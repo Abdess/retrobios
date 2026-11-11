@@ -1,0 +1,40 @@
+ RetroBIOS: More
+
+ > Remove files
+   Backups
+   Put back a backup
+   Delete a backup
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ A/Enter Open  B/Esc Back  ? Help

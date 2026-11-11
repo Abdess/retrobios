@@ -1,0 +1,12 @@
+ RetroBIOS: Confirm
+
+ Remove 2 files for good? 512.0 KB is
+   freed.
+
+ > Remove
+   Back
+
+
+
+
+ A Confirm  B Back  ? Help

@@ -771,7 +771,12 @@ Kept 1 file already there (512.0 KB), which the collection's copies replaced, in
 ```
 
 `--restore FOLDER` copies every file of that folder back to its place and
-leaves the folder as it is, to delete once the emulators start as before.
+leaves the folder as it is, to delete once the emulators start as before. A
+file at that place with other contents (a newer one, one put there by hand) is
+first moved into a new dated backup, as an install keeps what it replaces, and
+the end of the run names that folder. The installer's own copy, as the
+install record names it, is replaced without one: the collection gives it
+again.
 Copying the contents of the dated folder into the folder that holds
 `retrobios-backup` does the same by hand. `--dry-run --restore FOLDER` lists
 what would go back. `--dry-run` alone counts the files an install would keep.
@@ -796,6 +801,80 @@ On one drive the old file is moved, not copied, so keeping it needs no space
 beyond what it already used. A link sitting at a file's name is not kept: the
 file it points to is never touched. Data trees and `--standalone-copies` keep
 their replaced files the same way, beside the folder they were in.
+
+## Removing files { #removing-files }
+
+`--remove` takes out of the BIOS folder what the installer put there, and only
+that. The [install record](#the-install-record) says which files these are, so
+a folder without one loses nothing:
+
+```
+python3 install.py --remove --system nintendo-gba
+Remove 2 files from ~/.config/retroarch/system for RetroArch, 12.0 KB freed.
+1 file stays: 1 still needed.
+  shared.bin: still needed by PlayStation
+Remove them for good? [y/N]
+```
+
+Without a narrowing option every file of the setup's record goes. `--system`,
+`--core` or `--emulator` takes one part, and `--file PATH` one file. The
+question comes once, names what goes and the space freed, and only `y` or
+`yes` goes on. `--dry-run` lists the files and removes nothing, and `--yes`
+answers it for a script. A run without a terminal and without `--yes` stops
+with code 2 and names `--yes`.
+
+Removal deletes for good. `--backup` moves the files into a new dated folder of
+`retrobios-backup` instead, and the end of the run prints the `--restore`
+command that puts them back. On one drive a move frees no space until the
+backup is deleted.
+
+A file is removed only when all of these hold:
+
+- the record lists it for this setup and this folder
+- its bytes are still the SHA-1 the record holds
+- it is a regular file, below the BIOS folder, reached through no link
+- the setup's current list still serves that SHA-1 at that place, so a later
+  install can put it back.
+
+Anything else stays and is named with its reason: a file changed since, a
+link, a file outside the BIOS folder (the save directory's included), a file
+the list no longer serves (a key the user supplied, a dump of another
+release), and a file still needed by what stays. A file two systems share
+stays while one of them is still chosen, and a file another setup of the same
+folder recorded stays too. Removing everything also counts the files the
+record never names, added by hand or by another program, and leaves them.
+A record that cannot be read is said in one line, and nothing is removed. So
+is a BIOS folder that is not there (a card not mounted), with code 2. Each
+file is read and hashed again just before it goes: one edited during the
+question stays, as changed since the plan.
+On FAT and exFAT cards, which open a name whatever its case, names are
+compared without case.
+
+The record is updated only after the yes, and only for what was done: the
+files removed leave it, the systems or cores removed leave its choice, a file
+that stayed (changed, failed, still needed) keeps its entry, and a setup with
+no file left goes from it. `--restore` on a removal's backup gives the files back to the record with
+the choice they had. A folder moved since the removal is said, the record
+left as it is. On a backup of files an install replaced, the record lets
+go of each file put back: it is the user's again.
+
+`--backups` lists the backups of the BIOS folder, newest first, and
+`--delete-backup FOLDER` deletes one after a question naming its date and
+size. Only a dated folder holding `.retrobios-backup`, inside
+`retrobios-backup`, is ever deleted, and no link inside it is followed, a
+Windows junction included. On the
+full screen, **More** on the plan, shown once the folder has a record or a
+backup, holds **Remove files**, **Backups**, **Put back a backup** and
+**Delete a backup**. Remove files lists every recorded file or one system,
+then the plan of the removal (what goes, the space freed, what stays and why,
+the files behind **Details**), **Keep a backup**, and a confirm before
+anything is removed.
+
+Exit codes: `0` once done, `1` when a file or the record could not be
+written, `2` when nothing was done (no record, nothing to remove, no `--yes`
+without a terminal, or no at the question). With `--events` the run writes
+`removal_plan`, `removed`, `backup` and `restored` events, see
+[Machine-readable events](#machine-readable-events).
 
 ## Copy from an old card { #copy-from-an-old-card }
 
@@ -1111,7 +1190,12 @@ what the options name, everything by default.
 | <span id="option-from-pack"></span>`--from-pack PATH` | Install from a pack already downloaded: its ZIP, one of its parts (the others are found in the same folder), or the folder holding them. Makes no network request and checks every file's hash. See [Without a network](#without-a-network-offline-install) |
 | <span id="option-offline"></span>`--offline` | Make no network request. `--check`, `--from`, `--from-pack` and `--manifest` work without one, the file list stops the run at once when none of them gives it, and a file the run would download fails at once. `RETROBIOS_INSTALL_OFFLINE=1` does the same. `--target` and `--list-targets` read the core list per board a pack carries, or `targets/<platform>.json` beside `--manifest`, and are refused when neither gives one |
 | <span id="option-manifest"></span>`--manifest FILE` | Read the file list from FILE, a copy of `install/<platform>.json`, instead of downloading it. See [Without a network](#without-a-network-offline-install) |
-| <span id="option-restore"></span>`--restore FOLDER` | Put back the files a run replaced and kept in FOLDER, a dated folder inside `retrobios-backup`. Takes no other option but `--dry-run` and `--no-input`. See [Files already in the folder](#files-you-already-had) |
+| <span id="option-restore"></span>`--restore FOLDER` | Put back the files a run replaced or a removal moved and kept in FOLDER, a dated folder inside `retrobios-backup`, and update the install record. Takes no other option but `--dry-run`, `--events`, `--yes`, `--no-input` and `--verbose`. See [Files already in the folder](#files-you-already-had) |
+| <span id="option-remove"></span>`--remove` | Remove what the installer placed in the BIOS folder, as its [install record](#the-install-record) proves it: every file, or those of one `--system`, `--core`, `--emulator` or `--file`. Deleted for good unless `--backup` is given. See [Removing files](#removing-files) |
+| <span id="option-file"></span>`--file PATH` | With `--remove`, one file of the BIOS folder, by its path there or in full. Repeat for several |
+| <span id="option-backup"></span>`--backup` | With `--remove`, move the files into a dated folder of `retrobios-backup` instead of deleting them, for `--restore` to put back |
+| <span id="option-backups"></span>`--backups` | List the backups of the BIOS folder, newest first, with the date, the files and the size of each |
+| <span id="option-delete-backup"></span>`--delete-backup FOLDER` | Delete one backup listed by `--backups`, after one question that names its date and size (`--yes` skips it) |
 | <span id="option-tui"></span>`--tui` | Open the full-screen interface, or stop with the reason it cannot open here (code 2) instead of falling back to the questions. Wins over `RETROBIOS_PLAIN` and `ACCESSIBLE`. See [The full-screen interface](#the-full-screen-interface) |
 | <span id="option-plain"></span>`--plain` | Ask the questions line by line instead of the full-screen interface, the mode for a screen reader. See [The full-screen interface](#the-full-screen-interface) |
 | <span id="option-version"></span>`--version` | Print the installer's identity, the first 12 hex digits of the SHA-256 the bootstraps pin |
@@ -1891,9 +1975,9 @@ fields, the installer refuses to narrow rather than install everything.
 
 | Code | Meaning |
 |------|---------|
-| `0` | everything asked for is installed or already in place |
-| `1` | a failure: the one-liner could not download or verify `install.py`, or found no Python 3.8 with its ssl, unicodedata and zlib modules (nothing was run), an unusable base URL, `--installed-cores` with no core found, a manifest that fails validation, a fetch that never succeeded, no platform to install for in a non-interactive run, some files failed or were left out by `--offline` while others installed, a `--from-pack` pack that cannot be read, lacks a part or is for another platform, a `--from` folder that does not exist or cannot be read, a BIOS folder that is a file or lies under one, a `--dest` that is not the card of the system named (another system's card, a folder inside one, a drive with none of its files where its card always has them, or a folder that does not exist), `--restore` could not put a file back, or `--add-app` could not put every file of the app on the card |
-| `2` | nothing was installed: every file the run tried failed (a BIOS folder that cannot be written, for one), or `--offline` left every file out, the drive has too little free space for the download (checked before any folder is created), or the question about a folder that does not exist, named with `--dest` or typed at the folder question, was answered no. Also an option the installer refused before any download: an unknown option, `--jobs` outside 1 to 32, `--target` with `--every-board`, `--target` with `--from-pack` or `--offline` (or `RETROBIOS_INSTALL_OFFLINE` set) when no core list per board is at hand (the pack carries none and none is beside `--manifest` as `targets/<platform>.json`), or for a platform that publishes none, which is said to have no hardware targets, `--list-targets` with `--offline` and neither, `--add-app` with `--check`, `--dry-run`, a listing, `--from-pack` or `--offline`. The message then starts with `install.py: error:`. Also an unknown platform, target, system, core or emulator, said in an `Error:` or `Unknown platform` line and an `error` event whose `stage` is `option`. Also `--add-app` for a folder on no card that takes the app, said in an `Error:` line and an `app` event before anything is written. With `--restore`, a folder that is not a dated folder inside `retrobios-backup`. Also a quit chosen before the install, as `gh` ends a cancelled prompt: `q` at a question, `q` or **Quit** on the full screen, which then keeps `RetroBIOS: quit. Nothing was installed.`, and the full screen closed with no button pressed (`RETROBIOS_IDLE_EXIT`). No code but `0` closes a Windows Terminal tab started on the installer itself, so such a tab stays open on a quit |
+| `0` | everything asked for is installed or already in place, or removed, put back or deleted |
+| `1` | a failure: the one-liner could not download or verify `install.py`, or found no Python 3.8 with its ssl, unicodedata and zlib modules (nothing was run), an unusable base URL, `--installed-cores` with no core found, a manifest that fails validation, a fetch that never succeeded, no platform to install for in a non-interactive run, some files failed or were left out by `--offline` while others installed, a `--from-pack` pack that cannot be read, lacks a part or is for another platform, a `--from` folder that does not exist or cannot be read, a BIOS folder that is a file or lies under one, a `--dest` that is not the card of the system named (another system's card, a folder inside one, a drive with none of its files where its card always has them, or a folder that does not exist), `--restore` could not put a file back, `--remove` or `--delete-backup` could not delete a file or update the install record, or `--add-app` could not put every file of the app on the card |
+| `2` | nothing was installed: every file the run tried failed (a BIOS folder that cannot be written, for one), or `--offline` left every file out, the drive has too little free space for the download (checked before any folder is created), or the question about a folder that does not exist, named with `--dest` or typed at the folder question, was answered no. Also an option the installer refused before any download: an unknown option, `--jobs` outside 1 to 32, `--target` with `--every-board`, `--target` with `--from-pack` or `--offline` (or `RETROBIOS_INSTALL_OFFLINE` set) when no core list per board is at hand (the pack carries none and none is beside `--manifest` as `targets/<platform>.json`), or for a platform that publishes none, which is said to have no hardware targets, `--list-targets` with `--offline` and neither, `--add-app` with `--check`, `--dry-run`, a listing, `--from-pack` or `--offline`. The message then starts with `install.py: error:`. Also an unknown platform, target, system, core or emulator, said in an `Error:` or `Unknown platform` line and an `error` event whose `stage` is `option`. Also `--add-app` for a folder on no card that takes the app, said in an `Error:` line and an `app` event before anything is written. With `--restore` or `--delete-backup`, a folder that is not a dated folder inside `retrobios-backup`. With `--remove`, nothing removed: no install record of the setup, nothing it can remove, no `--yes` without a terminal, or no at its question, and the same for `--delete-backup`. Also a quit chosen before the install, as `gh` ends a cancelled prompt: `q` at a question, `q` or **Quit** on the full screen, which then keeps `RetroBIOS: quit. Nothing was installed.`, and the full screen closed with no button pressed (`RETROBIOS_IDLE_EXIT`). No code but `0` closes a Windows Terminal tab started on the installer itself, so such a tab stays open on a quit |
 | `3` | `--check` ran and found files to fetch or wrong copies, nothing having failed. A failure takes `1` as before: a manifest refused, a `--from` folder that does not exist. Until November 2026 this case also ended on `1`, so a script that reads any code but `0` as "not ready" needs no change |
 | `130` | stopped with Ctrl+C, or with Ctrl+C or Ctrl+D at a question, the terminal keeping `RetroBIOS: stopped. Nothing was installed.` before an install. Run the same command again to carry on |
 | `141` | the output was piped to a reader that closed early (`--list-platforms \| head`) |
@@ -1937,7 +2021,7 @@ other schemas under `api/v1/schemas/`.
 
 | Kind | Keys | When |
 |------|------|------|
-| `start` | `schema`, `installer`, `mode` | First line. `schema` is 1, `installer` the identity `--version` prints, `mode` one of `install`, `check`, `dry-run`, `list` |
+| `start` | `schema`, `installer`, `mode` | First line. `schema` is 1, `installer` the identity `--version` prints, `mode` one of `install`, `check`, `dry-run`, `list` (also `--backups`), `remove` (`--remove`, `--delete-backup`), `restore` |
 | `unsearched` | `folder`, `reason`, `message` | Before `detect`, once for each folder the search for setups could not look in, this user being refused it or a read failing there (a failing card, a link that loops), or under WSL the Windows side when Windows did not answer (`folder` is then the drive mount, `/mnt`). What it would hold counts as absent, and the other places are still searched: `detect` then lists what they hold, and an empty `platforms` after an `unsearched` line means nothing was found where the installer could look. `reason` says why in words (`Permission denied`), `message` says it in a sentence |
 | `detect` | `os`, `os_name`, `platforms` | Once the platforms are known. `os_name` comes from `/etc/os-release`. `platforms` lists `{platform, name, bios_dir}`, and is empty when nothing supported was found |
 | `error` | `stage`, `reason`, `platform`, `message` | The file list could not be read (`stage` is `manifest`): `reason` is `network`, `not_found` or `invalid`, `clock` when the server's certificate was refused and the system clock reads a date before the installer was written, `no_ca` when the machine holds no list of trusted certificates (`SSL_CERT_FILE` names one), `no_ssl` when this Python was built without its `ssl` module and cannot use HTTPS, or `offline` when `--offline` forbids the request. A folder named with `--from` cannot be read (`stage` is `from`, `reason` `not_found`, `not_a_folder` for a file that is no ZIP, `unreadable`, or `system` for the root of the system, `/proc`, `/sys` or `/dev`). The BIOS folder sits under a folder this user cannot open (`stage` is `dest`, `reason` `unreadable`), or is a file or lies under one (`reason` `not_a_folder`), and the run ends with code 1 before anything is written. A platform, target, system, core or emulator named on the command line is unknown or cannot be used here (`stage` is `option`, `reason` `unknown`, `platform` the platform it was checked against or the name typed), refused before any download with code 2. The BIOS folder cannot be created (`stage` is `dest`, `reason` `not_writable`): a `summary` follows with what the run installed before it. Two systems are detected on one machine and no `--dest` names the folder (`stage` is `detect`, `reason` `conflict`). The platform named with `--platform` is found nowhere and no folder can be assumed for it: a card system with no card named, a portable emulator, Batocera or Recalbox named on a computer (their folder is the `bios` folder of their SHARE drive), or no usual folder on this system or one set aside behind a folder this user cannot open (`stage` is `detect`, `reason` `not_found`). So is a platform named by a file list or a pack, in a run without questions where it is found nowhere here. A `--dest` refused as the card of the system named carries the same `stage` and `reason`: another system's card, a folder inside a card, a drive with none of the files its card always has, or a folder that does not exist. `message` says it in words, and is the only thing that tells these cases apart |
@@ -1966,11 +2050,15 @@ other schemas under `api/v1/schemas/`.
 | `summary` | `mode`, `installed`, `up_to_date`, `pending`, `failed`, `skipped`, `left_out`, `kept`, `interrupted` | The outcome. `pending` counts what a next run would still fetch, `failed` lists `{dest, reason}`, `skipped` lists `{reason, label, files, required}` for the files the collection cannot supply, `left_out` lists `{category, label, files, dests}` for what `--no-game-data` left out, and is empty without it. `kept` lists `{folder, files, bytes}`, one per backup folder, for the files in place the run moved aside before replacing them (with `--dry-run`, would move), and is empty when none. Not written for a listing |
 | `app` | `system`, `folder`, `ok`, `reason`, `dests`, `written`, `kept` | After `summary`, with `--add-app` or a yes to its question: the RetroBIOS app on the card of `system` whose root is `folder`. `dests` lists the app's files below that root, `written` the ones this run wrote (empty when each was in place), `kept` the backup folders as in `summary`. `ok` is false, with `reason`, when the card takes no app (before anything is written, code 2), when the install did not finish, or when a file could not be fetched, verified or written (code 1) |
 | `record` | `platform`, `folder`, `path`, `status`, `choice`, `date`, `files`, `message` | The [install record](#the-install-record) of `folder`, kept at `path`. `status` is `applied` before `choices` when the run took its choice, nothing on the command line having chosen, `written` before `summary` once an install placed files, `unreadable` when it cannot be read (said once, ignored), or `not_written` when it could not be saved, the install itself unharmed. `choice` is the recorded options as words, `date` when it was written (UTC), `files` how many files it holds for the platform |
+| `removal_plan` | `platform`, `folder`, `files`, `bytes`, `systems`, `dests`, `kept`, `gone`, `backup`, `message` | With `--remove`, before anything is removed, and all a `--dry-run` writes: `dests` the files that go in record order, `bytes` the space they free, `systems` those losing a file, `kept` a `{dest, reason}` for each file left (`shared`, `changed`, `link`, `not_a_file`, `outside`, `not_servable`, `unreadable`, `not_recorded`), `gone` the recorded files no longer there, `backup` whether they are moved rather than deleted. With `files` 0 and a `message` when no record says what is the installer's |
+| `removed` | `platform`, `dest`, `size`, `ok`, `reason`, `moved_to` | Each file `--remove` took. `ok` is false, with `reason`, for a file that stays. `moved_to` is its place in the backup with `--backup`, empty otherwise |
+| `restored` | `folder`, `path`, `size`, `ok`, `reason` | Each file `--restore` put back from the backup `folder` to `path` |
+| `backup` | `folder`, `date`, `files`, `bytes`, `source`, `status`, `message` | A backup folder: `status` is `listed` by `--backups`, `made` by `--remove --backup`, `deleted` or `not_deleted` by `--delete-backup`. `date` is when it was made, local time. `source` is `remove` for a removal's backup and `install` for the files an install replaced |
 | `end` | `code` | Last line, with the exit status the process returns (see [Exit status](#exit-status)) |
 
 <!-- /generated: events -->
 
-Schema 1 can gain a kind (`found` came with `--from`, `declared` with `--declared-only`, `unsearched` with the search that goes on past a closed folder, `app` with `--add-app`, `data` with the size of the data trees, `version` with the list's version, `record` with the install record), never a key of an
+Schema 1 can gain a kind (`found` came with `--from`, `declared` with `--declared-only`, `unsearched` with the search that goes on past a closed folder, `app` with `--add-app`, `data` with the size of the data trees, `version` with the list's version, `record` with the install record, `removal_plan`, `removed`, `restored` and `backup` with removal), never a key of an
 existing kind: a reader skips a kind it does not know. An option refused
 before the run starts (`install.py: error:`, code 2) writes
 no event at all. A program reads a missing `end` as that case, or as a
