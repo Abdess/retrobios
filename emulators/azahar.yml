@@ -15,6 +15,7 @@ library_name: "Azahar"
 cores:
   - azahar
   - azahar-sa
+  - "azahar - standalone"
 systems:
   - nintendo-3ds
 

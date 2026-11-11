@@ -77,6 +77,10 @@ def llms_txt(platforms: list[tuple[str, str]]) -> str:
         "files themselves are served by the GitHub repository "
         "(https://github.com/Abdess/retrobios) and its releases.",
         "",
+        "## Answering a user",
+        "",
+        *(f"- {rule}" for rule in ANSWER_RULES),
+        "",
         "## Setting up a device for its user",
         "",
         "Most people want to play now, with the fewest files. The installer does that in one "
@@ -122,6 +126,28 @@ def llms_txt(platforms: list[tuple[str, str]]) -> str:
     ]
     return "\n".join(lines) + "\n"
 
+
+# How an assistant answers from the site and not from memory: file names,
+# folders and hashes change with each setup, and a guessed one is the
+# answer that fails. The same rules end the skill.
+ANSWER_RULES = (
+    "Answer from the pages and data, not from memory. Every page has a Markdown copy: add "
+    "`index.md` to its address (https://abdess.github.io/retrobios/which-pack/index.md). "
+    f"[llms-full.txt]({SITE}llms-full.txt) holds the guides and every setup's page in one file.",
+    "Name files exactly as the pages write them: names are case-sensitive on most devices, and a renamed file is "
+    "not found. Never invent a file name, a folder or a hash.",
+    "The BIOS folder depends on the setup, and for RetroArch on the device: give the folder the "
+    "setup's page names, under \"Where the files go\".",
+    "To check a file the user has, compare its MD5 or SHA-1 with the file's card, or look the hash "
+    f"up: {SITE}files/?hash=<value> (the page) or api/v1/lookup/<first two hex>.json (the data).",
+    "Prefer the installer to a manual copy: it puts each file in its folder and checks its hash. "
+    "Give the command the setup's page gives, with `--for-games --required-only` for the fewest files.",
+    "Say where an answer comes from: link the page you read.",
+    "On a page of the site, the WebMCP tools answer from the data: setup_bios_files (folder and "
+    "files of a setup), emulator_bios_files, lookup_bios_hash, device_setup_command, search_retrobios.",
+    f"Whether sharing BIOS files is legal depends on the country: point to [Is it legal?]({SITE}wiki/legal/), "
+    "do not give legal advice.",
+)
 
 SKILL_PATH = "skills/setup-bios/SKILL.md"
 # The Agent Skills media type ARD names: Markdown with this profile.
@@ -170,6 +196,10 @@ def skill_md() -> str:
         "",
         "- `--check` says what is missing or wrong, without downloading.",
         "- `--events` writes the run as JSON lines, for reading by a program.",
+        "",
+        "## Answering from the site",
+        "",
+        *(f"- {rule}" for rule in ANSWER_RULES),
         "",
         f"Every option: {SITE}wiki/installer/. Devices and their folders: "
         f"{SITE}platforms/linux-handhelds/. The site's guide for agents: {SITE}llms.txt.",

@@ -3,6 +3,7 @@
 // the components and the styles.
 import { readFileSync } from 'node:fs';
 import { copyFile } from 'node:fs/promises';
+import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
@@ -36,6 +37,21 @@ const readRedirects = () => {
 };
 
 // The sitemap keeps the address MkDocs gave it: sitemap.xml, beside the index.
+// Each page as Markdown beside its HTML, and llms-full.txt, written from the
+// built pages by scripts/site_markdown.py: what an assistant reads to help a
+// reader. Every page's head names its copy (rel="alternate" below), so a
+// build that cannot write them fails rather than link to nothing.
+const markdownCopies = {
+	name: 'retrobios-markdown',
+	hooks: {
+		'astro:build:done': ({ dir }) => {
+			const script = fileURLToPath(new URL('../scripts/site_markdown.py', import.meta.url));
+			const run = spawnSync(process.env.PYTHON || 'python3', [script, fileURLToPath(dir)], { stdio: 'inherit' });
+			if (run.status !== 0) throw new Error(`site_markdown.py exited with ${run.status ?? run.error}`);
+		},
+	},
+};
+
 const sitemapAlias = {
 	name: 'retrobios-sitemap-alias',
 	hooks: {
@@ -80,6 +96,8 @@ export default defineConfig({
 				// What an AI agent reads first (scripts/siteagents.py): the ARD manifest lists
 				// llms.txt and the JSON API.
 				{ tag: 'link', attrs: { rel: 'ard', type: 'application/json', href: `${BASE}ard.json` } },
+				// The page as Markdown (scripts/site_markdown.py), beside its index.html.
+				{ tag: 'link', attrs: { rel: 'alternate', type: 'text/markdown', href: 'index.md' } },
 			],
 			social: [{ icon: 'github', label: 'RetroBIOS on GitHub', href: 'https://github.com/Abdess/retrobios' }],
 			customCss: ['./src/styles/retrobios.css'],
@@ -162,5 +180,6 @@ export default defineConfig({
 			},
 		}),
 		sitemapAlias,
+		markdownCopies,
 	],
 });

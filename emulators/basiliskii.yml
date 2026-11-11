@@ -14,6 +14,7 @@ display_name: "Apple - Macintosh 68k (Basilisk II)"
 cores:
   - basiliskii
   - basilisk
+  - "basilisk2"
 systems:
   - apple-macintosh
   - macintosh-ii

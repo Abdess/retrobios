@@ -13,6 +13,8 @@ cores:
   - vox_official
   - "pico8"
   - "Pico-8"
+  - "pico_standalone"
+  - "float-scaled"
 systems:
   - pico8
   - voxatron

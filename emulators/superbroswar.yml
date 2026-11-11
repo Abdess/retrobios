@@ -11,7 +11,7 @@ version_basis:
   path: "libretro/libretro.cpp"
   pattern: 'info->library_version\s+=\s+"([^"]+)'
 display_name: "Super Bros War"
-cores: [superbroswar]
+cores: [superbroswar, "km_superbroswar"]
 systems: []
 files: []
 notes: >

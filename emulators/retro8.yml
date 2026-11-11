@@ -14,6 +14,7 @@ version_basis:
 display_name: "PICO-8 (Retro8)"
 cores:
   - retro8
+  - "picante8"
 systems:
   - pico8
 

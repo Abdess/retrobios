@@ -1282,19 +1282,142 @@ const filterFiles = () => {
 	}
 };
 
-// The 404 page: a search button, and the list a moved page belongs to.
+// "Start with" names the file to get first and links its card, where the
+// download is. A console's first file is the most downloaded of the site
+// (the PS2's: 436 in three days): its download sits beside its name too,
+// the card's own link reused, never a second address.
+const startDownloads = () => {
+	for (const strong of document.querySelectorAll<HTMLElement>('.sl-markdown-content strong')) {
+		if (strong.textContent?.trim() !== 'Start with') continue;
+		const block = strong.closest('p')?.nextElementSibling?.matches('ul') && !strong.closest('p')?.querySelector('a[href^="#sha1-"]')
+			? strong.closest('p')!.nextElementSibling!
+			: strong.closest('p');
+		for (const named of block?.querySelectorAll<HTMLAnchorElement>('a[href^="#sha1-"]') ?? []) {
+			const card = document.getElementById(named.hash.slice(1))?.closest('.rb-sys-file');
+			const source = card?.querySelector<HTMLAnchorElement>('a.rb-download');
+			if (!source || named.nextElementSibling?.classList.contains('rb-start-download')) continue;
+			const download = document.createElement('a');
+			download.className = 'rb-start-download';
+			download.href = source.href;
+			download.textContent = 'Download';
+			download.setAttribute('aria-label', source.getAttribute('aria-label') ?? 'Download');
+			named.after(' ', download);
+		}
+	}
+};
+
+// The 404 page: a search button, and what the address it was asked for
+// looks like. The addresses readers reached (counted, wiki/privacy.md): a
+// command pasted as a link (/i.ps1%20%7C%20iex), a file name under files/,
+// a GitHub path (/blob/main/bios), a section below a page
+// (/platforms/emudeck/install). The address is only ever set as text.
+const INSTALL_COMMANDS: [string, string][] = [
+	['Windows (PowerShell)', 'irm https://abdess.github.io/retrobios/i.ps1 | iex'],
+	['Linux, macOS, Steam Deck, handhelds', 'curl -fsSL https://abdess.github.io/retrobios/i | sh'],
+];
+
+const openSearch = (query = '') => {
+	document.querySelector<HTMLButtonElement>('site-search button[data-open-modal]')?.click();
+	if (!query) return;
+	// The search box exists once the search has loaded: fill it then.
+	const fill = (tries: number) => {
+		const input = document.querySelector<HTMLInputElement>('.pagefind-ui__search-input');
+		if (input) {
+			input.value = query;
+			input.dispatchEvent(new Event('input', { bubbles: true }));
+		} else if (tries > 0) {
+			setTimeout(() => fill(tries - 1), 100);
+		}
+	};
+	fill(30);
+};
+
+const hintLine = (...parts: (string | Node)[]) => {
+	const line = document.createElement('p');
+	line.append(...parts);
+	return line;
+};
+
 const notFound = () => {
-	document.querySelector('[data-rb-open-search]')?.addEventListener('click', () => {
-		document.querySelector<HTMLButtonElement>('site-search button[data-open-modal]')?.click();
-	});
+	document.querySelector('[data-rb-open-search]')?.addEventListener('click', () => openSearch());
 	const hint = document.getElementById('rb-notfound-hint');
-	const match = location.pathname.match(/\/(emulators|systems|platforms)\/([^/]+)\/?$/);
-	if (!hint || !match) return;
-	const link = document.createElement('a');
-	link.href = new URL(`${match[1]}/`, siteRoot()).href;
-	link.textContent = `the list of ${match[1]}`;
-	hint.append(`No page is named ${decodeURIComponent(match[2])} here. It may be listed under another name in `, link, '.');
-	hint.hidden = false;
+	if (!hint) return;
+	const base = siteRoot().pathname;
+	let rest = location.pathname.startsWith(base) ? location.pathname.slice(base.length) : location.pathname;
+	try {
+		rest = decodeURIComponent(rest);
+	} catch {
+		// A malformed escape stays as typed.
+	}
+	const show = (...lines: HTMLElement[]) => {
+		hint.replaceChildren(...lines);
+		hint.hidden = false;
+	};
+
+	// A command that a chat or a forum turned into a link.
+	if (/^i(\.ps1)?[\s|)(;'"&-]/.test(rest)) {
+		const list = document.createElement('ul');
+		for (const [where, command] of INSTALL_COMMANDS) {
+			const item = document.createElement('li');
+			const code = document.createElement('code');
+			code.textContent = command;
+			item.append(`${where}: `, code);
+			list.append(item);
+		}
+		show(hintLine('This address is an install command, not a page. Paste the command into a terminal, not into the browser:'), list);
+		return;
+	}
+	// A GitHub path: the files are browsed on the repository.
+	const github = rest.match(/^(blob|tree|raw)\/(.+)$/);
+	if (github) {
+		const link = document.createElement('a');
+		link.href = `https://github.com/Abdess/retrobios/${github[1] === 'raw' ? 'blob' : github[1]}/${github[2]}`;
+		link.textContent = 'the same path on GitHub';
+		show(hintLine('This is a path of the GitHub repository. Open ', link, '.'));
+		return;
+	}
+	// A file name: the search finds the pages that list it.
+	const file = rest.match(/(?:^|\/)([^/]+\.[a-z0-9]{1,5})\/?$/i);
+	const word = file ? file[1] : rest.replace(/\/$/, '').split('/').pop() ?? '';
+	const lines: HTMLElement[] = [];
+	const known = rest.match(/^(emulators|systems|platforms)\/([^/]+)\/?$/);
+	if (known) {
+		const link = document.createElement('a');
+		link.href = new URL(`${known[1]}/`, siteRoot()).href;
+		link.textContent = `the list of ${known[1]}`;
+		lines.push(hintLine(`No page is named ${known[2]} here. It may be listed under another name in `, link, '.'));
+	}
+	if (word && word.length <= 60) {
+		const button = document.createElement('button');
+		button.type = 'button';
+		button.className = 'rb-notfound-search';
+		button.textContent = `Search for ${word}`;
+		button.addEventListener('click', () => openSearch(word));
+		lines.push(hintLine(button));
+	}
+	if (lines.length) show(...lines);
+	// A section below a page: the nearest page above it that exists.
+	// Empty segments dropped: "//host/x" would read as another site's address.
+	const parts = rest.split('/').filter((part) => part && part !== '.' && part !== '..');
+	const parents = parts.slice(0, -1).map((_, index) => parts.slice(0, parts.length - 1 - index).join('/'));
+	(async () => {
+		for (const parent of parents) {
+			const url = new URL(`${parent}/`, siteRoot());
+			// Only a page of this site, under its base, is fetched or linked.
+			if (url.origin !== siteRoot().origin || !url.pathname.startsWith(siteRoot().pathname)) return;
+			try {
+				if ((await fetch(url, { method: 'HEAD' })).ok) {
+					const link = document.createElement('a');
+					link.href = url.href;
+					link.textContent = url.pathname;
+					show(...lines, hintLine('The page above it: ', link, '.'));
+					return;
+				}
+			} catch {
+				return;
+			}
+		}
+	})();
 };
 
 resolveFileAddress();
@@ -1310,4 +1433,5 @@ filterFiles();
 osTabs();
 installPickers();
 showCurrentPage();
+startDownloads();
 notFound();

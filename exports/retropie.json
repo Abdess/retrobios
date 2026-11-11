@@ -1,15 +1,14 @@
 {
   "platform": "retropie",
   "originals": {
-    "RetroPie-Setup.tar.gz": "https://codeload.github.com/RetroPie/RetroPie-Setup/tar.gz/46128cd252cdecae852a4d0bafa2aaf9d03ab563"
+    "RetroPie-Setup.tar.gz": "https://codeload.github.com/RetroPie/RetroPie-Setup/tar.gz/427e76216633591861791cfb28807ac1039c5ea8"
   },
   "files": [
     "scriptmodules/emulators/flycast.sh",
     "scriptmodules/emulators/quasi88.sh",
-    "scriptmodules/libretrocores/lr-flycast-dev.sh",
     "scriptmodules/libretrocores/lr-flycast.sh"
   ],
-  "summary": "4 packages updated. Left as is: dgen, gpsp, lr-freechaf, uae4arm, which no profiled core matches. Left as is: lr-fbneo, lr-fmsx, openmsx, pcsx2 and 1 more, whose help text lists no files to add to. Left as is: xm7, whose help text names a file no profile documents yet (dicrom.rom, extsub.rom, fbasic30.rom, fddseek.wav, initiate.rom, relay_on.wav, relayoff.wav, subsys_a.rom, subsys_b.rom, subsys_c.rom, subsyscg.rom). Left as is: sdltrs, whose help text names a file no profile documents yet (level3.rom, level4.rom, level4p.rom). Left as is: lr-opera, whose help text names a file no profile documents yet (panazf10.bin)",
+  "summary": "3 packages updated. Left as is: dgen, gpsp, lr-freechaf, openmsx and 1 more, which no profiled core matches. Left as is: lr-fbneo, lr-flycast-dev, lr-fmsx, pifba, whose help text lists no files of that system to add to. Left as is: xm7, whose help text names a file no profile documents yet (dicrom.rom, extsub.rom, fbasic30.rom, fddseek.wav, initiate.rom, relay_on.wav, relayoff.wav, subsys_a.rom, subsys_b.rom, subsys_c.rom, subsyscg.rom). Left as is: sdltrs, whose help text names a file no profile documents yet (level3.rom, level4.rom, level4p.rom). Left as is: lr-opera, whose help text names a file no profile documents yet (panazf10.bin)",
   "counts": null,
   "changes": [
     {
@@ -47,7 +46,8 @@
   "hashes_cleared": [],
   "required_aligned": 0,
   "withheld": [],
-  "found_by_content": 98,
+  "found_by_content": 357,
+  "unattributed": [],
   "removal_candidates": [
     {
       "system": "Dinothawr",
@@ -59,31 +59,16 @@
         "dinothawr"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -96,31 +81,16 @@
         "mame"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -133,31 +103,16 @@
         "mame"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -170,31 +125,16 @@
         "mame"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -210,31 +150,16 @@
         "prboom"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -249,31 +174,16 @@
         "squirreljme"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -288,31 +198,16 @@
         "squirreljme"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -330,31 +225,16 @@
         "zesarux"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -369,31 +249,16 @@
         "np2pi"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -406,31 +271,16 @@
         "beetle_pcfx"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -443,31 +293,16 @@
         "beetle_pcfx"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -480,31 +315,16 @@
         "beetle_pcfx"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -518,31 +338,16 @@
         "ishiiruka"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -556,31 +361,16 @@
         "ishiiruka"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -594,31 +384,16 @@
         "ishiiruka"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -632,31 +407,16 @@
         "ishiiruka"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -670,31 +430,16 @@
         "ishiiruka"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -708,31 +453,16 @@
         "ishiiruka"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -746,31 +476,16 @@
         "ishiiruka"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -784,31 +499,16 @@
         "ishiiruka"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -822,31 +522,16 @@
         "ishiiruka"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -860,31 +545,16 @@
         "ishiiruka"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -911,31 +581,16 @@
         "supersnes9x"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -962,31 +617,16 @@
         "supersnes9x"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -1004,31 +644,16 @@
         "ymir"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -1039,39 +664,22 @@
       "reason": "a core the platform names has no profile yet",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
         "fbzx",
         "fuse",
         "zesarux"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -1082,39 +690,22 @@
       "reason": "a core the platform names has no profile yet",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
         "fbzx",
         "fuse",
         "zesarux"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -1125,39 +716,22 @@
       "reason": "a core the platform names has no profile yet",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
         "fbzx",
         "fuse",
         "zesarux"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -1168,39 +742,22 @@
       "reason": "a core the platform names has no profile yet",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
         "fbzx",
         "fuse",
         "zesarux"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -1211,39 +768,22 @@
       "reason": "a core the platform names has no profile yet",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
         "fbzx",
         "fuse",
         "zesarux"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -1254,39 +794,22 @@
       "reason": "a core the platform names has no profile yet",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
         "fbzx",
         "fuse",
         "zesarux"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -1297,39 +820,22 @@
       "reason": "a core the platform names has no profile yet",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
         "fbzx",
         "fuse",
         "zesarux"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -1340,39 +846,22 @@
       "reason": "a core the platform names has no profile yet",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
         "fbzx",
         "fuse",
         "zesarux"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -1383,39 +872,22 @@
       "reason": "a core the platform names has no profile yet",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
         "fbzx",
         "fuse",
         "zesarux"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -1426,39 +898,22 @@
       "reason": "a core the platform names has no profile yet",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
         "fbzx",
         "fuse",
         "zesarux"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -1469,39 +924,22 @@
       "reason": "a core the platform names has no profile yet",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
         "fbzx",
         "fuse",
         "zesarux"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -1512,39 +950,22 @@
       "reason": "a core the platform names has no profile yet",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
         "fbzx",
         "fuse",
         "zesarux"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -1555,39 +976,22 @@
       "reason": "a core the platform names has no profile yet",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
         "fbzx",
         "fuse",
         "zesarux"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -1598,39 +1002,22 @@
       "reason": "a core the platform names has no profile yet",
       "cores_examined": [
         "81",
-        "eightyone",
-        "ep128emu",
         "ep128emu_core",
         "fbzx",
         "fuse",
         "zesarux"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     },
     {
@@ -1644,33 +1031,19 @@
         "scummvm-sdl1"
       ],
       "unresolved_cores": [
-        "beetle-lynx",
-        "beetle-ngp",
-        "beetle-pce",
-        "beetle-pce-fast",
-        "beetle-pcfx",
-        "beetle-psx",
-        "beetle-supergrafx",
-        "beetle-vb",
-        "beetle-wswan",
-        "flycast-dev",
-        "genesis-plus-gx",
         "giana",
         "kodi",
         "lincity-ng",
-        "mame2003-plus",
         "micropolis",
         "minecraft",
         "mysticmine",
         "openblok",
         "openpht",
-        "parallel-n64",
-        "smsplus-gx",
         "steamlink",
-        "superflappybirds",
-        "vba-next"
+        "superflappybirds"
       ]
     }
   ],
+  "doubled": [],
   "invalid": []
 }

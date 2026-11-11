@@ -145,98 +145,6 @@
       {
         "md5": "646773759326fbac3b2311fd8c8793ee",
         "file": "bios/kick40068.A1200"
-      },
-      {
-        "md5": "945c364bb9b5f28a04e1003f8b7a469c",
-        "file": "bios/aros-ext.bin"
-      },
-      {
-        "md5": "69179a8479d1ba279c786094ce343386",
-        "file": "bios/aros-rom.bin"
-      },
-      {
-        "md5": "6670a9571f235ec31b8bbd48fc18f428",
-        "file": "bios/whdboot/WHDLoad"
-      },
-      {
-        "md5": "2a3a61bbd7c351751506e22a4354b76a",
-        "file": "bios/whdboot/JST"
-      },
-      {
-        "md5": "36ab26d3b855e634fdda062c052cd52b",
-        "file": "bios/whdboot/AmiQuit"
-      },
-      {
-        "md5": "9e638f3d531eb7cd82594f49a4cf03b7",
-        "file": "bios/whdboot/boot-data.zip"
-      },
-      {
-        "md5": "51d44cd24e16fbb395b1bfefbaacd375",
-        "file": "bios/whdboot/game-data/whdload_db.json"
-      },
-      {
-        "md5": "c993feb1eeddec1d2e687aa514231028",
-        "file": "bios/whdboot/save-data/Kickstarts/kick33180.A500.RTB"
-      },
-      {
-        "md5": "7eb13d974af0992d672b67c317a7e0a1",
-        "file": "bios/whdboot/save-data/Kickstarts/kick34005.A500.RTB"
-      },
-      {
-        "md5": "3f97c1963d82c808ef29e7c984c4c688",
-        "file": "bios/whdboot/save-data/Kickstarts/kick40063.A600.RTB"
-      },
-      {
-        "md5": "547b42b7b070c7f227ea45e0986d57a1",
-        "file": "bios/whdboot/save-data/Kickstarts/kick40068.A1200.RTB"
-      },
-      {
-        "md5": "f89f19b858ea6b1a04327c6f71ee1600",
-        "file": "bios/whdboot/save-data/Kickstarts/kick40068.A4000.RTB"
-      },
-      {
-        "md5": "c5ba6165df42fc69b32942b248fca725",
-        "file": "bios/whdboot/save-data/Kickstarts/kick31034.A1000.RTB"
-      },
-      {
-        "md5": "6c5b44c1a2bcee664129f850bfe4ed8a",
-        "file": "bios/uae_data/drive_click_A500.wav"
-      },
-      {
-        "md5": "7401f854a75f9ede18769168ab896a2a",
-        "file": "bios/uae_data/drive_spin_A500.wav"
-      },
-      {
-        "md5": "f9d954879fee8e96baa93d6139077cdb",
-        "file": "bios/uae_data/drive_spinnd_A500.wav"
-      },
-      {
-        "md5": "aebeacc7e7bc52ef890785c835bec3d0",
-        "file": "bios/uae_data/drive_startup_A500.wav"
-      },
-      {
-        "md5": "1a4b2d6254918ff769f26beeede75655",
-        "file": "bios/uae_data/drive_snatch_A500.wav"
-      },
-      {
-        "md5": "b64bee23f356635f67fb08b543df9797",
-        "file": "bios/uae_data/drive_click_LOUD.wav"
-      },
-      {
-        "md5": "56d8e36a2f04b5e8c5a1f1530cfc886c",
-        "file": "bios/uae_data/drive_spin_LOUD.wav"
-      },
-      {
-        "md5": "43ab05c6d969cb40805970a5b2352875",
-        "file": "bios/uae_data/drive_spinnd_LOUD.wav"
-      },
-      {
-        "md5": "743b4b9f0ca645c4c2a34953b5e01e45",
-        "file": "bios/uae_data/drive_startup_LOUD.wav"
-      },
-      {
-        "md5": "40cdf89f35b68cfefd4df5fb0256e02f",
-        "file": "bios/uae_data/drive_snatch_LOUD.wav"
       }
     ]
   },
@@ -1011,10 +919,6 @@
       {
         "md5": "",
         "file": "bios/dc/dc.zip"
-      },
-      {
-        "md5": "e10c53c2f8b90bab96ead2d368858623",
-        "file": "bios/dc/boot.bin"
       }
     ]
   },
@@ -2043,6 +1947,10 @@
       {
         "md5": "89e42e386e82e0cacb4a2704a03706ca",
         "file": "bios/scummvm/extra/MT32_PCM.ROM"
+      },
+      {
+        "md5": "c5233e4594f9b7bc4f773ae6ba5aa87d",
+        "file": "bios/system/MT32_CONTROL.ROM"
       }
     ]
   },

@@ -21,6 +21,8 @@ cores:
   - openbor7142
   - openbor7530
   - "OPENBOR"
+  - "openbor v7530 - standalone"
+  - "openbor_standalone_plus"
 systems:
   - openbor
 mode: standalone

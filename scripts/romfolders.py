@@ -172,7 +172,10 @@ class ProfileResolver:
             return None
         # RetroPie names a libretro package lr-<core> (scriptmodules/libretrocores).
         bare = core.removeprefix("lr-")
-        spellings = (core, core.lower(), bare, bare.replace("-", "_"), bare.lower().replace("-", "_"))
+        # Either separator in either direction: plumOS names flycast_xtreme
+        # the core flycast2021 lists as flycast-xtreme.
+        spellings = (core, core.lower(), bare, bare.replace("-", "_"), bare.lower().replace("-", "_"),
+                     bare.replace("_", "-"), bare.lower().replace("_", "-"))
         for name in dict.fromkeys(spellings):
             found = preferred_profile(self.index, name)
             if found:

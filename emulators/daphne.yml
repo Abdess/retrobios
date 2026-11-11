@@ -13,6 +13,7 @@ version_basis:
 display_name: "Arcade (Daphne)"
 cores:
   - daphne
+  - "km_daphne_xtreme"
 systems:
   - arcade-laserdisc
 

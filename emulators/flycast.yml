@@ -20,6 +20,8 @@ cores:
   - "flycast_32b"
   - "flycast-sa"
   - "flycast-dev"
+  - "flycast32_rumble"
+  - "flycast_rumble"
 systems:
   - sega-dreamcast
   - sega-naomi

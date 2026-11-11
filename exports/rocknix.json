@@ -11,7 +11,7 @@
   "counts": {
     "kept": 38,
     "added": 1,
-    "not_added": 1727,
+    "not_added": 2337,
     "not_kept": 0
   },
   "changes": [
@@ -34,7 +34,8 @@
   "hashes_cleared": [],
   "required_aligned": 0,
   "withheld": [],
-  "found_by_content": 132,
+  "found_by_content": 344,
+  "unattributed": [],
   "removal_candidates": [
     {
       "system": "dreamcast",
@@ -45,36 +46,16 @@
       "cores_examined": [
         "flycast",
         "flycast2021",
+        "parallel_dc",
         "redream",
         "retrodream"
       ],
       "unresolved_cores": [
-        "ares-sa",
-        "armsx2-sa",
-        "bigpemu-sa",
-        "cemu-sa",
-        "dolphin-sa",
-        "drastic-sa",
-        "duckstation-sa",
-        "flycast-sa",
-        "gopher64-sa",
-        "gzdoom-sa",
-        "hatarisa",
         "heroic",
-        "melonds-sa",
-        "mupen64plus-sa",
-        "ppsspp-sa",
-        "rpcs3-sa",
-        "scummvm-sa",
-        "skyemu-sa",
-        "steam",
-        "supermodel-sa",
-        "vice-sa",
-        "vita3k-sa",
-        "xemu-sa",
-        "yabasanshiro-sa"
+        "steam"
       ]
     }
   ],
+  "doubled": [],
   "invalid": []
 }

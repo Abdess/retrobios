@@ -17,6 +17,7 @@ display_name: "Nintendo - DS (DraStic)"
 cores:
   - drastic
   - "drastic-sa"
+  - "drastic_standalone"
 systems:
   - nintendo-ds
 mode: standalone

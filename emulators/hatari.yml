@@ -17,6 +17,7 @@ cores:
   - hatari
   - "HATARISA"
   - "hatarisa"
+  - "hatari-fast"
 systems:
   - atari-st
   - atari-ste

@@ -88,6 +88,46 @@ class TheSkillIsAnAgentSkill(unittest.TestCase):
         self.assertTrue(skill["url"].endswith(siteagents.SKILL_PATH))
 
 
+class EveryPageHasAMarkdownCopy(unittest.TestCase):
+    """An assistant reads a page's words, not its navigation: each page has
+    its Markdown at <page>/index.md, which its head names."""
+
+    def test_the_head_names_the_copy_and_the_build_writes_it(self) -> None:
+        config = CONFIG.read_text(encoding="utf-8")
+        self.assertIn("rel: 'alternate', type: 'text/markdown', href: 'index.md'", config)
+        self.assertIn("markdownCopies,", config)
+
+    def test_a_page_keeps_its_commands_under_their_system(self) -> None:
+        import site_markdown  # noqa: PLC0415
+
+        html = ('<html><body><main><h1 id="_top">Demo</h1><div class="sl-markdown-content">'
+                '<p>Run it <a href="/retrobios/x/">here</a>.</p>'
+                '<div role="tablist"><a role="tab" id="tab-0-0">Windows</a>'
+                '<a role="tab" id="tab-0-1">Linux</a></div>'
+                '<div role="tabpanel" aria-labelledby="tab-0-0"><pre><code>'
+                '<div class="ec-line"><div class="code">irm x | iex</div></div></code></pre></div>'
+                '<div role="tabpanel" aria-labelledby="tab-0-1"><pre><code>'
+                '<div class="ec-line"><div class="code">curl x | sh</div></div></code></pre></div>'
+                '<table><tr><th>File</th><th>MD5</th></tr><tr><td>a.bin</td><td>ff</td></tr></table>'
+                '<button>Copy</button><span class="sr-only">hidden</span></div></main></body></html>')
+        text = site_markdown.page_markdown(html, "https://abdess.github.io/retrobios/demo/")
+        self.assertTrue(text.startswith("# Demo\n\nSource: https://abdess.github.io/retrobios/demo/"))
+        self.assertIn("[here](https://abdess.github.io/retrobios/x/)", text)
+        self.assertIn("**Windows:**\n\n```\nirm x | iex\n```", text)
+        self.assertIn("**Linux:**\n\n```\ncurl x | sh\n```", text)
+        self.assertIn("| File | MD5 |\n|---|---|\n| a.bin | ff |", text)
+        self.assertNotIn("Copy", text)
+        self.assertNotIn("hidden", text)
+
+    @unittest.skipUnless((DIST / "index.md").is_file(), "website/dist is not built")
+    def test_the_built_site_has_them(self) -> None:
+        pages = sorted(DIST.rglob("index.html"))
+        missing = [p for p in pages if not (p.parent / "index.md").is_file()]
+        self.assertEqual(missing, [])
+        self.assertIn("# Get your files", (DIST / "which-pack" / "index.md").read_text(encoding="utf-8"))
+        self.assertTrue((DIST / "llms-full.txt").is_file())
+
+
 class TheManifestIsAnArdManifest(unittest.TestCase):
     """The terms ard-entry.schema.json requires (ards-project/ard-spec)."""
 
@@ -115,7 +155,7 @@ class TheToolsReadOnly(unittest.TestCase):
         self.assertIn("import '../scripts/agent-tools.ts';", FOOTER.read_text(encoding="utf-8"))
         names = re.findall(r"^\s*name: '([a-z_]+)'", self.source, re.M)
         self.assertEqual(names, ["lookup_bios_hash", "emulator_bios_files", "search_retrobios",
-                                 "device_setup_command"])
+                                 "setup_bios_files", "device_setup_command"])
         self.assertEqual(self.source.count("readOnlyHint: true"), len(names))
 
     def test_the_setup_command_defaults_to_the_games(self) -> None:
@@ -130,6 +170,10 @@ class TheToolsReadOnly(unittest.TestCase):
         self.assertIn("value.startsWith('-')", self.source)
         self.assertIn("/^[a-z0-9_-]+$/.test(platform)", self.source)
         self.assertIn("`--dest=${quote(bios_folder as string)}`", self.source)
+
+    def test_setup_files_answer_from_the_picker_data(self) -> None:
+        self.assertIn("json<PickerData>(`data/picker/${found.platform}.json`)", self.source)
+        self.assertIn("Keep each name exactly as written.", self.source)
 
     def test_they_reach_no_other_site(self) -> None:
         code = re.sub(r"^\s*//.*$", "", self.source, flags=re.M)

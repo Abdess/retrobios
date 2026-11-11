@@ -9,15 +9,16 @@
     <bios path="amiga/bios/kick02019.AROS"     md5="186d23cccd9fbd6336d0f988b39dce4d" mandatory="false" core="amiberry,libretro/uae,libretro/uae4arm" note="AROS Free bios" />
     <bios path="aros-ext.bin" md5="945c364bb9b5f28a04e1003f8b7a469c" core="libretro/amiberry,amiberry" mandatory="false" />
     <bios path="aros-rom.bin" md5="69179a8479d1ba279c786094ce343386" core="libretro/amiberry,amiberry" mandatory="false" />
-    <bios path="whdboot/WHDLoad" md5="6670a9571f235ec31b8bbd48fc18f428" core="libretro/amiberry" mandatory="false" />
-    <bios path="whdboot/JST" md5="2a3a61bbd7c351751506e22a4354b76a" core="libretro/amiberry" mandatory="false" />
-    <bios path="whdboot/AmiQuit" md5="36ab26d3b855e634fdda062c052cd52b" core="libretro/amiberry" mandatory="false" />
+    <bios path="whdboot/host-quit" md5="a491e6bc79db7e968d35577cee2769a5" core="libretro/amiberry" mandatory="false" />
     <bios path="whdboot/game-data/whdload_db.json" md5="51d44cd24e16fbb395b1bfefbaacd375" core="libretro/amiberry" mandatory="false" />
-    <bios path="whdboot/save-data/Kickstarts/kick33180.A500.RTB" md5="c993feb1eeddec1d2e687aa514231028" core="libretro/amiberry" mandatory="false" />
-    <bios path="whdboot/save-data/Kickstarts/kick34005.A500.RTB" md5="7eb13d974af0992d672b67c317a7e0a1" core="libretro/amiberry" mandatory="false" />
-    <bios path="whdboot/save-data/Kickstarts/kick40063.A600.RTB" md5="3f97c1963d82c808ef29e7c984c4c688" core="libretro/amiberry" mandatory="false" />
-    <bios path="whdboot/save-data/Kickstarts/kick40068.A1200.RTB" md5="547b42b7b070c7f227ea45e0986d57a1" core="libretro/amiberry" mandatory="false" />
-    <bios path="whdboot/save-data/Kickstarts/kick40068.A4000.RTB" md5="f89f19b858ea6b1a04327c6f71ee1600" core="libretro/amiberry" mandatory="false" />
+    <bios path="whdboot/save-data/Kickstarts/kick33180.A500.RTB" md5="c993feb1eeddec1d2e687aa514231028" core="libretro/amiberry,amiberry" mandatory="false" />
+    <bios path="whdboot/save-data/Kickstarts/kick34005.A500.RTB" md5="7eb13d974af0992d672b67c317a7e0a1" core="libretro/amiberry,amiberry" mandatory="false" />
+    <bios path="whdboot/save-data/Kickstarts/kick37175.A500.RTB" md5="e057054449b5e21591ce27d2eb9ac720" core="libretro/amiberry,amiberry" mandatory="false" />
+    <bios path="whdboot/save-data/Kickstarts/kick36143.A3000.RTB" md5="2a2652daba6be3ef1d0bdf5ddd4347c6" core="libretro/amiberry,amiberry" mandatory="false" />
+    <bios path="whdboot/save-data/Kickstarts/kick39106.A1200.RTB" md5="af8b2e2227f01a142e20c8ab463f14ed" core="libretro/amiberry,amiberry" mandatory="false" />
+    <bios path="whdboot/save-data/Kickstarts/kick40063.A600.RTB" md5="3f97c1963d82c808ef29e7c984c4c688" core="libretro/amiberry,amiberry" mandatory="false" />
+    <bios path="whdboot/save-data/Kickstarts/kick40068.A1200.RTB" md5="547b42b7b070c7f227ea45e0986d57a1" core="libretro/amiberry,amiberry" mandatory="false" />
+    <bios path="whdboot/save-data/Kickstarts/kick40068.A4000.RTB" md5="f89f19b858ea6b1a04327c6f71ee1600" core="libretro/amiberry,amiberry" mandatory="false" />
     <bios path="whdboot/save-data/Kickstarts/kick31034.A1000.RTB" md5="c5ba6165df42fc69b32942b248fca725" core="libretro/amiberry" mandatory="false" />
     <bios path="uae_data/drive_click_A500.wav" md5="6c5b44c1a2bcee664129f850bfe4ed8a" core="libretro/puae,libretro/puae2021" mandatory="false" />
     <bios path="uae_data/drive_spin_A500.wav" md5="7401f854a75f9ede18769168ab896a2a" core="libretro/puae,libretro/puae2021" mandatory="false" />
@@ -150,7 +151,7 @@
     <bios path="np2kai/font.rom"       md5="38d32748ae49d1815b0614970849fd40,fd0b856899aec843cbe69d2940df547f,
                                             4133b0be0d470920da60b9ed28d2614f,693fd1da3239d4bbeafc77d211718fc5,
                                             829b963e21334e0fc2092ebd58f2ab4a,add4a225048c85ca2bc588696c6ecdc5,
-                                            ca87908a99ea423093f6d497fc367f7d" hashMatchMandatory="false" core="libretro/np2kai" />
+                                            ca87908a99ea423093f6d497fc367f7d" hashMatchMandatory="false" core="libretro/np2kai" mandatory="false" />
     <bios path="np2kai/itf.rom"        md5="1d295699ffeab0f0e24e09381299259d,72ea51443070f0e9212bfc9b793ee28e,
                                             a13d96da03a28af8418d7f86ab951f1a,b49ea39a1f730f1c966babc11961dc9a,
                                             e9fc3890963b12cf15d0a2eea5815b72" hashMatchMandatory="false" core="libretro/np2kai" />

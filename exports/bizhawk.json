@@ -22,6 +22,8 @@
   "required_aligned": 0,
   "withheld": [],
   "found_by_content": 0,
+  "unattributed": [],
   "removal_candidates": [],
+  "doubled": [],
   "invalid": []
 }

@@ -2357,6 +2357,12 @@
     "md5": "4659968035d462be471fdfb46b604696",
     "sha1": "4317f301d6e4117dfde42b33dfaf73a2b25f43c1"
   },
+  "arcade:dotron.zip": {
+    "size": "2010009",
+    "crc": "05fc6c6b",
+    "md5": "e284ec87c3d7978628c78d8031b7dd98",
+    "sha1": "c6d6579ffe0f709ff7861747ba17cb2931dce1b5"
+  },
   "arcade:frogs.zip": {
     "size": "2832731",
     "crc": "99541e86",

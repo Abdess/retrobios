@@ -6,11 +6,11 @@
   "files": [
     "knulli-systems"
   ],
-  "summary": "566 kept, 122 files added, 4 hashes updated to the emulator source",
+  "summary": "566 kept, 115 files added, 3 hashes updated to the emulator source",
   "counts": {
     "kept": 566,
-    "added": 122,
-    "not_added": 1868,
+    "added": 115,
+    "not_added": 2456,
     "not_kept": 0
   },
   "changes": [
@@ -46,15 +46,6 @@
       "new": {
         "md5": "796f62574413bc59ca767063b3184f90"
       }
-    },
-    {
-      "kind": "hash_updated",
-      "system": "neogeo",
-      "name": "neogeo.zip",
-      "destination": "neogeo.zip",
-      "field": "md5",
-      "old": "dffb72f116d36d025068b23970a4f6df",
-      "new": "00dad01abdbf8ea9e79ad2fe11bdb182"
     },
     {
       "kind": "added",
@@ -197,17 +188,6 @@
       "old": null,
       "new": {
         "md5": "428577250f43edc902ea239c50d2240d"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "dreamcast",
-      "name": "dc_bios.bin",
-      "destination": "dc/boot.bin",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "e10c53c2f8b90bab96ead2d368858623"
       }
     },
     {
@@ -437,156 +417,90 @@
     },
     {
       "kind": "added",
-      "system": "msx",
-      "name": "NMS8245SystemROM1.08.bin",
-      "destination": "openmsx/share/systemroms/NMS8245SystemROM1.08.bin",
+      "system": "amiga500",
+      "name": "kick33180.A500.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick33180.A500.RTB",
       "field": null,
       "old": null,
       "new": {
-        "md5": "ee02cf1a80bab82c3b19a7dbaa1c0d25"
+        "md5": "c993feb1eeddec1d2e687aa514231028"
       }
     },
     {
       "kind": "added",
-      "system": "msx",
-      "name": "fmpac.rom",
-      "destination": "openmsx/share/systemroms/fmpac.rom",
+      "system": "amiga500",
+      "name": "kick34005.A500.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick34005.A500.RTB",
       "field": null,
       "old": null,
       "new": {
-        "md5": "398856474188363d68d5744d2a867e90"
+        "md5": "7eb13d974af0992d672b67c317a7e0a1"
       }
     },
     {
       "kind": "added",
-      "system": "msx",
-      "name": "ide250.dat",
-      "destination": "openmsx/share/systemroms/ide250.dat",
+      "system": "amiga500",
+      "name": "kick37175.A500.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick37175.A500.RTB",
       "field": null,
       "old": null,
       "new": {
-        "md5": "26befc02fc1313b1c1609c74bdb4cac3"
+        "md5": "e057054449b5e21591ce27d2eb9ac720"
       }
     },
     {
       "kind": "added",
-      "system": "msx",
-      "name": "COLECO.ROM",
-      "destination": "openmsx/share/systemroms/COLECO.ROM",
+      "system": "amiga500",
+      "name": "kick36143.A3000.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick36143.A3000.RTB",
       "field": null,
       "old": null,
       "new": {
-        "md5": "2c66f5911e5b42b8ebe113403548eee7"
+        "md5": "2a2652daba6be3ef1d0bdf5ddd4347c6"
       }
     },
     {
       "kind": "added",
-      "system": "msx",
-      "name": "svi-3x8_v111.rom",
-      "destination": "openmsx/share/systemroms/svi-3x8_v111.rom",
+      "system": "amiga500",
+      "name": "kick39106.A1200.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick39106.A1200.RTB",
       "field": null,
       "old": null,
       "new": {
-        "md5": "352f054ab09605070bdff49d73f335cc"
+        "md5": "af8b2e2227f01a142e20c8ab463f14ed"
       }
     },
     {
       "kind": "added",
-      "system": "msx",
-      "name": "px-7_basic-bios1.rom",
-      "destination": "openmsx/share/systemroms/px-7_basic-bios1.rom",
+      "system": "amiga500",
+      "name": "kick40063.A600.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick40063.A600.RTB",
       "field": null,
       "old": null,
       "new": {
-        "md5": "9218f6dd89f7ba01e3090d44721b4260"
+        "md5": "3f97c1963d82c808ef29e7c984c4c688"
       }
     },
     {
       "kind": "added",
-      "system": "msx",
-      "name": "cf-3300_basic-bios1.rom",
-      "destination": "openmsx/share/systemroms/cf-3300_basic-bios1.rom",
+      "system": "amiga500",
+      "name": "kick40068.A1200.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick40068.A1200.RTB",
       "field": null,
       "old": null,
       "new": {
-        "md5": "f873f1260b14f1468fa118778ae1c3d2"
+        "md5": "547b42b7b070c7f227ea45e0986d57a1"
       }
     },
     {
       "kind": "added",
-      "system": "msx",
-      "name": "cf-3300_disk.rom",
-      "destination": "openmsx/share/systemroms/cf-3300_disk.rom",
+      "system": "amiga500",
+      "name": "kick40068.A4000.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick40068.A4000.RTB",
       "field": null,
       "old": null,
       "new": {
-        "md5": "318b6aa76da71c54ccad7734356e1902"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "msx",
-      "name": "fs-5500_basic-bios2.rom",
-      "destination": "openmsx/share/systemroms/fs-5500_basic-bios2.rom",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "5bf4fdfd3c3ffea3e573b386550cb3fa"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "msx",
-      "name": "fs-5500_msx2sub.rom",
-      "destination": "openmsx/share/systemroms/fs-5500_msx2sub.rom",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "dcd5e2388115172f2fb48875b2089dbf"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "msx",
-      "name": "fs-5500_kanjibasic.rom",
-      "destination": "openmsx/share/systemroms/fs-5500_kanjibasic.rom",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "afbe6ba903453902540ae988cc89dc7b"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "msx",
-      "name": "fs-5500_kanjifont.rom",
-      "destination": "openmsx/share/systemroms/fs-5500_kanjifont.rom",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "090539674630c1338a90a1df943a93e2"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "msx",
-      "name": "fs-5500_superimp.rom",
-      "destination": "openmsx/share/systemroms/fs-5500_superimp.rom",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "7eb6ae0fbe9736b20dda8dcbd5064f67"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "msx",
-      "name": "vg8020_basic-bios1.rom",
-      "destination": "openmsx/share/systemroms/vg8020_basic-bios1.rom",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "a0452dbf5ace7d2e49d0a8029efed09a"
+        "md5": "f89f19b858ea6b1a04327c6f71ee1600"
       }
     },
     {
@@ -1394,7 +1308,6 @@
     }
   ],
   "hashes_updated": [
-    "neogeo/neogeo.zip md5",
     "nds/dsi_bios7.bin md5",
     "nds/dsi_bios9.bin md5",
     "msx/MSX.ROM md5"
@@ -1405,7 +1318,8 @@
   "hashes_cleared": [],
   "required_aligned": 0,
   "withheld": [],
-  "found_by_content": 114,
+  "found_by_content": 337,
+  "unattributed": [],
   "removal_candidates": [
     {
       "system": "atarist",
@@ -2518,5 +2432,6 @@
       "unresolved_cores": []
     }
   ],
+  "doubled": [],
   "invalid": []
 }

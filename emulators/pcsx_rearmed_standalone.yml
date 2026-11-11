@@ -13,6 +13,7 @@ display_name: "Sony - PlayStation (PCSX-ReARMed standalone)"
 mode: standalone
 cores:
   - pcsx-rearmed
+  - "pcsx_standalone"
 systems:
   - sony-playstation
 

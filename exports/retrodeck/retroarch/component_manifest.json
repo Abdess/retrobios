@@ -1956,7 +1956,7 @@
         },
         {
           "filename": "neocdz.zip",
-          "md5": "b31a246b69493c35194fe0bac120dc37",
+          "md5": "c733b4b7bd30fa849874d96c591c8639",
           "system": "fbneo",
           "description": "Neo Geo CDZ BIOS",
           "required": "Required"
@@ -3490,9 +3490,8 @@
           "md5": "0a93f7940c455905bea6e392dfde92a4",
           "system": "dreamcast",
           "description": "Dreamcast flash BIOS (duplicate of dc_flash.bin)",
-          "required": "Required",
-          "paths": "$bios_path/dc",
-          "sha256": "dd8b365521a9c08bb4c170da3592212580f7251f35a45d6083774d1c030bc3e3"
+          "required": "Optional",
+          "paths": "$bios_path/dc"
         },
         {
           "filename": "bios_J.sms",
@@ -5191,12 +5190,6 @@
           "description": " V.SMILE TV Learning System BIOS"
         },
         {
-          "filename": "segasp.zip",
-          "system": "fbneo",
-          "required": "Required",
-          "paths": "$bios_path/dc"
-        },
-        {
           "filename": "3do.xml",
           "system": "3do",
           "paths": "$bios_path/mame/hash"
@@ -5232,50 +5225,6 @@
           "paths": "$bios_path/mame/hash"
         },
         {
-          "filename": "a2diskiing.zip",
-          "system": "apple2gs"
-        },
-        {
-          "filename": "a2focdrv.zip",
-          "system": "apple2gs"
-        },
-        {
-          "filename": "a2hsscsi.zip",
-          "system": "apple2gs"
-        },
-        {
-          "filename": "a2memexp.zip",
-          "system": "apple2gs"
-        },
-        {
-          "filename": "a2mouse.zip",
-          "system": "apple2gs"
-        },
-        {
-          "filename": "a2parprn.zip",
-          "system": "apple2gs"
-        },
-        {
-          "filename": "a2pdromdr.zip",
-          "system": "apple2gs"
-        },
-        {
-          "filename": "a2pic.zip",
-          "system": "apple2gs"
-        },
-        {
-          "filename": "ace80.zip",
-          "system": "apple2gs"
-        },
-        {
-          "filename": "d2fdc.zip",
-          "system": "apple2gs"
-        },
-        {
-          "filename": "ibsap2.zip",
-          "system": "apple2gs"
-        },
-        {
           "filename": "cdi.xml",
           "system": "cdimono1",
           "paths": "$bios_path/mame/hash"
@@ -5303,74 +5252,6 @@
         {
           "filename": "gmaster.xml",
           "system": "gmaster",
-          "paths": "$bios_path/mame/hash"
-        },
-        {
-          "filename": "mac128k.zip",
-          "system": "mac2",
-          "required": "Required"
-        },
-        {
-          "filename": "mac512k.zip",
-          "system": "mac2"
-        },
-        {
-          "filename": "macplus.zip",
-          "system": "mac2",
-          "required": "Required"
-        },
-        {
-          "filename": "macse.zip",
-          "system": "mac2",
-          "required": "Required"
-        },
-        {
-          "filename": "macclasc.zip",
-          "system": "mac2",
-          "required": "Required"
-        },
-        {
-          "filename": "mac2fdhd.zip",
-          "system": "mac2",
-          "required": "Required"
-        },
-        {
-          "filename": "maciix.zip",
-          "system": "mac2"
-        },
-        {
-          "filename": "maclc3.zip",
-          "system": "mac2",
-          "required": "Required"
-        },
-        {
-          "filename": "mac_cdrom.xml",
-          "system": "mac2",
-          "paths": "$bios_path/mame/hash"
-        },
-        {
-          "filename": "mac_flop.xml",
-          "system": "mac2",
-          "paths": "$bios_path/mame/hash"
-        },
-        {
-          "filename": "mac_flop_clcracked.xml",
-          "system": "mac2",
-          "paths": "$bios_path/mame/hash"
-        },
-        {
-          "filename": "mac_flop_orig.xml",
-          "system": "mac2",
-          "paths": "$bios_path/mame/hash"
-        },
-        {
-          "filename": "mac_hdd.xml",
-          "system": "mac2",
-          "paths": "$bios_path/mame/hash"
-        },
-        {
-          "filename": "mac_hdflop.xml",
-          "system": "mac2",
           "paths": "$bios_path/mame/hash"
         },
         {

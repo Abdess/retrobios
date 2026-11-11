@@ -11,7 +11,7 @@ version_basis:
   tag: "v2.9.9"
   distance: 0
 display_name: "Pyxel"
-cores: [pyxel]
+cores: [pyxel, "mf", "pixel2"]
 systems: []
 verification: existence
 

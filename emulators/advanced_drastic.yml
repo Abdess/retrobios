@@ -22,6 +22,8 @@ version_basis:
 display_name: "Nintendo - DS (advanced_drastic)"
 cores:
   - "advanced_drastic"
+  - "drastic - standalone"
+  - "DraStic-original"
 systems:
   - nintendo-ds
 mode: standalone

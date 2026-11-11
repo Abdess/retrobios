@@ -28,6 +28,8 @@ cores:
   - "yabasanshiro-2"
   - "yabasanshiroSA"
   - "yabasanshiro-sa"
+  - "yabasanshiro-libretro"
+  - "yabasanshiroSA1_5"
 systems:
   - sega-saturn
 

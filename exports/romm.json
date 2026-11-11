@@ -1,16 +1,16 @@
 {
   "platform": "romm",
   "originals": {
-    "known_bios_files.json": "https://raw.githubusercontent.com/rommapp/romm/5.4.0/backend/models/fixtures/known_bios_files.json"
+    "known_bios_files.json": "https://raw.githubusercontent.com/rommapp/romm/5.4.1/backend/models/fixtures/known_bios_files.json"
   },
   "files": [
     "known_bios_files.json"
   ],
-  "summary": "374 kept, 93 files added, 1 hash updated to the emulator source",
+  "summary": "374 kept, 94 files added, 1 hash updated to the emulator source",
   "counts": {
     "kept": 374,
-    "added": 93,
-    "not_added": 321,
+    "added": 94,
+    "not_added": 330,
     "not_kept": 0
   },
   "changes": [
@@ -54,6 +54,20 @@
         "md5": "4659968035d462be471fdfb46b604696",
         "crc32": "7481c2ea",
         "size": 925914
+      }
+    },
+    {
+      "kind": "added",
+      "system": "arcade",
+      "name": "dotron.zip",
+      "destination": "mame2003-plus/artwork/dotron.zip",
+      "field": null,
+      "old": null,
+      "new": {
+        "sha1": "c6d6579ffe0f709ff7861747ba17cb2931dce1b5",
+        "md5": "e284ec87c3d7978628c78d8031b7dd98",
+        "crc32": "05fc6c6b",
+        "size": 2010009
       }
     },
     {
@@ -1334,7 +1348,10 @@
   "hashes_cleared": [],
   "required_aligned": 0,
   "withheld": [],
-  "found_by_content": 0,
+  "found_by_content": 1,
+  "unattributed": [
+    "microsoft-msx/msx.zip"
+  ],
   "removal_candidates": [
     {
       "system": "arcade",
@@ -1654,7 +1671,7 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "mednafen_pce"
+        "beetle_pce"
       ],
       "unresolved_cores": []
     },
@@ -1874,6 +1891,7 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
+        "bsnes",
         "mgba"
       ],
       "unresolved_cores": []
@@ -1885,6 +1903,7 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
+        "bsnes",
         "mgba"
       ],
       "unresolved_cores": []
@@ -2034,7 +2053,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2048,7 +2066,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2062,7 +2079,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2076,7 +2092,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2090,7 +2105,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2104,7 +2118,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2118,7 +2131,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2132,7 +2144,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2146,7 +2157,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2160,7 +2170,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2174,7 +2183,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2188,7 +2196,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2202,7 +2209,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2216,7 +2222,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2230,7 +2235,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2244,7 +2248,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2258,7 +2261,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2272,7 +2274,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2286,7 +2287,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2300,7 +2300,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2314,7 +2313,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2328,7 +2326,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2342,7 +2339,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2356,7 +2352,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2370,7 +2365,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2384,7 +2378,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2398,7 +2391,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -2412,7 +2404,6 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "clk",
-        "ep128emu",
         "ep128emu_core",
         "fuse"
       ],
@@ -3557,5 +3548,6 @@
       "unresolved_cores": []
     }
   ],
+  "doubled": [],
   "invalid": []
 }

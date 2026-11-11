@@ -6,11 +6,11 @@
   "files": [
     "batocera-systems"
   ],
-  "summary": "692 kept, 138 files added, 3 hashes updated to the emulator source",
+  "summary": "692 kept, 142 files added, 3 hashes updated to the emulator source",
   "counts": {
     "kept": 692,
-    "added": 138,
-    "not_added": 1780,
+    "added": 142,
+    "not_added": 2371,
     "not_kept": 0
   },
   "changes": [
@@ -166,28 +166,6 @@
       "old": null,
       "new": {
         "md5": "428577250f43edc902ea239c50d2240d"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "dreamcast",
-      "name": "dc_flash.bin",
-      "destination": "dc/flash.bin",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "0a93f7940c455905bea6e392dfde92a4"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "dreamcast",
-      "name": "dc_bios.bin",
-      "destination": "dc/boot.bin",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "e10c53c2f8b90bab96ead2d368858623"
       }
     },
     {
@@ -384,13 +362,90 @@
     },
     {
       "kind": "added",
-      "system": "msx",
-      "name": "px-7_basic-bios1.rom",
-      "destination": "openmsx/share/systemroms/px-7_basic-bios1.rom",
+      "system": "amiga500",
+      "name": "kick33180.A500.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick33180.A500.RTB",
       "field": null,
       "old": null,
       "new": {
-        "md5": "9218f6dd89f7ba01e3090d44721b4260"
+        "md5": "c993feb1eeddec1d2e687aa514231028"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "kick34005.A500.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick34005.A500.RTB",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "7eb13d974af0992d672b67c317a7e0a1"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "kick37175.A500.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick37175.A500.RTB",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "e057054449b5e21591ce27d2eb9ac720"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "kick36143.A3000.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick36143.A3000.RTB",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "2a2652daba6be3ef1d0bdf5ddd4347c6"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "kick39106.A1200.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick39106.A1200.RTB",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "af8b2e2227f01a142e20c8ab463f14ed"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "kick40063.A600.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick40063.A600.RTB",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "3f97c1963d82c808ef29e7c984c4c688"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "kick40068.A1200.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick40068.A1200.RTB",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "547b42b7b070c7f227ea45e0986d57a1"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "amiga500",
+      "name": "kick40068.A4000.RTB",
+      "destination": "whdboot/save-data/Kickstarts/kick40068.A4000.RTB",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "f89f19b858ea6b1a04327c6f71ee1600"
       }
     },
     {
@@ -1547,17 +1602,6 @@
       "new": {
         "md5": "849d8796d8d3e3fcf89f151b57db73b0"
       }
-    },
-    {
-      "kind": "added",
-      "system": "bk",
-      "name": "basic10.rom",
-      "destination": "Oric/basic10.rom",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "ebe418ec8a6c85d5ac32956c9a96c179"
-      }
     }
   ],
   "hashes_updated": [
@@ -1571,7 +1615,8 @@
   "hashes_cleared": [],
   "required_aligned": 0,
   "withheld": [],
-  "found_by_content": 114,
+  "found_by_content": 323,
+  "unattributed": [],
   "removal_candidates": [
     {
       "system": "pc60",
@@ -2640,18 +2685,8 @@
         "ep128emu_core"
       ],
       "unresolved_cores": []
-    },
-    {
-      "system": "tvc",
-      "name": "tvc64.zip",
-      "destination": "tvc64.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "ep128emu_core"
-      ],
-      "unresolved_cores": []
     }
   ],
+  "doubled": [],
   "invalid": []
 }
