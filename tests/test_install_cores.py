@@ -145,6 +145,52 @@ class ACoreOnlyTheDownloaderBrings(unittest.TestCase):
         self.assertEqual([f["dest"] for f in files], ["kick31.rom", "roms/a4091.rom"])
 
 
+
+class CoreOfferedOnSomeBoards(unittest.TestCase):
+    """ROCKNIX writes uae4arm for roms/amiga under the devices it builds it
+    for (emulators/package.mk:188), and s922x runs uae4arm for amigacd32:
+    the core list alone would keep its roms/amiga files there."""
+
+    MANIFEST = {
+        "core_names": {"uae4arm": [], "puae": []},
+        "offered_boards": {
+            "uae4arm": [{"root": "roms", "folder": "amiga", "boards": ["h700", "rk3326"]}],
+        },
+        "files": [
+            {"dest": "amiga/kick.rom", "cores": ["uae4arm"], "root": "roms"},
+            {"dest": "amigacd32/kick.rom", "cores": ["uae4arm"], "root": "roms"},
+            {"dest": "amiga/shared.rom", "cores": ["uae4arm", "puae"], "root": "roms"},
+        ],
+        "omitted_files": [],
+    }
+
+    def dests(self, target):
+        files, _ = install.narrow_to_cores(self.MANIFEST, ["uae4arm"], target=target)
+        return [f["dest"] for f in files]
+
+    def test_a_board_it_is_offered_on_keeps_the_folder(self):
+        self.assertEqual(self.dests("rk3326"),
+                         ["amiga/kick.rom", "amigacd32/kick.rom", "amiga/shared.rom"])
+
+    def test_another_board_keeps_only_the_folders_offering_it(self):
+        self.assertEqual(self.dests("s922x"), ["amigacd32/kick.rom"])
+
+    def test_a_core_offered_everywhere_keeps_a_shared_file(self):
+        files, _ = install.narrow_to_cores(self.MANIFEST, ["uae4arm", "puae"], target="s922x")
+        self.assertEqual([f["dest"] for f in files], ["amigacd32/kick.rom", "amiga/shared.rom"])
+
+    def test_installed_cores_are_no_board(self):
+        files, _ = install.narrow_to_cores(self.MANIFEST, ["uae4arm"])
+        self.assertEqual(len(files), 3)
+
+    def test_the_manifest_check_refuses_a_malformed_map(self):
+        base = {"manifest_version": 2, "platform": "rocknix", "files": [], "omitted_files": []}
+        install._validate_manifest(
+            {**base, "offered_boards": self.MANIFEST["offered_boards"]}, "rocknix")
+        with self.assertRaisesRegex(ValueError, "offered_boards"):
+            install._validate_manifest(
+                {**base, "offered_boards": {"uae4arm": [{"folder": "amiga"}]}}, "rocknix")
+
 class ACoreTheListDoesNotKnow(unittest.TestCase):
     """A core newer than the list (parallel_dc, issue 87) loses nothing its .info declares."""
 

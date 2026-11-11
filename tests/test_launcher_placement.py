@@ -13,6 +13,7 @@ import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
 
 import hashlib
 import io
+import json
 import shutil
 import sys
 import tempfile
@@ -1206,6 +1207,59 @@ class EveryCoreAFolderOffers(unittest.TestCase):
             folders = {e["path"].split("/")[0] for e in view["files"]
                        if e.get("category") == "bios_zip" and e.get("layout_path")}
             self.assertIn("arcade", folders, platform)
+
+
+class CoreOfferedOnSomeBoards(unittest.TestCase):
+    """ROCKNIX writes some add_emu_core calls under a `case "${DEVICE}"`
+    branch (emulators/package.mk:188 offers uae4arm for amiga on the devices
+    it builds it for). A board's pack places such a core in that folder only
+    when the branch names the board, and a manifest for every board says
+    where it does."""
+
+    ROW = {
+        "folder": "amiga", "core": "puae", "emulator": "retroarch",
+        "offers": [
+            {"emulator": "retroarch", "core": "puae"},
+            {"emulator": "retroarch", "core": "uae4arm", "when": "DEVICE H700|RK3326"},
+            {"emulator": "retroarch", "core": "puae2021",
+             "when": 'if [ "${PREFER_GLES}" = "yes" ]; then'},
+        ],
+    }
+
+    def config(self, **extra) -> dict:
+        base = load_platform_config("rocknix", str(REPO_ROOT / "platforms"))
+        return {**base, "_rom_folders": [self.ROW], **extra}
+
+    def test_a_branch_names_the_boards(self) -> None:
+        from common import when_admits
+
+        self.assertTrue(when_admits("DEVICE H700|RK3326", "rk3326"))
+        self.assertFalse(when_admits("DEVICE H700|RK3326", "s922x"))
+        self.assertTrue(when_admits("DEVICE AMD64; DEVICE RK3588*", "rk3588"))
+        self.assertTrue(when_admits('if [ "${PREFER_GLES}" = "yes" ]; then', "h700"))
+
+    def test_an_offer_carries_the_boards_its_branch_names(self) -> None:
+        from common import offer_boards
+
+        boards = offer_boards(self.config())
+        self.assertEqual(boards[("uae4arm", "amiga")], frozenset({"h700", "rk3326"}))
+        self.assertIsNone(boards[("puae", "amiga")])
+        self.assertIsNone(boards[("puae2021", "amiga")])
+
+    def test_a_board_pack_places_the_core_where_the_board_offers_it(self) -> None:
+        from common import CONTENT_FOLDER_PREFIX, TARGET_KEY, content_folder_tags
+
+        def placed(config: dict) -> dict:
+            rows = [json.loads(t[len(CONTENT_FOLDER_PREFIX):]) for t in content_folder_tags(config)
+                    if t.startswith(CONTENT_FOLDER_PREFIX)]
+            return {core: on for core, _folder, _where, on in rows}
+
+        every = placed(self.config())
+        self.assertEqual(every["uae4arm"], ["h700", "rk3326"])
+        self.assertIsNone(every["puae"])
+        self.assertIn("uae4arm", placed(self.config(**{TARGET_KEY: "rk3326"})))
+        self.assertNotIn("uae4arm", placed(self.config(**{TARGET_KEY: "s922x"})))
+        self.assertIn("puae", placed(self.config(**{TARGET_KEY: "s922x"})))
 
 
 def platform_manifest(platform: str) -> dict:

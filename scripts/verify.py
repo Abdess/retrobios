@@ -46,6 +46,8 @@ from alternatives import (
     slot_set_keys,
 )
 from common import (
+    TARGET_KEY,
+    canonical_target_name,
     OUTER_ROOTS,
     _foreign_tree,
     _owner_tokens,
@@ -3302,6 +3304,11 @@ def _main(held: contextlib.ExitStack) -> None:
     for group_platforms, representative in groups:
         config = load_platform_config(representative, args.platforms_dir)
         tc = target_cores_cache.get(representative) if args.target else None
+        if tc is not None:
+            # A core a roms folder offers on other boards only is not placed
+            # there, as generate_pack builds the board's pack.
+            config = {**config, TARGET_KEY: canonical_target_name(
+                [representative], args.target, args.platforms_dir)}
         result = verify_platform(
             config,
             db,
