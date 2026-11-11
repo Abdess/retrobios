@@ -876,6 +876,60 @@ without a terminal, or no at the question). With `--events` the run writes
 `removal_plan`, `removed`, `backup` and `restored` events, see
 [Machine-readable events](#machine-readable-events).
 
+## Making a pack { #making-a-pack }
+
+`--pack PATH` downloads the files of the choice into a pack ZIP instead of a
+BIOS folder, for another device or an install without the internet. Every
+narrowing option applies as for an install (`--system`, `--core`,
+`--emulator`, `--region`, `--target`, `--no-game-data`, and `--for-games
+FOLDER` with `--required-only`), and `--dry-run` says what would go in,
+`--verbose` listing each file:
+
+```
+python3 install.py --platform retroarch --system sony-playstation --pack ~/Downloads/ --dry-run
+Pack for RetroArch: 108 files (324.0 MB).
+Pack: ~/Downloads/RetroArch_Custom_BIOS_Pack.zip
+  --verbose lists the files.
+```
+
+Without `--dry-run` the run downloads the files, writes the pack and ends on
+`Pack made:` with the count and the size of the ZIP.
+
+A folder takes the name `<Platform>_BIOS_Pack.zip`, with `_Custom` when the
+choice narrows the list. A file name must end with `_BIOS_Pack.zip`, the
+name `--from-pack` and the parts read. On the other device,
+`--from-pack` on the pack installs the same files at the same places, with no
+network and no option: the pack's `manifest.json` carries the list narrowed
+to the choice, the cores per board and every file's SHA-1. A file two places
+share is stored once, and each data tree sits where the reader looks for it.
+
+Every file is checked against its SHA-1 as it is written into the ZIP, before
+the ZIP is closed. The pack is written beside its final name and renamed only
+once complete, so a download that fails, a file that does not match or a stop
+leaves no file behind, and a pack of the same name written before stays as it
+was. The bytes depend on the choice alone: members in a fixed order, a fixed
+date and mode, one compression level. Making the pack needs room for the files
+and the ZIP together on the drive it goes to.
+
+`--split SIZE` (`1900M`, `4G`) writes parts of at most that size, each a whole
+ZIP named `<Name>.part1of3.zip`, as release packs are split, with the marker
+`--check` reads. On a FAT32 drive, which holds no file of 4 GB or more, a pack
+that would pass that is split by itself, and the run says so in one line.
+`--from-pack` takes any one of the parts and finds the others beside it.
+
+On the full screen, **More** on the plan holds **Make a pack**. Its plan names
+the files, their size, where the pack goes (Downloads, else the home folder,
+**Change where** to browse) and how it is written, then **Make the pack**
+gives the result. The plan's choice is the pack's, and the options of the
+folder of this machine (the save directory, the installed cores, the card's
+own games) are left out.
+
+Exit codes: `0` once written, or listed with `--dry-run`, `1` when a file
+could not be had or the pack could not be written, `2` when nothing was tried
+(an option refused, a choice that keeps no file, a file larger than a part,
+too little room). With `--events` the run writes a `pack` event, see
+[Machine-readable events](#machine-readable-events).
+
 ## Copy from an old card { #copy-from-an-old-card }
 
 The card a handheld came with, a backup of an old BIOS folder, a Downloads
@@ -1196,6 +1250,8 @@ what the options name, everything by default.
 | <span id="option-backup"></span>`--backup` | With `--remove`, move the files into a dated folder of `retrobios-backup` instead of deleting them, for `--restore` to put back |
 | <span id="option-backups"></span>`--backups` | List the backups of the BIOS folder, newest first, with the date, the files and the size of each |
 | <span id="option-delete-backup"></span>`--delete-backup FOLDER` | Delete one backup listed by `--backups`, after one question that names its date and size (`--yes` skips it) |
+| <span id="option-pack"></span>`--pack PATH` | Download the choice into a pack ZIP at PATH instead of a BIOS folder, for another device or an install without the internet: a folder takes `<Platform>_BIOS_Pack.zip`. The narrowing options apply, `--dry-run` lists what would go in, and `--from-pack` installs from it. See [Making a pack](#making-a-pack) |
+| <span id="option-split"></span>`--split SIZE` | With `--pack`, write parts of at most SIZE (`1900M`, `4G`), each a whole ZIP. A pack that would pass 4 GB on a FAT32 drive is split by itself |
 | <span id="option-tui"></span>`--tui` | Open the full-screen interface, or stop with the reason it cannot open here (code 2) instead of falling back to the questions. Wins over `RETROBIOS_PLAIN` and `ACCESSIBLE`. See [The full-screen interface](#the-full-screen-interface) |
 | <span id="option-plain"></span>`--plain` | Ask the questions line by line instead of the full-screen interface, the mode for a screen reader. See [The full-screen interface](#the-full-screen-interface) |
 | <span id="option-version"></span>`--version` | Print the installer's identity, the first 12 hex digits of the SHA-256 the bootstraps pin |
@@ -1976,8 +2032,8 @@ fields, the installer refuses to narrow rather than install everything.
 | Code | Meaning |
 |------|---------|
 | `0` | everything asked for is installed or already in place, or removed, put back or deleted |
-| `1` | a failure: the one-liner could not download or verify `install.py`, or found no Python 3.8 with its ssl, unicodedata and zlib modules (nothing was run), an unusable base URL, `--installed-cores` with no core found, a manifest that fails validation, a fetch that never succeeded, no platform to install for in a non-interactive run, some files failed or were left out by `--offline` while others installed, a `--from-pack` pack that cannot be read, lacks a part or is for another platform, a `--from` folder that does not exist or cannot be read, a BIOS folder that is a file or lies under one, a `--dest` that is not the card of the system named (another system's card, a folder inside one, a drive with none of its files where its card always has them, or a folder that does not exist), `--restore` could not put a file back, `--remove` or `--delete-backup` could not delete a file or update the install record, or `--add-app` could not put every file of the app on the card |
-| `2` | nothing was installed: every file the run tried failed (a BIOS folder that cannot be written, for one), or `--offline` left every file out, the drive has too little free space for the download (checked before any folder is created), or the question about a folder that does not exist, named with `--dest` or typed at the folder question, was answered no. Also an option the installer refused before any download: an unknown option, `--jobs` outside 1 to 32, `--target` with `--every-board`, `--target` with `--from-pack` or `--offline` (or `RETROBIOS_INSTALL_OFFLINE` set) when no core list per board is at hand (the pack carries none and none is beside `--manifest` as `targets/<platform>.json`), or for a platform that publishes none, which is said to have no hardware targets, `--list-targets` with `--offline` and neither, `--add-app` with `--check`, `--dry-run`, a listing, `--from-pack` or `--offline`. The message then starts with `install.py: error:`. Also an unknown platform, target, system, core or emulator, said in an `Error:` or `Unknown platform` line and an `error` event whose `stage` is `option`. Also `--add-app` for a folder on no card that takes the app, said in an `Error:` line and an `app` event before anything is written. With `--restore` or `--delete-backup`, a folder that is not a dated folder inside `retrobios-backup`. With `--remove`, nothing removed: no install record of the setup, nothing it can remove, no `--yes` without a terminal, or no at its question, and the same for `--delete-backup`. Also a quit chosen before the install, as `gh` ends a cancelled prompt: `q` at a question, `q` or **Quit** on the full screen, which then keeps `RetroBIOS: quit. Nothing was installed.`, and the full screen closed with no button pressed (`RETROBIOS_IDLE_EXIT`). No code but `0` closes a Windows Terminal tab started on the installer itself, so such a tab stays open on a quit |
+| `1` | a failure: the one-liner could not download or verify `install.py`, or found no Python 3.8 with its ssl, unicodedata and zlib modules (nothing was run), an unusable base URL, `--installed-cores` with no core found, a manifest that fails validation, a fetch that never succeeded, no platform to install for in a non-interactive run, some files failed or were left out by `--offline` while others installed, a `--from-pack` pack that cannot be read, lacks a part or is for another platform, a `--from` folder that does not exist or cannot be read, a BIOS folder that is a file or lies under one, a `--dest` that is not the card of the system named (another system's card, a folder inside one, a drive with none of its files where its card always has them, or a folder that does not exist), `--restore` could not put a file back, `--remove` or `--delete-backup` could not delete a file or update the install record, `--pack` could not get a file or write the pack (nothing is left behind), or `--add-app` could not put every file of the app on the card |
+| `2` | nothing was installed: every file the run tried failed (a BIOS folder that cannot be written, for one), or `--offline` left every file out, the drive has too little free space for the download (checked before any folder is created), or the question about a folder that does not exist, named with `--dest` or typed at the folder question, was answered no. Also an option the installer refused before any download: an unknown option, `--jobs` outside 1 to 32, `--target` with `--every-board`, `--target` with `--from-pack` or `--offline` (or `RETROBIOS_INSTALL_OFFLINE` set) when no core list per board is at hand (the pack carries none and none is beside `--manifest` as `targets/<platform>.json`), or for a platform that publishes none, which is said to have no hardware targets, `--list-targets` with `--offline` and neither, `--add-app` with `--check`, `--dry-run`, a listing, `--from-pack` or `--offline`. The message then starts with `install.py: error:`. Also an unknown platform, target, system, core or emulator, said in an `Error:` or `Unknown platform` line and an `error` event whose `stage` is `option`. Also `--add-app` for a folder on no card that takes the app, said in an `Error:` line and an `app` event before anything is written. With `--restore` or `--delete-backup`, a folder that is not a dated folder inside `retrobios-backup`. With `--pack`, no pack tried: a choice that keeps no file, a file larger than a part of `--split`, too little room, or `--pack` with an option that reads the BIOS folder of this machine. With `--remove`, nothing removed: no install record of the setup, nothing it can remove, no `--yes` without a terminal, or no at its question, and the same for `--delete-backup`. Also a quit chosen before the install, as `gh` ends a cancelled prompt: `q` at a question, `q` or **Quit** on the full screen, which then keeps `RetroBIOS: quit. Nothing was installed.`, and the full screen closed with no button pressed (`RETROBIOS_IDLE_EXIT`). No code but `0` closes a Windows Terminal tab started on the installer itself, so such a tab stays open on a quit |
 | `3` | `--check` ran and found files to fetch or wrong copies, nothing having failed. A failure takes `1` as before: a manifest refused, a `--from` folder that does not exist. Until November 2026 this case also ended on `1`, so a script that reads any code but `0` as "not ready" needs no change |
 | `130` | stopped with Ctrl+C, or with Ctrl+C or Ctrl+D at a question, the terminal keeping `RetroBIOS: stopped. Nothing was installed.` before an install. Run the same command again to carry on |
 | `141` | the output was piped to a reader that closed early (`--list-platforms \| head`) |
@@ -2021,7 +2077,7 @@ other schemas under `api/v1/schemas/`.
 
 | Kind | Keys | When |
 |------|------|------|
-| `start` | `schema`, `installer`, `mode` | First line. `schema` is 1, `installer` the identity `--version` prints, `mode` one of `install`, `check`, `dry-run`, `list` (also `--backups`), `remove` (`--remove`, `--delete-backup`), `restore` |
+| `start` | `schema`, `installer`, `mode` | First line. `schema` is 1, `installer` the identity `--version` prints, `mode` one of `install`, `check`, `dry-run`, `list` (also `--backups`), `remove` (`--remove`, `--delete-backup`), `restore`, `pack` (`--pack`, with `--dry-run` too) |
 | `unsearched` | `folder`, `reason`, `message` | Before `detect`, once for each folder the search for setups could not look in, this user being refused it or a read failing there (a failing card, a link that loops), or under WSL the Windows side when Windows did not answer (`folder` is then the drive mount, `/mnt`). What it would hold counts as absent, and the other places are still searched: `detect` then lists what they hold, and an empty `platforms` after an `unsearched` line means nothing was found where the installer could look. `reason` says why in words (`Permission denied`), `message` says it in a sentence |
 | `detect` | `os`, `os_name`, `platforms` | Once the platforms are known. `os_name` comes from `/etc/os-release`. `platforms` lists `{platform, name, bios_dir}`, and is empty when nothing supported was found |
 | `error` | `stage`, `reason`, `platform`, `message` | The file list could not be read (`stage` is `manifest`): `reason` is `network`, `not_found` or `invalid`, `clock` when the server's certificate was refused and the system clock reads a date before the installer was written, `no_ca` when the machine holds no list of trusted certificates (`SSL_CERT_FILE` names one), `no_ssl` when this Python was built without its `ssl` module and cannot use HTTPS, or `offline` when `--offline` forbids the request. A folder named with `--from` cannot be read (`stage` is `from`, `reason` `not_found`, `not_a_folder` for a file that is no ZIP, `unreadable`, or `system` for the root of the system, `/proc`, `/sys` or `/dev`). The BIOS folder sits under a folder this user cannot open (`stage` is `dest`, `reason` `unreadable`), or is a file or lies under one (`reason` `not_a_folder`), and the run ends with code 1 before anything is written. A platform, target, system, core or emulator named on the command line is unknown or cannot be used here (`stage` is `option`, `reason` `unknown`, `platform` the platform it was checked against or the name typed), refused before any download with code 2. The BIOS folder cannot be created (`stage` is `dest`, `reason` `not_writable`): a `summary` follows with what the run installed before it. Two systems are detected on one machine and no `--dest` names the folder (`stage` is `detect`, `reason` `conflict`). The platform named with `--platform` is found nowhere and no folder can be assumed for it: a card system with no card named, a portable emulator, Batocera or Recalbox named on a computer (their folder is the `bios` folder of their SHARE drive), or no usual folder on this system or one set aside behind a folder this user cannot open (`stage` is `detect`, `reason` `not_found`). So is a platform named by a file list or a pack, in a run without questions where it is found nowhere here. A `--dest` refused as the card of the system named carries the same `stage` and `reason`: another system's card, a folder inside a card, a drive with none of the files its card always has, or a folder that does not exist. `message` says it in words, and is the only thing that tells these cases apart |
@@ -2054,11 +2110,12 @@ other schemas under `api/v1/schemas/`.
 | `removed` | `platform`, `dest`, `size`, `ok`, `reason`, `moved_to` | Each file `--remove` took. `ok` is false, with `reason`, for a file that stays. `moved_to` is its place in the backup with `--backup`, empty otherwise |
 | `restored` | `folder`, `path`, `size`, `ok`, `reason` | Each file `--restore` put back from the backup `folder` to `path` |
 | `backup` | `folder`, `date`, `files`, `bytes`, `source`, `status`, `message` | A backup folder: `status` is `listed` by `--backups`, `made` by `--remove --backup`, `deleted` or `not_deleted` by `--delete-backup`. `date` is when it was made, local time. `source` is `remove` for a removal's backup and `install` for the files an install replaced |
+| `pack` | `platform`, `path`, `files`, `bytes`, `size`, `parts`, `status`, `message` | With `--pack`, once: `status` is `planned` with `--dry-run`, `written` once every part is in place, `failed` when no pack was written (`message` says why). `files` and `bytes` count the pack's members, each file stored once, `size` what the written files take on disk (0 unless `written`), `parts` each file written or to be written, the pack alone when it is one ZIP |
 | `end` | `code` | Last line, with the exit status the process returns (see [Exit status](#exit-status)) |
 
 <!-- /generated: events -->
 
-Schema 1 can gain a kind (`found` came with `--from`, `declared` with `--declared-only`, `unsearched` with the search that goes on past a closed folder, `app` with `--add-app`, `data` with the size of the data trees, `version` with the list's version, `record` with the install record, `removal_plan`, `removed`, `restored` and `backup` with removal), never a key of an
+Schema 1 can gain a kind (`found` came with `--from`, `declared` with `--declared-only`, `unsearched` with the search that goes on past a closed folder, `app` with `--add-app`, `data` with the size of the data trees, `version` with the list's version, `record` with the install record, `removal_plan`, `removed`, `restored` and `backup` with removal, `pack` with `--pack`), never a key of an
 existing kind: a reader skips a kind it does not know. An option refused
 before the run starts (`install.py: error:`, code 2) writes
 no event at all. A program reads a missing `end` as that case, or as a
