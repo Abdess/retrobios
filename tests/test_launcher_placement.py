@@ -993,8 +993,17 @@ class AdvanceMameOnEmuELEC(unittest.TestCase):
                 str(REPO_ROOT / "platforms" / "_registry.yml"),
                 emulators_dir=str(REPO_ROOT / "emulators"), offline=True,
             )
-        by_dest = {f["dest"]: f["sha1"] for f in manifest["files"]}
-        sets = [d.removeprefix("arcade/") for d in by_dest if d.startswith("arcade/")]
+        # mame2003_plus reads its own sets in arcade/ too (es_systems.cfg):
+        # the copy AdvanceMAME reads there is the one its claim names.
+        def advancemame_copy(entry: dict) -> str | None:
+            for copy in (entry, *(entry.get("alternatives") or [])):
+                if "advancemame" in (copy.get("cores") or []):
+                    return copy["sha1"]
+            return None
+
+        by_dest = {f["dest"]: advancemame_copy(f) for f in manifest["files"]}
+        sets = [d.removeprefix("arcade/") for d, sha1 in by_dest.items()
+                if d.startswith("arcade/") and sha1]
         self.assertEqual(len(sets), 29)
         for name in sets:
             self.assertEqual(by_dest["arcade/" + name], by_dest["mame/" + name], name)
@@ -1013,6 +1022,81 @@ class AdvanceMameOnEmuELEC(unittest.TestCase):
         root, _status = resolve_local_file(plain, db, dest_hint=entry["name"])
         self.assertEqual(moved, root)
         self.assertNotIn("/MAME/", moved)
+
+
+def libretro_view(emulator: str, platform: str) -> dict:
+    profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))[emulator]
+    config = load_platform_config(platform, str(REPO_ROOT / "platforms"))
+    (view,) = [v for v, standalone in platform_layouts(emulator, profile, standalone_set(config))
+               if not standalone]
+    return view
+
+
+class SetsReadBesideTheGame(unittest.TestCase):
+    """MAME 2016 and older search the folder of the loaded game for their
+    sets and never the system folder (mame2003 src/fileio.c:217-220,
+    mame2010 src/emu/romload.c:667-685, mame2016
+    src/osd/retro/retromain.cpp:1364-1402)."""
+
+    CORES = ("mame2000", "mame2003", "mame2003_plus", "mame2009", "mame2010",
+             "mame2014", "mame2015", "mame2016", "ume2015")
+
+    def test_each_set_is_read_beside_the_game(self) -> None:
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        for key in self.CORES:
+            sets = [f for f in profiles[key]["files"] if f.get("category") == "bios_zip"]
+            self.assertTrue(sets, key)
+            for entry in sets:
+                self.assertEqual(entry.get("load_from"), "content_dir", (key, entry["name"]))
+
+    def test_batocera_places_them_in_the_folders_it_launches_the_core_for(self) -> None:
+        # es_systems.yml offers mame078plus under mame and neogeo.
+        view = libretro_view("mame2003_plus", "batocera")
+        neogeo = [e for e in view["files"] if e["name"] == "neogeo.zip"]
+        self.assertEqual(sorted(e["path"] for e in neogeo), ["mame/neogeo.zip", "neogeo/neogeo.zip"])
+        self.assertTrue(all(e["root"] == "roms" and "load_from" not in e for e in neogeo))
+
+    def test_retroarch_names_them_outside_the_bios_folder(self) -> None:
+        # RetroArch keeps no folder per system: the game's folder is the user's.
+        view = libretro_view("mame2003", "retroarch")
+        sets = [e for e in view["files"] if e.get("category") == "bios_zip"]
+        self.assertTrue(sets)
+        self.assertTrue(all(e.get("unplaced") == "outside_bios_folder" for e in sets))
+
+    def test_game_data_beside_the_content_is_left_to_the_game(self) -> None:
+        view = libretro_view("mame2000", "retroarch")
+        (hiscore,) = [e for e in view["files"] if e["name"] == "hiscore.dat"]
+        self.assertEqual(hiscore.get("load_from"), "content_dir")
+        self.assertNotIn("unplaced", hiscore)
+
+    def test_a_mess_build_takes_no_arcade_set(self) -> None:
+        # lr-mess2016 builds mame2016 with SUBTARGET=mess (lr-mess2016.sh:31).
+        view = libretro_view("mame2016", "retropie")
+        folders = {e["path"].split("/")[0] for e in view["files"] if e.get("root") == "roms"}
+        self.assertEqual(folders, {"arcade", "mame-libretro"})
+
+    def test_emulatorjs_writes_the_bios_beside_the_game(self) -> None:
+        # data/src/emulator.js:845, 990, 1054: one filesystem root for both.
+        view = libretro_view("mame2003_plus", "romm")
+        sets = [e for e in view["files"] if e.get("category") == "bios_zip"]
+        self.assertTrue(all("load_from" not in e and "root" not in e for e in sets))
+
+    def test_the_manifest_drops_the_root_copy_no_core_reads(self) -> None:
+        from common import load_database
+
+        db = load_database(str(REPO_ROOT / "database.json"))
+        with redirect_stdout(io.StringIO()):
+            manifest = generate_manifest(
+                "rocknix", str(REPO_ROOT / "platforms"), db, str(REPO_ROOT / "bios"),
+                str(REPO_ROOT / "platforms" / "_registry.yml"),
+                emulators_dir=str(REPO_ROOT / "emulators"), offline=True,
+            )
+        dests = {(f.get("root") or "", f["dest"]) for f in manifest["files"]}
+        # ROCKNIX starts mame2003_plus for arcade and mame (arcade.conf, mame.conf),
+        # and no core it runs reads coh1000c.zip at the BIOS root.
+        self.assertIn(("roms", "arcade/coh1000c.zip"), dests)
+        self.assertIn(("roms", "mame/coh1000c.zip"), dests)
+        self.assertNotIn(("", "coh1000c.zip"), dests)
 
 
 if __name__ == "__main__":

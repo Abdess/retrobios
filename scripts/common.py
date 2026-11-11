@@ -619,6 +619,10 @@ def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -
             roms_root = (source_yaml(f) or {}).get("roms_root")
         if isinstance(roms_root, dict):
             config["_roms_root"] = roms_root
+        with open(romfolders) as f:
+            folders = (source_yaml(f) or {}).get("folders")
+        if isinstance(folders, list):
+            config["_rom_folders"] = [row for row in folders if isinstance(row, dict)]
     _platform_config_cache[cache_key] = config
     return config
 
@@ -2861,6 +2865,19 @@ OWN_BUILD_PREFIX = "ownbuild:"
 SYSTEM_FILE_PREFIX = "sysfile:"
 # The key, in that index, of a machine a launcher record offers.
 MACHINE_KEY = "machine:"
+# The platform is known: an entry read beside the content is placed in the
+# roms folders a core is launched for, or named as read outside the BIOS
+# folder. The tags below carry those folders.
+CONTENT_SCOPE_TAG = "contentscope:"
+# [core name, roms folder, (tree, path)]: a libretro core the platform
+# launches for the games of that folder, which it reads beside.
+CONTENT_FOLDER_PREFIX = "contentdir:"
+# The frontend writes the BIOS it hands a core beside the content: the
+# folder it gives the BIOS is the content's.
+CONTENT_SYSTEM_TAG = "contentsystem:"
+CONTENT_TAG_PREFIXES = (
+    CONTENT_SCOPE_TAG, CONTENT_FOLDER_PREFIX, CONTENT_SYSTEM_TAG,
+)
 
 
 def core_system_dirs(
@@ -3016,7 +3033,7 @@ def standalone_set(config: dict) -> set[str]:
             EXECUTED_PREFIX + json.dumps([run.emulator, run.name, run.place, run.source_ref])
             for run in executed_files(config)
         }
-    return names
+    return names | content_folder_tags(config)
 
 
 def merged_standalone_set(configs: Iterable[dict]) -> set[str]:
@@ -3031,7 +3048,7 @@ def merged_standalone_set(configs: Iterable[dict]) -> set[str]:
         tag
         for config in configs
         for tag in standalone_set(config)
-        if not tag.startswith(CORE_DIR_PREFIX)
+        if not tag.startswith((CORE_DIR_PREFIX, *CONTENT_TAG_PREFIXES))
     }
 
 
@@ -3232,6 +3249,17 @@ def _placed_entry(entry: dict, profile: dict, placed: tuple[str, str]) -> dict:
 def platform_layouts(
     emu_name: str, profile: dict, standalone_cores: set[str]
 ) -> list[tuple[dict, bool]]:
+    """The layouts a platform gives an emulator: (profile, standalone?) each,
+    with the files read in a roms folder placed there (content_layout)."""
+    return [
+        (content_layout(emu_name, view, standalone, standalone_cores), standalone)
+        for view, standalone in _build_layouts(emu_name, profile, standalone_cores)
+    ]
+
+
+def _build_layouts(
+    emu_name: str, profile: dict, standalone_cores: set[str]
+) -> list[tuple[dict, bool]]:
     """The layouts a platform gives an emulator: (profile, standalone?) each.
 
     One, libretro or standalone, for most. Both for an emulator the platform
@@ -3368,6 +3396,138 @@ def platform_layouts(
     }:
         return [(profile, False), (standalone, True)]
     return [(standalone, True)]
+
+
+LIBRETRO_RUNNERS = frozenset({"libretro", "retroarch", "retroarch32", "retrorun"})
+
+
+def _core_key(name: str) -> str:
+    """A core name as two platforms spell it alike: mame2003-plus, mame2003_plus."""
+    return str(name).lower().replace("-", "_")
+
+
+def content_folder_tags(config: dict) -> set[str]:
+    """The roms folders a platform launches each libretro core for, as tags.
+
+    A core reading its BIOS sets beside the game (MAME 2003's osd_get_path
+    gives FILETYPE_ROM the content directory) reads them in the folder of
+    the system it is launched for. The folders come from the platform's own
+    lists: ``libretro_systems``, the default core of each folder its rom
+    folders file records, the cores a system offers under its own name, and
+    the systems a RetroPie package registers. A platform with no roms root,
+    or one keeping no folder per system (RetroArch, Lakka), gives none.
+    """
+    if config.get("inherits_from") == "emulatorjs":
+        # EmulatorJS writes the BIOS a frontend hands it and the game to
+        # the root of one filesystem (data/src/emulator.js:845, 990, 1054):
+        # RomM's firmware folder is beside the content.
+        return {CONTENT_SYSTEM_TAG}
+    tags = {CONTENT_SCOPE_TAG}
+    if outer_layout(config, ROMS_ROOT) is None:
+        return tags
+    rows = config.get("_rom_folders") or []
+    folders = {str(r.get("folder")) for r in rows if r.get("folder")}
+    pairs: set[tuple[str, str]] = set()
+    for core, systems in (config.get("libretro_systems") or {}).items():
+        pairs |= {(_core_key(core), str(s)) for s in systems or []}
+    for row in rows:
+        for choice in [row, *(row.get("board_defaults") or {}).values()]:
+            if choice.get("core") and choice.get("emulator") in LIBRETRO_RUNNERS:
+                pairs.add((_core_key(choice["core"]), str(row["folder"])))
+    for system in (config.get("systems") or {}).values():
+        if isinstance(system, dict) and system.get("native_id"):
+            pairs |= {(_core_key(c), str(system["native_id"])) for c in system.get("cores") or []}
+    for record in config.get("launchers") or []:
+        if record.get("kind") == "package" and record.get("build") == "libretro":
+            package = str(record.get("emulator", ""))
+            if package.startswith("lr-mess"):
+                # Built with SUBTARGET=mess (lr-mess2016.sh:31): the MESS
+                # drivers alone, none of the arcade sets of the core it
+                # shares a repository with.
+                continue
+            core = _core_key(package.removeprefix("lr-"))
+            pairs |= {(core, str(s)) for s in record.get("systems") or []}
+    from launchers import _roms_place  # noqa: PLC0415
+
+    def place(folder: str) -> list:
+        return list(_roms_place(config, folder) or ())
+
+    tags |= {
+        CONTENT_FOLDER_PREFIX + json.dumps([c, f, place(f)]) for c, f in pairs if f in folders
+    }
+    return tags
+
+
+def content_layout(
+    emu_name: str, view: dict, standalone: bool, standalone_cores: Iterable[str],
+) -> dict:
+    """The layout with each file read in a roms folder placed in that folder.
+
+    A libretro entry read beside the content (``load_from: content_dir``)
+    goes to the folder of each system the platform launches the core for,
+    and is named as read outside the BIOS folder where it knows none.
+    Outside a platform (no CONTENT_SCOPE_TAG) the view is left as it is.
+    """
+    tags = [t for t in standalone_cores if t.startswith(CONTENT_TAG_PREFIXES)]
+    if CONTENT_SYSTEM_TAG in tags and not standalone:
+        files = [
+            _without_libretro_load(f)
+            if isinstance(f, dict) and _content_load(f) == "content_dir"
+            and f.get("category") != "game_data" else f
+            for f in view.get("files") or []
+        ]
+        return {**view, "files": files}
+    if CONTENT_SCOPE_TAG not in tags:
+        return view
+    names = {_core_key(n) for n in {emu_name, *(str(c) for c in view.get("cores") or [])}}
+    files = view.get("files") or []
+    out: list = []
+    changed = False
+    if not standalone:
+        folders = sorted({
+            tuple(where) for core, _folder, where in (
+                json.loads(t[len(CONTENT_FOLDER_PREFIX):])
+                for t in tags if t.startswith(CONTENT_FOLDER_PREFIX)
+            ) if core in names and where
+        })
+        for f in files:
+            if (not isinstance(f, dict) or _content_load(f) != "content_dir"
+                    or f.get("category") == "game_data"):
+                # Game data read beside the content is the game's own.
+                out.append(f)
+                continue
+            changed = True
+            plain = _without_libretro_load(f)
+            if not folders:
+                out.append({**plain, "unplaced": OUTSIDE_BIOS_FOLDER})
+                continue
+            rel = str(f.get("path") or f.get("name") or "")
+            for tree, folder in folders:
+                # Below the roms root inside the install tree (EmuELEC's
+                # /storage/roms): a plain dest the platform prefix skips, as
+                # a standalone entry placed there (_placed_entry).
+                where: dict[str, object] = (
+                    {"unprefixed": True} if tree == "install" else {"root": ROMS_ROOT}
+                )
+                out.append({**plain, **where, "path": f"{folder}/{rel}", "layout_path": rel})
+        return {**view, "files": out} if changed else view
+    return view
+
+
+def _content_load(entry: dict) -> str:
+    load_from = entry.get("load_from") or ""
+    if isinstance(load_from, dict):
+        load_from = load_from.get("libretro") or ""
+    return str(load_from)
+
+
+def _without_libretro_load(entry: dict) -> dict:
+    """The entry without the libretro build's load_from: its folder is now its path."""
+    load_from = entry.get("load_from")
+    rest = {k: v for k, v in entry.items() if k != "load_from"}
+    if isinstance(load_from, dict) and load_from.get("standalone"):
+        rest["load_from"] = {"standalone": load_from["standalone"]}
+    return rest
 
 
 # What identifies a profile entry's content, carried unchanged wherever the
