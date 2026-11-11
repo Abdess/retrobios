@@ -52,6 +52,11 @@ class ListxmlIndex(unittest.TestCase):
     def test_device_with_roms_only(self) -> None:
         self.assertEqual(self.index["devices"], {"m68705p3": ["mslug"]})
 
+    def test_a_clone_lists_its_parent_game(self) -> None:
+        # MAME looks a clone's shared ROMs up in its parent's archive
+        # (src/emu/driver.cpp:31-38): mslugh reads mslug.zip.
+        self.assertEqual(self.index["parents"], {"mslug": ["mslugh"]})
+
     def test_chd_and_missing_parent(self) -> None:
         self.assertEqual(self.index["chd"], ["ikaruga"])
         self.assertEqual(self.index["missing_parents"], {"orphan": "gonebios"})

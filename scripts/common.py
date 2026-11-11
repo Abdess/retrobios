@@ -3618,6 +3618,10 @@ def _rom_search_sets(
     if relation is None:
         return frozenset()
     bios, devices = relation.get("bios") or {}, relation.get("devices") or {}
+    # A clone reads the ROMs it shares with its parent from the parent's
+    # archive: the search path is the set and every ancestor
+    # (src/emu/driver.cpp:31-38, src/emu/romload.cpp:67-84 at mame0289).
+    parents = relation.get("parents") or {}
     sources = relation.get("sources") or {}
     members: set[str] = set(machines)
     kind, keys = ANY_MACHINE_POPULATIONS.get(system, ("all", ())) if any_machine else ("", ())
@@ -3633,6 +3637,7 @@ def _rom_search_sets(
         return kind == "all" or not members.isdisjoint(users)
 
     found = {b for b, users in bios.items() if used(users)}
+    found |= {p for p, users in parents.items() if used(users)}
     found |= {d for d, users in devices.items() if used(users)}
     return frozenset(found | members)
 

@@ -59,6 +59,10 @@
       "$ref": "#/$defs/sets_by_archive",
       "description": "BIOS set -> the game sets whose romof chain reaches it."
     },
+    "parents": {
+      "$ref": "#/$defs/sets_by_archive",
+      "description": "Parent game set with ROMs -> the clones whose romof chain reaches it before any BIOS set. A clone reads the ROMs it shares with its parent from the parent's archive."
+    },
     "devices": {
       "$ref": "#/$defs/sets_by_archive",
       "description": "Device set with ROMs -> the game sets that instantiate it."

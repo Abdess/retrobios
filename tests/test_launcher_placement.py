@@ -1209,6 +1209,21 @@ class EveryCoreAFolderOffers(unittest.TestCase):
             self.assertIn("arcade", folders, platform)
 
 
+class CloneReadsItsParent(unittest.TestCase):
+    """ES-DE starts odyssey2 with -rompath on roms/odyssey2 alone, and MAME
+    finds o2bios.rom in the parent's videopac.zip (src/emu/driver.cpp:31-38)."""
+
+    def test_the_parent_set_goes_to_the_clone_folder(self) -> None:
+        from common import rom_search_sets
+
+        self.assertIn("videopac", rom_search_sets("mame", "odyssey2", ["odyssey2"], False))
+        for platform, dest in (("emudeck", "odyssey2/videopac.zip"),
+                               ("retrodeck", "roms/odyssey2/videopac.zip")):
+            with self.subTest(platform=platform):
+                dests = {f["dest"] for f in platform_manifest(platform)["files"]}
+                self.assertIn(dest, dests)
+
+
 class AdvanceMameOnRetroPie(unittest.TestCase):
     """RetroPie writes dir_rom $romdir/mame-advmame:$romdir/arcade into each
     AdvanceMAME build's rc (advmame.sh:100), the list the code splits on ':'
