@@ -265,6 +265,34 @@ class Invariants(unittest.TestCase):
         self.assertEqual(_config_reads_without_build(path, {"config_reads": closed}), [])
 
 
+class CoreOptions(unittest.TestCase):
+    def test_a_core_option_is_read_by_the_core_not_the_frontend(self) -> None:
+        """RetroDECK's retroarch component writes pcsx2_bios: the frontend
+        names the record, the core RetroArch runs reads the option."""
+        profiles = {
+            "retroarch": {"emulator": "RetroArch", "type": "utility", "cores": ["retroarch"],
+                          "config_reads": [{"file": "retroarch.cfg", "source_ref": "a.c:1",
+                                            "keys": [{"key": "system_directory",
+                                                      "source_ref": "a.c:2"}]}]},
+            "lrps2": {"emulator": "LRPS2", "type": "libretro", "cores": ["lrps2"],
+                      "config_reads": [{"file": "core options", "source_ref": "main.cpp:1",
+                                        "keys": [{"key": "pcsx2_bios",
+                                                  "source_ref": "main.cpp:2"}]}]},
+        }
+        option = {
+            "emulator": "retroarch", "build": "libretro", "kind": "core_option",
+            "names": ["scph10000.bin"], "passes_to": "core option pcsx2_bios",
+            "installs": {"path": "$core_options", "source_ref": "prepare.sh:24"},
+            "overrides": [], "source_ref": "rd_config/retroarch-core-options.cfg:515",
+        }
+        evidence = config_evidence(option, profiles, "retrodeck")
+        self.assertTrue(evidence.proven, evidence.missing)
+        self.assertEqual(evidence.readers, ("lrps2",))
+        system = {**option, "kind": "passes_path", "passes_to": "retroarch.cfg system_directory",
+                  "source_ref": "rd_config/retroarch.cfg:44"}
+        self.assertEqual(config_evidence(system, profiles, "retrodeck").readers, ("retroarch",))
+
+
 class BuildRefs(unittest.TestCase):
     def test_reads_for_a_shipped_build_are_read_at_that_build(self) -> None:
         document = {

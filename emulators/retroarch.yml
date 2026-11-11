@@ -1,0 +1,58 @@
+emulator: "RetroArch"
+type: utility
+core_classification: other
+source: "https://github.com/libretro/RetroArch"
+upstream: "https://github.com/libretro/RetroArch"
+profiled_date: "2026-11-11"
+source_commit: "69a4f0ea1e8aaf442ae4858f2e7f2b31a1776576"
+core_version: "v1.22.2"
+version_basis:
+  kind: tag
+  tag: "v1.22.2"
+  distance: 0
+display_name: "RetroArch (libretro frontend)"
+cores:
+  - retroarch
+systems: []
+
+pin_build:
+  - platform: amberelec
+    repo: "https://github.com/AmberELEC/AmberELEC"
+    revision: "a21975bfb1a3af68f66e07a931b994b523e1e6e2"
+    path: "packages/games/tools/retroarch/package.mk"
+    variable: PKG_VERSION
+    value: "69a4f0ea1e8aaf442ae4858f2e7f2b31a1776576"
+  - platform: rocknix
+    repo: "https://github.com/ROCKNIX/distribution"
+    revision: "20261101"
+    path: "projects/ROCKNIX/packages/emulators/libretro/retroarch/package.mk"
+    variable: PKG_VERSION
+    value: "bdba046fa6766380bc2457532f38e589df769aaf"
+config_reads:
+  - file: "retroarch.cfg"
+    platforms: [amberelec]
+    source_ref: "retroarch.c:6968-6969, 7148-7155, 7244, configuration.c:3469, 3779, 3824, 3863-3884, 5014-5018, libretro-common/file/config_file.c:840"
+    keys:
+      - key: "system_directory"
+        source_ref: "configuration.c:1645, 4063-4069, 4110-4115, 4346-4347, libretro-common/file/config_file.c:1180-1189, libretro-common/file/file_path.c:1060-1098, runloop.c:1935-1976"
+        condition: "systemfiles_in_content_dir false (its default, config.def.h:925); LIBRETRO_SYSTEM_DIRECTORY in the environment replaces the value, an empty value hands the content's folder"
+  - file: "retroarch.cfg"
+    platforms: [rocknix]
+    source_ref: "retroarch.c:7272-7273, 7452-7459, 7548, configuration.c:3565, 3886, 3931, 3970-4010, 5174-5176, libretro-common/file/config_file.c:817"
+    keys:
+      - key: "system_directory"
+        source_ref: "configuration.c:1688, 4193-4199, 4240-4245, 4494-4495, libretro-common/file/config_file.c:1190-1199, libretro-common/file/file_path.c:1066-1100, runloop.c:1949-1990"
+        condition: "systemfiles_in_content_dir false; LIBRETRO_SYSTEM_DIRECTORY in the environment replaces the value, an empty value hands the content's folder"
+      - key: "systemfiles_in_content_dir"
+        source_ref: "configuration.c:1870, runloop.c:1949-1990"
+        condition: "true hands the content's folder in place of system_directory"
+
+notes: |
+  The libretro frontend. It loads each core and answers
+  RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY with the system_directory of the
+  config it was started with (-c, else the default path), a leading ~
+  expanded to $HOME. The cores read their BIOS files below that folder, so
+  their profiles hold the files and this one holds none.
+  ref: retroarch.c:7148-7155, configuration.c:3824, runloop.c:1935-1976
+
+files: []
