@@ -519,7 +519,7 @@ def elec_conf(spec: dict, fetcher: Fetcher) -> list[dict]:
                  "when": ", ".join(f"{v} {p}".strip() for v, p in c["branches"]),
                  "source_ref": _ref(key, package, c["line"])}
                 for c in mine
-            ], pick and pick["core"], pick and pick["emulator"]),
+            ], pick["core"] if pick else None, pick["emulator"] if pick else None),
             "arcade": values.get("SYSTEM_HARDWARE") == "arcade" or None,
             "note": note,
         })
