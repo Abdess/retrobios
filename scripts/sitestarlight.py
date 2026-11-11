@@ -274,9 +274,13 @@ _HEADING_ATTRS = re.compile(r"(?m)(?<=\S)[ \t]+\{[ \t]*#[^{}\n]*\}[ \t]*$")
 _COMMENT = re.compile(r"<!--.*?-->", re.S)
 
 
+_TAG_GAP = re.compile(r"(</[A-Za-z][\w-]*>)[ \t]+(?=<[A-Za-z])")
+
+
 def mdx_safe(text: str) -> str:
     """What MDX would read as code in prose: braces, a stray ``<``,
-    comments, unclosed void tags and ``<https://...>`` links."""
+    comments, unclosed void tags and ``<https://...>`` links. A space
+    between two tags is written as an expression MDX keeps."""
     def fix(chunk: str) -> str:
         chunk = _COMMENT.sub("", chunk)
         chunk = re.sub(r"<(https?://[^>\s]+)>", r"[\1](\1)", chunk)
@@ -289,7 +293,10 @@ def mdx_safe(text: str) -> str:
         chunk = chunk.replace("{", "&#123;").replace("}", "&#125;")
         chunk = re.sub(r"\x00(\d+)\x00", lambda m: held[int(m[1])], chunk)
         chunk = re.sub(r"<(?![A-Za-z/])", "&lt;", chunk)
-        return _VOID.sub(lambda m: f"<{m[1]}{m[2].rstrip()} />", chunk)
+        chunk = _VOID.sub(lambda m: f"<{m[1]}{m[2].rstrip()} />", chunk)
+        # A line of tags alone is JSX to MDX, which drops the space between
+        # them: a setup page with tabs read "2007/2008Coverage".
+        return _TAG_GAP.sub(r'\1{" "}', chunk)
     return outside_code(text, fix)
 
 
