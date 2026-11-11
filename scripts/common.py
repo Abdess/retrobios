@@ -3189,11 +3189,12 @@ def standalone_bindings_for(
 
     ``systems`` are those the entry is launched for (entry_launch_systems).
     """
-    declared = profile.get("standalone_directories") or []
-    pools = profile.get("standalone_pools") or {}
+    from launchers import directory_handles, pool_folders, standalone_bindings  # noqa: PLC0415
+
+    declared = directory_handles(profile)
+    pools = pool_folders(profile)
     if not declared and not pools:
         return {}
-    from launchers import standalone_bindings  # noqa: PLC0415
 
     names = {emu_name, *(str(c) for c in profile.get("cores") or [])}
     layout = [
@@ -3298,9 +3299,9 @@ def platform_layouts(
 
     # The layout folders a search setting stands for (standalone_pools):
     # bound, the launcher passes the setting and the default is not read.
-    pool_folders = {
-        str(v).strip("/") for v in (profile.get("standalone_pools") or {}).values()
-    } - {""}
+    from launchers import pool_folders as _pool_folders  # noqa: PLC0415
+
+    pool_folders = {v.strip("/") for v in _pool_folders(profile).values()} - {""}
 
     def passed_setting(entry: dict) -> bool:
         layout = str(standalone_layout_path(entry, profile) or "")

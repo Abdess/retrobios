@@ -3180,6 +3180,11 @@ launchers:
   search_dir: ~/roms/bios
   passes_to: retroarch.cfg system_directory
   fails_when_missing: false
+  installs:
+    path: /storage/.config/retroarch/retroarch.cfg
+    source_ref: "packages/sysutils/systemd/scripts/userconfig-setup:20"
+  kept_if_present: true
+  overrides: []
   source_ref: "packages/games/tools/retroarch/sources/retroarch.cfg:611"
 - emulator: retrorun
   build: libretro
@@ -3198,25 +3203,6 @@ launchers:
   fails_when_missing: false
   depends_on_option: self.emulator == 'mame'
   source_ref: "packages/amberelec/sources/scripts/runemu.py:233, 252, 255"
-- emulator: atari800
-  build: libretro
-  kind: fixed_name
-  names:
-  - ATARIOSA.ROM
-  - ATARIXL.ROM
-  - 5200.rom
-  - 5200a.rom
-  - BASIC_Rev_A.rom
-  - BASIC_Rev_B.rom
-  - ATARIBAS.ROM
-  - ATARIOSB.ROM
-  case_insensitive: false
-  search_dir: /storage/roms/bios
-  passes_to: atari800.cfg ROM_OS_A_PAL, ROM_OS_BB01R2, ROM_5200, ROM_5200_A, ROM_BASIC_A,
-    ROM_BASIC_B, ROM_BASIC_C, ROM_400/800_CUSTOM
-  fails_when_missing: false
-  source_ref: "packages/games/libretro/atari800/patches/atari800-01-add-emuelec-platform.patch:27,\
-    \ packages/amberelec/config/distribution/configs/atari800.cfg:3, 8, 16-22"
 - emulator: scummvm
   build: libretro
   kind: passes_path
@@ -3291,7 +3277,13 @@ launchers:
   passes_to: "AmigaA1200-default.uae kickstart_rom_file, $(FILE_PATH) = /storage/.config/amiberry/kickstarts/"
   fails_when_missing: false
   depends_on_option: "[ `echo $1 | egrep 'AGA|CD32' | wc -l` -eq 1 -o `echo \"$AMIBERRY_TMP_DIR\"\
-    /* | egrep 'AGA|CD32' | wc -l` -eq 1 ]"
+    /* | egrep 'AGA|CD32' | wc -l` -eq 1 ], content not booted with --autoload, a\
+    \ WHDLoad .lha or .zip (amiberry.sh:83, 122)"
+  installs:
+    path: /tmp/emulation/amiberry/.amiberry_conf.uae
+    source_ref: "packages/games/emulators/amiberry/scripts/amiberry.sh:59"
+  kept_if_present: false
+  overrides: []
   source_ref: "packages/amberelec/sources/scripts/runemu.py:111, packages/games/emulators/amiberry/scripts/amiberry.sh:57-59,\
     \ packages/games/emulators/amiberry/config/conf/AmigaA1200-default.uae:35, 85"
 - emulator: AMIBERRY
@@ -3305,7 +3297,13 @@ launchers:
   passes_to: "AmigaA500-default.uae kickstart_rom_file, $(FILE_PATH) = /storage/.config/amiberry/kickstarts/"
   fails_when_missing: false
   depends_on_option: "not ([ `echo $1 | egrep 'AGA|CD32' | wc -l` -eq 1 -o `echo \"\
-    $AMIBERRY_TMP_DIR\"/* | egrep 'AGA|CD32' | wc -l` -eq 1 ])"
+    $AMIBERRY_TMP_DIR\"/* | egrep 'AGA|CD32' | wc -l` -eq 1 ]), content not booted\
+    \ with --autoload, a WHDLoad .lha or .zip (amiberry.sh:83, 122)"
+  installs:
+    path: /tmp/emulation/amiberry/.amiberry_conf.uae
+    source_ref: "packages/games/emulators/amiberry/scripts/amiberry.sh:62"
+  kept_if_present: false
+  overrides: []
   source_ref: "packages/amberelec/sources/scripts/runemu.py:111, packages/games/emulators/amiberry/scripts/amiberry.sh:60-62,\
     \ packages/games/emulators/amiberry/config/conf/AmigaA500-default.uae:35, 85"
 - emulator: HATARISA
@@ -3317,6 +3315,11 @@ launchers:
   search_dir: /storage/roms/bios
   passes_to: "Atari-ST-default.cfg [ROM] szTosImageFileName"
   fails_when_missing: false
+  installs:
+    path: /tmp/hatari/.hatari-temp.cfg
+    source_ref: "packages/games/emulators/hatarisa/scripts/hatari.sh:36"
+  kept_if_present: false
+  overrides: []
   source_ref: "packages/amberelec/sources/scripts/runemu.py:113, packages/games/emulators/hatarisa/scripts/hatari.sh:36,\
     \ 66, packages/games/emulators/hatarisa/config/conf/Atari-ST-default.cfg:200"
 - emulator: pico8

@@ -43,6 +43,61 @@ systems:
   - snk-ngpc
   - sony-playstation
 
+pin_build:
+  - platform: rocknix
+    repo: "https://github.com/ROCKNIX/distribution"
+    revision: "20261101"
+    path: "projects/ROCKNIX/packages/emulators/standalone/mednafen/package.mk"
+    variable: PKG_URL
+    value: "https://github.com/sydarn/mednafen/archive/refs/tags/1.32.1-chd.tar.gz"
+config_reads:
+  - file: "mednafen.cfg"
+    platforms: [rocknix]
+    revision: "e46995e49cbaf1e9996a8e29cc5be16d7fe6d834"
+    revision_from: "tag 1.32.1-chd of the sydarn/mednafen fork, the PKG_URL ROCKNIX builds"
+    source_ref: "src/drivers/main.cpp:1469-1520, 1883-1974, 2249, 2405, src/general.cpp:277-300"
+    keys:
+      - key: "gba.bios"
+        source_ref: "src/gba/GBA.cpp:3278, 772, 2472-2481"
+      - key: "md.cdbios"
+        source_ref: "src/md/system.cpp:755, 630-640, src/md/cd/cd.cpp:894-912, 971-982"
+        condition: "CD content"
+      - key: "nes.ggrom"
+        source_ref: "src/nes/nes.cpp:455, 298-299, src/nes/cart.cpp:570-583"
+        condition: "nes.gg 1"
+      - key: "pce.cdbios"
+        source_ref: "src/pce/pce.cpp:1103, 647-649"
+        condition: "disc not detected as Games Express"
+      - key: "pce.gecdbios"
+        source_ref: "src/pce/pce.cpp:1104, 647-649"
+        condition: "disc detected as Games Express"
+      - key: "pce_fast.cdbios"
+        source_ref: "src/pce_fast/pce.cpp:647, 476-487"
+      - key: "pcfx.bios"
+        source_ref: "src/pcfx/pcfx.cpp:1115, 606-611"
+      - key:
+          - "psx.bios_eu"
+          - "psx.bios_jp"
+          - "psx.bios_na"
+        source_ref: "src/psx/psx.cpp:2373-2375, 1764-1775"
+        condition: "the disc's region"
+      - key:
+          - "ss.bios_jp"
+          - "ss.bios_na_eu"
+        source_ref: "src/ss/ss.cpp:2441-2442, 1430-1439"
+        condition: "not ST-V, by SMPC area"
+      - key:
+          - "ss.bios_stv_eu"
+          - "ss.bios_stv_jp"
+          - "ss.bios_stv_na"
+        source_ref: "src/ss/ss.cpp:2444-2446, 1420-1439"
+        condition: "ST-V cart, by area"
+      - key:
+          - "ss.cart.kof95_path"
+          - "ss.cart.ultraman_path"
+        source_ref: "src/ss/ss.cpp:2477-2478, 1811-1840, 1320-1350, 1389-1396"
+        condition: "cart type KOF95 or ULTRAMAN"
+
 notes: |
   Multi-system emulator by the Mednafen Team, the upstream of the beetle_* and
   mednafen_* libretro cores, which are forks of individual modules. A module is

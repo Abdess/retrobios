@@ -32,6 +32,32 @@ data_root:
     source_ref: "src/frontend/sdl/config.cpp:39-49"
     note: "~/.config/dsperate when XDG_CONFIG_HOME is unset. System files are read wherever the [paths] keys of the ini point."
 
+config_reads:
+  - file: "dsperate.ini"
+    platforms: [rocknix]
+    revision: "ddf2910e6d80220c6b22b4df61f0786ac9879cda"
+    revision_from: "PKG_VERSION 3.0.5, the release binaries CI built from tag v3.0.5"
+    source_ref: "src/frontend/sdl/main.cpp:1065, 1155-1157, src/frontend/sdl/config.cpp:64-81"
+    keys:
+      - key:
+          - "[paths] bios9"
+          - "[paths] bios7"
+        source_ref: "src/frontend/sdl/main.cpp:1175, 1270-1274, src/core/nds.cpp:114-129"
+        condition: "both present, otherwise FreeBIOS"
+      - key: "[paths] firmware"
+        source_ref: "src/frontend/sdl/main.cpp:1178, 1270, src/core/nds.cpp:123, 134-135"
+      - key:
+          - "[paths] bios9i"
+          - "[paths] bios7i"
+        source_ref: "src/frontend/sdl/main.cpp:1179-1186, 1319-1322, 1331-1334, src/core/nds_dsi.cpp:88-99"
+        condition: "DSi session"
+      - key: "[paths] dsi_firmware"
+        source_ref: "src/frontend/sdl/main.cpp:1176-1178, 1270"
+        condition: "DSi session"
+      - key: "[paths] dsi_nand"
+        source_ref: "src/frontend/sdl/main.cpp:1158-1162, 1324-1326, 1337, src/core/nds_dsi.cpp:114-120"
+        condition: "--dsi-mode, BootMenuDSi.nds or a .dspr.nds shortcut"
+
 notes: |
   Nintendo DS emulator for ARM handhelds with a DSi mode. ROCKNIX installs the
   release tarball for its architecture and runs it with --config pointing at

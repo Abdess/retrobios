@@ -3647,13 +3647,15 @@ def _served_line(f: dict, declared_sha1: str = "") -> str:
 def _launcher_refs(config: dict) -> dict[str, list[str]]:
     """Entry name, casefolded -> each launcher record that opens it, rendered."""
     from launchers import _names as launcher_names
+    from launchers import bound_launchers
     from sitesources import launcher_ref_markdown, list_source
 
     # Every scraper reads its launchers in the repository and at the revision
-    # of the list it scrapes, so `source` pins each source_ref.
+    # of the list it scrapes, so `source` pins each source_ref. A record a
+    # config file does not prove opens nothing: it is listed apart.
     source = list_source(str(config.get("source") or ""))
     found: dict[str, list[str]] = {}
-    for record in config.get("launchers") or []:
+    for record in bound_launchers(config):
         if not isinstance(record, dict) or not record.get("source_ref"):
             continue
         text = (f"{_escape_tags(str(record.get('emulator', '')))} at "
@@ -3663,6 +3665,31 @@ def _launcher_refs(config: dict) -> dict[str, list[str]]:
             if text not in names:
                 names.append(text)
     return found
+
+
+UNPROVEN_TITLE = "Launcher records a config does not prove"
+
+
+def _launcher_unproven_section(config: dict) -> list[str]:
+    """The platform's launcher records resting on a config the code does not prove.
+
+    A config file is proof only when the code installing it and the code
+    reading it are shown: these records place no file.
+    """
+    from launchers import launcher_unproven
+    from sitesources import launcher_ref_markdown, list_source
+
+    rows = launcher_unproven({str(config.get("_key") or ""): config})
+    if not rows:
+        return []
+    source = list_source(str(config.get("source") or ""))
+    body = [
+        f"- {_escape_tags(row['emulator'])}, `{_escape_tags(row['passes_to'] or row['kind'])}` "
+        f"at {launcher_ref_markdown(source, row['source_ref'])}: "
+        f"{_escape_tags('; '.join(row['missing']))}"
+        for row in rows
+    ]
+    return ["", *markup.details("note", f"{UNPROVEN_TITLE} ({len(rows)})", body)]
 
 
 # The hash a row shows first, when the list does not say which it checks.
@@ -4799,6 +4826,7 @@ def generate_platform_page(
         _render_platform_systems(by_system, config_files, emulator_files,
                                  (name, display), moved, config)
     )
+    lines.extend(_launcher_unproven_section(config))
 
     lines.extend(["", _date_line()])
     return "\n".join(lines) + "\n"

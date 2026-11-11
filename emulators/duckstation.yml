@@ -33,6 +33,61 @@ data_root:
     source_ref: "src/core/core.cpp:137-151, src/core/core.cpp:190-215"
     note: "portable.txt or settings.ini beside the executable, or beside the AppImage, makes that folder the root"
 
+pin_build:
+  - platform: emuelec
+    repo: "https://github.com/EmuELEC/EmuELEC"
+    revision: "v4.8"
+    path: "packages/sx05re/emulators/duckstation/package.mk"
+    variable: PKG_VERSION
+    value: "fd3507c16d098fb32806c281caaefb205946da8a"
+  - platform: rocknix
+    repo: "https://github.com/ROCKNIX/distribution"
+    revision: "20261101"
+    path: "projects/ROCKNIX/packages/emulators/standalone/duckstation-sa/package.mk"
+    variable: PKG_VERSION
+    value: "0.1-10998"
+config_reads:
+  - file: "settings.ini"
+    platforms: [emuelec]
+    source_ref: "src/frontend-common/common_host_interface.cpp:403-407, 3042-3050, 3304-3327, src/duckstation-nogui/main.cpp:62-64, 137-140, src/duckstation-nogui/nogui_host_interface.cpp:39-42"
+    keys:
+      - key: "[BIOS] SearchDirectory"
+        source_ref: "src/core/host_interface.cpp:253-260"
+      - key:
+          - "[BIOS] PathNTSCU"
+          - "[BIOS] PathNTSCJ"
+          - "[BIOS] PathPAL"
+        source_ref: "src/core/host_interface.cpp:262-375, src/core/system.cpp:817"
+        condition: "the console region; an empty value scans SearchDirectory"
+  - file: "settings.ini"
+    platforms: [rocknix]
+    revision: "9b0a4ec559ae83bfdb14685932b036ad7c1701be"
+    revision_from: "PKG_VERSION 0.1-10998, the AppImage of tag v0.1-10998"
+    source_ref: "src/core/core.cpp:105-223, 227-230, 232-275, src/duckstation-qt/qthost.cpp:796-800"
+    keys:
+      - key: "[BIOS] SearchDirectory"
+        source_ref: "src/core/settings.cpp:2709-2719, 2723"
+      - key:
+          - "[BIOS] PathNTSCU"
+          - "[BIOS] PathNTSCJ"
+          - "[BIOS] PathPAL"
+        source_ref: "src/core/bios.cpp:351-458, src/core/system.cpp:2923"
+        condition: "the console region; an empty value scans SearchDirectory"
+  - file: "settings.ini"
+    platforms: [retrobat]
+    revision: "5fd366809053fe287291de7a39752c4d5d5b146b"
+    revision_from: "version 0.1-11752-g5fd366809 of duckstation.exe in RetroBat's stable duckstation.7z, 2026-11-10"
+    source_ref: "src/core/core.cpp:131-249, 253-256, 258-301, src/duckstation-qt/qthost.cpp:803-807"
+    keys:
+      - key: "[BIOS] SearchDirectory"
+        source_ref: "src/core/settings.cpp:2859-2869, 2873"
+      - key:
+          - "[BIOS] PathNTSCU"
+          - "[BIOS] PathNTSCJ"
+          - "[BIOS] PathPAL"
+        source_ref: "src/core/bios.cpp:351-456, src/core/system.cpp:2671"
+        condition: "the console region; an empty value scans SearchDirectory"
+
 notes: |
   DuckStation auto-detects BIOS by MD5 hash from a flat scan of the BIOS directory.
   ref: src/core/bios.cpp:458-479 (FindBIOSImagesInDirectory, scans all files by size)

@@ -94,6 +94,11 @@ class Launcher:
     passes_to: str | None = None
     fails_when_missing: bool | str | None = None
     depends_on_option: str | None = None
+    # For a record citing a config: where the platform's code puts it, whether
+    # that leaves a file already there, and the launch code rewriting it.
+    installs: dict[str, str] | None = None
+    kept_if_present: bool | None = None
+    overrides: list[str] | None = None
     lines: list[tuple[str, int]] = field(default_factory=list, repr=False)
 
     def entry(self) -> dict[str, Any]:
@@ -101,7 +106,8 @@ class Launcher:
         order = (
             "emulator", "package", "repo", "systems", "build", "kind", "slot",
             "names", "case_insensitive", "search_dir", "passes_to",
-            "fails_when_missing", "depends_on_option", "source_ref",
+            "fails_when_missing", "depends_on_option", "installs", "kept_if_present",
+            "overrides", "source_ref",
         )
         return {key: getattr(self, key) for key in order if getattr(self, key) is not None}
 
