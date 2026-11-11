@@ -186,18 +186,36 @@ keep, with the total to download under the list. It opens on its first system,
 every system ticked: A or Enter ticks or unticks the one in focus, and **All** and
 **None** (`a` and `n`) sit at the end of the list. B or Esc (**Done**) takes the
 choice back to the plan, which counts it before **Install**: the list never installs
-by itself, and Done with nothing ticked is refused. **Options** sets the
-preferred regions, game data, the installed cores only, the cores, the parallel
-downloads, the folder and, for a list with files read from the frontend's save
-directory, that directory. Each row names the option it sets, and **Show the
-command line** gives the same choice as one command for a script. **Preview the
-file list** shows what would be downloaded and writes nothing. **Copy the BIOS
+by itself, and Done with nothing ticked is refused. **Change** holds every
+other option, grouped by what it decides. **What to install**: the preferred
+regions, the cores, the emulators and the game data. **Where**: the BIOS
+folder, the save directory for a list with files read there, a folder to copy
+from, and **From a pack**, a pack ZIP downloaded before
+([`--from-pack`](#option-from-pack)), whose own list is then read. **For which
+device**: **Device** and the installed cores only. **How**: **Without the
+internet** ([`--offline`](#option-offline)) and the parallel downloads.
+**See**: the preview and the command line. Up and Down pass the headings. Each
+row names the option it sets, and **Show the command line** gives the same
+choice as one command for a script. **Preview the file list** shows what would
+be downloaded and writes nothing.
+
+**Device** lists the boards of the platform's board list by the names that
+list gives them (`bcm2711`, `h700`), each with the devices it runs where the
+list names them, then **Every board**. The board read on the device, or named
+by the card in the reader (`boot/batocera.board`), comes first, marked
+`this device` or `named by the card`, and is already chosen: it is what the
+run does with nothing chosen. Another board sets
+[`--target`](#option-target), **Every board** sets
+[`--every-board`](#option-every-board) where a board was read. **Emulators**
+ticks the emulators to install for, each one [`--emulator`](#option-emulator),
+and none ticked installs for every emulator. A choice made on either screen
+installs the files its option installs. **Copy the BIOS
 files from an old card or a folder** opens the folder browser on the first
 mounted card, and adds [`--from`](#copy-from-an-old-card): the plan then says how
 many files that folder holds and how many are left to download, or that it
 holds none of them. After an install
 on a muOS, KNULLI or ROCKNIX card, the result offers **Put RetroBIOS on this
-card (update from the console later)**, and **Options** has the same row
+card (update from the console later)**, and **Change** has the same row
 ([On a handheld](#on-a-handheld-the-retrobios-port)). Files the BIOS
 folder holds in the wrong place are counted on the plan, and **Show the files
 in the wrong place** lists each one with its reason. Back on the plan
@@ -213,7 +231,7 @@ install starts.
 | Continue, open, choose | Enter, and Space outside a list of ticks | A, Start |
 | Tick, untick | Space, Right, Left | X, D-pad Right and Left (X alone inside muxterm, Y with muxterm's own keys) |
 | Back | Esc, Backspace | B, Select (B alone with muxterm's own keys, where Select shows its keyboard) |
-| Options | `o`, Tab | Y |
+| Change | `o`, Tab | Y |
 | Details | `d`, and `o` or Tab on the result | the Details row, Y on the result |
 | Filter a long list | `/` then type, Enter on a lone match chooses it | muxterm: Select shows a keyboard. Elsewhere none (the setup list puts the SD cards after RetroArch) |
 | Keys of the screen | `?`, F1 (F1 alone while typing a filter, where the help lists the keys that do not type) | |
@@ -844,7 +862,7 @@ counts them (`3 copied from the wrong place in the BIOS folder`).
 
 By default the installer fetches everything the platform runs. At a terminal,
 the plan screen of the [full-screen interface](#the-full-screen-interface)
-offers **Install**, **Choose systems** and **Options**. With `--plain`, or where
+offers **Install**, **Choose systems** and **Change**. With `--plain`, or where
 the full screen cannot open (a terminal smaller than 40x12, `TERM=dumb`), the
 same choice comes as questions after detection. A RetroArch run with `--plain`
 prints this for the RetroArch list, `g` then pressed (written from install.py
@@ -889,7 +907,7 @@ game data, and the data files of an emulator's own data folder (Dolphin's
 `g` leaves the game data of the choice out, as `--no-game-data` does, and
 counts again (`g` then keeps it). The plan screen has the same choice as a row
 of its own, **Game data: kept** with its count, one press toggling it to
-**Game data: left out**, and Options keeps its **Game data** row too. Its
+**Game data: left out**, and Change keeps its **Game data** row too. Its
 count follows the systems chosen, as `g` counts them, and a choice that holds
 no game data has no row. Given `--no-game-data`, neither the menu nor the plan
 offers the game data back.
@@ -1591,7 +1609,7 @@ muxterm, as the muOS app does.
 | A, Start | Choose, continue |
 | B, Select | Back, and quit on the first screen |
 | X | Tick or untick a system |
-| Y | Options |
+| Y | Change |
 | L1, R1 | Page up, page down (not in muxterm, which keeps them for its own scrollback) |
 | Hold Select, then Start | Quit at once (PortMaster port, muOS, Tools) |
 
@@ -1643,7 +1661,7 @@ gets the column that names both:
 | Page | PgUp/PgDn | PgUp/PgDn, L1/R1 | L1/R1, PgUp/PgDn | D-pad Left/Right | D-pad Left/Right | L1/R1, PgUp/PgDn | L1/R1, PgUp/PgDn |
 | Continue, open, choose | Enter | A/Enter, Start | A, Start, Enter | A, Start, Enter | Start, Enter | A, Start, Enter | A, Start, Enter |
 | Tick, untick | Space, Right/Left | X, Space, Right/Left | X, Space, Right/Left | X, Space | Y, Space | X, Space, Right/Left | A, Space, Right/Left |
-| Options | o, Tab | Y, o, Tab | Y, Tab, o | Y, Tab, o | o, Tab | Y, Tab, o | L2, Tab, o |
+| Change | o, Tab | Y, o, Tab | Y, Tab, o | Y, Tab, o | o, Tab | Y, Tab, o | L2, Tab, o |
 | Back, and quit on the first screen | Esc, Backspace | B/Esc, Backspace | B, Select, Esc | B, Select, Esc | B, Esc, Backspace | B, Select, Esc | R2, Esc, Backspace |
 | Stop an install | Esc, Ctrl-C | B/Esc, Ctrl-C | B, Esc, Ctrl-C | B, Esc, Ctrl-C | B, Esc, Ctrl-C | B, Esc, Ctrl-C | R2, Esc, Ctrl-C |
 | Quit at once | none | Select+Start | Select, then Start | Select, then Start | none | none | none |
@@ -1701,7 +1719,7 @@ This works for every system above too.
 **The app, from a computer.** After an install on a muOS, KNULLI or ROCKNIX
 card, the installer can put RetroBIOS on that card too, so the console checks
 and updates its BIOS files later. The result screen offers **Put RetroBIOS on
-this card (update from the console later)**, **Options** has the same row, the
+this card (update from the console later)**, **Change** has the same row, the
 line questions ask once (`[y/N]`), and a script adds
 [`--add-app`](#option-add-app). Nothing is written without that choice.
 

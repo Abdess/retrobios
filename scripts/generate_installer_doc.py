@@ -66,7 +66,7 @@ ACTIONS = {
     "page": "Page",
     "ok": "Continue, open, choose",
     "tick": "Tick, untick",
-    "options": "Options",
+    "options": "Change",
     "back": "Back, and quit on the first screen",
     "stop": "Stop an install",
     "kill": "Quit at once",
