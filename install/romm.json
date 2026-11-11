@@ -6,7 +6,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "5.4.1",
-  "generated": "2026-11-11T12:03:42Z",
+  "generated": "2026-11-11T14:23:39Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -8266,8 +8266,7 @@
       "drastic - standalone"
     ],
     "advancemame": [
-      "AdvanceMame",
-      "advmame"
+      "AdvanceMame"
     ],
     "aethersx2": [
       "aethersx2-sa"
@@ -8912,6 +8911,7 @@
     ],
     "arcade": [
       "advancemame",
+      "advmame",
       "advmame-0.94",
       "advmame-1.4",
       "ares",
@@ -8951,6 +8951,7 @@
     "atari-7800": [
       "a7800",
       "bizhawk",
+      "mame",
       "prosystem"
     ],
     "atari-lynx": [
@@ -9027,7 +9028,8 @@
     "fairchild-channel-f": [
       "bizhawk",
       "fbneo",
-      "freechaf"
+      "freechaf",
+      "mame"
     ],
     "j2me": [
       "freej2me",
@@ -9038,12 +9040,14 @@
       "squirreljme"
     ],
     "magnavox-odyssey2": [
+      "mame",
       "o2em"
     ],
     "mattel-intellivision": [
       "bizhawk",
       "freeintv",
-      "jzintv"
+      "jzintv",
+      "mame"
     ],
     "microsoft-msx": [
       "ares",
@@ -9329,6 +9333,7 @@
     ],
     "philips-videopac": [
       "bizhawk",
+      "mame",
       "o2em"
     ],
     "scummvm": [
@@ -9474,6 +9479,7 @@
     ],
     "snk-neogeo-mvs": [
       "advancemame",
+      "advmame",
       "advmame-0.94",
       "advmame-1.4",
       "fba2x",

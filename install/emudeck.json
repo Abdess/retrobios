@@ -6,7 +6,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "2.7EA",
-  "generated": "2026-11-11T12:03:42Z",
+  "generated": "2026-11-11T14:23:39Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -2177,10 +2177,10 @@
       }
     }
   ],
-  "total_files": 11653,
-  "total_size": 9295865038,
-  "pack_files": 16028,
-  "pack_size": 8702483101,
+  "total_files": 11776,
+  "total_size": 9340403197,
+  "pack_files": 16038,
+  "pack_size": 8703993885,
   "total_omitted": 469,
   "omitted_files": [
     {
@@ -81390,6 +81390,144 @@
       "root": "roms"
     },
     {
+      "dest": "mame/bios/apple2e.zip",
+      "sha1": "891f44b09ab1a948d3d887f8a30b9c9265849ada",
+      "sha256": "82e28c1d338990afba6027e4d208963d01789f1ef3597e2bd3761fa00963a836",
+      "size": 15975,
+      "repo_path": "bios/Apple/Apple II/apple2e.zip",
+      "cores": [
+        "mame",
+        "mamemess"
+      ]
+    },
+    {
+      "dest": "apple2/apple2e.zip",
+      "sha1": "891f44b09ab1a948d3d887f8a30b9c9265849ada",
+      "sha256": "82e28c1d338990afba6027e4d208963d01789f1ef3597e2bd3761fa00963a836",
+      "size": 15975,
+      "repo_path": "bios/Apple/Apple II/apple2e.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/bios/a7800.zip",
+      "sha1": "ac0173e7e11e8f657ac36a1036c2024475c9d784",
+      "sha256": "d4ba4fc4942892b87fe14c22c0cf2b28fbe02b947d52156316762a82dfd73ed4",
+      "size": 22059,
+      "repo_path": "bios/Other/a7800/a7800.zip",
+      "cores": [
+        "mame"
+      ]
+    },
+    {
+      "dest": "atari7800/a7800.zip",
+      "sha1": "ac0173e7e11e8f657ac36a1036c2024475c9d784",
+      "sha256": "d4ba4fc4942892b87fe14c22c0cf2b28fbe02b947d52156316762a82dfd73ed4",
+      "size": 22059,
+      "repo_path": "bios/Other/a7800/a7800.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/bios/channelf.zip",
+      "sha1": "1cb23b462b990241013deb4b5e07ce741af28267",
+      "sha256": "c158f7c177c61c7b441eb1061e5148737597e871cbcfa1e2d60ace15e90c8e70",
+      "size": 2705,
+      "repo_path": "bios/Arcade/Arcade/channelf.zip",
+      "cores": [
+        "mame"
+      ]
+    },
+    {
+      "dest": "channelf/channelf.zip",
+      "sha1": "1cb23b462b990241013deb4b5e07ce741af28267",
+      "sha256": "c158f7c177c61c7b441eb1061e5148737597e871cbcfa1e2d60ace15e90c8e70",
+      "size": 2705,
+      "repo_path": "bios/Arcade/Arcade/channelf.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/bios/fmtownshr.zip",
+      "sha1": "239c1ade320fc7e09e426e80aee8f05deddc5a50",
+      "sha256": "34a693f1543a6cbb714eddc94fcd4772614abc7814510365e0bfc7a653d37bc4",
+      "size": 717797,
+      "repo_path": "bios/Fujitsu/FM Towns/fmtownshr.zip",
+      "cores": [
+        "mame"
+      ]
+    },
+    {
+      "dest": "fmtowns/fmtownshr.zip",
+      "sha1": "239c1ade320fc7e09e426e80aee8f05deddc5a50",
+      "sha256": "34a693f1543a6cbb714eddc94fcd4772614abc7814510365e0bfc7a653d37bc4",
+      "size": 717797,
+      "repo_path": "bios/Fujitsu/FM Towns/fmtownshr.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/bios/intv.zip",
+      "sha1": "2e39fec139e4bed5aa164551e4be009341a94ac2",
+      "sha256": "7bde005116012be13a5b4f090a914a3aa989001a516b66daded3217ad866af65",
+      "size": 5101,
+      "repo_path": "bios/Mattel/Intellivision/intv.zip",
+      "cores": [
+        "mame"
+      ]
+    },
+    {
+      "dest": "intellivision/intv.zip",
+      "sha1": "2e39fec139e4bed5aa164551e4be009341a94ac2",
+      "sha256": "7bde005116012be13a5b4f090a914a3aa989001a516b66daded3217ad866af65",
+      "size": 5101,
+      "repo_path": "bios/Mattel/Intellivision/intv.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/bios/videopac.zip",
+      "sha1": "92518b157a349bc8d31a411488a8b65e299a1afa",
+      "sha256": "71a37c1cd26df1920b186d0bd5730e562ce730b0790b3d7d98d8c594e5fe344c",
+      "size": 1095,
+      "repo_path": "bios/Philips/Videopac/videopac.zip",
+      "cores": [
+        "mame"
+      ]
+    },
+    {
+      "dest": "odyssey2/videopac.zip",
+      "sha1": "92518b157a349bc8d31a411488a8b65e299a1afa",
+      "sha256": "71a37c1cd26df1920b186d0bd5730e562ce730b0790b3d7d98d8c594e5fe344c",
+      "size": 1095,
+      "repo_path": "bios/Philips/Videopac/videopac.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "videopac/videopac.zip",
+      "sha1": "92518b157a349bc8d31a411488a8b65e299a1afa",
+      "sha256": "71a37c1cd26df1920b186d0bd5730e562ce730b0790b3d7d98d8c594e5fe344c",
+      "size": 1095,
+      "repo_path": "bios/Philips/Videopac/videopac.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
       "dest": "mame/bios/mac128k.zip",
       "sha1": "b63ea7435784f26bb99398890c707b21d7084769",
       "sha256": "e035283d83dae590b8139527a2a7668d34c0dc83728889d2940cfffd19c5038d",
@@ -99350,6 +99488,39 @@
       ]
     },
     {
+      "dest": "arcade/astrocde.zip",
+      "sha1": "8641b09be090c0dc45f4ee5459fec3cc6fb9d78e",
+      "sha256": "520606125ae26a0a6f6b35d2573a4719882da6f6213cc030c487f2303c07360e",
+      "size": 6800,
+      "repo_path": "bios/Bally/Astrocade/astrocde.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/astrocde.zip",
+      "sha1": "8641b09be090c0dc45f4ee5459fec3cc6fb9d78e",
+      "sha256": "520606125ae26a0a6f6b35d2573a4719882da6f6213cc030c487f2303c07360e",
+      "size": 6800,
+      "repo_path": "bios/Bally/Astrocade/astrocde.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/astrocde.zip",
+      "sha1": "8641b09be090c0dc45f4ee5459fec3cc6fb9d78e",
+      "sha256": "520606125ae26a0a6f6b35d2573a4719882da6f6213cc030c487f2303c07360e",
+      "size": 6800,
+      "repo_path": "bios/Bally/Astrocade/astrocde.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
       "dest": "astrocdl.zip",
       "sha1": "49248415d2f678ccdbd605b4b50197f81a0fff4d",
       "sha256": "7e831730407fd06f613a3518c6328576c5b6dae967da839553305c95b320e1d5",
@@ -99380,6 +99551,265 @@
       ]
     },
     {
+      "dest": "arcade/apple2gs.zip",
+      "sha1": "69cff7f1ccbd3cddb7ae887c90ca00781fd42860",
+      "sha256": "96f77c9fcf7285442dfbcddaa4fd1179820136bde65e8deecb4d41da3daa557f",
+      "size": 173963,
+      "repo_path": "bios/Apple/Apple II/.variants/apple2gs.zip.ca867966",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/apple2gs.zip",
+      "sha1": "69cff7f1ccbd3cddb7ae887c90ca00781fd42860",
+      "sha256": "96f77c9fcf7285442dfbcddaa4fd1179820136bde65e8deecb4d41da3daa557f",
+      "size": 173963,
+      "repo_path": "bios/Apple/Apple II/.variants/apple2gs.zip.ca867966",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/apple2gs.zip",
+      "sha1": "69cff7f1ccbd3cddb7ae887c90ca00781fd42860",
+      "sha256": "96f77c9fcf7285442dfbcddaa4fd1179820136bde65e8deecb4d41da3daa557f",
+      "size": 173963,
+      "repo_path": "bios/Apple/Apple II/.variants/apple2gs.zip.ca867966",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "apple2e.zip",
+      "sha1": "891f44b09ab1a948d3d887f8a30b9c9265849ada",
+      "sha256": "82e28c1d338990afba6027e4d208963d01789f1ef3597e2bd3761fa00963a836",
+      "size": 15975,
+      "repo_path": "bios/Apple/Apple II/apple2e.zip",
+      "cores": [
+        "mame"
+      ]
+    },
+    {
+      "dest": "arcade/apple2e.zip",
+      "sha1": "891f44b09ab1a948d3d887f8a30b9c9265849ada",
+      "sha256": "82e28c1d338990afba6027e4d208963d01789f1ef3597e2bd3761fa00963a836",
+      "size": 15975,
+      "repo_path": "bios/Apple/Apple II/apple2e.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/apple2e.zip",
+      "sha1": "891f44b09ab1a948d3d887f8a30b9c9265849ada",
+      "sha256": "82e28c1d338990afba6027e4d208963d01789f1ef3597e2bd3761fa00963a836",
+      "size": 15975,
+      "repo_path": "bios/Apple/Apple II/apple2e.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/apple2e.zip",
+      "sha1": "891f44b09ab1a948d3d887f8a30b9c9265849ada",
+      "sha256": "82e28c1d338990afba6027e4d208963d01789f1ef3597e2bd3761fa00963a836",
+      "size": 15975,
+      "repo_path": "bios/Apple/Apple II/apple2e.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "a7800.zip",
+      "sha1": "ac0173e7e11e8f657ac36a1036c2024475c9d784",
+      "sha256": "d4ba4fc4942892b87fe14c22c0cf2b28fbe02b947d52156316762a82dfd73ed4",
+      "size": 22059,
+      "repo_path": "bios/Other/a7800/a7800.zip",
+      "cores": [
+        "mame"
+      ]
+    },
+    {
+      "dest": "arcade/a7800.zip",
+      "sha1": "ac0173e7e11e8f657ac36a1036c2024475c9d784",
+      "sha256": "d4ba4fc4942892b87fe14c22c0cf2b28fbe02b947d52156316762a82dfd73ed4",
+      "size": 22059,
+      "repo_path": "bios/Other/a7800/a7800.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/a7800.zip",
+      "sha1": "ac0173e7e11e8f657ac36a1036c2024475c9d784",
+      "sha256": "d4ba4fc4942892b87fe14c22c0cf2b28fbe02b947d52156316762a82dfd73ed4",
+      "size": 22059,
+      "repo_path": "bios/Other/a7800/a7800.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/a7800.zip",
+      "sha1": "ac0173e7e11e8f657ac36a1036c2024475c9d784",
+      "sha256": "d4ba4fc4942892b87fe14c22c0cf2b28fbe02b947d52156316762a82dfd73ed4",
+      "size": 22059,
+      "repo_path": "bios/Other/a7800/a7800.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "channelf.zip",
+      "sha1": "1cb23b462b990241013deb4b5e07ce741af28267",
+      "sha256": "c158f7c177c61c7b441eb1061e5148737597e871cbcfa1e2d60ace15e90c8e70",
+      "size": 2705,
+      "repo_path": "bios/Arcade/Arcade/channelf.zip",
+      "cores": [
+        "fbneo",
+        "mame"
+      ]
+    },
+    {
+      "dest": "arcade/channelf.zip",
+      "sha1": "1cb23b462b990241013deb4b5e07ce741af28267",
+      "sha256": "c158f7c177c61c7b441eb1061e5148737597e871cbcfa1e2d60ace15e90c8e70",
+      "size": 2705,
+      "repo_path": "bios/Arcade/Arcade/channelf.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/channelf.zip",
+      "sha1": "1cb23b462b990241013deb4b5e07ce741af28267",
+      "sha256": "c158f7c177c61c7b441eb1061e5148737597e871cbcfa1e2d60ace15e90c8e70",
+      "size": 2705,
+      "repo_path": "bios/Arcade/Arcade/channelf.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/channelf.zip",
+      "sha1": "1cb23b462b990241013deb4b5e07ce741af28267",
+      "sha256": "c158f7c177c61c7b441eb1061e5148737597e871cbcfa1e2d60ace15e90c8e70",
+      "size": 2705,
+      "repo_path": "bios/Arcade/Arcade/channelf.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "fmtownshr.zip",
+      "sha1": "239c1ade320fc7e09e426e80aee8f05deddc5a50",
+      "sha256": "34a693f1543a6cbb714eddc94fcd4772614abc7814510365e0bfc7a653d37bc4",
+      "size": 717797,
+      "repo_path": "bios/Fujitsu/FM Towns/fmtownshr.zip",
+      "cores": [
+        "mame"
+      ]
+    },
+    {
+      "dest": "intv.zip",
+      "sha1": "2e39fec139e4bed5aa164551e4be009341a94ac2",
+      "sha256": "7bde005116012be13a5b4f090a914a3aa989001a516b66daded3217ad866af65",
+      "size": 5101,
+      "repo_path": "bios/Mattel/Intellivision/intv.zip",
+      "cores": [
+        "mame"
+      ]
+    },
+    {
+      "dest": "arcade/intv.zip",
+      "sha1": "2e39fec139e4bed5aa164551e4be009341a94ac2",
+      "sha256": "7bde005116012be13a5b4f090a914a3aa989001a516b66daded3217ad866af65",
+      "size": 5101,
+      "repo_path": "bios/Mattel/Intellivision/intv.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/intv.zip",
+      "sha1": "2e39fec139e4bed5aa164551e4be009341a94ac2",
+      "sha256": "7bde005116012be13a5b4f090a914a3aa989001a516b66daded3217ad866af65",
+      "size": 5101,
+      "repo_path": "bios/Mattel/Intellivision/intv.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/intv.zip",
+      "sha1": "2e39fec139e4bed5aa164551e4be009341a94ac2",
+      "sha256": "7bde005116012be13a5b4f090a914a3aa989001a516b66daded3217ad866af65",
+      "size": 5101,
+      "repo_path": "bios/Mattel/Intellivision/intv.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "videopac.zip",
+      "sha1": "92518b157a349bc8d31a411488a8b65e299a1afa",
+      "sha256": "71a37c1cd26df1920b186d0bd5730e562ce730b0790b3d7d98d8c594e5fe344c",
+      "size": 1095,
+      "repo_path": "bios/Philips/Videopac/videopac.zip",
+      "cores": [
+        "mame"
+      ]
+    },
+    {
+      "dest": "arcade/videopac.zip",
+      "sha1": "92518b157a349bc8d31a411488a8b65e299a1afa",
+      "sha256": "71a37c1cd26df1920b186d0bd5730e562ce730b0790b3d7d98d8c594e5fe344c",
+      "size": 1095,
+      "repo_path": "bios/Philips/Videopac/videopac.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/videopac.zip",
+      "sha1": "92518b157a349bc8d31a411488a8b65e299a1afa",
+      "sha256": "71a37c1cd26df1920b186d0bd5730e562ce730b0790b3d7d98d8c594e5fe344c",
+      "size": 1095,
+      "repo_path": "bios/Philips/Videopac/videopac.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/videopac.zip",
+      "sha1": "92518b157a349bc8d31a411488a8b65e299a1afa",
+      "sha256": "71a37c1cd26df1920b186d0bd5730e562ce730b0790b3d7d98d8c594e5fe344c",
+      "size": 1095,
+      "repo_path": "bios/Philips/Videopac/videopac.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
       "dest": "mac128k.zip",
       "sha1": "b63ea7435784f26bb99398890c707b21d7084769",
       "sha256": "e035283d83dae590b8139527a2a7668d34c0dc83728889d2940cfffd19c5038d",
@@ -99388,6 +99818,39 @@
       "cores": [
         "mame"
       ]
+    },
+    {
+      "dest": "arcade/mac128k.zip",
+      "sha1": "b63ea7435784f26bb99398890c707b21d7084769",
+      "sha256": "e035283d83dae590b8139527a2a7668d34c0dc83728889d2940cfffd19c5038d",
+      "size": 49592,
+      "repo_path": "bios/Apple/Macintosh/mac128k.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/mac128k.zip",
+      "sha1": "b63ea7435784f26bb99398890c707b21d7084769",
+      "sha256": "e035283d83dae590b8139527a2a7668d34c0dc83728889d2940cfffd19c5038d",
+      "size": 49592,
+      "repo_path": "bios/Apple/Macintosh/mac128k.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/mac128k.zip",
+      "sha1": "b63ea7435784f26bb99398890c707b21d7084769",
+      "sha256": "e035283d83dae590b8139527a2a7668d34c0dc83728889d2940cfffd19c5038d",
+      "size": 49592,
+      "repo_path": "bios/Apple/Macintosh/mac128k.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
     },
     {
       "dest": "mac512k.zip",
@@ -99410,7 +99873,40 @@
       ]
     },
     {
+      "dest": "arcade/macplus.zip",
+      "sha1": "616a58ca17834f76f9e07e64919f1cc56ae41e28",
+      "sha256": "d5768a4892bfd8997077871ab4e23c4d597f11d52a73086b6a28f83f7e0dff73",
+      "size": 1001148,
+      "repo_path": "bios/Apple/Macintosh/macplus.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/macplus.zip",
+      "sha1": "616a58ca17834f76f9e07e64919f1cc56ae41e28",
+      "sha256": "d5768a4892bfd8997077871ab4e23c4d597f11d52a73086b6a28f83f7e0dff73",
+      "size": 1001148,
+      "repo_path": "bios/Apple/Macintosh/macplus.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
       "dest": "macintosh/macplus.zip",
+      "sha1": "616a58ca17834f76f9e07e64919f1cc56ae41e28",
+      "sha256": "d5768a4892bfd8997077871ab4e23c4d597f11d52a73086b6a28f83f7e0dff73",
+      "size": 1001148,
+      "repo_path": "bios/Apple/Macintosh/macplus.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/macplus.zip",
       "sha1": "616a58ca17834f76f9e07e64919f1cc56ae41e28",
       "sha256": "d5768a4892bfd8997077871ab4e23c4d597f11d52a73086b6a28f83f7e0dff73",
       "size": 1001148,
@@ -99462,6 +99958,39 @@
       ]
     },
     {
+      "dest": "arcade/mac2fdhd.zip",
+      "sha1": "bcecee4379e0ecfa6dc0c49900dda3f8220d6ef0",
+      "sha256": "51e851a305a15c7b384b5db1d5c1fad9d510211f69c8cae0f51f95d3a0a44753",
+      "size": 153811,
+      "repo_path": "bios/Apple/Macintosh/mac2fdhd.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/mac2fdhd.zip",
+      "sha1": "bcecee4379e0ecfa6dc0c49900dda3f8220d6ef0",
+      "sha256": "51e851a305a15c7b384b5db1d5c1fad9d510211f69c8cae0f51f95d3a0a44753",
+      "size": 153811,
+      "repo_path": "bios/Apple/Macintosh/mac2fdhd.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/mac2fdhd.zip",
+      "sha1": "bcecee4379e0ecfa6dc0c49900dda3f8220d6ef0",
+      "sha256": "51e851a305a15c7b384b5db1d5c1fad9d510211f69c8cae0f51f95d3a0a44753",
+      "size": 153811,
+      "repo_path": "bios/Apple/Macintosh/mac2fdhd.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
       "dest": "maciix.zip",
       "sha1": "bcecee4379e0ecfa6dc0c49900dda3f8220d6ef0",
       "sha256": "51e851a305a15c7b384b5db1d5c1fad9d510211f69c8cae0f51f95d3a0a44753",
@@ -99480,6 +100009,39 @@
       "cores": [
         "mame"
       ]
+    },
+    {
+      "dest": "arcade/maclc3.zip",
+      "sha1": "f454095619834dbfb9e8de0111bb3ee5fc21622d",
+      "sha256": "05b962fdba4dab14c5ba12340fdd91f6bd0f7516083ebbdf20896ac3774f6186",
+      "size": 481885,
+      "repo_path": "bios/Apple/Macintosh/maclc3.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/maclc3.zip",
+      "sha1": "f454095619834dbfb9e8de0111bb3ee5fc21622d",
+      "sha256": "05b962fdba4dab14c5ba12340fdd91f6bd0f7516083ebbdf20896ac3774f6186",
+      "size": 481885,
+      "repo_path": "bios/Apple/Macintosh/maclc3.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/maclc3.zip",
+      "sha1": "f454095619834dbfb9e8de0111bb3ee5fc21622d",
+      "sha256": "05b962fdba4dab14c5ba12340fdd91f6bd0f7516083ebbdf20896ac3774f6186",
+      "size": 481885,
+      "repo_path": "bios/Apple/Macintosh/maclc3.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
     },
     {
       "dest": "adbmodem.zip",
@@ -99782,6 +100344,50 @@
       ]
     },
     {
+      "dest": "arcade/electron.zip",
+      "sha1": "19ed4ca51b20946ec05c0f1340b0c3141de9dbe1",
+      "sha256": "bfdfea55aa04cec8ba90cec74b153ce4c737d94ad8686804b0dae75db861c83a",
+      "size": 25571,
+      "repo_path": "bios/Acorn/BBC Micro/electron.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/electron.zip",
+      "sha1": "19ed4ca51b20946ec05c0f1340b0c3141de9dbe1",
+      "sha256": "bfdfea55aa04cec8ba90cec74b153ce4c737d94ad8686804b0dae75db861c83a",
+      "size": 25571,
+      "repo_path": "bios/Acorn/BBC Micro/electron.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "electron/electron.zip",
+      "sha1": "19ed4ca51b20946ec05c0f1340b0c3141de9dbe1",
+      "sha256": "bfdfea55aa04cec8ba90cec74b153ce4c737d94ad8686804b0dae75db861c83a",
+      "size": 25571,
+      "repo_path": "bios/Acorn/BBC Micro/electron.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/electron.zip",
+      "sha1": "19ed4ca51b20946ec05c0f1340b0c3141de9dbe1",
+      "sha256": "bfdfea55aa04cec8ba90cec74b153ce4c737d94ad8686804b0dae75db861c83a",
+      "size": 25571,
+      "repo_path": "bios/Acorn/BBC Micro/electron.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
       "dest": "electron64.zip",
       "sha1": "2310f98e8f8021400922a84a68daeb4b980ef898",
       "sha256": "29fb4522d291994e9fe32a613ed31e5749552c01bac30eb8b35f06ca3bee0fa4",
@@ -99921,6 +100527,39 @@
       ]
     },
     {
+      "dest": "arcade/mc10.zip",
+      "sha1": "fa66a874b735d3d984d66b529a54ae978a9b2766",
+      "sha256": "577cd77780d04e0ec7a22b3004160ee5df3224e537e2507f71d6184cff7d8985",
+      "size": 7262,
+      "repo_path": "bios/Tandy/MC-10/mc10.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/mc10.zip",
+      "sha1": "fa66a874b735d3d984d66b529a54ae978a9b2766",
+      "sha256": "577cd77780d04e0ec7a22b3004160ee5df3224e537e2507f71d6184cff7d8985",
+      "size": 7262,
+      "repo_path": "bios/Tandy/MC-10/mc10.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/mc10.zip",
+      "sha1": "fa66a874b735d3d984d66b529a54ae978a9b2766",
+      "sha256": "577cd77780d04e0ec7a22b3004160ee5df3224e537e2507f71d6184cff7d8985",
+      "size": 7262,
+      "repo_path": "bios/Tandy/MC-10/mc10.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
       "dest": "alice.zip",
       "sha1": "026b5c2e4d04b2c8e7d569a852d62be9bca2f32c",
       "sha256": "c96f3b7add0184328928cabc0a35dd0d4e6ab2036400e2f225d6e9c92129a6f7",
@@ -99939,6 +100578,39 @@
       "cores": [
         "mame"
       ]
+    },
+    {
+      "dest": "arcade/pc8001.zip",
+      "sha1": "007704fa0bc202851affae38f268487694bcae6e",
+      "sha256": "c2eceeb416956391a0e54b4a66850d5156919aa7c38dee9523a19489b9a39952",
+      "size": 60721,
+      "repo_path": "bios/NEC/PC-8001/pc8001.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/pc8001.zip",
+      "sha1": "007704fa0bc202851affae38f268487694bcae6e",
+      "sha256": "c2eceeb416956391a0e54b4a66850d5156919aa7c38dee9523a19489b9a39952",
+      "size": 60721,
+      "repo_path": "bios/NEC/PC-8001/pc8001.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/pc8001.zip",
+      "sha1": "007704fa0bc202851affae38f268487694bcae6e",
+      "sha256": "c2eceeb416956391a0e54b4a66850d5156919aa7c38dee9523a19489b9a39952",
+      "size": 60721,
+      "repo_path": "bios/NEC/PC-8001/pc8001.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
     },
     {
       "dest": "pc8001mk2sr.zip",
@@ -100288,6 +100960,39 @@
       ]
     },
     {
+      "dest": "arcade/apfm1000.zip",
+      "sha1": "d2cce3ff07afa9d13ea371499495f4df9611420c",
+      "sha256": "2ca0b1e99adff5f3330b1a3ee4f5dc86450560c4ad92617efe4eecf5f3432cd2",
+      "size": 6896,
+      "repo_path": "bios/APF/Imagination Machine/apfm1000.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/apfm1000.zip",
+      "sha1": "d2cce3ff07afa9d13ea371499495f4df9611420c",
+      "sha256": "2ca0b1e99adff5f3330b1a3ee4f5dc86450560c4ad92617efe4eecf5f3432cd2",
+      "size": 6896,
+      "repo_path": "bios/APF/Imagination Machine/apfm1000.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/apfm1000.zip",
+      "sha1": "d2cce3ff07afa9d13ea371499495f4df9611420c",
+      "sha256": "2ca0b1e99adff5f3330b1a3ee4f5dc86450560c4ad92617efe4eecf5f3432cd2",
+      "size": 6896,
+      "repo_path": "bios/APF/Imagination Machine/apfm1000.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
       "dest": "beena.zip",
       "sha1": "f63eca9a1b1e92ee1582ff5e4c0db55193f97e33",
       "sha256": "6a8bf30a5a0942f500d1d617506a99552e33774207d3e895258abafe35979641",
@@ -100338,6 +101043,39 @@
       ]
     },
     {
+      "dest": "arcade/lynx48k.zip",
+      "sha1": "54bd40c0784dc67fe88372f1e9db93d6c7d9703a",
+      "sha256": "67fbfc6ecc608256fbf1691f5c0d624ae0ec84e939227aa650548fc805117680",
+      "size": 76468,
+      "repo_path": "bios/Arcade/Arcade/lynx48k.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/lynx48k.zip",
+      "sha1": "54bd40c0784dc67fe88372f1e9db93d6c7d9703a",
+      "sha256": "67fbfc6ecc608256fbf1691f5c0d624ae0ec84e939227aa650548fc805117680",
+      "size": 76468,
+      "repo_path": "bios/Arcade/Arcade/lynx48k.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/lynx48k.zip",
+      "sha1": "54bd40c0784dc67fe88372f1e9db93d6c7d9703a",
+      "sha256": "67fbfc6ecc608256fbf1691f5c0d624ae0ec84e939227aa650548fc805117680",
+      "size": 76468,
+      "repo_path": "bios/Arcade/Arcade/lynx48k.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
       "dest": "lynx96k.zip",
       "sha1": "f59800796cd1a354dc9440e1aa41137403ef67b6",
       "sha256": "a9189fa0888f8e528a2d59f24184f85317c4995e16ddd3d462c736543365ce41",
@@ -100366,6 +101104,39 @@
       "cores": [
         "mame"
       ]
+    },
+    {
+      "dest": "arcade/crvision.zip",
+      "sha1": "887bde265f0567db6b210721f568ec9ebf42a8a2",
+      "sha256": "8db7ea44632bd13216829acd12918600a489682f4524c115fc9581580bf53402",
+      "size": 1810,
+      "repo_path": "bios/VTech/CreatiVision/crvision.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/crvision.zip",
+      "sha1": "887bde265f0567db6b210721f568ec9ebf42a8a2",
+      "sha256": "8db7ea44632bd13216829acd12918600a489682f4524c115fc9581580bf53402",
+      "size": 1810,
+      "repo_path": "bios/VTech/CreatiVision/crvision.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/crvision.zip",
+      "sha1": "887bde265f0567db6b210721f568ec9ebf42a8a2",
+      "sha256": "8db7ea44632bd13216829acd12918600a489682f4524c115fc9581580bf53402",
+      "size": 1810,
+      "repo_path": "bios/VTech/CreatiVision/crvision.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
     },
     {
       "dest": "fnvision.zip",
@@ -100408,6 +101179,39 @@
       ]
     },
     {
+      "dest": "arcade/laser310.zip",
+      "sha1": "e43c9c1ac25aba224fac7cce0d5269346ad02a25",
+      "sha256": "1a096918031f96be817461756331d641e12fac4cb43413947dc4b445efdc23de",
+      "size": 26514,
+      "repo_path": "bios/VTech/Laser 310/laser310.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/laser310.zip",
+      "sha1": "e43c9c1ac25aba224fac7cce0d5269346ad02a25",
+      "sha256": "1a096918031f96be817461756331d641e12fac4cb43413947dc4b445efdc23de",
+      "size": 26514,
+      "repo_path": "bios/VTech/Laser 310/laser310.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/laser310.zip",
+      "sha1": "e43c9c1ac25aba224fac7cce0d5269346ad02a25",
+      "sha256": "1a096918031f96be817461756331d641e12fac4cb43413947dc4b445efdc23de",
+      "size": 26514,
+      "repo_path": "bios/VTech/Laser 310/laser310.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
       "dest": "socrates.zip",
       "sha1": "6bbaa8f73027eaca2c6988ee3b9b3f3b0b29d18e",
       "sha256": "468ff4b7247b7ba6b7ade48a353e17368b4bd1841bf0384c0b2f94a2ab44c799",
@@ -100418,6 +101222,39 @@
       ]
     },
     {
+      "dest": "arcade/socrates.zip",
+      "sha1": "6bbaa8f73027eaca2c6988ee3b9b3f3b0b29d18e",
+      "sha256": "468ff4b7247b7ba6b7ade48a353e17368b4bd1841bf0384c0b2f94a2ab44c799",
+      "size": 218299,
+      "repo_path": "bios/VTech/Socrates/socrates.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/socrates.zip",
+      "sha1": "6bbaa8f73027eaca2c6988ee3b9b3f3b0b29d18e",
+      "sha256": "468ff4b7247b7ba6b7ade48a353e17368b4bd1841bf0384c0b2f94a2ab44c799",
+      "size": 218299,
+      "repo_path": "bios/VTech/Socrates/socrates.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/socrates.zip",
+      "sha1": "6bbaa8f73027eaca2c6988ee3b9b3f3b0b29d18e",
+      "sha256": "468ff4b7247b7ba6b7ade48a353e17368b4bd1841bf0384c0b2f94a2ab44c799",
+      "size": 218299,
+      "repo_path": "bios/VTech/Socrates/socrates.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
       "dest": "vsmile.zip",
       "sha1": "65e526ae3e4795a9186c53c7428d8b946170befe",
       "sha256": "40442c0570e0e26350dfab8eb74ff90a8e5b4093daa85a9a60113f9357c0c768",
@@ -100426,6 +101263,39 @@
       "cores": [
         "mame"
       ]
+    },
+    {
+      "dest": "arcade/vsmile.zip",
+      "sha1": "65e526ae3e4795a9186c53c7428d8b946170befe",
+      "sha256": "40442c0570e0e26350dfab8eb74ff90a8e5b4093daa85a9a60113f9357c0c768",
+      "size": 3078731,
+      "repo_path": "bios/VTech/V.Smile/vsmile.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/vsmile.zip",
+      "sha1": "65e526ae3e4795a9186c53c7428d8b946170befe",
+      "sha256": "40442c0570e0e26350dfab8eb74ff90a8e5b4093daa85a9a60113f9357c0c768",
+      "size": 3078731,
+      "repo_path": "bios/VTech/V.Smile/vsmile.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/vsmile.zip",
+      "sha1": "65e526ae3e4795a9186c53c7428d8b946170befe",
+      "sha256": "40442c0570e0e26350dfab8eb74ff90a8e5b4093daa85a9a60113f9357c0c768",
+      "size": 3078731,
+      "repo_path": "bios/VTech/V.Smile/vsmile.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
     },
     {
       "dest": "gamate.zip",
@@ -100510,7 +101380,40 @@
       ]
     },
     {
+      "dest": "arcade/fm7.zip",
+      "sha1": "1c29ba16151255cd916f49ea25570956f1353b71",
+      "sha256": "0be316f68398755419157d7ef79dc1a1426adfedc507e1a6212342d37e8e16de",
+      "size": 104276,
+      "repo_path": "bios/Fujitsu/FM-7/fm7.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/fm7.zip",
+      "sha1": "1c29ba16151255cd916f49ea25570956f1353b71",
+      "sha256": "0be316f68398755419157d7ef79dc1a1426adfedc507e1a6212342d37e8e16de",
+      "size": 104276,
+      "repo_path": "bios/Fujitsu/FM-7/fm7.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
       "dest": "fm7/fm7.zip",
+      "sha1": "1c29ba16151255cd916f49ea25570956f1353b71",
+      "sha256": "0be316f68398755419157d7ef79dc1a1426adfedc507e1a6212342d37e8e16de",
+      "size": 104276,
+      "repo_path": "bios/Fujitsu/FM-7/fm7.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/fm7.zip",
       "sha1": "1c29ba16151255cd916f49ea25570956f1353b71",
       "sha256": "0be316f68398755419157d7ef79dc1a1426adfedc507e1a6212342d37e8e16de",
       "size": 104276,
@@ -100562,6 +101465,39 @@
       ]
     },
     {
+      "dest": "arcade/pegasus.zip",
+      "sha1": "fc10ef402bcac78c70e1cff57d51613fa12202f9",
+      "sha256": "c31d69d4840986fbc8a56658200d31d709596cf1ccadabc2e405f6b415a9950d",
+      "size": 27305,
+      "repo_path": "bios/Arcade/MAME/pegasus.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/pegasus.zip",
+      "sha1": "fc10ef402bcac78c70e1cff57d51613fa12202f9",
+      "sha256": "c31d69d4840986fbc8a56658200d31d709596cf1ccadabc2e405f6b415a9950d",
+      "size": 27305,
+      "repo_path": "bios/Arcade/MAME/pegasus.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/pegasus.zip",
+      "sha1": "fc10ef402bcac78c70e1cff57d51613fa12202f9",
+      "sha256": "c31d69d4840986fbc8a56658200d31d709596cf1ccadabc2e405f6b415a9950d",
+      "size": 27305,
+      "repo_path": "bios/Arcade/MAME/pegasus.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
       "dest": "pcw8256.zip",
       "sha1": "f8a11b4e03bb8c3caee604ca591676eab6535d1b",
       "sha256": "3e3897f421eff60a97addfa33e45a79dfc3c983097c95c13714a69d5562b4261",
@@ -100570,6 +101506,39 @@
       "cores": [
         "mame"
       ]
+    },
+    {
+      "dest": "arcade/pcw8256.zip",
+      "sha1": "f8a11b4e03bb8c3caee604ca591676eab6535d1b",
+      "sha256": "3e3897f421eff60a97addfa33e45a79dfc3c983097c95c13714a69d5562b4261",
+      "size": 1710,
+      "repo_path": "bios/Amstrad/PCW/pcw8256.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/pcw8256.zip",
+      "sha1": "f8a11b4e03bb8c3caee604ca591676eab6535d1b",
+      "sha256": "3e3897f421eff60a97addfa33e45a79dfc3c983097c95c13714a69d5562b4261",
+      "size": 1710,
+      "repo_path": "bios/Amstrad/PCW/pcw8256.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/pcw8256.zip",
+      "sha1": "f8a11b4e03bb8c3caee604ca591676eab6535d1b",
+      "sha256": "3e3897f421eff60a97addfa33e45a79dfc3c983097c95c13714a69d5562b4261",
+      "size": 1710,
+      "repo_path": "bios/Amstrad/PCW/pcw8256.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
     },
     {
       "dest": "pcw9512.zip",
@@ -100622,6 +101591,39 @@
       ]
     },
     {
+      "dest": "arcade/eg3003.zip",
+      "sha1": "b87f161a5e1e7090b15571ea1abc0bfda4acb7e2",
+      "sha256": "1ac0016192bd2d2feec8ce8d37e7d2ea2cc17129d49eef58e695e792a06d4c64",
+      "size": 13284,
+      "repo_path": "bios/Arcade/MAME/eg3003.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/eg3003.zip",
+      "sha1": "b87f161a5e1e7090b15571ea1abc0bfda4acb7e2",
+      "sha256": "1ac0016192bd2d2feec8ce8d37e7d2ea2cc17129d49eef58e695e792a06d4c64",
+      "size": 13284,
+      "repo_path": "bios/Arcade/MAME/eg3003.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/eg3003.zip",
+      "sha1": "b87f161a5e1e7090b15571ea1abc0bfda4acb7e2",
+      "sha256": "1ac0016192bd2d2feec8ce8d37e7d2ea2cc17129d49eef58e695e792a06d4c64",
+      "size": 13284,
+      "repo_path": "bios/Arcade/MAME/eg3003.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
       "dest": "sys80.zip",
       "sha1": "acd9eaa3f155db4826b7e3416f600a30d54d10b1",
       "sha256": "516237ba0450ff504985d559ca9a210fe2ceb835b3f1dea64f31ce06c97cd247",
@@ -100672,6 +101674,39 @@
       ]
     },
     {
+      "dest": "arcade/trs80m3.zip",
+      "sha1": "8cdf51015a0bac500d9a1d3969fa47ebec4144f6",
+      "sha256": "cb70c9eb80135f399c3a068d2d91fb763af362218298a8e04a52168c0d97f817",
+      "size": 20844,
+      "repo_path": "bios/Tandy/TRS-80/trs80m3.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/trs80m3.zip",
+      "sha1": "8cdf51015a0bac500d9a1d3969fa47ebec4144f6",
+      "sha256": "cb70c9eb80135f399c3a068d2d91fb763af362218298a8e04a52168c0d97f817",
+      "size": 20844,
+      "repo_path": "bios/Tandy/TRS-80/trs80m3.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/trs80m3.zip",
+      "sha1": "8cdf51015a0bac500d9a1d3969fa47ebec4144f6",
+      "sha256": "cb70c9eb80135f399c3a068d2d91fb763af362218298a8e04a52168c0d97f817",
+      "size": 20844,
+      "repo_path": "bios/Tandy/TRS-80/trs80m3.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
       "dest": "trs80m4.zip",
       "sha1": "bc58ac28be4854fb198b895c7fd999f599b5a961",
       "sha256": "24a286c1818d14c003d9aec26bf2a1fe307a173fc2731e4757583a1c0b96d78b",
@@ -100712,7 +101747,40 @@
       ]
     },
     {
+      "dest": "arcade/coco.zip",
+      "sha1": "edc5e86ca93d1161618d44a959ae7ecd0bf0f006",
+      "sha256": "414371a6a1ffc8fd068a8013873ae2bd83df167b212b51b51417246dba77e131",
+      "size": 36592,
+      "repo_path": "bios/Tandy/CoCo/coco.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
       "dest": "coco/coco.zip",
+      "sha1": "edc5e86ca93d1161618d44a959ae7ecd0bf0f006",
+      "sha256": "414371a6a1ffc8fd068a8013873ae2bd83df167b212b51b51417246dba77e131",
+      "size": 36592,
+      "repo_path": "bios/Tandy/CoCo/coco.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/coco.zip",
+      "sha1": "edc5e86ca93d1161618d44a959ae7ecd0bf0f006",
+      "sha256": "414371a6a1ffc8fd068a8013873ae2bd83df167b212b51b51417246dba77e131",
+      "size": 36592,
+      "repo_path": "bios/Tandy/CoCo/coco.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/coco.zip",
       "sha1": "edc5e86ca93d1161618d44a959ae7ecd0bf0f006",
       "sha256": "414371a6a1ffc8fd068a8013873ae2bd83df167b212b51b51417246dba77e131",
       "size": 36592,
@@ -100838,7 +101906,40 @@
       ]
     },
     {
+      "dest": "arcade/aa310.zip",
+      "sha1": "db67429100680a7a991822b8e2b1ca958df1e140",
+      "sha256": "9f5874a25631210d26fcc70966ac0ed0abb9031c27df37e1baa997cc1f365266",
+      "size": 6536273,
+      "repo_path": "bios/Acorn/Archimedes/aa310.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
       "dest": "archimedes/aa310.zip",
+      "sha1": "db67429100680a7a991822b8e2b1ca958df1e140",
+      "sha256": "9f5874a25631210d26fcc70966ac0ed0abb9031c27df37e1baa997cc1f365266",
+      "size": 6536273,
+      "repo_path": "bios/Acorn/Archimedes/aa310.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/aa310.zip",
+      "sha1": "db67429100680a7a991822b8e2b1ca958df1e140",
+      "sha256": "9f5874a25631210d26fcc70966ac0ed0abb9031c27df37e1baa997cc1f365266",
+      "size": 6536273,
+      "repo_path": "bios/Acorn/Archimedes/aa310.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/aa310.zip",
       "sha1": "db67429100680a7a991822b8e2b1ca958df1e140",
       "sha256": "9f5874a25631210d26fcc70966ac0ed0abb9031c27df37e1baa997cc1f365266",
       "size": 6536273,
@@ -100913,6 +102014,39 @@
       ]
     },
     {
+      "dest": "arcade/scv.zip",
+      "sha1": "48a67b02680d2789f91c9c8f322b70267e5c3cb2",
+      "sha256": "a5a37cfdae0827505af3c09510bb17320c09cd358581192835794d6ffe4ce5b7",
+      "size": 5111,
+      "repo_path": "bios/Epoch/Super Cassette Vision/.variants/scv.zip.2f5d468e",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/scv.zip",
+      "sha1": "48a67b02680d2789f91c9c8f322b70267e5c3cb2",
+      "sha256": "a5a37cfdae0827505af3c09510bb17320c09cd358581192835794d6ffe4ce5b7",
+      "size": 5111,
+      "repo_path": "bios/Epoch/Super Cassette Vision/.variants/scv.zip.2f5d468e",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/scv.zip",
+      "sha1": "48a67b02680d2789f91c9c8f322b70267e5c3cb2",
+      "sha256": "a5a37cfdae0827505af3c09510bb17320c09cd358581192835794d6ffe4ce5b7",
+      "size": 5111,
+      "repo_path": "bios/Epoch/Super Cassette Vision/.variants/scv.zip.2f5d468e",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
       "dest": "ti99_4a.zip",
       "sha1": "e05575b630bea7ff98b9ca1f083d745abb3110b6",
       "sha256": "d7bb2d9b65a766dcc03376c6afd9a605df5fe302cf61584f801653b7be87279a",
@@ -100921,6 +102055,39 @@
       "cores": [
         "mame"
       ]
+    },
+    {
+      "dest": "arcade/ti99_4a.zip",
+      "sha1": "e05575b630bea7ff98b9ca1f083d745abb3110b6",
+      "sha256": "d7bb2d9b65a766dcc03376c6afd9a605df5fe302cf61584f801653b7be87279a",
+      "size": 21377,
+      "repo_path": "bios/Texas Instruments/TI-99/ti99_4a.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/ti99_4a.zip",
+      "sha1": "e05575b630bea7ff98b9ca1f083d745abb3110b6",
+      "sha256": "d7bb2d9b65a766dcc03376c6afd9a605df5fe302cf61584f801653b7be87279a",
+      "size": 21377,
+      "repo_path": "bios/Texas Instruments/TI-99/ti99_4a.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/ti99_4a.zip",
+      "sha1": "e05575b630bea7ff98b9ca1f083d745abb3110b6",
+      "sha256": "d7bb2d9b65a766dcc03376c6afd9a605df5fe302cf61584f801653b7be87279a",
+      "size": 21377,
+      "repo_path": "bios/Texas Instruments/TI-99/ti99_4a.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
     },
     {
       "dest": "ti99/ti99_4a.zip",
@@ -100954,6 +102121,39 @@
       ]
     },
     {
+      "dest": "arcade/tutor.zip",
+      "sha1": "273dbb7a93eb0ab83c2e13e9db51b897cc18f838",
+      "sha256": "c156550085a40e69e82e83ce4fe31c92401b1cc0e09b35ca3a9b1687b0d852d6",
+      "size": 34653,
+      "repo_path": "bios/Tomy/Tutor/tutor.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/tutor.zip",
+      "sha1": "273dbb7a93eb0ab83c2e13e9db51b897cc18f838",
+      "sha256": "c156550085a40e69e82e83ce4fe31c92401b1cc0e09b35ca3a9b1687b0d852d6",
+      "size": 34653,
+      "repo_path": "bios/Tomy/Tutor/tutor.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/tutor.zip",
+      "sha1": "273dbb7a93eb0ab83c2e13e9db51b897cc18f838",
+      "sha256": "c156550085a40e69e82e83ce4fe31c92401b1cc0e09b35ca3a9b1687b0d852d6",
+      "size": 34653,
+      "repo_path": "bios/Tomy/Tutor/tutor.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
       "dest": "vg5k.zip",
       "sha1": "5ad489a58fc457d2bfb7a348f4a312c3b49daad1",
       "sha256": "9e0492d9890bf004c53c30e418e2fcd977511548136f18fa27e4c96d16c98d90",
@@ -100974,6 +102174,39 @@
       ]
     },
     {
+      "dest": "arcade/bbcm.zip",
+      "sha1": "557be97016b8e990a286226b1ec933986a70805d",
+      "sha256": "110316cc4fe65b0ffc2eb5127539c726e9220f145cb5b0811e2baf05d190dfa4",
+      "size": 400592,
+      "repo_path": "bios/Acorn/BBC Micro/.variants/bbcm.zip.4cc3e25a",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/bbcm.zip",
+      "sha1": "557be97016b8e990a286226b1ec933986a70805d",
+      "sha256": "110316cc4fe65b0ffc2eb5127539c726e9220f145cb5b0811e2baf05d190dfa4",
+      "size": 400592,
+      "repo_path": "bios/Acorn/BBC Micro/.variants/bbcm.zip.4cc3e25a",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/bbcm.zip",
+      "sha1": "557be97016b8e990a286226b1ec933986a70805d",
+      "sha256": "110316cc4fe65b0ffc2eb5127539c726e9220f145cb5b0811e2baf05d190dfa4",
+      "size": 400592,
+      "repo_path": "bios/Acorn/BBC Micro/.variants/bbcm.zip.4cc3e25a",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
       "dest": "bbcmc.zip",
       "sha1": "8809bb953f0d8ec01dae1df2a94ec09913f924ba",
       "sha256": "6b68708e806e3893d987fa0f8cc990ba7f4e4fb2933e9b871bb57458306dfd1e",
@@ -100982,6 +102215,39 @@
       "cores": [
         "mame"
       ]
+    },
+    {
+      "dest": "arcade/bbcmc.zip",
+      "sha1": "8809bb953f0d8ec01dae1df2a94ec09913f924ba",
+      "sha256": "6b68708e806e3893d987fa0f8cc990ba7f4e4fb2933e9b871bb57458306dfd1e",
+      "size": 100096,
+      "repo_path": "bios/Acorn/BBC Micro/bbcmc.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/bbcmc.zip",
+      "sha1": "8809bb953f0d8ec01dae1df2a94ec09913f924ba",
+      "sha256": "6b68708e806e3893d987fa0f8cc990ba7f4e4fb2933e9b871bb57458306dfd1e",
+      "size": 100096,
+      "repo_path": "bios/Acorn/BBC Micro/bbcmc.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/bbcmc.zip",
+      "sha1": "8809bb953f0d8ec01dae1df2a94ec09913f924ba",
+      "sha256": "6b68708e806e3893d987fa0f8cc990ba7f4e4fb2933e9b871bb57458306dfd1e",
+      "size": 100096,
+      "repo_path": "bios/Acorn/BBC Micro/bbcmc.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
     },
     {
       "dest": "saa5050.zip",
@@ -101111,6 +102377,39 @@
       ]
     },
     {
+      "dest": "arcade/bk0010.zip",
+      "sha1": "4aa3cec86fb5eb0cec7d7b3c8ddfe28b7f1c7963",
+      "sha256": "b849f2cb6b11fb334e858dd3722dbb6b46174019d77cf72ab0ad978896068697",
+      "size": 74578,
+      "repo_path": "bios/Arcade/MAME/bk0010.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/bk0010.zip",
+      "sha1": "4aa3cec86fb5eb0cec7d7b3c8ddfe28b7f1c7963",
+      "sha256": "b849f2cb6b11fb334e858dd3722dbb6b46174019d77cf72ab0ad978896068697",
+      "size": 74578,
+      "repo_path": "bios/Arcade/MAME/bk0010.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/bk0010.zip",
+      "sha1": "4aa3cec86fb5eb0cec7d7b3c8ddfe28b7f1c7963",
+      "sha256": "b849f2cb6b11fb334e858dd3722dbb6b46174019d77cf72ab0ad978896068697",
+      "size": 74578,
+      "repo_path": "bios/Arcade/MAME/bk0010.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
       "dest": "vectrex.zip",
       "sha1": "89d1a70142fb4e768e24854f98799c3fd1345ba5",
       "sha256": "76d4ba88a8a1be233880ccc30db96e22009bda6d40ba8c18a4b0c8e3930ae47e",
@@ -101227,6 +102526,39 @@
       ]
     },
     {
+      "dest": "arcade/ekara.zip",
+      "sha1": "86665ff4bce0f27c1ffd1d0459708885b82983a2",
+      "sha256": "b58ecfd6b1666eb71068cd46fc0499016ae589460c594b189af766b199bf17b3",
+      "size": 630644,
+      "repo_path": "bios/Arcade/Arcade/ekara.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/ekara.zip",
+      "sha1": "86665ff4bce0f27c1ffd1d0459708885b82983a2",
+      "sha256": "b58ecfd6b1666eb71068cd46fc0499016ae589460c594b189af766b199bf17b3",
+      "size": 630644,
+      "repo_path": "bios/Arcade/Arcade/ekara.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/ekara.zip",
+      "sha1": "86665ff4bce0f27c1ffd1d0459708885b82983a2",
+      "sha256": "b58ecfd6b1666eb71068cd46fc0499016ae589460c594b189af766b199bf17b3",
+      "size": 630644,
+      "repo_path": "bios/Arcade/Arcade/ekara.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
       "dest": "ekaraa.zip",
       "sha1": "98080e5a3d352e04ed8b50e6a04af456518aa66e",
       "sha256": "28520a1ab1dafb4cf6b7d9cfefc7af1fb225adb3234ae354deaa7bd2d87c23de",
@@ -101325,6 +102657,39 @@
       "cores": [
         "mame"
       ]
+    },
+    {
+      "dest": "arcade/popira.zip",
+      "sha1": "5fb387eef5d254797413c9d0ea342b64b7eeb5bb",
+      "sha256": "3022e52228b5070b258b67f613a015a3c818ed783bf8a4d11afc270addc9c07e",
+      "size": 654918,
+      "repo_path": "bios/Arcade/Arcade/popira.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "consolearcade/popira.zip",
+      "sha1": "5fb387eef5d254797413c9d0ea342b64b7eeb5bb",
+      "sha256": "3022e52228b5070b258b67f613a015a3c818ed783bf8a4d11afc270addc9c07e",
+      "size": 654918,
+      "repo_path": "bios/Arcade/Arcade/popira.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
+    },
+    {
+      "dest": "mame/popira.zip",
+      "sha1": "5fb387eef5d254797413c9d0ea342b64b7eeb5bb",
+      "sha256": "3022e52228b5070b258b67f613a015a3c818ed783bf8a4d11afc270addc9c07e",
+      "size": 654918,
+      "repo_path": "bios/Arcade/Arcade/popira.zip",
+      "cores": [
+        "mame"
+      ],
+      "root": "roms"
     },
     {
       "dest": "popirak.zip",
@@ -130672,16 +132037,6 @@
       ]
     },
     {
-      "dest": "mame/bios/apple2e.zip",
-      "sha1": "891f44b09ab1a948d3d887f8a30b9c9265849ada",
-      "sha256": "82e28c1d338990afba6027e4d208963d01789f1ef3597e2bd3761fa00963a836",
-      "size": 15975,
-      "repo_path": "bios/Apple/Apple II/apple2e.zip",
-      "cores": [
-        "mamemess"
-      ]
-    },
-    {
       "dest": "mame/bios/apple2ee.zip",
       "sha1": "97d54fa68a7b30ff7a63334567be688663ad18b7",
       "sha256": "aff74b8e7ffb77f5ce190f50f742dbe56484090ec79bfe26fb7b916371202664",
@@ -137435,16 +138790,6 @@
       "repo_path": "bios/Sega/Hikaru/18wheelr.zip",
       "cores": [
         "odin"
-      ]
-    },
-    {
-      "dest": "channelf.zip",
-      "sha1": "1cb23b462b990241013deb4b5e07ce741af28267",
-      "sha256": "c158f7c177c61c7b441eb1061e5148737597e871cbcfa1e2d60ace15e90c8e70",
-      "size": 2705,
-      "repo_path": "bios/Arcade/Arcade/channelf.zip",
-      "cores": [
-        "fbneo"
       ]
     },
     {

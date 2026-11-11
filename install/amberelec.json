@@ -6,7 +6,7 @@
   "platform": "amberelec",
   "display_name": "AmberELEC",
   "version": "prerelease-20261019_1835",
-  "generated": "2026-11-11T12:03:42Z",
+  "generated": "2026-11-11T14:23:39Z",
   "base_destination": "",
   "detect": [
     {
@@ -29,10 +29,10 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 5327,
-  "total_size": 5746030214,
-  "pack_files": 9090,
-  "pack_size": 5853591481,
+  "total_files": 5331,
+  "total_size": 5746706774,
+  "pack_files": 9094,
+  "pack_size": 5854268041,
   "total_omitted": 127,
   "omitted_files": [
     {
@@ -1406,8 +1406,7 @@
       "drastic - standalone"
     ],
     "advancemame": [
-      "AdvanceMame",
-      "advmame"
+      "AdvanceMame"
     ],
     "amiberry": [
       "AMIBERRY"
@@ -2014,6 +2013,7 @@
     "atari-7800": [
       "a7800",
       "bizhawk",
+      "mame",
       "prosystem"
     ],
     "atari-lynx": [
@@ -2071,12 +2071,14 @@
       "winuae"
     ],
     "magnavox-odyssey2": [
+      "mame",
       "o2em"
     ],
     "mattel-intellivision": [
       "bizhawk",
       "freeintv",
-      "jzintv"
+      "jzintv",
+      "mame"
     ],
     "microsoft-msx": [
       "ares",
@@ -25052,7 +25054,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25066,7 +25071,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25080,7 +25088,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25094,7 +25105,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25108,7 +25122,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25122,7 +25139,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25136,7 +25156,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25150,7 +25173,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25164,7 +25190,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25178,7 +25207,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25192,7 +25224,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25206,7 +25241,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25220,7 +25258,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25234,7 +25275,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25248,7 +25292,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25262,7 +25309,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25276,7 +25326,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25290,7 +25343,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25304,7 +25360,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25318,7 +25377,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25332,7 +25394,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25346,7 +25411,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25360,7 +25428,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25374,7 +25445,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25388,7 +25462,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25402,7 +25479,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25416,7 +25496,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25430,7 +25513,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25444,7 +25530,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25458,7 +25547,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25472,7 +25564,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25486,7 +25581,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25500,7 +25598,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25514,7 +25615,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25528,7 +25632,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25542,7 +25649,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25556,7 +25666,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25570,7 +25683,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25584,7 +25700,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25598,7 +25717,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25612,7 +25734,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25626,7 +25751,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25640,7 +25768,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25654,7 +25785,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25668,7 +25802,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25682,7 +25819,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25696,7 +25836,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25710,7 +25853,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25724,7 +25870,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25738,7 +25887,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25752,7 +25904,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25766,7 +25921,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25780,7 +25938,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25794,7 +25955,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25808,7 +25972,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25822,7 +25989,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25836,7 +26006,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25850,7 +26023,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25864,7 +26040,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25878,7 +26057,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25892,7 +26074,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25906,7 +26091,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25920,7 +26108,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25934,7 +26125,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25948,7 +26142,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25962,7 +26159,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25976,7 +26176,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -25990,7 +26193,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26004,7 +26210,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26018,7 +26227,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26032,7 +26244,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26046,7 +26261,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26060,7 +26278,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26074,7 +26295,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26088,7 +26312,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26102,7 +26329,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26116,7 +26346,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26130,7 +26363,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26144,7 +26380,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26158,7 +26397,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26172,7 +26414,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26186,7 +26431,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26200,7 +26448,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26214,7 +26465,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26228,7 +26482,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26242,7 +26499,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26256,7 +26516,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26270,7 +26533,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26284,7 +26550,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26298,7 +26567,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26312,7 +26584,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26326,7 +26601,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26340,7 +26618,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26354,7 +26635,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26368,7 +26652,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26382,7 +26669,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26396,7 +26686,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26410,7 +26703,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26424,7 +26720,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26438,7 +26737,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26452,7 +26754,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26466,7 +26771,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26480,7 +26788,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26494,7 +26805,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26508,7 +26822,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26522,7 +26839,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26536,7 +26856,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26550,7 +26873,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26564,7 +26890,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26578,7 +26907,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26592,7 +26924,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26606,7 +26941,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26620,7 +26958,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26634,7 +26975,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26648,7 +26992,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26662,7 +27009,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26676,7 +27026,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26690,7 +27043,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26704,7 +27060,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26718,7 +27077,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26732,7 +27094,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26746,7 +27111,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26760,7 +27128,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26774,7 +27145,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26788,7 +27162,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26802,7 +27179,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26816,7 +27196,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26830,7 +27213,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26844,7 +27230,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26858,7 +27247,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26872,7 +27264,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26886,7 +27281,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26900,7 +27298,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26914,7 +27315,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26928,7 +27332,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26942,7 +27349,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26956,7 +27366,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26970,7 +27383,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26984,7 +27400,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -26998,7 +27417,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27012,7 +27434,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27026,7 +27451,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27040,7 +27468,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27054,7 +27485,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27068,7 +27502,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27082,7 +27519,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27096,7 +27536,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27110,7 +27553,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27124,7 +27570,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27138,7 +27587,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27152,7 +27604,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27166,7 +27621,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27180,7 +27638,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27194,7 +27655,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27208,7 +27672,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27222,7 +27689,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27236,7 +27706,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27250,7 +27723,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27264,7 +27740,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27278,7 +27757,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27292,7 +27774,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27306,7 +27791,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27320,7 +27808,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27334,7 +27825,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27348,7 +27842,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27362,7 +27859,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27376,7 +27876,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27390,7 +27893,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27404,7 +27910,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27418,7 +27927,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27432,7 +27944,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27446,7 +27961,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27460,7 +27978,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27474,7 +27995,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27488,7 +28012,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27502,7 +28029,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27516,7 +28046,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27530,7 +28063,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27544,7 +28080,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27558,7 +28097,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27572,7 +28114,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27586,7 +28131,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27600,7 +28148,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27614,7 +28165,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27628,7 +28182,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27642,7 +28199,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27656,7 +28216,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27670,7 +28233,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27684,7 +28250,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27698,7 +28267,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27712,7 +28284,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27726,7 +28301,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27740,7 +28318,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27754,7 +28335,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27768,7 +28352,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27782,7 +28369,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27796,7 +28386,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27810,7 +28403,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27824,7 +28420,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27838,7 +28437,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27852,7 +28454,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27866,7 +28471,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27880,7 +28488,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27894,7 +28505,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27908,7 +28522,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27922,7 +28539,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27936,7 +28556,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27950,7 +28573,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27964,7 +28590,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27978,7 +28607,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -27992,7 +28624,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28006,7 +28641,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28020,7 +28658,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28034,7 +28675,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28048,7 +28692,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28062,7 +28709,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28076,7 +28726,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28090,7 +28743,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28104,7 +28760,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28118,7 +28777,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28132,7 +28794,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28146,7 +28811,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28160,7 +28828,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28174,7 +28845,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28188,7 +28862,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28202,7 +28879,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28216,7 +28896,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28230,7 +28913,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28244,7 +28930,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28258,7 +28947,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28272,7 +28964,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28286,7 +28981,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28300,7 +28998,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28314,7 +29015,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28328,7 +29032,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28342,7 +29049,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28356,7 +29066,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28370,7 +29083,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28384,7 +29100,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28398,7 +29117,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28412,7 +29134,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28426,7 +29151,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28440,7 +29168,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28454,7 +29185,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28468,7 +29202,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28482,7 +29219,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28496,7 +29236,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28510,7 +29253,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28524,7 +29270,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28538,7 +29287,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28552,7 +29304,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28566,7 +29321,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28580,7 +29338,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28594,7 +29355,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28608,7 +29372,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28622,7 +29389,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28636,7 +29406,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28650,7 +29423,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28664,7 +29440,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28678,7 +29457,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28692,7 +29474,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28706,7 +29491,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28720,7 +29508,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28734,7 +29525,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28748,7 +29542,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28762,7 +29559,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28776,7 +29576,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28790,7 +29593,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28804,7 +29610,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28818,7 +29627,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28832,7 +29644,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28846,7 +29661,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28860,7 +29678,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28874,7 +29695,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28888,7 +29712,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28902,7 +29729,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28916,7 +29746,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28930,7 +29763,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28944,7 +29780,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28958,7 +29797,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28972,7 +29814,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -28986,7 +29831,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29000,7 +29848,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29014,7 +29865,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29028,7 +29882,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29042,7 +29899,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29056,7 +29916,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29070,7 +29933,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29084,7 +29950,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29098,7 +29967,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29112,7 +29984,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29126,7 +30001,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29140,7 +30018,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29154,7 +30035,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29168,7 +30052,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29182,7 +30069,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29196,7 +30086,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29210,7 +30103,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29224,7 +30120,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29238,7 +30137,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29252,7 +30154,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29266,7 +30171,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29280,7 +30188,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29294,7 +30205,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29308,7 +30222,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29322,7 +30239,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29336,7 +30256,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29350,7 +30273,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29364,7 +30290,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29378,7 +30307,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29392,7 +30324,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29406,7 +30341,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29420,7 +30358,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29434,7 +30375,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29448,7 +30392,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29462,7 +30409,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29476,7 +30426,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29490,7 +30443,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29504,7 +30460,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29518,7 +30477,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29532,7 +30494,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29546,7 +30511,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29560,7 +30528,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29574,7 +30545,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29588,7 +30562,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29602,7 +30579,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29616,7 +30596,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29630,7 +30613,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29644,7 +30630,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29658,7 +30647,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29672,7 +30664,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29686,7 +30681,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29700,7 +30698,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29714,7 +30715,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29728,7 +30732,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29742,7 +30749,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29756,7 +30766,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29770,7 +30783,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29784,7 +30800,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29798,7 +30817,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29812,7 +30834,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29826,7 +30851,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29840,7 +30868,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29854,7 +30885,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29868,7 +30902,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29882,7 +30919,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29896,7 +30936,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29910,7 +30953,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29924,7 +30970,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29938,7 +30987,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29952,7 +31004,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29966,7 +31021,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29980,7 +31038,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -29994,7 +31055,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30008,7 +31072,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30022,7 +31089,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30036,7 +31106,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30050,7 +31123,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30064,7 +31140,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30078,7 +31157,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30092,7 +31174,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30106,7 +31191,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30120,7 +31208,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30134,7 +31225,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30148,7 +31242,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30162,7 +31259,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30176,7 +31276,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30190,7 +31293,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30204,7 +31310,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30218,7 +31327,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30232,7 +31344,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30246,7 +31361,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30260,7 +31378,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30274,7 +31395,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30288,7 +31412,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30302,7 +31429,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30316,7 +31446,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30330,7 +31463,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30344,7 +31480,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30358,7 +31497,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30372,7 +31514,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30386,7 +31531,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30400,7 +31548,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30414,7 +31565,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30428,7 +31582,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30442,7 +31599,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30456,7 +31616,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30470,7 +31633,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30484,7 +31650,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30498,7 +31667,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30512,7 +31684,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30526,7 +31701,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30540,7 +31718,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30554,7 +31735,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30568,7 +31752,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30582,7 +31769,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30596,7 +31786,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30610,7 +31803,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30624,7 +31820,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30638,7 +31837,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30652,7 +31854,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30666,7 +31871,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30680,7 +31888,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30694,7 +31905,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30708,7 +31922,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30722,7 +31939,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30736,7 +31956,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30750,7 +31973,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30764,7 +31990,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30778,7 +32007,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30792,7 +32024,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30806,7 +32041,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30820,7 +32058,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30834,7 +32075,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30848,7 +32092,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30862,7 +32109,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30876,7 +32126,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30890,7 +32143,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30904,7 +32160,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30918,7 +32177,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30932,7 +32194,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30946,7 +32211,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30960,7 +32228,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30974,7 +32245,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -30988,7 +32262,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31002,7 +32279,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31016,7 +32296,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31030,7 +32313,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31044,7 +32330,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31058,7 +32347,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31072,7 +32364,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31086,7 +32381,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31100,7 +32398,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31114,7 +32415,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31128,7 +32432,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31142,7 +32449,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31156,7 +32466,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31170,7 +32483,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31184,7 +32500,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31198,7 +32517,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31212,7 +32534,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31226,7 +32551,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31240,7 +32568,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31254,7 +32585,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31268,7 +32602,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31282,7 +32619,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31296,7 +32636,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31310,7 +32653,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31324,7 +32670,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31338,7 +32687,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31352,7 +32704,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31366,7 +32721,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31380,7 +32738,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31394,7 +32755,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31408,7 +32772,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31422,7 +32789,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31436,7 +32806,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31450,7 +32823,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31464,7 +32840,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31478,7 +32857,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31492,7 +32874,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31506,7 +32891,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31520,7 +32908,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31534,7 +32925,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31548,7 +32942,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31562,7 +32959,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31576,7 +32976,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31590,7 +32993,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31604,7 +33010,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31618,7 +33027,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31632,7 +33044,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31646,7 +33061,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31660,7 +33078,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31674,7 +33095,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31688,7 +33112,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31702,7 +33129,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31716,7 +33146,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31730,7 +33163,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31744,7 +33180,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31758,7 +33197,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31772,7 +33214,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31786,7 +33231,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31800,7 +33248,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31814,7 +33265,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31828,7 +33282,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31842,7 +33299,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31856,7 +33316,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31870,7 +33333,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31884,7 +33350,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31898,7 +33367,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31912,7 +33384,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31926,7 +33401,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31940,7 +33418,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31954,7 +33435,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31968,7 +33452,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31982,7 +33469,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -31996,7 +33486,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32010,7 +33503,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32024,7 +33520,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32038,7 +33537,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32052,7 +33554,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32066,7 +33571,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32080,7 +33588,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32094,7 +33605,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32108,7 +33622,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32122,7 +33639,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32136,7 +33656,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32150,7 +33673,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32164,7 +33690,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32178,7 +33707,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32192,7 +33724,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32206,7 +33741,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32220,7 +33758,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32234,7 +33775,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32248,7 +33792,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32262,7 +33809,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32276,7 +33826,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32290,7 +33843,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32304,7 +33860,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32318,7 +33877,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32332,7 +33894,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32346,7 +33911,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32360,7 +33928,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32374,7 +33945,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32388,7 +33962,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32402,7 +33979,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32416,7 +33996,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32430,7 +34013,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32444,7 +34030,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32458,7 +34047,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32472,7 +34064,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32486,7 +34081,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32500,7 +34098,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32514,7 +34115,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32528,7 +34132,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32542,7 +34149,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32556,7 +34166,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32570,7 +34183,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32584,7 +34200,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32598,7 +34217,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32612,7 +34234,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32626,7 +34251,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32640,7 +34268,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32654,7 +34285,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32668,7 +34302,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32682,7 +34319,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32696,7 +34336,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32710,7 +34353,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32724,7 +34370,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32738,7 +34387,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32752,7 +34404,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32766,7 +34421,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32780,7 +34438,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32794,7 +34455,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32808,7 +34472,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32822,7 +34489,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32836,7 +34506,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32850,7 +34523,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32864,7 +34540,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32878,7 +34557,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32892,7 +34574,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32906,7 +34591,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32920,7 +34608,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32934,7 +34625,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32948,7 +34642,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32962,7 +34659,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32976,7 +34676,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -32990,7 +34693,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33004,7 +34710,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33018,7 +34727,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33032,7 +34744,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33046,7 +34761,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33060,7 +34778,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33074,7 +34795,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33088,7 +34812,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33102,7 +34829,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33116,7 +34846,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33130,7 +34863,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33144,7 +34880,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33158,7 +34897,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33172,7 +34914,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33186,7 +34931,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33200,7 +34948,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33214,7 +34965,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33228,7 +34982,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33242,7 +34999,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33256,7 +35016,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33270,7 +35033,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33284,7 +35050,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33298,7 +35067,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33312,7 +35084,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33326,7 +35101,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33340,7 +35118,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33354,7 +35135,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33368,7 +35152,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33382,7 +35169,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33396,7 +35186,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33410,7 +35203,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33424,7 +35220,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33438,7 +35237,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33452,7 +35254,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33466,7 +35271,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33480,7 +35288,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33494,7 +35305,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33508,7 +35322,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33522,7 +35339,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33536,7 +35356,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33550,7 +35373,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33564,7 +35390,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33578,7 +35407,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33592,7 +35424,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33606,7 +35441,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33620,7 +35458,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33634,7 +35475,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33648,7 +35492,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33662,7 +35509,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33676,7 +35526,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33690,7 +35543,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33704,7 +35560,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33718,7 +35577,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33732,7 +35594,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33746,7 +35611,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33760,7 +35628,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33774,7 +35645,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33788,7 +35662,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33802,7 +35679,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33816,7 +35696,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33830,7 +35713,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33844,7 +35730,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33858,7 +35747,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33872,7 +35764,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33886,7 +35781,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33900,7 +35798,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33914,7 +35815,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33928,7 +35832,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33942,7 +35849,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33956,7 +35866,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33970,7 +35883,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33984,7 +35900,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -33998,7 +35917,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34012,7 +35934,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34026,7 +35951,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34040,7 +35968,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34054,7 +35985,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34068,7 +36002,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34082,7 +36019,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34096,7 +36036,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34110,7 +36053,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34124,7 +36070,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34138,7 +36087,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34152,7 +36104,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34166,7 +36121,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34180,7 +36138,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34194,7 +36155,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34208,7 +36172,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34222,7 +36189,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34236,7 +36206,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34250,7 +36223,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34264,7 +36240,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34278,7 +36257,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34292,7 +36274,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34306,7 +36291,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34320,7 +36308,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34334,7 +36325,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34348,7 +36342,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34362,7 +36359,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34376,7 +36376,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34390,7 +36393,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34404,7 +36410,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34418,7 +36427,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34432,7 +36444,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34446,7 +36461,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34460,7 +36478,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34474,7 +36495,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34488,7 +36512,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34502,7 +36529,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34516,7 +36546,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34530,7 +36563,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34544,7 +36580,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34558,7 +36597,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34572,7 +36614,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34586,7 +36631,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34600,7 +36648,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34614,7 +36665,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34628,7 +36682,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34642,7 +36699,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34656,7 +36716,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34670,7 +36733,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34684,7 +36750,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34698,7 +36767,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34712,7 +36784,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34726,7 +36801,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34740,7 +36818,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34754,7 +36835,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34768,7 +36852,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34782,7 +36869,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34796,7 +36886,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34810,7 +36903,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34824,7 +36920,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34838,7 +36937,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34852,7 +36954,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34866,7 +36971,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34880,7 +36988,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34894,7 +37005,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34908,7 +37022,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34922,7 +37039,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34936,7 +37056,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34950,7 +37073,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34964,7 +37090,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34978,7 +37107,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -34992,7 +37124,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -35006,7 +37141,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -35020,7 +37158,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -35034,7 +37175,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -35048,7 +37192,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -35062,7 +37209,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -35076,7 +37226,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -35090,7 +37243,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -35104,7 +37260,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -35118,7 +37277,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -35132,7 +37294,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -35146,7 +37311,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ],
       "category": "game_data"
     },
@@ -41116,57 +43284,6 @@
       ]
     },
     {
-      "dest": "bios/coh1002v.zip",
-      "sha1": "5162fcac2fa5a92480a081b3397099ce4a3703c5",
-      "sha256": "9e4fb8208d357e7d0269628be6d2916d7031d248904ed9b6fb34a814432ae5f8",
-      "size": 126314,
-      "repo_path": "bios/Arcade/Arcade/coh1002v.zip",
-      "cores": [
-        "advancemame"
-      ]
-    },
-    {
-      "dest": "bios/aleck64.zip",
-      "sha1": "beaf97c4a0e0792b8db65648f9dabb6a54ae0549",
-      "sha256": "53e9cb3814cfa086a4cb152d250a740d2a438aaadbeec248a86a1698e69dc24a",
-      "size": 1804,
-      "repo_path": "bios/Arcade/Arcade/aleck64.zip",
-      "cores": [
-        "advancemame"
-      ]
-    },
-    {
-      "dest": "bios/atarisy1.zip",
-      "sha1": "0c9bc4b948bd1816ebe13e2acb97931cbcc6ea15",
-      "sha256": "ae8c41b3d0107c6f0634730267af569a51e49f5df1bdb2c1e6c591bb6251b7d3",
-      "size": 57375,
-      "repo_path": "bios/Arcade/MAME/atarisy1.zip",
-      "cores": [
-        "fbneo"
-      ],
-      "alternatives": [
-        {
-          "sha1": "4fb1f00681d2540b476add2def2bbf07ca3e3993",
-          "sha256": "1cf61e6b54589ed9bf2b5f319c2b56de205384d6726b7a0fae79213071f3cfb5",
-          "size": 49385,
-          "repo_path": "bios/Arcade/Arcade/atarisy1.zip",
-          "cores": [
-            "advancemame"
-          ]
-        }
-      ]
-    },
-    {
-      "dest": "bios/cedmag.zip",
-      "sha1": "66ac875b32dc9bf03b1eeb500ff4651279386951",
-      "sha256": "11e3489f372949d5c95c976336d8490d399bbec8afe872bc61788ed38522b446",
-      "size": 1264,
-      "repo_path": "bios/Arcade/Arcade/cedmag.zip",
-      "cores": [
-        "advancemame"
-      ]
-    },
-    {
       "dest": "bios/ar_bios.zip",
       "sha1": "df93e5943023cc8f7ddf0ffb956fd969e04a171a",
       "sha256": "370e7f2d67a58847911ebc6e3f12de834cdaeb49834db802b4cba9d9e6e28a42",
@@ -41212,6 +43329,16 @@
       "sha256": "29e05af157d01d146c7ec501e99b7931d78920beccf9b66c9b310c860941e37f",
       "size": 3753,
       "repo_path": "bios/Arcade/Arcade/v4bios.zip",
+      "cores": [
+        "advancemame"
+      ]
+    },
+    {
+      "dest": "bios/hng64.zip",
+      "sha1": "98b92ece93d3e160c446a56ac859a8311333e36c",
+      "sha256": "6c5a6332a6dc48832e505a8ed2ed9946753ed2d7dc96a7b40e5efd2bb720de4e",
+      "size": 41210,
+      "repo_path": "bios/Arcade/Arcade/hng64.zip",
       "cores": [
         "advancemame"
       ]
@@ -44645,6 +46772,72 @@
       "sha256": "96f77c9fcf7285442dfbcddaa4fd1179820136bde65e8deecb4d41da3daa557f",
       "size": 173963,
       "repo_path": "bios/Apple/Apple II/.variants/apple2gs.zip.ca867966",
+      "cores": [
+        "mame"
+      ]
+    },
+    {
+      "dest": "bios/mame/bios/apple2e.zip",
+      "sha1": "891f44b09ab1a948d3d887f8a30b9c9265849ada",
+      "sha256": "82e28c1d338990afba6027e4d208963d01789f1ef3597e2bd3761fa00963a836",
+      "size": 15975,
+      "repo_path": "bios/Apple/Apple II/apple2e.zip",
+      "cores": [
+        "mame"
+      ]
+    },
+    {
+      "dest": "bios/mame/bios/a7800.zip",
+      "sha1": "ac0173e7e11e8f657ac36a1036c2024475c9d784",
+      "sha256": "d4ba4fc4942892b87fe14c22c0cf2b28fbe02b947d52156316762a82dfd73ed4",
+      "size": 22059,
+      "repo_path": "bios/Other/a7800/a7800.zip",
+      "cores": [
+        "mame"
+      ],
+      "systems": [
+        "atari-7800"
+      ]
+    },
+    {
+      "dest": "bios/mame/bios/channelf.zip",
+      "sha1": "1cb23b462b990241013deb4b5e07ce741af28267",
+      "sha256": "c158f7c177c61c7b441eb1061e5148737597e871cbcfa1e2d60ace15e90c8e70",
+      "size": 2705,
+      "repo_path": "bios/Arcade/Arcade/channelf.zip",
+      "cores": [
+        "mame"
+      ]
+    },
+    {
+      "dest": "bios/mame/bios/fmtownshr.zip",
+      "sha1": "239c1ade320fc7e09e426e80aee8f05deddc5a50",
+      "sha256": "34a693f1543a6cbb714eddc94fcd4772614abc7814510365e0bfc7a653d37bc4",
+      "size": 717797,
+      "repo_path": "bios/Fujitsu/FM Towns/fmtownshr.zip",
+      "cores": [
+        "mame"
+      ]
+    },
+    {
+      "dest": "bios/mame/bios/intv.zip",
+      "sha1": "2e39fec139e4bed5aa164551e4be009341a94ac2",
+      "sha256": "7bde005116012be13a5b4f090a914a3aa989001a516b66daded3217ad866af65",
+      "size": 5101,
+      "repo_path": "bios/Mattel/Intellivision/intv.zip",
+      "cores": [
+        "mame"
+      ],
+      "systems": [
+        "mattel-intellivision"
+      ]
+    },
+    {
+      "dest": "bios/mame/bios/videopac.zip",
+      "sha1": "92518b157a349bc8d31a411488a8b65e299a1afa",
+      "sha256": "71a37c1cd26df1920b186d0bd5730e562ce730b0790b3d7d98d8c594e5fe344c",
+      "size": 1095,
+      "repo_path": "bios/Philips/Videopac/videopac.zip",
       "cores": [
         "mame"
       ]
@@ -48469,7 +50662,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -49562,7 +51758,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -49775,7 +51974,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -50638,7 +52840,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -50721,7 +52926,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -50754,7 +52962,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -50767,7 +52978,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -50800,7 +53014,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -50813,7 +53030,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -51176,7 +53396,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -51759,7 +53982,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -51772,7 +53998,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -52135,7 +54364,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -54108,7 +56340,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -54401,7 +56636,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -54864,7 +57102,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -55587,7 +57828,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -55950,7 +58194,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -57073,7 +59320,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -57096,7 +59346,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -57109,7 +59362,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -57132,7 +59388,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -57145,7 +59404,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -57178,7 +59440,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -57291,7 +59556,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -57304,7 +59572,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -57447,7 +59718,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -57590,7 +59864,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -57603,7 +59880,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -57616,7 +59896,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -57629,7 +59912,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -57642,7 +59928,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -57655,7 +59944,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -57668,7 +59960,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -57681,7 +59976,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -57694,7 +59992,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -57707,7 +60008,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -58840,7 +61144,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -59253,7 +61560,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -59626,7 +61936,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -59639,7 +61952,10 @@
         "mame"
       ],
       "systems": [
-        "3do"
+        "3do",
+        "atari-7800",
+        "magnavox-odyssey2",
+        "mattel-intellivision"
       ]
     },
     {
@@ -65627,6 +67943,16 @@
       "sha256": "520606125ae26a0a6f6b35d2573a4719882da6f6213cc030c487f2303c07360e",
       "size": 6800,
       "repo_path": "bios/Bally/Astrocade/astrocde.zip",
+      "cores": [
+        "fbneo"
+      ]
+    },
+    {
+      "dest": "bios/atarisy1.zip",
+      "sha1": "0c9bc4b948bd1816ebe13e2acb97931cbcc6ea15",
+      "sha256": "ae8c41b3d0107c6f0634730267af569a51e49f5df1bdb2c1e6c591bb6251b7d3",
+      "size": 57375,
+      "repo_path": "bios/Arcade/MAME/atarisy1.zip",
       "cores": [
         "fbneo"
       ]

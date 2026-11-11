@@ -6,7 +6,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "10.1.1",
-  "generated": "2026-11-11T12:03:42Z",
+  "generated": "2026-11-11T14:23:39Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -1644,10 +1644,10 @@
       }
     }
   ],
-  "total_files": 4002,
-  "total_size": 5214646840,
-  "pack_files": 7297,
-  "pack_size": 5077484580,
+  "total_files": 4000,
+  "total_size": 5214558668,
+  "pack_files": 7295,
+  "pack_size": 5077396408,
   "total_omitted": 99,
   "omitted_files": [
     {
@@ -2661,8 +2661,7 @@
       "drastic - standalone"
     ],
     "advancemame": [
-      "AdvanceMame",
-      "advmame"
+      "AdvanceMame"
     ],
     "aethersx2": [
       "aethersx2-sa"
@@ -3462,6 +3461,7 @@
     "atari-7800": [
       "a7800",
       "bizhawk",
+      "mame",
       "prosystem"
     ],
     "atari-st": [
@@ -3557,7 +3557,8 @@
     "fairchild-channel-f": [
       "bizhawk",
       "fbneo",
-      "freechaf"
+      "freechaf",
+      "mame"
     ],
     "lynx": [
       "beetle_lynx",
@@ -3569,12 +3570,14 @@
       "mednafen"
     ],
     "magnavox-odyssey2": [
+      "mame",
       "o2em"
     ],
     "mattel-intellivision": [
       "bizhawk",
       "freeintv",
-      "jzintv"
+      "jzintv",
+      "mame"
     ],
     "microsoft-msx": [
       "ares",
@@ -3777,6 +3780,7 @@
     ],
     "philips-videopac": [
       "bizhawk",
+      "mame",
       "o2em"
     ],
     "satellaview": [
@@ -3974,6 +3978,7 @@
     ],
     "stv": [
       "advancemame",
+      "advmame",
       "advmame-0.94",
       "advmame-1.4",
       "beetle_saturn",
@@ -40545,57 +40550,6 @@
       ]
     },
     {
-      "dest": "coh1002v.zip",
-      "sha1": "5162fcac2fa5a92480a081b3397099ce4a3703c5",
-      "sha256": "9e4fb8208d357e7d0269628be6d2916d7031d248904ed9b6fb34a814432ae5f8",
-      "size": 126314,
-      "repo_path": "bios/Arcade/Arcade/coh1002v.zip",
-      "cores": [
-        "advancemame"
-      ]
-    },
-    {
-      "dest": "aleck64.zip",
-      "sha1": "beaf97c4a0e0792b8db65648f9dabb6a54ae0549",
-      "sha256": "53e9cb3814cfa086a4cb152d250a740d2a438aaadbeec248a86a1698e69dc24a",
-      "size": 1804,
-      "repo_path": "bios/Arcade/Arcade/aleck64.zip",
-      "cores": [
-        "advancemame"
-      ]
-    },
-    {
-      "dest": "atarisy1.zip",
-      "sha1": "0c9bc4b948bd1816ebe13e2acb97931cbcc6ea15",
-      "sha256": "ae8c41b3d0107c6f0634730267af569a51e49f5df1bdb2c1e6c591bb6251b7d3",
-      "size": 57375,
-      "repo_path": "bios/Arcade/MAME/atarisy1.zip",
-      "cores": [
-        "fbneo"
-      ],
-      "alternatives": [
-        {
-          "sha1": "4fb1f00681d2540b476add2def2bbf07ca3e3993",
-          "sha256": "1cf61e6b54589ed9bf2b5f319c2b56de205384d6726b7a0fae79213071f3cfb5",
-          "size": 49385,
-          "repo_path": "bios/Arcade/Arcade/atarisy1.zip",
-          "cores": [
-            "advancemame"
-          ]
-        }
-      ]
-    },
-    {
-      "dest": "cedmag.zip",
-      "sha1": "66ac875b32dc9bf03b1eeb500ff4651279386951",
-      "sha256": "11e3489f372949d5c95c976336d8490d399bbec8afe872bc61788ed38522b446",
-      "size": 1264,
-      "repo_path": "bios/Arcade/Arcade/cedmag.zip",
-      "cores": [
-        "advancemame"
-      ]
-    },
-    {
       "dest": "ar_bios.zip",
       "sha1": "df93e5943023cc8f7ddf0ffb956fd969e04a171a",
       "sha256": "370e7f2d67a58847911ebc6e3f12de834cdaeb49834db802b4cba9d9e6e28a42",
@@ -40641,6 +40595,16 @@
       "sha256": "29e05af157d01d146c7ec501e99b7931d78920beccf9b66c9b310c860941e37f",
       "size": 3753,
       "repo_path": "bios/Arcade/Arcade/v4bios.zip",
+      "cores": [
+        "advancemame"
+      ]
+    },
+    {
+      "dest": "hng64.zip",
+      "sha1": "98b92ece93d3e160c446a56ac859a8311333e36c",
+      "sha256": "6c5a6332a6dc48832e505a8ed2ed9946753ed2d7dc96a7b40e5efd2bb720de4e",
+      "size": 41210,
+      "repo_path": "bios/Arcade/Arcade/hng64.zip",
       "cores": [
         "advancemame"
       ]
@@ -48841,6 +48805,16 @@
       "sha256": "520606125ae26a0a6f6b35d2573a4719882da6f6213cc030c487f2303c07360e",
       "size": 6800,
       "repo_path": "bios/Bally/Astrocade/astrocde.zip",
+      "cores": [
+        "fbneo"
+      ]
+    },
+    {
+      "dest": "atarisy1.zip",
+      "sha1": "0c9bc4b948bd1816ebe13e2acb97931cbcc6ea15",
+      "sha256": "ae8c41b3d0107c6f0634730267af569a51e49f5df1bdb2c1e6c591bb6251b7d3",
+      "size": 57375,
+      "repo_path": "bios/Arcade/MAME/atarisy1.zip",
       "cores": [
         "fbneo"
       ]
