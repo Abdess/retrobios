@@ -13513,11 +13513,12 @@ class PackSource:
     def platforms(self) -> list[str]:
         """The platforms the pack's name spells, several for a grouped pack."""
         spelled = pack_name_platforms(self.name)
-        if spelled:
-            return spelled
-        # A pack made by --pack under a name of the user's says it inside.
+        # A pack made by --pack says its platform inside, which a name of
+        # the user's, or a file renamed, does not change.
         named = (self.install_list or {}).get("platform")
-        return [named] if named in AVAILABLE_PLATFORMS else []
+        if named in AVAILABLE_PLATFORMS and named not in spelled:
+            return [named]
+        return spelled
 
     def manifest(self, plat: str) -> dict:
         """A file list for plat: the install list the pack carries, else one
@@ -13650,9 +13651,10 @@ def pack_lacks_words(count: int, total: int) -> str:
 # --pack writes the narrowed choice as a pack --from-pack reads: each file
 # once by its SHA-1, at its destination (a file of another root under that
 # root's name), each data tree at its place, and manifest.json carrying the
-# list narrowed to the choice. The bytes depend on the inputs alone: members
-# in a fixed order, a fixed date and mode, one compression level, as
-# generate_pack.py writes its packs.
+# list narrowed to the choice. For one zlib the bytes depend on the inputs
+# alone: members in a fixed order, a fixed date and mode, one compression
+# level set on each member. Another deflate gives other bytes for the same
+# members (zlib-ng, which CPython 3.14 on Windows ships).
 PACK_NAME_END = "_BIOS_Pack.zip"
 PACK_MEMBER_DATE = (1980, 1, 1, 0, 0, 0)
 PACK_COMPRESSLEVEL = 9
@@ -13675,7 +13677,22 @@ _ZIP_END_BYTES = 22 + 56 + 20
 
 
 class PackError(Exception):
-    """A pack that cannot be made as asked: nothing is written."""
+    """A pack that cannot be made as asked. left names the files a failure
+    could not take away, none when nothing was left behind."""
+
+    def __init__(self, words: str, left: list[Path] | None = None) -> None:
+        super().__init__(words)
+        self.left = list(left or [])
+
+
+class PackWritten(NamedTuple):
+    """What write_pack did: the files of the pack, the earlier files of
+    its name it removed, and those it could not remove or left as they
+    are, each with the reason."""
+
+    files: list[Path]
+    removed: list[Path]
+    kept: list[tuple[Path, str]]
 
 
 class PackMember(NamedTuple):
@@ -13963,6 +13980,10 @@ def _pack_info(name: str, compress: int = zipfile.ZIP_DEFLATED) -> zipfile.ZipIn
     """A member header that depends on its name alone."""
     info = zipfile.ZipInfo(name, date_time=PACK_MEMBER_DATE)
     info.compress_type = compress
+    # A ZipInfo given to writestr or open keeps its own level, the
+    # archive's left unread: without it every member was deflated at 6.
+    info._compresslevel = (  # type: ignore[attr-defined]
+        PACK_COMPRESSLEVEL if compress == zipfile.ZIP_DEFLATED else None)
     info.create_system = 3
     info.external_attr = 0o100644 << 16
     return info
@@ -14024,17 +14045,56 @@ def _part_contents(name: str, index: int, count: int, manifest: bytes,
     return held + [(member.name, member.size) for member in chosen]
 
 
-def write_pack(path: Path, manifest: bytes, members: list[PackMember],
-               limit: int | None) -> list[Path]:
-    """Write the pack at path, or in parts beside it when a limit is given
-    and the pack would pass it. Returns the files written.
+def _discard(paths: Iterable[Path]) -> list[Path]:
+    """Delete each file, the ones that could not be deleted returned."""
+    left = []
+    for path in paths:
+        try:
+            path.unlink(missing_ok=True)
+        except OSError:
+            left.append(path)
+    return left
 
-    Each file is written beside its final name and renamed only once every
-    member was checked against its SHA-1 and the archives read back: a
-    failure leaves no file behind, and a pack of that name written before
-    stays as it was. An earlier pack of that name in another layout (whole,
-    or in another count of parts) goes once the new one is in place:
-    --from-pack would otherwise find both."""
+
+def _of_this_pack(path: Path, name: str) -> bool:
+    """Whether path is a regular file that is a pack of this name: a part
+    whose marker names it, or a ZIP holding a manifest.json."""
+    try:
+        if not stat.S_ISREG(os.lstat(path).st_mode):
+            return False
+        with zipfile.ZipFile(path) as archive:
+            names = archive.namelist()
+            markers = [member for member in names if _PART_MARKER.match(member)]
+            if markers:
+                text = archive.read(markers[0])[:MAX_MARKER_BYTES].decode("utf-8", "replace")
+                return f"pack: {name}" in text.splitlines()
+            return "manifest.json" in names
+    except (OSError, zipfile.BadZipFile, ValueError):
+        return False
+
+
+def _aside_name(path: Path) -> Path:
+    """A name beside path no file holds, for the earlier pack while the
+    new one takes its place."""
+    for number in range(1000):
+        aside = path.with_name(f".{path.name}.{os.getpid()}.{number}.old")
+        if not os.path.lexists(aside):
+            return aside
+    raise PackError(f"no free name beside {path.name} to set it aside")
+
+
+def write_pack(path: Path, manifest: bytes, members: list[PackMember],
+               limit: int | None) -> PackWritten:
+    """Write the pack at path, or in parts beside it when a limit is given
+    and the pack would pass it.
+
+    Each file is written beside its final name, every member checked
+    against its SHA-1 and the archive read back with its CRCs. Then the
+    earlier files of this pack (whole, or in parts) are set aside, the new
+    ones renamed in, and the earlier ones deleted. A failure before the new
+    set is whole puts the earlier set back and deletes the new files: the
+    folder holds the pack before or the pack after, never a mix. A file
+    deleted at the end that cannot be is reported, the pack being written."""
     name = path.name
     plan = plan_pack_parts(name, len(manifest), members, limit)
     count = len(plan)
@@ -14069,6 +14129,9 @@ def write_pack(path: Path, manifest: bytes, members: list[PackMember],
             shown = finals[index - 1].name
             with zipfile.ZipFile(scratch) as archive:
                 held = [(info.filename, info.file_size) for info in archive.infolist()]
+                damaged = archive.testzip()
+                if damaged is not None:
+                    raise PackError(f"{shown}: {damaged} does not read back")
                 if count > 1 and archive.read(part_marker_name(name, index, count)) != \
                         part_marker_text(name, index, sizes):
                     raise PackError(f"{shown}: its marker does not read back")
@@ -14076,20 +14139,69 @@ def write_pack(path: Path, manifest: bytes, members: list[PackMember],
                 raise PackError(f"{shown} does not read back as written")
             if limit is not None and count > 1 and sizes[index - 1] >= limit:
                 raise PackError(f"{shown} reached the limit of {format_size(limit)}")
-    except BaseException:
-        for scratch in scratches:
-            scratch.unlink(missing_ok=True)
+    except BaseException as exc:
+        left = _discard(scratches)
+        if left and isinstance(exc, (OSError, PackError)):
+            raise PackError(str(exc), left) from exc
         raise
+    return _swap_in(path, scratches, finals)
+
+
+def _swap_in(path: Path, scratches: list[Path], finals: list[Path]) -> PackWritten:
+    """Put the new files in place of the earlier pack of this name."""
+    name = path.name
     stem = name[: -len(".zip")]
-    stale = [old for old in _listed_paths(path.parent)
-             if old not in finals and (old == path or (
+    named = [old for old in _listed_paths(path.parent)
+             if old == path or old in finals or (
                  _PART_FILE.match(old.name) is not None
-                 and _PART_FILE.match(old.name)["stem"] == stem))]  # type: ignore[index]
-    for scratch, final in zip(scratches, finals):
-        os.replace(scratch, final)
-    for old in stale:
-        old.unlink(missing_ok=True)
-    return finals
+                 and _PART_FILE.match(old.name)["stem"] == stem)]  # type: ignore[index]
+    kept: list[tuple[Path, str]] = []
+    earlier: list[Path] = []
+    aside: list[tuple[Path, Path]] = []
+    placed: list[Path] = []
+    try:
+        for old in named:
+            if old in finals:
+                if not stat.S_ISREG(os.lstat(old).st_mode):
+                    raise PackError(f"{old.name} is in the way and is not a file")
+                earlier.append(old)
+            elif _of_this_pack(old, name):
+                earlier.append(old)
+            else:
+                kept.append((old, "it is not a part of this pack, left as it is"))
+        for old in earlier:
+            moved = _aside_name(old)
+            os.replace(old, moved)
+            aside.append((old, moved))
+        for scratch, final in zip(scratches, finals):
+            os.replace(scratch, final)
+            placed.append(final)
+    except (OSError, PackError) as exc:
+        left = _discard([*placed, *(scratch for scratch, final in zip(scratches, finals)
+                                    if final not in placed)])
+        unrestored = []
+        for old, moved in reversed(aside):
+            try:
+                os.replace(moved, old)
+            except OSError:
+                unrestored.append((old, moved))
+        words = f"{name} could not be put in place: {exc.strerror or exc}" \
+            if isinstance(exc, OSError) else str(exc)
+        if unrestored:
+            words += ". The earlier pack is set aside as " + ", ".join(
+                f"{moved.name} (was {old.name})" for old, moved in unrestored)
+        raise PackError(words, [*left, *(moved for _old, moved in unrestored)]) from exc
+    removed = []
+    for old, moved in aside:
+        if old in finals:
+            if _discard([moved]):
+                kept.append((moved, "the earlier copy could not be deleted"))
+            continue
+        if _discard([moved]):
+            kept.append((moved, f"the earlier {old.name}, set aside, could not be deleted"))
+        else:
+            removed.append(old)
+    return PackWritten(finals, removed, kept)
 
 
 def _listed_paths(folder: Path) -> list[Path]:
@@ -14132,6 +14244,16 @@ def pack_parts_words(count: int, limit: int | None, fat: bool) -> str:
     return f"{each}, as FAT32 holds no file of 4 GB." if fat else f"{each}."
 
 
+def pack_space_bytes(files: int, bound: int, data_dirs: list[dict]) -> int:
+    """What making a pack takes on its drive: the files fetched, the ZIP at
+    its largest, and the largest source archive of a data tree, which is
+    downloaded whole beside its tree until the tree is read. A pack read
+    as the source fetches no archive."""
+    archives = [int(entry.get("archive_size") or 0) for entry in data_dirs
+                if entry.get("files") and isinstance(entry.get("archive_size"), int)]
+    return files + bound + (max(archives, default=0) if LOCAL.pack is None else 0)
+
+
 def run_pack(args: argparse.Namespace, plat: str, manifest: dict, files: list[dict],
              omitted: list[dict], data_dirs: list[dict], narrowed: bool,
              term: Terminal) -> int:
@@ -14147,6 +14269,11 @@ def run_pack(args: argparse.Namespace, plat: str, manifest: dict, files: list[di
     if not _is_dir(path.parent):
         return _pack_refused(plat, path, f"the folder {shown_path(path.parent)} does not "
                              "exist", 2)
+    spelled = pack_name_platforms(path.name)
+    if spelled and plat not in spelled:
+        return _pack_refused(plat, path, f"{path.name} names a pack for "
+                             f"{' and '.join(display_name(name) for name in spelled)}, and "
+                             f"this one is for {display_name(plat)}", 2)
     members, rows, sources = pack_layout(files, data_dirs)
     if not members:
         return _pack_refused(plat, path, "the choice keeps no file to put in a pack", 2)
@@ -14180,7 +14307,7 @@ def run_pack(args: argparse.Namespace, plat: str, manifest: dict, files: list[di
             print("  --verbose lists the files.")
         _pack_event(plat, path, members, finals, "planned", how)
         return 0
-    needed = total + pack_bound(len(body), planned)
+    needed = pack_space_bytes(total, pack_bound(len(body), planned), data_dirs)
     try:
         free = shutil.disk_usage(path.parent).free
     except OSError:
@@ -14257,15 +14384,23 @@ def _fill_pack(args: argparse.Namespace, plat: str, path: Path, body: bytes,
                for name, (sha1, size) in sorted(members.items())]
     detail(f"\nWriting {path.name}...")
     try:
-        written = write_pack(path, body, ordered, limit)
+        result = write_pack(path, body, ordered, limit)
     except (OSError, PackError) as exc:
         words = (DRIVE_FULL if isinstance(exc, OSError) and _drive_full(exc)
                  else exc.strerror if isinstance(exc, OSError) and exc.strerror else str(exc))
-        print(f"\n  {path.name} could not be written: {screen_text(str(words))}. No pack "
-              "was left behind.", file=sys.stderr)
+        left = exc.left if isinstance(exc, PackError) else []
+        after = ("Left behind, to delete: " + ", ".join(shown_path(f) for f in left) + "."
+                 if left else "No pack was left behind.")
+        print(f"\n  {path.name} could not be written: {screen_text(str(words))}. "
+              f"{screen_text(after)}", file=sys.stderr)
         _pack_event(plat, path, members, [], "failed",
-                    f"{path.name} could not be written: {words}.")
+                    f"{path.name} could not be written: {words}. {after}")
         return 1
+    written = result.files
+    for old in result.removed:
+        print(f"  Removed the earlier {shown_path(old)}.")
+    for old, why in result.kept:
+        print(f"  {shown_path(old)}: {why}.")
     size = sum(part.stat().st_size for part in written)
     print(f"\nPack made: {_plural(len(members), 'file')}, {format_size(size)}"
           + (f", in {len(written)} parts" if len(written) > 1 else "") + ".")

@@ -25,6 +25,7 @@ import tempfile
 import threading
 import unittest
 import zipfile
+import zlib
 from pathlib import Path
 from unittest import mock
 
@@ -437,6 +438,190 @@ class Refusals(Repository):
         pack = install.PackSource([named])
         self.addCleanup(pack.close)
         self.assertEqual(pack.platforms(), ["retroarch"])
+
+
+def _members(folder: Path, sizes: dict[str, int]) -> list:
+    """PackMembers of noise files written in folder."""
+    folder.mkdir(parents=True, exist_ok=True)
+    members = []
+    for name, size in sorted(sizes.items()):
+        data = _noise(name, size)
+        source = folder / name.replace("/", "_")
+        source.write_bytes(data)
+        members.append(install.PackMember(name, _sha1(data), len(data), source))
+    return members
+
+
+def _folder(path: Path) -> dict[str, bytes]:
+    return {child.name: child.read_bytes() for child in sorted(path.iterdir())}
+
+
+class TheSwapIsWhole(unittest.TestCase):
+    """The new files replace the earlier pack of the name as one set: a
+    failure puts the earlier set back, a cleanup that fails keeps the pack."""
+
+    def setUp(self):
+        scratch = REPO_ROOT / "tmp"
+        scratch.mkdir(exist_ok=True)
+        self.root = Path(tempfile.mkdtemp(dir=scratch))
+        self.addCleanup(shutil.rmtree, self.root, True)
+        self.out = self.root / "out"
+        self.out.mkdir()
+        self.path = self.out / "RetroArch_BIOS_Pack.zip"
+
+    def test_a_rename_that_fails_puts_the_earlier_pack_back(self):
+        old = install.write_pack(self.path, b"{}", _members(self.root / "a", {
+            f"f{n}.bin": 24 * 1024 for n in range(3)}), 64 * 1024)
+        self.assertEqual(len(old.files), 2)
+        before = _folder(self.out)
+        real = os.replace
+        renamed: list[str] = []
+
+        def refuse_the_second_part(source, target):
+            if str(source).endswith(".partial"):
+                renamed.append(str(target))
+                if len(renamed) == 2:
+                    raise PermissionError(13, "Permission denied")
+            return real(source, target)
+
+        new = _members(self.root / "b", {f"g{n}.bin": 24 * 1024 for n in range(5)})
+        with mock.patch.object(install.os, "replace", refuse_the_second_part), \
+                self.assertRaises(install.PackError) as raised:
+            install.write_pack(self.path, b"{}", new, 64 * 1024)
+        self.assertEqual(raised.exception.left, [])
+        self.assertEqual(_folder(self.out), before)
+
+    def test_a_scratch_file_that_cannot_be_deleted_is_named(self):
+        source = self.root / "a.bin"
+        source.write_bytes(b"other bytes")
+        member = install.PackMember("a.bin", _sha1(b"listed bytes"), 11, source)
+        real = Path.unlink
+
+        def refuse_partial(path, missing_ok=False):
+            if path.name.endswith(".partial"):
+                raise PermissionError(13, "Permission denied")
+            return real(path, missing_ok=missing_ok)
+
+        with mock.patch.object(install.Path, "unlink", refuse_partial), \
+                self.assertRaises(install.PackError) as raised:
+            install.write_pack(self.path, b"{}", [member], None)
+        self.assertEqual([path.name.endswith(".partial") for path in raised.exception.left],
+                         [True])
+
+    def test_a_cleanup_that_fails_keeps_the_pack_written(self):
+        install.write_pack(self.path, b"{}", _members(self.root / "a", {"a.bin": 1000}), None)
+        real = Path.unlink
+
+        def refuse_old(path, missing_ok=False):
+            if path.name.endswith(".old"):
+                raise PermissionError(13, "Permission denied")
+            return real(path, missing_ok=missing_ok)
+
+        new = _members(self.root / "b", {f"g{n}.bin": 24 * 1024 for n in range(3)})
+        with mock.patch.object(install.Path, "unlink", refuse_old):
+            written = install.write_pack(self.path, b"{}", new, 64 * 1024)
+        self.assertEqual(len(written.files), 2)
+        self.assertTrue(all(path.is_file() for path in written.files))
+        self.assertEqual(written.removed, [])
+        self.assertEqual(len(written.kept), 1)
+        self.assertTrue(written.kept[0][0].name.endswith(".old"))
+
+    def test_the_earlier_layout_is_removed_and_said(self):
+        install.write_pack(self.path, b"{}", _members(self.root / "a", {"a.bin": 1000}), None)
+        written = install.write_pack(self.path, b"{}", _members(
+            self.root / "b", {f"g{n}.bin": 24 * 1024 for n in range(3)}), 64 * 1024)
+        self.assertEqual(written.removed, [self.path])
+        self.assertEqual(sorted(_folder(self.out)), sorted(f.name for f in written.files))
+
+    def test_a_file_of_another_pack_under_a_part_name_stays(self):
+        stranger = self.out / "RetroArch_BIOS_Pack.part1of5.zip"
+        stranger.write_bytes(b"not a zip")
+        written = install.write_pack(self.path, b"{}", _members(self.root / "a",
+                                                               {"a.bin": 1000}), None)
+        self.assertEqual(stranger.read_bytes(), b"not a zip")
+        self.assertEqual([path for path, _why in written.kept], [stranger])
+
+    def test_a_crc_that_does_not_read_back_writes_nothing(self):
+        with mock.patch.object(install.zipfile.ZipFile, "testzip", return_value="a.bin"), \
+                self.assertRaises(install.PackError):
+            install.write_pack(self.path, b"{}", _members(self.root / "a",
+                                                          {"a.bin": 1000}), None)
+        self.assertEqual(_folder(self.out), {})
+
+    def test_members_are_deflated_at_the_level_named(self):
+        text = " ".join(f"word{(n * 7919) % 1013}" for n in range(40000)).encode()
+        source = self.root / "text.bin"
+        source.write_bytes(text)
+
+        def raw(level: int) -> int:
+            packer = zlib.compressobj(level, zlib.DEFLATED, -15)
+            return len(packer.compress(text) + packer.flush())
+
+        self.assertNotEqual(raw(6), raw(install.PACK_COMPRESSLEVEL))
+        install.write_pack(self.path, b"{}", [install.PackMember(
+            "text.bin", _sha1(text), len(text), source)], None)
+        with zipfile.ZipFile(self.path) as archive:
+            self.assertEqual(archive.getinfo("text.bin").compress_size,
+                             raw(install.PACK_COMPRESSLEVEL))
+
+
+# A drive with little room, the list's tree declaring a large archive.
+SPACE_CHILD = """
+import collections, importlib.util, sys
+spec = importlib.util.spec_from_file_location("install", {script!r})
+install = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(install)
+usage = collections.namedtuple("usage", "total used free")
+install.shutil.disk_usage = lambda folder: usage(1 << 40, 0, 10 * 1024 * 1024)
+sys.argv = ["install.py", *sys.argv[1:]]
+install.main()
+"""
+
+
+class TheSpaceCountsTheTreeArchive(Repository):
+    def write_list(self) -> None:
+        super().write_list()
+        listed_path = self.served / "install" / "retroarch.json"
+        listed = json.loads(listed_path.read_text())
+        listed["data_directories"][0]["archive_size"] = 50 * 1024 * 1024
+        listed_path.write_text(json.dumps(listed))
+
+    def test_a_drive_without_room_for_the_archive_is_refused(self):
+        proc = self.run_installer("--pack", f"{self.out}{os.sep}", code=SPACE_CHILD.format(
+            script=str(REPO_ROOT / "install.py")))
+        self.assertEqual(proc.returncode, 2, proc.stdout + proc.stderr)
+        self.assertIn("has 10.0 MB free", proc.stderr)
+        self.assertEqual(self.packs(), [])
+
+    def test_the_largest_archive_counts_once(self):
+        trees = [{"files": {"a": {}}, "archive_size": 300},
+                 {"files": {"b": {}}, "archive_size": 500}, {"files": {}, "archive_size": 9000}]
+        self.assertEqual(install.pack_space_bytes(10, 20, trees), 530)
+
+
+class ThePackNamesItsPlatform(Repository):
+    tree: dict = {}
+
+    def test_a_name_that_spells_another_platform_is_refused(self):
+        proc = self.run_installer("--pack", str(self.out / "Batocera_BIOS_Pack.zip"))
+        self.assertEqual(proc.returncode, 2, proc.stdout + proc.stderr)
+        self.assertIn("names a pack for Batocera, and this one is for RetroArch", proc.stderr)
+        self.assertEqual(self.packs(), [])
+
+    def test_a_pack_renamed_for_another_platform_is_read_by_its_manifest(self):
+        self.assertEqual(self.make().returncode, 0)
+        renamed = self.out / "Batocera_BIOS_Pack.zip"
+        self.packs()[0].rename(renamed)
+        pack = install.PackSource([renamed])
+        self.addCleanup(pack.close)
+        self.assertEqual(pack.platforms(), ["retroarch"])
+        proc = subprocess.run(
+            [sys.executable, str(REPO_ROOT / "install.py"), "--platform", "batocera",
+             "--dest", str(self.root / "x"), "--from-pack", str(renamed), "--yes"],
+            env=self.env(offline=True), capture_output=True, text=True, timeout=120,
+            check=False, stdin=subprocess.DEVNULL)
+        self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+        self.assertIn("is a pack for RetroArch, not Batocera", proc.stderr)
 
 
 class PartSizes(unittest.TestCase):
