@@ -6548,10 +6548,6 @@ def apply_record(args: argparse.Namespace, plat: str, folder: Path) -> dict | No
     return setup
 
 
-# Windows marks a directory junction, and any other reparse point, with this
-# attribute. Before Python 3.12 lstat does not report a junction as a link,
-# and os.walk(followlinks=False) descends into it.
-_REPARSE_POINT = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
 
 
 def _is_link(info: os.stat_result) -> bool:
@@ -13878,6 +13874,8 @@ APPLE_DOUBLE = "._"
 # Folders the kernel makes up on the fly: endless, and never a copy.
 PSEUDO_FOLDERS = frozenset() if os.name == "nt" else frozenset(("/proc", "/sys", "/dev"))
 # FILE_ATTRIBUTE_REPARSE_POINT: a junction, a mount point or a link on Windows.
+# Before Python 3.12 lstat does not report a junction as a link, and
+# os.walk(followlinks=False) descends into it.
 _REPARSE_POINT = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
 # Errors a member of someone's ZIP can raise on reading: damaged, encrypted
 # (RuntimeError), or packed with a method zipfile lacks.

@@ -904,7 +904,9 @@ GLANCE_GROUPS: tuple[tuple[str, tuple[str, ...]], ...] = (
                      "--cores-dir")),
     ("Look first", ("--check", "--dry-run", "--list-platforms", "--list-targets",
                     "--list-systems", "--list-cores", "--list-emulators")),
-    ("From files on hand", ("--from", "--from-pack", "--manifest", "--offline", "--restore")),
+    ("From files on hand", ("--from", "--from-pack", "--manifest", "--offline")),
+    ("Remove and put back", ("--remove", "--file", "--backup", "--backups", "--restore",
+                             "--delete-backup")),
     ("How the run talks", ("--tui", "--plain", "--no-input", "--yes", "--quiet", "--verbose",
                            "--events", "--jobs", "--version", "--help")),
 )
