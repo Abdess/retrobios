@@ -235,8 +235,10 @@ class NothingIsLost(unittest.TestCase):
 # 2026-10-27. A ceiling is the measured value plus 5 %, never above the
 # value before the rows were tables (Batocera 2,433, AmberELEC 1,301, RomM
 # 1,607, RetroArch 2,207, the largest main page 2,459, the largest part
-# 19,127: RetroDECK's arcade list).
-PAGE_CEILINGS = {"batocera": 2433, "amberelec": 1301, "romm": 1607, "retroarch": 2192}
+# 19,127: RetroDECK's arcade list). AmberELEC rose to 1,304 on 2026-11-11:
+# MAME is named beside ProSystem, O2EM and FreeIntv, the cores its rom
+# folders offer, and the MSX section shows its file count.
+PAGE_CEILINGS = {"batocera": 2433, "amberelec": 1304, "romm": 1607, "retroarch": 2192}
 MAIN_PAGE_CEILING = 2459
 PART_PAGE_CEILING = 2219
 
@@ -276,8 +278,11 @@ BEFORE_WEIGHT = {
     # config.ini line, machineCreate, readMachine, romLoad, LoadROM): the
     # MSX part went from 57,600 to 91,769 bytes, and the filter boxes and
     # file summaries got their spaces and labels (about 190 bytes a page).
-    # 1,394,379 bytes on the built site of 7c5ad8366.
-    "batocera": (13, 18_854, 1_394_379),
+    # 1,394,379 bytes on the built site of 7c5ad8366. MAME is named among
+    # the readers of seven systems its rom folders offer it for, and the
+    # LRPS2 that Batocera builds reads "LRPS2 (416291a, Batocera)" since
+    # 2026-11-11: 1,396,309 bytes on the built site of 964875572.
+    "batocera": (13, 18_854, 1_396_309),
     "amberelec": (1, 7_928, 473_388),
     "romm": (2, 9_561, 572_487),
     "retroarch": (14, 21_503, 1_430_802),
