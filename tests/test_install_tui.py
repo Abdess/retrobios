@@ -1063,7 +1063,81 @@ def golden_states() -> dict:
     told.stack.append("details")
     states["result-details"] = told
     states["plan-record"] = record_state()
+    states["more"] = more_state("more")
+    states["remove"] = more_state("more", "remove")
+    states["removal"] = removal_state()
+    states["removal-confirm"] = removal_state()
+    install.tui_update(states["removal-confirm"], Key("enter"))
+    states["removal-done"] = removal_done_state()
+    states["backups"] = backups_state()
     return states
+
+
+# What an install of the PlayStation and the Game Boy Advance recorded.
+MORE_RECORD = {"written": "2026-11-03T12:00:00Z", "list": {"version": "v1", "generated": ""},
+               "choice": ["--all-files"],
+               "files": [{"dest": dest, "root": "", "sha1": "0" * 40, "size": size,
+                          "from": "download"}
+                         for dest, size in (("gba_bios.bin", 16384), ("pcsx/extra.bin", 4),
+                                            ("scph5500.bin", 524288))]}
+REMOVAL_PLAN = {"event": "removal_plan", "platform": "retroarch", "folder": str(SYSTEM_DIR),
+                "files": 2, "bytes": 524292, "systems": ["sony-playstation"],
+                "dests": ["pcsx/extra.bin", "scph5500.bin"],
+                "kept": [{"dest": "scph5501.bin", "reason": "changed"}], "gone": 0,
+                "backup": False, "message": ""}
+BACKUPS = [{"event": "backup", "folder": str(HOME / ".config" / "retroarch" / "retrobios-backup"
+                                             / name), "date": date, "files": files,
+            "bytes": size, "source": source, "status": "listed", "message": ""}
+           for name, date, files, size, source in (
+               ("20261103-120000", "2026-11-03 12:00:00", 2, 524292, "remove"),
+               ("20261020-093000", "2026-10-20 09:30:00", 1, 16384, "install"))]
+
+
+def more_state(*screens: str) -> install.TuiState:
+    """The plan of a folder whose record holds three files, More opened."""
+    state = checked_state()
+    state.record = json.loads(json.dumps(MORE_RECORD))
+    for screen in screens:
+        rows = install.tui_rows(state)
+        state.focus[state.screen] = [row.action for row in rows].index(screen)
+        assert install.tui_update(state, Key("enter")) == [], screen
+    return state
+
+
+def removal_state(system: bool = True) -> install.TuiState:
+    """The removal plan of the PlayStation, read by its dry run."""
+    state = more_state("more", "remove")
+    values = [row.value for row in install.tui_rows(state)]
+    state.focus["remove"] = values.index("sony-playstation") if system else 0
+    effects = install.tui_update(state, Key("enter"))
+    assert effects == [("run", "removal_plan")], effects
+    install.tui_receive(state, ("event", state.run_id, REMOVAL_PLAN))
+    install.tui_receive(state, ("ended", state.run_id, 0, []))
+    return state
+
+
+def removal_done_state() -> install.TuiState:
+    state = removal_state()
+    install.tui_update(state, Key("enter"))
+    effects = install.tui_update(state, Key("enter"))
+    assert effects == [("run", "remove")], effects
+    for dest, size in (("pcsx/extra.bin", 4), ("scph5500.bin", 524288)):
+        install.tui_receive(state, ("event", state.run_id, {
+            "event": "removed", "platform": "retroarch", "dest": dest, "size": size,
+            "ok": True, "reason": "", "moved_to": ""}))
+    install.tui_receive(state, ("ended", state.run_id, 0, []))
+    return state
+
+
+def backups_state(purpose: str = "backups") -> install.TuiState:
+    state = more_state("more")
+    state.focus["more"] = [row.action for row in install.tui_rows(state)].index(purpose)
+    effects = install.tui_update(state, Key("enter"))
+    assert effects == [("run", "backups")], effects
+    for event in BACKUPS:
+        install.tui_receive(state, ("event", state.run_id, event))
+    install.tui_receive(state, ("ended", state.run_id, 0, []))
+    return state
 
 
 # A board list as install/targets/ publishes it, read by Device: the boards
@@ -1187,7 +1261,7 @@ class RecordedPlan(unittest.TestCase):
         self.assertTrue(state.opened_on_plan)
         self.assertEqual(state.stack, ["setup", "plan"])
         self.assertEqual(install.tui_rows(state)[0].action, "install")
-        press(state, "end", "up", "up", "up")
+        press(state, "end", "up", "up", "up", "up")
         self.assertEqual(install.tui_rows(state)[state.focus["plan"]].label, "Change where")
         press(state, "enter")
         self.assertEqual(state.screen, "setup")
@@ -15182,8 +15256,9 @@ SCREEN_WORDS = {
     "result-details": (30, 30, 19, 19),
     # The plan's words, plus the recorded choice by name, its row (the one
     # press back to the whole list) and Change where (back to the setups,
-    # the plan having opened on the one found).
-    "plan-record": (38, 42, 42, 42),
+    # the plan having opened on the one found), and More, the record being
+    # what a removal reads.
+    "plan-record": (38, 42, 43, 43),
     # Change holds every option one level below the plan (design 4.4): the
     # rows for Emulators, a pack, the device and the internet, and the five
     # headings that group them, the intro sentence they replace dropped.
@@ -15191,6 +15266,14 @@ SCREEN_WORDS = {
     # A list of boards and one of emulators, each with the line that says
     # what the choice does and the gloss of "board".
     "device": (35, 35, 33, 33), "emulators": (29, 29, 27, 27),
+    # A plan names More (one word) where the folder has a record or a
+    # backup (design 4.3), the first install's plan unchanged. More's
+    # four rows, Remove files with each system the record holds and its
+    # size, the removal plan (what goes, the space freed, the folder, what
+    # stays and why), its confirm and result, and the backups newest first.
+    "more": (17, 17, 15, 15), "remove": (31, 31, 29, 29), "removal": (34, 34, 32, 32),
+    "removal-confirm": (18, 18, 16, 16), "removal-done": (18, 18, 16, 16),
+    "backups": (24, 24, 22, 22),
 }
 
 
@@ -15198,6 +15281,121 @@ def screen_words(lines: list) -> int:
     """Words of a drawn screen, its title and bar included, a path left out."""
     return sum(1 for line in lines for token in str(line).split()
                if re.search(r"[A-Za-z0-9]", token) and "/" not in token)
+
+
+class MoreScreens(unittest.TestCase):
+    """More: removal, the backups, putting one back and deleting one, each
+    a child run with its own options and none of the plan's."""
+
+    def setUp(self):
+        patcher = mock.patch.object(install, "_mounted_cards", return_value=[])
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def test_a_plan_names_more_where_it_has_something_to_act_on(self):
+        self.assertNotIn("more", [row.action for row in install.tui_rows(checked_state())])
+        self.assertEqual([row.action for row in install.tui_rows(more_state())][-2:],
+                         ["more", "quit"])
+        done = golden_states()["plan-in-place"]
+        done.has_backups = True
+        self.assertEqual(install.tui_rows(done)[-1].action, "more")
+
+    def test_the_removal_plan_asks_its_own_child(self):
+        state = removal_state()
+        state.regions = ["japan"]
+        argv = install.tui_argv(state, "removal_plan", "python", "install.py")
+        self.assertEqual(argv[-4:], ["--remove", "--system=sony-playstation", "--dry-run",
+                                     "--events"])
+        self.assertNotIn("--region=japan", argv)
+        self.assertIn(f"--dest={SYSTEM_DIR}", argv)
+        self.assertEqual(state.screen, "removal")
+        self.assertEqual(install.tui_rows(state)[0].label, "Remove 512.0 KB")
+
+    def test_everything_removes_with_no_system(self):
+        state = removal_state(system=False)
+        argv = install.tui_argv(state, "removal_plan", "python", "install.py")
+        self.assertEqual(argv[-3:], ["--remove", "--dry-run", "--events"])
+
+    def test_a_backup_is_one_row_away_and_the_removal_says_so(self):
+        state = removal_state()
+        state.focus["removal"] = 1
+        press(state, "enter")
+        self.assertTrue(state.removal_backup)
+        self.assertEqual(install.tui_rows(state)[0].label, "Move 512.0 KB to a backup")
+        state.focus["removal"] = 0
+        press(state, "enter")
+        self.assertEqual(state.screen, "actconfirm")
+        effects = press(state, "enter")
+        self.assertEqual(effects, [("run", "remove")])
+        argv = install.tui_argv(state, "remove", "python", "install.py")
+        self.assertEqual(argv[-4:], ["--system=sony-playstation", "--backup", "--events",
+                                     "--yes"])
+
+    def test_close_ends_with_the_removal_s_code_and_back_counts_again(self):
+        state = removal_done_state()
+        self.assertEqual(state.screen, "actdone")
+        self.assertIn("Removed 2 files, 512.0 KB freed.",
+                      screen_text(install.tui_view(state, 80, 24)))
+        press(state, "enter")
+        self.assertEqual(state.exit_code, 0)
+        state = removal_done_state()
+        with mock.patch.object(install, "setup_record", return_value=(None, None, "")):
+            effects = press(state, "esc")
+        self.assertEqual(effects, [("run", "check")])
+        self.assertEqual(state.screen, "checking")
+        # The record is read again: the removal changed it.
+        self.assertIsNone(state.record)
+
+    def test_a_failure_is_said_and_ends_on_one(self):
+        state = removal_state()
+        press(state, "enter", "enter")
+        install.tui_receive(state, ("event", state.run_id, {
+            "event": "removed", "platform": "retroarch", "dest": "scph5500.bin",
+            "size": 524288, "ok": False, "reason": "Permission denied", "moved_to": ""}))
+        install.tui_receive(state, ("ended", state.run_id, 1, []))
+        self.assertIn("1 file failed.", screen_text(install.tui_view(state, 80, 24)))
+        press(state, "enter")
+        self.assertEqual(state.exit_code, 1)
+
+    def test_put_back_and_delete_name_the_backup_alone(self):
+        folder = BACKUPS[0]["folder"]
+        for purpose, run, argv in (
+                ("putback", "restore", [f"--restore={folder}", "--events"]),
+                ("dropbackup", "delete_backup",
+                 [f"--delete-backup={folder}", "--events", "--yes"])):
+            with self.subTest(purpose=purpose):
+                state = backups_state(purpose)
+                press(state, "enter")
+                self.assertEqual(state.screen, "actconfirm")
+                self.assertEqual(press(state, "enter"), [("run", run)])
+                self.assertEqual(install.tui_argv(state, run, "python", "install.py"),
+                                 ["python", "install.py", *argv])
+
+    def test_a_backup_looked_at_offers_both(self):
+        state = backups_state()
+        press(state, "down", "enter")
+        self.assertEqual(state.screen, "backup")
+        self.assertEqual(state.backup_chosen["date"], BACKUPS[1]["date"])
+        self.assertEqual([row.action for row in install.tui_rows(state)],
+                         ["bkrestore", "bkdelete", "back"])
+        argv = install.tui_argv(state, "backups", "python", "install.py")
+        self.assertEqual(argv[-2:], ["--backups", "--events"])
+
+    def test_without_a_record_nothing_is_offered_to_remove(self):
+        state = checked_state()
+        state.record = None
+        state.stack += ["more", "remove"]
+        self.assertEqual([row.action for row in install.tui_rows(state)], ["back"])
+        self.assertIn("No install record here", screen_text(install.tui_view(state, 80, 24)))
+
+    def test_the_files_and_what_stays_are_on_details(self):
+        state = removal_state()
+        state.focus["removal"] = [row.action for row in install.tui_rows(state)].index(
+            "details")
+        press(state, "enter")
+        text = screen_text(install.tui_view(state, 80, 24))
+        self.assertIn("pcsx/extra.bin", text)
+        self.assertIn("scph5501.bin: changed since it was installed", text)
 
 
 class ScreenWordBudgets(unittest.TestCase):

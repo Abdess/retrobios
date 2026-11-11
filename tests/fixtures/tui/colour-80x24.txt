@@ -712,6 +712,7 @@
    Change where
    Details
    Change
+   More
    Quit
  
  
@@ -721,5 +722,154 @@
  
  
  
- 
  ^[[0;1;35mA/Enter^[[0m Install  ^[[0;2mB/Esc^[[0m Back  ^[[0;2mY/o^[[0m Change  ^[[0;2m?^[[0m Help
+=== more
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: More^[[0m
+
+^[[0;7;35m > Remove files^[[0m
+   Backups
+   Put back a backup
+   Delete a backup
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ ^[[0;1;35mA/Enter^[[0m Open  ^[[0;2mB/Esc^[[0m Back  ^[[0;2m?^[[0m Help
+=== remove
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Remove files^[[0m
+
+ Choose what to remove. A file changed or added by hand stays.
+ 
+^[[0;7;35m > All RetroBIOS files                                                 528.0 KB^[[0m
+   nintendo-gba                                                         16.0 KB
+   sony-playstation                                                    512.0 KB
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ ^[[0;1;35mA/Enter^[[0m Choose  ^[[0;2mB/Esc^[[0m Back  ^[[0;2m?^[[0m Help
+=== removal
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Remove files^[[0m
+
+ 2 files go, 512.0 KB freed.
+ BIOS folder: ^[[0;1m~/.config/retroarch/system^[[0m
+ 1 file stays: 1 changed since it was installed.
+ 
+^[[0;7;35m > Remove 512.0 KB^[[0m
+   Keep a backup: no                                                   --backup
+   Details
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ ^[[0;1;35mA/Enter^[[0m Remove  ^[[0;2mB/Esc^[[0m Back  ^[[0;2m?^[[0m Help
+=== removal-confirm
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Confirm^[[0m
+
+ Remove 2 files for good? 512.0 KB is freed.
+ 
+^[[0;7;35m > Remove^[[0m
+   Back
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ ^[[0;1;35mA/Enter^[[0m Confirm  ^[[0;2mB/Esc^[[0m Back  ^[[0;2m?^[[0m Help
+=== removal-done
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: ^[[0;1;32mDone^[[0m
+
+^[[0;1m Removed ^[[0;1;35m2^[[0;1m files, ^[[0;1;35m512.0 KB^[[0;1m freed.^[[0m
+ BIOS folder: ^[[0;1m~/.config/retroarch/system^[[0m
+ 
+^[[0;7;35m > Close^[[0m
+   Check again
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ ^[[0;1;35mA/Enter^[[0m Close  ^[[0;2mB/Esc^[[0m Back  ^[[0;2m?^[[0m Help
+=== backups
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Backups^[[0m
+
+ Newest first.
+ 
+^[[0;7;35m > 3 Nov 12:00                                                2 files, 512.0 KB^[[0m
+   20 Oct 09:30                                                 1 file, 16.0 KB
+   Back
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ ^[[0;1;35mA/Enter^[[0m Choose  ^[[0;2mB/Esc^[[0m Back  ^[[0;2m?^[[0m Help

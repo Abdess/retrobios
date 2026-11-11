@@ -39,6 +39,10 @@
         "summary",
         "app",
         "record",
+        "removal_plan",
+        "removed",
+        "restored",
+        "backup",
         "end"
       ]
     }
@@ -132,6 +136,18 @@
       "$ref": "#/$defs/record"
     },
     {
+      "$ref": "#/$defs/removal_plan"
+    },
+    {
+      "$ref": "#/$defs/removed"
+    },
+    {
+      "$ref": "#/$defs/restored"
+    },
+    {
+      "$ref": "#/$defs/backup"
+    },
+    {
       "$ref": "#/$defs/end"
     }
   ],
@@ -160,7 +176,9 @@
             "install",
             "check",
             "dry-run",
-            "list"
+            "list",
+            "remove",
+            "restore"
           ]
         }
       }
@@ -1002,7 +1020,9 @@
             "install",
             "check",
             "dry-run",
-            "list"
+            "list",
+            "remove",
+            "restore"
           ]
         },
         "installed": {
@@ -1127,7 +1147,11 @@
             "applied",
             "written",
             "unreadable",
-            "not_written"
+            "not_written",
+            "listed",
+            "made",
+            "deleted",
+            "not_deleted"
           ]
         },
         "choice": {
@@ -1142,6 +1166,194 @@
         "files": {
           "type": "integer",
           "minimum": 0
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "removal_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event",
+        "platform",
+        "folder",
+        "files",
+        "bytes",
+        "systems",
+        "dests",
+        "kept",
+        "gone",
+        "backup",
+        "message"
+      ],
+      "properties": {
+        "event": {
+          "const": "removal_plan"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "folder": {
+          "type": "string"
+        },
+        "files": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "systems": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "dests": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "kept": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "gone": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "backup": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "removed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event",
+        "platform",
+        "dest",
+        "size",
+        "ok",
+        "reason",
+        "moved_to"
+      ],
+      "properties": {
+        "event": {
+          "const": "removed"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "dest": {
+          "type": "string"
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "ok": {
+          "type": "boolean"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "moved_to": {
+          "type": "string"
+        }
+      }
+    },
+    "restored": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event",
+        "folder",
+        "path",
+        "size",
+        "ok",
+        "reason"
+      ],
+      "properties": {
+        "event": {
+          "const": "restored"
+        },
+        "folder": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "ok": {
+          "type": "boolean"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "backup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event",
+        "folder",
+        "date",
+        "files",
+        "bytes",
+        "source",
+        "status",
+        "message"
+      ],
+      "properties": {
+        "event": {
+          "const": "backup"
+        },
+        "folder": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "files": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "source": {
+          "enum": [
+            "remove",
+            "install"
+          ]
+        },
+        "status": {
+          "enum": [
+            "applied",
+            "written",
+            "unreadable",
+            "not_written",
+            "listed",
+            "made",
+            "deleted",
+            "not_deleted"
+          ]
         },
         "message": {
           "type": "string"

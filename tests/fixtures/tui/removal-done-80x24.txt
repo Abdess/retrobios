@@ -1,0 +1,24 @@
+ RetroBIOS: Done
+
+ Removed 2 files, 512.0 KB freed.
+ BIOS folder: ~/.config/retroarch/system
+
+ > Close
+   Check again
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ A/Enter Close  B/Esc Back  ? Help

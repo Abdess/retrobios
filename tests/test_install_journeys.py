@@ -63,9 +63,11 @@ JOURNEY_KEYS = {
 JOURNEY_WORDS = {
     "first_install": 47,
     "card_with_games": 87,
-    "update": 70,
+    # A plan whose folder has a record names More (one word): an update
+    # and a second run of one system.
+    "update": 71,
     "one_system": 179,
-    "one_system_again": 67,
+    "one_system_again": 68,
     # Change holds every option one level down now (design 4.4): its
     # headings and the rows for Emulators, a pack, the device and the
     # internet, the intro sentence dropped, 10 words on each of its two

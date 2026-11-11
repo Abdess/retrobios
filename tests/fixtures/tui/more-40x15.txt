@@ -1,0 +1,15 @@
+ RetroBIOS: More
+
+ > Remove files
+   Backups
+   Put back a backup
+   Delete a backup
+
+
+
+
+
+
+
+
+ A Open  B Back  ? Help

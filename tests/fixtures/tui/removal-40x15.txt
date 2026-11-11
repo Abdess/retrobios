@@ -1,0 +1,15 @@
+ RetroBIOS: Remove files
+
+ 2 files go, 512.0 KB freed.
+ BIOS folder:
+   ~/.config/retroarch/system
+ 1 file stays: 1 changed since it was
+   installed.
+
+ > Remove 512.0 KB
+   Keep a backup: no           --backup
+   Details
+
+
+
+ A Remove  B Back  ? Help

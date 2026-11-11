@@ -685,7 +685,8 @@ class Progress:
 # exactly these keys besides "event", in this order, and nothing else.
 EVENT_SCHEMA = 1
 EVENT_KEYS: dict[str, tuple[str, ...]] = {
-    # mode: install, check, dry-run or list.
+    # mode: install, check, dry-run, list, remove (--remove, --delete-backup) or
+    # restore.
     "start": ("schema", "installer", "mode"),
     # A folder detection could not look in, once each, before detect: the
     # probes under it counted as absent and the others went on. reason is
@@ -823,6 +824,24 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # files it holds for the platform. A kind of its own, since schema 1
     # never adds a key to an existing kind.
     "record": ("platform", "folder", "path", "status", "choice", "date", "files", "message"),
+    # --remove, before anything is removed (with --dry-run, all it writes):
+    # the files that go (dests, in record order), their bytes, the systems
+    # losing a file, kept [{"dest", "reason"}] for each file left (reason
+    # one of REMOVAL_REASONS), gone the recorded files no longer there,
+    # backup whether they are moved rather than deleted. message says it.
+    # Written with files 0 when no record says what is the installer's.
+    "removal_plan": ("platform", "folder", "files", "bytes", "systems", "dests", "kept",
+                     "gone", "backup", "message"),
+    # Each file --remove took: ok false with reason when it stays, moved_to
+    # the file's place in the backup with --backup, else "".
+    "removed": ("platform", "dest", "size", "ok", "reason", "moved_to"),
+    # Each file --restore put back from the backup folder to path.
+    "restored": ("folder", "path", "size", "ok", "reason"),
+    # A backup folder: listed by --backups, made by --remove --backup, or
+    # deleted (not_deleted when a file stayed) by --delete-backup. date is
+    # when it was made (local time), source remove for a removal's, install
+    # for the files an install replaced.
+    "backup": ("folder", "date", "files", "bytes", "source", "status", "message"),
     "end": ("code",),
 }
 # Seconds between two progress events while bytes arrive.
@@ -863,6 +882,12 @@ EVENTS = EventStream()
 
 
 def _event_mode(args: argparse.Namespace) -> str:
+    if getattr(args, "remove", False) or getattr(args, "delete_backup", None) is not None:
+        return "remove"
+    if getattr(args, "restore", None) is not None:
+        return "restore"
+    if getattr(args, "backups", False):
+        return "list"
     if args.check:
         return "check"
     if args.dry_run:
@@ -6394,6 +6419,15 @@ def write_record(
     }
     data = {"schema": RECORD_SCHEMA, "installer": installer_id(), "folder": str(folder),
             "setups": {**data["setups"], plat: setup}}
+    where, failure = _save_record(folder, data, found)
+    if where is None:
+        return None, setup, f"The install record could not be written ({failure})"
+    return where, setup, ""
+
+
+def _save_record(folder: Path, data: dict, found: Path | None) -> tuple[Path | None, str]:
+    """Write a record's data where it was read, else where it goes: (where,
+    why nothing could be written)."""
     text = json.dumps(data, separators=(",", ":"), sort_keys=True) + "\n"
     places = record_paths(folder)
     if found is not None and found in places:
@@ -6419,8 +6453,8 @@ def write_record(
                 except OSError as left:
                     failure += f", and {scratch} stays ({left.strerror or left})"
             continue
-        return path, setup, ""
-    return None, setup, f"The install record could not be written ({failure})"
+        return path, ""
+    return None, failure
 
 
 def record_menu_words(setup: dict | None) -> str:
@@ -6514,63 +6548,842 @@ def apply_record(args: argparse.Namespace, plat: str, folder: Path) -> dict | No
     return setup
 
 
-def restore_kept(run: Path, dry_run: bool = False) -> int:
-    """Put every file of a backup run folder back where it was.
+def _is_backup_run(run: Path) -> bool:
+    """Whether run is a dated folder a run of the installer made: a real
+    folder holding the marker, inside a retrobios-backup holder that is no
+    link."""
+    try:
+        info, holder = os.lstat(run), os.lstat(run.parent)
+        marker = os.lstat(run / BACKUP_MARKER)
+    except OSError:
+        return False
+    return (stat.S_ISDIR(info.st_mode) and stat.S_ISDIR(holder.st_mode)
+            and run.parent.name == BACKUP_DIR and stat.S_ISREG(marker.st_mode))
 
-    run is a <holder>/<date-time> folder a run wrote, its holder named
-    retrobios-backup. Each file goes to the same path below the holder's
-    parent, replacing what is there. The backup is left in place. Returns
-    the exit code: 0 when every file went back, 1 when one failed, 2 when
-    the folder is no backup.
-    """
-    run = Path(os.path.abspath(os.path.expanduser(str(run))))
-    if (not run.is_dir() or run.is_symlink() or run.parent.name != BACKUP_DIR
-            or run.parent.is_symlink() or not (run / BACKUP_MARKER).is_file()):
-        print(f"Error: {run} is not a folder the installer kept files in.", file=sys.stderr)
-        print(f"  Name one of the dated folders inside a {BACKUP_DIR} folder, as the "
-              "end of the install printed it.", file=sys.stderr)
-        return 2
-    root = run.parent.parent
-    # Links inside the backup are never followed: os.walk does not descend
-    # into a linked folder and a linked file is skipped.
-    files = sorted(
+
+def _backup_files(run: Path) -> list[Path]:
+    """The files a backup run folder holds, its marker and note aside. Links
+    inside it are never followed: os.walk does not descend into a linked
+    folder, and a linked file is skipped."""
+    return sorted(
         Path(base) / name
         for base, _dirs, names in os.walk(run, followlinks=False)
         for name in names
         if not (Path(base) / name).is_symlink()
         and not (name.startswith(".") and name.endswith(".part"))
-        and not (Path(base) == run and name == BACKUP_MARKER)
+        and not (Path(base) == run and name in (BACKUP_MARKER, REMOVED_NOTE))
     )
+
+
+def _backup_note(run: Path) -> dict | None:
+    """What a removal wrote beside the files it moved into run: the setup,
+    its folder, its choice before and the record's entries. None for the
+    backup of files an install replaced, or a note that cannot be read."""
+    try:
+        data = json.loads(_read_record_bytes(run / REMOVED_NOTE).decode("utf-8"))
+    except (OSError, UnicodeDecodeError, ValueError):
+        return None
+    if not isinstance(data, dict) or not isinstance(data.get("platform"), str) \
+            or not isinstance(data.get("folder"), str):
+        return None
+    setup = {"written": "", "choice": data.get("choice"), "files": data.get("files")}
+    return data if _valid_setup(setup, Path(data["folder"])) else None
+
+
+def _record_folder(run: Path, path: Path) -> tuple[Path, str] | None:
+    """The BIOS folder whose record may name a file put back at path, and
+    its dest there. The holder beside a folder keeps the folder's name as
+    the first level of each run, the one inside it none."""
+    holder, root = run.parent, run.parent.parent
+    rel = PurePosixPath(*path.relative_to(root).parts)
+    if len(rel.parts) > 1 and (holder / f"{rel.parts[0]}{RECORD_SUFFIX}").is_file():
+        return root / rel.parts[0], PurePosixPath(*rel.parts[1:]).as_posix()
+    if (holder / f"{root.name or 'folder'}{RECORD_SUFFIX}").is_file():
+        return root, rel.as_posix()
+    return None
+
+
+def _record_after_restore(run: Path, put_back: list[Path]) -> str:
+    """The record of the folder files went back into, made to say what is
+    there now: "" once written, else why not. A removal's backup gives its
+    files back to their setup, with the choice it had. Any other backup
+    holds the user's own files, which the record never names: its entries
+    at their places go."""
+    note = _backup_note(run)
+    if note is not None:
+        folder = Path(note["folder"])
+        back = []
+        for item in note["files"]:
+            path = _below(folder, item["dest"])[0]
+            if path is not None and not _check_ours(path, item)[0]:
+                back.append(item)
+        if not back:
+            return ""
+        return _update_record(folder, note["platform"],
+                              lambda setup: _record_merge(setup, back, note["choice"]))
+    by_folder: dict[Path, set[str]] = {}
+    for path in put_back:
+        found = _record_folder(run, path)
+        if found is not None:
+            by_folder.setdefault(found[0], set()).add(found[1].casefold())
+    problems = []
+    for folder, gone in by_folder.items():
+        read = load_record(folder)
+        for plat in sorted((read.data or {}).get("setups") or {}):
+            problems.append(_update_record(folder, plat, lambda setup: None if setup is None else {
+                **setup, "files": [item for item in setup["files"]
+                                   if str(item.get("root") or "") not in ("", "data")
+                                   or item["dest"].casefold() not in gone]}))
+    return next((problem for problem in problems if problem), "")
+
+
+def _record_merge(setup: dict | None, files: list[dict], choice: list[str]) -> dict:
+    """A setup with files given back and the choice it had before a removal."""
+    merged = {(str(item.get("root") or ""), item["dest"]): item
+              for item in (setup or {}).get("files") or []}
+    for item in files:
+        merged[(str(item.get("root") or ""), item["dest"])] = item
+    return {"list": {"version": None, "generated": None}, **(setup or {}),
+            "written": _record_now(), "choice": list(choice),
+            "files": [merged[key] for key in sorted(merged)]}
+
+
+def _record_now() -> str:
+    return datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def _update_record(folder: Path, plat: str,
+                   change: Callable[[dict | None], dict | None]) -> str:
+    """Rewrite the setup plat of folder's record as change makes it, None
+    taking it out: "" once written, else why not. A record that cannot be
+    read, or that a newer installer wrote, is left as it is."""
+    folder = Path(os.path.abspath(folder))
+    read = load_record(folder)
+    if read.newer or (read.data is None and read.path is not None):
+        return read.problem
+    data = read.data or {"setups": {}, "folder": str(folder)}
+    setups = dict(data["setups"])
+    new = change(setups.get(plat))
+    if new is None:
+        setups.pop(plat, None)
+    else:
+        setups[plat] = new
+    if not setups:
+        if read.path is None:
+            return ""
+        # Nothing of ours is left in the folder: the record goes with it.
+        try:
+            read.path.unlink()
+        except OSError as exc:
+            return exc.strerror or str(exc)
+        return ""
+    data = {"schema": RECORD_SCHEMA, "installer": installer_id(),
+            "folder": str(data.get("folder") or folder), "setups": setups}
+    where, failure = _save_record(folder, data, read.path)
+    return "" if where is not None else failure
+
+
+def restore_kept(run: Path, dry_run: bool = False) -> int:
+    """Put every file of a backup run folder back where it was.
+
+    run is a <holder>/<date-time> folder a run wrote, its holder named
+    retrobios-backup. Each file goes to the same path below the holder's
+    parent, replacing what is there, and the install record of its folder
+    is made to say so. The backup is left in place. Returns the exit code:
+    0 when every file went back, 1 when one failed, 2 when the folder is no
+    backup.
+    """
+    run = Path(os.path.abspath(os.path.expanduser(str(run))))
+    if not _is_backup_run(run):
+        print(f"Error: {run} is not a folder the installer kept files in.", file=sys.stderr)
+        print(f"  Name one of the dated folders inside a {BACKUP_DIR} folder, as "
+              "--backups lists them.", file=sys.stderr)
+        return 2
+    root = run.parent.parent
+    files = _backup_files(run)
     if not files:
         print(f"{run} holds no file. Nothing to put back.")
         return 0
     restored = size = failed = 0
+    put_back: list[Path] = []
     for src in files:
         dest = root / src.relative_to(run)
+        length = src.stat().st_size
         if dry_run:
             print(f"  would put back {dest}")
             restored += 1
-            size += src.stat().st_size
+            size += length
             continue
         try:
             dest.parent.mkdir(parents=True, exist_ok=True)
             _clear_read_only(dest)
             _replace_with_copy(src, dest)
         except OSError as exc:
-            print(f"  failed: {dest} ({exc.strerror or exc})", file=sys.stderr)
+            reason = exc.strerror or str(exc)
+            print(f"  failed: {dest} ({reason})", file=sys.stderr)
+            EVENTS.emit("restored", folder=str(run), path=str(dest), size=length, ok=False,
+                        reason=reason)
             failed += 1
             continue
+        EVENTS.emit("restored", folder=str(run), path=str(dest), size=length, ok=True,
+                    reason="")
+        put_back.append(dest)
         restored += 1
-        size += src.stat().st_size
+        size += length
     if dry_run:
         print(f"\nWould put back {_plural(restored, 'file')} ({format_size(size)}) "
               f"under {root}. Nothing was written.")
         return 0
+    problem = _record_after_restore(run, put_back)
     print(f"\nPut back {_plural(restored, 'file')} ({format_size(size)}) under {root}.")
     if failed:
         print(f"{_plural(failed, 'file')} could not be put back.", file=sys.stderr)
-    print(f"The copies are still in {run}. That folder can be deleted once it is no longer needed.")
-    return 1 if failed else 0
+    if problem:
+        print(f"The install record could not be updated ({problem}).", file=sys.stderr)
+    print(f"The copies are still in {run}. To free the space: {_INVOCATION.launcher()} "
+          f"--delete-backup {_INVOCATION.word(str(run))}")
+    return 1 if failed or problem else 0
+
+
+# Removal deletes for good, or moves into a backup with --backup, only what
+# the install record proves the installer placed: a file it lists, still
+# its recorded bytes, the collection able to serve it again. Anything else
+# is named and left. Why each file stays, as removal_plan's kept says it.
+REMOVAL_REASONS = {
+    "shared": "still needed",
+    "changed": "changed since it was installed",
+    "link": "a link, never followed",
+    "not_a_file": "not a regular file",
+    "outside": "outside the BIOS folder",
+    "not_servable": "the collection cannot give it again",
+    "unreadable": "could not be read",
+    "not_recorded": "not installed by RetroBIOS",
+}
+# Written into a backup that a removal made: the setup, its folder, its
+# choice before and the record's entries, so --restore gives them back.
+REMOVED_NOTE = ".retrobios-removed.json"
+
+
+class Removal(NamedTuple):
+    """What a removal takes and leaves. remove holds {dest, root, sha1,
+    size, systems, path, inode} per file to remove, kept {dest, root, sha1,
+    size, systems, reason, what} per file left, gone the record's entries
+    no longer on disk, choice the setup's choice once the removal is done
+    (None: the setup goes from the record), systems those losing a file."""
+
+    plat: str
+    folder: Path
+    remove: list
+    kept: list
+    gone: list
+    choice: list | None
+    systems: list
+
+
+def _entry_sha1s(entry: dict) -> set[str]:
+    return {str(copy.get("sha1")) for copy in [entry, *(entry.get("alternatives") or []),
+                                               *(entry.get("slot_choices") or [])]
+            if copy.get("sha1")}
+
+
+def _entry_readers(entry: dict) -> set[str] | None:
+    """The cores that read an entry, None for a file of the platform's own list."""
+    if entry.get("cores") is None:
+        return None
+    return {core for copy in [entry, *(entry.get("alternatives") or []),
+                              *(entry.get("slot_choices") or [])]
+            for core in copy.get("cores") or ()}
+
+
+def _served(manifest: dict, fold: bool) -> dict[tuple[str, str], tuple]:
+    """What the list serves, by (root, dest): (the sha1s it serves there,
+    its systems, its readers). A data tree's member counts under root data,
+    as the record keeps it."""
+    served: dict[tuple[str, str], tuple] = {}
+    for entry in [*(manifest.get("files") or []), *(manifest.get("case_variants") or [])]:
+        dest = str(entry.get("dest"))
+        place = (str(entry.get("root") or ""), dest.casefold() if fold else dest)
+        sha1s, systems, readers = served.get(place, (set(), [], None))
+        mine = _entry_readers(entry)
+        served[place] = (sha1s | _entry_sha1s(entry),
+                         sorted(set(systems) | set(entry_systems(entry))),
+                         mine if readers is None else readers | (mine or set()))
+    for tree in manifest.get("data_directories") or []:
+        for rel, meta in (tree.get("files") or {}).items():
+            dest = f"{tree['dest']}/{rel}" if tree.get("dest") else rel
+            served[("data", dest.casefold() if fold else dest)] = (
+                {str(meta.get("sha1"))}, list(tree.get("systems") or []), None)
+    return served
+
+
+def _below(folder: Path, dest: str) -> tuple[Path | None, str]:
+    """The file a record's dest names below folder, reached through no link:
+    (path, "") or (None, why it is left). A dest that climbs or is absolute
+    is outside, whatever a record says."""
+    try:
+        rel = _safe_relative_path(dest, "dest")
+    except ValueError:
+        return None, "outside"
+    path = folder
+    for part in rel.parts[:-1]:
+        path = path / part
+        try:
+            info = os.lstat(path)
+        except FileNotFoundError:
+            return None, "gone"
+        except OSError:
+            return None, "unreadable"
+        if stat.S_ISLNK(info.st_mode):
+            return None, "link"
+        if not stat.S_ISDIR(info.st_mode):
+            return None, "not_a_file"
+    return path / rel.parts[-1], ""
+
+
+def _check_ours(path: Path, item: dict) -> tuple[str, os.stat_result | None]:
+    """Why the file at path is not the one the record names, "" when it
+    is, and what lstat read of it."""
+    try:
+        info = os.lstat(path)
+    except FileNotFoundError:
+        return "gone", None
+    except OSError:
+        return "unreadable", None
+    if stat.S_ISLNK(info.st_mode):
+        return "link", info
+    if not stat.S_ISREG(info.st_mode):
+        return "not_a_file", info
+    if not re.fullmatch(r"[0-9a-f]{40}", str(item["sha1"])) or info.st_size != item["size"]:
+        return "changed", info
+    try:
+        same = _digest_file(path, ("sha1",))["sha1"] == item["sha1"]
+    except OSError:
+        return "unreadable", info
+    return ("" if same else "changed"), info
+
+
+def _choice_names(options: list[tuple[str, str | None]], flag: str) -> list[str]:
+    return [name.strip() for option, value in options if option == flag
+            for name in (value or "").split(",") if name.strip()]
+
+
+def _choice_without(choice: list[str], flag: str, names: Collection[str],
+                    left: list[str]) -> list[str]:
+    """A recorded choice once names of flag are taken out: those it named
+    go, and a choice that named none gets the names left. A flag left with
+    no name is dropped."""
+    options = [option for option in record_options(choice) if option[0] != "--all-files"]
+    gone = {name.casefold() for name in names}
+    remaining = [name for name in (_choice_names(options, flag) or left)
+                 if name.casefold() not in gone]
+    kept = [option for option in options if option[0] != flag]
+    if remaining:
+        kept.append((flag, ",".join(remaining)))
+    return record_argv(kept)
+
+
+def plan_removal(
+    plat: str, folder: Path, record: dict, manifest: dict, *,
+    systems: Collection[str] = (), cores: Collection[str] = (),
+    emulators: Collection[str] = (), files: Collection[str] = (),
+) -> Removal:
+    """What removing the chosen part of a setup takes and leaves.
+
+    Only the record of plat in folder says what may go: every file it
+    lists, or those of systems, of cores (or of the emulators' cores), or
+    the dests in files. A file still needed by what stays (a system or a
+    core still chosen, another setup of the same folder) stays, and so do a
+    file changed since, a link, anything that is not a regular file, any
+    file outside the BIOS folder, and any the list can no longer serve. A
+    drive that folds case compares dests folded, as FAT and exFAT open them.
+    """
+    folder = Path(os.path.abspath(folder))
+    setup = record["setups"][plat]
+    fold = not keeps_case(folder)
+
+    def norm(dest: str) -> str:
+        return dest.casefold() if fold else dest
+
+    served = _served(manifest, fold)
+    known = available_choices(list(manifest.get("files") or []),
+                              list(manifest.get("omitted_files") or []))
+    options = record_options(setup.get("choice") or [])
+    chosen_systems = set(systems)
+    chosen_cores = designated_cores(manifest, [*cores, *emulators]) if (
+        cores or emulators) else set()
+    others = {(str(item.get("root") or ""), norm(item["dest"])): name
+              for name, other in record["setups"].items() if name != plat
+              for item in other.get("files") or []}
+    wanted = {norm(dest) for dest in files}
+    # What stays chosen once the removal is done, as an install names it:
+    # the systems or cores the record named, else every one of the list.
+    named_systems = {name.casefold() for name in _choice_names(options, "--system")}
+    staying_systems = {name for name in known["systems"] if not named_systems
+                       or name.casefold() in named_systems} - chosen_systems
+    named_cores = _choice_names(options, "--core")
+    staying_cores = (designated_cores(manifest, named_cores) if named_cores
+                     else set(known["cores"]) | set(manifest.get("core_names") or {})
+                     ) - chosen_cores
+    remove, kept, gone, picked = [], [], [], set()
+    for item in setup.get("files") or []:
+        root, dest = str(item.get("root") or ""), str(item["dest"])
+        sha1s, item_systems, readers = served.get((root, norm(dest)), (set(), [], None))
+        if chosen_systems and not (chosen_systems & set(item_systems) or (
+                not item_systems and OTHER_SYSTEMS in chosen_systems)):
+            continue
+        if chosen_cores and not (readers and readers & chosen_cores):
+            continue
+        if files and norm(dest) not in wanted:
+            continue
+        picked.add(norm(dest))
+        entry = {"dest": dest, "root": root, "sha1": item["sha1"], "size": item["size"],
+                 "systems": item_systems}
+        if root not in ("", "data"):
+            kept.append({**entry, "reason": "outside", "what": ""})
+            continue
+        path, why = _below(folder, dest)
+        info = None
+        if path is not None:
+            why, info = _check_ours(path, item)
+        if why == "gone":
+            gone.append(item)
+            continue
+        what = ""
+        if not why and item["sha1"] not in sha1s:
+            why = "not_servable"
+        if not why and (root, norm(dest)) in others:
+            why, what = "shared", display_name(others[(root, norm(dest))])
+        if not why and chosen_systems and set(item_systems) & staying_systems:
+            why, what = "shared", ", ".join(system_title(name, manifest) for name in sorted(
+                set(item_systems) & staying_systems))
+        if not why and chosen_cores and readers and readers & staying_cores:
+            why, what = "shared", ", ".join(sorted(readers & staying_cores))
+        if why or path is None or info is None:
+            kept.append({**entry, "reason": why or "unreadable", "what": what})
+            continue
+        remove.append({**entry, "path": path, "inode": (info.st_dev, info.st_ino)})
+    kept += [{"dest": dest, "root": "", "sha1": "", "size": 0, "systems": [],
+              "reason": "not_recorded", "what": ""}
+             for dest in files if norm(dest) not in picked]
+    recorded: list[str] = list(setup.get("choice") or [])
+    choice: list | None = recorded
+    if files:
+        pass
+    elif chosen_systems:
+        choice = _choice_without(recorded, "--system", chosen_systems,
+                                 sorted(staying_systems | chosen_systems))
+        if not _choice_names(record_options(choice), "--system"):
+            choice = None
+    elif chosen_cores and emulators and _choice_names(options, "--emulator"):
+        choice = _choice_without(recorded, "--emulator", emulators, [])
+    elif chosen_cores:
+        left = [] if named_cores else sorted(set(known["cores"]) - chosen_cores)
+        choice = _choice_without(recorded, "--core", chosen_cores | set(cores), left)
+    else:
+        choice = None
+    lost = sorted({name for entry in remove for name in entry["systems"]})
+    return Removal(plat, folder, remove, kept, gone, choice, lost)
+
+
+def _left_by_hand(folder: Path, record: dict, fold: bool) -> list[str]:
+    """The files in folder that no setup of its record names: placed by the
+    user or another program, never touched, counted in the summary."""
+    named = {(item["dest"].casefold() if fold else item["dest"])
+             for setup in record["setups"].values() for item in setup.get("files") or []
+             if str(item.get("root") or "") in ("", "data")}
+    found = []
+    for base, dirs, names in os.walk(folder, followlinks=False):
+        dirs[:] = sorted(name for name in dirs if name != BACKUP_DIR)
+        for name in sorted(names):
+            rel = (Path(base) / name).relative_to(folder).as_posix()
+            if (rel.casefold() if fold else rel) not in named and name != ".nomedia":
+                found.append(rel)
+    return found
+
+
+def _kept_words(kept: list[dict]) -> str:
+    """Why files stay, counted by reason: 2 still needed, 1 changed since."""
+    counts: dict[str, int] = {}
+    for item in kept:
+        counts[item["reason"]] = counts.get(item["reason"], 0) + 1
+    order = list(REMOVAL_REASONS)
+    return ", ".join(f"{count} {REMOVAL_REASONS[reason]}" for reason, count in sorted(
+        counts.items(), key=lambda pair: (-pair[1], order.index(pair[0]))))
+
+
+def kept_line(item: dict) -> str:
+    """One file a removal leaves, and why."""
+    why = REMOVAL_REASONS[item["reason"]]
+    if item["reason"] == "shared" and item["what"]:
+        why += f" by {item['what']}"
+    return f"{item['dest']}: {why}"
+
+
+def remove_files(removal: Removal, setup: dict, backup: bool
+                 ) -> tuple[list[dict], list[dict], Path | None]:
+    """Delete each file of the plan, or with backup move it into a new
+    backup folder: (removed, failed {dest, reason}, the backup folder). Each
+    file is read again just before: one that changed kind or inode since
+    the plan stays."""
+    removed, failed = [], []
+    run: Path | None = None
+    under: Path | None = None
+    for entry in removal.remove:
+        path = entry["path"]
+        kept: Path | None = None
+        try:
+            info = os.lstat(path)
+            if (not stat.S_ISREG(info.st_mode)
+                    or (info.st_dev, info.st_ino) != entry["inode"]):
+                raise OSError(errno.ESTALE, "changed since it was read")
+            if backup:
+                if run is None or under is None:
+                    run, under = KEPT.place(removal.folder, create=True)
+                    _write_removed_note(run, removal, setup)
+                kept = under / Path(*PurePosixPath(entry["dest"]).parts)
+                kept.parent.mkdir(parents=True, exist_ok=True)
+                _move_aside(path, kept)
+            else:
+                _clear_read_only(path)
+                path.unlink()
+        except OSError as exc:
+            reason = exc.strerror or str(exc)
+            failed.append({"dest": entry["dest"], "reason": reason})
+            EVENTS.emit("removed", platform=removal.plat, dest=entry["dest"],
+                        size=entry["size"], ok=False, reason=reason, moved_to="")
+            continue
+        removed.append(entry)
+        EVENTS.emit("removed", platform=removal.plat, dest=entry["dest"],
+                    size=entry["size"], ok=True, reason="",
+                    moved_to="" if kept is None else str(spelled(kept)))
+    return removed, failed, run
+
+
+def _write_removed_note(run: Path, removal: Removal, setup: dict) -> None:
+    """What --restore needs to give the moved files back to their setup:
+    the record's entries of every file the plan moves, the choice before."""
+    dests = {entry["dest"] for entry in removal.remove}
+    note = {"platform": removal.plat, "folder": str(removal.folder),
+            "choice": list(setup.get("choice") or []),
+            "files": [item for item in setup.get("files") or [] if item["dest"] in dests]}
+    (run / REMOVED_NOTE).write_text(json.dumps(note, sort_keys=True), encoding="utf-8")
+
+
+def _record_after_removal(removal: Removal, removed: list[dict]) -> str:
+    """The setup's record without the files removed and those gone, with the
+    choice left: the setup goes once nothing of it is chosen or held."""
+    taken = {(entry["root"], entry["dest"]) for entry in removed} | {
+        (str(item.get("root") or ""), item["dest"]) for item in removal.gone}
+
+    def change(setup: dict | None) -> dict | None:
+        if setup is None:
+            return None
+        files = [item for item in setup.get("files") or []
+                 if (str(item.get("root") or ""), item["dest"]) not in taken]
+        if removal.choice is None or not files:
+            return None
+        return {**setup, "written": _record_now(), "choice": list(removal.choice),
+                "files": files}
+
+    return _update_record(removal.folder, removal.plat, change)
+
+
+def _answer_yes(prompt: str) -> bool:
+    """Yes only to y or yes: a removal is never the default answer."""
+    return _ask(prompt).strip().lower() in ("y", "yes")
+
+
+def _named_files(values: Iterable[Path], folder: Path) -> list[str] | None:
+    """The --file values as dests below folder, None for one outside it."""
+    files = []
+    for value in values:
+        given = Path(os.path.expanduser(str(value)))
+        if given.is_absolute():
+            try:
+                given = Path(os.path.abspath(given)).relative_to(folder)
+            except ValueError:
+                print(f"Error: {value} is not inside {shown_path(folder)}: --file names a "
+                      "file of the BIOS folder.", file=sys.stderr)
+                return None
+        files.append(PurePosixPath(*given.parts).as_posix())
+    return files
+
+
+def run_removal(args: argparse.Namespace) -> int:
+    """--remove: the plan, one confirmation, then each file deleted (or
+    moved with --backup), and the record made to say so. 0 done, 1 a file
+    or the record failed, 2 nothing done."""
+    plat, folder = _action_setup(args)
+    read = load_record(folder)
+    setup, _path, problem = setup_record(plat, folder)
+    if setup is None or read.data is None:
+        why = problem or (f"its install record holds nothing for {display_name(plat)}"
+                          if read.data is not None else
+                          "no install record is beside it, so no file is known to be "
+                          "the installer's")
+        message = f"Nothing was removed from {shown_path(folder)}: {why}."
+        print(message, file=sys.stderr)
+        EVENTS.emit("removal_plan", platform=plat, folder=str(folder), files=0, bytes=0,
+                    systems=[], dests=[], kept=[], gone=0, backup=bool(args.backup),
+                    message=message)
+        return 2
+    manifest = fetch_manifest(plat)
+    every = list(manifest.get("files") or [])
+    omitted = list(manifest.get("omitted_files") or [])
+    known = available_choices(every, omitted)
+    try:
+        systems = resolve_choices(args.system, known["systems"], "system") \
+            if args.system else []
+        cores = resolve_choices(args.core, known["cores"], "core") if args.core else []
+        emulators = resolve_choices(args.emulator, sorted(emulator_names(
+            manifest, every, omitted)), "emulator") if args.emulator else []
+    except ValueError as exc:
+        refuse_name(plat, f"Error: {plat}: {exc}")
+    files = _named_files(args.file or [], folder)
+    if files is None:
+        return 2
+    removal = plan_removal(plat, folder, read.data, manifest, systems=systems, cores=cores,
+                           emulators=emulators, files=files)
+    size = sum(entry["size"] for entry in removal.remove)
+    whole = not (systems or cores or emulators or files)
+    by_hand = _left_by_hand(folder, read.data, not keeps_case(folder)) if whole else []
+    where = f"{shown_path(folder)} for {display_name(plat, manifest)}"
+    if not removal.remove:
+        headline = f"Nothing to remove from {where}."
+    elif args.backup:
+        headline = (f"Move {_plural(len(removal.remove), 'file')} "
+                    f"({format_size(size)}) from {where} to a backup.")
+    else:
+        headline = (f"Remove {_plural(len(removal.remove), 'file')} from {where}, "
+                    f"{format_size(size)} freed.")
+    EVENTS.emit("removal_plan", platform=plat, folder=str(folder), files=len(removal.remove),
+                bytes=size, systems=removal.systems,
+                dests=[entry["dest"] for entry in removal.remove],
+                kept=[{"dest": item["dest"], "reason": item["reason"]}
+                      for item in removal.kept],
+                gone=len(removal.gone), backup=bool(args.backup), message=headline)
+    print(headline)
+    if args.dry_run or args.verbose:
+        for entry in removal.remove:
+            print(f"  {entry['dest']}")
+    if removal.kept:
+        print(f"{agree(len(removal.kept), 'file stays', 'files stay')}: "
+              f"{_kept_words(removal.kept)}.")
+        shown = removal.kept if args.verbose else removal.kept[:REMOVAL_KEPT_SHOWN]
+        for item in shown:
+            print(f"  {kept_line(item)}")
+        if len(shown) < len(removal.kept):
+            print(f"  and {len(removal.kept) - len(shown)} more (--verbose lists them)")
+    if by_hand:
+        print(f"{agree(len(by_hand), 'other file stays', 'other files stay')}, not "
+              "installed by RetroBIOS.")
+        if args.verbose:
+            for rel in by_hand:
+                print(f"  {rel}")
+    if not removal.remove:
+        if removal.gone and not args.dry_run:
+            _record_after_removal(removal, [])
+        return 2
+    if args.dry_run:
+        print("Nothing was removed (--dry-run).")
+        return 0
+    if not args.yes:
+        if args.no_input or not sys.stdin.isatty():
+            print("Error: removing files needs a yes: add --yes to remove them without "
+                  "a question, or --dry-run to list them.", file=sys.stderr)
+            return 2
+        question = ("Move them to a backup? [y/N] " if args.backup
+                    else "Remove them for good? [y/N] ")
+        if not _answer_yes(question):
+            print("Nothing was removed.")
+            return QUIT_CODE
+    KEPT.reset()
+    removed, failed, run = remove_files(removal, setup, bool(args.backup))
+    problem = _record_after_removal(removal, removed)
+    freed = sum(entry["size"] for entry in removed)
+    if run is not None:
+        print(f"Moved {_plural(len(removed), 'file')} ({format_size(freed)}) to "
+              f"{shown_path(run)}.")
+        print(f"To put them back: {_INVOCATION.launcher()} --restore "
+              f"{_INVOCATION.word(str(spelled(run)))}")
+        EVENTS.emit("backup", folder=str(spelled(run)), date=_backup_date(run),
+                    files=len(removed), bytes=freed, source="remove", status="made",
+                    message=f"Moved {_plural(len(removed), 'file')} here.")
+    elif removed:
+        print(f"Removed {_plural(len(removed), 'file')}, {format_size(freed)} freed.")
+    for item in failed:
+        print(f"  failed: {item['dest']} ({item['reason']})", file=sys.stderr)
+    if problem:
+        print(f"The install record could not be updated ({problem}).", file=sys.stderr)
+    return 1 if failed or problem else 0
+
+
+# The files a removal leaves named one by one by default: past this, a
+# count and --verbose.
+REMOVAL_KEPT_SHOWN = 10
+
+
+def _backup_date(run: Path) -> str:
+    """When a run folder was made, read from its name: 2026-11-03 12:00:00."""
+    match = re.match(r"(\d{4})(\d\d)(\d\d)-(\d\d)(\d\d)(\d\d)", run.name)
+    if not match:
+        return ""
+    year, month, day, hour, minute, second = match.groups()
+    return f"{year}-{month}-{day} {hour}:{minute}:{second}"
+
+
+def backup_words(date: str) -> str:
+    """A backup's date as a list says it: 3 Nov 12:00."""
+    try:
+        when = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
+    except ValueError:
+        return date or "unknown date"
+    day = f"{when.day} {_MONTHS[when.month - 1]}"
+    if when.year != datetime.datetime.now().year:
+        day += f" {when.year}"
+    return f"{day} {when.hour:02d}:{when.minute:02d}"
+
+
+def list_backups(folder: Path) -> list[dict]:
+    """The backups of a BIOS folder, newest first: {folder, date, files,
+    bytes, source}, source remove for a removal's and install for the files
+    an install replaced. Only dated folders holding the marker count."""
+    folder = Path(os.path.abspath(folder))
+    found = []
+    for holder, prefix in KeptFiles._holders(folder):
+        try:
+            if not stat.S_ISDIR(os.lstat(holder).st_mode):
+                continue
+            runs = sorted(holder.iterdir())
+        except OSError:
+            continue
+        for run in runs:
+            if not _is_backup_run(run):
+                continue
+            under = run / prefix if prefix else run
+            files = [path for path in _backup_files(run) if under in path.parents]
+            if files:
+                found.append({"folder": run, "date": _backup_date(run), "files": len(files),
+                              "bytes": sum(path.stat().st_size for path in files),
+                              "source": "remove" if _backup_note(run) is not None
+                              else "install"})
+    return sorted(found, key=lambda item: item["folder"].name, reverse=True)
+
+
+def run_backups(args: argparse.Namespace) -> int:
+    """--backups: the backups of the BIOS folder, newest first."""
+    folder = _action_folder(args)
+    backups = list_backups(folder)
+    if not backups:
+        print(f"No backup of {shown_path(folder)}.")
+        return 0
+    print(f"Backups of {shown_path(folder)}, newest first:")
+    for item in backups:
+        made = "removed" if item["source"] == "remove" else "replaced by an install"
+        print(f"  {backup_words(item['date'])}  {_plural(item['files'], 'file')}, "
+              f"{format_size(item['bytes'])}, {made}")
+        print(f"    {shown_path(item['folder'])}")
+        EVENTS.emit("backup", folder=str(spelled(item["folder"])), date=item["date"],
+                    files=item["files"], bytes=item["bytes"], source=item["source"],
+                    status="listed", message="")
+    print(f"To put one back: {_INVOCATION.launcher()} --restore FOLDER")
+    return 0
+
+
+def run_delete_backup(args: argparse.Namespace) -> int:
+    """--delete-backup: one backup folder deleted after one confirmation.
+    0 done, 1 a file failed, 2 refused or declined."""
+    run = Path(os.path.abspath(os.path.expanduser(str(args.delete_backup))))
+    if not _is_backup_run(run):
+        print(f"Error: {run} is not a folder the installer kept files in.", file=sys.stderr)
+        print("  Name one of the dated folders --backups lists.", file=sys.stderr)
+        return 2
+    files = _backup_files(run)
+    size = sum(path.stat().st_size for path in files)
+    date = _backup_date(run)
+    source = "remove" if _backup_note(run) is not None else "install"
+    print(f"Delete the backup of {backup_words(date)}: {_plural(len(files), 'file')}, "
+          f"{format_size(size)}.")
+    if args.dry_run:
+        print("Nothing was deleted (--dry-run).")
+        return 0
+    if not args.yes:
+        if args.no_input or not sys.stdin.isatty():
+            print("Error: deleting a backup needs a yes: add --yes to delete it without "
+                  "a question.", file=sys.stderr)
+            return 2
+        if not _answer_yes("Delete it for good? [y/N] "):
+            print("Nothing was deleted.")
+            return QUIT_CODE
+    failed = 0
+    # Bottom up, never through a link: a link goes, not what it names.
+    for base, dirs, names in os.walk(run, topdown=False, followlinks=False):
+        for name in [*names, *dirs]:
+            path = Path(base) / name
+            try:
+                if stat.S_ISDIR(os.lstat(path).st_mode):
+                    path.rmdir()
+                else:
+                    _clear_read_only(path)
+                    path.unlink()
+            except OSError as exc:
+                failed += 1
+                print(f"  failed: {path} ({exc.strerror or exc})", file=sys.stderr)
+    try:
+        run.rmdir()
+    except OSError as exc:
+        failed += 1
+        print(f"  failed: {run} ({exc.strerror or exc})", file=sys.stderr)
+    EVENTS.emit("backup", folder=str(spelled(run)), date=date, files=len(files), bytes=size,
+                source=source, status="not_deleted" if failed else "deleted",
+                message=f"{_plural(failed, 'file')} could not be deleted." if failed else "")
+    if failed:
+        return 1
+    print(f"Deleted, {format_size(size)} freed.")
+    return 0
+
+
+def _action_folder(args: argparse.Namespace) -> Path:
+    """The BIOS folder a listing of backups is for: --dest, else the one
+    setup found here."""
+    if args.dest and not args.platform:
+        return Path(os.path.abspath(os.path.expanduser(str(args.dest))))
+    return _action_setup(args)[1]
+
+
+def _action_setup(args: argparse.Namespace) -> tuple[str, Path]:
+    """The setup and BIOS folder a removal is for: --platform and --dest,
+    the one setup a record names or the search here finds, never a guess.
+    A choice left open exits 2, naming the option that settles it."""
+    named = args.platform or ""
+    plat = normalize_platform(args.platform, say=False) if args.platform else ""
+    if args.dest:
+        dest = Path(args.dest)
+        if plat:
+            plat, dest = card_dest(named, plat, dest)
+        folder = Path(os.path.abspath(os.path.expanduser(str(dest))))
+        if plat:
+            return plat, folder
+        setups = sorted((load_record(folder).data or {}).get("setups") or {})
+        if len(setups) == 1:
+            return setups[0], folder
+        print(f"Error: name the setup of {shown_path(folder)} with --platform"
+              + (f": {', '.join(setups)}." if setups else "."), file=sys.stderr)
+        sys.exit(2)
+    found = [(name, path) for name, path in detect_platforms(detect_os())
+             if not plat or name == plat]
+    if len(found) == 1:
+        return found[0][0], Path(os.path.abspath(found[0][1]))
+    if not found:
+        print("Error: no setup found here: name its BIOS folder with --dest"
+              + ("." if plat else " and its setup with --platform."), file=sys.stderr)
+    else:
+        print("Error: several setups found here: name one with --platform and --dest.",
+              file=sys.stderr)
+        for name, path in found:
+            print(f"  --platform {name} --dest {_INVOCATION.word(str(path))}",
+                  file=sys.stderr)
+    sys.exit(2)
 
 
 def _download_one(
@@ -14689,6 +15502,40 @@ def build_parser() -> argparse.ArgumentParser:
              f"(a dated folder inside {BACKUP_DIR})",
     )
     parser.add_argument(
+        "--remove",
+        action="store_true",
+        help="remove what the installer placed in the BIOS folder, as its install "
+             "record proves it: every file, or those of --system, --core, --emulator "
+             "or --file. A file changed since, added by hand, still needed by "
+             "something kept, or that the collection cannot give again stays",
+    )
+    parser.add_argument(
+        "--file",
+        action="append",
+        type=Path,
+        metavar="PATH",
+        help="with --remove, one file of the BIOS folder (its path there, or the "
+             "full path). Repeat for several",
+    )
+    parser.add_argument(
+        "--backup",
+        action="store_true",
+        help=f"with --remove, move the files into a dated folder of {BACKUP_DIR} "
+             "instead of deleting them, for --restore to put back",
+    )
+    parser.add_argument(
+        "--backups",
+        action="store_true",
+        help="list the backups of the BIOS folder, newest first, and exit",
+    )
+    parser.add_argument(
+        "--delete-backup",
+        type=Path,
+        metavar="FOLDER",
+        help=f"delete one backup (a dated folder inside {BACKUP_DIR}) after one "
+             "question, to free its space",
+    )
+    parser.add_argument(
         "--tui",
         action="store_true",
         help="open the full-screen interface, which a keyboard or a controller "
@@ -14849,23 +15696,11 @@ def main() -> None:
             print(f"{parser.prog}: error: --tui cannot open the full-screen interface "
                   f"here: {reason}", file=sys.stderr)
             sys.exit(2)
+    _check_actions(parser, args)
     if args.restore is not None:
-        # The folder says where each file goes: nothing else applies.
-        alone = ("platform", "dest", "target", "every_board", "check", "list_platforms",
-                 "list_targets", "standalone_copies", "emulator", "installed_cores",
-                 "cores_dir", "save_dir", "system", "core", "region", "no_game_data",
-                 "declared_only", "list_systems", "required_only",
-                 "list_cores", "romm_firmware", "list_emulators", "events", "quiet",
-                 "yes", "verbose", "from_pack", "manifest", "from", "add_app")
-        given = [name for name in alone if getattr(args, name)]
-        if args.for_games is not None:
-            given.append("for_games")
-        if args.jobs != 8:
-            given.append("jobs")
-        if given:
-            parser.error("--restore puts files back from a folder and takes no "
-                         f"--{given[0].replace('_', '-')}")
-        sys.exit(restore_kept(args.restore, args.dry_run))
+        _run_action(args, lambda given: restore_kept(given.restore, given.dry_run))
+    if args.delete_backup is not None:
+        _run_action(args, run_delete_backup)
     if args.every_board and args.target:
         parser.error("--every-board installs every board, and --target names one")
     if args.add_app:
@@ -14901,6 +15736,9 @@ def main() -> None:
         parser.error(f"--target needs a core list, which {offline_named()} does not fetch: "
                      "give --from-pack, or --manifest with targets/<platform>.json beside it")
     install_bounded_opener()
+    if args.remove or args.backups:
+        _open_local_sources(args)
+        _run_action(args, run_removal if args.remove else run_backups)
     if getattr(args, "from") and (
         args.list_platforms or args.list_targets or args.list_systems
         or args.list_cores or args.list_emulators
@@ -14945,6 +15783,72 @@ def main() -> None:
         EVENTS.emit("end", code=0)
         return
     _run(args)
+
+
+# What each action reads beside its own option: anything else given with
+# it is refused, never ignored. dest and platform name the BIOS folder.
+_ACTION_TAKES = {
+    "restore": ("dry_run", "events", "yes", "no_input", "verbose"),
+    "delete_backup": ("dry_run", "events", "yes", "no_input", "verbose"),
+    "backups": ("platform", "dest", "events", "no_input", "verbose"),
+    "remove": ("platform", "dest", "system", "core", "emulator", "file", "backup",
+               "dry_run", "events", "yes", "no_input", "verbose", "manifest", "from_pack",
+               "offline"),
+}
+# Options that are a choice of their own, never refused for being given.
+_ACTION_FREE = ("jobs", "plain", "from_record")
+
+
+def _check_actions(parser: argparse.ArgumentParser, args: argparse.Namespace) -> None:
+    """Refuse an action given with an option it does not read, two actions,
+    or --file and --backup without --remove."""
+    actions = [name for name in _ACTION_TAKES if getattr(args, name)]
+    if len(actions) > 1:
+        parser.error(f"--{actions[0].replace('_', '-')} and --{actions[1].replace('_', '-')} "
+                     "are two actions: run them one at a time")
+    if not actions:
+        for name in ("file", "backup"):
+            if getattr(args, name):
+                parser.error(f"--{name} applies to --remove")
+        return
+    action = actions[0]
+    defaults = build_parser().parse_args([])
+    given = [name for name, value in vars(args).items()
+             if name != action and name not in _ACTION_TAKES[action]
+             and name not in _ACTION_FREE and value != getattr(defaults, name, value)]
+    if given:
+        parser.error(f"--{action.replace('_', '-')} takes no "
+                     f"--{given[0].replace('_', '-')}")
+    if action == "remove":
+        narrowed = [flag for flag, value in (("--system", args.system), ("--core", args.core),
+                                             ("--emulator", args.emulator),
+                                             ("--file", args.file)) if value]
+        if len(narrowed) > 1:
+            parser.error(f"--remove takes one of --system, --core, --emulator or --file, "
+                         f"not {narrowed[0]} and {narrowed[1]}")
+
+
+def _run_action(args: argparse.Namespace,
+                action: Callable[[argparse.Namespace], int]) -> NoReturn:
+    """Run an action and exit with its code, its events framed by start and
+    end with --events."""
+    if not args.events:
+        sys.exit(action(args))
+    args.no_input = True
+    EVENTS.open(sys.stdout)
+    sys.stdout = sys.stderr
+    EVENTS.emit("start", schema=EVENT_SCHEMA, installer=installer_id(),
+                mode=_event_mode(args))
+    try:
+        code = action(args)
+    except SystemExit as exc:
+        EVENTS.emit("end", code=_event_exit_code(exc.code))
+        raise
+    except KeyboardInterrupt:
+        EVENTS.emit("end", code=130)
+        raise
+    EVENTS.emit("end", code=code)
+    sys.exit(code)
 
 
 def _run(args: argparse.Namespace) -> None:
@@ -18645,6 +19549,21 @@ class TuiState:
         # (platform, folder, board, applied, here) of the last board event:
         # kept across checks, a --target chosen since stops the event.
         self.board_seen: tuple | None = None
+        # More: what to remove (the --system of a removal, none for
+        # everything), whether into a backup, the plan its dry run read,
+        # the backups listed and why, the one chosen, the action confirmed
+        # (remove, restore, delete_backup), its events and its code.
+        self.removal_scope: list[tuple[str, str]] = []
+        self.removal_backup: bool = False
+        self.removal: dict | None = None
+        self.backups: list[dict] | None = None
+        self.backups_for: str = "look"
+        self.backup_chosen: dict | None = None
+        self.action: str = ""
+        self.action_events: list[dict] = []
+        self.action_code: int | None = None
+        # Whether the folder checked has a backup, read once each check.
+        self.has_backups: bool = False
 
     @property
     def screen(self) -> str:
@@ -19132,6 +20051,8 @@ _TUI_MODES = {
 
 def tui_argv(state: TuiState, run: str, python: str, script: str) -> list[str]:
     """The child that does what the screen decided."""
+    if run in TUI_ACTION_RUNS:
+        return tui_action_argv(state, run, python, script)
     # --dest=VALUE: a folder typed as -x would otherwise be read as an option.
     argv = [python, script, f"--platform={state.platform}", f"--dest={state.dest}"]
     if state.manifest_path is not None:
@@ -19431,6 +20352,8 @@ def tui_systems(state: TuiState) -> list[str]:
 def tui_rows(state: TuiState) -> list[TuiRow]:
     """The rows of the current screen, in the order they are shown."""
     screen = state.screen
+    if screen in _ACTION_SCREENS:
+        return _action_rows(state)
     if screen == "setup":
         # The focused one's folder is spelled out below the list.
         rows = [TuiRow("setup", label, value=index)
@@ -19617,10 +20540,12 @@ def _plan_rows(state: TuiState) -> list[TuiRow]:
         rows = [TuiRow("systems", TUI_SYSTEMS_ROW)]
         game_data = _game_data_row(state)
         return rows + ([game_data] if game_data is not None else []) + [
-            *_details_row(state), TuiRow("options", "Change"), TuiRow("quit", "Quit")]
+            *_details_row(state), TuiRow("options", "Change"), *_more_row(state),
+            TuiRow("quit", "Quit")]
     if not (_needed(check) if check else 0) and not check.get("data_missing"):
         return [TuiRow("close", "Close"), *_games_rows(state), *_record_rows(state),
-                *_where_rows(state), *_details_row(state), TuiRow("options", "Change")]
+                *_where_rows(state), *_details_row(state), TuiRow("options", "Change"),
+                *_more_row(state)]
     # The size the headline says: "Install 6.6 GB" stood under "14930 files
     # to download, 6.8 GB", the copies counted in one and the data files in
     # the other.
@@ -19677,7 +20602,18 @@ def _plan_rows(state: TuiState) -> list[TuiRow]:
     if state.unreadable:
         rows.append(TuiRow("unreadable", "Show the files that could not be read"))
     return rows + [*_where_rows(state), *_details_row(state), TuiRow("options", "Change"),
-                   TuiRow("quit", "Quit")]
+                   *_more_row(state), TuiRow("quit", "Quit")]
+
+
+# The plan's row to remove files and to see or put back a backup.
+TUI_MORE_ROW = TuiRow("more", "More")
+
+
+def _more_row(state: TuiState) -> list[TuiRow]:
+    """More, where it has something to act on: an install record of this
+    setup in the folder, or a backup of it. A first install's plan keeps
+    its rows."""
+    return [TUI_MORE_ROW] if state.record is not None or state.has_backups else []
 
 
 # The plan's row for the record's choice, and the one back to the setups.
@@ -20178,6 +21114,9 @@ def _replace(state: TuiState, screen: str) -> None:
 
 
 def _back(state: TuiState) -> list[tuple]:
+    if state.screen == "actdone" and not state.running:
+        # Done: what was planned is gone, and the plan is counted again.
+        return _activate_action(state, TuiRow("recheck", ""))
     effects = [("kill",)] if state.running else []
     if state.running:
         # What the stopped run still reports belongs to no screen.
@@ -20906,6 +21845,8 @@ def _activate(state: TuiState, row: TuiRow) -> list[tuple]:
             return _activate(state, only)
         state.editing = screen
         return []
+    if screen in _ACTION_SCREENS:
+        return _activate_action(state, row)
     if screen == "setup":
         if action == "another":
             return _push(state, "platforms", _platform_focus(state, "retroarch"))
@@ -21043,7 +21984,7 @@ def _activate(state: TuiState, row: TuiRow) -> list[tuple]:
             return _open_folder_screen(state, state.dest, "chosen", rebind=True)
         if action == "fromcard":
             return _open_from_browser(state)
-        if action in ("misplaced", "unreadable"):
+        if action in ("misplaced", "unreadable", "more"):
             return _push(state, action)
         if action == "recheck":
             return _start_check(state)
@@ -22451,6 +23392,8 @@ def _space(state: TuiState, row: TuiRow) -> list[tuple]:
 
 
 def _take_event(state: TuiState, event: dict) -> None:
+    if _take_action_event(state, event):
+        return
     kind = event.get("event")
     if kind == "app" and state.run == "install":
         state.app = event
@@ -22604,6 +23547,8 @@ def tui_receive(state: TuiState, message: tuple) -> list[tuple]:
     state.running = False
     state.tail = [line for line in tail if not line.startswith("RetroBIOS ")]
     tail = state.tail
+    if state.run in TUI_ACTION_RUNS:
+        return _action_ended(state, code, tail)
     if state.run == "check":
         if state.check is None:
             return _fail(state, tail, code)
@@ -22621,6 +23566,7 @@ def tui_receive(state: TuiState, message: tuple) -> list[tuple]:
                                        for name in state.keep_ticked)
             state.keep_ticked = None
         state.facts = _tui_folder_facts(state)
+        state.has_backups = state.dest is not None and bool(list_backups(state.dest))
         _replace(state, "plan")
         refocus, state.refocus = state.refocus, ""
         _focus_plan(state, refocus)
@@ -22757,7 +23703,10 @@ _ROW_VERBS = {
     "recheck": "Check again", "gamedata": "Change", "share": "Choose", "morecores": "Show",
     "games": "Change", "startonly": "Change", "gameslist": "Show", "details": "Show",
     "device": "Open", "emulators": "Open", "emulator": "Tick", "board": "Choose",
-    "pack": "Choose", "offline": "Change",
+    "pack": "Choose", "offline": "Change", "more": "Open", "remove": "Open",
+    "backups": "Open", "putback": "Open", "dropbackup": "Open", "rmall": "Choose",
+    "rmsystem": "Choose", "rmgo": "Remove", "rmbackup": "Change", "backup": "Choose",
+    "bkrestore": "Put back", "bkdelete": "Delete", "actgo": "Confirm",
 }
 
 
@@ -24748,6 +25697,8 @@ def details_lines(state: TuiState) -> list:
         under = state.screen
         lines = (_plan_text(state) if under == "plan"
                  else _confirm_text(state) if under == "confirm"
+                 else _removal_text(state) if under == "removal"
+                 else tui_action_outcome(state) if under == "actdone"
                  else tui_outcome(state)[1] if under == "result" else [])
     finally:
         state.stack.append(top)
@@ -24767,6 +25718,343 @@ def _open_details(state: TuiState) -> list[tuple]:
     return _push(state, "details")
 
 
+# The screens below More, each listing its rows in _action_rows.
+_ACTION_SCREENS = ("more", "remove", "removal", "backups", "backup", "actconfirm", "actdone")
+# The runs More starts, each a child as an install is: what --remove would
+# take (removal_plan), the removal, the backups listed, one put back and
+# one deleted.
+TUI_ACTION_RUNS = ("removal_plan", "remove", "backups", "restore", "delete_backup")
+
+
+def tui_action_argv(state: TuiState, run: str, python: str, script: str) -> list[str]:
+    """The child of a More action: its own options and none of the plan's,
+    whose --system is an install's choice, not what to remove."""
+    if run in ("restore", "delete_backup"):
+        folder = str((state.backup_chosen or {}).get("folder", ""))
+        flag = "--restore" if run == "restore" else "--delete-backup"
+        return [python, script, f"{flag}={folder}", "--events",
+                *(["--yes"] if run == "delete_backup" else [])]
+    argv = [python, script, f"--platform={state.platform}", f"--dest={state.dest}"]
+    if run == "backups":
+        return argv + ["--backups", "--events"]
+    if state.manifest_path is not None:
+        argv.append(f"--manifest={state.manifest_path}")
+    argv += ["--remove", *(f"{flag}={value}" for flag, value in state.removal_scope)]
+    if state.removal_backup:
+        argv.append("--backup")
+    return argv + (["--dry-run", "--events"] if run == "removal_plan" else ["--events", "--yes"])
+
+
+def tui_removal_systems(state: TuiState) -> list[tuple[str, int, int]]:
+    """(system, files, bytes) of each system the install record holds files
+    of, by the list's systems, in the order Choose systems lists them."""
+    if state.record is None or state.manifest is None:
+        return []
+    served = _served(state.manifest, False)
+    held: dict[str, list[int]] = {}
+    for item in state.record.get("files") or []:
+        systems = served.get((str(item.get("root") or ""), str(item["dest"])),
+                             (set(), [], None))[1]
+        for system in systems or [OTHER_SYSTEMS]:
+            tally = held.setdefault(system, [0, 0])
+            tally[0] += 1
+            tally[1] += int(item.get("size") or 0)
+    titles = {system: system_title(system, state.manifest) for system in held}
+    return [(system, held[system][0], held[system][1])
+            for system in sorted(held, key=titles.__getitem__)]
+
+
+def _more_rows(state: TuiState) -> list[TuiRow]:
+    return [TuiRow("remove", "Remove files"), TuiRow("backups", "Backups"),
+            TuiRow("putback", "Put back a backup"), TuiRow("dropbackup", "Delete a backup")]
+
+
+def _remove_rows(state: TuiState) -> list[TuiRow]:
+    """Remove files: everything the record holds, then each system of it."""
+    if state.record is None:
+        return [TuiRow("back", "Back")]
+    files = state.record.get("files") or []
+    size = format_size(sum(int(item.get("size") or 0) for item in files))
+    rows = [TuiRow("rmall", "All RetroBIOS files", size, keep_right=True)]
+    for system, count, length in tui_removal_systems(state):
+        rows.append(TuiRow("rmsystem", system_title(system, state.manifest),
+                           format_size(length), system, narrow=(_plural(count, "file"),),
+                           keep_right=True))
+    return rows
+
+
+def _removal_rows(state: TuiState) -> list[TuiRow]:
+    """The removal plan's rows: Remove with the space it frees, the backup
+    choice, Details and Back."""
+    plan = state.removal
+    if state.running or plan is None:
+        return []
+    rows = []
+    if plan["files"]:
+        rows.append(TuiRow("rmgo", f"Move {format_size(plan['bytes'])} to a backup"
+                           if state.removal_backup else f"Remove {format_size(plan['bytes'])}"))
+        rows.append(TuiRow("rmbackup", f"Keep a backup: {_yes(state.removal_backup)}",
+                           "--backup"))
+    # B goes back: a Back row pushed what stays out of a 40x12 screen.
+    return rows + _details_row(state)
+
+
+def _backup_rows(state: TuiState) -> list[TuiRow]:
+    if state.running or state.backups is None:
+        return []
+    rows = [TuiRow("backup", backup_words(item["date"]),
+                   f"{_plural(item['files'], 'file')}, {format_size(item['bytes'])}", index,
+                   narrow=(format_size(item["bytes"]),), keep_right=True)
+            for index, item in enumerate(state.backups)]
+    return rows + [TuiRow("back", "Back")]
+
+
+def _action_rows(state: TuiState) -> list[TuiRow]:
+    """The rows of the More screens, or None for another screen."""
+    screen = state.screen
+    if screen == "more":
+        return _more_rows(state)
+    if screen == "remove":
+        return _remove_rows(state)
+    if screen == "removal":
+        return _removal_rows(state)
+    if screen == "backups":
+        return _backup_rows(state)
+    if screen == "backup":
+        return [TuiRow("bkrestore", "Put back"), TuiRow("bkdelete", "Delete"),
+                TuiRow("back", "Back")]
+    if screen == "actconfirm":
+        verb = {"remove": "Move to a backup" if state.removal_backup else "Remove",
+                "restore": "Put back", "delete_backup": "Delete"}[state.action]
+        return [TuiRow("actgo", verb), TuiRow("back", "Back")]
+    if screen == "actdone" and not state.running:
+        return [TuiRow("close", "Close"), TuiRow("recheck", "Check again")]
+    return []
+
+
+def _open_backups(state: TuiState, purpose: str) -> list[tuple]:
+    """The backups of the folder, read by a child: to look at them, or to
+    put one back or delete one."""
+    state.backups_for, state.backups = purpose, None
+    _push(state, "backups")
+    return _start_run(state, "backups")
+
+
+def _activate_action(state: TuiState, row: TuiRow) -> list[tuple]:
+    """A and Enter on the More screens."""
+    screen, action = state.screen, row.action
+    if action == "back":
+        return _back(state)
+    if screen == "more" and action == "remove":
+        return _push(state, "remove")
+    if screen == "more":
+        return _open_backups(state, {"backups": "look", "putback": "restore",
+                                     "dropbackup": "delete_backup"}[action])
+    if screen == "remove":
+        state.removal_scope = ([("--system", str(row.value))] if action == "rmsystem"
+                               else [])
+        state.removal = None
+        _push(state, "removal")
+        return _start_run(state, "removal_plan")
+    if screen == "removal" and action == "rmbackup":
+        state.removal_backup = not state.removal_backup
+        return []
+    if screen == "removal" and action == "rmgo":
+        state.action = "remove"
+        return _push(state, "actconfirm")
+    if screen == "backups" and action == "backup":
+        state.backup_chosen = (state.backups or [])[int(str(row.value))]
+        if state.backups_for == "look":
+            return _push(state, "backup")
+        state.action = state.backups_for
+        return _push(state, "actconfirm")
+    if screen == "backup":
+        state.action = "restore" if action == "bkrestore" else "delete_backup"
+        return _push(state, "actconfirm")
+    if screen == "actconfirm" and action == "actgo":
+        state.action_events, state.action_code = [], None
+        _replace(state, "actdone")
+        return _start_run(state, state.action)
+    if screen == "actdone" and action == "close":
+        state.exit_code = state.action_code if state.action_code is not None else 1
+        return []
+    if screen == "actdone" and action == "recheck":
+        # The record changed with the folder: read again, with its choice.
+        state.record_for = None
+        del state.stack[1:]
+        state.stack.append("checking")
+        return _start_check(state)
+    return []
+
+
+def _take_action_event(state: TuiState, event: dict) -> bool:
+    """An event of a More run, kept for its screen: whether it was one."""
+    kind = event.get("event")
+    if kind == "removal_plan" and state.run in ("removal_plan", "remove"):
+        state.removal = event
+    elif kind == "backup" and state.run == "backups":
+        state.backups = [*(state.backups or []), event]
+    elif kind in ("removed", "restored", "backup") and state.run in (
+            "remove", "restore", "delete_backup"):
+        state.action_events.append(event)
+    else:
+        return False
+    return True
+
+
+def _action_ended(state: TuiState, code: int, tail: list[str]) -> list[tuple]:
+    """A More run's end: the plan, the list, or what the action did."""
+    if state.run == "removal_plan":
+        if state.removal is None:
+            return _fail(state, tail, code)
+        return []
+    if state.run == "backups":
+        if state.backups is None and code:
+            return _fail(state, tail, code)
+        state.backups = state.backups or []
+        return []
+    state.action_code = code if code >= 0 else 128 - code
+    return []
+
+
+def _removal_text(state: TuiState) -> list:
+    """The removal plan: what goes and the space freed, where, what stays
+    and why, the files themselves behind Details."""
+    plan = state.removal or {}
+    folder = _short_path(state.dest, state.home)
+    if not plan.get("files"):
+        lines: list = ["Nothing here can be removed."]
+    elif state.removal_backup:
+        lines = [f"{_plural(plan['files'], 'file')} to a backup, "
+                 f"{format_size(plan['bytes'])}."]
+    else:
+        lines = [f"{_plural(plan['files'], 'file')} go, {format_size(plan['bytes'])} freed."]
+    lines.append(_styled(f"{_FOLDER_LABEL}{folder}", "path"))
+    kept = plan.get("kept") or []
+    if kept:
+        lines.append(f"{agree(len(kept), 'file stays', 'files stay')}: "
+                     f"{_kept_words([{**item, 'what': ''} for item in kept])}.")
+    if not plan.get("files") and plan.get("message") and not kept:
+        lines.append(_detail(str(plan["message"])))
+    lines += _details(["", "Removed:"] + [f"  {dest}" for dest in plan.get("dests") or []]
+                      if plan.get("dests") else [])
+    lines += _details(["", "Left as they are:"] + [
+        f"  {kept_line({**item, 'what': ''})}" for item in kept] if kept else [])
+    return lines
+
+
+def _view_more(state: TuiState, width: int, height: int) -> tuple:
+    return ("More", _compose(state, width, height, [], tui_rows(state),
+                             [], _status_footer(state)),
+            ("A/Enter Open", "B/Esc Back", "? Help"))
+
+
+def _view_remove(state: TuiState, width: int, height: int) -> tuple:
+    if state.record is None:
+        before = ["No install record here: no file is known to be the installer's, so "
+                  "nothing is removed."]
+    else:
+        before = ["Choose what to remove. A file changed or added by hand stays."]
+    return ("Remove files", _compose(state, width, height, before, tui_rows(state)),
+            ("A/Enter Choose", "B/Esc Back", "? Help"))
+
+
+def _view_removal(state: TuiState, width: int, height: int) -> tuple:
+    if state.running or state.removal is None:
+        return ("Remove files", _compose(state, width, height,
+                                         ["Reading what can be removed..."], []),
+                ("B/Esc Back", "? Help"))
+    lines = _shown(state, _removal_text(state))
+    lines = [piece for line in lines for piece in (
+        [_styled(part, "folder" if index else "") for index, part in enumerate(
+            _wrap(str(line), width, "  "))]
+        if getattr(line, "style", "") == "path" and cell_width(str(line)) > width
+        else [line])]
+    return ("Remove files", _compose(state, width, height, lines, tui_rows(state)),
+            ("A/Enter Choose", "B/Esc Back", "? Help"))
+
+
+def _view_backups(state: TuiState, width: int, height: int) -> tuple:
+    if state.running or state.backups is None:
+        return ("Backups", _compose(state, width, height, ["Reading the backups..."], []),
+                ("B/Esc Back", "? Help"))
+    if not state.backups:
+        before = ["No backup of this folder."]
+    else:
+        before = [{"look": "Newest first.", "restore": "Choose the backup to put back.",
+                   "delete_backup": "Choose the backup to delete."}[state.backups_for]]
+    return ("Backups", _compose(state, width, height, before, tui_rows(state)),
+            ("A/Enter Choose", "B/Esc Back", "? Help"))
+
+
+def _view_backup(state: TuiState, width: int, height: int) -> tuple:
+    item = state.backup_chosen or {}
+    lines = [f"{backup_words(str(item.get('date', '')))}: "
+             f"{_plural(int(item.get('files', 0)), 'file')}, "
+             f"{format_size(int(item.get('bytes', 0)))}."]
+    return ("Backup", _compose(state, width, height, lines, tui_rows(state)),
+            ("A/Enter Choose", "B/Esc Back", "? Help"))
+
+
+def _confirm_action_text(state: TuiState) -> list[str]:
+    if state.action == "remove":
+        plan = state.removal or {}
+        if state.removal_backup:
+            return [f"Move {_plural(plan.get('files', 0), 'file')} to a backup? The space "
+                    "is freed once the backup is deleted."]
+        return [f"Remove {_plural(plan.get('files', 0), 'file')} for good? "
+                f"{format_size(plan.get('bytes', 0))} is freed."]
+    item = state.backup_chosen or {}
+    when = backup_words(str(item.get("date", "")))
+    if state.action == "restore":
+        return [f"Put back the {_plural(int(item.get('files', 0)), 'file')} of {when}? "
+                "Each one replaces the file at its place."]
+    return [f"Delete the backup of {when} for good? "
+            f"{format_size(int(item.get('bytes', 0)))} is freed."]
+
+
+def _view_actconfirm(state: TuiState, width: int, height: int) -> tuple:
+    return ("Confirm", _compose(state, width, height, _confirm_action_text(state),
+                                tui_rows(state)),
+            ("A/Enter Choose", "B/Esc Back", "? Help"))
+
+
+def tui_action_outcome(state: TuiState) -> list:
+    """What a More action did, in one line, then where."""
+    events = state.action_events
+    done = [event for event in events if event.get("ok", True)]
+    failed = [event for event in events if not event.get("ok", True)]
+    size = format_size(sum(int(event.get("size") or 0) for event in done))
+    if state.action == "remove" and state.removal_backup:
+        lines: list = [f"Moved {_plural(len(done), 'file')} to a backup, {size}."]
+    elif state.action == "remove":
+        lines = [f"Removed {_plural(len(done), 'file')}, {size} freed."]
+    elif state.action == "restore":
+        lines = [f"Put back {_plural(len(done), 'file')}, {size}."]
+    else:
+        gone = next((event for event in events if event.get("status") == "deleted"), None)
+        lines = ([f"Deleted the backup, {format_size(int(gone['bytes']))} freed."]
+                 if gone is not None else ["The backup was not deleted."])
+    if failed:
+        lines.append(_styled(f"{_plural(len(failed), 'file')} failed.", "failure"))
+        lines += _details([f"  {event.get('dest') or event.get('path')}: {event['reason']}"
+                           for event in failed])
+    lines.append(_styled(f"{_FOLDER_LABEL}{_short_path(state.dest, state.home)}", "path"))
+    return lines
+
+
+def _view_actdone(state: TuiState, width: int, height: int) -> tuple:
+    if state.running:
+        words = {"remove": "Removing the files...", "restore": "Putting the files back...",
+                 "delete_backup": "Deleting the backup..."}[state.action]
+        return ("Working", _compose(state, width, height, [words], []), ("B/Esc Stop",))
+    lines = _shown(state, tui_action_outcome(state))
+    lines[0] = _styled(str(lines[0]), "title")
+    return ("Done" if state.action_code == 0 else "Not done",
+            _compose(state, width, height, lines, tui_rows(state)),
+            ("A/Enter Choose", "B/Esc Back", "? Help"))
+
+
 _TUI_VIEWS: dict[str, Callable[[TuiState, int, int], tuple]] = {
     "setup": _view_setup, "platforms": _view_platforms, "folder": _view_folder,
     "browse": _view_browse, "path": _view_path, "create": _view_create,
@@ -24776,7 +26064,9 @@ _TUI_VIEWS: dict[str, Callable[[TuiState, int, int], tuple]] = {
     "installing": _view_installing, "result": _view_result, "error": _view_error,
     "quit": _view_quit, "cardroot": _view_cardroot, "misplaced": _view_misplaced,
     "unreadable": _view_unreadable, "games": _view_games, "details": _view_details,
-    "device": _view_device, "emulators": _view_emulators,
+    "device": _view_device, "emulators": _view_emulators, "more": _view_more,
+    "remove": _view_remove, "removal": _view_removal, "backups": _view_backups,
+    "backup": _view_backup, "actconfirm": _view_actconfirm, "actdone": _view_actdone,
 }
 
 
