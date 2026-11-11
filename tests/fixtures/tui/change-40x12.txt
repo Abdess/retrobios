@@ -1,0 +1,12 @@
+ RetroBIOS: Change
+
+ What to install
+ > Preferred regions: North America, Ja
+   Cores: all
+   Emulators: all
+   Game data: kept
+ Where
+   BIOS folder: ~/.config...ch/system
+   Copy from: none
+ 1-8 of 18
+ A Open  B Back  <> Set  ? Help

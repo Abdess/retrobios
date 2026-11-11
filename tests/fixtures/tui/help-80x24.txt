@@ -2,7 +2,7 @@
 
  Up/Down, k/j      Move
  A/Enter, Start    Install
- Y, o, Tab         Options
+ Y, o, Tab         Change
  d                 Details
  B/Esc, Backspace  Back
  q, Ctrl-C         Quit

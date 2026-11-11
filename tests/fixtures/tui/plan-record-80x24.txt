@@ -10,7 +10,7 @@
    Copy the BIOS files from an old card or a folder
    Change where
    Details
-   Options
+   Change
    Quit
 
 
@@ -21,4 +21,4 @@
 
 
 
- A/Enter Install  B/Esc Back  Y/o Options  ? Help
+ A/Enter Install  B/Esc Back  Y/o Change  ? Help

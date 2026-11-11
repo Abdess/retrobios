@@ -208,7 +208,7 @@
    Choose systems
    Copy the BIOS files from an old card or a folder
    Details
-   Options
+   Change
    Quit
  
  
@@ -222,7 +222,7 @@
  
  
  
- ^[[0;1;35mA/Enter^[[0m Install  ^[[0;2mB/Esc^[[0m Back  ^[[0;2mY/o^[[0m Options  ^[[0;2m?^[[0m Help
+ ^[[0;1;35mA/Enter^[[0m Install  ^[[0;2mB/Esc^[[0m Back  ^[[0;2mY/o^[[0m Change  ^[[0;2m?^[[0m Help
 === plan-in-place
 ^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: RetroArch^[[0m
 
@@ -231,7 +231,7 @@
  
 ^[[0;7;35m > Close^[[0m
    Details
-   Options
+   Change
  
  
  
@@ -247,7 +247,7 @@
  
  
  
- ^[[0;1;35mA/Enter^[[0m Close  ^[[0;2mB/Esc^[[0m Back  ^[[0;2mY/o^[[0m Options  ^[[0;2m?^[[0m Help
+ ^[[0;1;35mA/Enter^[[0m Close  ^[[0;2mB/Esc^[[0m Back  ^[[0;2mY/o^[[0m Change  ^[[0;2m?^[[0m Help
 === systems
 ^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Choose systems^[[0m
 
@@ -273,31 +273,81 @@
  
 ^[[0;1m ^[[0;1;35m2^[[0;1m of ^[[0;1;35m3^[[0;1m systems: ^[[0;1;35m4^[[0;1m files, ^[[0;1;35m1.0 MB^[[0m
  ^[[0;1;35mA/Enter^[[0m Tick  ^[[0;2mB/Esc^[[0m Done  ^[[0;2m?^[[0m Help
-=== options
-^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Options^[[0m
+=== change
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Change^[[0m
 
- Each row is an option of the command line, named on the right.
- 
+^[[0;1m What to install^[[0m
 ^[[0;7;35m > Preferred regions: North America, Japan                             --region^[[0m
-   Game data: kept                                               --no-game-data
-   Installed cores only: no (1 found)                         --installed-cores
    Cores: all                                                            --core
-   Parallel downloads: 8                                                 --jobs
+   Emulators: all                                                    --emulator
+   Game data: kept                                               --no-game-data
+^[[0;1m Where^[[0m
    BIOS folder: ^[[0;1m~/.config/retroarch/system^[[0m                               --dest
    Copy from: none                                                       --from
+   From a pack: none                                                --from-pack
+^[[0;1m For which device^[[0m
+   Device: every board                                                 --target
+   Installed cores only: no (1 found)                         --installed-cores
+^[[0;1m How^[[0m
+   Without the internet: no                                           --offline
+   Parallel downloads: 8                                                 --jobs
+^[[0;1m See^[[0m
    Preview the file list                                              --dry-run
    Show the command line
  
  
  
- 
- 
- 
- 
- 
- 
- 
  ^[[0;1;35mA/Enter^[[0m Open  ^[[0;2mB/Esc^[[0m Back  ^[[0;2mLeft/Right^[[0m Set  ^[[0;2m?^[[0m Help
+=== device
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Device^[[0m
+
+ Choose the board, the chip of the device the games run on. Every board fits
+   any device.
+ 
+^[[0;7;35m > (x) h700                                                   named by the card^[[0m
+   ( ) bcm2711                                                             rpi4
+   ( ) x86_64
+   ( ) Every board
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ ^[[0;1;35mA/Enter^[[0m Choose  ^[[0;2mB/Esc^[[0m Back  ^[[0;2m?^[[0m Help
+=== emulators
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Emulators^[[0m
+
+ Tick the emulators to install for. With none ticked, every emulator's files
+   are installed.
+ 
+   Filter (/ to type)
+   [ ] mesen
+^[[0;7;35m > [x] pcsx_rearmed^[[0m
+   None
+   ^[[0;32mDone^[[0m
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ ^[[0;1;35mA/Enter^[[0m Tick  ^[[0;2mB/Esc^[[0m Done  ^[[0;2m?^[[0m Help
 === regions
 ^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Preferred regions^[[0m
 
@@ -528,7 +578,7 @@
 
  Up/Down, k/j      Move
  A/Enter, Start    Install
- Y, o, Tab         Options
+ Y, o, Tab         Change
  d                 Details
  B/Esc, Backspace  Back
  q, Ctrl-C         Quit
@@ -562,7 +612,7 @@
    Choose systems
    Copy the BIOS files from an old card or a folder
    Details
-   Options
+   Change
    Quit
  
  
@@ -572,7 +622,7 @@
  
  
  
- ^[[0;1;35mA/Enter^[[0m Install  ^[[0;2mB/Esc^[[0m Back  ^[[0;2mY/o^[[0m Options  ^[[0;2m?^[[0m Help
+ ^[[0;1;35mA/Enter^[[0m Install  ^[[0;2mB/Esc^[[0m Back  ^[[0;2mY/o^[[0m Change  ^[[0;2m?^[[0m Help
 === games
 ^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Games on this card^[[0m
 
@@ -661,7 +711,7 @@
    Copy the BIOS files from an old card or a folder
    Change where
    Details
-   Options
+   Change
    Quit
  
  
@@ -672,4 +722,4 @@
  
  
  
- ^[[0;1;35mA/Enter^[[0m Install  ^[[0;2mB/Esc^[[0m Back  ^[[0;2mY/o^[[0m Options  ^[[0;2m?^[[0m Help
+ ^[[0;1;35mA/Enter^[[0m Install  ^[[0;2mB/Esc^[[0m Back  ^[[0;2mY/o^[[0m Change  ^[[0;2m?^[[0m Help

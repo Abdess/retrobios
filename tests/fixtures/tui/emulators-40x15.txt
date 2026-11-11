@@ -1,0 +1,15 @@
+ RetroBIOS: Emulators
+
+ Tick the emulators to install for.
+   With none ticked, every emulator's
+   files are installed.
+
+   Filter (/ to type)
+   [ ] mesen
+ > [x] pcsx_rearmed
+   None
+   Done
+
+
+
+ A Tick  B Done  ? Help

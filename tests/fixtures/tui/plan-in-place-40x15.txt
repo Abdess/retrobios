@@ -6,10 +6,10 @@
 
  > Close
    Details
-   Options
+   Change
 
 
 
 
 
- A Close  B Back  Y Options  ? Help
+ A Close  B Back  Y Change  ? Help
