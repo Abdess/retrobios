@@ -34,8 +34,8 @@ config_reads:
     source_ref: "retroarch.c:6968-6969, 7148-7155, 7244, configuration.c:3469, 3779, 3824, 3863-3884, 5014-5018, libretro-common/file/config_file.c:840"
     keys:
       - key: "system_directory"
-        source_ref: "configuration.c:1645, 4063-4069, 4110-4115, 4346-4347, libretro-common/file/config_file.c:1180-1189, libretro-common/file/file_path.c:1060-1098, runloop.c:1935-1976"
-        condition: "systemfiles_in_content_dir false (its default, config.def.h:925); LIBRETRO_SYSTEM_DIRECTORY in the environment replaces the value, an empty value hands the content's folder"
+        source_ref: "configuration.c:1645, 4063-4069, 4110-4115, 4346-4347, libretro-common/file/config_file.c:1180-1189, libretro-common/file/file_path.c:1060-1098, runloop.c:1935-1976, config.def.h:925"
+        condition: "systemfiles_in_content_dir false, its default; LIBRETRO_SYSTEM_DIRECTORY in the environment replaces the value, an empty value hands the content's folder"
   - file: "retroarch.cfg"
     platforms: [rocknix]
     source_ref: "retroarch.c:7272-7273, 7452-7459, 7548, configuration.c:3565, 3886, 3931, 3970-4010, 5174-5176, libretro-common/file/config_file.c:817"

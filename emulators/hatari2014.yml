@@ -30,8 +30,8 @@ config_reads:
     source_ref: "source libretro/libretro.c:264-300, 372, 393-413, 437-440, 984-1001, 1418, source libretro/libretro_core_options.h:129-145"
     keys:
       - key: "hatari_tosimage"
-        source_ref: "source libretro/libretro.c:617, 639-649, 1612-1617, source src/main.c:913-917, source src/tos.c:575-590"
-        condition: "a value other than default is a file of system/hatari/tos ending in img (libretro/libretro.c:288-299)"
+        source_ref: "source libretro/libretro.c:288-299, 617, 639-649, 1612-1617, source src/main.c:913-917, source src/tos.c:575-590"
+        condition: "a value other than default is a file of system/hatari/tos ending in img"
 
 notes: |
   Hatari 2014 is the libretro port of Hatari 1.8.0 (src/includes/version.h:16),

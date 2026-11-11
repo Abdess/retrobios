@@ -28,8 +28,8 @@ config_reads:
     source_ref: "core/core.c:963-976, core/core_config.c:961-969, 985, 1286-1318, 1408-1413, hatari/src/main.c:898, 921-925, 1019"
     keys:
       - key: "hatarib_tos"
-        source_ref: "core/core_config.c:1082-1104, core/core_file.c:256-259, 763-769, hatari/src/tos.c:996-1056"
-        condition: "<tos.img> is offered only when system/tos.img exists, a hatarib/ value only for a file with an img, rom, bin or tos extension (core/core_config.c:1293-1318, core/core_file.c:707-716)"
+        source_ref: "core/core_config.c:1082-1104, 1293-1318, core/core_file.c:256-259, 707-716, 763-769, hatari/src/tos.c:996-1056"
+        condition: "<tos.img> is offered only when system/tos.img exists, a hatarib/ value only for a file with an img, rom, bin or tos extension"
 
 notes: |
   hatariB carries Hatari 2.6.1 in its hatari/ directory, every change

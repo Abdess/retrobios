@@ -49,8 +49,8 @@ config_reads:
       - key: "[0.9.11] General\\EnableEmulatedBios"
         source_ref: "yabasanshiro.exe 0x1400d248f-0x1400d2512"
       - key: "[0.9.11] General\\Bios"
-        source_ref: "yabasanshiro.exe 0x1400d251b-0x1400d258c, yabasanshiro.exe 0x1400cf162-0x1400cf166, yabasanshiro.exe 0x14016d957-0x14016d98f, yabasanshiro.exe 0x14016f3ad-0x14016f4b4"
-        condition: "General\\EnableEmulatedBios false; an empty value runs the HLE BIOS (0x14016d997-0x14016d9f7), a file that does not open stops init"
+        source_ref: "yabasanshiro.exe 0x1400d251b-0x1400d258c, yabasanshiro.exe 0x1400cf162-0x1400cf166, yabasanshiro.exe 0x14016d957-0x14016d98f, yabasanshiro.exe 0x14016f3ad-0x14016f4b4, yabasanshiro.exe 0x14016d997-0x14016d9f7"
+        condition: "General\\EnableEmulatedBios false; an empty value runs the HLE BIOS, a file that does not open stops init"
 
 notes: |
   YabaSanshiro is a Sega Saturn emulator by devmiyax, forked from Yabause.
