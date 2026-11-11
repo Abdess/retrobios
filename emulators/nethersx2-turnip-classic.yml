@@ -162,6 +162,7 @@ notes: |
   the shader sources differ from the ones the 4248 line carries: the OpenGL
   preamble, its format conversion and texture function fragment shaders, and the
   Vulkan texture function and format conversion shaders.
+  Java line numbers in the file refs are jadx 1.5.1 output of classes.dex.
   ref: nethersx2-turnip-classic v0.7 libemucore.so 0x828110,
        xyz/aethersx2/android/NativeLibrary readPackageFile,
        xyz/aethersx2/android/NativeLibrary playSoundAsync
@@ -778,7 +779,7 @@ files:
     note: >-
       Loaded as icons/flags/<region>.png with the region string of the entry.
       Thirty are carried, seven NTSC and twenty-two PAL plus Other.
-    source_ref: "classes.dex nethersx2-turnip-classic v0.7 xyz.aethersx2.android.e.h(e.b, int) formats icons/flags/%s.png (jadx 1.5.1 e.java line 71), classes.dex NativeLibrary.loadDrawableFromPackage(Context, String) AssetManager.open (jadx 1.5.1 NativeLibrary.java lines 559-567)"
+    source_ref: "classes.dex nethersx2-turnip-classic v0.7 xyz.aethersx2.android.e.h(e.b, int) formats icons/flags/%s.png (jadx e.java:71), classes.dex NativeLibrary.loadDrawableFromPackage(Context, String) AssetManager.open (jadx NativeLibrary.java:559-567)"
 
   - name: "star-<rating>.png"
     path: assets/icons/star-0.png
@@ -786,7 +787,7 @@ files:
     bundled: true
     description: "Game list compatibility rating icon"
     note: "Loaded as icons/star-<rating>.png for ratings 0 to 5."
-    source_ref: "classes.dex nethersx2-turnip-classic v0.7 xyz.aethersx2.android.e.h(e.b, int) formats icons/star-%d.png (jadx 1.5.1 e.java line 73), classes.dex NativeLibrary.loadDrawableFromPackage(Context, String) AssetManager.open (jadx 1.5.1 NativeLibrary.java lines 559-567)"
+    source_ref: "classes.dex nethersx2-turnip-classic v0.7 xyz.aethersx2.android.e.h(e.b, int) formats icons/star-%d.png (jadx e.java:73), classes.dex NativeLibrary.loadDrawableFromPackage(Context, String) AssetManager.open (jadx NativeLibrary.java:559-567)"
 
   - name: faq.html
     path: assets/faq.html
@@ -797,7 +798,7 @@ files:
     sha1: 9163d4a3d19b87483f843e4bf3afe236a50a72d2
     description: "Help page"
     note: "Opened under the android_asset scheme by the setup wizard's browser view."
-    source_ref: "classes.dex nethersx2-turnip-classic v0.7 xyz.aethersx2.android.SetupWizardActivity.a.onCreateView(LayoutInflater, ViewGroup, Bundle) WebView.loadUrl (jadx 1.5.1 SetupWizardActivity.java line 44)"
+    source_ref: "classes.dex nethersx2-turnip-classic v0.7 xyz.aethersx2.android.SetupWizardActivity.a.onCreateView(LayoutInflater, ViewGroup, Bundle) WebView.loadUrl (jadx SetupWizardActivity.java:44)"
 
   - name: 3rdparty.html
     path: assets/3rdparty.html
@@ -808,7 +809,7 @@ files:
     sha1: 7743bf1d7e6e09a02f1b2972aa63bd8a9f26050d
     description: "Third party notices page"
     note: "Opened under the android_asset scheme in the built-in browser view."
-    source_ref: "classes.dex nethersx2-turnip-classic v0.7 xyz.aethersx2.android.MainActivity.A(MainActivity, MenuItem) action_third_party_notices then WebView.loadUrl (jadx 1.5.1 MainActivity.java lines 164-171), classes.dex NativeLibrary.readPackageFileToString(Context, String) AssetManager.open (jadx 1.5.1 NativeLibrary.java lines 652-654)"
+    source_ref: "classes.dex nethersx2-turnip-classic v0.7 xyz.aethersx2.android.MainActivity.A(MainActivity, MenuItem) action_third_party_notices then WebView.loadUrl (jadx MainActivity.java:164-171), classes.dex NativeLibrary.readPackageFileToString(Context, String) AssetManager.open (jadx NativeLibrary.java:652-654)"
 
 exclusion_note: >
   Left out are the libraries the package carries for the dynamic linker rather
