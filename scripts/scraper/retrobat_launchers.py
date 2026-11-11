@@ -14,6 +14,11 @@ import bisect
 import re
 from collections.abc import Callable, Iterator
 
+try:
+    from .shell_launchers import is_feature_ref, split_ref
+except ImportError:
+    from shell_launchers import is_feature_ref, split_ref  # type: ignore[no-redef]
+
 GENERATORS = "emulatorLauncher/Generators"
 FEATURES = ".emulationstation/es_features.cfg"
 
@@ -1254,6 +1259,11 @@ def xemu(sources: dict[str, Source]) -> list[Record]:
     )
 
     flash = src.find(r'isOptSet\("(xemu_flashrom)"\)', "xemu_flashrom")
+    # The flashrom is written outside a Chihiro launch only.
+    chihiro_set = src.find(r"(_chihiro) = \(([^;]+)\);", "Chihiro test")
+    chihiro_guard = src.find_all(
+        rf"if \(!{chihiro_set.group(1)}\)", "flashrom guard", end=flash.start()
+    )[-1]
     flash_default = src.find(
         r'ini\.WriteValue\("([\w.]+)", "(flashrom_path)", "\'" \+ Path\.Combine\(flashromPath, "([^"]+)"\)',
         "flashrom default",
@@ -1267,7 +1277,10 @@ def xemu(sources: dict[str, Source]) -> list[Record]:
             "core_option",
             _unique([flash_default.group(3), *choices]),
             source_ref(
-                (src.path, [src.lines(flash.start(), flash_default.end())]),
+                (src.path, [
+                    src.lines(chihiro_set.start(), chihiro_set.end()),
+                    src.lines(chihiro_guard.start(), flash_default.end()),
+                ]),
                 (features.path, [choice_lines]),
             ),
             case_insensitive=True,
@@ -1277,7 +1290,7 @@ def xemu(sources: dict[str, Source]) -> list[Record]:
                 f" default {flash_default.group(3)}"
             ),
             fails_when_missing="path written without an existence check",
-            depends_on_option=flash.group(1),
+            depends_on_option=f"{flash.group(1)}, not ({chihiro_set.group(2)})",
         )
     )
 
@@ -3890,4 +3903,23 @@ def extract_launchers(texts: dict[str, str]) -> list[Record]:
     if missing:
         raise LauncherPatternMissing(missing[0], "source file")
     sources = {path: Source(path, text) for path, text in texts.items()}
-    return [record for extractor in EXTRACTORS for record in extractor(sources)]
+    return [
+        _choices_apart(record) for extractor in EXTRACTORS for record in extractor(sources)
+    ]
+
+
+def _choices_apart(record: Record) -> Record:
+    """The es_features.cfg part of a record's source_ref, moved to choices_from.
+
+    The feature file lists the values a menu option offers. The generator
+    writing the choice is the record's evidence, never the list.
+    """
+    parts = split_ref(str(record["source_ref"]))
+    listed = [p for p in parts if is_feature_ref(p)]
+    if not listed:
+        return record
+    code = [p for p in parts if not is_feature_ref(p)]
+    if not code:
+        raise LauncherPatternMissing(listed[0], "generator code beside the option list")
+    moved = {k: v for k, v in record.items() if k != "source_ref"}
+    return {**moved, "choices_from": ", ".join(listed), "source_ref": ", ".join(code)}
