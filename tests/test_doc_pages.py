@@ -137,7 +137,7 @@ class InstallerOutputExample(unittest.TestCase):
         manifest = json.loads((ROOT / "install" / "retroarch.json").read_text(encoding="utf-8"))
         # The line as the installer writes it (not_installable_words), or
         # its earlier "(1 required, not found: 37)" form.
-        omitted = re.search(r"Not installable: \d+ files? (?:\(\d+ required, (.*)\)\.|(?:is|are) "
+        omitted = re.search(r"Not installable: \d+ files?(?: \(\d+ required, (.*)\)\.| (?:is|are) "
                             r"not in the collection|.*Why: (.*)\.)", run)
         self.assertEqual(omitted is not None, bool(manifest.get("omitted_files")))
         if omitted and (omitted.group(1) or omitted.group(2)):
