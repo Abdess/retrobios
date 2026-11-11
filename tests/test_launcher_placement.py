@@ -1148,6 +1148,20 @@ class MameOnRetroDeckRomPaths(unittest.TestCase):
         self.assertEqual(places["stvbios.zip"] - {"arcade", "mame", "consolearcade"}, {"stv"})
 
 
+class MacBootDisksOnKnulli(unittest.TestCase):
+    def test_the_hard_records_bind(self) -> None:
+        # mameGenerator.py and libretroMAMEConfig.py pass the boot disk as
+        # -hard, the brief name of the LC III's one hard disk image
+        # (harddriv.h:43, diimage.cpp:1131-1165, maclc3.cpp:266).
+        from launchers import bound_launchers
+
+        config = load_platform_config("knulli", str(REPO_ROOT / "platforms"))
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        bound = [r for r in bound_launchers(config, profiles)
+                 if r.get("emulator") == "mame" and "-hard" in str(r.get("passes_to"))]
+        self.assertEqual(sorted(r["build"] for r in bound), ["libretro", "standalone"])
+
+
 class ArcadeParentSources(unittest.TestCase):
     def test_the_index_names_each_driver_source(self) -> None:
         import json

@@ -13,6 +13,26 @@ version_basis:
   path: "makefile"
   pattern: '#define BARE_BUILD_VERSION "([^"]+)"'
 display_name: "Arcade (MAME)"
+pin_build:
+  - platform: knulli
+    repo: "https://github.com/knulli-cfw/knulli-linux"
+    revision: "20260511"
+    path: "batocera/package/batocera/emulators/retroarch/libretro/libretro-mame/libretro-mame.mk"
+    variable: LIBRETRO_MAME_VERSION
+    value: "lrmame0278"
+  - platform: knulli
+    repo: "https://github.com/knulli-cfw/knulli-linux"
+    revision: "20260511"
+    path: "batocera/package/batocera/emulators/mame/mame.mk"
+    variable: MAME_VERSION
+    value: "gm0277sr221e"
+config_reads:
+  - file: "command line"
+    platforms: [knulli]
+    source_ref: "src/emu/emuopts.cpp:680-694"
+    keys:
+      - key: "-hard"
+        source_ref: "src/devices/imagedev/harddriv.h:43, src/emu/diimage.cpp:1131-1165, src/emu/emuopts.cpp:389-404, src/mame/apple/maclc3.cpp:266"
 
 cores:
   - mame
@@ -181,6 +201,13 @@ notes: |
   330-392). rompath defaults to roms, samplepath to samples, hashpath to
   hash and pluginspath to plugins (src/emu/emuopts.cpp:44-46, 53), and the
   sets are read at the top of a rompath directory.
+
+  KNULLI ships libretro/mame lrmame0278 and GroovyMAME gm0277sr221e. In both
+  a machine with one hard disk image (the LC III's scsi:0 harddisk) names its
+  option -hard, the brief type name of the image (harddriv.h:43, diimage.cpp
+  update_names, emuopts.cpp get_full_option_names). GroovyMAME's diimage.cpp,
+  harddriv.h and maclc3.cpp equal mamedev mame0277, its emuopts.cpp carries
+  the same code at 396-411 and 695.
 
   BIOS root set names follow current MAME conventions. ZN-based boards
   renamed from legacy names (cpzn1 to coh1000c, atpsx to coh1000a, etc.).
