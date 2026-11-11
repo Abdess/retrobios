@@ -335,6 +335,13 @@ that text belongs in a guide field.
       pack_folder: userdata-saves    # the pack's folder for them, where the BIOS tree
                                      # already has one named like folder (Batocera)
                                      # null when saves sit beside each game
+    home_directory: /storage         # the home directory launcher scripts get, spelled out:
+                                     # a path below it reads as ~ (EmuELEC links
+                                     # /storage/.local/share/flycast, Flycast's
+                                     # ~/.local/share/flycast)
+    rescrape_args: ["--revision", "master"]  # what a rescrape passes so a scraper
+                                     # that rereads its pinned revision reads the
+                                     # upstream head (RetroBat)
     zip_digest: composite            # the frontend hashes a .zip by its members only
     firmware_folder_flat: true       # the frontend lists each system folder without
                                      # descending into it
