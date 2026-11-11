@@ -12,8 +12,8 @@
    Copy the BIOS files from an old card or a folder
    Details
    Change
+   More
    Quit
-
 
 
 

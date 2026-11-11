@@ -685,8 +685,8 @@ class Progress:
 # exactly these keys besides "event", in this order, and nothing else.
 EVENT_SCHEMA = 1
 EVENT_KEYS: dict[str, tuple[str, ...]] = {
-    # mode: install, check, dry-run, list, remove (--remove, --delete-backup) or
-    # restore.
+    # mode: install, check, dry-run, list, remove (--remove, --delete-backup),
+    # restore or pack (--pack, with --dry-run too).
     "start": ("schema", "installer", "mode"),
     # A folder detection could not look in, once each, before detect: the
     # probes under it counted as absent and the others went on. reason is
@@ -842,6 +842,10 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # when it was made (local time), source remove for a removal's, install
     # for the files an install replaced.
     "backup": ("folder", "date", "files", "bytes", "source", "status", "message"),
+    # --pack: planned (--dry-run), written or failed. files and bytes are
+    # the pack's members, each stored once, size what it takes on disk,
+    # parts each file written (the pack alone when it is one ZIP).
+    "pack": ("platform", "path", "files", "bytes", "size", "parts", "status", "message"),
     "end": ("code",),
 }
 # Seconds between two progress events while bytes arrive.
@@ -888,6 +892,8 @@ def _event_mode(args: argparse.Namespace) -> str:
         return "restore"
     if getattr(args, "backups", False):
         return "list"
+    if getattr(args, "pack", None) is not None:
+        return "pack"
     if args.check:
         return "check"
     if args.dry_run:
@@ -13508,9 +13514,12 @@ class PackSource:
 
     def platforms(self) -> list[str]:
         """The platforms the pack's name spells, several for a grouped pack."""
-        stem = "_" + self.name[: -len("_BIOS_Pack.zip")] + "_"
-        return [plat for plat in AVAILABLE_PLATFORMS
-                if f"_{PLATFORM_NAMES[plat].replace(' ', '_')}_" in stem]
+        spelled = pack_name_platforms(self.name)
+        if spelled:
+            return spelled
+        # A pack made by --pack under a name of the user's says it inside.
+        named = (self.install_list or {}).get("platform")
+        return [named] if named in AVAILABLE_PLATFORMS else []
 
     def manifest(self, plat: str) -> dict:
         """A file list for plat: the install list the pack carries, else one
@@ -13638,6 +13647,636 @@ def pack_lacks_words(count: int, total: int) -> str:
                 "installed from it.")
     return (f"{count} of these {total} files {'is' if count == 1 else 'are'} not in "
             f"{name}: {'it' if count == 1 else 'they'} cannot be installed from it.")
+
+
+# --pack writes the narrowed choice as a pack --from-pack reads: each file
+# once by its SHA-1, at its destination (a file of another root under that
+# root's name), each data tree at its place, and manifest.json carrying the
+# list narrowed to the choice. The bytes depend on the inputs alone: members
+# in a fixed order, a fixed date and mode, one compression level, as
+# generate_pack.py writes its packs.
+PACK_NAME_END = "_BIOS_Pack.zip"
+PACK_MEMBER_DATE = (1980, 1, 1, 0, 0, 0)
+PACK_COMPRESSLEVEL = 9
+# FAT32 holds no file of 4 GiB or more (its size field is 32 bits). A pack
+# that would pass that on such a drive is written in parts of at most this
+# many bytes, the margin keeping each well under.
+FAT_FILE_LIMIT = 4 * 1024 ** 3 - 1
+FAT_PART_BYTES = 4 * 1024 ** 3 - 64 * 1024 ** 2
+MIN_PART_BYTES = 64 * 1024
+# The marker each part carries at its root, as scripts/split_pack.py writes
+# it: the sizes at a fixed width, so its length does not depend on them.
+PART_SIZE_WIDTH = 13
+# A member may grow under deflate (zlib's deflateBound is under one byte in
+# a thousand, plus a few), and its headers carry a ZIP64 field past 2 GiB.
+# A part is planned on these bounds, never on the compressed size, which is
+# known only once written.
+_ZIP_LOCAL_BYTES = 30 + 20
+_ZIP_CENTRAL_BYTES = 46 + 28
+_ZIP_END_BYTES = 22 + 56 + 20
+
+
+class PackError(Exception):
+    """A pack that cannot be made as asked: nothing is written."""
+
+
+class PackMember(NamedTuple):
+    """One member of a pack being made: its name, the bytes it must hold
+    and the file they are read from."""
+
+    name: str
+    sha1: str
+    size: int
+    source: Path
+
+
+def parse_part_size(text: str) -> int:
+    """--split SIZE: bytes, or a number with K, M or G (powers of 1024)."""
+    match = re.fullmatch(r"\s*(\d+)\s*([KMG]?)(?:I?B)?\s*", text, re.IGNORECASE)
+    if match is None:
+        raise argparse.ArgumentTypeError(
+            f"{text!r} is not a size: give bytes, or a number with K, M or G (1900M)")
+    size = int(match[1]) * 1024 ** " KMG".index((match[2] or " ").upper())
+    if size < MIN_PART_BYTES:
+        raise argparse.ArgumentTypeError(
+            f"a part of {format_size(size)} is too small: give {format_size(MIN_PART_BYTES)} "
+            "or more")
+    return size
+
+
+def pack_default_name(plat: str, narrowed: bool) -> str:
+    """<Platform>_BIOS_Pack.zip, with _Custom when the choice narrows the
+    list, as generate_pack.py names a narrowed pack."""
+    stem = PLATFORM_NAMES.get(plat, plat).replace(" ", "_")
+    return f"{stem}{'_Custom' if narrowed else ''}{PACK_NAME_END}"
+
+
+def pack_path(given: Path, plat: str, narrowed: bool) -> Path:
+    """The pack --pack names: the file given, or the default name inside a
+    folder given."""
+    path = Path(os.path.expanduser(str(given)))
+    if _is_dir(path) or str(given).endswith(("/", os.sep)):
+        path = path / pack_default_name(plat, narrowed)
+    return path.absolute()
+
+
+def pack_name_platforms(name: str) -> list[str]:
+    """The platforms a pack's name spells, as PackSource reads them."""
+    if not name.endswith(PACK_NAME_END):
+        return []
+    stem = "_" + name[: -len(PACK_NAME_END)] + "_"
+    return [plat for plat in AVAILABLE_PLATFORMS
+            if f"_{PLATFORM_NAMES[plat].replace(' ', '_')}_" in stem]
+
+
+def mountinfo_types(text: str) -> list[tuple[str, str]]:
+    """(mount point, file system type) of each line of /proc/self/mountinfo:
+    the point is field 5, its space, tab and backslash written as octal
+    escapes, the type the first field after the " - " separator (proc(5))."""
+    mounts = []
+    for line in text.splitlines():
+        head, _sep, tail = line.partition(" - ")
+        fields = head.split(" ")
+        if len(fields) > 4 and tail:
+            point = re.sub(r"\\([0-7]{3})", lambda m: chr(int(m.group(1), 8)), fields[4])
+            mounts.append((point, tail.split(" ")[0]))
+    return mounts
+
+
+def mount_list_types(text: str) -> list[tuple[str, str]]:
+    """(mount point, file system type) of each line macOS's mount prints:
+    "/dev/disk4s1 on /Volumes/CARD (msdos, local, nodev)"."""
+    return [(found[1], found[2]) for found in
+            (re.match(r".+? on (.+) \(([^,)]+)", line) for line in text.splitlines())
+            if found]
+
+
+def fat_mounted(target: Path, mounts: list[tuple[str, str]]) -> bool:
+    """Whether the deepest mount holding target is FAT (vfat on Linux,
+    msdos on macOS)."""
+    best = ""
+    kind = ""
+    for point, fstype in mounts:
+        mount = Path(point)
+        if (target == mount or mount in target.parents) and len(point) >= len(best):
+            best, kind = point, fstype
+    return kind.lower() in ("vfat", "msdos", "fat")
+
+
+def fat32_drive(folder: Path) -> bool:
+    """Whether folder is on a FAT32 (or FAT16) drive, which holds no file of
+    4 GiB: the mount table's type on Linux, the volume's file system on
+    Windows, the mount list on macOS. False where the system does not say."""
+    probe = folder
+    while not _is_dir(probe) and probe != probe.parent:
+        probe = probe.parent
+    if os.name == "nt":
+        try:
+            import ctypes  # noqa: PLC0415
+            root = ctypes.create_unicode_buffer(261)
+            kind = ctypes.create_unicode_buffer(261)
+            kernel = ctypes.windll.kernel32  # type: ignore[attr-defined]
+            if not kernel.GetVolumePathNameW(str(probe), root, 261):
+                return False
+            if not kernel.GetVolumeInformationW(root, None, 0, None, None, None, kind, 261):
+                return False
+        except (AttributeError, OSError):
+            return False
+        return kind.value.upper() in ("FAT32", "FAT")
+    try:
+        target = probe.resolve()
+        if sys.platform == "darwin":
+            listing = subprocess.run(["/sbin/mount"], capture_output=True, text=True,
+                                     timeout=5, check=False).stdout
+            return fat_mounted(target, mount_list_types(listing))
+        text = Path("/proc/self/mountinfo").read_text(encoding="utf-8", errors="replace")
+    except (OSError, subprocess.SubprocessError):
+        return False
+    return fat_mounted(target, mountinfo_types(text))
+
+
+def pack_layout(files: list[dict], data_dirs: list[dict]) -> tuple[
+        dict[str, tuple[str, int]], list[dict], dict[str, dict]]:
+    """Where each file of the choice goes in the pack: the members, by name,
+    with their SHA-1 and size, the list manifest.json carries (path, sha1,
+    size, systems) of the BIOS files, and the entry each member that no
+    data tree holds is fetched as.
+
+    A data tree's files take the path the reader looks under. A BIOS file
+    is stored once by its SHA-1: at its dest, a file of another root (the
+    save directory, an emulator's folder) under the root's name, and below
+    by-sha1/ when another file already holds that name. A BIOS file whose
+    bytes a tree holds is read from the tree's member."""
+    members: dict[str, tuple[str, int]] = {}
+    for entry in data_dirs:
+        lead = f"{str(entry.get('dest') or '').rstrip('/')}/" if entry.get("dest") else ""
+        for rel, meta in sorted((entry.get("files") or {}).items()):
+            members.setdefault(f"{lead}{rel}", (str(meta["sha1"]), int(meta["size"])))
+    by_sha1: dict[str, str] = {}
+    for name, (sha1, _size) in sorted(members.items()):
+        by_sha1.setdefault(sha1, name)
+    systems: dict[str, set[str]] = {}
+    listed: set[str] = set()
+    sources: dict[str, dict] = {}
+    for entry in sorted(files, key=lambda f: (str(f.get("root") or ""), str(f["dest"]))):
+        sha1 = str(entry["sha1"]).lower()
+        systems.setdefault(sha1, set()).update(entry.get("systems") or [])
+        if sha1 not in by_sha1:
+            root = str(entry.get("root") or "")
+            name = f"{root}/{entry['dest']}" if root else str(entry["dest"])
+            if name in members:
+                name = f"by-sha1/{sha1}/{PurePosixPath(str(entry['dest'])).name}"
+            members[name] = (sha1, int(entry["size"]))
+            by_sha1[sha1] = name
+            sources[name] = entry
+        listed.add(by_sha1[sha1])
+    rows = []
+    for name in sorted(listed):
+        sha1, size = members[name]
+        row: dict = {"path": name, "sha1": sha1, "size": size}
+        if systems.get(sha1):
+            row["systems"] = sorted(systems[sha1])
+        rows.append(row)
+    return members, rows, sources
+
+
+def pack_install_list(manifest: dict, files: list[dict], omitted: list[dict],
+                      data_dirs: list[dict]) -> dict:
+    """The platform's list narrowed to the choice, which the pack carries:
+    --from-pack with no option installs what the choice kept, the same
+    files at the same places."""
+    narrowed = {key: value for key, value in manifest.items()
+                if key not in ("files", "case_variants", "omitted_files",
+                               "data_directories")}
+    narrowed["files"] = [entry for entry in files if not entry.get("case_variant")]
+    variants = [{key: value for key, value in entry.items() if key != "case_variant"}
+                for entry in files if entry.get("case_variant")]
+    if variants or "case_variants" in manifest:
+        narrowed["case_variants"] = variants
+    narrowed["omitted_files"] = list(omitted)
+    if data_dirs or "data_directories" in manifest:
+        narrowed["data_directories"] = list(data_dirs)
+    return narrowed
+
+
+def pack_manifest(plat: str, install_list: dict, rows: list[dict],
+                  targets: dict | None) -> bytes:
+    """manifest.json of a pack made here, as --from-pack reads it."""
+    entries = [*install_list.get("files", []), *install_list.get("omitted_files", [])]
+    records = {"systems"} if any("systems" in entry for entry in entries) else set()
+    if any(copy.get("cores") for entry in install_list.get("files", [])
+           for copy in [entry, *entry.get("alternatives", []),
+                        *entry.get("slot_choices", [])]):
+        records.add("cores")
+    if records or any("regions" in entry for entry in entries):
+        records.add("regions")
+    data: dict = {"platform": plat, "files": rows}
+    for key in ("system_titles", "system_names"):
+        if install_list.get(key):
+            data[key] = install_list[key]
+    data["list_records"] = sorted(records)
+    if install_list.get("version"):
+        data["list_version"] = install_list["version"]
+    data["install_list"] = install_list
+    if targets is not None:
+        data["targets"] = targets
+    return json.dumps(data, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+
+
+def _member_bound(name: str, size: int) -> int:
+    """The most bytes a member can take in a part: both headers and its
+    data deflated at worst."""
+    encoded = len(name.encode("utf-8"))
+    return _ZIP_LOCAL_BYTES + _ZIP_CENTRAL_BYTES + 2 * encoded + size + size // 1000 + 64
+
+
+def pack_bound(manifest_size: int, members: list[PackMember]) -> int:
+    """The most bytes the pack can take as one ZIP."""
+    return (_ZIP_END_BYTES + _member_bound("manifest.json", manifest_size)
+            + sum(_member_bound(member.name, member.size) for member in members))
+
+
+def part_file_name(name: str, index: int, count: int) -> str:
+    return f"{name[: -len('.zip')]}.part{index}of{count}.zip"
+
+
+def part_marker_name(name: str, index: int, count: int) -> str:
+    return f"{name[: -len('.zip')]}.part{index}of{count}.txt"
+
+
+def part_marker_text(name: str, index: int, sizes: list[int]) -> bytes:
+    """The marker of part index, in the words scripts/split_pack.py writes
+    and read_part_marker reads back."""
+    count = len(sizes)
+    lines = [
+        "RetroBIOS split pack",
+        f"This folder holds part {index} of {count} of {name}.",
+        "Every part is needed: extract them all into this same folder.",
+        "The installer's --check names a part missing from the folder.",
+        "",
+        f"pack: {name}",
+        f"part: {index} of {count}",
+    ]
+    lines += [f"file: {size:>{PART_SIZE_WIDTH}} {part_file_name(name, number, count)}"
+              for number, size in enumerate(sizes, 1)]
+    return ("\n".join(lines) + "\n").encode("utf-8")
+
+
+def _marker_bound(name: str, count: int) -> int:
+    marker = len(part_marker_name(name, count, count).encode("utf-8"))
+    return 30 + 46 + 2 * marker + len(part_marker_text(name, count, [0] * count))
+
+
+def plan_pack_parts(name: str, manifest_size: int, members: list[PackMember],
+                    limit: int | None) -> list[list[PackMember]]:
+    """The members of each part, in pack order, manifest.json in the first.
+    One part without a limit, or when the whole pack stays under it. Each
+    part's bound stays under the limit, room kept for its marker, the plan
+    made again until the count it assumed is the count it gives."""
+    if limit is None or pack_bound(manifest_size, members) < limit:
+        return [list(members)]
+    count = 2
+    while True:
+        floor = _ZIP_END_BYTES + _marker_bound(name, count)
+        parts: list[list[PackMember]] = [[]]
+        size = floor + _member_bound("manifest.json", manifest_size)
+        if size >= limit:
+            raise PackError(f"the list alone needs {format_size(size)}, more than a part "
+                            f"of {format_size(limit)} holds")
+        for member in members:
+            weight = _member_bound(member.name, member.size)
+            if floor + weight >= limit:
+                raise PackError(f"{member.name} ({format_size(member.size)}) does not fit "
+                                f"in a part of {format_size(limit)}")
+            if size + weight >= limit or len(parts[-1]) >= 0xFFFE:
+                parts.append([])
+                size = floor
+            parts[-1].append(member)
+            size += weight
+        if len(parts) > MAX_PARTS:
+            raise PackError(f"the pack would take {len(parts)} parts, more than "
+                            f"{MAX_PARTS}: give a larger size")
+        if len(parts) <= count:
+            return parts
+        count = len(parts)
+
+
+def _pack_info(name: str, compress: int = zipfile.ZIP_DEFLATED) -> zipfile.ZipInfo:
+    """A member header that depends on its name alone."""
+    info = zipfile.ZipInfo(name, date_time=PACK_MEMBER_DATE)
+    info.compress_type = compress
+    info.create_system = 3
+    info.external_attr = 0o100644 << 16
+    return info
+
+
+def _write_member(archive: zipfile.ZipFile, member: PackMember) -> None:
+    """Copy one member into the archive, its SHA-1 and size checked on the
+    bytes written, before the archive is closed."""
+    info = _pack_info(member.name)
+    info.file_size = member.size
+    digest = hashlib.sha1()
+    size = 0
+    with open(member.source, "rb") as src, archive.open(info, "w") as out:
+        while True:
+            chunk = src.read(1024 * 1024)
+            if not chunk:
+                break
+            digest.update(chunk)
+            size += len(chunk)
+            out.write(chunk)
+    if size != member.size or digest.hexdigest() != member.sha1:
+        raise PackError(f"{member.name} does not match the list: {size} bytes of SHA-1 "
+                        f"{digest.hexdigest()}, the list says {member.size} of "
+                        f"{member.sha1}")
+
+
+def _patch_marker(path: Path, marker: str, body: bytes) -> None:
+    """Write the real marker over its placeholder of the same length: the
+    data, and the CRC-32 of the local and the central header."""
+    with zipfile.ZipFile(path) as archive:
+        first = archive.infolist()[0]
+        central = int(archive.start_dir)  # type: ignore[attr-defined]
+    if first.filename != marker or first.file_size != len(body) or first.header_offset:
+        raise PackError(f"{path.name} does not start with its marker")
+    crc = zlib.crc32(body).to_bytes(4, "little")
+    with open(path, "r+b") as handle:
+        local = handle.read(30)
+        if local[:4] != b"PK\x03\x04":
+            raise PackError(f"{path.name} has no local header at its start")
+        data = (30 + int.from_bytes(local[26:28], "little")
+                + int.from_bytes(local[28:30], "little"))
+        handle.seek(14)
+        handle.write(crc)
+        handle.seek(data)
+        handle.write(body)
+        handle.seek(central)
+        if handle.read(4) != b"PK\x01\x02":
+            raise PackError(f"{path.name} has no central directory where it says")
+        handle.seek(central + 16)
+        handle.write(crc)
+
+
+def _part_contents(name: str, index: int, count: int, manifest: bytes,
+                   chosen: list[PackMember]) -> list[tuple[str, int]]:
+    """(name, size) of each member of a part, in the order written."""
+    held = ([(part_marker_name(name, index, count),
+              len(part_marker_text(name, index, [0] * count)))] if count > 1 else [])
+    held += [("manifest.json", len(manifest))] if index == 1 else []
+    return held + [(member.name, member.size) for member in chosen]
+
+
+def write_pack(path: Path, manifest: bytes, members: list[PackMember],
+               limit: int | None) -> list[Path]:
+    """Write the pack at path, or in parts beside it when a limit is given
+    and the pack would pass it. Returns the files written.
+
+    Each file is written beside its final name and renamed only once every
+    member was checked against its SHA-1 and the archives read back: a
+    failure leaves no file behind, and a pack of that name written before
+    stays as it was. An earlier pack of that name in another layout (whole,
+    or in another count of parts) goes once the new one is in place:
+    --from-pack would otherwise find both."""
+    name = path.name
+    plan = plan_pack_parts(name, len(manifest), members, limit)
+    count = len(plan)
+    finals = ([path] if count == 1 else
+              [path.with_name(part_file_name(name, index, count))
+               for index in range(1, count + 1)])
+    scratches: list[Path] = []
+    try:
+        for index, (final, chosen) in enumerate(zip(finals, plan), 1):
+            handle, scratch = tempfile.mkstemp(prefix=f".{final.name}.", suffix=".partial",
+                                               dir=str(path.parent))
+            os.close(handle)
+            scratches.append(Path(scratch))
+            with zipfile.ZipFile(scratch, "w", zipfile.ZIP_DEFLATED,
+                                 compresslevel=PACK_COMPRESSLEVEL) as archive:
+                if count > 1:
+                    archive.writestr(
+                        _pack_info(part_marker_name(name, index, count), zipfile.ZIP_STORED),
+                        part_marker_text(name, index, [0] * count))
+                if index == 1:
+                    archive.writestr(_pack_info("manifest.json"), manifest)
+                for member in chosen:
+                    if _stop.is_set():
+                        raise KeyboardInterrupt
+                    _write_member(archive, member)
+        sizes = [scratch.stat().st_size for scratch in scratches]
+        if count > 1:
+            for index, scratch in enumerate(scratches, 1):
+                _patch_marker(scratch, part_marker_name(name, index, count),
+                              part_marker_text(name, index, sizes))
+        for index, (scratch, chosen) in enumerate(zip(scratches, plan), 1):
+            shown = finals[index - 1].name
+            with zipfile.ZipFile(scratch) as archive:
+                held = [(info.filename, info.file_size) for info in archive.infolist()]
+                if count > 1 and archive.read(part_marker_name(name, index, count)) != \
+                        part_marker_text(name, index, sizes):
+                    raise PackError(f"{shown}: its marker does not read back")
+            if held != _part_contents(name, index, count, manifest, chosen):
+                raise PackError(f"{shown} does not read back as written")
+            if limit is not None and count > 1 and sizes[index - 1] >= limit:
+                raise PackError(f"{shown} reached the limit of {format_size(limit)}")
+    except BaseException:
+        for scratch in scratches:
+            scratch.unlink(missing_ok=True)
+        raise
+    stem = name[: -len(".zip")]
+    stale = [old for old in _listed_paths(path.parent)
+             if old not in finals and (old == path or (
+                 _PART_FILE.match(old.name) is not None
+                 and _PART_FILE.match(old.name)["stem"] == stem))]  # type: ignore[index]
+    for scratch, final in zip(scratches, finals):
+        os.replace(scratch, final)
+    for old in stale:
+        old.unlink(missing_ok=True)
+    return finals
+
+
+def _listed_paths(folder: Path) -> list[Path]:
+    """The files of a folder, [] when it cannot be listed."""
+    return [folder / name for name in sorted(_listed(folder))]
+
+
+def _pack_targets(plat: str) -> dict | None:
+    """The cores per board the pack carries, as a pack built by the
+    repository does: the list at hand offline, else the one fetched. None
+    for a platform that publishes none, or a list that cannot be read."""
+    if plat not in TARGET_PLATFORMS:
+        return None
+    if LOCAL.offline:
+        return local_targets(plat)
+    with contextlib.redirect_stderr(io.StringIO()):
+        return fetch_targets(plat)
+
+
+def _pack_event(plat: str, path: Path, members: dict[str, tuple[str, int]],
+                parts: list[Path], status: str, message: str, size: int = 0) -> None:
+    EVENTS.emit("pack", platform=plat, path=str(path), files=len(members),
+                bytes=sum(length for _sha1, length in members.values()), size=size,
+                parts=[str(part) for part in parts], status=status, message=message)
+
+
+def _pack_refused(plat: str, path: Path, words: str, code: int,
+                  members: dict[str, tuple[str, int]] | None = None) -> int:
+    """Say why no pack is made, the event saying it too: code."""
+    print(f"Error: {screen_text(words)}. No pack was written.", file=sys.stderr)
+    _pack_event(plat, path, members or {}, [], "failed", f"{words}.")
+    return code
+
+
+def pack_parts_words(count: int, limit: int | None, fat: bool) -> str:
+    """How the pack is written, in one line: whole, or in parts and why."""
+    if count == 1:
+        return "One ZIP."
+    each = f"In {count} parts of at most {format_size(limit or 0)}"
+    return f"{each}, as FAT32 holds no file of 4 GB." if fat else f"{each}."
+
+
+def run_pack(args: argparse.Namespace, plat: str, manifest: dict, files: list[dict],
+             omitted: list[dict], data_dirs: list[dict], narrowed: bool,
+             term: Terminal) -> int:
+    """--pack: the choice downloaded into a pack instead of a folder, every
+    member checked against its SHA-1 before the ZIP is closed. Returns the
+    exit code: 0 once written (or listed with --dry-run), 1 when a file
+    could not be had or the pack written, 2 when nothing was tried."""
+    path = pack_path(args.pack, plat, narrowed)
+    display = display_name(plat, manifest)
+    if not path.name.endswith(PACK_NAME_END):
+        return _pack_refused(plat, path, f"{path.name} does not end with {PACK_NAME_END}, "
+                             "which --from-pack and the parts of a pack read", 2)
+    if not _is_dir(path.parent):
+        return _pack_refused(plat, path, f"the folder {shown_path(path.parent)} does not "
+                             "exist", 2)
+    members, rows, sources = pack_layout(files, data_dirs)
+    if not members:
+        return _pack_refused(plat, path, "the choice keeps no file to put in a pack", 2)
+    body = pack_manifest(plat, pack_install_list(manifest, files, omitted, data_dirs), rows,
+                         _pack_targets(plat))
+    planned = [PackMember(name, sha1, size, Path())
+               for name, (sha1, size) in sorted(members.items())]
+    fat = fat32_drive(path.parent)
+    limit = args.split
+    if fat and (limit is None and pack_bound(len(body), planned) > FAT_FILE_LIMIT
+                or limit is not None and limit > FAT_PART_BYTES):
+        limit = FAT_PART_BYTES
+    try:
+        plan = plan_pack_parts(path.name, len(body), planned, limit)
+    except PackError as exc:
+        return _pack_refused(plat, path, str(exc), 2, members)
+    count = len(plan)
+    finals = ([path] if count == 1 else
+              [path.with_name(part_file_name(path.name, index, count))
+               for index in range(1, count + 1)])
+    total = sum(size for _sha1, size in members.values())
+    print(f"\nPack for {display}: {_plural(len(members), 'file')} ({format_size(total)}).")
+    print(f"Pack: {shown_path(path)}")
+    how = pack_parts_words(count, limit, fat and limit == FAT_PART_BYTES)
+    if count > 1:
+        print(f"  {how}")
+    if args.dry_run:
+        for name in sorted(members):
+            detail(f"    {screen_text(name)} ({format_size(members[name][1])})")
+        if not OUTPUT.verbose:
+            print("  --verbose lists the files.")
+        _pack_event(plat, path, members, finals, "planned", how)
+        return 0
+    needed = total + pack_bound(len(body), planned)
+    try:
+        free = shutil.disk_usage(path.parent).free
+    except OSError:
+        free = needed
+    if free < needed:
+        return _pack_refused(plat, path, f"the drive holding {shown_path(path.parent)} has "
+                             f"{format_size(free)} free, and making the pack needs "
+                             f"{format_size(needed)}", 2, members)
+    staging = Path(tempfile.mkdtemp(prefix=f".{path.name}.", suffix=".staging",
+                                    dir=str(path.parent)))
+    try:
+        return _fill_pack(args, plat, path, body, members, sources, data_dirs, limit,
+                          staging, term)
+    except KeyboardInterrupt:
+        _stop.set()
+        print("\n  Stopped. No pack was written.", file=sys.stderr)
+        _pack_event(plat, path, members, [], "failed", "Stopped before the pack was written.")
+        return 130
+    finally:
+        shutil.rmtree(staging, ignore_errors=True)
+
+
+def _fill_pack(args: argparse.Namespace, plat: str, path: Path, body: bytes,
+               members: dict[str, tuple[str, int]], sources: dict[str, dict],
+               data_dirs: list[dict], limit: int | None, staging: Path,
+               term: Terminal) -> int:
+    """Fetch every member into staging, then write the pack from it."""
+    staged = [{**{key: value for key, value in entry.items()
+                  if key not in ("root", "core_folder", "case_variant")}, "dest": name}
+              for name, entry in sorted(sources.items())]
+    copies = plan_local_copies(staged, staging, None, LOCAL.folders)
+    fetched = sum(int(entry.get("size") or 0) for entry in staged)
+    EVENTS.emit("download", platform=plat, files=len(staged), bytes=fetched)
+    detail(f"\nDownloading {_plural(len(staged), 'file')} ({format_size(fetched)})...")
+    failed, interrupted = download_files(staged, staging, jobs=args.jobs,
+                                         verbose=args.verbose, term=term, copies=copies)
+    if interrupted:
+        raise KeyboardInterrupt
+    owners: dict[str, Path] = {}
+    trees_failed: list[tuple[str, str]] = []
+    for index, entry in enumerate(data_dirs):
+        lead = f"{str(entry.get('dest') or '').rstrip('/')}/" if entry.get("dest") else ""
+        root = staging / ".trees" / str(index)
+        names = [f"{lead}{rel}" for rel in sorted(entry.get("files") or {})]
+        owned = [name for name in names if name in members and name not in sources
+                 and name not in owners]
+        if not owned:
+            continue
+        detail(f"  {entry.get('ref', 'data')}: {_plural(len(names), 'data file')}...")
+        counts = install_data_directory(entry, root)
+        problem = (str(counts["error"]) if counts["error"]
+                   else f"{counts['changed']} changed in its source" if counts["changed"]
+                   else f"{counts['absent']} not in its source" if counts["absent"]
+                   else "")
+        if problem:
+            trees_failed.append((str(entry.get("ref", "data")), problem))
+            continue
+        for name in owned:
+            owners[name] = root.joinpath(*PurePosixPath(name).parts)
+    if failed or trees_failed:
+        lines = [*failed, *trees_failed]
+        print(f"\n  {_plural(len(lines), 'file')} could not be had: no pack was written.",
+              file=sys.stderr)
+        for dest, reason in lines[: None if args.verbose else 5]:
+            print(f"    {screen_text(dest)}: {screen_text(str(reason))}", file=sys.stderr)
+        if len(lines) > 5 and not args.verbose:
+            print(f"    ... and {len(lines) - 5} more (--verbose lists them)", file=sys.stderr)
+        _pack_event(plat, path, members, [], "failed",
+                    f"{_plural(len(lines), 'file')} could not be had: no pack was written.")
+        return 1
+    ordered = [PackMember(name, sha1, size,
+                          owners[name] if name in owners
+                          else staging.joinpath(*PurePosixPath(name).parts))
+               for name, (sha1, size) in sorted(members.items())]
+    detail(f"\nWriting {path.name}...")
+    try:
+        written = write_pack(path, body, ordered, limit)
+    except (OSError, PackError) as exc:
+        words = (DRIVE_FULL if isinstance(exc, OSError) and _drive_full(exc)
+                 else exc.strerror if isinstance(exc, OSError) and exc.strerror else str(exc))
+        print(f"\n  {path.name} could not be written: {screen_text(str(words))}. No pack "
+              "was left behind.", file=sys.stderr)
+        _pack_event(plat, path, members, [], "failed",
+                    f"{path.name} could not be written: {words}.")
+        return 1
+    size = sum(part.stat().st_size for part in written)
+    print(f"\nPack made: {_plural(len(members), 'file')}, {format_size(size)}"
+          + (f", in {len(written)} parts" if len(written) > 1 else "") + ".")
+    for part in written if len(written) > 1 else []:
+        print(f"  {shown_path(part)}")
+    print("Install from it on the other device with --from-pack.")
+    _pack_event(plat, path, members, written, "written",
+                f"{path.name}: {_plural(len(members), 'file')}, every one checked.", size)
+    return 0
 
 
 class _Offline(OSError):
@@ -15653,6 +16292,22 @@ def build_parser() -> argparse.ArgumentParser:
              "question, to free its space",
     )
     parser.add_argument(
+        "--pack",
+        type=Path,
+        metavar="PATH",
+        help=f"download the choice into a pack ZIP at PATH instead of a BIOS folder, for "
+             f"another device or an install without the internet (--from-pack reads it). "
+             f"A folder takes <Platform>{PACK_NAME_END}. The narrowing options apply, and "
+             "--dry-run lists what would go in",
+    )
+    parser.add_argument(
+        "--split",
+        type=parse_part_size,
+        metavar="SIZE",
+        help="with --pack, write parts of at most SIZE (1900M, 4G), each a whole ZIP. "
+             "A pack that would pass 4 GiB on a FAT32 drive is split by itself",
+    )
+    parser.add_argument(
         "--tui",
         action="store_true",
         help="open the full-screen interface, which a keyboard or a controller "
@@ -15814,6 +16469,7 @@ def main() -> None:
                   f"here: {reason}", file=sys.stderr)
             sys.exit(2)
     _check_actions(parser, args)
+    _check_pack(parser, args)
     if args.restore is not None:
         _run_action(args, lambda given: restore_kept(given.restore, given.dry_run))
     if args.delete_backup is not None:
@@ -15943,6 +16599,36 @@ def _check_actions(parser: argparse.ArgumentParser, args: argparse.Namespace) ->
         if len(narrowed) > 1:
             parser.error(f"--remove takes one of --system, --core, --emulator or --file, "
                          f"not {narrowed[0]} and {narrowed[1]}")
+
+
+def _check_pack(parser: argparse.ArgumentParser, args: argparse.Namespace) -> None:
+    """Refuse --split without --pack, and --pack with an option that reads
+    or writes a BIOS folder: applied or refused, never ignored."""
+    pack = getattr(args, "pack", None)
+    if getattr(args, "split", None) is not None and pack is None:
+        parser.error("--split applies to --pack")
+    if pack is None:
+        return
+    for flag, given in (
+        ("--check", args.check), ("--dest", args.dest),
+        ("--installed-cores", args.installed_cores), ("--cores-dir", args.cores_dir),
+        ("--save-dir", args.save_dir), ("--standalone-copies", args.standalone_copies),
+        ("--add-app", args.add_app), ("--romm-firmware", args.romm_firmware is not None),
+        ("--tui", args.tui), ("--list-platforms", args.list_platforms),
+        ("--list-targets", args.list_targets), ("--list-systems", args.list_systems),
+        ("--list-cores", args.list_cores), ("--list-emulators", args.list_emulators),
+    ):
+        if given:
+            parser.error(f"--pack writes a pack ZIP, and {flag} reads or writes the "
+                         "BIOS folder of this machine")
+    if args.for_games is True:
+        parser.error("--for-games with --pack needs its FOLDER: no card is read for a pack")
+    name = Path(os.path.expanduser(str(pack))).name
+    if not (_is_dir(Path(os.path.expanduser(str(pack))))
+            or str(pack).endswith(("/", os.sep)) or name.endswith(PACK_NAME_END)):
+        parser.error(f"--pack names a folder, or a file whose name ends with "
+                     f"{PACK_NAME_END} (--from-pack and the parts of a pack read that "
+                     f"name): {name}")
 
 
 def _run_action(args: argparse.Namespace,
@@ -17341,6 +18027,18 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         _enter_wsl()
         _wsl_dest(args)
     _open_local_sources(args)
+    # --pack: the files go into a ZIP for another device, no folder of this
+    # machine is read or written, and nothing is asked.
+    packing = getattr(args, "pack", None) is not None
+    if packing:
+        interactive = False
+        if args.platform is None:
+            spelled = pack_name_platforms(Path(os.path.expanduser(str(args.pack))).name)
+            if len(spelled) != 1:
+                print("Error: name the platform the pack is for with --platform.",
+                      file=sys.stderr)
+                sys.exit(2)
+            args.platform = spelled[0]
 
     # Early exit for listing
     if args.list_platforms:
@@ -17379,7 +18077,10 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
     if args.dest:
         plat, args.dest = card_dest(named, args.platform or "", args.dest)
         args.platform = plat or args.platform
-    if args.platform and args.dest:
+    if packing:
+        # Where the pack goes stands for the folder: nothing is read there.
+        platforms = [(args.platform, pack_path(args.pack, args.platform, False).parent)]
+    elif args.platform and args.dest:
         platforms = [(args.platform, args.dest)]
     elif args.platform:
         detail("Looking for setups here...")
@@ -17560,7 +18261,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         # would have chosen: --yes beside two setups filled both, 14 GB in
         # two folders, where its help says it stops on what to name.
         _several_found(platforms, setups)
-    if platforms:
+    if platforms and not packing:
         EVENTS.emit("detect", os=os_type, os_name=_os_name(), platforms=[
             {"platform": name, "name": display_name(name), "bios_dir": str(path)}
             for name, path in platforms
@@ -17579,7 +18280,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
 
     if args.dest is not None and not listing:
         _missing_dest(args.dest, interactive and not (args.check or args.dry_run or args.yes))
-    elif not listing:
+    elif not listing and not packing:
         # A system_directory under /root read from retroarch.cfg, run without
         # sudo: the case probe raised PermissionError before any line.
         for name, path in platforms:
@@ -17658,7 +18359,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                     message=f"{problem}." if problem else
                     f"Recorded {_plural(count, 'file')} and this choice in {path}.")
 
-    if len(platforms) == 1 and not listing and not choice_given(args):
+    if len(platforms) == 1 and not listing and not packing and not choice_given(args):
         apply_record(args, *platforms[0])
 
     # --target is checked for every platform before anything is written, as
@@ -17703,7 +18404,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
     # refusal for the second platform must not follow an install of the first.
     cores_found: dict[tuple[str, Path], list[str]] = {}
     cores_searched: dict[tuple[str, Path], list[Path]] = {}
-    for plat_name, bios_path in platforms:
+    for plat_name, bios_path in [] if packing else platforms:
         if plat_name in CORE_PLATFORMS:
             if args.cores_dir:
                 _check_cores_dir(args.cores_dir)
@@ -17740,7 +18441,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         files = manifest.get("files", [])
         omitted_files = manifest.get("omitted_files", [])
         variants = manifest.get("case_variants", [])
-        case_kept = keeps_case(bios_path)
+        # A ZIP keeps both spellings: the device installing it folds them.
+        case_kept = packing or keeps_case(bios_path)
         if variants and case_kept:
             # The list is folded for Windows and macOS, but here bios.col and
             # BIOS.col are two files that two cores open.
@@ -17756,7 +18458,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                     f"  {_plural(len(folded), 'file')} left out: {bios_path} does not keep "
                     f"case and holds another file under the same name ({shown})"
                 )
-        if any(FAT_REFUSED.search(str(entry.get("dest", ""))) for entry in files) \
+        if not packing and any(FAT_REFUSED.search(str(entry.get("dest", "")))
+                               for entry in files) \
                 and not holds_fat_refused_names(bios_path):
             files, refused = split_fat_refused(files)
             shown = ", ".join(refused[:3]) + (" ..." if len(refused) > 3 else "")
@@ -17802,7 +18505,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         # a card prepared on a computer took every board's files, and the
         # full-screen interface, which always gives --dest, never applied one.
         target = args.target
-        if (not target and not args.every_board
+        if (not target and not args.every_board and not packing
                 and (not LOCAL.offline or local_targets(plat_name) is not None)):
             board = detect_board(plat_name)
             where = "detected"
@@ -17888,7 +18591,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             )
 
         # Said before the install and again with the result.
-        note = None if listing else version_note(plat_name, bios_path, manifest)
+        note = None if listing or packing else version_note(plat_name, bios_path, manifest)
         if note is not None:
             print(f"  {note[2]}")
             version_notes.append(note[2])
@@ -17899,14 +18602,18 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         # one read from an unknown save directory left out. Said once the
         # choice is made, over the files it keeps (say_saves).
         display = display_name(plat_name, manifest)
-        files, unplaced = place_save_entries(
-            files, bios_path, manifest, args.save_dir, display, say=False)
-        files, beyond = place_relative_entries(
-            files, bios_path, manifest, display, say=not listing)
-        files, elsewhere = place_emulator_entries(
-            files, bios_path, manifest, display, say=not listing)
-        unplaced = [*unplaced, *beyond, *elsewhere]
-        if not manifest.get("save_directory"):
+        unplaced = []
+        if not packing:
+            # A pack keeps every root's files: the device installing it
+            # places them.
+            files, unplaced = place_save_entries(
+                files, bios_path, manifest, args.save_dir, display, say=False)
+            files, beyond = place_relative_entries(
+                files, bios_path, manifest, display, say=not listing)
+            files, elsewhere = place_emulator_entries(
+                files, bios_path, manifest, display, say=not listing)
+            unplaced = [*unplaced, *beyond, *elsewhere]
+        if not manifest.get("save_directory") and not packing:
             # Its own list leaves these files out: naming the folder with
             # --save-dir installs none of them, and was advised in a loop.
             _SAVE_WHY[bios_path] = unlisted_saves_words(display)
@@ -17919,7 +18626,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         # two games, while the screen offers what they need first. Not for a
         # run given its list (the screen's own runs, the choice already
         # made), nor one narrowed by name.
-        unasked = (not interactive and not args.check and not listing
+        unasked = (not interactive and not args.check and not listing and not packing
                    and not getattr(args, "all_files", False)
                    and LOCAL.manifest is None and LOCAL.pack is None
                    and not (args.installed_cores or args.no_game_data or args.system
@@ -18076,7 +18783,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         if unplaced:
             total_omitted += len(unplaced)
             omitted_seen.extend(unplaced)
-        say_saves(plat_name, files, omitted_files + unplaced, bios_path, display, menu)
+        if not packing:
+            say_saves(plat_name, files, omitted_files + unplaced, bios_path, display, menu)
 
         if args.list_systems or args.list_cores:
             _print_choices(plat_name, files, omitted_files, args.list_systems, manifest)
@@ -18128,6 +18836,9 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                            (selection[0] if selection else [])], bool(game_data_cut)))
         if empty_choice:
             print(f"  {empty_choice}")
+            if packing:
+                sys.exit(_pack_refused(plat_name, pack_path(args.pack, plat_name, narrowed),
+                                       "the choice keeps no file to put in a pack", 2))
             if not EVENTS.on:
                 continue
         if omitted_files:
@@ -18147,6 +18858,10 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                                 if entry.get("reason") == "no_save_directory"
                                 and not entry.get("frontend") else entry
                                 for entry in omitted_files)
+
+        if packing:
+            sys.exit(run_pack(args, plat_name, manifest, files, omitted_files, data_dirs,
+                              narrowed, term))
 
         if plat_name == "romm":
             try:
@@ -19681,6 +20396,14 @@ class TuiState:
         self.action_code: int | None = None
         # Whether the folder checked has a backup, read once each check.
         self.has_backups: bool = False
+        # Make a pack: the folder it goes in (Downloads by default), what
+        # its dry run said (the pack event), what the run made, its count
+        # of files fetched so far and its code.
+        self.pack_dir: Path | None = None
+        self.pack_plan: dict | None = None
+        self.pack_done: dict | None = None
+        self.pack_fetched: tuple[int, int] | None = None
+        self.pack_code: int | None = None
 
     @property
     def screen(self) -> str:
@@ -19999,6 +20722,7 @@ def tui_blocker(
         ("--list-emulators", args.list_emulators), ("--events", args.events),
         ("--quiet", args.quiet), ("--yes", args.yes), ("--no-input", args.no_input),
         ("--restore", args.restore is not None),
+        ("--pack", getattr(args, "pack", None) is not None),
     ):
         if given:
             return f"{flag} runs without questions"
@@ -20727,10 +21451,9 @@ TUI_MORE_ROW = TuiRow("more", "More")
 
 
 def _more_row(state: TuiState) -> list[TuiRow]:
-    """More, where it has something to act on: an install record of this
-    setup in the folder, or a backup of it. A first install's plan keeps
-    its rows."""
-    return [TUI_MORE_ROW] if state.record is not None or state.has_backups else []
+    """More, on every plan: a pack can always be made, and the folder's
+    record or backups add removing and putting back."""
+    return [TUI_MORE_ROW]
 
 
 # The plan's row for the record's choice, and the one back to the setups.
@@ -21231,6 +21954,10 @@ def _replace(state: TuiState, screen: str) -> None:
 
 
 def _back(state: TuiState) -> list[tuple]:
+    if state.screen == "packdone" and not state.running and "more" in state.stack:
+        # Made or not, its plan is spent: back to More.
+        del state.stack[state.stack.index("more") + 1:]
+        return []
     if state.screen == "actdone" and not state.running:
         # Done: what was planned is gone, and the plan is counted again.
         return _activate_action(state, TuiRow("recheck", ""))
@@ -21828,7 +22555,7 @@ def _browse_to(state: TuiState, folder: Path | None, came_from: Path | None = No
         # A pack is a ZIP, never a folder.
         state.browse_rows = [row for row in state.browse_rows if row.action != "use"]
     focus = 0
-    if (folder is not None and state.browse_for not in ("from", "pack")
+    if (folder is not None and state.browse_for not in ("from", "pack", "packto")
             and folder in (state.home, Path(folder.anchor))):
         # No frontend reads its BIOS files from HOME or a drive's root: A
         # pressed through the screens installed into ~. A goes into a
@@ -22046,6 +22773,12 @@ def _activate(state: TuiState, row: TuiRow) -> list[tuple]:
         if action == "zip" and state.browse_for == "pack":
             # Opened in this process (perform), which answers pack_opened.
             return [("pack", row.value)]
+        if action == "use" and state.browse_for == "packto":
+            state.pack_dir = state.browse_dir
+            state.browse_for = "dest"
+            state.stack.pop()
+            state.pack_plan = None
+            return _start_run(state, "pack_plan")
         if action == "use" and state.browse_for == "save":
             state.passthrough = [flag for flag in state.passthrough
                                  if flag[0] != "--save-dir"]
@@ -23824,6 +24557,7 @@ _ROW_VERBS = {
     "backups": "Open", "putback": "Open", "dropbackup": "Open", "rmall": "Choose",
     "rmsystem": "Choose", "rmgo": "Remove", "rmbackup": "Change", "backup": "Choose",
     "bkrestore": "Put back", "bkdelete": "Delete", "actgo": "Confirm",
+    "packmake": "Open", "packgo": "Make", "packwhere": "Change",
 }
 
 
@@ -24608,11 +25342,14 @@ def _view_browse(state: TuiState, width: int, height: int) -> tuple:
                 "cores read files there."]
     elif state.browse_for == "pack":
         hint = ["Choose the pack ZIP downloaded before: nothing is downloaded then."]
+    elif state.browse_for == "packto":
+        hint = ["Choose the folder the pack goes in."]
     # The hint is kept whole under the list, which scrolls: three folders at
     # 40x12 cut it to "Choose the old card, a backup folder".
     return ("Copy from" if state.browse_for == "from"
             else "Save folder" if state.browse_for == "save"
-            else "From a pack" if state.browse_for == "pack" else "Browse for a folder",
+            else "From a pack" if state.browse_for == "pack"
+            else "Pack folder" if state.browse_for == "packto" else "Browse for a folder",
             _compose(state, width, height, [where], tui_rows(state), _status_after(state),
                      hint),
             ("A/Enter Open", "B/Esc Back", "? Help"))
@@ -24932,6 +25669,9 @@ def _plan_body(state: TuiState, width: int, height: int, lines: list,
     # plan offered Choose another folder and Install anyway and no word of
     # why.
     kept += [line for line in lines if str(line).startswith(CANNOT_WRITE)]
+    # A file in place that the install replaces, said whatever the rows: the
+    # More row every plan holds pushed it out of a 40x12 plan.
+    kept += [line for line in lines if "backed up, replaced" in str(line)]
     top = _text_lines(kept, width)
     drawn = [str(line).strip() for line in body]
     # Three lines at least for the rows: two of them and where the list is,
@@ -25836,16 +26576,52 @@ def _open_details(state: TuiState) -> list[tuple]:
 
 
 # The screens below More, each listing its rows in _action_rows.
-_ACTION_SCREENS = ("more", "remove", "removal", "backups", "backup", "actconfirm", "actdone")
+_ACTION_SCREENS = ("more", "remove", "removal", "backups", "backup", "actconfirm", "actdone",
+                   "packplan", "packdone")
 # The runs More starts, each a child as an install is: what --remove would
 # take (removal_plan), the removal, the backups listed, one put back and
 # one deleted.
-TUI_ACTION_RUNS = ("removal_plan", "remove", "backups", "restore", "delete_backup")
+TUI_ACTION_RUNS = ("removal_plan", "remove", "backups", "restore", "delete_backup",
+                   "pack_plan", "pack")
+# The plan's options a pack's run leaves out: each reads or writes the BIOS
+# folder of this machine, which --pack refuses.
+TUI_PACK_DROPPED = ("--dest", "--installed-cores", "--cores-dir", "--save-dir",
+                    "--standalone-copies", "--add-app", "--romm-firmware", "--for-games",
+                    "--required-only")
+
+
+def tui_pack_dir(state: TuiState) -> Path:
+    """The folder the pack goes in: the one chosen, else Downloads where
+    there is one, else the home folder."""
+    if state.pack_dir is not None:
+        return state.pack_dir
+    downloads = state.home / "Downloads"
+    return downloads if _is_dir(downloads) else state.home
+
+
+def tui_pack_argv(state: TuiState, run: str, python: str, script: str) -> list[str]:
+    """The child that makes the pack, or lists it (pack_plan): the plan's
+    choice, none of the options of this machine's folder. The games of a
+    folder named stay a choice, the card's own are not read for a pack."""
+    argv = [python, script, f"--platform={state.platform}"]
+    if state.manifest_path is not None:
+        argv.append(f"--manifest={state.manifest_path}")
+    flags = [flag for flag in tui_flags(state) if flag[0] not in TUI_PACK_DROPPED]
+    if state.for_games and state.games_folder:
+        flags.append(("--for-games", str(state.games_folder)))
+        if state.required_only:
+            flags.append(("--required-only", None))
+    argv += [flag if value is None else f"{flag}={value}" for flag, value in flags]
+    argv.append(f"--pack={tui_pack_dir(state)}{os.sep}")
+    return argv + (["--dry-run", "--events"] if run == "pack_plan" else ["--events", "--yes"])
 
 
 def tui_action_argv(state: TuiState, run: str, python: str, script: str) -> list[str]:
     """The child of a More action: its own options and none of the plan's,
-    whose --system is an install's choice, not what to remove."""
+    whose --system is an install's choice, not what to remove. A pack
+    takes the plan's choice."""
+    if run in ("pack_plan", "pack"):
+        return tui_pack_argv(state, run, python, script)
     if run in ("restore", "delete_backup"):
         folder = str((state.backup_chosen or {}).get("folder", ""))
         flag = "--restore" if run == "restore" else "--delete-backup"
@@ -25882,8 +26658,21 @@ def tui_removal_systems(state: TuiState) -> list[tuple[str, int, int]]:
 
 
 def _more_rows(state: TuiState) -> list[TuiRow]:
-    return [TuiRow("remove", "Remove files"), TuiRow("backups", "Backups"),
-            TuiRow("putback", "Put back a backup"), TuiRow("dropbackup", "Delete a backup")]
+    """Removing and the backups where the folder has a record or a backup,
+    then Make a pack."""
+    rows = ([TuiRow("remove", "Remove files"), TuiRow("backups", "Backups"),
+             TuiRow("putback", "Put back a backup"), TuiRow("dropbackup", "Delete a backup")]
+            if state.record is not None or state.has_backups else [])
+    return rows + [TuiRow("packmake", "Make a pack")]
+
+
+def _pack_plan_rows(state: TuiState) -> list[TuiRow]:
+    """Make the pack, once its dry run said what goes in, and Change where."""
+    if state.running or state.pack_plan is None:
+        return []
+    rows = ([TuiRow("packgo", "Make the pack")]
+            if state.pack_plan.get("status") == "planned" else [])
+    return rows + [TuiRow("packwhere", "Change where")]
 
 
 def _remove_rows(state: TuiState) -> list[TuiRow]:
@@ -25946,6 +26735,10 @@ def _action_rows(state: TuiState) -> list[TuiRow]:
         return [TuiRow("actgo", verb), TuiRow("back", "Back")]
     if screen == "actdone" and not state.running:
         return [TuiRow("close", "Close"), TuiRow("recheck", "Check again")]
+    if screen == "packplan":
+        return _pack_plan_rows(state)
+    if screen == "packdone" and not state.running:
+        return [TuiRow("close", "Close")]
     return []
 
 
@@ -25962,6 +26755,22 @@ def _activate_action(state: TuiState, row: TuiRow) -> list[tuple]:
     screen, action = state.screen, row.action
     if action == "back":
         return _back(state)
+    if screen == "more" and action == "packmake":
+        state.pack_plan = None
+        _push(state, "packplan")
+        return _start_run(state, "pack_plan")
+    if screen == "packplan" and action == "packwhere":
+        state.browse_for = "packto"
+        _push(state, "browse")
+        _browse_to(state, _nearest_folder(tui_pack_dir(state)))
+        return []
+    if screen == "packplan" and action == "packgo":
+        state.pack_done, state.pack_code, state.pack_fetched = None, None, None
+        _push(state, "packdone")
+        return _start_run(state, "pack")
+    if screen == "packdone" and action == "close":
+        state.exit_code = state.pack_code if state.pack_code is not None else 1
+        return []
     if screen == "more" and action == "remove":
         return _push(state, "remove")
     if screen == "more":
@@ -26007,7 +26816,13 @@ def _activate_action(state: TuiState, row: TuiRow) -> list[tuple]:
 def _take_action_event(state: TuiState, event: dict) -> bool:
     """An event of a More run, kept for its screen: whether it was one."""
     kind = event.get("event")
-    if kind == "removal_plan" and state.run in ("removal_plan", "remove"):
+    if kind == "pack" and state.run == "pack_plan":
+        state.pack_plan = event
+    elif kind == "pack" and state.run == "pack":
+        state.pack_done = event
+    elif kind in ("progress", "downloaded") and state.run == "pack":
+        state.pack_fetched = (int(event["files_done"]), int(event["files_total"]))
+    elif kind == "removal_plan" and state.run in ("removal_plan", "remove"):
         state.removal = event
     elif kind == "backup" and state.run == "backups":
         state.backups = [*(state.backups or []), event]
@@ -26021,6 +26836,11 @@ def _take_action_event(state: TuiState, event: dict) -> bool:
 
 def _action_ended(state: TuiState, code: int, tail: list[str]) -> list[tuple]:
     """A More run's end: the plan, the list, or what the action did."""
+    if state.run == "pack_plan":
+        return _fail(state, tail, code) if state.pack_plan is None else []
+    if state.run == "pack":
+        state.pack_code = code if code >= 0 else 128 - code
+        return []
     if state.run == "removal_plan":
         if state.removal is None:
             return _fail(state, tail, code)
@@ -26160,6 +26980,78 @@ def tui_action_outcome(state: TuiState) -> list:
     return lines
 
 
+def tui_pack_text(state: TuiState) -> list:
+    """The pack's plan: what goes in and its size, where, how many parts,
+    the part files behind Details."""
+    plan = state.pack_plan or {}
+    if plan.get("status") != "planned":
+        return [str(plan.get("message") or "No pack can be made of this choice.")]
+    parts = list(plan.get("parts") or [])
+    lines: list = [f"{_plural(int(plan['files']), 'file')}, "
+                   f"{format_size(int(plan['bytes']))}, for "
+                   f"{display_name(state.platform, state.manifest)}."]
+    shown = Path(str(parts[0] if parts else plan["path"]))
+    lines.append(_styled(f"Pack: {_short_path(shown, state.home)}", "path"))
+    lines.append(str(plan.get("message") or "")
+                 if len(parts) > 1 else "One ZIP, installed with --from-pack.")
+    if len(parts) > 1:
+        lines += _details(["", "Parts:"] + [f"  {Path(part).name}" for part in parts])
+    return lines
+
+
+def tui_pack_outcome(state: TuiState) -> list:
+    """What making the pack did, in one line, then where."""
+    done = state.pack_done or {}
+    if done.get("status") != "written":
+        lines: list = [_styled("No pack was made.", "failure")]
+        if done.get("message"):
+            lines.append(str(done["message"]))
+        lines += _details(list(state.tail))
+        return lines
+    parts = list(done.get("parts") or [])
+    lines = [f"Pack made: {_plural(int(done['files']), 'file')}, "
+             f"{format_size(int(done['size']))}"
+             + (f", in {len(parts)} parts." if len(parts) > 1 else ".")]
+    shown = Path(str(parts[0] if parts else done["path"]))
+    lines.append(_styled(f"Pack: {_short_path(shown, state.home)}", "path"))
+    lines.append("On the other device, install from it with --from-pack.")
+    if len(parts) > 1:
+        lines += _details(["", "Parts:"] + [f"  {Path(part).name}" for part in parts])
+    return lines
+
+
+def _wrapped_paths(lines: list, width: int) -> list:
+    """A path line too wide for the screen, folded over the next lines."""
+    return [piece for line in lines for piece in (
+        [_styled(part, "folder" if index else "") for index, part in enumerate(
+            _wrap(str(line), width, "  "))]
+        if getattr(line, "style", "") == "path" and cell_width(str(line)) > width
+        else [line])]
+
+
+def _view_packplan(state: TuiState, width: int, height: int) -> tuple:
+    if state.running or state.pack_plan is None:
+        return ("Make a pack", _compose(state, width, height,
+                                        ["Reading what goes into the pack..."], []),
+                ("B/Esc Back", "? Help"))
+    lines = _wrapped_paths(_shown(state, tui_pack_text(state)), width)
+    return ("Make a pack", _compose(state, width, height, lines, tui_rows(state)),
+            ("A/Enter Choose", "B/Esc Back", "? Help"))
+
+
+def _view_packdone(state: TuiState, width: int, height: int) -> tuple:
+    if state.running:
+        fetched = state.pack_fetched
+        words = (f"Making the pack: {fetched[0]} of {fetched[1]} files."
+                 if fetched else "Making the pack...")
+        return ("Working", _compose(state, width, height, [words], []), ("B/Esc Stop",))
+    lines = _wrapped_paths(_shown(state, tui_pack_outcome(state)), width)
+    lines[0] = _styled(str(lines[0]), "title")
+    return ("Done" if state.pack_code == 0 else "Not done",
+            _compose(state, width, height, lines, tui_rows(state)),
+            ("A/Enter Close", "B/Esc Back", "? Help"))
+
+
 def _view_actdone(state: TuiState, width: int, height: int) -> tuple:
     if state.running:
         words = {"remove": "Removing the files...", "restore": "Putting the files back...",
@@ -26184,6 +27076,7 @@ _TUI_VIEWS: dict[str, Callable[[TuiState, int, int], tuple]] = {
     "device": _view_device, "emulators": _view_emulators, "more": _view_more,
     "remove": _view_remove, "removal": _view_removal, "backups": _view_backups,
     "backup": _view_backup, "actconfirm": _view_actconfirm, "actdone": _view_actdone,
+    "packplan": _view_packplan, "packdone": _view_packdone,
 }
 
 

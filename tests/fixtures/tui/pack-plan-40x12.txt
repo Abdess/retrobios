@@ -1,0 +1,12 @@
+ RetroBIOS: Make a pack
+
+ 4 files, 1.0 MB, for RetroArch.
+ Pack: ~/Downloads/
+   RetroArch_Custom_BIOS_Pack.zip
+ One ZIP, installed with --from-pack.
+
+ > Make the pack
+   Change where
+
+
+ A Make  B Back  ? Help
