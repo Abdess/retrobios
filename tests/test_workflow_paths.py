@@ -159,6 +159,24 @@ class ThePullRequestBuildsTheSite(unittest.TestCase):
         # then failed under it: the generator runs whatever came before.
         self.assertEqual(steps[generate].get("if"), "${{ !cancelled() }}")
 
+    def test_a_failed_sandbox_step_skips_nothing_after_it(self):
+        """No Ubuntu mirror resolved on 2026-11-11: the bubblewrap step
+        failed, the steps after it were skipped, and the suite failed on
+        absent data trees and astro. Those steps do not need bubblewrap."""
+        steps = self._workflow("validate.yml")["jobs"]["run-tests"]["steps"]
+        sandbox = next(step for step in steps if "bubblewrap" in str(step.get("name", "")))
+        self.assertNotIn("continue-on-error", sandbox)
+        self.assertNotIn("if", sandbox)
+        self.assertIn("Acquire::Retries=5", sandbox["run"])
+        self.assertIn("sleep 30", sandbox["run"])
+        after = steps[steps.index(sandbox) + 1:]
+        for key in ("actions/setup-node@", "npm ci --prefix website",
+                    "export_native.py --all --refresh-cache", "refresh_data_dirs.py"):
+            step = next(s for s in after
+                        if key in str(s.get("uses", "")) or key in str(s.get("run", "")))
+            with self.subTest(step=key):
+                self.assertEqual(step.get("if"), "${{ !cancelled() }}")
+
     def test_every_site_input_triggers_validation(self):
         deploy = self._workflow("deploy-site.yml")
         validate = self._workflow("validate.yml")
