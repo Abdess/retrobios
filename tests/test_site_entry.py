@@ -41,6 +41,8 @@ import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 
+import yaml
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 sys.path.insert(0, str(REPO_ROOT))
@@ -983,9 +985,10 @@ class GetPagesSayWhatTheyHold(unittest.TestCase):
             display = _display(name)
             text = sitepages.page(f"get/{name}.md").read_text(encoding="utf-8")
             kind = "pack" if REGISTRY[name].get("release_pack") is True else "files"
-            title = (f"BIOS {kind} for {display}"
-                     if (REPO_ROOT / "emulators" / f"{name}.yml").is_file()
-                     else f"{display} BIOS {kind}")
+            # A profile that lists files titles its page "<name> BIOS files".
+            profile = REPO_ROOT / "emulators" / f"{name}.yml"
+            lists = profile.is_file() and (yaml.safe_load(profile.read_text(encoding="utf-8")) or {}).get("files")
+            title = f"BIOS {kind} for {display}" if lists else f"{display} BIOS {kind}"
             with self.subTest(setup=name):
                 self.assertEqual(generate_site.get_page_title(name, display), title)
                 self.assertIn(f"title: {title}\n", text)
