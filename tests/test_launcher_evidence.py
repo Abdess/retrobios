@@ -35,12 +35,16 @@ from scraper.shell_launchers import (  # noqa: E402
     config_ref,
     is_feature_ref,
 )
-from validate_schemas import (  # noqa: E402
-    _config_reads_without_build,
-    _config_records_without_evidence,
-)
-
 REPO_ROOT = Path(__file__).resolve().parents[1]
+
+
+def schema_checks(test: unittest.TestCase):
+    """validate_schemas, or a skip: it needs jsonschema, the build does not."""
+    try:
+        import validate_schemas  # noqa: PLC0415
+    except ImportError as exc:
+        test.skipTest(f"validate_schemas needs jsonschema: {exc}")
+    return validate_schemas
 
 
 def record(**fields: object) -> dict:
@@ -244,6 +248,7 @@ class StartScripts(unittest.TestCase):
 
 class Invariants(unittest.TestCase):
     def test_a_config_record_without_its_platform_links_is_an_error(self) -> None:
+        _config_records_without_evidence = schema_checks(self)._config_records_without_evidence
         path = REPO_ROOT / "platforms" / "x.yml"
         bare = {k: v for k, v in record().items() if k not in ("installs", "overrides")}
         listed = record(source_ref="gen.cs:3, es_features.yml:9")
@@ -253,6 +258,7 @@ class Invariants(unittest.TestCase):
         self.assertIn("choices_from holds it", errors[1])
 
     def test_reads_naming_a_platform_need_its_build(self) -> None:
+        _config_reads_without_build = schema_checks(self)._config_reads_without_build
         path = REPO_ROOT / "emulators" / "x.yml"
         reads = [{"file": "a.ini", "platforms": ["rocknix"], "source_ref": "a:1", "keys": []}]
         self.assertEqual(len(_config_reads_without_build(path, {"config_reads": reads})), 1)
@@ -348,7 +354,7 @@ class BuildRefs(unittest.TestCase):
 
     def test_a_closed_build_is_read_in_its_binary(self) -> None:
         """An address ref is read in the binary binary_sha256 names, never
-        fetched; a source path cannot exist at a closed build."""
+        fetched. A source path cannot exist at a closed build."""
         read = {
             "file": "SSF.ini", "platforms": ["retrobat"], "binary_sha256": "e" * 64,
             "revision_from": "the archive", "source_ref": "SSF.exe 0x10-0x20", "keys": [],
@@ -396,6 +402,7 @@ class RepositoryRecords(unittest.TestCase):
                 )
 
     def test_every_config_record_carries_its_platform_links(self) -> None:
+        _config_records_without_evidence = schema_checks(self)._config_records_without_evidence
         for path in sorted((REPO_ROOT / "platforms").glob("*.yml")):
             if path.name.startswith("_"):
                 continue
