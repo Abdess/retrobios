@@ -63,6 +63,48 @@ def source_ref(parts: Iterable[tuple[str, Iterable[int]]]) -> str:
     )
 
 
+# The files a platform ships as configuration: an emulator reads them, the
+# platform's code never runs them. Batocera's .yml lists and an EmuELEC .opt
+# only offer the values a menu option takes.
+_CONFIG_FILE = re.compile(
+    r"\.(?:ini|cfg|conf|rc|rc_\w+|opt|bml|toml|uae|template|yml|yaml)$", re.IGNORECASE
+)
+_FEATURE_FILE = re.compile(r"(?:^|/)es_features[^/]*$|\.opt$", re.IGNORECASE)
+
+
+def split_ref(ref: str) -> list[str]:
+    """The parts of a source_ref, each "path:lines", a bare line span
+    continuing the path before it."""
+    parts: list[str] = []
+    for part in (p.strip() for p in ref.split(", ")):
+        if not part:
+            continue
+        if re.fullmatch(r"\d+(?:-\d+)?", part) and parts:
+            parts[-1] += f", {part}"
+        else:
+            parts.append(part)
+    return parts
+
+
+def ref_path(part: str) -> str:
+    return part.rsplit(":", 1)[0] if re.search(r":\d", part) else part
+
+
+def config_ref(ref: str) -> list[str]:
+    """The parts of a source_ref that cite a config, option or feature file.
+
+    Such a part proves what the file says, never that an emulator reads it:
+    melonDS.ini keys are written on ROCKNIX for a build that reads them only
+    when another key is set.
+    """
+    return [part for part in split_ref(ref) if _CONFIG_FILE.search(ref_path(part))]
+
+
+def is_feature_ref(part: str) -> bool:
+    """Whether a source_ref part cites a file that lists a menu option's values."""
+    return bool(_FEATURE_FILE.search(ref_path(part)))
+
+
 @dataclass
 class Word:
     """A shell word: as written, and with quotes removed."""
@@ -392,6 +434,166 @@ def _merge_links(links: list[Link]) -> list[Link]:
             first.lines |= member.lines
             folded.add(id(member))
     return [link for link in merged if id(link) not in folded]
+
+
+_COPY = re.compile(r"(?:^|[\s;&|(])(cp|rsync|install|mv)\s")
+_GUARD = re.compile(r"\[\[?\s*!\s+-[fde]\s+(\S+)\s*\]")
+
+
+@dataclass
+class ConfigPlacement:
+    """How a start script puts a config where the emulator reads it.
+
+    ``install`` are the lines copying it there, ``kept_if_present`` whether
+    every such copy runs only when the file (or its folder) is absent, and
+    ``overrides`` the sed lines rewriting one of the record's keys in it.
+    """
+
+    script: str
+    path: str
+    install: set[int]
+    kept_if_present: bool
+    overrides: set[int]
+
+
+def _bare_key(key: str) -> str:
+    return key.rsplit("] ", 1)[-1].rsplit("/", 1)[-1].strip()
+
+
+def _guarded(script: Script, number: int, target: str) -> bool:
+    """Whether a line runs only when target, or a folder above it, is absent."""
+
+    def covers(found: re.Match[str], at: int) -> bool:
+        guarded = script.expand(words(found.group(1))[0].text, at, set()).rstrip("/")
+        return target == guarded or target.startswith(guarded + "/")
+
+    line = script.lines[number - 1]
+    if any(covers(m, number) for m in _GUARD.finditer(line)):
+        return True
+    depth = 0
+    for at in range(number - 1, 0, -1):
+        text = script.lines[at - 1].strip()
+        if re.match(r"fi\b", text):
+            depth += 1
+        elif re.match(r"if\b", text):
+            if depth:
+                depth -= 1
+                continue
+            return any(covers(m, at) for m in _GUARD.finditer(text))
+    return False
+
+
+def _quoted_glob(command: str) -> bool:
+    """Whether the source of a copy holds a "*" only inside quotes."""
+    found = [w for w in words(command)[1:] if not w.raw.startswith("-")]
+    if len(found) < 2:
+        return False
+    raw = found[0].raw
+    return "*" in raw and "*" not in re.sub(r'"[^"]*"|\'[^\']*\'', "", raw)
+
+
+def config_placement(
+    script: Script,
+    target: str,
+    keys: Iterable[str] = (),
+    writers: Iterable[str] = (),
+    source_name: str = "",
+    required: bool = True,
+    sources: tuple[str, ...] = (),
+) -> ConfigPlacement:
+    """The lines of a start script that install ``target`` and rewrite its keys.
+
+    A copy installs the target when its destination is the file or a folder
+    above it. ``writers`` are other commands that write the file (ROCKNIX
+    generates mednafen.cfg with mednafen_gen_config.sh). A copy guarded by
+    `[ ! -f X ]` or `[ ! -d X ]` on the target or a folder above it, or made
+    with cp -n or rsync --ignore-existing, leaves a file already there.
+    """
+    install: set[int] = set()
+    kept = True
+    overrides: set[int] = set()
+    bare = {_bare_key(k) for k in keys} - {""}
+    writer = re.compile("|".join(re.escape(w) for w in writers)) if writers else None
+    for number, line in script.code():
+        if (copy := _COPY.search(line)) or (writer and writer.search(line)):
+            if copy:
+                args = []
+                for word in words(line[copy.start(1):])[1:]:
+                    # The command ends at a separator or a redirection.
+                    if word.raw in {";", "&&", "||", "|"} or re.match(r"\d*>|&>", word.raw):
+                        break
+                    args.append(word.text)
+                operands = [a for a in args if not a.startswith("-")]
+                if not operands:
+                    continue
+                # A quoted "*" is a file named *, which no package installs:
+                # the copy does nothing (EmuELEC's duckstation.sh).
+                if _quoted_glob(line[copy.start(1):]):
+                    continue
+                destination = script.expand(operands[-1], number, set()).rstrip("/")
+                source = script.expand(operands[0], number, set()).rstrip("/")
+                hits = target == destination or target.startswith(destination + "/") or (
+                    target.startswith(f"{destination}/{source.rsplit('/', 1)[-1]}")
+                )
+                # A copy of another file into the same place is another
+                # record's: amiberry copies the A500 or the A1200 setup.
+                named = source.rsplit("/", 1)[-1]
+                if not hits or (source_name and "." in named and named != source_name):
+                    continue
+                # A named file copied into a folder above the target is
+                # another file of that folder (ARMSX2's secrets.ini).
+                if (
+                    not source_name and "." in named and "*" not in named
+                    and destination != target and named != target.rsplit("/", 1)[-1]
+                ):
+                    continue
+                if sources and not source.startswith(sources):
+                    continue
+                # cp -i fed by false answers no to every overwrite.
+                prompted = any(
+                    a.startswith("-") and not a.startswith("--") and "i" in a[1:] for a in args
+                ) and re.search(r"\bfalse\s*\|\s*$", line[:copy.start(1)])
+                skip = "-n" in args or "--ignore-existing" in args or bool(prompted)
+            else:
+                skip = False
+            install.add(number)
+            if not (skip or _guarded(script, number, target)):
+                kept = False
+        elif re.search(r"\bsed\b.*\s-i\b|\bsed -i", line) and bare:
+            expanded = script.expand(line, number, set())
+            if target in expanded or target.rsplit("/", 1)[-1] in expanded:
+                if any(re.search(rf"\b{re.escape(k)}\b", expanded) for k in bare):
+                    overrides.add(number)
+    if not install and required:
+        raise script.missing(f"install of {target}")
+    return ConfigPlacement(script.path, target, install, kept, overrides)
+
+
+def evidence_fields(
+    placements: Iterable[ConfigPlacement],
+    installed: Iterable[tuple[str, Iterable[int]]] = (),
+) -> dict:
+    """The installs, kept_if_present and overrides fields of a config record.
+
+    ``placements`` are the steps that put the file in place, in the order
+    they run (a first-boot copy, then the start script). ``installed`` are
+    the build steps that put it where they copy it from (a package.mk copy
+    into /usr/config).
+    """
+    placements = list(placements)
+    steps = [p for p in placements if p.install]
+    if not steps:
+        raise LauncherPatternMissing(placements[0].path if placements else "", "install")
+    return {
+        "installs": {
+            "path": steps[-1].path,
+            "source_ref": source_ref([*installed, *((p.script, p.install) for p in steps)]),
+        },
+        "kept_if_present": all(p.kept_if_present for p in steps),
+        "overrides": [
+            source_ref([(p.script, {line})]) for p in placements for line in sorted(p.overrides)
+        ],
+    }
 
 
 @dataclass

@@ -50,6 +50,13 @@ notes: |
   archive: which binary runs, and from which folder, is the launcher's choice.
   The amd64 and raspi archives carry pico8.dat 10b39730, byte for byte.
 
+  Refs to binary code cite these files by sha256 prefix: amd64 pico8
+  b07e76cd6a033650, amd64 pico8_dyn ca4e55eda8933a83, raspi pico8
+  cee03b8ffd89bd38, raspi pico8_dyn 443e9553a6aa81dd, raspi pico8_gpio
+  f9df817ffa37257e, raspi pico8_64 ad56e8ed1ad812ca, windows pico8.exe
+  9d0b31219e536304. The Linux binaries keep their symbol tables, so the
+  function names are those of the binary.
+
   Launchers by platform, each read at the revision the platform file pins:
   - Batocera lexaloffleGenerator.py runs bios/pico-8/pico8 and raises when it
     is missing or not executable, with LD_LIBRARY_PATH set to bios/pico-8.
@@ -109,7 +116,7 @@ files:
     sha1: 946db0633966afecf81d2b33957c7db8fb3a2356
     description: "PICO-8 0.2.7 armhf executable, SDL2 linked in"
     note: "The pico8 of pico-8_0.2.7_raspi.zip, a 32-bit ARM ELF that needs libbcm_host.so, so it runs on Raspberry Pi firmware only. Batocera's fixed path is the one a 32-bit Raspberry Pi board (bcm2835, bcm2836) can run."
-    source_ref: "batocera lexaloffleGenerator.py:17, 48-52"
+    source_ref: "pico-8 0.2.7 raspi pico8, DT_NEEDED libbcm_host.so at 0x27647c (loader-resolved), RPI_VideoInit 0x1741ac bl bcm_host_init at 0x1741b8, batocera lexaloffleGenerator.py:17, 48-52"
 
   - name: pico8
     path: pico-8/pico8
@@ -132,8 +139,8 @@ files:
     md5: 70ab37eab4e7d162d36d9b2d91b84867
     sha1: 4ed23b6578a2d93d67aa856791dc70e95d68a3f4
     description: "PICO-8 0.2.7 aarch64 executable, system libSDL2"
-    note: "pico8_64 is only in pico-8_0.2.7_raspi.zip, the build for 64-bit Raspberry Pi OS, linked against the system SDL2. AmberELEC and ROCKNIX run it from roms/pico-8/, not from bios/. AmberELEC stops with a message when it is missing. ROCKNIX picks it when HW_ARCH is aarch64. Recalbox renames bios/pico-8/pico8_64 to pico8 before the first run, and a missing file fails the rename."
-    source_ref: "pico-8 0.2.7 raspi readme_raspi.txt:3-11, amberelec packages/amberelec/sources/pico-8.sh:51-54, amberelec packages/amberelec/sources/scripts/runemu.py:123, rocknix projects/ROCKNIX/packages/emulators/standalone/pico-8/scripts/start_pico8.sh:8-17, 35-40, 46-47, recalbox projects/configgen/configgen/generators/pico8/pico8Generator.py:14-19, dArkOS pico8/pico8.sh:47-60, 128-135"
+    note: "pico8_64 is only in pico-8_0.2.7_raspi.zip, an aarch64 ELF linked against the system SDL2. AmberELEC and ROCKNIX run it from roms/pico-8/, not from bios/. AmberELEC stops with a message when it is missing. ROCKNIX picks it when HW_ARCH is aarch64. Recalbox renames bios/pico-8/pico8_64 to pico8 before the first run, and a missing file fails the rename."
+    source_ref: "pico-8 0.2.7 raspi pico8_64, DT_NEEDED libSDL2-2.0.so.0 at 0x17cb08 (loader-resolved), codo_system_init 0xefd20 bl SDL_Init at 0xefd7c, amberelec packages/amberelec/sources/pico-8.sh:51-54, amberelec packages/amberelec/sources/scripts/runemu.py:123, rocknix projects/ROCKNIX/packages/emulators/standalone/pico-8/scripts/start_pico8.sh:8-17, 35-40, 46-47, recalbox projects/configgen/configgen/generators/pico8/pico8Generator.py:14-19, dArkOS pico8/pico8.sh:47-60, 128-135"
 
   - name: pico8_dyn
     path: pico-8/pico8_dyn
@@ -145,7 +152,7 @@ files:
     sha1: 9b2e573250c70382b4071709a85c8d56c0371d59
     description: "PICO-8 0.2.7 x86_64 executable, system libSDL2"
     note: "The pico8_dyn of pico-8_0.2.7_amd64.zip, the same program linked against the system SDL2. RetroDECK lists it as required in its manifest, but its launcher executes pico8 only. Batocera never runs it. ROCKNIX runs it from roms/pico-8/ on x86_64, its HW_ARCH other than aarch64."
-    source_ref: "pico-8 0.2.7 amd64 pico8_dyn, NEEDED libSDL2-2.0.so.0, RetroDECK pico-8/component_manifest.json:26-32, RetroDECK pico-8/component_launcher.sh:3, rocknix projects/ROCKNIX/packages/emulators/standalone/pico-8/scripts/start_pico8.sh:10-17, 48"
+    source_ref: "pico-8 0.2.7 amd64 pico8_dyn, DT_NEEDED libSDL2-2.0.so.0 at 0x796da0 (loader-resolved), codo_system_init 0x519b50 call SDL_Init@plt at 0x519bb3, RetroDECK pico-8/component_manifest.json:26-32, RetroDECK pico-8/component_launcher.sh:3, rocknix projects/ROCKNIX/packages/emulators/standalone/pico-8/scripts/start_pico8.sh:10-17, 48"
 
   - name: pico8_dyn
     path: pico-8/pico8_dyn
@@ -157,7 +164,7 @@ files:
     sha1: 87ef68e70c53ba209e697bb51de45826e982d92d
     description: "PICO-8 0.2.7 armhf executable, system libSDL2"
     note: "The pico8_dyn of pico-8_0.2.7_raspi.zip, 32-bit, linked against the system SDL2. EmuELEC copies bios/pico-8 to /emuelec/bin/pico-8 and runs pico8_dyn with no existence check. KNULLI's installer stops when the archive lacks it and moves it to bios/pico-8, and the RG35XX simplermenu launcher runs it. ROCKNIX runs a pico8_dyn from roms/pico-8/ on a HW_ARCH other than aarch64, and ArkOS falls back to it when pico8_64 is absent."
-    source_ref: "pico-8 0.2.7 raspi readme_raspi.txt:3-11, emuelec packages/sx05re/emuelec/bin/pico8.sh:9-14, 39-43, knulli board/fsoverlay/usr/bin/knulli-install-pico8:9, 38-41, 67, knulli board/actions/atm7039/rg35xx/fsoverlay/usr/share/knulli/datainit/system/configs/simplermenu_plus/launchers/pico8_sa:3, rocknix projects/ROCKNIX/packages/emulators/standalone/pico-8/scripts/start_pico8.sh:14-16, dArkOS pico8/pico8.sh:49-50"
+    source_ref: "pico-8 0.2.7 raspi pico8_dyn, DT_NEEDED libSDL2-2.0.so.0 at 0x15b00c (loader-resolved), codo_system_init 0xf2660 bl SDL_Init at 0xf26a8, emuelec packages/sx05re/emuelec/bin/pico8.sh:9-14, 39-43, knulli board/fsoverlay/usr/bin/knulli-install-pico8:9, 38-41, 67, knulli board/actions/atm7039/rg35xx/fsoverlay/usr/share/knulli/datainit/system/configs/simplermenu_plus/launchers/pico8_sa:3, rocknix projects/ROCKNIX/packages/emulators/standalone/pico-8/scripts/start_pico8.sh:14-16, dArkOS pico8/pico8.sh:49-50"
 
   - name: pico8_gpio
     path: pico-8/pico8_gpio
@@ -168,8 +175,8 @@ files:
     md5: 286ab30756dfc40749ecd72221f0d063
     sha1: df77c64c95695710d23b451277325e0c37e7416e
     description: "PICO-8 0.2.7 armhf executable with GPIO access (wiringPi)"
-    note: "Only in pico-8_0.2.7_raspi.zip. The 32-bit build that maps the GPIO pins to 0x5f80..0x5fff, linked against libbcm_host.so and libwiringPi.so. KNULLI's installer stops when the archive lacks it and moves it to bios/pico-8, but no launcher runs it."
-    source_ref: "pico-8 0.2.7 raspi readme_raspi.txt:3-11, knulli board/fsoverlay/usr/bin/knulli-install-pico8:10, 43-46, 68"
+    note: "Only in pico-8_0.2.7_raspi.zip. The 32-bit build linked against libbcm_host.so and libwiringPi.so: a peek of 0x5f80+n reads GPIO pin n through wiringPi, pins 0 to 31. KNULLI's installer stops when the archive lacks it and moves it to bios/pico-8, but no launcher runs it."
+    source_ref: "pico-8 0.2.7 raspi pico8_gpio, DT_NEEDED libbcm_host.so at 0x27702c and libwiringPi.so at 0x277034 (loader-resolved), pico8_peek_1 0x860ac 0x863ac-0x863b4 (address minus 0x5f80 passed to gpio_read), gpio_read 0xae6c0 0xae70c (wiringPiSetup), 0xae730 (pin above 31 reads 0), 0xae750 (pinMode), 0xae75c (digitalRead), knulli board/fsoverlay/usr/bin/knulli-install-pico8:10, 43-46, 68"
 
   - name: pico8.dat
     path: pico-8/pico8.dat
@@ -179,8 +186,8 @@ files:
     md5: 10b397305093c80109096319a538ba56
     sha1: 0f92093752bddb12210c7db6d93af3ba2413cfce
     description: "PICO-8 0.2.7 data file (boot sequence, themes, demo carts)"
-    note: "PICO-8 opens it from its own folder and quits with \"couldn't load <folder>/pico8.dat\" when it is absent (the amd64 pico8, run without it). Paired with the binary's own version, identical in pico-8_0.2.7_amd64.zip, pico-8_0.2.7_raspi.zip and pico-8_0.2.7_windows.zip. AmberELEC and ArkOS check for it before starting PICO-8, and KNULLI's installer stops when the archive lacks it."
-    source_ref: "pico-8 0.2.7 amd64 pico8, string pico8.dat at 0x231bc0, pico-8 0.2.7 raspi pico8_64, string pico8.dat at 0x110138, amberelec packages/amberelec/sources/pico-8.sh:51-52, dArkOS pico8/pico8.sh:136-142, knulli board/fsoverlay/usr/bin/knulli-install-pico8:11, 48-51, 69"
+    note: "PICO-8 opens it from its own folder and quits with \"couldn't load <folder>/pico8.dat\" and exit status 0 when it is absent. Paired with the binary's own version, identical in pico-8_0.2.7_amd64.zip, pico-8_0.2.7_raspi.zip and pico-8_0.2.7_windows.zip. AmberELEC and ArkOS check for it before starting PICO-8, and KNULLI's installer stops when the archive lacks it."
+    source_ref: "pico-8 0.2.7 amd64 pico8 codo_main_init 0x407a90 0x407df8-0x407e09 (pico8.dat prefixed with the program folder), 0x407e1f (codo_load_pod, fopen rb at 0x4d1d90), 0x4084f2-0x408508 (printf couldn't load %s, exit when it returns null), pico-8 0.2.7 raspi pico8_64 codo_main_init 0xf724 0xfa34-0xfa50, 0xfa5c, 0x100c4-0x100d8 (same sequence), pico-8 0.2.7 windows pico8.exe _codo_main_init 0x403aa0 0x403e25-0x403e47, amberelec packages/amberelec/sources/pico-8.sh:51-52, dArkOS pico8/pico8.sh:136-142, knulli board/fsoverlay/usr/bin/knulli-install-pico8:11, 48-51, 69"
 
   - name: pico8.exe
     path: pico-8/pico8.exe
@@ -204,22 +211,22 @@ files:
     sha1: 9174251921d675c204e683cdea65a8c906fcba28
     description: "SDL2 library of the PICO-8 0.2.7 Windows build"
     note: "pico8.exe imports SDL2.dll, which Windows loads from the executable's folder. Shipped beside it in pico-8_0.2.7_windows.zip."
-    source_ref: "pico-8 0.2.7 windows pico8.exe, import table"
+    source_ref: "pico-8 0.2.7 windows pico8.exe import descriptor 0x912064 for SDL2.dll (93 functions from IAT 0x91277c, loader-resolved), _codo_system_init 0x4f9840 call _SDL_Init at 0x4f988e, thunk 0x521890 jmp [0x91285c] (SDL2.dll IAT slot)"
 
   - name: config.txt
     unsourceable: "written by the emulator on exit, no canonical file"
     system: pico8
     required: false
     description: "PICO-8 settings"
-    source_ref: "pico-8 0.2.7 amd64 pico8, string config.txt at 0x244739, pico-8 0.2.7 pico-8_manual.txt:250-259, 284"
-    note: "Read beside the binary, then from the -home folder (~/.lexaloffle/pico-8 on Linux), and written there on exit when absent."
+    source_ref: "pico-8 0.2.7 amd64 pico8 codo_config_load 0x4d2900 0x4d2965-0x4d297d (config.txt in the -home folder), 0x4d2bbd (fopen r), 0x4d3411 (vdisk), 0x4d2a7b-0x4d2a85 and 0x4d348c (config.txt beside the binary), 0x4d34bb (neither: return with defaults), codo_config_save 0x4d37f0 0x4d37f4-0x4d3824 (written to the -home folder, called from codo_exit.part.1 at 0x4bf640), codo_prefix_with_appdata_path 0x518940 0x51894c (-home folder, else $HOME/.lexaloffle/<app>)"
+    note: "Read from the -home folder (~/.lexaloffle/pico-8 on Linux), else from beside the binary, and written to the -home folder on exit."
 
   - name: sdl_controllers.txt
     unsourceable: "user supplied, no canonical file"
     system: pico8
     required: false
     description: "Custom SDL controller mappings, one per line"
-    source_ref: "pico-8 0.2.7 amd64 pico8, string sdl_controllers.txt at 0x24c896, pico-8 0.2.7 pico-8_manual.txt:301-302, 4053"
+    source_ref: "pico-8 0.2.7 amd64 pico8 add_sdl_controllers 0x518c00 0x518c04-0x518c46 (beside the binary, fopen r), 0x518c54-0x518c73 (the -home folder), 0x518c8a-0x518cab (created there with a comment line when absent), 0x518d5c-0x518d7a (fgets, SDL_GameControllerAddMapping per line), called from codo_joystick_init at 0x518e74"
     note: "Processed first when present beside the binary, then read from the -home folder, where PICO-8 writes it when absent."
 
   - name: favourites.txt
@@ -227,5 +234,5 @@ files:
     system: pico8
     required: false
     description: "SPLORE favourites list"
-    source_ref: "pico-8 0.2.7 amd64 pico8, string favourites.txt at 0x242346"
-    note: "Read from the -home folder. The bbs/<listing>.pip.png images beside it are downloaded from the BBS."
+    source_ref: "pico-8 0.2.7 amd64 pico8 reload_favourites 0x4b0800 0x4b0801-0x4b0837, splore_init.part.19 0x4b2980 0x4b2bd5-0x4b2bed (populate_splore_list_from_text_file 0x4b0350, codo_fopen r at 0x4b038b), save_splore_favourites 0x4ab2d0 0x4ab2d4-0x4ab30c (fopen w)"
+    note: "Read from the -home folder and written there by SPLORE. The bbs/<listing>.pip.png images beside it are downloaded from the BBS."

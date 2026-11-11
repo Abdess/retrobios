@@ -24,6 +24,14 @@ cores:
 systems:
   - nintendo-gba
 
+config_reads:
+  - file: "/storage/.config/nanoboyadvance/config.toml"
+    platforms: [rocknix]
+    source_ref: "src/platform/sdl/main.cpp:293, src/platform/core/src/config.cpp:16-31"
+    keys:
+      - key: "[general] bios_path"
+        source_ref: "src/platform/core/src/config.cpp:36, src/platform/sdl/main.cpp:177-191, src/platform/core/src/loader/bios.cpp:19-46"
+
 notes: |
   Game Boy Advance emulator. ROCKNIX builds the SDL2 frontend only
   (PLATFORM_SDL2=ON, PLATFORM_QT=OFF).

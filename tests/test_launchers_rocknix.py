@@ -85,13 +85,14 @@ MELONDS_SH = text(
             sed -i '/^ExternalBIOSEnable=/c\\ExternalBIOSEnable=0' /storage/.config/melonDS/melonDS.ini
         fi
     fi
+    CONF_DIR="/storage/.config/melonDS"
 """
 )
 
 
 def melonds_tree() -> RepoTree:
     pkg = f"{SA}/melonds-sa"
-    return RepoTree.from_files(
+    return rocknix_tree(
         {
             **devices("AMD64", "H700", "RK3576", "S922X"),
             f"{pkg}/package.mk": MELONDS_MK,
@@ -148,6 +149,7 @@ AMIBERRY_SH = text(
       cp -rf /usr/config/amiberry ${AMIBERRY_DIR}
     fi
     cd ${AMIBERRY_DIR}
+    amiberry -f "${AMIBERRY_TMP_CONFIG}" --autoload "$1" >> ${AMIBERRY_LOG} 2>&1
 """
 )
 
@@ -291,6 +293,22 @@ FLYCAST_SH = text(
 )
 
 
+USERCONFIG = text(
+    """
+    #!/bin/bash
+    if [ ! -e "/storage/.configured" ]
+    then
+      rsync -a --ignore-existing --exclude={es_features.cfg,es_systems.cfg} /usr/config/* /storage/.config/ >/var/log/configure.log 2>&1
+    fi
+    """
+)
+
+
+def rocknix_tree(files: dict[str, str], links: dict[str, str] | None = None) -> RepoTree:
+    """A ROCKNIX tree holding the first-boot copy every config record cites."""
+    return RepoTree.from_files({rl.USERCONFIG: USERCONFIG, **files}, links)
+
+
 def by(records: list[dict], emulator: str) -> list[dict]:
     return [r for r in records if r["emulator"] == emulator]
 
@@ -302,23 +320,26 @@ class ConfigsPerDevice(unittest.TestCase):
         empty, named = records
         self.assertEqual(empty["names"], [])
         self.assertTrue(empty["passes_to"].endswith("DSiNANDPath left empty"))
+        # melonDS opens the DSi BIOS and firmware keys only under
+        # DSiExternalBIOSEnable, which no shipped config sets.
         self.assertEqual(
-            named["names"],
-            [
-                "bios9.bin",
-                "bios7.bin",
-                "firmware.bin",
-                "dsi_bios9.bin",
-                "dsi_bios7.bin",
-                "dsi_firmware.bin",
-                "dsi_nand.bin",
-            ],
+            named["names"], ["bios9.bin", "bios7.bin", "firmware.bin", "dsi_nand.bin"]
         )
         self.assertEqual(named["search_dir"], "/storage/roms/bios")
+        self.assertEqual(named["installs"]["path"], "/storage/.config/melonDS/melonDS.ini")
+        self.assertIs(named["kept_if_present"], True)
+        self.assertEqual(named["overrides"], [])
+
+    def test_a_config_setting_the_dsi_switch_keeps_the_dsi_keys(self):
+        tree = melonds_tree()
+        path = f"{SA}/melonds-sa/config/S922X/melonDS.ini"
+        tree._texts[path] = tree.read(path) + "DSiExternalBIOSEnable=1\n"
+        named = rl.melonds(tree)[1].entry()
+        self.assertIn("dsi_bios9.bin", named["names"])
 
     def test_a_linked_device_directory_reads_its_target(self):
         named = rl.melonds(melonds_tree())[1].entry()
-        self.assertIn(f"{SA}/melonds-sa/config/InputPlumber/melonDS.ini:2-8", named["source_ref"])
+        self.assertIn(f"{SA}/melonds-sa/config/InputPlumber/melonDS.ini:2-4, 8", named["source_ref"])
         self.assertNotIn("config/RK3576", named["source_ref"])
 
     def test_the_external_bios_switch_is_the_option(self):
@@ -330,11 +351,14 @@ class ConfigsPerDevice(unittest.TestCase):
 
     def test_identical_configs_give_one_record_without_device(self):
         pkg = f"{SA}/dsperate-sa"
-        tree = RepoTree.from_files(
+        tree = rocknix_tree(
             {
                 **devices("H700", "RK3576", "S922X"),
                 f"{pkg}/package.mk": DSPERATE_MK,
-                f"{pkg}/scripts/start_dsperate.sh": '${EMUPERF} /usr/bin/dsperate --config "${DSPERATE_INI}" "${ROM}"\n',
+                f"{pkg}/scripts/start_dsperate.sh": (
+                    '${EMUPERF} /usr/bin/dsperate --config "${DSPERATE_INI}" "${ROM}"\n'
+                    'DSPERATE_INI="/storage/.config/dsperate/dsperate.ini"\n'
+                ),
                 f"{pkg}/config/H700/dsperate.ini": DSPERATE_INI,
                 f"{pkg}/config/InputPlumber/dsperate.ini": DSPERATE_INI,
                 f"{pkg}/config/S922X/dsperate.ini": DSPERATE_INI,
@@ -352,10 +376,11 @@ class ConfigsPerDevice(unittest.TestCase):
 
     def test_an_absent_key_and_an_empty_one_hand_over_the_same(self):
         pkg = f"{SA}/duckstation-sa"
-        tree = RepoTree.from_files(
+        tree = rocknix_tree(
             {
                 **devices("AMD64", "S922X"),
                 f"{pkg}/package.mk": DUCKSTATION_MK,
+                f"{pkg}/scripts/start_duckstation.sh": "#!/bin/bash\n",
                 f"{pkg}/config/AMD64/settings.ini": "[BIOS]\nSearchDirectory = /storage/roms/bios\n",
                 f"{pkg}/config/S922X/settings.ini": text(
                     """
@@ -375,10 +400,11 @@ class ConfigsPerDevice(unittest.TestCase):
 
     def test_a_bios_written_into_a_path_key_is_an_unknown_shape(self):
         pkg = f"{SA}/duckstation-sa"
-        tree = RepoTree.from_files(
+        tree = rocknix_tree(
             {
                 **devices("S922X"),
                 f"{pkg}/package.mk": DUCKSTATION_MK,
+                f"{pkg}/scripts/start_duckstation.sh": "#!/bin/bash\n",
                 f"{pkg}/config/S922X/settings.ini": "[BIOS]\nSearchDirectory = /storage/roms/bios\nPathNTSCU = scph5501.bin\n",
             }
         )
@@ -387,7 +413,7 @@ class ConfigsPerDevice(unittest.TestCase):
 
     def test_a_package_without_a_device_copy_raises(self):
         pkg = f"{SA}/duckstation-sa"
-        tree = RepoTree.from_files(
+        tree = rocknix_tree(
             {
                 **devices("S922X"),
                 f"{pkg}/package.mk": "makeinstall_target() {\n  true\n}\n",
@@ -402,7 +428,7 @@ class NamesTheConfigsFix(unittest.TestCase):
     def test_amiberry_machine_follows_the_game_name(self):
         pkg = f"{SA}/amiberry"
         uae = "amiberry.rom_path=/storage/.config/amiberry/kickstarts/\nkickstart_rom_file=@BIOS_PATH@/{}\nkickstart_ext_rom_file=\n"
-        tree = RepoTree.from_files(
+        tree = rocknix_tree(
             {
                 f"{pkg}/scripts/start_amiberry.sh": AMIBERRY_SH,
                 f"{pkg}/package.mk": AMIBERRY_MK,
@@ -412,9 +438,15 @@ class NamesTheConfigsFix(unittest.TestCase):
         )
         a1200, a500, link, entered, copied = (r.entry() for r in rl.amiberry(tree))
         self.assertEqual((a1200["slot"], a1200["names"]), ("A1200", ["kick40068.A1200.rom"]))
-        self.assertEqual(a1200["depends_on_option"], "game name matches AGA|CD32")
+        self.assertEqual(
+            a1200["depends_on_option"],
+            "game name matches AGA|CD32, content not booted with --autoload, "
+            "a WHDLoad .lha or .zip (start_amiberry.sh:17)",
+        )
+        self.assertEqual(a1200["installs"]["path"], "${AMIBERRY_TMP_CONFIG}")
+        self.assertIs(a1200["kept_if_present"], False)
         self.assertEqual((a500["slot"], a500["names"]), ("A500", ["kick34005.A500.rom"]))
-        self.assertEqual(a500["depends_on_option"], "game name does not match AGA|CD32")
+        self.assertTrue(a500["depends_on_option"].startswith("game name does not match AGA|CD32"))
         self.assertEqual(a500["search_dir"], "/storage/roms/bios")
         self.assertEqual(
             a1200["source_ref"],
@@ -443,7 +475,7 @@ class NamesTheConfigsFix(unittest.TestCase):
 
     def test_mednafen_one_record_per_module(self):
         pkg = f"{SA}/mednafen"
-        tree = RepoTree.from_files(
+        tree = rocknix_tree(
             {
                 f"{pkg}/config/common/mednafen.template": MEDNAFEN_TEMPLATE,
                 f"{pkg}/scripts/start_mednafen.sh": MEDNAFEN_SH,
@@ -461,7 +493,7 @@ class NamesTheConfigsFix(unittest.TestCase):
 
     def test_mednafen_without_a_firmware_directory_raises(self):
         pkg = f"{SA}/mednafen"
-        tree = RepoTree.from_files(
+        tree = rocknix_tree(
             {
                 f"{pkg}/config/common/mednafen.template": "psx.bios_eu scph5502.bin\n",
                 f"{pkg}/scripts/start_mednafen.sh": MEDNAFEN_SH,
@@ -473,7 +505,7 @@ class NamesTheConfigsFix(unittest.TestCase):
 
 class SearchedNames(unittest.TestCase):
     def tree(self, script: str) -> RepoTree:
-        return RepoTree.from_files({f"{SA}/yabasanshiro-sa/scripts/start_yabasanshiro.sh": script})
+        return rocknix_tree({f"{SA}/yabasanshiro-sa/scripts/start_yabasanshiro.sh": script})
 
     def test_yabasanshiro_tries_its_names_in_order(self):
         (record,) = [r.entry() for r in rl.yabasanshiro(self.tree(YABASANSHIRO_SH))]
@@ -514,7 +546,7 @@ class Links(unittest.TestCase):
 
     def tree(self) -> RepoTree:
         scripts = self.all_scripts()
-        return RepoTree.from_files({p: scripts[e] for e, p in rl.LINK_SCRIPTS})
+        return rocknix_tree({p: scripts[e] for e, p in rl.LINK_SCRIPTS})
 
     def emulator(self, name: str) -> list[dict]:
         return by([r.entry() for r in rl.links(self.tree())], name)
@@ -566,7 +598,7 @@ class Links(unittest.TestCase):
     def test_a_script_without_a_bios_link_raises(self):
         scripts = self.all_scripts()
         scripts["flycast"] = 'ln -sf "/storage/.config/flycast" "/storage/.local/share/flycast"\n'
-        tree = RepoTree.from_files({p: scripts[e] for e, p in rl.LINK_SCRIPTS})
+        tree = rocknix_tree({p: scripts[e] for e, p in rl.LINK_SCRIPTS})
         with self.assertRaises(LauncherPatternMissing):
             rl.links(tree)
 
@@ -603,7 +635,7 @@ class ProgramsRunOutsideTheBiosFolder(unittest.TestCase):
     PATH = f"{SA}/pico-8/scripts/start_pico8.sh"
 
     def test_pico8_runs_its_binary_from_roms(self):
-        (record,) = [r.entry() for r in rl.pico8(RepoTree.from_files({self.PATH: START_PICO8}))]
+        (record,) = [r.entry() for r in rl.pico8(rocknix_tree({self.PATH: START_PICO8}))]
         self.assertEqual(
             (record["emulator"], record["kind"], record["names"], record["search_dir"],
              record["passes_to"]),
@@ -615,7 +647,7 @@ class ProgramsRunOutsideTheBiosFolder(unittest.TestCase):
     def test_a_script_without_its_binary_choice_raises(self):
         broken = START_PICO8.replace('STATIC_BIN="pico8_dyn"', "STATIC_BIN=$OTHER")
         with self.assertRaises(LauncherPatternMissing):
-            rl.pico8(RepoTree.from_files({self.PATH: broken}))
+            rl.pico8(rocknix_tree({self.PATH: broken}))
 
 
 class Revision(unittest.TestCase):

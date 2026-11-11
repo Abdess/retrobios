@@ -282,7 +282,8 @@ def diff_targets(old: dict, new: dict) -> PlatformDiff:
 
 
 def _scrape_into_copy(
-    module: str, source: Path, workdir: Path, timeout: int = 900
+    module: str, source: Path, workdir: Path, timeout: int = 900,
+    extra: tuple[str, ...] = (),
 ) -> tuple[Path, str | None]:
     """Run a scraper's own write path on a throwaway copy of *source*.
 
@@ -292,7 +293,7 @@ def _scrape_into_copy(
     target = workdir / source.name
     shutil.copyfile(source, target)
     proc = subprocess.run(
-        [sys.executable, "-m", module, "-o", str(target)],
+        [sys.executable, "-m", module, "-o", str(target), *extra],
         cwd=REPO_ROOT,
         capture_output=True,
         text=True,
@@ -327,6 +328,17 @@ def _scrapable_platforms(platforms_dir: Path) -> list[tuple[str, str, Path]]:
     return rows
 
 
+def rescrape_args(platforms_dir: Path, name: str) -> tuple[str, ...]:
+    """What a rescrape passes so the scraper reads upstream's moving head.
+
+    A scraper that rereads the revision its platform file pins by default
+    (RetroBat) names the ref to move to in the registry's rescrape_args.
+    """
+    with (platforms_dir / "_registry.yml").open(encoding="utf-8") as fh:
+        registry = (yaml_load(fh) or {}).get("platforms") or {}
+    return tuple(str(a) for a in (registry.get(name) or {}).get("rescrape_args") or ())
+
+
 def check_platforms(platforms_dir: Path, workdir: Path, jobs: int) -> list[Finding]:
     rows = _scrapable_platforms(platforms_dir)
     findings: list[Finding] = []
@@ -334,7 +346,9 @@ def check_platforms(platforms_dir: Path, workdir: Path, jobs: int) -> list[Findi
     def run(row: tuple[str, str, Path]) -> Finding:
         name, module, path = row
         try:
-            fresh, error = _scrape_into_copy(module, path, workdir)
+            fresh, error = _scrape_into_copy(
+                module, path, workdir, extra=rescrape_args(platforms_dir, name)
+            )
         except subprocess.TimeoutExpired:
             return Finding("platforms", name, ERROR, detail="scraper timed out")
         if error:

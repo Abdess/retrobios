@@ -79,7 +79,9 @@ class Companions(unittest.TestCase):
         }
         stored = {
             "ps2-0230a-20080220.bin": b"I" * 8,
+            "SCPH-70004.BIN": b"B" * 8,
             "SCPH-70004.ROM1": b"R" * 6,
+            "246C.ROM1": b"N" * 3,
             "cheats_ws.zip": b"Z",
             "GameIndex.yaml": b"Y",
         }
@@ -107,6 +109,58 @@ class Companions(unittest.TestCase):
         names = {e["destination"] for e in extras}
         self.assertIn("SCPH-70004.rom1", names)
         self.assertFalse({"SCPH-70004.ROM1", "cheats_ws.zip", "GameIndex.yaml"} & names)
+        # Read beside the image the core selected only: no 246C image here.
+        self.assertNotIn("246C.rom1", names)
+
+    def test_a_shared_image_brings_each_cores_companions(self):
+        """Recalbox runs LRPS2 and the old libretro PCSX2 on one ps2/ folder.
+        LRPS2's scan placed SCPH-70004.BIN and its rom1, and the second core's
+        scan stopped at the taken image, so the .erom only it reads stayed out."""
+        import os
+        import tempfile
+
+        from packextras import _agnostic_scan_extras
+
+        def profile(name: str, ext: str) -> dict:
+            return {"emulator": name, "bios_mode": "agnostic", "files": [
+                {"name": "ps2-0230a-20080220.bin", "found_by": "content",
+                 "path": "ps2/ps2-0230a-20080220.bin", "min_size": 8, "max_size": 16},
+                {"name": f"ps2-0230a-20080220.{ext}", "path": f"ps2/ps2-0230a-20080220.{ext}"},
+            ]}
+
+        stored = {
+            "ps2-0230a-20080220.bin": b"I" * 8,
+            "ps2-0230a-20080220.rom1": b"R",
+            "ps2-0230a-20080220.erom": b"E",
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            cwd = os.getcwd()
+            os.chdir(tmp)
+            try:
+                files, by_name = {}, {}
+                for name, payload in stored.items():
+                    path = f"bios/PS2/{name}"
+                    os.makedirs("bios/PS2", exist_ok=True)
+                    Path(path).write_bytes(payload)
+                    sha1 = f"{len(files):040d}"
+                    files[sha1] = {"path": path, "name": name, "size": len(payload),
+                                   "sha1": sha1}
+                    by_name[name] = [sha1]
+                db = {"files": files, "indexes": {
+                    "by_name": by_name, "by_md5": {}, "by_crc32": {}, "by_path_suffix": {},
+                }}
+                profiles = {"a": profile("A", "rom1"), "b": profile("B", "erom")}
+                extras = _agnostic_scan_extras(
+                    profiles, {"a", "b"}, db, by_name, set(), "", taken={},
+                )
+            finally:
+                os.chdir(cwd)
+        placed = [(e["destination"], e["source_profile"]) for e in extras]
+        self.assertEqual(sorted(placed), [
+            ("ps2/ps2-0230a-20080220.bin", "a"),
+            ("ps2/ps2-0230a-20080220.erom", "b"),
+            ("ps2/ps2-0230a-20080220.rom1", "a"),
+        ])
 
     def test_pcsx2_profiles_name_no_free_standing_companion(self):
         for name in ("pcsx2", "pcsx2-legacy"):

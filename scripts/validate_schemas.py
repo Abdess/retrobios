@@ -81,12 +81,16 @@ def _validate_yaml_directory(
             continue
         out.extend(_errors(validator, data, str(path.relative_to(ROOT))))
         out.extend(_unreachable_citations(path, data))
+        if schema_name == "platform.schema.json":
+            out.extend(_config_records_without_evidence(path, data))
         if schema_name == "emulator.schema.json":
+            out.extend(_config_reads_without_build(path, data))
             out.extend(_checks_without_values(path, data))
             out.extend(_save_dir_without_library_name(path, data))
             out.extend(_systems_outside_profile(path, data))
             out.extend(_doubled_paths(path))
             out.extend(_group_requirement_split(path, data))
+            out.extend(_data_only_source_refs(path, data))
     return out
 
 
@@ -95,8 +99,63 @@ _CHECK_FIELDS = {
     "md5": ("md5",),
     "sha1": ("sha1",),
     "sha256": ("sha256",),
-    "size": ("size", "min_size", "max_size"),
+    "size": ("size", "min_size", "max_size", "size_multiple"),
+    "romdir": ("romdir",),
+    "masked_sha1": ("masked_sha1",),
 }
+
+
+def _config_records_without_evidence(path: Path, document: object) -> list[str]:
+    """A launcher record citing a config without the links its extractor reads.
+
+    A config file is proof only when the code installing it and the code
+    reading it are shown (launchers.config_evidence). The platform's half
+    is the extractor's to write: a record citing a shipped config carries
+    installs and overrides, and a feature or option file is never a
+    record's source, only its choices_from.
+    """
+    if not isinstance(document, dict):
+        return []
+    from scraper.shell_launchers import config_ref, is_feature_ref  # noqa: PLC0415
+
+    out: list[str] = []
+    for index, record in enumerate(document.get("launchers") or []):
+        if not isinstance(record, dict):
+            continue
+        cited = config_ref(str(record.get("source_ref") or ""))
+        where = f"{path.relative_to(ROOT)}: launchers[{index}] ({record.get('emulator')})"
+        features = [part for part in cited if is_feature_ref(part)]
+        if features:
+            out.append(f"{where} cites {features[0]} as source, choices_from holds it")
+        if [part for part in cited if not is_feature_ref(part)] and not (
+            record.get("installs") and "overrides" in record
+        ):
+            out.append(f"{where} cites a config without installs and overrides")
+    return out
+
+
+def _config_reads_without_build(path: Path, document: object) -> list[str]:
+    """A config_reads entry naming a platform the profile gives no pin_build.
+
+    Such an entry is read at the build that platform ships, and pin_build is
+    where that build is named.
+    """
+    if not isinstance(document, dict):
+        return []
+    builds = {str(b.get("platform")) for b in document.get("pin_build") or []}
+    out: list[str] = []
+    for index, read in enumerate(document.get("config_reads") or []):
+        if not isinstance(read, dict):
+            continue
+        if read.get("revision") or read.get("binary_sha256"):
+            continue
+        for platform in read.get("platforms") or []:
+            if str(platform) not in builds:
+                out.append(
+                    f"{path.relative_to(ROOT)}: config_reads[{index}] ({read.get('file')}) "
+                    f"names {platform}, which has no pin_build"
+                )
+    return out
 
 
 def _systems_outside_profile(path: Path, document: object) -> list[str]:
@@ -150,6 +209,77 @@ def _group_requirement_split(path: Path, document: object) -> list[str]:
                        "and writes required: the set's requirement is in groups")
     out.extend(f"{label}: group {g} has no entry in groups" for g in sorted(used - declared))
     out.extend(f"{label}: groups declares {g}, which no entry names" for g in sorted(declared - used))
+    return out
+
+
+_CODE_SUFFIXES = frozenset(
+    "c cc cpp cxx c++ h hh hpp hxx inc inl ipp m mm mjs cjs js jsx ts tsx py cs java kt "
+    "go rs lua pas pp asm s sh bash zsh ps1 bat cmd vbs swift d zig nim qml qc rb pl php "
+    "scala ml hs dart vue ino z80 smali".split()
+)
+_CODE_FILE = re.compile(r"(?<=[\w+-])\.([A-Za-z0-9+]+)\b")
+# A compiled image: a part that names one has to say where in it the file
+# is read, an address, a decompiled function or an IL method.
+# A name under a directory is a file of the tree it sits in, and a further
+# extension (.dll.map) makes it another file.
+_BINARY_FILE = re.compile(
+    r"(?<![\w/+.-])[\w+.-]+\.(?:so|dll|exe|dylib|dex|elf|nro|xex)(?:\.\d+)*(?![\w.-]*\w)",
+    re.IGNORECASE,
+)
+_BINARY_EVIDENCE = re.compile(
+    r"\b0x[0-9a-fA-F]+\b"
+    r"|\b(?:FUN|sub|thunk|LAB)_[0-9a-fA-F]+\b"
+    r"|\bIL_[0-9a-fA-F]{4}\b"
+    r"|::|\.\.c?ctor\b"
+    r"|\b[A-Za-z_][\w.$]*\("
+)
+
+# Profiles whose files cite no published code. Each reason says why the
+# check cannot apply yet.
+DATA_ONLY_REF_EXCEPTIONS: dict[str, str] = {}
+
+
+def _ref_cites_code(ref: str) -> bool:
+    """A source_ref cites a source file or a place in a compiled image.
+
+    A part naming a binary without an address, a decompiled function or an
+    IL method says only that the binary exists: "import directory",
+    "string table" and "readelf -d" are not the code that reads a file.
+    """
+    from sourceref import split_source_ref
+
+    cited = False
+    for part in split_source_ref(ref):
+        located = bool(_BINARY_EVIDENCE.search(part.raw)) or any(
+            suffix.lower() in _CODE_SUFFIXES for suffix in _CODE_FILE.findall(part.raw)
+        )
+        if _BINARY_FILE.search(part.raw) and not located:
+            return False
+        cited = cited or located
+    return cited
+
+
+def _data_only_source_refs(path: Path, document: object) -> list[str]:
+    """A files[] source_ref that cites only data or build files.
+
+    A data file is evidence that the emulator reads a file only once the
+    code that ships and parses it is cited too: iwadinfo.txt names the
+    IWADs, d_iwad.cpp is what reads it. 655 entries in 27 profiles cited
+    the table alone, and six of them named a file no code opens.
+    """
+    if not isinstance(document, dict) or path.stem in DATA_ONLY_REF_EXCEPTIONS:
+        return []
+    out: list[str] = []
+    for index, entry in enumerate(document.get("files") or []):
+        if not isinstance(entry, dict) or not entry.get("source_ref"):
+            continue
+        refs = entry["source_ref"]
+        for ref in refs.values() if isinstance(refs, dict) else [refs]:
+            if ref and not _ref_cites_code(str(ref)):
+                out.append(
+                    f"{path.relative_to(ROOT)}: files[{index}] ({entry.get('name')}) "
+                    f"source_ref cites no code that reads the file: {ref}"
+                )
     return out
 
 
@@ -584,7 +714,13 @@ def _semantic_install_checks(path: Path, manifest: dict) -> list[str]:
     destinations = [(entry.get("root"), entry.get("dest")) for entry in files]
     if len(destinations) != len(set(destinations)):
         out.append(f"{path.relative_to(ROOT)}: duplicate destinations")
-    omitted_destinations = [(entry.get("root"), entry.get("dest")) for entry in omitted]
+    # root: emulator is each core's own folder: mame2015 and mame2016 read
+    # 3dobios.zip in two places, one omission each, named by its cores.
+    omitted_destinations = [
+        (entry.get("root"), entry.get("dest"),
+         tuple(entry.get("cores") or ()) if entry.get("root") == "emulator" else ())
+        for entry in omitted
+    ]
     if len(omitted_destinations) != len(set(omitted_destinations)):
         out.append(f"{path.relative_to(ROOT)}: duplicate omitted destinations")
     overlap = set(destinations) & set(omitted_destinations)

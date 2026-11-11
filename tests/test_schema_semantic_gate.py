@@ -95,6 +95,24 @@ class SemanticManifestValidation(unittest.TestCase):
         self.assertEqual(len(errors), 1)
         self.assertIn("total_files does not equal len(files)", errors[0])
 
+    def test_an_emulator_folder_omission_is_keyed_by_its_cores(self):
+        """mame2015 and mame2016 read 3dobios.zip each in its own folder:
+        two omissions, two places. The same core twice is one place."""
+        path = REPO_ROOT / "install" / "synthetic.json"
+
+        def omission(core: str) -> dict:
+            return {"dest": "3dobios.zip", "root": "emulator", "cores": [core]}
+
+        def errors(omitted: list[dict]) -> list[str]:
+            manifest = {"files": [], "total_files": 0, "total_size": 0,
+                        "omitted_files": omitted, "total_omitted": len(omitted)}
+            return [e for e in validate_schemas._semantic_install_checks(path, manifest)
+                    if "omitted destinations" in e]
+
+        self.assertEqual(errors([omission("mame2015"), omission("mame2016")]), [])
+        self.assertEqual(len(errors([omission("mame2015"), omission("mame2015")])), 1)
+        self.assertEqual(len(errors([{"dest": "a.bin"}, {"dest": "a.bin"}])), 1)
+
 
 try:
     import jsonschema

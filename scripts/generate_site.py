@@ -95,6 +95,7 @@ import siteentries
 import siteinputs
 import retired_files
 import siteagents
+import sitediagrams
 import sitestarlight
 import sitesteps
 from siteexports import generate_exports_page, load_export_reports
@@ -127,6 +128,7 @@ from siteguides import (
 import archive_build
 import release_record
 import sitebootstrap
+import sitehandheld
 import sitemeasurements
 
 # The Starlight project, and where its pages go inside it.
@@ -415,8 +417,8 @@ def _date_line() -> str:
 def _stat(value: str, label: str) -> list[str]:
     return [
         markup.block_open("div", 'class="rb-stat"'),
-        f'<span class="rb-stat-value">{value}</span>',
-        f'<span class="rb-stat-label">{label}</span>',
+        # One line, a space between: the page text read "168/168Coverage".
+        f'<span class="rb-stat-value">{value}</span> <span class="rb-stat-label">{label}</span>',
         "</div>",
         "",
     ]
@@ -725,9 +727,11 @@ def get_page_title(platform_name: str, display: str) -> str:
     """What a get/ page holds, by its name: the ZIP of a setup a release
     publishes one for, the files of any other. "Download KNULLI" read as
     the system's own download. A setup that is also an emulator (BizHawk)
-    names it last: "BizHawk BIOS files" is the title of its emulator page."""
+    names it last: "BizHawk BIOS files" is the title of its emulator page.
+    A profile listing no file (the RetroArch frontend) titles its page
+    "... emulator", which no setup title repeats."""
     kind = "BIOS pack" if has_release_pack(platform_name) else "BIOS files"
-    if (siteinputs.current().emulators / f"{platform_name}.yml").is_file():
+    if (_profiles_on_disk().get(platform_name) or {}).get("files"):
         return f"{kind} for {display}"
     return f"{display} {kind}"
 
@@ -859,6 +863,7 @@ def generate_get_page(platform_name: str) -> str:
             f"[Why no ZIP?](../{NO_ZIP_FAQ})",
             "",
         ]
+    lines += sitehandheld.platform_block(platform_name, _REPO_ROOT)
     lines += _next_block([
         f"[{display}](../platforms/{platform_name}.md#install): the folder, "
         "and how to run the command on the device",
@@ -886,6 +891,11 @@ def generate_get_index() -> str:
         for name in names:
             display = load_platform_config(name, str(siteinputs.current().platforms)).get("platform", name)
             lines.append(f"- [{get_page_title(name, display)}]({name}.md)")
+        # The handheld app sits with the group whose tile leads to the
+        # handheld guide.
+        if any(HANDHELD_GUIDE and tile.link == HANDHELD_GUIDE.path
+               for tile in GROUP_TILES.get(group, ())):
+            lines.append(f"- [{sitehandheld.GROUP_TITLE}]({sitehandheld.GROUP_PAGE}.md)")
         lines.append("")
     return "\n".join(lines)
 
@@ -3639,13 +3649,15 @@ def _served_line(f: dict, declared_sha1: str = "") -> str:
 def _launcher_refs(config: dict) -> dict[str, list[str]]:
     """Entry name, casefolded -> each launcher record that opens it, rendered."""
     from launchers import _names as launcher_names
+    from launchers import bound_launchers
     from sitesources import launcher_ref_markdown, list_source
 
     # Every scraper reads its launchers in the repository and at the revision
-    # of the list it scrapes, so `source` pins each source_ref.
+    # of the list it scrapes, so `source` pins each source_ref. A record a
+    # config file does not prove opens nothing: it is listed apart.
     source = list_source(str(config.get("source") or ""))
     found: dict[str, list[str]] = {}
-    for record in config.get("launchers") or []:
+    for record in bound_launchers(config):
         if not isinstance(record, dict) or not record.get("source_ref"):
             continue
         text = (f"{_escape_tags(str(record.get('emulator', '')))} at "
@@ -3655,6 +3667,31 @@ def _launcher_refs(config: dict) -> dict[str, list[str]]:
             if text not in names:
                 names.append(text)
     return found
+
+
+UNPROVEN_TITLE = "Launcher records a config does not prove"
+
+
+def _launcher_unproven_section(config: dict) -> list[str]:
+    """The platform's launcher records resting on a config the code does not prove.
+
+    A config file is proof only when the code installing it and the code
+    reading it are shown: these records place no file.
+    """
+    from launchers import launcher_unproven
+    from sitesources import launcher_ref_markdown, list_source
+
+    rows = launcher_unproven({str(config.get("_key") or ""): config})
+    if not rows:
+        return []
+    source = list_source(str(config.get("source") or ""))
+    body = [
+        f"- {_escape_tags(row['emulator'])}, `{_escape_tags(row['passes_to'] or row['kind'])}` "
+        f"at {launcher_ref_markdown(source, row['source_ref'])}: "
+        f"{_escape_tags('; '.join(row['missing']))}"
+        for row in rows
+    ]
+    return ["", *markup.details("note", f"{UNPROVEN_TITLE} ({len(rows)})", body)]
 
 
 # The hash a row shows first, when the list does not say which it checks.
@@ -3795,8 +3832,10 @@ def _platform_file_row(f: dict, cfg_entry: dict, hash_type: str = "",
         facts.append(_inline_html(_category_evidence_md(f["category_evidence"], launched)))
 
     path = _row_path(fname, cfg_entry)
-    summary = (_text_html(fname) + (f"<code>{_text_html(path)}</code>" if path else "")
-               + _status_chip(f))
+    # Spaces between name, path and status: the summary lays them out as
+    # columns, and the page text read "SVI603.ROMbios/Machines/...OK".
+    summary = " ".join([_text_html(fname), *([f"<code>{_text_html(path)}</code>"] if path else []),
+                        _status_chip(f)])
     copy = _copy_hash(shown, hashes[shown]) if shown else ""
     return (f'<details class="rb-file"><summary>{summary}</summary>'
             f'{"<br>".join(facts)}</details>{copy}')
@@ -3810,14 +3849,8 @@ def _platform_file_list(rows: list[str], has_path: bool, anchor: str) -> list[st
     """
     lines: list[str] = []
     if len(rows) >= FILTER_ROWS:
-        field = f"rb-files-filter-{anchor}"
-        lines += [
-            '<div class="rb-table-filter">'
-            f'<label for="{field}">Filter files</label>'
-            f'<input id="{field}" type="search" autocomplete="off" placeholder="File, path, status, hash...">'
-            f'<span class="rb-table-filter-count" aria-live="polite">{len(rows):,} rows</span></div>',
-            "",
-        ]
+        lines += [siteentries.filter_box(f"rb-files-filter-{anchor}", "files",
+                                         ["File", "path", "status", "hash"], len(rows)), ""]
     kind = "rb-files rb-files-path" if has_path else "rb-files"
     return [*lines, f'<div class="{kind}">', *rows, "</div>"]
 
@@ -4512,6 +4545,10 @@ def generate_handheld_guide(guide: HandheldGuide) -> str:
         "",
         *_guide_download(guide.uses, display, uses, None, "## Download { #download }"),
         *_offline_line(guide.uses),
+        f"On {sitehandheld.joined(sitehandheld.group_systems(), 'or')}: "
+        f"[{sitehandheld.GROUP_TITLE}]"
+        f"(../get/{sitehandheld.GROUP_PAGE}.md).",
+        "",
         "## Fill the card from a computer { #install }",
         "",
         "On Windows, note the card's letter, like **E:**. Put its BIOS folder after "
@@ -4791,6 +4828,7 @@ def generate_platform_page(
         _render_platform_systems(by_system, config_files, emulator_files,
                                  (name, display), moved, config)
     )
+    lines.extend(_launcher_unproven_section(config))
 
     lines.extend(["", _date_line()])
     return "\n".join(lines) + "\n"
@@ -12472,6 +12510,8 @@ def _generate(args: argparse.Namespace) -> None:
     (public / "robots.txt").unlink(missing_ok=True)
     # The one-line commands' bootstraps, at the site's root.
     sitebootstrap.write_bootstraps(public, _REPO_ROOT)
+    # The handheld launchers, built from the same commit (sitehandheld).
+    sitehandheld.write_launchers(public, _REPO_ROOT)
 
     images_dest = public / "assets" / "images"
     images_dest.mkdir(parents=True, exist_ok=True)
@@ -12484,6 +12524,9 @@ def _generate(args: argparse.Namespace) -> None:
         source = Path("docs_assets") / folder
         if source.is_dir():
             shutil.copytree(source, public / "assets" / dest, dirs_exist_ok=True)
+    # The diagrams and the drawn install steps, one SVG per layout and theme.
+    sitediagrams.write_diagram_files(public / sitediagrams.DIAGRAM_DIR,
+                                     {**sitediagrams.figure_files(), **sitesteps.steps_files()})
     demo_dest = public / "assets" / "demo"
     demo_dest.mkdir(parents=True, exist_ok=True)
     for name in DEMO_ASSETS:
@@ -12820,6 +12863,8 @@ def _generate(args: argparse.Namespace) -> None:
     get_dir.mkdir(parents=True, exist_ok=True)
     for name in platform_names:
         write_if_changed(str(get_dir / f"{name}.md"), generate_get_page(name))
+    write_if_changed(str(get_dir / f"{sitehandheld.GROUP_PAGE}.md"),
+                     sitehandheld.group_page(_REPO_ROOT))
     write_if_changed(str(get_dir / "index.md"), generate_get_index())
 
     print("Generating contributing page...")

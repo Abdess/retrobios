@@ -16,6 +16,10 @@ cores:
   - psxmame
 systems:
   - arcade
+standalone_pools:
+  rompath: ""
+  "-rompath": ""
+  "-rp": ""
 
 notes: |
   MAME build reduced to the PlayStation based arcade boards, with the ZiNc
@@ -31,6 +35,9 @@ notes: |
   zn.c, plus taitogn.c, ksys573.c and konamigv.c. emulatorlauncher runs
   `mame.exe -skip_gameinfo -rompath <bios>/psxmame/bios;<game folder>
   ... <set>` (emulatorLauncher Generators/PSXMame.Generator.cs:20-110).
+  Each directory of the semicolon-separated rompath is tried in turn and a
+  set is read at its top (src/emu/emuopts.c:36, src/emu/fileio.c:245-249,
+  816-835).
 
   A ROM missing from its set is fatal unless it is optional or has no good
   dump (src/emu/romload.c:427-449, src/emu/romload.c:594). Of a set with
@@ -40,6 +47,7 @@ notes: |
 
 files:
   - name: "cpzn1.zip"
+    path: "cpzn1.zip"
     system: arcade
     required: true
     category: bios_zip
@@ -52,6 +60,7 @@ files:
         sha1: "486d92ff6c7f1e54f8e0ef41cd9116eca0e10e1a"
 
   - name: "cpzn2.zip"
+    path: "cpzn2.zip"
     system: arcade
     required: true
     category: bios_zip
@@ -64,6 +73,7 @@ files:
         sha1: "66e7e1d4e426466b8f48a2ba055a91b475569504"
 
   - name: "atpsx.zip"
+    path: "atpsx.zip"
     system: arcade
     required: true
     category: bios_zip
@@ -76,6 +86,7 @@ files:
         sha1: "815488d8563c85f97fbc3384ff21f08e4c88b7b7"
 
   - name: "acpsx.zip"
+    path: "acpsx.zip"
     system: arcade
     required: true
     category: bios_zip
@@ -88,6 +99,7 @@ files:
         sha1: "7ee83d317190bb1cef2f8f01c81eaaae47150ebb"
 
   - name: "tps.zip"
+    path: "tps.zip"
     system: arcade
     required: true
     category: bios_zip
@@ -100,6 +112,7 @@ files:
         sha1: "03eb2febfab3fcde716defff291babd9392de965"
 
   - name: "vspsx.zip"
+    path: "vspsx.zip"
     system: arcade
     required: true
     category: bios_zip
@@ -112,6 +125,7 @@ files:
         sha1: "8f59314c1093446b9bcb06d232244da6df78e206"
 
   - name: "taitofx1.zip"
+    path: "taitofx1.zip"
     system: arcade
     required: true
     category: bios_zip
@@ -124,6 +138,7 @@ files:
         sha1: "e18907cf8c6ba54d96edba0a9a00487a90219e0d"
 
   - name: "psarc95.zip"
+    path: "psarc95.zip"
     system: arcade
     required: true
     category: bios_zip
@@ -136,6 +151,7 @@ files:
         sha1: "cd68532967a25f476a6d73473ec6b6f4df2e1689"
 
   - name: "atluspsx.zip"
+    path: "atluspsx.zip"
     system: arcade
     required: true
     category: bios_zip
@@ -148,6 +164,7 @@ files:
         sha1: "9511d24bfe25eb180fb2db0835b131cb4a12730e"
 
   - name: "taitogn.zip"
+    path: "taitogn.zip"
     system: arcade
     required: true
     category: bios_zip
@@ -171,6 +188,7 @@ files:
         sha1: "f1b10846a8423d9fe021191c5876190857c3d2a4"
 
   - name: "sys573.zip"
+    path: "sys573.zip"
     system: arcade
     required: true
     category: bios_zip
@@ -183,6 +201,7 @@ files:
         sha1: "e1284add4aaddd5337bd7f4e27614460d52b5b48"
 
   - name: "konamigv.zip"
+    path: "konamigv.zip"
     system: arcade
     required: true
     category: bios_zip

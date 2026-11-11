@@ -33,6 +33,7 @@ from common import (  # noqa: E402
     system_file_index,
 )
 from launchers import (  # noqa: E402
+    SEARCHED_FILES,
     bound_path,
     handed_directories,
     normalize_handle,
@@ -205,7 +206,38 @@ class SearchLists(unittest.TestCase):
         self.assertEqual(
             bind(config(passes("emu", "$roms_path/coco:$bios_path/xroar", "xroar.conf rompath")),
                  [], {"rompath": ""}),
-            {"": ("", "xroar")},
+            {SEARCHED_FILES: ("", "xroar")},
+        )
+
+    def test_a_semicolon_list_leaves_out_the_game_folder(self) -> None:
+        # MAME splits its search paths on semicolons (src/emu/fileio.cpp:53-58).
+        found = handed_directories(config(passes(
+            "emu", "<romDirname>;/userdata/bios/mame;/userdata/bios", "command line -rompath",
+        )))
+        self.assertEqual([h.folder for h in found], ["mame", ""])
+        found = handed_directories(config(passes(
+            "emu", "bios;<rom directory>", "command line -rp bios;<rom directory>",
+        )))
+        self.assertEqual([(h.folder, "-rp" in h.handles) for h in found], [("", True)])
+
+    def test_a_list_holding_the_files_folder_keeps_them_there(self) -> None:
+        # KNULLI lists bios/mame before bios: the sets at the root stay.
+        cfg = config(passes(
+            "emu", "<romDirname>;/userdata/bios/mame;/userdata/bios", "command line -rompath",
+        ))
+        cfg["systems"] = {"x": {"files": [{"name": "a.rom", "destination": "mame/a.rom"}]}}
+        self.assertEqual(bind(cfg, [], {"-rompath": ""}), {SEARCHED_FILES: ("", "")})
+        # Without the root, the first folder of the BIOS tree.
+        cfg = config(passes("emu", "$romdir/mame;$biosdir/mame", "rompath in mame.ini"))
+        self.assertEqual(bind(cfg, [], {"rompath": ""}), {SEARCHED_FILES: ("", "mame")})
+
+    def test_a_whole_layout_list_holds_files_not_folders(self) -> None:
+        found = {SEARCHED_FILES: ("", "mame")}
+        self.assertEqual(bound_path("neogeo.zip", found), ("", "mame/neogeo.zip"))
+        self.assertIsNone(bound_path("samples/bbc.zip", found))
+        self.assertEqual(
+            bound_path("samples/bbc.zip", {**found, "samples": ("", "mame-sa/samples")}),
+            ("", "mame-sa/samples/bbc.zip"),
         )
 
     def test_a_drive_letter_is_one_directory(self) -> None:
@@ -241,11 +273,11 @@ class PerSystem(unittest.TestCase):
     POOLS = {"-rompath": ""}
 
     def test_the_system_record_wins_for_its_system(self) -> None:
-        self.assertEqual(bind(self.CFG, [], self.POOLS, ("coco",)), {"": ("", "coco")})
+        self.assertEqual(bind(self.CFG, [], self.POOLS, ("coco",)), {SEARCHED_FILES: ("", "coco")})
 
     def test_another_system_keeps_the_generic_record(self) -> None:
-        self.assertEqual(bind(self.CFG, [], self.POOLS, ("dragon32",)), {"": ("", "dragon")})
-        self.assertEqual(bind(self.CFG, [], self.POOLS), {"": ("", "dragon")})
+        self.assertEqual(bind(self.CFG, [], self.POOLS, ("dragon32",)), {SEARCHED_FILES: ("", "dragon")})
+        self.assertEqual(bind(self.CFG, [], self.POOLS), {SEARCHED_FILES: ("", "dragon")})
 
     def test_native_names_are_read_as_our_ids(self) -> None:
         cfg = {
@@ -270,7 +302,7 @@ class PerSystem(unittest.TestCase):
             [("dragon", ["dragon64"]), ("trs80coco", ["coco"])],
         )
         self.assertEqual(bind(cfg, [], self.POOLS | {"-rompath": ""}, ("coco",)),
-                         {"": ("", "trs80coco")})
+                         {SEARCHED_FILES: ("", "trs80coco")})
         self.assertEqual(bind(cfg, [], {"-rompath": ""}, ("dragon32",)), {})
 
     def test_an_entry_is_launched_for_the_system_that_declares_its_name(self) -> None:

@@ -14,6 +14,11 @@ import bisect
 import re
 from collections.abc import Callable, Iterator
 
+try:
+    from .shell_launchers import is_feature_ref, split_ref
+except ImportError:
+    from shell_launchers import is_feature_ref, split_ref  # type: ignore[no-redef]
+
 GENERATORS = "emulatorLauncher/Generators"
 FEATURES = ".emulationstation/es_features.cfg"
 
@@ -1254,6 +1259,11 @@ def xemu(sources: dict[str, Source]) -> list[Record]:
     )
 
     flash = src.find(r'isOptSet\("(xemu_flashrom)"\)', "xemu_flashrom")
+    # The flashrom is written outside a Chihiro launch only.
+    chihiro_set = src.find(r"(_chihiro) = \(([^;]+)\);", "Chihiro test")
+    chihiro_guard = src.find_all(
+        rf"if \(!{chihiro_set.group(1)}\)", "flashrom guard", end=flash.start()
+    )[-1]
     flash_default = src.find(
         r'ini\.WriteValue\("([\w.]+)", "(flashrom_path)", "\'" \+ Path\.Combine\(flashromPath, "([^"]+)"\)',
         "flashrom default",
@@ -1267,7 +1277,10 @@ def xemu(sources: dict[str, Source]) -> list[Record]:
             "core_option",
             _unique([flash_default.group(3), *choices]),
             source_ref(
-                (src.path, [src.lines(flash.start(), flash_default.end())]),
+                (src.path, [
+                    src.lines(chihiro_set.start(), chihiro_set.end()),
+                    src.lines(chihiro_guard.start(), flash_default.end()),
+                ]),
                 (features.path, [choice_lines]),
             ),
             case_insensitive=True,
@@ -1277,7 +1290,7 @@ def xemu(sources: dict[str, Source]) -> list[Record]:
                 f" default {flash_default.group(3)}"
             ),
             fails_when_missing="path written without an existence check",
-            depends_on_option=flash.group(1),
+            depends_on_option=f"{flash.group(1)}, not ({chihiro_set.group(2)})",
         )
     )
 
@@ -1855,13 +1868,27 @@ def _root_writes(src: Source, emulator: str) -> list[Record]:
         if root_reach is None:
             continue
         method = root_reach[0]
+        # A folder below the root, `string x = Path.Combine(root, "cdb")`
+        # that the method creates or tests as a directory. A file below it
+        # is a guarded write's, read by _guarded_write.
+        folders = {root.group(1): ("bios", root)}
+        for sub in re.compile(
+            rf"string (\w+) = Path\.Combine\({root.group(1)}, ((?:{STRING}, )*{STRING})\);"
+        ).finditer(src.text, root.end(), method[1]):
+            if re.search(
+                rf"\b(?:\w*CreateDirectory|Directory\.Exists)\({sub.group(1)}\)",
+                src.text[sub.end() : method[1]],
+            ):
+                folders[sub.group(1)] = ("/".join(["bios", *_strings(sub.group(2))]), sub)
+        names = "|".join(map(re.escape, folders))
         for write in re.compile(
-            rf'(\w+)\.WriteValue\("([^"]*)", "([^"]+)", (?:"\'" \+ )?{root.group(1)}(?: \+ "\'")?\);'
+            rf'(\w+)\.WriteValue\("([^"]*)", "([^"]+)", (?:"\'" \+ )?({names})(?: \+ "\'")?\);'
         ).finditer(src.text, root.end(), method[1]):
             reached = _conditions(src, write.start())
             if reached is None:
                 continue
-            writer, section, key = write.groups()
+            writer, section, key, held = write.groups()
+            folder, declared = folders[held]
             target = f"[{section}] {key}" if section else key
             records.append(
                 _record(
@@ -1875,12 +1902,14 @@ def _root_writes(src: Source, emulator: str) -> list[Record]:
                             [
                                 *reached[2],
                                 src.lines(root.start(), root.end()),
+                                *([src.lines(declared.start(), declared.end())]
+                                  if declared is not root else []),
                                 src.lines(write.start(), write.end()),
                             ],
                         )
                     ),
-                    search_dir="bios",
-                    passes_to=f"{_config_name(src, method, writer)} {target} = bios",
+                    search_dir=folder,
+                    passes_to=f"{_config_name(src, method, writer)} {target} = {folder}",
                     fails_when_missing=False,
                     depends_on_option=", ".join(reached[1]) or None,
                 )
@@ -2363,11 +2392,7 @@ def _option_path_in(src: Source, features: Source, emulator: str) -> list[Record
     gate = src.find(
         rf'if \(SystemConfig\.isOptSet\("{option}"\)', f"{option} gate", method[0], override.start()
     )
-    gate_block = src.block_at(gate.end())
-    if not gate_block[0] < override.start() < gate_block[1]:
-        raise LauncherPatternMissing(
-            src.path, f"{option} block around line {src.line(override.start())}"
-        )
+    gate_block = _gate_span(src, gate, override)
     write = re.compile(
         rf'(\w+)\.WriteValue\("([^"]*)", "([^"]+)", ([^;\n]*\b{var}\b[^;\n]*)\);'
     ).search(code, override.end(), method[1])
@@ -2377,6 +2402,8 @@ def _option_path_in(src: Source, features: Source, emulator: str) -> list[Record
     guarded = re.compile(rf"if \(File\.Exists\({var}\)[^\n]*\)\s*$").search(
         code, method[0], write.start()
     )
+    flag = None if guarded else _flag_guard(code, var, method[0], write.start())
+    guarded = guarded or flag
     skipped = re.findall(
         rf'SystemConfig\["{option}"\] != "(\w+)"', code[gate.start() : write.end()]
     )
@@ -2384,8 +2411,13 @@ def _option_path_in(src: Source, features: Source, emulator: str) -> list[Record
     target = f"{config} [{section}] {key}" if section else f"{config} {key}"
     suffix = ", only if the file exists" if guarded else ", written without an existence check"
     fails = f"{key} not written" if guarded else "path written without an existence check"
-    write_span = src.lines(_statement_start(src, write.start()), write.end())
+    write_span = src.lines(
+        flag.start() if flag else _statement_start(src, write.start()), write.end()
+    )
     choices, choice_lines = feature_choices(features, emulator, option)
+    fallback = _fallback_names(src, var, gate_block[1], write.start())
+    if fallback is not None:
+        fails = f"{', then '.join(fallback[0])}, instead, else {fails}"
     records = []
     default = list(
         re.compile(rf'string {var} = Path\.Combine\({_BIOS_ROOT}, "([^"]+)"\);').finditer(
@@ -2424,7 +2456,69 @@ def _option_path_in(src: Source, features: Source, emulator: str) -> list[Record
             depends_on_option=option,
         )
     )
+    if fallback is not None:
+        names, span = fallback
+        unset = f"{default[-1].group(1)} absent with {option} unset" if default else None
+        chosen = f"the {option} file absent" + (
+            f", {option} not {' or '.join(skipped)}" if skipped else ""
+        )
+        records.append(
+            _record(
+                emulator,
+                "standalone",
+                "names_searched",
+                names,
+                _path_parts(src, span, write_span),
+                case_insensitive=True,
+                search_dir="bios",
+                passes_to=f"{target} = <first found>{suffix}",
+                fails_when_missing=f"{key} not written" if guarded else fails,
+                depends_on_option=" or ".join(c for c in (unset, chosen) if c),
+            )
+        )
     return records + _root_writes(src, emulator)
+
+
+def _gate_span(src: Source, gate: re.Match[str], override: re.Match[str]) -> tuple[int, int]:
+    """The span an option gate governs: its block, or the one statement a
+    braceless if runs, which must be the override."""
+    paren = gate.start() + len("if ")
+    after = paren + len(_call_args(src, paren)) + 2
+    if re.match(r"\s*\{", src.text[after:]):
+        block = src.block_at(after)
+    else:
+        block = (after, _statement_end(src, after))
+    if not block[0] < override.start() < block[1]:
+        raise LauncherPatternMissing(
+            src.path, f"option block around line {src.line(override.start())}"
+        )
+    return block
+
+
+def _flag_guard(code: str, var: str, start: int, end: int) -> re.Match[str] | None:
+    """A write under `if (flag)` where flag holds File.Exists of the path."""
+    flag = re.compile(rf"bool (\w+) = [^;\n]*\bFile\.Exists\({var}\)[^;\n]*;").search(
+        code, start, end
+    )
+    if flag is None or not re.compile(rf"if \({flag.group(1)}\)\s*$", re.M).search(
+        code, flag.end(), end
+    ):
+        return None
+    return flag
+
+
+def _fallback_names(
+    src: Source, var: str, start: int, end: int
+) -> tuple[list[str], tuple[int, int]] | None:
+    """Names tried in bios, first existing one kept, when the chosen file is absent."""
+    found = re.compile(
+        rf"if \(([^\n]*!File\.Exists\({var}\)[^\n]*)\)\s*"
+        rf"{var} = new\[\] \{{ (?P<names>(?:{STRING}(?:, )?)+) \}}\.Select\((?P<arg>\w+) => "
+        rf"Path\.Combine\({_BIOS_ROOT}, (?P=arg)\)\)\.FirstOrDefault\(File\.Exists\) \?\? {var};"
+    ).search(_code(src), start, end)
+    if found is None:
+        return None
+    return _strings(found.group("names")), src.lines(found.start(), found.end())
 
 
 OPTION_PATHS = {
@@ -3336,7 +3430,11 @@ def mame(sources: dict[str, Source]) -> list[Record]:
         raise LauncherPatternMissing(own.path, "MAME folder arguments")
     records = _covered(
         own,
-        [_with_conditions(record, conditions) for record, conditions in found],
+        [
+            split
+            for record, conditions in found
+            for split in _per_emulator(own, _with_conditions(record, conditions))
+        ],
         # The bezel artwork folder is read by the launcher, not passed.
         skip=(_BIOS_GUARD, r"ConfigureBezels\("),
     )
@@ -3422,6 +3520,42 @@ def xroar(sources: dict[str, Source]) -> list[Record]:
         )
     )
     return _covered(src, records)
+
+
+_EMULATOR_BRANCH = re.compile(r"([^\s;<>]+) when (\w+), else ([^\s;<>]+)")
+
+
+def _per_emulator(src: Source, record: Record) -> list[Record]:
+    """A directory chosen by the emulator the generator runs, one record each.
+
+    Mame64.Generator.cs sets `bool hbmame = emulator == "hbmame";` and passes
+    `-sp bios/hbmame/samples` for it, bios/mame/samples for mame64. A choice
+    on any other condition is left as it reads.
+    """
+    rendered = str(record.get("search_dir", ""))
+    branch = _EMULATOR_BRANCH.fullmatch(rendered)
+    if branch is None:
+        return [record]
+    chosen, flag, default = branch.groups()
+    declared = re.search(rf'bool {flag} = emulator == "([\w.-]+)";', _code(src))
+    if declared is None:
+        return [record]
+    ref = str(record["source_ref"])
+    if not ref.startswith(src.path + ":"):
+        raise LauncherPatternMissing(src.path, f"source of the directory choice {rendered!r}")
+    spans = [
+        (int(first), int(last or first))
+        for first, _, last in (s.partition("-") for s in ref[len(src.path) + 1:].split(", "))
+    ]
+    spans.append(src.lines(declared.start(), declared.end()))
+    prefix = str(record["passes_to"]).removesuffix(rendered).strip()
+    out = []
+    for emulator, directory in ((declared.group(1), chosen), (record["emulator"], default)):
+        split = {k: v for k, v in record.items() if k != "source_ref"}
+        split.update(emulator=emulator, search_dir=directory, passes_to=f"{prefix} {directory}")
+        split["source_ref"] = _path_parts(src, *spans)
+        out.append(split)
+    return out
 
 
 _SYSTEM_BRANCH = re.compile(r'(\S+), or (\S+) when system == "([\w.-]+)"')
@@ -3850,4 +3984,23 @@ def extract_launchers(texts: dict[str, str]) -> list[Record]:
     if missing:
         raise LauncherPatternMissing(missing[0], "source file")
     sources = {path: Source(path, text) for path, text in texts.items()}
-    return [record for extractor in EXTRACTORS for record in extractor(sources)]
+    return [
+        _choices_apart(record) for extractor in EXTRACTORS for record in extractor(sources)
+    ]
+
+
+def _choices_apart(record: Record) -> Record:
+    """The es_features.cfg part of a record's source_ref, moved to choices_from.
+
+    The feature file lists the values a menu option offers. The generator
+    writing the choice is the record's evidence, never the list.
+    """
+    parts = split_ref(str(record["source_ref"]))
+    listed = [p for p in parts if is_feature_ref(p)]
+    if not listed:
+        return record
+    code = [p for p in parts if not is_feature_ref(p)]
+    if not code:
+        raise LauncherPatternMissing(listed[0], "generator code beside the option list")
+    moved = {k: v for k, v in record.items() if k != "source_ref"}
+    return {**moved, "choices_from": ", ".join(listed), "source_ref": ", ".join(code)}

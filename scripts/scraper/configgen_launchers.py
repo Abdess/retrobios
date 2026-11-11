@@ -37,14 +37,25 @@ class Launcher:
     device: str | None = None
     # The machines the platform offers under the record's systems.
     machines: list[str] | None = None
+    # The platform systems the record is written for, none for every one.
+    systems: list[str] | None = None
+    # For a record citing a config: where the platform's code puts it
+    # ({path, source_ref}), whether that leaves a file already there, and
+    # the launch code rewriting its keys ([] when none does).
+    installs: dict[str, str] | None = None
+    kept_if_present: bool | None = None
+    overrides: list[str] | None = None
+    # The feature or option file listing the values the option written takes.
+    choices_from: str | None = None
 
     def entry(self) -> dict[str, Any]:
         """The platform YAML form, in a fixed key order, unset keys left out."""
         order = (
-            "emulator", "build", "kind", "slot", "names", "expands",
+            "emulator", "systems", "build", "kind", "slot", "names", "expands",
             "case_insensitive", "search_dir", "passes_to",
             "fails_when_missing", "fails_scope", "depends_on_option",
-            "device", "machines", "source_ref",
+            "device", "machines", "installs", "kept_if_present", "overrides",
+            "choices_from", "source_ref",
         )
         return {key: getattr(self, key) for key in order if getattr(self, key) is not None}
 

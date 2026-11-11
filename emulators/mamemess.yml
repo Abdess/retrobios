@@ -57,7 +57,9 @@ notes: |
   romload.cpp unmodified. No hiscore support.
 
   Paths under system_dir/mame/ (artwork, cheat, hash, ini, plugins, samples,
-  crosshair). ROM search: content_dir + system_dir/mame/bios + system_dir/mame/roms.
+  crosshair). ROM search: content_dir + system_dir/mame/bios + system_dir/mame/roms,
+  never system_dir itself (src/osd/libretro/libretro-internal/retro_init.cpp:580-597),
+  so the sets are read in mame/bios.
   Hash directory contains software list XMLs needed for MESS software loading.
 
   mess.flt exceptions: adds AES (+aes), CD-i consoles (+cdimono1, +cdimono2,
@@ -457,6 +459,7 @@ files:
 
   # Miuchiz Virtual Companions
   - name: miuchiz.zip
+    path: "mame/bios/miuchiz.zip"
     required: true
     category: bios_zip
     source_ref: "upstream src/mame/misc/miuchiz.cpp:227"
@@ -468,6 +471,7 @@ files:
 
   # XaviX TV games: e-kara family
   - name: ekara.zip
+    path: "mame/bios/ekara.zip"
     required: true
     category: bios_zip
     source_ref: "source src/mame/tvgames/xavix.cpp:2904"
@@ -478,6 +482,7 @@ files:
         sha1: "d75dda7434933135d2f7e353840a9384e9a0d586"
 
   - name: ekaraa.zip
+    path: "mame/bios/ekaraa.zip"
     required: true
     category: bios_zip
     source_ref: "source src/mame/tvgames/xavix.cpp:2905"
@@ -488,6 +493,7 @@ files:
         sha1: "450fbe53826cdb87ec797f84b9757987afcc1ec5"
 
   - name: ekaraj.zip
+    path: "mame/bios/ekaraj.zip"
     required: true
     category: bios_zip
     source_ref: "source src/mame/tvgames/xavix.cpp:2906"
@@ -498,6 +504,7 @@ files:
         sha1: "58b7f36a81571a2df5e812c118fdf68812a05abc"
 
   - name: ekarag.zip
+    path: "mame/bios/ekarag.zip"
     required: true
     category: bios_zip
     source_ref: "source src/mame/tvgames/xavix.cpp:2907"
@@ -508,6 +515,7 @@ files:
         sha1: "433e65a6ea029b67ee62b4b3de52ff3504cfdf16"
 
   - name: ekaras.zip
+    path: "mame/bios/ekaras.zip"
     required: true
     category: bios_zip
     source_ref: "source src/mame/tvgames/xavix.cpp:2908"
@@ -518,6 +526,7 @@ files:
         sha1: "402053e22e371c5f5e8069a4bf3b33841e742375"
 
   - name: isinger.zip
+    path: "mame/bios/isinger.zip"
     required: true
     category: bios_zip
     source_ref: "source src/mame/tvgames/xavix.cpp:2910"
@@ -528,6 +537,7 @@ files:
         sha1: "879da069ca8c126232a1b2dfcce25c8615540e48"
 
   - name: ekaraphs.zip
+    path: "mame/bios/ekaraphs.zip"
     required: true
     category: bios_zip
     source_ref: "source src/mame/tvgames/xavix.cpp:2913"
@@ -538,6 +548,7 @@ files:
         sha1: "baaf35d56fa45b6f995b8466331bb30f0035f734"
 
   - name: epitch.zip
+    path: "mame/bios/epitch.zip"
     required: true
     category: bios_zip
     source_ref: "source src/mame/tvgames/xavix.cpp:2916"
@@ -548,6 +559,7 @@ files:
         sha1: "58b7f36a81571a2df5e812c118fdf68812a05abc"
 
   - name: ekaramix.zip
+    path: "mame/bios/ekaramix.zip"
     required: true
     category: bios_zip
     source_ref: "source src/mame/tvgames/xavix.cpp:2919"
@@ -559,6 +571,7 @@ files:
 
   # XaviX TV games: DDR / Popira / misc
   - name: ddrfammt.zip
+    path: "mame/bios/ddrfammt.zip"
     required: true
     category: bios_zip
     source_ref: "source src/mame/tvgames/xavix.cpp:2922"
@@ -569,6 +582,7 @@ files:
         sha1: "a1043047056dd27bca69767ee2044461ec549465"
 
   - name: popira.zip
+    path: "mame/bios/popira.zip"
     required: true
     category: bios_zip
     source_ref: "source src/mame/tvgames/xavix.cpp:2925"
@@ -579,6 +593,7 @@ files:
         sha1: "fb2ae023fc8a188c79b2d6550f737e06c05e12da"
 
   - name: popirak.zip
+    path: "mame/bios/popirak.zip"
     required: true
     category: bios_zip
     source_ref: "source src/mame/tvgames/xavix.cpp:2927"
@@ -589,6 +604,7 @@ files:
         sha1: "7877ac33b57bdd8ceac6bda3b0006a3274ad4dce"
 
   - name: popira2.zip
+    path: "mame/bios/popira2.zip"
     required: true
     category: bios_zip
     source_ref: "source src/mame/tvgames/xavix.cpp:2930"
@@ -599,6 +615,7 @@ files:
         sha1: "8b6c812d37e2dc2f2531b0e47d84ad8485729dc5"
 
   - name: taikodp.zip
+    path: "mame/bios/taikodp.zip"
     required: true
     category: bios_zip
     source_ref: "source src/mame/tvgames/xavix.cpp:2933"
@@ -609,6 +626,7 @@ files:
         sha1: "03cae465965935fc084fb906f8f5de7679f42dd1"
 
   - name: jpopira.zip
+    path: "mame/bios/jpopira.zip"
     required: true
     category: bios_zip
     source_ref: "source src/mame/tvgames/xavix.cpp:2936"
@@ -623,6 +641,7 @@ files:
         sha1: "e8f4ab51445777fe459f9ff09333f548c4e3507c"
 
   - name: evio.zip
+    path: "mame/bios/evio.zip"
     required: true
     category: bios_zip
     source_ref: "source src/mame/tvgames/xavix.cpp:2939"
@@ -633,6 +652,7 @@ files:
         sha1: "f2b7e213eb78065a63ef484a619bcfc61299e30e"
 
   - name: tak_daig.zip
+    path: "mame/bios/tak_daig.zip"
     required: true
     category: bios_zip
     source_ref: "source src/mame/tvgames/xavix.cpp:2944"
@@ -643,6 +663,7 @@ files:
         sha1: "7d7b54684f8b0b92daf02738560779c7df627b91"
 
   - name: gcslottv.zip
+    path: "mame/bios/gcslottv.zip"
     required: true
     category: bios_zip
     source_ref: "source src/mame/tvgames/xavix.cpp:2946"
@@ -653,6 +674,7 @@ files:
         sha1: "1c7fc0c85d817db1550d40c0258f424770e0bd81"
 
   - name: hikara.zip
+    path: "mame/bios/hikara.zip"
     required: true
     category: bios_zip
     source_ref: "source src/mame/tvgames/xavix.cpp:2951"
@@ -664,6 +686,7 @@ files:
 
   # Bally Astrocade
   - name: astrocde.zip
+    path: "mame/bios/astrocde.zip"
     required: true
     category: bios_zip
     system: bally-astrocade
@@ -675,6 +698,7 @@ files:
         crc32: "ebc77f3a"
 
   - name: astrocdl.zip
+    path: "mame/bios/astrocdl.zip"
     required: false
     category: bios_zip
     system: bally-astrocade
@@ -686,6 +710,7 @@ files:
         crc32: "d7c517ba"
 
   - name: astrocdw.zip
+    path: "mame/bios/astrocdw.zip"
     required: false
     category: bios_zip
     system: bally-astrocade
@@ -698,6 +723,7 @@ files:
 
   # Apple II family: machine ROM sets
   - name: apple2.zip
+    path: "mame/bios/apple2.zip"
     required: true
     category: bios_zip
     system: apple2
@@ -729,6 +755,7 @@ files:
         crc32: "079589c4"
 
   - name: apple2p.zip
+    path: "mame/bios/apple2p.zip"
     required: true
     category: bios_zip
     system: apple2
@@ -764,6 +791,7 @@ files:
         crc32: "079589c4"
 
   - name: apple2e.zip
+    path: "mame/bios/apple2e.zip"
     required: true
     category: bios_zip
     system: apple2
@@ -787,6 +815,7 @@ files:
         crc32: "e47045f4"
 
   - name: apple2ee.zip
+    path: "mame/bios/apple2ee.zip"
     required: true
     category: bios_zip
     system: apple2
@@ -811,6 +840,7 @@ files:
 
   # Apple II: peripheral device ROM sets
   - name: a2diskiing.zip
+    path: "mame/bios/a2diskiing.zip"
     required: true
     category: bios_zip
     system: apple2
@@ -823,6 +853,7 @@ files:
         crc32: "ce7144f6"
 
   - name: d2fdc.zip
+    path: "mame/bios/d2fdc.zip"
     required: true
     category: bios_zip
     system: apple2
@@ -835,6 +866,7 @@ files:
         crc32: "b72a2c70"
 
   - name: a2cffa02.zip
+    path: "mame/bios/a2cffa02.zip"
     required: false
     category: bios_zip
     system: apple2
@@ -847,6 +879,7 @@ files:
         crc32: "3ecafce5"
 
   - name: votrsc01.zip
+    path: "mame/bios/votrsc01.zip"
     required: false
     category: bios_zip
     system: apple2
@@ -859,6 +892,7 @@ files:
         crc32: "528d1c57"
 
   - name: votrsc01a.zip
+    path: "mame/bios/votrsc01a.zip"
     required: false
     category: bios_zip
     system: apple2
@@ -872,6 +906,7 @@ files:
 
   # Apple IIgs
   - name: apple2gs.zip
+    path: "mame/bios/apple2gs.zip"
     required: true
     category: bios_zip
     system: apple-iigs
@@ -896,6 +931,7 @@ files:
 
   # Casio Loopy
   - name: casloopy.zip
+    path: "mame/bios/casloopy.zip"
     required: true
     category: bios_zip
     system: casio-loopy
@@ -912,6 +948,7 @@ files:
 
   # Casio PV-2000
   - name: pv2000.zip
+    path: "mame/bios/pv2000.zip"
     required: true
     category: bios_zip
     system: casio-pv2000
@@ -924,6 +961,7 @@ files:
 
   # Coleco Adam
   - name: adam.zip
+    path: "mame/bios/adam.zip"
     required: true
     category: bios_zip
     system: coleco-adam
@@ -959,6 +997,7 @@ files:
         crc32: "035a7a3d"
 
   - name: adam_kb.zip
+    path: "mame/bios/adam_kb.zip"
     required: true
     category: bios_zip
     system: coleco-adam
@@ -970,6 +1009,7 @@ files:
         crc32: "ef204746"
 
   - name: adam_prn.zip
+    path: "mame/bios/adam_prn.zip"
     required: true
     category: bios_zip
     system: coleco-adam
@@ -981,6 +1021,7 @@ files:
         crc32: "e8db783b"
 
   - name: adam_ddp.zip
+    path: "mame/bios/adam_ddp.zip"
     required: true
     category: bios_zip
     system: coleco-adam
@@ -992,6 +1033,7 @@ files:
         crc32: "6b9ea1cf"
 
   - name: adam_fdc.zip
+    path: "mame/bios/adam_fdc.zip"
     required: true
     category: bios_zip
     system: coleco-adam
@@ -1003,30 +1045,35 @@ files:
         crc32: "4b0b7143"
 
   - name: adam_fdc_320kb.zip
+    path: "mame/bios/adam_fdc_320kb.zip"
     required: false
     category: bios_zip
     system: coleco-adam
     source_ref: "upstream src/devices/bus/adamnet/fdc.cpp:76-85"
 
   - name: adam_fdc_a720dipi.zip
+    path: "mame/bios/adam_fdc_a720dipi.zip"
     required: false
     category: bios_zip
     system: coleco-adam
     source_ref: "upstream src/devices/bus/adamnet/fdc.cpp:92-96"
 
   - name: adam_fdc_fp720at.zip
+    path: "mame/bios/adam_fdc_fp720at.zip"
     required: false
     category: bios_zip
     system: coleco-adam
     source_ref: "upstream src/devices/bus/adamnet/fdc.cpp:103-107"
 
   - name: adam_fdc_mihddd.zip
+    path: "mame/bios/adam_fdc_mihddd.zip"
     required: false
     category: bios_zip
     system: coleco-adam
     source_ref: "upstream src/devices/bus/adamnet/fdc.cpp:114-117"
 
   - name: adam_spi.zip
+    path: "mame/bios/adam_spi.zip"
     required: false
     category: bios_zip
     system: coleco-adam
@@ -1034,6 +1081,7 @@ files:
 
   # Entex Adventure Vision
   - name: advision.zip
+    path: "mame/bios/advision.zip"
     required: true
     category: bios_zip
     system: entex-advision
@@ -1050,6 +1098,7 @@ files:
 
   # Bandai RX-78
   - name: rx78.zip
+    path: "mame/bios/rx78.zip"
     required: true
     category: bios_zip
     system: bandai-rx78
@@ -1063,6 +1112,7 @@ files:
 
   # VTech CreatiVision
   - name: crvision.zip
+    path: "mame/bios/crvision.zip"
     required: true
     category: bios_zip
     system: crvision
@@ -1074,6 +1124,7 @@ files:
         crc32: "c3c590c6"
 
   - name: fnvision.zip
+    path: "mame/bios/fnvision.zip"
     required: false
     category: bios_zip
     system: crvision
@@ -1086,6 +1137,7 @@ files:
         crc32: "05602697"
 
   - name: lasr2001.zip
+    path: "mame/bios/lasr2001.zip"
     required: false
     category: bios_zip
     system: crvision
@@ -1098,6 +1150,7 @@ files:
         crc32: "4dc35c39"
 
   - name: manager.zip
+    path: "mame/bios/manager.zip"
     required: false
     category: bios_zip
     system: crvision
@@ -1115,6 +1168,7 @@ files:
 
   # VTech Laser 310 (VZ-300)
   - name: laser310.zip
+    path: "mame/bios/laser310.zip"
     required: true
     category: bios_zip
     system: laser310
@@ -1132,6 +1186,7 @@ files:
 
   # VTech Socrates Educational Video System
   - name: socrates.zip
+    path: "mame/bios/socrates.zip"
     required: true
     category: bios_zip
     system: vtech-socrates
@@ -1161,6 +1216,7 @@ files:
 
   # Mattel Aquarius
   - name: aquarius.zip
+    path: "mame/bios/aquarius.zip"
     required: true
     category: bios_zip
     system: mattel-aquarius
@@ -1180,6 +1236,7 @@ files:
         crc32: "e117f57c"
 
   - name: aquarius2.zip
+    path: "mame/bios/aquarius2.zip"
     required: true
     category: bios_zip
     system: mattel-aquarius
@@ -1199,6 +1256,7 @@ files:
         crc32: "e117f57c"
 
   - name: aquarius_ar.zip
+    path: "mame/bios/aquarius_ar.zip"
     required: true
     category: bios_zip
     system: mattel-aquarius
@@ -1215,6 +1273,7 @@ files:
 
   # Camputers Lynx 48K
   - name: lynx48k.zip
+    path: "mame/bios/lynx48k.zip"
     required: true
     category: bios_zip
     system: camplynx
@@ -1239,6 +1298,7 @@ files:
 
   # Camputers Lynx 96K
   - name: lynx96k.zip
+    path: "mame/bios/lynx96k.zip"
     required: true
     category: bios_zip
     system: camplynx
@@ -1271,6 +1331,7 @@ files:
 
   # Camputers Lynx 128K
   - name: lynx128k.zip
+    path: "mame/bios/lynx128k.zip"
     required: true
     category: bios_zip
     system: camplynx
@@ -1295,6 +1356,7 @@ files:
 
   # EACA Colour Genie: parent machine ROM set
   - name: cgenie.zip
+    path: "mame/bios/cgenie.zip"
     required: true
     category: bios_zip
     system: cgenie
@@ -1327,6 +1389,7 @@ files:
 
   # EACA Colour Genie: clone: New Zealand
   - name: cgenienz.zip
+    path: "mame/bios/cgenienz.zip"
     required: false
     category: bios_zip
     system: cgenie
@@ -1347,6 +1410,7 @@ files:
 
   # EACA Colour Genie: expansion: FDC
   - name: cgenie_fdc.zip
+    path: "mame/bios/cgenie_fdc.zip"
     required: false
     category: bios_zip
     system: cgenie
@@ -1372,6 +1436,7 @@ files:
 
   # Acorn Atom: parent machine ROM set
   - name: atom.zip
+    path: "mame/bios/atom.zip"
     required: true
     category: bios_zip
     system: atom
@@ -1388,6 +1453,7 @@ files:
 
   # Acorn Atom: clone: Atom with BBC Basic
   - name: atombbc.zip
+    path: "mame/bios/atombbc.zip"
     required: false
     category: bios_zip
     system: atom
@@ -1404,6 +1470,7 @@ files:
 
   # Acorn Atom: clone: Busicomputers Prophet 2
   - name: prophet2.zip
+    path: "mame/bios/prophet2.zip"
     required: false
     category: bios_zip
     system: atom
@@ -1424,6 +1491,7 @@ files:
 
   # Acorn Atom: bus device: Disc Pack (default on pl6)
   - name: atom_discpack.zip
+    path: "mame/bios/atom_discpack.zip"
     required: false
     category: bios_zip
     system: atom
@@ -1437,6 +1505,7 @@ files:
 
   # Acorn Atom: bus device: GDOS
   - name: atom_gdos.zip
+    path: "mame/bios/atom_gdos.zip"
     required: false
     category: bios_zip
     system: atom
@@ -1449,6 +1518,7 @@ files:
 
   # Acorn Atom: bus device: GDOS-2015
   - name: atom_gdos2015.zip
+    path: "mame/bios/atom_gdos2015.zip"
     required: false
     category: bios_zip
     system: atom
@@ -1461,6 +1531,7 @@ files:
 
   # Acorn Atom: bus device: Speech Module
   - name: atom_speech.zip
+    path: "mame/bios/atom_speech.zip"
     required: false
     category: bios_zip
     system: atom
@@ -1473,6 +1544,7 @@ files:
 
   # Acorn Atom: bus device: 80 Column VDU
   - name: atom_vdu80.zip
+    path: "mame/bios/atom_vdu80.zip"
     required: false
     category: bios_zip
     system: atom
@@ -1485,6 +1557,7 @@ files:
 
   # Tiger game.com
   - name: gamecom.zip
+    path: "mame/bios/gamecom.zip"
     required: true
     category: bios_zip
     system: tiger-game-com
@@ -1501,6 +1574,7 @@ files:
 
   # Bit Corporation Gamate
   - name: gamate.zip
+    path: "mame/bios/gamate.zip"
     required: true
     category: bios_zip
     system: gamate
@@ -1517,6 +1591,7 @@ files:
 
   # Epoch Game Pocket Computer
   - name: gamepock.zip
+    path: "mame/bios/gamepock.zip"
     required: true
     category: bios_zip
     system: gamepock
@@ -1529,6 +1604,7 @@ files:
 
   # Hartung Game Master
   - name: gmaster.zip
+    path: "mame/bios/gmaster.zip"
     required: true
     category: bios_zip
     system: hartung-game-master
@@ -1541,6 +1617,7 @@ files:
 
   # Fujitsu FM-7 family
   - name: fm7.zip
+    path: "mame/bios/fm7.zip"
     required: true
     category: bios_zip
     system: fm7
@@ -1568,6 +1645,7 @@ files:
         crc32: "62402ac9"
 
   - name: fm77av.zip
+    path: "mame/bios/fm77av.zip"
     required: true
     category: bios_zip
     system: fm7
@@ -1595,6 +1673,7 @@ files:
         crc32: "e9f16c42"
 
   - name: fmnew7.zip
+    path: "mame/bios/fmnew7.zip"
     required: false
     category: bios_zip
     system: fm7
@@ -1612,6 +1691,7 @@ files:
 
   # Sharp MZ-80K (Japanese, parent)
   - name: mz80kj.zip
+    path: "mame/bios/mz80kj.zip"
     required: true
     category: bios_zip
     system: mz80k
@@ -1636,6 +1716,7 @@ files:
 
   # Sharp MZ-80K (clone)
   - name: mz80k.zip
+    path: "mame/bios/mz80k.zip"
     required: true
     category: bios_zip
     system: mz80k
@@ -1668,6 +1749,7 @@ files:
 
   # Sharp MZ-2000
   - name: mz2000.zip
+    path: "mame/bios/mz2000.zip"
     required: true
     category: bios_zip
     system: mz2000
@@ -1684,6 +1766,7 @@ files:
 
   # Sharp MZ-2500
   - name: mz2500.zip
+    path: "mame/bios/mz2500.zip"
     required: true
     category: bios_zip
     system: mz2500
@@ -1716,6 +1799,7 @@ files:
 
   # Sharp MZ-700
   - name: mz700.zip
+    path: "mame/bios/mz700.zip"
     required: true
     category: bios_zip
     system: mz700
@@ -1732,6 +1816,7 @@ files:
 
   # Sharp MZ-800
   - name: mz800.zip
+    path: "mame/bios/mz800.zip"
     required: true
     category: bios_zip
     system: mz800
@@ -1756,6 +1841,7 @@ files:
 
   # NEC PC-6001 family
   - name: pc6001.zip
+    path: "mame/bios/pc6001.zip"
     required: true
     category: bios_zip
     system: pc60
@@ -1775,6 +1861,7 @@ files:
         crc32: "b0142d32"
 
   - name: pc6001a.zip
+    path: "mame/bios/pc6001a.zip"
     required: false
     category: bios_zip
     system: pc60
@@ -1794,6 +1881,7 @@ files:
         crc32: "49c21d08"
 
   - name: pc6001mk2.zip
+    path: "mame/bios/pc6001mk2.zip"
     required: true
     category: bios_zip
     system: pc60
@@ -1821,6 +1909,7 @@ files:
         crc32: "20c8f3eb"
 
   - name: pc6601.zip
+    path: "mame/bios/pc6601.zip"
     required: false
     category: bios_zip
     system: pc60
@@ -1848,6 +1937,7 @@ files:
         crc32: "20c8f3eb"
 
   - name: pc6001mk2sr.zip
+    path: "mame/bios/pc6001mk2sr.zip"
     required: true
     category: bios_zip
     system: pc60
@@ -1867,6 +1957,7 @@ files:
         crc32: "73bc3256"
 
   - name: pc6601sr.zip
+    path: "mame/bios/pc6601sr.zip"
     required: false
     category: bios_zip
     system: pc60
@@ -1911,6 +2002,7 @@ files:
 
   # Technosys Aamber Pegasus
   - name: pegasus.zip
+    path: "mame/bios/pegasus.zip"
     required: true
     category: bios_zip
     system: pegasus
@@ -1956,6 +2048,7 @@ files:
 
   # Funtech Super A'Can
   - name: supracan.zip
+    path: "mame/bios/supracan.zip"
     required: true
     category: bios_zip
     system: supracan
@@ -1975,6 +2068,7 @@ files:
         crc32: "bf950ab7"
 
   - name: umc6650.zip
+    path: "mame/bios/umc6650.zip"
     required: true
     category: bios_zip
     system: supracan
@@ -1990,6 +2084,7 @@ files:
   # vis.cpp: vis (parent, WORKING). Tandy/Memorex MD-2500 (1992).
   # CD-ROM-based multimedia system built on modified 286 PC hardware.
   - name: vis.zip
+    path: "mame/bios/vis.zip"
     required: true
     category: bios_zip
     system: tandy-vis
@@ -2011,6 +2106,7 @@ files:
   # Z80-based home computers (1977-1983). Only trs80 (Level I) is MACHINE_SUPPORTS_SAVE,
   # all others MACHINE_NOT_WORKING. Software lists: trs80_cass, trs80_flop, trs80_quik.
   - name: trs80.zip
+    path: "mame/bios/trs80.zip"
     required: true
     category: bios_zip
     system: trs80
@@ -2027,6 +2123,7 @@ files:
         crc32: "0033f2b9"
 
   - name: trs80l2.zip
+    path: "mame/bios/trs80l2.zip"
     required: true
     category: bios_zip
     system: trs80
@@ -2066,6 +2163,7 @@ files:
         crc32: "0033f2b9"
 
   - name: eg3003.zip
+    path: "mame/bios/eg3003.zip"
     required: false
     category: bios_zip
     system: trs80
@@ -2097,6 +2195,7 @@ files:
         crc32: "150c5f1f"
 
   - name: sys80.zip
+    path: "mame/bios/sys80.zip"
     required: false
     category: bios_zip
     system: trs80
@@ -2113,6 +2212,7 @@ files:
         crc32: "0033f2b9"
 
   - name: ht1080z.zip
+    path: "mame/bios/ht1080z.zip"
     required: false
     category: bios_zip
     system: trs80
@@ -2125,6 +2225,7 @@ files:
         crc32: "e8c59d4f"
 
   - name: ht1080z2.zip
+    path: "mame/bios/ht1080z2.zip"
     required: false
     category: bios_zip
     system: trs80
@@ -2141,6 +2242,7 @@ files:
         crc32: "6728f0ab"
 
   - name: ht108064.zip
+    path: "mame/bios/ht108064.zip"
     required: false
     category: bios_zip
     system: trs80
@@ -2165,6 +2267,7 @@ files:
         crc32: "e76b73a4"
 
   - name: trs80m3.zip
+    path: "mame/bios/trs80m3.zip"
     required: true
     category: bios_zip
     system: trs80
@@ -2204,6 +2307,7 @@ files:
         crc32: "444c8b60"
 
   - name: trs80m4.zip
+    path: "mame/bios/trs80m4.zip"
     required: false
     category: bios_zip
     system: trs80
@@ -2222,6 +2326,7 @@ files:
         crc32: "444c8b60"
 
   - name: trs80m4p.zip
+    path: "mame/bios/trs80m4p.zip"
     required: false
     category: bios_zip
     system: trs80
@@ -2246,6 +2351,7 @@ files:
         crc32: "1ac44bea"
 
   - name: cp500.zip
+    path: "mame/bios/cp500.zip"
     required: false
     category: bios_zip
     system: trs80
@@ -2263,6 +2369,7 @@ files:
 
   # TI-99/4A family: machine ROM sets
   - name: ti99_4a.zip
+    path: "mame/bios/ti99_4a.zip"
     required: true
     category: bios_zip
     system: ti99
@@ -2291,6 +2398,7 @@ files:
         crc32: "37859301"
 
   - name: ti99_4.zip
+    path: "mame/bios/ti99_4.zip"
     required: false
     category: bios_zip
     system: ti99
@@ -2320,6 +2428,7 @@ files:
 
   # TI-99/4A: peripheral device ROM sets
   - name: ti99_speech.zip
+    path: "mame/bios/ti99_speech.zip"
     required: false
     category: bios_zip
     system: ti99
@@ -2336,6 +2445,7 @@ files:
         crc32: "65d00401"
 
   - name: ti99_fdc.zip
+    path: "mame/bios/ti99_fdc.zip"
     required: false
     category: bios_zip
     system: ti99
@@ -2352,6 +2462,7 @@ files:
         crc32: "2c921087"
 
   - name: ti99_bwg.zip
+    path: "mame/bios/ti99_bwg.zip"
     required: false
     category: bios_zip
     system: ti99
@@ -2364,6 +2475,7 @@ files:
         crc32: "06f1ec89"
 
   - name: ti99_ccdcc.zip
+    path: "mame/bios/ti99_ccdcc.zip"
     required: false
     category: bios_zip
     system: ti99
@@ -2380,6 +2492,7 @@ files:
         crc32: "9c4e5c08"
 
   - name: ti99_ccfdc.zip
+    path: "mame/bios/ti99_ccfdc.zip"
     required: false
     category: bios_zip
     system: ti99
@@ -2396,6 +2509,7 @@ files:
         crc32: "0cad8f5b"
 
   - name: ti99_rs232.zip
+    path: "mame/bios/ti99_rs232.zip"
     required: false
     category: bios_zip
     system: ti99
@@ -2408,6 +2522,7 @@ files:
         crc32: "eab382fb"
 
   - name: ti99_evpc.zip
+    path: "mame/bios/ti99_evpc.zip"
     required: false
     category: bios_zip
     system: ti99
@@ -2420,6 +2535,7 @@ files:
         crc32: "a062b75d"
 
   - name: ti99_hfdc.zip
+    path: "mame/bios/ti99_hfdc.zip"
     required: false
     category: bios_zip
     system: ti99
@@ -2432,6 +2548,7 @@ files:
         crc32: "66fbe0ed"
 
   - name: ti99_pcode.zip
+    path: "mame/bios/ti99_pcode.zip"
     required: false
     category: bios_zip
     system: ti99
@@ -2480,6 +2597,7 @@ files:
         crc32: "46a06b8b"
 
   - name: ti99_ddcc1.zip
+    path: "mame/bios/ti99_ddcc1.zip"
     required: false
     category: bios_zip
     system: ti99
@@ -2492,6 +2610,7 @@ files:
         crc32: "042968a9"
 
   - name: ti99_myarcmem.zip
+    path: "mame/bios/ti99_myarcmem.zip"
     required: false
     category: bios_zip
     system: ti99
@@ -2504,6 +2623,7 @@ files:
         crc32: "41fbb96d"
 
   - name: ti99_tipi.zip
+    path: "mame/bios/ti99_tipi.zip"
     required: false
     category: bios_zip
     system: ti99
@@ -2524,6 +2644,7 @@ files:
         crc32: "3b9cb922"
 
   - name: ti99_whtscsi.zip
+    path: "mame/bios/ti99_whtscsi.zip"
     required: false
     category: bios_zip
     system: ti99
@@ -2536,6 +2657,7 @@ files:
         crc32: "6e067c22"
 
   - name: ti99_arcturus.zip
+    path: "mame/bios/ti99_arcturus.zip"
     required: false
     category: bios_zip
     system: ti99
@@ -2556,6 +2678,7 @@ files:
         crc32: "e9ce9f4e"
 
   - name: ti99_gkracker.zip
+    path: "mame/bios/ti99_gkracker.zip"
     required: false
     category: bios_zip
     system: ti99

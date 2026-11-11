@@ -33,6 +33,7 @@ from __future__ import annotations
 
 import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
 
+import fnmatch
 import json
 import re
 import sys
@@ -48,6 +49,7 @@ sys.path.insert(0, str(REPO_ROOT))
 import sitediagrams  # noqa: E402
 from siteguides import INSTALL_SH  # noqa: E402
 from tests import sitepages  # noqa: E402
+import build_port  # noqa: E402
 from check_release import SUMS, Asset, compare_release  # noqa: E402
 
 
@@ -350,7 +352,7 @@ class DiagramText(unittest.TestCase):
                                              sitediagrams.MAX_BOX_LINES)
 
     def test_a_path_is_mono_on_its_own_line(self):
-        html = sitediagrams.figure_html("bios-chain")
+        html = sitediagrams.svg(sitediagrams.figures()["bios-chain"], "wide")
         self.assertRegex(html, r'<text [^>]*style="font-family: var\(--sl-font-mono[^>]*>/userdata/bios/</text>')
 
     def test_boxes_of_a_row_share_one_height(self):
@@ -870,15 +872,33 @@ class PinnedInstaller(unittest.TestCase):
         kinds = {(f.kind, f.name) for f in compare_release(record, sums, assets, "v1")}
         self.assertEqual(kinds, {("unrecorded", "install.py"), ("unrecorded", "retroarch.json")})
 
+    def test_a_launcher_attached_to_the_release_is_refused(self):
+        """The handheld launchers carry install.py: the site serves them
+        from its own commit, the release never does."""
+        record = {"tag": "v1", "packs": {"P.zip": {"download_size": 5, "assets": ["P.zip"]}}}
+        sums = _sums_with(["P.zip", *build_port.ARCHIVES])
+        assets = {name: Asset(5, digest) for name, digest in sums.items()}
+        assets[SUMS] = Asset(1, None)
+        kinds = {(f.kind, f.name) for f in compare_release(record, sums, assets, "v1")}
+        self.assertEqual(kinds, {("unrecorded", name) for name in build_port.ARCHIVES})
+
     def test_the_release_steps_ship_none(self):
         text = _wiki("release-process.md")
         self.assertNotIn("cp install.py", text)
         sums = re.search(r"sha256sum [^>]+> SHA256SUMS.txt", text, re.S).group(0)
         upload = re.search(r"for f in dist/SHA256SUMS.txt.*?; do", text, re.S).group(0)
-        for name in ("install.py", "install.sh", "install.ps1", ".json"):
+        for name in ("install.py", "install.sh", "install.ps1", ".json", "RetroBIOS",
+                     ".muxapp", "build_port", " *.zip", "/*.zip"):
             with self.subTest(name=name):
                 self.assertNotIn(name, sums)
                 self.assertNotIn(name, upload)
+        # A launcher built into dist/ is never caught by the glob either.
+        for archive in build_port.ARCHIVES:
+            with self.subTest(archive=archive):
+                self.assertFalse(fnmatch.fnmatch(archive, "*_BIOS_Pack*.zip"))
+        self.assertIn("*_BIOS_Pack*.zip", sums)
+        self.assertIn("*_BIOS_Pack*.zip", upload)
+        self.assertNotIn("scripts/build_port.py", text)
 
     def test_the_installer_page_pins_one_commit(self):
         # v2026.10.10 carries no install.py: until a release does, the

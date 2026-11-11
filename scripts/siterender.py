@@ -982,7 +982,6 @@ SYSTEM_NAMES: dict[str, str] = {
     "heroes-of-might-and-magic-2": "Heroes of Might and Magic II",
     "hexen": "Hexen",
     "hexen2": "Hexen II",
-    "hppa": "HP PA-RISC",
     "hugo": "Hugo",
     "hyper-neogeo64": "SNK Hyper Neo Geo 64",
     "ibm-at": "IBM PC/AT",
@@ -1339,6 +1338,11 @@ SYSTEM_PARENTS: dict[str, tuple[str, str]] = {
     # Games, filed with the game whose folder holds their data
     "dinothawr": ("Dinothawr", "Dinothawr"),
     "doom": ("Id Software", "Doom"),
+    # The other games of the Doom engines keep their IWADs in its folder.
+    "heretic": ("Id Software", "Doom"),
+    "hexen": ("Id Software", "Doom"),
+    "strife": ("Id Software", "Doom"),
+    "chex": ("Id Software", "Doom"),
     "ctf": ("Id Software", "Quake II"),
     "teamarena": ("Id Software", "Quake III Arena"),
     "enemyterritory": ("Id Software", "Wolfenstein Enemy Territory"),

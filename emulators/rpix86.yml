@@ -25,11 +25,12 @@ notes: |
   input and serial devices, and the log and screenshot files it writes.
 
   C:\ is the directory given with -d, the working directory by default
-  (usage text). The emulator looks for its shell as C:\4DOS.COM or
-  C:\4DOS\4DOS.COM. When neither exists it stops with "Unable to find
-  4DOS.COM command interpreter (shell)" and offers to fetch it with
-  "wget http://rpix86.patrickaalto.com/4DOS.COM". RetroPie runs the binary
-  from its install directory and unpacks
+  (usage text). Started without a program to run, the emulator looks for
+  its shell as C:\4DOS\4DOS.COM, then C:\4DOS.COM. When neither exists it
+  asks "Unable to find 4DOS.COM command interpreter (shell)", runs
+  "wget http://rpix86.patrickaalto.com/4DOS.COM" into C:\ on yes and
+  exits on no. The binary itself is sha256 48769ffb388822b6...68c0.
+  RetroPie runs the binary from its install directory and unpacks
   files.retropie.org.uk/archives/4dos.zip (sha256 801441f3f65e...5b636a,
   4DOS 7.50 from JP Software) there (scriptmodules/emulators/rpix86.sh).
 
@@ -44,5 +45,5 @@ files:
     sha1: "a44f65d6318582501d22e27831eb2b1f0df58f79"
     md5: "fc3a0078a13d98e611a62c1d6724f8c5"
     crc32: "8300d4cb"
-    source_ref: "rpix86 0.19 binary, file offsets 0x1b2c48 (C:\\4DOS.COM), 0x1b2c34 (C:\\4DOS\\4DOS.COM), 0x1b515c (Unable to find 4DOS.COM), 0x1b504c (wget .../4DOS.COM -O%s/4DOS.COM)"
+    source_ref: "rpix86 0.19 (sha256 48769ffb388822b6) main 0xbf34: 0xc380-0xc388 (no program on the command line, start the shell), 0xc6d4-0xc6e0 (retry after a download), 0xcbbc (exit when declined); FUN_0000d72c 0xd814-0xd8c0 (tries C:\\4DOS\\4DOS.COM then C:\\4DOS.COM from the table at 0x1ca810 with tail /P through the DOS EXEC at 0x22da0, returns -1 when both fail); FUN_00015e80 0x15ea4-0x15eb0 (Unable to find 4DOS.COM prompt), 0x15eec-0x15f00 and 0x1636c-0x1637c (sprintf of wget .../4DOS.COM -O%s/4DOS.COM into the C: directory, system)"
     note: "Same bytes at rpix86.patrickaalto.com/4DOS.COM, the URL the binary downloads from, and in RetroPie's 4dos.zip. Read from the emulated C: root, not a BIOS directory. The author's rpix86.zip and rpix86.tar.gz hold the binary alone, and RetroPie unpacks 4dos.zip into the install directory."

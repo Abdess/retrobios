@@ -598,10 +598,11 @@ class BootDisks(unittest.TestCase):
         self.assertEqual((hard.names, hard.passes_to), (["{bootdisk}.chd"], "command line -hard"))
         self.assertEqual(hard.expands, {"bootdisk": ["macos3", "mac755"]})
         self.assertTrue(hard.depends_on_option.startswith("bootdisk (system.name == 'macintosh'"))
-        self.assertEqual(
-            hard.source_ref,
-            f"{G}/mame/mameGenerator.py:3-4, 9-10, {kl.ES_FEATURES}:8-10",
-        )
+        # The menu's values are where the choices come from, the generator
+        # writing the choice is the evidence.
+        self.assertEqual(hard.source_ref, f"{G}/mame/mameGenerator.py:3-4, 9-10")
+        self.assertEqual(hard.choices_from, f"{kl.ES_FEATURES}:8-10")
+        self.assertIsNone(floppy.choices_from)
 
     def test_a_name_built_another_way_raises(self):
         broken = MAME.replace('"/userdata/bios/" + system.config["bootdisk"] + ".chd"', "disk")

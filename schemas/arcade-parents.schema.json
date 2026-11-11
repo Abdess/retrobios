@@ -59,6 +59,10 @@
       "$ref": "#/$defs/sets_by_archive",
       "description": "BIOS set -> the game sets whose romof chain reaches it."
     },
+    "parents": {
+      "$ref": "#/$defs/sets_by_archive",
+      "description": "Parent game set with ROMs -> the clones whose romof chain reaches it before any BIOS set. A clone reads the ROMs it shares with its parent from the parent's archive."
+    },
     "devices": {
       "$ref": "#/$defs/sets_by_archive",
       "description": "Device set with ROMs -> the game sets that instantiate it."
@@ -80,6 +84,12 @@
     "bios_sets": {
       "$ref": "#/$defs/set_list",
       "description": "Every BIOS set of the DAT, used by a game or not: an archive of that name on a card is not a game."
+    },
+    "sources": {
+      "type": "object",
+      "description": "Driver source file -> the game sets and the device sets with ROMs it declares, as the -listxml sourcefile attribute names it.",
+      "propertyNames": { "type": "string", "minLength": 1 },
+      "additionalProperties": { "$ref": "#/$defs/set_list", "minItems": 1 }
     },
     "counts": {
       "type": "object",

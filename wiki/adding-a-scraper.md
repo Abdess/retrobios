@@ -97,13 +97,14 @@ Returned by `compare_with_config()`. Contains:
 
 ### scraper_cli
 
-`scraper_cli(scraper_class, description)` provides a shared CLI with three modes:
+`scraper_cli(scraper_class, description)` provides a shared CLI:
 
 | Flag | Behavior |
 |------|----------|
 | `--dry-run` | Fetch and print a summary grouped by system |
 | `--json` | Output all requirements as JSON |
 | `--output FILE` | Write platform YAML to FILE |
+| `--revision REF` | Read a branch head or a commit instead of the revision the platform file pins. Offered only to a scraper whose constructor takes `revision` (RetroBat), and passed by `check_freshness.py` and `refresh_stale.py` from the registry's `rescrape_args` |
 
 When `--output` targets an existing file, every top-level key the scraper writes
 is replaced and the others are kept, as is a system's `data_directories` the new

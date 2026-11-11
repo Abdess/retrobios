@@ -30,7 +30,13 @@ except ImportError:
 
 BIOS = "$bios_path"
 PLACEHOLDER = "RETRODECKBIOSDIR"
+# The roms folder in the same presets: GZDoom's IWADSearch.Directories holds
+# RETRODECKROMSDIR/doom (gzdoom/rd_assets/rd_config/gzdoom.ini:9), which
+# gzdoom/component_prepare.sh:27 rewrites to $roms_path.
+ROMS_PLACEHOLDER = "RETRODECKROMSDIR"
 CORE_OPTIONS = "retroarch/rd_assets/rd_config/retroarch-core-options.cfg"
+# XRoar ROM lists RetroDECK's xroar.conf defines that no machine looks up.
+UNREAD_ROMLISTS = frozenset({"coco1", "coco1e", "coco1e_ext", "coco2", "coco2_ext", "coco2b"})
 # The component that runs libretro cores.
 LIBRETRO_COMPONENT = "retroarch"
 # Values of a core option that name a file rather than a setting.
@@ -282,7 +288,11 @@ class Component:
         )
 
     def _preset(self, script: Script, number: int, words: list[str]) -> None:
-        """`sed -i "s#RETRODECKBIOSDIR#${bios_path}#g" "$cfg"` on a preset copied just above."""
+        """`sed -i "s#RETRODECKBIOSDIR#${bios_path}#g" "$cfg"` on a preset copied just above.
+
+        Each line naming the BIOS or the roms folder is a record: a search
+        list can mix them (XRoar's rompath, GZDoom's IWAD directories).
+        """
         target = words[-1]
         substitutions = self._substitutions(script, target)
         copied = None
@@ -293,6 +303,19 @@ class Component:
         if copied is None:
             raise LauncherPatternMissing(f"{script.path}:{number}", f"no preset copied to {target}")
         preset = f"{self.name}/rd_assets/rd_config/{copied[1]}"
+        # The reset copies the preset over the user's file, then fills its
+        # placeholders: that is the install, and nothing keeps an older file.
+        evidence: dict[str, Any] = {
+            "installs": {
+                "path": target,
+                "source_ref": source_ref(
+                    [(script.path, copied[0])]
+                    + [(script.path, line) for _v, line in substitutions.values()]
+                ),
+            },
+            "kept_if_present": False,
+            "overrides": self.launch_rewrites(target),
+        }
         text = self.read(preset)
         if text is None:
             raise LauncherPatternMissing(preset, "preset is missing")
@@ -302,40 +325,67 @@ class Component:
             stripped = line.strip()
             if re.fullmatch(r"\[[^\]]+\]", stripped):
                 section = stripped
-            if PLACEHOLDER not in stripped or stripped.startswith("#"):
+            if stripped.startswith("#") or not any(
+                p in stripped for p in (PLACEHOLDER, ROMS_PLACEHOLDER)
+            ):
                 continue
             setting = re.match(r"^([\w.$()-]+)\s*(?:=|\s)\s*(.+)$", stripped)
             if setting is None:
                 raise LauncherPatternMissing(f"{preset}:{line_no}", f"placeholder in {stripped}")
+            named = [p for p in substitutions if p in stripped]
+            if PLACEHOLDER not in stripped and not named:
+                # A roms placeholder the script leaves as written.
+                continue
             key, value = setting.group(1), _unquote(setting.group(2))
-            for placeholder, variable in substitutions.items():
+            for placeholder, (variable, _line) in substitutions.items():
                 value = value.replace(placeholder, variable)
             where = f"{section} {key}" if section else key
-            found += 1
-            applied = [(script.path, copied[0]), (script.path, number)]
+            found += PLACEHOLDER in stripped
+            applied = [(script.path, copied[0]), (script.path, number)] + [
+                (script.path, substitutions[p][1]) for p in named
+            ]
             self.record(
                 "passes_path", [], [(preset, line_no)] + applied,
                 search_dir=value, passes_to=f"{self.config_name(target)} {where}",
-                fails_when_missing=False,
+                fails_when_missing=False, **evidence,
             )
             if key == "rompath":
-                self.romlists(preset, text, value, applied)
+                self.romlists(preset, text, value, applied, evidence)
         if not found:
             raise LauncherPatternMissing(preset, f"no {PLACEHOLDER} line")
 
     @staticmethod
-    def _substitutions(script: Script, target: str) -> dict[str, str]:
+    def _substitutions(script: Script, target: str) -> dict[str, tuple[str, int]]:
+        """Each placeholder sed rewrites in ``target``: (variable, line)."""
         found = {}
-        for line in script.lines:
+        for line_no, line in enumerate(script.lines, 1):
             for m in re.finditer(r"s#(RETRODECK\w+)#\$\{?(\w+)\}?#g[\"']?\s+\"([^\"]+)\"", line):
                 if m.group(3) == target:
-                    found[m.group(1)] = f"${m.group(2)}"
+                    found[m.group(1)] = (f"${m.group(2)}", line_no)
         return found
 
+    def launch_rewrites(self, target: str) -> list[str]:
+        """The sed lines of the component launcher rewriting ``target``."""
+        path = f"{self.name}/component_launcher.sh"
+        text = self.read(path)
+        if text is None:
+            return []
+        return [
+            source_ref([(path, number)])
+            for number, line in enumerate(text.splitlines(), 1)
+            if re.search(r"\bsed\b.*\s-i\b", line) and target in line
+        ]
+
     def romlists(
-        self, preset: str, text: str, rompath: str, applied: list[tuple[str, int]]
+        self, preset: str, text: str, rompath: str, applied: list[tuple[str, int]],
+        evidence: dict[str, Any],
     ) -> None:
-        """XRoar's `romlist NAME=a,b,@other`: the names tried for each ROM, in order."""
+        """XRoar's `romlist NAME=a,b,@other`: the names tried for each ROM, in order.
+
+        A list no XRoar machine or cartridge looks up is no read: coco1,
+        coco1e, coco1e_ext, coco2, coco2_ext and coco2b are defined by XRoar
+        (src/xroar.c:663-670) and named by nothing else.
+        """
         lists: dict[str, tuple[int, list[str]]] = {}
         for line_no, line in enumerate(text.splitlines(), 1):
             found = re.match(r"^romlist\s+([\w-]+)=(.*)$", line.strip())
@@ -358,10 +408,12 @@ class Component:
             return list(dict.fromkeys(names))
 
         for name, (line_no, _items) in lists.items():
+            if name in UNREAD_ROMLISTS:
+                continue
             self.record(
                 "names_searched", expand(name, (name,)), [(preset, line_no)] + applied,
                 slot=name, search_dir=rompath, passes_to=f"romlist {name}",
-                fails_when_missing=False,
+                fails_when_missing=False, **evidence,
             )
 
     def read_launcher(self) -> None:
@@ -463,6 +515,7 @@ def core_options(read: Read) -> list[Launcher]:
     ]
     if not copied:
         raise LauncherPatternMissing(prepare_path, "the core options preset is never copied")
+    target = _words(prepare.splitlines()[copied[0] - 1].strip())[-1]
     records = []
     for line_no, line in enumerate(text.splitlines(), 1):
         found = re.match(r'^([\w.-]+)\s*=\s*"([^"]*)"$', line.strip())
@@ -472,6 +525,8 @@ def core_options(read: Read) -> list[Launcher]:
         records.append(Launcher(
             emulator=LIBRETRO_COMPONENT, build="libretro", kind="core_option", names=[value],
             passes_to=f"core option {key}", fails_when_missing=False,
+            installs={"path": target, "source_ref": source_ref([(prepare_path, copied[0])])},
+            kept_if_present=False, overrides=[],
             source_ref=source_ref([(CORE_OPTIONS, line_no), (prepare_path, copied[0])]),
         ))
     if not records:

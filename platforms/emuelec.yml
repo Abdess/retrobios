@@ -4241,96 +4241,6 @@ launchers:
   fails_when_missing: false
   depends_on_option: /storage/roms/bios/mame/ini/mame.ini absent
   source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:357-358, packages/sx05re/libretro/mame/scripts/mame.sh:21-23"
-- emulator: mame
-  build: libretro
-  kind: passes_path
-  names: []
-  search_dir: /storage/roms/bios/mame
-  passes_to: mame.ini homepath
-  fails_when_missing: false
-  depends_on_option: mame_read_config = enabled
-  source_ref: "packages/sx05re/libretro/mame/config/ini/mame.ini:10, packages/sx05re/libretro/mame/config/MAME/MAME.opt:19,\
-    \ packages/sx05re/emuelec/bin/emuelecRunEmu.sh:357-358, packages/sx05re/libretro/mame/scripts/mame.sh:21-23"
-- emulator: mame
-  build: libretro
-  kind: passes_path
-  names: []
-  search_dir: /storage/roms/bios/mame/bios
-  passes_to: mame.ini rompath
-  fails_when_missing: false
-  depends_on_option: mame_read_config = enabled
-  source_ref: "packages/sx05re/libretro/mame/config/ini/mame.ini:11, packages/sx05re/libretro/mame/config/MAME/MAME.opt:19,\
-    \ packages/sx05re/emuelec/bin/emuelecRunEmu.sh:357-358, packages/sx05re/libretro/mame/scripts/mame.sh:21-23"
-- emulator: mame
-  build: libretro
-  kind: passes_path
-  names: []
-  search_dir: /storage/roms/bios/mame/hash
-  passes_to: mame.ini hashpath
-  fails_when_missing: false
-  depends_on_option: mame_read_config = enabled
-  source_ref: "packages/sx05re/libretro/mame/config/ini/mame.ini:12, packages/sx05re/libretro/mame/config/MAME/MAME.opt:19,\
-    \ packages/sx05re/emuelec/bin/emuelecRunEmu.sh:357-358, packages/sx05re/libretro/mame/scripts/mame.sh:21-23"
-- emulator: mame
-  build: libretro
-  kind: passes_path
-  names: []
-  search_dir: /storage/roms/bios/mame/samples
-  passes_to: mame.ini samplepath
-  fails_when_missing: false
-  depends_on_option: mame_read_config = enabled
-  source_ref: "packages/sx05re/libretro/mame/config/ini/mame.ini:13, packages/sx05re/libretro/mame/config/MAME/MAME.opt:19,\
-    \ packages/sx05re/emuelec/bin/emuelecRunEmu.sh:357-358, packages/sx05re/libretro/mame/scripts/mame.sh:21-23"
-- emulator: mame
-  build: libretro
-  kind: passes_path
-  names: []
-  search_dir: /storage/roms/bios/mame/artwork
-  passes_to: mame.ini artpath
-  fails_when_missing: false
-  depends_on_option: mame_read_config = enabled
-  source_ref: "packages/sx05re/libretro/mame/config/ini/mame.ini:14, packages/sx05re/libretro/mame/config/MAME/MAME.opt:19,\
-    \ packages/sx05re/emuelec/bin/emuelecRunEmu.sh:357-358, packages/sx05re/libretro/mame/scripts/mame.sh:21-23"
-- emulator: mame
-  build: libretro
-  kind: passes_path
-  names: []
-  search_dir: /storage/roms/bios/mame/ini
-  passes_to: mame.ini inipath
-  fails_when_missing: false
-  depends_on_option: mame_read_config = enabled
-  source_ref: "packages/sx05re/libretro/mame/config/ini/mame.ini:16, packages/sx05re/libretro/mame/config/MAME/MAME.opt:19,\
-    \ packages/sx05re/emuelec/bin/emuelecRunEmu.sh:357-358, packages/sx05re/libretro/mame/scripts/mame.sh:21-23"
-- emulator: mame
-  build: libretro
-  kind: passes_path
-  names: []
-  search_dir: /storage/roms/bios/mame/cheat
-  passes_to: mame.ini cheatpath
-  fails_when_missing: false
-  depends_on_option: mame_read_config = enabled
-  source_ref: "packages/sx05re/libretro/mame/config/ini/mame.ini:18, packages/sx05re/libretro/mame/config/MAME/MAME.opt:19,\
-    \ packages/sx05re/emuelec/bin/emuelecRunEmu.sh:357-358, packages/sx05re/libretro/mame/scripts/mame.sh:21-23"
-- emulator: mame
-  build: libretro
-  kind: passes_path
-  names: []
-  search_dir: /storage/roms/bios/mame/crosshair
-  passes_to: mame.ini crosshairpath
-  fails_when_missing: false
-  depends_on_option: mame_read_config = enabled
-  source_ref: "packages/sx05re/libretro/mame/config/ini/mame.ini:19, packages/sx05re/libretro/mame/config/MAME/MAME.opt:19,\
-    \ packages/sx05re/emuelec/bin/emuelecRunEmu.sh:357-358, packages/sx05re/libretro/mame/scripts/mame.sh:21-23"
-- emulator: mame
-  build: libretro
-  kind: passes_path
-  names: []
-  search_dir: /storage/roms/bios/mame/plugins
-  passes_to: mame.ini pluginspath
-  fails_when_missing: false
-  depends_on_option: mame_read_config = enabled
-  source_ref: "packages/sx05re/libretro/mame/config/ini/mame.ini:20, packages/sx05re/libretro/mame/config/MAME/MAME.opt:19,\
-    \ packages/sx05re/emuelec/bin/emuelecRunEmu.sh:357-358, packages/sx05re/libretro/mame/scripts/mame.sh:21-23"
 - emulator: pico8
   build: standalone
   kind: moves
@@ -4384,6 +4294,11 @@ launchers:
   passes_to: "settings.ini [BIOS] SearchDirectory (-settings), [BIOS] PathNTSCU, PathNTSCJ,\
     \ PathPAL unset"
   fails_when_missing: false
+  installs:
+    path: /storage/.config/emuelec/configs/duckstation/settings.ini
+    source_ref: "packages/sx05re/emulators/duckstation/package.mk:56, packages/sysutils/systemd/scripts/userconfig-setup:12"
+  kept_if_present: true
+  overrides: []
   source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:207-209, packages/sx05re/emulators/duckstation/config/settings.ini:6-9,\
     \ packages/sx05re/emulators/duckstation/package.mk:56, packages/sx05re/emulators/duckstation/scripts/duckstation.sh:40"
 - emulator: yabasanshiroSA
@@ -4439,6 +4354,11 @@ launchers:
   search_dir: /storage/roms/bios
   passes_to: "Atari-ST-default.cfg [ROM] szTosImageFileName (--configfile)"
   fails_when_missing: false
+  installs:
+    path: /tmp/hatari/.hatari-temp.cfg
+    source_ref: "packages/sx05re/emulators/hatarisa/scripts/hatari.start:36"
+  kept_if_present: false
+  overrides: []
   source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:172-174, packages/sx05re/emulators/hatarisa/config/conf/Atari-ST-default.cfg:200,\
     \ packages/sx05re/emulators/hatarisa/package.mk:39, packages/sx05re/emulators/hatarisa/scripts/hatari.start:36,\
     \ 66, 73"
@@ -4446,12 +4366,409 @@ launchers:
   build: standalone
   kind: passes_path
   names: []
+  search_dir: /storage/roms/mame/artwork
+  passes_to: advmame.rc dir_artwork
+  fails_when_missing: false
+  depends_on_option: system != arcade
+  installs:
+    path: /emuelec/configs/advmame/advmame.rc
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+  kept_if_present: false
+  overrides:
+  - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:213-215, packages/sx05re/emulators/advancemame/config/advmame.rc_oga:1-11,\
+    \ packages/sx05re/emulators/advancemame/config/advmame.rc_gf:1-11, packages/sx05re/emulators/advancemame/config/advmame.rc:4-14,\
+    \ packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sx05re/emulators/advancemame/bin/advmame.sh:26-27,\
+    \ 80"
+- emulator: AdvanceMame
+  systems:
+  - arcade
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/arcade/artwork
+  passes_to: advmame.rc dir_artwork
+  fails_when_missing: false
+  installs:
+    path: /emuelec/configs/advmame/advmame.rc
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+  kept_if_present: false
+  overrides:
+  - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:213-215, packages/sx05re/emulators/advancemame/config/advmame.rc_oga:1-11,\
+    \ packages/sx05re/emulators/advancemame/config/advmame.rc_gf:1-11, packages/sx05re/emulators/advancemame/config/advmame.rc:4-14,\
+    \ packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sx05re/emulators/advancemame/bin/advmame.sh:26-27,\
+    \ 80"
+- emulator: AdvanceMame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/mame/diff
+  passes_to: advmame.rc dir_diff
+  fails_when_missing: false
+  depends_on_option: system != arcade
+  installs:
+    path: /emuelec/configs/advmame/advmame.rc
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+  kept_if_present: false
+  overrides:
+  - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:213-215, packages/sx05re/emulators/advancemame/config/advmame.rc_oga:1-11,\
+    \ packages/sx05re/emulators/advancemame/config/advmame.rc_gf:1-11, packages/sx05re/emulators/advancemame/config/advmame.rc:4-14,\
+    \ packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sx05re/emulators/advancemame/bin/advmame.sh:26-27,\
+    \ 80"
+- emulator: AdvanceMame
+  systems:
+  - arcade
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/arcade/diff
+  passes_to: advmame.rc dir_diff
+  fails_when_missing: false
+  installs:
+    path: /emuelec/configs/advmame/advmame.rc
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+  kept_if_present: false
+  overrides:
+  - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:213-215, packages/sx05re/emulators/advancemame/config/advmame.rc_oga:1-11,\
+    \ packages/sx05re/emulators/advancemame/config/advmame.rc_gf:1-11, packages/sx05re/emulators/advancemame/config/advmame.rc:4-14,\
+    \ packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sx05re/emulators/advancemame/bin/advmame.sh:26-27,\
+    \ 80"
+- emulator: AdvanceMame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/mame/hi
+  passes_to: advmame.rc dir_hi
+  fails_when_missing: false
+  depends_on_option: system != arcade
+  installs:
+    path: /emuelec/configs/advmame/advmame.rc
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+  kept_if_present: false
+  overrides:
+  - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:213-215, packages/sx05re/emulators/advancemame/config/advmame.rc_oga:1-11,\
+    \ packages/sx05re/emulators/advancemame/config/advmame.rc_gf:1-11, packages/sx05re/emulators/advancemame/config/advmame.rc:4-14,\
+    \ packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sx05re/emulators/advancemame/bin/advmame.sh:26-27,\
+    \ 80"
+- emulator: AdvanceMame
+  systems:
+  - arcade
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/arcade/hi
+  passes_to: advmame.rc dir_hi
+  fails_when_missing: false
+  installs:
+    path: /emuelec/configs/advmame/advmame.rc
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+  kept_if_present: false
+  overrides:
+  - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:213-215, packages/sx05re/emulators/advancemame/config/advmame.rc_oga:1-11,\
+    \ packages/sx05re/emulators/advancemame/config/advmame.rc_gf:1-11, packages/sx05re/emulators/advancemame/config/advmame.rc:4-14,\
+    \ packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sx05re/emulators/advancemame/bin/advmame.sh:26-27,\
+    \ 80"
+- emulator: AdvanceMame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/mame/image
+  passes_to: advmame.rc dir_image
+  fails_when_missing: false
+  depends_on_option: system != arcade
+  installs:
+    path: /emuelec/configs/advmame/advmame.rc
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+  kept_if_present: false
+  overrides:
+  - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:213-215, packages/sx05re/emulators/advancemame/config/advmame.rc_oga:1-11,\
+    \ packages/sx05re/emulators/advancemame/config/advmame.rc_gf:1-11, packages/sx05re/emulators/advancemame/config/advmame.rc:4-14,\
+    \ packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sx05re/emulators/advancemame/bin/advmame.sh:26-27,\
+    \ 80"
+- emulator: AdvanceMame
+  systems:
+  - arcade
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/arcade/image
+  passes_to: advmame.rc dir_image
+  fails_when_missing: false
+  installs:
+    path: /emuelec/configs/advmame/advmame.rc
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+  kept_if_present: false
+  overrides:
+  - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:213-215, packages/sx05re/emulators/advancemame/config/advmame.rc_oga:1-11,\
+    \ packages/sx05re/emulators/advancemame/config/advmame.rc_gf:1-11, packages/sx05re/emulators/advancemame/config/advmame.rc:4-14,\
+    \ packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sx05re/emulators/advancemame/bin/advmame.sh:26-27,\
+    \ 80"
+- emulator: AdvanceMame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/mame/inp
+  passes_to: advmame.rc dir_inp
+  fails_when_missing: false
+  depends_on_option: system != arcade
+  installs:
+    path: /emuelec/configs/advmame/advmame.rc
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+  kept_if_present: false
+  overrides:
+  - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:213-215, packages/sx05re/emulators/advancemame/config/advmame.rc_oga:1-11,\
+    \ packages/sx05re/emulators/advancemame/config/advmame.rc_gf:1-11, packages/sx05re/emulators/advancemame/config/advmame.rc:4-14,\
+    \ packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sx05re/emulators/advancemame/bin/advmame.sh:26-27,\
+    \ 80"
+- emulator: AdvanceMame
+  systems:
+  - arcade
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/arcade/inp
+  passes_to: advmame.rc dir_inp
+  fails_when_missing: false
+  installs:
+    path: /emuelec/configs/advmame/advmame.rc
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+  kept_if_present: false
+  overrides:
+  - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:213-215, packages/sx05re/emulators/advancemame/config/advmame.rc_oga:1-11,\
+    \ packages/sx05re/emulators/advancemame/config/advmame.rc_gf:1-11, packages/sx05re/emulators/advancemame/config/advmame.rc:4-14,\
+    \ packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sx05re/emulators/advancemame/bin/advmame.sh:26-27,\
+    \ 80"
+- emulator: AdvanceMame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/mame/memcard
+  passes_to: advmame.rc dir_memcard
+  fails_when_missing: false
+  depends_on_option: system != arcade
+  installs:
+    path: /emuelec/configs/advmame/advmame.rc
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+  kept_if_present: false
+  overrides:
+  - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:213-215, packages/sx05re/emulators/advancemame/config/advmame.rc_oga:1-11,\
+    \ packages/sx05re/emulators/advancemame/config/advmame.rc_gf:1-11, packages/sx05re/emulators/advancemame/config/advmame.rc:4-14,\
+    \ packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sx05re/emulators/advancemame/bin/advmame.sh:26-27,\
+    \ 80"
+- emulator: AdvanceMame
+  systems:
+  - arcade
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/arcade/memcard
+  passes_to: advmame.rc dir_memcard
+  fails_when_missing: false
+  installs:
+    path: /emuelec/configs/advmame/advmame.rc
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+  kept_if_present: false
+  overrides:
+  - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:213-215, packages/sx05re/emulators/advancemame/config/advmame.rc_oga:1-11,\
+    \ packages/sx05re/emulators/advancemame/config/advmame.rc_gf:1-11, packages/sx05re/emulators/advancemame/config/advmame.rc:4-14,\
+    \ packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sx05re/emulators/advancemame/bin/advmame.sh:26-27,\
+    \ 80"
+- emulator: AdvanceMame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/mame/nvram
+  passes_to: advmame.rc dir_nvram
+  fails_when_missing: false
+  depends_on_option: system != arcade
+  installs:
+    path: /emuelec/configs/advmame/advmame.rc
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+  kept_if_present: false
+  overrides:
+  - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:213-215, packages/sx05re/emulators/advancemame/config/advmame.rc_oga:1-11,\
+    \ packages/sx05re/emulators/advancemame/config/advmame.rc_gf:1-11, packages/sx05re/emulators/advancemame/config/advmame.rc:4-14,\
+    \ packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sx05re/emulators/advancemame/bin/advmame.sh:26-27,\
+    \ 80"
+- emulator: AdvanceMame
+  systems:
+  - arcade
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/arcade/nvram
+  passes_to: advmame.rc dir_nvram
+  fails_when_missing: false
+  installs:
+    path: /emuelec/configs/advmame/advmame.rc
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+  kept_if_present: false
+  overrides:
+  - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:213-215, packages/sx05re/emulators/advancemame/config/advmame.rc_oga:1-11,\
+    \ packages/sx05re/emulators/advancemame/config/advmame.rc_gf:1-11, packages/sx05re/emulators/advancemame/config/advmame.rc:4-14,\
+    \ packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sx05re/emulators/advancemame/bin/advmame.sh:26-27,\
+    \ 80"
+- emulator: AdvanceMame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/mame
+  passes_to: advmame.rc dir_rom
+  fails_when_missing: false
+  depends_on_option: system != arcade
+  installs:
+    path: /emuelec/configs/advmame/advmame.rc
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+  kept_if_present: false
+  overrides:
+  - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:213-215, packages/sx05re/emulators/advancemame/config/advmame.rc_oga:1-11,\
+    \ packages/sx05re/emulators/advancemame/config/advmame.rc_gf:1-11, packages/sx05re/emulators/advancemame/config/advmame.rc:4-14,\
+    \ packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sx05re/emulators/advancemame/bin/advmame.sh:26-27,\
+    \ 80"
+- emulator: AdvanceMame
+  systems:
+  - arcade
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/arcade
+  passes_to: advmame.rc dir_rom
+  fails_when_missing: false
+  installs:
+    path: /emuelec/configs/advmame/advmame.rc
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+  kept_if_present: false
+  overrides:
+  - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:213-215, packages/sx05re/emulators/advancemame/config/advmame.rc_oga:1-11,\
+    \ packages/sx05re/emulators/advancemame/config/advmame.rc_gf:1-11, packages/sx05re/emulators/advancemame/config/advmame.rc:4-14,\
+    \ packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sx05re/emulators/advancemame/bin/advmame.sh:26-27,\
+    \ 80"
+- emulator: AdvanceMame
+  build: standalone
+  kind: passes_path
+  names: []
   search_dir: /storage/roms/bios/advmame/samples
   passes_to: advmame.rc dir_sample
   fails_when_missing: false
-  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:213-215, packages/sx05re/emulators/advancemame/config/advmame.rc_oga:9,\
-    \ packages/sx05re/emulators/advancemame/config/advmame.rc_gf:9, packages/sx05re/emulators/advancemame/config/advmame.rc:12,\
+  installs:
+    path: /emuelec/configs/advmame/advmame.rc
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+  kept_if_present: false
+  overrides:
+  - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:213-215, packages/sx05re/emulators/advancemame/config/advmame.rc_oga:1-11,\
+    \ packages/sx05re/emulators/advancemame/config/advmame.rc_gf:1-11, packages/sx05re/emulators/advancemame/config/advmame.rc:4-14,\
     \ packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sx05re/emulators/advancemame/bin/advmame.sh:80"
+- emulator: AdvanceMame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/mame/snap
+  passes_to: advmame.rc dir_snap
+  fails_when_missing: false
+  depends_on_option: system != arcade
+  installs:
+    path: /emuelec/configs/advmame/advmame.rc
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+  kept_if_present: false
+  overrides:
+  - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:213-215, packages/sx05re/emulators/advancemame/config/advmame.rc_oga:1-11,\
+    \ packages/sx05re/emulators/advancemame/config/advmame.rc_gf:1-11, packages/sx05re/emulators/advancemame/config/advmame.rc:4-14,\
+    \ packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sx05re/emulators/advancemame/bin/advmame.sh:26-27,\
+    \ 80"
+- emulator: AdvanceMame
+  systems:
+  - arcade
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/arcade/snap
+  passes_to: advmame.rc dir_snap
+  fails_when_missing: false
+  installs:
+    path: /emuelec/configs/advmame/advmame.rc
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+  kept_if_present: false
+  overrides:
+  - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:213-215, packages/sx05re/emulators/advancemame/config/advmame.rc_oga:1-11,\
+    \ packages/sx05re/emulators/advancemame/config/advmame.rc_gf:1-11, packages/sx05re/emulators/advancemame/config/advmame.rc:4-14,\
+    \ packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sx05re/emulators/advancemame/bin/advmame.sh:26-27,\
+    \ 80"
+- emulator: AdvanceMame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/mame/nvram
+  passes_to: advmame.rc dir_sta
+  fails_when_missing: false
+  depends_on_option: system != arcade
+  installs:
+    path: /emuelec/configs/advmame/advmame.rc
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+  kept_if_present: false
+  overrides:
+  - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:213-215, packages/sx05re/emulators/advancemame/config/advmame.rc_oga:1-11,\
+    \ packages/sx05re/emulators/advancemame/config/advmame.rc_gf:1-11, packages/sx05re/emulators/advancemame/config/advmame.rc:4-14,\
+    \ packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sx05re/emulators/advancemame/bin/advmame.sh:26-27,\
+    \ 80"
+- emulator: AdvanceMame
+  systems:
+  - arcade
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /storage/roms/arcade/nvram
+  passes_to: advmame.rc dir_sta
+  fails_when_missing: false
+  installs:
+    path: /emuelec/configs/advmame/advmame.rc
+    source_ref: "packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sysutils/systemd/scripts/userconfig-setup:12,\
+      \ packages/sx05re/emulators/advancemame/bin/advmame.sh:17, 21"
+  kept_if_present: false
+  overrides:
+  - "packages/sx05re/emulators/advancemame/bin/advmame.sh:27"
+  source_ref: "packages/sx05re/emuelec/bin/emuelecRunEmu.sh:213-215, packages/sx05re/emulators/advancemame/config/advmame.rc_oga:1-11,\
+    \ packages/sx05re/emulators/advancemame/config/advmame.rc_gf:1-11, packages/sx05re/emulators/advancemame/config/advmame.rc:4-14,\
+    \ packages/sx05re/emulators/advancemame/package.mk:45-49, packages/sx05re/emulators/advancemame/bin/advmame.sh:26-27,\
+    \ 80"
 - emulator: SCUMMVMSA
   build: standalone
   kind: passes_path
@@ -4470,7 +4787,8 @@ launchers:
   search_dir: /storage/.config/scummvm
   passes_to: /storage/roms/bios/scummvm.ini
   fails_when_missing: false
-  depends_on_option: scummvm.start add
+  depends_on_option: "scummvm.start add, an action no launch runs (emuelecRunEmu.sh\
+    \ passes libretro, sa)"
   source_ref: "packages/sx05re/emulators/scummvmsa/bin/scummvm.start:9, 49-51, 54"
 - emulator: dolphin
   build: standalone

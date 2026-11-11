@@ -299,6 +299,23 @@ class RecordsNameNoLocalPath(unittest.TestCase):
         self.assertEqual(summary, "Copy it from an owned copy of the game into <dest>/jazz2/Source/. "
                                   "Saves go to <save-dir>.")
 
+    def test_a_probe_error_names_the_checkout(self) -> None:
+        """A core_probe traceback spelled the worktree it ran from."""
+        import subprocess
+        import unittest.mock
+
+        work = TMP / "error-paths"
+        script = pp.ROOT / "scripts" / "core_probe.py"
+
+        def fake_run(command, **kwargs):
+            return subprocess.CompletedProcess(command, 1, "", f'  File "{script}", line 9\n')
+
+        with unittest.mock.patch.object(pp, "PROBE_LOCK", work / "probe.lock"), \
+                unittest.mock.patch.object(pp.subprocess, "run", fake_run):
+            code, record, error = pp.core_probe(["run"], set(), layout({}), work)
+        self.assertEqual((code, record), (1, None))
+        self.assertEqual(error, 'File "<repo>/scripts/core_probe.py", line 9')
+
     def test_no_committed_record_holds_a_local_path(self) -> None:
         """Ten records cut at 400 characters inside the scratch path kept
         its tail, which no absolute-path pattern sees."""

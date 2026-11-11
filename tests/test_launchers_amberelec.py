@@ -105,22 +105,6 @@ HATARI_CFG = text(
     """
 )
 
-ATARI800_CFG = text(
-    """
-    Atari 800 Emulator, Version 3.1.0
-    ROM_OS_A_NTSC=
-    ROM_OS_A_PAL=/storage/roms/bios/ATARIOSA.ROM
-    ROM_5200=/storage/roms/bios/5200.rom
-    """
-)
-
-ATARI800_PATCH = text(
-    """
-    +	LDFLAGS += -static-libgcc
-    +	CFLAGS += -DDEFAULT_CFG_NAME="\\"/storage/.config/distribution/configs/atari800.cfg\\""
-    """
-)
-
 AMIBERRY_MK = text(
     """
     makeinstall_target() {
@@ -141,6 +125,17 @@ AMIBERRY_SH = text(
         cp $AMIBERRY_CONFIG_DIR/AmigaA500-default.uae "$AMIBERRY_TMP_CONFIG"
       fi
     }
+    amiberry -f "$AMIBERRY_TMP_CONFIG" --autoload "$1" >> $AMIBERRY_LOG 2>&1
+    """
+)
+
+USERCONFIG = text(
+    """
+    #!/bin/bash
+    if [ ! -e "/storage/.configured" ]
+    then
+      rsync -a --ignore-existing --exclude=es_systems.cfg /usr/config/* /storage/.config/ || exit 1
+    fi
     """
 )
 
@@ -195,8 +190,7 @@ def tree(**overrides: str) -> dict[str, str]:
         al.SCRIPTS["piemu"]: PIEMU,
         al.SCRIPTS["HATARISA"]: HATARI_SH,
         al.HATARI_CONFIG: HATARI_CFG,
-        al.ATARI800_CONFIG: ATARI800_CFG,
-        al.ATARI800_PATCH: ATARI800_PATCH,
+        al.USERCONFIG: USERCONFIG,
         al.AMIBERRY_PACKAGE: AMIBERRY_MK,
         al.SCRIPTS["AMIBERRY"]: AMIBERRY_SH,
         f"{al.AMIBERRY_CONFIGS}/AmigaA1200-default.uae": uae("kick40068.A1200.rom"),
@@ -218,6 +212,13 @@ class Frontends(unittest.TestCase):
         (record,) = al.retroarch(read())
         self.assertEqual(record.search_dir, "~/roms/bios")
         self.assertEqual(record.source_ref, f"{al.RETROARCH_CFG}:2")
+        # The first boot copies /usr/config and leaves a file already there.
+        self.assertEqual(record.installs, {
+            "path": "/storage/.config/retroarch/retroarch.cfg",
+            "source_ref": f"{al.USERCONFIG}:4",
+        })
+        self.assertIs(record.kept_if_present, True)
+        self.assertEqual(record.overrides, [])
 
     def test_retrorun_directory(self):
         (record,) = al.retrorun(read())
@@ -266,6 +267,9 @@ class Standalone(unittest.TestCase):
             record.source_ref,
             f"{al.RUNEMU}:3, {al.SCRIPTS['HATARISA']}:3-4, {al.HATARI_CONFIG}:2",
         )
+        # Copied over at each launch: nothing the user edits survives.
+        self.assertEqual(record.installs["source_ref"], f"{al.SCRIPTS['HATARISA']}:3")
+        self.assertIs(record.kept_if_present, False)
 
     def test_amiberry_link_and_one_kickstart_per_config(self):
         link, a1200, a500 = al.amiberry(read(), al.Runemu(read()))
@@ -273,7 +277,11 @@ class Standalone(unittest.TestCase):
         self.assertEqual(link.passes_to, "/usr/config/amiberry/kickstarts is a symlink to it")
         self.assertEqual((a1200.slot, a1200.names), ("A1200", ["kick40068.A1200.rom"]))
         self.assertEqual((a500.slot, a500.names), ("A500", ["kick34005.A500.rom"]))
-        self.assertEqual(a500.depends_on_option, f"not ({a1200.depends_on_option})")
+        self.assertTrue(a500.depends_on_option.startswith("not ("))
+        # A WHDLoad boot replaces the setup the config gives.
+        self.assertIn("--autoload", a1200.depends_on_option)
+        self.assertEqual(a1200.installs["source_ref"], f"{al.SCRIPTS['AMIBERRY']}:5")
+        self.assertEqual(a500.installs["source_ref"], f"{al.SCRIPTS['AMIBERRY']}:7")
 
     def test_a_table_running_another_script_raises(self):
         broken = RUNEMU.replace("/usr/bin/yabasanshiro.sh", "/usr/bin/yaba.sh")
@@ -287,15 +295,9 @@ class Standalone(unittest.TestCase):
 
 
 class Cores(unittest.TestCase):
-    def test_atari800_built_to_read_the_shipped_config(self):
-        (record,) = al.atari800(read())
-        self.assertEqual(record.names, ["ATARIOSA.ROM", "5200.rom"])
-        self.assertEqual(record.source_ref, f"{al.ATARI800_PATCH}:2, {al.ATARI800_CONFIG}:3-4")
-
-    def test_atari800_built_for_another_config_raises(self):
-        broken = ATARI800_PATCH.replace("atari800.cfg", "other.cfg")
-        with self.assertRaises(LauncherShapeError):
-            al.atari800(read(**{al.ATARI800_PATCH: broken}))
+    def test_atari800_config_is_no_record(self):
+        # The core reads atari800.cfg only under an option that is off.
+        self.assertFalse(any(r["emulator"] == "atari800" for r in al.extract_launchers(read())))
 
     def test_scummvm_paths_written_under_bios(self):
         theme, extra = al.scummvm(read())
@@ -319,7 +321,7 @@ class Cores(unittest.TestCase):
     def test_every_extractor_runs_on_the_fixture(self):
         records = al.extract_launchers(read())
         # One easyrpg runtime in the fixture, two at the pinned commit.
-        self.assertEqual(len(records), 16)
+        self.assertEqual(len(records), 15)
 
 
 class PlatformFile(unittest.TestCase):

@@ -1001,6 +1001,14 @@ def boot_disks(
         emulator = (
             ", ".join(_caller_cores(cg, spec.caller)) if spec.caller else cg.emulator(module)
         )
+        if spec.caller and spec.feature[:2] == ("libretro", "cores"):
+            # The option is offered for one core of the system: es_features
+            # lists it under that core, the other cores the generator serves
+            # never see it (KNULLI's macintosh offers mame alone).
+            core = spec.feature[2]
+            if core not in emulator.split(", "):
+                src.fail(f"es_features offers the option for {core}, which the generator does not serve")
+            emulator = core
         found = 0
         for chain in ast.walk(src.tree):
             if not (
@@ -1054,10 +1062,10 @@ def boot_disks(
                     expands={option: values}, case_insensitive=False, search_dir=cg.bios,
                     passes_to=f"command line {flag}", fails_when_missing=False,
                     depends_on_option=f"{option} ({' and '.join(tests)})",
-                    source_ref=", ".join([
-                        src.ref([*spans, src.span(statement), _lines(added)]),
-                        f"{ES_FEATURES}:{lines[0]}-{lines[1]}" if not listed else "",
-                    ]).rstrip(", "),
+                    # The values the menu offers come from es_features.yml;
+                    # the generator writing the choice is the evidence.
+                    choices_from=None if listed else f"{ES_FEATURES}:{lines[0]}-{lines[1]}",
+                    source_ref=src.ref([*spans, src.span(statement), _lines(added)]),
                 ))
         if not found:
             src.fail("names no BIOS file from an option value")

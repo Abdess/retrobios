@@ -228,6 +228,23 @@ DUCKSTATION_SH = text(
     """
     CONFIG_DIR="/emuelec/configs/duckstation"
         duckstation-nogui -fullscreen -settings "${CONFIG_DIR}/settings.ini" -- "${1}"
+    if [ ! -d "${CONFIG_DIR}" ]; then
+        cp -rf "/usr/config/emuelec/configs/duckstation/*" "${CONFIG_DIR}"
+    fi
+"""
+)
+
+# packages/sysutils/systemd/scripts/userconfig-setup:11-12 at v4.8.
+USERCONFIG = text(
+    """
+    # Copy config files, but don't overwrite - this should replace our sample files
+    false | cp -iRp /usr/config/* /storage/.config/ &>/dev/null
+"""
+)
+
+EMUELEC_MK = text(
+    """
+      ln -sf /storage/.config/emuelec ${INSTALL}/emuelec
 """
 )
 
@@ -313,7 +330,15 @@ ADVMAME_RC = text(
 
 ADVMAME_SH = text(
     """
+    if [[ "${1}" = "arcade" ]]; then
+    sed -i "s|/roms/mame|/roms/arcade|g" ${CONFIG_DIR}/advmame.rc
+     else
+    sed -i "s|/roms/arcade|/roms/mame|g" ${CONFIG_DIR}/advmame.rc
+    fi
     SDL_AUDIODRIVER=alsa advmame ${ARG} -quiet
+    if [ ! -d "${CONFIG_DIR}" ]; then
+     cp -rf /usr/config/emuelec/configs/advmame/* "${CONFIG_DIR}/"
+    fi
 """
 )
 
@@ -389,6 +414,8 @@ FILES = {
     f"{EMU}/duckstation/config/settings.ini": DUCKSTATION_INI,
     f"{EMU}/duckstation/package.mk": DUCKSTATION_MK,
     f"{EMU}/duckstation/scripts/duckstation.sh": DUCKSTATION_SH,
+    el.USERCONFIG: USERCONFIG,
+    el.EMUELEC_MK: EMUELEC_MK,
     el.YABASANSHIRO_SCRIPTS[0]: yabasanshiro_sh("yabasanshiro"),
     el.YABASANSHIRO_SCRIPTS[1]: yabasanshiro_sh("yabasanshiro1_5"),
     f"{EMU}/jzintv/scripts/jzintv.sh": JZINTV_SH,
@@ -475,24 +502,12 @@ class LibretroRecords(unittest.TestCase):
         self.assertEqual(jar["passes_to"], "${HOME}/roms/bios")
         self.assertEqual(jar["depends_on_option"], "/storage/roms/bios/jdk/eeversion exists")
 
-    def test_mame_copies_its_own_files_and_reads_only_path_options(self):
+    def test_mame_copies_its_own_files_and_hands_no_folder(self):
+        # The core passes no path option and reads no mame.ini: only the
+        # copies are the launcher's.
         found = records(el.mame)
-        copies = [r for r in found if r["kind"] == "copies"]
-        self.assertEqual([r["names"] for r in copies], [["fm*"], ["mame*"]])
-        folders = [(r["passes_to"], r["search_dir"]) for r in found if r["kind"] == "passes_path"]
-        self.assertEqual(
-            folders,
-            [
-                ("mame.ini rompath", "/storage/roms/bios/mame/bios"),
-                ("mame.ini samplepath", "/storage/roms/bios/mame/samples"),
-            ],
-        )
-        self.assertTrue(all(r["depends_on_option"] == "mame_read_config = enabled"
-                            for r in found if r["kind"] == "passes_path"))
-
-    def test_mame_without_the_read_config_option_raises(self):
-        with self.assertRaises(LauncherPatternMissing):
-            records(el.mame, **{f"{el.LIBRETRO}/mame/config/MAME/MAME.opt": "x = 1\n"})
+        self.assertEqual([r["kind"] for r in found], ["copies", "copies"])
+        self.assertEqual([r["names"] for r in found], [["fm*"], ["mame*"]])
 
 
 class StandaloneRecords(unittest.TestCase):
@@ -541,6 +556,37 @@ class StandaloneRecords(unittest.TestCase):
         (record,) = records(el.duckstation)
         self.assertEqual((record["kind"], record["search_dir"]), ("scans_dir", "/storage/roms/bios"))
 
+    def test_duckstation_config_comes_from_the_boot_copy(self):
+        """duckstation.sh quotes its glob: its copy names a file called *, so
+        the settings.ini in place is the one userconfig-setup copies from
+        /usr/config, an existing file kept (false | cp -i)."""
+        (record,) = records(el.duckstation)
+        self.assertEqual(
+            record["installs"],
+            {"path": "/storage/.config/emuelec/configs/duckstation/settings.ini",
+             "source_ref": f"{EMU}/duckstation/package.mk:1, {el.USERCONFIG}:2"},
+        )
+        self.assertIs(record["kept_if_present"], True)
+        self.assertEqual(record["overrides"], [])
+
+    def test_an_unquoted_glob_in_the_start_script_installs_too(self):
+        unquoted = DUCKSTATION_SH.replace(
+            '"/usr/config/emuelec/configs/duckstation/*"', "/usr/config/emuelec/configs/duckstation/*"
+        )
+        (record,) = records(el.duckstation, **{f"{EMU}/duckstation/scripts/duckstation.sh": unquoted})
+        self.assertEqual(record["installs"]["path"], "/emuelec/configs/duckstation/settings.ini")
+        self.assertIs(record["kept_if_present"], True)
+
+    def test_without_a_boot_copy_the_quoted_glob_installs_nothing(self):
+        with self.assertRaises(LauncherPatternMissing):
+            records(el.duckstation, **{el.USERCONFIG: "#!/bin/sh\n"})
+
+    def test_an_overwriting_boot_copy_does_not_keep_the_file(self):
+        (record,) = records(el.duckstation, **{
+            el.USERCONFIG: "cp -Rp /usr/config/* /storage/.config/ &>/dev/null\n",
+        })
+        self.assertIs(record["kept_if_present"], False)
+
     def test_duckstation_with_a_fixed_bios_path_raises(self):
         changed = DUCKSTATION_INI.replace("PathPAL =", "PathPAL = /storage/roms/bios/scph5502.bin")
         with self.assertRaises(LauncherPatternMissing):
@@ -580,9 +626,17 @@ class StandaloneRecords(unittest.TestCase):
         )
 
     def test_advancemame_one_record_when_every_device_agrees(self):
-        (record,) = records(el.advancemame)
-        self.assertEqual(record["search_dir"], "/storage/roms/bios/advmame/samples")
-        self.assertNotIn("device", record)
+        roms, arcade, samples = records(el.advancemame)
+        self.assertEqual(samples["search_dir"], "/storage/roms/bios/advmame/samples")
+        self.assertNotIn("device", samples)
+        # advmame.sh rewrites /roms/mame to /roms/arcade for the arcade system.
+        self.assertEqual(
+            (roms["search_dir"], roms["passes_to"], roms["depends_on_option"]),
+            ("/storage/roms/mame", "advmame.rc dir_rom", "system != arcade"),
+        )
+        self.assertNotIn("systems", roms)
+        self.assertEqual((arcade["search_dir"], arcade["systems"]), ("/storage/roms/arcade", ["arcade"]))
+        self.assertTrue(arcade["source_ref"].endswith("bin/advmame.sh:1-2, 6"))
 
     def test_advancemame_devices_that_disagree_raise(self):
         changed = ADVMAME_RC.replace("bios/advmame", "bios/other")
@@ -618,6 +672,7 @@ class StandaloneRecords(unittest.TestCase):
 
     def test_every_extractor_runs_on_the_fixtures(self):
         found = el.extract_launchers(tree())
+        # The two mame.ini folders are no longer records.
         self.assertEqual(len(found), 26)
 
 

@@ -6,7 +6,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "5.4.1",
-  "generated": "2026-11-10T01:52:59Z",
+  "generated": "2026-11-11T14:23:39Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -8266,8 +8266,7 @@
       "drastic - standalone"
     ],
     "advancemame": [
-      "AdvanceMame",
-      "advmame"
+      "AdvanceMame"
     ],
     "aethersx2": [
       "aethersx2-sa"
@@ -8529,6 +8528,12 @@
       "pcsx2",
       "ps2"
     ],
+    "lrps2-416291a": [
+      "pcsx2"
+    ],
+    "lrps2-9485a53": [
+      "ps2"
+    ],
     "lynx-emu": [
       "LYNX-EMU",
       "Lynx.emu"
@@ -8707,6 +8712,9 @@
     "pcsx2-legacy": [
       "PCSX2-LEGACY",
       "pcsx2-16"
+    ],
+    "pcsx2-libretro-408e3b2": [
+      "pcsx2"
     ],
     "pcsx_rearmed": [
       "pcsx_rearmed32",
@@ -8903,6 +8911,7 @@
     ],
     "arcade": [
       "advancemame",
+      "advmame",
       "advmame-0.94",
       "advmame-1.4",
       "ares",
@@ -8942,6 +8951,7 @@
     "atari-7800": [
       "a7800",
       "bizhawk",
+      "mame",
       "prosystem"
     ],
     "atari-lynx": [
@@ -9018,7 +9028,8 @@
     "fairchild-channel-f": [
       "bizhawk",
       "fbneo",
-      "freechaf"
+      "freechaf",
+      "mame"
     ],
     "j2me": [
       "freej2me",
@@ -9029,12 +9040,14 @@
       "squirreljme"
     ],
     "magnavox-odyssey2": [
+      "mame",
       "o2em"
     ],
     "mattel-intellivision": [
       "bizhawk",
       "freeintv",
-      "jzintv"
+      "jzintv",
+      "mame"
     ],
     "microsoft-msx": [
       "ares",
@@ -9320,6 +9333,7 @@
     ],
     "philips-videopac": [
       "bizhawk",
+      "mame",
       "o2em"
     ],
     "scummvm": [
@@ -9465,6 +9479,7 @@
     ],
     "snk-neogeo-mvs": [
       "advancemame",
+      "advmame",
       "advmame-0.94",
       "advmame-1.4",
       "fba2x",
@@ -9515,12 +9530,15 @@
       "armsx2",
       "emucorex",
       "lrps2",
+      "lrps2-416291a",
+      "lrps2-9485a53",
       "nethersx2",
       "nethersx2-turnip",
       "nethersx2-turnip-classic",
       "pcee2",
       "pcsx2",
       "pcsx2-legacy",
+      "pcsx2-libretro-408e3b2",
       "play",
       "yaps2"
     ],

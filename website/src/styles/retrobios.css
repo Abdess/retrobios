@@ -277,6 +277,18 @@
 	vertical-align: middle;
 }
 
+/* A setup with no logo: its initials, drawn by the stylesheet so the page
+   text holds its name once (sitemarkup._tile_mark). */
+.sl-markdown-content .rb-card-initials {
+	display: inline-grid;
+	place-items: center;
+	color: #2b2e5c;
+	font-size: 10.5px;
+	font-weight: 700;
+	line-height: 1;
+}
+.sl-markdown-content .rb-card-initials::before { content: attr(data-initials); }
+
 /* Device tiles: the whole tile is the link. Logo on the left, name over
    what it runs on, so a phone shows a short row per setup. */
 .sl-markdown-content .rb-tiles { grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: 0.6rem; }
@@ -756,28 +768,22 @@ body:has(table.rb-entries) { --sl-content-width: var(--rb-grid-width); }
 /* Terminal output: what the screen shows, not something to type */
 .sl-markdown-content .rb-terminal .expressive-code pre { background: var(--rb-terminal-bg); color: var(--rb-terminal-fg); }
 
-/* Diagrams written by scripts/sitediagrams.py follow the theme */
+/* Diagrams written by scripts/sitediagrams.py follow the theme: each is an
+   image per theme (its colours written in the file, sitediagrams.THEMES),
+   and the one of the other theme is not shown, so not fetched either.
+   Starlight's dark theme is the one without data-theme='light'. */
 .sl-markdown-content .rb-figure { margin: 1.2rem 0 1.6rem; }
-.sl-markdown-content .rb-figure svg { display: block; width: 100%; height: auto; max-width: 52rem; color: var(--sl-color-text); }
+.sl-markdown-content .rb-figure .rb-diagram { display: block; max-width: 52rem; }
+.sl-markdown-content .rb-figure .rb-diagram img { display: block; width: 100%; height: auto; }
+.sl-markdown-content .rb-figure .rb-diagram-light { display: none; }
+:root[data-theme='light'] .sl-markdown-content .rb-figure .rb-diagram-light { display: block; }
+:root[data-theme='light'] .sl-markdown-content .rb-figure .rb-diagram-dark { display: none; }
 .sl-markdown-content .rb-figure :is(figcaption, .rb-figure-caption) {
 	display: block;
 	max-width: 44em;
 	margin-top: 0.4rem;
 	font-size: 0.8rem;
 	color: var(--rb-text-secondary);
-}
-.rb-diagram text { font-family: var(--sl-font); fill: currentColor; }
-.rb-diagram .rb-d-box { fill: var(--rb-diagram-fill); stroke: var(--rb-diagram-stroke); }
-.rb-diagram .rb-d-accent { stroke: var(--rb-diagram-accent); }
-.rb-diagram .rb-d-line { stroke: var(--rb-diagram-stroke); }
-.rb-diagram .rb-d-head { fill: var(--rb-diagram-stroke); }
-.rb-diagram .rb-d-num { fill: var(--rb-diagram-accent); }
-.rb-diagram .rb-d-numtext { fill: var(--sl-color-bg); }
-.rb-diagram .rb-d-muted { fill: var(--rb-text-secondary); }
-.rb-diagram-narrow { display: none !important; }
-@media (max-width: 37.5em) {
-	.rb-diagram-wide { display: none !important; }
-	.rb-diagram-narrow { display: block !important; }
 }
 
 /* Glossary terms */
@@ -871,6 +877,10 @@ abbr.rb-term[data-open]::after {
 	align-items: end;
 	margin: 1rem 0 0.45rem;
 }
+/* Written `hidden` (siteentries.filter_box, rehype-stack-tables.mjs) and
+   shown by site.ts: until then it keeps its room, so the table below never
+   moves, and nothing reads it. */
+.rb-table-filter[hidden] { visibility: hidden; }
 .sl-markdown-content .rb-table-filter > * { margin: 0; }
 .rb-table-filter label { grid-column: 1 / -1; color: var(--rb-text-secondary); font-size: 0.78rem; font-weight: 700; }
 .rb-table-filter input {

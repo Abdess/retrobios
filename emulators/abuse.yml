@@ -52,11 +52,11 @@ files:
 
   - name: "defaults.prp"
     category: game_data
-    description: "Default properties for level objects"
-    required: true
+    description: "Level editor window positions"
+    required: false
     bundled: true
-    source_ref: "data/abuse.lsp"
-    note: "Shipped in Abuse-0.9.1-win32.zip."
+    source_ref: "src/game.cpp:2373, src/dev.cpp:821-828, 3371-3374, src/property.cpp:155-159"
+    note: "Shipped in Abuse-0.9.1-win32.zip. Read at every start, and a missing file leaves the defaults. Written back after an -edit session."
 
   - name: "english.lsp"
     path: "lisp/english.lsp"
@@ -64,5 +64,5 @@ files:
     description: "Localized strings loaded first by abuse.lsp"
     required: true
     bundled: true
-    source_ref: "data/abuse.lsp:9"
+    source_ref: "data/abuse.lsp:9-12, data/CMakeLists.txt:1-5, 10-16, src/loader2.cpp:284, 348-354"
     note: "Shipped in Abuse-0.9.1-win32.zip."

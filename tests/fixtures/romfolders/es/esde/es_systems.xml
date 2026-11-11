@@ -13,4 +13,18 @@
         <extension>.zip</extension>
         <command label="MAME">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame_libretro.so %ROM%</command>
     </system>
+    <system>
+        <name>tanodragon</name>
+        <path>%ROMPATH%/tanodragon</path>
+        <extension>.cas .CAS</extension>
+        <command label="MAME [Tape] (Standalone)">%EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/dragon32 tanodr64 -cass %ROM%</command>
+        <!-- <command label="MAME Legacy (Standalone)">%EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/tanodragon tanodr64 -cass %ROM%</command> -->
+    </system>
+    <system>
+        <name>arcade</name>
+        <path>%ROMPATH%/arcade</path>
+        <extension>.zip .ZIP</extension>
+        <command label="MAME - Current">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame_libretro.so "%BASENAME% -rompath \"%GAMEDIRRAW%;%ROMPATH%/arcade\""</command>
+        <command label="MAME (Standalone)">%EMULATOR_MAME% -rompath %GAMEDIR%\;%ROMPATH%/arcade %BASENAME%</command>
+    </system>
 </systemList>

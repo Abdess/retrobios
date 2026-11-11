@@ -41,6 +41,8 @@ import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 
+import yaml
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 sys.path.insert(0, str(REPO_ROOT))
@@ -160,7 +162,7 @@ class SetupTiles(unittest.TestCase):
     def test_a_setup_without_a_logo_shows_its_initials(self):
         self.assertEqual(sitemarkup.initials("MyMinUI"), "MM")
         tile = "".join(sitemarkup.platform_tiles([("MyMinUI", "x.md", "", "Handhelds")]))
-        self.assertIn(">MM</text>", tile)
+        self.assertIn('data-initials="MM"', tile)
         tile = "".join(sitemarkup.platform_tiles([("RomM", "x.md", "logo.png", "A server")]))
         self.assertIn('<img class="rb-card-logo" src="logo.png"', tile)
 
@@ -983,9 +985,10 @@ class GetPagesSayWhatTheyHold(unittest.TestCase):
             display = _display(name)
             text = sitepages.page(f"get/{name}.md").read_text(encoding="utf-8")
             kind = "pack" if REGISTRY[name].get("release_pack") is True else "files"
-            title = (f"BIOS {kind} for {display}"
-                     if (REPO_ROOT / "emulators" / f"{name}.yml").is_file()
-                     else f"{display} BIOS {kind}")
+            # A profile that lists files titles its page "<name> BIOS files".
+            profile = REPO_ROOT / "emulators" / f"{name}.yml"
+            lists = profile.is_file() and (yaml.safe_load(profile.read_text(encoding="utf-8")) or {}).get("files")
+            title = f"BIOS {kind} for {display}" if lists else f"{display} BIOS {kind}"
             with self.subTest(setup=name):
                 self.assertEqual(generate_site.get_page_title(name, display), title)
                 self.assertIn(f"title: {title}\n", text)

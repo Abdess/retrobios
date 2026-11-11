@@ -313,13 +313,14 @@ class TheReleaseNotesNameTheSetupsWithoutAZip(unittest.TestCase):
         import release_notes
 
         text = release_notes.render(self.RECORD, PLATFORMS, "### What changed\n\n- x\n")
-        paragraph = next(line for line in text.splitlines() if line.startswith("No ZIP for "))
+        paragraph = next(line for line in text.splitlines()
+                         if line.startswith("Only the most used setups have a pack"))
         for name in ("KNULLI", "Recalbox", "RetroPie", "Lakka"):
             self.assertIn(name, paragraph)
         for name in ("RetroArch", "Batocera", "RomM"):
             self.assertNotIn(f" {name},", paragraph)
-        self.assertIn("The command above", paragraph)
-        self.assertIn("--dry-run", paragraph)
+        self.assertTrue(paragraph.endswith("use the command above."))
+        self.assertLess(text.index("| Platform"), text.index(paragraph))
         self.assertLess(text.index(paragraph), text.index("### What changed"))
 
     def test_the_rows_link_this_release_files(self):
@@ -331,7 +332,141 @@ class TheReleaseNotesNameTheSetupsWithoutAZip(unittest.TestCase):
         self.assertIn(
             "[Download](https://github.com/Abdess/retrobios/releases/download/"
             "v2026.10.24/RomM_5_BIOS_Pack.zip)", text)
-        self.assertNotIn(f"{SITE}get/", text)
+        rows = [line for line in text.splitlines() if line.startswith("| ")]
+        self.assertTrue(rows)
+        for row in rows:
+            self.assertNotIn(f"{SITE}get/", row)
+
+    def test_the_command_comes_before_the_packs(self):
+        """Most readers need a few files, not a pack of several GB (owner,
+        2026-11-10): the command and the handheld app open the notes."""
+        import release_notes
+
+        text = release_notes.render(self.RECORD, PLATFORMS, "### What changed\n\n- x\n")
+        command = text.index("```sh")
+        # The installer's handheld section, which opens on every download.
+        handheld = text.index(f"{SITE}wiki/installer/#on-a-handheld-the-retrobios-port")
+        packs = text.index("### Full packs")
+        self.assertLess(text.index("### Get the BIOS files"), command)
+        self.assertLess(command, handheld)
+        self.assertLess(handheld, packs)
+        self.assertLess(packs, text.index("| Platform"))
+        self.assertLess(packs, text.index("### What changed"))
+        self.assertNotIn("releases/download/", text[:packs])
+
+
+class TheReleaseNotesThankPeople(unittest.TestCase):
+    """The notes end with everyone who helped since the repository started
+    and the full changelog, read from gh and git (owner, 2026-11-10).
+    Fixtures stand in for both."""
+
+    TAGS = {"c4": "v2026.11.10", "c3": "v2026.10.10", "c2": "v2026.10.10",
+            "c1": "v2026.10.10", "c0": "v2026.09.04"}
+    # `gh api --paginate --jq` prints one login per line, none for a
+    # commit GitHub links to no account.
+    COMMIT_AUTHORS = "Abdess\nhabib256\nAbdess76\ndependabot[bot]\nzed\nhabib256\n"
+    PULLS = [
+        {"number": 84, "author": {"login": "dajiaohuang", "is_bot": False}},
+        {"number": 86, "author": {"login": "habib256", "is_bot": False}},
+        {"number": 80, "author": {"login": "app/dependabot", "is_bot": True}},
+        {"number": 67, "author": {"login": "prakashmagat50-byte", "is_bot": False}},
+        {"number": 70, "author": {"login": "closedwithoutmerge", "is_bot": False}},
+    ]
+    ISSUES = [
+        {"number": 87, "author": {"login": "paperweightorder", "is_bot": False}},
+        {"number": 85, "author": {"login": "72374", "is_bot": False}},
+        {"number": 83, "author": {"login": "72374", "is_bot": False}},
+        {"number": 32, "author": {"login": "Bappo0", "is_bot": False}},
+        {"number": 31, "author": {"login": "ghost", "is_bot": False}},
+        {"number": 30, "author": {"login": "habib256", "is_bot": False}},
+        {"number": 29, "author": {"login": "Abdess", "is_bot": False}},
+    ]
+    ISSUE_COMMENTS = "Abdess\nhelper\n72374\ngithub-actions[bot]\nAlpha\n"
+    REVIEW_COMMENTS = "reviewer\nhabib256\n"
+
+    def fake(self, argv):
+        self.calls.append(argv)
+        if argv[:2] == ["git", "log"]:
+            return "\n".join(self.TAGS) + "\n"
+        if argv[:2] == ["git", "show"]:
+            return json.dumps({"tag": self.TAGS[argv[2].split(":")[0]]})
+        if argv[:2] == ["gh", "api"]:
+            path = argv[3]
+            return {"repos/Abdess/retrobios/commits": self.COMMIT_AUTHORS,
+                    "repos/Abdess/retrobios/issues/comments": self.ISSUE_COMMENTS,
+                    "repos/Abdess/retrobios/pulls/comments": self.REVIEW_COMMENTS}[path]
+        if argv[:3] == ["gh", "pr", "list"]:
+            return json.dumps(self.PULLS)
+        if argv[:3] == ["gh", "issue", "list"]:
+            return json.dumps(self.ISSUES)
+        raise AssertionError(argv)
+
+    def setUp(self):
+        self.calls = []
+
+    def test_the_base_is_the_previous_release_record(self):
+        import release_notes
+
+        self.assertEqual(release_notes.previous_record_commit("v2026.11.10", self.fake), "c1")
+
+    def test_everyone_since_the_start_is_thanked_once(self):
+        import release_notes
+
+        lines = release_notes.gather_thanks(self.fake)
+        self.assertEqual(lines, [
+            "- **Code and data**: @closedwithoutmerge, @dajiaohuang, @habib256 and @zed.",
+            "- **Reports**: @72374 and @paperweightorder.",
+            "- **Help in issues**: @Alpha, @helper and @reviewer.",
+        ])
+        text = "\n".join(lines)
+        for left_out in ("Abdess", "bot", "dependabot", "ghost", "Bappo0", "prakashmagat50"):
+            self.assertNotIn(left_out, text)
+        # Every state: a pull request closed without merge still counts.
+        pulls = next(argv for argv in self.calls if argv[:3] == ["gh", "pr", "list"])
+        self.assertEqual(pulls[pulls.index("--state") + 1], "all")
+        issues = next(argv for argv in self.calls if argv[:3] == ["gh", "issue", "list"])
+        self.assertEqual(issues[issues.index("--state") + 1], "all")
+
+    def test_the_notes_end_with_thanks_then_the_changelog(self):
+        import release_notes
+
+        closing = release_notes.closing_lines(
+            ["- **Code and data**: @habib256."],
+            release_notes.changelog_url("55eb95344" + "0" * 31, "v2026.11.10"))
+        text = release_notes.render(TheReleaseNotesNameTheSetupsWithoutAZip.RECORD, PLATFORMS,
+                                    "### What changed\n\n- x\n", closing)
+        self.assertLess(text.index("### What changed"), text.index("### Thanks"))
+        self.assertIn("### Thanks\n\n<details>\n"
+                      "<summary>Everyone who helped since the start</summary>\n\n"
+                      "- **Code and data**: @habib256.\n\n</details>\n\n**Full changelog**",
+                      text)
+        self.assertEqual(release_notes.refused_words(text), [])
+        self.assertTrue(text.rstrip().endswith(
+            "**Full changelog**: https://github.com/Abdess/retrobios/compare/"
+            "55eb95344...v2026.11.10"))
+
+    def test_a_checked_list_replaces_the_one_gh_gives(self):
+        import release_notes
+
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            tmp = Path(tmp)
+            (tmp / "whats-new.md").write_text("### What changed\n\n- x\n", encoding="utf-8")
+            (tmp / "thanks.md").write_text("- **Code and data**: @habib256.\n",
+                                           encoding="utf-8")
+            (tmp / "release.json").write_text(
+                json.dumps(TheReleaseNotesNameTheSetupsWithoutAZip.RECORD), encoding="utf-8")
+            argv = ["release_notes.py", "--record", str(tmp / "release.json"),
+                    "--whats-new", str(tmp / "whats-new.md"), "--thanks", str(tmp / "thanks.md"),
+                    "--platforms-dir", PLATFORMS, "--output", str(tmp / "notes.md")]
+            with mock.patch.object(sys, "argv", argv), \
+                    mock.patch.object(release_notes, "_run", self.fake), \
+                    mock.patch.object(release_notes, "gather_thanks",
+                                      side_effect=AssertionError("gh read")), \
+                    contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(release_notes.main(), 0)
+            text = (tmp / "notes.md").read_text(encoding="utf-8")
+        self.assertIn("- **Code and data**: @habib256.\n", text)
+        self.assertIn("/compare/c4...v2026.10.24", text)
 
 
 class EveryPlatformHasAPermanentPage(unittest.TestCase):

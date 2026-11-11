@@ -6,7 +6,7 @@ upstream: "http://ace.cpcscene.net"
 version_source:
   url: "https://roudoudou.com/ACE-DL/"
   pattern: 'New release <i>[^<]*</i> - (\d{4}/\d{2}/\d{2})'
-profiled_date: "2026-10-20"
+profiled_date: "2026-11-10"
 core_version: "2026/10/16"
 version_basis:
   kind: package
@@ -23,21 +23,19 @@ mode: standalone
 notes: |
   SDL port of ACE, the Amstrad CPC/Plus emulator written by Philippe Rimauro
   (OffseT) for MorphOS. ACE-DL is built by Edouard Bergé (Roudoudou) from the
-  MorphOS sources and released for Windows, macOS, Linux and Raspberry Pi;
-  a third port targets Haiku. All three are closed source, the original author
-  keeps the sources private, so the entries below were established on the
-  official Linux x86-64 builds: file opens traced with strace and
-  required/optional decided by removing each file on the 2026-06-03 build, then
-  path constants, error strings and plugin keys read again from the 2026/10/16
-  build (BNDGEN.tar.gz), which ships the same ROM files byte for byte.
+  MorphOS sources and released for Windows, macOS, Linux and Raspberry Pi.
+  The sources are private. Every entry below was read from the stripped
+  Linux x86-64 executable AceDL of the 2026/10/16 BNDGEN.tar.gz (tarball
+  sha256 4f3567bb2196e32f, AceDL sha256 0f159a705028e80e). The binary has no
+  symbols, so functions are named FUN_<address> (file offset = virtual
+  address in this PIE).
 
   Machines are CPC 464, 664 and 6128 plus the Plus range, which boots from a
-  cartridge and covers the GX-4000. An operating system is one 32 KB file
-  holding the 16 KB firmware ROM followed by the 16 KB BASIC ROM. The AMSDOS
-  disc ROM is a separate 16 KB file mapped in slot 7. The upstream MorphOS
-  release keeps the three ROMs apart under System/ and composes them at
-  startup, ACE-DL ships them pre-joined under private/firmware/ with one file
-  per machine and language. The pairs are exact:
+  cartridge and covers the GX-4000. An operating system is one file read by
+  FUN_248970 as two 16 KB halves, the firmware ROM then the BASIC ROM, each
+  fread having to return 0x4000 bytes. A shorter file is refused, bytes past
+  32 KB are ignored. ACE-DL ships them pre-joined under private/firmware/,
+  one file per machine and language:
 
     OS464_UK.rom        Firmware v1 + BASIC 1.00
     OS464_FR.rom        Firmware f1 + French BASIC 1.0 (md5 824f5213...)
@@ -50,55 +48,55 @@ notes: |
     XMEM_FW_3_15_FR.rom XMEM 3.15 firmware + BASIC 1.23
 
   Firmware versions run 1 to 4 for the 464, 664, 6128 and Plus, and the letter
-  is the country: v English, f French, s Spanish, d Danish. The BASIC revision
-  attached to a version 3 firmware follows the country, 1.23 for France, 1.21
-  for Spain, 1.20 elsewhere, which is what the pairs above show. The XMEM files
-  replace the firmware half with the X-MEM expansion firmware and keep the
-  stock BASIC.
+  is the country: v English, f French, s Spanish, d Danish.
 
-  The nine operating systems are the entries of the Machine configuration
-  selector. OS6128_UK.rom is the built-in default and is opened at every
-  startup even when the config OS= key names another file. Command line -fuk,
-  -ffr, -fsp and -fdk switch to the UK, French, Spanish and Danish 6128 files.
-  A machine needs at least 32 KB in the file: truncated to 16384 bytes the
-  emulator prints "Error initializing ROMs!" and dies, padded to 40000 bytes it
-  boots, so the check is a lower bound rather than an exact length. The AMSDOS
-  ROM is checked for presence only, an 8 KB stub boots. Every ROM path is built
-  from the application directory. The -configDir option added in 2026/10/16
-  only moves the directory holding config.cfg, while the firmware stays under
-  private/ beside the executable.
+  main (FUN_3a479) builds OS6128_UK.rom and Amsdos.rom from the application
+  directory and creates the machine with them before the config file is read.
+  If either load fails the machine constructor returns NULL, main prints
+  "Initialisation Error should not happend" and the next call dereferences
+  the NULL machine, so startup dies. Afterwards the OS= config key
+  (FUN_2a4840) loads the path it holds, the firmware requester (FUN_373ad0)
+  lists every *.rom under private/firmware/ and loads the pick, and -fuk,
+  -ffr, -fsp, -fdk (FUN_345230, applied by FUN_2989f0 after the config) load
+  one of the four 6128 files. These three paths keep the current firmware
+  when the load fails. The Machine configuration page (FUN_377790) names the
+  loaded firmware by comparing its basename with the nine names above.
 
-  Plus machines boot from a cartridge and no cartridge filename is compiled
-  into the binary, the three Amstrad_?4.cpr files are the system cartridges the
-  author ships in the same directory, which is also the default browse root of
-  the cartridge requester. The loader walks the RIFF chunk list and reports
-  "Cartridge Load Error (Header)" on a bad header and "truncated file!" when a
-  cb00..cb07 bank is short, each bank being 16 KB for 128 KB total.
+  Two older code paths switch firmware by RAM size, 64 KB for a 464 or 664,
+  more for a 6128, keeping the language through a strstr for "FR" in the
+  current path: the SNA loader (FUN_369ce0) opens ./private/firmware/OS464_FR,
+  OS464_UK, OS664_UK, OS6128_FR or OS6128_UK and the RAM selector
+  (FUN_377790) opens the same names under ./firmware/, both without
+  extension and relative to the working directory. When the open fails the
+  current firmware stays.
 
-  Plugins pull three more ROMs. Multiface II reads multiface2.rom, the Hacker
-  plugin reads hackit400uk.rom in its UK flavour and hacker481fr.rom in its
-  French one, and Play2CPC reads the YM2608 ADPCM rhythm ROM, warning with
-  "ym2608_adpcm_rom.bin not found!" and running without it. The Windows package
-  omits that ROM, the Linux and Raspberry Pi packages carry it.
+  Plus system cartridges are loaded by the CPR loader FUN_234870, reached
+  from the media loader FUN_2a30a0 on a .cpr extension (command line,
+  CARTRIDGE= config key, dropped file). No code names the three
+  Amstrad_?4.cpr files.
+
+  Plugins pull three more ROMs, each from a path under the application
+  directory, loaded when the PLUGIN_ key is 1 in the config file (FUN_2a4840)
+  or from the plugin menu (FUN_375320). Multiface II and Play2CPC are also
+  reachable with -plugin multiface2 and -plugin play2cpc. A missing
+  Multiface II or Hacker ROM leaves the plugin uninstalled, a short one also
+  clears its PLUGIN_ flag. A missing YM2608 ROM is reported and Play2CPC runs
+  without the rhythm samples. The Windows x64 package omits that ROM, the
+  Linux packages carry it.
 
   Expansion ROMs are user business: config keys ROM0 to ROM255 hold whatever
-  the user picks through the requester rooted at media/rom/, and the release
-  seeds that directory with third-party ROMs (ParaDOS, Protext, Maxam, Utopia,
-  uniDOS, SymbOS, FutureOS, Orgams, Discology and others). Disc, tape,
-  snapshot, Dandanator and X-MASS images are user content the same way, and the
-  Nova plugin regenerates its 32 KB private/Nova/nova.nvram when the file is
-  absent. Outside emulation the binary loads its own payload: sixteen QOI
-  images (fatal with "Error loading QOI file please reinstall"), seventeen WAV
-  drive and monitor samples (each merely reported as not found), and the
-  private/messages catalog holding the French, English and Spanish
-  translations. private/sounds/hitachi_long_seek.wav and
-  private/images/acelogo.qoi ship with every package but appear in no path
-  constant.
+  the user picks through the requester rooted at media/rom/, loaded by
+  FUN_248ae0 with the ROM type check. Disc, tape, snapshot, Dandanator and
+  X-MASS images are user content the same way, and the Nova plugin
+  regenerates its 32 KB private/Nova/nova.nvram when the file is absent.
+  Outside emulation the binary loads its own payload: QOI images, WAV drive
+  and monitor samples, and the private/messages catalog.
 
 files:
   # -- Operating systems, firmware ROM + BASIC ROM joined in one 32 KB file --
   - name: OS6128_UK.rom
     path: "private/firmware/OS6128_UK.rom"
+    aliases: [OS6128_UK]
     system: amstrad-cpc
     required: true
     bundled: true
@@ -106,13 +104,15 @@ files:
     validation: [size]
     md5: b96280dc6c95a48857b4b8eb931533ae
     sha1: 5977adbad3f7c1e0e082cd02fe76a700d9860c30
-    source_ref: "AceDL 2026/10/16: private/firmware/OS6128_UK.rom, default machine, opened at every startup"
+    source_ref: "AceDL 2026/10/16 linux-x64 FUN_3a479 0x3a893-0x3a8ac (sprintf %sprivate/firmware/OS6128_UK.rom), 0x3a8fc FUN_26caf0, FUN_249ef0 0x249fc0 FUN_248970 (fopen rb 0x248a0f, fread 0x4000 at 0x248a2c and 0x248aa1, a short read fails), 0x249fda (Error initializing ROMs!), FUN_3a479 0x3a905-0x3a93e (NULL machine), FUN_247c50 0x247c54 (NULL dereference); FUN_2989f0 0x299450 (-fuk); FUN_372cb0 0x373077-0x3730a4 (reset to 6128 UK); FUN_369ce0 0x36b7f4 and FUN_377790 0x378298 (extensionless OS6128_UK)"
     note: >-
       CPC 6128 English. Firmware v3 followed by BASIC 1.20. Absence stops
-      startup with "Error initializing ROMs!".
+      startup with "Error initializing ROMs!". The SNA loader and the RAM
+      selector also try the extensionless name.
 
   - name: OS6128_FR.rom
     path: "private/firmware/OS6128_FR.rom"
+    aliases: [OS6128_FR]
     system: amstrad-cpc
     region: [france]
     required: false
@@ -121,8 +121,10 @@ files:
     validation: [size]
     md5: 5ee871d5600eb9b5a22989c295f902a5
     sha1: 200d59076dfef36db061d6d7d21d80021cab1237
-    source_ref: "AceDL 2026/10/16: Machine configuration entry OS6128_FR.rom, command line -ffr"
-    note: "CPC 6128 French. Firmware f3 followed by BASIC 1.23."
+    source_ref: "AceDL 2026/10/16 linux-x64 FUN_345230 0x345f26-0x345f36 (-ffr sets 2), FUN_2989f0 0x298a03, 0x2993d7-0x2993ff (sprintf %sprivate/firmware/OS6128_FR.rom), 0x29946b FUN_248970 (fopen rb 0x248a0f, fread 0x4000 at 0x248a2c and 0x248aa1, a short read fails), 0x299472 (failure keeps the current firmware); FUN_373ad0 0x374ea6-0x374ed7 (requester); FUN_369ce0 0x36b2ad and FUN_377790 0x377dc5 (extensionless OS6128_FR)"
+    note: >-
+      CPC 6128 French. Firmware f3 followed by BASIC 1.23. The SNA loader and
+      the RAM selector also try the extensionless name.
 
   - name: OS6128_S.rom
     path: "private/firmware/OS6128_S.rom"
@@ -134,7 +136,7 @@ files:
     validation: [size]
     md5: 0246740371010333385665dfeb7cd0ec
     sha1: 1acd01c2c03424a78b32c9440f4d890fb1104815
-    source_ref: "AceDL 2026/10/16: Machine configuration entry OS6128_S.rom, command line -fsp"
+    source_ref: "AceDL 2026/10/16 linux-x64 FUN_345230 0x345f6b-0x345f7b (-fsp sets 3), FUN_2989f0 0x2993c1-0x2993ff (sprintf %sprivate/firmware/OS6128_S.rom), 0x29946b FUN_248970 (fopen rb 0x248a0f, fread 0x4000 at 0x248a2c and 0x248aa1, a short read fails); FUN_373ad0 0x374ea6-0x374ed7 (requester)"
     note: "CPC 6128 Spanish. Firmware s3 followed by BASIC 1.21."
 
   - name: OS6128_DK.rom
@@ -147,11 +149,12 @@ files:
     validation: [size]
     md5: ca1635fd992e2aa7a776b30da13467e5
     sha1: a9e7ee6355730f319a37c95ca0a714212b88c3b1
-    source_ref: "AceDL 2026/10/16: Machine configuration entry OS6128_DK.rom, command line -fdk"
+    source_ref: "AceDL 2026/10/16 linux-x64 FUN_345230 0x345fb0-0x345fc4 (-fdk sets 4), FUN_2989f0 0x299438-0x299449, 0x2993ff (sprintf %sprivate/firmware/OS6128_DK.rom), 0x29946b FUN_248970 (fopen rb 0x248a0f, fread 0x4000 at 0x248a2c and 0x248aa1, a short read fails); FUN_373ad0 0x374ea6-0x374ed7 (requester)"
     note: "CPC 6128 Danish. Firmware d3 followed by BASIC 1.20."
 
   - name: OS464_UK.rom
     path: "private/firmware/OS464_UK.rom"
+    aliases: [OS464_UK]
     system: amstrad-cpc
     required: false
     bundled: true
@@ -159,11 +162,14 @@ files:
     validation: [size]
     md5: a993f85b88ac4350cf4d41554e87fe4f
     sha1: 56d39c463da60968d93e58b4ba0e675829412a20
-    source_ref: "AceDL 2026/10/16: Machine configuration entry OS464_UK.rom"
-    note: "CPC 464 English. Firmware v1 followed by BASIC 1.00."
+    source_ref: "AceDL 2026/10/16 linux-x64 FUN_373ad0 0x37407d-0x3740ad (firmware requester lists *.rom under %sprivate/firmware), 0x374ea6-0x374ed7 (sprintf %sprivate/firmware/ + pick, FUN_248970 (fopen rb 0x248a0f, fread 0x4000 at 0x248a2c and 0x248aa1, a short read fails)); FUN_2a4840 0x2a4bac-0x2a4c15 (OS= key); FUN_377790 0x3779fe (Machine configuration label); FUN_369ce0 0x36b918 and FUN_377790 0x378363 (extensionless OS464_UK)"
+    note: >-
+      CPC 464 English. Firmware v1 followed by BASIC 1.00. The SNA loader and
+      the RAM selector also try the extensionless name.
 
   - name: OS464_FR.rom
     path: "private/firmware/OS464_FR.rom"
+    aliases: [OS464_FR]
     system: amstrad-cpc
     required: false
     bundled: true
@@ -171,13 +177,14 @@ files:
     validation: [size]
     md5: a588b7c9e1c142b5d8ebec65ac7713d8
     sha1: c68d84f37ab9defbb19200598c24948c97c9a644
-    source_ref: "AceDL 2026/10/16: Machine configuration entry OS464_FR.rom"
+    source_ref: "AceDL 2026/10/16 linux-x64 FUN_373ad0 0x37407d-0x3740ad (firmware requester lists *.rom under %sprivate/firmware), 0x374ea6-0x374ed7 (sprintf %sprivate/firmware/ + pick, FUN_248970 (fopen rb 0x248a0f, fread 0x4000 at 0x248a2c and 0x248aa1, a short read fails)); FUN_2a4840 0x2a4bac-0x2a4c15 (OS= key); FUN_377790 0x3779e7 (Machine configuration label); FUN_369ce0 0x36b8e1 and FUN_377790 0x3782f4 (extensionless OS464_FR)"
     note: >-
-      CPC 464 French. Firmware f1 followed by a French BASIC 1.0 that the
-      upstream MorphOS release does not carry.
+      CPC 464 French. Firmware f1 followed by a French BASIC 1.0. The SNA
+      loader and the RAM selector also try the extensionless name.
 
   - name: OS664_UK.rom
     path: "private/firmware/OS664_UK.rom"
+    aliases: [OS664_UK]
     system: amstrad-cpc
     required: false
     bundled: true
@@ -185,8 +192,10 @@ files:
     validation: [size]
     md5: 5a384a2310f472c7857888371c00ed66
     sha1: 073a7665527b5bd8a148747a3947dbd3328682c8
-    source_ref: "AceDL 2026/10/16: Machine configuration entry OS664_UK.rom"
-    note: "CPC 664 English. Firmware v2 followed by BASIC 1.10."
+    source_ref: "AceDL 2026/10/16 linux-x64 FUN_373ad0 0x37407d-0x3740ad (firmware requester lists *.rom under %sprivate/firmware), 0x374ea6-0x374ed7 (sprintf %sprivate/firmware/ + pick, FUN_248970 (fopen rb 0x248a0f, fread 0x4000 at 0x248a2c and 0x248aa1, a short read fails)); FUN_2a4840 0x2a4bac-0x2a4c15 (OS= key); FUN_377790 0x377a15 (Machine configuration label); FUN_369ce0 0x36b881 and FUN_377790 0x378168 (extensionless OS664_UK)"
+    note: >-
+      CPC 664 English. Firmware v2 followed by BASIC 1.10. The SNA loader and
+      the RAM selector also try the extensionless name.
 
   - name: XMEM_FW_3_15_UK.rom
     path: "private/firmware/XMEM_FW_3_15_UK.rom"
@@ -197,7 +206,7 @@ files:
     validation: [size]
     md5: 85accc17e98c79dbbdde826cbfaf4692
     sha1: c7d7e5116665e4f21ae3b9bcdca2ce3685f00293
-    source_ref: "AceDL 2026/10/16: Machine configuration entry XMEM_FW_3_15_UK.rom"
+    source_ref: "AceDL 2026/10/16 linux-x64 FUN_373ad0 0x37407d-0x3740ad (firmware requester lists *.rom under %sprivate/firmware), 0x374ea6-0x374ed7 (sprintf %sprivate/firmware/ + pick, FUN_248970 (fopen rb 0x248a0f, fread 0x4000 at 0x248a2c and 0x248aa1, a short read fails)); FUN_2a4840 0x2a4bac-0x2a4c15 (OS= key); FUN_377790 0x377a9f (Machine configuration label)"
     note: "X-MEM firmware 3.15 English, followed by BASIC 1.20."
 
   - name: XMEM_FW_3_15_FR.rom
@@ -209,7 +218,7 @@ files:
     validation: [size]
     md5: 046fa182f7574bde3ab97ee873f6e736
     sha1: faa49a3aeb1d7e972437f6b77515455d14e2d680
-    source_ref: "AceDL 2026/10/16: Machine configuration entry XMEM_FW_3_15_FR.rom"
+    source_ref: "AceDL 2026/10/16 linux-x64 FUN_373ad0 0x37407d-0x3740ad (firmware requester lists *.rom under %sprivate/firmware), 0x374ea6-0x374ed7 (sprintf %sprivate/firmware/ + pick, FUN_248970 (fopen rb 0x248a0f, fread 0x4000 at 0x248a2c and 0x248aa1, a short read fails)); FUN_2a4840 0x2a4bac-0x2a4c15 (OS= key); FUN_377790 0x377a88 (Machine configuration label)"
     note: "X-MEM firmware 3.15 French, followed by BASIC 1.23."
 
   # -- Disc ROM, mapped in slot 7 --
@@ -221,10 +230,11 @@ files:
     size: 16384
     md5: 25629dfe870d097469c217b95fdc1c95
     sha1: 39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb
-    source_ref: "AceDL 2026/10/16: private/amsdos/Amsdos.rom, opened at every startup"
+    source_ref: "AceDL 2026/10/16 linux-x64 FUN_3a479 0x3a8bb-0x3a8d4 (sprintf %sprivate/amsdos/Amsdos.rom), FUN_249ef0 0x24a037 FUN_248ae0 (fopen rb 0x248b42, %s is missing. 0x248c31, 128-byte AMSDOS header skipped when its checksum matches 0x248b63-0x248b99, ROM type byte 0-3 or 0x80 else not a CPC ROM file 0x248bd2-0x248bfd, fread 0x3f80 unchecked 0x248bb7), 0x24a098 (Error loading AMSDOS ROM), 0x249fda, FUN_3a479 0x3a905-0x3a93e, FUN_247c50 0x247c54 (NULL dereference)"
     note: >-
       AMSDOS disc ROM. Absence prints "Error loading AMSDOS ROM" then
-      "Error initializing ROMs!" and stops startup. Length is not checked.
+      "Error initializing ROMs!" and stops startup. Length is not checked,
+      the first byte must be a ROM type 0 to 3 or 0x80.
 
   # -- Plus system cartridges, 8 banks of 16 KB in RIFF chunks --
   - name: Amstrad_v4.cpr
@@ -235,7 +245,7 @@ files:
     size: 131156
     md5: 39b565e648172980aa552293e667070f
     sha1: 405e341437fab8db477606238af0c20eca2e39ee
-    source_ref: "AceDL 2026/10/16: private/firmware, cartridge requester root, CPR loader"
+    source_ref: "AceDL 2026/10/16 linux-x64 FUN_2a30a0 0x2a31ae (.cpr extension), FUN_234870 (fopen rb 0x2348b3, 12-byte RIFF header 0x234927, form AMS! or CXME 0x234937-0x23494b else Cartridge Load Error (Header) 0x2349a0, chunk loop 0x234bad with truncated file! 0x234d20, cbNN bank number 0x234eb0, 16 KB bank read 0x235010-0x235042)"
     note: "464plus/6128plus/GX-4000 system cartridge, English, firmware version 4."
 
   - name: Amstrad_f4.cpr
@@ -246,7 +256,7 @@ files:
     size: 131156
     md5: e7159fd674022ba05f9b347ae3cdafc6
     sha1: e5aa80c501cfb435e2cba35ad92e427240394164
-    source_ref: "AceDL 2026/10/16: private/firmware, cartridge requester root, CPR loader"
+    source_ref: "AceDL 2026/10/16 linux-x64 FUN_2a30a0 0x2a31ae (.cpr extension), FUN_234870 (fopen rb 0x2348b3, 12-byte RIFF header 0x234927, form AMS! or CXME 0x234937-0x23494b else Cartridge Load Error (Header) 0x2349a0, chunk loop 0x234bad with truncated file! 0x234d20, cbNN bank number 0x234eb0, 16 KB bank read 0x235010-0x235042)"
     note: "464plus/6128plus/GX-4000 system cartridge, French, firmware version 4."
 
   - name: Amstrad_s4.cpr
@@ -257,7 +267,7 @@ files:
     size: 131156
     md5: 6eeed3fdd4abc98a2a932da810410128
     sha1: 05fb14df24b2b504a3ae463a086f02f0adcc07b9
-    source_ref: "AceDL 2026/10/16: private/firmware, cartridge requester root, CPR loader"
+    source_ref: "AceDL 2026/10/16 linux-x64 FUN_2a30a0 0x2a31ae (.cpr extension), FUN_234870 (fopen rb 0x2348b3, 12-byte RIFF header 0x234927, form AMS! or CXME 0x234937-0x23494b else Cartridge Load Error (Header) 0x2349a0, chunk loop 0x234bad with truncated file! 0x234d20, cbNN bank number 0x234eb0, 16 KB bank read 0x235010-0x235042)"
     note: "464plus/6128plus/GX-4000 system cartridge, Spanish, firmware version 4."
 
   # -- Plugin ROMs --
@@ -266,36 +276,44 @@ files:
     system: amstrad-cpc
     required: false
     bundled: true
-    size: 8192
+    min_size: 8192
+    validation: [size]
     md5: 4c9f014e91d407cc6509fad0095ab909
     sha1: 1431ec628d38f000715545dd2186b684c5fe5a6f
-    source_ref: "AceDL 2026/10/16: private/multiface2/multiface2.rom, read when PLUGIN_MULTIFACE2=1"
-    note: "Romantic Robot Multiface Two ROM. The plugin loads without it."
+    source_ref: "AceDL 2026/10/16 linux-x64 FUN_2a4840 0x2a735b-0x2a73c3 (PLUGIN_MULTIFACE2 into 0x50c410), 0x2a767b-0x2a7685, 0x2ac38a FUN_3aa850 (sprintf %sprivate/multiface2/multiface2.rom 0x3aa87b, fopen rb 0x3aa88c, missing returns uninstalled 0x3aa894, fread 0x2000 0x3aa8ad, short read clears the flag 0x3aa8ba, hooks installed 0x3aa8e0-0x3aa955); FUN_345230 0x346086 (-plugin multiface2), FUN_2989f0 0x29934c-0x299358"
+    note: >-
+      Romantic Robot Multiface Two ROM. Without it the plugin is not
+      installed, a file shorter than 8 KB also clears PLUGIN_MULTIFACE2.
 
   - name: hackit400uk.rom
     path: "private/hacker/hackit400uk.rom"
     system: amstrad-cpc
     required: false
     bundled: true
-    size: 16384
+    min_size: 16384
+    validation: [size]
     md5: 9a293eaaebca601f671070ad56cb81b6
     sha1: 56306e7234bcffd14b4f977d42d237c4ad9c12d5
-    source_ref: "AceDL 2026/10/16: private/hacker/hackit400uk.rom, read when PLUGIN_HACKER=1"
+    source_ref: "AceDL 2026/10/16 linux-x64 FUN_2a4840 0x2a743d-0x2a74a5 (PLUGIN_HACKER into 0x50c40c), 0x2a74ae-0x2a7516 (PLUGIN_HACKERFR into 0x50c408), 0x2a769b-0x2a76a3, 0x2ac36c FUN_3adac0 (0x3adaf1 %sprivate/hacker/hackit400uk.rom when PLUGIN_HACKERFR=0, fopen rb 0x3adb1d, missing returns uninstalled 0x3adb28, fread 0x4000 0x3adb3e, short read clears PLUGIN_HACKER 0x3adb4b)"
     note: >-
-      HackIt 4.00 by Siren Software, English, UK flavour of the Hacker plugin.
+      HackIt 4.00 by Siren Software, English, read when PLUGIN_HACKERFR is 0.
+      Without it the plugin is not installed, a file shorter than 16 KB also
+      clears PLUGIN_HACKER.
 
   - name: hacker481fr.rom
     path: "private/hacker/hacker481fr.rom"
     system: amstrad-cpc
     required: false
     bundled: true
-    size: 16384
+    min_size: 16384
+    validation: [size]
     md5: dfdd9924295f491d54f30569874287f8
     sha1: 0c15d6753cf0ae2a1737b6e857e8e82ee135a697
-    source_ref: "AceDL 2026/10/16: private/hacker/hacker481fr.rom, read when PLUGIN_HACKER=1 and PLUGIN_HACKERFR=1"
+    source_ref: "AceDL 2026/10/16 linux-x64 FUN_2a4840 0x2a74ae-0x2a7516 (PLUGIN_HACKERFR into 0x50c408), 0x2a769b-0x2a76a3, 0x2ac36c FUN_3adac0 (0x3adafb-0x3adaff %sprivate/hacker/hacker481fr.rom when PLUGIN_HACKERFR=1, fopen rb 0x3adb1d, missing returns uninstalled 0x3adb28, fread 0x4000 0x3adb3e, short read clears PLUGIN_HACKER 0x3adb4b)"
     note: >-
       Le Hackeur 4.81, the French edition of the same Siren Software ROM,
-      French flavour of the Hacker plugin.
+      read when PLUGIN_HACKERFR is 1. Without it the plugin is not
+      installed, a file shorter than 16 KB also clears PLUGIN_HACKER.
 
   - name: ym2608_adpcm_rom.bin
     path: "private/sounds/ym2608_adpcm_rom.bin"
@@ -304,9 +322,9 @@ files:
     size: 8192
     md5: 8740932cda05e518a9955f1d08d6786f
     sha1: 50b6c3e288eaa12ad275d4f323267bb72b0445df
-    source_ref: "AceDL 2026/10/16: private/sounds/ym2608_adpcm_rom.bin, read when PLUGIN_PLAY2CPC=1"
+    source_ref: "AceDL 2026/10/16 linux-x64 FUN_2a4840 0x2a7584-0x2a758c (PLUGIN_PLAY2CPC flag 0x50c46c), 0x2ac31a FUN_3a7820, 0x3a7849 FUN_3ae520, FUN_3ae340 (sprintf %sprivate/sounds/ym2608_adpcm_rom.bin 0x3ae3d1, fopen rb 0x3ae3f1, missing prints Warning not found 0x3ae4ed-0x3ae505 and continues, whole file read by ftell size 0x3ae402-0x3ae463); FUN_345230 0x345a29 (-plugin play2cpc)"
     note: >-
       YM2608 internal ADPCM rhythm ROM used by the Play2CPC cartridge sound.
       Missing file prints "Warning: ym2608_adpcm_rom.bin not found!" and the
-      plugin keeps running. Shipped in the Linux and Raspberry Pi packages,
-      absent from the Windows package.
+      plugin keeps running. The whole file is read, its length is not
+      checked. Absent from the Windows x64 package.

@@ -374,10 +374,16 @@ class TheArchives(unittest.TestCase):
             with self.subTest(archive=name), self.assertRaises(ValueError):
                 build_port.build_archive(name, self.out / name, root)
 
-    def test_the_release_process_attaches_each(self):
+    def test_the_site_serves_each_and_the_release_none(self):
+        """Each archive carries install.py: the site serves it from its own
+        commit (sitehandheld.py), and the release steps never build one."""
         text = (REPO_ROOT / "wiki" / "release-process.md").read_text(encoding="utf-8")
+        self.assertNotIn("scripts/build_port.py", text)
+        installer = (REPO_ROOT / "wiki" / "installer.md").read_text(encoding="utf-8")
         for name in build_port.ARCHIVES:
-            self.assertIn(name, text)
+            with self.subTest(archive=name):
+                self.assertNotIn(name, text)
+                self.assertIn(f"](../get/handheld/{name})", installer)
 
 
 FAKE_INSTALL = r'''

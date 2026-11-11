@@ -238,19 +238,6 @@ files:
     description: "C-BIOS MSX-MUSIC ROM, slot 3-1 from page 2"
     source_ref: "MSX.emu/res/firmware/Machines/MSX2+ - C-BIOS/config.ini:31, MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/blueMSX/Memory/romMapperMsxMusic.c:55-68"
 
-  - name: "cbios.txt"
-    path: "cbios.txt"
-    system: msx
-    required: false
-    bundled: true
-    category: game_data
-    size: 10469
-    sha1: "78ae5c049bc94ee1284536c419388b1ab7ac218c"
-    description: "C-BIOS 0.29 release notes and licence, bundled beside the machine folders"
-    note: >-
-      Shipped in the application bundle. No code reads it.
-    source_ref: "MSX.emu/res/firmware/cbios.txt"
-
   - name: "config.ini"
     path: "Machines/MSX/config.ini"
     system: msx

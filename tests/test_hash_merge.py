@@ -488,6 +488,8 @@ class AReleaseProfileDescribesItsOwnRelease(unittest.TestCase):
         self.assertEqual(files["neogeo.zip"]["system"], "snk-neogeo-mvs")
         self.assertNotIn("system", files["newset.zip"])
         self.assertEqual(files["neogeo.zip"]["source_ref"], "upstream src/mame/neogeo/neogeo.cpp:10")
+        # The libretro build reads <system>/mame/bios, never the system root.
+        self.assertEqual(files["neogeo.zip"]["path"], "mame/bios/neogeo.zip")
 
     def test_a_set_the_release_runs_without_is_not_required(self):
         """recel is undumped at 0.258: the current profile's true does not apply."""

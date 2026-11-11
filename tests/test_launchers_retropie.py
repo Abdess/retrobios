@@ -239,6 +239,77 @@ class LinksAndCopies(unittest.TestCase):
         self.assertEqual(base[0]["names"], ["hiscore.dat", "cheat.dat"])
 
 
+MAME = module("mame", """
+    function configure_mame() {
+        local system="mame"
+        local temp_ini_mame="$(mktemp)"
+        iniConfig " " "" "$temp_ini_mame"
+        iniSet "rompath"            "$romdir/$system;$romdir/arcade;$biosdir/$system"
+        iniSet "hashpath"           "$md_inst/hash"
+        iniSet "samplepath"         "$romdir/$system/samples;$romdir/arcade/samples"
+        iniSet "cfg_directory"      "$romdir/$system/cfg"
+        copyDefaultConfig "$temp_ini_mame" "$md_conf_root/$system/mame.ini"
+        addEmulator 0 "$md_id" "arcade" "$md_inst/mame %BASENAME%"
+        addSystem "arcade"
+    }
+""", 109)
+
+
+class IniSearchLists(unittest.TestCase):
+    """MAME's mame.ini lists folders below $romdir (mame.sh:133-136)."""
+
+    def test_a_list_below_the_roms_root_is_a_search_path(self):
+        found = [r for r in records({f"{EMULATORS}/mame.sh": MAME}, "mame")
+                 if r["kind"] == "passes_path"]
+        self.assertEqual(
+            [(r["search_dir"], r["passes_to"].split(" in ")[0]) for r in found],
+            [
+                ("$romdir/mame;$romdir/arcade;$biosdir/mame", "rompath"),
+                ("$romdir/mame/samples;$romdir/arcade/samples", "samplepath"),
+            ],
+        )
+        self.assertEqual(found[1]["source_ref"], f"{EMULATORS}/mame.sh:115")
+
+    def test_one_folder_written_to_is_no_search_path(self):
+        # cfg_directory is where MAME writes, $md_inst/hash a folder of the
+        # package itself.
+        found = records({f"{EMULATORS}/mame.sh": MAME}, "mame")
+        self.assertFalse([r for r in found if "cfg" in str(r.get("search_dir"))])
+        self.assertFalse([r for r in found if "hash" in str(r.get("search_dir"))])
+
+
+ADVMAME = module("advmame", """
+    function configure_advmame() {
+        iniConfig " " "" "$md_conf_root/mame-advmame/$md_id.rc"
+        iniSet "dir_rom" "$romdir/mame-advmame:$romdir/arcade"
+        iniSet "dir_artwork" "$romdir/mame-advmame/artwork"
+        addEmulator 1 "$md_id" "arcade" "$md_inst/bin/advmame %BASENAME%"
+        addSystem "arcade"
+    }
+""", 95)
+
+
+class AdvanceMameSearchList(unittest.TestCase):
+    """AdvanceMAME splits dir_rom on ':' (advance/linux/file.c:138-141,
+    advance/osd/fileio.c:696-699), and advmame.sh:100 lists two folders."""
+
+    def test_a_colon_list_below_the_roms_root_is_a_search_path(self):
+        found = [r for r in records({f"{EMULATORS}/advmame.sh": ADVMAME}, "advmame")
+                 if r["kind"] == "passes_path"]
+        self.assertEqual(
+            [(r["search_dir"], r["passes_to"].split(" in ")[0]) for r in found],
+            [("$romdir/mame-advmame:$romdir/arcade", "dir_rom")],
+        )
+
+    def test_mame_does_not_read_a_colon_as_a_separator(self):
+        from scraper.retropie_launchers import LIST_SEPARATORS
+
+        self.assertNotIn("mame", LIST_SEPARATORS)
+        self.assertEqual(
+            {LIST_SEPARATORS[p] for p in ("advmame", "advmame-0.94", "advmame-1.4")}, {":"}
+        )
+
+
 class CommandLines(unittest.TestCase):
     def test_sdltrs_passes_one_rom_per_machine(self):
         found = records({f"{EMULATORS}/sdltrs.sh": SDLTRS}, "sdltrs")

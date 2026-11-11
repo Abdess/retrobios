@@ -23,6 +23,9 @@ cores:
   - "dolphin-qt-gc"
   - "dolphin-qt-wii"
 systems: [nintendo-gamecube, nintendo-wii, sega-triforce]
+standalone_directories:
+  - "$XDG_DATA_HOME/dolphin-emu"
+  - "~/.local/share/dolphin-emu"
 data_root:
   android:
     path: "Android/data/org.dolphinemu.dolphinemu/files"

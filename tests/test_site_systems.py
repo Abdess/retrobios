@@ -1191,7 +1191,16 @@ class EnginesGoByEngine(unittest.TestCase):
             self.skipTest("pages not generated")
         for old, target in gs.SYSTEM_PAGES_MOVED.items():
             new = target.partition("#")[0]
-            self.assertFalse((CONTENT / old).exists() or (CONTENT / old).with_suffix(".mdx").exists(), old)
+            written = [path for path in (CONTENT / old, (CONTENT / old).with_suffix(".mdx"))
+                       if path.exists()]
+            # A maker's page split by console again (Sega past its budget)
+            # writes the old address as one of its parts: the redirect then
+            # stands aside, and the page names the one it moved to as parent.
+            for path in written:
+                parent = re.search(r"^parent:\n  label: .*\n  link: (\S+)$",
+                                   path.read_text(encoding="utf-8"), re.M)
+                self.assertIsNotNone(parent, old)
+                self.assertEqual(parent.group(1), "/" + new.removesuffix(".md") + "/", old)
             # A page with tabs is written as MDX.
             self.assertTrue((CONTENT / new).exists() or (CONTENT / new).with_suffix(".mdx").exists(), new)
         redirects = CONTENT.parents[1] / "generated" / "redirects.json"

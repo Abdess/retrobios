@@ -112,7 +112,7 @@ files:
     required: false
     sha1: "aa2dfd12c11c6e6f3baaf7bf199bd6bcd71a520c"
     md5: "ee71d6cd464c618c632e6fd62b430d2c"
-    source_ref: "upstream dists/scummvm.rc:24"
+    source_ref: "upstream dists/scummvm.rc:24, source backends/platform/libretro/scripts/bundle_datafiles.sh:74, source backends/platform/libretro/src/libretro-os-utils.cpp:241, source gui/gui-manager.cpp:87-88, source gui/ThemeEngine.cpp:2229-2256, 2052-2066"
     note: "Modern GUI theme for ScummVM launcher."
 
   - name: "scummclassic.zip"
@@ -121,7 +121,7 @@ files:
     required: false
     sha1: "69836fb392710f2182df07bab8960e8a2d92c1a9"
     md5: "8f37bd19dd51be456ac8f005fd5669a8"
-    source_ref: "upstream dists/scummvm.rc:23"
+    source_ref: "upstream dists/scummvm.rc:23, source backends/platform/libretro/scripts/bundle_datafiles.sh:74, source backends/platform/libretro/src/libretro-os-utils.cpp:241, source gui/gui-manager.cpp:87-88, source gui/ThemeEngine.cpp:2229-2256, 2052-2066"
     note: "Classic GUI theme for ScummVM launcher."
 
   - name: "scummremastered.zip"
@@ -130,7 +130,7 @@ files:
     required: false
     sha1: "03e53349eefc39ce25220bfcb1ae4a580704d29d"
     md5: "0d990484d0dfc1680b20cfabcae373cd"
-    source_ref: "upstream dists/scummvm.rc:25"
+    source_ref: "upstream dists/scummvm.rc:25, source backends/platform/libretro/scripts/bundle_datafiles.sh:74, source backends/platform/libretro/src/libretro-os-utils.cpp:241, source gui/gui-manager.cpp:87-88, source gui/ThemeEngine.cpp:2229-2256, 2052-2066"
     note: "Remastered GUI theme for ScummVM launcher."
 
   - name: "residualvm.zip"
@@ -139,7 +139,7 @@ files:
     required: false
     sha1: "589b622f55c9944c4883e4163d4d49508e22e056"
     md5: "b2811fa9b209733b61cd49ddb21e1e95"
-    source_ref: "upstream dists/scummvm.rc:26"
+    source_ref: "upstream dists/scummvm.rc:26, source backends/platform/libretro/scripts/bundle_datafiles.sh:74, source backends/platform/libretro/src/libretro-os-utils.cpp:241, source gui/gui-manager.cpp:87-88, source gui/ThemeEngine.cpp:2229-2256, 2052-2066"
     note: "ResidualVM theme for 3D adventure games (Grim Fandango, Myst III)."
 
   - name: "gui-icons.dat"
@@ -148,7 +148,7 @@ files:
     required: false
     sha1: "38e74e6994924781487a0d39cc53dc4708a90c1c"
     md5: "9c59e0e9875434456ec1b7eb8e51666f"
-    source_ref: "upstream dists/scummvm.rc:27"
+    source_ref: "upstream dists/scummvm.rc:27, source backends/platform/libretro/scripts/bundle_datafiles.sh:74, source backends/platform/libretro/src/libretro-os-utils.cpp:241, source gui/gui-manager.cpp:118"
     note: "GUI icon pack used by the ScummVM launcher interface."
 
   - name: "shaders.dat"
@@ -157,7 +157,7 @@ files:
     required: false
     sha1: "c67ec35c3f6e2ba7f09b8f61a78df7f713ff040c"
     md5: "f073f17187d0bfa3e7ebb7f328847969"
-    source_ref: "upstream dists/scummvm.rc:28"
+    source_ref: "upstream dists/scummvm.rc:28, source backends/platform/libretro/scripts/bundle_datafiles.sh:74, source backends/platform/libretro/src/libretro-os-utils.cpp:241, source backends/graphics/opengl/opengl-graphics.cpp:423, source gui/shaderbrowser-dialog.cpp:88"
     note: "Compiled shader pack for the GUI rendering pipeline."
 
   - name: "translations.dat"
@@ -166,7 +166,7 @@ files:
     required: false
     sha1: "e5b6f6d6473e2d6aa0a250fd9983b573ebf6fbe4"
     md5: "a206e54bac1af13559ac8b2d9e550577"
-    source_ref: "upstream dists/scummvm.rc:43"
+    source_ref: "upstream dists/scummvm.rc:43, source backends/platform/libretro/scripts/bundle_datafiles.sh:74, source backends/platform/libretro/src/libretro-os-utils.cpp:241, source common/translation.h:288, source common/translation.cpp:282-290"
     note: "GUI translation strings for ScummVM launcher localization."
 
   # ================================================================
@@ -180,7 +180,7 @@ files:
     required: false
     sha1: "379f9def6d0de4b4bad18b0177df81783a51f17b"
     md5: "73cf5bd61896442a990e363f284a0bc2"
-    source_ref: "source dists/engine-data/engine_data_core.mk"
+    source_ref: "source dists/engine-data/engine_data_core.mk, source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/achievements.cpp:105-109"
     note: "Achievement definitions for supported games."
 
   - name: "classicmacfonts.dat"
@@ -189,7 +189,7 @@ files:
     required: false
     sha1: "768b6231c6068e3d9b4f2cc6b1b1e5485578fde1"
     md5: "d4264d4573f22d290e033e1d834d7221"
-    source_ref: "source dists/engine-data/engine_data_core.mk"
+    source_ref: "source dists/engine-data/engine_data_core.mk, source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source graphics/macgui/macfontmanager.cpp:222"
     note: "Classic Macintosh bitmap fonts for Mac game rendering."
 
   - name: "encoding.dat"
@@ -198,7 +198,7 @@ files:
     required: false
     sha1: "11d3873337827195bc16c3d3175ad00f1777ed95"
     md5: "f2e88b2faec499a4914c3a0bcffc7db1"
-    source_ref: "source dists/engine-data/engine_data_core.mk"
+    source_ref: "source dists/engine-data/engine_data_core.mk, source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source common/str-enc.cpp:142"
     note: "Character encoding tables for text rendering across languages."
 
   - name: "helpdialog.zip"
@@ -207,7 +207,7 @@ files:
     required: false
     sha1: "386d8a89e180f8abab53e5d5926b6a81ee4b31dd"
     md5: "a9584a928c0f52ef28b33d8702983c35"
-    source_ref: "source dists/engine-data/engine_data_core.mk"
+    source_ref: "source dists/engine-data/engine_data_core.mk, source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source gui/helpdialog.cpp:69, 147-148, source graphics/image-archive.cpp:50-54"
     note: "Help dialog assets for the in-game help system."
 
   - name: "macgui.dat"
@@ -216,7 +216,7 @@ files:
     required: false
     sha1: "1eed577281b8819367d1ee99b1a76ff3e1920735"
     md5: "d97f2965013b343dd3d4fdbbc7192f15"
-    source_ref: "source dists/engine-data/engine_data_core.mk"
+    source_ref: "source dists/engine-data/engine_data_core.mk, source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source graphics/macgui/datafiles.cpp:37, 81"
     note: "Macintosh GUI widget data for Mac-style game interfaces."
 
   # ================================================================
@@ -230,7 +230,7 @@ files:
     required: false
     sha1: "775b12b7e787bbaaeb73aa45b1ad3bb383e041ef"
     md5: "4f9dd40b455876d5c54b5ebd93aec88c"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_ACCESS)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_ACCESS), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/access/resources.cpp:44"
     note: "Engine data for Access Software games (e.g. Amazon, Martian Memorandum)."
 
   - name: "bagel.dat"
@@ -239,7 +239,7 @@ files:
     required: false
     sha1: "f83084c72b1ff8e16f9c013e5ef7cfbb5f3cc835"
     md5: "f6d90885f6962f89de02e34031111599"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_BAGEL)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_BAGEL), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/bagel/spacebar/baglib/bagel.cpp:113, source common/engine_data.cpp:253"
     note: "Engine data for Bagel engine games."
 
   - name: "cryo.dat"
@@ -248,7 +248,7 @@ files:
     required: false
     sha1: "220c2fe52d26b8607abeb2ad4a8ea4324daea5ba"
     md5: "fc5886ea5388f20eae299bb408da5bcc"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_CRYO)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_CRYO), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/cryo/resource.cpp:303"
     note: "Engine data for Cryo Interactive games (e.g. Dune, Lost Eden)."
 
   - name: "cryomni3d.dat"
@@ -257,7 +257,7 @@ files:
     required: false
     sha1: "3971847e26be0abad8196caf03e5852a81ddbdea"
     md5: "7224c7a94074addeb69015b1346695d2"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_CRYOMNI3D)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_CRYOMNI3D), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/cryomni3d/cryomni3d.cpp:82"
     note: "Engine data for CryOmni3D games (Versailles 1685)."
 
   - name: "darkseed.dat"
@@ -266,7 +266,7 @@ files:
     required: false
     sha1: "343172f1bfff8cb8c4abefa95e211379f39583b7"
     md5: "9a9cfe40dcca517f130d4430bd1af643"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_DARKSEED)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_DARKSEED), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/darkseed/darkseed.cpp:66-71"
     note: "Engine data for Dark Seed (H.R. Giger adventure game)."
 
   - name: "drascula.dat"
@@ -275,7 +275,7 @@ files:
     required: false
     sha1: "05c97e92439b67aea8f6eb7fc96db023edf62124"
     md5: "b304979ed642a6dcaf26f43f8a37a1de"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_DRASCULA)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_DRASCULA), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/drascula/drascula.cpp:987"
     note: "Engine data for Drascula: The Vampire Strikes Back."
 
   - name: "freescape.dat"
@@ -284,7 +284,7 @@ files:
     required: false
     sha1: "c6b3d3152e4e2ff4c9bf55e103bb39ed7faca2bd"
     md5: "71697f90fb0c7747616dbb0799ce966b"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_FREESCAPE)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_FREESCAPE), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/freescape/freescape.h:61, source engines/freescape/assets.cpp:115"
     note: "Engine data for Freescape games (Driller, Dark Side, Total Eclipse)."
 
   - name: "got.aud"
@@ -293,7 +293,7 @@ files:
     required: false
     sha1: "209ab6d86a7c44f241689c5511b2027f7ad2c7c4"
     md5: "d13cc3c481e84e787ec8aa86dffc565f"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_GOT)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_GOT), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/got/sound.cpp:38, 194-198"
     note: "Audio data for Game of Thrones engine."
 
   - name: "got.gfx"
@@ -302,7 +302,7 @@ files:
     required: false
     sha1: "0c9603da78b980bcf391bbf5f9103a5a642c4ee8"
     md5: "a29f591769bd731df0d9ddd3a191fe8c"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_GOT)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_GOT), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/got/gfx/gfx_chunks.cpp:85"
     note: "Graphics data for Game of Thrones engine."
 
   - name: "hadesch_translations.dat"
@@ -311,7 +311,7 @@ files:
     required: false
     sha1: "17aae444b3010e72e092635d25d3b93c104b0ad2"
     md5: "7857da7e56a11e0749fb45100c323b3c"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_HADESCH)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_HADESCH), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/hadesch/hadesch.cpp:476"
     note: "Translation data for Hades Challenge."
 
   - name: "hugo.dat"
@@ -320,7 +320,7 @@ files:
     required: false
     sha1: "74a5fa172f5327fedc145cb9eccc8fd050b9cfb9"
     md5: "a865e70f1b0998a500f522dab441c8fc"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_HUGO)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_HUGO), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/hugo/hugo.cpp:457"
     note: "Engine data for Hugo's House of Horrors trilogy."
 
   - name: "kyra.dat"
@@ -329,7 +329,7 @@ files:
     required: false
     sha1: "31b0b9418af2f9dd4e4094aada05d48eb355975b"
     md5: "ebddd7bbd97135a427083db5daf6f9fc"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_KYRA)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_KYRA), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/kyra/resource/resource.h:1252, source engines/kyra/resource/staticres.cpp:138-145"
     note: "Engine data for Kyrandia series (Legend of Kyrandia, Hand of Fate, Malcolm's Revenge)."
 
   - name: "lure.dat"
@@ -338,7 +338,7 @@ files:
     required: false
     sha1: "516347ec0ec2a397265d1b2fb053aa3758382e09"
     md5: "6f90cf73f36453d332d5c9cee311f81c"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_LURE)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_LURE), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/lure/luredefs.h:31, source engines/lure/lure.cpp:56"
     note: "Engine data for Lure of the Temptress."
 
   - name: "macventure.dat"
@@ -347,7 +347,7 @@ files:
     required: false
     sha1: "e431e718e3c784532422ea2654d5fc6042a95c09"
     md5: "3b1faf40e685b955372e02f54ed70263"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_MACVENTURE)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_MACVENTURE), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/macventure/datafiles.cpp:40, 76"
     note: "Engine data for MacVenture games (Shadowgate, Deja Vu, Uninvited)."
 
   - name: "mm.dat"
@@ -356,7 +356,7 @@ files:
     required: false
     sha1: "0816fe29b57911b28cbf774348f5492062326a85"
     md5: "01f074a6ac34dd86fcc6d1e8090614f0"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_MM)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_MM), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/mm/xeen/files.cpp:72, source engines/mm/mm1/globals.cpp:61, source common/engine_data.cpp:253"
     note: "Engine data for Might and Magic engine."
 
   - name: "mort.dat"
@@ -365,7 +365,7 @@ files:
     required: false
     sha1: "0b9d0fa2a18eadf61aeddc19128ef90898ab7206"
     md5: "3cfb16d7bab4d77606b3b1274b8ae870"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_MORTEVIELLE)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_MORTEVIELLE), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/mortevielle/mortevielle.h:87, source engines/mortevielle/mortevielle.cpp:299"
     note: "Engine data for Mortville Manor."
 
   - name: "myst3.dat"
@@ -374,7 +374,7 @@ files:
     required: false
     sha1: "5fbf7b1a596219f0daab60a8ceb2f1e59e042243"
     md5: "54e9056211f2fff255b6f66a3fe39a8d"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_MYST3)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_MYST3), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/myst3/database.cpp:460"
     note: "Engine data for Myst III: Exile."
 
   - name: "nancy.dat"
@@ -383,7 +383,7 @@ files:
     required: false
     sha1: "7c8907d33da59afd4e4b62eee67541910e0b78d9"
     md5: "eb7cfdb3f74972beb8f43196e4e44001"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_NANCY)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_NANCY), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/nancy/nancy.cpp:1111"
     note: "Engine data for Nancy Drew adventure games."
 
   - name: "neverhood.dat"
@@ -392,7 +392,7 @@ files:
     required: false
     sha1: "490012c996ba0c56dd8d077e1418ee53b1e96397"
     md5: "dfaab12ffb265646f31f51b6904246d1"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_NEVERHOOD)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_NEVERHOOD), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/neverhood/neverhood.cpp:91"
     note: "Engine data for The Neverhood."
 
   - name: "prince_translation.dat"
@@ -401,7 +401,7 @@ files:
     required: false
     sha1: "57403a286c4d251384442a507d285b2dc5ce330e"
     md5: "993adab2fd44277d5fd7aa5971e7099c"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_PRINCE)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_PRINCE), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/prince/prince.cpp:339"
     note: "Translation data for The Prince and the Coward."
 
   - name: "queen.tbl"
@@ -410,7 +410,7 @@ files:
     required: false
     sha1: "7bafa28dfd9b3be17430d467d8787d8204437ba0"
     md5: "93c6d6379eb0290ce93854a6888ec3f4"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_QUEEN)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_QUEEN), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/queen/resource.cpp:32, 149"
     note: "Resource table for Flight of the Amazon Queen."
 
   - name: "sky.cpt"
@@ -419,7 +419,7 @@ files:
     required: false
     sha1: "fa03ede717223eaf011491d2066e37eb112e735b"
     md5: "9d00157b1cebd6368cbf88135c098f40"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_SKY)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_SKY), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/sky/compact.cpp:127"
     note: "Compact table for Beneath a Steel Sky."
 
   - name: "supernova.dat"
@@ -428,7 +428,7 @@ files:
     required: false
     sha1: "8a571cfc431b5fe794f0262f0e55f72927ab27b4"
     md5: "89664136c503a30894d5c713be5bfe90"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_SUPERNOVA)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_SUPERNOVA), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/supernova/supernova.h:50, source engines/supernova/supernova.cpp:466"
     note: "Engine data for Mission Supernova."
 
   - name: "teenagent.dat"
@@ -437,7 +437,7 @@ files:
     required: false
     sha1: "0d488164930332bae3aa1ad38cef44abbe3d00a6"
     md5: "4594620989a0bfd8b120da2de7ac30de"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_TEENAGENT)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_TEENAGENT), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/teenagent/resources.cpp:308"
     note: "Engine data for Teenagent."
 
   - name: "titanic.dat"
@@ -446,7 +446,7 @@ files:
     required: false
     sha1: "15f51828f08fdbe01b56123e96312b5859a968c0"
     md5: "4b2fb71201dc3795cff45df6200a1918"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_TITANIC)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_TITANIC), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/titanic/support/files_manager.cpp:40"
     note: "Engine data for Starship Titanic."
 
   - name: "tony.dat"
@@ -455,7 +455,7 @@ files:
     required: false
     sha1: "a5e19f364bda6a0d2330495114c9ad665bb79ad0"
     md5: "891022a4e2917bb54b5cdc9a46f5b3df"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_TONY)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_TONY), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/tony/tony.cpp:182"
     note: "Engine data for Tony Tough and the Night of Roasted Moths."
 
   - name: "toon.dat"
@@ -464,7 +464,7 @@ files:
     required: false
     sha1: "85bb688125d66f2797a41f153ce1fa177027a83f"
     md5: "2b71a5d9aa19219d46711e8a77451f0f"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_TOON)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_TOON), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/toon/toon.cpp:5419"
     note: "Engine data for Toonstruck."
 
   - name: "ultima.dat"
@@ -473,7 +473,7 @@ files:
     required: false
     sha1: "e049932518390257f4d49b1691cad229e6060079"
     md5: "e359fb7f14c4cb072b6e9300a23a6d62"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_ULTIMA)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_ULTIMA), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/ultima/shared/engine/data_archive.cpp:31, 84-85"
     note: "Engine data for Ultima series (Ultima IV-VIII, Savage Empire, Martian Dreams)."
 
   - name: "ultima8.dat"
@@ -482,7 +482,7 @@ files:
     required: false
     sha1: "6319d3a245297697c1e4def78dc231a3f30708bb"
     md5: "e5b95811b05b9f0f593b49c860391200"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_ULTIMA)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_ULTIMA), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/ultima/ultima8/ultima8.cpp:177-182"
     note: "Engine data specific to Ultima VIII: Pagan."
 
   - name: "wintermute.zip"
@@ -491,7 +491,7 @@ files:
     required: false
     sha1: "5302f543384b21fb55466118a6966e5ef46b85f6"
     md5: "9783248899f9cb531f0a3e0a711ab8b3"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_WINTERMUTE)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_WINTERMUTE), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/wintermute/base/base_file_manager.cpp:408"
     note: "Engine data for Wintermute engine games."
 
   - name: "fonts.dat"
@@ -500,7 +500,7 @@ files:
     required: false
     sha1: "1eaef39122559500fbbc705c9425500311d23e03"
     md5: "6df29d218962e155d0a2114006af45c0"
-    source_ref: "source dists/engine-data/engine_data.mk (USE_FREETYPE2)"
+    source_ref: "source dists/engine-data/engine_data.mk (USE_FREETYPE2), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source graphics/fonts/ttf.cpp:954-958, source engines/scumm/he/font_he.cpp:269-273"
     note: "FreeType2 font data for text rendering."
 
   - name: "fonts-cjk.dat"
@@ -509,7 +509,7 @@ files:
     required: false
     sha1: "b46f5a744387d1991d66a06292811f217ae063e2"
     md5: "18b8811c1bbc297be45f38c3bd6a0728"
-    source_ref: "source dists/engine-data/engine_data_big.mk (USE_FREETYPE2)"
+    source_ref: "source dists/engine-data/engine_data_big.mk (USE_FREETYPE2), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source graphics/fonts/ttf.cpp:975-979"
     note: "CJK (Chinese/Japanese/Korean) font data. Large file, only for systems with enough memory."
 
   - name: "fonts-imgui.dat"
@@ -518,7 +518,7 @@ files:
     required: false
     sha1: "659a025dfa39a8caada7dac6e69b4d7c88217b3f"
     md5: "9eb64ec7aa31dc2f5b55541415ecdf8b"
-    source_ref: "source dists/engine-data/engine_data.mk (USE_IMGUI)"
+    source_ref: "source dists/engine-data/engine_data.mk (USE_IMGUI), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source backends/imgui/imgui_fonts.cpp:83"
     note: "ImGui font data for debug overlay rendering."
 
   - name: "grim-patch.lab"
@@ -527,7 +527,7 @@ files:
     required: false
     sha1: "3c43b7a0125f88a9f83ae4307dca57867ffd637c"
     md5: "32b777b824f02b1e1259903740964058"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_GRIM)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_GRIM), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/grim/resource.cpp:126-129"
     note: "Patch data for Grim Fandango."
 
   - name: "monkey4-patch.m4b"
@@ -536,7 +536,7 @@ files:
     required: false
     sha1: "49fc530e77b61f326f6e1d5a5147daa2fd67d1e2"
     md5: "9eb7b7e7cc7dad1fe08be6e73d749abe"
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_MONKEY4)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_MONKEY4), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source engines/grim/resource.cpp:159"
     note: "Patch data for Escape from Monkey Island."
 
   # ================================================================
@@ -547,7 +547,7 @@ files:
     installed_on: [lakka, recalbox, retrobat, retrodeck, retropie]
     path: "scummvm/extra/pred.dic"
     required: false
-    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_AGI)"
+    source_ref: "source dists/engine-data/engine_data.mk (ENABLE_AGI), source backends/platform/libretro/scripts/bundle_datafiles.sh:75-77, source backends/platform/libretro/src/libretro-os-utils.cpp:243, source gui/predictivedialog.cpp:119"
     note: "Predictive text dictionary for AGI engine text input (King's Quest, Space Quest, etc)."
 
   # ================================================================

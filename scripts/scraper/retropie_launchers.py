@@ -32,6 +32,9 @@ SECTIONS = ("emulators", "libretrocores", "ports")
 PACKAGES_SCRIPT = "retropie_packages.sh"
 
 BIOSDIR = "$biosdir"
+# The roms root (retropie_packages.sh:47-49): MAME's mame.ini lists rom,
+# sample and artwork folders below it (scriptmodules/emulators/mame.sh:133-136).
+ROMDIR = "$romdir"
 # The package whose config every lr- core runs under.
 LIBRETRO_FRONTEND = "retroarch"
 # The launch scripts copied next to an emulator spell the directory out.
@@ -91,6 +94,11 @@ class Launcher:
     passes_to: str | None = None
     fails_when_missing: bool | str | None = None
     depends_on_option: str | None = None
+    # For a record citing a config: where the platform's code puts it, whether
+    # that leaves a file already there, and the launch code rewriting it.
+    installs: dict[str, str] | None = None
+    kept_if_present: bool | None = None
+    overrides: list[str] | None = None
     lines: list[tuple[str, int]] = field(default_factory=list, repr=False)
 
     def entry(self) -> dict[str, Any]:
@@ -98,7 +106,8 @@ class Launcher:
         order = (
             "emulator", "package", "repo", "systems", "build", "kind", "slot",
             "names", "case_insensitive", "search_dir", "passes_to",
-            "fails_when_missing", "depends_on_option", "source_ref",
+            "fails_when_missing", "depends_on_option", "installs", "kept_if_present",
+            "overrides", "source_ref",
         )
         return {key: getattr(self, key) for key in order if getattr(self, key) is not None}
 
@@ -464,6 +473,31 @@ class Scripts:
         return results
 
 
+# The character each program splits a search list on, read in its code.
+# AdvanceMAME strtoks dir_rom on file_dir_separator(), ':' on Linux, in all
+# three builds RetroPie ships (advance/linux/file.c:138-141 and
+# advance/osd/fileio.c:696-699 at 96237a5, 685-688 at advancemame-1.4,
+# 640-643 in advancemame-0.94.0.tar.gz). MAME's path_iterator splits on ';'
+# whatever the system (src/emu/fileio.cpp:56, 64, 112 at mame0289).
+LIST_SEPARATORS = {"advmame": ":", "advmame-0.94": ":", "advmame-1.4": ":"}
+DEFAULT_LIST_SEPARATOR = ";"
+
+
+def _search_list_in_roms(event: "Event", separator: str = DEFAULT_LIST_SEPARATOR) -> bool:
+    """An iniSet whose value is a list of folders below the roms root.
+
+    One folder alone is where a program writes (cfg_directory, nvram_directory
+    and the others MAME's mame.ini sets): a list is where it searches, split
+    on the separator the program reads it with.
+    """
+    if len(event.words) < 3 or len(event.words[2]) != 1:
+        return False
+    parts = [p for p in event.words[2][0].split(separator) if p]
+    return len(parts) > 1 and all(
+        p.startswith(ROMDIR + "/") or p.startswith("${romdir}/") for p in parts
+    )
+
+
 def _mentions_bios(text: str) -> bool:
     return BIOSDIR in text or "${biosdir}" in text or BIOS_SPELLED in text
 
@@ -540,6 +574,14 @@ class PackageReader:
             return
         if command == "addEmulator":
             self._add_emulator(event)
+            return
+        if command == "iniSet" and not _mentions_bios(event.raw):
+            # A search path below the roms root: MAME reads its samples from
+            # samplepath $romdir/mame/samples;$romdir/arcade/samples.
+            if _search_list_in_roms(
+                event, LIST_SEPARATORS.get(self.package.id, DEFAULT_LIST_SEPARATOR)
+            ):
+                self._ini_set(event)
             return
         if not _mentions_bios(event.raw):
             return

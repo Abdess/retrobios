@@ -27,8 +27,8 @@ the collection. It is checked against its recipe before it is kept.
 ## Exact or canonical
 
 <!-- generated: archive-recipes -->
-- **Exact**: the same bytes as the archive in the collection. 1,794 of 2,229 archives.
-- **Canonical**: the same files inside, packed another way. 435 of 2,229 archives.
+- **Exact**: the same bytes as the archive in the collection. 1,796 of 2,231 archives.
+- **Canonical**: the same files inside, packed another way. 435 of 2,231 archives.
 <!-- /generated: archive-recipes -->
 
 An emulator reads the files inside, so both work the same. A setup that

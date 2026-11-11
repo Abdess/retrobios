@@ -278,7 +278,7 @@ class ReleaseProcessPublishesArchives(unittest.TestCase):
     def test_the_checksums_are_those_of_the_published_files(self):
         self.assertLess(
             self.text.index("scripts/split_pack.py"),
-            self.text.index("sha256sum *.zip"),
+            self.text.index("sha256sum *_BIOS_Pack*.zip"),
         )
 
 

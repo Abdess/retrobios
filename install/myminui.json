@@ -6,7 +6,7 @@
   "platform": "myminui",
   "display_name": "MyMinUI",
   "version": "2026-08-09",
-  "generated": "2026-11-09T23:51:30Z",
+  "generated": "2026-11-11T12:03:42Z",
   "base_destination": "",
   "detect": [
     {
@@ -17,11 +17,11 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 479,
-  "total_size": 1484645031,
-  "pack_files": 7425,
-  "pack_size": 1656295611,
-  "total_omitted": 4,
+  "total_files": 453,
+  "total_size": 1474881028,
+  "pack_files": 7399,
+  "pack_size": 1646531608,
+  "total_omitted": 30,
   "omitted_files": [
     {
       "dest": "Bios/DOOM/doomu.wad",
@@ -53,6 +53,292 @@
       "reason": "not_found",
       "cores": [
         "fbneo"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/coh1000a.zip",
+      "root": "emulator",
+      "name": "coh1000a.zip",
+      "system": "zn1-acclaim",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/coh1000c.zip",
+      "root": "emulator",
+      "name": "coh1000c.zip",
+      "system": "zn1-capcom",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/coh1000t.zip",
+      "root": "emulator",
+      "name": "coh1000t.zip",
+      "system": "zn1-taito",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/coh1000w.zip",
+      "root": "emulator",
+      "name": "coh1000w.zip",
+      "system": "atari-zn1",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/coh1001l.zip",
+      "root": "emulator",
+      "name": "coh1001l.zip",
+      "system": "zn1-atlus",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/coh1002e.zip",
+      "root": "emulator",
+      "name": "coh1002e.zip",
+      "system": "eighting-zn1",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/coh1002m.zip",
+      "root": "emulator",
+      "name": "coh1002m.zip",
+      "system": "zn1-tecmo",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/coh1002t.zip",
+      "root": "emulator",
+      "name": "coh1002t.zip",
+      "system": "taito-gnet",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/coh1002v.zip",
+      "root": "emulator",
+      "name": "coh1002v.zip",
+      "system": "zn1-video-system",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/coh3002c.zip",
+      "root": "emulator",
+      "name": "coh3002c.zip",
+      "system": "zn2-capcom",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/coh3002t.zip",
+      "root": "emulator",
+      "name": "coh3002t.zip",
+      "system": "taito-gnet",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/cvs.zip",
+      "root": "emulator",
+      "name": "cvs.zip",
+      "system": "century-cvs",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/decocass.zip",
+      "root": "emulator",
+      "name": "decocass.zip",
+      "system": "deco-cassette",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/konamigx.zip",
+      "root": "emulator",
+      "name": "konamigx.zip",
+      "system": "konami-gx",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/megaplay.zip",
+      "root": "emulator",
+      "name": "megaplay.zip",
+      "system": "sega-megaplay",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/megatech.zip",
+      "root": "emulator",
+      "name": "megatech.zip",
+      "system": "sega-megatech",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/model1io.zip",
+      "root": "emulator",
+      "name": "model1io.zip",
+      "system": "sega-model2",
+      "required": false,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/model1io2.zip",
+      "root": "emulator",
+      "name": "model1io2.zip",
+      "system": "sega-model2",
+      "required": false,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/namcoc74.zip",
+      "root": "emulator",
+      "name": "namcoc74.zip",
+      "system": "arcade",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/namcoc76.zip",
+      "root": "emulator",
+      "name": "namcoc76.zip",
+      "system": "namco-system11",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/neogeo.zip",
+      "root": "emulator",
+      "name": "neogeo.zip",
+      "system": "snk-neogeo-mvs",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/nss.zip",
+      "root": "emulator",
+      "name": "nss.zip",
+      "system": "nintendo-nss",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/pgm.zip",
+      "root": "emulator",
+      "name": "pgm.zip",
+      "system": "igs-pgm",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/playch10.zip",
+      "root": "emulator",
+      "name": "playch10.zip",
+      "system": "nintendo-playch10",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/skns.zip",
+      "root": "emulator",
+      "name": "skns.zip",
+      "system": "super-kaneko-nova",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
+      ]
+    },
+    {
+      "dest": "Bios/MAME/stvbios.zip",
+      "root": "emulator",
+      "name": "stvbios.zip",
+      "system": "sega-stv",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003_plus"
       ]
     },
     {
@@ -1183,266 +1469,6 @@
         "mame2003_plus"
       ],
       "category": "game_data"
-    },
-    {
-      "dest": "Bios/MAME/neogeo.zip",
-      "sha1": "b43ed646fb64625ec2e06531c274340b98bd9baa",
-      "sha256": "6c1ea40e4acf89c7a077ce0adfed7b81f86eff7ffc9ea06ff9b2904d6c22ef3a",
-      "size": 674691,
-      "repo_path": "bios/Arcade/Arcade/.variants/neogeo.zip.74df3258",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/pgm.zip",
-      "sha1": "6bbbce094422062bd178d6007bed06dcdd0d8b78",
-      "sha256": "b26918d5b844b60490a748e3afe21313db2de285c188e58bdfc72add865b9049",
-      "size": 2190114,
-      "repo_path": "bios/Arcade/Arcade/pgm.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/stvbios.zip",
-      "sha1": "b14bbed4bf459439cf7e96d2f79d7adea5d31448",
-      "sha256": "1c4970da5f7066dd213d3dca14f7e45408cf667f508f4653025626bb33fbeb14",
-      "size": 3455065,
-      "repo_path": "bios/Arcade/Arcade/stvbios.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/megaplay.zip",
-      "sha1": "c9ee16e26e03496195a7bff151efbdd89da01204",
-      "sha256": "5ba0a73114eaa86f6f5e233f2d4e2f6a38c4c383b99abc17b75f23a0940b6ba5",
-      "size": 49978,
-      "repo_path": "bios/Arcade/Arcade/megaplay.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/megatech.zip",
-      "sha1": "be1bcca32794d0eb36c86ae32a2a43c92834cdc6",
-      "sha256": "74b1591205a6c6c8f6ab62da6868dbdec5b0c886d80aa3e020220bc684a3401b",
-      "size": 24831,
-      "repo_path": "bios/Arcade/Arcade/megatech.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/decocass.zip",
-      "sha1": "1b33cf0e730a6cde96479b0face108b6931d433e",
-      "sha256": "bd86d293abab2e816d307626cdd793e2da2ed69c4124bf92f7e7eca69f9a5096",
-      "size": 22379,
-      "repo_path": "bios/Arcade/Arcade/decocass.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/playch10.zip",
-      "sha1": "125e74975da3f7ac643232210ab37c33e4ece9ca",
-      "sha256": "4734e5323c91f01c6027c9c8deeb4ad6a0cc82395436f4df7390c5b02897f47a",
-      "size": 23388,
-      "repo_path": "bios/Arcade/Arcade/playch10.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/nss.zip",
-      "sha1": "9196cf10477b2b4a1a18ace699d226817203073a",
-      "sha256": "5d763d0fead849cd834fc782be7be65746f9c19d294e9a74c13ad7abdebcc4cc",
-      "size": 33184,
-      "repo_path": "bios/Arcade/Arcade/.variants/nss.zip.cba0bd8c",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/skns.zip",
-      "sha1": "4257bd14b541fafbd555cb98ba079a3416a45934",
-      "sha256": "6edf22c68e70be06c9b32741e0d1df1aa38cf6fc162c1027c15d6c1d882f621b",
-      "size": 924762,
-      "repo_path": "bios/Arcade/Arcade/skns.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/konamigx.zip",
-      "sha1": "8cf0aa7f9dca4d77485e605fb0e2173a734633bf",
-      "sha256": "a59e2233cb32b9292e6287736f73251f3e8d590810f18d38b8f8b28492d39505",
-      "size": 8712,
-      "repo_path": "bios/Arcade/Arcade/konamigx.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/coh1000c.zip",
-      "sha1": "9e156eee236b0077a50a2cda1ff0b874390ed8db",
-      "sha256": "8411e2b6e41326d2f4b6687b445155681a82246ad2746568e5026fcd7cf58466",
-      "size": 278470,
-      "repo_path": "bios/Arcade/Arcade/coh1000c.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/coh3002c.zip",
-      "sha1": "94d49033e2c45a2591331826559bc93b2bb0884f",
-      "sha256": "a85cdfb3d5c2d0ba2ee537776ba94ef9d69dc3a2f9d7217d6404fbb00563f666",
-      "size": 137941,
-      "repo_path": "bios/Arcade/Arcade/coh3002c.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/coh1000t.zip",
-      "sha1": "c6d884d7b7ea46338efd116d6ddfa1392c624649",
-      "sha256": "d415464f70fdf2474fda692345729d77d2d35fe682cb8fbfc5999eb8c2765bee",
-      "size": 126274,
-      "repo_path": "bios/Arcade/Arcade/coh1000t.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/coh1002m.zip",
-      "sha1": "197337577f55ab4c237c3d545d63082e73748c47",
-      "sha256": "ac3c371340786919a9a420a7d0e6355709c3c5af62383e5c9ba3f90231af4723",
-      "size": 138588,
-      "repo_path": "bios/Arcade/Arcade/coh1002m.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/coh1002v.zip",
-      "sha1": "5162fcac2fa5a92480a081b3397099ce4a3703c5",
-      "sha256": "9e4fb8208d357e7d0269628be6d2916d7031d248904ed9b6fb34a814432ae5f8",
-      "size": 126314,
-      "repo_path": "bios/Arcade/Arcade/coh1002v.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/coh1000a.zip",
-      "sha1": "c91f79c7ac73519c8b99c184b2fcbffae42fa324",
-      "sha256": "7f4a45107f6eb3fcfe7078f9f2b2e5bbce1d3eff0b0e1fba84da068a69bdac8f",
-      "size": 126259,
-      "repo_path": "bios/Arcade/Arcade/coh1000a.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/coh1001l.zip",
-      "sha1": "ab30bd19261c208e2c44c35de6f68cd415fb80e9",
-      "sha256": "2d49c0d3039fcd1b5ead9a166b4bc07d5b9ad17287547fc1aa4492d6d7cada2d",
-      "size": 126185,
-      "repo_path": "bios/Arcade/Arcade/coh1001l.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/coh1000w.zip",
-      "sha1": "13bf28e3528c385b642046c2e0f96f44b33df0f2",
-      "sha256": "5fae53908dcf09d5de4d0d5d6efd8f7315ea6f52cc224caba4cf888448202b73",
-      "size": 126147,
-      "repo_path": "bios/Arcade/Arcade/coh1000w.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/coh1002e.zip",
-      "sha1": "1f15b3acc75031633387b372ea71e537f4f96220",
-      "sha256": "31d0823e4ac37f1e7c8a5d9e98e556b74001c8c34e92fcd6315af3b0852f1ff9",
-      "size": 128626,
-      "repo_path": "bios/Arcade/Arcade/coh1002e.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/coh3002t.zip",
-      "sha1": "96499a322093e675f348fae484295bdcd6d5f135",
-      "sha256": "c72148054270b006d2289d04bc71d060580597d8f4780a01dc8d1d5b975f256e",
-      "size": 785154,
-      "repo_path": "bios/Arcade/Arcade/.variants/coh3002t.zip.db439f9b",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/coh1002t.zip",
-      "sha1": "bf92b9645651332fb680c954a6da050a8a773465",
-      "sha256": "ee7c32f207d01be2f863e42c2b3a22183fd36f13029638e49fb8241ddd0ba06b",
-      "size": 216727,
-      "repo_path": "bios/Arcade/MAME/coh1002t.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/model1io.zip",
-      "sha1": "1587dcdbe3faf79d4dfa8c7248fc88698cac6ae8",
-      "sha256": "4d595b927d9c20de4064638327375d380ced62c42d3d91b658524662afd42185",
-      "size": 4700,
-      "repo_path": "bios/Arcade/Arcade/model1io.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/model1io2.zip",
-      "sha1": "18666368c9ff86bf06ec9f7ff8641c0779a59244",
-      "sha256": "1bcb201866ae36a32c73e1413a36b65b5eb25da50ed2996e1381d666a1fb6121",
-      "size": 17058,
-      "repo_path": "bios/Arcade/Arcade/model1io2.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/namcoc76.zip",
-      "sha1": "21d5d4b13286e39b6c91c6bf0bcf8fa376800dfb",
-      "sha256": "6791156b4602e06a2649ebe3216b6ede0cedb2e17ba35a3c99105f6e25819320",
-      "size": 9579,
-      "repo_path": "bios/Arcade/Arcade/namcoc76.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/namcoc74.zip",
-      "sha1": "493acecff671496212f2de7d0b6ca6561f3b6d8a",
-      "sha256": "3dc2f39b09e05bead85321c46f91424bba5a574513c5e21c496560c0080b5f1d",
-      "size": 6936,
-      "repo_path": "bios/Arcade/Arcade/namcoc74.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "Bios/MAME/cvs.zip",
-      "sha1": "1fedd2d6cce0889bf8e23fdecdbbd01d383b0497",
-      "sha256": "96389d4937afde45a53b468610cd8dab10688ae2f7393d4013af54f61ec876f5",
-      "size": 1941,
-      "repo_path": "bios/Arcade/Arcade/cvs.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
     },
     {
       "dest": "Bios/PCE/syscard3.pce",

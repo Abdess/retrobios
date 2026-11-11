@@ -92,7 +92,7 @@ files:
     required: true
     system: msx
     note: "MSX1 generic BIOS. Used by default 'MSX' machine config."
-    source_ref: "system/bluemsx/Machines/MSX/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX/config.ini:28, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSX.rom
     path: "Machines/Shared Roms/MSX.rom"
@@ -104,7 +104,7 @@ files:
     sha1: "e998f0c441f4f1800ef44e42cd1659150206cf79"
     md5: "364a1a579fe5cb8dba54519bcfcdac0d"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/MSX/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX/config.ini:28, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSXJ.rom
     installed_on: [batocera, recalbox, retrobat, retrodeck, retropie]
@@ -114,7 +114,7 @@ files:
     required: false
     system: msx
     note: "MSX1 Japanese BIOS. Used by 'MSX - Japanese' machine."
-    source_ref: "system/bluemsx/Machines/MSX - Japanese/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX - Japanese/config.ini:28, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSXJ.rom
     path: "Machines/Shared Roms/MSXJ.rom"
@@ -126,7 +126,7 @@ files:
     sha1: "df48902f5f12af8867ae1a87f255145f0e5e0774"
     md5: "f005e55c680ba6e7b19f6d4dc8f73ce5"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/MSX - Japanese/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX - Japanese/config.ini:28, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSXBR.rom
     installed_on: [batocera, recalbox, retrobat, retrodeck, retropie]
@@ -338,7 +338,7 @@ files:
     required: true
     system: msx2
     note: "MSX2 generic main BIOS. Used by default 'MSX2' machine config."
-    source_ref: "system/bluemsx/Machines/MSX2/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX2/config.ini:28, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSX2.rom
     path: "Machines/Shared Roms/MSX2.rom"
@@ -350,7 +350,7 @@ files:
     sha1: "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
     md5: "ec3a01c91f24fbddcbcab0ad301bc9ef"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/MSX2/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX2/config.ini:28, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSX2EXT.rom
     installed_on: [batocera, recalbox, retrobat, retrodeck, retropie]
@@ -360,7 +360,7 @@ files:
     required: true
     system: msx2
     note: "MSX2 extension BIOS (SubROM). Required alongside MSX2.rom."
-    source_ref: "system/bluemsx/Machines/MSX2/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX2/config.ini:31, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSX2EXT.rom
     path: "Machines/Shared Roms/MSX2EXT.rom"
@@ -372,7 +372,7 @@ files:
     sha1: "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02"
     md5: "2183c2aff17cf4297bdb496de78c2e8a"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/MSX2/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX2/config.ini:31, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSX2J.rom
     installed_on: [batocera, recalbox, retrobat, retrodeck, retropie]
@@ -764,7 +764,7 @@ files:
     required: true
     system: msx2plus
     note: "MSX2+ main BIOS. Used by default 'MSX2+' machine config (auto-selected for .dsk/.cas/.rom)."
-    source_ref: "system/bluemsx/Machines/MSX2+/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX2+/config.ini:31, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSX2P.rom
     path: "Machines/Shared Roms/MSX2P.rom"
@@ -776,7 +776,7 @@ files:
     sha1: "e90f80a61d94c617850c415e12ad70ac41e66bb7"
     md5: "847cc025ffae665487940ff2639540e5"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/MSX2+/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX2+/config.ini:31, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSX2PEXT.rom
     installed_on: [batocera, recalbox, retrobat, retrodeck, retropie]
@@ -786,7 +786,7 @@ files:
     required: true
     system: msx2plus
     note: "MSX2+ extension BIOS (SubROM)."
-    source_ref: "system/bluemsx/Machines/MSX2+/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX2+/config.ini:35, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSX2PEXT.rom
     path: "Machines/Shared Roms/MSX2PEXT.rom"
@@ -798,7 +798,7 @@ files:
     sha1: "fe0254cbfc11405b79e7c86c7769bd6322b04995"
     md5: "7c8243c71d8f143b2531f01afa6a05dc"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/MSX2+/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX2+/config.ini:35, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSX2PMUS.rom
     installed_on: [batocera, recalbox, retrobat, retrodeck, retropie]
@@ -808,7 +808,7 @@ files:
     required: true
     system: msx2plus
     note: "MSX2+ MSX-MUSIC BIOS (FM-PAC built-in). Used by MSX2+ and MSX2 default configs."
-    source_ref: "system/bluemsx/Machines/MSX2+/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX2+/config.ini:32, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSX2PMUS.rom
     path: "Machines/Shared Roms/MSX2PMUS.rom"
@@ -820,7 +820,7 @@ files:
     sha1: "6354ccc5c100b1c558c9395fa8c00784d2e9b0a3"
     md5: "f877f32e6d8687474ac5ee83e40de23b"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/MSX2+/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX2+/config.ini:32, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   # -- MSX turboR BIOS set --
 
@@ -832,7 +832,7 @@ files:
     required: true
     system: msxturboR
     note: "MSX turboR main BIOS."
-    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini"
+    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini:38, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSXTR.ROM
     path: "Machines/Shared Roms/MSXTR.ROM"
@@ -844,7 +844,7 @@ files:
     sha1: "242e73d8284a012b275c0a266844ebbc4269d787"
     md5: "fd9513736823e470965949f2a3ec6a43"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini"
+    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini:38, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSXTREXT.ROM
     installed_on: [batocera, recalbox, retrobat, retrodeck, retropie]
@@ -854,7 +854,7 @@ files:
     required: true
     system: msxturboR
     note: "MSX turboR extension BIOS."
-    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini"
+    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini:43, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSXTREXT.ROM
     path: "Machines/Shared Roms/MSXTREXT.ROM"
@@ -866,7 +866,7 @@ files:
     sha1: "018d7a5222f28514908fb1b1513286a6558a6d05"
     md5: "824b1c4475a3bd3b91c5ae81ea940aa2"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini"
+    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini:43, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSXTRMUS.ROM
     installed_on: [batocera, recalbox, retrobat, retrodeck, retropie]
@@ -876,7 +876,7 @@ files:
     required: true
     system: msxturboR
     note: "MSX turboR MSX-MUSIC BIOS."
-    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini"
+    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini:39, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSXTRMUS.ROM
     path: "Machines/Shared Roms/MSXTRMUS.ROM"
@@ -888,7 +888,7 @@ files:
     sha1: "6aea1aef5ec31c1826c22edf580525f93baad425"
     md5: "c688a229f834f95f8c64df7d33188cd8"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini"
+    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini:39, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSXTROPT.ROM
     installed_on: [batocera, recalbox, retrobat, retrodeck, retropie]
@@ -898,7 +898,7 @@ files:
     required: true
     system: msxturboR
     note: "MSX turboR option ROM (firmware utilities)."
-    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini"
+    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini:40, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSXTROPT.ROM
     path: "Machines/Shared Roms/MSXTROPT.ROM"
@@ -910,7 +910,7 @@ files:
     sha1: "b4433a3975c57dd440d6bf12dbd28b2ac1b90ef4"
     md5: "2cba0d812ec445cfe63ffa2cac8d42c2"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini"
+    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini:40, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSXDOS23.ROM
     installed_on: [batocera, recalbox, retrobat, retrodeck, retropie]
@@ -920,7 +920,7 @@ files:
     required: true
     system: msxturboR
     note: "MSX-DOS 2.3 ROM. Used by turboR default config for disk operations."
-    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini"
+    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini:45, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSXDOS23.ROM
     path: "Machines/Shared Roms/MSXDOS23.ROM"
@@ -932,7 +932,7 @@ files:
     sha1: "0527fb75775caa76c7eca8d449938ace83d36e96"
     md5: "56bf5b02fed377b7bb9d91f914965431"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini"
+    source_ref: "system/bluemsx/Machines/MSXturboR/config.ini:45, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   # -- Shared utility/extension ROMs --
 
@@ -943,7 +943,7 @@ files:
     size: 262144
     required: false
     note: "Kanji font ROM (256 KB). Used by MSX2+, turboR, and Japanese MSX2 machines."
-    source_ref: "system/bluemsx/Machines/MSX2+/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX2+/config.ini:28, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: KANJI.rom
     path: "Machines/Shared Roms/KANJI.rom"
@@ -954,7 +954,7 @@ files:
     sha1: "5aff2d9b6efc723bc395b0f96f0adfa83cc54a49"
     md5: "acf53887c2d2783dc059a9b442c86b90"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/MSX2+/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX2+/config.ini:28, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSXKANJI.rom
     installed_on: [batocera, recalbox, retrobat, retrodeck, retropie]
@@ -963,7 +963,7 @@ files:
     size: 32768
     required: false
     note: "MSX-Kanji driver ROM. Used by MSX2+, turboR, and Japanese MSX2 for kanji display."
-    source_ref: "system/bluemsx/Machines/MSX2+/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX2+/config.ini:36, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MSXKANJI.rom
     path: "Machines/Shared Roms/MSXKANJI.rom"
@@ -974,7 +974,7 @@ files:
     sha1: "dcc3a67732aa01c4f2ee8d1ad886444a4dbafe06"
     md5: "9dfdebfaa6b547222a40aab8bb2e29f8"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/MSX2+/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX2+/config.ini:36, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: FMPAC.rom
     installed_on: [batocera, recalbox, retrobat, retrodeck, retropie]
@@ -1004,7 +1004,7 @@ files:
     size: 16384
     required: false
     note: "MSX-BASIC 2 extension ROM. Used by MSX2, MSX2+, and turboR default configs."
-    source_ref: "system/bluemsx/Machines/MSX2/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX2/config.ini:34, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: XBASIC2.rom
     path: "Machines/Shared Roms/XBASIC2.rom"
@@ -1015,7 +1015,7 @@ files:
     sha1: "47370bec7ca1f0615a54eda548b07fbc0c7ef398"
     md5: "0b6120f289336538bc564548109f97c6"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/MSX2/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX2/config.ini:34, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: PAINT.rom
     installed_on: [batocera, recalbox, retrobat, retrodeck, retropie]
@@ -1024,7 +1024,7 @@ files:
     size: 65536
     required: false
     note: "Paint utility ROM. Loaded by the MSX2 - Arabic machine config."
-    source_ref: "system/bluemsx/Machines/MSX2 - Arabic/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX2 - Arabic/config.ini:30, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: PAINT.rom
     path: "Machines/Shared Roms/PAINT.rom"
@@ -1035,7 +1035,7 @@ files:
     sha1: "ace202e87337fbc54fea21e22c0b3af0abe6f4ae"
     md5: "41db0d7b37be479296ffd59fcd6775f0"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/MSX2 - Arabic/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX2 - Arabic/config.ini:30, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: SWP.rom
     installed_on: [batocera, recalbox, retrobat, retrodeck, retropie]
@@ -1116,7 +1116,7 @@ files:
     size: 2097152
     required: false
     note: "MoonSound (OPL4) wavetable ROM (2 MB). Used by MSX2, MSX2+, and turboR configs."
-    source_ref: "system/bluemsx/Machines/MSX2/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX2/config.ini:26, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: MOONSOUND.rom
     path: "Machines/Shared Roms/MOONSOUND.rom"
@@ -1127,7 +1127,7 @@ files:
     sha1: "32760893ce06dbe3930627755ba065cc3d8ec6ca"
     md5: "42af93619160ef2116416f74a6cb12f2"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/MSX2/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX2/config.ini:26, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   # -- Disk controller ROMs --
 
@@ -1138,7 +1138,7 @@ files:
     size: 16384
     required: false
     note: "Panasonic disk controller ROM. Used by MSX2+ and turboR default configs."
-    source_ref: "system/bluemsx/Machines/MSX2+/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX2+/config.ini:37, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: PANASONICDISK.rom
     path: "Machines/Shared Roms/PANASONICDISK.rom"
@@ -1149,7 +1149,7 @@ files:
     sha1: "7ed7c55e0359737ac5e68d38cb6903f9e5d7c2b6"
     md5: "00aa02b6077de40a0b51d71a3c3e1d5f"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/MSX2+/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX2+/config.ini:37, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: PHILIPSDISK.rom
     installed_on: [batocera, recalbox, retrobat, retrodeck, retropie]
@@ -1158,7 +1158,7 @@ files:
     size: 16384
     required: false
     note: "Philips disk controller ROM. Used by MSX1 and MSX2 default configs."
-    source_ref: "system/bluemsx/Machines/MSX/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX/config.ini:29, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: PHILIPSDISK.rom
     path: "Machines/Shared Roms/PHILIPSDISK.rom"
@@ -1169,7 +1169,7 @@ files:
     sha1: "c3efedda7ab947a06d9345f7b8261076fa7ceeef"
     md5: "01dd1d72ed9bb6afe8a9b441c198a1cd"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/MSX/config.ini"
+    source_ref: "system/bluemsx/Machines/MSX/config.ini:29, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: NATIONALDISK.rom
     installed_on: [batocera, recalbox, retrobat, retrodeck, retropie]
@@ -1521,7 +1521,7 @@ files:
     required: true
     system: colecovision
     note: "ColecoVision BIOS ROM. Required for ColecoVision mode."
-    source_ref: "system/bluemsx/Machines/COL - ColecoVision/config.ini"
+    source_ref: "system/bluemsx/Machines/COL - ColecoVision/config.ini:23, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: coleco.rom
     path: "Machines/COL - ColecoVision/coleco.rom"
@@ -1533,7 +1533,7 @@ files:
     sha1: "45bedc4cbdeac66c7df59e9e599195c778d86a92"
     md5: "2c66f5911e5b42b8ebe113403548eee7"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/COL - ColecoVision/config.ini"
+    source_ref: "system/bluemsx/Machines/COL - ColecoVision/config.ini:23, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   # ============================================================
   # SEGA SF-7000 BIOS
@@ -1548,7 +1548,7 @@ files:
     required: true
     system: sega-sf7000
     note: "Sega SF-7000 BIOS ROM. SG-1000 and SC-3000 have no BIOS requirement."
-    source_ref: "system/bluemsx/Machines/SEGA - SF-7000/config.ini"
+    source_ref: "system/bluemsx/Machines/SEGA - SF-7000/config.ini:23, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: sf7000.rom
     path: "Machines/SEGA - SF-7000/sf7000.rom"
@@ -1560,7 +1560,7 @@ files:
     sha1: "77339a6db2593aadc638bed77b8e9bed5d9d87e3"
     md5: "561b362f9aa4cbcb240461abf83c2e0d"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/SEGA - SF-7000/config.ini"
+    source_ref: "system/bluemsx/Machines/SEGA - SF-7000/config.ini:23, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   # ============================================================
   # Spectravideo SVI BIOS files
@@ -1574,7 +1574,7 @@ files:
     required: true
     system: spectravideo
     note: "SVI-318 BIOS ROM."
-    source_ref: "system/bluemsx/Machines/SVI - Spectravideo SVI-318/config.ini"
+    source_ref: "system/bluemsx/Machines/SVI - Spectravideo SVI-318/config.ini:23, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: svi318.rom
     path: "Machines/SVI - Spectravideo SVI-318/svi318.rom"
@@ -1586,7 +1586,7 @@ files:
     sha1: "07758272df475e5e06187aa3574241df1b14035b"
     md5: "ee6ad7ea29e791b03a28a9443e622648"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/SVI - Spectravideo SVI-318/config.ini"
+    source_ref: "system/bluemsx/Machines/SVI - Spectravideo SVI-318/config.ini:23, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: svi328.rom
     installed_on: [batocera, recalbox, retrobat, retrodeck, retropie]
@@ -1596,7 +1596,7 @@ files:
     required: true
     system: spectravideo
     note: "SVI-328 BIOS ROM."
-    source_ref: "system/bluemsx/Machines/SVI - Spectravideo SVI-328/config.ini"
+    source_ref: "system/bluemsx/Machines/SVI - Spectravideo SVI-328/config.ini:26, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: svi328.rom
     path: "Machines/SVI - Spectravideo SVI-328/svi328.rom"
@@ -1608,7 +1608,7 @@ files:
     sha1: "7d8daf52f78371ca2c9443e04827c8e1f98c8f2c"
     md5: "2cebd1db9dda475a011b7bce65c984a2"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/SVI - Spectravideo SVI-328/config.ini"
+    source_ref: "system/bluemsx/Machines/SVI - Spectravideo SVI-328/config.ini:26, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: svi328a.rom
     installed_on: [batocera, recalbox, retrobat, retrodeck, retropie]
@@ -1630,7 +1630,7 @@ files:
     sha1: "10349ce675f6d6d47f0976e39cb7188eba858d89"
     md5: "352f054ab09605070bdff49d73f335cc"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/SVI - Spectravideo SVI-328 MK2/config.ini:26"
+    source_ref: "system/bluemsx/Machines/SVI - Spectravideo SVI-328 MK2/config.ini:26, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   # ============================================================
   # Machine-specific ROMs (Machines/<machine>/)
@@ -1650,7 +1650,7 @@ files:
     required: false
     system: msx2plus
     note: "MSX2+ European main BIOS. Used by the 'MSX2+ - European' machine config."
-    source_ref: "system/bluemsx/Machines/MSX2+ - European/config.ini:34"
+    source_ref: "system/bluemsx/Machines/MSX2+ - European/config.ini:34, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: Msx2pe.rom
     path: "Machines/MSX2+ - European/Msx2pe.rom"
@@ -1662,7 +1662,7 @@ files:
     sha1: "aea0e4a635efce5336e496d36e4cb0a4b79593ff"
     md5: "277fd57c13f301fb4b366845a32d673a"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/MSX2+ - European/config.ini:34"
+    source_ref: "system/bluemsx/Machines/MSX2+ - European/config.ini:34, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: Msx2pexte.rom
     installed_on: [batocera, recalbox, retrobat, retrodeck, retropie]
@@ -1672,7 +1672,7 @@ files:
     required: false
     system: msx2plus
     note: "MSX2+ European extension BIOS (SubROM). Used by the 'MSX2+ - European' machine config."
-    source_ref: "system/bluemsx/Machines/MSX2+ - European/config.ini:39"
+    source_ref: "system/bluemsx/Machines/MSX2+ - European/config.ini:39, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: Msx2pexte.rom
     path: "Machines/MSX2+ - European/Msx2pexte.rom"
@@ -1684,7 +1684,7 @@ files:
     sha1: "cf00ec60608010aac94cfe245eb7aa67cb44d110"
     md5: "f78ab735aaad7045badbda8f4c8ac751"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/MSX2+ - European/config.ini:39"
+    source_ref: "system/bluemsx/Machines/MSX2+ - European/config.ini:39, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: pesadelo.rom
     installed_on: [batocera, recalbox, retrobat, retrodeck, retropie]
@@ -1694,7 +1694,7 @@ files:
     required: false
     system: msx
     note: "Forte II arcade board ROM (board type MSX-ForteII). Used by the 'Forte II Games - Pesadelo' machine config."
-    source_ref: "system/bluemsx/Machines/Forte II Games - Pesadelo/config.ini:27"
+    source_ref: "system/bluemsx/Machines/Forte II Games - Pesadelo/config.ini:27, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   - name: pesadelo.rom
     path: "Machines/Forte II Games - Pesadelo/pesadelo.rom"
@@ -1706,7 +1706,7 @@ files:
     sha1: "12880dd7ad82acf04861843fb9d4f0f926d18f6b"
     md5: "ba53d700ec25bcb08020ce693319cd28"
     note: "Shipped in blueMSXv282full.zip."
-    source_ref: "system/bluemsx/Machines/Forte II Games - Pesadelo/config.ini:27"
+    source_ref: "system/bluemsx/Machines/Forte II Games - Pesadelo/config.ini:27, libretro.c:1196-1197, 1447, Src/Board/Machine.c:255-266, 397-470, 623-640, 1451"
 
   # ============================================================
   # Databases (required for ROM identification/mapper detection)

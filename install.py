@@ -4308,6 +4308,21 @@ def _validate_manifest(data: object, plat: str) -> dict:
             _check_tags(mapping, key, field)
             if mapping[key] is None:
                 raise ValueError(f"invalid {field} for {key}")
+    offered = data.get("offered_boards")
+    if offered is not None:
+        if not isinstance(offered, dict) or len(offered) > MAX_MANIFEST_FILES:
+            raise ValueError("invalid offered_boards")
+        for key, places in offered.items():
+            if not isinstance(key, str) or not 0 < len(key) <= 256:
+                raise ValueError("invalid offered_boards key")
+            if not isinstance(places, list) or not all(
+                isinstance(p, dict) and isinstance(p.get("folder"), str)
+                and p.get("root") in ("roms", "install")
+                and isinstance(p.get("boards"), list)
+                and all(isinstance(b, str) for b in p["boards"])
+                for p in places
+            ):
+                raise ValueError(f"invalid offered_boards for {key}")
     titles = data.get("system_titles")
     if titles is not None:
         if not isinstance(titles, dict) or len(titles) > MAX_MANIFEST_FILES:
@@ -4914,6 +4929,33 @@ def designated_cores(
     return chosen
 
 
+def offered_here(
+    manifest: dict, entry: dict, cores: set[str], target: str | None
+) -> set[str]:
+    """The cores a board reads this file for.
+
+    A roms folder can offer a core on some boards only (ROCKNIX writes
+    uae4arm for roms/amiga under the devices it builds it for): on another
+    board, that core reads nothing there, even when the board runs it for
+    another folder. `offered_boards` gives those boards.
+    """
+    offered = manifest.get("offered_boards") or {}
+    if target is None or not offered:
+        return cores
+    tree = {"roms": "roms", None: "install"}.get(entry.get("root"))
+    if tree is None:
+        return cores
+    dest = str(entry.get("dest", ""))
+    return {
+        core for core in cores
+        if not any(
+            place["root"] == tree and dest.startswith(place["folder"] + "/")
+            and target not in place["boards"]
+            for place in offered.get(core) or []
+        )
+    }
+
+
 def narrow_to_cores(
     manifest: dict,
     names: list[str],
@@ -4950,7 +4992,8 @@ def narrow_to_cores(
                 result.append(_for_cores(entry, cores) or _settle_slot(entry, cores))
                 continue
             if entry.get("cores") is not None:
-                copy = _for_cores(entry, cores)
+                here = offered_here(manifest, entry, cores, target)
+                copy = _for_cores(entry, here)
                 if copy is not None:
                     result.append(copy)
                     continue
@@ -4958,7 +5001,7 @@ def narrow_to_cores(
                 # wants the slot and has nothing held is a file left out.
                 claim = next(
                     (c for c in entry.get("absent_claims", [])
-                     if cores.intersection(c.get("cores") or [])),
+                     if here.intersection(c.get("cores") or [])),
                     None,
                 )
                 if claim is not None:
