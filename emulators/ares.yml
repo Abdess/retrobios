@@ -98,6 +98,53 @@ config_reads:
           - "PlayStation/Firmware/BIOS.Europe"
         source_ref: "desktop-ui/emulator/playstation.cpp:19-23, 87-101"
         condition: "the disc's region"
+  - file: "settings.bml"
+    platforms: [emudeck]
+    revision: "0aafd85789215e84e1e43415c07d4c88461b7899"
+    revision_from: "v148, the tarball the Flathub manifest dev.ares.ares builds at 1259ea09 (EmuDeck installs the Flathub app)"
+    source_ref: "desktop-ui/desktop-ui.cpp:9-35, 100-103, 114, desktop-ui/settings/settings.cpp:31-35, 42, 223-235, nall/nall/path.cpp:123-142"
+    keys:
+      - key: "ColecoVision/Firmware/BIOS.World"
+        source_ref: "desktop-ui/emulator/colecovision.cpp:10-12, 42-50, mia/system/colecovision.cpp:7-9"
+      - key: "MSX/Firmware/BIOS.Japan"
+        source_ref: "desktop-ui/emulator/msx.cpp:16-19, 44-53"
+      - key: "FamicomDiskSystem/Firmware/BIOS.Japan"
+        source_ref: "desktop-ui/emulator/famicom-disk-system.cpp:17-19, 89-97"
+      - key:
+          - "Nintendo64DD/Firmware/BIOS.Japan"
+          - "Nintendo64DD/Firmware/BIOS.US"
+          - "Nintendo64DD/Firmware/BIOS.DEV"
+        source_ref: "desktop-ui/emulator/nintendo-64dd.cpp:17-19, 59-79"
+        condition: "the game's region"
+      - key: "GameBoyAdvance/Firmware/BIOS.World"
+        source_ref: "desktop-ui/emulator/game-boy-advance.cpp:12-14, 55-63"
+      - key:
+          - "MasterSystem/Firmware/BIOS.US"
+          - "MasterSystem/Firmware/BIOS.Japan"
+          - "MasterSystem/Firmware/BIOS.Europe"
+        source_ref: "desktop-ui/emulator/master-system.cpp:12-16, 93-107"
+        condition: "the game's region"
+      - key: "GameGear/Firmware/BIOS.World"
+        source_ref: "desktop-ui/emulator/game-gear.cpp:10-12, 30-40"
+      - key:
+          - "MegaCD/Firmware/BIOS.US"
+          - "MegaCD/Firmware/BIOS.Japan"
+          - "MegaCD/Firmware/BIOS.Europe"
+        source_ref: "desktop-ui/emulator/mega-cd.cpp:17-19, 63-83"
+        condition: "the disc's region"
+      - key: "NeoGeoAES/Firmware/BIOS.World"
+        source_ref: "desktop-ui/emulator/neo-geo-aes.cpp:14, 37-51, mia/system/neo-geo-aes.cpp:8-34"
+        condition: "a .zip path is searched for neo-epo.bin, any other path is read whole"
+      - key: "NeoGeoPocket/Firmware/BIOS.World"
+        source_ref: "desktop-ui/emulator/neo-geo-pocket.cpp:10-12, 32-40"
+      - key: "NeoGeoPocketColor/Firmware/BIOS.World"
+        source_ref: "desktop-ui/emulator/neo-geo-pocket-color.cpp:10-12, 32-40"
+      - key:
+          - "PlayStation/Firmware/BIOS.US"
+          - "PlayStation/Firmware/BIOS.Japan"
+          - "PlayStation/Firmware/BIOS.Europe"
+        source_ref: "desktop-ui/emulator/playstation.cpp:18-20, 78-98"
+        condition: "the disc's region"
 
 notes: |
   Multi-system emulator by Near (byuu), successor to higan/bsnes. Focuses on

@@ -265,6 +265,23 @@ class Invariants(unittest.TestCase):
         self.assertEqual(_config_reads_without_build(path, {"config_reads": closed}), [])
 
 
+class ShippedBuild(unittest.TestCase):
+    def test_a_platform_an_entry_names_is_read_there_only(self) -> None:
+        """RetroDECK ships GZDoom 4.14.2: the entry read at the pin does not
+        also stand for it, so a key only the pin reads proves nothing there."""
+        duck = profile(config_reads=[
+            {"file": "settings.ini", "source_ref": "src/core.cpp:10",
+             "keys": [{"key": "[BIOS] SearchDirectory", "source_ref": "src/settings.cpp:20"},
+                      {"key": ["[BIOS] PathPAL", "[BIOS] PathNTSCU"], "source_ref": "src/bios.cpp:30"}]},
+            {"file": "settings.ini", "platforms": ["rocknix"], "revision": "a" * 40,
+             "revision_from": "the AppImage", "source_ref": "src/core.cpp:12",
+             "keys": [{"key": "[BIOS] SearchDirectory", "source_ref": "src/settings.cpp:22"}]},
+        ])
+        evidence = config_evidence(record(), {"duck": duck}, "rocknix")
+        self.assertEqual(evidence.missing, ("config_reads: no read of [BIOS] PathPAL",))
+        self.assertTrue(config_evidence(record(), {"duck": duck}, "emuelec").proven)
+
+
 class CoreOptions(unittest.TestCase):
     def test_a_core_option_is_read_by_the_core_not_the_frontend(self) -> None:
         """RetroDECK's retroarch component writes pcsx2_bios: the frontend

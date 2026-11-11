@@ -369,13 +369,17 @@ def pool_folders(profile: dict) -> dict[str, str]:
 def _reads_apply(read: dict, profile: dict, platform: str) -> bool:
     """Whether a config_reads entry describes the build ``platform`` ships.
 
-    An entry naming platforms is read at their pin_build revision. One that
-    names none is read at the profile's pin, the build of every platform
-    with no pin_build of its own or one pinning the same commit.
+    An entry naming platforms is read at their pin_build revision or its
+    revision. One that names none is read at the profile's pin, the build
+    of every platform no entry names and with no pin_build of its own or
+    one pinning the same commit.
     """
     named = [str(p) for p in read.get("platforms") or []]
     if named:
         return platform in named
+    # A platform an entry names has its build read there, not at the pin.
+    if any(platform in (r.get("platforms") or []) for r in profile.get("config_reads") or []):
+        return False
     pin = str(profile.get("source_commit") or "")
     builds = [b for b in profile.get("pin_build") or [] if b.get("platform") == platform]
     return all(pin and str(b.get("value") or "").startswith(pin[:12]) for b in builds)

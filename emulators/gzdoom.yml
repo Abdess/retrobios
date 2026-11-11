@@ -27,6 +27,18 @@ config_reads:
         source_ref: "src/common/utility/findfile.cpp:224-260"
       - key: "[SoundfontSearch.Directories] Path"
         source_ref: "src/common/audio/music/i_soundfont.cpp:393-410"
+  - file: "gzdoom.ini"
+    platforms: [retrodeck]
+    revision: "99aa489d09015a95bb78df2b30ede29f328cc874"
+    revision_from: "GZDoom g4.14.2-m in the gzdoom binary RetroDECK's components carry at fcd0d729 (gzdoom/rd_assets/gzdoom_release/bin/gzdoom), the g4.14.2 tag"
+    source_ref: "src/gameconfigfile.cpp:89-102, 894-904, src/common/platform/posix/unix/i_specialpaths.cpp:166-169"
+    keys:
+      - key: "[IWADSearch.Directories] Path"
+        source_ref: "src/d_iwad.cpp:457-471"
+      - key: "[FileSearch.Directories] Path"
+        source_ref: "src/common/utility/findfile.cpp:224-260"
+      - key: "[SoundfontSearch.Directories] Path"
+        source_ref: "src/common/audio/music/i_soundfont.cpp:393-410"
 
 notes: |
   Doom-engine source port by Christoph Oelckers. Supports Doom, Heretic,
