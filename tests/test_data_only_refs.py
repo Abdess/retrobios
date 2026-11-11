@@ -53,17 +53,39 @@ class DataOnlySourceRefs(unittest.TestCase):
 
     def test_a_binary_with_an_address_passes(self):
         for ref in ("libemucore.so 0x1a2b3c", "Fusion.exe 0x00401000",
-                    "bigpemu FUN_006d8be0 (BootROM read)", "nethersx2 v2.2n classes.dex icons/star-%d.png"):
+                    "bigpemu FUN_006d8be0 (BootROM read)",
+                    "CSpect.exe 3.3.1.0 a.H::e() IL_00bd-IL_00c9",
+                    "GameAssembly.dll DSP1..ctor (name and CRC32)",
+                    "libpizzaboy-jni.so pizza.c:931-937 (path buffer)"):
             with self.subTest(ref=ref):
                 self.assertEqual(self.errors(ref), [])
+
+    def test_a_binary_named_without_a_place_in_it_is_refused(self):
+        for ref in ("ArcadeFlashWeb v1.0.2 pepflashplayer.dll string table",
+                    "Future Pinball.exe 1.9.1.20101231 import directory",
+                    "Main.java:27302, libfpse.so readelf -d",
+                    "nethersx2 v2.2n classes.dex icons/star-%d.png",
+                    "Fusion.exe 0x00401000, PS3Eye.dll .rdata"):
+            with self.subTest(ref=ref):
+                self.assertEqual(len(self.errors(ref)), 1)
+
+    def test_a_binary_file_of_a_source_tree_is_a_path(self):
+        self.assertEqual(self.errors(
+            "src/loader/elfLoader/elfLoader.cpp:365, libs/win32/ll-deps/zlib1.dll"), [])
+        self.assertEqual(self.errors(
+            "src/emu/kernel/src/libmanager.cpp:549-566, src/patch/ecam/group/ecam.dll.map:190-193"), [])
 
     def test_each_build_mode_is_judged(self):
         self.assertEqual(len(self.errors({"standalone": "src/main.cpp:10", "libretro": "data/list.txt:3"})), 1)
 
     def test_an_excepted_profile_is_not_judged(self):
-        name = next(iter(validate_schemas.DATA_ONLY_REF_EXCEPTIONS))
-        path = REPO_ROOT / "emulators" / f"{name}.yml"
-        self.assertEqual(validate_schemas._data_only_source_refs(path, _profile("history.txt:38")), [])
+        path = REPO_ROOT / "emulators" / "synthetic.yml"
+        exceptions = validate_schemas.DATA_ONLY_REF_EXCEPTIONS
+        exceptions["synthetic"] = "binary found nowhere"
+        try:
+            self.assertEqual(validate_schemas._data_only_source_refs(path, _profile("history.txt:38")), [])
+        finally:
+            del exceptions["synthetic"]
 
     def test_every_exception_names_a_profile_and_a_reason(self):
         for name, reason in validate_schemas.DATA_ONLY_REF_EXCEPTIONS.items():

@@ -181,8 +181,9 @@ files:
     bundled: true
     description: "Adobe Flash Access blob shipped with the runtime"
     note: >-
-      Named in the Flash library's own string table next to PepperFlashPlayer.
+      The Flash library joins its own directory and pepper.vch and hands the
+      path, with the name PepperFlashPlayer, to its Flash Access DRM callback.
       PKCS#7 over 446144 opaque bytes, signed through the Adobe Flash Access
       chain under subject CN AdobeIV-202002031156. It carries DRM material and
       no plain SWF needs it.
-    source_ref: "ArcadeFlashWeb v1.0.2 pepflashplayer.dll string table"
+    source_ref: "pepflashplayer.dll 32.0.0.371 (ArcadeFlashWeb v1.0.2, sha256 2b37e916199e1ef8) 0x104777be-0x104777d5 (plugin directory path joined with pepper.vch at 0x104777cb), 0x10477ca5-0x10477d3d (callback 0x10477c85 returns that path and PepperFlashPlayer), 0x104772a9 (callback stored in the DRM host table)"

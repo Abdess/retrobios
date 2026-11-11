@@ -31,7 +31,9 @@ notes: |
   v0.320b. The Windows and Linux archives (SuperZSNES_v0.320.zip, sha1
   c934d6b74a050ef8857595a0529ee0e0006e2d93, and SuperZSNES_v0.320.tar.gz,
   sha1 7630f6bbcda789a329ee4198ec11934feaf56e32, from zsnes.com/files)
-  carry the same VersionNo object in level0.
+  carry the same VersionNo object in level0. Method addresses are those the
+  Windows GameAssembly.dll (sha256 5643f3364802cea8) assigns to the metadata
+  methods (global-metadata.dat version 39, sha256 99a8e5dbfa9f6028).
 
   One NEC uPD7725 interpreter serves every cartridge whose header declares a
   DSP. RomLoader.GetROMType reads the cartridge type byte at $FFD6 and returns
@@ -74,7 +76,7 @@ files:
     size: 8192
     crc32: 465c4e1c
     validation: [crc32]
-    source_ref: "GameAssembly DSP1..ctor (name and expected CRC32 0x465C4E1C, compare, warn on mismatch), DSP1Core.LoadROM (8192-byte layout)"
+    source_ref: "GameAssembly.dll v0.320 DSP1..ctor at 0x1805587d0 (name and expected CRC32 0x465C4E1C loaded at 0x1805588e8, compare, warn on mismatch, zero-filled 0x2000 buffer at 0x180558e33), DSP1Core.LoadROM at 0x180555280 (8192-byte layout)"
     note: "Default for every DSP cartridge with no table entry, so it covers DSP-1 and DSP-1A titles as well. A mismatched CRC32 warns and the data is used anyway."
 
   - name: "dsp2.rom"
@@ -83,7 +85,7 @@ files:
     description: "NEC uPD7725 DSP-2 microcode"
     required: true
     size: 8192
-    source_ref: "GameAssembly DSP1..ctor (table lookup, no CRC32 check), SUPERZSNES_Data/level0 (VersionNo.dspDetections entry 0, title CRC32 0x84690f8b)"
+    source_ref: "GameAssembly.dll v0.320 DSP1..ctor at 0x1805587d0 (table lookup, no CRC32 check), SUPERZSNES_Data/level0 (VersionNo.dspDetections entry 0, title CRC32 0x84690f8b)"
     note: "Selected for header title 'DUNGEON MASTER' (Dungeon Master)."
 
   - name: "dsp3.rom"
@@ -92,7 +94,7 @@ files:
     description: "NEC uPD7725 DSP-3 microcode"
     required: true
     size: 8192
-    source_ref: "GameAssembly DSP1..ctor (table lookup, no CRC32 check), SUPERZSNES_Data/level0 (VersionNo.dspDetections entry 1, title CRC32 0xfa7f8076)"
+    source_ref: "GameAssembly.dll v0.320 DSP1..ctor at 0x1805587d0 (table lookup, no CRC32 check), SUPERZSNES_Data/level0 (VersionNo.dspDetections entry 1, title CRC32 0xfa7f8076)"
     note: "Selected for the half-width katakana header title of SD Gundam GX, 'SD' then $B6 $DE $DD $C0 $DE $D1 then 'GX'."
 
   - name: "dsp4.rom"
@@ -101,7 +103,7 @@ files:
     description: "NEC uPD7725 DSP-4 microcode"
     required: true
     size: 8192
-    source_ref: "GameAssembly DSP1..ctor (table lookup, no CRC32 check), SUPERZSNES_Data/level0 (VersionNo.dspDetections entry 2, title CRC32 0x42578645)"
+    source_ref: "GameAssembly.dll v0.320 DSP1..ctor at 0x1805587d0 (table lookup, no CRC32 check), SUPERZSNES_Data/level0 (VersionNo.dspDetections entry 2, title CRC32 0x42578645)"
     note: "Selected for header title 'TOP GEAR 3000' (Top Gear 3000)."
 
   # Seta parts. The table routes their cartridges to the same uPD7725
@@ -113,7 +115,7 @@ files:
     system: nintendo-snes
     description: "Seta ST010 microcode"
     required: true
-    source_ref: "GameAssembly DSP1..ctor (table lookup, no CRC32 check), SUPERZSNES_Data/level0 (VersionNo.dspDetections entry 3, title CRC32 0x04e7aca6)"
+    source_ref: "GameAssembly.dll v0.320 DSP1..ctor at 0x1805587d0 (table lookup, no CRC32 check), SUPERZSNES_Data/level0 (VersionNo.dspDetections entry 3, title CRC32 0x04e7aca6)"
     note: "Selected for header title 'F1 ROC II' with $00 as the 21st byte (F1 ROC II: Race of Champions)."
 
   - name: "st011.rom"
@@ -121,7 +123,7 @@ files:
     system: nintendo-snes
     description: "Seta ST011 microcode"
     required: true
-    source_ref: "GameAssembly DSP1..ctor (table lookup, no CRC32 check), SUPERZSNES_Data/level0 (VersionNo.dspDetections entry 4, title CRC32 0xc96d71c1)"
+    source_ref: "GameAssembly.dll v0.320 DSP1..ctor at 0x1805587d0 (table lookup, no CRC32 check), SUPERZSNES_Data/level0 (VersionNo.dspDetections entry 4, title CRC32 0xc96d71c1)"
     note: "Selected for header title '2DAN MORITA SHOUGI' with $00 as the 21st byte (Hayazashi Nidan Morita Shougi)."
 
   - name: "st018.rom"
@@ -129,5 +131,5 @@ files:
     system: nintendo-snes
     description: "Seta ST018 firmware"
     required: true
-    source_ref: "GameAssembly DSP1..ctor (table lookup, no CRC32 check), SUPERZSNES_Data/level0 (VersionNo.dspDetections entry 5, title CRC32 0x85885c5e)"
+    source_ref: "GameAssembly.dll v0.320 DSP1..ctor at 0x1805587d0 (table lookup, no CRC32 check), SUPERZSNES_Data/level0 (VersionNo.dspDetections entry 5, title CRC32 0x85885c5e)"
     note: "Selected for header title 'NIDAN MORITASHOGI2' (Hayazashi Nidan Morita Shougi 2)."

@@ -26,8 +26,15 @@ notes: |
 
   Batocera's generator runs bios/voxatron/vox with LD_LIBRARY_PATH set to
   bios/voxatron. x86_64 only. vox_dyn is the variant linked against the
-  system SDL2. libHoloPlayCore.so is the Looking Glass SDK the binary links
-  against.
+  system SDL2.
+
+  Refs to binary code cite vox (sha256 045d95a428c10d7e) and vox_dyn
+  (sha256 3e20fa90c40abe2d), both with their symbol tables. For a Looking
+  Glass display codo_choose_display (0x16b7a0) matches the SDL display
+  name against looking and holoplay. Neither binary loads
+  libHoloPlayCore.so: no NEEDED entry, no string or immediate naming it or
+  an hpc_ symbol, and every dlopen site is SDL's own loader for system
+  libraries.
 
 files:
   - name: vox
@@ -43,7 +50,7 @@ files:
     system: voxatron
     required: false
     description: "Voxatron dynamically linked executable"
-    source_ref: "voxatron vox_dyn, NEEDED libSDL2-2.0.so.0, batocera lexaloffleGenerator.py:20, 42"
+    source_ref: "voxatron 0.3.5b vox_dyn, DT_NEEDED libSDL2-2.0.so.0 at 0x3b2780 (loader-resolved), codo_system_init 0x15f810 call SDL_Init@plt at 0x15f831, batocera lexaloffleGenerator.py:20, 42"
     note: "The same program linked against the system SDL2 (its only extra NEEDED library). Batocera's generator never runs it."
 
   - name: vox.dat
@@ -51,48 +58,48 @@ files:
     system: voxatron
     required: true
     description: "Voxatron data file"
-    source_ref: "voxatron vox, string vox.dat at 0x2a58f, voxatron vox_dyn, string vox.dat at 0x1f1af"
-    note: "Opened from the folder of the binary that runs. Absent, vox stops with \"FATAL ERROR: could not load vox.dat\"."
+    source_ref: "voxatron 0.3.5b vox load_all_pods 0x2a560 0x2a58d-0x2a5ad (movabs vox.dat, prefixed with the program folder, codo_load_pod_set, fopen rb at 0x122d65), 0x2a670-0x2a67a (retry vox.dat in the working directory), 0x2a687-0x2a6b0 (codo_fatal_error, exit at 0x16abe4), vox_dyn load_all_pods 0x1f180 0x1f1ad-0x1f1cd, 0x1f29a, 0x1f2d0 (same sequence)"
+    note: "Opened from the folder of the binary that runs, then from the working directory. Absent from both, Voxatron stops with \"** FATAL ERROR: could not load vox.dat\"."
 
   - name: libHoloPlayCore.so
     path: voxatron/libHoloPlayCore.so
     system: voxatron
     required: false
     description: "Looking Glass holographic display support library"
-    source_ref: "voxatron vox, voxatron vox_dyn, batocera lexaloffleGenerator.py:41, 87-90"
-    note: "Neither binary links it or names it, and neither opens it in a run (strace, with and without the file). Batocera's generator sets LD_LIBRARY_PATH to bios/voxatron, where it keeps the library."
+    source_ref: "batocera lexaloffleGenerator.py:41, 87-90"
+    note: "Put on LD_LIBRARY_PATH by Batocera's generator. Neither binary loads it."
 
   - name: config.txt
     unsourceable: "written by the emulator on exit, no canonical file"
     system: voxatron
     required: false
     description: "Voxatron settings"
-    source_ref: "voxatron vox, string config.txt at 0x27bea0"
-    note: "Read beside the binary, then from ~/.lexaloffle/Voxatron, and written there when absent."
+    source_ref: "voxatron 0.3.5b vox codo_config_load 0x11a970 0x11a974-0x11a9d8 (home folder, fopen r), 0x11b156 (vdisk), 0x11b167-0x11b1a3 (beside the binary), 0x11b1d2 (neither: return with defaults), codo_config_save 0x11b480 0x11b484-0x11b4df (written to the home folder, called from codo_exit.part.2 at 0x10eb30)"
+    note: "Read from ~/.lexaloffle/Voxatron, else from beside the binary, and written to ~/.lexaloffle/Voxatron on exit."
 
   - name: sdl_controllers.txt
     unsourceable: "user supplied, no canonical file"
     system: voxatron
     required: false
     description: "Custom SDL controller mappings"
-    source_ref: "voxatron vox, string sdl_controllers.txt at 0x2847f7"
-    note: "Read beside the binary, then from ~/.lexaloffle/Voxatron, where Voxatron writes it when absent."
+    source_ref: "voxatron 0.3.5b vox add_sdl_controllers 0x169cc0 0x169cc4-0x169d06 (beside the binary, fopen r), 0x169d14-0x169d33 (home folder), 0x169d40-0x169d6b (created there with a comment line when absent), 0x169e1c-0x169e3a (fgets, SDL_GameControllerAddMapping per line), called from codo_joystick_init at 0x169f23"
+    note: "Processed beside the binary when present, then from ~/.lexaloffle/Voxatron, where Voxatron writes it when absent."
 
   - name: favourites.txt
     unsourceable: "written by the emulator, no canonical file"
     system: voxatron
     required: false
     description: "Cart browser favourites list"
-    source_ref: "voxatron vox, string favourites.txt at 0x27a39e"
-    note: "Read from ~/.lexaloffle/Voxatron."
+    source_ref: "voxatron 0.3.5b vox reload_favourites 0xf6bb0 0xf6bb1-0xf6be7, splore_init 0xfaeb0 0xfb15d-0xfb175 (populate_splore_list_from_text_file), save_splore_favourites 0xf4ee0 0xf4ee4"
+    note: "Read from ~/.lexaloffle/Voxatron and written there by the cart browser."
 
   - name: internal_carts.txt
     unsourceable: "written by the emulator, no canonical file"
     system: voxatron
     required: false
     description: "Voxatron internal cart list"
-    source_ref: "voxatron vox, string internal_carts.txt at 0x27a446"
-    note: "Read from ~/.lexaloffle/Voxatron and written there at startup."
+    source_ref: "voxatron 0.3.5b vox splore_init 0xfaeb0 0xfaefc-0xfaf0e (codo_file_exists in the home folder), 0xfaf21-0xfaf45 (written from a built-in list when absent), 0xfaf54 (populate_splore_list_from_text_file), populate_internal_carts_list 0xfae10 0xfae12-0xfae87 (same sequence)"
+    note: "Read from ~/.lexaloffle/Voxatron, written there from a list built into the binary when absent."
 
   - name: player_1.vpp
     path: player/player_1.vpp
@@ -100,5 +107,5 @@ files:
     system: voxatron
     required: false
     description: "Voxatron player profile"
-    source_ref: "voxatron vox, string player/player_%d.vpp at 0x273f90"
+    source_ref: "voxatron 0.3.5b vox switch_to_profile 0x88220 0x8822d-0x8828e (player/player_%d.vpp in the home folder), 0x882cf (codo_fopen rb), 0x882d7 (absent: nothing read), save_current_player_profile 0x88460 0x88463-0x884be (codo_fopen wb)"
     note: "Read from ~/.lexaloffle/Voxatron/player, and written there when absent."
