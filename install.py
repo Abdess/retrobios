@@ -14044,11 +14044,11 @@ def write_pack(path: Path, manifest: bytes, members: list[PackMember],
     scratches: list[Path] = []
     try:
         for index, (final, chosen) in enumerate(zip(finals, plan), 1):
-            handle, scratch = tempfile.mkstemp(prefix=f".{final.name}.", suffix=".partial",
-                                               dir=str(path.parent))
+            handle, made = tempfile.mkstemp(prefix=f".{final.name}.", suffix=".partial",
+                                            dir=str(path.parent))
             os.close(handle)
-            scratches.append(Path(scratch))
-            with zipfile.ZipFile(scratch, "w", zipfile.ZIP_DEFLATED,
+            scratches.append(Path(made))
+            with zipfile.ZipFile(made, "w", zipfile.ZIP_DEFLATED,
                                  compresslevel=PACK_COMPRESSLEVEL) as archive:
                 if count > 1:
                     archive.writestr(
@@ -18439,12 +18439,16 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         files = manifest.get("files", [])
         omitted_files = manifest.get("omitted_files", [])
         variants = manifest.get("case_variants", [])
-        # A ZIP keeps both spellings: the device installing it folds them.
-        case_kept = packing or keeps_case(bios_path)
+        case_kept = keeps_case(bios_path)
         if variants and case_kept:
             # The list is folded for Windows and macOS, but here bios.col and
             # BIOS.col are two files that two cores open.
             files = files + [{**variant, "case_variant": True} for variant in variants]
+        elif packing:
+            # A ZIP keeps both spellings, whatever drive it is written to:
+            # the device installing it folds them.
+            files = files + [{**variant, "case_variant": True} for variant in variants]
+            case_kept = True
         if not case_kept:
             files, folded = fold_case_twins(files)
             if folded:
@@ -18600,7 +18604,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         # one read from an unknown save directory left out. Said once the
         # choice is made, over the files it keeps (say_saves).
         display = display_name(plat_name, manifest)
-        unplaced = []
+        unplaced: list[dict] = []
         if not packing:
             # A pack keeps every root's files: the device installing it
             # places them.
