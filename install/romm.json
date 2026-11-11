@@ -9450,6 +9450,7 @@
       "zesarux"
     ],
     "snk-neogeo-aes": [
+      "ares",
       "fba2x",
       "fbneo",
       "fbneo_neogeo",
@@ -9482,7 +9483,10 @@
       "advmame",
       "advmame-0.94",
       "advmame-1.4",
+      "ares",
       "fba2x",
+      "fbalpha2012",
+      "fbalpha2012_neogeo",
       "fbalpha2019",
       "fbneo",
       "fbneo_neogeo",

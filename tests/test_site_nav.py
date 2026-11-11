@@ -500,16 +500,20 @@ class MetaFields(unittest.TestCase):
         self.assertEqual(sitestarlight.file_names_meta("<p>no card</p>"), "")
 
     def test_system_pages_carry_the_platforms_names(self) -> None:
-        page = DOCS / "systems" / "sony-playstation.md"
-        if not page.is_file():
+        def page(stem: str) -> Path | None:
+            # A page with tabs is MDX: reading .md alone skipped this test.
+            return next((p for p in (DOCS / "systems" / f"{stem}.md",
+                                     DOCS / "systems" / f"{stem}.mdx") if p.is_file()), None)
+
+        playstation = page("sony-playstation")
+        if playstation is None:
             self.skipTest("site pages not generated")
-        text = page.read_text(encoding="utf-8")
+        text = playstation.read_text(encoding="utf-8")
         match = re.search(r'data-pagefind-meta="aliases:([^"]*)"', text)
         self.assertIsNotNone(match, "no aliases field on the PlayStation page")
         self.assertIn("psx", unescape(match[1]).split())
         # The Dreamcast section's page: its own, or Sega's when it fits there.
-        own = DOCS / "systems" / "sega-dreamcast.md"
-        dreamcast = (own if own.is_file() else DOCS / "systems" / "sega.md").read_text(
+        dreamcast = (page("sega-dreamcast") or page("sega") or DOCS / "systems" / "sega.md").read_text(
             encoding="utf-8")
         self.assertRegex(dreamcast, r'data-pagefind-meta="aliases:[^"]*\bdc\b')
 

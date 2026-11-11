@@ -6937,9 +6937,30 @@ def _start_groups(
     weak = {key for key, emulators in requiring.items()
             if len(emulators) <= len({e for e in optional.get(key, ())
                                       if needs_other.get(e, set()) - {key}})}
+    # A group's members are one requirement, any of them answering it: the
+    # emulator requires on the line the member most emulators require, its
+    # search order breaking a tie. PicoDrive's four Europe Mega CD names
+    # each read as a file to get beside the bios_CD_E.bin of every other.
+    members: dict[tuple, list[tuple[tuple, str]]] = {}
+    for f in ranked:
+        for emulator, entry, _system, name, named in reading(f):
+            if entry.get("group") and entry.get("required", True) and not entry.get("hle_fallback"):
+                key = named or _visible(name)
+                place = (emulator, str(entry["group"]),
+                         tuple(sorted(str(r) for r in entry.get("region") or [])))
+                rank = (-len(requiring.get(key, ())),
+                        entry["priority"] if isinstance(entry.get("priority"), int) else _NO_PRIORITY,
+                        _visible(name))
+                members.setdefault(place, []).append((rank, key))
+    chosen = {place: min(found)[1] for place, found in members.items()}
 
     for f in ranked:
         for emulator, entry, system, name, named in reading(f):
+            if entry.get("group") and entry.get("required", True) and not entry.get("hle_fallback"):
+                place = (emulator, str(entry["group"]),
+                         tuple(sorted(str(r) for r in entry.get("region") or [])))
+                if chosen.get(place) != (named or _visible(name)):
+                    continue
             try:
                 key = system_name(system) if system else None
             except KeyError:

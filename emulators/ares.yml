@@ -37,7 +37,8 @@ systems:
   - laseractive
   - msx
   - msx2
-  - neo-geo
+  - snk-neogeo-aes
+  - snk-neogeo-mvs
   - snk-ngp
   - snk-ngpc
   - nintendo-64
@@ -360,7 +361,7 @@ files:
 
   # --- Neo Geo AES ---
   - name: aes.zip
-    system: neo-geo
+    system: snk-neogeo-aes
     required: true
     found_by: name
     load_from: content_dir
@@ -378,7 +379,7 @@ files:
 
   # --- Neo Geo MVS ---
   - name: neogeo.zip
-    system: neo-geo
+    system: snk-neogeo-mvs
     required: true
     found_by: name
     load_from: content_dir
