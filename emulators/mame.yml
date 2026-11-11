@@ -4407,24 +4407,10 @@ files:
     system: videopac
     source_ref: "upstream src/mame/philips/odyssey2.cpp:902-905, upstream src/mame/philips/odyssey2.cpp:942"
     note: >-
-      The machine also loads the i8245 set.
-    contents:
-      - name: "o2bios.rom"
-        description: "BIOS"
-        size: 1024
-        crc32: "8016a315"
-        sha1: "b2e1955d957a475de2411770452eff4ea19f4cee"
-
-  - name: odyssey2.zip
-    path: "mame/bios/odyssey2.zip"
-    standalone_path: "odyssey2.zip"
-    required: false
-    category: bios_zip
-    system: odyssey2
-    source_ref: "upstream src/mame/philips/odyssey2.cpp:907-910, upstream src/mame/philips/odyssey2.cpp:944"
-    note: >-
-      Clone of videopac, the same BIOS, also looked up in videopac.zip. The
-      machine also loads the i8244 set.
+      The machine also loads the i8245 set. Its clone odyssey2 (Magnavox
+      Odyssey 2, src/mame/philips/odyssey2.cpp:907-910, 944) declares the
+      same o2bios.rom, which a ROM search along the parent chain finds in
+      this archive, and loads the i8244 set.
     contents:
       - name: "o2bios.rom"
         description: "BIOS"
