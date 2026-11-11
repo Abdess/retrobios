@@ -727,9 +727,11 @@ def get_page_title(platform_name: str, display: str) -> str:
     """What a get/ page holds, by its name: the ZIP of a setup a release
     publishes one for, the files of any other. "Download KNULLI" read as
     the system's own download. A setup that is also an emulator (BizHawk)
-    names it last: "BizHawk BIOS files" is the title of its emulator page."""
+    names it last: "BizHawk BIOS files" is the title of its emulator page.
+    A profile listing no file (the RetroArch frontend) titles its page
+    "... emulator", which no setup title repeats."""
     kind = "BIOS pack" if has_release_pack(platform_name) else "BIOS files"
-    if (siteinputs.current().emulators / f"{platform_name}.yml").is_file():
+    if (_profiles_on_disk().get(platform_name) or {}).get("files"):
         return f"{kind} for {display}"
     return f"{display} {kind}"
 
