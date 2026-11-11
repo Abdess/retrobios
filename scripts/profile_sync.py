@@ -1047,6 +1047,11 @@ class ProfileReport:
     new_files_elided: dict[str, int] = field(default_factory=dict)
     new_hashes: list[dict] | None = None
     detection_skipped: str | None = None
+    # config_reads refs written for a build a platform ships, each read at
+    # that build (pin_build) rather than at source_commit: {platform,
+    # revision, ref, status, detail}. A status other than BUILD_OK is review
+    # work.
+    build_refs: list[dict] = field(default_factory=list)
 
     # Skips that say the profile cannot be checked as written: a repository
     # that no longer answers, no pin to read, a death the forge contradicts.
@@ -1070,6 +1075,7 @@ class ProfileReport:
             + len(self.orphaned)
             + len(self.stale_prose or ())
             + len(self.moved_repos)
+            + sum(1 for ref in self.build_refs if ref["status"] != "BUILD_OK")
         )
 
 
@@ -1603,6 +1609,84 @@ def moved_repositories(
     return moved
 
 
+def shipped_build_holders(profile: dict) -> dict[int, dict]:
+    """The source_ref holders of config_reads entries naming platforms, by id.
+
+    Such an entry describes the build those platforms ship, so its refs are
+    read at their pin_build revision, never at source_commit.
+    """
+    found: dict[int, dict] = {}
+    for read in profile.get("config_reads") or []:
+        if not isinstance(read, dict) or not read.get("platforms"):
+            continue
+        found[id(read)] = read
+        for key in read.get("keys") or []:
+            if isinstance(key, dict):
+                found[id(key)] = read
+    return found
+
+
+def build_revision(profile: dict, platform: str) -> str | None:
+    """The emulator revision a platform's pin_build entry names, None when
+    its value is no revision (a URL, a package name)."""
+    for build in profile.get("pin_build") or []:
+        if build.get("platform") != platform:
+            continue
+        value = str(build.get("value") or "").strip()
+        return value if value and re.fullmatch(r"[\w.+-]+", value) else None
+    return None
+
+
+def _check_build_refs(
+    profile: dict,
+    deferred: list[tuple[Citation, dict]],
+    views: list[RepoView],
+    fetch: Callable[[upstream.Repo, str, str], list[str] | None],
+) -> list[dict]:
+    """Each deferred config_reads ref read at the build of its platforms.
+
+    The file must exist at that revision and every cited line lie inside
+    it. The entry declares no value to anchor on, so this is the check a
+    ref past the end of its file fails (BUILD_GONE), not a content match.
+    """
+    results: list[dict] = []
+    for citation, read in deferred:
+        for platform in read.get("platforms") or []:
+            # A closed build is named by its binary: an address ref is
+            # skipped below, a source path cannot exist at a sha256.
+            revision = (str(read.get("revision") or read.get("binary_sha256") or "")
+                        or build_revision(profile, str(platform)))
+            row = {"platform": str(platform), "revision": revision or "",
+                   "ref": citation.ref, "field": citation.field}
+            if revision is None:
+                results.append({**row, "status": "BUILD_UNREAD",
+                                "detail": "no pin_build revision for this platform"})
+                continue
+            problems: list[str] = []
+            for part in split_source_ref(citation.ref):
+                role, path = ref_role(part.path)
+                if " " in path:
+                    # A project word in front (`ROCKNIX patches/x.patch:4`):
+                    # a file of the platform's tree, read with the record.
+                    continue
+                lines = next(
+                    (found for view in views
+                     if (not role or view.field == role)
+                     and (found := fetch(view.repo, revision, path)) is not None),
+                    None,
+                )
+                if lines is None:
+                    problems.append(f"{part.path} absent at {revision[:12]}")
+                elif (part.end or part.start or 0) > len(lines):
+                    problems.append(f"{part.raw} past the end ({len(lines)} lines)")
+            results.append({
+                **row,
+                "status": "BUILD_GONE" if problems else "BUILD_OK",
+                "detail": "; ".join(problems),
+            })
+    return results
+
+
 def build_report(
     name: str, profile: dict, cache_dir: str, offline: bool = False,
     text: str | None = None,
@@ -1621,7 +1705,13 @@ def build_report(
     )
     modes = {mode for _, mode, _ in declared_repositories(profile) if mode}
     refs = []
+    at_build = shipped_build_holders(profile)
+    deferred: list[tuple[Citation, dict]] = []
     for citation in collect_citations(profile, text):
+        if citation.kind == "ref" and id(citation.holder) in at_build:
+            # Written for the build a platform ships: read at pin_build.
+            deferred.append((citation, at_build[id(citation.holder)]))
+            continue
         if citation.kind == "ref":
             entry = citation.entry
             display = str(entry.get("name") or "") or citation.field
@@ -2204,6 +2294,8 @@ def build_report(
             )
         return result
 
+    report.build_refs = _check_build_refs(profile, deferred, views, fetch_from)
+
     staged = []
     for entry_name, ref, tokens, hashes, ref_parts, citation in refs:
         flags = [self_checked(part, tokens) for part in ref_parts]
@@ -2335,6 +2427,14 @@ def format_report(report: ProfileReport, changed_only: bool = False) -> str:
     lines.append(f"  {len(report.entries)} refs: {summary}")
     for line in report.stale_prose or ():
         lines.append(f"  prose under an older pin: {line}")
+    for ref in report.build_refs:
+        if changed_only and ref["status"] == "BUILD_OK":
+            continue
+        detail = f": {ref['detail']}" if ref["detail"] else ""
+        lines.append(
+            f"  {ref['status']} at {ref['platform']} build "
+            f"{ref['revision'][:12] or '-'}  {ref['ref']}{detail}"
+        )
     lines.append(f"  {report.needs_review()} to review")
     return "\n".join(lines)
 
@@ -3582,10 +3682,11 @@ def bump_commit(
     if pending_recale(report, accept_changed, text):
         return False
     document = yaml.safe_load(text)
-    if document.get("built_by"):
+    if document.get("built_by") and not document.get("pin_follows"):
         # The pin is the commit a platform builds (recalbox gsplus.mk, the
         # mame0258 its package fetches), not a point on a moving branch:
-        # HEAD is a build nobody ships under this name.
+        # HEAD is a build nobody ships under this name. A build of the
+        # branch tip (RetroPie's advmame) is HEAD, and follows it.
         print(
             f"{path.stem}: pinned to the build {', '.join(document['built_by'])} "
             "ships, advanced by hand",
@@ -3644,6 +3745,8 @@ def bump_commit(
     expected = dict(document)
     expected["source_commit"] = report.head
     new_text = _set_pin(text, document, "source_commit", report.head, "profiled_date")
+    if document.get("pin_follows") and report.head:
+        new_text, expected = _follow_config_reads(new_text, expected, document, report.head)
     if upstream_moves:
         expected["upstream_commit"] = report.upstream_head
         new_text = _set_pin(
@@ -3698,6 +3801,28 @@ def cites_primary(report: ProfileReport) -> bool:
         if part.status != "EXTERNAL"
     ]
     return not parts or any(part.repo is None for part in parts)
+
+
+def _follow_config_reads(
+    text: str, expected: dict, document: dict, head: str
+) -> tuple[str, dict]:
+    """A config_reads entry read at the pin moves with a pin that follows the
+    branch tip: RetroPie installs advmame from the tip, so the build its
+    advmame.rc is read at is the pin itself."""
+    pin = str(document.get("source_commit") or "")
+    reads = document.get("config_reads") or []
+    if not pin or not any(isinstance(r, dict) and r.get("revision") == pin for r in reads):
+        return text, expected
+    text = re.sub(
+        r'^(\s*revision:\s*)(["\']?)' + re.escape(pin) + r"\2\s*$",
+        lambda m: f"{m.group(1)}{m.group(2)}{head}{m.group(2)}",
+        text, flags=re.M,
+    )
+    expected = {**expected, "config_reads": [
+        {**r, "revision": head} if isinstance(r, dict) and r.get("revision") == pin else r
+        for r in reads
+    ]}
+    return text, expected
 
 
 def _set_pin(text: str, document: dict, field: str, value: str, after: str) -> str:

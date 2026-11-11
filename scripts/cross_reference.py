@@ -42,6 +42,7 @@ from common import (
     load_database,
     load_emulator_profiles,
     load_platform_config,
+    content_fits,
     name_match_size_ok,
     parse_md5_list,
     require_platform,
@@ -55,9 +56,11 @@ from common import (
 from hashing import parse_hash_list
 from launchers import (
     LauncherLayer,
+    bound_launchers,
     catalogued_model_files,
     declared_destinations,
     held_record,
+    launcher_unproven,
     name_settings,
     set_by,
     setting_readers,
@@ -247,6 +250,7 @@ def _resolve_source(
             sha1s = [sha1s]
         return any(
             name_match_size_ok(file_entry, db_files.get(sha1, {}).get("size"))
+            and content_fits(file_entry, db_files.get(sha1, {}).get("path", ""))
             and _record_carries(sha1, db_files.get(sha1, {}), declared)
             for sha1 in sha1s
         )
@@ -1093,6 +1097,8 @@ def _settle_launcher_places(
 
 # The --json key of the launcher reads category, beside the emulator keys.
 LAUNCHER_READS_KEY = "_launcher_reads_not_held"
+# The --json key of the launcher records a config file does not prove.
+LAUNCHER_UNPROVEN_KEY = "_launcher_unproven"
 
 # A package record names no file: it records what a package builds.
 _NAMELESS_KINDS = frozenset({"package"})
@@ -1236,7 +1242,9 @@ def launcher_reads_not_held(
     rows: list[dict] = []
     for platform, config in configs.items():
         by_key: dict[str, dict] = {}
-        for record in config.get("launchers") or []:
+        # A record resting on a config file it cannot prove reads nothing
+        # yet: it is reported apart (launcher_unproven).
+        for record in bound_launchers(config, profiles):
             names = launcher_file_names(record)
             if not names:
                 continue
@@ -1327,6 +1335,25 @@ def launcher_reads_not_held(
                     row["readers"].append(reader)
         rows.extend(by_key[key] for key in sorted(by_key, key=str.casefold))
     return rows
+
+
+def print_launcher_unproven(rows: list[dict]) -> None:
+    """The launcher records resting on a config file the code does not prove.
+
+    Neither a pack, a manifest nor a severity reads them: each is listed
+    with the links it lacks.
+    """
+    if not rows:
+        return
+    platforms = sorted({r["platform"] for r in rows})
+    noun = "platform" if len(platforms) == 1 else "platforms"
+    print(f"\nLauncher records unproven: {len(rows)} across {len(platforms)} {noun}")
+    for platform in platforms:
+        print(f"\n{platform}")
+        for row in (r for r in rows if r["platform"] == platform):
+            print(f"    [{row['index']}] {row['emulator']} {row['kind']}: {row['passes_to']}")
+            for link in row["missing"]:
+                print(f"        missing {link}")
 
 
 def print_launcher_reads(rows: list[dict]) -> None:
@@ -1647,8 +1674,25 @@ def main() -> None:
         db, all_profiles, registry, emulator or "",
     )
 
+    unproven = [
+        row for row in launcher_unproven(
+            {
+                name: load_platform_config(name, args.platforms_dir)
+                for name in (selected or list_registered_platforms(args.platforms_dir))
+            },
+            all_profiles,
+        )
+        if not emulator or any(
+            emulator in LauncherLayer._profiles_named(part, all_profiles, set(all_profiles))
+            for part in row["emulator"].split(", ")
+        )
+    ]
+
     if args.json:
-        print(json.dumps({**report, LAUNCHER_READS_KEY: launcher_reads}, indent=2))
+        print(json.dumps(
+            {**report, LAUNCHER_READS_KEY: launcher_reads, LAUNCHER_UNPROVEN_KEY: unproven},
+            indent=2,
+        ))
     else:
         if emulator:
             scope = emulator
@@ -1658,6 +1702,7 @@ def main() -> None:
             scope = "all emulators"
         print_report(report, scope, show_clean=bool(args.emulator))
         print_launcher_reads(launcher_reads)
+        print_launcher_unproven(unproven)
 
 
 if __name__ == "__main__":

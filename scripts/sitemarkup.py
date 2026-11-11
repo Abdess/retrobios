@@ -225,10 +225,11 @@ def _tile_mark(name: str, logo: str, lazy: bool = False) -> str:
         loading = ' loading="lazy"' if lazy else ""
         return (f'<img class="rb-card-logo" src="{html.escape(logo)}" alt="" '
                 f'width="40" height="40"{loading}>')
-    # The same square as a logo, drawn on white like the logos are.
-    return ('<svg class="rb-card-logo" viewBox="0 0 40 40" width="40" height="40" aria-hidden="true">'
-            '<text x="20" y="25" text-anchor="middle" font-size="14" font-weight="700" '
-            f'fill="#2b2e5c">{html.escape(initials(name))}</text></svg>')
+    # The same square as a logo, drawn on white like the logos are. The
+    # letters are the stylesheet's (::before), not text of the page: the
+    # tile's name follows, and a copy or a text dump read "MMMyMinUI".
+    return (f'<span class="rb-card-logo rb-card-initials" data-initials="{html.escape(initials(name))}" '
+            'aria-hidden="true"></span>')
 
 
 # Tiles in the first row of a grid at its widest, two columns of 15rem in
@@ -246,8 +247,8 @@ def platform_tiles(tiles: list[tuple[str, str, str, str]], eager: int = 0) -> li
     links = "".join(
         f'<a class="rb-card rb-tile" href="{html.escape(target)}">'
         f"{_tile_mark(name, logo, lazy=index >= eager)}"
-        f'<strong class="rb-tile-name">{html.escape(name)}</strong>'
-        f'<span class="rb-tile-runs">{inline_html(runs_on)}</span></a>'
+        f'<strong class="rb-tile-name">{html.escape(name)}</strong> '
+        f'<span class="rb-tile-runs">{inline_html(runs_on)}</span></a> '
         for index, (name, target, logo, runs_on) in enumerate(tiles)
     )
     return [f'<div class="rb-cards rb-tiles">{links}</div>', ""]

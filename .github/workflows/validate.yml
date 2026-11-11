@@ -267,21 +267,31 @@ jobs:
       # core_probe and the campaign run third-party cores only inside a
       # bubblewrap sandbox and refuse without one. Ubuntu 24.04 blocks the
       # unprivileged user namespaces bwrap needs, so the campaign tests saw
-      # "refused". The last command proves a sandbox starts.
+      # "refused". The last command proves a sandbox starts. On 2026-11-11
+      # two runs could not resolve any Ubuntu mirror: apt retries each file,
+      # and the whole install runs once more after 30 s.
       - name: Give the sandbox tests a working bubblewrap
         run: |
-          sudo apt-get install -y --no-install-recommends bubblewrap
+          apt="sudo apt-get -o Acquire::Retries=5 -o Acquire::http::Timeout=30"
+          get_bwrap() { $apt update && $apt install -y --no-install-recommends bubblewrap; }
+          get_bwrap || { sleep 30; get_bwrap; }
           sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
           bwrap --ro-bind /usr /usr --symlink usr/lib /lib --symlink usr/lib64 /lib64 --symlink usr/bin /bin --proc /proc --dev /dev --unshare-all /bin/true
 
       # The site is built as deploy-site.yml builds it, from the lockfile.
+      # Neither this nor the two fetches below needs bubblewrap: a failed
+      # sandbox step skipped all four, and the suite then failed on missing
+      # data trees and an absent astro instead of on the sandbox alone. The
+      # bubblewrap step still fails the job.
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1  # v7.1.0
+        if: ${{ !cancelled() }}
         with:
           node-version: "24"
           cache: npm
           cache-dependency-path: website/package-lock.json
 
-      - run: npm ci --prefix website
+      - if: ${{ !cancelled() }}
+        run: npm ci --prefix website
 
       # The exporter fidelity cases compare what we hand back against the
       # file each platform publishes, so they need those files. --fetch
@@ -289,12 +299,14 @@ jobs:
       # download, so the cases skipped on every run: --refresh-cache only
       # downloads them.
       - name: Fetch the platforms' own files
+        if: ${{ !cancelled() }}
         run: python scripts/export_native.py --all --refresh-cache
 
       # A pack built without its data directories exits non-zero: it is not
       # the pack a user gets. Tests that build packs need the same trees a
       # release build has, as deploy-site.yml fetches them.
       - name: Fetch the data directories
+        if: ${{ !cancelled() }}
         run: python scripts/refresh_data_dirs.py
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

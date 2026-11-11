@@ -45,6 +45,37 @@ data_root:
     source_ref: "ui/xemu-settings.cc:51-63, 73-92"
     note: "xemu.toml beside the executable makes its folder the root"
 
+pin_build:
+  - platform: rocknix
+    repo: "https://github.com/ROCKNIX/distribution"
+    revision: "20261101"
+    path: "projects/ROCKNIX/packages/emulators/standalone/xemu-sa/package.mk"
+    variable: PKG_VERSION
+    value: "cbffb57d084c70351a596e99e32a8b73e0c5eabf"
+config_reads:
+  - file: "xemu.toml"
+    platforms: [rocknix]
+    source_ref: "ui/xemu.c:1314-1325, ui/xemu-settings.cc:65-71, 94-104, 158-207"
+    keys:
+      - key: "[sys.files] bootrom_path"
+        source_ref: "system/vl.c:2983-3016"
+      - key: "[sys.files] flashrom_path"
+        source_ref: "system/vl.c:3041-3054"
+        condition: "[general] show_welcome false"
+      - key: "[sys.files] eeprom_path"
+        source_ref: "system/vl.c:2909-2949, 3030-3039"
+      - key: "[sys.files] hdd_path"
+        source_ref: "system/vl.c:3060-3074"
+  - file: "xemu.toml"
+    platforms: [retrobat]
+    revision: "fc24584ce88f0915ad7f04775bb7712c2e3f49ee"
+    revision_from: "xemu.exe 0.8.136 in RetroBat's stable xemu.7z, 2026-11-10"
+    source_ref: "ui/xemu.c:1325, ui/xemu-settings.cc:51-63, 73-92, 94-104, 158-207"
+    keys:
+      - key: "[sys.files] flashrom_path"
+        source_ref: "system/vl.c:3041-3054"
+        condition: "[general] show_welcome false"
+
 notes: |
   Full-system Xbox emulator built on QEMU. The libretro core is built from
   libretro's xemu-libretro tree on its libretro branch, which merges
@@ -131,9 +162,10 @@ files:
   - name: Complex_4627.bin
     mode: standalone
     required: true
-    size: [262144, 524288, 1048576]
+    min_size: 65536
+    size_multiple: 65536
     validation: [size]
-    size_note: "Any size that is a positive multiple of 64 KiB is mapped, and the image is mirrored across the 16 MB flash window"
+    size_note: "Any size that is a positive multiple of 64 KiB is mapped (hw/xbox/xbox.c:75-81), and the image is mirrored across the 16 MB flash window"
     config_key: sys.files.flashrom_path
     found_by: content
     description: "Xbox flash ROM image"
@@ -150,9 +182,10 @@ files:
     path: "xemu/Complex_4627.bin"
     aliases: [Complex_4627v1.03.bin]
     required: true
-    size: [262144, 524288, 1048576]
+    min_size: 65536
+    size_multiple: 65536
     validation: [size]
-    size_note: "Any size that is a positive multiple of 64 KiB is mapped, and the image is mirrored across the 16 MB flash window"
+    size_note: "Any size that is a positive multiple of 64 KiB is mapped (hw/xbox/xbox.c:75-81), and the image is mirrored across the 16 MB flash window"
     description: "Xbox flash ROM image"
     note: >-
       The core tries Complex_4627v1.03.bin, then Complex_4627.bin, in

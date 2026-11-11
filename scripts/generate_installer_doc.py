@@ -8,7 +8,8 @@ Each table sits between `<!-- generated: NAME -->` and
 `<!-- /generated: NAME -->`. What install.py knows is written from it: the
 options and their arguments from its parser, the event kinds and their keys
 from EVENT_KEYS, the exit codes from its sys.exit calls, the RETROBIOS_PAD
-values and each route's keys from TUI_ROUTES. The prose cells (what an option
+values and each route's keys from TUI_ROUTES, the handheld launchers from
+sitehandheld.LAUNCHERS. The prose cells (what an option
 does, when an event comes) are kept as written, matched by their row. A row
 install.py gains has no prose yet: the generator names it and writes nothing,
 and the row is added by hand inside the markers, its first cell holding the
@@ -45,6 +46,7 @@ import zipfile
 from pathlib import Path, PurePosixPath
 from typing import Callable
 
+import sitehandheld
 from artifacts import write_text_atomic
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -622,6 +624,10 @@ def render(page: str) -> str:
         "card-markers": lambda _body: _table(["On the card", "System", "Files go to"],
                                              card_marker_rows()),
         "line-menu": lambda _body: line_menu(),
+        # Where each handheld launcher goes, written from the site's own
+        # description of it (sitehandheld.LAUNCHERS).
+        "handheld": lambda _body: "\n".join(sitehandheld.table_rows()),
+        "handheld-downloads": lambda _body: "\n".join(sitehandheld.download_rows()),
     }
     seen = []
     with contextlib.ExitStack() as stack:

@@ -70,13 +70,11 @@ notes: |
   of 0x80000 bytes after "Loading '%s'...", and a miss reports "Can't load
   biosfile '%s', switching to HLE", sets the HLE bit and writes
   "CEX-3000/1001/1002 by K.S.", "System ROM Version 2.2 12/04/95 A" and the Sony
-  copyright line into BIOS memory, so no image is needed on its own. The FAQ on
-  the emulator's own site states that a file named scph1001.bin is recommended
-  and is not distributed with the emulator.
+  copyright line into BIOS memory, so no image is needed on its own.
   ref: Main.java:1169, Main.java:21925-21927, Main.java:25833-25835,
        Main.java:9943-9977, Main.java:30177-30192, Main.java:5392-5396,
        Main.java:36446-36451, Main.java:28751-28754,
-       libfpse.so 0x70e20-0x70f20, fpsece.net/faq.html
+       libfpse.so 0x70e20-0x70f20
 
   Automatic detection recognises one dump and does it on content. Scanning
   storage, FPseNG keeps files whose lowercased name ends in .bin and whose length
@@ -106,7 +104,8 @@ notes: |
   Android runtime and are not files anyone supplies.
   ref: Main.java:25134-25137, Main.java:27300-27312, Main.java:9985,
        Main.java:1116-1133, Main.java:8496, Main.java:13854,
-       Main.java:23615-23621, libfpse.so readelf -d
+       Main.java:23615-23621,
+       FPseNG 1.13 libfpse.so .dynamic DT_NEEDED 0x220ae0-0x220baf
 
   Resources unpack through helpers that differ in one respect. The guarded one
   writes only when the target is absent, so bios/kanji.rom, fpse.ini and the
@@ -171,7 +170,7 @@ files:
     category: game_data
     description: "software renderer plugin"
     note: "Named by System.loadLibrary(\"soft1\") outside any catch and listed in DT_NEEDED by the core. Also holds the VR background loader."
-    source_ref: "Main.java:27302, libfpse.so readelf -d"
+    source_ref: "Main.java:27302, FPseNG 1.13 libfpse.so DT_NEEDED libsoft1.so at 0x220af0 (loader-resolved)"
 
   - name: libspuplugin.so
     size: 51120
@@ -181,7 +180,7 @@ files:
     category: game_data
     description: "sound plugin"
     note: "Named by System.loadLibrary(\"spuplugin\") outside any catch and listed in DT_NEEDED."
-    source_ref: "Main.java:27301, libfpse.so readelf -d"
+    source_ref: "Main.java:27301, FPseNG 1.13 libfpse.so DT_NEEDED libspuplugin.so at 0x220b00 (loader-resolved)"
 
   - name: libopengl.so
     size: 688072
@@ -192,7 +191,7 @@ files:
     aliases: ["libopengl1.so"]
     description: "OpenGL renderer plugin"
     note: "Named by System.loadLibrary(\"opengl\") outside any catch and listed in DT_NEEDED. A plugin chosen from the .so browser is copied over libopengl1.so under the root."
-    source_ref: "Main.java:27304, Main.java:9985, libfpse.so readelf -d"
+    source_ref: "Main.java:27304, Main.java:9985, FPseNG 1.13 libfpse.so DT_NEEDED libopengl.so at 0x220ae0 (loader-resolved)"
 
   - name: libnfsplugin.so
     size: 300944
@@ -202,7 +201,7 @@ files:
     category: game_data
     description: "NFS client plugin, for discs read from a network share"
     note: "Named by System.loadLibrary(\"nfsplugin\") outside any catch and listed in DT_NEEDED. Backs the isnfsbios and copyfromnfs entry points."
-    source_ref: "Main.java:27303, Main.java:25670, libfpse.so readelf -d"
+    source_ref: "Main.java:27303, Main.java:25670, FPseNG 1.13 libfpse.so DT_NEEDED libnfsplugin.so at 0x220b30 (loader-resolved)"
 
   - name: libsdl.so
     size: 67536
@@ -212,7 +211,7 @@ files:
     category: game_data
     description: "SDL audio backend"
     note: "Named by System.loadLibrary(\"sdl\") from a static block that catches UnsatisfiedLinkError, and listed in DT_NEEDED, so the core will not link without it."
-    source_ref: "Main.java:25134, libfpse.so readelf -d"
+    source_ref: "Main.java:25134, FPseNG 1.13 libfpse.so DT_NEEDED libsdl.so at 0x220b20 (loader-resolved)"
 
   - name: libneon.so
     size: 5688
@@ -222,7 +221,7 @@ files:
     category: game_data
     description: "NEON colour conversion routines"
     note: "Named by System.loadLibrary(\"neon\") from the same static block and listed in DT_NEEDED."
-    source_ref: "Main.java:25135, libfpse.so readelf -d"
+    source_ref: "Main.java:25135, FPseNG 1.13 libfpse.so DT_NEEDED libneon.so at 0x220b10 (loader-resolved)"
 
   - name: libuncompress.so
     size: 1512392
@@ -232,7 +231,7 @@ files:
     category: game_data
     description: "archive extractor for .zip, .rar, .7z, .ape and .ecm images"
     note: "Named by System.loadLibrary(\"uncompress\") outside any catch, and the only one of the plugins the core does not list in DT_NEEDED."
-    source_ref: "Main.java:27300, Main.java:25408, libfpse.so readelf -d"
+    source_ref: "Main.java:27300, Main.java:25408, FPseNG 1.13 libfpse.so .dynamic DT_NEEDED 0x220ae0-0x220baf (no libuncompress.so)"
 
   # The Shaders setting walks FPse64/shaders and reads the selected pair,
   # passing the bytes to setVSH and setFSH. The packaged set below is copied

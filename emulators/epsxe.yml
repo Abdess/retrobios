@@ -61,13 +61,10 @@ notes: |
   ends. The HLE branch, taken when the BiosHLE setting is on, skips the read
   entirely and logs " * ePSXe: using HLE BIOS (compatibility limited)", so any
   one of the images below fills the slot and none of them is needed on its own.
-  HLE arrived in 1.9.25 and savestates made under it are not interchangeable
-  with savestates made under a real image.
   ref: ePSXe 2.0.5 Linux x64 load_bios 0x433540-0x433621,
        ePSXe 2.0.5 Linux x64 bios_name_select 0x4334c0-0x4334f2,
        ePSXe 2.0.5 Linux x64 write_configfiledefault 0x42ae99-0x42aeeb,
-       ePSXeReadPreferences.java:20-30, ePSXe.java:445-453,
-       docs/ePSXe_en.txt:260-271, docs/ePSXe_en.txt:883-888
+       ePSXeReadPreferences.java:20-30, ePSXe.java:445-453
 
   Both consumer families carry a table of the images they recognise, and the two
   tables are built differently and do not hold the same set. Android ships 21
@@ -90,11 +87,8 @@ notes: |
 
   No region decides which image is taken. findBios keeps the first md5 that
   answers anywhere in the walk, the Windows ids only pick a label to display, and
-  the JP, US and PAL words are part of that label string. Automatic selection of
-  a required BIOS per game existed once and was removed because it stopped
-  Legend of Dragoon US and Wild Arms 2 US from running.
-  ref: ScanBiosTask.java:167-171, ePSXe 2.0.18 Windows 0x42f5aa-0x42f5c2,
-       docs/ePSXe_en.txt:1243-1244
+  the JP, US and PAL words are part of that label string.
+  ref: ScanBiosTask.java:167-171, ePSXe 2.0.18 Windows 0x42f5aa-0x42f5c2
 
   Video, sound, cdrom and input go through the PSEmu Pro plugin interface.
   init_gpu builds plugins/<name> from the configured name, dlopens it and

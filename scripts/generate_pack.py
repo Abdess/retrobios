@@ -39,6 +39,10 @@ sys.path.insert(0, os.path.dirname(__file__))
 from alternatives import core_file_spares, settle_sets, slot_set_keys
 from common import resolve_platform_cores as _platform_cores
 from common import (
+    ROMS_ROOT,
+    TARGET_KEY,
+    _core_key,
+    content_folder_boards,
     OUTER_ROOTS,
     outer_layout,
     installed_data_refs,
@@ -895,6 +899,8 @@ def generate_pack(
     Returns the path to the generated ZIP, or None on failure.
     """
     config = load_platform_config(platform_name, platforms_dir)
+    if target_name:
+        config = {**config, TARGET_KEY: target_name}
     if zip_contents is None:
         zip_contents = {}
     if emu_profiles is None:
@@ -4091,8 +4097,20 @@ def _data_root_target(system: str, text: str) -> str | None:
     return None
 
 
+def _one_content(held: list[str], entries: dict[str, dict], emulator: str) -> list[str]:
+    """The one dest a copy reads when every held dest carries the same bytes.
+
+    Unchanged when the contents differ: the name then designates nothing.
+    """
+    if len({entries[dest].get("sha1") for dest in held}) != 1:
+        return held
+    own = [dest for dest in held if emulator in (entries[dest].get("cores") or ())]
+    return [min(own or held, key=lambda dest: (dest.count("/"), len(dest), dest))]
+
+
 def _profile_copies(
     profiles: dict[str, dict], dests: list[str], declared: list[dict],
+    entries: dict[str, dict] | None = None,
 ) -> list[dict]:
     """The standalone copies the emulator profiles document: each file with
     a standalone_path, into the data_root of each system that names a place.
@@ -4105,6 +4123,10 @@ def _profile_copies(
     file found by content (found_by) sits wherever the folder the user set
     for the scan points: Amiberry reads its ROMs from rom_path, which
     amiberry.conf moves, so its name under data_root proves nothing.
+    ``entries`` maps each dest to its manifest entry: one file carried at
+    two paths with the same bytes is one source, the copy whose cores name
+    the emulator, else the shortest path. DuckStation's ps2_scph50006.bin
+    sits at the BIOS root and under pcsx2/bios/ for the libretro PS2 cores.
     """
     from fnmatch import fnmatch  # noqa: PLC0415
 
@@ -4143,6 +4165,8 @@ def _profile_copies(
                     or entry.get("type") == "directory" or entry.get("found_by") == "content"):
                 continue
             held = by_tail.get(entry.get("path") or entry["name"], [])
+            if len(held) > 1 and entries is not None:
+                held = _one_content(held, entries, profile_name)
             if len(held) != 1:
                 continue
             source = held[0]
@@ -4171,8 +4195,10 @@ def _standalone_copies(
     whose registry entry declares none gets none."""
     if not declared:
         return []
-    dests = [entry["dest"] for entry in manifest_files if entry.get("root") != "save"]
-    return _placed_copies(declared, dests) + _profile_copies(profiles, dests, declared)
+    kept = [entry for entry in manifest_files if entry.get("root") != "save"]
+    dests = [entry["dest"] for entry in kept]
+    entries = {entry["dest"]: entry for entry in kept}
+    return _placed_copies(declared, dests) + _profile_copies(profiles, dests, declared, entries)
 
 
 def _stable_hashes(local_path: str, db: dict) -> dict:
@@ -4841,6 +4867,8 @@ def generate_manifest(
     config = load_platform_config(platform_name, platforms_dir)
     if fold_case is not None:
         config = {**config, "case_insensitive_fs": fold_case}
+    if target_name:
+        config = {**config, TARGET_KEY: target_name}
     if zip_contents is None:
         zip_contents = {}
     if emu_profiles is None:
@@ -5314,6 +5342,10 @@ def generate_manifest(
         **({"downloaded_cores": downloaded} if (downloaded := _downloaded_cores(
             config, emu_profiles, core_names, platforms_dir,
         )) else {}),
+        **({"offered_boards": offered} if (offered := _offered_boards(
+            config, emu_profiles, core_names,
+            [*manifest_files, *omitted_by_destination.values()],
+        )) else {}),
         "system_cores": system_cores,
         # The names the platform itself gives its systems (Batocera's psx),
         # which --system accepts beside the ids.
@@ -5466,6 +5498,65 @@ def _manifest_data_directories(
             group["cores"] = readers[group["ref"]]
         trees.append(group)
     return trees
+
+
+def _offered_boards(
+    config: dict,
+    profiles: dict[str, dict],
+    core_names: dict[str, list[str]],
+    entries: list[dict],
+) -> dict[str, list[dict]]:
+    """The roms folders each profile is offered for on some boards only,
+    each with those boards, aliases included, where the manifest places a
+    file of that profile.
+
+    ROCKNIX writes uae4arm for roms/amiga under the devices it builds it for
+    (emulators/package.mk:188), and a board's core list names uae4arm when
+    another folder offers it there. The pack builder reads the board from
+    the config (TARGET_KEY) and `install.py --target` reads its answer here.
+    A manifest built for one board needs none.
+    """
+    if config.get(TARGET_KEY):
+        return {}
+    pairs = content_folder_boards(config)
+    if all(on is None for on in pairs.values()):
+        return {}
+    from launchers import _roms_place  # noqa: PLC0415
+
+    by_key: dict[str, set[str]] = {}
+    for name, claimants in upstream_profile_index(profiles).items():
+        by_key.setdefault(_core_key(name), set()).update(claimants)
+    free = {
+        (profile, folder) for (core, folder), on in pairs.items() if on is None
+        for profile in by_key.get(core, ())
+    }
+    found: dict[tuple[str, str, str], set[str]] = {}
+    for (core, folder), on in pairs.items():
+        where = _roms_place(config, folder) if on is not None else None
+        if where is None:
+            continue
+        for profile in by_key.get(core, ()):
+            if profile in core_names and (profile, folder) not in free:
+                found.setdefault((profile, where[0], where[1]), set()).update(on)
+    # An entry below the roms root names it, one in the install tree none.
+    trees = {ROMS_ROOT: ROMS_ROOT, None: "install"}
+    placed = {
+        (profile, trees[entry.get("root")], str(entry.get("dest", "")).rpartition("/")[0])
+        for entry in entries if entry.get("root") in trees
+        for copy in [entry, *entry.get("alternatives", [])]
+        for profile in copy.get("cores") or []
+    }
+    result: dict[str, list[dict]] = {}
+    for (profile, tree, folder), boards in sorted(found.items()):
+        if not any(
+            p == profile and t == tree and (d == folder or d.startswith(f"{folder}/"))
+            for p, t, d in placed
+        ):
+            continue
+        result.setdefault(profile, []).append(
+            {"root": tree, "folder": folder, "boards": sorted(boards)}
+        )
+    return result
 
 
 def _downloaded_cores(
@@ -5799,7 +5890,7 @@ def _pack_archives(output_dir: str) -> list[str]:
     fail conformance, and injecting a manifest would change published bytes.
     Every name the builder gives holds `_BIOS_Pack`, then the system tag of
     a --system platform pack (`_BIOS_Pack_Playstation.zip`): build_port.py
-    writes its launcher archives (RetroBIOS.zip) to the same dist/, and
+    wrote its launcher archives (RetroBIOS.zip) to the same dist/, and
     taking every ZIP rewrote them with a manifest after build_port had
     printed their hashes.
     """

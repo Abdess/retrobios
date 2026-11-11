@@ -20,6 +20,19 @@ systems:
   - sega-saturn
   - sega-stv
 
+config_reads:
+  - file: "kronos.ini"
+    platforms: [retrobat]
+    revision: "6750417f3d6fef1b7be9adf52e707cc78aa41ee0"
+    revision_from: "Kronos 2.7.0 without a commit id in kronos.exe of RetroBat's stable kronos.7z, linked 2024-12-31: the last FCare/Kronos commit before that date, the cited files unchanged from aca9865c to the 2.7.0_official_release tag 58352d6d"
+    source_ref: "upstream yabause/src/port/qt/Settings.cpp:50-61, 95-103, upstream yabause/src/port/qt/Settings.h:25-26, upstream yabause/src/CMakeLists.txt:763, upstream yabause/src/port/qt/main.cpp:55-57"
+    keys:
+      - key: "[1.0] General\\EnableEmulatedBios"
+        source_ref: "upstream yabause/src/port/qt/YabauseThread.cpp:392-393"
+      - key: "[1.0] General\\Bios"
+        source_ref: "upstream yabause/src/port/qt/YabauseThread.cpp:394-395, upstream yabause/src/port/qt/VolatileSettings.cpp:20-27, upstream yabause/src/ctrl/src/yabause.c:497-509, 575-587, 626-630, upstream yabause/src/sys/memory/src/memory.c:1343-1346"
+        condition: "General\\EnableEmulatedBios false; an empty path runs the HLE BIOS, a path that fails to load stops init"
+
 notes: |
   Kronos is a Sega Saturn and ST-V arcade emulator by FCare, forked from
   Yabause. Requires OpenGL 4.3 compute shaders.

@@ -31,7 +31,14 @@ files:
     required: true
     min_size: 4194304
     max_size: 8388608
-    validation: [size]
+    validation: [size, romdir]
+    romdir:
+      reset_compare: 10
+      missing_reset: ends_walk
+      terminated_names: true
+      extinfo: true
+      unreadable_romver: ends_walk
+      truncated_walk: ends_walk
     source_ref: "pcsx2/ps2/BiosTools.cpp:16-17,80-197,258-283,317-370"
     note: "Accepts any file 4-8 MB with valid romdir (RESET + ROMVER). Naming convention ps2-VVVVr-YYYYMMDD.bin (version, region, date)."
 

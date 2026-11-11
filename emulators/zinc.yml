@@ -35,21 +35,24 @@ notes: |
   (*.znc, s11player.dll) ship beside it.
   ref: ZiNc.exe 0x493f60
 
-  Games are picked by number on the command line, not by set name. Each of the
-  79 driver records holds the description, parent, set name, a pointer to its
-  ROM list and the name of the BIOS set, then the list gives name, region,
-  load offset and CRC32 of every ROM, the BIOS ROM first. RetroBat maps the
-  set name to that number in zincGameNumber.
-  ref: ZiNc.exe 0x496404 (glpracr record),
+  Games are picked by number on the command line, not by set name. The
+  driver table at 0x49fc08 holds 71 records (count returned at 0x463250).
+  Each record holds the description, parent, set name, a pointer to its ROM
+  list and the name of the BIOS set, then the list gives name, region, load
+  offset and CRC32 of every ROM, the BIOS ROM first. Records for glpracr,
+  glpracr2, btchamp, mgcldate, sfchamp, PointBlank2, sws99 and mdhorse sit in
+  the image but no table entry points at them, so they cannot be run.
+  RetroBat maps the set name to the number in zincGameNumber.
+  ref: ZiNc.exe 0x463250, 0x463590-0x4635a2,
        emulatorlauncher emulatorLauncher/Generators/Zinc.Generator.cs:136-209
 
   ROMs are read from the directory given by -roms-directory (default roms),
   which RetroBat writes into zinc.cfg as the folder of the launched game. A ROM
-  is looked up in <set>.zip, then in the parent's zip, then in the BIOS set's
-  zip, each also as a plain directory. A missing ROM stops the load with
-  "ERROR: missing rom file", and every ROM is checked against the CRC32 of its
-  record ("ERROR: BAD CRC ... expected").
-  ref: ZiNc.exe 0x494134, 0x49fdfc, 0x4a018c, 0x49fe24, 0x49fe48,
+  is looked up in the parent's zip, then in the BIOS set's zip, then in the
+  game's own zip. A missing ROM stops the load with "ERROR: missing rom file",
+  and every ROM is checked against the CRC32 of its record ("ERROR: BAD CRC
+  ... expected").
+  ref: ZiNc.exe 0x46366d-0x4636f0, 0x463724-0x463833, 0x463838-0x4638ac,
        emulatorlauncher emulatorLauncher/Generators/Zinc.Generator.cs:109-114
 
   The Namco System 11 records name no BIOS set: the first ROM of each list is
@@ -63,8 +66,8 @@ files:
     category: bios_zip
     system: capcom-zn1
     description: "Capcom ZN-1 BIOS"
-    note: "BIOS set of starglad, sfex, sfexa, sfexj, sfexp, sfexpu1, sfexpj, ts2, ts2j and glpracr."
-    source_ref: "ZiNc.exe 0x49926c, ZiNc.exe 0x496404"
+    note: "BIOS set of starglad, sfex, sfexa, sfexj, sfexp, sfexpu1, sfexpj, ts2 and ts2j."
+    source_ref: "ZiNc.exe 1.1 0x463590-0x4638ac (game load: record from the driver table at 0x49fc08, BIOS set name at record+0x28 formatted %s/%s.zip at 0x4636ae-0x4636d7, each ROM looked up in the parent, BIOS and own set zip at 0x463724-0x463808, missing ROM fatal at 0x46381e-0x463833, CRC32 mismatch fatal at 0x463838-0x4638ac), record 0x49926c (starglad, first ROM coh-1000c.353)"
     contents:
       - name: "coh-1000c.353"
         crc32: "50033af6"
@@ -75,7 +78,7 @@ files:
     system: capcom-zn2
     description: "Capcom ZN-2 BIOS"
     note: "BIOS set of tgmj, stargld2, plsmaswd, sfex2, sfex2j, sfex2p, sfex2pa, sfex2pj, shiryu2, strider2, kikaioh, techromn, rvschool, rvschola and jgakuen."
-    source_ref: "ZiNc.exe 0x499054"
+    source_ref: "ZiNc.exe 1.1 0x463590-0x4638ac (game load: record from the driver table at 0x49fc08, BIOS set name at record+0x28 formatted %s/%s.zip at 0x4636ae-0x4636d7, each ROM looked up in the parent, BIOS and own set zip at 0x463724-0x463808, missing ROM fatal at 0x46381e-0x463833, CRC32 mismatch fatal at 0x463838-0x4638ac), record 0x499054 (tgmj, first ROM coh-3002c.353)"
     contents:
       - name: "coh-3002c.353"
         crc32: "e860ea8b"
@@ -85,8 +88,8 @@ files:
     category: bios_zip
     system: tecmo-tps
     description: "Tecmo TPS BIOS"
-    note: "BIOS set of glpracr2, glpracr3, shngmtkb, mfjump, cbaj, tondemo, doapp and brvblade."
-    source_ref: "ZiNc.exe 0x496dec"
+    note: "BIOS set of glpracr3, shngmtkb, mfjump, cbaj, tondemo, doapp and brvblade."
+    source_ref: "ZiNc.exe 1.1 0x463590-0x4638ac (game load: record from the driver table at 0x49fc08, BIOS set name at record+0x28 formatted %s/%s.zip at 0x4636ae-0x4636d7, each ROM looked up in the parent, BIOS and own set zip at 0x463724-0x463808, missing ROM fatal at 0x46381e-0x463833, CRC32 mismatch fatal at 0x463838-0x4638ac), record 0x496dec (cbaj, first ROM coh-1002m.353)"
     contents:
       - name: "coh-1002m.353"
         crc32: "69ffbcb4"
@@ -96,8 +99,8 @@ files:
     category: bios_zip
     system: taito-fx1
     description: "Taito FX-1 BIOS"
-    note: "BIOS set of psyforce, psyforcj, psyfrcex, mgcldate, mgcldtex, sfchamp, gdarius, gdarius2, raystorm, raystorj and ftimpcta."
-    source_ref: "ZiNc.exe 0x49cb98"
+    note: "BIOS set of psyforce, psyforcj, psyfrcex, mgcldtex, gdarius, gdarius2, raystorm, raystorj and ftimpcta."
+    source_ref: "ZiNc.exe 1.1 0x463590-0x4638ac (game load: record from the driver table at 0x49fc08, BIOS set name at record+0x28 formatted %s/%s.zip at 0x4636ae-0x4636d7, each ROM looked up in the parent, BIOS and own set zip at 0x463724-0x463808, missing ROM fatal at 0x46381e-0x463833, CRC32 mismatch fatal at 0x463838-0x4638ac), record 0x49cb98 (psyforce, first ROM coh-1000t.353)"
     contents:
       - name: "coh-1000t.353"
         crc32: "e3f23b6e"
@@ -108,7 +111,7 @@ files:
     system: eighting-zn1
     description: "Raizing/Eighting PS Arcade 95 BIOS"
     note: "BIOS set of beastrzr, beastrzb and bldyror2."
-    source_ref: "ZiNc.exe 0x49c3ac"
+    source_ref: "ZiNc.exe 1.1 0x463590-0x4638ac (game load: record from the driver table at 0x49fc08, BIOS set name at record+0x28 formatted %s/%s.zip at 0x4636ae-0x4636d7, each ROM looked up in the parent, BIOS and own set zip at 0x463724-0x463808, missing ROM fatal at 0x46381e-0x463833, CRC32 mismatch fatal at 0x463838-0x4638ac), record 0x49c3ac (beastrzr, first ROM coh-1002e.353)"
     contents:
       - name: "coh-1002e.353"
         crc32: "910f3a8b"
@@ -119,7 +122,7 @@ files:
     system: atlus-zn1
     description: "Atlus PSX BIOS"
     note: "BIOS set of hvnsgate."
-    source_ref: "ZiNc.exe 0x49ed34"
+    source_ref: "ZiNc.exe 1.1 0x463590-0x4638ac (game load: record from the driver table at 0x49fc08, BIOS set name at record+0x28 formatted %s/%s.zip at 0x4636ae-0x4636d7, each ROM looked up in the parent, BIOS and own set zip at 0x463724-0x463808, missing ROM fatal at 0x46381e-0x463833, CRC32 mismatch fatal at 0x463838-0x4638ac), record 0x49ed34 (hvnsgate, first ROM coh-1001l.353)"
     contents:
       - name: "coh-1001l.353"
         crc32: "6721146b"
@@ -129,8 +132,8 @@ files:
     category: bios_zip
     system: konami-gv
     description: "Konami GV BIOS"
-    note: "BIOS set of weddingr, hyperath, btchamp, pbball96 and susume."
-    source_ref: "ZiNc.exe 0x49f0e4"
+    note: "BIOS set of weddingr, hyperath, pbball96 and susume."
+    source_ref: "ZiNc.exe 1.1 0x463590-0x4638ac (game load: record from the driver table at 0x49fc08, BIOS set name at record+0x28 formatted %s/%s.zip at 0x4636ae-0x4636d7, each ROM looked up in the parent, BIOS and own set zip at 0x463724-0x463808, missing ROM fatal at 0x46381e-0x463833, CRC32 mismatch fatal at 0x463838-0x4638ac), record 0x49f0e4 (weddingr, first ROM 999a01.7e)"
     contents:
       - name: "999a01.7e"
         crc32: "ad498d2d"

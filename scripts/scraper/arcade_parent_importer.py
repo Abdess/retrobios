@@ -205,6 +205,7 @@ def build_index(
         if n not in bios_names and not e.isdevice and e.runnable and (e.has_roms or e.disks)
     }
     bios: dict[str, set[str]] = {}
+    parents: dict[str, set[str]] = {}
     devices: dict[str, set[str]] = {}
     missing: dict[str, str] = {}
     for name, entry in games.items():
@@ -218,17 +219,32 @@ def build_index(
                 break
             if current in bios_names and parent.has_roms:
                 bios.setdefault(archive(current, current), set()).add(name)
+            elif current not in bios_names and parent.has_roms:
+                # A clone's ROM shared with its parent is looked up in the
+                # parent's archive too: MAME's search path is the set and
+                # every ancestor (src/emu/driver.cpp:31-38,
+                # src/emu/romload.cpp:67-84 at mame0289).
+                parents.setdefault(archive(current, current), set()).add(name)
             current = parent.romof
         for device in set(entry.devices) & device_roms:
             devices.setdefault(device, set()).add(name)
     with_bios = {g for members in bios.values() for g in members}
+    # The source file of each game and device set: what a launcher that
+    # starts whatever set a folder holds selects a folder's machines by
+    # (ES-DE runs MAME on any CPS-2 set of roms/cps2).
+    sources: dict[str, set[str]] = {}
+    for name, entry in sets.items():
+        if entry.source and (name in games or name in device_roms):
+            sources.setdefault(entry.source, set()).add(archive(name, name))
     return {
         "bios": {k: sorted(v) for k, v in sorted(bios.items())},
+        "parents": {k: sorted(v) for k, v in sorted(parents.items())},
         "devices": {k: sorted(v) for k, v in sorted(devices.items())},
         "chd": sorted(n for n, e in games.items() if e.disks),
         "missing_parents": dict(sorted(missing.items())),
         "no_bios": sorted(set(games) - with_bios - set(missing)),
         "bios_sets": sorted(bios_names),
+        **({"sources": {k: sorted(v) for k, v in sorted(sources.items())}} if sources else {}),
         "counts": {
             "sets": len(sets),
             "games": len(games),

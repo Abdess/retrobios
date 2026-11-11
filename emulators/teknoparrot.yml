@@ -76,9 +76,9 @@ notes: |
   Play! runs System 246/256 games from its arcadedefs (dongle, CD or HDD image)
   with HLE and loads no BIOS. CrediarDolphin ships Sys/Triforce/segaboot.gcm,
   which it opens for the test menus, and the free DSP ROMs in Sys/GC. The
-  RPCS3 fork refuses to boot without installed PS3 firmware ("PS3 firmware is
-  not installed or the installed firmware is invalid."). The cxbxr fork keeps
-  the Chihiro media board files of Cxbx-Reloaded under EmuMediaBoard.
+  RPCS3 fork refuses to boot without installed PS3 firmware ("Missing Firmware
+  Detected!"). The cxbxr fork keeps the Chihiro media board files of
+  Cxbx-Reloaded under EmuMediaBoard.
 
   Not documented: the BIOS sets of TeknoMVS, TeknoCPS, TeknoSS32 and the other
   Tekno* board emulators. TeknoParrotUI names only the game ZIP for them
@@ -166,7 +166,14 @@ files:
     required: true
     min_size: 4194304
     max_size: 8388608
-    validation: [size]
+    validation: [size, romdir]
+    romdir:
+      reset_compare: 10
+      missing_reset: ends_walk
+      terminated_names: true
+      extinfo: true
+      unreadable_romver: ends_walk
+      truncated_walk: ends_walk
     description: "COH-H arcade board BIOS"
     aliases:
       - COH-H31000.BIN
@@ -231,8 +238,8 @@ files:
     required: true
     storage: large_file
     description: "PlayStation 3 system software update"
-    note: "Installed into dev_flash through Install firmware from PS3UPDAT.PUP. Without installed firmware the fork stops with \"PS3 firmware is not installed or the installed firmware is invalid.\""
-    source_ref: "RPCS3 rpcs3.exe, release RPCS3_1.0.0.7"
+    note: "Installed into dev_flash through Install firmware from PS3UPDAT.PUP. Without dev_flash/sys/external/liblv2.sprx the boot stops and the \"Missing Firmware Detected!\" dialog asks for PS3UPDAT.PUP."
+    source_ref: "RPCS3 1.0.0.7 rpcs3.exe (sha256 89990c08039bdb21) Emulator::Load 0x14109dac2-0x14109db62 (ppu_exec ok and fs::is_file of dev_flash sys/external/liblv2.sprx false), 0x14109dbc0-0x14109dbd2 (an LLE firmware module is configured), 0x14109dc75-0x14109dced (Kill, then on_missing_fw on the main thread, boot ends), main_window 0x140cc6b50-0x140cc6b82 (Missing Firmware Detected! dialog), HandlePupInstallation 0x140cc1456: 0x140cc15a7 (fs::file open of the selected PUP), 0x140cc15ff (could not be opened), 0x140cc1635-0x140cc16d3 (pup_object parse: empty, not a PUP, incomplete)"
 
   # cxbxr component, Chihiro (RetroBat core chihiro)
   - name: fpr21042_m29w160et.bin
@@ -240,33 +247,34 @@ files:
     system: sega-chihiro
     required: true
     size: 2097152
+    validation: [size]
     description: "Chihiro media board flash ROM"
-    note: "Read to write out the two SEGABOOT halves when they are absent."
-    source_ref: "cxbxr cxbxr-emu.dll, release cxbxr_1.0.0.20"
+    note: "Opened when a title is started directly (boot flags zero), the system is Chihiro and a boot.id sits beside the XBE. The emulator aborts when it is missing or not 2 MB, then writes the two SEGABOOT halves out of it when they are absent."
+    source_ref: "cxbxr 1.0.0.20 cxbxr-emu.dll (sha256 4396e61e874359c9) FUN_100c2dc0 0x100c2dc0-0x100c2dfa (static std::string fpr21042_m29w160et.bin), FUN_103deed0 0x103df12c-0x103df16c (xbeDirectory, parent_path FUN_10200420 of the XBE path), 0x103df408-0x103df4d4 (auto detect: XbeType 0, 1 or other gives system 2, 4 or 8, then filesystem::exists FUN_100cbc80 of xbeDirectory / boot.id, string 0x10652c54, sets 8 Chihiro), 0x103df572-0x103df646 (BootFlags zero, system 8 and a second exists of xbeDirectory / boot.id, otherwise jump to 0x103dfa07 past the ROM block), 0x103df6a7-0x103df72d (EmuMediaBoard path plus that name, exists check, CxbxrAbort Chihiro Media Board ROM could not be found), 0x103df744-0x103df769 (fopen, abort when it fails), 0x103df777-0x103df7b2 (fseek end, ftell, abort unless 0x200000), 0x103df83a-0x103df92e (SEGABOOT halves written when absent)"
 
   - name: ic10_g24lc64.bin
     path: "EmuMediaBoard/Chihiro/ic10_g24lc64.bin"
     system: sega-chihiro
     required: true
     description: "Base board QC microcontroller firmware"
-    note: "\"Failed to load base board qc firmware\" when it cannot be opened."
-    source_ref: "cxbxr cxbxr-emu.dll, release cxbxr_1.0.0.20"
+    note: "\"Failed to load base board firmware\" and abort when it cannot be loaded."
+    source_ref: "cxbxr 1.0.0.20 cxbxr-emu.dll (sha256 4396e61e874359c9) FUN_102d0f70 0x102d10ae-0x102d10d7 (std::string ic10_g24lc64.bin), 0x102d12f7-0x102d13d6 (EmuMediaBoard\\Chihiro path, fopen and mapped-file helper FUN_102d0bf0 into 0x1070e560), 0x102d1461-0x102d1465 and 0x102d1af1-0x102d1b04 (CxbxrAbort Failed to load base board firmware)"
 
   - name: pc20_g24lc64.bin
     path: "EmuMediaBoard/Chihiro/pc20_g24lc64.bin"
     system: sega-chihiro
     required: true
     description: "Base board SC microcontroller firmware"
-    note: "\"Failed to load base board firmware\" when it cannot be opened."
-    source_ref: "cxbxr cxbxr-emu.dll, release cxbxr_1.0.0.20"
+    note: "\"Failed to load base board qc firmware\" and abort when it cannot be loaded."
+    source_ref: "cxbxr 1.0.0.20 cxbxr-emu.dll (sha256 4396e61e874359c9) FUN_102d0f70 0x102d10ff-0x102d1128 (std::string pc20_g24lc64.bin), 0x102d1496-0x102d1576 (path, FUN_102d0bf0 into 0x1070e590), 0x102d15d1-0x102d15d5 and 0x102d1b0e-0x102d1b21 (CxbxrAbort Failed to load base board qc firmware)"
 
   - name: ic11_24lc024.bin
     path: "EmuMediaBoard/Chihiro/ic11_24lc024.bin"
     system: sega-chihiro
     required: true
     description: "Base board configuration EEPROM"
-    note: "\"Failed to load base board EEPROM\" when it cannot be opened."
-    source_ref: "cxbxr cxbxr-emu.dll, release cxbxr_1.0.0.20"
+    note: "\"Failed to load base board EEPROM\" and abort when it cannot be loaded."
+    source_ref: "cxbxr 1.0.0.20 cxbxr-emu.dll (sha256 4396e61e874359c9) FUN_102d0f70 0x102d1150-0x102d117c (std::string ic11_24lc024.bin), 0x102d1606-0x102d1669 (path, FUN_102d0bf0 into 0x1070e578), 0x102d1688-0x102d168c and 0x102d1b2b-0x102d1b3e (CxbxrAbort Failed to load base board EEPROM)"
 
   - name: backup_ram.bin
     path: "EmuMediaBoard/Chihiro/backup_ram.bin"
@@ -275,8 +283,8 @@ files:
     unsourceable: "written by the emulator, no canonical file"
     has_builtin: true
     description: "Base board backup memory"
-    note: "Created by the emulator when absent (\"Could not create Backup File\" on failure)."
-    source_ref: "cxbxr cxbxr-emu.dll, release cxbxr_1.0.0.20"
+    note: "Created by the emulator as 128 KiB of zeros when absent (\"Could not create Backup File\" on failure), then loaded."
+    source_ref: "cxbxr 1.0.0.20 cxbxr-emu.dll (sha256 4396e61e874359c9) FUN_102d0f70 0x102d1180-0x102d11c2 (std::string backup_ram.bin), 0x102d16eb-0x102d1725 (exists check), 0x102d1789-0x102d17cb (fopen, fseek 0x1ffff, fputc 0, fclose), 0x102d17ad and 0x102d1b4d-0x102d1b60 (CxbxrAbort Could not create Backup File), 0x102d1865 and 0x102d1887-0x102d188b, 0x102d1b6a-0x102d1b7d (FUN_102d0bf0 load, CxbxrAbort Failed to load base board BACKUP RAM)"
 
   # CrediarDolphin component, Triforce (RetroBat core triforce)
   - name: segaboot.gcm
@@ -287,5 +295,5 @@ files:
     size: 2097152
     sha1: "87918619c632ac9de270d4fdf396a57eb57fc620"
     description: "Triforce boot program"
-    note: "Shipped in the CrediarDolphin 1.0.0.10 release. Opened for the test menus, \"Failed to open segaboot.gcm, which is required for test menus\" otherwise."
-    source_ref: "CrediarDolphin Dolphin.exe, release CrediarDolphin_1.0.0.10"
+    note: "Shipped in the CrediarDolphin 1.0.0.10 release. User/Triforce/segaboot.gcm is preferred when present. Read into the media board firmware for the test menus, \"Failed to open segaboot.gcm, which is required for test menus\" and no test menu otherwise."
+    source_ref: "CrediarDolphin Source/Core/Core/HW/DVD/AMMediaboard.cpp:498-526 at ReaverTeknoGods/CrediarDolphin 44afbabf7135303e9a29805f4b0bc12080545d3a (the revision Dolphin.exe 1.0.0.10, sha256 d7e5a7fe2989c7db, reports as its build and whose message it carries)"

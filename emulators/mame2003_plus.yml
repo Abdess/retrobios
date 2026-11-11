@@ -56,7 +56,8 @@ notes: |
 
   BIOS ZIPs must be in {content_dir}/ (same folder as the game ROMs).
   The core resolves parent ROMs by walking the clone_of chain within the
-  content directory only (osd_get_path returns content_path for FILETYPE_ROM).
+  content directory only (osd_get_path returns content_path for FILETYPE_ROM,
+  src/fileio.c:217-220).
 
   ROM naming follows MAME 0.78 conventions with some updates from the Plus patches.
   Requires a mame2003-plus-specific romset for full CRC32/SHA1 compatibility.
@@ -217,6 +218,7 @@ files:
   - name: neogeo.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: snk-neogeo-mvs
     note: "MVS/AES BIOS, 15 variants including Universe BIOS 4.0"
     source_ref: "src/drivers/neogeo.c:1677-1714, 1726-1734, 1803"
@@ -289,6 +291,7 @@ files:
   - name: pgm.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: igs-pgm
     note: "PGM system BIOS - 68K program, text tiles, samples"
     source_ref: "src/drivers/pgm.c:4305-4314"
@@ -312,6 +315,7 @@ files:
   - name: stvbios.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: sega-stv
     note: "ST-V (Saturn-based arcade) BIOS, 6 region variants"
     source_ref: "src/drivers/stv.c:4186-4210"
@@ -341,6 +345,7 @@ files:
   - name: megaplay.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: sega-megaplay
     note: "Mega Play BIOS, 2 versions"
     source_ref: "src/drivers/megaplay.c:981-988, 1210"
@@ -358,6 +363,7 @@ files:
   - name: megatech.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: sega-megatech
     note: "Mega Tech BIOS - menu/instruction screen processor"
     source_ref: "src/drivers/megatech.c:1286-1292, 1591"
@@ -373,6 +379,7 @@ files:
   - name: decocass.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: deco-cassette
     note: "DECO Cassette shared BIOS - 6502 CPU, sound, MCU, PROMs"
     source_ref: "src/drivers/decocass.c:696-727"
@@ -407,6 +414,7 @@ files:
   - name: playch10.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: nintendo-playch10
     note: "PlayChoice-10 BIOS - Z80 main CPU + character ROMs + PROMs"
     source_ref: "src/drivers/playch10.c:815-827"
@@ -440,6 +448,7 @@ files:
   - name: nss.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: nintendo-nss
     note: "Nintendo Super System BIOS - SPC700 boot ROM + BIOS CPU"
     source_ref: "src/drivers/nss.c:260-269"
@@ -463,6 +472,7 @@ files:
   - name: skns.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: super-kaneko-nova
     note: "Super Kaneko Nova System BIOS, 4 region variants"
     source_ref: "src/drivers/suprnova.c:1226-1229"
@@ -490,6 +500,7 @@ files:
   - name: konamigx.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: konami-gx
     note: "Konami System GX BIOS"
     source_ref: "src/drivers/konamigx.c:2404"
@@ -507,6 +518,7 @@ files:
   - name: coh1000c.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: zn1-capcom
     note: "Capcom ZN-1 BIOS"
     source_ref: "src/drivers/zn.c:3859-3864, src/drivers/zn.c:3873-3886, src/drivers/zn.c:6745"
@@ -525,6 +537,7 @@ files:
   - name: coh3002c.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: zn2-capcom
     note: "Capcom ZN-2 BIOS"
     source_ref: "src/drivers/zn.c:3866-3871, src/drivers/zn.c:4307-4320, src/drivers/zn.c:6766"
@@ -543,6 +556,7 @@ files:
   - name: coh1000t.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: zn1-taito
     note: "Taito FX-1 BIOS"
     source_ref: "src/drivers/zn.c:5513-5518, src/drivers/zn.c:5520-5522, src/drivers/zn.c:6853"
@@ -561,6 +575,7 @@ files:
   - name: coh1002m.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: zn1-tecmo
     note: "Tecmo TPS BIOS"
     source_ref: "src/drivers/zn.c:5048-5053, src/drivers/zn.c:5058-5060, src/drivers/zn.c:6818"
@@ -579,6 +594,7 @@ files:
   - name: coh1002v.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: zn1-video-system
     note: "Video System ZN-1 BIOS"
     source_ref: "src/drivers/zn.c:5412-5417, src/drivers/zn.c:5430-5432, src/drivers/zn.c:6841"
@@ -597,6 +613,7 @@ files:
   - name: coh1000a.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: zn1-acclaim
     note: "Acclaim ZN-1 BIOS"
     source_ref: "src/drivers/zn.c:6274-6279, src/drivers/zn.c:6281-6283, src/drivers/zn.c:6809"
@@ -615,6 +632,7 @@ files:
   - name: coh1001l.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: zn1-atlus
     note: "Atlus ZN-1 BIOS"
     source_ref: "src/drivers/zn.c:5476-5481, src/drivers/zn.c:5483-5485, src/drivers/zn.c:6848"
@@ -633,6 +651,7 @@ files:
   - name: coh1000w.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: atari-zn1
     note: "Time Warner ZN-1 BIOS"
     source_ref: "src/drivers/zn.c:6244-6249, src/drivers/zn.c:6251-6253, src/drivers/zn.c:6798"
@@ -651,6 +670,7 @@ files:
   - name: coh1002e.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: eighting-zn1
     note: "Eighting / Raizing ZN-1 BIOS"
     source_ref: "src/drivers/zn.c:5952-5957, src/drivers/zn.c:5959-5961, src/drivers/zn.c:6882"
@@ -669,6 +689,7 @@ files:
   - name: coh3002t.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: taito-gnet
     note: >-
       Taito G-NET (COH-3002T) BIOS. The games are PC card CHDs and take the
@@ -721,6 +742,7 @@ files:
   - name: coh1002t.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: taito-gnet
     note: "Taito G-NET (COH-1002T) BIOS, parent of Mawasunda"
     source_ref: "src/drivers/zn.c:6405-6416, src/drivers/zn.c:6427-6429, src/drivers/zn.c:6898"
@@ -753,6 +775,7 @@ files:
   - name: model1io.zip
     required: false
     category: bios_zip
+    load_from: content_dir
     system: sega-model2
     note: "Model 1 I/O board BIOS, read by Daytona USA and Desert Tank"
     source_ref: "src/drivers/model2.c:3362-3365, src/drivers/model2.c:3473-3474, src/drivers/model2.c:3520-3521, src/drivers/model2.c:7071, src/drivers/model2.c:7074-7075"
@@ -766,6 +789,7 @@ files:
   - name: model1io2.zip
     required: false
     category: bios_zip
+    load_from: content_dir
     system: sega-model2
     note: "Model 1 I/O board 2 BIOS, read by Virtua Cop"
     source_ref: "src/drivers/model2.c:3367-3370, src/drivers/model2.c:3413-3414, src/drivers/model2.c:7072-7073"
@@ -782,6 +806,7 @@ files:
   - name: namcoc76.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: namco-system11
     note: "Namco C76 (M37702) internal BIOS, runs sound, inputs and coins"
     source_ref: "src/drivers/namcos11.c:1294-1300, 2262"
@@ -798,6 +823,7 @@ files:
   - name: namcoc74.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: arcade
     note: "Namco C74 (M37702) internal BIOS, parent of the System 22 and Super System 22 sets"
     source_ref: "src/drivers/namcos22.c:2069-2075, 3724"
@@ -812,6 +838,7 @@ files:
   - name: cvs.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: century-cvs
     source_ref: "src/drivers/cvs.c:475-482,1393"
     contents:

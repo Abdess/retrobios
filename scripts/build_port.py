@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the handheld launchers in ports/ into their archives in dist/.
+"""Build the handheld launchers in ports/ into their archives.
 
     RetroBIOS.zip            the PortMaster port (ports/RetroBIOS)
     RetroBIOS-batocera.zip   Batocera and Knulli, from Ports (ports/batocera)
@@ -17,13 +17,16 @@ the applications folder, so its top folder is the application.
 
 install.py is copied from the repository root, and only when it is the
 installer the bootstraps pin, so every launcher runs the same bytes as the
-one-line command of the same commit. Members are written as the packs write
+one-line command of the same commit. The site builds them at each deploy
+and serves them under get/handheld/ (scripts/sitehandheld.py): they are no
+release files, and are written to tmp/handheld/ by default, away from the
+packs of dist/. Members are written as the packs write
 theirs: fixed timestamps, sorted names, the executable bit read from the
 source, so the same tree gives the same archives.
 
 Usage:
     python scripts/build_port.py
-    python scripts/build_port.py --output-dir tmp/port
+    python scripts/build_port.py --output-dir tmp/port   # default: tmp/handheld
 """
 
 from __future__ import annotations
@@ -44,7 +47,7 @@ PORT_ZIP = "RetroBIOS.zip"
 BATOCERA_ZIP = "RetroBIOS-batocera.zip"
 MUOS_APP = "RetroBIOS.muxapp"
 TOOLS_ZIP = "RetroBIOS-tools.zip"
-# Every archive a release attaches, in the order the release notes list them.
+# Every launcher archive the site serves.
 ARCHIVES = (PORT_ZIP, BATOCERA_ZIP, MUOS_APP, TOOLS_ZIP)
 # Which release pack serves each platform, read by tui.txt offline.
 PACKS_TABLE = "packs.txt"
@@ -201,8 +204,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         allow_abbrev=False, description="Build the RetroBIOS handheld launchers"
     )
-    parser.add_argument("--output-dir", type=Path, default=REPO_ROOT / "dist",
-                        help="where the archives are written (default: dist/)")
+    parser.add_argument("--output-dir", type=Path, default=REPO_ROOT / "tmp" / "handheld",
+                        help="where the archives are written (default: tmp/handheld/)")
     args = parser.parse_args()
     try:
         with artifact_lock(str(args.output_dir)):

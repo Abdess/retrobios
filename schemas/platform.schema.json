@@ -341,6 +341,29 @@
           "type": "string",
           "description": "Devices whose shipped config this record reads, comma-separated, set only where the configs of a package differ between devices"
         },
+        "installs": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "source_ref"],
+          "properties": {
+            "path": {"type": "string", "minLength": 1, "description": "Where the config the record cites lands on the device, as the platform's code spells it"},
+            "source_ref": {"type": "string", "minLength": 1, "description": "path:lines of the code that puts it there"}
+          },
+          "description": "How the config file a record cites reaches the emulator: link (a) of the evidence a config record carries"
+        },
+        "kept_if_present": {
+          "type": "boolean",
+          "description": "True when the install leaves a file already there in place (cp if absent, rsync --ignore-existing): the record holds on a fresh install"
+        },
+        "overrides": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "path:lines of launch code that rewrites the record's keys or replaces the installed config, empty when the launch path writes neither: link (b)"
+        },
+        "choices_from": {
+          "type": "string",
+          "description": "path:lines of the feature or option file (es_features, a core .opt) listing the values the option the record writes takes. It is never the record's evidence: source_ref cites the code writing the choice"
+        },
         "source_ref": {
           "type": "string",
           "description": "path:lines in the platform's repository at the pinned revision"

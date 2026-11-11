@@ -187,7 +187,14 @@ files:
     required: true
     min_size: 4194304
     max_size: 8388608
-    validation: [size]
+    validation: [size, romdir]
+    romdir:
+      reset_compare: 10
+      missing_reset: ends_walk
+      terminated_names: true
+      extinfo: true
+      unreadable_romver: ends_walk
+      truncated_walk: ends_walk
     description: "PS2 BIOS image"
     note: >-
       Any image whose romdir holds RESET and ROMVER is accepted, whatever its

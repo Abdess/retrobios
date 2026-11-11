@@ -145,11 +145,20 @@ class EveryBuildReferenceNamesThePin(unittest.TestCase):
                 else {str(versions)} if versions else set()
             )
 
+            source = str(profile.get("source") or "").rstrip("/").removesuffix(".git")
+
             def names_it(value: str) -> bool:
+                if profile.get("pin_follows"):
+                    # A build of the branch tip names the repository it
+                    # clones, at no revision: RetroPie's advmame.
+                    return value.split()[-1].rstrip("/").removesuffix(".git") == source
                 token = value.split()[-1].rsplit("/", 1)[-1].removesuffix(".tar.gz")
                 return value in pins or any(token in v or v in value for v in versions)
 
-            if not any(names_it(str(r["value"])) for r in references):
+            # A reference that only dates a config_reads entry names the build
+            # the platform reads that file at, not this profile's pin.
+            justifies_pin = profile.get("pin_frozen") or profile.get("pin_follows")
+            if justifies_pin and not any(names_it(str(r["value"])) for r in references):
                 disagree.append(name)
             for reference in references:
                 if not cf.pin_build_revision(reference, REPO_ROOT / "platforms"):

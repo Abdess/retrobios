@@ -10,7 +10,7 @@ from collections.abc import Iterable
 
 from common import PROFILE_IDENTITY_FIELDS, _norm_system_id, entry_system_ids
 from alternatives import core_file_spares, required_only_spares, set_fields
-from common import archive_members, holds_required_members
+from common import archive_members, contents_members, holds_required_members
 from common import declared_root, expand_platform_declared_names, platform_declarations
 from common import load_emulator_profiles
 from common import resolution_is_hash_exact
@@ -19,7 +19,7 @@ from common import resolve_platform_cores
 from common import core_system_dirs, platform_layouts, system_dir_path
 from common import standalone_set as platform_standalone_set
 from common import OUTER_ROOTS, outer_layout, sanitize_pack_path
-from common import size_fits
+from common import declares_shape, shape_fits, size_fits
 from validation import deliverable, read_from_save_dir, read_from_system_dir
 from packpaths import libretro_systems, save_destination, save_layout
 from region import FILE_GROUP
@@ -513,6 +513,7 @@ def _agnostic_scan_extras(
     extras_prefix: str,
     standalone_set: set[str] | None = None,
     taken: dict[str, dict] | None = None,
+    all_profiles: dict | None = None,
 ) -> list[dict]:
     """Every interchangeable candidate a filename-agnostic core accepts.
 
@@ -521,6 +522,8 @@ def _agnostic_scan_extras(
     The directory is the delicate part: anchoring it on a single
     filename walked into another emulator's tree, so the profile's own
     files have to agree before the scan follows an ambiguous name.
+    ``all_profiles`` are the profiles a placeholder's directory is proven
+    from, ``profiles`` when not given.
     """
     extras: list[dict] = []
     files_db = db.get("files", {})
@@ -564,7 +567,15 @@ def _agnostic_scan_extras(
                 agnostic_votes.get(directory + "/", 0) + 1
             )
 
-        for profile, standalone in platform_layouts(emu_name, profile, standalone_set or set()):
+        own = profile
+        for profile, standalone in platform_layouts(emu_name, own, standalone_set or set()):
+            # A layout copies each entry in order (a launcher's folder, a
+            # system directory): its files are looked up as the profile's
+            # own, or a bound layout scans nothing (KNULLI's bios/ps2).
+            origin = {
+                id(view): entry
+                for view, entry in zip(profile.get("files", []), own.get("files", []))
+            }
             for f in profile.get("files", []):
                 if not is_profile_agnostic and not f.get("agnostic"):
                     continue
@@ -591,7 +602,7 @@ def _agnostic_scan_extras(
                 # the flag icons of an Android package walked into a PS2 pack.
                 if f.get("category", "bios") != "bios":
                     continue
-                if not (f.get("size") or f.get("min_size") or f.get("max_size")):
+                if not declares_shape(f):
                     continue
                 # The free name is the BIOS directory's: a shader, a sound or a
                 # font the emulator reads from its resources tree has a fixed
@@ -614,24 +625,45 @@ def _agnostic_scan_extras(
                 companion_ext, image = _companion_of(profile, fname)
 
                 path_prefix = (
-                    resolved_dirs.get(id(image), "") if image
-                    else resolved_dirs.get(id(f), "")
+                    resolved_dirs.get(id(origin.get(id(image), image)), "") if image
+                    else resolved_dirs.get(id(origin.get(id(f), f)), "")
                 )
-                if not path_prefix:
+                # A placeholder (<bios>.bin) resolves to nothing and anchors no
+                # directory. The folders where the system's other profiles
+                # resolve hashed files of that shape do, those folders only:
+                # LRPS2 and PCEE2 are made of placeholders, and on Batocera,
+                # where no other libretro PS2 core anchors pcsx2/bios/, the
+                # pack held nothing there. A companion (<bios>.nvm) looks
+                # where its image is proven: RetroBat's pcsx2/bios/ had
+                # scph39001.bin and its .nvm only at the BIOS root.
+                exact_dirs: frozenset[str] = frozenset()
+                anchor = image if image else f
+                if not path_prefix and "<" in str(anchor.get("name", "")):
+                    exact_dirs = placeholder_directories(
+                        anchor, emu_name, profile, db, all_profiles or profiles
+                    )
+                if not path_prefix and not exact_dirs:
                     continue
                 # A name matching one file identifies it. A name matching several
                 # identifies nothing on its own, so the profile's other files have
                 # to agree on the directory before the scan walks it.
-                ambiguous = id(f) in named_only and len(by_name.get(fname, [])) > 1
+                ambiguous = (
+                    id(origin.get(id(f), f)) in named_only
+                    and len(by_name.get(fname, [])) > 1
+                )
                 if ambiguous and agnostic_votes.get(path_prefix, 0) < 2:
                     continue
 
                 # Scan DB for all files under this prefix matching size
                 for sha1, entry in files_db.items():
                     path = entry.get("path", "")
-                    if not path.startswith(path_prefix):
+                    if exact_dirs:
+                        if ("/" not in path or path.rsplit("/", 1)[0] not in exact_dirs
+                                or "/.variants/" in path):
+                            continue
+                    elif not path.startswith(path_prefix):
                         continue
-                    if not companion_ext and not size_fits(f, entry.get("size", 0)):
+                    if not companion_ext and not shape_fits(f, path, entry.get("size", 0)):
                         continue
                     scan_name = entry.get("name", "")
                     if not scan_name:
@@ -639,6 +671,12 @@ def _agnostic_scan_extras(
                     if companion_ext:
                         stem, _, ext = scan_name.rpartition(".")
                         if not stem or ext.lower() != companion_ext.lower():
+                            continue
+                        # Read only beside the image the core selected, so a
+                        # companion counts only next to an image the image's
+                        # own test accepts: Namco System 246 .nvm and .mec
+                        # dumps sit beside no PS2 BIOS.
+                        if not _image_beside(path, stem, image, files_db):
                             continue
                         scan_name = f"{stem}.{companion_ext}"
                     # Into the directory the seed entry names, not the root:
@@ -676,14 +714,47 @@ def _agnostic_scan_extras(
                         "agnostic_scan": True,
                     }
                     extra["claim_order"] = (4, 0, emu_name)
-                    if not _take(extra, full_dest, seen_dests, taken):
-                        continue
-                    extras.append(extra)
+                    if _take(extra, full_dest, seen_dests, taken):
+                        extras.append(extra)
+                    else:
+                        # The image another core's scan placed is this core's
+                        # too, and so are the companions it reads beside it:
+                        # Recalbox's libretro PCSX2 opens <bios>.erom next to
+                        # the images LRPS2 placed, which LRPS2 never reads.
+                        held = taken.get(full_dest) if taken is not None else None
+                        if held is None or held.get("sha1") != sha1:
+                            continue
                     extras.extend(_companion_extras(
                         _companions(path, scan_name, _companion_extensions(profile, fname), files_db),
                         folder, extras_prefix, seen_dests, profile, emu_name, f, taken,
                     ))
     return extras
+
+
+def placeholder_directories(
+    seed: dict, emu_name: str, profile: dict, db: dict, all_profiles: dict,
+) -> frozenset[str]:
+    """The folders that hold the dumps a placeholder entry accepts.
+
+    Each folder where another profile of the same system resolves a hashed
+    file of the seed's shape by content: PCSX2 proves bios/Sony/PlayStation 2/.
+    Only that folder, not the ones below it (its DVD firmware).
+    """
+    systems = set(profile.get("systems", []))
+    directories: set[str] = set()
+    for other_name, other in all_profiles.items():
+        if other_name == emu_name or not systems & set(other.get("systems", [])):
+            continue
+        for f in other.get("files", []):
+            if not isinstance(f, dict) or not any(f.get(h) for h in ("sha1", "md5", "sha256", "crc32")):
+                continue
+            if f.get("size") and not size_fits(seed, f["size"]):
+                continue
+            local, status = resolve_local_file({**f, "source_profile": other_name}, db)
+            if (local and "/" in local and resolution_is_hash_exact(status)
+                    and shape_fits(seed, local)):
+                directories.add(local.rsplit("/", 1)[0])
+    return frozenset(directories)
 
 
 def _placeholder_scan(
@@ -699,33 +770,28 @@ def _placeholder_scan(
     (its DVD firmware). Nothing proven, nothing scanned.
     """
     files_db = db.get("files", {})
-    systems = set(profile.get("systems", []))
     extras: list[dict] = []
     for seed in files:
         name = str(seed.get("name", ""))
         if "<" not in name or seed.get("category", "bios") != "bios":
             continue
-        if not (seed.get("size") or seed.get("min_size") or seed.get("max_size")):
+        if not declares_shape(seed):
             continue
-        directories: set[str] = set()
-        for other_name, other in (all_profiles or load_emulator_profiles("emulators")).items():
-            if other_name == emu_name or not systems & set(other.get("systems", [])):
-                continue
-            for f in other.get("files", []):
-                if not any(f.get(h) for h in ("sha1", "md5", "sha256", "crc32")):
-                    continue
-                if f.get("size") and not size_fits(seed, f["size"]):
-                    continue
-                local, status = resolve_local_file({**f, "source_profile": other_name}, db)
-                if local and "/" in local and resolution_is_hash_exact(status):
-                    directories.add(local.rsplit("/", 1)[0])
+        # <bios>.nvm is read beside the image the core selected, never on
+        # its own: its files come with each scanned image (_companions).
+        if _companion_of(profile, name)[1] is not None:
+            continue
+        directories = placeholder_directories(
+            seed, emu_name, profile, db,
+            all_profiles or load_emulator_profiles("emulators"),
+        )
         layout = (seed.get("standalone_path") if standalone else None) or seed.get("path") or ""
         folder = layout.rsplit("/", 1)[0] if "/" in layout else ""
         for sha1, entry in sorted(files_db.items(), key=lambda kv: kv[1].get("path", "")):
             path = entry.get("path", "")
             if "/" not in path or path.rsplit("/", 1)[0] not in directories:
                 continue
-            if "/.variants/" in path or not size_fits(seed, entry.get("size", 0)):
+            if "/.variants/" in path or not shape_fits(seed, path, entry.get("size", 0)):
                 continue
             scan_name = entry.get("name", "")
             dest = f"{folder}/{scan_name}" if folder else scan_name
@@ -733,6 +799,7 @@ def _placeholder_scan(
                 "name": scan_name,
                 "destination": dest,
                 "sha1": sha1,
+                "source_name": name,
                 "source_system": seed.get("system"),
                 "region": seed.get("region"),
             })
@@ -766,16 +833,34 @@ def expand_agnostic_entries(
         db.get("indexes", {}).get("by_name", {}), set(), "",
         {emu_name} if standalone else set(),
     )
-    # A placeholder is answered by files found in its own folder: PCEE2's
-    # eeprom.dat, scanned at the root, said nothing about pcsx2/bios/.
-    covered = {e["destination"].rsplit("/", 1)[0] if "/" in e["destination"] else "" for e in scanned}
+
+    # A placeholder is answered by the files its own scan found in its own
+    # folder: PCEE2's eeprom.dat, scanned at the root, said nothing about
+    # pcsx2/bios/, and its COH-H images, scanned into pcsx2/bios/, say
+    # nothing about the console <bios>.bin beside them.
+    def answered(extras: list[dict]) -> set[tuple[str, str]]:
+        return {
+            (str(e.get("source_name", "")),
+             e["destination"].rsplit("/", 1)[0] if "/" in e["destination"] else "")
+            for e in extras
+        }
+
+    def is_answered(f: dict, covered: set[tuple[str, str]]) -> bool:
+        # A companion placeholder (<bios>.rom1) is read beside its image, so
+        # it is answered wherever the image placeholder is.
+        _ext, image = _companion_of(profile, str(f.get("name", "")))
+        names = {f.get("name", "")} | ({image.get("name", "")} if image else set())
+        return any((n, folder(f)) in covered for n in names)
+
+    covered = answered(scanned)
     open_seeds = [
-        f for f in files if "<" in str(f.get("name", "")) and folder(f) not in covered
+        f for f in files
+        if "<" in str(f.get("name", "")) and not is_answered(f, covered)
     ]
     scanned += _placeholder_scan(
         open_seeds, emu_name, profile, db, standalone, all_profiles
     )
-    covered = {e["destination"].rsplit("/", 1)[0] if "/" in e["destination"] else "" for e in scanned}
+    covered = answered(scanned)
     if not scanned:
         return files
     concrete = [
@@ -793,7 +878,7 @@ def expand_agnostic_entries(
     ]
     return [
         f for f in files
-        if "<" not in str(f.get("name", "")) or folder(f) not in covered
+        if "<" not in str(f.get("name", "")) or not is_answered(f, covered)
     ] + concrete
 
 
@@ -856,6 +941,32 @@ def _companion_of(profile: dict, name: str) -> tuple[str, dict | None]:
         ):
             return ext, entry
     return "", None
+
+
+def _image_beside(
+    companion_path: str, stem: str, image: dict | None, files_db: dict
+) -> bool:
+    """Whether the folder of a companion holds an image it is read beside.
+
+    PCSX2 opens `<bios>.rom1`, then the BIOS path with its extension
+    replaced (BiosTools.cpp LoadExtraRom, CDVD.cpp cdvdLoadNVRAM): the
+    companion's stem is the image's name or the image's own stem. The
+    image has to pass the image entry's test, its size and its ROM
+    directory, as the scan that selected it does.
+    """
+    if image is None:
+        return False
+    directory = companion_path.rsplit("/", 1)[0] + "/"
+    wanted = stem.lower()
+    for _sha1, entry in _files_by_directory(files_db).get(directory, ()):
+        name = str(entry.get("name", ""))
+        if name.lower() != wanted and name.rpartition(".")[0].lower() != wanted:
+            continue
+        if name.lower() == companion_path.rsplit("/", 1)[-1].lower():
+            continue
+        if shape_fits(image, entry.get("path", ""), entry.get("size", 0)):
+            return True
+    return False
 
 
 def _companion_extensions(profile: dict, seed_name: str) -> set[str]:
@@ -1336,6 +1447,8 @@ def _collect_emulator_extras(
     for e in extras:
         covered_names.add(e["name"])
 
+    # Destination -> the copies cores ask for there, in profile order.
+    copied: dict[str, list[dict]] = {}
     for emu_name, profile in sorted(profiles.items()):
         if profile.get("type") in ("launcher", "alias"):
             continue
@@ -1351,7 +1464,7 @@ def _collect_emulator_extras(
                 # covered elsewhere belongs to another program's file.
                 # Nor is one placed outside the BIOS tree by the layout.
                 if (fname not in covered_names or f.get("unsourceable") or f.get("unplaced")
-                        or f.get("root") in OUTER_ROOTS or f.get("unprefixed")):
+                        or f.get("root") in OUTER_ROOTS):
                     continue
                 # Installed with the emulator or by the platform's package,
                 # as the first pass already decided for the same entry.
@@ -1381,10 +1494,16 @@ def _collect_emulator_extras(
                 # of the directory core files go to, which the platform may not
                 # declare (Recalbox has its System Cards under pcenginecd/ only,
                 # geargrafx reads them from the root).
-                full_dest = prefixed_destination(dest, extras_prefix)
+                # A path of the install tree outside the BIOS folder keeps no
+                # prefix: EmuELEC's dolphin/dolphin-emu/GBA/gba_bios.bin.
+                full_dest = (
+                    sanitize_pack_path(dest) if f.get("unprefixed")
+                    else prefixed_destination(dest, extras_prefix)
+                )
                 if full_dest in seen_dests and full_dest not in taken:
                     continue
-                if full_dest in taken and full_dest not in seen and fname not in platform_names:
+                if (full_dest in taken or full_dest in copied) and full_dest not in seen \
+                        and fname not in platform_names:
                     # Another core's extra holds this path and only that
                     # extra covers the name: a pack without that core never
                     # reaches this copy, so this core claims nothing here.
@@ -1427,9 +1546,30 @@ def _collect_emulator_extras(
                     extra["contents"] = f["contents"]
                 if f.get("system_dir"):
                     extra["system_dir"] = f["system_dir"]
+                if f.get("unprefixed"):
+                    extra["unprefixed"] = True
+                # A copy placed outside the BIOS tree resolves by its layout
+                # path alone, as the first pass does: EmuELEC's
+                # roms/mame/stvbios.zip took bios/Arcade/MAME's set by that tail.
+                if f.get("layout_path"):
+                    extra["layout_path"] = f["layout_path"]
                 extra["claim_order"] = (2, 0, emu_name)
-                if _take(extra, full_dest, seen_dests, taken):
-                    extras.append(extra)
+                copied.setdefault(full_dest, []).append(extra)
+
+    # Several cores reading one archive in one roms folder: the copy of the
+    # core the folder starts by default goes first, then the copy serving
+    # the most of them. Five cores AmberELEC offers for roms/arcade read
+    # neogeo.zip there, and the copy holding the 18 members its default
+    # MAME 2003-Plus requires also holds the 3 MAME 2000 requires.
+    defaults = _folder_defaults(config, profiles)
+    for full_dest, claims in copied.items():
+        if len(claims) > 1:
+            claims = sorted(claims, key=lambda c: (
+                not _starts_by_default(c, defaults), -_copy_serves(c, claims, db),
+            ))
+        for extra in claims:
+            if _take(extra, full_dest, seen_dests, taken):
+                extras.append(extra)
 
     extras.extend(
         _archive_prefix_extras(
@@ -1531,6 +1671,42 @@ class _ClaimRanks:
             for dest, full in contests
             for c in (u, *u.get("other_claims", []))
         )
+
+
+def _folder_defaults(config: dict, profiles: dict) -> dict[str, set[str]]:
+    """Roms folder -> the profiles its default core or emulator names."""
+    out: dict[str, set[str]] = {}
+    for row in config.get("_rom_folders") or []:
+        chosen = {str(row.get("core") or ""), str(row.get("emulator") or "")} - {""}
+        keys = {c.lower().replace("-", "_") for c in chosen}
+        out[str(row.get("folder"))] = {
+            name for name, profile in profiles.items()
+            if keys & {n.lower().replace("-", "_")
+                       for n in (name, *(str(c) for c in profile.get("cores") or []))}
+        }
+    return out
+
+
+def _starts_by_default(extra: dict, defaults: dict[str, set[str]]) -> bool:
+    """Whether the extra's core is the one its roms folder starts by default."""
+    layout = str(extra.get("layout_path") or "")
+    destination = str(extra.get("destination") or "")
+    if not layout or not destination.endswith("/" + layout):
+        return False
+    folder = destination[: -len(layout) - 1].removeprefix("roms/")
+    return extra.get("source_profile") in defaults.get(folder, set())
+
+
+def _copy_serves(extra: dict, claims: list[dict], db: dict) -> int:
+    """How many of the claims on one path the copy an extra resolves to
+    holds every required member of."""
+    wanted = [members for c in claims if (members := contents_members(c))]
+    if not wanted:
+        return 0
+    path, _status = resolve_local_file(extra, db, dest_hint=extra.get("destination", ""))
+    if not path:
+        return 0
+    return sum(1 for members in wanted if holds_required_members(path, members))
 
 
 def _names_content(entry: dict) -> bool:

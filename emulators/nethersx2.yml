@@ -122,6 +122,7 @@ notes: |
   archives and help pages, and adds two files the 4248 package does not carry,
   placeholder.png, which the library names outright, and the Polish flag the
   game list can ask for.
+  Java line numbers in the file refs are jadx 1.5.1 output of classes.dex.
   ref: nethersx2 v2.2n-4248 libemucore.so 0x8348d0,
        nethersx2 v2.2n-4248 libemucore.so 0x834bb0,
        xyz/aethersx2/android/NativeLibrary.smali readPackageFile,
@@ -134,7 +135,14 @@ files:
     required: true
     min_size: 4194304
     max_size: 8388608
-    validation: [size]
+    validation: [size, romdir]
+    romdir:
+      reset_compare: 10
+      missing_reset: ends_walk
+      terminated_names: true
+      extinfo: true
+      unreadable_romver: ends_walk
+      truncated_walk: ends_walk
     description: "PS2 BIOS image"
     note: >-
       Any image whose romdir holds RESET and a readable ROMVER is accepted,
@@ -142,7 +150,7 @@ files:
       named in the configuration skips both that range and the romdir test. The
       sixth ROMVER character is not examined here, the patch having replaced the
       test that rejected images carrying D.
-    source_ref: "upstream aethersx2/pcsx2/ps2/BiosTools.cpp:27-28, upstream aethersx2/pcsx2/ps2/BiosTools.cpp:235-260, nethersx2 v2.2n-4248 libemucore.so 0x828d80-0x828f10, nethersx2 v2.2n-4248 libemucore.so 0x829244-0x829248"
+    source_ref: "upstream aethersx2/pcsx2/ps2/BiosTools.cpp:27-28, upstream aethersx2/pcsx2/ps2/BiosTools.cpp:235-260, nethersx2 v2.2n-4248 libemucore.so 0x828d80-0x828f10, nethersx2 v2.2n-4248 libemucore.so 0x829020-0x8292bc, nethersx2 v2.2n-4248 libemucore.so 0x829244-0x829248"
 
   - name: ps2-0230a-20080220.rom1
     path: bios/ps2-0230a-20080220.rom1
@@ -552,7 +560,7 @@ files:
       Loaded as icons/flags/<region>.png with the region string of the entry.
       Thirty are carried, seven NTSC and twenty-two PAL plus Other, the Polish
       flag being one the project adds.
-    source_ref: "nethersx2 v2.2n-4248 classes.dex icons/flags/%s.png"
+    source_ref: "classes.dex nethersx2 v2.2n-4248 xyz.aethersx2.android.e.h(e.b, int) formats icons/flags/%s.png (jadx e.java:72), classes.dex NativeLibrary.loadDrawableFromPackage(Context, String) AssetManager.open (jadx NativeLibrary.java:575-583)"
 
   - name: "star-<rating>.png"
     path: assets/icons/star-0.png
@@ -560,7 +568,7 @@ files:
     bundled: true
     description: "Game list compatibility rating icon"
     note: "Loaded as icons/star-<rating>.png for ratings 0 to 5."
-    source_ref: "nethersx2 v2.2n-4248 classes.dex icons/star-%d.png"
+    source_ref: "classes.dex nethersx2 v2.2n-4248 xyz.aethersx2.android.e.h(e.b, int) formats icons/star-%d.png (jadx e.java:74), classes.dex NativeLibrary.loadDrawableFromPackage(Context, String) AssetManager.open (jadx NativeLibrary.java:575-583)"
 
   - name: faq.html
     path: assets/faq.html
@@ -571,7 +579,7 @@ files:
     sha1: 9163d4a3d19b87483f843e4bf3afe236a50a72d2
     description: "Help page"
     note: "Opened under the android_asset scheme in the built-in browser view."
-    source_ref: "nethersx2 v2.2n-4248 classes.dex android_asset faq.html"
+    source_ref: "classes.dex nethersx2 v2.2n-4248 xyz.aethersx2.android.MainActivity.A(MainActivity, MenuItem) action_show_faq (jadx MainActivity.java:154-156), classes.dex MainActivity.G(String) WebView.loadUrl (jadx MainActivity.java:371-376), classes.dex SetupWizardActivity.a.onCreateView(LayoutInflater, ViewGroup, Bundle) WebView.loadUrl (jadx SetupWizardActivity.java:45)"
 
   - name: 3rdparty.html
     path: assets/3rdparty.html
@@ -582,7 +590,7 @@ files:
     sha1: 7743bf1d7e6e09a02f1b2972aa63bd8a9f26050d
     description: "Third party notices page"
     note: "Opened under the android_asset scheme in the built-in browser view."
-    source_ref: "nethersx2 v2.2n-4248 classes.dex android_asset 3rdparty.html"
+    source_ref: "classes.dex nethersx2 v2.2n-4248 xyz.aethersx2.android.MainActivity.A(MainActivity, MenuItem) action_third_party_notices (jadx MainActivity.java:192-194), classes.dex MainActivity.G(String) WebView.loadUrl (jadx MainActivity.java:371-376)"
 
 exclusion_note: >
   Left out are the assets the package carries that no code path on this platform

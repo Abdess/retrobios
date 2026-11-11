@@ -193,7 +193,7 @@ files:
     max_size: 131072
     validation: [size]
     note: "Integra-B slot under the Torch configuration."
-    source_ref: "UserData/Roms_Torch.cfg:24"
+    source_ref: "UserData/Roms_Torch.cfg:24, BeebEmTorch.vbs:3, Src/BeebWin.cpp:5291-5297, 5960-5964, 473, Src/RomConfigFile.cpp:158-162, Src/BeebMem.cpp:1321-1337"
 
   - name: WDFS.rom
     path: BeebFile/BBCINT/WDFS.rom
@@ -206,7 +206,7 @@ files:
     max_size: 131072
     validation: [size]
     note: "Filing system slot under the Torch configuration."
-    source_ref: "UserData/Roms_Torch.cfg:26"
+    source_ref: "UserData/Roms_Torch.cfg:26, BeebEmTorch.vbs:3, Src/BeebWin.cpp:5291-5297, 5960-5964, 473, Src/RomConfigFile.cpp:158-162, Src/BeebMem.cpp:1321-1337"
 
   - name: MCP120-CBL.rom
     path: BeebFile/BBC/MCP120-CBL.rom
@@ -219,7 +219,7 @@ files:
     max_size: 131072
     validation: [size]
     note: "Host tube support for the Torch Z80 co-processor on a Model B."
-    source_ref: "UserData/Roms_Torch.cfg:5, Help/z80torch.html"
+    source_ref: "UserData/Roms_Torch.cfg:5, Help/z80torch.html, BeebEmTorch.vbs:3, Src/BeebWin.cpp:5291-5297, 5960-5964, 473, Src/RomConfigFile.cpp:158-162, Src/BeebMem.cpp:1321-1337"
 
   # -- BBC Model B Plus --
 
@@ -413,7 +413,7 @@ files:
     max_size: 131072
     validation: [size]
     note: "Host tube support for the Torch Z80 co-processor on a Master."
-    source_ref: "UserData/Roms_Torch.cfg:79, Help/z80torch.html"
+    source_ref: "UserData/Roms_Torch.cfg:79, Help/z80torch.html, BeebEmTorch.vbs:3, Src/BeebWin.cpp:5291-5297, 5960-5964, 473, Src/RomConfigFile.cpp:158-162, Src/BeebMem.cpp:1321-1337"
 
   # -- BBC Master ET --
 

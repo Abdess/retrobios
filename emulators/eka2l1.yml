@@ -29,6 +29,8 @@ cores:
 systems:
   - ngage
   - symbian
+standalone_directories:
+  - "data-storage = data"
 
 data_root:
   android:

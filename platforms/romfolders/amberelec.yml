@@ -75,6 +75,15 @@ folders:
   core: puae2021
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:45"
+  offers:
+  - emulator: retroarch
+    core: puae2021
+  - emulator: retroarch
+    core: puae
+  - emulator: retroarch
+    core: uae4arm
+  - emulator: AMIBERRY
+    core: AMIBERRY
 - folder: amigacd32
   extensions:
   - .chd
@@ -84,6 +93,13 @@ folders:
   core: puae2021
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:72"
+  offers:
+  - emulator: retroarch
+    core: puae2021
+  - emulator: retroarch
+    core: puae
+  - emulator: retroarch
+    core: uae4arm
 - folder: amstradcpc
   extensions:
   - .7z
@@ -98,6 +114,13 @@ folders:
   core: crocods
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:94"
+  offers:
+  - emulator: retroarch
+    core: crocods
+  - emulator: retroarch
+    core: cap32
+  - emulator: retroarch
+    core: ep128emu_core
 - folder: arcade
   extensions:
   - .7z
@@ -105,6 +128,29 @@ folders:
   core: mame2003_plus
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:116"
+  offers:
+  - emulator: retroarch
+    core: mame2003_plus
+  - emulator: retroarch
+    core: mame2000
+  - emulator: retroarch
+    core: mame2010
+  - emulator: retroarch
+    core: mame2015
+  - emulator: retroarch
+    core: mame2016
+  - emulator: retroarch
+    core: mame
+  - emulator: retroarch
+    core: fbneo
+  - emulator: retroarch
+    core: fbalpha2012
+  - emulator: retroarch
+    core: fbalpha2019
+  - emulator: retrorun
+    core: mame
+  - emulator: AdvanceMame
+    core: AdvanceMame
   arcade: true
 - folder: arduboy
   extensions:
@@ -121,6 +167,15 @@ folders:
   core: stella2014
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:173"
+  offers:
+  - emulator: retroarch
+    core: stella
+  - emulator: retroarch
+    core: stella2014
+  - emulator: retrorun
+    core: stella
+  - emulator: retrorun
+    core: stella2014
 - folder: atari5200
   extensions:
   - .7z
@@ -138,6 +193,11 @@ folders:
   core: a5200
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:200"
+  offers:
+  - emulator: retroarch
+    core: atari800
+  - emulator: retroarch
+    core: a5200
 - folder: atari7800
   extensions:
   - .7z
@@ -147,6 +207,13 @@ folders:
   core: prosystem
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:221"
+  offers:
+  - emulator: retroarch
+    core: prosystem
+  - emulator: mame
+    core: a7800
+  - emulator: mame
+    core: a7800p
 - folder: atari800
   extensions:
   - .7z
@@ -173,6 +240,11 @@ folders:
   core: virtualjaguar
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:292"
+  offers:
+  - emulator: retroarch
+    core: virtualjaguar
+  - emulator: retrorun
+    core: virtualjaguar
 - folder: atarilynx
   extensions:
   - .7z
@@ -182,6 +254,11 @@ folders:
   core: handy
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1043"
+  offers:
+  - emulator: retroarch
+    core: handy
+  - emulator: retroarch
+    core: beetle_lynx
 - folder: atarist
   extensions:
   - .7z
@@ -195,6 +272,11 @@ folders:
   core: hatari
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:267"
+  offers:
+  - emulator: retroarch
+    core: hatari
+  - emulator: HATARISA
+    core: HATARISA
 - folder: atomiswave
   extensions:
   - .7z
@@ -205,6 +287,19 @@ folders:
   core: flycast2021le
   emulator: retrorun
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:317"
+  offers:
+  - emulator: retroarch
+    core: flycast
+  - emulator: retroarch
+    core: flycast2021
+  - emulator: retroarch
+    core: flycast2021le
+  - emulator: retrorun
+    core: flycast
+  - emulator: retrorun
+    core: flycast2021
+  - emulator: retrorun
+    core: flycast2021le
   arcade: true
 - folder: build
   extensions:
@@ -341,12 +436,26 @@ folders:
   core: bluemsx
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:366"
+  offers:
+  - emulator: retroarch
+    core: bluemsx
+  - emulator: retroarch
+    core: gearcoleco
+  - emulator: retroarch
+    core: smsplus
 - folder: doom
   extensions:
   - .doom
   core: gzdoom
   emulator: gzdoom
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:2825"
+  offers:
+  - emulator: gzdoom
+    core: gzdoom
+  - emulator: lzdoom
+    core: lzdoom
+  - emulator: retroarch
+    core: prboom
 - folder: dreamcast
   extensions:
   - .cdi
@@ -356,6 +465,19 @@ folders:
   core: flycast2021le
   emulator: retrorun
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:487"
+  offers:
+  - emulator: retroarch
+    core: flycast
+  - emulator: retroarch
+    core: flycast2021
+  - emulator: retroarch
+    core: flycast2021le
+  - emulator: retrorun
+    core: flycast
+  - emulator: retrorun
+    core: flycast2021
+  - emulator: retrorun
+    core: flycast2021le
 - folder: easyrpg
   extensions:
   - .easyrpg
@@ -394,6 +516,15 @@ folders:
   core: nestopia
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:536"
+  offers:
+  - emulator: retroarch
+    core: fceumm
+  - emulator: retroarch
+    core: nestopia
+  - emulator: retroarch
+    core: quicknes
+  - emulator: retroarch
+    core: mesen
 - folder: fbneo
   name: fbn
   extensions:
@@ -402,6 +533,23 @@ folders:
   core: fbneo
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:582"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+  - emulator: retroarch
+    core: mame2003_plus
+  - emulator: retroarch
+    core: mame2010
+  - emulator: retroarch
+    core: mame2015
+  - emulator: retroarch
+    core: mame2016
+  - emulator: retroarch
+    core: mame
+  - emulator: retroarch
+    core: fbalpha2012
+  - emulator: retroarch
+    core: fbalpha2019
   arcade: true
 - folder: fds
   extensions:
@@ -411,6 +559,15 @@ folders:
   core: nestopia
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:559"
+  offers:
+  - emulator: retroarch
+    core: fceumm
+  - emulator: retroarch
+    core: nestopia
+  - emulator: retroarch
+    core: quicknes
+  - emulator: retroarch
+    core: mesen
 - folder: gamate
   extensions:
   - .7z
@@ -436,6 +593,19 @@ folders:
   core: gearsystem
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:844"
+  offers:
+  - emulator: retroarch
+    core: gearsystem
+  - emulator: retroarch
+    core: genesis_plus_gx
+  - emulator: retroarch
+    core: picodrive
+  - emulator: retroarch
+    core: smsplus
+  - emulator: retrorun
+    core: genesis_plus_gx
+  - emulator: retrorun
+    core: picodrive
 - folder: gamegearh
   name: ggh
   extensions:
@@ -446,6 +616,19 @@ folders:
   core: gearsystem
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:873"
+  offers:
+  - emulator: retroarch
+    core: gearsystem
+  - emulator: retroarch
+    core: genesis_plus_gx
+  - emulator: retroarch
+    core: picodrive
+  - emulator: retroarch
+    core: smsplus
+  - emulator: retrorun
+    core: genesis_plus_gx
+  - emulator: retrorun
+    core: picodrive
 - folder: gameking
   extensions:
   - .7z
@@ -488,6 +671,29 @@ folders:
   core: gambatte
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:648"
+  offers:
+  - emulator: retroarch
+    core: gambatte
+  - emulator: retroarch
+    core: sameboy
+  - emulator: retroarch
+    core: gearboy
+  - emulator: retroarch
+    core: tgbdual
+  - emulator: retroarch
+    core: DoubleCherryGB
+  - emulator: retroarch
+    core: mgba
+  - emulator: retroarch
+    core: vbam
+  - emulator: retroarch
+    core: bsnes
+  - emulator: retroarch
+    core: mesen-s
+  - emulator: retrorun
+    core: mgba
+  - emulator: retrorun
+    core: vbam
 - folder: gba
   extensions:
   - .7z
@@ -496,6 +702,21 @@ folders:
   core: mgba
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:716"
+  offers:
+  - emulator: retroarch
+    core: mgba
+  - emulator: retroarch
+    core: gpsp
+  - emulator: retroarch
+    core: vbam
+  - emulator: retroarch
+    core: vba_next
+  - emulator: retroarch
+    core: beetle_gba
+  - emulator: retrorun
+    core: mgba
+  - emulator: retrorun
+    core: vbam
 - folder: gbah
   extensions:
   - .7z
@@ -504,6 +725,21 @@ folders:
   core: mgba
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:746"
+  offers:
+  - emulator: retroarch
+    core: mgba
+  - emulator: retroarch
+    core: gpsp
+  - emulator: retroarch
+    core: vbam
+  - emulator: retroarch
+    core: vba_next
+  - emulator: retroarch
+    core: beetle_gba
+  - emulator: retrorun
+    core: mgba
+  - emulator: retrorun
+    core: vbam
 - folder: gbc
   extensions:
   - .7z
@@ -513,6 +749,29 @@ folders:
   core: gambatte
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:776"
+  offers:
+  - emulator: retroarch
+    core: gambatte
+  - emulator: retroarch
+    core: sameboy
+  - emulator: retroarch
+    core: gearboy
+  - emulator: retroarch
+    core: tgbdual
+  - emulator: retroarch
+    core: DoubleCherryGB
+  - emulator: retroarch
+    core: mgba
+  - emulator: retroarch
+    core: vbam
+  - emulator: retroarch
+    core: bsnes
+  - emulator: retroarch
+    core: mesen-s
+  - emulator: retrorun
+    core: mgba
+  - emulator: retrorun
+    core: vbam
 - folder: gbch
   extensions:
   - .7z
@@ -522,6 +781,29 @@ folders:
   core: gambatte
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:810"
+  offers:
+  - emulator: retroarch
+    core: gambatte
+  - emulator: retroarch
+    core: sameboy
+  - emulator: retroarch
+    core: gearboy
+  - emulator: retroarch
+    core: tgbdual
+  - emulator: retroarch
+    core: DoubleCherryGB
+  - emulator: retroarch
+    core: mgba
+  - emulator: retroarch
+    core: vbam
+  - emulator: retroarch
+    core: bsnes
+  - emulator: retroarch
+    core: mesen-s
+  - emulator: retrorun
+    core: mgba
+  - emulator: retrorun
+    core: vbam
 - folder: gbh
   extensions:
   - .7z
@@ -531,6 +813,29 @@ folders:
   core: gambatte
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:682"
+  offers:
+  - emulator: retroarch
+    core: gambatte
+  - emulator: retroarch
+    core: sameboy
+  - emulator: retroarch
+    core: gearboy
+  - emulator: retroarch
+    core: tgbdual
+  - emulator: retroarch
+    core: DoubleCherryGB
+  - emulator: retroarch
+    core: mgba
+  - emulator: retroarch
+    core: vbam
+  - emulator: retroarch
+    core: bsnes
+  - emulator: retroarch
+    core: mesen-s
+  - emulator: retrorun
+    core: mgba
+  - emulator: retrorun
+    core: vbam
 - folder: genesis
   extensions:
   - .7z
@@ -543,6 +848,17 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1855"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+  - emulator: retroarch
+    core: picodrive
+  - emulator: retrorun
+    core: genesis_plus_gx
+  - emulator: retrorun
+    core: picodrive
 - folder: genh
   extensions:
   - .7z
@@ -555,6 +871,17 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1883"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+  - emulator: retroarch
+    core: picodrive
+  - emulator: retrorun
+    core: genesis_plus_gx
+  - emulator: retrorun
+    core: picodrive
 - folder: homebrew
   extensions:
   - .sh
@@ -575,6 +902,11 @@ folders:
   core: freej2me-plus
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1022"
+  offers:
+  - emulator: retroarch
+    core: freej2me-plus
+  - emulator: retroarch
+    core: freej2me
 - folder: laserdisc
   extensions:
   - .daphne
@@ -596,6 +928,29 @@ folders:
   core: mame2003_plus
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1064"
+  offers:
+  - emulator: retroarch
+    core: mame2003_plus
+  - emulator: retroarch
+    core: mame2000
+  - emulator: retroarch
+    core: mame2010
+  - emulator: retroarch
+    core: mame2015
+  - emulator: retroarch
+    core: mame2016
+  - emulator: retroarch
+    core: mame
+  - emulator: retroarch
+    core: fbneo
+  - emulator: retroarch
+    core: fbalpha2012
+  - emulator: retroarch
+    core: fbalpha2019
+  - emulator: retrorun
+    core: mame
+  - emulator: AdvanceMame
+    core: AdvanceMame
   arcade: true
 - folder: mastersystem
   extensions:
@@ -606,6 +961,19 @@ folders:
   core: gearsystem
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1911"
+  offers:
+  - emulator: retroarch
+    core: gearsystem
+  - emulator: retroarch
+    core: genesis_plus_gx
+  - emulator: retroarch
+    core: picodrive
+  - emulator: retroarch
+    core: smsplus
+  - emulator: retrorun
+    core: genesis_plus_gx
+  - emulator: retrorun
+    core: picodrive
 - folder: megacd
   extensions:
   - .chd
@@ -615,6 +983,15 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1828"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+  - emulator: retroarch
+    core: picodrive
+  - emulator: retrorun
+    core: genesis_plus_gx
+  - emulator: retrorun
+    core: picodrive
 - folder: megadrive
   extensions:
   - .7z
@@ -627,6 +1004,17 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1940"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+  - emulator: retroarch
+    core: picodrive
+  - emulator: retrorun
+    core: genesis_plus_gx
+  - emulator: retrorun
+    core: picodrive
 - folder: megadrive-japan
   extensions:
   - .7z
@@ -639,6 +1027,17 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1968"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+  - emulator: retroarch
+    core: picodrive
+  - emulator: retrorun
+    core: genesis_plus_gx
+  - emulator: retrorun
+    core: picodrive
 - folder: megaduck
   extensions:
   - .7z
@@ -684,6 +1083,11 @@ folders:
   core: bluemsx
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1151"
+  offers:
+  - emulator: retroarch
+    core: bluemsx
+  - emulator: retroarch
+    core: fmsx
 - folder: msx2
   extensions:
   - .7z
@@ -696,6 +1100,11 @@ folders:
   core: bluemsx
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1172"
+  offers:
+  - emulator: retroarch
+    core: bluemsx
+  - emulator: retroarch
+    core: fmsx
 - folder: n64
   extensions:
   - .7z
@@ -706,6 +1115,17 @@ folders:
   core: m64p_rice
   emulator: mupen64plussa
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1313"
+  offers:
+  - emulator: retroarch
+    core: parallel_n64
+  - emulator: retroarch
+    core: mupen64plus_next
+  - emulator: retrorun
+    core: parallel_n64
+  - emulator: mupen64plussa
+    core: m64p_gl64mk2
+  - emulator: mupen64plussa
+    core: m64p_rice
 - folder: naomi
   extensions:
   - .7z
@@ -716,6 +1136,19 @@ folders:
   core: flycast2021le
   emulator: retrorun
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1193"
+  offers:
+  - emulator: retroarch
+    core: flycast
+  - emulator: retroarch
+    core: flycast2021
+  - emulator: retroarch
+    core: flycast2021le
+  - emulator: retrorun
+    core: flycast
+  - emulator: retrorun
+    core: flycast2021
+  - emulator: retrorun
+    core: flycast2021le
   arcade: true
 - folder: nds
   extensions:
@@ -725,6 +1158,13 @@ folders:
   core: drastic
   emulator: drastic
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1345"
+  offers:
+  - emulator: retroarch
+    core: melonds
+  - emulator: retroarch
+    core: melondsds
+  - emulator: drastic
+    core: drastic
 - folder: neocd
   extensions:
   - .chd
@@ -733,6 +1173,11 @@ folders:
   core: neocd
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1250"
+  offers:
+  - emulator: retroarch
+    core: neocd
+  - emulator: retroarch
+    core: fbneo
 - folder: neogeo
   extensions:
   - .7z
@@ -741,6 +1186,25 @@ folders:
   core: fbneo
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1222"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+  - emulator: retroarch
+    core: geolith
+  - emulator: retroarch
+    core: mame2003_plus
+  - emulator: retroarch
+    core: fbalpha2012
+  - emulator: retroarch
+    core: fbalpha2019
+  - emulator: retroarch
+    core: mame2010
+  - emulator: retroarch
+    core: mame2015
+  - emulator: retroarch
+    core: mame2016
+  - emulator: retroarch
+    core: mame
 - folder: nes
   extensions:
   - .7z
@@ -751,6 +1215,15 @@ folders:
   core: nestopia
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1371"
+  offers:
+  - emulator: retroarch
+    core: fceumm
+  - emulator: retroarch
+    core: nestopia
+  - emulator: retroarch
+    core: quicknes
+  - emulator: retroarch
+    core: mesen
 - folder: nesh
   extensions:
   - .7z
@@ -761,6 +1234,15 @@ folders:
   core: nestopia
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1394"
+  offers:
+  - emulator: retroarch
+    core: fceumm
+  - emulator: retroarch
+    core: nestopia
+  - emulator: retroarch
+    core: quicknes
+  - emulator: retroarch
+    core: mesen
 - folder: ngp
   extensions:
   - .7z
@@ -770,6 +1252,11 @@ folders:
   core: beetle_ngp
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1271"
+  offers:
+  - emulator: retroarch
+    core: beetle_ngp
+  - emulator: retroarch
+    core: race
 - folder: ngpc
   extensions:
   - .7z
@@ -778,6 +1265,11 @@ folders:
   core: beetle_ngp
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1292"
+  offers:
+  - emulator: retroarch
+    core: beetle_ngp
+  - emulator: retroarch
+    core: race
 - folder: odyssey
   name: odyssey2
   extensions:
@@ -802,6 +1294,15 @@ folders:
   core: dosbox_pure
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1101"
+  offers:
+  - emulator: retroarch
+    core: dosbox_pure
+  - emulator: retroarch
+    core: dosbox_core
+  - emulator: retrorun
+    core: dosbox_pure
+  - emulator: retrorun
+    core: dosbox_core
 - folder: pc88
   name: pc-8800
   extensions:
@@ -834,6 +1335,11 @@ folders:
   core: np2kai
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1477"
+  offers:
+  - emulator: retroarch
+    core: np2kai
+  - emulator: retroarch
+    core: nekop2
 - folder: pcengine
   extensions:
   - .7z
@@ -843,6 +1349,13 @@ folders:
   core: beetle_pce_fast
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1498"
+  offers:
+  - emulator: retroarch
+    core: beetle_pce_fast
+  - emulator: retroarch
+    core: beetle_pce
+  - emulator: retroarch
+    core: beetle_supergrafx
 - folder: pcenginecd
   extensions:
   - .ccd
@@ -853,6 +1366,13 @@ folders:
   core: beetle_pce_fast
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1520"
+  offers:
+  - emulator: retroarch
+    core: beetle_pce_fast
+  - emulator: retroarch
+    core: beetle_pce
+  - emulator: retroarch
+    core: beetle_supergrafx
 - folder: pcfx
   extensions:
   - .ccd
@@ -870,6 +1390,11 @@ folders:
   core: fake08
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1562"
+  offers:
+  - emulator: retroarch
+    core: fake08
+  - emulator: pico8
+    core: pico8_64
 - folder: piece
   extensions:
   - .pex
@@ -898,6 +1423,13 @@ folders:
   core: PPSSPPSDL
   emulator: PPSSPPSDL
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1636"
+  offers:
+  - emulator: PPSSPPSDL
+    core: PPSSPPSDL
+  - emulator: retroarch
+    core: ppsspp
+  - emulator: retrorun
+    core: ppsspp
 - folder: pspminis
   extensions:
   - .chd
@@ -907,6 +1439,11 @@ folders:
   core: PPSSPPSDL
   emulator: PPSSPPSDL
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1666"
+  offers:
+  - emulator: PPSSPPSDL
+    core: PPSSPPSDL
+  - emulator: retroarch
+    core: ppsspp
 - folder: psx
   extensions:
   - .bin
@@ -923,6 +1460,19 @@ folders:
   core: pcsx_rearmed
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1607"
+  offers:
+  - emulator: retroarch
+    core: pcsx_rearmed
+  - emulator: retroarch
+    core: duckstation
+  - emulator: retroarch
+    core: swanstation
+  - emulator: retrorun
+    core: pcsx_rearmed
+  - emulator: retrorun
+    core: duckstation
+  - emulator: retrorun
+    core: swanstation
 - folder: pv1000
   extensions:
   - .7z
@@ -944,6 +1494,29 @@ folders:
   core: snes9x
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:2307"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+  - emulator: retroarch
+    core: snes9x2010
+  - emulator: retroarch
+    core: snes9x2002
+  - emulator: retroarch
+    core: snes9x2005_plus
+  - emulator: retroarch
+    core: beetle_snes
+  - emulator: retroarch
+    core: bsnes
+  - emulator: retroarch
+    core: bsnes2014_performance
+  - emulator: retroarch
+    core: bsnes2014_balanced
+  - emulator: retroarch
+    core: bsnes_mercury_performance
+  - emulator: retroarch
+    core: bsnes_mercury_balanced
+  - emulator: retroarch
+    core: mesen-s
 - folder: saturn
   extensions:
   - .chd
@@ -967,6 +1540,11 @@ folders:
   core: SCUMMVMSA
   emulator: SCUMMVMSA
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1751"
+  offers:
+  - emulator: retroarch
+    core: scummvm
+  - emulator: SCUMMVMSA
+    core: SCUMMVMSA
 - folder: scv
   extensions:
   - '.0'
@@ -988,6 +1566,11 @@ folders:
   core: picodrive
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1776"
+  offers:
+  - emulator: retroarch
+    core: picodrive
+  - emulator: retrorun
+    core: picodrive
 - folder: segacd
   extensions:
   - .chd
@@ -997,6 +1580,15 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1801"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+  - emulator: retroarch
+    core: picodrive
+  - emulator: retrorun
+    core: genesis_plus_gx
+  - emulator: retrorun
+    core: picodrive
 - folder: sfc
   extensions:
   - .7z
@@ -1008,6 +1600,31 @@ folders:
   core: snes9x
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:2276"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+  - emulator: retroarch
+    core: snes9x2010
+  - emulator: retroarch
+    core: snes9x2002
+  - emulator: retroarch
+    core: snes9x2005_plus
+  - emulator: retroarch
+    core: beetle_supafaust
+  - emulator: retroarch
+    core: beetle_snes
+  - emulator: retroarch
+    core: bsnes
+  - emulator: retroarch
+    core: bsnes2014_performance
+  - emulator: retroarch
+    core: bsnes2014_balanced
+  - emulator: retroarch
+    core: bsnes_mercury_performance
+  - emulator: retroarch
+    core: bsnes_mercury_balanced
+  - emulator: retroarch
+    core: mesen-s
 - folder: sg-1000
   extensions:
   - .7z
@@ -1017,6 +1634,17 @@ folders:
   core: gearsystem
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:2036"
+  offers:
+  - emulator: retroarch
+    core: gearsystem
+  - emulator: retroarch
+    core: genesis_plus_gx
+  - emulator: retroarch
+    core: picodrive
+  - emulator: retrorun
+    core: genesis_plus_gx
+  - emulator: retrorun
+    core: picodrive
 - folder: sgfx
   name: supergrafx
   extensions:
@@ -1030,6 +1658,11 @@ folders:
   core: beetle_supergrafx
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:2185"
+  offers:
+  - emulator: retroarch
+    core: beetle_supergrafx
+  - emulator: retroarch
+    core: beetle_pce
 - folder: snes
   extensions:
   - .7z
@@ -1041,6 +1674,39 @@ folders:
   core: snes9x
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:2206"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+  - emulator: retroarch
+    core: snes9x2010
+  - emulator: retroarch
+    core: snes9x2002
+  - emulator: retroarch
+    core: snes9x2005_plus
+  - emulator: retroarch
+    core: beetle_supafaust
+  - emulator: retroarch
+    core: beetle_snes
+  - emulator: retroarch
+    core: bsnes
+  - emulator: retroarch
+    core: bsnes2014_performance
+  - emulator: retroarch
+    core: bsnes2014_balanced
+  - emulator: retroarch
+    core: bsnes_mercury_performance
+  - emulator: retroarch
+    core: bsnes_mercury_balanced
+  - emulator: retroarch
+    core: mesen-s
+  - emulator: retrorun
+    core: snes9x
+  - emulator: retrorun
+    core: snes9x2010
+  - emulator: retrorun
+    core: snes9x2002
+  - emulator: retrorun
+    core: snes9x2005_plus
 - folder: snesh
   extensions:
   - .7z
@@ -1052,6 +1718,31 @@ folders:
   core: snes9x
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:2245"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+  - emulator: retroarch
+    core: snes9x2010
+  - emulator: retroarch
+    core: snes9x2002
+  - emulator: retroarch
+    core: snes9x2005_plus
+  - emulator: retroarch
+    core: beetle_supafaust
+  - emulator: retroarch
+    core: beetle_snes
+  - emulator: retroarch
+    core: bsnes
+  - emulator: retroarch
+    core: bsnes2014_performance
+  - emulator: retroarch
+    core: bsnes2014_balanced
+  - emulator: retroarch
+    core: bsnes_mercury_performance
+  - emulator: retroarch
+    core: bsnes_mercury_balanced
+  - emulator: retroarch
+    core: mesen-s
 - folder: snesmsu1
   extensions:
   - .7z
@@ -1063,6 +1754,15 @@ folders:
   core: snes9x
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:1128"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+  - emulator: retroarch
+    core: beetle_supafaust
+  - emulator: retroarch
+    core: bsnes
+  - emulator: retroarch
+    core: mesen-s
 - folder: solarus
   extensions:
   - .solarus
@@ -1094,6 +1794,13 @@ folders:
   core: beetle_pce_fast
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:2517"
+  offers:
+  - emulator: retroarch
+    core: beetle_pce_fast
+  - emulator: retroarch
+    core: beetle_pce
+  - emulator: retroarch
+    core: beetle_supergrafx
 - folder: tg16cd
   extensions:
   - .ccd
@@ -1104,6 +1811,13 @@ folders:
   core: beetle_pce_fast
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:2539"
+  offers:
+  - emulator: retroarch
+    core: beetle_pce_fast
+  - emulator: retroarch
+    core: beetle_pce
+  - emulator: retroarch
+    core: beetle_supergrafx
 - folder: thomson
   name: moto
   extensions:
@@ -1220,6 +1934,11 @@ folders:
   core: beetle_vb
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:2661"
+  offers:
+  - emulator: retroarch
+    core: beetle_vb
+  - emulator: retrorun
+    core: beetle_vb
 - folder: vsmile
   extensions:
   - .7z
@@ -1321,3 +2040,8 @@ folders:
   core: fuse
   emulator: retroarch
   source_ref: "os packages/ui/emulationstation/config/es_systems.cfg:2084"
+  offers:
+  - emulator: retroarch
+    core: fuse
+  - emulator: retroarch
+    core: ep128emu_core

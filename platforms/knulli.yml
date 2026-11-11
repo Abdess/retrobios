@@ -5662,9 +5662,10 @@ launchers:
   depends_on_option: "bootdisk (not (messSysName[messMode] == '' or messMode == -1)\
     \ and softList == '' and system.name == 'macintosh' and system.isOptSet('bootdisk')\
     \ and not (system.config['bootdisk'] in ['macos30', 'macos608', 'macos701', 'macos75']))"
+  choices_from: "package/emulationstation/knulli-es-system/es_features.yml:11037-11043"
   source_ref: "package/system/knulli-configgen/configgen/configgen/generators/mame/mameGenerator.py:303-305,\
-    \ 375-379, 384-385, package/emulationstation/knulli-es-system/es_features.yml:11037-11043"
-- emulator: mame, mess, mamevirtual, same_cdi
+    \ 375-379, 384-385"
+- emulator: mame
   build: libretro
   kind: fixed_name
   names:
@@ -5685,7 +5686,7 @@ launchers:
     \ in ['macos30', 'macos608', 'macos701', 'macos75'])"
   source_ref: "package/system/knulli-configgen/configgen/configgen/generators/libretro/libretroMAMEConfig.py:64,\
     \ 123, 197, 265-268, 270, 274"
-- emulator: mame, mess, mamevirtual, same_cdi
+- emulator: mame
   build: libretro
   kind: fixed_name
   names:
@@ -5704,8 +5705,9 @@ launchers:
     \ 'plugnplay', 'vis']) and not (messSysName[messMode] == '') and not (softList\
     \ != '') and system.name == 'macintosh' and system.isOptSet('bootdisk') and not\
     \ (system.config['bootdisk'] in ['macos30', 'macos608', 'macos701', 'macos75']))"
+  choices_from: "package/emulationstation/knulli-es-system/es_features.yml:3727-3733"
   source_ref: "package/system/knulli-configgen/configgen/configgen/generators/libretro/libretroMAMEConfig.py:64,\
-    \ 123, 197, 265-268, 273-274, package/emulationstation/knulli-es-system/es_features.yml:3727-3733"
+    \ 123, 197, 265-268, 273-274"
 - emulator: dolphin
   build: standalone
   kind: fixed_name

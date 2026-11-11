@@ -67,6 +67,11 @@ folders:
   core: opera
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1598"
+  offers:
+  - emulator: libretro
+    core: opera
+  - emulator: phoenix
+    core: phoenix
 - folder: 3ds
   extensions:
   - .3ds
@@ -88,12 +93,28 @@ folders:
   core: azahar
   emulator: azahar
   source_ref: "os system/templates/emulationstation/es_systems.cfg:3031"
+  offers:
+  - emulator: azahar
+    core: azahar
+  - emulator: libretro
+    core: azahar
+  - emulator: mandarine
+    core: mandarine
+  - emulator: citra
+    core: citra-qt
+  - emulator: bizhawk
+    core: Encore
 - folder: actionmax
   extensions:
   - .actionmax
   core: hypseus
   emulator: hypseus
   source_ref: "os system/templates/emulationstation/es_systems.cfg:246"
+  offers:
+  - emulator: hypseus
+    core: hypseus
+  - emulator: singe2
+    core: singe2
 - folder: adam
   extensions:
   - .1dd
@@ -119,6 +140,13 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4690"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: libretro
+    core: gearcoleco
+  - emulator: mame64
+    core: adam
 - folder: advision
   extensions:
   - .7z
@@ -127,6 +155,11 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4194"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: advision
 - folder: amazon
   extensions:
   - .bat
@@ -151,6 +184,17 @@ folders:
   core: puae
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1642"
+  offers:
+  - emulator: libretro
+    core: puae
+  - emulator: libretro
+    core: amiberry
+  - emulator: amiberry
+    core: amiberry
+  - emulator: winuae
+    core: winuae
+  - emulator: amigaforever
+    core: amigaforever
 - folder: amiga4000
   extensions:
   - .7z
@@ -167,6 +211,17 @@ folders:
   core: puae
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1667"
+  offers:
+  - emulator: libretro
+    core: puae
+  - emulator: libretro
+    core: amiberry
+  - emulator: amiberry
+    core: amiberry
+  - emulator: winuae
+    core: winuae
+  - emulator: amigaforever
+    core: amigaforever
 - folder: amiga500
   extensions:
   - .7z
@@ -184,6 +239,17 @@ folders:
   core: puae
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1618"
+  offers:
+  - emulator: libretro
+    core: puae
+  - emulator: libretro
+    core: amiberry
+  - emulator: amiberry
+    core: amiberry
+  - emulator: winuae
+    core: winuae
+  - emulator: amigaforever
+    core: amigaforever
 - folder: amigacd32
   extensions:
   - .7z
@@ -200,6 +266,17 @@ folders:
   core: puae
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1690"
+  offers:
+  - emulator: libretro
+    core: puae
+  - emulator: libretro
+    core: amiberry
+  - emulator: amiberry
+    core: amiberry
+  - emulator: winuae
+    core: cd32
+  - emulator: amigaforever
+    core: amigaforever
 - folder: amigacdtv
   extensions:
   - .7z
@@ -216,6 +293,17 @@ folders:
   core: puae
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1715"
+  offers:
+  - emulator: libretro
+    core: puae
+  - emulator: libretro
+    core: amiberry
+  - emulator: amiberry
+    core: amiberry
+  - emulator: winuae
+    core: cdtv
+  - emulator: amigaforever
+    core: amigaforever
 - folder: amstradcpc
   extensions:
   - .7z
@@ -230,6 +318,13 @@ folders:
   core: cap32
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1740"
+  offers:
+  - emulator: libretro
+    core: cap32
+  - emulator: libretro
+    core: crocods
+  - emulator: capriceforever
+    core: capriceforever
 - folder: apfm1000
   extensions:
   - .7z
@@ -238,6 +333,11 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4614"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: apfm1000
 - folder: apple2
   extensions:
   - .do
@@ -251,6 +351,19 @@ folders:
   core: applewin
   emulator: applewin
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1781"
+  offers:
+  - emulator: applewin
+    core: applewin
+  - emulator: mednafen
+    core: apple2
+  - emulator: bizhawk
+    core: AppleII
+  - emulator: libretro
+    core: applewin
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: mame64
 - folder: apple2gs
   extensions:
   - .2mg
@@ -261,12 +374,24 @@ folders:
   core: gsplus
   emulator: gsplus
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1818"
+  offers:
+  - emulator: gsplus
+    core: gsplus
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: mame64
 - folder: aquarius
   extensions:
   - .zip
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2211"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: aquarius
 - folder: arcadia
   extensions:
   - .7z
@@ -275,6 +400,13 @@ folders:
   core: amiarcadia
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4767"
+  offers:
+  - emulator: libretro
+    core: amiarcadia
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: arcadia
 - folder: archimedes
   extensions:
   - .1dd
@@ -310,6 +442,11 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4741"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: archimedes
 - folder: arduboy
   extensions:
   - .7z
@@ -318,6 +455,11 @@ folders:
   core: arduous
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4269"
+  offers:
+  - emulator: libretro
+    core: arduous
+  - emulator: libretro
+    core: ardens
 - folder: astrocade
   extensions:
   - .7z
@@ -326,6 +468,11 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4818"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: astrocde
 - folder: atari2600
   extensions:
   - .7z
@@ -337,6 +484,15 @@ folders:
   core: stella
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1864"
+  offers:
+  - emulator: libretro
+    core: stella
+  - emulator: libretro
+    core: stella2014
+  - emulator: stella
+    core: stella
+  - emulator: bizhawk
+    core: Atari2600Hawk
 - folder: atari5200
   extensions:
   - .7z
@@ -353,6 +509,15 @@ folders:
   core: a5200
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1890"
+  offers:
+  - emulator: libretro
+    core: a5200
+  - emulator: libretro
+    core: atari800
+  - emulator: libretro
+    core: stella2014
+  - emulator: altirra
+    core: altirra
 - folder: atari7800
   extensions:
   - .7z
@@ -362,6 +527,11 @@ folders:
   core: prosystem
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1912"
+  offers:
+  - emulator: libretro
+    core: prosystem
+  - emulator: bizhawk
+    core: A78
 - folder: atari800
   extensions:
   - .7z
@@ -379,6 +549,11 @@ folders:
   core: atari800
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1844"
+  offers:
+  - emulator: libretro
+    core: atari800
+  - emulator: altirra
+    core: altirra
 - folder: atarist
   extensions:
   - .7z
@@ -393,6 +568,13 @@ folders:
   core: hatari
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1936"
+  offers:
+  - emulator: libretro
+    core: hatari
+  - emulator: libretro
+    core: hatarib
+  - emulator: hatari
+    core: hatari
 - folder: atom
   extensions:
   - .1dd
@@ -420,6 +602,11 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4716"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: atom
 - folder: atomiswave
   extensions:
   - .7z
@@ -429,6 +616,13 @@ folders:
   core: flycast
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:448"
+  offers:
+  - emulator: libretro
+    core: flycast
+  - emulator: flycast
+    core: atomiswave
+  - emulator: demul
+    core: atomiswave
   arcade: true
 - folder: bbcmicro
   extensions:
@@ -439,6 +633,13 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4639"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: libretro
+    core: b2
+  - emulator: mame64
+    core: bbcmicro
 - folder: bennugd
   extensions:
   - .dat
@@ -521,6 +722,13 @@ folders:
   core: vice_x64
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2108"
+  offers:
+  - emulator: libretro
+    core: vice_x64
+  - emulator: libretro
+    core: vice_x64sc
+  - emulator: libretro
+    core: frodo
 - folder: camplynx
   extensions:
   - .bin
@@ -530,6 +738,13 @@ folders:
   core: jynx
   emulator: jynx
   source_ref: "os system/templates/emulationstation/es_systems.cfg:5014"
+  offers:
+  - emulator: jynx
+    core: jynx
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: camplynx
 - folder: cannonball
   extensions:
   - .game
@@ -551,6 +766,23 @@ folders:
   core: fbneo
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:147"
+  offers:
+  - emulator: libretro
+    core: fbneo
+  - emulator: libretro
+    core: fbalpha
+  - emulator: libretro
+    core: fbalpha2012
+  - emulator: libretro
+    core: mame2003_plus
+  - emulator: libretro
+    core: mame2016
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: mame64
+  - emulator: demul
+    core: demul
   arcade: true
 - folder: cavestory
   extensions:
@@ -559,6 +791,11 @@ folders:
   core: nxengine
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:3571"
+  offers:
+  - emulator: libretro
+    core: nxengine
+  - emulator: libretro
+    core: doukutsu_rs
 - folder: cdi
   extensions:
   - .cdr
@@ -571,6 +808,13 @@ folders:
   core: same_cdi
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4153"
+  offers:
+  - emulator: libretro
+    core: same_cdi
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: cdi
 - folder: cdogs
   extensions:
   - .game
@@ -592,6 +836,11 @@ folders:
   core: freechaf
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2236"
+  offers:
+  - emulator: libretro
+    core: freechaf
+  - emulator: bizhawk
+    core: ChannelFHawk
 - folder: chihiro
   extensions:
   - .bin
@@ -600,6 +849,17 @@ folders:
   core: xemu-chihiro
   emulator: xemu-chihiro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:563"
+  offers:
+  - emulator: xemu-chihiro
+    core: xemu-chihiro
+  - emulator: chihiro
+    core: chihiro
+  - emulator: chihiro-gun
+    core: chihiro-gun
+  - emulator: cxbx
+    core: cxbx
+  - emulator: teknoparrot
+    core: chihiro
   arcade: true
 - folder: coco
   extensions:
@@ -613,6 +873,13 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4892"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: coco
+  - emulator: xroar
+    core: xroar
 - folder: colecovision
   extensions:
   - .7z
@@ -631,6 +898,23 @@ folders:
   core: gearcoleco
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2036"
+  offers:
+  - emulator: libretro
+    core: gearcoleco
+  - emulator: libretro
+    core: jollycv
+  - emulator: libretro
+    core: bluemsx
+  - emulator: libretro
+    core: fbneo
+  - emulator: openmsx
+    core: openmsx
+  - emulator: ares
+    core: ColecoVision
+  - emulator: bizhawk
+    core: Coleco
+  - emulator: mesen
+    core: mesen
 - folder: corsixth
   extensions:
   - .game
@@ -656,6 +940,15 @@ folders:
   core: fbneo
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:266"
+  offers:
+  - emulator: libretro
+    core: fbneo
+  - emulator: libretro
+    core: fbalpha2012_cps1
+  - emulator: libretro
+    core: fbalpha
+  - emulator: libretro
+    core: fbalpha2012
   arcade: true
 - folder: cps2
   extensions:
@@ -665,6 +958,15 @@ folders:
   core: fbneo
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:288"
+  offers:
+  - emulator: libretro
+    core: fbneo
+  - emulator: libretro
+    core: fbalpha2012_cps2
+  - emulator: libretro
+    core: fbalpha
+  - emulator: libretro
+    core: fbalpha2012
   arcade: true
 - folder: cps3
   extensions:
@@ -675,6 +977,15 @@ folders:
   core: fbneo
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:310"
+  offers:
+  - emulator: libretro
+    core: fbneo
+  - emulator: libretro
+    core: fbalpha2012_cps3
+  - emulator: libretro
+    core: fbalpha
+  - emulator: libretro
+    core: fbalpha2012
   arcade: true
 - folder: crvision
   extensions:
@@ -685,6 +996,13 @@ folders:
   core: jollycv
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4421"
+  offers:
+  - emulator: libretro
+    core: jollycv
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: crvision
 - folder: daphne
   extensions:
   - .7z
@@ -695,6 +1013,13 @@ folders:
   core: hypseus
   emulator: hypseus
   source_ref: "os system/templates/emulationstation/es_systems.cfg:193"
+  offers:
+  - emulator: hypseus
+    core: hypseus
+  - emulator: daphne
+    core: daphne
+  - emulator: singe2
+    core: singe2
   arcade: true
 - folder: devilutionx
   extensions:
@@ -729,6 +1054,13 @@ folders:
   core: uzdoom
   emulator: uzdoom
   source_ref: "os system/templates/emulationstation/es_systems.cfg:3416"
+  offers:
+  - emulator: uzdoom
+    core: uzdoom
+  - emulator: gzdoom
+    core: gzdoom
+  - emulator: libretro
+    core: prboom
 - folder: doom3
   extensions:
   - .boom3
@@ -736,6 +1068,13 @@ folders:
   core: boom3
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:3454"
+  offers:
+  - emulator: libretro
+    core: boom3
+  - emulator: libretro
+    core: boom3_xp
+  - emulator: dhewm3
+    core: dhewm3
 - folder: dos
   extensions:
   - .bat
@@ -749,6 +1088,15 @@ folders:
   core: dosbox_pure
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:3784"
+  offers:
+  - emulator: libretro
+    core: dosbox_pure
+  - emulator: dosbox-staging
+    core: dosbox-staging
+  - emulator: dosbox-pure
+    core: dosbox-pure
+  - emulator: dosbox
+    core: dosbox
 - folder: dragon32
   extensions:
   - .cas
@@ -773,6 +1121,15 @@ folders:
   core: flycast
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:900"
+  offers:
+  - emulator: libretro
+    core: flycast
+  - emulator: flycast
+    core: dreamcast
+  - emulator: redream
+    core: redream
+  - emulator: demul
+    core: dreamcast
 - folder: dusklight
   extensions:
   - .iso
@@ -820,6 +1177,11 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4665"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: electron
 - folder: enterprise
   extensions:
   - .bas
@@ -868,6 +1230,17 @@ folders:
   core: fbneo
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:120"
+  offers:
+  - emulator: libretro
+    core: fbneo
+  - emulator: libretro
+    core: fbalpha
+  - emulator: libretro
+    core: fbalpha2012
+  - emulator: libretro
+    core: fbalpha2012_neogeo
+  - emulator: fbneo
+    core: arcade
   arcade: true
 - folder: fds
   extensions:
@@ -878,12 +1251,28 @@ folders:
   core: fceumm
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:928"
+  offers:
+  - emulator: libretro
+    core: fceumm
+  - emulator: libretro
+    core: nestopia
+  - emulator: libretro
+    core: mesen
+  - emulator: mesen
+    core: mesen
+  - emulator: ares
+    core: FamicomDiskSystem
 - folder: flash
   extensions:
   - .swf
   core: arcadeflashweb
   emulator: arcadeflashweb
   source_ref: "os system/templates/emulationstation/es_systems.cfg:5"
+  offers:
+  - emulator: arcadeflashweb
+    core: arcadeflashweb
+  - emulator: ruffle
+    core: ruffle
 - folder: fm7
   extensions:
   - .1dd
@@ -905,6 +1294,11 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4589"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: fm7
 - folder: fmtowns
   extensions:
   - .cd
@@ -919,6 +1313,13 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4934"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: tsugaru
+    core: tsugaru
+  - emulator: mame64
+    core: fmtownsux
 - folder: fpinball
   extensions:
   - .7z
@@ -928,12 +1329,26 @@ folders:
   core: bam
   emulator: fpinball
   source_ref: "os system/templates/emulationstation/es_systems.cfg:3969"
+  offers:
+  - emulator: fpinball
+    core: bam
+  - emulator: fpinball
+    core: fpinball
 - folder: gaelco
   extensions:
   - .zip
   core: gaelco
   emulator: demul
   source_ref: "os system/templates/emulationstation/es_systems.cfg:540"
+  offers:
+  - emulator: demul
+    core: gaelco
+  - emulator: libretro
+    core: mame
+  - emulator: libretro
+    core: mame2016
+  - emulator: libretro
+    core: mame2014
   arcade: true
 - folder: gamate
   extensions:
@@ -942,6 +1357,11 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:5091"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: gamate
 - folder: gameandwatch
   name: gw
   extensions:
@@ -951,6 +1371,13 @@ folders:
   core: gw
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2741"
+  offers:
+  - emulator: libretro
+    core: gw
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: mame64
 - folder: gamecom
   extensions:
   - .7z
@@ -960,6 +1387,11 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4446"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: gamecom
 - folder: gamecube
   extensions:
   - .7z
@@ -979,6 +1411,11 @@ folders:
   core: dolphin
   emulator: dolphin
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1238"
+  offers:
+  - emulator: dolphin
+    core: dolphin
+  - emulator: libretro
+    core: dolphin
 - folder: gamegear
   extensions:
   - .7z
@@ -988,6 +1425,25 @@ folders:
   core: genesis_plus_gx
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2702"
+  offers:
+  - emulator: libretro
+    core: genesis_plus_gx
+  - emulator: libretro
+    core: picodrive
+  - emulator: libretro
+    core: gearsystem
+  - emulator: libretro
+    core: fbneo
+  - emulator: jgenesis
+    core: jgenesis
+  - emulator: blastem
+    core: blastem
+  - emulator: mednafen
+    core: gg
+  - emulator: ares
+    core: GameGear
+  - emulator: bizhawk
+    core: SMSHawk
 - folder: gamepock
   extensions:
   - .7z
@@ -996,6 +1452,11 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4471"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: gamepock
 - folder: gb
   extensions:
   - .7z
@@ -1004,6 +1465,35 @@ folders:
   core: gambatte
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2762"
+  offers:
+  - emulator: libretro
+    core: gambatte
+  - emulator: libretro
+    core: mesen-s
+  - emulator: libretro
+    core: bsnes
+  - emulator: libretro
+    core: tgbdual
+  - emulator: libretro
+    core: sameboy
+  - emulator: libretro
+    core: DoubleCherryGB
+  - emulator: mesen
+    core: mesen
+  - emulator: jgenesis
+    core: jgenesis
+  - emulator: mgba
+    core: mgba
+  - emulator: mednafen
+    core: gb
+  - emulator: ares
+    core: GameBoy
+  - emulator: bizhawk
+    core: Gambatte
+  - emulator: bizhawk
+    core: GBHawk
+  - emulator: bizhawk
+    core: SameBoy
 - folder: gb2players
   extensions:
   - .7z
@@ -1013,6 +1503,13 @@ folders:
   core: tgbdual
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2811"
+  offers:
+  - emulator: libretro
+    core: tgbdual
+  - emulator: libretro
+    core: sameboy
+  - emulator: libretro
+    core: DoubleCherryGB
 - folder: gba
   extensions:
   - .7z
@@ -1022,6 +1519,27 @@ folders:
   core: mgba
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2902"
+  offers:
+  - emulator: libretro
+    core: mgba
+  - emulator: libretro
+    core: mednafen_gba
+  - emulator: libretro
+    core: gpsp
+  - emulator: mgba
+    core: mgba
+  - emulator: jgenesis
+    core: jgenesis
+  - emulator: mesen
+    core: mesen
+  - emulator: nosgba
+    core: nosgba
+  - emulator: mednafen
+    core: gba
+  - emulator: ares
+    core: GameBoyAdvance
+  - emulator: bizhawk
+    core: mGBA
 - folder: gba2players
   extensions:
   - .gba
@@ -1036,6 +1554,31 @@ folders:
   core: gambatte
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2833"
+  offers:
+  - emulator: libretro
+    core: gambatte
+  - emulator: libretro
+    core: tgbdual
+  - emulator: libretro
+    core: sameboy
+  - emulator: libretro
+    core: DoubleCherryGB
+  - emulator: mesen
+    core: mesen
+  - emulator: jgenesis
+    core: jgenesis
+  - emulator: mgba
+    core: mgba
+  - emulator: mednafen
+    core: gbc
+  - emulator: ares
+    core: GameBoyColor
+  - emulator: bizhawk
+    core: Gambatte
+  - emulator: bizhawk
+    core: GBHawk
+  - emulator: bizhawk
+    core: SameBoy
 - folder: gbc2players
   extensions:
   - .7z
@@ -1045,6 +1588,13 @@ folders:
   core: tgbdual
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2880"
+  offers:
+  - emulator: libretro
+    core: tgbdual
+  - emulator: libretro
+    core: sameboy
+  - emulator: libretro
+    core: DoubleCherryGB
 - folder: gemrb
   extensions:
   - .auto
@@ -1072,6 +1622,11 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4793"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: gmaster
 - folder: gog
   extensions:
   - .bat
@@ -1087,6 +1642,11 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4496"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: gp32
 - folder: gx4000
   extensions:
   - .7z
@@ -1097,6 +1657,11 @@ folders:
   core: cap32
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1761"
+  offers:
+  - emulator: libretro
+    core: cap32
+  - emulator: capriceforever
+    core: capriceforever
 - folder: halflife
   extensions:
   - .game
@@ -1110,6 +1675,11 @@ folders:
   core: hbmame
   emulator: hbmame
   source_ref: "os system/templates/emulationstation/es_systems.cfg:100"
+  offers:
+  - emulator: hbmame
+    core: hbmame
+  - emulator: libretro
+    core: mame
   arcade: true
 - folder: hikaru
   extensions:
@@ -1137,6 +1707,13 @@ folders:
   core: freeintv
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2186"
+  offers:
+  - emulator: libretro
+    core: freeintv
+  - emulator: jzintv
+    core: jzintv
+  - emulator: bizhawk
+    core: IntelliHawk
 - folder: j2me
   extensions:
   - .jar
@@ -1160,6 +1737,15 @@ folders:
   core: virtualjaguar
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1983"
+  offers:
+  - emulator: libretro
+    core: virtualjaguar
+  - emulator: bigpemu
+    core: bigpemu
+  - emulator: bizhawk
+    core: Jaguar
+  - emulator: phoenix
+    core: phoenix
 - folder: jaguarcd
   extensions:
   - .7z
@@ -1171,6 +1757,13 @@ folders:
   core: bigpemu
   emulator: bigpemu
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2010"
+  offers:
+  - emulator: bigpemu
+    core: bigpemu
+  - emulator: libretro
+    core: virtualjaguar
+  - emulator: bizhawk
+    core: Jaguar
 - folder: karaoke
   extensions:
   - .cdg
@@ -1183,18 +1776,35 @@ folders:
   core: MegaLD
   emulator: ares
   source_ref: "os system/templates/emulationstation/es_systems.cfg:173"
+  offers:
+  - emulator: ares
+    core: MegaLD
+  - emulator: ares
+    core: NecLD
 - folder: lcdgames
   extensions:
   - .zip
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4964"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: libretro
+    core: gw
+  - emulator: mame64
+    core: lcdgames
 - folder: lindbergh
   extensions:
   - .game
   core: linuxloader
   emulator: linuxloader
   source_ref: "os system/templates/emulationstation/es_systems.cfg:610"
+  offers:
+  - emulator: linuxloader
+    core: linuxloader
+  - emulator: teknoparrot
+    core: teknoparrot
   arcade: true
 - folder: loopy
   name: casloopy
@@ -1204,6 +1814,11 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4396"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: casloopy
 - folder: love
   extensions:
   - .7z
@@ -1240,6 +1855,17 @@ folders:
   core: mednafen_lynx
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2671"
+  offers:
+  - emulator: libretro
+    core: mednafen_lynx
+  - emulator: libretro
+    core: handy
+  - emulator: libretro
+    core: holani
+  - emulator: mednafen
+    core: lynx
+  - emulator: bizhawk
+    core: Handy
 - folder: mame
   extensions:
   - .7z
@@ -1248,6 +1874,27 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:72"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: libretro
+    core: mame2016
+  - emulator: libretro
+    core: mame2014
+  - emulator: libretro
+    core: mame2010
+  - emulator: libretro
+    core: mame2003_plus
+  - emulator: libretro
+    core: mame2003
+  - emulator: libretro
+    core: mame2003_midway
+  - emulator: libretro
+    core: mame2000
+  - emulator: mame64
+    core: mame64
+  - emulator: groovymame
+    core: groovymame
   arcade: true
 - folder: mastersystem
   extensions:
@@ -1259,6 +1906,31 @@ folders:
   core: genesis_plus_gx
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:671"
+  offers:
+  - emulator: libretro
+    core: genesis_plus_gx
+  - emulator: libretro
+    core: picodrive
+  - emulator: libretro
+    core: gearsystem
+  - emulator: libretro
+    core: fbneo
+  - emulator: jgenesis
+    core: jgenesis
+  - emulator: blastem
+    core: blastem
+  - emulator: mednafen
+    core: mastersystem
+  - emulator: mesen
+    core: mesen
+  - emulator: ares
+    core: MasterSystem
+  - emulator: kega-fusion
+    core: auto
+  - emulator: kega-fusion
+    core: mastersystem
+  - emulator: bizhawk
+    core: SMSHawk
 - folder: megacd
   extensions:
   - .7z
@@ -1271,6 +1943,23 @@ folders:
   core: genesis_plus_gx
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:775"
+  offers:
+  - emulator: libretro
+    core: genesis_plus_gx
+  - emulator: libretro
+    core: genesis_plus_gx_wide
+  - emulator: libretro
+    core: picodrive
+  - emulator: jgenesis
+    core: jgenesis
+  - emulator: blastem
+    core: blastem
+  - emulator: ares
+    core: MegaCD
+  - emulator: kega-fusion
+    core: megacd
+  - emulator: kega-fusion
+    core: segacd
 - folder: megadrive
   extensions:
   - .68k
@@ -1286,6 +1975,31 @@ folders:
   core: genesis_plus_gx
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:711"
+  offers:
+  - emulator: libretro
+    core: genesis_plus_gx
+  - emulator: libretro
+    core: genesis_plus_gx_wide
+  - emulator: libretro
+    core: picodrive
+  - emulator: libretro
+    core: fbneo
+  - emulator: jgenesis
+    core: jgenesis
+  - emulator: blastem
+    core: blastem
+  - emulator: mednafen
+    core: megadrive
+  - emulator: ares
+    core: MegaDrive
+  - emulator: kega-fusion
+    core: auto
+  - emulator: kega-fusion
+    core: megadrive
+  - emulator: kega-fusion
+    core: genesis
+  - emulator: bizhawk
+    core: Genplus-gx
 - folder: megadrive-msu
   extensions:
   - .68k
@@ -1302,6 +2016,15 @@ folders:
   core: genesis_plus_gx
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:752"
+  offers:
+  - emulator: libretro
+    core: genesis_plus_gx
+  - emulator: libretro
+    core: genesis_plus_gx_wide
+  - emulator: libretro
+    core: genesis_plus_gx_expanded
+  - emulator: blastem
+    core: blastem
 - folder: megaduck
   extensions:
   - .7z
@@ -1310,6 +2033,13 @@ folders:
   core: sameduck
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4244"
+  offers:
+  - emulator: libretro
+    core: sameduck
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: megaduck
 - folder: model2
   extensions:
   - .decomp
@@ -1317,6 +2047,15 @@ folders:
   core: multicpu
   emulator: m2emulator
   source_ref: "os system/templates/emulationstation/es_systems.cfg:402"
+  offers:
+  - emulator: m2emulator
+    core: multicpu
+  - emulator: m2emulator
+    core: singlecpu
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: mame64
   arcade: true
 - folder: model3
   extensions:
@@ -1325,6 +2064,11 @@ folders:
   core: supermodel
   emulator: supermodel
   source_ref: "os system/templates/emulationstation/es_systems.cfg:428"
+  offers:
+  - emulator: supermodel
+    core: supermodel
+  - emulator: libretro
+    core: supermodel
   arcade: true
 - folder: msx1
   extensions:
@@ -1345,6 +2089,13 @@ folders:
   core: bluemsx
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2279"
+  offers:
+  - emulator: libretro
+    core: bluemsx
+  - emulator: libretro
+    core: fbneo
+  - emulator: openmsx
+    core: openmsx
 - folder: msx2
   extensions:
   - .7z
@@ -1364,6 +2115,13 @@ folders:
   core: bluemsx
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2301"
+  offers:
+  - emulator: libretro
+    core: bluemsx
+  - emulator: libretro
+    core: fbneo
+  - emulator: openmsx
+    core: openmsx
 - folder: msx2+
   extensions:
   - .7z
@@ -1383,6 +2141,13 @@ folders:
   core: bluemsx
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2323"
+  offers:
+  - emulator: libretro
+    core: bluemsx
+  - emulator: libretro
+    core: fbneo
+  - emulator: openmsx
+    core: openmsx
 - folder: msxturbor
   extensions:
   - .7z
@@ -1402,6 +2167,13 @@ folders:
   core: bluemsx
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2345"
+  offers:
+  - emulator: libretro
+    core: bluemsx
+  - emulator: libretro
+    core: fbneo
+  - emulator: openmsx
+    core: openmsx
 - folder: mugen
   extensions:
   - .game
@@ -1435,6 +2207,25 @@ folders:
   core: mupen64plus_next
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1158"
+  offers:
+  - emulator: libretro
+    core: mupen64plus_next
+  - emulator: libretro
+    core: parallel_n64
+  - emulator: mupen64
+    core: mupen64
+  - emulator: gopher64
+    core: gopher64
+  - emulator: simple64
+    core: simple64
+  - emulator: ares
+    core: Nintendo64
+  - emulator: bizhawk
+    core: Ares64
+  - emulator: bizhawk
+    core: Mupen64Plus
+  - emulator: project64
+    core: project64
 - folder: n64dd
   extensions:
   - .7z
@@ -1447,6 +2238,17 @@ folders:
   core: mupen64
   emulator: mupen64
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1210"
+  offers:
+  - emulator: mupen64
+    core: mupen64
+  - emulator: libretro
+    core: mupen64plus_next
+  - emulator: libretro
+    core: parallel_n64
+  - emulator: ares
+    core: Nintendo64DD
+  - emulator: project64
+    core: project64
 - folder: namco2x6
   extensions:
   - .acgame
@@ -1455,6 +2257,13 @@ folders:
   core: namco2x6
   emulator: pcsx2x6
   source_ref: "os system/templates/emulationstation/es_systems.cfg:3741"
+  offers:
+  - emulator: pcsx2x6
+    core: namco2x6
+  - emulator: play
+    core: play
+  - emulator: teknoparrot
+    core: pcsx2x6
   arcade: true
 - folder: namco3xx
   extensions:
@@ -1474,6 +2283,13 @@ folders:
   core: flycast
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:473"
+  offers:
+  - emulator: libretro
+    core: flycast
+  - emulator: flycast
+    core: naomi
+  - emulator: demul
+    core: naomi
   arcade: true
 - folder: naomi2
   extensions:
@@ -1483,6 +2299,13 @@ folders:
   core: flycast
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:498"
+  offers:
+  - emulator: libretro
+    core: flycast
+  - emulator: flycast
+    core: naomi2
+  - emulator: demul
+    core: naomi
   arcade: true
 - folder: nds
   extensions:
@@ -1493,6 +2316,23 @@ folders:
   core: melondsds
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:3001"
+  offers:
+  - emulator: libretro
+    core: melondsds
+  - emulator: libretro
+    core: desmume
+  - emulator: libretro
+    core: desmume2015
+  - emulator: libretro
+    core: melonds
+  - emulator: libretro
+    core: noods
+  - emulator: melonds
+    core: melonds
+  - emulator: desmume
+    core: desmume
+  - emulator: bizhawk
+    core: melonDS
 - folder: neogeo
   extensions:
   - .7z
@@ -1502,6 +2342,19 @@ folders:
   core: fbneo
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:351"
+  offers:
+  - emulator: libretro
+    core: fbneo
+  - emulator: libretro
+    core: geolith
+  - emulator: libretro
+    core: fbalpha
+  - emulator: libretro
+    core: fbalpha2012_neogeo
+  - emulator: raine
+    core: raine
+  - emulator: mame64
+    core: neogeo
 - folder: neogeo64
   extensions:
   - .7z
@@ -1509,6 +2362,13 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:5148"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: libretro
+    core: mame2016
+  - emulator: mame64
+    core: mame64
   arcade: true
 - folder: neogeocd
   extensions:
@@ -1522,6 +2382,13 @@ folders:
   core: neocd
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:380"
+  offers:
+  - emulator: libretro
+    core: neocd
+  - emulator: libretro
+    core: fbneo
+  - emulator: raine
+    core: raine
 - folder: nes
   extensions:
   - .7z
@@ -1532,6 +2399,25 @@ folders:
   core: fceumm
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:954"
+  offers:
+  - emulator: libretro
+    core: fceumm
+  - emulator: libretro
+    core: nestopia
+  - emulator: libretro
+    core: mesen
+  - emulator: mednafen
+    core: nes
+  - emulator: mesen
+    core: mesen
+  - emulator: jgenesis
+    core: jgenesis
+  - emulator: ares
+    core: Famicom
+  - emulator: bizhawk
+    core: NesHawk
+  - emulator: bizhawk
+    core: quickerNES
 - folder: ngage
   extensions:
   - .ngage
@@ -1548,6 +2434,17 @@ folders:
   core: mednafen_ngp
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:3084"
+  offers:
+  - emulator: libretro
+    core: mednafen_ngp
+  - emulator: libretro
+    core: race
+  - emulator: mednafen
+    core: ngp
+  - emulator: ares
+    core: NeoGeoPocket
+  - emulator: bizhawk
+    core: NeoPop
 - folder: ngpc
   extensions:
   - .7z
@@ -1557,6 +2454,17 @@ folders:
   core: mednafen_ngp
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:3120"
+  offers:
+  - emulator: libretro
+    core: mednafen_ngp
+  - emulator: libretro
+    core: race
+  - emulator: mednafen
+    core: ngp
+  - emulator: ares
+    core: NeoGeoPocketColor
+  - emulator: bizhawk
+    core: NeoPop
 - folder: odyssey2
   extensions:
   - .7z
@@ -1565,6 +2473,15 @@ folders:
   core: o2em
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2550"
+  offers:
+  - emulator: libretro
+    core: o2em
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: videopac
+  - emulator: bizhawk
+    core: O2Hawk
 - folder: openbor
   extensions:
   - .exe
@@ -1572,6 +2489,11 @@ folders:
   core: openbor
   emulator: openbor
   source_ref: "os system/templates/emulationstation/es_systems.cfg:3646"
+  offers:
+  - emulator: openbor
+    core: openbor
+  - emulator: openbor
+    core: openbor-specific-version
 - folder: opengoal
   extensions:
   - .opengoal
@@ -1597,6 +2519,11 @@ folders:
   core: oricutron
   emulator: oricutron
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2387"
+  offers:
+  - emulator: oricutron
+    core: oricutron
+  - emulator: libretro
+    core: mame
 - folder: p2000t
   extensions:
   - .cas
@@ -1644,6 +2571,11 @@ folders:
   core: np2kai
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2429"
+  offers:
+  - emulator: libretro
+    core: np2kai
+  - emulator: libretro
+    core: nekop2
 - folder: pcengine
   extensions:
   - .7z
@@ -1655,6 +2587,27 @@ folders:
   core: mednafen_pce
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1317"
+  offers:
+  - emulator: libretro
+    core: mednafen_pce
+  - emulator: libretro
+    core: mednafen_pce_fast
+  - emulator: libretro
+    core: fbneo
+  - emulator: mednafen
+    core: pce
+  - emulator: mesen
+    core: mesen
+  - emulator: ares
+    core: PCEngine
+  - emulator: bizhawk
+    core: HyperNyma
+  - emulator: bizhawk
+    core: PCEHawk
+  - emulator: bizhawk
+    core: TurboNyma
+  - emulator: magicengine
+    core: magicengine
 - folder: pcenginecd
   extensions:
   - .7z
@@ -1672,6 +2625,25 @@ folders:
   core: mednafen_pce
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1358"
+  offers:
+  - emulator: libretro
+    core: mednafen_pce
+  - emulator: libretro
+    core: mednafen_pce_fast
+  - emulator: libretro
+    core: fbneo
+  - emulator: mednafen
+    core: pce
+  - emulator: mesen
+    core: mesen
+  - emulator: ares
+    core: PCEngineCD
+  - emulator: bizhawk
+    core: HyperNyma
+  - emulator: bizhawk
+    core: PCEHawk
+  - emulator: bizhawk
+    core: TurboNyma
 - folder: pcfx
   extensions:
   - .ccd
@@ -1682,6 +2654,13 @@ folders:
   core: mednafen_pcfx
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1439"
+  offers:
+  - emulator: libretro
+    core: mednafen_pcfx
+  - emulator: mednafen
+    core: pcfx
+  - emulator: bizhawk
+    core: PCFX
 - folder: pdark
   extensions:
   - .z64
@@ -1695,6 +2674,11 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4520"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: pegasus
 - folder: pet
   extensions:
   - .7z
@@ -1719,12 +2703,24 @@ folders:
   core: retro8
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4089"
+  offers:
+  - emulator: libretro
+    core: retro8
+  - emulator: libretro
+    core: fake08
+  - emulator: pico8
+    core: pico8
 - folder: pinballfx
   extensions:
   - .table
   core: steam
   emulator: pinballfx
   source_ref: "os system/templates/emulationstation/es_systems.cfg:3989"
+  offers:
+  - emulator: pinballfx
+    core: steam
+  - emulator: pinballfx
+    core: nonsteam
 - folder: pinballfx2
   extensions:
   - .pxp
@@ -1732,6 +2728,11 @@ folders:
   core: steam
   emulator: pinballfx
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4029"
+  offers:
+  - emulator: pinballfx
+    core: steam
+  - emulator: pinballfx
+    core: nonsteam
 - folder: pinballfx3
   extensions:
   - .pxp
@@ -1739,12 +2740,22 @@ folders:
   core: steam
   emulator: pinballfx
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4049"
+  offers:
+  - emulator: pinballfx
+    core: steam
+  - emulator: pinballfx
+    core: nonsteam
 - folder: pinballm
   extensions:
   - .table
   core: steam
   emulator: pinballfx
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4009"
+  offers:
+  - emulator: pinballfx
+    core: steam
+  - emulator: pinballfx
+    core: nonsteam
 - folder: pokemini
   extensions:
   - .7z
@@ -1775,6 +2786,15 @@ folders:
   core: pcsx2
   emulator: pcsx2
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1502"
+  offers:
+  - emulator: pcsx2
+    core: pcsx2
+  - emulator: libretro
+    core: pcsx2
+  - emulator: play
+    core: play
+  - emulator: pcsx2-16
+    core: pcsx2-16
 - folder: ps3
   extensions:
   - .7z
@@ -1812,6 +2832,11 @@ folders:
   core: ppsspp
   emulator: ppsspp
   source_ref: "os system/templates/emulationstation/es_systems.cfg:3064"
+  offers:
+  - emulator: ppsspp
+    core: ppsspp
+  - emulator: libretro
+    core: ppsspp
 - folder: psvita
   extensions:
   - .m3u
@@ -1840,6 +2865,21 @@ folders:
   core: mednafen_psx_hw
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1468"
+  offers:
+  - emulator: libretro
+    core: mednafen_psx_hw
+  - emulator: libretro
+    core: pcsx_rearmed
+  - emulator: libretro
+    core: swanstation
+  - emulator: duckstation
+    core: duckstation
+  - emulator: mednafen
+    core: psx
+  - emulator: bizhawk
+    core: Nymashock
+  - emulator: bizhawk
+    core: Octoshock
 - folder: pv1000
   extensions:
   - .7z
@@ -1848,6 +2888,11 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4351"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: pv1000
 - folder: quake
   extensions:
   - .pak
@@ -1855,6 +2900,11 @@ folders:
   core: tyrquake
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:3476"
+  offers:
+  - emulator: libretro
+    core: tyrquake
+  - emulator: vkquake
+    core: vkquake
 - folder: quake2
   extensions:
   - .pak
@@ -1862,6 +2912,17 @@ folders:
   core: vitaquake2
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:3498"
+  offers:
+  - emulator: libretro
+    core: vitaquake2
+  - emulator: libretro
+    core: vitaquake2-rogue
+  - emulator: libretro
+    core: vitaquake2-xatrix
+  - emulator: libretro
+    core: vitaquake2-zaero
+  - emulator: vkquake2
+    core: vkquake2
 - folder: raze
   extensions:
   - .raze
@@ -1907,6 +2968,13 @@ folders:
   core: snes9x
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1082"
+  offers:
+  - emulator: libretro
+    core: snes9x
+  - emulator: libretro
+    core: mesen-s
+  - emulator: ares
+    core: SuperFamicom
 - folder: saturn
   extensions:
   - .ccd
@@ -1922,6 +2990,27 @@ folders:
   core: kronos
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:839"
+  offers:
+  - emulator: libretro
+    core: kronos
+  - emulator: libretro
+    core: mednafen_saturn
+  - emulator: libretro
+    core: ymir
+  - emulator: libretro
+    core: yabasanshiro
+  - emulator: ymir
+    core: ymir
+  - emulator: mednafen
+    core: saturn
+  - emulator: yabasanshiro
+    core: yabasanshiro
+  - emulator: kronos
+    core: kronos
+  - emulator: bizhawk
+    core: Saturnus
+  - emulator: ssf
+    core: ssf
 - folder: scummvm
   extensions:
   - .7z
@@ -1932,6 +3021,11 @@ folders:
   core: scummvm
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:3245"
+  offers:
+  - emulator: libretro
+    core: scummvm
+  - emulator: scummvm
+    core: scummvm
 - folder: scv
   extensions:
   - .bin
@@ -1939,6 +3033,13 @@ folders:
   core: emuscv
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4564"
+  offers:
+  - emulator: libretro
+    core: emuscv
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: scv
 - folder: sega32x
   extensions:
   - .32x
@@ -1950,12 +3051,44 @@ folders:
   core: picodrive
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:808"
+  offers:
+  - emulator: libretro
+    core: picodrive
+  - emulator: jgenesis
+    core: jgenesis
+  - emulator: blastem
+    core: blastem
+  - emulator: ares
+    core: Mega32X
+  - emulator: kega-fusion
+    core: sega32x
+  - emulator: bizhawk
+    core: PicoDrive
 - folder: segastv
   extensions:
   - .zip
   core: kronos
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:871"
+  offers:
+  - emulator: libretro
+    core: kronos
+  - emulator: libretro
+    core: mame
+  - emulator: libretro
+    core: mame2016
+  - emulator: libretro
+    core: mame2014
+  - emulator: libretro
+    core: mame2010
+  - emulator: libretro
+    core: mame2003_plus
+  - emulator: libretro
+    core: mame2003
+  - emulator: mednafen
+    core: saturn
+  - emulator: mame64
+    core: mame64
   arcade: true
 - folder: sg1000
   extensions:
@@ -1969,6 +3102,15 @@ folders:
   core: gearsystem
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:626"
+  offers:
+  - emulator: libretro
+    core: gearsystem
+  - emulator: libretro
+    core: genesis_plus_gx
+  - emulator: ares
+    core: SG-1000
+  - emulator: bizhawk
+    core: SMSHawk
 - folder: sgb
   extensions:
   - .7z
@@ -1978,6 +3120,19 @@ folders:
   core: mgba
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:5117"
+  offers:
+  - emulator: libretro
+    core: mgba
+  - emulator: libretro
+    core: mesen-s
+  - emulator: mesen
+    core: mesen
+  - emulator: mgba
+    core: mgba
+  - emulator: bizhawk
+    core: BSNES
+  - emulator: bizhawk
+    core: Gambatte
 - folder: sgb-msu1
   extensions:
   - .gb
@@ -1986,6 +3141,11 @@ folders:
   core: bsnes
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1061"
+  offers:
+  - emulator: libretro
+    core: bsnes
+  - emulator: libretro
+    core: bsnes_hd_beta
 - folder: singe
   extensions:
   - .hypseus
@@ -1993,6 +3153,11 @@ folders:
   core: hypseus
   emulator: hypseus
   source_ref: "os system/templates/emulationstation/es_systems.cfg:222"
+  offers:
+  - emulator: hypseus
+    core: hypseus
+  - emulator: singe2
+    core: singe2
   arcade: true
 - folder: snes
   extensions:
@@ -2012,6 +3177,37 @@ folders:
   core: snes9x
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:990"
+  offers:
+  - emulator: libretro
+    core: snes9x
+  - emulator: libretro
+    core: bsnes-jg
+  - emulator: libretro
+    core: bsnes
+  - emulator: libretro
+    core: bsnes_hd_beta
+  - emulator: libretro
+    core: mednafen_snes
+  - emulator: libretro
+    core: mesen-s
+  - emulator: libretro
+    core: snes9x2005
+  - emulator: mednafen
+    core: snes
+  - emulator: mesen
+    core: mesen
+  - emulator: snes9x
+    core: snes9x
+  - emulator: jgenesis
+    core: jgenesis
+  - emulator: ares
+    core: SuperFamicom
+  - emulator: bizhawk
+    core: BSNES
+  - emulator: bizhawk
+    core: Faust
+  - emulator: bizhawk
+    core: Snes9x
 - folder: snes-msu1
   extensions:
   - .m3u
@@ -2021,6 +3217,19 @@ folders:
   core: snes9x
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1036"
+  offers:
+  - emulator: libretro
+    core: snes9x
+  - emulator: libretro
+    core: mesen-s
+  - emulator: libretro
+    core: bsnes
+  - emulator: libretro
+    core: bsnes_hd_beta
+  - emulator: mesen
+    core: mesen
+  - emulator: snes9x
+    core: snes9x
 - folder: soh
   extensions:
   - .n64
@@ -2035,6 +3244,11 @@ folders:
   core: solarus
   emulator: solarus
   source_ref: "os system/templates/emulationstation/es_systems.cfg:3666"
+  offers:
+  - emulator: solarus
+    core: solarus
+  - emulator: solarus2
+    core: solarus2
 - folder: sonic-mania
   extensions:
   - .rsdk
@@ -2053,6 +3267,11 @@ folders:
   core: sonicretro
   emulator: sonicretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:5437"
+  offers:
+  - emulator: sonicretro
+    core: sonicretro
+  - emulator: sonicretrocd
+    core: sonicretrocd
 - folder: spectravideo
   extensions:
   - .7z
@@ -2088,6 +3307,13 @@ folders:
   core: snes9x
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1108"
+  offers:
+  - emulator: libretro
+    core: snes9x
+  - emulator: libretro
+    core: bsnes
+  - emulator: ares
+    core: SuperFamicom
 - folder: superbroswar
   extensions:
   - .sbw
@@ -2103,6 +3329,27 @@ folders:
   core: mednafen_supergrafx
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1398"
+  offers:
+  - emulator: libretro
+    core: mednafen_supergrafx
+  - emulator: libretro
+    core: geargrafx
+  - emulator: libretro
+    core: fbneo
+  - emulator: mednafen
+    core: pce
+  - emulator: mesen
+    core: mesen
+  - emulator: ares
+    core: SuperGrafx
+  - emulator: bizhawk
+    core: HyperNyma
+  - emulator: bizhawk
+    core: PCEHawk
+  - emulator: bizhawk
+    core: TurboNyma
+  - emulator: magicengine
+    core: magicengine
 - folder: supervision
   extensions:
   - .7z
@@ -2118,6 +3365,11 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:5066"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: supracan
 - folder: switch
   extensions:
   - .decomp
@@ -2130,6 +3382,17 @@ folders:
   core: eden
   emulator: eden
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1297"
+  offers:
+  - emulator: eden
+    core: eden
+  - emulator: ryujinx
+    core: ryujinx
+  - emulator: citron
+    core: citron
+  - emulator: sudachi
+    core: sudachi
+  - emulator: yuzu
+    core: yuzu
 - folder: teknoparrot
   extensions:
   - .7z
@@ -2168,12 +3431,22 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4842"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: mame64
 - folder: tic80
   extensions:
   - .tic
   core: tic80
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4110"
+  offers:
+  - emulator: libretro
+    core: tic80
+  - emulator: bizhawk
+    core: TIC-80
 - folder: triforce
   extensions:
   - .7z
@@ -2183,6 +3456,15 @@ folders:
   core: dolphin
   emulator: dolphin
   source_ref: "os system/templates/emulationstation/es_systems.cfg:586"
+  offers:
+  - emulator: dolphin
+    core: dolphin
+  - emulator: libretro
+    core: dolphin
+  - emulator: dolphin-triforce
+    core: dolphin-triforce
+  - emulator: teknoparrot
+    core: triforce
   arcade: true
 - folder: tutor
   extensions:
@@ -2193,6 +3475,11 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4867"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: tutor
 - folder: tvgames
   extensions:
   - .7z
@@ -2200,12 +3487,22 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4219"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: tvgames
 - folder: uzebox
   extensions:
   - .uze
   core: uzem
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4289"
+  offers:
+  - emulator: libretro
+    core: uzem
+  - emulator: bizhawk
+    core: Uzem
 - folder: vc4000
   extensions:
   - .bin
@@ -2213,6 +3510,13 @@ folders:
   core: amiarcadia
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:5040"
+  offers:
+  - emulator: libretro
+    core: amiarcadia
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: vc4000
 - folder: vectrex
   extensions:
   - .7z
@@ -2223,12 +3527,22 @@ folders:
   core: vecx
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2526"
+  offers:
+  - emulator: libretro
+    core: vecx
+  - emulator: bizhawk
+    core: VectrexHawk
 - folder: vg5k
   extensions:
   - .zip
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2599"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: vg5k
 - folder: vircon32
   extensions:
   - .v32
@@ -2246,6 +3560,11 @@ folders:
   core: mednafen_vb
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1134"
+  offers:
+  - emulator: libretro
+    core: mednafen_vb
+  - emulator: bizhawk
+    core: VirtualBoyee
 - folder: vpinball
   extensions:
   - .7z
@@ -2262,6 +3581,11 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4989"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: vsmile
 - folder: wasm4
   extensions:
   - .wasm
@@ -2288,6 +3612,11 @@ folders:
   core: dolphin
   emulator: dolphin
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1260"
+  offers:
+  - emulator: dolphin
+    core: dolphin
+  - emulator: libretro
+    core: dolphin
 - folder: wiiu
   extensions:
   - .iso
@@ -2327,6 +3656,15 @@ folders:
   core: mednafen_wswan
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:3175"
+  offers:
+  - emulator: libretro
+    core: mednafen_wswan
+  - emulator: mednafen
+    core: wswan
+  - emulator: ares
+    core: WonderSwan
+  - emulator: bizhawk
+    core: Cygne
 - folder: wswanc
   extensions:
   - .7z
@@ -2335,6 +3673,15 @@ folders:
   core: mednafen_wswan
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:3210"
+  offers:
+  - emulator: libretro
+    core: mednafen_wswan
+  - emulator: mednafen
+    core: wswan
+  - emulator: ares
+    core: WonderSwanColor
+  - emulator: bizhawk
+    core: Cygne
 - folder: x1
   extensions:
   - .2d
@@ -2370,6 +3717,11 @@ folders:
   core: px68k
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2468"
+  offers:
+  - emulator: libretro
+    core: px68k
+  - emulator: xm6pro
+    core: xm6pro
 - folder: xbox
   extensions:
   - .decomp
@@ -2378,6 +3730,11 @@ folders:
   core: xemu
   emulator: xemu
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1558"
+  offers:
+  - emulator: xemu
+    core: xemu
+  - emulator: cxbx
+    core: cxbx
 - folder: xbox360
   extensions:
   - .decomp
@@ -2390,6 +3747,19 @@ folders:
   core: xenia-canary
   emulator: xenia-canary
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1574"
+  offers:
+  - emulator: xenia-canary
+    core: xenia-canary
+  - emulator: xenia-edge
+    core: xenia-edge
+  - emulator: xenia-manager
+    core: canary
+  - emulator: xenia-manager
+    core: mousehook
+  - emulator: xenia-manager
+    core: netplay
+  - emulator: xenia
+    core: xenia
 - folder: xegs
   extensions:
   - .7z
@@ -2403,12 +3773,24 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:1957"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: xegs
+  - emulator: altirra
+    core: altirra
 - folder: zaccariapinball
   extensions:
   - .table
   core: steam
   emulator: zaccariapinball
   source_ref: "os system/templates/emulationstation/es_systems.cfg:4069"
+  offers:
+  - emulator: zaccariapinball
+    core: steam
+  - emulator: zaccariapinball
+    core: nonsteam
 - folder: zeldaclassic
   extensions:
   - .7z
@@ -2417,12 +3799,28 @@ folders:
   core: zquestclassic
   emulator: zquestclassic
   source_ref: "os system/templates/emulationstation/es_systems.cfg:3682"
+  offers:
+  - emulator: zquestclassic
+    core: zquestclassic
+  - emulator: libretro
+    core: zc255
 - folder: zinc
   extensions:
   - .zip
   core: arcadeduck
   emulator: arcadeduck
   source_ref: "os system/templates/emulationstation/es_systems.cfg:3718"
+  offers:
+  - emulator: arcadeduck
+    core: arcadeduck
+  - emulator: psxmame
+    core: psxmame
+  - emulator: zinc
+    core: zinc
+  - emulator: libretro
+    core: mame
+  - emulator: mame64
+    core: mame64
   arcade: true
 - folder: zx81
   extensions:
@@ -2438,6 +3836,13 @@ folders:
   core: "81"
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2624"
+  offers:
+  - emulator: libretro
+    core: "81"
+  - emulator: libretro
+    core: fuse
+  - emulator: libretro
+    core: fbneo
 - folder: zxspectrum
   extensions:
   - .7z
@@ -2452,3 +3857,12 @@ folders:
   core: fuse
   emulator: libretro
   source_ref: "os system/templates/emulationstation/es_systems.cfg:2645"
+  offers:
+  - emulator: libretro
+    core: fuse
+  - emulator: libretro
+    core: fbneo
+  - emulator: zesarux
+    core: zesarux
+  - emulator: bizhawk
+    core: ZXHawk

@@ -3077,9 +3077,14 @@ class TestDeliberatelyFrozenPin(TestBuildReport):
         # live build can add a system its frozen revision lacked
         # (advancemame's coh1002v, after advmame-1.4), so the frozen one's
         # systems are a subset, not an equal set. A live build can also drop
-        # a system upstream deleted: advancemame removed its Hyper Neo Geo 64
-        # driver in dff25b6ee7, which advmame-1.4 still carries.
-        removed_upstream = {("advmame-1.4", "advancemame"): {"hyper-neogeo64"}}
+        # a system upstream deleted: AdvanceMAME removed its Hyper Neo Geo 64
+        # driver in dff25b6ee7, which advmame-1.4 and advancemame (AmberELEC's
+        # 0f6a767) still carry.
+        removed_upstream = {
+            ("advmame-1.4", "advancemame"): {"hyper-neogeo64"},
+            ("advmame-1.4", "advmame"): {"hyper-neogeo64"},
+            ("advancemame", "advmame"): {"hyper-neogeo64"},
+        }
         pairs = 0
         for names in by_source.values():
             frozen = [
@@ -3372,6 +3377,61 @@ class TestBumpCommit(unittest.TestCase):
         with contextlib.redirect_stderr(io.StringIO()):
             self.assertFalse(bump_commit(self.path, report))
         self.assertNotIn("newhead", self.path.read_text())
+
+    def test_a_build_of_the_branch_tip_follows_it(self):
+        # RetroPie builds AdvanceMAME from the tip of master
+        # (advmame.sh:16, 39-41): HEAD is the build it ships.
+        self.path.write_text(
+            SAMPLE + "built_by: [retropie]\n"
+            + 'pin_follows: "RetroPie builds the branch tip"\n',
+            encoding="utf-8",
+        )
+        part = PartResult(
+            RefPart("a.c", 10, 12, "a.c:10-12"), "ANCHORED", None, 10, 12, []
+        )
+        report = ProfileReport(
+            name="p", repo="o/n", pin="pin", head="newhead",
+            entries=[
+                EntryReport("a.bin", "a.c:10-12, (just a note)", "ANCHORED", [part])
+            ],
+            counts={"ANCHORED": 1},
+        )
+        self.assertTrue(bump_commit(self.path, report))
+        self.assertIn("newhead", self.path.read_text())
+
+    def test_a_config_read_at_the_pin_follows_it(self):
+        # RetroPie reads advmame.rc at the build it installs, the pin: the
+        # config_reads revision is the pin, and moves with it.
+        pin = "a" * 40
+        self.path.write_text(
+            SAMPLE.replace('profiled_date: "2026-03-29"\n',
+                           f'profiled_date: "2026-03-29"\nsource_commit: "{pin}"\n', 1)
+            + "built_by: [retropie]\n"
+            + 'pin_follows: "RetroPie builds the branch tip"\n'
+            + "config_reads:\n"
+            + '  - file: "advmame.rc"\n'
+            + "    platforms: [retropie]\n"
+            + f'    revision: "{pin}"\n'
+            + '    source_ref: "a.c:10-12"\n'
+            + "  - file: \"other.rc\"\n"
+            + "    platforms: [emuelec]\n"
+            + f'    revision: "{"b" * 40}"\n'
+            + '    source_ref: "a.c:10-12"\n',
+            encoding="utf-8",
+        )
+        part = PartResult(
+            RefPart("a.c", 10, 12, "a.c:10-12"), "ANCHORED", None, 10, 12, []
+        )
+        head = "c" * 40
+        report = ProfileReport(
+            name="p", repo="o/n", pin=pin, head=head,
+            entries=[EntryReport("a.bin", "a.c:10-12", "ANCHORED", [part])],
+            counts={"ANCHORED": 1},
+        )
+        self.assertTrue(bump_commit(self.path, report))
+        document = yaml.safe_load(self.path.read_text(encoding="utf-8"))
+        self.assertEqual(document["source_commit"], head)
+        self.assertEqual([r["revision"] for r in document["config_reads"]], [head, "b" * 40])
 
     def test_refused_when_no_ref_reads_the_pinned_repository(self):
         """gam4980: every bare libretro.c ref anchored in upstream, and the

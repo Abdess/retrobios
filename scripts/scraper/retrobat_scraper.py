@@ -12,6 +12,7 @@ import json
 import re
 import urllib.error
 import urllib.request
+from pathlib import Path
 
 try:
     from .base_scraper import (
@@ -39,6 +40,7 @@ except ImportError:
     from retrobat_launchers import extract_launchers
 
 PLATFORM_NAME = "retrobat"
+PLATFORM_FILE = Path(__file__).resolve().parents[2] / "platforms" / "retrobat.yml"
 
 LAUNCHER_REPO = "RetroBat-Official/emulatorlauncher"
 SOURCE_URL = (
@@ -132,6 +134,28 @@ def launcher_revision(url: str) -> str:
     return found.group(1)
 
 
+def pinned_revision(platform_file: Path = PLATFORM_FILE) -> str:
+    """The emulatorLauncher commit platforms/retrobat.yml was read from.
+
+    A rescrape reads this commit unless told to move, so a change to an
+    extractor shows in the diff alone, without upstream's commits since.
+    """
+    from common import yaml_load
+
+    with platform_file.open(encoding="utf-8") as fh:
+        source = str((yaml_load(fh) or {}).get("source") or "")
+    return launcher_revision(source)
+
+
+def resolve_revision(revision: str | None) -> str:
+    """The commit to read: the pin when None, a branch's head, or a sha."""
+    if revision is None:
+        return pinned_revision()
+    if re.fullmatch(r"[0-9a-f]{40}", revision):
+        return revision
+    return fetch_branch_head(LAUNCHER_REPO, revision)
+
+
 def fetch_launchers(rev: str) -> list[dict]:
     """Launcher records read from the generators at the commit the BIOS list comes from."""
     texts = {
@@ -160,10 +184,14 @@ SYSTEM_SLUG_MAP = {
 class Scraper(BaseScraper):
     """Scraper for RetroBat batocera-systems.json."""
 
-    def __init__(self, url: str | None = None) -> None:
-        # batocera-systems.json is read from master: the commit read is recorded.
+    def __init__(self, url: str | None = None, revision: str | None = None) -> None:
+        # The BIOS list and the generators are read at one commit, the one
+        # platforms/retrobat.yml pins unless a revision moves it (--revision
+        # master reads the branch head). The commit read is recorded.
         if url is None:
-            url = SOURCE_URL.format(rev=fetch_branch_head(LAUNCHER_REPO, "master"))
+            url = SOURCE_URL.format(rev=resolve_revision(revision))
+        elif revision is not None:
+            raise ValueError("pass a url or a revision, not both")
         super().__init__(url=url)
         self._parsed: dict | None = None
 

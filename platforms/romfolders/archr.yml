@@ -107,6 +107,21 @@ folders:
       core: puae2021
       emulator: retroarch
       source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:163"
+  offers:
+  - emulator: retroarch
+    core: puae2021
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:163,168"
+  - emulator: retroarch
+    core: puae
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:164,167"
+  - emulator: amiberry
+    core: amiberry
+    when: TARGET_ARCH aarch64
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:173"
+  - emulator: retroarch
+    core: uae4arm
+    when: TARGET_ARCH aarch64
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:174"
 - folder: amigacd32
   extensions:
   - .chd
@@ -122,6 +137,17 @@ folders:
       core: puae2021
       emulator: retroarch
       source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:182"
+  offers:
+  - emulator: retroarch
+    core: puae2021
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:182,187"
+  - emulator: retroarch
+    core: puae
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:183,186"
+  - emulator: retroarch
+    core: uae4arm
+    when: TARGET_ARCH aarch64
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:192"
 - folder: amstradcpc
   extensions:
   - .7z
@@ -138,6 +164,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/amstradcpc.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:200;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:198"
+  offers:
+  - emulator: retroarch
+    core: crocods
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:198"
+  - emulator: retroarch
+    core: cap32
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:199"
 - folder: arcade
   extensions:
   - .7z
@@ -146,6 +179,28 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/arcade.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:210;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:203"
+  offers:
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:203"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:204"
+  - emulator: retroarch
+    core: mame2015
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:205"
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:206"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:207"
+  - emulator: retroarch
+    core: fbalpha2019
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:208"
+  - emulator: retroarch
+    core: mame
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:209"
   arcade: true
 - folder: arduboy
   extensions:
@@ -182,6 +237,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/atari5200.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:223;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:221"
+  offers:
+  - emulator: retroarch
+    core: a5200
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:221"
+  - emulator: retroarch
+    core: atari800
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:222"
 - folder: atari7800
   extensions:
   - .7z
@@ -228,6 +290,14 @@ folders:
       core: bigpemu-sa
       emulator: bigpemu
       source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:692"
+  offers:
+  - emulator: retroarch
+    core: virtualjaguar
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:689"
+  - emulator: bigpemu
+    core: bigpemu-sa
+    when: DEVICE SM8250|SM8550|SM8650|SDM845
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:692"
 - folder: atarilynx
   extensions:
   - .7z
@@ -239,6 +309,17 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/atarilynx.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:706;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:699"
+  offers:
+  - emulator: retroarch
+    core: handy
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:699"
+  - emulator: retroarch
+    core: beetle_lynx
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:700"
+  - emulator: mednafen
+    core: lynx
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:703"
 - folder: atarist
   extensions:
   - .7z
@@ -253,6 +334,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/atarist.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:236;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:234"
+  offers:
+  - emulator: retroarch
+    core: hatari
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:234"
+  - emulator: hatarisa
+    core: hatarisa
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:235"
 - folder: atomiswave
   extensions:
   - .7z
@@ -273,6 +361,17 @@ folders:
       core: flycast-sa
       emulator: flycast
       source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:247"
+  offers:
+  - emulator: retroarch
+    core: flycast2021
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588; DEVICE SDM845|SM8250|SM8550|SM8650|S922X
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:242,249"
+  - emulator: retroarch
+    core: flycast
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:243,248,252"
+  - emulator: flycast
+    core: flycast-sa
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:244,247,253"
   arcade: true
 - folder: bbcmicro
   extensions:
@@ -323,6 +422,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/c128.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:271;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:269"
+  offers:
+  - emulator: retroarch
+    core: vice_x128
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:269"
+  - emulator: vicesa
+    core: x128
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:270"
 - folder: c16
   extensions:
   - .bin
@@ -355,6 +461,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/c16.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:276;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:274"
+  offers:
+  - emulator: retroarch
+    core: vice_xplus4
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:274"
+  - emulator: vicesa
+    core: xplus4
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:275"
 - folder: c64
   extensions:
   - .bin
@@ -387,6 +500,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/c64.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:281;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:279"
+  offers:
+  - emulator: retroarch
+    core: vice_x64
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:279"
+  - emulator: vicesa
+    core: x64sc
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:280"
 - folder: cdi
   extensions:
   - .chd
@@ -427,6 +547,16 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/colecovision.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:266;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:263"
+  offers:
+  - emulator: retroarch
+    core: gearcoleco
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:263"
+  - emulator: retroarch
+    core: bluemsx
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:264"
+  - emulator: retroarch
+    core: smsplus
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:265"
 - folder: cps1
   extensions:
   - .7z
@@ -435,6 +565,23 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/cps1.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:302;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:293"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:293"
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:294"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:295"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:296"
+  - emulator: AdvanceMame
+    core: AdvanceMame
+    when: TARGET_ARCH aarch64
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:299"
   arcade: true
 - folder: cps2
   extensions:
@@ -444,6 +591,23 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/cps2.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:314;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:305"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:305"
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:306"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:307"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:308"
+  - emulator: AdvanceMame
+    core: AdvanceMame
+    when: TARGET_ARCH aarch64
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:311"
   arcade: true
 - folder: cps3
   extensions:
@@ -453,6 +617,23 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/cps3.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:326;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:317"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:317"
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:318"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:319"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:320"
+  - emulator: AdvanceMame
+    core: AdvanceMame
+    when: TARGET_ARCH aarch64
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:323"
   arcade: true
 - folder: daphne
   extensions:
@@ -462,6 +643,13 @@ folders:
   emulator: hypseus-singe
   source_ref: "os config/emulators/daphne.conf:5,6; os projects/ArchR/packages/virtual/emulators/package.mk:331;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:329"
+  offers:
+  - emulator: hypseus-singe
+    core: hypseus-singe
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:329"
+  - emulator: retroarch
+    core: daphne
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:330"
   arcade: true
 - folder: doom
   extensions:
@@ -490,6 +678,17 @@ folders:
       core: flycast-sa
       emulator: flycast
       source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:341"
+  offers:
+  - emulator: retroarch
+    core: flycast2021
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588; DEVICE SDM845|SM8250|SM8550|SM8650|S922X
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:336,343"
+  - emulator: retroarch
+    core: flycast
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:337,342,346"
+  - emulator: flycast
+    core: flycast-sa
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:338,341,347"
 - folder: easyrpg
   extensions:
   - .easyrpg
@@ -510,6 +709,23 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/famicom.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:375;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:366"
+  offers:
+  - emulator: retroarch
+    core: nestopia
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:366"
+  - emulator: retroarch
+    core: fceumm
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:367"
+  - emulator: retroarch
+    core: quicknes
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:368"
+  - emulator: retroarch
+    core: mesen
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:369"
+  - emulator: mednafen
+    core: nes
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:372"
 - folder: fbneo
   name: fbn
   extensions:
@@ -519,6 +735,28 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/fbn.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:397;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:390"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:390"
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:391"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:392"
+  - emulator: retroarch
+    core: mame2015
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:393"
+  - emulator: retroarch
+    core: mame
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:394"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:395"
+  - emulator: retroarch
+    core: fbalpha2019
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:396"
   arcade: true
 - folder: fds
   extensions:
@@ -529,6 +767,23 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/fds.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:387;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:378"
+  offers:
+  - emulator: retroarch
+    core: nestopia
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:378"
+  - emulator: retroarch
+    core: fceumm
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:379"
+  - emulator: retroarch
+    core: quicknes
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:380"
+  - emulator: retroarch
+    core: mesen
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:381"
+  - emulator: mednafen
+    core: nes
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:384"
 - folder: gameandwatch
   extensions:
   - .7z
@@ -538,6 +793,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/gameandwatch.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:411;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:409"
+  offers:
+  - emulator: retroarch
+    core: gw
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:409"
+  - emulator: retroarch
+    core: mame
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:410"
 - folder: gamecube
   extensions:
   - .ciso
@@ -561,6 +823,18 @@ folders:
       core: dolphin-sa-gc
       emulator: dolphin
       source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:595"
+  offers:
+  - emulator: dolphin
+    core: dolphin-qt-gc
+    when: DEVICE RK3399|SDM845|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:588"
+  - emulator: dolphin
+    core: dolphin-sa-gc
+    when: DEVICE RK3399|SDM845|SM8250|SM8550|SM8650; DEVICE RK3566|RK3588|S922X
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:589,595"
+  - emulator: retroarch
+    core: dolphin
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:590,596,602"
 - folder: gamegear
   extensions:
   - .7z
@@ -571,6 +845,23 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/gamegear.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:666;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:657"
+  offers:
+  - emulator: retroarch
+    core: gearsystem
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:657"
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:658"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:659"
+  - emulator: retroarch
+    core: smsplus
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:660"
+  - emulator: mednafen
+    core: gg
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:663"
 - folder: gamegearh
   name: ggh
   extensions:
@@ -582,6 +873,23 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/ggh.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:678;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:669"
+  offers:
+  - emulator: retroarch
+    core: gearsystem
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:669"
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:670"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:671"
+  - emulator: retroarch
+    core: smsplus
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:672"
+  - emulator: mednafen
+    core: gg
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:675"
 - folder: gb
   extensions:
   - .7z
@@ -592,6 +900,39 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/gb.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:433;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:414"
+  offers:
+  - emulator: retroarch
+    core: gambatte
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:414"
+  - emulator: retroarch
+    core: sameboy
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:415"
+  - emulator: retroarch
+    core: gearboy
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:416"
+  - emulator: retroarch
+    core: tgbdual
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:417"
+  - emulator: retroarch
+    core: mgba
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:418"
+  - emulator: retroarch
+    core: vbam
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:419"
+  - emulator: retroarch
+    core: DoubleCherryGB
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:420"
+  - emulator: retroarch
+    core: skyemu
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:421"
+  - emulator: mednafen
+    core: gb
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:424"
+  - emulator: skyemu
+    core: skyemu-sa
+    when: DEVICE SDM845|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:429"
 - folder: gba
   extensions:
   - .7z
@@ -606,6 +947,38 @@ folders:
       core: gpsp
       emulator: retroarch
       source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:462"
+  offers:
+  - emulator: retroarch
+    core: gpsp
+    when: DEVICE H700|RK3566|S922X; DEVICE RK3326; DEVICE RK3399|RK3588|SM8250|SM8550|SDM845
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:462,475,478"
+  - emulator: retroarch
+    core: mgba
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:463,466"
+  - emulator: retroarch
+    core: vbam
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:469"
+  - emulator: retroarch
+    core: vba_next
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:470"
+  - emulator: retroarch
+    core: beetle_gba
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:471"
+  - emulator: retroarch
+    core: skyemu
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:472"
+  - emulator: nanoboyadvance
+    core: nanoboyadvance-sa
+    when: DEVICE RK3399|RK3588|SM8250|SM8550|SDM845; DEVICE SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:479,482"
+  - emulator: mednafen
+    core: gba
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:487"
+  - emulator: skyemu
+    core: skyemu-sa
+    when: DEVICE SDM845|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:492"
 - folder: gbah
   extensions:
   - .7z
@@ -615,6 +988,34 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/gbah.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:517;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:498"
+  offers:
+  - emulator: retroarch
+    core: mgba
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:498"
+  - emulator: retroarch
+    core: vbam
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:499"
+  - emulator: retroarch
+    core: vba_next
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:500"
+  - emulator: retroarch
+    core: beetle_gba
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:501"
+  - emulator: retroarch
+    core: skyemu
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:502"
+  - emulator: retroarch
+    core: gpsp
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:505"
+  - emulator: mednafen
+    core: gba
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650; DEVICE SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:506,509"
+  - emulator: skyemu
+    core: skyemu-sa
+    when: DEVICE SDM845|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:514"
 - folder: gbav
   extensions:
   - .7z
@@ -624,6 +1025,34 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/gbav.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:539;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:520"
+  offers:
+  - emulator: retroarch
+    core: mgba
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:520"
+  - emulator: retroarch
+    core: vbam
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:521"
+  - emulator: retroarch
+    core: vba_next
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:522"
+  - emulator: retroarch
+    core: beetle_gba
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:523"
+  - emulator: retroarch
+    core: skyemu
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:524"
+  - emulator: retroarch
+    core: gpsp
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:527"
+  - emulator: mednafen
+    core: gba
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550; DEVICE SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:528,531"
+  - emulator: skyemu
+    core: skyemu-sa
+    when: DEVICE SDM845|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:536"
 - folder: gbc
   extensions:
   - .7z
@@ -634,6 +1063,39 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/gbc.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:560;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:542"
+  offers:
+  - emulator: retroarch
+    core: gambatte
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:542"
+  - emulator: retroarch
+    core: sameboy
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:543"
+  - emulator: retroarch
+    core: gearboy
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:544"
+  - emulator: retroarch
+    core: tgbdual
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:545"
+  - emulator: retroarch
+    core: mgba
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:546"
+  - emulator: retroarch
+    core: vbam
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:547"
+  - emulator: retroarch
+    core: DoubleCherryGB
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:548"
+  - emulator: retroarch
+    core: skyemu
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:549"
+  - emulator: mednafen
+    core: gb
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:552"
+  - emulator: skyemu
+    core: skyemu-sa
+    when: DEVICE SDM845|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:557"
 - folder: gbch
   extensions:
   - .7z
@@ -644,6 +1106,39 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/gbch.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:581;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:563"
+  offers:
+  - emulator: retroarch
+    core: gambatte
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:563"
+  - emulator: retroarch
+    core: sameboy
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:564"
+  - emulator: retroarch
+    core: gearboy
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:565"
+  - emulator: retroarch
+    core: tgbdual
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:566"
+  - emulator: retroarch
+    core: mgba
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:567"
+  - emulator: retroarch
+    core: vbam
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:568"
+  - emulator: retroarch
+    core: DoubleCherryGB
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:569"
+  - emulator: retroarch
+    core: skyemu
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:570"
+  - emulator: mednafen
+    core: gb
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:573"
+  - emulator: skyemu
+    core: skyemu-sa
+    when: DEVICE SDM845|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:578"
 - folder: gbh
   extensions:
   - .7z
@@ -653,6 +1148,39 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/gbh.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:454;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:436"
+  offers:
+  - emulator: retroarch
+    core: gambatte
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:436"
+  - emulator: retroarch
+    core: sameboy
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:437"
+  - emulator: retroarch
+    core: gearboy
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:438"
+  - emulator: retroarch
+    core: tgbdual
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:439"
+  - emulator: retroarch
+    core: mgba
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:440"
+  - emulator: retroarch
+    core: vbam
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:441"
+  - emulator: retroarch
+    core: DoubleCherryGB
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:442"
+  - emulator: retroarch
+    core: skyemu
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:443"
+  - emulator: mednafen
+    core: gb
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:446"
+  - emulator: skyemu
+    core: skyemu-sa
+    when: DEVICE SDM845|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:451"
 - folder: genesis
   extensions:
   - .7z
@@ -666,6 +1194,20 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/genesis.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:1088;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:1080"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1080"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1081"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1082"
+  - emulator: mednafen
+    core: md
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1085"
 - folder: genh
   extensions:
   - .7z
@@ -679,6 +1221,20 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/genh.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:1099;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:1091"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1091"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1092"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1093"
+  - emulator: mednafen
+    core: md
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1096"
 - folder: gp32
   extensions:
   - .7z
@@ -734,6 +1290,28 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/mame.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:720;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:713"
+  offers:
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:713"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:714"
+  - emulator: retroarch
+    core: mame2015
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:715"
+  - emulator: retroarch
+    core: mame
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:716"
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:717"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:718"
+  - emulator: retroarch
+    core: fbalpha2019
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:719"
   arcade: true
 - folder: mastersystem
   extensions:
@@ -745,6 +1323,23 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/mastersystem.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:1111;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:1102"
+  offers:
+  - emulator: retroarch
+    core: gearsystem
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1102"
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1103"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1104"
+  - emulator: retroarch
+    core: smsplus
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1105"
+  - emulator: mednafen
+    core: sms
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1108"
 - folder: megacd
   extensions:
   - .chd
@@ -755,6 +1350,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/megacd.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:1077;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:1075"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1075"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1076"
 - folder: megadrive
   extensions:
   - .7z
@@ -768,6 +1370,20 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/megadrive.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:1122;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:1114"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1114"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1115"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1116"
+  - emulator: mednafen
+    core: md
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1119"
 - folder: megadrive-japan
   extensions:
   - .7z
@@ -781,6 +1397,20 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/megadrive-japan.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:731;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:723"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:723"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:724"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:725"
+  - emulator: mednafen
+    core: md
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:728"
 - folder: megadriveh
   extensions:
   - .7z
@@ -794,6 +1424,20 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/megadriveh.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:1133;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:1125"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1125"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1126"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1127"
+  - emulator: mednafen
+    core: md
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1130"
 - folder: megaduck
   extensions:
   - .7z
@@ -869,6 +1513,13 @@ folders:
   emulator: mplayer
   source_ref: "os config/emulators/mplayer.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:1411;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:1408"
+  offers:
+  - emulator: mplayer
+    core: mplayer
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1408"
+  - emulator: retroarch
+    core: ffmpeg
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1410"
 - folder: msx
   extensions:
   - .7z
@@ -882,6 +1533,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/msx.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:759;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:757"
+  offers:
+  - emulator: retroarch
+    core: bluemsx
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:757"
+  - emulator: retroarch
+    core: fmsx
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:758"
 - folder: msx2
   extensions:
   - .7z
@@ -895,6 +1553,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/msx2.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:764;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:762"
+  offers:
+  - emulator: retroarch
+    core: bluemsx
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:762"
+  - emulator: retroarch
+    core: fmsx
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:763"
 - folder: n64
   extensions:
   - .7z
@@ -906,6 +1571,24 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/n64.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:839;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:826"
+  offers:
+  - emulator: retroarch
+    core: mupen64plus_next
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:826"
+  - emulator: retroarch
+    core: mupen64plus
+    when: "if [ \"${PREFER_GLES}\" = \"yes\" ]; then"
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:829"
+  - emulator: retroarch
+    core: parallel_n64
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:831"
+  - emulator: mupen64plus
+    core: mupen64plus-sa
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:832"
+  - emulator: daedalusx64
+    core: daedalusx64-sa
+    when: DEVICE SDM845|SM8250|SM8550
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:835"
 - folder: naomi
   extensions:
   - .7z
@@ -926,6 +1609,17 @@ folders:
       core: flycast-sa
       emulator: flycast
       source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:774"
+  offers:
+  - emulator: retroarch
+    core: flycast2021
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588; DEVICE SDM845|SM8250|SM8550|SM8650|S922X
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:769,776"
+  - emulator: retroarch
+    core: flycast
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:770,775,779"
+  - emulator: flycast
+    core: flycast-sa
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:771,774,780"
   arcade: true
 - folder: nds
   extensions:
@@ -945,6 +1639,32 @@ folders:
       core: melonds-sa
       emulator: melonds
       source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:871"
+  offers:
+  - emulator: drastic
+    core: drastic-sa
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:844,853,879,887"
+  - emulator: melonds
+    core: melonds-sa
+    when: DEVICE H700|RK3326; DEVICE RK3399|RK3566|RK3588; DEVICE S922X; DEVICE SDM845|SM8250|SM8550;
+      DEVICE SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:845,856,862,871,882"
+  - emulator: retroarch
+    core: melonds
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:846,854,864,873,880,888"
+  - emulator: retroarch
+    core: melondsds
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:847,855,865,874,881,889"
+  - emulator: retroarch
+    core: desmume
+    when: DEVICE H700|RK3326; DEVICE RK3399|RK3566|RK3588; DEVICE SDM845|SM8250|SM8550
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:848,857,866"
+  - emulator: retroarch
+    core: skyemu
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:849,858,867,875,883,890"
+  - emulator: skyemu
+    core: skyemu-sa
+    when: DEVICE SDM845|SM8250|SM8550; DEVICE SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:863,872"
 - folder: ndsiware
   extensions:
   - .7z
@@ -954,6 +1674,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/ndsiware.conf:3,7; os projects/ArchR/packages/virtual/emulators/package.mk:906;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:902"
+  offers:
+  - emulator: retroarch
+    core: melondsds
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:898,902"
+  - emulator: melonds
+    core: melonds-sa
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:899,903"
 - folder: neocd
   extensions:
   - .chd
@@ -963,6 +1690,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/neocd.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:803;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:801"
+  offers:
+  - emulator: retroarch
+    core: neocd
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:801"
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:802"
 - folder: neogeo
   extensions:
   - .7z
@@ -972,6 +1706,32 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/neogeo.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:798;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:786"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:786"
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:787"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:788"
+  - emulator: retroarch
+    core: fbalpha2019
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:789"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:790"
+  - emulator: retroarch
+    core: mame2015
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:791"
+  - emulator: retroarch
+    core: mame
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:792"
+  - emulator: retroarch
+    core: geolith
+    when: TARGET_ARCH aarch64
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:795"
 - folder: nes
   extensions:
   - .7z
@@ -983,6 +1743,23 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/nes.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:918;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:909"
+  offers:
+  - emulator: retroarch
+    core: nestopia
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:909"
+  - emulator: retroarch
+    core: fceumm
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:910"
+  - emulator: retroarch
+    core: quicknes
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:911"
+  - emulator: retroarch
+    core: mesen
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:912"
+  - emulator: mednafen
+    core: nes
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:915"
 - folder: nesh
   extensions:
   - .7z
@@ -994,6 +1771,23 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/nesh.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:930;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:921"
+  offers:
+  - emulator: retroarch
+    core: nestopia
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:921"
+  - emulator: retroarch
+    core: fceumm
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:922"
+  - emulator: retroarch
+    core: quicknes
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:923"
+  - emulator: retroarch
+    core: mesen
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:924"
+  - emulator: mednafen
+    core: nesh
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:927"
 - folder: ngp
   extensions:
   - .7z
@@ -1004,6 +1798,17 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/ngp.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:813;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:806"
+  offers:
+  - emulator: retroarch
+    core: beetle_ngp
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:806"
+  - emulator: retroarch
+    core: race
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:807"
+  - emulator: mednafen
+    core: ngp
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:810"
 - folder: ngpc
   extensions:
   - .7z
@@ -1014,6 +1819,17 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/ngpc.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:823;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:816"
+  offers:
+  - emulator: retroarch
+    core: beetle_ngp
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:816"
+  - emulator: retroarch
+    core: race
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:817"
+  - emulator: mednafen
+    core: ngp
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:820"
 - folder: odyssey
   name: odyssey2
   extensions:
@@ -1052,6 +1868,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/pc.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:744;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:742"
+  offers:
+  - emulator: retroarch
+    core: dosbox_pure
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:742"
+  - emulator: retroarch
+    core: dosbox_core
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:743"
 - folder: pc88
   name: pc-8800
   extensions:
@@ -1095,6 +1918,24 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/pcengine.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:958;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:949"
+  offers:
+  - emulator: retroarch
+    core: beetle_pce_fast
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:949"
+  - emulator: retroarch
+    core: beetle_pce
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:950"
+  - emulator: retroarch
+    core: beetle_supergrafx
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:951"
+  - emulator: mednafen
+    core: pce
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:954"
+  - emulator: mednafen
+    core: pce_fast
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:955"
 - folder: pcenginecd
   extensions:
   - .ccd
@@ -1106,6 +1947,24 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/pcenginecd.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:970;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:961"
+  offers:
+  - emulator: retroarch
+    core: beetle_pce_fast
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:961"
+  - emulator: retroarch
+    core: beetle_pce
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:962"
+  - emulator: retroarch
+    core: beetle_supergrafx
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:963"
+  - emulator: mednafen
+    core: pce
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:966"
+  - emulator: mednafen
+    core: pce_fast
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:967"
 - folder: pcfx
   extensions:
   - .ccd
@@ -1116,6 +1975,14 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/pcfx.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:979;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:973"
+  offers:
+  - emulator: retroarch
+    core: beetle_pcfx
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:973"
+  - emulator: mednafen
+    core: pcfx
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:976"
 - folder: pet
   extensions:
   - '.20'
@@ -1160,6 +2027,13 @@ folders:
   emulator: pico-8
   source_ref: "os config/emulators/pico-8.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:984;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:982"
+  offers:
+  - emulator: pico-8
+    core: pico8
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:982"
+  - emulator: retroarch
+    core: fake08
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:983"
 - folder: pokemini
   extensions:
   - .7z
@@ -1211,6 +2085,13 @@ folders:
   emulator: ppsspp
   source_ref: "os config/emulators/psp.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:1043;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:1041"
+  offers:
+  - emulator: ppsspp
+    core: ppsspp-sa
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1041"
+  - emulator: retroarch
+    core: ppsspp
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1042"
 - folder: pspminis
   extensions:
   - .chd
@@ -1221,6 +2102,13 @@ folders:
   emulator: ppsspp
   source_ref: "os config/emulators/pspminis.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:1049;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:1047"
+  offers:
+  - emulator: ppsspp
+    core: ppsspp-sa
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1047"
+  - emulator: retroarch
+    core: ppsspp
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1048"
 - folder: psx
   extensions:
   - .bin
@@ -1247,6 +2135,30 @@ folders:
       core: pcsx_rearmed
       emulator: retroarch
       source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1014"
+  offers:
+  - emulator: retroarch
+    core: pcsx_rearmed32
+    when: DEVICE H700|RK3326; DEVICE RK3399|RK3588; DEVICE RK3566; DEVICE SDM845|SM8250|SM8550
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:989,994,999,1003"
+  - emulator: retroarch
+    core: pcsx_rearmed
+    when: DEVICE H700|RK3326; DEVICE RK3399|RK3588; DEVICE RK3566; DEVICE S922X; DEVICE SDM845|SM8250|SM8550;
+      DEVICE SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:990,993,1000,1004,1009,1014"
+  - emulator: retroarch
+    core: beetle_psx
+    when: DEVICE RK3399|RK3588; DEVICE S922X; DEVICE SDM845|SM8250|SM8550; DEVICE SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:995,1005,1010,1015"
+  - emulator: mednafen
+    core: psx
+    when: DEVICE RK3399|RK3588; DEVICE SDM845|SM8250|SM8550; DEVICE SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:996,1006,1011"
+  - emulator: duckstation
+    core: duckstation-sa
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1018"
+  - emulator: retroarch
+    core: swanstation
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1019"
 - folder: satellaview
   extensions:
   - .7z
@@ -1261,6 +2173,19 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/satellaview.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:1282;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:1278"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1278"
+  - emulator: retroarch
+    core: snes9x2010
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1279"
+  - emulator: retroarch
+    core: snes9x2002
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1280"
+  - emulator: retroarch
+    core: snes9x2005_plus
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1281"
 - folder: saturn
   extensions:
   - .chd
@@ -1276,6 +2201,27 @@ folders:
       core: yabasanshiro
       emulator: retroarch
       source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1146"
+  offers:
+  - emulator: yabasanshiro
+    core: yabasanshiro-sa
+    when: TARGET_ARCH aarch64
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1142"
+  - emulator: retroarch
+    core: yabasanshiro
+    when: TARGET_ARCH aarch64; TARGET_ARCH x86_64
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1143,1146"
+  - emulator: retroarch
+    core: beetle_saturn
+    when: DEVICE RK3588; DEVICE S922X; DEVICE SDM845|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1151,1155,1160"
+  - emulator: mednafen
+    core: ss
+    when: DEVICE RK3588; DEVICE SDM845|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1152,1157"
+  - emulator: retroarch
+    core: kronos
+    when: DEVICE SDM845|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1156"
 - folder: screenshots
   name: imageviewer
   extensions:
@@ -1328,6 +2274,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/segacd.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:1072;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:1070"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1070"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1071"
 - folder: segamodel3
   extensions:
   - .zip
@@ -1348,6 +2301,33 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/sfc.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:1275;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:1256"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1256"
+  - emulator: retroarch
+    core: snes9x2010
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1257"
+  - emulator: retroarch
+    core: snes9x2002
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1258"
+  - emulator: retroarch
+    core: snes9x2005_plus
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1259"
+  - emulator: retroarch
+    core: beetle_supafaust
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1260"
+  - emulator: retroarch
+    core: bsnes_mercury_performance
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1263"
+  - emulator: retroarch
+    core: bsnes
+    when: DEVICE RK3399|RK3588|SDM845|SM8250|SM8550|SM8650|S922X
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1266"
+  - emulator: retroarch
+    core: bsnes_hd_beta
+    when: DEVICE RK3399|RK3588|SDM845|SM8250|SM8550|SM8650|S922X
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1267"
 - folder: sg-1000
   extensions:
   - .7z
@@ -1358,6 +2338,16 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/sg-1000.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:1177;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:1174"
+  offers:
+  - emulator: retroarch
+    core: gearsystem
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1174"
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1175"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1176"
 - folder: sgfx
   name: supergrafx
   extensions:
@@ -1372,6 +2362,21 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/supergrafx.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:1209;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:1201"
+  offers:
+  - emulator: retroarch
+    core: beetle_supergrafx
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1201"
+  - emulator: retroarch
+    core: beetle_pce
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1202"
+  - emulator: mednafen
+    core: pce
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1205"
+  - emulator: mednafen
+    core: pce_fast
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1206"
 - folder: snes
   extensions:
   - .7z
@@ -1384,6 +2389,43 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/snes.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:1231;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:1212"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1212"
+  - emulator: retroarch
+    core: snes9x2010
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1213"
+  - emulator: retroarch
+    core: snes9x2002
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1214"
+  - emulator: retroarch
+    core: snes9x2005_plus
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1215"
+  - emulator: retroarch
+    core: beetle_supafaust
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1216"
+  - emulator: retroarch
+    core: bsnes_mercury_accuracy
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1217,1239,1261"
+  - emulator: retroarch
+    core: bsnes_mercury_balanced
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1218,1240,1262"
+  - emulator: retroarch
+    core: bsnes_mercury_performance
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1219"
+  - emulator: retroarch
+    core: bsnes
+    when: DEVICE RK3399|RK3588|SDM845|SM8250|SM8550|SM8650|S922X
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1222"
+  - emulator: retroarch
+    core: bsnes_hd_beta
+    when: DEVICE RK3399|RK3588|SDM845|SM8250|SM8550|SM8650|S922X
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1223"
+  - emulator: mednafen
+    core: snes_faust
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1228,1272"
 - folder: snesh
   extensions:
   - .7z
@@ -1396,6 +2438,37 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/snesh.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:1253;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:1234"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1234"
+  - emulator: retroarch
+    core: snes9x2010
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1235"
+  - emulator: retroarch
+    core: snes9x2002
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1236"
+  - emulator: retroarch
+    core: snes9x2005_plus
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1237"
+  - emulator: retroarch
+    core: beetle_supafaust
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1238"
+  - emulator: retroarch
+    core: bsnes_mercury_performance
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1241"
+  - emulator: retroarch
+    core: bsnes
+    when: DEVICE RK3399|RK3588|SDM845|SM8250|SM8550|SM8650|S922X
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1244"
+  - emulator: retroarch
+    core: bsnes_hd_beta
+    when: DEVICE RK3399|RK3588|SDM845|SM8250|SM8550|SM8650|S922X
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1245"
+  - emulator: mednafen
+    core: snes_faust
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1250"
 - folder: snesmsu1
   extensions:
   - .7z
@@ -1408,6 +2481,17 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/snesmsu1.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:754;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:747"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:747"
+  - emulator: retroarch
+    core: beetle_supafaust
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:748"
+  - emulator: mednafen
+    core: snes_faust
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:751"
 - folder: st-v
   extensions:
   - .zip
@@ -1444,6 +2528,24 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/tg16.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:1310;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:1301"
+  offers:
+  - emulator: retroarch
+    core: beetle_pce_fast
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1301"
+  - emulator: retroarch
+    core: beetle_pce
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1302"
+  - emulator: retroarch
+    core: beetle_supergrafx
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1303"
+  - emulator: mednafen
+    core: pce
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1306"
+  - emulator: mednafen
+    core: pce_fast
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1307"
 - folder: tg16cd
   extensions:
   - .ccd
@@ -1455,6 +2557,24 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/tg16cd.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:1322;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:1313"
+  offers:
+  - emulator: retroarch
+    core: beetle_pce_fast
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1313"
+  - emulator: retroarch
+    core: beetle_pce
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1314"
+  - emulator: retroarch
+    core: beetle_supergrafx
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1315"
+  - emulator: mednafen
+    core: pce
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1318"
+  - emulator: mednafen
+    core: pce_fast
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1319"
 - folder: tic-80
   extensions:
   - .tic
@@ -1531,6 +2651,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/vic20.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:290;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:288"
+  offers:
+  - emulator: retroarch
+    core: vice_xvic
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:288"
+  - emulator: vicesa
+    core: xvic
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:289"
 - folder: videopac
   extensions:
   - .7z
@@ -1556,6 +2683,14 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/virtualboy.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:1347;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:1341"
+  offers:
+  - emulator: retroarch
+    core: beetle_vb
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1341"
+  - emulator: mednafen
+    core: vb
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1344"
 - folder: wasm4
   extensions:
   - .wasm
@@ -1588,6 +2723,18 @@ folders:
       core: dolphin-sa-wii
       emulator: dolphin
       source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:630"
+  offers:
+  - emulator: dolphin
+    core: dolphin-qt-wii
+    when: DEVICE RK3399|SDM845|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:620"
+  - emulator: dolphin
+    core: dolphin-sa-wii
+    when: DEVICE RK3399|SDM845|SM8250|SM8550|SM8650; DEVICE RK3566|RK3588|S922X
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:622,630"
+  - emulator: retroarch
+    core: dolphin
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:624,632,640"
 - folder: wiiu
   extensions:
   - .rpx
@@ -1622,6 +2769,18 @@ folders:
       core: dolphin-sa-wii
       emulator: dolphin
       source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:631"
+  offers:
+  - emulator: dolphin
+    core: dolphin-qt-wii
+    when: DEVICE RK3399|SDM845|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:621"
+  - emulator: dolphin
+    core: dolphin-sa-wii
+    when: DEVICE RK3399|SDM845|SM8250|SM8550|SM8650; DEVICE RK3566|RK3588|S922X
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:623,631"
+  - emulator: retroarch
+    core: dolphin
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:625,633,641"
 - folder: windows
   extensions:
   - .sh
@@ -1639,6 +2798,14 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/wonderswan.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:1356;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:1350"
+  offers:
+  - emulator: retroarch
+    core: beetle_wswan
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1350"
+  - emulator: mednafen
+    core: wswan
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1353"
 - folder: wonderswancolor
   extensions:
   - .7z
@@ -1649,6 +2816,14 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/wonderswancolor.conf:6,7; os projects/ArchR/packages/virtual/emulators/package.mk:1365;\
     \ os projects/ArchR/packages/virtual/emulators/package.mk:1359"
+  offers:
+  - emulator: retroarch
+    core: beetle_wswan
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1359"
+  - emulator: mednafen
+    core: wswan
+    when: DEVICE H700|RK3326|RK3399|RK3566|RK3588|SM8250|SM8550|SM8650
+    source_ref: "os projects/ArchR/packages/virtual/emulators/package.mk:1362"
 - folder: x1
   extensions:
   - .2d

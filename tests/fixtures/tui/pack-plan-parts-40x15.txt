@@ -1,0 +1,15 @@
+ RetroBIOS: Make a pack
+
+ 4 files, 1.0 MB, for RetroArch.
+ Pack: ~/Downloads/
+   RetroArch_Custom_BIOS_Pack.part1of3.
+   zip
+ In 3 parts of at most 3.9 GB, as FAT32
+   holds no file of 4 GB.
+
+ > Make the pack
+   Change where
+
+
+
+ A Make  B Back  ? Help

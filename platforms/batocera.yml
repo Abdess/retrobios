@@ -6814,6 +6814,59 @@ launchers:
   fails_when_missing: false
   source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/shadps4/shadps4Generator.py:46,\
     \ 228"
+- emulator: mame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: <romDirname>;/userdata/bios/mame;/userdata/bios
+  passes_to: command line -rompath
+  fails_when_missing: false
+  depends_on_option: messMode == -1
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/mame/mameGenerator.py:129-130"
+- emulator: mame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: <romDirname>;/userdata/bios/mame;/userdata/bios;/userdata/roms/mame;<softDir>
+  passes_to: command line -rompath
+  fails_when_missing: false
+  depends_on_option: "not (messMode == -1) and softList in subdirSoftList"
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/mame/mameGenerator.py:129,\
+    \ 132-133"
+- emulator: mame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: <romDirname>;/userdata/bios/mame;/userdata/bios;/userdata/roms/mame
+  passes_to: command line -rompath
+  fails_when_missing: false
+  depends_on_option: "not (messMode == -1) and not (softList in subdirSoftList)"
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/mame/mameGenerator.py:129,\
+    \ 132, 135"
+- emulator: mame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/mame/samples
+  passes_to: command line -samplepath
+  fails_when_missing: false
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/mame/mameGenerator.py:142"
+- emulator: mame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /var/run/mame_artwork/;/usr/bin/mame/artwork/;/userdata/bios/mame/artwork;/userdata/decorations
+  passes_to: command line -artpath
+  fails_when_missing: false
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/mame/mameGenerator.py:143"
+- emulator: mame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: /userdata/bios/mame/artwork/crosshairs
+  passes_to: command line -crosshairpath
+  fails_when_missing: false
+  source_ref: "package/batocera/core/batocera-configgen/configgen/configgen/generators/mame/mameGenerator.py:189"
 configs_root:
   path: /userdata/system/configs
   from_bios: ../system/configs

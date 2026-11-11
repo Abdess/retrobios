@@ -1,0 +1,158 @@
+# LRPS2 at 9485a53 with Recalbox's path patch
+# Source: https://github.com/libretro/parallel-ps2
+# Upstream: https://github.com/PCSX2/pcsx2
+
+emulator: "LRPS2 (9485a53, Recalbox)"
+type: libretro
+core_classification: community_fork
+bios_mode: agnostic
+source: "https://github.com/libretro/parallel-ps2"
+upstream: "https://github.com/PCSX2/pcsx2"
+profiled_date: "2026-11-10"
+source_commit: "9485a53fa5aa2bff17e04518116107f81a8c82e3"
+pin_frozen: "Recalbox, the only platform that ships it, builds this revision with package/libretro-ps2/0001-recalbox-paths.patch (Recalbox package/libretro-ps2/libretro-ps2.mk:9 at tag 10.1.1). Later commits are not part of that build."
+pin_build:
+  - platform: recalbox
+    repo: "https://gitlab.com/recalbox/recalbox"
+    revision: "10.1.1"
+    path: "package/libretro-ps2/libretro-ps2.mk"
+    variable: LIBRETRO_PS2_VERSION
+    value: "9485a53fa5aa2bff17e04518116107f81a8c82e3"
+core_version: null
+version_basis:
+  kind: none
+display_name: "Sony - PlayStation 2 (LRPS2 9485a53 for Recalbox)"
+cores: [ps2]
+built_by: [recalbox]
+systems: [sony-playstation-2]
+
+bios_directory: "ps2/"
+resources_directory: "ps2/resources/"
+
+notes: |
+  Recalbox installs the build as ps2_libretro.so (Recalbox
+  package/libretro-ps2/libretro-ps2.mk:31-33) and lists it as the libretro
+  core ps2 of the ps2 system (Recalbox
+  package/recalbox-romfs2/systems/ps2/system.ini:65-69).
+  The library version is the short commit hash git reports at build time
+  (cmake/BuildParameters.cmake:4-9, libretro/main.cpp:1424-1428).
+
+  Its patch moves the BIOS scan from pcsx2/bios to ps2 below the system
+  directory (libretro/main.cpp:1807), the data root from system/pcsx2 to
+  system/ps2, so resources are read from ps2/resources
+  (libretro/main.cpp:1911-1913), the BIOS folder default to
+  /recalbox/share/bios/ps2, the same folder on Recalbox, and memory cards to
+  /recalbox/share/saves/ps2 (pcsx2/Pcsx2Config.cpp:1042-1043, 1061-1062).
+
+  BIOS detection is filename-agnostic: ps2/ is scanned for any file between
+  4 and 8 MB with a RESET and a ROMVER romdir entry, no hash is checked, and
+  the list fills the pcsx2_bios core option whose default is the first BIOS
+  found (libretro/main.cpp:1801-1839). retro_load_game refuses to start when
+  no BIOS was found (libretro/main.cpp:1928-1932). The companion files take
+  their path from the selected BIOS.
+
+  The DEV9 hard disk image is user storage the core creates, not a file to
+  obtain.
+
+files:
+  - name: "<bios>.bin"
+    found_by: content
+    path: "ps2/<bios>.bin"
+    required: true
+    description: "PS2 BIOS binary"
+    min_size: 4194304
+    max_size: 8388608
+    validation: [size, romdir]
+    romdir:
+      reset_compare: 10
+      missing_reset: ends_walk
+      terminated_names: true
+      extinfo: true
+      unreadable_romver: ends_walk
+      truncated_walk: ends_walk
+    config_key: "pcsx2_bios"
+    source_ref: "source libretro/main.cpp:1801-1839, source libretro/main.cpp:360-365, source libretro/main.cpp:1928-1932, source pcsx2/ps2/BiosTools.cpp:31-32, 60-187, 231-323, source pcsx2/Pcsx2Config.cpp:994-1000, 1042, 1051-1061"
+    note: >
+      Any file of 4 to 8 MB in ps2/ whose romdir holds RESET and ROMVER. The
+      pcsx2_bios core option picks one, and the first valid image found is used
+      when the configured one is missing.
+
+  - name: "<bios>.rom1"
+    path: "ps2/<bios>.rom1"
+    required: false
+    max_size: 4194304
+    description: "DVD player ROM"
+    source_ref: "source pcsx2/ps2/BiosTools.cpp:189-213, 314, source pcsx2/MemoryTypes.h:24"
+    note: "Tries <bios path>.rom1, then the BIOS path with its extension replaced by rom1. Skipped when neither exists."
+
+  - name: "<bios>.rom2"
+    path: "ps2/<bios>.rom2"
+    required: false
+    max_size: 524288
+    description: "Chinese ROM extension"
+    source_ref: "source pcsx2/ps2/BiosTools.cpp:189-213, 315, source pcsx2/MemoryTypes.h:25"
+    note: "Same naming as rom1. Present only on Chinese consoles."
+
+  - name: "<bios>.nvm"
+    path: "ps2/<bios>.nvm"
+    required: false
+    hle_fallback: true
+    size: 1024
+    description: "NVRAM / EEPROM data"
+    source_ref: "source pcsx2/CDVD/CDVD.cpp:59-60, source pcsx2/CDVD/CDVD.cpp:160-184"
+    note: >
+      Read at the BIOS path with the extension replaced by nvm. Region and
+      language defaults are filled in when the file is missing, short, or has
+      no language or region parameters.
+
+  - name: "<bios>.mec"
+    path: "ps2/<bios>.mec"
+    required: false
+    hle_fallback: true
+    size: 4
+    description: "Mechacon version"
+    source_ref: "source pcsx2/CDVD/CDVD.cpp:62, source pcsx2/CDVD/CDVD.cpp:186-196"
+    note: "Read at the BIOS path with the extension replaced by mec. Written as 0x00020603 when missing."
+
+  - name: "GameIndex.yaml"
+    path: "ps2/resources/GameIndex.yaml"
+    required: false
+    installed_on: [recalbox]
+    description: "Per-game fixes and settings database"
+    source_ref: "source pcsx2/GameDatabase.cpp:48, source pcsx2/GameDatabase.cpp:880-885, source libretro/main.cpp:2265-2302"
+    note: >
+      Read from ps2/resources at the first game lookup. Without it no game fix
+      applies. Recalbox installs the copy of the built tree in
+      bios/ps2/resources (Recalbox package/libretro-ps2/libretro-ps2.mk:34-37).
+
+  - name: "cheats_ws.zip"
+    path: "ps2/resources/cheats_ws.zip"
+    required: false
+    description: "widescreen patches archive"
+    source_ref: "source pcsx2/VMManager.cpp:333-348, source libretro/main.cpp:2256-2263"
+    note: "Read when widescreen patches are enabled and ps2/cheats_ws holds no patch for the game."
+
+  - name: "cheats_ni.zip"
+    path: "ps2/resources/cheats_ni.zip"
+    required: false
+    description: "no-interlacing patches archive"
+    source_ref: "source pcsx2/VMManager.cpp:366-383, source libretro/main.cpp:2256-2263"
+    note: "Read when no-interlacing patches are enabled and ps2/cheats_ni holds no patch for the game."
+
+  - name: "eeprom.dat"
+    load_from: working_directory
+    required: false
+    hle_fallback: true
+    size: 64
+    description: "DEV9 EEPROM"
+    source_ref: "source pcsx2/DEV9/DEV9.cpp:107-116, source pcsx2/DEV9/DEV9.cpp:152-167"
+    note: "Opened from the working directory when DEV9 starts and mapped over 64 bytes. A compiled-in image stands in when the file is missing."
+
+  - name: "flash.dat"
+    load_from: working_directory
+    required: false
+    hle_fallback: true
+    size: 8650752
+    description: "DEV9 flash memory with ECC"
+    source_ref: "source pcsx2/DEV9/flash.cpp:21-28, source pcsx2/DEV9/flash.cpp:74-101"
+    note: "Read from the working directory when DEV9 starts. The flash is blank (0xFF) when the file is missing."

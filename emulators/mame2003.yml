@@ -41,7 +41,9 @@ notes: |
   Frozen snapshot of MAME 0.78 (xmame, January 2003). Stock version without
   the Plus patches. Targets low-end hardware (Raspberry Pi, SBCs).
 
-  BIOS ZIPs are loaded from {content_dir}/ (same folder as the game ROM).
+  BIOS ZIPs are loaded from {content_dir}/ (same folder as the game ROM):
+  osd_get_path gives FILETYPE_ROM the content path (src/fileio.c:217-220,
+  src/mame2003/mame2003.c:351-352).
 
   Data files (hiscore.dat, cheat.dat, history.dat, mameinfo.dat) are loaded
   from system_dir/mame2003/. Samples from system_dir/mame2003/samples/.
@@ -98,6 +100,7 @@ files:
   - name: neogeo.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: snk-neogeo-mvs
     note: "MVS/AES BIOS, 7 official variants"
     source_ref: "src/drivers/neogeo.c:1544-1556,5661-5675"
@@ -140,6 +143,7 @@ files:
   - name: pgm.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: igs-pgm
     source_ref: "src/drivers/pgm.c:946"
     contents:
@@ -157,6 +161,7 @@ files:
   - name: stvbios.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: sega-stv
     source_ref: "src/drivers/stv.c:4597"
 
@@ -164,6 +169,7 @@ files:
   - name: megaplay.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: sega-megaplay
     source_ref: "src/drivers/segac2.c:4468"
 
@@ -171,6 +177,7 @@ files:
   - name: megatech.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: sega-megatech
     source_ref: "src/drivers/segac2.c:4390"
 
@@ -178,6 +185,7 @@ files:
   - name: decocass.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: deco-cassette
     source_ref: "src/drivers/decocass.c:1086"
 
@@ -185,6 +193,7 @@ files:
   - name: playch10.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: nintendo-playch10
     source_ref: "src/drivers/playch10.c:1680"
 
@@ -192,6 +201,7 @@ files:
   - name: nss.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: nintendo-nss
     source_ref: "src/drivers/nss.c:406"
 
@@ -199,6 +209,7 @@ files:
   - name: skns.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: super-kaneko-nova
     source_ref: "src/drivers/suprnova.c:1668"
 
@@ -206,6 +217,7 @@ files:
   - name: konamigx.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: konami-gx
     source_ref: "src/drivers/konamigx.c:3369"
 
@@ -213,6 +225,7 @@ files:
   - name: cvs.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: century-cvs
     source_ref: "src/drivers/cvs.c:475-482,1350"
     contents:
@@ -234,6 +247,7 @@ files:
   - name: cpzn1.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: zn1-capcom
     note: "Capcom ZN-1 BIOS (PS1-based). Most games NOT_WORKING"
     source_ref: "src/drivers/zn.c:1879"
@@ -241,6 +255,7 @@ files:
   - name: cpzn2.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: zn2-capcom
     note: "Capcom ZN-2 BIOS (PS1-based). Most games NOT_WORKING"
     source_ref: "src/drivers/zn.c:1898"
@@ -248,6 +263,7 @@ files:
   - name: taitofx1.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: zn1-taito
     note: "Taito FX-1 BIOS (PS1-based). Most games NOT_WORKING"
     source_ref: "src/drivers/zn.c:1955"
@@ -255,6 +271,7 @@ files:
   - name: tps.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: zn1-tecmo
     note: "Tecmo TPS BIOS (PS1-based). Most games NOT_WORKING"
     source_ref: "src/drivers/zn.c:1936"
@@ -262,6 +279,7 @@ files:
   - name: sncwgltd.zip
     required: false
     category: bios_zip
+    load_from: content_dir
     system: zn1-video-system
     note: "Video System KN BIOS (PS1-based). NOT_WORKING"
     source_ref: "src/drivers/zn.c:1948"
@@ -269,6 +287,7 @@ files:
   - name: acpsx.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: zn1-acclaim
     note: "Acclaim PSX BIOS (PS1-based). NOT_WORKING"
     source_ref: "src/drivers/zn.c:1925"
@@ -276,6 +295,7 @@ files:
   - name: namcoc76.zip
     required: false
     category: bios_zip
+    load_from: content_dir
     system: namco-system11
     note: "Namco C76 sound MCU BIOS, parent of the Tekken sets. Each game also loads c76.bin as ROM_LOAD_OPTIONAL from its own archive"
     source_ref: "src/drivers/namcos11.c:1604-1607, 1609-1610, 1427"

@@ -508,7 +508,13 @@ def core_probe(argv: list[str], staged: set[str], layout: Layout, work: Path) ->
             record = json.loads(proc.stdout)
         except ValueError:
             record = None
-    return proc.returncode, record, proc.stderr.strip()[-1500:]
+    # A traceback spells the checkout and the scratch folders: a record read
+    # on another machine names them by role.
+    places = [(str(work), "<work>"), (str(layout.root), "<dest>"), (str(ROOT), "<repo>")]
+    error = proc.stderr.strip()
+    for prefix, name in sorted(places, key=lambda place: -len(place[0])):
+        error = error.replace(prefix, name)
+    return proc.returncode, record, error[-1500:]
 
 
 def probe_argv(core: dict, choice: CoreChoice, content: campaign.Content, load: Path,

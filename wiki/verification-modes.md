@@ -258,6 +258,8 @@ Each entry in the index tracks:
 - `min_size`, `max_size`: bounds when the code accepts a range
 - `crc32`, `md5`, `sha1`, `sha256`: sets of accepted hash values
 - `adler32`: set of accepted Adler-32 values
+- `size_multiples`: granules a size must be a whole number of
+- `rules[].content`: the content tests of each entry (`romdir`, `masked_sha1`) with their spec
 - `crypto_only`: non-reproducible checks (see below)
 - `per_emulator`: per-core detail with source references
 
@@ -273,6 +275,13 @@ accepted values from the index.
 console-specific cryptographic keys (e.g., RSA-2048 for 3DS, AES-128-CBC for certain
 firmware). `verify.py` reports these as informational but cannot verify them without
 the keys. Size checks still apply if combined with crypto.
+
+**Content tests** (`CONTENT_CHECKS` in `common.py`): `romdir` walks a PS2 ROM
+directory the way the profile's fork reads it (`scripts/romdir.py`), and
+`masked_sha1` hashes a file with a byte range cleared. `content_fits()` runs them,
+and the name steps of the resolver, the folder scans of the pack and manifest,
+the emulator expansion and `verify.py` all call it, so they accept and refuse the
+same files.
 
 ### Size validation
 

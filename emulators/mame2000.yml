@@ -27,7 +27,9 @@ notes: |
 
   BIOS handling follows MAME 0.37b5 conventions. Shared BIOS files are packaged
   as parent ROM ZIPs (e.g. neogeo.zip) and placed in the ROM directory alongside
-  game ROMs. The core searches only the ROM directory for ROMs and BIOS sets.
+  game ROMs. The core searches only the ROM directory for ROMs and BIOS sets:
+  the rom path is IMAMEBASEPATH, the folder of the loaded content
+  (src/libretro/libretro.c:1044-1053, 1247, src/libretro/fileio.c:400-424).
 
   Samples (per-game WAV files) are loaded from system_dir/mame2000/samples/.
   They provide sound effects for certain games and are optional.
@@ -78,6 +80,7 @@ files:
   - name: neogeo.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: snk-neogeo-mvs
     source_ref: "src/drivers/neogeo.c:4499-4508"
     contents:
@@ -97,6 +100,7 @@ files:
   - name: decocass.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: deco-cassette
     source_ref: "src/drivers/btime.c:1996-2005"
     contents:

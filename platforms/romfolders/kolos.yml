@@ -75,6 +75,15 @@ folders:
       core: citra-sa
       emulator: citra
       source_ref: "os packages/virtual/emulators/package.mk:134"
+  offers:
+  - emulator: retroarch
+    core: citra
+    when: DEVICE AMD64
+    source_ref: "os packages/virtual/emulators/package.mk:129"
+  - emulator: citra
+    core: citra-sa
+    when: DEVICE AMD64; DEVICE S922X*
+    source_ref: "os packages/virtual/emulators/package.mk:130,134"
 - folder: amiga
   extensions:
   - .adf
@@ -95,6 +104,21 @@ folders:
       core: puae2021
       emulator: retroarch
       source_ref: "os packages/virtual/emulators/package.mk:142"
+  offers:
+  - emulator: retroarch
+    core: puae2021
+    source_ref: "os packages/virtual/emulators/package.mk:142,147"
+  - emulator: retroarch
+    core: puae
+    source_ref: "os packages/virtual/emulators/package.mk:143,146"
+  - emulator: amiberry
+    core: amiberry
+    when: TARGET_ARCH aarch64
+    source_ref: "os packages/virtual/emulators/package.mk:152"
+  - emulator: retroarch
+    core: uae4arm
+    when: TARGET_ARCH aarch64
+    source_ref: "os packages/virtual/emulators/package.mk:153"
 - folder: amigacd32
   extensions:
   - .chd
@@ -110,6 +134,17 @@ folders:
       core: puae2021
       emulator: retroarch
       source_ref: "os packages/virtual/emulators/package.mk:161"
+  offers:
+  - emulator: retroarch
+    core: puae2021
+    source_ref: "os packages/virtual/emulators/package.mk:161,166"
+  - emulator: retroarch
+    core: puae
+    source_ref: "os packages/virtual/emulators/package.mk:162,165"
+  - emulator: retroarch
+    core: uae4arm
+    when: TARGET_ARCH aarch64
+    source_ref: "os packages/virtual/emulators/package.mk:171"
 - folder: amstradcpc
   extensions:
   - .7z
@@ -126,6 +161,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/amstradcpc.conf:6,7; os packages/virtual/emulators/package.mk:179;\
     \ os packages/virtual/emulators/package.mk:177"
+  offers:
+  - emulator: retroarch
+    core: crocods
+    source_ref: "os packages/virtual/emulators/package.mk:177"
+  - emulator: retroarch
+    core: cap32
+    source_ref: "os packages/virtual/emulators/package.mk:178"
 - folder: arcade
   extensions:
   - .7z
@@ -133,6 +175,28 @@ folders:
   core: mame2003_plus
   emulator: retroarch
   source_ref: "os config/emulators/arcade.conf:6,7; os packages/virtual/emulators/package.mk:189; os packages/virtual/emulators/package.mk:182"
+  offers:
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "os packages/virtual/emulators/package.mk:182"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "os packages/virtual/emulators/package.mk:183"
+  - emulator: retroarch
+    core: mame2015
+    source_ref: "os packages/virtual/emulators/package.mk:184"
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os packages/virtual/emulators/package.mk:185"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "os packages/virtual/emulators/package.mk:186"
+  - emulator: retroarch
+    core: fbalpha2019
+    source_ref: "os packages/virtual/emulators/package.mk:187"
+  - emulator: retroarch
+    core: mame
+    source_ref: "os packages/virtual/emulators/package.mk:188"
   arcade: true
 - folder: arduboy
   extensions:
@@ -169,6 +233,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/atari5200.conf:6,7; os packages/virtual/emulators/package.mk:202; os\
     \ packages/virtual/emulators/package.mk:200"
+  offers:
+  - emulator: retroarch
+    core: a5200
+    source_ref: "os packages/virtual/emulators/package.mk:200"
+  - emulator: retroarch
+    core: atari800
+    source_ref: "os packages/virtual/emulators/package.mk:201"
 - folder: atari7800
   extensions:
   - .7z
@@ -221,6 +292,17 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/atarilynx.conf:6,7; os packages/virtual/emulators/package.mk:555; os\
     \ packages/virtual/emulators/package.mk:548"
+  offers:
+  - emulator: retroarch
+    core: handy
+    source_ref: "os packages/virtual/emulators/package.mk:548"
+  - emulator: retroarch
+    core: beetle_lynx
+    source_ref: "os packages/virtual/emulators/package.mk:549"
+  - emulator: mednafen
+    core: lynx
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:552"
 - folder: atarist
   extensions:
   - .7z
@@ -235,6 +317,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/atarist.conf:6,7; os packages/virtual/emulators/package.mk:215; os\
     \ packages/virtual/emulators/package.mk:213"
+  offers:
+  - emulator: retroarch
+    core: hatari
+    source_ref: "os packages/virtual/emulators/package.mk:213"
+  - emulator: hatarisa
+    core: hatarisa
+    source_ref: "os packages/virtual/emulators/package.mk:214"
 - folder: atomiswave
   extensions:
   - .7z
@@ -251,6 +340,17 @@ folders:
       core: flycast-sa
       emulator: flycast
       source_ref: "os packages/virtual/emulators/package.mk:232"
+  offers:
+  - emulator: retroarch
+    core: flycast2021
+    when: DEVICE RK33*; DEVICE RK35*; DEVICE S922X
+    source_ref: "os packages/virtual/emulators/package.mk:221,226,231"
+  - emulator: retroarch
+    core: flycast
+    source_ref: "os packages/virtual/emulators/package.mk:222,228,233,236"
+  - emulator: flycast
+    core: flycast-sa
+    source_ref: "os packages/virtual/emulators/package.mk:223,227,232,237"
   arcade: true
 - folder: cdi
   extensions:
@@ -290,6 +390,16 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/colecovision.conf:6,7; os packages/virtual/emulators/package.mk:250;\
     \ os packages/virtual/emulators/package.mk:247"
+  offers:
+  - emulator: retroarch
+    core: bluemsx
+    source_ref: "os packages/virtual/emulators/package.mk:247"
+  - emulator: retroarch
+    core: gearcoleco
+    source_ref: "os packages/virtual/emulators/package.mk:248"
+  - emulator: retroarch
+    core: smsplus
+    source_ref: "os packages/virtual/emulators/package.mk:249"
 - folder: cps1
   extensions:
   - .7z
@@ -297,6 +407,23 @@ folders:
   core: fbneo
   emulator: retroarch
   source_ref: "os config/emulators/cps1.conf:6,7; os packages/virtual/emulators/package.mk:262; os packages/virtual/emulators/package.mk:253"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os packages/virtual/emulators/package.mk:253"
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "os packages/virtual/emulators/package.mk:254"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "os packages/virtual/emulators/package.mk:255"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "os packages/virtual/emulators/package.mk:256"
+  - emulator: AdvanceMame
+    core: AdvanceMame
+    when: TARGET_ARCH aarch64
+    source_ref: "os packages/virtual/emulators/package.mk:259"
   arcade: true
 - folder: cps2
   extensions:
@@ -305,6 +432,23 @@ folders:
   core: fbneo
   emulator: retroarch
   source_ref: "os config/emulators/cps2.conf:6,7; os packages/virtual/emulators/package.mk:274; os packages/virtual/emulators/package.mk:265"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os packages/virtual/emulators/package.mk:265"
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "os packages/virtual/emulators/package.mk:266"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "os packages/virtual/emulators/package.mk:267"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "os packages/virtual/emulators/package.mk:268"
+  - emulator: AdvanceMame
+    core: AdvanceMame
+    when: TARGET_ARCH aarch64
+    source_ref: "os packages/virtual/emulators/package.mk:271"
   arcade: true
 - folder: cps3
   extensions:
@@ -313,6 +457,23 @@ folders:
   core: fbneo
   emulator: retroarch
   source_ref: "os config/emulators/cps3.conf:6,7; os packages/virtual/emulators/package.mk:286; os packages/virtual/emulators/package.mk:277"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os packages/virtual/emulators/package.mk:277"
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "os packages/virtual/emulators/package.mk:278"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "os packages/virtual/emulators/package.mk:279"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "os packages/virtual/emulators/package.mk:280"
+  - emulator: AdvanceMame
+    core: AdvanceMame
+    when: TARGET_ARCH aarch64
+    source_ref: "os packages/virtual/emulators/package.mk:283"
   arcade: true
 - folder: daphne
   extensions:
@@ -321,6 +482,13 @@ folders:
   core: hypseus-singe
   emulator: hypseus-singe
   source_ref: "os config/emulators/daphne.conf:5,6; os packages/virtual/emulators/package.mk:291; os packages/virtual/emulators/package.mk:289"
+  offers:
+  - emulator: hypseus-singe
+    core: hypseus-singe
+    source_ref: "os packages/virtual/emulators/package.mk:289"
+  - emulator: retroarch
+    core: daphne
+    source_ref: "os packages/virtual/emulators/package.mk:290"
   arcade: true
 - folder: dreamcast
   extensions:
@@ -338,6 +506,16 @@ folders:
       core: flycast-sa
       emulator: flycast
       source_ref: "os packages/virtual/emulators/package.mk:307"
+  offers:
+  - emulator: retroarch
+    core: flycast2021
+    source_ref: "os packages/virtual/emulators/package.mk:296,301,306,311"
+  - emulator: retroarch
+    core: flycast
+    source_ref: "os packages/virtual/emulators/package.mk:297,303,308,312"
+  - emulator: flycast
+    core: flycast-sa
+    source_ref: "os packages/virtual/emulators/package.mk:298,302,307,313"
 - folder: easyrpg
   extensions:
   - .easyrpg
@@ -358,6 +536,23 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/famicom.conf:6,7; os packages/virtual/emulators/package.mk:332; os\
     \ packages/virtual/emulators/package.mk:323"
+  offers:
+  - emulator: retroarch
+    core: nestopia
+    source_ref: "os packages/virtual/emulators/package.mk:323"
+  - emulator: retroarch
+    core: fceumm
+    source_ref: "os packages/virtual/emulators/package.mk:324"
+  - emulator: retroarch
+    core: quicknes
+    source_ref: "os packages/virtual/emulators/package.mk:325"
+  - emulator: retroarch
+    core: mesen
+    source_ref: "os packages/virtual/emulators/package.mk:326"
+  - emulator: mednafen
+    core: nes
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:329"
 - folder: fbneo
   name: fbn
   extensions:
@@ -366,6 +561,28 @@ folders:
   core: fbneo
   emulator: retroarch
   source_ref: "os config/emulators/fbn.conf:6,7; os packages/virtual/emulators/package.mk:354; os packages/virtual/emulators/package.mk:347"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os packages/virtual/emulators/package.mk:347"
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "os packages/virtual/emulators/package.mk:348"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "os packages/virtual/emulators/package.mk:349"
+  - emulator: retroarch
+    core: mame2015
+    source_ref: "os packages/virtual/emulators/package.mk:350"
+  - emulator: retroarch
+    core: mame
+    source_ref: "os packages/virtual/emulators/package.mk:351"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "os packages/virtual/emulators/package.mk:352"
+  - emulator: retroarch
+    core: fbalpha2019
+    source_ref: "os packages/virtual/emulators/package.mk:353"
   arcade: true
 - folder: fds
   extensions:
@@ -375,6 +592,23 @@ folders:
   core: nestopia
   emulator: retroarch
   source_ref: "os config/emulators/fds.conf:6,7; os packages/virtual/emulators/package.mk:344; os packages/virtual/emulators/package.mk:335"
+  offers:
+  - emulator: retroarch
+    core: nestopia
+    source_ref: "os packages/virtual/emulators/package.mk:335"
+  - emulator: retroarch
+    core: fceumm
+    source_ref: "os packages/virtual/emulators/package.mk:336"
+  - emulator: retroarch
+    core: quicknes
+    source_ref: "os packages/virtual/emulators/package.mk:337"
+  - emulator: retroarch
+    core: mesen
+    source_ref: "os packages/virtual/emulators/package.mk:338"
+  - emulator: mednafen
+    core: nes
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:341"
 - folder: gameandwatch
   extensions:
   - .7z
@@ -384,6 +618,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/gameandwatch.conf:6,7; os packages/virtual/emulators/package.mk:367;\
     \ os packages/virtual/emulators/package.mk:365"
+  offers:
+  - emulator: retroarch
+    core: gw
+    source_ref: "os packages/virtual/emulators/package.mk:365"
+  - emulator: retroarch
+    core: mame
+    source_ref: "os packages/virtual/emulators/package.mk:366"
 - folder: gamecube
   extensions:
   - .ciso
@@ -397,6 +638,15 @@ folders:
   emulator: dolphin
   source_ref: "os config/emulators/gamecube.conf:6,7; os packages/virtual/emulators/package.mk:468,473;\
     \ os packages/virtual/emulators/package.mk:466"
+  offers:
+  - emulator: dolphin
+    core: dolphin-sa-gc
+    when: DEVICE AMD64; DEVICE S922X*|RK3399|RK3588
+    source_ref: "os packages/virtual/emulators/package.mk:466,471"
+  - emulator: retroarch
+    core: dolphin
+    when: DEVICE AMD64; DEVICE S922X*|RK3399|RK3588
+    source_ref: "os packages/virtual/emulators/package.mk:467,472"
 - folder: gamegear
   extensions:
   - .7z
@@ -407,6 +657,23 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/gamegear.conf:6,7; os packages/virtual/emulators/package.mk:521; os\
     \ packages/virtual/emulators/package.mk:512"
+  offers:
+  - emulator: retroarch
+    core: gearsystem
+    source_ref: "os packages/virtual/emulators/package.mk:512"
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os packages/virtual/emulators/package.mk:513"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os packages/virtual/emulators/package.mk:514"
+  - emulator: retroarch
+    core: smsplus
+    source_ref: "os packages/virtual/emulators/package.mk:515"
+  - emulator: mednafen
+    core: gg
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:518"
 - folder: gamegearh
   name: ggh
   extensions:
@@ -417,6 +684,23 @@ folders:
   core: gearsystem
   emulator: retroarch
   source_ref: "os config/emulators/ggh.conf:6,7; os packages/virtual/emulators/package.mk:533; os packages/virtual/emulators/package.mk:524"
+  offers:
+  - emulator: retroarch
+    core: gearsystem
+    source_ref: "os packages/virtual/emulators/package.mk:524"
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os packages/virtual/emulators/package.mk:525"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os packages/virtual/emulators/package.mk:526"
+  - emulator: retroarch
+    core: smsplus
+    source_ref: "os packages/virtual/emulators/package.mk:527"
+  - emulator: mednafen
+    core: gg
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:530"
 - folder: gb
   extensions:
   - .7z
@@ -426,6 +710,29 @@ folders:
   core: gambatte
   emulator: retroarch
   source_ref: "os config/emulators/gb.conf:6,7; os packages/virtual/emulators/package.mk:381; os packages/virtual/emulators/package.mk:370"
+  offers:
+  - emulator: retroarch
+    core: gambatte
+    source_ref: "os packages/virtual/emulators/package.mk:370"
+  - emulator: retroarch
+    core: sameboy
+    source_ref: "os packages/virtual/emulators/package.mk:371"
+  - emulator: retroarch
+    core: gearboy
+    source_ref: "os packages/virtual/emulators/package.mk:372"
+  - emulator: retroarch
+    core: tgbdual
+    source_ref: "os packages/virtual/emulators/package.mk:373"
+  - emulator: retroarch
+    core: mgba
+    source_ref: "os packages/virtual/emulators/package.mk:374"
+  - emulator: retroarch
+    core: vbam
+    source_ref: "os packages/virtual/emulators/package.mk:375"
+  - emulator: mednafen
+    core: gb
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:378"
 - folder: gba
   extensions:
   - .7z
@@ -434,6 +741,34 @@ folders:
   core: mgba
   emulator: retroarch
   source_ref: "os config/emulators/gba.conf:6,7; os packages/virtual/emulators/package.mk:420; os packages/virtual/emulators/package.mk:398"
+  offers:
+  - emulator: retroarch
+    core: mgba
+    source_ref: "os packages/virtual/emulators/package.mk:398"
+  - emulator: retroarch
+    core: gbsp
+    source_ref: "os packages/virtual/emulators/package.mk:399"
+  - emulator: retroarch
+    core: vbam
+    source_ref: "os packages/virtual/emulators/package.mk:400"
+  - emulator: retroarch
+    core: vba_next
+    source_ref: "os packages/virtual/emulators/package.mk:401"
+  - emulator: retroarch
+    core: beetle_gba
+    source_ref: "os packages/virtual/emulators/package.mk:402"
+  - emulator: retroarch
+    core: gpsp
+    when: DEVICE RK3399|RK3588; DEVICE RK356*|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:405,408"
+  - emulator: nanoboyadvance
+    core: nanoboyadvance-sa
+    when: DEVICE AMD64; DEVICE RK3399|RK3588
+    source_ref: "os packages/virtual/emulators/package.mk:409,412"
+  - emulator: mednafen
+    core: gba
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:417"
 - folder: gbah
   extensions:
   - .7z
@@ -442,6 +777,26 @@ folders:
   core: mgba
   emulator: retroarch
   source_ref: "os config/emulators/gbah.conf:6,7; os packages/virtual/emulators/package.mk:433; os packages/virtual/emulators/package.mk:423"
+  offers:
+  - emulator: retroarch
+    core: mgba
+    source_ref: "os packages/virtual/emulators/package.mk:423"
+  - emulator: retroarch
+    core: gbsp
+    source_ref: "os packages/virtual/emulators/package.mk:424"
+  - emulator: retroarch
+    core: vbam
+    source_ref: "os packages/virtual/emulators/package.mk:425"
+  - emulator: retroarch
+    core: vba_next
+    source_ref: "os packages/virtual/emulators/package.mk:426"
+  - emulator: retroarch
+    core: beetle_gba
+    source_ref: "os packages/virtual/emulators/package.mk:427"
+  - emulator: mednafen
+    core: gba
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:430"
 - folder: gbc
   extensions:
   - .7z
@@ -451,6 +806,29 @@ folders:
   core: gambatte
   emulator: retroarch
   source_ref: "os config/emulators/gbc.conf:6,7; os packages/virtual/emulators/package.mk:447; os packages/virtual/emulators/package.mk:436"
+  offers:
+  - emulator: retroarch
+    core: gambatte
+    source_ref: "os packages/virtual/emulators/package.mk:436"
+  - emulator: retroarch
+    core: sameboy
+    source_ref: "os packages/virtual/emulators/package.mk:437"
+  - emulator: retroarch
+    core: gearboy
+    source_ref: "os packages/virtual/emulators/package.mk:438"
+  - emulator: retroarch
+    core: tgbdual
+    source_ref: "os packages/virtual/emulators/package.mk:439"
+  - emulator: retroarch
+    core: mgba
+    source_ref: "os packages/virtual/emulators/package.mk:440"
+  - emulator: retroarch
+    core: vbam
+    source_ref: "os packages/virtual/emulators/package.mk:441"
+  - emulator: mednafen
+    core: gb
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:444"
 - folder: gbch
   extensions:
   - .7z
@@ -460,6 +838,29 @@ folders:
   core: gambatte
   emulator: retroarch
   source_ref: "os config/emulators/gbch.conf:6,7; os packages/virtual/emulators/package.mk:461; os packages/virtual/emulators/package.mk:450"
+  offers:
+  - emulator: retroarch
+    core: gambatte
+    source_ref: "os packages/virtual/emulators/package.mk:450"
+  - emulator: retroarch
+    core: sameboy
+    source_ref: "os packages/virtual/emulators/package.mk:451"
+  - emulator: retroarch
+    core: gearboy
+    source_ref: "os packages/virtual/emulators/package.mk:452"
+  - emulator: retroarch
+    core: tgbdual
+    source_ref: "os packages/virtual/emulators/package.mk:453"
+  - emulator: retroarch
+    core: mgba
+    source_ref: "os packages/virtual/emulators/package.mk:454"
+  - emulator: retroarch
+    core: vbam
+    source_ref: "os packages/virtual/emulators/package.mk:455"
+  - emulator: mednafen
+    core: gb
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:458"
 - folder: gbh
   extensions:
   - .7z
@@ -468,6 +869,29 @@ folders:
   core: gambatte
   emulator: retroarch
   source_ref: "os config/emulators/gbh.conf:6,7; os packages/virtual/emulators/package.mk:395; os packages/virtual/emulators/package.mk:384"
+  offers:
+  - emulator: retroarch
+    core: gambatte
+    source_ref: "os packages/virtual/emulators/package.mk:384"
+  - emulator: retroarch
+    core: sameboy
+    source_ref: "os packages/virtual/emulators/package.mk:385"
+  - emulator: retroarch
+    core: gearboy
+    source_ref: "os packages/virtual/emulators/package.mk:386"
+  - emulator: retroarch
+    core: tgbdual
+    source_ref: "os packages/virtual/emulators/package.mk:387"
+  - emulator: retroarch
+    core: mgba
+    source_ref: "os packages/virtual/emulators/package.mk:388"
+  - emulator: retroarch
+    core: vbam
+    source_ref: "os packages/virtual/emulators/package.mk:389"
+  - emulator: mednafen
+    core: gb
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:392"
 - folder: genesis
   extensions:
   - .7z
@@ -481,6 +905,20 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/genesis.conf:6,7; os packages/virtual/emulators/package.mk:912; os\
     \ packages/virtual/emulators/package.mk:904"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os packages/virtual/emulators/package.mk:904"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "os packages/virtual/emulators/package.mk:905"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os packages/virtual/emulators/package.mk:906"
+  - emulator: mednafen
+    core: md
+    when: DEVICE RK3399|AMD64
+    source_ref: "os packages/virtual/emulators/package.mk:909"
 - folder: genh
   extensions:
   - .7z
@@ -493,6 +931,20 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "os config/emulators/genh.conf:6,7; os packages/virtual/emulators/package.mk:923; os packages/virtual/emulators/package.mk:915"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os packages/virtual/emulators/package.mk:915"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "os packages/virtual/emulators/package.mk:916"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os packages/virtual/emulators/package.mk:917"
+  - emulator: mednafen
+    core: md
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:920"
 - folder: idtech
   extensions:
   - .sh
@@ -535,6 +987,28 @@ folders:
   core: mame2003_plus
   emulator: retroarch
   source_ref: "os config/emulators/mame.conf:6,7; os packages/virtual/emulators/package.mk:569; os packages/virtual/emulators/package.mk:562"
+  offers:
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "os packages/virtual/emulators/package.mk:562"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "os packages/virtual/emulators/package.mk:563"
+  - emulator: retroarch
+    core: mame2015
+    source_ref: "os packages/virtual/emulators/package.mk:564"
+  - emulator: retroarch
+    core: mame
+    source_ref: "os packages/virtual/emulators/package.mk:565"
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os packages/virtual/emulators/package.mk:566"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "os packages/virtual/emulators/package.mk:567"
+  - emulator: retroarch
+    core: fbalpha2019
+    source_ref: "os packages/virtual/emulators/package.mk:568"
   arcade: true
 - folder: mastersystem
   extensions:
@@ -546,6 +1020,23 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/mastersystem.conf:6,7; os packages/virtual/emulators/package.mk:935;\
     \ os packages/virtual/emulators/package.mk:926"
+  offers:
+  - emulator: retroarch
+    core: gearsystem
+    source_ref: "os packages/virtual/emulators/package.mk:926"
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os packages/virtual/emulators/package.mk:927"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os packages/virtual/emulators/package.mk:928"
+  - emulator: retroarch
+    core: smsplus
+    source_ref: "os packages/virtual/emulators/package.mk:929"
+  - emulator: mednafen
+    core: sms
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:932"
 - folder: megacd
   extensions:
   - .chd
@@ -555,6 +1046,13 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "os config/emulators/megacd.conf:6,7; os packages/virtual/emulators/package.mk:901; os packages/virtual/emulators/package.mk:899"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os packages/virtual/emulators/package.mk:899"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os packages/virtual/emulators/package.mk:900"
 - folder: megadrive
   extensions:
   - .7z
@@ -568,6 +1066,20 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/megadrive.conf:6,7; os packages/virtual/emulators/package.mk:946; os\
     \ packages/virtual/emulators/package.mk:938"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os packages/virtual/emulators/package.mk:938"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "os packages/virtual/emulators/package.mk:939"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os packages/virtual/emulators/package.mk:940"
+  - emulator: mednafen
+    core: md
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:943"
 - folder: megadrive-japan
   extensions:
   - .7z
@@ -581,6 +1093,20 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/megadrive-japan.conf:6,7; os packages/virtual/emulators/package.mk:580;\
     \ os packages/virtual/emulators/package.mk:572"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os packages/virtual/emulators/package.mk:572"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "os packages/virtual/emulators/package.mk:573"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os packages/virtual/emulators/package.mk:574"
+  - emulator: mednafen
+    core: md
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:577"
 - folder: megaduck
   extensions:
   - .7z
@@ -635,6 +1161,13 @@ folders:
   core: bluemsx
   emulator: retroarch
   source_ref: "os config/emulators/msx.conf:6,7; os packages/virtual/emulators/package.mk:600; os packages/virtual/emulators/package.mk:598"
+  offers:
+  - emulator: retroarch
+    core: bluemsx
+    source_ref: "os packages/virtual/emulators/package.mk:598"
+  - emulator: retroarch
+    core: fmsx
+    source_ref: "os packages/virtual/emulators/package.mk:599"
 - folder: msx2
   extensions:
   - .7z
@@ -647,6 +1180,13 @@ folders:
   core: bluemsx
   emulator: retroarch
   source_ref: "os config/emulators/msx2.conf:6,7; os packages/virtual/emulators/package.mk:605; os packages/virtual/emulators/package.mk:603"
+  offers:
+  - emulator: retroarch
+    core: bluemsx
+    source_ref: "os packages/virtual/emulators/package.mk:603"
+  - emulator: retroarch
+    core: fmsx
+    source_ref: "os packages/virtual/emulators/package.mk:604"
 - folder: n64
   extensions:
   - .7z
@@ -657,6 +1197,19 @@ folders:
   core: mupen64plus_next
   emulator: retroarch
   source_ref: "os config/emulators/n64.conf:6,7; os packages/virtual/emulators/package.mk:672; os packages/virtual/emulators/package.mk:668"
+  offers:
+  - emulator: retroarch
+    core: mupen64plus_next
+    source_ref: "os packages/virtual/emulators/package.mk:668"
+  - emulator: retroarch
+    core: mupen64plus
+    source_ref: "os packages/virtual/emulators/package.mk:669"
+  - emulator: retroarch
+    core: parallel_n64
+    source_ref: "os packages/virtual/emulators/package.mk:670"
+  - emulator: mupen64plus
+    core: mupen64plus-sa
+    source_ref: "os packages/virtual/emulators/package.mk:671"
 - folder: naomi
   extensions:
   - .7z
@@ -672,6 +1225,16 @@ folders:
       core: flycast-sa
       emulator: flycast
       source_ref: "os packages/virtual/emulators/package.mk:621"
+  offers:
+  - emulator: retroarch
+    core: flycast2021
+    source_ref: "os packages/virtual/emulators/package.mk:610,615,620,625"
+  - emulator: retroarch
+    core: flycast
+    source_ref: "os packages/virtual/emulators/package.mk:611,617,622,626"
+  - emulator: flycast
+    core: flycast-sa
+    source_ref: "os packages/virtual/emulators/package.mk:612,616,621,627"
   arcade: true
 - folder: nds
   extensions:
@@ -690,6 +1253,21 @@ folders:
       core: melonds
       emulator: retroarch
       source_ref: "os packages/virtual/emulators/package.mk:689"
+  offers:
+  - emulator: retroarch
+    core: melonds
+    source_ref: "os packages/virtual/emulators/package.mk:677,683,689,695,700"
+  - emulator: retroarch
+    core: desmume
+    when: DEVICE AMD64; DEVICE RK3*; DEVICE RK3399; DEVICE RK3588
+    source_ref: "os packages/virtual/emulators/package.mk:678,685,691,696"
+  - emulator: melonds
+    core: melonds-sa
+    when: DEVICE AMD64; DEVICE RK3399; DEVICE RK3588
+    source_ref: "os packages/virtual/emulators/package.mk:679,684,690"
+  - emulator: drastic
+    core: drastic-sa
+    source_ref: "os packages/virtual/emulators/package.mk:682,688,694,699"
 - folder: neocd
   extensions:
   - .chd
@@ -698,6 +1276,13 @@ folders:
   core: neocd
   emulator: retroarch
   source_ref: "os config/emulators/neocd.conf:6,7; os packages/virtual/emulators/package.mk:645; os packages/virtual/emulators/package.mk:643"
+  offers:
+  - emulator: retroarch
+    core: neocd
+    source_ref: "os packages/virtual/emulators/package.mk:643"
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os packages/virtual/emulators/package.mk:644"
 - folder: neogeo
   extensions:
   - .7z
@@ -705,6 +1290,28 @@ folders:
   core: fbneo
   emulator: retroarch
   source_ref: "os config/emulators/neogeo.conf:6,7; os packages/virtual/emulators/package.mk:640; os packages/virtual/emulators/package.mk:633"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os packages/virtual/emulators/package.mk:633"
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "os packages/virtual/emulators/package.mk:634"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "os packages/virtual/emulators/package.mk:635"
+  - emulator: retroarch
+    core: fbalpha2019
+    source_ref: "os packages/virtual/emulators/package.mk:636"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "os packages/virtual/emulators/package.mk:637"
+  - emulator: retroarch
+    core: mame2015
+    source_ref: "os packages/virtual/emulators/package.mk:638"
+  - emulator: retroarch
+    core: mame
+    source_ref: "os packages/virtual/emulators/package.mk:639"
 - folder: nes
   extensions:
   - .7z
@@ -715,6 +1322,23 @@ folders:
   core: nestopia
   emulator: retroarch
   source_ref: "os config/emulators/nes.conf:6,7; os packages/virtual/emulators/package.mk:715; os packages/virtual/emulators/package.mk:706"
+  offers:
+  - emulator: retroarch
+    core: nestopia
+    source_ref: "os packages/virtual/emulators/package.mk:706"
+  - emulator: retroarch
+    core: fceumm
+    source_ref: "os packages/virtual/emulators/package.mk:707"
+  - emulator: retroarch
+    core: quicknes
+    source_ref: "os packages/virtual/emulators/package.mk:708"
+  - emulator: retroarch
+    core: mesen
+    source_ref: "os packages/virtual/emulators/package.mk:709"
+  - emulator: mednafen
+    core: nes
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:712"
 - folder: nesh
   extensions:
   - .7z
@@ -725,6 +1349,23 @@ folders:
   core: nestopia
   emulator: retroarch
   source_ref: "os config/emulators/nesh.conf:6,7; os packages/virtual/emulators/package.mk:727; os packages/virtual/emulators/package.mk:718"
+  offers:
+  - emulator: retroarch
+    core: nestopia
+    source_ref: "os packages/virtual/emulators/package.mk:718"
+  - emulator: retroarch
+    core: fceumm
+    source_ref: "os packages/virtual/emulators/package.mk:719"
+  - emulator: retroarch
+    core: quicknes
+    source_ref: "os packages/virtual/emulators/package.mk:720"
+  - emulator: retroarch
+    core: mesen
+    source_ref: "os packages/virtual/emulators/package.mk:721"
+  - emulator: mednafen
+    core: nesh
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:724"
 - folder: ngp
   extensions:
   - .7z
@@ -734,6 +1375,17 @@ folders:
   core: beetle_ngp
   emulator: retroarch
   source_ref: "os config/emulators/ngp.conf:6,7; os packages/virtual/emulators/package.mk:655; os packages/virtual/emulators/package.mk:648"
+  offers:
+  - emulator: retroarch
+    core: beetle_ngp
+    source_ref: "os packages/virtual/emulators/package.mk:648"
+  - emulator: retroarch
+    core: race
+    source_ref: "os packages/virtual/emulators/package.mk:649"
+  - emulator: mednafen
+    core: ngp
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:652"
 - folder: ngpc
   extensions:
   - .7z
@@ -742,6 +1394,17 @@ folders:
   core: beetle_ngp
   emulator: retroarch
   source_ref: "os config/emulators/ngpc.conf:6,7; os packages/virtual/emulators/package.mk:665; os packages/virtual/emulators/package.mk:658"
+  offers:
+  - emulator: retroarch
+    core: beetle_ngp
+    source_ref: "os packages/virtual/emulators/package.mk:658"
+  - emulator: retroarch
+    core: race
+    source_ref: "os packages/virtual/emulators/package.mk:659"
+  - emulator: mednafen
+    core: ngp
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:662"
 - folder: odyssey
   name: odyssey2
   extensions:
@@ -768,6 +1431,13 @@ folders:
   core: dosbox_pure
   emulator: retroarch
   source_ref: "os config/emulators/pc.conf:6,7; os packages/virtual/emulators/package.mk:585; os packages/virtual/emulators/package.mk:583"
+  offers:
+  - emulator: retroarch
+    core: dosbox_pure
+    source_ref: "os packages/virtual/emulators/package.mk:583"
+  - emulator: retroarch
+    core: dosbox_svn
+    source_ref: "os packages/virtual/emulators/package.mk:584"
 - folder: pc88
   name: pc-8800
   extensions:
@@ -809,6 +1479,24 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/pcengine.conf:6,7; os packages/virtual/emulators/package.mk:755; os\
     \ packages/virtual/emulators/package.mk:746"
+  offers:
+  - emulator: retroarch
+    core: beetle_pce_fast
+    source_ref: "os packages/virtual/emulators/package.mk:746"
+  - emulator: retroarch
+    core: beetle_pce
+    source_ref: "os packages/virtual/emulators/package.mk:747"
+  - emulator: retroarch
+    core: beetle_supergrafx
+    source_ref: "os packages/virtual/emulators/package.mk:748"
+  - emulator: mednafen
+    core: pce
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:751"
+  - emulator: mednafen
+    core: pce_fast
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:752"
 - folder: pcenginecd
   extensions:
   - .ccd
@@ -820,6 +1508,24 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/pcenginecd.conf:6,7; os packages/virtual/emulators/package.mk:767;\
     \ os packages/virtual/emulators/package.mk:758"
+  offers:
+  - emulator: retroarch
+    core: beetle_pce_fast
+    source_ref: "os packages/virtual/emulators/package.mk:758"
+  - emulator: retroarch
+    core: beetle_pce
+    source_ref: "os packages/virtual/emulators/package.mk:759"
+  - emulator: retroarch
+    core: beetle_supergrafx
+    source_ref: "os packages/virtual/emulators/package.mk:760"
+  - emulator: mednafen
+    core: pce
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:763"
+  - emulator: mednafen
+    core: pce_fast
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:764"
 - folder: pcfx
   extensions:
   - .ccd
@@ -829,6 +1535,14 @@ folders:
   core: beetle_pcfx
   emulator: retroarch
   source_ref: "os config/emulators/pcfx.conf:6,7; os packages/virtual/emulators/package.mk:776; os packages/virtual/emulators/package.mk:770"
+  offers:
+  - emulator: retroarch
+    core: beetle_pcfx
+    source_ref: "os packages/virtual/emulators/package.mk:770"
+  - emulator: mednafen
+    core: pcfx
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:773"
 - folder: pico-8
   extensions:
   - .p8
@@ -836,6 +1550,13 @@ folders:
   core: pico8
   emulator: pico-8
   source_ref: "os config/emulators/pico-8.conf:6,7; os packages/virtual/emulators/package.mk:781; os packages/virtual/emulators/package.mk:779"
+  offers:
+  - emulator: pico-8
+    core: pico8
+    source_ref: "os packages/virtual/emulators/package.mk:779"
+  - emulator: retroarch
+    core: fake08
+    source_ref: "os packages/virtual/emulators/package.mk:780"
 - folder: pokemini
   extensions:
   - .7z
@@ -871,6 +1592,19 @@ folders:
       core: aethersx2-sa
       emulator: aethersx2
       source_ref: "os packages/virtual/emulators/package.mk:830"
+  offers:
+  - emulator: pcsx2
+    core: pcsx2-sa
+    when: DEVICE AMD64
+    source_ref: "os packages/virtual/emulators/package.mk:824"
+  - emulator: retroarch
+    core: pcsx2
+    when: DEVICE AMD64
+    source_ref: "os packages/virtual/emulators/package.mk:825"
+  - emulator: aethersx2
+    core: aethersx2-sa
+    when: DEVICE RK3588|S922X|RK3399
+    source_ref: "os packages/virtual/emulators/package.mk:830"
 - folder: ps3
   extensions:
   - .ps3
@@ -887,6 +1621,14 @@ folders:
   core: ppsspp-sa
   emulator: ppsspp
   source_ref: "os config/emulators/psp.conf:6,7; os packages/virtual/emulators/package.mk:852; os packages/virtual/emulators/package.mk:846"
+  offers:
+  - emulator: ppsspp
+    core: ppsspp-sa
+    source_ref: "os packages/virtual/emulators/package.mk:846"
+  - emulator: retroarch
+    core: ppsspp
+    when: DEVICE AMD64
+    source_ref: "os packages/virtual/emulators/package.mk:849"
 - folder: pspminis
   extensions:
   - .cso
@@ -896,6 +1638,13 @@ folders:
   emulator: ppsspp
   source_ref: "os config/emulators/pspminis.conf:6,7; os packages/virtual/emulators/package.mk:858; os\
     \ packages/virtual/emulators/package.mk:856"
+  offers:
+  - emulator: ppsspp
+    core: ppsspp-sa
+    source_ref: "os packages/virtual/emulators/package.mk:856"
+  - emulator: retroarch
+    core: ppsspp
+    source_ref: "os packages/virtual/emulators/package.mk:857"
 - folder: psx
   extensions:
   - .bin
@@ -933,6 +1682,33 @@ folders:
       core: pcsx_rearmed32
       emulator: retroarch
       source_ref: "os packages/virtual/emulators/package.mk:813"
+  offers:
+  - emulator: retroarch
+    core: beetle_psx
+    when: DEVICE AMD64; DEVICE RK3399; DEVICE RK3588; DEVICE S922X*
+    source_ref: "os packages/virtual/emulators/package.mk:786,792,798,804"
+  - emulator: duckstation
+    core: duckstation-sa
+    when: DEVICE AMD64; DEVICE RK3399; DEVICE RK3566*; DEVICE RK3588; DEVICE S922X*
+    source_ref: "os packages/virtual/emulators/package.mk:787,793,799,805,810"
+  - emulator: mednafen
+    core: psx
+    when: DEVICE AMD64
+    source_ref: "os packages/virtual/emulators/package.mk:788"
+  - emulator: retroarch
+    core: pcsx_rearmed
+    when: DEVICE RK3326; DEVICE RK3399; DEVICE RK3566*; DEVICE RK3588; DEVICE S922X*
+    source_ref: "os packages/virtual/emulators/package.mk:791,797,803,809,814"
+  - emulator: retroarch
+    core: pcsx_rearmed32
+    when: DEVICE RK3326; DEVICE RK3399; DEVICE RK3566*; DEVICE RK3588
+    source_ref: "os packages/virtual/emulators/package.mk:796,802,808,813"
+  - emulator: retroarch
+    core: duckstation
+    source_ref: "os packages/virtual/emulators/package.mk:817"
+  - emulator: retroarch
+    core: swanstation
+    source_ref: "os packages/virtual/emulators/package.mk:818"
 - folder: satellaview
   extensions:
   - .7z
@@ -947,6 +1723,19 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/satellaview.conf:6,7; os packages/virtual/emulators/package.mk:1102;\
     \ os packages/virtual/emulators/package.mk:1098"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+    source_ref: "os packages/virtual/emulators/package.mk:1098"
+  - emulator: retroarch
+    core: snes9x2010
+    source_ref: "os packages/virtual/emulators/package.mk:1099"
+  - emulator: retroarch
+    core: snes9x2002
+    source_ref: "os packages/virtual/emulators/package.mk:1100"
+  - emulator: retroarch
+    core: snes9x2005_plus
+    source_ref: "os packages/virtual/emulators/package.mk:1101"
 - folder: saturn
   extensions:
   - .chd
@@ -964,6 +1753,31 @@ folders:
       core: kronos-sa
       emulator: kronos
       source_ref: "os packages/virtual/emulators/package.mk:979"
+  offers:
+  - emulator: yabasanshiro
+    core: yabasanshiro-sa
+    when: TARGET_ARCH aarch64
+    source_ref: "os packages/virtual/emulators/package.mk:955"
+  - emulator: retroarch
+    core: yabasanshiro
+    when: TARGET_ARCH aarch64; TARGET_ARCH x86_64
+    source_ref: "os packages/virtual/emulators/package.mk:956,960"
+  - emulator: kronos
+    core: kronos-sa
+    when: DEVICE AMD64; TARGET_ARCH x86_64
+    source_ref: "os packages/virtual/emulators/package.mk:959,979"
+  - emulator: retroarch
+    core: kronos
+    when: TARGET_ARCH x86_64
+    source_ref: "os packages/virtual/emulators/package.mk:961"
+  - emulator: retroarch
+    core: beetle_saturn
+    when: DEVICE AMD64|RK358*
+    source_ref: "os packages/virtual/emulators/package.mk:966"
+  - emulator: mednafen
+    core: ss
+    when: DEVICE AMD64|RK358*
+    source_ref: "os packages/virtual/emulators/package.mk:967"
 - folder: screenshots
   name: imageviewer
   extensions:
@@ -1014,6 +1828,13 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "os config/emulators/segacd.conf:6,7; os packages/virtual/emulators/package.mk:896; os packages/virtual/emulators/package.mk:894"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os packages/virtual/emulators/package.mk:894"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os packages/virtual/emulators/package.mk:895"
 - folder: sfc
   extensions:
   - .7z
@@ -1025,6 +1846,41 @@ folders:
   core: snes9x
   emulator: retroarch
   source_ref: "os config/emulators/sfc.conf:6,7; os packages/virtual/emulators/package.mk:1095; os packages/virtual/emulators/package.mk:1074"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+    source_ref: "os packages/virtual/emulators/package.mk:1074"
+  - emulator: retroarch
+    core: snes9x2010
+    source_ref: "os packages/virtual/emulators/package.mk:1075"
+  - emulator: retroarch
+    core: snes9x2002
+    source_ref: "os packages/virtual/emulators/package.mk:1076"
+  - emulator: retroarch
+    core: snes9x2005_plus
+    source_ref: "os packages/virtual/emulators/package.mk:1077"
+  - emulator: retroarch
+    core: beetle_supafaust
+    source_ref: "os packages/virtual/emulators/package.mk:1078"
+  - emulator: retroarch
+    core: bsnes_mercury_performance
+    source_ref: "os packages/virtual/emulators/package.mk:1079"
+  - emulator: retroarch
+    core: bsnes
+    when: DEVICE AMD64|S922X*|RK3399|RK358*
+    source_ref: "os packages/virtual/emulators/package.mk:1082"
+  - emulator: retroarch
+    core: bsnes_hd_beta
+    when: DEVICE AMD64|S922X*|RK3399|RK358*
+    source_ref: "os packages/virtual/emulators/package.mk:1083"
+  - emulator: mednafen
+    core: snes
+    when: DEVICE AMD64
+    source_ref: "os packages/virtual/emulators/package.mk:1088"
+  - emulator: mednafen
+    core: snes_faust
+    when: DEVICE AMD64
+    source_ref: "os packages/virtual/emulators/package.mk:1089"
 - folder: sg-1000
   extensions:
   - .7z
@@ -1035,6 +1891,16 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/sg-1000.conf:6,7; os packages/virtual/emulators/package.mk:991; os\
     \ packages/virtual/emulators/package.mk:988"
+  offers:
+  - emulator: retroarch
+    core: gearsystem
+    source_ref: "os packages/virtual/emulators/package.mk:988"
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os packages/virtual/emulators/package.mk:989"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os packages/virtual/emulators/package.mk:990"
 - folder: sgfx
   name: supergrafx
   extensions:
@@ -1049,6 +1915,21 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/supergrafx.conf:6,7; os packages/virtual/emulators/package.mk:1023;\
     \ os packages/virtual/emulators/package.mk:1015"
+  offers:
+  - emulator: retroarch
+    core: beetle_supergrafx
+    source_ref: "os packages/virtual/emulators/package.mk:1015"
+  - emulator: retroarch
+    core: beetle_pce
+    source_ref: "os packages/virtual/emulators/package.mk:1016"
+  - emulator: mednafen
+    core: pce
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:1019"
+  - emulator: mednafen
+    core: pce_fast
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:1020"
 - folder: snes
   extensions:
   - .7z
@@ -1060,6 +1941,41 @@ folders:
   core: snes9x
   emulator: retroarch
   source_ref: "os config/emulators/snes.conf:6,7; os packages/virtual/emulators/package.mk:1047; os packages/virtual/emulators/package.mk:1026"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+    source_ref: "os packages/virtual/emulators/package.mk:1026"
+  - emulator: retroarch
+    core: snes9x2010
+    source_ref: "os packages/virtual/emulators/package.mk:1027"
+  - emulator: retroarch
+    core: snes9x2002
+    source_ref: "os packages/virtual/emulators/package.mk:1028"
+  - emulator: retroarch
+    core: snes9x2005_plus
+    source_ref: "os packages/virtual/emulators/package.mk:1029"
+  - emulator: retroarch
+    core: beetle_supafaust
+    source_ref: "os packages/virtual/emulators/package.mk:1030"
+  - emulator: retroarch
+    core: bsnes_mercury_performance
+    source_ref: "os packages/virtual/emulators/package.mk:1031"
+  - emulator: retroarch
+    core: bsnes
+    when: DEVICE AMD64|S922X*|RK3399|RK358*
+    source_ref: "os packages/virtual/emulators/package.mk:1034"
+  - emulator: retroarch
+    core: bsnes_hd_beta
+    when: DEVICE AMD64|S922X*|RK3399|RK358*
+    source_ref: "os packages/virtual/emulators/package.mk:1035"
+  - emulator: mednafen
+    core: snes_faust
+    when: DEVICE AMD64; DEVICE RK33*
+    source_ref: "os packages/virtual/emulators/package.mk:1040,1044,1092"
+  - emulator: mednafen
+    core: snes
+    when: DEVICE AMD64
+    source_ref: "os packages/virtual/emulators/package.mk:1041"
 - folder: snesh
   extensions:
   - .7z
@@ -1071,6 +1987,41 @@ folders:
   core: snes9x
   emulator: retroarch
   source_ref: "os config/emulators/snesh.conf:6,7; os packages/virtual/emulators/package.mk:1071; os packages/virtual/emulators/package.mk:1050"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+    source_ref: "os packages/virtual/emulators/package.mk:1050"
+  - emulator: retroarch
+    core: snes9x2010
+    source_ref: "os packages/virtual/emulators/package.mk:1051"
+  - emulator: retroarch
+    core: snes9x2002
+    source_ref: "os packages/virtual/emulators/package.mk:1052"
+  - emulator: retroarch
+    core: snes9x2005_plus
+    source_ref: "os packages/virtual/emulators/package.mk:1053"
+  - emulator: retroarch
+    core: beetle_supafaust
+    source_ref: "os packages/virtual/emulators/package.mk:1054"
+  - emulator: retroarch
+    core: bsnes_mercury_performance
+    source_ref: "os packages/virtual/emulators/package.mk:1055"
+  - emulator: retroarch
+    core: bsnes
+    when: DEVICE AMD64|S922X*|RK3399|RK358*
+    source_ref: "os packages/virtual/emulators/package.mk:1058"
+  - emulator: retroarch
+    core: bsnes_hd_beta
+    when: DEVICE AMD64|S922X*|RK3399|RK358*
+    source_ref: "os packages/virtual/emulators/package.mk:1059"
+  - emulator: mednafen
+    core: snes
+    when: DEVICE AMD64
+    source_ref: "os packages/virtual/emulators/package.mk:1064"
+  - emulator: mednafen
+    core: snes_faust
+    when: DEVICE AMD64; DEVICE RK33*
+    source_ref: "os packages/virtual/emulators/package.mk:1065,1068"
 - folder: snesmsu1
   extensions:
   - .7z
@@ -1083,12 +2034,36 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/snesmsu1.conf:6,7; os packages/virtual/emulators/package.mk:595; os\
     \ packages/virtual/emulators/package.mk:588"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+    source_ref: "os packages/virtual/emulators/package.mk:588"
+  - emulator: retroarch
+    core: beetle_supafaust
+    source_ref: "os packages/virtual/emulators/package.mk:589"
+  - emulator: mednafen
+    core: snes_faust
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:592"
 - folder: st-v
   extensions:
   - .zip
   core: beetle_saturn
   emulator: retroarch
   source_ref: "os config/emulators/st-v.conf:6,7; os packages/virtual/emulators/package.mk:985; os packages/virtual/emulators/package.mk:975"
+  offers:
+  - emulator: retroarch
+    core: beetle_saturn
+    when: DEVICE AMD64; DEVICE RK358*
+    source_ref: "os packages/virtual/emulators/package.mk:975,980"
+  - emulator: mednafen
+    core: ss
+    when: DEVICE AMD64; DEVICE RK358*
+    source_ref: "os packages/virtual/emulators/package.mk:976,982"
+  - emulator: retroarch
+    core: kronos
+    when: DEVICE AMD64
+    source_ref: "os packages/virtual/emulators/package.mk:981"
   arcade: true
 - folder: sufami
   extensions:
@@ -1118,6 +2093,15 @@ folders:
   core: yuzu-sa
   emulator: yuzu
   source_ref: "os config/emulators/switch.conf:6,7; os packages/virtual/emulators/package.mk:505; os packages/virtual/emulators/package.mk:503"
+  offers:
+  - emulator: yuzu
+    core: yuzu-sa
+    when: DEVICE AMD64
+    source_ref: "os packages/virtual/emulators/package.mk:503"
+  - emulator: ryujinx
+    core: ryujinx-sa
+    when: DEVICE AMD64
+    source_ref: "os packages/virtual/emulators/package.mk:504"
 - folder: tg16
   extensions:
   - .7z
@@ -1127,6 +2111,24 @@ folders:
   core: beetle_pce_fast
   emulator: retroarch
   source_ref: "os config/emulators/tg16.conf:6,7; os packages/virtual/emulators/package.mk:1122; os packages/virtual/emulators/package.mk:1113"
+  offers:
+  - emulator: retroarch
+    core: beetle_pce_fast
+    source_ref: "os packages/virtual/emulators/package.mk:1113"
+  - emulator: retroarch
+    core: beetle_pce
+    source_ref: "os packages/virtual/emulators/package.mk:1114"
+  - emulator: retroarch
+    core: beetle_supergrafx
+    source_ref: "os packages/virtual/emulators/package.mk:1115"
+  - emulator: mednafen
+    core: pce
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:1118"
+  - emulator: mednafen
+    core: pce_fast
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:1119"
 - folder: tg16cd
   extensions:
   - .ccd
@@ -1138,6 +2140,24 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/tg16cd.conf:6,7; os packages/virtual/emulators/package.mk:1134; os\
     \ packages/virtual/emulators/package.mk:1125"
+  offers:
+  - emulator: retroarch
+    core: beetle_pce_fast
+    source_ref: "os packages/virtual/emulators/package.mk:1125"
+  - emulator: retroarch
+    core: beetle_pce
+    source_ref: "os packages/virtual/emulators/package.mk:1126"
+  - emulator: retroarch
+    core: beetle_supergrafx
+    source_ref: "os packages/virtual/emulators/package.mk:1127"
+  - emulator: mednafen
+    core: pce
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:1130"
+  - emulator: mednafen
+    core: pce_fast
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:1131"
 - folder: uzebox
   extensions:
   - .uze
@@ -1174,6 +2194,14 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/virtualboy.conf:6,7; os packages/virtual/emulators/package.mk:1159;\
     \ os packages/virtual/emulators/package.mk:1153"
+  offers:
+  - emulator: retroarch
+    core: beetle_vb
+    source_ref: "os packages/virtual/emulators/package.mk:1153"
+  - emulator: mednafen
+    core: vb
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:1156"
 - folder: wii
   extensions:
   - .ciso
@@ -1188,6 +2216,15 @@ folders:
   emulator: dolphin
   source_ref: "os config/emulators/wii.conf:6,7; os packages/virtual/emulators/package.mk:482,487; os\
     \ packages/virtual/emulators/package.mk:480"
+  offers:
+  - emulator: dolphin
+    core: dolphin-sa-wii
+    when: DEVICE AMD64; DEVICE S922X*|RK3399|RK3588
+    source_ref: "os packages/virtual/emulators/package.mk:480,485"
+  - emulator: retroarch
+    core: dolphin
+    when: DEVICE AMD64; DEVICE S922X*|RK3399|RK3588
+    source_ref: "os packages/virtual/emulators/package.mk:481,486"
 - folder: wiiu
   extensions:
   - .wua
@@ -1205,6 +2242,14 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/wonderswan.conf:6,7; os packages/virtual/emulators/package.mk:1168;\
     \ os packages/virtual/emulators/package.mk:1162"
+  offers:
+  - emulator: retroarch
+    core: beetle_wswan
+    source_ref: "os packages/virtual/emulators/package.mk:1162"
+  - emulator: mednafen
+    core: wswan
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:1165"
 - folder: wonderswancolor
   extensions:
   - .7z
@@ -1214,6 +2259,14 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/wonderswancolor.conf:6,7; os packages/virtual/emulators/package.mk:1177;\
     \ os packages/virtual/emulators/package.mk:1171"
+  offers:
+  - emulator: retroarch
+    core: beetle_wswan
+    source_ref: "os packages/virtual/emulators/package.mk:1171"
+  - emulator: mednafen
+    core: wswan
+    when: DEVICE RK3399|AMD64|RK3326
+    source_ref: "os packages/virtual/emulators/package.mk:1174"
 - folder: x1
   extensions:
   - .2d

@@ -570,6 +570,11 @@ launchers:
   passes_to: retroarch.cfg system_directory = "~/roms/bios", systemfiles_in_content_dir
     = "false"
   fails_when_missing: false
+  installs:
+    path: /storage/.config/retroarch/retroarch.cfg
+    source_ref: "projects/ROCKNIX/packages/sysutils/systemd/scripts/userconfig-setup:13"
+  kept_if_present: true
+  overrides: []
   source_ref: "projects/ROCKNIX/packages/emulators/libretro/retroarch/sources/AMD64/retroarch.cfg:3395-3396,\
     \ projects/ROCKNIX/packages/emulators/libretro/retroarch/sources/H700/retroarch.cfg:711-712,\
     \ projects/ROCKNIX/packages/emulators/libretro/retroarch/sources/RK3326/retroarch.cfg:716-717,\
@@ -594,7 +599,13 @@ launchers:
   search_dir: /storage/roms/bios
   passes_to: "AmigaA1200-default.uae kickstart_rom_file (amiberry -f)"
   fails_when_missing: false
-  depends_on_option: game name matches AGA|CD32
+  depends_on_option: "game name matches AGA|CD32, content not booted with --autoload,\
+    \ a WHDLoad .lha or .zip (start_amiberry.sh:90, 129)"
+  installs:
+    path: /tmp/emulation/amiberry/.amiberry_conf.uae
+    source_ref: "projects/ROCKNIX/packages/emulators/standalone/amiberry/scripts/start_amiberry.sh:64"
+  kept_if_present: false
+  overrides: []
   source_ref: "projects/ROCKNIX/packages/emulators/standalone/amiberry/scripts/start_amiberry.sh:17,\
     \ 62-69, projects/ROCKNIX/packages/emulators/standalone/amiberry/config/conf/AmigaA1200-default.uae:114"
 - emulator: amiberry
@@ -606,7 +617,13 @@ launchers:
   search_dir: /storage/roms/bios
   passes_to: "AmigaA500-default.uae kickstart_rom_file (amiberry -f)"
   fails_when_missing: false
-  depends_on_option: game name does not match AGA|CD32
+  depends_on_option: "game name does not match AGA|CD32, content not booted with --autoload,\
+    \ a WHDLoad .lha or .zip (start_amiberry.sh:90, 129)"
+  installs:
+    path: /tmp/emulation/amiberry/.amiberry_conf.uae
+    source_ref: "projects/ROCKNIX/packages/emulators/standalone/amiberry/scripts/start_amiberry.sh:67"
+  kept_if_present: false
+  overrides: []
   source_ref: "projects/ROCKNIX/packages/emulators/standalone/amiberry/scripts/start_amiberry.sh:17,\
     \ 62-69, projects/ROCKNIX/packages/emulators/standalone/amiberry/config/conf/AmigaA500-default.uae:114"
 - emulator: amiberry
@@ -645,6 +662,11 @@ launchers:
   search_dir: /storage/roms/bios
   passes_to: "Atari-ST-default.cfg [ROM] szTosImageFileName (--configfile)"
   fails_when_missing: false
+  installs:
+    path: /tmp/hatari/.hatari-temp.cfg
+    source_ref: "projects/ROCKNIX/packages/emulators/standalone/hatarisa/scripts/start_hatarisa.sh:35"
+  kept_if_present: false
+  overrides: []
   source_ref: "projects/ROCKNIX/packages/emulators/standalone/hatarisa/config/conf/Atari-ST-default.cfg:200,\
     \ projects/ROCKNIX/packages/emulators/standalone/hatarisa/scripts/start_hatarisa.sh:35,\
     \ 65"
@@ -652,13 +674,20 @@ launchers:
   build: standalone
   kind: fixed_name
   names: []
-  passes_to: melonDS.ini BIOS9Path, BIOS7Path, FirmwarePath, DSiBIOS9Path, DSiBIOS7Path,
-    DSiFirmwarePath, DSiNANDPath left empty
+  passes_to: melonDS.ini BIOS9Path, BIOS7Path, FirmwarePath, DSiNANDPath left empty
   fails_when_missing: false
   depends_on_option: direct_boot = 0 sets ExternalBIOSEnable=1, otherwise 0
   device: AMD64
-  source_ref: "projects/ROCKNIX/packages/emulators/standalone/melonds-sa/config/AMD64/melonDS.ini:84-90,\
-    \ projects/ROCKNIX/packages/emulators/standalone/melonds-sa/package.mk:60, projects/ROCKNIX/packages/emulators/standalone/melonds-sa/scripts/start_melonds.sh:41,\
+  installs:
+    path: /storage/.config/melonDS/melonDS.ini
+    source_ref: "projects/ROCKNIX/packages/sysutils/systemd/scripts/userconfig-setup:13,\
+      \ projects/ROCKNIX/packages/emulators/standalone/melonds-sa/scripts/start_melonds.sh:20,\
+      \ 34"
+  kept_if_present: true
+  overrides: []
+  source_ref: "projects/ROCKNIX/packages/emulators/standalone/melonds-sa/config/AMD64/melonDS.ini:84-86,\
+    \ 90, projects/ROCKNIX/packages/emulators/standalone/melonds-sa/package.mk:60,\
+    \ projects/ROCKNIX/packages/emulators/standalone/melonds-sa/scripts/start_melonds.sh:41,\
     \ 71-73"
 - emulator: melonds
   build: standalone
@@ -667,24 +696,28 @@ launchers:
   - bios9.bin
   - bios7.bin
   - firmware.bin
-  - dsi_bios9.bin
-  - dsi_bios7.bin
-  - dsi_firmware.bin
   - dsi_nand.bin
   search_dir: /storage/roms/bios
-  passes_to: melonDS.ini BIOS9Path, BIOS7Path, FirmwarePath, DSiBIOS9Path, DSiBIOS7Path,
-    DSiFirmwarePath, DSiNANDPath
+  passes_to: melonDS.ini BIOS9Path, BIOS7Path, FirmwarePath, DSiNANDPath
   fails_when_missing: false
   depends_on_option: direct_boot = 0 sets ExternalBIOSEnable=1, otherwise 0
   device: RK3399, RK3566, RK3576, RK3588, S922X, SDM845, SM4450, SM6115, SM8250, SM8550,
     SM8650, SM8750
-  source_ref: "projects/ROCKNIX/packages/emulators/standalone/melonds-sa/config/InputPlumber/melonDS.ini:94-100,\
-    \ projects/ROCKNIX/packages/emulators/standalone/melonds-sa/config/RK3399/melonDS.ini:93-99,\
-    \ projects/ROCKNIX/packages/emulators/standalone/melonds-sa/config/RK3566/melonDS.ini:93-99,\
-    \ projects/ROCKNIX/packages/emulators/standalone/melonds-sa/config/RK3588/melonDS.ini:93-99,\
-    \ projects/ROCKNIX/packages/emulators/standalone/melonds-sa/config/S922X/melonDS.ini:95-101,\
-    \ projects/ROCKNIX/packages/emulators/standalone/melonds-sa/config/SM4450/melonDS.ini:90-96,\
-    \ projects/ROCKNIX/packages/emulators/standalone/melonds-sa/package.mk:60, projects/ROCKNIX/packages/emulators/standalone/melonds-sa/scripts/start_melonds.sh:41,\
+  installs:
+    path: /storage/.config/melonDS/melonDS.ini
+    source_ref: "projects/ROCKNIX/packages/sysutils/systemd/scripts/userconfig-setup:13,\
+      \ projects/ROCKNIX/packages/emulators/standalone/melonds-sa/scripts/start_melonds.sh:20,\
+      \ 34"
+  kept_if_present: true
+  overrides: []
+  source_ref: "projects/ROCKNIX/packages/emulators/standalone/melonds-sa/config/InputPlumber/melonDS.ini:94-96,\
+    \ 100, projects/ROCKNIX/packages/emulators/standalone/melonds-sa/config/RK3399/melonDS.ini:93-95,\
+    \ 99, projects/ROCKNIX/packages/emulators/standalone/melonds-sa/config/RK3566/melonDS.ini:93-95,\
+    \ 99, projects/ROCKNIX/packages/emulators/standalone/melonds-sa/config/RK3588/melonDS.ini:93-95,\
+    \ 99, projects/ROCKNIX/packages/emulators/standalone/melonds-sa/config/S922X/melonDS.ini:95-97,\
+    \ 101, projects/ROCKNIX/packages/emulators/standalone/melonds-sa/config/SM4450/melonDS.ini:90-92,\
+    \ 96, projects/ROCKNIX/packages/emulators/standalone/melonds-sa/package.mk:60,\
+    \ projects/ROCKNIX/packages/emulators/standalone/melonds-sa/scripts/start_melonds.sh:41,\
     \ 71-73"
 - emulator: dsperate
   build: standalone
@@ -701,6 +734,12 @@ launchers:
   passes_to: "dsperate.ini [paths] bios9, bios7, firmware, bios9i, bios7i, dsi_firmware,\
     \ dsi_nand (--config)"
   fails_when_missing: false
+  installs:
+    path: /storage/.config/dsperate/dsperate.ini
+    source_ref: "projects/ROCKNIX/packages/sysutils/systemd/scripts/userconfig-setup:13,\
+      \ projects/ROCKNIX/packages/emulators/standalone/dsperate-sa/scripts/start_dsperate.sh:19"
+  kept_if_present: true
+  overrides: []
   source_ref: "projects/ROCKNIX/packages/emulators/standalone/dsperate-sa/config/H700/dsperate.ini:11-17,\
     \ projects/ROCKNIX/packages/emulators/standalone/dsperate-sa/config/InputPlumber/dsperate.ini:11-17,\
     \ projects/ROCKNIX/packages/emulators/standalone/dsperate-sa/config/RK3326/dsperate.ini:11-17,\
@@ -716,7 +755,13 @@ launchers:
   - gba_bios.bin
   search_dir: /storage/roms/bios
   passes_to: "config.toml [general] bios_path"
-  fails_when_missing: false
+  fails_when_missing: true
+  installs:
+    path: /storage/.config/nanoboyadvance/config.toml
+    source_ref: "projects/ROCKNIX/packages/sysutils/systemd/scripts/userconfig-setup:13,\
+      \ projects/ROCKNIX/packages/emulators/standalone/nanoboyadvance-sa/scripts/start_nanoboyadvance.sh:12"
+  kept_if_present: true
+  overrides: []
   source_ref: "projects/ROCKNIX/packages/emulators/standalone/nanoboyadvance-sa/config/config.toml:2,\
     \ projects/ROCKNIX/packages/emulators/standalone/nanoboyadvance-sa/package.mk:30"
 - emulator: xemu
@@ -731,6 +776,13 @@ launchers:
   passes_to: "xemu.toml [sys.files] bootrom_path, flashrom_path, eeprom_path, hdd_path\
     \ (copied at each launch)"
   fails_when_missing: false
+  installs:
+    path: /storage/.config/xemu/xemu.toml
+    source_ref: "projects/ROCKNIX/packages/sysutils/systemd/scripts/userconfig-setup:13,\
+      \ projects/ROCKNIX/packages/emulators/standalone/xemu-sa/scripts/start_xemu.sh:15,\
+      \ 19"
+  kept_if_present: false
+  overrides: []
   source_ref: "projects/ROCKNIX/packages/emulators/standalone/xemu-sa/config/AMD64/xemu.toml:28-31,\
     \ projects/ROCKNIX/packages/emulators/standalone/xemu-sa/config/SM4450/xemu.toml:29-32,\
     \ projects/ROCKNIX/packages/emulators/standalone/xemu-sa/config/SM8250/xemu.toml:29-32,\
@@ -747,6 +799,12 @@ launchers:
   search_dir: /storage/roms/bios/
   passes_to: mednafen.cfg gba.bios
   fails_when_missing: false
+  installs:
+    path: /storage/.config/mednafen/mednafen.cfg
+    source_ref: "projects/ROCKNIX/packages/sysutils/systemd/scripts/userconfig-setup:13,\
+      \ projects/ROCKNIX/packages/emulators/standalone/mednafen/scripts/start_mednafen.sh:21"
+  kept_if_present: true
+  overrides: []
   source_ref: "projects/ROCKNIX/packages/emulators/standalone/mednafen/config/common/mednafen.template:570,\
     \ 729, projects/ROCKNIX/packages/emulators/standalone/mednafen/scripts/start_mednafen.sh:19-21"
 - emulator: mednafen
@@ -758,6 +816,12 @@ launchers:
   search_dir: /storage/roms/bios/
   passes_to: mednafen.cfg md.cdbios
   fails_when_missing: false
+  installs:
+    path: /storage/.config/mednafen/mednafen.cfg
+    source_ref: "projects/ROCKNIX/packages/sysutils/systemd/scripts/userconfig-setup:13,\
+      \ projects/ROCKNIX/packages/emulators/standalone/mednafen/scripts/start_mednafen.sh:21"
+  kept_if_present: true
+  overrides: []
   source_ref: "projects/ROCKNIX/packages/emulators/standalone/mednafen/config/common/mednafen.template:570,\
     \ 1050, projects/ROCKNIX/packages/emulators/standalone/mednafen/scripts/start_mednafen.sh:19-21"
 - emulator: mednafen
@@ -769,6 +833,12 @@ launchers:
   search_dir: /storage/roms/bios/
   passes_to: mednafen.cfg nes.ggrom
   fails_when_missing: false
+  installs:
+    path: /storage/.config/mednafen/mednafen.cfg
+    source_ref: "projects/ROCKNIX/packages/sysutils/systemd/scripts/userconfig-setup:13,\
+      \ projects/ROCKNIX/packages/emulators/standalone/mednafen/scripts/start_mednafen.sh:21"
+  kept_if_present: true
+  overrides: []
   source_ref: "projects/ROCKNIX/packages/emulators/standalone/mednafen/config/common/mednafen.template:570,\
     \ 2292, projects/ROCKNIX/packages/emulators/standalone/mednafen/scripts/start_mednafen.sh:19-21"
 - emulator: mednafen
@@ -781,6 +851,12 @@ launchers:
   search_dir: /storage/roms/bios/
   passes_to: mednafen.cfg pce.cdbios, pce.gecdbios
   fails_when_missing: false
+  installs:
+    path: /storage/.config/mednafen/mednafen.cfg
+    source_ref: "projects/ROCKNIX/packages/sysutils/systemd/scripts/userconfig-setup:13,\
+      \ projects/ROCKNIX/packages/emulators/standalone/mednafen/scripts/start_mednafen.sh:21"
+  kept_if_present: true
+  overrides: []
   source_ref: "projects/ROCKNIX/packages/emulators/standalone/mednafen/config/common/mednafen.template:570,\
     \ 3309, 3342, projects/ROCKNIX/packages/emulators/standalone/mednafen/scripts/start_mednafen.sh:19-21"
 - emulator: mednafen
@@ -792,6 +868,12 @@ launchers:
   search_dir: /storage/roms/bios/
   passes_to: mednafen.cfg pce_fast.cdbios
   fails_when_missing: false
+  installs:
+    path: /storage/.config/mednafen/mednafen.cfg
+    source_ref: "projects/ROCKNIX/packages/sysutils/systemd/scripts/userconfig-setup:13,\
+      \ projects/ROCKNIX/packages/emulators/standalone/mednafen/scripts/start_mednafen.sh:21"
+  kept_if_present: true
+  overrides: []
   source_ref: "projects/ROCKNIX/packages/emulators/standalone/mednafen/config/common/mednafen.template:570,\
     \ 4128, projects/ROCKNIX/packages/emulators/standalone/mednafen/scripts/start_mednafen.sh:19-21"
 - emulator: mednafen
@@ -803,6 +885,12 @@ launchers:
   search_dir: /storage/roms/bios/
   passes_to: mednafen.cfg pcfx.bios
   fails_when_missing: false
+  installs:
+    path: /storage/.config/mednafen/mednafen.cfg
+    source_ref: "projects/ROCKNIX/packages/sysutils/systemd/scripts/userconfig-setup:13,\
+      \ projects/ROCKNIX/packages/emulators/standalone/mednafen/scripts/start_mednafen.sh:21"
+  kept_if_present: true
+  overrides: []
   source_ref: "projects/ROCKNIX/packages/emulators/standalone/mednafen/config/common/mednafen.template:570,\
     \ 4611, projects/ROCKNIX/packages/emulators/standalone/mednafen/scripts/start_mednafen.sh:19-21"
 - emulator: mednafen
@@ -816,6 +904,12 @@ launchers:
   search_dir: /storage/roms/bios/
   passes_to: mednafen.cfg psx.bios_eu, psx.bios_jp, psx.bios_na
   fails_when_missing: false
+  installs:
+    path: /storage/.config/mednafen/mednafen.cfg
+    source_ref: "projects/ROCKNIX/packages/sysutils/systemd/scripts/userconfig-setup:13,\
+      \ projects/ROCKNIX/packages/emulators/standalone/mednafen/scripts/start_mednafen.sh:21"
+  kept_if_present: true
+  overrides: []
   source_ref: "projects/ROCKNIX/packages/emulators/standalone/mednafen/config/common/mednafen.template:570,\
     \ 7366-7370, projects/ROCKNIX/packages/emulators/standalone/mednafen/scripts/start_mednafen.sh:19-21"
 - emulator: mednafen
@@ -834,6 +928,12 @@ launchers:
   passes_to: mednafen.cfg ss.bios_jp, ss.bios_na_eu, ss.bios_stv_eu, ss.bios_stv_jp,
     ss.bios_stv_na, ss.cart.kof95_path, ss.cart.ultraman_path
   fails_when_missing: false
+  installs:
+    path: /storage/.config/mednafen/mednafen.cfg
+    source_ref: "projects/ROCKNIX/packages/sysutils/systemd/scripts/userconfig-setup:13,\
+      \ projects/ROCKNIX/packages/emulators/standalone/mednafen/scripts/start_mednafen.sh:21"
+  kept_if_present: true
+  overrides: []
   source_ref: "projects/ROCKNIX/packages/emulators/standalone/mednafen/config/common/mednafen.template:570,\
     \ 9818-9820, 9824-9828, 9834-9836, projects/ROCKNIX/packages/emulators/standalone/mednafen/scripts/start_mednafen.sh:19-21"
 - emulator: yabasanshiro
@@ -861,6 +961,13 @@ launchers:
   passes_to: "settings.ini [BIOS] SearchDirectory = /storage/roms/bios, [BIOS] PathNTSCU,\
     \ PathNTSCJ, PathPAL unset"
   fails_when_missing: false
+  installs:
+    path: /storage/.config/duckstation/settings.ini
+    source_ref: "projects/ROCKNIX/packages/sysutils/systemd/scripts/userconfig-setup:13,\
+      \ projects/ROCKNIX/packages/emulators/standalone/duckstation-sa/scripts/start_duckstation.sh:19,\
+      \ 22"
+  kept_if_present: true
+  overrides: []
   source_ref: "projects/ROCKNIX/packages/emulators/standalone/duckstation-sa/config/AMD64/settings.ini:134,\
     \ projects/ROCKNIX/packages/emulators/standalone/duckstation-sa/config/H700/settings.ini:24,\
     \ projects/ROCKNIX/packages/emulators/standalone/duckstation-sa/config/InputPlumber/settings.ini:29-32,\
@@ -878,6 +985,13 @@ launchers:
   passes_to: "PCSX2.ini [Folders] Bios = /storage/roms/bios/armsx2, [Filenames] BIOS\
     \ unset"
   fails_when_missing: false
+  installs:
+    path: /storage/.config/ARMSX2/inis/PCSX2.ini
+    source_ref: "projects/ROCKNIX/packages/sysutils/systemd/scripts/userconfig-setup:13,\
+      \ projects/ROCKNIX/packages/emulators/standalone/armsx2-sa/scripts/start_armsx2.sh:11,\
+      \ 16"
+  kept_if_present: true
+  overrides: []
   source_ref: "projects/ROCKNIX/packages/emulators/standalone/armsx2-sa/config/S922X/ARMSX2/inis/PCSX2.ini:21,\
     \ 475, projects/ROCKNIX/packages/emulators/standalone/armsx2-sa/config/inputplumber/ARMSX2/inis/PCSX2.ini:21,\
     \ 473, projects/ROCKNIX/packages/emulators/standalone/armsx2-sa/package.mk:117-118"

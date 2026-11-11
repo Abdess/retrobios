@@ -14,7 +14,7 @@ display_name: "Arcade (FB Alpha 2012 Neo Geo)"
 cores:
   - fbalpha2012_neogeo
 systems:
-  - neogeo
+  - snk-neogeo-mvs
 
 notes: |
   Frozen snapshot of Final Burn Alpha v0.2.97.29 (circa 2012), Neo Geo only.

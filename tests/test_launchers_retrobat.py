@@ -11,6 +11,7 @@ from __future__ import annotations
 import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
 
 import sys
+import tempfile
 import textwrap
 import unittest
 from pathlib import Path
@@ -637,6 +638,57 @@ YMIR = """
     }
 """
 
+# emulatorLauncher f681f435: the default falls back to the regional BIOS.
+KRONOS_FALLBACK = """
+    private void SetupConfig(string path)
+    {
+        string iniFile = Path.Combine(path, "kronos.ini");
+        using (var ini = new IniFile(iniFile, IniOptions.KeepEmptyValues))
+        {
+            bool hleBios = false;
+            string bios = Path.Combine(AppConfig.GetFullPath("bios"), "saturn_bios.bin");
+            if (SystemConfig.isOptSet("kronos_force_bios") && !string.IsNullOrEmpty(SystemConfig["kronos_force_bios"]))
+            {
+                if (SystemConfig["kronos_force_bios"] != "hle")
+                    bios = Path.Combine(AppConfig.GetFullPath("bios"), SystemConfig["kronos_force_bios"]);
+                else
+                    hleBios = true;
+            }
+            if (!hleBios && !File.Exists(bios))
+                bios = new[] { "sega_101.bin", "mpr-17933.bin" }.Select(f => Path.Combine(AppConfig.GetFullPath("bios"), f)).FirstOrDefault(File.Exists) ?? bios;
+
+            if (File.Exists(bios))
+                ini.WriteValue("1.0", "General\\\\Bios", bios.Replace("\\\\", "/"));
+        }
+    }
+"""
+
+# emulatorLauncher f681f435: a forced BIOS only, written under a flag, and
+# a folder below bios for the CD block ROM.
+YMIR_OVERRIDE = """
+    private void SetupConfiguration(string path)
+    {
+        string iniFile = Path.Combine(path, "Ymir.toml");
+        using (var ini = new IniFile(iniFile))
+        {
+            string saturnBiosPath = null;
+            if (SystemConfig.isOptSet("ymir_force_bios") && !string.IsNullOrEmpty(SystemConfig["ymir_force_bios"]))
+                saturnBiosPath = Path.Combine(AppConfig.GetFullPath("bios"), SystemConfig["ymir_force_bios"]);
+
+            bool overrideIpl = saturnBiosPath != null && File.Exists(saturnBiosPath);
+            ini.WriteValue("System.IPL", "Override", overrideIpl ? "true" : "false");
+            if (overrideIpl)
+                ini.WriteValue("System.IPL", "Path", "'" + saturnBiosPath + "'");
+
+            string iplPath = AppConfig.GetFullPath("bios");
+            ini.WriteValue("General.PathOverrides", "IPLROMImages", "'" + iplPath + "'");
+            string cdbPath = Path.Combine(iplPath, "cdb");
+            FileTools.TryCreateDirectory(cdbPath);
+            ini.WriteValue("General.PathOverrides", "CDBlockROMImages", "'" + cdbPath + "'");
+        }
+    }
+"""
+
 SSF = """
     private void SetupConfiguration(string path)
     {
@@ -1042,6 +1094,46 @@ class OptionReplacesThePath(unittest.TestCase):
         self.assertEqual(
             folder["passes_to"], "Ymir.toml [General.PathOverrides] IPLROMImages = bios"
         )
+
+    def test_kronos_falls_back_to_the_regional_bios(self):
+        path = f"{G}/Kronos.Generator.cs"
+        sources = _feature_sources(path, KRONOS_FALLBACK, SATURN_FEATURES)
+        fixed, option, fallback = rl._option_path_in(
+            sources[path], sources[rl.FEATURES], "kronos"
+        )
+        self.assertEqual(
+            fixed["fails_when_missing"],
+            "sega_101.bin, then mpr-17933.bin, instead, else General\\Bios not written",
+        )
+        self.assertEqual(option["fails_when_missing"], fixed["fails_when_missing"])
+        self.assertEqual(fallback["kind"], "names_searched")
+        self.assertEqual(fallback["names"], ["sega_101.bin", "mpr-17933.bin"])
+        self.assertEqual(
+            fallback["passes_to"],
+            "kronos.ini [1.0] General\\Bios = <first found>, only if the file exists",
+        )
+        self.assertEqual(
+            fallback["depends_on_option"],
+            "saturn_bios.bin absent with kronos_force_bios unset"
+            " or the kronos_force_bios file absent, kronos_force_bios not hle",
+        )
+        self.assertEqual(fallback["source_ref"], f"{path}:15-19")
+
+    def test_ymir_writes_a_forced_bios_under_its_flag(self):
+        path = f"{G}/Ymir.Generator.cs"
+        sources = _feature_sources(path, YMIR_OVERRIDE, SATURN_FEATURES)
+        option, ipl, cdb = rl._option_path_in(sources[path], sources[rl.FEATURES], "ymir")
+        self.assertEqual(
+            option["passes_to"],
+            "Ymir.toml [System.IPL] Path = <bios>/<value>, only if the file exists",
+        )
+        self.assertEqual(option["source_ref"], f"{path}:7-13, {rl.FEATURES}:10-13")
+        self.assertEqual(ipl["passes_to"], "Ymir.toml [General.PathOverrides] IPLROMImages = bios")
+        self.assertEqual(cdb["search_dir"], "bios/cdb")
+        self.assertEqual(
+            cdb["passes_to"], "Ymir.toml [General.PathOverrides] CDBlockROMImages = bios/cdb"
+        )
+        self.assertEqual(cdb["source_ref"], f"{path}:15-19")
 
     def test_ssf_has_no_default_name(self):
         path = f"{G}/SSF.Generator.cs"
@@ -1487,6 +1579,21 @@ class Helpers(unittest.TestCase):
     def test_braces_inside_strings_do_not_close_blocks(self):
         src = rl.Source("x.cs", 'void f()\n{\n    s = "}";\n}\n')
         self.assertEqual(src.lines(*src.block_at(0)), (2, 4))
+
+    def test_a_rescrape_reads_the_pinned_commit(self):
+        from scraper import retrobat_scraper as rs  # noqa: PLC0415
+
+        pin = "ca486005f598551600d04a33b3156a5d764368d6"
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as scratch:
+            yml = Path(scratch) / "retrobat.yml"
+            yml.write_text(
+                "source: https://raw.githubusercontent.com/RetroBat-Official/emulatorlauncher/"
+                f"{pin}/batocera-systems/Resources/batocera-systems.json\n",
+                encoding="utf-8",
+            )
+            self.assertEqual(rs.pinned_revision(yml), pin)
+        self.assertEqual(rs.resolve_revision(pin), pin)
+        self.assertEqual(rs.resolve_revision(None), rs.pinned_revision())
 
     def test_revision_comes_from_the_pinned_url(self):
         url = (

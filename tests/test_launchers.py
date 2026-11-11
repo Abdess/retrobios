@@ -529,6 +529,46 @@ OPENMSX_FILEPOOL = '''    def generate(self, system, rom):
             file.write("filepool add -path /userdata/bios/openmsx -types system_rom -position 2\\n")'''
 
 
+MAME = f"{GENERATORS}/mame/mameGenerator.py"
+MAME_PATHS = f"{GENERATORS}/mame/mamePaths.py"
+MAME_HEAD = """from __future__ import annotations
+from ...batoceraPaths import BIOS
+from .mamePaths import MAME_BIOS
+class MameGenerator:
+    def generate(self, system, rom, playersControllers, metadata, guns, wheels, gameResolution):"""
+MAME_COMMAND = """        if messMode == -1:
+            commandArray += [ "-rompath", f"{romDirname};{MAME_BIOS};{BIOS}" ]"""
+MAME_SAMPLES = """        commandArray += [ "-samplepath",  MAME_BIOS / "samples" ]"""
+MAME_BOOT = """        if boot_disk:
+            bootDisk = f"/userdata/bios/{boot_disk}.img"
+            commandArray += [ bootType, bootDisk ]"""
+
+
+class MameSearchPaths(unittest.TestCase):
+    """mameGenerator.py:129-142 at batocera-43.1: `-rompath` and `-samplepath`."""
+
+    def test_the_command_line_search_paths_are_recorded(self):
+        from scraper.batocera_launchers import search_paths
+
+        cg = configgen({
+            MAME: placed({1: MAME_HEAD, 129: MAME_COMMAND, 142: MAME_SAMPLES, 378: MAME_BOOT}),
+            MAME_PATHS: "from ...batoceraPaths import BIOS\nMAME_BIOS = BIOS / 'mame'\n",
+        })
+        records = [r.entry() for r in search_paths(cg)]
+        self.assertEqual(
+            [(r["emulator"], r["search_dir"], r["passes_to"], r.get("depends_on_option"))
+             for r in records],
+            [
+                ("mame", "<romDirname>;/userdata/bios/mame;/userdata/bios",
+                 "command line -rompath", "messMode == -1"),
+                ("mame", "/userdata/bios/mame/samples", "command line -samplepath", None),
+            ],
+        )
+        self.assertEqual(records[0]["source_ref"], f"{MAME}:129-130")
+        # The boot disk the command names is a file, no search path.
+        self.assertFalse([r for r in records if "boot_disk" in r["search_dir"]])
+
+
 class ConfigDirectories(unittest.TestCase):
     """A BIOS directory written into the emulator's config, at batocera-43.1."""
 

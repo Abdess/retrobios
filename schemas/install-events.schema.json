@@ -43,6 +43,7 @@
         "removed",
         "restored",
         "backup",
+        "pack",
         "end"
       ]
     }
@@ -148,6 +149,9 @@
       "$ref": "#/$defs/backup"
     },
     {
+      "$ref": "#/$defs/pack"
+    },
+    {
       "$ref": "#/$defs/end"
     }
   ],
@@ -178,7 +182,8 @@
             "dry-run",
             "list",
             "remove",
-            "restore"
+            "restore",
+            "pack"
           ]
         }
       }
@@ -1022,7 +1027,8 @@
             "dry-run",
             "list",
             "remove",
-            "restore"
+            "restore",
+            "pack"
           ]
         },
         "installed": {
@@ -1151,7 +1157,9 @@
             "listed",
             "made",
             "deleted",
-            "not_deleted"
+            "not_deleted",
+            "planned",
+            "failed"
           ]
         },
         "choice": {
@@ -1352,7 +1360,70 @@
             "listed",
             "made",
             "deleted",
-            "not_deleted"
+            "not_deleted",
+            "planned",
+            "failed"
+          ]
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "pack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event",
+        "platform",
+        "path",
+        "files",
+        "bytes",
+        "size",
+        "parts",
+        "status",
+        "message"
+      ],
+      "properties": {
+        "event": {
+          "const": "pack"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "files": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "parts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "enum": [
+            "applied",
+            "written",
+            "unreadable",
+            "not_written",
+            "listed",
+            "made",
+            "deleted",
+            "not_deleted",
+            "planned",
+            "failed"
           ]
         },
         "message": {

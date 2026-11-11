@@ -1,0 +1,24 @@
+ RetroBIOS: Done
+
+ Pack made: 4 files, 1023.4 KB, in 3 parts.
+ Pack: ~/Downloads/RetroArch_Custom_BIOS_Pack.part1of3.zip
+ On the other device, install from it with --from-pack.
+
+ > Close
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ A/Enter Close  B/Esc Back  ? Help

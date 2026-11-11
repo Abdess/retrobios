@@ -71,6 +71,17 @@ folders:
   core: uae4arm
   emulator: retroarch32
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:16"
+  offers:
+  - emulator: retroarch32
+    core: uae4arm
+  - emulator: retroarch
+    core: puae2021
+  - emulator: retroarch
+    core: puae
+  - emulator: retroarch
+    core: uae4arm
+  - emulator: standalone
+    core: standalone
 - folder: amigacd32
   extensions:
   - .ccd
@@ -84,6 +95,17 @@ folders:
   core: puae2021
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:44"
+  offers:
+  - emulator: retroarch
+    core: puae2021
+  - emulator: retroarch
+    core: puae
+  - emulator: retroarch
+    core: uae4arm
+  - emulator: standalone
+    core: standalone
+  - emulator: retroarch32
+    core: uae4arm
 - folder: amstradcpc
   extensions:
   - .7z
@@ -93,6 +115,11 @@ folders:
   core: crocods
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:72"
+  offers:
+  - emulator: retroarch
+    core: crocods
+  - emulator: retroarch
+    core: cap32
 - folder: apple2
   extensions:
   - .apple2
@@ -105,6 +132,17 @@ folders:
   core: linapple
   emulator: linapple
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:92"
+  offers:
+  - emulator: linapple
+    core: linapple
+  - emulator: retroarch
+    core: applewin
+  - emulator: retroarch
+    core: mess
+  - emulator: applewin
+    core: scanlines
+  - emulator: applewin
+    core: no-scanlines
 - folder: arcade
   extensions:
   - .7z
@@ -113,6 +151,21 @@ folders:
   core: fbneo
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:189"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+  - emulator: retroarch
+    core: km_fbneo_xtreme_amped
+  - emulator: retroarch
+    core: fbalpha2012
+  - emulator: retroarch
+    core: mame2003_plus
+  - emulator: retroarch
+    core: mame
+  - emulator: retroarch32
+    core: fbalpha2016
+  - emulator: retroarch32
+    core: fbalpha2018
   arcade: true
 - folder: arduboy
   extensions:
@@ -120,6 +173,11 @@ folders:
   core: ardens
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:2211"
+  offers:
+  - emulator: retroarch
+    core: ardens
+  - emulator: retroarch
+    core: arduous
 - folder: astrocde
   name: astrocade
   extensions:
@@ -138,6 +196,11 @@ folders:
   core: stella2014
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:522"
+  offers:
+  - emulator: retroarch
+    core: stella2014
+  - emulator: retroarch
+    core: stella
 - folder: atari5200
   extensions:
   - .7z
@@ -146,6 +209,11 @@ folders:
   core: a5200
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:542"
+  offers:
+  - emulator: retroarch
+    core: a5200
+  - emulator: retroarch
+    core: atari800
 - folder: atari7800
   extensions:
   - .7z
@@ -186,6 +254,21 @@ folders:
   core: handy
   emulator: retroarch32
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:618"
+  offers:
+  - emulator: retroarch32
+    core: handy
+  - emulator: retroarch
+    core: handy
+  - emulator: retroarch
+    core: mednafen_lynx
+  - emulator: mednafen
+    core: norecord-aspect
+  - emulator: mednafen
+    core: norecord-full
+  - emulator: mednafen
+    core: record-aspect
+  - emulator: mednafen
+    core: record-full
 - folder: atarist
   extensions:
   - .dim
@@ -197,6 +280,11 @@ folders:
   core: hatari
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:574"
+  offers:
+  - emulator: retroarch
+    core: hatari
+  - emulator: retroarch
+    core: hatarib
 - folder: atarixegs
   extensions:
   - .7z
@@ -220,6 +308,25 @@ folders:
   core: flycast
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:394"
+  offers:
+  - emulator: retroarch
+    core: flycast
+  - emulator: retrorun
+    core: flycast
+  - emulator: retroarch32
+    core: flycast32_rumble
+  - emulator: retroarch32
+    core: flycast_xtreme
+  - emulator: retroarch32
+    core: reicast_xtreme
+  - emulator: retrorun32
+    core: flycast32_rumble
+  - emulator: retrorun32
+    core: flycast_xtreme
+  - emulator: retrorun32
+    core: reicast_xtreme
+  - emulator: standalone
+    core: standalone
   arcade: true
 - folder: bbcmicro
   extensions:
@@ -377,6 +484,13 @@ folders:
   core: coco3
   emulator: standalone
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:2435"
+  offers:
+  - emulator: standalone
+    core: coco3
+  - emulator: standalone
+    core: coco
+  - emulator: retroarch
+    core: mess
 - folder: coleco
   extensions:
   - .7z
@@ -394,6 +508,13 @@ folders:
   core: coolcv
   emulator: retroarch32
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1890"
+  offers:
+  - emulator: retroarch32
+    core: coolcv
+  - emulator: retroarch
+    core: bluemsx
+  - emulator: retroarch
+    core: gearcoleco
 - folder: cps1
   extensions:
   - .7z
@@ -402,6 +523,19 @@ folders:
   core: fbneo
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:242"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+  - emulator: retroarch
+    core: km_fbneo_xtreme_amped
+  - emulator: retroarch
+    core: fbalpha2012
+  - emulator: retroarch
+    core: mame2003_plus
+  - emulator: retroarch32
+    core: fbalpha2016
+  - emulator: retroarch32
+    core: fbalpha2018
   arcade: true
 - folder: cps2
   extensions:
@@ -411,6 +545,19 @@ folders:
   core: fbneo
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:270"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+  - emulator: retroarch
+    core: km_fbneo_xtreme_amped
+  - emulator: retroarch
+    core: fbalpha2012
+  - emulator: retroarch
+    core: mame2003_plus
+  - emulator: retroarch32
+    core: fbalpha2016
+  - emulator: retroarch32
+    core: fbalpha2018
   arcade: true
 - folder: cps3
   extensions:
@@ -420,6 +567,19 @@ folders:
   core: fbneo
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:298"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+  - emulator: retroarch
+    core: km_fbneo_xtreme_amped
+  - emulator: retroarch
+    core: fbalpha2012
+  - emulator: retroarch
+    core: mame2003_plus
+  - emulator: retroarch32
+    core: fbalpha2016
+  - emulator: retroarch32
+    core: fbalpha2018
   arcade: true
 - folder: daphne
   name: Daphne
@@ -435,6 +595,13 @@ folders:
   core: standalone
   emulator: standalone
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:2167"
+  offers:
+  - emulator: standalone
+    core: standalone
+  - emulator: standalone-gzdoom
+    core: standalone-gzdoom
+  - emulator: retroarch
+    core: prboom
 - folder: dos
   name: msdos
   extensions:
@@ -450,6 +617,11 @@ folders:
   core: dosbox_pure
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:2123"
+  offers:
+  - emulator: retroarch
+    core: dosbox_pure
+  - emulator: retroarch
+    core: dosbox
 - folder: dragon32
   extensions:
   - .bin
@@ -462,6 +634,11 @@ folders:
   core: dragon32
   emulator: standalone
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:2415"
+  offers:
+  - emulator: standalone
+    core: dragon32
+  - emulator: standalone
+    core: dragon64
 - folder: dreamcast
   extensions:
   - .7z
@@ -473,6 +650,29 @@ folders:
   core: flycast32_rumble
   emulator: retroarch32
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1587"
+  offers:
+  - emulator: retroarch32
+    core: flycast32_rumble
+  - emulator: retroarch32
+    core: flycast_xtreme
+  - emulator: retroarch32
+    core: reicast_xtreme
+  - emulator: retroarch
+    core: flycast_rumble
+  - emulator: retroarch
+    core: flycast
+  - emulator: retrorun32
+    core: flycast32_rumble
+  - emulator: retrorun32
+    core: flycast_xtreme
+  - emulator: retrorun32
+    core: reicast_xtreme
+  - emulator: retrorun
+    core: flycast_rumble
+  - emulator: retrorun
+    core: flycast
+  - emulator: standalone
+    core: standalone
 - folder: easyrpg
   extensions:
   - .easyrpg
@@ -501,6 +701,11 @@ folders:
   core: nestopia
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:861"
+  offers:
+  - emulator: retroarch
+    core: nestopia
+  - emulator: retroarch
+    core: fceumm
 - folder: fds
   name: famicom disk system
   extensions:
@@ -513,6 +718,21 @@ folders:
   core: nestopia
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:881"
+  offers:
+  - emulator: retroarch
+    core: nestopia
+  - emulator: retroarch
+    core: fceumm
+  - emulator: retroarch
+    core: quicknes
+  - emulator: mednafen
+    core: norecord-aspect
+  - emulator: mednafen
+    core: norecord-full
+  - emulator: mednafen
+    core: record-aspect
+  - emulator: mednafen
+    core: record-full
 - folder: gameandwatch
   extensions:
   - .mgw
@@ -528,6 +748,25 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1641"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+  - emulator: retroarch
+    core: genesis_plus_gx_EX
+  - emulator: retroarch
+    core: gearsystem
+  - emulator: retroarch
+    core: smsplus
+  - emulator: retroarch
+    core: picodrive
+  - emulator: mednafen
+    core: norecord-aspect
+  - emulator: mednafen
+    core: norecord-full
+  - emulator: mednafen
+    core: record-aspect
+  - emulator: mednafen
+    core: record-full
 - folder: gametank
   extensions:
   - .7z
@@ -536,6 +775,11 @@ folders:
   core: standalone
   emulator: standalone
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:2460"
+  offers:
+  - emulator: standalone
+    core: standalone
+  - emulator: retroarch
+    core: libgametank
 - folder: gb
   extensions:
   - .7z
@@ -546,6 +790,29 @@ folders:
   core: gambatte
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1219"
+  offers:
+  - emulator: retroarch
+    core: gambatte
+  - emulator: retroarch
+    core: mgba_rumble
+  - emulator: retroarch
+    core: sameboy
+  - emulator: retroarch
+    core: DoubleCherryGB
+  - emulator: retroarch
+    core: tgbdual
+  - emulator: retroarch
+    core: vbam
+  - emulator: retroarch
+    core: bsnes
+  - emulator: mednafen
+    core: norecord-aspect
+  - emulator: mednafen
+    core: norecord-full
+  - emulator: mednafen
+    core: record-aspect
+  - emulator: mednafen
+    core: record-full
 - folder: gba
   extensions:
   - .7z
@@ -556,6 +823,27 @@ folders:
   core: mgba_rumble
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1285"
+  offers:
+  - emulator: retroarch
+    core: mgba_rumble
+  - emulator: retroarch
+    core: mgba
+  - emulator: retroarch
+    core: vbam
+  - emulator: retroarch
+    core: vba_next
+  - emulator: retroarch
+    core: gpsp
+  - emulator: retroarch32
+    core: gpsp
+  - emulator: mednafen
+    core: norecord-aspect
+  - emulator: mednafen
+    core: norecord-full
+  - emulator: mednafen
+    core: record-aspect
+  - emulator: mednafen
+    core: record-full
 - folder: gbc
   extensions:
   - .7z
@@ -566,6 +854,29 @@ folders:
   core: gambatte
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1252"
+  offers:
+  - emulator: retroarch
+    core: gambatte
+  - emulator: retroarch
+    core: mgba_rumble
+  - emulator: retroarch
+    core: sameboy
+  - emulator: retroarch
+    core: DoubleCherryGB
+  - emulator: retroarch
+    core: tgbdual
+  - emulator: retroarch
+    core: vbam
+  - emulator: retroarch
+    core: bsnes
+  - emulator: mednafen
+    core: norecord-aspect
+  - emulator: mednafen
+    core: norecord-full
+  - emulator: mednafen
+    core: record-aspect
+  - emulator: mednafen
+    core: record-full
 - folder: gc
   name: Gamecube
   extensions:
@@ -600,6 +911,27 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1460"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+  - emulator: retroarch
+    core: genesis_plus_gx_EX
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+  - emulator: retroarch
+    core: picodrive
+  - emulator: retroarch32
+    core: genesis_plus_gx_wide
+  - emulator: retroarch32
+    core: picodrive
+  - emulator: mednafen
+    core: norecord-aspect
+  - emulator: mednafen
+    core: norecord-full
+  - emulator: mednafen
+    core: record-aspect
+  - emulator: mednafen
+    core: record-full
 - folder: gx4000
   extensions:
   - .cpr
@@ -623,6 +955,11 @@ folders:
   core: freej2me-plus
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:2347"
+  offers:
+  - emulator: retroarch
+    core: freej2me-plus
+  - emulator: retroarch
+    core: freej2me
 - folder: love2d
   extensions:
   - .love
@@ -671,6 +1008,29 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1375"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+  - emulator: retroarch
+    core: genesis_plus_gx_EX
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+  - emulator: retroarch
+    core: picodrive
+  - emulator: retroarch
+    core: gearsystem
+  - emulator: retroarch
+    core: smsplus
+  - emulator: retroarch32
+    core: picodrive
+  - emulator: mednafen
+    core: norecord-aspect
+  - emulator: mednafen
+    core: norecord-full
+  - emulator: mednafen
+    core: record-aspect
+  - emulator: mednafen
+    core: record-full
 - folder: megadrive
   extensions:
   - .68k
@@ -691,6 +1051,27 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1412"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+  - emulator: retroarch
+    core: genesis_plus_gx_EX
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+  - emulator: retroarch
+    core: picodrive
+  - emulator: retroarch32
+    core: genesis_plus_gx_wide
+  - emulator: retroarch32
+    core: picodrive
+  - emulator: mednafen
+    core: norecord-aspect
+  - emulator: mednafen
+    core: norecord-full
+  - emulator: mednafen
+    core: record-aspect
+  - emulator: mednafen
+    core: record-full
 - folder: megaduck
   extensions:
   - .7z
@@ -699,6 +1080,11 @@ folders:
   core: sameduck
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:326"
+  offers:
+  - emulator: retroarch
+    core: sameduck
+  - emulator: retroarch
+    core: mess
 - folder: movies
   name: videos
   extensions:
@@ -728,6 +1114,13 @@ folders:
   core: bluemsx
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1939"
+  offers:
+  - emulator: retroarch
+    core: bluemsx
+  - emulator: retroarch
+    core: fmsx
+  - emulator: openmsx
+    core: openmsx
 - folder: msx2
   extensions:
   - .7z
@@ -741,6 +1134,13 @@ folders:
   core: bluemsx
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1961"
+  offers:
+  - emulator: retroarch
+    core: bluemsx
+  - emulator: retroarch
+    core: fmsx
+  - emulator: openmsx
+    core: openmsx
 - folder: mv
   name: microvision
   extensions:
@@ -756,6 +1156,21 @@ folders:
   core: parallel_n64
   emulator: retroarch32
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1103"
+  offers:
+  - emulator: retroarch32
+    core: parallel_n64
+  - emulator: retroarch
+    core: parallel_n64
+  - emulator: retroarch
+    core: mupen64plus_next
+  - emulator: retroarch
+    core: mupen64plus
+  - emulator: standalone-Rice
+    core: standalone-Rice
+  - emulator: standalone-Glide64mk2
+    core: standalone-Glide64mk2
+  - emulator: standalone-GlideN64
+    core: standalone-GlideN64
 - folder: n64dd
   extensions:
   - .d64
@@ -766,6 +1181,15 @@ folders:
   core: parallel_n64
   emulator: retroarch32
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1135"
+  offers:
+  - emulator: retroarch32
+    core: parallel_n64
+  - emulator: retroarch
+    core: parallel_n64
+  - emulator: retroarch
+    core: mupen64plus_next
+  - emulator: retroarch
+    core: mupen64plus
 - folder: naomi
   extensions:
   - .7z
@@ -776,6 +1200,25 @@ folders:
   core: flycast
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:434"
+  offers:
+  - emulator: retroarch
+    core: flycast
+  - emulator: retrorun
+    core: flycast
+  - emulator: retroarch32
+    core: flycast32_rumble
+  - emulator: retroarch32
+    core: flycast_xtreme
+  - emulator: retroarch32
+    core: reicast_xtreme
+  - emulator: retrorun32
+    core: flycast32_rumble
+  - emulator: retrorun32
+    core: flycast_xtreme
+  - emulator: retrorun32
+    core: reicast_xtreme
+  - emulator: standalone
+    core: standalone
   arcade: true
 - folder: nds
   extensions:
@@ -785,6 +1228,11 @@ folders:
   core: drastic
   emulator: drastic
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1345"
+  offers:
+  - emulator: drastic
+    core: drastic
+  - emulator: dsperate
+    core: dsperate
 - folder: neogeo
   extensions:
   - .7z
@@ -794,6 +1242,17 @@ folders:
   core: fbneo
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1696"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+  - emulator: retroarch
+    core: km_fbneo_xtreme_amped
+  - emulator: retroarch
+    core: fbalpha2012
+  - emulator: retroarch
+    core: mame2003_plus
+  - emulator: retroarch
+    core: geolith
 - folder: neogeocd
   extensions:
   - .chd
@@ -802,6 +1261,13 @@ folders:
   core: neocd
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1719"
+  offers:
+  - emulator: retroarch
+    core: neocd
+  - emulator: retroarch
+    core: fbneo
+  - emulator: retroarch
+    core: km_fbneo_xtreme_amped
 - folder: nes
   extensions:
   - .7z
@@ -810,6 +1276,21 @@ folders:
   core: nestopia
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:947"
+  offers:
+  - emulator: retroarch
+    core: nestopia
+  - emulator: retroarch
+    core: fceumm
+  - emulator: retroarch
+    core: quicknes
+  - emulator: mednafen
+    core: norecord-aspect
+  - emulator: mednafen
+    core: norecord-full
+  - emulator: mednafen
+    core: record-aspect
+  - emulator: mednafen
+    core: record-full
 - folder: ngp
   extensions:
   - .7z
@@ -819,6 +1300,19 @@ folders:
   core: mednafen_ngp
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1740"
+  offers:
+  - emulator: retroarch
+    core: mednafen_ngp
+  - emulator: retroarch
+    core: race
+  - emulator: mednafen
+    core: norecord-aspect
+  - emulator: mednafen
+    core: norecord-full
+  - emulator: mednafen
+    core: record-aspect
+  - emulator: mednafen
+    core: record-full
 - folder: ngpc
   extensions:
   - .7z
@@ -828,6 +1322,19 @@ folders:
   core: mednafen_ngp
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1768"
+  offers:
+  - emulator: retroarch
+    core: mednafen_ngp
+  - emulator: retroarch
+    core: race
+  - emulator: mednafen
+    core: norecord-aspect
+  - emulator: mednafen
+    core: norecord-full
+  - emulator: mednafen
+    core: record-aspect
+  - emulator: mednafen
+    core: record-full
 - folder: odyssey2
   extensions:
   - .bin
@@ -841,6 +1348,11 @@ folders:
   core: onscripter
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:2267"
+  offers:
+  - emulator: retroarch
+    core: onscripter
+  - emulator: retroarch
+    core: onsyuri
 - folder: openbor
   extensions:
   - .pak
@@ -862,6 +1374,11 @@ folders:
   core: nekop2
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:2091"
+  offers:
+  - emulator: retroarch
+    core: nekop2
+  - emulator: retroarch
+    core: np2kai
 - folder: pcengine
   extensions:
   - .7z
@@ -871,6 +1388,21 @@ folders:
   core: mednafen_pce_fast
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:717"
+  offers:
+  - emulator: retroarch
+    core: mednafen_pce_fast
+  - emulator: retroarch
+    core: mednafen_supergrafx
+  - emulator: retroarch
+    core: mednafen_pce
+  - emulator: mednafen
+    core: norecord-aspect
+  - emulator: mednafen
+    core: norecord-full
+  - emulator: mednafen
+    core: record-aspect
+  - emulator: mednafen
+    core: record-full
 - folder: pcenginecd
   extensions:
   - .ccd
@@ -883,6 +1415,21 @@ folders:
   core: mednafen_pce_fast
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:746"
+  offers:
+  - emulator: retroarch
+    core: mednafen_pce_fast
+  - emulator: retroarch
+    core: mednafen_supergrafx
+  - emulator: retroarch
+    core: mednafen_pce
+  - emulator: mednafen
+    core: norecord-aspect
+  - emulator: mednafen
+    core: norecord-full
+  - emulator: mednafen
+    core: record-aspect
+  - emulator: mednafen
+    core: record-full
 - folder: pcfx
   extensions:
   - .ccd
@@ -913,6 +1460,11 @@ folders:
   core: picodrive
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1672"
+  offers:
+  - emulator: retroarch
+    core: picodrive
+  - emulator: retroarch32
+    core: picodrive
 - folder: pico-8/carts
   name: pico-8
   extensions:
@@ -921,6 +1473,17 @@ folders:
   core: float-scaled
   emulator: float-scaled
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:2287"
+  offers:
+  - emulator: float-scaled
+    core: float-scaled
+  - emulator: pixel-perfect
+    core: pixel-perfect
+  - emulator: full-screen
+    core: full-screen
+  - emulator: fake08
+    core: fake08
+  - emulator: retroarch
+    core: retroarch
 - folder: piece
   extensions:
   - .pex
@@ -953,6 +1516,15 @@ folders:
       core: standalone
       emulator: standalone
       source_ref: "os Emulationstation/es_systems.cfg.rk3326:1801"
+  offers:
+  - emulator: standalone-vulkan
+    core: standalone-vulkan
+  - emulator: standalone
+    core: standalone
+  - emulator: retroarch
+    core: retroarch
+  - emulator: standalone-2021
+    core: standalone-2021
 - folder: pspminis
   extensions:
   - .chd
@@ -967,6 +1539,13 @@ folders:
       core: standalone
       emulator: standalone
       source_ref: "os Emulationstation/es_systems.cfg.rk3326:1821"
+  offers:
+  - emulator: standalone-vulkan
+    core: standalone-vulkan
+  - emulator: standalone
+    core: standalone
+  - emulator: retroarch
+    core: retroarch
 - folder: psx
   extensions:
   - .7z
@@ -984,6 +1563,17 @@ folders:
   core: pcsx_rearmed_rumble
   emulator: retroarch32
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1808"
+  offers:
+  - emulator: retroarch32
+    core: pcsx_rearmed_rumble
+  - emulator: retroarch32
+    core: pcsx_rearmed
+  - emulator: retroarch
+    core: duckstation
+  - emulator: retroarch
+    core: swanstation
+  - emulator: standalone-duckstation
+    core: standalone-duckstation
 - folder: puzzlescript
   extensions:
   - .pz
@@ -1011,12 +1601,34 @@ folders:
   core: standalone-nobios
   emulator: standalone-nobios
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1547"
+  offers:
+  - emulator: standalone-nobios
+    core: standalone-nobios
+  - emulator: standalone-bios
+    core: standalone-bios
+  - emulator: retroarch32
+    core: yabasanshiro
+  - emulator: retroarch32
+    core: yabause
+  - emulator: retrorun32
+    core: yabasanshiro
+  - emulator: retroarch
+    core: yabause
+  - emulator: retroarch
+    core: yabasanshiro
+  - emulator: retrorun
+    core: yabasanshiro
 - folder: scummvm
   extensions:
   - .scummvm
   core: standalone
   emulator: standalone
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:2528"
+  offers:
+  - emulator: standalone
+    core: standalone
+  - emulator: retroarch
+    core: scummvm
 - folder: scv
   extensions:
   - '.0'
@@ -1044,6 +1656,11 @@ folders:
   core: picodrive
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1523"
+  offers:
+  - emulator: retroarch
+    core: picodrive
+  - emulator: retroarch32
+    core: picodrive
 - folder: segacd
   extensions:
   - .68k
@@ -1063,6 +1680,17 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1496"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+  - emulator: retroarch
+    core: genesis_plus_gx_EX
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+  - emulator: retroarch
+    core: picodrive
+  - emulator: retroarch32
+    core: picodrive
 - folder: sfc
   extensions:
   - .7z
@@ -1072,6 +1700,29 @@ folders:
   core: snes9x
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:910"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+  - emulator: retroarch
+    core: snes9x2005
+  - emulator: retroarch
+    core: snes9x2010
+  - emulator: retroarch
+    core: chimerasnes
+  - emulator: retroarch
+    core: mednafen_supafaust
+  - emulator: retroarch32
+    core: snes9x2002
+  - emulator: retroarch32
+    core: snes9x2005
+  - emulator: mednafen
+    core: norecord-aspect
+  - emulator: mednafen
+    core: norecord-full
+  - emulator: mednafen
+    core: record-aspect
+  - emulator: mednafen
+    core: record-full
 - folder: sg-1000
   extensions:
   - .68k
@@ -1112,6 +1763,29 @@ folders:
   core: snes9x
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1017"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+  - emulator: retroarch
+    core: snes9x2005
+  - emulator: retroarch
+    core: snes9x2010
+  - emulator: retroarch
+    core: chimerasnes
+  - emulator: retroarch
+    core: mednafen_supafaust
+  - emulator: retroarch32
+    core: snes9x2002
+  - emulator: retroarch32
+    core: snes9x2005
+  - emulator: mednafen
+    core: norecord-aspect
+  - emulator: mednafen
+    core: norecord-full
+  - emulator: mednafen
+    core: record-aspect
+  - emulator: mednafen
+    core: record-full
   note: the list names 2 systems snes
 - folder: snes-hacks
   extensions:
@@ -1130,6 +1804,29 @@ folders:
   core: snes9x
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1066"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+  - emulator: retroarch
+    core: snes9x2005
+  - emulator: retroarch
+    core: snes9x2010
+  - emulator: retroarch
+    core: chimerasnes
+  - emulator: retroarch
+    core: mednafen_supafaust
+  - emulator: retroarch32
+    core: snes9x2002
+  - emulator: retroarch32
+    core: snes9x2005
+  - emulator: mednafen
+    core: norecord-aspect
+  - emulator: mednafen
+    core: norecord-full
+  - emulator: mednafen
+    core: record-aspect
+  - emulator: mednafen
+    core: record-full
 - folder: snesmsu1
   name: snesmsu
   extensions:
@@ -1158,6 +1855,21 @@ folders:
       core: snes9x
       emulator: retroarch
       source_ref: "os Emulationstation/es_systems.cfg.rk3326:1005"
+  offers:
+  - emulator: retroarch
+    core: snes9x2010
+  - emulator: retroarch
+    core: chimerasnes
+  - emulator: retroarch
+    core: mednafen_supafaust
+  - emulator: retroarch
+    core: snes9x
+  - emulator: retroarch
+    core: snes9x2005
+  - emulator: retroarch32
+    core: snes9x2002
+  - emulator: retroarch32
+    core: snes9x2005
   note: the list names 2 systems snes
 - folder: supergrafx
   extensions:
@@ -1171,6 +1883,19 @@ folders:
   core: mednafen_supergrafx
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:833"
+  offers:
+  - emulator: retroarch
+    core: mednafen_supergrafx
+  - emulator: retroarch
+    core: mednafen_pce
+  - emulator: mednafen
+    core: norecord-aspect
+  - emulator: mednafen
+    core: norecord-full
+  - emulator: mednafen
+    core: record-aspect
+  - emulator: mednafen
+    core: record-full
 - folder: supervision
   extensions:
   - .7z
@@ -1217,6 +1942,21 @@ folders:
   core: mednafen_pce_fast
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:775"
+  offers:
+  - emulator: retroarch
+    core: mednafen_pce_fast
+  - emulator: retroarch
+    core: mednafen_supergrafx
+  - emulator: retroarch
+    core: mednafen_pce
+  - emulator: mednafen
+    core: norecord-aspect
+  - emulator: mednafen
+    core: norecord-full
+  - emulator: mednafen
+    core: record-aspect
+  - emulator: mednafen
+    core: record-full
 - folder: turbografxcd
   extensions:
   - .ccd
@@ -1230,6 +1970,21 @@ folders:
   core: mednafen_pce_fast
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:804"
+  offers:
+  - emulator: retroarch
+    core: mednafen_pce_fast
+  - emulator: retroarch
+    core: mednafen_supergrafx
+  - emulator: retroarch
+    core: mednafen_pce
+  - emulator: mednafen
+    core: norecord-aspect
+  - emulator: mednafen
+    core: norecord-full
+  - emulator: mednafen
+    core: record-aspect
+  - emulator: mednafen
+    core: record-full
 - folder: tvc
   name: videoton
   extensions:
@@ -1316,6 +2071,17 @@ folders:
   core: mednafen_vb
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:1192"
+  offers:
+  - emulator: retroarch
+    core: mednafen_vb
+  - emulator: mednafen
+    core: norecord-aspect
+  - emulator: mednafen
+    core: norecord-full
+  - emulator: mednafen
+    core: record-aspect
+  - emulator: mednafen
+    core: record-full
 - folder: vmac
   name: macintosh
   extensions:
@@ -1348,6 +2114,11 @@ folders:
   core: standalone
   emulator: standalone
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:2190"
+  offers:
+  - emulator: standalone
+    core: standalone
+  - emulator: retroarch
+    core: ecwolf
 - folder: wonderswan
   extensions:
   - .7z
@@ -1358,6 +2129,17 @@ folders:
   core: mednafen_wswan
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:651"
+  offers:
+  - emulator: retroarch
+    core: mednafen_wswan
+  - emulator: mednafen
+    core: norecord-aspect
+  - emulator: mednafen
+    core: norecord-full
+  - emulator: mednafen
+    core: record-aspect
+  - emulator: mednafen
+    core: record-full
 - folder: wonderswancolor
   extensions:
   - .7z
@@ -1368,6 +2150,17 @@ folders:
   core: mednafen_wswan
   emulator: retroarch
   source_ref: "os Emulationstation/es_systems.cfg.rk3566:678"
+  offers:
+  - emulator: retroarch
+    core: mednafen_wswan
+  - emulator: mednafen
+    core: norecord-aspect
+  - emulator: mednafen
+    core: norecord-full
+  - emulator: mednafen
+    core: record-aspect
+  - emulator: mednafen
+    core: record-full
 - folder: x1
   extensions:
   - .2d

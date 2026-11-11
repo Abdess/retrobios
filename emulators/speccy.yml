@@ -56,7 +56,8 @@ notes: |
   through 5.9, is a binary package, while ColEm and fMSX on the same site ship
   source archives.
   ref: com.fms.speccy.apk APK Signing Block, https://fms.komkon.org/Speccy/,
-       Speccy59-Windows-bin.zip, Speccy59-Ubuntu-x86-bin.tgz
+       Speccy59-Windows-bin.zip, Speccy59-Ubuntu-x86-bin.tgz (sha256
+       723eef7f34c50532, speccy sha256 2c335e4b7ead43f8)
 
   One directory holds everything. MainActivity hands the home directory to
   jniStart, which copies it into the buffer GetHomeDir returns and passes that
@@ -65,21 +66,23 @@ notes: |
   of when it is done. That directory is external storage
   joined with the application label up to its first space, so /sdcard/Speccy for
   the package read here, falling back to getExternalFilesDirs(null) when it is
-  not a writable directory. The author's own instructions give the same
-  placement. Every open goes through mopen, which calls OpenRealFile first: the
+  not a writable directory. Every open goes through mopen, which calls OpenRealFile first: the
   name is tried as given, and again as <PrivateDir>/<basename>, keeping the
   larger of the two when both open. mopen then layers gzdopen over the
   descriptor, so any of these files also opens gzipped, and a content:// name is
   routed to the Android storage framework. The desktop builds have no home
-  directory of their own and open every name where they stand, which -home
-  changes for the system ROMs alone.
+  directory of their own and open every name where they stand. Option -home
+  stores its argument as the one directory LoadBIOS changes into before the
+  first ROM and back out of after the last, so it moves the system ROMs alone.
   ref: MainActivity.java:1091-1104, EMULib.java:178, 315-361, 363-373,
        libmain.so jniStart 0x30ad8-0x310e3 (0x30eec-0x30efc, 0x30f58),
        GetHomeDir 0x2e73c, SetPrivateDir 0x509e0,
        Application 0x57784-0x577a4, OpenRealFile 0x50bd8-0x50dff,
        mopen 0x50e00-0x50f8f, LoadBIOS 0x5b0c4-0x5b0e8, 0x5b3d4-0x5b3e0,
-       Speccy59-Ubuntu-x86-bin speccy 0x3dae5-0x3db17, Speccy.html
-       "-home <dirname>", EmuAndroid "System ROMs"
+       Speccy59-Ubuntu-x86-bin speccy main 0xc000-0xc053 (option table
+       0x593b0, entry 48 home), 0xc22f-0xc258 (argument stored at 0x6f9f0),
+       LoadBIOS 0x3dae5-0x3db17 (getcwd, chdir to 0x6f9f0), 0x3de68-0x3de6e
+       (chdir back)
 
   LoadBIOS drives the whole set from one word of hardware flags, calling
   TryLoadROM once per name in a fixed order with the length to read and the bit
@@ -108,7 +111,7 @@ notes: |
   ROM.
   ref: libmain.so LoadBIOS 0x5b29c-0x5b2c4, 0x5b32c-0x5b348, 0x5b2fc-0x5b3b4,
        Speccy59-Ubuntu-x86-bin speccy 0x3dc79-0x3dca1, 0x3ddf0-0x3de10,
-       0x3dcd9-0x3dd64, Speccy.html "Now trying to load ZXS128TR.ROM BIOS file"
+       0x3dcd9-0x3dd64
 
   Thirteen of the nineteen ROMs ship inside the Android package. MainActivity
   reads assets/memfs.mp3 whole and jniStart mounts it through SetMemoryFS as an
@@ -132,7 +135,9 @@ notes: |
   ref: libmain.so LoadFile 0x5c100, 0x5c1e8, 0x5c210, 0x5c234,
        Application 0x57874-0x578d0, StartZXS 0x5af00-0x5af10,
        LoadPAL 0x5b5f4, Speccy59-Ubuntu-x86-bin speccy 0x3f4ac-0x3f4bd,
-       0x3e450-0x3e494, Speccy.html "-palette <filename>"
+       0x3e450-0x3e494, main 0xc25d-0xc29b (option -palette, entry 47: a
+       one digit argument picks a built-in palette at 0xc809-0xc833, any
+       other is stored at 0x6a708, which defaults to Speccy.pal at 0x5aca9)
 
 files:
   - name: ZXS48.ROM
@@ -273,7 +278,7 @@ files:
     crc32: "39ff160a"
     description: "Sam Coupe ROM"
     note: "Read as 32768 bytes for the Sam Coupe, which is a machine of its own in the same flag word, so selecting it clears every Spectrum bit and the trapdoor devices are switched off with it."
-    source_ref: "libmain.so LoadBIOS 0x5b24c-0x5b25c, TryLoadROM 0x5c728-0x5c744, Speccy59-Ubuntu-x86-bin speccy 0x3dc26-0x3dc39, Speccy.html \"Now disabling all trapdoor-based devices in Sam Coupe mode\""
+    source_ref: "libmain.so LoadBIOS 0x5b24c-0x5b25c, TryLoadROM 0x5c728-0x5c744, Speccy59-Ubuntu-x86-bin speccy LoadBIOS 0x3dc26-0x3dc39, reset 0x3df04-0x3df12 (Sam Coupe bit 0x20000000 clears the TRDOS.ROM, IF1.ROM, DISCIPLE.ROM, PLUSD.ROM and Multiface bits, mask 0x7fff0fff)"
 
   - name: TRDOS.ROM
     system: sinclair-zx-spectrum
@@ -296,8 +301,8 @@ files:
     sha1: 5cfb6bca4177c45fefd571734576b55e3a127c08
     crc32: "bb66dd1e"
     description: "Sinclair Interface I ROM"
-    note: "Read as 8192 bytes when the Interface I is on, and dropped silently when it is missing. Snapshots that page it in need it to restore."
-    source_ref: "libmain.so LoadBIOS 0x5b144-0x5b154, Speccy59-Ubuntu-x86-bin speccy 0x3db4c-0x3db5f, Speccy.html \"Fixed some .Z80 snapshots not loading when IF1.ROM is missing\""
+    note: "Read as 8192 bytes when the Interface I is on, and dropped silently when it is missing."
+    source_ref: "libmain.so LoadBIOS 0x5b144-0x5b154, Speccy59-Ubuntu-x86-bin speccy 0x3db4c-0x3db5f"
 
   - name: DISCIPLE.ROM
     system: sinclair-zx-spectrum
@@ -355,8 +360,8 @@ files:
     sha1: 0b53d51635a2ce3d4e12c2077df9aeffeac02517
     crc32: "b58e81f1"
     description: "cheat database read by the Cheatopedia browser"
-    note: "The package ships no cheat set. Cheatopedia looks for the file in the package assets, then in the home directory and its subdirectories, and takes it from Speccy-Cheats.zip in the Downloads directory when that is newer, unpacking it into <HomeDir>/Cheats. The author publishes that archive at fms.komkon.org/EmuAndroid/Speccy-Cheats.zip and states it is what re-enables the cheat features Google Play made him disable in March 2019. The copy read here holds this one file."
-    source_ref: "CheatHelper.java:16-49, Cheatopedia.java:181-188, 256-290, 455, EmuAndroid \"Cheats support\""
+    note: "The package ships no cheat set. Cheatopedia looks for the file in the package assets, then in the home directory and its subdirectories, and takes it from Speccy-Cheats.zip in the Downloads directory when that is newer, unpacking it into <HomeDir>/Cheats. The author publishes that archive at fms.komkon.org/EmuAndroid/Speccy-Cheats.zip, and the copy read here holds this one file."
+    source_ref: "CheatHelper.java:16-49, Cheatopedia.java:181-188, 256-290, 455"
 
   - name: Controls.png
     required: false
@@ -430,5 +435,6 @@ exclusion_note: >
        SndName 0x8b048, StartZXS 0x5aeb0-0x5aec0, Application 0x57848-0x57874,
        LoadRPL 0x77b64, SaveRPL 0x777f8, SaveSCR 0x60838,
        bi.java:189-218, EMULib.java:779, 809,
-       Speccy59-Ubuntu-x86-bin speccy 0xbf50,
-       Speccy.html "[filename] = Name of the file to load [DEFAULT.Z80]"
+       Speccy59-Ubuntu-x86-bin speccy main 0xbf50-0xbf57 (DEFAULT.Z80 as
+       the file to load), 0xbf9a-0xbfa2, 0xbfd4 (a non-option argument
+       replaces it), 0xc05c-0xc060 (passed to the startup routine)

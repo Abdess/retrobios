@@ -965,7 +965,11 @@ def run_once(args: argparse.Namespace, system_dir: Path, scratch: Path, state_ou
             result["exit"] = exit_description(proc.returncode)
     places = [(str(system_dir.resolve()), "<system>"), (str(save_dir.resolve()), "<save>")]
     if args.content:
-        places.append((str(Path(args.content).resolve().parent), "<content>"))
+        folder = Path(args.content).resolve().parent
+        # MAME prints the folder above the content's too ("Parent path").
+        places.append((str(folder), "<content>"))
+        if folder.parent != folder.parent.parent:
+            places.append((str(folder.parent), "<content>/.."))
     places.append((str(ROOT), "<repo>"))
     for line in result.get("logs", []):
         line["text"] = host_paths_hidden(line["text"], places)

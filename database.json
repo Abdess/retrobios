@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-10T01:52:59Z",
-  "total_files": 21936,
-  "total_size": 17343466067,
+  "generated_at": "2026-11-11T14:23:39Z",
+  "total_files": 21938,
+  "total_size": 17343472263,
   "bios_dir": "bios",
   "files": {
     "738c7f5fd0c8b57ee2e87ae7a97bf8e21a821d07": {
@@ -130115,6 +130115,16 @@
         }
       }
     },
+    "2e39fec139e4bed5aa164551e4be009341a94ac2": {
+      "path": "bios/Mattel/Intellivision/intv.zip",
+      "name": "intv.zip",
+      "size": 5101,
+      "sha1": "2e39fec139e4bed5aa164551e4be009341a94ac2",
+      "md5": "d69068bbc45a2a27b8a77c5f23575e5c",
+      "sha256": "7bde005116012be13a5b4f090a914a3aa989001a516b66daded3217ad866af65",
+      "crc32": "607cb583",
+      "adler32": "bf4015f7"
+    },
     "bf5fb954db868e523febccc68549ed9187961076": {
       "path": "bios/Microsoft/MSX/.variants/CARTS.SHA.bf5fb954",
       "name": "CARTS.SHA",
@@ -186587,6 +186597,16 @@
         }
       }
     },
+    "92518b157a349bc8d31a411488a8b65e299a1afa": {
+      "path": "bios/Philips/Videopac/videopac.zip",
+      "name": "videopac.zip",
+      "size": 1095,
+      "sha1": "92518b157a349bc8d31a411488a8b65e299a1afa",
+      "md5": "923dd665faeedf211d63ed945acbb691",
+      "sha256": "71a37c1cd26df1920b186d0bd5730e562ce730b0790b3d7d98d8c594e5fe344c",
+      "crc32": "3e3a27ee",
+      "adler32": "e4f7f8d4"
+    },
     "54b8d2c1317628de51a85fc1c424423a986775e4": {
       "path": "bios/Philips/Videopac+/jopac.bin",
       "name": "jopac.bin",
@@ -237569,6 +237589,7 @@
       "62e761035cb657903761800f4437b8af": "5a65b922b562cb1f57dab51b73151283f0e20c7a",
       "0cd5946c6473e42e8e4c2137785e427f": "f9608bb4ad1cfe3640d02844c7ad8e0bcd974917",
       "d5530f74681ec6e0f282dab42e6b1c5f": "618563e512ff5665183664f52270fa9606c9d289",
+      "d69068bbc45a2a27b8a77c5f23575e5c": "2e39fec139e4bed5aa164551e4be009341a94ac2",
       "74b0f217fa0e2b8bb5a2f8e2ecc69da3": "bf5fb954db868e523febccc68549ed9187961076",
       "254bfa82fa9b34c82d7b9766b193c303": "b7068e2aab02072852ca249596b7550ac632c4c2",
       "5353336d9c81946fa17582daccbb5cae": "1ef3956f7f918873fb9b031339bba45d1e5e5878",
@@ -243101,6 +243122,7 @@
       "5ece9a94220331305f849538c1e255d7": "85452207c2fd87aa3e9d7f47874dc91d107ac556",
       "c500ff71236068e0dc0d0603d265ae76": "5130243429b40b01a14e1304d0394b8459a6fbae",
       "f1071cdb0b6b10dde94d3bc8a6146387": "a6120aed50831c9c0d95dbdf707820f601d9452e",
+      "923dd665faeedf211d63ed945acbb691": "92518b157a349bc8d31a411488a8b65e299a1afa",
       "279008e4a0db2dc5f1c048853b033828": "54b8d2c1317628de51a85fc1c424423a986775e4",
       "515636778430c8e01027234c38c4ddf8": "f7101b40cae0484a0f43f3bbee2d55033ff1e3ec",
       "a5a2f9aae57d464bc66b80ee79c3da6e": "26237b333db4a4c6770297fa5e655ea95840d5d9",
@@ -280145,6 +280167,9 @@
       "IVOICE.BIN": [
         "618563e512ff5665183664f52270fa9606c9d289"
       ],
+      "intv.zip": [
+        "2e39fec139e4bed5aa164551e4be009341a94ac2"
+      ],
       "CARTS.SHA": [
         "bf5fb954db868e523febccc68549ed9187961076",
         "69dd7344e4dfa7e250973a71bbb3e8aa6fb08d81"
@@ -291279,6 +291304,9 @@
       ],
       "O2_PhillipsC52.bin": [
         "a6120aed50831c9c0d95dbdf707820f601d9452e"
+      ],
+      "videopac.zip": [
+        "92518b157a349bc8d31a411488a8b65e299a1afa"
       ],
       "jopac.bin": [
         "54b8d2c1317628de51a85fc1c424423a986775e4"
@@ -307354,6 +307382,9 @@
       "OS6128_UK.rom": [
         "5977adbad3f7c1e0e082cd02fe76a700d9860c30"
       ],
+      "OS6128_UK": [
+        "5977adbad3f7c1e0e082cd02fe76a700d9860c30"
+      ],
       "CPC6128.ROM": [
         "5977adbad3f7c1e0e082cd02fe76a700d9860c30"
       ],
@@ -307363,10 +307394,16 @@
       "OS464_UK.rom": [
         "56d39c463da60968d93e58b4ba0e675829412a20"
       ],
+      "OS464_UK": [
+        "56d39c463da60968d93e58b4ba0e675829412a20"
+      ],
       "CPC464.ROM": [
         "56d39c463da60968d93e58b4ba0e675829412a20"
       ],
       "OS664_UK.rom": [
+        "073a7665527b5bd8a148747a3947dbd3328682c8"
+      ],
+      "OS664_UK": [
         "073a7665527b5bd8a148747a3947dbd3328682c8"
       ],
       "CPC664.ROM": [
@@ -308044,35 +308081,11 @@
       "EFI vmxnet3": [
         "6557242402387a6319a0db6abb916ada48e1391c"
       ],
-      "EDK2 x86_64 UEFI": [
-        "eac1a94b8e0d7c53fd5df001c36794ec34c7c724"
-      ],
-      "EDK2 x86_64 Secure Boot UEFI": [
-        "617abe2746696bb4a309d72cecb446dc76a2a61e"
-      ],
-      "EDK2 i386 UEFI": [
-        "45b8faebdfaaf19d16e3a7c5f60d69214685071c"
-      ],
-      "EDK2 i386 Secure Boot UEFI": [
-        "6982abec8ef2ed7c8293163d5a0bd69a01a2126f"
-      ],
-      "EDK2 i386 UEFI vars template": [
-        "b62e676c9317a32aaa9ee1d76268d8c55663bd6e"
-      ],
       "EDK2 AArch64 UEFI": [
         "514edbce58bfa877170673c1799351a7dab3b6df"
       ],
       "EDK2 ARM UEFI": [
         "c20f01c28b59b388abb9d0febeec45d801a632f0"
-      ],
-      "EDK2 ARM UEFI vars template": [
-        "b051167e0e57bd13d77ed92ef7b474872f44ec6d"
-      ],
-      "EDK2 RISC-V UEFI": [
-        "2c8633d881ece0c4794d740138a318f7e9af480c"
-      ],
-      "EDK2 RISC-V UEFI vars template": [
-        "c4e6cce4247ba8f32f528c1c69f49228f616677f"
       ],
       "OpenBIOS PowerPC": [
         "0ef5051dcb318c0bc45d1908f8318d6eece8686a"
@@ -308085,9 +308098,6 @@
       ],
       "VOF (Virtual Open Firmware)": [
         "fc737b34a390f5752cb7e35b33d71f4f438ab607"
-      ],
-      "VOF NVRAM": [
-        "5d1184609b87f78635f0575467a1c3f440900ff0"
       ],
       "U-Boot e500": [
         "9ea03f249f856cdcb4399cc1f5a5031729379911"
@@ -308125,12 +308135,6 @@
       "S390 network boot": [
         "f6cec671408117bd9a31e982682662f27ef4fb2c"
       ],
-      "HP-PA firmware (32-bit)": [
-        "605c36ede6c120c6cc7efe147a75a3dc4b7e4fb0"
-      ],
-      "HP-PA firmware (64-bit)": [
-        "b42f6d4ca74073de6c038579b4a9323ad0a6b398"
-      ],
       "NPCM7xx boot ROM": [
         "22a75d26a0591d2c7763765b6381fa2f73de43e1"
       ],
@@ -308139,12 +308143,6 @@
       ],
       "Canyonlands DTB (PPC)": [
         "8a2fda0b4f23a92eb44776b5d7ffe951987062da"
-      ],
-      "Petalogix ML605 DTB (MicroBlaze)": [
-        "892d265838866869b8a8ef104252ff5b2fda156f"
-      ],
-      "Petalogix S3ADSP1800 DTB (MicroBlaze)": [
-        "976600e3f89ecc1f3564b7077f53c58e0b565280"
       ],
       "N88_1.ROM": [
         "4ae4d37409ff99411a623da9f6a44192170a854e",
@@ -321477,6 +321475,7 @@
       "cbce86f7": "5a65b922b562cb1f57dab51b73151283f0e20c7a",
       "683a4158": "f9608bb4ad1cfe3640d02844c7ad8e0bcd974917",
       "0de7579d": "618563e512ff5665183664f52270fa9606c9d289",
+      "607cb583": "2e39fec139e4bed5aa164551e4be009341a94ac2",
       "d42f4444": "bf5fb954db868e523febccc68549ed9187961076",
       "ac7d92b4": "b7068e2aab02072852ca249596b7550ac632c4c2",
       "a068cba9": "1ef3956f7f918873fb9b031339bba45d1e5e5878",
@@ -327009,6 +327008,7 @@
       "24c3aae8": "85452207c2fd87aa3e9d7f47874dc91d107ac556",
       "e20a9f41": "5130243429b40b01a14e1304d0394b8459a6fbae",
       "a318e8d6": "a6120aed50831c9c0d95dbdf707820f601d9452e",
+      "3e3a27ee": "92518b157a349bc8d31a411488a8b65e299a1afa",
       "11647ca5": "54b8d2c1317628de51a85fc1c424423a986775e4",
       "1493522c": "f7101b40cae0484a0f43f3bbee2d55033ff1e3ec",
       "00eedb3a": "26237b333db4a4c6770297fa5e655ea95840d5d9",
@@ -343414,6 +343414,7 @@
       "1aeb614856beba95463166daf09304b414d5617d3f37d221724b3337fc4b2722": "5a65b922b562cb1f57dab51b73151283f0e20c7a",
       "a80b6841182547d08635ad30a6af71441c4c9eed9391b3dd22feb30d8e50cc85": "f9608bb4ad1cfe3640d02844c7ad8e0bcd974917",
       "dabade432af1523f43029057071ca8c1ed3604498c784603e8733023382ad7a5": "618563e512ff5665183664f52270fa9606c9d289",
+      "7bde005116012be13a5b4f090a914a3aa989001a516b66daded3217ad866af65": "2e39fec139e4bed5aa164551e4be009341a94ac2",
       "0a09940701f40647a2715271b43c9ab0d82bd488871427ad627b7e0f462f5dda": "bf5fb954db868e523febccc68549ed9187961076",
       "e33df7537335c0b6402ced6b3be70ef305e9158896e90b7939f8d406e5184b03": "b7068e2aab02072852ca249596b7550ac632c4c2",
       "01f43988d825d48a46915199b6cd42ae1505bdf83d642511204c50ecdf95c741": "1ef3956f7f918873fb9b031339bba45d1e5e5878",
@@ -348946,6 +348947,7 @@
       "31eaec79a1904101a61715ba870319d6cbe67d5d48705aa9ddc94cc81c2c45ad": "85452207c2fd87aa3e9d7f47874dc91d107ac556",
       "8e0413c324a748ca2e493652b8089aa1db129e1ba115b5f58a99e32cebe063e1": "5130243429b40b01a14e1304d0394b8459a6fbae",
       "2ab1b2c7f4b28a74d0ecf3e073088fac19ce40866404420c70576e1862bb5502": "a6120aed50831c9c0d95dbdf707820f601d9452e",
+      "71a37c1cd26df1920b186d0bd5730e562ce730b0790b3d7d98d8c594e5fe344c": "92518b157a349bc8d31a411488a8b65e299a1afa",
       "dd48b75c56dbe1524dee18defa448a74f648653eb209ccba93066a7a0fe6a074": "54b8d2c1317628de51a85fc1c424423a986775e4",
       "369c1e699abbaecd231a3ab7b98443d28097366ff3cdd978698417195d54ca3c": "f7101b40cae0484a0f43f3bbee2d55033ff1e3ec",
       "dca942d977217f703d8d1c6eb1aeb6b32c78ecc421486bbb46c459d385161c94": "26237b333db4a4c6770297fa5e655ea95840d5d9",
@@ -513039,6 +513041,12 @@
       "Intellivision/IVOICE.BIN": [
         "618563e512ff5665183664f52270fa9606c9d289"
       ],
+      "Mattel/Intellivision/intv.zip": [
+        "2e39fec139e4bed5aa164551e4be009341a94ac2"
+      ],
+      "Intellivision/intv.zip": [
+        "2e39fec139e4bed5aa164551e4be009341a94ac2"
+      ],
       "Microsoft/MSX/.variants/CARTS.SHA.bf5fb954": [
         "bf5fb954db868e523febccc68549ed9187961076"
       ],
@@ -576276,6 +576284,12 @@
       ],
       "Videopac/O2_PhillipsC52.bin": [
         "a6120aed50831c9c0d95dbdf707820f601d9452e"
+      ],
+      "Philips/Videopac/videopac.zip": [
+        "92518b157a349bc8d31a411488a8b65e299a1afa"
+      ],
+      "Videopac/videopac.zip": [
+        "92518b157a349bc8d31a411488a8b65e299a1afa"
       ],
       "Philips/Videopac+/jopac.bin": [
         "54b8d2c1317628de51a85fc1c424423a986775e4"

@@ -93,6 +93,17 @@ folders:
   core: puae
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:947"
+  offers:
+  - emulator: AMIBERRY
+    core: AMIBERRY-LITE
+  - emulator: AMIBERRY
+    core: AMIBERRY
+  - emulator: libretro
+    core: puae
+  - emulator: libretro
+    core: puae2021
+  - emulator: libretro
+    core: uae4arm_32b
 - folder: amigacd32
   extensions:
   - .chd
@@ -104,6 +115,17 @@ folders:
   core: puae
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:999"
+  offers:
+  - emulator: AMIBERRY
+    core: AMIBERRY-LITE
+  - emulator: AMIBERRY
+    core: AMIBERRY
+  - emulator: libretro
+    core: puae
+  - emulator: libretro
+    core: puae2021
+  - emulator: libretro
+    core: uae4arm_32b
 - folder: amstradcpc
   extensions:
   - .7z
@@ -159,6 +181,11 @@ folders:
   core: applewin
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:244"
+  offers:
+  - emulator: libretro
+    core: applewin
+  - emulator: libretro
+    core: mame
 - folder: arcade
   extensions:
   - .7z
@@ -168,6 +195,21 @@ folders:
   core: mame2003_plus
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:82"
+  offers:
+  - emulator: AdvanceMame
+    core: AdvanceMame
+  - emulator: libretro
+    core: mame2003_plus
+  - emulator: libretro
+    core: mame2010
+  - emulator: libretro
+    core: fbneo
+  - emulator: libretro
+    core: fbalpha2012
+  - emulator: libretro
+    core: mame
+  - emulator: FBNEOSA
+    core: FbneoSA
   arcade: true
 - folder: arcadia
   extensions:
@@ -178,6 +220,11 @@ folders:
   core: amiarcadia
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:4760"
+  offers:
+  - emulator: libretro
+    core: amiarcadia
+  - emulator: libretro
+    core: mame
 - folder: archimedes
   extensions:
   - '.360'
@@ -240,6 +287,11 @@ folders:
   core: STELLASA
   emulator: STELLASA
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:338"
+  offers:
+  - emulator: STELLASA
+    core: STELLASA
+  - emulator: libretro
+    core: stella
 - folder: atari5200
   extensions:
   - .7z
@@ -256,6 +308,11 @@ folders:
   core: a5200
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:374"
+  offers:
+  - emulator: libretro
+    core: a5200
+  - emulator: libretro
+    core: atari800
 - folder: atari7800
   extensions:
   - .7z
@@ -291,6 +348,11 @@ folders:
   core: bigpemu
   emulator: bigpemu
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:550"
+  offers:
+  - emulator: bigpemu
+    core: bigpemu
+  - emulator: libretro
+    core: virtualjaguar
 - folder: atarijaguarcd
   extensions:
   - .abs
@@ -305,6 +367,11 @@ folders:
   core: bigpemu
   emulator: bigpemu
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:586"
+  offers:
+  - emulator: bigpemu
+    core: bigpemu
+  - emulator: libretro
+    core: virtualjaguar
 - folder: atarilynx
   extensions:
   - .7z
@@ -313,6 +380,13 @@ folders:
   core: handy
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:477"
+  offers:
+  - emulator: libretro
+    core: handy
+  - emulator: libretro
+    core: mednafen_lynx
+  - emulator: libretro
+    core: gearlynx
 - folder: atarist
   extensions:
   - .7z
@@ -326,6 +400,11 @@ folders:
   core: hatari
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:510"
+  offers:
+  - emulator: HATARISA
+    core: HATARISA
+  - emulator: libretro
+    core: hatari
 - folder: atomiswave
   extensions:
   - .7z
@@ -336,6 +415,19 @@ folders:
   core: flycast
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:3158"
+  offers:
+  - emulator: libretro
+    core: flycast
+  - emulator: libretro
+    core: flycast_32b
+  - emulator: flycastsa
+    core: flycastsa
+  - emulator: flycast_dojo
+    core: flycast_dojo
+  - emulator: retrorun
+    core: flycast
+  - emulator: retrorun
+    core: flycast_32b
   arcade: true
 - folder: bbc
   extensions:
@@ -372,6 +464,11 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:4499"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: libretro
+    core: b2
 - folder: bk
   extensions:
   - .bin
@@ -417,6 +514,11 @@ folders:
   core: vice_x64
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:912"
+  offers:
+  - emulator: libretro
+    core: vice_x64
+  - emulator: libretro
+    core: vice_x64sc
 - folder: cassettevision
   extensions:
   - .bin
@@ -470,6 +572,11 @@ folders:
   core: xroar
   emulator: xroar
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:5630"
+  offers:
+  - emulator: xroar
+    core: xroar
+  - emulator: libretro
+    core: mame
 - folder: coco3
   extensions:
   - .7z
@@ -492,6 +599,11 @@ folders:
   core: xroar
   emulator: xroar
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:5679"
+  offers:
+  - emulator: xroar
+    core: xroar
+  - emulator: libretro
+    core: mame
 - folder: coleco
   name: colecovision
   extensions:
@@ -503,6 +615,13 @@ folders:
   core: bluemsx
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:844"
+  offers:
+  - emulator: libretro
+    core: bluemsx
+  - emulator: libretro
+    core: gearcoleco
+  - emulator: libretro
+    core: jollycv
 - folder: cps1
   extensions:
   - .7z
@@ -510,6 +629,21 @@ folders:
   core: fbneo
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:682"
+  offers:
+  - emulator: AdvanceMame
+    core: AdvanceMame
+  - emulator: libretro
+    core: mame2003_plus
+  - emulator: libretro
+    core: mame2010
+  - emulator: libretro
+    core: fbneo
+  - emulator: libretro
+    core: fbalpha2012
+  - emulator: libretro
+    core: mame
+  - emulator: FBNEOSA
+    core: FbneoSA
   arcade: true
 - folder: cps2
   extensions:
@@ -518,6 +652,21 @@ folders:
   core: fbneo
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:736"
+  offers:
+  - emulator: AdvanceMame
+    core: AdvanceMame
+  - emulator: libretro
+    core: mame2003_plus
+  - emulator: libretro
+    core: mame2010
+  - emulator: libretro
+    core: fbneo
+  - emulator: libretro
+    core: fbalpha2012
+  - emulator: libretro
+    core: mame
+  - emulator: FBNEOSA
+    core: FbneoSA
   arcade: true
 - folder: cps3
   extensions:
@@ -526,6 +675,21 @@ folders:
   core: fbneo
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:790"
+  offers:
+  - emulator: AdvanceMame
+    core: AdvanceMame
+  - emulator: libretro
+    core: mame2003_plus
+  - emulator: libretro
+    core: mame2010
+  - emulator: libretro
+    core: fbneo
+  - emulator: libretro
+    core: fbalpha2012
+  - emulator: libretro
+    core: mame
+  - emulator: FBNEOSA
+    core: FbneoSA
   arcade: true
 - folder: crvision
   extensions:
@@ -537,12 +701,22 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:4820"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: libretro
+    core: jollycv
 - folder: daphne
   extensions:
   - .daphne
   core: HYPSEUS
   emulator: HYPSEUS
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:1197"
+  offers:
+  - emulator: HYPSEUS
+    core: HYPSEUS
+  - emulator: libretro
+    core: daphne
   arcade: true
 - folder: dice
   extensions:
@@ -573,6 +747,11 @@ folders:
   core: xroar
   emulator: xroar
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:5532"
+  offers:
+  - emulator: xroar
+    core: xroar
+  - emulator: libretro
+    core: mame
 - folder: dragon64
   extensions:
   - .7z
@@ -595,6 +774,11 @@ folders:
   core: xroar
   emulator: xroar
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:5581"
+  offers:
+  - emulator: xroar
+    core: xroar
+  - emulator: libretro
+    core: mame
 - folder: dreamcast
   extensions:
   - .7z
@@ -606,6 +790,19 @@ folders:
   core: flycast
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:3098"
+  offers:
+  - emulator: libretro
+    core: flycast
+  - emulator: libretro
+    core: flycast_32b
+  - emulator: flycastsa
+    core: flycastsa
+  - emulator: flycast_dojo
+    core: flycast_dojo
+  - emulator: retrorun
+    core: flycast
+  - emulator: retrorun
+    core: flycast_32b
 - folder: dreamm
   extensions:
   - .dreamm
@@ -662,6 +859,15 @@ folders:
   core: nestopia
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:2052"
+  offers:
+  - emulator: libretro
+    core: nestopia
+  - emulator: libretro
+    core: fceumm
+  - emulator: libretro
+    core: fceumm_mod
+  - emulator: libretro
+    core: mesen
 - folder: fbneo
   name: fbn
   extensions:
@@ -671,6 +877,15 @@ folders:
   core: fbneo
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:1291"
+  offers:
+  - emulator: libretro
+    core: fbneo
+  - emulator: libretro
+    core: mame2003_plus
+  - emulator: libretro
+    core: fbalpha2012
+  - emulator: FBNEOSA
+    core: FbneoSA
   arcade: true
 - folder: fds
   extensions:
@@ -680,6 +895,15 @@ folders:
   core: nestopia
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:2091"
+  offers:
+  - emulator: libretro
+    core: nestopia
+  - emulator: libretro
+    core: fceumm
+  - emulator: libretro
+    core: fceumm_mod
+  - emulator: libretro
+    core: mesen
 - folder: flash
   extensions:
   - .swf
@@ -728,6 +952,13 @@ folders:
   core: tsugaru
   emulator: tsugaru
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:192"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: libretro
+    core: geartowns
+  - emulator: tsugaru
+    core: tsugaru
 - folder: freej2me
   extensions:
   - .jar
@@ -772,6 +1003,13 @@ folders:
   core: gearsystem
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:3217"
+  offers:
+  - emulator: libretro
+    core: gearsystem
+  - emulator: libretro
+    core: genesis_plus_gx
+  - emulator: libretro
+    core: picodrive
 - folder: gamegearh
   name: ggh
   extensions:
@@ -782,6 +1020,13 @@ folders:
   core: gearsystem
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:3251"
+  offers:
+  - emulator: libretro
+    core: gearsystem
+  - emulator: libretro
+    core: genesis_plus_gx
+  - emulator: libretro
+    core: picodrive
 - folder: gb
   extensions:
   - .7z
@@ -790,6 +1035,23 @@ folders:
   core: gambatte
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:2127"
+  offers:
+  - emulator: libretro
+    core: gambatte
+  - emulator: libretro
+    core: gearboy
+  - emulator: libretro
+    core: sameboy
+  - emulator: libretro
+    core: tgbdual
+  - emulator: libretro
+    core: mgba
+  - emulator: libretro
+    core: vbam
+  - emulator: libretro
+    core: vba_next
+  - emulator: libretro
+    core: mesen-s
 - folder: gba
   extensions:
   - .7z
@@ -798,6 +1060,15 @@ folders:
   core: mgba
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:2175"
+  offers:
+  - emulator: libretro
+    core: mgba
+  - emulator: libretro
+    core: gpsp
+  - emulator: libretro
+    core: vbam
+  - emulator: libretro
+    core: vba_next
 - folder: gbah
   extensions:
   - .7z
@@ -806,6 +1077,15 @@ folders:
   core: mgba
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:2211"
+  offers:
+  - emulator: libretro
+    core: mgba
+  - emulator: libretro
+    core: gpsp
+  - emulator: libretro
+    core: vbam
+  - emulator: libretro
+    core: vba_next
 - folder: gbc
   extensions:
   - .7z
@@ -815,6 +1095,23 @@ folders:
   core: gambatte
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:2247"
+  offers:
+  - emulator: libretro
+    core: gambatte
+  - emulator: libretro
+    core: gearboy
+  - emulator: libretro
+    core: sameboy
+  - emulator: libretro
+    core: tgbdual
+  - emulator: libretro
+    core: mgba
+  - emulator: libretro
+    core: vbam
+  - emulator: libretro
+    core: vba_next
+  - emulator: libretro
+    core: mesen-s
 - folder: gbch
   extensions:
   - .7z
@@ -824,6 +1121,23 @@ folders:
   core: gambatte
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:2296"
+  offers:
+  - emulator: libretro
+    core: gambatte
+  - emulator: libretro
+    core: gearboy
+  - emulator: libretro
+    core: sameboy
+  - emulator: libretro
+    core: tgbdual
+  - emulator: libretro
+    core: mgba
+  - emulator: libretro
+    core: vbam
+  - emulator: libretro
+    core: vba_next
+  - emulator: libretro
+    core: mesen-s
 - folder: gbh
   extensions:
   - .7z
@@ -832,6 +1146,23 @@ folders:
   core: gambatte
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:2345"
+  offers:
+  - emulator: libretro
+    core: gambatte
+  - emulator: libretro
+    core: gearboy
+  - emulator: libretro
+    core: sameboy
+  - emulator: libretro
+    core: tgbdual
+  - emulator: libretro
+    core: mgba
+  - emulator: libretro
+    core: vbam
+  - emulator: libretro
+    core: vba_next
+  - emulator: libretro
+    core: mesen-s
 - folder: genesis
   extensions:
   - .68k
@@ -846,6 +1177,17 @@ folders:
   core: genesis_plus_gx
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:3285"
+  offers:
+  - emulator: libretro
+    core: genesis_plus_gx
+  - emulator: libretro
+    core: genesis_plus_gx_cart_special
+  - emulator: libretro
+    core: genesis_plus_gx_wide
+  - emulator: libretro
+    core: clownmdemu
+  - emulator: libretro
+    core: picodrive
 - folder: genh
   extensions:
   - .68k
@@ -860,6 +1202,17 @@ folders:
   core: genesis_plus_gx
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:3330"
+  offers:
+  - emulator: libretro
+    core: genesis_plus_gx
+  - emulator: libretro
+    core: genesis_plus_gx_wide
+  - emulator: libretro
+    core: genesis_plus_gx_cart_special
+  - emulator: libretro
+    core: clownmdemu
+  - emulator: libretro
+    core: picodrive
 - folder: gmaster
   extensions:
   - .7z
@@ -879,6 +1232,11 @@ folders:
   core: gp32emu
   emulator: libretro
   source_ref: os packages/sx05re/emuelec-emulationstation/config/es_systems.json
+  offers:
+  - emulator: libretro
+    core: gp32emu
+  - emulator: libretro
+    core: mame
 - folder: ikemen
   extensions:
   - .exe
@@ -897,6 +1255,11 @@ folders:
   core: freeintv
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:1544"
+  offers:
+  - emulator: libretro
+    core: freeintv
+  - emulator: jzintv
+    core: jzintv
 - folder: iphone
   extensions:
   - .app
@@ -957,6 +1320,13 @@ folders:
   core: basilisk2
   emulator: basilisk2
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:4581"
+  offers:
+  - emulator: basilisk2
+    core: basilisk2
+  - emulator: libretro
+    core: mame
+  - emulator: libretro
+    core: minivmac
 - folder: mame
   extensions:
   - .7z
@@ -966,6 +1336,21 @@ folders:
   core: AdvanceMame
   emulator: AdvanceMame
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:137"
+  offers:
+  - emulator: AdvanceMame
+    core: AdvanceMame
+  - emulator: libretro
+    core: mame2003_plus
+  - emulator: libretro
+    core: mame2010
+  - emulator: libretro
+    core: fbneo
+  - emulator: libretro
+    core: fbalpha2012
+  - emulator: libretro
+    core: mame
+  - emulator: FBNEOSA
+    core: FbneoSA
   arcade: true
   note: the list names 3 systems mame
 - folder: mastersystem
@@ -977,6 +1362,15 @@ folders:
   core: gearsystem
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:3375"
+  offers:
+  - emulator: libretro
+    core: gearsystem
+  - emulator: libretro
+    core: genesis_plus_gx
+  - emulator: libretro
+    core: clownmdemu
+  - emulator: libretro
+    core: picodrive
 - folder: mc10
   extensions:
   - .7z
@@ -999,6 +1393,11 @@ folders:
   core: xroar
   emulator: xroar
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:5728"
+  offers:
+  - emulator: xroar
+    core: xroar
+  - emulator: libretro
+    core: mame
 - folder: megadrive
   extensions:
   - .68k
@@ -1013,6 +1412,17 @@ folders:
   core: genesis_plus_gx
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:3412"
+  offers:
+  - emulator: libretro
+    core: genesis_plus_gx
+  - emulator: libretro
+    core: genesis_plus_gx_cart_special
+  - emulator: libretro
+    core: clownmdemu
+  - emulator: libretro
+    core: genesis_plus_gx_wide
+  - emulator: libretro
+    core: picodrive
 - folder: megadrive-japan
   extensions:
   - .68k
@@ -1027,6 +1437,17 @@ folders:
   core: genesis_plus_gx
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:3494"
+  offers:
+  - emulator: libretro
+    core: genesis_plus_gx
+  - emulator: libretro
+    core: genesis_plus_gx_wide
+  - emulator: libretro
+    core: clownmdemu
+  - emulator: libretro
+    core: genesis_plus_gx_cart_special
+  - emulator: libretro
+    core: picodrive
 - folder: megadrivemsu
   extensions:
   - .7z
@@ -1039,6 +1460,13 @@ folders:
   core: genesis_plus_gx_wide
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:3457"
+  offers:
+  - emulator: libretro
+    core: genesis_plus_gx_wide
+  - emulator: libretro
+    core: clownmdemu
+  - emulator: libretro
+    core: genesis_plus_gx
 - folder: megaduck
   extensions:
   - .7z
@@ -1057,6 +1485,11 @@ folders:
   core: mame
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:5314"
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: mvem
+    core: mvem
 - folder: mplayer
   extensions:
   - .3g2
@@ -1105,6 +1538,11 @@ folders:
   core: mpv
   emulator: mpv
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:1581"
+  offers:
+  - emulator: mpv
+    core: mpv
+  - emulator: ffplay
+    core: ffplay
 - folder: msx
   extensions:
   - .7z
@@ -1118,6 +1556,13 @@ folders:
   core: openmsx
   emulator: openmsx
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:1331"
+  offers:
+  - emulator: openmsx
+    core: openmsx
+  - emulator: libretro
+    core: bluemsx
+  - emulator: libretro
+    core: fmsx
 - folder: msx2
   extensions:
   - .7z
@@ -1131,6 +1576,13 @@ folders:
   core: openmsx
   emulator: openmsx
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:1374"
+  offers:
+  - emulator: openmsx
+    core: openmsx
+  - emulator: libretro
+    core: bluemsx
+  - emulator: libretro
+    core: fmsx
 - folder: msx2+
   extensions:
   - .7z
@@ -1144,6 +1596,13 @@ folders:
   core: openmsx
   emulator: openmsx
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:1417"
+  offers:
+  - emulator: openmsx
+    core: openmsx
+  - emulator: libretro
+    core: bluemsx
+  - emulator: libretro
+    core: fmsx
 - folder: msxlaserdisc
   extensions:
   - .ogv
@@ -1171,6 +1630,11 @@ folders:
   core: memu
   emulator: memu
   source_ref: os packages/sx05re/emuelec-emulationstation/config/es_systems.json
+  offers:
+  - emulator: memu
+    core: memu
+  - emulator: libretro
+    core: mame
 - folder: multivision
   extensions:
   - .7z
@@ -1190,6 +1654,19 @@ folders:
   core: mupen64plus_next
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:1895"
+  offers:
+  - emulator: libretro
+    core: mupen64plus_next
+  - emulator: libretro
+    core: mupen64plus_next_alt
+  - emulator: libretro
+    core: mupen64plus_32b
+  - emulator: libretro
+    core: parallel_n64_32b
+  - emulator: mupen64plussa
+    core: rice
+  - emulator: mupen64plussa
+    core: glide64mk2
 - folder: naomi
   extensions:
   - .7z
@@ -1200,6 +1677,19 @@ folders:
   core: flycast
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:3566"
+  offers:
+  - emulator: libretro
+    core: flycast
+  - emulator: libretro
+    core: flycast_32b
+  - emulator: flycastsa
+    core: flycastsa
+  - emulator: flycast_dojo
+    core: flycast_dojo
+  - emulator: retrorun
+    core: flycast
+  - emulator: retrorun
+    core: flycast_32b
   arcade: true
 - folder: native32
   extensions:
@@ -1218,6 +1708,11 @@ folders:
   core: melonds
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:1944"
+  offers:
+  - emulator: libretro
+    core: melonds
+  - emulator: libretro
+    core: desmume
 - folder: neocd
   extensions:
   - .7z
@@ -1228,6 +1723,11 @@ folders:
   core: neocd
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:2917"
+  offers:
+  - emulator: libretro
+    core: neocd
+  - emulator: libretro
+    core: fbneo
 - folder: neogeo
   extensions:
   - .7z
@@ -1236,6 +1736,17 @@ folders:
   core: fbneo
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:2873"
+  offers:
+  - emulator: libretro
+    core: fbneo
+  - emulator: libretro
+    core: mame2003_plus
+  - emulator: libretro
+    core: fbalpha2012
+  - emulator: libretro
+    core: geolith
+  - emulator: FBNEOSA
+    core: FbneoSA
 - folder: nes
   extensions:
   - .7z
@@ -1247,6 +1758,15 @@ folders:
   core: nestopia
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:1974"
+  offers:
+  - emulator: libretro
+    core: nestopia
+  - emulator: libretro
+    core: fceumm
+  - emulator: libretro
+    core: fceumm_mod
+  - emulator: libretro
+    core: mesen
 - folder: nesh
   extensions:
   - .7z
@@ -1258,6 +1778,15 @@ folders:
   core: nestopia
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:2013"
+  offers:
+  - emulator: libretro
+    core: nestopia
+  - emulator: libretro
+    core: fceumm
+  - emulator: libretro
+    core: fceumm_mod
+  - emulator: libretro
+    core: mesen
 - folder: ngage
   extensions:
   - .ngage
@@ -1298,6 +1827,11 @@ folders:
   core: OpenBOR
   emulator: OPENBOR
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:2764"
+  offers:
+  - emulator: OPENBOR
+    core: OpenBOR
+  - emulator: OPENBOR
+    core: OpenBORff
 - folder: oricatmos
   name: oricutron
   extensions:
@@ -1308,6 +1842,11 @@ folders:
   core: oricutron
   emulator: oricutron
   source_ref: os packages/sx05re/emuelec-emulationstation/config/es_systems.json
+  offers:
+  - emulator: oricutron
+    core: oricutron
+  - emulator: libretro
+    core: mame
 - folder: p2000t
   name: m2000
   extensions:
@@ -1338,6 +1877,15 @@ folders:
   core: dosbox_pure
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:1107"
+  offers:
+  - emulator: DOSBOXSDL2
+    core: DOSBOXSDL2
+  - emulator: libretro
+    core: dosbox_pure
+  - emulator: libretro
+    core: dosbox_svn
+  - emulator: libretro
+    core: virtualxt
 - folder: pc88
   extensions:
   - .d88
@@ -1369,6 +1917,11 @@ folders:
   core: np2kai
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:1153"
+  offers:
+  - emulator: libretro
+    core: np2kai
+  - emulator: libretro
+    core: nekop2
 - folder: pcengine
   extensions:
   - .7z
@@ -1378,6 +1931,13 @@ folders:
   core: mednafen_pce_fast
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:1683"
+  offers:
+  - emulator: libretro
+    core: mednafen_pce_fast
+  - emulator: libretro
+    core: mednafen_supergrafx
+  - emulator: libretro
+    core: geargrafx
 - folder: pcenginecd
   extensions:
   - .7z
@@ -1392,6 +1952,13 @@ folders:
   core: mednafen_pce_fast
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:1717"
+  offers:
+  - emulator: libretro
+    core: mednafen_pce_fast
+  - emulator: libretro
+    core: mednafen_supergrafx
+  - emulator: libretro
+    core: geargrafx
 - folder: pcfx
   extensions:
   - .ccd
@@ -1426,6 +1993,11 @@ folders:
   core: Pico-8
   emulator: Pico-8
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:4090"
+  offers:
+  - emulator: Pico-8
+    core: Pico-8
+  - emulator: libretro
+    core: fake08
   note: the list names 2 systems pico8
 - folder: pokemini
   extensions:
@@ -1445,6 +2017,15 @@ folders:
   core: Chocolate-Doom
   emulator: Chocolate-Doom
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:4124"
+  offers:
+  - emulator: libretro
+    core: prboom
+  - emulator: Chocolate-Doom
+    core: Chocolate-Doom
+  - emulator: LZDoom
+    core: LZDoom
+  - emulator: GZDoom
+    core: GZDoom
 - folder: ports/ecwolf/games
   name: ecwolf
   extensions:
@@ -1506,6 +2087,15 @@ folders:
   core: pcsx_rearmed_32b
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:3906"
+  offers:
+  - emulator: libretro
+    core: pcsx_rearmed_32b
+  - emulator: libretro
+    core: pcsx_rearmed
+  - emulator: libretro
+    core: swanstation
+  - emulator: Duckstation
+    core: duckstation
 - folder: puzzlescript
   extensions:
   - .pz
@@ -1543,6 +2133,11 @@ folders:
   core: snes9x
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:2649"
+  offers:
+  - emulator: libretro
+    core: snes9x
+  - emulator: libretro
+    core: mesen-s
 - folder: saturn
   extensions:
   - .bin
@@ -1554,6 +2149,15 @@ folders:
   core: yabasanshiroSA1_5
   emulator: yabasanshiro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:3687"
+  offers:
+  - emulator: libretro
+    core: yabasanshiro
+  - emulator: libretro
+    core: mednafen_saturn
+  - emulator: yabasanshiro
+    core: yabasanshiroSA
+  - emulator: yabasanshiro
+    core: yabasanshiroSA1_5
 - folder: sc-3000
   extensions:
   - .7z
@@ -1569,6 +2173,11 @@ folders:
   core: SCUMMVMSA
   emulator: SCUMMVMSA
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:3003"
+  offers:
+  - emulator: SCUMMVMSA
+    core: SCUMMVMSA
+  - emulator: libretro
+    core: scummvm
 - folder: scv
   extensions:
   - '.0'
@@ -1598,6 +2207,11 @@ folders:
   core: genesis_plus_gx
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:3065"
+  offers:
+  - emulator: libretro
+    core: genesis_plus_gx
+  - emulator: libretro
+    core: picodrive
 - folder: sfc
   extensions:
   - .7z
@@ -1615,6 +2229,19 @@ folders:
   core: snes9x
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:2420"
+  offers:
+  - emulator: libretro
+    core: snes9x
+  - emulator: libretro
+    core: snes9x2010
+  - emulator: libretro
+    core: snes9x2002
+  - emulator: libretro
+    core: snes9x2005_plus
+  - emulator: libretro
+    core: mesen-s
+  - emulator: libretro
+    core: mednafen_supafaust
 - folder: sg-1000
   extensions:
   - .7z
@@ -1624,6 +2251,13 @@ folders:
   core: gearsystem
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:3653"
+  offers:
+  - emulator: libretro
+    core: gearsystem
+  - emulator: libretro
+    core: genesis_plus_gx
+  - emulator: libretro
+    core: picodrive
 - folder: snes
   extensions:
   - .7z
@@ -1641,6 +2275,19 @@ folders:
   core: snes9x
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:2471"
+  offers:
+  - emulator: libretro
+    core: snes9x
+  - emulator: libretro
+    core: snes9x2010
+  - emulator: libretro
+    core: snes9x2002
+  - emulator: libretro
+    core: snes9x2005_plus
+  - emulator: libretro
+    core: mesen-s
+  - emulator: libretro
+    core: mednafen_supafaust
 - folder: snesh
   extensions:
   - .7z
@@ -1658,6 +2305,19 @@ folders:
   core: snes9x
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:2522"
+  offers:
+  - emulator: libretro
+    core: snes9x
+  - emulator: libretro
+    core: snes9x2010
+  - emulator: libretro
+    core: snes9x2002
+  - emulator: libretro
+    core: snes9x2005_plus
+  - emulator: libretro
+    core: mesen-s
+  - emulator: libretro
+    core: mednafen_supafaust
 - folder: snesmsu1
   extensions:
   - .7z
@@ -1675,6 +2335,13 @@ folders:
   core: snes9x
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:2573"
+  offers:
+  - emulator: libretro
+    core: snes9x
+  - emulator: libretro
+    core: mednafen_supafaust
+  - emulator: libretro
+    core: mesen-s
 - folder: socrates
   extensions:
   - .7z
@@ -1702,6 +2369,11 @@ folders:
   core: snes9x
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:2615"
+  offers:
+  - emulator: libretro
+    core: snes9x
+  - emulator: libretro
+    core: mesen-s
 - folder: supergrafx
   extensions:
   - .7z
@@ -1714,6 +2386,13 @@ folders:
   core: mednafen_supergrafx
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:1785"
+  offers:
+  - emulator: libretro
+    core: mednafen_supergrafx
+  - emulator: libretro
+    core: mednafen_pce_fast
+  - emulator: libretro
+    core: geargrafx
 - folder: supervision
   extensions:
   - .7z
@@ -1732,6 +2411,13 @@ folders:
   core: mednafen_pce_fast
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:1822"
+  offers:
+  - emulator: libretro
+    core: mednafen_pce_fast
+  - emulator: libretro
+    core: mednafen_supergrafx
+  - emulator: libretro
+    core: geargrafx
 - folder: tg16cd
   extensions:
   - .7z
@@ -1746,6 +2432,13 @@ folders:
   core: mednafen_pce_fast
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:1856"
+  offers:
+  - emulator: libretro
+    core: mednafen_pce_fast
+  - emulator: libretro
+    core: mednafen_supergrafx
+  - emulator: libretro
+    core: geargrafx
 - folder: thomson
   name: theodore
   extensions:
@@ -1777,6 +2470,11 @@ folders:
   core: mame
   emulator: libretro
   source_ref: os packages/sx05re/emuelec-emulationstation/config/es_systems.json
+  offers:
+  - emulator: libretro
+    core: mame
+  - emulator: ti99sim
+    core: ti99sim
 - folder: tic-80
   extensions:
   - .tic
@@ -1800,6 +2498,11 @@ folders:
   core: amiarcadia
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:4791"
+  offers:
+  - emulator: libretro
+    core: amiarcadia
+  - emulator: libretro
+    core: mame
 - folder: uzebox
   extensions:
   - .hex
@@ -1819,6 +2522,11 @@ folders:
   core: amiarcadia
   emulator: libretro
   source_ref: "os packages/sx05re/emuelec-emulationstation/config/es_systems.json:5101"
+  offers:
+  - emulator: libretro
+    core: amiarcadia
+  - emulator: libretro
+    core: mame
 - folder: vectrex
   extensions:
   - .7z

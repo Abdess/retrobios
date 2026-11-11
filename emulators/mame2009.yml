@@ -46,7 +46,9 @@ notes: |
   moderately low-powered devices. Hosted on r-type's GitHub (not in
   the libretro org).
 
-  BIOS ZIPs are loaded from the content directory (ROM folder).
+  BIOS ZIPs are loaded from the content directory (ROM folder): -rompath
+  is MgamePath, the folder of the loaded game (src/osd/retro/retromain.c:
+  379, 432-434).
   Cheats use per-game XML files in system_dir/mame2009/cheat/.
   Samples in system_dir/mame2009/samples/.
   Artwork in system_dir/mame2009/artwork/.
@@ -62,6 +64,7 @@ files:
   - name: neogeo.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: snk-neogeo-mvs
     source_ref: "upstream src/mame/drivers/neodrvr.c:7833"
 
@@ -69,6 +72,7 @@ files:
   - name: pgm.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: igs-pgm
     source_ref: "upstream src/mame/drivers/pgm.c:4375"
 
@@ -76,24 +80,28 @@ files:
   - name: naomi.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: sega-naomi
     source_ref: "upstream src/mame/drivers/naomi.c:4499"
 
   - name: naomi2.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: sega-naomi2
     source_ref: "upstream src/mame/drivers/naomi.c:5869"
 
   - name: naomigd.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: sega-naomigd
     source_ref: "upstream src/mame/drivers/naomi.c:5411"
 
   - name: awbios.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: sammy-atomiswave
     source_ref: "upstream src/mame/drivers/naomi.c:6254"
 
@@ -101,18 +109,21 @@ files:
   - name: hod2bios.zip
     required: false
     category: bios_zip
+    load_from: content_dir
     system: sega-naomi
     source_ref: "upstream src/mame/drivers/naomi.c:4555"
 
   - name: f355bios.zip
     required: false
     category: bios_zip
+    load_from: content_dir
     system: sega-naomi
     source_ref: "upstream src/mame/drivers/naomi.c:4557"
 
   - name: airlbios.zip
     required: false
     category: bios_zip
+    load_from: content_dir
     system: sega-naomi
     source_ref: "upstream src/mame/drivers/naomi.c:4561"
 
@@ -120,24 +131,28 @@ files:
   - name: stvbios.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: sega-stv
     source_ref: "upstream src/mame/drivers/stv.c:3846"
 
   - name: hikaru.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: sega-hikaru
     source_ref: "upstream src/mame/drivers/hikaru.c:552"
 
   - name: chihiro.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: sega-chihiro
     source_ref: "upstream src/mame/drivers/chihiro.c:247"
 
   - name: triforce.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: sega-triforce
     source_ref: "upstream src/mame/drivers/triforce.c:699"
 
@@ -145,12 +160,14 @@ files:
   - name: megaplay.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: sega-megaplay
     source_ref: "upstream src/mame/drivers/megaplay.c:932"
 
   - name: megatech.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: sega-megatech
     source_ref: "upstream src/mame/drivers/megatech.c:1159"
 
@@ -158,6 +175,7 @@ files:
   - name: decocass.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: deco-cassette
     source_ref: "upstream src/mame/drivers/decocass.c:1384"
 
@@ -165,12 +183,14 @@ files:
   - name: playch10.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: nintendo-playch10
     source_ref: "upstream src/mame/drivers/playch10.c:1637"
 
   - name: nss.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: nintendo-nss
     source_ref: "upstream src/mame/drivers/nss.c:593"
 
@@ -178,6 +198,7 @@ files:
   - name: skns.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: super-kaneko-nova
     source_ref: "upstream src/mame/drivers/suprnova.c:1685"
 
@@ -185,18 +206,21 @@ files:
   - name: konamigx.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: konami-gx
     source_ref: "upstream src/mame/drivers/konamigx.c:3682"
 
   - name: konamigv.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: konami-gv
     source_ref: "upstream src/mame/drivers/konamigv.c:899"
 
   - name: kviper.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: konami-viper
     source_ref: "upstream src/mame/drivers/viper.c:1049"
 
@@ -204,18 +228,21 @@ files:
   - name: sys246.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: namco-system246
     source_ref: "upstream src/mame/drivers/namcops2.c:260"
 
   - name: sys256.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: namco-system256
     source_ref: "upstream src/mame/drivers/namcops2.c:276"
 
   - name: sys573.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     system: namco-system573
     source_ref: "upstream src/mame/drivers/ksys573.c:4664"
 
@@ -223,117 +250,140 @@ files:
   - name: cpzn1.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     source_ref: "upstream src/mame/drivers/zn.c:4386"
 
   - name: cpzn2.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     source_ref: "upstream src/mame/drivers/zn.c:4405"
 
   - name: taitofx1.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     source_ref: "upstream src/mame/drivers/zn.c:4484"
 
   - name: tps.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     source_ref: "upstream src/mame/drivers/zn.c:4452"
 
   - name: acpsx.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     source_ref: "upstream src/mame/drivers/zn.c:4441"
 
   - name: psarc95.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     source_ref: "upstream src/mame/drivers/zn.c:4507"
 
   - name: atluspsx.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     source_ref: "upstream src/mame/drivers/zn.c:4526"
 
   - name: atpsx.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     source_ref: "upstream src/mame/drivers/zn.c:4432"
 
   - name: vspsx.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     source_ref: "upstream src/mame/drivers/zn.c:4474"
 
   # Taito GNET
   - name: taitogn.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     source_ref: "upstream src/mame/drivers/taitogn.c:1294"
 
   # Other BIOS sets
   - name: alg_bios.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     source_ref: "upstream src/mame/drivers/alg.c:778"
 
   - name: maxaflex.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     source_ref: "upstream src/mame/drivers/maxaflex.c:541"
 
   - name: hng64.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     source_ref: "upstream src/mame/drivers/hng64.c:2357"
 
   - name: aleck64.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     source_ref: "upstream src/mame/drivers/aleck64.c:833"
 
   - name: ar_bios.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     source_ref: "upstream src/mame/drivers/arcadia.c:804"
 
   - name: atarisy1.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     source_ref: "upstream src/mame/drivers/atarisy1.c:2411"
 
   - name: bctvidbs.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     source_ref: "upstream src/mame/drivers/mpu4drvr.c:2070"
 
   - name: cd32.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     source_ref: "upstream src/mame/drivers/cubocd32.c:1304"
 
   - name: crysbios.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     source_ref: "upstream src/mame/drivers/crystal.c:918"
 
   - name: galgbios.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     source_ref: "upstream src/mame/drivers/tmaster.c:1726"
 
   - name: gq863.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     source_ref: "upstream src/mame/drivers/twinkle.c:1126"
 
   - name: mac2bios.zip
     required: false
     category: bios_zip
+    load_from: content_dir
     source_ref: "upstream src/mame/drivers/macs.c:664"
     note: "macs2os_l.bin and macs2os_h.bin are both NO_DUMP (src/mame/drivers/macs.c:440-443). handle_missing_file (src/emu/romload.c:429-451) counts a missing NO_DUMP ROM as a warning, not an error, so the machine runs without the set."
 
   - name: macsbios.zip
     required: true
     category: bios_zip
+    load_from: content_dir
     source_ref: "upstream src/mame/drivers/macs.c:663"

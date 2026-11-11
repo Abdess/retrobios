@@ -97,7 +97,7 @@ class ARowPerFile(unittest.TestCase):
                         {"name": "bios_a.bin", "md5": md5, "sha1": sha1, "crc32": "0badf00d",
                          "destination": "bios/bios_a.bin"})
         # The summary is the row: the name, its folder, the status.
-        self.assertIn('<details class="rb-file"><summary>bios&#95;a.bin<code>bios/</code>'
+        self.assertIn('<details class="rb-file"><summary>bios&#95;a.bin <code>bios/</code> '
                       '<span class="rb-badge rb-badge-success">OK</span></summary>', row)
         # The hash the platform checks, short, on one button beside the
         # summary (a summary is a control: no button inside it).
@@ -113,7 +113,7 @@ class ARowPerFile(unittest.TestCase):
     def test_a_file_at_the_root_prints_no_path(self):
         for destination in ("", "x.bin"):
             row = self._row({"name": "x.bin", "status": "ok"}, {"destination": destination})
-            self.assertIn("<summary>x.bin<span", row)
+            self.assertIn("<summary>x.bin <span", row)
 
     def test_a_list_drops_the_path_column_when_no_row_has_one(self):
         files = [{"name": "a.bin", "status": "ok"}, {"name": "b.bin", "status": "ok"}]
@@ -153,7 +153,8 @@ class ARowPerFile(unittest.TestCase):
     def test_a_long_list_gets_a_filter(self):
         rows = ["<details></details>"] * generate_site.FILTER_ROWS
         block = generate_site._platform_file_list(rows, False, "arcade")
-        self.assertTrue(block[0].startswith('<div class="rb-table-filter"><label for="rb-files-filter-arcade">'))
+        self.assertTrue(block[0].startswith('<div class="rb-table-filter" hidden data-pagefind-ignore>'
+                                        '<label for="rb-files-filter-arcade">Filter files</label>'))
         self.assertNotIn("rb-table-filter", "".join(
             generate_site._platform_file_list(rows[1:], False, "arcade")))
 
@@ -234,8 +235,13 @@ class NothingIsLost(unittest.TestCase):
 # 2026-10-27. A ceiling is the measured value plus 5 %, never above the
 # value before the rows were tables (Batocera 2,433, AmberELEC 1,301, RomM
 # 1,607, RetroArch 2,207, the largest main page 2,459, the largest part
-# 19,127: RetroDECK's arcade list).
-PAGE_CEILINGS = {"batocera": 2433, "amberelec": 1301, "romm": 1607, "retroarch": 2192}
+# 19,127: RetroDECK's arcade list). AmberELEC rose to 1,304 on 2026-11-11:
+# MAME is named beside ProSystem, O2EM and FreeIntv, the cores its rom
+# folders offer, and the MSX section shows its file count. 1,311 once
+# its Neo Geo row names the emulators that read the set (AdvanceMAME,
+# FinalBurn Neo, Geolith, MAME) beside FB Alpha 2012, the only one it named
+# while the platforms' snk-neogeo met no profile id.
+PAGE_CEILINGS = {"batocera": 2433, "amberelec": 1311, "romm": 1607, "retroarch": 2192}
 MAIN_PAGE_CEILING = 2459
 PART_PAGE_CEILING = 2219
 
@@ -270,11 +276,29 @@ BEFORE_WEIGHT = {
     # bytes more where its Amiberry build is named "Amiberry 8.0.0
     # (facaaeb, Batocera)" (twice). The search stopped reading the date
     # line and "Next steps" on 2026-11-10 (data-pagefind-ignore, about 68
-    # bytes a page): 1,357,282 bytes on the built site of 25057ee3a.
-    "batocera": (13, 18_854, 1_357_282),
-    "amberelec": (1, 7_928, 473_388),
+    # bytes a page): 1,357,282 bytes on the built site of 25057ee3a. The
+    # blueMSX and fMSX machine ROMs cite each reader since 2026-11-10 (the
+    # config.ini line, machineCreate, readMachine, romLoad, LoadROM): the
+    # MSX part went from 57,600 to 91,769 bytes, and the filter boxes and
+    # file summaries got their spaces and labels (about 190 bytes a page).
+    # 1,394,379 bytes on the built site of 7c5ad8366. MAME is named among
+    # the readers of seven systems its rom folders offer it for, and the
+    # LRPS2 that Batocera builds reads "LRPS2 (416291a, Batocera)" since
+    # 2026-11-11: 1,396,309 bytes on the built site of 964875572. Its Neo
+    # Geo system names every Neo Geo core since the platforms' snk-neogeo
+    # met one: 1,396,380 bytes on the built site of 2026-11-11.
+    "batocera": (13, 18_854, 1_396_380),
+    # AmberELEC's MSX files cite the fMSX ROM loader since 2026-11-11 (fMSX
+    # named 82 times instead of 28, the same 295 files): the section moved
+    # to a part page of its own, 2 pages, 7,160 elements and 545,681 bytes
+    # on the built site of 964875572. Its Neo Geo row names the emulators
+    # that read the set (546,385 bytes on the built site of 2026-11-11).
+    "amberelec": (2, 7_928, 546_385),
     "romm": (2, 9_561, 572_487),
-    "retroarch": (14, 21_503, 1_430_802),
+    # RetroArch's MSX files cite the fMSX ROM loader and its ScummVM files
+    # the readers of each data file since 2026-11-11 (46,737 and 9,275 bytes
+    # more): 1,433,702 bytes on the built site of 964875572.
+    "retroarch": (14, 21_503, 1_433_702),
 }
 
 

@@ -982,7 +982,6 @@ SYSTEM_NAMES: dict[str, str] = {
     "heroes-of-might-and-magic-2": "Heroes of Might and Magic II",
     "hexen": "Hexen",
     "hexen2": "Hexen II",
-    "hppa": "HP PA-RISC",
     "hugo": "Hugo",
     "hyper-neogeo64": "SNK Hyper Neo Geo 64",
     "ibm-at": "IBM PC/AT",
@@ -1147,6 +1146,8 @@ SYSTEM_NAMES: dict[str, str] = {
     "smbx": "Super Mario Bros. X",
     "snk-neogeo-aes": "SNK Neo Geo AES",
     "snk-neogeo-mvs": "SNK Neo Geo MVS",
+    "snk-neogeo": "SNK Neo Geo",
+    "neogeo": "SNK Neo Geo",
     "snk-ngpc": "SNK Neo Geo Pocket Color",
     "soh": "The Legend of Zelda: Ocarina of Time",
     "sonic-1-2013": "Sonic the Hedgehog (2013)",
@@ -1269,6 +1270,9 @@ SYSTEM_PARENTS: dict[str, tuple[str, str]] = {
     "snk-ngpc": ("SNK", "Neo Geo Pocket"),
     "snk-neogeo-aes": ("SNK", "Neo Geo"),
     "snk-neogeo-mvs": ("SNK", "Neo Geo"),
+    # The platforms' one Neo Geo system, as Batocera and RetroDECK spell it.
+    "snk-neogeo": ("SNK", "Neo Geo"),
+    "neogeo": ("SNK", "Neo Geo"),
     # Sega. The VMU is the Dreamcast's memory card, its images sit there.
     # Sega's arcade section holds the OutRun board ROMs Cannonball reads.
     "sega-genesis": ("Sega", "Mega Drive"),
@@ -1339,6 +1343,11 @@ SYSTEM_PARENTS: dict[str, tuple[str, str]] = {
     # Games, filed with the game whose folder holds their data
     "dinothawr": ("Dinothawr", "Dinothawr"),
     "doom": ("Id Software", "Doom"),
+    # The other games of the Doom engines keep their IWADs in its folder.
+    "heretic": ("Id Software", "Doom"),
+    "hexen": ("Id Software", "Doom"),
+    "strife": ("Id Software", "Doom"),
+    "chex": ("Id Software", "Doom"),
     "ctf": ("Id Software", "Quake II"),
     "teamarena": ("Id Software", "Quake III Arena"),
     "enemyterritory": ("Id Software", "Wolfenstein Enemy Territory"),

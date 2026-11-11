@@ -15,6 +15,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
+import build_port  # noqa: E402
 from check_release import SIGNATURE, SUMS, Asset, compare_release, parse_sums
 
 A = "a" * 64
@@ -97,20 +98,21 @@ class ReleaseMatchesWhatWasBuilt(unittest.TestCase):
         self.assertIn(("unrecorded", "Other_BIOS_Pack.zip"), kinds)
         self.assertIn(("missing", "Other_BIOS_Pack.zip"), kinds)
 
-    def test_the_handheld_port_is_vouched_for_by_the_checksum_list(self):
-        sums = {**SUMS_LIST, "RetroBIOS.zip": A}
-        assets = _assets()
-        self.assertEqual(
-            _kinds(compare_release(RECORD, sums, assets, "v2026.10.10")),
-            {("missing", "RetroBIOS.zip")},
-        )
-        assets["RetroBIOS.zip"] = Asset(70, A)
-        self.assertEqual(compare_release(RECORD, sums, assets, "v2026.10.10"), [])
-        assets["RetroBIOS.zip"] = Asset(70, B)
-        self.assertEqual(
-            _kinds(compare_release(RECORD, sums, assets, "v2026.10.10")),
-            {("content", "RetroBIOS.zip")},
-        )
+    def test_a_handheld_launcher_is_no_release_file(self):
+        """The site serves the launchers built from its own commit: one in
+        the checksum list or among the assets is refused."""
+        for name in build_port.ARCHIVES:
+            with self.subTest(name=name):
+                sums = {**SUMS_LIST, name: A}
+                assets = _assets()
+                assets[name] = Asset(70, A)
+                self.assertEqual(_kinds(compare_release(RECORD, sums, assets, "v2026.10.10")),
+                                 {("unrecorded", name)})
+                assets = _assets()
+                assets[name] = Asset(70, A)
+                self.assertEqual(
+                    _kinds(compare_release(RECORD, SUMS_LIST, assets, "v2026.10.10")),
+                    {("extra", name)})
 
     def test_parts_must_add_up_to_the_printed_download_size(self):
         assets = _assets()

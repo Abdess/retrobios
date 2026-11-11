@@ -142,6 +142,35 @@
         "uniqueItems": true
       }
     },
+    "offered_boards": {
+      "description": "Each core a roms folder of the platform offers on some boards only, with the folder (below the roms root, or the install tree) and the boards and board aliases it is offered on. install.py --target keeps the core's files in that folder on those boards only.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["root", "folder", "boards"],
+          "properties": {
+            "root": {
+              "description": "What the folder is relative to: the roms root of the platform, or the install tree.",
+              "enum": ["roms", "install"]
+            },
+            "folder": {
+              "description": "The folder the core is offered for, below that root.",
+              "type": "string",
+              "minLength": 1
+            },
+            "boards": {
+              "description": "The boards, and their aliases, on which the folder offers the core.",
+              "type": "array",
+              "items": {"type": "string", "minLength": 1},
+              "uniqueItems": true
+            }
+          }
+        }
+      }
+    },
     "system_cores": {
       "description": "Each platform system with the cores whose presence keeps it. A system absent here is kept whatever cores are available.",
       "type": "object",

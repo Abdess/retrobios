@@ -1070,6 +1070,9 @@ def golden_states() -> dict:
     install.tui_update(states["removal-confirm"], Key("enter"))
     states["removal-done"] = removal_done_state()
     states["backups"] = backups_state()
+    states["pack-plan"] = pack_plan_state()
+    states["pack-plan-parts"] = pack_plan_state(parts=3)
+    states["pack-done"] = pack_done_state()
     return states
 
 
@@ -1136,6 +1139,51 @@ def backups_state(purpose: str = "backups") -> install.TuiState:
     assert effects == [("run", "backups")], effects
     for event in BACKUPS:
         install.tui_receive(state, ("event", state.run_id, event))
+    install.tui_receive(state, ("ended", state.run_id, 0, []))
+    return state
+
+
+PACK_PATH = HOME / "Downloads" / "RetroArch_Custom_BIOS_Pack.zip"
+
+
+def pack_event(status: str, parts: int = 1, size: int = 0) -> dict:
+    """The pack event of a dry run (planned) or a run (written), the pack
+    whole or in parts on a FAT32 card."""
+    names = ([PACK_PATH] if parts == 1 else
+             [PACK_PATH.with_name(f"RetroArch_Custom_BIOS_Pack.part{n}of{parts}.zip")
+              for n in range(1, parts + 1)])
+    message = ("One ZIP." if parts == 1 else
+               f"In {parts} parts of at most 3.9 GB, as FAT32 holds no file of 4 GB.")
+    return {"event": "pack", "platform": "retroarch", "path": str(PACK_PATH), "files": 4,
+            "bytes": 1049604, "size": size, "parts": [str(name) for name in names],
+            "status": status, "message": message}
+
+
+def pack_plan_state(parts: int = 1) -> install.TuiState:
+    """More, Make a pack, its dry run read."""
+    state = checked_state()
+    rows = install.tui_rows(state)
+    state.focus["plan"] = [row.action for row in rows].index("more")
+    assert install.tui_update(state, Key("enter")) == []
+    rows = install.tui_rows(state)
+    state.focus["more"] = [row.action for row in rows].index("packmake")
+    effects = install.tui_update(state, Key("enter"))
+    assert effects == [("run", "pack_plan")], effects
+    install.tui_receive(state, ("event", state.run_id, pack_event("planned", parts)))
+    install.tui_receive(state, ("ended", state.run_id, 0, []))
+    return state
+
+
+def pack_done_state() -> install.TuiState:
+    """The pack made, in three parts on a FAT32 card."""
+    state = pack_plan_state(parts=3)
+    effects = install.tui_update(state, Key("enter"))
+    assert effects == [("run", "pack")], effects
+    install.tui_receive(state, ("event", state.run_id, {
+        "event": "progress", "files_done": 4, "files_total": 4, "bytes_done": 1049604,
+        "bytes_total": 1049604}))
+    install.tui_receive(state, ("event", state.run_id,
+                                pack_event("written", 3, size=1048000)))
     install.tui_receive(state, ("ended", state.run_id, 0, []))
     return state
 
@@ -15246,12 +15294,12 @@ class GamesEndToEnd(unittest.TestCase):
 SCREEN_WORDS = {
     "setup": (29, 36, 34, 34), "platforms": (23, 27, 89, 225), "folder": (27, 27, 25, 25),
     "folder-card": (52, 52, 50, 50), "browse": (17, 17, 15, 15), "path": (23, 23, 25, 25),
-    "create": (23, 23, 21, 21), "checking": (18, 18, 17, 17), "plan": (31, 31, 31, 31),
-    "plan-in-place": (22, 22, 19, 19), "systems": (36, 37, 36, 36),
+    "create": (23, 23, 21, 21), "checking": (18, 18, 17, 17), "plan": (32, 32, 32, 32),
+    "plan-in-place": (23, 23, 20, 20), "systems": (36, 37, 36, 36),
     "regions": (45, 44, 42, 42), "cores": (47, 47, 45, 45),
     "preview": (29, 29, 28, 28), "command": (22, 22, 16, 16), "confirm": (22, 22, 20, 20),
     "installing": (32, 32, 31, 31), "result": (33, 33, 31, 31), "error": (37, 34, 32, 31),
-    "quit": (14, 14, 12, 12), "help": (24, 26, 26, 26), "plan-games": (36, 46, 54, 54),
+    "quit": (14, 14, 12, 12), "help": (24, 26, 26, 26), "plan-games": (36, 47, 55, 55),
     "games": (36, 45, 44, 44), "plan-details": (30, 30, 29, 29),
     "result-details": (30, 30, 19, 19),
     # The plan's words, plus the recorded choice by name, its row (the one
@@ -15266,14 +15314,18 @@ SCREEN_WORDS = {
     # A list of boards and one of emulators, each with the line that says
     # what the choice does and the gloss of "board".
     "device": (35, 35, 33, 33), "emulators": (29, 29, 27, 27),
-    # A plan names More (one word) where the folder has a record or a
-    # backup (design 4.3), the first install's plan unchanged. More's
-    # four rows, Remove files with each system the record holds and its
+    # Every plan names More (one word, counted in the plan budgets above):
+    # a pack can always be made. More's four rows where the folder has a
+    # record or a backup, then Make a pack (three words), Remove files with each system the record holds and its
     # size, the removal plan (what goes, the space freed, the folder, what
     # stays and why), its confirm and result, and the backups newest first.
-    "more": (17, 17, 15, 15), "remove": (31, 31, 29, 29), "removal": (34, 34, 32, 32),
+    "more": (20, 20, 18, 18), "remove": (31, 31, 29, 29), "removal": (34, 34, 32, 32),
     "removal-confirm": (18, 18, 16, 16), "removal-done": (18, 18, 16, 16),
     "backups": (24, 24, 22, 22),
+    # Make a pack: what goes in, its size and setup, where it goes, how it
+    # is written (one ZIP, or the parts and why), then the result.
+    "pack-plan": (27, 27, 24, 24), "pack-plan-parts": (39, 39, 35, 35),
+    "pack-done": (29, 29, 25, 25),
 }
 
 
@@ -15293,12 +15345,12 @@ class MoreScreens(unittest.TestCase):
         self.addCleanup(patcher.stop)
 
     def test_a_plan_names_more_where_it_has_something_to_act_on(self):
-        self.assertNotIn("more", [row.action for row in install.tui_rows(checked_state())])
         self.assertEqual([row.action for row in install.tui_rows(more_state())][-2:],
                          ["more", "quit"])
         done = golden_states()["plan-in-place"]
-        done.has_backups = True
         self.assertEqual(install.tui_rows(done)[-1].action, "more")
+        self.assertEqual([row.action for row in install.tui_rows(more_state("more"))],
+                         ["remove", "backups", "putback", "dropbackup", "packmake"])
 
     def test_the_removal_plan_asks_its_own_child(self):
         state = removal_state()
@@ -15396,6 +15448,85 @@ class MoreScreens(unittest.TestCase):
         text = screen_text(install.tui_view(state, 80, 24))
         self.assertIn("pcsx/extra.bin", text)
         self.assertIn("scph5501.bin: changed since it was installed", text)
+
+
+class PackScreens(unittest.TestCase):
+    """More, Make a pack: a dry run says what goes in, the run makes it,
+    each a child given the plan's choice and none of the folder's options."""
+
+    def setUp(self):
+        patcher = mock.patch.object(install, "_mounted_cards", return_value=[])
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def test_more_is_on_every_plan_with_make_a_pack(self):
+        state = checked_state()
+        self.assertEqual([row.action for row in install.tui_rows(state)][-2:],
+                         ["more", "quit"])
+        state.stack.append("more")
+        self.assertEqual([row.action for row in install.tui_rows(state)], ["packmake"])
+        self.assertEqual([row.action for row in install.tui_rows(more_state("more"))][-1],
+                         "packmake")
+
+    def test_the_dry_run_takes_the_choice_and_not_the_folder(self):
+        state = pack_plan_state()
+        state.regions = ["japan"]
+        state.passthrough = [("--save-dir", "/saves")]
+        argv = install.tui_argv(state, "pack_plan", "python", "install.py")
+        self.assertIn("--region=japan", argv)
+        self.assertFalse([arg for arg in argv if arg.startswith(("--dest", "--save-dir"))])
+        # No Downloads folder here: the home folder.
+        self.assertEqual(argv[-3:], [f"--pack={HOME}{os.sep}", "--dry-run", "--events"])
+        with mock.patch.object(install, "_is_dir", return_value=True):
+            self.assertEqual(install.tui_pack_dir(state), HOME / "Downloads")
+        self.assertEqual([row.action for row in install.tui_rows(state)],
+                         ["packgo", "packwhere"])
+
+    def test_make_the_pack_runs_it_and_close_ends_on_its_code(self):
+        state = pack_plan_state()
+        self.assertEqual(install.tui_update(state, Key("enter")), [("run", "pack")])
+        self.assertEqual(install.tui_argv(state, "pack", "python", "install.py")[-2:],
+                         ["--events", "--yes"])
+        self.assertIn("Making the pack...", screen_text(install.tui_view(state, 80, 24)))
+        install.tui_receive(state, ("event", state.run_id, pack_event("written", size=900)))
+        install.tui_receive(state, ("ended", state.run_id, 0, []))
+        self.assertIn("Pack made: 4 files, 900 B.", screen_text(install.tui_view(state, 80, 24)))
+        install.tui_update(state, Key("enter"))
+        self.assertEqual(state.exit_code, 0)
+
+    def test_a_pack_not_made_says_so_and_back_returns_to_more(self):
+        state = pack_plan_state()
+        install.tui_update(state, Key("enter"))
+        failed = {**pack_event("failed"), "parts": [],
+                  "message": "1 file could not be had: no pack was written."}
+        install.tui_receive(state, ("event", state.run_id, failed))
+        install.tui_receive(state, ("ended", state.run_id, 1, []))
+        text = screen_text(install.tui_view(state, 80, 24))
+        self.assertIn("No pack was made.", text)
+        self.assertIn("1 file could not be had", text)
+        install.tui_update(state, Key("esc"))
+        self.assertEqual(state.screen, "more")
+
+    def test_change_where_browses_and_reads_the_plan_again(self):
+        state = pack_plan_state()
+        state.focus["packplan"] = 1
+        with mock.patch.object(install, "_browse_rows", return_value=(
+                [install.TuiRow("use", "Use this folder")], "")):
+            install.tui_update(state, Key("enter"))
+        self.assertEqual((state.screen, state.browse_for), ("browse", "packto"))
+        state.browse_dir = Path("/media/card")
+        self.assertEqual(install.tui_update(state, Key("enter")), [("run", "pack_plan")])
+        self.assertEqual(state.screen, "packplan")
+        self.assertEqual(install.tui_argv(state, "pack_plan", "python", "install.py")[-3],
+                         f"--pack={Path('/media/card')}{os.sep}")
+
+    def test_a_dry_run_that_ends_without_its_event_is_an_error(self):
+        state = checked_state()
+        state.stack += ["more"]
+        state.focus["more"] = 0
+        install.tui_update(state, Key("enter"))
+        install.tui_receive(state, ("ended", state.run_id, 2, ["install.py: error: no"]))
+        self.assertEqual(state.screen, "error")
 
 
 class ScreenWordBudgets(unittest.TestCase):

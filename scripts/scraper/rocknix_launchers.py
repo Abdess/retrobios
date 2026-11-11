@@ -18,6 +18,7 @@ from dataclasses import dataclass
 
 try:
     from .configgen_launchers import Launcher
+    from .shell_launchers import config_placement, evidence_fields
     from .shell_launchers import (
         LauncherPatternMissing,
         Link,
@@ -30,6 +31,7 @@ try:
     )
 except ImportError:
     from configgen_launchers import Launcher
+    from shell_launchers import config_placement, evidence_fields  # type: ignore[no-redef]
     from shell_launchers import (
         LauncherPatternMissing,
         Link,
@@ -46,6 +48,9 @@ DEVICES = f"{ROCKNIX}/devices"
 STANDALONE = f"{ROCKNIX}/packages/emulators/standalone"
 RETROARCH = f"{ROCKNIX}/packages/emulators/libretro/retroarch"
 BIOS_ROOT = "/storage/roms/bios"
+CONFIG_ROOT = "/storage/.config"
+# The first-boot step copying every package's /usr/config to /storage/.config.
+USERCONFIG = f"{ROCKNIX}/packages/sysutils/systemd/scripts/userconfig-setup"
 
 Lines = list[tuple[str, set[int]]]
 
@@ -186,6 +191,38 @@ def bios_keys(tree: RepoTree, paths: list[str], root: str = BIOS_ROOT) -> list[t
     return keys
 
 
+def with_evidence(
+    tree: RepoTree,
+    record: Launcher,
+    target: str,
+    keys: list[str],
+    start: Script | None = None,
+    writers: tuple[str, ...] = (),
+    source_name: str = "",
+) -> Launcher:
+    """A config record with the steps that put its file at ``target``.
+
+    The first boot copies /usr/config to /storage/.config, leaving a file
+    already there. A start script can copy or generate it again, and its
+    sed lines rewriting one of the record's keys are the overrides.
+    """
+    setup = Script(USERCONFIG, tree.read(USERCONFIG))
+    placements = [config_placement(setup, target, required=False, sources=("/usr/config/",))]
+    if start is not None:
+        placements.append(config_placement(
+            start, target, keys, writers, source_name, required=False
+        ))
+    fields = evidence_fields(placements)
+    record.installs = fields["installs"]
+    record.kept_if_present = fields["kept_if_present"]
+    record.overrides = fields["overrides"]
+    return record
+
+
+def _keys(value: FixedPaths) -> list[str]:
+    return [f"[{section}] {key}" if section else key for section, key in value.keys]
+
+
 def config_records(
     tree: RepoTree,
     emulator: str,
@@ -193,10 +230,17 @@ def config_records(
     file: str,
     passes_to_suffix: str = "",
     depends_on_option: str | None = None,
+    target: str = "",
+    start: Script | None = None,
+    unread: Callable[[tuple[str, str]], bool] = lambda key: False,
 ) -> list[Launcher]:
-    """fixed_name records for the bios paths of a config installed per device."""
+    """fixed_name records for the bios paths of a config installed per device.
+
+    ``unread`` drops the keys the shipped configs leave the emulator
+    reading no file from.
+    """
     configs = device_configs(tree, package, file)
-    keys = bios_keys(tree, [c.path for c in configs])
+    keys = [k for k in bios_keys(tree, [c.path for c in configs]) if not unread(k)]
     name = posixpath.basename(file)
 
     def read(path: str, text: str) -> tuple[object, set[int]]:
@@ -206,7 +250,8 @@ def config_records(
     for device, value, refs in per_device(tree, configs, f"{package}/package.mk", read):
         assert isinstance(value, FixedPaths)
         described = describe_keys(name, value.keys)
-        records.append(
+        records.append(with_evidence(
+            tree,
             Launcher(
                 emulator=emulator,
                 build="standalone",
@@ -219,8 +264,11 @@ def config_records(
                 ),
                 device=device,
                 depends_on_option=depends_on_option,
-            )
-        )
+            ),
+            target or f"{CONFIG_ROOT}/{posixpath.basename(package)}/{name}",
+            _keys(value),
+            start,
+        ))
     return records
 
 
@@ -241,7 +289,8 @@ def retroarch(tree: RepoTree) -> list[Launcher]:
     for device, value, refs in per_device(tree, configs, f"{RETROARCH}/package.mk", read):
         assert isinstance(value, tuple)
         values = dict(value)
-        records.append(
+        records.append(with_evidence(
+            tree,
             Launcher(
                 emulator="retroarch",
                 build="libretro",
@@ -251,8 +300,10 @@ def retroarch(tree: RepoTree) -> list[Launcher]:
                 search_dir=values["system_directory"],
                 passes_to="retroarch.cfg " + ", ".join(f'{k} = "{v}"' for k, v in value),
                 device=device,
-            )
-        )
+            ),
+            f"{CONFIG_ROOT}/retroarch/retroarch.cfg",
+            [k for k, _ in value],
+        ))
     return records
 
 
@@ -275,6 +326,19 @@ def amiberry(tree: RepoTree) -> list[Launcher]:
     )
     used: set[int] = {test_line, then_line, else_line, other_line, sed_line}
     root = script.expand("${" + sed.group(2) + "}", sed_line, used)
+    written = re.search(r'"?(\$\{?\w+\}?)"?\s*$', script.lines[then_line - 1])
+    if written is None:
+        raise script.missing("destination of the config copy")
+    target = script.expand(written.group(1), then_line, set())
+    # A WHDLoad archive is booted by --autoload, which builds its own setup
+    # (kickstart included) over the config: the record holds for floppies.
+    autoload = [n for n, line in script.code() if re.search(r"amiberry .*--autoload", line)]
+    if not autoload:
+        raise script.missing("WHDLoad boot with --autoload")
+    content = (
+        "content not booted with --autoload, a WHDLoad .lha or .zip "
+        f"({posixpath.basename(script.path)}:{', '.join(map(str, autoload))})"
+    )
     records = []
     for config, condition in (
         (then.group(1), f"game name matches {test.group(1)}"),
@@ -290,7 +354,8 @@ def amiberry(tree: RepoTree) -> list[Launcher]:
             raise LauncherPatternMissing(path, f"key naming a file under {sed.group(1)}")
         value, lines = fixed_paths(found, keys, path)
         slot = re.fullmatch(r"Amiga(\w+)-default\.uae", config)
-        records.append(
+        records.append(with_evidence(
+            tree,
             Launcher(
                 emulator="amiberry",
                 build="standalone",
@@ -300,9 +365,13 @@ def amiberry(tree: RepoTree) -> list[Launcher]:
                 slot=slot.group(1) if slot else config,
                 search_dir=value.search_dir,
                 passes_to=f"{describe_keys(config, value.keys)} (amiberry -f)",
-                depends_on_option=condition,
-            )
-        )
+                depends_on_option=f"{condition}, {content}",
+            ),
+            target,
+            _keys(value),
+            script,
+            source_name=config,
+        ))
     mk = Script(f"{package}/package.mk", tree.read(f"{package}/package.mk"))
     links = mk.links(BIOS_ROOT, fixed={"INSTALL": ""})
     if not links:
@@ -375,7 +444,11 @@ def hatari(tree: RepoTree) -> list[Launcher]:
     if not keys:
         raise LauncherPatternMissing(path, f"key naming a file under {BIOS_ROOT}")
     value, lines = fixed_paths(found, keys, path)
-    return [
+    copied = re.search(r'"?(\$\{?\w+\}?)"?\s*$', script.lines[copy_line - 1])
+    if copied is None:
+        raise script.missing("destination of the default config copy")
+    return [with_evidence(
+        tree,
         Launcher(
             emulator="hatari",
             build="standalone",
@@ -384,8 +457,12 @@ def hatari(tree: RepoTree) -> list[Launcher]:
             source_ref=source_ref([(path, lines), (script.path, {copy_line, run_line})]),
             search_dir=value.search_dir,
             passes_to=f"{describe_keys(copy.group(1), value.keys)} (--configfile)",
-        )
-    ]
+        ),
+        script.expand(copied.group(1), copy_line, set()),
+        _keys(value),
+        script,
+        source_name=copy.group(1),
+    )]
 
 
 def melonds(tree: RepoTree) -> list[Launcher]:
@@ -406,7 +483,22 @@ def melonds(tree: RepoTree) -> list[Launcher]:
         rf"^\s*{test.group(1)}=\$\(get_setting (\w+) ", f"setting read into {test.group(1)}"
     )
     condition = f"{setting.group(1)} = {test.group(2)} sets ExternalBIOSEnable=1, otherwise 0"
-    records = config_records(tree, "melonds", package, "melonDS.ini", depends_on_option=condition)
+    configs = [c.path for c in device_configs(tree, package, "melonDS.ini")]
+    # melonDS opens the DSi BIOS and firmware keys only under
+    # DSiExternalBIOSEnable, off unless a config sets it.
+    dsi_external = any(
+        s.key == "DSiExternalBIOSEnable" and s.value not in ("", "0")
+        for path in configs for s in settings(tree.read(path))
+    )
+
+    def unread(key: tuple[str, str]) -> bool:
+        return not dsi_external and key[1] in ("DSiBIOS9Path", "DSiBIOS7Path", "DSiFirmwarePath")
+
+    conf_line, conf = script.find(r'^\s*CONF_DIR="([^"]+)"', "CONF_DIR")
+    records = config_records(
+        tree, "melonds", package, "melonDS.ini", depends_on_option=condition,
+        target=f"{conf.group(1)}/melonDS.ini", start=script, unread=unread,
+    )
     for record in records:
         record.source_ref += (
             f", {source_ref([(script.path, {setting_line, test_line, enable_line})])}"
@@ -420,7 +512,10 @@ def dsperate(tree: RepoTree) -> list[Launcher]:
         f"{package}/scripts/start_dsperate.sh", tree.read(f"{package}/scripts/start_dsperate.sh")
     )
     run_line, _ = script.find(r"/usr/bin/dsperate --config ", "dsperate --config")
-    records = config_records(tree, "dsperate", package, "dsperate.ini", " (--config)")
+    records = config_records(
+        tree, "dsperate", package, "dsperate.ini", " (--config)",
+        target=script.expand("${DSPERATE_INI}", run_line, set()), start=script,
+    )
     for record in records:
         record.source_ref += f", {source_ref([(script.path, {run_line})])}"
     return records
@@ -434,7 +529,10 @@ def xemu(tree: RepoTree) -> list[Launcher]:
     copy_line, _ = script.find(
         r'cp -r "\$\{SOURCE_DIR\}/\$\{XEMU_INI\}"', "xemu.toml copy at launch"
     )
-    records = config_records(tree, "xemu", package, "xemu.toml", " (copied at each launch)")
+    records = config_records(
+        tree, "xemu", package, "xemu.toml", " (copied at each launch)",
+        target=script.expand("${CONF_DIR}/${XEMU_INI}", copy_line, set()), start=script,
+    )
     for record in records:
         record.source_ref += f", {source_ref([(script.path, {copy_line})])}"
     return records
@@ -452,7 +550,9 @@ def nanoboyadvance(tree: RepoTree) -> list[Launcher]:
     mk_line, _ = Script(mk_path, tree.read(mk_path)).find(
         r"config/config\.toml", "config.toml install"
     )
-    return [
+    start_path = f"{package}/scripts/start_nanoboyadvance.sh"
+    return [with_evidence(
+        tree,
         Launcher(
             emulator="nanoboyadvance",
             build="standalone",
@@ -461,8 +561,14 @@ def nanoboyadvance(tree: RepoTree) -> list[Launcher]:
             source_ref=source_ref([(path, lines), (mk_path, {mk_line})]),
             search_dir=value.search_dir,
             passes_to=describe_keys("config.toml", value.keys),
-        )
-    ]
+            # NanoBoyAdvance exits when its BIOS cannot be read
+            # (src/platform/sdl/main.cpp:180-185 at the build ROCKNIX ships).
+            fails_when_missing=True,
+        ),
+        f"{CONFIG_ROOT}/nanoboyadvance/config.toml",
+        _keys(value),
+        Script(start_path, tree.read(start_path)),
+    )]
 
 
 def mednafen(tree: RepoTree) -> list[Launcher]:
@@ -486,7 +592,9 @@ def mednafen(tree: RepoTree) -> list[Launcher]:
     modules: dict[str, list[Setting]] = {}
     for setting in firmware:
         modules.setdefault(setting.key.split(".", 1)[0], []).append(setting)
-    return [
+    home = script.expand("${MEDNAFEN_HOME}", gen_line, set())
+    return [with_evidence(
+        tree,
         Launcher(
             emulator="mednafen",
             build="standalone",
@@ -501,9 +609,12 @@ def mednafen(tree: RepoTree) -> list[Launcher]:
             slot=module,
             search_dir=folder.value,
             passes_to="mednafen.cfg " + ", ".join(s.key for s in group),
-        )
-        for module, group in modules.items()
-    ]
+        ),
+        f"{home}/mednafen.cfg",
+        [s.key for s in group],
+        script,
+        writers=("mednafen_gen_config.sh",),
+    ) for module, group in modules.items()]
 
 
 def yabasanshiro(tree: RepoTree) -> list[Launcher]:
@@ -549,6 +660,8 @@ def directory_records(
     file: str,
     folder_key: tuple[str, str],
     file_keys: tuple[tuple[str, str], ...],
+    target: str = "",
+    start: str = "",
 ) -> list[Launcher]:
     """scans_dir records: the config hands a directory and leaves the file keys empty."""
     configs = device_configs(tree, package, file)
@@ -568,7 +681,8 @@ def directory_records(
     records = []
     for device, folder, refs in per_device(tree, configs, f"{package}/package.mk", read):
         passes = f"{name} [{folder_key[0]}] {folder_key[1]} = {folder}, {unset} unset"
-        records.append(
+        records.append(with_evidence(
+            tree,
             Launcher(
                 emulator=emulator,
                 build="standalone",
@@ -578,8 +692,11 @@ def directory_records(
                 search_dir=folder,
                 passes_to=passes,
                 device=device,
-            )
-        )
+            ),
+            target,
+            [f"[{s}] {k}" for s, k in (folder_key, *file_keys)],
+            Script(start, tree.read(start)) if start else None,
+        ))
     return records
 
 
@@ -591,6 +708,8 @@ def duckstation(tree: RepoTree) -> list[Launcher]:
         "settings.ini",
         ("BIOS", "SearchDirectory"),
         (("BIOS", "PathNTSCU"), ("BIOS", "PathNTSCJ"), ("BIOS", "PathPAL")),
+        f"{CONFIG_ROOT}/duckstation/settings.ini",
+        f"{STANDALONE}/duckstation-sa/scripts/start_duckstation.sh",
     )
 
 
@@ -602,6 +721,8 @@ def armsx2(tree: RepoTree) -> list[Launcher]:
         "ARMSX2/inis/PCSX2.ini",
         ("Folders", "Bios"),
         (("Filenames", "BIOS"),),
+        f"{CONFIG_ROOT}/ARMSX2/inis/PCSX2.ini",
+        f"{STANDALONE}/armsx2-sa/scripts/start_armsx2.sh",
     )
 
 

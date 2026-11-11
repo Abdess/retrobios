@@ -396,7 +396,7 @@ class _Page(HTMLParser):
     def handle_endtag(self, tag: str) -> None:
         if tag == "nav" and self._crumbs:
             self._crumbs = 0
-        if tag == "div" and self._pagination and not self.pagination:
+        if tag == "nav" and self._pagination and not self.pagination:
             self._pagination = False
         if self._text is not None and tag in ("a", "summary"):
             self.sidebar.append(" ".join("".join(self._text).split()))
@@ -500,16 +500,20 @@ class MetaFields(unittest.TestCase):
         self.assertEqual(sitestarlight.file_names_meta("<p>no card</p>"), "")
 
     def test_system_pages_carry_the_platforms_names(self) -> None:
-        page = DOCS / "systems" / "sony-playstation.md"
-        if not page.is_file():
+        def page(stem: str) -> Path | None:
+            # A page with tabs is MDX: reading .md alone skipped this test.
+            return next((p for p in (DOCS / "systems" / f"{stem}.md",
+                                     DOCS / "systems" / f"{stem}.mdx") if p.is_file()), None)
+
+        playstation = page("sony-playstation")
+        if playstation is None:
             self.skipTest("site pages not generated")
-        text = page.read_text(encoding="utf-8")
+        text = playstation.read_text(encoding="utf-8")
         match = re.search(r'data-pagefind-meta="aliases:([^"]*)"', text)
         self.assertIsNotNone(match, "no aliases field on the PlayStation page")
         self.assertIn("psx", unescape(match[1]).split())
         # The Dreamcast section's page: its own, or Sega's when it fits there.
-        own = DOCS / "systems" / "sega-dreamcast.md"
-        dreamcast = (own if own.is_file() else DOCS / "systems" / "sega.md").read_text(
+        dreamcast = (page("sega-dreamcast") or page("sega") or DOCS / "systems" / "sega.md").read_text(
             encoding="utf-8")
         self.assertRegex(dreamcast, r'data-pagefind-meta="aliases:[^"]*\bdc\b')
 
@@ -621,7 +625,7 @@ def _html(url: str) -> str:
 
 
 def _pagination(text: str) -> tuple[str | None, str | None]:
-    start = text.find('<div class="pagination-links')
+    start = text.find('<nav class="pagination-links')
     if start == -1:
         return None, None
     links = text[start:text.find("</footer>", start)]

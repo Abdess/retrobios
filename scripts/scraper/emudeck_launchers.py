@@ -44,6 +44,8 @@ BIOS = "${biosPath}"
 EMULATION_BIOS = "${emulationPath}/bios"
 STORAGE = "${storagePath}"
 FLATPAK_DATA = "${HOME}/.var/app/"
+# The function every EmuScript installs its Flatpak config with.
+CONFIG_EMU_FP = "functions/configEmuFP.sh"
 
 # EmuScripts file names that differ from the emulator profile they set up.
 # The platform and target scrapers both read them here.
@@ -93,6 +95,31 @@ def _emulator(name: str) -> str:
 
 def _is_bios(value: str) -> bool:
     return any(value == root or value.startswith(root + "/") for root in (BIOS, EMULATION_BIOS))
+
+
+def with_evidence(tree: RepoTree, script: Script, record: Launcher, config: str) -> Launcher:
+    """A record citing a shipped config, with the steps that install it.
+
+    configEmuFP rsyncs the repository's configs/<app> over the Flatpak's:
+    the _init call overwrites (keeping a .bak), every other call passes
+    --ignore-existing and leaves the user's file in place.
+    """
+    fp = Script(CONFIG_EMU_FP, tree.read(CONFIG_EMU_FP))
+    rsync_line, _ = fp.find(r"^\s*rsync .*\$emudeckBackend/configs/", "rsync of the configs")
+    keep_line, _ = fp.find(r'overwrite="--ignore-existing"', "--ignore-existing")
+    calls = {n for n, line in script.code() if re.match(r"\s*configEmuFP\s", line)}
+    if not calls:
+        raise script.missing("configEmuFP call")
+    variable = script.assignment_ending("/" + config)
+    if variable is None:
+        raise script.missing(f"config variable for {config}")
+    record.installs = {
+        "path": script.expand(variable.value, variable.line, set()),
+        "source_ref": source_ref([(script.path, calls), (fp.path, {keep_line, rsync_line})]),
+    }
+    record.kept_if_present = True
+    record.overrides = []
+    return record
 
 
 def _repo_config(script: Script, path: str) -> str:
@@ -268,7 +295,8 @@ def ares(tree: RepoTree) -> list[Launcher]:
         raise LauncherPatternMissing(path, f"Firmware path under {old}")
     for system, found in entries.items():
         folder = posixpath.commonpath([posixpath.dirname(t) for _, t, _ in found])
-        records.append(
+        records.append(with_evidence(
+            tree, script,
             Launcher(
                 emulator="ares",
                 build="standalone",
@@ -281,16 +309,20 @@ def ares(tree: RepoTree) -> list[Launcher]:
                 search_dir=folder,
                 passes_to="settings.bml "
                 + ", ".join(f"{system}/Firmware/{k}" for k, _, _ in found),
-            )
-        )
+            ),
+            posixpath.basename(path),
+        ))
     return records
 
 
 def melonds(tree: RepoTree) -> list[Launcher]:
     """melonDS.ini paths set by changeLine, melonDS.toml paths shipped and rewritten by sed."""
     name = "emuDeckMelonDS.sh"
-    records = setter_records(tree, name, option_key="ExternalBIOSEnable")
     script = _script(tree, name)
+    records = [
+        with_evidence(tree, script, record, str(record.passes_to or "").split(" ", 1)[0])
+        for record in setter_records(tree, name, option_key="ExternalBIOSEnable")
+    ]
     # A config whose BIOS keys the setters write again keeps their values.
     set_by_setters = {file for file, _, _, value, _ in setters(script) if _is_bios(value)}
     for file, old, new, sed_lines in sed_rewrites(script, "melonDS_init"):
@@ -306,22 +338,29 @@ def melonds(tree: RepoTree) -> list[Launcher]:
             continue
         folder = posixpath.commonpath([posixpath.dirname(t) for _, t in found])
         config = posixpath.basename(path)
-        option = next((s for s in settings(tree.read(path)) if s.key == "ExternalBIOSEnable"), None)
-        if option is None:
-            raise LauncherPatternMissing(path, "ExternalBIOSEnable")
+        shipped = {s.key: s for s in settings(tree.read(path))}
+        if "ExternalBIOSEnable" not in shipped or "ConsoleType" not in shipped:
+            raise LauncherPatternMissing(path, "ExternalBIOSEnable and ConsoleType")
+        option, console = shipped["ExternalBIOSEnable"], shipped["ConsoleType"]
+        # The DS keys are read under ExternalBIOSEnable, the DSi keys only
+        # when the console is a DSi (ConsoleType 1).
         record = Launcher(
             emulator="melonds",
             build="standalone",
             kind="fixed_name",
             names=[posixpath.relpath(t, folder) for _, t in found],
-            source_ref=source_ref(
-                [(path, {option.line, *(s.line for s, _ in found)}), (script.path, sed_lines)]
-            ),
+            source_ref=source_ref([
+                (path, {option.line, console.line, *(s.line for s, _ in found)}),
+                (script.path, sed_lines),
+            ]),
             search_dir=folder,
             passes_to=describe_keys(config, tuple((s.section, s.key) for s, _ in found)),
-            depends_on_option=f"ExternalBIOSEnable = {option.value} in the shipped {config}",
+            depends_on_option=(
+                f"[DS] keys: ExternalBIOSEnable = true, {option.value} in the shipped {config}; "
+                f"[DSi] keys: ConsoleType = 1, {console.value} in the shipped {config}"
+            ),
         )
-        records.append(record)
+        records.append(with_evidence(tree, script, record, config))
     if len(records) < 2:
         raise script.missing("melonDS.toml BIOS paths rewritten by sed")
     return records

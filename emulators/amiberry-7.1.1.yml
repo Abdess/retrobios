@@ -43,6 +43,15 @@ standalone_directories:
 - "AMIBERRY_HOME_DIR/roms"
 - "~/Amiberry/roms"
 - "whdboot_path = whdboot"
+config_reads:
+  - file: "*.uae"
+    source_ref: "src/main.cpp:986-994"
+    keys:
+      - key: "kickstart_rom_file"
+        source_ref: "src/cfgfile.cpp:6122, src/memory.cpp:1974-1983"
+      - key: "$(FILE_PATH)"
+        source_ref: "src/cfgfile.cpp:389"
+
 notes: |
   Amiberry 7.1.1 (CMakeLists.txt:3-4). The ROM path is rom_path in
   amiberry.conf, else roms/ below the home directory: $AMIBERRY_HOME_DIR,

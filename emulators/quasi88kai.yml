@@ -16,6 +16,8 @@ built_by: [retropie]
 systems:
   - nec-pc-88
   - nec-pc-80
+standalone_directories:
+  - "-romdir = rom"
 
 notes: |
   Continuation of Showzoh Fukunaga's QUASI88, version 0.7.1 at the pinned

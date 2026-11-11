@@ -63,10 +63,10 @@ Unzip into the BIOS folder, files straight in it. A big pack comes in parts (`Pa
 
 ## How it is built
 
-- **648 emulators profiled**, 614 from their source code and 34 closed-source builds from their binaries: 94% of the files they load cite the file and line that reads them
+- **653 emulators profiled**, 619 from their source code and 34 closed-source builds from their binaries: 94% of the files they load cite the file and line that reads them
 - **18 setups**, each checked its own way: MD5 for Batocera and Recalbox, the file name for RetroArch, as their own code does
-- **522 systems**, 21,936 files in the collection, [what is still missing](https://abdess.github.io/retrobios/gaps/) named file by file
-- **2,229 archives**, each with a recipe that rebuilds it from the ROMs the collection holds: 1,794 byte for byte, 435 with the same files inside ([rebuilding an archive](https://abdess.github.io/retrobios/wiki/archive-recipes/))
+- **520 systems**, 21,938 files in the collection, [what is still missing](https://abdess.github.io/retrobios/gaps/) named file by file
+- **2,231 archives**, each with a recipe that rebuilds it from the ROMs the collection holds: 1,796 byte for byte, 435 with the same files inside ([rebuilding an archive](https://abdess.github.io/retrobios/wiki/archive-recipes/))
 - Public data: [JSON, CSV and SQLite](https://abdess.github.io/retrobios/data/), the metadata under MIT
 
 <details>
@@ -110,4 +110,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in [the project's legal position](https://abdess.github.io/retrobios/wiki/legal/).
 
-*Auto-generated on 2026-11-10T08:51:40Z*
+*Auto-generated on 2026-11-11T21:59:37Z*

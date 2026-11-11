@@ -49,8 +49,9 @@ class TheEntryTable(unittest.TestCase):
     def test_a_long_table_has_its_filter_box_and_stacks(self):
         lines = siteentries.entry_table(self._rows(25), gs.ENTRY_HEADS, "rb-entry-filter-x", "Required")
         text = "\n".join(lines)
-        self.assertRegex(text, r'<div class="rb-table-filter"><label for="rb-entry-filter-x">'
-                               r"Filter Required</label><input id=\"rb-entry-filter-x\" type=\"search\"")
+        self.assertRegex(text, r'<div class="rb-table-filter" hidden data-pagefind-ignore>'
+                               r'<label for="rb-entry-filter-x">Filter Required</label> '
+                               r"<input id=\"rb-entry-filter-x\" type=\"search\"")
         self.assertIn('aria-live="polite">25 rows</span></div>\n<table class="rb-entries" '
                       'data-rb-stack="true">', text)
         # The Status column is empty on every row: not written.
@@ -210,7 +211,7 @@ class TheWantedListIsOneFilteredTable(unittest.TestCase):
         self.assertIn("| Nintendo - GameCube - BIOS Images | 16 |", self.page)
 
     def test_every_dump_is_one_row_under_a_filter_box(self):
-        box = re.search(r'<div class="rb-table-filter">.*?</div>\n<details[^>]*>\n'
+        box = re.search(r'<div class="rb-table-filter"[^>]*>.*?</div>\n<details[^>]*>\n'
                         r"<summary>All 31 wanted dumps</summary>\n<table class=\"rb-wanted\"",
                         self.page, re.S)
         self.assertIsNotNone(box)

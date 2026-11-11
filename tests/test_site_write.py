@@ -120,6 +120,21 @@ class Sweep(unittest.TestCase):
         self.assertTrue((self.docs / "emulators/kept.md").exists())
         self.assertTrue((self.docs / "emulators/nested/deep.md").exists())
 
+    def test_a_page_the_decoration_pass_made_mdx_is_kept(self):
+        """A body is written as .md, and the decoration pass, after the
+        sweep, renames a page with components to .mdx. The .mdx of the run
+        before was swept and written again on every run: 402 pages."""
+        (self.docs / "platforms/kept.mdx").write_text("x")
+        (self.docs / "platforms/gone.mdx").write_text("x")
+        self._produce("platforms/kept.md")
+        sitewrite._sweep_generated(self.docs, ["platforms"])
+        (self.docs / "top.mdx").write_text("x")
+        sitewrite._record(self.docs / "top.md")
+        self.assertEqual(sitewrite._sweep_top_pages(self.docs), 0)
+        self.assertTrue((self.docs / "platforms/kept.mdx").exists())
+        self.assertTrue((self.docs / "top.mdx").exists())
+        self.assertFalse((self.docs / "platforms/gone.mdx").exists())
+
     def test_a_directory_outside_the_list_is_never_touched(self):
         self._produce("emulators/kept.md", "emulators/nested/deep.md",
                       "emulators/stale.md")

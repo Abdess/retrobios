@@ -4259,7 +4259,8 @@ launchers:
   passes_to: "settings.ini [BIOS] PathNTSCJ = PathNTSCU = PathPAL = <value>"
   fails_when_missing: not checked by the launcher
   depends_on_option: duck_bios
-  source_ref: "emulatorLauncher/Generators/Duckstation.Generator.cs:197-202, .emulationstation/es_features.cfg:12489-12497"
+  choices_from: ".emulationstation/es_features.cfg:12489-12497"
+  source_ref: "emulatorLauncher/Generators/Duckstation.Generator.cs:197-202"
 - emulator: eka2l1
   build: standalone
   kind: passes_path
@@ -4599,7 +4600,8 @@ launchers:
   passes_to: "hatari.cfg [ROM] szTosImageFileName=<bios>/hatari/tos/<value>"
   fails_when_missing: ApplicationException 'Missing TOS file <tosName> in 'bios' folder.'
   depends_on_option: hatari_tos
-  source_ref: "emulatorLauncher/Generators/Hatari.Generator.cs:410-415, 454, .emulationstation/es_features.cfg:13768-13774"
+  choices_from: ".emulationstation/es_features.cfg:13768-13774"
+  source_ref: "emulatorLauncher/Generators/Hatari.Generator.cs:410-415, 454"
 - emulator: hatari
   build: standalone
   kind: fixed_name
@@ -4639,7 +4641,8 @@ launchers:
   passes_to: hatari_tosimage = <value>, if the file is there | default
   fails_when_missing: hatari_tosimage = default
   depends_on_option: hatari2014_tos
-  source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:3409-3417, .emulationstation/es_features.cfg:7095-7102"
+  choices_from: ".emulationstation/es_features.cfg:7095-7102"
+  source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:3409-3417"
 - emulator: hatarib
   build: libretro
   kind: fixed_name
@@ -4667,8 +4670,8 @@ launchers:
   passes_to: hatarib_tos = hatarib/<value>
   fails_when_missing: hatarib_tos = <etos1024k>, or <tos.img> when bios holds it
   depends_on_option: hatarib_tos
-  source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:3434-3435, 3457-3474,\
-    \ .emulationstation/es_features.cfg:7125-7134"
+  choices_from: ".emulationstation/es_features.cfg:7125-7134"
+  source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:3434-3435, 3457-3474"
 - emulator: hatarib
   build: libretro
   kind: copies
@@ -4718,16 +4721,26 @@ launchers:
     \ == \"hbmame\", !string.IsNullOrEmpty(AppConfig[\"bios\"]) && Directory.Exists(AppConfig[\"\
     bios\"])"
   source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:93-96"
+- emulator: hbmame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: bios/hbmame/samples
+  passes_to: command line -sp bios/hbmame/samples
+  fails_when_missing: false
+  depends_on_option: "messMode == null || messMode.Name == \"mame\" || messMode.Name\
+    \ == \"hbmame\", !string.IsNullOrEmpty(samplePath) && Directory.Exists(samplePath)"
+  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:30, 101, 106-107"
 - emulator: mame64
   build: standalone
   kind: passes_path
   names: []
-  search_dir: bios/hbmame/samples when hbmame, else bios/mame/samples
-  passes_to: command line -sp bios/hbmame/samples when hbmame, else bios/mame/samples
+  search_dir: bios/mame/samples
+  passes_to: command line -sp bios/mame/samples
   fails_when_missing: false
   depends_on_option: "messMode == null || messMode.Name == \"mame\" || messMode.Name\
     \ == \"hbmame\", !string.IsNullOrEmpty(samplePath) && Directory.Exists(samplePath)"
-  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:101, 106-107"
+  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:30, 101, 106-107"
 - emulator: mame64
   build: standalone
   kind: passes_path
@@ -4764,16 +4777,26 @@ launchers:
   depends_on_option: "messMode == null || messMode.Name == \"mame\" || messMode.Name\
     \ == \"hbmame\", !string.IsNullOrEmpty(iniPath) && Directory.Exists(iniPath)"
   source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:74-76, 167-168"
+- emulator: hbmame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: bios/hbmame/hash
+  passes_to: command line -hash bios/hbmame/hash
+  fails_when_missing: false
+  depends_on_option: "messMode == null || messMode.Name == \"mame\" || messMode.Name\
+    \ == \"hbmame\", !string.IsNullOrEmpty(hashPath) && Directory.Exists(hashPath)"
+  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:30, 172, 177-178"
 - emulator: mame64
   build: standalone
   kind: passes_path
   names: []
-  search_dir: bios/hbmame/hash when hbmame, else bios/mame/hash
-  passes_to: command line -hash bios/hbmame/hash when hbmame, else bios/mame/hash
+  search_dir: bios/mame/hash
+  passes_to: command line -hash bios/mame/hash
   fails_when_missing: false
   depends_on_option: "messMode == null || messMode.Name == \"mame\" || messMode.Name\
     \ == \"hbmame\", !string.IsNullOrEmpty(hashPath) && Directory.Exists(hashPath)"
-  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:172, 177-178"
+  source_ref: "emulatorLauncher/Generators/Mame64.Generator.cs:30, 172, 177-178"
 - emulator: mame64
   build: standalone
   kind: passes_path
@@ -4865,7 +4888,8 @@ launchers:
   fails_when_missing: falls back to dsi_nand.bin
   depends_on_option: melonds_console == "dsi", melonds_nandregion set, rom extension
     not ".bin"
-  source_ref: "emulatorLauncher/Generators/MelonDS.Generator.cs:193-202, .emulationstation/es_features.cfg:16816-16823"
+  choices_from: ".emulationstation/es_features.cfg:16816-16823"
+  source_ref: "emulatorLauncher/Generators/MelonDS.Generator.cs:193-202"
 - emulator: mesen
   build: standalone
   kind: copies
@@ -5061,7 +5085,8 @@ launchers:
   passes_to: "kronos.ini [1.0] General\\Bios = <bios>/<value>, only if the file exists"
   fails_when_missing: General\Bios not written
   depends_on_option: kronos_force_bios
-  source_ref: "emulatorLauncher/Generators/Kronos.Generator.cs:162-170, .emulationstation/es_features.cfg:14519-14524"
+  choices_from: ".emulationstation/es_features.cfg:14519-14524"
+  source_ref: "emulatorLauncher/Generators/Kronos.Generator.cs:162-170"
 - emulator: ssf
   build: standalone
   kind: core_option
@@ -5074,7 +5099,8 @@ launchers:
   passes_to: "SSF.ini [Peripheral] SaturnBIOS = <bios>/<value>, only if the file exists"
   fails_when_missing: SaturnBIOS not written
   depends_on_option: use_external_bios
-  source_ref: "emulatorLauncher/Generators/SSF.Generator.cs:76-83, .emulationstation/es_features.cfg:20762-20767"
+  choices_from: ".emulationstation/es_features.cfg:20762-20767"
+  source_ref: "emulatorLauncher/Generators/SSF.Generator.cs:76-83"
 - emulator: yabasanshiro
   build: standalone
   kind: fixed_name
@@ -5099,7 +5125,8 @@ launchers:
     \ exists"
   fails_when_missing: General\Bios not written
   depends_on_option: yabasanshiro_force_bios
-  source_ref: "emulatorLauncher/Generators/Yabasanshiro.Generator.cs:123-131, .emulationstation/es_features.cfg:22724-22729"
+  choices_from: ".emulationstation/es_features.cfg:22724-22729"
+  source_ref: "emulatorLauncher/Generators/Yabasanshiro.Generator.cs:123-131"
 - emulator: ymir
   build: standalone
   kind: fixed_name
@@ -5124,7 +5151,8 @@ launchers:
     \ check"
   fails_when_missing: path written without an existence check
   depends_on_option: ymir_force_bios
-  source_ref: "emulatorLauncher/Generators/Ymir.Generator.cs:120-125, .emulationstation/es_features.cfg:22784-22788"
+  choices_from: ".emulationstation/es_features.cfg:22784-22788"
+  source_ref: "emulatorLauncher/Generators/Ymir.Generator.cs:120-125"
 - emulator: ymir
   build: standalone
   kind: passes_path
@@ -5202,7 +5230,8 @@ launchers:
   fails_when_missing: ApplicationException 'BIOS file <pcsx2Bios> does not exist in
     '<ps2BiosFolder>'.'
   depends_on_option: lrps2_bios
-  source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:3695-3704, .emulationstation/es_features.cfg:5875-5881"
+  choices_from: ".emulationstation/es_features.cfg:5875-5881"
+  source_ref: "emulatorLauncher/Generators/LibRetro.CoreOptions.cs:3695-3704"
 - emulator: pcsx2
   build: libretro
   kind: scans_dir
@@ -5615,8 +5644,10 @@ launchers:
   search_dir: bios
   passes_to: "xemu.toml [sys.files] flashrom_path=<bios>/<value>, default Complex_4627.bin"
   fails_when_missing: path written without an existence check
-  depends_on_option: xemu_flashrom
-  source_ref: "emulatorLauncher/Generators/Xemu.Generator.cs:286-289, .emulationstation/es_features.cfg:22081-22085"
+  depends_on_option: "xemu_flashrom, not (emulator == \"xemu-chihiro\" || system ==\
+    \ \"chihiro\")"
+  choices_from: ".emulationstation/es_features.cfg:22081-22085"
+  source_ref: "emulatorLauncher/Generators/Xemu.Generator.cs:48, 284-289"
 - emulator: xemu
   build: standalone
   kind: names_searched
@@ -5732,7 +5763,8 @@ launchers:
   - coco3h
   - coco3p
   - coco3ph
-  source_ref: "emulatorLauncher/Generators/Xroar.Generator.cs:76-80, .emulationstation/es_features.cfg:22650-22659"
+  choices_from: ".emulationstation/es_features.cfg:22650-22659"
+  source_ref: "emulatorLauncher/Generators/Xroar.Generator.cs:76-80"
 - emulator: xroar
   build: standalone
   kind: passes_path

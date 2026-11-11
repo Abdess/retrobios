@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import posixpath
 import re
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
 
 from .configgen_launchers import Launcher
@@ -22,6 +22,8 @@ from .rocknix_launchers import fixed_paths
 from .shell_launchers import (
     LauncherPatternMissing,
     Link,
+    config_placement,
+    evidence_fields,
     RepoTree,
     Script,
     describe_keys,
@@ -38,6 +40,12 @@ EMULATORS = f"{SX05RE}/emulators"
 LIBRETRO = f"{SX05RE}/libretro"
 RETROARCH_MK = f"{SX05RE}/libretro_base/retroarch/package.mk"
 BIOS_ROOT = "/storage/roms/bios"
+EMUELEC_MK = f"{SX05RE}/emuelec/package.mk"
+# The copy of every package's /usr/config into /storage/.config at each boot,
+# an existing file kept (cp -i answered by false).
+USERCONFIG = "packages/sysutils/systemd/scripts/userconfig-setup"
+# The roms root that holds it (packages/sx05re/libretro_base/retroarch/package.mk:112,117).
+ROMS_ROOT = "/storage/roms"
 
 _EMU_TEST = re.compile(r'\$\{?EMU\}?"?\s*==?\s*"([^"]+)"')
 _ARM = re.compile(r'^\s*((?:"[^"]+"\|?)+)\)\s*$')
@@ -100,6 +108,54 @@ class Runs:
 
     def ref(self, name: str) -> tuple[str, set[int]]:
         return (RUN_EMU, set(self.of(name).lines))
+
+
+def _storage_path(tree: RepoTree, target: str) -> str:
+    """target with the /emuelec link resolved to the folder it points at.
+
+    The emuelec package links /emuelec to /storage/.config/emuelec, where
+    the first-boot copy of /usr/config lands.
+    """
+    mk = _read(tree, EMUELEC_MK)
+    _line, link = mk.find(r"ln -sf (/storage/\S+) \$\{INSTALL\}(/emuelec)$", "/emuelec link")
+    if target == link.group(2) or target.startswith(link.group(2) + "/"):
+        return link.group(1) + target[len(link.group(2)):]
+    return target
+
+
+def _evidence(
+    record: Launcher,
+    script: Script,
+    target: str,
+    keys: list[str],
+    source_name: str = "",
+    rewrites: Iterable[int] = (),
+    tree: RepoTree | None = None,
+    installed: Iterable[tuple[str, Iterable[int]]] = (),
+) -> Launcher:
+    """A config record with the lines that put its file in place: the
+    first-boot copy of /usr/config when ``tree`` is given, then the start
+    script's own. ``installed`` are the package.mk lines putting the file
+    in /usr/config.
+
+    ``rewrites`` are lines the extractor read as rewriting the record's
+    values without naming their keys (advmame.sh's sed of /roms/mame).
+    """
+    placements = []
+    if tree is not None:
+        setup = _read(tree, USERCONFIG)
+        placements.append(config_placement(
+            setup, _storage_path(tree, target), required=False, sources=("/usr/config/",)
+        ))
+    placement = config_placement(script, target, keys, source_name=source_name,
+                                 required=not placements or not placements[0].install)
+    placement.overrides |= set(rewrites)
+    placements.append(placement)
+    fields = evidence_fields(placements, installed)
+    record.installs = fields["installs"]
+    record.kept_if_present = fields["kept_if_present"]
+    record.overrides = fields["overrides"]
+    return record
 
 
 def _read(tree: RepoTree, path: str) -> Script:
@@ -315,7 +371,7 @@ def duckstation(tree: RepoTree, runs: Runs) -> list[Launcher]:
     name = posixpath.basename(script.path)
     lines = {found[k].line for k in (folder_key, *file_keys) if k in found}
     unset = describe_keys("", file_keys).strip()
-    return [
+    return [_evidence(
         Launcher(
             emulator=runs.emulator(name),
             build="standalone",
@@ -326,8 +382,13 @@ def duckstation(tree: RepoTree, runs: Runs) -> list[Launcher]:
             ),
             search_dir=found[folder_key].value,
             passes_to=f"settings.ini [BIOS] SearchDirectory (-settings), {unset} unset",
-        )
-    ]
+        ),
+        script,
+        script.expand("${CONFIG_DIR}/settings.ini", run_line, set()),
+        [f"[{s}] {k}" for s, k in (folder_key, *file_keys)],
+        tree=tree,
+        installed=[(mk.path, {mk_line})],
+    )]
 
 
 YABASANSHIRO_SCRIPTS = (
@@ -471,7 +532,7 @@ def hatari(tree: RepoTree, runs: Runs) -> list[Launcher]:
     mk = _read(tree, f"{package}/package.mk")
     mk_line, _ = mk.find(r"cp -R \$\{PKG_DIR\}/config/\* ", "config install")
     name = posixpath.basename(script.path)
-    return [
+    return [_evidence(
         Launcher(
             emulator=runs.emulator(name),
             build="standalone",
@@ -483,12 +544,26 @@ def hatari(tree: RepoTree, runs: Runs) -> list[Launcher]:
             ),
             search_dir=value.search_dir,
             passes_to=f"{describe_keys(copy.group(1), value.keys)} (--configfile)",
-        )
-    ]
+        ),
+        script,
+        script.expand("${" + copy.group(2) + "}", copy_line, set()),
+        [f"[{s}] {k}" if s else k for s, k in value.keys],
+        source_name=copy.group(1),
+    )]
+
+
+_ADVMAME_SYSTEM = re.compile(r'^\s*if \[\[ "\$\{1\}" = "([\w-]+)" \]\]; then$')
+_ADVMAME_SED = re.compile(r'^\s*sed -i "s\|([^|]+)\|([^|]+)\|g" \$\{CONFIG_DIR\}/advmame\.rc$')
 
 
 def advancemame(tree: RepoTree, runs: Runs) -> list[Launcher]:
-    """Folder keys of the advmame.rc package.mk installs, one per device branch."""
+    """Folder keys of the advmame.rc package.mk installs, one per device branch.
+
+    A key under the roms root is one too: dir_rom is /storage/roms/mame. The
+    start script rewrites the config for the system it is launched for
+    (advmame.sh:26-30): /roms/mame becomes /roms/arcade for arcade, so that
+    system reads its own record.
+    """
     package = f"{EMULATORS}/advancemame"
     mk = _read(tree, f"{package}/package.mk")
     installs = [
@@ -501,8 +576,8 @@ def advancemame(tree: RepoTree, runs: Runs) -> list[Launcher]:
     by_value: dict[tuple[tuple[str, str], ...], list[tuple[str, set[int], int]]] = {}
     for mk_line, file in installs:
         path = f"{package}/config/{file}"
-        keys = [s for s in settings(tree.read(path), separator=" ") if _under(s.value)]
-        if not keys:
+        keys = [s for s in settings(tree.read(path), separator=" ") if _under(s.value, ROMS_ROOT)]
+        if not any(_under(s.value) for s in keys):
             raise LauncherPatternMissing(path, f"key naming a folder under {BIOS_ROOT}")
         value = tuple((s.key, s.value) for s in keys)
         by_value.setdefault(value, []).append((path, {s.line for s in keys}, mk_line))
@@ -511,25 +586,47 @@ def advancemame(tree: RepoTree, runs: Runs) -> list[Launcher]:
     ((value, configs),) = by_value.items()
     script = _read(tree, f"{package}/bin/advmame.sh")
     run_line, _ = script.find(r"^\s*(?:\w+=\S+ )*advmame ", "advmame start")
+    test_line, test = script.find(_ADVMAME_SYSTEM.pattern, "system test", end=run_line)
+    sed_line, sed = script.find(_ADVMAME_SED.pattern, "system rewrite", test_line + 1, test_line + 1)
     name = posixpath.basename(script.path)
-    refs = [
-        runs.ref(name),
-        *((path, lines) for path, lines, _ in configs),
-        (mk.path, {mk_line for _, _, mk_line in configs}),
-        (script.path, {run_line}),
-    ]
-    return [
-        Launcher(
-            emulator=runs.emulator(name),
-            build="standalone",
-            kind="passes_path",
-            names=[],
-            source_ref=source_ref(refs),
-            search_dir=folder,
-            passes_to=f"advmame.rc {key}",
-        )
-        for key, folder in value
-    ]
+
+    def refs(*lines: int) -> str:
+        return source_ref([
+            runs.ref(name),
+            *((path, lines) for path, lines, _ in configs),
+            (mk.path, {mk_line for _, _, mk_line in configs}),
+            (script.path, {run_line, *lines}),
+        ])
+
+    target = script.expand("${CONFIG_DIR}/advmame.rc", run_line, set())
+
+    def proved(record: Launcher, key: str) -> Launcher:
+        return _evidence(record, script, target, [key], rewrites={sed_line}, tree=tree,
+                         installed=[(mk.path, {mk_line for _, _, mk_line in configs})])
+
+    records = []
+    for key, folder in value:
+        rewritten = folder.replace(sed.group(1), sed.group(2))
+        if rewritten != folder:
+            # Every system but the one the script rewrites the key for, and
+            # that system with the rewritten folder.
+            records.append(proved(Launcher(
+                emulator=runs.emulator(name), build="standalone", kind="passes_path", names=[],
+                source_ref=refs(test_line, sed_line), search_dir=folder,
+                passes_to=f"advmame.rc {key}",
+                depends_on_option=f"system != {test.group(1)}",
+            ), key))
+            records.append(proved(Launcher(
+                emulator=runs.emulator(name), build="standalone", kind="passes_path", names=[],
+                source_ref=refs(test_line, sed_line), search_dir=rewritten,
+                passes_to=f"advmame.rc {key}", systems=[test.group(1)],
+            ), key))
+            continue
+        records.append(proved(Launcher(
+            emulator=runs.emulator(name), build="standalone", kind="passes_path", names=[],
+            source_ref=refs(), search_dir=folder, passes_to=f"advmame.rc {key}",
+        ), key))
+    return records
 
 
 def mame(tree: RepoTree, runs: Runs) -> list[Launcher]:
@@ -566,42 +663,11 @@ def mame(tree: RepoTree, runs: Runs) -> list[Launcher]:
         )
     if not records:
         raise script.missing(f"copy into {BIOS_ROOT}")
-    ini = next((r for r in records if r.names == ["mame*"]), None)
-    if ini is None:
-        raise script.missing("copy of mame.ini")
-    option_path = f"{package}/config/MAME/MAME.opt"
-    option = next(
-        (s for s in settings(tree.read(option_path)) if s.key == "mame_read_config"), None
-    )
-    if option is None:
-        raise LauncherPatternMissing(option_path, "mame_read_config")
-    ini_path = f"{package}/config/ini/mame.ini"
-    # MAME reads from the folders its *path options name and writes to its
-    # *_directory ones.
-    folders = [
-        (s, [p for p in s.value.split(";") if _under(p)])
-        for s in settings(tree.read(ini_path), separator=" ")
-        if s.key.endswith("path")
-    ]
-    folders = [(s, parts) for s, parts in folders if parts]
-    if not folders:
-        raise LauncherPatternMissing(ini_path, f"path under {BIOS_ROOT}")
-    for setting, parts in folders:
-        for part in parts:
-            records.append(
-                Launcher(
-                    emulator=emulator,
-                    build="libretro",
-                    kind="passes_path",
-                    names=[],
-                    source_ref=source_ref(
-                        [(ini_path, {setting.line}), (option_path, {option.line})]
-                    ) + f", {ini.source_ref}",
-                    search_dir=part.rstrip("/"),
-                    passes_to=f"mame.ini {setting.key}",
-                    depends_on_option=f"mame_read_config = {option.value}",
-                )
-            )
+    # mame.ini hands the core no folder: MAME.opt turns on
+    # mame_mame_paths_enable, so the core passes no path option
+    # (libretro mame src/osd/libretro/libretro-internal/retro_init.cpp:554-555),
+    # and the ini MAME would read sits under a working directory no launcher
+    # sets (src/emu/emuopts.cpp:49). Only the copies are the launcher's.
     return records
 
 
@@ -616,6 +682,16 @@ def scummvm(tree: RepoTree, runs: Runs) -> list[Launcher]:
     core_line, core = script.find(r"-L /tmp/cores/(\w+)_libretro\.so", "libretro start")
     arm_line, arm = script.find(r'^\s*"(\w+)"\)', "setup arm", core_line)
     copy_line, copy = script.find(r"^\s*cp (\S+) (\S+)$", "copy into the BIOS folder", arm_line)
+    launched = sorted({
+        m.group(1) for _, line in runs.script.code()
+        if (m := re.search(rf"\b{re.escape(name)} (\w+)", line))
+    })
+    if not launched:
+        raise runs.script.missing(f"start of {name} with an action")
+    action = f"{name} {arm.group(1)}"
+    if arm.group(1) not in launched:
+        # The copy runs from the setup action, never from a launch.
+        action += f", an action no launch runs ({RUN_EMU.rsplit('/', 1)[-1]} passes {', '.join(launched)})"
     used = {copy_line}
     source = script.expand(copy.group(1), copy_line, used)
     target = script.expand(copy.group(2), copy_line, used)
@@ -641,7 +717,7 @@ def scummvm(tree: RepoTree, runs: Runs) -> list[Launcher]:
             search_dir=posixpath.dirname(source),
             passes_to=target,
             fails_when_missing=False,
-            depends_on_option=f"{name} {arm.group(1)}",
+            depends_on_option=action,
         ),
     ]
 

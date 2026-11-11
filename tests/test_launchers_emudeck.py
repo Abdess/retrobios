@@ -40,6 +40,9 @@ ARES_SH = text(
     	UserBIOSPath='/home/deck/Emulation/bios/'
     	sed -i "s|$UserBIOSPath|${biosPath}\\/|g" "$ares_configFile"
     }
+    ares_init(){
+    	configEmuFP "${ares_emuName}" "${ares_emuPath}" "true"
+    }
 """
 )
 
@@ -87,6 +90,9 @@ MELONDS_SH = text(
     	buttonA='Joy_A='
     	changeLine "$buttonA" "$buttonA""0" "${melonDS_configFile}"
     }
+    melonDS_update(){
+    	configEmuFP "${melonDS_emuName}" "${melonDS_emuPath}"
+    }
 """
 )
 
@@ -103,6 +109,7 @@ MELONDS_TOML = text(
     LastROMFolder = "/run/media/mmcblk0p1/Emulation/roms/ds"
     [Emu]
     ExternalBIOSEnable = false
+    ConsoleType = 0
     [DS]
     FirmwarePath = "/run/media/mmcblk0p1/Emulation/bios/firmware.bin"
     BIOS7Path = "/run/media/mmcblk0p1/Emulation/bios/bios7.bin"
@@ -206,8 +213,23 @@ SHADPS4_SH = text(
 )
 
 
+CONFIG_EMU_FP = text(
+    """
+    configEmuFP(){
+    	if [[ $overwrite == 'true' ]]; then
+    		overwrite="--backup --suffix=.bak"
+        else
+            overwrite="--ignore-existing"
+        fi
+    	rsync -avhp --mkpath "$emudeckBackend/configs/${ID}" "$HOME/.var/app/" $overwrite
+    }
+"""
+)
+
+
 def tree(**scripts: str) -> RepoTree:
     files = {f"{S}/{name}": body for name, body in scripts.items()}
+    files[el.CONFIG_EMU_FP] = CONFIG_EMU_FP
     files[f"{el.CONFIGS}/dev.ares.ares/data/ares/settings.bml"] = ARES_BML
     files[f"{el.CONFIGS}/net.kuribo64.melonDS/config/melonDS/melonDS.ini"] = MELONDS_INI
     files[f"{el.CONFIGS}/net.kuribo64.melonDS/config/melonDS/melonDS.toml"] = MELONDS_TOML
@@ -253,8 +275,17 @@ class WrittenIntoTheConfig(unittest.TestCase):
         self.assertEqual(
             toml["passes_to"], "melonDS.toml [DS] FirmwarePath, BIOS7Path [DSi] NANDPath"
         )
+        # The DS keys wait for ExternalBIOSEnable, the DSi keys for a DSi.
         self.assertEqual(
-            toml["depends_on_option"], "ExternalBIOSEnable = false in the shipped melonDS.toml"
+            toml["depends_on_option"],
+            "[DS] keys: ExternalBIOSEnable = true, false in the shipped melonDS.toml; "
+            "[DSi] keys: ConsoleType = 1, 0 in the shipped melonDS.toml",
+        )
+        # configEmuFP's update call passes --ignore-existing.
+        self.assertIs(toml["kept_if_present"], True)
+        self.assertEqual(
+            toml["installs"]["path"],
+            "${HOME}/.var/app/net.kuribo64.melonDS/config/melonDS/melonDS.toml",
         )
 
     def test_a_config_the_setters_rewrite_keeps_their_values(self):

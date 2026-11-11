@@ -289,7 +289,7 @@ class Presets(unittest.TestCase):
         self.assertEqual(lists["dragon64"]["names"][-1], "dragon")
         self.assertEqual(
             lists["d64_1"]["source_ref"],
-            "xroar/rd_assets/rd_config/xroar.conf:292, xroar/component_prepare.sh:13, 15",
+            "xroar/rd_assets/rd_config/xroar.conf:292, xroar/component_prepare.sh:13-15",
         )
 
     def test_a_reference_to_an_unknown_romlist_raises(self):

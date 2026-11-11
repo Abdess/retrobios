@@ -407,12 +407,12 @@
  4 files to download, 1.0 MB
  BIOS folder:
    ~/.config/retroarch/system
+
  > Install
    Choose systems
    Copy from an old card or a folder
    Details
-   Change
-   Quit
+ 1-4 of 7
  A Install  B Back  Y Change
 === plan 40x15
  RetroBIOS: RetroArch
@@ -426,8 +426,8 @@
    Copy from an old card or a folder
    Details
    Change
+   More
    Quit
-
 
  A Install  B Back  Y Change
 === plan 80x24
@@ -441,8 +441,8 @@
    Copy the BIOS files from an old card or a folder
    Details
    Change
+   More
    Quit
-
 
 
 
@@ -465,7 +465,7 @@
  > Close
    Details
    Change
-
+   More
 
  A Close  B Back  Y Change
 === plan-in-place 40x15
@@ -478,7 +478,7 @@
  > Close
    Details
    Change
-
+   More
 
 
 
@@ -493,7 +493,7 @@
  > Close
    Details
    Change
-
+   More
 
 
 
@@ -1144,7 +1144,7 @@
    For the games on this card: yes  412
    Only what starts: no
    Show the games
- 1-4 of 9
+ 1-4 of 10
  A Install  B Back  Y Change
 === plan-games 40x15
  RetroBIOS: RetroArch
@@ -1152,6 +1152,7 @@
  4 files to download, 1.0 MB
  BIOS folder:
    ~/.config/retroarch/system
+
  > Install
    For the games on this card: yes  412
    Only what starts: no
@@ -1159,8 +1160,7 @@
    Choose systems
    Copy from an old card or a folder
    Details
-   Change
-   Quit
+ 1-7 of 10
  A Install  B Back  Y Change
 === plan-games 80x24
  RetroBIOS: RetroArch
@@ -1177,8 +1177,8 @@
    Copy the BIOS files from an old card or a folder
    Details
    Change
+   More
    Quit
-
 
 
 
@@ -1352,7 +1352,7 @@
    Backups
    Put back a backup
    Delete a backup
-
+   Make a pack
 
 
 
@@ -1365,7 +1365,7 @@
    Backups
    Put back a backup
    Delete a backup
-
+   Make a pack
 
 
 
@@ -1381,7 +1381,7 @@
    Backups
    Put back a backup
    Delete a backup
-
+   Make a pack
 
 
 
@@ -1669,3 +1669,165 @@
 
 
  A Choose  B Back
+=== pack-plan 40x12
+ RetroBIOS: Make a pack
+
+ 4 files, 1.0 MB, for RetroArch.
+ Pack: ~/Downloads/
+   RetroArch_Custom_BIOS_Pack.zip
+ One ZIP, installed with --from-pack.
+
+ > Make the pack
+   Change where
+
+
+ A Make  B Back
+=== pack-plan 40x15
+ RetroBIOS: Make a pack
+
+ 4 files, 1.0 MB, for RetroArch.
+ Pack: ~/Downloads/
+   RetroArch_Custom_BIOS_Pack.zip
+ One ZIP, installed with --from-pack.
+
+ > Make the pack
+   Change where
+
+
+
+
+
+ A Make  B Back
+=== pack-plan 80x24
+ RetroBIOS: Make a pack
+
+ 4 files, 1.0 MB, for RetroArch.
+ Pack: ~/Downloads/RetroArch_Custom_BIOS_Pack.zip
+ One ZIP, installed with --from-pack.
+
+ > Make the pack
+   Change where
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ A Make  B Back
+=== pack-plan-parts 40x12
+ RetroBIOS: Make a pack
+
+ 4 files, 1.0 MB, for RetroArch.
+ Pack: ~/Downloads/
+   RetroArch_Custom_BIOS_Pack.part1of3.
+   zip
+ In 3 parts of at most 3.9 GB, as FAT32
+   holds no file of 4 GB.
+
+ > Make the pack
+   Change where
+ A Make  B Back
+=== pack-plan-parts 40x15
+ RetroBIOS: Make a pack
+
+ 4 files, 1.0 MB, for RetroArch.
+ Pack: ~/Downloads/
+   RetroArch_Custom_BIOS_Pack.part1of3.
+   zip
+ In 3 parts of at most 3.9 GB, as FAT32
+   holds no file of 4 GB.
+
+ > Make the pack
+   Change where
+
+
+
+ A Make  B Back
+=== pack-plan-parts 80x24
+ RetroBIOS: Make a pack
+
+ 4 files, 1.0 MB, for RetroArch.
+ Pack: ~/Downloads/RetroArch_Custom_BIOS_Pack.part1of3.zip
+ In 3 parts of at most 3.9 GB, as FAT32 holds no file of 4 GB.
+
+ > Make the pack
+   Change where
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ A Make  B Back
+=== pack-done 40x12
+ RetroBIOS: Done
+
+ Pack made: 4 files, 1023.4 KB, in 3
+   parts.
+ Pack: ~/Downloads/
+   RetroArch_Custom_BIOS_Pack.part1of3.
+   zip
+ On the other device, install from it
+   with --from-pack.
+
+ > Close
+ A Close  B Back
+=== pack-done 40x15
+ RetroBIOS: Done
+
+ Pack made: 4 files, 1023.4 KB, in 3
+   parts.
+ Pack: ~/Downloads/
+   RetroArch_Custom_BIOS_Pack.part1of3.
+   zip
+ On the other device, install from it
+   with --from-pack.
+
+ > Close
+
+
+
+ A Close  B Back
+=== pack-done 80x24
+ RetroBIOS: Done
+
+ Pack made: 4 files, 1023.4 KB, in 3 parts.
+ Pack: ~/Downloads/RetroArch_Custom_BIOS_Pack.part1of3.zip
+ On the other device, install from it with --from-pack.
+
+ > Close
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ A Close  B Back
