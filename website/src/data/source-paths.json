@@ -419,6 +419,7 @@
   "cmake/BuildParameters.cmake",
   "pcsx2-libretro/Main.cpp",
   "pcsx2-qt/GameList/GameListModel.cpp",
+  "pcsx2-qt/QtHost.cpp",
   "pcsx2-qt/QtUtils.cpp",
   "pcsx2-qt/Settings/AchievementLoginDialog.cpp",
   "pcsx2-qt/Settings/GameSummaryWidget.cpp",
@@ -608,10 +609,13 @@
   "crates/wqxemu/src/main.rs"
  ],
  "github.com/AmberELEC/AmberELEC@a21975bfb1a3af68f66e07a931b994b523e1e6e2": [
+  "packages/games/emulators/advancemame/package.mk",
   "packages/games/emulators/amiberry/package.mk",
+  "packages/games/emulators/hatarisa/package.mk",
   "packages/games/emulators/lzdoom/package.mk",
   "packages/games/emulators/piemu/package.mk",
-  "packages/games/libretro/flycast2021le/package.mk"
+  "packages/games/libretro/flycast2021le/package.mk",
+  "packages/games/tools/retroarch/package.mk"
  ],
  "github.com/Amjad50/plastic@74152adb3acd890d3abee2ff5906408f26a199e2": [
   "plastic_core/src/cartridge/mod.rs",
@@ -784,6 +788,8 @@
   "src/x86.cpp"
  ],
  "github.com/BlitterStudio/amiberry@5c54536997c0039aaa72bb0552cefdc3c967ad8d": [
+  "src/cfgfile.cpp",
+  "src/main.cpp",
   "src/memory.cpp",
   "src/osdep/amiberry.cpp",
   "src/osdep/amiberry_gui.cpp",
@@ -802,9 +808,11 @@
  ],
  "github.com/BlitterStudio/amiberry@c53d6db770a5580732a7f2bb48abcbfcd95fd0f4": [
   "CMakeLists.txt",
+  "src/cfgfile.cpp",
   "src/kbmcu/keyboard_mcu_6500_1.cpp",
   "src/kbmcu/keyboard_mcu_6805.cpp",
   "src/kbmcu/keyboard_mcu_d8039hlc.cpp",
+  "src/main.cpp",
   "src/memory.cpp",
   "src/midiemu.cpp",
   "src/osdep/amiberry.cpp",
@@ -1142,10 +1150,18 @@
   "Oxygen/sonic3air/source/sonic3air/version.inc"
  ],
  "github.com/FCare/Kronos@d0384bc33aad06bfa9cf5cd308c4bd7ae6cfc814": [
+  "yabause/src/CMakeLists.txt",
   "yabause/src/ctrl/src/stv.c",
+  "yabause/src/ctrl/src/yabause.c",
   "yabause/src/libretro/Makefile.common",
   "yabause/src/libretro/libretro.c",
+  "yabause/src/port/qt/Settings.cpp",
+  "yabause/src/port/qt/Settings.h",
+  "yabause/src/port/qt/VolatileSettings.cpp",
+  "yabause/src/port/qt/YabauseThread.cpp",
+  "yabause/src/port/qt/main.cpp",
   "yabause/src/sys/memory/src/cs0.c",
+  "yabause/src/sys/memory/src/memory.c",
   "yabause/src/utils/src/db.c"
  ],
  "github.com/FWGS/xash3d-fwgs@27092af50d912432887faa43a1cccddfae569b2d": [
@@ -1415,6 +1431,7 @@
   "README.md",
   "cmake/BuildParameters.cmake",
   "pcsx2-qt/GameList/GameListModel.cpp",
+  "pcsx2-qt/QtHost.cpp",
   "pcsx2-qt/QtUtils.cpp",
   "pcsx2-qt/Settings/AchievementLoginDialog.cpp",
   "pcsx2-qt/Settings/GameSummaryWidget.cpp",
@@ -1507,6 +1524,7 @@
   "pcsx2/DEV9/flash.cpp",
   "pcsx2/GameDatabase.cpp",
   "pcsx2/Patch.cpp",
+  "pcsx2/Pcsx2Config.cpp",
   "pcsx2/VMManager.cpp",
   "pcsx2/ps2/BiosTools.cpp"
  ],
@@ -2510,6 +2528,7 @@
   "src/CMakeLists.txt",
   "src/common/audio/music/i_soundfont.cpp",
   "src/common/filesystem/source/resourcefile.cpp",
+  "src/common/platform/posix/unix/i_specialpaths.cpp",
   "src/common/utility/findfile.cpp",
   "src/d_iwad.cpp",
   "src/d_main.cpp",
@@ -2726,7 +2745,7 @@
   "src/ui_text.c",
   "src/version.c"
  ],
- "github.com/amadvance/advancemame@e29103266ebf2debde456c4a21193baf4a0192c8": [
+ "github.com/amadvance/advancemame@799060ba176e4aee5959087b08fc28904e842885": [
   "advance/advance.mak",
   "advance/linux/file.c",
   "advance/osd/emu.c",
@@ -2945,10 +2964,12 @@
   "mia/medium/saturn.cpp",
   "mia/medium/super-famicom.cpp",
   "mia/system/atari-5200.cpp",
+  "mia/system/colecovision.cpp",
   "mia/system/game-gear.cpp",
   "mia/system/master-system.cpp",
   "mia/system/neo-geo-aes.cpp",
-  "mia/system/neo-geo-mvs.cpp"
+  "mia/system/neo-geo-mvs.cpp",
+  "nall/nall/path.cpp"
  ],
  "github.com/atari800/atari800@98cc2dc749867c9c7317a0271ba062a6c797f886": [],
  "github.com/audetto/AppleWin@0a89db3d593a74d04590b902fb7206723591f445": [
@@ -4676,6 +4697,14 @@
  "github.com/libretro/RetroArch@5078a39b624e31b359e1527ea7fbfddfc7de96cb": [
   "version.all"
  ],
+ "github.com/libretro/RetroArch@69a4f0ea1e8aaf442ae4858f2e7f2b31a1776576": [
+  "config.def.h",
+  "configuration.c",
+  "libretro-common/file/config_file.c",
+  "libretro-common/file/file_path.c",
+  "retroarch.c",
+  "runloop.c"
+ ],
  "github.com/libretro/SameBoy@aa158a889a48b538a0302873704a34577c8eb67d": [
   "Core/gb.c",
   "Core/gb.h",
@@ -5149,6 +5178,7 @@
   "libretro/gui-retro/dlgRom.c",
   "libretro/include/config.h",
   "libretro/libretro.c",
+  "libretro/libretro_core_options.h",
   "src/cart.c",
   "src/change.c",
   "src/configuration.c",
@@ -5397,6 +5427,7 @@
   "src/drivers/stv.c",
   "src/drivers/suprnova.c",
   "src/drivers/zn.c",
+  "src/fileio.c",
   "src/hiscore.c",
   "src/mame2003/mame2003.c"
  ],
@@ -5470,6 +5501,7 @@
   "src/mame/drivers/twinkle.c",
   "src/mame/drivers/viper.c",
   "src/mame/drivers/zn.c",
+  "src/osd/retro/retromain.c",
   "src/osd/retro/retroos.c"
  ],
  "github.com/libretro/mame2015-libretro@7adbf440d5f554097f58f8c6ebb673adc4320a31": [
@@ -5584,6 +5616,7 @@
   "src/mame/drivers/twinkle.c",
   "src/mame/drivers/viper.c",
   "src/mame/drivers/zn.c",
+  "src/osd/retro/retromain.c",
   "src/version.c"
  ],
  "github.com/libretro/mame2016-libretro@ae07c2f88ff2482ba9f50ffc8c9e7e6fbfe97d0a": [
@@ -5639,6 +5672,7 @@
   "src/mame/drivers/twinkle.cpp",
   "src/mame/drivers/viper.cpp",
   "src/mame/drivers/zn.cpp",
+  "src/osd/retro/retromain.cpp",
   "src/version.cpp"
  ],
  "github.com/libretro/mame@5f5a07748ce5c239c4118463ce8e6473743d4859": [
@@ -6318,6 +6352,7 @@
   "src/devices/cpu/tms320c3x/tms320c3x.cpp",
   "src/devices/cpu/z8/z8.cpp",
   "src/devices/imagedev/floppy.cpp",
+  "src/devices/imagedev/harddriv.h",
   "src/devices/machine/archimedes_keyb.cpp",
   "src/devices/machine/at_keybc.cpp",
   "src/devices/machine/chessmachine.cpp",
@@ -6370,12 +6405,14 @@
   "src/devices/video/upd7220.cpp",
   "src/devices/video/voodoo_pci.cpp",
   "src/emu/device.cpp",
+  "src/emu/diimage.cpp",
   "src/emu/driver.cpp",
   "src/emu/emuopts.cpp",
   "src/emu/fileio.cpp",
   "src/emu/romload.cpp",
   "src/emu/softlist_dev.cpp",
   "src/frontend/mame/mame.cpp",
+  "src/lib/util/options.cpp",
   "src/mame/acorn/aa310.cpp",
   "src/mame/acorn/aristmk5.cpp",
   "src/mame/acorn/atom.cpp",
@@ -6765,6 +6802,7 @@
   "src/SPI.cpp",
   "src/frontend/Util_ROM.cpp",
   "src/frontend/qt_sdl/CMakeLists.txt",
+  "src/frontend/qt_sdl/Platform.cpp",
   "src/frontend/qt_sdl/main.cpp",
   "src/libretro/libretro.cpp"
  ],
@@ -6894,6 +6932,7 @@
   "pcsx2/DEV9/DEV9.cpp",
   "pcsx2/DEV9/flash.cpp",
   "pcsx2/GameDatabase.cpp",
+  "pcsx2/Pcsx2Config.cpp",
   "pcsx2/USB/usb-python2/py2desc.h",
   "pcsx2/VMManager.cpp",
   "pcsx2/ps2/BiosTools.cpp"
@@ -7193,10 +7232,18 @@
   "yabause/src/yabause.c"
  ],
  "github.com/libretro/yabause@3791ffb2221fda61d70aec5cca376418caf05669": [
+  "yabause/src/CMakeLists.txt",
   "yabause/src/ctrl/src/stv.c",
+  "yabause/src/ctrl/src/yabause.c",
   "yabause/src/libretro/Makefile.common",
   "yabause/src/libretro/libretro.c",
+  "yabause/src/port/qt/Settings.cpp",
+  "yabause/src/port/qt/Settings.h",
+  "yabause/src/port/qt/VolatileSettings.cpp",
+  "yabause/src/port/qt/YabauseThread.cpp",
+  "yabause/src/port/qt/main.cpp",
   "yabause/src/sys/memory/src/cs0.c",
+  "yabause/src/sys/memory/src/memory.c",
   "yabause/src/utils/src/db.c"
  ],
  "github.com/libretro/yabause@8926b0c6c347f8c5c755911ddb0ac695420ffbf8": [
@@ -8333,6 +8380,7 @@
   "src/devices/cpu/tms320c3x/tms320c3x.cpp",
   "src/devices/cpu/z8/z8.cpp",
   "src/devices/imagedev/floppy.cpp",
+  "src/devices/imagedev/harddriv.h",
   "src/devices/machine/archimedes_keyb.cpp",
   "src/devices/machine/at_keybc.cpp",
   "src/devices/machine/chessmachine.cpp",
@@ -8386,6 +8434,7 @@
   "src/devices/video/voodoo_pci.cpp",
   "src/emu/crsshair.cpp",
   "src/emu/device.cpp",
+  "src/emu/diimage.cpp",
   "src/emu/driver.cpp",
   "src/emu/emuopts.cpp",
   "src/emu/fileio.cpp",
@@ -8396,6 +8445,7 @@
   "src/frontend/mame/cheat.cpp",
   "src/frontend/mame/mame.cpp",
   "src/frontend/mame/ui/moptions.cpp",
+  "src/lib/util/options.cpp",
   "src/mame/acorn/aa310.cpp",
   "src/mame/acorn/aristmk5.cpp",
   "src/mame/acorn/atom.cpp",
@@ -8708,6 +8758,8 @@
   "src/SPI.cpp",
   "src/frontend/qt_sdl/CMakeLists.txt",
   "src/frontend/qt_sdl/Config.cpp",
+  "src/frontend/qt_sdl/EmuInstance.cpp",
+  "src/frontend/qt_sdl/Platform.cpp",
   "src/frontend/qt_sdl/main.cpp"
  ],
  "github.com/mentalfoundry/Pokket@4bf542953909c4efee926b9a344831f331b7de45": [
@@ -9344,6 +9396,7 @@
   "src/mame/drivers/twinkle.c",
   "src/mame/drivers/viper.c",
   "src/mame/drivers/zn.c",
+  "src/osd/retro/retromain.c",
   "src/version.c"
  ],
  "github.com/r-type/sdlvice-libretro@baaaeed97ce1c0a07ed78e3e155cfbd6f508b472": [
@@ -10154,7 +10207,8 @@
   "src/core/settings.cpp",
   "src/core/settings.h",
   "src/core/system.cpp",
-  "src/duckstation-qt/biossettingswidget.cpp"
+  "src/duckstation-qt/biossettingswidget.cpp",
+  "src/duckstation-qt/qthost.cpp"
  ],
  "github.com/suijingfeng/vkQuake3@650bd625eb725446279c6176804b554e2e1c98f3": [
   "Makefile",
@@ -10241,7 +10295,6 @@
   "src/tyrian2.c"
  ],
  "github.com/trngaje/advanced_drastic@eaf41ab9bc8adcc15c010bf9517bc94c38e7bffd": [
-  "README.md",
   "drastic",
   "launch.sh"
  ],
@@ -10373,6 +10426,7 @@
   "apps/ymir-sdl3/src/app/profile.cpp",
   "apps/ymir-sdl3/src/app/rom_manager.cpp",
   "apps/ymir-sdl3/src/app/services/rom_service.cpp",
+  "apps/ymir-sdl3/src/app/settings.cpp",
   "apps/ymir-sdl3/src/app/settings.hpp",
   "apps/ymir-sdl3/src/util/rom_loader.cpp",
   "libs/ymir-core/include/ymir/db/rom_cart_db.hpp",
@@ -10648,6 +10702,7 @@
   "apps/ymir-sdl3/src/app/profile.cpp",
   "apps/ymir-sdl3/src/app/rom_manager.cpp",
   "apps/ymir-sdl3/src/app/services/rom_service.cpp",
+  "apps/ymir-sdl3/src/app/settings.cpp",
   "apps/ymir-sdl3/src/app/settings.hpp",
   "apps/ymir-sdl3/src/util/rom_loader.cpp",
   "libs/ymir-core/include/ymir/db/rom_cart_db.hpp",
@@ -10664,6 +10719,7 @@
   "apps/ymir-sdl3/src/app/profile.cpp",
   "apps/ymir-sdl3/src/app/rom_manager.cpp",
   "apps/ymir-sdl3/src/app/services/rom_service.cpp",
+  "apps/ymir-sdl3/src/app/settings.cpp",
   "apps/ymir-sdl3/src/app/settings.hpp",
   "apps/ymir-sdl3/src/util/rom_loader.cpp",
   "libs/ymir-core/include/ymir/db/rom_cart_db.hpp",
