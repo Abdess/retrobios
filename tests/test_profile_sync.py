@@ -3077,11 +3077,13 @@ class TestDeliberatelyFrozenPin(TestBuildReport):
         # live build can add a system its frozen revision lacked
         # (advancemame's coh1002v, after advmame-1.4), so the frozen one's
         # systems are a subset, not an equal set. A live build can also drop
-        # a system upstream deleted: advancemame removed its Hyper Neo Geo 64
-        # driver in dff25b6ee7, which advmame-1.4 still carries.
+        # a system upstream deleted: AdvanceMAME removed its Hyper Neo Geo 64
+        # driver in dff25b6ee7, which advmame-1.4 and advancemame (AmberELEC's
+        # 0f6a767) still carry.
         removed_upstream = {
             ("advmame-1.4", "advancemame"): {"hyper-neogeo64"},
             ("advmame-1.4", "advmame"): {"hyper-neogeo64"},
+            ("advancemame", "advmame"): {"hyper-neogeo64"},
         }
         pairs = 0
         for names in by_source.values():
