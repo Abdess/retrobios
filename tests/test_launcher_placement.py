@@ -1148,6 +1148,113 @@ class MameOnRetroDeckRomPaths(unittest.TestCase):
         self.assertEqual(places["stvbios.zip"] - {"arcade", "mame", "consolearcade"}, {"stv"})
 
 
+class LibretroMameOnEsdeRomPaths(unittest.TestCase):
+    """ES-DE hands the libretro MAME core a command line as its content,
+    with -rompath "%GAMEDIRRAW%;%ROMPATH%/<system>" after the machine. The
+    core passes it to MAME after its own <system>/mame/bios, and the later
+    value wins (retro_init.cpp:580-597, 902-940, options.cpp:260-276)."""
+
+    def test_the_rom_folders_file_records_the_core(self) -> None:
+        with (REPO_ROOT / "platforms" / "romfolders" / "retrodeck.yml").open() as f:
+            rows = yaml.safe_load(f)["folders"]
+        found = {r["folder"]: s for r in rows for s in r.get("searched_by") or []
+                 if s.get("core") == "mame"}
+        self.assertEqual(len(found), 21)
+        self.assertEqual(found["apple2"]["machines"], ["apple2e"])
+        self.assertEqual(found["atari7800"]["reads"], ["atari7800"])
+        self.assertEqual(found["atari7800"]["emulator"], "retroarch")
+
+    def test_sets_also_land_in_the_folder_the_command_names(self) -> None:
+        # RetroDECK's roms/ sits beside bios/ in the install tree.
+        for platform, read in (("retrodeck", ("", "roms/gamate/gamate.zip")),
+                               ("emudeck", ("roms", "gamate/gamate.zip"))):
+            view = libretro_view("mame", platform)
+            places = {(e.get("root") or "", e["path"]) for e in view["files"]
+                      if e["name"] == "gamate.zip"}
+            self.assertEqual(places, {("", "mame/bios/gamate.zip"), read}, platform)
+
+
+class StandaloneMameOnEmuDeck(unittest.TestCase):
+    """EmuDeck writes mame.ini rompath roms/arcade;bios;bios/mame
+    (emuDeckMAME.sh:66-68), read when Steam ROM Manager starts MAME with no
+    -rompath (tools/launchers/mame.sh). ES-DE's commands pass their own."""
+
+    def test_a_set_keeps_its_ini_place_and_gains_the_command_folder(self) -> None:
+        view = standalone_view("mame", "emudeck")
+        places = {(e.get("root") or "", e["standalone_path"]) for e in view["files"]
+                  if e["name"] == "adam.zip"}
+        self.assertIn(("", "adam.zip"), places)
+        self.assertIn(("roms", "adam/adam.zip"), places)
+
+
+class EveryCoreAFolderOffers(unittest.TestCase):
+    """AmberELEC's es_systems.cfg, EmuELEC's es_systems.json and ROCKNIX's
+    add_emu_core calls offer several cores per folder, the user's choice
+    starting any of them."""
+
+    def test_the_rom_folders_files_record_the_offers(self) -> None:
+        for setup, folder, core in (("amberelec", "arcade", "mame2010"),
+                                    ("emuelec", "arcade", "mame2010"),
+                                    ("rocknix", "arcade", "mame2010")):
+            with (REPO_ROOT / "platforms" / "romfolders" / f"{setup}.yml").open() as f:
+                rows = {r["folder"]: r for r in yaml.safe_load(f)["folders"]}
+            self.assertIn(core, {o["core"] for o in rows[folder].get("offers") or []}, setup)
+
+    def test_an_offered_core_reads_its_sets_in_that_folder(self) -> None:
+        for platform in ("amberelec", "rocknix"):
+            view = libretro_view("mame2010", platform)
+            folders = {e["path"].split("/")[0] for e in view["files"]
+                       if e.get("category") == "bios_zip" and e.get("layout_path")}
+            self.assertIn("arcade", folders, platform)
+
+
+def platform_manifest(platform: str) -> dict:
+    from common import load_database
+
+    db = load_database(str(REPO_ROOT / "database.json"))
+    with redirect_stdout(io.StringIO()):
+        return generate_manifest(
+            platform, str(REPO_ROOT / "platforms"), db, str(REPO_ROOT / "bios"),
+            str(REPO_ROOT / "platforms" / "_registry.yml"),
+            emulators_dir=str(REPO_ROOT / "emulators"), offline=True,
+        )
+
+
+class ArchiveSharedByOfferedCores(unittest.TestCase):
+    """One path holds one file: several cores reading an archive in one roms
+    folder get the copy of the core the folder starts by default, then the
+    copy serving the most of them."""
+
+    def test_the_default_core_copy_takes_the_folder(self) -> None:
+        # EmuELEC's arcade folder starts MAME 2003-Plus by default
+        # (es_systems.json:82), AdvanceMAME reads its sets there too.
+        (entry,) = [f for f in platform_manifest("emuelec")["files"]
+                    if f["dest"] == "arcade/neogeo.zip"]
+        self.assertEqual(entry["cores"], ["mame2003_plus"])
+        self.assertTrue(entry["repo_path"].endswith("neogeo.zip.74df3258"))
+        others = {c for a in entry.get("alternatives", []) for c in a["cores"]}
+        self.assertIn("advancemame", others)
+
+    def test_offered_cores_join_the_default_one(self) -> None:
+        # AmberELEC's arcade folder starts MAME 2003-Plus and offers MAME
+        # 2000, 2010, 2015 and 2016 (es_systems.cfg:116-150).
+        (entry,) = [f for f in platform_manifest("amberelec")["files"]
+                    if f["dest"] == "arcade/neogeo.zip"]
+        self.assertEqual(entry["cores"], ["mame2003_plus"])
+        self.assertTrue(entry["repo_path"].endswith("neogeo.zip.74df3258"))
+        others = {c for a in entry.get("alternatives", []) for c in a["cores"]}
+        self.assertLessEqual({"mame2000", "mame2010", "mame2015", "mame2016"}, others)
+
+    def test_the_copy_serving_most_cores_wins_without_a_default(self) -> None:
+        # RetroDECK's cps folders start the libretro MAME core, whose sets are
+        # in mame/bios. Of the cores reading nss.zip in cps1, MAME 2003-Plus
+        # alone lists members, and only its copy holds them.
+        (entry,) = [f for f in platform_manifest("retrodeck")["files"]
+                    if f["dest"] == "roms/cps1/nss.zip"]
+        self.assertEqual(entry["cores"], ["mame2003_plus"])
+        self.assertTrue(entry["repo_path"].endswith("nss.zip.cba0bd8c"))
+
+
 class MacBootDisksOnKnulli(unittest.TestCase):
     def test_the_hard_records_bind(self) -> None:
         # mameGenerator.py and libretroMAMEConfig.py pass the boot disk as

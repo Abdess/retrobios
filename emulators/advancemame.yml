@@ -4,8 +4,8 @@ core_classification: enhanced_fork
 source: "https://github.com/amadvance/advancemame"
 upstream: "https://www.mamedev.org"
 profiled_date: "2026-11-09"
-source_commit: "e29103266ebf2debde456c4a21193baf4a0192c8"
-core_version: "v5.0-453-ge291032"
+source_commit: "799060ba176e4aee5959087b08fc28904e842885"
+core_version: "v5.0-453-g799060b"
 version_basis:
   kind: tag
   match: "v*"
@@ -13,6 +13,7 @@ version_basis:
   distance: 453
 mame_version: "0.106"
 display_name: "Arcade (AdvanceMAME)"
+pin_frozen: "Held before e1a9aad5, from which the Sony ZN BIOS archives take their MAME names (cpzn1 becomes coh1000c) and firmware loads through BIOS_LOAD. EmuELEC, AmberELEC and Recalbox build earlier revisions, which read the names below. RetroPie builds the branch tip (RetroPie scriptmodules/emulators/advmame.sh:16, 39-41)."
 pin_build:
   - platform: emuelec
     repo: "https://github.com/EmuELEC/EmuELEC"
@@ -20,6 +21,18 @@ pin_build:
     path: "packages/sx05re/emulators/advancemame/package.mk"
     variable: PKG_VERSION
     value: "6a34ec0ec3fd74535ae559304ceb6c7ce63acff5"
+  - platform: amberelec
+    repo: "https://github.com/AmberELEC/AmberELEC"
+    revision: "a21975bfb1a3af68f66e07a931b994b523e1e6e2"
+    path: "packages/games/emulators/advancemame/package.mk"
+    variable: PKG_VERSION
+    value: "0f6a7677ad42b4dfdfa36b046f74bef5238d5837"
+  - platform: recalbox
+    repo: "https://gitlab.com/recalbox/recalbox"
+    revision: "10.1.1"
+    path: "package/advancemame/advancemame.mk"
+    variable: ADVANCEMAME_VERSION
+    value: "5f301c8490b25ba518d287d5a6abec8268940b80"
 config_reads:
   - file: "advmame.rc"
     platforms: [emuelec]

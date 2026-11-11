@@ -46,6 +46,44 @@ def _board(core: str | None, emulator: str | None, source_ref: str) -> dict:
     return {k: str(v) for k, v in out.items() if v}
 
 
+def _offers(choices: list[dict], core: str | None, emulator: str | None) -> list[dict]:
+    """Every (emulator, core) a folder can start, in the list's order, or
+    none when the default is the only one.
+
+    A core written under several branches of a device case keeps the
+    conditions it is written under, and none once a branch is the `*)` one
+    beside another or no branch at all: every build then offers it.
+    """
+    found: dict[tuple[str, str], dict] = {}
+    whens: dict[tuple[str, str], set[str]] = {}
+    lines: dict[tuple[str, str], list[str]] = {}
+    for choice in choices:
+        pair = (str(choice.get("emulator") or ""), str(choice.get("core") or choice.get("emulator") or ""))
+        if not pair[1]:
+            continue
+        whens.setdefault(pair, set()).add(str(choice.get("when") or ""))
+        ref = str(choice.get("source_ref") or "")
+        if ref and pair in found and found[pair].get("source_ref", "").split(":")[0] == ref.split(":")[0]:
+            lines[pair].append(ref.rsplit(":", 1)[-1])
+        if pair not in found:
+            found[pair] = {k: str(v) for k, v in {**choice, "core": pair[1]}.items()
+                           if v and k != "when"}
+            lines[pair] = []
+    out = []
+    for pair, offer in found.items():
+        if lines[pair] and offer.get("source_ref"):
+            offer["source_ref"] = ",".join([offer["source_ref"], *lines[pair]])
+        conditions = whens[pair]
+        if "" not in conditions and not (
+                len(conditions) > 1 and any(w.endswith(" *") for w in conditions)):
+            offer = {**offer, "when": "; ".join(sorted(conditions))}
+            offer = {k: offer[k] for k in ("emulator", "core", "when", "source_ref") if k in offer}
+        out.append(offer)
+    if [(o.get("emulator", ""), o["core"]) for o in out] == [(emulator or "", core or emulator or "")]:
+        return []
+    return out
+
+
 def _top_key_lines(text: str) -> dict[str, int]:
     """First line of each top-level YAML key."""
     out: dict[str, int] = {}
@@ -286,6 +324,9 @@ def _xml_rows(text: str, key: str, path: str, params: dict) -> list[dict]:
             "core": core or emulator,
             "emulator": emulator,
             "source_ref": _ref(key, path, row["line"]),
+            "offers": _offers(
+                [{"emulator": e, "core": c} for e, cores in emulators for c, _d in cores or [(e, False)]],
+                core, emulator),
             "arcade": _is_arcade(system.findtext("hardware"), platform),
             "note": row.get("note"),
         })
@@ -322,6 +363,9 @@ def es_json(spec: dict, fetcher: Fetcher) -> list[dict]:
             "core": core or emulator,
             "emulator": emulator,
             "source_ref": _ref(key, path, row["line"]),
+            "offers": _offers(
+                [{"emulator": e, "core": c} for e, cores in emulators for c, _d in cores or [(e, False)]],
+                core, emulator),
             "arcade": _is_arcade(system.get("hardware"), system.get("platform")),
             "note": row.get("note"),
         })
@@ -470,6 +514,12 @@ def elec_conf(spec: dict, fetcher: Fetcher) -> list[dict]:
             "emulator": pick["emulator"] if pick else None,
             "source_ref": "; ".join(refs),
             "board_defaults": board_defaults,
+            "offers": _offers([
+                {"emulator": c["emulator"], "core": c["core"],
+                 "when": ", ".join(f"{v} {p}".strip() for v, p in c["branches"]),
+                 "source_ref": _ref(key, package, c["line"])}
+                for c in mine
+            ], pick and pick["core"], pick and pick["emulator"]),
             "arcade": values.get("SYSTEM_HARDWARE") == "arcade" or None,
             "note": note,
         })
@@ -526,21 +576,55 @@ def _alternative_emulators(text: str, function: str) -> dict[str, tuple[str, int
 _ROMPATH_OPTIONS = ("-rompath", "-rp")
 
 
+def _core_words(command: str) -> tuple[str, list[str]] | None:
+    """The core and the words of the content RetroArch hands it.
+
+    ES-DE starts the libretro MAME core with a quoted command line as its
+    content (`-L .../mame_libretro.so "apple2e -rompath \\"...\\" ..."`): popen
+    runs it through the shell (es-core/src/utils/PlatformUtil.cpp:231, 257),
+    and the core splits the content on spaces and quotes when it is no file
+    (retro_init.cpp parse_cmdline, mmain2).
+    """
+    core = _RA_CORE.search(command)
+    if core is None:
+        return None
+    try:
+        args = shlex.split(command)
+        at = args.index("-L")
+        content = shlex.split(args[at + 2]) if at + 2 < len(args) else []
+    except ValueError:
+        return None
+    return core.group(1), content
+
+
 def _searched_by(commands: list[tuple[str, str, int | None]], key: str, path: str) -> list[dict]:
-    """The ROM folders each standalone emulator's commands pass it, by emulator.
+    """The ROM folders each emulator's commands pass it, by emulator and core.
 
     ES-DE starts standalone MAME with `-rompath %GAMEDIR%\\;%ROMPATH%/<system>`
     and a machine, or %BASENAME% where the game is the machine. The command
-    line outranks mame.ini. %GAMEDIR% is the game's own folder, no folder a
-    pack fills.
+    line outranks mame.ini. The libretro MAME core gets the same option in
+    the command line it is handed as content, after the machine. %GAMEDIR%
+    is the game's own folder, no folder a pack fills.
     """
-    found: dict[str, dict] = {}
+    found: dict[tuple[str, str], dict] = {}
     for _label, command, line in commands:
-        emulator = _EMULATOR.search(command)
-        if emulator is None or _RA_CORE.search(command):
-            continue
-        words = command.replace("\\;", ";").split()
-        at = next((i for i, w in enumerate(words) if w in _ROMPATH_OPTIONS), None)
+        libretro = _core_words(command)
+        if libretro is not None:
+            core, words = libretro
+            if words[:1] == [core]:
+                # A first word naming the core is dropped (mmain2).
+                words = words[1:]
+            name = "retroarch"
+            at = next((i for i, w in enumerate(words) if w in _ROMPATH_OPTIONS), None)
+            machine = words[0] if words and at else ""
+        else:
+            emulator = _EMULATOR.search(command)
+            if emulator is None:
+                continue
+            core, name = "", emulator.group(1).lower()
+            words = command.replace("\\;", ";").split()
+            at = next((i for i, w in enumerate(words) if w in _ROMPATH_OPTIONS), None)
+            machine = words[at + 2] if at is not None and at + 2 < len(words) else ""
         if at is None or at + 1 >= len(words):
             continue
         reads = [
@@ -549,11 +633,10 @@ def _searched_by(commands: list[tuple[str, str, int | None]], key: str, path: st
         ]
         if not reads:
             continue
-        name = emulator.group(1).lower()
-        record = found.setdefault(name, {"emulator": name, "reads": [], "machines": [],
-                                         "any_machine": False, "lines": []})
+        record = found.setdefault((name, core), {"emulator": name, "core": core, "reads": [],
+                                                 "machines": [], "any_machine": False,
+                                                 "lines": []})
         record["reads"] += [r for r in reads if r not in record["reads"]]
-        machine = words[at + 2] if at + 2 < len(words) else ""
         if not machine or machine.startswith("%"):
             record["any_machine"] = True
         elif machine not in record["machines"]:
@@ -561,7 +644,10 @@ def _searched_by(commands: list[tuple[str, str, int | None]], key: str, path: st
         record["lines"].append(line)
     rows = []
     for record in found.values():
-        row = {"emulator": record["emulator"], "reads": record["reads"]}
+        row = {"emulator": record["emulator"]}
+        if record["core"]:
+            row["core"] = record["core"]
+        row["reads"] = record["reads"]
         if record["machines"]:
             row["machines"] = record["machines"]
         if record["any_machine"]:
@@ -611,6 +697,7 @@ def esde(spec: dict, fetcher: Fetcher) -> list[dict]:
                 "folder": folder, "extensions": extensions, "commands": commands,
                 "ref": _ref(key, path, lines.get(name)),
                 "searched_by": _searched_by(placed, key, path),
+                "placed": [(*c, key, path) for c in placed],
             }
     alternatives: dict[str, tuple[str, int]] = {}
     alt = params.get("alternatives")
@@ -633,6 +720,11 @@ def esde(spec: dict, fetcher: Fetcher) -> list[dict]:
             else:
                 note = f"alternative emulator '{label}' names no command of this system"
         emulator, core = _command_core(chosen[1])
+        offers = _offers([
+            {"emulator": e, "core": c, "source_ref": _ref(key_, path_, line)}
+            for _label, command, line, key_, path_ in system["placed"]
+            for e, c in [_command_core(command)] if e
+        ], core, emulator)
         extensions = system["extensions"]
         if "." in extensions:
             # ES-DE's "." is a file without an extension (SystemData.cpp
@@ -647,6 +739,7 @@ def esde(spec: dict, fetcher: Fetcher) -> list[dict]:
             "emulator": emulator,
             "source_ref": "; ".join(refs),
             "note": note,
+            "offers": offers,
             "searched_by": system["searched_by"] or None,
         })
     return rows

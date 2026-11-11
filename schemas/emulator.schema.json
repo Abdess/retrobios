@@ -1112,6 +1112,24 @@
       },
       "description": "Settings the standalone build reads as a list of directories it searches one after the other, each mapped to the subfolder of the layout (relative to standalone_directories, empty for the whole of it) its directories stand for: openMSX's filepool entries are searched like share/systemroms, XRoar's rompath entries hold the ROMs themselves. A file in any entry is read, so several platform records naming entries give the first one a pack can fill."
     },
+    "libretro_pools": {
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [
+          {"type": "string"},
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["folder", "source_ref"],
+            "properties": {
+              "folder": {"type": "string"},
+              "source_ref": {"type": "string", "minLength": 1, "description": "Where the build reads the option from its content"}
+            }
+          }
+        ]
+      },
+      "description": "Options of the command line a libretro build is handed as its content that set a list of directories it searches, each mapped to the folder below the system directory whose files those directories stand for: libretro MAME hands MAME <system>/mame/bios unless the content's own -rompath replaces it."
+    },
     "prose_written_at": {
       "type": "string",
       "pattern": "^[0-9a-f]{40}$",

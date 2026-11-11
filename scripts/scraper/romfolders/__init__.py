@@ -36,7 +36,7 @@ SETUP_KEYS = (
 )
 ROW_KEYS = (
     "folder", "name", "aliases", "extensions", "files", "core", "emulator", "source_ref",
-    "board_defaults", "arcade", "searched_by", "note",
+    "board_defaults", "offers", "arcade", "searched_by", "note",
 )
 
 

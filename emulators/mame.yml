@@ -172,6 +172,14 @@ standalone_pools:
   pluginspath: "plugins"
   "-pluginspath": "plugins"
 
+libretro_pools:
+  "-rompath":
+    folder: "mame/bios"
+    source_ref: "src/osd/libretro/libretro-internal/retro_init.cpp:580-597, 804-809, 902-940, src/lib/util/options.cpp:260-276"
+  "-rp":
+    folder: "mame/bios"
+    source_ref: "src/osd/libretro/libretro-internal/retro_init.cpp:580-597, 804-809, 914-919"
+
 data_root:
   windows:
     path: "<working directory>"
@@ -195,7 +203,12 @@ notes: |
   samples, crosshair). ROM search: content_dir + system_dir/mame/bios +
   system_dir/mame/roms, never system_dir itself
   (src/osd/libretro/libretro-internal/retro_init.cpp:580-597), so the libretro
-  build reads its sets in mame/bios. Cheats via per-game XML files.
+  build reads its sets in mame/bios. Content that is no file is read as a
+  command line (retro_init.cpp:966-1008): a -rompath there is passed to
+  MAME after the core's own, and the later value wins
+  (src/lib/util/options.cpp:260-276), so the sets are read in the folders
+  it names. A -rp is dropped and appended to the core's list (580-597,
+  914-919). Cheats via per-game XML files.
   The standalone build splits every search path on semicolons and tries
   each directory in turn until the file opens (src/emu/fileio.cpp:53-58,
   330-392). rompath defaults to roms, samplepath to samples, hashpath to
