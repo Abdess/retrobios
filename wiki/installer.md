@@ -906,7 +906,7 @@ without a terminal, or no at the question). With `--events` the run writes
 BIOS folder, for another device or an install without the internet. Every
 narrowing option applies as for an install (`--system`, `--core`,
 `--emulator`, `--region`, `--target`, `--no-game-data`, and `--for-games
-FOLDER` with `--required-only`), and `--dry-run` says what would go in,
+FOLDER` with `--required-only`), and `--dry-run` says what the pack would hold,
 `--verbose` listing each file:
 
 ```
@@ -1284,7 +1284,7 @@ what the options name, everything by default.
 | <span id="option-backup"></span>`--backup` | With `--remove`, move the files into a dated folder of `retrobios-backup` instead of deleting them, for `--restore` to put back |
 | <span id="option-backups"></span>`--backups` | List the backups of the BIOS folder, newest first, with the date, the files and the size of each |
 | <span id="option-delete-backup"></span>`--delete-backup FOLDER` | Delete one backup listed by `--backups`, after one question that names its date and size (`--yes` skips it) |
-| <span id="option-pack"></span>`--pack PATH` | Download the choice into a pack ZIP at PATH instead of a BIOS folder, for another device or an install without the internet: a folder takes `<Platform>_BIOS_Pack.zip`. The narrowing options apply, `--dry-run` lists what would go in, and `--from-pack` installs from it. See [Making a pack](#making-a-pack) |
+| <span id="option-pack"></span>`--pack PATH` | Download the choice into a pack ZIP at PATH instead of a BIOS folder, for another device or an install without the internet: a folder takes `<Platform>_BIOS_Pack.zip`. The narrowing options apply, `--dry-run` lists what the pack would hold, and `--from-pack` installs from it. See [Making a pack](#making-a-pack) |
 | <span id="option-split"></span>`--split SIZE` | With `--pack`, write parts of at most SIZE (`1900M`, `4G`), each a whole ZIP. A pack that would pass 4 GB on a FAT32 drive is split by itself |
 | <span id="option-tui"></span>`--tui` | Open the full-screen interface, or stop with the reason it cannot open here (code 2) instead of falling back to the questions. Wins over `RETROBIOS_PLAIN` and `ACCESSIBLE`. See [The full-screen interface](#the-full-screen-interface) |
 | <span id="option-plain"></span>`--plain` | Ask the questions line by line instead of the full-screen interface, the mode for a screen reader. See [The full-screen interface](#the-full-screen-interface) |

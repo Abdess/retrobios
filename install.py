@@ -16474,7 +16474,7 @@ def build_parser() -> argparse.ArgumentParser:
         help=f"download the choice into a pack ZIP at PATH instead of a BIOS folder, for "
              f"another device or an install without the internet (--from-pack reads it). "
              f"A folder takes <Platform>{PACK_NAME_END}. The narrowing options apply, and "
-             "--dry-run lists what would go in",
+             "--dry-run lists what the pack would hold",
     )
     parser.add_argument(
         "--split",
