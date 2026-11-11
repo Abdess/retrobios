@@ -147,7 +147,7 @@ def _config_reads_without_build(path: Path, document: object) -> list[str]:
     for index, read in enumerate(document.get("config_reads") or []):
         if not isinstance(read, dict):
             continue
-        if read.get("revision"):
+        if read.get("revision") or read.get("binary_sha256"):
             continue
         for platform in read.get("platforms") or []:
             if str(platform) not in builds:

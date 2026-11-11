@@ -261,6 +261,8 @@ class Invariants(unittest.TestCase):
         ), [])
         pinned = [{**reads[0], "revision": "c" * 40, "revision_from": "the exe"}]
         self.assertEqual(_config_reads_without_build(path, {"config_reads": pinned}), [])
+        closed = [{**reads[0], "binary_sha256": "d" * 64, "revision_from": "the archive"}]
+        self.assertEqual(_config_reads_without_build(path, {"config_reads": closed}), [])
 
 
 class BuildRefs(unittest.TestCase):
@@ -297,6 +299,37 @@ class BuildRefs(unittest.TestCase):
         self.assertEqual([r["status"] for r in rows], ["BUILD_OK", "BUILD_GONE"])
         self.assertTrue(all(revision == "b" * 40 for revision, _ in asked))
         self.assertNotIn(("b" * 40, "ROCKNIX x.patch"), asked)
+
+
+    def test_a_closed_build_is_read_in_its_binary(self) -> None:
+        """An address ref is read in the binary binary_sha256 names, never
+        fetched; a source path cannot exist at a closed build."""
+        read = {
+            "file": "SSF.ini", "platforms": ["retrobat"], "binary_sha256": "e" * 64,
+            "revision_from": "the archive", "source_ref": "SSF.exe 0x10-0x20", "keys": [],
+        }
+
+        class View:
+            repo, field = "repo", "source"
+
+        class Citation:
+            def __init__(self, ref: str) -> None:
+                self.ref, self.field = ref, "c"
+
+        asked: list[str] = []
+
+        def fetch(_repo: str, _revision: str, path: str) -> list[str] | None:
+            asked.append(path)
+            return None
+
+        rows = _check_build_refs(
+            {"config_reads": [read]},
+            [(Citation("SSF.exe 0x10-0x20"), read), (Citation("src/a.c:3"), read)],
+            [View()], fetch,
+        )
+        self.assertEqual([r["status"] for r in rows], ["BUILD_OK", "BUILD_GONE"])
+        self.assertEqual({r["revision"] for r in rows}, {"e" * 64})
+        self.assertEqual(asked, ["src/a.c"])
 
 
 class RepositoryRecords(unittest.TestCase):

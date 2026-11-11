@@ -76,6 +76,14 @@ config_reads:
     keys:
       - key: "[ROM] szTosImageFileName"
         source_ref: "upstream src/configuration.c:480, upstream src/tos.c:975-986"
+  - file: "*.cfg"
+    platforms: [retrobat]
+    revision: "4371dcd647fc85d31c0629400adaeaa4212040d9"
+    revision_from: "Hatari v2.4.1, compiled Aug 3 2022, in hatari.exe of RetroBat's stable hatari.7z (2026-04-04), the v2.4.1 tag"
+    source_ref: "upstream src/options.c:228-229, 1099-1108, upstream src/configuration.c:967-976, 1024"
+    keys:
+      - key: "[ROM] szTosImageFileName"
+        source_ref: "upstream src/configuration.c:413, 884, upstream src/tos.c:942-955"
 
 notes: |
   The main branch of libretro/hatari is the upstream Hatari tree at

@@ -20,6 +20,17 @@ systems:
   - atari-tt
   - atari-falcon
 
+config_reads:
+  - file: "core options"
+    platforms: [retrobat]
+    revision: "9c5ee608504d7e174dce99ac9237151863d78347"
+    revision_from: "library_version v0.3 9c5ee60 of hatarib_libretro.dll in RetroBat's stable cores/hatarib_libretro.dll.zip (2026-04-04), the 0.3 tag"
+    source_ref: "core/core.c:963-976, core/core_config.c:961-969, 985, 1286-1318, 1408-1413, hatari/src/main.c:898, 921-925, 1019"
+    keys:
+      - key: "hatarib_tos"
+        source_ref: "core/core_config.c:1082-1104, core/core_file.c:256-259, 763-769, hatari/src/tos.c:996-1056"
+        condition: "<tos.img> is offered only when system/tos.img exists, a hatarib/ value only for a file with an img, rom, bin or tos extension (core/core_config.c:1293-1318, core/core_file.c:707-716)"
+
 notes: |
   hatariB carries Hatari 2.6.1 in its hatari/ directory, every change
   fenced by __LIBRETRO__ (DEVELOP.md:7-14, DEVELOP.md:44-48), and
