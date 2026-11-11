@@ -3682,10 +3682,11 @@ def bump_commit(
     if pending_recale(report, accept_changed, text):
         return False
     document = yaml.safe_load(text)
-    if document.get("built_by"):
+    if document.get("built_by") and not document.get("pin_follows"):
         # The pin is the commit a platform builds (recalbox gsplus.mk, the
         # mame0258 its package fetches), not a point on a moving branch:
-        # HEAD is a build nobody ships under this name.
+        # HEAD is a build nobody ships under this name. A build of the
+        # branch tip (RetroPie's advmame) is HEAD, and follows it.
         print(
             f"{path.stem}: pinned to the build {', '.join(document['built_by'])} "
             "ships, advanced by hand",
