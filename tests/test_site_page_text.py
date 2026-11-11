@@ -70,6 +70,8 @@ class PageText(HTMLParser):
         self.skipping = 0
         self.inside = not article_only
         self.glued: list[str] = []
+        # Filter boxes read: the build writes each one hidden until wired.
+        self.filters_read = 0
 
     def _text_so_far(self) -> str:
         return "".join(self.parts[-4:])
@@ -89,6 +91,8 @@ class PageText(HTMLParser):
             return
         if tag in BLOCKS:
             self.parts.append("\n")
+        if "rb-table-filter" in classes and "hidden" not in attr:
+            self.filters_read += 1
         if any(name in OWN_BOX for name in classes) or (tag == "code" and self.stack
                                                          and self.stack[-1][0] == "summary"):
             before = self._text_so_far()
@@ -141,7 +145,8 @@ def _sources() -> dict[str, str]:
         for suffix in (".mdx", ".md"):
             path = DOCS / f"{page}{suffix}"
             if path.is_file():
-                found[page] = path.read_text(encoding="utf-8")
+                # MDX keeps a space between two tags only as an expression.
+                found[page] = path.read_text(encoding="utf-8").replace('{" "}', " ")
     return found
 
 
@@ -193,7 +198,9 @@ class PageReadsOnce:
         for name, page in self.pages.items():
             with self.subTest(page=name):
                 self.assertIsNone(re.search(r"[^\s\d,(][\d,]*\d rows\b", page.text))
-                self.assertIsNone(re.search(r"(?m)^Filter \S", page.text))
+                # A filter box read whole ("Filter Options41 rows"). A cell
+                # may open on the word: installer.md's "Filter a long list".
+                self.assertEqual(page.filters_read, 0)
 
     def test_no_empty_picker(self):
         for name, page in self.pages.items():
