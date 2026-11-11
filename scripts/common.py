@@ -4272,6 +4272,10 @@ SYSTEM_ALIASES: dict[str, str] = {
     "genesis": "sega-megadrive",
     "sinclair-spectrum": "sinclair-zx-spectrum",
     "sms": "sega-mastersystem",
+    # The platforms' one Neo Geo system: the profiles file the MVS sets,
+    # which every Neo Geo core reads, under snk-neogeo-mvs.
+    "snk-neogeo": "snk-neogeo-mvs",
+    "neogeo": "snk-neogeo-mvs",
 }
 
 

@@ -6945,13 +6945,13 @@ def _start_groups(
     for f in ranked:
         for emulator, entry, _system, name, named in reading(f):
             if entry.get("group") and entry.get("required", True) and not entry.get("hle_fallback"):
-                key = named or _visible(name)
+                member = named or _visible(name)
                 place = (emulator, str(entry["group"]),
                          tuple(sorted(str(r) for r in entry.get("region") or [])))
-                rank = (-len(requiring.get(key, ())),
+                rank = (-len(requiring.get(member, ())),
                         entry["priority"] if isinstance(entry.get("priority"), int) else _NO_PRIORITY,
                         _visible(name))
-                members.setdefault(place, []).append((rank, key))
+                members.setdefault(place, []).append((rank, member))
     chosen = {place: min(found)[1] for place, found in members.items()}
 
     for f in ranked:

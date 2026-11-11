@@ -1252,6 +1252,9 @@
     "fake08": [
       "fake_08"
     ],
+    "fba2x": [
+      "pifba"
+    ],
     "fbalpha2012": [
       "fbalpha"
     ],
@@ -1377,6 +1380,9 @@
     "mame": [
       "mame64"
     ],
+    "mame2000": [
+      "imame4all"
+    ],
     "mame2003_plus": [
       "mame078plus",
       "mame2003-plus"
@@ -1470,6 +1476,10 @@
     ],
     "nekop2": [
       "meowpc98"
+    ],
+    "neo-emu": [
+      "NEO-EMU",
+      "NEO.emu"
     ],
     "neocd": [],
     "nes-emu": [
@@ -2083,6 +2093,40 @@
       "xm6pro68k",
       "xm6typeg"
     ],
+    "snk-neogeo": [
+      "advancemame",
+      "advmame",
+      "advmame-0.94",
+      "advmame-1.4",
+      "ares",
+      "fba2x",
+      "fbalpha2012",
+      "fbalpha2012_neogeo",
+      "fbalpha2019",
+      "fbneo",
+      "fbneo_neogeo",
+      "geolith",
+      "gngeopi",
+      "groovymame",
+      "mame",
+      "mame0258",
+      "mame0278",
+      "mame2000",
+      "mame2003",
+      "mame2003_plus",
+      "mame2009",
+      "mame2010",
+      "mame2014",
+      "mame2015",
+      "mame2016",
+      "mame4all",
+      "mame4droid",
+      "mame4droid-2024",
+      "mamearcade",
+      "neo-emu",
+      "raine",
+      "ume2015"
+    ],
     "snk-neogeo-cd": [
       "fbalpha2019",
       "fbneo",
@@ -2266,7 +2310,6 @@
     "sega-outrun": "OutRun",
     "sega-saturn": "Sega Saturn",
     "sharp-x68000": "Sharp X68000",
-    "snk-neogeo": "SNK Neo Geo",
     "snk-neogeo-cd": "SNK Neo Geo CD",
     "sonic-1-2013": "Sonic the Hedgehog (2013)",
     "sonic-2-2013": "Sonic the Hedgehog 2 (2013)",
@@ -25922,6 +25965,9 @@
       "repo_path": "bios/SNK/Neo Geo/irrmaze.zip",
       "cores": [
         "geolith"
+      ],
+      "systems": [
+        "snk-neogeo"
       ]
     },
     {
@@ -25960,7 +26006,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -25979,7 +26026,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -25998,7 +26046,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26017,7 +26066,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26036,7 +26086,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26055,7 +26106,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26074,7 +26126,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26093,7 +26146,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26112,7 +26166,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26131,7 +26186,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26150,7 +26206,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26169,7 +26226,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26188,7 +26246,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26207,7 +26266,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26226,7 +26286,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26245,7 +26306,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26264,7 +26326,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26283,7 +26346,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26302,7 +26366,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26321,7 +26386,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26340,7 +26406,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26359,7 +26426,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26378,7 +26446,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26397,7 +26466,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26416,7 +26486,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26435,7 +26506,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26454,7 +26526,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26473,7 +26546,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26492,7 +26566,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26511,7 +26586,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26530,7 +26606,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26549,7 +26626,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26568,7 +26646,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26587,7 +26666,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26606,7 +26686,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26625,7 +26706,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26644,7 +26726,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26663,7 +26746,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26682,7 +26766,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26701,7 +26786,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26720,7 +26806,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26739,7 +26826,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26758,7 +26846,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26777,7 +26866,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26796,7 +26886,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26815,7 +26906,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26834,7 +26926,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26853,7 +26946,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26872,7 +26966,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26891,7 +26986,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26910,7 +27006,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26929,7 +27026,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26948,7 +27046,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26967,7 +27066,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -26986,7 +27086,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27005,7 +27106,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27024,7 +27126,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27043,7 +27146,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27062,7 +27166,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27081,7 +27186,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27100,7 +27206,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27119,7 +27226,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27138,7 +27246,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27157,7 +27266,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27176,7 +27286,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27195,7 +27306,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27214,7 +27326,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27233,7 +27346,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27252,7 +27366,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27271,7 +27386,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27290,7 +27406,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27309,7 +27426,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27328,7 +27446,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27347,7 +27466,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27366,7 +27486,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27385,7 +27506,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27404,7 +27526,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27423,7 +27546,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27442,7 +27566,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27461,7 +27586,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27480,7 +27606,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27499,7 +27626,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27518,7 +27646,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27537,7 +27666,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27556,7 +27686,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27575,7 +27706,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27594,7 +27726,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27613,7 +27746,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27632,7 +27766,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27651,7 +27786,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27670,7 +27806,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27689,7 +27826,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27708,7 +27846,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27727,7 +27866,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27746,7 +27886,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27765,7 +27906,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27784,7 +27926,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27803,7 +27946,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27822,7 +27966,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27841,7 +27986,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27860,7 +28006,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27879,7 +28026,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27898,7 +28046,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27917,7 +28066,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27936,7 +28086,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27955,7 +28106,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27974,7 +28126,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -27993,7 +28146,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28012,7 +28166,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28031,7 +28186,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28050,7 +28206,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28069,7 +28226,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28088,7 +28246,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28107,7 +28266,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28126,7 +28286,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28145,7 +28306,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28164,7 +28326,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28183,7 +28346,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28202,7 +28366,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28221,7 +28386,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28240,7 +28406,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28259,7 +28426,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28278,7 +28446,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28297,7 +28466,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28316,7 +28486,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28335,7 +28506,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28354,7 +28526,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28373,7 +28546,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28392,7 +28566,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28411,7 +28586,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28430,7 +28606,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28449,7 +28626,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28468,7 +28646,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28487,7 +28666,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28506,7 +28686,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28525,7 +28706,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28544,7 +28726,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28563,7 +28746,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28582,7 +28766,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28601,7 +28786,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28620,7 +28806,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28639,7 +28826,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28658,7 +28846,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28677,7 +28866,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28696,7 +28886,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28715,7 +28906,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28734,7 +28926,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28753,7 +28946,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28772,7 +28966,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28791,7 +28986,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28810,7 +29006,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28829,7 +29026,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28848,7 +29046,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28867,7 +29066,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28886,7 +29086,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28905,7 +29106,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28924,7 +29126,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28943,7 +29146,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28962,7 +29166,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -28981,7 +29186,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29000,7 +29206,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29019,7 +29226,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29038,7 +29246,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29057,7 +29266,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29076,7 +29286,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29095,7 +29306,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29114,7 +29326,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29133,7 +29346,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29152,7 +29366,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29171,7 +29386,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29190,7 +29406,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29209,7 +29426,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29228,7 +29446,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29247,7 +29466,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29266,7 +29486,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29285,7 +29506,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29304,7 +29526,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29323,7 +29546,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29342,7 +29566,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29361,7 +29586,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29380,7 +29606,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29399,7 +29626,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29418,7 +29646,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29437,7 +29666,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29456,7 +29686,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29475,7 +29706,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29494,7 +29726,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29513,7 +29746,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29532,7 +29766,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29551,7 +29786,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29570,7 +29806,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29589,7 +29826,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29608,7 +29846,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29627,7 +29866,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29646,7 +29886,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29665,7 +29906,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29684,7 +29926,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29703,7 +29946,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29722,7 +29966,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29741,7 +29986,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29760,7 +30006,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29779,7 +30026,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29798,7 +30046,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29817,7 +30066,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29836,7 +30086,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29855,7 +30106,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29874,7 +30126,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29893,7 +30146,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29912,7 +30166,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29931,7 +30186,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29950,7 +30206,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29969,7 +30226,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -29988,7 +30246,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30007,7 +30266,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30026,7 +30286,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30045,7 +30306,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30064,7 +30326,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30083,7 +30346,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30102,7 +30366,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30121,7 +30386,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30140,7 +30406,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30159,7 +30426,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30178,7 +30446,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30197,7 +30466,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30216,7 +30486,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30235,7 +30506,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30254,7 +30526,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30273,7 +30546,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30292,7 +30566,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30311,7 +30586,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30330,7 +30606,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30349,7 +30626,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30368,7 +30646,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30387,7 +30666,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30406,7 +30686,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30425,7 +30706,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30444,7 +30726,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30463,7 +30746,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30482,7 +30766,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30501,7 +30786,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30520,7 +30806,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30539,7 +30826,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30558,7 +30846,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30577,7 +30866,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30596,7 +30886,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30615,7 +30906,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30634,7 +30926,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30653,7 +30946,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30672,7 +30966,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30691,7 +30986,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30710,7 +31006,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30729,7 +31026,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30748,7 +31046,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30767,7 +31066,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30786,7 +31086,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30805,7 +31106,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30824,7 +31126,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30843,7 +31146,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30862,7 +31166,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30881,7 +31186,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30900,7 +31206,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30919,7 +31226,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30938,7 +31246,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30957,7 +31266,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30976,7 +31286,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -30995,7 +31306,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31014,7 +31326,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31033,7 +31346,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31052,7 +31366,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31071,7 +31386,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31090,7 +31406,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31109,7 +31426,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31128,7 +31446,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31147,7 +31466,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31166,7 +31486,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31185,7 +31506,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31204,7 +31526,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31223,7 +31546,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31242,7 +31566,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31261,7 +31586,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31280,7 +31606,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31299,7 +31626,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31318,7 +31646,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31337,7 +31666,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31356,7 +31686,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31375,7 +31706,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31394,7 +31726,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31413,7 +31746,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31432,7 +31766,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31451,7 +31786,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31470,7 +31806,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31489,7 +31826,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31508,7 +31846,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31527,7 +31866,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31546,7 +31886,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31565,7 +31906,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31584,7 +31926,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31603,7 +31946,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31622,7 +31966,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31641,7 +31986,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31660,7 +32006,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31679,7 +32026,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31698,7 +32046,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31717,7 +32066,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31736,7 +32086,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31755,7 +32106,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31774,7 +32126,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31793,7 +32146,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31812,7 +32166,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31831,7 +32186,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31850,7 +32206,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31869,7 +32226,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31888,7 +32246,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31907,7 +32266,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31926,7 +32286,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31945,7 +32306,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31964,7 +32326,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -31983,7 +32346,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32002,7 +32366,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32021,7 +32386,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32040,7 +32406,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32059,7 +32426,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32078,7 +32446,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32097,7 +32466,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32116,7 +32486,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32135,7 +32506,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32154,7 +32526,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32173,7 +32546,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32192,7 +32566,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32211,7 +32586,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32230,7 +32606,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32249,7 +32626,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32268,7 +32646,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32287,7 +32666,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32306,7 +32686,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32325,7 +32706,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32344,7 +32726,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32363,7 +32746,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32382,7 +32766,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32401,7 +32786,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32420,7 +32806,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32439,7 +32826,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32458,7 +32846,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32477,7 +32866,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32496,7 +32886,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32515,7 +32906,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32534,7 +32926,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32553,7 +32946,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32572,7 +32966,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32591,7 +32986,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32610,7 +33006,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32629,7 +33026,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32648,7 +33046,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32667,7 +33066,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32686,7 +33086,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32705,7 +33106,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32724,7 +33126,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32743,7 +33146,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32762,7 +33166,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32781,7 +33186,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32800,7 +33206,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32819,7 +33226,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32838,7 +33246,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32857,7 +33266,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32876,7 +33286,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32895,7 +33306,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32914,7 +33326,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32933,7 +33346,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32952,7 +33366,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32971,7 +33386,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32990,7 +33406,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33009,7 +33426,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33028,7 +33446,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33047,7 +33466,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33066,7 +33486,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33085,7 +33506,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33104,7 +33526,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33123,7 +33546,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33142,7 +33566,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33161,7 +33586,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33180,7 +33606,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33199,7 +33626,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33218,7 +33646,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33237,7 +33666,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33256,7 +33686,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33275,7 +33706,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33294,7 +33726,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33313,7 +33746,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33332,7 +33766,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33351,7 +33786,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33370,7 +33806,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33389,7 +33826,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33408,7 +33846,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33427,7 +33866,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33446,7 +33886,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33465,7 +33906,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33484,7 +33926,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33503,7 +33946,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33522,7 +33966,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33541,7 +33986,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33560,7 +34006,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33579,7 +34026,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33598,7 +34046,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33617,7 +34066,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33636,7 +34086,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33655,7 +34106,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33674,7 +34126,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33693,7 +34146,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33712,7 +34166,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33731,7 +34186,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33750,7 +34206,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33769,7 +34226,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33788,7 +34246,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33807,7 +34266,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33826,7 +34286,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33845,7 +34306,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33864,7 +34326,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33883,7 +34346,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33902,7 +34366,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33921,7 +34386,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33940,7 +34406,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33959,7 +34426,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33978,7 +34446,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33997,7 +34466,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34016,7 +34486,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34035,7 +34506,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34054,7 +34526,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34073,7 +34546,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34092,7 +34566,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34111,7 +34586,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34130,7 +34606,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34149,7 +34626,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34168,7 +34646,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34187,7 +34666,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34206,7 +34686,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34225,7 +34706,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34244,7 +34726,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34263,7 +34746,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34282,7 +34766,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34301,7 +34786,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34320,7 +34806,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34339,7 +34826,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34358,7 +34846,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34377,7 +34866,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34396,7 +34886,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34415,7 +34906,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34434,7 +34926,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34453,7 +34946,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34472,7 +34966,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34491,7 +34986,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34510,7 +35006,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34529,7 +35026,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34548,7 +35046,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34567,7 +35066,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34586,7 +35086,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34605,7 +35106,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34624,7 +35126,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34643,7 +35146,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34662,7 +35166,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34681,7 +35186,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34700,7 +35206,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34719,7 +35226,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34738,7 +35246,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34757,7 +35266,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34776,7 +35286,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34795,7 +35306,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34814,7 +35326,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34833,7 +35346,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34852,7 +35366,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34871,7 +35386,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34890,7 +35406,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34909,7 +35426,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34928,7 +35446,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34947,7 +35466,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34966,7 +35486,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34985,7 +35506,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35004,7 +35526,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35023,7 +35546,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35042,7 +35566,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35061,7 +35586,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35080,7 +35606,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35099,7 +35626,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35118,7 +35646,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35137,7 +35666,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35156,7 +35686,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35175,7 +35706,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35194,7 +35726,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35213,7 +35746,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35232,7 +35766,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35251,7 +35786,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35270,7 +35806,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35289,7 +35826,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35308,7 +35846,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35327,7 +35866,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35346,7 +35886,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35365,7 +35906,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35384,7 +35926,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35403,7 +35946,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35422,7 +35966,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35441,7 +35986,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35460,7 +36006,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35479,7 +36026,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35498,7 +36046,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35517,7 +36066,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35536,7 +36086,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35555,7 +36106,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35574,7 +36126,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35593,7 +36146,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35612,7 +36166,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35631,7 +36186,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35650,7 +36206,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35669,7 +36226,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35688,7 +36246,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35707,7 +36266,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35726,7 +36286,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35745,7 +36306,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35764,7 +36326,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35783,7 +36346,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35802,7 +36366,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35821,7 +36386,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35840,7 +36406,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35859,7 +36426,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35878,7 +36446,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35897,7 +36466,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35916,7 +36486,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35935,7 +36506,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35954,7 +36526,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35973,7 +36546,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35992,7 +36566,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36011,7 +36586,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36030,7 +36606,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36049,7 +36626,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36068,7 +36646,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36087,7 +36666,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36106,7 +36686,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36125,7 +36706,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36144,7 +36726,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36163,7 +36746,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36182,7 +36766,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36201,7 +36786,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36220,7 +36806,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36239,7 +36826,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36258,7 +36846,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36277,7 +36866,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36296,7 +36886,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36315,7 +36906,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36334,7 +36926,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36353,7 +36946,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36372,7 +36966,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36391,7 +36986,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36410,7 +37006,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36429,7 +37026,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36448,7 +37046,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36467,7 +37066,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36486,7 +37086,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36505,7 +37106,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36524,7 +37126,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36543,7 +37146,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36562,7 +37166,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36581,7 +37186,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36600,7 +37206,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36619,7 +37226,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36638,7 +37246,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36657,7 +37266,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36676,7 +37286,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36695,7 +37306,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36714,7 +37326,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36733,7 +37346,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36752,7 +37366,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36771,7 +37386,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36790,7 +37406,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36809,7 +37426,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36828,7 +37446,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36847,7 +37466,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36866,7 +37486,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36885,7 +37506,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36904,7 +37526,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36923,7 +37546,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36942,7 +37566,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36961,7 +37586,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36980,7 +37606,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36999,7 +37626,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37018,7 +37646,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37037,7 +37666,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37056,7 +37686,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37075,7 +37706,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37094,7 +37726,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37113,7 +37746,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37132,7 +37766,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37151,7 +37786,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37170,7 +37806,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37189,7 +37826,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37208,7 +37846,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37227,7 +37866,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37246,7 +37886,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37265,7 +37906,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37284,7 +37926,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37303,7 +37946,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37322,7 +37966,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37341,7 +37986,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37360,7 +38006,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37379,7 +38026,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37398,7 +38046,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37417,7 +38066,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37436,7 +38086,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37455,7 +38106,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37474,7 +38126,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37493,7 +38146,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37512,7 +38166,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37531,7 +38186,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37550,7 +38206,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37569,7 +38226,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37588,7 +38246,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37607,7 +38266,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37626,7 +38286,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37645,7 +38306,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37664,7 +38326,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37683,7 +38346,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37702,7 +38366,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37721,7 +38386,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37740,7 +38406,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37759,7 +38426,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37778,7 +38446,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37797,7 +38466,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37816,7 +38486,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37835,7 +38506,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37854,7 +38526,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37873,7 +38546,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37892,7 +38566,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37911,7 +38586,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37930,7 +38606,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37949,7 +38626,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37968,7 +38646,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37987,7 +38666,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38006,7 +38686,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38025,7 +38706,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38044,7 +38726,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38063,7 +38746,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38082,7 +38766,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38101,7 +38786,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38120,7 +38806,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38139,7 +38826,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38158,7 +38846,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38177,7 +38866,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38196,7 +38886,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38215,7 +38906,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38234,7 +38926,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38253,7 +38946,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38272,7 +38966,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38291,7 +38986,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38310,7 +39006,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38329,7 +39026,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38348,7 +39046,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38367,7 +39066,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38386,7 +39086,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38405,7 +39106,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38424,7 +39126,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38443,7 +39146,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38462,7 +39166,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38481,7 +39186,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38500,7 +39206,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38519,7 +39226,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38538,7 +39246,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38557,7 +39266,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38576,7 +39286,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38595,7 +39306,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38614,7 +39326,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38633,7 +39346,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38652,7 +39366,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38671,7 +39386,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38690,7 +39406,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38709,7 +39426,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38728,7 +39446,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38747,7 +39466,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38766,7 +39486,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38785,7 +39506,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38804,7 +39526,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38823,7 +39546,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38842,7 +39566,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38861,7 +39586,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38880,7 +39606,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38899,7 +39626,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38918,7 +39646,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38937,7 +39666,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38956,7 +39686,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38975,7 +39706,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38994,7 +39726,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39013,7 +39746,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39032,7 +39766,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39051,7 +39786,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39070,7 +39806,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39089,7 +39826,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39108,7 +39846,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39127,7 +39866,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39146,7 +39886,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39165,7 +39906,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39184,7 +39926,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39203,7 +39946,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39222,7 +39966,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39241,7 +39986,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39260,7 +40006,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39279,7 +40026,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39298,7 +40046,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39317,7 +40066,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39336,7 +40086,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39355,7 +40106,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39374,7 +40126,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39393,7 +40146,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39412,7 +40166,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39431,7 +40186,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39450,7 +40206,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39469,7 +40226,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39488,7 +40246,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39507,7 +40266,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39526,7 +40286,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39545,7 +40306,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39564,7 +40326,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39583,7 +40346,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39602,7 +40366,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39621,7 +40386,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39640,7 +40406,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39659,7 +40426,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -51277,6 +52045,9 @@
       "cores": [
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -52901,7 +53672,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -53999,7 +54771,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -54217,7 +54990,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -55085,7 +55859,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -55173,7 +55948,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -55211,7 +55987,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -55229,7 +56006,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -55267,7 +56045,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -55285,7 +56064,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -55653,7 +56433,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -56241,7 +57022,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -56259,7 +57041,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -56627,7 +57410,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -58605,7 +59389,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -58903,7 +59688,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -59371,7 +60157,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -60099,7 +60886,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -60467,7 +61255,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -61595,7 +62384,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -61623,7 +62413,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -61641,7 +62432,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -61669,7 +62461,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -61687,7 +62480,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -61725,7 +62519,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -61843,7 +62638,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -61861,7 +62657,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -62009,7 +62806,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -62157,7 +62955,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -62175,7 +62974,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -62193,7 +62993,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -62211,7 +63012,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -62229,7 +63031,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -62247,7 +63050,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -62265,7 +63069,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -62283,7 +63088,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -62301,7 +63107,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -62319,7 +63126,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -63457,7 +64265,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -63875,7 +64684,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -64253,7 +65063,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -64271,7 +65082,8 @@
         "cdi",
         "fmtowns",
         "magnavox-odyssey2",
-        "mattel-intellivision"
+        "mattel-intellivision",
+        "snk-neogeo"
       ]
     },
     {
@@ -69902,6 +70714,9 @@
       "cores": [
         "mame2003_plus"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "alternatives": [
         {
           "sha1": "c0df728fb6339edd68da0902292aedbdee614964",
@@ -69931,6 +70746,9 @@
       "repo_path": "bios/Arcade/Arcade/.variants/neogeo.zip.4ccf6682",
       "cores": [
         "advancemame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "alternatives": [
         {
@@ -70742,6 +71560,9 @@
       "repo_path": "bios/Arcade/Arcade/neogeo.zip",
       "cores": [
         "geolith"
+      ],
+      "systems": [
+        "snk-neogeo"
       ]
     },
     {
@@ -70752,6 +71573,9 @@
       "repo_path": "bios/Arcade/MAME/neogeo.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ]
     },
     {
@@ -70806,6 +71630,9 @@
       "cores": [
         "mame2003_plus"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "alternatives": [
         {
           "sha1": "5b00dd73906a6f8a191ac2d0409459c29826710e",
@@ -70826,6 +71653,9 @@
       "repo_path": "bios/Arcade/Arcade/.variants/neogeo.zip.74df3258",
       "cores": [
         "mame2003_plus"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "alternatives": [
         {
@@ -70848,6 +71678,9 @@
       "cores": [
         "mame2003_plus"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "alternatives": [
         {
           "sha1": "5b00dd73906a6f8a191ac2d0409459c29826710e",
@@ -70868,6 +71701,9 @@
       "repo_path": "bios/Arcade/Arcade/.variants/neogeo.zip.74df3258",
       "cores": [
         "mame2003_plus"
+      ],
+      "systems": [
+        "snk-neogeo"
       ]
     },
     {
@@ -71389,6 +72225,9 @@
       "repo_path": "bios/Arcade/Arcade/.variants/neogeo.zip.9d7bbba3",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "snk-neogeo"
       ]
     },
     {

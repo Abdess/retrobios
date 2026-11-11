@@ -7435,6 +7435,9 @@
       "drastic - standalone"
     ],
     "advanced_tests": [],
+    "advancemame": [
+      "AdvanceMame"
+    ],
     "aethersx2": [
       "aethersx2-sa"
     ],
@@ -7629,6 +7632,9 @@
     "fake08": [
       "fake_08"
     ],
+    "fba2x": [
+      "pifba"
+    ],
     "fbalpha2012": [
       "fbalpha"
     ],
@@ -7799,6 +7805,10 @@
     "mame2016": [
       "mess2016"
     ],
+    "mame4droid": [
+      "MAME4DROID",
+      "com.seleuco.mame4droid"
+    ],
     "mame4droid-2024": [
       "MAME4DROID-2024",
       "MAME4DROID-CURRENT",
@@ -7902,6 +7912,10 @@
     "native32emu": [],
     "nekop2": [
       "meowpc98"
+    ],
+    "neo-emu": [
+      "NEO-EMU",
+      "NEO.emu"
     ],
     "neocd": [],
     "nes": [],
@@ -8415,6 +8429,40 @@
       "yabause",
       "ymir"
     ],
+    "snk-neogeo": [
+      "advancemame",
+      "advmame",
+      "advmame-0.94",
+      "advmame-1.4",
+      "ares",
+      "fba2x",
+      "fbalpha2012",
+      "fbalpha2012_neogeo",
+      "fbalpha2019",
+      "fbneo",
+      "fbneo_neogeo",
+      "geolith",
+      "gngeopi",
+      "groovymame",
+      "mame",
+      "mame0258",
+      "mame0278",
+      "mame2000",
+      "mame2003",
+      "mame2003_plus",
+      "mame2009",
+      "mame2010",
+      "mame2014",
+      "mame2015",
+      "mame2016",
+      "mame4all",
+      "mame4droid",
+      "mame4droid-2024",
+      "mamearcade",
+      "neo-emu",
+      "raine",
+      "ume2015"
+    ],
     "snk-neogeo-cd": [
       "fbalpha2019",
       "fbneo",
@@ -8487,7 +8535,6 @@
     "sega-dreamcast-arcade": "Sega Dreamcast-based arcade boards",
     "sega-mega-cd": "Sega Mega CD",
     "sega-saturn": "Sega Saturn",
-    "snk-neogeo": "SNK Neo Geo",
     "snk-neogeo-cd": "SNK Neo Geo CD",
     "sony-playstation": "Sony PlayStation",
     "sony-playstation-2": "Sony PlayStation 2",
@@ -27833,6 +27880,9 @@
       "repo_path": "bios/SNK/Neo Geo/irrmaze.zip",
       "cores": [
         "geolith"
+      ],
+      "systems": [
+        "snk-neogeo"
       ]
     },
     {
@@ -32059,7 +32109,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32075,7 +32126,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32091,7 +32143,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32107,7 +32160,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32123,7 +32177,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32139,7 +32194,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32155,7 +32211,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32171,7 +32228,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32187,7 +32245,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32203,7 +32262,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32219,7 +32279,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32235,7 +32296,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32251,7 +32313,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32267,7 +32330,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32283,7 +32347,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32299,7 +32364,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32315,7 +32381,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32331,7 +32398,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32347,7 +32415,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32363,7 +32432,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32379,7 +32449,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32395,7 +32466,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32411,7 +32483,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32427,7 +32500,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32443,7 +32517,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32459,7 +32534,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32475,7 +32551,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32491,7 +32568,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32507,7 +32585,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32523,7 +32602,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32539,7 +32619,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32555,7 +32636,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32571,7 +32653,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32587,7 +32670,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32603,7 +32687,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32619,7 +32704,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32635,7 +32721,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32651,7 +32738,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32667,7 +32755,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32683,7 +32772,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32699,7 +32789,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32715,7 +32806,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32731,7 +32823,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32747,7 +32840,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32763,7 +32857,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32779,7 +32874,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32795,7 +32891,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32811,7 +32908,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32827,7 +32925,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32843,7 +32942,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32859,7 +32959,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32875,7 +32976,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32891,7 +32993,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32907,7 +33010,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32923,7 +33027,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32939,7 +33044,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32955,7 +33061,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32971,7 +33078,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -32987,7 +33095,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33003,7 +33112,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33019,7 +33129,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33035,7 +33146,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33051,7 +33163,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33067,7 +33180,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33083,7 +33197,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33099,7 +33214,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33115,7 +33231,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33131,7 +33248,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33147,7 +33265,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33163,7 +33282,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33179,7 +33299,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33195,7 +33316,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33211,7 +33333,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33227,7 +33350,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33243,7 +33367,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33259,7 +33384,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33275,7 +33401,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33291,7 +33418,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33307,7 +33435,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33323,7 +33452,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33339,7 +33469,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33355,7 +33486,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33371,7 +33503,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33387,7 +33520,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33403,7 +33537,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33419,7 +33554,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33435,7 +33571,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33451,7 +33588,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33467,7 +33605,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33483,7 +33622,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33499,7 +33639,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33515,7 +33656,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33531,7 +33673,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33547,7 +33690,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33563,7 +33707,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33579,7 +33724,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33595,7 +33741,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33611,7 +33758,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33627,7 +33775,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33643,7 +33792,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33659,7 +33809,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33675,7 +33826,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33691,7 +33843,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33707,7 +33860,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33723,7 +33877,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33739,7 +33894,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33755,7 +33911,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33771,7 +33928,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33787,7 +33945,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33803,7 +33962,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33819,7 +33979,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33835,7 +33996,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33851,7 +34013,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33867,7 +34030,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33883,7 +34047,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33899,7 +34064,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33915,7 +34081,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33931,7 +34098,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33947,7 +34115,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33963,7 +34132,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33979,7 +34149,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -33995,7 +34166,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34011,7 +34183,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34027,7 +34200,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34043,7 +34217,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34059,7 +34234,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34075,7 +34251,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34091,7 +34268,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34107,7 +34285,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34123,7 +34302,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34139,7 +34319,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34155,7 +34336,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34171,7 +34353,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34187,7 +34370,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34203,7 +34387,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34219,7 +34404,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34235,7 +34421,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34251,7 +34438,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34267,7 +34455,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34283,7 +34472,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34299,7 +34489,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34315,7 +34506,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34331,7 +34523,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34347,7 +34540,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34363,7 +34557,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34379,7 +34574,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34395,7 +34591,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34411,7 +34608,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34427,7 +34625,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34443,7 +34642,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34459,7 +34659,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34475,7 +34676,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34491,7 +34693,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34507,7 +34710,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34523,7 +34727,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34539,7 +34744,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34555,7 +34761,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34571,7 +34778,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34587,7 +34795,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34603,7 +34812,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34619,7 +34829,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34635,7 +34846,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34651,7 +34863,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34667,7 +34880,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34683,7 +34897,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34699,7 +34914,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34715,7 +34931,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34731,7 +34948,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34747,7 +34965,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34763,7 +34982,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34779,7 +34999,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34795,7 +35016,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34811,7 +35033,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34827,7 +35050,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34843,7 +35067,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34859,7 +35084,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34875,7 +35101,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34891,7 +35118,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34907,7 +35135,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34923,7 +35152,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34939,7 +35169,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34955,7 +35186,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34971,7 +35203,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -34987,7 +35220,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35003,7 +35237,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35019,7 +35254,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35035,7 +35271,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35051,7 +35288,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35067,7 +35305,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35083,7 +35322,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35099,7 +35339,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35115,7 +35356,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35131,7 +35373,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35147,7 +35390,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35163,7 +35407,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35179,7 +35424,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35195,7 +35441,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35211,7 +35458,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35227,7 +35475,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35243,7 +35492,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35259,7 +35509,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35275,7 +35526,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35291,7 +35543,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35307,7 +35560,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35323,7 +35577,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35339,7 +35594,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35355,7 +35611,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35371,7 +35628,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35387,7 +35645,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35403,7 +35662,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35419,7 +35679,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35435,7 +35696,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35451,7 +35713,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35467,7 +35730,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35483,7 +35747,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35499,7 +35764,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35515,7 +35781,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35531,7 +35798,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35547,7 +35815,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35563,7 +35832,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35579,7 +35849,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35595,7 +35866,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35611,7 +35883,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35627,7 +35900,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35643,7 +35917,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35659,7 +35934,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35675,7 +35951,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35691,7 +35968,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35707,7 +35985,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35723,7 +36002,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35739,7 +36019,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35755,7 +36036,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35771,7 +36053,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35787,7 +36070,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35803,7 +36087,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35819,7 +36104,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35835,7 +36121,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35851,7 +36138,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35867,7 +36155,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35883,7 +36172,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35899,7 +36189,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35915,7 +36206,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35931,7 +36223,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35947,7 +36240,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35963,7 +36257,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35979,7 +36274,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -35995,7 +36291,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36011,7 +36308,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36027,7 +36325,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36043,7 +36342,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36059,7 +36359,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36075,7 +36376,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36091,7 +36393,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36107,7 +36410,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36123,7 +36427,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36139,7 +36444,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36155,7 +36461,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36171,7 +36478,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36187,7 +36495,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36203,7 +36512,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36219,7 +36529,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36235,7 +36546,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36251,7 +36563,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36267,7 +36580,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36283,7 +36597,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36299,7 +36614,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36315,7 +36631,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36331,7 +36648,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36347,7 +36665,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36363,7 +36682,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36379,7 +36699,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36395,7 +36716,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36411,7 +36733,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36427,7 +36750,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36443,7 +36767,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36459,7 +36784,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36475,7 +36801,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36491,7 +36818,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36507,7 +36835,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36523,7 +36852,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36539,7 +36869,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36555,7 +36886,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36571,7 +36903,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36587,7 +36920,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36603,7 +36937,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36619,7 +36954,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36635,7 +36971,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36651,7 +36988,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36667,7 +37005,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36683,7 +37022,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36699,7 +37039,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36715,7 +37056,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36731,7 +37073,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36747,7 +37090,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36763,7 +37107,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36779,7 +37124,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36795,7 +37141,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36811,7 +37158,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36827,7 +37175,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36843,7 +37192,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36859,7 +37209,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36875,7 +37226,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36891,7 +37243,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36907,7 +37260,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36923,7 +37277,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36939,7 +37294,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36955,7 +37311,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36971,7 +37328,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -36987,7 +37345,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37003,7 +37362,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37019,7 +37379,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37035,7 +37396,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37051,7 +37413,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37067,7 +37430,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37083,7 +37447,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37099,7 +37464,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37115,7 +37481,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37131,7 +37498,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37147,7 +37515,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37163,7 +37532,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37179,7 +37549,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37195,7 +37566,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37211,7 +37583,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37227,7 +37600,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37243,7 +37617,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37259,7 +37634,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37275,7 +37651,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37291,7 +37668,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37307,7 +37685,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37323,7 +37702,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37339,7 +37719,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37355,7 +37736,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37371,7 +37753,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37387,7 +37770,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37403,7 +37787,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37419,7 +37804,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37435,7 +37821,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37451,7 +37838,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37467,7 +37855,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37483,7 +37872,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37499,7 +37889,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37515,7 +37906,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37531,7 +37923,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37547,7 +37940,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37563,7 +37957,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37579,7 +37974,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37595,7 +37991,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37611,7 +38008,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37627,7 +38025,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37643,7 +38042,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37659,7 +38059,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37675,7 +38076,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37691,7 +38093,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37707,7 +38110,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37723,7 +38127,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37739,7 +38144,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37755,7 +38161,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37771,7 +38178,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37787,7 +38195,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37803,7 +38212,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37819,7 +38229,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37835,7 +38246,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37851,7 +38263,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37867,7 +38280,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37883,7 +38297,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37899,7 +38314,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37915,7 +38331,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37931,7 +38348,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37947,7 +38365,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37963,7 +38382,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37979,7 +38399,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -37995,7 +38416,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38011,7 +38433,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38027,7 +38450,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38043,7 +38467,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38059,7 +38484,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38075,7 +38501,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38091,7 +38518,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38107,7 +38535,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38123,7 +38552,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38139,7 +38569,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38155,7 +38586,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38171,7 +38603,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38187,7 +38620,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38203,7 +38637,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38219,7 +38654,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38235,7 +38671,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38251,7 +38688,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38267,7 +38705,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38283,7 +38722,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38299,7 +38739,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38315,7 +38756,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38331,7 +38773,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38347,7 +38790,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38363,7 +38807,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38379,7 +38824,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38395,7 +38841,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38411,7 +38858,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38427,7 +38875,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38443,7 +38892,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38459,7 +38909,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38475,7 +38926,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38491,7 +38943,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38507,7 +38960,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38523,7 +38977,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38539,7 +38994,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38555,7 +39011,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38571,7 +39028,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38587,7 +39045,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38603,7 +39062,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38619,7 +39079,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38635,7 +39096,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38651,7 +39113,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38667,7 +39130,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38683,7 +39147,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38699,7 +39164,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38715,7 +39181,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38731,7 +39198,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38747,7 +39215,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38763,7 +39232,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38779,7 +39249,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38795,7 +39266,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38811,7 +39283,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38827,7 +39300,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38843,7 +39317,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38859,7 +39334,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38875,7 +39351,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38891,7 +39368,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38907,7 +39385,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38923,7 +39402,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38939,7 +39419,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38955,7 +39436,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38971,7 +39453,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -38987,7 +39470,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39003,7 +39487,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39019,7 +39504,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39035,7 +39521,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39051,7 +39538,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39067,7 +39555,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39083,7 +39572,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39099,7 +39589,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39115,7 +39606,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39131,7 +39623,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39147,7 +39640,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39163,7 +39657,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39179,7 +39674,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39195,7 +39691,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39211,7 +39708,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39227,7 +39725,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39243,7 +39742,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39259,7 +39759,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39275,7 +39776,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39291,7 +39793,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39307,7 +39810,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39323,7 +39827,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39339,7 +39844,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39355,7 +39861,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39371,7 +39878,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39387,7 +39895,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39403,7 +39912,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39419,7 +39929,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39435,7 +39946,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39451,7 +39963,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39467,7 +39980,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39483,7 +39997,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39499,7 +40014,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39515,7 +40031,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39531,7 +40048,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39547,7 +40065,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39563,7 +40082,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39579,7 +40099,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39595,7 +40116,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39611,7 +40133,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39627,7 +40150,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39643,7 +40167,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39659,7 +40184,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39675,7 +40201,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39691,7 +40218,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39707,7 +40235,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39723,7 +40252,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39739,7 +40269,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39755,7 +40286,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39771,7 +40303,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39787,7 +40320,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39803,7 +40337,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39819,7 +40354,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39835,7 +40371,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39851,7 +40388,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39867,7 +40405,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39883,7 +40422,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39899,7 +40439,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39915,7 +40456,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39931,7 +40473,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39947,7 +40490,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39963,7 +40507,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39979,7 +40524,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -39995,7 +40541,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40011,7 +40558,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40027,7 +40575,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40043,7 +40592,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40059,7 +40609,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40075,7 +40626,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40091,7 +40643,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40107,7 +40660,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40123,7 +40677,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40139,7 +40694,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40155,7 +40711,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40171,7 +40728,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40187,7 +40745,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40203,7 +40762,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40219,7 +40779,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40235,7 +40796,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40251,7 +40813,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40267,7 +40830,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40283,7 +40847,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40299,7 +40864,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40315,7 +40881,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40331,7 +40898,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40347,7 +40915,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40363,7 +40932,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40379,7 +40949,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40395,7 +40966,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40411,7 +40983,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40427,7 +41000,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40443,7 +41017,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40459,7 +41034,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40475,7 +41051,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40491,7 +41068,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40507,7 +41085,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40523,7 +41102,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40539,7 +41119,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40555,7 +41136,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40571,7 +41153,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40587,7 +41170,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40603,7 +41187,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40619,7 +41204,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40635,7 +41221,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40651,7 +41238,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40667,7 +41255,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40683,7 +41272,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40699,7 +41289,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40715,7 +41306,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40731,7 +41323,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40747,7 +41340,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40763,7 +41357,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40779,7 +41374,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40795,7 +41391,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40811,7 +41408,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40827,7 +41425,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40843,7 +41442,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40859,7 +41459,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40875,7 +41476,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40891,7 +41493,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40907,7 +41510,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40923,7 +41527,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40939,7 +41544,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40955,7 +41561,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40971,7 +41578,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -40987,7 +41595,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41003,7 +41612,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41019,7 +41629,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41035,7 +41646,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41051,7 +41663,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41067,7 +41680,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41083,7 +41697,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41099,7 +41714,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41115,7 +41731,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41131,7 +41748,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41147,7 +41765,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41163,7 +41782,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41179,7 +41799,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41195,7 +41816,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41211,7 +41833,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41227,7 +41850,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41243,7 +41867,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41259,7 +41884,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41275,7 +41901,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41291,7 +41918,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41307,7 +41935,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41323,7 +41952,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41339,7 +41969,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41355,7 +41986,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41371,7 +42003,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41387,7 +42020,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41403,7 +42037,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41419,7 +42054,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41435,7 +42071,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41451,7 +42088,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41467,7 +42105,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41483,7 +42122,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41499,7 +42139,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41515,7 +42156,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41531,7 +42173,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41547,7 +42190,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41563,7 +42207,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41579,7 +42224,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41595,7 +42241,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41611,7 +42258,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41627,7 +42275,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41643,7 +42292,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41659,7 +42309,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41675,7 +42326,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41691,7 +42343,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41707,7 +42360,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41723,7 +42377,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41739,7 +42394,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41755,7 +42411,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41771,7 +42428,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41787,7 +42445,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41803,7 +42462,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41819,7 +42479,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41835,7 +42496,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41851,7 +42513,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41867,7 +42530,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41883,7 +42547,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41899,7 +42564,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41915,7 +42581,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41931,7 +42598,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41947,7 +42615,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41963,7 +42632,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41979,7 +42649,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -41995,7 +42666,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42011,7 +42683,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42027,7 +42700,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42043,7 +42717,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42059,7 +42734,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42075,7 +42751,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42091,7 +42768,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42107,7 +42785,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42123,7 +42802,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42139,7 +42819,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42155,7 +42836,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42171,7 +42853,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42187,7 +42870,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42203,7 +42887,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42219,7 +42904,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42235,7 +42921,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42251,7 +42938,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42267,7 +42955,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42283,7 +42972,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42299,7 +42989,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42315,7 +43006,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42331,7 +43023,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42347,7 +43040,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42363,7 +43057,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42379,7 +43074,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42395,7 +43091,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42411,7 +43108,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42427,7 +43125,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42443,7 +43142,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42459,7 +43159,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42475,7 +43176,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42491,7 +43193,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42507,7 +43210,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42523,7 +43227,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42539,7 +43244,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42555,7 +43261,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42571,7 +43278,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42587,7 +43295,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42603,7 +43312,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42619,7 +43329,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42635,7 +43346,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42651,7 +43363,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42667,7 +43380,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42683,7 +43397,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42699,7 +43414,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42715,7 +43431,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42731,7 +43448,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42747,7 +43465,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42763,7 +43482,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42779,7 +43499,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42795,7 +43516,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42811,7 +43533,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42827,7 +43550,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42843,7 +43567,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42859,7 +43584,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42875,7 +43601,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42891,7 +43618,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42907,7 +43635,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42923,7 +43652,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42939,7 +43669,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42955,7 +43686,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42971,7 +43703,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -42987,7 +43720,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43003,7 +43737,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43019,7 +43754,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43035,7 +43771,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43051,7 +43788,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43067,7 +43805,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43083,7 +43822,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43099,7 +43839,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43115,7 +43856,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43131,7 +43873,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43147,7 +43890,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43163,7 +43907,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43179,7 +43924,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43195,7 +43941,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43211,7 +43958,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43227,7 +43975,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43243,7 +43992,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43259,7 +44009,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43275,7 +44026,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43291,7 +44043,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43307,7 +44060,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43323,7 +44077,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43339,7 +44094,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43355,7 +44111,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43371,7 +44128,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43387,7 +44145,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43403,7 +44162,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43419,7 +44179,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43435,7 +44196,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43451,7 +44213,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43467,7 +44230,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43483,7 +44247,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43499,7 +44264,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43515,7 +44281,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43531,7 +44298,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43547,7 +44315,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43563,7 +44332,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43579,7 +44349,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43595,7 +44366,8 @@
         "mamemess"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43971,7 +44743,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -43986,6 +44759,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -43998,6 +44774,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44012,6 +44791,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44024,6 +44806,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44038,6 +44823,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44050,6 +44838,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44064,6 +44855,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44076,6 +44870,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44090,6 +44887,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44102,6 +44902,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44116,6 +44919,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44128,6 +44934,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44142,6 +44951,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44154,6 +44966,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44168,6 +44983,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44180,6 +44998,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44194,6 +45015,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44206,6 +45030,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44220,6 +45047,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44232,6 +45062,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44246,6 +45079,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44258,6 +45094,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44272,6 +45111,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44284,6 +45126,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44298,6 +45143,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44310,6 +45158,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44324,6 +45175,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44336,6 +45190,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44350,6 +45207,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44362,6 +45222,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44376,6 +45239,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44388,6 +45254,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44402,6 +45271,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44414,6 +45286,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44428,6 +45303,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44440,6 +45318,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44454,6 +45335,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44466,6 +45350,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44480,6 +45367,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44492,6 +45382,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44506,6 +45399,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44518,6 +45414,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44532,6 +45431,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44544,6 +45446,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44558,6 +45463,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44570,6 +45478,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44584,6 +45495,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44596,6 +45510,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44610,6 +45527,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44622,6 +45542,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44636,6 +45559,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44648,6 +45574,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44662,6 +45591,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44674,6 +45606,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44688,6 +45623,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44700,6 +45638,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44714,6 +45655,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44726,6 +45670,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44740,6 +45687,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44752,6 +45702,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44766,6 +45719,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44778,6 +45734,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44792,6 +45751,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44804,6 +45766,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44818,6 +45783,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44830,6 +45798,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44844,6 +45815,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44856,6 +45830,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44870,6 +45847,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44882,6 +45862,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44896,6 +45879,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44908,6 +45894,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44922,6 +45911,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44934,6 +45926,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44948,6 +45943,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44960,6 +45958,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -44974,6 +45975,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -44986,6 +45990,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45000,6 +46007,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45012,6 +46022,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45026,6 +46039,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45038,6 +46054,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45052,6 +46071,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45064,6 +46086,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45078,6 +46103,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45090,6 +46118,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45104,6 +46135,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45116,6 +46150,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45130,6 +46167,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45142,6 +46182,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45156,6 +46199,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45168,6 +46214,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45182,6 +46231,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45194,6 +46246,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45208,6 +46263,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45220,6 +46278,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45234,6 +46295,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45246,6 +46310,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45261,7 +46328,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45276,6 +46344,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45288,6 +46359,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45302,6 +46376,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45314,6 +46391,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45328,6 +46408,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45340,6 +46423,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45354,6 +46440,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45366,6 +46455,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45380,6 +46472,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45392,6 +46487,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45406,6 +46504,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45418,6 +46519,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45432,6 +46536,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45444,6 +46551,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45458,6 +46568,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45470,6 +46583,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45484,6 +46600,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45496,6 +46615,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45510,6 +46632,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45522,6 +46647,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45536,6 +46664,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45548,6 +46679,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45562,6 +46696,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45574,6 +46711,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45588,6 +46728,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45600,6 +46743,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45614,6 +46760,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45626,6 +46775,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45640,6 +46792,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45652,6 +46807,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -45666,6 +46824,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45679,6 +46840,9 @@
         "mamemess",
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "category": "game_data"
     },
     {
@@ -45691,6 +46855,9 @@
         "mamearcade",
         "mamemess",
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "category": "game_data"
     },
@@ -84028,7 +85195,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -85126,7 +86294,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -85339,7 +86508,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -86202,7 +87372,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -86285,7 +87456,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -86318,7 +87490,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -86331,7 +87504,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -86364,7 +87538,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -86377,7 +87552,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -86740,7 +87916,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -87324,7 +88501,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -87337,7 +88515,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -87712,7 +88891,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -89707,7 +90887,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -90000,7 +91181,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -90463,7 +91645,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -91186,7 +92369,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -91549,7 +92733,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -92672,7 +93857,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -92695,7 +93881,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -92708,7 +93895,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -92731,7 +93919,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -92744,7 +93933,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -92777,7 +93967,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -92890,7 +94081,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -92903,7 +94095,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -93046,7 +94239,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -93189,7 +94383,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -93202,7 +94397,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -93215,7 +94411,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -93228,7 +94425,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -93241,7 +94439,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -93254,7 +94453,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -93267,7 +94467,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -93280,7 +94481,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -93293,7 +94495,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -93306,7 +94509,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -94464,7 +95668,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -94889,7 +96094,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -95275,7 +96481,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -95288,7 +96495,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -95350,6 +96558,9 @@
       "cores": [
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "root": "roms",
       "alternatives": [
         {
@@ -95399,6 +96610,9 @@
       "cores": [
         "mame"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "root": "roms"
     },
     {
@@ -95409,6 +96623,9 @@
       "repo_path": "bios/Arcade/MAME/neogeo.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "root": "roms",
       "alternatives": [
@@ -95458,6 +96675,9 @@
       "repo_path": "bios/Arcade/MAME/neogeo.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "root": "roms"
     },
@@ -104631,7 +105851,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -106252,7 +107473,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -106641,7 +107863,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -108032,7 +109255,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -108181,7 +109405,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -108214,7 +109439,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -108227,7 +109453,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -108260,7 +109487,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -108273,7 +109501,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -109022,7 +110251,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -110298,7 +111528,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -110311,7 +111542,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -111081,7 +112313,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -116014,7 +117247,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -116835,7 +118069,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -118054,7 +119289,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -119842,7 +121078,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -120624,7 +121861,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -122858,7 +124096,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -122914,7 +124153,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -122927,7 +124167,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -122983,7 +124224,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -122996,7 +124238,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -123095,7 +124338,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -123351,7 +124595,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -123364,7 +124609,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -123760,7 +125006,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -124156,7 +125403,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -124169,7 +125417,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -124182,7 +125431,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -124195,7 +125445,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -124208,7 +125459,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -124221,7 +125473,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -124234,7 +125487,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -124247,7 +125501,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -124260,7 +125515,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -124273,7 +125529,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -126099,7 +127356,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -127172,7 +128430,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -127941,7 +129200,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -127954,7 +129214,8 @@
         "mame"
       ],
       "systems": [
-        "panasonic-3do"
+        "panasonic-3do",
+        "snk-neogeo"
       ]
     },
     {
@@ -128126,6 +129387,9 @@
       "cores": [
         "mame2000"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "root": "roms",
       "alternatives": [
         {
@@ -128165,6 +129429,9 @@
       "repo_path": "bios/Arcade/Arcade/.variants/neogeo.zip.0c69efec",
       "cores": [
         "mame2000"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "root": "roms",
       "alternatives": [
@@ -128206,6 +129473,9 @@
       "cores": [
         "mame2000"
       ],
+      "systems": [
+        "snk-neogeo"
+      ],
       "root": "roms",
       "alternatives": [
         {
@@ -128245,6 +129515,9 @@
       "repo_path": "bios/Arcade/Arcade/.variants/neogeo.zip.0c69efec",
       "cores": [
         "mame2000"
+      ],
+      "systems": [
+        "snk-neogeo"
       ],
       "root": "roms",
       "alternatives": [
@@ -139418,6 +140691,9 @@
       "cores": [
         "mame",
         "mamearcade"
+      ],
+      "systems": [
+        "snk-neogeo"
       ]
     },
     {
@@ -139824,6 +141100,9 @@
       "cores": [
         "fbneo",
         "fbneo_neogeo"
+      ],
+      "systems": [
+        "snk-neogeo"
       ]
     },
     {
