@@ -3745,6 +3745,8 @@ def bump_commit(
     expected = dict(document)
     expected["source_commit"] = report.head
     new_text = _set_pin(text, document, "source_commit", report.head, "profiled_date")
+    if document.get("pin_follows"):
+        new_text, expected = _follow_config_reads(new_text, expected, document, report.head)
     if upstream_moves:
         expected["upstream_commit"] = report.upstream_head
         new_text = _set_pin(
@@ -3799,6 +3801,28 @@ def cites_primary(report: ProfileReport) -> bool:
         if part.status != "EXTERNAL"
     ]
     return not parts or any(part.repo is None for part in parts)
+
+
+def _follow_config_reads(
+    text: str, expected: dict, document: dict, head: str
+) -> tuple[str, dict]:
+    """A config_reads entry read at the pin moves with a pin that follows the
+    branch tip: RetroPie installs advmame from the tip, so the build its
+    advmame.rc is read at is the pin itself."""
+    pin = str(document.get("source_commit") or "")
+    reads = document.get("config_reads") or []
+    if not pin or not any(isinstance(r, dict) and r.get("revision") == pin for r in reads):
+        return text, expected
+    text = re.sub(
+        r'^(\s*revision:\s*)(["\']?)' + re.escape(pin) + r"\2\s*$",
+        lambda m: f"{m.group(1)}{m.group(2)}{head}{m.group(2)}",
+        text, flags=re.M,
+    )
+    expected = {**expected, "config_reads": [
+        {**r, "revision": head} if isinstance(r, dict) and r.get("revision") == pin else r
+        for r in reads
+    ]}
+    return text, expected
 
 
 def _set_pin(text: str, document: dict, field: str, value: str, after: str) -> str:

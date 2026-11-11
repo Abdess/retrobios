@@ -3399,6 +3399,40 @@ class TestBumpCommit(unittest.TestCase):
         self.assertTrue(bump_commit(self.path, report))
         self.assertIn("newhead", self.path.read_text())
 
+    def test_a_config_read_at_the_pin_follows_it(self):
+        # RetroPie reads advmame.rc at the build it installs, the pin: the
+        # config_reads revision is the pin, and moves with it.
+        pin = "a" * 40
+        self.path.write_text(
+            SAMPLE.replace('profiled_date: "2026-03-29"\n',
+                           f'profiled_date: "2026-03-29"\nsource_commit: "{pin}"\n', 1)
+            + "built_by: [retropie]\n"
+            + 'pin_follows: "RetroPie builds the branch tip"\n'
+            + "config_reads:\n"
+            + '  - file: "advmame.rc"\n'
+            + "    platforms: [retropie]\n"
+            + f'    revision: "{pin}"\n'
+            + '    source_ref: "a.c:10-12"\n'
+            + "  - file: \"other.rc\"\n"
+            + "    platforms: [emuelec]\n"
+            + f'    revision: "{"b" * 40}"\n'
+            + '    source_ref: "a.c:10-12"\n',
+            encoding="utf-8",
+        )
+        part = PartResult(
+            RefPart("a.c", 10, 12, "a.c:10-12"), "ANCHORED", None, 10, 12, []
+        )
+        head = "c" * 40
+        report = ProfileReport(
+            name="p", repo="o/n", pin=pin, head=head,
+            entries=[EntryReport("a.bin", "a.c:10-12", "ANCHORED", [part])],
+            counts={"ANCHORED": 1},
+        )
+        self.assertTrue(bump_commit(self.path, report))
+        document = yaml.safe_load(self.path.read_text(encoding="utf-8"))
+        self.assertEqual(document["source_commit"], head)
+        self.assertEqual([r["revision"] for r in document["config_reads"]], [head, "b" * 40])
+
     def test_refused_when_no_ref_reads_the_pinned_repository(self):
         """gam4980: every bare libretro.c ref anchored in upstream, and the
         bump wrote the fork's HEAD over refs that never described it."""
