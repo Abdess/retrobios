@@ -18,7 +18,7 @@ cores:
   - fbalpha
 systems:
   - arcade
-  - neogeo
+  - snk-neogeo-mvs
   - capcom-cps1
   - capcom-cps2
   - capcom-cps3
