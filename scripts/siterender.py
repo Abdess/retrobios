@@ -982,7 +982,6 @@ SYSTEM_NAMES: dict[str, str] = {
     "heroes-of-might-and-magic-2": "Heroes of Might and Magic II",
     "hexen": "Hexen",
     "hexen2": "Hexen II",
-    "hppa": "HP PA-RISC",
     "hugo": "Hugo",
     "hyper-neogeo64": "SNK Hyper Neo Geo 64",
     "ibm-at": "IBM PC/AT",
