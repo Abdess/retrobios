@@ -24,6 +24,7 @@ Formats, by the shape of the source:
 
 from __future__ import annotations
 
+import html
 import json
 import re
 import shlex
@@ -167,7 +168,7 @@ def _all_lines(text: str, pattern: str) -> dict[str, list[int]]:
     for number, line in enumerate(text.splitlines(), 1):
         match = re.search(pattern, line)
         if match:
-            out.setdefault(match.group(1).strip(), []).append(number)
+            out.setdefault(html.unescape(match.group(1)).strip(), []).append(number)
     return out
 
 
@@ -522,6 +523,64 @@ def _alternative_emulators(text: str, function: str) -> dict[str, tuple[str, int
     return out
 
 
+_ROMPATH_OPTIONS = ("-rompath", "-rp")
+
+
+def _searched_by(commands: list[tuple[str, str, int | None]], key: str, path: str) -> list[dict]:
+    """The ROM folders each standalone emulator's commands pass it, by emulator.
+
+    ES-DE starts standalone MAME with `-rompath %GAMEDIR%\\;%ROMPATH%/<system>`
+    and a machine, or %BASENAME% where the game is the machine. The command
+    line outranks mame.ini. %GAMEDIR% is the game's own folder, no folder a
+    pack fills.
+    """
+    found: dict[str, dict] = {}
+    for _label, command, line in commands:
+        emulator = _EMULATOR.search(command)
+        if emulator is None or _RA_CORE.search(command):
+            continue
+        words = command.replace("\\;", ";").split()
+        at = next((i for i, w in enumerate(words) if w in _ROMPATH_OPTIONS), None)
+        if at is None or at + 1 >= len(words):
+            continue
+        reads = [
+            folder for part in words[at + 1].split(";")
+            if (folder := _strip_prefix(part, ["%ROMPATH%/", "%ROMPATH%\\"]))
+        ]
+        if not reads:
+            continue
+        name = emulator.group(1).lower()
+        record = found.setdefault(name, {"emulator": name, "reads": [], "machines": [],
+                                         "any_machine": False, "lines": []})
+        record["reads"] += [r for r in reads if r not in record["reads"]]
+        machine = words[at + 2] if at + 2 < len(words) else ""
+        if not machine or machine.startswith("%"):
+            record["any_machine"] = True
+        elif machine not in record["machines"]:
+            record["machines"].append(machine)
+        record["lines"].append(line)
+    rows = []
+    for record in found.values():
+        row = {"emulator": record["emulator"], "reads": record["reads"]}
+        if record["machines"]:
+            row["machines"] = record["machines"]
+        if record["any_machine"]:
+            row["any_machine"] = True
+        row["source_ref"] = _ref(key, path, *record["lines"])
+        rows.append(row)
+    return rows
+
+
+def _command_lines(text: str) -> dict[str, list[int]]:
+    """Command text -> the lines it is written on, in file order."""
+    out: dict[str, list[int]] = {}
+    for number, line in enumerate(text.splitlines(), 1):
+        match = re.search(r"<command\b[^>]*>([^<]*)</command>", line)
+        if match:
+            out.setdefault(match.group(1).strip(), []).append(number)
+    return out
+
+
 @register("esde")
 def esde(spec: dict, fetcher: Fetcher) -> list[dict]:
     """Each system of ES-DE's list whose path is %ROMPATH%/<folder>.
@@ -537,13 +596,21 @@ def esde(spec: dict, fetcher: Fetcher) -> list[dict]:
         key, path = item["source"], item["path"]
         text = _lenient_xml(fetcher.text(key, path))
         lines = _first_lines(text, r"<name>([^<]+)</name>")
+        command_lines = _command_lines(text)
         for name, rom_path, extensions, commands in _esde_systems(text, path):
             folder = _strip_prefix(rom_path, ["%ROMPATH%/", "%ROMPATH%\\"])
             if not name or not folder:
                 continue
+            start = lines.get(name) or 0
+            placed = [
+                (label, command, next(
+                    (n for n in command_lines.get(command, []) if n >= start), None))
+                for label, command in commands
+            ]
             systems[name] = {
                 "folder": folder, "extensions": extensions, "commands": commands,
                 "ref": _ref(key, path, lines.get(name)),
+                "searched_by": _searched_by(placed, key, path),
             }
     alternatives: dict[str, tuple[str, int]] = {}
     alt = params.get("alternatives")
@@ -580,6 +647,7 @@ def esde(spec: dict, fetcher: Fetcher) -> list[dict]:
             "emulator": emulator,
             "source_ref": "; ".join(refs),
             "note": note,
+            "searched_by": system["searched_by"] or None,
         })
     return rows
 

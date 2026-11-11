@@ -848,7 +848,9 @@ class MameSearchPaths(unittest.TestCase):
         self.assertEqual(bbc["standalone_path"], "mame-sa/samples/bbc.zip")
         # ES-DE hands -rompath %GAMEDIR%;%ROMPATH%/<system>: no BIOS folder.
         self.assertTrue(all(
-            e.get("unplaced") == "outside_bios_folder" for e in self.sets(view)
+            e.get("unplaced") == "outside_bios_folder"
+            or str(e.get("standalone_path")).startswith("roms/")
+            for e in self.sets(view)
         ))
 
     def test_a_passed_search_setting_leaves_the_bundled_tree_unread(self) -> None:
@@ -1097,6 +1099,52 @@ class SetsReadBesideTheGame(unittest.TestCase):
         self.assertIn(("roms", "arcade/coh1000c.zip"), dests)
         self.assertIn(("roms", "mame/coh1000c.zip"), dests)
         self.assertNotIn(("", "coh1000c.zip"), dests)
+
+
+class MameOnRetroDeckRomPaths(unittest.TestCase):
+    """ES-DE starts standalone MAME with -rompath %GAMEDIR%;%ROMPATH%/<system>
+    (resources/systems/linux/es_systems.xml), which outranks mame.ini."""
+
+    def test_the_rom_folders_file_records_each_search_path(self) -> None:
+        with (REPO_ROOT / "platforms" / "romfolders" / "retrodeck.yml").open() as f:
+            rows = yaml.safe_load(f)["folders"]
+        found = {r["folder"]: s for r in rows for s in r.get("searched_by") or []}
+        self.assertEqual(len(found), 54)
+        self.assertEqual(found["tanodragon"]["reads"], ["dragon32"])
+        self.assertEqual(found["adam"]["machines"], ["adam"])
+        self.assertTrue(found["neogeo"]["any_machine"])
+
+    def test_a_machine_reads_its_own_set_and_its_devices(self) -> None:
+        from common import rom_search_sets
+
+        self.assertIn("adam", rom_search_sets("mame", "adam", ["adam"], False))
+        neogeo = rom_search_sets("mame", "neogeo", [], True)
+        self.assertIn("neogeo", neogeo)
+        self.assertNotIn("stvbios", neogeo)
+        # A folder that holds any machine reads every BIOS set.
+        self.assertIn("stvbios", rom_search_sets("mame", "mame", [], True))
+
+    def test_sets_land_in_the_folders_that_read_them(self) -> None:
+        # RetroDECK's roms/ sits beside bios/ in the install tree.
+        view = standalone_view("mame", "retrodeck")
+        places = {}
+        for e in view["files"]:
+            if e.get("unprefixed") and e["standalone_path"].startswith("roms/"):
+                places.setdefault(e["name"], set()).add(e["standalone_path"].split("/")[1])
+        self.assertEqual(places["adam.zip"], {"adam"})
+        self.assertIn("neogeo", places["neogeo.zip"])
+        self.assertNotIn("adam", places["neogeo.zip"])
+        self.assertEqual(places["stvbios.zip"] - {"arcade", "mame", "consolearcade"}, {"stv"})
+
+
+class ArcadeParentSources(unittest.TestCase):
+    def test_the_index_names_each_driver_source(self) -> None:
+        import json
+
+        with (REPO_ROOT / "games" / "arcade" / "mame.json").open() as f:
+            index = json.load(f)
+        self.assertIn("sf2", index["sources"]["capcom/cps1.cpp"])
+        self.assertIn("qsound_hle", {d for sets in index["sources"].values() for d in sets})
 
 
 if __name__ == "__main__":

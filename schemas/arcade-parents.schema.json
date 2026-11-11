@@ -81,6 +81,12 @@
       "$ref": "#/$defs/set_list",
       "description": "Every BIOS set of the DAT, used by a game or not: an archive of that name on a card is not a game."
     },
+    "sources": {
+      "type": "object",
+      "description": "Driver source file -> the game sets and the device sets with ROMs it declares, as the -listxml sourcefile attribute names it.",
+      "propertyNames": { "type": "string", "minLength": 1 },
+      "additionalProperties": { "$ref": "#/$defs/set_list", "minItems": 1 }
+    },
     "counts": {
       "type": "object",
       "additionalProperties": false,

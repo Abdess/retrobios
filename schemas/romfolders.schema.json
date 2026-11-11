@@ -121,6 +121,22 @@
             "additionalProperties": { "$ref": "#/$defs/board_default" }
           },
           "arcade": { "type": "boolean" },
+          "searched_by": {
+            "type": "array",
+            "description": "The standalone emulators whose commands for this folder pass a ROM search path, and the folders below the roms root it names.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["emulator", "reads", "source_ref"],
+              "properties": {
+                "emulator": { "type": "string", "minLength": 1 },
+                "reads": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+                "machines": { "type": "array", "description": "The machines the commands start, as the emulator names them.", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+                "any_machine": { "type": "boolean", "description": "A command starts the game itself as the machine (ES-DE's %BASENAME%)." },
+                "source_ref": { "$ref": "#/$defs/ref" }
+              }
+            }
+          },
           "note": { "type": "string", "minLength": 1 }
         }
       }

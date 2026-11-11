@@ -222,6 +222,13 @@ def build_index(
         for device in set(entry.devices) & device_roms:
             devices.setdefault(device, set()).add(name)
     with_bios = {g for members in bios.values() for g in members}
+    # The source file of each game and device set: what a launcher that
+    # starts whatever set a folder holds selects a folder's machines by
+    # (ES-DE runs MAME on any CPS-2 set of roms/cps2).
+    sources: dict[str, set[str]] = {}
+    for name, entry in sets.items():
+        if entry.source and (name in games or name in device_roms):
+            sources.setdefault(entry.source, set()).add(archive(name, name))
     return {
         "bios": {k: sorted(v) for k, v in sorted(bios.items())},
         "devices": {k: sorted(v) for k, v in sorted(devices.items())},
@@ -229,6 +236,7 @@ def build_index(
         "missing_parents": dict(sorted(missing.items())),
         "no_bios": sorted(set(games) - with_bios - set(missing)),
         "bios_sets": sorted(bios_names),
+        **({"sources": {k: sorted(v) for k, v in sorted(sources.items())}} if sources else {}),
         "counts": {
             "sets": len(sets),
             "games": len(games),

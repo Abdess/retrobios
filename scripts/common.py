@@ -2872,11 +2872,15 @@ CONTENT_SCOPE_TAG = "contentscope:"
 # [core name, roms folder, (tree, path)]: a libretro core the platform
 # launches for the games of that folder, which it reads beside.
 CONTENT_FOLDER_PREFIX = "contentdir:"
+# [emulator, (tree, path), system, machines, any machine, source_ref]: a
+# standalone emulator handed a roms folder as its ROM search path on the
+# command line of a system's launch.
+ROM_SEARCH_PREFIX = "romsearch:"
 # The frontend writes the BIOS it hands a core beside the content: the
 # folder it gives the BIOS is the content's.
 CONTENT_SYSTEM_TAG = "contentsystem:"
 CONTENT_TAG_PREFIXES = (
-    CONTENT_SCOPE_TAG, CONTENT_FOLDER_PREFIX, CONTENT_SYSTEM_TAG,
+    CONTENT_SCOPE_TAG, CONTENT_FOLDER_PREFIX, ROM_SEARCH_PREFIX, CONTENT_SYSTEM_TAG,
 )
 
 
@@ -3407,7 +3411,8 @@ def _core_key(name: str) -> str:
 
 
 def content_folder_tags(config: dict) -> set[str]:
-    """The roms folders a platform launches each libretro core for, as tags.
+    """The roms folders a platform launches each libretro core for, and the
+    ROM search paths its commands hand standalone emulators, as tags.
 
     A core reading its BIOS sets beside the game (MAME 2003's osd_get_path
     gives FILETYPE_ROM the content directory) reads them in the folder of
@@ -3455,7 +3460,86 @@ def content_folder_tags(config: dict) -> set[str]:
     tags |= {
         CONTENT_FOLDER_PREFIX + json.dumps([c, f, place(f)]) for c, f in pairs if f in folders
     }
+    for row in rows:
+        for search in row.get("searched_by") or []:
+            for read in search.get("reads") or []:
+                if read in folders:
+                    tags.add(ROM_SEARCH_PREFIX + json.dumps([
+                        str(search["emulator"]), place(read), str(row["folder"]),
+                        sorted(search.get("machines") or []), bool(search.get("any_machine")),
+                        str(search.get("source_ref", "")),
+                    ]))
     return tags
+
+
+# The machines ES-DE runs from a folder whose command starts the game itself
+# (%BASENAME%), by the folder's system: its BIOS root, the driver source
+# files of its board, or a device its machines carry. A system not listed
+# holds any machine.
+ANY_MACHINE_POPULATIONS: dict[str, tuple[str, tuple[str, ...]]] = {
+    "neogeo": ("bios", ("neogeo",)),
+    "stv": ("bios", ("stvbios",)),
+    "cps": ("source", ("capcom/cps1.cpp", "capcom/cps2.cpp", "capcom/cps3.cpp")),
+    "cps1": ("source", ("capcom/cps1.cpp",)),
+    "cps2": ("source", ("capcom/cps2.cpp",)),
+    "cps3": ("source", ("capcom/cps3.cpp",)),
+    "model2": ("source", ("sega/model2.cpp",)),
+    "daphne": ("device_source", ("devices/machine/ld",)),
+    "laserdisc": ("device_source", ("devices/machine/ld",)),
+    "gameandwatch": ("source", ("handheld/",)),
+    "lcdgames": ("source", ("handheld/",)),
+}
+
+
+@functools.lru_cache(maxsize=8)
+def _arcade_relation(profile_key: str) -> dict | None:
+    """games/arcade/<profile>.json: the BIOS and device sets each game set
+    loads, from the -listxml of the version the profile pins."""
+    path = Path(__file__).resolve().parent.parent / "games" / "arcade" / f"{profile_key}.json"
+    if not path.is_file():
+        return None
+    with path.open(encoding="utf-8") as f:
+        return json.load(f)
+
+
+def rom_search_sets(
+    profile_key: str, system: str, machines: Iterable[str], any_machine: bool,
+) -> frozenset[str]:
+    """The sets a command reads from the ROM search path it passes.
+
+    The machines it starts, the BIOS sets on their romof chain and the
+    device sets with ROMs they instantiate, as the -listxml records them.
+    A command starting the game itself reads them for each machine its
+    folder holds (ANY_MACHINE_POPULATIONS).
+    """
+    return _rom_search_sets(profile_key, system, tuple(sorted(machines)), any_machine)
+
+
+@functools.lru_cache(maxsize=256)
+def _rom_search_sets(
+    profile_key: str, system: str, machines: tuple[str, ...], any_machine: bool,
+) -> frozenset[str]:
+    relation = _arcade_relation(profile_key)
+    if relation is None:
+        return frozenset()
+    bios, devices = relation.get("bios") or {}, relation.get("devices") or {}
+    sources = relation.get("sources") or {}
+    members: set[str] = set(machines)
+    kind, keys = ANY_MACHINE_POPULATIONS.get(system, ("all", ())) if any_machine else ("", ())
+    if kind == "bios":
+        members |= {g for k in keys for g in bios.get(k) or []} | set(keys)
+    elif kind == "source":
+        members |= {g for src, sets in sources.items() if src.startswith(keys) for g in sets}
+    elif kind == "device_source":
+        carried = {d for src, sets in sources.items() if src.startswith(keys) for d in sets}
+        members |= {g for d in carried for g in devices.get(d) or []}
+
+    def used(users: list[str]) -> bool:
+        return kind == "all" or not members.isdisjoint(users)
+
+    found = {b for b, users in bios.items() if used(users)}
+    found |= {d for d, users in devices.items() if used(users)}
+    return frozenset(found | members)
 
 
 def content_layout(
@@ -3465,8 +3549,11 @@ def content_layout(
 
     A libretro entry read beside the content (``load_from: content_dir``)
     goes to the folder of each system the platform launches the core for,
-    and is named as read outside the BIOS folder where it knows none.
-    Outside a platform (no CONTENT_SCOPE_TAG) the view is left as it is.
+    and is named as read outside the BIOS folder where it knows none. A
+    standalone entry no launcher record places, under the root of the
+    layout a passed ROM search path stands for, goes to each folder a
+    command passes for a machine that reads it. Outside a platform (no
+    CONTENT_SCOPE_TAG) the view is left as it is.
     """
     tags = [t for t in standalone_cores if t.startswith(CONTENT_TAG_PREFIXES)]
     if CONTENT_SYSTEM_TAG in tags and not standalone:
@@ -3511,7 +3598,33 @@ def content_layout(
                 )
                 out.append({**plain, **where, "path": f"{folder}/{rel}", "layout_path": rel})
         return {**view, "files": out} if changed else view
-    return view
+    searches = [
+        json.loads(t[len(ROM_SEARCH_PREFIX):])
+        for t in tags if t.startswith(ROM_SEARCH_PREFIX)
+    ]
+    searches = [s for s in searches if _core_key(s[0]) in names]
+    pools = {str(v).strip("/") for v in (view.get("standalone_pools") or {}).values()}
+    if not searches or "" not in pools:
+        return view
+    for f in files:
+        layout = standalone_layout_path(f, view) if isinstance(f, dict) else None
+        if not layout or "/" in layout or f.get("unplaced") != OUTSIDE_BIOS_FOLDER:
+            out.append(f)
+            continue
+        stem = layout.rsplit(".", 1)[0]
+        reads = sorted({
+            tuple(where) for _emu, where, system, machines, any_machine, _ref in searches
+            if where and stem in rom_search_sets(emu_name, system, machines, any_machine)
+        })
+        if not reads:
+            out.append(f)
+            continue
+        changed = True
+        placed = {k: v for k, v in f.items() if k != "unplaced"}
+        out.extend(
+            _placed_entry(placed, view, (tree, f"{folder}/{layout}")) for tree, folder in reads
+        )
+    return {**view, "files": out} if changed else view
 
 
 def _content_load(entry: dict) -> str:

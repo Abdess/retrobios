@@ -57,6 +57,13 @@ folders:
   core: mame
   emulator: mame
   source_ref: "esde resources/systems/linux/es_systems.xml:14"
+  searched_by:
+  - emulator: mame
+    reads:
+    - adam
+    machines:
+    - adam
+    source_ref: "esde resources/systems/linux/es_systems.xml:18,19,20,21"
 - folder: amiga
   extensions:
   - .7z
@@ -169,6 +176,13 @@ folders:
   core: cap32
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:97"
+  searched_by:
+  - emulator: mame
+    reads:
+    - amstradcpc
+    machines:
+    - cpc6128
+    source_ref: "esde resources/systems/linux/es_systems.xml:105"
 - folder: apple2
   extensions:
   - .7z
@@ -180,6 +194,13 @@ folders:
   core: applewin
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:139"
+  searched_by:
+  - emulator: mame
+    reads:
+    - apple2
+    machines:
+    - apple2e
+    source_ref: "esde resources/systems/linux/es_systems.xml:147"
 - folder: apple2gs
   extensions:
   - .2mg
@@ -188,6 +209,13 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:153"
+  searched_by:
+  - emulator: mame
+    reads:
+    - apple2gs
+    machines:
+    - apple2gs
+    source_ref: "esde resources/systems/linux/es_systems.xml:158"
 - folder: arcade
   extensions:
   - .7z
@@ -203,6 +231,12 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:163"
+  searched_by:
+  - emulator: mame
+    reads:
+    - arcade
+    any_machine: true
+    source_ref: "esde resources/systems/linux/es_systems.xml:173"
 - folder: arcadia
   extensions:
   - .7z
@@ -212,6 +246,13 @@ folders:
   core: amiarcadia
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:198"
+  searched_by:
+  - emulator: mame
+    reads:
+    - arcadia
+    machines:
+    - arcadia
+    source_ref: "esde resources/systems/linux/es_systems.xml:204"
 - folder: archimedes
   extensions:
   - .1dd
@@ -248,6 +289,16 @@ folders:
   core: mame
   emulator: mame
   source_ref: "esde resources/systems/linux/es_systems.xml:209"
+  searched_by:
+  - emulator: mame
+    reads:
+    - archimedes
+    machines:
+    - aa4401
+    - aa3000
+    - aa310
+    - aa540
+    source_ref: "esde resources/systems/linux/es_systems.xml:213,214,215,216"
 - folder: arduboy
   extensions:
   - .7z
@@ -264,6 +315,13 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:231"
+  searched_by:
+  - emulator: mame
+    reads:
+    - astrocde
+    machines:
+    - astrocde
+    source_ref: "esde resources/systems/linux/es_systems.xml:236"
 - folder: atari2600
   extensions:
   - .7z
@@ -299,6 +357,13 @@ folders:
   core: prosystem
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:268"
+  searched_by:
+  - emulator: mame
+    reads:
+    - atari7800
+    machines:
+    - a7800
+    source_ref: "esde resources/systems/linux/es_systems.xml:274"
 - folder: atari800
   extensions:
   - .7z
@@ -334,6 +399,13 @@ folders:
   core: virtualjaguar
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:290"
+  searched_by:
+  - emulator: mame
+    reads:
+    - atarijaguar
+    machines:
+    - jaguar
+    source_ref: "esde resources/systems/linux/es_systems.xml:299"
 - folder: atarilynx
   extensions:
   - .7z
@@ -396,6 +468,13 @@ folders:
   core: mame
   emulator: mame
   source_ref: "esde resources/systems/linux/es_systems.xml:362"
+  searched_by:
+  - emulator: mame
+    reads:
+    - bbcmicro
+    machines:
+    - bbcb
+    source_ref: "esde resources/systems/linux/es_systems.xml:366"
 - folder: c64
   extensions:
   - .7z
@@ -441,6 +520,13 @@ folders:
   core: same_cdi
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:386"
+  searched_by:
+  - emulator: mame
+    reads:
+    - cdimono1
+    machines:
+    - cdimono1
+    source_ref: "esde resources/systems/linux/es_systems.xml:392"
 - folder: cdtv
   extensions:
   - .7z
@@ -483,6 +569,13 @@ folders:
   core: freechaf
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:420"
+  searched_by:
+  - emulator: mame
+    reads:
+    - channelf
+    machines:
+    - channelf
+    source_ref: "esde resources/systems/linux/es_systems.xml:426"
 - folder: coco
   extensions:
   - .cas
@@ -492,6 +585,13 @@ folders:
   core: xroar
   emulator: xroar
   source_ref: "esde resources/systems/linux/es_systems.xml:431"
+  searched_by:
+  - emulator: mame
+    reads:
+    - coco
+    machines:
+    - coco
+    source_ref: "esde resources/systems/linux/es_systems.xml:437,438"
 - folder: colecovision
   extensions:
   - .7z
@@ -526,6 +626,12 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:460"
+  searched_by:
+  - emulator: mame
+    reads:
+    - consolearcade
+    any_machine: true
+    source_ref: "esde resources/systems/linux/es_systems.xml:465"
 - folder: cps
   extensions:
   - .7z
@@ -533,6 +639,12 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:483"
+  searched_by:
+  - emulator: mame
+    reads:
+    - cps
+    any_machine: true
+    source_ref: "esde resources/systems/linux/es_systems.xml:492"
 - folder: cps1
   extensions:
   - .7z
@@ -540,6 +652,12 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:503"
+  searched_by:
+  - emulator: mame
+    reads:
+    - cps1
+    any_machine: true
+    source_ref: "esde resources/systems/linux/es_systems.xml:512"
 - folder: cps2
   extensions:
   - .7z
@@ -547,6 +665,12 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:521"
+  searched_by:
+  - emulator: mame
+    reads:
+    - cps2
+    any_machine: true
+    source_ref: "esde resources/systems/linux/es_systems.xml:530"
 - folder: cps3
   extensions:
   - .7z
@@ -554,6 +678,12 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:539"
+  searched_by:
+  - emulator: mame
+    reads:
+    - cps3
+    any_machine: true
+    source_ref: "esde resources/systems/linux/es_systems.xml:548"
 - folder: crvision
   extensions:
   - .7z
@@ -563,6 +693,13 @@ folders:
   core: jollycv
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:557"
+  searched_by:
+  - emulator: mame
+    reads:
+    - crvision
+    machines:
+    - crvision
+    source_ref: "esde resources/systems/linux/es_systems.xml:563"
 - folder: daphne
   extensions:
   - .7z
@@ -575,6 +712,12 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:568"
+  searched_by:
+  - emulator: mame
+    reads:
+    - daphne
+    any_machine: true
+    source_ref: "esde resources/systems/linux/es_systems.xml:576"
 - folder: desktop
   extensions:
   - .appimage
@@ -623,6 +766,14 @@ folders:
   core: xroar
   emulator: xroar
   source_ref: "esde resources/systems/linux/es_systems.xml:626"
+  searched_by:
+  - emulator: mame
+    reads:
+    - dragon32
+    machines:
+    - dragon32
+    - dragon64
+    source_ref: "esde resources/systems/linux/es_systems.xml:632,633,634,635"
 - folder: dreamcast
   extensions:
   - .7z
@@ -678,6 +829,13 @@ folders:
   core: mame
   emulator: mame
   source_ref: "esde resources/systems/linux/es_systems.xml:662"
+  searched_by:
+  - emulator: mame
+    reads:
+    - electron
+    machines:
+    - electron64
+    source_ref: "esde resources/systems/linux/es_systems.xml:666,667,668"
 - folder: famicom
   extensions:
   - .3dsen
@@ -744,6 +902,14 @@ folders:
   core: mame
   emulator: mame
   source_ref: "esde resources/systems/linux/es_systems.xml:771"
+  searched_by:
+  - emulator: mame
+    reads:
+    - fm7
+    machines:
+    - fm7
+    - fm77av
+    source_ref: "esde resources/systems/linux/es_systems.xml:775,776,777,778,779,780"
 - folder: fmtowns
   extensions:
   - .cdr
@@ -754,6 +920,13 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:785"
+  searched_by:
+  - emulator: mame
+    reads:
+    - fmtowns
+    machines:
+    - fmtownshr
+    source_ref: "esde resources/systems/linux/es_systems.xml:790"
 - folder: gamate
   extensions:
   - .7z
@@ -762,6 +935,13 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:807"
+  searched_by:
+  - emulator: mame
+    reads:
+    - gamate
+    machines:
+    - gamate
+    source_ref: "esde resources/systems/linux/es_systems.xml:812"
 - folder: gameandwatch
   extensions:
   - .7z
@@ -770,6 +950,12 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:817"
+  searched_by:
+  - emulator: mame
+    reads:
+    - gameandwatch
+    any_machine: true
+    source_ref: "esde resources/systems/linux/es_systems.xml:822,823"
 - folder: gamecom
   extensions:
   - .7z
@@ -778,6 +964,13 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:829"
+  searched_by:
+  - emulator: mame
+    reads:
+    - gamecom
+    machines:
+    - gamecom
+    source_ref: "esde resources/systems/linux/es_systems.xml:834"
 - folder: gamegear
   extensions:
   - .68k
@@ -902,6 +1095,13 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:972"
+  searched_by:
+  - emulator: mame
+    reads:
+    - gmaster
+    machines:
+    - gmaster
+    source_ref: "esde resources/systems/linux/es_systems.xml:977"
 - folder: gx4000
   extensions:
   - .7z
@@ -919,6 +1119,13 @@ folders:
   core: cap32
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:982"
+  searched_by:
+  - emulator: mame
+    reads:
+    - gx4000
+    machines:
+    - gx4000
+    source_ref: "esde resources/systems/linux/es_systems.xml:988"
 - folder: intellivision
   extensions:
   - .7z
@@ -929,6 +1136,13 @@ folders:
   core: freeintv
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:993"
+  searched_by:
+  - emulator: mame
+    reads:
+    - intellivision
+    machines:
+    - intv
+    source_ref: "esde resources/systems/linux/es_systems.xml:999"
 - folder: j2me
   extensions:
   - .7z
@@ -949,6 +1163,12 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:1024"
+  searched_by:
+  - emulator: mame
+    reads:
+    - laserdisc
+    any_machine: true
+    source_ref: "esde resources/systems/linux/es_systems.xml:1032"
 - folder: lcdgames
   extensions:
   - .7z
@@ -957,6 +1177,12 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:1038"
+  searched_by:
+  - emulator: mame
+    reads:
+    - lcdgames
+    any_machine: true
+    source_ref: "esde resources/systems/linux/es_systems.xml:1043,1044"
 - folder: lowresnx
   extensions:
   - .nx
@@ -979,6 +1205,14 @@ folders:
   core: mame
   emulator: mame
   source_ref: "esde resources/systems/linux/es_systems.xml:1079"
+  searched_by:
+  - emulator: mame
+    reads:
+    - macintosh
+    machines:
+    - macse
+    - macplus
+    source_ref: "esde resources/systems/linux/es_systems.xml:1083,1084,1085,1086"
 - folder: mame
   extensions:
   - .7z
@@ -994,6 +1228,12 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:1093"
+  searched_by:
+  - emulator: mame
+    reads:
+    - mame
+    any_machine: true
+    source_ref: "esde resources/systems/linux/es_systems.xml:1103"
 - folder: mark3
   extensions:
   - .68k
@@ -1140,6 +1380,13 @@ folders:
   core: sameduck
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:1247"
+  searched_by:
+  - emulator: mame
+    reads:
+    - megaduck
+    machines:
+    - megaduck
+    source_ref: "esde resources/systems/linux/es_systems.xml:1253"
 - folder: mess
   extensions:
   - .7z
@@ -1155,6 +1402,12 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:1267"
+  searched_by:
+  - emulator: mame
+    reads:
+    - model2
+    any_machine: true
+    source_ref: "esde resources/systems/linux/es_systems.xml:1272"
 - folder: moto
   extensions:
   - .7z
@@ -1388,6 +1641,12 @@ folders:
   core: fbneo
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:1474"
+  searched_by:
+  - emulator: mame
+    reads:
+    - neogeo
+    any_machine: true
+    source_ref: "esde resources/systems/linux/es_systems.xml:1482"
 - folder: neogeocd
   extensions:
   - .chd
@@ -1395,6 +1654,13 @@ folders:
   core: neocd
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:1487"
+  searched_by:
+  - emulator: mame
+    reads:
+    - neogeocd
+    machines:
+    - neocdz
+    source_ref: "esde resources/systems/linux/es_systems.xml:1495"
 - folder: neogeocdjp
   extensions:
   - .chd
@@ -1402,6 +1668,13 @@ folders:
   core: neocd
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:1500"
+  searched_by:
+  - emulator: mame
+    reads:
+    - neogeocdjp
+    machines:
+    - neocdz
+    source_ref: "esde resources/systems/linux/es_systems.xml:1508"
 - folder: nes
   extensions:
   - .3dsen
@@ -1444,6 +1717,13 @@ folders:
   core: o2em
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:1576"
+  searched_by:
+  - emulator: mame
+    reads:
+    - odyssey2
+    machines:
+    - odyssey2
+    source_ref: "esde resources/systems/linux/es_systems.xml:1582"
 - folder: openbor
   extensions:
   - .bor
@@ -1460,6 +1740,13 @@ folders:
   core: mame
   emulator: mame
   source_ref: "esde resources/systems/linux/es_systems.xml:1597"
+  searched_by:
+  - emulator: mame
+    reads:
+    - oric
+    machines:
+    - oric1
+    source_ref: "esde resources/systems/linux/es_systems.xml:1601"
 - folder: palm
   extensions:
   - .7z
@@ -1740,6 +2027,13 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:1854"
+  searched_by:
+  - emulator: mame
+    reads:
+    - pv1000
+    machines:
+    - pv1000
+    source_ref: "esde resources/systems/linux/es_systems.xml:1859"
 - folder: quake
   extensions:
   - .desktop
@@ -1809,6 +2103,13 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:1951"
+  searched_by:
+  - emulator: mame
+    reads:
+    - scv
+    machines:
+    - scv
+    source_ref: "esde resources/systems/linux/es_systems.xml:1956"
 - folder: sega32x
   extensions:
   - .32x
@@ -2009,6 +2310,12 @@ folders:
   core: kronos
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:2147"
+  searched_by:
+  - emulator: mame
+    reads:
+    - stv
+    any_machine: true
+    source_ref: "esde resources/systems/linux/es_systems.xml:2153"
 - folder: sufami
   extensions:
   - .7z
@@ -2044,6 +2351,13 @@ folders:
   core: potator
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:2193"
+  searched_by:
+  - emulator: mame
+    reads:
+    - supervision
+    machines:
+    - svision
+    source_ref: "esde resources/systems/linux/es_systems.xml:2199"
 - folder: supracan
   extensions:
   - .7z
@@ -2052,6 +2366,13 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:2204"
+  searched_by:
+  - emulator: mame
+    reads:
+    - supracan
+    machines:
+    - supracan
+    source_ref: "esde resources/systems/linux/es_systems.xml:2209"
 - folder: switch
   extensions:
   - .nca
@@ -2073,6 +2394,13 @@ folders:
   core: xroar
   emulator: xroar
   source_ref: "esde resources/systems/linux/es_systems.xml:2238"
+  searched_by:
+  - emulator: mame
+    reads:
+    - dragon32
+    machines:
+    - tanodr64
+    source_ref: "esde resources/systems/linux/es_systems.xml:2243,2244"
 - folder: tg-cd
   extensions:
   - .7z
@@ -2113,6 +2441,13 @@ folders:
   core: mame
   emulator: mame
   source_ref: "esde resources/systems/linux/es_systems.xml:2283"
+  searched_by:
+  - emulator: mame
+    reads:
+    - ti99
+    machines:
+    - ti99_4a
+    source_ref: "esde resources/systems/linux/es_systems.xml:2287"
 - folder: tic80
   extensions:
   - .png
@@ -2173,6 +2508,13 @@ folders:
   core: vecx
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:2357"
+  searched_by:
+  - emulator: mame
+    reads:
+    - vectrex
+    machines:
+    - vectrex
+    source_ref: "esde resources/systems/linux/es_systems.xml:2363"
 - folder: vic20
   extensions:
   - .7z
@@ -2221,6 +2563,13 @@ folders:
   core: o2em
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:2378"
+  searched_by:
+  - emulator: mame
+    reads:
+    - videopac
+    machines:
+    - videopac
+    source_ref: "esde resources/systems/linux/es_systems.xml:2384"
 - folder: vircon32
   extensions:
   - .7z
@@ -2247,6 +2596,13 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:2420"
+  searched_by:
+  - emulator: mame
+    reads:
+    - vsmile
+    machines:
+    - vsmile
+    source_ref: "esde resources/systems/linux/es_systems.xml:2425"
 - folder: wasm4
   extensions:
   - .7z
@@ -2349,6 +2705,13 @@ folders:
   core: x1
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:2532"
+  searched_by:
+  - emulator: mame
+    reads:
+    - x1
+    machines:
+    - x1
+    source_ref: "esde resources/systems/linux/es_systems.xml:2537,2538"
 - folder: x68000
   extensions:
   - .2hd
@@ -2367,6 +2730,13 @@ folders:
   core: px68k
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:2543"
+  searched_by:
+  - emulator: mame
+    reads:
+    - x68000
+    machines:
+    - x68000
+    source_ref: "esde resources/systems/linux/es_systems.xml:2548"
 - folder: xbox
   extensions:
   - .iso

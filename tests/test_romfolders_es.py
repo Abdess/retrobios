@@ -198,6 +198,22 @@ class EsdeFormat(unittest.TestCase):
         self.assertEqual(model2["core"], "model-2")
         self.assertIn("names no command", model2["note"])
 
+    def test_a_rom_search_path_names_the_folders_it_reads(self) -> None:
+        # The Tano Dragon reads the Dragon 32 folder, the commented command
+        # counts for nothing.
+        (tano,) = self.rows["tanodragon"]["searched_by"]
+        self.assertEqual(tano["reads"], ["dragon32"])
+        self.assertEqual(tano["machines"], ["tanodr64"])
+        self.assertNotIn("any_machine", tano)
+        self.assertEqual(tano["source_ref"], "os es_systems.xml:20")
+
+    def test_the_game_itself_as_machine_and_libretro_left_out(self) -> None:
+        (arcade,) = self.rows["arcade"]["searched_by"]
+        self.assertEqual(arcade["emulator"], "mame")
+        self.assertTrue(arcade["any_machine"])
+        self.assertNotIn("machines", arcade)
+        self.assertNotIn("searched_by", self.rows["psx"])
+
     def test_first_command_without_alternative(self) -> None:
         rows = by_folder(scrape("esde", "esde", {"systems": {"source": "os", "path": "es_systems.xml"}}))
         self.assertEqual((rows["psx"]["core"], rows["psx"]["emulator"]), ("mednafen_psx", "retroarch"))

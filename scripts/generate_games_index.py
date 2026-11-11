@@ -543,7 +543,12 @@ def build_systems(
 def build_arcade(directory: Path) -> dict[str, dict]:
     if not directory.is_dir():
         return {}
-    return {path.stem: _load_json(path) for path in sorted(directory.glob("*.json"))}
+    # The driver sources place a search path's sets at build time
+    # (common.rom_search_sets): the installer reads none of them.
+    return {
+        path.stem: {k: v for k, v in _load_json(path).items() if k != "sources"}
+        for path in sorted(directory.glob("*.json"))
+    }
 
 
 # --- Writing ----------------------------------------------------------------
