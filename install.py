@@ -6554,8 +6554,6 @@ def apply_record(args: argparse.Namespace, plat: str, folder: Path) -> dict | No
     return setup
 
 
-
-
 def _is_link(info: os.stat_result) -> bool:
     """Whether what lstat read is a link: a symbolic link, or on Windows a
     junction or any other reparse point."""
