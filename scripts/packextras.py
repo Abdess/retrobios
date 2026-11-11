@@ -10,7 +10,7 @@ from collections.abc import Iterable
 
 from common import PROFILE_IDENTITY_FIELDS, _norm_system_id, entry_system_ids
 from alternatives import core_file_spares, required_only_spares, set_fields
-from common import archive_members, holds_required_members
+from common import archive_members, contents_members, holds_required_members
 from common import declared_root, expand_platform_declared_names, platform_declarations
 from common import load_emulator_profiles
 from common import resolution_is_hash_exact
@@ -1447,6 +1447,8 @@ def _collect_emulator_extras(
     for e in extras:
         covered_names.add(e["name"])
 
+    # Destination -> the copies cores ask for there, in profile order.
+    copied: dict[str, list[dict]] = {}
     for emu_name, profile in sorted(profiles.items()):
         if profile.get("type") in ("launcher", "alias"):
             continue
@@ -1500,7 +1502,8 @@ def _collect_emulator_extras(
                 )
                 if full_dest in seen_dests and full_dest not in taken:
                     continue
-                if full_dest in taken and full_dest not in seen and fname not in platform_names:
+                if (full_dest in taken or full_dest in copied) and full_dest not in seen \
+                        and fname not in platform_names:
                     # Another core's extra holds this path and only that
                     # extra covers the name: a pack without that core never
                     # reaches this copy, so this core claims nothing here.
@@ -1551,8 +1554,22 @@ def _collect_emulator_extras(
                 if f.get("layout_path"):
                     extra["layout_path"] = f["layout_path"]
                 extra["claim_order"] = (2, 0, emu_name)
-                if _take(extra, full_dest, seen_dests, taken):
-                    extras.append(extra)
+                copied.setdefault(full_dest, []).append(extra)
+
+    # Several cores reading one archive in one roms folder: the copy of the
+    # core the folder starts by default goes first, then the copy serving
+    # the most of them. Five cores AmberELEC offers for roms/arcade read
+    # neogeo.zip there, and the copy holding the 18 members its default
+    # MAME 2003-Plus requires also holds the 3 MAME 2000 requires.
+    defaults = _folder_defaults(config, profiles)
+    for full_dest, claims in copied.items():
+        if len(claims) > 1:
+            claims = sorted(claims, key=lambda c: (
+                not _starts_by_default(c, defaults), -_copy_serves(c, claims, db),
+            ))
+        for extra in claims:
+            if _take(extra, full_dest, seen_dests, taken):
+                extras.append(extra)
 
     extras.extend(
         _archive_prefix_extras(
@@ -1654,6 +1671,42 @@ class _ClaimRanks:
             for dest, full in contests
             for c in (u, *u.get("other_claims", []))
         )
+
+
+def _folder_defaults(config: dict, profiles: dict) -> dict[str, set[str]]:
+    """Roms folder -> the profiles its default core or emulator names."""
+    out: dict[str, set[str]] = {}
+    for row in config.get("_rom_folders") or []:
+        chosen = {str(row.get("core") or ""), str(row.get("emulator") or "")} - {""}
+        keys = {c.lower().replace("-", "_") for c in chosen}
+        out[str(row.get("folder"))] = {
+            name for name, profile in profiles.items()
+            if keys & {n.lower().replace("-", "_")
+                       for n in (name, *(str(c) for c in profile.get("cores") or []))}
+        }
+    return out
+
+
+def _starts_by_default(extra: dict, defaults: dict[str, set[str]]) -> bool:
+    """Whether the extra's core is the one its roms folder starts by default."""
+    layout = str(extra.get("layout_path") or "")
+    destination = str(extra.get("destination") or "")
+    if not layout or not destination.endswith("/" + layout):
+        return False
+    folder = destination[: -len(layout) - 1].removeprefix("roms/")
+    return extra.get("source_profile") in defaults.get(folder, set())
+
+
+def _copy_serves(extra: dict, claims: list[dict], db: dict) -> int:
+    """How many of the claims on one path the copy an extra resolves to
+    holds every required member of."""
+    wanted = [members for c in claims if (members := contents_members(c))]
+    if not wanted:
+        return 0
+    path, _status = resolve_local_file(extra, db, dest_hint=extra.get("destination", ""))
+    if not path:
+        return 0
+    return sum(1 for members in wanted if holds_required_members(path, members))
 
 
 def _names_content(entry: dict) -> bool:

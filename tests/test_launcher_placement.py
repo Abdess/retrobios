@@ -1187,6 +1187,43 @@ class StandaloneMameOnEmuDeck(unittest.TestCase):
         self.assertIn(("roms", "adam/adam.zip"), places)
 
 
+def platform_manifest(platform: str) -> dict:
+    from common import load_database
+
+    db = load_database(str(REPO_ROOT / "database.json"))
+    with redirect_stdout(io.StringIO()):
+        return generate_manifest(
+            platform, str(REPO_ROOT / "platforms"), db, str(REPO_ROOT / "bios"),
+            str(REPO_ROOT / "platforms" / "_registry.yml"),
+            emulators_dir=str(REPO_ROOT / "emulators"), offline=True,
+        )
+
+
+class ArchiveSharedByOfferedCores(unittest.TestCase):
+    """One path holds one file: several cores reading an archive in one roms
+    folder get the copy of the core the folder starts by default, then the
+    copy serving the most of them."""
+
+    def test_the_default_core_copy_takes_the_folder(self) -> None:
+        # EmuELEC's arcade folder starts MAME 2003-Plus by default
+        # (es_systems.json:82), AdvanceMAME reads its sets there too.
+        (entry,) = [f for f in platform_manifest("emuelec")["files"]
+                    if f["dest"] == "arcade/neogeo.zip"]
+        self.assertEqual(entry["cores"], ["mame2003_plus"])
+        self.assertTrue(entry["repo_path"].endswith("neogeo.zip.74df3258"))
+        others = {c for a in entry.get("alternatives", []) for c in a["cores"]}
+        self.assertIn("advancemame", others)
+
+    def test_the_copy_serving_most_cores_wins_without_a_default(self) -> None:
+        # RetroDECK's cps folders start the libretro MAME core, whose sets are
+        # in mame/bios. Of the cores reading nss.zip in cps1, MAME 2003-Plus
+        # alone lists members, and only its copy holds them.
+        (entry,) = [f for f in platform_manifest("retrodeck")["files"]
+                    if f["dest"] == "roms/cps1/nss.zip"]
+        self.assertEqual(entry["cores"], ["mame2003_plus"])
+        self.assertTrue(entry["repo_path"].endswith("nss.zip.cba0bd8c"))
+
+
 class MacBootDisksOnKnulli(unittest.TestCase):
     def test_the_hard_records_bind(self) -> None:
         # mameGenerator.py and libretroMAMEConfig.py pass the boot disk as
