@@ -271,8 +271,13 @@ BEFORE_WEIGHT = {
     # bytes more where its Amiberry build is named "Amiberry 8.0.0
     # (facaaeb, Batocera)" (twice). The search stopped reading the date
     # line and "Next steps" on 2026-11-10 (data-pagefind-ignore, about 68
-    # bytes a page): 1,357,282 bytes on the built site of 25057ee3a.
-    "batocera": (13, 18_854, 1_357_282),
+    # bytes a page): 1,357,282 bytes on the built site of 25057ee3a. The
+    # blueMSX and fMSX machine ROMs cite each reader since 2026-11-10 (the
+    # config.ini line, machineCreate, readMachine, romLoad, LoadROM): the
+    # MSX part went from 57,600 to 91,769 bytes, and the filter boxes and
+    # file summaries got their spaces and labels (about 190 bytes a page).
+    # 1,394,379 bytes on the built site of 7c5ad8366.
+    "batocera": (13, 18_854, 1_394_379),
     "amberelec": (1, 7_928, 473_388),
     "romm": (2, 9_561, 572_487),
     "retroarch": (14, 21_503, 1_430_802),
