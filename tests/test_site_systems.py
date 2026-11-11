@@ -988,11 +988,18 @@ def _consumers(reads: dict[str, list[tuple[str, dict]]]) -> types.SimpleNamespac
     )
 
 
+def _pages(pattern: str) -> list[Path]:
+    """The generated pages a stem pattern names: a page with tabs is MDX.
+    Reading .md alone skipped eleven tests in silence once the SNK, Sega
+    and Nintendo pages had tabs."""
+    return sorted(SYSTEMS.glob(f"{pattern}.md")) + sorted(SYSTEMS.glob(f"{pattern}.mdx"))
+
+
 def _system_page(stem: str) -> str:
-    path = SYSTEMS / f"{stem}.md"
-    if not path.is_file():
+    found = _pages(stem)
+    if not found:
         raise unittest.SkipTest(f"systems/{stem}.md not generated")
-    return _unlinked(path.read_text(encoding="utf-8"))
+    return _unlinked(found[0].read_text(encoding="utf-8"))
 
 
 def _start_line(text: str) -> str:
@@ -1085,17 +1092,17 @@ class OtherNamesForOneSlotReadAsAlternatives(unittest.TestCase):
 
 class TheNeoGeoSetsSitWithTheNeoGeo(unittest.TestCase):
     """6.3: every neogeo.zip has its card on SNK's pages, side by side and
-    open, and the ares sentence names the card."""
+    open, and ares is among the readers of the set."""
 
     def test_every_neogeo_zip_is_on_snk(self) -> None:
         db = _database()
         sha1s = [sha1 for sha1, f in db["files"].items() if f["name"] == "neogeo.zip"]
-        held = "".join(path.read_text(encoding="utf-8") for path in SYSTEMS.glob("snk*.md"))
+        held = "".join(path.read_text(encoding="utf-8") for path in _pages("snk*"))
         if not held:
             self.skipTest("SNK pages not generated")
         self.assertEqual([s for s in sha1s if f'id="sha1-{s[:12]}"' not in held], [])
         others = "".join(path.read_text(encoding="utf-8")
-                         for path in SYSTEMS.glob("arcade*.md"))
+                         for path in _pages("arcade*"))
         self.assertEqual([s for s in sha1s if f'id="sha1-{s[:12]}"' in others], [])
 
     def test_the_sets_are_open_and_together(self) -> None:
@@ -1108,7 +1115,11 @@ class TheNeoGeoSetsSitWithTheNeoGeo(unittest.TestCase):
         self.assertNotIn("<code>neogeo.zip</code>", variants)
 
     def test_ares_is_told_the_card_it_reads(self) -> None:
-        self.assertIn("ares reads `neo-epo.bin` and `sp-45.sp1` instead.", _system_page("snk"))
+        # ares reads neogeo.zip for an MVS game (desktop-ui/emulator/arcade.cpp:456-464):
+        # the lead names it among its readers, with no sentence of its own.
+        start = _system_page("snk").split("{ #neo-geo }", 1)[1]
+        self.assertRegex(_start_line(start), r"^\*\*Start with\*\* `neogeo.zip`\..* ares and .* read it\.$")
+        self.assertNotIn("ares reads", start.split("\n## ", 1)[0])
 
 
 class ABoardIsAnArcadeMachine(unittest.TestCase):
@@ -1124,7 +1135,7 @@ class ABoardIsAnArcadeMachine(unittest.TestCase):
             self.skipTest("pages not generated")
         for stem in ("arcade-acorn-atom", "arcade-sharp-mz-2000", "arcade-sharp-mz-2500",
                      "arcade-yamaha-ym2608", "arcade-miuchiz"):
-            self.assertFalse((SYSTEMS / f"{stem}.md").exists(), stem)
+            self.assertEqual(_pages(stem), [], stem)
 
     def test_the_computers_sets_are_on_their_makers_page(self) -> None:
         acorn = _system_page("acorn")
@@ -1171,13 +1182,13 @@ class EnginesGoByEngine(unittest.TestCase):
         names = set(db["indexes"]["by_name"])
         index = _system_page("index")
         rows = re.findall(r"^\| \[([^\]]+)\]\(", index, re.M)
-        headings = [h.strip() for path in SYSTEMS.glob("*.md")
+        headings = [h.strip() for path in _pages("*")
                     for h in re.findall(r"^## ([^{\n]+)", path.read_text(encoding="utf-8"), re.M)]
         wrong = sorted({n for n in rows + headings if n.startswith(".") or n in names})
         self.assertEqual(wrong, [])
 
     def test_scummvm_has_one_page(self) -> None:
-        self.assertFalse((SYSTEMS / "other-scummvm.md").exists())
+        self.assertEqual(_pages("other-scummvm"), [])
         self.assertIn("## ScummVM {", _system_page("scummvm"))
         self.assertNotIn("](/retrobios/systems/other/#scummvm)", _system_page("index"))
 
@@ -1228,13 +1239,13 @@ class OneLabelOnceOnABoardPage(unittest.TestCase):
     def test_no_part_says_where_it_sits(self) -> None:
         if not SYSTEMS.is_dir():
             self.skipTest("pages not generated")
-        said = sorted(p.name for p in SYSTEMS.glob("*.md")
+        said = sorted(p.name for p in _pages("*")
                       if "\nPart of [" in p.read_text(encoding="utf-8"))
         self.assertEqual(said, [])
 
     def test_a_part_goes_by_the_emulators_name(self) -> None:
         titles = [re.search(r"^title: (.*)$", p.read_text(encoding="utf-8"), re.M)[1].strip("'")
-                  for p in SYSTEMS.glob("other-mame*.md")]
+                  for p in _pages("other-mame*")]
         if not titles:
             self.skipTest("pages not generated")
         self.assertEqual([t for t in titles if not t.startswith(("MAME files", "Other: MAME"))],
