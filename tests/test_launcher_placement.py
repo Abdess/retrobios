@@ -986,12 +986,12 @@ class AdvanceMameOnEmuELEC(unittest.TestCase):
         # read in both.
         view = standalone_view("advancemame", "emuelec")
         sets = [e for e in view["files"] if e.get("category") == "bios_zip"]
-        self.assertEqual(len(sets), 58)
+        self.assertEqual(len(sets), 52)
         places: dict[str, set[str]] = {}
         for entry in sets:
             self.assertTrue(entry.get("unprefixed"))
             places.setdefault(entry["name"], set()).add(entry["standalone_path"])
-        self.assertEqual(len(places), 29)
+        self.assertEqual(len(places), 26)
         for name, paths in places.items():
             self.assertEqual(paths, {"mame/" + name, "arcade/" + name})
 
@@ -1018,7 +1018,7 @@ class AdvanceMameOnEmuELEC(unittest.TestCase):
         by_dest = {f["dest"]: advancemame_copy(f) for f in manifest["files"]}
         sets = [d.removeprefix("arcade/") for d, sha1 in by_dest.items()
                 if d.startswith("arcade/") and sha1]
-        self.assertEqual(len(sets), 29)
+        self.assertEqual(len(sets), 26)
         for name in sets:
             self.assertEqual(by_dest["arcade/" + name], by_dest["mame/" + name], name)
 
