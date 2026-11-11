@@ -5,7 +5,7 @@ source: "https://github.com/amadvance/advancemame"
 upstream: "https://www.mamedev.org"
 profiled_date: "2026-11-09"
 source_commit: "0f6a7677ad42b4dfdfa36b046f74bef5238d5837"
-core_version: "v5.0-99-g0f6a7677"
+core_version: "v5.0-99-g0f6a767"
 version_basis:
   kind: tag
   match: "v*"
