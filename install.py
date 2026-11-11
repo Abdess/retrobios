@@ -3162,7 +3162,7 @@ def keeps_case(directory: Path) -> bool:
     a casefolded ext4 directory folds it. Unprobeable: the system's default.
     """
     probe_dir = directory
-    while not probe_dir.is_dir() and probe_dir != probe_dir.parent:
+    while not _is_dir(probe_dir) and probe_dir != probe_dir.parent:
         probe_dir = probe_dir.parent
     try:
         handle, name = tempfile.mkstemp(prefix=".retrobios-case-", dir=str(probe_dir))
@@ -3216,7 +3216,7 @@ def holds_fat_refused_names(directory: Path) -> bool:
     if os.name == "nt":
         return False
     probe_dir = directory
-    while not probe_dir.is_dir() and probe_dir != probe_dir.parent:
+    while not _is_dir(probe_dir) and probe_dir != probe_dir.parent:
         probe_dir = probe_dir.parent
     try:
         handle, name = tempfile.mkstemp(prefix=".retrobios-name-", suffix=":",
@@ -5458,7 +5458,7 @@ def save_directory_for(
         if override is not None:
             return SavePlace(override, by_core, listed)
         directory = _retroarch_cfg_dir(cfg_path, "savefile_directory", app_dir, folder)
-        if directory is None or not directory.is_dir():
+        if directory is None or not _is_dir(directory):
             directory = app_dir / folder
         return SavePlace(directory, by_core, listed)
     if override is not None:
@@ -5616,7 +5616,7 @@ def place_emulator_entries(
         ) if matches else None
         if (matches and key.lower() not in moved and default is not None
                 and all(_lexically_under(place, home) for place in [*places, default])):
-            found = next((place for place in places if place.is_dir()), None)
+            found = next((place for place in places if _is_dir(place)), None)
             _EMULATOR_DIRS[(bios_path, key)] = found or default
             kept.append(entry)
             continue
@@ -5768,6 +5768,16 @@ def _is_dir(path: Path) -> bool:
 def _is_file(path: Path) -> bool:
     """Path.is_file(), False where the place cannot be looked at."""
     return _probed(path.is_file, path)
+
+
+def _closed_to_this_user(path: Path) -> OSError | None:
+    """The error that keeps path from being looked at, None when it can
+    be, there or not."""
+    try:
+        os.stat(path)
+    except OSError as exc:
+        return None if exc.errno in _ABSENT_ERRNOS else exc
+    return None
 
 
 def closed_folder(path: Path) -> tuple[Path, str] | None:
@@ -7983,7 +7993,7 @@ def _folder_writable(path: Path) -> bool:
     existing folder: a BIOS folder not created yet is as writable as the
     folder it would go in."""
     probe = path
-    while not probe.exists() and probe.parent != probe:
+    while not _exists(probe) and probe.parent != probe:
         probe = probe.parent
     return os.access(probe, os.W_OK)
 
@@ -8976,7 +8986,7 @@ def _check_free_space(bios_path: Path, needed: int, plat: str = "", code: int = 
     platform of the run installed files.
     """
     probe = bios_path
-    while not probe.exists() and probe != probe.parent:
+    while not _exists(probe) and probe != probe.parent:
         probe = probe.parent
     try:
         free = shutil.disk_usage(probe).free
@@ -9480,7 +9490,7 @@ def standalone_folders_here(
         if "note" in entry:
             continue
         for folder in _copy_targets(entry, os_type, extra_dirs):
-            if folder not in found and folder.is_dir():
+            if folder not in found and _is_dir(folder):
                 found.append(folder)
     return found
 
@@ -9518,7 +9528,7 @@ def standalone_plan(
                 held = by_dest.get(copy.get("source") or copy["file"])
                 sources = [held] if held else []
             for folder in _copy_targets(copy, os_type, extra_dirs):
-                if not sources or not folder.is_dir():
+                if not sources or not _is_dir(folder):
                     continue
                 chosen = plan.setdefault(folder, {})
                 for entry in sources:
@@ -9659,7 +9669,7 @@ def do_standalone_copies(
                 detect_paths = entry.get("detect", {}).get("linux", [])
             for dp in detect_paths:
                 expanded = Path(os.path.expandvars(os.path.expanduser(dp)))
-                if expanded.is_dir():
+                if _is_dir(expanded):
                     print(f"  {entry['note']}")
                     break
             continue
@@ -9677,13 +9687,21 @@ def do_standalone_copies(
             # names it as the registry does for every platform, and laid out
             # that way it was missing wherever the pack places it elsewhere.
             src = _destination_path(bios_path, entry.get("source") or entry["file"])
-            sources = [src] if src.exists() else []
+            sources = [src] if _exists(src) else []
 
         if not sources:
             continue
 
         for target_dir in _copy_targets(entry, os_type, extra_dirs):
-            if not target_dir.is_dir():
+            closed = _closed_to_this_user(target_dir)
+            if closed is not None:
+                # Android 11 and later keep each app's Android/data folder
+                # to that app, there or not: Termux cannot copy Dolphin's
+                # IPL.bin there, and cannot tell whether Dolphin is installed.
+                print(f"  {target_dir}: {unreachable_words(closed)}, not copied")
+                skipped += len(sources)
+                continue
+            if not _is_dir(target_dir):
                 skipped += len(sources)
                 continue
             resolved_dir = target_dir.resolve()
@@ -11449,8 +11467,8 @@ def romm_firmware_layout(
         template = _romm_configured_firmware(library.parent / "config" / "config.yml")
     if template is not None:
         return parse_romm_firmware(template)
-    platform_first = not (library / "roms").is_dir() and any(
-        path.is_dir() for path in library.glob("*/roms")
+    platform_first = not _is_dir(library / "roms") and any(
+        _is_dir(path) for path in library.glob("*/roms")
     )
     if platform_first:
         raise ValueError(
@@ -18604,7 +18622,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             )
             if copied or skipped or copy_failed:
                 print(
-                    f"  {copied} copied, {skipped} skipped (dir not found), "
+                    f"  {copied} copied, {skipped} skipped (folder not found or closed), "
                     f"{copy_failed} failed"
                 )
             total_errors += copy_failed

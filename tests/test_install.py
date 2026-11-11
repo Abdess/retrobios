@@ -1111,6 +1111,44 @@ class TestStandaloneCopiesExtraDirs(unittest.TestCase):
         )
 
 
+@unittest.skipIf(os.name == "nt" or (hasattr(os, "geteuid") and os.geteuid() == 0),
+                 "a closed folder needs POSIX permissions and a non-root user")
+class StandaloneFolderClosedToThisUser(unittest.TestCase):
+    """Termux on Android 11 and later cannot look into another app's
+    Android/data folder: is_dir() on Dolphin's GC/USA raised PermissionError
+    after the install, and the run stopped with code 1."""
+
+    def setUp(self) -> None:
+        self.bios = Path(_tempdir(self))
+        (self.bios / "IPL.bin").write_text("ipl")
+        self.app = Path(_tempdir(self)) / "org.dolphinemu.dolphinemu"
+        (self.app / "files" / "GC" / "USA").mkdir(parents=True)
+        self.app.chmod(0)
+        self.addCleanup(self.app.chmod, 0o755)
+        self.target = self.app / "files" / "GC" / "USA"
+        self.manifest = {"files": [{"dest": "IPL.bin"}], "standalone_copies": [
+            {"file": "IPL.bin", "targets": {"android": [str(self.target)]}},
+            {"note": "Dolphin reads GC/", "detect": {"android": [str(self.target)]}},
+        ]}
+
+    def test_listing_the_folders_here_skips_it(self):
+        self.assertEqual(install.standalone_folders_here(self.manifest, "android"), [])
+
+    def test_planning_skips_it(self):
+        self.assertEqual(install.standalone_plan([self.manifest], "android"), [])
+
+    def test_copying_names_it_and_goes_on(self):
+        """Skipped, not failed: Android answers the same refusal for an app
+        that is not installed, and a run without Dolphin is no failure."""
+        failures: list[tuple[str, str]] = []
+        with contextlib.redirect_stdout(io.StringIO()) as out:
+            result = install.do_standalone_copies(
+                self.manifest, self.bios, "android", failures=failures)
+        self.assertEqual(result, (0, 1, 0))
+        self.assertEqual(failures, [])
+        self.assertIn(f"{self.target}: could not be read", out.getvalue())
+
+
 class StandaloneCopiesReadWhereThePackPutTheFile(unittest.TestCase):
     """The registry names Citra/sysdata/aes_keys.txt for every platform,
     but EmuDeck's manifest installs it at the root. The installer looked under
