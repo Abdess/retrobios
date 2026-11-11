@@ -28,6 +28,58 @@ data_root:
     source_ref: "upstream src/frontend/qt_sdl/main.cpp:182-184, 196-200, 206-211"
     note: "portable beside the executable when that folder exists"
 
+pin_build:
+  - platform: rocknix
+    repo: "https://github.com/ROCKNIX/distribution"
+    revision: "20261101"
+    path: "projects/ROCKNIX/packages/emulators/standalone/melonds-sa/package.mk"
+    variable: PKG_VERSION
+    value: "906e9ebb27da8c6a715cd7abab4abfe8a8d29427"
+config_reads:
+  - file: "melonDS.ini"
+    platforms: [rocknix]
+    source_ref: "upstream src/frontend/qt_sdl/main.cpp:366, upstream src/frontend/qt_sdl/Config.cpp:682-774, 777-783, 785-795, upstream src/frontend/qt_sdl/Platform.cpp:144-166, ROCKNIX projects/ROCKNIX/packages/emulators/standalone/melonds-sa/patches/001-default-config.patch:8-13, ROCKNIX projects/ROCKNIX/packages/emulators/standalone/melonds-sa/patches/003-hotkeys.patch:41-76"
+    keys:
+      - key: "BIOS9Path"
+        source_ref: "upstream src/frontend/qt_sdl/Config.cpp:238, 240, upstream src/frontend/qt_sdl/EmuInstance.cpp:855-876, 1261-1263"
+        condition: "ExternalBIOSEnable=1"
+      - key: "BIOS7Path"
+        source_ref: "upstream src/frontend/qt_sdl/Config.cpp:238, 241, upstream src/frontend/qt_sdl/EmuInstance.cpp:878-898, 1265-1267"
+        condition: "ExternalBIOSEnable=1"
+      - key: "FirmwarePath"
+        source_ref: "upstream src/frontend/qt_sdl/Config.cpp:238, 242, upstream src/frontend/qt_sdl/EmuInstance.cpp:992-1016, 1269"
+        condition: "ExternalBIOSEnable=1 and ConsoleType=0"
+      - key: "DSiNANDPath"
+        source_ref: "upstream src/frontend/qt_sdl/Config.cpp:227, 249, upstream src/frontend/qt_sdl/EmuInstance.cpp:1039-1043, 1227, 1312-1322"
+        condition: "ConsoleType=1"
+  - file: "melonDS.toml"
+    platforms: [emudeck, retrobat]
+    revision: "b86390e4428bf38ce4c1ce0e9ca446d6d25955e8"
+    revision_from: "melonDS 1.1: the Flathub manifest net.kuribo64.melonDS at e5ce4504 builds it, and RetroBat's melonDS.exe names it"
+    source_ref: "upstream src/frontend/qt_sdl/main.cpp:196-213, 328, upstream src/frontend/qt_sdl/Config.cpp:42, 785-799"
+    keys:
+      - key: "[DS] BIOS9Path"
+        source_ref: "upstream src/frontend/qt_sdl/EmuInstance.cpp:868-889, 1277"
+        condition: "[Emu] ExternalBIOSEnable = true"
+      - key: "[DS] BIOS7Path"
+        source_ref: "upstream src/frontend/qt_sdl/EmuInstance.cpp:891-911"
+        condition: "[Emu] ExternalBIOSEnable = true"
+      - key: "[DS] FirmwarePath"
+        source_ref: "upstream src/frontend/qt_sdl/EmuInstance.cpp:1013-1031, 1285"
+        condition: "[Emu] ExternalBIOSEnable = true and ConsoleType = 0"
+      - key: "[DSi] BIOS9Path"
+        source_ref: "upstream src/frontend/qt_sdl/EmuInstance.cpp:913-938, 1328-1336"
+        condition: "[Emu] ConsoleType = 1"
+      - key: "[DSi] BIOS7Path"
+        source_ref: "upstream src/frontend/qt_sdl/EmuInstance.cpp:940-965, 1328-1332"
+        condition: "[Emu] ConsoleType = 1"
+      - key: "[DSi] FirmwarePath"
+        source_ref: "upstream src/frontend/qt_sdl/EmuInstance.cpp:1013-1029, 1285"
+        condition: "[Emu] ConsoleType = 1"
+      - key: "[DSi] NANDPath"
+        source_ref: "upstream src/frontend/qt_sdl/EmuInstance.cpp:1064-1068, 1338-1340"
+        condition: "[Emu] ConsoleType = 1"
+
 notes: |
   FreeBIOS fallback for DS mode (NTR), while DSi mode requires all native files.
   Libretro fork based on melonDS ~0.9.x era, validates size only.

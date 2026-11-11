@@ -48,6 +48,25 @@ data_root:
     source_ref: "source pcsx2/Pcsx2Config.cpp:2523-2530, pcsx2/Pcsx2Config.cpp:2540-2560, pcsx2/Pcsx2Config.cpp:2567-2589"
     note: "portable.ini or portable.txt beside the binary makes its folder the root"
 
+pin_build:
+  - platform: rocknix
+    repo: "https://github.com/ROCKNIX/distribution"
+    revision: "20261101"
+    path: "projects/ROCKNIX/packages/emulators/standalone/armsx2-sa/package.mk"
+    variable: PKG_VERSION
+    value: "19c83bf065ed21a19d8c46a1f578e37d2dab8efd"
+config_reads:
+  - file: "PCSX2.ini"
+    platforms: [rocknix]
+    source_ref: "pcsx2-qt/QtHost.cpp:1307, 1325-1331, pcsx2/Pcsx2Config.cpp:2398-2491, pcsx2/VMManager.cpp:630-641"
+    keys:
+      - key: "[Folders] Bios"
+        source_ref: "pcsx2/Pcsx2Config.cpp:2514-2524"
+        condition: "[UI] SettingsVersion 1, else the ini is reset (pcsx2-qt/QtHost.cpp:1331-1342)"
+      - key: "[Filenames] BIOS"
+        source_ref: "pcsx2/Pcsx2Config.cpp:1879-1881, 2258-2264, pcsx2/ps2/BiosTools.cpp:258-282, 333-348, pcsx2/VMManager.cpp:1638"
+        condition: "empty: the first PS2 BIOS of 4 to 8 MB found in [Folders] Bios"
+
 notes: |
   PlayStation 2 emulator, a GPL-3.0 fork of PCSX2 that replaces the x86-64 only
   EE, IOP, VU and vtlb fast memory recompilers with native AArch64 ones. One tree
