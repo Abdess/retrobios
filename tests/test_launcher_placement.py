@@ -1174,6 +1174,19 @@ class LibretroMameOnEsdeRomPaths(unittest.TestCase):
             self.assertEqual(places, {("", "mame/bios/gamate.zip"), read}, platform)
 
 
+class StandaloneMameOnEmuDeck(unittest.TestCase):
+    """EmuDeck writes mame.ini rompath roms/arcade;bios;bios/mame
+    (emuDeckMAME.sh:66-68), read when Steam ROM Manager starts MAME with no
+    -rompath (tools/launchers/mame.sh). ES-DE's commands pass their own."""
+
+    def test_a_set_keeps_its_ini_place_and_gains_the_command_folder(self) -> None:
+        view = standalone_view("mame", "emudeck")
+        places = {(e.get("root") or "", e["standalone_path"]) for e in view["files"]
+                  if e["name"] == "adam.zip"}
+        self.assertIn(("", "adam.zip"), places)
+        self.assertIn(("roms", "adam/adam.zip"), places)
+
+
 class MacBootDisksOnKnulli(unittest.TestCase):
     def test_the_hard_records_bind(self) -> None:
         # mameGenerator.py and libretroMAMEConfig.py pass the boot disk as

@@ -3487,6 +3487,7 @@ ANY_MACHINE_POPULATIONS: dict[str, tuple[str, tuple[str, ...]]] = {
     "cps2": ("source", ("capcom/cps2.cpp",)),
     "cps3": ("source", ("capcom/cps3.cpp",)),
     "model2": ("source", ("sega/model2.cpp",)),
+    "model3": ("source", ("sega/model3.cpp",)),
     "daphne": ("device_source", ("devices/machine/ld",)),
     "laserdisc": ("device_source", ("devices/machine/ld",)),
     "gameandwatch": ("source", ("handheld/",)),
@@ -3554,9 +3555,9 @@ def content_layout(
     goes to the folder of each system the platform launches the core for,
     and is named as read outside the BIOS folder where it knows none. An
     entry in the folder a passed ROM search path stands for (the root of a
-    standalone layout no launcher record places it in, a ``libretro_pools``
-    folder) goes to each folder a command passes for a machine that reads
-    it, a libretro one staying where it is too. Outside a platform (no
+    standalone layout, a ``libretro_pools`` folder) also goes to each folder
+    a command passes for a machine that reads it, and a standalone entry no
+    launcher record places goes there only. Outside a platform (no
     CONTENT_SCOPE_TAG) the view is left as it is.
     """
     tags = [t for t in standalone_cores if t.startswith(CONTENT_TAG_PREFIXES)]
@@ -3636,11 +3637,27 @@ def content_layout(
     if not searches or "" not in pools:
         return view
     for f in files:
-        layout = standalone_layout_path(f, view) if isinstance(f, dict) else None
-        if not layout or "/" in layout or f.get("unplaced") != OUTSIDE_BIOS_FOLDER:
+        layout = (
+            (f.get("layout_path") or standalone_layout_path(f, view)) if isinstance(f, dict) else None
+        )
+        if not layout or "/" in layout:
             out.append(f)
             continue
         reads = search_reads(layout)
+        if f.get("unplaced") != OUTSIDE_BIOS_FOLDER:
+            # A set a launcher record placed stays there: EmuDeck's
+            # mame.ini rompath is read when Steam ROM Manager starts MAME
+            # with no -rompath (tools/launchers/mame.sh), and ES-DE's
+            # commands read the folders they pass.
+            out.append(f)
+            held = {(f.get("root") or "", f.get("standalone_path") or "")}
+            extra = [
+                _placed_entry(f, view, (tree, f"{folder}/{layout}")) for tree, folder in reads
+            ]
+            extra = [e for e in extra if (e.get("root") or "", e["standalone_path"]) not in held]
+            changed |= bool(extra)
+            out.extend(extra)
+            continue
         if not reads:
             out.append(f)
             continue
