@@ -450,6 +450,12 @@ class HoldingPack:
         return (None, entry)
 
 
+def option_focus(state: install.TuiState, action: str) -> None:
+    """The focus on the Change row doing action: its rows sit under
+    headings, which no index of the flat list kept."""
+    state.focus["options"] = [row.action for row in install.tui_rows(state)].index(action)
+
+
 def press(state: install.TuiState, *pressed) -> list:
     effects = []
     for key in pressed:
@@ -495,6 +501,7 @@ class Flow(unittest.TestCase):
         state = checked_state()
         state.passthrough = started.passthrough
         state.from_folders = started.from_folders
+        state.packs = started.packs
         for run in ("check", "install"):
             argv = install.tui_argv(state, run, "py", "i.py")
             for folder in ("old-card", "backup.zip"):
@@ -556,9 +563,12 @@ class Flow(unittest.TestCase):
         press(state, "o")
         self.assertEqual(state.screen, "options")
         rows = install.tui_rows(state)
-        self.assertEqual([row.right for row in rows], [
-            "--region", "--no-game-data", "--installed-cores", "--core", "--jobs", "--dest",
-            "--from", "--dry-run", ""])
+        # Grouped by what each decides, a heading above each group.
+        self.assertEqual([row.right or row.label for row in rows], [
+            "What to install", "--region", "--core", "--emulator", "--no-game-data",
+            "Where", "--dest", "--from", "--from-pack",
+            "For which device", "--target", "--installed-cores",
+            "How", "--offline", "--jobs", "See", "--dry-run", "Show the command line"])
         press(state, "enter")
         self.assertEqual(state.screen, "regions")
         # Ticked in the order of preference, then moved up.
@@ -574,7 +584,10 @@ class Flow(unittest.TestCase):
                          ["[2] Japan", "[1] North America", "None", "Done"])
         press(state, "shift-down")
         self.assertEqual(state.regions, ["japan", "north-america"])
-        press(state, "esc", "down", "enter", "down", "right", "down", "down", "right", "right")
+        # Down passes the headings: Game data, Installed cores only, then
+        # Parallel downloads.
+        press(state, "esc", "down", "down", "down", "enter", *["down"] * 5, "right",
+              "down", "down", "right", "right")
         self.assertTrue(state.no_game_data)
         self.assertTrue(state.installed_only)
         self.assertEqual(state.jobs, 10)
@@ -586,7 +599,7 @@ class Flow(unittest.TestCase):
     def test_cores_checklist(self):
         state = checked_state()
         press(state, "o")
-        state.focus["options"] = 3
+        option_focus(state, "cores")
         press(state, "enter")
         self.assertEqual(state.screen, "cores")
         self.assertEqual([row.value for row in install.tui_rows(state)
@@ -610,7 +623,7 @@ class Flow(unittest.TestCase):
     def test_preview_is_a_dry_run(self):
         state = checked_state()
         press(state, "o")
-        state.focus["options"] = 7
+        option_focus(state, "preview")
         self.assertEqual(press(state, "enter"), [("run", "preview")])
         self.assertEqual(install.tui_argv(state, "preview", "py", "i.py")[-2:],
                          ["--dry-run", "--events"])
@@ -805,7 +818,7 @@ class Flow(unittest.TestCase):
     def test_events_of_an_abandoned_run_are_ignored(self):
         state = checked_state()
         press(state, "o")
-        state.focus["options"] = 7
+        option_focus(state, "preview")
         press(state, "enter")
         old = state.run_id
         self.assertEqual(press(state, "esc"), [("kill",)])
@@ -983,8 +996,15 @@ def golden_states() -> dict:
     states["systems"] = systems
     options = checked_state()
     options.stack.append("options")
+    options.focus["options"] = 1
     options.regions = ["north-america", "japan"]
-    states["options"] = options
+    states["change"] = options
+    states["device"] = device_state()
+    emulators = checked_state()
+    emulators.stack += ["options", "emulators"]
+    emulators.emulators = ["pcsx_rearmed"]
+    emulators.focus["emulators"] = 2
+    states["emulators"] = emulators
     regions = checked_state()
     regions.stack += ["options", "regions"]
     regions.regions = ["north-america"]
@@ -1044,6 +1064,30 @@ def golden_states() -> dict:
     states["result-details"] = told
     states["plan-record"] = record_state()
     return states
+
+
+# A board list as install/targets/ publishes it, read by Device: the boards
+# by the names the list gives them, the device images each one runs.
+TARGETS = {"bcm2711": {"cores": ["pcsx_rearmed"], "images": ["rpi4"]},
+           "h700": {"cores": ["pcsx_rearmed", "mesen"],
+                    "images": ["anbernic-rg35xx-plus", "anbernic-rg40xx-h"]},
+           "x86_64": {"cores": None}}
+
+
+def device_state(board: str = "h700") -> install.TuiState:
+    """Device opened from Change, the board list in, the card in the reader
+    naming its board (the check's board event)."""
+    state = checked_state()
+    if board:
+        state.board_seen = ("retroarch", state.dest, board, True, False)
+    state.stack.append("options")
+    install.tui_update(state, Key("home"))
+    rows = install.tui_rows(state)
+    state.focus["options"] = [row.action for row in rows].index("device")
+    effects = install.tui_update(state, Key("enter"))
+    assert effects == [("targets", "retroarch")], effects
+    install.tui_receive(state, ("targets", "retroarch", TARGETS, ""))
+    return state
 
 
 def record_setup(choice: list[str] | None = None) -> dict:
@@ -1465,12 +1509,12 @@ class PadRoutes(unittest.TestCase):
 
     def test_the_plan_bar_of_each_route(self):
         expected = {
-            "both": "A/Enter Install  B/Esc Back  Y/o Options  ? Help",
-            "keys": "Enter Install  Esc Back  o Options  ? Help",
-            "gptokeyb": "A Install  B Back  Y Options",
-            "evmapy": "A Install  B Back  Y Options",
+            "both": "A/Enter Install  B/Esc Back  Y/o Change  ? Help",
+            "keys": "Enter Install  Esc Back  o Change  ? Help",
+            "gptokeyb": "A Install  B Back  Y Change",
+            "evmapy": "A Install  B Back  Y Change",
             "muxterm": "Start Install  B Back",
-            "miyoo": "A Install  R2 Back  L2 Options",
+            "miyoo": "A Install  R2 Back  L2 Change",
         }
         for route, bar in expected.items():
             with self.subTest(route=route):
@@ -2003,7 +2047,7 @@ class TicksBarAndPaths(unittest.TestCase):
         ticked = set(state.ticked)
         press(state, "esc", "o")
         self.assertEqual(state.screen, "options")
-        state.focus["options"] = 1
+        option_focus(state, "game_data")
         press(state, "enter")
         self.assertTrue(state.no_game_data)
         effects = press(state, "esc")
@@ -3257,12 +3301,12 @@ class SaveDirectoryLeftOut(unittest.TestCase):
         plan = " ".join(" ".join(install.tui_view(state, 120, 40)).split())
         # The plan names the row that sets it, the result the option a
         # command carries.
-        self.assertIn(line + "Choose it in Options, Save folder (--save-dir). Its place is "
+        self.assertIn(line + "Choose it in Change, Save folder (--save-dir). Its place is "
                       "not known.", plan)
         state.stack.append("result")
         state.code = 0
         state.summary = {**summary, "mode": "install", "installed": 5}
-        self.assertIn(line + "Choose it in Options, Save folder (--save-dir), next time.",
+        self.assertIn(line + "Choose it in Change, Save folder (--save-dir), next time.",
                       install.tui_outcome(state)[1])
 
 
@@ -4128,7 +4172,7 @@ class BackTicksAndSaveFolder(unittest.TestCase):
         state.manifest = {**state.manifest, "save_directory": {"folder": "saves",
                                                                "by_core": True}}
         lines = install._unplaced_lines(summary, state)
-        self.assertIn("Options, Save folder (--save-dir)", lines[0])
+        self.assertIn("Change, Save folder (--save-dir)", lines[0])
 
     def test_a_size_keeps_its_unit(self):
         for width in range(20, 45):
@@ -5095,7 +5139,7 @@ class EndToEnd(unittest.TestCase):
         term = self.start("--platform", "knulli", "--dest", str(root))
         term.wait("files to download")
         term.send("o")
-        term.wait("Each row is an option")
+        term.wait("RetroBIOS: Change")
         for _step in range(20):
             if "> Put RetroBIOS on this card: no" in term.settle():
                 break
@@ -5231,13 +5275,17 @@ class EndToEnd(unittest.TestCase):
         term = self.start("--platform", "retroarch", "--dest", str(repo.dest))
         term.wait("6 files to download")
         term.send("o")
-        screen = term.wait("Each row is an option")
+        screen = term.wait("RetroBIOS: Change")
         self.assertIn("--no-game-data", screen)
         term.send("\r")
         term.wait("Preferred regions")
         term.send(DOWN, "\r", "\x1b")
         screen = term.wait("Preferred regions: North America")
-        term.send(DOWN, RIGHT, "\x1b")
+        for _step in range(8):
+            if "> Game data: kept" in term.settle():
+                break
+            term.send(DOWN)
+        term.send(RIGHT, "\x1b")
         # Back on the plan, the check runs again under the new options.
         screen = term.wait("4 files to download")
         self.assertIn("> Install", screen)
@@ -10688,7 +10736,7 @@ class MouseEnabled(unittest.TestCase):
                 self.assertFalse(install.tui_wants_mouse(state, drawn(state, 80, 24)))
         # The result takes a tap on its Exit: its text is printed again in
         # the terminal once it closes, selected there as anywhere.
-        for name in ("setup", "platforms", "plan", "systems", "options", "error", "quit",
+        for name in ("setup", "platforms", "plan", "systems", "change", "error", "quit",
                      "result"):
             with self.subTest(screen=name):
                 state = states[name]
@@ -10749,6 +10797,13 @@ class MouseOnEveryScreen(unittest.TestCase):
                             self.assertEqual(lines[line].style == "focus", index == focus)
                             # The whole width, the text's end or not.
                             effects = tap(state, cols - 1, line)
+                            if row_list[index].action == "heading":
+                                # A heading names the rows under it: no
+                                # choice, nothing happens.
+                                self.assertEqual(effects, [])
+                                self.assertEqual((state.stack, state.focus),
+                                                 (base.stack, base.focus))
+                                continue
                             if row_list[index].action in install.TUI_TICK_ROWS:
                                 # A tick is ticked as Space ticks it, focus
                                 # moved there first.
@@ -13357,7 +13412,7 @@ class TheSettleRunsFromTheFrameShown(unittest.TestCase):
         term.wait("> Install")
         term.settle()
         term.send("o")
-        term.wait("RetroBIOS: Options")
+        term.wait("RetroBIOS: Change")
         term.settle()
         time.sleep(1.0)
         col, line = self.bar_entry(term, "Back")
@@ -15119,7 +15174,7 @@ SCREEN_WORDS = {
     "folder-card": (52, 52, 50, 50), "browse": (17, 17, 15, 15), "path": (23, 23, 25, 25),
     "create": (23, 23, 21, 21), "checking": (18, 18, 17, 17), "plan": (31, 31, 31, 31),
     "plan-in-place": (22, 22, 19, 19), "systems": (36, 37, 36, 36),
-    "options": (40, 42, 59, 59), "regions": (45, 44, 42, 42), "cores": (47, 47, 45, 45),
+    "regions": (45, 44, 42, 42), "cores": (47, 47, 45, 45),
     "preview": (29, 29, 28, 28), "command": (22, 22, 16, 16), "confirm": (22, 22, 20, 20),
     "installing": (32, 32, 31, 31), "result": (33, 33, 31, 31), "error": (37, 34, 32, 31),
     "quit": (14, 14, 12, 12), "help": (24, 26, 26, 26), "plan-games": (36, 46, 54, 54),
@@ -15129,6 +15184,13 @@ SCREEN_WORDS = {
     # press back to the whole list) and Change where (back to the setups,
     # the plan having opened on the one found).
     "plan-record": (38, 42, 42, 42),
+    # Change holds every option one level below the plan (design 4.4): the
+    # rows for Emulators, a pack, the device and the internet, and the five
+    # headings that group them, the intro sentence they replace dropped.
+    "change": (32, 42, 72, 72),
+    # A list of boards and one of emulators, each with the line that says
+    # what the choice does and the gloss of "board".
+    "device": (35, 35, 33, 33), "emulators": (29, 29, 27, 27),
 }
 
 
@@ -15313,7 +15375,7 @@ class WhatToActOnStaysOnTheScreen(unittest.TestCase):
         state = checked_state()
         state.manifest = {**MANIFEST, "save_directory": {"folder": "saves", "by_core": True}}
         state.check_summary = {"skipped": [{"reason": "no_save_directory", "files": 2}]}
-        self.assertIn("Choose it in Options, Save folder (--save-dir).", self.text(state))
+        self.assertIn("Choose it in Change, Save folder (--save-dir).", self.text(state))
 
     def test_files_that_could_not_be_read_are_counted_where_no_row_says_so(self):
         unread = [{"event": "unreadable", "platform": "retroarch", "folder": "/media/OLD",
@@ -15339,6 +15401,432 @@ class WhatToActOnStaysOnTheScreen(unittest.TestCase):
         self.assertIn("E:\\D is another drive: add it to copy from it too.", text)
         self.assertNotIn("Read the first", text)
 
+
+
+class DeviceAndEmulatorScreens(unittest.TestCase):
+    """Device chooses --target and --every-board, Emulators --emulator, and
+    Change keeps every option one level below the plan, grouped by intent."""
+
+    def setUp(self):
+        patcher = mock.patch.object(install, "_mounted_cards", return_value=[])
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def text(self, state: install.TuiState, cols: int = 80, rows: int = 24) -> str:
+        return "\n".join(str(line) for line in install.tui_view(state, cols, rows))
+
+    def focus(self, state: install.TuiState, action: str, value: object = None) -> None:
+        rows = install.tui_rows(state)
+        state.focus[state.screen] = next(
+            index for index, row in enumerate(rows)
+            if row.action == action and (value is None or row.value == value))
+
+    def test_change_groups_every_option_under_headings_focus_skips(self):
+        state = checked_state()
+        press(state, "o")
+        rows = install.tui_rows(state)
+        headings = [row.label for row in rows if row.action == "heading"]
+        self.assertEqual(headings, list(install.TUI_CHANGE_GROUPS))
+        self.assertNotEqual(rows[state.focus["options"]].action, "heading")
+        flags = {row.right for row in rows if row.action != "heading"}
+        for flag in ("--region", "--core", "--emulator", "--no-game-data", "--dest", "--from",
+                     "--from-pack", "--target", "--installed-cores", "--jobs", "--offline",
+                     "--dry-run"):
+            self.assertIn(flag, flags)
+        # Down and Up never stop on a heading, Home neither.
+        for key in ("down",) * len(rows) + ("up",) * len(rows) + ("home", "end", "home"):
+            press(state, key)
+            self.assertNotEqual(install.tui_rows(state)[state.focus["options"]].action,
+                                "heading", key)
+        # Up on the first row stays: the list does not wrap past its heading.
+        press(state, "home", "up")
+        self.assertEqual(state.focus["options"], 1)
+        # The plan's row and bar name the screen.
+        plan = checked_state()
+        self.assertIn("Change", [row.label for row in install.tui_rows(plan)])
+        self.assertIn("Y/o Change", self.text(plan))
+
+    def test_a_tap_on_a_heading_does_nothing(self):
+        state = checked_state()
+        press(state, "o")
+        before = dict(state.focus)
+        rows = install.tui_rows(state)
+        index = next(i for i, row in enumerate(rows) if row.action == "heading")
+        state.cols, state.rows = 80, 24
+        state.hits = install.tui_hits(state, install.tui_view(state, 80, 24))
+        number = next(target[0] for target in state.hits.targets
+                      if target[3][:2] == ("row", index))
+        state.now = state.hits.shown + 1
+        install.tui_mouse(state, install.TuiMouse(0, 3, number + 1, False))
+        self.assertEqual(install.tui_mouse(state, install.TuiMouse(0, 3, number + 1, True)), [])
+        self.assertEqual(state.focus, before)
+
+    def test_device_lists_the_card_board_first_and_chosen(self):
+        state = device_state()
+        self.assertEqual(state.screen, "device")
+        rows = install.tui_rows(state)
+        self.assertEqual([row.label for row in rows],
+                         ["(x) h700", "( ) bcm2711", "( ) x86_64", "( ) Every board"])
+        self.assertEqual(rows[0].right, "named by the card")
+        self.assertEqual(rows[1].right, "rpi4")
+        self.assertEqual(state.focus["device"], 0)
+        # Chosen as it is: nothing to say on the command line.
+        press(state, "enter")
+        self.assertEqual(state.screen, "options")
+        self.assertEqual([flag for flag in install.tui_flags(state)
+                          if flag[0] in ("--target", "--every-board")], [])
+        self.assertIn("Device: h700, named by the card", self.text(state))
+
+    def test_on_the_device_itself_it_says_this_device(self):
+        state = checked_state()
+        state.board_seen = ("retroarch", state.dest, "bcm2711", True, True)
+        state.stack.append("options")
+        self.assertIn("Device: bcm2711, this device", self.text(state))
+
+    def test_the_board_event_is_kept_across_checks(self):
+        state = checked_state()
+        state.run, state.running = "check", True
+        install.tui_receive(state, ("event", state.run_id, {
+            "event": "board", "platform": "retroarch", "board": "h700", "applied": True,
+            "message": "Board h700 found on the card (--every-board installs all boards)"}))
+        with mock.patch.object(install, "detect_board", return_value=None):
+            self.assertEqual(install._board_seen(state)[:2], ("h700", True))
+        install._start_run(state, "check")
+        self.assertEqual(install._board_seen(state)[:2], ("h700", True))
+
+    def test_another_board_and_every_board_set_their_flag(self):
+        state = device_state()
+        self.focus(state, "board", "bcm2711")
+        press(state, "enter")
+        self.assertIn(("--target", "bcm2711"), install.tui_flags(state))
+        self.assertIn("--target=bcm2711", install.tui_argv(state, "install", "py", "i.py"))
+        self.assertIn("Device: bcm2711", self.text(state))
+        # Back on the plan, counted again for the board.
+        self.assertEqual(press(state, "esc"), [("run", "check")])
+        state = device_state()
+        self.focus(state, "board", "")
+        press(state, "enter")
+        self.assertEqual([flag for flag in install.tui_flags(state)
+                          if flag[0] in ("--target", "--every-board")],
+                         [("--every-board", None)])
+        self.assertIn("Device: every board", self.text(state))
+
+    def test_with_no_board_read_every_board_is_the_choice_and_no_flag(self):
+        state = device_state(board="")
+        self.assertEqual(install.tui_rows(state)[-1].label, "(x) Every board")
+        self.assertEqual(state.focus["device"], 3)
+        press(state, "enter")
+        self.assertEqual([flag for flag in install.tui_flags(state)
+                          if flag[0] in ("--target", "--every-board")], [])
+
+    def test_a_board_list_that_cannot_be_read_is_said(self):
+        state = checked_state()
+        state.stack.append("options")
+        self.focus(state, "device")
+        press(state, "enter")
+        self.assertIn("Reading the board list...", self.text(state))
+        install.tui_receive(state, ("targets", "retroarch", None,
+                                    "The board list could not be read."))
+        self.assertIn("The board list could not be read.", self.text(state))
+        self.assertEqual(press(state, "esc"), [])
+        self.assertEqual(state.screen, "options")
+
+    def test_the_command_line_choice_is_the_one_shown(self):
+        args = _args(platform="retroarch", dest=SYSTEM_DIR, target="bcm2711",
+                     emulator=["mesen"])
+        state, _effects = install.tui_start(args, "linux", detect=False)
+        self.assertEqual((state.target, state.emulators), ("bcm2711", ["mesen"]))
+        self.assertNotIn("--target", [flag for flag, _value in state.passthrough])
+        flags = install.tui_flags(state)
+        self.assertIn(("--target", "bcm2711"), flags)
+        self.assertIn(("--emulator", "mesen"), flags)
+
+    def test_emulators_ticked_are_the_emulator_flags(self):
+        state = checked_state()
+        state.stack.append("options")
+        self.focus(state, "emulators")
+        press(state, "enter")
+        self.assertEqual(state.screen, "emulators")
+        rows = install.tui_rows(state)
+        self.assertEqual([row.label for row in rows if row.action == "emulator"],
+                         ["[ ] mesen", "[ ] pcsx_rearmed"])
+        self.assertEqual(rows[state.focus["emulators"]].value, "mesen")
+        press(state, " ")
+        self.assertEqual(state.emulators, ["mesen"])
+        self.assertIn(("--emulator", "mesen"), install.tui_flags(state))
+        press(state, "n")
+        self.assertEqual(state.emulators, [])
+        press(state, " ", "esc")
+        self.assertEqual(state.screen, "options")
+        self.assertIn("Emulators: mesen", self.text(state))
+
+    def test_without_the_internet_sets_offline_for_the_runs(self):
+        state = checked_state()
+        state.stack.append("options")
+        self.focus(state, "offline")
+        with mock.patch.dict(os.environ, {}, clear=False):
+            os.environ.pop(install.OFFLINE_VARIABLE, None)
+            self.assertIn("Without the internet: no", self.text(state))
+            self.assertEqual(press(state, "enter"), [("offline", True)])
+            install.set_offline(True)
+            self.assertIn("Without the internet: yes", self.text(state))
+            self.assertIn(("--offline", None), install.tui_flags(state))
+            self.assertEqual(press(state, "left"), [("offline", False)])
+            install.set_offline(False)
+            self.assertNotIn(("--offline", None), install.tui_flags(state))
+
+    def test_from_a_pack_opens_the_browser_on_zips_and_reads_the_pack(self):
+        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, root, True)
+        (root / "Downloads").mkdir()
+        pack = root / "Downloads" / "RetroArch_BIOS_Pack.zip"
+        pack.write_bytes(b"PK")
+        (root / "Downloads" / "notes.txt").write_text("x")
+        state = checked_state()
+        state.home = root
+        state.stack.append("options")
+        self.focus(state, "pack")
+        press(state, "enter")
+        self.assertEqual((state.screen, state.browse_for), ("browse", "pack"))
+        rows = install.tui_rows(state)
+        self.assertNotIn("use", [row.action for row in rows])
+        self.assertEqual([row.label for row in rows if row.action == "zip"],
+                         ["RetroArch_BIOS_Pack.zip"])
+        self.focus(state, "zip")
+        self.assertIn("A/Enter Use this pack", self.text(state))
+        self.assertEqual(press(state, "enter"), [("pack", pack)])
+        # Refused: said, the browser stays.
+        install.tui_receive(state, ("pack_opened", pack, "Not a pack."))
+        self.assertEqual(state.screen, "browse")
+        self.assertIn("Not a pack.", self.text(state))
+        effects = install.tui_receive(state, ("pack_opened", pack, ""))
+        self.assertEqual(effects, [("fetch", "retroarch")])
+        self.assertEqual(state.packs, [pack])
+        self.assertIn(("--from-pack", str(pack)), install.tui_flags(state))
+
+    def test_open_tui_pack_refuses_another_platforms_pack(self):
+        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, root, True)
+        pack = root / "Batocera_BIOS_Pack.zip"
+        with zipfile.ZipFile(pack, "w") as archive:
+            archive.writestr("manifest.json", json.dumps({"platform": "batocera",
+                                                          "files": []}))
+        previous = install.LOCAL.pack
+        self.addCleanup(setattr, install.LOCAL, "pack", previous)
+        problem = install.open_tui_pack(pack, "retroarch")
+        self.assertIs(install.LOCAL.pack, previous)
+        self.assertTrue(problem)
+
+
+def _parity_list(root: Path) -> tuple[Path, Path]:
+    """A RetroArch list whose cores per board pick other files, a shared
+    destination two cores want different bytes at, and the copies of every
+    file in a folder: an install from it needs no network."""
+    payloads = root / "copies"
+    payloads.mkdir()
+    entries = []
+    alternative = {}
+    for name, cores, systems in (("plat.bin", None, ["sony-playstation"]),
+                                 ("pcsx/extra.bin", ["pcsx_rearmed"], ["sony-playstation"]),
+                                 ("mesen/nes.bin", ["mesen"], ["nintendo-nes"]),
+                                 ("nes_plat.bin", None, ["nintendo-nes"]),
+                                 ("shared.bin", ["pcsx_rearmed"], ["sony-playstation"]),
+                                 ("shared.bin#mesen", ["mesen"], ["nintendo-nes"])):
+        payload = name.encode() * 8
+        stored = name.replace("/", "_").replace("#", "_")
+        (payloads / stored).write_bytes(payload)
+        entry = {"dest": name.split("#")[0], "size": len(payload),
+                 "sha1": hashlib.sha1(payload).hexdigest(),
+                 "sha256": hashlib.sha256(payload).hexdigest(),
+                 "repo_path": f"bios/{stored}", "cores": cores, "systems": systems}
+        if "#" in name:
+            alternative = {field: entry[field] for field in
+                           ("sha1", "sha256", "size", "repo_path", "cores")}
+            continue
+        entries.append(entry)
+    next(entry for entry in entries if entry["dest"] == "shared.bin")["alternatives"] = [
+        alternative]
+    listed = root / "list"
+    (listed / "targets").mkdir(parents=True)
+    manifest = {"manifest_version": 2, "platform": "retroarch", "files": entries,
+                "omitted_files": [],
+                "system_cores": {"sony-playstation": ["pcsx_rearmed"],
+                                 "nintendo-nes": ["mesen"]},
+                "core_names": {"pcsx_rearmed": ["pcsx_rearmed"], "mesen": ["mesen"]}}
+    (listed / "retroarch.json").write_text(json.dumps(manifest))
+    (listed / "targets" / "retroarch.json").write_text(json.dumps(
+        {"bcm2711": {"cores": ["pcsx_rearmed"]}, "h700": {"cores": ["mesen"]}}))
+    return listed / "retroarch.json", payloads
+
+
+class ScreenChoicesInstallWhatTheirFlagInstalls(unittest.TestCase):
+    """A board chosen on Device and an emulator ticked on Emulators install,
+    file for file and byte for byte, what --target and --emulator install."""
+
+    def setUp(self):
+        patcher = mock.patch.object(install, "_mounted_cards", return_value=[])
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, self.root, True)
+        self.listed, self.copies = _parity_list(self.root)
+        self.manifest = json.loads(self.listed.read_text())
+        self.env = {**os.environ, "RETROBIOS_OS": "linux", "HOME": str(self.root),
+                    install.OFFLINE_VARIABLE: "1"}
+
+    def run_install(self, argv: list[str]) -> dict[str, str]:
+        proc = subprocess.run(argv, env=self.env, capture_output=True, text=True,
+                              timeout=120, check=False, stdin=subprocess.DEVNULL)
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        dest = Path(next(arg for arg in argv if arg.startswith("--dest=")).split("=", 1)[1])
+        return {path.relative_to(dest).as_posix(): hashlib.sha1(path.read_bytes()).hexdigest()
+                for path in dest.rglob("*") if path.is_file()}
+
+    def flag_run(self, name: str, *flags: str) -> dict[str, str]:
+        return self.run_install([sys.executable, str(REPO_ROOT / "install.py"),
+                                 "--platform=retroarch",
+                                 f"--dest={self.root / name / 'system'}",
+                                 f"--manifest={self.listed}", f"--from={self.copies}",
+                                 *flags, "--events", "--yes"])
+
+    def screen(self, name: str) -> install.TuiState:
+        """Change, over the plan of the list as a check leaves it."""
+        state = install.TuiState(os_type="linux", home=self.root)
+        state.platform, state.dest = "retroarch", self.root / name / "system"
+        state.manifest, state.manifest_for = self.manifest, "retroarch"
+        state.manifest_path, state.manifest_given = self.listed, True
+        state.from_folders = [self.copies]
+        state.check = dict(CHECK)
+        state.stack = ["plan", "options"]
+        return state
+
+    def screen_run(self, state: install.TuiState) -> dict[str, str]:
+        return self.run_install(install.tui_argv(state, "install", sys.executable,
+                                                 str(REPO_ROOT / "install.py")))
+
+    @staticmethod
+    def choose(state: install.TuiState, action: str, value: object = None) -> None:
+        rows = install.tui_rows(state)
+        state.focus[state.screen] = next(
+            index for index, row in enumerate(rows)
+            if row.action == action and (value is None or row.value == value))
+
+    def test_a_board_chosen_on_device_installs_what_target_installs(self):
+        targets = install._validate_targets(
+            json.loads((self.listed.parent / "targets" / "retroarch.json").read_text()))
+        everything = self.flag_run("all")
+        chosen = {}
+        for board in ("bcm2711", "h700"):
+            with self.subTest(board=board):
+                state = self.screen(f"screen-{board}")
+                self.choose(state, "device")
+                self.assertEqual(press(state, "enter"), [("targets", "retroarch")])
+                install.tui_receive(state, ("targets", "retroarch", targets, ""))
+                self.choose(state, "board", board)
+                press(state, "enter")
+                self.assertEqual(state.screen, "options")
+                chosen[board] = self.screen_run(state)
+                self.assertEqual(chosen[board],
+                                 self.flag_run(f"flag-{board}", "--target", board))
+                self.assertNotEqual(chosen[board], everything)
+        # The two boards' cores want other bytes at one destination.
+        self.assertNotEqual(chosen["bcm2711"]["shared.bin"], chosen["h700"]["shared.bin"])
+
+    def test_every_board_installs_what_every_board_installs(self):
+        targets = install._validate_targets(
+            json.loads((self.listed.parent / "targets" / "retroarch.json").read_text()))
+        state = self.screen("screen-every")
+        state.board_seen = ("retroarch", state.dest, "h700", True, True)
+        self.choose(state, "device")
+        press(state, "enter")
+        install.tui_receive(state, ("targets", "retroarch", targets, ""))
+        self.choose(state, "board", "")
+        press(state, "enter")
+        self.assertEqual(self.screen_run(state),
+                         self.flag_run("flag-every", "--every-board"))
+
+    def test_an_emulator_ticked_installs_what_emulator_installs(self):
+        for emulator in ("mesen", "pcsx_rearmed"):
+            with self.subTest(emulator=emulator):
+                state = self.screen(f"screen-{emulator}")
+                self.choose(state, "emulators")
+                press(state, "enter")
+                self.choose(state, "emulator", emulator)
+                press(state, " ", "esc")
+                self.assertEqual(state.screen, "options")
+                chosen = self.screen_run(state)
+                self.assertEqual(chosen, self.flag_run(f"flag-{emulator}",
+                                                       "--emulator", emulator))
+                # The files of its systems, and its own copy of the shared one.
+                shared = next(entry for entry in self.manifest["files"]
+                              if entry["dest"] == "shared.bin")
+                self.assertEqual(chosen["shared.bin"], shared["sha1"] if emulator ==
+                                 "pcsx_rearmed" else shared["alternatives"][0]["sha1"])
+                self.assertNotIn("nes_plat.bin" if emulator == "pcsx_rearmed"
+                                 else "plat.bin", chosen)
+
+
+class EmulatorChoiceMatchesTheEmulatorPack(unittest.TestCase):
+    """An emulator ticked on Emulators against the pack generate_pack.py
+    --emulator builds for it, on the real lists: every file of the pack at
+    its destination with its bytes, and beside them only the files the
+    platform's own list names for the systems the emulator runs."""
+
+    CASES = (("retroarch", "handy"), ("retroarch", "beetle_psx"), ("retroarch", "mesen"),
+             ("batocera", "mesen"), ("batocera", "handy"))
+
+    @classmethod
+    def setUpClass(cls):
+        db_path = REPO_ROOT / "database.json"
+        if not db_path.exists():
+            raise unittest.SkipTest("database.json is not built")
+        if sys.version_info < (3, 9):
+            # The builder's floor: install.py alone keeps 3.8.
+            raise unittest.SkipTest("generate_pack.py needs Python 3.9 or newer")
+        sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        import generate_pack as gp
+        from common import build_zip_contents_index
+
+        cls.gp = gp
+        cls.db = json.loads(db_path.read_text(encoding="utf-8"))
+        cls.zip_contents = build_zip_contents_index(cls.db)
+        cls.by_path = {entry["path"]: sha1 for sha1, entry in cls.db["files"].items()}
+
+    def pack(self, emulator: str) -> dict[str, str]:
+        record = self.gp.PackRecord()
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.gp.generate_emulator_pack(
+                [emulator], str(REPO_ROOT / "emulators"), self.db, str(REPO_ROOT / "bios"),
+                str(REPO_ROOT / "tmp"), zip_contents=self.zip_contents, offline=True,
+                record=record)
+        return {member: self.by_path[record.sources[member]] for member in record.files}
+
+    def test_each_case(self):
+        for plat, emulator in self.CASES:
+            with self.subTest(platform=plat, emulator=emulator):
+                manifest = json.loads((REPO_ROOT / "install" / f"{plat}.json").read_text())
+                state = install.TuiState(os_type="linux")
+                state.platform, state.dest = plat, Path("/x/bios")
+                state.manifest, state.manifest_for = manifest, plat
+                state.stack = ["plan", "options", "emulators"]
+                rows = install.tui_rows(state)
+                state.focus["emulators"] = next(i for i, row in enumerate(rows)
+                                                if row.value == emulator)
+                press(state, " ")
+                argv = install.tui_argv(state, "install", "py", "install.py")
+                args = install.build_parser().parse_args(argv[2:])
+                self.assertEqual(args.emulator, [emulator])
+                with contextlib.redirect_stdout(io.StringIO()):
+                    files, _omitted = install._narrow_to_emulators(
+                        args.emulator, manifest, plat, manifest["files"],
+                        manifest["omitted_files"])
+                installed = {entry["dest"]: entry["sha1"] for entry in files}
+                packed = self.pack(emulator)
+                self.assertTrue(packed)
+                self.assertEqual({dest: installed.get(dest) for dest in packed}, packed)
+                for dest in set(installed) - set(packed):
+                    entry = next(entry for entry in files if entry["dest"] == dest)
+                    self.assertIsNone(entry.get("cores"), dest)
 
 if __name__ == "__main__":
     unittest.main()

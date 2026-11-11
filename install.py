@@ -18622,6 +18622,22 @@ class TuiState:
         # Opened on the plan of the one setup found: its Change where row
         # goes back to the setups.
         self.opened_on_plan: bool = False
+        # The device chosen on Device (--target, "" for the board the run
+        # reads itself) or every board (--every-board), the emulators
+        # ticked on Emulators (--emulator), and the packs read in place of
+        # the network (--from-pack).
+        self.target: str = ""
+        self.every_board: bool = False
+        self.emulators: list[str] = []
+        self.packs: list[Path] = []
+        # The platform's board list, as fetched for Device: None until it
+        # comes or when it could not be read, and why.
+        self.targets: dict | None = None
+        self.targets_for: str = ""
+        self.targets_problem: str = ""
+        # (platform, folder, board, applied, here) of the last board event:
+        # kept across checks, a --target chosen since stops the event.
+        self.board_seen: tuple | None = None
 
     @property
     def screen(self) -> str:
@@ -19064,6 +19080,12 @@ def _tui_system_flags(state: TuiState) -> list[tuple[str, str | None]]:
 def tui_flags(state: TuiState) -> list[tuple[str, str | None]]:
     """The options that carry the choices made on screen, CLI ones included."""
     flags = list(state.passthrough)
+    if state.target:
+        flags.append(("--target", state.target))
+    if state.every_board:
+        flags.append(("--every-board", None))
+    flags += [("--emulator", name) for name in state.emulators]
+    flags += [("--from-pack", str(pack)) for pack in state.packs]
     flags += _tui_system_flags(state)
     flags += [("--core", name) for name in tui_core_flags(state)]
     if state.regions:
@@ -19202,7 +19224,7 @@ class TuiRow(NamedTuple):
 
 # Screens that scroll text instead of listing rows.
 _PAGERS = ("preview", "command", "result", "misplaced", "unreadable", "games", "details")
-_CHECKLISTS = ("systems", "cores")
+_CHECKLISTS = ("systems", "cores", "emulators")
 
 
 def _needed(row: dict) -> int:
@@ -19476,6 +19498,14 @@ def tui_rows(state: TuiState) -> list[TuiRow]:
         return _system_rows(state)
     if screen == "options":
         return _option_rows(state)
+    if screen == "device":
+        return _device_rows(state)
+    if screen == "emulators":
+        needle = state.filters.get(screen, "")
+        return [_filter_row(state)] + [
+            TuiRow("emulator", f"[{'x' if name in state.emulators else ' '}] {name}",
+                   value=name) for name in tui_emulators(state) if _matches(name, needle)
+        ] + _REGIONS_END
     if screen == "regions":
         known = sorted(set(tui_choices(state)["regions"]) | set(state.cli_regions),
                        key=region_title)
@@ -19580,10 +19610,10 @@ def _plan_rows(state: TuiState) -> list[TuiRow]:
         rows = [TuiRow("systems", TUI_SYSTEMS_ROW)]
         game_data = _game_data_row(state)
         return rows + ([game_data] if game_data is not None else []) + [
-            *_details_row(state), TuiRow("options", "Options"), TuiRow("quit", "Quit")]
+            *_details_row(state), TuiRow("options", "Change"), TuiRow("quit", "Quit")]
     if not (_needed(check) if check else 0) and not check.get("data_missing"):
         return [TuiRow("close", "Close"), *_games_rows(state), *_record_rows(state),
-                *_where_rows(state), *_details_row(state), TuiRow("options", "Options")]
+                *_where_rows(state), *_details_row(state), TuiRow("options", "Change")]
     # The size the headline says: "Install 6.6 GB" stood under "14930 files
     # to download, 6.8 GB", the copies counted in one and the data files in
     # the other.
@@ -19639,7 +19669,7 @@ def _plan_rows(state: TuiState) -> list[TuiRow]:
         rows.append(TuiRow("misplaced", "Show the files in the wrong place"))
     if state.unreadable:
         rows.append(TuiRow("unreadable", "Show the files that could not be read"))
-    return rows + [*_where_rows(state), *_details_row(state), TuiRow("options", "Options"),
+    return rows + [*_where_rows(state), *_details_row(state), TuiRow("options", "Change"),
                    TuiRow("quit", "Quit")]
 
 
@@ -19904,8 +19934,11 @@ _REGIONS_END = [TuiRow("none", "None"), TuiRow("done", "Done")]
 
 
 def _first_item(state: TuiState) -> int:
-    """The row a list of ticks opens on: its first item."""
-    return next((i for i, row in enumerate(tui_rows(state)) if row.action in TUI_TICK_ROWS), 0)
+    """The row a list of ticks opens on: its first item. Elsewhere the
+    first row that is no heading."""
+    rows = tui_rows(state)
+    return next((i for i, row in enumerate(rows) if row.action in TUI_TICK_ROWS),
+                next((i for i, row in enumerate(rows) if row.action != "heading"), 0))
 
 
 def _shared_needed(state: TuiState) -> dict[str, tuple[int, int]]:
@@ -19930,54 +19963,166 @@ def _yes(value: bool) -> str:
     return "yes" if value else "no"
 
 
+# The Change screen's groups, in the order they are drawn: a heading is no
+# row Up and Down stop on, and a group with no row is not drawn.
+TUI_CHANGE_GROUPS = ("What to install", "Where", "For which device", "How", "See")
+
+
 def _option_rows(state: TuiState) -> list[TuiRow]:
+    """The Change screen: every option one level below the plan, grouped by
+    what it decides, each row with its value and its flag."""
     manifest = state.manifest or {}
     choices = tui_choices(state)
-    rows = []
+    what: list[TuiRow] = []
     if choices["regions"]:
-        rows.append(TuiRow("regions", "Preferred regions: "
+        what.append(TuiRow("regions", "Preferred regions: "
                            + (", ".join(map(region_title, state.regions)) or "any"),
                            "--region"))
-    if manifest.get("categorized"):
-        # "Leave out game data: no" was a double negative.
-        rows.append(TuiRow("game_data", "Game data: "
-                           + ("left out" if state.no_game_data else "kept"),
-                           "--no-game-data"))
-    found = len(state.facts.get("cores", []))
-    if _cores_dir_given(state):
-        rows.append(TuiRow("installed", "Installed cores only: yes, implied by --cores-dir",
-                           "--cores-dir"))
-    elif state.platform in CORE_PLATFORMS and "system_cores" in manifest and found:
-        rows.append(TuiRow("installed", f"Installed cores only: "
-                           f"{_yes(state.installed_only)} ({found} found)",
-                           "--installed-cores"))
     if len(choices["cores"]) > 1:
         # The plan's words, the noun left to the row's own label. A list
         # with one core asks nothing, as line mode does not.
-        rows.append(TuiRow("cores", "Cores: " + cores_words(
+        what.append(TuiRow("cores", "Cores: " + cores_words(
             tui_cores_ticked(state), len(_core_base(state))).replace(" cores", ""), "--core"))
+    if "system_cores" in manifest and tui_emulators(state):
+        what.append(TuiRow("emulators", f"Emulators: {_emulator_words(state)}",
+                           "--emulator"))
+    if manifest.get("categorized"):
+        # "Leave out game data: no" was a double negative.
+        what.append(TuiRow("game_data", "Game data: "
+                           + ("left out" if state.no_game_data else "kept"),
+                           "--no-game-data"))
     copied = ", ".join(str(folder) for folder in state.from_folders) or "none"
-    if manifest.get("save_directory"):
-        # The interface said "Name it with --save-dir" and had no row for it.
-        rows.append(TuiRow("savedir", f"Save folder: {_save_folder_words(state)}",
-                           "--save-dir", style="path"))
-    if not LOCAL.offline:
-        # From a pack, or offline, nothing is downloaded.
-        rows.append(TuiRow("jobs", f"Parallel downloads: {state.jobs}", "--jobs"))
-    rows += [
+    where = [
         # The plan's folder: AmberELEC's read the games part here and its
         # bios folder on the plan, two values under one name. --dest stays the
         # games part, as the command line takes it.
         TuiRow("folder", "BIOS folder: "
                + _short_path(_plan_folder(state, state.dest), state.home),
                "--dest", style="path"),
-        TuiRow("from", f"Copy from: {copied}", "--from", style="path"),
-        *([TuiRow("addapp", f"Put RetroBIOS on this card: {_yes(state.add_app)}",
-                  "--add-app")] if _tui_app_ready(state) else []),
-        TuiRow("preview", "Preview the file list", "--dry-run"),
-        TuiRow("command", "Show the command line"),
     ]
+    if manifest.get("save_directory"):
+        # The interface said "Name it with --save-dir" and had no row for it.
+        where.append(TuiRow("savedir", f"Save folder: {_save_folder_words(state)}",
+                            "--save-dir", style="path"))
+    where += [TuiRow("from", f"Copy from: {copied}", "--from", style="path"),
+              TuiRow("pack", "From a pack: "
+                     + (state.packs[0].name if state.packs else "none"), "--from-pack")]
+    device: list[TuiRow] = []
+    if state.platform in TARGET_PLATFORMS:
+        device.append(TuiRow("device", f"Device: {_device_words(state)}", "--target"))
+    found = len(state.facts.get("cores", []))
+    if _cores_dir_given(state):
+        device.append(TuiRow("installed", "Installed cores only: yes, implied by --cores-dir",
+                             "--cores-dir"))
+    elif state.platform in CORE_PLATFORMS and "system_cores" in manifest and found:
+        device.append(TuiRow("installed", f"Installed cores only: "
+                             f"{_yes(state.installed_only)} ({found} found)",
+                             "--installed-cores"))
+    if _tui_app_ready(state):
+        device.append(TuiRow("addapp", f"Put RetroBIOS on this card: {_yes(state.add_app)}",
+                             "--add-app"))
+    # Parallel downloads below: the row goes once nothing is downloaded,
+    # and the focus stays on the row just changed.
+    how = [TuiRow("offline", "Without the internet: "
+                  + ("yes, a pack is read" if LOCAL.pack is not None
+                     else _yes(offline_requested())), "--offline")]
+    if not LOCAL.offline:
+        # From a pack, or offline, nothing is downloaded.
+        how.append(TuiRow("jobs", f"Parallel downloads: {state.jobs}", "--jobs"))
+    see = [TuiRow("preview", "Preview the file list", "--dry-run"),
+           TuiRow("command", "Show the command line")]
+    rows: list[TuiRow] = []
+    for heading, group in zip(TUI_CHANGE_GROUPS, (what, where, device, how, see)):
+        if group:
+            rows += [TuiRow("heading", heading, style="head"), *group]
     return rows
+
+
+def tui_emulators(state: TuiState) -> list[str]:
+    """The emulators Emulators lists: each profile once, by the name the
+    list gives it, as --list-emulators names them."""
+    if state.manifest is None:
+        return []
+    return sorted(set(emulator_names(state.manifest, *tui_run_files(state)).values()))
+
+
+def _emulator_words(state: TuiState) -> str:
+    """The emulators chosen, as the Change row says them."""
+    if not state.emulators:
+        return "all"
+    if len(state.emulators) <= 2:
+        return ", ".join(state.emulators)
+    return f"{len(state.emulators)} chosen"
+
+
+def _board_seen(state: TuiState) -> tuple[str, bool, bool] | None:
+    """(board, applied, here) the last check read for this setup and folder."""
+    seen = state.board_seen
+    if seen is None or seen[:2] != (state.platform, state.dest):
+        return None
+    return seen[2], seen[3], seen[4]
+
+
+def _board_where(here: bool) -> str:
+    return "this device" if here else "named by the card"
+
+
+def _device_choice(state: TuiState) -> str:
+    """The board the runs install for, "" for every board."""
+    if state.every_board:
+        return ""
+    if state.target:
+        return state.target
+    seen = _board_seen(state)
+    return seen[0] if seen is not None and seen[1] else ""
+
+
+def _device_words(state: TuiState) -> str:
+    """The device as the Change row says it: the board, where the run read
+    it when it chose it itself."""
+    chosen = _device_choice(state)
+    if not chosen:
+        return "every board"
+    seen = _board_seen(state)
+    if not state.target and seen is not None:
+        return f"{chosen}, {_board_where(seen[2])}"
+    return chosen
+
+
+def _device_rows(state: TuiState) -> list[TuiRow]:
+    """Device: the platform's boards by the names its list gives them, the
+    one read here or named by the card first, then every board."""
+    targets = state.targets if state.targets_for == state.platform else None
+    if not targets:
+        return []
+    seen = _board_seen(state)
+    chosen = _device_choice(state)
+    names = sorted(targets)
+    if seen is not None and seen[0] in targets:
+        names.remove(seen[0])
+        names.insert(0, seen[0])
+    rows = []
+    for name in names:
+        images = [str(image) for image in targets[name].get("images") or ()]
+        # The device names an image carries say what a board code means.
+        right = (_board_where(seen[2]) if seen is not None and name == seen[0]
+                 else ", ".join(images))
+        narrow = (images[0] + (f" +{len(images) - 1}" if len(images) > 1 else ""),) \
+            if images and right != images[0] and name != (seen or ("",))[0] else ()
+        rows.append(TuiRow("board", f"({'x' if name == chosen else ' '}) {name}", right,
+                           name, narrow=narrow))
+    rows.append(TuiRow("board", f"({' ' if chosen else 'x'}) Every board", value=""))
+    return rows
+
+
+def _choose_board(state: TuiState, name: str) -> list[tuple]:
+    """A board chosen on Device, back on Change. The board the run reads
+    itself is no option: the command stays the one with nothing chosen."""
+    seen = _board_seen(state)
+    read = seen[0] if seen is not None and seen[1] else ""
+    state.target = "" if name == read else name
+    state.every_board = not name and bool(read)
+    return _back(state)
 
 
 def _save_dir_given(state: TuiState) -> Path | None:
@@ -20183,15 +20328,19 @@ def _tui_record_take(state: TuiState) -> None:
     state.games_folder = parsed.for_games if isinstance(parsed.for_games, Path) else None
     state.required_only = bool(parsed.required_only) and state.for_games
     state.games_choice = "record"
+    # Device and Emulators show these: a choice no row showed was kept apart.
+    state.target = str(parsed.target or "")
+    state.every_board = bool(parsed.every_board)
+    state.emulators = list(parsed.emulator or [])
     state.record_flags = [(flag, value) for flag, value in record_options(setup["choice"])
-                          if flag in ("--target", "--emulator", "--every-board",
-                                      "--declared-only")]
+                          if flag == "--declared-only"]
 
 
 def _tui_record_drop(state: TuiState) -> None:
     """The recorded choice given up: the choice nothing narrows."""
     state.cli_systems, state.cores, state.regions, state.record_flags = [], [], [], []
     state.no_game_data = state.installed_only = state.required_only = False
+    state.target, state.every_board, state.emulators = "", False, []
     state.for_games, state.games_folder, state.games_choice = None, None, ""
     # The systems of the recorded check go, and with them its ticks.
     state.systems, state.ticked, state.keep_ticked, state.widened_from = [], set(), None, None
@@ -20575,10 +20724,13 @@ def _os_folder(path: Path, folder: Path) -> bool:
 def _browse_to(state: TuiState, folder: Path | None, came_from: Path | None = None) -> None:
     state.browse_dir = folder
     copying = state.browse_for == "from"
-    state.browse_rows, state.status = _browse_rows(folder, copying,
+    state.browse_rows, state.status = _browse_rows(folder, copying or state.browse_for == "pack",
                                                    _dest_card(state) if copying else None)
+    if state.browse_for == "pack":
+        # A pack is a ZIP, never a folder.
+        state.browse_rows = [row for row in state.browse_rows if row.action != "use"]
     focus = 0
-    if (folder is not None and state.browse_for != "from"
+    if (folder is not None and state.browse_for not in ("from", "pack")
             and folder in (state.home, Path(folder.anchor))):
         # No frontend reads its BIOS files from HOME or a drive's root: A
         # pressed through the screens installed into ~. A goes into a
@@ -20791,6 +20943,9 @@ def _activate(state: TuiState, row: TuiRow) -> list[tuple]:
         state.path_selected = bool(state.path_text)
         return _push(state, "path")
     if screen == "browse":
+        if action == "zip" and state.browse_for == "pack":
+            # Opened in this process (perform), which answers pack_opened.
+            return [("pack", row.value)]
         if action == "use" and state.browse_for == "save":
             state.passthrough = [flag for flag in state.passthrough
                                  if flag[0] != "--save-dir"]
@@ -20913,6 +21068,8 @@ def _activate(state: TuiState, row: TuiRow) -> list[tuple]:
         return _checklist(state, row)
     if screen == "options":
         return _option(state, action, 0)
+    if screen == "device" and action == "board":
+        return _choose_board(state, str(row.value))
     if screen == "confirm":
         if action == "install":
             state.stack.pop()
@@ -20959,6 +21116,10 @@ def _checklist(state: TuiState, row: TuiRow) -> list[tuple]:
         state.cores, state.no_cores = [], False
     elif action == "none" and screen == "regions":
         state.regions = []
+    elif action == "none" and screen == "emulators":
+        # None ticked installs for every emulator, as Preferred regions keeps
+        # every region with none ticked.
+        state.emulators = []
     elif action == "none":
         if screen == "systems":
             state.ticked = set()
@@ -21437,6 +21598,21 @@ def _option(state: TuiState, action: str, step: int) -> list[tuple]:
         state.jobs = max(1, min(32, state.jobs + (step or 1)))
     elif action == "addapp":
         state.add_app = step > 0 if step else not state.add_app
+    elif action == "offline" and LOCAL.pack is None:
+        # Set in this process by the effect, as --offline sets it: the
+        # runs started next inherit it, and their command names it.
+        return [("offline", step > 0 if step else not offline_requested())]
+    elif action == "device":
+        _push(state, "device")
+        state.focus["device"] = _device_focus(state)
+        if state.targets_for != state.platform:
+            state.targets, state.targets_problem = None, ""
+            return [("targets", state.platform)]
+    elif action == "emulators":
+        _push(state, action)
+        state.focus[action] = _first_item(state)
+    elif action == "pack":
+        return _open_pack_browser(state)
     elif action == "cores":
         # On the first core: the filter row under A opened a field a
         # controller cannot type into.
@@ -21466,6 +21642,54 @@ def _option(state: TuiState, action: str, step: int) -> list[tuple]:
         _push(state, "preview")
         return _start_run(state, "preview")
     return []
+
+
+def _device_focus(state: TuiState) -> int:
+    """Device opens on the board chosen: the one read here or named by
+    the card when nothing else was."""
+    rows = _device_rows(state)
+    chosen = _device_choice(state)
+    return next((index for index, row in enumerate(rows) if row.value == chosen), 0)
+
+
+def _open_pack_browser(state: TuiState) -> list[tuple]:
+    """The browser, to name a pack downloaded before: it opens where a
+    download lands."""
+    state.browse_for = "pack"
+    _push(state, "browse")
+    downloads = state.home / "Downloads"
+    start = (state.packs[0].parent if state.packs
+             else downloads if _is_dir(downloads) else state.home)
+    _browse_to(state, _nearest_folder(start))
+    return []
+
+
+def open_tui_pack(path: Path, plat: str) -> str:
+    """The pack the screen chose, opened in this process in place of the
+    network as --from-pack opens it: "" once it is, else why not."""
+    try:
+        pack = PackSource([path])
+    except ValueError as exc:
+        return str(exc)
+    spelled = pack.platforms()
+    if spelled and plat not in spelled:
+        pack.close()
+        return (f"{pack.name} is a pack for "
+                f"{' and '.join(display_name(name) for name in spelled)}, "
+                f"not {display_name(plat)}.")
+    if LOCAL.pack is not None:
+        LOCAL.pack.close()
+    LOCAL.pack = pack
+    return ""
+
+
+def set_offline(on: bool) -> None:
+    """Without the internet on or off for this process and the runs it
+    starts, as --offline sets it."""
+    if on:
+        os.environ[OFFLINE_VARIABLE] = OFFLINE_FLAG_VALUE
+    else:
+        os.environ.pop(OFFLINE_VARIABLE, None)
 
 
 def _open_from_browser(state: TuiState) -> list[tuple]:
@@ -21546,10 +21770,18 @@ def _tick(state: TuiState, row: TuiRow, on: bool | None) -> None:
         chosen = state.ticked
     elif state.screen == "cores" and row.action == "core":
         chosen = {name for name in tui_choices(state)["cores"] if core_ticked(state, name)}
+    elif state.screen == "emulators" and row.action == "emulator":
+        chosen = set(state.emulators)
     else:
         return
     value = row.value
     want = (value not in chosen) if on is None else on
+    if state.screen == "emulators":
+        if want and value not in state.emulators:
+            state.emulators.append(str(value))
+        elif not want and value in state.emulators:
+            state.emulators.remove(str(value))
+        return
     if state.screen == "systems":
         if want:
             state.ticked.add(value)
@@ -21793,7 +22025,9 @@ def tui_update(state: TuiState, key: TuiKey) -> list[tuple]:
     elif name in ("esc", "backspace"):
         return _back(state)
     elif (name == "tab" or char == "o") and screen in ("plan", "systems", "confirm"):
-        return _push(state, "options")
+        _push(state, "options")
+        state.focus["options"] = _first_item(state)
+        return []
     elif char == "/" and any(item.action == "filter" for item in rows):
         # The focus goes to the field typed into: it stayed on None, and the
         # bar named None's keys while letters went into the filter.
@@ -21808,7 +22042,7 @@ def tui_update(state: TuiState, key: TuiKey) -> list[tuple]:
     elif screen == "regions" and name in ("right", "shift-down"):
         _move_region(state, row.value, 1)
         return []
-    elif screen in _CHECKLISTS and row.action in ("system", "core") and (
+    elif screen in _CHECKLISTS and row.action in ("system", "core", "emulator") and (
             char == " " or name in ("right", "left")):
         _tick(state, row, None if char == " " else name == "right")
         return []
@@ -21822,12 +22056,21 @@ def tui_update(state: TuiState, key: TuiKey) -> list[tuple]:
         return _checklist(state, named[0]) if named else []
     elif screen == "options" and name in ("left", "right"):
         return _option(state, row.action, 1 if name == "right" else -1) \
-            if row.action in ("game_data", "installed", "jobs", "addapp") \
+            if row.action in ("game_data", "installed", "jobs", "addapp", "offline") \
             or (row.action == "from" and name == "left") else []
     elif char == " ":
         return _space(state, row)
     elif name == "enter":
         return _activate(state, row)
+    if rows[focus].action == "heading":
+        # A heading names the rows under it and is never in focus: the
+        # move goes on to the next row its way, else stays where it was.
+        step = -1 if name in ("up", "pgup", "end") or char in ("k", "G") else 1
+        order = list(range(focus, -1, -1) if step < 0 else range(focus, len(rows)))
+        if wrap:
+            order += range(last, focus, -1) if step < 0 else range(0, focus)
+        focus = next((index for index in order if rows[index].action != "heading"),
+                     max(0, min(state.focus.get(screen, 0), last)))
     state.focus[screen] = focus
     return []
 
@@ -21906,6 +22149,8 @@ def tui_mouse(state: TuiState, event: TuiMouse) -> list[tuple]:
     screen = state.screen
     row = rows[index]
     seen = (screen, len(state.stack), row.action, row.value)
+    if row.action == "heading":
+        return []
     if state.editing:
         state.editing = ""
     elif row.action in TUI_TICK_ROWS:
@@ -21929,7 +22174,7 @@ def tui_mouse(state: TuiState, event: TuiMouse) -> list[tuple]:
 
 
 # The rows a tap ticks or unticks, as Space does: the lists of ticks.
-TUI_TICK_ROWS = ("system", "core", "region")
+TUI_TICK_ROWS = ("system", "core", "region", "emulator")
 
 
 def _bar_commits(state: TuiState, key: TuiKey) -> bool:
@@ -22069,7 +22314,12 @@ def _wheel(state: TuiState, hits: TuiHits, step: int) -> list[tuple]:
         state.list_top[screen] = top
         rows = tui_rows(state)
         focus = max(0, min(state.focus.get(screen, 0), len(rows) - 1))
-        state.focus[screen] = max(top, min(focus, top + shown - 1))
+        focus = max(top, min(focus, top + shown - 1))
+        if rows and rows[focus].action == "heading":
+            # Never on a heading: the row under it, else the one above.
+            below = focus + 1 < min(len(rows), top + shown)
+            focus = focus + 1 if below or focus == 0 else focus - 1
+        state.focus[screen] = focus
     elif hits.scroll == "error":
         state.focus["error_text"] = max(0, state.focus.get("error_text", 0) + lines)
     elif hits.scroll == "pager":
@@ -22170,6 +22420,10 @@ def _take_event(state: TuiState, event: dict) -> None:
         state.set_aside = set(event["dests"])
     elif kind == "board" and state.run == "check":
         state.board = str(event["message"])
+        # Read on the device itself, or named by the card in a reader: a
+        # computer preparing a card has no board of its own.
+        state.board_seen = (state.platform, state.dest, str(event["board"]),
+                            bool(event["applied"]), detect_board(state.platform) is not None)
     elif kind == "version" and state.run == "check":
         state.version = str(event["message"])
         state.version_short = (f"List for {display_name(state.platform, state.manifest)} "
@@ -22239,6 +22493,29 @@ def tui_receive(state: TuiState, message: tuple) -> list[tuple]:
         if state.games_probed is None:
             state.games_probed = (plat, state.dest)
         return _start_run(state, "check")
+    if kind == "targets":
+        _kind, plat, targets, problem = message
+        if plat == state.platform:
+            state.targets, state.targets_for, state.targets_problem = targets, plat, problem
+            if state.screen == "device":
+                state.focus["device"] = _device_focus(state)
+        return []
+    if kind == "pack_opened":
+        _kind, path, problem = message
+        if state.screen != "browse" or state.browse_for != "pack":
+            return []
+        if problem:
+            state.status = _styled(problem, "refusal")
+            return []
+        # The pack's own list, as --from-pack reads it: the list fetched
+        # before is fetched again from the pack.
+        state.packs = [path]
+        state.browse_for = "dest"
+        state.manifest, state.manifest_for = None, ""
+        if not state.manifest_given:
+            state.manifest_path = None
+        state.targets_for = ""
+        return _start_check(state)
     if kind == "app":
         # Put from the result screen, in this process.
         state.app, state.app_running = message[1], False
@@ -22414,6 +22691,8 @@ _ROW_VERBS = {
     "cardsystem": "Choose", "rescan": "Look again", "elsewhere": "Choose", "drive": "Choose",
     "recheck": "Check again", "gamedata": "Change", "share": "Choose", "morecores": "Show",
     "games": "Change", "startonly": "Change", "gameslist": "Show", "details": "Show",
+    "device": "Open", "emulators": "Open", "emulator": "Tick", "board": "Choose",
+    "pack": "Choose", "offline": "Change",
 }
 
 
@@ -22423,6 +22702,9 @@ TUI_ROW_SPREAD = 78
 
 
 def _row_line(row: TuiRow, focused: bool, width: int) -> TuiLine:
+    if row.action == "heading":
+        # Flush left of the rows it names, never in focus.
+        return _styled(fit(row.label, width), row.style)
     left = ("> " if focused else "  ") + row.label
     if row.align and (row.right or row.narrow or row.cut):
         # One column for the list: the longest form that fits after it, a
@@ -22901,7 +23183,7 @@ def _plan_lines(check: dict, dest: Path | None, state: TuiState) -> list:
         lines += _unavailable_brief(state) + _details(_unavailable_lines(state))
     if check is state.check:
         lines += _unplaced_lines(_choice_summary(state), state,
-                                 "Choose it in Options, Save folder (--save-dir).")
+                                 "Choose it in Change, Save folder (--save-dir).")
     if check is state.check:
         lines += _found_lines(state)
     if check is state.check and state.from_folders:
@@ -23193,10 +23475,13 @@ def _view_browse(state: TuiState, width: int, height: int) -> tuple:
     elif state.browse_for == "save":
         hint = [f"Choose {display_name(state.platform)}'s save directory: some "
                 "cores read files there."]
+    elif state.browse_for == "pack":
+        hint = ["Choose the pack ZIP downloaded before: nothing is downloaded then."]
     # The hint is kept whole under the list, which scrolls: three folders at
     # 40x12 cut it to "Choose the old card, a backup folder".
     return ("Copy from" if state.browse_for == "from"
-            else "Save folder" if state.browse_for == "save" else "Browse for a folder",
+            else "Save folder" if state.browse_for == "save"
+            else "From a pack" if state.browse_for == "pack" else "Browse for a folder",
             _compose(state, width, height, [where], tui_rows(state), _status_after(state),
                      hint),
             ("A/Enter Open", "B/Esc Back", "? Help"))
@@ -23489,7 +23774,7 @@ def _view_plan(state: TuiState, width: int, height: int) -> tuple:
     name = display_name(state.platform, state.manifest)
     return (f"{system} ({name} files)" if system and system != name else name,
             _plan_body(state, width, height, lines, rows),
-            ("A/Enter Install", "B/Esc Back", "Y/o Options", "? Help"))
+            ("A/Enter Install", "B/Esc Back", "Y/o Change", "? Help"))
 
 
 def _plan_body(state: TuiState, width: int, height: int, lines: list,
@@ -23678,13 +23963,13 @@ def _view_systems(state: TuiState, width: int, height: int) -> tuple:
 
 def _view_options(state: TuiState, width: int, height: int) -> tuple:
     rows = tui_rows(state)
-    before = ["Each row is an option of the command line, named on the right."]
+    # The headings say what each group decides, the flags on the right
+    # which option of the command line each row is.
     after: list = []
     if width < 60:
         # A value cut to make room for its flag said nothing: the flag of
         # the focused row is named below instead.
         focus = rows[min(state.focus.get("options", 0), len(rows) - 1)]
-        before = []
         after = [f"Sets {focus.right}"] if focus.right else []
         rows = [row._replace(right="") for row in rows]
     # A folder is cut in its middle, its last levels being what tells it apart.
@@ -23692,8 +23977,33 @@ def _view_options(state: TuiState, width: int, height: int) -> tuple:
     rows = [_middle_label(row, room) if row.style == "path" else row for row in rows]
     if state.status:
         after.append(state.status)
-    return ("Options", _compose(state, width, height, before, rows, after),
+    return ("Change", _compose(state, width, height, [], rows, after),
             ("A/Enter Change", "B/Esc Back", "Left/Right Set", "? Help"))
+
+
+def _view_device(state: TuiState, width: int, height: int) -> tuple:
+    # "Board" is the list's word, glossed once: a beginner knows the device.
+    pinned = ["Choose the board, the chip of the device the games run on. "
+              "Every board fits any device."]
+    rows = tui_rows(state)
+    if state.targets_for != state.platform:
+        after = ["Reading the board list..."]
+    elif not rows:
+        after = [state.targets_problem or f"{display_name(state.platform)} publishes "
+                 "no board list: every board's files are installed."]
+    else:
+        after = []
+    return ("Device", _compose(state, width, height, [], rows, after,
+                               _status_footer(state), pinned),
+            ("A/Enter Choose", "B/Esc Back", "? Help") if rows else ("B/Esc Back", "? Help"))
+
+
+def _view_emulators(state: TuiState, width: int, height: int) -> tuple:
+    pinned = ["Tick the emulators to install for. With none ticked, every "
+              "emulator's files are installed."]
+    return ("Emulators", _compose(state, width, height, [], tui_rows(state), [],
+                                  _status_footer(state), pinned),
+            _CHECKLIST_BAR)
 
 
 def _middle_label(row: TuiRow, room: int) -> TuiRow:
@@ -24399,6 +24709,7 @@ _TUI_VIEWS: dict[str, Callable[[TuiState, int, int], tuple]] = {
     "installing": _view_installing, "result": _view_result, "error": _view_error,
     "quit": _view_quit, "cardroot": _view_cardroot, "misplaced": _view_misplaced,
     "unreadable": _view_unreadable, "games": _view_games, "details": _view_details,
+    "device": _view_device, "emulators": _view_emulators,
 }
 
 
@@ -24446,22 +24757,22 @@ def _help_lines(state: TuiState) -> list[tuple[str, str]]:
     # How a tap acts, before what the list says elsewhere: last, it was the
     # line a 40x12 help cut.
     keys += _tap_help(state)
-    if screen in _CHECKLISTS:
+    if screen in ("systems", "cores"):
         keys.append(("a, n", "All, none"))
-    elif screen == "regions":
+    elif screen in ("regions", "emulators"):
         keys.append(("n", "None"))
     if screen == "platforms":
         keys.append(("/", "Filter by setup or device name"))
-    elif screen in ("systems", "cores"):
+    elif screen in _CHECKLISTS:
         keys.append(("/", "Filter"))
-    if screen in ("platforms", "systems", "cores") and state.filters.get(screen):
+    if screen in ("platforms", *_CHECKLISTS) and state.filters.get(screen):
         keys.append((names["esc"], "Clear the filter"))
     if screen == "regions":
         keys.append(("Left/Right", "Move a region up or down the order"))
     if screen == "options":
         keys.append(("Left/Right", "Change a value"))
     if screen in ("plan", "systems", "confirm"):
-        keys.append((names["options"], "Options"))
+        keys.append((names["options"], "Change"))
     if screen in ("plan", "confirm"):
         keys.append(("d", "Details"))
     elif screen == "result" and not tui_rows(state):
@@ -24510,6 +24821,8 @@ def _primary(state: TuiState) -> str | None:
     verb = _ROW_VERBS.get(row.action)
     if row.action == "filter" and _only_match(state) is not None:
         verb = "Choose"
+    if row.action == "zip" and state.browse_for == "pack":
+        verb = "Use this pack"
     return f"A/Enter {verb}" if verb else None
 
 
@@ -24544,7 +24857,7 @@ def _view_help(state: TuiState, width: int, height: int) -> tuple:
     # Cut from its end at 40x12, the help lost Quit and This help with no
     # sign: what a list's keys also say elsewhere goes first.
     for spare in ("First, last", "All, none", "extra", "Filter by setup or device name",
-                  "Filter", "Options", "Details", "This help", "gap", "definitions"):
+                  "Filter", "Change", "Details", "This help", "gap", "definitions"):
         if (len(drawn(keys)) + len(extra) + len(defined)
                 + len(_text_lines(more, width)) <= height):
             break
@@ -24752,17 +25065,13 @@ def tell_apart(setups: list[tuple]) -> list[tuple]:
 def _tui_passthrough(args: argparse.Namespace) -> list[tuple[str, str | None]]:
     """Options the screens do not change, handed to every run unchanged."""
     flags: list[tuple[str, str | None]] = []
-    for flag in ("--target", "--romm-firmware"):
-        value = getattr(args, flag[2:].replace("-", "_"))
-        if value is not None:
-            flags.append((flag, str(value)))
+    if args.romm_firmware is not None:
+        flags.append(("--romm-firmware", str(args.romm_firmware)))
     for flag in ("--save-dir", "--cores-dir"):
         value = getattr(args, flag[2:].replace("-", "_"))
         if value is not None:
             flags.append((flag, str(Path(value).absolute())))
-    flags += [("--emulator", name) for name in args.emulator or []]
-    flags += [("--from-pack", str(Path(pack).absolute())) for pack in args.from_pack or []]
-    for flag in ("--every-board", "--standalone-copies", "--verbose"):
+    for flag in ("--standalone-copies", "--verbose"):
         if getattr(args, flag[2:].replace("-", "_")):
             flags.append((flag, None))
     return flags
@@ -24843,6 +25152,10 @@ def tui_start(
     state.jobs = args.jobs
     state.add_app = bool(getattr(args, "add_app", False))
     state.passthrough = _tui_passthrough(args)
+    state.target = str(args.target or "")
+    state.every_board = bool(args.every_board)
+    state.emulators = list(args.emulator or [])
+    state.packs = [Path(pack).absolute() for pack in args.from_pack or []]
     if getattr(args, "for_games", None) is not None:
         state.for_games, state.games_choice = True, "cli"
         if isinstance(args.for_games, Path):
@@ -25100,6 +25413,21 @@ def _tui_fetch(plat: str, inbox: queue.Queue, log: io.StringIO) -> None:
     if os.environ.get("RETROBIOS_BASE_URL"):
         lines.append(f"RETROBIOS_BASE_URL chose the address: {url}")
     inbox.put(("manifest_failed", plat, title, lines, 1))
+
+
+def _tui_fetch_targets(plat: str, inbox: queue.Queue, log: io.StringIO) -> None:
+    """The platform's board list for Device, fetched in this process as a
+    --target run reads it: the pack's or the list's beside --manifest, else
+    the network's. None and why when it cannot be read."""
+    mark = len(log.getvalue())
+    try:
+        targets = fetch_targets(plat)
+    except SystemExit:
+        targets = None
+    said = [line.strip() for line in log.getvalue()[mark:].splitlines() if line.strip()]
+    problem = "" if targets is not None else (
+        f"The board list could not be read{': ' + said[0] if said else '.'}")
+    inbox.put(("targets", plat, targets, problem))
 
 
 def _tui_fetch_games(plat: str, inbox: queue.Queue, log: io.StringIO, dest: Path | None,
@@ -25405,7 +25733,7 @@ ROMM_SCAN_WORDS = ("RomM lists the firmware its library scan has recorded: start
 # The result's remedy for the save files left out, as the terminal says it
 # once the screen is gone: Options are not there to choose from
 # Line mode's words.
-TUI_SAVE_REMEDY = "Choose it in Options, Save folder (--save-dir), next time."
+TUI_SAVE_REMEDY = "Choose it in Change, Save folder (--save-dir), next time."
 LINE_SAVE_REMEDY = "Name it with --save-dir next time."
 
 
@@ -25533,12 +25861,19 @@ def run_tui(args: argparse.Namespace) -> int:
                 for run in current:
                     run.stop(0)
                 current.clear()
-                if not state.manifest_given and not args.from_pack and state.manifest:
+                if not state.manifest_given and not state.packs and state.manifest:
                     if state.platform not in written:
                         path = work / f"{state.platform}.json"
                         path.write_text(json.dumps(state.manifest), encoding="utf-8")
                         written[state.platform] = path
                     state.manifest_path = written[state.platform]
+                    if state.targets_for == state.platform and state.targets:
+                        # Beside the list, where a --target run without the
+                        # internet reads the boards (local_targets).
+                        boards = work / "targets" / f"{state.platform}.json"
+                        boards.parent.mkdir(exist_ok=True)
+                        boards.write_text(json.dumps(state.targets), encoding="utf-8")
+                        written[f"targets:{state.platform}"] = boards
                 log = work / f"{effect[1]}.log"
                 if effect[1] == "install":
                     state.log = str(log)
@@ -25561,6 +25896,13 @@ def run_tui(args: argparse.Namespace) -> int:
             elif kind == "app":
                 threading.Thread(target=_tui_put_app, args=(effect[1], inbox),
                                  daemon=True).start()
+            elif kind == "targets":
+                threading.Thread(target=_tui_fetch_targets, args=(effect[1], inbox, buffer),
+                                 daemon=True).start()
+            elif kind == "pack":
+                inbox.put(("pack_opened", effect[1], open_tui_pack(effect[1], state.platform)))
+            elif kind == "offline":
+                set_offline(effect[1])
 
     def on_interrupt(_signum: int, _frame: object) -> None:
         flags["interrupt"] = True

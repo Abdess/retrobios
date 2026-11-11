@@ -10,6 +10,6 @@
    Copy from an old card or a folder
    Change where
    Details
-   Options
+   Change
    Quit
- A Install  B Back  Y Options  ? Help
+ A Install  B Back  Y Change  ? Help

@@ -440,9 +440,9 @@
    Choose systems
    Copy from an old card or a folder
    Details
-   Options
+   Change
    Quit
- A Install  R2 Back  L2 Options
+ A Install  R2 Back  L2 Change
 === plan 40x15
  RetroBIOS: RetroArch
 
@@ -454,11 +454,11 @@
    Choose systems
    Copy from an old card or a folder
    Details
-   Options
+   Change
    Quit
 
 
- A Install  R2 Back  L2 Options
+ A Install  R2 Back  L2 Change
 === plan 80x24
  RetroBIOS: RetroArch
 
@@ -469,7 +469,7 @@
    Choose systems
    Copy the BIOS files from an old card or a folder
    Details
-   Options
+   Change
    Quit
 
 
@@ -483,7 +483,7 @@
 
 
 
- A Install  R2 Back  L2 Options
+ A Install  R2 Back  L2 Change
 === plan-in-place 40x12
  RetroBIOS: RetroArch
 
@@ -493,10 +493,10 @@
 
  > Close
    Details
-   Options
+   Change
 
 
- A Close  R2 Back  L2 Options
+ A Close  R2 Back  L2 Change
 === plan-in-place 40x15
  RetroBIOS: RetroArch
 
@@ -506,13 +506,13 @@
 
  > Close
    Details
-   Options
+   Change
 
 
 
 
 
- A Close  R2 Back  L2 Options
+ A Close  R2 Back  L2 Change
 === plan-in-place 80x24
  RetroBIOS: RetroArch
 
@@ -521,7 +521,7 @@
 
  > Close
    Details
-   Options
+   Change
 
 
 
@@ -537,7 +537,7 @@
 
 
 
- A Close  R2 Back  L2 Options
+ A Close  R2 Back  L2 Change
 === systems 40x12
  RetroBIOS: Choose systems
 
@@ -592,60 +592,168 @@
 
  2 of 3 systems: 4 files, 1.0 MB
  A Tick  R2 Done
-=== options 40x12
- RetroBIOS: Options
+=== change 40x12
+ RetroBIOS: Change
 
+ What to install
  > Preferred regions: North America, Ja
-   Game data: kept
-   Installed cores only: no (1 found)
    Cores: all
-   Parallel downloads: 8
+   Emulators: all
+   Game data: kept
+ Where
    BIOS folder: ~/.config...ch/system
    Copy from: none
-   Preview the file list
-   Show the command line
+ 1-8 of 18
  A Open  R2 Back  <> Set
-=== options 40x15
- RetroBIOS: Options
+=== change 40x15
+ RetroBIOS: Change
 
+ What to install
  > Preferred regions: North America, Ja
-   Game data: kept
-   Installed cores only: no (1 found)
    Cores: all
-   Parallel downloads: 8
+   Emulators: all
+   Game data: kept
+ Where
    BIOS folder: ~/.config...ch/system
    Copy from: none
-   Preview the file list
-   Show the command line
-
- Sets --region
-
+   From a pack: none
+ For which device
+   Device: every board
+ 1-11 of 18
  A Open  R2 Back  <> Set
-=== options 80x24
- RetroBIOS: Options
+=== change 80x24
+ RetroBIOS: Change
 
- Each row is an option of the command line, named on the right.
-
+ What to install
  > Preferred regions: North America, Japan                             --region
-   Game data: kept                                               --no-game-data
-   Installed cores only: no (1 found)                         --installed-cores
    Cores: all                                                            --core
-   Parallel downloads: 8                                                 --jobs
+   Emulators: all                                                    --emulator
+   Game data: kept                                               --no-game-data
+ Where
    BIOS folder: ~/.config/retroarch/system                               --dest
    Copy from: none                                                       --from
+   From a pack: none                                                --from-pack
+ For which device
+   Device: every board                                                 --target
+   Installed cores only: no (1 found)                         --installed-cores
+ How
+   Without the internet: no                                           --offline
+   Parallel downloads: 8                                                 --jobs
+ See
    Preview the file list                                              --dry-run
    Show the command line
 
 
 
-
-
-
-
-
-
-
  A Open  R2 Back  Left/Right Set
+=== device 40x12
+ RetroBIOS: Device
+
+ Choose the board, the chip of the
+   device the games run on. Every board
+   fits any device.
+
+ > (x) h700           named by the card
+   ( ) bcm2711                     rpi4
+   ( ) x86_64
+   ( ) Every board
+
+ A Choose  R2 Back
+=== device 40x15
+ RetroBIOS: Device
+
+ Choose the board, the chip of the
+   device the games run on. Every board
+   fits any device.
+
+ > (x) h700           named by the card
+   ( ) bcm2711                     rpi4
+   ( ) x86_64
+   ( ) Every board
+
+
+
+
+ A Choose  R2 Back
+=== device 80x24
+ RetroBIOS: Device
+
+ Choose the board, the chip of the device the games run on. Every board fits
+   any device.
+
+ > (x) h700                                                   named by the card
+   ( ) bcm2711                                                             rpi4
+   ( ) x86_64
+   ( ) Every board
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ A Choose  R2 Back
+=== emulators 40x12
+ RetroBIOS: Emulators
+
+ Tick the emulators to install for.
+   With none ticked, every emulator's
+   files are installed.
+
+   Filter (with a keyboard)
+   [ ] mesen
+ > [x] pcsx_rearmed
+   None
+   Done
+ A Tick  R2 Done
+=== emulators 40x15
+ RetroBIOS: Emulators
+
+ Tick the emulators to install for.
+   With none ticked, every emulator's
+   files are installed.
+
+   Filter (with a keyboard)
+   [ ] mesen
+ > [x] pcsx_rearmed
+   None
+   Done
+
+
+
+ A Tick  R2 Done
+=== emulators 80x24
+ RetroBIOS: Emulators
+
+ Tick the emulators to install for. With none ticked, every emulator's files
+   are installed.
+
+   Filter (with a keyboard)
+   [ ] mesen
+ > [x] pcsx_rearmed
+   None
+   Done
+
+
+
+
+
+
+
+
+
+
+
+
+
+ A Tick  R2 Done
 === regions 40x12
  RetroBIOS: Preferred regions
 
@@ -1079,7 +1187,7 @@
 
  D-pad, Up/Down      Move
  A, Start, Enter     Install
- L2, Tab, o          Options
+ L2, Tab, o          Change
  d                   Details
  R2, Esc, Backspace  Back
  q, Ctrl-C           Quit
@@ -1092,7 +1200,7 @@
 
  D-pad, Up/Down      Move
  A, Start, Enter     Install
- L2, Tab, o          Options
+ L2, Tab, o          Change
  d                   Details
  R2, Esc, Backspace  Back
  q, Ctrl-C           Quit
@@ -1108,7 +1216,7 @@
 
  D-pad, Up/Down      Move
  A, Start, Enter     Install
- L2, Tab, o          Options
+ L2, Tab, o          Change
  d                   Details
  R2, Esc, Backspace  Back
  q, Ctrl-C           Quit
@@ -1140,7 +1248,7 @@
    Only what starts: no
    Show the games
  1-4 of 9
- A Install  R2 Back  L2 Options
+ A Install  R2 Back  L2 Change
 === plan-games 40x15
  RetroBIOS: RetroArch
 
@@ -1154,9 +1262,9 @@
    Choose systems
    Copy from an old card or a folder
    Details
-   Options
+   Change
    Quit
- A Install  R2 Back  L2 Options
+ A Install  R2 Back  L2 Change
 === plan-games 80x24
  RetroBIOS: RetroArch
 
@@ -1171,7 +1279,7 @@
    Choose systems
    Copy the BIOS files from an old card or a folder
    Details
-   Options
+   Change
    Quit
 
 
@@ -1181,7 +1289,7 @@
 
 
 
- A Install  R2 Back  L2 Options
+ A Install  R2 Back  L2 Change
 === games 80x24
  RetroBIOS: Games on this card
 
@@ -1298,7 +1406,7 @@
    Choose systems
    Copy from an old card or a folder
  1-4 of 8
- A Install  R2 Back  L2 Options
+ A Install  R2 Back  L2 Change
 === plan-record 40x15
  RetroBIOS: RetroArch
 
@@ -1312,9 +1420,9 @@
    Copy from an old card or a folder
    Change where
    Details
-   Options
+   Change
    Quit
- A Install  R2 Back  L2 Options
+ A Install  R2 Back  L2 Change
 === plan-record 80x24
  RetroBIOS: RetroArch
 
@@ -1328,7 +1436,7 @@
    Copy the BIOS files from an old card or a folder
    Change where
    Details
-   Options
+   Change
    Quit
 
 
@@ -1339,4 +1447,4 @@
 
 
 
- A Install  R2 Back  L2 Options
+ A Install  R2 Back  L2 Change

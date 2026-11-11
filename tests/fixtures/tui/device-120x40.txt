@@ -1,0 +1,40 @@
+ RetroBIOS: Device
+
+ Choose the board, the chip of the device the games run on. Every board fits any device.
+
+ > (x) h700                                                   named by the card
+   ( ) bcm2711                                                             rpi4
+   ( ) x86_64
+   ( ) Every board
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ A/Enter Choose  B/Esc Back  ? Help

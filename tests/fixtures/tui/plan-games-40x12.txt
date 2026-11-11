@@ -9,4 +9,4 @@
    Only what starts: no
    Show the games
  1-4 of 9
- A Install  B Back  Y Options  ? Help
+ A Install  B Back  Y Change  ? Help

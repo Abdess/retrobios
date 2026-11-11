@@ -66,7 +66,11 @@ JOURNEY_WORDS = {
     "update": 70,
     "one_system": 179,
     "one_system_again": 67,
-    "what_is_missing": 207,
+    # Change holds every option one level down now (design 4.4): its
+    # headings and the rows for Emulators, a pack, the device and the
+    # internet, the intro sentence dropped, 10 words on each of its two
+    # frames.
+    "what_is_missing": 227,
     # The plan of the setup found comes first now (33 words), the setups
     # one Esc away, and the last plan names Change where (2 words).
     "another_device": 265,
@@ -319,7 +323,7 @@ class Journeys(unittest.TestCase):
         term = self.start(repo)
         term.wait("files to download", timeout=40)
         self.press(term, "o")
-        term.wait("Each row is an option")
+        term.wait("RetroBIOS: Change")
         self.press(term, END, UP)
         term.wait("> Preview the file list")
         self.press(term, "\r")
