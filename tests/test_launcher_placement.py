@@ -1209,6 +1209,26 @@ class EveryCoreAFolderOffers(unittest.TestCase):
             self.assertIn("arcade", folders, platform)
 
 
+class AdvanceMameOnRetroPie(unittest.TestCase):
+    """RetroPie writes dir_rom $romdir/mame-advmame:$romdir/arcade into each
+    AdvanceMAME build's rc (advmame.sh:100), the list the code splits on ':'
+    (advance/linux/file.c:138-141)."""
+
+    def test_the_sets_go_to_the_first_folder_searched(self) -> None:
+        config = load_platform_config("retropie", str(REPO_ROOT / "platforms"))
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        tags = standalone_set(config)
+        for emu in ("advmame", "advmame-1.4", "advmame-0.94"):
+            with self.subTest(emu=emu):
+                placed = [
+                    (f.get("root"), f.get("standalone_path"))
+                    for view, standalone in platform_layouts(emu, profiles[emu], tags)
+                    if standalone
+                    for f in view["files"] if isinstance(f, dict) and f["name"] == "neogeo.zip"
+                ]
+                self.assertEqual(placed, [("roms", "mame-advmame/neogeo.zip")])
+
+
 class CoreOfferedOnSomeBoards(unittest.TestCase):
     """ROCKNIX writes some add_emu_core calls under a `case "${DEVICE}"`
     branch (emulators/package.mk:188 offers uae4arm for amiga on the devices

@@ -325,6 +325,15 @@ launchers:
   kind: package
   names: []
   source_ref: "scriptmodules/emulators/advmame-0.94.sh:12, 16, scriptmodules/emulators/advmame.sh:147-148"
+- emulator: advmame-0.94
+  package: advmame-0.94
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "$romdir/mame-advmame:$romdir/arcade"
+  passes_to: dir_rom in $md_conf_root/mame-advmame/$md_id.rc
+  fails_when_missing: false
+  source_ref: "scriptmodules/emulators/advmame.sh:100"
 - emulator: advmame-1.4
   package: advmame-1.4
   repo: file $__archive_url/advancemame-1.4.tar.gz
@@ -335,6 +344,15 @@ launchers:
   kind: package
   names: []
   source_ref: "scriptmodules/emulators/advmame-1.4.sh:12, 16, scriptmodules/emulators/advmame.sh:147-148"
+- emulator: advmame-1.4
+  package: advmame-1.4
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "$romdir/mame-advmame:$romdir/arcade"
+  passes_to: dir_rom in $md_conf_root/mame-advmame/$md_id.rc
+  fails_when_missing: false
+  source_ref: "scriptmodules/emulators/advmame.sh:100"
 - emulator: advmame
   package: advmame
   repo: "git https://github.com/amadvance/advancemame"
@@ -345,6 +363,15 @@ launchers:
   kind: package
   names: []
   source_ref: "scriptmodules/emulators/advmame.sh:12, 16, 147-148"
+- emulator: advmame
+  package: advmame
+  build: standalone
+  kind: passes_path
+  names: []
+  search_dir: "$romdir/mame-advmame:$romdir/arcade"
+  passes_to: dir_rom in $md_conf_root/mame-advmame/$md_id.rc
+  fails_when_missing: false
+  source_ref: "scriptmodules/emulators/advmame.sh:100"
 - emulator: ags
   package: ags
   repo: "git https://github.com/adventuregamestudio/ags.git release-3.6.0"

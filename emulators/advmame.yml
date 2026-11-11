@@ -21,6 +21,15 @@ pin_build:
     path: "scriptmodules/emulators/advmame.sh"
     variable: rp_module_repo
     value: "git https://github.com/amadvance/advancemame"
+config_reads:
+  - file: "advmame.rc"
+    platforms: [retropie]
+    revision: "96237a5f97a61bb9ae424536dc4223de26afce04"
+    revision_from: "the profile pin, the branch tip (RetroPie scriptmodules/emulators/advmame.sh:16, 39-41 at 427e762)"
+    source_ref: "advance/osd/emu.c:763-766, 788-800"
+    keys:
+      - key: "dir_rom"
+        source_ref: "advance/osd/fileio.c:72-86, 687-712, 798-829"
 mode: standalone
 
 cores:
