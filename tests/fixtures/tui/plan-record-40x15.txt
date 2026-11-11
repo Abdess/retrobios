@@ -3,7 +3,6 @@
  1 file to download, 16.0 KB
  BIOS folder:
    ~/.config/retroarch/system
- For nintendo-gba.
  > Install
    Same choice as on 3 Nov: yes
    Choose systems
@@ -11,5 +10,6 @@
    Change where
    Details
    Change
+   More
    Quit
  A Install  B Back  Y Change  ? Help
