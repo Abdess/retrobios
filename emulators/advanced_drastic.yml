@@ -29,16 +29,15 @@ systems:
 mode: standalone
 
 notes: |
-  trngaje's package around the closed-source 64-bit Linux DraStic, whose
-  screen output, input and settings menu it replaces through a hooked SDL2
-  build (trngaje/SDL_drastic) and the drastic_layout library. The repository
-  carries the DraStic binary itself, md5 59a7711eff41c640b8861b4d869c747d
+  trngaje's package around the closed-source 64-bit Linux DraStic. The
+  repository carries the DraStic binary itself, md5 59a7711eff41c640b8861b4d869c747d
   (sha256 6e11511907f21888), stripped, which draws "Version r2.5.2.0" in its
   menu, together with its system, config, resources and microphone
-  directories, game_database.xml and usrcheat.dat. launch.sh changes to its
-  own directory and runs ./drastic on the content, so that directory is the
-  root every path below is joined to.
-  ref: README.md:1-12, launch.sh:1-9,
+  directories, game_database.xml and usrcheat.dat. launch.sh puts libs/ under
+  its own directory on LD_LIBRARY_PATH, changes to that directory and runs
+  ./drastic on the content, so that directory is the root every path below is
+  joined to.
+  ref: launch.sh:1-9,
        drastic r2.5.2.0 FUN_93140 0x931b4-0x931cc (draws the version string)
 
   KNULLI builds this revision, installs the whole tree under
