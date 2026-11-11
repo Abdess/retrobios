@@ -937,6 +937,12 @@ launchers:
   search_dir: "${biosPath}"
   passes_to: settings.bml ColecoVision/Firmware/BIOS.World
   fails_when_missing: false
+  installs:
+    path: "${HOME}/.var/app/dev.ares.ares/data/ares/settings.bml"
+    source_ref: "functions/EmuScripts/emuDeckares.sh:26, 42, functions/configEmuFP.sh:11,\
+      \ 15"
+  kept_if_present: true
+  overrides: []
   source_ref: "configs/dev.ares.ares/data/ares/settings.bml:270, functions/EmuScripts/emuDeckares.sh:6,\
     \ 63-64"
 - emulator: ares
@@ -948,6 +954,12 @@ launchers:
   search_dir: "${biosPath}"
   passes_to: settings.bml MSX/Firmware/BIOS.Japan
   fails_when_missing: false
+  installs:
+    path: "${HOME}/.var/app/dev.ares.ares/data/ares/settings.bml"
+    source_ref: "functions/EmuScripts/emuDeckares.sh:26, 42, functions/configEmuFP.sh:11,\
+      \ 15"
+  kept_if_present: true
+  overrides: []
   source_ref: "configs/dev.ares.ares/data/ares/settings.bml:278, functions/EmuScripts/emuDeckares.sh:6,\
     \ 63-64"
 - emulator: ares
@@ -959,6 +971,12 @@ launchers:
   search_dir: "${biosPath}"
   passes_to: settings.bml MSX2/Firmware/BIOS.Japan
   fails_when_missing: false
+  installs:
+    path: "${HOME}/.var/app/dev.ares.ares/data/ares/settings.bml"
+    source_ref: "functions/EmuScripts/emuDeckares.sh:26, 42, functions/configEmuFP.sh:11,\
+      \ 15"
+  kept_if_present: true
+  overrides: []
   source_ref: "configs/dev.ares.ares/data/ares/settings.bml:283, functions/EmuScripts/emuDeckares.sh:6,\
     \ 63-64"
 - emulator: ares
@@ -971,6 +989,12 @@ launchers:
   search_dir: "${biosPath}"
   passes_to: settings.bml PCEngineCD/Firmware/BIOS.US, PCEngineCD/Firmware/BIOS.Japan
   fails_when_missing: false
+  installs:
+    path: "${HOME}/.var/app/dev.ares.ares/data/ares/settings.bml"
+    source_ref: "functions/EmuScripts/emuDeckares.sh:26, 42, functions/configEmuFP.sh:11,\
+      \ 15"
+  kept_if_present: true
+  overrides: []
   source_ref: "configs/dev.ares.ares/data/ares/settings.bml:291-292, functions/EmuScripts/emuDeckares.sh:6,\
     \ 63-64"
 - emulator: ares
@@ -982,6 +1006,12 @@ launchers:
   search_dir: "${biosPath}"
   passes_to: settings.bml SuperGrafxCD/Firmware/BIOS.Japan
   fails_when_missing: false
+  installs:
+    path: "${HOME}/.var/app/dev.ares.ares/data/ares/settings.bml"
+    source_ref: "functions/EmuScripts/emuDeckares.sh:26, 42, functions/configEmuFP.sh:11,\
+      \ 15"
+  kept_if_present: true
+  overrides: []
   source_ref: "configs/dev.ares.ares/data/ares/settings.bml:300, functions/EmuScripts/emuDeckares.sh:6,\
     \ 63-64"
 - emulator: ares
@@ -993,6 +1023,12 @@ launchers:
   search_dir: "${biosPath}"
   passes_to: settings.bml FamicomDiskSystem/Firmware/BIOS.Japan
   fails_when_missing: false
+  installs:
+    path: "${HOME}/.var/app/dev.ares.ares/data/ares/settings.bml"
+    source_ref: "functions/EmuScripts/emuDeckares.sh:26, 42, functions/configEmuFP.sh:11,\
+      \ 15"
+  kept_if_present: true
+  overrides: []
   source_ref: "configs/dev.ares.ares/data/ares/settings.bml:308, functions/EmuScripts/emuDeckares.sh:6,\
     \ 63-64"
 - emulator: ares
@@ -1007,6 +1043,12 @@ launchers:
   passes_to: settings.bml Nintendo64DD/Firmware/BIOS.Japan, Nintendo64DD/Firmware/BIOS.US,
     Nintendo64DD/Firmware/BIOS.DEV
   fails_when_missing: false
+  installs:
+    path: "${HOME}/.var/app/dev.ares.ares/data/ares/settings.bml"
+    source_ref: "functions/EmuScripts/emuDeckares.sh:26, 42, functions/configEmuFP.sh:11,\
+      \ 15"
+  kept_if_present: true
+  overrides: []
   source_ref: "configs/dev.ares.ares/data/ares/settings.bml:319-321, functions/EmuScripts/emuDeckares.sh:6,\
     \ 63-64"
 - emulator: ares
@@ -1018,6 +1060,12 @@ launchers:
   search_dir: "${biosPath}"
   passes_to: settings.bml GameBoyAdvance/Firmware/BIOS.World
   fails_when_missing: false
+  installs:
+    path: "${HOME}/.var/app/dev.ares.ares/data/ares/settings.bml"
+    source_ref: "functions/EmuScripts/emuDeckares.sh:26, 42, functions/configEmuFP.sh:11,\
+      \ 15"
+  kept_if_present: true
+  overrides: []
   source_ref: "configs/dev.ares.ares/data/ares/settings.bml:332, functions/EmuScripts/emuDeckares.sh:6,\
     \ 63-64"
 - emulator: ares
@@ -1032,6 +1080,12 @@ launchers:
   passes_to: settings.bml MasterSystem/Firmware/BIOS.US, MasterSystem/Firmware/BIOS.Japan,
     MasterSystem/Firmware/BIOS.Europe
   fails_when_missing: false
+  installs:
+    path: "${HOME}/.var/app/dev.ares.ares/data/ares/settings.bml"
+    source_ref: "functions/EmuScripts/emuDeckares.sh:26, 42, functions/configEmuFP.sh:11,\
+      \ 15"
+  kept_if_present: true
+  overrides: []
   source_ref: "configs/dev.ares.ares/data/ares/settings.bml:340-342, functions/EmuScripts/emuDeckares.sh:6,\
     \ 63-64"
 - emulator: ares
@@ -1043,6 +1097,12 @@ launchers:
   search_dir: "${biosPath}"
   passes_to: settings.bml GameGear/Firmware/BIOS.World
   fails_when_missing: false
+  installs:
+    path: "${HOME}/.var/app/dev.ares.ares/data/ares/settings.bml"
+    source_ref: "functions/EmuScripts/emuDeckares.sh:26, 42, functions/configEmuFP.sh:11,\
+      \ 15"
+  kept_if_present: true
+  overrides: []
   source_ref: "configs/dev.ares.ares/data/ares/settings.bml:347, functions/EmuScripts/emuDeckares.sh:6,\
     \ 63-64"
 - emulator: ares
@@ -1056,6 +1116,12 @@ launchers:
   search_dir: "${biosPath}"
   passes_to: settings.bml MegaCD/Firmware/BIOS.US, MegaCD/Firmware/BIOS.Japan, MegaCD/Firmware/BIOS.Europe
   fails_when_missing: false
+  installs:
+    path: "${HOME}/.var/app/dev.ares.ares/data/ares/settings.bml"
+    source_ref: "functions/EmuScripts/emuDeckares.sh:26, 42, functions/configEmuFP.sh:11,\
+      \ 15"
+  kept_if_present: true
+  overrides: []
   source_ref: "configs/dev.ares.ares/data/ares/settings.bml:358-360, functions/EmuScripts/emuDeckares.sh:6,\
     \ 63-64"
 - emulator: ares
@@ -1067,6 +1133,12 @@ launchers:
   search_dir: "${biosPath}"
   passes_to: settings.bml NeoGeoAES/Firmware/BIOS.World
   fails_when_missing: false
+  installs:
+    path: "${HOME}/.var/app/dev.ares.ares/data/ares/settings.bml"
+    source_ref: "functions/EmuScripts/emuDeckares.sh:26, 42, functions/configEmuFP.sh:11,\
+      \ 15"
+  kept_if_present: true
+  overrides: []
   source_ref: "configs/dev.ares.ares/data/ares/settings.bml:368, functions/EmuScripts/emuDeckares.sh:6,\
     \ 63-64"
 - emulator: ares
@@ -1078,6 +1150,12 @@ launchers:
   search_dir: "${biosPath}"
   passes_to: settings.bml NeoGeoPocket/Firmware/BIOS.World
   fails_when_missing: false
+  installs:
+    path: "${HOME}/.var/app/dev.ares.ares/data/ares/settings.bml"
+    source_ref: "functions/EmuScripts/emuDeckares.sh:26, 42, functions/configEmuFP.sh:11,\
+      \ 15"
+  kept_if_present: true
+  overrides: []
   source_ref: "configs/dev.ares.ares/data/ares/settings.bml:378, functions/EmuScripts/emuDeckares.sh:6,\
     \ 63-64"
 - emulator: ares
@@ -1089,6 +1167,12 @@ launchers:
   search_dir: "${biosPath}"
   passes_to: settings.bml NeoGeoPocketColor/Firmware/BIOS.World
   fails_when_missing: false
+  installs:
+    path: "${HOME}/.var/app/dev.ares.ares/data/ares/settings.bml"
+    source_ref: "functions/EmuScripts/emuDeckares.sh:26, 42, functions/configEmuFP.sh:11,\
+      \ 15"
+  kept_if_present: true
+  overrides: []
   source_ref: "configs/dev.ares.ares/data/ares/settings.bml:383, functions/EmuScripts/emuDeckares.sh:6,\
     \ 63-64"
 - emulator: ares
@@ -1103,6 +1187,12 @@ launchers:
   passes_to: settings.bml PlayStation/Firmware/BIOS.US, PlayStation/Firmware/BIOS.Japan,
     PlayStation/Firmware/BIOS.Europe
   fails_when_missing: false
+  installs:
+    path: "${HOME}/.var/app/dev.ares.ares/data/ares/settings.bml"
+    source_ref: "functions/EmuScripts/emuDeckares.sh:26, 42, functions/configEmuFP.sh:11,\
+      \ 15"
+  kept_if_present: true
+  overrides: []
   source_ref: "configs/dev.ares.ares/data/ares/settings.bml:388-390, functions/EmuScripts/emuDeckares.sh:6,\
     \ 63-64"
 - emulator: melonds
@@ -1121,6 +1211,12 @@ launchers:
     DSiFirmwarePath, DSiNANDPath
   fails_when_missing: false
   depends_on_option: ExternalBIOSEnable = 0 in the shipped melonDS.ini
+  installs:
+    path: "${HOME}/.var/app/net.kuribo64.melonDS/config/melonDS/melonDS.ini"
+    source_ref: "functions/EmuScripts/emuDeckMelonDS.sh:29, 48, functions/configEmuFP.sh:11,\
+      \ 15"
+  kept_if_present: true
+  overrides: []
   source_ref: "functions/EmuScripts/emuDeckMelonDS.sh:7, 62-68, 71-77, configs/net.kuribo64.melonDS/config/melonDS/melonDS.ini:77"
 - emulator: melonds
   build: standalone
@@ -1137,8 +1233,15 @@ launchers:
   passes_to: "melonDS.toml [DS] FirmwarePath, BIOS7Path, BIOS9Path [DSi] FirmwarePath,\
     \ NANDPath, BIOS7Path, BIOS9Path"
   fails_when_missing: false
-  depends_on_option: ExternalBIOSEnable = false in the shipped melonDS.toml
-  source_ref: "configs/net.kuribo64.melonDS/config/melonDS/melonDS.toml:176, 181-183,\
+  depends_on_option: "[DS] keys: ExternalBIOSEnable = true, false in the shipped melonDS.toml;\
+    \ [DSi] keys: ConsoleType = 1, 0 in the shipped melonDS.toml"
+  installs:
+    path: "${HOME}/.var/app/net.kuribo64.melonDS/config/melonDS/melonDS.toml"
+    source_ref: "functions/EmuScripts/emuDeckMelonDS.sh:29, 48, functions/configEmuFP.sh:11,\
+      \ 15"
+  kept_if_present: true
+  overrides: []
+  source_ref: "configs/net.kuribo64.melonDS/config/melonDS/melonDS.toml:176-178, 181-183,\
     \ 186-189, functions/EmuScripts/emuDeckMelonDS.sh:8, 32"
 - emulator: mupen64plus_next
   build: standalone

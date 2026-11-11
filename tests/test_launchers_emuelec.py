@@ -228,6 +228,9 @@ DUCKSTATION_SH = text(
     """
     CONFIG_DIR="/emuelec/configs/duckstation"
         duckstation-nogui -fullscreen -settings "${CONFIG_DIR}/settings.ini" -- "${1}"
+    if [ ! -d "${CONFIG_DIR}" ]; then
+        cp -rf /usr/config/emuelec/configs/duckstation/* "${CONFIG_DIR}"
+    fi
 """
 )
 
@@ -319,6 +322,9 @@ ADVMAME_SH = text(
     sed -i "s|/roms/arcade|/roms/mame|g" ${CONFIG_DIR}/advmame.rc
     fi
     SDL_AUDIODRIVER=alsa advmame ${ARG} -quiet
+    if [ ! -d "${CONFIG_DIR}" ]; then
+     cp -rf /usr/config/emuelec/configs/advmame/* "${CONFIG_DIR}/"
+    fi
 """
 )
 
@@ -480,24 +486,12 @@ class LibretroRecords(unittest.TestCase):
         self.assertEqual(jar["passes_to"], "${HOME}/roms/bios")
         self.assertEqual(jar["depends_on_option"], "/storage/roms/bios/jdk/eeversion exists")
 
-    def test_mame_copies_its_own_files_and_reads_only_path_options(self):
+    def test_mame_copies_its_own_files_and_hands_no_folder(self):
+        # The core passes no path option and reads no mame.ini: only the
+        # copies are the launcher's.
         found = records(el.mame)
-        copies = [r for r in found if r["kind"] == "copies"]
-        self.assertEqual([r["names"] for r in copies], [["fm*"], ["mame*"]])
-        folders = [(r["passes_to"], r["search_dir"]) for r in found if r["kind"] == "passes_path"]
-        self.assertEqual(
-            folders,
-            [
-                ("mame.ini rompath", "/storage/roms/bios/mame/bios"),
-                ("mame.ini samplepath", "/storage/roms/bios/mame/samples"),
-            ],
-        )
-        self.assertTrue(all(r["depends_on_option"] == "mame_read_config = enabled"
-                            for r in found if r["kind"] == "passes_path"))
-
-    def test_mame_without_the_read_config_option_raises(self):
-        with self.assertRaises(LauncherPatternMissing):
-            records(el.mame, **{f"{el.LIBRETRO}/mame/config/MAME/MAME.opt": "x = 1\n"})
+        self.assertEqual([r["kind"] for r in found], ["copies", "copies"])
+        self.assertEqual([r["names"] for r in found], [["fm*"], ["mame*"]])
 
 
 class StandaloneRecords(unittest.TestCase):
@@ -545,6 +539,12 @@ class StandaloneRecords(unittest.TestCase):
     def test_duckstation_scans_the_folder_its_config_names(self):
         (record,) = records(el.duckstation)
         self.assertEqual((record["kind"], record["search_dir"]), ("scans_dir", "/storage/roms/bios"))
+
+    def test_duckstation_config_is_kept_when_present(self):
+        (record,) = records(el.duckstation)
+        self.assertEqual(record["installs"]["path"], "/emuelec/configs/duckstation/settings.ini")
+        self.assertIs(record["kept_if_present"], True)
+        self.assertEqual(record["overrides"], [])
 
     def test_duckstation_with_a_fixed_bios_path_raises(self):
         changed = DUCKSTATION_INI.replace("PathPAL =", "PathPAL = /storage/roms/bios/scph5502.bin")
@@ -631,7 +631,8 @@ class StandaloneRecords(unittest.TestCase):
 
     def test_every_extractor_runs_on_the_fixtures(self):
         found = el.extract_launchers(tree())
-        self.assertEqual(len(found), 28)
+        # The two mame.ini folders are no longer records.
+        self.assertEqual(len(found), 26)
 
 
 class Revision(unittest.TestCase):
