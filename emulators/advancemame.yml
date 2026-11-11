@@ -13,6 +13,20 @@ version_basis:
   distance: 453
 mame_version: "0.106"
 display_name: "Arcade (AdvanceMAME)"
+pin_build:
+  - platform: emuelec
+    repo: "https://github.com/EmuELEC/EmuELEC"
+    revision: "v4.8"
+    path: "packages/sx05re/emulators/advancemame/package.mk"
+    variable: PKG_VERSION
+    value: "6a34ec0ec3fd74535ae559304ceb6c7ce63acff5"
+config_reads:
+  - file: "advmame.rc"
+    platforms: [emuelec]
+    source_ref: "advance/osd/emu.c:754-757, 779-791"
+    keys:
+      - key: ["dir_rom", "dir_image", "dir_diff", "dir_sample", "dir_artwork", "dir_nvram", "dir_hi", "dir_inp", "dir_sta", "dir_memcard", "dir_snap"]
+        source_ref: "advance/osd/fileio.c:72-86, 798-815"
 mode: standalone
 
 cores:
