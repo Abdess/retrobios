@@ -897,19 +897,27 @@ Without `--dry-run` the run downloads the files, writes the pack and ends on
 
 A folder takes the name `<Platform>_BIOS_Pack.zip`, with `_Custom` when the
 choice narrows the list. A file name must end with `_BIOS_Pack.zip`, the
-name `--from-pack` and the parts read. On the other device,
+name `--from-pack` and the parts read, and must not name another platform
+(`Batocera_BIOS_Pack.zip` for a RetroArch pack is refused). The reader trusts
+the platform the pack's own list names over its file name. On the other device,
 `--from-pack` on the pack installs the same files at the same places, with no
 network and no option: the pack's `manifest.json` carries the list narrowed
 to the choice, the cores per board and every file's SHA-1. A file two places
 share is stored once, and each data tree sits where the reader looks for it.
 
-Every file is checked against its SHA-1 as it is written into the ZIP, before
-the ZIP is closed. The pack is written beside its final name and renamed only
-once complete, so a download that fails, a file that does not match or a stop
-leaves no file behind, and a pack of the same name written before stays as it
-was. The bytes depend on the choice alone: members in a fixed order, a fixed
-date and mode, one compression level. Making the pack needs room for the files
-and the ZIP together on the drive it goes to.
+Every file is checked against its SHA-1 as it is written into the ZIP, and the
+ZIP is read back with its CRCs before it takes its name. The pack is written
+beside its final name, so a download that fails, a file that does not match or
+a stop leaves no file behind. An earlier pack of the same name, whole or in
+parts, is set aside while the new files take their names, and put back if one
+of them cannot: the folder holds the old pack or the new one, never a mix of
+their parts. The earlier files are then deleted and each one is named. A file
+of that name that is not a part of this pack stays and is named too. With one
+zlib the bytes depend on the choice alone: members in a fixed order, a fixed
+date and mode, deflate level 9 on each member. Another deflate (zlib-ng, which
+CPython 3.14 ships on Windows) gives other bytes for the same members. Making
+the pack needs room for the files, the ZIP and the largest data tree archive
+together on the drive it goes to.
 
 `--split SIZE` (`1900M`, `4G`) writes parts of at most that size, each a whole
 ZIP named `<Name>.part1of3.zip`, as release packs are split, with the marker
