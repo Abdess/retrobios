@@ -152,9 +152,17 @@
           "additionalProperties": false,
           "required": ["root", "folder", "boards"],
           "properties": {
-            "root": {"enum": ["roms", "install"]},
-            "folder": {"type": "string", "minLength": 1},
+            "root": {
+              "description": "What the folder is relative to: the roms root of the platform, or the install tree.",
+              "enum": ["roms", "install"]
+            },
+            "folder": {
+              "description": "The folder the core is offered for, below that root.",
+              "type": "string",
+              "minLength": 1
+            },
             "boards": {
+              "description": "The boards, and their aliases, on which the folder offers the core.",
               "type": "array",
               "items": {"type": "string", "minLength": 1},
               "uniqueItems": true
