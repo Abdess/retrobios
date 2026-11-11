@@ -123,13 +123,14 @@
           "arcade": { "type": "boolean" },
           "searched_by": {
             "type": "array",
-            "description": "The standalone emulators whose commands for this folder pass a ROM search path, and the folders below the roms root it names.",
+            "description": "The emulators, or the libretro core with its runner, whose commands for this folder pass a ROM search path, and the folders below the roms root it names.",
             "items": {
               "type": "object",
               "additionalProperties": false,
               "required": ["emulator", "reads", "source_ref"],
               "properties": {
                 "emulator": { "type": "string", "minLength": 1 },
+                "core": { "type": "string", "minLength": 1, "description": "The libretro core RetroArch starts, handed the search path in its content command line." },
                 "reads": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
                 "machines": { "type": "array", "description": "The machines the commands start, as the emulator names them.", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
                 "any_machine": { "type": "boolean", "description": "A command starts the game itself as the machine (ES-DE's %BASENAME%)." },

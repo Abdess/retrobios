@@ -2872,9 +2872,10 @@ CONTENT_SCOPE_TAG = "contentscope:"
 # [core name, roms folder, (tree, path)]: a libretro core the platform
 # launches for the games of that folder, which it reads beside.
 CONTENT_FOLDER_PREFIX = "contentdir:"
-# [emulator, (tree, path), system, machines, any machine, source_ref]: a
-# standalone emulator handed a roms folder as its ROM search path on the
-# command line of a system's launch.
+# [emulator or core, (tree, path), system, machines, any machine,
+# source_ref, build]: a standalone emulator, or a libretro core in the
+# command line it is handed as content, given a roms folder as its ROM
+# search path by a system's launch command.
 ROM_SEARCH_PREFIX = "romsearch:"
 # The frontend writes the BIOS it hands a core beside the content: the
 # folder it gives the BIOS is the content's.
@@ -3413,7 +3414,7 @@ def _core_key(name: str) -> str:
 
 def content_folder_tags(config: dict) -> set[str]:
     """The roms folders a platform launches each libretro core for, and the
-    ROM search paths its commands hand standalone emulators, as tags.
+    ROM search paths its commands hand emulators and cores, as tags.
 
     A core reading its BIOS sets beside the game (MAME 2003's osd_get_path
     gives FILETYPE_ROM the content directory) reads them in the folder of
@@ -3466,9 +3467,10 @@ def content_folder_tags(config: dict) -> set[str]:
             for read in search.get("reads") or []:
                 if read in folders:
                     tags.add(ROM_SEARCH_PREFIX + json.dumps([
-                        str(search["emulator"]), place(read), str(row["folder"]),
-                        sorted(search.get("machines") or []), bool(search.get("any_machine")),
-                        str(search.get("source_ref", "")),
+                        str(search.get("core") or search["emulator"]), place(read),
+                        str(row["folder"]), sorted(search.get("machines") or []),
+                        bool(search.get("any_machine")), str(search.get("source_ref", "")),
+                        "libretro" if search.get("core") else "standalone",
                     ]))
     return tags
 
@@ -3550,10 +3552,11 @@ def content_layout(
 
     A libretro entry read beside the content (``load_from: content_dir``)
     goes to the folder of each system the platform launches the core for,
-    and is named as read outside the BIOS folder where it knows none. A
-    standalone entry no launcher record places, under the root of the
-    layout a passed ROM search path stands for, goes to each folder a
-    command passes for a machine that reads it. Outside a platform (no
+    and is named as read outside the BIOS folder where it knows none. An
+    entry in the folder a passed ROM search path stands for (the root of a
+    standalone layout no launcher record places it in, a ``libretro_pools``
+    folder) goes to each folder a command passes for a machine that reads
+    it, a libretro one staying where it is too. Outside a platform (no
     CONTENT_SCOPE_TAG) the view is left as it is.
     """
     tags = [t for t in standalone_cores if t.startswith(CONTENT_TAG_PREFIXES)]
@@ -3571,6 +3574,29 @@ def content_layout(
     files = view.get("files") or []
     out: list = []
     changed = False
+    searches = [
+        json.loads(t[len(ROM_SEARCH_PREFIX):])
+        for t in tags if t.startswith(ROM_SEARCH_PREFIX)
+    ]
+    build = "standalone" if standalone else "libretro"
+    searches = [s for s in searches if _core_key(s[0]) in names and s[6] == build]
+
+    def search_reads(name: str) -> list[tuple[str, str]]:
+        stem = name.rsplit(".", 1)[0]
+        return sorted({
+            tuple(where) for _emu, where, system, machines, any_machine, _ref, _build in searches
+            if where and stem in rom_search_sets(emu_name, system, machines, any_machine)
+        })
+
+    def roms_entry(entry: dict, tree: str, folder: str, rel: str) -> dict:
+        # Below the roms root inside the install tree (EmuELEC's
+        # /storage/roms): a plain dest the platform prefix skips, as a
+        # standalone entry placed there (_placed_entry).
+        where: dict[str, object] = (
+            {"unprefixed": True} if tree == "install" else {"root": ROMS_ROOT}
+        )
+        return {**entry, **where, "path": f"{folder}/{rel}", "layout_path": rel}
+
     if not standalone:
         folders = sorted({
             tuple(where) for core, _folder, where in (
@@ -3578,11 +3604,25 @@ def content_layout(
                 for t in tags if t.startswith(CONTENT_FOLDER_PREFIX)
             ) if core in names and where
         })
+        # The folders a passed -rompath replaces the build's own search
+        # path with stand for these: libretro MAME hands MAME
+        # <system>/mame/bios unless the content's command line names
+        # another (retro_init.cpp Set_Path_Option, execute_game_cmd).
+        from launchers import pool_folders  # noqa: PLC0415
+
+        pools = set(pool_folders({"standalone_pools": view.get("libretro_pools")}).values())
         for f in files:
-            if (not isinstance(f, dict) or _content_load(f) != "content_dir"
-                    or f.get("category") == "game_data"):
+            if not isinstance(f, dict):
+                out.append(f)
+                continue
+            if _content_load(f) != "content_dir" or f.get("category") == "game_data":
                 # Game data read beside the content is the game's own.
                 out.append(f)
+                parent, _, rel = str(f.get("path") or "").rpartition("/")
+                if searches and parent in pools and rel:
+                    reads = search_reads(rel)
+                    changed |= bool(reads)
+                    out.extend(roms_entry(f, tree, folder, rel) for tree, folder in reads)
                 continue
             changed = True
             plain = _without_libretro_load(f)
@@ -3590,20 +3630,8 @@ def content_layout(
                 out.append({**plain, "unplaced": OUTSIDE_BIOS_FOLDER})
                 continue
             rel = str(f.get("path") or f.get("name") or "")
-            for tree, folder in folders:
-                # Below the roms root inside the install tree (EmuELEC's
-                # /storage/roms): a plain dest the platform prefix skips, as
-                # a standalone entry placed there (_placed_entry).
-                where: dict[str, object] = (
-                    {"unprefixed": True} if tree == "install" else {"root": ROMS_ROOT}
-                )
-                out.append({**plain, **where, "path": f"{folder}/{rel}", "layout_path": rel})
+            out.extend(roms_entry(plain, tree, folder, rel) for tree, folder in folders)
         return {**view, "files": out} if changed else view
-    searches = [
-        json.loads(t[len(ROM_SEARCH_PREFIX):])
-        for t in tags if t.startswith(ROM_SEARCH_PREFIX)
-    ]
-    searches = [s for s in searches if _core_key(s[0]) in names]
     pools = {str(v).strip("/") for v in (view.get("standalone_pools") or {}).values()}
     if not searches or "" not in pools:
         return view
@@ -3612,11 +3640,7 @@ def content_layout(
         if not layout or "/" in layout or f.get("unplaced") != OUTSIDE_BIOS_FOLDER:
             out.append(f)
             continue
-        stem = layout.rsplit(".", 1)[0]
-        reads = sorted({
-            tuple(where) for _emu, where, system, machines, any_machine, _ref in searches
-            if where and stem in rom_search_sets(emu_name, system, machines, any_machine)
-        })
+        reads = search_reads(layout)
         if not reads:
             out.append(f)
             continue

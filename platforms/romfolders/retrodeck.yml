@@ -195,6 +195,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:139"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - apple2
+    machines:
+    - apple2e
+    source_ref: "esde resources/systems/linux/es_systems.xml:146"
   - emulator: mame
     reads:
     - apple2
@@ -210,6 +217,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:153"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - apple2gs
+    machines:
+    - apple2gs
+    source_ref: "esde resources/systems/linux/es_systems.xml:157"
   - emulator: mame
     reads:
     - apple2gs
@@ -247,6 +261,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:198"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - arcadia
+    machines:
+    - arcadia
+    source_ref: "esde resources/systems/linux/es_systems.xml:203"
   - emulator: mame
     reads:
     - arcadia
@@ -316,6 +337,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:231"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - astrocde
+    machines:
+    - astrocde
+    source_ref: "esde resources/systems/linux/es_systems.xml:235"
   - emulator: mame
     reads:
     - astrocde
@@ -358,6 +386,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:268"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - atari7800
+    machines:
+    - a7800
+    source_ref: "esde resources/systems/linux/es_systems.xml:273"
   - emulator: mame
     reads:
     - atari7800
@@ -570,6 +605,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:420"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - channelf
+    machines:
+    - channelf
+    source_ref: "esde resources/systems/linux/es_systems.xml:425"
   - emulator: mame
     reads:
     - channelf
@@ -694,6 +736,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:557"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - crvision
+    machines:
+    - crvision
+    source_ref: "esde resources/systems/linux/es_systems.xml:562"
   - emulator: mame
     reads:
     - crvision
@@ -921,6 +970,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:785"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - fmtowns
+    machines:
+    - fmtownshr
+    source_ref: "esde resources/systems/linux/es_systems.xml:789"
   - emulator: mame
     reads:
     - fmtowns
@@ -936,6 +992,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:807"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - gamate
+    machines:
+    - gamate
+    source_ref: "esde resources/systems/linux/es_systems.xml:811"
   - emulator: mame
     reads:
     - gamate
@@ -965,6 +1028,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:829"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - gamecom
+    machines:
+    - gamecom
+    source_ref: "esde resources/systems/linux/es_systems.xml:833"
   - emulator: mame
     reads:
     - gamecom
@@ -1096,6 +1166,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:972"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - gmaster
+    machines:
+    - gmaster
+    source_ref: "esde resources/systems/linux/es_systems.xml:976"
   - emulator: mame
     reads:
     - gmaster
@@ -1137,6 +1214,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:993"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - intellivision
+    machines:
+    - intv
+    source_ref: "esde resources/systems/linux/es_systems.xml:998"
   - emulator: mame
     reads:
     - intellivision
@@ -1381,6 +1465,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:1247"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - megaduck
+    machines:
+    - megaduck
+    source_ref: "esde resources/systems/linux/es_systems.xml:1252"
   - emulator: mame
     reads:
     - megaduck
@@ -1718,6 +1809,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:1576"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - odyssey2
+    machines:
+    - odyssey2
+    source_ref: "esde resources/systems/linux/es_systems.xml:1581"
   - emulator: mame
     reads:
     - odyssey2
@@ -2028,6 +2126,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:1854"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - pv1000
+    machines:
+    - pv1000
+    source_ref: "esde resources/systems/linux/es_systems.xml:1858"
   - emulator: mame
     reads:
     - pv1000
@@ -2104,6 +2209,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:1951"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - scv
+    machines:
+    - scv
+    source_ref: "esde resources/systems/linux/es_systems.xml:1955"
   - emulator: mame
     reads:
     - scv
@@ -2352,6 +2464,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:2193"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - supervision
+    machines:
+    - svision
+    source_ref: "esde resources/systems/linux/es_systems.xml:2198"
   - emulator: mame
     reads:
     - supervision
@@ -2367,6 +2486,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:2204"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - supracan
+    machines:
+    - supracan
+    source_ref: "esde resources/systems/linux/es_systems.xml:2208"
   - emulator: mame
     reads:
     - supracan
@@ -2509,6 +2635,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:2357"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - vectrex
+    machines:
+    - vectrex
+    source_ref: "esde resources/systems/linux/es_systems.xml:2362"
   - emulator: mame
     reads:
     - vectrex
@@ -2564,6 +2697,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:2378"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - videopac
+    machines:
+    - videopac
+    source_ref: "esde resources/systems/linux/es_systems.xml:2383"
   - emulator: mame
     reads:
     - videopac
@@ -2597,6 +2737,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/linux/es_systems.xml:2420"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - vsmile
+    machines:
+    - vsmile
+    source_ref: "esde resources/systems/linux/es_systems.xml:2424"
   - emulator: mame
     reads:
     - vsmile

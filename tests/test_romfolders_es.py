@@ -207,12 +207,19 @@ class EsdeFormat(unittest.TestCase):
         self.assertNotIn("any_machine", tano)
         self.assertEqual(tano["source_ref"], "os es_systems.xml:20")
 
-    def test_the_game_itself_as_machine_and_libretro_left_out(self) -> None:
-        (arcade,) = self.rows["arcade"]["searched_by"]
-        self.assertEqual(arcade["emulator"], "mame")
-        self.assertTrue(arcade["any_machine"])
-        self.assertNotIn("machines", arcade)
+    def test_the_game_itself_as_machine(self) -> None:
+        libretro, standalone = self.rows["arcade"]["searched_by"]
+        self.assertEqual(standalone["emulator"], "mame")
+        self.assertNotIn("core", standalone)
+        self.assertTrue(standalone["any_machine"])
+        self.assertNotIn("machines", standalone)
         self.assertNotIn("searched_by", self.rows["psx"])
+        # The libretro core reads the -rompath of the command line it is
+        # handed as content (retro_init.cpp execute_game_cmd).
+        self.assertEqual((libretro["emulator"], libretro["core"]), ("retroarch", "mame"))
+        self.assertEqual(libretro["reads"], ["arcade"])
+        self.assertTrue(libretro["any_machine"])
+        self.assertEqual(libretro["source_ref"], "os es_systems.xml:27")
 
     def test_first_command_without_alternative(self) -> None:
         rows = by_folder(scrape("esde", "esde", {"systems": {"source": "os", "path": "es_systems.xml"}}))

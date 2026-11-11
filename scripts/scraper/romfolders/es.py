@@ -526,21 +526,55 @@ def _alternative_emulators(text: str, function: str) -> dict[str, tuple[str, int
 _ROMPATH_OPTIONS = ("-rompath", "-rp")
 
 
+def _core_words(command: str) -> tuple[str, list[str]] | None:
+    """The core and the words of the content RetroArch hands it.
+
+    ES-DE starts the libretro MAME core with a quoted command line as its
+    content (`-L .../mame_libretro.so "apple2e -rompath \\"...\\" ..."`): popen
+    runs it through the shell (es-core/src/utils/PlatformUtil.cpp:231, 257),
+    and the core splits the content on spaces and quotes when it is no file
+    (retro_init.cpp parse_cmdline, mmain2).
+    """
+    core = _RA_CORE.search(command)
+    if core is None:
+        return None
+    try:
+        args = shlex.split(command)
+        at = args.index("-L")
+        content = shlex.split(args[at + 2]) if at + 2 < len(args) else []
+    except ValueError:
+        return None
+    return core.group(1), content
+
+
 def _searched_by(commands: list[tuple[str, str, int | None]], key: str, path: str) -> list[dict]:
-    """The ROM folders each standalone emulator's commands pass it, by emulator.
+    """The ROM folders each emulator's commands pass it, by emulator and core.
 
     ES-DE starts standalone MAME with `-rompath %GAMEDIR%\\;%ROMPATH%/<system>`
     and a machine, or %BASENAME% where the game is the machine. The command
-    line outranks mame.ini. %GAMEDIR% is the game's own folder, no folder a
-    pack fills.
+    line outranks mame.ini. The libretro MAME core gets the same option in
+    the command line it is handed as content, after the machine. %GAMEDIR%
+    is the game's own folder, no folder a pack fills.
     """
-    found: dict[str, dict] = {}
+    found: dict[tuple[str, str], dict] = {}
     for _label, command, line in commands:
-        emulator = _EMULATOR.search(command)
-        if emulator is None or _RA_CORE.search(command):
-            continue
-        words = command.replace("\\;", ";").split()
-        at = next((i for i, w in enumerate(words) if w in _ROMPATH_OPTIONS), None)
+        libretro = _core_words(command)
+        if libretro is not None:
+            core, words = libretro
+            if words[:1] == [core]:
+                # A first word naming the core is dropped (mmain2).
+                words = words[1:]
+            name = "retroarch"
+            at = next((i for i, w in enumerate(words) if w in _ROMPATH_OPTIONS), None)
+            machine = words[0] if words and at else ""
+        else:
+            emulator = _EMULATOR.search(command)
+            if emulator is None:
+                continue
+            core, name = "", emulator.group(1).lower()
+            words = command.replace("\\;", ";").split()
+            at = next((i for i, w in enumerate(words) if w in _ROMPATH_OPTIONS), None)
+            machine = words[at + 2] if at is not None and at + 2 < len(words) else ""
         if at is None or at + 1 >= len(words):
             continue
         reads = [
@@ -549,11 +583,10 @@ def _searched_by(commands: list[tuple[str, str, int | None]], key: str, path: st
         ]
         if not reads:
             continue
-        name = emulator.group(1).lower()
-        record = found.setdefault(name, {"emulator": name, "reads": [], "machines": [],
-                                         "any_machine": False, "lines": []})
+        record = found.setdefault((name, core), {"emulator": name, "core": core, "reads": [],
+                                                 "machines": [], "any_machine": False,
+                                                 "lines": []})
         record["reads"] += [r for r in reads if r not in record["reads"]]
-        machine = words[at + 2] if at + 2 < len(words) else ""
         if not machine or machine.startswith("%"):
             record["any_machine"] = True
         elif machine not in record["machines"]:
@@ -561,7 +594,10 @@ def _searched_by(commands: list[tuple[str, str, int | None]], key: str, path: st
         record["lines"].append(line)
     rows = []
     for record in found.values():
-        row = {"emulator": record["emulator"], "reads": record["reads"]}
+        row = {"emulator": record["emulator"]}
+        if record["core"]:
+            row["core"] = record["core"]
+        row["reads"] = record["reads"]
         if record["machines"]:
             row["machines"] = record["machines"]
         if record["any_machine"]:

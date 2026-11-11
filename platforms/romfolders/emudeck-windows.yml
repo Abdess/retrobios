@@ -222,6 +222,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:128"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - apple2
+    machines:
+    - apple2e
+    source_ref: "esde resources/systems/windows/es_systems.xml:135"
   - emulator: mame
     reads:
     - apple2
@@ -237,6 +244,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:142"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - apple2gs
+    machines:
+    - apple2gs
+    source_ref: "esde resources/systems/windows/es_systems.xml:146,147"
   - emulator: mame
     reads:
     - apple2gs
@@ -279,6 +293,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:191"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - arcadia
+    machines:
+    - arcadia
+    source_ref: "esde resources/systems/windows/es_systems.xml:196"
   - emulator: mame
     reads:
     - arcadia
@@ -348,6 +369,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:225"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - astrocde
+    machines:
+    - astrocde
+    source_ref: "esde resources/systems/windows/es_systems.xml:229"
   - emulator: mame
     reads:
     - astrocde
@@ -391,6 +419,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:262"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - atari7800
+    machines:
+    - a7800
+    source_ref: "esde resources/systems/windows/es_systems.xml:267"
   - emulator: mame
     reads:
     - atari7800
@@ -624,6 +659,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:411"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - channelf
+    machines:
+    - channelf
+    source_ref: "esde resources/systems/windows/es_systems.xml:416"
   - emulator: mame
     reads:
     - channelf
@@ -748,6 +790,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:553"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - crvision
+    machines:
+    - crvision
+    source_ref: "esde resources/systems/windows/es_systems.xml:558"
   - emulator: mame
     reads:
     - crvision
@@ -988,6 +1037,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:769"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - fmtowns
+    machines:
+    - fmtownshr
+    source_ref: "esde resources/systems/windows/es_systems.xml:773"
   - emulator: mame
     reads:
     - fmtowns
@@ -1009,6 +1065,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:790"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - gamate
+    machines:
+    - gamate
+    source_ref: "esde resources/systems/windows/es_systems.xml:794"
   - emulator: mame
     reads:
     - gamate
@@ -1038,6 +1101,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:812"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - gamecom
+    machines:
+    - gamecom
+    source_ref: "esde resources/systems/windows/es_systems.xml:816"
   - emulator: mame
     reads:
     - gamecom
@@ -1169,6 +1239,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:954"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - gmaster
+    machines:
+    - gmaster
+    source_ref: "esde resources/systems/windows/es_systems.xml:958"
   - emulator: mame
     reads:
     - gmaster
@@ -1210,6 +1287,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:975"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - intellivision
+    machines:
+    - intv
+    source_ref: "esde resources/systems/windows/es_systems.xml:980"
   - emulator: mame
     reads:
     - intellivision
@@ -1479,6 +1563,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1227"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - megaduck
+    machines:
+    - megaduck
+    source_ref: "esde resources/systems/windows/es_systems.xml:1232"
   - emulator: mame
     reads:
     - megaduck
@@ -1834,6 +1925,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1548"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - odyssey2
+    machines:
+    - odyssey2
+    source_ref: "esde resources/systems/windows/es_systems.xml:1553"
   - emulator: mame
     reads:
     - odyssey2
@@ -2136,6 +2234,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1798"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - pv1000
+    machines:
+    - pv1000
+    source_ref: "esde resources/systems/windows/es_systems.xml:1802"
   - emulator: mame
     reads:
     - pv1000
@@ -2223,6 +2328,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1898"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - scv
+    machines:
+    - scv
+    source_ref: "esde resources/systems/windows/es_systems.xml:1902"
   - emulator: mame
     reads:
     - scv
@@ -2479,6 +2591,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2138"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - supervision
+    machines:
+    - svision
+    source_ref: "esde resources/systems/windows/es_systems.xml:2143"
   - emulator: mame
     reads:
     - supervision
@@ -2494,6 +2613,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2149"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - supracan
+    machines:
+    - supracan
+    source_ref: "esde resources/systems/windows/es_systems.xml:2153"
   - emulator: mame
     reads:
     - supracan
@@ -2659,6 +2785,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2296"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - vectrex
+    machines:
+    - vectrex
+    source_ref: "esde resources/systems/windows/es_systems.xml:2301"
   - emulator: mame
     reads:
     - vectrex
@@ -2714,6 +2847,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2317"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - videopac
+    machines:
+    - videopac
+    source_ref: "esde resources/systems/windows/es_systems.xml:2322"
   - emulator: mame
     reads:
     - videopac
@@ -2754,6 +2894,13 @@ folders:
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2357"
   searched_by:
+  - emulator: retroarch
+    core: mame
+    reads:
+    - vsmile
+    machines:
+    - vsmile
+    source_ref: "esde resources/systems/windows/es_systems.xml:2361"
   - emulator: mame
     reads:
     - vsmile

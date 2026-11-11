@@ -1148,6 +1148,32 @@ class MameOnRetroDeckRomPaths(unittest.TestCase):
         self.assertEqual(places["stvbios.zip"] - {"arcade", "mame", "consolearcade"}, {"stv"})
 
 
+class LibretroMameOnEsdeRomPaths(unittest.TestCase):
+    """ES-DE hands the libretro MAME core a command line as its content,
+    with -rompath "%GAMEDIRRAW%;%ROMPATH%/<system>" after the machine. The
+    core passes it to MAME after its own <system>/mame/bios, and the later
+    value wins (retro_init.cpp:580-597, 902-940, options.cpp:260-276)."""
+
+    def test_the_rom_folders_file_records_the_core(self) -> None:
+        with (REPO_ROOT / "platforms" / "romfolders" / "retrodeck.yml").open() as f:
+            rows = yaml.safe_load(f)["folders"]
+        found = {r["folder"]: s for r in rows for s in r.get("searched_by") or []
+                 if s.get("core") == "mame"}
+        self.assertEqual(len(found), 21)
+        self.assertEqual(found["apple2"]["machines"], ["apple2e"])
+        self.assertEqual(found["atari7800"]["reads"], ["atari7800"])
+        self.assertEqual(found["atari7800"]["emulator"], "retroarch")
+
+    def test_sets_also_land_in_the_folder_the_command_names(self) -> None:
+        # RetroDECK's roms/ sits beside bios/ in the install tree.
+        for platform, read in (("retrodeck", ("", "roms/gamate/gamate.zip")),
+                               ("emudeck", ("roms", "gamate/gamate.zip"))):
+            view = libretro_view("mame", platform)
+            places = {(e.get("root") or "", e["path"]) for e in view["files"]
+                      if e["name"] == "gamate.zip"}
+            self.assertEqual(places, {("", "mame/bios/gamate.zip"), read}, platform)
+
+
 class MacBootDisksOnKnulli(unittest.TestCase):
     def test_the_hard_records_bind(self) -> None:
         # mameGenerator.py and libretroMAMEConfig.py pass the boot disk as
