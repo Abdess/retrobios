@@ -34,7 +34,7 @@ notes: |
 
   Each machine declares its dump slots with a flag word. A slot whose flag
   has bit 0 clear is mandatory: with no dump registered there, the launch
-  stops on "You must select %1.". 3DO declares CD-ROM 3, BIOS 0, FONT-ROM 1, FMV-ROM 1 and
+  stops on `You must select %1.`. 3DO declares CD-ROM 3, BIOS 0, FONT-ROM 1, FMV-ROM 1 and
   NVRAM 1, Jaguar CARTRIDGE 2 and BIOS 1. QFrontend reads a slot by seeking
   its dump to 0 and reading at most the size the machine asks for, and
   returns -1 when the slot is empty.
@@ -65,7 +65,7 @@ files:
       Read from the path registered as the 3DO BIOS in phoenix.config.xml,
       under any name. The name is a label for the Panasonic FZ-10 dump. The
       slot is mandatory and the read is capped at 1 MB.
-    source_ref: "PhoenixEmuProject.exe 2.8.JAG (sha256 82298a9db3e0e53a) FUN_004a3980 0x4a3a74-0x4a3aa9 (3DO slot BIOS declared with flag 0), FUN_004fd550 0x4ff197-0x4ff220 (empty slot with flag bit 0 clear) and 0x4ff22d-0x4ff409 (QMessageBox You must select %1, returns false at 0x4fdae6), FUN_004a7f60 0x4a8ad0-0x4a8b3b (QFrontend read of slot BIOS, at most 0x100000 bytes, into this+0x1097558), 0x4a8be2-0x4a8c02 (byte swap of the 2 MB ROM area), FUN_004b1460 0x4b1489-0x4b14c4 (slot lookup, seek 0, read, -1 when empty)"
+    source_ref: "PhoenixEmuProject.exe 2.8.JAG (sha256 82298a9db3e0e53a) FUN_004a3980 0x4a3a74-0x4a3aa9 (3DO slot BIOS declared with flag 0), FUN_004fd550 0x4ff197-0x4ff220 (empty slot with flag bit 0 clear) and 0x4ff22d-0x4ff409 (QMessageBox naming the empty slot, returns false at 0x4fdae6), FUN_004a7f60 0x4a8ad0-0x4a8b3b (QFrontend read of slot BIOS, at most 0x100000 bytes, into this+0x1097558), 0x4a8be2-0x4a8c02 (byte swap of the 2 MB ROM area), FUN_004b1460 0x4b1489-0x4b14c4 (slot lookup, seek 0, read, -1 when empty)"
 
   - name: panafz10e-anvil.bin
     system: 3do
