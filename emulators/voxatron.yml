@@ -59,7 +59,7 @@ files:
     required: true
     description: "Voxatron data file"
     source_ref: "voxatron 0.3.5b vox load_all_pods 0x2a560 0x2a58d-0x2a5ad (movabs vox.dat, prefixed with the program folder, codo_load_pod_set, fopen rb at 0x122d65), 0x2a670-0x2a67a (retry vox.dat in the working directory), 0x2a687-0x2a6b0 (codo_fatal_error, exit at 0x16abe4), vox_dyn load_all_pods 0x1f180 0x1f1ad-0x1f1cd, 0x1f29a, 0x1f2d0 (same sequence)"
-    note: "Opened from the folder of the binary that runs, then from the working directory. Absent from both, Voxatron stops with \"** FATAL ERROR: could not load vox.dat\"."
+    note: "Opened from the folder of the binary that runs, then from the working directory. Absent from both, Voxatron stops with `** FATAL ERROR: could not load vox.dat`."
 
   - name: libHoloPlayCore.so
     path: voxatron/libHoloPlayCore.so
