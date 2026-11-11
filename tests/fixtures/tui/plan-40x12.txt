@@ -3,10 +3,10 @@
  4 files to download, 1.0 MB
  BIOS folder:
    ~/.config/retroarch/system
+
  > Install
    Choose systems
    Copy from an old card or a folder
    Details
-   Change
-   Quit
+ 1-4 of 7
  A Install  B Back  Y Change  ? Help

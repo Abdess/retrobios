@@ -61,21 +61,23 @@ JOURNEY_KEYS = {
 # word: its length is the machine's. A change that adds words raises a
 # number here and says why.
 JOURNEY_WORDS = {
-    "first_install": 47,
-    "card_with_games": 87,
+    # Every plan names More (one word, Make a pack being always there): one
+    # word per plan a journey stops on.
+    "first_install": 48,
+    "card_with_games": 88,
     # A plan whose folder has a record names More (one word): an update
     # and a second run of one system.
     "update": 71,
-    "one_system": 179,
+    "one_system": 181,
     "one_system_again": 68,
     # Change holds every option one level down now (design 4.4): its
     # headings and the rows for Emulators, a pack, the device and the
     # internet, the intro sentence dropped, 10 words on each of its two
     # frames.
-    "what_is_missing": 227,
+    "what_is_missing": 228,
     # The plan of the setup found comes first now (33 words), the setups
     # one Esc away, and the last plan names Change where (2 words).
-    "another_device": 265,
+    "another_device": 267,
 }
 # Which setup? names every setup, Preview every file: lists, not prose.
 SCREEN_CEILING = 90

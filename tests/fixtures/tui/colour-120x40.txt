@@ -337,8 +337,8 @@
    Copy the BIOS files from an old card or a folder
    Details
    Change
+   More
    Quit
- 
  
  
  
@@ -376,7 +376,7 @@
 ^[[0;7;35m > Close^[[0m
    Details
    Change
- 
+   More
  
  
  
@@ -997,8 +997,8 @@
    Copy the BIOS files from an old card or a folder
    Details
    Change
+   More
    Quit
- 
  
  
  
@@ -1194,7 +1194,7 @@
    Backups
    Put back a backup
    Delete a backup
- 
+   Make a pack
  
  
  
@@ -1433,3 +1433,126 @@
  
  
  ^[[0;1;35mA/Enter^[[0m Choose  ^[[0;2mB/Esc^[[0m Back  ^[[0;2m?^[[0m Help
+=== pack-plan
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Make a pack^[[0m
+
+ 4 files, 1.0 MB, for RetroArch.
+ Pack: ~/Downloads/RetroArch_Custom_BIOS_Pack.zip
+ One ZIP, installed with --from-pack.
+ 
+^[[0;7;35m > Make the pack^[[0m
+   Change where
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ ^[[0;1;35mA/Enter^[[0m Make  ^[[0;2mB/Esc^[[0m Back  ^[[0;2m?^[[0m Help
+=== pack-plan-parts
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Make a pack^[[0m
+
+ 4 files, 1.0 MB, for RetroArch.
+ Pack: ~/Downloads/RetroArch_Custom_BIOS_Pack.part1of3.zip
+ In 3 parts of at most 3.9 GB, as FAT32 holds no file of 4 GB.
+ 
+^[[0;7;35m > Make the pack^[[0m
+   Change where
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ ^[[0;1;35mA/Enter^[[0m Make  ^[[0;2mB/Esc^[[0m Back  ^[[0;2m?^[[0m Help
+=== pack-done
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: ^[[0;1;32mDone^[[0m
+
+^[[0;1m Pack made: ^[[0;1;35m4^[[0;1m files, ^[[0;1;35m1023.4 KB^[[0;1m, in ^[[0;1;35m3^[[0;1m parts.^[[0m
+ Pack: ~/Downloads/RetroArch_Custom_BIOS_Pack.part1of3.zip
+ On the other device, install from it with --from-pack.
+ 
+^[[0;7;35m > Close^[[0m
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ ^[[0;1;35mA/Enter^[[0m Close  ^[[0;2mB/Esc^[[0m Back  ^[[0;2m?^[[0m Help

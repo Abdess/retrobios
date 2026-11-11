@@ -108,12 +108,12 @@
 ^[[0;1m ^[[0;1;35m4^[[0;1m files to download, ^[[0;1;35m1.0 MB^[[0m
  BIOS folder:
    ^[[0;1m~/.config/retroarch/system^[[0m
+ 
 ^[[0;7;35m > Install^[[0m
    Choose systems
    Copy from an old card or a folder
    Details
-   Change
-   Quit
+^[[0;2m 1-4 of 7^[[0m
  ^[[0;1;35mA^[[0m Install  ^[[0;2mB^[[0m Back  ^[[0;2mY^[[0m Change  ^[[0;2m?^[[0m Help
 === plan-in-place
 ^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: RetroArch^[[0m
@@ -125,7 +125,7 @@
 ^[[0;7;35m > Close^[[0m
    Details
    Change
- 
+   More
  
  ^[[0;1;35mA^[[0m Close  ^[[0;2mB^[[0m Back  ^[[0;2mY^[[0m Change  ^[[0;2m?^[[0m Help
 === systems
@@ -321,7 +321,7 @@
    For the games on this card: yes  412
    Only what starts: no
    Show the games
-^[[0;2m 1-4 of 9^[[0m
+^[[0;2m 1-4 of 10^[[0m
  ^[[0;1;35mA^[[0m Install  ^[[0;2mB^[[0m Back  ^[[0;2mY^[[0m Change  ^[[0;2m?^[[0m Help
 === games
 ^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Games on this card^[[0m
@@ -382,7 +382,7 @@
    Backups
    Put back a backup
    Delete a backup
- 
+   Make a pack
  
  
  
@@ -453,3 +453,42 @@
  
  
  ^[[0;1;35mA^[[0m Choose  ^[[0;2mB^[[0m Back  ^[[0;2m?^[[0m Help
+=== pack-plan
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Make a pack^[[0m
+
+ 4 files, 1.0 MB, for RetroArch.
+ Pack: ~/Downloads/
+   ^[[0;1mRetroArch_Custom_BIOS_Pack.zip^[[0m
+ One ZIP, installed with --from-pack.
+ 
+^[[0;7;35m > Make the pack^[[0m
+   Change where
+ 
+ 
+ ^[[0;1;35mA^[[0m Make  ^[[0;2mB^[[0m Back  ^[[0;2m?^[[0m Help
+=== pack-plan-parts
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Make a pack^[[0m
+
+ 4 files, 1.0 MB, for RetroArch.
+ Pack: ~/Downloads/
+   ^[[0;1mRetroArch_Custom_BIOS_Pack.part1of3.^[[0m
+   ^[[0;1mzip^[[0m
+ In 3 parts of at most 3.9 GB, as FAT32
+   holds no file of 4 GB.
+ 
+^[[0;7;35m > Make the pack^[[0m
+   Change where
+ ^[[0;1;35mA^[[0m Make  ^[[0;2mB^[[0m Back  ^[[0;2m?^[[0m Help
+=== pack-done
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: ^[[0;1;32mDone^[[0m
+
+^[[0;1m Pack made: ^[[0;1;35m4^[[0;1m files, ^[[0;1;35m1023.4 KB^[[0;1m, in ^[[0;1;35m3^[[0m
+^[[0;1m   parts.^[[0m
+ Pack: ~/Downloads/
+   ^[[0;1mRetroArch_Custom_BIOS_Pack.part1of3.^[[0m
+   ^[[0;1mzip^[[0m
+ On the other device, install from it
+   with --from-pack.
+ 
+^[[0;7;35m > Close^[[0m
+ ^[[0;1;35mA^[[0m Close  ^[[0;2mB^[[0m Back  ^[[0;2m?^[[0m Help

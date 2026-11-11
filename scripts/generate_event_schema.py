@@ -39,11 +39,11 @@ KEY_TYPES: dict[str, dict] = {
         "folder", "dest", "system", "name", "bios_dir", "path", "member",
         "list_version", "installed_version", "board", "core", "date", "moved_to",
     ), _TEXT),
-    "mode": {"enum": ["install", "check", "dry-run", "list", "remove", "restore"]},
+    "mode": {"enum": ["install", "check", "dry-run", "list", "remove", "restore", "pack"]},
     "source": {"enum": ["remove", "install"]},
     "state": {"enum": ["present", "wrong_hash", "missing"]},
     "status": {"enum": ["applied", "written", "unreadable", "not_written", "listed", "made",
-                        "deleted", "not_deleted"]},
+                        "deleted", "not_deleted", "planned", "failed"]},
     **dict.fromkeys((
         "files", "files_done", "files_total", "bytes", "bytes_done", "bytes_total",
         "bytes_local", "bytes_network", "size", "present", "missing", "wrong_hash",
@@ -52,7 +52,8 @@ KEY_TYPES: dict[str, dict] = {
     ), _COUNT),
     **dict.fromkeys(("truncated", "ok", "interrupted", "required_only", "applied", "info",
                      "backup"), _FLAG),
-    **dict.fromkeys(("systems", "other_drives", "dests", "written", "choice"), _NAMES),
+    **dict.fromkeys(("systems", "other_drives", "dests", "written", "choice", "parts"),
+                    _NAMES),
     **dict.fromkeys(("platforms", "failed", "skipped", "left_out", "kept", "found",
                      "fallback"), _RECORDS),
 }

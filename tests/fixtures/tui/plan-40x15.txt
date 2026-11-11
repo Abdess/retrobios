@@ -9,7 +9,7 @@
    Copy from an old card or a folder
    Details
    Change
+   More
    Quit
-
 
  A Install  B Back  Y Change  ? Help
