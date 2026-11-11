@@ -108,6 +108,20 @@ folders:
       core: puae2021
       emulator: retroarch
       source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:186"
+  offers:
+  - emulator: retroarch
+    core: puae2021
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:186,192"
+  - emulator: retroarch
+    core: puae
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:187,191"
+  - emulator: retroarch
+    core: uae4arm
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:188"
+  - emulator: amiberry
+    core: amiberry
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:195"
 - folder: amigacd32
   extensions:
   - .chd
@@ -123,6 +137,16 @@ folders:
       core: puae2021
       emulator: retroarch
       source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:201"
+  offers:
+  - emulator: retroarch
+    core: puae2021
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:201,206"
+  - emulator: retroarch
+    core: puae
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:202,205"
+  - emulator: retroarch
+    core: uae4arm
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:209"
 - folder: amstradcpc
   extensions:
   - .7z
@@ -139,6 +163,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/amstradcpc.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:215;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:213"
+  offers:
+  - emulator: retroarch
+    core: crocods
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:213"
+  - emulator: retroarch
+    core: cap32
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:214"
 - folder: arcade
   extensions:
   - .7z
@@ -147,6 +178,32 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/arcade.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:230;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:218"
+  offers:
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:218"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:219"
+  - emulator: retroarch
+    core: mame2015
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:220"
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:221"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:222"
+  - emulator: retroarch
+    core: fbalpha2019
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:223"
+  - emulator: retroarch
+    core: mame
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:224"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:227"
   arcade: true
 - folder: arduboy
   extensions:
@@ -183,6 +240,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/atari5200.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:243;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:241"
+  offers:
+  - emulator: retroarch
+    core: a5200
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:241"
+  - emulator: retroarch
+    core: atari800
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:242"
 - folder: atari7800
   extensions:
   - .7z
@@ -224,6 +288,14 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/atarijaguar.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:759;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:752"
+  offers:
+  - emulator: retroarch
+    core: virtualjaguar
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:752"
+  - emulator: bigpemu
+    core: bigpemu-sa
+    when: DEVICE S922X|SM4450|SM8250|SM8550|SM8650|SM8750|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:755"
 - folder: atarilynx
   extensions:
   - .7z
@@ -235,6 +307,20 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/atarilynx.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:770;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:762"
+  offers:
+  - emulator: retroarch
+    core: handy
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:762"
+  - emulator: retroarch
+    core: beetle_lynx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:763"
+  - emulator: retroarch
+    core: gearlynx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:764"
+  - emulator: mednafen
+    core: lynx
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:767"
 - folder: atarist
   extensions:
   - .7z
@@ -249,6 +335,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/atarist.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:256;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:254"
+  offers:
+  - emulator: retroarch
+    core: hatari
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:254"
+  - emulator: hatarisa
+    core: hatarisa
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:255"
 - folder: atomiswave
   extensions:
   - .7z
@@ -273,6 +366,17 @@ folders:
       core: flycast-sa
       emulator: flycast
       source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:272"
+  offers:
+  - emulator: retroarch
+    core: flycast2021
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM6115; DEVICE SM4450|SM8250|SM8550|SM8650|SM8750|S922X|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:262,269"
+  - emulator: retroarch
+    core: flycast
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:263,268,273,276"
+  - emulator: flycast
+    core: flycast-sa
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:264,267,272,277"
   arcade: true
 - folder: bbcmicro
   extensions:
@@ -326,6 +430,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/c128.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:300;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:298"
+  offers:
+  - emulator: retroarch
+    core: vice_x128
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:298"
+  - emulator: vicesa
+    core: x128
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:299"
 - folder: c16
   extensions:
   - .bin
@@ -358,6 +469,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/c16.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:305;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:303"
+  offers:
+  - emulator: retroarch
+    core: vice_xplus4
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:303"
+  - emulator: vicesa
+    core: xplus4
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:304"
 - folder: c64
   extensions:
   - .bin
@@ -390,6 +508,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/c64.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:310;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:308"
+  offers:
+  - emulator: retroarch
+    core: vice_x64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:308"
+  - emulator: vicesa
+    core: x64sc
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:309"
 - folder: cdi
   extensions:
   - .chd
@@ -430,6 +555,20 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/colecovision.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:295;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:287"
+  offers:
+  - emulator: retroarch
+    core: gearcoleco
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:287"
+  - emulator: retroarch
+    core: bluemsx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:288"
+  - emulator: retroarch
+    core: smsplus
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:289"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:292"
 - folder: cps1
   extensions:
   - .7z
@@ -438,6 +577,22 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/cps1.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:327;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:322"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:322"
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:323"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:324"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:325"
+  - emulator: AdvanceMame
+    core: AdvanceMame
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:326"
   arcade: true
 - folder: cps2
   extensions:
@@ -447,6 +602,22 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/cps2.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:335;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:330"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:330"
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:331"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:332"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:333"
+  - emulator: AdvanceMame
+    core: AdvanceMame
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:334"
   arcade: true
 - folder: cps3
   extensions:
@@ -456,6 +627,22 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/cps3.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:343;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:338"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:338"
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:339"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:340"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:341"
+  - emulator: AdvanceMame
+    core: AdvanceMame
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:342"
   arcade: true
 - folder: daphne
   extensions:
@@ -465,6 +652,13 @@ folders:
   emulator: hypseus-singe
   source_ref: "os config/emulators/daphne.conf:5,6; os projects/ROCKNIX/packages/virtual/emulators/package.mk:348;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:346"
+  offers:
+  - emulator: hypseus-singe
+    core: hypseus-singe
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:346"
+  - emulator: retroarch
+    core: daphne
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:347"
   arcade: true
 - folder: doom
   extensions:
@@ -476,6 +670,13 @@ folders:
   emulator: gzdoom
   source_ref: "os config/emulators/doom.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1671;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1669"
+  offers:
+  - emulator: gzdoom
+    core: gzdoom-sa
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1669"
+  - emulator: retroarch
+    core: prboom
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1670"
 - folder: dreamcast
   extensions:
   - .cdi
@@ -500,6 +701,17 @@ folders:
       core: flycast-sa
       emulator: flycast
       source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:363"
+  offers:
+  - emulator: retroarch
+    core: flycast2021
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM6115; DEVICE SM4450|SM8250|SM8550|SM8650|SM8750|S922X|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:353,360"
+  - emulator: retroarch
+    core: flycast
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:354,359,364,367"
+  - emulator: flycast
+    core: flycast-sa
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:355,358,363,368"
 - folder: easyrpg
   extensions:
   - .easyrpg
@@ -520,6 +732,27 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/famicom.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:397;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:383"
+  offers:
+  - emulator: retroarch
+    core: nestopia
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:383"
+  - emulator: retroarch
+    core: fceumm
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:384"
+  - emulator: retroarch
+    core: quicknes
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:385"
+  - emulator: retroarch
+    core: mesen
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:386"
+  - emulator: mednafen
+    core: nes
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:389"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:394"
 - folder: fbneo
   name: fbn
   extensions:
@@ -529,6 +762,28 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/fbn.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:424;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:417"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:417"
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:418"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:419"
+  - emulator: retroarch
+    core: mame2015
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:420"
+  - emulator: retroarch
+    core: mame
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:421"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:422"
+  - emulator: retroarch
+    core: fbalpha2019
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:423"
   arcade: true
 - folder: fds
   extensions:
@@ -539,6 +794,27 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/fds.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:414;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:400"
+  offers:
+  - emulator: retroarch
+    core: nestopia
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:400"
+  - emulator: retroarch
+    core: fceumm
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:401"
+  - emulator: retroarch
+    core: quicknes
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:402"
+  - emulator: retroarch
+    core: mesen
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:403"
+  - emulator: mednafen
+    core: nes
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:406"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:411"
 - folder: gameandwatch
   extensions:
   - .7z
@@ -548,6 +824,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/gameandwatch.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:438;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:436"
+  offers:
+  - emulator: retroarch
+    core: gw
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:436"
+  - emulator: retroarch
+    core: mame
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:437"
 - folder: gamecube
   extensions:
   - .ciso
@@ -562,6 +845,19 @@ folders:
   emulator: dolphin
   source_ref: "os config/emulators/gamecube.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:652;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:648"
+  offers:
+  - emulator: dolphin
+    core: dolphin-sa-gc
+    when: DEVICE RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|S922X|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:648"
+  - emulator: dolphin
+    core: dolphin-qt-gc
+    when: DEVICE RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|S922X|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:649"
+  - emulator: retroarch
+    core: dolphin
+    when: DEVICE RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|S922X|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:650"
 - folder: gamegear
   extensions:
   - .7z
@@ -572,6 +868,27 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/gamegear.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:704;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:690"
+  offers:
+  - emulator: retroarch
+    core: gearsystem
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:690"
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:691"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:692"
+  - emulator: retroarch
+    core: smsplus
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:693"
+  - emulator: mednafen
+    core: gg
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:696"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:701"
 - folder: gamegearh
   name: ggh
   extensions:
@@ -583,6 +900,27 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/ggh.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:721;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:707"
+  offers:
+  - emulator: retroarch
+    core: gearsystem
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:707"
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:708"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:709"
+  - emulator: retroarch
+    core: smsplus
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:710"
+  - emulator: mednafen
+    core: gg
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:713"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:718"
 - folder: gb
   extensions:
   - .7z
@@ -593,6 +931,53 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/gb.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:472;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:441"
+  offers:
+  - emulator: retroarch
+    core: gambatte
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:441"
+  - emulator: retroarch
+    core: sameboy
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:442"
+  - emulator: retroarch
+    core: gearboy
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:443"
+  - emulator: retroarch
+    core: tgbdual
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:444"
+  - emulator: retroarch
+    core: mgba
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:445"
+  - emulator: retroarch
+    core: vbam
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:446"
+  - emulator: retroarch
+    core: DoubleCherryGB
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:447"
+  - emulator: retroarch
+    core: skyemu
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:448"
+  - emulator: retroarch
+    core: mesen-s
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:449"
+  - emulator: retroarch
+    core: supersnes9x
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:450"
+  - emulator: retroarch
+    core: bsnes
+    when: DEVICE RK3399|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|S922X|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:453"
+  - emulator: mednafen
+    core: gb
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:458"
+  - emulator: skyemu
+    core: skyemu-sa
+    when: DEVICE SM4450|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:463"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:469"
 - folder: gba
   extensions:
   - .7z
@@ -602,6 +987,42 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/gba.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:540;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:508"
+  offers:
+  - emulator: retroarch
+    core: mgba
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:508"
+  - emulator: retroarch
+    core: vbam
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:509"
+  - emulator: retroarch
+    core: vba_next
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:510"
+  - emulator: retroarch
+    core: beetle_gba
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:511"
+  - emulator: retroarch
+    core: skyemu
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:512"
+  - emulator: retroarch
+    core: gpsp
+    when: DEVICE H700|RK3326|RK3576|RK3566|S922X; DEVICE RK3399|RK3588|SM4450|SM6115|SM8250|SM8550|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:515,518"
+  - emulator: nanoboyadvance
+    core: nanoboyadvance-sa
+    when: DEVICE RK3399|RK3588|SM4450|SM6115|SM8250|SM8550|SDM845; DEVICE SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:519,522"
+  - emulator: mednafen
+    core: gba
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:527"
+  - emulator: skyemu
+    core: skyemu-sa
+    when: DEVICE SM4450|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:532"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:537"
 - folder: gbah
   extensions:
   - .7z
@@ -611,6 +1032,38 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/gbah.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:567;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:543"
+  offers:
+  - emulator: retroarch
+    core: mgba
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:543"
+  - emulator: retroarch
+    core: vbam
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:544"
+  - emulator: retroarch
+    core: vba_next
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:545"
+  - emulator: retroarch
+    core: beetle_gba
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:546"
+  - emulator: retroarch
+    core: skyemu
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:547"
+  - emulator: retroarch
+    core: gpsp
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:550"
+  - emulator: mednafen
+    core: gba
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SDM845; DEVICE SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:551,554"
+  - emulator: skyemu
+    core: skyemu-sa
+    when: DEVICE SM4450|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:559"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:564"
 - folder: gbav
   extensions:
   - .7z
@@ -620,6 +1073,34 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/gbav.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:589;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:570"
+  offers:
+  - emulator: retroarch
+    core: mgba
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:570"
+  - emulator: retroarch
+    core: vbam
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:571"
+  - emulator: retroarch
+    core: vba_next
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:572"
+  - emulator: retroarch
+    core: beetle_gba
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:573"
+  - emulator: retroarch
+    core: skyemu
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:574"
+  - emulator: retroarch
+    core: gpsp
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:577"
+  - emulator: mednafen
+    core: gba
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SDM845; DEVICE SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:578,581"
+  - emulator: skyemu
+    core: skyemu-sa
+    when: DEVICE SM4450|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:586"
 - folder: gbc
   extensions:
   - .7z
@@ -630,6 +1111,46 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/gbc.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:616;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:592"
+  offers:
+  - emulator: retroarch
+    core: gambatte
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:592"
+  - emulator: retroarch
+    core: sameboy
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:593"
+  - emulator: retroarch
+    core: gearboy
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:594"
+  - emulator: retroarch
+    core: tgbdual
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:595"
+  - emulator: retroarch
+    core: mgba
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:596"
+  - emulator: retroarch
+    core: vbam
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:597"
+  - emulator: retroarch
+    core: DoubleCherryGB
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:598"
+  - emulator: retroarch
+    core: skyemu
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:599"
+  - emulator: retroarch
+    core: mesen-s
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:600"
+  - emulator: mednafen
+    core: gb
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:603"
+  - emulator: skyemu
+    core: skyemu-sa
+    when: DEVICE SM4450|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:608"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:613"
 - folder: gbch
   extensions:
   - .7z
@@ -640,6 +1161,46 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/gbch.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:643;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:619"
+  offers:
+  - emulator: retroarch
+    core: gambatte
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:619"
+  - emulator: retroarch
+    core: sameboy
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:620"
+  - emulator: retroarch
+    core: gearboy
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:621"
+  - emulator: retroarch
+    core: tgbdual
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:622"
+  - emulator: retroarch
+    core: mgba
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:623"
+  - emulator: retroarch
+    core: vbam
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:624"
+  - emulator: retroarch
+    core: DoubleCherryGB
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:625"
+  - emulator: retroarch
+    core: skyemu
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:626"
+  - emulator: retroarch
+    core: mesen-s
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:627"
+  - emulator: mednafen
+    core: gb
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:630"
+  - emulator: skyemu
+    core: skyemu-sa
+    when: DEVICE SM4450|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:635"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:640"
 - folder: gbh
   extensions:
   - .7z
@@ -649,6 +1210,53 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/gbh.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:505;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:475"
+  offers:
+  - emulator: retroarch
+    core: gambatte
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:475"
+  - emulator: retroarch
+    core: sameboy
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:476"
+  - emulator: retroarch
+    core: gearboy
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:477"
+  - emulator: retroarch
+    core: tgbdual
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:478"
+  - emulator: retroarch
+    core: mgba
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:479"
+  - emulator: retroarch
+    core: vbam
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:480"
+  - emulator: retroarch
+    core: DoubleCherryGB
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:481"
+  - emulator: retroarch
+    core: skyemu
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:482"
+  - emulator: retroarch
+    core: mesen-s
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:483"
+  - emulator: retroarch
+    core: supersnes9x
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:484"
+  - emulator: retroarch
+    core: bsnes
+    when: DEVICE RK3399|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|S922X|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:487"
+  - emulator: mednafen
+    core: gb
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:492"
+  - emulator: skyemu
+    core: skyemu-sa
+    when: DEVICE SM4450|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:497"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:502"
 - folder: genesis
   extensions:
   - .7z
@@ -662,6 +1270,24 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/genesis.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1282;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1269"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1269"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1270"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1271"
+  - emulator: mednafen
+    core: md
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1274"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1279"
 - folder: genh
   extensions:
   - .7z
@@ -675,6 +1301,24 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/genh.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1298;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1285"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1285"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1286"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1287"
+  - emulator: mednafen
+    core: md
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1290"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1295"
 - folder: gp32
   extensions:
   - .7z
@@ -737,6 +1381,28 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/mame.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:784;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:777"
+  offers:
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:777"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:778"
+  - emulator: retroarch
+    core: mame2015
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:779"
+  - emulator: retroarch
+    core: mame
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:780"
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:781"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:782"
+  - emulator: retroarch
+    core: fbalpha2019
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:783"
   arcade: true
 - folder: mastersystem
   extensions:
@@ -748,6 +1414,27 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/mastersystem.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1315;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1301"
+  offers:
+  - emulator: retroarch
+    core: gearsystem
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1301"
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1302"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1303"
+  - emulator: retroarch
+    core: smsplus
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1304"
+  - emulator: mednafen
+    core: sms
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1307"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1312"
 - folder: megacd
   extensions:
   - .chd
@@ -758,6 +1445,17 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/megacd.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1266;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1259"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1259"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1260"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1263"
 - folder: megadrive
   extensions:
   - .7z
@@ -771,6 +1469,20 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/megadrive.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1326;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1318"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1318"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1319"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1320"
+  - emulator: mednafen
+    core: md
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1323"
 - folder: megadrive-japan
   extensions:
   - .7z
@@ -784,6 +1496,20 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/megadrive-japan.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:795;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:787"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:787"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:788"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:789"
+  - emulator: mednafen
+    core: md
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:792"
 - folder: megadriveh
   extensions:
   - .7z
@@ -797,6 +1523,20 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/megadriveh.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1337;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1329"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1329"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1330"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1331"
+  - emulator: mednafen
+    core: md
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1334"
 - folder: megaduck
   extensions:
   - .7z
@@ -872,6 +1612,13 @@ folders:
   emulator: mplayer
   source_ref: "os config/emulators/mplayer.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1677;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1674"
+  offers:
+  - emulator: mplayer
+    core: mplayer
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1674"
+  - emulator: retroarch
+    core: ffmpeg
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1676"
 - folder: msx
   extensions:
   - .7z
@@ -885,6 +1632,17 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/msx.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:829;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:822"
+  offers:
+  - emulator: retroarch
+    core: bluemsx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:822"
+  - emulator: retroarch
+    core: fmsx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:823"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:826,836"
 - folder: msx2
   extensions:
   - .7z
@@ -898,6 +1656,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/msx2.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:839;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:832"
+  offers:
+  - emulator: retroarch
+    core: bluemsx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:832"
+  - emulator: retroarch
+    core: fmsx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:833"
 - folder: n64
   extensions:
   - .7z
@@ -909,6 +1674,32 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/n64.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:941;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:918"
+  offers:
+  - emulator: retroarch
+    core: mupen64plus_next
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:918"
+  - emulator: retroarch
+    core: mupen64plus
+    when: "if [ \"${PREFER_GLES}\" = \"yes\" ]; then"
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:921"
+  - emulator: retroarch
+    core: parallel_n64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:923"
+  - emulator: mupen64plus
+    core: mupen64plus-sa
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:924"
+  - emulator: daedalusx64
+    core: daedalusx64-sa
+    when: DEVICE SM4450|SM8250|SDM845; DEVICE SM8550
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:927,931"
+  - emulator: gopher64
+    core: gopher64-sa
+    when: DEVICE SM8550; DEVICE SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:932,937"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550; DEVICE SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:933,938"
 - folder: n64dd
   extensions:
   - .7z
@@ -921,6 +1712,20 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/n64dd.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:952;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:944"
+  offers:
+  - emulator: retroarch
+    core: mupen64plus_next
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:944"
+  - emulator: retroarch
+    core: parallel_n64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:945"
+  - emulator: mupen64plus
+    core: mupen64plus-sa
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:946"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:949"
 - folder: naomi
   extensions:
   - .7z
@@ -945,6 +1750,17 @@ folders:
       core: flycast-sa
       emulator: flycast
       source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:854"
+  offers:
+  - emulator: retroarch
+    core: flycast2021
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM6115; DEVICE SM4450|SM8250|SM8550|SM8650|SM8750|S922X|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:844,851"
+  - emulator: retroarch
+    core: flycast
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:845,850,855,858"
+  - emulator: flycast
+    core: flycast-sa
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:846,849,854,859"
   arcade: true
 - folder: nds
   extensions:
@@ -968,6 +1784,35 @@ folders:
       core: melonds-sa
       emulator: melonds
       source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:995"
+  offers:
+  - emulator: drastic
+    core: drastic-sa
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:957,965,976,1003,1012"
+  - emulator: retroarch
+    core: melonds
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:958,966,978,988,997,1004,1013"
+  - emulator: retroarch
+    core: melondsds
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:959,967,979,989,998,1005,1014"
+  - emulator: retroarch
+    core: desmume
+    when: DEVICE H700|RK3326; DEVICE RK3399|RK3566|RK3576|RK3588|SM6115; DEVICE SM4450|SM8250|SM8550|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:960,969,980"
+  - emulator: retroarch
+    core: skyemu
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:961,970,981,990,999,1007,1015"
+  - emulator: dsperate
+    core: dsperate-sa
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:962,971,982,991,1008,1016"
+  - emulator: melonds
+    core: melonds-sa
+    when: DEVICE AMD64; DEVICE RK3399|RK3566|RK3576|RK3588|SM6115; DEVICE S922X; DEVICE SM4450|SM8250|SM8550|SDM845;
+      DEVICE SM8650|SM8750
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:968,975,986,995,1006"
+  - emulator: skyemu
+    core: skyemu-sa
+    when: DEVICE AMD64; DEVICE SM4450|SM8250|SM8550|SDM845; DEVICE SM8650|SM8750
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:977,987,996"
 - folder: ndsiware
   extensions:
   - .7z
@@ -977,6 +1822,16 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/ndsiware.conf:3,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1037;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1032"
+  offers:
+  - emulator: retroarch
+    core: melondsds
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1024,1028,1032"
+  - emulator: dsperate
+    core: dsperate-sa
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1025,1034"
+  - emulator: melonds
+    core: melonds-sa
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1029,1033"
 - folder: neocd
   extensions:
   - .chd
@@ -986,6 +1841,16 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/neocd.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:885;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:882"
+  offers:
+  - emulator: retroarch
+    core: neocd
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:882"
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:883"
+  - emulator: retroarch
+    core: geolith
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:884"
 - folder: neogeo
   extensions:
   - .7z
@@ -995,6 +1860,35 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/neogeo.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:879;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:865"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:865"
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:866"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:867"
+  - emulator: retroarch
+    core: fbalpha2019
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:868"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:869"
+  - emulator: retroarch
+    core: mame2015
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:870"
+  - emulator: retroarch
+    core: mame
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:871"
+  - emulator: retroarch
+    core: geolith
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:872"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:875"
 - folder: nes
   extensions:
   - .7z
@@ -1006,6 +1900,27 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/nes.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1054;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1040"
+  offers:
+  - emulator: retroarch
+    core: nestopia
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1040"
+  - emulator: retroarch
+    core: fceumm
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1041"
+  - emulator: retroarch
+    core: quicknes
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1042"
+  - emulator: retroarch
+    core: mesen
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1043"
+  - emulator: mednafen
+    core: nes
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1046"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1051"
 - folder: nesh
   extensions:
   - .7z
@@ -1017,6 +1932,27 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/nesh.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1071;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1057"
+  offers:
+  - emulator: retroarch
+    core: nestopia
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1057"
+  - emulator: retroarch
+    core: fceumm
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1058"
+  - emulator: retroarch
+    core: quicknes
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1059"
+  - emulator: retroarch
+    core: mesen
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1060"
+  - emulator: mednafen
+    core: nesh
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1063"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1068"
 - folder: ngp
   extensions:
   - .7z
@@ -1027,6 +1963,21 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/ngp.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:900;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:888"
+  offers:
+  - emulator: retroarch
+    core: beetle_ngp
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:888"
+  - emulator: retroarch
+    core: race
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:889"
+  - emulator: mednafen
+    core: ngp
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:892"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:897"
 - folder: ngpc
   extensions:
   - .7z
@@ -1037,6 +1988,21 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/ngpc.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:915;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:903"
+  offers:
+  - emulator: retroarch
+    core: beetle_ngp
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:903"
+  - emulator: retroarch
+    core: race
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:904"
+  - emulator: mednafen
+    core: ngp
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:907"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:912"
 - folder: odyssey
   name: odyssey2
   extensions:
@@ -1075,6 +2041,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/pc.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:808;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:806"
+  offers:
+  - emulator: retroarch
+    core: dosbox_pure
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:806"
+  - emulator: retroarch
+    core: dosbox_core
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:807"
 - folder: pc88
   name: pc-8800
   extensions:
@@ -1118,6 +2091,31 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/pcengine.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1105;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1090"
+  offers:
+  - emulator: retroarch
+    core: beetle_pce_fast
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1090"
+  - emulator: retroarch
+    core: beetle_pce
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1091"
+  - emulator: retroarch
+    core: beetle_supergrafx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1092"
+  - emulator: retroarch
+    core: geargrafx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1093"
+  - emulator: mednafen
+    core: pce
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1096"
+  - emulator: mednafen
+    core: pce_fast
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1097"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1102"
 - folder: pcenginecd
   extensions:
   - .ccd
@@ -1129,6 +2127,31 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/pcenginecd.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1123;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1108"
+  offers:
+  - emulator: retroarch
+    core: beetle_pce_fast
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1108"
+  - emulator: retroarch
+    core: beetle_pce
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1109"
+  - emulator: retroarch
+    core: beetle_supergrafx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1110"
+  - emulator: retroarch
+    core: geargrafx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1111"
+  - emulator: mednafen
+    core: pce
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1114"
+  - emulator: mednafen
+    core: pce_fast
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1115"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1120"
 - folder: pcfx
   extensions:
   - .ccd
@@ -1139,6 +2162,14 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/pcfx.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1132;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1126"
+  offers:
+  - emulator: retroarch
+    core: beetle_pcfx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1126"
+  - emulator: mednafen
+    core: pcfx
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1129"
 - folder: pet
   extensions:
   - '.20'
@@ -1183,6 +2214,13 @@ folders:
   emulator: pico-8
   source_ref: "os config/emulators/pico-8.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1137;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1135"
+  offers:
+  - emulator: pico-8
+    core: pico8
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1135"
+  - emulator: retroarch
+    core: fake08
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1136"
 - folder: pokemini
   extensions:
   - .7z
@@ -1234,6 +2272,13 @@ folders:
   emulator: ppsspp
   source_ref: "os config/emulators/psp.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1206;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1204"
+  offers:
+  - emulator: ppsspp
+    core: ppsspp-sa
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1204"
+  - emulator: retroarch
+    core: ppsspp
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1205"
 - folder: pspminis
   extensions:
   - .chd
@@ -1244,6 +2289,13 @@ folders:
   emulator: ppsspp
   source_ref: "os config/emulators/pspminis.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1212;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1210"
+  offers:
+  - emulator: ppsspp
+    core: ppsspp-sa
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1210"
+  - emulator: retroarch
+    core: ppsspp
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1211"
 - folder: psvita
   extensions:
   - .pkg
@@ -1287,6 +2339,36 @@ folders:
       core: pcsx_rearmed
       emulator: retroarch
       source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1177"
+  offers:
+  - emulator: retroarch
+    core: pcsx_rearmed32
+    when: DEVICE H700|RK3326; DEVICE RK3399|RK3588|SM6115; DEVICE RK3576|RK3566; DEVICE SM4450|SM8250|SM8550|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1142,1148,1154,1159"
+  - emulator: retroarch
+    core: pcsx_rearmed
+    when: DEVICE AMD64; DEVICE H700|RK3326; DEVICE RK3399|RK3588|SM6115; DEVICE RK3576|RK3566; DEVICE
+      S922X; DEVICE SM4450|SM8250|SM8550|SDM845; DEVICE SM8650|SM8750
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1143,1147,1155,1160,1166,1172,1177"
+  - emulator: retroarch
+    core: duckstation
+    when: DEVICE H700|RK3326; DEVICE RK3399|RK3588|SM6115; DEVICE RK3576|RK3566; DEVICE S922X; DEVICE
+      SM4450|SM8250|SM8550|SDM845; DEVICE SM8650|SM8750
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1144,1151,1156,1163,1169,1174"
+  - emulator: retroarch
+    core: beetle_psx
+    when: DEVICE AMD64; DEVICE RK3399|RK3588|SM6115; DEVICE S922X; DEVICE SM4450|SM8250|SM8550|SDM845;
+      DEVICE SM8650|SM8750
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1149,1161,1167,1173,1178"
+  - emulator: mednafen
+    core: psx
+    when: DEVICE AMD64; DEVICE RK3399|RK3588|SM6115; DEVICE SM4450|SM8250|SM8550|SDM845; DEVICE SM8650|SM8750
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1150,1162,1168,1179"
+  - emulator: duckstation
+    core: duckstation-sa
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1181"
+  - emulator: retroarch
+    core: swanstation
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1182"
 - folder: satellaview
   extensions:
   - .7z
@@ -1301,6 +2383,29 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/satellaview.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1533;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1522"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1522"
+  - emulator: retroarch
+    core: snes9x2010
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1523"
+  - emulator: retroarch
+    core: snes9x2002
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1524"
+  - emulator: retroarch
+    core: snes9x2005_plus
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1525"
+  - emulator: retroarch
+    core: supersnes9x
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1526"
+  - emulator: retroarch
+    core: mesen-s
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1527"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1530"
 - folder: saturn
   extensions:
   - .chd
@@ -1311,6 +2416,28 @@ folders:
   emulator: yabasanshiro
   source_ref: "os config/emulators/saturn.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1361;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1344"
+  offers:
+  - emulator: yabasanshiro
+    core: yabasanshiro-sa
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1344"
+  - emulator: retroarch
+    core: yabasanshiro
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1345"
+  - emulator: retroarch
+    core: yabadabadoo
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1346"
+  - emulator: retroarch
+    core: beetle_saturn
+    when: DEVICE RK3588|SM6115; DEVICE S922X|AMD64; DEVICE SM4450|SM8250|SM8550|SM8650|SM8750|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1349,1353,1358"
+  - emulator: mednafen
+    core: ss
+    when: DEVICE RK3588|SM6115; DEVICE SM4450|SM8250|SM8550|SM8650|SM8750|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1350,1355"
+  - emulator: retroarch
+    core: kronos
+    when: DEVICE SM4450|SM8250|SM8550|SM8650|SM8750|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1354"
 - folder: screenshots
   name: imageviewer
   extensions:
@@ -1353,6 +2480,14 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/sega32x.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1246;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1240"
+  offers:
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1240"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1243"
 - folder: segacd
   extensions:
   - .chd
@@ -1363,6 +2498,17 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/segacd.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1256;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1249"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1249"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1250"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1253"
 - folder: segamodel3
   extensions:
   - .zip
@@ -1383,6 +2529,62 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/sfc.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1519;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1490"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1490"
+  - emulator: retroarch
+    core: snes9x2010
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1491"
+  - emulator: retroarch
+    core: snes9x2002
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1492"
+  - emulator: retroarch
+    core: snes9x2005_plus
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1493"
+  - emulator: retroarch
+    core: supersnes9x
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1494"
+  - emulator: retroarch
+    core: beetle_supafaust
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1495"
+  - emulator: retroarch
+    core: bsnes_mercury_accuracy
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1496"
+  - emulator: retroarch
+    core: bsnes_mercury_balanced
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1497"
+  - emulator: retroarch
+    core: bsnes_mercury_performance
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1498"
+  - emulator: retroarch
+    core: bsnes2014_accuracy
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1499"
+  - emulator: retroarch
+    core: bsnes2014_balanced
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1500"
+  - emulator: retroarch
+    core: bsnes2014_performance
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1501"
+  - emulator: retroarch
+    core: mesen-s
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1502"
+  - emulator: retroarch
+    core: bsnes
+    when: DEVICE RK3399|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|S922X|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1505"
+  - emulator: retroarch
+    core: bsnes_hd_beta
+    when: DEVICE RK3399|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|S922X|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1506"
+  - emulator: mednafen
+    core: snes_faust
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1511"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1516"
 - folder: sg-1000
   extensions:
   - .7z
@@ -1393,6 +2595,20 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/sg-1000.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1380;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1372"
+  offers:
+  - emulator: retroarch
+    core: gearsystem
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1372"
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1373"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1374"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1377"
 - folder: sgfx
   name: supergrafx
   extensions:
@@ -1407,6 +2623,28 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/supergrafx.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1423;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1409"
+  offers:
+  - emulator: retroarch
+    core: beetle_supergrafx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1409"
+  - emulator: retroarch
+    core: beetle_pce
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1410"
+  - emulator: retroarch
+    core: geargrafx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1411"
+  - emulator: mednafen
+    core: pce
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1414"
+  - emulator: mednafen
+    core: pce_fast
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1415"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1420"
 - folder: snes
   extensions:
   - .7z
@@ -1419,6 +2657,62 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/snes.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1455;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1426"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1426"
+  - emulator: retroarch
+    core: snes9x2010
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1427"
+  - emulator: retroarch
+    core: snes9x2002
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1428"
+  - emulator: retroarch
+    core: snes9x2005_plus
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1429"
+  - emulator: retroarch
+    core: supersnes9x
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1430"
+  - emulator: retroarch
+    core: beetle_supafaust
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1431"
+  - emulator: retroarch
+    core: bsnes_mercury_accuracy
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1432"
+  - emulator: retroarch
+    core: bsnes_mercury_balanced
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1433"
+  - emulator: retroarch
+    core: bsnes_mercury_performance
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1434"
+  - emulator: retroarch
+    core: bsnes2014_accuracy
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1435"
+  - emulator: retroarch
+    core: bsnes2014_balanced
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1436"
+  - emulator: retroarch
+    core: bsnes2014_performance
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1437"
+  - emulator: retroarch
+    core: mesen-s
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1438"
+  - emulator: retroarch
+    core: bsnes
+    when: DEVICE RK3399|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|S922X|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1441"
+  - emulator: retroarch
+    core: bsnes_hd_beta
+    when: DEVICE RK3399|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|S922X|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1442"
+  - emulator: mednafen
+    core: snes_faust
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1447"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1452"
 - folder: snesh
   extensions:
   - .7z
@@ -1431,6 +2725,62 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/snesh.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1487;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1458"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1458"
+  - emulator: retroarch
+    core: snes9x2010
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1459"
+  - emulator: retroarch
+    core: snes9x2002
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1460"
+  - emulator: retroarch
+    core: snes9x2005_plus
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1461"
+  - emulator: retroarch
+    core: supersnes9x
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1462"
+  - emulator: retroarch
+    core: beetle_supafaust
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1463"
+  - emulator: retroarch
+    core: bsnes_mercury_accuracy
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1464"
+  - emulator: retroarch
+    core: bsnes_mercury_balanced
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1465"
+  - emulator: retroarch
+    core: bsnes_mercury_performance
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1466"
+  - emulator: retroarch
+    core: bsnes2014_accuracy
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1467"
+  - emulator: retroarch
+    core: bsnes2014_balanced
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1468"
+  - emulator: retroarch
+    core: bsnes2014_performance
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1469"
+  - emulator: retroarch
+    core: mesen-s
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1470"
+  - emulator: retroarch
+    core: bsnes
+    when: DEVICE RK3399|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|S922X|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1473"
+  - emulator: retroarch
+    core: bsnes_hd_beta
+    when: DEVICE RK3399|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|S922X|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1474"
+  - emulator: mednafen
+    core: snes_faust
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1479"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1484"
 - folder: snesmsu1
   extensions:
   - .7z
@@ -1443,6 +2793,20 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/snesmsu1.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:819;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:811"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:811"
+  - emulator: retroarch
+    core: supersnes9x
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:812"
+  - emulator: retroarch
+    core: beetle_supafaust
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:813"
+  - emulator: mednafen
+    core: snes_faust
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:816"
 - folder: st-v
   extensions:
   - .zip
@@ -1460,6 +2824,17 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/sufami.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1543;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1536"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1536"
+  - emulator: retroarch
+    core: supersnes9x
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1537"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1540"
 - folder: supervision
   extensions:
   - .7z
@@ -1479,6 +2854,27 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/tg16.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1568;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1558"
+  offers:
+  - emulator: retroarch
+    core: beetle_pce_fast
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1558"
+  - emulator: retroarch
+    core: beetle_pce
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1559"
+  - emulator: retroarch
+    core: beetle_supergrafx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1560"
+  - emulator: retroarch
+    core: geargrafx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1561"
+  - emulator: mednafen
+    core: pce
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1564"
+  - emulator: mednafen
+    core: pce_fast
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1565"
 - folder: tg16cd
   extensions:
   - .ccd
@@ -1490,6 +2886,27 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/tg16cd.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1581;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1571"
+  offers:
+  - emulator: retroarch
+    core: beetle_pce_fast
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1571"
+  - emulator: retroarch
+    core: beetle_pce
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1572"
+  - emulator: retroarch
+    core: beetle_supergrafx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1573"
+  - emulator: retroarch
+    core: geargrafx
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1574"
+  - emulator: mednafen
+    core: pce
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1577"
+  - emulator: mednafen
+    core: pce_fast
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1578"
 - folder: tic-80
   extensions:
   - .tic
@@ -1511,6 +2928,15 @@ folders:
   emulator: dolphin
   source_ref: "os config/emulators/triforce.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:662;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:659"
+  offers:
+  - emulator: dolphin
+    core: dolphin-sa-gc
+    when: DEVICE RK3399|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:659"
+  - emulator: dolphin
+    core: dolphin-qt-gc
+    when: DEVICE RK3399|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:660"
   arcade: true
 - folder: uzebox
   extensions:
@@ -1566,6 +2992,13 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/vic20.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:319;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:317"
+  offers:
+  - emulator: retroarch
+    core: vice_xvic
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:317"
+  - emulator: vicesa
+    core: xvic
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:318"
 - folder: videopac
   extensions:
   - .7z
@@ -1591,6 +3024,14 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/virtualboy.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1606;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1600"
+  offers:
+  - emulator: retroarch
+    core: beetle_vb
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1600"
+  - emulator: mednafen
+    core: vb
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1603"
 - folder: wasm4
   extensions:
   - .wasm
@@ -1614,6 +3055,19 @@ folders:
   emulator: dolphin
   source_ref: "os config/emulators/wii.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:675;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:669"
+  offers:
+  - emulator: dolphin
+    core: dolphin-sa-wii
+    when: DEVICE RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|S922X|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:669"
+  - emulator: dolphin
+    core: dolphin-qt-wii
+    when: DEVICE RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|S922X|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:671"
+  - emulator: retroarch
+    core: dolphin
+    when: DEVICE RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|S922X|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:673"
 - folder: wiiu
   extensions:
   - .rpx
@@ -1639,6 +3093,19 @@ folders:
   emulator: dolphin
   source_ref: "os config/emulators/wiiware.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:676;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:670"
+  offers:
+  - emulator: dolphin
+    core: dolphin-sa-wii
+    when: DEVICE RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|S922X|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:670"
+  - emulator: dolphin
+    core: dolphin-qt-wii
+    when: DEVICE RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|S922X|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:672"
+  - emulator: retroarch
+    core: dolphin
+    when: DEVICE RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|S922X|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:674"
 - folder: windows
   extensions:
   - .sh
@@ -1656,6 +3123,18 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/wonderswan.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1620;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1609"
+  offers:
+  - emulator: retroarch
+    core: beetle_wswan
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1609"
+  - emulator: mednafen
+    core: wswan
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1612"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1617"
 - folder: wonderswancolor
   extensions:
   - .7z
@@ -1666,6 +3145,18 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/wonderswancolor.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1634;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1623"
+  offers:
+  - emulator: retroarch
+    core: beetle_wswan
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1623"
+  - emulator: mednafen
+    core: wswan
+    when: DEVICE H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750|AMD64|SDM845
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1626"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1631"
 - folder: x1
   extensions:
   - .2d
@@ -1750,3 +3241,11 @@ folders:
   emulator: retroarch
   source_ref: "os config/emulators/zxspectrum.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1402;\
     \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1396"
+  offers:
+  - emulator: retroarch
+    core: fuse
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1396"
+  - emulator: ares
+    core: ares-sa
+    when: DEVICE SM8550|SM8650|SM8750|AMD64
+    source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1399"

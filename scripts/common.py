@@ -3419,10 +3419,11 @@ def content_folder_tags(config: dict) -> set[str]:
     A core reading its BIOS sets beside the game (MAME 2003's osd_get_path
     gives FILETYPE_ROM the content directory) reads them in the folder of
     the system it is launched for. The folders come from the platform's own
-    lists: ``libretro_systems``, the default core of each folder its rom
-    folders file records, the cores a system offers under its own name, and
-    the systems a RetroPie package registers. A platform with no roms root,
-    or one keeping no folder per system (RetroArch, Lakka), gives none.
+    lists: ``libretro_systems``, every core a folder of its rom folders file
+    offers (its default, its board defaults, ``offers``), the cores a system
+    offers under its own name, and the systems a RetroPie package registers.
+    A platform with no roms root, or one keeping no folder per system
+    (RetroArch, Lakka), gives none.
     """
     if config.get("inherits_from") == "emulatorjs":
         # EmulatorJS writes the BIOS a frontend hands it and the game to
@@ -3438,7 +3439,8 @@ def content_folder_tags(config: dict) -> set[str]:
     for core, systems in (config.get("libretro_systems") or {}).items():
         pairs |= {(_core_key(core), str(s)) for s in systems or []}
     for row in rows:
-        for choice in [row, *(row.get("board_defaults") or {}).values()]:
+        choices = [row, *(row.get("board_defaults") or {}).values(), *(row.get("offers") or [])]
+        for choice in choices:
             if choice.get("core") and choice.get("emulator") in LIBRETRO_RUNNERS:
                 pairs.add((_core_key(choice["core"]), str(row["folder"])))
     for system in (config.get("systems") or {}).values():

@@ -61,6 +61,13 @@ folders:
   core: mame
   emulator: mame
   source_ref: "esde resources/systems/windows/es_systems.xml:14"
+  offers:
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:18,19,20,21"
+  - emulator: colem
+    core: colem
+    source_ref: "esde resources/systems/windows/es_systems.xml:22"
   searched_by:
   - emulator: mame
     reads:
@@ -99,6 +106,22 @@ folders:
   core: puae
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:36"
+  offers:
+  - emulator: retroarch
+    core: puae
+    source_ref: "esde resources/systems/windows/es_systems.xml:40"
+  - emulator: retroarch
+    core: puae2021
+    source_ref: "esde resources/systems/windows/es_systems.xml:41"
+  - emulator: fs-uae
+    core: fs-uae
+    source_ref: "esde resources/systems/windows/es_systems.xml:42"
+  - emulator: retroarch
+    core: amiberry
+    source_ref: "esde resources/systems/windows/es_systems.xml:43"
+  - emulator: amiberry
+    core: amiberry
+    source_ref: "esde resources/systems/windows/es_systems.xml:44"
 - folder: amiga1200
   extensions:
   - .7z
@@ -123,6 +146,22 @@ folders:
   core: puae
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:49"
+  offers:
+  - emulator: retroarch
+    core: puae
+    source_ref: "esde resources/systems/windows/es_systems.xml:53"
+  - emulator: retroarch
+    core: puae2021
+    source_ref: "esde resources/systems/windows/es_systems.xml:54"
+  - emulator: fs-uae
+    core: fs-uae
+    source_ref: "esde resources/systems/windows/es_systems.xml:55"
+  - emulator: retroarch
+    core: amiberry
+    source_ref: "esde resources/systems/windows/es_systems.xml:56"
+  - emulator: amiberry
+    core: amiberry
+    source_ref: "esde resources/systems/windows/es_systems.xml:57"
 - folder: amiga600
   extensions:
   - .7z
@@ -147,6 +186,22 @@ folders:
   core: puae
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:62"
+  offers:
+  - emulator: retroarch
+    core: puae
+    source_ref: "esde resources/systems/windows/es_systems.xml:66"
+  - emulator: retroarch
+    core: puae2021
+    source_ref: "esde resources/systems/windows/es_systems.xml:67"
+  - emulator: fs-uae
+    core: fs-uae
+    source_ref: "esde resources/systems/windows/es_systems.xml:68"
+  - emulator: retroarch
+    core: amiberry
+    source_ref: "esde resources/systems/windows/es_systems.xml:69"
+  - emulator: amiberry
+    core: amiberry
+    source_ref: "esde resources/systems/windows/es_systems.xml:70"
 - folder: amigacd32
   extensions:
   - .7z
@@ -171,6 +226,22 @@ folders:
   core: puae
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:75"
+  offers:
+  - emulator: retroarch
+    core: puae
+    source_ref: "esde resources/systems/windows/es_systems.xml:79"
+  - emulator: retroarch
+    core: puae2021
+    source_ref: "esde resources/systems/windows/es_systems.xml:80"
+  - emulator: fs-uae
+    core: fs-uae
+    source_ref: "esde resources/systems/windows/es_systems.xml:81"
+  - emulator: retroarch
+    core: amiberry
+    source_ref: "esde resources/systems/windows/es_systems.xml:82"
+  - emulator: amiberry
+    core: amiberry
+    source_ref: "esde resources/systems/windows/es_systems.xml:83"
 - folder: amstradcpc
   extensions:
   - .7z
@@ -187,6 +258,22 @@ folders:
   core: cap32
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:88"
+  offers:
+  - emulator: retroarch
+    core: cap32
+    source_ref: "esde resources/systems/windows/es_systems.xml:92"
+  - emulator: retroarch
+    core: crocods
+    source_ref: "esde resources/systems/windows/es_systems.xml:93"
+  - emulator: cpcemu
+    core: cpcemu
+    source_ref: "esde resources/systems/windows/es_systems.xml:94"
+  - emulator: ace-dl
+    core: ace-dl
+    source_ref: "esde resources/systems/windows/es_systems.xml:95"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:96"
   searched_by:
   - emulator: mame
     reads:
@@ -221,6 +308,25 @@ folders:
   core: applewin
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:128"
+  offers:
+  - emulator: retroarch
+    core: applewin
+    source_ref: "esde resources/systems/windows/es_systems.xml:132"
+  - emulator: applewin
+    core: applewin
+    source_ref: "esde resources/systems/windows/es_systems.xml:133"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:134"
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:135"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:136"
+  - emulator: izapple2
+    core: izapple2
+    source_ref: "esde resources/systems/windows/es_systems.xml:137"
   searched_by:
   - emulator: retroarch
     core: mame
@@ -243,6 +349,16 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:142"
+  offers:
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:146,147"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:148,149"
+  - emulator: kegs
+    core: kegs
+    source_ref: "esde resources/systems/windows/es_systems.xml:150"
   searched_by:
   - emulator: retroarch
     core: mame
@@ -272,6 +388,85 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:155"
+  offers:
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:159"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "esde resources/systems/windows/es_systems.xml:160"
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "esde resources/systems/windows/es_systems.xml:161"
+  - emulator: retroarch
+    core: mame2003
+    source_ref: "esde resources/systems/windows/es_systems.xml:162"
+  - emulator: retroarch
+    core: mame2000
+    source_ref: "esde resources/systems/windows/es_systems.xml:163"
+  - emulator: retroarch
+    core: hbmame
+    source_ref: "esde resources/systems/windows/es_systems.xml:164"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:165"
+  - emulator: groovymame
+    core: groovymame
+    source_ref: "esde resources/systems/windows/es_systems.xml:166"
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "esde resources/systems/windows/es_systems.xml:167"
+  - emulator: finalburn-neo
+    core: finalburn-neo
+    source_ref: "esde resources/systems/windows/es_systems.xml:168"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "esde resources/systems/windows/es_systems.xml:169"
+  - emulator: retroarch
+    core: geolith
+    source_ref: "esde resources/systems/windows/es_systems.xml:170"
+  - emulator: retroarch
+    core: flycast
+    source_ref: "esde resources/systems/windows/es_systems.xml:171"
+  - emulator: flycast
+    core: flycast
+    source_ref: "esde resources/systems/windows/es_systems.xml:172"
+  - emulator: flycast-dojo
+    core: flycast-dojo
+    source_ref: "esde resources/systems/windows/es_systems.xml:173"
+  - emulator: retroarch
+    core: kronos
+    source_ref: "esde resources/systems/windows/es_systems.xml:174"
+  - emulator: retroarch
+    core: dice
+    source_ref: "esde resources/systems/windows/es_systems.xml:175"
+  - emulator: m2emulator
+    core: m2emulator
+    source_ref: "esde resources/systems/windows/es_systems.xml:176,177"
+  - emulator: retroarch
+    core: supermodel
+    source_ref: "esde resources/systems/windows/es_systems.xml:178"
+  - emulator: supermodel
+    core: supermodel
+    source_ref: "esde resources/systems/windows/es_systems.xml:179"
+  - emulator: supermodel-dojo
+    core: supermodel-dojo
+    source_ref: "esde resources/systems/windows/es_systems.xml:180"
+  - emulator: linux-loader
+    core: linux-loader
+    source_ref: "esde resources/systems/windows/es_systems.xml:181"
+  - emulator: pcsx2x6
+    core: pcsx2x6
+    source_ref: "esde resources/systems/windows/es_systems.xml:182"
+  - emulator: mfme
+    core: mfme
+    source_ref: "esde resources/systems/windows/es_systems.xml:184"
+  - emulator: arcadeduck
+    core: arcadeduck
+    source_ref: "esde resources/systems/windows/es_systems.xml:185"
+  - emulator: os-shell
+    core: os-shell
+    source_ref: "esde resources/systems/windows/es_systems.xml:186"
   searched_by:
   - emulator: mame
     reads:
@@ -292,6 +487,19 @@ folders:
   core: amiarcadia
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:191"
+  offers:
+  - emulator: retroarch
+    core: amiarcadia
+    source_ref: "esde resources/systems/windows/es_systems.xml:195"
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:196"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:197"
+  - emulator: winarcadia
+    core: winarcadia
+    source_ref: "esde resources/systems/windows/es_systems.xml:198"
   searched_by:
   - emulator: retroarch
     core: mame
@@ -361,6 +569,13 @@ folders:
   core: arduous
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:215"
+  offers:
+  - emulator: retroarch
+    core: arduous
+    source_ref: "esde resources/systems/windows/es_systems.xml:219"
+  - emulator: retroarch
+    core: ardens
+    source_ref: "esde resources/systems/windows/es_systems.xml:220"
 - folder: astrocde
   extensions:
   - .7z
@@ -368,6 +583,13 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:225"
+  offers:
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:229"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:230"
   searched_by:
   - emulator: retroarch
     core: mame
@@ -391,6 +613,28 @@ folders:
   core: stella
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:235"
+  offers:
+  - emulator: retroarch
+    core: stella
+    source_ref: "esde resources/systems/windows/es_systems.xml:239"
+  - emulator: retroarch
+    core: stella2014
+    source_ref: "esde resources/systems/windows/es_systems.xml:240"
+  - emulator: retroarch
+    core: stella2023
+    source_ref: "esde resources/systems/windows/es_systems.xml:241"
+  - emulator: stella
+    core: stella
+    source_ref: "esde resources/systems/windows/es_systems.xml:242"
+  - emulator: retroarch
+    core: tia
+    source_ref: "esde resources/systems/windows/es_systems.xml:243"
+  - emulator: gopher2600
+    core: gopher2600
+    source_ref: "esde resources/systems/windows/es_systems.xml:244"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:245"
 - folder: atari5200
   extensions:
   - .7z
@@ -409,6 +653,19 @@ folders:
   core: a5200
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:250"
+  offers:
+  - emulator: retroarch
+    core: a5200
+    source_ref: "esde resources/systems/windows/es_systems.xml:254"
+  - emulator: retroarch
+    core: atari800
+    source_ref: "esde resources/systems/windows/es_systems.xml:255"
+  - emulator: atari800
+    core: atari800
+    source_ref: "esde resources/systems/windows/es_systems.xml:256"
+  - emulator: altirra
+    core: altirra
+    source_ref: "esde resources/systems/windows/es_systems.xml:257"
 - folder: atari7800
   extensions:
   - .7z
@@ -418,6 +675,19 @@ folders:
   core: prosystem
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:262"
+  offers:
+  - emulator: retroarch
+    core: prosystem
+    source_ref: "esde resources/systems/windows/es_systems.xml:266"
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:267"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:268"
+  - emulator: a7800
+    core: a7800
+    source_ref: "esde resources/systems/windows/es_systems.xml:269"
   searched_by:
   - emulator: retroarch
     core: mame
@@ -456,6 +726,16 @@ folders:
   core: atari800
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:274"
+  offers:
+  - emulator: retroarch
+    core: atari800
+    source_ref: "esde resources/systems/windows/es_systems.xml:278"
+  - emulator: atari800
+    core: atari800
+    source_ref: "esde resources/systems/windows/es_systems.xml:279"
+  - emulator: altirra
+    core: altirra
+    source_ref: "esde resources/systems/windows/es_systems.xml:280"
 - folder: atarijaguar
   extensions:
   - .7z
@@ -473,6 +753,16 @@ folders:
   core: virtualjaguar
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:285"
+  offers:
+  - emulator: retroarch
+    core: virtualjaguar
+    source_ref: "esde resources/systems/windows/es_systems.xml:289"
+  - emulator: bigpemu
+    core: bigpemu
+    source_ref: "esde resources/systems/windows/es_systems.xml:290"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:291"
   searched_by:
   - emulator: mame
     reads:
@@ -495,6 +785,13 @@ folders:
   core: virtualjaguar
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:296"
+  offers:
+  - emulator: retroarch
+    core: virtualjaguar
+    source_ref: "esde resources/systems/windows/es_systems.xml:300"
+  - emulator: bigpemu
+    core: bigpemu
+    source_ref: "esde resources/systems/windows/es_systems.xml:301"
 - folder: atarilynx
   extensions:
   - .7z
@@ -505,6 +802,22 @@ folders:
   core: mednafen_lynx
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:306; os functions/ToolScripts/emuDeckESDE.ps1:311"
+  offers:
+  - emulator: retroarch
+    core: handy
+    source_ref: "esde resources/systems/windows/es_systems.xml:310"
+  - emulator: retroarch
+    core: mednafen_lynx
+    source_ref: "esde resources/systems/windows/es_systems.xml:311"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:312"
+  - emulator: retroarch
+    core: gearlynx
+    source_ref: "esde resources/systems/windows/es_systems.xml:313"
+  - emulator: retroarch
+    core: holani
+    source_ref: "esde resources/systems/windows/es_systems.xml:314"
 - folder: atarist
   extensions:
   - .7z
@@ -518,6 +831,16 @@ folders:
   core: hatari
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:319"
+  offers:
+  - emulator: retroarch
+    core: hatari
+    source_ref: "esde resources/systems/windows/es_systems.xml:323"
+  - emulator: retroarch
+    core: hatari2014
+    source_ref: "esde resources/systems/windows/es_systems.xml:324"
+  - emulator: hatari
+    core: hatari
+    source_ref: "esde resources/systems/windows/es_systems.xml:325"
 - folder: atarixe
   extensions:
   - .7z
@@ -536,6 +859,16 @@ folders:
   core: atari800
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:330"
+  offers:
+  - emulator: retroarch
+    core: atari800
+    source_ref: "esde resources/systems/windows/es_systems.xml:334"
+  - emulator: atari800
+    core: atari800
+    source_ref: "esde resources/systems/windows/es_systems.xml:335"
+  - emulator: altirra
+    core: altirra
+    source_ref: "esde resources/systems/windows/es_systems.xml:336"
 - folder: atomiswave
   extensions:
   - .7z
@@ -547,6 +880,19 @@ folders:
   core: flycast
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:341"
+  offers:
+  - emulator: retroarch
+    core: flycast
+    source_ref: "esde resources/systems/windows/es_systems.xml:345"
+  - emulator: flycast
+    core: flycast
+    source_ref: "esde resources/systems/windows/es_systems.xml:346"
+  - emulator: flycast-dojo
+    core: flycast-dojo
+    source_ref: "esde resources/systems/windows/es_systems.xml:347"
+  - emulator: demul
+    core: demul
+    source_ref: "esde resources/systems/windows/es_systems.xml:348"
 - folder: bbcmicro
   extensions:
   - .7z
@@ -557,6 +903,16 @@ folders:
   core: mame
   emulator: mame
   source_ref: "esde resources/systems/windows/es_systems.xml:353"
+  offers:
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:357"
+  - emulator: retroarch
+    core: b2
+    source_ref: "esde resources/systems/windows/es_systems.xml:358"
+  - emulator: beebem
+    core: beebem
+    source_ref: "esde resources/systems/windows/es_systems.xml:359"
   searched_by:
   - emulator: mame
     reads:
@@ -601,6 +957,25 @@ folders:
   core: vice_x64sc
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:364"
+  offers:
+  - emulator: retroarch
+    core: vice_x64sc
+    source_ref: "esde resources/systems/windows/es_systems.xml:368"
+  - emulator: vice-x64sc
+    core: vice-x64sc
+    source_ref: "esde resources/systems/windows/es_systems.xml:369"
+  - emulator: retroarch
+    core: vice_x64
+    source_ref: "esde resources/systems/windows/es_systems.xml:370"
+  - emulator: retroarch
+    core: vice_xscpu64
+    source_ref: "esde resources/systems/windows/es_systems.xml:371"
+  - emulator: retroarch
+    core: vice_x128
+    source_ref: "esde resources/systems/windows/es_systems.xml:372"
+  - emulator: retroarch
+    core: frodo
+    source_ref: "esde resources/systems/windows/es_systems.xml:373"
 - folder: cdimono1
   extensions:
   - .chd
@@ -609,6 +984,16 @@ folders:
   core: same_cdi
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:378"
+  offers:
+  - emulator: retroarch
+    core: same_cdi
+    source_ref: "esde resources/systems/windows/es_systems.xml:382"
+  - emulator: retroarch
+    core: cdi2015
+    source_ref: "esde resources/systems/windows/es_systems.xml:383"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:384"
   searched_by:
   - emulator: mame
     reads:
@@ -640,6 +1025,22 @@ folders:
   core: puae
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:389"
+  offers:
+  - emulator: retroarch
+    core: puae
+    source_ref: "esde resources/systems/windows/es_systems.xml:393"
+  - emulator: retroarch
+    core: puae2021
+    source_ref: "esde resources/systems/windows/es_systems.xml:394"
+  - emulator: fs-uae
+    core: fs-uae
+    source_ref: "esde resources/systems/windows/es_systems.xml:395"
+  - emulator: retroarch
+    core: amiberry
+    source_ref: "esde resources/systems/windows/es_systems.xml:396"
+  - emulator: amiberry
+    core: amiberry
+    source_ref: "esde resources/systems/windows/es_systems.xml:397"
 - folder: chailove
   extensions:
   - .7z
@@ -658,6 +1059,16 @@ folders:
   core: freechaf
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:411"
+  offers:
+  - emulator: retroarch
+    core: freechaf
+    source_ref: "esde resources/systems/windows/es_systems.xml:415"
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:416"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:417"
   searched_by:
   - emulator: retroarch
     core: mame
@@ -681,6 +1092,13 @@ folders:
   core: xroar
   emulator: xroar
   source_ref: "esde resources/systems/windows/es_systems.xml:422"
+  offers:
+  - emulator: xroar
+    core: xroar
+    source_ref: "esde resources/systems/windows/es_systems.xml:426,427"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:428,429"
   searched_by:
   - emulator: mame
     reads:
@@ -708,6 +1126,34 @@ folders:
   core: bluemsx
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:434"
+  offers:
+  - emulator: retroarch
+    core: bluemsx
+    source_ref: "esde resources/systems/windows/es_systems.xml:438"
+  - emulator: retroarch
+    core: gearcoleco
+    source_ref: "esde resources/systems/windows/es_systems.xml:439"
+  - emulator: retroarch
+    core: jollycv
+    source_ref: "esde resources/systems/windows/es_systems.xml:440"
+  - emulator: retroarch
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:441"
+  - emulator: blastem
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:442"
+  - emulator: openmsx
+    core: openmsx
+    source_ref: "esde resources/systems/windows/es_systems.xml:443"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:444"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:445"
+  - emulator: colem
+    core: colem
+    source_ref: "esde resources/systems/windows/es_systems.xml:446"
 - folder: consolearcade
   extensions:
   - .7z
@@ -722,6 +1168,55 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:451"
+  offers:
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:455"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:456"
+  - emulator: retroarch
+    core: flycast
+    source_ref: "esde resources/systems/windows/es_systems.xml:457"
+  - emulator: flycast
+    core: flycast
+    source_ref: "esde resources/systems/windows/es_systems.xml:458"
+  - emulator: flycast-dojo
+    core: flycast-dojo
+    source_ref: "esde resources/systems/windows/es_systems.xml:459"
+  - emulator: retroarch
+    core: kronos
+    source_ref: "esde resources/systems/windows/es_systems.xml:460"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:461"
+  - emulator: pcsx2x6
+    core: pcsx2x6
+    source_ref: "esde resources/systems/windows/es_systems.xml:462"
+  - emulator: os-shell
+    core: os-shell
+    source_ref: "esde resources/systems/windows/es_systems.xml:465,465"
+  - emulator: rpcs3
+    core: rpcs3
+    source_ref: "esde resources/systems/windows/es_systems.xml:466,467"
+  - emulator: retroarch
+    core: dolphin
+    source_ref: "esde resources/systems/windows/es_systems.xml:468"
+  - emulator: dolphin
+    core: dolphin
+    source_ref: "esde resources/systems/windows/es_systems.xml:469"
+  - emulator: triforce
+    core: triforce
+    source_ref: "esde resources/systems/windows/es_systems.xml:470"
+  - emulator: xemu
+    core: xemu
+    source_ref: "esde resources/systems/windows/es_systems.xml:471"
+  - emulator: cxbx-reloaded
+    core: cxbx-reloaded
+    source_ref: "esde resources/systems/windows/es_systems.xml:472"
+  - emulator: arcadeduck
+    core: arcadeduck
+    source_ref: "esde resources/systems/windows/es_systems.xml:473"
   searched_by:
   - emulator: mame
     reads:
@@ -735,6 +1230,43 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:479"
+  offers:
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:483"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "esde resources/systems/windows/es_systems.xml:484"
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "esde resources/systems/windows/es_systems.xml:485"
+  - emulator: retroarch
+    core: mame2003
+    source_ref: "esde resources/systems/windows/es_systems.xml:486"
+  - emulator: retroarch
+    core: mame2000
+    source_ref: "esde resources/systems/windows/es_systems.xml:487"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:488"
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "esde resources/systems/windows/es_systems.xml:489"
+  - emulator: finalburn-neo
+    core: finalburn-neo
+    source_ref: "esde resources/systems/windows/es_systems.xml:490"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "esde resources/systems/windows/es_systems.xml:491"
+  - emulator: retroarch
+    core: fbalpha2012_cps1
+    source_ref: "esde resources/systems/windows/es_systems.xml:492"
+  - emulator: retroarch
+    core: fbalpha2012_cps2
+    source_ref: "esde resources/systems/windows/es_systems.xml:493"
+  - emulator: retroarch
+    core: fbalpha2012_cps3
+    source_ref: "esde resources/systems/windows/es_systems.xml:494"
   searched_by:
   - emulator: mame
     reads:
@@ -748,6 +1280,37 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:499"
+  offers:
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:503"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "esde resources/systems/windows/es_systems.xml:504"
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "esde resources/systems/windows/es_systems.xml:505"
+  - emulator: retroarch
+    core: mame2003
+    source_ref: "esde resources/systems/windows/es_systems.xml:506"
+  - emulator: retroarch
+    core: mame2000
+    source_ref: "esde resources/systems/windows/es_systems.xml:507"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:508"
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "esde resources/systems/windows/es_systems.xml:509"
+  - emulator: finalburn-neo
+    core: finalburn-neo
+    source_ref: "esde resources/systems/windows/es_systems.xml:510"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "esde resources/systems/windows/es_systems.xml:511"
+  - emulator: retroarch
+    core: fbalpha2012_cps1
+    source_ref: "esde resources/systems/windows/es_systems.xml:512"
   searched_by:
   - emulator: mame
     reads:
@@ -761,6 +1324,37 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:517"
+  offers:
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:521"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "esde resources/systems/windows/es_systems.xml:522"
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "esde resources/systems/windows/es_systems.xml:523"
+  - emulator: retroarch
+    core: mame2003
+    source_ref: "esde resources/systems/windows/es_systems.xml:524"
+  - emulator: retroarch
+    core: mame2000
+    source_ref: "esde resources/systems/windows/es_systems.xml:525"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:526"
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "esde resources/systems/windows/es_systems.xml:527"
+  - emulator: finalburn-neo
+    core: finalburn-neo
+    source_ref: "esde resources/systems/windows/es_systems.xml:528"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "esde resources/systems/windows/es_systems.xml:529"
+  - emulator: retroarch
+    core: fbalpha2012_cps2
+    source_ref: "esde resources/systems/windows/es_systems.xml:530"
   searched_by:
   - emulator: mame
     reads:
@@ -774,6 +1368,37 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:535"
+  offers:
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:539"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "esde resources/systems/windows/es_systems.xml:540"
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "esde resources/systems/windows/es_systems.xml:541"
+  - emulator: retroarch
+    core: mame2003
+    source_ref: "esde resources/systems/windows/es_systems.xml:542"
+  - emulator: retroarch
+    core: mame2000
+    source_ref: "esde resources/systems/windows/es_systems.xml:543"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:544"
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "esde resources/systems/windows/es_systems.xml:545"
+  - emulator: finalburn-neo
+    core: finalburn-neo
+    source_ref: "esde resources/systems/windows/es_systems.xml:546"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "esde resources/systems/windows/es_systems.xml:547"
+  - emulator: retroarch
+    core: fbalpha2012_cps3
+    source_ref: "esde resources/systems/windows/es_systems.xml:548"
   searched_by:
   - emulator: mame
     reads:
@@ -789,6 +1414,16 @@ folders:
   core: jollycv
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:553"
+  offers:
+  - emulator: retroarch
+    core: jollycv
+    source_ref: "esde resources/systems/windows/es_systems.xml:557"
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:558"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:559"
   searched_by:
   - emulator: retroarch
     core: mame
@@ -815,6 +1450,22 @@ folders:
   core: hypseus-singe
   emulator: hypseus-singe
   source_ref: "esde resources/systems/windows/es_systems.xml:564"
+  offers:
+  - emulator: hypseus-singe
+    core: hypseus-singe
+    source_ref: "esde resources/systems/windows/es_systems.xml:568,569,570"
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:571"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:572"
+  - emulator: retroarch
+    core: dirksimple
+    source_ref: "esde resources/systems/windows/es_systems.xml:573"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:574"
   searched_by:
   - emulator: mame
     reads:
@@ -841,6 +1492,22 @@ folders:
   core: prboom
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:589"
+  offers:
+  - emulator: retroarch
+    core: prboom
+    source_ref: "esde resources/systems/windows/es_systems.xml:593"
+  - emulator: prboom-plus
+    core: prboom-plus
+    source_ref: "esde resources/systems/windows/es_systems.xml:594"
+  - emulator: retroarch
+    core: boom3
+    source_ref: "esde resources/systems/windows/es_systems.xml:595"
+  - emulator: retroarch
+    core: boom3_xp
+    source_ref: "esde resources/systems/windows/es_systems.xml:596"
+  - emulator: os-shell
+    core: os-shell
+    source_ref: "esde resources/systems/windows/es_systems.xml:597"
 - folder: dos
   extensions:
   - .7z
@@ -856,6 +1523,31 @@ folders:
   core: dosbox_pure
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:602"
+  offers:
+  - emulator: retroarch
+    core: dosbox_pure
+    source_ref: "esde resources/systems/windows/es_systems.xml:606"
+  - emulator: dosbox-pure-unleashed
+    core: dosbox-pure-unleashed
+    source_ref: "esde resources/systems/windows/es_systems.xml:607"
+  - emulator: retroarch
+    core: dosbox_core
+    source_ref: "esde resources/systems/windows/es_systems.xml:608"
+  - emulator: retroarch
+    core: dosbox_svn
+    source_ref: "esde resources/systems/windows/es_systems.xml:609"
+  - emulator: dosbox-x
+    core: dosbox-x
+    source_ref: "esde resources/systems/windows/es_systems.xml:610"
+  - emulator: dosbox-staging
+    core: dosbox-staging
+    source_ref: "esde resources/systems/windows/es_systems.xml:611"
+  - emulator: dreamm
+    core: dreamm
+    source_ref: "esde resources/systems/windows/es_systems.xml:612"
+  - emulator: retroarch
+    core: virtualxt
+    source_ref: "esde resources/systems/windows/es_systems.xml:613"
 - folder: dragon32
   extensions:
   - .7z
@@ -867,6 +1559,13 @@ folders:
   core: mame
   emulator: mame
   source_ref: "esde resources/systems/windows/es_systems.xml:618"
+  offers:
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:622,623,624,625"
+  - emulator: xroar
+    core: xroar
+    source_ref: "esde resources/systems/windows/es_systems.xml:626,627"
   searched_by:
   - emulator: mame
     reads:
@@ -891,6 +1590,22 @@ folders:
   core: flycast
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:632"
+  offers:
+  - emulator: retroarch
+    core: flycast
+    source_ref: "esde resources/systems/windows/es_systems.xml:636"
+  - emulator: flycast
+    core: flycast
+    source_ref: "esde resources/systems/windows/es_systems.xml:637"
+  - emulator: flycast-dojo
+    core: flycast-dojo
+    source_ref: "esde resources/systems/windows/es_systems.xml:638"
+  - emulator: redream
+    core: redream
+    source_ref: "esde resources/systems/windows/es_systems.xml:639"
+  - emulator: demul
+    core: demul
+    source_ref: "esde resources/systems/windows/es_systems.xml:640"
 - folder: easyrpg
   extensions:
   - .easyrpg
@@ -898,6 +1613,13 @@ folders:
   core: easyrpg
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:645"
+  offers:
+  - emulator: retroarch
+    core: easyrpg
+    source_ref: "esde resources/systems/windows/es_systems.xml:649"
+  - emulator: easyrpg
+    core: easyrpg
+    source_ref: "esde resources/systems/windows/es_systems.xml:650"
 - folder: electron
   extensions:
   - .1dd
@@ -964,6 +1686,43 @@ folders:
   core: mesen
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:685"
+  offers:
+  - emulator: retroarch
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:689"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:690"
+  - emulator: retroarch
+    core: mesen2
+    source_ref: "esde resources/systems/windows/es_systems.xml:691"
+  - emulator: retroarch
+    core: nestopia
+    source_ref: "esde resources/systems/windows/es_systems.xml:692"
+  - emulator: retroarch
+    core: fceumm
+    source_ref: "esde resources/systems/windows/es_systems.xml:693"
+  - emulator: retroarch
+    core: quicknes
+    source_ref: "esde resources/systems/windows/es_systems.xml:694"
+  - emulator: retroarch
+    core: rustynes
+    source_ref: "esde resources/systems/windows/es_systems.xml:695"
+  - emulator: punes
+    core: punes
+    source_ref: "esde resources/systems/windows/es_systems.xml:696"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:697"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:698,699"
+  - emulator: jgenesis
+    core: jgenesis
+    source_ref: "esde resources/systems/windows/es_systems.xml:700"
+  - emulator: 3dsen
+    core: 3dsen
+    source_ref: "esde resources/systems/windows/es_systems.xml:701"
 - folder: fba
   extensions:
   - .7z
@@ -972,6 +1731,22 @@ folders:
   core: fbalpha2012
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:706"
+  offers:
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "esde resources/systems/windows/es_systems.xml:710"
+  - emulator: retroarch
+    core: fbalpha2012_neogeo
+    source_ref: "esde resources/systems/windows/es_systems.xml:711"
+  - emulator: retroarch
+    core: fbalpha2012_cps1
+    source_ref: "esde resources/systems/windows/es_systems.xml:712"
+  - emulator: retroarch
+    core: fbalpha2012_cps2
+    source_ref: "esde resources/systems/windows/es_systems.xml:713"
+  - emulator: retroarch
+    core: fbalpha2012_cps3
+    source_ref: "esde resources/systems/windows/es_systems.xml:714"
 - folder: fbneo
   extensions:
   - .7z
@@ -979,6 +1754,13 @@ folders:
   core: fbneo
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:719"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "esde resources/systems/windows/es_systems.xml:723"
+  - emulator: finalburn-neo
+    core: finalburn-neo
+    source_ref: "esde resources/systems/windows/es_systems.xml:724"
 - folder: fds
   extensions:
   - .7z
@@ -990,6 +1772,31 @@ folders:
   core: mesen
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:729"
+  offers:
+  - emulator: retroarch
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:733"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:734"
+  - emulator: retroarch
+    core: mesen2
+    source_ref: "esde resources/systems/windows/es_systems.xml:735"
+  - emulator: retroarch
+    core: nestopia
+    source_ref: "esde resources/systems/windows/es_systems.xml:736"
+  - emulator: retroarch
+    core: fceumm
+    source_ref: "esde resources/systems/windows/es_systems.xml:737"
+  - emulator: retroarch
+    core: rustynes
+    source_ref: "esde resources/systems/windows/es_systems.xml:738"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:739"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:740"
 - folder: flash
   extensions:
   - .ruf
@@ -997,6 +1804,13 @@ folders:
   core: ruffle
   emulator: ruffle
   source_ref: "esde resources/systems/windows/es_systems.xml:745"
+  offers:
+  - emulator: ruffle
+    core: ruffle
+    source_ref: "esde resources/systems/windows/es_systems.xml:749"
+  - emulator: arcadeflashweb
+    core: arcadeflashweb
+    source_ref: "esde resources/systems/windows/es_systems.xml:750"
 - folder: fm7
   extensions:
   - .1dd
@@ -1036,6 +1850,16 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:769"
+  offers:
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:773"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:774"
+  - emulator: tsugaru
+    core: tsugaru
+    source_ref: "esde resources/systems/windows/es_systems.xml:775"
   searched_by:
   - emulator: retroarch
     core: mame
@@ -1056,6 +1880,13 @@ folders:
   core: future-pinball
   emulator: future-pinball
   source_ref: "esde resources/systems/windows/es_systems.xml:780"
+  offers:
+  - emulator: future-pinball
+    core: future-pinball
+    source_ref: "esde resources/systems/windows/es_systems.xml:784"
+  - emulator: future-pinball-fploader
+    core: future-pinball-fploader
+    source_ref: "esde resources/systems/windows/es_systems.xml:785"
 - folder: gamate
   extensions:
   - .7z
@@ -1064,6 +1895,13 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:790"
+  offers:
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:794"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:795"
   searched_by:
   - emulator: retroarch
     core: mame
@@ -1086,6 +1924,16 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:800"
+  offers:
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:804"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:805,806"
+  - emulator: retroarch
+    core: gw
+    source_ref: "esde resources/systems/windows/es_systems.xml:807"
   searched_by:
   - emulator: mame
     reads:
@@ -1100,6 +1948,13 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:812"
+  offers:
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:816"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:817"
   searched_by:
   - emulator: retroarch
     core: mame
@@ -1138,6 +1993,46 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:822"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "esde resources/systems/windows/es_systems.xml:826"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "esde resources/systems/windows/es_systems.xml:827"
+  - emulator: retroarch
+    core: gearsystem
+    source_ref: "esde resources/systems/windows/es_systems.xml:828"
+  - emulator: retroarch
+    core: smsplus
+    source_ref: "esde resources/systems/windows/es_systems.xml:829"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "esde resources/systems/windows/es_systems.xml:830"
+  - emulator: retroarch
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:831"
+  - emulator: blastem
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:832"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:833"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:834"
+  - emulator: retroarch
+    core: mesen2
+    source_ref: "esde resources/systems/windows/es_systems.xml:835"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:836"
+  - emulator: jgenesis
+    core: jgenesis
+    source_ref: "esde resources/systems/windows/es_systems.xml:837"
+  - emulator: emulicious
+    core: emulicious
+    source_ref: "esde resources/systems/windows/es_systems.xml:838"
 - folder: gb
   extensions:
   - .7z
@@ -1154,6 +2049,73 @@ folders:
   core: gambatte
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:843"
+  offers:
+  - emulator: retroarch
+    core: gambatte
+    source_ref: "esde resources/systems/windows/es_systems.xml:847"
+  - emulator: retroarch
+    core: sameboy
+    source_ref: "esde resources/systems/windows/es_systems.xml:848"
+  - emulator: sameboy
+    core: sameboy
+    source_ref: "esde resources/systems/windows/es_systems.xml:849"
+  - emulator: retroarch
+    core: gearboy
+    source_ref: "esde resources/systems/windows/es_systems.xml:850"
+  - emulator: gearboy
+    core: gearboy
+    source_ref: "esde resources/systems/windows/es_systems.xml:851"
+  - emulator: retroarch
+    core: tgbdual
+    source_ref: "esde resources/systems/windows/es_systems.xml:852"
+  - emulator: retroarch
+    core: DoubleCherryGB
+    source_ref: "esde resources/systems/windows/es_systems.xml:853"
+  - emulator: retroarch
+    core: irogb
+    source_ref: "esde resources/systems/windows/es_systems.xml:854"
+  - emulator: retroarch
+    core: mesen-s
+    source_ref: "esde resources/systems/windows/es_systems.xml:855"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:856"
+  - emulator: retroarch
+    core: mesen2
+    source_ref: "esde resources/systems/windows/es_systems.xml:857"
+  - emulator: retroarch
+    core: bsnes
+    source_ref: "esde resources/systems/windows/es_systems.xml:858"
+  - emulator: retroarch
+    core: mgba
+    source_ref: "esde resources/systems/windows/es_systems.xml:859"
+  - emulator: mgba
+    core: mgba
+    source_ref: "esde resources/systems/windows/es_systems.xml:860"
+  - emulator: retroarch
+    core: vbam
+    source_ref: "esde resources/systems/windows/es_systems.xml:861"
+  - emulator: vba-m
+    core: vba-m
+    source_ref: "esde resources/systems/windows/es_systems.xml:862"
+  - emulator: retroarch
+    core: skyemu
+    source_ref: "esde resources/systems/windows/es_systems.xml:863"
+  - emulator: skyemu
+    core: skyemu
+    source_ref: "esde resources/systems/windows/es_systems.xml:864"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:865"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:866"
+  - emulator: jgenesis
+    core: jgenesis
+    source_ref: "esde resources/systems/windows/es_systems.xml:867"
+  - emulator: emulicious
+    core: emulicious
+    source_ref: "esde resources/systems/windows/es_systems.xml:868"
 - folder: gba
   extensions:
   - .7z
@@ -1170,6 +2132,49 @@ folders:
   core: mgba
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:873"
+  offers:
+  - emulator: retroarch
+    core: mgba
+    source_ref: "esde resources/systems/windows/es_systems.xml:877"
+  - emulator: mgba
+    core: mgba
+    source_ref: "esde resources/systems/windows/es_systems.xml:878"
+  - emulator: retroarch
+    core: vbam
+    source_ref: "esde resources/systems/windows/es_systems.xml:879"
+  - emulator: vba-m
+    core: vba-m
+    source_ref: "esde resources/systems/windows/es_systems.xml:880"
+  - emulator: retroarch
+    core: vba_next
+    source_ref: "esde resources/systems/windows/es_systems.xml:881"
+  - emulator: retroarch
+    core: gpsp
+    source_ref: "esde resources/systems/windows/es_systems.xml:882"
+  - emulator: retroarch
+    core: noods
+    source_ref: "esde resources/systems/windows/es_systems.xml:883"
+  - emulator: noods
+    core: noods
+    source_ref: "esde resources/systems/windows/es_systems.xml:884"
+  - emulator: retroarch
+    core: skyemu
+    source_ref: "esde resources/systems/windows/es_systems.xml:885"
+  - emulator: skyemu
+    core: skyemu
+    source_ref: "esde resources/systems/windows/es_systems.xml:886"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:887"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:888"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:889"
+  - emulator: retroarch
+    core: mesen2
+    source_ref: "esde resources/systems/windows/es_systems.xml:890"
 - folder: gbc
   extensions:
   - .7z
@@ -1186,6 +2191,73 @@ folders:
   core: gambatte
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:895"
+  offers:
+  - emulator: retroarch
+    core: gambatte
+    source_ref: "esde resources/systems/windows/es_systems.xml:899"
+  - emulator: retroarch
+    core: sameboy
+    source_ref: "esde resources/systems/windows/es_systems.xml:900"
+  - emulator: sameboy
+    core: sameboy
+    source_ref: "esde resources/systems/windows/es_systems.xml:901"
+  - emulator: retroarch
+    core: gearboy
+    source_ref: "esde resources/systems/windows/es_systems.xml:902"
+  - emulator: gearboy
+    core: gearboy
+    source_ref: "esde resources/systems/windows/es_systems.xml:903"
+  - emulator: retroarch
+    core: tgbdual
+    source_ref: "esde resources/systems/windows/es_systems.xml:904"
+  - emulator: retroarch
+    core: DoubleCherryGB
+    source_ref: "esde resources/systems/windows/es_systems.xml:905"
+  - emulator: retroarch
+    core: irogb
+    source_ref: "esde resources/systems/windows/es_systems.xml:906"
+  - emulator: retroarch
+    core: mesen-s
+    source_ref: "esde resources/systems/windows/es_systems.xml:907"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:908"
+  - emulator: retroarch
+    core: mesen2
+    source_ref: "esde resources/systems/windows/es_systems.xml:909"
+  - emulator: retroarch
+    core: bsnes
+    source_ref: "esde resources/systems/windows/es_systems.xml:910"
+  - emulator: retroarch
+    core: mgba
+    source_ref: "esde resources/systems/windows/es_systems.xml:911"
+  - emulator: mgba
+    core: mgba
+    source_ref: "esde resources/systems/windows/es_systems.xml:912"
+  - emulator: retroarch
+    core: vbam
+    source_ref: "esde resources/systems/windows/es_systems.xml:913"
+  - emulator: vba-m
+    core: vba-m
+    source_ref: "esde resources/systems/windows/es_systems.xml:914"
+  - emulator: retroarch
+    core: skyemu
+    source_ref: "esde resources/systems/windows/es_systems.xml:915"
+  - emulator: skyemu
+    core: skyemu
+    source_ref: "esde resources/systems/windows/es_systems.xml:916"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:917"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:918"
+  - emulator: jgenesis
+    core: jgenesis
+    source_ref: "esde resources/systems/windows/es_systems.xml:919"
+  - emulator: emulicious
+    core: emulicious
+    source_ref: "esde resources/systems/windows/es_systems.xml:920"
 - folder: gc
   extensions:
   - .7z
@@ -1207,6 +2279,19 @@ folders:
   core: dolphin
   emulator: dolphin
   source_ref: "esde resources/systems/windows/es_systems.xml:925; os functions/ToolScripts/emuDeckESDE.ps1:301"
+  offers:
+  - emulator: retroarch
+    core: dolphin
+    source_ref: "esde resources/systems/windows/es_systems.xml:929"
+  - emulator: dolphin
+    core: dolphin
+    source_ref: "esde resources/systems/windows/es_systems.xml:930"
+  - emulator: primehack
+    core: primehack
+    source_ref: "esde resources/systems/windows/es_systems.xml:931"
+  - emulator: triforce
+    core: triforce
+    source_ref: "esde resources/systems/windows/es_systems.xml:932"
 - folder: genesis
   extensions:
   - .32x
@@ -1230,6 +2315,34 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:937"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "esde resources/systems/windows/es_systems.xml:941"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "esde resources/systems/windows/es_systems.xml:942"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "esde resources/systems/windows/es_systems.xml:943"
+  - emulator: retroarch
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:944"
+  - emulator: blastem
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:945"
+  - emulator: retroarch
+    core: clownmdemu
+    source_ref: "esde resources/systems/windows/es_systems.xml:946"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:947"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:948"
+  - emulator: jgenesis
+    core: jgenesis
+    source_ref: "esde resources/systems/windows/es_systems.xml:949"
 - folder: gmaster
   extensions:
   - .7z
@@ -1238,6 +2351,13 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:954"
+  offers:
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:958"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:959"
   searched_by:
   - emulator: retroarch
     core: mame
@@ -1269,6 +2389,16 @@ folders:
   core: cap32
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:964"
+  offers:
+  - emulator: retroarch
+    core: cap32
+    source_ref: "esde resources/systems/windows/es_systems.xml:968"
+  - emulator: retroarch
+    core: crocods
+    source_ref: "esde resources/systems/windows/es_systems.xml:969"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:970"
   searched_by:
   - emulator: mame
     reads:
@@ -1286,6 +2416,16 @@ folders:
   core: freeintv
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:975"
+  offers:
+  - emulator: retroarch
+    core: freeintv
+    source_ref: "esde resources/systems/windows/es_systems.xml:979"
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:980"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:981"
   searched_by:
   - emulator: retroarch
     core: mame
@@ -1308,6 +2448,13 @@ folders:
   core: squirreljme
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:986"
+  offers:
+  - emulator: retroarch
+    core: squirreljme
+    source_ref: "esde resources/systems/windows/es_systems.xml:990"
+  - emulator: kemulator
+    core: kemulator
+    source_ref: "esde resources/systems/windows/es_systems.xml:991"
 - folder: kodi
   extensions:
   - .bat
@@ -1327,6 +2474,22 @@ folders:
   core: hypseus-singe
   emulator: hypseus-singe
   source_ref: "esde resources/systems/windows/es_systems.xml:1005"
+  offers:
+  - emulator: hypseus-singe
+    core: hypseus-singe
+    source_ref: "esde resources/systems/windows/es_systems.xml:1009,1010,1011"
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1012"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1013"
+  - emulator: retroarch
+    core: dirksimple
+    source_ref: "esde resources/systems/windows/es_systems.xml:1014"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1015"
   searched_by:
   - emulator: mame
     reads:
@@ -1341,6 +2504,16 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1020"
+  offers:
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1024"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1025,1026"
+  - emulator: retroarch
+    core: gw
+    source_ref: "esde resources/systems/windows/es_systems.xml:1027"
   searched_by:
   - emulator: mame
     reads:
@@ -1375,6 +2548,19 @@ folders:
   core: mame
   emulator: mame
   source_ref: "esde resources/systems/windows/es_systems.xml:1059"
+  offers:
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1063,1064,1065,1066"
+  - emulator: basiliskii
+    core: basiliskii
+    source_ref: "esde resources/systems/windows/es_systems.xml:1067"
+  - emulator: sheepshaver
+    core: sheepshaver
+    source_ref: "esde resources/systems/windows/es_systems.xml:1068"
+  - emulator: retroarch
+    core: minivmac
+    source_ref: "esde resources/systems/windows/es_systems.xml:1069"
   searched_by:
   - emulator: mame
     reads:
@@ -1398,6 +2584,85 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1074"
+  offers:
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1078"
+  - emulator: retroarch
+    core: mame2010
+    source_ref: "esde resources/systems/windows/es_systems.xml:1079"
+  - emulator: retroarch
+    core: mame2003_plus
+    source_ref: "esde resources/systems/windows/es_systems.xml:1080"
+  - emulator: retroarch
+    core: mame2003
+    source_ref: "esde resources/systems/windows/es_systems.xml:1081"
+  - emulator: retroarch
+    core: mame2000
+    source_ref: "esde resources/systems/windows/es_systems.xml:1082"
+  - emulator: retroarch
+    core: hbmame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1083"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1084"
+  - emulator: groovymame
+    core: groovymame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1085"
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "esde resources/systems/windows/es_systems.xml:1086"
+  - emulator: finalburn-neo
+    core: finalburn-neo
+    source_ref: "esde resources/systems/windows/es_systems.xml:1087"
+  - emulator: retroarch
+    core: fbalpha2012
+    source_ref: "esde resources/systems/windows/es_systems.xml:1088"
+  - emulator: retroarch
+    core: geolith
+    source_ref: "esde resources/systems/windows/es_systems.xml:1089"
+  - emulator: retroarch
+    core: flycast
+    source_ref: "esde resources/systems/windows/es_systems.xml:1090"
+  - emulator: flycast
+    core: flycast
+    source_ref: "esde resources/systems/windows/es_systems.xml:1091"
+  - emulator: flycast-dojo
+    core: flycast-dojo
+    source_ref: "esde resources/systems/windows/es_systems.xml:1092"
+  - emulator: retroarch
+    core: kronos
+    source_ref: "esde resources/systems/windows/es_systems.xml:1093"
+  - emulator: retroarch
+    core: dice
+    source_ref: "esde resources/systems/windows/es_systems.xml:1094"
+  - emulator: m2emulator
+    core: m2emulator
+    source_ref: "esde resources/systems/windows/es_systems.xml:1095,1096"
+  - emulator: retroarch
+    core: supermodel
+    source_ref: "esde resources/systems/windows/es_systems.xml:1097"
+  - emulator: supermodel
+    core: supermodel
+    source_ref: "esde resources/systems/windows/es_systems.xml:1098"
+  - emulator: supermodel-dojo
+    core: supermodel-dojo
+    source_ref: "esde resources/systems/windows/es_systems.xml:1099"
+  - emulator: linux-loader
+    core: linux-loader
+    source_ref: "esde resources/systems/windows/es_systems.xml:1100"
+  - emulator: pcsx2x6
+    core: pcsx2x6
+    source_ref: "esde resources/systems/windows/es_systems.xml:1101"
+  - emulator: mfme
+    core: mfme
+    source_ref: "esde resources/systems/windows/es_systems.xml:1103"
+  - emulator: arcadeduck
+    core: arcadeduck
+    source_ref: "esde resources/systems/windows/es_systems.xml:1104"
+  - emulator: os-shell
+    core: os-shell
+    source_ref: "esde resources/systems/windows/es_systems.xml:1105"
   searched_by:
   - emulator: mame
     reads:
@@ -1440,6 +2705,46 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1119"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1123"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "esde resources/systems/windows/es_systems.xml:1124"
+  - emulator: retroarch
+    core: smsplus
+    source_ref: "esde resources/systems/windows/es_systems.xml:1125"
+  - emulator: retroarch
+    core: gearsystem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1126"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "esde resources/systems/windows/es_systems.xml:1127"
+  - emulator: retroarch
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1128"
+  - emulator: blastem
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1129"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1130"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1131"
+  - emulator: retroarch
+    core: mesen2
+    source_ref: "esde resources/systems/windows/es_systems.xml:1132"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1133"
+  - emulator: jgenesis
+    core: jgenesis
+    source_ref: "esde resources/systems/windows/es_systems.xml:1134"
+  - emulator: emulicious
+    core: emulicious
+    source_ref: "esde resources/systems/windows/es_systems.xml:1135"
 - folder: mastersystem
   extensions:
   - .68k
@@ -1464,6 +2769,46 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1140"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1144"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "esde resources/systems/windows/es_systems.xml:1145"
+  - emulator: retroarch
+    core: smsplus
+    source_ref: "esde resources/systems/windows/es_systems.xml:1146"
+  - emulator: retroarch
+    core: gearsystem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1147"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "esde resources/systems/windows/es_systems.xml:1148"
+  - emulator: retroarch
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1149"
+  - emulator: blastem
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1150"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1151"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1152"
+  - emulator: retroarch
+    core: mesen2
+    source_ref: "esde resources/systems/windows/es_systems.xml:1153"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1154"
+  - emulator: jgenesis
+    core: jgenesis
+    source_ref: "esde resources/systems/windows/es_systems.xml:1155"
+  - emulator: emulicious
+    core: emulicious
+    source_ref: "esde resources/systems/windows/es_systems.xml:1156"
 - folder: megacd
   extensions:
   - .68k
@@ -1486,6 +2831,31 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1161"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1165"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "esde resources/systems/windows/es_systems.xml:1166"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "esde resources/systems/windows/es_systems.xml:1167"
+  - emulator: retroarch
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1168"
+  - emulator: blastem
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1169"
+  - emulator: retroarch
+    core: clownmdemu
+    source_ref: "esde resources/systems/windows/es_systems.xml:1170"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1171"
+  - emulator: jgenesis
+    core: jgenesis
+    source_ref: "esde resources/systems/windows/es_systems.xml:1172"
 - folder: megacdjp
   extensions:
   - .68k
@@ -1508,6 +2878,31 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1177"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1181"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "esde resources/systems/windows/es_systems.xml:1182"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "esde resources/systems/windows/es_systems.xml:1183"
+  - emulator: retroarch
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1184"
+  - emulator: blastem
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1185"
+  - emulator: retroarch
+    core: clownmdemu
+    source_ref: "esde resources/systems/windows/es_systems.xml:1186"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1187"
+  - emulator: jgenesis
+    core: jgenesis
+    source_ref: "esde resources/systems/windows/es_systems.xml:1188"
 - folder: megadrive
   extensions:
   - .32x
@@ -1531,6 +2926,34 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1193"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1197"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "esde resources/systems/windows/es_systems.xml:1198"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "esde resources/systems/windows/es_systems.xml:1199"
+  - emulator: retroarch
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1200"
+  - emulator: blastem
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1201"
+  - emulator: retroarch
+    core: clownmdemu
+    source_ref: "esde resources/systems/windows/es_systems.xml:1202"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1203"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1204"
+  - emulator: jgenesis
+    core: jgenesis
+    source_ref: "esde resources/systems/windows/es_systems.xml:1205"
 - folder: megadrivejp
   extensions:
   - .32x
@@ -1554,6 +2977,34 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1210"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1214"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "esde resources/systems/windows/es_systems.xml:1215"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "esde resources/systems/windows/es_systems.xml:1216"
+  - emulator: retroarch
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1217"
+  - emulator: blastem
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1218"
+  - emulator: retroarch
+    core: clownmdemu
+    source_ref: "esde resources/systems/windows/es_systems.xml:1219"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1220"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1221"
+  - emulator: jgenesis
+    core: jgenesis
+    source_ref: "esde resources/systems/windows/es_systems.xml:1222"
 - folder: megaduck
   extensions:
   - .7z
@@ -1562,6 +3013,16 @@ folders:
   core: sameduck
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1227"
+  offers:
+  - emulator: retroarch
+    core: sameduck
+    source_ref: "esde resources/systems/windows/es_systems.xml:1231"
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1232"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1233"
   searched_by:
   - emulator: retroarch
     core: mame
@@ -1591,6 +3052,16 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1247"
+  offers:
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1251"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1252"
+  - emulator: m2emulator
+    core: m2emulator
+    source_ref: "esde resources/systems/windows/es_systems.xml:1253,1254"
   searched_by:
   - emulator: mame
     reads:
@@ -1604,6 +3075,22 @@ folders:
   core: supermodel
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1259"
+  offers:
+  - emulator: retroarch
+    core: supermodel
+    source_ref: "esde resources/systems/windows/es_systems.xml:1263"
+  - emulator: supermodel
+    core: supermodel
+    source_ref: "esde resources/systems/windows/es_systems.xml:1264"
+  - emulator: supermodel-dojo
+    core: supermodel-dojo
+    source_ref: "esde resources/systems/windows/es_systems.xml:1265"
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1266"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1267"
   searched_by:
   - emulator: mame
     reads:
@@ -1648,6 +3135,22 @@ folders:
   core: bluemsx
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1281"
+  offers:
+  - emulator: retroarch
+    core: bluemsx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1285"
+  - emulator: retroarch
+    core: fmsx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1286"
+  - emulator: openmsx
+    core: openmsx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1287,1288"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1289"
+  - emulator: emulicious
+    core: emulicious
+    source_ref: "esde resources/systems/windows/es_systems.xml:1290"
 - folder: msx1
   extensions:
   - .7z
@@ -1673,6 +3176,22 @@ folders:
   core: bluemsx
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1295"
+  offers:
+  - emulator: retroarch
+    core: bluemsx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1299"
+  - emulator: retroarch
+    core: fmsx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1300"
+  - emulator: openmsx
+    core: openmsx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1301,1302"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1303"
+  - emulator: emulicious
+    core: emulicious
+    source_ref: "esde resources/systems/windows/es_systems.xml:1304"
 - folder: msx2
   extensions:
   - .7z
@@ -1698,6 +3217,22 @@ folders:
   core: bluemsx
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1309"
+  offers:
+  - emulator: retroarch
+    core: bluemsx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1313"
+  - emulator: retroarch
+    core: fmsx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1314"
+  - emulator: openmsx
+    core: openmsx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1315,1316"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1317"
+  - emulator: emulicious
+    core: emulicious
+    source_ref: "esde resources/systems/windows/es_systems.xml:1318"
 - folder: msxturbor
   extensions:
   - .7z
@@ -1723,6 +3258,13 @@ folders:
   core: bluemsx
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1323"
+  offers:
+  - emulator: retroarch
+    core: bluemsx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1327"
+  - emulator: openmsx
+    core: openmsx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1328,1329"
 - folder: mugen
   extensions:
   - .lnk
@@ -1741,6 +3283,13 @@ folders:
   core: gearsystem
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1343"
+  offers:
+  - emulator: retroarch
+    core: gearsystem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1347"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1348"
 - folder: n3ds
   extensions:
   - .3ds
@@ -1758,6 +3307,16 @@ folders:
   core: azahar
   emulator: azahar
   source_ref: "os configs/emulationstation/custom_systems/es_systems.xml:53; os functions/ToolScripts/emuDeckESDE.ps1:310"
+  offers:
+  - emulator: retroarch
+    core: citra
+    source_ref: "os configs/emulationstation/custom_systems/es_systems.xml:57"
+  - emulator: retroarch
+    core: citra2018
+    source_ref: "os configs/emulationstation/custom_systems/es_systems.xml:58"
+  - emulator: azahar
+    core: azahar
+    source_ref: "os configs/emulationstation/custom_systems/es_systems.xml:59"
 - folder: n64
   extensions:
   - .7z
@@ -1774,6 +3333,37 @@ folders:
   core: mupen64plus_next
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1371"
+  offers:
+  - emulator: retroarch
+    core: mupen64plus_next
+    source_ref: "esde resources/systems/windows/es_systems.xml:1375"
+  - emulator: mupen64plus
+    core: mupen64plus
+    source_ref: "esde resources/systems/windows/es_systems.xml:1376"
+  - emulator: retroarch
+    core: parallel_n64
+    source_ref: "esde resources/systems/windows/es_systems.xml:1377"
+  - emulator: parallel-launcher
+    core: parallel-launcher
+    source_ref: "esde resources/systems/windows/es_systems.xml:1378"
+  - emulator: simple64
+    core: simple64
+    source_ref: "esde resources/systems/windows/es_systems.xml:1379"
+  - emulator: rosalies-mupen-gui
+    core: rosalies-mupen-gui
+    source_ref: "esde resources/systems/windows/es_systems.xml:1380"
+  - emulator: project64
+    core: project64
+    source_ref: "esde resources/systems/windows/es_systems.xml:1381"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1382"
+  - emulator: gopher64
+    core: gopher64
+    source_ref: "esde resources/systems/windows/es_systems.xml:1383"
+  - emulator: os-shell
+    core: os-shell
+    source_ref: "esde resources/systems/windows/es_systems.xml:1384,1385"
 - folder: n64dd
   extensions:
   - .7z
@@ -1788,6 +3378,19 @@ folders:
   core: parallel_n64
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1390"
+  offers:
+  - emulator: retroarch
+    core: parallel_n64
+    source_ref: "esde resources/systems/windows/es_systems.xml:1394"
+  - emulator: retroarch
+    core: mupen64plus_next
+    source_ref: "esde resources/systems/windows/es_systems.xml:1395"
+  - emulator: rosalies-mupen-gui
+    core: rosalies-mupen-gui
+    source_ref: "esde resources/systems/windows/es_systems.xml:1396"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1397"
 - folder: naomi
   extensions:
   - .7z
@@ -1799,6 +3402,19 @@ folders:
   core: flycast
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1402"
+  offers:
+  - emulator: retroarch
+    core: flycast
+    source_ref: "esde resources/systems/windows/es_systems.xml:1406"
+  - emulator: flycast
+    core: flycast
+    source_ref: "esde resources/systems/windows/es_systems.xml:1407"
+  - emulator: flycast-dojo
+    core: flycast-dojo
+    source_ref: "esde resources/systems/windows/es_systems.xml:1408"
+  - emulator: demul
+    core: demul
+    source_ref: "esde resources/systems/windows/es_systems.xml:1409"
 - folder: naomi2
   extensions:
   - .7z
@@ -1810,6 +3426,19 @@ folders:
   core: flycast
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1414"
+  offers:
+  - emulator: retroarch
+    core: flycast
+    source_ref: "esde resources/systems/windows/es_systems.xml:1418"
+  - emulator: flycast
+    core: flycast
+    source_ref: "esde resources/systems/windows/es_systems.xml:1419"
+  - emulator: flycast-dojo
+    core: flycast-dojo
+    source_ref: "esde resources/systems/windows/es_systems.xml:1420"
+  - emulator: demul
+    core: demul
+    source_ref: "esde resources/systems/windows/es_systems.xml:1421"
 - folder: naomigd
   extensions:
   - .7z
@@ -1821,6 +3450,16 @@ folders:
   core: flycast
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1426"
+  offers:
+  - emulator: retroarch
+    core: flycast
+    source_ref: "esde resources/systems/windows/es_systems.xml:1430"
+  - emulator: flycast
+    core: flycast
+    source_ref: "esde resources/systems/windows/es_systems.xml:1431"
+  - emulator: flycast-dojo
+    core: flycast-dojo
+    source_ref: "esde resources/systems/windows/es_systems.xml:1432"
 - folder: nds
   extensions:
   - .7z
@@ -1833,6 +3472,34 @@ folders:
   core: melonds
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1437; os functions/ToolScripts/emuDeckESDE.ps1:308"
+  offers:
+  - emulator: retroarch
+    core: melondsds
+    source_ref: "esde resources/systems/windows/es_systems.xml:1441"
+  - emulator: retroarch
+    core: melonds
+    source_ref: "esde resources/systems/windows/es_systems.xml:1442"
+  - emulator: melonds
+    core: melonds
+    source_ref: "esde resources/systems/windows/es_systems.xml:1443"
+  - emulator: retroarch
+    core: desmume
+    source_ref: "esde resources/systems/windows/es_systems.xml:1444"
+  - emulator: retroarch
+    core: desmume2015
+    source_ref: "esde resources/systems/windows/es_systems.xml:1445"
+  - emulator: retroarch
+    core: noods
+    source_ref: "esde resources/systems/windows/es_systems.xml:1446"
+  - emulator: noods
+    core: noods
+    source_ref: "esde resources/systems/windows/es_systems.xml:1447"
+  - emulator: retroarch
+    core: skyemu
+    source_ref: "esde resources/systems/windows/es_systems.xml:1448"
+  - emulator: skyemu
+    core: skyemu
+    source_ref: "esde resources/systems/windows/es_systems.xml:1449"
 - folder: neogeo
   extensions:
   - .7z
@@ -1841,6 +3508,22 @@ folders:
   core: fbneo
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1454"
+  offers:
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "esde resources/systems/windows/es_systems.xml:1458"
+  - emulator: finalburn-neo
+    core: finalburn-neo
+    source_ref: "esde resources/systems/windows/es_systems.xml:1459"
+  - emulator: retroarch
+    core: geolith
+    source_ref: "esde resources/systems/windows/es_systems.xml:1460"
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1461"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1462"
   searched_by:
   - emulator: mame
     reads:
@@ -1854,6 +3537,22 @@ folders:
   core: neocd
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1467"
+  offers:
+  - emulator: retroarch
+    core: neocd
+    source_ref: "esde resources/systems/windows/es_systems.xml:1471"
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "esde resources/systems/windows/es_systems.xml:1472"
+  - emulator: finalburn-neo
+    core: finalburn-neo
+    source_ref: "esde resources/systems/windows/es_systems.xml:1473"
+  - emulator: retroarch
+    core: geolith
+    source_ref: "esde resources/systems/windows/es_systems.xml:1474"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1475"
   searched_by:
   - emulator: mame
     reads:
@@ -1868,6 +3567,22 @@ folders:
   core: neocd
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1480"
+  offers:
+  - emulator: retroarch
+    core: neocd
+    source_ref: "esde resources/systems/windows/es_systems.xml:1484"
+  - emulator: retroarch
+    core: fbneo
+    source_ref: "esde resources/systems/windows/es_systems.xml:1485"
+  - emulator: finalburn-neo
+    core: finalburn-neo
+    source_ref: "esde resources/systems/windows/es_systems.xml:1486"
+  - emulator: retroarch
+    core: geolith
+    source_ref: "esde resources/systems/windows/es_systems.xml:1487"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1488"
   searched_by:
   - emulator: mame
     reads:
@@ -1887,6 +3602,43 @@ folders:
   core: mesen
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1493"
+  offers:
+  - emulator: retroarch
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1497"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1498"
+  - emulator: retroarch
+    core: mesen2
+    source_ref: "esde resources/systems/windows/es_systems.xml:1499"
+  - emulator: retroarch
+    core: nestopia
+    source_ref: "esde resources/systems/windows/es_systems.xml:1500"
+  - emulator: retroarch
+    core: fceumm
+    source_ref: "esde resources/systems/windows/es_systems.xml:1501"
+  - emulator: retroarch
+    core: quicknes
+    source_ref: "esde resources/systems/windows/es_systems.xml:1502"
+  - emulator: retroarch
+    core: rustynes
+    source_ref: "esde resources/systems/windows/es_systems.xml:1503"
+  - emulator: punes
+    core: punes
+    source_ref: "esde resources/systems/windows/es_systems.xml:1504"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1505"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1506,1507"
+  - emulator: jgenesis
+    core: jgenesis
+    source_ref: "esde resources/systems/windows/es_systems.xml:1508"
+  - emulator: 3dsen
+    core: 3dsen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1509"
 - folder: ngage
   extensions:
   - .ngage
@@ -1905,6 +3657,19 @@ folders:
   core: mednafen_ngp
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1524"
+  offers:
+  - emulator: retroarch
+    core: mednafen_ngp
+    source_ref: "esde resources/systems/windows/es_systems.xml:1528"
+  - emulator: retroarch
+    core: race
+    source_ref: "esde resources/systems/windows/es_systems.xml:1529"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1530"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1531"
 - folder: ngpc
   extensions:
   - .7z
@@ -1916,6 +3681,19 @@ folders:
   core: mednafen_ngp
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1536"
+  offers:
+  - emulator: retroarch
+    core: mednafen_ngp
+    source_ref: "esde resources/systems/windows/es_systems.xml:1540"
+  - emulator: retroarch
+    core: race
+    source_ref: "esde resources/systems/windows/es_systems.xml:1541"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1542"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1543"
 - folder: odyssey2
   extensions:
   - .7z
@@ -1924,6 +3702,16 @@ folders:
   core: o2em
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1548"
+  offers:
+  - emulator: retroarch
+    core: o2em
+    source_ref: "esde resources/systems/windows/es_systems.xml:1552"
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1553"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1554"
   searched_by:
   - emulator: retroarch
     core: mame
@@ -1954,6 +3742,13 @@ folders:
   core: mame
   emulator: mame
   source_ref: "esde resources/systems/windows/es_systems.xml:1568"
+  offers:
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1572"
+  - emulator: oricutron
+    core: oricutron
+    source_ref: "esde resources/systems/windows/es_systems.xml:1573"
   searched_by:
   - emulator: mame
     reads:
@@ -1986,6 +3781,31 @@ folders:
   core: dosbox_pure
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1587"
+  offers:
+  - emulator: retroarch
+    core: dosbox_pure
+    source_ref: "esde resources/systems/windows/es_systems.xml:1591"
+  - emulator: dosbox-pure-unleashed
+    core: dosbox-pure-unleashed
+    source_ref: "esde resources/systems/windows/es_systems.xml:1592"
+  - emulator: retroarch
+    core: dosbox_core
+    source_ref: "esde resources/systems/windows/es_systems.xml:1593"
+  - emulator: retroarch
+    core: dosbox_svn
+    source_ref: "esde resources/systems/windows/es_systems.xml:1594"
+  - emulator: dosbox-x
+    core: dosbox-x
+    source_ref: "esde resources/systems/windows/es_systems.xml:1595"
+  - emulator: dosbox-staging
+    core: dosbox-staging
+    source_ref: "esde resources/systems/windows/es_systems.xml:1596"
+  - emulator: dreamm
+    core: dreamm
+    source_ref: "esde resources/systems/windows/es_systems.xml:1597"
+  - emulator: retroarch
+    core: virtualxt
+    source_ref: "esde resources/systems/windows/es_systems.xml:1598"
 - folder: pc88
   extensions:
   - .88d
@@ -1997,6 +3817,13 @@ folders:
   core: quasi88
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1603"
+  offers:
+  - emulator: retroarch
+    core: quasi88
+    source_ref: "esde resources/systems/windows/es_systems.xml:1607"
+  - emulator: quasi88
+    core: quasi88
+    source_ref: "esde resources/systems/windows/es_systems.xml:1608"
 - folder: pc98
   extensions:
   - .2hd
@@ -2022,6 +3849,13 @@ folders:
   core: np2kai
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1613"
+  offers:
+  - emulator: retroarch
+    core: np2kai
+    source_ref: "esde resources/systems/windows/es_systems.xml:1617"
+  - emulator: retroarch
+    core: nekop2
+    source_ref: "esde resources/systems/windows/es_systems.xml:1618"
 - folder: pcarcade
   extensions:
   - .bat
@@ -2030,6 +3864,13 @@ folders:
   core: os-shell
   emulator: os-shell
   source_ref: "esde resources/systems/windows/es_systems.xml:1623"
+  offers:
+  - emulator: os-shell
+    core: os-shell
+    source_ref: "esde resources/systems/windows/es_systems.xml:1627"
+  - emulator: linux-loader
+    core: linux-loader
+    source_ref: "esde resources/systems/windows/es_systems.xml:1628"
 - folder: pcengine
   extensions:
   - .7z
@@ -2047,6 +3888,34 @@ folders:
   core: mednafen_pce
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1633"
+  offers:
+  - emulator: retroarch
+    core: mednafen_pce
+    source_ref: "esde resources/systems/windows/es_systems.xml:1637"
+  - emulator: retroarch
+    core: mednafen_pce_fast
+    source_ref: "esde resources/systems/windows/es_systems.xml:1638"
+  - emulator: retroarch
+    core: mednafen_supergrafx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1639"
+  - emulator: retroarch
+    core: geargrafx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1640"
+  - emulator: geargrafx
+    core: geargrafx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1641"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1642"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1643"
+  - emulator: retroarch
+    core: mesen2
+    source_ref: "esde resources/systems/windows/es_systems.xml:1644"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1645"
 - folder: pcenginecd
   extensions:
   - .7z
@@ -2063,6 +3932,34 @@ folders:
   core: mednafen_pce
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1650"
+  offers:
+  - emulator: retroarch
+    core: mednafen_pce
+    source_ref: "esde resources/systems/windows/es_systems.xml:1654"
+  - emulator: retroarch
+    core: mednafen_pce_fast
+    source_ref: "esde resources/systems/windows/es_systems.xml:1655"
+  - emulator: retroarch
+    core: mednafen_supergrafx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1656"
+  - emulator: retroarch
+    core: geargrafx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1657"
+  - emulator: geargrafx
+    core: geargrafx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1658"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1659"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1660"
+  - emulator: retroarch
+    core: mesen2
+    source_ref: "esde resources/systems/windows/es_systems.xml:1661"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1662"
 - folder: pcfx
   extensions:
   - .7z
@@ -2075,6 +3972,13 @@ folders:
   core: mednafen_pcfx
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1667"
+  offers:
+  - emulator: retroarch
+    core: mednafen_pcfx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1671"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1672"
 - folder: pico8
   extensions:
   - .p8
@@ -2082,6 +3986,13 @@ folders:
   core: pico-8
   emulator: pico-8
   source_ref: "esde resources/systems/windows/es_systems.xml:1677"
+  offers:
+  - emulator: pico-8
+    core: pico-8
+    source_ref: "esde resources/systems/windows/es_systems.xml:1681,1682"
+  - emulator: retroarch
+    core: retro8
+    source_ref: "esde resources/systems/windows/es_systems.xml:1683"
 - folder: plus4
   extensions:
   - .7z
@@ -2119,6 +4030,13 @@ folders:
   core: vice_xplus4
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1688"
+  offers:
+  - emulator: retroarch
+    core: vice_xplus4
+    source_ref: "esde resources/systems/windows/es_systems.xml:1692"
+  - emulator: vice-xplus4
+    core: vice-xplus4
+    source_ref: "esde resources/systems/windows/es_systems.xml:1693"
 - folder: pokemini
   extensions:
   - .7z
@@ -2138,6 +4056,34 @@ folders:
   core: os-shell
   emulator: os-shell
   source_ref: "esde resources/systems/windows/es_systems.xml:1707"
+  offers:
+  - emulator: os-shell
+    core: os-shell
+    source_ref: "esde resources/systems/windows/es_systems.xml:1711"
+  - emulator: retroarch
+    core: ecwolf
+    source_ref: "esde resources/systems/windows/es_systems.xml:1712"
+  - emulator: retroarch
+    core: cannonball
+    source_ref: "esde resources/systems/windows/es_systems.xml:1713"
+  - emulator: retroarch
+    core: craft
+    source_ref: "esde resources/systems/windows/es_systems.xml:1714"
+  - emulator: retroarch
+    core: mrboom
+    source_ref: "esde resources/systems/windows/es_systems.xml:1715"
+  - emulator: retroarch
+    core: nxengine
+    source_ref: "esde resources/systems/windows/es_systems.xml:1716"
+  - emulator: retroarch
+    core: doukutsu_rs
+    source_ref: "esde resources/systems/windows/es_systems.xml:1717"
+  - emulator: retroarch
+    core: openlara
+    source_ref: "esde resources/systems/windows/es_systems.xml:1718"
+  - emulator: retroarch
+    core: superbroswar
+    source_ref: "esde resources/systems/windows/es_systems.xml:1719"
 - folder: ps2
   extensions:
   - .bin
@@ -2159,6 +4105,22 @@ folders:
   core: pcsx2
   emulator: pcsx2
   source_ref: "esde resources/systems/windows/es_systems.xml:1724; os functions/ToolScripts/emuDeckESDE.ps1:304"
+  offers:
+  - emulator: retroarch
+    core: pcee2
+    source_ref: "esde resources/systems/windows/es_systems.xml:1728"
+  - emulator: retroarch
+    core: pcsx2
+    source_ref: "esde resources/systems/windows/es_systems.xml:1729,1729"
+  - emulator: pcsx2
+    core: pcsx2
+    source_ref: "esde resources/systems/windows/es_systems.xml:1731"
+  - emulator: pcsx2-legacy
+    core: pcsx2-legacy
+    source_ref: "esde resources/systems/windows/es_systems.xml:1732"
+  - emulator: os-shell
+    core: os-shell
+    source_ref: "esde resources/systems/windows/es_systems.xml:1734"
 - folder: ps3
   extensions:
   - .iso
@@ -2193,6 +4155,13 @@ folders:
   core: ppsspp
   emulator: ppsspp
   source_ref: "esde resources/systems/windows/es_systems.xml:1764; os functions/ToolScripts/emuDeckESDE.ps1:302"
+  offers:
+  - emulator: retroarch
+    core: ppsspp
+    source_ref: "esde resources/systems/windows/es_systems.xml:1768"
+  - emulator: ppsspp
+    core: ppsspp
+    source_ref: "esde resources/systems/windows/es_systems.xml:1769"
 - folder: psvita
   extensions:
   - .psvita
@@ -2225,6 +4194,28 @@ folders:
   core: duckstation
   emulator: duckstation
   source_ref: "esde resources/systems/windows/es_systems.xml:1783; os functions/ToolScripts/emuDeckESDE.ps1:312"
+  offers:
+  - emulator: retroarch
+    core: mednafen_psx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1787"
+  - emulator: retroarch
+    core: mednafen_psx_hw
+    source_ref: "esde resources/systems/windows/es_systems.xml:1788"
+  - emulator: retroarch
+    core: pcsx_rearmed
+    source_ref: "esde resources/systems/windows/es_systems.xml:1789"
+  - emulator: retroarch
+    core: swanstation
+    source_ref: "esde resources/systems/windows/es_systems.xml:1790"
+  - emulator: duckstation
+    core: duckstation
+    source_ref: "esde resources/systems/windows/es_systems.xml:1791"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1792"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1793"
 - folder: pv1000
   extensions:
   - .7z
@@ -2233,6 +4224,13 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1798"
+  offers:
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1802"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1803"
   searched_by:
   - emulator: retroarch
     core: mame
@@ -2256,6 +4254,28 @@ folders:
   core: tyrquake
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1808"
+  offers:
+  - emulator: retroarch
+    core: tyrquake
+    source_ref: "esde resources/systems/windows/es_systems.xml:1812"
+  - emulator: retroarch
+    core: vitaquake2
+    source_ref: "esde resources/systems/windows/es_systems.xml:1813"
+  - emulator: retroarch
+    core: vitaquake2-rogue
+    source_ref: "esde resources/systems/windows/es_systems.xml:1814"
+  - emulator: retroarch
+    core: vitaquake2-xatrix
+    source_ref: "esde resources/systems/windows/es_systems.xml:1815"
+  - emulator: retroarch
+    core: vitaquake2-zaero
+    source_ref: "esde resources/systems/windows/es_systems.xml:1816"
+  - emulator: retroarch
+    core: vitaquake3
+    source_ref: "esde resources/systems/windows/es_systems.xml:1817"
+  - emulator: os-shell
+    core: os-shell
+    source_ref: "esde resources/systems/windows/es_systems.xml:1818"
 - folder: samcoupe
   extensions:
   - .7z
@@ -2281,6 +4301,46 @@ folders:
   core: snes9x
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1832"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+    source_ref: "esde resources/systems/windows/es_systems.xml:1836"
+  - emulator: retroarch
+    core: snes9x2010
+    source_ref: "esde resources/systems/windows/es_systems.xml:1837"
+  - emulator: retroarch
+    core: snes9x2005_plus
+    source_ref: "esde resources/systems/windows/es_systems.xml:1838"
+  - emulator: snes9x
+    core: snes9x
+    source_ref: "esde resources/systems/windows/es_systems.xml:1839"
+  - emulator: retroarch
+    core: bsnes
+    source_ref: "esde resources/systems/windows/es_systems.xml:1840"
+  - emulator: retroarch
+    core: bsnes_hd_beta
+    source_ref: "esde resources/systems/windows/es_systems.xml:1841"
+  - emulator: retroarch
+    core: bsnes-jg
+    source_ref: "esde resources/systems/windows/es_systems.xml:1842"
+  - emulator: retroarch
+    core: bsnes_mercury_accuracy
+    source_ref: "esde resources/systems/windows/es_systems.xml:1843"
+  - emulator: bsnes
+    core: bsnes
+    source_ref: "esde resources/systems/windows/es_systems.xml:1844"
+  - emulator: retroarch
+    core: mesen-s
+    source_ref: "esde resources/systems/windows/es_systems.xml:1845"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1846"
+  - emulator: retroarch
+    core: mesen2
+    source_ref: "esde resources/systems/windows/es_systems.xml:1847"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1848"
 - folder: saturn
   extensions:
   - .7z
@@ -2296,6 +4356,34 @@ folders:
   core: mednafen_saturn
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1853; os functions/ToolScripts/emuDeckESDE.ps1:313"
+  offers:
+  - emulator: retroarch
+    core: mednafen_saturn
+    source_ref: "esde resources/systems/windows/es_systems.xml:1857"
+  - emulator: retroarch
+    core: kronos
+    source_ref: "esde resources/systems/windows/es_systems.xml:1858"
+  - emulator: kronos
+    core: kronos
+    source_ref: "esde resources/systems/windows/es_systems.xml:1859"
+  - emulator: retroarch
+    core: yabasanshiro
+    source_ref: "esde resources/systems/windows/es_systems.xml:1860"
+  - emulator: yabasanshiro-2
+    core: yabasanshiro-2
+    source_ref: "esde resources/systems/windows/es_systems.xml:1861"
+  - emulator: retroarch
+    core: yabause
+    source_ref: "esde resources/systems/windows/es_systems.xml:1862"
+  - emulator: ymir
+    core: ymir
+    source_ref: "esde resources/systems/windows/es_systems.xml:1863"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1864"
+  - emulator: ssf
+    core: ssf
+    source_ref: "esde resources/systems/windows/es_systems.xml:1865"
 - folder: saturnjp
   extensions:
   - .7z
@@ -2311,6 +4399,34 @@ folders:
   core: mednafen_saturn
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1870"
+  offers:
+  - emulator: retroarch
+    core: mednafen_saturn
+    source_ref: "esde resources/systems/windows/es_systems.xml:1874"
+  - emulator: retroarch
+    core: kronos
+    source_ref: "esde resources/systems/windows/es_systems.xml:1875"
+  - emulator: kronos
+    core: kronos
+    source_ref: "esde resources/systems/windows/es_systems.xml:1876"
+  - emulator: retroarch
+    core: yabasanshiro
+    source_ref: "esde resources/systems/windows/es_systems.xml:1877"
+  - emulator: yabasanshiro-2
+    core: yabasanshiro-2
+    source_ref: "esde resources/systems/windows/es_systems.xml:1878"
+  - emulator: retroarch
+    core: yabause
+    source_ref: "esde resources/systems/windows/es_systems.xml:1879"
+  - emulator: ymir
+    core: ymir
+    source_ref: "esde resources/systems/windows/es_systems.xml:1880"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1881"
+  - emulator: ssf
+    core: ssf
+    source_ref: "esde resources/systems/windows/es_systems.xml:1882"
 - folder: scummvm
   extensions:
   - .scummvm
@@ -2318,6 +4434,16 @@ folders:
   core: scummvm
   emulator: scummvm
   source_ref: "esde resources/systems/windows/es_systems.xml:1887; os functions/ToolScripts/emuDeckESDE.ps1:314"
+  offers:
+  - emulator: retroarch
+    core: scummvm
+    source_ref: "esde resources/systems/windows/es_systems.xml:1891"
+  - emulator: scummvm
+    core: scummvm
+    source_ref: "esde resources/systems/windows/es_systems.xml:1892"
+  - emulator: dreamm
+    core: dreamm
+    source_ref: "esde resources/systems/windows/es_systems.xml:1893"
 - folder: scv
   extensions:
   - '.0'
@@ -2327,6 +4453,13 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1898"
+  offers:
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1902"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:1903"
   searched_by:
   - emulator: retroarch
     core: mame
@@ -2359,6 +4492,19 @@ folders:
   core: picodrive
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1908"
+  offers:
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "esde resources/systems/windows/es_systems.xml:1912"
+  - emulator: retroarch
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1913"
+  - emulator: blastem
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1914"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1915"
 - folder: sega32xjp
   extensions:
   - .32x
@@ -2377,6 +4523,19 @@ folders:
   core: picodrive
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1920"
+  offers:
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "esde resources/systems/windows/es_systems.xml:1924"
+  - emulator: retroarch
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1925"
+  - emulator: blastem
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1926"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1927"
 - folder: sega32xna
   extensions:
   - .32x
@@ -2395,6 +4554,19 @@ folders:
   core: picodrive
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1932"
+  offers:
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "esde resources/systems/windows/es_systems.xml:1936"
+  - emulator: retroarch
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1937"
+  - emulator: blastem
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1938"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1939"
 - folder: segacd
   extensions:
   - .68k
@@ -2417,6 +4589,31 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1944"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1948"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "esde resources/systems/windows/es_systems.xml:1949"
+  - emulator: retroarch
+    core: picodrive
+    source_ref: "esde resources/systems/windows/es_systems.xml:1950"
+  - emulator: retroarch
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1951"
+  - emulator: blastem
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1952"
+  - emulator: retroarch
+    core: clownmdemu
+    source_ref: "esde resources/systems/windows/es_systems.xml:1953"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1954"
+  - emulator: jgenesis
+    core: jgenesis
+    source_ref: "esde resources/systems/windows/es_systems.xml:1955"
 - folder: sfc
   extensions:
   - .7z
@@ -2437,6 +4634,58 @@ folders:
   core: snes9x
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1960"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+    source_ref: "esde resources/systems/windows/es_systems.xml:1964"
+  - emulator: retroarch
+    core: snes9x2010
+    source_ref: "esde resources/systems/windows/es_systems.xml:1965"
+  - emulator: retroarch
+    core: snes9x2005_plus
+    source_ref: "esde resources/systems/windows/es_systems.xml:1966"
+  - emulator: snes9x
+    core: snes9x
+    source_ref: "esde resources/systems/windows/es_systems.xml:1967"
+  - emulator: retroarch
+    core: bsnes
+    source_ref: "esde resources/systems/windows/es_systems.xml:1968"
+  - emulator: retroarch
+    core: bsnes_hd_beta
+    source_ref: "esde resources/systems/windows/es_systems.xml:1969"
+  - emulator: retroarch
+    core: bsnes-jg
+    source_ref: "esde resources/systems/windows/es_systems.xml:1970"
+  - emulator: retroarch
+    core: bsnes_mercury_accuracy
+    source_ref: "esde resources/systems/windows/es_systems.xml:1971"
+  - emulator: bsnes
+    core: bsnes
+    source_ref: "esde resources/systems/windows/es_systems.xml:1972"
+  - emulator: retroarch
+    core: mednafen_supafaust
+    source_ref: "esde resources/systems/windows/es_systems.xml:1973"
+  - emulator: retroarch
+    core: mesen-s
+    source_ref: "esde resources/systems/windows/es_systems.xml:1974"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1975"
+  - emulator: retroarch
+    core: mesen2
+    source_ref: "esde resources/systems/windows/es_systems.xml:1976"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1977"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1978"
+  - emulator: jgenesis
+    core: jgenesis
+    source_ref: "esde resources/systems/windows/es_systems.xml:1979"
+  - emulator: superzsnes
+    core: superzsnes
+    source_ref: "esde resources/systems/windows/es_systems.xml:1980"
 - folder: sg-1000
   extensions:
   - .68k
@@ -2461,6 +4710,31 @@ folders:
   core: genesis_plus_gx
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:1985"
+  offers:
+  - emulator: retroarch
+    core: genesis_plus_gx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1989"
+  - emulator: retroarch
+    core: genesis_plus_gx_wide
+    source_ref: "esde resources/systems/windows/es_systems.xml:1990"
+  - emulator: retroarch
+    core: gearsystem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1991"
+  - emulator: retroarch
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1992"
+  - emulator: blastem
+    core: blastem
+    source_ref: "esde resources/systems/windows/es_systems.xml:1993"
+  - emulator: retroarch
+    core: bluemsx
+    source_ref: "esde resources/systems/windows/es_systems.xml:1994"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:1995"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:1996"
 - folder: sgb
   extensions:
   - .7z
@@ -2471,6 +4745,25 @@ folders:
   core: mesen-s
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2001"
+  offers:
+  - emulator: retroarch
+    core: mesen-s
+    source_ref: "esde resources/systems/windows/es_systems.xml:2005"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:2006"
+  - emulator: retroarch
+    core: mesen2
+    source_ref: "esde resources/systems/windows/es_systems.xml:2007"
+  - emulator: retroarch
+    core: sameboy
+    source_ref: "esde resources/systems/windows/es_systems.xml:2008"
+  - emulator: retroarch
+    core: mgba
+    source_ref: "esde resources/systems/windows/es_systems.xml:2009"
+  - emulator: mgba
+    core: mgba
+    source_ref: "esde resources/systems/windows/es_systems.xml:2010"
 - folder: snes
   extensions:
   - .7z
@@ -2491,6 +4784,58 @@ folders:
   core: snes9x
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2015"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+    source_ref: "esde resources/systems/windows/es_systems.xml:2019"
+  - emulator: retroarch
+    core: snes9x2010
+    source_ref: "esde resources/systems/windows/es_systems.xml:2020"
+  - emulator: retroarch
+    core: snes9x2005_plus
+    source_ref: "esde resources/systems/windows/es_systems.xml:2021"
+  - emulator: snes9x
+    core: snes9x
+    source_ref: "esde resources/systems/windows/es_systems.xml:2022"
+  - emulator: retroarch
+    core: bsnes
+    source_ref: "esde resources/systems/windows/es_systems.xml:2023"
+  - emulator: retroarch
+    core: bsnes_hd_beta
+    source_ref: "esde resources/systems/windows/es_systems.xml:2024"
+  - emulator: retroarch
+    core: bsnes-jg
+    source_ref: "esde resources/systems/windows/es_systems.xml:2025"
+  - emulator: retroarch
+    core: bsnes_mercury_accuracy
+    source_ref: "esde resources/systems/windows/es_systems.xml:2026"
+  - emulator: bsnes
+    core: bsnes
+    source_ref: "esde resources/systems/windows/es_systems.xml:2027"
+  - emulator: retroarch
+    core: mednafen_supafaust
+    source_ref: "esde resources/systems/windows/es_systems.xml:2028"
+  - emulator: retroarch
+    core: mesen-s
+    source_ref: "esde resources/systems/windows/es_systems.xml:2029"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:2030"
+  - emulator: retroarch
+    core: mesen2
+    source_ref: "esde resources/systems/windows/es_systems.xml:2031"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:2032"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:2033"
+  - emulator: jgenesis
+    core: jgenesis
+    source_ref: "esde resources/systems/windows/es_systems.xml:2034"
+  - emulator: superzsnes
+    core: superzsnes
+    source_ref: "esde resources/systems/windows/es_systems.xml:2035"
 - folder: snesna
   extensions:
   - .7z
@@ -2511,6 +4856,58 @@ folders:
   core: snes9x
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2040"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+    source_ref: "esde resources/systems/windows/es_systems.xml:2044"
+  - emulator: retroarch
+    core: snes9x2010
+    source_ref: "esde resources/systems/windows/es_systems.xml:2045"
+  - emulator: retroarch
+    core: snes9x2005_plus
+    source_ref: "esde resources/systems/windows/es_systems.xml:2046"
+  - emulator: snes9x
+    core: snes9x
+    source_ref: "esde resources/systems/windows/es_systems.xml:2047"
+  - emulator: retroarch
+    core: bsnes
+    source_ref: "esde resources/systems/windows/es_systems.xml:2048"
+  - emulator: retroarch
+    core: bsnes_hd_beta
+    source_ref: "esde resources/systems/windows/es_systems.xml:2049"
+  - emulator: retroarch
+    core: bsnes-jg
+    source_ref: "esde resources/systems/windows/es_systems.xml:2050"
+  - emulator: retroarch
+    core: bsnes_mercury_accuracy
+    source_ref: "esde resources/systems/windows/es_systems.xml:2051"
+  - emulator: bsnes
+    core: bsnes
+    source_ref: "esde resources/systems/windows/es_systems.xml:2052"
+  - emulator: retroarch
+    core: mednafen_supafaust
+    source_ref: "esde resources/systems/windows/es_systems.xml:2053"
+  - emulator: retroarch
+    core: mesen-s
+    source_ref: "esde resources/systems/windows/es_systems.xml:2054"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:2055"
+  - emulator: retroarch
+    core: mesen2
+    source_ref: "esde resources/systems/windows/es_systems.xml:2056"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:2057"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:2058"
+  - emulator: jgenesis
+    core: jgenesis
+    source_ref: "esde resources/systems/windows/es_systems.xml:2059"
+  - emulator: superzsnes
+    core: superzsnes
+    source_ref: "esde resources/systems/windows/es_systems.xml:2060"
 - folder: solarus
   extensions:
   - .solarus
@@ -2549,6 +4946,19 @@ folders:
   core: kronos
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2092"
+  offers:
+  - emulator: retroarch
+    core: kronos
+    source_ref: "esde resources/systems/windows/es_systems.xml:2096"
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:2097"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:2098"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:2099"
   searched_by:
   - emulator: mame
     reads:
@@ -2568,6 +4978,37 @@ folders:
   core: snes9x
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2104"
+  offers:
+  - emulator: retroarch
+    core: snes9x
+    source_ref: "esde resources/systems/windows/es_systems.xml:2108"
+  - emulator: retroarch
+    core: snes9x2010
+    source_ref: "esde resources/systems/windows/es_systems.xml:2109"
+  - emulator: retroarch
+    core: snes9x2005_plus
+    source_ref: "esde resources/systems/windows/es_systems.xml:2110"
+  - emulator: snes9x
+    core: snes9x
+    source_ref: "esde resources/systems/windows/es_systems.xml:2111"
+  - emulator: retroarch
+    core: bsnes
+    source_ref: "esde resources/systems/windows/es_systems.xml:2112"
+  - emulator: retroarch
+    core: bsnes_hd_beta
+    source_ref: "esde resources/systems/windows/es_systems.xml:2113"
+  - emulator: retroarch
+    core: bsnes-jg
+    source_ref: "esde resources/systems/windows/es_systems.xml:2114"
+  - emulator: retroarch
+    core: bsnes_mercury_accuracy
+    source_ref: "esde resources/systems/windows/es_systems.xml:2115"
+  - emulator: bsnes
+    core: bsnes
+    source_ref: "esde resources/systems/windows/es_systems.xml:2116"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:2117"
 - folder: supergrafx
   extensions:
   - .7z
@@ -2581,6 +5022,31 @@ folders:
   core: mednafen_supergrafx
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2122"
+  offers:
+  - emulator: retroarch
+    core: mednafen_supergrafx
+    source_ref: "esde resources/systems/windows/es_systems.xml:2126"
+  - emulator: retroarch
+    core: mednafen_pce
+    source_ref: "esde resources/systems/windows/es_systems.xml:2127"
+  - emulator: retroarch
+    core: geargrafx
+    source_ref: "esde resources/systems/windows/es_systems.xml:2128"
+  - emulator: geargrafx
+    core: geargrafx
+    source_ref: "esde resources/systems/windows/es_systems.xml:2129"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:2130"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:2131"
+  - emulator: retroarch
+    core: mesen2
+    source_ref: "esde resources/systems/windows/es_systems.xml:2132"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:2133"
 - folder: supervision
   extensions:
   - .7z
@@ -2590,6 +5056,16 @@ folders:
   core: potator
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2138"
+  offers:
+  - emulator: retroarch
+    core: potator
+    source_ref: "esde resources/systems/windows/es_systems.xml:2142"
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:2143"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:2144"
   searched_by:
   - emulator: retroarch
     core: mame
@@ -2612,6 +5088,13 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2149"
+  offers:
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:2153"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:2154"
   searched_by:
   - emulator: retroarch
     core: mame
@@ -2636,6 +5119,19 @@ folders:
   core: yuzu
   emulator: yuzu
   source_ref: "os configs/emulationstation/custom_systems/es_systems.xml:41"
+  offers:
+  - emulator: yuzu
+    core: yuzu
+    source_ref: "os configs/emulationstation/custom_systems/es_systems.xml:45"
+  - emulator: citron
+    core: citron
+    source_ref: "os configs/emulationstation/custom_systems/es_systems.xml:46"
+  - emulator: eden
+    core: eden
+    source_ref: "os configs/emulationstation/custom_systems/es_systems.xml:47"
+  - emulator: ryujinx
+    core: ryujinx
+    source_ref: "os configs/emulationstation/custom_systems/es_systems.xml:48"
 - folder: symbian
   extensions:
   - .sis
@@ -2655,6 +5151,13 @@ folders:
   core: mame
   emulator: mame
   source_ref: "esde resources/systems/windows/es_systems.xml:2182"
+  offers:
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:2186,2187"
+  - emulator: xroar
+    core: xroar
+    source_ref: "esde resources/systems/windows/es_systems.xml:2188"
   searched_by:
   - emulator: mame
     reads:
@@ -2678,6 +5181,34 @@ folders:
   core: mednafen_pce
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2210"
+  offers:
+  - emulator: retroarch
+    core: mednafen_pce
+    source_ref: "esde resources/systems/windows/es_systems.xml:2214"
+  - emulator: retroarch
+    core: mednafen_pce_fast
+    source_ref: "esde resources/systems/windows/es_systems.xml:2215"
+  - emulator: retroarch
+    core: mednafen_supergrafx
+    source_ref: "esde resources/systems/windows/es_systems.xml:2216"
+  - emulator: retroarch
+    core: geargrafx
+    source_ref: "esde resources/systems/windows/es_systems.xml:2217"
+  - emulator: geargrafx
+    core: geargrafx
+    source_ref: "esde resources/systems/windows/es_systems.xml:2218"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:2219"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:2220"
+  - emulator: retroarch
+    core: mesen2
+    source_ref: "esde resources/systems/windows/es_systems.xml:2221"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:2222"
 - folder: tg16
   extensions:
   - .7z
@@ -2695,6 +5226,34 @@ folders:
   core: mednafen_pce
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2193"
+  offers:
+  - emulator: retroarch
+    core: mednafen_pce
+    source_ref: "esde resources/systems/windows/es_systems.xml:2197"
+  - emulator: retroarch
+    core: mednafen_pce_fast
+    source_ref: "esde resources/systems/windows/es_systems.xml:2198"
+  - emulator: retroarch
+    core: mednafen_supergrafx
+    source_ref: "esde resources/systems/windows/es_systems.xml:2199"
+  - emulator: retroarch
+    core: geargrafx
+    source_ref: "esde resources/systems/windows/es_systems.xml:2200"
+  - emulator: geargrafx
+    core: geargrafx
+    source_ref: "esde resources/systems/windows/es_systems.xml:2201"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:2202"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:2203"
+  - emulator: retroarch
+    core: mesen2
+    source_ref: "esde resources/systems/windows/es_systems.xml:2204"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:2205"
 - folder: ti99
   extensions:
   - .7z
@@ -2717,6 +5276,13 @@ folders:
   core: tic80
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2237"
+  offers:
+  - emulator: retroarch
+    core: tic80
+    source_ref: "esde resources/systems/windows/es_systems.xml:2241"
+  - emulator: tic-80
+    core: tic-80
+    source_ref: "esde resources/systems/windows/es_systems.xml:2242"
 - folder: to8
   extensions:
   - .7z
@@ -2751,6 +5317,16 @@ folders:
   core: dolphin
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2256"
+  offers:
+  - emulator: retroarch
+    core: dolphin
+    source_ref: "esde resources/systems/windows/es_systems.xml:2260"
+  - emulator: dolphin
+    core: dolphin
+    source_ref: "esde resources/systems/windows/es_systems.xml:2261"
+  - emulator: triforce
+    core: triforce
+    source_ref: "esde resources/systems/windows/es_systems.xml:2262"
 - folder: trs-80
   extensions:
   - .cmd
@@ -2784,6 +5360,16 @@ folders:
   core: vecx
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2296"
+  offers:
+  - emulator: retroarch
+    core: vecx
+    source_ref: "esde resources/systems/windows/es_systems.xml:2300"
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:2301"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:2302"
   searched_by:
   - emulator: retroarch
     core: mame
@@ -2838,6 +5424,13 @@ folders:
   core: vice_xvic
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2307"
+  offers:
+  - emulator: retroarch
+    core: vice_xvic
+    source_ref: "esde resources/systems/windows/es_systems.xml:2311"
+  - emulator: vice-xvic
+    core: vice-xvic
+    source_ref: "esde resources/systems/windows/es_systems.xml:2312"
 - folder: videopac
   extensions:
   - .7z
@@ -2846,6 +5439,16 @@ folders:
   core: o2em
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2317"
+  offers:
+  - emulator: retroarch
+    core: o2em
+    source_ref: "esde resources/systems/windows/es_systems.xml:2321"
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:2322"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:2323"
   searched_by:
   - emulator: retroarch
     core: mame
@@ -2868,6 +5471,13 @@ folders:
   core: vircon32
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2328"
+  offers:
+  - emulator: retroarch
+    core: vircon32
+    source_ref: "esde resources/systems/windows/es_systems.xml:2332"
+  - emulator: vircon32
+    core: vircon32
+    source_ref: "esde resources/systems/windows/es_systems.xml:2333"
 - folder: virtualboy
   extensions:
   - .7z
@@ -2878,6 +5488,13 @@ folders:
   core: mednafen_vb
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2338"
+  offers:
+  - emulator: retroarch
+    core: mednafen_vb
+    source_ref: "esde resources/systems/windows/es_systems.xml:2342"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:2343"
 - folder: vpinball
   extensions:
   - .vpt
@@ -2893,6 +5510,16 @@ folders:
   core: mame
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2357"
+  offers:
+  - emulator: retroarch
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:2361"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:2362"
+  - emulator: veesem
+    core: veesem
+    source_ref: "esde resources/systems/windows/es_systems.xml:2363"
   searched_by:
   - emulator: retroarch
     core: mame
@@ -2936,6 +5563,16 @@ folders:
   core: dolphin
   emulator: dolphin
   source_ref: "esde resources/systems/windows/es_systems.xml:2377; os functions/ToolScripts/emuDeckESDE.ps1:303"
+  offers:
+  - emulator: retroarch
+    core: dolphin
+    source_ref: "esde resources/systems/windows/es_systems.xml:2381"
+  - emulator: dolphin
+    core: dolphin
+    source_ref: "esde resources/systems/windows/es_systems.xml:2382"
+  - emulator: primehack
+    core: primehack
+    source_ref: "esde resources/systems/windows/es_systems.xml:2383"
 - folder: wiiu
   extensions:
   - .elf
@@ -2948,6 +5585,13 @@ folders:
   core: cemu
   emulator: cemu
   source_ref: "esde resources/systems/windows/es_systems.xml:2388"
+  offers:
+  - emulator: cemu
+    core: cemu
+    source_ref: "esde resources/systems/windows/es_systems.xml:2392"
+  - emulator: retroarch
+    core: cemu
+    source_ref: "esde resources/systems/windows/es_systems.xml:2393"
 - folder: windows
   extensions:
   - .bat
@@ -2965,6 +5609,19 @@ folders:
   core: dosbox-x
   emulator: dosbox-x
   source_ref: "esde resources/systems/windows/es_systems.xml:2408"
+  offers:
+  - emulator: dosbox-x
+    core: dosbox-x
+    source_ref: "esde resources/systems/windows/es_systems.xml:2412"
+  - emulator: retroarch
+    core: dosbox_pure
+    source_ref: "esde resources/systems/windows/es_systems.xml:2413"
+  - emulator: dosbox-pure-unleashed
+    core: dosbox-pure-unleashed
+    source_ref: "esde resources/systems/windows/es_systems.xml:2414"
+  - emulator: os-shell
+    core: os-shell
+    source_ref: "esde resources/systems/windows/es_systems.xml:2415,2416"
 - folder: windows9x
   extensions:
   - .7z
@@ -2975,6 +5632,19 @@ folders:
   core: dosbox-x
   emulator: dosbox-x
   source_ref: "esde resources/systems/windows/es_systems.xml:2421"
+  offers:
+  - emulator: dosbox-x
+    core: dosbox-x
+    source_ref: "esde resources/systems/windows/es_systems.xml:2425"
+  - emulator: retroarch
+    core: dosbox_pure
+    source_ref: "esde resources/systems/windows/es_systems.xml:2426"
+  - emulator: dosbox-pure-unleashed
+    core: dosbox-pure-unleashed
+    source_ref: "esde resources/systems/windows/es_systems.xml:2427"
+  - emulator: os-shell
+    core: os-shell
+    source_ref: "esde resources/systems/windows/es_systems.xml:2428,2429"
 - folder: wonderswan
   extensions:
   - .7z
@@ -2984,6 +5654,22 @@ folders:
   core: mednafen_wswan
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2434"
+  offers:
+  - emulator: retroarch
+    core: mednafen_wswan
+    source_ref: "esde resources/systems/windows/es_systems.xml:2438"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:2439"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:2440,2441"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:2442"
+  - emulator: retroarch
+    core: mesen2
+    source_ref: "esde resources/systems/windows/es_systems.xml:2443"
 - folder: wonderswancolor
   extensions:
   - .7z
@@ -2994,6 +5680,22 @@ folders:
   core: mednafen_wswan
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2448"
+  offers:
+  - emulator: retroarch
+    core: mednafen_wswan
+    source_ref: "esde resources/systems/windows/es_systems.xml:2452"
+  - emulator: mednafen
+    core: mednafen
+    source_ref: "esde resources/systems/windows/es_systems.xml:2453"
+  - emulator: ares
+    core: ares
+    source_ref: "esde resources/systems/windows/es_systems.xml:2454"
+  - emulator: mesen
+    core: mesen
+    source_ref: "esde resources/systems/windows/es_systems.xml:2455"
+  - emulator: retroarch
+    core: mesen2
+    source_ref: "esde resources/systems/windows/es_systems.xml:2456"
 - folder: x1
   extensions:
   - .2d
@@ -3012,6 +5714,13 @@ folders:
   core: x1
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2461"
+  offers:
+  - emulator: retroarch
+    core: x1
+    source_ref: "esde resources/systems/windows/es_systems.xml:2465"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:2466,2467"
   searched_by:
   - emulator: mame
     reads:
@@ -3037,6 +5746,19 @@ folders:
   core: px68k
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2472"
+  offers:
+  - emulator: retroarch
+    core: px68k
+    source_ref: "esde resources/systems/windows/es_systems.xml:2476"
+  - emulator: mame
+    core: mame
+    source_ref: "esde resources/systems/windows/es_systems.xml:2477"
+  - emulator: xm6pro68k
+    core: xm6pro68k
+    source_ref: "esde resources/systems/windows/es_systems.xml:2478"
+  - emulator: xm6typeg
+    core: xm6typeg
+    source_ref: "esde resources/systems/windows/es_systems.xml:2479"
   searched_by:
   - emulator: mame
     reads:
@@ -3053,6 +5775,16 @@ folders:
   core: xemu
   emulator: xemu
   source_ref: "esde resources/systems/windows/es_systems.xml:2484"
+  offers:
+  - emulator: xemu
+    core: xemu
+    source_ref: "esde resources/systems/windows/es_systems.xml:2488"
+  - emulator: cxbx-reloaded
+    core: cxbx-reloaded
+    source_ref: "esde resources/systems/windows/es_systems.xml:2489"
+  - emulator: os-shell
+    core: os-shell
+    source_ref: "esde resources/systems/windows/es_systems.xml:2490"
 - folder: xbox360
   extensions:
   - .iso
@@ -3062,6 +5794,16 @@ folders:
   core: xenia
   emulator: xenia
   source_ref: "esde resources/systems/windows/es_systems.xml:2495"
+  offers:
+  - emulator: xenia
+    core: xenia
+    source_ref: "esde resources/systems/windows/es_systems.xml:2499"
+  - emulator: xenia-edge
+    core: xenia-edge
+    source_ref: "esde resources/systems/windows/es_systems.xml:2500"
+  - emulator: os-shell
+    core: os-shell
+    source_ref: "esde resources/systems/windows/es_systems.xml:2501"
   note: "files without an extension are games too ('.' in the list)"
 - folder: xboxone
   extensions:
@@ -3084,6 +5826,13 @@ folders:
   core: mojozork
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2515"
+  offers:
+  - emulator: retroarch
+    core: mojozork
+    source_ref: "esde resources/systems/windows/es_systems.xml:2519"
+  - emulator: gargoyle
+    core: gargoyle
+    source_ref: "esde resources/systems/windows/es_systems.xml:2520"
 - folder: zx81
   extensions:
   - .7z
@@ -3100,6 +5849,13 @@ folders:
   core: cspect
   emulator: cspect
   source_ref: "esde resources/systems/windows/es_systems.xml:2534"
+  offers:
+  - emulator: cspect
+    core: cspect
+    source_ref: "esde resources/systems/windows/es_systems.xml:2538"
+  - emulator: zesarux
+    core: zesarux
+    source_ref: "esde resources/systems/windows/es_systems.xml:2539"
 - folder: zxspectrum
   extensions:
   - .7z
@@ -3121,3 +5877,10 @@ folders:
   core: fuse
   emulator: retroarch
   source_ref: "esde resources/systems/windows/es_systems.xml:2544"
+  offers:
+  - emulator: retroarch
+    core: fuse
+    source_ref: "esde resources/systems/windows/es_systems.xml:2548"
+  - emulator: fuse
+    core: fuse
+    source_ref: "esde resources/systems/windows/es_systems.xml:2549"

@@ -1187,6 +1187,27 @@ class StandaloneMameOnEmuDeck(unittest.TestCase):
         self.assertIn(("roms", "adam/adam.zip"), places)
 
 
+class EveryCoreAFolderOffers(unittest.TestCase):
+    """AmberELEC's es_systems.cfg, EmuELEC's es_systems.json and ROCKNIX's
+    add_emu_core calls offer several cores per folder, the user's choice
+    starting any of them."""
+
+    def test_the_rom_folders_files_record_the_offers(self) -> None:
+        for setup, folder, core in (("amberelec", "arcade", "mame2010"),
+                                    ("emuelec", "arcade", "mame2010"),
+                                    ("rocknix", "arcade", "mame2010")):
+            with (REPO_ROOT / "platforms" / "romfolders" / f"{setup}.yml").open() as f:
+                rows = {r["folder"]: r for r in yaml.safe_load(f)["folders"]}
+            self.assertIn(core, {o["core"] for o in rows[folder].get("offers") or []}, setup)
+
+    def test_an_offered_core_reads_its_sets_in_that_folder(self) -> None:
+        for platform in ("amberelec", "rocknix"):
+            view = libretro_view("mame2010", platform)
+            folders = {e["path"].split("/")[0] for e in view["files"]
+                       if e.get("category") == "bios_zip" and e.get("layout_path")}
+            self.assertIn("arcade", folders, platform)
+
+
 def platform_manifest(platform: str) -> dict:
     from common import load_database
 
@@ -1213,6 +1234,16 @@ class ArchiveSharedByOfferedCores(unittest.TestCase):
         self.assertTrue(entry["repo_path"].endswith("neogeo.zip.74df3258"))
         others = {c for a in entry.get("alternatives", []) for c in a["cores"]}
         self.assertIn("advancemame", others)
+
+    def test_offered_cores_join_the_default_one(self) -> None:
+        # AmberELEC's arcade folder starts MAME 2003-Plus and offers MAME
+        # 2000, 2010, 2015 and 2016 (es_systems.cfg:116-150).
+        (entry,) = [f for f in platform_manifest("amberelec")["files"]
+                    if f["dest"] == "arcade/neogeo.zip"]
+        self.assertEqual(entry["cores"], ["mame2003_plus"])
+        self.assertTrue(entry["repo_path"].endswith("neogeo.zip.74df3258"))
+        others = {c for a in entry.get("alternatives", []) for c in a["cores"]}
+        self.assertLessEqual({"mame2000", "mame2010", "mame2015", "mame2016"}, others)
 
     def test_the_copy_serving_most_cores_wins_without_a_default(self) -> None:
         # RetroDECK's cps folders start the libretro MAME core, whose sets are

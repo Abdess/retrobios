@@ -120,6 +120,21 @@
             "type": "object",
             "additionalProperties": { "$ref": "#/$defs/board_default" }
           },
+          "offers": {
+            "type": "array",
+            "description": "Every emulator and core the frontend can start for this folder, the default included, in the list's order. Absent when the default is the only one.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["core"],
+              "properties": {
+                "emulator": { "type": "string", "minLength": 1 },
+                "core": { "type": "string", "minLength": 1 },
+                "when": { "type": "string", "minLength": 1, "description": "The build condition the offer is written under (a device case)." },
+                "source_ref": { "$ref": "#/$defs/ref" }
+              }
+            }
+          },
           "arcade": { "type": "boolean" },
           "searched_by": {
             "type": "array",

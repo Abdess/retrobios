@@ -133,6 +133,13 @@ class EsXmlFormat(unittest.TestCase):
         self.assertEqual(rows["psx"]["board_defaults"]["rk3326"]["core"], "duckstation")
         self.assertNotIn("board_defaults", rows["mame"])
 
+    def test_every_core_the_system_lists_is_offered(self) -> None:
+        self.assertEqual(self.rows["psx"]["offers"], [
+            {"emulator": "retroarch", "core": "pcsx_rearmed"},
+            {"emulator": "retroarch", "core": "swanstation"}])
+        # A default alone is no choice.
+        self.assertNotIn("offers", self.rows["mame"])
+
     def test_source_ref_points_at_the_name_line(self) -> None:
         self.assertEqual(self.rows["psx"]["source_ref"], "os es_systems.cfg:4")
         self.assertEqual(self.rows["advision"]["source_ref"], "os es_systems.cfg:20")
@@ -172,6 +179,11 @@ class ElecConfFormat(unittest.TestCase):
         self.assertEqual(psx["board_defaults"], {
             "DEVICE=RK3326": {"core": "pcsx_rearmed", "emulator": "retroarch",
                               "source_ref": "os package.mk:11"}})
+
+    def test_a_core_under_every_branch_is_offered_unconditionally(self) -> None:
+        self.assertEqual(self.rows["psx"]["offers"], [
+            {"emulator": "retroarch", "core": "pcsx_rearmed", "source_ref": "os package.mk:11,16"},
+            {"emulator": "retroarch", "core": "swanstation", "source_ref": "os package.mk:12,15"}])
 
     def test_unconditional_default(self) -> None:
         self.assertEqual(self.rows["3do"]["core"], "opera")
@@ -220,6 +232,11 @@ class EsdeFormat(unittest.TestCase):
         self.assertEqual(libretro["reads"], ["arcade"])
         self.assertTrue(libretro["any_machine"])
         self.assertEqual(libretro["source_ref"], "os es_systems.xml:27")
+
+    def test_each_command_offers_its_emulator(self) -> None:
+        self.assertEqual(self.rows["arcade"]["offers"], [
+            {"emulator": "retroarch", "core": "mame", "source_ref": "os es_systems.xml:27"},
+            {"emulator": "mame", "core": "mame", "source_ref": "os es_systems.xml:28"}])
 
     def test_first_command_without_alternative(self) -> None:
         rows = by_folder(scrape("esde", "esde", {"systems": {"source": "os", "path": "es_systems.xml"}}))
