@@ -697,6 +697,8 @@ class Device:
         self.root = _tempdir(test)
         self.state = self.root / "state"
         self.state.mkdir()
+        # Registered before every other cleanup, so it runs after them.
+        test.addCleanup(self._sweep)
         self.bin = self.root / "bin"
         self.bin.mkdir()
         master, slave = pty.openpty()
@@ -820,6 +822,40 @@ class Device:
                     os.kill(int(path.read_text()), signal.SIGKILL)
                 except (ProcessLookupError, ValueError):
                     pass
+
+    def _left(self) -> list[int]:
+        """The processes a run on this device started that still run: each
+        carries the device's FAKE_STATE in its environment."""
+        marker = f"FAKE_STATE={self.state}".encode()
+        found = []
+        for entry in Path("/proc").iterdir():
+            if not entry.name.isdigit() or int(entry.name) == os.getpid():
+                continue
+            try:
+                environ = (entry / "environ").read_bytes()
+            except OSError:
+                continue
+            if marker in environ.split(b"\0"):
+                found.append(int(entry.name))
+        return found
+
+    def _sweep(self) -> None:
+        """No process outlives its test. A launcher's stop sentinel polls
+        every 5 s, so what is still running 6 s on was left behind: it is
+        killed, and the test fails naming it, instead of the leak running
+        into the tests after it."""
+        end = time.monotonic() + 6
+        while (left := self._left()) and time.monotonic() < end:
+            time.sleep(0.1)
+        named = []
+        for pid in left:
+            try:
+                argv = Path(f"/proc/{pid}/cmdline").read_bytes().replace(b"\0", b" ")
+                os.kill(pid, signal.SIGKILL)
+            except (ProcessLookupError, FileNotFoundError):
+                continue
+            named.append(f"{pid} {argv.decode('utf-8', 'replace').strip()}")
+        self.test.assertEqual(named, [], "processes left running after the test")
 
     def calls(self) -> list[dict]:
         path = self.state / "calls.jsonl"
@@ -2022,6 +2058,24 @@ INI
         self.assertLess(device.elapsed, 10)
         self.assertNotIn("Press A", device.screen)
         device.assert_mapper_gone()
+
+
+class TheSweep(unittest.TestCase):
+    def test_a_process_left_running_fails_its_test(self):
+        started = []
+
+        class Leaky(unittest.TestCase):
+            def runTest(inner):
+                device = Device(inner)
+                started.append(subprocess.Popen(["sleep", "60"], env=device.env,
+                                                stdin=subprocess.DEVNULL))
+
+        result = unittest.TestResult()
+        Leaky().run(result)
+        [proc] = started
+        self.assertEqual(proc.wait(timeout=5), -signal.SIGKILL)
+        [(_, report)] = result.failures
+        self.assertIn(f"{proc.pid} sleep 60", report)
 
 
 class TheLiveness(unittest.TestCase):
