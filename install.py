@@ -7127,6 +7127,137 @@ def plan_removal(
     return Removal(plat, folder, remove, kept, gone, choice, lost)
 
 
+def _parent_of(dest: str) -> str:
+    """The folder of a dest, "" at the top: dc for dc/dc_boot.bin."""
+    parent = PurePosixPath(dest).parent.as_posix()
+    return "" if parent == "." else parent
+
+
+def plan_misplaced_removal(
+    plat: str, folder: Path, record: dict, manifests: list[dict],
+) -> Removal:
+    """The copies in the wrong place of the BIOS folder that removing takes.
+
+    A copy goes when its bytes are those of a file plat's record says the
+    installer placed, read again now at that place, under that file's own
+    name, and it sits beside that file (the name in another case), or at
+    the top of the folder where the list places files there itself:
+    GBA_BIOS.BIN beside gba_bios.bin, dc_boot.bin at the top of RetroArch's
+    system folder for dc/dc_boot.bin. A renamed copy stays: a core option,
+    a launcher or a frontend entry may name it. Only those folders
+    are read, so a games folder (ports/doom on a card whose install folder
+    is the roms folder), the save folder and any other tree are never
+    looked at. Even there these stay:
+
+    - a place any list of manifests reads or any setup recorded, in any
+      root, whole or as the end of the path from a folder down
+    - a link, anything but a regular file, a file with a second name, and
+      the installer's own file under a spelling the record does not use.
+    """
+    folder = Path(os.path.abspath(folder))
+    fold = not keeps_case(folder)
+
+    def norm(dest: str) -> str:
+        return dest.casefold() if fold else dest
+
+    known: set[str] = set()
+    top_placed = False
+    # Game data sits in folders a frontend lists as games: DOOM2.WAD beside
+    # doom2.wad is a game entry of its own there, never a copy.
+    games = {norm(str(entry.get("dest", ""))) for manifest in manifests
+             for entry in manifest.get("files") or [] if entry.get("category") == "game_data"}
+    for manifest in manifests:
+        for root, dest in _served(manifest, fold):
+            known.add(dest)
+            top_placed = top_placed or (root == "" and "/" not in dest)
+        known |= {norm(str(entry.get("dest", "")))
+                  for entry in manifest.get("omitted_files") or []}
+    known |= {norm(str(item["dest"])) for setup in record["setups"].values()
+              for item in setup.get("files") or []}
+    placed: dict[int, list[dict]] = {}
+    # The folders read: each one the installer placed a file in, and the
+    # top where the list places files there itself.
+    folders: dict[str, str] = {"": ""} if top_placed else {}
+    for item in record["setups"][plat].get("files") or []:
+        if str(item.get("root") or "") == "" and isinstance(item.get("size"), int):
+            placed.setdefault(item["size"], []).append(item)
+            parent = _parent_of(str(item["dest"]))
+            folders.setdefault(norm(parent), parent)
+    proven: dict[str, tuple[str, os.stat_result, Path] | None] = {}
+
+    def in_place(item: dict) -> tuple[str, os.stat_result, Path] | None:
+        """The placed file's dest, lstat and path when it still holds its bytes."""
+        if item["dest"] not in proven:
+            path, why = _below(folder, item["dest"])
+            info = None
+            if path is not None and not why:
+                why, info = _check_ours(path, item)
+            proven[item["dest"]] = ((item["dest"], info, path)
+                                    if not why and info and path is not None else None)
+        return proven[item["dest"]]
+
+    def read_somewhere(rel: str) -> bool:
+        """Whether rel is a known place, or ends with one that names a
+        folder: saves/n3ds/Azahar/sysdata/keys.txt is the save folder's
+        n3ds/Azahar/sysdata/keys.txt. A bare name is no such end."""
+        parts = norm(rel).split("/")
+        return "/".join(parts) in known or any(
+            "/".join(parts[index:]) in known for index in range(1, len(parts) - 1))
+
+    remove: list[dict] = []
+    for rel_dir in sorted(folders.values()):
+        # The folder reached through no link, as _below reaches a file in it.
+        inside, why = _below(folder, f"{rel_dir}/-" if rel_dir else "-")
+        if inside is None or why:
+            continue
+        try:
+            entries = sorted(os.scandir(inside.parent), key=lambda entry: entry.name)
+        except OSError:
+            continue
+        for entry in entries:
+            rel = f"{rel_dir}/{entry.name}" if rel_dir else entry.name
+            if entry.name in (".nomedia", BACKUP_DIR) or read_somewhere(rel):
+                continue
+            path = Path(entry.path)
+            try:
+                info = os.lstat(path)
+            except OSError:
+                continue
+            if (not stat.S_ISREG(info.st_mode) or _is_link(info) or info.st_nlink != 1
+                    or info.st_size not in placed):
+                continue
+            try:
+                sha1 = _digest_file(path, ("sha1",))["sha1"]
+            except OSError:
+                continue
+            found = [(other, hit) for other in placed[info.st_size] if other["sha1"] == sha1
+                     for hit in [in_place(other)] if hit is not None]
+            if any(norm(str(other["dest"])) in games for other, _hit in found):
+                continue
+            if any((hit[1].st_dev, hit[1].st_ino) == (info.st_dev, info.st_ino)
+                   for _other, hit in found):
+                # The installer's own file under a spelling the record does not use.
+                continue
+            # Under its twin's own name: a copy renamed (SCPH-39001 USA.bin, a
+            # game's own title) may be read by that name, a core option or a
+            # frontend entry naming it. Beside its twin that name differs in
+            # case only, and at the top it is a twin's anywhere below.
+            near = [hit for other, hit in found
+                    if PurePosixPath(str(other["dest"])).name.casefold()
+                    == entry.name.casefold()
+                    and ((not rel_dir and top_placed)
+                         or norm(_parent_of(str(other["dest"]))) == norm(rel_dir))]
+            if not near:
+                continue
+            remove.append({"dest": rel, "root": "", "sha1": sha1, "size": info.st_size,
+                           "systems": [], "path": path, "inode": _stamp(info),
+                           "placed": near[0][0], "placed_path": near[0][2],
+                           "placed_inode": _stamp(near[0][1])})
+    remove.sort(key=lambda entry: str(entry["dest"]))
+    return Removal(plat, folder, remove, [], [], list(record["setups"][plat].get("choice")
+                                                      or []), [])
+
+
 def _left_by_hand(folder: Path, record: dict, fold: bool) -> list[str]:
     """The files in folder that no setup of its record names: placed by the
     user or another program, never touched, counted in the summary."""
@@ -7166,6 +7297,38 @@ def _stamp(info: os.stat_result) -> tuple[int, int, int, int]:
     return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns
 
 
+def _other_setup_list(name: str) -> tuple[dict | None, str]:
+    """The list of another setup of the folder, fetched from the address
+    whatever list this run was given, or None and why it is not at hand."""
+    if offline_requested():
+        return None, "this run is offline: run it again with the internet"
+    try:
+        return _validate_manifest(_fetch_json(MANIFEST_URL.format(platform=name),
+                                              MAX_MANIFEST_BYTES, "file list"), name), ""
+    except urllib.error.HTTPError as exc:
+        if exc.code == 404:
+            return None, "no such list exists, as for a setup this installer no longer serves"
+        return None, f"the server answered HTTP {exc.code}: run it again later"
+    except (ValueError, OSError):
+        return None, "it could not be fetched: run it again with the internet"
+
+
+def _still_in_place(entry: dict) -> bool:
+    """For a misplaced copy, whether the file it duplicates is still the one
+    the plan read at its place: a copy is deleted only while that one holds
+    its bytes. True for any other entry."""
+    placed = entry.get("placed_path")
+    if placed is None:
+        return True
+    try:
+        info = os.lstat(placed)
+        return (stat.S_ISREG(info.st_mode) and not _is_link(info)
+                and _stamp(info) == entry["placed_inode"]
+                and _digest_file(placed, ("sha1",))["sha1"] == entry["sha1"])
+    except OSError:
+        return False
+
+
 class _ChangedSincePlan(OSError):
     """The file is not the one the plan read: it stays."""
 
@@ -7187,7 +7350,8 @@ def remove_files(removal: Removal, setup: dict, backup: bool
             info = os.lstat(path)
             if (not stat.S_ISREG(info.st_mode) or _is_link(info)
                     or _stamp(info) != entry["inode"]
-                    or _digest_file(path, ("sha1",))["sha1"] != entry["sha1"]):
+                    or _digest_file(path, ("sha1",))["sha1"] != entry["sha1"]
+                    or not _still_in_place(entry)):
                 raise _ChangedSincePlan(errno.ESTALE, CHANGED_SINCE_PLAN)
             if backup:
                 if run is None or under is None:
@@ -7309,14 +7473,50 @@ def run_removal(args: argparse.Namespace) -> int:
     files = _named_files(args.file or [], folder)
     if files is None:
         return 2
-    removal = plan_removal(plat, folder, read.data, manifest, systems=systems, cores=cores,
-                           emulators=emulators, files=files)
+    misplaced = bool(getattr(args, "misplaced", False))
+    if misplaced:
+        # Every setup of the folder protects the places its list reads: one
+        # whose list or record entry cannot be read leaves nothing to tell
+        # its files from copies, so nothing is removed.
+        message = ""
+        if read.dropped:
+            message = (f"Nothing was removed from {shown_path(folder)}: the install "
+                       f"record's entry for {display_name(read.dropped[0])}, which shares "
+                       "the folder, cannot be used, so its files would not be told from "
+                       f"copies. Install {display_name(read.dropped[0])} again, with the "
+                       "choice it was installed with, to rewrite it.")
+        others = []
+        for name in read.data["setups"]:
+            if name == plat or message:
+                continue
+            other, why = _other_setup_list(name)
+            if other is None:
+                message = (f"Nothing was removed from {shown_path(folder)}: the file list "
+                           f"of {display_name(name)}, which shares the folder, is needed "
+                           f"to tell its files from copies, and {why}.")
+            else:
+                others.append(other)
+        if message:
+            print(message, file=sys.stderr)
+            EVENTS.emit("removal_plan", platform=plat, folder=str(folder), files=0, bytes=0,
+                        systems=[], dests=[], kept=[], gone=0, backup=False,
+                        message=message)
+            return 2
+        removal = plan_misplaced_removal(plat, folder, read.data, [manifest, *others])
+    else:
+        removal = plan_removal(plat, folder, read.data, manifest, systems=systems,
+                               cores=cores, emulators=emulators, files=files)
     size = sum(entry["size"] for entry in removal.remove)
-    whole = not (systems or cores or emulators or files)
+    whole = not (systems or cores or emulators or files or misplaced)
     by_hand = _left_by_hand(folder, read.data, not keeps_case(folder)) if whole else []
     where = f"{shown_path(folder)} for {display_name(plat, manifest)}"
     if not removal.remove:
-        headline = f"Nothing to remove from {where}."
+        headline = (f"No copy in the wrong place of {where}." if misplaced
+                    else f"Nothing to remove from {where}.")
+    elif misplaced:
+        headline = (f"Remove {_plural(len(removal.remove), 'copy')} in the wrong "
+                    f"place of {where}, {format_size(size)} freed. Each is a file "
+                    "RetroBIOS placed where the cores read it.")
     elif args.backup:
         headline = (f"Move {_plural(len(removal.remove), 'file')} "
                     f"({format_size(size)}) from {where} to a backup.")
@@ -7330,9 +7530,14 @@ def run_removal(args: argparse.Namespace) -> int:
                       for item in removal.kept],
                 gone=len(removal.gone), backup=bool(args.backup), message=headline)
     print(headline)
-    if args.dry_run or args.verbose:
-        for entry in removal.remove:
-            print(f"  {entry['dest']}")
+    # The copies are the user's: they are named before any question.
+    listed = (removal.remove if args.dry_run or args.verbose
+              else removal.remove[:REMOVAL_KEPT_SHOWN] if misplaced else [])
+    for entry in listed:
+        print(f"  {entry['dest']}" + (f" (in place: {entry['placed']})"
+                                      if entry.get("placed") else ""))
+    if len(listed) < len(removal.remove) and misplaced:
+        print(f"  and {len(removal.remove) - len(listed)} more (--dry-run lists them)")
     if removal.kept:
         print(f"{agree(len(removal.kept), 'file stays', 'files stay')}: "
               f"{_kept_words(removal.kept)}.")
@@ -7365,7 +7570,8 @@ def run_removal(args: argparse.Namespace) -> int:
             return QUIT_CODE
     KEPT.reset()
     removed, failed, run = remove_files(removal, setup, bool(args.backup))
-    problem = _record_after_removal(removal, removed)
+    # The copies were never the record's: it stays as it is.
+    problem = "" if misplaced else _record_after_removal(removal, removed)
     freed = sum(entry["size"] for entry in removed)
     if run is not None:
         print(f"Moved {_plural(len(removed), 'file')} ({format_size(freed)}) to "
@@ -7376,7 +7582,8 @@ def run_removal(args: argparse.Namespace) -> int:
                     files=len(removed), bytes=freed, source="remove", status="made",
                     message=f"Moved {_plural(len(removed), 'file')} here.")
     elif removed:
-        print(f"Removed {_plural(len(removed), 'file')}, {format_size(freed)} freed.")
+        print(f"Removed {_plural(len(removed), 'copy' if misplaced else 'file')}, "
+              f"{format_size(freed)} freed.")
     changed = [item for item in failed if item["changed"]]
     if changed:
         print(f"{agree(len(changed), 'file stays', 'files stay')}: "
@@ -16468,6 +16675,13 @@ def build_parser() -> argparse.ArgumentParser:
              "full path). Repeat for several",
     )
     parser.add_argument(
+        "--misplaced",
+        action="store_true",
+        help="with --remove, delete instead the copies left in the wrong place of the "
+             "BIOS folder: each one whose bytes the installer placed where the cores "
+             "read them. A place a list reads, or a setup of the folder recorded, stays",
+    )
+    parser.add_argument(
         "--backup",
         action="store_true",
         help=f"with --remove, move the files into a dated folder of {BACKUP_DIR} "
@@ -16759,7 +16973,7 @@ _ACTION_TAKES = {
     "delete_backup": ("dry_run", "events", "yes", "no_input", "verbose"),
     "backups": ("platform", "dest", "events", "no_input", "verbose"),
     "remove": ("platform", "dest", "system", "core", "emulator", "file", "backup",
-               "dry_run", "events", "yes", "no_input", "verbose", "manifest", "from_pack",
+               "misplaced", "dry_run", "events", "yes", "no_input", "verbose", "manifest", "from_pack",
                "offline"),
 }
 # Options that are a choice of their own, never refused for being given.
@@ -16768,13 +16982,13 @@ _ACTION_FREE = ("jobs", "plain", "from_record")
 
 def _check_actions(parser: argparse.ArgumentParser, args: argparse.Namespace) -> None:
     """Refuse an action given with an option it does not read, two actions,
-    or --file and --backup without --remove."""
+    or --file, --backup and --misplaced without --remove."""
     actions = [name for name in _ACTION_TAKES if getattr(args, name)]
     if len(actions) > 1:
         parser.error(f"--{actions[0].replace('_', '-')} and --{actions[1].replace('_', '-')} "
                      "are two actions: run them one at a time")
     if not actions:
-        for name in ("file", "backup"):
+        for name in ("file", "backup", "misplaced"):
             if getattr(args, name):
                 parser.error(f"--{name} applies to --remove")
         return
@@ -16793,6 +17007,10 @@ def _check_actions(parser: argparse.ArgumentParser, args: argparse.Namespace) ->
         if len(narrowed) > 1:
             parser.error(f"--remove takes one of --system, --core, --emulator or --file, "
                          f"not {narrowed[0]} and {narrowed[1]}")
+        if args.misplaced and (narrowed or args.backup):
+            # The copies are the user's, so no backup note can give them
+            # back to a setup, and no system or core names them.
+            parser.error(f"--remove --misplaced takes no {(narrowed or ['--backup'])[0]}")
 
 
 def _check_pack(parser: argparse.ArgumentParser, args: argparse.Namespace) -> None:
@@ -24753,7 +24971,7 @@ _ROW_VERBS = {
     "device": "Open", "emulators": "Open", "emulator": "Tick", "board": "Choose",
     "pack": "Choose", "offline": "Change", "more": "Open", "remove": "Open",
     "backups": "Open", "putback": "Open", "dropbackup": "Open", "rmall": "Choose",
-    "rmsystem": "Choose", "rmgo": "Remove", "rmbackup": "Change", "backup": "Choose",
+    "rmsystem": "Choose", "rmmisplaced": "Choose", "rmgo": "Remove", "rmbackup": "Change", "backup": "Choose",
     "bkrestore": "Put back", "bkdelete": "Delete", "actgo": "Confirm",
     "packmake": "Open", "packgo": "Make", "packwhere": "Change",
 }
@@ -26830,8 +27048,9 @@ def tui_action_argv(state: TuiState, run: str, python: str, script: str) -> list
         return argv + ["--backups", "--events"]
     if state.manifest_path is not None:
         argv.append(f"--manifest={state.manifest_path}")
-    argv += ["--remove", *(f"{flag}={value}" for flag, value in state.removal_scope)]
-    if state.removal_backup:
+    argv += ["--remove", *(f"{flag}={value}" if value else flag
+                           for flag, value in state.removal_scope)]
+    if state.removal_backup and not _removing_misplaced(state):
         argv.append("--backup")
     return argv + (["--dry-run", "--events"] if run == "removal_plan" else ["--events", "--yes"])
 
@@ -26879,12 +27098,19 @@ def _remove_rows(state: TuiState) -> list[TuiRow]:
         return [TuiRow("back", "Back")]
     files = state.record.get("files") or []
     size = format_size(sum(int(item.get("size") or 0) for item in files))
-    rows = [TuiRow("rmall", "All RetroBIOS files", size, keep_right=True)]
+    rows = [TuiRow("rmall", "All RetroBIOS files", size, keep_right=True),
+            TuiRow("rmmisplaced", "Misplaced copies")]
     for system, count, length in tui_removal_systems(state):
         rows.append(TuiRow("rmsystem", system_title(system, state.manifest),
                            format_size(length), system, narrow=(_plural(count, "file"),),
                            keep_right=True))
     return rows
+
+
+def _removing_misplaced(state: TuiState) -> bool:
+    """Whether the removal is of the copies in the wrong place, which are
+    deleted: they were never a setup's, so no backup gives them back."""
+    return ("--misplaced", "") in state.removal_scope
 
 
 def _removal_rows(state: TuiState) -> list[TuiRow]:
@@ -26896,9 +27122,11 @@ def _removal_rows(state: TuiState) -> list[TuiRow]:
     rows = []
     if plan["files"]:
         rows.append(TuiRow("rmgo", f"Move {format_size(plan['bytes'])} to a backup"
-                           if state.removal_backup else f"Remove {format_size(plan['bytes'])}"))
-        rows.append(TuiRow("rmbackup", f"Keep a backup: {_yes(state.removal_backup)}",
-                           "--backup"))
+                           if state.removal_backup and not _removing_misplaced(state)
+                           else f"Remove {format_size(plan['bytes'])}"))
+        if not _removing_misplaced(state):
+            rows.append(TuiRow("rmbackup", f"Keep a backup: {_yes(state.removal_backup)}",
+                               "--backup"))
     # B goes back: a Back row pushed what stays out of a 40x12 screen.
     return rows + _details_row(state)
 
@@ -26928,7 +27156,8 @@ def _action_rows(state: TuiState) -> list[TuiRow]:
         return [TuiRow("bkrestore", "Put back"), TuiRow("bkdelete", "Delete"),
                 TuiRow("back", "Back")]
     if screen == "actconfirm":
-        verb = {"remove": "Move to a backup" if state.removal_backup else "Remove",
+        verb = {"remove": "Move to a backup"
+                if state.removal_backup and not _removing_misplaced(state) else "Remove",
                 "restore": "Put back", "delete_backup": "Delete"}[state.action]
         return [TuiRow("actgo", verb), TuiRow("back", "Back")]
     if screen == "actdone" and not state.running:
@@ -26976,6 +27205,7 @@ def _activate_action(state: TuiState, row: TuiRow) -> list[tuple]:
                                      "dropbackup": "delete_backup"}[action])
     if screen == "remove":
         state.removal_scope = ([("--system", str(row.value))] if action == "rmsystem"
+                               else [("--misplaced", "")] if action == "rmmisplaced"
                                else [])
         state.removal = None
         _push(state, "removal")
@@ -27058,7 +27288,12 @@ def _removal_text(state: TuiState) -> list:
     plan = state.removal or {}
     folder = _short_path(state.dest, state.home)
     if not plan.get("files"):
-        lines: list = ["Nothing here can be removed."]
+        lines: list = ["No copy in the wrong place." if _removing_misplaced(state)
+                       else "Nothing here can be removed."]
+    elif _removing_misplaced(state):
+        lines = [f"{_plural(plan['files'], 'copy')} in the wrong place go, "
+                 f"{format_size(plan['bytes'])} freed. The files where the cores read "
+                 "them stay."]
     elif state.removal_backup:
         lines = [f"{_plural(plan['files'], 'file')} to a backup, "
                  f"{format_size(plan['bytes'])}."]
@@ -27134,6 +27369,10 @@ def _view_backup(state: TuiState, width: int, height: int) -> tuple:
 def _confirm_action_text(state: TuiState) -> list[str]:
     if state.action == "remove":
         plan = state.removal or {}
+        if _removing_misplaced(state):
+            return [f"Remove {_plural(plan.get('files', 0), 'copy')} in the wrong place for "
+                    f"good? {format_size(plan.get('bytes', 0))} is freed. The files where "
+                    "the cores read them stay."]
         if state.removal_backup:
             return [f"Move {_plural(plan.get('files', 0), 'file')} to a backup? The space "
                     "is freed once the backup is deleted."]
