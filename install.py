@@ -104,6 +104,9 @@ def _checked_base_url(value: str) -> str:
 BASE_URL = _checked_base_url(os.environ.get("RETROBIOS_BASE_URL", DEFAULT_BASE_URL))
 MANIFEST_URL = f"{BASE_URL}/install/{{platform}}.json"
 TARGETS_URL = f"{BASE_URL}/install/targets/{{platform}}.json"
+# What --standalone reads, apart from the list every run downloads.
+STANDALONE_DIR = "standalone"
+STANDALONE_URL = f"{BASE_URL}/install/standalone/{{platform}}.json"
 # The platforms that publish a core list per board, install/targets/ in the
 # repository: a test holds the two equal. Offline, a platform outside it
 # has no hardware targets, where the run sent the user after a list that
@@ -124,6 +127,7 @@ MAX_RETRIES = 3
 CONNECT_TIMEOUT = 4.0
 MAX_MANIFEST_BYTES = 16 * 1024 * 1024
 MAX_TARGETS_BYTES = 4 * 1024 * 1024
+MAX_STANDALONE_BYTES = 16 * 1024 * 1024
 MAX_MANIFEST_FILES = 100_000
 MAX_DOWNLOAD_SIZE = 1024 * 1024 * 1024
 # A data directory's source archive: PCSX2's source tarball is the largest.
@@ -4162,7 +4166,151 @@ def _check_entry(
         _check_omission(claim, dest)
     for field in (*SELECTION_FIELDS, "declared_in"):
         _check_tags(entry, field, dest)
+    _check_expert_fields(entry, dest)
     return size, largest
+
+
+def _check_expert_fields(entry: dict, dest: str) -> None:
+    """`truth` and `slot`, what --source truth and --one-per-slot read."""
+    if "truth" in entry and entry["truth"] is not False:
+        raise ValueError(f"invalid truth flag for {dest}")
+    slot = entry.get("slot")
+    if slot is None:
+        return
+    if not isinstance(slot, dict) or not {"groups", "keys"} <= set(slot) <= {
+            "groups", "keys", "also"}:
+        raise ValueError(f"invalid slot for {dest}")
+    also = slot.get("also", [])
+    if not isinstance(also, list) or len(also) > MAX_SELECTION_TAGS:
+        raise ValueError(f"invalid slot for {dest}")
+    for chain in [slot, *also]:
+        if not isinstance(chain, dict) or not {"groups", "keys"} <= set(chain) or (
+                chain is not slot and set(chain) != {"groups", "keys"}):
+            raise ValueError(f"invalid slot for {dest}")
+        _check_slot_chain(chain, dest)
+
+
+def _check_slot_chain(chain: dict, dest: str) -> None:
+    """One name's groups and the claims at each key its lookup tries."""
+    if not isinstance(chain.get("groups"), list):
+        raise ValueError(f"invalid slot groups for {dest}")
+    _check_tags(chain, "groups", dest)
+    keys = chain["keys"]
+    if not isinstance(keys, list) or len(keys) > MAX_SELECTION_TAGS:
+        raise ValueError(f"invalid slot keys for {dest}")
+    for claims in keys:
+        if not isinstance(claims, dict) or not claims or len(claims) > MAX_SELECTION_TAGS:
+            raise ValueError(f"invalid slot claims for {dest}")
+        for name, claim in claims.items():
+            if not isinstance(claim, dict):
+                raise ValueError(f"invalid slot claim for {dest}")
+            ranks = claim.get("ranks")
+            if (not isinstance(name, str) or not 0 < len(name) <= 256
+                    or not set(claim) <= {"ranks", "regions", "sets"}
+                    or not isinstance(ranks, list) or not ranks
+                    or len(ranks) > MAX_SELECTION_TAGS
+                    or not all(rank is None or (isinstance(rank, int)
+                                                and not isinstance(rank, bool))
+                               for rank in ranks)):
+                raise ValueError(f"invalid slot claim for {dest}")
+            _check_tags(claim, "regions", dest)
+            _check_tags(claim, "sets", dest)
+
+
+def _check_omitted_entry(entry: dict, dest: str) -> None:
+    """An omission's fields, its cores' claims and its expert fields, the
+    same for omitted_files and truth_omitted."""
+    _check_omission(entry, dest)
+    _check_root(entry, dest, omitted=True)
+    claims = entry.get("alternatives", [])
+    if not isinstance(claims, list) or len(claims) > MAX_SELECTION_TAGS:
+        raise ValueError(f"invalid omitted alternatives for {dest}")
+    for claim in claims:
+        claim_cores = claim.get("cores") if isinstance(claim, dict) else None
+        if (
+            not isinstance(claim, dict)
+            or set(claim) != {"cores"}
+            or not isinstance(claim_cores, list)
+            or not claim_cores
+            or not all(isinstance(core, str) for core in claim_cores)
+        ):
+            raise ValueError(f"invalid omitted alternative for {dest}")
+    for field in (*SELECTION_FIELDS, "declared_in"):
+        _check_tags(entry, field, dest)
+    _check_expert_fields(entry, dest)
+
+
+def _check_truth_lists(data: dict, seen_destinations: set[str]) -> int:
+    """truth_files and truth_omitted, what --source truth adds to the list:
+    each a valid entry, and the truth list it makes holds each destination
+    once. Returns the largest size the truth files may fetch."""
+    files = data.get("truth_files")
+    if files is None:
+        if "truth_omitted" in data:
+            raise ValueError("truth_omitted without truth_files")
+        return 0
+    if not isinstance(files, list) or len(files) > MAX_MANIFEST_FILES:
+        raise ValueError("invalid truth_files list")
+    kept = {_entry_key(entry) for entry in data.get("files", [])
+            if entry.get("truth", True)}
+    seen: set[str] = set()
+    largest = 0
+    for index, entry in enumerate(files):
+        _size, most = _check_entry(entry, f"truth_files[{index}]", seen)
+        largest += most
+    if seen & kept:
+        raise ValueError("truth_files repeats a destination the truth list keeps")
+    omitted = data.get("truth_omitted", [])
+    if not isinstance(omitted, list) or len(omitted) > MAX_MANIFEST_FILES:
+        raise ValueError("invalid truth_omitted list")
+    for index, entry in enumerate(omitted):
+        if not isinstance(entry, dict):
+            raise ValueError(f"truth_omitted[{index}] must be an object")
+        dest = str(_safe_relative_path(entry.get("dest"), f"truth_omitted[{index}].dest"))
+        _check_omitted_entry(entry, dest)
+    return largest
+
+
+def _check_standalone_layouts(data: object, manifest: dict, plat: str) -> dict:
+    """install/standalone/<platform>.json, checked as the list is: per
+    emulator the list names, entries or [dest, sha1] pairs whose content
+    the list carries. Returns the layouts."""
+    if not isinstance(data, dict) or data.get("schema") != 1 or data.get("platform") != plat:
+        raise ValueError(f"it is no standalone layout of {plat}")
+    layouts = data.get("standalone_layouts")
+    if not isinstance(layouts, dict) or len(layouts) > MAX_SELECTION_TAGS:
+        raise ValueError("invalid standalone_layouts")
+    if sorted(layouts) != sorted(manifest.get("standalone_builds") or []):
+        raise ValueError("its builds are not the ones the file list names")
+    sizes = {
+        copy["sha1"]: copy.get("size", 0)
+        for entry in [*manifest.get("files", []), *(manifest.get("truth_files") or [])]
+        for copy in [entry, *entry.get("alternatives", []), *entry.get("slot_choices", [])]
+        if isinstance(copy, dict) and copy.get("sha1")
+        and (copy.get("repo_path") or copy.get("release_asset"))
+    }
+    for name, items in layouts.items():
+        if (not isinstance(name, str) or not 0 < len(name) <= 256
+                or not isinstance(items, list) or len(items) > MAX_MANIFEST_FILES):
+            raise ValueError("invalid standalone_layouts entry")
+        seen: set[str] = set()
+        largest = 0
+        for index, item in enumerate(items):
+            where = f"standalone_layouts[{name!r}][{index}]"
+            if isinstance(item, list):
+                if (len(item) != 2 or not isinstance(item[1], str)
+                        or item[1] not in sizes):
+                    raise ValueError(f"invalid {where}")
+                key = _entry_key({"dest": str(_safe_relative_path(item[0], where))})
+                if key in seen:
+                    raise ValueError(f"duplicate destination in {where}")
+                seen.add(key)
+                largest += int(sizes[item[1]] or 0)
+            else:
+                largest += _check_entry(item, where, seen)[1]
+            if largest > MAX_TOTAL_DOWNLOAD_SIZE:
+                raise ValueError("standalone build size exceeds safety limit")
+    return layouts
 
 
 def _check_data_directory(entry: object, where: str) -> None:
@@ -4294,23 +4442,14 @@ def _validate_manifest(data: object, plat: str) -> dict:
         if key in seen_destinations or key in seen_omitted:
             raise ValueError(f"duplicate or conflicting omitted destination: {dest}")
         seen_omitted.add(key)
-        _check_omission(entry, dest)
-        _check_root(entry, dest, omitted=True)
-        claims = entry.get("alternatives", [])
-        if not isinstance(claims, list) or len(claims) > MAX_SELECTION_TAGS:
-            raise ValueError(f"invalid omitted alternatives for {dest}")
-        for claim in claims:
-            claim_cores = claim.get("cores") if isinstance(claim, dict) else None
-            if (
-                not isinstance(claim, dict)
-                or set(claim) != {"cores"}
-                or not isinstance(claim_cores, list)
-                or not claim_cores
-                or not all(isinstance(core, str) for core in claim_cores)
-            ):
-                raise ValueError(f"invalid omitted alternative for {dest}")
-        for field in (*SELECTION_FIELDS, "declared_in"):
-            _check_tags(entry, field, dest)
+        _check_omitted_entry(entry, dest)
+    if data.get("slot_fields", True) is not True:
+        raise ValueError("invalid slot_fields")
+    largest_total += _check_truth_lists(data, seen_destinations)
+    if "standalone_builds" in data:
+        _check_tags(data, "standalone_builds", "the file list")
+    if largest_total > MAX_TOTAL_DOWNLOAD_SIZE:
+        raise ValueError("manifest total size exceeds safety limit")
     declared_total_omitted = data.get("total_omitted")
     if (
         declared_total_omitted is not None
@@ -4802,6 +4941,35 @@ def local_targets(plat: str) -> "dict | None":
         sys.exit(1)
 
 
+def fetch_standalone(plat: str, manifest: dict) -> dict:
+    """What each standalone build reads, for --standalone only: the file
+    beside --manifest (standalone/<platform>.json, where the repository
+    keeps it), else downloaded as the list is. Missing, unreachable or
+    invalid, the run stops on one line, code 1."""
+    beside = (LOCAL.manifest.parent / STANDALONE_DIR / f"{plat}.json"
+              if LOCAL.manifest is not None else None)
+    url = STANDALONE_URL.format(platform=plat)
+    where = str(beside) if beside is not None and _is_file(beside) else url
+    try:
+        if where != url:
+            raw = _read_capped(Path(where), MAX_STANDALONE_BYTES)
+            data = json.loads((raw or b"").decode("utf-8"))
+        else:
+            data = _fetch_json(url, MAX_STANDALONE_BYTES, "standalone layout")
+        return _check_standalone_layouts(data, manifest, plat)
+    except urllib.error.HTTPError as exc:
+        problem = f"HTTP {exc.code}"
+    except (urllib.error.URLError, OSError) as exc:
+        problem = str(exc) if isinstance(exc, _Offline) else network_words(exc)[1]
+    except (UnicodeDecodeError, ValueError) as exc:
+        problem = f"not valid: {exc}"
+    EVENTS.emit("error", stage="manifest", reason="unavailable", platform=plat,
+                message=f"--standalone needs {where}: {problem}")
+    print(f"Error: --standalone needs {where}, which could not be read ({problem}).",
+          file=sys.stderr)
+    sys.exit(1)
+
+
 def fetch_targets(plat: str, attempts: int = MAX_RETRIES,
                   timeout: float | None = None) -> "dict | None":
     """The target core list: the one this run has at hand, else downloaded.
@@ -5213,6 +5381,190 @@ def _chosen(entry: dict, wanted: set[str]) -> bool:
     if not systems:
         return OTHER_SYSTEMS in wanted
     return bool(wanted & set(systems))
+
+
+def _merged_slot(claims: dict) -> tuple[int | None, tuple, frozenset]:
+    """One key's rank, regions and sets over the emulators claiming it, as
+    the pack builder merges them (slot.merge_claims). Two ranks that differ,
+    or a rank beside an emulator declaring the file without one, leave the
+    file unranked: neither order may win for a pack serving both cores."""
+    ranks = {rank for claim in claims.values() for rank in claim.get("ranks", [])
+             if rank is not None}
+    ranked_by = {name for name, claim in claims.items()
+                 if any(rank is not None for rank in claim.get("ranks", []))}
+    unranked_by = {name for name, claim in claims.items() if None in claim.get("ranks", [])}
+    conflict = len(ranks) > 1 or bool(ranked_by and unranked_by - ranked_by)
+    regions = tuple(sorted({r for claim in claims.values() for r in claim.get("regions", [])}))
+    sets = frozenset((name, group) for name, claim in claims.items()
+                     for group in claim.get("sets", []))
+    return (None if conflict or not ranks else min(ranks)), regions, sets
+
+
+def slot_drops(entries: list[dict], held: set[str],
+               reach: Collection[str] | None = None) -> set[str]:
+    """Destinations --one-per-slot withdraws, as _entry_key spells them.
+
+    The pack builder's rule (slot.resolve_slot_drops), replayed over the
+    `slot` each entry records. A slot is a group and the regions the code
+    selects the file for, split where no set links its files. In a slot of
+    two files or more, the one ranked first by `priority:` (lower first)
+    stays and the others go, and only when every file of it is ranked and
+    one ranks best: otherwise every file stays. `held` names what the run
+    can install, as for the regions. `reach` is the cores of the board: the
+    claims of the others are no part of its order.
+    """
+    bucketed: dict[tuple[str, tuple], list[tuple[str, int | None, frozenset]]] = {}
+    keep: set[str] = set()
+    for entry in entries:
+        slot = entry.get("slot")
+        key = _entry_key(entry)
+        if not isinstance(slot, dict) or key not in held:
+            continue
+        # One lookup per name the groups list the file under (`also`).
+        for chain in [slot, *slot.get("also", [])]:
+            merged = None
+            for claims in chain.get("keys", []):
+                here = {name: claim for name, claim in claims.items()
+                        if reach is None or name in reach}
+                if here:
+                    merged = _merged_slot(here)
+                    break
+            if merged is None:
+                keep.add(key)
+                continue
+            rank, regions, sets = merged
+            for group in chain.get("groups", []):
+                bucketed.setdefault((group, regions), []).append((key, rank, sets))
+    drop: set[str] = set()
+    for found in bucketed.values():
+        for candidates in _linked_by_set(found):
+            if len(candidates) < 2 or any(rank is None for _key, rank in candidates):
+                keep.update(key for key, _rank in candidates)
+                continue
+            best = min(rank for _key, rank in candidates if rank is not None)
+            winners = [key for key, rank in candidates if rank == best]
+            if len(winners) != 1:
+                keep.update(key for key, _rank in candidates)
+                continue
+            keep.add(winners[0])
+            drop.update(key for key, _rank in candidates if key != winners[0])
+    return drop - keep
+
+
+def _linked_by_set(found: list[tuple[str, int | None, frozenset]]
+                   ) -> list[list[tuple[str, int | None]]]:
+    """The files of one slot split where no set links them: a rank orders
+    the members of one set, and files in no set are compared together."""
+    parent = list(range(len(found)))
+
+    def root(i: int) -> int:
+        while parent[i] != i:
+            parent[i] = parent[parent[i]]
+            i = parent[i]
+        return i
+
+    first_of: dict[object, int] = {}
+    for i, (_key, _rank, sets) in enumerate(found):
+        for set_key in sets or {None}:
+            if set_key in first_of:
+                parent[root(i)] = root(first_of[set_key])
+            else:
+                first_of[set_key] = i
+    parts: dict[int, list[tuple[str, int | None]]] = {}
+    for i, (key, rank, _sets) in enumerate(found):
+        parts.setdefault(root(i), []).append((key, rank))
+    return list(parts.values())
+
+
+def one_per_slot(files: list[dict], omitted: list[dict],
+                 reach: Collection[str] | None = None) -> tuple[list[dict], list[dict]]:
+    """The files and omissions --one-per-slot keeps. What the builder holds
+    and this download lacks (held: true) displaces a file as in the pack."""
+    held = {_entry_key(f) for f in files} | {_entry_key(o) for o in omitted if o.get("held")}
+    dropped = slot_drops(files + omitted, held, reach)
+    return ([f for f in files if _entry_key(f) not in dropped],
+            [o for o in omitted if _entry_key(o) not in dropped])
+
+
+def truth_lists(manifest: dict, files: list[dict],
+                omitted: list[dict]) -> tuple[list[dict], list[dict]]:
+    """What --source truth installs: the files the emulator profiles prove a
+    core reads, as `generate_pack.py --source truth` packs them. The full
+    list marks what that list lacks (truth: false) and carries what only it
+    holds (truth_files, truth_omitted)."""
+    return ([f for f in files if f.get("truth", True)] + list(manifest.get("truth_files") or []),
+            [o for o in omitted if o.get("truth", True)]
+            + list(manifest.get("truth_omitted") or []))
+
+
+def standalone_entries(manifest: dict, layouts: dict, profile: str) -> list[dict] | None:
+    """The files a profile's standalone build reads, as entries of the list:
+    None for a profile without one. An item [dest, sha1] takes its download
+    from the copy of the list with that content."""
+    if profile not in layouts:
+        return None
+    copies = {
+        copy["sha1"]: copy
+        for entry in [*manifest.get("files", []), *(manifest.get("truth_files") or [])]
+        for copy in [entry, *entry.get("alternatives", []), *entry.get("slot_choices", [])]
+        if copy.get("sha1") and (copy.get("repo_path") or copy.get("release_asset"))
+    }
+    result: list[dict] = []
+    for item in layouts[profile]:
+        if isinstance(item, list):
+            dest, sha1 = item
+            copy = copies[sha1]
+            result.append({"dest": dest, **{k: copy[k] for k in _COPY_FIELDS
+                                            if k in copy and k != "cores"},
+                           "cores": [profile]})
+        else:
+            result.append({**item, "cores": [profile]})
+    return result
+
+
+def standalone_layout(manifest: dict, layouts: dict, profiles: list[str],
+                      files: list[dict], omitted: list[dict]
+                      ) -> tuple[list[dict], list[dict]]:
+    """--emulator with --standalone: the platform's own files of the systems
+    the emulators run, and beside them each emulator's standalone build, in
+    profile order, first at a destination wins, as `generate_pack.py
+    --emulator --standalone` packs them."""
+    built: dict[str, dict] = {}
+    for profile in sorted(profiles):
+        for entry in standalone_entries(manifest, layouts, profile) or []:
+            built.setdefault(_entry_key(entry), entry)
+    own = [entry for entry in files
+           if entry.get("cores") is None and _entry_key(entry) not in built]
+    return own + list(built.values()), [o for o in omitted if o.get("cores") is None]
+
+
+# What --find reads a hash as, by its length in hex digits.
+FIND_KINDS = {40: "sha1", 64: "sha256", 32: "md5", 8: "crc32"}
+
+
+def find_by_hash(files: list[dict], value: str) -> tuple[str, list[dict], bool]:
+    """The entries of a list whose content has this hash: the kind read
+    from its length, the matches, each at its destination with the copy
+    that has it, and whether the list records that kind at all."""
+    value = value.strip().lower()
+    kind = FIND_KINDS.get(len(value), "")
+    matches: list[dict] = []
+    recorded = False
+    seen: set[tuple[str, str]] = set()
+    for entry in files:
+        for copy in [entry, *entry.get("alternatives", []), *entry.get("slot_choices", [])]:
+            if kind in copy:
+                recorded = True
+            if str(copy.get(kind, "")).lower() != value:
+                continue
+            found = dict(entry)
+            for field in ("alternatives", "slot_choices", "declared_choices", "declared_copy"):
+                found.pop(field, None)
+            found.update((k, copy[k]) for k in _COPY_FIELDS if k in copy)
+            if (_entry_key(found), found.get("sha1", "")) not in seen:
+                seen.add((_entry_key(found), found.get("sha1", "")))
+                matches.append(found)
+    return kind, matches, recorded
 
 
 def recorded_axes(files: list[dict], omitted: list[dict] = ()) -> frozenset:
@@ -8291,8 +8643,10 @@ _CHOICE_OPTIONS = ("--system", "--core", "--region", "--for-games", "--required-
 # wrote --manifest before --from and line mode after it, for one choice
 # An option not named here comes after them.
 _COMMAND_ORDER = (
-    "--manifest", "--from-pack", "--system", "--core", "--emulator", "--region",
-    "--for-games", "--required-only", "--all-files", "--target", "--no-game-data", "--installed-cores", "--cores-dir", "--every-board",
+    "--manifest", "--from-pack", "--system", "--core", "--emulator", "--standalone",
+    "--region", "--one-per-slot", "--source", "--find", "--for-games", "--required-only",
+    "--all-files", "--target", "--no-game-data", "--installed-cores", "--cores-dir",
+    "--every-board",
     "--declared-only", "--standalone-copies", "--save-dir", "--jobs", "--from",
     "--add-app", "--offline", "--check", "--dry-run",
 )
@@ -8341,6 +8695,10 @@ class Invocation:
         games = getattr(args, "for_games", None)
         if games is not None:
             options.append(("--for-games", None if games is True else str(games)))
+        if getattr(args, "source", "full") != "full":
+            options.append(("--source", args.source))
+        if getattr(args, "find", None):
+            options.append(("--find", args.find))
         for flag, on in (
             ("--required-only", getattr(args, "required_only", False)),
             ("--all-files", getattr(args, "all_files", False)),
@@ -8348,6 +8706,8 @@ class Invocation:
             ("--installed-cores", args.installed_cores and not args.cores_dir),
             ("--no-game-data", args.no_game_data),
             ("--declared-only", args.declared_only),
+            ("--one-per-slot", getattr(args, "one_per_slot", False)),
+            ("--standalone", getattr(args, "standalone", False)),
             ("--standalone-copies", args.standalone_copies),
             ("--offline", offline_option(getattr(args, "offline", False))),
             ("--check", args.check),
@@ -11855,6 +12215,32 @@ def _narrow_to_emulators(
     files = [entry for entry in files if theirs(entry)]
     omitted = [entry for entry in omitted if theirs(entry)]
     print(f"  Narrowed {before} to {len(files)} files to {', '.join(chosen)}")
+    return files, omitted
+
+
+def _standalone_builds(
+    values: list[str], names: dict[str, str], manifest: dict, plat: str,
+    files: list[dict], omitted: list[dict],
+) -> tuple[list[dict], list[dict]]:
+    """--emulator with --standalone: each emulator's standalone build in
+    place of the files its core reads. An emulator with no standalone
+    build is refused, as `generate_pack.py --standalone` refuses it."""
+    if "standalone_builds" not in manifest:
+        print(f"Error: the {plat} file list does not say which emulators have a "
+              "standalone build, which --standalone needs.", file=sys.stderr)
+        print(_older_list_advice(plat), file=sys.stderr)
+        sys.exit(1)
+    profiles = sorted({names[name] for name in resolve_choices(values, sorted(names),
+                                                                "emulator")})
+    lacking = [p for p in profiles if p not in manifest["standalone_builds"]]
+    if lacking:
+        refuse_name(plat, f"Error: {', '.join(lacking)} has no standalone build: run "
+                    "again without --standalone.")
+    before = len(files)
+    files, omitted = standalone_layout(manifest, fetch_standalone(plat, manifest), profiles,
+                                       files, omitted)
+    detail(f"  The standalone {'builds' if len(profiles) > 1 else 'build'}: "
+           f"{before} to {len(files)} files")
     return files, omitted
 
 
@@ -16589,6 +16975,36 @@ def build_parser() -> argparse.ArgumentParser:
              "files cores load: --check then answers for the list the platform checks",
     )
     parser.add_argument(
+        "--one-per-slot",
+        action="store_true",
+        help="keep one BIOS per console and region, the one the emulators' own "
+             "search order ranks first (a slot no order decides keeps every file)",
+    )
+    parser.add_argument(
+        "--standalone",
+        action="store_true",
+        help="with --emulator: the files each emulator's standalone build reads, "
+             "where that build reads them",
+    )
+    parser.add_argument(
+        "--source",
+        choices=("full", "truth"),
+        default="full",
+        help="truth: only the files the emulator profiles prove a core reads "
+             "(default full: the platform's list and what its cores read)",
+    )
+    parser.add_argument(
+        "--find",
+        metavar="HASH",
+        help="install the file of the list with this sha1 or sha256, or md5 or "
+             "crc32 where the list records them",
+    )
+    parser.add_argument(
+        "--json",
+        action="store_true",
+        help="with --find: print the matching files as JSON and install nothing",
+    )
+    parser.add_argument(
         "--list-systems",
         action="store_true",
         help="list a platform's systems with their file counts and exit",
@@ -16794,6 +17210,113 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _check_expert(parser: argparse.ArgumentParser, args: argparse.Namespace) -> None:
+    """--one-per-slot, --standalone, --source truth and --find, applied or
+    refused, never ignored. Each is held equal to the pack builder's own
+    option, so a choice the builder refuses beside it is refused here."""
+    listing = (args.list_platforms or args.list_targets or args.list_systems
+               or args.list_cores or args.list_emulators)
+    truth = args.source == "truth"
+    refusals = (
+        (args.json and not args.find, "--json applies to --find"),
+        (args.standalone and not args.emulator,
+         "--standalone applies to --emulator: it picks that emulator's standalone build"),
+        (args.standalone and (args.region or args.one_per_slot or args.core or args.system),
+         "--standalone installs each emulator's standalone build whole, which "
+         "--region, --one-per-slot, --core and --system do not narrow"),
+        (args.one_per_slot and (args.system or args.emulator or args.for_games is not None),
+         "--one-per-slot decides each slot over the whole list, which --system, "
+         "--emulator and --for-games narrow first"),
+        (args.one_per_slot and args.declared_only,
+         "--one-per-slot ranks the files cores load too, which --declared-only leaves out"),
+        (truth and (args.system or args.core or args.emulator or args.region
+                    or args.one_per_slot or args.for_games is not None
+                    or args.declared_only or args.target or args.installed_cores
+                    or args.no_game_data),
+         "--source truth installs what the emulator profiles prove is read, over "
+         "the whole list: run it without other choices"),
+        (truth and args.tui, "the full-screen interface has no choice for --source truth"),
+        (bool(args.find) and (args.system or args.core or args.emulator or args.region
+                              or args.one_per_slot or truth or args.for_games is not None
+                              or args.declared_only or args.no_game_data or args.target
+                              or args.installed_cores or args.all_files or args.standalone),
+         "--find picks one file by its hash: run it without other choices"),
+        (bool(args.find) and (listing or args.check or args.tui),
+         "--find installs or names one file, not a listing, a check or the full screen"),
+        (args.json and args.events, "--json and --events each write JSON on stdout"),
+        (listing and (args.one_per_slot or args.standalone or truth),
+         "a listing prints the whole list, which --one-per-slot, --standalone and "
+         "--source do not narrow"),
+    )
+    for given, reason in refusals:
+        if given:
+            parser.error(reason)
+    if args.find:
+        # Each would be skipped by a run that installs one file or prints it.
+        for flag, given in (("--pack", getattr(args, "pack", None) is not None),
+                            ("--add-app", args.add_app),
+                            ("--standalone-copies", args.standalone_copies),
+                            ("--romm-firmware", args.romm_firmware is not None),
+                            ("--from", bool(getattr(args, "from")))):
+            if given:
+                parser.error(f"--find picks one file by its hash, which {flag} does not apply to")
+    if args.find is not None:
+        value = args.find.strip()
+        if len(value) not in FIND_KINDS or not re.fullmatch(r"[0-9a-fA-F]+", value):
+            kinds = ", ".join(f"{kind} ({length} digits)" for length, kind in FIND_KINDS.items())
+            parser.error(f"--find takes a hash in hexadecimal: {kinds}")
+
+
+FIND_SCHEMA = 1
+# What a match of --find --json carries, every key in this order, null
+# where the list records none.
+FIND_FIELDS = ("dest", "root", "sha1", "sha256", "md5", "crc32", "size", "systems", "cores")
+
+
+def _found_files(args: argparse.Namespace, plat: str,
+                 files: list[dict]) -> tuple[list[dict], list[dict]]:
+    """--find: the file of the list with the hash given, the run narrowed to
+    it, or with --json the matches printed and nothing installed.
+
+    One content found at several destinations installs at each. A hash two
+    contents share (a crc32) is ambiguous: named, never chosen. A kind the
+    list does not record (md5, crc32) is said as such, never as unknown.
+    """
+    value = args.find.strip().lower()
+    kind, matches, recorded = find_by_hash(files, value)
+    contents = {match.get("sha1") or match.get("sha256") for match in matches}
+    result = ("found" if len(contents) == 1 else "ambiguous" if contents
+              else "unknown" if recorded else "unrecorded")
+    if args.json:
+        record = {"schema": FIND_SCHEMA, "platform": plat, "hash": value, "kind": kind,
+                  "result": result,
+                  "matches": [{field: match.get(field) for field in FIND_FIELDS}
+                              for match in matches]}
+        print(json.dumps(record), file=args.json_out, flush=True)
+        if result != "found":
+            args.find_failed = True
+        return [], []
+    lines = {
+        "unrecorded": [f"Error: the {plat} file list records no {kind}: --find reads "
+                       "sha1 and sha256 in every list."],
+        "unknown": [f"Error: no file of the {plat} list has the {kind} {value}."],
+        "ambiguous": [f"Error: {len(contents)} files of the {plat} list have the "
+                      f"{kind} {value}: give their sha1 instead.",
+                      *(f"  {match['dest']}  {match.get('sha1', '')}" for match in matches)],
+    }.get(result)
+    if lines is not None:
+        EVENTS.emit("error", stage="option", reason="unknown", platform=plat,
+                    message=lines[0][len("Error: "):])
+        for line in lines:
+            print(line, file=sys.stderr)
+        # 4: the hash was read and the list holds no one file for it, neither
+        # a failure (1) nor an option refused (2).
+        sys.exit(4)
+    for match in matches:
+        print(f"  {value} is {match['dest']}")
+    return matches, []
+
+
 def say_raw_errors(verbose: bool) -> None:
     """Each run says errors from its own options: a run with --verbose before
     it in the same process left every later message with its raw cause."""
@@ -16891,6 +17414,7 @@ def main() -> None:
         ):
             if given:
                 parser.error(reason)
+    _check_expert(parser, args)
     if args.tui:
         reason = tui_blocker(args)
         if reason:
@@ -16957,10 +17481,12 @@ def main() -> None:
                      "or --list-targets")
     # The screens have no choice for --declared-only: the questions ask the
     # rest, and the run keeps the platform's own list.
+    # Nor for --source truth and --find, which choose the files themselves.
+    lined = args.declared_only or args.source == "truth" or bool(args.find)
     blocker = "" if args.tui else tui_blocker(args)
-    if args.tui or not (plain_requested(args) or args.declared_only or blocker):
+    if args.tui or not (plain_requested(args) or lined or blocker):
         sys.exit(run_tui(args))
-    if not (plain_requested(args) or args.declared_only):
+    if not (plain_requested(args) or lined):
         # The questions came line by line with no word of why: the page
         # says a smaller window says so, and a TERM
         # unset or dumb said nothing.
@@ -16984,6 +17510,16 @@ def main() -> None:
             EVENTS.emit("end", code=130)
             raise
         EVENTS.emit("end", code=0)
+        return
+    if args.json:
+        # The matches own stdout, the text a person reads goes to stderr.
+        args.no_input = True
+        args.json_out = sys.stdout
+        sys.stdout = sys.stderr
+        try:
+            _run(args)
+        finally:
+            sys.stdout = args.json_out
         return
     _run(args)
 
@@ -18439,6 +18975,12 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
     # A namespace built by a caller that predates --for-games has neither.
     args.for_games = getattr(args, "for_games", None)
     args.required_only = getattr(args, "required_only", False)
+    for name, default in (("one_per_slot", False), ("standalone", False), ("source", "full"),
+                          ("find", None), ("json", False)):
+        setattr(args, name, getattr(args, name, default))
+    # Options that choose the files themselves: no question chooses again,
+    # and no board or game of the card narrows what they chose.
+    chosen_by_flag = bool(args.find) or args.source == "truth"
     term = Terminal(real_stdout, quiet=args.quiet)
     interactive = sys.stdin.isatty() and not args.no_input and not args.quiet
     listing = (args.list_targets or args.list_systems or args.list_cores
@@ -18875,6 +19417,16 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         categorized = categorized or bool(manifest.get("categorized"))
         files = manifest.get("files", [])
         omitted_files = manifest.get("omitted_files", [])
+        if args.source == "truth":
+            if manifest.get("truth_files") is None:
+                print(f"Error: the {plat_name} file list does not say what the emulator "
+                      "profiles prove is read, which --source truth needs.", file=sys.stderr)
+                print(_older_list_advice(plat_name), file=sys.stderr)
+                sys.exit(1)
+            before = len(files)
+            files, omitted_files = truth_lists(manifest, files, omitted_files)
+            detail(f"  What the emulator profiles prove is read: {before} to "
+                   f"{len(files)} files (--source truth)")
         variants = manifest.get("case_variants", [])
         case_kept = keeps_case(bios_path)
         if variants and case_kept:
@@ -18908,6 +19460,11 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 f"{FAT_REFUSED_SHOWN} ({screen_text(shown)})"
             )
 
+        if args.find:
+            # Among the case variants kept here too: bios.col is one file.
+            files, omitted_files = _found_files(args, plat_name, files)
+            if args.json:
+                continue
         game_data_cut = 0
         if args.no_game_data and not manifest.get("categorized") and by_record(args):
             drop_recorded(args, plat_name, "--no-game-data", "the list marks no game data")
@@ -18944,7 +19501,9 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         # a card prepared on a computer took every board's files, and the
         # full-screen interface, which always gives --dest, never applied one.
         target = args.target
-        if (not target and not args.every_board and not packing
+        # The cores whose order decides a slot: the board's, else every core.
+        slot_reach: set[str] | None = None
+        if (not target and not args.every_board and not packing and not chosen_by_flag
                 and (not LOCAL.offline or local_targets(plat_name) is not None)):
             board = detect_board(plat_name)
             where = "detected"
@@ -18987,6 +19546,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                     manifest, target_info["cores"], files, omitted_files,
                     target=target,
                 )
+                slot_reach = designated_cores(manifest, target_info["cores"], target)
                 detail(f"  Filtered {before} to {len(files)} files for target {target}")
 
         found_cores = cores_found.get((plat_name, bios_path), [])
@@ -19015,6 +19575,9 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 manifest, found_cores, files, omitted_files, info_dests
             )
             detail(f"  Narrowed {before} to {len(files)} files to the installed cores")
+            # A slot is ranked by the cores installed, as a pack built for them.
+            found_reach = designated_cores(manifest, found_cores)
+            slot_reach = found_reach if slot_reach is None else slot_reach & found_reach
 
         if args.list_emulators:
             _print_emulators(plat_name, manifest, *(
@@ -19025,9 +19588,13 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         if args.emulator and by_record(args):
             _recorded_emulators(args, plat_name, manifest, files, omitted_files)
         if args.emulator:
+            names = emulator_names(manifest, files, omitted_files)
             files, omitted_files = _narrow_to_emulators(
                 args.emulator, manifest, plat_name, files, omitted_files
             )
+            if args.standalone:
+                files, omitted_files = _standalone_builds(
+                    args.emulator, names, manifest, plat_name, files, omitted_files)
 
         # Said before the install and again with the result.
         note = None if listing or packing else version_note(plat_name, bios_path, manifest)
@@ -19059,7 +19626,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         # The games of the card, read before the choices: where it holds
         # some, what they need is the menu's first choice, and --for-games
         # narrows the list here, before the systems are counted.
-        will_ask = interactive and not args.check and not listing
+        will_ask = (interactive and not args.check and not listing and not chosen_by_flag
+                    and not args.one_per_slot)
         # A run that asks nothing takes the plan's first choice: the games of
         # the card. `--yes` alone installed 6.4 GB on a dArkOS card holding
         # two games, while the screen offers what they need first. Not for a
@@ -19069,7 +19637,8 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                    and not getattr(args, "all_files", False)
                    and LOCAL.manifest is None and LOCAL.pack is None
                    and not (args.installed_cores or args.no_game_data or args.system
-                            or args.core or args.region or args.emulator or args.declared_only))
+                            or args.core or args.region or args.emulator or args.declared_only
+                            or args.one_per_slot or chosen_by_flag))
         games_plan = None
         if args.for_games is not None or unasked or (will_ask and not (
                 args.installed_cores or args.no_game_data or LOCAL.pack is not None)):
@@ -19115,7 +19684,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             given = GamesChoice(games_plan, args.required_only)
         # g at the menu: whether it left the game data out.
         cut: list[bool] | None = None
-        menu = interactive and not args.check and not listing
+        menu = will_ask
         if menu:
             whole_installed = (
                 narrow_to_cores(manifest, found_cores, files, omitted_files)
@@ -19206,6 +19775,15 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 # Enter for every system narrows nothing: "Narrowed 23 to 23".
                 # The menu counted the choice again before Enter.
                 detail(f"  Narrowed {before} to {len(files)} files")
+        if args.one_per_slot:
+            if not manifest.get("slot_fields"):
+                print(f"Error: the {plat_name} file list does not say which files a "
+                      "slot holds, which --one-per-slot needs.", file=sys.stderr)
+                print(_older_list_advice(plat_name), file=sys.stderr)
+                sys.exit(1)
+            before = len(files)
+            files, omitted_files = one_per_slot(files, omitted_files, slot_reach)
+            detail(f"  One BIOS per console and region: {before} to {len(files)} files")
         if (cut and cut[0]) or args.no_game_data:
             # Left out at g or by --no-game-data, from what the choice kept:
             # g offered the game data of the systems chosen, and the line
@@ -19237,14 +19815,15 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         # must count the same trees.
         narrowed = bool(
             target or args.system or args.core or args.region or args.installed_cores
+            or args.one_per_slot or args.standalone or chosen_by_flag
             or args.declared_only or len(files) + game_data_cut + len(unplaced)
             != len(manifest.get("files", [])) + len(variants if case_kept else [])
             or games_applied
         )
-        data_dirs = select_data_directories(manifest, files, narrowed,
-                                            bool(args.required_only),
-                                            games_plan if games_applied else None,
-                                            chosen_systems(selection))
+        # --find installs the file found, no tree beside it.
+        data_dirs = [] if args.find else select_data_directories(
+            manifest, files, narrowed, bool(args.required_only),
+            games_plan if games_applied else None, chosen_systems(selection))
         # The kinds as the plan and the menu head say them (parts_words),
         # the data files of the folders kept among them: this head said
         # BIOS files and game data beside a plan of three kinds, neither
@@ -19779,6 +20358,9 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                        "they read into them.")
 
     sys.stdout = real_stdout
+    if args.find and getattr(args, "json", False):
+        # The matches are the answer: nothing was installed.
+        sys.exit(4 if getattr(args, "find_failed", False) else 0)
     if not listing:
         EVENTS.emit(
             "summary", mode=_event_mode(args), installed=total_downloaded,
@@ -20743,6 +21325,9 @@ class TuiState:
         self.cli_regions: list = []
         self.cores: list = []
         self.no_game_data: bool = False
+        # --one-per-slot and --standalone, set on Change or given.
+        self.one_per_slot: bool = False
+        self.standalone: bool = False
         # --no-game-data on the command line: the plan has no game data row,
         # as line mode has no g then.
         self.cli_no_game_data: bool = False
@@ -21302,6 +21887,10 @@ def tui_flags(state: TuiState) -> list[tuple[str, str | None]]:
             flags.append(("--required-only", None))
     if state.no_game_data:
         flags.append(("--no-game-data", None))
+    if state.standalone and _tui_standalone_offered(state):
+        flags.append(("--standalone", None))
+    if state.one_per_slot and _tui_slot_offered(state, flags):
+        flags.append(("--one-per-slot", None))
     if state.installed_only and not any(flag == "--cores-dir" for flag, _v in flags):
         flags.append(("--installed-cores", None))
     if state.jobs != 8:
@@ -22200,6 +22789,9 @@ def _option_rows(state: TuiState) -> list[TuiRow]:
         what.append(TuiRow("regions", "Preferred regions: "
                            + (", ".join(map(region_title, state.regions)) or "any"),
                            "--region"))
+    if _tui_slot_offered(state, tui_flags(state)):
+        what.append(TuiRow("slot", "One BIOS per console and region: "
+                           + _yes(state.one_per_slot), "--one-per-slot"))
     if len(choices["cores"]) > 1:
         # The plan's words, the noun left to the row's own label. A list
         # with one core asks nothing, as line mode does not.
@@ -22208,6 +22800,9 @@ def _option_rows(state: TuiState) -> list[TuiRow]:
     if "system_cores" in manifest and tui_emulators(state):
         what.append(TuiRow("emulators", f"Emulators: {_emulator_words(state)}",
                            "--emulator"))
+    if _tui_standalone_offered(state):
+        what.append(TuiRow("standalone", "Standalone version of it: "
+                           + _yes(state.standalone), "--standalone"))
     if manifest.get("categorized"):
         # "Leave out game data: no" was a double negative.
         what.append(TuiRow("game_data", "Game data: "
@@ -22258,6 +22853,32 @@ def _option_rows(state: TuiState) -> list[TuiRow]:
         if group:
             rows += [TuiRow("heading", heading, style="head"), *group]
     return rows
+
+
+def _tui_standalone_offered(state: TuiState) -> bool:
+    """Whether Change offers --standalone: emulators are chosen, the list
+    records a standalone build for each of them, and no region, core or
+    system choice narrows the run, which the option refuses beside it."""
+    manifest = state.manifest or {}
+    layouts = manifest.get("standalone_builds") or []
+    if not state.emulators or not layouts or not _tui_standalone_fits(state):
+        return False
+    names = emulator_names(manifest, *tui_run_files(state))
+    return all(names.get(name) in layouts for name in state.emulators)
+
+
+def _tui_standalone_fits(state: TuiState) -> bool:
+    """No region, core or system choice: --standalone takes none."""
+    return not (state.regions or tui_core_flags(state) or _tui_system_flags(state))
+
+
+def _tui_slot_offered(state: TuiState, flags: list[tuple[str, str | None]]) -> bool:
+    """Whether Change offers --one-per-slot: the list records its slots and
+    the choice is the whole list, as the pack builder decides slots over it
+    (no system, emulator or game choice narrows it first)."""
+    return bool((state.manifest or {}).get("slot_fields")) and not any(
+        flag in ("--system", "--emulator", "--for-games", "--declared-only")
+        for flag, _value in flags)
 
 
 def tui_emulators(state: TuiState) -> list[str]:
@@ -23868,6 +24489,10 @@ def _option(state: TuiState, action: str, step: int) -> list[tuple]:
     """A row of the options: step 0 is Enter, -1 and 1 are Left and Right."""
     if action == "game_data":
         state.no_game_data = step > 0 if step else not state.no_game_data
+    elif action == "slot":
+        state.one_per_slot = step > 0 if step else not state.one_per_slot
+    elif action == "standalone":
+        state.standalone = step > 0 if step else not state.standalone
     elif action == "installed" and not _cores_dir_given(state):
         state.installed_only = step > 0 if step else not state.installed_only
     elif action == "jobs":
@@ -24209,7 +24834,22 @@ def _pager_last(state: TuiState, items: list) -> int:
 
 
 def tui_update(state: TuiState, key: TuiKey) -> list[tuple]:
-    """What a key does on the current screen, and the work it starts."""
+    """What a key does on the current screen, and the work it starts. A
+    choice that --standalone cannot sit beside turns it off, said once."""
+    effects = _tui_key(state, key)
+    if state.standalone and state.emulators and not _tui_standalone_fits(state):
+        state.standalone = False
+        state.status = TUI_STANDALONE_OFF
+    return effects
+
+
+# Said when a choice of regions, cores or systems turns Standalone off.
+TUI_STANDALONE_OFF = ("Standalone version off: the build is installed whole, which "
+                      "regions, cores and systems do not narrow.")
+
+
+def _tui_key(state: TuiState, key: TuiKey) -> list[tuple]:
+    """tui_update for one key."""
     if key.name == "mouse":
         return tui_mouse(state, key)  # type: ignore[arg-type]
     # A key moves the focus its own way: the next tap focuses again.
@@ -24989,6 +25629,7 @@ _ROW_VERBS = {
     "none": "Untick all", "filter": "Filter", "system": "Tick", "core": "Tick",
     "region": "Tick", "done": "Done", "regions": "Open", "cores": "Open", "command": "Open",
     "preview": "Open", "folder": "Choose", "game_data": "Change", "installed": "Change",
+    "slot": "Change", "standalone": "Change",
     "jobs": "Change", "retry": "Try again", "back": "Back", "stay": "Stay",
     "fromcard": "Choose", "from": "Add a folder", "misplaced": "Show", "zip": "Copy from it",
     "unreadable": "Show", "exit": "Exit", "addapp": "Put it on the card",
@@ -27981,6 +28622,8 @@ def tui_start(
         if token.strip()))
     state.cli_cores = list(state.cores)
     state.no_game_data = state.cli_no_game_data = bool(args.no_game_data)
+    state.one_per_slot = bool(getattr(args, "one_per_slot", False))
+    state.standalone = bool(getattr(args, "standalone", False))
     state.installed_only = bool(args.installed_cores)
     state.jobs = args.jobs
     state.add_app = bool(getattr(args, "add_app", False))

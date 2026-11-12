@@ -3,6 +3,7 @@
   "source": "full",
   "regions": [],
   "categorized": true,
+  "slot_fields": true,
   "platform": "knulli",
   "display_name": "KNULLI",
   "version": "20260511",
@@ -4566,7 +4567,8 @@
       "cores": null,
       "systems": [
         "acorn-bbc-micro"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "bbc_acorn8271.zip",
@@ -4588,7 +4590,8 @@
             "mame"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "saa5050.zip",
@@ -4654,7 +4657,8 @@
             "mame"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "bbcmc.zip",
@@ -4809,7 +4813,8 @@
             "mame"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "adam_kb.zip",
@@ -4908,7 +4913,8 @@
       "cores": null,
       "systems": [
         "apple-ii"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "apple2p.zip",
@@ -4919,7 +4925,8 @@
       "cores": null,
       "systems": [
         "apple-ii"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "a2diskiing.zip",
@@ -5063,7 +5070,8 @@
       "cores": null,
       "systems": [
         "apple-iigs"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "apple2gs.zip",
@@ -5085,7 +5093,8 @@
             "mame"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "MacII.ROM",
@@ -5470,7 +5479,8 @@
       "cores": null,
       "systems": [
         "apple-macintosh-ii"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "macos608.img",
@@ -5481,7 +5491,8 @@
       "cores": null,
       "systems": [
         "apple-macintosh-ii"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "macos701.img",
@@ -5492,7 +5503,8 @@
       "cores": null,
       "systems": [
         "apple-macintosh-ii"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "macos75.img",
@@ -5503,7 +5515,8 @@
       "cores": null,
       "systems": [
         "apple-macintosh-ii"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "mac608.chd",
@@ -5514,7 +5527,8 @@
       "cores": null,
       "systems": [
         "apple-macintosh-ii"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "mac701.chd",
@@ -5525,7 +5539,8 @@
       "cores": null,
       "systems": [
         "apple-macintosh-ii"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "mac755.chd",
@@ -5536,7 +5551,8 @@
       "cores": null,
       "systems": [
         "apple-macintosh-ii"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "aa310.zip",
@@ -5580,7 +5596,8 @@
             "mame"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "astrocde.zip",
@@ -5796,7 +5813,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos100uk.img",
@@ -5807,7 +5825,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos100us.img",
@@ -5818,7 +5837,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos102de.img",
@@ -5829,7 +5849,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos102fr.img",
@@ -5840,7 +5861,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos102uk.img",
@@ -5851,7 +5873,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos104de.img",
@@ -5862,7 +5885,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos104es.img",
@@ -5873,7 +5897,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos104fr.img",
@@ -5884,7 +5909,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos104uk.img",
@@ -5895,7 +5921,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos104us.img",
@@ -5906,7 +5933,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos106de.img",
@@ -5917,7 +5945,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos106es.img",
@@ -5928,7 +5957,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos106fr.img",
@@ -5939,7 +5969,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos106uk.img",
@@ -5950,7 +5981,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos106us.img",
@@ -5961,7 +5993,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos162de.img",
@@ -5972,7 +6005,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos162fr.img",
@@ -5983,7 +6017,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos162uk.img",
@@ -5994,7 +6029,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos162us.img",
@@ -6005,7 +6041,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos205de.img",
@@ -6016,7 +6053,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos205es.img",
@@ -6027,7 +6065,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos205fr.img",
@@ -6038,7 +6077,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos205it.img",
@@ -6049,7 +6089,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos205us.img",
@@ -6060,7 +6101,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos206de.img",
@@ -6071,7 +6113,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos206fr.img",
@@ -6082,7 +6125,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos206.img",
@@ -6093,7 +6137,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos206uk.img",
@@ -6104,7 +6149,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos206us.img",
@@ -6115,7 +6161,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos306de.img",
@@ -6126,7 +6173,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos306uk.img",
@@ -6137,7 +6185,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos400.img",
@@ -6148,7 +6197,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos402.img",
@@ -6159,7 +6209,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "tos404.img",
@@ -6170,7 +6221,8 @@
       "cores": null,
       "systems": [
         "atari-st"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "atom.zip",
@@ -6181,7 +6233,8 @@
       "cores": null,
       "systems": [
         "atom"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "lynx48k.zip",
@@ -6258,7 +6311,8 @@
       "cores": null,
       "systems": [
         "cdi"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "mcpx_1.0.bin",
@@ -6292,7 +6346,8 @@
       "cores": null,
       "systems": [
         "chihiro"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "coco.zip",
@@ -6314,7 +6369,8 @@
             "mame"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "coco2.zip",
@@ -6325,7 +6381,8 @@
       "cores": null,
       "systems": [
         "coco"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "coco2b.zip",
@@ -6402,7 +6459,8 @@
       "cores": null,
       "systems": [
         "coco"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "amiga/kick33180.A500",
@@ -6413,7 +6471,8 @@
       "cores": null,
       "systems": [
         "commodore-amiga"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "amiga/kick37175.A500",
@@ -6424,7 +6483,8 @@
       "cores": null,
       "systems": [
         "commodore-amiga"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "amiga/kick34005.A500",
@@ -6435,7 +6495,8 @@
       "cores": null,
       "systems": [
         "commodore-amiga"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "amiga/kick37350.A600",
@@ -6446,7 +6507,8 @@
       "cores": null,
       "systems": [
         "commodore-amiga"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "amiga/kick40063.A600",
@@ -6457,7 +6519,8 @@
       "cores": null,
       "systems": [
         "commodore-amiga"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "amiga/amiga-os-120.rom",
@@ -6534,7 +6597,8 @@
       "cores": null,
       "systems": [
         "commodore-amiga"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "amiga/amiga-os-310-a600.rom",
@@ -6567,7 +6631,8 @@
       "cores": null,
       "systems": [
         "commodore-amiga"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "amiga/amiga-ext-130-cdtv.rom",
@@ -6600,7 +6665,8 @@
       "cores": null,
       "systems": [
         "commodore-amiga"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "amiga/kick40068.A1200",
@@ -6611,7 +6677,8 @@
       "cores": null,
       "systems": [
         "commodore-amiga"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "amiga/kick40068.A4000",
@@ -6622,7 +6689,8 @@
       "cores": null,
       "systems": [
         "commodore-amiga"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "amiga/amiga-os-300-a1200.rom",
@@ -6743,7 +6811,8 @@
       "cores": null,
       "systems": [
         "commodore-amiga"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "amiga/kick40060.CD32.ext",
@@ -6754,7 +6823,8 @@
       "cores": null,
       "systems": [
         "commodore-amiga"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "amiga/amiga-os-310-cd32.rom",
@@ -6930,7 +7000,8 @@
             "mame"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "sl31253.bin",
@@ -6942,6 +7013,24 @@
       "systems": [
         "fairchild-channel-f"
       ],
+      "slot": {
+        "groups": [
+          "fairchild-channel-f",
+          "fairchild-channel-f"
+        ],
+        "keys": [
+          {
+            "freechaf": {
+              "ranks": [
+                2
+              ],
+              "sets": [
+                "psu1"
+              ]
+            }
+          }
+        ]
+      },
       "alternatives": [
         {
           "sha1": "81193965a374d77b99b4743d317824b53c3e3c78",
@@ -6964,6 +7053,21 @@
       "systems": [
         "fairchild-channel-f"
       ],
+      "slot": {
+        "groups": [
+          "fairchild-channel-f",
+          "fairchild-channel-f"
+        ],
+        "keys": [
+          {
+            "freechaf": {
+              "ranks": [
+                null
+              ]
+            }
+          }
+        ]
+      },
       "alternatives": [
         {
           "sha1": "8f70d1b74483ba3a37e86cf16c849d601a8c3d2c",
@@ -6986,6 +7090,24 @@
       "systems": [
         "fairchild-channel-f"
       ],
+      "slot": {
+        "groups": [
+          "fairchild-channel-f",
+          "fairchild-channel-f"
+        ],
+        "keys": [
+          {
+            "freechaf": {
+              "ranks": [
+                1
+              ],
+              "sets": [
+                "psu1"
+              ]
+            }
+          }
+        ]
+      },
       "alternatives": [
         {
           "sha1": "759e2ed31fbde4a2d8daf8b9f3e0dffebc90dae2",
@@ -7051,7 +7173,8 @@
       "cores": null,
       "systems": [
         "fmtowns"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "fmtowns/FMT_DOS.ROM",
@@ -7062,7 +7185,8 @@
       "cores": null,
       "systems": [
         "fmtowns"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "fmtowns/FMT_F20.ROM",
@@ -7073,7 +7197,8 @@
       "cores": null,
       "systems": [
         "fmtowns"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "fmtowns/FMT_FNT.ROM",
@@ -7084,7 +7209,8 @@
       "cores": null,
       "systems": [
         "fmtowns"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "fmtowns/FMT_SYS.ROM",
@@ -7095,7 +7221,8 @@
       "cores": null,
       "systems": [
         "fmtowns"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "fmtmarty.zip",
@@ -7106,7 +7233,8 @@
       "cores": null,
       "systems": [
         "fmtowns"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "fmtowns.zip",
@@ -7117,7 +7245,8 @@
       "cores": null,
       "systems": [
         "fmtowns"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "fmtownsux.zip",
@@ -7128,7 +7257,8 @@
       "cores": null,
       "systems": [
         "fmtowns"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "wsh57/scripten.exe",
@@ -7139,7 +7269,8 @@
       "cores": null,
       "systems": [
         "fpinball"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "gamate.zip",
@@ -7271,7 +7402,8 @@
             "mame"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "mie.zip",
@@ -7429,7 +7561,8 @@
             "fmsx"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "MSX2.ROM",
@@ -7484,7 +7617,8 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "openmsx/fs-a1wsx_basic-bios2p.rom",
@@ -7495,7 +7629,8 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "openmsx/fs-a1wsx_fmbasic.rom",
@@ -7506,7 +7641,8 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "openmsx/fs-a1wsx_msx2psub.rom",
@@ -7517,7 +7653,8 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "openmsx/fs-a1wsx_kanjibasic.rom",
@@ -7528,7 +7665,8 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "openmsx/fs-a1wsx_disk.rom",
@@ -7539,7 +7677,8 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "openmsx/fs-a1wsx_firmware.rom",
@@ -7550,7 +7689,8 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "openmsx/phc-70fd2_basickun.rom",
@@ -7561,7 +7701,8 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "openmsx/yrw801.rom",
@@ -7572,7 +7713,8 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "openmsx/px-7_pbasic.rom",
@@ -7583,7 +7725,8 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "openmsx/px-7_basic-bios1.rom",
@@ -7594,7 +7737,8 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "openmsx/fs-a1gt_firmware.rom",
@@ -7605,7 +7749,8 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "openmsx/fs-a1gt_kanjifont.rom",
@@ -7616,7 +7761,8 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "openmsx/ide250.zip",
@@ -7627,7 +7773,8 @@
       "cores": null,
       "systems": [
         "microsoft-msx"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "Complex_4627.bin",
@@ -7664,7 +7811,8 @@
       "cores": null,
       "systems": [
         "nec-pc-88"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "quasi88/N88SUB.ROM",
@@ -7675,7 +7823,8 @@
       "cores": null,
       "systems": [
         "nec-pc-88"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "quasi88/N88N.ROM",
@@ -7686,7 +7835,8 @@
       "cores": null,
       "systems": [
         "nec-pc-88"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "quasi88/N88KNJ1.ROM",
@@ -7697,7 +7847,8 @@
       "cores": null,
       "systems": [
         "nec-pc-88"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "quasi88/N88EXT0.ROM",
@@ -7708,7 +7859,8 @@
       "cores": null,
       "systems": [
         "nec-pc-88"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "quasi88/N88EXT1.ROM",
@@ -7719,7 +7871,8 @@
       "cores": null,
       "systems": [
         "nec-pc-88"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "quasi88/N88EXT2.ROM",
@@ -7730,7 +7883,8 @@
       "cores": null,
       "systems": [
         "nec-pc-88"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "quasi88/N88EXT3.ROM",
@@ -7741,7 +7895,8 @@
       "cores": null,
       "systems": [
         "nec-pc-88"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "np2kai/BIOS.ROM",
@@ -7752,7 +7907,8 @@
       "cores": null,
       "systems": [
         "nec-pc-98"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "np2kai/FONT.ROM",
@@ -7774,7 +7930,8 @@
             "np2kai"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "np2kai/SOUND.ROM",
@@ -7785,7 +7942,8 @@
       "cores": null,
       "systems": [
         "nec-pc-98"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "np2kai/ITF.ROM",
@@ -7796,7 +7954,8 @@
       "cores": null,
       "systems": [
         "nec-pc-98"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "np2kai/font.bmp",
@@ -7978,7 +8137,8 @@
             "melonds_ds"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "dsi_bios9.bin",
@@ -8001,7 +8161,8 @@
             "melonds_ds"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "dsi_firmware.bin",
@@ -8139,7 +8300,8 @@
             "dolphin"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "GC/USA/IPL.bin",
@@ -8327,7 +8489,8 @@
             "sameboy"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "sgb2_boot.bin",
@@ -8354,7 +8517,8 @@
             "sameboy"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "SGB1.sfc",
@@ -8398,7 +8562,8 @@
             "mesen-s"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "SGB2.sfc",
@@ -8569,7 +8734,8 @@
       "cores": null,
       "systems": [
         "sega-dreamcast"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "dc_flash.bin",
@@ -8580,7 +8746,8 @@
       "cores": null,
       "systems": [
         "sega-dreamcast"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "dc/naomi.zip",
@@ -8603,7 +8770,8 @@
             "flycast2021"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "dc/awbios.zip",
@@ -8660,6 +8828,47 @@
       "systems": [
         "sega-mega-cd"
       ],
+      "slot": {
+        "groups": [
+          "sega-mega-cd",
+          "sega-mega-cd",
+          "sega-mega-cd"
+        ],
+        "keys": [
+          {
+            "genesis_plus_gx": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ]
+            },
+            "genesis_plus_gx_wide": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ]
+            },
+            "picodrive": {
+              "ranks": [
+                7
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "mega-cd-eu"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -8694,6 +8903,47 @@
       "systems": [
         "sega-mega-cd"
       ],
+      "slot": {
+        "groups": [
+          "sega-mega-cd",
+          "sega-mega-cd",
+          "sega-mega-cd"
+        ],
+        "keys": [
+          {
+            "genesis_plus_gx": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ]
+            },
+            "genesis_plus_gx_wide": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ]
+            },
+            "picodrive": {
+              "ranks": [
+                7
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "mega-cd-us"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -8716,7 +8966,8 @@
             "picodrive"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "bios_CD_J.bin",
@@ -8728,6 +8979,44 @@
       "systems": [
         "sega-mega-cd"
       ],
+      "slot": {
+        "groups": [
+          "sega-mega-cd",
+          "sega-mega-cd",
+          "sega-mega-cd"
+        ],
+        "keys": [
+          {
+            "genesis_plus_gx": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "japan"
+              ]
+            },
+            "genesis_plus_gx_wide": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "japan"
+              ]
+            },
+            "picodrive": {
+              "ranks": [
+                7
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "mega-cd-jp"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -8761,6 +9050,33 @@
       "systems": [
         "sega-saturn"
       ],
+      "slot": {
+        "groups": [
+          "sega-saturn",
+          "sega-saturn"
+        ],
+        "keys": [
+          {
+            "beetle_saturn": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "asia-ntsc",
+                "japan"
+              ]
+            },
+            "yabasanshiro": {
+              "ranks": [
+                2
+              ],
+              "sets": [
+                "saturn-bios"
+              ]
+            }
+          }
+        ]
+      },
       "alternatives": [
         {
           "sha1": "df94c5b4d47eb3cc404d88b33a8fda237eaf4720",
@@ -8784,6 +9100,38 @@
       "systems": [
         "sega-saturn"
       ],
+      "slot": {
+        "groups": [
+          "sega-saturn",
+          "sega-saturn"
+        ],
+        "keys": [
+          {
+            "beetle_saturn": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "asia-pal",
+                "brazil",
+                "europe",
+                "latin-america",
+                "north-america",
+                "oceania",
+                "south-korea"
+              ]
+            },
+            "yabasanshiro": {
+              "ranks": [
+                3
+              ],
+              "sets": [
+                "saturn-bios"
+              ]
+            }
+          }
+        ]
+      },
       "alternatives": [
         {
           "sha1": "faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3",
@@ -8807,6 +9155,21 @@
       "systems": [
         "sega-saturn"
       ],
+      "slot": {
+        "groups": [
+          "sega-saturn",
+          "sega-saturn"
+        ],
+        "keys": [
+          {
+            "beetle_saturn": {
+              "ranks": [
+                null
+              ]
+            }
+          }
+        ]
+      },
       "alternatives": [
         {
           "sha1": "a67cd4f550751f8b91de2b8b74528ab4e0c11c77",
@@ -8829,6 +9192,21 @@
       "systems": [
         "sega-saturn"
       ],
+      "slot": {
+        "groups": [
+          "sega-saturn",
+          "sega-saturn"
+        ],
+        "keys": [
+          {
+            "beetle_saturn": {
+              "ranks": [
+                null
+              ]
+            }
+          }
+        ]
+      },
       "alternatives": [
         {
           "sha1": "56c1b93da6b660bf393fbf48ca47569000ef4047",
@@ -8851,6 +9229,24 @@
       "systems": [
         "sega-saturn"
       ],
+      "slot": {
+        "groups": [
+          "sega-saturn",
+          "sega-saturn"
+        ],
+        "keys": [
+          {
+            "yabasanshiro": {
+              "ranks": [
+                1
+              ],
+              "sets": [
+                "saturn-bios"
+              ]
+            }
+          }
+        ]
+      },
       "alternatives": [
         {
           "sha1": "2b8cb4f87580683eb4d760e4ed210813d667f0a2",
@@ -8894,7 +9290,8 @@
       "cores": null,
       "systems": [
         "sharp-x1"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "keropi/iplrom.dat",
@@ -8906,6 +9303,24 @@
       "systems": [
         "sharp-x68000"
       ],
+      "slot": {
+        "groups": [
+          "sharp-x68000",
+          "sharp-x68000"
+        ],
+        "keys": [
+          {
+            "px68k": {
+              "ranks": [
+                1
+              ],
+              "sets": [
+                "ipl"
+              ]
+            }
+          }
+        ]
+      },
       "alternatives": [
         {
           "sha1": "0ed038ed2133b9f78c6e37256807424e0d927560",
@@ -8928,6 +9343,24 @@
       "systems": [
         "sharp-x68000"
       ],
+      "slot": {
+        "groups": [
+          "sharp-x68000",
+          "sharp-x68000"
+        ],
+        "keys": [
+          {
+            "px68k": {
+              "ranks": [
+                1
+              ],
+              "sets": [
+                "font"
+              ]
+            }
+          }
+        ]
+      },
       "alternatives": [
         {
           "sha1": "8d72c5b4d63bb14c5dbdac495244d659aa1498b6",
@@ -8969,7 +9402,8 @@
             "mame"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "neocd/neocd_f.rom",
@@ -9277,7 +9711,8 @@
             "pcsx_rearmed"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "scph5500.bin",
@@ -9521,7 +9956,8 @@
       "cores": null,
       "systems": [
         "supracan"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "vis.zip",
@@ -9653,7 +10089,8 @@
             "mame"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "ym2413.zip",
@@ -9701,7 +10138,8 @@
             "mame"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "socrates.zip",
@@ -10042,7 +10480,8 @@
       "cores": null,
       "systems": [
         "zc210"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "amiga/6570-036.rom",
@@ -113199,7 +113638,21 @@
       ],
       "systems": [
         "sega-saturn"
-      ]
+      ],
+      "slot": {
+        "groups": [
+          "sega-saturn"
+        ],
+        "keys": [
+          {
+            "beetle_saturn": {
+              "ranks": [
+                null
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "dest": "satar4mp.bin",
@@ -113212,7 +113665,21 @@
       ],
       "systems": [
         "sega-saturn"
-      ]
+      ],
+      "slot": {
+        "groups": [
+          "sega-saturn"
+        ],
+        "keys": [
+          {
+            "beetle_saturn": {
+              "ranks": [
+                null
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "dest": "bk/MONIT10.ROM",
@@ -156074,6 +156541,27 @@
       "systems": [
         "sega-mega-cd"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                1
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "mega-cd-us"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -156095,6 +156583,27 @@
       "systems": [
         "sega-mega-cd"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                3
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "mega-cd-us"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -156116,6 +156625,27 @@
       "systems": [
         "sega-mega-cd"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                5
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "mega-cd-us"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -156137,6 +156667,27 @@
       "systems": [
         "sega-mega-cd"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                1
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "mega-cd-eu"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -156158,6 +156709,27 @@
       "systems": [
         "sega-mega-cd"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                3
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "mega-cd-eu"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -156179,6 +156751,27 @@
       "systems": [
         "sega-mega-cd"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                5
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "mega-cd-eu"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -156200,6 +156793,26 @@
       "systems": [
         "sega-mega-cd"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                1
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "mega-cd-jp"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -156220,6 +156833,26 @@
       "systems": [
         "sega-mega-cd"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                3
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "mega-cd-jp"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -156240,6 +156873,26 @@
       "systems": [
         "sega-mega-cd"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                5
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "mega-cd-jp"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -156483,7 +157136,24 @@
       ],
       "systems": [
         "sharp-x68000"
-      ]
+      ],
+      "slot": {
+        "groups": [
+          "sharp-x68000"
+        ],
+        "keys": [
+          {
+            "px68k": {
+              "ranks": [
+                2
+              ],
+              "sets": [
+                "ipl"
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "dest": "keropi/iplromco.dat",
@@ -156496,7 +157166,24 @@
       ],
       "systems": [
         "sharp-x68000"
-      ]
+      ],
+      "slot": {
+        "groups": [
+          "sharp-x68000"
+        ],
+        "keys": [
+          {
+            "px68k": {
+              "ranks": [
+                3
+              ],
+              "sets": [
+                "ipl"
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "dest": "keropi/iplromxv.dat",
@@ -156509,7 +157196,24 @@
       ],
       "systems": [
         "sharp-x68000"
-      ]
+      ],
+      "slot": {
+        "groups": [
+          "sharp-x68000"
+        ],
+        "keys": [
+          {
+            "px68k": {
+              "ranks": [
+                4
+              ],
+              "sets": [
+                "ipl"
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "dest": "quasi88/n88knj2.rom",
@@ -176433,5 +177137,633 @@
     "folder": "saves",
     "by_core": false,
     "by_system": true
-  }
+  },
+  "truth_files": [
+    {
+      "dest": "SGB1.sfc",
+      "sha1": "6ed55c4368333b57f6a2f8bbd70ccd87ed48058e",
+      "sha256": "bba9c269273bedb9b38bd5eb23bfaa6e509b8decc7cb80bb5513905af04f4ceb",
+      "size": 262144,
+      "repo_path": "bios/Nintendo/SNES/SNES_SGB_(JU).sfc",
+      "cores": [
+        "gearboy"
+      ],
+      "systems": [
+        "nintendo-satellaview",
+        "nintendo-sgb"
+      ],
+      "alternatives": [
+        {
+          "sha1": "973e10840db683cf3faf61bd443090786b3a9f04",
+          "sha256": "a75160f7b89b1f0e20fd2f6441bb86285c7378db5035ef6885485eaff6059376",
+          "size": 262144,
+          "repo_path": "bios/Nintendo/Super Game Boy/SGB1.sfc/program.rom",
+          "cores": [
+            "bsnes",
+            "mesen-s"
+          ]
+        }
+      ]
+    },
+    {
+      "dest": "MSX.ROM",
+      "sha1": "409e82adac40f6bdd18eb6c84e8b2fbdc7fb5498",
+      "sha256": "999564a371dd2fdf7fbe8d853e82a68d557c27b7d87417639b2fa17704b83f78",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/MSX.ROM",
+      "cores": [
+        "fmsx"
+      ],
+      "systems": [
+        "microsoft-msx"
+      ]
+    },
+    {
+      "dest": "neogeo.zip",
+      "sha1": "deb62b0074b8cae4f162c257662136733cfc76ad",
+      "sha256": "bf05cc848e403f8ae457bfe26faa8135cf4725cfff956fa030f5c0a00a26adcc",
+      "size": 1859335,
+      "repo_path": "bios/Arcade/Arcade/neogeo.zip",
+      "cores": [
+        "geolith"
+      ],
+      "systems": [
+        "snk-neogeo"
+      ],
+      "alternatives": [
+        {
+          "sha1": "447e23757e5be7ae688885a5ce8ea3da8c8bedc0",
+          "sha256": "9a8cf2b88488969d7000028b30474175067f753a649a1fe0c008efd8450d60a0",
+          "size": 1952551,
+          "repo_path": "bios/Arcade/MAME/neogeo.zip",
+          "cores": [
+            "mame"
+          ]
+        },
+        {
+          "sha1": "420194cc1171adb1920d2ff05e3b7b9ae2b73942",
+          "sha256": "7eb6e948f095d669f4bcdd22dbb58f6e3da4f3cca5ffe92ea42ebca8396cadac",
+          "size": 2438734,
+          "repo_path": "bios/Arcade/Arcade/.variants/neogeo.zip.9d7bbba3",
+          "cores": [
+            "fbneo"
+          ]
+        }
+      ]
+    },
+    {
+      "dest": "dsi_bios9.bin",
+      "sha1": "719b9eef33692406d7170ff526069615759c4dfc",
+      "sha256": "6e9f70b51dc4f26289b597f14e2513620c2af964374a95f4c5a62b5cad199afc",
+      "size": 65536,
+      "repo_path": "bios/Nintendo/Nintendo DSi/NDS_Bios9i.bin",
+      "cores": [
+        "melonds",
+        "melonds_ds"
+      ],
+      "systems": [
+        "nintendo-ds"
+      ]
+    },
+    {
+      "dest": "dsi_bios7.bin",
+      "sha1": "c7c7570bfe51c3c7c5da3b01331b94e7e7cb4f53",
+      "sha256": "12a03016ba07cfd874fc002df49a2c6eb2414eb7cfa395c2043035ec5e9193e8",
+      "size": 65536,
+      "repo_path": "bios/Nintendo/Nintendo DSi/NDS_Bios7i.bin",
+      "cores": [
+        "melonds",
+        "melonds_ds"
+      ],
+      "systems": [
+        "nintendo-ds"
+      ]
+    },
+    {
+      "dest": "GC/JAP/IPL.bin",
+      "sha1": "a1837968288253ed541f2b11440b68f5a9b33875",
+      "sha256": "5b2f2617cc63f1861a1f4ae44bb135caf10e202b5b9b79271daaf60f8caaf37d",
+      "size": 2097152,
+      "repo_path": "bios/Nintendo/GameCube/GC/JAP/IPL.bin",
+      "cores": [
+        "dolphin"
+      ],
+      "systems": [
+        "nintendo-gamecube"
+      ],
+      "regions": [
+        "japan",
+        "south-korea"
+      ],
+      "region_groups": [
+        "nintendo-gamecube"
+      ],
+      "region_system_groups": [
+        "nintendo-gamecube"
+      ]
+    },
+    {
+      "dest": "dc/naomi.zip",
+      "sha1": "788aee0f30ee80ea54dcd705afe93944accafc31",
+      "sha256": "62a011c3a4dc5686ebced343987199bd7ccad1578ca8e2f2350b41204d87de65",
+      "size": 9651827,
+      "repo_path": "bios/Arcade/Arcade/naomi.zip",
+      "cores": [
+        "flycast",
+        "flycast2021"
+      ],
+      "systems": [
+        "sega-dreamcast-arcade"
+      ]
+    },
+    {
+      "dest": "bios_CD_U.bin",
+      "sha1": "f4f315adcef9b8feb0364c21ab7f0eaf5457f3ed",
+      "sha256": "807384678ef259494d943eddb6954dfc7069693d0dde0c424e2028488d88e81a",
+      "size": 131072,
+      "repo_path": "bios/Sega/Mega CD/bios_CD_U.bin",
+      "cores": [
+        "genesis_plus_gx",
+        "genesis_plus_gx_wide",
+        "picodrive"
+      ],
+      "systems": [
+        "sega-mega-cd"
+      ],
+      "slot": {
+        "groups": [
+          "sega-mega-cd",
+          "sega-mega-cd",
+          "sega-mega-cd"
+        ],
+        "keys": [
+          {
+            "genesis_plus_gx": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ]
+            },
+            "genesis_plus_gx_wide": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ]
+            },
+            "picodrive": {
+              "ranks": [
+                7
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "mega-cd-us"
+              ]
+            }
+          }
+        ]
+      },
+      "regions": [
+        "latin-america",
+        "north-america"
+      ],
+      "region_groups": [
+        "sega-mega-cd"
+      ],
+      "region_system_groups": [
+        "sega-mega-cd"
+      ]
+    },
+    {
+      "dest": "hikaru.zip",
+      "sha1": "8ce366388c9e09c5d218d639f19d1d816b59395d",
+      "sha256": "806a236b5665bbcc4f204e8e877e8c9416d150353a34d469849244bbaa138dbf",
+      "size": 1049493,
+      "repo_path": "bios/Sega/Hikaru/hikaru.zip",
+      "cores": [
+        "mame"
+      ],
+      "systems": [
+        "hikaru"
+      ]
+    },
+    {
+      "dest": "apple2gs.zip",
+      "sha1": "69cff7f1ccbd3cddb7ae887c90ca00781fd42860",
+      "sha256": "96f77c9fcf7285442dfbcddaa4fd1179820136bde65e8deecb4d41da3daa557f",
+      "size": 173963,
+      "repo_path": "bios/Apple/Apple II/.variants/apple2gs.zip.ca867966",
+      "cores": [
+        "mame"
+      ],
+      "systems": [
+        "apple-iigs"
+      ]
+    },
+    {
+      "dest": "adam_fdc.zip",
+      "sha1": "8bc454bdf61b99880a45d4aa28d324784ebe260c",
+      "sha256": "b87c7d89ef2cd7478243dbb413d1173c9aadbddd50608895eaf177f1d1c90fce",
+      "size": 1609,
+      "repo_path": "bios/Arcade/MAME/adam_fdc.zip",
+      "cores": [
+        "mame"
+      ],
+      "systems": [
+        "adam"
+      ]
+    },
+    {
+      "dest": "advision.zip",
+      "sha1": "c13fa16800e5c7fb15fd74e8fece02d31dec345e",
+      "sha256": "1fa2384f56c29a7485e9755f8f1266b047f91e9428074b9d99aa75ca632c07ed",
+      "size": 1546,
+      "repo_path": "bios/Entex/Adventure Vision/advision.zip",
+      "cores": [
+        "mame"
+      ],
+      "systems": [
+        "entex-advision"
+      ]
+    },
+    {
+      "dest": "coco.zip",
+      "sha1": "edc5e86ca93d1161618d44a959ae7ecd0bf0f006",
+      "sha256": "414371a6a1ffc8fd068a8013873ae2bd83df167b212b51b51417246dba77e131",
+      "size": 36592,
+      "repo_path": "bios/Tandy/CoCo/coco.zip",
+      "cores": [
+        "mame"
+      ],
+      "systems": [
+        "coco"
+      ]
+    },
+    {
+      "dest": "archimedes_keyboard.zip",
+      "sha1": "8d22783d40413a68038b2bff4dd4b263363a2c67",
+      "sha256": "1d02b14cd4d2ff80a343c3afb1ba43de0bd77815952816fc19d0736f8644664e",
+      "size": 1323,
+      "repo_path": "bios/Arcade/MAME/archimedes_keyboard.zip",
+      "cores": [
+        "mame"
+      ],
+      "systems": [
+        "archimedes"
+      ]
+    },
+    {
+      "dest": "bbcm.zip",
+      "sha1": "557be97016b8e990a286226b1ec933986a70805d",
+      "sha256": "110316cc4fe65b0ffc2eb5127539c726e9220f145cb5b0811e2baf05d190dfa4",
+      "size": 400592,
+      "repo_path": "bios/Acorn/BBC Micro/.variants/bbcm.zip.4cc3e25a",
+      "cores": [
+        "mame"
+      ],
+      "systems": [
+        "acorn-bbc-micro"
+      ]
+    },
+    {
+      "dest": "qsound.zip",
+      "sha1": "b875be47c087d7a0d484d29232a23fd0bae736e6",
+      "sha256": "55feb9b70dacb7364f0310ed16cc9281b5b0a31318b9e2e0587ae06d15f95356",
+      "size": 2676,
+      "repo_path": "bios/Arcade/MAME/qsound.zip",
+      "cores": [
+        "mame"
+      ],
+      "systems": [
+        "vgmplay"
+      ]
+    },
+    {
+      "dest": "ym2608.zip",
+      "sha1": "06fc753d015b43ca1787f4cfd9331b1674202e64",
+      "sha256": "187ede0f57d1439092a7ac50ea923533871ab7ee65e29baabc4dcdfa7ad4823f",
+      "size": 7609,
+      "repo_path": "bios/Arcade/Arcade/ym2608.zip",
+      "cores": [
+        "fbneo"
+      ],
+      "systems": [
+        "vgmplay"
+      ],
+      "alternatives": [
+        {
+          "sha1": "1214e3207e4dc85cc1597c53abd70802049dda2c",
+          "sha256": "817aabbfe1ed8734a6cbb88d72178a80b6074dea155cfe1c95f2e4eb8990d1be",
+          "size": 7587,
+          "repo_path": "bios/Arcade/MAME/ym2608.zip",
+          "cores": [
+            "mame"
+          ]
+        }
+      ]
+    },
+    {
+      "dest": "bbc_acorn8271.zip",
+      "sha1": "7b9c57ddf60042c69cd9dc20d15919f630a9f7bd",
+      "sha256": "8296bc8d3c8d47d90a5de9094eedd7fcad72605278c662906dbe26ea4f6410b2",
+      "size": 97195,
+      "repo_path": "bios/Arcade/MAME/bbc_acorn8271.zip",
+      "cores": [
+        "mame"
+      ],
+      "systems": [
+        "acorn-bbc-micro"
+      ]
+    },
+    {
+      "dest": "sgb_boot.bin",
+      "sha1": "369e6eb5e0c975eaa52a4a3f6ee07b2a3c3c16de",
+      "sha256": "b60d493a7944ccf74c81f1e7b6bf38c2c7029e296648ea0e74cb22b10dd1fcb8",
+      "size": 256,
+      "repo_path": "bios/Nintendo/Super Game Boy/sgb_boot.bin",
+      "cores": [
+        "mesen-s",
+        "sameboy"
+      ],
+      "systems": [
+        "nintendo-satellaview",
+        "nintendo-sgb"
+      ]
+    },
+    {
+      "dest": "sgb2_boot.bin",
+      "sha1": "f282b3aaf98f8423dab7d77f1aa0192be630f2fb",
+      "sha256": "8a65465a9da7ec657726a671da9a85963cf19d2c975e499aea6b97eb37e0b6ea",
+      "size": 256,
+      "repo_path": "bios/Nintendo/Super Game Boy/sgb2_boot.bin",
+      "cores": [
+        "mesen-s",
+        "sameboy"
+      ],
+      "systems": [
+        "nintendo-satellaview",
+        "nintendo-sgb"
+      ]
+    },
+    {
+      "dest": "np2kai/FONT.ROM",
+      "sha1": "78ba9960f135372825ab7244b5e4e73a810002ff",
+      "sha256": "8db165d567e13bce3f50ee495975671faa5a0ff332dcb08e187aa91125c81ec6",
+      "size": 288768,
+      "repo_path": "bios/NEC/PC-98/font.rom",
+      "cores": [
+        "np2kai"
+      ],
+      "systems": [
+        "nec-pc-98"
+      ]
+    },
+    {
+      "dest": "scph1001.bin",
+      "sha1": "10155d8d6e6e832d6ea66db9bc098321fb5e8ebf",
+      "sha256": "71af94d1e47a68c11e8fdb9f8368040601514a42a5a399cda48c7d3bff1e99d3",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph1001.bin",
+      "cores": [
+        "pcsx_rearmed"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "latin-america",
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
+      ],
+      "region_system_groups": [
+        "sony-playstation"
+      ]
+    },
+    {
+      "dest": "quasi88/n88.rom",
+      "sha1": "3518193b8207bdebf22c1380c2db8c554baff329",
+      "sha256": "d76f9118f9994eb391a0dc9c1fbfbfa2e9bc584a65da75f3ba7065d3c03cab76",
+      "size": 32768,
+      "repo_path": "bios/NEC/PC-88/n88.rom",
+      "cores": [
+        "quasi88"
+      ],
+      "systems": [
+        "nec-pc-88"
+      ]
+    },
+    {
+      "dest": "quasi88/n88_0.rom",
+      "sha1": "d1ae642aed4f0584eeb81ff50180db694e5101d4",
+      "sha256": "8b584cd9143a670ddfce657ca65067c86f6be1db757a3085f48b1479ac6e8cf3",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-88/n88_0.rom",
+      "cores": [
+        "quasi88"
+      ],
+      "systems": [
+        "nec-pc-88"
+      ]
+    },
+    {
+      "dest": "quasi88/n88_1.rom",
+      "sha1": "4ae4d37409ff99411a623da9f6a44192170a854e",
+      "sha256": "810936574cdf68849822a1570046091f0bad0590dee3635dbc89a4cc4e099555",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-88/n88_1.rom",
+      "cores": [
+        "quasi88"
+      ],
+      "systems": [
+        "nec-pc-88"
+      ]
+    },
+    {
+      "dest": "quasi88/n88_2.rom",
+      "sha1": "e94278682ef9e9bbb82201f72c50382748dcea2a",
+      "sha256": "7d361b1bfd8523cd580bd9ca73902154556fbf45f60f0f539beef397d9462646",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-88/n88_2.rom",
+      "cores": [
+        "quasi88"
+      ],
+      "systems": [
+        "nec-pc-88"
+      ]
+    },
+    {
+      "dest": "quasi88/n88_3.rom",
+      "sha1": "af452aed79b072c4d17985830b7c5dca64d4b412",
+      "sha256": "3dc431af6e0c724582a3aa49e5c22cb9cc99d8298a4cce500e62bbaf1bc4bffb",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-88/n88_3.rom",
+      "cores": [
+        "quasi88"
+      ],
+      "systems": [
+        "nec-pc-88"
+      ]
+    },
+    {
+      "dest": "quasi88/n88n.rom",
+      "sha1": "063609dd518c124a4fc9ba35d1bae35771666a34",
+      "sha256": "4db0b25bf25fd063b08fde9e76d7504440cd322a8ab6b72c4ee7d8ea98ce0839",
+      "size": 32768,
+      "repo_path": "bios/NEC/PC-88/n88n.rom",
+      "cores": [
+        "quasi88"
+      ],
+      "systems": [
+        "nec-pc-88"
+      ]
+    },
+    {
+      "dest": "quasi88/n88sub.rom",
+      "sha1": "bb7103a0818850a039c67ff666a31ce49a8d516f",
+      "sha256": "9dc63118728a171ce2ed437ad38ef280b8b7bcf4a5a95fedf18946501b010456",
+      "size": 2048,
+      "repo_path": "bios/NEC/PC-88/N88SUB.ROM",
+      "cores": [
+        "quasi88"
+      ],
+      "systems": [
+        "nec-pc-88"
+      ]
+    },
+    {
+      "dest": "quasi88/n88knj1.rom",
+      "sha1": "82e11a177af6a5091dd67f50a2f4bafda84d6556",
+      "sha256": "7608040cffb1951e5cc567abb63f75b5746777a1ba96196c1b75606b793bb4bb",
+      "size": 131072,
+      "repo_path": "bios/NEC/PC-88/KANJI1.ROM",
+      "cores": [
+        "quasi88"
+      ],
+      "systems": [
+        "nec-pc-88"
+      ]
+    },
+    {
+      "dest": "gba.zip",
+      "sha1": "ddb271d497462a6443bb88ca6520e0a6af693f18",
+      "sha256": "afe59ce12a3ec5182c3cd771ef667c9958587d66d0bcbd5d18483ceb18aebba0",
+      "size": 13624,
+      "repo_path": "bios/Arcade/Arcade/gba.zip",
+      "cores": [
+        "fbneo"
+      ],
+      "systems": [
+        "nintendo-gba"
+      ]
+    },
+    {
+      "dest": "fbneo/gba.zip",
+      "sha1": "ddb271d497462a6443bb88ca6520e0a6af693f18",
+      "sha256": "afe59ce12a3ec5182c3cd771ef667c9958587d66d0bcbd5d18483ceb18aebba0",
+      "size": 13624,
+      "repo_path": "bios/Arcade/Arcade/gba.zip",
+      "cores": [
+        "fbneo"
+      ],
+      "systems": [
+        "nintendo-gba"
+      ]
+    }
+  ],
+  "truth_omitted": [
+    {
+      "dest": "neogeo.zip",
+      "root": "emulator",
+      "name": "neogeo.zip",
+      "system": "snk-neogeo-mvs",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "mame2003"
+      ],
+      "systems": [
+        "snk-neogeo"
+      ],
+      "held": true
+    }
+  ],
+  "standalone_builds": [
+    "81",
+    "abuse",
+    "advanced_drastic",
+    "aethersx2",
+    "amiberry-7.1.1",
+    "atari800",
+    "azahar-sdl",
+    "bluemsx",
+    "bstone",
+    "cap32",
+    "cdogs",
+    "cemu",
+    "cgenius",
+    "clk",
+    "corsixth",
+    "devilutionx",
+    "dhewm3",
+    "dolphin",
+    "dosbox-staging",
+    "dosbox-x",
+    "dosbox_pure",
+    "dxx-rebirth",
+    "easyrpg",
+    "ecwolf",
+    "eduke32",
+    "etlegacy",
+    "fallout1-ce",
+    "fallout2-ce",
+    "flycast",
+    "fury",
+    "gsplus",
+    "gzdoom",
+    "hatari",
+    "hcl",
+    "hurrican",
+    "ioquake3",
+    "iortcw",
+    "lexaloffle",
+    "lightspark",
+    "mame",
+    "melonds",
+    "mupen64plus",
+    "openbor",
+    "openjazz",
+    "ppsspp",
+    "raze",
+    "rpcs3",
+    "samcoupe",
+    "sdlpop",
+    "smsplus",
+    "solarus",
+    "sonic-mania",
+    "sonic2013",
+    "sonic3-air",
+    "soniccd",
+    "stella",
+    "taradino",
+    "thextech",
+    "vbam",
+    "vita3k",
+    "vkquake",
+    "vkquake2",
+    "vkquake3",
+    "voxatron",
+    "x16emu",
+    "xemu",
+    "yabasanshiro"
+  ]
 }

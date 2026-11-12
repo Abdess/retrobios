@@ -1,0 +1,15 @@
+ RetroBIOS: Change
+
+ What to install
+   Preferred regions: any
+ > One BIOS per console and region: yes
+   Cores: all
+   Emulators: all
+   Game data: kept
+ Where
+   BIOS folder: ~/.config...ch/system
+   Copy from: none
+   From a pack: none
+ For which device
+ 1-11 of 19
+ A Change  B Back  <> Set  ? Help

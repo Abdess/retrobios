@@ -18,6 +18,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import region as region_mod
+import slot as slot_mod
 from common import _norm_system_id, sanitize_pack_path
 from packextras import (
     _kept,
@@ -41,6 +42,7 @@ class SelectionIndex:
     systems_by_dest: dict[str, frozenset[str]]
     declared_by: dict[str, frozenset[str]]
     extra_groups: dict[str, frozenset[str]]
+    slots: dict[str, dict]
 
     @classmethod
     def build(
@@ -51,6 +53,7 @@ class SelectionIndex:
         extras: list[dict],
         required_only: bool = False,
         extras_prefix: str = "",
+        slot_claims: dict[str, dict[str, dict]] | None = None,
     ) -> SelectionIndex:
         by_norm: dict[str, set[str]] = {}
         for sys_id in pack_systems:
@@ -93,6 +96,7 @@ class SelectionIndex:
             systems_by_dest,
             {dest: frozenset(ids) for dest, ids in declared_by.items()},
             {dest: frozenset(ids) for dest, ids in extra_groups.items()},
+            _slot_fields(region_groups, slot_claims or {}),
         )
 
     def fields(self, dest: str, name: str) -> dict:
@@ -110,6 +114,8 @@ class SelectionIndex:
             out["systems"] = sorted(systems)
         if dest not in self.competing:
             return out
+        if dest in self.slots:
+            out["slot"] = self.slots[dest]
         regions = region_mod.lookup_regions(self.region_index, dest, name)
         if not regions:
             return out
@@ -126,3 +132,65 @@ class SelectionIndex:
         if priority is not None:
             out["priority"] = priority
         return out
+
+
+def _slot_fields(
+    region_groups: dict[str, list[tuple[str, str]]],
+    claims: dict[str, dict[str, dict]],
+) -> dict[str, dict]:
+    """Per destination, the groups it competes in for a slot and the claims
+    at each key slot.lookup_slot would try.
+
+    The builder looks each member up by its own name, so a destination a
+    platform declares under one name and a core under another is looked up
+    twice: the first name's groups and keys head the field, each other
+    name's go in `also`. A name no emulator claims has no keys, which keeps
+    the destination as the builder keeps it. Only a group where some
+    emulator ranks a member can drop a file, so only its members are
+    written, each with all its groups. A key whose claims equal the
+    previous one's answers the same and is left out.
+    """
+    # Each time a group lists the destination: two cores filing one file in
+    # a group make two candidates of one rank, which no order separates.
+    chains: dict[str, dict[str, list[str]]] = {}
+    for group_id, members in region_groups.items():
+        for dest, name in members:
+            chains.setdefault(dest, {}).setdefault(name, []).append(group_id)
+
+    def keys_of(dest: str, name: str) -> list[str]:
+        return [k for k in slot_mod.slot_lookup_keys(dest, name) if k in claims]
+
+    def ranked(dest: str) -> bool:
+        return any(rank is not None for name in chains.get(dest, {})
+                   for key in keys_of(dest, name)
+                   for claim in claims[key].values() for rank in claim["ranks"])
+
+    # Every group of such a destination: one where it stays keeps it.
+    written: set[str] = set()
+    for members in region_groups.values():
+        if any(ranked(member) for member, _name in members):
+            written.update(member for member, name in members
+                           if any(keys_of(member, other) for other in chains[member]))
+
+    def chain(dest: str, name: str, group_ids: list[str]) -> dict:
+        kept: list[dict] = []
+        for key in keys_of(dest, name):
+            by_emulator = {
+                emulator: {
+                    "ranks": claim["ranks"],
+                    **({"regions": sorted(claim["regions"])} if claim["regions"] else {}),
+                    **({"sets": sorted(g for _owner, g in claim["sets"])}
+                       if claim["sets"] else {}),
+                }
+                for emulator, claim in sorted(claims[key].items())
+            }
+            if not kept or kept[-1] != by_emulator:
+                kept.append(by_emulator)
+        return {"groups": sorted(group_ids), "keys": kept}
+
+    fields: dict[str, dict] = {}
+    for dest in sorted(written):
+        first, *others = [chain(dest, name, group_ids)
+                          for name, group_ids in chains[dest].items()]
+        fields[dest] = {**first, **({"also": others} if others else {})}
+    return fields

@@ -45,6 +45,7 @@ EXIT_CODES = (
     (1, "a failure: a download, a file list or a folder that cannot be used"),
     (2, "nothing was done: an option refused, every file failed, or the user quit"),
     (3, "`--check` found files missing or wrong, nothing having failed"),
+    (4, "`--find` read the hash and the list holds no one file for it"),
     (130, "stopped with Ctrl+C"),
     (141, "the output went to a reader that closed early"),
 )
