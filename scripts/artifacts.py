@@ -217,6 +217,8 @@ class ArtifactDirectoryMissing(FileNotFoundError):
 # here, os.pathsep apart, for the steps it spawns: they would otherwise be
 # refused by it. A pipeline holds the repository root and its --output-dir.
 HELD_LOCK_ENV = "RETROBIOS_HELD_ARTIFACT_DIR"
+# Where the repository root's lock is taken instead, set by tests/__init__.
+REPOSITORY_LOCK_ENV = "RETROBIOS_REPOSITORY_LOCK_DIR"
 
 
 def _held_directories() -> list[str]:
@@ -250,7 +252,19 @@ def artifact_lock(directory: str, exclusive: bool = True) -> Iterator[None]:
     if os.path.realpath(directory) in _held_directories():
         yield
         return
-    lock_path = os.path.join(directory, ".lock")
+    lock_dir = directory
+    # The test suite runs its modules side by side, each a process with its
+    # own scratch folder (scripts/run_tests.py): the repository's hold is
+    # taken there, so a module that runs the pipeline or a generator is not
+    # refused because another module holds it. Nothing else sets it.
+    moved = os.environ.get(REPOSITORY_LOCK_ENV)
+    real = os.path.realpath(directory)
+    if moved and os.path.isfile(os.path.join(real, "scripts", "artifacts.py")):
+        # Keyed by the root's path: a scratch checkout and the process it
+        # spawns name the same root, and find the same lock.
+        lock_dir = os.path.join(moved, real.strip(os.sep).replace(os.sep, "__"))
+        os.makedirs(lock_dir, exist_ok=True)
+    lock_path = os.path.join(lock_dir, ".lock")
     mode = fcntl.LOCK_EX if exclusive else fcntl.LOCK_SH
     with open(lock_path, "w") as handle:
         try:

@@ -31,6 +31,10 @@ _SCRATCH = Path(os.environ.get("RETROBIOS_TEST_SCRATCH")
                 or Path(__file__).resolve().parent.parent / "tmp" / "tests")
 _SCRATCH.mkdir(parents=True, exist_ok=True)
 os.environ.setdefault("RETROBIOS_PROBE_LOCK", str(_SCRATCH / "probe.lock"))
+# The repository's own hold (database.json, install/, README.md) too: a
+# pipeline run by one module no longer refuses another module's, nor the
+# maintainer's real run beside the suite.
+os.environ.setdefault("RETROBIOS_REPOSITORY_LOCK_DIR", str(_SCRATCH / "repository-lock"))
 # A TemporaryDirectory() without dir= landed in /tmp, a 4 GB tmpfs here: once
 # another run filled it, modules unrelated to any change failed with ENOSPC.
 # The default is the repository's tmp/, for this process and its children.

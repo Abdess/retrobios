@@ -28,6 +28,8 @@ from common import (  # noqa: E402
     publish_hold,
 )
 from tests.scratchtree import scratch_checkout  # noqa: E402
+import artifacts  # noqa: E402
+from unittest import mock  # noqa: E402
 
 
 def _tempdir(test: unittest.TestCase) -> str:
@@ -255,6 +257,36 @@ class PipelineHoldsItsFixedOutputs(unittest.TestCase):
                 self.assertRaises(ArtifactLockBusy):
             with hold_repository_outputs(str(REPO_ROOT)):
                 pass
+
+
+class TheSuiteTakesTheRepositoryHoldInItsScratch(unittest.TestCase):
+    """scripts/run_tests.py runs modules side by side: a pipeline one module
+    ran held the repository root, and every module that ran another one, or
+    a generator writing database.json, failed on the busy lock."""
+
+    def test_the_hold_is_taken_where_the_variable_says(self):
+        scratch = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, scratch, True)
+        moved = scratch / "repository-lock"
+        with mock.patch.dict(os.environ, {artifacts.REPOSITORY_LOCK_ENV: str(moved)}):
+            with artifacts.hold_repository_outputs(str(REPO_ROOT)):
+                key = str(REPO_ROOT.resolve()).strip(os.sep).replace(os.sep, "__")
+                self.assertTrue((moved / key / ".lock").is_file())
+                # Held there: a second hold in the same tree is refused.
+                with self.assertRaises(artifacts.ArtifactLockBusy):
+                    with artifacts.hold_repository_outputs(str(REPO_ROOT)):
+                        pass
+
+    def test_another_directory_keeps_its_own_lock(self):
+        out = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, out, True)
+        with mock.patch.dict(os.environ, {artifacts.REPOSITORY_LOCK_ENV: str(out / "x")}):
+            with artifacts.artifact_lock(str(out)):
+                self.assertTrue((out / ".lock").is_file())
+        self.assertFalse((out / "x").exists())
+
+    def test_the_suite_sets_it(self):
+        self.assertTrue(os.environ.get(artifacts.REPOSITORY_LOCK_ENV))
 
 
 class StandaloneWritersHonourTheRepositoryHold(unittest.TestCase):
