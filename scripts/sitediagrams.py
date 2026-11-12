@@ -998,7 +998,8 @@ GLANCE_GROUPS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("Where and for what", ("--platform", "--dest", "--target", "--every-board", "--save-dir",
                             "--romm-firmware", "--standalone-copies", "--add-app")),
     ("Fewer files", ("--for-games", "--required-only", "--all-files", "--system", "--core", "--emulator",
-                     "--region", "--no-game-data", "--declared-only", "--installed-cores",
+                     "--standalone", "--region", "--one-per-slot", "--no-game-data",
+                     "--declared-only", "--source", "--find", "--installed-cores",
                      "--cores-dir")),
     ("Look first", ("--check", "--dry-run", "--list-platforms", "--list-targets",
                     "--list-systems", "--list-cores", "--list-emulators")),
@@ -1007,7 +1008,7 @@ GLANCE_GROUPS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("Remove and put back", ("--remove", "--file", "--backup", "--backups", "--restore",
                              "--delete-backup")),
     ("How the run talks", ("--tui", "--plain", "--no-input", "--yes", "--quiet", "--verbose",
-                           "--events", "--jobs", "--version", "--help")),
+                           "--events", "--json", "--jobs", "--version", "--help")),
 )
 GLANCE_OTHER = "Other"
 

@@ -298,6 +298,56 @@
  
  
  ^[[0;1;35mA/Enter^[[0m Open  ^[[0;2mB/Esc^[[0m Back  ^[[0;2mLeft/Right^[[0m Set  ^[[0;2m?^[[0m Help
+=== change-slot
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Change^[[0m
+
+^[[0;1m What to install^[[0m
+   Preferred regions: any                                              --region
+^[[0;7;35m > One BIOS per console and region: yes                          --one-per-slot^[[0m
+   Cores: all                                                            --core
+   Emulators: all                                                    --emulator
+   Game data: kept                                               --no-game-data
+^[[0;1m Where^[[0m
+   BIOS folder: ^[[0;1m~/.config/retroarch/system^[[0m                               --dest
+   Copy from: none                                                       --from
+   From a pack: none                                                --from-pack
+^[[0;1m For which device^[[0m
+   Device: every board                                                 --target
+   Installed cores only: no (1 found)                         --installed-cores
+^[[0;1m How^[[0m
+   Without the internet: no                                           --offline
+   Parallel downloads: 8                                                 --jobs
+^[[0;1m See^[[0m
+   Preview the file list                                              --dry-run
+   Show the command line
+ 
+ 
+ ^[[0;1;35mA/Enter^[[0m Change  ^[[0;2mB/Esc^[[0m Back  ^[[0;2mLeft/Right^[[0m Set  ^[[0;2m?^[[0m Help
+=== change-standalone
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Change^[[0m
+
+^[[0;1m What to install^[[0m
+   Preferred regions: any                                              --region
+   Cores: all                                                            --core
+   Emulators: pcsx_rearmed                                           --emulator
+^[[0;7;35m > Standalone version of it: no                                    --standalone^[[0m
+   Game data: kept                                               --no-game-data
+^[[0;1m Where^[[0m
+   BIOS folder: ^[[0;1m~/.config/retroarch/system^[[0m                               --dest
+   Copy from: none                                                       --from
+   From a pack: none                                                --from-pack
+^[[0;1m For which device^[[0m
+   Device: every board                                                 --target
+   Installed cores only: no (1 found)                         --installed-cores
+^[[0;1m How^[[0m
+   Without the internet: no                                           --offline
+   Parallel downloads: 8                                                 --jobs
+^[[0;1m See^[[0m
+   Preview the file list                                              --dry-run
+   Show the command line
+ 
+ 
+ ^[[0;1;35mA/Enter^[[0m Change  ^[[0;2mB/Esc^[[0m Back  ^[[0;2mLeft/Right^[[0m Set  ^[[0;2m?^[[0m Help
 === device
 ^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Device^[[0m
 

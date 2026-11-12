@@ -4546,6 +4546,31 @@ class EveryToolRefusesAFlagItWouldDrop(unittest.TestCase):
             ["--offline", "--source", "truth", "--full-narrowings"],
             ["--offline", "--source", "platform", "--full-narrowings"],
         ],
+        # The expert narrowings: what the pack builder refuses beside its
+        # option of the same name, and a flag with no mode to apply it.
+        "install.py": [
+            ["--json"],
+            ["--standalone"],
+            ["--emulator", "duckstation", "--standalone", "--region", "us"],
+            ["--emulator", "duckstation", "--standalone", "--one-per-slot"],
+            ["--one-per-slot", "--system", "sony-playstation"],
+            ["--one-per-slot", "--emulator", "duckstation"],
+            ["--one-per-slot", "--for-games"],
+            ["--one-per-slot", "--declared-only"],
+            ["--one-per-slot", "--list-systems"],
+            ["--source", "truth", "--system", "sony-playstation"],
+            ["--source", "truth", "--target", "switch"],
+            ["--source", "truth", "--one-per-slot"],
+            ["--source", "truth", "--tui"],
+            ["--source", "platform"],
+            ["--find", "0" * 40, "--system", "sony-playstation"],
+            ["--find", "0" * 40, "--one-per-slot"],
+            ["--find", "0" * 40, "--check"],
+            ["--find", "0" * 40, "--list-systems"],
+            ["--find", "0" * 40, "--json", "--events"],
+            ["--find", "not-a-hash"],
+            ["--find", "0" * 12],
+        ],
     }
 
     def test_each_pair_is_refused(self):

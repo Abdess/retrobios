@@ -1242,6 +1242,47 @@ The questions are asked only when standard input is a terminal. Piped,
 scripted or run with `--no-input`, the installer asks nothing and installs
 what the options name, everything by default.
 
+### One level further { #one-level-further }
+
+Four options sit below the default path, on the Change screen and as flags.
+Each gives what the pack builder's option of the same name gives, and
+`tests/test_install_expert.py` compares the two, (dest, sha1) for (dest,
+sha1), on the real list of every registered platform.
+
+- [`--one-per-slot`](#option-one-per-slot) keeps one BIOS per console and
+  region: the one the emulators' own search order ranks first. A slot is a
+  system and the regions the code selects the file for, so the Japanese and
+  the American PlayStation BIOS never compete. Change offers it as
+  **One BIOS per console and region** while no system, emulator or game
+  choice narrows the list.
+- [`--standalone`](#option-standalone), with `--emulator`, installs the
+  emulator's standalone build in place of its core's layout. Change shows
+  **Standalone version of it** once an emulator with such a build is ticked.
+- [`--source truth`](#option-source) keeps only what the emulator profiles
+  prove a core reads, the platform's own declarations aside.
+- [`--find HASH`](#option-find) installs the one BIOS with that content.
+
+`--find` with `--json` prints, for each platform, one line:
+
+```json
+{"schema": 1, "platform": "retroarch", "hash": "<the hash, lower case>",
+ "kind": "sha1", "result": "found",
+ "matches": [{"dest": "scph5501.bin", "root": null, "sha1": "...",
+              "sha256": "...", "size": 524288,
+              "systems": ["sony-playstation"], "cores": null}]}
+```
+
+`kind` is `sha1`, `sha256`, `md5` or `crc32`, read from the length.
+`result` is `found` (one content), `ambiguous` (two contents share the
+hash), `unknown`, or `unrecorded` when the list records no hash of that
+kind. A match carries `md5` or `crc32` too where the list does. New keys
+may come, existing ones keep their meaning.
+
+A list published before these options lacks what they read, and the run
+stops on it with code 1 rather than install the whole list. None of them is
+kept in the [install record](#the-install-record): a later run without the
+option takes the recorded choice whole.
+
 ## Options
 
 <!-- generated: options -->
@@ -1264,6 +1305,11 @@ what the options name, everything by default.
 | <span id="option-all-files"></span>`--all-files` | The whole list, even when the card holds games. A run that asks nothing (`--yes`, `--no-input`, `--events`) otherwise installs what the card's games need, the plan's first choice. See [For the games on this card](#for-the-games-on-this-card) |
 | <span id="option-no-game-data"></span>`--no-game-data` | Leave out game data (a game's own files, not firmware) and install the firmware only. What it leaves out is named. See [Firmware without game data](#firmware-without-game-data) |
 | <span id="option-declared-only"></span>`--declared-only` | Keep only the files the platform's own list names (`cores: null` in the manifest), not the extra files cores load. With `--check`, the answer is about the list the platform itself checks. Refused with `--core`, the listings it does not change, `--standalone-copies` and `--tui` |
+| <span id="option-one-per-slot"></span>`--one-per-slot` | Keep one BIOS per console and region, the one the emulators' own search order (`priority:`, lower first) ranks first, as `generate_pack.py --one-per-slot` does. A slot with an unranked candidate, or a candidate two cores rank apart, keeps all of them. Decided over the whole list, by the board's cores on a board: refused with `--system`, `--emulator`, `--for-games`, `--declared-only` and the listings. See [One level further](#one-level-further) |
+| <span id="option-standalone"></span>`--standalone` | With `--emulator`: that emulator's standalone build, at the paths it reads, beside the platform's own BIOS of its systems, as `generate_pack.py --emulator NAME --standalone` packs it. An emulator without a standalone build is refused, and so are `--region`, `--one-per-slot`, `--core` and `--system` beside it |
+| <span id="option-source"></span>`--source SOURCE` | `truth`: only what the emulator profiles prove a core reads, as `generate_pack.py --source truth` packs it. `full`, the default, is the platform's list and what its cores read. `truth` takes no other choice, opens no full screen, and is refused on a list published before it |
+| <span id="option-find"></span>`--find HASH` | Install the one BIOS of the list with this content: a sha1 or sha256 always, an md5 or crc32 where the list records it. A content at several destinations is installed at each. A hash two contents share is named and refused, as is one the list lacks. Takes no other choice |
+| <span id="option-json"></span>`--json` | With `--find`: print the matches as one JSON object per platform and install nothing. The shape is in [One level further](#one-level-further). Exit code 0 when found, 2 otherwise |
 | <span id="option-list-systems"></span>`--list-systems` | Print a platform's systems with the files and size each holds, the files other systems share too counted apart. `--system`, `--core`, `--region`, `--target` and `--installed-cores` narrow it, as they narrow an install. A run prints one list: two listing options are refused |
 | <span id="option-list-cores"></span>`--list-cores` | Print the cores whose extra files a platform installs. The options that narrow `--list-systems` narrow it too |
 | <span id="option-list-emulators"></span>`--list-emulators` | Print every name `--emulator` accepts, each buildbot name beside the emulator it stands for. `--target` and `--installed-cores` narrow it, and `--system`, `--core`, `--region` and `--emulator` are refused |

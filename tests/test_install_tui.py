@@ -999,6 +999,18 @@ def golden_states() -> dict:
     options.focus["options"] = 1
     options.regions = ["north-america", "japan"]
     states["change"] = options
+    slots = checked_state()
+    slots.manifest = {**MANIFEST, "slot_fields": True}
+    slots.stack.append("options")
+    slots.one_per_slot = True
+    option_focus(slots, "slot")
+    states["change-slot"] = slots
+    standalone = checked_state()
+    standalone.manifest = {**MANIFEST, "standalone_layouts": {"pcsx_rearmed": []}}
+    standalone.stack.append("options")
+    standalone.emulators = ["pcsx_rearmed"]
+    option_focus(standalone, "standalone")
+    states["change-standalone"] = standalone
     states["device"] = device_state()
     emulators = checked_state()
     emulators.stack += ["options", "emulators"]
@@ -15311,6 +15323,9 @@ SCREEN_WORDS = {
     # rows for Emulators, a pack, the device and the internet, and the five
     # headings that group them, the intro sentence they replace dropped.
     "change": (32, 42, 72, 72),
+    # Change with an expert row: one BIOS per console and region on a list
+    # that records its slots, or the standalone build of the emulator chosen.
+    "change-slot": (34, 44, 78, 78), "change-standalone": (32, 42, 76, 76),
     # A list of boards and one of emulators, each with the line that says
     # what the choice does and the gloss of "board".
     "device": (35, 35, 33, 33), "emulators": (29, 29, 27, 27),
