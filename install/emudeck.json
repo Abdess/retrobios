@@ -7,7 +7,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "2.7EA",
-  "generated": "2026-11-12T15:47:13Z",
+  "generated": "2026-11-12T18:49:42Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -9212,7 +9212,17 @@
       "systems": [
         "sony-playstation-2"
       ],
-      "truth": false
+      "alternatives": [
+        {
+          "sha1": "434bc0b4eb4827da0773ec0795aadc5162569a07",
+          "sha256": "d6653f4e93be2f6f9e9d690a934f26cf0f6ad4e348b69f41ef736732c3a6685b",
+          "size": 4194304,
+          "repo_path": "bios/Sony/PlayStation 2/SCPH-70004.BIN",
+          "cores": [
+            "pcsx2"
+          ]
+        }
+      ]
     },
     {
       "dest": "SCPH-70004_BIOS_V12_EUR_200.EROM",

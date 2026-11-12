@@ -2023,6 +2023,34 @@
           "pcsx2"
         ]
       },
+      [
+        "SCPH-39001_BIOS_V7_USA_160.BIN",
+        "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7"
+      ],
+      [
+        "SCPH-39004_BIOS_V7_EUR_160.BIN",
+        "bff2902bd0ce9729a060581132541e9fd1a9fab6"
+      ],
+      {
+        "dest": "SCPH-70000_BIOS_V12_JAP_200.BIN",
+        "sha1": "224ab5704ab719edeb05ca1d835812252c97c1b3",
+        "sha256": "3b377ce5f7bb8d880260851867a5452b59149aeb8bb189c5df41e3bace7b8e09",
+        "size": 4194304,
+        "repo_path": "bios/Sony/PlayStation 2/ps2-0200j-20040614.bin",
+        "cores": [
+          "pcsx2"
+        ]
+      },
+      {
+        "dest": "SCPH-70004_BIOS_V12_EUR_200.BIN",
+        "sha1": "434bc0b4eb4827da0773ec0795aadc5162569a07",
+        "sha256": "d6653f4e93be2f6f9e9d690a934f26cf0f6ad4e348b69f41ef736732c3a6685b",
+        "size": 4194304,
+        "repo_path": "bios/Sony/PlayStation 2/SCPH-70004.BIN",
+        "cores": [
+          "pcsx2"
+        ]
+      },
       {
         "dest": "ps2-0230a-20080220.rom1",
         "sha1": "747e36b086aceceb300c72c0d1bbab38e2920e63",
