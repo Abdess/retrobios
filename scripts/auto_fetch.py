@@ -21,6 +21,7 @@ import hashlib
 import http.client
 import json
 import os
+import re
 import subprocess
 import sys
 import urllib.error
@@ -61,6 +62,12 @@ PUBLIC_REPOS = [
     # BatoceraPLUS - Batocera-specific
     "https://raw.githubusercontent.com/BatoceraPLUS/Batocera.PLUS-bios/main/{name}",
 ]
+
+# Software Heritage archives the source of every public forge, deleted
+# repositories and rewritten histories included, and finds a file by its
+# hash: a ROM once committed anywhere answers here even when no forge still
+# serves it. Anonymous use allows 120 requests an hour.
+SOFTWARE_HERITAGE = "https://archive.softwareheritage.org/api/1/content"
 
 ARCHIVE_ORG_COLLECTIONS = [
     "RetroarchSystemFiles",
@@ -306,6 +313,26 @@ def step3_search_public_repos(entry: dict) -> bytes | None:
     return None
 
 
+def step3b_software_heritage(entry: dict) -> bytes | None:
+    """Ask Software Heritage for the file by each accepted sha1, then
+    sha256: its archive answers by content, whatever the file was named."""
+    for field in ("sha1", "sha256"):
+        for value in sorted(_accepted(entry, field)):
+            url = f"{SOFTWARE_HERITAGE}/{field}:{value}/raw/"
+            try:
+                req = urllib.request.Request(
+                    url, headers={"User-Agent": "retrobios-fetch/1.0"}
+                )
+                with urllib.request.urlopen(req, timeout=60) as resp:
+                    data = _read_limited(resp)
+            except urllib.error.URLError as exc:
+                _unanswered(url, exc)
+                continue
+            if data is not None and verify_content(data, entry):
+                return data
+    return None
+
+
 def step4_search_archive_org(entry: dict) -> bytes | None:
     """Search archive.org firmware collections by direct download."""
     name = entry["name"]
@@ -426,7 +453,7 @@ def fetch_missing(
             continue
 
         if dry_run:
-            print("    [DRY RUN] Would search branches, repos, archive.org")
+            print("    [DRY RUN] Would search branches, repos, Software Heritage, archive.org")
             still_missing.append(entry)
             stats["not_found"] += 1
             continue
@@ -442,6 +469,13 @@ def fetch_missing(
         if data:
             path = place_file(data, entry, bios_dir, db)
             print(f"    [3] Found in public repo, saved to: {path}")
+            stats["found"] += 1
+            continue
+
+        data = step3b_software_heritage(entry)
+        if data:
+            path = place_file(data, entry, bios_dir, db)
+            print(f"    [3b] Found in Software Heritage, saved to: {path}")
             stats["found"] += 1
             continue
 
@@ -465,6 +499,84 @@ def fetch_missing(
         stats["not_found"] += 1
 
     return {"stats": stats, "still_missing": still_missing}
+
+
+ACQUIRE_DIR = Path("tmp") / "acquire"
+
+
+def lookup_sha1s(sha1s: list[str], db: dict, dry_run: bool = False) -> int:
+    """--sha1: each file looked for by its hash alone, without a platform.
+    Found bytes are verified, then saved as tmp/acquire/<sha1>, never into
+    bios/: placing a file is a decision the collection makes. 0 when every
+    one was found, 1 otherwise."""
+    missing = 0
+    for raw in sha1s:
+        sha1 = raw.strip().lower()
+        if not re.fullmatch(r"[0-9a-f]{40}", sha1):
+            print(f"  {raw}: not a sha1", file=sys.stderr)
+            missing += 1
+            continue
+        entry = {"name": sha1, "sha1": sha1, "system": ""}
+        _UNANSWERED.clear()
+        held = step1_crossref_db(entry, db)
+        if held:
+            print(f"  {sha1}: already held at {held}")
+            continue
+        if dry_run:
+            print(f"  {sha1}: would ask Software Heritage and archive.org")
+            continue
+        data = step3b_software_heritage(entry)
+        where = "Software Heritage"
+        if data is None:
+            data, where = _archive_org_by_sha1(sha1), "archive.org"
+        if data is None:
+            note = f", {len(_UNANSWERED)} source(s) did not answer" if _UNANSWERED else ""
+            print(f"  {sha1}: not found{note}")
+            missing += 1
+            continue
+        ACQUIRE_DIR.mkdir(parents=True, exist_ok=True)
+        out = ACQUIRE_DIR / sha1
+        out.write_bytes(data)
+        print(f"  {sha1}: found in {where}, {len(data)} bytes, saved to {out}")
+    return 1 if missing else 0
+
+
+def _archive_org_by_sha1(sha1: str) -> bytes | None:
+    """The first archive.org file whose metadata names sha1, read and checked."""
+    search = ("https://archive.org/advancedsearch.php?q="
+              f"{urllib.parse.quote(f'sha1:{sha1}')}&fl[]=identifier&output=json&rows=5")
+    try:
+        with urllib.request.urlopen(urllib.request.Request(
+                search, headers={"User-Agent": "retrobios-fetch/1.0"}), timeout=30) as resp:
+            docs = json.loads(resp.read()).get("response", {}).get("docs", [])
+    except (urllib.error.URLError, json.JSONDecodeError) as exc:
+        _unanswered(search, exc)
+        return None
+    for doc in docs:
+        identifier = doc.get("identifier")
+        meta = f"https://archive.org/metadata/{identifier}/files"
+        try:
+            with urllib.request.urlopen(urllib.request.Request(
+                    meta, headers={"User-Agent": "retrobios-fetch/1.0"}), timeout=30) as resp:
+                files = json.loads(resp.read()).get("result", [])
+        except (urllib.error.URLError, json.JSONDecodeError) as exc:
+            _unanswered(meta, exc)
+            continue
+        for item in files:
+            if str(item.get("sha1", "")).lower() != sha1:
+                continue
+            url = (f"https://archive.org/download/{identifier}/"
+                   f"{urllib.parse.quote(item['name'])}")
+            try:
+                with urllib.request.urlopen(urllib.request.Request(
+                        url, headers={"User-Agent": "retrobios-fetch/1.0"}), timeout=60) as resp:
+                    data = _read_limited(resp)
+            except urllib.error.URLError as exc:
+                _unanswered(url, exc)
+                continue
+            if data is not None and hashlib.sha1(data).hexdigest() == sha1:
+                return data
+    return None
 
 
 CONTRIBUTING_URL = "https://github.com/Abdess/retrobios/blob/main/CONTRIBUTING.md"
@@ -516,8 +628,19 @@ def main() -> None:
     parser.add_argument(
         "--create-issues", action="store_true", help="Output GitHub Issue bodies"
     )
+    parser.add_argument(
+        "--sha1", action="append", metavar="SHA1",
+        help="look for one file by its sha1 in the database, Software Heritage and "
+             "archive.org, and save what is found under tmp/acquire/ (repeatable)",
+    )
     args = parser.parse_args()
     require_directory(args.bios_dir)
+    if args.sha1:
+        if args.platform or args.all or args.create_issues:
+            parser.error("--sha1 looks for files by hash alone: it takes no "
+                         "--platform, --all or --create-issues")
+        db = load_database(args.db) if os.path.exists(args.db) else {"files": {}}
+        sys.exit(lookup_sha1s(args.sha1, db, args.dry_run))
 
     if not os.path.exists(args.db):
         print(f"Error: {args.db} not found. Run generate_db.py first.", file=sys.stderr)
