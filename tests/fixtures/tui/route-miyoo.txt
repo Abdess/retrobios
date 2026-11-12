@@ -102,7 +102,7 @@
    ArchR, SD card                    R36S, R33S, R36S Soysauce, +9
    ArkOS, SD card                    RG353M, RG353V, RG503, RGB30, RK2023, +4
    CrossMix-OS, SD card              TrimUI Smart Pro
-   dArkOS, SD card                   Odroid Go Advance, RGB10, RG351MP, G350
+   dArkOS, SD card                   RG353M, RG353V, RG503, RGB30, +8
    EmuELEC, SD card                  Odroid Go
  1-19 of 34
  A Choose  R2 Back

@@ -2220,6 +2220,28 @@ def detected_os(plat: str, path: Path) -> str:
     return _DETECTED_OS.get((plat, path), "")
 
 
+# A card read from a computer can name a system it cannot tell from
+# another: dArkOS writes ArkOS's EASYROMS tree (finishing_touches.sh:420-
+# 481, daecf488) and replaced it on 30 December 2025, so an EASYROMS card is
+# either one. The detection keeps ArkOS's name, as its rules and lists are
+# keyed. On the device itself the boot splash title tells them apart.
+_CARD_TITLES = {"ArkOS": "dArkOS or ArkOS"}
+# The folders whose system was named from a card read on a computer.
+_FROM_CARD: set[tuple[str, Path]] = set()
+
+
+def card_title(name: str) -> str:
+    """The system a card's own files name, as a computer reading it can tell."""
+    return _CARD_TITLES.get(name, name)
+
+
+def detected_shown(plat: str, path: Path) -> str:
+    """detected_os as the screen says it: a card read on a computer by the
+    name its files allow."""
+    name = detected_os(plat, path)
+    return card_title(name) if (plat, path) in _FROM_CARD else name
+
+
 def os_conflict(platforms: list[tuple[str, Path]]) -> list[str]:
     """The systems among these when there are two or more: a machine runs one."""
     names = list(dict.fromkeys(filter(None, (detected_os(n, p) for n, p in platforms))))
@@ -2244,7 +2266,7 @@ def _system_lines() -> list[str]:
 def found_label(plat: str, path: Path) -> str:
     """How a detected folder is announced: the system's own name, and the
     platform whose files it gets when that is another name."""
-    name = detected_os(plat, path)
+    name = detected_shown(plat, path)
     shown = display_name(plat)
     moved = "".join(f", {folder}/ at {place}"
                     for folder, place in sorted(_MOVED_FOLDERS.get(path, {}).items())
@@ -10229,7 +10251,7 @@ def drive_targets(plat: str) -> list[tuple[str, Path]]:
             continue
         if found is not None:
             below = found[1].relative_to(mount).as_posix() if found[1] != mount else ""
-            what = f"{found[2]} {_card_word(found)}"
+            what = f"{card_title(found[2])} {_card_word(found)}"
             targets.append((f"{_drive_folder(mount, below)} ({what})", found[1]))
         else:
             # A drive its files show to be no card is called a drive, under
@@ -10427,7 +10449,7 @@ def drives_left_out(plat: str) -> str:
                           f"--dest {shown_path(mount)})")
         elif found is not None and found[0] != plat:
             word = _name_key(found[2]) or found[0]
-            others.append(f"{_mount_name(mount)} ({found[2]} {_card_word(found)}: "
+            others.append(f"{_mount_name(mount)} ({card_title(found[2])} {_card_word(found)}: "
                           f"--platform {word} --dest {shown_path(mount)})")
     if not others:
         return ""
@@ -18027,7 +18049,7 @@ def _list_card_choice(plat: str, dest: Path) -> CardChoice:
                               found=f"{found[2]} SHARE drive: its BIOS folder is "
                               f"{shown_path(found[1])}")
         return CardChoice(found[0], found[1],
-                          found=f"{found[2]} card: {display_name(found[0])} files, "
+                          found=f"{card_title(found[2])} card: {display_name(found[0])} files, "
                           f"in {shown_path(found[1])}")
     if found and plat in _SHARE_FOLDERS and found[0] != plat and drive_kind(found) != "card":
         # Another system's drive, never filled beside its own files.
@@ -18038,7 +18060,8 @@ def _list_card_choice(plat: str, dest: Path) -> CardChoice:
                           short=f"That is {_a(found[2])} {kind}.", other=found[2])
     if found and plat and found[0] != plat:
         shown = shown_path(dest)
-        return CardChoice(plat, dest, f"Note: {shown} is {_a(found[2])} {drive_kind(found)}, "
+        return CardChoice(plat, dest, f"Note: {shown} is {_a(card_title(found[2]))} "
+                          f"{drive_kind(found)}, "
                           "which reads "
                           f"the {display_name(found[0])} file list in {shown_path(found[1])}: "
                           f"--platform {_name_key(found[2])} --dest {shown}. The "
@@ -19120,7 +19143,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             record_options_kept = _INVOCATION.chosen.get(plat_name)
             selection = _prompt_custom_selection(
                 plat_name, bare, bare_omitted + unplaced, installed,
-                detected_os(plat_name, bios_path) or display,
+                detected_shown(plat_name, bios_path) or display,
                 args.dry_run, manifest.get("data_directories") or [], bios_path,
                 records_selection(files), given, manifest,
                 bool(target or args.installed_cores or args.declared_only
@@ -19521,7 +19544,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                                        for entry, state in data_states)
                 taken = _RECORD_TAKEN.get(plat_name)
                 print(f"\nInstalling {_plural(coming, 'file')} ({format_size(weight)}) for "
-                      f"{detected_os(plat_name, bios_path) or display}"
+                      f"{detected_shown(plat_name, bios_path) or display}"
                       + (", what the games need" if games_applied else "")
                       + (f", same choice as on {record_day(taken)}" if taken else "") + ".")
                 print(f"BIOS folder: {shown_path(bios_path)}")
@@ -22689,11 +22712,11 @@ def _choose(state: TuiState, plat: str, dest: Path, proposed: bool = False) -> l
         # The card's own files name it, so its folder is known: created as
         # line mode creates it, and said on the plan, not asked.
         state.card_note = (f"{dest.name} is created on {_mount_name(root)}, where "
-                           f"{detected_os(plat, dest) or display_name(plat)} reads it.")
+                           f"{detected_shown(plat, dest) or display_name(plat)} reads it.")
         return _start_check(state)
     if proposed and not _exists(dest):
         # Where no setup is there yet, nothing reads it: said as it is.
-        reads = (f", where {detected_os(plat, dest) or display_name(plat)} reads it"
+        reads = (f", where {detected_shown(plat, dest) or display_name(plat)} reads it"
                  if _is_dir(dest.parent) else ", a folder that does not exist yet")
         state.card_note = (f"{dest.name} is created in "
                            f"{_short_path(dest.parent, state.home)}{reads}.")
@@ -22807,6 +22830,7 @@ def _take_card(state: TuiState, choice: CardChoice, root: Path) -> list[tuple]:
     if card and card[1] == choice.folder:
         # Titled as the same card found by itself: "Onion (RetroArch files)".
         _DETECTED_OS.setdefault((choice.plat, choice.folder), card[2])
+        _FROM_CARD.add((choice.plat, choice.folder))
     elif state.card_bound:
         # A card no file names, chosen as ArkOS's: titled ArkOS, not RetroArch.
         _DETECTED_OS.setdefault((choice.plat, choice.folder), state.card_bound[0])
@@ -22902,7 +22926,7 @@ def _tui_card_bound(state: TuiState) -> tuple[str, str] | None:
 def _card_what(mount: Path) -> str:
     """What a mounted card is, as its own files say."""
     system = card_system(mount)
-    return f"{system[2]} {drive_kind(system)}" if system else "card or drive"
+    return f"{card_title(system[2])} {drive_kind(system)}" if system else "card or drive"
 
 
 def _browse_rows(folder: Path | None, zips: bool = False,
@@ -23435,7 +23459,9 @@ _DEVICES: dict[str, str] = {
     **{model: "SJGAM" for model in ("SJGAM M21", "SJGAM M22 Pro")},
     **{model: "" for model in (
         "R33S", "R35S", "R36H", "R36S", "R36S Plus", "R36S Soysauce", "R40XX Pro Max",
-        "XF40H", "K36", "M17", "BittBoy", "Pocket Go", "Sup M3", "XYC Q8", "Android")},
+        "XF40H", "K36", "M17", "BittBoy", "Pocket Go", "Sup M3", "XYC Q8", "Android",
+        # dArkOS names these two by model alone (v08272026 release notes).
+        "A10 Mini", "Miniloong Pocket 1")},
     "G350": "BattleXP",
     "GKD Pixel": "GKD",
     "GKD Pixel 2": "GKD",
@@ -23479,7 +23505,8 @@ _SETUP_DEVICES: dict[str, tuple[str, ...]] = {
     "ArchR": ("R36S", "R33S", "R36S Soysauce", "Odroid Go Advance", "Odroid Go Super",
               "RG351V", "RG351M", "GameForce Chi", "MagicX XU10", "RGB10", "RGB10X", "K36"),
     "CrossMix-OS": ("TrimUI Smart Pro",),
-    "dArkOS": ("Odroid Go Advance", "RGB10", "RG351MP", "G350"),
+    "dArkOS": ("RG353M", "RG353V", "RG503", "RGB30", "RGB20 Pro", "RK2023", "RG351MP", "RGB10",
+               "G350", "Odroid Go Advance", "A10 Mini", "Miniloong Pocket 1"),
     # JELOS 7b2e116c, packages/hardware/quirks/devices: one folder per device
     # it was built for, the handhelds here.
     "JELOS": ("RG351M", "RG351V", "RG353M", "RG353P", "RG353V", "RG353VS", "RG503", "RG552",
@@ -26054,7 +26081,7 @@ def _view_plan(state: TuiState, width: int, height: int) -> tuple:
         if at is not None and at + 1 < len(lines) and "backed up, replaced" in str(lines[at + 1]):
             lines[at], lines[at + 1] = lines[at + 1], lines[at]
     # A muOS card gets RetroArch's files: the title says both.
-    system = detected_os(state.platform, state.dest) if state.dest is not None else ""
+    system = detected_shown(state.platform, state.dest) if state.dest is not None else ""
     name = display_name(state.platform, state.manifest)
     return (f"{system} ({name} files)" if system and system != name else name,
             _plan_body(state, width, height, lines, rows),
@@ -27832,7 +27859,7 @@ def tui_hits(state: TuiState, lines: list[str]) -> TuiHits:
 
 
 def _setup_label(plat: str, path: Path) -> str:
-    system = detected_os(plat, path)
+    system = detected_shown(plat, path)
     name = display_name(plat)
     return f"{system} ({name} files)" if system and system != name else name
 
@@ -27904,6 +27931,7 @@ def found_setups(os_type: str) -> tuple[list[tuple[str, Path, str]], set]:
             continue
         if (card[0], card[1]) not in found and card[2] not in here:
             _DETECTED_OS.setdefault((card[0], card[1]), card[2])
+            _FROM_CARD.add((card[0], card[1]))
             mounted.add((card[0], card[1]))
             taken.append((card, mount))
     systems = [card[2] for card, _mount in taken]
@@ -27918,7 +27946,8 @@ def found_setups(os_type: str) -> tuple[list[tuple[str, Path, str]], set]:
         held = counts.get(mount)
         what = ("" if held is None else ", no BIOS folder" if held < 0
                 else f", {_plural(held, 'BIOS file')}")
-        setups.append((card[0], card[1], f"{card[2]} {kind} ({_mount_name(mount)}{what})"))
+        setups.append((card[0], card[1],
+                       f"{card_title(card[2])} {kind} ({_mount_name(mount)}{what})"))
     return tell_apart(setups), mounted
 
 

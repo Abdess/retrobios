@@ -100,6 +100,10 @@ class HandheldSystem:
     devices: tuple[str, ...] = ()
     devices_source: str = ""
     linux_only: bool = False
+    # Said when the project stopped, with the project's own page saying so:
+    # ArkOS points its readers to dArkOS.
+    ended: str = ""
+    ended_source: str = ""
 
 
 @dataclass(frozen=True)
@@ -135,7 +139,8 @@ _ALSO_KEYS = ("setup", "summary", "uses", "runs_on", "folder")
 _TILE_KEYS = ("name", "text", "link")
 _TILE_LOGO_KEYS = ("logo", "logo_owner", "logo_licence")
 _HANDHELD_KEYS = {"page", "title", "summary", "uses", "systems"}
-_SYSTEM_KEYS = {"name", "folder", "folder_source", "devices", "devices_source", "linux_only"}
+_SYSTEM_KEYS = {"name", "folder", "folder_source", "devices", "devices_source", "linux_only",
+                "ended", "ended_source"}
 _SOURCE = re.compile(r"https://\S+")
 _TERMINAL_KEYS = ("label", "how", "shell")
 
@@ -244,7 +249,8 @@ def _handheld_system(data: object, where: str) -> HandheldSystem:
         raise GuideError(f"{where}: expected a mapping")
     _unknown(data, _SYSTEM_KEYS, where)
     values: dict = {"name": _text(data.get("name"), f"{where}.name")}
-    for value, source in (("folder", "folder_source"), ("devices", "devices_source")):
+    for value, source in (("folder", "folder_source"), ("devices", "devices_source"),
+                          ("ended", "ended_source")):
         if (value in data) != (source in data):
             raise GuideError(f"{where}: {value} and {source} go together, "
                              "a value is written only with the page that states it")

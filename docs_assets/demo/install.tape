@@ -31,12 +31,8 @@ Screenshot tmp/demo/poster.png
 Sleep 600ms
 Enter
 
-# The first screen: the card found.
-Wait+Screen@30s /ArkOS SD card \(EASYROMS\)/
-Sleep 2500ms
-Enter
-
-# The plan: only the files the games on the card need.
+# The plan, opened on the one card found: only the files the games on it need.
+Wait+Screen@60s /RetroBIOS: dArkOS or ArkOS \(RetroArch files\)/
 Wait+Screen@60s /For the games on this card: yes/
 Sleep 4500ms
 Enter

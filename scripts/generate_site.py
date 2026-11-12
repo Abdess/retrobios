@@ -4510,7 +4510,14 @@ def _handheld_row(system: HandheldSystem) -> str:
         folder = f"{system.folder} ([source]({system.folder_source}))"
         if system.linux_only:
             folder += f". {LINUX_ONLY_HINT}"
-    return f"| {system.name} | {devices} | {folder} |"
+    return f"| {handheld_name(system)} | {devices} | {folder} |"
+
+
+def handheld_name(system: HandheldSystem) -> str:
+    """A system's cell: its name, and for one that stopped, that it did and
+    what replaced it, with the project's own page saying so."""
+    return (f"{system.name}, {system.ended} ([source]({system.ended_source}))"
+            if system.ended else system.name)
 
 
 def generate_handheld_guide(guide: HandheldGuide) -> str:

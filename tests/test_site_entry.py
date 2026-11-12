@@ -388,7 +388,19 @@ class HandheldWayIn(unittest.TestCase):
         text = _page(GUIDE.path)
         for system in GUIDE.systems:
             with self.subTest(system=system.name):
-                self.assertIn(f"| {system.name} |", text)
+                self.assertIn(f"| {generate_site.handheld_name(system)} |", text)
+
+    def test_a_system_that_stopped_says_so_with_its_source(self):
+        """ArkOS was archived on 30 December 2025 and points to dArkOS: the
+        guide listed it first, as a system to install."""
+        systems = {s.name: s for s in GUIDE.systems}
+        self.assertEqual(GUIDE.systems[0].name, "dArkOS")
+        self.assertIn("replaced by dArkOS", systems["ArkOS"].ended)
+        self.assertTrue(systems["ArkOS"].ended_source.startswith("https://github.com/"))
+        self.assertTrue(systems["JELOS"].ended)
+        self.assertNotIn("ArkOS,", GUIDE.summary.replace("dArkOS,", ""))
+        with self.assertRaises(siteguides.GuideError):
+            siteguides._handheld_system({"name": "X", "ended": "no longer updated"}, "test")
 
     def test_every_folder_and_device_list_is_cited(self):
         for system in GUIDE.systems:
@@ -754,7 +766,9 @@ class EveryHandheldRowSaysWhere(unittest.TestCase):
     def test_a_folder_only_linux_reads_says_what_to_do(self):
         text = _plain_page(HANDHELDS.path)
         for system in HANDHELDS.systems:
-            row = next(line for line in text.splitlines() if line.startswith(f"| {system.name} |"))
+            row = next(line for line in text.splitlines()
+                       if line.startswith(f"| {system.name} |")
+                       or line.startswith(f"| {system.name}, "))
             with self.subTest(system=system.name):
                 self.assertEqual(generate_site.LINUX_ONLY_HINT in row, system.linux_only)
         self.assertTrue(any(s.linux_only for s in HANDHELDS.systems if s.name == "ArchR"))

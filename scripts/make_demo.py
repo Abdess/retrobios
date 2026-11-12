@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """Record the installer demos shown in the README and on the site, once.
 
-Each recording is the installer on an ArkOS SD card that holds six games: it
+Each recording is the installer on a dArkOS SD card that holds six games: it
 finds the card, plans only the BIOS files those games need, installs them
 and shows the summary. Two variants, by where the install box says the
 command runs:
 
 - default: the one-line command in a terminal on a Linux computer, the card
   mounted at /media/EASYROMS. The README and every tab but one show it.
-- handheld: the full-screen interface on ArkOS itself, at the 640x480
-  screen of an R36S, as the Tools menu launcher starts it (ports/shared/
+- handheld: the full-screen interface on dArkOS itself, at the 640x480
+  screen of an RG351MP, as the Tools menu launcher starts it (ports/shared/
   tui.txt: install.py --tui, RETROBIOS_PAD=gptokeyb, RETROBIOS_IDLE_EXIT).
   The keys typed are the ones gptokeyb sends for the buttons
   (ports/shared/retrobios.gptk: A is Enter), and the bottom line names the
@@ -21,10 +21,10 @@ gives the command back with --dest /mnt/e/bios, a path no Windows user sees.
 
 Everything a recording reads is local and the same on every machine:
 
-- The card is built under tmp/demo/ (bios/, the folders ArkOS writes on its
+- The card is built under tmp/demo/ (bios/, the folders dArkOS writes on its
   games partition, one game per console) on a tmpfs of a card's size, in a
   mount namespace of this user (unshare, or bwrap for the handheld, whose
-  root holds ArkOS's /home/ark, /opt/system and /roms). /media and /mnt are
+  root holds dArkOS's /home/ark, /opt/system, /roms and its boot splash). /media and /mnt are
   emptied, so no drive of this machine is shown.
 - The repository is served on 127.0.0.1 and named with RETROBIOS_BASE_URL:
   the file lists, install/games/ and the BIOS files are this checkout's.
@@ -74,7 +74,16 @@ OUT = ROOT / "docs_assets" / "demo"
 WORK = ROOT / "tmp" / "demo"
 FACTS = OUT / "demo.json"
 CARD_SIZE = "29g"
-SETUP = "ArkOS"
+# The system on the device: dArkOS, which replaced ArkOS on 30 December
+# 2025 (christianhaitian/arkos wiki). A computer reading its card cannot
+# tell the two apart (install.py card_title), and says both.
+SETUP = "dArkOS"
+CARD_SETUP = "dArkOS or ArkOS"
+# The boot splash title dArkOS is recognised by on the device
+# (finishing_touches.sh:359-361, install.py _PLYMOUTH_TITLE), dated as its
+# latest release, v08272026.
+SPLASH = "/usr/share/plymouth/themes/text.plymouth"
+SPLASH_TEXT = "[Plymouth Theme]\ntitle=dArkOS (08272026)\n"
 
 
 @dataclass(frozen=True)
@@ -250,19 +259,36 @@ def _computer_session(variant: Variant, work: Path, names: list[str]) -> str:
     )
 
 
+def _usr_binds() -> str:
+    """This machine's /usr, entry by entry over a tmpfs, /usr/share too: a
+    bind of the whole of /usr is read-only, and dArkOS's splash file goes in
+    /usr/share/plymouth, which this machine does not have."""
+    def bind(source: Path) -> str:
+        return (f"--symlink {os.readlink(source)} {source}" if source.is_symlink()
+                else f"--ro-bind {source} {source}")
+    usr = Path("/usr")
+    share = usr / "share"
+    words = ["--tmpfs /usr"]
+    words += [bind(entry) for entry in sorted(usr.iterdir()) if entry != share]
+    words += [bind(entry) for entry in sorted(share.iterdir()) if entry.name != "plymouth"]
+    words.append(f'--ro-bind "$RETROBIOS_DEMO_SPLASH" {SPLASH}')
+    return " ".join(words)
+
+
 def _device_session(names: list[str]) -> str:
-    """ArkOS's own root, made of this machine's /usr and /etc: the user and
-    the Tools menu folder ArkOS is recognised by, EASYROMS at /roms, and
-    the installer where the Tools menu launcher keeps it."""
+    """dArkOS's own root, made of this machine's /usr and /etc: the user and
+    the Tools menu folder ArkOS's line keeps, the boot splash title dArkOS
+    is recognised by, EASYROMS at /roms, and the installer where the Tools
+    menu launcher keeps it."""
     binds = " ".join(
         f"--symlink usr/{name} /{name}" for name in ("bin", "lib", "lib64", "sbin"))
     return (
         'if [ "$#" -eq 0 ]; then\n'
         f'  set -- python3 {ARK_INSTALLER} --tui\n'
         "fi\n"
-        "exec bwrap --unshare-user --unshare-pid --unshare-ipc --unshare-uts --hostname arkos "
+        "exec bwrap --unshare-user --unshare-pid --unshare-ipc --unshare-uts --hostname darkos "
         '--uid "$RETROBIOS_DEMO_UID" --gid "$RETROBIOS_DEMO_GID" '
-        f"--ro-bind /usr /usr {binds} --ro-bind /etc /etc --proc /proc --dev /dev "
+        f"{_usr_binds()} {binds} --ro-bind /etc /etc --proc /proc --dev /dev "
         f"--tmpfs /tmp --dir {ARK_HOME} --dir /opt/inttools --dir {ARK_TOOLS} "
         f'--ro-bind "$RETROBIOS_DEMO_INSTALLER" {ARK_INSTALLER} '
         f'--ro-bind "$RETROBIOS_DEMO_CARD" /card --size 31138512896 --tmpfs /roms '
@@ -284,6 +310,14 @@ def write_session(work: Path, names: list[str], variant: Variant = VARIANTS["def
                        encoding="utf-8")
     session.chmod(0o755)
     return session
+
+
+def _splash(work: Path) -> Path:
+    """dArkOS's boot splash theme, bound at SPLASH on the device."""
+    path = work / "text.plymouth"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(SPLASH_TEXT, encoding="utf-8")
+    return path
 
 
 def session_env(base_url: str, work: Path, card: Path,
@@ -309,6 +343,7 @@ def session_env(base_url: str, work: Path, card: Path,
             "RETROBIOS_PAD": "gptokeyb",
             "RETROBIOS_IDLE_EXIT": "300",
             "RETROBIOS_DEMO_INSTALLER": str(ROOT / "install.py"),
+            "RETROBIOS_DEMO_SPLASH": str(_splash(work)),
         }
     home = work / "home"
     home.mkdir(parents=True, exist_ok=True)
@@ -352,7 +387,12 @@ def describe(variant: str, facts: dict) -> str:
                 f"{facts['setup']}, on a demonstration card. It finds the {facts['games']} games "
                 f"on the card, {plan} The A button chooses, and the bottom line names the buttons.")
     return (f"Recording of the one-line command in a terminal, on a demonstration card. The "
-            f"installer finds an {facts['setup']} SD card with {facts['games']} games, {plan}")
+            f"installer finds {_article(facts['setup'])} {facts['setup']} SD card with "
+            f"{facts['games']} games, {plan}")
+
+
+def _article(name: str) -> str:
+    return "an" if name[:1].lower() in "aeiou" else "a"
 
 
 def measure(session: Path, env: dict[str, str], variant: Variant = VARIANTS["default"]) -> dict:
@@ -375,7 +415,7 @@ def measure(session: Path, env: dict[str, str], variant: Variant = VARIANTS["def
     facts = {
         "width": size["width"],
         "height": size["height"],
-        "setup": SETUP,
+        "setup": SETUP if variant.place == "device" else CARD_SETUP,
         "games": games["games"],
         "systems": len(games["found"]),
         "files": check["missing"],

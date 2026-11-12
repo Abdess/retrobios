@@ -31,7 +31,7 @@ curl -fsSL https://abdess.github.io/retrobios/i | sh
 
 **A handheld, an SD card, or not sure?** [Pick the device](https://abdess.github.io/retrobios/which-pack/): its page gives the folder and the command. A muOS, Onion, spruceOS, MinUI, KNULLI, ROCKNIX, Lakka or MiSTer SD card plugged into the computer is found by itself.
 
-![Recording of the one-line command in a terminal, on a demonstration card. The installer finds an ArkOS SD card with 6 games, plans 43 BIOS files (15.1 MB) for them, installs them and shows the summary.](docs_assets/demo/install.gif)
+![Recording of the one-line command in a terminal, on a demonstration card. The installer finds a dArkOS or ArkOS SD card with 6 games, plans 43 BIOS files (15.1 MB) for them, installs them and shows the summary.](docs_assets/demo/install.gif)
 
 The installer finds the setup and its BIOS folder, installs the files it needs (only what the games need when it finds them on the card) and checks each one. Its screen installs everything, or fewer under **Choose systems**. Arrow keys and Enter drive it, or a controller on a handheld. It sends no report of its own ([what is counted](https://abdess.github.io/retrobios/wiki/privacy/)). Options go after the line in the form the [installer page](https://abdess.github.io/retrobios/wiki/installer/#passing-options) gives.
 
@@ -110,4 +110,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in [the project's legal position](https://abdess.github.io/retrobios/wiki/legal/).
 
-*Auto-generated on 2026-11-12T02:12:16Z*
+*Auto-generated on 2026-11-12T06:24:42Z*

@@ -77,7 +77,7 @@ device_groups:
       logo_owner: Google
       logo_licence: Android robot, file from simple-icons, CC0-1.0
     - name: Linux handhelds
-      text: ArkOS, muOS, Onion, spruceOS
+      text: dArkOS, muOS, Onion, spruceOS
       link: platforms/linux-handhelds.md
       logo: https://raw.githubusercontent.com/simple-icons/simple-icons/521c96fd04b0ea93034db8715eda5a4de27a58bb/icons/linux.svg
       logo_owner: Larry Ewing
@@ -158,14 +158,17 @@ handheld_guide:
   title: Linux handhelds
   uses: retroarch
   summary: >-
-    ArkOS, muOS, Onion, spruceOS and the other systems below run **RetroArch**, an app
+    dArkOS, muOS, Onion, spruceOS and the other systems below run **RetroArch**, an app
     with a small emulator for each console. They use its BIOS files.
   systems:
-  - name: ArkOS
+  # dArkOS replaced ArkOS on 30 December 2025. Its devices are the images of
+  # its latest release, and the Odroid Go Advance its wiki names.
+  - name: dArkOS
     folder: '`bios` on the **EASYROMS** part of the card'
-    folder_source: https://github.com/christianhaitian/arkos/wiki/ArkOS-Emulators-and-Ports-information
-    devices: [RG353M, RG353V, RG503, RGB30, RK2023, RG351MP, RG351V, R35S, RGB10]
-    devices_source: https://github.com/christianhaitian/arkos/wiki
+    folder_source: https://github.com/christianhaitian/dArkOS/wiki/dArkOS-Emulators-and-Ports-information
+    devices: [RG353M, RG353V, RG503, RGB30, RGB20 Pro, RK2023, RG351MP, RGB10, G350,
+              Odroid Go Advance, A10 Mini, Miniloong Pocket 1]
+    devices_source: https://github.com/christianhaitian/dArkOS/releases/tag/v08272026
   - name: muOS
     folder: '`MUOS/bios` on the card'
     folder_source: https://github.com/MustardOS/internal/blob/main/share/web/tools/bios-checker.html
@@ -198,17 +201,22 @@ handheld_guide:
     devices: [R36S, R33S, R36S Soysauce, Odroid Go Advance, Odroid Go Super, RG351V,
               RG351M, GameForce Chi, MagicX XU10, RGB10, RGB10X, K36]
     devices_source: https://github.com/archr-linux/Arch-R
+  # Cards made before the end still run it: the row stays, said as ended.
+  - name: ArkOS
+    ended: no longer updated, replaced by dArkOS
+    ended_source: https://github.com/christianhaitian/arkos/wiki
+    folder: '`bios` on the **EASYROMS** part of the card'
+    folder_source: https://github.com/christianhaitian/arkos/wiki/ArkOS-Emulators-and-Ports-information
+    devices: [RG353M, RG353V, RG503, RGB30, RK2023, RG351MP, RG351V, R35S, RGB10]
+    devices_source: https://github.com/christianhaitian/arkos/wiki
   - name: CrossMix-OS
     folder: '`BIOS` at the root of the card'
     folder_source: https://github.com/cizia64/CrossMix-OS/wiki/Emulators
     devices: [TrimUI Smart Pro]
     devices_source: https://github.com/cizia64/CrossMix-OS
-  - name: dArkOS
-    folder: '`bios` on the **EASYROMS** part of the card'
-    folder_source: https://github.com/christianhaitian/dArkOS/wiki/dArkOS-Emulators-and-Ports-information
-    devices: [Odroid Go Advance, RGB10, RG351MP, G350]
-    devices_source: https://github.com/christianhaitian/dArkOS/wiki
   - name: JELOS
+    ended: no longer updated
+    ended_source: https://github.com/JustEnoughLinuxOS/distribution
     folder: '`roms/bios` on the games card'
     folder_source: https://github.com/JustEnoughLinuxOS/distribution/blob/7b2e116ce6996d56e642a0e2a07288c926db926b/packages/emulators/standalone/retroarch/sources/RK3566/retroarch.cfg#L716
     devices: [RG351M, RG351V, RG353M, RG353P, RG353V, RG353VS, RG503, RG552, R33S, R36S,

@@ -9554,7 +9554,7 @@ class OneDeviceRegistry(unittest.TestCase):
                 self.assertEqual([name for name in devices if name not in install._DEVICES], [])
 
     def test_every_spelling_finds_every_system_that_runs_it(self):
-        rk2023 = {"ArkOS", "KOLOS", "JELOS", "rocknix"}
+        rk2023 = {"dArkOS", "ArkOS", "KOLOS", "JELOS", "rocknix"}
         cubexx = {"muOS", "knulli", "rocknix", "minui"}
         flip2 = {"knulli", "rocknix"}
         for typed, systems in (("Powkiddy RK2023", rk2023), ("RK2023", rk2023),
@@ -9583,7 +9583,7 @@ class OneDeviceRegistry(unittest.TestCase):
                 contextlib.redirect_stdout(out), self.assertRaises(SystemExit):
             install._choose_platform("Which?", "retroarch")
         text = out.getvalue()
-        self.assertIn("4 setups run on 'Powkiddy RK2023':", text)
+        self.assertIn("5 setups run on 'Powkiddy RK2023':", text)
         # Enter after the matches takes none, and 0 and 35 are numbers.
         self.assertEqual(text.count("Type a number from 1 to 34"), 3)
         self.assertNotIn("run on '0'", text)
@@ -13019,7 +13019,7 @@ class ChoiceStateInBothModes(unittest.TestCase):
                     self.assertEqual(state.dest, card / "bios")
                     text = self.screen(listed(state))
                     # Named on the setups, its plan one Enter away.
-                    self.assertIn(f"> ArkOS SD card ({name}", text)
+                    self.assertIn(f"> dArkOS or ArkOS SD card ({name}", text)
                     self.assertNotIn("Nothing was found here", text)
                     install.tui_update(state, Key("enter"))
                     self.assertEqual(state.dest, card / "bios")
@@ -13295,10 +13295,11 @@ class ChoiceStateInBothModes(unittest.TestCase):
         card = self.easyroms()
         text, asked = self.line_run(_args(manifest=self.game_listing(), dry_run=True,
                                           declared_only=False), [""], mounts=[card])
-        # Found as the screen finds it, under Enter.
-        self.assertIn(f"Found ArkOS at {card / 'bios'} (RetroArch files)", text)
+        # Found as the screen finds it, under Enter. dArkOS writes the same
+        # EASYROMS tree, so a computer cannot tell the two apart.
+        self.assertIn(f"Found dArkOS or ArkOS at {card / 'bios'} (RetroArch files)", text)
         self.assertNotIn("Nothing was found here", text)
-        self.assertIn("Enter for ArkOS SD card (EASYROMS)", asked[0])
+        self.assertIn("Enter for dArkOS or ArkOS SD card (EASYROMS)", asked[0])
         self.assertIn(f"BIOS folder: {card / 'bios'}", text)
 
 
@@ -13423,14 +13424,14 @@ class DriveIsACardByItsFiles(unittest.TestCase):
         state = self.first_screen(mounts)
         # The card is the setup found, under Enter.
         text = self.screen(state)
-        self.assertIn("> ArkOS SD card (EASYROMS", text)
+        self.assertIn("> dArkOS or ArkOS SD card (EASYROMS", text)
         with mock.patch.object(install, "_mounted_cards", return_value=mounts), \
                 mock.patch.object(install, "_mount_points", return_value=frozenset()):
             install.tui_update(state, Key("enter"))
         self.assertEqual(state.dest, card / "bios")
         text, asked = self.line_run(_args(manifest=self.game_listing(), dry_run=True,
                                           declared_only=False), [""], mounts=mounts)
-        self.assertIn("Enter for ArkOS SD card (EASYROMS)", asked[0])
+        self.assertIn("Enter for dArkOS or ArkOS SD card (EASYROMS)", asked[0])
         self.assertIn(f"BIOS folder: {card / 'bios'}", text)
 
     def test_two_cards_are_spoken_of_in_the_plural(self):
@@ -13446,8 +13447,8 @@ class DriveIsACardByItsFiles(unittest.TestCase):
         self.assertIn("ArkOS SD card (ROMS2", text)
         text, asked = self.line_run(_args(manifest=self.game_listing(), dry_run=True,
                                           declared_only=False), [], mounts=mounts)
-        self.assertIn("1) ArkOS SD card (EASYROMS", text)
-        self.assertIn("2) ArkOS SD card (ROMS2", text)
+        self.assertIn("1) dArkOS or ArkOS SD card (EASYROMS", text)
+        self.assertIn("2) dArkOS or ArkOS SD card (ROMS2", text)
         self.assertNotIn("in the reader", text)
 
     def test_a_fixed_partition_is_told_from_a_card(self):
