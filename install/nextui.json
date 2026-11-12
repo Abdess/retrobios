@@ -21096,8 +21096,8 @@
   ],
   "truth_files": [],
   "truth_omitted": [],
-  "standalone_layouts": {
-    "bluemsx": [],
-    "cap32": []
-  }
+  "standalone_builds": [
+    "bluemsx",
+    "cap32"
+  ]
 }
