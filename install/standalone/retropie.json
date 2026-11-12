@@ -4824,6 +4824,10 @@
     ],
     "amiberry-5.7.2": [
       [
+        "kickstarts/KS ROM v1.0 (A1000)(NTSC).rom",
+        "00c15406beb4b8ab1a16aa66c05860e1a7c1ad79"
+      ],
+      [
         "kickstarts/KS ROM v1.1 (A1000)(NTSC).rom",
         "4192c505d130f446b2ada6bdc91dae730acafb4c"
       ],
@@ -4844,12 +4848,24 @@
         "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
       ],
       [
+        "kickstarts/KS ROM v1.3 (A3000)(SK).rom",
+        "c39bd9094d4e5f4e28c1411f3086950406062e87"
+      ],
+      [
+        "kickstarts/KS ROM v1.4 (A3000).rom",
+        "f76316bf36dff14b20fa349ed02e4b11dd932b07"
+      ],
+      [
         "kickstarts/amiga-os-204.rom",
         "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
       ],
       [
         "kickstarts/amiga-os-205-a600.rom",
         "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
+      ],
+      [
+        "kickstarts/KS ROM v2.04 (A3000).rom",
+        "d82ebb59afc53540ddf2d7187ecf239b7ea91590"
       ],
       [
         "kickstarts/amiga-os-300-a1200.rom",
@@ -4882,6 +4898,10 @@
       [
         "kickstarts/amiga-os-310-a4000t.rom",
         "b0ec8b84d6768321e01209f11e6248f2f5281a21"
+      ],
+      [
+        "kickstarts/KS ROM v3.2 (Walker).rom",
+        "7a9095f1107966f90267dc4cb3c1972efb4b78a8"
       ],
       [
         "kickstarts/draco-boot-rom-v1.3.rom",
@@ -4934,6 +4954,10 @@
       [
         "kickstarts/cdtv-cr-extended-rom-v3.44.rom",
         "3b160c5abe79f10ae69243328004bb9e3162b648"
+      ],
+      [
+        "kickstarts/The Diagnostic 2.0 (Logica).rom",
+        "ba10d16166b2e2d6177c979c99edf8462b21651e"
       ],
       [
         "kickstarts/action-replay-mk-i-v1.00.rom",
@@ -5642,6 +5666,10 @@
     ],
     "amiberry-6.3.3": [
       [
+        "kickstarts/KS ROM v1.0 (A1000)(NTSC).rom",
+        "00c15406beb4b8ab1a16aa66c05860e1a7c1ad79"
+      ],
+      [
         "kickstarts/KS ROM v1.1 (A1000)(NTSC).rom",
         "4192c505d130f446b2ada6bdc91dae730acafb4c"
       ],
@@ -5662,12 +5690,24 @@
         "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
       ],
       [
+        "kickstarts/KS ROM v1.3 (A3000)(SK).rom",
+        "c39bd9094d4e5f4e28c1411f3086950406062e87"
+      ],
+      [
+        "kickstarts/KS ROM v1.4 (A3000).rom",
+        "f76316bf36dff14b20fa349ed02e4b11dd932b07"
+      ],
+      [
         "kickstarts/amiga-os-204.rom",
         "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
       ],
       [
         "kickstarts/amiga-os-205-a600.rom",
         "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
+      ],
+      [
+        "kickstarts/KS ROM v2.04 (A3000).rom",
+        "d82ebb59afc53540ddf2d7187ecf239b7ea91590"
       ],
       [
         "kickstarts/amiga-os-300-a1200.rom",
@@ -5700,6 +5740,10 @@
       [
         "kickstarts/amiga-os-310-a4000t.rom",
         "b0ec8b84d6768321e01209f11e6248f2f5281a21"
+      ],
+      [
+        "kickstarts/KS ROM v3.2 (Walker).rom",
+        "7a9095f1107966f90267dc4cb3c1972efb4b78a8"
       ],
       [
         "kickstarts/draco-boot-rom-v1.3.rom",
@@ -5752,6 +5796,10 @@
       [
         "kickstarts/cdtv-cr-extended-rom-v3.44.rom",
         "3b160c5abe79f10ae69243328004bb9e3162b648"
+      ],
+      [
+        "kickstarts/The Diagnostic 2.0 (Logica).rom",
+        "ba10d16166b2e2d6177c979c99edf8462b21651e"
       ],
       [
         "kickstarts/action-replay-mk-i-v1.00.rom",

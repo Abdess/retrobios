@@ -7,7 +7,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "10.1.1",
-  "generated": "2026-11-12T11:40:11Z",
+  "generated": "2026-11-12T15:26:44Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -1645,11 +1645,11 @@
       }
     }
   ],
-  "total_files": 4000,
-  "total_size": 5214558668,
-  "pack_files": 7295,
-  "pack_size": 5077396408,
-  "total_omitted": 99,
+  "total_files": 4006,
+  "total_size": 5217180108,
+  "pack_files": 7301,
+  "pack_size": 5080017848,
+  "total_omitted": 93,
   "omitted_files": [
     {
       "dest": "D8039HLC.rom",
@@ -1684,46 +1684,6 @@
     {
       "dest": "amiga/bios/D8039HLC.rom",
       "name": "D8039HLC.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-8.2.2"
-      ]
-    },
-    {
-      "dest": "amiga/bios/KS ROM v1.0 (A1000)(NTSC).rom",
-      "name": "KS ROM v1.0 (A1000)(NTSC).rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-8.2.2"
-      ]
-    },
-    {
-      "dest": "amiga/bios/KS ROM v1.3 (A3000)(SK).rom",
-      "name": "KS ROM v1.3 (A3000)(SK).rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-8.2.2"
-      ]
-    },
-    {
-      "dest": "amiga/bios/KS ROM v1.4 (A3000).rom",
-      "name": "KS ROM v1.4 (A3000).rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-8.2.2"
-      ]
-    },
-    {
-      "dest": "amiga/bios/KS ROM v2.04 (A3000).rom",
-      "name": "KS ROM v2.04 (A3000).rom",
       "system": "commodore-amiga",
       "required": false,
       "reason": "not_found",
@@ -1922,16 +1882,6 @@
       ]
     },
     {
-      "dest": "amiga/bios/KS ROM v3.2 (Walker).rom",
-      "name": "KS ROM v3.2 (Walker).rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-8.2.2"
-      ]
-    },
-    {
       "dest": "amiga/bios/KS ROM v3.2.1 (A1200).rom",
       "name": "KS ROM v3.2.1 (A1200).rom",
       "system": "commodore-amiga",
@@ -2084,16 +2034,6 @@
     {
       "dest": "amiga/bios/KS ROM v3.X (A4000)(Cloanto).rom",
       "name": "KS ROM v3.X (A4000)(Cloanto).rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-8.2.2"
-      ]
-    },
-    {
-      "dest": "amiga/bios/The Diagnostic 2.0 (Logica).rom",
-      "name": "The Diagnostic 2.0 (Logica).rom",
       "system": "commodore-amiga",
       "required": false,
       "reason": "not_found",
@@ -12669,6 +12609,19 @@
       ]
     },
     {
+      "dest": "amiga/bios/KS ROM v1.0 (A1000)(NTSC).rom",
+      "sha1": "00c15406beb4b8ab1a16aa66c05860e1a7c1ad79",
+      "sha256": "f0ecb1b000bc0317c886e6d4d4b3665aac0a26c9388bb1874eff51c6470dc03f",
+      "size": 262144,
+      "repo_path": "bios/Commodore/Amiga/KS ROM v1.0 (A1000)(NTSC).rom",
+      "cores": [
+        "amiberry-8.2.2"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
       "dest": "amiga/bios/KS ROM v1.1 (A1000)(NTSC).rom",
       "sha1": "4192c505d130f446b2ada6bdc91dae730acafb4c",
       "sha256": "879a7b2dc9735fd628dc0c52e8d97fb30713fa52a6d90856113610c2ea936e14",
@@ -12708,11 +12661,50 @@
       ]
     },
     {
+      "dest": "amiga/bios/KS ROM v1.3 (A3000)(SK).rom",
+      "sha1": "c39bd9094d4e5f4e28c1411f3086950406062e87",
+      "sha256": "fafb349f6137eaac97aa54cef2251247d1770b8da90b41266682cf6a82fbe3ec",
+      "size": 262144,
+      "repo_path": "bios/Commodore/Amiga/KS ROM v1.3 (A3000)(SK).rom",
+      "cores": [
+        "amiberry-8.2.2"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "amiga/bios/KS ROM v1.4 (A3000).rom",
+      "sha1": "f76316bf36dff14b20fa349ed02e4b11dd932b07",
+      "sha256": "08d564e782972b59e16db013049117f9c73a650d946a52d2abe736f27e4713d7",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/KS ROM v1.4 (A3000).rom",
+      "cores": [
+        "amiberry-8.2.2"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
       "dest": "amiga/bios/amiga-os-205-a600.rom",
       "sha1": "02843c4253bbd29aba535b0aa3bd9a85034ecde4",
       "sha256": "8d57d6e9d976df42d91ff9d10a5eedaede1a00e3b4b34cad750ca5ff7229f28a",
       "size": 524288,
       "repo_path": "bios/Commodore/Amiga/amiga-os-205-a600.rom",
+      "cores": [
+        "amiberry-8.2.2"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "amiga/bios/KS ROM v2.04 (A3000).rom",
+      "sha1": "d82ebb59afc53540ddf2d7187ecf239b7ea91590",
+      "sha256": "563f948af19c09daed1f06b8760221ff4b2789c1690cdcfbce2c941157af23d1",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/KS ROM v2.04 (A3000).rom",
       "cores": [
         "amiberry-8.2.2"
       ],
@@ -12765,6 +12757,19 @@
       "sha256": "e5f87ea8953d840db0e05d097362ad1be98a1bf3292cf7f359190af61556d036",
       "size": 524288,
       "repo_path": "bios/Commodore/Amiga/amiga-os-310-a4000t.rom",
+      "cores": [
+        "amiberry-8.2.2"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "amiga/bios/KS ROM v3.2 (Walker).rom",
+      "sha1": "7a9095f1107966f90267dc4cb3c1972efb4b78a8",
+      "sha256": "3913ea4124cc1d0b24bca3e9d7b6f8fd5935f41d8dcfb17781c1ca09424cf120",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/KS ROM v3.2 (Walker).rom",
       "cores": [
         "amiberry-8.2.2"
       ],
@@ -12896,6 +12901,19 @@
       "repo_path": "bios/Commodore/Amiga/expansion/cdtv-cr-extended-rom-v3.44.rom",
       "cores": [
         "amiberry-8.2.2"
+      ]
+    },
+    {
+      "dest": "amiga/bios/The Diagnostic 2.0 (Logica).rom",
+      "sha1": "ba10d16166b2e2d6177c979c99edf8462b21651e",
+      "sha256": "14f8f8e69e30c07c0ad780124f2d6404e423bf2759b93c4a8eaae7e799ab8e8c",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/The Diagnostic 2.0 (Logica).rom",
+      "cores": [
+        "amiberry-8.2.2"
+      ],
+      "systems": [
+        "commodore-amiga"
       ]
     },
     {

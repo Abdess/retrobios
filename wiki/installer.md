@@ -541,10 +541,10 @@ an emulator needs that is not available is said too.
 <!-- generated: run-default -->
 
 ```
-Installing 20841 files (10.9 GB) for Batocera.
+Installing 20847 files (11.0 GB) for Batocera.
 BIOS folder: /userdata/bios
 
-Done. 20841 files installed.
+Done. 20847 files installed.
 254 files an emulator needs are not available here (--verbose names them).
 Next: start Batocera and play.
 ```
@@ -590,13 +590,13 @@ few minutes on a memory card, because every file is hashed:
 ```
 Fetching file index for batocera...
   23 files read from Batocera's save directory go to a folder per system under /userdata/saves
-  20841 files (11.0 GB)
-    5452 BIOS files (6.2 GB), 11561 game data files (4.7 GB) and 3828 data files (88.7 MB).
+  20847 files (11.0 GB)
+    5458 BIOS files (6.2 GB), 11561 game data files (4.7 GB) and 3828 data files (88.7 MB).
     Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
-  Not installable: 873 files, 254 of them required. Why: no system runs the core (83), not found (591), read outside the BIOS folder (199).
+  Not installable: 867 files, 254 of them required. Why: no system runs the core (83), not found (585), read outside the BIOS folder (199).
 
 Checking existing files...
-  0 in place, 20841 missing, 0 wrong copies
+  0 in place, 20847 missing, 0 wrong copies
 ```
 <!-- /generated: run-index -->
 
@@ -611,10 +611,10 @@ line per file, as the log of the run below:
 <!-- generated: run-download -->
 
 ```
-Downloading 17013 files (10.9 GB)...
+Downloading 17019 files (10.9 GB)...
   Press Ctrl+C to stop. Running the same command again carries on from here.
-  [1/17013] panafz1.bin ok
-  [2/17013] panafz10.bin ok
+  [1/17019] panafz1.bin ok
+  [2/17019] panafz10.bin ok
 ```
 <!-- /generated: run-download -->
 
@@ -626,10 +626,10 @@ command again picks up where it stopped.
 <!-- generated: run-end -->
 
 ```
-Done. 20841 files installed.
-  Installed: 5452 BIOS files, 11561 game data files and 3828 data files.
+Done. 20847 files installed.
+  Installed: 5458 BIOS files, 11561 game data files and 3828 data files.
 BIOS folder: /userdata/bios
-873 files were not installed: the collection does not hold them, or its copy fails their check.
+867 files were not installed: the collection does not hold them, or its copy fails their check.
   Needed to start an emulator (102 files):
     acclaim-zn1 (mame2010, mame2015): acpsx.zip
       https://abdess.github.io/retrobios/emulators/mame2010/
@@ -701,7 +701,7 @@ The same command with `--check` reads the folder and writes nothing:
 
 ```
 Checking existing files...
-  20841 in place, 0 missing, 0 wrong copies
+  20847 in place, 0 missing, 0 wrong copies
 
   Every file on the list is in place.
 ```

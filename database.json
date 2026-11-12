@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-12T11:40:11Z",
-  "total_files": 21939,
-  "total_size": 17343488647,
+  "generated_at": "2026-11-12T15:26:44Z",
+  "total_files": 21945,
+  "total_size": 17346110087,
   "bios_dir": "bios",
   "files": {
     "738c7f5fd0c8b57ee2e87ae7a97bf8e21a821d07": {
@@ -36662,6 +36662,77 @@
       "crc32": "fb92a773",
       "adler32": "3095f810"
     },
+    "00c15406beb4b8ab1a16aa66c05860e1a7c1ad79": {
+      "path": "bios/Commodore/Amiga/KS ROM v1.0 (A1000)(NTSC).rom",
+      "name": "KS ROM v1.0 (A1000)(NTSC).rom",
+      "size": 262144,
+      "sha1": "00c15406beb4b8ab1a16aa66c05860e1a7c1ad79",
+      "md5": "d8dbff05f1d39d5b687a5dacb76f8535",
+      "sha256": "f0ecb1b000bc0317c886e6d4d4b3665aac0a26c9388bb1874eff51c6470dc03f",
+      "crc32": "299790ff",
+      "adler32": "4c724d53",
+      "provenance": {
+        "tosec": {
+          "dat": "Commodore Amiga - Firmware",
+          "name": "Kickstart v1.0 r30 (1985-09)(Commodore)(A1000)(NTSC)[!].rom",
+          "description": "Kickstart v1.0 r30 (1985-09)(Commodore)(A1000)(NTSC)[!]"
+        }
+      }
+    },
+    "c39bd9094d4e5f4e28c1411f3086950406062e87": {
+      "path": "bios/Commodore/Amiga/KS ROM v1.3 (A3000)(SK).rom",
+      "name": "KS ROM v1.3 (A3000)(SK).rom",
+      "size": 262144,
+      "sha1": "c39bd9094d4e5f4e28c1411f3086950406062e87",
+      "md5": "0cbbaacbabcb4b5806438039acc0ff02",
+      "sha256": "fafb349f6137eaac97aa54cef2251247d1770b8da90b41266682cf6a82fbe3ec",
+      "crc32": "e0f37258",
+      "adler32": "e1d542ed",
+      "provenance": {
+        "tosec": {
+          "dat": "Commodore Amiga - Firmware",
+          "name": "Kickstart v1.3 r34.005 (1987-12)(Commodore)(A3000)[!].rom",
+          "description": "Kickstart v1.3 r34.005 (1987-12)(Commodore)(A3000)[!]"
+        }
+      }
+    },
+    "f76316bf36dff14b20fa349ed02e4b11dd932b07": {
+      "path": "bios/Commodore/Amiga/KS ROM v1.4 (A3000).rom",
+      "name": "KS ROM v1.4 (A3000).rom",
+      "size": 524288,
+      "sha1": "f76316bf36dff14b20fa349ed02e4b11dd932b07",
+      "md5": "7a220b3da82de67a31cf31e7dacba913",
+      "sha256": "08d564e782972b59e16db013049117f9c73a650d946a52d2abe736f27e4713d7",
+      "crc32": "bc0ec13f",
+      "adler32": "755b590e"
+    },
+    "d82ebb59afc53540ddf2d7187ecf239b7ea91590": {
+      "path": "bios/Commodore/Amiga/KS ROM v2.04 (A3000).rom",
+      "name": "KS ROM v2.04 (A3000).rom",
+      "size": 524288,
+      "sha1": "d82ebb59afc53540ddf2d7187ecf239b7ea91590",
+      "md5": "c5fd2322c53d25c0972e6fc54b705d17",
+      "sha256": "563f948af19c09daed1f06b8760221ff4b2789c1690cdcfbce2c941157af23d1",
+      "crc32": "234a7233",
+      "adler32": "b7feeea5",
+      "provenance": {
+        "tosec": {
+          "dat": "Commodore Amiga - Firmware",
+          "name": "Kickstart v2.04 r37.175 (1991-05)(Commodore)(A3000).rom",
+          "description": "Kickstart v2.04 r37.175 (1991-05)(Commodore)(A3000)"
+        }
+      }
+    },
+    "7a9095f1107966f90267dc4cb3c1972efb4b78a8": {
+      "path": "bios/Commodore/Amiga/KS ROM v3.2 (Walker).rom",
+      "name": "KS ROM v3.2 (Walker).rom",
+      "size": 524288,
+      "sha1": "7a9095f1107966f90267dc4cb3c1972efb4b78a8",
+      "md5": "c403a6e4322d976e499fabeadcfa5a4b",
+      "sha256": "3913ea4124cc1d0b24bca3e9d7b6f8fd5935f41d8dcfb17781c1ca09424cf120",
+      "crc32": "261339f8",
+      "adler32": "506f6b53"
+    },
     "6a7bfb5dbd6b8f179f03da84d8d9528267b6273b": {
       "path": "bios/Commodore/Amiga/Kickstart v1.2 rev 33.166 (1986)(Commodore)(A1000).rom",
       "name": "Kickstart v1.2 rev 33.166 (1986)(Commodore)(A1000).rom",
@@ -36700,6 +36771,16 @@
           "description": "Kickstart v1.3 r34.005 (1987-12)(Commodore)(A500-A1000-A2000-CDTV)[!]"
         }
       }
+    },
+    "ba10d16166b2e2d6177c979c99edf8462b21651e": {
+      "path": "bios/Commodore/Amiga/The Diagnostic 2.0 (Logica).rom",
+      "name": "The Diagnostic 2.0 (Logica).rom",
+      "size": 524288,
+      "sha1": "ba10d16166b2e2d6177c979c99edf8462b21651e",
+      "md5": "e462d59d551d36e800c1b6fe3ee8223c",
+      "sha256": "14f8f8e69e30c07c0ad780124f2d6404e423bf2759b93c4a8eaae7e799ab8e8c",
+      "crc32": "8484f426",
+      "adler32": "322dd7ed"
     },
     "455aa8688747daaa7e64122ba6871eaf51566727": {
       "path": "bios/Commodore/Amiga/WHDLoad.prefs",
@@ -228377,8 +228458,14 @@
       "49fcec5e46d21b935059abde97d4e286": "83b21d0c8b93fc9b9b3b287fde4ec8f3badac5a2",
       "cc609f0d1c905b6e4d1054bb5a7be1ec": "301ec6a69404457d912c89e3fc54095eda9f0e93",
       "e6d8a5ae3763657147ede8a8d429767b": "e787dc05de227f30a47ac5b9ee7a355c2e9e693b",
+      "d8dbff05f1d39d5b687a5dacb76f8535": "00c15406beb4b8ab1a16aa66c05860e1a7c1ad79",
+      "0cbbaacbabcb4b5806438039acc0ff02": "c39bd9094d4e5f4e28c1411f3086950406062e87",
+      "7a220b3da82de67a31cf31e7dacba913": "f76316bf36dff14b20fa349ed02e4b11dd932b07",
+      "c5fd2322c53d25c0972e6fc54b705d17": "d82ebb59afc53540ddf2d7187ecf239b7ea91590",
+      "c403a6e4322d976e499fabeadcfa5a4b": "7a9095f1107966f90267dc4cb3c1972efb4b78a8",
       "68c9c0826f6c0ca20546d588ee77391c": "6a7bfb5dbd6b8f179f03da84d8d9528267b6273b",
       "82a21c1890cae844b3df741f2762d48d": "891e9a547772fe0c6c19b610baf8bc4ea7fcb785",
+      "e462d59d551d36e800c1b6fe3ee8223c": "ba10d16166b2e2d6177c979c99edf8462b21651e",
       "4df7c6a10c6b4ab21898756dfc3b3677": "455aa8688747daaa7e64122ba6871eaf51566727",
       "3dbbbbac1edef40e040309f229c033ed": "5a9d9c387162e280512f5ebd169c01125c8dda4b",
       "89da1838a24460e4b93f4f0c5d92d48d": "7ba40ffa17e500ed9fed041f3424bd81d9c907be",
@@ -257455,11 +257542,29 @@
       "D8039HLC.rom": [
         "e787dc05de227f30a47ac5b9ee7a355c2e9e693b"
       ],
+      "KS ROM v1.0 (A1000)(NTSC).rom": [
+        "00c15406beb4b8ab1a16aa66c05860e1a7c1ad79"
+      ],
+      "KS ROM v1.3 (A3000)(SK).rom": [
+        "c39bd9094d4e5f4e28c1411f3086950406062e87"
+      ],
+      "KS ROM v1.4 (A3000).rom": [
+        "f76316bf36dff14b20fa349ed02e4b11dd932b07"
+      ],
+      "KS ROM v2.04 (A3000).rom": [
+        "d82ebb59afc53540ddf2d7187ecf239b7ea91590"
+      ],
+      "KS ROM v3.2 (Walker).rom": [
+        "7a9095f1107966f90267dc4cb3c1972efb4b78a8"
+      ],
       "Kickstart v1.2 rev 33.166 (1986)(Commodore)(A1000).rom": [
         "6a7bfb5dbd6b8f179f03da84d8d9528267b6273b"
       ],
       "Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom": [
         "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
+      ],
+      "The Diagnostic 2.0 (Logica).rom": [
+        "ba10d16166b2e2d6177c979c99edf8462b21651e"
       ],
       "WHDLoad.prefs": [
         "455aa8688747daaa7e64122ba6871eaf51566727"
@@ -312265,8 +312370,14 @@
       "4a3fc332": "83b21d0c8b93fc9b9b3b287fde4ec8f3badac5a2",
       "2a77eec4": "301ec6a69404457d912c89e3fc54095eda9f0e93",
       "fb92a773": "e787dc05de227f30a47ac5b9ee7a355c2e9e693b",
+      "299790ff": "00c15406beb4b8ab1a16aa66c05860e1a7c1ad79",
+      "e0f37258": "c39bd9094d4e5f4e28c1411f3086950406062e87",
+      "bc0ec13f": "f76316bf36dff14b20fa349ed02e4b11dd932b07",
+      "234a7233": "d82ebb59afc53540ddf2d7187ecf239b7ea91590",
+      "261339f8": "7a9095f1107966f90267dc4cb3c1972efb4b78a8",
       "9ed783d0": "6a7bfb5dbd6b8f179f03da84d8d9528267b6273b",
       "c4f0f55f": "891e9a547772fe0c6c19b610baf8bc4ea7fcb785",
+      "8484f426": "ba10d16166b2e2d6177c979c99edf8462b21651e",
       "bfa2be8c": "455aa8688747daaa7e64122ba6871eaf51566727",
       "413acfc9": "5a9d9c387162e280512f5ebd169c01125c8dda4b",
       "42baa124": "7ba40ffa17e500ed9fed041f3424bd81d9c907be",
@@ -334205,8 +334316,14 @@
       "5616a4105d5bd4c2a566b474203fd624ac1a3c454e4c900c7ef2f97c83464418": "83b21d0c8b93fc9b9b3b287fde4ec8f3badac5a2",
       "61f4381ebe81b7fcaf71d79db2d834419f165e3c3b818131ae6d778a485b93ce": "301ec6a69404457d912c89e3fc54095eda9f0e93",
       "920a252af58081bfcbc7f052b933319a39cdc86dab83bfc6225bf6694d6fb34f": "e787dc05de227f30a47ac5b9ee7a355c2e9e693b",
+      "f0ecb1b000bc0317c886e6d4d4b3665aac0a26c9388bb1874eff51c6470dc03f": "00c15406beb4b8ab1a16aa66c05860e1a7c1ad79",
+      "fafb349f6137eaac97aa54cef2251247d1770b8da90b41266682cf6a82fbe3ec": "c39bd9094d4e5f4e28c1411f3086950406062e87",
+      "08d564e782972b59e16db013049117f9c73a650d946a52d2abe736f27e4713d7": "f76316bf36dff14b20fa349ed02e4b11dd932b07",
+      "563f948af19c09daed1f06b8760221ff4b2789c1690cdcfbce2c941157af23d1": "d82ebb59afc53540ddf2d7187ecf239b7ea91590",
+      "3913ea4124cc1d0b24bca3e9d7b6f8fd5935f41d8dcfb17781c1ca09424cf120": "7a9095f1107966f90267dc4cb3c1972efb4b78a8",
       "86a0de3a6e390fe0804e8d8e3d39091552f3f5020d8bd4989a77bb996bbc50b7": "6a7bfb5dbd6b8f179f03da84d8d9528267b6273b",
       "ee05862d8102a08436ac4056da7d549db31625c7d47b24dfb7b3c9a5c113ca53": "891e9a547772fe0c6c19b610baf8bc4ea7fcb785",
+      "14f8f8e69e30c07c0ad780124f2d6404e423bf2759b93c4a8eaae7e799ab8e8c": "ba10d16166b2e2d6177c979c99edf8462b21651e",
       "8b4b332c97dab28fb751ef79529d2472119b223d6885f8a885c42cdc84e88400": "455aa8688747daaa7e64122ba6871eaf51566727",
       "6b5c79789f9af9f1044320ace0bdc7878b405763f21c188dcb4ad99adf254fd2": "5a9d9c387162e280512f5ebd169c01125c8dda4b",
       "6e48bb768539e8dae352553e5fdfa860682edaf9e26b105fadd8e26103171765": "7ba40ffa17e500ed9fed041f3424bd81d9c907be",
@@ -381343,6 +381460,36 @@
       "Amiga/D8039HLC.rom": [
         "e787dc05de227f30a47ac5b9ee7a355c2e9e693b"
       ],
+      "Commodore/Amiga/KS ROM v1.0 (A1000)(NTSC).rom": [
+        "00c15406beb4b8ab1a16aa66c05860e1a7c1ad79"
+      ],
+      "Amiga/KS ROM v1.0 (A1000)(NTSC).rom": [
+        "00c15406beb4b8ab1a16aa66c05860e1a7c1ad79"
+      ],
+      "Commodore/Amiga/KS ROM v1.3 (A3000)(SK).rom": [
+        "c39bd9094d4e5f4e28c1411f3086950406062e87"
+      ],
+      "Amiga/KS ROM v1.3 (A3000)(SK).rom": [
+        "c39bd9094d4e5f4e28c1411f3086950406062e87"
+      ],
+      "Commodore/Amiga/KS ROM v1.4 (A3000).rom": [
+        "f76316bf36dff14b20fa349ed02e4b11dd932b07"
+      ],
+      "Amiga/KS ROM v1.4 (A3000).rom": [
+        "f76316bf36dff14b20fa349ed02e4b11dd932b07"
+      ],
+      "Commodore/Amiga/KS ROM v2.04 (A3000).rom": [
+        "d82ebb59afc53540ddf2d7187ecf239b7ea91590"
+      ],
+      "Amiga/KS ROM v2.04 (A3000).rom": [
+        "d82ebb59afc53540ddf2d7187ecf239b7ea91590"
+      ],
+      "Commodore/Amiga/KS ROM v3.2 (Walker).rom": [
+        "7a9095f1107966f90267dc4cb3c1972efb4b78a8"
+      ],
+      "Amiga/KS ROM v3.2 (Walker).rom": [
+        "7a9095f1107966f90267dc4cb3c1972efb4b78a8"
+      ],
       "Commodore/Amiga/Kickstart v1.2 rev 33.166 (1986)(Commodore)(A1000).rom": [
         "6a7bfb5dbd6b8f179f03da84d8d9528267b6273b"
       ],
@@ -381354,6 +381501,12 @@
       ],
       "Amiga/Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom": [
         "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
+      ],
+      "Commodore/Amiga/The Diagnostic 2.0 (Logica).rom": [
+        "ba10d16166b2e2d6177c979c99edf8462b21651e"
+      ],
+      "Amiga/The Diagnostic 2.0 (Logica).rom": [
+        "ba10d16166b2e2d6177c979c99edf8462b21651e"
       ],
       "Commodore/Amiga/WHDLoad.prefs": [
         "455aa8688747daaa7e64122ba6871eaf51566727"

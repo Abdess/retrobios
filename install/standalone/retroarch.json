@@ -62,6 +62,16 @@
           "amiberry"
         ]
       },
+      {
+        "dest": "KS ROM v1.0 (A1000)(NTSC).rom",
+        "sha1": "00c15406beb4b8ab1a16aa66c05860e1a7c1ad79",
+        "sha256": "f0ecb1b000bc0317c886e6d4d4b3665aac0a26c9388bb1874eff51c6470dc03f",
+        "size": 262144,
+        "repo_path": "bios/Commodore/Amiga/KS ROM v1.0 (A1000)(NTSC).rom",
+        "cores": [
+          "amiberry"
+        ]
+      },
       [
         "KS ROM v1.1 (A1000)(NTSC).rom",
         "4192c505d130f446b2ada6bdc91dae730acafb4c"
@@ -88,6 +98,26 @@
         "amiga-os-130.rom",
         "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
       ],
+      {
+        "dest": "KS ROM v1.3 (A3000)(SK).rom",
+        "sha1": "c39bd9094d4e5f4e28c1411f3086950406062e87",
+        "sha256": "fafb349f6137eaac97aa54cef2251247d1770b8da90b41266682cf6a82fbe3ec",
+        "size": 262144,
+        "repo_path": "bios/Commodore/Amiga/KS ROM v1.3 (A3000)(SK).rom",
+        "cores": [
+          "amiberry"
+        ]
+      },
+      {
+        "dest": "KS ROM v1.4 (A3000).rom",
+        "sha1": "f76316bf36dff14b20fa349ed02e4b11dd932b07",
+        "sha256": "08d564e782972b59e16db013049117f9c73a650d946a52d2abe736f27e4713d7",
+        "size": 524288,
+        "repo_path": "bios/Commodore/Amiga/KS ROM v1.4 (A3000).rom",
+        "cores": [
+          "amiberry"
+        ]
+      },
       [
         "amiga-os-204.rom",
         "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
@@ -96,6 +126,16 @@
         "amiga-os-205-a600.rom",
         "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
       ],
+      {
+        "dest": "KS ROM v2.04 (A3000).rom",
+        "sha1": "d82ebb59afc53540ddf2d7187ecf239b7ea91590",
+        "sha256": "563f948af19c09daed1f06b8760221ff4b2789c1690cdcfbce2c941157af23d1",
+        "size": 524288,
+        "repo_path": "bios/Commodore/Amiga/KS ROM v2.04 (A3000).rom",
+        "cores": [
+          "amiberry"
+        ]
+      },
       [
         "amiga-os-300-a1200.rom",
         "70033828182fffc7ed106e5373a8b89dda76faa5"
@@ -126,6 +166,26 @@
         "sha256": "e5f87ea8953d840db0e05d097362ad1be98a1bf3292cf7f359190af61556d036",
         "size": 524288,
         "repo_path": "bios/Commodore/Amiga/amiga-os-310-a4000t.rom",
+        "cores": [
+          "amiberry"
+        ]
+      },
+      {
+        "dest": "KS ROM v3.2 (Walker).rom",
+        "sha1": "7a9095f1107966f90267dc4cb3c1972efb4b78a8",
+        "sha256": "3913ea4124cc1d0b24bca3e9d7b6f8fd5935f41d8dcfb17781c1ca09424cf120",
+        "size": 524288,
+        "repo_path": "bios/Commodore/Amiga/KS ROM v3.2 (Walker).rom",
+        "cores": [
+          "amiberry"
+        ]
+      },
+      {
+        "dest": "The Diagnostic 2.0 (Logica).rom",
+        "sha1": "ba10d16166b2e2d6177c979c99edf8462b21651e",
+        "sha256": "14f8f8e69e30c07c0ad780124f2d6404e423bf2759b93c4a8eaae7e799ab8e8c",
+        "size": 524288,
+        "repo_path": "bios/Commodore/Amiga/The Diagnostic 2.0 (Logica).rom",
         "cores": [
           "amiberry"
         ]
