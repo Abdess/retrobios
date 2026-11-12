@@ -419,8 +419,8 @@ release assets, since a lighter pack means a core that fails with no message.
 The release notes are written by `release_notes.py`: the install commands,
 the pack table and its parts sentence come from `release.json`, then what
 changed since the previous tag and the contributors of the closed issues,
-written by hand. A pack has two sizes and they are far apart: in v2026.10.10,
-Batocera downloaded as 5.2 GB and extracted to 7.5 GB. Step 4 prints both, and whichever
+written by hand. A pack has two sizes and they are far apart: in v2026.11.11,
+Batocera downloaded as 7.6 GB and extracted to 10.9 GB. Step 4 prints both, and whichever
 one the table carries, the header names it. Someone sizing a USB drive is
 reading that column. The README table is the extracted size of the released
 pack, from `release.json`. `SHA256SUMS.txt` lists the checksums of the files
