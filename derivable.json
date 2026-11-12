@@ -30,6 +30,12 @@
     ],
     "transform": "mirrored twice"
   },
+  "099e9e10dace735ef5aa87bc006f258e3ce9addd": {
+    "from": [
+      "bios/Commodore/Amiga/KS ROM v1.3 (A3000)(SK).rom"
+    ],
+    "transform": "mirrored twice"
+  },
   "0a2f67455166f8dac101f8f8564a1c0364cb456a": {
     "from": [
       "bios/Commodore/C128/vice/C128/kernalfr"
@@ -190,6 +196,12 @@
     ],
     "transform": "concatenated"
   },
+  "48f14b31279da6757848df6feb5318818f8f576c": {
+    "from": [
+      "bios/Commodore/Amiga/KS ROM v2.04 (A3000).rom"
+    ],
+    "transform": "odd words, byte-swapped"
+  },
   "4b0a38b5af525aa598907683f0dcfeaa90d242e0": {
     "from": [
       "bios/Arcade/Arcade/channelf.zip/sl31253.rom",
@@ -266,6 +278,12 @@
     ],
     "transform": "concatenated"
   },
+  "83bab8e95d378b55b0c6ae6561385a96f638598f": {
+    "from": [
+      "bios/Commodore/Amiga/KS ROM v2.04 (A3000).rom"
+    ],
+    "transform": "even words, byte-swapped"
+  },
   "89639e3dbf517eeac7b307ba59df708c99728e66": {
     "from": [
       "bios/Commodore/PET/vice/PET/basic-2.901465-01-02.bin"
@@ -327,11 +345,23 @@
     ],
     "transform": "second half"
   },
+  "c05c9c52d014c66f9019152b3f2a2adc2c678794": {
+    "from": [
+      "bios/Commodore/Amiga/KS ROM v1.4 (A3000).rom"
+    ],
+    "transform": "odd words, byte-swapped"
+  },
   "cd7a706c431b04d87814d3a2d8b397100cf44c0c": {
     "from": [
       "bios/Commodore/Amiga/amiga-os-310-a4000t.rom"
     ],
     "transform": "odd words, byte-swapped"
+  },
+  "d1713d7f31474a5948e6d488e33686061cf3d1e2": {
+    "from": [
+      "bios/Commodore/Amiga/KS ROM v1.4 (A3000).rom"
+    ],
+    "transform": "even words, byte-swapped"
   },
   "d234a031caf59a0f66871f2babe1644783e66cf7": {
     "from": [
