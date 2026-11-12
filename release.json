@@ -1,25 +1,26 @@
 {
   "schema_version": 1,
-  "tag": "v2026.11.10",
+  "tag": "v2026.11.11",
   "packs": {
     "Batocera_43.1_BIOS_Pack.zip": {
-      "files": 19125,
-      "extracted_size": 10792595135,
-      "download_size": 7364979492,
+      "files": 20717,
+      "extracted_size": 11718549509,
+      "download_size": 8127352876,
       "assets": [
-        "Batocera_43.1_BIOS_Pack.part1of4.zip",
-        "Batocera_43.1_BIOS_Pack.part2of4.zip",
-        "Batocera_43.1_BIOS_Pack.part3of4.zip",
-        "Batocera_43.1_BIOS_Pack.part4of4.zip"
+        "Batocera_43.1_BIOS_Pack.part1of5.zip",
+        "Batocera_43.1_BIOS_Pack.part2of5.zip",
+        "Batocera_43.1_BIOS_Pack.part3of5.zip",
+        "Batocera_43.1_BIOS_Pack.part4of5.zip",
+        "Batocera_43.1_BIOS_Pack.part5of5.zip"
       ],
       "platforms": [
         "batocera"
       ]
     },
     "EmuDeck_2.7EA_BIOS_Pack.zip": {
-      "files": 14651,
-      "extracted_size": 8555799930,
-      "download_size": 5344993664,
+      "files": 16038,
+      "extracted_size": 8713666159,
+      "download_size": 5638755492,
       "assets": [
         "EmuDeck_2.7EA_BIOS_Pack.part1of3.zip",
         "EmuDeck_2.7EA_BIOS_Pack.part2of3.zip",
@@ -41,9 +42,9 @@
       ]
     },
     "RetroArch_v1.22.2_BIOS_Pack.zip": {
-      "files": 15005,
-      "extracted_size": 8201385955,
-      "download_size": 5073855389,
+      "files": 14989,
+      "extracted_size": 8031879733,
+      "download_size": 5040774606,
       "assets": [
         "RetroArch_v1.22.2_BIOS_Pack.part1of3.zip",
         "RetroArch_v1.22.2_BIOS_Pack.part2of3.zip",
@@ -54,13 +55,14 @@
       ]
     },
     "RetroBat_8.3.1_BIOS_Pack.zip": {
-      "files": 8882,
-      "extracted_size": 8837711598,
-      "download_size": 5814138531,
+      "files": 11209,
+      "extracted_size": 9603031964,
+      "download_size": 6361188449,
       "assets": [
-        "RetroBat_8.3.1_BIOS_Pack.part1of3.zip",
-        "RetroBat_8.3.1_BIOS_Pack.part2of3.zip",
-        "RetroBat_8.3.1_BIOS_Pack.part3of3.zip"
+        "RetroBat_8.3.1_BIOS_Pack.part1of4.zip",
+        "RetroBat_8.3.1_BIOS_Pack.part2of4.zip",
+        "RetroBat_8.3.1_BIOS_Pack.part3of4.zip",
+        "RetroBat_8.3.1_BIOS_Pack.part4of4.zip"
       ],
       "platforms": [
         "retrobat"
@@ -68,8 +70,8 @@
     },
     "RomM_5.4.1_BIOS_Pack.zip": {
       "files": 468,
-      "extracted_size": 871160574,
-      "download_size": 468629106,
+      "extracted_size": 871160914,
+      "download_size": 468629159,
       "assets": [
         "RomM_5.4.1_BIOS_Pack.zip"
       ],
