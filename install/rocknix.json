@@ -3,6 +3,7 @@
   "source": "full",
   "regions": [],
   "categorized": true,
+  "slot_fields": true,
   "platform": "rocknix",
   "display_name": "ROCKNIX",
   "version": "20261101",
@@ -1974,7 +1975,8 @@
       "cores": null,
       "systems": [
         "microsoft-xbox"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "xemu/bios/Complex_4627v1.03.bin",
@@ -1985,7 +1987,8 @@
       "cores": null,
       "systems": [
         "microsoft-xbox"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "firmware.bin",
@@ -2010,7 +2013,8 @@
             "melonds_ds"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "bios7.bin",
@@ -2084,7 +2088,8 @@
             "melonds_ds"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "dsi_bios9.bin",
@@ -2108,7 +2113,8 @@
             "melonds_ds"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "dsi_firmware.bin",
@@ -2160,7 +2166,8 @@
           "storage": "release",
           "release_asset": "dsi_nand.bin"
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "GC/EUR/IPL.bin",
@@ -2224,7 +2231,8 @@
             "dolphin"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "GC/USA/IPL.bin",
@@ -2366,7 +2374,8 @@
       "cores": null,
       "systems": [
         "sega-dreamcast"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "dc/naomi_boot.bin",
@@ -2377,7 +2386,8 @@
       "cores": null,
       "systems": [
         "sega-dreamcast"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "bios.gg",
@@ -2437,6 +2447,46 @@
       "systems": [
         "sega-mega-cd"
       ],
+      "slot": {
+        "groups": [
+          "sega-mega-cd",
+          "sega-mega-cd"
+        ],
+        "keys": [
+          {
+            "genesis_plus_gx": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ]
+            },
+            "genesis_plus_gx_wide": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ]
+            },
+            "picodrive": {
+              "ranks": [
+                7
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "mega-cd-eu"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -2471,6 +2521,46 @@
       "systems": [
         "sega-mega-cd"
       ],
+      "slot": {
+        "groups": [
+          "sega-mega-cd",
+          "sega-mega-cd"
+        ],
+        "keys": [
+          {
+            "genesis_plus_gx": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ]
+            },
+            "genesis_plus_gx_wide": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ]
+            },
+            "picodrive": {
+              "ranks": [
+                7
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "mega-cd-us"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -2505,6 +2595,43 @@
       "systems": [
         "sega-mega-cd"
       ],
+      "slot": {
+        "groups": [
+          "sega-mega-cd",
+          "sega-mega-cd"
+        ],
+        "keys": [
+          {
+            "genesis_plus_gx": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "japan"
+              ]
+            },
+            "genesis_plus_gx_wide": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "japan"
+              ]
+            },
+            "picodrive": {
+              "ranks": [
+                7
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "mega-cd-jp"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -2538,6 +2665,63 @@
       "systems": [
         "sega-saturn"
       ],
+      "slot": {
+        "groups": [
+          "sega-saturn",
+          "sega-saturn"
+        ],
+        "keys": [
+          {
+            "beetle_saturn": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "asia-ntsc",
+                "japan"
+              ]
+            },
+            "kronos": {
+              "ranks": [
+                3
+              ],
+              "sets": [
+                "saturn-bios"
+              ]
+            },
+            "mednafen": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "asia-ntsc",
+                "japan"
+              ]
+            },
+            "yabadabadoo": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "asia-ntsc",
+                "japan",
+                "south-korea"
+              ],
+              "sets": [
+                "saturn-bios"
+              ]
+            },
+            "yabasanshiro": {
+              "ranks": [
+                2
+              ],
+              "sets": [
+                "saturn-bios"
+              ]
+            }
+          }
+        ]
+      },
       "alternatives": [
         {
           "sha1": "df94c5b4d47eb3cc404d88b33a8fda237eaf4720",
@@ -2564,6 +2748,76 @@
       "systems": [
         "sega-saturn"
       ],
+      "slot": {
+        "groups": [
+          "sega-saturn",
+          "sega-saturn"
+        ],
+        "keys": [
+          {
+            "beetle_saturn": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "asia-pal",
+                "brazil",
+                "europe",
+                "latin-america",
+                "north-america",
+                "oceania",
+                "south-korea"
+              ]
+            },
+            "kronos": {
+              "ranks": [
+                4
+              ],
+              "sets": [
+                "saturn-bios"
+              ]
+            },
+            "mednafen": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "asia-pal",
+                "brazil",
+                "europe",
+                "latin-america",
+                "north-america",
+                "oceania",
+                "south-korea"
+              ]
+            },
+            "yabadabadoo": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "asia-pal",
+                "brazil",
+                "europe",
+                "latin-america",
+                "north-america",
+                "oceania"
+              ],
+              "sets": [
+                "saturn-bios"
+              ]
+            },
+            "yabasanshiro": {
+              "ranks": [
+                3
+              ],
+              "sets": [
+                "saturn-bios"
+              ]
+            }
+          }
+        ]
+      },
       "alternatives": [
         {
           "sha1": "faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3",
@@ -2590,6 +2844,31 @@
       "systems": [
         "sega-saturn"
       ],
+      "slot": {
+        "groups": [
+          "sega-saturn",
+          "sega-saturn"
+        ],
+        "keys": [
+          {
+            "beetle_saturn": {
+              "ranks": [
+                null
+              ]
+            },
+            "kronos": {
+              "ranks": [
+                null
+              ]
+            },
+            "mednafen": {
+              "ranks": [
+                null
+              ]
+            }
+          }
+        ]
+      },
       "alternatives": [
         {
           "sha1": "a67cd4f550751f8b91de2b8b74528ab4e0c11c77",
@@ -2614,6 +2893,31 @@
       "systems": [
         "sega-saturn"
       ],
+      "slot": {
+        "groups": [
+          "sega-saturn",
+          "sega-saturn"
+        ],
+        "keys": [
+          {
+            "beetle_saturn": {
+              "ranks": [
+                null
+              ]
+            },
+            "kronos": {
+              "ranks": [
+                null
+              ]
+            },
+            "mednafen": {
+              "ranks": [
+                null
+              ]
+            }
+          }
+        ]
+      },
       "alternatives": [
         {
           "sha1": "56c1b93da6b660bf393fbf48ca47569000ef4047",
@@ -2638,6 +2942,41 @@
       "systems": [
         "sega-saturn"
       ],
+      "slot": {
+        "groups": [
+          "sega-saturn",
+          "sega-saturn"
+        ],
+        "keys": [
+          {
+            "kronos": {
+              "ranks": [
+                1,
+                2
+              ],
+              "sets": [
+                "saturn-bios"
+              ]
+            },
+            "yabadabadoo": {
+              "ranks": [
+                null
+              ],
+              "sets": [
+                "saturn-bios"
+              ]
+            },
+            "yabasanshiro": {
+              "ranks": [
+                1
+              ],
+              "sets": [
+                "saturn-bios"
+              ]
+            }
+          }
+        ]
+      },
       "alternatives": [
         {
           "sha1": "2b8cb4f87580683eb4d760e4ed210813d667f0a2",
@@ -2662,6 +3001,37 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation",
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "beetle_psx": {
+              "ranks": [
+                null
+              ]
+            },
+            "pcsx_rearmed": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "japan"
+              ]
+            },
+            "swanstation": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "world"
+              ]
+            }
+          }
+        ]
+      },
       "alternatives": [
         {
           "sha1": "96880d1ca92a016ff054be5159bb06fe03cb4e14",
@@ -2686,6 +3056,25 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation",
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "pcsx_rearmed": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -2718,6 +3107,37 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation",
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                10
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            },
+            "pcsx_rearmed": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -2739,7 +3159,8 @@
             "pcsx_rearmed"
           ]
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "scph5500.bin",
@@ -2751,6 +3172,67 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation",
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "ares": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "japan"
+              ]
+            },
+            "beetle_psx": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "japan"
+              ]
+            },
+            "duckstation": {
+              "ranks": [
+                5
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            },
+            "mednafen": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "japan"
+              ]
+            },
+            "pcsx_rearmed": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "japan"
+              ]
+            },
+            "swanstation": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "japan"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -2787,6 +3269,73 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation",
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "ares": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ]
+            },
+            "beetle_psx": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ]
+            },
+            "duckstation": {
+              "ranks": [
+                5
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            },
+            "mednafen": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ]
+            },
+            "pcsx_rearmed": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ]
+            },
+            "swanstation": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -2824,6 +3373,73 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation",
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "ares": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ]
+            },
+            "beetle_psx": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ]
+            },
+            "duckstation": {
+              "ranks": [
+                5
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            },
+            "mednafen": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ]
+            },
+            "pcsx_rearmed": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ]
+            },
+            "swanstation": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -2861,6 +3477,37 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation",
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                10
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            },
+            "pcsx_rearmed": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -2893,7 +3540,8 @@
       "cores": null,
       "systems": [
         "sony-playstation-2"
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "armsx2/ps2-0230a-20080220.bin",
@@ -2941,7 +3589,8 @@
           "storage": "release",
           "release_asset": "PS3UPDAT.PUP"
         }
-      ]
+      ],
+      "truth": false
     },
     {
       "dest": "5200.rom",
@@ -5031,6 +5680,36 @@
       "systems": [
         "sega-mega-cd"
       ],
+      "slot": {
+        "groups": [
+          "sega-mega-cd"
+        ],
+        "keys": [
+          {
+            "ares": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ]
+            },
+            "picodrive": {
+              "ranks": [
+                3
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "mega-cd-us"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -5052,6 +5731,34 @@
       "systems": [
         "sega-mega-cd"
       ],
+      "slot": {
+        "groups": [
+          "sega-mega-cd"
+        ],
+        "keys": [
+          {
+            "ares": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "japan"
+              ]
+            },
+            "picodrive": {
+              "ranks": [
+                1
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "mega-cd-jp"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -5072,6 +5779,36 @@
       "systems": [
         "sega-mega-cd"
       ],
+      "slot": {
+        "groups": [
+          "sega-mega-cd"
+        ],
+        "keys": [
+          {
+            "ares": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ]
+            },
+            "picodrive": {
+              "ranks": [
+                3
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "mega-cd-eu"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -5511,7 +6248,21 @@
       ],
       "systems": [
         "sony-playstation"
-      ]
+      ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "beetle_psx": {
+              "ranks": [
+                null
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "dest": "ps1_rom.bin",
@@ -5525,7 +6276,30 @@
       ],
       "systems": [
         "sony-playstation"
-      ]
+      ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "beetle_psx": {
+              "ranks": [
+                null
+              ]
+            },
+            "swanstation": {
+              "ranks": [
+                null,
+                null
+              ],
+              "regions": [
+                "world"
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "dest": "cx4.data.rom",
@@ -5684,6 +6458,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                50
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -5704,6 +6498,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                10
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -5725,6 +6540,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                10
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -5746,6 +6582,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                10
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -5767,6 +6624,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                20
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -5787,6 +6664,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                10
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -5807,6 +6704,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                10
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -5828,6 +6746,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                10
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -5848,6 +6786,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                10
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -5869,6 +6828,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                5
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -5889,6 +6868,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                10
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -5909,6 +6908,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                10
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -5929,6 +6948,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                10
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -5950,6 +6990,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                10
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -5970,6 +7030,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                10
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -5991,6 +7072,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                10
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -6012,6 +7114,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                20
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -6033,6 +7156,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                20
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -6054,6 +7198,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                10
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -6074,6 +7238,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -6094,6 +7278,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                150
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -6115,6 +7320,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "world"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "world"
       ],
@@ -6135,6 +7360,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "world"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "world"
       ],
@@ -6155,6 +7400,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "world"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "world"
       ],
@@ -6175,6 +7440,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "world"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "world"
       ],
@@ -6195,6 +7480,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "world"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "world"
       ],
@@ -6215,6 +7520,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -6236,6 +7562,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -6257,6 +7604,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -6278,6 +7646,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                150
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -6299,6 +7688,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                150
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -6320,6 +7730,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -6341,6 +7772,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -6361,6 +7812,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -6381,6 +7852,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -6402,6 +7894,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -6423,6 +7936,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                150
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -6444,6 +7978,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -6465,6 +8020,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -6485,6 +8060,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -6505,6 +8100,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -6526,6 +8142,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -6546,6 +8182,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -6567,6 +8224,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -6588,6 +8266,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -6609,6 +8308,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -6630,6 +8350,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -6650,6 +8390,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -6671,6 +8432,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -6692,6 +8474,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -6712,6 +8514,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                150
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -6733,6 +8556,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -6753,6 +8596,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -6773,6 +8636,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -6793,6 +8676,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                150
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -6814,6 +8718,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -6835,6 +8760,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -6856,6 +8802,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -6877,6 +8844,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -6897,6 +8884,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -6917,6 +8924,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -6937,6 +8964,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -6958,6 +9006,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -6979,6 +9048,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -7000,6 +9090,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -7020,6 +9130,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -7040,6 +9170,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                150
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -7061,6 +9212,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -7081,6 +9252,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -7101,6 +9292,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                150
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -7122,6 +9334,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -7143,6 +9376,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -7163,6 +9416,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -7184,6 +9458,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -7205,6 +9500,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                150
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -7226,6 +9542,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                150
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -7247,6 +9584,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -7267,6 +9624,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -7287,6 +9664,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -7307,6 +9704,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -7327,6 +9744,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -7348,6 +9786,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -7369,6 +9828,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -7390,6 +9870,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -7410,6 +9910,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -7430,6 +9950,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -7451,6 +9992,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -7472,6 +10034,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -7492,6 +10074,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -7512,6 +10114,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -7532,6 +10154,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -7553,6 +10196,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -7574,6 +10238,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -7595,6 +10280,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -7615,6 +10320,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -7635,6 +10360,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -7656,6 +10402,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -7677,6 +10444,26 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                100
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -7697,6 +10484,27 @@
       "systems": [
         "sony-playstation"
       ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                150
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -16731,6 +19539,24 @@
       "systems": [
         "sega-saturn"
       ],
+      "slot": {
+        "groups": [
+          "sega-saturn"
+        ],
+        "keys": [
+          {
+            "mednafen": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "asia-ntsc",
+                "japan"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "asia-ntsc",
         "japan"
@@ -16751,6 +19577,24 @@
       "systems": [
         "sega-saturn"
       ],
+      "slot": {
+        "groups": [
+          "sega-saturn"
+        ],
+        "keys": [
+          {
+            "mednafen": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "asia-ntsc",
+                "japan"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "asia-ntsc",
         "japan"
@@ -16771,6 +19615,29 @@
       "systems": [
         "sega-saturn"
       ],
+      "slot": {
+        "groups": [
+          "sega-saturn"
+        ],
+        "keys": [
+          {
+            "mednafen": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "asia-pal",
+                "brazil",
+                "europe",
+                "latin-america",
+                "north-america",
+                "oceania",
+                "south-korea"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "asia-pal",
         "brazil",
@@ -22373,7 +25240,21 @@
       ],
       "systems": [
         "sega-saturn"
-      ]
+      ],
+      "slot": {
+        "groups": [
+          "sega-saturn"
+        ],
+        "keys": [
+          {
+            "ares": {
+              "ranks": [
+                null
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "dest": "saturn_bios_J.bin",
@@ -22386,7 +25267,21 @@
       ],
       "systems": [
         "sega-saturn"
-      ]
+      ],
+      "slot": {
+        "groups": [
+          "sega-saturn"
+        ],
+        "keys": [
+          {
+            "ares": {
+              "ranks": [
+                null
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "dest": "saturn_bios_E.bin",
@@ -22399,7 +25294,21 @@
       ],
       "systems": [
         "sega-saturn"
-      ]
+      ],
+      "slot": {
+        "groups": [
+          "sega-saturn"
+        ],
+        "keys": [
+          {
+            "ares": {
+              "ranks": [
+                null
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "dest": "STBIOS.bin",
@@ -22517,7 +25426,40 @@
       ],
       "systems": [
         "sony-playstation"
-      ]
+      ],
+      "slot": {
+        "groups": [
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "beetle_psx": {
+              "ranks": [
+                null
+              ]
+            },
+            "duckstation": {
+              "ranks": [
+                200
+              ],
+              "regions": [
+                "world"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            },
+            "swanstation": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "world"
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "dest": "epr-20091.ic8",
@@ -22599,7 +25541,21 @@
       ],
       "systems": [
         "sega-saturn"
-      ]
+      ],
+      "slot": {
+        "groups": [
+          "sega-saturn"
+        ],
+        "keys": [
+          {
+            "beetle_saturn": {
+              "ranks": [
+                null
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "dest": "satar4mp.bin",
@@ -22613,7 +25569,26 @@
       ],
       "systems": [
         "sega-saturn"
-      ]
+      ],
+      "slot": {
+        "groups": [
+          "sega-saturn"
+        ],
+        "keys": [
+          {
+            "beetle_saturn": {
+              "ranks": [
+                null
+              ]
+            },
+            "mednafen": {
+              "ranks": [
+                null
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "dest": "[BIOS] Atari Jaguar (World).j64",
@@ -48850,7 +51825,33 @@
       ],
       "systems": [
         "sega-mega-cd"
-      ]
+      ],
+      "slot": {
+        "groups": [
+          "sega-mega-cd"
+        ],
+        "keys": [
+          {
+            "mednafen": {
+              "ranks": [
+                null
+              ]
+            },
+            "picodrive": {
+              "ranks": [
+                5
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "mega-cd-us"
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "dest": "dsi_sd_card.bin",
@@ -49399,6 +52400,27 @@
       "systems": [
         "sega-mega-cd"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                1
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "mega-cd-us"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -49420,6 +52442,27 @@
       "systems": [
         "sega-mega-cd"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                1
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "mega-cd-eu"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -49441,6 +52484,27 @@
       "systems": [
         "sega-mega-cd"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                5
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "mega-cd-eu"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -49462,6 +52526,26 @@
       "systems": [
         "sega-mega-cd"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                3
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "mega-cd-jp"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -49482,6 +52566,26 @@
       "systems": [
         "sega-mega-cd"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                5
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "mega-cd-jp"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -49816,7 +52920,24 @@
       "repo_path": "bios/Sharp/X68000/iplrom.dat",
       "cores": [
         "px68k"
-      ]
+      ],
+      "slot": {
+        "groups": [
+          "sharp-x68000"
+        ],
+        "keys": [
+          {
+            "px68k": {
+              "ranks": [
+                1
+              ],
+              "sets": [
+                "ipl"
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "dest": "keropi/iplrom30.dat",
@@ -49826,7 +52947,24 @@
       "repo_path": "bios/Sharp/X68000/iplrom30.dat",
       "cores": [
         "px68k"
-      ]
+      ],
+      "slot": {
+        "groups": [
+          "sharp-x68000"
+        ],
+        "keys": [
+          {
+            "px68k": {
+              "ranks": [
+                2
+              ],
+              "sets": [
+                "ipl"
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "dest": "keropi/iplromco.dat",
@@ -49836,7 +52974,24 @@
       "repo_path": "bios/Sharp/X68000/iplromco.dat",
       "cores": [
         "px68k"
-      ]
+      ],
+      "slot": {
+        "groups": [
+          "sharp-x68000"
+        ],
+        "keys": [
+          {
+            "px68k": {
+              "ranks": [
+                3
+              ],
+              "sets": [
+                "ipl"
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "dest": "keropi/iplromxv.dat",
@@ -49846,7 +53001,24 @@
       "repo_path": "bios/Sharp/X68000/iplromxv.dat",
       "cores": [
         "px68k"
-      ]
+      ],
+      "slot": {
+        "groups": [
+          "sharp-x68000"
+        ],
+        "keys": [
+          {
+            "px68k": {
+              "ranks": [
+                4
+              ],
+              "sets": [
+                "ipl"
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "dest": "keropi/cgrom.dat",
@@ -49856,7 +53028,24 @@
       "repo_path": "bios/Sharp/X68000/cgrom.dat",
       "cores": [
         "px68k"
-      ]
+      ],
+      "slot": {
+        "groups": [
+          "sharp-x68000"
+        ],
+        "keys": [
+          {
+            "px68k": {
+              "ranks": [
+                1
+              ],
+              "sets": [
+                "font"
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "dest": "quasi88/n88.rom",
@@ -51164,7 +54353,51 @@
       ],
       "systems": [
         "sega-saturn"
-      ]
+      ],
+      "slot": {
+        "groups": [
+          "sega-saturn"
+        ],
+        "keys": [
+          {
+            "kronos": {
+              "ranks": [
+                1
+              ],
+              "sets": [
+                "saturn-bios"
+              ]
+            }
+          },
+          {
+            "kronos": {
+              "ranks": [
+                1,
+                2
+              ],
+              "sets": [
+                "saturn-bios"
+              ]
+            },
+            "yabadabadoo": {
+              "ranks": [
+                null
+              ],
+              "sets": [
+                "saturn-bios"
+              ]
+            },
+            "yabasanshiro": {
+              "ranks": [
+                1
+              ],
+              "sets": [
+                "saturn-bios"
+              ]
+            }
+          }
+        ]
+      }
     },
     {
       "dest": "SkyEmu/gba_bios.bin",
@@ -76460,5 +79693,238 @@
   "roms_directory": {
     "bios_folder": "bios",
     "from_bios": ".."
-  }
+  },
+  "truth_files": [
+    {
+      "dest": "dsi_bios9.bin",
+      "sha1": "719b9eef33692406d7170ff526069615759c4dfc",
+      "sha256": "6e9f70b51dc4f26289b597f14e2513620c2af964374a95f4c5a62b5cad199afc",
+      "size": 65536,
+      "repo_path": "bios/Nintendo/Nintendo DSi/NDS_Bios9i.bin",
+      "cores": [
+        "melonds",
+        "melonds_ds",
+        "dsperate"
+      ],
+      "systems": [
+        "nintendo-ds"
+      ]
+    },
+    {
+      "dest": "dsi_bios7.bin",
+      "sha1": "c7c7570bfe51c3c7c5da3b01331b94e7e7cb4f53",
+      "sha256": "12a03016ba07cfd874fc002df49a2c6eb2414eb7cfa395c2043035ec5e9193e8",
+      "size": 65536,
+      "repo_path": "bios/Nintendo/Nintendo DSi/NDS_Bios7i.bin",
+      "cores": [
+        "melonds",
+        "melonds_ds",
+        "dsperate"
+      ],
+      "systems": [
+        "nintendo-ds"
+      ]
+    },
+    {
+      "dest": "scph1001.bin",
+      "sha1": "10155d8d6e6e832d6ea66db9bc098321fb5e8ebf",
+      "sha256": "71af94d1e47a68c11e8fdb9f8368040601514a42a5a399cda48c7d3bff1e99d3",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation/scph1001.bin",
+      "cores": [
+        "duckstation",
+        "pcsx_rearmed"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "slot": {
+        "groups": [
+          "sony-playstation",
+          "sony-playstation"
+        ],
+        "keys": [
+          {
+            "duckstation": {
+              "ranks": [
+                10
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "ps-bios"
+              ]
+            },
+            "pcsx_rearmed": {
+              "ranks": [
+                null
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ]
+            }
+          }
+        ]
+      },
+      "regions": [
+        "latin-america",
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
+      ],
+      "region_system_groups": [
+        "sony-playstation"
+      ]
+    },
+    {
+      "dest": "firmware.bin",
+      "sha1": "cfe072921ee3fb93f688743f8beef89043c3e9ad",
+      "sha256": "57a1d6b43c1399d219ea18644240c4d4c6787c829f0a67ded216472867857cd0",
+      "size": 262144,
+      "repo_path": "bios/Nintendo/Nintendo DS/firmware.bin",
+      "cores": [
+        "desmume",
+        "dsperate",
+        "melonds",
+        "melonds_ds"
+      ],
+      "systems": [
+        "nintendo-ds"
+      ]
+    },
+    {
+      "dest": "GC/JAP/IPL.bin",
+      "sha1": "a1837968288253ed541f2b11440b68f5a9b33875",
+      "sha256": "5b2f2617cc63f1861a1f4ae44bb135caf10e202b5b9b79271daaf60f8caaf37d",
+      "size": 2097152,
+      "repo_path": "bios/Nintendo/GameCube/GC/JAP/IPL.bin",
+      "cores": [
+        "dolphin"
+      ],
+      "systems": [
+        "nintendo-gamecube"
+      ],
+      "regions": [
+        "japan",
+        "south-korea"
+      ],
+      "region_groups": [
+        "nintendo-gamecube"
+      ],
+      "region_system_groups": [
+        "nintendo-gamecube"
+      ]
+    },
+    {
+      "dest": "dsi_nand.bin",
+      "sha1": "b48f44194fe918aaaec5298861479512b581d661",
+      "sha256": "f57d9bf00529bec35d58404faff029a193fd2ccda0a83403ec4e6cc32626721b",
+      "size": 251658304,
+      "repo_path": "bios/Nintendo/Nintendo DSi/dsi_nand.bin",
+      "cores": [
+        "dsperate",
+        "melonds_ds",
+        "melonds"
+      ],
+      "systems": [
+        "nintendo-ds"
+      ],
+      "storage": "release",
+      "release_asset": "dsi_nand.bin"
+    },
+    {
+      "dest": "PS3UPDAT.PUP",
+      "sha1": "093f8698b54b78dcb701de2043f82639de51d63b",
+      "sha256": "69070a95780f59fc9e0d82bcf53eb9b28fd4ed4a7d54d0a40045f80422fd98d6",
+      "size": 206126236,
+      "repo_path": "bios/Sony/PlayStation 3/PS3UPDAT.PUP",
+      "cores": [
+        "rpcs3"
+      ],
+      "systems": [
+        "sony-playstation-3"
+      ],
+      "storage": "release",
+      "release_asset": "PS3UPDAT.PUP"
+    },
+    {
+      "dest": "gba.zip",
+      "sha1": "ddb271d497462a6443bb88ca6520e0a6af693f18",
+      "sha256": "afe59ce12a3ec5182c3cd771ef667c9958587d66d0bcbd5d18483ceb18aebba0",
+      "size": 13624,
+      "repo_path": "bios/Arcade/Arcade/gba.zip",
+      "cores": [
+        "fbneo"
+      ],
+      "systems": [
+        "nintendo-gba"
+      ]
+    },
+    {
+      "dest": "fbneo/gba.zip",
+      "sha1": "ddb271d497462a6443bb88ca6520e0a6af693f18",
+      "sha256": "afe59ce12a3ec5182c3cd771ef667c9958587d66d0bcbd5d18483ceb18aebba0",
+      "size": 13624,
+      "repo_path": "bios/Arcade/Arcade/gba.zip",
+      "cores": [
+        "fbneo"
+      ],
+      "systems": [
+        "nintendo-gba"
+      ]
+    }
+  ],
+  "truth_omitted": [],
+  "standalone_builds": [
+    "81",
+    "amiberry-5.6.5",
+    "ares",
+    "armsx2",
+    "atari800",
+    "azahar",
+    "b2",
+    "bigpemu",
+    "bluemsx",
+    "cap32",
+    "cemu",
+    "daedalusx64",
+    "daphne",
+    "dolphin",
+    "dosbox_pure",
+    "drastic",
+    "dsperate",
+    "duckstation",
+    "easyrpg",
+    "ecwolf",
+    "flycast",
+    "gopher64",
+    "gzdoom",
+    "hatari",
+    "hypseus-singe",
+    "lexaloffle",
+    "mame",
+    "mednafen",
+    "melonds",
+    "mupen64plus",
+    "nanoboyadvance",
+    "openbor",
+    "ppsspp",
+    "rpcs3",
+    "scummvm-standalone",
+    "skyemu",
+    "smsplus",
+    "stella",
+    "supermodel",
+    "supermodel3",
+    "touchhle",
+    "vbam",
+    "vice-standalone",
+    "vita3k",
+    "xemu",
+    "yabasanshiro"
+  ]
 }

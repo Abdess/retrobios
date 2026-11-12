@@ -3,6 +3,7 @@
   "source": "full",
   "regions": [],
   "categorized": true,
+  "slot_fields": true,
   "platform": "minui",
   "display_name": "MinUI",
   "version": "2025-11-27",
@@ -424,6 +425,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                1
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "mega-cd-us"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -442,6 +464,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                3
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "mega-cd-us"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -460,6 +503,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                5
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "mega-cd-us"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -478,6 +542,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                7
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "mega-cd-us"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -496,6 +581,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                1
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "mega-cd-eu"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -514,6 +620,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                3
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "mega-cd-eu"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -532,6 +659,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                5
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "mega-cd-eu"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -550,6 +698,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                7
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "mega-cd-eu"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -568,6 +737,26 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                1
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "mega-cd-jp"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -585,6 +774,26 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                3
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "mega-cd-jp"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -602,6 +811,26 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                5
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "mega-cd-jp"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -619,6 +848,26 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                7
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "mega-cd-jp"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -676,6 +925,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                1
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "mega-cd-us"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -694,6 +964,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                3
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "mega-cd-us"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -712,6 +1003,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                5
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "mega-cd-us"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -730,6 +1042,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                7
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "mega-cd-us"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -748,6 +1081,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                1
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "mega-cd-eu"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -766,6 +1120,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                3
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "mega-cd-eu"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -784,6 +1159,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                5
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "mega-cd-eu"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -802,6 +1198,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                7
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "mega-cd-eu"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -820,6 +1237,26 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                1
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "mega-cd-jp"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -837,6 +1274,26 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                3
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "mega-cd-jp"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -854,6 +1311,26 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                5
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "mega-cd-jp"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -871,6 +1348,26 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                7
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "mega-cd-jp"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -928,6 +1425,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                1
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "mega-cd-us"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -946,6 +1464,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                3
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "mega-cd-us"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -964,6 +1503,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                5
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "mega-cd-us"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -982,6 +1542,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                7
+              ],
+              "regions": [
+                "latin-america",
+                "north-america"
+              ],
+              "sets": [
+                "mega-cd-us"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "latin-america",
         "north-america"
@@ -1000,6 +1581,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                1
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "mega-cd-eu"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -1018,6 +1620,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                3
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "mega-cd-eu"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -1036,6 +1659,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                5
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "mega-cd-eu"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -1054,6 +1698,27 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                7
+              ],
+              "regions": [
+                "europe",
+                "oceania"
+              ],
+              "sets": [
+                "mega-cd-eu"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "europe",
         "oceania"
@@ -1072,6 +1737,26 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                1
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "mega-cd-jp"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -1089,6 +1774,26 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                3
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "mega-cd-jp"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -1106,6 +1811,26 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                5
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "mega-cd-jp"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -1123,6 +1848,26 @@
       "cores": [
         "picodrive"
       ],
+      "slot": {
+        "groups": [
+          "PicoDrive:variant:mega-cd-bios"
+        ],
+        "keys": [
+          {
+            "picodrive": {
+              "ranks": [
+                7
+              ],
+              "regions": [
+                "japan"
+              ],
+              "sets": [
+                "mega-cd-jp"
+              ]
+            }
+          }
+        ]
+      },
       "regions": [
         "japan"
       ],
@@ -1171,5 +1916,7 @@
         "pokemini"
       ]
     }
-  ]
+  ],
+  "truth_files": [],
+  "truth_omitted": []
 }

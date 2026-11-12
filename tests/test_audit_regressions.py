@@ -2480,6 +2480,25 @@ class EveryManifestEntryIsFetchable(unittest.TestCase):
                 data = json.loads(path.read_text())
                 install._validate_manifest(data, data["platform"])
 
+    def test_every_standalone_layout_goes_with_its_list(self):
+        """install/standalone/<platform>.json, which only --standalone
+        reads: the installer accepts it against its own list, each item
+        written whole has a source, and a list naming builds has its file."""
+        listed = {path.stem: json.loads(path.read_text())
+                  for path in sorted((ROOT / "install").glob("*.json"))}
+        layouts = sorted((ROOT / "install" / "standalone").glob("*.json"))
+        self.assertEqual({path.stem for path in layouts},
+                         {plat for plat, data in listed.items()
+                          if data.get("standalone_builds")})
+        for path in layouts:
+            with self.subTest(layout=path.name):
+                data = json.loads(path.read_text())
+                kept = install._check_standalone_layouts(data, listed[path.stem], path.stem)
+                orphans = [item["dest"] for items in kept.values() for item in items
+                           if isinstance(item, dict)
+                           and not item.get("repo_path") and not item.get("release_asset")]
+                self.assertEqual(orphans, [])
+
     def test_schema_and_installer_name_the_same_reasons(self):
         schema = json.loads(
             (ROOT / "schemas" / "install-manifest.schema.json").read_text()
@@ -4545,6 +4564,37 @@ class EveryToolRefusesAFlagItWouldDrop(unittest.TestCase):
             ["--offline", "--skip-packs", "--source", "full"],
             ["--offline", "--source", "truth", "--full-narrowings"],
             ["--offline", "--source", "platform", "--full-narrowings"],
+        ],
+        # The expert narrowings: what the pack builder refuses beside its
+        # option of the same name, and a flag with no mode to apply it.
+        "install.py": [
+            ["--json"],
+            ["--standalone"],
+            ["--emulator", "duckstation", "--standalone", "--region", "us"],
+            ["--emulator", "duckstation", "--standalone", "--one-per-slot"],
+            ["--one-per-slot", "--system", "sony-playstation"],
+            ["--one-per-slot", "--emulator", "duckstation"],
+            ["--one-per-slot", "--for-games"],
+            ["--one-per-slot", "--declared-only"],
+            ["--one-per-slot", "--list-systems"],
+            ["--source", "truth", "--system", "sony-playstation"],
+            ["--source", "truth", "--target", "switch"],
+            ["--source", "truth", "--one-per-slot"],
+            ["--source", "truth", "--tui"],
+            ["--source", "platform"],
+            ["--find", "0" * 40, "--system", "sony-playstation"],
+            ["--find", "0" * 40, "--one-per-slot"],
+            ["--find", "0" * 40, "--check"],
+            ["--find", "0" * 40, "--list-systems"],
+            ["--find", "0" * 40, "--json", "--events"],
+            ["--find", "0" * 40, "--json", "--pack", "tmp/"],
+            ["--find", "0" * 40, "--json", "--add-app"],
+            ["--find", "0" * 40, "--json", "--standalone-copies"],
+            ["--find", "0" * 40, "--json", "--romm-firmware", "{platform}/bios"],
+            ["--find", "0" * 40, "--json", "--from", "tmp"],
+            ["--find", "0" * 40, "--pack", "tmp/"],
+            ["--find", "not-a-hash"],
+            ["--find", "0" * 12],
         ],
     }
 

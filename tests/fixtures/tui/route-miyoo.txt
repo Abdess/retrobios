@@ -646,6 +646,114 @@
 
 
  A Open  R2 Back  Left/Right Set
+=== change-slot 40x12
+ RetroBIOS: Change
+
+ What to install
+   Preferred regions: any
+ > One BIOS per console and region: yes
+   Cores: all
+   Emulators: all
+   Game data: kept
+ Where
+   BIOS folder: ~/.config...ch/system
+ 1-8 of 19
+ A Change  R2 Back  <> Set
+=== change-slot 40x15
+ RetroBIOS: Change
+
+ What to install
+   Preferred regions: any
+ > One BIOS per console and region: yes
+   Cores: all
+   Emulators: all
+   Game data: kept
+ Where
+   BIOS folder: ~/.config...ch/system
+   Copy from: none
+   From a pack: none
+ For which device
+ 1-11 of 19
+ A Change  R2 Back  <> Set
+=== change-slot 80x24
+ RetroBIOS: Change
+
+ What to install
+   Preferred regions: any                                              --region
+ > One BIOS per console and region: yes                          --one-per-slot
+   Cores: all                                                            --core
+   Emulators: all                                                    --emulator
+   Game data: kept                                               --no-game-data
+ Where
+   BIOS folder: ~/.config/retroarch/system                               --dest
+   Copy from: none                                                       --from
+   From a pack: none                                                --from-pack
+ For which device
+   Device: every board                                                 --target
+   Installed cores only: no (1 found)                         --installed-cores
+ How
+   Without the internet: no                                           --offline
+   Parallel downloads: 8                                                 --jobs
+ See
+   Preview the file list                                              --dry-run
+   Show the command line
+
+
+ A Change  R2 Back  Left/Right Set
+=== change-standalone 40x12
+ RetroBIOS: Change
+
+ What to install
+   Preferred regions: any
+   Cores: all
+   Emulators: pcsx_rearmed
+ > Standalone version of it: no
+   Game data: kept
+ Where
+   BIOS folder: ~/.config...ch/system
+ 1-8 of 19
+ A Change  R2 Back  <> Set
+=== change-standalone 40x15
+ RetroBIOS: Change
+
+ What to install
+   Preferred regions: any
+   Cores: all
+   Emulators: pcsx_rearmed
+ > Standalone version of it: no
+   Game data: kept
+ Where
+   BIOS folder: ~/.config...ch/system
+   Copy from: none
+   From a pack: none
+ For which device
+ 1-11 of 19
+ A Change  R2 Back  <> Set
+=== change-standalone 80x24
+ RetroBIOS: Change
+
+ What to install
+   Preferred regions: any                                              --region
+   Cores: all                                                            --core
+   Emulators: pcsx_rearmed                                           --emulator
+ > Standalone version of it: no                                    --standalone
+   Game data: kept                                               --no-game-data
+ Where
+   BIOS folder: ~/.config/retroarch/system                               --dest
+   Copy from: none                                                       --from
+   From a pack: none                                                --from-pack
+ For which device
+   Device: every board                                                 --target
+   Installed cores only: no (1 found)                         --installed-cores
+ How
+   Without the internet: no                                           --offline
+   Parallel downloads: 8                                                 --jobs
+ See
+   Preview the file list                                              --dry-run
+   Show the command line
+
+
+ A Change  R2 Back  Left/Right Set
 === device 40x12
  RetroBIOS: Device
 

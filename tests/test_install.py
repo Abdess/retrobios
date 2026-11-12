@@ -7194,7 +7194,7 @@ class TheInstallerPageIsWrittenFromTheCode(unittest.TestCase):
                       self.scratch.read_text(encoding="utf-8"))
 
     def test_the_exit_codes_are_the_ones_install_py_exits_with(self):
-        self.assertEqual(self.generator.exit_codes(), [0, 1, 2, 3, 130, 141])
+        self.assertEqual(self.generator.exit_codes(), [0, 1, 2, 3, 4, 130, 141])
 
     def test_a_missing_marker_stops_it(self):
         page = self.scratch.read_text(encoding="utf-8")

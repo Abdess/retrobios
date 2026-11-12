@@ -43,15 +43,31 @@ def platform_slot_index(
     PlayStation BIOS of RomM, whose cores rank none of them, and
     `--one-per-slot` dropped four images RomM declares.
     """
+    return {
+        key: merge_claims(by_emu)
+        for key, by_emu in platform_slot_claims(config, profiles, target_cores).items()
+    }
+
+
+def platform_slot_claims(
+    config: dict, profiles: dict, target_cores: set[str] | None = None
+) -> dict[str, dict[str, dict]]:
+    """What each emulator a platform runs declares at each key, unmerged."""
     from common import resolve_platform_cores  # noqa: PLC0415
 
     cores = resolve_platform_cores(config, profiles, target_cores=target_cores)
-    return build_slot_index({n: profiles[n] for n in cores if n in profiles})
+    return slot_claims({n: profiles[n] for n in cores if n in profiles})
 
 
-def build_slot_index(profiles: dict) -> dict[str, dict]:
-    """Map a file key to its slot metadata, keyed by path then name."""
-    index: dict[str, dict] = {}
+def slot_claims(profiles: dict) -> dict[str, dict[str, dict]]:
+    """Per key (path, standalone path, name), what each emulator declares there.
+
+    Each claim holds the ranks the emulator gives the key in declaration
+    order, None for an entry without one, the regions, and the set keys.
+    The install manifest carries these unmerged, so the installer merges
+    them over the cores a board runs as build_slot_index merges them here.
+    """
+    claims: dict[str, dict[str, dict]] = {}
     for emu_name, profile in sorted(profiles.items()):
         if profile.get("type") in ("launcher", "alias"):
             continue
@@ -64,34 +80,49 @@ def build_slot_index(profiles: dict) -> dict[str, dict]:
             path = f.get("path") or ""
             # Keyed by the standalone layout too, as build_region_index is.
             for key in {path, f.get("standalone_path") or "", name} - {""}:
-                entry = index.setdefault(
-                    key,
-                    {"rank": None, "conflict": False, "regions": set(),
-                     "emulators": [], "ranked_by": set(), "unranked_by": set(),
-                     "sets": set()},
+                claim = claims.setdefault(key, {}).setdefault(
+                    emu_name, {"ranks": [], "regions": set(), "sets": set()}
                 )
-                entry["regions"] |= {str(r) for r in (f.get("region") or [])}
-                entry["sets"] |= set(set_keys(emu_name, f))
-                rank = f.get("priority")
-                entry["unranked_by" if rank is None else "ranked_by"].add(emu_name)
-                if rank is not None:
-                    current = entry["rank"]
-                    if current is not None and current != rank:
-                        entry["conflict"] = True
-                    entry["rank"] = (
-                        rank if current is None else min(current, rank)
-                    )
-                if emu_name not in entry["emulators"]:
-                    entry["emulators"].append(emu_name)
-    # A core that declares the file without a rank loads it by a rule of its
-    # own: Genesis Plus GX opens bios_CD_U.bin by name for a US disc, and
-    # PicoDrive's rank 4 for it would let its rank-3 file replace it.
-    for entry in index.values():
-        if entry["ranked_by"] and entry.pop("unranked_by") - entry["ranked_by"]:
-            entry["conflict"] = True
-        entry.pop("unranked_by", None)
-        entry.pop("ranked_by")
-    return index
+                claim["regions"] |= {str(r) for r in (f.get("region") or [])}
+                claim["sets"] |= set(set_keys(emu_name, f))
+                claim["ranks"].append(f.get("priority"))
+    return claims
+
+
+def merge_claims(by_emulator: dict[str, dict]) -> dict:
+    """One key's slot metadata, merged over the emulators claiming it.
+
+    Two ranks that differ make the key conflicting. So does an emulator
+    that declares the key without a rank beside one that ranks it: a core
+    that declares the file without a rank loads it by a rule of its own.
+    Genesis Plus GX opens bios_CD_U.bin by name for a US disc, and
+    PicoDrive's rank 4 for it would let its rank-3 file replace it.
+    """
+    ranks = {r for claim in by_emulator.values() for r in claim["ranks"] if r is not None}
+    ranked_by = {e for e, claim in by_emulator.items()
+                 if any(r is not None for r in claim["ranks"])}
+    unranked_by = {e for e, claim in by_emulator.items() if None in claim["ranks"]}
+    return {
+        "rank": min(ranks) if ranks else None,
+        "conflict": len(ranks) > 1 or bool(ranked_by and unranked_by - ranked_by),
+        "regions": {r for claim in by_emulator.values() for r in claim["regions"]},
+        "emulators": sorted(by_emulator),
+        "sets": {k for claim in by_emulator.values() for k in claim["sets"]},
+    }
+
+
+def build_slot_index(profiles: dict) -> dict[str, dict]:
+    """Map a file key to its slot metadata, keyed by path then name."""
+    return {key: merge_claims(by_emu) for key, by_emu in slot_claims(profiles).items()}
+
+
+def slot_lookup_keys(destination: str, name: str) -> list[str]:
+    """The keys lookup_slot tries, in its order."""
+    keys: list[str] = []
+    if destination:
+        parts = destination.split("/")
+        keys += ["/".join(parts[i:]) for i in range(len(parts))]
+    return [*keys, name]
 
 
 def lookup_slot(index: dict[str, dict], destination: str, name: str) -> dict | None:

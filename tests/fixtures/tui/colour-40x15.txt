@@ -190,6 +190,38 @@
    Device: every board
 ^[[0;2m 1-11 of 18^[[0m
  ^[[0;1;35mA^[[0m Open  ^[[0;2mB^[[0m Back  ^[[0;2m<>^[[0m Set  ^[[0;2m?^[[0m Help
+=== change-slot
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Change^[[0m
+
+^[[0;1m What to install^[[0m
+   Preferred regions: any
+^[[0;7;35m > One BIOS per console and region: yes^[[0m
+   Cores: all
+   Emulators: all
+   Game data: kept
+^[[0;1m Where^[[0m
+   BIOS folder: ^[[0;1m~/.config...ch/system^[[0m
+   Copy from: none
+   From a pack: none
+^[[0;1m For which device^[[0m
+^[[0;2m 1-11 of 19^[[0m
+ ^[[0;1;35mA^[[0m Change  ^[[0;2mB^[[0m Back  ^[[0;2m<>^[[0m Set  ^[[0;2m?^[[0m Help
+=== change-standalone
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Change^[[0m
+
+^[[0;1m What to install^[[0m
+   Preferred regions: any
+   Cores: all
+   Emulators: pcsx_rearmed
+^[[0;7;35m > Standalone version of it: no^[[0m
+   Game data: kept
+^[[0;1m Where^[[0m
+   BIOS folder: ^[[0;1m~/.config...ch/system^[[0m
+   Copy from: none
+   From a pack: none
+^[[0;1m For which device^[[0m
+^[[0;2m 1-11 of 19^[[0m
+ ^[[0;1;35mA^[[0m Change  ^[[0;2mB^[[0m Back  ^[[0;2m<>^[[0m Set  ^[[0;2m?^[[0m Help
 === device
 ^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Device^[[0m
 
