@@ -1883,15 +1883,6 @@ def _publish_manifests(api: Path) -> list[tuple]:
         _record(targets / source.name)
         assets.append((targets / source.name, f"Target list: {source.stem}",
                        "application/json", "schemas/target-manifest.schema.json"))
-    # What install.py --standalone reads beside the list, apart so that no
-    # other run downloads it.
-    standalone = api / "standalone"
-    standalone.mkdir(parents=True, exist_ok=True)
-    for source in sorted((_REPO_ROOT / "install" / "standalone").glob("*.json")):
-        shutil.copy2(source, standalone / source.name)
-        _record(standalone / source.name)
-        assets.append((standalone / source.name, f"Standalone layouts: {source.stem}",
-                       "application/json", "schemas/install-standalone.schema.json"))
     # Every change each updated platform file carries, for a maintainer who
     # reviews them by script: the Exports page linked only the files.
     exports = api / "exports"
