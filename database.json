@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-12T15:26:44Z",
-  "total_files": 21945,
-  "total_size": 17346110087,
+  "generated_at": "2026-11-12T15:47:13Z",
+  "total_files": 22018,
+  "total_size": 17367945863,
   "bios_dir": "bios",
   "files": {
     "738c7f5fd0c8b57ee2e87ae7a97bf8e21a821d07": {
@@ -131772,6 +131772,147 @@
       "crc32": "2a9d8d43",
       "adler32": "abadcbef"
     },
+    "d3a4375ff5f58cf59cc609dd41c90af285f033c2": {
+      "path": "bios/Microsoft/MSX/share/systemroms/.variants/Nextor-2.1.1.SunriseIDE.ROM.c9e6cc75",
+      "name": "Nextor-2.1.1.SunriseIDE.ROM",
+      "size": 131072,
+      "sha1": "d3a4375ff5f58cf59cc609dd41c90af285f033c2",
+      "md5": "c9e6cc75d5a557711564b6cc74b6293c",
+      "sha256": "26975633723185ed2656bfbf1f37739ff5104869b68ed9b2325f333b36717844",
+      "crc32": "b5506b0c",
+      "adler32": "43928a95"
+    },
+    "a363015286341ffabcdc38ef0d890897ed51e322": {
+      "path": "bios/Microsoft/MSX/share/systemroms/.variants/ddx_3.0.rom.abdbc70a",
+      "name": "ddx_3.0.rom",
+      "size": 16384,
+      "sha1": "a363015286341ffabcdc38ef0d890897ed51e322",
+      "md5": "abdbc70a4393c3272a7718ae99f8cc54",
+      "sha256": "99664345d75eefcad347c9d6a9c00a84864c2d85d5aea7388745887c2b1a95e9",
+      "crc32": "2a623a9a",
+      "adler32": "031c2766",
+      "provenance": {
+        "tosec": {
+          "dat": "MSX MSX - Firmware",
+          "name": "Digital Design Eletronica DDX v3.0d - Mixed Port + Memory Based (19xx)(Digital Design Eletronica)(BR)[DDX30D.ROM].rom",
+          "description": "Digital Design Eletronica DDX v3.0d - Mixed Port + Memory Based (19xx)(Digital Design Eletronica)(BR)[DDX30D.ROM]"
+        }
+      }
+    },
+    "5a5cc35ffb7f78ef440df9548c7360ab56719c5a": {
+      "path": "bios/Microsoft/MSX/share/systemroms/.variants/fd-03.rom.06f24f6f",
+      "name": "fd-03.rom",
+      "size": 16384,
+      "sha1": "5a5cc35ffb7f78ef440df9548c7360ab56719c5a",
+      "md5": "06f24f6f8ef5786ba8f2a10be85c625e",
+      "sha256": "0db133c5318df955b726b419afcae62af3ab1987d218eeea25705f966e41eb6c",
+      "crc32": "ec1aca6e",
+      "adler32": "5b171de2"
+    },
+    "4b84465c2faa802bfd5f772118c4d31f993f29d0": {
+      "path": "bios/Microsoft/MSX/share/systemroms/.variants/fs-a1st_firmware.rom.2da883fa",
+      "name": "fs-a1st_firmware.rom",
+      "size": 4194304,
+      "sha1": "4b84465c2faa802bfd5f772118c4d31f993f29d0",
+      "md5": "2da883fac7e483956e52001009df3e0c",
+      "sha256": "5546766d6224a3a698348bc697dad2da5914fd5785a2e360b0e9ce9c07c921fd",
+      "crc32": "f8d14eea",
+      "adler32": "bd302638"
+    },
+    "930eae7057af1652abae794072b296a59decd61b": {
+      "path": "bios/Microsoft/MSX/share/systemroms/.variants/fs-ca1.rom.337c2abc",
+      "name": "fs-ca1.rom",
+      "size": 131072,
+      "sha1": "930eae7057af1652abae794072b296a59decd61b",
+      "md5": "337c2abc33dc539c6aa2dbe0f5e7f523",
+      "sha256": "42c5f473e077dc4c4493dfe7ee55ff60d7207ff714cdac53f4d5f9200539ca49",
+      "crc32": "90e893ba",
+      "adler32": "c262abbd",
+      "provenance": {
+        "tosec": {
+          "dat": "MSX MSX - Firmware",
+          "name": "MSX Audio FS-CA1 (1988)(Matsushita Electric Industrial)(JP).rom",
+          "description": "MSX Audio FS-CA1 (1988)(Matsushita Electric Industrial)(JP)"
+        }
+      }
+    },
+    "36d47cf70618fdb460f97a8ceb75013ec4529063": {
+      "path": "bios/Microsoft/MSX/share/systemroms/.variants/fs-ca1.rom.ebe7f408",
+      "name": "fs-ca1.rom",
+      "size": 131072,
+      "sha1": "36d47cf70618fdb460f97a8ceb75013ec4529063",
+      "md5": "ebe7f40865c39d0a67921a79137cbe11",
+      "sha256": "3a5671111276287dd66feaedd038854bc9f376bbb115eb7b4c0ab1b6de4b552a",
+      "crc32": "3e60c1e6",
+      "adler32": "a1779fcc"
+    },
+    "24624c5fa3a8069b1d865cdea8a029f15c1955ea": {
+      "path": "bios/Microsoft/MSX/share/systemroms/.variants/hb-f700p_msx2sub.rom.acb82643",
+      "name": "hb-f700p_msx2sub.rom",
+      "size": 16384,
+      "sha1": "24624c5fa3a8069b1d865cdea8a029f15c1955ea",
+      "md5": "acb82643f5f8aeb23f98be25fe7e2979",
+      "sha256": "b27ea48e856e3271ce85f3d97ed39f2286c4f0b8dd8ef335c14a165f7fd98cc9",
+      "crc32": "a286180e",
+      "adler32": "7f995716"
+    },
+    "2144036d6573d666143e890e5413956bfe8f66c5": {
+      "path": "bios/Microsoft/MSX/share/systemroms/.variants/hbd-50.rom.76cdc12c",
+      "name": "hbd-50.rom",
+      "size": 16384,
+      "sha1": "2144036d6573d666143e890e5413956bfe8f66c5",
+      "md5": "76cdc12c2849be763aacd1d397b989be",
+      "sha256": "f370b00ff678ae42c403e6589c0530124372ff831f8fef8dce69d6f6391bbed1",
+      "crc32": "71961d9d",
+      "adler32": "68293c7b",
+      "provenance": {
+        "tosec": {
+          "dat": "MSX MSX - Firmware",
+          "name": "Sony HBD-50 BASIC BIOS (19xx)(Sony)(JP).rom",
+          "description": "Sony HBD-50 BASIC BIOS (19xx)(Sony)(JP)"
+        }
+      }
+    },
+    "5a14ac0a1cce3ceebdcd66c42b2d5c975d45b755": {
+      "path": "bios/Microsoft/MSX/share/systemroms/.variants/hddrom.rom.8f5dc7f7",
+      "name": "hddrom.rom",
+      "size": 16384,
+      "sha1": "5a14ac0a1cce3ceebdcd66c42b2d5c975d45b755",
+      "md5": "8f5dc7f7a343ad4265c69ad7f88284b1",
+      "sha256": "baf73396f2daff9653ad46cc75f6bd493bc99b0c624c29fa81c1b71887eaa547",
+      "crc32": "36f22d53",
+      "adler32": "7a575684"
+    },
+    "11bd12a95142185d18659ccf74748fc1bb20c60d": {
+      "path": "bios/Microsoft/MSX/share/systemroms/.variants/hddrom.rom.a3a6d0ce",
+      "name": "hddrom.rom",
+      "size": 16384,
+      "sha1": "11bd12a95142185d18659ccf74748fc1bb20c60d",
+      "md5": "a3a6d0cefe89df1d73a2fb49b4c35887",
+      "sha256": "31cfcfb99892fb186b617d0b98f5ed5620bdb6c345b954eb5e2052f84d6a5ad0",
+      "crc32": "fa250bf0",
+      "adler32": "3f33311a"
+    },
+    "3b02e5f45603df2c180f9c07d59b2ccc5a87bd0a": {
+      "path": "bios/Microsoft/MSX/share/systemroms/.variants/msxaudio12pre4a.rom.ace98898",
+      "name": "msxaudio12pre4a.rom",
+      "size": 49152,
+      "sha1": "3b02e5f45603df2c180f9c07d59b2ccc5a87bd0a",
+      "md5": "ace988988013ad1df9f9010febe0645e",
+      "sha256": "464a9c6d449ce1cfc833412a967d25832a0b0f3f8a0e2780811c56f4ff8537e9",
+      "crc32": "451605ff",
+      "adler32": "102e0e5d"
+    },
+    "f0e0447a0872a2f09d7b28d9599fdd183acb5cb2": {
+      "path": "bios/Microsoft/MSX/share/systemroms/.variants/nms1200_6.rom.8bf667b5",
+      "name": "nms1200_6.rom",
+      "size": 16384,
+      "sha1": "f0e0447a0872a2f09d7b28d9599fdd183acb5cb2",
+      "md5": "8bf667b58dc0e0ecb62da7739ec51892",
+      "sha256": "8bde00cb8224d6025ca734d02c317c60d8d1394ae690ad6c67df088f9fb84530",
+      "crc32": "7c0b1439",
+      "adler32": "476e06af"
+    },
     "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091": {
       "path": "bios/Microsoft/MSX/share/systemroms/.variants/nms8245_disk.rom.3a15f5f1",
       "name": "nms8245_disk.rom",
@@ -131781,6 +131922,177 @@
       "sha256": "83d5e564550a2518fbe9a3e5d1ad378506e9d5dac6cd865ab51c21460ae8144f",
       "crc32": "3d00bf53",
       "adler32": "fab95f56"
+    },
+    "58ba1887e8fd21c912b6859cae6514bd874ffcca": {
+      "path": "bios/Microsoft/MSX/share/systemroms/.variants/nms8245_disk.rom.f71a1e66",
+      "name": "nms8245_disk.rom",
+      "size": 16384,
+      "sha1": "58ba1887e8fd21c912b6859cae6514bd874ffcca",
+      "md5": "f71a1e662850337d47d454dc044c4d9c",
+      "sha256": "e7bd920b362a205c368324756e2fc0c5b896e09b134dd596026119137d9ca03a",
+      "crc32": "13b60725",
+      "adler32": "a8919aaf"
+    },
+    "7e6a267e1a3e075dcdad3669b651b1050f6375ac": {
+      "path": "bios/Microsoft/MSX/share/systemroms/7e6a267e/NMS8245SystemROM1.05.bin",
+      "name": "NMS8245SystemROM1.05.bin",
+      "size": 131072,
+      "sha1": "7e6a267e1a3e075dcdad3669b651b1050f6375ac",
+      "md5": "b9b69446c8a3b21b4ed05439fde54bd0",
+      "sha256": "c1999293e69a4988356826662a4e3934085782255d65dba226605efa4b09f200",
+      "crc32": "5c49db82",
+      "adler32": "acdac5fd"
+    },
+    "4b08a057e5863ade179dcf8bc9377e90940e6d61": {
+      "path": "bios/Microsoft/MSX/share/systemroms/FD-051.BIN",
+      "name": "FD-051.BIN",
+      "size": 16384,
+      "sha1": "4b08a057e5863ade179dcf8bc9377e90940e6d61",
+      "md5": "44bb9d23d7ae7971f155132b87b35819",
+      "sha256": "ebde8e704c79eb4febd3046094bcf5e0a15c102a8d5a0930212efa008416f759",
+      "crc32": "ab94a273",
+      "adler32": "fd795333"
+    },
+    "4180544158a57c99162269e33e4f2c77c9fce84e": {
+      "path": "bios/Microsoft/MSX/share/systemroms/Japanese MSX-Write (1986) (Ascii) (J).rom",
+      "name": "Japanese MSX-Write (1986) (Ascii) (J).rom",
+      "size": 524288,
+      "sha1": "4180544158a57c99162269e33e4f2c77c9fce84e",
+      "md5": "151f3659d993f68b1694fd1bfde022d5",
+      "sha256": "92819471ae1b87d383b3d1815c69f3c59db5e66ead2b7b012f60ef11fce12737",
+      "crc32": "ef02e4f3",
+      "adler32": "438e2c56",
+      "provenance": {
+        "tosec": {
+          "dat": "MSX MSX - Firmware",
+          "name": "MSX-Write (1986)(ASCII)(JP).rom",
+          "description": "MSX-Write (1986)(ASCII)(JP)"
+        }
+      }
+    },
+    "9afdee40e7b243f99cc50dd1ad710ab0928dd820": {
+      "path": "bios/Microsoft/MSX/share/systemroms/Japanese MSX-Write II (1988) (Ascii) (J).rom",
+      "name": "Japanese MSX-Write II (1988) (Ascii) (J).rom",
+      "size": 524288,
+      "sha1": "9afdee40e7b243f99cc50dd1ad710ab0928dd820",
+      "md5": "1e4ef11e18575f052ea5de49872d4f4b",
+      "sha256": "8db375f31bcbd0951f9fae02199a1702ffa49be8770945d351c31a215549b357",
+      "crc32": "459478cb",
+      "adler32": "51f6c6bc",
+      "provenance": {
+        "tosec": {
+          "dat": "MSX MSX2 - Firmware",
+          "name": "MSX-Write II (1988)(ASCII)(JP).rom",
+          "description": "MSX-Write II (1988)(ASCII)(JP)"
+        }
+      }
+    },
+    "2a3d953a423fa513f0d26a8bf0bd50664688868c": {
+      "path": "bios/Microsoft/MSX/share/systemroms/NEOSC.ROM",
+      "name": "NEOSC.ROM",
+      "size": 32768,
+      "sha1": "2a3d953a423fa513f0d26a8bf0bd50664688868c",
+      "md5": "8452829bccb0c6dbb66dd0e4ded0886c",
+      "sha256": "017718c5f2c5ff1fd0e1953db06fc999c09727c1875a69ddbd0d3014d19c8ed5",
+      "crc32": "2924e879",
+      "adler32": "97a0afc6"
+    },
+    "20100697cc10c3a1e49d371bf647fed9c47c4d04": {
+      "path": "bios/Microsoft/MSX/share/systemroms/NEOSV.ROM",
+      "name": "NEOSV.ROM",
+      "size": 32768,
+      "sha1": "20100697cc10c3a1e49d371bf647fed9c47c4d04",
+      "md5": "b317cf287f4de9240f73b9fdd40e1476",
+      "sha256": "1157e8d0ffc8c62598924d50f67ad1170764382f84421f588ec9723fa096b506",
+      "crc32": "21dde18b",
+      "adler32": "de8b2623"
+    },
+    "816ceb21088b116ec34be0ff869d02222b525e58": {
+      "path": "bios/Microsoft/MSX/share/systemroms/NMS8245SystemROM1.05.bin",
+      "name": "NMS8245SystemROM1.05.bin",
+      "size": 65536,
+      "sha1": "816ceb21088b116ec34be0ff869d02222b525e58",
+      "md5": "a851d1013e4d5dbf1b5bf2e28995b2dc",
+      "sha256": "ad304970db9851954c4127f31044b5b36e800b5921603a012b56a2b7f232dcc7",
+      "crc32": "cef8895d",
+      "adler32": "7af9b70c"
+    },
+    "b746192dc333eaf2a725a44777303808a3649d63": {
+      "path": "bios/Microsoft/MSX/share/systemroms/NMS8245SystemROM1.06.bin",
+      "name": "NMS8245SystemROM1.06.bin",
+      "size": 65536,
+      "sha1": "b746192dc333eaf2a725a44777303808a3649d63",
+      "md5": "8c6fe27ab789741b14b31015df0ec5bf",
+      "sha256": "17732f61bddbb7b644409d42c9da3812589ec8d67aa2cf22aed28d8b42c01b87",
+      "crc32": "be4ae17e",
+      "adler32": "066ef197"
+    },
+    "61cba1680ac6cb448dc3e8c710a43f4e7ab49457": {
+      "path": "bios/Microsoft/MSX/share/systemroms/Nextor-2.1.1.SunriseIDE.ROM",
+      "name": "Nextor-2.1.1.SunriseIDE.ROM",
+      "size": 131072,
+      "sha1": "61cba1680ac6cb448dc3e8c710a43f4e7ab49457",
+      "md5": "0a0958e60d39c196b7db4eebf082db24",
+      "sha256": "ec932c060d2b69e80c8911530e69d2ca7cd91ae6c36a3f1c313a573050eec6ea",
+      "crc32": "cc1cde04",
+      "adler32": "5d8297e9"
+    },
+    "f2a1d326d72d4c70ea214d7883838de8847a82b7": {
+      "path": "bios/Microsoft/MSX/share/systemroms/Sony_HB-F1XV.rom",
+      "name": "Sony_HB-F1XV.rom",
+      "size": 131072,
+      "sha1": "f2a1d326d72d4c70ea214d7883838de8847a82b7",
+      "md5": "e4dee6157589e1bb36591ee6eb4b1288",
+      "sha256": "2a7c24251a2401b8967484058c725b7ef4c712059e356d44cf5e3ceea99f9dcf",
+      "crc32": "d89bab74",
+      "adler32": "a8da3e54"
+    },
+    "2ba40f6520e3045326a985956f7d32ff6d7cd99a": {
+      "path": "bios/Microsoft/MSX/share/systemroms/Tecall_MSX_RAMFILE_TM220.rom",
+      "name": "Tecall_MSX_RAMFILE_TM220.rom",
+      "size": 16384,
+      "sha1": "2ba40f6520e3045326a985956f7d32ff6d7cd99a",
+      "md5": "c60a5040634b088e8f36c867270b7d74",
+      "sha256": "7b0a1f7a3b5f68c41f7658a23392ae0f7b66529627c8e9de4cc62346a0f09cd6",
+      "crc32": "6a793baf",
+      "adler32": "9b90e7c4"
+    },
+    "42f4e3360eb134857b0efa82c1abedf342680124": {
+      "path": "bios/Microsoft/MSX/share/systemroms/ascii_msxdos22.rom",
+      "name": "ascii_msxdos22.rom",
+      "size": 65536,
+      "sha1": "42f4e3360eb134857b0efa82c1abedf342680124",
+      "md5": "9b7d6c55eb37d287fa9edb1c7e63f777",
+      "sha256": "f2614cbfc2d73f88ffa1a41a378d081af1ad217c6b1562715acc9683f36fe453",
+      "crc32": "47eea028",
+      "adler32": "724143a6"
+    },
+    "633ad62599361bbb8ba6803cdcfaa14c54521c43": {
+      "path": "bios/Microsoft/MSX/share/systemroms/avt_dpf-550_disk.rom",
+      "name": "avt_dpf-550_disk.rom",
+      "size": 16384,
+      "sha1": "633ad62599361bbb8ba6803cdcfaa14c54521c43",
+      "md5": "00c388a67a25a26824cc5f35857c8f4f",
+      "sha256": "c97a06eceec4631c5554099557cec648caec602aa5cd46566e2a230b078bdcf9",
+      "crc32": "938f51b0",
+      "adler32": "4f607991"
+    },
+    "ffc1bafca38d20ed6e9a27c90c6ab089a8482d89": {
+      "path": "bios/Microsoft/MSX/share/systemroms/cdx-2.rom",
+      "name": "cdx-2.rom",
+      "size": 16384,
+      "sha1": "ffc1bafca38d20ed6e9a27c90c6ab089a8482d89",
+      "md5": "6b29d76005d573cf7bf7cf04500cff9b",
+      "sha256": "619a616053d094f098faa9c72a04d14095c5ef6cd2fa21da54c1b4f28356953a",
+      "crc32": "7d55811a",
+      "adler32": "1279b028",
+      "provenance": {
+        "tosec": {
+          "dat": "MSX MSX - Firmware",
+          "name": "Microsol Tecnologia CDX2 1986 - Port Based (19xx)(-)[CDX-2.ROM].rom",
+          "description": "Microsol Tecnologia CDX2 1986 - Port Based (19xx)(-)[CDX-2.ROM]"
+        }
+      }
     },
     "c7a2c5baee6a9f0e1c6ee7d76944c0ab1886796c": {
       "path": "bios/Microsoft/MSX/share/systemroms/cf-3300_basic-bios1.rom",
@@ -131815,6 +132127,73 @@
           "description": "National Matsushita CF-3300 MSX Disk BASIC v1.0 (1984)(Matsushita Electric Industrial)(JP)[DISK.ROM]"
         }
       }
+    },
+    "aa98b0822d768acb73ab729d736c8fb682685492": {
+      "path": "bios/Microsoft/MSX/share/systemroms/chakkari.rom",
+      "name": "chakkari.rom",
+      "size": 8192,
+      "sha1": "aa98b0822d768acb73ab729d736c8fb682685492",
+      "md5": "2134ce3d00f0fc2e451a16bc39137ae2",
+      "sha256": "5068a0ae71a309d945ace5d17d8a7b9ff0bd98eeaca69059ba7dddcc99ad959f",
+      "crc32": "3a8f200d",
+      "adler32": "ae0b55ac"
+    },
+    "e89eb87f295a2c93688265c4f6f25a9ccb4e3697": {
+      "path": "bios/Microsoft/MSX/share/systemroms/ct-80e.rom",
+      "name": "ct-80e.rom",
+      "size": 32768,
+      "sha1": "e89eb87f295a2c93688265c4f6f25a9ccb4e3697",
+      "md5": "193ee56ebe64a499d942b7f61e0e9ce6",
+      "sha256": "795f0aece47423ef46e79977ab3b282df0e3d3c4b5dc38ab4d75a280633eeb69",
+      "crc32": "0a0006e7",
+      "adler32": "150c94dc"
+    },
+    "124126cee840e43c7668c11c2bec2f34b3d00c68": {
+      "path": "bios/Microsoft/MSX/share/systemroms/ddx_3.0.rom",
+      "name": "ddx_3.0.rom",
+      "size": 16384,
+      "sha1": "124126cee840e43c7668c11c2bec2f34b3d00c68",
+      "md5": "6072bc6c0016dbc7cba76948458bf69b",
+      "sha256": "a063d5306380e1a3d83c3e3f33af0146bf18e6f18519001b004bf52404e69dcc",
+      "crc32": "337b11b7",
+      "adler32": "b8bf12f5",
+      "provenance": {
+        "tosec": {
+          "dat": "MSX MSX - Firmware",
+          "name": "Digital Design Eletronica DDX v3.0 - Mixed Port + Memory Based (19xx)(Digital Design Eletronica)(BR)[DDX30.ROM].rom",
+          "description": "Digital Design Eletronica DDX v3.0 - Mixed Port + Memory Based (19xx)(Digital Design Eletronica)(BR)[DDX30.ROM]"
+        }
+      }
+    },
+    "d9c82e091b5fa1b5ee9b7f012f0084611762eb93": {
+      "path": "bios/Microsoft/MSX/share/systemroms/dpf-550_disk.rom",
+      "name": "dpf-550_disk.rom",
+      "size": 16384,
+      "sha1": "d9c82e091b5fa1b5ee9b7f012f0084611762eb93",
+      "md5": "d2913b67c8d6fc43e5e5c437cddbcc2b",
+      "sha256": "73dea5e4b5534b9829fc89e1bc88af46c89bb9bd84a8a1712df3723bec270647",
+      "crc32": "bed64b97",
+      "adler32": "219fe626"
+    },
+    "ea3c1d20310e7fbaacfdede839be0118ecea015e": {
+      "path": "bios/Microsoft/MSX/share/systemroms/fd-03.rom",
+      "name": "fd-03.rom",
+      "size": 32768,
+      "sha1": "ea3c1d20310e7fbaacfdede839be0118ecea015e",
+      "md5": "bbfd0222547841d4c0d960111d4692e5",
+      "sha256": "806d9319c880d0ae5536f109998bb403a9f6947beb734cf228702793a3c59d41",
+      "crc32": "f691d69b",
+      "adler32": "46faf9d2"
+    },
+    "19bf90b8d2e695ffad61fff6f47f7fcda2f24a1d": {
+      "path": "bios/Microsoft/MSX/share/systemroms/fmpak.rom",
+      "name": "fmpak.rom",
+      "size": 65536,
+      "sha1": "19bf90b8d2e695ffad61fff6f47f7fcda2f24a1d",
+      "md5": "f89f131048d14e160f5a5f65e2eb91d7",
+      "sha256": "300f871a076132f894a2cb9c22aeabcb3125629264b3267d74300ab902b69036",
+      "crc32": "e57d6580",
+      "adler32": "1c7b4889"
     },
     "44e0dd215b2a9f0770dd76fb49187c05b083eed9": {
       "path": "bios/Microsoft/MSX/share/systemroms/fs-5500_basic-bios2.rom",
@@ -131883,6 +132262,436 @@
       "crc32": "6173a88c",
       "adler32": "48ff83da"
     },
+    "c212b11fda13f83dafed688c54d098e7e47ab225": {
+      "path": "bios/Microsoft/MSX/share/systemroms/fs-a1st_firmware.rom",
+      "name": "fs-a1st_firmware.rom",
+      "size": 4194304,
+      "sha1": "c212b11fda13f83dafed688c54d098e7e47ab225",
+      "md5": "dcf6f64dee38e3c2996678deabf0b0fc",
+      "sha256": "9356be1f78e33383a7f9f8e788293f3fbe788d2ee228d00eaad8825b9e005691",
+      "crc32": "139ac99c",
+      "adler32": "a88bfdd4"
+    },
+    "a45692849acf29ddb653707a62747985439f6d4f": {
+      "path": "bios/Microsoft/MSX/share/systemroms/fs-ca1.rom",
+      "name": "fs-ca1.rom",
+      "size": 131072,
+      "sha1": "a45692849acf29ddb653707a62747985439f6d4f",
+      "md5": "69203698f393d26043a059a6733fa9bd",
+      "sha256": "2a35f43b078dd916c284159d33615516efedde1b523d377711384231c6204807",
+      "crc32": "78584d2e",
+      "adler32": "4fe39fd4"
+    },
+    "a2f70f911ccaa6831008bd473e92a3f0eb1e8b0f": {
+      "path": "bios/Microsoft/MSX/share/systemroms/fs-fd1a.rom",
+      "name": "fs-fd1a.rom",
+      "size": 16384,
+      "sha1": "a2f70f911ccaa6831008bd473e92a3f0eb1e8b0f",
+      "md5": "506b3c31e19178adbd2be5b73f6121e7",
+      "sha256": "d22373524bebdc37deee96de9e49e25796b02ac4211b68adaa96bea311f0154a",
+      "crc32": "0261124a",
+      "adler32": "49baf8bd"
+    },
+    "5e872d5853698731a0ed22fb72dbcdfd59cd19c3": {
+      "path": "bios/Microsoft/MSX/share/systemroms/fs-pw1_kanjifont.rom",
+      "name": "fs-pw1_kanjifont.rom",
+      "size": 131072,
+      "sha1": "5e872d5853698731a0ed22fb72dbcdfd59cd19c3",
+      "md5": "e67b0fc114ad784f4f8b33df010aa154",
+      "sha256": "e4036415638e73d5894d850cab3a40cb63e76afa0391d0ad31321bf2ed61b7d7",
+      "crc32": "c61ddc5d",
+      "adler32": "8332d262"
+    },
+    "b262aedc71b445303f84efe5e865cbb71fd7d952": {
+      "path": "bios/Microsoft/MSX/share/systemroms/hb-75p_firmware.rom",
+      "name": "hb-75p_firmware.rom",
+      "size": 16384,
+      "sha1": "b262aedc71b445303f84efe5e865cbb71fd7d952",
+      "md5": "9fee5c622ff65c276d79c3f2f9905e4f",
+      "sha256": "070b5c3b36cb88d50ccf489ca45585a2167ac48a5f6f6c3dec4b9923666f8300",
+      "crc32": "492b12f8",
+      "adler32": "4337b551",
+      "provenance": {
+        "tosec": {
+          "dat": "MSX MSX - Firmware",
+          "name": "Sony HB75P Firmware (19xx)(Sony)(JP).rom",
+          "description": "Sony HB75P Firmware (19xx)(Sony)(JP)"
+        }
+      }
+    },
+    "4ce41fcc1a603411ec4e99556409c442078f0ecf": {
+      "path": "bios/Microsoft/MSX/share/systemroms/hb-f1xd_basic-bios2.rom",
+      "name": "hb-f1xd_basic-bios2.rom",
+      "size": 32768,
+      "sha1": "4ce41fcc1a603411ec4e99556409c442078f0ecf",
+      "md5": "a9105b8be71c346807890cc80b8c220c",
+      "sha256": "2bf26217ae16768b721bd0a2c795aa642d227633753f1171fd4c9add3c3d6868",
+      "crc32": "ba81b3dd",
+      "adler32": "7d01664c"
+    },
+    "12f2cc79b3d09723840bae774be48c0d721ec1c6": {
+      "path": "bios/Microsoft/MSX/share/systemroms/hb-f1xd_disk.rom",
+      "name": "hb-f1xd_disk.rom",
+      "size": 16384,
+      "sha1": "12f2cc79b3d09723840bae774be48c0d721ec1c6",
+      "md5": "37f22b0c7cfbc23f7839f6e78b501dd3",
+      "sha256": "ee882383179b02561913f386e6993c711c4acf07639c43c21ba390dc81eefa4a",
+      "crc32": "54c73ad6",
+      "adler32": "4fbfbcf4"
+    },
+    "ade0c5ba5574f8114d7079050317099b4519e88f": {
+      "path": "bios/Microsoft/MSX/share/systemroms/hb-f1xv.rom",
+      "name": "hb-f1xv.rom",
+      "size": 1048576,
+      "sha1": "ade0c5ba5574f8114d7079050317099b4519e88f",
+      "md5": "5ccfc5dde146e49af6427c2f2f128cbe",
+      "sha256": "c78c13996a406ee69c2a6b988c53a68b649affabef6e4599e6ea507d5387f044",
+      "crc32": "77be583f",
+      "adler32": "5e0e4063"
+    },
+    "174c9254f09d99361ff7607630248ff9d7d8d4d6": {
+      "path": "bios/Microsoft/MSX/share/systemroms/hb-f1xv_basic-bios2p.rom",
+      "name": "hb-f1xv_basic-bios2p.rom",
+      "size": 32768,
+      "sha1": "174c9254f09d99361ff7607630248ff9d7d8d4d6",
+      "md5": "c15e9797d42e9fcb55a4c9f761d2842e",
+      "sha256": "75adcdb462137c61fa570a2773a8d27ce3eeaf18873b3ac500492b594a1a1b93",
+      "crc32": "2c7ed27b",
+      "adler32": "1bb59cb0"
+    },
+    "5a4e7dbbfb759109c7d2a3b38bda9c60bf6ffef5": {
+      "path": "bios/Microsoft/MSX/share/systemroms/hb-f1xv_disk.rom",
+      "name": "hb-f1xv_disk.rom",
+      "size": 16384,
+      "sha1": "5a4e7dbbfb759109c7d2a3b38bda9c60bf6ffef5",
+      "md5": "9c5357b593f142e0d832999809e9dc04",
+      "sha256": "b9e0f8db66c06069eae881096245666b798dcdc0461afb415a45a95476be8f9b",
+      "crc32": "04e4e533",
+      "adler32": "2587c2ec",
+      "provenance": {
+        "tosec": {
+          "dat": "MSX MSX2+ - Firmware",
+          "name": "Disk BASIC v1.0 for HB-F1XV (1989)(Sony)(JP).rom",
+          "description": "Disk BASIC v1.0 for HB-F1XV (1989)(Sony)(JP)"
+        }
+      }
+    },
+    "218d91eb6df2823c924d3774a9f455492a10aecb": {
+      "path": "bios/Microsoft/MSX/share/systemroms/hb-f1xv_kanjifont.rom",
+      "name": "hb-f1xv_kanjifont.rom",
+      "size": 262144,
+      "sha1": "218d91eb6df2823c924d3774a9f455492a10aecb",
+      "md5": "fd6a420fc67299d92cf3be0a66774b73",
+      "sha256": "3c9f60fda25b42978612cff1b979de8a0f8deeaf9957db957f0e5c7c10263d8e",
+      "crc32": "7016dfd0",
+      "adler32": "87526432"
+    },
+    "0de3c802057560560a03d7965fcc4cff69f8575c": {
+      "path": "bios/Microsoft/MSX/share/systemroms/hb-f700p_basic-bios2.rom",
+      "name": "hb-f700p_basic-bios2.rom",
+      "size": 32768,
+      "sha1": "0de3c802057560560a03d7965fcc4cff69f8575c",
+      "md5": "061a87cbb20e6c695f980eda1204f4a5",
+      "sha256": "554d5d2172ae1ad6128f26a1d5c8b28d52c07de155e2248c2108b8fc30625997",
+      "crc32": "b31c851d",
+      "adler32": "acc088a9",
+      "provenance": {
+        "tosec": {
+          "dat": "MSX MSX2 - Firmware",
+          "name": "Sony HB-F9P MSX BIOS + BASIC v2.0 (1986)(Sony)(JP)[MSX2.ROM].rom",
+          "description": "Sony HB-F9P MSX BIOS + BASIC v2.0 (1986)(Sony)(JP)[MSX2.ROM]"
+        }
+      }
+    },
+    "3376cf9dd2b1ac9b41bf6bf6598b33136e86f9d5": {
+      "path": "bios/Microsoft/MSX/share/systemroms/hb-f700p_disk.rom",
+      "name": "hb-f700p_disk.rom",
+      "size": 16384,
+      "sha1": "3376cf9dd2b1ac9b41bf6bf6598b33136e86f9d5",
+      "md5": "16f0d60f94f4b0e3ac2f3087fdc3e72a",
+      "sha256": "dfcc1cc0fa1184eb70f6033cf72205a126c74de18ae8c4071dee7e3ccd6e4474",
+      "crc32": "1d9cc7f6",
+      "adler32": "120760f7"
+    },
+    "3288894e1be6af705871499b23c85732dbc40993": {
+      "path": "bios/Microsoft/MSX/share/systemroms/hb-f700p_msx2sub.rom",
+      "name": "hb-f700p_msx2sub.rom",
+      "size": 16384,
+      "sha1": "3288894e1be6af705871499b23c85732dbc40993",
+      "md5": "0b8f0ec02c1f723f5e669462cb1c800c",
+      "sha256": "3e095f3151e1bd17a5ecc123eaf3d6908575bd3de48f4473081d172746aff233",
+      "crc32": "8f84f783",
+      "adler32": "7e9a5617",
+      "provenance": {
+        "tosec": {
+          "dat": "MSX MSX2 - Firmware",
+          "name": "Sony HB-F500P BASIC BIOS (19xx)(Sony)(JP).rom",
+          "description": "Sony HB-F500P BASIC BIOS (19xx)(Sony)(JP)"
+        }
+      }
+    },
+    "608e8e9ab91c67f7015a67ea12f52ea3b0d609cd": {
+      "path": "bios/Microsoft/MSX/share/systemroms/hb3600_disk.rom",
+      "name": "hb3600_disk.rom",
+      "size": 16384,
+      "sha1": "608e8e9ab91c67f7015a67ea12f52ea3b0d609cd",
+      "md5": "1162fc9bc00e206c86918885b5ea10d3",
+      "sha256": "87fdbda95438697e9efa8fd35700d47349a077231336fea7233f06dce88e873f",
+      "crc32": "af445c3d",
+      "adler32": "502153d0",
+      "provenance": {
+        "tosec": {
+          "dat": "MSX MSX - Firmware",
+          "name": "Disk BASIC v1.1 for Epcom Sharp HB-3600 - Memory Based (1987)(Sharp)[SHARP.ROM].rom",
+          "description": "Disk BASIC v1.1 for Epcom Sharp HB-3600 - Memory Based (1987)(Sharp)[SHARP.ROM]"
+        }
+      }
+    },
+    "ab57b4c8e5d47c2a39031c2057b97d2d10546582": {
+      "path": "bios/Microsoft/MSX/share/systemroms/hbd-50.rom",
+      "name": "hbd-50.rom",
+      "size": 16384,
+      "sha1": "ab57b4c8e5d47c2a39031c2057b97d2d10546582",
+      "md5": "4747d5d0a0ff835490a800f566fe2cfd",
+      "sha256": "2dfa1fed1071a5bb2f5e8377d5d8346fa4e62c917ad94d1e42a0271551113f75",
+      "crc32": "a8569f6f",
+      "adler32": "8c9731a4"
+    },
+    "b2776159a7b92d74308b434a6b3e5feba161e2b7": {
+      "path": "bios/Microsoft/MSX/share/systemroms/hbi-232.rom",
+      "name": "hbi-232.rom",
+      "size": 8192,
+      "sha1": "b2776159a7b92d74308b434a6b3e5feba161e2b7",
+      "md5": "f463b1617c8f1850cc6b627ccdc04c63",
+      "sha256": "267ab614324129f4f3547471e5c996a2bf5b32ee07d0273de4fad6edc648cf66",
+      "crc32": "be88e5f7",
+      "adler32": "724455d6"
+    },
+    "ba83a80a0041e3a8fb5c075a9b4a29ee92255d62": {
+      "path": "bios/Microsoft/MSX/share/systemroms/hbk-30.rom",
+      "name": "hbk-30.rom",
+      "size": 32768,
+      "sha1": "ba83a80a0041e3a8fb5c075a9b4a29ee92255d62",
+      "md5": "f7aeca5b9ece4481b9c280e3ab60b76c",
+      "sha256": "9d9a7a1ccbf8b1ef6e6780690419480c5bc40fcc7ec859d582fc2a6d7f913351",
+      "crc32": "18b37c5e",
+      "adler32": "2e621c3d",
+      "provenance": {
+        "tosec": {
+          "dat": "MSX MSX - Firmware",
+          "name": "Sony HBK-30 BASIC BIOS (19xx)(Sony)(JP).rom",
+          "description": "Sony HBK-30 BASIC BIOS (19xx)(Sony)(JP)"
+        }
+      }
+    },
+    "e92f47bd8320f94b8f7ae1943b31316002075ffb": {
+      "path": "bios/Microsoft/MSX/share/systemroms/hddrom.rom",
+      "name": "hddrom.rom",
+      "size": 32768,
+      "sha1": "e92f47bd8320f94b8f7ae1943b31316002075ffb",
+      "md5": "c60f7b30128a3c51750694b6b92a677d",
+      "sha256": "3de3d57b64b6ab2ab62c96aaeb28090bb145f683b712cedfb0ba03de980e7052",
+      "crc32": "1a948496",
+      "adler32": "06d0dfab"
+    },
+    "4dad9de7c28b452351cc12910849b51bd9a37ab3": {
+      "path": "bios/Microsoft/MSX/share/systemroms/hx-10_basic-bios1.rom",
+      "name": "hx-10_basic-bios1.rom",
+      "size": 32768,
+      "sha1": "4dad9de7c28b452351cc12910849b51bd9a37ab3",
+      "md5": "a29e8e1a862d78c442475e1c4ec41ddc",
+      "sha256": "bbc474afbf3a0a9f8f3ed7ed59a86fa526c3a21487ffa211636c4082a9e61bd5",
+      "crc32": "5486b711",
+      "adler32": "4f790b51"
+    },
+    "b88c507720a0617a27141c329755de1a48b89deb": {
+      "path": "bios/Microsoft/MSX/share/systemroms/hx-f101pe.rom",
+      "name": "hx-f101pe.rom",
+      "size": 16384,
+      "sha1": "b88c507720a0617a27141c329755de1a48b89deb",
+      "md5": "9e960fc3090671bb5464dba6106a97cc",
+      "sha256": "479e9d0e3111c2e48bb06809384434bdbdece6293cb29ee872801860f1796360",
+      "crc32": "8c3b1271",
+      "adler32": "14396873"
+    },
+    "0d246b0e3edc63803fcce861ea07eadf29dc488c": {
+      "path": "bios/Microsoft/MSX/share/systemroms/hx-mu900.rom",
+      "name": "hx-mu900.rom",
+      "size": 32768,
+      "sha1": "0d246b0e3edc63803fcce861ea07eadf29dc488c",
+      "md5": "38eb2e535b8fe6886597081f79f27243",
+      "sha256": "9532b23b70820ca08aa7c927763bccd91a993916c94202a441ba5f9131b1d55c",
+      "crc32": "dc405f8c",
+      "adler32": "386e70b2",
+      "provenance": {
+        "tosec": {
+          "dat": "MSX MSX - Firmware",
+          "name": "Toshiba HX-MU900 MSX-Audio (1985)(Toshiba)(JP)[MMOD1.ROM].rom",
+          "description": "Toshiba HX-MU900 MSX-Audio (1985)(Toshiba)(JP)[MMOD1.ROM]"
+        }
+      }
+    },
+    "1621f623b834dc57cb2983f30b36bcc3ac56cafd": {
+      "path": "bios/Microsoft/MSX/share/systemroms/megaflashrom_scc+_sd.rom",
+      "name": "megaflashrom_scc+_sd.rom",
+      "size": 8208384,
+      "sha1": "1621f623b834dc57cb2983f30b36bcc3ac56cafd",
+      "md5": "aef0f9ff05c83c05fff02f4ffac2b675",
+      "sha256": "54d92573bf88b699b6f15d82f497d268a61a9d491b71aa84fd78d862a4561065",
+      "crc32": "facbbca2",
+      "adler32": "76260fe7"
+    },
+    "bb72819da1160bc375fa3623f2d0a5424d08c89b": {
+      "path": "bios/Microsoft/MSX/share/systemroms/mfd-001_disk.rom",
+      "name": "mfd-001_disk.rom",
+      "size": 16384,
+      "sha1": "bb72819da1160bc375fa3623f2d0a5424d08c89b",
+      "md5": "eaab6f1152427a68bc02c33699c467f2",
+      "sha256": "d9382f7790764803c482586e6b7e512ab7fd547951281739c5a2b9535a93ae34",
+      "crc32": "7055c36f",
+      "adler32": "4dff0452"
+    },
+    "658bc7cd4b19bd5face14f09e4e2904157a5c298": {
+      "path": "bios/Microsoft/MSX/share/systemroms/ml-30dc.rom",
+      "name": "ml-30dc.rom",
+      "size": 16384,
+      "sha1": "658bc7cd4b19bd5face14f09e4e2904157a5c298",
+      "md5": "0ddedb30a4b688e845cb988eb3acaf7e",
+      "sha256": "b84703bf5c6d51227bc2f17c68ef7b8be3367f84265105e5307adcb2ab669812",
+      "crc32": "0ed4d468",
+      "adler32": "2d572652"
+    },
+    "f0abc38f345c05e2112079239d09f25fb08a7c56": {
+      "path": "bios/Microsoft/MSX/share/systemroms/mr512.rom",
+      "name": "mr512.rom",
+      "size": 32768,
+      "sha1": "f0abc38f345c05e2112079239d09f25fb08a7c56",
+      "md5": "d66309cf1742765835f01717b1ad5e86",
+      "sha256": "c041c3a3fc29e1841fcaf36391fd96c5bf54bbbfde7b4b76599a9f8b50af3a57",
+      "crc32": "5d50943c",
+      "adler32": "3c114c9c"
+    },
+    "41c4810ec56ed0f61e0fc8b355d2aae91de12d99": {
+      "path": "bios/Microsoft/MSX/share/systemroms/mrs-001.rom",
+      "name": "mrs-001.rom",
+      "size": 8192,
+      "sha1": "41c4810ec56ed0f61e0fc8b355d2aae91de12d99",
+      "md5": "f0cd74a735e3aa96aa94a54615b183fe",
+      "sha256": "8bc41c39412b521dbb29394c342026bd115d9f6c35d93de4d592f3e64d41604d",
+      "crc32": "abb107a0",
+      "adler32": "f2072cb8"
+    },
+    "f4dba5ba267b5dd1a35eb74a6ec4fd4d5ca9a1b4": {
+      "path": "bios/Microsoft/MSX/share/systemroms/msx-write_ii_kanjifont.rom",
+      "name": "msx-write_ii_kanjifont.rom",
+      "size": 262144,
+      "sha1": "f4dba5ba267b5dd1a35eb74a6ec4fd4d5ca9a1b4",
+      "md5": "cb30a978bd4bddf957c66d1d05273658",
+      "sha256": "7b4d4cddcb20f8043b95d3171b59430e92378ce0ea216aaf4e7a9110420dcabf",
+      "crc32": "17e58926",
+      "adler32": "684d83cc",
+      "provenance": {
+        "no-intro": {
+          "dat": "Microsoft - MSX2",
+          "name": "[BIOS] Kanji ROM - JIS 1st+2nd Class (Japan).rom",
+          "description": "[BIOS] Kanji ROM - JIS 1st+2nd Class (Japan)"
+        },
+        "tosec": {
+          "dat": "MSX MSX2 - Firmware",
+          "name": "Kanji ROM - JIS 1st+2nd Class for MSX-Write II (1988)(ASCII)(JP).rom",
+          "description": "Kanji ROM - JIS 1st+2nd Class for MSX-Write II (1988)(ASCII)(JP)"
+        }
+      }
+    },
+    "fc71561a64f73da0e0043d256f67fd18d7fc3a7f": {
+      "path": "bios/Microsoft/MSX/share/systemroms/msx-write_kanjifont.rom",
+      "name": "msx-write_kanjifont.rom",
+      "size": 131072,
+      "sha1": "fc71561a64f73da0e0043d256f67fd18d7fc3a7f",
+      "md5": "f35edf0808fdd1a81f86ea647e5b38ee",
+      "sha256": "1f9949b3a7e173d0c42892972a9d6b47a7509eea09f8a10c078edd8f337dbfe7",
+      "crc32": "3b8fdf44",
+      "adler32": "736b3572",
+      "provenance": {
+        "no-intro": {
+          "dat": "Microsoft - MSX",
+          "name": "[BIOS] Kanji Rom - JIS 1st Class (Japan).rom",
+          "description": "[BIOS] Kanji Rom - JIS 1st Class (Japan)"
+        },
+        "tosec": {
+          "dat": "MSX MSX - Firmware",
+          "name": "Kanji ROM - JIS 1st Class for MSX-Write (1986)(ASCII)(JP).rom",
+          "description": "Kanji ROM - JIS 1st Class for MSX-Write (1986)(ASCII)(JP)"
+        }
+      }
+    },
+    "7f115ff923a1cc0d1944cf280168add946fde854": {
+      "path": "bios/Microsoft/MSX/share/systemroms/msxaudio12pre4a.rom",
+      "name": "msxaudio12pre4a.rom",
+      "size": 32768,
+      "sha1": "7f115ff923a1cc0d1944cf280168add946fde854",
+      "md5": "0cbeb218d5624c24f966f4797e8129a3",
+      "sha256": "e217d3d82dbd00050a65f2c33e702c7e500cae752d4465a07bf116c8ed7f826e",
+      "crc32": "d3c56cca",
+      "adler32": "d313ad9d"
+    },
+    "b344b5b7988f459354a2db49d7d339ceeee7d864": {
+      "path": "bios/Microsoft/MSX/share/systemroms/msxaudio13.OPL3_mono.rom",
+      "name": "msxaudio13.OPL3_mono.rom",
+      "size": 49152,
+      "sha1": "b344b5b7988f459354a2db49d7d339ceeee7d864",
+      "md5": "4a59c37c6ecc11a65535b2d775bd6f4c",
+      "sha256": "582001da1f41ffe3098caa7ec8419b2efceca6a991c3b59bb8142aea6dff3306",
+      "crc32": "6a3bfeda",
+      "adler32": "007e724f"
+    },
+    "9c924cc79b17cfe468fc7c969868be86ccbe9d46": {
+      "path": "bios/Microsoft/MSX/share/systemroms/msxaudio13.OPL3_stereo.rom",
+      "name": "msxaudio13.OPL3_stereo.rom",
+      "size": 49152,
+      "sha1": "9c924cc79b17cfe468fc7c969868be86ccbe9d46",
+      "md5": "00d7758773ee20fe9d3ecb87b9818480",
+      "sha256": "30fdef68c851d79b8e5ff7c8123d76e0f2fbbb8ac4dd230aaae4c754001b7089",
+      "crc32": "95b932a1",
+      "adler32": "c97152a2"
+    },
+    "e88ca790ab58e7709cd99cbbb23ff7d33631b71f": {
+      "path": "bios/Microsoft/MSX/share/systemroms/mu-pack.rom",
+      "name": "mu-pack.rom",
+      "size": 16384,
+      "sha1": "e88ca790ab58e7709cd99cbbb23ff7d33631b71f",
+      "md5": "f78eb4dc81bab537d385e93d011f6f7b",
+      "sha256": "04a4176e4d6d05bd2067f9305f6e155824e55cbcedb30117bd19c685afc6fa36",
+      "crc32": "faa97d0a",
+      "adler32": "e2defb3e"
+    },
+    "0b63e9cf99bc2a3d7f21cabf1cb668a6ca71ad2d": {
+      "path": "bios/Microsoft/MSX/share/systemroms/nms1200_6.rom",
+      "name": "nms1200_6.rom",
+      "size": 16384,
+      "sha1": "0b63e9cf99bc2a3d7f21cabf1cb668a6ca71ad2d",
+      "md5": "a26585a3214ac8ea5830e9f9abb825ff",
+      "sha256": "63a8a27341af745802cdd60e9186a4ef1f4fbb0d4bea7cae1a751906e49e2b75",
+      "crc32": "6df59842",
+      "adler32": "58c5b340"
+    },
+    "c7463e1fd0433c5d41b70670d6c10fd781b66426": {
+      "path": "bios/Microsoft/MSX/share/systemroms/nms1205.rom",
+      "name": "nms1205.rom",
+      "size": 32768,
+      "sha1": "c7463e1fd0433c5d41b70670d6c10fd781b66426",
+      "md5": "b4415a26072ed955d83cc88d0dc16405",
+      "sha256": "3e914ea47784c2389c6cdecb6d2488506398fc25eff24af8b98802e9bc71eeae",
+      "crc32": "5ecaeef0",
+      "adler32": "2d40e0e9",
+      "provenance": {
+        "tosec": {
+          "dat": "MSX MSX - Firmware",
+          "name": "Philips NMS-1205 Music Module ROM MSX1 (19xx)(Philips).rom",
+          "description": "Philips NMS-1205 Music Module ROM MSX1 (19xx)(Philips)"
+        }
+      }
+    },
     "c3f3ca454d66a0bc791f1d4b60e6857b44eb8755": {
       "path": "bios/Microsoft/MSX/share/systemroms/nms8245_disk.rom",
       "name": "nms8245_disk.rom",
@@ -131926,6 +132735,56 @@
           "description": "MSX2 System Extension Unknown (19xx)(-)[MSX2EXT.ROM]"
         }
       }
+    },
+    "794aca3c2136933f1fe6405e56e0ce7fdbb10385": {
+      "path": "bios/Microsoft/MSX/share/systemroms/sensor-kid.rom",
+      "name": "sensor-kid.rom",
+      "size": 32768,
+      "sha1": "794aca3c2136933f1fe6405e56e0ce7fdbb10385",
+      "md5": "7c0730892da70e703c7c1c0a55e8c09a",
+      "sha256": "968599c215b6307b6db0c3d0f4e73d9a6accdca94f56053c22fc8cdfd8151e00",
+      "crc32": "acdfc7ac",
+      "adler32": "cd65d793"
+    },
+    "49a1750c10e407293af6bce27a02e99307ceba12": {
+      "path": "bios/Microsoft/MSX/share/systemroms/sfg-01.rom",
+      "name": "sfg-01.rom",
+      "size": 16384,
+      "sha1": "49a1750c10e407293af6bce27a02e99307ceba12",
+      "md5": "04e6467d5da11f64dd944c6bcffa2281",
+      "sha256": "deb1e9d4f1a8288d8e4ac1f6a23e285ff1d317017b2f914b89977770cd2145c2",
+      "crc32": "84f4b692",
+      "adler32": "fd0d34cb"
+    },
+    "6680d7118d85418813f1db9449bf3e20942b16da": {
+      "path": "bios/Microsoft/MSX/share/systemroms/sfg-05.rom",
+      "name": "sfg-05.rom",
+      "size": 32768,
+      "sha1": "6680d7118d85418813f1db9449bf3e20942b16da",
+      "md5": "036325e1de5b125c2c25778f3ebc7695",
+      "sha256": "e200733119be57298cf37687b05ca448039cc54554253d46ce49c9ecf9d1e4ad",
+      "crc32": "38bf684f",
+      "adler32": "23c309ac"
+    },
+    "2cb1c373753d792b75609d81d57719d545c63c41": {
+      "path": "bios/Microsoft/MSX/share/systemroms/svi-707_cpm.rom",
+      "name": "svi-707_cpm.rom",
+      "size": 4096,
+      "sha1": "2cb1c373753d792b75609d81d57719d545c63c41",
+      "md5": "b8253f9cdd8c18af5110ea221a7159c1",
+      "sha256": "f247071439f2378e88d28f0ce57ad12a0e3f0172b02511b5b5ed0ca0c6799599",
+      "crc32": "00940cd0",
+      "adler32": "d30dacdf"
+    },
+    "a337c9aede83cf684339f61a80468e73af31ebeb": {
+      "path": "bios/Microsoft/MSX/share/systemroms/svi-707_disk.rom",
+      "name": "svi-707_disk.rom",
+      "size": 16384,
+      "sha1": "a337c9aede83cf684339f61a80468e73af31ebeb",
+      "md5": "0918a31446a3840e18b01e6f65e86c73",
+      "sha256": "82b3914528791db5c9ddbbf56879f4ac79a8135a7d0b9110b8b7cd0bee98aa7f",
+      "crc32": "53ec9f04",
+      "adler32": "a36374ae"
     },
     "c53b3f2c00f31683914f7452f3f4d94ae2929c0d": {
       "path": "bios/Microsoft/MSX/share/systemroms/svi-738_basic-bios1.rom",
@@ -237810,18 +238669,91 @@
       "281809cafe63437fc4bffb3033fbd0db": "665d805f96616e1037f1823050657b7849899283",
       "352f054ab09605070bdff49d73f335cc": "10349ce675f6d6d47f0976e39cb7188eba858d89",
       "42af93619160ef2116416f74a6cb12f2": "32760893ce06dbe3930627755ba065cc3d8ec6ca",
+      "c9e6cc75d5a557711564b6cc74b6293c": "d3a4375ff5f58cf59cc609dd41c90af285f033c2",
+      "abdbc70a4393c3272a7718ae99f8cc54": "a363015286341ffabcdc38ef0d890897ed51e322",
+      "06f24f6f8ef5786ba8f2a10be85c625e": "5a5cc35ffb7f78ef440df9548c7360ab56719c5a",
+      "2da883fac7e483956e52001009df3e0c": "4b84465c2faa802bfd5f772118c4d31f993f29d0",
+      "337c2abc33dc539c6aa2dbe0f5e7f523": "930eae7057af1652abae794072b296a59decd61b",
+      "ebe7f40865c39d0a67921a79137cbe11": "36d47cf70618fdb460f97a8ceb75013ec4529063",
+      "acb82643f5f8aeb23f98be25fe7e2979": "24624c5fa3a8069b1d865cdea8a029f15c1955ea",
+      "76cdc12c2849be763aacd1d397b989be": "2144036d6573d666143e890e5413956bfe8f66c5",
+      "8f5dc7f7a343ad4265c69ad7f88284b1": "5a14ac0a1cce3ceebdcd66c42b2d5c975d45b755",
+      "a3a6d0cefe89df1d73a2fb49b4c35887": "11bd12a95142185d18659ccf74748fc1bb20c60d",
+      "ace988988013ad1df9f9010febe0645e": "3b02e5f45603df2c180f9c07d59b2ccc5a87bd0a",
+      "8bf667b58dc0e0ecb62da7739ec51892": "f0e0447a0872a2f09d7b28d9599fdd183acb5cb2",
       "3a15f5f1de879be93dd433f8ae230407": "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091",
+      "f71a1e662850337d47d454dc044c4d9c": "58ba1887e8fd21c912b6859cae6514bd874ffcca",
+      "b9b69446c8a3b21b4ed05439fde54bd0": "7e6a267e1a3e075dcdad3669b651b1050f6375ac",
+      "44bb9d23d7ae7971f155132b87b35819": "4b08a057e5863ade179dcf8bc9377e90940e6d61",
+      "151f3659d993f68b1694fd1bfde022d5": "4180544158a57c99162269e33e4f2c77c9fce84e",
+      "1e4ef11e18575f052ea5de49872d4f4b": "9afdee40e7b243f99cc50dd1ad710ab0928dd820",
+      "8452829bccb0c6dbb66dd0e4ded0886c": "2a3d953a423fa513f0d26a8bf0bd50664688868c",
+      "b317cf287f4de9240f73b9fdd40e1476": "20100697cc10c3a1e49d371bf647fed9c47c4d04",
+      "a851d1013e4d5dbf1b5bf2e28995b2dc": "816ceb21088b116ec34be0ff869d02222b525e58",
+      "8c6fe27ab789741b14b31015df0ec5bf": "b746192dc333eaf2a725a44777303808a3649d63",
+      "0a0958e60d39c196b7db4eebf082db24": "61cba1680ac6cb448dc3e8c710a43f4e7ab49457",
+      "e4dee6157589e1bb36591ee6eb4b1288": "f2a1d326d72d4c70ea214d7883838de8847a82b7",
+      "c60a5040634b088e8f36c867270b7d74": "2ba40f6520e3045326a985956f7d32ff6d7cd99a",
+      "9b7d6c55eb37d287fa9edb1c7e63f777": "42f4e3360eb134857b0efa82c1abedf342680124",
+      "00c388a67a25a26824cc5f35857c8f4f": "633ad62599361bbb8ba6803cdcfaa14c54521c43",
+      "6b29d76005d573cf7bf7cf04500cff9b": "ffc1bafca38d20ed6e9a27c90c6ab089a8482d89",
       "f873f1260b14f1468fa118778ae1c3d2": "c7a2c5baee6a9f0e1c6ee7d76944c0ab1886796c",
       "318b6aa76da71c54ccad7734356e1902": "f1525de4e0b60a6687156c2a96f8a8b2044b6c56",
+      "2134ce3d00f0fc2e451a16bc39137ae2": "aa98b0822d768acb73ab729d736c8fb682685492",
+      "193ee56ebe64a499d942b7f61e0e9ce6": "e89eb87f295a2c93688265c4f6f25a9ccb4e3697",
+      "6072bc6c0016dbc7cba76948458bf69b": "124126cee840e43c7668c11c2bec2f34b3d00c68",
+      "d2913b67c8d6fc43e5e5c437cddbcc2b": "d9c82e091b5fa1b5ee9b7f012f0084611762eb93",
+      "bbfd0222547841d4c0d960111d4692e5": "ea3c1d20310e7fbaacfdede839be0118ecea015e",
+      "f89f131048d14e160f5a5f65e2eb91d7": "19bf90b8d2e695ffad61fff6f47f7fcda2f24a1d",
       "5bf4fdfd3c3ffea3e573b386550cb3fa": "44e0dd215b2a9f0770dd76fb49187c05b083eed9",
       "86269da485e852d9f581ac27f4ba32ff": "78cd7f847e77fd8cd51a647efb2725ba93f4c471",
       "afbe6ba903453902540ae988cc89dc7b": "3a9a942ed888dd641cddf8deada1879c454df3c6",
       "090539674630c1338a90a1df943a93e2": "9ed3ab6d893632b9246e91b412cd5db519e7586b",
       "dcd5e2388115172f2fb48875b2089dbf": "4be8371f3b03e70ddaca495958345f3c4f8e2d36",
       "7eb6ae0fbe9736b20dda8dcbd5064f67": "b677a861b67e8763a11d5dcf52416b42493ade57",
+      "dcf6f64dee38e3c2996678deabf0b0fc": "c212b11fda13f83dafed688c54d098e7e47ab225",
+      "69203698f393d26043a059a6733fa9bd": "a45692849acf29ddb653707a62747985439f6d4f",
+      "506b3c31e19178adbd2be5b73f6121e7": "a2f70f911ccaa6831008bd473e92a3f0eb1e8b0f",
+      "e67b0fc114ad784f4f8b33df010aa154": "5e872d5853698731a0ed22fb72dbcdfd59cd19c3",
+      "9fee5c622ff65c276d79c3f2f9905e4f": "b262aedc71b445303f84efe5e865cbb71fd7d952",
+      "a9105b8be71c346807890cc80b8c220c": "4ce41fcc1a603411ec4e99556409c442078f0ecf",
+      "37f22b0c7cfbc23f7839f6e78b501dd3": "12f2cc79b3d09723840bae774be48c0d721ec1c6",
+      "5ccfc5dde146e49af6427c2f2f128cbe": "ade0c5ba5574f8114d7079050317099b4519e88f",
+      "c15e9797d42e9fcb55a4c9f761d2842e": "174c9254f09d99361ff7607630248ff9d7d8d4d6",
+      "9c5357b593f142e0d832999809e9dc04": "5a4e7dbbfb759109c7d2a3b38bda9c60bf6ffef5",
+      "fd6a420fc67299d92cf3be0a66774b73": "218d91eb6df2823c924d3774a9f455492a10aecb",
+      "061a87cbb20e6c695f980eda1204f4a5": "0de3c802057560560a03d7965fcc4cff69f8575c",
+      "16f0d60f94f4b0e3ac2f3087fdc3e72a": "3376cf9dd2b1ac9b41bf6bf6598b33136e86f9d5",
+      "0b8f0ec02c1f723f5e669462cb1c800c": "3288894e1be6af705871499b23c85732dbc40993",
+      "1162fc9bc00e206c86918885b5ea10d3": "608e8e9ab91c67f7015a67ea12f52ea3b0d609cd",
+      "4747d5d0a0ff835490a800f566fe2cfd": "ab57b4c8e5d47c2a39031c2057b97d2d10546582",
+      "f463b1617c8f1850cc6b627ccdc04c63": "b2776159a7b92d74308b434a6b3e5feba161e2b7",
+      "f7aeca5b9ece4481b9c280e3ab60b76c": "ba83a80a0041e3a8fb5c075a9b4a29ee92255d62",
+      "c60f7b30128a3c51750694b6b92a677d": "e92f47bd8320f94b8f7ae1943b31316002075ffb",
+      "a29e8e1a862d78c442475e1c4ec41ddc": "4dad9de7c28b452351cc12910849b51bd9a37ab3",
+      "9e960fc3090671bb5464dba6106a97cc": "b88c507720a0617a27141c329755de1a48b89deb",
+      "38eb2e535b8fe6886597081f79f27243": "0d246b0e3edc63803fcce861ea07eadf29dc488c",
+      "aef0f9ff05c83c05fff02f4ffac2b675": "1621f623b834dc57cb2983f30b36bcc3ac56cafd",
+      "eaab6f1152427a68bc02c33699c467f2": "bb72819da1160bc375fa3623f2d0a5424d08c89b",
+      "0ddedb30a4b688e845cb988eb3acaf7e": "658bc7cd4b19bd5face14f09e4e2904157a5c298",
+      "d66309cf1742765835f01717b1ad5e86": "f0abc38f345c05e2112079239d09f25fb08a7c56",
+      "f0cd74a735e3aa96aa94a54615b183fe": "41c4810ec56ed0f61e0fc8b355d2aae91de12d99",
+      "cb30a978bd4bddf957c66d1d05273658": "f4dba5ba267b5dd1a35eb74a6ec4fd4d5ca9a1b4",
+      "f35edf0808fdd1a81f86ea647e5b38ee": "fc71561a64f73da0e0043d256f67fd18d7fc3a7f",
+      "0cbeb218d5624c24f966f4797e8129a3": "7f115ff923a1cc0d1944cf280168add946fde854",
+      "4a59c37c6ecc11a65535b2d775bd6f4c": "b344b5b7988f459354a2db49d7d339ceeee7d864",
+      "00d7758773ee20fe9d3ecb87b9818480": "9c924cc79b17cfe468fc7c969868be86ccbe9d46",
+      "f78eb4dc81bab537d385e93d011f6f7b": "e88ca790ab58e7709cd99cbbb23ff7d33631b71f",
+      "a26585a3214ac8ea5830e9f9abb825ff": "0b63e9cf99bc2a3d7f21cabf1cb668a6ca71ad2d",
+      "b4415a26072ed955d83cc88d0dc16405": "c7463e1fd0433c5d41b70670d6c10fd781b66426",
       "3525ea046ddedc66991790eeae32acfd": "c3f3ca454d66a0bc791f1d4b60e6857b44eb8755",
       "57509815f93e2817d3eb57e20286c7fb": "b484c8fa4549b79cff976001ac4beb19abf7cfb5",
       "248514aba82a0ec7fe2a9106862b05cd": "e7905d16d2ccd57a013c122dc432106cd59ef52c",
+      "7c0730892da70e703c7c1c0a55e8c09a": "794aca3c2136933f1fe6405e56e0ce7fdbb10385",
+      "04e6467d5da11f64dd944c6bcffa2281": "49a1750c10e407293af6bce27a02e99307ceba12",
+      "036325e1de5b125c2c25778f3ebc7695": "6680d7118d85418813f1db9449bf3e20942b16da",
+      "b8253f9cdd8c18af5110ea221a7159c1": "2cb1c373753d792b75609d81d57719d545c63c41",
+      "0918a31446a3840e18b01e6f65e86c73": "a337c9aede83cf684339f61a80468e73af31ebeb",
       "bb53012ac162bd9a9644d163c0b924e0": "c53b3f2c00f31683914f7452f3f4d94ae2929c0d",
       "a063a2acbcf12b5f1d2919b119a6fe19": "99a40266bc296cef1d432cb0caa8df1a7e570be4",
       "a0452dbf5ace7d2e49d0a8029efed09a": "829c00c3114f25b3dae5157c0a238b52a3ac37db",
@@ -280640,15 +281572,107 @@
       "yrw801.rom": [
         "32760893ce06dbe3930627755ba065cc3d8ec6ca"
       ],
+      "Nextor-2.1.1.SunriseIDE.ROM": [
+        "d3a4375ff5f58cf59cc609dd41c90af285f033c2",
+        "61cba1680ac6cb448dc3e8c710a43f4e7ab49457"
+      ],
+      "ddx_3.0.rom": [
+        "a363015286341ffabcdc38ef0d890897ed51e322",
+        "124126cee840e43c7668c11c2bec2f34b3d00c68"
+      ],
+      "fd-03.rom": [
+        "5a5cc35ffb7f78ef440df9548c7360ab56719c5a",
+        "ea3c1d20310e7fbaacfdede839be0118ecea015e"
+      ],
+      "fs-a1st_firmware.rom": [
+        "4b84465c2faa802bfd5f772118c4d31f993f29d0",
+        "c212b11fda13f83dafed688c54d098e7e47ab225"
+      ],
+      "fs-ca1.rom": [
+        "930eae7057af1652abae794072b296a59decd61b",
+        "36d47cf70618fdb460f97a8ceb75013ec4529063",
+        "a45692849acf29ddb653707a62747985439f6d4f"
+      ],
+      "hb-f700p_msx2sub.rom": [
+        "24624c5fa3a8069b1d865cdea8a029f15c1955ea",
+        "3288894e1be6af705871499b23c85732dbc40993"
+      ],
+      "hbd-50.rom": [
+        "2144036d6573d666143e890e5413956bfe8f66c5",
+        "ab57b4c8e5d47c2a39031c2057b97d2d10546582"
+      ],
+      "hddrom.rom": [
+        "5a14ac0a1cce3ceebdcd66c42b2d5c975d45b755",
+        "11bd12a95142185d18659ccf74748fc1bb20c60d",
+        "e92f47bd8320f94b8f7ae1943b31316002075ffb"
+      ],
+      "msxaudio12pre4a.rom": [
+        "3b02e5f45603df2c180f9c07d59b2ccc5a87bd0a",
+        "7f115ff923a1cc0d1944cf280168add946fde854"
+      ],
+      "nms1200_6.rom": [
+        "f0e0447a0872a2f09d7b28d9599fdd183acb5cb2",
+        "0b63e9cf99bc2a3d7f21cabf1cb668a6ca71ad2d"
+      ],
       "nms8245_disk.rom": [
         "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091",
+        "58ba1887e8fd21c912b6859cae6514bd874ffcca",
         "c3f3ca454d66a0bc791f1d4b60e6857b44eb8755"
+      ],
+      "NMS8245SystemROM1.05.bin": [
+        "7e6a267e1a3e075dcdad3669b651b1050f6375ac",
+        "816ceb21088b116ec34be0ff869d02222b525e58"
+      ],
+      "FD-051.BIN": [
+        "4b08a057e5863ade179dcf8bc9377e90940e6d61"
+      ],
+      "Japanese MSX-Write (1986) (Ascii) (J).rom": [
+        "4180544158a57c99162269e33e4f2c77c9fce84e"
+      ],
+      "Japanese MSX-Write II (1988) (Ascii) (J).rom": [
+        "9afdee40e7b243f99cc50dd1ad710ab0928dd820"
+      ],
+      "NEOSC.ROM": [
+        "2a3d953a423fa513f0d26a8bf0bd50664688868c"
+      ],
+      "NEOSV.ROM": [
+        "20100697cc10c3a1e49d371bf647fed9c47c4d04"
+      ],
+      "NMS8245SystemROM1.06.bin": [
+        "b746192dc333eaf2a725a44777303808a3649d63"
+      ],
+      "Sony_HB-F1XV.rom": [
+        "f2a1d326d72d4c70ea214d7883838de8847a82b7"
+      ],
+      "Tecall_MSX_RAMFILE_TM220.rom": [
+        "2ba40f6520e3045326a985956f7d32ff6d7cd99a"
+      ],
+      "ascii_msxdos22.rom": [
+        "42f4e3360eb134857b0efa82c1abedf342680124"
+      ],
+      "avt_dpf-550_disk.rom": [
+        "633ad62599361bbb8ba6803cdcfaa14c54521c43"
+      ],
+      "cdx-2.rom": [
+        "ffc1bafca38d20ed6e9a27c90c6ab089a8482d89"
       ],
       "cf-3300_basic-bios1.rom": [
         "c7a2c5baee6a9f0e1c6ee7d76944c0ab1886796c"
       ],
       "cf-3300_disk.rom": [
         "f1525de4e0b60a6687156c2a96f8a8b2044b6c56"
+      ],
+      "chakkari.rom": [
+        "aa98b0822d768acb73ab729d736c8fb682685492"
+      ],
+      "ct-80e.rom": [
+        "e89eb87f295a2c93688265c4f6f25a9ccb4e3697"
+      ],
+      "dpf-550_disk.rom": [
+        "d9c82e091b5fa1b5ee9b7f012f0084611762eb93"
+      ],
+      "fmpak.rom": [
+        "19bf90b8d2e695ffad61fff6f47f7fcda2f24a1d"
       ],
       "fs-5500_basic-bios2.rom": [
         "44e0dd215b2a9f0770dd76fb49187c05b083eed9"
@@ -280668,11 +281692,110 @@
       "fs-5500_superimp.rom": [
         "b677a861b67e8763a11d5dcf52416b42493ade57"
       ],
+      "fs-fd1a.rom": [
+        "a2f70f911ccaa6831008bd473e92a3f0eb1e8b0f"
+      ],
+      "fs-pw1_kanjifont.rom": [
+        "5e872d5853698731a0ed22fb72dbcdfd59cd19c3"
+      ],
+      "hb-75p_firmware.rom": [
+        "b262aedc71b445303f84efe5e865cbb71fd7d952"
+      ],
+      "hb-f1xd_basic-bios2.rom": [
+        "4ce41fcc1a603411ec4e99556409c442078f0ecf"
+      ],
+      "hb-f1xd_disk.rom": [
+        "12f2cc79b3d09723840bae774be48c0d721ec1c6"
+      ],
+      "hb-f1xv.rom": [
+        "ade0c5ba5574f8114d7079050317099b4519e88f"
+      ],
+      "hb-f1xv_basic-bios2p.rom": [
+        "174c9254f09d99361ff7607630248ff9d7d8d4d6"
+      ],
+      "hb-f1xv_disk.rom": [
+        "5a4e7dbbfb759109c7d2a3b38bda9c60bf6ffef5"
+      ],
+      "hb-f1xv_kanjifont.rom": [
+        "218d91eb6df2823c924d3774a9f455492a10aecb"
+      ],
+      "hb-f700p_basic-bios2.rom": [
+        "0de3c802057560560a03d7965fcc4cff69f8575c"
+      ],
+      "hb-f700p_disk.rom": [
+        "3376cf9dd2b1ac9b41bf6bf6598b33136e86f9d5"
+      ],
+      "hb3600_disk.rom": [
+        "608e8e9ab91c67f7015a67ea12f52ea3b0d609cd"
+      ],
+      "hbi-232.rom": [
+        "b2776159a7b92d74308b434a6b3e5feba161e2b7"
+      ],
+      "hbk-30.rom": [
+        "ba83a80a0041e3a8fb5c075a9b4a29ee92255d62"
+      ],
+      "hx-10_basic-bios1.rom": [
+        "4dad9de7c28b452351cc12910849b51bd9a37ab3"
+      ],
+      "hx-f101pe.rom": [
+        "b88c507720a0617a27141c329755de1a48b89deb"
+      ],
+      "hx-mu900.rom": [
+        "0d246b0e3edc63803fcce861ea07eadf29dc488c"
+      ],
+      "megaflashrom_scc+_sd.rom": [
+        "1621f623b834dc57cb2983f30b36bcc3ac56cafd"
+      ],
+      "mfd-001_disk.rom": [
+        "bb72819da1160bc375fa3623f2d0a5424d08c89b"
+      ],
+      "ml-30dc.rom": [
+        "658bc7cd4b19bd5face14f09e4e2904157a5c298"
+      ],
+      "mr512.rom": [
+        "f0abc38f345c05e2112079239d09f25fb08a7c56"
+      ],
+      "mrs-001.rom": [
+        "41c4810ec56ed0f61e0fc8b355d2aae91de12d99"
+      ],
+      "msx-write_ii_kanjifont.rom": [
+        "f4dba5ba267b5dd1a35eb74a6ec4fd4d5ca9a1b4"
+      ],
+      "msx-write_kanjifont.rom": [
+        "fc71561a64f73da0e0043d256f67fd18d7fc3a7f"
+      ],
+      "msxaudio13.OPL3_mono.rom": [
+        "b344b5b7988f459354a2db49d7d339ceeee7d864"
+      ],
+      "msxaudio13.OPL3_stereo.rom": [
+        "9c924cc79b17cfe468fc7c969868be86ccbe9d46"
+      ],
+      "mu-pack.rom": [
+        "e88ca790ab58e7709cd99cbbb23ff7d33631b71f"
+      ],
+      "nms1205.rom": [
+        "c7463e1fd0433c5d41b70670d6c10fd781b66426"
+      ],
       "nms8245_disk_1.06.rom": [
         "b484c8fa4549b79cff976001ac4beb19abf7cfb5"
       ],
       "nms8245_msx2sub.rom": [
         "e7905d16d2ccd57a013c122dc432106cd59ef52c"
+      ],
+      "sensor-kid.rom": [
+        "794aca3c2136933f1fe6405e56e0ce7fdbb10385"
+      ],
+      "sfg-01.rom": [
+        "49a1750c10e407293af6bce27a02e99307ceba12"
+      ],
+      "sfg-05.rom": [
+        "6680d7118d85418813f1db9449bf3e20942b16da"
+      ],
+      "svi-707_cpm.rom": [
+        "2cb1c373753d792b75609d81d57719d545c63c41"
+      ],
+      "svi-707_disk.rom": [
+        "a337c9aede83cf684339f61a80468e73af31ebeb"
       ],
       "svi-738_basic-bios1.rom": [
         "c53b3f2c00f31683914f7452f3f4d94ae2929c0d"
@@ -308021,8 +309144,23 @@
       "hb-f1xd_msx2sub.rom": [
         "0fbd45ef3dd7bb82d4c31f1947884f411f1ca344"
       ],
+      "hbd-20w.rom": [
+        "12f2cc79b3d09723840bae774be48c0d721ec1c6"
+      ],
+      "hbd-f1.rom": [
+        "12f2cc79b3d09723840bae774be48c0d721ec1c6"
+      ],
+      "hbi-j1_kanjifont.rom": [
+        "218d91eb6df2823c924d3774a9f455492a10aecb"
+      ],
+      "hbi-j1_msx-je.rom": [
+        "ade0c5ba5574f8114d7079050317099b4519e88f"
+      ],
       "hb-f1xv_fmbasic.rom": [
         "aad42ba4289b33d8eed225d42cea930b7fc5c228"
+      ],
+      "ec-702_kanjifont.rom": [
+        "fc71561a64f73da0e0043d256f67fd18d7fc3a7f"
       ],
       "msxdos22.rom": [
         "c36c9e0f96738a340381e23b4f97245388801a46"
@@ -321722,18 +322860,91 @@
       "a5d0c0b9": "665d805f96616e1037f1823050657b7849899283",
       "bc433df6": "10349ce675f6d6d47f0976e39cb7188eba858d89",
       "2a9d8d43": "32760893ce06dbe3930627755ba065cc3d8ec6ca",
+      "b5506b0c": "d3a4375ff5f58cf59cc609dd41c90af285f033c2",
+      "2a623a9a": "a363015286341ffabcdc38ef0d890897ed51e322",
+      "ec1aca6e": "5a5cc35ffb7f78ef440df9548c7360ab56719c5a",
+      "f8d14eea": "4b84465c2faa802bfd5f772118c4d31f993f29d0",
+      "90e893ba": "930eae7057af1652abae794072b296a59decd61b",
+      "3e60c1e6": "36d47cf70618fdb460f97a8ceb75013ec4529063",
+      "a286180e": "24624c5fa3a8069b1d865cdea8a029f15c1955ea",
+      "71961d9d": "2144036d6573d666143e890e5413956bfe8f66c5",
+      "36f22d53": "5a14ac0a1cce3ceebdcd66c42b2d5c975d45b755",
+      "fa250bf0": "11bd12a95142185d18659ccf74748fc1bb20c60d",
+      "451605ff": "3b02e5f45603df2c180f9c07d59b2ccc5a87bd0a",
+      "7c0b1439": "f0e0447a0872a2f09d7b28d9599fdd183acb5cb2",
       "3d00bf53": "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091",
+      "13b60725": "58ba1887e8fd21c912b6859cae6514bd874ffcca",
+      "5c49db82": "7e6a267e1a3e075dcdad3669b651b1050f6375ac",
+      "ab94a273": "4b08a057e5863ade179dcf8bc9377e90940e6d61",
+      "ef02e4f3": "4180544158a57c99162269e33e4f2c77c9fce84e",
+      "459478cb": "9afdee40e7b243f99cc50dd1ad710ab0928dd820",
+      "2924e879": "2a3d953a423fa513f0d26a8bf0bd50664688868c",
+      "21dde18b": "20100697cc10c3a1e49d371bf647fed9c47c4d04",
+      "cef8895d": "816ceb21088b116ec34be0ff869d02222b525e58",
+      "be4ae17e": "b746192dc333eaf2a725a44777303808a3649d63",
+      "cc1cde04": "61cba1680ac6cb448dc3e8c710a43f4e7ab49457",
+      "d89bab74": "f2a1d326d72d4c70ea214d7883838de8847a82b7",
+      "6a793baf": "2ba40f6520e3045326a985956f7d32ff6d7cd99a",
+      "47eea028": "42f4e3360eb134857b0efa82c1abedf342680124",
+      "938f51b0": "633ad62599361bbb8ba6803cdcfaa14c54521c43",
+      "7d55811a": "ffc1bafca38d20ed6e9a27c90c6ab089a8482d89",
       "5ad03407": "c7a2c5baee6a9f0e1c6ee7d76944c0ab1886796c",
       "549f1d90": "f1525de4e0b60a6687156c2a96f8a8b2044b6c56",
+      "3a8f200d": "aa98b0822d768acb73ab729d736c8fb682685492",
+      "0a0006e7": "e89eb87f295a2c93688265c4f6f25a9ccb4e3697",
+      "337b11b7": "124126cee840e43c7668c11c2bec2f34b3d00c68",
+      "bed64b97": "d9c82e091b5fa1b5ee9b7f012f0084611762eb93",
+      "f691d69b": "ea3c1d20310e7fbaacfdede839be0118ecea015e",
+      "e57d6580": "19bf90b8d2e695ffad61fff6f47f7fcda2f24a1d",
       "5bf38e13": "44e0dd215b2a9f0770dd76fb49187c05b083eed9",
       "1e7d6512": "78cd7f847e77fd8cd51a647efb2725ba93f4c471",
       "b2db6bf5": "3a9a942ed888dd641cddf8deada1879c454df3c6",
       "956dc96d": "9ed3ab6d893632b9246e91b412cd5db519e7586b",
       "3c42c367": "4be8371f3b03e70ddaca495958345f3c4f8e2d36",
       "6173a88c": "b677a861b67e8763a11d5dcf52416b42493ade57",
+      "139ac99c": "c212b11fda13f83dafed688c54d098e7e47ab225",
+      "78584d2e": "a45692849acf29ddb653707a62747985439f6d4f",
+      "0261124a": "a2f70f911ccaa6831008bd473e92a3f0eb1e8b0f",
+      "c61ddc5d": "5e872d5853698731a0ed22fb72dbcdfd59cd19c3",
+      "492b12f8": "b262aedc71b445303f84efe5e865cbb71fd7d952",
+      "ba81b3dd": "4ce41fcc1a603411ec4e99556409c442078f0ecf",
+      "54c73ad6": "12f2cc79b3d09723840bae774be48c0d721ec1c6",
+      "77be583f": "ade0c5ba5574f8114d7079050317099b4519e88f",
+      "2c7ed27b": "174c9254f09d99361ff7607630248ff9d7d8d4d6",
+      "04e4e533": "5a4e7dbbfb759109c7d2a3b38bda9c60bf6ffef5",
+      "7016dfd0": "218d91eb6df2823c924d3774a9f455492a10aecb",
+      "b31c851d": "0de3c802057560560a03d7965fcc4cff69f8575c",
+      "1d9cc7f6": "3376cf9dd2b1ac9b41bf6bf6598b33136e86f9d5",
+      "8f84f783": "3288894e1be6af705871499b23c85732dbc40993",
+      "af445c3d": "608e8e9ab91c67f7015a67ea12f52ea3b0d609cd",
+      "a8569f6f": "ab57b4c8e5d47c2a39031c2057b97d2d10546582",
+      "be88e5f7": "b2776159a7b92d74308b434a6b3e5feba161e2b7",
+      "18b37c5e": "ba83a80a0041e3a8fb5c075a9b4a29ee92255d62",
+      "1a948496": "e92f47bd8320f94b8f7ae1943b31316002075ffb",
+      "5486b711": "4dad9de7c28b452351cc12910849b51bd9a37ab3",
+      "8c3b1271": "b88c507720a0617a27141c329755de1a48b89deb",
+      "dc405f8c": "0d246b0e3edc63803fcce861ea07eadf29dc488c",
+      "facbbca2": "1621f623b834dc57cb2983f30b36bcc3ac56cafd",
+      "7055c36f": "bb72819da1160bc375fa3623f2d0a5424d08c89b",
+      "0ed4d468": "658bc7cd4b19bd5face14f09e4e2904157a5c298",
+      "5d50943c": "f0abc38f345c05e2112079239d09f25fb08a7c56",
+      "abb107a0": "41c4810ec56ed0f61e0fc8b355d2aae91de12d99",
+      "17e58926": "f4dba5ba267b5dd1a35eb74a6ec4fd4d5ca9a1b4",
+      "3b8fdf44": "fc71561a64f73da0e0043d256f67fd18d7fc3a7f",
+      "d3c56cca": "7f115ff923a1cc0d1944cf280168add946fde854",
+      "6a3bfeda": "b344b5b7988f459354a2db49d7d339ceeee7d864",
+      "95b932a1": "9c924cc79b17cfe468fc7c969868be86ccbe9d46",
+      "faa97d0a": "e88ca790ab58e7709cd99cbbb23ff7d33631b71f",
+      "6df59842": "0b63e9cf99bc2a3d7f21cabf1cb668a6ca71ad2d",
+      "5ecaeef0": "c7463e1fd0433c5d41b70670d6c10fd781b66426",
       "0cb81074": "c3f3ca454d66a0bc791f1d4b60e6857b44eb8755",
       "c443c426": "b484c8fa4549b79cff976001ac4beb19abf7cfb5",
       "95db2959": "e7905d16d2ccd57a013c122dc432106cd59ef52c",
+      "acdfc7ac": "794aca3c2136933f1fe6405e56e0ce7fdbb10385",
+      "84f4b692": "49a1750c10e407293af6bce27a02e99307ceba12",
+      "38bf684f": "6680d7118d85418813f1db9449bf3e20942b16da",
+      "00940cd0": "2cb1c373753d792b75609d81d57719d545c63c41",
+      "53ec9f04": "a337c9aede83cf684339f61a80468e73af31ebeb",
       "ad007d62": "c53b3f2c00f31683914f7452f3f4d94ae2929c0d",
       "acd27a36": "99a40266bc296cef1d432cb0caa8df1a7e570be4",
       "8205795e": "829c00c3114f25b3dae5157c0a238b52a3ac37db",
@@ -343668,18 +344879,91 @@
       "6f3a760be58bace2bce20496ffc7d43e0dbe7d229ac14453f2194fcc7059d3ab": "665d805f96616e1037f1823050657b7849899283",
       "407b47ff8c1ed31d8050600233ef8b70c495f5176d86f98511c4a0cee438f559": "10349ce675f6d6d47f0976e39cb7188eba858d89",
       "0481e861f639fa3d6a64a75b735035a54b0875d57aaae33fdbe400146c80423f": "32760893ce06dbe3930627755ba065cc3d8ec6ca",
+      "26975633723185ed2656bfbf1f37739ff5104869b68ed9b2325f333b36717844": "d3a4375ff5f58cf59cc609dd41c90af285f033c2",
+      "99664345d75eefcad347c9d6a9c00a84864c2d85d5aea7388745887c2b1a95e9": "a363015286341ffabcdc38ef0d890897ed51e322",
+      "0db133c5318df955b726b419afcae62af3ab1987d218eeea25705f966e41eb6c": "5a5cc35ffb7f78ef440df9548c7360ab56719c5a",
+      "5546766d6224a3a698348bc697dad2da5914fd5785a2e360b0e9ce9c07c921fd": "4b84465c2faa802bfd5f772118c4d31f993f29d0",
+      "42c5f473e077dc4c4493dfe7ee55ff60d7207ff714cdac53f4d5f9200539ca49": "930eae7057af1652abae794072b296a59decd61b",
+      "3a5671111276287dd66feaedd038854bc9f376bbb115eb7b4c0ab1b6de4b552a": "36d47cf70618fdb460f97a8ceb75013ec4529063",
+      "b27ea48e856e3271ce85f3d97ed39f2286c4f0b8dd8ef335c14a165f7fd98cc9": "24624c5fa3a8069b1d865cdea8a029f15c1955ea",
+      "f370b00ff678ae42c403e6589c0530124372ff831f8fef8dce69d6f6391bbed1": "2144036d6573d666143e890e5413956bfe8f66c5",
+      "baf73396f2daff9653ad46cc75f6bd493bc99b0c624c29fa81c1b71887eaa547": "5a14ac0a1cce3ceebdcd66c42b2d5c975d45b755",
+      "31cfcfb99892fb186b617d0b98f5ed5620bdb6c345b954eb5e2052f84d6a5ad0": "11bd12a95142185d18659ccf74748fc1bb20c60d",
+      "464a9c6d449ce1cfc833412a967d25832a0b0f3f8a0e2780811c56f4ff8537e9": "3b02e5f45603df2c180f9c07d59b2ccc5a87bd0a",
+      "8bde00cb8224d6025ca734d02c317c60d8d1394ae690ad6c67df088f9fb84530": "f0e0447a0872a2f09d7b28d9599fdd183acb5cb2",
       "83d5e564550a2518fbe9a3e5d1ad378506e9d5dac6cd865ab51c21460ae8144f": "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091",
+      "e7bd920b362a205c368324756e2fc0c5b896e09b134dd596026119137d9ca03a": "58ba1887e8fd21c912b6859cae6514bd874ffcca",
+      "c1999293e69a4988356826662a4e3934085782255d65dba226605efa4b09f200": "7e6a267e1a3e075dcdad3669b651b1050f6375ac",
+      "ebde8e704c79eb4febd3046094bcf5e0a15c102a8d5a0930212efa008416f759": "4b08a057e5863ade179dcf8bc9377e90940e6d61",
+      "92819471ae1b87d383b3d1815c69f3c59db5e66ead2b7b012f60ef11fce12737": "4180544158a57c99162269e33e4f2c77c9fce84e",
+      "8db375f31bcbd0951f9fae02199a1702ffa49be8770945d351c31a215549b357": "9afdee40e7b243f99cc50dd1ad710ab0928dd820",
+      "017718c5f2c5ff1fd0e1953db06fc999c09727c1875a69ddbd0d3014d19c8ed5": "2a3d953a423fa513f0d26a8bf0bd50664688868c",
+      "1157e8d0ffc8c62598924d50f67ad1170764382f84421f588ec9723fa096b506": "20100697cc10c3a1e49d371bf647fed9c47c4d04",
+      "ad304970db9851954c4127f31044b5b36e800b5921603a012b56a2b7f232dcc7": "816ceb21088b116ec34be0ff869d02222b525e58",
+      "17732f61bddbb7b644409d42c9da3812589ec8d67aa2cf22aed28d8b42c01b87": "b746192dc333eaf2a725a44777303808a3649d63",
+      "ec932c060d2b69e80c8911530e69d2ca7cd91ae6c36a3f1c313a573050eec6ea": "61cba1680ac6cb448dc3e8c710a43f4e7ab49457",
+      "2a7c24251a2401b8967484058c725b7ef4c712059e356d44cf5e3ceea99f9dcf": "f2a1d326d72d4c70ea214d7883838de8847a82b7",
+      "7b0a1f7a3b5f68c41f7658a23392ae0f7b66529627c8e9de4cc62346a0f09cd6": "2ba40f6520e3045326a985956f7d32ff6d7cd99a",
+      "f2614cbfc2d73f88ffa1a41a378d081af1ad217c6b1562715acc9683f36fe453": "42f4e3360eb134857b0efa82c1abedf342680124",
+      "c97a06eceec4631c5554099557cec648caec602aa5cd46566e2a230b078bdcf9": "633ad62599361bbb8ba6803cdcfaa14c54521c43",
+      "619a616053d094f098faa9c72a04d14095c5ef6cd2fa21da54c1b4f28356953a": "ffc1bafca38d20ed6e9a27c90c6ab089a8482d89",
       "ba8ae935046ad59741778967c4b234bd977d796848f2ddf67846831a7e5aee8f": "c7a2c5baee6a9f0e1c6ee7d76944c0ab1886796c",
       "966ad1e47ba8140ca0f330140e43cc22914857e43345a39685878abc8e55b582": "f1525de4e0b60a6687156c2a96f8a8b2044b6c56",
+      "5068a0ae71a309d945ace5d17d8a7b9ff0bd98eeaca69059ba7dddcc99ad959f": "aa98b0822d768acb73ab729d736c8fb682685492",
+      "795f0aece47423ef46e79977ab3b282df0e3d3c4b5dc38ab4d75a280633eeb69": "e89eb87f295a2c93688265c4f6f25a9ccb4e3697",
+      "a063d5306380e1a3d83c3e3f33af0146bf18e6f18519001b004bf52404e69dcc": "124126cee840e43c7668c11c2bec2f34b3d00c68",
+      "73dea5e4b5534b9829fc89e1bc88af46c89bb9bd84a8a1712df3723bec270647": "d9c82e091b5fa1b5ee9b7f012f0084611762eb93",
+      "806d9319c880d0ae5536f109998bb403a9f6947beb734cf228702793a3c59d41": "ea3c1d20310e7fbaacfdede839be0118ecea015e",
+      "300f871a076132f894a2cb9c22aeabcb3125629264b3267d74300ab902b69036": "19bf90b8d2e695ffad61fff6f47f7fcda2f24a1d",
       "997b8e9d88a27ccb48dfecce0ef76073216695e358c0df78e99786e6d9efa72c": "44e0dd215b2a9f0770dd76fb49187c05b083eed9",
       "954e13823e232e745bf527fc5b2d80d6dd55df28593f3d71fc2f4ba6a569ab21": "78cd7f847e77fd8cd51a647efb2725ba93f4c471",
       "4ef55af79fd4e34812edd936be9a5d08ad4f60715ced12f005f6b4f3a6a3eacb": "3a9a942ed888dd641cddf8deada1879c454df3c6",
       "17b694b14fa9593535e89e9b8cc6f6373217105971fa473badc66dbde5abc539": "9ed3ab6d893632b9246e91b412cd5db519e7586b",
       "585a7bddbd4fa4eb8fa877913bbe21540eae1fe92274b838323f3374a6854f83": "4be8371f3b03e70ddaca495958345f3c4f8e2d36",
       "6f74869ae36d7dc7e9e23bf1f3c7456f0f4b693e004e84b06b65dd961e97a0d5": "b677a861b67e8763a11d5dcf52416b42493ade57",
+      "9356be1f78e33383a7f9f8e788293f3fbe788d2ee228d00eaad8825b9e005691": "c212b11fda13f83dafed688c54d098e7e47ab225",
+      "2a35f43b078dd916c284159d33615516efedde1b523d377711384231c6204807": "a45692849acf29ddb653707a62747985439f6d4f",
+      "d22373524bebdc37deee96de9e49e25796b02ac4211b68adaa96bea311f0154a": "a2f70f911ccaa6831008bd473e92a3f0eb1e8b0f",
+      "e4036415638e73d5894d850cab3a40cb63e76afa0391d0ad31321bf2ed61b7d7": "5e872d5853698731a0ed22fb72dbcdfd59cd19c3",
+      "070b5c3b36cb88d50ccf489ca45585a2167ac48a5f6f6c3dec4b9923666f8300": "b262aedc71b445303f84efe5e865cbb71fd7d952",
+      "2bf26217ae16768b721bd0a2c795aa642d227633753f1171fd4c9add3c3d6868": "4ce41fcc1a603411ec4e99556409c442078f0ecf",
+      "ee882383179b02561913f386e6993c711c4acf07639c43c21ba390dc81eefa4a": "12f2cc79b3d09723840bae774be48c0d721ec1c6",
+      "c78c13996a406ee69c2a6b988c53a68b649affabef6e4599e6ea507d5387f044": "ade0c5ba5574f8114d7079050317099b4519e88f",
+      "75adcdb462137c61fa570a2773a8d27ce3eeaf18873b3ac500492b594a1a1b93": "174c9254f09d99361ff7607630248ff9d7d8d4d6",
+      "b9e0f8db66c06069eae881096245666b798dcdc0461afb415a45a95476be8f9b": "5a4e7dbbfb759109c7d2a3b38bda9c60bf6ffef5",
+      "3c9f60fda25b42978612cff1b979de8a0f8deeaf9957db957f0e5c7c10263d8e": "218d91eb6df2823c924d3774a9f455492a10aecb",
+      "554d5d2172ae1ad6128f26a1d5c8b28d52c07de155e2248c2108b8fc30625997": "0de3c802057560560a03d7965fcc4cff69f8575c",
+      "dfcc1cc0fa1184eb70f6033cf72205a126c74de18ae8c4071dee7e3ccd6e4474": "3376cf9dd2b1ac9b41bf6bf6598b33136e86f9d5",
+      "3e095f3151e1bd17a5ecc123eaf3d6908575bd3de48f4473081d172746aff233": "3288894e1be6af705871499b23c85732dbc40993",
+      "87fdbda95438697e9efa8fd35700d47349a077231336fea7233f06dce88e873f": "608e8e9ab91c67f7015a67ea12f52ea3b0d609cd",
+      "2dfa1fed1071a5bb2f5e8377d5d8346fa4e62c917ad94d1e42a0271551113f75": "ab57b4c8e5d47c2a39031c2057b97d2d10546582",
+      "267ab614324129f4f3547471e5c996a2bf5b32ee07d0273de4fad6edc648cf66": "b2776159a7b92d74308b434a6b3e5feba161e2b7",
+      "9d9a7a1ccbf8b1ef6e6780690419480c5bc40fcc7ec859d582fc2a6d7f913351": "ba83a80a0041e3a8fb5c075a9b4a29ee92255d62",
+      "3de3d57b64b6ab2ab62c96aaeb28090bb145f683b712cedfb0ba03de980e7052": "e92f47bd8320f94b8f7ae1943b31316002075ffb",
+      "bbc474afbf3a0a9f8f3ed7ed59a86fa526c3a21487ffa211636c4082a9e61bd5": "4dad9de7c28b452351cc12910849b51bd9a37ab3",
+      "479e9d0e3111c2e48bb06809384434bdbdece6293cb29ee872801860f1796360": "b88c507720a0617a27141c329755de1a48b89deb",
+      "9532b23b70820ca08aa7c927763bccd91a993916c94202a441ba5f9131b1d55c": "0d246b0e3edc63803fcce861ea07eadf29dc488c",
+      "54d92573bf88b699b6f15d82f497d268a61a9d491b71aa84fd78d862a4561065": "1621f623b834dc57cb2983f30b36bcc3ac56cafd",
+      "d9382f7790764803c482586e6b7e512ab7fd547951281739c5a2b9535a93ae34": "bb72819da1160bc375fa3623f2d0a5424d08c89b",
+      "b84703bf5c6d51227bc2f17c68ef7b8be3367f84265105e5307adcb2ab669812": "658bc7cd4b19bd5face14f09e4e2904157a5c298",
+      "c041c3a3fc29e1841fcaf36391fd96c5bf54bbbfde7b4b76599a9f8b50af3a57": "f0abc38f345c05e2112079239d09f25fb08a7c56",
+      "8bc41c39412b521dbb29394c342026bd115d9f6c35d93de4d592f3e64d41604d": "41c4810ec56ed0f61e0fc8b355d2aae91de12d99",
+      "7b4d4cddcb20f8043b95d3171b59430e92378ce0ea216aaf4e7a9110420dcabf": "f4dba5ba267b5dd1a35eb74a6ec4fd4d5ca9a1b4",
+      "1f9949b3a7e173d0c42892972a9d6b47a7509eea09f8a10c078edd8f337dbfe7": "fc71561a64f73da0e0043d256f67fd18d7fc3a7f",
+      "e217d3d82dbd00050a65f2c33e702c7e500cae752d4465a07bf116c8ed7f826e": "7f115ff923a1cc0d1944cf280168add946fde854",
+      "582001da1f41ffe3098caa7ec8419b2efceca6a991c3b59bb8142aea6dff3306": "b344b5b7988f459354a2db49d7d339ceeee7d864",
+      "30fdef68c851d79b8e5ff7c8123d76e0f2fbbb8ac4dd230aaae4c754001b7089": "9c924cc79b17cfe468fc7c969868be86ccbe9d46",
+      "04a4176e4d6d05bd2067f9305f6e155824e55cbcedb30117bd19c685afc6fa36": "e88ca790ab58e7709cd99cbbb23ff7d33631b71f",
+      "63a8a27341af745802cdd60e9186a4ef1f4fbb0d4bea7cae1a751906e49e2b75": "0b63e9cf99bc2a3d7f21cabf1cb668a6ca71ad2d",
+      "3e914ea47784c2389c6cdecb6d2488506398fc25eff24af8b98802e9bc71eeae": "c7463e1fd0433c5d41b70670d6c10fd781b66426",
       "c71aa69cac617854b30a4f22b8338c4f4827286a6968703917c65fb8ba51f492": "c3f3ca454d66a0bc791f1d4b60e6857b44eb8755",
       "d3d513d2d6b1c6103964cb7c543f1d965f53f240a2b9db71712edc191a077f8f": "b484c8fa4549b79cff976001ac4beb19abf7cfb5",
       "a615f14eacd492e0eeba8614730b2275e64cdbcd01e0a1ad8e2d7006b1623dd1": "e7905d16d2ccd57a013c122dc432106cd59ef52c",
+      "968599c215b6307b6db0c3d0f4e73d9a6accdca94f56053c22fc8cdfd8151e00": "794aca3c2136933f1fe6405e56e0ce7fdbb10385",
+      "deb1e9d4f1a8288d8e4ac1f6a23e285ff1d317017b2f914b89977770cd2145c2": "49a1750c10e407293af6bce27a02e99307ceba12",
+      "e200733119be57298cf37687b05ca448039cc54554253d46ce49c9ecf9d1e4ad": "6680d7118d85418813f1db9449bf3e20942b16da",
+      "f247071439f2378e88d28f0ce57ad12a0e3f0172b02511b5b5ed0ca0c6799599": "2cb1c373753d792b75609d81d57719d545c63c41",
+      "82b3914528791db5c9ddbbf56879f4ac79a8135a7d0b9110b8b7cd0bee98aa7f": "a337c9aede83cf684339f61a80468e73af31ebeb",
       "f071a09376a0771b84a1f735af71f4ca93d85622c68f4acf65fdba0854a943ac": "c53b3f2c00f31683914f7452f3f4d94ae2929c0d",
       "8a3a68bc5d47c9e2f0d22a4ba934e6b942565cd4241b1e0a3e7463745a12ef97": "99a40266bc296cef1d432cb0caa8df1a7e570be4",
       "04fd77f02f652770cbb3cc6b4a594cc736d56486a106c1068965f1fe090746a5": "829c00c3114f25b3dae5157c0a238b52a3ac37db",
@@ -514255,6 +515539,186 @@
       "openmsx/yrw801.rom": [
         "32760893ce06dbe3930627755ba065cc3d8ec6ca"
       ],
+      "Microsoft/MSX/share/systemroms/.variants/Nextor-2.1.1.SunriseIDE.ROM.c9e6cc75": [
+        "d3a4375ff5f58cf59cc609dd41c90af285f033c2"
+      ],
+      "MSX/share/systemroms/.variants/Nextor-2.1.1.SunriseIDE.ROM.c9e6cc75": [
+        "d3a4375ff5f58cf59cc609dd41c90af285f033c2"
+      ],
+      "share/systemroms/.variants/Nextor-2.1.1.SunriseIDE.ROM.c9e6cc75": [
+        "d3a4375ff5f58cf59cc609dd41c90af285f033c2"
+      ],
+      "systemroms/.variants/Nextor-2.1.1.SunriseIDE.ROM.c9e6cc75": [
+        "d3a4375ff5f58cf59cc609dd41c90af285f033c2"
+      ],
+      ".variants/Nextor-2.1.1.SunriseIDE.ROM.c9e6cc75": [
+        "d3a4375ff5f58cf59cc609dd41c90af285f033c2"
+      ],
+      "Microsoft/MSX/share/systemroms/.variants/ddx_3.0.rom.abdbc70a": [
+        "a363015286341ffabcdc38ef0d890897ed51e322"
+      ],
+      "MSX/share/systemroms/.variants/ddx_3.0.rom.abdbc70a": [
+        "a363015286341ffabcdc38ef0d890897ed51e322"
+      ],
+      "share/systemroms/.variants/ddx_3.0.rom.abdbc70a": [
+        "a363015286341ffabcdc38ef0d890897ed51e322"
+      ],
+      "systemroms/.variants/ddx_3.0.rom.abdbc70a": [
+        "a363015286341ffabcdc38ef0d890897ed51e322"
+      ],
+      ".variants/ddx_3.0.rom.abdbc70a": [
+        "a363015286341ffabcdc38ef0d890897ed51e322"
+      ],
+      "Microsoft/MSX/share/systemroms/.variants/fd-03.rom.06f24f6f": [
+        "5a5cc35ffb7f78ef440df9548c7360ab56719c5a"
+      ],
+      "MSX/share/systemroms/.variants/fd-03.rom.06f24f6f": [
+        "5a5cc35ffb7f78ef440df9548c7360ab56719c5a"
+      ],
+      "share/systemroms/.variants/fd-03.rom.06f24f6f": [
+        "5a5cc35ffb7f78ef440df9548c7360ab56719c5a"
+      ],
+      "systemroms/.variants/fd-03.rom.06f24f6f": [
+        "5a5cc35ffb7f78ef440df9548c7360ab56719c5a"
+      ],
+      ".variants/fd-03.rom.06f24f6f": [
+        "5a5cc35ffb7f78ef440df9548c7360ab56719c5a"
+      ],
+      "Microsoft/MSX/share/systemroms/.variants/fs-a1st_firmware.rom.2da883fa": [
+        "4b84465c2faa802bfd5f772118c4d31f993f29d0"
+      ],
+      "MSX/share/systemroms/.variants/fs-a1st_firmware.rom.2da883fa": [
+        "4b84465c2faa802bfd5f772118c4d31f993f29d0"
+      ],
+      "share/systemroms/.variants/fs-a1st_firmware.rom.2da883fa": [
+        "4b84465c2faa802bfd5f772118c4d31f993f29d0"
+      ],
+      "systemroms/.variants/fs-a1st_firmware.rom.2da883fa": [
+        "4b84465c2faa802bfd5f772118c4d31f993f29d0"
+      ],
+      ".variants/fs-a1st_firmware.rom.2da883fa": [
+        "4b84465c2faa802bfd5f772118c4d31f993f29d0"
+      ],
+      "Microsoft/MSX/share/systemroms/.variants/fs-ca1.rom.337c2abc": [
+        "930eae7057af1652abae794072b296a59decd61b"
+      ],
+      "MSX/share/systemroms/.variants/fs-ca1.rom.337c2abc": [
+        "930eae7057af1652abae794072b296a59decd61b"
+      ],
+      "share/systemroms/.variants/fs-ca1.rom.337c2abc": [
+        "930eae7057af1652abae794072b296a59decd61b"
+      ],
+      "systemroms/.variants/fs-ca1.rom.337c2abc": [
+        "930eae7057af1652abae794072b296a59decd61b"
+      ],
+      ".variants/fs-ca1.rom.337c2abc": [
+        "930eae7057af1652abae794072b296a59decd61b"
+      ],
+      "Microsoft/MSX/share/systemroms/.variants/fs-ca1.rom.ebe7f408": [
+        "36d47cf70618fdb460f97a8ceb75013ec4529063"
+      ],
+      "MSX/share/systemroms/.variants/fs-ca1.rom.ebe7f408": [
+        "36d47cf70618fdb460f97a8ceb75013ec4529063"
+      ],
+      "share/systemroms/.variants/fs-ca1.rom.ebe7f408": [
+        "36d47cf70618fdb460f97a8ceb75013ec4529063"
+      ],
+      "systemroms/.variants/fs-ca1.rom.ebe7f408": [
+        "36d47cf70618fdb460f97a8ceb75013ec4529063"
+      ],
+      ".variants/fs-ca1.rom.ebe7f408": [
+        "36d47cf70618fdb460f97a8ceb75013ec4529063"
+      ],
+      "Microsoft/MSX/share/systemroms/.variants/hb-f700p_msx2sub.rom.acb82643": [
+        "24624c5fa3a8069b1d865cdea8a029f15c1955ea"
+      ],
+      "MSX/share/systemroms/.variants/hb-f700p_msx2sub.rom.acb82643": [
+        "24624c5fa3a8069b1d865cdea8a029f15c1955ea"
+      ],
+      "share/systemroms/.variants/hb-f700p_msx2sub.rom.acb82643": [
+        "24624c5fa3a8069b1d865cdea8a029f15c1955ea"
+      ],
+      "systemroms/.variants/hb-f700p_msx2sub.rom.acb82643": [
+        "24624c5fa3a8069b1d865cdea8a029f15c1955ea"
+      ],
+      ".variants/hb-f700p_msx2sub.rom.acb82643": [
+        "24624c5fa3a8069b1d865cdea8a029f15c1955ea"
+      ],
+      "Microsoft/MSX/share/systemroms/.variants/hbd-50.rom.76cdc12c": [
+        "2144036d6573d666143e890e5413956bfe8f66c5"
+      ],
+      "MSX/share/systemroms/.variants/hbd-50.rom.76cdc12c": [
+        "2144036d6573d666143e890e5413956bfe8f66c5"
+      ],
+      "share/systemroms/.variants/hbd-50.rom.76cdc12c": [
+        "2144036d6573d666143e890e5413956bfe8f66c5"
+      ],
+      "systemroms/.variants/hbd-50.rom.76cdc12c": [
+        "2144036d6573d666143e890e5413956bfe8f66c5"
+      ],
+      ".variants/hbd-50.rom.76cdc12c": [
+        "2144036d6573d666143e890e5413956bfe8f66c5"
+      ],
+      "Microsoft/MSX/share/systemroms/.variants/hddrom.rom.8f5dc7f7": [
+        "5a14ac0a1cce3ceebdcd66c42b2d5c975d45b755"
+      ],
+      "MSX/share/systemroms/.variants/hddrom.rom.8f5dc7f7": [
+        "5a14ac0a1cce3ceebdcd66c42b2d5c975d45b755"
+      ],
+      "share/systemroms/.variants/hddrom.rom.8f5dc7f7": [
+        "5a14ac0a1cce3ceebdcd66c42b2d5c975d45b755"
+      ],
+      "systemroms/.variants/hddrom.rom.8f5dc7f7": [
+        "5a14ac0a1cce3ceebdcd66c42b2d5c975d45b755"
+      ],
+      ".variants/hddrom.rom.8f5dc7f7": [
+        "5a14ac0a1cce3ceebdcd66c42b2d5c975d45b755"
+      ],
+      "Microsoft/MSX/share/systemroms/.variants/hddrom.rom.a3a6d0ce": [
+        "11bd12a95142185d18659ccf74748fc1bb20c60d"
+      ],
+      "MSX/share/systemroms/.variants/hddrom.rom.a3a6d0ce": [
+        "11bd12a95142185d18659ccf74748fc1bb20c60d"
+      ],
+      "share/systemroms/.variants/hddrom.rom.a3a6d0ce": [
+        "11bd12a95142185d18659ccf74748fc1bb20c60d"
+      ],
+      "systemroms/.variants/hddrom.rom.a3a6d0ce": [
+        "11bd12a95142185d18659ccf74748fc1bb20c60d"
+      ],
+      ".variants/hddrom.rom.a3a6d0ce": [
+        "11bd12a95142185d18659ccf74748fc1bb20c60d"
+      ],
+      "Microsoft/MSX/share/systemroms/.variants/msxaudio12pre4a.rom.ace98898": [
+        "3b02e5f45603df2c180f9c07d59b2ccc5a87bd0a"
+      ],
+      "MSX/share/systemroms/.variants/msxaudio12pre4a.rom.ace98898": [
+        "3b02e5f45603df2c180f9c07d59b2ccc5a87bd0a"
+      ],
+      "share/systemroms/.variants/msxaudio12pre4a.rom.ace98898": [
+        "3b02e5f45603df2c180f9c07d59b2ccc5a87bd0a"
+      ],
+      "systemroms/.variants/msxaudio12pre4a.rom.ace98898": [
+        "3b02e5f45603df2c180f9c07d59b2ccc5a87bd0a"
+      ],
+      ".variants/msxaudio12pre4a.rom.ace98898": [
+        "3b02e5f45603df2c180f9c07d59b2ccc5a87bd0a"
+      ],
+      "Microsoft/MSX/share/systemroms/.variants/nms1200_6.rom.8bf667b5": [
+        "f0e0447a0872a2f09d7b28d9599fdd183acb5cb2"
+      ],
+      "MSX/share/systemroms/.variants/nms1200_6.rom.8bf667b5": [
+        "f0e0447a0872a2f09d7b28d9599fdd183acb5cb2"
+      ],
+      "share/systemroms/.variants/nms1200_6.rom.8bf667b5": [
+        "f0e0447a0872a2f09d7b28d9599fdd183acb5cb2"
+      ],
+      "systemroms/.variants/nms1200_6.rom.8bf667b5": [
+        "f0e0447a0872a2f09d7b28d9599fdd183acb5cb2"
+      ],
+      ".variants/nms1200_6.rom.8bf667b5": [
+        "f0e0447a0872a2f09d7b28d9599fdd183acb5cb2"
+      ],
       "Microsoft/MSX/share/systemroms/.variants/nms8245_disk.rom.3a15f5f1": [
         "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091"
       ],
@@ -514269,6 +515733,192 @@
       ],
       ".variants/nms8245_disk.rom.3a15f5f1": [
         "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091"
+      ],
+      "Microsoft/MSX/share/systemroms/.variants/nms8245_disk.rom.f71a1e66": [
+        "58ba1887e8fd21c912b6859cae6514bd874ffcca"
+      ],
+      "MSX/share/systemroms/.variants/nms8245_disk.rom.f71a1e66": [
+        "58ba1887e8fd21c912b6859cae6514bd874ffcca"
+      ],
+      "share/systemroms/.variants/nms8245_disk.rom.f71a1e66": [
+        "58ba1887e8fd21c912b6859cae6514bd874ffcca"
+      ],
+      "systemroms/.variants/nms8245_disk.rom.f71a1e66": [
+        "58ba1887e8fd21c912b6859cae6514bd874ffcca"
+      ],
+      ".variants/nms8245_disk.rom.f71a1e66": [
+        "58ba1887e8fd21c912b6859cae6514bd874ffcca"
+      ],
+      "Microsoft/MSX/share/systemroms/7e6a267e/NMS8245SystemROM1.05.bin": [
+        "7e6a267e1a3e075dcdad3669b651b1050f6375ac"
+      ],
+      "MSX/share/systemroms/7e6a267e/NMS8245SystemROM1.05.bin": [
+        "7e6a267e1a3e075dcdad3669b651b1050f6375ac"
+      ],
+      "share/systemroms/7e6a267e/NMS8245SystemROM1.05.bin": [
+        "7e6a267e1a3e075dcdad3669b651b1050f6375ac"
+      ],
+      "systemroms/7e6a267e/NMS8245SystemROM1.05.bin": [
+        "7e6a267e1a3e075dcdad3669b651b1050f6375ac"
+      ],
+      "7e6a267e/NMS8245SystemROM1.05.bin": [
+        "7e6a267e1a3e075dcdad3669b651b1050f6375ac"
+      ],
+      "Microsoft/MSX/share/systemroms/FD-051.BIN": [
+        "4b08a057e5863ade179dcf8bc9377e90940e6d61"
+      ],
+      "MSX/share/systemroms/FD-051.BIN": [
+        "4b08a057e5863ade179dcf8bc9377e90940e6d61"
+      ],
+      "share/systemroms/FD-051.BIN": [
+        "4b08a057e5863ade179dcf8bc9377e90940e6d61"
+      ],
+      "systemroms/FD-051.BIN": [
+        "4b08a057e5863ade179dcf8bc9377e90940e6d61"
+      ],
+      "Microsoft/MSX/share/systemroms/Japanese MSX-Write (1986) (Ascii) (J).rom": [
+        "4180544158a57c99162269e33e4f2c77c9fce84e"
+      ],
+      "MSX/share/systemroms/Japanese MSX-Write (1986) (Ascii) (J).rom": [
+        "4180544158a57c99162269e33e4f2c77c9fce84e"
+      ],
+      "share/systemroms/Japanese MSX-Write (1986) (Ascii) (J).rom": [
+        "4180544158a57c99162269e33e4f2c77c9fce84e"
+      ],
+      "systemroms/Japanese MSX-Write (1986) (Ascii) (J).rom": [
+        "4180544158a57c99162269e33e4f2c77c9fce84e"
+      ],
+      "Microsoft/MSX/share/systemroms/Japanese MSX-Write II (1988) (Ascii) (J).rom": [
+        "9afdee40e7b243f99cc50dd1ad710ab0928dd820"
+      ],
+      "MSX/share/systemroms/Japanese MSX-Write II (1988) (Ascii) (J).rom": [
+        "9afdee40e7b243f99cc50dd1ad710ab0928dd820"
+      ],
+      "share/systemroms/Japanese MSX-Write II (1988) (Ascii) (J).rom": [
+        "9afdee40e7b243f99cc50dd1ad710ab0928dd820"
+      ],
+      "systemroms/Japanese MSX-Write II (1988) (Ascii) (J).rom": [
+        "9afdee40e7b243f99cc50dd1ad710ab0928dd820"
+      ],
+      "Microsoft/MSX/share/systemroms/NEOSC.ROM": [
+        "2a3d953a423fa513f0d26a8bf0bd50664688868c"
+      ],
+      "MSX/share/systemroms/NEOSC.ROM": [
+        "2a3d953a423fa513f0d26a8bf0bd50664688868c"
+      ],
+      "share/systemroms/NEOSC.ROM": [
+        "2a3d953a423fa513f0d26a8bf0bd50664688868c"
+      ],
+      "systemroms/NEOSC.ROM": [
+        "2a3d953a423fa513f0d26a8bf0bd50664688868c"
+      ],
+      "Microsoft/MSX/share/systemroms/NEOSV.ROM": [
+        "20100697cc10c3a1e49d371bf647fed9c47c4d04"
+      ],
+      "MSX/share/systemroms/NEOSV.ROM": [
+        "20100697cc10c3a1e49d371bf647fed9c47c4d04"
+      ],
+      "share/systemroms/NEOSV.ROM": [
+        "20100697cc10c3a1e49d371bf647fed9c47c4d04"
+      ],
+      "systemroms/NEOSV.ROM": [
+        "20100697cc10c3a1e49d371bf647fed9c47c4d04"
+      ],
+      "Microsoft/MSX/share/systemroms/NMS8245SystemROM1.05.bin": [
+        "816ceb21088b116ec34be0ff869d02222b525e58"
+      ],
+      "MSX/share/systemroms/NMS8245SystemROM1.05.bin": [
+        "816ceb21088b116ec34be0ff869d02222b525e58"
+      ],
+      "share/systemroms/NMS8245SystemROM1.05.bin": [
+        "816ceb21088b116ec34be0ff869d02222b525e58"
+      ],
+      "systemroms/NMS8245SystemROM1.05.bin": [
+        "816ceb21088b116ec34be0ff869d02222b525e58"
+      ],
+      "Microsoft/MSX/share/systemroms/NMS8245SystemROM1.06.bin": [
+        "b746192dc333eaf2a725a44777303808a3649d63"
+      ],
+      "MSX/share/systemroms/NMS8245SystemROM1.06.bin": [
+        "b746192dc333eaf2a725a44777303808a3649d63"
+      ],
+      "share/systemroms/NMS8245SystemROM1.06.bin": [
+        "b746192dc333eaf2a725a44777303808a3649d63"
+      ],
+      "systemroms/NMS8245SystemROM1.06.bin": [
+        "b746192dc333eaf2a725a44777303808a3649d63"
+      ],
+      "Microsoft/MSX/share/systemroms/Nextor-2.1.1.SunriseIDE.ROM": [
+        "61cba1680ac6cb448dc3e8c710a43f4e7ab49457"
+      ],
+      "MSX/share/systemroms/Nextor-2.1.1.SunriseIDE.ROM": [
+        "61cba1680ac6cb448dc3e8c710a43f4e7ab49457"
+      ],
+      "share/systemroms/Nextor-2.1.1.SunriseIDE.ROM": [
+        "61cba1680ac6cb448dc3e8c710a43f4e7ab49457"
+      ],
+      "systemroms/Nextor-2.1.1.SunriseIDE.ROM": [
+        "61cba1680ac6cb448dc3e8c710a43f4e7ab49457"
+      ],
+      "Microsoft/MSX/share/systemroms/Sony_HB-F1XV.rom": [
+        "f2a1d326d72d4c70ea214d7883838de8847a82b7"
+      ],
+      "MSX/share/systemroms/Sony_HB-F1XV.rom": [
+        "f2a1d326d72d4c70ea214d7883838de8847a82b7"
+      ],
+      "share/systemroms/Sony_HB-F1XV.rom": [
+        "f2a1d326d72d4c70ea214d7883838de8847a82b7"
+      ],
+      "systemroms/Sony_HB-F1XV.rom": [
+        "f2a1d326d72d4c70ea214d7883838de8847a82b7"
+      ],
+      "Microsoft/MSX/share/systemroms/Tecall_MSX_RAMFILE_TM220.rom": [
+        "2ba40f6520e3045326a985956f7d32ff6d7cd99a"
+      ],
+      "MSX/share/systemroms/Tecall_MSX_RAMFILE_TM220.rom": [
+        "2ba40f6520e3045326a985956f7d32ff6d7cd99a"
+      ],
+      "share/systemroms/Tecall_MSX_RAMFILE_TM220.rom": [
+        "2ba40f6520e3045326a985956f7d32ff6d7cd99a"
+      ],
+      "systemroms/Tecall_MSX_RAMFILE_TM220.rom": [
+        "2ba40f6520e3045326a985956f7d32ff6d7cd99a"
+      ],
+      "Microsoft/MSX/share/systemroms/ascii_msxdos22.rom": [
+        "42f4e3360eb134857b0efa82c1abedf342680124"
+      ],
+      "MSX/share/systemroms/ascii_msxdos22.rom": [
+        "42f4e3360eb134857b0efa82c1abedf342680124"
+      ],
+      "share/systemroms/ascii_msxdos22.rom": [
+        "42f4e3360eb134857b0efa82c1abedf342680124"
+      ],
+      "systemroms/ascii_msxdos22.rom": [
+        "42f4e3360eb134857b0efa82c1abedf342680124"
+      ],
+      "Microsoft/MSX/share/systemroms/avt_dpf-550_disk.rom": [
+        "633ad62599361bbb8ba6803cdcfaa14c54521c43"
+      ],
+      "MSX/share/systemroms/avt_dpf-550_disk.rom": [
+        "633ad62599361bbb8ba6803cdcfaa14c54521c43"
+      ],
+      "share/systemroms/avt_dpf-550_disk.rom": [
+        "633ad62599361bbb8ba6803cdcfaa14c54521c43"
+      ],
+      "systemroms/avt_dpf-550_disk.rom": [
+        "633ad62599361bbb8ba6803cdcfaa14c54521c43"
+      ],
+      "Microsoft/MSX/share/systemroms/cdx-2.rom": [
+        "ffc1bafca38d20ed6e9a27c90c6ab089a8482d89"
+      ],
+      "MSX/share/systemroms/cdx-2.rom": [
+        "ffc1bafca38d20ed6e9a27c90c6ab089a8482d89"
+      ],
+      "share/systemroms/cdx-2.rom": [
+        "ffc1bafca38d20ed6e9a27c90c6ab089a8482d89"
+      ],
+      "systemroms/cdx-2.rom": [
+        "ffc1bafca38d20ed6e9a27c90c6ab089a8482d89"
       ],
       "Microsoft/MSX/share/systemroms/cf-3300_basic-bios1.rom": [
         "c7a2c5baee6a9f0e1c6ee7d76944c0ab1886796c"
@@ -514293,6 +515943,78 @@
       ],
       "systemroms/cf-3300_disk.rom": [
         "f1525de4e0b60a6687156c2a96f8a8b2044b6c56"
+      ],
+      "Microsoft/MSX/share/systemroms/chakkari.rom": [
+        "aa98b0822d768acb73ab729d736c8fb682685492"
+      ],
+      "MSX/share/systemroms/chakkari.rom": [
+        "aa98b0822d768acb73ab729d736c8fb682685492"
+      ],
+      "share/systemroms/chakkari.rom": [
+        "aa98b0822d768acb73ab729d736c8fb682685492"
+      ],
+      "systemroms/chakkari.rom": [
+        "aa98b0822d768acb73ab729d736c8fb682685492"
+      ],
+      "Microsoft/MSX/share/systemroms/ct-80e.rom": [
+        "e89eb87f295a2c93688265c4f6f25a9ccb4e3697"
+      ],
+      "MSX/share/systemroms/ct-80e.rom": [
+        "e89eb87f295a2c93688265c4f6f25a9ccb4e3697"
+      ],
+      "share/systemroms/ct-80e.rom": [
+        "e89eb87f295a2c93688265c4f6f25a9ccb4e3697"
+      ],
+      "systemroms/ct-80e.rom": [
+        "e89eb87f295a2c93688265c4f6f25a9ccb4e3697"
+      ],
+      "Microsoft/MSX/share/systemroms/ddx_3.0.rom": [
+        "124126cee840e43c7668c11c2bec2f34b3d00c68"
+      ],
+      "MSX/share/systemroms/ddx_3.0.rom": [
+        "124126cee840e43c7668c11c2bec2f34b3d00c68"
+      ],
+      "share/systemroms/ddx_3.0.rom": [
+        "124126cee840e43c7668c11c2bec2f34b3d00c68"
+      ],
+      "systemroms/ddx_3.0.rom": [
+        "124126cee840e43c7668c11c2bec2f34b3d00c68"
+      ],
+      "Microsoft/MSX/share/systemroms/dpf-550_disk.rom": [
+        "d9c82e091b5fa1b5ee9b7f012f0084611762eb93"
+      ],
+      "MSX/share/systemroms/dpf-550_disk.rom": [
+        "d9c82e091b5fa1b5ee9b7f012f0084611762eb93"
+      ],
+      "share/systemroms/dpf-550_disk.rom": [
+        "d9c82e091b5fa1b5ee9b7f012f0084611762eb93"
+      ],
+      "systemroms/dpf-550_disk.rom": [
+        "d9c82e091b5fa1b5ee9b7f012f0084611762eb93"
+      ],
+      "Microsoft/MSX/share/systemroms/fd-03.rom": [
+        "ea3c1d20310e7fbaacfdede839be0118ecea015e"
+      ],
+      "MSX/share/systemroms/fd-03.rom": [
+        "ea3c1d20310e7fbaacfdede839be0118ecea015e"
+      ],
+      "share/systemroms/fd-03.rom": [
+        "ea3c1d20310e7fbaacfdede839be0118ecea015e"
+      ],
+      "systemroms/fd-03.rom": [
+        "ea3c1d20310e7fbaacfdede839be0118ecea015e"
+      ],
+      "Microsoft/MSX/share/systemroms/fmpak.rom": [
+        "19bf90b8d2e695ffad61fff6f47f7fcda2f24a1d"
+      ],
+      "MSX/share/systemroms/fmpak.rom": [
+        "19bf90b8d2e695ffad61fff6f47f7fcda2f24a1d"
+      ],
+      "share/systemroms/fmpak.rom": [
+        "19bf90b8d2e695ffad61fff6f47f7fcda2f24a1d"
+      ],
+      "systemroms/fmpak.rom": [
+        "19bf90b8d2e695ffad61fff6f47f7fcda2f24a1d"
       ],
       "Microsoft/MSX/share/systemroms/fs-5500_basic-bios2.rom": [
         "44e0dd215b2a9f0770dd76fb49187c05b083eed9"
@@ -514366,6 +516088,426 @@
       "systemroms/fs-5500_superimp.rom": [
         "b677a861b67e8763a11d5dcf52416b42493ade57"
       ],
+      "Microsoft/MSX/share/systemroms/fs-a1st_firmware.rom": [
+        "c212b11fda13f83dafed688c54d098e7e47ab225"
+      ],
+      "MSX/share/systemroms/fs-a1st_firmware.rom": [
+        "c212b11fda13f83dafed688c54d098e7e47ab225"
+      ],
+      "share/systemroms/fs-a1st_firmware.rom": [
+        "c212b11fda13f83dafed688c54d098e7e47ab225"
+      ],
+      "systemroms/fs-a1st_firmware.rom": [
+        "c212b11fda13f83dafed688c54d098e7e47ab225"
+      ],
+      "Microsoft/MSX/share/systemroms/fs-ca1.rom": [
+        "a45692849acf29ddb653707a62747985439f6d4f"
+      ],
+      "MSX/share/systemroms/fs-ca1.rom": [
+        "a45692849acf29ddb653707a62747985439f6d4f"
+      ],
+      "share/systemroms/fs-ca1.rom": [
+        "a45692849acf29ddb653707a62747985439f6d4f"
+      ],
+      "systemroms/fs-ca1.rom": [
+        "a45692849acf29ddb653707a62747985439f6d4f"
+      ],
+      "Microsoft/MSX/share/systemroms/fs-fd1a.rom": [
+        "a2f70f911ccaa6831008bd473e92a3f0eb1e8b0f"
+      ],
+      "MSX/share/systemroms/fs-fd1a.rom": [
+        "a2f70f911ccaa6831008bd473e92a3f0eb1e8b0f"
+      ],
+      "share/systemroms/fs-fd1a.rom": [
+        "a2f70f911ccaa6831008bd473e92a3f0eb1e8b0f"
+      ],
+      "systemroms/fs-fd1a.rom": [
+        "a2f70f911ccaa6831008bd473e92a3f0eb1e8b0f"
+      ],
+      "Microsoft/MSX/share/systemroms/fs-pw1_kanjifont.rom": [
+        "5e872d5853698731a0ed22fb72dbcdfd59cd19c3"
+      ],
+      "MSX/share/systemroms/fs-pw1_kanjifont.rom": [
+        "5e872d5853698731a0ed22fb72dbcdfd59cd19c3"
+      ],
+      "share/systemroms/fs-pw1_kanjifont.rom": [
+        "5e872d5853698731a0ed22fb72dbcdfd59cd19c3"
+      ],
+      "systemroms/fs-pw1_kanjifont.rom": [
+        "5e872d5853698731a0ed22fb72dbcdfd59cd19c3"
+      ],
+      "Microsoft/MSX/share/systemroms/hb-75p_firmware.rom": [
+        "b262aedc71b445303f84efe5e865cbb71fd7d952"
+      ],
+      "MSX/share/systemroms/hb-75p_firmware.rom": [
+        "b262aedc71b445303f84efe5e865cbb71fd7d952"
+      ],
+      "share/systemroms/hb-75p_firmware.rom": [
+        "b262aedc71b445303f84efe5e865cbb71fd7d952"
+      ],
+      "systemroms/hb-75p_firmware.rom": [
+        "b262aedc71b445303f84efe5e865cbb71fd7d952"
+      ],
+      "Microsoft/MSX/share/systemroms/hb-f1xd_basic-bios2.rom": [
+        "4ce41fcc1a603411ec4e99556409c442078f0ecf"
+      ],
+      "MSX/share/systemroms/hb-f1xd_basic-bios2.rom": [
+        "4ce41fcc1a603411ec4e99556409c442078f0ecf"
+      ],
+      "share/systemroms/hb-f1xd_basic-bios2.rom": [
+        "4ce41fcc1a603411ec4e99556409c442078f0ecf"
+      ],
+      "systemroms/hb-f1xd_basic-bios2.rom": [
+        "4ce41fcc1a603411ec4e99556409c442078f0ecf"
+      ],
+      "Microsoft/MSX/share/systemroms/hb-f1xd_disk.rom": [
+        "12f2cc79b3d09723840bae774be48c0d721ec1c6"
+      ],
+      "MSX/share/systemroms/hb-f1xd_disk.rom": [
+        "12f2cc79b3d09723840bae774be48c0d721ec1c6"
+      ],
+      "share/systemroms/hb-f1xd_disk.rom": [
+        "12f2cc79b3d09723840bae774be48c0d721ec1c6"
+      ],
+      "systemroms/hb-f1xd_disk.rom": [
+        "12f2cc79b3d09723840bae774be48c0d721ec1c6"
+      ],
+      "Microsoft/MSX/share/systemroms/hb-f1xv.rom": [
+        "ade0c5ba5574f8114d7079050317099b4519e88f"
+      ],
+      "MSX/share/systemroms/hb-f1xv.rom": [
+        "ade0c5ba5574f8114d7079050317099b4519e88f"
+      ],
+      "share/systemroms/hb-f1xv.rom": [
+        "ade0c5ba5574f8114d7079050317099b4519e88f"
+      ],
+      "systemroms/hb-f1xv.rom": [
+        "ade0c5ba5574f8114d7079050317099b4519e88f"
+      ],
+      "Microsoft/MSX/share/systemroms/hb-f1xv_basic-bios2p.rom": [
+        "174c9254f09d99361ff7607630248ff9d7d8d4d6"
+      ],
+      "MSX/share/systemroms/hb-f1xv_basic-bios2p.rom": [
+        "174c9254f09d99361ff7607630248ff9d7d8d4d6"
+      ],
+      "share/systemroms/hb-f1xv_basic-bios2p.rom": [
+        "174c9254f09d99361ff7607630248ff9d7d8d4d6"
+      ],
+      "systemroms/hb-f1xv_basic-bios2p.rom": [
+        "174c9254f09d99361ff7607630248ff9d7d8d4d6"
+      ],
+      "Microsoft/MSX/share/systemroms/hb-f1xv_disk.rom": [
+        "5a4e7dbbfb759109c7d2a3b38bda9c60bf6ffef5"
+      ],
+      "MSX/share/systemroms/hb-f1xv_disk.rom": [
+        "5a4e7dbbfb759109c7d2a3b38bda9c60bf6ffef5"
+      ],
+      "share/systemroms/hb-f1xv_disk.rom": [
+        "5a4e7dbbfb759109c7d2a3b38bda9c60bf6ffef5"
+      ],
+      "systemroms/hb-f1xv_disk.rom": [
+        "5a4e7dbbfb759109c7d2a3b38bda9c60bf6ffef5"
+      ],
+      "Microsoft/MSX/share/systemroms/hb-f1xv_kanjifont.rom": [
+        "218d91eb6df2823c924d3774a9f455492a10aecb"
+      ],
+      "MSX/share/systemroms/hb-f1xv_kanjifont.rom": [
+        "218d91eb6df2823c924d3774a9f455492a10aecb"
+      ],
+      "share/systemroms/hb-f1xv_kanjifont.rom": [
+        "218d91eb6df2823c924d3774a9f455492a10aecb"
+      ],
+      "systemroms/hb-f1xv_kanjifont.rom": [
+        "218d91eb6df2823c924d3774a9f455492a10aecb"
+      ],
+      "Microsoft/MSX/share/systemroms/hb-f700p_basic-bios2.rom": [
+        "0de3c802057560560a03d7965fcc4cff69f8575c"
+      ],
+      "MSX/share/systemroms/hb-f700p_basic-bios2.rom": [
+        "0de3c802057560560a03d7965fcc4cff69f8575c"
+      ],
+      "share/systemroms/hb-f700p_basic-bios2.rom": [
+        "0de3c802057560560a03d7965fcc4cff69f8575c"
+      ],
+      "systemroms/hb-f700p_basic-bios2.rom": [
+        "0de3c802057560560a03d7965fcc4cff69f8575c"
+      ],
+      "Microsoft/MSX/share/systemroms/hb-f700p_disk.rom": [
+        "3376cf9dd2b1ac9b41bf6bf6598b33136e86f9d5"
+      ],
+      "MSX/share/systemroms/hb-f700p_disk.rom": [
+        "3376cf9dd2b1ac9b41bf6bf6598b33136e86f9d5"
+      ],
+      "share/systemroms/hb-f700p_disk.rom": [
+        "3376cf9dd2b1ac9b41bf6bf6598b33136e86f9d5"
+      ],
+      "systemroms/hb-f700p_disk.rom": [
+        "3376cf9dd2b1ac9b41bf6bf6598b33136e86f9d5"
+      ],
+      "Microsoft/MSX/share/systemroms/hb-f700p_msx2sub.rom": [
+        "3288894e1be6af705871499b23c85732dbc40993"
+      ],
+      "MSX/share/systemroms/hb-f700p_msx2sub.rom": [
+        "3288894e1be6af705871499b23c85732dbc40993"
+      ],
+      "share/systemroms/hb-f700p_msx2sub.rom": [
+        "3288894e1be6af705871499b23c85732dbc40993"
+      ],
+      "systemroms/hb-f700p_msx2sub.rom": [
+        "3288894e1be6af705871499b23c85732dbc40993"
+      ],
+      "Microsoft/MSX/share/systemroms/hb3600_disk.rom": [
+        "608e8e9ab91c67f7015a67ea12f52ea3b0d609cd"
+      ],
+      "MSX/share/systemroms/hb3600_disk.rom": [
+        "608e8e9ab91c67f7015a67ea12f52ea3b0d609cd"
+      ],
+      "share/systemroms/hb3600_disk.rom": [
+        "608e8e9ab91c67f7015a67ea12f52ea3b0d609cd"
+      ],
+      "systemroms/hb3600_disk.rom": [
+        "608e8e9ab91c67f7015a67ea12f52ea3b0d609cd"
+      ],
+      "Microsoft/MSX/share/systemroms/hbd-50.rom": [
+        "ab57b4c8e5d47c2a39031c2057b97d2d10546582"
+      ],
+      "MSX/share/systemroms/hbd-50.rom": [
+        "ab57b4c8e5d47c2a39031c2057b97d2d10546582"
+      ],
+      "share/systemroms/hbd-50.rom": [
+        "ab57b4c8e5d47c2a39031c2057b97d2d10546582"
+      ],
+      "systemroms/hbd-50.rom": [
+        "ab57b4c8e5d47c2a39031c2057b97d2d10546582"
+      ],
+      "Microsoft/MSX/share/systemroms/hbi-232.rom": [
+        "b2776159a7b92d74308b434a6b3e5feba161e2b7"
+      ],
+      "MSX/share/systemroms/hbi-232.rom": [
+        "b2776159a7b92d74308b434a6b3e5feba161e2b7"
+      ],
+      "share/systemroms/hbi-232.rom": [
+        "b2776159a7b92d74308b434a6b3e5feba161e2b7"
+      ],
+      "systemroms/hbi-232.rom": [
+        "b2776159a7b92d74308b434a6b3e5feba161e2b7"
+      ],
+      "Microsoft/MSX/share/systemroms/hbk-30.rom": [
+        "ba83a80a0041e3a8fb5c075a9b4a29ee92255d62"
+      ],
+      "MSX/share/systemroms/hbk-30.rom": [
+        "ba83a80a0041e3a8fb5c075a9b4a29ee92255d62"
+      ],
+      "share/systemroms/hbk-30.rom": [
+        "ba83a80a0041e3a8fb5c075a9b4a29ee92255d62"
+      ],
+      "systemroms/hbk-30.rom": [
+        "ba83a80a0041e3a8fb5c075a9b4a29ee92255d62"
+      ],
+      "Microsoft/MSX/share/systemroms/hddrom.rom": [
+        "e92f47bd8320f94b8f7ae1943b31316002075ffb"
+      ],
+      "MSX/share/systemroms/hddrom.rom": [
+        "e92f47bd8320f94b8f7ae1943b31316002075ffb"
+      ],
+      "share/systemroms/hddrom.rom": [
+        "e92f47bd8320f94b8f7ae1943b31316002075ffb"
+      ],
+      "systemroms/hddrom.rom": [
+        "e92f47bd8320f94b8f7ae1943b31316002075ffb"
+      ],
+      "Microsoft/MSX/share/systemroms/hx-10_basic-bios1.rom": [
+        "4dad9de7c28b452351cc12910849b51bd9a37ab3"
+      ],
+      "MSX/share/systemroms/hx-10_basic-bios1.rom": [
+        "4dad9de7c28b452351cc12910849b51bd9a37ab3"
+      ],
+      "share/systemroms/hx-10_basic-bios1.rom": [
+        "4dad9de7c28b452351cc12910849b51bd9a37ab3"
+      ],
+      "systemroms/hx-10_basic-bios1.rom": [
+        "4dad9de7c28b452351cc12910849b51bd9a37ab3"
+      ],
+      "Microsoft/MSX/share/systemroms/hx-f101pe.rom": [
+        "b88c507720a0617a27141c329755de1a48b89deb"
+      ],
+      "MSX/share/systemroms/hx-f101pe.rom": [
+        "b88c507720a0617a27141c329755de1a48b89deb"
+      ],
+      "share/systemroms/hx-f101pe.rom": [
+        "b88c507720a0617a27141c329755de1a48b89deb"
+      ],
+      "systemroms/hx-f101pe.rom": [
+        "b88c507720a0617a27141c329755de1a48b89deb"
+      ],
+      "Microsoft/MSX/share/systemroms/hx-mu900.rom": [
+        "0d246b0e3edc63803fcce861ea07eadf29dc488c"
+      ],
+      "MSX/share/systemroms/hx-mu900.rom": [
+        "0d246b0e3edc63803fcce861ea07eadf29dc488c"
+      ],
+      "share/systemroms/hx-mu900.rom": [
+        "0d246b0e3edc63803fcce861ea07eadf29dc488c"
+      ],
+      "systemroms/hx-mu900.rom": [
+        "0d246b0e3edc63803fcce861ea07eadf29dc488c"
+      ],
+      "Microsoft/MSX/share/systemroms/megaflashrom_scc+_sd.rom": [
+        "1621f623b834dc57cb2983f30b36bcc3ac56cafd"
+      ],
+      "MSX/share/systemroms/megaflashrom_scc+_sd.rom": [
+        "1621f623b834dc57cb2983f30b36bcc3ac56cafd"
+      ],
+      "share/systemroms/megaflashrom_scc+_sd.rom": [
+        "1621f623b834dc57cb2983f30b36bcc3ac56cafd"
+      ],
+      "systemroms/megaflashrom_scc+_sd.rom": [
+        "1621f623b834dc57cb2983f30b36bcc3ac56cafd"
+      ],
+      "Microsoft/MSX/share/systemroms/mfd-001_disk.rom": [
+        "bb72819da1160bc375fa3623f2d0a5424d08c89b"
+      ],
+      "MSX/share/systemroms/mfd-001_disk.rom": [
+        "bb72819da1160bc375fa3623f2d0a5424d08c89b"
+      ],
+      "share/systemroms/mfd-001_disk.rom": [
+        "bb72819da1160bc375fa3623f2d0a5424d08c89b"
+      ],
+      "systemroms/mfd-001_disk.rom": [
+        "bb72819da1160bc375fa3623f2d0a5424d08c89b"
+      ],
+      "Microsoft/MSX/share/systemroms/ml-30dc.rom": [
+        "658bc7cd4b19bd5face14f09e4e2904157a5c298"
+      ],
+      "MSX/share/systemroms/ml-30dc.rom": [
+        "658bc7cd4b19bd5face14f09e4e2904157a5c298"
+      ],
+      "share/systemroms/ml-30dc.rom": [
+        "658bc7cd4b19bd5face14f09e4e2904157a5c298"
+      ],
+      "systemroms/ml-30dc.rom": [
+        "658bc7cd4b19bd5face14f09e4e2904157a5c298"
+      ],
+      "Microsoft/MSX/share/systemroms/mr512.rom": [
+        "f0abc38f345c05e2112079239d09f25fb08a7c56"
+      ],
+      "MSX/share/systemroms/mr512.rom": [
+        "f0abc38f345c05e2112079239d09f25fb08a7c56"
+      ],
+      "share/systemroms/mr512.rom": [
+        "f0abc38f345c05e2112079239d09f25fb08a7c56"
+      ],
+      "systemroms/mr512.rom": [
+        "f0abc38f345c05e2112079239d09f25fb08a7c56"
+      ],
+      "Microsoft/MSX/share/systemroms/mrs-001.rom": [
+        "41c4810ec56ed0f61e0fc8b355d2aae91de12d99"
+      ],
+      "MSX/share/systemroms/mrs-001.rom": [
+        "41c4810ec56ed0f61e0fc8b355d2aae91de12d99"
+      ],
+      "share/systemroms/mrs-001.rom": [
+        "41c4810ec56ed0f61e0fc8b355d2aae91de12d99"
+      ],
+      "systemroms/mrs-001.rom": [
+        "41c4810ec56ed0f61e0fc8b355d2aae91de12d99"
+      ],
+      "Microsoft/MSX/share/systemroms/msx-write_ii_kanjifont.rom": [
+        "f4dba5ba267b5dd1a35eb74a6ec4fd4d5ca9a1b4"
+      ],
+      "MSX/share/systemroms/msx-write_ii_kanjifont.rom": [
+        "f4dba5ba267b5dd1a35eb74a6ec4fd4d5ca9a1b4"
+      ],
+      "share/systemroms/msx-write_ii_kanjifont.rom": [
+        "f4dba5ba267b5dd1a35eb74a6ec4fd4d5ca9a1b4"
+      ],
+      "systemroms/msx-write_ii_kanjifont.rom": [
+        "f4dba5ba267b5dd1a35eb74a6ec4fd4d5ca9a1b4"
+      ],
+      "Microsoft/MSX/share/systemroms/msx-write_kanjifont.rom": [
+        "fc71561a64f73da0e0043d256f67fd18d7fc3a7f"
+      ],
+      "MSX/share/systemroms/msx-write_kanjifont.rom": [
+        "fc71561a64f73da0e0043d256f67fd18d7fc3a7f"
+      ],
+      "share/systemroms/msx-write_kanjifont.rom": [
+        "fc71561a64f73da0e0043d256f67fd18d7fc3a7f"
+      ],
+      "systemroms/msx-write_kanjifont.rom": [
+        "fc71561a64f73da0e0043d256f67fd18d7fc3a7f"
+      ],
+      "Microsoft/MSX/share/systemroms/msxaudio12pre4a.rom": [
+        "7f115ff923a1cc0d1944cf280168add946fde854"
+      ],
+      "MSX/share/systemroms/msxaudio12pre4a.rom": [
+        "7f115ff923a1cc0d1944cf280168add946fde854"
+      ],
+      "share/systemroms/msxaudio12pre4a.rom": [
+        "7f115ff923a1cc0d1944cf280168add946fde854"
+      ],
+      "systemroms/msxaudio12pre4a.rom": [
+        "7f115ff923a1cc0d1944cf280168add946fde854"
+      ],
+      "Microsoft/MSX/share/systemroms/msxaudio13.OPL3_mono.rom": [
+        "b344b5b7988f459354a2db49d7d339ceeee7d864"
+      ],
+      "MSX/share/systemroms/msxaudio13.OPL3_mono.rom": [
+        "b344b5b7988f459354a2db49d7d339ceeee7d864"
+      ],
+      "share/systemroms/msxaudio13.OPL3_mono.rom": [
+        "b344b5b7988f459354a2db49d7d339ceeee7d864"
+      ],
+      "systemroms/msxaudio13.OPL3_mono.rom": [
+        "b344b5b7988f459354a2db49d7d339ceeee7d864"
+      ],
+      "Microsoft/MSX/share/systemroms/msxaudio13.OPL3_stereo.rom": [
+        "9c924cc79b17cfe468fc7c969868be86ccbe9d46"
+      ],
+      "MSX/share/systemroms/msxaudio13.OPL3_stereo.rom": [
+        "9c924cc79b17cfe468fc7c969868be86ccbe9d46"
+      ],
+      "share/systemroms/msxaudio13.OPL3_stereo.rom": [
+        "9c924cc79b17cfe468fc7c969868be86ccbe9d46"
+      ],
+      "systemroms/msxaudio13.OPL3_stereo.rom": [
+        "9c924cc79b17cfe468fc7c969868be86ccbe9d46"
+      ],
+      "Microsoft/MSX/share/systemroms/mu-pack.rom": [
+        "e88ca790ab58e7709cd99cbbb23ff7d33631b71f"
+      ],
+      "MSX/share/systemroms/mu-pack.rom": [
+        "e88ca790ab58e7709cd99cbbb23ff7d33631b71f"
+      ],
+      "share/systemroms/mu-pack.rom": [
+        "e88ca790ab58e7709cd99cbbb23ff7d33631b71f"
+      ],
+      "systemroms/mu-pack.rom": [
+        "e88ca790ab58e7709cd99cbbb23ff7d33631b71f"
+      ],
+      "Microsoft/MSX/share/systemroms/nms1200_6.rom": [
+        "0b63e9cf99bc2a3d7f21cabf1cb668a6ca71ad2d"
+      ],
+      "MSX/share/systemroms/nms1200_6.rom": [
+        "0b63e9cf99bc2a3d7f21cabf1cb668a6ca71ad2d"
+      ],
+      "share/systemroms/nms1200_6.rom": [
+        "0b63e9cf99bc2a3d7f21cabf1cb668a6ca71ad2d"
+      ],
+      "systemroms/nms1200_6.rom": [
+        "0b63e9cf99bc2a3d7f21cabf1cb668a6ca71ad2d"
+      ],
+      "Microsoft/MSX/share/systemroms/nms1205.rom": [
+        "c7463e1fd0433c5d41b70670d6c10fd781b66426"
+      ],
+      "MSX/share/systemroms/nms1205.rom": [
+        "c7463e1fd0433c5d41b70670d6c10fd781b66426"
+      ],
+      "share/systemroms/nms1205.rom": [
+        "c7463e1fd0433c5d41b70670d6c10fd781b66426"
+      ],
+      "systemroms/nms1205.rom": [
+        "c7463e1fd0433c5d41b70670d6c10fd781b66426"
+      ],
       "Microsoft/MSX/share/systemroms/nms8245_disk.rom": [
         "c3f3ca454d66a0bc791f1d4b60e6857b44eb8755"
       ],
@@ -514401,6 +516543,66 @@
       ],
       "systemroms/nms8245_msx2sub.rom": [
         "e7905d16d2ccd57a013c122dc432106cd59ef52c"
+      ],
+      "Microsoft/MSX/share/systemroms/sensor-kid.rom": [
+        "794aca3c2136933f1fe6405e56e0ce7fdbb10385"
+      ],
+      "MSX/share/systemroms/sensor-kid.rom": [
+        "794aca3c2136933f1fe6405e56e0ce7fdbb10385"
+      ],
+      "share/systemroms/sensor-kid.rom": [
+        "794aca3c2136933f1fe6405e56e0ce7fdbb10385"
+      ],
+      "systemroms/sensor-kid.rom": [
+        "794aca3c2136933f1fe6405e56e0ce7fdbb10385"
+      ],
+      "Microsoft/MSX/share/systemroms/sfg-01.rom": [
+        "49a1750c10e407293af6bce27a02e99307ceba12"
+      ],
+      "MSX/share/systemroms/sfg-01.rom": [
+        "49a1750c10e407293af6bce27a02e99307ceba12"
+      ],
+      "share/systemroms/sfg-01.rom": [
+        "49a1750c10e407293af6bce27a02e99307ceba12"
+      ],
+      "systemroms/sfg-01.rom": [
+        "49a1750c10e407293af6bce27a02e99307ceba12"
+      ],
+      "Microsoft/MSX/share/systemroms/sfg-05.rom": [
+        "6680d7118d85418813f1db9449bf3e20942b16da"
+      ],
+      "MSX/share/systemroms/sfg-05.rom": [
+        "6680d7118d85418813f1db9449bf3e20942b16da"
+      ],
+      "share/systemroms/sfg-05.rom": [
+        "6680d7118d85418813f1db9449bf3e20942b16da"
+      ],
+      "systemroms/sfg-05.rom": [
+        "6680d7118d85418813f1db9449bf3e20942b16da"
+      ],
+      "Microsoft/MSX/share/systemroms/svi-707_cpm.rom": [
+        "2cb1c373753d792b75609d81d57719d545c63c41"
+      ],
+      "MSX/share/systemroms/svi-707_cpm.rom": [
+        "2cb1c373753d792b75609d81d57719d545c63c41"
+      ],
+      "share/systemroms/svi-707_cpm.rom": [
+        "2cb1c373753d792b75609d81d57719d545c63c41"
+      ],
+      "systemroms/svi-707_cpm.rom": [
+        "2cb1c373753d792b75609d81d57719d545c63c41"
+      ],
+      "Microsoft/MSX/share/systemroms/svi-707_disk.rom": [
+        "a337c9aede83cf684339f61a80468e73af31ebeb"
+      ],
+      "MSX/share/systemroms/svi-707_disk.rom": [
+        "a337c9aede83cf684339f61a80468e73af31ebeb"
+      ],
+      "share/systemroms/svi-707_disk.rom": [
+        "a337c9aede83cf684339f61a80468e73af31ebeb"
+      ],
+      "systemroms/svi-707_disk.rom": [
+        "a337c9aede83cf684339f61a80468e73af31ebeb"
       ],
       "Microsoft/MSX/share/systemroms/svi-738_basic-bios1.rom": [
         "c53b3f2c00f31683914f7452f3f4d94ae2929c0d"
