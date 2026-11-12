@@ -7,7 +7,7 @@
   "platform": "retrobat",
   "display_name": "RetroBat",
   "version": "8.3.1",
-  "generated": "2026-11-12T15:26:44Z",
+  "generated": "2026-11-12T15:47:13Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -169343,10 +169343,10 @@
     },
     {
       "dest": "openmsx/share/systemroms/nms8245_disk.rom",
-      "sha1": "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091",
-      "sha256": "83d5e564550a2518fbe9a3e5d1ad378506e9d5dac6cd865ab51c21460ae8144f",
+      "sha1": "58ba1887e8fd21c912b6859cae6514bd874ffcca",
+      "sha256": "e7bd920b362a205c368324756e2fc0c5b896e09b134dd596026119137d9ca03a",
       "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/share/systemroms/.variants/nms8245_disk.rom.3a15f5f1",
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/.variants/nms8245_disk.rom.f71a1e66",
       "cores": [
         "openmsx"
       ],

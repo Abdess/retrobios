@@ -7,7 +7,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "2.7EA",
-  "generated": "2026-11-12T11:40:11Z",
+  "generated": "2026-11-12T15:47:13Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -2178,11 +2178,11 @@
       }
     }
   ],
-  "total_files": 11777,
-  "total_size": 9340419581,
-  "pack_files": 16039,
-  "pack_size": 8704010269,
-  "total_omitted": 468,
+  "total_files": 11837,
+  "total_size": 9357471229,
+  "pack_files": 16099,
+  "pack_size": 8721061917,
+  "total_omitted": 408,
   "omitted_files": [
     {
       "dest": "3dobios.zip",
@@ -5103,48 +5103,8 @@
       "held": true
     },
     {
-      "dest": "openmsx/share/systemroms/7e6a267e/NMS8245SystemROM1.05.bin",
-      "name": "NMS8245SystemROM1.05.bin",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
       "dest": "openmsx/share/systemroms/ESPUNAPI_IO.rom",
       "name": "ESPUNAPI_IO.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/FD-051.BIN",
-      "name": "FD-051.BIN",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/Japanese MSX-Write (1986) (Ascii) (J).rom",
-      "name": "Japanese MSX-Write (1986) (Ascii) (J).rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/Japanese MSX-Write II (1988) (Ascii) (J).rom",
-      "name": "Japanese MSX-Write II (1988) (Ascii) (J).rom",
       "system": "msx",
       "required": false,
       "reason": "not_found",
@@ -5173,68 +5133,8 @@
       ]
     },
     {
-      "dest": "openmsx/share/systemroms/NEOSC.ROM",
-      "name": "NEOSC.ROM",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/NEOSV.ROM",
-      "name": "NEOSV.ROM",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/NMS8245SystemROM1.05.bin",
-      "name": "NMS8245SystemROM1.05.bin",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/NMS8245SystemROM1.06.bin",
-      "name": "NMS8245SystemROM1.06.bin",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/Nextor-2.1.1.SunriseIDE.ROM",
-      "name": "Nextor-2.1.1.SunriseIDE.ROM",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
       "dest": "openmsx/share/systemroms/ROM_Hunter_Mk2.rom",
       "name": "ROM_Hunter_Mk2.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/Sony_HB-F1XV.rom",
-      "name": "Sony_HB-F1XV.rom",
       "system": "msx",
       "required": false,
       "reason": "not_found",
@@ -5253,48 +5153,8 @@
       ]
     },
     {
-      "dest": "openmsx/share/systemroms/Tecall_MSX_RAMFILE_TM220.rom",
-      "name": "Tecall_MSX_RAMFILE_TM220.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/ascii_msxdos22.rom",
-      "name": "ascii_msxdos22.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/avt_dpf-550_disk.rom",
-      "name": "avt_dpf-550_disk.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
       "dest": "openmsx/share/systemroms/carnivore2.rom",
       "name": "carnivore2.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/cdx-2.rom",
-      "name": "cdx-2.rom",
       "system": "msx",
       "required": false,
       "reason": "not_found",
@@ -5333,78 +5193,8 @@
       ]
     },
     {
-      "dest": "openmsx/share/systemroms/chakkari.rom",
-      "name": "chakkari.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
       "dest": "openmsx/share/systemroms/computer_mates_disk_interface.rom",
       "name": "computer_mates_disk_interface.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/ct-80e.rom",
-      "name": "ct-80e.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/ddx_3.0.rom",
-      "name": "ddx_3.0.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/dpf-550_disk.rom",
-      "name": "dpf-550_disk.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/fd-03.rom",
-      "name": "fd-03.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/fmpak.rom",
-      "name": "fmpak.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/fs-a1st_firmware.rom",
-      "name": "fs-a1st_firmware.rom",
       "system": "msx",
       "required": false,
       "reason": "not_found",
@@ -5423,248 +5213,8 @@
       ]
     },
     {
-      "dest": "openmsx/share/systemroms/fs-ca1.rom",
-      "name": "fs-ca1.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/fs-fd1a.rom",
-      "name": "fs-fd1a.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/fs-pw1_kanjifont.rom",
-      "name": "fs-pw1_kanjifont.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
       "dest": "openmsx/share/systemroms/fs-pw1_msxword.rom",
       "name": "fs-pw1_msxword.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/hb-75p_firmware.rom",
-      "name": "hb-75p_firmware.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/hb-f1xd_basic-bios2.rom",
-      "name": "hb-f1xd_basic-bios2.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/hb-f1xd_disk.rom",
-      "name": "hb-f1xd_disk.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/hb-f1xv.rom",
-      "name": "hb-f1xv.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/hb-f1xv_basic-bios2p.rom",
-      "name": "hb-f1xv_basic-bios2p.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/hb-f1xv_disk.rom",
-      "name": "hb-f1xv_disk.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/hb-f1xv_kanjifont.rom",
-      "name": "hb-f1xv_kanjifont.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/hb-f700p_basic-bios2.rom",
-      "name": "hb-f700p_basic-bios2.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/hb-f700p_disk.rom",
-      "name": "hb-f700p_disk.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/hb-f700p_msx2sub.rom",
-      "name": "hb-f700p_msx2sub.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/hb3600_disk.rom",
-      "name": "hb3600_disk.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/hbd-50.rom",
-      "name": "hbd-50.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/hbi-232.rom",
-      "name": "hbi-232.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/hbk-30.rom",
-      "name": "hbk-30.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/hddrom.rom",
-      "name": "hddrom.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/hx-10_basic-bios1.rom",
-      "name": "hx-10_basic-bios1.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/hx-f101pe.rom",
-      "name": "hx-f101pe.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/hx-mu900.rom",
-      "name": "hx-mu900.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/megaflashrom_scc+_sd.rom",
-      "name": "megaflashrom_scc+_sd.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/mfd-001_disk.rom",
-      "name": "mfd-001_disk.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/ml-30dc.rom",
-      "name": "ml-30dc.rom",
       "system": "msx",
       "required": false,
       "reason": "not_found",
@@ -5683,138 +5233,8 @@
       ]
     },
     {
-      "dest": "openmsx/share/systemroms/mr512.rom",
-      "name": "mr512.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/mrs-001.rom",
-      "name": "mrs-001.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/msx-write_ii_kanjifont.rom",
-      "name": "msx-write_ii_kanjifont.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/msx-write_kanjifont.rom",
-      "name": "msx-write_kanjifont.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/msxaudio12pre4a.rom",
-      "name": "msxaudio12pre4a.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/msxaudio13.OPL3_mono.rom",
-      "name": "msxaudio13.OPL3_mono.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/msxaudio13.OPL3_stereo.rom",
-      "name": "msxaudio13.OPL3_stereo.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
       "dest": "openmsx/share/systemroms/msxpibios.rom",
       "name": "msxpibios.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/mu-pack.rom",
-      "name": "mu-pack.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/nms1200_6.rom",
-      "name": "nms1200_6.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/nms1205.rom",
-      "name": "nms1205.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/sensor-kid.rom",
-      "name": "sensor-kid.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/sfg-01.rom",
-      "name": "sfg-01.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/sfg-05.rom",
-      "name": "sfg-05.rom",
       "system": "msx",
       "required": false,
       "reason": "not_found",
@@ -5855,26 +5275,6 @@
     {
       "dest": "openmsx/share/systemroms/skw-05_main.rom",
       "name": "skw-05_main.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/svi-707_cpm.rom",
-      "name": "svi-707_cpm.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "openmsx/share/systemroms/svi-707_disk.rom",
-      "name": "svi-707_disk.rom",
       "system": "msx",
       "required": false,
       "reason": "not_found",
@@ -77451,11 +76851,61 @@
       ]
     },
     {
+      "dest": "openmsx/share/systemroms/hb-75p_firmware.rom",
+      "sha1": "b262aedc71b445303f84efe5e865cbb71fd7d952",
+      "sha256": "070b5c3b36cb88d50ccf489ca45585a2167ac48a5f6f6c3dec4b9923666f8300",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/hb-75p_firmware.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/hx-10_basic-bios1.rom",
+      "sha1": "4dad9de7c28b452351cc12910849b51bd9a37ab3",
+      "sha256": "bbc474afbf3a0a9f8f3ed7ed59a86fa526c3a21487ffa211636c4082a9e61bd5",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/hx-10_basic-bios1.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/sfg-01.rom",
+      "sha1": "49a1750c10e407293af6bce27a02e99307ceba12",
+      "sha256": "deb1e9d4f1a8288d8e4ac1f6a23e285ff1d317017b2f914b89977770cd2145c2",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/sfg-01.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
       "dest": "openmsx/share/systemroms/NMS8245SystemROM1.08.bin",
       "sha1": "cc57c1dcd7249ea9f8e2547244592e7d97308ed0",
       "sha256": "8b7e32bbe42dbb77faee79ed4fc0295ecc8330b78e04c1f606a40e5d7ef20011",
       "size": 65536,
       "repo_path": "bios/Microsoft/MSX/openmsx/NMS8245SystemROM1.08.bin",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/NMS8245SystemROM1.06.bin",
+      "sha1": "b746192dc333eaf2a725a44777303808a3649d63",
+      "sha256": "17732f61bddbb7b644409d42c9da3812589ec8d67aa2cf22aed28d8b42c01b87",
+      "size": 65536,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/NMS8245SystemROM1.06.bin",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/NMS8245SystemROM1.05.bin",
+      "sha1": "816ceb21088b116ec34be0ff869d02222b525e58",
+      "sha256": "ad304970db9851954c4127f31044b5b36e800b5921603a012b56a2b7f232dcc7",
+      "size": 65536,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/NMS8245SystemROM1.05.bin",
       "cores": [
         "openmsx-libretro"
       ]
@@ -77481,11 +76931,21 @@
       ]
     },
     {
+      "dest": "openmsx/share/systemroms/7e6a267e/NMS8245SystemROM1.05.bin",
+      "sha1": "7e6a267e1a3e075dcdad3669b651b1050f6375ac",
+      "sha256": "c1999293e69a4988356826662a4e3934085782255d65dba226605efa4b09f200",
+      "size": 131072,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/7e6a267e/NMS8245SystemROM1.05.bin",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
       "dest": "openmsx/share/systemroms/nms8245_disk.rom",
-      "sha1": "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091",
-      "sha256": "83d5e564550a2518fbe9a3e5d1ad378506e9d5dac6cd865ab51c21460ae8144f",
+      "sha1": "58ba1887e8fd21c912b6859cae6514bd874ffcca",
+      "sha256": "e7bd920b362a205c368324756e2fc0c5b896e09b134dd596026119137d9ca03a",
       "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/share/systemroms/.variants/nms8245_disk.rom.3a15f5f1",
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/.variants/nms8245_disk.rom.f71a1e66",
       "cores": [
         "openmsx-libretro"
       ]
@@ -77511,11 +76971,101 @@
       ]
     },
     {
+      "dest": "openmsx/share/systemroms/hb-f700p_basic-bios2.rom",
+      "sha1": "0de3c802057560560a03d7965fcc4cff69f8575c",
+      "sha256": "554d5d2172ae1ad6128f26a1d5c8b28d52c07de155e2248c2108b8fc30625997",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/hb-f700p_basic-bios2.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/hb-f700p_msx2sub.rom",
+      "sha1": "24624c5fa3a8069b1d865cdea8a029f15c1955ea",
+      "sha256": "b27ea48e856e3271ce85f3d97ed39f2286c4f0b8dd8ef335c14a165f7fd98cc9",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/.variants/hb-f700p_msx2sub.rom.acb82643",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/hb-f700p_disk.rom",
+      "sha1": "3376cf9dd2b1ac9b41bf6bf6598b33136e86f9d5",
+      "sha256": "dfcc1cc0fa1184eb70f6033cf72205a126c74de18ae8c4071dee7e3ccd6e4474",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/hb-f700p_disk.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/hb-f1xd_basic-bios2.rom",
+      "sha1": "4ce41fcc1a603411ec4e99556409c442078f0ecf",
+      "sha256": "2bf26217ae16768b721bd0a2c795aa642d227633753f1171fd4c9add3c3d6868",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/hb-f1xd_basic-bios2.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
       "dest": "openmsx/share/systemroms/hb-f1xd_msx2sub.rom",
       "sha1": "0fbd45ef3dd7bb82d4c31f1947884f411f1ca344",
       "sha256": "fb6daa38e31431b81971eb5618241685447e23b1450051008a1deb5023513ce9",
       "size": 16384,
       "repo_path": "bios/Microsoft/MSX/Shared Roms/MSX2JEXT.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/hb-f1xd_disk.rom",
+      "sha1": "12f2cc79b3d09723840bae774be48c0d721ec1c6",
+      "sha256": "ee882383179b02561913f386e6993c711c4acf07639c43c21ba390dc81eefa4a",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/hb-f1xd_disk.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/hb-f1xv_kanjifont.rom",
+      "sha1": "218d91eb6df2823c924d3774a9f455492a10aecb",
+      "sha256": "3c9f60fda25b42978612cff1b979de8a0f8deeaf9957db957f0e5c7c10263d8e",
+      "size": 262144,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/hb-f1xv_kanjifont.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/Sony_HB-F1XV.rom",
+      "sha1": "f2a1d326d72d4c70ea214d7883838de8847a82b7",
+      "sha256": "2a7c24251a2401b8967484058c725b7ef4c712059e356d44cf5e3ceea99f9dcf",
+      "size": 131072,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/Sony_HB-F1XV.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/hb-f1xv_basic-bios2p.rom",
+      "sha1": "174c9254f09d99361ff7607630248ff9d7d8d4d6",
+      "sha256": "75adcdb462137c61fa570a2773a8d27ce3eeaf18873b3ac500492b594a1a1b93",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/hb-f1xv_basic-bios2p.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/hb-f1xv.rom",
+      "sha1": "ade0c5ba5574f8114d7079050317099b4519e88f",
+      "sha256": "c78c13996a406ee69c2a6b988c53a68b649affabef6e4599e6ea507d5387f044",
+      "size": 1048576,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/hb-f1xv.rom",
       "cores": [
         "openmsx-libretro"
       ]
@@ -77536,6 +77086,16 @@
       "sha256": "9fb7ef5003fcb953f46ffe5bab399832d8175f53cccb763d8c454a91bc2429fd",
       "size": 32768,
       "repo_path": "bios/Microsoft/MSX/openmsx/fs-a1wsx_kanjibasic.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/hb-f1xv_disk.rom",
+      "sha1": "5a4e7dbbfb759109c7d2a3b38bda9c60bf6ffef5",
+      "sha256": "b9e0f8db66c06069eae881096245666b798dcdc0461afb415a45a95476be8f9b",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/hb-f1xv_disk.rom",
       "cores": [
         "openmsx-libretro"
       ]
@@ -77601,11 +77161,71 @@
       ]
     },
     {
+      "dest": "openmsx/share/systemroms/fs-a1st_firmware.rom",
+      "sha1": "4b84465c2faa802bfd5f772118c4d31f993f29d0",
+      "sha256": "5546766d6224a3a698348bc697dad2da5914fd5785a2e360b0e9ce9c07c921fd",
+      "size": 4194304,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/.variants/fs-a1st_firmware.rom.2da883fa",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
       "dest": "openmsx/share/systemroms/fs-a1gt_firmware.rom",
       "sha1": "e779c338eb91a7dea3ff75f3fde76b8af22c4a3a",
       "sha256": "7eeacb763c39de7185b1ab8bbf9c625f1c5717444e20ea03d3ee2172dfeefe9f",
       "size": 4194304,
       "repo_path": "bios/Microsoft/MSX/openmsx/fs-a1gt_firmware.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/ascii_msxdos22.rom",
+      "sha1": "42f4e3360eb134857b0efa82c1abedf342680124",
+      "sha256": "f2614cbfc2d73f88ffa1a41a378d081af1ad217c6b1562715acc9683f36fe453",
+      "size": 65536,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/ascii_msxdos22.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/msx-write_kanjifont.rom",
+      "sha1": "fc71561a64f73da0e0043d256f67fd18d7fc3a7f",
+      "sha256": "1f9949b3a7e173d0c42892972a9d6b47a7509eea09f8a10c078edd8f337dbfe7",
+      "size": 131072,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/msx-write_kanjifont.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/Japanese MSX-Write (1986) (Ascii) (J).rom",
+      "sha1": "4180544158a57c99162269e33e4f2c77c9fce84e",
+      "sha256": "92819471ae1b87d383b3d1815c69f3c59db5e66ead2b7b012f60ef11fce12737",
+      "size": 524288,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/Japanese MSX-Write (1986) (Ascii) (J).rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/msx-write_ii_kanjifont.rom",
+      "sha1": "f4dba5ba267b5dd1a35eb74a6ec4fd4d5ca9a1b4",
+      "sha256": "7b4d4cddcb20f8043b95d3171b59430e92378ce0ea216aaf4e7a9110420dcabf",
+      "size": 262144,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/msx-write_ii_kanjifont.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/Japanese MSX-Write II (1988) (Ascii) (J).rom",
+      "sha1": "9afdee40e7b243f99cc50dd1ad710ab0928dd820",
+      "sha256": "8db375f31bcbd0951f9fae02199a1702ffa49be8770945d351c31a215549b357",
+      "size": 524288,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/Japanese MSX-Write II (1988) (Ascii) (J).rom",
       "cores": [
         "openmsx-libretro"
       ]
@@ -77621,6 +77241,66 @@
       ]
     },
     {
+      "dest": "openmsx/share/systemroms/avt_dpf-550_disk.rom",
+      "sha1": "633ad62599361bbb8ba6803cdcfaa14c54521c43",
+      "sha256": "c97a06eceec4631c5554099557cec648caec602aa5cd46566e2a230b078bdcf9",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/avt_dpf-550_disk.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/mu-pack.rom",
+      "sha1": "e88ca790ab58e7709cd99cbbb23ff7d33631b71f",
+      "sha256": "04a4176e4d6d05bd2067f9305f6e155824e55cbcedb30117bd19c685afc6fa36",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/mu-pack.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/fmpak.rom",
+      "sha1": "19bf90b8d2e695ffad61fff6f47f7fcda2f24a1d",
+      "sha256": "300f871a076132f894a2cb9c22aeabcb3125629264b3267d74300ab902b69036",
+      "size": 65536,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/fmpak.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/ddx_3.0.rom",
+      "sha1": "124126cee840e43c7668c11c2bec2f34b3d00c68",
+      "sha256": "a063d5306380e1a3d83c3e3f33af0146bf18e6f18519001b004bf52404e69dcc",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/ddx_3.0.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/mr512.rom",
+      "sha1": "f0abc38f345c05e2112079239d09f25fb08a7c56",
+      "sha256": "c041c3a3fc29e1841fcaf36391fd96c5bf54bbbfde7b4b76599a9f8b50af3a57",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/mr512.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/chakkari.rom",
+      "sha1": "aa98b0822d768acb73ab729d736c8fb682685492",
+      "sha256": "5068a0ae71a309d945ace5d17d8a7b9ff0bd98eeaca69059ba7dddcc99ad959f",
+      "size": 8192,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/chakkari.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
       "dest": "openmsx/share/systemroms/rs232.rom",
       "sha1": "4e9384c9d137f0ab65ffc5a78f04cd8c9df6c8b7",
       "sha256": "696da03345b9fd27799b8fd92024050a201c020ef730e9006cb8f10bbbf68004",
@@ -77631,11 +77311,51 @@
       ]
     },
     {
+      "dest": "openmsx/share/systemroms/ct-80e.rom",
+      "sha1": "e89eb87f295a2c93688265c4f6f25a9ccb4e3697",
+      "sha256": "795f0aece47423ef46e79977ab3b282df0e3d3c4b5dc38ab4d75a280633eeb69",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/ct-80e.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
       "dest": "openmsx/share/systemroms/yrw801.rom",
       "sha1": "32760893ce06dbe3930627755ba065cc3d8ec6ca",
       "sha256": "0481e861f639fa3d6a64a75b735035a54b0875d57aaae33fdbe400146c80423f",
       "size": 2097152,
       "repo_path": "bios/Microsoft/MSX/openmsx/yrw801.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/megaflashrom_scc+_sd.rom",
+      "sha1": "1621f623b834dc57cb2983f30b36bcc3ac56cafd",
+      "sha256": "54d92573bf88b699b6f15d82f497d268a61a9d491b71aa84fd78d862a4561065",
+      "size": 8208384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/megaflashrom_scc+_sd.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/cdx-2.rom",
+      "sha1": "ffc1bafca38d20ed6e9a27c90c6ab089a8482d89",
+      "sha256": "619a616053d094f098faa9c72a04d14095c5ef6cd2fa21da54c1b4f28356953a",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/cdx-2.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/ml-30dc.rom",
+      "sha1": "658bc7cd4b19bd5face14f09e4e2904157a5c298",
+      "sha256": "b84703bf5c6d51227bc2f17c68ef7b8be3367f84265105e5307adcb2ab669812",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/ml-30dc.rom",
       "cores": [
         "openmsx-libretro"
       ]
@@ -77661,11 +77381,221 @@
       ]
     },
     {
+      "dest": "openmsx/share/systemroms/msxaudio13.OPL3_mono.rom",
+      "sha1": "b344b5b7988f459354a2db49d7d339ceeee7d864",
+      "sha256": "582001da1f41ffe3098caa7ec8419b2efceca6a991c3b59bb8142aea6dff3306",
+      "size": 49152,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/msxaudio13.OPL3_mono.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/msxaudio13.OPL3_stereo.rom",
+      "sha1": "9c924cc79b17cfe468fc7c969868be86ccbe9d46",
+      "sha256": "30fdef68c851d79b8e5ff7c8123d76e0f2fbbb8ac4dd230aaae4c754001b7089",
+      "size": 49152,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/msxaudio13.OPL3_stereo.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/NEOSC.ROM",
+      "sha1": "2a3d953a423fa513f0d26a8bf0bd50664688868c",
+      "sha256": "017718c5f2c5ff1fd0e1953db06fc999c09727c1875a69ddbd0d3014d19c8ed5",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/NEOSC.ROM",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/NEOSV.ROM",
+      "sha1": "20100697cc10c3a1e49d371bf647fed9c47c4d04",
+      "sha256": "1157e8d0ffc8c62598924d50f67ad1170764382f84421f588ec9723fa096b506",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/NEOSV.ROM",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/fs-fd1a.rom",
+      "sha1": "a2f70f911ccaa6831008bd473e92a3f0eb1e8b0f",
+      "sha256": "d22373524bebdc37deee96de9e49e25796b02ac4211b68adaa96bea311f0154a",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/fs-fd1a.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/fs-ca1.rom",
+      "sha1": "36d47cf70618fdb460f97a8ceb75013ec4529063",
+      "sha256": "3a5671111276287dd66feaedd038854bc9f376bbb115eb7b4c0ab1b6de4b552a",
+      "size": 131072,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/.variants/fs-ca1.rom.ebe7f408",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/fs-pw1_kanjifont.rom",
+      "sha1": "5e872d5853698731a0ed22fb72dbcdfd59cd19c3",
+      "sha256": "e4036415638e73d5894d850cab3a40cb63e76afa0391d0ad31321bf2ed61b7d7",
+      "size": 131072,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/fs-pw1_kanjifont.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/nms1200_6.rom",
+      "sha1": "0b63e9cf99bc2a3d7f21cabf1cb668a6ca71ad2d",
+      "sha256": "63a8a27341af745802cdd60e9186a4ef1f4fbb0d4bea7cae1a751906e49e2b75",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/nms1200_6.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/nms1205.rom",
+      "sha1": "c7463e1fd0433c5d41b70670d6c10fd781b66426",
+      "sha256": "3e914ea47784c2389c6cdecb6d2488506398fc25eff24af8b98802e9bc71eeae",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/nms1205.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/msxaudio12pre4a.rom",
+      "sha1": "3b02e5f45603df2c180f9c07d59b2ccc5a87bd0a",
+      "sha256": "464a9c6d449ce1cfc833412a967d25832a0b0f3f8a0e2780811c56f4ff8537e9",
+      "size": 49152,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/.variants/msxaudio12pre4a.rom.ace98898",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/mfd-001_disk.rom",
+      "sha1": "bb72819da1160bc375fa3623f2d0a5424d08c89b",
+      "sha256": "d9382f7790764803c482586e6b7e512ab7fd547951281739c5a2b9535a93ae34",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/mfd-001_disk.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/mrs-001.rom",
+      "sha1": "41c4810ec56ed0f61e0fc8b355d2aae91de12d99",
+      "sha256": "8bc41c39412b521dbb29394c342026bd115d9f6c35d93de4d592f3e64d41604d",
+      "size": 8192,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/mrs-001.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/hb3600_disk.rom",
+      "sha1": "608e8e9ab91c67f7015a67ea12f52ea3b0d609cd",
+      "sha256": "87fdbda95438697e9efa8fd35700d47349a077231336fea7233f06dce88e873f",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/hb3600_disk.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/hddrom.rom",
+      "sha1": "11bd12a95142185d18659ccf74748fc1bb20c60d",
+      "sha256": "31cfcfb99892fb186b617d0b98f5ed5620bdb6c345b954eb5e2052f84d6a5ad0",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/.variants/hddrom.rom.a3a6d0ce",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
       "dest": "openmsx/share/systemroms/hbi-j1_kanjibasic.rom",
       "sha1": "1ef3956f7f918873fb9b031339bba45d1e5e5878",
       "sha256": "01f43988d825d48a46915199b6cd42ae1505bdf83d642511204c50ecdf95c741",
       "size": 32768,
       "repo_path": "bios/Microsoft/MSX/.variants/KANJI.ROM.a068cba9",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/hbd-50.rom",
+      "sha1": "2144036d6573d666143e890e5413956bfe8f66c5",
+      "sha256": "f370b00ff678ae42c403e6589c0530124372ff831f8fef8dce69d6f6391bbed1",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/.variants/hbd-50.rom.76cdc12c",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/hbk-30.rom",
+      "sha1": "ba83a80a0041e3a8fb5c075a9b4a29ee92255d62",
+      "sha256": "9d9a7a1ccbf8b1ef6e6780690419480c5bc40fcc7ec859d582fc2a6d7f913351",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/hbk-30.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/hbi-232.rom",
+      "sha1": "b2776159a7b92d74308b434a6b3e5feba161e2b7",
+      "sha256": "267ab614324129f4f3547471e5c996a2bf5b32ee07d0273de4fad6edc648cf66",
+      "size": 8192,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/hbi-232.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/sensor-kid.rom",
+      "sha1": "794aca3c2136933f1fe6405e56e0ce7fdbb10385",
+      "sha256": "968599c215b6307b6db0c3d0f4e73d9a6accdca94f56053c22fc8cdfd8151e00",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/sensor-kid.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/svi-707_disk.rom",
+      "sha1": "a337c9aede83cf684339f61a80468e73af31ebeb",
+      "sha256": "82b3914528791db5c9ddbbf56879f4ac79a8135a7d0b9110b8b7cd0bee98aa7f",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/svi-707_disk.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/svi-707_cpm.rom",
+      "sha1": "2cb1c373753d792b75609d81d57719d545c63c41",
+      "sha256": "f247071439f2378e88d28f0ce57ad12a0e3f0172b02511b5b5ed0ca0c6799599",
+      "size": 4096,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/svi-707_cpm.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/Nextor-2.1.1.SunriseIDE.ROM",
+      "sha1": "61cba1680ac6cb448dc3e8c710a43f4e7ab49457",
+      "sha256": "ec932c060d2b69e80c8911530e69d2ca7cd91ae6c36a3f1c313a573050eec6ea",
+      "size": 131072,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/Nextor-2.1.1.SunriseIDE.ROM",
       "cores": [
         "openmsx-libretro"
       ]
@@ -77696,6 +77626,76 @@
       "sha256": "53afd0fa9c62eda3e2be939e23f3adf48a2af8ad37bb1640261726c5d5adeba8",
       "size": 8192,
       "repo_path": "bios/Arcade/FBNeo/ym2608_adpcm_rom.bin",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/dpf-550_disk.rom",
+      "sha1": "d9c82e091b5fa1b5ee9b7f012f0084611762eb93",
+      "sha256": "73dea5e4b5534b9829fc89e1bc88af46c89bb9bd84a8a1712df3723bec270647",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/dpf-550_disk.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/Tecall_MSX_RAMFILE_TM220.rom",
+      "sha1": "2ba40f6520e3045326a985956f7d32ff6d7cd99a",
+      "sha256": "7b0a1f7a3b5f68c41f7658a23392ae0f7b66529627c8e9de4cc62346a0f09cd6",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/Tecall_MSX_RAMFILE_TM220.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/hx-f101pe.rom",
+      "sha1": "b88c507720a0617a27141c329755de1a48b89deb",
+      "sha256": "479e9d0e3111c2e48bb06809384434bdbdece6293cb29ee872801860f1796360",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/hx-f101pe.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/hx-mu900.rom",
+      "sha1": "0d246b0e3edc63803fcce861ea07eadf29dc488c",
+      "sha256": "9532b23b70820ca08aa7c927763bccd91a993916c94202a441ba5f9131b1d55c",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/hx-mu900.rom",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/fd-03.rom",
+      "sha1": "5a5cc35ffb7f78ef440df9548c7360ab56719c5a",
+      "sha256": "0db133c5318df955b726b419afcae62af3ab1987d218eeea25705f966e41eb6c",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/.variants/fd-03.rom.06f24f6f",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/FD-051.BIN",
+      "sha1": "4b08a057e5863ade179dcf8bc9377e90940e6d61",
+      "sha256": "ebde8e704c79eb4febd3046094bcf5e0a15c102a8d5a0930212efa008416f759",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/FD-051.BIN",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/sfg-05.rom",
+      "sha1": "6680d7118d85418813f1db9449bf3e20942b16da",
+      "sha256": "e200733119be57298cf37687b05ca448039cc54554253d46ce49c9ecf9d1e4ad",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/sfg-05.rom",
       "cores": [
         "openmsx-libretro"
       ]
