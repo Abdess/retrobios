@@ -27,7 +27,7 @@ notes: |
 files:
   - name: ps2-0230a-20080220.bin
     found_by: content
-    aliases: [ps2-0250j-20100415.bin, SCPH-70004_BIOS_V12_EUR_200.BIN]
+    aliases: [ps2-0250j-20100415.bin]
     required: true
     min_size: 4194304
     max_size: 8388608
@@ -55,6 +55,42 @@ files:
       RPCS3, from 0x12F bytes before "compatible mode" to 0x262 bytes after
       "Parity error" and padded to 4 MiB, as firmware_bios_claim release 2
       does. Accepted like any image with a valid romdir.
+
+  - name: SCPH-39001_BIOS_V7_USA_160.BIN
+    found_by: content
+    required: false
+    size: 4194304
+    sha1: "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7"
+    md5: "d5ce2c7d119f563ce04bc04dbc3a323e"
+    source_ref: "pcsx2/ps2/BiosTools.cpp:16-17,80-197,258-283,317-370"
+    note: "ROMVER 0160AC20020207, the SCPH-39001 image. Accepted like any image with a valid romdir."
+
+  - name: SCPH-39004_BIOS_V7_EUR_160.BIN
+    found_by: content
+    required: false
+    size: 4194304
+    sha1: "bff2902bd0ce9729a060581132541e9fd1a9fab6"
+    md5: "0d2228e6fd4fb639c9c39d077a9ec10c"
+    source_ref: "pcsx2/ps2/BiosTools.cpp:16-17,80-197,258-283,317-370"
+    note: "ROMVER 0160EC20020319, the SCPH-39004 image. Accepted like any image with a valid romdir."
+
+  - name: SCPH-70000_BIOS_V12_JAP_200.BIN
+    found_by: content
+    required: false
+    size: 4194304
+    sha1: "224ab5704ab719edeb05ca1d835812252c97c1b3"
+    md5: "0eee5d1c779aa50e94edd168b4ebf42e"
+    source_ref: "pcsx2/ps2/BiosTools.cpp:16-17,80-197,258-283,317-370"
+    note: "ROMVER 0200JC20040614, the SCPH-70000 image. Accepted like any image with a valid romdir."
+
+  - name: SCPH-70004_BIOS_V12_EUR_200.BIN
+    found_by: content
+    required: false
+    size: 4194304
+    sha1: "434bc0b4eb4827da0773ec0795aadc5162569a07"
+    md5: "dc752f160044f2ed5fc1f4964db2a095"
+    source_ref: "pcsx2/ps2/BiosTools.cpp:16-17,80-197,258-283,317-370"
+    note: "ROMVER 0200EC20040614, the SCPH-70004 image. Accepted like any image with a valid romdir."
 
   - name: ps2-0230a-20080220.rom1
     aliases: [SCPH-70004_BIOS_V12_EUR_200.ROM1]
