@@ -299,7 +299,10 @@ BEFORE_WEIGHT = {
     # to a part page of its own, 2 pages, 7,160 elements and 545,681 bytes
     # on the built site of 964875572. Its Neo Geo row names the emulators
     # that read the set (546,385 bytes on the built site of 2026-11-11).
-    "amberelec": (2, 7_928, 546_385),
+    # The openMSX system ROMs collected on 2026-11-12 split the MSX system
+    # page in two, and nine of its files now link to microsoft-msx-2:
+    # 546,403 bytes on the built site of 82d134cd8.
+    "amberelec": (2, 7_928, 546_403),
     "romm": (2, 9_561, 572_487),
     # RetroArch's MSX files cite the fMSX ROM loader and its ScummVM files
     # the readers of each data file since 2026-11-11 (46,737 and 9,275 bytes
