@@ -286,8 +286,14 @@ BEFORE_WEIGHT = {
     # LRPS2 that Batocera builds reads "LRPS2 (416291a, Batocera)" since
     # 2026-11-11: 1,396,309 bytes on the built site of 964875572. Its Neo
     # Geo system names every Neo Geo core since the platforms' snk-neogeo
-    # met one: 1,396,380 bytes on the built site of 2026-11-11.
-    "batocera": (13, 18_854, 1_396_380),
+    # met one: 1,396,380 bytes on the built site of 2026-11-11, in a
+    # checkout without the release assets. The deployed site restores them,
+    # and Batocera's pages then name four more files (PS3UPDAT.PUP, the two
+    # Vita PUPs, dsi_nand.bin): 1,396,955 bytes on the site deployed from
+    # 7d6efc352, 1,396,475 without the assets. Generated at 8d87f28cd and at
+    # 750a6eb8e from the same inputs, the Markdown of all 13 pages is the
+    # same size.
+    "batocera": (13, 18_854, 1_396_955),
     # AmberELEC's MSX files cite the fMSX ROM loader since 2026-11-11 (fMSX
     # named 82 times instead of 28, the same 295 files): the section moved
     # to a part page of its own, 2 pages, 7,160 elements and 545,681 bytes

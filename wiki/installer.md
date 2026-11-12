@@ -445,7 +445,7 @@ lists record these files as omitted.
 
 <!-- generated: dry-run -->
 
-A RetroArch dry run into an empty folder, with the list of 2026-11-11, printed this:
+A RetroArch dry run into an empty folder, with the list of 2026-11-12, printed this:
 
 ```
 Fetching file index for retroarch...
@@ -530,7 +530,7 @@ gives a `record` event, see [Machine-readable events](#machine-readable-events).
 <!-- generated: run-date -->
 
 Each line a first install prints, and what it means. The run below is a
-Batocera install into an empty folder, from the list of 2026-11-11.
+Batocera install into an empty folder, from the list of 2026-11-12.
 The figures change with each release.
 <!-- /generated: run-date -->
 
@@ -541,10 +541,10 @@ an emulator needs that is not available is said too.
 <!-- generated: run-default -->
 
 ```
-Installing 20838 files (10.9 GB) for Batocera.
+Installing 20841 files (10.9 GB) for Batocera.
 BIOS folder: /userdata/bios
 
-Done. 20838 files installed.
+Done. 20841 files installed.
 254 files an emulator needs are not available here (--verbose names them).
 Next: start Batocera and play.
 ```
@@ -590,13 +590,13 @@ few minutes on a memory card, because every file is hashed:
 ```
 Fetching file index for batocera...
   23 files read from Batocera's save directory go to a folder per system under /userdata/saves
-  20838 files (11.0 GB)
-    5449 BIOS files (6.2 GB), 11561 game data files (4.7 GB) and 3828 data files (88.7 MB).
+  20841 files (11.0 GB)
+    5452 BIOS files (6.2 GB), 11561 game data files (4.7 GB) and 3828 data files (88.7 MB).
     Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
-  Not installable: 874 files, 254 of them required. Why: no system runs the core (83), not found (592), read outside the BIOS folder (199).
+  Not installable: 873 files, 254 of them required. Why: no system runs the core (83), not found (591), read outside the BIOS folder (199).
 
 Checking existing files...
-  0 in place, 20838 missing, 0 wrong copies
+  0 in place, 20841 missing, 0 wrong copies
 ```
 <!-- /generated: run-index -->
 
@@ -611,10 +611,10 @@ line per file, as the log of the run below:
 <!-- generated: run-download -->
 
 ```
-Downloading 17010 files (10.9 GB)...
+Downloading 17013 files (10.9 GB)...
   Press Ctrl+C to stop. Running the same command again carries on from here.
-  [1/17010] panafz1.bin ok
-  [2/17010] panafz10.bin ok
+  [1/17013] panafz1.bin ok
+  [2/17013] panafz10.bin ok
 ```
 <!-- /generated: run-download -->
 
@@ -626,10 +626,10 @@ command again picks up where it stopped.
 <!-- generated: run-end -->
 
 ```
-Done. 20838 files installed.
-  Installed: 5449 BIOS files, 11561 game data files and 3828 data files.
+Done. 20841 files installed.
+  Installed: 5452 BIOS files, 11561 game data files and 3828 data files.
 BIOS folder: /userdata/bios
-874 files were not installed: the collection does not hold them, or its copy fails their check.
+873 files were not installed: the collection does not hold them, or its copy fails their check.
   Needed to start an emulator (102 files):
     acclaim-zn1 (mame2010, mame2015): acpsx.zip
       https://abdess.github.io/retrobios/emulators/mame2010/
@@ -666,7 +666,7 @@ narrowing would save, once that saving is over half.
 
 <!-- generated: bulk-hint -->
 
-RetroArch with `--system sony-playstation`, from the list of 2026-11-11:
+RetroArch with `--system sony-playstation`, from the list of 2026-11-12:
 
 ```
   duckstation pulls 316.5 MB of this 329.0 MB download for sony-playstation. --core pcsx1 keeps 11.0 MB of it and saves 318.0 MB (96%).
@@ -701,7 +701,7 @@ The same command with `--check` reads the folder and writes nothing:
 
 ```
 Checking existing files...
-  20838 in place, 0 missing, 0 wrong copies
+  20841 in place, 0 missing, 0 wrong copies
 
   Every file on the list is in place.
 ```
