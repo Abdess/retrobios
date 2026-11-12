@@ -69,7 +69,7 @@ class RealListParity(unittest.TestCase):
         if plat not in self.manifests:
             self.layouts[plat] = {}
             with contextlib.redirect_stdout(io.StringIO()):
-                self.manifests[plat] = self.gp.generate_manifest(
+                self.manifests[plat] = self.gp.generate_install_list(
                     plat, str(REPO_ROOT / "platforms"), self.db, str(REPO_ROOT / "bios"),
                     str(REPO_ROOT / "platforms" / "_registry.yml"),
                     emulators_dir=str(REPO_ROOT / "emulators"),
@@ -588,7 +588,10 @@ class ExpertRuns(Lists):
     def test_the_schema_check_reads_a_null_truth_list(self):
         from unittest import mock
 
-        import validate_schemas
+        try:
+            import validate_schemas
+        except ImportError as exc:
+            self.skipTest(f"validate_schemas needs jsonschema: {exc}")
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as root:
             (Path(root) / "install" / "standalone").mkdir(parents=True)

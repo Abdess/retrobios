@@ -34,6 +34,7 @@ import shutil
 import tempfile
 import zipfile
 from pathlib import Path, PurePosixPath
+from typing import Any
 
 sys.path.insert(0, os.path.dirname(__file__))
 from alternatives import core_file_spares, settle_sets, slot_set_keys
@@ -2965,7 +2966,7 @@ def _run_manifest_mode(
                 continue
             layouts: dict = {}
             try:
-                manifest = generate_manifest(
+                manifest = generate_install_list(
                     representative,
                     args.platforms_dir,
                     db,
@@ -4882,7 +4883,7 @@ def generate_manifest(
     no_game_data: bool = False,
     one_per_slot: bool = False,
     known_slot_choices: dict | None = None,
-    standalone_out: dict | None = None,
+    build_out: dict | None = None,
 ) -> dict:
     """Generate a JSON manifest for a platform (same resolution as generate_pack).
 
@@ -4893,10 +4894,9 @@ def generate_manifest(
     A file that is a game's data, not firmware, carries ``"category":
     "game_data"``, so the installer can leave it out as the builder does
     under ``no_game_data``. Firmware carries no category.
-    `standalone_out` receives, per emulator with a standalone build, what
-    `--emulator X --standalone` packs (standalone_layouts), which the list
-    itself only names (standalone_builds): written apart, it is fetched
-    only by a run given --standalone.
+    One build: generate_install_list adds what --source truth and
+    --standalone read. `build_out` receives the slot choices and the
+    profiles this build read, which that second build takes over.
     """
     config = load_platform_config(platform_name, platforms_dir)
     if fold_case is not None:
@@ -5433,24 +5433,51 @@ def generate_manifest(
         ]
         if variants:
             result["case_variants"] = variants
-    if source == "full" and target_cores is None and fold_case is None and not one_per_slot:
-        with contextlib.redirect_stdout(io.StringIO()):
-            truth = generate_manifest(
-                platform_name, platforms_dir, db, bios_dir, registry_path,
-                emulators_dir, zip_contents, full_profiles, None, "truth",
-                regions, target_name, offline, required_only, data_registry,
-                fold_case=None, no_game_data=no_game_data,
-                known_slot_choices=slot_choices,
-            )
-        _mark_truth(result, truth)
-        layouts = _standalone_layouts(
-            manifest_profiles, emulators_dir, db, bios_dir, zip_contents, offline,
-            platforms_dir, repo_root, result,
+    if build_out is not None:
+        build_out.update(slot_choices=slot_choices, profiles=manifest_profiles)
+    return result
+
+
+def generate_install_list(
+    platform_name: str,
+    platforms_dir: str,
+    db: dict,
+    bios_dir: str,
+    registry_path: str,
+    standalone_out: dict | None = None,
+    **options: Any,
+) -> dict:
+    """The list install.py reads: the full manifest, the files and omissions
+    the --source truth build holds apart from it, and the emulators with a
+    standalone build. `standalone_out` receives, per such emulator, what
+    `--emulator X --standalone` packs, written apart from the list
+    (install/standalone/<platform>.json) and fetched only by a run given
+    --standalone.
+
+    A manifest narrowed by a target, a case fold or --one-per-slot is no
+    list install.py reads by default and gets neither.
+    """
+    built: dict = {}
+    result = generate_manifest(platform_name, platforms_dir, db, bios_dir, registry_path,
+                               build_out=built, **options)
+    if (options.get("source", "full") != "full" or options.get("target_cores") is not None
+            or options.get("fold_case") is not None or options.get("one_per_slot")):
+        return result
+    with contextlib.redirect_stdout(io.StringIO()):
+        truth = generate_manifest(
+            platform_name, platforms_dir, db, bios_dir, registry_path,
+            **{**options, "source": "truth"}, known_slot_choices=built["slot_choices"],
         )
-        if layouts:
-            result["standalone_builds"] = sorted(layouts)
-            if standalone_out is not None:
-                standalone_out.update(layouts)
+    _mark_truth(result, truth)
+    layouts = _standalone_layouts(
+        built["profiles"], options.get("emulators_dir", "emulators"), db, bios_dir,
+        options.get("zip_contents") or {}, options.get("offline"), platforms_dir,
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))), result,
+    )
+    if layouts:
+        result["standalone_builds"] = sorted(layouts)
+        if standalone_out is not None:
+            standalone_out.update(layouts)
     return result
 
 
