@@ -775,14 +775,8 @@ def _select_variants(
 
     slot_undecidable: list[str] = []
     if one_per_slot:
-        slot_groups = {
-            sys_id: [(d, n) for d, n in members if d not in region_drops]
-            for sys_id, members in region_groups.items()
-        }
-        slot_drops, slot_undecidable = slot_mod.resolve_slot_drops(
-            slot_groups,
-            slot_mod.platform_slot_index(config, emu_profiles or {}, target_cores),
-            held,
+        slot_drops, slot_undecidable = _slot_drops(
+            config, emu_profiles, target_cores, region_groups, region_drops, held
         )
         region_drops = region_drops | slot_drops
         if slot_undecidable:
@@ -792,6 +786,27 @@ def _select_variants(
             )
 
     return region_drops, region_fallbacks, slot_undecidable
+
+
+def _slot_drops(
+    config: dict,
+    emu_profiles: dict | None,
+    target_cores: set[str] | None,
+    region_groups: dict[str, list[tuple[str, str]]],
+    region_drops: set[str],
+    held: set[str],
+) -> tuple[set[str], list[str]]:
+    """What --one-per-slot withdraws once the regions have, and the slots no
+    declared order decides. The pack and the manifest both read it."""
+    slot_groups = {
+        sys_id: [(d, n) for d, n in members if d not in region_drops]
+        for sys_id, members in region_groups.items()
+    }
+    return slot_mod.resolve_slot_drops(
+        slot_groups,
+        slot_mod.platform_slot_index(config, emu_profiles or {}, target_cores),
+        held,
+    )
 
 
 def _platform_pack_name(
@@ -4649,12 +4664,14 @@ def _manifest_selection(
     zip_contents: dict | None = None,
     data_registry: dict | None = None,
     slot_overrides: dict[str, str] | None = None,
+    one_per_slot: bool = False,
 ) -> tuple[set[str], SelectionIndex, set[str]]:
-    """Destinations a region list removes, the groups the installer replays,
-    and the destinations the builder holds.
+    """Destinations a region list and --one-per-slot remove, the groups the
+    installer replays, and the destinations the builder holds.
 
-    Grouped as the pack groups them, so a region the installer applies to
-    the full manifest withdraws what `--region` withdraws from the pack.
+    Grouped as the pack groups them, so a region or a slot the installer
+    decides on the full manifest withdraws what `--region` and
+    `--one-per-slot` withdraw from the pack.
     """
     extras: list[dict] = []
     held: set[str] = set()
@@ -4684,9 +4701,14 @@ def _manifest_selection(
         if regions
         else set()
     )
+    if one_per_slot:
+        drops = drops | _slot_drops(
+            config, emu_profiles, target_cores, region_groups, drops, held
+        )[0]
     return drops, SelectionIndex.build(
         region_groups, region_index, pack_systems, extras, required_only,
         extras_prefix=declared_root(config),
+        slot_claims=slot_mod.platform_slot_claims(config, emu_profiles, target_cores),
     ), held
 
 
@@ -4853,6 +4875,8 @@ def generate_manifest(
     data_registry: dict | None = None,
     fold_case: bool | None = None,
     no_game_data: bool = False,
+    one_per_slot: bool = False,
+    known_slot_choices: dict | None = None,
 ) -> dict:
     """Generate a JSON manifest for a platform (same resolution as generate_pack).
 
@@ -4947,8 +4971,10 @@ def generate_manifest(
     # The full manifest records every core's answer at a contested slot, so a
     # target narrowed from it gets what that target's own pack serves.
     whole = target_cores is None and source != "platform" and bool(emu_profiles)
+    # The truth list read inside this run takes the choices already made.
     slot_choices = (
-        slots.slot_choices(config, emu_profiles, db, zip_contents, data_registry)
+        known_slot_choices if known_slot_choices is not None and whole
+        else slots.slot_choices(config, emu_profiles, db, zip_contents, data_registry)
         if whole else {}
     )
     # Derived from the same choices: computed twice, it was 8% of a run.
@@ -5025,7 +5051,7 @@ def generate_manifest(
         config, pack_systems, emulators_dir, db, base_dest, emu_profiles,
         target_cores, source, required_only, regions, undeclared=undeclared,
         zip_contents=zip_contents, data_registry=data_registry,
-        slot_overrides=slot_overrides,
+        slot_overrides=slot_overrides, one_per_slot=one_per_slot,
     )
 
     # Phase 1: baseline files
@@ -5317,6 +5343,9 @@ def generate_manifest(
         # Every game data file below says so: the installer's --no-game-data
         # relies on it, and refuses a list that does not record categories.
         "categorized": True,
+        # The entries a slot decides carry `slot`, which --one-per-slot
+        # reads: without this mark the installer refuses it.
+        "slot_fields": True,
         **({"no_game_data": True} if no_game_data else {}),
         "platform": platform_name,
         "display_name": platform_display,
@@ -5394,7 +5423,108 @@ def generate_manifest(
         ]
         if variants:
             result["case_variants"] = variants
+    if source == "full" and target_cores is None and fold_case is None and not one_per_slot:
+        with contextlib.redirect_stdout(io.StringIO()):
+            truth = generate_manifest(
+                platform_name, platforms_dir, db, bios_dir, registry_path,
+                emulators_dir, zip_contents, full_profiles, None, "truth",
+                regions, target_name, offline, required_only, data_registry,
+                fold_case=None, no_game_data=no_game_data,
+                known_slot_choices=slot_choices,
+            )
+        _mark_truth(result, truth)
+        layouts = _standalone_layouts(
+            manifest_profiles, emulators_dir, db, bios_dir, zip_contents, offline,
+            platforms_dir, repo_root, result,
+        )
+        if layouts:
+            result["standalone_layouts"] = layouts
     return result
+
+
+def _truth_key(entry: dict) -> tuple:
+    """What tells one entry from another, as the installer's _entry_key."""
+    root = entry.get("root")
+    cores = tuple(entry.get("cores") or []) if root == "emulator" else ()
+    return (str(entry.get("dest")), root, cores)
+
+
+def _mark_truth(result: dict, truth: dict) -> None:
+    """What `--source truth` installs, carried in the full list.
+
+    The truth list holds what the emulator profiles prove is read. A file of
+    the full list it does not hold, by destination and content, is marked
+    `"truth": false`, and what only the truth list holds is `truth_files`.
+    Omissions compare by destination. The installer then rebuilds the
+    truth list from the full one, and a list without `truth_files` is one
+    published before, on which `--source truth` is refused.
+    """
+    held = {(_truth_key(entry), entry.get("sha1")) for entry in truth["files"]}
+    full = {(_truth_key(entry), entry.get("sha1")) for entry in result["files"]}
+    for entry in result["files"]:
+        if (_truth_key(entry), entry.get("sha1")) not in held:
+            entry["truth"] = False
+    result["truth_files"] = [
+        entry for entry in truth["files"]
+        if (_truth_key(entry), entry.get("sha1")) not in full
+    ]
+    absent = {_truth_key(entry) for entry in truth["omitted_files"]}
+    listed = {_truth_key(entry) for entry in result["omitted_files"]}
+    for entry in result["omitted_files"]:
+        if _truth_key(entry) not in absent:
+            entry["truth"] = False
+    result["truth_omitted"] = [
+        entry for entry in truth["omitted_files"] if _truth_key(entry) not in listed
+    ]
+
+
+def _standalone_layouts(
+    profiles: dict[str, dict],
+    emulators_dir: str,
+    db: dict,
+    bios_dir: str,
+    zip_contents: dict,
+    offline: bool | None,
+    platforms_dir: str,
+    repo_root: str,
+    result: dict,
+) -> dict[str, list]:
+    """Per emulator with a standalone build, the files `--emulator X
+    --standalone` packs, at the destinations that build reads.
+
+    Built by the emulator pack itself, in memory. A file whose content the
+    list already carries is written as [dest, sha1], its download read from
+    that entry. Another is written whole. A data tree member is left to the
+    list's data directories.
+    """
+    known = {
+        copy["sha1"]
+        for entry in [*result["files"], *result.get("truth_files", [])]
+        for copy in [entry, *entry.get("alternatives", []), *entry.get("slot_choices", [])]
+        if copy.get("sha1") and (copy.get("repo_path") or copy.get("release_asset"))
+    }
+    layouts: dict[str, list] = {}
+    for name, profile in sorted(profiles.items()):
+        if "standalone" not in str(profile.get("type", "")):
+            continue
+        record = PackRecord()
+        with contextlib.redirect_stdout(io.StringIO()), \
+                contextlib.redirect_stderr(io.StringIO()):
+            generate_emulator_pack(
+                [name], emulators_dir, db, bios_dir, "", standalone=True,
+                zip_contents=zip_contents, offline=offline,
+                platforms_dir=platforms_dir, record=record,
+            )
+        items: list = []
+        for member in record.files:
+            entry, _size = _manifest_entry(
+                record.sources.get(member), member, [name], db, repo_root, {}
+            )
+            if entry is None:
+                continue
+            items.append([member, entry["sha1"]] if entry["sha1"] in known else entry)
+        layouts[name] = items
+    return layouts
 
 
 def tree_readers(pack_systems: dict, core_trees: Iterable[dict]) -> dict[str, list[str]]:

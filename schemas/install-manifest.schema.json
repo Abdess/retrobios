@@ -55,6 +55,10 @@
       "description": "Built without game data, absent when the game data is listed",
       "const": true
     },
+    "slot_fields": {
+      "description": "The entries a slot decides carry slot, which --one-per-slot reads. Without it the installer refuses --one-per-slot.",
+      "const": true
+    },
     "platform": {
       "type": "string",
       "minLength": 1,
@@ -378,6 +382,13 @@
             "description": "The rank the code searches the file at, lower first: a world file withdraws an unmatched regional one only when it ranks no worse.",
             "type": "integer"
           },
+          "truth": {
+            "description": "false when the list --source truth installs lacks this omission.",
+            "const": false
+          },
+          "slot": {
+            "$ref": "#/$defs/slot"
+          },
           "declared_in": {
             "description": "The platform systems declaring the file, when fewer than `systems`, which also names the systems whose cores read it there.",
             "type": "array",
@@ -441,6 +452,49 @@
       "type": "array",
       "items": {
         "$ref": "#/$defs/file"
+      }
+    },
+    "truth_files": {
+      "description": "Files only the list --source truth installs holds, at their destination with their bytes. With the files not marked truth: false they make that list. Absent on a list built before it, on which --source truth is refused.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/file"
+      }
+    },
+    "truth_omitted": {
+      "description": "Omissions only the list --source truth installs holds.",
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "standalone_layouts": {
+      "description": "Per emulator with a standalone build, the files generate_pack.py --emulator --standalone packs, at the destinations that build reads: an entry, or [dest, sha1] when the list carries that content.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "oneOf": [
+            {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "string",
+                  "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+                },
+                {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{40}$"
+                }
+              ],
+              "minItems": 2,
+              "maxItems": 2
+            },
+            {
+              "$ref": "#/$defs/file"
+            }
+          ]
+        }
       }
     },
     "data_directories": {
@@ -657,6 +711,65 @@
     }
   },
   "$defs": {
+    "slot": {
+      "description": "What --one-per-slot reads: the groups the file competes in, once per time a group lists it, then the keys the slot lookup tries, each with what every emulator declares there.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "groups",
+        "keys"
+      ],
+      "properties": {
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "keys": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "ranks"
+              ],
+              "properties": {
+                "ranks": {
+                  "description": "The priority: of each entry of the emulator at this key, null for one without, lower first.",
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  }
+                },
+                "regions": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "sets": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "file": {
       "type": "object",
       "additionalProperties": false,
@@ -803,6 +916,13 @@
         "priority": {
           "description": "The rank the code searches the file at, lower first: a world file withdraws an unmatched regional one only when it ranks no worse.",
           "type": "integer"
+        },
+        "truth": {
+          "description": "false when the list --source truth installs lacks this file at this destination with these bytes.",
+          "const": false
+        },
+        "slot": {
+          "$ref": "#/$defs/slot"
         },
         "alternatives": {
           "description": "Copies other cores read at this destination when they disagree on its content, in the order the pack builder tries them. A narrowing that drops the entry's cores takes the first whose cores remain.",
