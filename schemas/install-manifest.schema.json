@@ -468,34 +468,14 @@
         "type": "object"
       }
     },
-    "standalone_layouts": {
-      "description": "Per emulator with a standalone build, the files generate_pack.py --emulator --standalone packs, at the destinations that build reads: an entry, or [dest, sha1] when the list carries that content.",
-      "type": "object",
-      "additionalProperties": {
-        "type": "array",
-        "items": {
-          "oneOf": [
-            {
-              "type": "array",
-              "prefixItems": [
-                {
-                  "type": "string",
-                  "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
-                },
-                {
-                  "type": "string",
-                  "pattern": "^[a-f0-9]{40}$"
-                }
-              ],
-              "minItems": 2,
-              "maxItems": 2
-            },
-            {
-              "$ref": "#/$defs/file"
-            }
-          ]
-        }
-      }
+    "standalone_builds": {
+      "description": "The emulators whose standalone build install/standalone/<platform>.json describes, which --emulator NAME --standalone reads. Absent when none has one.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
     },
     "data_directories": {
       "description": "Data trees the pack carries, rebuilt by the installer from their source archive. Each file is kept only when its sha1 matches.",

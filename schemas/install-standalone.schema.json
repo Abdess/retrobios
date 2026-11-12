@@ -1,0 +1,654 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://abdess.github.io/retrobios/api/v1/schemas/install-standalone.schema.json",
+  "title": "RetroBIOS standalone build layouts",
+  "description": "install/standalone/<platform>.json: per emulator with a standalone build, the files generate_pack.py --emulator NAME --standalone packs, at the destinations that build reads. install.py reads it only with --standalone.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "platform",
+    "standalone_layouts"
+  ],
+  "properties": {
+    "schema": {
+      "const": 1
+    },
+    "platform": {
+      "type": "string",
+      "minLength": 1
+    },
+    "standalone_layouts": {
+      "description": "Per emulator with a standalone build, the files generate_pack.py --emulator --standalone packs, at the destinations that build reads: an entry, or [dest, sha1] when the list carries that content.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "oneOf": [
+            {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "string",
+                  "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+                },
+                {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{40}$"
+                }
+              ],
+              "minItems": 2,
+              "maxItems": 2
+            },
+            {
+              "$ref": "#/$defs/file"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "$defs": {
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dest",
+        "sha1",
+        "sha256",
+        "size",
+        "repo_path",
+        "cores"
+      ],
+      "properties": {
+        "dest": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$",
+          "description": "Path below base_destination, below the save directory when root is save, below the roms folder when root is roms, below the configs folder when root is configs, or in an emulator folder when root is emulators (its key first)."
+        },
+        "sha1": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$",
+          "description": "SHA1 of the copy the repository serves. The installer checks it after download."
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "SHA256 of the same copy."
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Bytes of the same copy."
+        },
+        "repo_path": {
+          "type": "string",
+          "description": "Path in the repository. Fetched from `https://raw.githubusercontent.com/Abdess/retrobios/<ref>/<repo_path>`, ref being main unless RETROBIOS_REF names a tag."
+        },
+        "cores": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "uniqueItems": true
+            }
+          ],
+          "description": "Profiles whose core brings the file into the pack. Null for a file the platform's own list declares."
+        },
+        "storage": {
+          "const": "release",
+          "description": "release when the file is a large-files release asset."
+        },
+        "release_asset": {
+          "type": "string",
+          "pattern": "^[^/\\\\]+$",
+          "description": "Asset of the large-files release, fetched from `https://github.com/Abdess/retrobios/releases/download/large-files/<asset>` instead of repo_path."
+        },
+        "systems": {
+          "description": "Every platform system that declares the file, for the installer's --system.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "minItems": 1,
+          "maxItems": 1000,
+          "uniqueItems": true
+        },
+        "regions": {
+          "description": "The regions the emulator code selects the file for. Absent when it never competes.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "argentina",
+              "asia",
+              "asia-ntsc",
+              "asia-pal",
+              "australia",
+              "brazil",
+              "canada",
+              "china",
+              "denmark",
+              "europe",
+              "finland",
+              "france",
+              "germany",
+              "greece",
+              "hong-kong",
+              "india",
+              "italy",
+              "japan",
+              "latin-america",
+              "mexico",
+              "netherlands",
+              "new-zealand",
+              "north-america",
+              "norway",
+              "oceania",
+              "poland",
+              "portugal",
+              "russia",
+              "singapore",
+              "south-korea",
+              "spain",
+              "sweden",
+              "taiwan",
+              "uk",
+              "world"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 1000,
+          "uniqueItems": true
+        },
+        "region_groups": {
+          "description": "Groups the file competes in as a core extra, whatever systems are chosen.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "minItems": 1,
+          "maxItems": 1000,
+          "uniqueItems": true
+        },
+        "region_system_groups": {
+          "description": "Groups the file competes in as the platform's own declaration: present only when that system is kept.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "minItems": 1,
+          "maxItems": 1000,
+          "uniqueItems": true
+        },
+        "priority": {
+          "description": "The rank the code searches the file at, lower first: a world file withdraws an unmatched regional one only when it ranks no worse.",
+          "type": "integer"
+        },
+        "truth": {
+          "description": "false when the list --source truth installs lacks this file at this destination with these bytes.",
+          "const": false
+        },
+        "slot": {
+          "$ref": "#/$defs/slot"
+        },
+        "alternatives": {
+          "description": "Copies other cores read at this destination when they disagree on its content, in the order the pack builder tries them. A narrowing that drops the entry's cores takes the first whose cores remain.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "sha1",
+              "sha256",
+              "size",
+              "repo_path",
+              "cores"
+            ],
+            "properties": {
+              "sha1": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{40}$",
+                "description": "SHA1 of this copy."
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$",
+                "description": "SHA256 of this copy."
+              },
+              "size": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Bytes of this copy."
+              },
+              "repo_path": {
+                "type": "string",
+                "description": "Path of this copy in the repository, fetched as the entry's repo_path is."
+              },
+              "storage": {
+                "const": "release",
+                "description": "release when this copy is a large-files release asset."
+              },
+              "release_asset": {
+                "type": "string",
+                "pattern": "^[^/\\\\]+$",
+                "description": "Asset of the large-files release holding this copy, fetched instead of repo_path."
+              },
+              "cores": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1,
+                "uniqueItems": true,
+                "description": "Profiles whose core reads this copy."
+              },
+              "executable": {
+                "type": "boolean",
+                "description": "The repository keeps this copy executable."
+              }
+            }
+          }
+        },
+        "slot_choices": {
+          "description": "On a platform file a core's own source contradicts while the frontend only checks the path: the copy each core's presence puts there, in the order the pack builder settles the slot. A narrowing serves the first whose cores remain. One naming only cores, or none remaining, leaves `declared_choices`.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "cores"
+            ],
+            "properties": {
+              "sha1": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{40}$",
+                "description": "SHA1 of this copy."
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$",
+                "description": "SHA256 of this copy."
+              },
+              "size": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Bytes of this copy."
+              },
+              "repo_path": {
+                "type": "string",
+                "description": "Path of this copy in the repository, fetched as the entry's repo_path is."
+              },
+              "storage": {
+                "const": "release",
+                "description": "release when this copy is a large-files release asset."
+              },
+              "release_asset": {
+                "type": "string",
+                "pattern": "^[^/\\\\]+$",
+                "description": "Asset of the large-files release holding this copy, fetched instead of repo_path."
+              },
+              "cores": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1,
+                "uniqueItems": true,
+                "description": "Profiles whose presence puts this copy in the slot."
+              },
+              "executable": {
+                "type": "boolean",
+                "description": "The repository keeps this copy executable."
+              }
+            }
+          }
+        },
+        "declared_choices": {
+          "description": "The platform's own answer at the destination by the declaring systems that remain, in the order the pack builder takes the declarations. A narrowing serves the first whose systems remain.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "sha1",
+              "sha256",
+              "size",
+              "repo_path",
+              "systems"
+            ],
+            "properties": {
+              "sha1": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{40}$",
+                "description": "SHA1 of this copy."
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$",
+                "description": "SHA256 of this copy."
+              },
+              "size": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Bytes of this copy."
+              },
+              "repo_path": {
+                "type": "string",
+                "description": "Path of this copy in the repository, fetched as the entry's repo_path is."
+              },
+              "storage": {
+                "const": "release",
+                "description": "release when this copy is a large-files release asset."
+              },
+              "release_asset": {
+                "type": "string",
+                "pattern": "^[^/\\\\]+$",
+                "description": "Asset of the large-files release holding this copy, fetched instead of repo_path."
+              },
+              "executable": {
+                "type": "boolean",
+                "description": "The repository keeps this copy executable."
+              },
+              "systems": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1,
+                "uniqueItems": true,
+                "description": "Platform systems whose declaration this copy answers."
+              }
+            }
+          }
+        },
+        "category": {
+          "description": "game_data: a game's own data, not firmware. Absent on firmware. The installer's --no-game-data leaves these out, as a pack built with --no-game-data does.",
+          "const": "game_data"
+        },
+        "executable": {
+          "description": "The repository keeps the file executable, and the installer gives it the execute bits the umask allows.",
+          "type": "boolean"
+        },
+        "declared_in": {
+          "description": "The platform systems declaring the file, when fewer than `systems`, which also names the systems whose cores read it there.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "absent_claims": {
+          "description": "Cores that want this destination and have nothing held, after the cores served here: a narrowing that keeps none of those takes the first named one as a file left out, as a pack built for it lists it.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "system",
+              "required",
+              "reason",
+              "cores"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "description": "File name the declaration gives."
+              },
+              "system": {
+                "type": "string",
+                "description": "System id of the declaration. Empty when the core's file names none."
+              },
+              "required": {
+                "type": "boolean",
+                "description": "The platform or the core needs the file to run, as the declaration says."
+              },
+              "reason": {
+                "enum": [
+                  "hash_mismatch",
+                  "not_found",
+                  "external",
+                  "user_provided",
+                  "no_platform_slug",
+                  "below_platform_folder"
+                ],
+                "description": "Why the file is left out, as a code. enumDescriptions gives the meaning of each code, in the order of enum.",
+                "enumDescriptions": [
+                  "The platform checks the hash and the only copy held contradicts the one it declares, so the frontend would refuse it.",
+                  "The collection holds no copy the declaration accepts.",
+                  "The declaration keeps the file outside the repository (storage: external). The pack builder downloads it from its own address, the installer does not.",
+                  "The user supplies the file (storage: user_provided). The pack writes its instructions in its place.",
+                  "The platform keeps one folder per system and has none for the system the core's file belongs to.",
+                  "The platform lists each system folder flat (firmware_folder_flat) and the file would sit in a subfolder it does not read."
+                ]
+              },
+              "cores": {
+                "oneOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "uniqueItems": true
+                  }
+                ],
+                "description": "Profiles whose core wants the file. Null for a file the platform's own list declares."
+              },
+              "regions": {
+                "description": "The regions the emulator code selects the file for. Absent when it never competes.",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "argentina",
+                    "asia",
+                    "asia-ntsc",
+                    "asia-pal",
+                    "australia",
+                    "brazil",
+                    "canada",
+                    "china",
+                    "denmark",
+                    "europe",
+                    "finland",
+                    "france",
+                    "germany",
+                    "greece",
+                    "hong-kong",
+                    "india",
+                    "italy",
+                    "japan",
+                    "latin-america",
+                    "mexico",
+                    "netherlands",
+                    "new-zealand",
+                    "north-america",
+                    "norway",
+                    "oceania",
+                    "poland",
+                    "portugal",
+                    "russia",
+                    "singapore",
+                    "south-korea",
+                    "spain",
+                    "sweden",
+                    "taiwan",
+                    "uk",
+                    "world"
+                  ]
+                },
+                "minItems": 1,
+                "maxItems": 1000,
+                "uniqueItems": true
+              },
+              "region_groups": {
+                "description": "Groups the file competes in as a core extra, whatever systems are chosen.",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "minItems": 1,
+                "maxItems": 1000,
+                "uniqueItems": true
+              },
+              "region_system_groups": {
+                "description": "Groups the file competes in as the platform's own declaration: present only when that system is kept.",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "minItems": 1,
+                "maxItems": 1000,
+                "uniqueItems": true
+              },
+              "systems": {
+                "description": "Every platform system that declares the file, for the installer's --system.",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "minItems": 1,
+                "maxItems": 1000,
+                "uniqueItems": true
+              },
+              "priority": {
+                "description": "The rank the code searches the file at, lower first: a world file withdraws an unmatched regional one only when it ranks no worse.",
+                "type": "integer"
+              },
+              "declared_in": {
+                "description": "The platform systems declaring the file, when fewer than `systems`, which also names the systems whose cores read it there.",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              }
+            }
+          }
+        },
+        "root": {
+          "description": "save: dest is relative to the save directory the frontend hands the core (RETRO_ENVIRONMENT_GET_SAVE_DIRECTORY), not to the BIOS directory. roms: dest is relative to the platform's roms folder, which roms_directory locates (a file its launcher runs from there, ROCKNIX's roms/pico-8). emulators: dest is the key of an emulator folder of the platform, then the path in it, located by emulators_directory (RetroBat's emulators/pico8). configs: dest is relative to the frontend's configs folder, which configs_directory locates (Batocera starts shadPS4 from configs/shadps4). Absent for a file of the BIOS tree.",
+          "enum": [
+            "save",
+            "roms",
+            "emulators",
+            "configs"
+          ]
+        },
+        "core_folder": {
+          "description": "The core's library_name, the folder a frontend sorting saves by core (RetroArch's sort_savefiles_enable) inserts between its save directory and dest. Only with root: save. Absent on a save entry when the core reads the same place sorted or not.",
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[^/\\\\]+$"
+        }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "release_asset"
+          ]
+        },
+        {
+          "properties": {
+            "repo_path": {
+              "type": "string",
+              "pattern": "^bios/",
+              "description": "Without release_asset, the copy is served from the repository's bios/ tree."
+            }
+          },
+          "not": {
+            "required": [
+              "release_asset"
+            ]
+          }
+        }
+      ]
+    },
+    "slot": {
+      "description": "What --one-per-slot reads: the groups the file competes in, once per time a group lists it, then the keys the slot lookup tries, each with what every emulator declares there.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "groups",
+        "keys"
+      ],
+      "properties": {
+        "groups": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "keys": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "ranks"
+              ],
+              "properties": {
+                "ranks": {
+                  "description": "The priority: of each entry of the emulator at this key, null for one without, lower first.",
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  }
+                },
+                "regions": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "sets": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

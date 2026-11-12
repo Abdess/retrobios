@@ -60,17 +60,21 @@ class RealListParity(unittest.TestCase):
         cls.by_path = {entry["path"]: sha1 for sha1, entry in cls.db["files"].items()}
         cls.platforms = list_registered_platforms(str(REPO_ROOT / "platforms"))
         cls.manifests: dict[str, dict] = {}
+        cls.layouts: dict[str, dict] = {}
         cls.baselines: dict[str, set[str]] = {}
 
     def manifest(self, plat: str) -> dict:
+        """The list, its standalone layouts kept aside as the run writes them
+        (install/standalone/<platform>.json)."""
         if plat not in self.manifests:
+            self.layouts[plat] = {}
             with contextlib.redirect_stdout(io.StringIO()):
                 self.manifests[plat] = self.gp.generate_manifest(
                     plat, str(REPO_ROOT / "platforms"), self.db, str(REPO_ROOT / "bios"),
                     str(REPO_ROOT / "platforms" / "_registry.yml"),
                     emulators_dir=str(REPO_ROOT / "emulators"),
                     zip_contents=self.zip_contents, emu_profiles=self.profiles,
-                    offline=True)
+                    offline=True, standalone_out=self.layouts[plat])
         return self.manifests[plat]
 
     def packed(self, plat: str, **options) -> dict[str, str | None]:
@@ -156,7 +160,11 @@ class RealListParity(unittest.TestCase):
         checked = 0
         for plat in self.platforms:
             full = self.manifest(plat)
-            for profile in sorted(full.get("standalone_layouts") or {}):
+            layouts = install._check_standalone_layouts(
+                {"schema": 1, "platform": plat, "standalone_layouts": self.layouts[plat]},
+                full, plat)
+            self.assertEqual(sorted(layouts), full.get("standalone_builds", []))
+            for profile in sorted(layouts):
                 with self.subTest(platform=plat, emulator=profile):
                     record = self.gp.PackRecord()
                     with contextlib.redirect_stdout(io.StringIO()), \
@@ -168,8 +176,8 @@ class RealListParity(unittest.TestCase):
                             offline=True, record=record)
                         files, omitted = install._narrow_to_emulators(
                             [profile], full, plat, full["files"], full["omitted_files"])
-                    files, _omitted = install.standalone_layout(full, [profile], files,
-                                                                omitted)
+                    files, _omitted = install.standalone_layout(full, layouts, [profile],
+                                                                files, omitted)
                     packed = {member: self.by_path[record.sources[member]]
                               for member in record.files
                               if record.sources.get(member) in self.by_path}
@@ -279,16 +287,26 @@ class Lists(unittest.TestCase):
         self.root = Path(scratch.name)
         self.dest = self.root / "bios"
 
-    def write(self, manifest: dict) -> Path:
+    def write(self, manifest: dict, layouts: dict | None = None) -> Path:
+        """The list, and its standalone layouts beside it where the
+        repository keeps them, unless layouts is {}."""
         path = self.root / "retroarch.json"
         path.write_text(json.dumps(manifest), encoding="utf-8")
+        beside = self.root / "standalone" / "retroarch.json"
+        if layouts == {}:
+            if beside.exists():
+                beside.unlink()
+        else:
+            beside.parent.mkdir(exist_ok=True)
+            beside.write_text(json.dumps(layouts or LAYOUTS), encoding="utf-8")
         return path
 
-    def run_install(self, manifest: dict, *argv: str) -> subprocess.CompletedProcess:
-        env = dict(os.environ, RETROBIOS_OS="linux", RETROBIOS_OFFLINE="1")
+    def run_install(self, manifest: dict, *argv: str, layouts: dict | None = None,
+                    env: dict | None = None) -> subprocess.CompletedProcess:
+        env = dict(os.environ, RETROBIOS_OS="linux", RETROBIOS_OFFLINE="1", **(env or {}))
         return subprocess.run(
             [sys.executable, str(REPO_ROOT / "install.py"), "--platform", "retroarch",
-             "--dest", str(self.dest), "--manifest", str(self.write(manifest)),
+             "--dest", str(self.dest), "--manifest", str(self.write(manifest, layouts)),
              "--no-input", *argv],
             capture_output=True, text=True, timeout=120, env=env, check=False)
 
@@ -313,9 +331,10 @@ LIST = {
     "omitted_files": [],
     "truth_files": [_copy("ds/only.bin", b"truth", ["duckstation"])],
     "truth_omitted": [],
-    "standalone_layouts": {"duckstation": [["ds/scph5501.bin",
-                                            hashlib.sha1(b"two").hexdigest()]]},
+    "standalone_builds": ["duckstation"],
 }
+LAYOUTS = {"schema": 1, "platform": "retroarch", "standalone_layouts": {
+    "duckstation": [["ds/scph5501.bin", hashlib.sha1(b"two").hexdigest()]]}}
 
 
 class FindByHash(Lists):
@@ -390,7 +409,7 @@ class ExpertRuns(Lists):
 
     def test_a_list_without_the_fields_is_refused(self):
         older = copy.deepcopy(LIST)
-        for field in ("slot_fields", "truth_files", "truth_omitted", "standalone_layouts"):
+        for field in ("slot_fields", "truth_files", "truth_omitted", "standalone_builds"):
             older.pop(field)
         for argv, words in (
             (["--one-per-slot"], "which --one-per-slot needs"),
@@ -416,11 +435,64 @@ class ExpertRuns(Lists):
                 bad["files"][0][field] = value
                 with self.assertRaises(ValueError):
                     install._validate_manifest(bad, "retroarch")
-        bad = copy.deepcopy(LIST)
-        bad["standalone_layouts"]["duckstation"] = [["../x.bin", "0" * 40]]
-        with self.assertRaises(ValueError):
-            install._validate_manifest(bad, "retroarch")
         install._validate_manifest(copy.deepcopy(LIST), "retroarch")
+        for broken in ([["../x.bin", LAYOUTS["standalone_layouts"]["duckstation"][0][1]]],
+                       [["ds/x.bin", "0" * 40]]):
+            with self.subTest(layout=broken):
+                with self.assertRaises(ValueError):
+                    install._check_standalone_layouts(
+                        {**LAYOUTS, "standalone_layouts": {"duckstation": broken}},
+                        LIST, "retroarch")
+        with self.assertRaises(ValueError):
+            install._check_standalone_layouts({**LAYOUTS, "standalone_layouts": {}},
+                                              LIST, "retroarch")
+
+    def test_a_layout_file_missing_or_unreachable_refuses_on_one_line(self):
+        """Only --standalone reads the file: a list without it beside still
+        installs everything else, and --standalone stops on one line."""
+        cases = (
+            ({}, {"RETROBIOS_INSTALL_OFFLINE": "1"}, "makes no network request"),
+            ({"schema": 1, "platform": "recalbox", "standalone_layouts": {}}, {},
+             "not valid"),
+        )
+        for layouts, env, words in cases:
+            with self.subTest(words=words):
+                proc = self.run_install(LIST, "--dry-run", "--emulator", "duckstation",
+                                        "--standalone", layouts=layouts, env=env)
+                self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+                said = [line for line in proc.stderr.splitlines() if line.strip()]
+                self.assertEqual(len(said), 1, said)
+                self.assertIn("--standalone needs", said[0])
+                self.assertIn(words, said[0])
+        proc = self.run_install(LIST, "--dry-run", "--emulator", "duckstation",
+                                layouts={}, env={"RETROBIOS_INSTALL_OFFLINE": "1"})
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+
+    def test_a_layout_file_missing_from_the_server(self):
+        import http.server
+        import threading
+
+        served = self.root / "served"
+        (served / "install").mkdir(parents=True)
+
+        class Quiet(http.server.SimpleHTTPRequestHandler):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, directory=str(served), **kwargs)
+
+            def log_message(self, *_args):
+                return
+
+        server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Quiet)
+        threading.Thread(target=server.serve_forever, daemon=True).start()
+        self.addCleanup(server.server_close)
+        self.addCleanup(server.shutdown)
+        base = f"http://127.0.0.1:{server.server_address[1]}"
+        proc = self.run_install(LIST, "--dry-run", "--emulator", "duckstation", "--standalone",
+                                layouts={}, env={"RETROBIOS_BASE_URL": base})
+        self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+        said = [line for line in proc.stderr.splitlines() if line.strip()]
+        self.assertEqual(said, [f"Error: --standalone needs {base}/install/standalone/"
+                                "retroarch.json, which could not be read (HTTP 404)."])
 
 
 class ChangeRows(unittest.TestCase):
@@ -460,7 +532,7 @@ class ChangeRows(unittest.TestCase):
 
     def test_no_row_on_a_list_without_the_fields(self):
         older = {key: value for key, value in LIST.items()
-                 if key not in ("slot_fields", "standalone_layouts")}
+                 if key not in ("slot_fields", "standalone_builds")}
         state = self.state(older)
         state.emulators = ["duckstation"]
         self.assertFalse({"slot", "standalone"} & set(self.actions(state)))

@@ -104,6 +104,9 @@ def _checked_base_url(value: str) -> str:
 BASE_URL = _checked_base_url(os.environ.get("RETROBIOS_BASE_URL", DEFAULT_BASE_URL))
 MANIFEST_URL = f"{BASE_URL}/install/{{platform}}.json"
 TARGETS_URL = f"{BASE_URL}/install/targets/{{platform}}.json"
+# What --standalone reads, apart from the list every run downloads.
+STANDALONE_DIR = "standalone"
+STANDALONE_URL = f"{BASE_URL}/install/standalone/{{platform}}.json"
 # The platforms that publish a core list per board, install/targets/ in the
 # repository: a test holds the two equal. Offline, a platform outside it
 # has no hardware targets, where the run sent the user after a list that
@@ -124,6 +127,7 @@ MAX_RETRIES = 3
 CONNECT_TIMEOUT = 4.0
 MAX_MANIFEST_BYTES = 16 * 1024 * 1024
 MAX_TARGETS_BYTES = 4 * 1024 * 1024
+MAX_STANDALONE_BYTES = 16 * 1024 * 1024
 MAX_MANIFEST_FILES = 100_000
 MAX_DOWNLOAD_SIZE = 1024 * 1024 * 1024
 # A data directory's source archive: PCSX2's source tarball is the largest.
@@ -4206,27 +4210,30 @@ def _check_truth_lists(data: dict, seen_destinations: set[str]) -> int:
     return largest
 
 
-def _check_standalone_layouts(data: dict) -> int:
-    """standalone_layouts: per emulator, entries or [dest, sha1] pairs whose
-    content the list carries. Returns the largest size they may fetch."""
+def _check_standalone_layouts(data: object, manifest: dict, plat: str) -> dict:
+    """install/standalone/<platform>.json, checked as the list is: per
+    emulator the list names, entries or [dest, sha1] pairs whose content
+    the list carries. Returns the layouts."""
+    if not isinstance(data, dict) or data.get("schema") != 1 or data.get("platform") != plat:
+        raise ValueError(f"it is no standalone layout of {plat}")
     layouts = data.get("standalone_layouts")
-    if layouts is None:
-        return 0
     if not isinstance(layouts, dict) or len(layouts) > MAX_SELECTION_TAGS:
         raise ValueError("invalid standalone_layouts")
+    if sorted(layouts) != sorted(manifest.get("standalone_builds") or []):
+        raise ValueError("its builds are not the ones the file list names")
     sizes = {
         copy["sha1"]: copy.get("size", 0)
-        for entry in [*data.get("files", []), *(data.get("truth_files") or [])]
+        for entry in [*manifest.get("files", []), *(manifest.get("truth_files") or [])]
         for copy in [entry, *entry.get("alternatives", []), *entry.get("slot_choices", [])]
         if isinstance(copy, dict) and copy.get("sha1")
         and (copy.get("repo_path") or copy.get("release_asset"))
     }
-    largest = 0
     for name, items in layouts.items():
         if (not isinstance(name, str) or not 0 < len(name) <= 256
                 or not isinstance(items, list) or len(items) > MAX_MANIFEST_FILES):
             raise ValueError("invalid standalone_layouts entry")
         seen: set[str] = set()
+        largest = 0
         for index, item in enumerate(items):
             where = f"standalone_layouts[{name!r}][{index}]"
             if isinstance(item, list):
@@ -4240,7 +4247,9 @@ def _check_standalone_layouts(data: dict) -> int:
                 largest += int(sizes[item[1]] or 0)
             else:
                 largest += _check_entry(item, where, seen)[1]
-    return largest
+            if largest > MAX_TOTAL_DOWNLOAD_SIZE:
+                raise ValueError("standalone build size exceeds safety limit")
+    return layouts
 
 
 def _check_data_directory(entry: object, where: str) -> None:
@@ -4393,7 +4402,8 @@ def _validate_manifest(data: object, plat: str) -> dict:
     if data.get("slot_fields", True) is not True:
         raise ValueError("invalid slot_fields")
     largest_total += _check_truth_lists(data, seen_destinations)
-    largest_total += _check_standalone_layouts(data)
+    if "standalone_builds" in data:
+        _check_tags(data, "standalone_builds", "the file list")
     if largest_total > MAX_TOTAL_DOWNLOAD_SIZE:
         raise ValueError("manifest total size exceeds safety limit")
     declared_total_omitted = data.get("total_omitted")
@@ -4885,6 +4895,35 @@ def local_targets(plat: str) -> "dict | None":
     except (UnicodeDecodeError, ValueError) as exc:
         print(f"  Error: the target list {beside} is not valid: {exc}", file=sys.stderr)
         sys.exit(1)
+
+
+def fetch_standalone(plat: str, manifest: dict) -> dict:
+    """What each standalone build reads, for --standalone only: the file
+    beside --manifest (standalone/<platform>.json, where the repository
+    keeps it), else downloaded as the list is. Missing, unreachable or
+    invalid, the run stops on one line, code 1."""
+    beside = (LOCAL.manifest.parent / STANDALONE_DIR / f"{plat}.json"
+              if LOCAL.manifest is not None else None)
+    url = STANDALONE_URL.format(platform=plat)
+    where = str(beside) if beside is not None and _is_file(beside) else url
+    try:
+        if where != url:
+            raw = _read_capped(Path(where), MAX_STANDALONE_BYTES)
+            data = json.loads((raw or b"").decode("utf-8"))
+        else:
+            data = _fetch_json(url, MAX_STANDALONE_BYTES, "standalone layout")
+        return _check_standalone_layouts(data, manifest, plat)
+    except urllib.error.HTTPError as exc:
+        problem = f"HTTP {exc.code}"
+    except (urllib.error.URLError, OSError) as exc:
+        problem = str(exc) if isinstance(exc, _Offline) else network_words(exc)[1]
+    except (UnicodeDecodeError, ValueError) as exc:
+        problem = f"not valid: {exc}"
+    EVENTS.emit("error", stage="manifest", reason="unavailable", platform=plat,
+                message=f"--standalone needs {where}: {problem}")
+    print(f"Error: --standalone needs {where}, which could not be read ({problem}).",
+          file=sys.stderr)
+    sys.exit(1)
 
 
 def fetch_targets(plat: str, attempts: int = MAX_RETRIES,
@@ -5412,11 +5451,10 @@ def truth_lists(manifest: dict, files: list[dict],
             + list(manifest.get("truth_omitted") or []))
 
 
-def standalone_entries(manifest: dict, profile: str) -> list[dict] | None:
+def standalone_entries(manifest: dict, layouts: dict, profile: str) -> list[dict] | None:
     """The files a profile's standalone build reads, as entries of the list:
     None for a profile without one. An item [dest, sha1] takes its download
     from the copy of the list with that content."""
-    layouts = manifest.get("standalone_layouts") or {}
     if profile not in layouts:
         return None
     copies = {
@@ -5438,15 +5476,16 @@ def standalone_entries(manifest: dict, profile: str) -> list[dict] | None:
     return result
 
 
-def standalone_layout(manifest: dict, profiles: list[str], files: list[dict],
-                      omitted: list[dict]) -> tuple[list[dict], list[dict]]:
+def standalone_layout(manifest: dict, layouts: dict, profiles: list[str],
+                      files: list[dict], omitted: list[dict]
+                      ) -> tuple[list[dict], list[dict]]:
     """--emulator with --standalone: the platform's own files of the systems
     the emulators run, and beside them each emulator's standalone build, in
     profile order, first at a destination wins, as `generate_pack.py
     --emulator --standalone` packs them."""
     built: dict[str, dict] = {}
     for profile in sorted(profiles):
-        for entry in standalone_entries(manifest, profile) or []:
+        for entry in standalone_entries(manifest, layouts, profile) or []:
             built.setdefault(_entry_key(entry), entry)
     own = [entry for entry in files
            if entry.get("cores") is None and _entry_key(entry) not in built]
@@ -11933,19 +11972,20 @@ def _standalone_builds(
     """--emulator with --standalone: each emulator's standalone build in
     place of the files its core reads. An emulator with no standalone
     build is refused, as `generate_pack.py --standalone` refuses it."""
-    if "standalone_layouts" not in manifest:
-        print(f"Error: the {plat} file list does not say what each standalone build "
-              "reads, which --standalone needs.", file=sys.stderr)
+    if "standalone_builds" not in manifest:
+        print(f"Error: the {plat} file list does not say which emulators have a "
+              "standalone build, which --standalone needs.", file=sys.stderr)
         print(_older_list_advice(plat), file=sys.stderr)
         sys.exit(1)
     profiles = sorted({names[name] for name in resolve_choices(values, sorted(names),
                                                                 "emulator")})
-    lacking = [p for p in profiles if p not in manifest["standalone_layouts"]]
+    lacking = [p for p in profiles if p not in manifest["standalone_builds"]]
     if lacking:
         refuse_name(plat, f"Error: {', '.join(lacking)} has no standalone build: run "
                     "again without --standalone.")
     before = len(files)
-    files, omitted = standalone_layout(manifest, profiles, files, omitted)
+    files, omitted = standalone_layout(manifest, fetch_standalone(plat, manifest), profiles,
+                                       files, omitted)
     detail(f"  The standalone {'builds' if len(profiles) > 1 else 'build'}: "
            f"{before} to {len(files)} files")
     return files, omitted
@@ -22535,7 +22575,7 @@ def _tui_standalone_offered(state: TuiState) -> bool:
     """Whether Change offers --standalone: emulators are chosen, and the
     list records a standalone build for each of them."""
     manifest = state.manifest or {}
-    layouts = manifest.get("standalone_layouts") or {}
+    layouts = manifest.get("standalone_builds") or []
     if not state.emulators or not layouts:
         return False
     names = emulator_names(manifest, *tui_run_files(state))

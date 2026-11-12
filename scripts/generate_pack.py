@@ -2963,6 +2963,7 @@ def _run_manifest_mode(
             tc = target_cores_cache.get(representative) if args.target else None
             if _skip_empty_truth(args, source, representative, emu_profiles, tc, failed):
                 continue
+            layouts: dict = {}
             try:
                 manifest = generate_manifest(
                     representative,
@@ -2982,6 +2983,7 @@ def _run_manifest_mode(
                     offline=args.offline,
                     required_only=required_only,
                     no_game_data=getattr(args, "no_game_data", False),
+                    standalone_out=layouts,
                 )
                 narrow_suffix = "".join(
                     tag.lower()
@@ -3004,6 +3006,9 @@ def _run_manifest_mode(
                     f"{manifest['total_size']} bytes, "
                     f"{manifest['total_omitted']} safely omitted"
                 )
+                for plat in group_platforms if layouts else ():
+                    print(f"  {_write_standalone_layouts(args.output_dir, plat, layouts)}: "
+                          f"{len(layouts)} standalone builds")
                 # Create aliases for grouped platforms (e.g., lakka -> retroarch)
                 for alias_plat in group_platforms:
                     if alias_plat != representative:
@@ -4877,6 +4882,7 @@ def generate_manifest(
     no_game_data: bool = False,
     one_per_slot: bool = False,
     known_slot_choices: dict | None = None,
+    standalone_out: dict | None = None,
 ) -> dict:
     """Generate a JSON manifest for a platform (same resolution as generate_pack).
 
@@ -4887,6 +4893,10 @@ def generate_manifest(
     A file that is a game's data, not firmware, carries ``"category":
     "game_data"``, so the installer can leave it out as the builder does
     under ``no_game_data``. Firmware carries no category.
+    `standalone_out` receives, per emulator with a standalone build, what
+    `--emulator X --standalone` packs (standalone_layouts), which the list
+    itself only names (standalone_builds): written apart, it is fetched
+    only by a run given --standalone.
     """
     config = load_platform_config(platform_name, platforms_dir)
     if fold_case is not None:
@@ -5438,8 +5448,24 @@ def generate_manifest(
             platforms_dir, repo_root, result,
         )
         if layouts:
-            result["standalone_layouts"] = layouts
+            result["standalone_builds"] = sorted(layouts)
+            if standalone_out is not None:
+                standalone_out.update(layouts)
     return result
+
+
+STANDALONE_DIR = "standalone"
+
+
+def _write_standalone_layouts(output_dir: str, platform: str, layouts: dict) -> str:
+    """install/standalone/<platform>.json, what --standalone reads beside the
+    list. Its [dest, sha1] items take their download from that list."""
+    path = os.path.join(output_dir, STANDALONE_DIR, f"{platform}.json")
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    _write_manifest_if_changed(path, {
+        "schema": 1, "platform": platform, "standalone_layouts": layouts,
+    })
+    return path
 
 
 def _truth_key(entry: dict) -> tuple:

@@ -738,6 +738,11 @@ def _semantic_install_checks(path: Path, manifest: dict) -> list[str]:
             f"{path.relative_to(ROOT)}: entries read below the save directory "
             "and no save_directory"
         )
+    builds = ROOT / "install" / "standalone" / path.name
+    if manifest.get("standalone_builds") and path.parent == ROOT / "install" \
+            and not builds.is_file():
+        out.append(f"{path.relative_to(ROOT)}: standalone_builds and no "
+                   f"install/standalone/{path.name}")
     stray = sorted(
         entry["dest"] for entry in [*files, *omitted]
         if entry.get("core_folder") and entry.get("root") != "save"
@@ -746,6 +751,36 @@ def _semantic_install_checks(path: Path, manifest: dict) -> list[str]:
         out.append(
             f"{path.relative_to(ROOT)}: core_folder outside root: save ({stray[0]})"
         )
+    return out
+
+
+def _semantic_standalone_checks(path: Path, layouts: dict) -> list[str]:
+    """A standalone layout file goes with its platform's list: the list
+    names the same builds, and each [dest, sha1] item takes its download
+    from a copy of that list."""
+    where = path.relative_to(ROOT)
+    plat = layouts.get("platform")
+    if path.stem != plat:
+        return [f"{where}: platform {plat} in a file named {path.stem}"]
+    listed = ROOT / "install" / f"{plat}.json"
+    if not listed.is_file():
+        return [f"{where}: no install/{plat}.json beside it"]
+    manifest = json.loads(listed.read_text(encoding="utf-8"))
+    out: list[str] = []
+    if sorted(layouts.get("standalone_layouts", {})) != manifest.get("standalone_builds"):
+        out.append(f"{where}: its builds differ from standalone_builds in {listed.name}")
+    held = {
+        copy.get("sha1")
+        for entry in [*manifest.get("files", []), *manifest.get("truth_files", [])]
+        for copy in [entry, *entry.get("alternatives", []), *entry.get("slot_choices", [])]
+    }
+    missing = sorted({
+        item[1] for items in layouts.get("standalone_layouts", {}).values()
+        for item in items if isinstance(item, list) and item[1] not in held
+    })
+    if missing:
+        out.append(f"{where}: {len(missing)} sha1 no copy of {listed.name} carries "
+                   f"({missing[0]})")
     return out
 
 
@@ -991,6 +1026,14 @@ def main() -> int:
         errors.extend(
             _validate_json_files(
                 install_paths, "install-manifest.schema.json", _semantic_install_checks
+            )
+        )
+
+        standalone_paths = sorted((ROOT / "install" / "standalone").glob("*.json"))
+        errors.extend(
+            _validate_json_files(
+                standalone_paths, "install-standalone.schema.json",
+                _semantic_standalone_checks,
             )
         )
 

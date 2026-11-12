@@ -1006,7 +1006,7 @@ def golden_states() -> dict:
     option_focus(slots, "slot")
     states["change-slot"] = slots
     standalone = checked_state()
-    standalone.manifest = {**MANIFEST, "standalone_layouts": {"pcsx_rearmed": []}}
+    standalone.manifest = {**MANIFEST, "standalone_builds": ["pcsx_rearmed"]}
     standalone.stack.append("options")
     standalone.emulators = ["pcsx_rearmed"]
     option_focus(standalone, "standalone")

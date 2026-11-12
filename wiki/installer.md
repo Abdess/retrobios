@@ -1258,6 +1258,10 @@ sha1), on the real list of every registered platform.
 - [`--standalone`](#option-standalone), with `--emulator`, installs the
   emulator's standalone build in place of its core's layout. Change shows
   **Standalone version of it** once an emulator with such a build is ticked.
+  The layouts live apart, in `install/standalone/<platform>.json`, read only
+  by a run given `--standalone`: beside `--manifest FILE` when a
+  `standalone/` folder holds it, else downloaded as the list is. Missing,
+  unreachable or invalid, the run stops on one line with code 1.
 - [`--source truth`](#option-source) keeps only what the emulator profiles
   prove a core reads, the platform's own declarations aside.
 - [`--find HASH`](#option-find) installs the one BIOS with that content.
@@ -1306,7 +1310,7 @@ option takes the recorded choice whole.
 | <span id="option-no-game-data"></span>`--no-game-data` | Leave out game data (a game's own files, not firmware) and install the firmware only. What it leaves out is named. See [Firmware without game data](#firmware-without-game-data) |
 | <span id="option-declared-only"></span>`--declared-only` | Keep only the files the platform's own list names (`cores: null` in the manifest), not the extra files cores load. With `--check`, the answer is about the list the platform itself checks. Refused with `--core`, the listings it does not change, `--standalone-copies` and `--tui` |
 | <span id="option-one-per-slot"></span>`--one-per-slot` | Keep one BIOS per console and region, the one the emulators' own search order (`priority:`, lower first) ranks first, as `generate_pack.py --one-per-slot` does. A slot with an unranked candidate, or a candidate two cores rank apart, keeps all of them. Decided over the whole list, by the board's cores on a board: refused with `--system`, `--emulator`, `--for-games`, `--declared-only` and the listings. See [One level further](#one-level-further) |
-| <span id="option-standalone"></span>`--standalone` | With `--emulator`: that emulator's standalone build, at the paths it reads, beside the platform's own BIOS of its systems, as `generate_pack.py --emulator NAME --standalone` packs it. An emulator without a standalone build is refused, and so are `--region`, `--one-per-slot`, `--core` and `--system` beside it |
+| <span id="option-standalone"></span>`--standalone` | With `--emulator`: that emulator's standalone build, at the paths it reads, beside the platform's own BIOS of its systems, as `generate_pack.py --emulator NAME --standalone` packs it. The layouts come from `install/standalone/<platform>.json`, fetched only for this option. An emulator without a standalone build is refused, and so are `--region`, `--one-per-slot`, `--core` and `--system` beside it |
 | <span id="option-source"></span>`--source SOURCE` | `truth`: only what the emulator profiles prove a core reads, as `generate_pack.py --source truth` packs it. `full`, the default, is the platform's list and what its cores read. `truth` takes no other choice, opens no full screen, and is refused on a list published before it |
 | <span id="option-find"></span>`--find HASH` | Install the one BIOS of the list with this content: a sha1 or sha256 always, an md5 or crc32 where the list records it. A content at several destinations is installed at each. A hash two contents share is named and refused, as is one the list lacks. Takes no other choice |
 | <span id="option-json"></span>`--json` | With `--find`: print the matches as one JSON object per platform and install nothing. The shape is in [One level further](#one-level-further). Exit code 0 when found, 2 otherwise |
