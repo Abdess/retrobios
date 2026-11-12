@@ -754,11 +754,13 @@ def _semantic_install_checks(path: Path, manifest: dict) -> list[str]:
     return out
 
 
-def _semantic_standalone_checks(path: Path, layouts: dict) -> list[str]:
+def _semantic_standalone_checks(path: Path, layouts: object) -> list[str]:
     """A standalone layout file goes with its platform's list: the list
     names the same builds, and each [dest, sha1] item takes its download
     from a copy of that list."""
     where = path.relative_to(ROOT)
+    if not isinstance(layouts, dict):
+        return [f"{where}: not an object"]
     plat = layouts.get("platform")
     if path.stem != plat:
         return [f"{where}: platform {plat} in a file named {path.stem}"]
