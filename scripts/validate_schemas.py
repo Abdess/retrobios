@@ -773,7 +773,7 @@ def _semantic_standalone_checks(path: Path, layouts: object) -> list[str]:
         out.append(f"{where}: its builds differ from standalone_builds in {listed.name}")
     held = {
         copy.get("sha1")
-        for entry in [*manifest.get("files", []), *manifest.get("truth_files", [])]
+        for entry in [*manifest.get("files", []), *(manifest.get("truth_files") or [])]
         for copy in [entry, *entry.get("alternatives", []), *entry.get("slot_choices", [])]
     }
     missing = sorted({

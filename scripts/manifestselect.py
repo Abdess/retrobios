@@ -141,44 +141,40 @@ def _slot_fields(
     """Per destination, the groups it competes in for a slot and the claims
     at each key slot.lookup_slot would try.
 
-    Only a group where some emulator ranks a member can drop a file, so
-    only its members are written, each with all its groups. A key whose
-    claims equal the previous one's answers the same and is left out. A
-    destination no emulator claims is never dropped, and carries nothing.
+    The builder looks each member up by its own name, so a destination a
+    platform declares under one name and a core under another is looked up
+    twice: the first name's groups and keys head the field, each other
+    name's go in `also`. A name no emulator claims has no keys, which keeps
+    the destination as the builder keeps it. Only a group where some
+    emulator ranks a member can drop a file, so only its members are
+    written, each with all its groups. A key whose claims equal the
+    previous one's answers the same and is left out.
     """
-    names: dict[str, list[str]] = {}
-    for members in region_groups.values():
-        for dest, name in members:
-            if name not in names.setdefault(dest, []):
-                names[dest].append(name)
-    keyed: dict[str, list[str]] = {}
-    for dest, found in names.items():
-        keys: list[str] = []
-        for name in found:
-            keys += [k for k in slot_mod.slot_lookup_keys(dest, name)
-                     if k in claims and k not in keys]
-        if keys:
-            keyed[dest] = keys
-
-    def ranked(dest: str) -> bool:
-        return any(rank is not None for key in keyed.get(dest, ())
-                   for claim in claims[key].values() for rank in claim["ranks"])
-
     # Each time a group lists the destination: two cores filing one file in
     # a group make two candidates of one rank, which no order separates.
-    groups: dict[str, list[str]] = {}
+    chains: dict[str, dict[str, list[str]]] = {}
     for group_id, members in region_groups.items():
-        for dest, _name in members:
-            groups.setdefault(dest, []).append(group_id)
+        for dest, name in members:
+            chains.setdefault(dest, {}).setdefault(name, []).append(group_id)
+
+    def keys_of(dest: str, name: str) -> list[str]:
+        return [k for k in slot_mod.slot_lookup_keys(dest, name) if k in claims]
+
+    def ranked(dest: str) -> bool:
+        return any(rank is not None for name in chains.get(dest, {})
+                   for key in keys_of(dest, name)
+                   for claim in claims[key].values() for rank in claim["ranks"])
+
     # Every group of such a destination: one where it stays keeps it.
     written: set[str] = set()
     for members in region_groups.values():
         if any(ranked(member) for member, _name in members):
-            written.update(member for member, _name in members if member in keyed)
-    fields: dict[str, dict] = {}
-    for dest in sorted(written):
+            written.update(member for member, name in members
+                           if any(keys_of(member, other) for other in chains[member]))
+
+    def chain(dest: str, name: str, group_ids: list[str]) -> dict:
         kept: list[dict] = []
-        for key in keyed[dest]:
+        for key in keys_of(dest, name):
             by_emulator = {
                 emulator: {
                     "ranks": claim["ranks"],
@@ -190,5 +186,11 @@ def _slot_fields(
             }
             if not kept or kept[-1] != by_emulator:
                 kept.append(by_emulator)
-        fields[dest] = {"groups": sorted(groups[dest]), "keys": kept}
+        return {"groups": sorted(group_ids), "keys": kept}
+
+    fields: dict[str, dict] = {}
+    for dest in sorted(written):
+        first, *others = [chain(dest, name, group_ids)
+                          for name, group_ids in chains[dest].items()]
+        fields[dest] = {**first, **({"also": others} if others else {})}
     return fields

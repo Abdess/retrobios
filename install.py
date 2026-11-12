@@ -4155,17 +4155,34 @@ def _check_expert_fields(entry: dict, dest: str) -> None:
     slot = entry.get("slot")
     if slot is None:
         return
-    if not isinstance(slot, dict) or set(slot) != {"groups", "keys"}:
+    if not isinstance(slot, dict) or not {"groups", "keys"} <= set(slot) <= {
+            "groups", "keys", "also"}:
         raise ValueError(f"invalid slot for {dest}")
-    _check_tags(slot, "groups", dest)
-    keys = slot["keys"]
-    if not isinstance(keys, list) or not keys or len(keys) > MAX_SELECTION_TAGS:
+    also = slot.get("also", [])
+    if not isinstance(also, list) or len(also) > MAX_SELECTION_TAGS:
+        raise ValueError(f"invalid slot for {dest}")
+    for chain in [slot, *also]:
+        if not isinstance(chain, dict) or not {"groups", "keys"} <= set(chain) or (
+                chain is not slot and set(chain) != {"groups", "keys"}):
+            raise ValueError(f"invalid slot for {dest}")
+        _check_slot_chain(chain, dest)
+
+
+def _check_slot_chain(chain: dict, dest: str) -> None:
+    """One name's groups and the claims at each key its lookup tries."""
+    if not isinstance(chain.get("groups"), list):
+        raise ValueError(f"invalid slot groups for {dest}")
+    _check_tags(chain, "groups", dest)
+    keys = chain["keys"]
+    if not isinstance(keys, list) or len(keys) > MAX_SELECTION_TAGS:
         raise ValueError(f"invalid slot keys for {dest}")
     for claims in keys:
         if not isinstance(claims, dict) or not claims or len(claims) > MAX_SELECTION_TAGS:
             raise ValueError(f"invalid slot claims for {dest}")
         for name, claim in claims.items():
-            ranks = claim.get("ranks") if isinstance(claim, dict) else None
+            if not isinstance(claim, dict):
+                raise ValueError(f"invalid slot claim for {dest}")
+            ranks = claim.get("ranks")
             if (not isinstance(name, str) or not 0 < len(name) <= 256
                     or not set(claim) <= {"ranks", "regions", "sets"}
                     or not isinstance(ranks, list) or not ranks
@@ -4176,6 +4193,29 @@ def _check_expert_fields(entry: dict, dest: str) -> None:
                 raise ValueError(f"invalid slot claim for {dest}")
             _check_tags(claim, "regions", dest)
             _check_tags(claim, "sets", dest)
+
+
+def _check_omitted_entry(entry: dict, dest: str) -> None:
+    """An omission's fields, its cores' claims and its expert fields, the
+    same for omitted_files and truth_omitted."""
+    _check_omission(entry, dest)
+    _check_root(entry, dest, omitted=True)
+    claims = entry.get("alternatives", [])
+    if not isinstance(claims, list) or len(claims) > MAX_SELECTION_TAGS:
+        raise ValueError(f"invalid omitted alternatives for {dest}")
+    for claim in claims:
+        claim_cores = claim.get("cores") if isinstance(claim, dict) else None
+        if (
+            not isinstance(claim, dict)
+            or set(claim) != {"cores"}
+            or not isinstance(claim_cores, list)
+            or not claim_cores
+            or not all(isinstance(core, str) for core in claim_cores)
+        ):
+            raise ValueError(f"invalid omitted alternative for {dest}")
+    for field in (*SELECTION_FIELDS, "declared_in"):
+        _check_tags(entry, field, dest)
+    _check_expert_fields(entry, dest)
 
 
 def _check_truth_lists(data: dict, seen_destinations: set[str]) -> int:
@@ -4205,8 +4245,7 @@ def _check_truth_lists(data: dict, seen_destinations: set[str]) -> int:
         if not isinstance(entry, dict):
             raise ValueError(f"truth_omitted[{index}] must be an object")
         dest = str(_safe_relative_path(entry.get("dest"), f"truth_omitted[{index}].dest"))
-        _check_omission(entry, dest)
-        _check_root(entry, dest, omitted=True)
+        _check_omitted_entry(entry, dest)
     return largest
 
 
@@ -4381,24 +4420,7 @@ def _validate_manifest(data: object, plat: str) -> dict:
         if key in seen_destinations or key in seen_omitted:
             raise ValueError(f"duplicate or conflicting omitted destination: {dest}")
         seen_omitted.add(key)
-        _check_omission(entry, dest)
-        _check_root(entry, dest, omitted=True)
-        claims = entry.get("alternatives", [])
-        if not isinstance(claims, list) or len(claims) > MAX_SELECTION_TAGS:
-            raise ValueError(f"invalid omitted alternatives for {dest}")
-        for claim in claims:
-            claim_cores = claim.get("cores") if isinstance(claim, dict) else None
-            if (
-                not isinstance(claim, dict)
-                or set(claim) != {"cores"}
-                or not isinstance(claim_cores, list)
-                or not claim_cores
-                or not all(isinstance(core, str) for core in claim_cores)
-            ):
-                raise ValueError(f"invalid omitted alternative for {dest}")
-        for field in (*SELECTION_FIELDS, "declared_in"):
-            _check_tags(entry, field, dest)
-        _check_expert_fields(entry, dest)
+        _check_omitted_entry(entry, dest)
     if data.get("slot_fields", True) is not True:
         raise ValueError("invalid slot_fields")
     largest_total += _check_truth_lists(data, seen_destinations)
@@ -5376,19 +5398,21 @@ def slot_drops(entries: list[dict], held: set[str],
         key = _entry_key(entry)
         if not isinstance(slot, dict) or key not in held:
             continue
-        merged = None
-        for claims in slot.get("keys", []):
-            here = {name: claim for name, claim in claims.items()
-                    if reach is None or name in reach}
-            if here:
-                merged = _merged_slot(here)
-                break
-        if merged is None:
-            keep.add(key)
-            continue
-        rank, regions, sets = merged
-        for group in slot.get("groups", []):
-            bucketed.setdefault((group, regions), []).append((key, rank, sets))
+        # One lookup per name the groups list the file under (`also`).
+        for chain in [slot, *slot.get("also", [])]:
+            merged = None
+            for claims in chain.get("keys", []):
+                here = {name: claim for name, claim in claims.items()
+                        if reach is None or name in reach}
+                if here:
+                    merged = _merged_slot(here)
+                    break
+            if merged is None:
+                keep.add(key)
+                continue
+            rank, regions, sets = merged
+            for group in chain.get("groups", []):
+                bucketed.setdefault((group, regions), []).append((key, rank, sets))
     drop: set[str] = set()
     for found in bucketed.values():
         for candidates in _linked_by_set(found):
@@ -5459,7 +5483,7 @@ def standalone_entries(manifest: dict, layouts: dict, profile: str) -> list[dict
         return None
     copies = {
         copy["sha1"]: copy
-        for entry in [*manifest.get("files", []), *manifest.get("truth_files", [])]
+        for entry in [*manifest.get("files", []), *(manifest.get("truth_files") or [])]
         for copy in [entry, *entry.get("alternatives", []), *entry.get("slot_choices", [])]
         if copy.get("sha1") and (copy.get("repo_path") or copy.get("release_asset"))
     }
@@ -17205,6 +17229,15 @@ def _check_expert(parser: argparse.ArgumentParser, args: argparse.Namespace) -> 
     for given, reason in refusals:
         if given:
             parser.error(reason)
+    if args.find:
+        # Each would be skipped by a run that installs one file or prints it.
+        for flag, given in (("--pack", getattr(args, "pack", None) is not None),
+                            ("--add-app", args.add_app),
+                            ("--standalone-copies", args.standalone_copies),
+                            ("--romm-firmware", args.romm_firmware is not None),
+                            ("--from", bool(getattr(args, "from")))):
+            if given:
+                parser.error(f"--find picks one file by its hash, which {flag} does not apply to")
     if args.find is not None:
         value = args.find.strip()
         if len(value) not in FIND_KINDS or not re.fullmatch(r"[0-9a-fA-F]+", value):
@@ -17213,7 +17246,8 @@ def _check_expert(parser: argparse.ArgumentParser, args: argparse.Namespace) -> 
 
 
 FIND_SCHEMA = 1
-# What a match of --find --json carries, in this order.
+# What a match of --find --json carries, every key in this order, null
+# where the list records none.
 FIND_FIELDS = ("dest", "root", "sha1", "sha256", "md5", "crc32", "size", "systems", "cores")
 
 
@@ -17234,22 +17268,28 @@ def _found_files(args: argparse.Namespace, plat: str,
     if args.json:
         record = {"schema": FIND_SCHEMA, "platform": plat, "hash": value, "kind": kind,
                   "result": result,
-                  "matches": [{field: match.get(field) for field in FIND_FIELDS
-                               if field in match or field in ("root", "cores")}
+                  "matches": [{field: match.get(field) for field in FIND_FIELDS}
                               for match in matches]}
         print(json.dumps(record), file=args.json_out, flush=True)
         if result != "found":
             args.find_failed = True
         return [], []
-    if result == "unrecorded":
-        refuse_name(plat, f"Error: the {plat} file list records no {kind}: --find reads "
-                    "sha1 and sha256 in every list.")
-    if result == "unknown":
-        refuse_name(plat, f"Error: no file of the {plat} list has the {kind} {value}.")
-    if result == "ambiguous":
-        refuse_name(plat, f"Error: {len(contents)} files of the {plat} list have the "
-                    f"{kind} {value}: give their sha1 instead.",
-                    *(f"  {match['dest']}  {match.get('sha1', '')}" for match in matches))
+    lines = {
+        "unrecorded": [f"Error: the {plat} file list records no {kind}: --find reads "
+                       "sha1 and sha256 in every list."],
+        "unknown": [f"Error: no file of the {plat} list has the {kind} {value}."],
+        "ambiguous": [f"Error: {len(contents)} files of the {plat} list have the "
+                      f"{kind} {value}: give their sha1 instead.",
+                      *(f"  {match['dest']}  {match.get('sha1', '')}" for match in matches)],
+    }.get(result)
+    if lines is not None:
+        EVENTS.emit("error", stage="option", reason="unknown", platform=plat,
+                    message=lines[0][len("Error: "):])
+        for line in lines:
+            print(line, file=sys.stderr)
+        # 4: the hash was read and the list holds no one file for it, neither
+        # a failure (1) nor an option refused (2).
+        sys.exit(4)
     for match in matches:
         print(f"  {value} is {match['dest']}")
     return matches, []
@@ -19355,7 +19395,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         files = manifest.get("files", [])
         omitted_files = manifest.get("omitted_files", [])
         if args.source == "truth":
-            if "truth_files" not in manifest:
+            if manifest.get("truth_files") is None:
                 print(f"Error: the {plat_name} file list does not say what the emulator "
                       "profiles prove is read, which --source truth needs.", file=sys.stderr)
                 print(_older_list_advice(plat_name), file=sys.stderr)
@@ -19512,6 +19552,9 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 manifest, found_cores, files, omitted_files, info_dests
             )
             detail(f"  Narrowed {before} to {len(files)} files to the installed cores")
+            # A slot is ranked by the cores installed, as a pack built for them.
+            found_reach = designated_cores(manifest, found_cores)
+            slot_reach = found_reach if slot_reach is None else slot_reach & found_reach
 
         if args.list_emulators:
             _print_emulators(plat_name, manifest, *(
@@ -20294,7 +20337,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
     sys.stdout = real_stdout
     if args.find and getattr(args, "json", False):
         # The matches are the answer: nothing was installed.
-        sys.exit(2 if getattr(args, "find_failed", False) else 0)
+        sys.exit(4 if getattr(args, "find_failed", False) else 0)
     if not listing:
         EVENTS.emit(
             "summary", mode=_event_mode(args), installed=total_downloaded,
@@ -22790,14 +22833,20 @@ def _option_rows(state: TuiState) -> list[TuiRow]:
 
 
 def _tui_standalone_offered(state: TuiState) -> bool:
-    """Whether Change offers --standalone: emulators are chosen, and the
-    list records a standalone build for each of them."""
+    """Whether Change offers --standalone: emulators are chosen, the list
+    records a standalone build for each of them, and no region, core or
+    system choice narrows the run, which the option refuses beside it."""
     manifest = state.manifest or {}
     layouts = manifest.get("standalone_builds") or []
-    if not state.emulators or not layouts:
+    if not state.emulators or not layouts or not _tui_standalone_fits(state):
         return False
     names = emulator_names(manifest, *tui_run_files(state))
     return all(names.get(name) in layouts for name in state.emulators)
+
+
+def _tui_standalone_fits(state: TuiState) -> bool:
+    """No region, core or system choice: --standalone takes none."""
+    return not (state.regions or tui_core_flags(state) or _tui_system_flags(state))
 
 
 def _tui_slot_offered(state: TuiState, flags: list[tuple[str, str | None]]) -> bool:
@@ -24758,7 +24807,22 @@ def _pager_last(state: TuiState, items: list) -> int:
 
 
 def tui_update(state: TuiState, key: TuiKey) -> list[tuple]:
-    """What a key does on the current screen, and the work it starts."""
+    """What a key does on the current screen, and the work it starts. A
+    choice that --standalone cannot sit beside turns it off, said once."""
+    effects = _tui_key(state, key)
+    if state.standalone and state.emulators and not _tui_standalone_fits(state):
+        state.standalone = False
+        state.status = TUI_STANDALONE_OFF
+    return effects
+
+
+# Said when a choice of regions, cores or systems turns Standalone off.
+TUI_STANDALONE_OFF = ("Standalone version off: the build is installed whole, which "
+                      "regions, cores and systems do not narrow.")
+
+
+def _tui_key(state: TuiState, key: TuiKey) -> list[tuple]:
+    """tui_update for one key."""
     if key.name == "mouse":
         return tui_mouse(state, key)  # type: ignore[arg-type]
     # A key moves the focus its own way: the next tap focuses again.

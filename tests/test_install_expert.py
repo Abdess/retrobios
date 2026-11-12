@@ -145,6 +145,22 @@ class RealListParity(unittest.TestCase):
                 self.assert_same(plat, files, self.packed(
                     plat, one_per_slot=True, target_cores=set(cores), target_name=target))
 
+    def test_one_per_slot_with_installed_cores(self):
+        """--installed-cores ranks a slot by the cores found, as a pack built
+        for exactly those cores (generate_pack target_cores) ranks it: the
+        run passes the found cores as its reach (slot_reach)."""
+        from common import load_target_config
+
+        for plat, target in (("retroarch", "switch"), ("retroarch", "playstation-psp")):
+            with self.subTest(platform=plat, cores=target):
+                found = sorted(load_target_config(plat, target, str(REPO_ROOT / "platforms")))
+                full = self.manifest(plat)
+                files, omitted = install.narrow_to_cores(full, found)
+                files, _omitted = install.one_per_slot(
+                    files, omitted, install.designated_cores(full, found))
+                self.assert_same(plat, files, self.packed(
+                    plat, one_per_slot=True, target_cores=set(found)))
+
     def test_source_truth(self):
         for plat in self.platforms:
             with self.subTest(platform=plat):
@@ -277,6 +293,41 @@ class TheSlotRuleIsTheBuilders(unittest.TestCase):
                       for name in entries]
             self.assertEqual(self.drops(listed, reach), expected)
 
+    @unittest.skipIf(sys.version_info < (3, 9), "slot.py needs Python 3.9 or newer")
+    def test_a_destination_two_groups_name_apart(self):
+        """One destination a platform declares under one name and a core
+        under another: each group looks its own name up, as the builder
+        does (slot.lookup_slot per member), whatever cores the board runs."""
+        import random
+
+        import manifestselect
+        import slot as slot_mod
+
+        rng = random.Random(11)
+        for _round in range(400):
+            profiles: dict = {}
+            groups: dict[str, list[tuple[str, str]]] = {"sysa": [], "sysb": []}
+            dests = [f"sub/f{index}.bin" for index in range(rng.randint(2, 5))]
+            for index, dest in enumerate(dests):
+                names = {"sysa": f"a{index}.bin",
+                         "sysb": rng.choice([f"a{index}.bin", f"b{index}.bin"])}
+                for group, name in names.items():
+                    groups[group].append((dest, name))
+                for name in set(names.values()):
+                    for emulator in rng.sample(["ds", "pcsx"], rng.randint(1, 2)):
+                        profiles.setdefault(emulator, {"files": []})["files"].append(
+                            {"name": name, "priority": rng.choice([None, 1, 2, 3])})
+            reach = set(rng.sample(sorted(profiles), rng.randint(1, len(profiles))))
+            index_ = slot_mod.build_slot_index({k: v for k, v in profiles.items()
+                                                if k in reach})
+            expected, _undecided = slot_mod.resolve_slot_drops(groups, index_, set(dests))
+            fields = manifestselect._slot_fields(groups, slot_mod.slot_claims(profiles))
+            listed = [_copy(dest, dest.encode(), **({"slot": fields[dest]}
+                                                    if dest in fields else {}))
+                      for dest in dests]
+            with self.subTest(round=_round):
+                self.assertEqual(self.drops(listed, reach), expected)
+
 
 class Lists(unittest.TestCase):
     """A list written for the runs below, in tmp/."""
@@ -342,7 +393,7 @@ class FindByHash(Lists):
 
     def found(self, value: str) -> dict:
         proc = self.run_install(LIST, "--find", value, "--json")
-        self.assertIn(proc.returncode, (0, 2), proc.stderr)
+        self.assertIn(proc.returncode, (0, 4), proc.stderr)
         return json.loads(proc.stdout)
 
     def test_each_kind(self):
@@ -362,18 +413,52 @@ class FindByHash(Lists):
         self.assertEqual(list(said), ["schema", "platform", "hash", "kind", "result",
                                       "matches"])
         self.assertEqual(said["schema"], 1)
-        self.assertEqual(list(said["matches"][0]), ["dest", "root", "sha1", "sha256", "md5",
-                                                    "size", "systems", "cores"])
+        # Every key in every match, null where the list records none: the
+        # copy at scph5501.bin has an md5 and no crc32.
+        for match in said["matches"]:
+            self.assertEqual(list(match), ["dest", "root", "sha1", "sha256", "md5", "crc32",
+                                           "size", "systems", "cores"])
+            self.assertIsNone(match["crc32"])
+            self.assertIsNone(match["root"])
+        crc = self.found(LIST["files"][4]["sha1"])["matches"][0]
+        self.assertEqual((crc["md5"], crc["crc32"], crc["systems"]), (None, "aaaaaaaa", None))
+
+    def test_a_hash_with_no_one_file_has_its_own_code(self):
+        """unknown, ambiguous and unrecorded end on 4, never on the 2 of an
+        option refused, so a script can tell a typo from a missing file."""
+        bare = copy.deepcopy(LIST)
+        for entry in bare["files"]:
+            entry.pop("md5", None)
+        for manifest, value in ((LIST, "0" * 40), (LIST, "aaaaaaaa"), (bare, "1" * 32)):
+            for json_too in ((), ("--json",)):
+                with self.subTest(value=value, json=bool(json_too)):
+                    proc = self.run_install(manifest, "--find", value, "--dry-run"
+                                            if not json_too else "--json")
+                    self.assertEqual(proc.returncode, 4, proc.stdout + proc.stderr)
+        typo = self.run_install(LIST, "--find", "0" * 39)
+        self.assertEqual(typo.returncode, 2)
+
+    def test_the_options_a_find_skips_are_refused(self):
+        sha1 = LIST["files"][0]["sha1"]
+        for extra in (["--pack", str(self.root / "out") + "/"], ["--add-app"],
+                      ["--standalone-copies"], ["--romm-firmware", "{platform}/bios"],
+                      ["--from", str(self.root)]):
+            for json_too in ((), ("--json",)):
+                with self.subTest(extra=extra, json=bool(json_too)):
+                    proc = self.run_install(LIST, "--find", sha1, *json_too, *extra)
+                    self.assertEqual(proc.returncode, 2, proc.stdout + proc.stderr)
+                    self.assertIn(f"which {extra[0]} does not apply to", proc.stderr)
+                    self.assertEqual(proc.stdout.strip(), "")
 
     def test_unknown_ambiguous_and_unrecorded(self):
         unknown = self.run_install(LIST, "--find", "0" * 40, "--json")
-        self.assertEqual(unknown.returncode, 2)
+        self.assertEqual(unknown.returncode, 4)
         self.assertEqual(json.loads(unknown.stdout)["result"], "unknown")
         for value, words in (("0" * 40, "no file of the retroarch list has the sha1"),
                              ("aaaaaaaa", "2 files of the retroarch list have the crc32")):
             with self.subTest(value=value):
                 proc = self.run_install(LIST, "--find", value, "--dry-run")
-                self.assertEqual(proc.returncode, 2, proc.stdout + proc.stderr)
+                self.assertEqual(proc.returncode, 4, proc.stdout + proc.stderr)
                 self.assertIn(words, proc.stderr)
         bare = copy.deepcopy(LIST)
         for entry in bare["files"]:
@@ -407,6 +492,22 @@ class ExpertRuns(Lists):
         said = self.plan(LIST, "--emulator", "duckstation", "--standalone")
         self.assertIn("ds/scph5501.bin", said)
 
+    def test_installed_cores_rank_a_slot_by_themselves(self):
+        """With pcsx_rearmed ranking scph1001 first and DuckStation last, the
+        whole list cannot decide the slot. Only DuckStation installed, its
+        order decides, as a pack built for it alone does."""
+        ranked = copy.deepcopy(LIST)
+        ranked["files"][0]["slot"] = _slot(_claims(duckstation=10, pcsx_rearmed=1))
+        ranked["files"][1]["slot"] = _slot(_claims(duckstation=5, pcsx_rearmed=2))
+        cores = self.root / "cores"
+        cores.mkdir()
+        (cores / "duckstation_libretro.so").write_bytes(b"")
+        whole = self.plan(ranked, "--one-per-slot")
+        self.assertIn("scph1001.bin", whole)
+        installed = self.plan(ranked, "--one-per-slot", "--cores-dir", str(cores))
+        self.assertNotIn("scph1001.bin", installed)
+        self.assertIn("scph5501.bin", installed)
+
     def test_a_list_without_the_fields_is_refused(self):
         older = copy.deepcopy(LIST)
         for field in ("slot_fields", "truth_files", "truth_omitted", "standalone_builds"):
@@ -436,6 +537,26 @@ class ExpertRuns(Lists):
                 with self.assertRaises(ValueError):
                     install._validate_manifest(bad, "retroarch")
         install._validate_manifest(copy.deepcopy(LIST), "retroarch")
+        # A claim that is no object says the list is not valid, never TypeError.
+        for claim in (None, 3, True, ["ranks"]):
+            with self.subTest(claim=claim):
+                bad = copy.deepcopy(LIST)
+                bad["files"][0]["slot"] = {"groups": ["s"], "keys": [{"ds": claim}]}
+                with self.assertRaises(ValueError):
+                    install._validate_manifest(bad, "retroarch")
+        # A truth-only omission is checked as any omission.
+        omission = {"dest": "gone.bin", "name": "gone.bin", "system": "s", "required": True,
+                    "reason": "not_found", "cores": None}
+        for field, value in (("alternatives", [{"cores": "ds"}]), ("slot", {"groups": []}),
+                             ("truth", True), ("systems", "s")):
+            with self.subTest(truth_omitted=field):
+                bad = copy.deepcopy(LIST)
+                bad["truth_omitted"] = [{**omission, field: value}]
+                with self.assertRaises(ValueError):
+                    install._validate_manifest(bad, "retroarch")
+        good = copy.deepcopy(LIST)
+        good["truth_omitted"] = [omission]
+        install._validate_manifest(good, "retroarch")
         for broken in ([["../x.bin", LAYOUTS["standalone_layouts"]["duckstation"][0][1]]],
                        [["ds/x.bin", "0" * 40]]):
             with self.subTest(layout=broken):
@@ -446,6 +567,38 @@ class ExpertRuns(Lists):
         with self.assertRaises(ValueError):
             install._check_standalone_layouts({**LAYOUTS, "standalone_layouts": {}},
                                               LIST, "retroarch")
+
+    def test_a_null_truth_list_reads_as_none(self):
+        """truth_files: null is no list: --standalone takes its copies from
+        the files alone, the schema check too, and --source truth refuses
+        the list as one that records nothing of it."""
+        nulled = {**copy.deepcopy(LIST), "truth_files": None}
+        del nulled["truth_omitted"]
+        install._validate_manifest(copy.deepcopy(nulled), "retroarch")
+        entries = install.standalone_entries(nulled, LAYOUTS["standalone_layouts"],
+                                             "duckstation")
+        self.assertEqual([entry["dest"] for entry in entries], ["ds/scph5501.bin"])
+        said = self.plan(nulled, "--emulator", "duckstation", "--standalone")
+        self.assertIn("ds/scph5501.bin", said)
+        proc = self.run_install(nulled, "--dry-run", "--source", "truth")
+        self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+        self.assertIn("which --source truth needs", proc.stderr)
+
+    @unittest.skipIf(sys.version_info < (3, 9), "validate_schemas.py needs Python 3.9 or newer")
+    def test_the_schema_check_reads_a_null_truth_list(self):
+        from unittest import mock
+
+        import validate_schemas
+
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as root:
+            (Path(root) / "install" / "standalone").mkdir(parents=True)
+            (Path(root) / "install" / "retroarch.json").write_text(
+                json.dumps({**LIST, "truth_files": None}), encoding="utf-8")
+            path = Path(root) / "install" / "standalone" / "retroarch.json"
+            path.write_text(json.dumps(LAYOUTS), encoding="utf-8")
+            with mock.patch.object(validate_schemas, "ROOT", Path(root)):
+                self.assertEqual(validate_schemas._semantic_standalone_checks(path, LAYOUTS),
+                                 [])
 
     def test_a_layout_file_missing_or_unreachable_refuses_on_one_line(self):
         """Only --standalone reads the file: a list without it beside still
@@ -529,6 +682,31 @@ class ChangeRows(unittest.TestCase):
         state.emulators = ["pcsx_rearmed"]
         self.assertNotIn("standalone", self.actions(state))
         self.assertNotIn(("--standalone", None), install.tui_flags(state))
+
+    def test_standalone_only_beside_no_other_narrowing(self):
+        """The CLI refuses --standalone beside --region, --core and
+        --system: the row is not offered with one, and a choice made after
+        it turns it off, said in one line."""
+        for choice in ("regions", "cores", "systems"):
+            with self.subTest(choice=choice):
+                state = self.state(LIST)
+                state.emulators = ["duckstation"]
+                state.standalone = True
+                self.assertIn(("--standalone", None), install.tui_flags(state))
+                if choice == "regions":
+                    state.regions = ["japan"]
+                elif choice == "cores":
+                    state.cores = ["duckstation"]
+                else:
+                    state.cli_systems = ["sony-playstation"]
+                self.assertNotIn("standalone", self.actions(state))
+                self.assertNotIn(("--standalone", None), install.tui_flags(state))
+                install.tui_update(state, install.TuiKey("down"))
+                self.assertFalse(state.standalone)
+                self.assertEqual(state.status, install.TUI_STANDALONE_OFF)
+                argv = install.tui_argv(state, "install", "python", "install.py")
+                args = install.build_parser().parse_args(argv[2:])
+                self.assertFalse(args.standalone)
 
     def test_no_row_on_a_list_without_the_fields(self):
         older = {key: value for key, value in LIST.items()
