@@ -241,11 +241,14 @@ class AModuleRunAloneHasItsScratchDirectory(unittest.TestCase):
             (clone / "tests" / "__init__.py").write_bytes(
                 (ROOT / "tests" / "__init__.py").read_bytes()
             )
+            # The folder a module gets alone, not the one scripts/run_tests.py
+            # names for each module it runs beside others.
+            env = {k: v for k, v in os.environ.items() if k != "RETROBIOS_TEST_SCRATCH"}
             proc = subprocess.run(
                 [sys.executable, "-I", "-c",
                  "import sys; sys.path.insert(0, '.'); import tests, tempfile, os;"
                  " print(tempfile.gettempdir()); print(os.environ['TMPDIR'])"],
-                cwd=clone, capture_output=True, text=True, timeout=60, check=False,
+                cwd=clone, env=env, capture_output=True, text=True, timeout=60, check=False,
             )
             self.assertEqual(proc.returncode, 0, proc.stderr)
             self.assertTrue((clone / "tmp" / "tests").is_dir())
@@ -278,7 +281,8 @@ class EveryTestModuleImportsTheIsolation(unittest.TestCase):
 
     def test_discover_without_a_top_level_runs_isolated(self):
         env = {k: v for k, v in os.environ.items()
-               if k not in ("RETROBIOS_OFFLINE", "TMPDIR", "RETROBIOS_CACHE")}
+               if k not in ("RETROBIOS_OFFLINE", "TMPDIR", "RETROBIOS_CACHE",
+                            "RETROBIOS_TEST_SCRATCH")}
         proc = subprocess.run(
             [sys.executable, "-c",
              "import os, sys, tempfile, unittest\n"
@@ -402,7 +406,7 @@ class WorkflowRegressions(unittest.TestCase):
                 name
                 for name, body in workflow["jobs"].items()
                 if any(
-                    "unittest discover" in str(step.get("run", ""))
+                    "scripts/run_tests.py" in str(step.get("run", ""))
                     for step in body.get("steps", [])
                 )
             ),
@@ -4794,7 +4798,7 @@ class TheTestJobHasTheDataTrees(unittest.TestCase):
         )["jobs"]["run-tests"]["steps"]
         runs = [step.get("run", "") for step in steps]
         fetch = next(i for i, run in enumerate(runs) if "refresh_data_dirs.py" in run)
-        suite = next(i for i, run in enumerate(runs) if "unittest discover" in run)
+        suite = next(i for i, run in enumerate(runs) if "scripts/run_tests.py" in run)
         self.assertLess(fetch, suite)
 
 

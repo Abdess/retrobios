@@ -1397,7 +1397,9 @@ Further options, by script:
 
 | Script | Options |
 |--------|---------|
-| `auto_fetch.py` | `--create-issues` prints a GitHub issue body per platform for the files still missing, with their full hashes. It posts nothing |
+| `auto_fetch.py` | `--create-issues` prints a GitHub issue body per platform for the files still missing, with their full hashes. It posts nothing. `--sha1` looks a file up by its hash alone, in the database, Software Heritage and archive.org, and writes what it finds to `tmp/acquire/` |
+| `find_embedded.py` | `--crc32` and `--size` name the file looked for inside other files (every offset, ZIP members read), `--sha1` confirms a hit, `--extract` writes a confirmed one to `tmp/acquire/` |
+| `run_tests.py` | `--jobs` sets how many test modules run at once (default a third of the cores, at most 6) |
 | `check_buildbot_system.py` | `--update` refreshes the entries found stale, `--json`, `--registry` |
 | `check_freshness.py` | `--cache-dir`, `--native-cache-dir` (originals of the native export) and `--truth-dir` move the caches it reads |
 | `check_release.py` | `--tag`, `--sums dist/SHA256SUMS.txt`, `--record` (default `release.json`), `--json` |

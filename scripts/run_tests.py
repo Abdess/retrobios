@@ -6,12 +6,12 @@ Usage:
     python scripts/run_tests.py --jobs 1        # one at a time, as discover runs
     python scripts/run_tests.py tests.test_install tests.test_e2e
 
-`python -m unittest discover` runs 8,500 tests in one process: about 40
-minutes here and 85 on the CI runner, and a module that left a variable or a
-flag set changed the modules after it. Here each module gets a fresh process
+unittest's discovery runs 8,500 tests in one process: about 40 minutes
+here and 85 on the CI runner, and a module that left a variable or a flag
+set changed the modules after it. Here each module gets a fresh process
 and its own scratch folder (RETROBIOS_TEST_SCRATCH, read by tests/__init__),
 the longest first so the last ones to start are short. Durations are kept in
-tmp/test-durations.json, from the previous run; a module never timed is
+tmp/test-durations.json, from the previous run, and a module never timed is
 weighed by its size.
 
 The host computes wrong and Python segfaults under load: a module killed by
@@ -41,6 +41,8 @@ DURATIONS = ROOT / "tmp" / "test-durations.json"
 # third of the cores at once made them fail for no other reason.
 DEFAULT_JOBS = max(1, min(6, (os.cpu_count() or 2) // 3))
 
+# Lines of a failed module's tracebacks printed in the summary.
+FAILURE_LINES = 200
 _RAN = re.compile(r"^Ran (\d+) tests? in ([\d.]+)s$", re.M)
 _COUNTS = re.compile(r"(failures|errors|skipped|expected failures|unexpected successes)=(\d+)")
 
@@ -117,7 +119,8 @@ def run_module(module: str, env: dict[str, str], logs: Path) -> Result:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__.split("\n\n", 1)[0])
+    parser = argparse.ArgumentParser(allow_abbrev=False,
+                                     description=__doc__.split("\n\n", 1)[0])
     parser.add_argument("modules", nargs="*", help="modules to run (tests.test_x), all by default")
     parser.add_argument("--jobs", "-j", type=int, default=DEFAULT_JOBS,
                         help=f"modules at once (default {DEFAULT_JOBS})")
@@ -169,9 +172,21 @@ def main() -> int:
         print(f"FAILED {result.module}: {result.failures} failures, {result.errors} errors "
               f"(code {result.code if result.crashed_then is None else result.crashed_then}), "
               f"log {result.log.relative_to(ROOT) if result.log else '-'}")
+        # A CI runner shows the output and keeps no file: what failed, and
+        # why, is said here, the tracebacks unittest wrote, at most a page.
+        if result.log is not None:
+            text = result.log.read_text(encoding="utf-8", errors="replace")
+            start = text.find("\n" + "=" * 70)
+            shown = (text[start:] if start >= 0 else text).strip().splitlines()
+            for line in shown[:FAILURE_LINES]:
+                print(f"    {line}")
+            if len(shown) > FAILURE_LINES:
+                print(f"    ... {len(shown) - FAILURE_LINES} more lines in the log")
     print("OK" if not failed else f"FAILED ({len(failed)} modules)")
     return 1 if failed else 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    from common import run_cli
+
+    run_cli(main)

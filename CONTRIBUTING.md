@@ -91,7 +91,7 @@ python scripts/refresh_data_dirs.py                      # data directories the 
 python scripts/generate_site.py                          # the pages the site tests read
 npm ci --prefix website                                  # the site's packages, Node 24
 npm run build --prefix website                           # the built site
-python -m unittest discover -s tests -t .                # the suite
+python scripts/run_tests.py --jobs 4                     # the suite, one process per module
 python3.8 -m unittest tests.test_install_tui             # the full screen on the installer's floor
 python scripts/validate_site.py --site-dir website/dist  # links and page budgets
 ```

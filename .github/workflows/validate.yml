@@ -332,9 +332,12 @@ jobs:
         # No test downloads a release asset: 252 MB files fetched into the
         # shared cache filled the runner's disk and changed what later tests
         # resolved. The download tests mock the network and clear it.
+        # One process per module, four at a time on the runner's four cores,
+        # each with its own scratch folder: a module that leaves a variable
+        # set no longer changes the ones after it.
         env:
           RETROBIOS_OFFLINE: "1"
-        run: python -m unittest discover -s tests -t . -v
+        run: python scripts/run_tests.py --jobs 4
 
       - name: Run the full-screen interface tests on Python 3.8
         if: ${{ !cancelled() }}

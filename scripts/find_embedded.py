@@ -86,7 +86,8 @@ def sources(paths: list[Path]) -> Iterator[tuple[str, bytes]]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__.split("\n\n", 1)[0])
+    parser = argparse.ArgumentParser(allow_abbrev=False,
+                                     description=__doc__.split("\n\n", 1)[0])
     parser.add_argument("paths", nargs="+", type=Path, help="files, folders or ZIPs to search")
     parser.add_argument("--crc32", required=True, help="crc32 of the wanted file, in hex")
     parser.add_argument("--size", required=True, type=int, help="size of the wanted file, in bytes")
@@ -125,4 +126,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from common import run_cli
+
+    run_cli(main)

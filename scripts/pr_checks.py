@@ -60,7 +60,7 @@ STEPS: tuple[Step, ...] = (
     # filled it and every later command failed with ENOSPC.
     Step("npm run build --prefix website", "the built site",
          needs="npm", provider="Node 24", env={"NODE_DISABLE_COMPILE_CACHE": "1"}),
-    Step("python -m unittest discover -s tests -t .", "the suite",
+    Step("python scripts/run_tests.py --jobs 4", "the suite, one process per module",
          env={"RETROBIOS_OFFLINE": "1"}),
     Step("python3.8 -m unittest tests.test_install_tui", "the full screen on the installer's floor",
          needs="python3.8", provider="a Python 3.8 with pyte",

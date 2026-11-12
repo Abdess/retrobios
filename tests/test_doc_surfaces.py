@@ -397,14 +397,14 @@ class ContributorChecksMatchCi(unittest.TestCase):
             block = _section(text, "## Before opening a PR")
             self.assertIn("python scripts/refresh_data_dirs.py", block)
             self.assertLess(
-                block.index("refresh_data_dirs.py"), block.index("unittest discover")
+                block.index("refresh_data_dirs.py"), block.index("run_tests.py")
             )
 
     def test_ci_does_the_same(self):
         workflow = _read(".github/workflows/validate.yml")
         self.assertLess(
             workflow.index("python scripts/refresh_data_dirs.py"),
-            workflow.index("python -m unittest discover"),
+            workflow.index("python scripts/run_tests.py"),
         )
 
     def test_the_pr_checklist_generates_the_site_before_the_tests(self):
@@ -413,7 +413,7 @@ class ContributorChecksMatchCi(unittest.TestCase):
         workflow = _read(".github/workflows/validate.yml")
         self.assertLess(
             workflow.index("run: python scripts/generate_site.py"),
-            workflow.index("python -m unittest discover"),
+            workflow.index("python scripts/run_tests.py"),
         )
         for text in (
             contributing_text(lambda page: page, "# C", "here"),
@@ -422,7 +422,7 @@ class ContributorChecksMatchCi(unittest.TestCase):
             block = _section(text, "## Before opening a PR")
             self.assertIn("python scripts/generate_site.py", block)
             self.assertLess(
-                block.index("generate_site.py"), block.index("unittest discover")
+                block.index("generate_site.py"), block.index("run_tests.py")
             )
 
 
@@ -626,7 +626,7 @@ class ContributorChecksFetchThePlatformsFiles(unittest.TestCase):
         workflow = _read(".github/workflows/validate.yml")
         self.assertLess(
             workflow.index("python scripts/export_native.py --all --refresh-cache"),
-            workflow.index("python -m unittest discover"),
+            workflow.index("python scripts/run_tests.py"),
         )
         for text in (
             contributing_text(lambda page: page, "# C", "here"),
@@ -635,7 +635,7 @@ class ContributorChecksFetchThePlatformsFiles(unittest.TestCase):
             block = _section(text, "## Before opening a PR")
             self.assertIn("python scripts/export_native.py --all --refresh-cache", block)
             self.assertLess(
-                block.index("export_native.py"), block.index("unittest discover")
+                block.index("export_native.py"), block.index("run_tests.py")
             )
 
     def test_the_testing_guide_names_the_command(self):

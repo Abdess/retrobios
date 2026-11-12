@@ -68,7 +68,7 @@ class BeforeOpeningAPullRequest(unittest.TestCase):
         section = text.split("## Before opening a PR", 1)[1].split("\n## ", 1)[0]
         block = "".join(_re.findall(r"```bash\n(.*?)```", section, _re.S))
         for command in ("validate_pr.py --changed", "validate_schemas.py --source-only",
-                        "unittest discover"):
+                        "run_tests.py"):
             self.assertIn(command, block)
         self.assertNotIn("pipeline.py", block)
         workflow = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
@@ -268,13 +268,13 @@ class OneCommandRunsTheChecks(unittest.TestCase):
         workflow = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
         order = [workflow.index(key) for key in (
             "refresh_data_dirs.py", "run: python scripts/generate_site.py",
-            "npm run build --prefix website", "python -m unittest discover",
+            "npm run build --prefix website", "python scripts/run_tests.py",
             "validate_site.py")]
         self.assertEqual(order, sorted(order))
         commands = [step.command for step in pr_checks.STEPS]
         positions = [next(i for i, c in enumerate(commands) if key in c) for key in (
             "refresh_data_dirs.py", "generate_site.py", "npm run build",
-            "unittest discover", "validate_site.py")]
+            "run_tests.py", "validate_site.py")]
         self.assertEqual(positions, sorted(positions))
 
     def test_the_guide_gives_the_runner_and_what_it_runs(self):

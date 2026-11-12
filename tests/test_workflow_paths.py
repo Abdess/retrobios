@@ -147,7 +147,7 @@ class ThePullRequestBuildsTheSite(unittest.TestCase):
         generate = next(
             i for i, run in enumerate(runs) if "scripts/generate_site.py" in run
         )
-        suite = next(i for i, run in enumerate(runs) if "unittest discover" in run)
+        suite = next(i for i, run in enumerate(runs) if "scripts/run_tests.py" in run)
         self.assertLess(generate, suite)
         # The built pages too: about fifty tests read website/dist.
         build = next(i for i, run in enumerate(runs) if "npm run build" in run)
