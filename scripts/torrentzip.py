@@ -43,7 +43,7 @@ class Source(Protocol):
 
 
 class Sink(Protocol):
-    def write(self, data: bytes, /) -> int: ...
+    def write(self, data: bytes | bytearray, /) -> int: ...
 
 # TorrentZip constants: 1996-12-24 23:32:00, deflate level 9
 _DOS_DATE = ((1996 - 1980) << 9) | (12 << 5) | 24

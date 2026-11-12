@@ -45,7 +45,7 @@ dev = [
     "uv==0.13.4",
     # The type check CI runs, pinned: another mypy reports other errors
     # than the ones mypy-baseline.txt holds.
-    "mypy==1.18.2",
+    "mypy==2.4.1",
     "mypy-baseline==0.7.4",
 ]
 # The site is built by Astro Starlight from website/package.json and its
@@ -63,7 +63,9 @@ Repository = "https://github.com/Abdess/retrobios"
 # `mypy-baseline sync < out.txt` once the fix is in.
 [tool.mypy]
 files = ["install.py", "scripts"]
-python_version = "3.9"
+# The oldest target mypy 2 checks against. install.py's own floor, 3.8, is
+# held by vermin (pr_checks.py, validate.yml).
+python_version = "3.10"
 explicit_package_bases = true
 ignore_missing_imports = true
 no_site_packages = true

@@ -7,11 +7,14 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "@astrojs/markdown-satteri": "0.4.5",
+    "@astrojs/markdown-satteri": "0.4.6",
     "@astrojs/sitemap": "3.7.4",
-    "@astrojs/starlight": "0.42.6",
-    "astro": "7.4.2",
+    "@astrojs/starlight": "0.42.7",
+    "astro": "7.4.4",
     "starlight-links-validator": "0.27.0",
     "starlight-sidebar-topics": "0.9.0"
+  },
+  "overrides": {
+    "ci-info": "4.4.0"
   }
 }

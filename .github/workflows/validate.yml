@@ -180,7 +180,7 @@ jobs:
       # what this job has installed does not change the result.
       - name: Type-check the scripts and the installer
         run: |
-          pip install "mypy==1.18.2" "mypy-baseline==0.7.4"
+          pip install "mypy==2.4.1" "mypy-baseline==0.7.4"
           mypy > "$RUNNER_TEMP/mypy.txt" || true
           mypy-baseline filter --no-colors < "$RUNNER_TEMP/mypy.txt"
 

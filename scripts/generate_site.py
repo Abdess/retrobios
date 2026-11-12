@@ -7255,7 +7255,7 @@ def _group_start(group: _StartGroup, first_below: bool) -> list[tuple[str, str]]
         if same is None:
             regional[(region,)] = text
         else:
-            regional[(*same, region)] = regional.pop(same)
+            regional[same + (region,)] = regional.pop(same)
 
     out = [(", ".join(_region_words(r) for r in regions), regional[regions])
            for regions in sorted(regional, key=lambda rs: (order.get(rs[0], len(order)), rs))]
@@ -10308,13 +10308,9 @@ def emulator_pages(
         else:
             lines.append(f"| Source | {source} |")
     if isinstance(upstream_raw, dict):
-        parts = []
-        for k, v in upstream_raw.items():
-            if isinstance(v, str) and v.startswith("http"):
-                parts.append(f"[{k}]({v})")
-            else:
-                parts.append(f"{k}: {v}")
-        lines.append(f"| Upstream | {', '.join(parts)} |")
+        links = [f"[{k}]({v})" if isinstance(v, str) and v.startswith("http") else f"{k}: {v}"
+                 for k, v in upstream_raw.items()]
+        lines.append(f"| Upstream | {', '.join(links)} |")
     elif upstream_none:
         lines.append("| Upstream | none: the source is the project itself |")
     elif upstream and upstream != source:
