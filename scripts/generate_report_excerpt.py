@@ -22,6 +22,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from artifacts import write_text_atomic
+
 ROOT = Path(__file__).resolve().parent.parent
 PAGE = ROOT / "wiki" / "reading-reports.md"
 BLOCK = re.compile(
@@ -77,7 +79,7 @@ def main() -> int:
         print(f"STALE {PAGE.relative_to(ROOT)}: the verify excerpt is not the run's. "
               "Run python scripts/generate_report_excerpt.py", file=sys.stderr)
         return 1
-    PAGE.write_text(text[:found.start(2)] + body + text[found.end(2):], encoding="utf-8")
+    write_text_atomic(str(PAGE), text[:found.start(2)] + body + text[found.end(2):])
     print(f"Wrote {PAGE.relative_to(ROOT)}")
     return 0
 
