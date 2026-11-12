@@ -28,6 +28,7 @@ Steps, numbered as the run prints them:
   6    --verify-packs               pack integrity, extraction and hashes
   7    generate_readme.py           README.md and CONTRIBUTING.md
        generate_installer_doc.py    run samples and tables of wiki/installer.md
+       generate_report_excerpt.py   the verify excerpt of wiki/reading-reports.md
   8    generate_site.py             site pages, into the Starlight project in website/
   8b   npm run build (website/)     rendered as the site deploy renders it, then validate_site.py
 
@@ -1526,7 +1527,10 @@ def main() -> None:
         # the manifests step 4b just wrote.
         doc_ok, _ = run([sys.executable, "scripts/generate_installer_doc.py"],
                         "7 generate installer page")
-        ok = ok and doc_ok
+        # The verify excerpt of wiki/reading-reports.md, from this run's data.
+        excerpt_ok, _ = run([sys.executable, "scripts/generate_report_excerpt.py"],
+                            "7 generate report excerpt")
+        ok = ok and doc_ok and excerpt_ok
         results["generate_readme"] = ok
         all_ok = all_ok and ok
     else:
