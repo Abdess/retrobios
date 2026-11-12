@@ -317,6 +317,15 @@ files:
     validation: [sha1]
     source_ref: "share/machines/National_FS-5500F2.xml:117-118, share/machines/National_FS-5500F1.xml:119, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
+  - name: nms8245_basic-bios2.rom
+    path: "share/systemroms/nms8245_basic-bios2.rom"
+    sha1: 6103b39f1e38d1aa2d84b1c3219c44f1abb5436e
+    required: false
+    size: 32768
+    description: "Philips NMS 8245 MSX2 BIOS and BASIC ROM"
+    validation: [sha1]
+    source_ref: "share/machines/Philips_NMS_8245.xml:76-79, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
+
   - name: nms8245_msx2sub.rom
     path: "share/systemroms/nms8245_msx2sub.rom"
     sha1:
@@ -327,6 +336,17 @@ files:
     description: "Philips NMS 8245 MSX2 Sub ROM (1.05/1.06 and 1.08 revisions)"
     validation: [sha1]
     source_ref: "share/machines/Philips_NMS_8245.xml:108-110, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
+
+  - name: nms8245_disk.rom
+    path: "share/systemroms/nms8245_disk.rom"
+    sha1:
+      - 58ba1887e8fd21c912b6859cae6514bd874ffcca
+      - 6acd4261795b6ce5f6a5ea432610d1d1d1d8b091
+    required: false
+    size: 16384
+    description: "Philips NMS 8245 disk ROM (1.06 and 1.08 revisions, FDC register bytes at 0x3FF8-0x3FFF read as 0xFF)"
+    validation: [sha1]
+    source_ref: "share/machines/Philips_NMS_8245.xml:149-153, build/install.py:39, src/config/HardwareConfig.cc:25-33, 249-277, src/memory/Rom.cc:97-98, 120-195"
 
   - name: vg8020_basic-bios1.rom
     path: "share/systemroms/vg8020_basic-bios1.rom"
