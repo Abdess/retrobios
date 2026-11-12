@@ -7,7 +7,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "2.7EA",
-  "generated": "2026-11-11T14:23:39Z",
+  "generated": "2026-11-12T11:40:11Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -2178,11 +2178,11 @@
       }
     }
   ],
-  "total_files": 11776,
-  "total_size": 9340403197,
-  "pack_files": 16038,
-  "pack_size": 8703993885,
-  "total_omitted": 469,
+  "total_files": 11777,
+  "total_size": 9340419581,
+  "pack_files": 16039,
+  "pack_size": 8704010269,
+  "total_omitted": 468,
   "omitted_files": [
     {
       "dest": "3dobios.zip",
@@ -5793,16 +5793,6 @@
       ]
     },
     {
-      "dest": "openmsx/share/systemroms/nms8245_disk.rom",
-      "name": "nms8245_disk.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
       "dest": "openmsx/share/systemroms/sensor-kid.rom",
       "name": "sensor-kid.rom",
       "system": "msx",
@@ -8536,6 +8526,7 @@
     "sega-dreamcast-arcade": "Sega Dreamcast-based arcade boards",
     "sega-mega-cd": "Sega Mega CD",
     "sega-saturn": "Sega Saturn",
+    "snk-neogeo": "SNK Neo Geo",
     "snk-neogeo-cd": "SNK Neo Geo CD",
     "sony-playstation": "Sony PlayStation",
     "sony-playstation-2": "Sony PlayStation 2",
@@ -77485,6 +77476,16 @@
       "sha256": "6c6f421a10c428d960b7ecc990f99af1c638147f747bddca7b0bf0e2ab738300",
       "size": 16384,
       "repo_path": "bios/Microsoft/MSX/MSX2EXT.ROM",
+      "cores": [
+        "openmsx-libretro"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/nms8245_disk.rom",
+      "sha1": "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091",
+      "sha256": "83d5e564550a2518fbe9a3e5d1ad378506e9d5dac6cd865ab51c21460ae8144f",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/.variants/nms8245_disk.rom.3a15f5f1",
       "cores": [
         "openmsx-libretro"
       ]

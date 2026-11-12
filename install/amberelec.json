@@ -7,7 +7,7 @@
   "platform": "amberelec",
   "display_name": "AmberELEC",
   "version": "prerelease-20261019_1835",
-  "generated": "2026-11-11T14:23:39Z",
+  "generated": "2026-11-12T11:40:11Z",
   "base_destination": "",
   "detect": [
     {
@@ -2594,6 +2594,7 @@
     "sharp-x1": "Sharp X1",
     "sharp-x68000": "Sharp X68000",
     "sinclair-zx-spectrum": "Sinclair ZX Spectrum",
+    "snk-neogeo": "SNK Neo Geo",
     "snk-neogeo-cd": "SNK Neo Geo CD",
     "sony-playstation": "Sony PlayStation"
   },

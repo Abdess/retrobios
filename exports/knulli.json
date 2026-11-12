@@ -6,11 +6,11 @@
   "files": [
     "knulli-systems"
   ],
-  "summary": "566 kept, 104 files added, 3 hashes updated to the emulator source",
+  "summary": "566 kept, 105 files added, 4 hashes updated to the emulator source",
   "counts": {
     "kept": 566,
-    "added": 104,
-    "not_added": 2006,
+    "added": 105,
+    "not_added": 2051,
     "not_kept": 0
   },
   "changes": [
@@ -45,6 +45,26 @@
       "old": null,
       "new": {
         "md5": "796f62574413bc59ca767063b3184f90"
+      }
+    },
+    {
+      "kind": "hash_updated",
+      "system": "neogeo",
+      "name": "neogeo.zip",
+      "destination": "neogeo.zip",
+      "field": "md5",
+      "old": "dffb72f116d36d025068b23970a4f6df",
+      "new": "00dad01abdbf8ea9e79ad2fe11bdb182"
+    },
+    {
+      "kind": "added",
+      "system": "neogeo",
+      "name": "irrmaze.zip",
+      "destination": "irrmaze.zip",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "0e369df30a70e45547cef9e4078dc511"
       }
     },
     {
@@ -1187,6 +1207,7 @@
     }
   ],
   "hashes_updated": [
+    "neogeo/neogeo.zip md5",
     "nds/dsi_bios7.bin md5",
     "nds/dsi_bios9.bin md5",
     "msx/MSX.ROM md5"
@@ -1318,7 +1339,9 @@
       "destination": "fmtowns/FMT_DIC.ROM",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
@@ -1327,7 +1350,9 @@
       "destination": "fmtowns/FMT_DOS.ROM",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
@@ -1336,7 +1361,9 @@
       "destination": "fmtowns/FMT_F20.ROM",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
@@ -1345,7 +1372,9 @@
       "destination": "fmtowns/FMT_FNT.ROM",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
@@ -1354,133 +1383,163 @@
       "destination": "fmtowns/FMT_SYS.ROM",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtmarty.zip",
       "destination": "fmtmarty.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtmarty.zip",
       "destination": "fmtmarty.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtmarty.zip",
       "destination": "fmtmarty.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtowns.zip",
       "destination": "fmtowns.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtowns.zip",
       "destination": "fmtowns.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtowns.zip",
       "destination": "fmtowns.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtowns.zip",
       "destination": "fmtowns.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtowns.zip",
       "destination": "fmtowns.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtownsux.zip",
       "destination": "fmtownsux.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtownsux.zip",
       "destination": "fmtownsux.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtownsux.zip",
       "destination": "fmtownsux.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtownsux.zip",
       "destination": "fmtownsux.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtownsux.zip",
       "destination": "fmtownsux.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtownsux.zip",
       "destination": "fmtownsux.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
@@ -1703,56 +1762,13 @@
     },
     {
       "system": "apple2",
-      "name": "apple2e.zip",
-      "destination": "apple2e.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "name": "apple2ee.zip",
+      "destination": "apple2ee.zip",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
-        "clk"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "apple2",
-      "name": "apple2e.zip",
-      "destination": "apple2e.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "apple2",
-      "name": "apple2e.zip",
-      "destination": "apple2e.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "apple2",
-      "name": "apple2e.zip",
-      "destination": "apple2e.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "apple2",
-      "name": "apple2e.zip",
-      "destination": "apple2e.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },
@@ -1760,10 +1776,11 @@
       "system": "apple2",
       "name": "apple2ee.zip",
       "destination": "apple2ee.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },
@@ -1771,10 +1788,11 @@
       "system": "apple2",
       "name": "apple2ee.zip",
       "destination": "apple2ee.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },
@@ -1782,10 +1800,11 @@
       "system": "apple2",
       "name": "apple2ee.zip",
       "destination": "apple2ee.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },
@@ -1793,21 +1812,11 @@
       "system": "apple2",
       "name": "apple2ee.zip",
       "destination": "apple2ee.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
-        "clk"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "apple2",
-      "name": "apple2ee.zip",
-      "destination": "apple2ee.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },
@@ -1815,10 +1824,11 @@
       "system": "apple2",
       "name": "apple2p.zip",
       "destination": "apple2p.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },
@@ -1826,10 +1836,11 @@
       "system": "apple2",
       "name": "apple2p.zip",
       "destination": "apple2p.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },
@@ -1837,10 +1848,11 @@
       "system": "apple2",
       "name": "apple2p.zip",
       "destination": "apple2p.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },
@@ -1848,10 +1860,11 @@
       "system": "apple2",
       "name": "apple2p.zip",
       "destination": "apple2p.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },
@@ -1859,10 +1872,11 @@
       "system": "apple2",
       "name": "apple2p.zip",
       "destination": "apple2p.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },
@@ -1870,10 +1884,11 @@
       "system": "apple2",
       "name": "apple2p.zip",
       "destination": "apple2p.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },
@@ -1881,10 +1896,11 @@
       "system": "apple2",
       "name": "apple2p.zip",
       "destination": "apple2p.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },

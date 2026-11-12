@@ -6,11 +6,11 @@
   "files": [
     "batocera-systems"
   ],
-  "summary": "692 kept, 153 files added, 3 hashes updated to the emulator source",
+  "summary": "692 kept, 153 files added, 4 hashes updated to the emulator source",
   "counts": {
     "kept": 692,
     "added": 153,
-    "not_added": 2606,
+    "not_added": 2574,
     "not_kept": 0
   },
   "changes": [
@@ -46,6 +46,15 @@
       "new": {
         "md5": "796f62574413bc59ca767063b3184f90"
       }
+    },
+    {
+      "kind": "hash_updated",
+      "system": "neogeo",
+      "name": "neogeo.zip",
+      "destination": "neogeo.zip",
+      "field": "md5",
+      "old": "dffb72f116d36d025068b23970a4f6df",
+      "new": "00dad01abdbf8ea9e79ad2fe11bdb182"
     },
     {
       "kind": "added",
@@ -1726,6 +1735,7 @@
     }
   ],
   "hashes_updated": [
+    "neogeo/neogeo.zip md5",
     "nds/dsi_bios7.bin md5",
     "nds/dsi_bios9.bin md5",
     "msx/MSX.ROM md5"
@@ -2130,61 +2140,14 @@
     },
     {
       "system": "apple2",
-      "name": "apple2e.zip",
-      "destination": "apple2e.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "name": "apple2ee.zip",
+      "destination": "apple2ee.zip",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
         "applewin",
-        "clk"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "apple2",
-      "name": "apple2e.zip",
-      "destination": "apple2e.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "applewin",
-        "clk"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "apple2",
-      "name": "apple2e.zip",
-      "destination": "apple2e.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "applewin",
-        "clk"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "apple2",
-      "name": "apple2e.zip",
-      "destination": "apple2e.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "applewin",
-        "clk"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "apple2",
-      "name": "apple2e.zip",
-      "destination": "apple2e.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "applewin",
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },
@@ -2192,11 +2155,12 @@
       "system": "apple2",
       "name": "apple2ee.zip",
       "destination": "apple2ee.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
         "applewin",
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },
@@ -2204,11 +2168,12 @@
       "system": "apple2",
       "name": "apple2ee.zip",
       "destination": "apple2ee.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
         "applewin",
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },
@@ -2216,11 +2181,12 @@
       "system": "apple2",
       "name": "apple2ee.zip",
       "destination": "apple2ee.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
         "applewin",
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },
@@ -2228,23 +2194,12 @@
       "system": "apple2",
       "name": "apple2ee.zip",
       "destination": "apple2ee.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
         "applewin",
-        "clk"
-      ],
-      "unresolved_cores": []
-    },
-    {
-      "system": "apple2",
-      "name": "apple2ee.zip",
-      "destination": "apple2ee.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [
-        "applewin",
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },
@@ -2252,11 +2207,12 @@
       "system": "apple2",
       "name": "apple2p.zip",
       "destination": "apple2p.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
         "applewin",
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },
@@ -2264,11 +2220,12 @@
       "system": "apple2",
       "name": "apple2p.zip",
       "destination": "apple2p.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
         "applewin",
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },
@@ -2276,11 +2233,12 @@
       "system": "apple2",
       "name": "apple2p.zip",
       "destination": "apple2p.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
         "applewin",
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },
@@ -2288,11 +2246,12 @@
       "system": "apple2",
       "name": "apple2p.zip",
       "destination": "apple2p.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
         "applewin",
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },
@@ -2300,11 +2259,12 @@
       "system": "apple2",
       "name": "apple2p.zip",
       "destination": "apple2p.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
         "applewin",
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },
@@ -2312,11 +2272,12 @@
       "system": "apple2",
       "name": "apple2p.zip",
       "destination": "apple2p.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
         "applewin",
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },
@@ -2324,11 +2285,12 @@
       "system": "apple2",
       "name": "apple2p.zip",
       "destination": "apple2p.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
       "cores_examined": [
         "applewin",
-        "clk"
+        "clk",
+        "mame"
       ],
       "unresolved_cores": []
     },

@@ -1748,20 +1748,17 @@
         {
           "filename": "a2diskiing.zip",
           "system": "apple2",
-          "description": "Apple II Disk II ROM",
-          "required": "Required"
+          "description": "Apple II Disk II ROM"
         },
         {
           "filename": "apple2e.zip",
           "system": "apple2",
-          "description": "Apple IIe BIOS ROM",
-          "required": "Required"
+          "description": "Apple IIe BIOS ROM"
         },
         {
           "filename": "d2fdc.zip",
           "system": "apple2",
-          "description": "Apple II Floppy-disk controller ROM",
-          "required": "Required"
+          "description": "Apple II Floppy-disk controller ROM"
         },
         {
           "filename": "votrsc01.zip",
@@ -1776,8 +1773,7 @@
         {
           "filename": "apple2gs.zip",
           "system": "apple2",
-          "description": "Apple IIGS system BIOS ROM",
-          "required": "Required"
+          "description": "Apple IIGS system BIOS ROM"
         },
         {
           "filename": "JiffyDOS_C64.bin",
@@ -1818,15 +1814,13 @@
           "filename": "cdibios.zip",
           "md5": "709acce6e9c4043b851ea7429b8e7eff",
           "system": "cdimono1",
-          "description": "Philips CDi",
-          "required": "Required"
+          "description": "Philips CDi"
         },
         {
           "filename": "cdibios.zip",
           "md5": "709acce6e9c4043b851ea7429b8e7eff",
           "system": "cdimono1",
-          "description": "Philips CDi",
-          "required": "Required"
+          "description": "Philips CDi"
         },
         {
           "filename": "cdi200.rom",
@@ -1898,8 +1892,7 @@
         {
           "filename": "gamecom.zip",
           "system": "gamecom",
-          "description": "Game.com - BIOS",
-          "required": "Required"
+          "description": "Game.com - BIOS"
         },
         {
           "filename": "external.bin",
@@ -1916,8 +1909,7 @@
         {
           "filename": "gmaster.zip",
           "system": "gmaster",
-          "description": "Game Master  - BIOS",
-          "required": "Required"
+          "description": "Game Master  - BIOS"
         },
         {
           "filename": "d78c11agf_e19.u1",
@@ -2985,8 +2977,7 @@
         {
           "filename": "xegs.zip",
           "system": "atarixe",
-          "description": "Atari XE zip",
-          "required": "Required"
+          "description": "Atari XE zip"
         },
         {
           "filename": "c101687.rom",
@@ -4709,20 +4700,17 @@
           "filename": "scv.zip",
           "md5": "33df021613fb12abe2ad14b9eb17c7fe",
           "system": "scv",
-          "description": "Super Cassette Vision - BIOS",
-          "required": "Required"
+          "description": "Super Cassette Vision - BIOS"
         },
         {
           "filename": "umc6650.zip",
           "system": "supracan",
-          "description": "Super A'Can - BIOS",
-          "required": "Required"
+          "description": "Super A'Can - BIOS"
         },
         {
           "filename": "supracan.zip",
           "system": "supracan",
-          "description": "Super A'Can - BIOS",
-          "required": "Required"
+          "description": "Super A'Can - BIOS"
         },
         {
           "filename": "ps2-0100j-20000117.bin",
@@ -5185,8 +5173,7 @@
         {
           "filename": "vsmile.zip",
           "system": "vsmile",
-          "description": " V.SMILE TV Learning System BIOS",
-          "required": "Required"
+          "description": " V.SMILE TV Learning System BIOS"
         },
         {
           "filename": "vsmile_v100.bin",
@@ -5205,6 +5192,92 @@
           "md5": "11e59253c578c8f16ea2375ec398e4e9",
           "system": "vsmile",
           "description": " V.SMILE TV Learning System BIOS"
+        },
+        {
+          "filename": "pgm.zip",
+          "system": "fbneo",
+          "description": "IGS PolyGame Master system BIOS ROM set",
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
+        },
+        {
+          "filename": "skns.zip",
+          "system": "fbneo",
+          "description": "Super Kaneko Nova System BIOS ROM set",
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
+        },
+        {
+          "filename": "midssio.zip",
+          "system": "fbneo",
+          "description": "Midway SSIO sound board PROM",
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
+        },
+        {
+          "filename": "nmk004.zip",
+          "system": "fbneo",
+          "description": "NMK004 sound MCU internal ROM",
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
+        },
+        {
+          "filename": "decocass.zip",
+          "system": "fbneo",
+          "description": "DECO Cassette System BIOS ROM set",
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
+        },
+        {
+          "filename": "isgsm.zip",
+          "system": "fbneo",
+          "description": "ISG Selection Master Type 2006 system BIOS",
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
+        },
+        {
+          "filename": "cchip.zip",
+          "system": "fbneo",
+          "description": "Taito C-Chip uPD78C11 internal ROM",
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
+        },
+        {
+          "filename": "ym2608.zip",
+          "system": "fbneo",
+          "description": "Yamaha YM2608 internal ADPCM ROM",
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
+        },
+        {
+          "filename": "namcoc69.zip",
+          "system": "fbneo",
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
+        },
+        {
+          "filename": "namcoc70.zip",
+          "system": "fbneo",
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
+        },
+        {
+          "filename": "namcoc75.zip",
+          "system": "fbneo",
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
+        },
+        {
+          "filename": "bubsys.zip",
+          "system": "fbneo",
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
+        },
+        {
+          "filename": "atarisy1.zip",
+          "system": "fbneo",
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
         },
         {
           "filename": "3do.xml",
@@ -5242,6 +5315,36 @@
           "paths": "$bios_path/mame/hash"
         },
         {
+          "filename": "apple2gs.zip",
+          "system": "apple2",
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
+        },
+        {
+          "filename": "apple2gs.zip",
+          "system": "apple2",
+          "required": "Required",
+          "paths": "$bios_path/roms/apple2gs"
+        },
+        {
+          "filename": "apple2e.zip",
+          "system": "apple2",
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
+        },
+        {
+          "filename": "apple2e.zip",
+          "system": "apple2",
+          "required": "Required",
+          "paths": "$bios_path/roms/apple2"
+        },
+        {
+          "filename": "cdibios.zip",
+          "system": "cdimono1",
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
+        },
+        {
           "filename": "cdi.xml",
           "system": "cdimono1",
           "paths": "$bios_path/mame/hash"
@@ -5262,14 +5365,86 @@
           "paths": "$bios_path/mame/hash"
         },
         {
+          "filename": "gamecom.zip",
+          "system": "gamecom",
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
+        },
+        {
+          "filename": "gamecom.zip",
+          "system": "gamecom",
+          "required": "Required",
+          "paths": "$bios_path/roms/gamecom"
+        },
+        {
           "filename": "gamecom.xml",
           "system": "gamecom",
           "paths": "$bios_path/mame/hash"
         },
         {
+          "filename": "gmaster.zip",
+          "system": "gmaster",
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
+        },
+        {
+          "filename": "gmaster.zip",
+          "system": "gmaster",
+          "required": "Required",
+          "paths": "$bios_path/roms/gmaster"
+        },
+        {
           "filename": "gmaster.xml",
           "system": "gmaster",
           "paths": "$bios_path/mame/hash"
+        },
+        {
+          "filename": "intv.zip",
+          "system": "intellivision",
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
+        },
+        {
+          "filename": "intv.zip",
+          "system": "intellivision",
+          "required": "Required",
+          "paths": "$bios_path/roms/intellivision"
+        },
+        {
+          "filename": "a7800.zip",
+          "system": "atari7800",
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
+        },
+        {
+          "filename": "a7800.zip",
+          "system": "atari7800",
+          "required": "Required",
+          "paths": "$bios_path/roms/atari7800"
+        },
+        {
+          "filename": "channelf.zip",
+          "system": "channelf",
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
+        },
+        {
+          "filename": "channelf.zip",
+          "system": "channelf",
+          "required": "Required",
+          "paths": "$bios_path/roms/channelf"
+        },
+        {
+          "filename": "scv.zip",
+          "system": "scv",
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
+        },
+        {
+          "filename": "scv.zip",
+          "system": "scv",
+          "required": "Required",
+          "paths": "$bios_path/roms/scv"
         },
         {
           "filename": "scv.xml",
@@ -5279,12 +5454,31 @@
         {
           "filename": "vectrex.zip",
           "system": "vectrex",
-          "required": "Required"
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
+        },
+        {
+          "filename": "vectrex.zip",
+          "system": "vectrex",
+          "required": "Required",
+          "paths": "$bios_path/roms/vectrex"
         },
         {
           "filename": "vectrex.xml",
           "system": "vectrex",
           "paths": "$bios_path/mame/hash"
+        },
+        {
+          "filename": "vsmile.zip",
+          "system": "vsmile",
+          "required": "Required",
+          "paths": "$bios_path/mame/bios"
+        },
+        {
+          "filename": "vsmile.zip",
+          "system": "vsmile",
+          "required": "Required",
+          "paths": "$bios_path/roms/vsmile"
         },
         {
           "filename": "vsmile_cart.xml",

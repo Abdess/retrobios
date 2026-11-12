@@ -7,7 +7,7 @@
   "platform": "retropie",
   "display_name": "RetroPie",
   "version": "4.8.12",
-  "generated": "2026-11-11T14:23:39Z",
+  "generated": "2026-11-12T11:40:11Z",
   "base_destination": "BIOS",
   "detect": [
     {
@@ -17,10 +17,10 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 10429,
-  "total_size": 9414986209,
-  "pack_files": 16248,
-  "pack_size": 9295918994,
+  "total_files": 10431,
+  "total_size": 9415035361,
+  "pack_files": 16250,
+  "pack_size": 9295968146,
   "total_omitted": 536,
   "omitted_files": [
     {
@@ -98000,11 +98000,39 @@
       ]
     },
     {
+      "dest": "openmsx/nms8245_basic-bios2.rom",
+      "sha1": "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e",
+      "sha256": "4bc4ae85ca5f28246cd3e7b7e017d298ddd375603657f84ef2c7954bc2d9b919",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/MSX2.ROM",
+      "cores": [
+        "openmsx"
+      ],
+      "systems": [
+        "coleco-colecovision",
+        "microsoft-msx"
+      ]
+    },
+    {
       "dest": "openmsx/nms8245_msx2sub.rom",
       "sha1": "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02",
       "sha256": "6c6f421a10c428d960b7ecc990f99af1c638147f747bddca7b0bf0e2ab738300",
       "size": 16384,
       "repo_path": "bios/Microsoft/MSX/MSX2EXT.ROM",
+      "cores": [
+        "openmsx"
+      ],
+      "systems": [
+        "coleco-colecovision",
+        "microsoft-msx"
+      ]
+    },
+    {
+      "dest": "openmsx/nms8245_disk.rom",
+      "sha1": "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091",
+      "sha256": "83d5e564550a2518fbe9a3e5d1ad378506e9d5dac6cd865ab51c21460ae8144f",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/.variants/nms8245_disk.rom.3a15f5f1",
       "cores": [
         "openmsx"
       ],
@@ -98150,10 +98178,10 @@
     },
     {
       "dest": "openmsx/share/systemroms/nms8245_disk.rom",
-      "sha1": "c3f3ca454d66a0bc791f1d4b60e6857b44eb8755",
-      "sha256": "c71aa69cac617854b30a4f22b8338c4f4827286a6968703917c65fb8ba51f492",
+      "sha1": "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091",
+      "sha256": "83d5e564550a2518fbe9a3e5d1ad378506e9d5dac6cd865ab51c21460ae8144f",
       "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/share/systemroms/nms8245_disk.rom",
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/.variants/nms8245_disk.rom.3a15f5f1",
       "cores": [
         "openmsx-libretro"
       ],

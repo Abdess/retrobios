@@ -109,7 +109,7 @@ systems = {
     "supergrafx": { "name": "Supergrafx", "biosFiles": [ { "md5": "38179df8f4ac870017db21ebcbf53114", "file": "bios/syscard3.pce" } ] },
 
     # ---------- SNK ----------#
-    "neogeo":   { "name": "NeoGeo", "biosFiles":    [  { "md5": "dffb72f116d36d025068b23970a4f6df", "file": "bios/neogeo.zip" } ] },
+    "neogeo":   { "name": "NeoGeo", "biosFiles":    [  { "md5": "00dad01abdbf8ea9e79ad2fe11bdb182", "file": "bios/neogeo.zip" } ] },
     "neogeocd":  { "name": "NeoGeo CD", "biosFiles": [ { "md5": "8834880c33164ccbe6476b559f3e37de", "file": "bios/neocd/neocd_f.rom" },
                                                        { "md5": "043d76d5f0ef836500700c34faef774d", "file": "bios/neocd/neocd_sf.rom" },
                                                        { "md5": "de3cf45d227ad44645b22aa83b49f450", "file": "bios/neocd/neocd_t.rom" },

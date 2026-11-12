@@ -6,11 +6,11 @@
   "files": [
     "batocera-systems"
   ],
-  "summary": "440 kept, 73 files added, 10 hashes added to an existing entry",
+  "summary": "440 kept, 55 files added, 10 hashes added to an existing entry",
   "counts": {
     "kept": 440,
-    "added": 73,
-    "not_added": 2027,
+    "added": 55,
+    "not_added": 1917,
     "not_kept": 0
   },
   "changes": [
@@ -320,215 +320,6 @@
     {
       "kind": "added",
       "system": "3do",
-      "name": "35_spin_start_empty.wav",
-      "destination": "mame/samples/floppy/35_spin_start_empty.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "803b6cdf5baeca233588424c62919213"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "3do",
-      "name": "35_spin_start_loaded.wav",
-      "destination": "mame/samples/floppy/35_spin_start_loaded.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "53cf5b1f444f8ba9f775520ad0b84613"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "3do",
-      "name": "35_spin_empty.wav",
-      "destination": "mame/samples/floppy/35_spin_empty.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "08cafd2255c7a0bf07050f16cc4a0960"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "3do",
-      "name": "35_spin_loaded.wav",
-      "destination": "mame/samples/floppy/35_spin_loaded.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "53270dd078877e0a3931da4b1eacd0b6"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "3do",
-      "name": "35_spin_end.wav",
-      "destination": "mame/samples/floppy/35_spin_end.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "1d31fb23cb53a73dbc4e661c373c25f8"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "3do",
-      "name": "35_step_1_1.wav",
-      "destination": "mame/samples/floppy/35_step_1_1.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "19801aca9dafe86e0625d80cd54d5041"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "3do",
-      "name": "35_seek_2ms.wav",
-      "destination": "mame/samples/floppy/35_seek_2ms.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "a8b357d6d5a7ad8e908efe075629de1c"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "3do",
-      "name": "35_seek_6ms.wav",
-      "destination": "mame/samples/floppy/35_seek_6ms.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "07ffab62a3e15bb725834d4e7ecf773f"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "3do",
-      "name": "35_seek_12ms.wav",
-      "destination": "mame/samples/floppy/35_seek_12ms.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "ed17d90d1b8667ad1e8f0e774ce42b24"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "3do",
-      "name": "35_seek_20ms.wav",
-      "destination": "mame/samples/floppy/35_seek_20ms.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "ffa59cb209831d8b8277b9c1079bba26"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "3do",
-      "name": "525_spin_start_empty.wav",
-      "destination": "mame/samples/floppy/525_spin_start_empty.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "9174c33dcdf90278de73bb181968ec71"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "3do",
-      "name": "525_spin_start_loaded.wav",
-      "destination": "mame/samples/floppy/525_spin_start_loaded.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "dc339bb490c6636068ea5dfe37066a35"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "3do",
-      "name": "525_spin_empty.wav",
-      "destination": "mame/samples/floppy/525_spin_empty.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "e7faacbafd450f435fdbd9cf34451b48"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "3do",
-      "name": "525_spin_loaded.wav",
-      "destination": "mame/samples/floppy/525_spin_loaded.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "76452ca73fb17ddd6cb04ac85ba318f1"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "3do",
-      "name": "525_spin_end.wav",
-      "destination": "mame/samples/floppy/525_spin_end.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "f8399a06c8e34f05a35f5c6f25bc5adf"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "3do",
-      "name": "525_step_1_1.wav",
-      "destination": "mame/samples/floppy/525_step_1_1.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "1840cb146a17022e1e60d63667793700"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "3do",
-      "name": "525_seek_6ms.wav",
-      "destination": "mame/samples/floppy/525_seek_6ms.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "e54ff7988c2c8a89a7cdf3f8db9bada7"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "3do",
-      "name": "525_seek_12ms.wav",
-      "destination": "mame/samples/floppy/525_seek_12ms.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "bebcaa730102d09091f903efeba1de3b"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "3do",
-      "name": "525_seek_20ms.wav",
-      "destination": "mame/samples/floppy/525_seek_20ms.wav",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "ef949610b4b5be40d7eb125973a626ec"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "3do",
       "name": "opera-boot.bin",
       "destination": "opera-boot.bin",
       "field": null,
@@ -633,6 +424,17 @@
       "field": "md5",
       "old": null,
       "new": "ad9585c72130c56f04ae26aae87c289d"
+    },
+    {
+      "kind": "added",
+      "system": "neogeo",
+      "name": "irrmaze.zip",
+      "destination": "irrmaze.zip",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "0e369df30a70e45547cef9e4078dc511"
+      }
     },
     {
       "kind": "hash_filled",
@@ -1068,7 +870,8 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "freeintv"
+        "freeintv",
+        "mame"
       ],
       "unresolved_cores": []
     },
@@ -1079,7 +882,8 @@
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
-        "freeintv"
+        "freeintv",
+        "mame"
       ],
       "unresolved_cores": []
     },

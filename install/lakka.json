@@ -7,7 +7,7 @@
   "platform": "lakka",
   "display_name": "Lakka",
   "version": "v6.1",
-  "generated": "2026-11-11T14:23:39Z",
+  "generated": "2026-11-12T11:40:11Z",
   "base_destination": "system",
   "detect": [
     {
@@ -94571,10 +94571,10 @@
     },
     {
       "dest": "openmsx/share/systemroms/nms8245_disk.rom",
-      "sha1": "c3f3ca454d66a0bc791f1d4b60e6857b44eb8755",
-      "sha256": "c71aa69cac617854b30a4f22b8338c4f4827286a6968703917c65fb8ba51f492",
+      "sha1": "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091",
+      "sha256": "83d5e564550a2518fbe9a3e5d1ad378506e9d5dac6cd865ab51c21460ae8144f",
       "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/share/systemroms/nms8245_disk.rom",
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/.variants/nms8245_disk.rom.3a15f5f1",
       "cores": [
         "openmsx-libretro"
       ],

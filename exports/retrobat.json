@@ -6,11 +6,11 @@
   "files": [
     "batocera-systems.json"
   ],
-  "summary": "362 kept, 52 files added, 1 hash updated to the emulator source, 4 hashes added to an existing entry",
+  "summary": "362 kept, 47 files added, 1 hash updated to the emulator source, 5 hashes added to an existing entry",
   "counts": {
     "kept": 362,
-    "added": 52,
-    "not_added": 1895,
+    "added": 47,
+    "not_added": 1937,
     "not_kept": 0
   },
   "changes": [
@@ -198,61 +198,6 @@
       "field": "md5",
       "old": null,
       "new": "4bbbda157dcf922619da1046df10e216"
-    },
-    {
-      "kind": "added",
-      "system": "chihiro",
-      "name": "fpr21042_m29w160et.bin",
-      "destination": "EmuDisk/Chihiro/fpr21042_m29w160et.bin",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "afacfb61877401f1611998d2b590dffd"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "chihiro",
-      "name": "ic10_g24lc64.bin",
-      "destination": "EmuDisk/Chihiro/ic10_g24lc64.bin",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "ec15634cf28e8bcaf660346787f83254"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "chihiro",
-      "name": "pc20_g24lc64.bin",
-      "destination": "EmuDisk/Chihiro/pc20_g24lc64.bin",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "bf1cf24f8549137c0b1ad0fa61473c7e"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "chihiro",
-      "name": "ic11_24lc024.bin",
-      "destination": "EmuDisk/Chihiro/ic11_24lc024.bin",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "da9feafc678d2476f3bf3b1049ec4b17"
-      }
-    },
-    {
-      "kind": "added",
-      "system": "chihiro",
-      "name": "backup_ram.bin",
-      "destination": "EmuDisk/Chihiro/backup_ram.bin",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "c34872828474f21cbc761febacea72df"
-      }
     },
     {
       "kind": "added",
@@ -503,6 +448,26 @@
     },
     {
       "kind": "hash_filled",
+      "system": "neogeo",
+      "name": "neogeo.zip",
+      "destination": "neogeo.zip",
+      "field": "md5",
+      "old": null,
+      "new": "00dad01abdbf8ea9e79ad2fe11bdb182"
+    },
+    {
+      "kind": "added",
+      "system": "neogeo",
+      "name": "irrmaze.zip",
+      "destination": "irrmaze.zip",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "0e369df30a70e45547cef9e4078dc511"
+      }
+    },
+    {
+      "kind": "hash_filled",
       "system": "neogeocd",
       "name": "neocdz.zip",
       "destination": "neocdz.zip",
@@ -619,17 +584,6 @@
       "new": {
         "md5": "d063803adcced52217989bd825d69eb8"
       }
-    },
-    {
-      "kind": "added",
-      "system": "xbox",
-      "name": "EEPROM.bin",
-      "destination": "EEPROM.bin",
-      "field": null,
-      "old": null,
-      "new": {
-        "md5": "6d497abbfb773a2e07f8ab71f2a2999d"
-      }
     }
   ],
   "hashes_updated": [
@@ -639,6 +593,7 @@
     "chihiro/chihiro_xbox_bios.bin md5",
     "nds/dsi_bios9.bin md5",
     "nds/dsi_bios7.bin md5",
+    "neogeo/neogeo.zip md5",
     "neogeocd/neocdz.zip md5"
   ],
   "sizes_updated": [],
@@ -646,7 +601,7 @@
   "hashes_cleared": [],
   "required_aligned": 0,
   "withheld": [],
-  "found_by_content": 684,
+  "found_by_content": 614,
   "unattributed": [
     "commodore-amiga/kick13.rom",
     "commodore-amiga/kick12.rom",
@@ -654,13 +609,7 @@
     "commodore-amiga/kick205.rom",
     "commodore-amiga/kick31.rom",
     "commodore-amiga/menu500.aca",
-    "commodore-amiga/aros-ext.bin",
-    "commodore-amiga/aros-rom.bin",
     "commodore-amiga/rom.key",
-    "commodore-amiga/mt32-roms/mt32_control.rom",
-    "commodore-amiga/mt32-roms/pcm_mt32.rom",
-    "commodore-amiga/mt32-roms/cm32l_control.rom",
-    "commodore-amiga/mt32-roms/pcm_cm32l.rom",
     "commodore-amiga/xpkmaster.library",
     "commodore-amiga/Compressors/xpkCBR0.library",
     "commodore-amiga/Compressors/xpkDLTA.library",
@@ -697,11 +646,6 @@
     "commodore-amiga/kick40068.A1200.RTB",
     "commodore-amiga/kick40068.A4000.RTB",
     "commodore-amiga/kick31034.A1000.RTB",
-    "commodore-amiga/cyberstormmk2.rom",
-    "commodore-amiga/cyberstormmk3.rom",
-    "commodore-amiga/cyberstormppc.rom",
-    "commodore-amiga/blizzardppc_040.rom",
-    "commodore-amiga/blizzardppc_060.rom",
     "commodore-amiga/kick31034.A1000",
     "commodore-amiga/kick32034.A1000",
     "commodore-amiga/kick37350.A600",
@@ -718,7 +662,10 @@
     "commodore-amiga/drive_spinnd_LOUD.wav",
     "commodore-amiga/drive_startup_LOUD.wav",
     "commodore-amiga/drive_snatch_LOUD.wav",
-    "microsoft-msx/msx.zip"
+    "microsoft-msx/msx.zip",
+    "sega-dreamcast-arcade/naomi.zip",
+    "sega-dreamcast-arcade/naomi2.zip",
+    "sega-dreamcast-arcade/awbios.zip"
   ],
   "removal_candidates": [
     {
@@ -730,28 +677,7 @@
       "cores_examined": [
         "applewin",
         "bizhawk",
-        "mednafen"
-      ],
-      "unresolved_cores": [
-        "amigaforever",
-        "exodos",
-        "mugen",
-        "pinballfx",
-        "powerbomberman",
-        "quiverlauncher",
-        "windows",
-        "zaccariapinball"
-      ]
-    },
-    {
-      "system": "apple2",
-      "name": "apple2e.zip",
-      "destination": "apple2e.zip",
-      "verdict": "undetermined",
-      "reason": "a core the platform names has no profile yet",
-      "cores_examined": [
-        "applewin",
-        "bizhawk",
+        "mame",
         "mednafen"
       ],
       "unresolved_cores": [
@@ -774,6 +700,7 @@
       "cores_examined": [
         "applewin",
         "bizhawk",
+        "mame",
         "mednafen"
       ],
       "unresolved_cores": [
@@ -796,6 +723,7 @@
       "cores_examined": [
         "applewin",
         "bizhawk",
+        "mame",
         "mednafen"
       ],
       "unresolved_cores": [
@@ -889,6 +817,7 @@
       "reason": "a core the platform names has no profile yet",
       "cores_examined": [
         "bizhawk",
+        "mame",
         "prosystem"
       ],
       "unresolved_cores": [

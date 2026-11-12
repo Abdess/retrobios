@@ -6,11 +6,11 @@
   "files": [
     "batocera-systems"
   ],
-  "summary": "590 kept, 36 files added, 47 hashes added to an existing entry",
+  "summary": "590 kept, 37 files added, 47 hashes added to an existing entry",
   "counts": {
     "kept": 590,
-    "added": 36,
-    "not_added": 1533,
+    "added": 37,
+    "not_added": 1885,
     "not_kept": 0
   },
   "changes": [
@@ -394,6 +394,17 @@
       "old": null,
       "new": {
         "md5": "428577250f43edc902ea239c50d2240d"
+      }
+    },
+    {
+      "kind": "added",
+      "system": "neogeo",
+      "name": "irrmaze.zip",
+      "destination": "irrmaze.zip",
+      "field": null,
+      "old": null,
+      "new": {
+        "md5": "0e369df30a70e45547cef9e4078dc511"
       }
     },
     {
@@ -1018,7 +1029,9 @@
       "destination": "bios/fmtowns/FMT_DIC.ROM",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
@@ -1027,7 +1040,9 @@
       "destination": "bios/fmtowns/FMT_DOS.ROM",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
@@ -1036,7 +1051,9 @@
       "destination": "bios/fmtowns/FMT_F20.ROM",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
@@ -1045,7 +1062,9 @@
       "destination": "bios/fmtowns/FMT_FNT.ROM",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
@@ -1054,133 +1073,163 @@
       "destination": "bios/fmtowns/FMT_SYS.ROM",
       "verdict": "candidate",
       "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtmarty.zip",
       "destination": "bios/fmtmarty.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtmarty.zip",
       "destination": "bios/fmtmarty.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtmarty.zip",
       "destination": "bios/fmtmarty.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtowns.zip",
       "destination": "bios/fmtowns.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtowns.zip",
       "destination": "bios/fmtowns.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtowns.zip",
       "destination": "bios/fmtowns.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtowns.zip",
       "destination": "bios/fmtowns.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtowns.zip",
       "destination": "bios/fmtowns.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtownsux.zip",
       "destination": "bios/fmtownsux.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtownsux.zip",
       "destination": "bios/fmtownsux.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtownsux.zip",
       "destination": "bios/fmtownsux.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtownsux.zip",
       "destination": "bios/fmtownsux.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtownsux.zip",
       "destination": "bios/fmtownsux.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
       "system": "fmtowns",
       "name": "fmtownsux.zip",
       "destination": "bios/fmtownsux.zip",
-      "verdict": "candidate",
-      "reason": "no profile of a core the platform runs names it",
-      "cores_examined": [],
+      "verdict": "undetermined",
+      "reason": "a ROM set, and these cores open sets their profiles do not list: mame",
+      "cores_examined": [
+        "mame"
+      ],
       "unresolved_cores": []
     },
     {
@@ -1191,7 +1240,8 @@
       "reason": "no profile of a core the platform runs names it",
       "cores_examined": [
         "freeintv",
-        "jzintv"
+        "jzintv",
+        "mame"
       ],
       "unresolved_cores": []
     },

@@ -7,7 +7,7 @@
   "platform": "retrodeck",
   "display_name": "RetroDECK",
   "version": "0.10.10b",
-  "generated": "2026-11-11T14:23:39Z",
+  "generated": "2026-11-12T11:40:11Z",
   "base_destination": "",
   "detect": [
     {
@@ -2365,11 +2365,11 @@
       }
     }
   ],
-  "total_files": 12099,
-  "total_size": 10522890730,
-  "pack_files": 16012,
-  "pack_size": 10639578016,
-  "total_omitted": 431,
+  "total_files": 12100,
+  "total_size": 10522907114,
+  "pack_files": 16013,
+  "pack_size": 10639594400,
+  "total_omitted": 430,
   "omitted_files": [
     {
       "dest": "A330.HXF",
@@ -4385,16 +4385,6 @@
     {
       "dest": "bios/openmsx/share/systemroms/nms1205.rom",
       "name": "nms1205.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
-      "dest": "bios/openmsx/share/systemroms/nms8245_disk.rom",
-      "name": "nms8245_disk.rom",
       "system": "msx",
       "required": false,
       "reason": "not_found",
@@ -8922,6 +8912,7 @@
     "nec-pc-98": "NEC PC-98",
     "nec-pc-engine": "NEC PC Engine",
     "nec-pc-fx": "NEC PC-FX",
+    "neogeo": "SNK Neo Geo",
     "ngp": "SNK Neo Geo Pocket",
     "ngpc": "SNK Neo Geo Pocket Color",
     "nintendo-3ds": "Nintendo 3DS",
@@ -120229,6 +120220,19 @@
       "sha256": "6c6f421a10c428d960b7ecc990f99af1c638147f747bddca7b0bf0e2ab738300",
       "size": 16384,
       "repo_path": "bios/Microsoft/MSX/MSX2EXT.ROM",
+      "cores": [
+        "openmsx-libretro"
+      ],
+      "systems": [
+        "microsoft-msx"
+      ]
+    },
+    {
+      "dest": "bios/openmsx/share/systemroms/nms8245_disk.rom",
+      "sha1": "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091",
+      "sha256": "83d5e564550a2518fbe9a3e5d1ad378506e9d5dac6cd865ab51c21460ae8144f",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/.variants/nms8245_disk.rom.3a15f5f1",
       "cores": [
         "openmsx-libretro"
       ],

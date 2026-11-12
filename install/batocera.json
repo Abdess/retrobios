@@ -7,7 +7,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "43.1",
-  "generated": "2026-11-11T14:23:39Z",
+  "generated": "2026-11-12T11:40:11Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -1946,11 +1946,11 @@
       }
     }
   ],
-  "total_files": 17010,
-  "total_size": 11669714635,
-  "pack_files": 20717,
-  "pack_size": 11703549086,
-  "total_omitted": 874,
+  "total_files": 17013,
+  "total_size": 11669780171,
+  "pack_files": 20720,
+  "pack_size": 11703614622,
+  "total_omitted": 873,
   "omitted_files": [
     {
       "dest": "3dobios.zip",
@@ -10136,16 +10136,6 @@
       ]
     },
     {
-      "dest": "openmsx/share/systemroms/nms8245_disk.rom",
-      "name": "nms8245_disk.rom",
-      "system": "msx",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "openmsx-libretro"
-      ]
-    },
-    {
       "dest": "openmsx/share/systemroms/sensor-kid.rom",
       "name": "sensor-kid.rom",
       "system": "msx",
@@ -14345,6 +14335,7 @@
     "sega-saturn": "Sega Saturn",
     "sharp-x1": "Sharp X1",
     "sharp-x68000": "Sharp X68000",
+    "snk-neogeo": "SNK Neo Geo",
     "snk-neogeo-cd": "SNK Neo Geo CD",
     "sony-playstation": "Sony PlayStation",
     "sony-playstation-2": "Sony PlayStation 2",
@@ -160905,11 +160896,39 @@
       ]
     },
     {
+      "dest": "openmsx/nms8245_basic-bios2.rom",
+      "sha1": "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e",
+      "sha256": "4bc4ae85ca5f28246cd3e7b7e017d298ddd375603657f84ef2c7954bc2d9b919",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/MSX2.ROM",
+      "cores": [
+        "openmsx"
+      ],
+      "systems": [
+        "coleco-colecovision",
+        "microsoft-msx"
+      ]
+    },
+    {
       "dest": "openmsx/nms8245_msx2sub.rom",
       "sha1": "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02",
       "sha256": "6c6f421a10c428d960b7ecc990f99af1c638147f747bddca7b0bf0e2ab738300",
       "size": 16384,
       "repo_path": "bios/Microsoft/MSX/MSX2EXT.ROM",
+      "cores": [
+        "openmsx"
+      ],
+      "systems": [
+        "coleco-colecovision",
+        "microsoft-msx"
+      ]
+    },
+    {
+      "dest": "openmsx/nms8245_disk.rom",
+      "sha1": "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091",
+      "sha256": "83d5e564550a2518fbe9a3e5d1ad378506e9d5dac6cd865ab51c21460ae8144f",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/.variants/nms8245_disk.rom.3a15f5f1",
       "cores": [
         "openmsx"
       ],
@@ -161046,6 +161065,19 @@
       "sha256": "6c6f421a10c428d960b7ecc990f99af1c638147f747bddca7b0bf0e2ab738300",
       "size": 16384,
       "repo_path": "bios/Microsoft/MSX/MSX2EXT.ROM",
+      "cores": [
+        "openmsx-libretro"
+      ],
+      "systems": [
+        "microsoft-msx"
+      ]
+    },
+    {
+      "dest": "openmsx/share/systemroms/nms8245_disk.rom",
+      "sha1": "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091",
+      "sha256": "83d5e564550a2518fbe9a3e5d1ad378506e9d5dac6cd865ab51c21460ae8144f",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/share/systemroms/.variants/nms8245_disk.rom.3a15f5f1",
       "cores": [
         "openmsx-libretro"
       ],

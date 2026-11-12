@@ -737,26 +737,6 @@
       {
         "md5": "",
         "file": "bios/chihiro/pc20_g24lc64.bin"
-      },
-      {
-        "md5": "afacfb61877401f1611998d2b590dffd",
-        "file": "bios/EmuDisk/Chihiro/fpr21042_m29w160et.bin"
-      },
-      {
-        "md5": "ec15634cf28e8bcaf660346787f83254",
-        "file": "bios/EmuDisk/Chihiro/ic10_g24lc64.bin"
-      },
-      {
-        "md5": "bf1cf24f8549137c0b1ad0fa61473c7e",
-        "file": "bios/EmuDisk/Chihiro/pc20_g24lc64.bin"
-      },
-      {
-        "md5": "da9feafc678d2476f3bf3b1049ec4b17",
-        "file": "bios/EmuDisk/Chihiro/ic11_24lc024.bin"
-      },
-      {
-        "md5": "c34872828474f21cbc761febacea72df",
-        "file": "bios/EmuDisk/Chihiro/backup_ram.bin"
       }
     ]
   },
@@ -1575,8 +1555,12 @@
     "name": "NeoGeo",
     "biosFiles": [
       {
-        "md5": "",
+        "md5": "00dad01abdbf8ea9e79ad2fe11bdb182",
         "file": "bios/neogeo.zip"
+      },
+      {
+        "md5": "0e369df30a70e45547cef9e4078dc511",
+        "file": "bios/irrmaze.zip"
       }
     ]
   },
@@ -2249,10 +2233,6 @@
       {
         "md5": "39cee882148a87f93cb440b99dde3ceb",
         "file": "bios/Complex_4627.bin"
-      },
-      {
-        "md5": "6d497abbfb773a2e07f8ab71f2a2999d",
-        "file": "bios/EEPROM.bin"
       }
     ]
   },

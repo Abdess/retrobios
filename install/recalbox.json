@@ -7,7 +7,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "10.1.1",
-  "generated": "2026-11-11T14:23:39Z",
+  "generated": "2026-11-12T11:40:11Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -4235,6 +4235,7 @@
     "sega-saturn": "Sega Saturn",
     "sharp-x68000": "Sharp X68000",
     "sinclair-zx-spectrum": "Sinclair ZX Spectrum",
+    "snk-neogeo": "SNK Neo Geo",
     "snk-neogeo-cd": "SNK Neo Geo CD",
     "sony-playstation": "Sony PlayStation",
     "sony-playstation-2": "Sony PlayStation 2",

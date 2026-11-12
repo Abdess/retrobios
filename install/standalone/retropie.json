@@ -20475,8 +20475,16 @@
         "b677a861b67e8763a11d5dcf52416b42493ade57"
       ],
       [
+        "share/systemroms/nms8245_basic-bios2.rom",
+        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
+      ],
+      [
         "share/systemroms/nms8245_msx2sub.rom",
         "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02"
+      ],
+      [
+        "share/systemroms/nms8245_disk.rom",
+        "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091"
       ],
       [
         "share/systemroms/vg8020_basic-bios1.rom",
