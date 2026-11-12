@@ -24,13 +24,13 @@ os.environ.setdefault("RETROBIOS_OFFLINE", "1")
 for _name in ("XDG_CONFIG_HOME", "XDG_DATA_HOME", "XDG_CACHE_HOME"):
     os.environ.pop(_name, None)
 # A test never waits on, nor blocks, the measurements running on the host.
-os.environ.setdefault(
-    "RETROBIOS_PROBE_LOCK",
-    str(Path(__file__).resolve().parent.parent / "tmp" / "tests" / "probe.lock"),
-)
-
-_SCRATCH = Path(__file__).resolve().parent.parent / "tmp" / "tests"
+# scripts/run_tests.py runs each module in a process of its own, beside
+# others: each one gets its own scratch folder, so two never share the
+# installer cache, the probe lock or a fixed name below it.
+_SCRATCH = Path(os.environ.get("RETROBIOS_TEST_SCRATCH")
+                or Path(__file__).resolve().parent.parent / "tmp" / "tests")
 _SCRATCH.mkdir(parents=True, exist_ok=True)
+os.environ.setdefault("RETROBIOS_PROBE_LOCK", str(_SCRATCH / "probe.lock"))
 # A TemporaryDirectory() without dir= landed in /tmp, a 4 GB tmpfs here: once
 # another run filled it, modules unrelated to any change failed with ENOSPC.
 # The default is the repository's tmp/, for this process and its children.
@@ -41,7 +41,4 @@ tempfile.tempdir = str(_SCRATCH)
 os.environ["GIT_CEILING_DIRECTORIES"] = str(_SCRATCH)
 # The installer's cache (the games index, what reading a card found) is the
 # suite's own: a run never reads nor fills the one of the person running it.
-os.environ.setdefault(
-    "RETROBIOS_CACHE",
-    str(Path(__file__).resolve().parent.parent / "tmp" / "tests" / "cache"),
-)
+os.environ.setdefault("RETROBIOS_CACHE", str(_SCRATCH / "cache"))
