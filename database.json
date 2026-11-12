@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-11T14:23:39Z",
-  "total_files": 21938,
-  "total_size": 17343472263,
+  "generated_at": "2026-11-12T11:40:11Z",
+  "total_files": 21939,
+  "total_size": 17343488647,
   "bios_dir": "bios",
   "files": {
     "738c7f5fd0c8b57ee2e87ae7a97bf8e21a821d07": {
@@ -131691,6 +131691,16 @@
       "crc32": "2a9d8d43",
       "adler32": "abadcbef"
     },
+    "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091": {
+      "path": "bios/Microsoft/MSX/share/systemroms/.variants/nms8245_disk.rom.3a15f5f1",
+      "name": "nms8245_disk.rom",
+      "size": 16384,
+      "sha1": "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091",
+      "md5": "3a15f5f1de879be93dd433f8ae230407",
+      "sha256": "83d5e564550a2518fbe9a3e5d1ad378506e9d5dac6cd865ab51c21460ae8144f",
+      "crc32": "3d00bf53",
+      "adler32": "fab95f56"
+    },
     "c7a2c5baee6a9f0e1c6ee7d76944c0ab1886796c": {
       "path": "bios/Microsoft/MSX/share/systemroms/cf-3300_basic-bios1.rom",
       "name": "cf-3300_basic-bios1.rom",
@@ -237713,6 +237723,7 @@
       "281809cafe63437fc4bffb3033fbd0db": "665d805f96616e1037f1823050657b7849899283",
       "352f054ab09605070bdff49d73f335cc": "10349ce675f6d6d47f0976e39cb7188eba858d89",
       "42af93619160ef2116416f74a6cb12f2": "32760893ce06dbe3930627755ba065cc3d8ec6ca",
+      "3a15f5f1de879be93dd433f8ae230407": "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091",
       "f873f1260b14f1468fa118778ae1c3d2": "c7a2c5baee6a9f0e1c6ee7d76944c0ab1886796c",
       "318b6aa76da71c54ccad7734356e1902": "f1525de4e0b60a6687156c2a96f8a8b2044b6c56",
       "5bf4fdfd3c3ffea3e573b386550cb3fa": "44e0dd215b2a9f0770dd76fb49187c05b083eed9",
@@ -280524,6 +280535,10 @@
       "yrw801.rom": [
         "32760893ce06dbe3930627755ba065cc3d8ec6ca"
       ],
+      "nms8245_disk.rom": [
+        "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091",
+        "c3f3ca454d66a0bc791f1d4b60e6857b44eb8755"
+      ],
       "cf-3300_basic-bios1.rom": [
         "c7a2c5baee6a9f0e1c6ee7d76944c0ab1886796c"
       ],
@@ -280547,9 +280562,6 @@
       ],
       "fs-5500_superimp.rom": [
         "b677a861b67e8763a11d5dcf52416b42493ade57"
-      ],
-      "nms8245_disk.rom": [
-        "c3f3ca454d66a0bc791f1d4b60e6857b44eb8755"
       ],
       "nms8245_disk_1.06.rom": [
         "b484c8fa4549b79cff976001ac4beb19abf7cfb5"
@@ -321599,6 +321611,7 @@
       "a5d0c0b9": "665d805f96616e1037f1823050657b7849899283",
       "bc433df6": "10349ce675f6d6d47f0976e39cb7188eba858d89",
       "2a9d8d43": "32760893ce06dbe3930627755ba065cc3d8ec6ca",
+      "3d00bf53": "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091",
       "5ad03407": "c7a2c5baee6a9f0e1c6ee7d76944c0ab1886796c",
       "549f1d90": "f1525de4e0b60a6687156c2a96f8a8b2044b6c56",
       "5bf38e13": "44e0dd215b2a9f0770dd76fb49187c05b083eed9",
@@ -343538,6 +343551,7 @@
       "6f3a760be58bace2bce20496ffc7d43e0dbe7d229ac14453f2194fcc7059d3ab": "665d805f96616e1037f1823050657b7849899283",
       "407b47ff8c1ed31d8050600233ef8b70c495f5176d86f98511c4a0cee438f559": "10349ce675f6d6d47f0976e39cb7188eba858d89",
       "0481e861f639fa3d6a64a75b735035a54b0875d57aaae33fdbe400146c80423f": "32760893ce06dbe3930627755ba065cc3d8ec6ca",
+      "83d5e564550a2518fbe9a3e5d1ad378506e9d5dac6cd865ab51c21460ae8144f": "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091",
       "ba8ae935046ad59741778967c4b234bd977d796848f2ddf67846831a7e5aee8f": "c7a2c5baee6a9f0e1c6ee7d76944c0ab1886796c",
       "966ad1e47ba8140ca0f330140e43cc22914857e43345a39685878abc8e55b582": "f1525de4e0b60a6687156c2a96f8a8b2044b6c56",
       "997b8e9d88a27ccb48dfecce0ef76073216695e358c0df78e99786e6d9efa72c": "44e0dd215b2a9f0770dd76fb49187c05b083eed9",
@@ -514087,6 +514101,21 @@
       ],
       "openmsx/yrw801.rom": [
         "32760893ce06dbe3930627755ba065cc3d8ec6ca"
+      ],
+      "Microsoft/MSX/share/systemroms/.variants/nms8245_disk.rom.3a15f5f1": [
+        "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091"
+      ],
+      "MSX/share/systemroms/.variants/nms8245_disk.rom.3a15f5f1": [
+        "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091"
+      ],
+      "share/systemroms/.variants/nms8245_disk.rom.3a15f5f1": [
+        "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091"
+      ],
+      "systemroms/.variants/nms8245_disk.rom.3a15f5f1": [
+        "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091"
+      ],
+      ".variants/nms8245_disk.rom.3a15f5f1": [
+        "6acd4261795b6ce5f6a5ea432610d1d1d1d8b091"
       ],
       "Microsoft/MSX/share/systemroms/cf-3300_basic-bios1.rom": [
         "c7a2c5baee6a9f0e1c6ee7d76944c0ab1886796c"
