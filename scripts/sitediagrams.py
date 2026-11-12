@@ -1005,8 +1005,8 @@ GLANCE_GROUPS: tuple[tuple[str, tuple[str, ...]], ...] = (
                     "--list-systems", "--list-cores", "--list-emulators")),
     ("From files on hand", ("--from", "--from-pack", "--manifest", "--offline")),
     ("Make a pack", ("--pack", "--split")),
-    ("Remove and put back", ("--remove", "--file", "--backup", "--backups", "--restore",
-                             "--delete-backup")),
+    ("Remove and put back", ("--remove", "--file", "--misplaced", "--backup", "--backups",
+                             "--restore", "--delete-backup")),
     ("How the run talks", ("--tui", "--plain", "--no-input", "--yes", "--quiet", "--verbose",
                            "--events", "--json", "--jobs", "--version", "--help")),
 )
