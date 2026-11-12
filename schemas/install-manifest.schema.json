@@ -387,6 +387,7 @@
             "const": false
           },
           "slot": {
+            "description": "What --one-per-slot reads for this entry: the groups it competes in and what each emulator declares at each key the slot lookup tries.",
             "$ref": "#/$defs/slot"
           },
           "declared_in": {
@@ -701,6 +702,7 @@
       ],
       "properties": {
         "groups": {
+          "description": "The groups listing the file under this name, once per time a group lists it.",
           "type": "array",
           "items": {
             "type": "string",
@@ -709,6 +711,7 @@
           "minItems": 1
         },
         "keys": {
+          "description": "Per key the slot lookup tries, in order, each emulator's ranks, regions and sets there. A key whose claims equal the previous one's is left out.",
           "type": "array",
           "items": {
             "type": "object",
@@ -732,12 +735,14 @@
                   }
                 },
                 "regions": {
+                  "description": "The regions the emulator's code selects the file for at this key.",
                   "type": "array",
                   "items": {
                     "type": "string"
                   }
                 },
                 "sets": {
+                  "description": "The sets the emulator files the file in at this key. A rank orders one set.",
                   "type": "array",
                   "items": {
                     "type": "string"
@@ -759,12 +764,14 @@
       ],
       "properties": {
         "also": {
+          "description": "Each other name a group gives the file, with its own groups and keys.",
           "type": "array",
           "items": {
             "$ref": "#/$defs/slot_chain"
           }
         },
         "groups": {
+          "description": "The groups listing the file under this name, once per time a group lists it.",
           "type": "array",
           "items": {
             "type": "string",
@@ -773,6 +780,7 @@
           "minItems": 1
         },
         "keys": {
+          "description": "Per key the slot lookup tries, in order, each emulator's ranks, regions and sets there. A key whose claims equal the previous one's is left out.",
           "type": "array",
           "items": {
             "type": "object",
@@ -796,12 +804,14 @@
                   }
                 },
                 "regions": {
+                  "description": "The regions the emulator's code selects the file for at this key.",
                   "type": "array",
                   "items": {
                     "type": "string"
                   }
                 },
                 "sets": {
+                  "description": "The sets the emulator files the file in at this key. A rank orders one set.",
                   "type": "array",
                   "items": {
                     "type": "string"
@@ -965,6 +975,7 @@
           "const": false
         },
         "slot": {
+          "description": "What --one-per-slot reads for this entry: the groups it competes in and what each emulator declares at each key the slot lookup tries.",
           "$ref": "#/$defs/slot"
         },
         "alternatives": {
