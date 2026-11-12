@@ -15332,9 +15332,9 @@ SCREEN_WORDS = {
     # Every plan names More (one word, counted in the plan budgets above):
     # a pack can always be made. More's four rows where the folder has a
     # record or a backup, then Make a pack (three words), Remove files with each system the record holds and its
-    # size, the removal plan (what goes, the space freed, the folder, what
+    # size and the row for the misplaced copies (two words), the removal plan (what goes, the space freed, the folder, what
     # stays and why), its confirm and result, and the backups newest first.
-    "more": (20, 20, 18, 18), "remove": (31, 31, 29, 29), "removal": (34, 34, 32, 32),
+    "more": (20, 20, 18, 18), "remove": (33, 33, 31, 31), "removal": (34, 34, 32, 32),
     "removal-confirm": (18, 18, 16, 16), "removal-done": (18, 18, 16, 16),
     "backups": (24, 24, 22, 22),
     # Make a pack: what goes in, its size and setup, where it goes, how it
@@ -15382,6 +15382,26 @@ class MoreScreens(unittest.TestCase):
         state = removal_state(system=False)
         argv = install.tui_argv(state, "removal_plan", "python", "install.py")
         self.assertEqual(argv[-3:], ["--remove", "--dry-run", "--events"])
+
+    def test_the_misplaced_copies_are_deleted_never_moved_to_a_backup(self):
+        state = more_state("more", "remove")
+        actions = [row.action for row in install.tui_rows(state)]
+        state.focus["remove"] = actions.index("rmmisplaced")
+        self.assertEqual(install.tui_update(state, Key("enter")), [("run", "removal_plan")])
+        argv = install.tui_argv(state, "removal_plan", "python", "install.py")
+        self.assertEqual(argv[-4:], ["--remove", "--misplaced", "--dry-run", "--events"])
+        install.tui_receive(state, ("event", state.run_id, REMOVAL_PLAN))
+        install.tui_receive(state, ("ended", state.run_id, 0, []))
+        state.removal_backup = True
+        self.assertNotIn("rmbackup", [row.action for row in install.tui_rows(state)])
+        self.assertIn("in the wrong place go", screen_text(install.tui_view(state, 80, 24)))
+        state.focus["removal"] = 0
+        press(state, "enter")
+        self.assertIn("The files where the cores read them stay.",
+                      screen_text(install.tui_view(state, 80, 24)))
+        press(state, "enter")
+        argv = install.tui_argv(state, "remove", "python", "install.py")
+        self.assertEqual(argv[-4:], ["--remove", "--misplaced", "--events", "--yes"])
 
     def test_a_backup_is_one_row_away_and_the_removal_says_so(self):
         state = removal_state()

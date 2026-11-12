@@ -43,11 +43,11 @@ The Files column counts what a pack holds once unzipped.
 
 | Setup | Files | Size | Unzip into | Download |
 |-------|------:|-----:|------------|----------|
-| Batocera | 19,125 | 10.1 GB | `/userdata/bios/` | [Download](https://abdess.github.io/retrobios/get/batocera/) |
-| EmuDeck | 14,651 | 8.0 GB | `~/Emulation/bios/` | [Download](https://abdess.github.io/retrobios/get/emudeck/) |
+| Batocera | 20,717 | 10.9 GB | `/userdata/bios/` | [Download](https://abdess.github.io/retrobios/get/batocera/) |
+| EmuDeck | 16,038 | 8.1 GB | `~/Emulation/bios/` | [Download](https://abdess.github.io/retrobios/get/emudeck/) |
 | MiSTer FPGA | 90 | 29 MB | `/media/fat/games/` | [Download](https://abdess.github.io/retrobios/get/misterfpga/) |
-| RetroArch | 15,005 | 7.6 GB | `system/` | [Download](https://abdess.github.io/retrobios/get/retroarch/) |
-| RetroBat | 8,882 | 8.2 GB | `bios/` | [Download](https://abdess.github.io/retrobios/get/retrobat/) |
+| RetroArch | 14,989 | 7.5 GB | `system/` | [Download](https://abdess.github.io/retrobios/get/retroarch/) |
+| RetroBat | 11,209 | 8.9 GB | `bios/` | [Download](https://abdess.github.io/retrobios/get/retrobat/) |
 | RomM | 468 | 831 MB | `library/bios/` | [Download](https://abdess.github.io/retrobios/get/romm/) |
 
 ZIPs are made for the setups most people download. The others install with the line above, and each page gives the command: [AmberELEC](https://abdess.github.io/retrobios/get/amberelec/), [BizHawk](https://abdess.github.io/retrobios/get/bizhawk/), [EmuELEC](https://abdess.github.io/retrobios/get/emuelec/), [KNULLI](https://abdess.github.io/retrobios/get/knulli/), [Lakka](https://abdess.github.io/retrobios/get/lakka/), [MinUI](https://abdess.github.io/retrobios/get/minui/), [MyMinUI](https://abdess.github.io/retrobios/get/myminui/), [NextUI](https://abdess.github.io/retrobios/get/nextui/), [ROCKNIX](https://abdess.github.io/retrobios/get/rocknix/), [Recalbox](https://abdess.github.io/retrobios/get/recalbox/), [RetroDECK](https://abdess.github.io/retrobios/get/retrodeck/), [RetroPie](https://abdess.github.io/retrobios/get/retropie/).
@@ -110,4 +110,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in [the project's legal position](https://abdess.github.io/retrobios/wiki/legal/).
 
-*Auto-generated on 2026-11-11T21:59:37Z*
+*Auto-generated on 2026-11-12T02:12:16Z*

@@ -847,6 +847,31 @@ question comes once, names what goes and the space freed, and only `y` or
 answers it for a script. A run without a terminal and without `--yes` stops
 with code 2 and names `--yes`.
 
+`--remove --misplaced` takes the other files instead: the copies an install
+found in the wrong place and copied where the cores read them. A copy goes
+only when the installer's file holds the same bytes at its place, read again
+just before, under the same name: beside it in another case (`GBA_BIOS.BIN`
+next to `gba_bios.bin`), or at the top of a folder where the list places files
+itself (`dc_boot.bin` at the top of RetroArch's `system` for `dc/dc_boot.bin`).
+No other folder is read: games, saves and other trees are never looked at. A
+renamed copy stays, since a core option, a launcher or a game list may name
+it (a PlayStation 2 BIOS picked by its name), and so does a copy of game data,
+which a frontend lists as a game of its own. A place any list of the folder
+reads or any setup recorded stays, and so do a link and a file with a second
+name. Every copy stays when the list of another setup of the folder cannot be
+fetched.
+
+The copies are named before the question. The record is not changed, and the
+copies are deleted, never moved to a backup: they were never a setup's.
+
+```
+python3 install.py --remove --misplaced --dry-run
+Remove 2 copies in the wrong place of /sdcard/RetroArch/system for RetroArch,
+2.0 MB freed. Each is a file RetroBIOS placed where the cores read it.
+  GBA_BIOS.BIN (in place: gba_bios.bin)
+  dc_boot.bin (in place: dc/dc_boot.bin)
+```
+
 Removal deletes for good. `--backup` moves the files into a new dated folder of
 `retrobios-backup` instead, and the end of the run prints the `--restore`
 command that puts them back. On one drive a move frees no space until the
@@ -1331,6 +1356,7 @@ option takes the recorded choice whole.
 | <span id="option-restore"></span>`--restore FOLDER` | Put back the files a run replaced or a removal moved and kept in FOLDER, a dated folder inside `retrobios-backup`, and update the install record. Takes no other option but `--dry-run`, `--events`, `--yes`, `--no-input` and `--verbose`. See [Files already in the folder](#files-you-already-had) |
 | <span id="option-remove"></span>`--remove` | Remove what the installer placed in the BIOS folder, as its [install record](#the-install-record) proves it: every file, or those of one `--system`, `--core`, `--emulator` or `--file`. Deleted for good unless `--backup` is given. See [Removing files](#removing-files) |
 | <span id="option-file"></span>`--file PATH` | With `--remove`, one file of the BIOS folder, by its path there or in full. Repeat for several |
+| <span id="option-misplaced"></span>`--misplaced` | With `--remove`, delete the copies left in the wrong place of the BIOS folder, each one whose bytes the installer placed where the cores read them. See [Removing files](#removing-files) |
 | <span id="option-backup"></span>`--backup` | With `--remove`, move the files into a dated folder of `retrobios-backup` instead of deleting them, for `--restore` to put back |
 | <span id="option-backups"></span>`--backups` | List the backups of the BIOS folder, newest first, with the date, the files and the size of each |
 | <span id="option-delete-backup"></span>`--delete-backup FOLDER` | Delete one backup listed by `--backups`, after one question that names its date and size (`--yes` skips it) |

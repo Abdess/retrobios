@@ -1617,9 +1617,9 @@
    or added by hand stays.
 
  > All RetroBIOS files         528.0 KB
+   Misplaced copies
    nintendo-gba                 16.0 KB
    sony-playstation            512.0 KB
-
 
 
  A Choose  R2 Back
@@ -1630,9 +1630,9 @@
    or added by hand stays.
 
  > All RetroBIOS files         528.0 KB
+   Misplaced copies
    nintendo-gba                 16.0 KB
    sony-playstation            512.0 KB
-
 
 
 
@@ -1645,9 +1645,9 @@
  Choose what to remove. A file changed or added by hand stays.
 
  > All RetroBIOS files                                                 528.0 KB
+   Misplaced copies
    nintendo-gba                                                         16.0 KB
    sony-playstation                                                    512.0 KB
-
 
 
 

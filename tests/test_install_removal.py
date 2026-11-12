@@ -22,6 +22,7 @@ import sys
 import tempfile
 import types
 import unittest
+import zipfile
 from pathlib import Path
 from unittest import mock
 
@@ -642,6 +643,186 @@ class ReviewOfTheRemoval(unittest.TestCase):
                 self.assertTrue((moved / "dest" / "gba_bios.bin").is_file())
             finally:
                 moved.rename(repo.root)
+
+
+class MisplacedCopies(unittest.TestCase):
+    """--remove --misplaced deletes the copies a fix left in the wrong place:
+    only a regular file whose bytes the installer placed where the cores
+    read them, still there, at a place no list reads and no setup names."""
+
+    def test_the_copies_go_and_everything_else_stays(self):
+        with SharedRepository() as repo:
+            repo.install_both()
+            gba = (repo.dest / "gba_bios.bin").read_bytes()
+            mgba = (repo.dest / "mgba" / "extra.bin").read_bytes()
+            # Beside its file, and at the top for one below: both go.
+            (repo.dest / "GBA_BIOS.BIN").write_bytes(gba)
+            (repo.dest / "extra.bin").write_bytes(mgba)
+            # In another folder than its file's, or renamed: it stays.
+            (repo.dest / "mgba" / "gba_bios.bin").write_bytes(gba)
+            (repo.dest / "gba_bios (copy).bin").write_bytes(gba)
+            # Outside every folder the list places files in: a game folder.
+            (repo.dest / "old").mkdir()
+            (repo.dest / "old" / "gba_bios.bin").write_bytes(gba)
+            (repo.dest / "old" / "scph5501.bin").write_bytes(b"another revision")
+            (repo.dest / "mine.bin").write_bytes(b"added by hand")
+            (repo.dest / "link.bin").symlink_to(repo.dest / "gba_bios.bin")
+            # The save folder's own file: the end of its path is a place.
+            (repo.dest / "saves" / "mgba").mkdir(parents=True)
+            (repo.dest / "saves" / "mgba" / "extra.bin").write_bytes(mgba)
+            (repo.dest / "pcsx" / "twin.bin").write_bytes(gba)
+            os.link(repo.dest / "pcsx" / "twin.bin", repo.dest / "pcsx" / "twin2.bin")
+            with zipfile.ZipFile(repo.dest / "mgba" / "set.zip", "w") as archive:
+                archive.writestr("gba_bios.bin", gba)
+            record = repo.record.read_bytes()
+            dry = repo.run("--remove", "--misplaced", "--dry-run")
+            self.assertEqual(dry.returncode, 0, dry.stdout + dry.stderr)
+            self.assertIn("Remove 2 copies in the wrong place", dry.stdout)
+            self.assertIn("  extra.bin (in place: mgba/extra.bin)", dry.stdout)
+            self.assertIn("  GBA_BIOS.BIN (in place: gba_bios.bin)", dry.stdout)
+            self.assertTrue((repo.dest / "GBA_BIOS.BIN").is_file())
+            proc = repo.run("--remove", "--misplaced", "--yes", "--events")
+            self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+            self.assertFalse((repo.dest / "GBA_BIOS.BIN").exists())
+            self.assertFalse((repo.dest / "extra.bin").exists())
+            for kept in ("gba_bios.bin", "mgba/gba_bios.bin", "gba_bios (copy).bin",
+                         "old/gba_bios.bin", "old/scph5501.bin", "mine.bin",
+                         "mgba/set.zip", "saves/mgba/extra.bin", "pcsx/twin.bin",
+                         "pcsx/twin2.bin"):
+                self.assertTrue((repo.dest / kept).is_file(), kept)
+            self.assertTrue((repo.dest / "link.bin").is_symlink())
+            self.assertEqual(repo.record.read_bytes(), record)
+            events = repo.events(proc)
+            [plan] = [event for event in events if event["event"] == "removal_plan"]
+            self.assertEqual(sorted(plan["dests"]), ["GBA_BIOS.BIN", "extra.bin"])
+            self.assertEqual(sorted(event["dest"] for event in events
+                                    if event["event"] == "removed" and event["ok"]),
+                             ["GBA_BIOS.BIN", "extra.bin"])
+            again = repo.run("--remove", "--misplaced", "--yes")
+            self.assertEqual(again.returncode, 2)
+            self.assertIn("No copy in the wrong place", again.stdout)
+
+    def test_a_question_comes_after_the_copies_are_named(self):
+        with SharedRepository() as repo:
+            repo.install_both()
+            (repo.dest / "GBA_BIOS.BIN").write_bytes((repo.dest / "gba_bios.bin").read_bytes())
+            code, said = repo.answer("n", "--remove", "--misplaced")
+            self.assertEqual(code, 2, said)
+            self.assertLess(said.index("GBA_BIOS.BIN (in place: gba_bios.bin)"),
+                            said.index("Remove them for good? [y/N]"))
+            self.assertTrue((repo.dest / "GBA_BIOS.BIN").is_file())
+
+    def test_a_setup_whose_list_cannot_be_read_stops_the_removal(self):
+        with SharedRepository() as repo:
+            repo.install_both()
+            data = json.loads(repo.record.read_text())
+            data["setups"]["nowhere"] = {**data["setups"]["retroarch"], "files": []}
+            repo.record.write_text(json.dumps(data))
+            (repo.dest / "GBA_BIOS.BIN").write_bytes((repo.dest / "gba_bios.bin").read_bytes())
+            proc = repo.run("--remove", "--misplaced", "--yes")
+            self.assertEqual(proc.returncode, 2, proc.stdout + proc.stderr)
+            self.assertIn("the file list of nowhere, which shares the folder, is needed",
+                          proc.stderr)
+            self.assertIn("no such list exists", proc.stderr)
+            self.assertTrue((repo.dest / "GBA_BIOS.BIN").is_file())
+
+    def test_a_copy_the_installer_no_longer_holds_in_place_stays(self):
+        with SharedRepository() as repo:
+            repo.install_both()
+            gba = (repo.dest / "gba_bios.bin").read_bytes()
+            (repo.dest / "GBA_BIOS.BIN").write_bytes(gba)
+            (repo.dest / "gba_bios.bin").write_bytes(b"edited by the user")
+            proc = repo.run("--remove", "--misplaced", "--yes")
+            self.assertEqual(proc.returncode, 2, proc.stdout + proc.stderr)
+            self.assertEqual((repo.dest / "GBA_BIOS.BIN").read_bytes(), gba)
+
+    def test_options_it_does_not_read_are_refused(self):
+        with SharedRepository() as repo:
+            for argv, words in (
+                (("--misplaced",), "--misplaced applies to --remove"),
+                (("--remove", "--misplaced", "--backup"), "takes no --backup"),
+                (("--remove", "--misplaced", "--system", "nintendo-gba"),
+                 "takes no --system"),
+            ):
+                with self.subTest(argv=argv):
+                    proc = repo.run(*argv)
+                    self.assertEqual(proc.returncode, 2)
+                    self.assertIn(words, proc.stderr)
+
+    def test_a_place_a_list_reads_or_a_setup_names_stays(self):
+        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, root, True)
+        folder = root / "bios"
+        folder.mkdir()
+        payload = b"the bios"
+        for rel in ("a.bin", "read/here.bin", "omitted.bin", "theirs.bin", "A.BIN",
+                    "a (1).bin"):
+            (folder / rel).parent.mkdir(parents=True, exist_ok=True)
+            (folder / rel).write_bytes(payload)
+        record = _record(folder, [_item("a.bin", payload)],
+                         others={"lakka": {"choice": [], "files": [_item("theirs.bin", payload)]}})
+        manifest = _served(("a.bin", payload), ("read/here.bin", b"other bytes"))
+        manifest["omitted_files"] = [{"dest": "omitted.bin"}]
+        removal = install.plan_misplaced_removal("retroarch", folder, record, [manifest])
+        self.assertEqual([entry["dest"] for entry in removal.remove], ["A.BIN"])
+        [entry] = removal.remove
+        self.assertEqual(entry["path"], folder / "A.BIN")
+        # The placed file edited after the plan: the copy is the one left.
+        (folder / "a.bin").write_bytes(b"edited")
+        removed, failed, _run = install.remove_files(removal, record["setups"]["retroarch"],
+                                                     False)
+        self.assertEqual((removed, [item["dest"] for item in failed]), ([], ["A.BIN"]))
+        self.assertEqual((folder / "A.BIN").read_bytes(), payload)
+        (folder / "a.bin").write_bytes(payload)
+        os.unlink(folder / "A.BIN")
+        os.link(folder / "a.bin", folder / "A.BIN")
+        removal = install.plan_misplaced_removal("retroarch", folder, record, [manifest])
+        self.assertEqual(removal.remove, [])
+        # Folded on a drive that folds: READ/HERE.BIN is the list's place.
+        os.unlink(folder / "A.BIN")
+        os.rename(folder / "read" / "here.bin", folder / "read" / "HERE.BIN")
+        (folder / "OMITTED.BIN").write_bytes(payload)
+        os.unlink(folder / "omitted.bin")
+        with mock.patch.object(install, "keeps_case", return_value=False):
+            removal = install.plan_misplaced_removal("retroarch", folder, record, [manifest])
+        self.assertEqual(removal.remove, [])
+
+    def test_a_card_whose_folder_is_the_roms_root_keeps_its_games(self):
+        """EmuELEC installs into /storage/roms: ports/doom/doom2.wad is the
+        user's game, bios/old/doom2.wad a copy in the wrong place."""
+        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, root, True)
+        folder = root / "roms"
+        wad = b"doom ii"
+        for rel in ("bios/doom2.wad", "ports/doom/doom2.wad", "bios/old/doom2.wad",
+                    "bios/doom2 (1).wad", "bios/DOOM2.WAD", "doom2.wad"):
+            (folder / rel).parent.mkdir(parents=True, exist_ok=True)
+            (folder / rel).write_bytes(wad)
+        elsewhere = root / "elsewhere"
+        elsewhere.mkdir()
+        (elsewhere / "doom2.wad").write_bytes(wad)
+        (folder / "bios" / "linked").symlink_to(elsewhere, target_is_directory=True)
+        # RetroArch installed below, with its own record.
+        nested = folder / "bios" / "retroarch"
+        nested.mkdir()
+        (nested / "doom2.wad").write_bytes(wad)
+        holder = folder / "bios" / install.BACKUP_DIR
+        holder.mkdir()
+        (holder / f"retroarch{install.RECORD_SUFFIX}").write_text("{}")
+        record = _record(folder, [_item("bios/doom2.wad", wad)])
+        removal = install.plan_misplaced_removal("emuelec", folder, {
+            **record, "setups": {"emuelec": record["setups"]["retroarch"]}},
+            [_served(("bios/doom2.wad", wad))])
+        # Beside its file, under its name: the top of the roms folder holds
+        # no list file, and the renamed copy may be a game's own entry.
+        self.assertEqual([entry["dest"] for entry in removal.remove], ["bios/DOOM2.WAD"])
+        # A game's data: DOOM2.WAD beside doom2.wad is a game entry of its own.
+        games = _served(("bios/doom2.wad", wad))
+        games["files"][0]["category"] = "game_data"
+        removal = install.plan_misplaced_removal("emuelec", folder, {
+            **record, "setups": {"emuelec": record["setups"]["retroarch"]}}, [games])
+        self.assertEqual(removal.remove, [])
+        self.assertEqual((elsewhere / "doom2.wad").read_bytes(), wad)
 
 
 if __name__ == "__main__":

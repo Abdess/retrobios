@@ -1316,9 +1316,9 @@
  Choose what to remove. A file changed or added by hand stays.
  
 ^[[0;7;35m > All RetroBIOS files                                                 528.0 KB^[[0m
+   Misplaced copies
    nintendo-gba                                                         16.0 KB
    sony-playstation                                                    512.0 KB
- 
  
  
  
