@@ -4468,187 +4468,289 @@ files:
     path: "whdboot/Libs/xpkmaster.library"
     system: commodore-amiga
     required: false
+    size: 16496
+    sha1: "5bd19f9503b59c5d19bfe1c6a6e3b6e7c0e9eae2"
+    md5: "94bf2832dc8588e4b1b96da05c90d495"
     note: >
-      XPK master library, opened by slaves that read XPK-packed data. When any file is present in whdboot/Libs, the booter mounts that
-      folder as DH4: and adds it to LIBS:. The standalone download step
-      extracts it from Aminet's xpk_User.lha, refused unless its SHA-256 is the pinned one (xpk_User/Libs/xpkmaster.library) while it is missing and never
-      overwrites it. The libretro core downloads nothing.
+      XPK master library, opened by slaves that read XPK-packed data. When any
+      file is present in whdboot/Libs, the booter mounts that folder as DH4: and
+      adds it to LIBS:. Not shipped: on request the standalone build downloads
+      Aminet's xpk_User.lha, refuses it unless its SHA-256 is the pinned one,
+      and extracts xpk_User/Libs/xpkmaster.library while the file is missing,
+      never overwriting it. The hashes are those of that member. The libretro
+      core downloads nothing.
     source_ref: "source src/osdep/amiberry_whdbooter.cpp:1580-1606, source src/osdep/amiberry_whdbooter.cpp:1616-1627, source src/osdep/amiberry_whdbooter.cpp:1754-1770, source src/osdep/amiberry.cpp:12451-12453, source src/osdep/amiberry.cpp:12467-12478, source src/osdep/amiberry.cpp:12894-12925, source src/osdep/amiberry.cpp:13131-13150"
 
   - name: "Compressors/xpkCBR0.library"
     path: "whdboot/Libs/Compressors/xpkCBR0.library"
     system: commodore-amiga
     required: false
+    size: 1300
+    sha1: "a2a76c10cb06315e51990911fa050669cc89830d"
+    md5: "2461c65dcd95124cc98327324d9bb184"
     note: >
-      XPK client library, read by xpkmaster.library from LIBS:Compressors. When any file is present in whdboot/Libs, the booter mounts that
-      folder as DH4: and adds it to LIBS:. The standalone download step
-      extracts it from Aminet's xpk_User.lha, refused unless its SHA-256 is the pinned one (xpk_User/Libs/compressors/xpkCBR0.library) while it is missing and never
-      overwrites it. The libretro core downloads nothing.
+      XPK client library, read by xpkmaster.library from LIBS:Compressors. When
+      any file is present in whdboot/Libs, the booter mounts that folder as DH4:
+      and adds it to LIBS:. Not shipped: on request the standalone build
+      downloads Aminet's xpk_User.lha, refuses it unless its SHA-256 is the
+      pinned one, and extracts xpk_User/Libs/compressors/xpkCBR0.library while
+      the file is missing, never overwriting it. The hashes are those of that
+      member. The libretro core downloads nothing.
     source_ref: "source src/osdep/amiberry_whdbooter.cpp:1580-1606, source src/osdep/amiberry_whdbooter.cpp:1616-1627, source src/osdep/amiberry_whdbooter.cpp:1754-1770, source src/osdep/amiberry.cpp:12451-12453, source src/osdep/amiberry.cpp:12467-12478, source src/osdep/amiberry.cpp:12894-12925, source src/osdep/amiberry.cpp:13131-13150"
 
   - name: "Compressors/xpkDLTA.library"
     path: "whdboot/Libs/Compressors/xpkDLTA.library"
     system: commodore-amiga
     required: false
+    size: 960
+    sha1: "ca64f89919c2869cb6fd75346b9a21245a6d04a8"
+    md5: "d7474dd89a09009fa84937b01e742171"
     note: >
-      XPK client library, read by xpkmaster.library from LIBS:Compressors. When any file is present in whdboot/Libs, the booter mounts that
-      folder as DH4: and adds it to LIBS:. The standalone download step
-      extracts it from Aminet's xpk_User.lha, refused unless its SHA-256 is the pinned one (xpk_User/Libs/compressors/xpkDLTA.library) while it is missing and never
-      overwrites it. The libretro core downloads nothing.
+      XPK client library, read by xpkmaster.library from LIBS:Compressors. When
+      any file is present in whdboot/Libs, the booter mounts that folder as DH4:
+      and adds it to LIBS:. Not shipped: on request the standalone build
+      downloads Aminet's xpk_User.lha, refuses it unless its SHA-256 is the
+      pinned one, and extracts xpk_User/Libs/compressors/xpkDLTA.library while
+      the file is missing, never overwriting it. The hashes are those of that
+      member. The libretro core downloads nothing.
     source_ref: "source src/osdep/amiberry_whdbooter.cpp:1580-1606, source src/osdep/amiberry_whdbooter.cpp:1616-1627, source src/osdep/amiberry_whdbooter.cpp:1754-1770, source src/osdep/amiberry.cpp:12451-12453, source src/osdep/amiberry.cpp:12467-12478, source src/osdep/amiberry.cpp:12894-12925, source src/osdep/amiberry.cpp:13131-13150"
 
   - name: "Compressors/xpkDUKE.library"
     path: "whdboot/Libs/Compressors/xpkDUKE.library"
     system: commodore-amiga
     required: false
+    size: 3280
+    sha1: "8102d77ae0a3d64496436ee56a9c577c84b11992"
+    md5: "d6a9aafb790d40423c4ed0acbc6e85c3"
     note: >
-      XPK client library, read by xpkmaster.library from LIBS:Compressors. When any file is present in whdboot/Libs, the booter mounts that
-      folder as DH4: and adds it to LIBS:. The standalone download step
-      extracts it from Aminet's xpk_User.lha, refused unless its SHA-256 is the pinned one (xpk_User/Libs/compressors/xpkDUKE.library) while it is missing and never
-      overwrites it. The libretro core downloads nothing.
+      XPK client library, read by xpkmaster.library from LIBS:Compressors. When
+      any file is present in whdboot/Libs, the booter mounts that folder as DH4:
+      and adds it to LIBS:. Not shipped: on request the standalone build
+      downloads Aminet's xpk_User.lha, refuses it unless its SHA-256 is the
+      pinned one, and extracts xpk_User/Libs/compressors/xpkDUKE.library while
+      the file is missing, never overwriting it. The hashes are those of that
+      member. The libretro core downloads nothing.
     source_ref: "source src/osdep/amiberry_whdbooter.cpp:1580-1606, source src/osdep/amiberry_whdbooter.cpp:1616-1627, source src/osdep/amiberry_whdbooter.cpp:1754-1770, source src/osdep/amiberry.cpp:12451-12453, source src/osdep/amiberry.cpp:12467-12478, source src/osdep/amiberry.cpp:12894-12925, source src/osdep/amiberry.cpp:13131-13150"
 
   - name: "Compressors/xpkFAST.library"
     path: "whdboot/Libs/Compressors/xpkFAST.library"
     system: commodore-amiga
     required: false
+    size: 2136
+    sha1: "4599430f3baa302635a85b26a7b70a4116dc5f09"
+    md5: "7e4ad7cdd26cb6badc571ce79ab91693"
     note: >
-      XPK client library, read by xpkmaster.library from LIBS:Compressors. When any file is present in whdboot/Libs, the booter mounts that
-      folder as DH4: and adds it to LIBS:. The standalone download step
-      extracts it from Aminet's xpk_User.lha, refused unless its SHA-256 is the pinned one (xpk_User/Libs/compressors/xpkFAST.library) while it is missing and never
-      overwrites it. The libretro core downloads nothing.
+      XPK client library, read by xpkmaster.library from LIBS:Compressors. When
+      any file is present in whdboot/Libs, the booter mounts that folder as DH4:
+      and adds it to LIBS:. Not shipped: on request the standalone build
+      downloads Aminet's xpk_User.lha, refuses it unless its SHA-256 is the
+      pinned one, and extracts xpk_User/Libs/compressors/xpkFAST.library while
+      the file is missing, never overwriting it. The hashes are those of that
+      member. The libretro core downloads nothing.
     source_ref: "source src/osdep/amiberry_whdbooter.cpp:1580-1606, source src/osdep/amiberry_whdbooter.cpp:1616-1627, source src/osdep/amiberry_whdbooter.cpp:1754-1770, source src/osdep/amiberry.cpp:12451-12453, source src/osdep/amiberry.cpp:12467-12478, source src/osdep/amiberry.cpp:12894-12925, source src/osdep/amiberry.cpp:13131-13150"
 
   - name: "Compressors/xpkFRLE.library"
     path: "whdboot/Libs/Compressors/xpkFRLE.library"
     system: commodore-amiga
     required: false
+    size: 1124
+    sha1: "d0746429187ab38e886a47820203315f734e8d89"
+    md5: "7a2c0a4eb36241ca6ed9303a13da9821"
     note: >
-      XPK client library, read by xpkmaster.library from LIBS:Compressors. When any file is present in whdboot/Libs, the booter mounts that
-      folder as DH4: and adds it to LIBS:. The standalone download step
-      extracts it from Aminet's xpk_User.lha, refused unless its SHA-256 is the pinned one (xpk_User/Libs/compressors/xpkFRLE.library) while it is missing and never
-      overwrites it. The libretro core downloads nothing.
+      XPK client library, read by xpkmaster.library from LIBS:Compressors. When
+      any file is present in whdboot/Libs, the booter mounts that folder as DH4:
+      and adds it to LIBS:. Not shipped: on request the standalone build
+      downloads Aminet's xpk_User.lha, refuses it unless its SHA-256 is the
+      pinned one, and extracts xpk_User/Libs/compressors/xpkFRLE.library while
+      the file is missing, never overwriting it. The hashes are those of that
+      member. The libretro core downloads nothing.
     source_ref: "source src/osdep/amiberry_whdbooter.cpp:1580-1606, source src/osdep/amiberry_whdbooter.cpp:1616-1627, source src/osdep/amiberry_whdbooter.cpp:1754-1770, source src/osdep/amiberry.cpp:12451-12453, source src/osdep/amiberry.cpp:12467-12478, source src/osdep/amiberry.cpp:12894-12925, source src/osdep/amiberry.cpp:13131-13150"
 
   - name: "Compressors/xpkHFMN.library"
     path: "whdboot/Libs/Compressors/xpkHFMN.library"
     system: commodore-amiga
     required: false
+    size: 2124
+    sha1: "f4a8dbe69e386d87d9ab8cbaf7fc3881b358fdb2"
+    md5: "4d600301435d442f59068e52265cc9f2"
     note: >
-      XPK client library, read by xpkmaster.library from LIBS:Compressors. When any file is present in whdboot/Libs, the booter mounts that
-      folder as DH4: and adds it to LIBS:. The standalone download step
-      extracts it from Aminet's xpk_User.lha, refused unless its SHA-256 is the pinned one (xpk_User/Libs/compressors/xpkHFMN.library) while it is missing and never
-      overwrites it. The libretro core downloads nothing.
+      XPK client library, read by xpkmaster.library from LIBS:Compressors. When
+      any file is present in whdboot/Libs, the booter mounts that folder as DH4:
+      and adds it to LIBS:. Not shipped: on request the standalone build
+      downloads Aminet's xpk_User.lha, refuses it unless its SHA-256 is the
+      pinned one, and extracts xpk_User/Libs/compressors/xpkHFMN.library while
+      the file is missing, never overwriting it. The hashes are those of that
+      member. The libretro core downloads nothing.
     source_ref: "source src/osdep/amiberry_whdbooter.cpp:1580-1606, source src/osdep/amiberry_whdbooter.cpp:1616-1627, source src/osdep/amiberry_whdbooter.cpp:1754-1770, source src/osdep/amiberry.cpp:12451-12453, source src/osdep/amiberry.cpp:12467-12478, source src/osdep/amiberry.cpp:12894-12925, source src/osdep/amiberry.cpp:13131-13150"
 
   - name: "Compressors/xpkHUFF.library"
     path: "whdboot/Libs/Compressors/xpkHUFF.library"
     system: commodore-amiga
     required: false
+    size: 2284
+    sha1: "f22d099b81d2d039c4fbb3fea47cc9700b01fecf"
+    md5: "0b752081f321d324f47c9ec7440531d0"
     note: >
-      XPK client library, read by xpkmaster.library from LIBS:Compressors. When any file is present in whdboot/Libs, the booter mounts that
-      folder as DH4: and adds it to LIBS:. The standalone download step
-      extracts it from Aminet's xpk_User.lha, refused unless its SHA-256 is the pinned one (xpk_User/Libs/compressors/xpkHUFF.library) while it is missing and never
-      overwrites it. The libretro core downloads nothing.
+      XPK client library, read by xpkmaster.library from LIBS:Compressors. When
+      any file is present in whdboot/Libs, the booter mounts that folder as DH4:
+      and adds it to LIBS:. Not shipped: on request the standalone build
+      downloads Aminet's xpk_User.lha, refuses it unless its SHA-256 is the
+      pinned one, and extracts xpk_User/Libs/compressors/xpkHUFF.library while
+      the file is missing, never overwriting it. The hashes are those of that
+      member. The libretro core downloads nothing.
     source_ref: "source src/osdep/amiberry_whdbooter.cpp:1580-1606, source src/osdep/amiberry_whdbooter.cpp:1616-1627, source src/osdep/amiberry_whdbooter.cpp:1754-1770, source src/osdep/amiberry.cpp:12451-12453, source src/osdep/amiberry.cpp:12467-12478, source src/osdep/amiberry.cpp:12894-12925, source src/osdep/amiberry.cpp:13131-13150"
 
   - name: "Compressors/xpkIMPL.library"
     path: "whdboot/Libs/Compressors/xpkIMPL.library"
     system: commodore-amiga
     required: false
+    size: 4048
+    sha1: "0e00bc18aec757d86f9831131c2236a704c175db"
+    md5: "6aa281fa42b10e3ff01be01d2f3bbf22"
     note: >
-      XPK client library, read by xpkmaster.library from LIBS:Compressors. When any file is present in whdboot/Libs, the booter mounts that
-      folder as DH4: and adds it to LIBS:. The standalone download step
-      extracts it from Aminet's xpk_User.lha, refused unless its SHA-256 is the pinned one (xpk_User/Libs/compressors/xpkIMPL.library) while it is missing and never
-      overwrites it. The libretro core downloads nothing.
+      XPK client library, read by xpkmaster.library from LIBS:Compressors. When
+      any file is present in whdboot/Libs, the booter mounts that folder as DH4:
+      and adds it to LIBS:. Not shipped: on request the standalone build
+      downloads Aminet's xpk_User.lha, refuses it unless its SHA-256 is the
+      pinned one, and extracts xpk_User/Libs/compressors/xpkIMPL.library while
+      the file is missing, never overwriting it. The hashes are those of that
+      member. The libretro core downloads nothing.
     source_ref: "source src/osdep/amiberry_whdbooter.cpp:1580-1606, source src/osdep/amiberry_whdbooter.cpp:1616-1627, source src/osdep/amiberry_whdbooter.cpp:1754-1770, source src/osdep/amiberry.cpp:12451-12453, source src/osdep/amiberry.cpp:12467-12478, source src/osdep/amiberry.cpp:12894-12925, source src/osdep/amiberry.cpp:13131-13150"
 
   - name: "Compressors/xpkMASH.library"
     path: "whdboot/Libs/Compressors/xpkMASH.library"
     system: commodore-amiga
     required: false
+    size: 2816
+    sha1: "1093133a17cb635c21c5532ae26ded83b6d359ce"
+    md5: "1527b4f331464f3013ba90ca44a91e54"
     note: >
-      XPK client library, read by xpkmaster.library from LIBS:Compressors. When any file is present in whdboot/Libs, the booter mounts that
-      folder as DH4: and adds it to LIBS:. The standalone download step
-      extracts it from Aminet's xpk_User.lha, refused unless its SHA-256 is the pinned one (xpk_User/Libs/compressors/xpkMASH.library) while it is missing and never
-      overwrites it. The libretro core downloads nothing.
+      XPK client library, read by xpkmaster.library from LIBS:Compressors. When
+      any file is present in whdboot/Libs, the booter mounts that folder as DH4:
+      and adds it to LIBS:. Not shipped: on request the standalone build
+      downloads Aminet's xpk_User.lha, refuses it unless its SHA-256 is the
+      pinned one, and extracts xpk_User/Libs/compressors/xpkMASH.library while
+      the file is missing, never overwriting it. The hashes are those of that
+      member. The libretro core downloads nothing.
     source_ref: "source src/osdep/amiberry_whdbooter.cpp:1580-1606, source src/osdep/amiberry_whdbooter.cpp:1616-1627, source src/osdep/amiberry_whdbooter.cpp:1754-1770, source src/osdep/amiberry.cpp:12451-12453, source src/osdep/amiberry.cpp:12467-12478, source src/osdep/amiberry.cpp:12894-12925, source src/osdep/amiberry.cpp:13131-13150"
 
   - name: "Compressors/xpkNONE.library"
     path: "whdboot/Libs/Compressors/xpkNONE.library"
     system: commodore-amiga
     required: false
+    size: 812
+    sha1: "46dca6e2ff2176f7a12c52ea992a7a49ae5ef269"
+    md5: "2e98fd5760fb158d697c3c183eb16827"
     note: >
-      XPK client library, read by xpkmaster.library from LIBS:Compressors. When any file is present in whdboot/Libs, the booter mounts that
-      folder as DH4: and adds it to LIBS:. The standalone download step
-      extracts it from Aminet's xpk_User.lha, refused unless its SHA-256 is the pinned one (xpk_User/Libs/compressors/xpkNONE.library) while it is missing and never
-      overwrites it. The libretro core downloads nothing.
+      XPK client library, read by xpkmaster.library from LIBS:Compressors. When
+      any file is present in whdboot/Libs, the booter mounts that folder as DH4:
+      and adds it to LIBS:. Not shipped: on request the standalone build
+      downloads Aminet's xpk_User.lha, refuses it unless its SHA-256 is the
+      pinned one, and extracts xpk_User/Libs/compressors/xpkNONE.library while
+      the file is missing, never overwriting it. The hashes are those of that
+      member. The libretro core downloads nothing.
     source_ref: "source src/osdep/amiberry_whdbooter.cpp:1580-1606, source src/osdep/amiberry_whdbooter.cpp:1616-1627, source src/osdep/amiberry_whdbooter.cpp:1754-1770, source src/osdep/amiberry.cpp:12451-12453, source src/osdep/amiberry.cpp:12467-12478, source src/osdep/amiberry.cpp:12894-12925, source src/osdep/amiberry.cpp:13131-13150"
 
   - name: "Compressors/xpkNUKE.library"
     path: "whdboot/Libs/Compressors/xpkNUKE.library"
     system: commodore-amiga
     required: false
+    size: 2900
+    sha1: "168bee97805be1f85b65f615e6931c4942caf4e4"
+    md5: "d644cfccffa44a284bc6e4050e2f2029"
     note: >
-      XPK client library, read by xpkmaster.library from LIBS:Compressors. When any file is present in whdboot/Libs, the booter mounts that
-      folder as DH4: and adds it to LIBS:. The standalone download step
-      extracts it from Aminet's xpk_User.lha, refused unless its SHA-256 is the pinned one (xpk_User/Libs/compressors/xpkNUKE.library) while it is missing and never
-      overwrites it. The libretro core downloads nothing.
+      XPK client library, read by xpkmaster.library from LIBS:Compressors. When
+      any file is present in whdboot/Libs, the booter mounts that folder as DH4:
+      and adds it to LIBS:. Not shipped: on request the standalone build
+      downloads Aminet's xpk_User.lha, refuses it unless its SHA-256 is the
+      pinned one, and extracts xpk_User/Libs/compressors/xpkNUKE.library while
+      the file is missing, never overwriting it. The hashes are those of that
+      member. The libretro core downloads nothing.
     source_ref: "source src/osdep/amiberry_whdbooter.cpp:1580-1606, source src/osdep/amiberry_whdbooter.cpp:1616-1627, source src/osdep/amiberry_whdbooter.cpp:1754-1770, source src/osdep/amiberry.cpp:12451-12453, source src/osdep/amiberry.cpp:12467-12478, source src/osdep/amiberry.cpp:12894-12925, source src/osdep/amiberry.cpp:13131-13150"
 
   - name: "Compressors/xpkRAKE.library"
     path: "whdboot/Libs/Compressors/xpkRAKE.library"
     system: commodore-amiga
     required: false
+    size: 6604
+    sha1: "50cd2a19bee1ebd6b54b31c5b9461d5a81a2e910"
+    md5: "c1c5d4aad555f1ce3049127bfb911cea"
     note: >
-      XPK client library, read by xpkmaster.library from LIBS:Compressors. When any file is present in whdboot/Libs, the booter mounts that
-      folder as DH4: and adds it to LIBS:. The standalone download step
-      extracts it from Aminet's xpk_User.lha, refused unless its SHA-256 is the pinned one (xpk_User/Libs/compressors/xpkRAKE.library) while it is missing and never
-      overwrites it. The libretro core downloads nothing.
+      XPK client library, read by xpkmaster.library from LIBS:Compressors. When
+      any file is present in whdboot/Libs, the booter mounts that folder as DH4:
+      and adds it to LIBS:. Not shipped: on request the standalone build
+      downloads Aminet's xpk_User.lha, refuses it unless its SHA-256 is the
+      pinned one, and extracts xpk_User/Libs/compressors/xpkRAKE.library while
+      the file is missing, never overwriting it. The hashes are those of that
+      member. The libretro core downloads nothing.
     source_ref: "source src/osdep/amiberry_whdbooter.cpp:1580-1606, source src/osdep/amiberry_whdbooter.cpp:1616-1627, source src/osdep/amiberry_whdbooter.cpp:1754-1770, source src/osdep/amiberry.cpp:12451-12453, source src/osdep/amiberry.cpp:12467-12478, source src/osdep/amiberry.cpp:12894-12925, source src/osdep/amiberry.cpp:13131-13150"
 
   - name: "Compressors/xpkRLEN.library"
     path: "whdboot/Libs/Compressors/xpkRLEN.library"
     system: commodore-amiga
     required: false
+    size: 1008
+    sha1: "c81cf6d99de56faa6154cc81a9876517c2a8efc0"
+    md5: "91531faa9caaff395ba3b5bbdd7996c2"
     note: >
-      XPK client library, read by xpkmaster.library from LIBS:Compressors. When any file is present in whdboot/Libs, the booter mounts that
-      folder as DH4: and adds it to LIBS:. The standalone download step
-      extracts it from Aminet's xpk_User.lha, refused unless its SHA-256 is the pinned one (xpk_User/Libs/compressors/xpkRLEN.library) while it is missing and never
-      overwrites it. The libretro core downloads nothing.
+      XPK client library, read by xpkmaster.library from LIBS:Compressors. When
+      any file is present in whdboot/Libs, the booter mounts that folder as DH4:
+      and adds it to LIBS:. Not shipped: on request the standalone build
+      downloads Aminet's xpk_User.lha, refuses it unless its SHA-256 is the
+      pinned one, and extracts xpk_User/Libs/compressors/xpkRLEN.library while
+      the file is missing, never overwriting it. The hashes are those of that
+      member. The libretro core downloads nothing.
     source_ref: "source src/osdep/amiberry_whdbooter.cpp:1580-1606, source src/osdep/amiberry_whdbooter.cpp:1616-1627, source src/osdep/amiberry_whdbooter.cpp:1754-1770, source src/osdep/amiberry.cpp:12451-12453, source src/osdep/amiberry.cpp:12467-12478, source src/osdep/amiberry.cpp:12894-12925, source src/osdep/amiberry.cpp:13131-13150"
 
   - name: "Compressors/xpkSHRI.library"
     path: "whdboot/Libs/Compressors/xpkSHRI.library"
     system: commodore-amiga
     required: false
+    size: 9272
+    sha1: "fc96d367e7b3409074841c7f145ab6daef0a6a4d"
+    md5: "0807f616ba364d5e1151de505a4845d4"
     note: >
-      XPK client library, read by xpkmaster.library from LIBS:Compressors. When any file is present in whdboot/Libs, the booter mounts that
-      folder as DH4: and adds it to LIBS:. The standalone download step
-      extracts it from Aminet's xpk_User.lha, refused unless its SHA-256 is the pinned one (xpk_User/Libs/compressors/xpkSHRI.library) while it is missing and never
-      overwrites it. The libretro core downloads nothing.
+      XPK client library, read by xpkmaster.library from LIBS:Compressors. When
+      any file is present in whdboot/Libs, the booter mounts that folder as DH4:
+      and adds it to LIBS:. Not shipped: on request the standalone build
+      downloads Aminet's xpk_User.lha, refuses it unless its SHA-256 is the
+      pinned one, and extracts xpk_User/Libs/compressors/xpkSHRI.library while
+      the file is missing, never overwriting it. The hashes are those of that
+      member. The libretro core downloads nothing.
     source_ref: "source src/osdep/amiberry_whdbooter.cpp:1580-1606, source src/osdep/amiberry_whdbooter.cpp:1616-1627, source src/osdep/amiberry_whdbooter.cpp:1754-1770, source src/osdep/amiberry.cpp:12451-12453, source src/osdep/amiberry.cpp:12467-12478, source src/osdep/amiberry.cpp:12894-12925, source src/osdep/amiberry.cpp:13131-13150"
 
   - name: "Compressors/xpkSMPL.library"
     path: "whdboot/Libs/Compressors/xpkSMPL.library"
     system: commodore-amiga
     required: false
+    size: 1740
+    sha1: "d140b4e87a2ff76cf94616d97fe7b127d128d973"
+    md5: "069b09e57a18c0f24a72564eaa15199e"
     note: >
-      XPK client library, read by xpkmaster.library from LIBS:Compressors. When any file is present in whdboot/Libs, the booter mounts that
-      folder as DH4: and adds it to LIBS:. The standalone download step
-      extracts it from Aminet's xpk_User.lha, refused unless its SHA-256 is the pinned one (xpk_User/Libs/compressors/xpkSMPL.library) while it is missing and never
-      overwrites it. The libretro core downloads nothing.
+      XPK client library, read by xpkmaster.library from LIBS:Compressors. When
+      any file is present in whdboot/Libs, the booter mounts that folder as DH4:
+      and adds it to LIBS:. Not shipped: on request the standalone build
+      downloads Aminet's xpk_User.lha, refuses it unless its SHA-256 is the
+      pinned one, and extracts xpk_User/Libs/compressors/xpkSMPL.library while
+      the file is missing, never overwriting it. The hashes are those of that
+      member. The libretro core downloads nothing.
     source_ref: "source src/osdep/amiberry_whdbooter.cpp:1580-1606, source src/osdep/amiberry_whdbooter.cpp:1616-1627, source src/osdep/amiberry_whdbooter.cpp:1754-1770, source src/osdep/amiberry.cpp:12451-12453, source src/osdep/amiberry.cpp:12467-12478, source src/osdep/amiberry.cpp:12894-12925, source src/osdep/amiberry.cpp:13131-13150"
 
   - name: "Compressors/xpkSQSH.library"
     path: "whdboot/Libs/Compressors/xpkSQSH.library"
     system: commodore-amiga
     required: false
+    size: 2936
+    sha1: "2191b616abd4b2fb34c89ae243c35feea2b71104"
+    md5: "0545456a27a23c3ee10686ab525ade94"
     note: >
-      XPK client library, read by xpkmaster.library from LIBS:Compressors. When any file is present in whdboot/Libs, the booter mounts that
-      folder as DH4: and adds it to LIBS:. The standalone download step
-      extracts it from Aminet's xpk_User.lha, refused unless its SHA-256 is the pinned one (xpk_User/Libs/compressors/xpkSQSH.library) while it is missing and never
-      overwrites it. The libretro core downloads nothing.
+      XPK client library, read by xpkmaster.library from LIBS:Compressors. When
+      any file is present in whdboot/Libs, the booter mounts that folder as DH4:
+      and adds it to LIBS:. Not shipped: on request the standalone build
+      downloads Aminet's xpk_User.lha, refuses it unless its SHA-256 is the
+      pinned one, and extracts xpk_User/Libs/compressors/xpkSQSH.library while
+      the file is missing, never overwriting it. The hashes are those of that
+      member. The libretro core downloads nothing.
     source_ref: "source src/osdep/amiberry_whdbooter.cpp:1580-1606, source src/osdep/amiberry_whdbooter.cpp:1616-1627, source src/osdep/amiberry_whdbooter.cpp:1754-1770, source src/osdep/amiberry.cpp:12451-12453, source src/osdep/amiberry.cpp:12467-12478, source src/osdep/amiberry.cpp:12894-12925, source src/osdep/amiberry.cpp:13131-13150"
 
   - name: "68040.library"
@@ -4656,10 +4758,13 @@ files:
     system: commodore-amiga
     required: false
     note: >
-      MMULib's 68040.library, the FPU-trap provider a 68040 setup expects in LIBS:. When any file is present in whdboot/Libs, the booter mounts that
-      folder as DH4: and adds it to LIBS:. The standalone download step
-      extracts it from Aminet's MMULib.lha, which is not pinned by hash (MMULib/Libs/68040.library) while it is missing and never
-      overwrites it. The libretro core downloads nothing.
+      MMULib's 68040.library, the FPU-trap provider a 68040 setup expects in
+      LIBS:. When any file is present in whdboot/Libs, the booter mounts that
+      folder as DH4: and adds it to LIBS:. Not shipped: on request the
+      standalone build downloads Aminet's MMULib.lha, which is not pinned by
+      hash and changes with each MMULib release, and extracts
+      MMULib/Libs/68040.library while the file is missing, never overwriting it.
+      The libretro core downloads nothing.
     source_ref: "source src/osdep/amiberry_whdbooter.cpp:1580-1606, source src/osdep/amiberry_whdbooter.cpp:1616-1627, source src/osdep/amiberry_whdbooter.cpp:1754-1770, source src/osdep/amiberry.cpp:12454-12457, source src/osdep/amiberry.cpp:12497-12510, source src/osdep/amiberry.cpp:13154-13167"
 
   - name: "mmu.library"
@@ -4667,10 +4772,12 @@ files:
     system: commodore-amiga
     required: false
     note: >
-      MMULib's mmu.library, opened by 68040.library. When any file is present in whdboot/Libs, the booter mounts that
-      folder as DH4: and adds it to LIBS:. The standalone download step
-      extracts it from Aminet's MMULib.lha, which is not pinned by hash (MMULib/Libs/mmu.library) while it is missing and never
-      overwrites it. The libretro core downloads nothing.
+      MMULib's mmu.library, opened by 68040.library. When any file is present in
+      whdboot/Libs, the booter mounts that folder as DH4: and adds it to LIBS:.
+      Not shipped: on request the standalone build downloads Aminet's
+      MMULib.lha, which is not pinned by hash and changes with each MMULib
+      release, and extracts MMULib/Libs/mmu.library while the file is missing,
+      never overwriting it. The libretro core downloads nothing.
     source_ref: "source src/osdep/amiberry_whdbooter.cpp:1580-1606, source src/osdep/amiberry_whdbooter.cpp:1616-1627, source src/osdep/amiberry_whdbooter.cpp:1754-1770, source src/osdep/amiberry.cpp:12454-12457, source src/osdep/amiberry.cpp:12497-12510, source src/osdep/amiberry.cpp:13154-13167"
 
   - name: "680x0.library"
@@ -4678,32 +4785,46 @@ files:
     system: commodore-amiga
     required: false
     note: >
-      MMULib's 680x0.library, opened by 68040.library. When any file is present in whdboot/Libs, the booter mounts that
-      folder as DH4: and adds it to LIBS:. The standalone download step
-      extracts it from Aminet's MMULib.lha, which is not pinned by hash (MMULib/Libs/680x0.library) while it is missing and never
-      overwrites it. The libretro core downloads nothing.
+      MMULib's 680x0.library, opened by 68040.library. When any file is present
+      in whdboot/Libs, the booter mounts that folder as DH4: and adds it to
+      LIBS:. Not shipped: on request the standalone build downloads Aminet's
+      MMULib.lha, which is not pinned by hash and changes with each MMULib
+      release, and extracts MMULib/Libs/680x0.library while the file is missing,
+      never overwriting it. The libretro core downloads nothing.
     source_ref: "source src/osdep/amiberry_whdbooter.cpp:1580-1606, source src/osdep/amiberry_whdbooter.cpp:1616-1627, source src/osdep/amiberry_whdbooter.cpp:1754-1770, source src/osdep/amiberry.cpp:12454-12457, source src/osdep/amiberry.cpp:12497-12510, source src/osdep/amiberry.cpp:13154-13167"
 
   - name: "explode.library"
     path: "whdboot/Libs/explode.library"
     system: commodore-amiga
     required: false
+    size: 1784
+    sha1: "c29ac7a92db4837703049af91d0d35b2a592f03d"
+    md5: "a3a6c7fa59ef63b0b432d32f98efa09e"
     note: >
-      explode.library, which LoadSeg needs for TurboImploder-crunched executables. When any file is present in whdboot/Libs, the booter mounts that
-      folder as DH4: and adds it to LIBS:. The standalone download step
-      extracts it from Aminet's explode-7.lha, refused unless its SHA-256 is the pinned one (explode.library) while it is missing and never
-      overwrites it. The libretro core downloads nothing.
+      explode.library, which LoadSeg needs for TurboImploder-crunched
+      executables. When any file is present in whdboot/Libs, the booter mounts
+      that folder as DH4: and adds it to LIBS:. Not shipped: on request the
+      standalone build downloads Aminet's explode-7.lha, refuses it unless its
+      SHA-256 is the pinned one, and extracts explode.library while the file is
+      missing, never overwriting it. The hashes are those of that member. The
+      libretro core downloads nothing.
     source_ref: "source src/osdep/amiberry_whdbooter.cpp:1580-1606, source src/osdep/amiberry_whdbooter.cpp:1616-1627, source src/osdep/amiberry_whdbooter.cpp:1754-1770, source src/osdep/amiberry.cpp:12458-12460, source src/osdep/amiberry.cpp:13170-13183"
 
   - name: "medplayer.library"
     path: "whdboot/Libs/medplayer.library"
     system: commodore-amiga
     required: false
+    size: 15340
+    sha1: "4313334a01dd02eaf60ea7eb95dee72c97835645"
+    md5: "57c19c020dafc309ff6f238ae6934cb9"
     note: >
-      OctaMED's medplayer.library, which music-playing slaves expect in LIBS:. When any file is present in whdboot/Libs, the booter mounts that
-      folder as DH4: and adds it to LIBS:. The standalone download step
-      extracts it from the OctaMED V5 tutorial disk 4 on Aminet, OctV5_Tut4.lha, refused unless its SHA-256 is the pinned one (libs/medplayer.library) while it is missing and never
-      overwrites it. The libretro core downloads nothing.
+      OctaMED's medplayer.library, which music-playing slaves expect in LIBS:.
+      When any file is present in whdboot/Libs, the booter mounts that folder as
+      DH4: and adds it to LIBS:. Not shipped: on request the standalone build
+      downloads the OctaMED V5 tutorial disk 4 from Aminet, OctV5_Tut4.lha,
+      refuses it unless its SHA-256 is the pinned one, and extracts
+      libs/medplayer.library while the file is missing, never overwriting it.
+      The hashes are those of that member. The libretro core downloads nothing.
     source_ref: "source src/osdep/amiberry_whdbooter.cpp:1580-1606, source src/osdep/amiberry_whdbooter.cpp:1616-1627, source src/osdep/amiberry_whdbooter.cpp:1754-1770, source src/osdep/amiberry.cpp:12461-12465, source src/osdep/amiberry.cpp:13186-13199"
 
   - name: "WHDLoad"
@@ -4735,9 +4856,9 @@ files:
     mode: libretro
     system: commodore-amiga
     required: false
-    size: 3180
-    sha1: "3ae8939c8f1cdd721eabd7d73c2d6277a038672a"
-    md5: "a491e6bc79db7e968d35577cee2769a5"
+    size: 1736
+    sha1: "f717cb754078a350908e2839b3095843ccd90fa7"
+    md5: "9a42e69421e3148c69be679b18b9444e"
     note: >
       Quit helper linked into C: and called at the end of the generated
       startup-sequence when quit_on_exit is set. Part of the set the whdboot
@@ -4749,9 +4870,9 @@ files:
     mode: libretro
     system: commodore-amiga
     required: false
-    size: 297373
-    sha1: "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86"
-    md5: "28b7fd41cd5d1b345324aa2571fb1c5d"
+    size: 187033
+    sha1: "b1e841768bf18b0d7d0ffbbe7f7788742b641677"
+    md5: "3f04bc22c0ac3e2aa1611c3ced93ae74"
     note: >
       Boot volume mounted as DH3. A boot-data directory at the same place is
       used when the zip is absent. Part of the set the whdboot seed check
@@ -4763,9 +4884,9 @@ files:
     mode: libretro
     system: commodore-amiga
     required: false
-    size: 6741053
-    sha1: "6540ae1a35080e3dbeacfba5139e4781eb74ca86"
-    md5: "51d44cd24e16fbb395b1bfefbaacd375"
+    size: 6750282
+    sha1: "7554061aa6f928bd41acdbcafe2d20322a0e188c"
+    md5: "932a2c1b886e6daf87f0e72ed7533146"
     note: >
       Per-game slave and hardware settings, matched on the archive SHA1 and then
       on its name. whdload_db.xml in the same folder is read when the JSON is
@@ -4937,9 +5058,9 @@ files:
     system: commodore-amiga
     required: false
     bundled: true
-    size: 3180
-    sha1: "3ae8939c8f1cdd721eabd7d73c2d6277a038672a"
-    md5: "a491e6bc79db7e968d35577cee2769a5"
+    size: 1736
+    sha1: "f717cb754078a350908e2839b3095843ccd90fa7"
+    md5: "9a42e69421e3148c69be679b18b9444e"
     note: >
       Quit helper linked into C: and called at the end of the generated
       startup-sequence when quit_on_exit is set. Ships in whdboot/ of the
@@ -4953,9 +5074,9 @@ files:
     system: commodore-amiga
     required: false
     bundled: true
-    size: 297373
-    sha1: "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86"
-    md5: "28b7fd41cd5d1b345324aa2571fb1c5d"
+    size: 187033
+    sha1: "b1e841768bf18b0d7d0ffbbe7f7788742b641677"
+    md5: "3f04bc22c0ac3e2aa1611c3ced93ae74"
     note: >
       Boot volume mounted as DH3. A boot-data directory at the same place is
       used when the zip is absent. Ships in whdboot/ of the installed build, and
@@ -4968,9 +5089,9 @@ files:
     system: commodore-amiga
     required: false
     bundled: true
-    size: 6741053
-    sha1: "6540ae1a35080e3dbeacfba5139e4781eb74ca86"
-    md5: "51d44cd24e16fbb395b1bfefbaacd375"
+    size: 6750282
+    sha1: "7554061aa6f928bd41acdbcafe2d20322a0e188c"
+    md5: "932a2c1b886e6daf87f0e72ed7533146"
     note: >
       Per-game slave and hardware settings, matched on the archive SHA1 and then
       on its name. whdload_db.xml in the same folder is read when the JSON is
