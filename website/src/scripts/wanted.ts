@@ -12,6 +12,7 @@ export type Entry = {
 	s?: number[];
 	r?: number;
 	z?: number[];
+	g?: number;
 	d?: string;
 	u?: string;
 	l?: [string, string][];

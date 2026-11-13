@@ -182,7 +182,8 @@ def load_platform_hashes(platforms_dir: str, db: dict | None = None) -> dict:
     under, read from the other files of that system it holds.
     """
     known = {"sha1": set(), "md5": set(), "sha256": set(), "crc32": set(),
-             "names": set(), "folders": {}, "sizes": {}, "entries": {}, "named": {}}
+             "names": set(), "folders": {}, "sizes": {}, "entries": {}, "named": {},
+             "name_systems": {}, "system_dirs": {}, "system_folders": {}}
     systems_of: dict[str, set[str]] = {}
     folders_of: dict[str, dict[str, int]] = {}
     files = (db or {}).get("files", {})
@@ -227,30 +228,47 @@ def load_platform_hashes(platforms_dir: str, db: dict | None = None) -> dict:
                     known["entries"].setdefault(file_entry["name"].lower(), []).append(
                         (file_entry, mode, rule, name)
                     )
+                    known["name_systems"].setdefault(file_entry["name"].lower(), set()).add(system_id)
                 for value in (*sha1s, *md5s):
                     systems_of.setdefault(value, set()).add(system_id)
                 for value in (*sha1s, *md5s, *sha256s):
                     if "name" in file_entry:
                         known["named"].setdefault(value, set()).add(file_entry["name"])
-                _note_folder(folders_of, system_id, files, by_md5, sha1s, md5s)
+                _note_folder(folders_of, system_id, files, by_md5, sha1s, md5s,
+                             known["system_dirs"])
 
     known["folders"] = _system_homes(systems_of, folders_of)
+    known["system_folders"] = _single_maker_folders(folders_of)
     return known
 
 
 def _note_folder(
     folders_of: dict[str, dict[str, int]], system_id: str, files: dict,
     by_md5: dict, sha1s: list[str], md5s: list[str],
+    dirs_of: dict[str, set[str]] | None = None,
 ) -> None:
-    """Count the bios/<Manufacturer>/<Console>/ folder a held file sits in."""
+    """Count the bios/<Manufacturer>/<Console>/ folder a held file sits in,
+    and note the directory it sits in under *dirs_of*."""
     held = next((s for s in sha1s if s in files), None) or next(
         (by_md5[m] for m in md5s if m in by_md5), None
     )
-    parts = str(files.get(held, {}).get("path", "")).split("/")
+    path = str(files.get(held, {}).get("path", ""))
+    if dirs_of is not None and "/" in path and "/.variants/" not in path:
+        dirs_of.setdefault(system_id, set()).add(path.rsplit("/", 1)[0] + "/")
+    parts = path.split("/")
     if len(parts) >= 4 and parts[0] == "bios" and not parts[2].startswith("."):
         folder = "/".join(parts[:3]) + "/"
         counts = folders_of.setdefault(system_id, {})
         counts[folder] = counts.get(folder, 0) + 1
+
+
+def _single_maker_folders(folders_of: dict[str, dict[str, int]]) -> dict[str, set[str]]:
+    """System id to the folders the collection files it under, for a system
+    filed under one manufacturer only, the rule _system_homes applies."""
+    return {
+        system_id: set(held_in) for system_id, held_in in folders_of.items()
+        if len({folder.split("/")[1] for folder in held_in}) == 1
+    }
 
 
 def _system_homes(
@@ -289,7 +307,7 @@ def load_profile_hashes(
     """
     known: dict[str, dict] = {
         "sha1": {}, "sha256": {}, "md5": {}, "crc32": {}, "sizes": {}, "folders": {},
-        "named": {},
+        "named": {}, "name_systems": {}, "system_dirs": {}, "system_folders": {},
     }
     systems_of: dict[str, set[str]] = {}
     folders_of: dict[str, dict[str, int]] = {}
@@ -322,10 +340,14 @@ def load_profile_hashes(
             if isinstance(system, str):
                 for value in (v for values in hashes.values() for v in values):
                     systems_of.setdefault(value, set()).add(system)
+                for n in names:
+                    if isinstance(n, str):
+                        known["name_systems"].setdefault(n.lower(), set()).add(system)
                 sha1s = [*hashes["sha1"], *(
                     by_sha256[v] for v in hashes["sha256"] if v in by_sha256
                 )]
-                _note_folder(folders_of, system, files, by_md5, sha1s, hashes["md5"])
+                _note_folder(folders_of, system, files, by_md5, sha1s, hashes["md5"],
+                             known["system_dirs"])
             if not any(entry.get(algo) for algo in ("sha1", "sha256", "md5")):
                 size = entry.get("size")
                 sizes = [int(v) for v in size] if isinstance(size, list) else (
@@ -336,6 +358,7 @@ def load_profile_hashes(
                         key = (value.zfill(8), accepted)
                         known["crc32"].setdefault(key, set()).add(emulator)
     known["folders"] = _system_homes(systems_of, folders_of)
+    known["system_folders"] = _single_maker_folders(folders_of)
     return known
 
 
@@ -618,13 +641,23 @@ def validate_file(
 
     if (name_known and not (sha1_known or md5_known or other_known or accepted_by)
             and not by_profile and size_fits):
-        home = _variant_home(db, result.filename)
+        owners = name_systems(result.filename, platform_hashes, profile_hashes)
+        home = _variant_home(db, result.filename, "", set() if len(owners) > 1 else {
+            d for table in (platform_hashes, profile_hashes or {}) for s in owners
+            for d in table.get("system_dirs", {}).get(s, ())
+        } if owners else None)
+        if not home and normalized.startswith("bios" + os.sep):
+            # Beside the file, in the folder the contributor chose.
+            home = os.path.dirname(normalized).replace(os.sep, "/") + "/"
         slot = f"{home}.variants/{result.filename}.{result.sha1[:8]}"
         if home and not normalized.startswith("bios" + os.sep):
             result.destination = slot
-        result.add_info(
-            f"This may be a valid variant. If accepted, it will be placed in `{slot}`"
-        )
+        if home:
+            result.add_info(
+                f"This may be a valid variant. If accepted, it will be placed in `{slot}`"
+            )
+        else:
+            result.add_info("This may be a valid variant of a file the collection lacks")
 
     return result
 
@@ -708,6 +741,8 @@ def placement(
     profile_hashes: dict | None,
     declared: bool,
     exists: Callable[[str], bool] = os.path.exists,
+    systems: Iterable[str] = (),
+    directory: str = "",
 ) -> Placement:
     """Where a file goes, by its hashes and its name.
 
@@ -715,6 +750,15 @@ def placement(
     folder a contributor is sent to is the folder the review accepts.
     *declared* says a list or a profile declares one of the hashes: a file
     known by its name alone gets a slot only once its size fits.
+
+    Without a folder from its hashes, the folder comes from its system:
+    *systems*, or every system that declares the name (several of them
+    name no copy to sit beside). A file of that name held elsewhere is a
+    homonym and says nothing: AmberELEC's MSX config.ini
+    was sent beside msx.emu's ColecoVision config.ini. A declared
+    *directory* (Machines/MSX2/ for one machine's config.ini) narrows it: a
+    copy by name counts only in a directory of that tail, and a held
+    directory of that tail is the folder.
     """
     values = [value for value in values if value]
     folders = expected_folders(values, platform_hashes, profile_hashes)
@@ -730,26 +774,86 @@ def placement(
             return Placement(tuple(folders), name=name, variant=exists(folders[0] + name))
         return Placement(tuple(folders))
     held = next((value for value in values if value in (db or {}).get("files", {})), "")
-    home = _variant_home(db, filename, held)
+    owners = set(systems) or name_systems(filename, platform_hashes, profile_hashes)
+    tables = (platform_hashes, profile_hashes or {})
+    # A name several systems declare does not say which one a file is:
+    # a copy held for one of them is no answer.
+    within = set() if not systems and len(owners) > 1 else {
+        d for table in tables for s in owners for d in table.get("system_dirs", {}).get(s, ())
+    }
+    tail = _directory_tail(db, directory)
+    if tail:
+        within = {d for d in within if d.endswith("/" + tail) or d == tail} if owners else None
+    home = _variant_home(db, filename, held, within if owners or tail else None)
     if declared and home and filename and "/" not in filename:
         # The folder holds a file of that name already.
         return Placement(home=home, name=filename, variant=True)
-    return Placement(home=home)
+    if home:
+        return Placement(home=home)
+    if tail:
+        return Placement(home=next(d for d in _held_directories(db) if d.endswith("/" + tail) or d == tail))
+    homes = {f for table in tables for s in owners for f in table.get("system_folders", {}).get(s, ())}
+    return Placement(tuple(sorted(homes)))
 
 
-def _variant_home(db: dict | None, name: str, held: str = "") -> str:
+_HELD_DIRECTORIES: dict[int, frozenset[str]] = {}
+
+
+def _held_directories(db: dict | None) -> frozenset[str]:
+    """Every directory a file of the database sits in, .variants/ aside."""
+    key = id(db)
+    if key not in _HELD_DIRECTORIES:
+        _HELD_DIRECTORIES[key] = frozenset(
+            path.rsplit("/", 1)[0] + "/"
+            for record in (db or {}).get("files", {}).values()
+            for path in [record.get("path"), *(record.get("paths") or [])]
+            if path and "/" in path and "/.variants/" not in path
+        )
+    return _HELD_DIRECTORIES[key]
+
+
+def _directory_tail(db: dict | None, directory: str) -> str:
+    """The longest tail of a declared directory, two segments at least,
+    that exactly one held directory ends with, empty when none does."""
+    parts = [p for p in directory.strip("/").split("/") if p]
+    held = _held_directories(db)
+    for size in range(len(parts), 1, -1):
+        tail = "/".join(parts[-size:]) + "/"
+        found = [d for d in held if d.endswith("/" + tail) or d == tail]
+        if len(found) == 1:
+            return tail
+        if found:
+            return ""
+    return ""
+
+
+def name_systems(filename: str, platform_hashes: dict, profile_hashes: dict | None) -> set[str]:
+    """The systems whose platform or profile entries declare this name."""
+    return {
+        system for table in (platform_hashes, profile_hashes or {})
+        for system in table.get("name_systems", {}).get(filename.lower(), ())
+    }
+
+
+def _variant_home(db: dict | None, name: str, held: str = "",
+                  within: set[str] | None = None) -> str:
     """The folder the collection keeps a name in, for its variants beside it.
 
     The folder of an identical copy comes first: adam_fdc.zip, held in
     bios/Coleco/Adam/, was sent to bios/Arcade/MAME/, the first folder
-    the name index gave.
+    the name index gave. A copy found by name alone counts only in a
+    directory of *within*, those the file's own systems are held in, when
+    the systems are known.
     """
     files = (db or {}).get("files", {})
     by_name = (db or {}).get("indexes", {}).get("by_name", {}).get(name, [])
-    for sha1 in ([held] if held in files else []) + list(by_name):
+    copies = [(held, True)] if held in files else []
+    for sha1, identical in copies + [(sha1, False) for sha1 in by_name]:
         path = str(files.get(sha1, {}).get("path", ""))
         folder = path.rsplit("/", 1)[0] + "/" if "/" in path else ""
-        if folder and "/.variants" not in "/" + folder:
+        if not folder or "/.variants" in "/" + folder:
+            continue
+        if identical or within is None or folder in within:
             return folder
     return ""
 

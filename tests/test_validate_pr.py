@@ -477,7 +477,8 @@ class PlatformHashLoading(_Fixture):
         known = validate_pr.load_platform_hashes(str(self.tmp / "absent"))
         self.assertEqual(known, {"sha1": set(), "md5": set(), "sha256": set(), "crc32": set(),
                                  "names": set(), "folders": {}, "sizes": {}, "entries": {},
-                                 "named": {}})
+                                 "named": {}, "name_systems": {}, "system_dirs": {},
+                                 "system_folders": {}})
 
     def test_declared_hashes_and_names_are_collected(self):
         platforms = self.tmp / "platforms"

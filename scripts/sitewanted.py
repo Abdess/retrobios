@@ -127,27 +127,62 @@ def gap_entries(profile: dict, name: str, identity: str, unsourceable: bool) -> 
     return named
 
 
+def _directory(entry: dict) -> str:
+    """The directory a declaration names for its file: a platform's
+    destination, a profile's path. Empty for a bare name."""
+    where = str(entry.get("destination") or entry.get("path") or "")
+    return where.rsplit("/", 1)[0] + "/" if "/" in where else ""
+
+
+def _paired(files: list, details: list[dict]) -> Iterable[tuple[dict, dict]]:
+    """Each verify detail of a system with the declaration it scores.
+
+    verify scores the declarations of a system in order, one detail each,
+    so the k-th detail of a name is the k-th declaration of that name:
+    AmberELEC declares config.ini once per blueMSX machine, and a match by
+    name alone gave each missing one every machine's folder.
+    """
+    by_name: dict[str, list[dict]] = {}
+    for entry in files:
+        if isinstance(entry, dict):
+            by_name.setdefault(str(entry.get("name")), []).append(entry)
+    seen: dict[str, int] = {}
+    for detail in details:
+        name = str(detail.get("name"))
+        position = seen.get(name, 0)
+        seen[name] = position + 1
+        same = by_name.get(name, [])
+        if position < len(same):
+            yield detail, same[position]
+
+
 def wanted_declarations(profiles: dict, coverages: dict, gap_report: dict) -> list[dict]:
     """Every declaration of a file the gaps page reports as lacking.
 
     Each is {name, system, required, reader: (kind, key, label), entry,
-    reason}, the reason a file not collected yet carries, empty otherwise.
+    reason, category, directory}: the reason a file not collected yet
+    carries, empty otherwise, and game_data or bios as verify (a
+    platform's entry) or the profile (an emulator's) gives it.
     """
     found: list[dict] = []
     for key, coverage in sorted(coverages.items()):
         systems = coverage.get("config", {}).get("systems") or {}
+        by_system: dict[str, list[dict]] = {}
         for detail in coverage.get("details", []):
-            if detail.get("settled_by") or detail.get("status") not in ("missing", "untested"):
-                continue
-            system = detail.get("system", "")
-            for entry in (systems.get(system) or {}).get("files") or []:
-                if isinstance(entry, dict) and entry.get("name") == detail.get("name"):
-                    found.append({
-                        "name": str(entry["name"]), "system": system,
-                        "required": bool(detail.get("required", True)),
-                        "reader": ("platform", key, coverage["platform"]), "entry": entry,
-                        "reason": "",
-                    })
+            by_system.setdefault(detail.get("system", ""), []).append(detail)
+        for system, details in sorted(by_system.items()):
+            files = (systems.get(system) or {}).get("files") or []
+            for detail, entry in _paired(files, details):
+                if detail.get("settled_by") or detail.get("status") not in ("missing", "untested"):
+                    continue
+                found.append({
+                    "name": str(entry["name"]), "system": system,
+                    "required": bool(detail.get("required", True)),
+                    "reader": ("platform", key, coverage["platform"]), "entry": entry,
+                    "reason": "",
+                    "category": GAME_DATA if detail.get("category") == GAME_DATA else BIOS,
+                    "directory": _directory(entry),
+                })
     unique = unique_emulator_profiles(profiles)
     for key, data in sorted(gap_report.items()):
         profile = unique.get(key)
@@ -166,6 +201,8 @@ def wanted_declarations(profiles: dict, coverages: dict, gap_report: dict) -> li
                     "required": bool(row.get("required", False)),
                     "reader": ("emulator", key, str(data.get("emulator", key))), "entry": entry,
                     "reason": str(row.get("reason") or "") if unsourceable else "",
+                    "category": GAME_DATA if entry.get("category") == GAME_DATA else BIOS,
+                    "directory": _directory(entry),
                 })
     return found
 
@@ -186,9 +223,37 @@ def catalog_listings(report: dict | None, labels: dict[str, str]) -> dict[tuple[
     return out
 
 
+BIOS = "bios"
+GAME_DATA = "game_data"
 # A name the code builds from the content (<serial>.txt, *.ini) is a
 # pattern, not a file anyone can upload.
 PATTERN = re.compile(r"[<>*?]")
+# A file not collected yet stays wanted, however hard it is to find ("no
+# public dump located", "retail data the collection does not hold"). It
+# leaves the list only when its reason (the profile's `unsourceable:`)
+# says no copy can be shared, read by the rules below.
+NOT_SHAREABLE = re.compile("|".join([
+    # Any file of the name serves: there is no one file to collect.
+    r"\bno canonical\b",
+    # The user writes, picks, records or places it (WHDLoad's key aside,
+    # emucorev's config.txt: "plugin list the user writes").
+    r"\bthe user\b|\buser[- ](?:supplied|authored|created|settings|overlay|placeholder)\b"
+    r"|\bother users\b",
+    # The emulator or the guest writes it: a save, a state, a generated key.
+    r"\bwritten by (?:the (?:emulator|guest|firmware editor)|bam)\b|\bgenerated by the emulator\b"
+    r"|\bwith the debug key\b|\bmachine state\b|\bcreat\w* (?:this directory )?empty\b",
+    # It belongs to one person, one account or one copy (puae's WHDLoad.key).
+    r"\bper[- ]user\b|\btied to the (?:account|tag)\b|\bnever distributed generically\b"
+    r"|\bissued for one copy\b",
+    # Nothing was ever released under the name.
+    r"\bno (?:distributed form|released artefact|hardware dump equivalent)\b"
+    r"|\bno file of this name is distributed\b",
+]), re.I)
+
+
+def shareable(reason: str) -> bool:
+    """False when a reason says no copy of the file can be shared."""
+    return not NOT_SHAREABLE.search(reason)
 # What a row says the file is: the first sentence of the declaration's
 # description or note, cut at a word past this many characters.
 DESCRIPTION_LIMIT = 160
@@ -249,17 +314,22 @@ class Placer:
             for path in [record.get("path"), *(record.get("paths") or [])] if path
         }
 
-    def place(self, hashes: dict[str, list[str]], name: str) -> Placement:
+    def place(self, hashes: dict[str, list[str]], name: str, systems: Iterable[str] = (),
+              directory: str = "") -> Placement:
         """A declaration that writes no hash is known by its name alone,
-        as the review knows a file whose hashes nothing declares."""
+        as the review knows a file whose hashes nothing declares, and its
+        folder comes from its systems and its declared directory."""
         values = [value for algo in ("sha1", "md5", "sha256") for value in hashes.get(algo, [])
                   if len(value) == FULL_LENGTH[algo]]
         return placement(values, name, self.db, self.platform_hashes, self.profile_hashes,
-                         declared=bool(hashes), exists=self.paths.__contains__)
+                         declared=bool(hashes), exists=self.paths.__contains__,
+                         systems=sorted(systems), directory=directory)
 
-    def folder(self, entry: dict) -> str:
+    def folder(self, entry: dict, system: str = "") -> str:
         """The folder an upload of a profile or platform entry goes to."""
-        return self.place(declared_hashes(entry), str(entry.get("name", ""))).folder
+        system = str(entry.get("system") or system)
+        return self.place(declared_hashes(entry), str(entry.get("name", "")),
+                          [system] if system else [], _directory(entry)).folder
 
 
 FULL_LENGTH = {"sha1": 40, "md5": 32, "sha256": 64}
@@ -272,10 +342,11 @@ def upload_href(root: str, folder: str) -> str:
 
 
 def _order(record: dict) -> tuple:
-    """Most useful first: required before optional, then by how many
-    setups and emulators read the file."""
-    return (not record["required"], -len(record["readers"]), record["name"].casefold(),
-            sorted(record["readers"]))
+    """Most useful first: required firmware, optional firmware, then game
+    data, required first, and within each by how many setups and
+    emulators read the file."""
+    return (record["category"] != BIOS, not record["required"], -len(record["readers"]),
+            record["name"].casefold(), sorted(record["readers"]))
 
 
 def build_wanted(
@@ -293,15 +364,17 @@ def build_wanted(
     Readers, systems and folders are written once and named by position.
     An entry: n name, h hashes (absent when the declarations write none:
     the file is known by its name only), w readers, s systems, r required,
-    z sizes, d what the file is, u why it is not collected yet, l the
-    catalogs that list it with the name they give it, f folder, t the name
-    it is uploaded under, v that name goes to the folder's .variants/ with
-    the first 8 characters of its sha1. Entries come most useful first.
+    z sizes, g game data (firmware when absent), d what the file is, u why
+    it is not collected yet, l the catalogs that list it with the name
+    they give it, f folder, t the name it is uploaded under, v that name
+    goes to the folder's .variants/ with the first 8 characters of its
+    sha1. Entries come most useful first. A file no one can share (the
+    reason says so, NOT_SHAREABLE) is left out.
     """
     held = Held(db, ledger)
     records: dict[tuple, dict] = {}
     for declaration in wanted_declarations(profiles, coverages, gap_report):
-        if PATTERN.search(declaration["name"]):
+        if PATTERN.search(declaration["name"]) or not shareable(declaration["reason"]):
             continue
         entry = declaration["entry"]
         sizes = _sizes(entry)
@@ -310,12 +383,16 @@ def build_wanted(
                 continue
             key = ((declaration["name"], tuple(sorted((a, tuple(v)) for a, v in hashes.items())),
                     tuple(sizes)) if hashes
-                   else (declaration["name"].casefold(), declaration["system"]))
+                   else (declaration["name"].casefold(), declaration["system"],
+                         declaration["directory"]))
             record = records.setdefault(key, {
                 "name": declaration["name"], "hashes": {a: list(v) for a, v in hashes.items()},
                 "sizes": sizes, "systems": set(), "required": False, "readers": set(),
-                "description": "", "reason": "", "listed": [],
+                "description": "", "reason": "", "listed": [], "category": GAME_DATA,
+                "directory": declaration["directory"],
             })
+            if declaration["category"] == BIOS:
+                record["category"] = BIOS
             if declaration["system"]:
                 record["systems"].add(declaration["system"])
             record["required"] = record["required"] or declaration["required"]
@@ -341,7 +418,8 @@ def build_wanted(
     folder_at: dict[str, int] = {}
     entries = []
     for record in ordered:
-        spot = placer.place(record["hashes"], record["name"])
+        spot = placer.place(record["hashes"], record["name"], record["systems"],
+                            record["directory"])
         if spot.folder and spot.folder not in folder_at:
             folder_at[spot.folder] = len(folders)
             folders.append(spot.folder)
@@ -356,6 +434,8 @@ def build_wanted(
             item["r"] = 1
         if record["sizes"]:
             item["z"] = record["sizes"]
+        if record["category"] == GAME_DATA:
+            item["g"] = 1
         for field, value in (("d", record["description"]), ("u", record["reason"])):
             if value:
                 item[field] = value
@@ -389,7 +469,7 @@ def _merge_named(records: dict[tuple, dict]) -> None:
             for system in record["systems"] or {""}:
                 hashed.setdefault((record["name"].casefold(), system), []).append(record)
     for key in [k for k, record in records.items() if not record["hashes"]]:
-        targets = hashed.get(key, [])
+        targets = hashed.get(key[:2], [])
         if len(targets) != 1:
             continue
         record = records.pop(key)
@@ -398,6 +478,8 @@ def _merge_named(records: dict[tuple, dict]) -> None:
         target["required"] = target["required"] or record["required"]
         target["description"] = target["description"] or record["description"]
         target["reason"] = target["reason"] or record["reason"]
+        if record["category"] == BIOS:
+            target["category"] = BIOS
         target["listed"] += [w for w in record["listed"] if w not in target["listed"]]
 
 
@@ -451,7 +533,7 @@ def page(total: int, known: int) -> str:
         "",
         "## The wanted list",
         "",
-        (f"The list holds {total:,} files, most useful first. Of these, {known:,} have a "
+        (f"The list holds {total:,} files, firmware first, then game data. Of these, {known:,} have a "
          "fingerprint (a hash), so a dropped copy is recognised."),
         "",
         "The others are known by name only: upload one and the check decides.",
