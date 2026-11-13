@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import re
 import urllib.parse
-from collections.abc import Callable, Iterable, Mapping
+from collections.abc import Callable, Iterable
 from pathlib import Path
 
 import archive_build
@@ -259,22 +259,6 @@ NOT_SHAREABLE = re.compile("|".join([
 def shareable(reason: str) -> bool:
     """False when a reason says no copy of the file can be shared."""
     return not NOT_SHAREABLE.search(reason)
-# What a row says the file is: the first sentence of the declaration's
-# description or note, cut at a word past this many characters.
-DESCRIPTION_LIMIT = 160
-SENTENCE_END = re.compile(r"(?:(?<=\w\w[.!?])|(?<=[)\]][.!?]))\s+(?=[A-Z])")
-
-
-def first_sentence(text: object, limit: int = DESCRIPTION_LIMIT) -> str:
-    """The first sentence of a description, on one line and at most about
-    *limit* characters."""
-    flat = " ".join(str(text or "").replace("`", "").split())
-    end = SENTENCE_END.search(flat)
-    if end:
-        flat = flat[:end.start()]
-    if len(flat) > limit:
-        flat = flat[:limit].rsplit(" ", 1)[0].rstrip(",;:(") + "..."
-    return flat
 
 
 def _settle_cut(records: list[dict]) -> None:
@@ -354,6 +338,12 @@ def _order(record: dict) -> tuple:
             record["name"].casefold(), sorted(record["readers"]))
 
 
+def reader_page(kind: str, key: str, entry: dict) -> str:
+    """Where a reader's page is, below the site root: the page a row of
+    the list links when no card anchor is given."""
+    return f"{'emulators' if kind == 'emulator' else 'platforms'}/{key}/"
+
+
 def build_wanted(
     profiles: dict,
     coverages: dict,
@@ -362,20 +352,20 @@ def build_wanted(
     placer: Placer,
     system_name: Callable[[str], str],
     ledger: Iterable[dict] = (),
-    catalogued: Mapping[tuple[str, str], list[tuple[str, str]]] | None = None,
+    link: Callable[[str, str, dict], str] = reader_page,
 ) -> dict:
     """The wanted list, compact, as public/data/wanted.json carries it.
 
     Readers, systems and folders are written once and named by position.
     An entry: n name, h hashes (absent when the declarations write none:
-    the file is known by its name only), w readers, s systems, r required,
-    z sizes, k 1 when no core reads it and 2 for game data (firmware when
-    absent), d what the file is, u why
-    it is not collected yet, l the catalogs that list it with the name
-    they give it, f folder, t the name it is uploaded under, v that name
+    the file is known by its name only), c a crc32 a declaration writes
+    beside a stronger hash (shown, never matched), w readers, s systems,
+    r required, z sizes, a the page holding its details (*link*: the card
+    of the first emulator that reads it, else the page of the first setup
+    that lists it), f folder, t the name it is uploaded under, v that name
     goes to the folder's .variants/ with the first 8 characters of its
-    sha1. Entries come most useful first. A file no one can share (the
-    reason says so, NOT_SHAREABLE) is left out.
+    sha1. Entries come most useful first (_order). A file no one can share
+    (the reason says so, NOT_SHAREABLE) is left out.
     """
     held = Held(db, ledger)
     records: dict[tuple, dict] = {}
@@ -394,8 +384,8 @@ def build_wanted(
             record = records.setdefault(key, {
                 "name": declaration["name"], "hashes": {a: list(v) for a, v in hashes.items()},
                 "sizes": sizes, "systems": set(), "required": False, "readers": set(),
-                "description": "", "reason": "", "listed": [], "category": GAME_DATA,
-                "directory": declaration["directory"],
+                "category": GAME_DATA, "directory": declaration["directory"],
+                "crc": set(), "links": {},
             })
             if RANK[declaration["category"]] < RANK[record["category"]]:
                 record["category"] = declaration["category"]
@@ -403,14 +393,9 @@ def build_wanted(
                 record["systems"].add(declaration["system"])
             record["required"] = record["required"] or declaration["required"]
             record["readers"].add(declaration["reader"])
-            record["description"] = record["description"] or first_sentence(
-                entry.get("description") or entry.get("note"))
-            record["reason"] = record["reason"] or first_sentence(declaration["reason"])
+            record["crc"] |= {v.zfill(8) for v in parse_hash_list(entry.get("crc32")) if len(v) <= 8}
             kind, reader_key, _label = declaration["reader"]
-            if kind == "emulator":
-                for where in (catalogued or {}).get((reader_key, declaration["name"].casefold()), []):
-                    if where not in record["listed"]:
-                        record["listed"].append(where)
+            record["links"].setdefault((kind != "emulator", reader_key), link(kind, reader_key, entry))
     _merge_named(records)
     ordered = sorted(records.values(), key=_order)
     _settle_cut(ordered)
@@ -432,6 +417,8 @@ def build_wanted(
         item: dict = {"n": record["name"]}
         if record["hashes"]:
             item["h"] = {algo: record["hashes"][algo] for algo in ALGORITHMS if algo in record["hashes"]}
+        if record["crc"] and "crc32" not in record["hashes"]:
+            item["c"] = sorted(record["crc"])
         item["w"] = sorted(reader_at[reader] for reader in record["readers"])
         systems = sorted({title_at[system_name(s)] for s in record["systems"]})
         if systems:
@@ -440,13 +427,7 @@ def build_wanted(
             item["r"] = 1
         if record["sizes"]:
             item["z"] = record["sizes"]
-        if RANK[record["category"]]:
-            item["k"] = RANK[record["category"]]
-        for field, value in (("d", record["description"]), ("u", record["reason"])):
-            if value:
-                item[field] = value
-        if record["listed"]:
-            item["l"] = [list(where) for where in record["listed"]]
+        item["a"] = record["links"][min(record["links"])]
         if spot.folder:
             item["f"] = folder_at[spot.folder]
         if spot.name:
@@ -482,11 +463,11 @@ def _merge_named(records: dict[tuple, dict]) -> None:
         target = targets[0]
         target["readers"] |= record["readers"]
         target["required"] = target["required"] or record["required"]
-        target["description"] = target["description"] or record["description"]
-        target["reason"] = target["reason"] or record["reason"]
+        target["crc"] |= record["crc"]
+        for where, href in record["links"].items():
+            target["links"].setdefault(where, href)
         if RANK[record["category"]] < RANK[target["category"]]:
             target["category"] = record["category"]
-        target["listed"] += [w for w in record["listed"] if w not in target["listed"]]
 
 
 def load_ledger(path: Path) -> list[dict]:
@@ -496,7 +477,8 @@ def load_ledger(path: Path) -> list[dict]:
 
 def page(total: int, known: int) -> str:
     """The wanted page: the drop box, the steps from a file in hand to a
-    file in the collection, then every wanted file (WantedList.astro).
+    file in the collection, then the table of every wanted file
+    (WantedList.astro).
 
     Held to the Start here budgets (tests/test_site_copy.py): anyone with a
     file in hand reads it.
@@ -521,13 +503,12 @@ def page(total: int, known: int) -> str:
         "- An old SD card, or the BIOS folder of an emulator used before.",
         "- A firmware update package from the maker.",
         "",
-        "When a catalog lists a file, its row in the list names it.",
         "To check any other file, use [Find or check a file](files/index.md).",
         "",
         "## Send it",
         "",
         "1. Make a free GitHub account once: [sign up](https://github.com/signup).",
-        "2. Press the upload button of the file. GitHub opens the right folder.",
+        "2. Drop the file at the top. If it is wanted, its button opens the right folder on GitHub.",
         "3. Rename the file if the page asks, then drop it there.",
         "4. GitHub makes a copy of the project and opens a pull request, a request to add the file.",
         "5. A check reads the file and comments on the request.",
@@ -539,10 +520,10 @@ def page(total: int, known: int) -> str:
         "",
         "## The wanted list",
         "",
-        (f"The list holds {total:,} files, firmware first and game data last. Of these, {known:,} have a "
-         "fingerprint (a hash), so a dropped copy is recognised."),
+        (f"{total:,} files, firmware first and game data last. A name opens its details. "
+         f"{known:,} have a fingerprint (a hash), so a dropped copy is recognised."),
         "",
-        "The others are known by name only: upload one and the check decides.",
+        "The others are known by name only: a dropped file of that name gets a button too.",
         "",
         "<WantedList />",
         "",

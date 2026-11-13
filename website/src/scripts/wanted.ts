@@ -12,10 +12,8 @@ export type Entry = {
 	s?: number[];
 	r?: number;
 	z?: number[];
-	k?: number;
-	d?: string;
-	u?: string;
-	l?: [string, string][];
+	c?: string[];
+	a: string;
 	f?: number;
 	t?: string;
 	v?: number;
@@ -69,22 +67,6 @@ export const target = (data: Wanted, entry: Entry, file: FileHashes, ownName: st
 	return { folder, name: entry.t };
 };
 
-// Where the list sends a file before it is read: the drop target, under
-// the name the declarations give. A variant's name ends with the first 8
-// characters of its sha1: with no single sha1 declared, the name is known
-// once the file is dropped, and name is empty.
-export const rowTarget = (data: Wanted, entry: Entry) => {
-	const folder = entry.f === undefined ? 'bios/' : data.folders[entry.f];
-	if (!entry.t) return { folder, name: entry.n };
-	if (!entry.v) return { folder, name: entry.t };
-	const sha1 = entry.h?.sha1?.length === 1 ? entry.h.sha1[0] : '';
-	return { folder: `${folder}.variants/`, name: sha1 ? `${entry.t}.${sha1.slice(0, 8)}` : '' };
-};
-
-// Too large for GitHub's upload page: every size the declarations allow
-// is over the limit.
-export const tooLarge = (data: Wanted, entry: Entry) => !!entry.z?.length && entry.z.every((size) => size > data.limit);
-
 let loaded: Promise<Wanted> | null = null;
 // The list, fetched once for the drop box and the list below it. The
 // version (wanted-version.ts) keeps a cached older list out.
@@ -106,15 +88,4 @@ export const issueUrl = (data: Wanted, name: string, file: FileHashes, size: num
 		sha1: file.sha1,
 		md5: file.md5,
 		size: String(size),
-	})}`;
-
-// The issue form for a listed file too large for the browser, with the
-// hashes and the size its declarations write.
-export const rowIssueUrl = (data: Wanted, entry: Entry) =>
-	`${data.issue}&${new URLSearchParams({
-		title: `[BIOS] Missing: ${entry.n}`,
-		filename: entry.n,
-		sha1: entry.h?.sha1?.[0] ?? '',
-		md5: entry.h?.md5?.find((value) => value.length === 32) ?? '',
-		size: entry.z?.length === 1 ? String(entry.z[0]) : '',
 	})}`;

@@ -5914,6 +5914,19 @@ def _emulator_card_anchor(emulator: str, files: list, index: int) -> str:
     return cached[1][index] if 0 <= index < len(cached[1]) else ""
 
 
+def _wanted_link(profiles: dict) -> Callable[[str, str, dict], str]:
+    """The page a row of the wanted list links: an emulator entry's card,
+    where its notes, hashes and source line are, else the setup's page."""
+    def link(kind: str, key: str, entry: dict) -> str:
+        files = (profiles.get(key) or {}).get("files") or [] if kind == "emulator" else []
+        index = next((i for i, f in enumerate(files) if f is entry), -1)
+        anchor = _emulator_card_anchor(key, files, index) if index >= 0 else ""
+        if anchor:
+            return f"emulators/{emulator_card_page(key, anchor)}/#{anchor}"
+        return sitewanted.reader_page(kind, key, entry)
+    return link
+
+
 def _emulator_links(sha1: str, consumers: FileConsumers) -> list[str]:
     """Each emulator reading the file, linked to the entry that reads it.
 
@@ -12830,7 +12843,7 @@ def _generate(args: argparse.Namespace) -> None:
     wanted = sitewanted.build_wanted(
         profiles, coverages, gap_report, db, placer, system_name,
         sitewanted.load_ledger(archive_build.ARCHIVES_FILE),
-        sitewanted.catalog_listings(provenance_report, _PROVENANCE_LABELS),
+        _wanted_link(profiles),
     )
     (public / "data").mkdir(parents=True, exist_ok=True)
     write_if_changed(str(public / sitewanted.DATA_FILE),

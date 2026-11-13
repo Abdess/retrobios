@@ -188,20 +188,21 @@ class TheListHoldsWhatTheGapsReportLacks(_World):
         for name in ("nohash.bin", "z.zip"):
             with self.subTest(name=name):
                 self.assertNotIn("h", self.entry(name))
-        self.assertEqual(self.entry("nohash.bin")["d"], "A boot ROM.")
         self.assertIn("h", self.entry("b.bin"))
 
+    # The world's categories: g.bin is game data, cut.bin a file a
+    # platform lists and no core reads, the others firmware.
+    KIND = {"g.bin": 2, "cut.bin": 1}
+
     def test_required_entries_come_first(self):
-        firmware = [e for e in self.data["entries"] if not e.get("k")]
+        firmware = [e for e in self.data["entries"] if e["n"] not in self.KIND]
         needs = [bool(e.get("r")) for e in firmware]
         self.assertEqual(needs, sorted(needs, reverse=True))
         self.assertTrue(any(needs) and not all(needs))
 
     def test_firmware_comes_before_game_data(self):
-        kinds = [e.get("k", 0) for e in self.data["entries"]]
+        kinds = [self.KIND.get(e["n"], 0) for e in self.data["entries"]]
         self.assertEqual(kinds, sorted(kinds))
-        self.assertEqual(self.entry("g.bin")["k"], 2)
-        self.assertEqual(self.entry("cut.bin")["k"], 1)
         # g.bin is required, and still after every optional firmware file.
         self.assertEqual(self.data["entries"][-1]["n"], "g.bin")
         self.assertEqual(self.entry("g.bin").get("r"), 1)
@@ -248,10 +249,10 @@ class TheListHoldsWhatTheGapsReportLacks(_World):
             ("b.bin", (("sha1", ("x",)),), ()): {
                 "name": "b.bin", "hashes": {"sha1": ["x"]}, "systems": {"x"}, "required": False,
                 "readers": {("emulator", "engine", "Engine")}, "description": "",
-                "reason": "", "listed": [], "category": sitewanted.GAME_DATA},
+                "category": sitewanted.GAME_DATA, "crc": set(), "links": {(False, "engine"): "e"}},
             ("b.bin", "x", ""): {
                 "name": "b.bin", "hashes": {}, "systems": {"x"}, "required": True,
-                "readers": {reader}, "description": "B", "reason": "", "listed": [],
+                "readers": {reader}, "crc": {"1234abcd"}, "links": {(False, "other"): "o"},
                 "category": sitewanted.BIOS},
         }
         sitewanted._merge_named(records)
@@ -271,21 +272,38 @@ class TheListHoldsWhatTheGapsReportLacks(_World):
                                        str, self.ledger)
         self.assertNotIn("<serial>.txt", [e["n"] for e in data["entries"]])
 
-    def test_a_catalog_listing_reaches_its_entry(self):
-        listings = sitewanted.catalog_listings(
-            {"tosec": {"missing": [{"name": "Boot (1990)", "romsets": [],
-                                    "needed_by": [{"emulator": "engine", "name": "b.bin"}]}]}},
-            {"tosec": "TOSEC"})
-        data = sitewanted.build_wanted(self.profiles, self.coverages, self.gap_report, self.db,
-                                       self.placer, str, self.ledger, listings)
-        self.assertEqual(next(e for e in data["entries"] if e["n"] == "b.bin")["l"],
-                         [["TOSEC", "Boot (1990)"]])
+    def test_every_name_links_its_details(self):
+        """An emulator's entry links its card, a file only a setup lists
+        links that setup's page."""
+        seen = []
 
-    def test_first_sentence(self):
-        self.assertEqual(sitewanted.first_sentence("One. Two."), "One.")
-        self.assertEqual(sitewanted.first_sentence("Ver. 1.0 of A"), "Ver. 1.0 of A")
-        cut = sitewanted.first_sentence("word " * 60)
-        self.assertTrue(cut.endswith("...") and len(cut) <= sitewanted.DESCRIPTION_LIMIT + 3)
+        def link(kind: str, key: str, entry: dict) -> str:
+            seen.append((kind, key, entry["name"]))
+            return f"{kind}/{key}/#{entry['name']}"
+
+        data = sitewanted.build_wanted(self.profiles, self.coverages, self.gap_report, self.db,
+                                       self.placer, str, self.ledger, link)
+        links = {e["n"]: e["a"] for e in data["entries"]}
+        self.assertEqual(links["b.bin"], "emulator/engine/#b.bin")
+        self.assertEqual(links["v.bin"], "platform/plat/#v.bin")
+        self.assertTrue(all(e["a"] for e in data["entries"]))
+        self.assertEqual(sitewanted.reader_page("platform", "plat", {}), "platforms/plat/")
+
+    def test_a_crc32_beside_a_stronger_hash_is_shown_not_matched(self):
+        profiles = {"engine": {**self.profiles["engine"], "files": [
+            {**f, "crc32": crc(WANTED)} if f["name"] == "b.bin" else f
+            for f in self.profiles["engine"]["files"]]}}
+        data = sitewanted.build_wanted(profiles, self.coverages, self.gap_report, self.db,
+                                       self.placer, str, self.ledger)
+        entry = next(e for e in data["entries"] if e["n"] == "b.bin")
+        self.assertEqual(entry["h"], {"sha1": [sha1(WANTED)]})
+        self.assertEqual(entry["c"], [crc(WANTED)])
+
+    def test_the_list_carries_only_what_the_table_and_the_drop_box_read(self):
+        allowed = {"n", "h", "c", "w", "s", "r", "z", "a", "f", "t", "v"}
+        for entry in self.data["entries"]:
+            with self.subTest(entry=entry["n"]):
+                self.assertLessEqual(set(entry), allowed)
 
     def test_an_entry_carries_its_readers_system_and_need(self):
         entry = self.entry("b.bin")
@@ -450,28 +468,6 @@ class ThePageReadsTheListAsTheResolverDoes(_World):
         self.assertEqual(variant, {"folder": "bios/Maker/Console/.variants/",
                                    "name": f"v.bin.{sha1(VARIANT)[:8]}"})
 
-    def test_every_row_uploads_to_the_reviews_folder(self):
-        """The list's own button on each row, against validate_pr.placement
-        for the declarations of that row."""
-        rows = json.loads(_node(
-            f"import {{ rowTarget, uploadUrl }} from {json.dumps(WANTED_TS.as_uri())};"
-            f"const data = {json.dumps(self.data)};"
-            "console.log(JSON.stringify(data.entries.map((e) => {"
-            " const place = rowTarget(data, e); return {...place, url: uploadUrl(data, place.folder)}; })));"
-        ))
-        self.assertEqual(len(rows), len(self.data["entries"]))
-        for entry, place in zip(self.data["entries"], rows):
-            spot = self.placer.place(entry.get("h", {}), entry["n"], ["x"])
-            folder = (spot.folder or "bios/") + (".variants/" if spot.variant else "")
-            with self.subTest(entry=entry["n"]):
-                self.assertEqual(place["folder"], folder)
-                self.assertEqual(place["url"], sitewanted.upload_href(sitewanted.UPLOAD_ROOT, folder))
-                if spot.variant:
-                    self.assertEqual(place["name"], f"{spot.name}.{entry['h']['sha1'][0][:8]}"
-                                     if len(entry.get("h", {}).get("sha1", [])) == 1 else "")
-                else:
-                    self.assertEqual(place["name"], spot.name or entry["n"])
-
     def test_a_dropped_file_meets_a_name_only_entry_by_its_name(self):
         out = json.loads(_node(
             f"import {{ byName, matches }} from {json.dumps(WANTED_TS.as_uri())};"
@@ -516,6 +512,19 @@ class ThePageSpeaksWithoutPronouns(unittest.TestCase):
             with self.subTest(component=name):
                 self.assertTrue(texts)
                 self.assertEqual([t for t in texts if pronouns(t)], [])
+
+    def test_a_simple_table(self):
+        """File name, size and the three hashes, a name linked to its
+        details: nothing else on a row."""
+        source = (COMPONENTS / "WantedList.astro").read_text(encoding="utf-8")
+        head = re.search(r"<thead>(.*?)</thead>", source, re.S)[1]
+        self.assertEqual(re.findall(r"<th[^>]*>([^<]*)</th>", head),
+                         ["File name", "Size", "CRC32", "MD5", "SHA1"])
+        script = source[source.index("<script>"):source.index("</script>")]
+        self.assertIn("name.href = `${base}${entry.a}`;", script)
+        for gone in ("entry.d", "entry.u", "entry.l", "entry.r", "entry.w", "Upload", "rb-badge",
+                     "Copy"):
+            self.assertNotIn(gone, script)
 
     def test_the_page_lists_the_steps(self):
         text = sitewanted.page(1_165, 199)
@@ -580,12 +589,7 @@ class ThePublishedList(unittest.TestCase):
             with self.subTest(entry=entry["n"]):
                 self.assertFalse(held.holds(entry["h"], entry.get("z", [])))
 
-    def test_firmware_first_then_required_first(self):
-        kinds = [e.get("k", 0) for e in self.data["entries"]]
-        self.assertEqual(kinds, sorted(kinds))
-        for kind in (0, 1, 2):
-            needs = [bool(e.get("r")) for e in self.data["entries"] if e.get("k", 0) == kind]
-            self.assertEqual(needs, sorted(needs, reverse=True))
+    def test_name_only_entries_are_kept(self):
         self.assertTrue(any("h" not in e for e in self.data["entries"]))
 
     def test_every_folder_is_the_reviews(self):
@@ -607,6 +611,23 @@ class ThePublishedList(unittest.TestCase):
 
     def test_weight(self):
         self.assertLess(PUBLISHED.stat().st_size, 200_000)
+
+    def test_every_link_lands_on_its_details(self):
+        """Each name's link is a built page, and a card anchor is on it."""
+        dist = WEBSITE / "dist"
+        if not dist.is_dir():
+            self.skipTest("no built site")
+        pages: dict[str, str] = {}
+        for entry in self.data["entries"]:
+            path, _, anchor = entry["a"].partition("#")
+            html = pages.get(path)
+            if html is None:
+                built = dist / path / "index.html"
+                html = pages[path] = built.read_text(encoding="utf-8") if built.is_file() else ""
+            with self.subTest(entry=entry["n"], link=entry["a"]):
+                self.assertTrue(html)
+                if anchor:
+                    self.assertIn(f'id="{anchor}"', html)
 
     def test_the_built_page_asks_for_this_list(self):
         """The list's address carries its version: a browser that cached an
