@@ -336,7 +336,9 @@ def page(known: int) -> str:
         "3. A check reads the file and says if it fits. Then we add it.",
         "",
         (f"The page knows {known:,} wanted files by their hash, a fingerprint of the contents. "
-        "The rest are listed on [the gaps page](gaps.md). "
+        "The rest are listed on [the gaps page](gaps.md)."),
+        "",
+        ("To look up any file, use [Find or check a file](files/index.md). "
         "More ways to help are on [Contributing](contributing.md)."),
         "",
     ])

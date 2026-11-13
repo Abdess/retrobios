@@ -300,6 +300,15 @@ class ThePageReadsTheListAsTheResolverDoes(_World):
         self.assertEqual(self._page(WANTED, "b.bin")["issue"], validate_pr.large_file_issue_url(result))
 
 
+class TheTwoPagesLinkEachOther(unittest.TestCase):
+    """files/ checks any file, wanted/ the ones the collection lacks: each
+    sends a reader to the other in one line."""
+
+    def test_links(self):
+        self.assertIn("[See if it is wanted](../wanted.md)", generate_site.generate_files_page())
+        self.assertIn("[Find or check a file](files/index.md)", sitewanted.page(1))
+
+
 class ThePublishedList(unittest.TestCase):
     """The list generate_site.py wrote, against the collection: nothing it
     holds, every folder by validate_pr, and light enough for a phone."""

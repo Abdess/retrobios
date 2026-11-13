@@ -3,12 +3,20 @@
 // tabs: the funnel (Start here to Contribute) is the site's structure, so it
 // sits where every docs site puts its sections. On a phone the tabs stay the
 // first row of the menu, where the sidebar lists them.
+// The wanted page is the one call to contribute, in the bar on every page
+// and every width: on a phone it sits beside the search and menu buttons.
 import Default from '@astrojs/starlight/components/Header.astro';
 
 const topics = Astro.locals.starlightSidebarTopics?.topics ?? [];
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const wanted = `${base}wanted/`;
+const onWanted = Astro.url.pathname.replace(/\/?$/, '/') === wanted;
 ---
 
-<div class="rb-header-bar"><Default /></div>
+<div class="rb-header-bar">
+	<Default />
+	<a class="rb-wanted-link print:hidden" href={wanted} aria-current={onWanted ? 'page' : undefined}>Wanted files</a>
+</div>
 {
 	topics.length > 0 && (
 		<nav class="rb-tabs print:hidden" aria-label="Sections">
@@ -27,7 +35,45 @@ const topics = Astro.locals.starlightSidebarTopics?.topics ?? [];
 
 <!-- Global: the bar height and the sidebar's topic list belong to other components. -->
 <style is:global>
-	.rb-header-bar { height: 100%; }
+	.rb-header-bar {
+		display: flex;
+		align-items: center;
+		gap: var(--sl-nav-gap);
+		height: 100%;
+	}
+	.rb-header-bar > .header { flex: 1; min-width: 0; }
+	/* A call to contribute: an outlined pill in the link colour, filled on
+	   its own page. The colours are the theme's, in light and dark. */
+	.rb-wanted-link {
+		display: inline-flex;
+		flex: none;
+		align-items: center;
+		min-height: 2rem;
+		padding: 0 0.75rem;
+		border: 1px solid var(--rb-link);
+		border-radius: 999px;
+		color: var(--rb-link);
+		font-size: var(--sl-text-sm);
+		font-weight: 600;
+		text-decoration: none;
+		white-space: nowrap;
+	}
+	.rb-wanted-link:hover { background: var(--sl-color-accent-low); }
+	.rb-wanted-link:focus-visible { outline: 2px solid var(--rb-link); outline-offset: 2px; }
+	.rb-wanted-link[aria-current='page'] { background: var(--rb-link); color: var(--sl-color-black); }
+	/* Below 27rem the bar cannot hold the name, the search, the link and the
+	   menu: the logo stays as the home link and the name is kept for screen
+	   readers, rather than cut to "Retr". */
+	@media (max-width: 26.99rem) {
+		.site-title span {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			clip-path: inset(50%);
+			white-space: nowrap;
+		}
+	}
 	.rb-tabs { display: none; }
 
 	/* "Look up this hash", the first result of a hash typed in the search (site.ts). */

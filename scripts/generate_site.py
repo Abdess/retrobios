@@ -4887,6 +4887,8 @@ def generate_files_page() -> str:
         "`scph5501.bin`, the PlayStation BIOS v3.0. "
         "To look a file up by its name, use the search at the top of the page.",
         "",
+        "Have a file the collection lacks? [See if it is wanted](../wanted.md).",
+        "",
         "## Permanent links",
         "",
         "A file's card lives on its manufacturer's page, and a file refiled "

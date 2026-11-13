@@ -189,6 +189,38 @@ class SectionTabsInTheHeader(unittest.TestCase):
         self.assertRegex(nav.group(1), r'aria-current="true"[^>]*>\s*Start here')
 
 
+class TheWantedPageIsInTheBar(unittest.TestCase):
+    """The wanted page is the site's call to contribute: in the bar on every
+    page, beside the search and menu buttons on a phone, where the section
+    tabs fold into the menu."""
+
+    LINK = re.compile(r'<a class="rb-wanted-link[^"]*" href="/retrobios/wanted/"([^>]*)>Wanted files</a>')
+
+    def test_the_bar_holds_it_outside_the_tabs(self):
+        header = _read(COMPONENTS / "Header.astro")
+        bar = header[header.index('<div class="rb-header-bar">'):header.index("</div>")]
+        self.assertIn('class="rb-wanted-link print:hidden"', bar)
+        self.assertIn("aria-current={onWanted ? 'page' : undefined}", bar)
+        # Theme colours only, the same in both themes' variables.
+        style = header[header.index(".rb-wanted-link {"):header.index("@media")]
+        self.assertNotRegex(style, r"#[0-9a-fA-F]{3,6}\b")
+        # At 360 px the name was cut to "Retr": the logo stays, the name is
+        # kept for screen readers only.
+        narrow = header[header.index("@media (max-width: 26.99rem)"):]
+        self.assertIn(".site-title span {", narrow[:200])
+        self.assertIn("clip-path: inset(50%);", narrow[:400])
+
+    def test_built_on_every_page_current_on_its_own(self):
+        for page in ("which-pack", "files", "systems"):
+            with self.subTest(page=page):
+                found = self.LINK.search(_built(page))
+                self.assertIsNotNone(found)
+                self.assertNotIn("aria-current", found.group(1))
+        own = self.LINK.search(_built("wanted"))
+        self.assertIsNotNone(own)
+        self.assertIn('aria-current="page"', own.group(1))
+
+
 def _title_block(html: str) -> str:
     """What PageTitle draws: from the main column to the h1."""
     end = html.index('id="_top"')
