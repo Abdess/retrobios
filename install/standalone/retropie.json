@@ -4860,6 +4860,14 @@
         "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
       ],
       [
+        "kickstarts/KS ROM v2.05 (A600).rom",
+        "87508de834dc7eb47359cede72d2e3c8a2e5d8db"
+      ],
+      [
+        "kickstarts/KS ROM v2.05 (A600HD).rom",
+        "f72d89148dac39c696e30b10859ebc859226637b"
+      ],
+      [
         "kickstarts/amiga-os-205-a600.rom",
         "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
       ],
@@ -4874,6 +4882,10 @@
       [
         "kickstarts/amiga-os-300-a4000.rom",
         "f0b4e9e29e12218c2d5bd7020e4e785297d91fd7"
+      ],
+      [
+        "kickstarts/KS ROM v3.1 (A4000).rom",
+        "81c631dd096bbb31d2af90299c76b774db74076c"
       ],
       [
         "kickstarts/amiga-os-310-a600.rom",
@@ -4898,6 +4910,14 @@
       [
         "kickstarts/amiga-os-310-a4000t.rom",
         "b0ec8b84d6768321e01209f11e6248f2f5281a21"
+      ],
+      [
+        "kickstarts/KS ROM v3.1.4-1 (A4000).rom",
+        "bad0ae388442db02eaeb6a5363ef43eb4e308ae6"
+      ],
+      [
+        "kickstarts/KS ROM v3.2 (A1200).rom",
+        "5b2982876fec2166673be447643881262c84090e"
       ],
       [
         "kickstarts/KS ROM v3.2 (Walker).rom",
@@ -4954,6 +4974,10 @@
       [
         "kickstarts/cdtv-cr-extended-rom-v3.44.rom",
         "3b160c5abe79f10ae69243328004bb9e3162b648"
+      ],
+      [
+        "kickstarts/A1000 bootstrap ROM.rom",
+        "ba93b8b85ca0d83a68225cc33b95050d72d2fdd7"
       ],
       [
         "kickstarts/The Diagnostic 2.0 (Logica).rom",
@@ -5578,6 +5602,22 @@
       [
         "kickstarts/cyberstorm-mk-i-cyberscsi-module.rom",
         "8e95bc8da06050fcb596b5b4c8cf91021ff4aeb3"
+      ],
+      [
+        "kickstarts/cyberstormmk3.rom",
+        "8adc960a086202f8de77a1eebb579036552840ad"
+      ],
+      [
+        "kickstarts/cyberstormppc.rom",
+        "41f30a0acbe93d2f309f1dd2077fffa21be8f8e2"
+      ],
+      [
+        "kickstarts/blizzardppc_040.rom",
+        "c9f86e18a1004e9cfe4eede2e0b399701c54323b"
+      ],
+      [
+        "kickstarts/blizzardppc_060.rom",
+        "ad1f450962c094ba2d970a501714b4997ba444ba"
       ],
       [
         "kickstarts/picasso_iv_flash.rom",
@@ -5702,6 +5742,14 @@
         "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
       ],
       [
+        "kickstarts/KS ROM v2.05 (A600).rom",
+        "87508de834dc7eb47359cede72d2e3c8a2e5d8db"
+      ],
+      [
+        "kickstarts/KS ROM v2.05 (A600HD).rom",
+        "f72d89148dac39c696e30b10859ebc859226637b"
+      ],
+      [
         "kickstarts/amiga-os-205-a600.rom",
         "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
       ],
@@ -5716,6 +5764,10 @@
       [
         "kickstarts/amiga-os-300-a4000.rom",
         "f0b4e9e29e12218c2d5bd7020e4e785297d91fd7"
+      ],
+      [
+        "kickstarts/KS ROM v3.1 (A4000).rom",
+        "81c631dd096bbb31d2af90299c76b774db74076c"
       ],
       [
         "kickstarts/amiga-os-310-a600.rom",
@@ -5740,6 +5792,14 @@
       [
         "kickstarts/amiga-os-310-a4000t.rom",
         "b0ec8b84d6768321e01209f11e6248f2f5281a21"
+      ],
+      [
+        "kickstarts/KS ROM v3.1.4-1 (A4000).rom",
+        "bad0ae388442db02eaeb6a5363ef43eb4e308ae6"
+      ],
+      [
+        "kickstarts/KS ROM v3.2 (A1200).rom",
+        "5b2982876fec2166673be447643881262c84090e"
       ],
       [
         "kickstarts/KS ROM v3.2 (Walker).rom",
@@ -5796,6 +5856,10 @@
       [
         "kickstarts/cdtv-cr-extended-rom-v3.44.rom",
         "3b160c5abe79f10ae69243328004bb9e3162b648"
+      ],
+      [
+        "kickstarts/A1000 bootstrap ROM.rom",
+        "ba93b8b85ca0d83a68225cc33b95050d72d2fdd7"
       ],
       [
         "kickstarts/The Diagnostic 2.0 (Logica).rom",
@@ -6420,6 +6484,22 @@
       [
         "kickstarts/cyberstorm-mk-i-cyberscsi-module.rom",
         "8e95bc8da06050fcb596b5b4c8cf91021ff4aeb3"
+      ],
+      [
+        "kickstarts/cyberstormmk3.rom",
+        "8adc960a086202f8de77a1eebb579036552840ad"
+      ],
+      [
+        "kickstarts/cyberstormppc.rom",
+        "41f30a0acbe93d2f309f1dd2077fffa21be8f8e2"
+      ],
+      [
+        "kickstarts/blizzardppc_040.rom",
+        "c9f86e18a1004e9cfe4eede2e0b399701c54323b"
+      ],
+      [
+        "kickstarts/blizzardppc_060.rom",
+        "ad1f450962c094ba2d970a501714b4997ba444ba"
       ],
       [
         "kickstarts/picasso_iv_flash.rom",

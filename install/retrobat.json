@@ -7,7 +7,7 @@
   "platform": "retrobat",
   "display_name": "RetroBat",
   "version": "8.3.1",
-  "generated": "2026-11-13T03:31:25Z",
+  "generated": "2026-11-13T11:31:17Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -1781,11 +1781,11 @@
       }
     }
   ],
-  "total_files": 7982,
-  "total_size": 9631458795,
-  "pack_files": 11222,
-  "pack_size": 9649131554,
-  "total_omitted": 463,
+  "total_files": 8027,
+  "total_size": 9639486696,
+  "pack_files": 11252,
+  "pack_size": 9651834655,
+  "total_omitted": 418,
   "omitted_files": [
     {
       "dest": "3dobios.zip",
@@ -2599,17 +2599,6 @@
       "held": true
     },
     {
-      "dest": "amiberry/ROMs/A1000 bootstrap ROM.rom",
-      "root": "emulators",
-      "name": "A1000 bootstrap ROM.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-8.3.0"
-      ]
-    },
-    {
       "dest": "amiberry/ROMs/Casablanca 74095 - 00 717 - 02.rom",
       "root": "emulators",
       "name": "Casablanca 74095 - 00 717 - 02.rom",
@@ -2632,42 +2621,9 @@
       ]
     },
     {
-      "dest": "amiberry/ROMs/KS ROM v2.05 (A600).rom",
-      "root": "emulators",
-      "name": "KS ROM v2.05 (A600).rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-8.3.0"
-      ]
-    },
-    {
-      "dest": "amiberry/ROMs/KS ROM v2.05 (A600HD).rom",
-      "root": "emulators",
-      "name": "KS ROM v2.05 (A600HD).rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-8.3.0"
-      ]
-    },
-    {
       "dest": "amiberry/ROMs/KS ROM v23.93 (Velvet).rom",
       "root": "emulators",
       "name": "KS ROM v23.93 (Velvet).rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-8.3.0"
-      ]
-    },
-    {
-      "dest": "amiberry/ROMs/KS ROM v3.1 (A4000).rom",
-      "root": "emulators",
-      "name": "KS ROM v3.1 (A4000).rom",
       "system": "commodore-amiga",
       "required": false,
       "reason": "not_found",
@@ -2690,17 +2646,6 @@
       "dest": "amiberry/ROMs/KS ROM v3.1.4-1 (A3000).rom",
       "root": "emulators",
       "name": "KS ROM v3.1.4-1 (A3000).rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-8.3.0"
-      ]
-    },
-    {
-      "dest": "amiberry/ROMs/KS ROM v3.1.4-1 (A4000).rom",
-      "root": "emulators",
-      "name": "KS ROM v3.1.4-1 (A4000).rom",
       "system": "commodore-amiga",
       "required": false,
       "reason": "not_found",
@@ -2778,17 +2723,6 @@
       "dest": "amiberry/ROMs/KS ROM v3.1.4-2 (A500).rom",
       "root": "emulators",
       "name": "KS ROM v3.1.4-2 (A500).rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-8.3.0"
-      ]
-    },
-    {
-      "dest": "amiberry/ROMs/KS ROM v3.2 (A1200).rom",
-      "root": "emulators",
-      "name": "KS ROM v3.2 (A1200).rom",
       "system": "commodore-amiga",
       "required": false,
       "reason": "not_found",
@@ -3017,17 +2951,6 @@
       ]
     },
     {
-      "dest": "amiberry/ROMs/a1060-bios-2.07.rom",
-      "root": "emulators",
-      "name": "a1060-bios-2.07.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-8.3.0"
-      ]
-    },
-    {
       "dest": "amiberry/ROMs/apollo-630.rom",
       "root": "emulators",
       "name": "apollo-630.rom",
@@ -3050,97 +2973,9 @@
       ]
     },
     {
-      "dest": "amiberry/ROMs/blizzard-ppc-68040-v44.69.rom",
-      "root": "emulators",
-      "name": "blizzard-ppc-68040-v44.69.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-8.3.0"
-      ]
-    },
-    {
-      "dest": "amiberry/ROMs/blizzard-ppc-68060-v44.69.rom",
-      "root": "emulators",
-      "name": "blizzard-ppc-68060-v44.69.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-8.3.0"
-      ]
-    },
-    {
-      "dest": "amiberry/ROMs/blizzardppc_040.rom",
-      "root": "emulators",
-      "name": "blizzardppc_040.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-8.3.0"
-      ]
-    },
-    {
-      "dest": "amiberry/ROMs/blizzardppc_060.rom",
-      "root": "emulators",
-      "name": "blizzardppc_060.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-8.3.0"
-      ]
-    },
-    {
-      "dest": "amiberry/ROMs/cyberstorm-mk-iii-v44.69.rom",
-      "root": "emulators",
-      "name": "cyberstorm-mk-iii-v44.69.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-8.3.0"
-      ]
-    },
-    {
-      "dest": "amiberry/ROMs/cyberstorm-ppc-v44.69.rom",
-      "root": "emulators",
-      "name": "cyberstorm-ppc-v44.69.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-8.3.0"
-      ]
-    },
-    {
       "dest": "amiberry/ROMs/cyberstormmk2.rom",
       "root": "emulators",
       "name": "cyberstormmk2.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-8.3.0"
-      ]
-    },
-    {
-      "dest": "amiberry/ROMs/cyberstormmk3.rom",
-      "root": "emulators",
-      "name": "cyberstormmk3.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-8.3.0"
-      ]
-    },
-    {
-      "dest": "amiberry/ROMs/cyberstormppc.rom",
-      "root": "emulators",
-      "name": "cyberstormppc.rom",
       "system": "commodore-amiga",
       "required": false,
       "reason": "not_found",
@@ -6007,88 +5842,8 @@
       ]
     },
     {
-      "dest": "roms/blizzard-ppc-68040-v44.69.rom",
-      "name": "blizzard-ppc-68040-v44.69.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "roms/blizzard-ppc-68060-v44.69.rom",
-      "name": "blizzard-ppc-68060-v44.69.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "roms/blizzardppc_040.rom",
-      "name": "blizzardppc_040.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "roms/blizzardppc_060.rom",
-      "name": "blizzardppc_060.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "roms/cyberstorm-mk-iii-v44.69.rom",
-      "name": "cyberstorm-mk-iii-v44.69.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "roms/cyberstorm-ppc-v44.69.rom",
-      "name": "cyberstorm-ppc-v44.69.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
       "dest": "roms/cyberstormmk2.rom",
       "name": "cyberstormmk2.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "roms/cyberstormmk3.rom",
-      "name": "cyberstormmk3.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "roms/cyberstormppc.rom",
-      "name": "cyberstormppc.rom",
       "system": "commodore-amiga",
       "required": false,
       "reason": "not_found",
@@ -6853,226 +6608,6 @@
       "reason": "outside_bios_folder",
       "cores": [
         "mame2016"
-      ]
-    },
-    {
-      "dest": "whdboot/Libs/68040.library",
-      "name": "68040.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "whdboot/Libs/680x0.library",
-      "name": "680x0.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "whdboot/Libs/Compressors/xpkCBR0.library",
-      "name": "Compressors/xpkCBR0.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "whdboot/Libs/Compressors/xpkDLTA.library",
-      "name": "Compressors/xpkDLTA.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "whdboot/Libs/Compressors/xpkDUKE.library",
-      "name": "Compressors/xpkDUKE.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "whdboot/Libs/Compressors/xpkFAST.library",
-      "name": "Compressors/xpkFAST.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "whdboot/Libs/Compressors/xpkFRLE.library",
-      "name": "Compressors/xpkFRLE.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "whdboot/Libs/Compressors/xpkHFMN.library",
-      "name": "Compressors/xpkHFMN.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "whdboot/Libs/Compressors/xpkHUFF.library",
-      "name": "Compressors/xpkHUFF.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "whdboot/Libs/Compressors/xpkIMPL.library",
-      "name": "Compressors/xpkIMPL.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "whdboot/Libs/Compressors/xpkMASH.library",
-      "name": "Compressors/xpkMASH.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "whdboot/Libs/Compressors/xpkNONE.library",
-      "name": "Compressors/xpkNONE.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "whdboot/Libs/Compressors/xpkNUKE.library",
-      "name": "Compressors/xpkNUKE.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "whdboot/Libs/Compressors/xpkRAKE.library",
-      "name": "Compressors/xpkRAKE.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "whdboot/Libs/Compressors/xpkRLEN.library",
-      "name": "Compressors/xpkRLEN.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "whdboot/Libs/Compressors/xpkSHRI.library",
-      "name": "Compressors/xpkSHRI.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "whdboot/Libs/Compressors/xpkSMPL.library",
-      "name": "Compressors/xpkSMPL.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "whdboot/Libs/Compressors/xpkSQSH.library",
-      "name": "Compressors/xpkSQSH.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "whdboot/Libs/explode.library",
-      "name": "explode.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "whdboot/Libs/medplayer.library",
-      "name": "medplayer.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "whdboot/Libs/mmu.library",
-      "name": "mmu.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "whdboot/Libs/xpkmaster.library",
-      "name": "xpkmaster.library",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry"
       ]
     }
   ],
@@ -19841,10 +19376,257 @@
       ]
     },
     {
+      "dest": "whdboot/Libs/xpkmaster.library",
+      "sha1": "5bd19f9503b59c5d19bfe1c6a6e3b6e7c0e9eae2",
+      "sha256": "3e709afeb8506a88fc8a43c05fd056825e0f06bd95cf48f81338733e7d521a39",
+      "size": 16496,
+      "repo_path": "bios/Commodore/Amiga/whdboot/Libs/xpkmaster.library",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkCBR0.library",
+      "sha1": "a2a76c10cb06315e51990911fa050669cc89830d",
+      "sha256": "2572b3228725a9bd32b008aa4fd225d176ca6af47d03978f44be13d77fe6f462",
+      "size": 1300,
+      "repo_path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkCBR0.library",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkDLTA.library",
+      "sha1": "ca64f89919c2869cb6fd75346b9a21245a6d04a8",
+      "sha256": "26b8e5721012e6d3bde59782c24747a6799dc86882655f4bae4939f6d36597a4",
+      "size": 960,
+      "repo_path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkDLTA.library",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkDUKE.library",
+      "sha1": "8102d77ae0a3d64496436ee56a9c577c84b11992",
+      "sha256": "70af41004441e1d793dd70cfe9f491d9e09a667969bf3360e64ae39999260e5b",
+      "size": 3280,
+      "repo_path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkDUKE.library",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkFAST.library",
+      "sha1": "4599430f3baa302635a85b26a7b70a4116dc5f09",
+      "sha256": "c27e93d5f11004e186ac9bdef75ff9dd121c0651eb44e8a987d4179e6bfcb049",
+      "size": 2136,
+      "repo_path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkFAST.library",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkFRLE.library",
+      "sha1": "d0746429187ab38e886a47820203315f734e8d89",
+      "sha256": "5d4f8f16bd935249a88c64afd450c0b8ca9adda960629b00ba9314e13e2e5b4e",
+      "size": 1124,
+      "repo_path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkFRLE.library",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkHFMN.library",
+      "sha1": "f4a8dbe69e386d87d9ab8cbaf7fc3881b358fdb2",
+      "sha256": "f40ab6ee8670eb0493e66e2f335c11bdc4e97fb56d97c01e13d51d6275d667ad",
+      "size": 2124,
+      "repo_path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkHFMN.library",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkHUFF.library",
+      "sha1": "f22d099b81d2d039c4fbb3fea47cc9700b01fecf",
+      "sha256": "3e3977cd7627c845468eef9737ff50540700c4e3197e13c8255e4cf92eeeddba",
+      "size": 2284,
+      "repo_path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkHUFF.library",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkIMPL.library",
+      "sha1": "0e00bc18aec757d86f9831131c2236a704c175db",
+      "sha256": "07e7d0d0e2e429726003dad04cefc003dcb8375076cadb7a3daba7dab6254d33",
+      "size": 4048,
+      "repo_path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkIMPL.library",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkMASH.library",
+      "sha1": "1093133a17cb635c21c5532ae26ded83b6d359ce",
+      "sha256": "244c4e807e8cc1d80a6a197a8b0071ebf71591233efd5e518c09927015cc4328",
+      "size": 2816,
+      "repo_path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkMASH.library",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkNONE.library",
+      "sha1": "46dca6e2ff2176f7a12c52ea992a7a49ae5ef269",
+      "sha256": "732b07e66d11cf507b4c5884ad93057fabdb936666117e69bb59233747ad1392",
+      "size": 812,
+      "repo_path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkNONE.library",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkNUKE.library",
+      "sha1": "168bee97805be1f85b65f615e6931c4942caf4e4",
+      "sha256": "8dd05bd2a4becddfb5fc0945255fd13b5c73920c1e46e9fd3acc4b2e834b6428",
+      "size": 2900,
+      "repo_path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkNUKE.library",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkRAKE.library",
+      "sha1": "50cd2a19bee1ebd6b54b31c5b9461d5a81a2e910",
+      "sha256": "c8286e4bc4f922262351ef00ab410955b4ad3216bad9b17d5647378fc755e06e",
+      "size": 6604,
+      "repo_path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkRAKE.library",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkRLEN.library",
+      "sha1": "c81cf6d99de56faa6154cc81a9876517c2a8efc0",
+      "sha256": "8c5bbdc3f3f57e874b1a09ff40cea41f292bc5b4caaa88df9366a1798437d493",
+      "size": 1008,
+      "repo_path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkRLEN.library",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkSHRI.library",
+      "sha1": "fc96d367e7b3409074841c7f145ab6daef0a6a4d",
+      "sha256": "25f27d71d13e26b0331441370833cdd985a6c22777f873acc3aa2c5f5e13e218",
+      "size": 9272,
+      "repo_path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkSHRI.library",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkSMPL.library",
+      "sha1": "d140b4e87a2ff76cf94616d97fe7b127d128d973",
+      "sha256": "9ccd9bc15c809325d21a6924fa1056d1cba44f8d02529004ff2055a2f6aed0d1",
+      "size": 1740,
+      "repo_path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkSMPL.library",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/Compressors/xpkSQSH.library",
+      "sha1": "2191b616abd4b2fb34c89ae243c35feea2b71104",
+      "sha256": "6f399a668b7d136a29f834b425b1c226732a87f28bd35bf0f3a7c6edcefa64da",
+      "size": 2936,
+      "repo_path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkSQSH.library",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/explode.library",
+      "sha1": "c29ac7a92db4837703049af91d0d35b2a592f03d",
+      "sha256": "a681ba94e29a791ae280fc8eb4592d704ddfe414cafc414bebe87d529559cd9a",
+      "size": 1784,
+      "repo_path": "bios/Commodore/Amiga/whdboot/Libs/explode.library",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/medplayer.library",
+      "sha1": "4313334a01dd02eaf60ea7eb95dee72c97835645",
+      "sha256": "f80334d84d9915c4cd8dffa3ac870807cbfbdb5fd866cffe0b1f9604c391079e",
+      "size": 15340,
+      "repo_path": "bios/Commodore/Amiga/whdboot/Libs/medplayer.library",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
       "dest": "whdboot/host-quit",
-      "sha1": "3ae8939c8f1cdd721eabd7d73c2d6277a038672a",
-      "sha256": "99b5442273d01c10a5b2792b7c0c534b17c734aa0334dde472bbe6ebcbbfb615",
-      "size": 3180,
+      "sha1": "f717cb754078a350908e2839b3095843ccd90fa7",
+      "sha256": "31bf26b3ade19706f029f023415b6becf4283993ff89d1d6956bb016626b895e",
+      "size": 1736,
       "repo_path": "bios/Commodore/Amiga/whdboot/host-quit",
       "cores": [
         "amiberry"
@@ -19855,9 +19637,9 @@
     },
     {
       "dest": "whdboot/boot-data.zip",
-      "sha1": "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86",
-      "sha256": "24572d3642585ffdc79f5b61b22483e08a869dcb037029d40977db224fbd1eda",
-      "size": 297373,
+      "sha1": "b1e841768bf18b0d7d0ffbbe7f7788742b641677",
+      "sha256": "2cc5bebf1b97a8dd35359652e655c1d5ebbded8922f93f42170cd351a06c067b",
+      "size": 187033,
       "repo_path": "bios/Commodore/Amiga/whdboot/boot-data.zip",
       "cores": [
         "amiberry"
@@ -19868,9 +19650,9 @@
     },
     {
       "dest": "whdboot/game-data/whdload_db.json",
-      "sha1": "6540ae1a35080e3dbeacfba5139e4781eb74ca86",
-      "sha256": "836357cb2f82cfe35e419d0e3dc6f07cff217cda9714dee19a00763547f0af56",
-      "size": 6741053,
+      "sha1": "7554061aa6f928bd41acdbcafe2d20322a0e188c",
+      "sha256": "cca5012f0963cd08df48b6a841e944947269afa0a8ce05b0d0cc14db2ae0097c",
+      "size": 6750282,
       "repo_path": "bios/Commodore/Amiga/whdboot/game-data/whdload_db.json",
       "cores": [
         "amiberry"
@@ -20151,6 +19933,34 @@
       "root": "emulators"
     },
     {
+      "dest": "amiberry/ROMs/KS ROM v2.05 (A600).rom",
+      "sha1": "87508de834dc7eb47359cede72d2e3c8a2e5d8db",
+      "sha256": "59e7df327a7a680e4f2f185e17161e3257bf41247911f34ddf6564399645d703",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/KS ROM v2.05 (A600).rom",
+      "cores": [
+        "amiberry-8.3.0"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ],
+      "root": "emulators"
+    },
+    {
+      "dest": "amiberry/ROMs/KS ROM v2.05 (A600HD).rom",
+      "sha1": "f72d89148dac39c696e30b10859ebc859226637b",
+      "sha256": "339deebab62f772775d7afb27bd50dbb56391480c911114c72b0a06709181ca4",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/KS ROM v2.05 (A600HD).rom",
+      "cores": [
+        "amiberry-8.3.0"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ],
+      "root": "emulators"
+    },
+    {
       "dest": "amiberry/ROMs/amiga-os-205-a600.rom",
       "sha1": "02843c4253bbd29aba535b0aa3bd9a85034ecde4",
       "sha256": "8d57d6e9d976df42d91ff9d10a5eedaede1a00e3b4b34cad750ca5ff7229f28a",
@@ -20198,6 +20008,20 @@
       "sha256": "b859d9fb3d868a8328a4a363d44934eb1ee1c73955aa98576c7ffe3feed3d3ff",
       "size": 524288,
       "repo_path": "bios/Commodore/Amiga/kick39106.A4000",
+      "cores": [
+        "amiberry-8.3.0"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ],
+      "root": "emulators"
+    },
+    {
+      "dest": "amiberry/ROMs/KS ROM v3.1 (A4000).rom",
+      "sha1": "81c631dd096bbb31d2af90299c76b774db74076c",
+      "sha256": "ac16eb9876550b8e07826b786269eb7c0d2afd0e5dc001a8b128c8ce8f9c0179",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/KS ROM v3.1 (A4000).rom",
       "cores": [
         "amiberry-8.3.0"
       ],
@@ -20282,6 +20106,34 @@
       "sha256": "e5f87ea8953d840db0e05d097362ad1be98a1bf3292cf7f359190af61556d036",
       "size": 524288,
       "repo_path": "bios/Commodore/Amiga/amiga-os-310-a4000t.rom",
+      "cores": [
+        "amiberry-8.3.0"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ],
+      "root": "emulators"
+    },
+    {
+      "dest": "amiberry/ROMs/KS ROM v3.1.4-1 (A4000).rom",
+      "sha1": "bad0ae388442db02eaeb6a5363ef43eb4e308ae6",
+      "sha256": "990272a0e53accc5cde6989210af0f0bd40e428946c2c769e11f0fef875ce759",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/KS ROM v3.1.4-1 (A4000).rom",
+      "cores": [
+        "amiberry-8.3.0"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ],
+      "root": "emulators"
+    },
+    {
+      "dest": "amiberry/ROMs/KS ROM v3.2 (A1200).rom",
+      "sha1": "5b2982876fec2166673be447643881262c84090e",
+      "sha256": "ffcf6993c1a2df032fee1125036e2192cf29f70add547a50fc2cfff8f4fb9f7a",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/KS ROM v3.2 (A1200).rom",
       "cores": [
         "amiberry-8.3.0"
       ],
@@ -20450,6 +20302,20 @@
       "repo_path": "bios/Commodore/Amiga/expansion/cdtv-cr-extended-rom-v3.44.rom",
       "cores": [
         "amiberry-8.3.0"
+      ],
+      "root": "emulators"
+    },
+    {
+      "dest": "amiberry/ROMs/A1000 bootstrap ROM.rom",
+      "sha1": "ba93b8b85ca0d83a68225cc33b95050d72d2fdd7",
+      "sha256": "c67d47d0ff4a4cd29104e96fe7920a2ec13dff4f7f0fbcf7be645e2ae493262c",
+      "size": 65536,
+      "repo_path": "bios/Commodore/Amiga/A1000 bootstrap ROM.rom",
+      "cores": [
+        "amiberry-8.3.0"
+      ],
+      "systems": [
+        "commodore-amiga"
       ],
       "root": "emulators"
     },
@@ -22685,6 +22551,20 @@
       "sha256": "dbd98d87653b9a4b38a6d59aad24989ca15f7cb16911f8cde404a214bbd47366",
       "size": 16384,
       "repo_path": "bios/Commodore/Amiga/expansion/a1060-bios-2.06.rom",
+      "cores": [
+        "amiberry-8.3.0"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ],
+      "root": "emulators"
+    },
+    {
+      "dest": "amiberry/ROMs/a1060-bios-2.07.rom",
+      "sha1": "0990ea8c509ead367391741df2d4542ccb9d8fb7",
+      "sha256": "34b61b406c4f72ad02e3c46f4ef042a47a7daec75bf15fc713b27d0ee4fa9e86",
+      "size": 16384,
+      "repo_path": "bios/Commodore/Amiga/expansion/a1060-bios-2.07.rom",
       "cores": [
         "amiberry-8.3.0"
       ],
@@ -101772,6 +101652,32 @@
       ]
     },
     {
+      "dest": "roms/cyberstormmk3.rom",
+      "sha1": "8adc960a086202f8de77a1eebb579036552840ad",
+      "sha256": "3db42c51f0682e68de7dc3ec6f02c8509a0eb7890b9fcd9cefd56c077bccfde5",
+      "size": 131072,
+      "repo_path": "bios/Commodore/Amiga/expansion/cyberstormmk3.rom",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "roms/cyberstorm-mk-iii-v44.69.rom",
+      "sha1": "44f667df433d64bb99b8632eb78c65e5b445acbf",
+      "sha256": "885da97a35cb86bacd3c3ec8996bd536658ea01295e45d09890e15dbc77e6a30",
+      "size": 131072,
+      "repo_path": "bios/Commodore/Amiga/expansion/cyberstorm-mk-iii-v44.69.rom",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
       "dest": "roms/cyberstorm-mk-iii-v44.71.rom",
       "sha1": "1c0e95c39e822597ad0e2945c37b556e5dc67828",
       "sha256": "af53c1e327d88a075da9d9aeca6823b61b42e47b76eb5b0cc5a14e37812d61e9",
@@ -101785,11 +101691,89 @@
       ]
     },
     {
+      "dest": "roms/cyberstormppc.rom",
+      "sha1": "41f30a0acbe93d2f309f1dd2077fffa21be8f8e2",
+      "sha256": "8005e9fb0b6fbe2627875d8edf02ab95811739a20aa2b291b884a36d01ead183",
+      "size": 131072,
+      "repo_path": "bios/Commodore/Amiga/expansion/cyberstormppc.rom",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "roms/cyberstorm-ppc-v44.69.rom",
+      "sha1": "1df506c9a170dca2ab8736fa1865f75f62e8663a",
+      "sha256": "28910ab61bee40147aaeed6b627664e0427dea3c451cd908bc048452c9809e29",
+      "size": 131072,
+      "repo_path": "bios/Commodore/Amiga/expansion/cyberstorm-ppc-v44.69.rom",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
       "dest": "roms/cyberstorm-ppc-v44.71.rom",
       "sha1": "3908d0630ec5c8b3cd47b2a01195e04b1bb8c54d",
       "sha256": "b6bda28c52cd2766731a3f475d092e2bddcdd240582f995b055abfff9046cdb3",
       "size": 131072,
       "repo_path": "bios/Commodore/Amiga/expansion/cyberstorm-ppc-v44.71.rom",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "roms/blizzardppc_040.rom",
+      "sha1": "c9f86e18a1004e9cfe4eede2e0b399701c54323b",
+      "sha256": "1c59eee74b32c7c9e173cea4de066d9087c407416cf77d81bfb1f06113f06e40",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/expansion/blizzardppc_040.rom",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "roms/blizzardppc_060.rom",
+      "sha1": "ad1f450962c094ba2d970a501714b4997ba444ba",
+      "sha256": "e765fab490f3daa906277cbad30a0aa84e5d8b1d637000bc07e663cf27ab1efd",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/expansion/blizzardppc_060.rom",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "roms/blizzard-ppc-68040-v44.69.rom",
+      "sha1": "ea0409700fefb5267ef5a29472e7810b77d4d88c",
+      "sha256": "affc2165c2818755235b028a825db1c4f7a90ac8e0ba8a9a188c0f4901edc8a4",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/expansion/blizzard-ppc-68040-v44.69.rom",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "roms/blizzard-ppc-68060-v44.69.rom",
+      "sha1": "3441410e991a916e8bf9b130181fa169a9b859bf",
+      "sha256": "d6a28ffd0e621a15692a77ecc149e4d2a26b5f8597017b9171353894552b7bb6",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/expansion/blizzard-ppc-68060-v44.69.rom",
       "cores": [
         "amiberry"
       ],
@@ -101876,6 +101860,45 @@
       ]
     },
     {
+      "dest": "whdboot/Libs/68040.library",
+      "sha1": "35d01bccc0062bc7943310dc9c9466e02fb561df",
+      "sha256": "0b2e62713e8b2cb48b3607ac71d8aa41ab6bfdd3f44448a88348e005ab699a05",
+      "size": 44040,
+      "repo_path": "bios/Commodore/Amiga/whdboot/Libs/68040.library",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/mmu.library",
+      "sha1": "d35699de96ff56478871c7839757ba52a9d2717a",
+      "sha256": "d88a1f01a4c84b2571325e5285cb7598dfbc7fc560885696c2c7acb842ce0b66",
+      "size": 49524,
+      "repo_path": "bios/Commodore/Amiga/whdboot/Libs/mmu.library",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "whdboot/Libs/680x0.library",
+      "sha1": "17f92f7647b1cec0c17f90b7d0b562f48278af02",
+      "sha256": "22d550efc3bd8cc882e25610a4a57069d486d1a66d8791dfecdfba8d36b28aba",
+      "size": 11688,
+      "repo_path": "bios/Commodore/Amiga/whdboot/Libs/680x0.library",
+      "cores": [
+        "amiberry"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
       "dest": "whdboot/WHDLoad",
       "sha1": "c3ecdaf43cc554026c8ef1c440a08c81144f810b",
       "sha256": "5e66d140e12b09769ba0bba87dc5a6f683261fd40eb43b94c390d1c62db1adb5",
@@ -101902,6 +101925,34 @@
       ]
     },
     {
+      "dest": "amiberry/ROMs/cyberstormmk3.rom",
+      "sha1": "8adc960a086202f8de77a1eebb579036552840ad",
+      "sha256": "3db42c51f0682e68de7dc3ec6f02c8509a0eb7890b9fcd9cefd56c077bccfde5",
+      "size": 131072,
+      "repo_path": "bios/Commodore/Amiga/expansion/cyberstormmk3.rom",
+      "cores": [
+        "amiberry-8.3.0"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ],
+      "root": "emulators"
+    },
+    {
+      "dest": "amiberry/ROMs/cyberstorm-mk-iii-v44.69.rom",
+      "sha1": "44f667df433d64bb99b8632eb78c65e5b445acbf",
+      "sha256": "885da97a35cb86bacd3c3ec8996bd536658ea01295e45d09890e15dbc77e6a30",
+      "size": 131072,
+      "repo_path": "bios/Commodore/Amiga/expansion/cyberstorm-mk-iii-v44.69.rom",
+      "cores": [
+        "amiberry-8.3.0"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ],
+      "root": "emulators"
+    },
+    {
       "dest": "amiberry/ROMs/cyberstorm-mk-iii-v44.71.rom",
       "sha1": "1c0e95c39e822597ad0e2945c37b556e5dc67828",
       "sha256": "af53c1e327d88a075da9d9aeca6823b61b42e47b76eb5b0cc5a14e37812d61e9",
@@ -101916,11 +101967,95 @@
       "root": "emulators"
     },
     {
+      "dest": "amiberry/ROMs/cyberstormppc.rom",
+      "sha1": "41f30a0acbe93d2f309f1dd2077fffa21be8f8e2",
+      "sha256": "8005e9fb0b6fbe2627875d8edf02ab95811739a20aa2b291b884a36d01ead183",
+      "size": 131072,
+      "repo_path": "bios/Commodore/Amiga/expansion/cyberstormppc.rom",
+      "cores": [
+        "amiberry-8.3.0"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ],
+      "root": "emulators"
+    },
+    {
+      "dest": "amiberry/ROMs/cyberstorm-ppc-v44.69.rom",
+      "sha1": "1df506c9a170dca2ab8736fa1865f75f62e8663a",
+      "sha256": "28910ab61bee40147aaeed6b627664e0427dea3c451cd908bc048452c9809e29",
+      "size": 131072,
+      "repo_path": "bios/Commodore/Amiga/expansion/cyberstorm-ppc-v44.69.rom",
+      "cores": [
+        "amiberry-8.3.0"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ],
+      "root": "emulators"
+    },
+    {
       "dest": "amiberry/ROMs/cyberstorm-ppc-v44.71.rom",
       "sha1": "3908d0630ec5c8b3cd47b2a01195e04b1bb8c54d",
       "sha256": "b6bda28c52cd2766731a3f475d092e2bddcdd240582f995b055abfff9046cdb3",
       "size": 131072,
       "repo_path": "bios/Commodore/Amiga/expansion/cyberstorm-ppc-v44.71.rom",
+      "cores": [
+        "amiberry-8.3.0"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ],
+      "root": "emulators"
+    },
+    {
+      "dest": "amiberry/ROMs/blizzardppc_040.rom",
+      "sha1": "c9f86e18a1004e9cfe4eede2e0b399701c54323b",
+      "sha256": "1c59eee74b32c7c9e173cea4de066d9087c407416cf77d81bfb1f06113f06e40",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/expansion/blizzardppc_040.rom",
+      "cores": [
+        "amiberry-8.3.0"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ],
+      "root": "emulators"
+    },
+    {
+      "dest": "amiberry/ROMs/blizzardppc_060.rom",
+      "sha1": "ad1f450962c094ba2d970a501714b4997ba444ba",
+      "sha256": "e765fab490f3daa906277cbad30a0aa84e5d8b1d637000bc07e663cf27ab1efd",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/expansion/blizzardppc_060.rom",
+      "cores": [
+        "amiberry-8.3.0"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ],
+      "root": "emulators"
+    },
+    {
+      "dest": "amiberry/ROMs/blizzard-ppc-68040-v44.69.rom",
+      "sha1": "ea0409700fefb5267ef5a29472e7810b77d4d88c",
+      "sha256": "affc2165c2818755235b028a825db1c4f7a90ac8e0ba8a9a188c0f4901edc8a4",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/expansion/blizzard-ppc-68040-v44.69.rom",
+      "cores": [
+        "amiberry-8.3.0"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ],
+      "root": "emulators"
+    },
+    {
+      "dest": "amiberry/ROMs/blizzard-ppc-68060-v44.69.rom",
+      "sha1": "3441410e991a916e8bf9b130181fa169a9b859bf",
+      "sha256": "d6a28ffd0e621a15692a77ecc149e4d2a26b5f8597017b9171353894552b7bb6",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/expansion/blizzard-ppc-68060-v44.69.rom",
       "cores": [
         "amiberry-8.3.0"
       ],

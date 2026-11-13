@@ -7,7 +7,7 @@
   "platform": "retropie",
   "display_name": "RetroPie",
   "version": "4.8.12",
-  "generated": "2026-11-13T03:31:25Z",
+  "generated": "2026-11-13T11:31:17Z",
   "base_destination": "BIOS",
   "detect": [
     {
@@ -17,11 +17,11 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 10504,
-  "total_size": 9464068577,
-  "pack_files": 16323,
-  "pack_size": 9345001362,
-  "total_omitted": 470,
+  "total_files": 10514,
+  "total_size": 9468066273,
+  "pack_files": 16333,
+  "pack_size": 9348999058,
+  "total_omitted": 460,
   "omitted_files": [
     {
       "dest": "3dobios.zip",
@@ -1335,17 +1335,6 @@
       ]
     },
     {
-      "dest": "amiga/A1000 bootstrap ROM.rom",
-      "name": "A1000 bootstrap ROM.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-5.7.2",
-        "amiberry-6.3.3"
-      ]
-    },
-    {
       "dest": "amiga/Casablanca 74095 - 00 717 - 02.rom",
       "name": "Casablanca 74095 - 00 717 - 02.rom",
       "system": "commodore-amiga",
@@ -1357,41 +1346,8 @@
       ]
     },
     {
-      "dest": "amiga/KS ROM v2.05 (A600).rom",
-      "name": "KS ROM v2.05 (A600).rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-5.7.2",
-        "amiberry-6.3.3"
-      ]
-    },
-    {
-      "dest": "amiga/KS ROM v2.05 (A600HD).rom",
-      "name": "KS ROM v2.05 (A600HD).rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-5.7.2",
-        "amiberry-6.3.3"
-      ]
-    },
-    {
       "dest": "amiga/KS ROM v23.93 (Velvet).rom",
       "name": "KS ROM v23.93 (Velvet).rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-5.7.2",
-        "amiberry-6.3.3"
-      ]
-    },
-    {
-      "dest": "amiga/KS ROM v3.1 (A4000).rom",
-      "name": "KS ROM v3.1 (A4000).rom",
       "system": "commodore-amiga",
       "required": false,
       "reason": "not_found",
@@ -1414,17 +1370,6 @@
     {
       "dest": "amiga/KS ROM v3.1.4-1 (A3000).rom",
       "name": "KS ROM v3.1.4-1 (A3000).rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-5.7.2",
-        "amiberry-6.3.3"
-      ]
-    },
-    {
-      "dest": "amiga/KS ROM v3.1.4-1 (A4000).rom",
-      "name": "KS ROM v3.1.4-1 (A4000).rom",
       "system": "commodore-amiga",
       "required": false,
       "reason": "not_found",
@@ -1502,17 +1447,6 @@
     {
       "dest": "amiga/KS ROM v3.1.4-2 (A500).rom",
       "name": "KS ROM v3.1.4-2 (A500).rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-5.7.2",
-        "amiberry-6.3.3"
-      ]
-    },
-    {
-      "dest": "amiga/KS ROM v3.2 (A1200).rom",
-      "name": "KS ROM v3.2 (A1200).rom",
       "system": "commodore-amiga",
       "required": false,
       "reason": "not_found",
@@ -1698,52 +1632,8 @@
       ]
     },
     {
-      "dest": "amiga/blizzardppc_040.rom",
-      "name": "blizzardppc_040.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-5.7.2",
-        "amiberry-6.3.3"
-      ]
-    },
-    {
-      "dest": "amiga/blizzardppc_060.rom",
-      "name": "blizzardppc_060.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-5.7.2",
-        "amiberry-6.3.3"
-      ]
-    },
-    {
       "dest": "amiga/cyberstormmk2.rom",
       "name": "cyberstormmk2.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-5.7.2",
-        "amiberry-6.3.3"
-      ]
-    },
-    {
-      "dest": "amiga/cyberstormmk3.rom",
-      "name": "cyberstormmk3.rom",
-      "system": "commodore-amiga",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "amiberry-5.7.2",
-        "amiberry-6.3.3"
-      ]
-    },
-    {
-      "dest": "amiga/cyberstormppc.rom",
-      "name": "cyberstormppc.rom",
       "system": "commodore-amiga",
       "required": false,
       "reason": "not_found",
@@ -20763,6 +20653,34 @@
       ]
     },
     {
+      "dest": "amiga/KS ROM v2.05 (A600).rom",
+      "sha1": "87508de834dc7eb47359cede72d2e3c8a2e5d8db",
+      "sha256": "59e7df327a7a680e4f2f185e17161e3257bf41247911f34ddf6564399645d703",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/KS ROM v2.05 (A600).rom",
+      "cores": [
+        "amiberry-5.7.2",
+        "amiberry-6.3.3"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "amiga/KS ROM v2.05 (A600HD).rom",
+      "sha1": "f72d89148dac39c696e30b10859ebc859226637b",
+      "sha256": "339deebab62f772775d7afb27bd50dbb56391480c911114c72b0a06709181ca4",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/KS ROM v2.05 (A600HD).rom",
+      "cores": [
+        "amiberry-5.7.2",
+        "amiberry-6.3.3"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
       "dest": "amiga/amiga-os-205-a600.rom",
       "sha1": "02843c4253bbd29aba535b0aa3bd9a85034ecde4",
       "sha256": "8d57d6e9d976df42d91ff9d10a5eedaede1a00e3b4b34cad750ca5ff7229f28a",
@@ -20810,6 +20728,20 @@
       "sha256": "b859d9fb3d868a8328a4a363d44934eb1ee1c73955aa98576c7ffe3feed3d3ff",
       "size": 524288,
       "repo_path": "bios/Commodore/Amiga/kick39106.A4000",
+      "cores": [
+        "amiberry-5.7.2",
+        "amiberry-6.3.3"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "amiga/KS ROM v3.1 (A4000).rom",
+      "sha1": "81c631dd096bbb31d2af90299c76b774db74076c",
+      "sha256": "ac16eb9876550b8e07826b786269eb7c0d2afd0e5dc001a8b128c8ce8f9c0179",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/KS ROM v3.1 (A4000).rom",
       "cores": [
         "amiberry-5.7.2",
         "amiberry-6.3.3"
@@ -20894,6 +20826,34 @@
       "sha256": "e5f87ea8953d840db0e05d097362ad1be98a1bf3292cf7f359190af61556d036",
       "size": 524288,
       "repo_path": "bios/Commodore/Amiga/amiga-os-310-a4000t.rom",
+      "cores": [
+        "amiberry-5.7.2",
+        "amiberry-6.3.3"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "amiga/KS ROM v3.1.4-1 (A4000).rom",
+      "sha1": "bad0ae388442db02eaeb6a5363ef43eb4e308ae6",
+      "sha256": "990272a0e53accc5cde6989210af0f0bd40e428946c2c769e11f0fef875ce759",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/KS ROM v3.1.4-1 (A4000).rom",
+      "cores": [
+        "amiberry-5.7.2",
+        "amiberry-6.3.3"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "amiga/KS ROM v3.2 (A1200).rom",
+      "sha1": "5b2982876fec2166673be447643881262c84090e",
+      "sha256": "ffcf6993c1a2df032fee1125036e2192cf29f70add547a50fc2cfff8f4fb9f7a",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/KS ROM v3.2 (A1200).rom",
       "cores": [
         "amiberry-5.7.2",
         "amiberry-6.3.3"
@@ -21063,6 +21023,20 @@
       "cores": [
         "amiberry-5.7.2",
         "amiberry-6.3.3"
+      ]
+    },
+    {
+      "dest": "amiga/A1000 bootstrap ROM.rom",
+      "sha1": "ba93b8b85ca0d83a68225cc33b95050d72d2fdd7",
+      "sha256": "c67d47d0ff4a4cd29104e96fe7920a2ec13dff4f7f0fbcf7be645e2ae493262c",
+      "size": 65536,
+      "repo_path": "bios/Commodore/Amiga/A1000 bootstrap ROM.rom",
+      "cores": [
+        "amiberry-5.7.2",
+        "amiberry-6.3.3"
+      ],
+      "systems": [
+        "commodore-amiga"
       ]
     },
     {
@@ -102475,6 +102449,62 @@
         "advmame-1.4"
       ],
       "root": "roms"
+    },
+    {
+      "dest": "amiga/cyberstormmk3.rom",
+      "sha1": "8adc960a086202f8de77a1eebb579036552840ad",
+      "sha256": "3db42c51f0682e68de7dc3ec6f02c8509a0eb7890b9fcd9cefd56c077bccfde5",
+      "size": 131072,
+      "repo_path": "bios/Commodore/Amiga/expansion/cyberstormmk3.rom",
+      "cores": [
+        "amiberry-5.7.2",
+        "amiberry-6.3.3"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "amiga/cyberstormppc.rom",
+      "sha1": "41f30a0acbe93d2f309f1dd2077fffa21be8f8e2",
+      "sha256": "8005e9fb0b6fbe2627875d8edf02ab95811739a20aa2b291b884a36d01ead183",
+      "size": 131072,
+      "repo_path": "bios/Commodore/Amiga/expansion/cyberstormppc.rom",
+      "cores": [
+        "amiberry-5.7.2",
+        "amiberry-6.3.3"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "amiga/blizzardppc_040.rom",
+      "sha1": "c9f86e18a1004e9cfe4eede2e0b399701c54323b",
+      "sha256": "1c59eee74b32c7c9e173cea4de066d9087c407416cf77d81bfb1f06113f06e40",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/expansion/blizzardppc_040.rom",
+      "cores": [
+        "amiberry-5.7.2",
+        "amiberry-6.3.3"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "amiga/blizzardppc_060.rom",
+      "sha1": "ad1f450962c094ba2d970a501714b4997ba444ba",
+      "sha256": "e765fab490f3daa906277cbad30a0aa84e5d8b1d637000bc07e663cf27ab1efd",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/expansion/blizzardppc_060.rom",
+      "cores": [
+        "amiberry-5.7.2",
+        "amiberry-6.3.3"
+      ],
+      "systems": [
+        "commodore-amiga"
+      ]
     },
     {
       "dest": "amiga/rom.key",
