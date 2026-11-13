@@ -168,8 +168,8 @@ def wanted_declarations(profiles: dict, coverages: dict, gap_report: dict) -> li
 def _settle_cut(records: list[dict]) -> None:
     """A cut md5 names a dump only if exactly one md5 starts with it.
 
-    Matched against the wanted md5s: one of them, and the cut is that md5;
-    several, and it names none; none, and the page compares by prefix.
+    Matched against the wanted md5s: with one match the cut is that md5.
+    With several it names none, and with none the page compares by prefix.
     """
     full = {v for r in records for v in r["hashes"].get("md5", []) if len(v) == 32}
     for record in records:

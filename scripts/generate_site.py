@@ -2538,7 +2538,7 @@ def _page_description(markdown: str, relative: Path, title: str) -> str:
         "explore.md": "Systems, emulators and installer options to explore, with the figures of the BIOS collection.",
         "which-pack.md": "Pick a device or setup and get its BIOS files: the folder they go in, one command that installs and checks them, or a ZIP pack to extract.",
         "contributing.md": "Add a BIOS file the collection lacks from the browser, checked on arrival, or add a platform or an emulator profile.",
-        "wanted.md": "Drop files on the page to learn if the collection wants them, then upload a wanted one to its folder on GitHub. Files are read on your device.",
+        "wanted.md": "Drop files on the page to learn if the collection wants them, then upload a wanted one to its folder on GitHub. Files are read on the device.",
     }
     if key in specific:
         return specific[key]
