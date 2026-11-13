@@ -687,20 +687,18 @@ class ArchiveRecipesAreCountedFromTheRecipes(unittest.TestCase):
 
 
 class TheReadmeBadges(unittest.TestCase):
-    """One row of four badges under the links, each linking its source."""
+    """One row of two badges under the links, each linking its source."""
 
     EXPECTED = (
         '<p align="center">'
         '<a href="https://pypi.org/project/retrobios/"><img src="https://img.shields.io/pypi/v/retrobios" alt="PyPI version"></a> '
-        '<a href="https://pypi.org/project/retrobios/"><img src="https://img.shields.io/pypi/pyversions/retrobios" alt="Python versions"></a> '
-        f'<a href="{REPO}/actions/workflows/validate.yml"><img src="{REPO}/actions/workflows/validate.yml/badge.svg?branch=main" alt="Validation"></a> '
-        '<a href="LICENSE"><img src="https://img.shields.io/github/license/Abdess/retrobios" alt="License"></a>'
+        f'<a href="{REPO}/actions/workflows/validate.yml"><img src="{REPO}/actions/workflows/validate.yml/badge.svg?branch=main" alt="Validation"></a>'
         "</p>"
     )
 
-    def test_exactly_these_four(self) -> None:
+    def test_exactly_these_two(self) -> None:
         readme = _read("README.md")
-        self.assertEqual(len(re.findall(r"<img src=\"https://(?:img\.shields\.io|github\.com)/", readme)), 4)
+        self.assertEqual(len(re.findall(r"<img src=\"https://(?:img\.shields\.io|github\.com)/", readme)), 2)
         lines = readme.splitlines()
         self.assertIn(self.EXPECTED, lines)
         links = next(i for i, line in enumerate(lines) if ">Get the files</a>" in line)

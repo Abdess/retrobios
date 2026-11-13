@@ -564,15 +564,14 @@ def _catalog_matched_line(db: dict) -> list[str]:
     ]
 
 
-# The badge row under the links: (alt text, image, link).
+# The badge row under the links: (alt text, image, link). A badge earns its
+# place by saying what the page does not: the Python floor is in the install
+# text, and GitHub cannot name the license of LICENSE, which opens on its scope.
 BADGES = (
     ("PyPI version", "https://img.shields.io/pypi/v/retrobios", "https://pypi.org/project/retrobios/"),
-    ("Python versions", "https://img.shields.io/pypi/pyversions/retrobios",
-     "https://pypi.org/project/retrobios/"),
     ("Validation",
      "https://github.com/Abdess/retrobios/actions/workflows/validate.yml/badge.svg?branch=main",
      "https://github.com/Abdess/retrobios/actions/workflows/validate.yml"),
-    ("License", "https://img.shields.io/github/license/Abdess/retrobios", "LICENSE"),
 )
 
 

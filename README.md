@@ -9,7 +9,7 @@
 
 <p align="center"><a href="https://abdess.github.io/retrobios/">Website</a> · <a href="https://abdess.github.io/retrobios/which-pack/">Get the files</a> · <a href="https://abdess.github.io/retrobios/wiki/troubleshooting/">A game does not start</a> · <a href="https://abdess.github.io/retrobios/wiki/faq/">Questions</a></p>
 
-<p align="center"><a href="https://pypi.org/project/retrobios/"><img src="https://img.shields.io/pypi/v/retrobios" alt="PyPI version"></a> <a href="https://pypi.org/project/retrobios/"><img src="https://img.shields.io/pypi/pyversions/retrobios" alt="Python versions"></a> <a href="https://github.com/Abdess/retrobios/actions/workflows/validate.yml"><img src="https://github.com/Abdess/retrobios/actions/workflows/validate.yml/badge.svg?branch=main" alt="Validation"></a> <a href="LICENSE"><img src="https://img.shields.io/github/license/Abdess/retrobios" alt="License"></a></p>
+<p align="center"><a href="https://pypi.org/project/retrobios/"><img src="https://img.shields.io/pypi/v/retrobios" alt="PyPI version"></a> <a href="https://github.com/Abdess/retrobios/actions/workflows/validate.yml"><img src="https://github.com/Abdess/retrobios/actions/workflows/validate.yml/badge.svg?branch=main" alt="Validation"></a></p>
 
 Some consoles need a small program, the **BIOS**, to start their games: PlayStation 1 and 2, Saturn, Neo Geo, Dreamcast and more. RetroBIOS installs the BIOS and firmware files for AmberELEC, Batocera, BizHawk, EmuDeck, EmuELEC, KNULLI, Lakka, MiSTer FPGA, MinUI, MyMinUI, NextUI, ROCKNIX, Recalbox, RetroArch, RetroBat, RetroDECK, RetroPie, and RomM, checked the way each one checks them.
 
@@ -110,4 +110,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in [the project's legal position](https://abdess.github.io/retrobios/wiki/legal/).
 
-*Auto-generated on 2026-11-12T15:50:13Z*
+*Auto-generated on 2026-11-13T03:36:46Z*
