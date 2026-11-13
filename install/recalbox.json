@@ -7,7 +7,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "10.1.1",
-  "generated": "2026-11-12T15:26:44Z",
+  "generated": "2026-11-13T01:24:31Z",
   "base_destination": "bios",
   "detect": [
     {

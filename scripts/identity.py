@@ -28,24 +28,10 @@ SHARED_TREES = frozenset({"Arcade", "Other"})
 # not on this list, or a further copy under a third maker, is a finding rather
 # than noise.
 KNOWN_SHARED: dict[str, tuple[frozenset[str], str]] = {
-    "5ea7c2b824672e914525d1d5c419d71b84a426a2": (
-        frozenset({"Enterprise", "Sinclair"}),
-        "ZX Spectrum 48K ROM, which the Enterprise and the FBNeo Spectrum "
-        "driver run as well",
-    ),
-    "16375d42ea109b47edded7a16028de7fdb3013a1": (
-        frozenset({"Enterprise", "Sinclair"}),
-        "ZX Spectrum 128K ROM, under both Sinclair spellings and the "
-        "Enterprise Spectrum mode",
-    ),
     "45bedc4cbdeac66c7df59e9e599195c778d86a92": (
         frozenset({"Coleco", "Microsoft"}),
         "ColecoVision BIOS, carried by MSX emulators for their ColecoVision "
         "machine",
-    ),
-    "b2e1955d957a475de2411770452eff4ea19f4cee": (
-        frozenset({"Magnavox", "Philips"}),
-        "Odyssey 2 and Videopac are one machine sold under two names",
     ),
     "286b2e1fb21cc79851da01666db6c0b0e88f25e3": (
         frozenset({"Infocom", "ZC"}),

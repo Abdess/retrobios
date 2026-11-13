@@ -7,7 +7,7 @@
   "platform": "emuelec",
   "display_name": "EmuELEC",
   "version": "4.8",
-  "generated": "2026-11-12T15:26:44Z",
+  "generated": "2026-11-13T01:24:31Z",
   "base_destination": "",
   "detect": [
     {

@@ -7,7 +7,7 @@
   "platform": "retroarch",
   "display_name": "RetroArch",
   "version": "v1.22.2",
-  "generated": "2026-11-12T15:47:13Z",
+  "generated": "2026-11-13T01:24:31Z",
   "base_destination": "system",
   "detect": [
     {

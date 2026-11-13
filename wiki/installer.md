@@ -445,7 +445,7 @@ lists record these files as omitted.
 
 <!-- generated: dry-run -->
 
-A RetroArch dry run into an empty folder, with the list of 2026-11-12, printed this:
+A RetroArch dry run into an empty folder, with the list of 2026-11-13, printed this:
 
 ```
 Fetching file index for retroarch...
@@ -530,7 +530,7 @@ gives a `record` event, see [Machine-readable events](#machine-readable-events).
 <!-- generated: run-date -->
 
 Each line a first install prints, and what it means. The run below is a
-Batocera install into an empty folder, from the list of 2026-11-12.
+Batocera install into an empty folder, from the list of 2026-11-13.
 The figures change with each release.
 <!-- /generated: run-date -->
 
@@ -666,7 +666,7 @@ narrowing would save, once that saving is over half.
 
 <!-- generated: bulk-hint -->
 
-RetroArch with `--system sony-playstation`, from the list of 2026-11-12:
+RetroArch with `--system sony-playstation`, from the list of 2026-11-13:
 
 ```
   duckstation pulls 316.5 MB of this 329.0 MB download for sony-playstation. --core pcsx1 keeps 11.0 MB of it and saves 318.0 MB (96%).

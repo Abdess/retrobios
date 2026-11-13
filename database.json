@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-12T18:49:42Z",
+  "generated_at": "2026-11-13T01:24:31Z",
   "total_files": 22018,
   "total_size": 17367945863,
   "bios_dir": "bios",
@@ -186722,113 +186722,6 @@
       "crc32": "d3684544",
       "adler32": "b49cf464"
     },
-    "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e": {
-      "path": "bios/Sinclair/ZX Spectrum/if1-1.rom",
-      "name": "if1-1.rom",
-      "size": 8192,
-      "sha1": "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e",
-      "md5": "5c11c61a2dd2ca4bf39328d9ff42d289",
-      "sha256": "6bb2eb282723e539f627a33002c2c31b633b4d3b712755f28696f0c4e49470f2",
-      "crc32": "e72a12ae",
-      "adler32": "27d71477",
-      "provenance": {
-        "tosec": {
-          "dat": "Sinclair ZX Spectrum - Firmware - [ROM]",
-          "name": "ZX Interface 1 v1 (1983)(Sinclair Research)[aka ZX Interface I].rom",
-          "description": "ZX Interface 1 v1 (1983)(Sinclair Research)[aka ZX Interface I]"
-        }
-      }
-    },
-    "5cfb6bca4177c45fefd571734576b55e3a127c08": {
-      "path": "bios/Sinclair/ZX Spectrum/if1-2.rom",
-      "name": "if1-2.rom",
-      "size": 8192,
-      "sha1": "5cfb6bca4177c45fefd571734576b55e3a127c08",
-      "md5": "31b704ae925305e74f50699271fddd9a",
-      "sha256": "ad392df2bd366a3412f186240a40dd6fd2750c96a1779ffae77cf10aa1faf7ee",
-      "crc32": "bb66dd1e",
-      "adler32": "ce114090",
-      "provenance": {
-        "tosec": {
-          "dat": "Sinclair ZX Spectrum - Firmware - [ROM]",
-          "name": "ZX Interface 1 v2 (1983)(Sinclair Research)[aka ZX Interface I].rom",
-          "description": "ZX Interface 1 v2 (1983)(Sinclair Research)[aka ZX Interface I]"
-        }
-      }
-    },
-    "8cafb292af58617907b9e6b9093d3588a75849b8": {
-      "path": "bios/Sinclair/ZX Spectrum/plus2.rom",
-      "name": "plus2.rom",
-      "size": 32768,
-      "sha1": "8cafb292af58617907b9e6b9093d3588a75849b8",
-      "md5": "238f77692156a5c49d20c0aa2862e8bb",
-      "sha256": "dae0690d8b433ea22b76b62520341f784071dbde0d02f50af0e3fd20fc6bca4a",
-      "crc32": "e7a517dc",
-      "adler32": "932bc41d",
-      "provenance": {
-        "tosec": {
-          "dat": "Sinclair ZX Spectrum - Firmware - [ROM]",
-          "name": "ZX Spectrum 128 +2 (1986)(Amstrad)[aka ZX Spectrum +2].rom",
-          "description": "ZX Spectrum 128 +2 (1986)(Amstrad)[aka ZX Spectrum +2]"
-        }
-      }
-    },
-    "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4": {
-      "path": "bios/Sinclair/ZX Spectrum/plus3.rom",
-      "name": "plus3.rom",
-      "size": 65536,
-      "sha1": "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4",
-      "md5": "05de80a055b5e7866f55769db0584d6e",
-      "sha256": "ee8218fa43ecb672ed45370114294228213a82318c6d1b007ec86bee3293d1f2",
-      "crc32": "96e3c17a",
-      "adler32": "d167b956",
-      "provenance": {
-        "tosec": {
-          "dat": "Sinclair ZX Spectrum - Firmware - [ROM]",
-          "name": "ZX Spectrum 128 +3 v4.0 (1987)(Amstrad)(+2A-+3)[aka ZX Spectrum +2A-+3].rom",
-          "description": "ZX Spectrum 128 +3 v4.0 (1987)(Amstrad)(+2A-+3)[aka ZX Spectrum +2A-+3]"
-        }
-      }
-    },
-    "a584272f21dc82c14b7d4f1ed440e23a976e71f0": {
-      "path": "bios/Sinclair/ZX Spectrum/ZX_pentagon.rom",
-      "name": "ZX_pentagon.rom",
-      "size": 32768,
-      "sha1": "a584272f21dc82c14b7d4f1ed440e23a976e71f0",
-      "md5": "178d780c1347cf6634471805bd10e52c",
-      "sha256": "7b88abff5964f0cf38481ac51bf035be2c01b8827569876b3d15eb3ac340fef3",
-      "crc32": "aa1ce4bd",
-      "adler32": "0ffaf811",
-      "provenance": {
-        "tosec": {
-          "dat": "Sinclair ZX Spectrum - Firmware - [ROM]",
-          "name": "Pentagon 128K (19xx)(Owen, Andrew)(Pentagon 128K)(ES)[tr ru].rom",
-          "description": "Pentagon 128K (19xx)(Owen, Andrew)(Pentagon 128K)(ES)[tr ru]"
-        }
-      }
-    },
-    "c315672807d8ddb8d91443729405c766dd95cae7": {
-      "path": "bios/Sega/Master System/SMS_us_1.3.sms",
-      "name": "SMS_us_1.3.sms",
-      "size": 8192,
-      "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
-      "md5": "840481177270d5642a14ca71ee72844c",
-      "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
-      "crc32": "0072ed54",
-      "adler32": "0eddf01e",
-      "provenance": {
-        "no-intro": {
-          "dat": "Sega - Master System - Mark III",
-          "name": "[BIOS] Sega Master System (USA, Europe) (v1.3).sms",
-          "description": "[BIOS] Sega Master System (USA, Europe) (v1.3)"
-        },
-        "tosec": {
-          "dat": "Sega Mark III & Master System - Firmware",
-          "name": "Sega Master System BIOS v1.3 (1986)(Sega)(EU-US)(en).bin",
-          "description": "Sega Master System BIOS v1.3 (1986)(Sega)(EU-US)(en)"
-        }
-      }
-    },
     "8ba966ec3fd8e4525b93bb4744424d954ba48a29": {
       "path": "bios/PC/PCem/430vx.nvr",
       "name": "430vx.nvr",
@@ -216740,6 +216633,28 @@
         }
       }
     },
+    "c315672807d8ddb8d91443729405c766dd95cae7": {
+      "path": "bios/Sega/Master System/SMS_us_1.3.sms",
+      "name": "SMS_us_1.3.sms",
+      "size": 8192,
+      "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
+      "md5": "840481177270d5642a14ca71ee72844c",
+      "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
+      "crc32": "0072ed54",
+      "adler32": "0eddf01e",
+      "provenance": {
+        "no-intro": {
+          "dat": "Sega - Master System - Mark III",
+          "name": "[BIOS] Sega Master System (USA, Europe) (v1.3).sms",
+          "description": "[BIOS] Sega Master System (USA, Europe) (v1.3)"
+        },
+        "tosec": {
+          "dat": "Sega Mark III & Master System - Firmware",
+          "name": "Sega Master System BIOS v1.3 (1986)(Sega)(EU-US)(en).bin",
+          "description": "Sega Master System BIOS v1.3 (1986)(Sega)(EU-US)(en)"
+        }
+      }
+    },
     "6a40a5cec00c3b49a4fd013505c5580baa733a29": {
       "path": "bios/Sega/Mega CD/.variants/megacd_v100g_jp.bin",
       "name": "megacd_v100g_jp.bin",
@@ -218590,6 +218505,23 @@
         }
       }
     },
+    "a584272f21dc82c14b7d4f1ed440e23a976e71f0": {
+      "path": "bios/Sinclair/ZX Spectrum/ZX_pentagon.rom",
+      "name": "ZX_pentagon.rom",
+      "size": 32768,
+      "sha1": "a584272f21dc82c14b7d4f1ed440e23a976e71f0",
+      "md5": "178d780c1347cf6634471805bd10e52c",
+      "sha256": "7b88abff5964f0cf38481ac51bf035be2c01b8827569876b3d15eb3ac340fef3",
+      "crc32": "aa1ce4bd",
+      "adler32": "0ffaf811",
+      "provenance": {
+        "tosec": {
+          "dat": "Sinclair ZX Spectrum - Firmware - [ROM]",
+          "name": "Pentagon 128K (19xx)(Owen, Andrew)(Pentagon 128K)(ES)[tr ru].rom",
+          "description": "Pentagon 128K (19xx)(Owen, Andrew)(Pentagon 128K)(ES)[tr ru]"
+        }
+      }
+    },
     "282eb7bc819aad2a12fd954e76f7838a4e1a7929": {
       "path": "bios/Sinclair/ZX Spectrum/ZX_trdos.rom",
       "name": "ZX_trdos.rom",
@@ -218735,6 +218667,40 @@
       "crc32": "ca321d79",
       "adler32": "75af1347"
     },
+    "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e": {
+      "path": "bios/Sinclair/ZX Spectrum/if1-1.rom",
+      "name": "if1-1.rom",
+      "size": 8192,
+      "sha1": "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e",
+      "md5": "5c11c61a2dd2ca4bf39328d9ff42d289",
+      "sha256": "6bb2eb282723e539f627a33002c2c31b633b4d3b712755f28696f0c4e49470f2",
+      "crc32": "e72a12ae",
+      "adler32": "27d71477",
+      "provenance": {
+        "tosec": {
+          "dat": "Sinclair ZX Spectrum - Firmware - [ROM]",
+          "name": "ZX Interface 1 v1 (1983)(Sinclair Research)[aka ZX Interface I].rom",
+          "description": "ZX Interface 1 v1 (1983)(Sinclair Research)[aka ZX Interface I]"
+        }
+      }
+    },
+    "5cfb6bca4177c45fefd571734576b55e3a127c08": {
+      "path": "bios/Sinclair/ZX Spectrum/if1-2.rom",
+      "name": "if1-2.rom",
+      "size": 8192,
+      "sha1": "5cfb6bca4177c45fefd571734576b55e3a127c08",
+      "md5": "31b704ae925305e74f50699271fddd9a",
+      "sha256": "ad392df2bd366a3412f186240a40dd6fd2750c96a1779ffae77cf10aa1faf7ee",
+      "crc32": "bb66dd1e",
+      "adler32": "ce114090",
+      "provenance": {
+        "tosec": {
+          "dat": "Sinclair ZX Spectrum - Firmware - [ROM]",
+          "name": "ZX Interface 1 v2 (1983)(Sinclair Research)[aka ZX Interface I].rom",
+          "description": "ZX Interface 1 v2 (1983)(Sinclair Research)[aka ZX Interface I]"
+        }
+      }
+    },
     "72703f9a3e734f3c23ec34c0727aae4ccbef9a91": {
       "path": "bios/Sinclair/ZX Spectrum/plus2-0.rom",
       "name": "plus2-0.rom",
@@ -218766,6 +218732,23 @@
           "dat": "Sinclair ZX Spectrum - Firmware - [ROM]",
           "name": "ZX Spectrum 128 +2 (1986)(Amstrad)(16K)[a].rom",
           "description": "ZX Spectrum 128 +2 (1986)(Amstrad)(16K)[a]"
+        }
+      }
+    },
+    "8cafb292af58617907b9e6b9093d3588a75849b8": {
+      "path": "bios/Sinclair/ZX Spectrum/plus2.rom",
+      "name": "plus2.rom",
+      "size": 32768,
+      "sha1": "8cafb292af58617907b9e6b9093d3588a75849b8",
+      "md5": "238f77692156a5c49d20c0aa2862e8bb",
+      "sha256": "dae0690d8b433ea22b76b62520341f784071dbde0d02f50af0e3fd20fc6bca4a",
+      "crc32": "e7a517dc",
+      "adler32": "932bc41d",
+      "provenance": {
+        "tosec": {
+          "dat": "Sinclair ZX Spectrum - Firmware - [ROM]",
+          "name": "ZX Spectrum 128 +2 (1986)(Amstrad)[aka ZX Spectrum +2].rom",
+          "description": "ZX Spectrum 128 +2 (1986)(Amstrad)[aka ZX Spectrum +2]"
         }
       }
     },
@@ -218834,6 +218817,23 @@
           "dat": "Sinclair ZX Spectrum - Firmware - [ROM]",
           "name": "ZX Spectrum 128 +3 v4.0 (1987)(Amstrad)(+2A-+3).rom",
           "description": "ZX Spectrum 128 +3 v4.0 (1987)(Amstrad)(+2A-+3)"
+        }
+      }
+    },
+    "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4": {
+      "path": "bios/Sinclair/ZX Spectrum/plus3.rom",
+      "name": "plus3.rom",
+      "size": 65536,
+      "sha1": "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4",
+      "md5": "05de80a055b5e7866f55769db0584d6e",
+      "sha256": "ee8218fa43ecb672ed45370114294228213a82318c6d1b007ec86bee3293d1f2",
+      "crc32": "96e3c17a",
+      "adler32": "d167b956",
+      "provenance": {
+        "tosec": {
+          "dat": "Sinclair ZX Spectrum - Firmware - [ROM]",
+          "name": "ZX Spectrum 128 +3 v4.0 (1987)(Amstrad)(+2A-+3)[aka ZX Spectrum +2A-+3].rom",
+          "description": "ZX Spectrum 128 +3 v4.0 (1987)(Amstrad)(+2A-+3)[aka ZX Spectrum +2A-+3]"
         }
       }
     },
@@ -244078,12 +244078,6 @@
       "f22c75481f23e98c5598c85a4ea99422": "9d9e1f89d20576251c49519974cefc0ce88554ec",
       "ac91b559987a387cca84431164f565b4": "0a16f66d7816d73af3b28dea2bb292415695f6f7",
       "ff28d4cd985b88cf3555bd55ee9f6d3d": "5da084d0425bc433952e03a6cef3f57e16a46886",
-      "5c11c61a2dd2ca4bf39328d9ff42d289": "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e",
-      "31b704ae925305e74f50699271fddd9a": "5cfb6bca4177c45fefd571734576b55e3a127c08",
-      "238f77692156a5c49d20c0aa2862e8bb": "8cafb292af58617907b9e6b9093d3588a75849b8",
-      "05de80a055b5e7866f55769db0584d6e": "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4",
-      "178d780c1347cf6634471805bd10e52c": "a584272f21dc82c14b7d4f1ed440e23a976e71f0",
-      "840481177270d5642a14ca71ee72844c": "c315672807d8ddb8d91443729405c766dd95cae7",
       "1c5e37133ca8436f525c860ca5596c31": "8ba966ec3fd8e4525b93bb4744424d954ba48a29",
       "7b7bb0a43ec9fdb11792819fc0498c4e": "2377b1dfb00a9d84420aff88b5886520e3f7664b",
       "6c6cd8c45b1c44d80fe12b2bcf2ff103": "2cb85e9dd60464d8deec5b3268e95e86b69e5bd1",
@@ -247039,6 +247033,7 @@
       "e49e63328c78fe3d24ae32bf903583e0": "2feafd8f1c40fdf1bd5668f8c5c02e5560945b17",
       "3153447d155fb8bfc66a4d1c41e399b9": "4a06c8e66261611dce0305217c42138b71331701",
       "626b3453613e43d5a47908a8944ba583": "29091ff60ef4c22b1ee17aa21e0e75bac6b36474",
+      "840481177270d5642a14ca71ee72844c": "c315672807d8ddb8d91443729405c766dd95cae7",
       "bc6ae4e1db01a2f349d9af392bf7e2bd": "6a40a5cec00c3b49a4fd013505c5580baa733a29",
       "29ad9ce848b49d0f9cefc294137f653c": "0d5485e67c3f033c41d677cc9936afd6ad618d5f",
       "cc049159d7e744c15eee080c241273b4": "9e1495e62b000e1e1c868c0f3b6982e1abbb8a94",
@@ -247174,6 +247169,7 @@
       "643861ad34831b255bf2eb64e8b6ecb8": "367b5a102fb663beee8e7930b8c4acc219c1f7b3",
       "d8ad507b1c915a9acfe0d73957082926": "07783ee295274d8ff15d935bfd787c8ac1d54900",
       "ce0723f9bc02f4948c15d3b3230ae831": "33703e97cc93b7edfcc0334b64233cf81b7930db",
+      "178d780c1347cf6634471805bd10e52c": "a584272f21dc82c14b7d4f1ed440e23a976e71f0",
       "53e2f417c6996df9af170e147df8e369": "282eb7bc819aad2a12fd954e76f7838a4e1a7929",
       "0da70a5d2a0e733398e005b96b7e4ba6": "21695e3f2a8f796386ce66eea8a246b0ac44810c",
       "78e61a2a02121873c1756b21fd1398b1": "9a75ed4b293f968985be4c9aa893cd88276d1ced",
@@ -247185,12 +247181,16 @@
       "1eab43c99c738172820927e01797715b": "0eee1c503f71709fce8b7560dadc2d07d15edb80",
       "f417a9ce8bdc54871ed91d3be10bcd4f": "c63d5b6a490a813a6d2890fefe9ce29e66d5c221",
       "d5869034604dbfd2c1d54170e874fd0a": "015eb96dafb273d4f4512c467e9b43c305fd1bc4",
+      "5c11c61a2dd2ca4bf39328d9ff42d289": "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e",
+      "31b704ae925305e74f50699271fddd9a": "5cfb6bca4177c45fefd571734576b55e3a127c08",
       "4ed7af4636308b8a48d7a35e6c5b546b": "72703f9a3e734f3c23ec34c0727aae4ccbef9a91",
       "b3db95931cc844efaeb82db9c171b9f3": "de8b0d2d0379cfe7c39322a086ca6da68c7f23cb",
+      "238f77692156a5c49d20c0aa2862e8bb": "8cafb292af58617907b9e6b9093d3588a75849b8",
       "9833b8b73384dd5fa3678377ff00a2bb": "e319ed08b4d53a5e421a75ea00ea02039ba6555b",
       "0f711ceb5ab801b4701989982e0f334c": "c9969fc36095a59787554026a9adc3b87678c794",
       "3b6dd659d5e4ec97f0e2f7878152c987": "22e50c6ba4157a3f6a821bd9937cd26e292775c6",
       "a148bcc575e51389e84fdf5d555c3196": "65f031caa8148a5493afe42c41f4929deab26b4e",
+      "05de80a055b5e7866f55769db0584d6e": "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4",
       "bc123f625e245c225f92ef05933ed134": "649fbd233490bf58b35350b0123d36caaaa011eb",
       "617364264c587d20c9fc4746c29679f2": "f12198108cbb14de4f03c6695bc16d08c85ee214",
       "c363e95dcd0a90e6e7f847e6e47e0179": "773633dce5ba323a9e00d9d0f9e4d8c295df7c87",
@@ -282781,8 +282781,7 @@
         "daad4113713ed776fbd47727762bca81ba74915f"
       ],
       "BS-X.bin": [
-        "4891d739a8a8b67923681bad4fb67edab2e90e50",
-        "604556b2e62860af18db5a77f2956ebc75450020"
+        "4891d739a8a8b67923681bad4fb67edab2e90e50"
       ],
       "SNES_SGB_(JU).sfc": [
         "6ed55c4368333b57f6a2f8bbd70ccd87ed48058e"
@@ -292383,24 +292382,6 @@
       "zxevo_baseconf.rom": [
         "5da084d0425bc433952e03a6cef3f57e16a46886"
       ],
-      "if1-1.rom": [
-        "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e"
-      ],
-      "if1-2.rom": [
-        "5cfb6bca4177c45fefd571734576b55e3a127c08"
-      ],
-      "plus2.rom": [
-        "8cafb292af58617907b9e6b9093d3588a75849b8"
-      ],
-      "plus3.rom": [
-        "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4"
-      ],
-      "ZX_pentagon.rom": [
-        "a584272f21dc82c14b7d4f1ed440e23a976e71f0"
-      ],
-      "SMS_us_1.3.sms": [
-        "c315672807d8ddb8d91443729405c766dd95cae7"
-      ],
       "430vx.nvr": [
         "8ba966ec3fd8e4525b93bb4744424d954ba48a29"
       ],
@@ -300337,6 +300318,9 @@
       "SMS_us_1.0b.sms": [
         "29091ff60ef4c22b1ee17aa21e0e75bac6b36474"
       ],
+      "SMS_us_1.3.sms": [
+        "c315672807d8ddb8d91443729405c766dd95cae7"
+      ],
       "megacd_v100g_jp.bin": [
         "6a40a5cec00c3b49a4fd013505c5580baa733a29"
       ],
@@ -300673,6 +300657,9 @@
       "256s-3.rom": [
         "33703e97cc93b7edfcc0334b64233cf81b7930db"
       ],
+      "ZX_pentagon.rom": [
+        "a584272f21dc82c14b7d4f1ed440e23a976e71f0"
+      ],
       "ZX_trdos.rom": [
         "282eb7bc819aad2a12fd954e76f7838a4e1a7929"
       ],
@@ -300706,14 +300693,26 @@
       "gluck.rom": [
         "015eb96dafb273d4f4512c467e9b43c305fd1bc4"
       ],
+      "if1-1.rom": [
+        "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e"
+      ],
+      "if1-2.rom": [
+        "5cfb6bca4177c45fefd571734576b55e3a127c08"
+      ],
       "plus2-0.rom": [
         "72703f9a3e734f3c23ec34c0727aae4ccbef9a91"
       ],
       "plus2-1.rom": [
         "de8b0d2d0379cfe7c39322a086ca6da68c7f23cb"
       ],
+      "plus2.rom": [
+        "8cafb292af58617907b9e6b9093d3588a75849b8"
+      ],
       "plus3-3.rom": [
         "65f031caa8148a5493afe42c41f4929deab26b4e"
+      ],
+      "plus3.rom": [
+        "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4"
       ],
       "plus3e-0.rom": [
         "649fbd233490bf58b35350b0123d36caaaa011eb"
@@ -302139,29 +302138,14 @@
       "desc.dat": [
         "8c20ff26ebfefbf9b050b67af8083704003595ba"
       ],
-      "goldstar_fc1_enc.bin": [
-        "8ef7503c948314d242da47b7fdc272f68dac2aee"
+      "disk2-13boot.rom": [
+        "afd060e6f35faf3bb0146fa889fc787adf56330a"
       ],
-      "panafz10j.bin": [
-        "fe7f9c9c6a98910013bf13f2cf798de9fea52acd"
+      "DISK2-13sector.rom": [
+        "afd060e6f35faf3bb0146fa889fc787adf56330a"
       ],
-      "panafz1e.bin": [
-        "1d0db81e171ebc1d07cefc8ce8ab082306186e56"
-      ],
-      "sanyo_hc21_b3_unenc.bin": [
-        "c389af32bcadf0d86826927dc3d20b7072f90069"
-      ],
-      "cpc_amsdos.rom": [
-        "39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb"
-      ],
-      "Amsdos.rom": [
-        "39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb"
-      ],
-      "AMSDOS_0.5.ROM": [
-        "39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb"
-      ],
-      "boot-16.rom": [
-        "d4181c9f046aafc3fb326b381baac809d9e38d16"
+      "disk2_13.rom": [
+        "afd060e6f35faf3bb0146fa889fc787adf56330a"
       ],
       "disk2-16boot.rom": [
         "d4181c9f046aafc3fb326b381baac809d9e38d16"
@@ -302181,27 +302165,6 @@
       "disk2.rom": [
         "d4181c9f046aafc3fb326b381baac809d9e38d16"
       ],
-      "apple2gs.rom2": [
-        "bc32bc0e8902946663998f56aea52be597d9e361"
-      ],
-      "apple2gs3.rom": [
-        "bc32bc0e8902946663998f56aea52be597d9e361"
-      ],
-      "ROM03.ROM": [
-        "bc32bc0e8902946663998f56aea52be597d9e361"
-      ],
-      "ROM.ROM": [
-        "bc32bc0e8902946663998f56aea52be597d9e361"
-      ],
-      "disk2-13boot.rom": [
-        "afd060e6f35faf3bb0146fa889fc787adf56330a"
-      ],
-      "DISK2-13sector.rom": [
-        "afd060e6f35faf3bb0146fa889fc787adf56330a"
-      ],
-      "disk2_13.rom": [
-        "afd060e6f35faf3bb0146fa889fc787adf56330a"
-      ],
       "disk2-16seq.rom": [
         "bc39fbd5b9a8d2287ac5d0a42e639fc4d3c2f9d4"
       ],
@@ -302211,26 +302174,8 @@
       "maciix.zip": [
         "bcecee4379e0ecfa6dc0c49900dda3f8220d6ef0"
       ],
-      "a2diskii.zip": [
-        "d9bb189730e15d46c27e7246d7bb23137e7d761e"
-      ],
-      "a2iwm_flop.zip": [
-        "d9bb189730e15d46c27e7246d7bb23137e7d761e"
-      ],
       "a2iwm.zip": [
         "d9bb189730e15d46c27e7246d7bb23137e7d761e"
-      ],
-      "nb_824gc.zip": [
-        "734efa75815502d58898599359cf55f8003a03a5"
-      ],
-      "256.MEC": [
-        "decbccbf862a0f94735ea7b8b31181f0c8b3f01c"
-      ],
-      "COH-H31000.MEC": [
-        "decbccbf862a0f94735ea7b8b31181f0c8b3f01c"
-      ],
-      "r27v1602f.7d": [
-        "f0a74bbcaf801f3fd0b7002ebd0118564aae3528"
       ],
       "gts1s.zip": [
         "d4b0c8277c187a92279e2d2b71fc91b72d581257"
@@ -302241,42 +302186,6 @@
       "gts80s.zip": [
         "a7d7a0538e2d1d9f3c623488af44b0d8b5e564e2"
       ],
-      "ROM_BASIC_C": [
-        "3693c9cb9bf3b41bae1150f7a8264992468fc8c0"
-      ],
-      "ataribasic.rom": [
-        "3693c9cb9bf3b41bae1150f7a8264992468fc8c0"
-      ],
-      "basic.rom": [
-        "3693c9cb9bf3b41bae1150f7a8264992468fc8c0"
-      ],
-      "atari_basic.rom": [
-        "3693c9cb9bf3b41bae1150f7a8264992468fc8c0"
-      ],
-      "A78_NTSC_bios.bin": [
-        "d9d134bb6b36907c615a594cc7688f7bfcef5b43"
-      ],
-      "A78_PAL_BIOS.bin": [
-        "5a140136a16d1d83e4ff32a19409ca376a8df874"
-      ],
-      "lynxboot.img": [
-        "e4ed47fae31693e016b081c6bda48da5b70d7ccb"
-      ],
-      "tos100.img": [
-        "9a6e4c88533a9eaa4d55cdc040e47443e0226eb2"
-      ],
-      "tos100uk.img": [
-        "9a6e4c88533a9eaa4d55cdc040e47443e0226eb2"
-      ],
-      "tos102uk.img": [
-        "87900a40a890fdf03bd08be6c60cc645855cbce5"
-      ],
-      "tos104uk.img": [
-        "9526ef63b9cb1d2a7109e278547ae78a5c1db6c6"
-      ],
-      "tos106uk.img": [
-        "06f9ea322e74b682df0396acfaee8cb4d9c90cad"
-      ],
       "score-panel_green.png": [
         "8f627c7d7a1358c0b3f278d05516958c2ed8020d"
       ],
@@ -302284,167 +302193,37 @@
         "0a28720fe2f4be983708a100548715fbb0cb69e9",
         "492b118314564937558b1e64067d212c53272504"
       ],
-      "Coleco_Bios.bin": [
-        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
-      ],
-      "COLECO.ROM": [
-        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
-      ],
-      "coleco.rom": [
-        "45bedc4cbdeac66c7df59e9e599195c778d86a92",
-        "99ba9be24ada3e86e5c17aeecb7a2d68c5edfe59"
-      ],
-      "colecovision.rom": [
-        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
-      ],
-      "amiga-os-130.rom": [
-        "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
-      ],
       "kick.rom": [
-        "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
-      ],
-      "kick34005.A500": [
         "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
       ],
       "Kickstart v1.3 r34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV)[!].rom": [
         "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
       ],
-      "Kickstart v1.3 rev 34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV)[!].rom": [
+      "kick34005.A500": [
         "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
       ],
-      "Kickstart v1.3 rev 34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV).rom": [
+      "amiga-os-130.rom": [
         "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
-      ],
-      "amiga-os-205.rom": [
-        "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
-      ],
-      "kick205.rom": [
-        "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
-      ],
-      "kick37350.A600": [
-        "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
-      ],
-      "Kickstart v2.05 r37.350 (1992)(Commodore)(A600HD)[!].rom": [
-        "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
-      ],
-      "Kickstart v2.05 rev 37.350 (1992)(Commodore)(A600HD)[!].rom": [
-        "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
-      ],
-      "cd32.rom": [
-        "3525be8887f79b5929e017b42380a79edfee542d"
-      ],
-      "kick40060.CD32": [
-        "3525be8887f79b5929e017b42380a79edfee542d"
-      ],
-      "Kickstart v3.1 r40.60 (1993)(Commodore)(CD32).rom": [
-        "3525be8887f79b5929e017b42380a79edfee542d"
-      ],
-      "Kickstart v3.1 rev 40.60 (1993)(Commodore)(CD32).rom": [
-        "3525be8887f79b5929e017b42380a79edfee542d"
-      ],
-      "cd32ext.rom": [
-        "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f"
-      ],
-      "kick40060.CD32.ext": [
-        "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f"
-      ],
-      "CD32 Extended-ROM r40.60 (1993)(Commodore)(CD32).rom": [
-        "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f"
-      ],
-      "amiga-os-310-cd32-ext.rom": [
-        "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f"
-      ],
-      "CD32 Extended.ROM": [
-        "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f"
-      ],
-      "CD32 Extended-ROM rev 40.60 (1993)(Commodore)(CD32).rom": [
-        "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f"
-      ],
-      "cdtv.rom": [
-        "7ba40ffa17e500ed9fed041f3424bd81d9c907be"
-      ],
-      "cdtvext.rom": [
-        "7ba40ffa17e500ed9fed041f3424bd81d9c907be"
-      ],
-      "CDTV Extended-ROM v1.0 (1991)(Commodore)(CDTV)[!].rom": [
-        "7ba40ffa17e500ed9fed041f3424bd81d9c907be"
-      ],
-      "CDTV Extended.ROM": [
-        "7ba40ffa17e500ed9fed041f3424bd81d9c907be"
       ],
       "kick20.rom": [
-        "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
-      ],
-      "kick37175.A500": [
         "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
       ],
       "Kickstart v2.04 r37.175 (1991)(Commodore)(A500+)[!].rom": [
         "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
       ],
+      "kick37175.A500": [
+        "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
+      ],
       "kick204.rom": [
         "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
-      ],
-      "Kickstart v2.04 rev 37.175 (1991)(Commodore)(A500+)[!].rom": [
-        "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
-      ],
-      "Kickstart v2.04 rev 37.175 (1991)(Commodore)(A500+).rom": [
-        "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
-      ],
-      "kick33180.A500": [
-        "11f9e62cf299f72184835b7b2a70a16333fc0d88"
-      ],
-      "Kickstart v1.2 r33.180 (1986)(Commodore)(A500-A1000-A2000)[!].rom": [
-        "11f9e62cf299f72184835b7b2a70a16333fc0d88"
-      ],
-      "Kickstart v1.2 rev 33.180 (1986)(Commodore)(A500-A2000)[!].rom": [
-        "11f9e62cf299f72184835b7b2a70a16333fc0d88"
-      ],
-      "Kickstart v1.2 rev 33.180 (1986)(Commodore)(A500-A1000-A2000).rom": [
-        "11f9e62cf299f72184835b7b2a70a16333fc0d88"
-      ],
-      "kick40063.A600": [
-        "3b7f1493b27e212830f989f26ca76c02049f09ca"
-      ],
-      "amiga-os-310-a600.rom": [
-        "3b7f1493b27e212830f989f26ca76c02049f09ca"
-      ],
-      "Kickstart v3.1 rev 40.63 (1993)(Commodore)(A500-A600-A2000)[!].rom": [
-        "3b7f1493b27e212830f989f26ca76c02049f09ca"
-      ],
-      "Kickstart v3.1 rev 40.63 (1993)(Commodore)(A500-A600-A2000).rom": [
-        "3b7f1493b27e212830f989f26ca76c02049f09ca"
-      ],
-      "kick40068.A1200": [
-        "e21545723fe8374e91342617604f1b3d703094f1"
-      ],
-      "Kickstart v3.1 r40.68 (1993)(Commodore)(A1200)[!].rom": [
-        "e21545723fe8374e91342617604f1b3d703094f1"
-      ],
-      "AmigaVision.rom": [
-        "e21545723fe8374e91342617604f1b3d703094f1"
-      ],
-      "Kickstart v3.1 rev 40.68 (1993)(Commodore)(A1200)[!].rom": [
-        "e21545723fe8374e91342617604f1b3d703094f1"
-      ],
-      "Kickstart v3.1 rev 40.68 (1993)(Commodore)(A1200).rom": [
-        "e21545723fe8374e91342617604f1b3d703094f1"
-      ],
-      "kick40068.A4000": [
-        "5fe04842d04a489720f0f4bb0e46948199406f49"
-      ],
-      "Kickstart v3.1 r40.68 (1993)(Commodore)(A4000).rom": [
-        "5fe04842d04a489720f0f4bb0e46948199406f49"
-      ],
-      "Kickstart v3.1 rev 40.68 (1993)(Commodore)(A4000).rom": [
-        "5fe04842d04a489720f0f4bb0e46948199406f49"
       ],
       "1541 ROM": [
         "ab16f56989b27d89babe5f89c5a8cb3da71a82f0"
       ],
-      "C64_Drive-1541.bin": [
+      "dos1541": [
         "ab16f56989b27d89babe5f89c5a8cb3da71a82f0"
       ],
-      "dos1541": [
+      "C64_Drive-1541.bin": [
         "ab16f56989b27d89babe5f89c5a8cb3da71a82f0"
       ],
       "vice/DRIVES/dos1541-325302-01+901229-05.bin": [
@@ -302453,10 +302232,10 @@
       "Basic ROM": [
         "79015323128650c742a3694c9429aa91f355905e"
       ],
-      "C64_Basic.bin": [
+      "basic": [
         "79015323128650c742a3694c9429aa91f355905e"
       ],
-      "basic": [
+      "C64_Basic.bin": [
         "79015323128650c742a3694c9429aa91f355905e"
       ],
       "basic64-901226-01.bin": [
@@ -302468,13 +302247,13 @@
       "vice/C64DTV/basic-901226-01.bin": [
         "79015323128650c742a3694c9429aa91f355905e"
       ],
-      "C64_Chargen.bin": [
-        "adc7c31e18c7c7413d54802ef2f4193da14711aa"
-      ],
       "Char ROM": [
         "adc7c31e18c7c7413d54802ef2f4193da14711aa"
       ],
       "chargen": [
+        "adc7c31e18c7c7413d54802ef2f4193da14711aa"
+      ],
+      "C64_Chargen.bin": [
         "adc7c31e18c7c7413d54802ef2f4193da14711aa"
       ],
       "vice/C64/chargen-901225-01.bin": [
@@ -302489,29 +302268,14 @@
       "vice/SCPU64/chargen-901225-01.bin": [
         "adc7c31e18c7c7413d54802ef2f4193da14711aa"
       ],
-      "C64_Drive-1541ii.bin": [
+      "d1541II": [
         "d3b78c3dbac55f5199f33f3fe0036439811f7fb3"
       ],
-      "d1541II": [
+      "C64_Drive-1541ii.bin": [
         "d3b78c3dbac55f5199f33f3fe0036439811f7fb3"
       ],
       "vice/DRIVES/dos1541ii-251968-03.bin": [
         "d3b78c3dbac55f5199f33f3fe0036439811f7fb3"
-      ],
-      "C64_Kernal.bin": [
-        "1d503e56df85a62fee696e7618dc5b4e781df1bb"
-      ],
-      "kernal": [
-        "1d503e56df85a62fee696e7618dc5b4e781df1bb"
-      ],
-      "kernal64-901227-03.bin": [
-        "1d503e56df85a62fee696e7618dc5b4e781df1bb"
-      ],
-      "vice/C64/kernal-901227-03.bin": [
-        "1d503e56df85a62fee696e7618dc5b4e781df1bb"
-      ],
-      "vice/C64DTV/kernal-901227-03.bin": [
-        "1d503e56df85a62fee696e7618dc5b4e781df1bb"
       ],
       "dos1001": [
         "d50b093828888146596f17ae0df9ef3dfde71b05"
@@ -302588,161 +302352,43 @@
       "vice/C64/kernal-906145-02.bin": [
         "4ff0f11e80f4b57430d8f0c3799ed0f0e0f4565d"
       ],
+      "kernal": [
+        "1d503e56df85a62fee696e7618dc5b4e781df1bb"
+      ],
+      "C64_Kernal.bin": [
+        "1d503e56df85a62fee696e7618dc5b4e781df1bb"
+      ],
+      "kernal64-901227-03.bin": [
+        "1d503e56df85a62fee696e7618dc5b4e781df1bb"
+      ],
+      "vice/C64/kernal-901227-03.bin": [
+        "1d503e56df85a62fee696e7618dc5b4e781df1bb"
+      ],
+      "vice/C64DTV/kernal-901227-03.bin": [
+        "1d503e56df85a62fee696e7618dc5b4e781df1bb"
+      ],
       "sxkernal": [
         "aa136e91ecf3c5ac64f696b3dbcbfc5ba0871c98"
       ],
       "vice/C64/kernal-251104-04.bin": [
         "aa136e91ecf3c5ac64f696b3dbcbfc5ba0871c98"
       ],
-      "basic.318006-01.bin": [
-        "161c96b4ad20f3a4f2321808e37a5ded26a135dd"
-      ],
-      "vice/PLUS4/basic-318006-01.bin": [
-        "161c96b4ad20f3a4f2321808e37a5ded26a135dd"
-      ],
-      "kernal.318004-05.bin": [
-        "7c7e07f016391174a557e790c4ef1cbe33512cdb"
-      ],
-      "vice/PLUS4/kernal-318004-05.bin": [
-        "7c7e07f016391174a557e790c4ef1cbe33512cdb"
-      ],
-      "basic.bin": [
-        "587d1e90950675ab6b12d91248a3f0d640d02e8d"
-      ],
-      "vice/VIC20/basic-901486-01.bin": [
-        "587d1e90950675ab6b12d91248a3f0d640d02e8d"
-      ],
-      "characters-english.bin": [
-        "4fd85ab6647ee2ac7ba40f729323f2472d35b9b4"
-      ],
-      "vice/VIC20/chargen-901460-03.bin": [
-        "4fd85ab6647ee2ac7ba40f729323f2472d35b9b4"
-      ],
-      "characters-japanese.bin": [
-        "dae61ac03065aa2904af5c123ce821855898c555"
-      ],
-      "vice/VIC20/chargen-901460-02.bin": [
-        "dae61ac03065aa2904af5c123ce821855898c555"
-      ],
-      "kernel-japanese.bin": [
-        "c9ead45e6674d1042ca6199160e8583c23aeac22"
-      ],
-      "vice/VIC20/kernal.901486-02.bin": [
-        "c9ead45e6674d1042ca6199160e8583c23aeac22"
-      ],
-      "kernel-ntsc.bin": [
-        "06de7ec017a5e78bd6746d89c2ecebb646efeb19"
-      ],
-      "vice/VIC20/kernal.901486-06.bin": [
-        "06de7ec017a5e78bd6746d89c2ecebb646efeb19"
-      ],
-      "kernel-pal.bin": [
-        "ce0137ed69f003a299f43538fa9eee27898e621e"
-      ],
-      "vice/VIC20/kernal.901486-07.bin": [
-        "ce0137ed69f003a299f43538fa9eee27898e621e"
-      ],
-      "d200rom1.rom": [
-        "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69"
-      ],
-      "d64_1.rom": [
-        "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69",
-        "f119506eaa3b4b70b9aa0dd83761e8cbe043d042"
-      ],
-      "d64tano.rom": [
-        "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69"
-      ],
-      "d64rom1": [
-        "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69"
-      ],
-      "dragrom": [
-        "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69"
-      ],
-      "Dragon Data Ltd - Dragon 64 - IC17": [
-        "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69"
-      ],
-      "Dragon Data Ltd - TANO IC18": [
-        "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69"
-      ],
-      "Eurohard S.A. - Dragon 200 IC18": [
-        "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69"
-      ],
-      "alpha_ba": [
-        "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69"
-      ],
-      "Dragon Data Ltd - Dragon Alpga Basic": [
-        "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69"
-      ],
-      "d64_2.rom": [
-        "e3c8986bb1d44269c4587b04f1ca27a70b0aaa2e"
-      ],
-      "d64rom2.rom": [
-        "e3c8986bb1d44269c4587b04f1ca27a70b0aaa2e"
-      ],
-      "d64tano2.rom": [
-        "e3c8986bb1d44269c4587b04f1ca27a70b0aaa2e"
-      ],
-      "d64rom2": [
-        "e3c8986bb1d44269c4587b04f1ca27a70b0aaa2e"
-      ],
-      "Dragon Data Ltd - Dragon 64 - IC18": [
-        "e3c8986bb1d44269c4587b04f1ca27a70b0aaa2e"
-      ],
-      "Dragon Data Ltd - TANO IC17": [
-        "e3c8986bb1d44269c4587b04f1ca27a70b0aaa2e"
-      ],
-      "Eurohard S.A. - Dragon 200 IC17": [
-        "e3c8986bb1d44269c4587b04f1ca27a70b0aaa2e"
-      ],
-      "deltados.rom": [
-        "686ebb5f39dd4fc907a0b748867d0a022d2f1a60"
-      ],
-      "Premier Micros - DeltaDOS": [
-        "686ebb5f39dd4fc907a0b748867d0a022d2f1a60"
-      ],
-      "exos20.rom": [
-        "6033a0535136c40c47137e4d1cd9273c06d5fdff"
-      ],
-      "Expandible OS v2.0 (1984)(Intelligent Software).bin": [
-        "6033a0535136c40c47137e4d1cd9273c06d5fdff"
-      ],
-      "EXOS20.ROM": [
-        "6033a0535136c40c47137e4d1cd9273c06d5fdff"
-      ],
-      "zx48.rom": [
-        "5ea7c2b824672e914525d1d5c419d71b84a426a2"
-      ],
-      "48.rom": [
-        "5ea7c2b824672e914525d1d5c419d71b84a426a2"
-      ],
-      "spectrum48.rom": [
-        "5ea7c2b824672e914525d1d5c419d71b84a426a2"
-      ],
-      "zxs:48.rom": [
-        "5ea7c2b824672e914525d1d5c419d71b84a426a2"
-      ],
-      "fuse/48.rom": [
-        "5ea7c2b824672e914525d1d5c419d71b84a426a2"
-      ],
-      "ZXS48.ROM": [
-        "5ea7c2b824672e914525d1d5c419d71b84a426a2"
+      "sl31253.bin": [
+        "81193965a374d77b99b4743d317824b53c3e3c78"
       ],
       "ChannelF_SL31253.rom": [
         "81193965a374d77b99b4743d317824b53c3e3c78"
       ],
-      "sl31253.bin": [
-        "81193965a374d77b99b4743d317824b53c3e3c78"
+      "sl31254.bin": [
+        "8f70d1b74483ba3a37e86cf16c849d601a8c3d2c"
       ],
       "ChannelF_SL31254.rom": [
         "8f70d1b74483ba3a37e86cf16c849d601a8c3d2c"
       ],
-      "sl31254.bin": [
-        "8f70d1b74483ba3a37e86cf16c849d601a8c3d2c"
-      ],
-      "ChannelF_sl90025.rom": [
+      "sl90025.bin": [
         "759e2ed31fbde4a2d8daf8b9f3e0dffebc90dae2"
       ],
-      "sl90025.bin": [
+      "ChannelF_sl90025.rom": [
         "759e2ed31fbde4a2d8daf8b9f3e0dffebc90dae2"
       ],
       "Vectrex_Bios.bin": [
@@ -304401,124 +304047,25 @@
       "E482.WAV": [
         "377332bc70c90a406174898e28460f860e96e5d7"
       ],
-      "exec.bin": [
-        "5a65b922b562cb1f57dab51b73151283f0e20c7a"
+      "COLECO.ROM": [
+        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
       ],
-      "grom.bin": [
-        "f9608bb4ad1cfe3640d02844c7ad8e0bcd974917"
+      "coleco.rom": [
+        "45bedc4cbdeac66c7df59e9e599195c778d86a92",
+        "99ba9be24ada3e86e5c17aeecb7a2d68c5edfe59"
       ],
-      "DEFAULT.FNT": [
-        "000ac11b702a4c42e40f135df12fa5f2f13e20a1"
+      "colecovision.rom": [
+        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
       ],
-      "MSX_1.0.rom": [
-        "3656bb3bbc17d280d2016fe4f6ff3cded3082a41"
-      ],
-      "MSX_jpn.rom": [
-        "302afb5d8be26c758309ca3df611ae69cced2821"
-      ],
-      "px-7_basic-bios1.rom": [
-        "302afb5d8be26c758309ca3df611ae69cced2821"
-      ],
-      "nms8250_basic-bios2.rom": [
-        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
-      ],
-      "MSX2.rom": [
-        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
-      ],
-      "nms8245_basic-bios2.rom": [
-        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
-      ],
-      "nms8250_msx2sub.rom": [
-        "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02"
-      ],
-      "MSX2EXT.rom": [
-        "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02"
-      ],
-      "fs-a1wsx_msx2psub.rom": [
-        "fe0254cbfc11405b79e7c86c7769bd6322b04995"
-      ],
-      "MSX2PEXT.rom": [
-        "fe0254cbfc11405b79e7c86c7769bd6322b04995"
-      ],
-      "hb-f1xv_msx2sub.rom": [
-        "fe0254cbfc11405b79e7c86c7769bd6322b04995"
+      "Coleco_Bios.bin": [
+        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
       ],
       "Complex_4627v1.03.bin": [
         "3944392c954cfb176d4210544e88353b3c5d36b1",
         "358a20e61ec1a2387127b1fa92113034fb279f9b"
       ],
-      "PCECD_3.0-(J).pce": [
-        "79f5ff55dd10187c7fd7b8daab0b3ffbd1f56a2c"
-      ],
-      "PCECD_gecard.pce": [
-        "014881a959e045e00f4db8f52955200865d40280"
-      ],
-      "gexpress.pce": [
-        "014881a959e045e00f4db8f52955200865d40280"
-      ],
-      "N88KNJ1.ROM": [
-        "82e11a177af6a5091dd67f50a2f4bafda84d6556"
-      ],
-      "n88knj1.rom": [
-        "82e11a177af6a5091dd67f50a2f4bafda84d6556"
-      ],
-      "kanji1.rom": [
-        "82e11a177af6a5091dd67f50a2f4bafda84d6556"
-      ],
-      "fx-scsi.rom": [
-        "65482a23ac5c10a6095aee1db5824cca54ead6e5"
-      ],
-      "pcfx.rom": [
-        "1a77fd83e337f906aecab27a1604db064cf10074"
-      ],
-      "pcfxbios.bin": [
-        "1a77fd83e337f906aecab27a1604db064cf10074"
-      ],
-      "FDS_disksys-nintendo.rom": [
-        "57fe1bdee955bb48d357e463ccbf129496930b62"
-      ],
-      "dmg_rom.bin": [
-        "4ed31ec6b0b175bb109c0eb5fd3d193da823339f",
-        "1db57a1e8b6e4096f811587f9eab0c6675fd9755"
-      ],
-      "gb_bios.bin": [
-        "4ed31ec6b0b175bb109c0eb5fd3d193da823339f",
-        "1db57a1e8b6e4096f811587f9eab0c6675fd9755"
-      ],
-      "dmg0_rom.bin": [
-        "4ed31ec6b0b175bb109c0eb5fd3d193da823339f",
-        "1db57a1e8b6e4096f811587f9eab0c6675fd9755"
-      ],
-      "gba_bios.bin": [
-        "300c20df6731a33952ded8c436f7f186d25d3492"
-      ],
-      "BIOSGBA.ROM": [
-        "300c20df6731a33952ded8c436f7f186d25d3492"
-      ],
-      "GBA.ROM": [
-        "300c20df6731a33952ded8c436f7f186d25d3492"
-      ],
-      "gbc_bios.bin": [
-        "1293d68bf9643bc4f36954c1e80e38f39864528d",
-        "80e3ee82416c1a74827a5459fde32f04bf51a1f6"
-      ],
-      "cgb_bios.bin": [
-        "1293d68bf9643bc4f36954c1e80e38f39864528d"
-      ],
       "custom.pal": [
         "c7635019127aa28d84d28ae48304bfca6d5baefb"
-      ],
-      "ymf288_adpcm_rom.bin": [
-        "50b6c3e288eaa12ad275d4f323267bb72b0445df"
-      ],
-      "64DD_IPL_DEV.n64": [
-        "10c4173c2a7eb09c6579818f72ef18fa0b6d32de"
-      ],
-      "IPL_DEV.n64": [
-        "10c4173c2a7eb09c6579818f72ef18fa0b6d32de"
-      ],
-      "64dd_ipl_DEV.bin": [
-        "10c4173c2a7eb09c6579818f72ef18fa0b6d32de"
       ],
       "64DD_IPL_JP.n64": [
         "bf861922dcb78c316360e3e742f4f70ff63c9bc3"
@@ -304532,65 +304079,17 @@
       "IPL_JAP.n64": [
         "bf861922dcb78c316360e3e742f4f70ff63c9bc3"
       ],
-      "64dd_ipl_J.bin": [
-        "bf861922dcb78c316360e3e742f4f70ff63c9bc3"
-      ],
-      "64DD_IPL_USA.bin": [
-        "3c5b93ca231550c68693a14f03cea8d5dbd1be9e"
-      ],
-      "IPL_USA.n64": [
-        "3c5b93ca231550c68693a14f03cea8d5dbd1be9e"
-      ],
-      "boot5.rom": [
-        "3c5b93ca231550c68693a14f03cea8d5dbd1be9e"
-      ],
-      "64dd_ipl_U.bin": [
-        "3c5b93ca231550c68693a14f03cea8d5dbd1be9e"
-      ],
-      "nds7.bin": [
-        "24f67bdea115a2c847c8813a262502ee1607b7df"
-      ],
-      "bios7.bin": [
-        "24f67bdea115a2c847c8813a262502ee1607b7df"
-      ],
-      "nintendo-ds:df692a80a5b1bc90728bc3dfc76cd948": [
-        "24f67bdea115a2c847c8813a262502ee1607b7df"
-      ],
-      "nds_bios_arm7.bin": [
-        "24f67bdea115a2c847c8813a262502ee1607b7df"
-      ],
-      "BIOSNDS7.ROM": [
-        "24f67bdea115a2c847c8813a262502ee1607b7df"
-      ],
-      "nds9.bin": [
-        "bfaac75f101c135e32e2aaf541de6b1be4c8c62d"
-      ],
-      "bios9.bin": [
-        "bfaac75f101c135e32e2aaf541de6b1be4c8c62d"
-      ],
-      "nintendo-ds:a392174eb3e572fed6447e956bde4b25": [
-        "bfaac75f101c135e32e2aaf541de6b1be4c8c62d"
-      ],
-      "nds_bios_arm9.bin": [
-        "bfaac75f101c135e32e2aaf541de6b1be4c8c62d"
-      ],
-      "BIOSNDS9.ROM": [
-        "bfaac75f101c135e32e2aaf541de6b1be4c8c62d"
-      ],
-      "cx4.data.rom": [
-        "a002f4efba42775a31185d443f3ed1790b0e949a"
-      ],
       "sgb1.boot.rom": [
         "aa2f50a77dfb4823da96ba99309085a3c6278515"
-      ],
-      "sgb.boot.rom": [
-        "aa2f50a77dfb4823da96ba99309085a3c6278515",
-        "369e6eb5e0c975eaa52a4a3f6ee07b2a3c3c16de"
       ],
       "sgb_bios.bin": [
         "aa2f50a77dfb4823da96ba99309085a3c6278515",
         "369e6eb5e0c975eaa52a4a3f6ee07b2a3c3c16de",
         "f282b3aaf98f8423dab7d77f1aa0192be630f2fb"
+      ],
+      "sgb.boot.rom": [
+        "aa2f50a77dfb4823da96ba99309085a3c6278515",
+        "369e6eb5e0c975eaa52a4a3f6ee07b2a3c3c16de"
       ],
       "lr35902.boot.rom": [
         "aa2f50a77dfb4823da96ba99309085a3c6278515",
@@ -304605,80 +304104,20 @@
         "93407ea10d2f30ab96a314d8eca44fe160aea734",
         "f282b3aaf98f8423dab7d77f1aa0192be630f2fb"
       ],
-      "SNES_SGB2_(J).sfc": [
-        "e5b2922ca137051059e4269b236d07a22c07bc84"
-      ],
-      "sgb2.program.rom": [
-        "e5b2922ca137051059e4269b236d07a22c07bc84"
-      ],
-      "SGB2.sfc": [
-        "e5b2922ca137051059e4269b236d07a22c07bc84"
-      ],
-      "Super Game Boy 2.sfc": [
-        "e5b2922ca137051059e4269b236d07a22c07bc84"
-      ],
-      "sgb1.program.rom": [
-        "973e10840db683cf3faf61bd443090786b3a9f04"
-      ],
-      "SGB1.sfc": [
-        "973e10840db683cf3faf61bd443090786b3a9f04"
-      ],
-      "Super Game Boy.sfc": [
-        "973e10840db683cf3faf61bd443090786b3a9f04"
-      ],
-      "SNES_SGB_RevB_(World).sfc": [
-        "973e10840db683cf3faf61bd443090786b3a9f04"
-      ],
       "squirreljme-0.3.0-test.jar": [
         "600cf0440594b0c69339ba4b626a47288b342d77"
       ],
       "xm.zip": [
         "bf84d9fb5d23b679460dbdd3b6992a90fd432fd2"
       ],
-      "ANFS425.rom": [
-        "14f75d36ffe9af14aaac42df55b4fe3729ba75cf"
-      ],
       "ic10_g24lc64.bin": [
         "3ababd4334d8d57abb22dd98bd2d347df39648d9"
-      ],
-      "136032.107.b2": [
-        "72ba464da01bd6d3a91b8d9997d5ac14b6f47aad"
       ],
       "msdash.xbe": [
         "4d8d6b1d3f7ace05cbaf03565382b0e6e40c706c"
       ],
       "SDL_GameControllerDB.txt": [
         "231b29ef9d6314930eb18e57240e27ae81a6e88f"
-      ],
-      "apple2e-enh-video.rom": [
-        "b2b5d87f52693817fc747df087a4aa1ddcdb1f10"
-      ],
-      "Apple2e_Enhanced_Video.rom": [
-        "b2b5d87f52693817fc747df087a4aa1ddcdb1f10"
-      ],
-      "apple2e_char.rom": [
-        "b2b5d87f52693817fc747df087a4aa1ddcdb1f10"
-      ],
-      "apple2e_char_us.rom": [
-        "b2b5d87f52693817fc747df087a4aa1ddcdb1f10"
-      ],
-      "apple2e-enh.rom": [
-        "b8ea90abe135a0031065e01697c4a3a20d51198b"
-      ],
-      "Apple2e_Enhanced.rom": [
-        "b8ea90abe135a0031065e01697c4a3a20d51198b"
-      ],
-      "apple2e-video.rom": [
-        "58ad0008df72896a18601e090ee0d58155ffa5be"
-      ],
-      "apple2e_char_us_unenh.rom": [
-        "58ad0008df72896a18601e090ee0d58155ffa5be"
-      ],
-      "apple2e_char_2k.rom": [
-        "58ad0008df72896a18601e090ee0d58155ffa5be"
-      ],
-      "342-0133-a.chr.rom": [
-        "58ad0008df72896a18601e090ee0d58155ffa5be"
       ],
       "FMPAC.rom": [
         "9d789166e3caf28e4742fe933d962e99618c633d"
@@ -304702,6 +304141,30 @@
       "msx.rom": [
         "e998f0c441f4f1800ef44e42cd1659150206cf79"
       ],
+      "MSX2.rom": [
+        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
+      ],
+      "nms8245_basic-bios2.rom": [
+        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
+      ],
+      "nms8250_basic-bios2.rom": [
+        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
+      ],
+      "MSX2EXT.rom": [
+        "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02"
+      ],
+      "nms8250_msx2sub.rom": [
+        "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02"
+      ],
+      "MSX2PEXT.rom": [
+        "fe0254cbfc11405b79e7c86c7769bd6322b04995"
+      ],
+      "fs-a1wsx_msx2psub.rom": [
+        "fe0254cbfc11405b79e7c86c7769bd6322b04995"
+      ],
+      "hb-f1xv_msx2sub.rom": [
+        "fe0254cbfc11405b79e7c86c7769bd6322b04995"
+      ],
       "MSXJ.rom": [
         "df48902f5f12af8867ae1a87f255145f0e5e0774"
       ],
@@ -304719,9 +304182,6 @@
       ],
       "PHILIPSDISK.rom": [
         "c3efedda7ab947a06d9345f7b8261076fa7ceeef"
-      ],
-      "PAL-M.png": [
-        "c78cd2ff8c2f363043a753b663af8855ee3b02f5"
       ],
       "tyrset.pcx": [
         "50ef0cd9eaa2ae0c0c628c141400b76101223385"
@@ -305637,9 +305097,6 @@
       "eeprom.bin": [
         "ff3e7eaf715fe5612e46fc984d686ed3b115baef"
       ],
-      "svi.rom": [
-        "7d8daf52f78371ca2c9443e04827c8e1f98c8f2c"
-      ],
       "acerv35n.nvr": [
         "2cb85e9dd60464d8deec5b3268e95e86b69e5bd1"
       ],
@@ -305685,29 +305142,11 @@
       "tandy1000sl2.bin": [
         "c04eca197b3a8b668f039ae80ac6e3b45b5d6ee6"
       ],
-      "O2_Odyssey2.bin": [
-        "b2e1955d957a475de2411770452eff4ea19f4cee"
-      ],
-      "c52.bin": [
-        "a6120aed50831c9c0d95dbdf707820f601d9452e"
-      ],
-      "g7400.bin": [
-        "5130243429b40b01a14e1304d0394b8459a6fbae"
-      ],
       "[BIOS] LaserActive PAC-S10 (US) (v1.04).bin": [
-        "aa811861f8874775075bd3f53008c8aaf59b07db"
-      ],
-      "mega_ld_bios_U.bin": [
         "aa811861f8874775075bd3f53008c8aaf59b07db"
       ],
       "LA_us_104.bin": [
         "aa811861f8874775075bd3f53008c8aaf59b07db"
-      ],
-      "mega_ld_bios_J.bin": [
-        "26237b333db4a4c6770297fa5e655ea95840d5d9"
-      ],
-      "LA_jp_102.bin": [
-        "26237b333db4a4c6770297fa5e655ea95840d5d9"
       ],
       "Battle 1.mid": [
         "dc5cc32fafa442b09ab2d814ed32074d02597234"
@@ -306138,20 +305577,11 @@
       "mt32_pcm.rom": [
         "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252"
       ],
-      "uni-bioscd.rom": [
-        "5142f205912869b673a71480c5828b1eaed782a8"
-      ],
       "[BIOS] SNK Neo Geo Pocket (Japan, Europe) (En,Ja).ngp": [
-        "edc13192054a59be49c6d55f83b70e2510968e86"
-      ],
-      "[BIOS] SNK Neo Geo Pocket Color (Japan) (En,Ja).ngc": [
         "edc13192054a59be49c6d55f83b70e2510968e86"
       ],
       "ngpc.zip": [
         "edc13192054a59be49c6d55f83b70e2510968e86"
-      ],
-      "ngp_bios.rom": [
-        "2f6429b68446536d8b03f35d02f1e98beb6460a0"
       ],
       "epr-10381b.132": [
         "bf3ff05bbf81bdd44567f3b9bb4919ed4a499624"
@@ -306159,35 +305589,14 @@
       "opr-10186.47": [
         "a554d4b68e71861a0d0da4d031b3b811b246f082"
       ],
-      "dc_boot.bin": [
-        "8951d1bb219ab2ff8583033d2119c899cc81f18c"
-      ],
-      "sega-dreamcast:e10c53c2f8b90bab96ead2d368858623": [
-        "8951d1bb219ab2ff8583033d2119c899cc81f18c"
-      ],
-      "boot.bin": [
-        "8951d1bb219ab2ff8583033d2119c899cc81f18c"
-      ],
-      "dc_boot.bin.bin": [
-        "8951d1bb219ab2ff8583033d2119c899cc81f18c"
-      ],
-      "dc_bios.bin.bin": [
-        "8951d1bb219ab2ff8583033d2119c899cc81f18c"
-      ],
-      "bios.gg": [
-        "914aa165e3d879f060be77870d345b60cfeb4ede"
-      ],
-      "SMS_jp_2.1.sms": [
-        "a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2"
-      ],
       "[BIOS] Sega Master System (Japan) (v2.1).sms": [
         "a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2"
       ],
       "bios_J.sms": [
         "a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2"
       ],
-      "sms.rom": [
-        "c315672807d8ddb8d91443729405c766dd95cae7"
+      "SMS_jp_2.1.sms": [
+        "a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2"
       ],
       "[BIOS] Sega Master System (USA, Europe) (v1.3).sms": [
         "c315672807d8ddb8d91443729405c766dd95cae7"
@@ -306195,22 +305604,22 @@
       "bios.sms": [
         "c315672807d8ddb8d91443729405c766dd95cae7"
       ],
-      "BIOS.sms": [
+      "sms.rom": [
         "c315672807d8ddb8d91443729405c766dd95cae7"
       ],
-      "bios_CD_E.bin": [
+      "eu_mcd1_9210.bin": [
         "f891e0ea651e2232af0c5c4cb46a0cae2ee8f356"
       ],
-      "eu_mcd1_9210.bin": [
+      "bios_CD_E.bin": [
         "f891e0ea651e2232af0c5c4cb46a0cae2ee8f356"
       ],
       "sega-mega-cd:e66fa1dc5820d254611fdcdba0662372": [
         "f891e0ea651e2232af0c5c4cb46a0cae2ee8f356"
       ],
-      "bios_CD_J.bin": [
+      "jp_mcd1_9111.bin": [
         "4846f448160059a7da0215a5df12ca160f26dd69"
       ],
-      "jp_mcd1_9111.bin": [
+      "bios_CD_J.bin": [
         "4846f448160059a7da0215a5df12ca160f26dd69"
       ],
       "sega-mega-cd:278a9397d192149e84e820ac621a8edd": [
@@ -306228,21 +305637,8 @@
       "tmss.md": [
         "3f50b76b0529db7f79c396b5e808cc0786ffc311"
       ],
-      "SAT_STV_17952A-(U).bin": [
-        "eaf1c3e5d602e1139d2090a78d7e19f04f916794"
-      ],
-      "SAT_STV_17954A-(E).bin": [
-        "af79cff317e5b57d49e463af16a9f616ed1eee08"
-      ],
-      "SAT_STV_20091-(J).bin": [
-        "eff0f54c70bce05ff3a289bf30b1027e1c8cd117"
-      ],
       "cdb_rom.bin": [
         "b3c20fbe57cd2eb595e9edac86817e5948dccae4"
-      ],
-      "mpr-17933.bin": [
-        "faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3",
-        "df94c5b4d47eb3cc404d88b33a8fda237eaf4720"
       ],
       "saturn_bios_E.bin": [
         "faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3"
@@ -306250,14 +305646,11 @@
       "saturn_bios_U.bin": [
         "faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3"
       ],
-      "sega-saturn:3240872c70984b6cbfda1586cab68dbe": [
+      "mpr-17933.bin": [
         "faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3"
       ],
-      "mpr-18811-mx.ic1": [
-        "a67cd4f550751f8b91de2b8b74528ab4e0c11c77"
-      ],
-      "mpr-19367-mx.ic1": [
-        "56c1b93da6b660bf393fbf48ca47569000ef4047"
+      "sega-saturn:3240872c70984b6cbfda1586cab68dbe": [
+        "faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3"
       ],
       "saturn_bios_J.bin": [
         "df94c5b4d47eb3cc404d88b33a8fda237eaf4720"
@@ -306267,88 +305660,6 @@
       ],
       "sega-saturn:85ec9ca47d8f6807718151cbcca8b964": [
         "df94c5b4d47eb3cc404d88b33a8fda237eaf4720"
-      ],
-      "zx81.rom": [
-        "7b143ee964e9ada89d1f9e88f0bd48d919184cfc"
-      ],
-      "128-0.rom": [
-        "4f4b11ec22326280bdb96e3baf9db4b4cb1d02c5"
-      ],
-      "fuse/128-0.rom": [
-        "4f4b11ec22326280bdb96e3baf9db4b4cb1d02c5"
-      ],
-      "128-1.rom": [
-        "80080644289ed93d71a1103992a154cc9802b2fa"
-      ],
-      "128p-1.rom": [
-        "80080644289ed93d71a1103992a154cc9802b2fa"
-      ],
-      "fuse/128-1.rom": [
-        "80080644289ed93d71a1103992a154cc9802b2fa"
-      ],
-      "128.rom": [
-        "16375d42ea109b47edded7a16028de7fdb3013a1"
-      ],
-      "spectrum128.rom": [
-        "16375d42ea109b47edded7a16028de7fdb3013a1"
-      ],
-      "ZXS128.ROM": [
-        "16375d42ea109b47edded7a16028de7fdb3013a1"
-      ],
-      "pentagon.rom": [
-        "a584272f21dc82c14b7d4f1ed440e23a976e71f0"
-      ],
-      "if1-v1.rom": [
-        "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e"
-      ],
-      "interface1.edition1.rom": [
-        "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e"
-      ],
-      "if1-v2.rom": [
-        "5cfb6bca4177c45fefd571734576b55e3a127c08"
-      ],
-      "interface1.edition2.rom": [
-        "5cfb6bca4177c45fefd571734576b55e3a127c08"
-      ],
-      "zxs:if1-2.rom": [
-        "5cfb6bca4177c45fefd571734576b55e3a127c08"
-      ],
-      "IF1.ROM": [
-        "5cfb6bca4177c45fefd571734576b55e3a127c08"
-      ],
-      "p2.rom": [
-        "8cafb292af58617907b9e6b9093d3588a75849b8"
-      ],
-      "spectrum+2.rom": [
-        "8cafb292af58617907b9e6b9093d3588a75849b8"
-      ],
-      "ZXSPLUS2.ROM": [
-        "8cafb292af58617907b9e6b9093d3588a75849b8"
-      ],
-      "p2a40.rom": [
-        "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4"
-      ],
-      "spectrum+3.version4-0.rom": [
-        "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4"
-      ],
-      "plus3e-3.rom": [
-        "65f031caa8148a5493afe42c41f4929deab26b4e",
-        "0a747cc0b827a94b4fd74cfd818ca792437a38f7"
-      ],
-      "plus3-40-3.rom": [
-        "65f031caa8148a5493afe42c41f4929deab26b4e"
-      ],
-      "fuse/plus3-3.rom": [
-        "65f031caa8148a5493afe42c41f4929deab26b4e"
-      ],
-      "fuse/plus3e-3.rom": [
-        "65f031caa8148a5493afe42c41f4929deab26b4e"
-      ],
-      "plusd.rom": [
-        "6b841dc5797ef7eb219ad455cd1e434ca3b9d30d"
-      ],
-      "fuse/plusd.rom": [
-        "6b841dc5797ef7eb219ad455cd1e434ca3b9d30d"
       ],
       "SHP1.APC": [
         "b64369d86ec9f7bf601b9b6da7ed3dfa13e2d88f"
@@ -306386,96 +305697,6 @@
       "SHP9.ARM": [
         "37c612a5bda088953dcf517c751adb6b38df34d6"
       ],
-      "dtlh2000.bin": [
-        "1a8d6f9453111b1d317bb7dae300495fbf54600c"
-      ],
-      "sony-playstation:2118230527a9f51bd9216e32fa912842": [
-        "1a8d6f9453111b1d317bb7dae300495fbf54600c"
-      ],
-      "scph1002a.bin": [
-        "20b98f3d80f11cbf5a7bfd0779b0e63760ecc62c"
-      ],
-      "sony-playstation:54847e693405ffeb0359c6287434cbef": [
-        "20b98f3d80f11cbf5a7bfd0779b0e63760ecc62c"
-      ],
-      "scph101_v45.bin": [
-        "dcffe16bd90a723499ad46c641424981338d8378"
-      ],
-      "sony-playstation:6e3735ff4c7dc899ee98981385f6f3d0": [
-        "dcffe16bd90a723499ad46c641424981338d8378"
-      ],
-      "scph102A.bin": [
-        "beb0ac693c0dc26daf5665b3314db81480fa5c7c"
-      ],
-      "scph102_v44.bin": [
-        "beb0ac693c0dc26daf5665b3314db81480fa5c7c"
-      ],
-      "sony-playstation:b10f5e0e3d9eb60e5159690680b1e774": [
-        "beb0ac693c0dc26daf5665b3314db81480fa5c7c"
-      ],
-      "scph102_v45.bin": [
-        "dbc7339e5d85827c095764fc077b41f78fd2ecae"
-      ],
-      "sony-playstation:de93caec13d1a141a40a79f5c86168d6": [
-        "dbc7339e5d85827c095764fc077b41f78fd2ecae"
-      ],
-      "scph102C.bin": [
-        "dbc7339e5d85827c095764fc077b41f78fd2ecae"
-      ],
-      "scph5001.bin": [
-        "ca7af30b50d9756cbd764640126c454cff658479"
-      ],
-      "sony-playstation:da27e8b6dab242d8f91a9b25d80c63b8": [
-        "ca7af30b50d9756cbd764640126c454cff658479"
-      ],
-      "scph7500.bin": [
-        "1b0dbdb23da9dc0776aac58d0755dc80fea20975"
-      ],
-      "sony-playstation:b84be139db3ee6cbd075630aa20a6553": [
-        "1b0dbdb23da9dc0776aac58d0755dc80fea20975"
-      ],
-      "scph9000.bin": [
-        "339a48f4fcf63e10b5b867b8c93cfd40945faf6c"
-      ],
-      "sony-playstation:8abc1b549a4a80954addc48ef02c4521": [
-        "339a48f4fcf63e10b5b867b8c93cfd40945faf6c"
-      ],
-      "scph_v11j.bin": [
-        "b06f4a861f74270be819aa2a07db8d0563a7cc4e"
-      ],
-      "sony-playstation:849515939161e62f6b866f6853006780": [
-        "b06f4a861f74270be819aa2a07db8d0563a7cc4e"
-      ],
-      "scph_v21e.bin": [
-        "76cf6b1b2a7c571a6ad07f2bac0db6cd8f71e2cc"
-      ],
-      "sony-playstation:417b34706319da7cf001e76e40136c23": [
-        "76cf6b1b2a7c571a6ad07f2bac0db6cd8f71e2cc"
-      ],
-      "scph_v22a.bin": [
-        "10155d8d6e6e832d6ea66db9bc098321fb5e8ebf"
-      ],
-      "sony-playstation:924e392ed05558ffdb115408c263dccf": [
-        "10155d8d6e6e832d6ea66db9bc098321fb5e8ebf"
-      ],
-      "scph_v22e.bin": [
-        "b6a11579caef3875504fcf3831b8e3922746df2c"
-      ],
-      "sony-playstation:e2110b8a2b97a8e0b857a45d32f7e187": [
-        "b6a11579caef3875504fcf3831b8e3922746df2c"
-      ],
-      "SCPH-70004_BIOS_V12_EUR_200.BIN": [
-        "434bc0b4eb4827da0773ec0795aadc5162569a07"
-      ],
-      "ps2-0200e-20040614.bin": [
-        "434bc0b4eb4827da0773ec0795aadc5162569a07"
-      ],
-      "ps2_scph70002.bin": [
-        "434bc0b4eb4827da0773ec0795aadc5162569a07"
-      ],
-      "sony-playstation-2:dc752f160044f2ed5fc1f4964db2a095": [
-        "434bc0b4eb4827da0773ec0795aadc5162569a07"
-      ],
       "SCPH-70004_BIOS_V12_EUR_200.EROM": [
         "ec0121bb8e2a209044309780d2efc2559c9a0ef1"
       ],
@@ -306486,491 +305707,171 @@
       "SCPH-90006_BIOS_VX_HK _230.ROM2": [
         "b96cf94772f01b8434038285896467884a84b0c2"
       ],
-      "ps2-0160a-20020207.bin": [
-        "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7"
-      ],
-      "ps2_scph39001.bin": [
-        "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7"
-      ],
-      "sony-playstation-2:d5ce2c7d119f563ce04bc04dbc3a323e": [
-        "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7"
-      ],
-      "scph39001.bin": [
-        "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7"
-      ],
-      "SCPH-39001_BIOS_V7_USA_160.BIN": [
-        "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7"
-      ],
       "ps2-0230a-20080220.mec": [
         "3f8affbe07024ccd2f5b8374072d0928c583a862"
       ],
       "ps2-0230a-20080220.rom1": [
         "747e36b086aceceb300c72c0d1bbab38e2920e63"
       ],
-      "ps2_desr5000.bin": [
-        "aa4a35c14ee342cf7a03b1dde294ca10e64889e1"
-      ],
-      "sony-playstation-2:1c6cd089e6c83da618fbf2a081eb4888": [
-        "aa4a35c14ee342cf7a03b1dde294ca10e64889e1"
-      ],
-      "ps2_desr5500.bin": [
-        "bbb1af3085e77599691ec430d147810157da934f"
-      ],
-      "sony-playstation-2:1ad977bb539fc9448a08ab276a836bbc": [
-        "bbb1af3085e77599691ec430d147810157da934f"
-      ],
-      "ps2_dtlh10000_0117.bin": [
-        "5b33170323ed6344e2363fed8115dc3918bb96a4"
-      ],
-      "sony-playstation-2:32f2e4d5ff5ee11072a6bc45530f5765": [
-        "5b33170323ed6344e2363fed8115dc3918bb96a4"
-      ],
-      "ps2_dtlh10000_0217.bin": [
-        "16f4a284d0e760ee13a2aff2f7dda928255e3080"
-      ],
-      "sony-playstation-2:acf9968c8f596d2b15f42272082513d1": [
-        "16f4a284d0e760ee13a2aff2f7dda928255e3080"
-      ],
-      "ps2_dtlh10000_0224.bin": [
-        "4440b246bfde7bb31002c584a76c6ef384908e84"
-      ],
-      "sony-playstation-2:d3f1853a16c2ec18f3cd1ae655213308": [
-        "4440b246bfde7bb31002c584a76c6ef384908e84"
-      ],
-      "ps2_dtlh30000.bin": [
-        "334e029fc7fd50222a399c50384ff42732652259"
-      ],
-      "sony-playstation-2:bb6bbc850458fff08af30e969ffd0175": [
-        "334e029fc7fd50222a399c50384ff42732652259"
-      ],
-      "ps2_dtlh30001.bin": [
-        "339c646cf0699268552df5b05f18f0a03a9f55ff"
-      ],
-      "sony-playstation-2:63e6fd9b3c72e0d7b920e80cf76645cd": [
-        "339c646cf0699268552df5b05f18f0a03a9f55ff"
-      ],
-      "ps2_dtlh30002.bin": [
-        "3bb1eecd618ab5c973c7bc53671a4475a02e1d5b"
-      ],
-      "sony-playstation-2:91c87cb2f2eb6ce529a2360f80ce2457": [
-        "3bb1eecd618ab5c973c7bc53671a4475a02e1d5b"
-      ],
-      "ps2_dtlh30101.bin": [
-        "7284b9d16df9935afc384318e024c87ef0574fe5"
-      ],
-      "sony-playstation-2:0bf988e9c7aaa4c051805b0fa6eb3387": [
-        "7284b9d16df9935afc384318e024c87ef0574fe5"
-      ],
-      "ps2_dtlh30102_0902.bin": [
-        "1b73dec999fcc2b92fa958110ff6bfe4d0af276e"
-      ],
-      "sony-playstation-2:3016b3dd42148a67e2c048595ca4d7ce": [
-        "1b73dec999fcc2b92fa958110ff6bfe4d0af276e"
-      ],
-      "ps2_dtlh30102_1228.bin": [
-        "d004326c9d8060812b4433c3f07646b04854d6c4"
-      ],
-      "sony-playstation-2:6f9a6feb749f0533aaae2cc45090b0ed": [
-        "d004326c9d8060812b4433c3f07646b04854d6c4"
-      ],
-      "ps2_dtlh50000.bin": [
-        "03c6531a1feba6da75a32c2a69c7bb89be61dcda"
-      ],
-      "ps2_dtlh50001_0325.bin": [
-        "c5bc6e893b4c43d528142e56c96073024de64157"
-      ],
-      "sony-playstation-2:eb960de68f0c0f7f9fa083e9f79d0360": [
-        "c5bc6e893b4c43d528142e56c96073024de64157"
-      ],
-      "ps2_dtlh50001_0623.bin": [
-        "fe19d2c52729e2ce4fea30e0e6a501587285d93f"
-      ],
-      "ps2_dtlh50002.bin": [
-        "e220bb282378c1f48ea1b585b3675e51a6dca572"
-      ],
-      "sony-playstation-2:666018ffec65c5c7e04796081295c6c7": [
-        "e220bb282378c1f48ea1b585b3675e51a6dca572"
-      ],
-      "ps2_dtlh50009.bin": [
-        "2de87767008fc4a303af64a46251156e965d9065"
-      ],
-      "sony-playstation-2:240d4c5ddd4b54069bdc4a3cd2faf99d": [
-        "2de87767008fc4a303af64a46251156e965d9065"
-      ],
-      "ps2_dtlh70002.bin": [
-        "902f4680b258abd40c0922f6b0d581cbd8f8a73e"
-      ],
-      "sony-playstation-2:63ead1d74893bf7f36880af81f68a82d": [
-        "902f4680b258abd40c0922f6b0d581cbd8f8a73e"
-      ],
-      "ps2_dtlh75000.bin": [
-        "458adf85d216856892d6480213575670894049c6"
-      ],
-      "ps2_dtlh75000a.bin": [
-        "7c7efdfcec7705f4e84bb47f45322104e39eed09"
-      ],
-      "sony-playstation-2:9959ad7a8685cad66206e7752ca23f8b": [
-        "7c7efdfcec7705f4e84bb47f45322104e39eed09"
-      ],
-      "ps2_dtlh90000_a.bin": [
-        "4191b5842f31a9985b5428bc9d2b733ce3abb583"
-      ],
-      "sony-playstation-2:21fe4cad111f7dc0f9af29477057f88d": [
-        "4191b5842f31a9985b5428bc9d2b733ce3abb583"
-      ],
-      "ps2_dtlh90000_j.bin": [
-        "3d095a3c2c38ebef3e48f31c7cfbb77ad4b04166"
-      ],
-      "ps2_kdl22px300.bin": [
-        "b9cb5775af29cd4d1ec5521e8231f8b6636e2e44"
-      ],
-      "sony-playstation-2:93ea3bcee4252627919175ff1b16a1d9": [
-        "b9cb5775af29cd4d1ec5521e8231f8b6636e2e44"
-      ],
-      "ps2_scph10000_0117.bin": [
-        "aea061e6e263fdcc1c4fdbd68553ef78dae74263"
-      ],
-      "sony-playstation-2:acf4730ceb38ac9d8c7d8e21f2614600": [
-        "aea061e6e263fdcc1c4fdbd68553ef78dae74263"
-      ],
-      "ps2-0100j-20000117.bin": [
-        "aea061e6e263fdcc1c4fdbd68553ef78dae74263"
-      ],
-      "ps2_scph10000_15000.bin": [
-        "916e02431bcd73140504da3355c9598143b77e11"
-      ],
-      "sony-playstation-2:b1459d7446c69e3e97e6ace3ae23dd1c": [
-        "916e02431bcd73140504da3355c9598143b77e11"
-      ],
-      "ps2_scph18000.bin": [
-        "d7d6be084f51354bc951d8fa2d8d912aa70abc5e"
-      ],
-      "sony-playstation:d8f485717a5237285e4d7c5f881b7f32": [
-        "d7d6be084f51354bc951d8fa2d8d912aa70abc5e"
-      ],
-      "ps2_scph18000_gh003.bin": [
-        "e481079eca752225555f0c26d14c9d0f94d9a8e9"
-      ],
-      "sony-playstation-2:f63bc530bd7ad7c026fcd6f7bd0d9525": [
-        "e481079eca752225555f0c26d14c9d0f94d9a8e9"
-      ],
-      "ps2_scph18000_gh008.bin": [
-        "a9f5d8ed56cfff18add1b599010493461fa02448"
-      ],
-      "sony-playstation-2:cee06bd68c333fc5768244eae77e4495": [
-        "a9f5d8ed56cfff18add1b599010493461fa02448"
-      ],
-      "ps2_scph30000_0427.bin": [
-        "e525a0c900e37acf0ae5a655d82a0abcb07c6f1f"
-      ],
-      "sony-playstation-2:ab55cceea548303c22c72570cfd4dd71": [
-        "e525a0c900e37acf0ae5a655d82a0abcb07c6f1f"
-      ],
-      "ps2_scph30000_35000.bin": [
-        "d6f365a0f07cd04ed28108e6ec5076e2f81e5f72"
-      ],
-      "sony-playstation-2:815ac991d8bc3b364696bead3457de7d": [
-        "d6f365a0f07cd04ed28108e6ec5076e2f81e5f72"
-      ],
-      "ps2_scph30001_0727.bin": [
-        "20f6ce6693cf97e9494f8f0227f2b7988ffaf961"
-      ],
-      "sony-playstation-2:a20c97c02210f16678ca3010127caf36": [
-        "20f6ce6693cf97e9494f8f0227f2b7988ffaf961"
-      ],
-      "ps2_scph30001_0902.bin": [
-        "dbc2318a1029347b5af3a0c74b0bdf88d19efee6"
-      ],
-      "sony-playstation-2:8db2fbbac7413bf3e7154c1e0715e565": [
-        "dbc2318a1029347b5af3a0c74b0bdf88d19efee6"
-      ],
-      "ps2_scph30001_35001.bin": [
-        "5af5b5077d84a9c037ebe12bfab8a38b31d8a543"
-      ],
-      "sony-playstation-2:8accc3c49ac45f5ae2c5db0adc854633": [
-        "5af5b5077d84a9c037ebe12bfab8a38b31d8a543"
-      ],
-      "ps2_scph30001r_0427.bin": [
-        "7331a40b4b4feb1b3f0f77b013b6d38483577baa"
-      ],
-      "sony-playstation-2:b107b5710042abe887c0f6175f6e94bb": [
-        "7331a40b4b4feb1b3f0f77b013b6d38483577baa"
-      ],
-      "ps2_scph30001r_0704.bin": [
-        "ce92e8e8c88665f2f645a9522e337823d47a914a"
-      ],
-      "sony-playstation-2:18bcaadb9ff74ed3add26cdf709fff2e": [
-        "ce92e8e8c88665f2f645a9522e337823d47a914a"
-      ],
-      "ps2_scph30001r_1004.bin": [
-        "d257bce6ecaf3bafb704c75a1b4741b910bd2d49"
-      ],
-      "sony-playstation-2:7200a03d51cacc4c14fcdfdbc4898431": [
-        "d257bce6ecaf3bafb704c75a1b4741b910bd2d49"
-      ],
-      "ps2_scph30002_0902.bin": [
-        "274c05fec654913a3f698d4b0d592085866a2cbd"
-      ],
-      "sony-playstation-2:b7fa11e87d51752a98b38e3e691cbf17": [
-        "274c05fec654913a3f698d4b0d592085866a2cbd"
-      ],
-      "ps2_scph30002_1228.bin": [
-        "e22ef231faf3661edd92f2ee449a71297c82a092"
-      ],
-      "sony-playstation-2:838544f12de9b0abc90811279ee223c8": [
-        "e22ef231faf3661edd92f2ee449a71297c82a092"
-      ],
-      "ps2_scph30002r_0704.bin": [
-        "3cbd048e437c785b5a05a0feced00117a8a42545"
-      ],
-      "sony-playstation-2:491209dd815ceee9de02dbbc408c06d6": [
-        "3cbd048e437c785b5a05a0feced00117a8a42545"
-      ],
-      "ps2_scph30002r_1004.bin": [
-        "ee34c3a87c53c75ca2a37d77b0042ca24d07831f"
-      ],
-      "sony-playstation-2:8359638e857c8bc18c3c18ac17d9cc3c": [
-        "ee34c3a87c53c75ca2a37d77b0042ca24d07831f"
-      ],
-      "ps2_scph30005r.bin": [
-        "ba15dcf7aac13864c08222037e9321d7468c87d1"
-      ],
-      "sony-playstation-2:352d2ff9b3f68be7e6fa7e6dd8389346": [
-        "ba15dcf7aac13864c08222037e9321d7468c87d1"
-      ],
-      "ps2_scph37000_39000.bin": [
-        "003628c137dae577ff3b04b93ca1787b0c944702"
-      ],
-      "sony-playstation-2:72da56fccb8fcd77bba16d1b6f479914": [
-        "003628c137dae577ff3b04b93ca1787b0c944702"
-      ],
-      "ps2_scph39002.bin": [
-        "bff2902bd0ce9729a060581132541e9fd1a9fab6"
-      ],
-      "sony-playstation-2:0d2228e6fd4fb639c9c39d077a9ec10c": [
-        "bff2902bd0ce9729a060581132541e9fd1a9fab6"
-      ],
-      "SCPH-39004_BIOS_V7_EUR_160.BIN": [
-        "bff2902bd0ce9729a060581132541e9fd1a9fab6"
-      ],
-      "ps2_scph39005.bin": [
-        "e3a74125c426bcacabca00b513fab928665c8846"
-      ],
-      "sony-playstation-2:315a4003535dfda689752cb25f24785c": [
-        "e3a74125c426bcacabca00b513fab928665c8846"
-      ],
-      "ps2_scph39008.bin": [
-        "d106b757ae2544dfe63f7e1924e59d5ad44c0c29"
-      ],
-      "sony-playstation-2:5b1f47fbeb277c6be2fccdd6344ff2fd": [
-        "d106b757ae2544dfe63f7e1924e59d5ad44c0c29"
-      ],
-      "ps2_scph50000_0822.bin": [
-        "0ea98a25a32145dda514de2f0d4bfbbd806bd00c"
-      ],
-      "sony-playstation-2:00da1b177096cfd2532c8fa22b43e667": [
-        "0ea98a25a32145dda514de2f0d4bfbbd806bd00c"
-      ],
-      "ps2_scph50000_55000.bin": [
-        "d812ac65c357d392396ca9edee812dc41bed8bde"
-      ],
-      "sony-playstation-2:312ad4816c232a9606e56f946bc0678a": [
-        "d812ac65c357d392396ca9edee812dc41bed8bde"
-      ],
-      "ps2_scph50001_0325.bin": [
-        "d269d1ed513227f3ef7133c76cf1b3a64f97b15d"
-      ],
-      "sony-playstation-2:8aa12ce243210128c5074552d3b86251": [
-        "d269d1ed513227f3ef7133c76cf1b3a64f97b15d"
-      ],
-      "ps2_scph50001_0623.bin": [
-        "c74d92a2952a2912b6698cbcf7742adac8f784d3"
-      ],
-      "sony-playstation-2:35461cecaa51712b300b2d6798825048": [
-        "c74d92a2952a2912b6698cbcf7742adac8f784d3"
-      ],
-      "ps2_scph50002_0227.bin": [
-        "ad15bd7eabd5bd81ba011516a5be44947d6641aa"
-      ],
-      "sony-playstation-2:6e69920fa6eef8522a1d688a11e41bc6": [
-        "ad15bd7eabd5bd81ba011516a5be44947d6641aa"
-      ],
-      "ps2_scph50002_0623.bin": [
-        "18b9ba833c469c4683676cc20da5124080d980bb"
-      ],
-      "sony-playstation-2:bd6415094e1ce9e05daabe85de807666": [
-        "18b9ba833c469c4683676cc20da5124080d980bb"
-      ],
-      "ps2_scph50004_0822.bin": [
-        "6e1f0eb4aec51a6288b3d802d3bcdb477cf52104"
-      ],
-      "sony-playstation-2:afde410bd026c16be605a1ae4bd651fd": [
-        "6e1f0eb4aec51a6288b3d802d3bcdb477cf52104"
-      ],
-      "ps2_scph50005.bin": [
-        "ad8b9b5aa87b1575fec6a70d1cec77851c9c0e29"
-      ],
-      "ps2_scph50009.bin": [
-        "92d9eb4b11cef97bb69a275b2851b72f7b0023d6"
-      ],
-      "sony-playstation-2:1b6e631b536247756287b916f9396872": [
-        "92d9eb4b11cef97bb69a275b2851b72f7b0023d6"
-      ],
-      "ps2_scph50011.bin": [
-        "b68c05f5cd86bf03cb38a643a723b7a97b759531"
-      ],
-      "sony-playstation-2:81f4336c1de607dd0865011c0447052e": [
-        "b68c05f5cd86bf03cb38a643a723b7a97b759531"
-      ],
-      "ps2_scph55000_0623.bin": [
-        "6a6ecfe6c10e42eff1ca056349def799b5629067"
-      ],
-      "sony-playstation-2:463d87789c555a4a7604e97d7db545d1": [
-        "6a6ecfe6c10e42eff1ca056349def799b5629067"
-      ],
-      "ps2_scph70000.bin": [
-        "224ab5704ab719edeb05ca1d835812252c97c1b3"
-      ],
-      "sony-playstation-2:0eee5d1c779aa50e94edd168b4ebf42e": [
-        "224ab5704ab719edeb05ca1d835812252c97c1b3"
-      ],
-      "SCPH-70000_BIOS_V12_JAP_200.BIN": [
-        "224ab5704ab719edeb05ca1d835812252c97c1b3"
-      ],
-      "ps2_scph70001.bin": [
-        "7a62e5f48603582707e9898eb055ea3eaee50d4c"
-      ],
-      "sony-playstation-2:d333558cc14561c1fdc334c75d5f37b7": [
-        "7a62e5f48603582707e9898eb055ea3eaee50d4c"
-      ],
-      "ps2_scph70005.bin": [
-        "7f8e812cab7c7393c85eac6c42661e1fd0a642df"
-      ],
-      "sony-playstation-2:3e3e030c0f600442fa05b94f87a1e238": [
-        "7f8e812cab7c7393c85eac6c42661e1fd0a642df"
-      ],
-      "ps2_scph75000.bin": [
-        "7ffa75d142cb8eeea6c777dbcf263143655275d5"
-      ],
-      "sony-playstation-2:eb4f40fcf4911ede39c1bbfe91e7a89a": [
-        "7ffa75d142cb8eeea6c777dbcf263143655275d5"
-      ],
-      "ps2_scph75001.bin": [
-        "48d0445dffd1e879c7ae752c5166ec3101921555"
-      ],
-      "sony-playstation-2:929a14baca1776b00869f983aa6e14d2": [
-        "48d0445dffd1e879c7ae752c5166ec3101921555"
-      ],
-      "ps2_scph75002.bin": [
-        "929a85e974faf4b40d0a7785023b758402c43bd9"
-      ],
-      "sony-playstation-2:573f7d4a430c32b3cc0fd0c41e104bbd": [
-        "929a85e974faf4b40d0a7785023b758402c43bd9"
-      ],
-      "ps2_scph75006.bin": [
-        "0a071d1b46607a7694770407606d8599f62a372b"
-      ],
-      "sony-playstation-2:df63a604e8bff5b0599bd1a6c2721bd0": [
-        "0a071d1b46607a7694770407606d8599f62a372b"
-      ],
-      "ps2_scph77000.bin": [
-        "0edf1fbb772a8e6a79ae00e977450e3ade25c4f3"
-      ],
-      "sony-playstation-2:5b1ba4bb914406fae75ab8e38901684d": [
-        "0edf1fbb772a8e6a79ae00e977450e3ade25c4f3"
-      ],
-      "ps2_scph77001.bin": [
-        "92e488d5b2705e4cca83d4d1efbc421012faf83e"
-      ],
-      "sony-playstation-2:cb801b7920a7d536ba07b6534d2433ca": [
-        "92e488d5b2705e4cca83d4d1efbc421012faf83e"
-      ],
-      "ps2_scph77002.bin": [
-        "28ad756d0cfd1e7b2e2de3de5d9e14207ee89761"
-      ],
-      "sony-playstation-2:af60e6d1a939019d55e5b330d24b1c25": [
-        "28ad756d0cfd1e7b2e2de3de5d9e14207ee89761"
-      ],
-      "ps2_scph77006.bin": [
-        "fce2a24e5e0400cc6d98c08f426405d19173813e"
-      ],
-      "sony-playstation-2:549a66d0c698635ca9fa3ab012da7129": [
-        "fce2a24e5e0400cc6d98c08f426405d19173813e"
-      ],
-      "ps2_scph79000_90000.bin": [
-        "3baf847c1c217aa71ac6d298389c88edb3db32e2"
-      ],
-      "sony-playstation-2:5de9d0d730ff1e7ad122806335332524": [
-        "3baf847c1c217aa71ac6d298389c88edb3db32e2"
-      ],
-      "ps2_scph79001_90001.bin": [
-        "8361d615cc895962e0f0838489337574dbdc9173"
-      ],
-      "sony-playstation-2:40c11c063b3b9409aa5e4058e984e30c": [
-        "8361d615cc895962e0f0838489337574dbdc9173"
-      ],
-      "ps2_scph79002_90002.bin": [
-        "da5aacead2fb55807d6d4e70b1f10f4fdcfd3281"
-      ],
-      "sony-playstation-2:80bbb237a6af9c611df43b16b930b683": [
-        "da5aacead2fb55807d6d4e70b1f10f4fdcfd3281"
-      ],
-      "ps2_scph79006_90006.bin": [
-        "a5a2ee0dd9a86ca35b94e97ca92476a584f755bf"
-      ],
-      "sony-playstation-2:c37bce95d32b2be480f87dd32704e664": [
-        "a5a2ee0dd9a86ca35b94e97ca92476a584f755bf"
-      ],
-      "ps2_scph90000_0220.bin": [
-        "fbd54bfc020af34008b317dcb80b812dd29b3759"
-      ],
-      "sony-playstation-2:80ac46fa7e77b8ab4366e86948e54f83": [
-        "fbd54bfc020af34008b317dcb80b812dd29b3759"
-      ],
-      "ps2_scph90001_0220.bin": [
-        "f9229fe159d0353b9f0632f3fdc66819c9030458"
-      ],
-      "sony-playstation-2:21038400dc633070a78ad53090c53017": [
-        "f9229fe159d0353b9f0632f3fdc66819c9030458"
-      ],
-      "ps2_scph90002_0220.bin": [
-        "9915b5ba56798f4027ac1bd8d10abe0c1c9c326a"
-      ],
-      "sony-playstation-2:dc69f0643a3030aaa4797501b483d6c4": [
-        "9915b5ba56798f4027ac1bd8d10abe0c1c9c326a"
-      ],
-      "ps2_scph90005_0220.bin": [
-        "a277b456849697abec11285c6b35bc734598c220"
-      ],
-      "sony-playstation-2:30d56e79d89fbddf10938fa67fe3f34e": [
-        "a277b456849697abec11285c6b35bc734598c220"
-      ],
-      "alice4k.rom": [
-        "c2166b91e6396a311f486832012aa43e0d2b19f8"
-      ],
-      "cp400extbas.rom": [
-        "a348a165009a6de1ae6fc18ed77137b38b6ed46d"
-      ],
       "cp450dsk.rom": [
         "827697fa5b755f5dc1efb054cdbbeb04e405405b"
-      ],
-      "microdisc.rom": [
-        "0d2ef6e67322f48f4b7e08d8bbe68827e2074561"
-      ],
-      "pravetzt.rom": [
-        "7afc276cb118adff72e4f16698f94bf3b2c64146"
       ],
       "custom0.sf2": [
         "286b2e1fb21cc79851da01666db6c0b0e88f25e3"
       ],
+      "lynxboot.img": [
+        "e4ed47fae31693e016b081c6bda48da5b70d7ccb"
+      ],
+      "CDTV Extended-ROM v1.0 (1991)(Commodore)(CDTV)[!].rom": [
+        "7ba40ffa17e500ed9fed041f3424bd81d9c907be",
+        "5bc114bba29f60a614a311745b3e2464bfa06846"
+      ],
+      "Kickstart v1.2 r33.180 (1986)(Commodore)(A500-A1000-A2000)[!].rom": [
+        "11f9e62cf299f72184835b7b2a70a16333fc0d88"
+      ],
+      "kick33180.A500": [
+        "11f9e62cf299f72184835b7b2a70a16333fc0d88"
+      ],
       "Kickstart v1.3 r34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV)[o].rom": [
         "90933936cce43ca9bc6bf375662c076b27e3c458"
+      ],
+      "Kickstart v2.05 r37.350 (1992)(Commodore)(A600HD)[!].rom": [
+        "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
+      ],
+      "kick37350.A600": [
+        "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
+      ],
+      "amiga-os-205.rom": [
+        "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
+      ],
+      "Kickstart v3.1 r40.60 (1993)(Commodore)(CD32).rom": [
+        "3525be8887f79b5929e017b42380a79edfee542d"
+      ],
+      "kick40060.CD32": [
+        "3525be8887f79b5929e017b42380a79edfee542d"
+      ],
+      "Kickstart v3.1 r40.68 (1993)(Commodore)(A1200)[!].rom": [
+        "e21545723fe8374e91342617604f1b3d703094f1"
+      ],
+      "kick40068.A1200": [
+        "e21545723fe8374e91342617604f1b3d703094f1"
+      ],
+      "AmigaVision.rom": [
+        "e21545723fe8374e91342617604f1b3d703094f1"
       ],
       "Kickstart v3.1 r40.68 (1993)(Commodore)(A3000).rom": [
         "f8e210d72b4c4853e0c9b85d223ba20e3d1b36ee"
       ],
+      "Kickstart v3.1 r40.68 (1993)(Commodore)(A4000).rom": [
+        "5fe04842d04a489720f0f4bb0e46948199406f49"
+      ],
+      "kick40068.A4000": [
+        "5fe04842d04a489720f0f4bb0e46948199406f49"
+      ],
+      "kick40060.CD32.ext": [
+        "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f"
+      ],
+      "CD32 Extended-ROM r40.60 (1993)(Commodore)(CD32).rom": [
+        "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f"
+      ],
+      "amiga-os-310-cd32-ext.rom": [
+        "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f"
+      ],
+      "kick40063.A600": [
+        "3b7f1493b27e212830f989f26ca76c02049f09ca"
+      ],
+      "amiga-os-310-a600.rom": [
+        "3b7f1493b27e212830f989f26ca76c02049f09ca"
+      ],
+      "c52.bin": [
+        "a6120aed50831c9c0d95dbdf707820f601d9452e"
+      ],
+      "g7400.bin": [
+        "5130243429b40b01a14e1304d0394b8459a6fbae"
+      ],
+      "exec.bin": [
+        "5a65b922b562cb1f57dab51b73151283f0e20c7a"
+      ],
+      "grom.bin": [
+        "f9608bb4ad1cfe3640d02844c7ad8e0bcd974917"
+      ],
       "IVOICE.bin": [
         "618563e512ff5665183664f52270fa9606c9d289"
+      ],
+      "pcfx.rom": [
+        "1a77fd83e337f906aecab27a1604db064cf10074"
+      ],
+      "pcfxbios.bin": [
+        "1a77fd83e337f906aecab27a1604db064cf10074"
+      ],
+      "FDS_disksys-nintendo.rom": [
+        "57fe1bdee955bb48d357e463ccbf129496930b62"
+      ],
+      "gb_bios.bin": [
+        "4ed31ec6b0b175bb109c0eb5fd3d193da823339f",
+        "1db57a1e8b6e4096f811587f9eab0c6675fd9755"
+      ],
+      "dmg_rom.bin": [
+        "4ed31ec6b0b175bb109c0eb5fd3d193da823339f",
+        "1db57a1e8b6e4096f811587f9eab0c6675fd9755"
+      ],
+      "gbc_bios.bin": [
+        "1293d68bf9643bc4f36954c1e80e38f39864528d",
+        "80e3ee82416c1a74827a5459fde32f04bf51a1f6"
+      ],
+      "cgb_bios.bin": [
+        "1293d68bf9643bc4f36954c1e80e38f39864528d"
+      ],
+      "gba_bios.bin": [
+        "300c20df6731a33952ded8c436f7f186d25d3492"
+      ],
+      "BIOSGBA.ROM": [
+        "300c20df6731a33952ded8c436f7f186d25d3492"
+      ],
+      "GBA.ROM": [
+        "300c20df6731a33952ded8c436f7f186d25d3492"
+      ],
+      "bios7.bin": [
+        "24f67bdea115a2c847c8813a262502ee1607b7df"
+      ],
+      "nintendo-ds:df692a80a5b1bc90728bc3dfc76cd948": [
+        "24f67bdea115a2c847c8813a262502ee1607b7df"
+      ],
+      "nds7.bin": [
+        "24f67bdea115a2c847c8813a262502ee1607b7df"
+      ],
+      "nds_bios_arm7.bin": [
+        "24f67bdea115a2c847c8813a262502ee1607b7df"
+      ],
+      "BIOSNDS7.ROM": [
+        "24f67bdea115a2c847c8813a262502ee1607b7df"
+      ],
+      "bios9.bin": [
+        "bfaac75f101c135e32e2aaf541de6b1be4c8c62d"
+      ],
+      "nintendo-ds:a392174eb3e572fed6447e956bde4b25": [
+        "bfaac75f101c135e32e2aaf541de6b1be4c8c62d"
+      ],
+      "nds9.bin": [
+        "bfaac75f101c135e32e2aaf541de6b1be4c8c62d"
+      ],
+      "nds_bios_arm9.bin": [
+        "bfaac75f101c135e32e2aaf541de6b1be4c8c62d"
+      ],
+      "BIOSNDS9.ROM": [
+        "bfaac75f101c135e32e2aaf541de6b1be4c8c62d"
+      ],
+      "dc_boot.bin": [
+        "8951d1bb219ab2ff8583033d2119c899cc81f18c"
+      ],
+      "sega-dreamcast:e10c53c2f8b90bab96ead2d368858623": [
+        "8951d1bb219ab2ff8583033d2119c899cc81f18c"
+      ],
+      "boot.bin": [
+        "8951d1bb219ab2ff8583033d2119c899cc81f18c"
+      ],
+      "bios.gg": [
+        "914aa165e3d879f060be77870d345b60cfeb4ede"
       ],
       "saturn_bios.bin": [
         "2b8cb4f87580683eb4d760e4ed210813d667f0a2"
@@ -306981,11 +305882,62 @@
       "SAT_1.00-(J).bin": [
         "2b8cb4f87580683eb4d760e4ed210813d667f0a2"
       ],
+      "mpr-18811-mx.ic1": [
+        "a67cd4f550751f8b91de2b8b74528ab4e0c11c77"
+      ],
+      "mpr-19367-mx.ic1": [
+        "56c1b93da6b660bf393fbf48ca47569000ef4047"
+      ],
+      "tos100uk.img": [
+        "9a6e4c88533a9eaa4d55cdc040e47443e0226eb2"
+      ],
+      "tos102uk.img": [
+        "87900a40a890fdf03bd08be6c60cc645855cbce5"
+      ],
+      "tos104uk.img": [
+        "9526ef63b9cb1d2a7109e278547ae78a5c1db6c6"
+      ],
       "tos106de.img": [
         "3b8cf5ffa41b252eb67f8824f94608fa4005d6dd"
       ],
+      "tos106uk.img": [
+        "06f9ea322e74b682df0396acfaee8cb4d9c90cad"
+      ],
       "tos206us.img": [
         "ee58768bdfc602c9b14942ce5481e97dd24e7c83"
+      ],
+      "uni-bioscd.rom": [
+        "5142f205912869b673a71480c5828b1eaed782a8"
+      ],
+      "SGB1.sfc": [
+        "973e10840db683cf3faf61bd443090786b3a9f04"
+      ],
+      "Super Game Boy.sfc": [
+        "973e10840db683cf3faf61bd443090786b3a9f04"
+      ],
+      "sgb1.program.rom": [
+        "973e10840db683cf3faf61bd443090786b3a9f04"
+      ],
+      "SNES_SGB_RevB_(World).sfc": [
+        "973e10840db683cf3faf61bd443090786b3a9f04"
+      ],
+      "SGB2.sfc": [
+        "e5b2922ca137051059e4269b236d07a22c07bc84"
+      ],
+      "SNES_SGB2_(J).sfc": [
+        "e5b2922ca137051059e4269b236d07a22c07bc84"
+      ],
+      "Super Game Boy 2.sfc": [
+        "e5b2922ca137051059e4269b236d07a22c07bc84"
+      ],
+      "sgb2.program.rom": [
+        "e5b2922ca137051059e4269b236d07a22c07bc84"
+      ],
+      "px-7_basic-bios1.rom": [
+        "302afb5d8be26c758309ca3df611ae69cced2821"
+      ],
+      "MSX_jpn.rom": [
+        "302afb5d8be26c758309ca3df611ae69cced2821"
       ],
       "amiga-os-300-a1200.rom": [
         "70033828182fffc7ed106e5373a8b89dda76faa5"
@@ -307001,6 +305953,12 @@
         "5b922ed9de07d2a729bdf1da7b57c50ddf08809a",
         "063609dd518c124a4fc9ba35d1bae35771666a34"
       ],
+      "N88KNJ1.ROM": [
+        "82e11a177af6a5091dd67f50a2f4bafda84d6556"
+      ],
+      "n88knj1.rom": [
+        "82e11a177af6a5091dd67f50a2f4bafda84d6556"
+      ],
       "iplrom.x1t": [
         "44620f57a25f0bcac2b57ca2b0f1ebad3bf305d3",
         "1c1a0d8c9f4c446ccd7470516b215ddca5052fb2"
@@ -307008,23 +305966,107 @@
       "basic11.rom": [
         "9451a1a09d8f75944dbd6f91193fc360f1de80ac"
       ],
+      "exos20.rom": [
+        "6033a0535136c40c47137e4d1cd9273c06d5fdff"
+      ],
+      "Expandible OS v2.0 (1984)(Intelligent Software).bin": [
+        "6033a0535136c40c47137e4d1cd9273c06d5fdff"
+      ],
+      "EXOS20.ROM": [
+        "6033a0535136c40c47137e4d1cd9273c06d5fdff"
+      ],
+      "A78_PAL_BIOS.bin": [
+        "5a140136a16d1d83e4ff32a19409ca376a8df874"
+      ],
+      "A78_NTSC_bios.bin": [
+        "d9d134bb6b36907c615a594cc7688f7bfcef5b43"
+      ],
       "Machines/Shared Roms/MSX.rom": [
         "409e82adac40f6bdd18eb6c84e8b2fbdc7fb5498"
+      ],
+      "MSX_1.0.rom": [
+        "3656bb3bbc17d280d2016fe4f6ff3cded3082a41"
+      ],
+      "64DD_IPL_USA.bin": [
+        "3c5b93ca231550c68693a14f03cea8d5dbd1be9e"
+      ],
+      "boot5.rom": [
+        "3c5b93ca231550c68693a14f03cea8d5dbd1be9e"
+      ],
+      "IPL_USA.n64": [
+        "3c5b93ca231550c68693a14f03cea8d5dbd1be9e"
+      ],
+      "O2_Odyssey2.bin": [
+        "b2e1955d957a475de2411770452eff4ea19f4cee"
+      ],
+      "PCECD_3.0-(J).pce": [
+        "79f5ff55dd10187c7fd7b8daab0b3ffbd1f56a2c"
+      ],
+      "PCECD_gecard.pce": [
+        "014881a959e045e00f4db8f52955200865d40280"
+      ],
+      "gexpress.pce": [
+        "014881a959e045e00f4db8f52955200865d40280"
+      ],
+      "SAT_STV_20091-(J).bin": [
+        "eff0f54c70bce05ff3a289bf30b1027e1c8cd117"
+      ],
+      "SAT_STV_17952A-(U).bin": [
+        "eaf1c3e5d602e1139d2090a78d7e19f04f916794"
+      ],
+      "SAT_STV_17954A-(E).bin": [
+        "af79cff317e5b57d49e463af16a9f616ed1eee08"
+      ],
+      "panafz1e.bin": [
+        "1d0db81e171ebc1d07cefc8ce8ab082306186e56"
+      ],
+      "panafz10j.bin": [
+        "fe7f9c9c6a98910013bf13f2cf798de9fea52acd"
+      ],
+      "goldstar_fc1_enc.bin": [
+        "8ef7503c948314d242da47b7fdc272f68dac2aee"
+      ],
+      "sanyo_hc21_b3_unenc.bin": [
+        "c389af32bcadf0d86826927dc3d20b7072f90069"
       ],
       "sony-playstation:239665b1a3dade1b5a52c06338011044": [
         "343883a7b555646da8cee54aadd2795b6e7dd070"
       ],
+      "sony-playstation:2118230527a9f51bd9216e32fa912842": [
+        "1a8d6f9453111b1d317bb7dae300495fbf54600c"
+      ],
+      "sony-playstation:849515939161e62f6b866f6853006780": [
+        "b06f4a861f74270be819aa2a07db8d0563a7cc4e"
+      ],
       "sony-playstation:dc2b9bf8da62ec93e868cfd29f0d067d": [
         "649895efd79d14790eabb362e94eb0622093dfb9"
       ],
+      "sony-playstation:54847e693405ffeb0359c6287434cbef": [
+        "20b98f3d80f11cbf5a7bfd0779b0e63760ecc62c"
+      ],
+      "scph1002a.bin": [
+        "20b98f3d80f11cbf5a7bfd0779b0e63760ecc62c"
+      ],
       "sony-playstation:cba733ceeff5aef5c32254f1d617fa62": [
         "e38466a4ba8005fba7e9e3c7b9efeba7205bee3f"
+      ],
+      "sony-playstation:da27e8b6dab242d8f91a9b25d80c63b8": [
+        "ca7af30b50d9756cbd764640126c454cff658479"
+      ],
+      "sony-playstation:417b34706319da7cf001e76e40136c23": [
+        "76cf6b1b2a7c571a6ad07f2bac0db6cd8f71e2cc"
       ],
       "sony-playstation:57a06303dfa9cf9351222dfcbb4a29d9": [
         "ffa7f9a7fb19d773a0c3985a541c8e5623d2c30d"
       ],
       "sony-playstation:81328b966e6dcf7ea1e32e55e1c104bb": [
         "15c94da3cc5a38a582429575af4198c487fe893c"
+      ],
+      "sony-playstation:924e392ed05558ffdb115408c263dccf": [
+        "10155d8d6e6e832d6ea66db9bc098321fb5e8ebf"
+      ],
+      "sony-playstation:e2110b8a2b97a8e0b857a45d32f7e187": [
+        "b6a11579caef3875504fcf3831b8e3922746df2c"
       ],
       "sony-playstation:ca5cfc321f916756e3f0effbfaeba13b": [
         "73107d468fc7cb1d2c5b18b269715dd889ecef06"
@@ -307113,6 +306155,9 @@
       "sony-playstation:8e4c14f567745eff2f0408c8129f72a6": [
         "77b10118d21ac7ffa9b35f9c4fd814da240eb3e9"
       ],
+      "sony-playstation:b84be139db3ee6cbd075630aa20a6553": [
+        "1b0dbdb23da9dc0776aac58d0755dc80fea20975"
+      ],
       "sony-playstation:1e68c231d0896b7eadcad1d7d8e76129": [
         "14df4f6c1e367ce097c11deae21566b4fe5647a9"
       ],
@@ -307125,8 +306170,35 @@
       "scph9002(7502).bin": [
         "8d5de56a79954f29e9006929ba3fed9b6a418c1d"
       ],
+      "sony-playstation:8abc1b549a4a80954addc48ef02c4521": [
+        "339a48f4fcf63e10b5b867b8c93cfd40945faf6c"
+      ],
       "sony-playstation:9a09ab7e49b422c007e6d54d7c49b965": [
         "7771d6e90980408f753891648685def6dd42ef6d"
+      ],
+      "sony-playstation:b10f5e0e3d9eb60e5159690680b1e774": [
+        "beb0ac693c0dc26daf5665b3314db81480fa5c7c"
+      ],
+      "scph102A.bin": [
+        "beb0ac693c0dc26daf5665b3314db81480fa5c7c"
+      ],
+      "scph102_v44.bin": [
+        "beb0ac693c0dc26daf5665b3314db81480fa5c7c"
+      ],
+      "sony-playstation:6e3735ff4c7dc899ee98981385f6f3d0": [
+        "dcffe16bd90a723499ad46c641424981338d8378"
+      ],
+      "scph101_v45.bin": [
+        "dcffe16bd90a723499ad46c641424981338d8378"
+      ],
+      "sony-playstation:de93caec13d1a141a40a79f5c86168d6": [
+        "dbc7339e5d85827c095764fc077b41f78fd2ecae"
+      ],
+      "scph102C.bin": [
+        "dbc7339e5d85827c095764fc077b41f78fd2ecae"
+      ],
+      "scph102_v45.bin": [
+        "dbc7339e5d85827c095764fc077b41f78fd2ecae"
       ],
       "sony-playstation:c53ca5908936d412331790f4426c6c33": [
         "96880d1ca92a016ff054be5159bb06fe03cb4e14"
@@ -307140,6 +306212,12 @@
       "sony-playstation:476d68a94ccec3b9c8303bbd1daf2810": [
         "7082bd57141fa0007b3adcd031f7ba23a20108a0"
       ],
+      "sony-playstation:d8f485717a5237285e4d7c5f881b7f32": [
+        "d7d6be084f51354bc951d8fa2d8d912aa70abc5e"
+      ],
+      "ps2_scph18000.bin": [
+        "d7d6be084f51354bc951d8fa2d8d912aa70abc5e"
+      ],
       "sony-playstation:fbb5f59ec332451debccf1e377017237": [
         "48f6a9e001e2cb002217107c46fb0459069d1a42"
       ],
@@ -307152,11 +306230,455 @@
       "PSX_rom.bin": [
         "c40146361eb8cf670b19fdc9759190257803cab7"
       ],
+      "sony-playstation-2:32f2e4d5ff5ee11072a6bc45530f5765": [
+        "5b33170323ed6344e2363fed8115dc3918bb96a4"
+      ],
+      "ps2_dtlh10000_0117.bin": [
+        "5b33170323ed6344e2363fed8115dc3918bb96a4"
+      ],
+      "sony-playstation-2:acf4730ceb38ac9d8c7d8e21f2614600": [
+        "aea061e6e263fdcc1c4fdbd68553ef78dae74263"
+      ],
+      "ps2-0100j-20000117.bin": [
+        "aea061e6e263fdcc1c4fdbd68553ef78dae74263"
+      ],
+      "ps2_scph10000_0117.bin": [
+        "aea061e6e263fdcc1c4fdbd68553ef78dae74263"
+      ],
+      "sony-playstation-2:acf9968c8f596d2b15f42272082513d1": [
+        "16f4a284d0e760ee13a2aff2f7dda928255e3080"
+      ],
+      "ps2_dtlh10000_0217.bin": [
+        "16f4a284d0e760ee13a2aff2f7dda928255e3080"
+      ],
+      "sony-playstation-2:b1459d7446c69e3e97e6ace3ae23dd1c": [
+        "916e02431bcd73140504da3355c9598143b77e11"
+      ],
+      "ps2_scph10000_15000.bin": [
+        "916e02431bcd73140504da3355c9598143b77e11"
+      ],
+      "sony-playstation-2:d3f1853a16c2ec18f3cd1ae655213308": [
+        "4440b246bfde7bb31002c584a76c6ef384908e84"
+      ],
+      "ps2_dtlh10000_0224.bin": [
+        "4440b246bfde7bb31002c584a76c6ef384908e84"
+      ],
+      "sony-playstation-2:63e6fd9b3c72e0d7b920e80cf76645cd": [
+        "339c646cf0699268552df5b05f18f0a03a9f55ff"
+      ],
+      "ps2_dtlh30001.bin": [
+        "339c646cf0699268552df5b05f18f0a03a9f55ff"
+      ],
+      "sony-playstation-2:a20c97c02210f16678ca3010127caf36": [
+        "20f6ce6693cf97e9494f8f0227f2b7988ffaf961"
+      ],
+      "ps2_scph30001_0727.bin": [
+        "20f6ce6693cf97e9494f8f0227f2b7988ffaf961"
+      ],
+      "sony-playstation-2:8db2fbbac7413bf3e7154c1e0715e565": [
+        "dbc2318a1029347b5af3a0c74b0bdf88d19efee6"
+      ],
+      "ps2_scph30001_0902.bin": [
+        "dbc2318a1029347b5af3a0c74b0bdf88d19efee6"
+      ],
+      "sony-playstation-2:91c87cb2f2eb6ce529a2360f80ce2457": [
+        "3bb1eecd618ab5c973c7bc53671a4475a02e1d5b"
+      ],
+      "ps2_dtlh30002.bin": [
+        "3bb1eecd618ab5c973c7bc53671a4475a02e1d5b"
+      ],
+      "sony-playstation-2:3016b3dd42148a67e2c048595ca4d7ce": [
+        "1b73dec999fcc2b92fa958110ff6bfe4d0af276e"
+      ],
+      "ps2_dtlh30102_0902.bin": [
+        "1b73dec999fcc2b92fa958110ff6bfe4d0af276e"
+      ],
+      "sony-playstation-2:b7fa11e87d51752a98b38e3e691cbf17": [
+        "274c05fec654913a3f698d4b0d592085866a2cbd"
+      ],
+      "ps2_scph30002_0902.bin": [
+        "274c05fec654913a3f698d4b0d592085866a2cbd"
+      ],
+      "sony-playstation-2:f63bc530bd7ad7c026fcd6f7bd0d9525": [
+        "e481079eca752225555f0c26d14c9d0f94d9a8e9"
+      ],
+      "ps2_scph18000_gh003.bin": [
+        "e481079eca752225555f0c26d14c9d0f94d9a8e9"
+      ],
+      "sony-playstation-2:cee06bd68c333fc5768244eae77e4495": [
+        "a9f5d8ed56cfff18add1b599010493461fa02448"
+      ],
+      "ps2_scph18000_gh008.bin": [
+        "a9f5d8ed56cfff18add1b599010493461fa02448"
+      ],
+      "sony-playstation-2:0bf988e9c7aaa4c051805b0fa6eb3387": [
+        "7284b9d16df9935afc384318e024c87ef0574fe5"
+      ],
+      "ps2_dtlh30101.bin": [
+        "7284b9d16df9935afc384318e024c87ef0574fe5"
+      ],
+      "sony-playstation-2:8accc3c49ac45f5ae2c5db0adc854633": [
+        "5af5b5077d84a9c037ebe12bfab8a38b31d8a543"
+      ],
+      "ps2_scph30001_35001.bin": [
+        "5af5b5077d84a9c037ebe12bfab8a38b31d8a543"
+      ],
+      "sony-playstation-2:6f9a6feb749f0533aaae2cc45090b0ed": [
+        "d004326c9d8060812b4433c3f07646b04854d6c4"
+      ],
+      "ps2_dtlh30102_1228.bin": [
+        "d004326c9d8060812b4433c3f07646b04854d6c4"
+      ],
+      "sony-playstation-2:838544f12de9b0abc90811279ee223c8": [
+        "e22ef231faf3661edd92f2ee449a71297c82a092"
+      ],
+      "ps2_scph30002_1228.bin": [
+        "e22ef231faf3661edd92f2ee449a71297c82a092"
+      ],
+      "sony-playstation-2:bb6bbc850458fff08af30e969ffd0175": [
+        "334e029fc7fd50222a399c50384ff42732652259"
+      ],
+      "ps2_dtlh30000.bin": [
+        "334e029fc7fd50222a399c50384ff42732652259"
+      ],
+      "sony-playstation-2:815ac991d8bc3b364696bead3457de7d": [
+        "d6f365a0f07cd04ed28108e6ec5076e2f81e5f72"
+      ],
+      "ps2_scph30000_35000.bin": [
+        "d6f365a0f07cd04ed28108e6ec5076e2f81e5f72"
+      ],
+      "sony-playstation-2:b107b5710042abe887c0f6175f6e94bb": [
+        "7331a40b4b4feb1b3f0f77b013b6d38483577baa"
+      ],
+      "ps2_scph30001r_0427.bin": [
+        "7331a40b4b4feb1b3f0f77b013b6d38483577baa"
+      ],
+      "sony-playstation-2:ab55cceea548303c22c72570cfd4dd71": [
+        "e525a0c900e37acf0ae5a655d82a0abcb07c6f1f"
+      ],
+      "ps2_scph30000_0427.bin": [
+        "e525a0c900e37acf0ae5a655d82a0abcb07c6f1f"
+      ],
+      "sony-playstation-2:18bcaadb9ff74ed3add26cdf709fff2e": [
+        "ce92e8e8c88665f2f645a9522e337823d47a914a"
+      ],
+      "ps2_scph30001r_0704.bin": [
+        "ce92e8e8c88665f2f645a9522e337823d47a914a"
+      ],
+      "sony-playstation-2:491209dd815ceee9de02dbbc408c06d6": [
+        "3cbd048e437c785b5a05a0feced00117a8a42545"
+      ],
+      "ps2_scph30002r_0704.bin": [
+        "3cbd048e437c785b5a05a0feced00117a8a42545"
+      ],
+      "sony-playstation-2:7200a03d51cacc4c14fcdfdbc4898431": [
+        "d257bce6ecaf3bafb704c75a1b4741b910bd2d49"
+      ],
+      "ps2_scph30001r_1004.bin": [
+        "d257bce6ecaf3bafb704c75a1b4741b910bd2d49"
+      ],
+      "sony-playstation-2:8359638e857c8bc18c3c18ac17d9cc3c": [
+        "ee34c3a87c53c75ca2a37d77b0042ca24d07831f"
+      ],
+      "ps2_scph30002r_1004.bin": [
+        "ee34c3a87c53c75ca2a37d77b0042ca24d07831f"
+      ],
+      "sony-playstation-2:352d2ff9b3f68be7e6fa7e6dd8389346": [
+        "ba15dcf7aac13864c08222037e9321d7468c87d1"
+      ],
+      "ps2_scph30005r.bin": [
+        "ba15dcf7aac13864c08222037e9321d7468c87d1"
+      ],
+      "sony-playstation-2:d5ce2c7d119f563ce04bc04dbc3a323e": [
+        "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7"
+      ],
+      "ps2-0160a-20020207.bin": [
+        "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7"
+      ],
+      "scph39001.bin": [
+        "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7"
+      ],
+      "ps2_scph39001.bin": [
+        "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7"
+      ],
+      "SCPH-39001_BIOS_V7_USA_160.BIN": [
+        "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7"
+      ],
+      "sony-playstation-2:0d2228e6fd4fb639c9c39d077a9ec10c": [
+        "bff2902bd0ce9729a060581132541e9fd1a9fab6"
+      ],
+      "ps2_scph39002.bin": [
+        "bff2902bd0ce9729a060581132541e9fd1a9fab6"
+      ],
+      "SCPH-39004_BIOS_V7_EUR_160.BIN": [
+        "bff2902bd0ce9729a060581132541e9fd1a9fab6"
+      ],
+      "sony-playstation-2:72da56fccb8fcd77bba16d1b6f479914": [
+        "003628c137dae577ff3b04b93ca1787b0c944702"
+      ],
+      "ps2_scph37000_39000.bin": [
+        "003628c137dae577ff3b04b93ca1787b0c944702"
+      ],
+      "sony-playstation-2:5b1f47fbeb277c6be2fccdd6344ff2fd": [
+        "d106b757ae2544dfe63f7e1924e59d5ad44c0c29"
+      ],
+      "ps2_scph39008.bin": [
+        "d106b757ae2544dfe63f7e1924e59d5ad44c0c29"
+      ],
+      "sony-playstation-2:315a4003535dfda689752cb25f24785c": [
+        "e3a74125c426bcacabca00b513fab928665c8846"
+      ],
+      "ps2_scph39005.bin": [
+        "e3a74125c426bcacabca00b513fab928665c8846"
+      ],
+      "sony-playstation-2:312ad4816c232a9606e56f946bc0678a": [
+        "d812ac65c357d392396ca9edee812dc41bed8bde"
+      ],
+      "ps2_scph50000_55000.bin": [
+        "d812ac65c357d392396ca9edee812dc41bed8bde"
+      ],
+      "sony-playstation-2:666018ffec65c5c7e04796081295c6c7": [
+        "e220bb282378c1f48ea1b585b3675e51a6dca572"
+      ],
+      "ps2_dtlh50002.bin": [
+        "e220bb282378c1f48ea1b585b3675e51a6dca572"
+      ],
+      "sony-playstation-2:6e69920fa6eef8522a1d688a11e41bc6": [
+        "ad15bd7eabd5bd81ba011516a5be44947d6641aa"
+      ],
+      "ps2_scph50002_0227.bin": [
+        "ad15bd7eabd5bd81ba011516a5be44947d6641aa"
+      ],
+      "sony-playstation-2:eb960de68f0c0f7f9fa083e9f79d0360": [
+        "c5bc6e893b4c43d528142e56c96073024de64157"
+      ],
+      "ps2_dtlh50001_0325.bin": [
+        "c5bc6e893b4c43d528142e56c96073024de64157"
+      ],
+      "sony-playstation-2:8aa12ce243210128c5074552d3b86251": [
+        "d269d1ed513227f3ef7133c76cf1b3a64f97b15d"
+      ],
+      "ps2_scph50001_0325.bin": [
+        "d269d1ed513227f3ef7133c76cf1b3a64f97b15d"
+      ],
+      "sony-playstation-2:240d4c5ddd4b54069bdc4a3cd2faf99d": [
+        "2de87767008fc4a303af64a46251156e965d9065"
+      ],
+      "ps2_dtlh50009.bin": [
+        "2de87767008fc4a303af64a46251156e965d9065"
+      ],
+      "sony-playstation-2:1c6cd089e6c83da618fbf2a081eb4888": [
+        "aa4a35c14ee342cf7a03b1dde294ca10e64889e1"
+      ],
+      "ps2_desr5000.bin": [
+        "aa4a35c14ee342cf7a03b1dde294ca10e64889e1"
+      ],
+      "sony-playstation-2:463d87789c555a4a7604e97d7db545d1": [
+        "6a6ecfe6c10e42eff1ca056349def799b5629067"
+      ],
+      "ps2_scph55000_0623.bin": [
+        "6a6ecfe6c10e42eff1ca056349def799b5629067"
+      ],
+      "sony-playstation-2:35461cecaa51712b300b2d6798825048": [
+        "c74d92a2952a2912b6698cbcf7742adac8f784d3"
+      ],
+      "ps2_scph50001_0623.bin": [
+        "c74d92a2952a2912b6698cbcf7742adac8f784d3"
+      ],
+      "sony-playstation-2:bd6415094e1ce9e05daabe85de807666": [
+        "18b9ba833c469c4683676cc20da5124080d980bb"
+      ],
+      "ps2_scph50002_0623.bin": [
+        "18b9ba833c469c4683676cc20da5124080d980bb"
+      ],
       "sony-playstation-2:2e70ad008d4ec8549aada8002fdf42fb": [
         "caa18ed04854a91e68f2d61a782560edd6373bbf"
       ],
       "sony-playstation-2:b53d51edc7fc086685e31b811dc32aad": [
         "34a81db03ab617fbfdd7f9b861692dd2ecd57b82"
+      ],
+      "sony-playstation-2:1b6e631b536247756287b916f9396872": [
+        "92d9eb4b11cef97bb69a275b2851b72f7b0023d6"
+      ],
+      "ps2_scph50009.bin": [
+        "92d9eb4b11cef97bb69a275b2851b72f7b0023d6"
+      ],
+      "sony-playstation-2:00da1b177096cfd2532c8fa22b43e667": [
+        "0ea98a25a32145dda514de2f0d4bfbbd806bd00c"
+      ],
+      "ps2_scph50000_0822.bin": [
+        "0ea98a25a32145dda514de2f0d4bfbbd806bd00c"
+      ],
+      "sony-playstation-2:afde410bd026c16be605a1ae4bd651fd": [
+        "6e1f0eb4aec51a6288b3d802d3bcdb477cf52104"
+      ],
+      "ps2_scph50004_0822.bin": [
+        "6e1f0eb4aec51a6288b3d802d3bcdb477cf52104"
+      ],
+      "sony-playstation-2:81f4336c1de607dd0865011c0447052e": [
+        "b68c05f5cd86bf03cb38a643a723b7a97b759531"
+      ],
+      "ps2_scph50011.bin": [
+        "b68c05f5cd86bf03cb38a643a723b7a97b759531"
+      ],
+      "sony-playstation-2:0eee5d1c779aa50e94edd168b4ebf42e": [
+        "224ab5704ab719edeb05ca1d835812252c97c1b3"
+      ],
+      "ps2_scph70000.bin": [
+        "224ab5704ab719edeb05ca1d835812252c97c1b3"
+      ],
+      "SCPH-70000_BIOS_V12_JAP_200.BIN": [
+        "224ab5704ab719edeb05ca1d835812252c97c1b3"
+      ],
+      "sony-playstation-2:d333558cc14561c1fdc334c75d5f37b7": [
+        "7a62e5f48603582707e9898eb055ea3eaee50d4c"
+      ],
+      "ps2_scph70001.bin": [
+        "7a62e5f48603582707e9898eb055ea3eaee50d4c"
+      ],
+      "sony-playstation-2:dc752f160044f2ed5fc1f4964db2a095": [
+        "434bc0b4eb4827da0773ec0795aadc5162569a07"
+      ],
+      "ps2-0200e-20040614.bin": [
+        "434bc0b4eb4827da0773ec0795aadc5162569a07"
+      ],
+      "ps2_scph70002.bin": [
+        "434bc0b4eb4827da0773ec0795aadc5162569a07"
+      ],
+      "SCPH-70004_BIOS_V12_EUR_200.BIN": [
+        "434bc0b4eb4827da0773ec0795aadc5162569a07"
+      ],
+      "sony-playstation-2:63ead1d74893bf7f36880af81f68a82d": [
+        "902f4680b258abd40c0922f6b0d581cbd8f8a73e"
+      ],
+      "ps2_dtlh70002.bin": [
+        "902f4680b258abd40c0922f6b0d581cbd8f8a73e"
+      ],
+      "sony-playstation-2:3e3e030c0f600442fa05b94f87a1e238": [
+        "7f8e812cab7c7393c85eac6c42661e1fd0a642df"
+      ],
+      "ps2_scph70005.bin": [
+        "7f8e812cab7c7393c85eac6c42661e1fd0a642df"
+      ],
+      "sony-playstation-2:1ad977bb539fc9448a08ab276a836bbc": [
+        "bbb1af3085e77599691ec430d147810157da934f"
+      ],
+      "ps2_desr5500.bin": [
+        "bbb1af3085e77599691ec430d147810157da934f"
+      ],
+      "sony-playstation-2:eb4f40fcf4911ede39c1bbfe91e7a89a": [
+        "7ffa75d142cb8eeea6c777dbcf263143655275d5"
+      ],
+      "ps2_scph75000.bin": [
+        "7ffa75d142cb8eeea6c777dbcf263143655275d5"
+      ],
+      "sony-playstation-2:9959ad7a8685cad66206e7752ca23f8b": [
+        "7c7efdfcec7705f4e84bb47f45322104e39eed09"
+      ],
+      "ps2_dtlh75000a.bin": [
+        "7c7efdfcec7705f4e84bb47f45322104e39eed09"
+      ],
+      "sony-playstation-2:929a14baca1776b00869f983aa6e14d2": [
+        "48d0445dffd1e879c7ae752c5166ec3101921555"
+      ],
+      "ps2_scph75001.bin": [
+        "48d0445dffd1e879c7ae752c5166ec3101921555"
+      ],
+      "sony-playstation-2:573f7d4a430c32b3cc0fd0c41e104bbd": [
+        "929a85e974faf4b40d0a7785023b758402c43bd9"
+      ],
+      "ps2_scph75002.bin": [
+        "929a85e974faf4b40d0a7785023b758402c43bd9"
+      ],
+      "sony-playstation-2:df63a604e8bff5b0599bd1a6c2721bd0": [
+        "0a071d1b46607a7694770407606d8599f62a372b"
+      ],
+      "ps2_scph75006.bin": [
+        "0a071d1b46607a7694770407606d8599f62a372b"
+      ],
+      "sony-playstation-2:5b1ba4bb914406fae75ab8e38901684d": [
+        "0edf1fbb772a8e6a79ae00e977450e3ade25c4f3"
+      ],
+      "ps2_scph77000.bin": [
+        "0edf1fbb772a8e6a79ae00e977450e3ade25c4f3"
+      ],
+      "sony-playstation-2:cb801b7920a7d536ba07b6534d2433ca": [
+        "92e488d5b2705e4cca83d4d1efbc421012faf83e"
+      ],
+      "ps2_scph77001.bin": [
+        "92e488d5b2705e4cca83d4d1efbc421012faf83e"
+      ],
+      "sony-playstation-2:af60e6d1a939019d55e5b330d24b1c25": [
+        "28ad756d0cfd1e7b2e2de3de5d9e14207ee89761"
+      ],
+      "ps2_scph77002.bin": [
+        "28ad756d0cfd1e7b2e2de3de5d9e14207ee89761"
+      ],
+      "sony-playstation-2:549a66d0c698635ca9fa3ab012da7129": [
+        "fce2a24e5e0400cc6d98c08f426405d19173813e"
+      ],
+      "ps2_scph77006.bin": [
+        "fce2a24e5e0400cc6d98c08f426405d19173813e"
+      ],
+      "sony-playstation-2:5de9d0d730ff1e7ad122806335332524": [
+        "3baf847c1c217aa71ac6d298389c88edb3db32e2"
+      ],
+      "ps2_scph79000_90000.bin": [
+        "3baf847c1c217aa71ac6d298389c88edb3db32e2"
+      ],
+      "sony-playstation-2:21fe4cad111f7dc0f9af29477057f88d": [
+        "4191b5842f31a9985b5428bc9d2b733ce3abb583"
+      ],
+      "ps2_dtlh90000_a.bin": [
+        "4191b5842f31a9985b5428bc9d2b733ce3abb583"
+      ],
+      "sony-playstation-2:40c11c063b3b9409aa5e4058e984e30c": [
+        "8361d615cc895962e0f0838489337574dbdc9173"
+      ],
+      "ps2_scph79001_90001.bin": [
+        "8361d615cc895962e0f0838489337574dbdc9173"
+      ],
+      "sony-playstation-2:80bbb237a6af9c611df43b16b930b683": [
+        "da5aacead2fb55807d6d4e70b1f10f4fdcfd3281"
+      ],
+      "ps2_scph79002_90002.bin": [
+        "da5aacead2fb55807d6d4e70b1f10f4fdcfd3281"
+      ],
+      "sony-playstation-2:c37bce95d32b2be480f87dd32704e664": [
+        "a5a2ee0dd9a86ca35b94e97ca92476a584f755bf"
+      ],
+      "ps2_scph79006_90006.bin": [
+        "a5a2ee0dd9a86ca35b94e97ca92476a584f755bf"
+      ],
+      "sony-playstation-2:80ac46fa7e77b8ab4366e86948e54f83": [
+        "fbd54bfc020af34008b317dcb80b812dd29b3759"
+      ],
+      "ps2_scph90000_0220.bin": [
+        "fbd54bfc020af34008b317dcb80b812dd29b3759"
+      ],
+      "sony-playstation-2:21038400dc633070a78ad53090c53017": [
+        "f9229fe159d0353b9f0632f3fdc66819c9030458"
+      ],
+      "ps2_scph90001_0220.bin": [
+        "f9229fe159d0353b9f0632f3fdc66819c9030458"
+      ],
+      "sony-playstation-2:dc69f0643a3030aaa4797501b483d6c4": [
+        "9915b5ba56798f4027ac1bd8d10abe0c1c9c326a"
+      ],
+      "ps2_scph90002_0220.bin": [
+        "9915b5ba56798f4027ac1bd8d10abe0c1c9c326a"
+      ],
+      "sony-playstation-2:30d56e79d89fbddf10938fa67fe3f34e": [
+        "a277b456849697abec11285c6b35bc734598c220"
+      ],
+      "ps2_scph90005_0220.bin": [
+        "a277b456849697abec11285c6b35bc734598c220"
+      ],
+      "sony-playstation-2:93ea3bcee4252627919175ff1b16a1d9": [
+        "b9cb5775af29cd4d1ec5521e8231f8b6636e2e44"
+      ],
+      "ps2_kdl22px300.bin": [
+        "b9cb5775af29cd4d1ec5521e8231f8b6636e2e44"
       ],
       "sony-playstation-2:d3e81e95db25f5a86a7b7474550a2155": [
         "4b5ef16b67e3b523d28ed2406106cb80470a06d0"
@@ -307284,6 +306806,9 @@
       "bsx_bios.rom": [
         "4891d739a8a8b67923681bad4fb67edab2e90e50"
       ],
+      "BS-X.bios": [
+        "4891d739a8a8b67923681bad4fb67edab2e90e50"
+      ],
       "neo-epo.sp1": [
         "1b3b22092f30c4d1b2c15f04d1670eb1e9fbea07"
       ],
@@ -307329,11 +306854,71 @@
       "342-0077-b": [
         "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
       ],
+      "apple2gs3.rom": [
+        "bc32bc0e8902946663998f56aea52be597d9e361"
+      ],
+      "ROM03.ROM": [
+        "bc32bc0e8902946663998f56aea52be597d9e361"
+      ],
+      "ROM.ROM": [
+        "bc32bc0e8902946663998f56aea52be597d9e361"
+      ],
       "MSXR2.ROM": [
         "04990aa1c3a3fc7294ec884b81deaa89832df614"
       ],
+      "pravetzt.rom": [
+        "7afc276cb118adff72e4f16698f94bf3b2c64146"
+      ],
       "svi328a.rom": [
         "10349ce675f6d6d47f0976e39cb7188eba858d89"
+      ],
+      "128p-1.rom": [
+        "80080644289ed93d71a1103992a154cc9802b2fa"
+      ],
+      "128-1.rom": [
+        "80080644289ed93d71a1103992a154cc9802b2fa"
+      ],
+      "fuse/128-1.rom": [
+        "80080644289ed93d71a1103992a154cc9802b2fa"
+      ],
+      "d64rom2.rom": [
+        "e3c8986bb1d44269c4587b04f1ca27a70b0aaa2e"
+      ],
+      "d64tano2.rom": [
+        "e3c8986bb1d44269c4587b04f1ca27a70b0aaa2e"
+      ],
+      "d64_2.rom": [
+        "e3c8986bb1d44269c4587b04f1ca27a70b0aaa2e"
+      ],
+      "d64tano.rom": [
+        "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69"
+      ],
+      "d200rom1.rom": [
+        "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69"
+      ],
+      "alpha_ba": [
+        "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69"
+      ],
+      "Dragon Data Ltd - Dragon Alpga Basic": [
+        "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69"
+      ],
+      "deltados.rom": [
+        "686ebb5f39dd4fc907a0b748867d0a022d2f1a60"
+      ],
+      "Premier Micros - DeltaDOS": [
+        "686ebb5f39dd4fc907a0b748867d0a022d2f1a60"
+      ],
+      "alice4k.rom": [
+        "c2166b91e6396a311f486832012aa43e0d2b19f8"
+      ],
+      "cpc_amsdos.rom": [
+        "39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb"
+      ],
+      "Amsdos.rom": [
+        "39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb"
+      ],
+      "AMSDOS_0.5.ROM": [
+        "39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb"
       ],
       "squirreljme-0.3.0.jar": [
         "8a2ddc37df2366d4e205e9904cd8bac22db2afd5"
@@ -307347,6 +306932,9 @@
       "squirreljme-slow.jar": [
         "8a2ddc37df2366d4e205e9904cd8bac22db2afd5"
       ],
+      "fx-scsi.rom": [
+        "65482a23ac5c10a6095aee1db5824cca54ead6e5"
+      ],
       "gc-ntsc-10.bin": [
         "a1837968288253ed541f2b11440b68f5a9b33875"
       ],
@@ -307355,6 +306943,64 @@
       ],
       "gc-pal-12.bin": [
         "80b8744ff5e43585392f55546bd03a673d11ef5f"
+      ],
+      "cx4.data.rom": [
+        "a002f4efba42775a31185d443f3ed1790b0e949a"
+      ],
+      "128-0.rom": [
+        "4f4b11ec22326280bdb96e3baf9db4b4cb1d02c5"
+      ],
+      "fuse/128-0.rom": [
+        "4f4b11ec22326280bdb96e3baf9db4b4cb1d02c5"
+      ],
+      "48.rom": [
+        "5ea7c2b824672e914525d1d5c419d71b84a426a2"
+      ],
+      "zx48.rom": [
+        "5ea7c2b824672e914525d1d5c419d71b84a426a2"
+      ],
+      "zxs:48.rom": [
+        "5ea7c2b824672e914525d1d5c419d71b84a426a2"
+      ],
+      "spectrum48.rom": [
+        "5ea7c2b824672e914525d1d5c419d71b84a426a2"
+      ],
+      "fuse/48.rom": [
+        "5ea7c2b824672e914525d1d5c419d71b84a426a2"
+      ],
+      "ZXS48.ROM": [
+        "5ea7c2b824672e914525d1d5c419d71b84a426a2"
+      ],
+      "plus3e-3.rom": [
+        "65f031caa8148a5493afe42c41f4929deab26b4e",
+        "0a747cc0b827a94b4fd74cfd818ca792437a38f7"
+      ],
+      "plus3-40-3.rom": [
+        "65f031caa8148a5493afe42c41f4929deab26b4e"
+      ],
+      "fuse/plus3-3.rom": [
+        "65f031caa8148a5493afe42c41f4929deab26b4e"
+      ],
+      "fuse/plus3e-3.rom": [
+        "65f031caa8148a5493afe42c41f4929deab26b4e"
+      ],
+      "plusd.rom": [
+        "6b841dc5797ef7eb219ad455cd1e434ca3b9d30d"
+      ],
+      "fuse/plusd.rom": [
+        "6b841dc5797ef7eb219ad455cd1e434ca3b9d30d"
+      ],
+      "d64_1.rom": [
+        "f119506eaa3b4b70b9aa0dd83761e8cbe043d042"
+      ],
+      "IPL_DEV.n64": [
+        "10c4173c2a7eb09c6579818f72ef18fa0b6d32de"
+      ],
+      "64DD_IPL_DEV.n64": [
+        "10c4173c2a7eb09c6579818f72ef18fa0b6d32de"
+      ],
+      "64dd_ipl_DEV.bin": [
+        "10c4173c2a7eb09c6579818f72ef18fa0b6d32de"
       ],
       "SCPH30004R.bin": [
         "8fa040852d4b8688f0c84bcfffc65eb208f2b432"
@@ -308556,6 +308202,18 @@
       "ROM_XEGAME": [
         "a107db7f16a1129cf9d933c9cf4f013b068c9e82"
       ],
+      "ROM_BASIC_C": [
+        "3693c9cb9bf3b41bae1150f7a8264992468fc8c0"
+      ],
+      "ataribasic.rom": [
+        "3693c9cb9bf3b41bae1150f7a8264992468fc8c0"
+      ],
+      "basic.rom": [
+        "3693c9cb9bf3b41bae1150f7a8264992468fc8c0"
+      ],
+      "atari_basic.rom": [
+        "3693c9cb9bf3b41bae1150f7a8264992468fc8c0"
+      ],
       "ROM_5200": [
         "6ad7a1e8c9fad486fbec9498cb48bf5bc3adc530"
       ],
@@ -308570,6 +308228,9 @@
       ],
       "atari_5200.rom": [
         "6ad7a1e8c9fad486fbec9498cb48bf5bc3adc530"
+      ],
+      "DEFAULT.FNT": [
+        "000ac11b702a4c42e40f135df12fa5f2f13e20a1"
       ],
       "MSXSP.ROM": [
         "342e7d4bd86f3351766f460f6de3c89a40791ee0"
@@ -308594,6 +308255,18 @@
       "iplromcdc_flash.bino.dat": [
         "77511fc58798404701f66b6bbc9cbde06596eba7"
       ],
+      "zxs:if1-2.rom": [
+        "5cfb6bca4177c45fefd571734576b55e3a127c08"
+      ],
+      "interface1.edition2.rom": [
+        "5cfb6bca4177c45fefd571734576b55e3a127c08"
+      ],
+      "if1-v2.rom": [
+        "5cfb6bca4177c45fefd571734576b55e3a127c08"
+      ],
+      "IF1.ROM": [
+        "5cfb6bca4177c45fefd571734576b55e3a127c08"
+      ],
       "tape_128.sz": [
         "3b1287bfc6fec9c7dd838f6ea1706698cb96fd16"
       ],
@@ -308612,6 +308285,9 @@
       "arm6.data.rom": [
         "b19c0f8f207d62fdabf4bf71442826063bccc626"
       ],
+      "cp400extbas.rom": [
+        "a348a165009a6de1ae6fc18ed77137b38b6ed46d"
+      ],
       "fd502.rom": [
         "10bdc5aa2d7d7f205f67b47b19003a4bd89defd1"
       ],
@@ -308626,6 +308302,39 @@
       ],
       "DBPATCH.wav": [
         "e0c98d00fe3004942c4a2842f06e2702dd2bd7c7"
+      ],
+      "zx81.rom": [
+        "7b143ee964e9ada89d1f9e88f0bd48d919184cfc"
+      ],
+      "interface1.edition1.rom": [
+        "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e"
+      ],
+      "if1-v1.rom": [
+        "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e"
+      ],
+      "spectrum128.rom": [
+        "16375d42ea109b47edded7a16028de7fdb3013a1"
+      ],
+      "ZXS128.ROM": [
+        "16375d42ea109b47edded7a16028de7fdb3013a1"
+      ],
+      "128.rom": [
+        "16375d42ea109b47edded7a16028de7fdb3013a1"
+      ],
+      "spectrum+2.rom": [
+        "8cafb292af58617907b9e6b9093d3588a75849b8"
+      ],
+      "ZXSPLUS2.ROM": [
+        "8cafb292af58617907b9e6b9093d3588a75849b8"
+      ],
+      "p2.rom": [
+        "8cafb292af58617907b9e6b9093d3588a75849b8"
+      ],
+      "spectrum+3.version4-0.rom": [
+        "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4"
+      ],
+      "p2a40.rom": [
+        "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4"
       ],
       "OS6128_UK.rom": [
         "5977adbad3f7c1e0e082cd02fe76a700d9860c30"
@@ -308693,6 +308402,12 @@
       "cdtv-extended-rom-v2.7.rom": [
         "5bc114bba29f60a614a311745b3e2464bfa06846"
       ],
+      "amiga-os-130-cdtv-ext.rom": [
+        "5bc114bba29f60a614a311745b3e2464bfa06846"
+      ],
+      "CDTV Extended-ROM v1.0 (1992)(Commodore)(CDTV).rom": [
+        "5bc114bba29f60a614a311745b3e2464bfa06846"
+      ],
       "blizzard_scsi_kit_iv.rom": [
         "efe17ca588c44a7f0f8c62be20f23278cfe06727"
       ],
@@ -308756,6 +308471,9 @@
       "ADFS-1.30.rom": [
         "301fd05c475a629c4bec70510d4507256a5b00d8"
       ],
+      "ANFS425.rom": [
+        "14f75d36ffe9af14aaac42df55b4fe3729ba75cf"
+      ],
       "OPENBIOS.bin": [
         "389df7981873d9e6e46c84c20cd43af0e4226cf8"
       ],
@@ -308770,6 +308488,9 @@
       ],
       "LA_jp_105.bin": [
         "b3b1d880e288b6dc79eec0ff1b0480c229ec141d"
+      ],
+      "LA_jp_102.bin": [
+        "26237b333db4a4c6770297fa5e655ea95840d5d9"
       ],
       "LA_us_102.bin": [
         "8af162223bb12fc19b414f126022910372790103"
@@ -308963,8 +308684,26 @@
       "cm32l_pcm_h.rom": [
         "3ad889fde5db5b6437cbc2eb6e305312fec3df93"
       ],
+      "ps2_dtlh50000.bin": [
+        "03c6531a1feba6da75a32c2a69c7bb89be61dcda"
+      ],
+      "ps2_dtlh50001_0623.bin": [
+        "fe19d2c52729e2ce4fea30e0e6a501587285d93f"
+      ],
+      "ps2_scph50005.bin": [
+        "ad8b9b5aa87b1575fec6a70d1cec77851c9c0e29"
+      ],
+      "ps2_dtlh75000.bin": [
+        "458adf85d216856892d6480213575670894049c6"
+      ],
+      "ps2_dtlh90000_j.bin": [
+        "3d095a3c2c38ebef3e48f31c7cfbb77ad4b04166"
+      ],
       "FluidR3_GM.sf2": [
         "4fd467afcb45c8b4cfd1eadac9372a819e35d46d"
+      ],
+      "r27v1602f.7d": [
+        "f0a74bbcaf801f3fd0b7002ebd0118564aae3528"
       ],
       "upd7801g.bin": [
         "6e89d1227581c76441a53d605f9e324185f1da33"
@@ -308973,6 +308712,9 @@
         "6e89d1227581c76441a53d605f9e324185f1da33"
       ],
       "DMG_ROM.bin": [
+        "1db57a1e8b6e4096f811587f9eab0c6675fd9755"
+      ],
+      "dmg0_rom.bin": [
         "1db57a1e8b6e4096f811587f9eab0c6675fd9755"
       ],
       "EXOS21.ROM": [
@@ -309113,17 +308855,32 @@
       "Apple2_Plus.rom": [
         "33a24f5489ba9195b44be77d9afb2252594cb5c7"
       ],
+      "Apple2e_Enhanced.rom": [
+        "b8ea90abe135a0031065e01697c4a3a20d51198b"
+      ],
       "Apple2_Video.rom": [
         "f9d312f128c9557d9d6ac03bfad6c3ddf83e5659"
       ],
       "apple2_char.rom": [
         "f9d312f128c9557d9d6ac03bfad6c3ddf83e5659"
       ],
+      "Apple2e_Enhanced_Video.rom": [
+        "b2b5d87f52693817fc747df087a4aa1ddcdb1f10"
+      ],
+      "apple2e_char.rom": [
+        "b2b5d87f52693817fc747df087a4aa1ddcdb1f10"
+      ],
+      "apple2e_char_us.rom": [
+        "b2b5d87f52693817fc747df087a4aa1ddcdb1f10"
+      ],
       "Parallel.rom": [
         "c75c751589cbcc1ad4ab4f63676af7abadd86f5b"
       ],
       "MouseInterface.rom": [
         "3a9d881a8a8d30f55b9719aceebbcf717f829d6f"
+      ],
+      "FdsBios.bin": [
+        "af5af53f66982e749643fdf8b2acbb7d4d3ed229"
       ],
       "FONT.BMP": [
         "b4f14e58030ed40fff2dc312b58ea4440bdf8cc5"
@@ -309196,6 +308953,15 @@
       ],
       "apple2c-plus.rom": [
         "1a27ae26966bbafd825d08ad1a24742d3e33557c"
+      ],
+      "apple2e_char_us_unenh.rom": [
+        "58ad0008df72896a18601e090ee0d58155ffa5be"
+      ],
+      "apple2e_char_2k.rom": [
+        "58ad0008df72896a18601e090ee0d58155ffa5be"
+      ],
+      "342-0133-a.chr.rom": [
+        "58ad0008df72896a18601e090ee0d58155ffa5be"
       ],
       "apple2e_char_frca_unenh.rom": [
         "42afb02aab4146f781ac52803a2733adc4da834e"
@@ -309644,6 +309410,30 @@
       "vice/C64DTV/dtvrom.bin": [
         "72b4c8da075646cc9940e4377004c81192c7b0b1"
       ],
+      "vice/VIC20/basic-901486-01.bin": [
+        "587d1e90950675ab6b12d91248a3f0d640d02e8d"
+      ],
+      "vice/VIC20/kernal.901486-07.bin": [
+        "ce0137ed69f003a299f43538fa9eee27898e621e"
+      ],
+      "vice/VIC20/kernal.901486-06.bin": [
+        "06de7ec017a5e78bd6746d89c2ecebb646efeb19"
+      ],
+      "vice/VIC20/kernal.901486-02.bin": [
+        "c9ead45e6674d1042ca6199160e8583c23aeac22"
+      ],
+      "vice/VIC20/chargen-901460-03.bin": [
+        "4fd85ab6647ee2ac7ba40f729323f2472d35b9b4"
+      ],
+      "vice/VIC20/chargen-901460-02.bin": [
+        "dae61ac03065aa2904af5c123ce821855898c555"
+      ],
+      "vice/PLUS4/basic-318006-01.bin": [
+        "161c96b4ad20f3a4f2321808e37a5ded26a135dd"
+      ],
+      "vice/PLUS4/kernal-318004-05.bin": [
+        "7c7e07f016391174a557e790c4ef1cbe33512cdb"
+      ],
       "vice/PLUS4/kernal-318005-05.bin": [
         "a3d9e5be091b98de39a046ab167fb7632d053682"
       ],
@@ -309869,6 +309659,12 @@
       ],
       "MCX_Basic_21_AZERTY": [
         "c8fd92705fc42deb6a0ffac6274e27fd61ecd4cc"
+      ],
+      "pentagon.rom": [
+        "a584272f21dc82c14b7d4f1ed440e23a976e71f0"
+      ],
+      "svi.rom": [
+        "7d8daf52f78371ca2c9443e04827c8e1f98c8f2c"
       ],
       "cgb0_boot.bin": [
         "80e3ee82416c1a74827a5459fde32f04bf51a1f6"
@@ -328277,12 +328073,6 @@
       "5450b00a": "9d9e1f89d20576251c49519974cefc0ce88554ec",
       "ded8bd81": "0a16f66d7816d73af3b28dea2bb292415695f6f7",
       "d3684544": "5da084d0425bc433952e03a6cef3f57e16a46886",
-      "e72a12ae": "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e",
-      "bb66dd1e": "5cfb6bca4177c45fefd571734576b55e3a127c08",
-      "e7a517dc": "8cafb292af58617907b9e6b9093d3588a75849b8",
-      "96e3c17a": "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4",
-      "aa1ce4bd": "a584272f21dc82c14b7d4f1ed440e23a976e71f0",
-      "0072ed54": "c315672807d8ddb8d91443729405c766dd95cae7",
       "5dd73b8b": "8ba966ec3fd8e4525b93bb4744424d954ba48a29",
       "1d2e6e25": "2377b1dfb00a9d84420aff88b5886520e3f7664b",
       "6f906842": "2cb85e9dd60464d8deec5b3268e95e86b69e5bd1",
@@ -331237,6 +331027,7 @@
       "9c5bad91": "2feafd8f1c40fdf1bd5668f8c5c02e5560945b17",
       "1a15dfcc": "4a06c8e66261611dce0305217c42138b71331701",
       "72bec693": "29091ff60ef4c22b1ee17aa21e0e75bac6b36474",
+      "0072ed54": "c315672807d8ddb8d91443729405c766dd95cae7",
       "9bce40b2": "6a40a5cec00c3b49a4fd013505c5580baa733a29",
       "f18dde5b": "0d5485e67c3f033c41d677cc9936afd6ad618d5f",
       "2ea250c0": "9e1495e62b000e1e1c868c0f3b6982e1abbb8a94",
@@ -331372,6 +331163,7 @@
       "9d513013": "367b5a102fb663beee8e7930b8c4acc219c1f7b3",
       "fd0d3ce1": "07783ee295274d8ff15d935bfd787c8ac1d54900",
       "1fe1d003": "33703e97cc93b7edfcc0334b64233cf81b7930db",
+      "aa1ce4bd": "a584272f21dc82c14b7d4f1ed440e23a976e71f0",
       "d8882a8c": "282eb7bc819aad2a12fd954e76f7838a4e1a7929",
       "10751aba": "21695e3f2a8f796386ce66eea8a246b0ac44810c",
       "82047489": "9a75ed4b293f968985be4c9aa893cd88276d1ced",
@@ -331383,12 +331175,16 @@
       "50f0eae0": "0eee1c503f71709fce8b7560dadc2d07d15edb80",
       "5adc4131": "c63d5b6a490a813a6d2890fefe9ce29e66d5c221",
       "ca321d79": "015eb96dafb273d4f4512c467e9b43c305fd1bc4",
+      "e72a12ae": "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e",
+      "bb66dd1e": "5cfb6bca4177c45fefd571734576b55e3a127c08",
       "5d2e8c66": "72703f9a3e734f3c23ec34c0727aae4ccbef9a91",
       "98b1320b": "de8b0d2d0379cfe7c39322a086ca6da68c7f23cb",
+      "e7a517dc": "8cafb292af58617907b9e6b9093d3588a75849b8",
       "17373da2": "e319ed08b4d53a5e421a75ea00ea02039ba6555b",
       "f1d1d99e": "c9969fc36095a59787554026a9adc3b87678c794",
       "3dbf351d": "22e50c6ba4157a3f6a821bd9937cd26e292775c6",
       "04448eaa": "65f031caa8148a5493afe42c41f4929deab26b4e",
+      "96e3c17a": "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4",
       "7f4a5482": "649fbd233490bf58b35350b0123d36caaaa011eb",
       "5aeb4675": "f12198108cbb14de4f03c6695bc16d08c85ee214",
       "504755cb": "773633dce5ba323a9e00d9d0f9e4d8c295df7c87",
@@ -350296,12 +350092,6 @@
       "94abba9d5f3fe9fc806190f93bf9728f64f7191694b4976226054e1d1f1daae1": "9d9e1f89d20576251c49519974cefc0ce88554ec",
       "406e8655a2c54bfe9b8de3319f721aa58a315c86e02d4278e67407dc4e3bbb07": "0a16f66d7816d73af3b28dea2bb292415695f6f7",
       "8e27c094916446a1bf3f3376f91ddbca56899fd06a5eb18fbdb0adad7e9c3270": "5da084d0425bc433952e03a6cef3f57e16a46886",
-      "6bb2eb282723e539f627a33002c2c31b633b4d3b712755f28696f0c4e49470f2": "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e",
-      "ad392df2bd366a3412f186240a40dd6fd2750c96a1779ffae77cf10aa1faf7ee": "5cfb6bca4177c45fefd571734576b55e3a127c08",
-      "dae0690d8b433ea22b76b62520341f784071dbde0d02f50af0e3fd20fc6bca4a": "8cafb292af58617907b9e6b9093d3588a75849b8",
-      "ee8218fa43ecb672ed45370114294228213a82318c6d1b007ec86bee3293d1f2": "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4",
-      "7b88abff5964f0cf38481ac51bf035be2c01b8827569876b3d15eb3ac340fef3": "a584272f21dc82c14b7d4f1ed440e23a976e71f0",
-      "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50": "c315672807d8ddb8d91443729405c766dd95cae7",
       "68302f00092b232545734316fefed5a69c5b4b12b59a2e39bc6533ac65862afc": "8ba966ec3fd8e4525b93bb4744424d954ba48a29",
       "0dc3972ab3cefab8209a663a6f531a2371c1c48f17e2d7ac60c8fdeb5ea89a02": "2377b1dfb00a9d84420aff88b5886520e3f7664b",
       "09d8b7c23285f099be5e468b81ac3709597f30e0798e247699d3037617bf7553": "2cb85e9dd60464d8deec5b3268e95e86b69e5bd1",
@@ -353257,6 +353047,7 @@
       "57abf3c00c82a8e042ebeb2bfe412adac9ba005e9009845236390de3ee645248": "2feafd8f1c40fdf1bd5668f8c5c02e5560945b17",
       "2a4371fadb9da65037ccd622adb77fc4c6e9a993ed2034e0e08bc320b4e9b41f": "4a06c8e66261611dce0305217c42138b71331701",
       "cb01de3464797a77b52e82f5f9b05398540df8c1151d31128d49584028589062": "29091ff60ef4c22b1ee17aa21e0e75bac6b36474",
+      "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50": "c315672807d8ddb8d91443729405c766dd95cae7",
       "7b68a0a062c5542ed326659fac563841feaeb799cbcdd479943e121419b89744": "6a40a5cec00c3b49a4fd013505c5580baa733a29",
       "1ce099cabc5485240212566f33d377f6cd115b359e20b085dd63395f2b283e66": "0d5485e67c3f033c41d677cc9936afd6ad618d5f",
       "b09db1827cfdcaf442e74328bc1e170920a6bce1ea99dcda89ee00f23b6ef467": "9e1495e62b000e1e1c868c0f3b6982e1abbb8a94",
@@ -353392,6 +353183,7 @@
       "e8b8ec052e5e7283a59173326a954773583fc282ccdf1dfff1724c30fdbc86f8": "367b5a102fb663beee8e7930b8c4acc219c1f7b3",
       "9f7571982a90268ef567bb6a8523d7c96db1d9644c85fee83c0ef0fa8a8900e1": "07783ee295274d8ff15d935bfd787c8ac1d54900",
       "31eda65b203179f466e5fcea8741ecb7c14d3c8f022e622585103e903969eadd": "33703e97cc93b7edfcc0334b64233cf81b7930db",
+      "7b88abff5964f0cf38481ac51bf035be2c01b8827569876b3d15eb3ac340fef3": "a584272f21dc82c14b7d4f1ed440e23a976e71f0",
       "1a029b414f474dfa80dfa4272338e1dd23b7d08615be9db127a2404e2b5e5acf": "282eb7bc819aad2a12fd954e76f7838a4e1a7929",
       "91259fca6a8ded428cc24046f5b48b31d4043f2afbd9087d8946eaf4e10d71a5": "21695e3f2a8f796386ce66eea8a246b0ac44810c",
       "efaedc62de4157d7a638634e6460f5dccff20dff2c043a876f830e04f1e988b1": "9a75ed4b293f968985be4c9aa893cd88276d1ced",
@@ -353403,12 +353195,16 @@
       "0a658b83257db99370f086f8ec57a5c9108ffc846e6fe567f262b63befc85dc9": "0eee1c503f71709fce8b7560dadc2d07d15edb80",
       "8096812e0cfe3040c981046f6d895d3d6b16970698727218a865b984102f2ac3": "c63d5b6a490a813a6d2890fefe9ce29e66d5c221",
       "7e0d59753fc1bc1f659baf0a1d982fe36d3a56a4de6c5a21f4023acd00371313": "015eb96dafb273d4f4512c467e9b43c305fd1bc4",
+      "6bb2eb282723e539f627a33002c2c31b633b4d3b712755f28696f0c4e49470f2": "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e",
+      "ad392df2bd366a3412f186240a40dd6fd2750c96a1779ffae77cf10aa1faf7ee": "5cfb6bca4177c45fefd571734576b55e3a127c08",
       "51dc881d1d3e8242972390224e7cfd8650987d9a620e086aca9dfdf6988fcbf1": "72703f9a3e734f3c23ec34c0727aae4ccbef9a91",
       "ae6d95f1e6d16c3d1c947b77e6087952f3204b7930c6cadae3769289a1f5a1b9": "de8b0d2d0379cfe7c39322a086ca6da68c7f23cb",
+      "dae0690d8b433ea22b76b62520341f784071dbde0d02f50af0e3fd20fc6bca4a": "8cafb292af58617907b9e6b9093d3588a75849b8",
       "841d54545c743a7202fb9b068534ed906a08cc657a19955ae20a8de5af8ab185": "e319ed08b4d53a5e421a75ea00ea02039ba6555b",
       "6d6ccab28f255b01c8cd89ceab9e7b60247f4610471118092f290f6c7768b7e3": "c9969fc36095a59787554026a9adc3b87678c794",
       "c5590212a269117657ce611acbac582e41e9db87dc78db480da2615e413b2da6": "22e50c6ba4157a3f6a821bd9937cd26e292775c6",
       "8ec5cb9fd7ec24a041800314bb5a2c99be02f7e50745194eb649ed6d9085bd1f": "65f031caa8148a5493afe42c41f4929deab26b4e",
+      "ee8218fa43ecb672ed45370114294228213a82318c6d1b007ec86bee3293d1f2": "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4",
       "be7969949f3df6344a01017426ecd2337e67f20659a80e2a26d73448253e677a": "649fbd233490bf58b35350b0123d36caaaa011eb",
       "2c738da90cd34a5df2e67f1ace2d2036b67711cfa6bf517ff7a5e20567b88266": "f12198108cbb14de4f03c6695bc16d08c85ee214",
       "897acb86e367e54f0c25407865f2d51090cef43d88d2d1e095443aed77ba4225": "773633dce5ba323a9e00d9d0f9e4d8c295df7c87",
@@ -578170,42 +577966,6 @@
       ".variants/zxevo_baseconf.rom.ff28d4cd": [
         "5da084d0425bc433952e03a6cef3f57e16a46886"
       ],
-      "Sinclair/ZX Spectrum/if1-1.rom": [
-        "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e"
-      ],
-      "ZX Spectrum/if1-1.rom": [
-        "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e"
-      ],
-      "Sinclair/ZX Spectrum/if1-2.rom": [
-        "5cfb6bca4177c45fefd571734576b55e3a127c08"
-      ],
-      "ZX Spectrum/if1-2.rom": [
-        "5cfb6bca4177c45fefd571734576b55e3a127c08"
-      ],
-      "Sinclair/ZX Spectrum/plus2.rom": [
-        "8cafb292af58617907b9e6b9093d3588a75849b8"
-      ],
-      "ZX Spectrum/plus2.rom": [
-        "8cafb292af58617907b9e6b9093d3588a75849b8"
-      ],
-      "Sinclair/ZX Spectrum/plus3.rom": [
-        "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4"
-      ],
-      "ZX Spectrum/plus3.rom": [
-        "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4"
-      ],
-      "Sinclair/ZX Spectrum/ZX_pentagon.rom": [
-        "a584272f21dc82c14b7d4f1ed440e23a976e71f0"
-      ],
-      "ZX Spectrum/ZX_pentagon.rom": [
-        "a584272f21dc82c14b7d4f1ed440e23a976e71f0"
-      ],
-      "Sega/Master System/SMS_us_1.3.sms": [
-        "c315672807d8ddb8d91443729405c766dd95cae7"
-      ],
-      "Master System/SMS_us_1.3.sms": [
-        "c315672807d8ddb8d91443729405c766dd95cae7"
-      ],
       "PC/PCem/430vx.nvr": [
         "8ba966ec3fd8e4525b93bb4744424d954ba48a29"
       ],
@@ -624076,6 +623836,12 @@
       "Master System/SMS_us_1.0b.sms": [
         "29091ff60ef4c22b1ee17aa21e0e75bac6b36474"
       ],
+      "Sega/Master System/SMS_us_1.3.sms": [
+        "c315672807d8ddb8d91443729405c766dd95cae7"
+      ],
+      "Master System/SMS_us_1.3.sms": [
+        "c315672807d8ddb8d91443729405c766dd95cae7"
+      ],
       "Sega/Mega CD/.variants/megacd_v100g_jp.bin": [
         "6a40a5cec00c3b49a4fd013505c5580baa733a29"
       ],
@@ -625009,6 +624775,12 @@
       "ZX Spectrum/256s-3.rom": [
         "33703e97cc93b7edfcc0334b64233cf81b7930db"
       ],
+      "Sinclair/ZX Spectrum/ZX_pentagon.rom": [
+        "a584272f21dc82c14b7d4f1ed440e23a976e71f0"
+      ],
+      "ZX Spectrum/ZX_pentagon.rom": [
+        "a584272f21dc82c14b7d4f1ed440e23a976e71f0"
+      ],
       "Sinclair/ZX Spectrum/ZX_trdos.rom": [
         "282eb7bc819aad2a12fd954e76f7838a4e1a7929"
       ],
@@ -625093,6 +624865,18 @@
       "ZX Spectrum/gluck.rom": [
         "015eb96dafb273d4f4512c467e9b43c305fd1bc4"
       ],
+      "Sinclair/ZX Spectrum/if1-1.rom": [
+        "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e"
+      ],
+      "ZX Spectrum/if1-1.rom": [
+        "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e"
+      ],
+      "Sinclair/ZX Spectrum/if1-2.rom": [
+        "5cfb6bca4177c45fefd571734576b55e3a127c08"
+      ],
+      "ZX Spectrum/if1-2.rom": [
+        "5cfb6bca4177c45fefd571734576b55e3a127c08"
+      ],
       "Sinclair/ZX Spectrum/plus2-0.rom": [
         "72703f9a3e734f3c23ec34c0727aae4ccbef9a91"
       ],
@@ -625104,6 +624888,12 @@
       ],
       "ZX Spectrum/plus2-1.rom": [
         "de8b0d2d0379cfe7c39322a086ca6da68c7f23cb"
+      ],
+      "Sinclair/ZX Spectrum/plus2.rom": [
+        "8cafb292af58617907b9e6b9093d3588a75849b8"
+      ],
+      "ZX Spectrum/plus2.rom": [
+        "8cafb292af58617907b9e6b9093d3588a75849b8"
       ],
       "Sinclair/ZX Spectrum/plus3-0.rom": [
         "e319ed08b4d53a5e421a75ea00ea02039ba6555b"
@@ -625128,6 +624918,12 @@
       ],
       "ZX Spectrum/plus3-3.rom": [
         "65f031caa8148a5493afe42c41f4929deab26b4e"
+      ],
+      "Sinclair/ZX Spectrum/plus3.rom": [
+        "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4"
+      ],
+      "ZX Spectrum/plus3.rom": [
+        "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4"
       ],
       "Sinclair/ZX Spectrum/plus3e-0.rom": [
         "649fbd233490bf58b35350b0123d36caaaa011eb"
@@ -629188,44 +628984,11 @@
       "sdlpal/desc.dat": [
         "8c20ff26ebfefbf9b050b67af8083704003595ba"
       ],
-      "3DO Company/3DO/goldstar_fc1_enc.bin": [
-        "8ef7503c948314d242da47b7fdc272f68dac2aee"
+      "Apple/Apple II/disk2-13boot.rom": [
+        "afd060e6f35faf3bb0146fa889fc787adf56330a"
       ],
-      "3DO/goldstar_fc1_enc.bin": [
-        "8ef7503c948314d242da47b7fdc272f68dac2aee"
-      ],
-      "3DO Company/3DO/panafz10j.bin": [
-        "fe7f9c9c6a98910013bf13f2cf798de9fea52acd"
-      ],
-      "3DO/panafz10j.bin": [
-        "fe7f9c9c6a98910013bf13f2cf798de9fea52acd"
-      ],
-      "3DO Company/3DO/panafz1e.bin": [
-        "1d0db81e171ebc1d07cefc8ce8ab082306186e56"
-      ],
-      "3DO/panafz1e.bin": [
-        "1d0db81e171ebc1d07cefc8ce8ab082306186e56"
-      ],
-      "3DO Company/3DO/sanyo_hc21_b3_unenc.bin": [
-        "c389af32bcadf0d86826927dc3d20b7072f90069"
-      ],
-      "3DO/sanyo_hc21_b3_unenc.bin": [
-        "c389af32bcadf0d86826927dc3d20b7072f90069"
-      ],
-      "Amstrad/CPC/cpc_amsdos.rom": [
-        "39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb"
-      ],
-      "CPC/cpc_amsdos.rom": [
-        "39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb"
-      ],
-      "Apple/Apple II/DiskII/boot-16.rom": [
-        "d4181c9f046aafc3fb326b381baac809d9e38d16"
-      ],
-      "Apple II/DiskII/boot-16.rom": [
-        "d4181c9f046aafc3fb326b381baac809d9e38d16"
-      ],
-      "DiskII/boot-16.rom": [
-        "d4181c9f046aafc3fb326b381baac809d9e38d16"
+      "Apple II/disk2-13boot.rom": [
+        "afd060e6f35faf3bb0146fa889fc787adf56330a"
       ],
       "Apple/Apple II/disk2-16boot.rom": [
         "d4181c9f046aafc3fb326b381baac809d9e38d16"
@@ -629239,18 +629002,6 @@
       "Apple IIGS/c600.rom": [
         "d4181c9f046aafc3fb326b381baac809d9e38d16"
       ],
-      "Apple/Apple II/apple2gs.rom2": [
-        "bc32bc0e8902946663998f56aea52be597d9e361"
-      ],
-      "Apple II/apple2gs.rom2": [
-        "bc32bc0e8902946663998f56aea52be597d9e361"
-      ],
-      "Apple/Apple II/disk2-13boot.rom": [
-        "afd060e6f35faf3bb0146fa889fc787adf56330a"
-      ],
-      "Apple II/disk2-13boot.rom": [
-        "afd060e6f35faf3bb0146fa889fc787adf56330a"
-      ],
       "Apple/Apple II/disk2-16seq.rom": [
         "bc39fbd5b9a8d2287ac5d0a42e639fc4d3c2f9d4"
       ],
@@ -629263,47 +629014,11 @@
       "Macintosh/maciix.zip": [
         "bcecee4379e0ecfa6dc0c49900dda3f8220d6ef0"
       ],
-      "Arcade/Arcade/a2diskii.zip": [
-        "d9bb189730e15d46c27e7246d7bb23137e7d761e"
-      ],
-      "Arcade/a2diskii.zip": [
-        "d9bb189730e15d46c27e7246d7bb23137e7d761e"
-      ],
-      "Arcade/Arcade/a2iwm_flop.zip": [
-        "d9bb189730e15d46c27e7246d7bb23137e7d761e"
-      ],
-      "Arcade/a2iwm_flop.zip": [
-        "d9bb189730e15d46c27e7246d7bb23137e7d761e"
-      ],
       "Arcade/MAME/a2iwm.zip": [
         "d9bb189730e15d46c27e7246d7bb23137e7d761e"
       ],
       "MAME/a2iwm.zip": [
         "d9bb189730e15d46c27e7246d7bb23137e7d761e"
-      ],
-      "Arcade/Arcade/nb_824gc.zip": [
-        "734efa75815502d58898599359cf55f8003a03a5"
-      ],
-      "Arcade/nb_824gc.zip": [
-        "734efa75815502d58898599359cf55f8003a03a5"
-      ],
-      "Arcade/Namco System 246/256.MEC": [
-        "decbccbf862a0f94735ea7b8b31181f0c8b3f01c"
-      ],
-      "Namco System 246/256.MEC": [
-        "decbccbf862a0f94735ea7b8b31181f0c8b3f01c"
-      ],
-      "Arcade/Namco System 246/COH-H31000.MEC": [
-        "decbccbf862a0f94735ea7b8b31181f0c8b3f01c"
-      ],
-      "Namco System 246/COH-H31000.MEC": [
-        "decbccbf862a0f94735ea7b8b31181f0c8b3f01c"
-      ],
-      "Arcade/Namco System 246/r27v1602f.7d": [
-        "f0a74bbcaf801f3fd0b7002ebd0118564aae3528"
-      ],
-      "Namco System 246/r27v1602f.7d": [
-        "f0a74bbcaf801f3fd0b7002ebd0118564aae3528"
       ],
       "Arcade/PinMAME/pinmame/roms/gts1s.zip": [
         "d4b0c8277c187a92279e2d2b71fc91b72d581257"
@@ -629340,54 +629055,6 @@
       ],
       "roms/gts80s.zip": [
         "a7d7a0538e2d1d9f3c623488af44b0d8b5e564e2"
-      ],
-      "Atari/5200/ROM_BASIC_C": [
-        "3693c9cb9bf3b41bae1150f7a8264992468fc8c0"
-      ],
-      "5200/ROM_BASIC_C": [
-        "3693c9cb9bf3b41bae1150f7a8264992468fc8c0"
-      ],
-      "Atari/7800/A78_NTSC_bios.bin": [
-        "d9d134bb6b36907c615a594cc7688f7bfcef5b43"
-      ],
-      "7800/A78_NTSC_bios.bin": [
-        "d9d134bb6b36907c615a594cc7688f7bfcef5b43"
-      ],
-      "Atari/7800/A78_PAL_BIOS.bin": [
-        "5a140136a16d1d83e4ff32a19409ca376a8df874"
-      ],
-      "7800/A78_PAL_BIOS.bin": [
-        "5a140136a16d1d83e4ff32a19409ca376a8df874"
-      ],
-      "Atari/Lynx/lynxboot.img": [
-        "e4ed47fae31693e016b081c6bda48da5b70d7ccb"
-      ],
-      "Lynx/lynxboot.img": [
-        "e4ed47fae31693e016b081c6bda48da5b70d7ccb"
-      ],
-      "Atari/ST/tos100.img": [
-        "9a6e4c88533a9eaa4d55cdc040e47443e0226eb2"
-      ],
-      "ST/tos100.img": [
-        "9a6e4c88533a9eaa4d55cdc040e47443e0226eb2"
-      ],
-      "Atari/ST/tos102uk.img": [
-        "87900a40a890fdf03bd08be6c60cc645855cbce5"
-      ],
-      "ST/tos102uk.img": [
-        "87900a40a890fdf03bd08be6c60cc645855cbce5"
-      ],
-      "Atari/ST/tos104uk.img": [
-        "9526ef63b9cb1d2a7109e278547ae78a5c1db6c6"
-      ],
-      "ST/tos104uk.img": [
-        "9526ef63b9cb1d2a7109e278547ae78a5c1db6c6"
-      ],
-      "Atari/ST/tos106uk.img": [
-        "06f9ea322e74b682df0396acfaee8cb4d9c90cad"
-      ],
-      "ST/tos106uk.img": [
-        "06f9ea322e74b682df0396acfaee8cb4d9c90cad"
       ],
       "BBK/GAM4980/gam4980/E.BIN": [
         "159b7e65f3f3dd67f435085be1e154316ba139e0"
@@ -630674,110 +630341,11 @@
       "Marathon Infinity/Plugins/Transparent Liquids/Transparent_Liquids.mml": [
         "90e5cf91a590482dd2c0d34f10ab8c1b0036f317"
       ],
-      "Coleco/ColecoVision/Coleco_Bios.bin": [
-        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
-      ],
-      "ColecoVision/Coleco_Bios.bin": [
-        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
-      ],
-      "Microsoft/MSX/openmsx/COLECO.ROM": [
-        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
-      ],
-      "MSX/openmsx/COLECO.ROM": [
-        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
-      ],
-      "openmsx/COLECO.ROM": [
-        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
-      ],
-      "Other/msx-emu/Machines/COL - ColecoVision/coleco.rom": [
-        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
-      ],
-      "msx-emu/Machines/COL - ColecoVision/coleco.rom": [
-        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
-      ],
-      "Machines/COL - ColecoVision/coleco.rom": [
-        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
-      ],
-      "COL - ColecoVision/coleco.rom": [
-        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
-      ],
-      "Commodore/Amiga/amiga-os-130.rom": [
-        "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
-      ],
-      "Amiga/amiga-os-130.rom": [
-        "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
-      ],
       "Commodore/Amiga/kick.rom": [
         "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
       ],
       "Amiga/kick.rom": [
         "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
-      ],
-      "Commodore/Amiga/kick34005.A500": [
-        "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
-      ],
-      "Amiga/kick34005.A500": [
-        "891e9a547772fe0c6c19b610baf8bc4ea7fcb785"
-      ],
-      "Commodore/Amiga/amiga-os-205.rom": [
-        "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
-      ],
-      "Amiga/amiga-os-205.rom": [
-        "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
-      ],
-      "Commodore/Amiga/kick205.rom": [
-        "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
-      ],
-      "Amiga/kick205.rom": [
-        "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
-      ],
-      "Commodore/Amiga/kick37350.A600": [
-        "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
-      ],
-      "Amiga/kick37350.A600": [
-        "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
-      ],
-      "Commodore/Amiga/cd32.rom": [
-        "3525be8887f79b5929e017b42380a79edfee542d"
-      ],
-      "Amiga/cd32.rom": [
-        "3525be8887f79b5929e017b42380a79edfee542d"
-      ],
-      "Commodore/Amiga/kick40060.CD32": [
-        "3525be8887f79b5929e017b42380a79edfee542d"
-      ],
-      "Amiga/kick40060.CD32": [
-        "3525be8887f79b5929e017b42380a79edfee542d"
-      ],
-      "Commodore/Amiga/cd32ext.rom": [
-        "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f"
-      ],
-      "Amiga/cd32ext.rom": [
-        "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f"
-      ],
-      "Commodore/Amiga/kick40060.CD32.ext": [
-        "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f"
-      ],
-      "Amiga/kick40060.CD32.ext": [
-        "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f"
-      ],
-      "Commodore/Amiga/cdtv.rom": [
-        "7ba40ffa17e500ed9fed041f3424bd81d9c907be"
-      ],
-      "Amiga/cdtv.rom": [
-        "7ba40ffa17e500ed9fed041f3424bd81d9c907be"
-      ],
-      "Commodore/Amiga/cdtvext.rom": [
-        "7ba40ffa17e500ed9fed041f3424bd81d9c907be"
-      ],
-      "Amiga/cdtvext.rom": [
-        "7ba40ffa17e500ed9fed041f3424bd81d9c907be"
-      ],
-      "Commodore/Amiga/kick34005.CDTV": [
-        "7ba40ffa17e500ed9fed041f3424bd81d9c907be"
-      ],
-      "Amiga/kick34005.CDTV": [
-        "7ba40ffa17e500ed9fed041f3424bd81d9c907be"
       ],
       "Commodore/Amiga/kick20.rom": [
         "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
@@ -630785,46 +630353,10 @@
       "Amiga/kick20.rom": [
         "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
       ],
-      "Commodore/Amiga/kick37175.A500": [
-        "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
-      ],
-      "Amiga/kick37175.A500": [
-        "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
-      ],
-      "Commodore/Amiga/kick33180.A500": [
-        "11f9e62cf299f72184835b7b2a70a16333fc0d88"
-      ],
-      "Amiga/kick33180.A500": [
-        "11f9e62cf299f72184835b7b2a70a16333fc0d88"
-      ],
-      "Commodore/Amiga/kick40063.A600": [
-        "3b7f1493b27e212830f989f26ca76c02049f09ca"
-      ],
-      "Amiga/kick40063.A600": [
-        "3b7f1493b27e212830f989f26ca76c02049f09ca"
-      ],
-      "Commodore/Amiga/kick40068.A1200": [
-        "e21545723fe8374e91342617604f1b3d703094f1"
-      ],
-      "Amiga/kick40068.A1200": [
-        "e21545723fe8374e91342617604f1b3d703094f1"
-      ],
-      "Commodore/Amiga/kick40068.A4000": [
-        "5fe04842d04a489720f0f4bb0e46948199406f49"
-      ],
-      "Amiga/kick40068.A4000": [
-        "5fe04842d04a489720f0f4bb0e46948199406f49"
-      ],
       "Commodore/C64/1541 ROM": [
         "ab16f56989b27d89babe5f89c5a8cb3da71a82f0"
       ],
       "C64/1541 ROM": [
-        "ab16f56989b27d89babe5f89c5a8cb3da71a82f0"
-      ],
-      "Commodore/C64/C64_Drive-1541.bin": [
-        "ab16f56989b27d89babe5f89c5a8cb3da71a82f0"
-      ],
-      "C64/C64_Drive-1541.bin": [
         "ab16f56989b27d89babe5f89c5a8cb3da71a82f0"
       ],
       "Commodore/C64/dos1541": [
@@ -630839,23 +630371,11 @@
       "C64/Basic ROM": [
         "79015323128650c742a3694c9429aa91f355905e"
       ],
-      "Commodore/C64/C64_Basic.bin": [
-        "79015323128650c742a3694c9429aa91f355905e"
-      ],
-      "C64/C64_Basic.bin": [
-        "79015323128650c742a3694c9429aa91f355905e"
-      ],
       "Commodore/C64/basic": [
         "79015323128650c742a3694c9429aa91f355905e"
       ],
       "C64/basic": [
         "79015323128650c742a3694c9429aa91f355905e"
-      ],
-      "Commodore/C64/C64_Chargen.bin": [
-        "adc7c31e18c7c7413d54802ef2f4193da14711aa"
-      ],
-      "C64/C64_Chargen.bin": [
-        "adc7c31e18c7c7413d54802ef2f4193da14711aa"
       ],
       "Commodore/C64/Char ROM": [
         "adc7c31e18c7c7413d54802ef2f4193da14711aa"
@@ -630869,29 +630389,11 @@
       "C64/chargen": [
         "adc7c31e18c7c7413d54802ef2f4193da14711aa"
       ],
-      "Commodore/C64/C64_Drive-1541ii.bin": [
-        "d3b78c3dbac55f5199f33f3fe0036439811f7fb3"
-      ],
-      "C64/C64_Drive-1541ii.bin": [
-        "d3b78c3dbac55f5199f33f3fe0036439811f7fb3"
-      ],
       "Commodore/C64/d1541II": [
         "d3b78c3dbac55f5199f33f3fe0036439811f7fb3"
       ],
       "C64/d1541II": [
         "d3b78c3dbac55f5199f33f3fe0036439811f7fb3"
-      ],
-      "Commodore/C64/C64_Kernal.bin": [
-        "1d503e56df85a62fee696e7618dc5b4e781df1bb"
-      ],
-      "C64/C64_Kernal.bin": [
-        "1d503e56df85a62fee696e7618dc5b4e781df1bb"
-      ],
-      "Commodore/C64/kernal": [
-        "1d503e56df85a62fee696e7618dc5b4e781df1bb"
-      ],
-      "C64/kernal": [
-        "1d503e56df85a62fee696e7618dc5b4e781df1bb"
       ],
       "Commodore/C64/dos1001": [
         "d50b093828888146596f17ae0df9ef3dfde71b05"
@@ -630965,113 +630467,17 @@
       "C64/jpkernal": [
         "4ff0f11e80f4b57430d8f0c3799ed0f0e0f4565d"
       ],
+      "Commodore/C64/kernal": [
+        "1d503e56df85a62fee696e7618dc5b4e781df1bb"
+      ],
+      "C64/kernal": [
+        "1d503e56df85a62fee696e7618dc5b4e781df1bb"
+      ],
       "Commodore/C64/sxkernal": [
         "aa136e91ecf3c5ac64f696b3dbcbfc5ba0871c98"
       ],
       "C64/sxkernal": [
         "aa136e91ecf3c5ac64f696b3dbcbfc5ba0871c98"
-      ],
-      "Commodore/Plus4/basic.318006-01.bin": [
-        "161c96b4ad20f3a4f2321808e37a5ded26a135dd"
-      ],
-      "Plus4/basic.318006-01.bin": [
-        "161c96b4ad20f3a4f2321808e37a5ded26a135dd"
-      ],
-      "Commodore/Plus4/kernal.318004-05.bin": [
-        "7c7e07f016391174a557e790c4ef1cbe33512cdb"
-      ],
-      "Plus4/kernal.318004-05.bin": [
-        "7c7e07f016391174a557e790c4ef1cbe33512cdb"
-      ],
-      "Commodore/VIC-20/basic.bin": [
-        "587d1e90950675ab6b12d91248a3f0d640d02e8d"
-      ],
-      "VIC-20/basic.bin": [
-        "587d1e90950675ab6b12d91248a3f0d640d02e8d"
-      ],
-      "Commodore/VIC-20/characters-english.bin": [
-        "4fd85ab6647ee2ac7ba40f729323f2472d35b9b4"
-      ],
-      "VIC-20/characters-english.bin": [
-        "4fd85ab6647ee2ac7ba40f729323f2472d35b9b4"
-      ],
-      "Commodore/VIC-20/characters-japanese.bin": [
-        "dae61ac03065aa2904af5c123ce821855898c555"
-      ],
-      "VIC-20/characters-japanese.bin": [
-        "dae61ac03065aa2904af5c123ce821855898c555"
-      ],
-      "Commodore/VIC-20/kernel-japanese.bin": [
-        "c9ead45e6674d1042ca6199160e8583c23aeac22"
-      ],
-      "VIC-20/kernel-japanese.bin": [
-        "c9ead45e6674d1042ca6199160e8583c23aeac22"
-      ],
-      "Commodore/VIC-20/kernel-ntsc.bin": [
-        "06de7ec017a5e78bd6746d89c2ecebb646efeb19"
-      ],
-      "VIC-20/kernel-ntsc.bin": [
-        "06de7ec017a5e78bd6746d89c2ecebb646efeb19"
-      ],
-      "Commodore/VIC-20/kernel-pal.bin": [
-        "ce0137ed69f003a299f43538fa9eee27898e621e"
-      ],
-      "VIC-20/kernel-pal.bin": [
-        "ce0137ed69f003a299f43538fa9eee27898e621e"
-      ],
-      "Dragon/Dragon/d200rom1.rom": [
-        "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69"
-      ],
-      "Dragon/d200rom1.rom": [
-        "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69"
-      ],
-      "Dragon/Dragon/d64_1.rom": [
-        "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69"
-      ],
-      "Dragon/d64_1.rom": [
-        "1983b4fb398e3dd9668d424c666c5a0b3f1e2b69"
-      ],
-      "Dragon/Dragon/d64_2.rom": [
-        "e3c8986bb1d44269c4587b04f1ca27a70b0aaa2e"
-      ],
-      "Dragon/d64_2.rom": [
-        "e3c8986bb1d44269c4587b04f1ca27a70b0aaa2e"
-      ],
-      "Dragon/Dragon/deltados.rom": [
-        "686ebb5f39dd4fc907a0b748867d0a022d2f1a60"
-      ],
-      "Dragon/deltados.rom": [
-        "686ebb5f39dd4fc907a0b748867d0a022d2f1a60"
-      ],
-      "Enterprise/64-128/exos20.rom": [
-        "6033a0535136c40c47137e4d1cd9273c06d5fdff"
-      ],
-      "64-128/exos20.rom": [
-        "6033a0535136c40c47137e4d1cd9273c06d5fdff"
-      ],
-      "Enterprise/64-128/zx48.rom": [
-        "5ea7c2b824672e914525d1d5c419d71b84a426a2"
-      ],
-      "64-128/zx48.rom": [
-        "5ea7c2b824672e914525d1d5c419d71b84a426a2"
-      ],
-      "Sinclair/ZX Spectrum/48.rom": [
-        "5ea7c2b824672e914525d1d5c419d71b84a426a2"
-      ],
-      "ZX Spectrum/48.rom": [
-        "5ea7c2b824672e914525d1d5c419d71b84a426a2"
-      ],
-      "Sinclair/ZX Spectrum/spectrum48.rom": [
-        "5ea7c2b824672e914525d1d5c419d71b84a426a2"
-      ],
-      "ZX Spectrum/spectrum48.rom": [
-        "5ea7c2b824672e914525d1d5c419d71b84a426a2"
-      ],
-      "Fairchild/Channel F/ChannelF_SL31253.rom": [
-        "81193965a374d77b99b4743d317824b53c3e3c78"
-      ],
-      "Channel F/ChannelF_SL31253.rom": [
-        "81193965a374d77b99b4743d317824b53c3e3c78"
       ],
       "Fairchild/Channel F/sl31253.bin": [
         "81193965a374d77b99b4743d317824b53c3e3c78"
@@ -631079,23 +630485,11 @@
       "Channel F/sl31253.bin": [
         "81193965a374d77b99b4743d317824b53c3e3c78"
       ],
-      "Fairchild/Channel F/ChannelF_SL31254.rom": [
-        "8f70d1b74483ba3a37e86cf16c849d601a8c3d2c"
-      ],
-      "Channel F/ChannelF_SL31254.rom": [
-        "8f70d1b74483ba3a37e86cf16c849d601a8c3d2c"
-      ],
       "Fairchild/Channel F/sl31254.bin": [
         "8f70d1b74483ba3a37e86cf16c849d601a8c3d2c"
       ],
       "Channel F/sl31254.bin": [
         "8f70d1b74483ba3a37e86cf16c849d601a8c3d2c"
-      ],
-      "Fairchild/Channel F/ChannelF_sl90025.rom": [
-        "759e2ed31fbde4a2d8daf8b9f3e0dffebc90dae2"
-      ],
-      "Channel F/ChannelF_sl90025.rom": [
-        "759e2ed31fbde4a2d8daf8b9f3e0dffebc90dae2"
       ],
       "Fairchild/Channel F/sl90025.bin": [
         "759e2ed31fbde4a2d8daf8b9f3e0dffebc90dae2"
@@ -647280,167 +646674,32 @@
       "voice/E482.WAV": [
         "377332bc70c90a406174898e28460f860e96e5d7"
       ],
-      "Mattel/Intellivision/exec.bin": [
-        "5a65b922b562cb1f57dab51b73151283f0e20c7a"
+      "Microsoft/MSX/openmsx/COLECO.ROM": [
+        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
       ],
-      "Intellivision/exec.bin": [
-        "5a65b922b562cb1f57dab51b73151283f0e20c7a"
+      "MSX/openmsx/COLECO.ROM": [
+        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
       ],
-      "Mattel/Intellivision/grom.bin": [
-        "f9608bb4ad1cfe3640d02844c7ad8e0bcd974917"
+      "openmsx/COLECO.ROM": [
+        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
       ],
-      "Intellivision/grom.bin": [
-        "f9608bb4ad1cfe3640d02844c7ad8e0bcd974917"
+      "Other/msx-emu/Machines/COL - ColecoVision/coleco.rom": [
+        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
       ],
-      "Microsoft/MSX/DEFAULT.FNT": [
-        "000ac11b702a4c42e40f135df12fa5f2f13e20a1"
+      "msx-emu/Machines/COL - ColecoVision/coleco.rom": [
+        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
       ],
-      "MSX/DEFAULT.FNT": [
-        "000ac11b702a4c42e40f135df12fa5f2f13e20a1"
+      "Machines/COL - ColecoVision/coleco.rom": [
+        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
       ],
-      "Microsoft/MSX/MSX_1.0.rom": [
-        "3656bb3bbc17d280d2016fe4f6ff3cded3082a41"
-      ],
-      "MSX/MSX_1.0.rom": [
-        "3656bb3bbc17d280d2016fe4f6ff3cded3082a41"
-      ],
-      "Microsoft/MSX/MSX_jpn.rom": [
-        "302afb5d8be26c758309ca3df611ae69cced2821"
-      ],
-      "MSX/MSX_jpn.rom": [
-        "302afb5d8be26c758309ca3df611ae69cced2821"
-      ],
-      "Microsoft/MSX/openmsx/px-7_basic-bios1.rom": [
-        "302afb5d8be26c758309ca3df611ae69cced2821"
-      ],
-      "MSX/openmsx/px-7_basic-bios1.rom": [
-        "302afb5d8be26c758309ca3df611ae69cced2821"
-      ],
-      "openmsx/px-7_basic-bios1.rom": [
-        "302afb5d8be26c758309ca3df611ae69cced2821"
-      ],
-      "Microsoft/MSX/nms8250_basic-bios2.rom": [
-        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
-      ],
-      "MSX/nms8250_basic-bios2.rom": [
-        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
-      ],
-      "Other/msx-emu/Machines/Shared Roms/MSX2.rom": [
-        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
-      ],
-      "msx-emu/Machines/Shared Roms/MSX2.rom": [
-        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
-      ],
-      "Machines/Shared Roms/MSX2.rom": [
-        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
-      ],
-      "Shared Roms/MSX2.rom": [
-        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
-      ],
-      "Microsoft/MSX/nms8250_msx2sub.rom": [
-        "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02"
-      ],
-      "MSX/nms8250_msx2sub.rom": [
-        "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02"
-      ],
-      "Other/msx-emu/Machines/Shared Roms/MSX2EXT.rom": [
-        "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02"
-      ],
-      "msx-emu/Machines/Shared Roms/MSX2EXT.rom": [
-        "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02"
-      ],
-      "Machines/Shared Roms/MSX2EXT.rom": [
-        "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02"
-      ],
-      "Shared Roms/MSX2EXT.rom": [
-        "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02"
-      ],
-      "Microsoft/MSX/openmsx/fs-a1wsx_msx2psub.rom": [
-        "fe0254cbfc11405b79e7c86c7769bd6322b04995"
-      ],
-      "MSX/openmsx/fs-a1wsx_msx2psub.rom": [
-        "fe0254cbfc11405b79e7c86c7769bd6322b04995"
-      ],
-      "openmsx/fs-a1wsx_msx2psub.rom": [
-        "fe0254cbfc11405b79e7c86c7769bd6322b04995"
-      ],
-      "Other/msx-emu/Machines/Shared Roms/MSX2PEXT.rom": [
-        "fe0254cbfc11405b79e7c86c7769bd6322b04995"
-      ],
-      "msx-emu/Machines/Shared Roms/MSX2PEXT.rom": [
-        "fe0254cbfc11405b79e7c86c7769bd6322b04995"
-      ],
-      "Machines/Shared Roms/MSX2PEXT.rom": [
-        "fe0254cbfc11405b79e7c86c7769bd6322b04995"
-      ],
-      "Shared Roms/MSX2PEXT.rom": [
-        "fe0254cbfc11405b79e7c86c7769bd6322b04995"
+      "COL - ColecoVision/coleco.rom": [
+        "45bedc4cbdeac66c7df59e9e599195c778d86a92"
       ],
       "Microsoft/Xbox/Complex_4627v1.03.bin": [
         "3944392c954cfb176d4210544e88353b3c5d36b1"
       ],
       "Xbox/Complex_4627v1.03.bin": [
         "3944392c954cfb176d4210544e88353b3c5d36b1"
-      ],
-      "NEC/PC Engine CD/PCECD_3.0-(J).pce": [
-        "79f5ff55dd10187c7fd7b8daab0b3ffbd1f56a2c"
-      ],
-      "PC Engine CD/PCECD_3.0-(J).pce": [
-        "79f5ff55dd10187c7fd7b8daab0b3ffbd1f56a2c"
-      ],
-      "NEC/PC Engine CD/PCECD_gecard.pce": [
-        "014881a959e045e00f4db8f52955200865d40280"
-      ],
-      "PC Engine CD/PCECD_gecard.pce": [
-        "014881a959e045e00f4db8f52955200865d40280"
-      ],
-      "NEC/PC-88/N88KNJ1.ROM": [
-        "82e11a177af6a5091dd67f50a2f4bafda84d6556"
-      ],
-      "PC-88/N88KNJ1.ROM": [
-        "82e11a177af6a5091dd67f50a2f4bafda84d6556"
-      ],
-      "NEC/PC-FX/fx-scsi.rom": [
-        "65482a23ac5c10a6095aee1db5824cca54ead6e5"
-      ],
-      "PC-FX/fx-scsi.rom": [
-        "65482a23ac5c10a6095aee1db5824cca54ead6e5"
-      ],
-      "NEC/PC-FX/pcfx.rom": [
-        "1a77fd83e337f906aecab27a1604db064cf10074"
-      ],
-      "PC-FX/pcfx.rom": [
-        "1a77fd83e337f906aecab27a1604db064cf10074"
-      ],
-      "Nintendo/Famicom Disk System/FDS_disksys-nintendo.rom": [
-        "57fe1bdee955bb48d357e463ccbf129496930b62"
-      ],
-      "Famicom Disk System/FDS_disksys-nintendo.rom": [
-        "57fe1bdee955bb48d357e463ccbf129496930b62"
-      ],
-      "Nintendo/Famicom Disk System/disksys.rom": [
-        "57fe1bdee955bb48d357e463ccbf129496930b62"
-      ],
-      "Famicom Disk System/disksys.rom": [
-        "57fe1bdee955bb48d357e463ccbf129496930b62"
-      ],
-      "Nintendo/Game Boy/dmg_rom.bin": [
-        "4ed31ec6b0b175bb109c0eb5fd3d193da823339f"
-      ],
-      "Game Boy/dmg_rom.bin": [
-        "4ed31ec6b0b175bb109c0eb5fd3d193da823339f"
-      ],
-      "Nintendo/Game Boy Advance/gba_bios.bin": [
-        "300c20df6731a33952ded8c436f7f186d25d3492"
-      ],
-      "Game Boy Advance/gba_bios.bin": [
-        "300c20df6731a33952ded8c436f7f186d25d3492"
-      ],
-      "Nintendo/Game Boy Color/gbc_bios.bin": [
-        "1293d68bf9643bc4f36954c1e80e38f39864528d"
-      ],
-      "Game Boy Color/gbc_bios.bin": [
-        "1293d68bf9643bc4f36954c1e80e38f39864528d"
       ],
       "Nintendo/NES/custom.pal": [
         "c7635019127aa28d84d28ae48304bfca6d5baefb"
@@ -647493,71 +646752,11 @@
       "mptennis/19.wav": [
         "b8000eada705cf56630266b151564d054d3e2a06"
       ],
-      "Nintendo/NES/ymf288_adpcm_rom.bin": [
-        "50b6c3e288eaa12ad275d4f323267bb72b0445df"
-      ],
-      "NES/ymf288_adpcm_rom.bin": [
-        "50b6c3e288eaa12ad275d4f323267bb72b0445df"
-      ],
-      "Nintendo/Nintendo 64DD/64DD_IPL_DEV.n64": [
-        "10c4173c2a7eb09c6579818f72ef18fa0b6d32de"
-      ],
-      "Nintendo 64DD/64DD_IPL_DEV.n64": [
-        "10c4173c2a7eb09c6579818f72ef18fa0b6d32de"
-      ],
-      "Nintendo/Nintendo 64DD/IPL_DEV.n64": [
-        "10c4173c2a7eb09c6579818f72ef18fa0b6d32de"
-      ],
-      "Nintendo 64DD/IPL_DEV.n64": [
-        "10c4173c2a7eb09c6579818f72ef18fa0b6d32de"
-      ],
       "Nintendo/Nintendo 64DD/64DD_IPL_JP.n64": [
         "bf861922dcb78c316360e3e742f4f70ff63c9bc3"
       ],
       "Nintendo 64DD/64DD_IPL_JP.n64": [
         "bf861922dcb78c316360e3e742f4f70ff63c9bc3"
-      ],
-      "Nintendo/Nintendo 64DD/64DD_IPL_v12_JPN.bin": [
-        "bf861922dcb78c316360e3e742f4f70ff63c9bc3"
-      ],
-      "Nintendo 64DD/64DD_IPL_v12_JPN.bin": [
-        "bf861922dcb78c316360e3e742f4f70ff63c9bc3"
-      ],
-      "Nintendo/Nintendo 64DD/64DD_IPL_USA.bin": [
-        "3c5b93ca231550c68693a14f03cea8d5dbd1be9e"
-      ],
-      "Nintendo 64DD/64DD_IPL_USA.bin": [
-        "3c5b93ca231550c68693a14f03cea8d5dbd1be9e"
-      ],
-      "Nintendo/Nintendo 64DD/IPL_USA.n64": [
-        "3c5b93ca231550c68693a14f03cea8d5dbd1be9e"
-      ],
-      "Nintendo 64DD/IPL_USA.n64": [
-        "3c5b93ca231550c68693a14f03cea8d5dbd1be9e"
-      ],
-      "Nintendo/Nintendo DS/nds7.bin": [
-        "24f67bdea115a2c847c8813a262502ee1607b7df"
-      ],
-      "Nintendo DS/nds7.bin": [
-        "24f67bdea115a2c847c8813a262502ee1607b7df"
-      ],
-      "Nintendo/Nintendo DS/nds9.bin": [
-        "bfaac75f101c135e32e2aaf541de6b1be4c8c62d"
-      ],
-      "Nintendo DS/nds9.bin": [
-        "bfaac75f101c135e32e2aaf541de6b1be4c8c62d"
-      ],
-      "Nintendo/SNES/cx4.data.rom": [
-        "a002f4efba42775a31185d443f3ed1790b0e949a"
-      ],
-      "SNES/cx4.data.rom": [
-        "a002f4efba42775a31185d443f3ed1790b0e949a"
-      ],
-      "Nintendo/Satellaview/BS-X.bin": [
-        "604556b2e62860af18db5a77f2956ebc75450020"
-      ],
-      "Satellaview/BS-X.bin": [
-        "604556b2e62860af18db5a77f2956ebc75450020"
       ],
       "Nintendo/Super Game Boy/SGB1.sfc/sgb1.boot.rom": [
         "aa2f50a77dfb4823da96ba99309085a3c6278515"
@@ -647568,12 +646767,6 @@
       "SGB1.sfc/sgb1.boot.rom": [
         "aa2f50a77dfb4823da96ba99309085a3c6278515"
       ],
-      "Nintendo/Super Game Boy/sgb.boot.rom": [
-        "aa2f50a77dfb4823da96ba99309085a3c6278515"
-      ],
-      "Super Game Boy/sgb.boot.rom": [
-        "aa2f50a77dfb4823da96ba99309085a3c6278515"
-      ],
       "Nintendo/Super Game Boy/SGB2.sfc/sgb2.boot.rom": [
         "93407ea10d2f30ab96a314d8eca44fe160aea734"
       ],
@@ -647582,24 +646775,6 @@
       ],
       "SGB2.sfc/sgb2.boot.rom": [
         "93407ea10d2f30ab96a314d8eca44fe160aea734"
-      ],
-      "Nintendo/Super Game Boy/SNES_SGB2_(J).sfc": [
-        "e5b2922ca137051059e4269b236d07a22c07bc84"
-      ],
-      "Super Game Boy/SNES_SGB2_(J).sfc": [
-        "e5b2922ca137051059e4269b236d07a22c07bc84"
-      ],
-      "Nintendo/Super Game Boy/sgb2.program.rom": [
-        "e5b2922ca137051059e4269b236d07a22c07bc84"
-      ],
-      "Super Game Boy/sgb2.program.rom": [
-        "e5b2922ca137051059e4269b236d07a22c07bc84"
-      ],
-      "Nintendo/Super Game Boy/sgb1.program.rom": [
-        "973e10840db683cf3faf61bd443090786b3a9f04"
-      ],
-      "Super Game Boy/sgb1.program.rom": [
-        "973e10840db683cf3faf61bd443090786b3a9f04"
       ],
       "Nintendo/Wii U/mlc01/sys/title/0005001b/10054000/content/scerts/CACERT_NINTENDO_CA.der": [
         "b5229455dd26c1f53c73060e9089b391389e1f75"
@@ -647640,18 +646815,6 @@
       "a7800/xm.zip": [
         "bf84d9fb5d23b679460dbdd3b6992a90fd432fd2"
       ],
-      "Other/beebem/BeebFile/Master ET/ANFS425.rom": [
-        "14f75d36ffe9af14aaac42df55b4fe3729ba75cf"
-      ],
-      "beebem/BeebFile/Master ET/ANFS425.rom": [
-        "14f75d36ffe9af14aaac42df55b4fe3729ba75cf"
-      ],
-      "BeebFile/Master ET/ANFS425.rom": [
-        "14f75d36ffe9af14aaac42df55b4fe3729ba75cf"
-      ],
-      "Master ET/ANFS425.rom": [
-        "14f75d36ffe9af14aaac42df55b4fe3729ba75cf"
-      ],
       "Other/c64-emu/CBM-II/pepto-pal.vpl": [
         "d4d062dc812a8e136a4a8696959672890e5b9543"
       ],
@@ -647682,12 +646845,6 @@
       "Chihiro/ic10_g24lc64.bin": [
         "3ababd4334d8d57abb22dd98bd2d347df39648d9"
       ],
-      "Other/fbneo/136032.107.b2": [
-        "72ba464da01bd6d3a91b8d9997d5ac14b6f47aad"
-      ],
-      "fbneo/136032.107.b2": [
-        "72ba464da01bd6d3a91b8d9997d5ac14b6f47aad"
-      ],
       "Other/hakux/C/msdash.xbe": [
         "4d8d6b1d3f7ace05cbaf03565382b0e6e40c706c"
       ],
@@ -647714,24 +646871,6 @@
       ],
       "mame/hash/k28o.xml": [
         "c8e1b348aee1ef0b600b6951f88182a9796a8aef"
-      ],
-      "Other/mednafen/apple2e-enh-video.rom": [
-        "b2b5d87f52693817fc747df087a4aa1ddcdb1f10"
-      ],
-      "mednafen/apple2e-enh-video.rom": [
-        "b2b5d87f52693817fc747df087a4aa1ddcdb1f10"
-      ],
-      "Other/mednafen/apple2e-enh.rom": [
-        "b8ea90abe135a0031065e01697c4a3a20d51198b"
-      ],
-      "mednafen/apple2e-enh.rom": [
-        "b8ea90abe135a0031065e01697c4a3a20d51198b"
-      ],
-      "Other/mednafen/apple2e-video.rom": [
-        "58ad0008df72896a18601e090ee0d58155ffa5be"
-      ],
-      "mednafen/apple2e-video.rom": [
-        "58ad0008df72896a18601e090ee0d58155ffa5be"
       ],
       "Other/msx-emu/Machines/Shared Roms/FMPAC.rom": [
         "9d789166e3caf28e4742fe933d962e99618c633d"
@@ -647780,6 +646919,42 @@
       ],
       "Shared Roms/MSX.rom": [
         "e998f0c441f4f1800ef44e42cd1659150206cf79"
+      ],
+      "Other/msx-emu/Machines/Shared Roms/MSX2.rom": [
+        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
+      ],
+      "msx-emu/Machines/Shared Roms/MSX2.rom": [
+        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
+      ],
+      "Machines/Shared Roms/MSX2.rom": [
+        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
+      ],
+      "Shared Roms/MSX2.rom": [
+        "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"
+      ],
+      "Other/msx-emu/Machines/Shared Roms/MSX2EXT.rom": [
+        "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02"
+      ],
+      "msx-emu/Machines/Shared Roms/MSX2EXT.rom": [
+        "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02"
+      ],
+      "Machines/Shared Roms/MSX2EXT.rom": [
+        "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02"
+      ],
+      "Shared Roms/MSX2EXT.rom": [
+        "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02"
+      ],
+      "Other/msx-emu/Machines/Shared Roms/MSX2PEXT.rom": [
+        "fe0254cbfc11405b79e7c86c7769bd6322b04995"
+      ],
+      "msx-emu/Machines/Shared Roms/MSX2PEXT.rom": [
+        "fe0254cbfc11405b79e7c86c7769bd6322b04995"
+      ],
+      "Machines/Shared Roms/MSX2PEXT.rom": [
+        "fe0254cbfc11405b79e7c86c7769bd6322b04995"
+      ],
+      "Shared Roms/MSX2PEXT.rom": [
+        "fe0254cbfc11405b79e7c86c7769bd6322b04995"
       ],
       "Other/msx-emu/Machines/Shared Roms/MSXJ.rom": [
         "df48902f5f12af8867ae1a87f255145f0e5e0774"
@@ -647840,21 +647015,6 @@
       ],
       "Shared Roms/PHILIPSDISK.rom": [
         "c3efedda7ab947a06d9345f7b8261076fa7ceeef"
-      ],
-      "Other/nethersx2/assets/icons/flags/PAL-M.png": [
-        "c78cd2ff8c2f363043a753b663af8855ee3b02f5"
-      ],
-      "nethersx2/assets/icons/flags/PAL-M.png": [
-        "c78cd2ff8c2f363043a753b663af8855ee3b02f5"
-      ],
-      "assets/icons/flags/PAL-M.png": [
-        "c78cd2ff8c2f363043a753b663af8855ee3b02f5"
-      ],
-      "icons/flags/PAL-M.png": [
-        "c78cd2ff8c2f363043a753b663af8855ee3b02f5"
-      ],
-      "flags/PAL-M.png": [
-        "c78cd2ff8c2f363043a753b663af8855ee3b02f5"
       ],
       "Other/opentyrian/tyrset.pcx": [
         "50ef0cd9eaa2ae0c0c628c141400b76101223385"
@@ -657312,12 +656472,6 @@
       "xemu/eeprom.bin": [
         "ff3e7eaf715fe5612e46fc984d686ed3b115baef"
       ],
-      "Other/zesarux/svi.rom": [
-        "7d8daf52f78371ca2c9443e04827c8e1f98c8f2c"
-      ],
-      "zesarux/svi.rom": [
-        "7d8daf52f78371ca2c9443e04827c8e1f98c8f2c"
-      ],
       "PC/PCem/acerv35n.nvr": [
         "2cb85e9dd60464d8deec5b3268e95e86b69e5bd1"
       ],
@@ -657420,41 +656574,11 @@
       "PCem/tandy1000sl2.bin": [
         "c04eca197b3a8b668f039ae80ac6e3b45b5d6ee6"
       ],
-      "Philips/Videopac/O2_Odyssey2.bin": [
-        "b2e1955d957a475de2411770452eff4ea19f4cee"
-      ],
-      "Videopac/O2_Odyssey2.bin": [
-        "b2e1955d957a475de2411770452eff4ea19f4cee"
-      ],
-      "Philips/Videopac+/c52.bin": [
-        "a6120aed50831c9c0d95dbdf707820f601d9452e"
-      ],
-      "Videopac+/c52.bin": [
-        "a6120aed50831c9c0d95dbdf707820f601d9452e"
-      ],
-      "Philips/Videopac+/g7400.bin": [
-        "5130243429b40b01a14e1304d0394b8459a6fbae"
-      ],
-      "Videopac+/g7400.bin": [
-        "5130243429b40b01a14e1304d0394b8459a6fbae"
-      ],
       "Pioneer/LaserActive/[BIOS] LaserActive PAC-S10 (US) (v1.04).bin": [
         "aa811861f8874775075bd3f53008c8aaf59b07db"
       ],
       "LaserActive/[BIOS] LaserActive PAC-S10 (US) (v1.04).bin": [
         "aa811861f8874775075bd3f53008c8aaf59b07db"
-      ],
-      "Pioneer/LaserActive/mega_ld_bios_U.bin": [
-        "aa811861f8874775075bd3f53008c8aaf59b07db"
-      ],
-      "LaserActive/mega_ld_bios_U.bin": [
-        "aa811861f8874775075bd3f53008c8aaf59b07db"
-      ],
-      "Pioneer/LaserActive/mega_ld_bios_J.bin": [
-        "26237b333db4a4c6770297fa5e655ea95840d5d9"
-      ],
-      "LaserActive/mega_ld_bios_J.bin": [
-        "26237b333db4a4c6770297fa5e655ea95840d5d9"
       ],
       "RPG Maker/easyrpg/rtp/2003/Battle/Arrow.png": [
         "7aa8d4c377efcea1c9fad01924da1ba7b8575e1e"
@@ -666474,29 +665598,11 @@
       "mt32-roms/pcm_mt32.rom": [
         "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252"
       ],
-      "SNK/Neo Geo CD/uni-bioscd.rom": [
-        "5142f205912869b673a71480c5828b1eaed782a8"
-      ],
-      "Neo Geo CD/uni-bioscd.rom": [
-        "5142f205912869b673a71480c5828b1eaed782a8"
-      ],
       "SNK/Neo Geo Pocket/[BIOS] SNK Neo Geo Pocket (Japan, Europe) (En,Ja).ngp": [
         "edc13192054a59be49c6d55f83b70e2510968e86"
       ],
       "Neo Geo Pocket/[BIOS] SNK Neo Geo Pocket (Japan, Europe) (En,Ja).ngp": [
         "edc13192054a59be49c6d55f83b70e2510968e86"
-      ],
-      "SNK/Neo Geo Pocket/[BIOS] SNK Neo Geo Pocket Color (Japan) (En,Ja).ngc": [
-        "edc13192054a59be49c6d55f83b70e2510968e86"
-      ],
-      "Neo Geo Pocket/[BIOS] SNK Neo Geo Pocket Color (Japan) (En,Ja).ngc": [
-        "edc13192054a59be49c6d55f83b70e2510968e86"
-      ],
-      "SNK/Neo Geo Pocket/ngp_bios.rom": [
-        "2f6429b68446536d8b03f35d02f1e98beb6460a0"
-      ],
-      "Neo Geo Pocket/ngp_bios.rom": [
-        "2f6429b68446536d8b03f35d02f1e98beb6460a0"
       ],
       "Sega/Arcade/epr-10381b.132": [
         "bf3ff05bbf81bdd44567f3b9bb4919ed4a499624"
@@ -666510,41 +665616,11 @@
       "Arcade/opr-10186.47": [
         "a554d4b68e71861a0d0da4d031b3b811b246f082"
       ],
-      "Sega/Dreamcast/dc_boot.bin": [
-        "8951d1bb219ab2ff8583033d2119c899cc81f18c"
-      ],
-      "Dreamcast/dc_boot.bin": [
-        "8951d1bb219ab2ff8583033d2119c899cc81f18c"
-      ],
-      "Sega/Game Gear/bios.gg": [
-        "914aa165e3d879f060be77870d345b60cfeb4ede"
-      ],
-      "Game Gear/bios.gg": [
-        "914aa165e3d879f060be77870d345b60cfeb4ede"
-      ],
-      "Sega/Master System/SMS_jp_2.1.sms": [
-        "a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2"
-      ],
-      "Master System/SMS_jp_2.1.sms": [
-        "a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2"
-      ],
       "Sega/Master System/[BIOS] Sega Master System (Japan) (v2.1).sms": [
         "a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2"
       ],
       "Master System/[BIOS] Sega Master System (Japan) (v2.1).sms": [
         "a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2"
-      ],
-      "Sega/Master System/bios_J.sms": [
-        "a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2"
-      ],
-      "Master System/bios_J.sms": [
-        "a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2"
-      ],
-      "Other/zesarux/sms.rom": [
-        "c315672807d8ddb8d91443729405c766dd95cae7"
-      ],
-      "zesarux/sms.rom": [
-        "c315672807d8ddb8d91443729405c766dd95cae7"
       ],
       "Sega/Master System/[BIOS] Sega Master System (USA, Europe) (v1.3).sms": [
         "c315672807d8ddb8d91443729405c766dd95cae7"
@@ -666552,29 +665628,11 @@
       "Master System/[BIOS] Sega Master System (USA, Europe) (v1.3).sms": [
         "c315672807d8ddb8d91443729405c766dd95cae7"
       ],
-      "Sega/Master System/bios.sms": [
-        "c315672807d8ddb8d91443729405c766dd95cae7"
-      ],
-      "Master System/bios.sms": [
-        "c315672807d8ddb8d91443729405c766dd95cae7"
-      ],
-      "Sega/Mega CD/bios_CD_E.bin": [
-        "f891e0ea651e2232af0c5c4cb46a0cae2ee8f356"
-      ],
-      "Mega CD/bios_CD_E.bin": [
-        "f891e0ea651e2232af0c5c4cb46a0cae2ee8f356"
-      ],
       "Sega/Mega CD/eu_mcd1_9210.bin": [
         "f891e0ea651e2232af0c5c4cb46a0cae2ee8f356"
       ],
       "Mega CD/eu_mcd1_9210.bin": [
         "f891e0ea651e2232af0c5c4cb46a0cae2ee8f356"
-      ],
-      "Sega/Mega CD/bios_CD_J.bin": [
-        "4846f448160059a7da0215a5df12ca160f26dd69"
-      ],
-      "Mega CD/bios_CD_J.bin": [
-        "4846f448160059a7da0215a5df12ca160f26dd69"
       ],
       "Sega/Mega CD/jp_mcd1_9111.bin": [
         "4846f448160059a7da0215a5df12ca160f26dd69"
@@ -666588,35 +665646,11 @@
       "Mega CD/us_scd1_9210.bin": [
         "f4f315adcef9b8feb0364c21ab7f0eaf5457f3ed"
       ],
-      "Sega/Mega Drive/bios_MD.bin": [
-        "3f50b76b0529db7f79c396b5e808cc0786ffc311"
-      ],
-      "Mega Drive/bios_MD.bin": [
-        "3f50b76b0529db7f79c396b5e808cc0786ffc311"
-      ],
       "Sega/Mega Drive/tmss.md": [
         "3f50b76b0529db7f79c396b5e808cc0786ffc311"
       ],
       "Mega Drive/tmss.md": [
         "3f50b76b0529db7f79c396b5e808cc0786ffc311"
-      ],
-      "Sega/Saturn/SAT_STV_17952A-(U).bin": [
-        "eaf1c3e5d602e1139d2090a78d7e19f04f916794"
-      ],
-      "Saturn/SAT_STV_17952A-(U).bin": [
-        "eaf1c3e5d602e1139d2090a78d7e19f04f916794"
-      ],
-      "Sega/Saturn/SAT_STV_17954A-(E).bin": [
-        "af79cff317e5b57d49e463af16a9f616ed1eee08"
-      ],
-      "Saturn/SAT_STV_17954A-(E).bin": [
-        "af79cff317e5b57d49e463af16a9f616ed1eee08"
-      ],
-      "Sega/Saturn/SAT_STV_20091-(J).bin": [
-        "eff0f54c70bce05ff3a289bf30b1027e1c8cd117"
-      ],
-      "Saturn/SAT_STV_20091-(J).bin": [
-        "eff0f54c70bce05ff3a289bf30b1027e1c8cd117"
       ],
       "Sega/Saturn/cdb/cdb_rom.bin": [
         "b3c20fbe57cd2eb595e9edac86817e5948dccae4"
@@ -666626,12 +665660,6 @@
       ],
       "cdb/cdb_rom.bin": [
         "b3c20fbe57cd2eb595e9edac86817e5948dccae4"
-      ],
-      "Sega/Saturn/mpr-17933.bin": [
-        "faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3"
-      ],
-      "Saturn/mpr-17933.bin": [
-        "faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3"
       ],
       "Sega/Saturn/saturn_bios_E.bin": [
         "faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3"
@@ -666645,137 +665673,11 @@
       "Saturn/saturn_bios_U.bin": [
         "faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3"
       ],
-      "Sega/Saturn/mpr-18811-mx.ic1": [
-        "a67cd4f550751f8b91de2b8b74528ab4e0c11c77"
-      ],
-      "Saturn/mpr-18811-mx.ic1": [
-        "a67cd4f550751f8b91de2b8b74528ab4e0c11c77"
-      ],
-      "Sega/Saturn/mpr-19367-mx.ic1": [
-        "56c1b93da6b660bf393fbf48ca47569000ef4047"
-      ],
-      "Saturn/mpr-19367-mx.ic1": [
-        "56c1b93da6b660bf393fbf48ca47569000ef4047"
-      ],
       "Sega/Saturn/saturn_bios_J.bin": [
         "df94c5b4d47eb3cc404d88b33a8fda237eaf4720"
       ],
       "Saturn/saturn_bios_J.bin": [
         "df94c5b4d47eb3cc404d88b33a8fda237eaf4720"
-      ],
-      "Sega/Saturn/sega_101.bin": [
-        "df94c5b4d47eb3cc404d88b33a8fda237eaf4720"
-      ],
-      "Saturn/sega_101.bin": [
-        "df94c5b4d47eb3cc404d88b33a8fda237eaf4720"
-      ],
-      "Sinclair/ZX 81/zx81.rom": [
-        "7b143ee964e9ada89d1f9e88f0bd48d919184cfc"
-      ],
-      "ZX 81/zx81.rom": [
-        "7b143ee964e9ada89d1f9e88f0bd48d919184cfc"
-      ],
-      "Sinclair/ZX Spectrum/128-0.rom": [
-        "4f4b11ec22326280bdb96e3baf9db4b4cb1d02c5"
-      ],
-      "ZX Spectrum/128-0.rom": [
-        "4f4b11ec22326280bdb96e3baf9db4b4cb1d02c5"
-      ],
-      "Sinclair/ZX Spectrum/128-1.rom": [
-        "80080644289ed93d71a1103992a154cc9802b2fa"
-      ],
-      "ZX Spectrum/128-1.rom": [
-        "80080644289ed93d71a1103992a154cc9802b2fa"
-      ],
-      "Sinclair/ZX Spectrum/128p-1.rom": [
-        "80080644289ed93d71a1103992a154cc9802b2fa"
-      ],
-      "ZX Spectrum/128p-1.rom": [
-        "80080644289ed93d71a1103992a154cc9802b2fa"
-      ],
-      "Sinclair/ZX Spectrum/128.rom": [
-        "16375d42ea109b47edded7a16028de7fdb3013a1"
-      ],
-      "ZX Spectrum/128.rom": [
-        "16375d42ea109b47edded7a16028de7fdb3013a1"
-      ],
-      "Sinclair/ZX Spectrum/spectrum128.rom": [
-        "16375d42ea109b47edded7a16028de7fdb3013a1"
-      ],
-      "ZX Spectrum/spectrum128.rom": [
-        "16375d42ea109b47edded7a16028de7fdb3013a1"
-      ],
-      "Other/zesarux/pentagon.rom": [
-        "a584272f21dc82c14b7d4f1ed440e23a976e71f0"
-      ],
-      "zesarux/pentagon.rom": [
-        "a584272f21dc82c14b7d4f1ed440e23a976e71f0"
-      ],
-      "Other/zesarux/if1-v1.rom": [
-        "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e"
-      ],
-      "zesarux/if1-v1.rom": [
-        "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e"
-      ],
-      "Sinclair/ZX Spectrum/interface1.edition1.rom": [
-        "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e"
-      ],
-      "ZX Spectrum/interface1.edition1.rom": [
-        "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e"
-      ],
-      "Other/zesarux/if1-v2.rom": [
-        "5cfb6bca4177c45fefd571734576b55e3a127c08"
-      ],
-      "zesarux/if1-v2.rom": [
-        "5cfb6bca4177c45fefd571734576b55e3a127c08"
-      ],
-      "Sinclair/ZX Spectrum/interface1.edition2.rom": [
-        "5cfb6bca4177c45fefd571734576b55e3a127c08"
-      ],
-      "ZX Spectrum/interface1.edition2.rom": [
-        "5cfb6bca4177c45fefd571734576b55e3a127c08"
-      ],
-      "Other/zesarux/p2.rom": [
-        "8cafb292af58617907b9e6b9093d3588a75849b8"
-      ],
-      "zesarux/p2.rom": [
-        "8cafb292af58617907b9e6b9093d3588a75849b8"
-      ],
-      "Sinclair/ZX Spectrum/spectrum+2.rom": [
-        "8cafb292af58617907b9e6b9093d3588a75849b8"
-      ],
-      "ZX Spectrum/spectrum+2.rom": [
-        "8cafb292af58617907b9e6b9093d3588a75849b8"
-      ],
-      "Other/zesarux/p2a40.rom": [
-        "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4"
-      ],
-      "zesarux/p2a40.rom": [
-        "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4"
-      ],
-      "Sinclair/ZX Spectrum/spectrum+3.version4-0.rom": [
-        "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4"
-      ],
-      "ZX Spectrum/spectrum+3.version4-0.rom": [
-        "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4"
-      ],
-      "Sinclair/ZX Spectrum/plus3e-3.rom": [
-        "65f031caa8148a5493afe42c41f4929deab26b4e"
-      ],
-      "ZX Spectrum/plus3e-3.rom": [
-        "65f031caa8148a5493afe42c41f4929deab26b4e"
-      ],
-      "Sinclair/ZX Spectrum/plusd.rom": [
-        "6b841dc5797ef7eb219ad455cd1e434ca3b9d30d"
-      ],
-      "ZX Spectrum/plusd.rom": [
-        "6b841dc5797ef7eb219ad455cd1e434ca3b9d30d"
-      ],
-      "Sinclair/ZX Spectrum/trdos.rom": [
-        "21695e3f2a8f796386ce66eea8a246b0ac44810c"
-      ],
-      "ZX Spectrum/trdos.rom": [
-        "21695e3f2a8f796386ce66eea8a246b0ac44810c"
       ],
       "Softdisk/Catacomb Apocalypse/SHP1.APC": [
         "b64369d86ec9f7bf601b9b6da7ed3dfa13e2d88f"
@@ -666849,102 +665751,6 @@
       "Catacomb Armageddon/SHP9.ARM": [
         "37c612a5bda088953dcf517c751adb6b38df34d6"
       ],
-      "Sony/PlayStation/dtlh2000.bin": [
-        "1a8d6f9453111b1d317bb7dae300495fbf54600c"
-      ],
-      "PlayStation/dtlh2000.bin": [
-        "1a8d6f9453111b1d317bb7dae300495fbf54600c"
-      ],
-      "Sony/PlayStation/scph1002a.bin": [
-        "20b98f3d80f11cbf5a7bfd0779b0e63760ecc62c"
-      ],
-      "PlayStation/scph1002a.bin": [
-        "20b98f3d80f11cbf5a7bfd0779b0e63760ecc62c"
-      ],
-      "Sony/PlayStation/scph101_v45.bin": [
-        "dcffe16bd90a723499ad46c641424981338d8378"
-      ],
-      "PlayStation/scph101_v45.bin": [
-        "dcffe16bd90a723499ad46c641424981338d8378"
-      ],
-      "Sony/PlayStation/scph102A.bin": [
-        "beb0ac693c0dc26daf5665b3314db81480fa5c7c"
-      ],
-      "PlayStation/scph102A.bin": [
-        "beb0ac693c0dc26daf5665b3314db81480fa5c7c"
-      ],
-      "Sony/PlayStation/scph102_v44.bin": [
-        "beb0ac693c0dc26daf5665b3314db81480fa5c7c"
-      ],
-      "PlayStation/scph102_v44.bin": [
-        "beb0ac693c0dc26daf5665b3314db81480fa5c7c"
-      ],
-      "Sony/PlayStation/scph102_v45.bin": [
-        "dbc7339e5d85827c095764fc077b41f78fd2ecae"
-      ],
-      "PlayStation/scph102_v45.bin": [
-        "dbc7339e5d85827c095764fc077b41f78fd2ecae"
-      ],
-      "Sony/PlayStation/scph5001.bin": [
-        "ca7af30b50d9756cbd764640126c454cff658479"
-      ],
-      "PlayStation/scph5001.bin": [
-        "ca7af30b50d9756cbd764640126c454cff658479"
-      ],
-      "Sony/PlayStation/scph7500.bin": [
-        "1b0dbdb23da9dc0776aac58d0755dc80fea20975"
-      ],
-      "PlayStation/scph7500.bin": [
-        "1b0dbdb23da9dc0776aac58d0755dc80fea20975"
-      ],
-      "Sony/PlayStation/scph9000.bin": [
-        "339a48f4fcf63e10b5b867b8c93cfd40945faf6c"
-      ],
-      "PlayStation/scph9000.bin": [
-        "339a48f4fcf63e10b5b867b8c93cfd40945faf6c"
-      ],
-      "Sony/PlayStation/scph_v11j.bin": [
-        "b06f4a861f74270be819aa2a07db8d0563a7cc4e"
-      ],
-      "PlayStation/scph_v11j.bin": [
-        "b06f4a861f74270be819aa2a07db8d0563a7cc4e"
-      ],
-      "Sony/PlayStation/scph_v21e.bin": [
-        "76cf6b1b2a7c571a6ad07f2bac0db6cd8f71e2cc"
-      ],
-      "PlayStation/scph_v21e.bin": [
-        "76cf6b1b2a7c571a6ad07f2bac0db6cd8f71e2cc"
-      ],
-      "Sony/PlayStation/scph_v22a.bin": [
-        "10155d8d6e6e832d6ea66db9bc098321fb5e8ebf"
-      ],
-      "PlayStation/scph_v22a.bin": [
-        "10155d8d6e6e832d6ea66db9bc098321fb5e8ebf"
-      ],
-      "Sony/PlayStation/scph_v22e.bin": [
-        "b6a11579caef3875504fcf3831b8e3922746df2c"
-      ],
-      "PlayStation/scph_v22e.bin": [
-        "b6a11579caef3875504fcf3831b8e3922746df2c"
-      ],
-      "Sony/PlayStation 2/SCPH-70004_BIOS_V12_EUR_200.BIN": [
-        "434bc0b4eb4827da0773ec0795aadc5162569a07"
-      ],
-      "PlayStation 2/SCPH-70004_BIOS_V12_EUR_200.BIN": [
-        "434bc0b4eb4827da0773ec0795aadc5162569a07"
-      ],
-      "Sony/PlayStation 2/ps2-0200e-20040614.bin": [
-        "434bc0b4eb4827da0773ec0795aadc5162569a07"
-      ],
-      "PlayStation 2/ps2-0200e-20040614.bin": [
-        "434bc0b4eb4827da0773ec0795aadc5162569a07"
-      ],
-      "Sony/PlayStation 2/ps2_scph70002.bin": [
-        "434bc0b4eb4827da0773ec0795aadc5162569a07"
-      ],
-      "PlayStation 2/ps2_scph70002.bin": [
-        "434bc0b4eb4827da0773ec0795aadc5162569a07"
-      ],
       "Sony/PlayStation 2/SCPH-70004_BIOS_V12_EUR_200.EROM": [
         "ec0121bb8e2a209044309780d2efc2559c9a0ef1"
       ],
@@ -666963,18 +665769,6 @@
       "PlayStation 2/SCPH-90006_BIOS_VX_HK _230.ROM2": [
         "b96cf94772f01b8434038285896467884a84b0c2"
       ],
-      "Sony/PlayStation 2/ps2-0160a-20020207.bin": [
-        "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7"
-      ],
-      "PlayStation 2/ps2-0160a-20020207.bin": [
-        "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7"
-      ],
-      "Sony/PlayStation 2/ps2_scph39001.bin": [
-        "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7"
-      ],
-      "PlayStation 2/ps2_scph39001.bin": [
-        "f9a5d629a036b99128f7cb530c6e3ca016e9c8b7"
-      ],
       "Sony/PlayStation 2/ps2-0230a-20080220.mec": [
         "3f8affbe07024ccd2f5b8374072d0928c583a862"
       ],
@@ -666987,479 +665781,11 @@
       "PlayStation 2/ps2-0230a-20080220.rom1": [
         "747e36b086aceceb300c72c0d1bbab38e2920e63"
       ],
-      "Sony/PlayStation 2/ps2_desr5000.bin": [
-        "aa4a35c14ee342cf7a03b1dde294ca10e64889e1"
-      ],
-      "PlayStation 2/ps2_desr5000.bin": [
-        "aa4a35c14ee342cf7a03b1dde294ca10e64889e1"
-      ],
-      "Sony/PlayStation 2/ps2_desr5500.bin": [
-        "bbb1af3085e77599691ec430d147810157da934f"
-      ],
-      "PlayStation 2/ps2_desr5500.bin": [
-        "bbb1af3085e77599691ec430d147810157da934f"
-      ],
-      "Sony/PlayStation 2/ps2_dtlh10000_0117.bin": [
-        "5b33170323ed6344e2363fed8115dc3918bb96a4"
-      ],
-      "PlayStation 2/ps2_dtlh10000_0117.bin": [
-        "5b33170323ed6344e2363fed8115dc3918bb96a4"
-      ],
-      "Sony/PlayStation 2/ps2_dtlh10000_0217.bin": [
-        "16f4a284d0e760ee13a2aff2f7dda928255e3080"
-      ],
-      "PlayStation 2/ps2_dtlh10000_0217.bin": [
-        "16f4a284d0e760ee13a2aff2f7dda928255e3080"
-      ],
-      "Sony/PlayStation 2/ps2_dtlh10000_0224.bin": [
-        "4440b246bfde7bb31002c584a76c6ef384908e84"
-      ],
-      "PlayStation 2/ps2_dtlh10000_0224.bin": [
-        "4440b246bfde7bb31002c584a76c6ef384908e84"
-      ],
-      "Sony/PlayStation 2/ps2_dtlh30000.bin": [
-        "334e029fc7fd50222a399c50384ff42732652259"
-      ],
-      "PlayStation 2/ps2_dtlh30000.bin": [
-        "334e029fc7fd50222a399c50384ff42732652259"
-      ],
-      "Sony/PlayStation 2/ps2_dtlh30001.bin": [
-        "339c646cf0699268552df5b05f18f0a03a9f55ff"
-      ],
-      "PlayStation 2/ps2_dtlh30001.bin": [
-        "339c646cf0699268552df5b05f18f0a03a9f55ff"
-      ],
-      "Sony/PlayStation 2/ps2_dtlh30002.bin": [
-        "3bb1eecd618ab5c973c7bc53671a4475a02e1d5b"
-      ],
-      "PlayStation 2/ps2_dtlh30002.bin": [
-        "3bb1eecd618ab5c973c7bc53671a4475a02e1d5b"
-      ],
-      "Sony/PlayStation 2/ps2_dtlh30101.bin": [
-        "7284b9d16df9935afc384318e024c87ef0574fe5"
-      ],
-      "PlayStation 2/ps2_dtlh30101.bin": [
-        "7284b9d16df9935afc384318e024c87ef0574fe5"
-      ],
-      "Sony/PlayStation 2/ps2_dtlh30102_0902.bin": [
-        "1b73dec999fcc2b92fa958110ff6bfe4d0af276e"
-      ],
-      "PlayStation 2/ps2_dtlh30102_0902.bin": [
-        "1b73dec999fcc2b92fa958110ff6bfe4d0af276e"
-      ],
-      "Sony/PlayStation 2/ps2_dtlh30102_1228.bin": [
-        "d004326c9d8060812b4433c3f07646b04854d6c4"
-      ],
-      "PlayStation 2/ps2_dtlh30102_1228.bin": [
-        "d004326c9d8060812b4433c3f07646b04854d6c4"
-      ],
-      "Sony/PlayStation 2/ps2_dtlh50000.bin": [
-        "03c6531a1feba6da75a32c2a69c7bb89be61dcda"
-      ],
-      "PlayStation 2/ps2_dtlh50000.bin": [
-        "03c6531a1feba6da75a32c2a69c7bb89be61dcda"
-      ],
-      "Sony/PlayStation 2/ps2_dtlh50001_0325.bin": [
-        "c5bc6e893b4c43d528142e56c96073024de64157"
-      ],
-      "PlayStation 2/ps2_dtlh50001_0325.bin": [
-        "c5bc6e893b4c43d528142e56c96073024de64157"
-      ],
-      "Sony/PlayStation 2/ps2_dtlh50001_0623.bin": [
-        "fe19d2c52729e2ce4fea30e0e6a501587285d93f"
-      ],
-      "PlayStation 2/ps2_dtlh50001_0623.bin": [
-        "fe19d2c52729e2ce4fea30e0e6a501587285d93f"
-      ],
-      "Sony/PlayStation 2/ps2_dtlh50002.bin": [
-        "e220bb282378c1f48ea1b585b3675e51a6dca572"
-      ],
-      "PlayStation 2/ps2_dtlh50002.bin": [
-        "e220bb282378c1f48ea1b585b3675e51a6dca572"
-      ],
-      "Sony/PlayStation 2/ps2_dtlh50009.bin": [
-        "2de87767008fc4a303af64a46251156e965d9065"
-      ],
-      "PlayStation 2/ps2_dtlh50009.bin": [
-        "2de87767008fc4a303af64a46251156e965d9065"
-      ],
-      "Sony/PlayStation 2/ps2_dtlh70002.bin": [
-        "902f4680b258abd40c0922f6b0d581cbd8f8a73e"
-      ],
-      "PlayStation 2/ps2_dtlh70002.bin": [
-        "902f4680b258abd40c0922f6b0d581cbd8f8a73e"
-      ],
-      "Sony/PlayStation 2/ps2_dtlh75000.bin": [
-        "458adf85d216856892d6480213575670894049c6"
-      ],
-      "PlayStation 2/ps2_dtlh75000.bin": [
-        "458adf85d216856892d6480213575670894049c6"
-      ],
-      "Sony/PlayStation 2/ps2_dtlh75000a.bin": [
-        "7c7efdfcec7705f4e84bb47f45322104e39eed09"
-      ],
-      "PlayStation 2/ps2_dtlh75000a.bin": [
-        "7c7efdfcec7705f4e84bb47f45322104e39eed09"
-      ],
-      "Sony/PlayStation 2/ps2_dtlh90000_a.bin": [
-        "4191b5842f31a9985b5428bc9d2b733ce3abb583"
-      ],
-      "PlayStation 2/ps2_dtlh90000_a.bin": [
-        "4191b5842f31a9985b5428bc9d2b733ce3abb583"
-      ],
-      "Sony/PlayStation 2/ps2_dtlh90000_j.bin": [
-        "3d095a3c2c38ebef3e48f31c7cfbb77ad4b04166"
-      ],
-      "PlayStation 2/ps2_dtlh90000_j.bin": [
-        "3d095a3c2c38ebef3e48f31c7cfbb77ad4b04166"
-      ],
-      "Sony/PlayStation 2/ps2_kdl22px300.bin": [
-        "b9cb5775af29cd4d1ec5521e8231f8b6636e2e44"
-      ],
-      "PlayStation 2/ps2_kdl22px300.bin": [
-        "b9cb5775af29cd4d1ec5521e8231f8b6636e2e44"
-      ],
-      "Sony/PlayStation 2/ps2_scph10000_0117.bin": [
-        "aea061e6e263fdcc1c4fdbd68553ef78dae74263"
-      ],
-      "PlayStation 2/ps2_scph10000_0117.bin": [
-        "aea061e6e263fdcc1c4fdbd68553ef78dae74263"
-      ],
-      "Sony/PlayStation 2/ps2_scph10000_15000.bin": [
-        "916e02431bcd73140504da3355c9598143b77e11"
-      ],
-      "PlayStation 2/ps2_scph10000_15000.bin": [
-        "916e02431bcd73140504da3355c9598143b77e11"
-      ],
-      "Sony/PlayStation 2/ps2_scph18000.bin": [
-        "d7d6be084f51354bc951d8fa2d8d912aa70abc5e"
-      ],
-      "PlayStation 2/ps2_scph18000.bin": [
-        "d7d6be084f51354bc951d8fa2d8d912aa70abc5e"
-      ],
-      "Sony/PlayStation 2/ps2_scph18000_gh003.bin": [
-        "e481079eca752225555f0c26d14c9d0f94d9a8e9"
-      ],
-      "PlayStation 2/ps2_scph18000_gh003.bin": [
-        "e481079eca752225555f0c26d14c9d0f94d9a8e9"
-      ],
-      "Sony/PlayStation 2/ps2_scph18000_gh008.bin": [
-        "a9f5d8ed56cfff18add1b599010493461fa02448"
-      ],
-      "PlayStation 2/ps2_scph18000_gh008.bin": [
-        "a9f5d8ed56cfff18add1b599010493461fa02448"
-      ],
-      "Sony/PlayStation 2/ps2_scph30000_0427.bin": [
-        "e525a0c900e37acf0ae5a655d82a0abcb07c6f1f"
-      ],
-      "PlayStation 2/ps2_scph30000_0427.bin": [
-        "e525a0c900e37acf0ae5a655d82a0abcb07c6f1f"
-      ],
-      "Sony/PlayStation 2/ps2_scph30000_35000.bin": [
-        "d6f365a0f07cd04ed28108e6ec5076e2f81e5f72"
-      ],
-      "PlayStation 2/ps2_scph30000_35000.bin": [
-        "d6f365a0f07cd04ed28108e6ec5076e2f81e5f72"
-      ],
-      "Sony/PlayStation 2/ps2_scph30001_0727.bin": [
-        "20f6ce6693cf97e9494f8f0227f2b7988ffaf961"
-      ],
-      "PlayStation 2/ps2_scph30001_0727.bin": [
-        "20f6ce6693cf97e9494f8f0227f2b7988ffaf961"
-      ],
-      "Sony/PlayStation 2/ps2_scph30001_0902.bin": [
-        "dbc2318a1029347b5af3a0c74b0bdf88d19efee6"
-      ],
-      "PlayStation 2/ps2_scph30001_0902.bin": [
-        "dbc2318a1029347b5af3a0c74b0bdf88d19efee6"
-      ],
-      "Sony/PlayStation 2/ps2_scph30001_35001.bin": [
-        "5af5b5077d84a9c037ebe12bfab8a38b31d8a543"
-      ],
-      "PlayStation 2/ps2_scph30001_35001.bin": [
-        "5af5b5077d84a9c037ebe12bfab8a38b31d8a543"
-      ],
-      "Sony/PlayStation 2/ps2_scph30001r_0427.bin": [
-        "7331a40b4b4feb1b3f0f77b013b6d38483577baa"
-      ],
-      "PlayStation 2/ps2_scph30001r_0427.bin": [
-        "7331a40b4b4feb1b3f0f77b013b6d38483577baa"
-      ],
-      "Sony/PlayStation 2/ps2_scph30001r_0704.bin": [
-        "ce92e8e8c88665f2f645a9522e337823d47a914a"
-      ],
-      "PlayStation 2/ps2_scph30001r_0704.bin": [
-        "ce92e8e8c88665f2f645a9522e337823d47a914a"
-      ],
-      "Sony/PlayStation 2/ps2_scph30001r_1004.bin": [
-        "d257bce6ecaf3bafb704c75a1b4741b910bd2d49"
-      ],
-      "PlayStation 2/ps2_scph30001r_1004.bin": [
-        "d257bce6ecaf3bafb704c75a1b4741b910bd2d49"
-      ],
-      "Sony/PlayStation 2/ps2_scph30002_0902.bin": [
-        "274c05fec654913a3f698d4b0d592085866a2cbd"
-      ],
-      "PlayStation 2/ps2_scph30002_0902.bin": [
-        "274c05fec654913a3f698d4b0d592085866a2cbd"
-      ],
-      "Sony/PlayStation 2/ps2_scph30002_1228.bin": [
-        "e22ef231faf3661edd92f2ee449a71297c82a092"
-      ],
-      "PlayStation 2/ps2_scph30002_1228.bin": [
-        "e22ef231faf3661edd92f2ee449a71297c82a092"
-      ],
-      "Sony/PlayStation 2/ps2_scph30002r_0704.bin": [
-        "3cbd048e437c785b5a05a0feced00117a8a42545"
-      ],
-      "PlayStation 2/ps2_scph30002r_0704.bin": [
-        "3cbd048e437c785b5a05a0feced00117a8a42545"
-      ],
-      "Sony/PlayStation 2/ps2_scph30002r_1004.bin": [
-        "ee34c3a87c53c75ca2a37d77b0042ca24d07831f"
-      ],
-      "PlayStation 2/ps2_scph30002r_1004.bin": [
-        "ee34c3a87c53c75ca2a37d77b0042ca24d07831f"
-      ],
-      "Sony/PlayStation 2/ps2_scph30005r.bin": [
-        "ba15dcf7aac13864c08222037e9321d7468c87d1"
-      ],
-      "PlayStation 2/ps2_scph30005r.bin": [
-        "ba15dcf7aac13864c08222037e9321d7468c87d1"
-      ],
-      "Sony/PlayStation 2/ps2_scph37000_39000.bin": [
-        "003628c137dae577ff3b04b93ca1787b0c944702"
-      ],
-      "PlayStation 2/ps2_scph37000_39000.bin": [
-        "003628c137dae577ff3b04b93ca1787b0c944702"
-      ],
-      "Sony/PlayStation 2/ps2_scph39002.bin": [
-        "bff2902bd0ce9729a060581132541e9fd1a9fab6"
-      ],
-      "PlayStation 2/ps2_scph39002.bin": [
-        "bff2902bd0ce9729a060581132541e9fd1a9fab6"
-      ],
-      "Sony/PlayStation 2/ps2_scph39005.bin": [
-        "e3a74125c426bcacabca00b513fab928665c8846"
-      ],
-      "PlayStation 2/ps2_scph39005.bin": [
-        "e3a74125c426bcacabca00b513fab928665c8846"
-      ],
-      "Sony/PlayStation 2/ps2_scph39008.bin": [
-        "d106b757ae2544dfe63f7e1924e59d5ad44c0c29"
-      ],
-      "PlayStation 2/ps2_scph39008.bin": [
-        "d106b757ae2544dfe63f7e1924e59d5ad44c0c29"
-      ],
-      "Sony/PlayStation 2/ps2_scph50000_0822.bin": [
-        "0ea98a25a32145dda514de2f0d4bfbbd806bd00c"
-      ],
-      "PlayStation 2/ps2_scph50000_0822.bin": [
-        "0ea98a25a32145dda514de2f0d4bfbbd806bd00c"
-      ],
-      "Sony/PlayStation 2/ps2_scph50000_55000.bin": [
-        "d812ac65c357d392396ca9edee812dc41bed8bde"
-      ],
-      "PlayStation 2/ps2_scph50000_55000.bin": [
-        "d812ac65c357d392396ca9edee812dc41bed8bde"
-      ],
-      "Sony/PlayStation 2/ps2_scph50001_0325.bin": [
-        "d269d1ed513227f3ef7133c76cf1b3a64f97b15d"
-      ],
-      "PlayStation 2/ps2_scph50001_0325.bin": [
-        "d269d1ed513227f3ef7133c76cf1b3a64f97b15d"
-      ],
-      "Sony/PlayStation 2/ps2_scph50001_0623.bin": [
-        "c74d92a2952a2912b6698cbcf7742adac8f784d3"
-      ],
-      "PlayStation 2/ps2_scph50001_0623.bin": [
-        "c74d92a2952a2912b6698cbcf7742adac8f784d3"
-      ],
-      "Sony/PlayStation 2/ps2_scph50002_0227.bin": [
-        "ad15bd7eabd5bd81ba011516a5be44947d6641aa"
-      ],
-      "PlayStation 2/ps2_scph50002_0227.bin": [
-        "ad15bd7eabd5bd81ba011516a5be44947d6641aa"
-      ],
-      "Sony/PlayStation 2/ps2_scph50002_0623.bin": [
-        "18b9ba833c469c4683676cc20da5124080d980bb"
-      ],
-      "PlayStation 2/ps2_scph50002_0623.bin": [
-        "18b9ba833c469c4683676cc20da5124080d980bb"
-      ],
-      "Sony/PlayStation 2/ps2_scph50004_0822.bin": [
-        "6e1f0eb4aec51a6288b3d802d3bcdb477cf52104"
-      ],
-      "PlayStation 2/ps2_scph50004_0822.bin": [
-        "6e1f0eb4aec51a6288b3d802d3bcdb477cf52104"
-      ],
-      "Sony/PlayStation 2/ps2_scph50005.bin": [
-        "ad8b9b5aa87b1575fec6a70d1cec77851c9c0e29"
-      ],
-      "PlayStation 2/ps2_scph50005.bin": [
-        "ad8b9b5aa87b1575fec6a70d1cec77851c9c0e29"
-      ],
-      "Sony/PlayStation 2/ps2_scph50009.bin": [
-        "92d9eb4b11cef97bb69a275b2851b72f7b0023d6"
-      ],
-      "PlayStation 2/ps2_scph50009.bin": [
-        "92d9eb4b11cef97bb69a275b2851b72f7b0023d6"
-      ],
-      "Sony/PlayStation 2/ps2_scph50011.bin": [
-        "b68c05f5cd86bf03cb38a643a723b7a97b759531"
-      ],
-      "PlayStation 2/ps2_scph50011.bin": [
-        "b68c05f5cd86bf03cb38a643a723b7a97b759531"
-      ],
-      "Sony/PlayStation 2/ps2_scph55000_0623.bin": [
-        "6a6ecfe6c10e42eff1ca056349def799b5629067"
-      ],
-      "PlayStation 2/ps2_scph55000_0623.bin": [
-        "6a6ecfe6c10e42eff1ca056349def799b5629067"
-      ],
-      "Sony/PlayStation 2/ps2_scph70000.bin": [
-        "224ab5704ab719edeb05ca1d835812252c97c1b3"
-      ],
-      "PlayStation 2/ps2_scph70000.bin": [
-        "224ab5704ab719edeb05ca1d835812252c97c1b3"
-      ],
-      "Sony/PlayStation 2/ps2_scph70001.bin": [
-        "7a62e5f48603582707e9898eb055ea3eaee50d4c"
-      ],
-      "PlayStation 2/ps2_scph70001.bin": [
-        "7a62e5f48603582707e9898eb055ea3eaee50d4c"
-      ],
-      "Sony/PlayStation 2/ps2_scph70005.bin": [
-        "7f8e812cab7c7393c85eac6c42661e1fd0a642df"
-      ],
-      "PlayStation 2/ps2_scph70005.bin": [
-        "7f8e812cab7c7393c85eac6c42661e1fd0a642df"
-      ],
-      "Sony/PlayStation 2/ps2_scph75000.bin": [
-        "7ffa75d142cb8eeea6c777dbcf263143655275d5"
-      ],
-      "PlayStation 2/ps2_scph75000.bin": [
-        "7ffa75d142cb8eeea6c777dbcf263143655275d5"
-      ],
-      "Sony/PlayStation 2/ps2_scph75001.bin": [
-        "48d0445dffd1e879c7ae752c5166ec3101921555"
-      ],
-      "PlayStation 2/ps2_scph75001.bin": [
-        "48d0445dffd1e879c7ae752c5166ec3101921555"
-      ],
-      "Sony/PlayStation 2/ps2_scph75002.bin": [
-        "929a85e974faf4b40d0a7785023b758402c43bd9"
-      ],
-      "PlayStation 2/ps2_scph75002.bin": [
-        "929a85e974faf4b40d0a7785023b758402c43bd9"
-      ],
-      "Sony/PlayStation 2/ps2_scph75006.bin": [
-        "0a071d1b46607a7694770407606d8599f62a372b"
-      ],
-      "PlayStation 2/ps2_scph75006.bin": [
-        "0a071d1b46607a7694770407606d8599f62a372b"
-      ],
-      "Sony/PlayStation 2/ps2_scph77000.bin": [
-        "0edf1fbb772a8e6a79ae00e977450e3ade25c4f3"
-      ],
-      "PlayStation 2/ps2_scph77000.bin": [
-        "0edf1fbb772a8e6a79ae00e977450e3ade25c4f3"
-      ],
-      "Sony/PlayStation 2/ps2_scph77001.bin": [
-        "92e488d5b2705e4cca83d4d1efbc421012faf83e"
-      ],
-      "PlayStation 2/ps2_scph77001.bin": [
-        "92e488d5b2705e4cca83d4d1efbc421012faf83e"
-      ],
-      "Sony/PlayStation 2/ps2_scph77002.bin": [
-        "28ad756d0cfd1e7b2e2de3de5d9e14207ee89761"
-      ],
-      "PlayStation 2/ps2_scph77002.bin": [
-        "28ad756d0cfd1e7b2e2de3de5d9e14207ee89761"
-      ],
-      "Sony/PlayStation 2/ps2_scph77006.bin": [
-        "fce2a24e5e0400cc6d98c08f426405d19173813e"
-      ],
-      "PlayStation 2/ps2_scph77006.bin": [
-        "fce2a24e5e0400cc6d98c08f426405d19173813e"
-      ],
-      "Sony/PlayStation 2/ps2_scph79000_90000.bin": [
-        "3baf847c1c217aa71ac6d298389c88edb3db32e2"
-      ],
-      "PlayStation 2/ps2_scph79000_90000.bin": [
-        "3baf847c1c217aa71ac6d298389c88edb3db32e2"
-      ],
-      "Sony/PlayStation 2/ps2_scph79001_90001.bin": [
-        "8361d615cc895962e0f0838489337574dbdc9173"
-      ],
-      "PlayStation 2/ps2_scph79001_90001.bin": [
-        "8361d615cc895962e0f0838489337574dbdc9173"
-      ],
-      "Sony/PlayStation 2/ps2_scph79002_90002.bin": [
-        "da5aacead2fb55807d6d4e70b1f10f4fdcfd3281"
-      ],
-      "PlayStation 2/ps2_scph79002_90002.bin": [
-        "da5aacead2fb55807d6d4e70b1f10f4fdcfd3281"
-      ],
-      "Sony/PlayStation 2/ps2_scph79006_90006.bin": [
-        "a5a2ee0dd9a86ca35b94e97ca92476a584f755bf"
-      ],
-      "PlayStation 2/ps2_scph79006_90006.bin": [
-        "a5a2ee0dd9a86ca35b94e97ca92476a584f755bf"
-      ],
-      "Sony/PlayStation 2/ps2_scph90000_0220.bin": [
-        "fbd54bfc020af34008b317dcb80b812dd29b3759"
-      ],
-      "PlayStation 2/ps2_scph90000_0220.bin": [
-        "fbd54bfc020af34008b317dcb80b812dd29b3759"
-      ],
-      "Sony/PlayStation 2/ps2_scph90001_0220.bin": [
-        "f9229fe159d0353b9f0632f3fdc66819c9030458"
-      ],
-      "PlayStation 2/ps2_scph90001_0220.bin": [
-        "f9229fe159d0353b9f0632f3fdc66819c9030458"
-      ],
-      "Sony/PlayStation 2/ps2_scph90002_0220.bin": [
-        "9915b5ba56798f4027ac1bd8d10abe0c1c9c326a"
-      ],
-      "PlayStation 2/ps2_scph90002_0220.bin": [
-        "9915b5ba56798f4027ac1bd8d10abe0c1c9c326a"
-      ],
-      "Sony/PlayStation 2/ps2_scph90005_0220.bin": [
-        "a277b456849697abec11285c6b35bc734598c220"
-      ],
-      "PlayStation 2/ps2_scph90005_0220.bin": [
-        "a277b456849697abec11285c6b35bc734598c220"
-      ],
-      "Tandy/CoCo/alice4k.rom": [
-        "c2166b91e6396a311f486832012aa43e0d2b19f8"
-      ],
-      "CoCo/alice4k.rom": [
-        "c2166b91e6396a311f486832012aa43e0d2b19f8"
-      ],
-      "Tandy/CoCo/cp400extbas.rom": [
-        "a348a165009a6de1ae6fc18ed77137b38b6ed46d"
-      ],
-      "CoCo/cp400extbas.rom": [
-        "a348a165009a6de1ae6fc18ed77137b38b6ed46d"
-      ],
       "Tandy/CoCo/cp450dsk.rom": [
         "827697fa5b755f5dc1efb054cdbbeb04e405405b"
       ],
       "CoCo/cp450dsk.rom": [
         "827697fa5b755f5dc1efb054cdbbeb04e405405b"
-      ],
-      "Tangerine/Oric/microdisc.rom": [
-        "0d2ef6e67322f48f4b7e08d8bbe68827e2074561"
-      ],
-      "Oric/microdisc.rom": [
-        "0d2ef6e67322f48f4b7e08d8bbe68827e2074561"
-      ],
-      "Tangerine/Oric/pravetzt.rom": [
-        "7afc276cb118adff72e4f16698f94bf3b2c64146"
-      ],
-      "Oric/pravetzt.rom": [
-        "7afc276cb118adff72e4f16698f94bf3b2c64146"
       ],
       "ZC/ZC210/zc210/sf2/custom0.sf2": [
         "286b2e1fb21cc79851da01666db6c0b0e88f25e3"
