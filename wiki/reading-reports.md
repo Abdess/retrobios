@@ -108,12 +108,11 @@ RetroDECK: 2007/2008 OK, 1 untested [md5]
   UNTESTED (required): nintendo-ds/dsifirmware.bin: declared hash contradicted by the local file
   DISCREPANCY: nintendo-snes/sgb2.boot.rom: RetroDECK says OK but supersnes9x says size mismatch: got 524288, accepted [256]
     supersnes9x [size]
-  Core files: 5007 in pack, 0 required missing, 64 optional missing (--verbose lists them)
+  Core files: 5014 in pack, 0 required missing, 64 optional missing (--verbose lists them)
   Bundled with their emulator, not collected: 34 (cg.dll, cg2.dll, cgGL.dll, libCg.so, libCgGL.so, libstdc++.so.5, libstdc++.so.6, 27 more, --verbose lists them)
   Core files held but not packed: 397 (245 read in a folder the platform keeps outside the BIOS tree, 140 installed with its emulator, 8 read below a save folder per system and no system runs the core there, 4 a packed file occupies its directory)
   Game data: 5146 in pack, 51 missing (--verbose lists them)
   Game data held but not packed: 11 (installed with its emulator)
-  Launcher reads, not held: 1 (--verbose lists them)
   Launcher records unproven: 3 (--verbose lists them)
   No external files: 81 cores (--verbose lists them)
   Ground truth: 109/2008 files have emulator validation (5%)

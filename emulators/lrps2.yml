@@ -105,6 +105,17 @@ files:
       A Konami Python game takes the first COH-H BIOS by name instead when the
       selected one is not COH-H.
 
+  - name: "scph10000.bin"
+    found_by: content
+    path: "pcsx2/bios/scph10000.bin"
+    required: false
+    size: 4194304
+    sha1: "aea061e6e263fdcc1c4fdbd68553ef78dae74263"
+    md5: "acf4730ceb38ac9d8c7d8e21f2614600"
+    config_key: "pcsx2_bios"
+    source_ref: "source pcsx2/ps2/BiosTools.cpp:32-33, 64-187, 257-289, 349-415, source libretro/main.cpp:525-536"
+    note: "ROMVER 0100JC20000117, the SCPH-10000 image. Accepted like any image with a valid romdir."
+
   - name: "<bios>.rom1"
     path: "pcsx2/bios/<bios>.rom1"
     required: false

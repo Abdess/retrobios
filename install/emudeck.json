@@ -7,7 +7,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "2.7EA",
-  "generated": "2026-11-13T01:24:31Z",
+  "generated": "2026-11-13T03:31:25Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -2178,10 +2178,10 @@
       }
     }
   ],
-  "total_files": 11837,
-  "total_size": 9357471229,
-  "pack_files": 16099,
-  "pack_size": 8721061917,
+  "total_files": 11844,
+  "total_size": 9386831357,
+  "pack_files": 16106,
+  "pack_size": 8750422045,
   "total_omitted": 408,
   "omitted_files": [
     {
@@ -146618,6 +146618,97 @@
         "lrps2",
         "pcee2",
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
+      ]
+    },
+    {
+      "dest": "pcsx2/bios/ps2-dvd-300e.bin",
+      "sha1": "bbfdc1a2df333885f62cca4e8920228e40e94e29",
+      "sha256": "7ff12f0d3e24f55c57c86274ca59dff400c5540762d79dee7451567edb07b98c",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-300e.bin",
+      "cores": [
+        "lrps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
+      ]
+    },
+    {
+      "dest": "pcsx2/bios/ps2-dvd-300u.bin",
+      "sha1": "6219ad4ead2ece9c4d32df5b040c4c391b763e5a",
+      "sha256": "ae6d65d7814a5f2078266e33b8fcd5a0aba9ca33b9e0fb7c6987a1d59f572925",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-300u.bin",
+      "cores": [
+        "lrps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
+      ]
+    },
+    {
+      "dest": "pcsx2/bios/ps2-dvd-302c.bin",
+      "sha1": "aa21592362b5797109ea38ec2df31e949ad3effd",
+      "sha256": "65f8de8e16de1f83022f7dc0d805fd05535cd162faafecfa795cf527936d0086",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-302c.bin",
+      "cores": [
+        "lrps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
+      ]
+    },
+    {
+      "dest": "pcsx2/bios/ps2-dvd-302e.bin",
+      "sha1": "30eb804bcc8824a679740ff8fce3d8268838425b",
+      "sha256": "b185af56f028e71426c032d956141bc39464219257955a5e937ecbb698b8cb65",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-302e.bin",
+      "cores": [
+        "lrps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
+      ]
+    },
+    {
+      "dest": "pcsx2/bios/ps2-dvd-302u.bin",
+      "sha1": "17380f704f16cc8ec44cf0ba1b349dda3a514b77",
+      "sha256": "6528268399a92f2a0e767f8451b9775bc4a758a37af34c8b66db696b25846707",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-302u.bin",
+      "cores": [
+        "lrps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
+      ]
+    },
+    {
+      "dest": "pcsx2/bios/ps2-dvd-310.bin",
+      "sha1": "cd8b548d6db7f7bdd4a0d90e21081520e7e05a40",
+      "sha256": "7ee91bf0093ff1260f7a2c342a9a286e19e971a637d9ad84ec78789bbc736700",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-310.bin",
+      "cores": [
+        "lrps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
+      ]
+    },
+    {
+      "dest": "pcsx2/bios/ps2-dvd-311.bin",
+      "sha1": "747e36b086aceceb300c72c0d1bbab38e2920e63",
+      "sha256": "98da02e0b2d264a438b4c3a918dd533641dcd9363e902413d1f424b0dbd2deb9",
+      "size": 4194304,
+      "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-311.bin",
+      "cores": [
+        "lrps2"
       ],
       "systems": [
         "sony-playstation-2"

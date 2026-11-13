@@ -1160,16 +1160,10 @@
         "bios/COH-H31000.BIN",
         "9a67e2d344b1132a183881c267463078b220ed21"
       ],
-      {
-        "dest": "bios/ps2-0230a-20080220.rom1",
-        "sha1": "747e36b086aceceb300c72c0d1bbab38e2920e63",
-        "sha256": "98da02e0b2d264a438b4c3a918dd533641dcd9363e902413d1f424b0dbd2deb9",
-        "size": 4194304,
-        "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-311.bin",
-        "cores": [
-          "armsx2"
-        ]
-      },
+      [
+        "bios/ps2-0230a-20080220.rom1",
+        "747e36b086aceceb300c72c0d1bbab38e2920e63"
+      ],
       {
         "dest": "bios/ps2-0230a-20080220.rom2",
         "sha1": "b96cf94772f01b8434038285896467884a84b0c2",
@@ -14013,16 +14007,10 @@
         "bios/ps2-0230a-20080220.bin",
         "f9229fe159d0353b9f0632f3fdc66819c9030458"
       ],
-      {
-        "dest": "bios/ps2-0230a-20080220.rom1",
-        "sha1": "747e36b086aceceb300c72c0d1bbab38e2920e63",
-        "sha256": "98da02e0b2d264a438b4c3a918dd533641dcd9363e902413d1f424b0dbd2deb9",
-        "size": 4194304,
-        "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-311.bin",
-        "cores": [
-          "yaps2"
-        ]
-      },
+      [
+        "bios/ps2-0230a-20080220.rom1",
+        "747e36b086aceceb300c72c0d1bbab38e2920e63"
+      ],
       [
         "bios/ps2-0230a-20080220.nvm",
         "258ad0f26b0b269462bbd9acbb5506d5dfbcc3d5"

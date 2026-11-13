@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-13T01:24:31Z",
+  "generated_at": "2026-11-13T03:31:25Z",
   "total_files": 22018,
   "total_size": 17367945863,
   "bios_dir": "bios",
@@ -306243,6 +306243,9 @@
         "aea061e6e263fdcc1c4fdbd68553ef78dae74263"
       ],
       "ps2_scph10000_0117.bin": [
+        "aea061e6e263fdcc1c4fdbd68553ef78dae74263"
+      ],
+      "scph10000.bin": [
         "aea061e6e263fdcc1c4fdbd68553ef78dae74263"
       ],
       "sony-playstation-2:acf9968c8f596d2b15f42272082513d1": [

@@ -99,6 +99,19 @@ config_reads:
           - "PlayStation/Firmware/BIOS.Europe"
         source_ref: "desktop-ui/emulator/playstation.cpp:19-23, 87-101"
         condition: "the disc's region"
+      - key:
+          - "MSX2/Firmware/MAIN.Japan"
+          - "MSX2/Firmware/SUB.Japan"
+        source_ref: "desktop-ui/emulator/msx2.cpp:13-16, 43-47"
+      - key:
+          - "PCEngineCD/Firmware/System-Card-1.0.Japan"
+          - "PCEngineCD/Firmware/System-Card-3.0.Japan"
+          - "PCEngineCD/Firmware/System-Card-3.0.US"
+          - "PCEngineCD/Firmware/Games-Express.Japan"
+        source_ref: "desktop-ui/emulator/pc-engine-cd.cpp:15-18, 30-45"
+        condition: "the disc's region, then the card the game names"
+      - key: "SuperGrafxCD/Firmware/Arcade-Card.Japan"
+        source_ref: "desktop-ui/emulator/supergrafx-cd.cpp:15, 27-33"
   - file: "settings.bml"
     platforms: [emudeck]
     revision: "0aafd85789215e84e1e43415c07d4c88461b7899"
