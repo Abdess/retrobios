@@ -69,7 +69,7 @@ const version = wantedVersion();
 			const head = element('p', code(entry.n), ' ');
 			const need = element('span', entry.r ? 'Required' : 'Optional');
 			need.className = `rb-badge ${entry.r ? 'rb-badge-warning' : 'rb-badge-muted'}`;
-			const kind = element('span', entry.g ? 'Game data' : 'Firmware');
+			const kind = element('span', entry.k === 2 ? 'Game data' : entry.k === 1 ? 'Read by no core' : 'Firmware');
 			kind.className = 'rb-badge rb-badge-info';
 			head.append(need, ' ', kind);
 			if (entry.z?.length) head.append(` ${entry.z.map(size).join(' or ')}`);

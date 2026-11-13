@@ -180,7 +180,7 @@ def wanted_declarations(profiles: dict, coverages: dict, gap_report: dict) -> li
                     "required": bool(detail.get("required", True)),
                     "reader": ("platform", key, coverage["platform"]), "entry": entry,
                     "reason": "",
-                    "category": GAME_DATA if detail.get("category") == GAME_DATA else BIOS,
+                    "category": detail.get("category") if detail.get("category") in RANK else BIOS,
                     "directory": _directory(entry),
                 })
     unique = unique_emulator_profiles(profiles)
@@ -225,6 +225,11 @@ def catalog_listings(report: dict | None, labels: dict[str, str]) -> dict[tuple[
 
 BIOS = "bios"
 GAME_DATA = "game_data"
+# verify's category for a platform entry no core the platform runs reads.
+UNREAD = "unread"
+# Firmware first, then what a platform lists and no core reads, then game
+# data. The value is also the list's k field, absent for firmware.
+RANK = {BIOS: 0, UNREAD: 1, GAME_DATA: 2}
 # A name the code builds from the content (<serial>.txt, *.ini) is a
 # pattern, not a file anyone can upload.
 PATTERN = re.compile(r"[<>*?]")
@@ -342,10 +347,10 @@ def upload_href(root: str, folder: str) -> str:
 
 
 def _order(record: dict) -> tuple:
-    """Most useful first: required firmware, optional firmware, then game
-    data, required first, and within each by how many setups and
-    emulators read the file."""
-    return (record["category"] != BIOS, not record["required"], -len(record["readers"]),
+    """Most useful first: required firmware, optional firmware, then the
+    files no core reads, then game data, required first, and within each
+    by how many setups and emulators read the file."""
+    return (RANK[record["category"]], not record["required"], -len(record["readers"]),
             record["name"].casefold(), sorted(record["readers"]))
 
 
@@ -364,7 +369,8 @@ def build_wanted(
     Readers, systems and folders are written once and named by position.
     An entry: n name, h hashes (absent when the declarations write none:
     the file is known by its name only), w readers, s systems, r required,
-    z sizes, g game data (firmware when absent), d what the file is, u why
+    z sizes, k 1 when no core reads it and 2 for game data (firmware when
+    absent), d what the file is, u why
     it is not collected yet, l the catalogs that list it with the name
     they give it, f folder, t the name it is uploaded under, v that name
     goes to the folder's .variants/ with the first 8 characters of its
@@ -391,8 +397,8 @@ def build_wanted(
                 "description": "", "reason": "", "listed": [], "category": GAME_DATA,
                 "directory": declaration["directory"],
             })
-            if declaration["category"] == BIOS:
-                record["category"] = BIOS
+            if RANK[declaration["category"]] < RANK[record["category"]]:
+                record["category"] = declaration["category"]
             if declaration["system"]:
                 record["systems"].add(declaration["system"])
             record["required"] = record["required"] or declaration["required"]
@@ -434,8 +440,8 @@ def build_wanted(
             item["r"] = 1
         if record["sizes"]:
             item["z"] = record["sizes"]
-        if record["category"] == GAME_DATA:
-            item["g"] = 1
+        if RANK[record["category"]]:
+            item["k"] = RANK[record["category"]]
         for field, value in (("d", record["description"]), ("u", record["reason"])):
             if value:
                 item[field] = value
@@ -478,8 +484,8 @@ def _merge_named(records: dict[tuple, dict]) -> None:
         target["required"] = target["required"] or record["required"]
         target["description"] = target["description"] or record["description"]
         target["reason"] = target["reason"] or record["reason"]
-        if record["category"] == BIOS:
-            target["category"] = BIOS
+        if RANK[record["category"]] < RANK[target["category"]]:
+            target["category"] = record["category"]
         target["listed"] += [w for w in record["listed"] if w not in target["listed"]]
 
 
@@ -533,7 +539,7 @@ def page(total: int, known: int) -> str:
         "",
         "## The wanted list",
         "",
-        (f"The list holds {total:,} files, firmware first, then game data. Of these, {known:,} have a "
+        (f"The list holds {total:,} files, firmware first and game data last. Of these, {known:,} have a "
          "fingerprint (a hash), so a dropped copy is recognised."),
         "",
         "The others are known by name only: upload one and the check decides.",

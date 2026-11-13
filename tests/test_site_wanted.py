@@ -147,7 +147,8 @@ class _World(unittest.TestCase):
             "platform": "Plat", "config": {"systems": platform},
             "details": [
                 {"name": "v.bin", "status": "untested", "system": "x", "required": True},
-                {"name": "cut.bin", "status": "missing", "system": "x", "required": False},
+                {"name": "cut.bin", "status": "missing", "system": "x", "required": False,
+                 "category": "unread"},
                 {"name": "z.zip", "status": "missing", "system": "x", "required": True},
                 {"name": "r.bin", "status": "missing", "system": "x", "required": True},
                 {"name": "a.bin", "status": "ok", "system": "x"},
@@ -191,14 +192,16 @@ class TheListHoldsWhatTheGapsReportLacks(_World):
         self.assertIn("h", self.entry("b.bin"))
 
     def test_required_entries_come_first(self):
-        firmware = [e for e in self.data["entries"] if not e.get("g")]
+        firmware = [e for e in self.data["entries"] if not e.get("k")]
         needs = [bool(e.get("r")) for e in firmware]
         self.assertEqual(needs, sorted(needs, reverse=True))
         self.assertTrue(any(needs) and not all(needs))
 
     def test_firmware_comes_before_game_data(self):
-        games = [bool(e.get("g")) for e in self.data["entries"]]
-        self.assertEqual(games, sorted(games))
+        kinds = [e.get("k", 0) for e in self.data["entries"]]
+        self.assertEqual(kinds, sorted(kinds))
+        self.assertEqual(self.entry("g.bin")["k"], 2)
+        self.assertEqual(self.entry("cut.bin")["k"], 1)
         # g.bin is required, and still after every optional firmware file.
         self.assertEqual(self.data["entries"][-1]["n"], "g.bin")
         self.assertEqual(self.entry("g.bin").get("r"), 1)
@@ -231,11 +234,13 @@ class TheListHoldsWhatTheGapsReportLacks(_World):
                     "readers": {("emulator", "e", "E"), ("platform", "p", "P")}},
                    {"name": "c", "required": True, "readers": {("emulator", "e", "E")}},
                    {"name": "d", "required": True, "readers": {("emulator", "e", "E")},
-                    "category": sitewanted.GAME_DATA}]
+                    "category": sitewanted.GAME_DATA},
+                   {"name": "u", "required": True, "readers": {("platform", "p", "P")},
+                    "category": sitewanted.UNREAD}]
         for record in records:
             record.setdefault("category", sitewanted.BIOS)
         self.assertEqual([r["name"] for r in sorted(records, key=sitewanted._order)],
-                         ["c", "b", "a", "d"])
+                         ["c", "b", "a", "u", "d"])
 
     def test_a_name_with_no_hash_joins_the_hashed_entry_of_its_name(self):
         reader = ("emulator", "other", "Other")
@@ -576,10 +581,10 @@ class ThePublishedList(unittest.TestCase):
                 self.assertFalse(held.holds(entry["h"], entry.get("z", [])))
 
     def test_firmware_first_then_required_first(self):
-        games = [bool(e.get("g")) for e in self.data["entries"]]
-        self.assertEqual(games, sorted(games))
-        for game in (False, True):
-            needs = [bool(e.get("r")) for e in self.data["entries"] if bool(e.get("g")) == game]
+        kinds = [e.get("k", 0) for e in self.data["entries"]]
+        self.assertEqual(kinds, sorted(kinds))
+        for kind in (0, 1, 2):
+            needs = [bool(e.get("r")) for e in self.data["entries"] if e.get("k", 0) == kind]
             self.assertEqual(needs, sorted(needs, reverse=True))
         self.assertTrue(any("h" not in e for e in self.data["entries"]))
 
