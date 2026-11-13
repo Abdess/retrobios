@@ -27,6 +27,8 @@ import subprocess
 import sys
 import urllib.parse
 import zipfile
+from collections.abc import Callable, Iterable
+from dataclasses import dataclass
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
@@ -554,18 +556,8 @@ def validate_file(
             )
 
     normalized = os.path.normpath(relative)
-    # A platform's declaration first, then a profile's: most files the gaps
-    # page lists are declared by a profile alone.
-    expected = next(
-        (
-            table["folders"][value]
-            for table in (platform_hashes, profile_hashes)
-            for value in (result.sha1, result.md5, hashes.get("sha256", ""))
-            if value in table.get("folders", {})
-        ),
-        set(),
-    )
-    expected_folders = sorted(expected)
+    values = (result.sha1, result.md5, hashes.get("sha256", ""))
+    expected = expected_folders(values, platform_hashes, profile_hashes)
     if too_large:
         # The file stays out of the pull request, so no folder of bios/ is
         # the contributor's to choose: the release asset is placed by hand.
@@ -578,7 +570,7 @@ def validate_file(
             # Depth alone passed a PS1 BIOS filed under bios/Nintendo/Game Boy/.
             result.add_warning(
                 "Placed under " + (here or "the bios/ root") + ", while the other files of "
-                "its system are in " + " or ".join(f"`{f}`" for f in sorted(expected))
+                "its system are in " + " or ".join(f"`{f}`" for f in expected)
             )
         elif len(parts) >= 4:
             result.add_check(True, f"Correct placement: bios/{parts[1]}/{parts[2]}/")
@@ -587,35 +579,28 @@ def validate_file(
     elif result.outcome == "held" or members is not None:
         # Nothing to place: a copy, or an archive whose files go in unzipped.
         pass
-    elif expected_folders:
-        # The contributor asks before forking: say where it goes.
-        names = {
-            name
-            for table in (platform_hashes, profile_hashes)
-            for value in (result.sha1, result.md5, hashes.get("sha256", ""))
-            for name in table.get("named", {}).get(value, ())
-        }
-        name = next(iter(names)) if len(names) == 1 else ""
-        if len(expected_folders) == 1 and name and "/" not in name:
-            folder = expected_folders[0]
-            result.destination = (
-                f"{folder}.variants/{name}.{result.sha1[:8]}"
-                if os.path.exists(folder + name) else folder + name
-            )
-        result.add_warning(
-            "File is not under bios/ yet. Its system's files are in "
-            + " or ".join(f"`{f}`" for f in expected_folders)
-            + (f". --place copies it to `{result.destination}`" if result.destination else "")
-        )
-    elif _variant_home(db, result.filename, result.sha1):
-        result.add_warning(
-            "File is not under bios/ yet. The collection keeps this name in "
-            f"`{_variant_home(db, result.filename, result.sha1)}`"
-        )
     else:
-        result.add_warning(
-            "File is not under bios/ yet. Place it in bios/Manufacturer/Console/"
+        # The contributor asks before forking: say where it goes.
+        spot = placement(
+            values, result.filename, db, platform_hashes, profile_hashes,
+            declared=bool(sha1_known or md5_known or other_known or accepted_by or by_profile),
         )
+        result.destination = spot.destination(result.sha1)
+        copies = f". --place copies it to `{result.destination}`" if result.destination else ""
+        if spot.folders:
+            result.add_warning(
+                "File is not under bios/ yet. Its system's files are in "
+                + " or ".join(f"`{f}`" for f in spot.folders) + copies
+            )
+        elif spot.home:
+            result.add_warning(
+                f"File is not under bios/ yet. The collection keeps this name in `{spot.home}`"
+                + copies
+            )
+        else:
+            result.add_warning(
+                "File is not under bios/ yet. Place it in bios/Manufacturer/Console/"
+            )
 
     declared = [
         *platform_hashes.get("sizes", {}).get(result.filename, []),
@@ -669,6 +654,87 @@ def _platforms_accepting(filepath: str, filename: str, platform_hashes: dict) ->
         if ok:
             accepted.add(platform)
     return accepted
+
+
+def expected_folders(
+    values: Iterable[str], platform_hashes: dict, profile_hashes: dict | None
+) -> list[str]:
+    """The bios/<Manufacturer>/<Console>/ folders the files of a hash's
+    system are in, read from the first of *values* a table knows.
+
+    A platform's declaration first, then a profile's: most files the gaps
+    page lists are declared by a profile alone.
+    """
+    for table in (platform_hashes, profile_hashes or {}):
+        for value in values:
+            if value and value in table.get("folders", {}):
+                return sorted(table["folders"][value])
+    return []
+
+
+@dataclass(frozen=True)
+class Placement:
+    """Where a file not under bios/ yet goes.
+
+    ``folders`` are those of its system, ``home`` the folder the collection
+    keeps its name in when its system names none. ``name`` is the name it
+    is copied under, empty when the declarations do not settle one.
+    ``variant`` says a file of that name is already in the folder: a copy
+    goes beside it in .variants/, never over it.
+    """
+
+    folders: tuple[str, ...] = ()
+    home: str = ""
+    name: str = ""
+    variant: bool = False
+
+    @property
+    def folder(self) -> str:
+        return self.folders[0] if self.folders else self.home
+
+    def destination(self, sha1: str) -> str:
+        if not self.name:
+            return ""
+        if self.variant:
+            return f"{self.folder}.variants/{self.name}.{sha1[:8]}"
+        return self.folder + self.name
+
+
+def placement(
+    values: Iterable[str],
+    filename: str,
+    db: dict | None,
+    platform_hashes: dict,
+    profile_hashes: dict | None,
+    declared: bool,
+    exists: Callable[[str], bool] = os.path.exists,
+) -> Placement:
+    """Where a file goes, by its hashes and its name.
+
+    The review and the site's wanted page both read this one rule, so the
+    folder a contributor is sent to is the folder the review accepts.
+    *declared* says a list or a profile declares one of the hashes: a file
+    known by its name alone gets a slot only once its size fits.
+    """
+    values = [value for value in values if value]
+    folders = expected_folders(values, platform_hashes, profile_hashes)
+    if folders:
+        names = {
+            name
+            for table in (platform_hashes, profile_hashes or {})
+            for value in values
+            for name in table.get("named", {}).get(value, ())
+        }
+        name = next(iter(names)) if len(names) == 1 else ""
+        if len(folders) == 1 and name and "/" not in name:
+            return Placement(tuple(folders), name=name, variant=exists(folders[0] + name))
+        return Placement(tuple(folders))
+    held = next((value for value in values if value in (db or {}).get("files", {})), "")
+    home = _variant_home(db, filename, held)
+    if declared and home and filename and "/" not in filename:
+        # The folder holds a file of that name already.
+        return Placement(home=home, name=filename, variant=True)
+    return Placement(home=home)
 
 
 def _variant_home(db: dict | None, name: str, held: str = "") -> str:
