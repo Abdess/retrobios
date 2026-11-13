@@ -43,6 +43,7 @@ WEBSITE = REPO_ROOT / "website"
 DIST = WEBSITE / "dist"
 COMPONENTS = WEBSITE / "src" / "components"
 SITE_TS = WEBSITE / "src" / "scripts" / "site.ts"
+HASHES_TS = WEBSITE / "src" / "scripts" / "hashes.ts"
 CONFIG = WEBSITE / "astro.config.mjs"
 PLUGIN = WEBSITE / "src" / "plugins" / "rehype-stack-tables.mjs"
 
@@ -186,6 +187,38 @@ class SectionTabsInTheHeader(unittest.TestCase):
         self.assertEqual(labels, ["Start here", "Setups", "Explore", "Reference", "Contribute"])
         self.assertEqual(nav.group(1).count('aria-current="true"'), 1)
         self.assertRegex(nav.group(1), r'aria-current="true"[^>]*>\s*Start here')
+
+
+class TheWantedPageIsInTheBar(unittest.TestCase):
+    """The wanted page is the site's call to contribute: in the bar on every
+    page, beside the search and menu buttons on a phone, where the section
+    tabs fold into the menu."""
+
+    LINK = re.compile(r'<a class="rb-wanted-link[^"]*" href="/retrobios/wanted/"([^>]*)>Wanted files</a>')
+
+    def test_the_bar_holds_it_outside_the_tabs(self):
+        header = _read(COMPONENTS / "Header.astro")
+        bar = header[header.index('<div class="rb-header-bar">'):header.index("</div>")]
+        self.assertIn('class="rb-wanted-link print:hidden"', bar)
+        self.assertIn("aria-current={onWanted ? 'page' : undefined}", bar)
+        # Theme colours only, the same in both themes' variables.
+        style = header[header.index(".rb-wanted-link {"):header.index("@media")]
+        self.assertNotRegex(style, r"#[0-9a-fA-F]{3,6}\b")
+        # At 360 px the name was cut to "Retr": the logo stays, the name is
+        # kept for screen readers only.
+        narrow = header[header.index("@media (max-width: 26.99rem)"):]
+        self.assertIn(".site-title span {", narrow[:200])
+        self.assertIn("clip-path: inset(50%);", narrow[:400])
+
+    def test_built_on_every_page_current_on_its_own(self):
+        for page in ("which-pack", "files", "systems"):
+            with self.subTest(page=page):
+                found = self.LINK.search(_built(page))
+                self.assertIsNotNone(found)
+                self.assertNotIn("aria-current", found.group(1))
+        own = self.LINK.search(_built("wanted"))
+        self.assertIsNotNone(own)
+        self.assertIn('aria-current="page"', own.group(1))
 
 
 def _title_block(html: str) -> str:
@@ -497,25 +530,75 @@ class HashAFileHere(unittest.TestCase):
         source = _read(SITE_TS)
         self.assertIn("input.type = 'file';", source)
         self.assertIn("It is hashed on this device. Nothing is uploaded.", source)
-        self.assertIn("crypto.subtle.digest(name, buffer)", source)
-        self.assertIn("['SHA-1', 'SHA-256']", source)
+        self.assertIn("import { type FileHashes, hashFile } from './hashes.ts';", source)
         self.assertIn("lookUp(status, result, [found.sha1, found.md5, found.crc32, found.sha256])", source)
+        hashing = _read(HASHES_TS)
+        self.assertIn("crypto.subtle.digest(name, buffer)", hashing)
+        self.assertIn("['SHA-1', 'SHA-256']", hashing)
 
-    def test_md5_and_crc32_match_python(self):
-        source = _read(SITE_TS)
-        block = source[source.index("// Hashing a file on this device"):source.index("type FileHashes")]
-        sizes = [0, 1, 55, 56, 63, 64, 65, 119, 120, 128, 1000, 70_001]
-        out = _node_module(block + (
-            f"console.log(JSON.stringify({json.dumps(sizes)}.map((n) => {{"
-            "const bytes = new Uint8Array(n);"
-            "for (let i = 0; i < n; i += 1) bytes[i] = (i * 31 + 7) & 0xff;"
-            "return [md5(bytes), crc32(bytes)]; })));"
+
+class FileHashesMatchPython(unittest.TestCase):
+    """MD5 and CRC32 are written here, Web Crypto having neither: each is
+    checked against hashlib and zlib, whole and fed in uneven slices, and
+    hashFile's four values against a file read in 4 MiB slices."""
+
+    SIZES = [0, 1, 55, 56, 63, 64, 65, 119, 120, 128, 1000, 70_001]
+
+    @staticmethod
+    def _bytes(size: int) -> bytes:
+        return bytes((i * 31 + 7) & 0xFF for i in range(size))
+
+    def _run(self, body: str) -> list:
+        return json.loads(_node_module(
+            f"import {{ Crc32, Md5, crc32, hashFile, md5 }} from {json.dumps(HASHES_TS.as_uri())};"
+            "const fill = (n) => { const b = new Uint8Array(n);"
+            " for (let i = 0; i < n; i += 1) b[i] = (i * 31 + 7) & 0xff; return b; };" + body
         ))
-        for size, (md5, crc) in zip(sizes, json.loads(out)):
-            data = bytes((i * 31 + 7) & 0xFF for i in range(size))
+
+    def test_md5_and_crc32_whole(self):
+        out = self._run(
+            f"console.log(JSON.stringify({json.dumps(self.SIZES)}.map((n) => "
+            "{ const bytes = fill(n); return [md5(bytes), crc32(bytes)]; })));"
+        )
+        for size, (md5, crc) in zip(self.SIZES, out):
+            data = self._bytes(size)
             with self.subTest(size=size):
                 self.assertEqual(md5, hashlib.md5(data).hexdigest())
                 self.assertEqual(crc, f"{zlib.crc32(data):08x}")
+
+    def test_md5_and_crc32_in_slices(self):
+        """A slice ending inside a 64-byte block carries it to the next."""
+        size, steps = 200_003, [1, 63, 64, 65, 3, 1000, 7, 100_000]
+        out = self._run(
+            f"const bytes = fill({size}); const steps = {json.dumps(steps)};"
+            "const m = new Md5(); const c = new Crc32();"
+            "for (let at = 0, k = 0; at < bytes.length; k += 1) {"
+            " const piece = bytes.subarray(at, at + steps[k % steps.length]);"
+            " m.update(piece); c.update(piece); at += piece.length; }"
+            "console.log(JSON.stringify([m.digest(), c.digest()]));"
+        )
+        data = self._bytes(size)
+        self.assertEqual(out, [hashlib.md5(data).hexdigest(), f"{zlib.crc32(data):08x}"])
+
+    def test_hash_file_reads_slices_and_reports_progress(self):
+        size = 9 * 1024 * 1024 + 17
+        out = self._run(
+            f"const shares = []; const found = await hashFile(new Blob([fill({size})]),"
+            " (share) => shares.push(share));"
+            "console.log(JSON.stringify([found, shares.length, shares.at(-1),"
+            " shares.every((v, i) => i === 0 || v >= shares[i - 1])]));"
+        )
+        data = self._bytes(size)
+        found, steps, last, rising = out
+        self.assertEqual(found, {
+            "sha1": hashlib.sha1(data).hexdigest(),
+            "md5": hashlib.md5(data).hexdigest(),
+            "crc32": f"{zlib.crc32(data):08x}",
+            "sha256": hashlib.sha256(data).hexdigest(),
+        })
+        self.assertGreaterEqual(steps, 3)
+        self.assertEqual(last, 1)
+        self.assertTrue(rising)
 
 
 class SearchFoldsPagesUnderAHash(unittest.TestCase):

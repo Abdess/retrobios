@@ -1,0 +1,180 @@
+---
+// The wanted page: files dropped here are hashed on this device and
+// compared with public/data/wanted.json, the files the gaps page reports
+// the collection lacks (scripts/sitewanted.py). A file the collection
+// holds is found in the hash lookup (api/v1/lookup/, one shard per first
+// two characters). Nothing is sent anywhere: a wanted file gets a link to
+// GitHub's upload page for its folder, and the visitor uploads it there.
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+
+<div class="rb-wanted" data-base={base}>
+	<div class="rb-wanted-drop">
+		<p><strong>Drop files here</strong></p>
+		<label class="rb-button" for="rb-wanted-input">Or choose them</label>
+		<input id="rb-wanted-input" type="file" multiple class="rb-wanted-input" />
+	</div>
+	<p class="rb-wanted-status" role="status" aria-live="polite"></p>
+	<ol class="rb-wanted-list"></ol>
+</div>
+
+<script>
+	import { type FileHashes, hashFile } from '../scripts/hashes.ts';
+	import { type Entry, type Wanted, issueUrl, matches, target, uploadUrl } from '../scripts/wanted.ts';
+
+	type Item = { layer: string; value: string; url: string; archive?: string; sha1?: string };
+
+	const size = (bytes: number) =>
+		bytes >= 1024 ** 3 ? `${(bytes / 1024 ** 3).toFixed(1)} GB`
+		: bytes >= 1024 ** 2 ? `${(bytes / 1024 ** 2).toFixed(1)} MB`
+		: bytes >= 1024 ? `${(bytes / 1024).toFixed(1)} KB`
+		: `${bytes} B`;
+
+	const element = <K extends keyof HTMLElementTagNameMap>(tag: K, ...content: (Node | string)[]) => {
+		const node = document.createElement(tag);
+		node.append(...content);
+		return node;
+	};
+	const code = (text: string) => element('code', text);
+	const listed = (nodes: Node[]) =>
+		nodes.flatMap((node, i) => (i === 0 ? [node] : [i === nodes.length - 1 ? ' and ' : ', ', node]));
+
+	for (const root of document.querySelectorAll<HTMLElement>('.rb-wanted')) {
+		const base = root.dataset.base ?? '/';
+		const drop = root.querySelector<HTMLElement>('.rb-wanted-drop')!;
+		const input = root.querySelector<HTMLInputElement>('.rb-wanted-input')!;
+		const status = root.querySelector<HTMLElement>('.rb-wanted-status')!;
+		const list = root.querySelector<HTMLOListElement>('.rb-wanted-list')!;
+		let wanted: Promise<Wanted> | null = null;
+		const shards = new Map<string, Promise<Item[]>>();
+		const shard = (value: string) => {
+			const prefix = value.slice(0, 2);
+			if (!shards.has(prefix)) {
+				shards.set(prefix, fetch(`${base}api/v1/lookup/${prefix}.json`)
+					.then((response) => (response.ok ? response.json() : { items: [] }))
+					.then((data) => data.items ?? []));
+			}
+			return shards.get(prefix)!;
+		};
+		const link = (href: string, text: string) => {
+			const a = element('a', text);
+			a.href = href;
+			return a;
+		};
+
+		const verdict = async (file: File, hashes: FileHashes): Promise<Node[]> => {
+			const bySha1 = (await shard(hashes.sha1)).find((item) =>
+				item.value === hashes.sha1 && (item.layer === 'collection' || item.layer === 'data-directory'));
+			if (bySha1) {
+				return [element('p', element('strong', 'Already held.'), ' The collection has this file. ',
+					link(new URL(bySha1.url, location.origin).href, 'See it'), '.')];
+			}
+			const data = await (wanted ??= fetch(`${base}data/wanted.json`).then((response) => response.json()));
+			const found = matches(data, hashes, file.size);
+			if (found.length) return wantedBlock(data, found, file, hashes);
+			const member = (await shard(hashes.crc32)).find((item) => item.value === hashes.crc32 && item.layer === 'archive-member');
+			if (member) {
+				return [element('p', element('strong', 'Already held.'), ' The collection has it inside ',
+					code(member.archive ?? ''), '. ', link(new URL(member.url, location.origin).href, 'See it'), '.')];
+			}
+			return [element('p', element('strong', 'Not wanted.'), ' No list we follow asks for this file.')];
+		};
+
+		const wantedBlock = (data: Wanted, found: Entry[], file: File, hashes: FileHashes): Node[] => {
+			const best = found[0];
+			const readers = [...new Set(found.flatMap((entry) => entry.w))].map((index) => {
+				const [kind, key, label] = data.readers[index];
+				return link(`${base}${kind === 'p' ? 'platforms' : 'emulators'}/${key}/`, label);
+			});
+			const systems = [...new Set(found.flatMap((entry) => (entry.s ? [entry.s] : [])))];
+			const required = found.some((entry) => entry.r);
+			const blocks: Node[] = [
+				element('p', element('strong', 'Wanted.'), ' This is ', code(best.n),
+					...(systems.length ? [`, for ${systems.join(', ')}`] : []), '. ',
+					required ? 'Needed by ' : 'Used by ', ...listed(readers), '.'),
+			];
+			const place = target(data, best, hashes, file.name);
+			if (file.size > data.limit) {
+				blocks.push(element('p', `GitHub's upload page takes ${size(data.limit)} at most. `,
+					link(issueUrl(data, best.n, hashes, file.size), 'Open an issue'),
+					' with its hashes filled in, and we add it.'));
+				return blocks;
+			}
+			if (place.name !== file.name) blocks.push(element('p', 'Rename it to ', code(place.name), ' first.'));
+			const button = link(uploadUrl(data, place.folder), `Upload to ${place.folder}`);
+			button.className = 'rb-button rb-button-primary';
+			button.target = '_blank';
+			button.rel = 'noopener';
+			blocks.push(element('p', button));
+			return blocks;
+		};
+
+		const run = async (files: File[]) => {
+			if (!files.length) return;
+			list.replaceChildren();
+			const rows = files.map((file) => {
+				const bar = element('progress');
+				bar.max = 1;
+				bar.value = 0;
+				bar.setAttribute('aria-label', `Reading ${file.name}`);
+				const body = element('div', bar);
+				list.append(element('li', element('p', code(file.name), ` ${size(file.size)}`), body));
+				return { file, bar, body };
+			});
+			let done = 0;
+			for (const { file, bar, body } of rows) {
+				status.textContent = `Reading ${file.name} (${done + 1} of ${files.length})...`;
+				try {
+					const hashes = await hashFile(file, (share) => { bar.value = share; });
+					body.replaceChildren(...(await verdict(file, hashes)));
+				} catch {
+					body.replaceChildren(element('p', 'This file could not be read here.'));
+				}
+				done += 1;
+			}
+			status.textContent = `Done: ${files.length} ${files.length === 1 ? 'file' : 'files'}.`;
+		};
+
+		input.addEventListener('change', () => run([...(input.files ?? [])]));
+		drop.addEventListener('dragover', (event) => {
+			event.preventDefault();
+			drop.classList.add('rb-wanted-over');
+		});
+		drop.addEventListener('dragleave', () => drop.classList.remove('rb-wanted-over'));
+		drop.addEventListener('drop', (event) => {
+			event.preventDefault();
+			drop.classList.remove('rb-wanted-over');
+			run([...(event.dataTransfer?.files ?? [])]);
+		});
+	}
+</script>
+
+<style is:global>
+	.rb-wanted-drop {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 2rem 1rem;
+		border: 2px dashed var(--rb-border);
+		border-radius: 8px;
+		text-align: center;
+	}
+	.rb-wanted-drop.rb-wanted-over { border-color: var(--rb-link); background: var(--sl-color-accent-low); }
+	.sl-markdown-content .rb-wanted-drop > * { margin: 0; }
+	/* The input stays in the page for keyboards and screen readers; its
+	   label is the button people see. */
+	.rb-wanted-input {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		opacity: 0;
+		overflow: hidden;
+	}
+	.rb-wanted-drop:focus-within label { outline: 2px solid var(--rb-link); outline-offset: 2px; }
+	.rb-wanted-drop label { cursor: pointer; }
+	.rb-wanted-list { padding-left: 1.25rem; }
+	.rb-wanted-list li { margin-top: 1rem; }
+	.rb-wanted-list progress { width: 100%; max-width: 20rem; }
+	.rb-wanted-status { margin-top: 1rem; font-weight: 600; }
+</style>
