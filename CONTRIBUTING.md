@@ -4,6 +4,9 @@
 
 Have a file the collection lacks? Add it from the browser. It is checked on arrival.
 
+Not sure? Drop it on [the wanted page](https://abdess.github.io/retrobios/wanted/). It reads the file on
+your device, says if it is wanted, and opens the upload in the right folder.
+
 [Upload it into `bios/`](https://github.com/Abdess/retrobios/upload/main/bios), 25 MB at most per file. GitHub
 writes it to a fork and opens the pull request.
 

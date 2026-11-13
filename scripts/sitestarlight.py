@@ -28,6 +28,7 @@ COMPONENTS = {
     "Tabs": "@astrojs/starlight/components",
     "TabItem": "@astrojs/starlight/components",
     "FilePicker": "components/FilePicker.astro",
+    "WantedFiles": "components/WantedFiles.astro",
     "MeasurementsExplorer": "components/MeasurementsExplorer.astro",
     "InstallDemo": "components/InstallDemo.astro",
 }

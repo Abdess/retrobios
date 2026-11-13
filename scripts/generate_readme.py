@@ -856,6 +856,9 @@ def contributing_text(
 
 Have a file the collection lacks? Add it from the browser. It is checked on arrival.
 
+Not sure? Drop it on [the wanted page]({link("wanted")}). It reads the file on
+your device, says if it is wanted, and opens the upload in the right folder.
+
 [Upload it into `bios/`]({UPLOAD_URL}), 25 MB at most per file. GitHub
 writes it to a fork and opens the pull request.
 
