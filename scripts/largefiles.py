@@ -210,6 +210,9 @@ def _fetch_asset(
     os.close(tmp_fd)
     try:
         downloaded = False
+        # Only a name no candidate answers is reported: a spaced name is
+        # published dotted, and logging its first 404 read as a missing asset.
+        failures: list[str] = []
         for candidate, url in _asset_urls(name):
             try:
                 req = urllib.request.Request(url, headers={"User-Agent": "retrobios/1.0"})
@@ -225,8 +228,10 @@ def _fetch_asset(
             except (urllib.error.URLError, OSError, http.client.HTTPException) as exc:
                 # A stalled or cut stream is a timeout or IncompleteRead, not
                 # a URLError: it escaped this handler and left its scratch.
-                print(f"  large file {candidate}: {exc}", file=sys.stderr)
+                failures.append(f"  large file {candidate}: {exc}")
         if not downloaded:
+            for failure in failures:
+                print(failure, file=sys.stderr)
             return None
         snapshot = _read_once(tmp_path)
         if snapshot is None or not _matches(snapshot[0], expected_sha1, expected_md5):
