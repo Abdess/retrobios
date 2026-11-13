@@ -30,6 +30,7 @@ import zipfile
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
@@ -181,7 +182,7 @@ def load_platform_hashes(platforms_dir: str, db: dict | None = None) -> dict:
     bios/<Manufacturer>/<Console>/ folders the collection files its system
     under, read from the other files of that system it holds.
     """
-    known = {"sha1": set(), "md5": set(), "sha256": set(), "crc32": set(),
+    known: dict[str, Any] = {"sha1": set(), "md5": set(), "sha256": set(), "crc32": set(),
              "names": set(), "folders": {}, "sizes": {}, "entries": {}, "named": {},
              "name_systems": {}, "system_dirs": {}, "system_folders": {}}
     systems_of: dict[str, set[str]] = {}
@@ -778,12 +779,13 @@ def placement(
     tables = (platform_hashes, profile_hashes or {})
     # A name several systems declare does not say which one a file is:
     # a copy held for one of them is no answer.
-    within = set() if not systems and len(owners) > 1 else {
+    dirs: set[str] = set() if not systems and len(owners) > 1 else {
         d for table in tables for s in owners for d in table.get("system_dirs", {}).get(s, ())
     }
     tail = _directory_tail(db, directory)
+    within: set[str] | None = dirs
     if tail:
-        within = {d for d in within if d.endswith("/" + tail) or d == tail} if owners else None
+        within = {d for d in dirs if d.endswith("/" + tail) or d == tail} if owners else None
     home = _variant_home(db, filename, held, within if owners or tail else None)
     if declared and home and filename and "/" not in filename:
         # The folder holds a file of that name already.
