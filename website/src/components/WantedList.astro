@@ -1,0 +1,254 @@
+---
+// Every file of public/data/wanted.json (scripts/sitewanted.py), by system,
+// most useful first. The list is fetched when the page runs, never written
+// in the HTML: a group's rows are drawn when it opens or a filter reaches
+// it. Each row carries its own upload button, to the folder
+// validate_pr.placement() gives (wanted.ts rowTarget).
+import { wantedVersion } from '../scripts/wanted-version.ts';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const version = wantedVersion();
+---
+
+<div class="rb-wanted-browse" data-base={base} data-version={version}>
+	<div class="rb-table-filter rb-wanted-filter" hidden data-pagefind-ignore="all">
+		<label for="rb-wanted-filter">Filter the list</label>
+		<input id="rb-wanted-filter" type="search" autocomplete="off"
+			placeholder="Name, system, emulator, setup" aria-describedby="rb-wanted-filter-count" />
+		<span id="rb-wanted-filter-count" class="rb-table-filter-count" aria-live="polite"></span>
+	</div>
+	<p class="rb-wanted-state">The list loads with the page. Without JavaScript, the <a href={`${base}gaps/`}>gaps page</a> lists the same files.</p>
+	<div class="rb-wanted-groups"></div>
+</div>
+
+<script>
+	import { type Entry, type Wanted, loadWanted, rowIssueUrl, rowTarget, tooLarge, uploadUrl } from '../scripts/wanted.ts';
+
+	const LABELS: Record<string, string> = { sha1: 'SHA-1', sha256: 'SHA-256', md5: 'MD5', crc32: 'CRC32' };
+	const OTHER = 'Other files';
+
+	const size = (bytes: number) =>
+		bytes >= 1024 ** 3 ? `${(bytes / 1024 ** 3).toFixed(1)} GB`
+		: bytes >= 1024 ** 2 ? `${(bytes / 1024 ** 2).toFixed(1)} MB`
+		: bytes >= 1024 ? `${(bytes / 1024).toFixed(1)} KB`
+		: `${bytes} B`;
+	const element = <K extends keyof HTMLElementTagNameMap>(tag: K, ...content: (Node | string)[]) => {
+		const node = document.createElement(tag);
+		node.append(...content);
+		return node;
+	};
+	const code = (text: string) => element('code', text);
+	const listed = (nodes: Node[]) =>
+		nodes.flatMap((node, i) => (i === 0 ? [node] : [i === nodes.length - 1 ? ' and ' : ', ', node]));
+	const plural = (count: number, noun: string) => `${count.toLocaleString('en')} ${noun}${count === 1 ? '' : 's'}`;
+
+	// A system's fold: its entries, those the filter keeps, and those drawn.
+	type Group = {
+		title: string; entries: Entry[]; required: number;
+		details: HTMLDetailsElement; list: HTMLOListElement;
+		found: Entry[]; drawn: Entry[] | null;
+	};
+	// A filter that keeps this many rows or fewer in a system opens it.
+	const OPEN_AT = 50;
+
+	for (const root of document.querySelectorAll<HTMLElement>('.rb-wanted-browse')) {
+		const base = root.dataset.base ?? '/';
+		const version = root.dataset.version ?? '';
+		const filter = root.querySelector<HTMLElement>('.rb-wanted-filter')!;
+		const input = root.querySelector<HTMLInputElement>('#rb-wanted-filter')!;
+		const count = root.querySelector<HTMLElement>('#rb-wanted-filter-count')!;
+		const state = root.querySelector<HTMLElement>('.rb-wanted-state')!;
+		const holder = root.querySelector<HTMLElement>('.rb-wanted-groups')!;
+		const link = (href: string, text: string) => {
+			const a = element('a', text);
+			a.href = href;
+			return a;
+		};
+
+		const row = (data: Wanted, entry: Entry): HTMLLIElement => {
+			const head = element('p', code(entry.n), ' ');
+			const need = element('span', entry.r ? 'Required' : 'Optional');
+			need.className = `rb-badge ${entry.r ? 'rb-badge-warning' : 'rb-badge-muted'}`;
+			head.append(need);
+			if (entry.z?.length) head.append(` ${entry.z.map(size).join(' or ')}`);
+			head.className = 'rb-wanted-row-head';
+			const item = element('li', head);
+			item.className = 'rb-wanted-row';
+			if (entry.d) item.append(element('p', entry.d));
+			const systems = (entry.s ?? []).map((index) => data.systems[index]);
+			const readers = entry.w.map((index) => {
+				const [kind, key, label] = data.readers[index];
+				return link(`${base}${kind === 'p' ? 'platforms' : 'emulators'}/${key}/`, label);
+			});
+			item.append(element('p', ...(systems.length ? [`For ${systems.join(', ')}. `] : []),
+				entry.r ? 'Needed by ' : 'Used by ', ...listed(readers), '.'));
+			if (entry.u) item.append(element('p', 'Not collected yet: ', entry.u.replace(/\.?$/, '.')));
+			for (const [where, name] of entry.l ?? []) item.append(element('p', `Listed in ${where} as `, code(name), '.'));
+			if (entry.h) {
+				const hashes = element('dl');
+				hashes.className = 'rb-wanted-hashes';
+				for (const [algo, values] of Object.entries(entry.h)) {
+					for (const value of values ?? []) {
+						const copy = element('button', 'Copy');
+						copy.type = 'button';
+						copy.className = 'rb-copy rb-wanted-copy';
+						copy.dataset.value = value;
+						copy.setAttribute('aria-label', `Copy the ${LABELS[algo]} of ${entry.n}`);
+						hashes.append(element('dt', LABELS[algo]), element('dd', code(value), copy));
+					}
+				}
+				item.append(hashes);
+			} else {
+				const note = element('p', 'No fingerprint in the list: the file is known by its name only. The check after the upload decides.');
+				note.className = 'rb-wanted-named';
+				item.append(note);
+			}
+			if (tooLarge(data, entry)) {
+				const issue = link(rowIssueUrl(data, entry), 'Open an issue');
+				issue.className = 'rb-button';
+				issue.target = '_blank';
+				issue.rel = 'noopener';
+				item.append(element('p', `Over ${size(data.limit)}, too large for the upload page. `, issue));
+				return item;
+			}
+			const place = rowTarget(data, entry);
+			const button = link(uploadUrl(data, place.folder), `Upload to ${place.folder}`);
+			button.className = 'rb-button rb-wanted-upload';
+			button.target = '_blank';
+			button.rel = 'noopener';
+			const naming = place.name
+				? ['Upload it as ', code(place.name), '.']
+				: ['Drop it above first: its name in that folder ends with part of its fingerprint.'];
+			item.append(element('p', ...naming), element('p', button));
+			return item;
+		};
+
+		const words = (text: string) => text.toLowerCase().split(/\s+/).filter(Boolean);
+
+		const draw = (data: Wanted, group: Group) => {
+			if (group.drawn === group.found) return;
+			group.list.replaceChildren(...group.found.map((entry) => row(data, entry)));
+			group.drawn = group.found;
+		};
+
+		const show = (data: Wanted, groups: Group[], haystack: Map<Entry, string>) => {
+			const query = words(input.value);
+			let rows = 0;
+			let visible = 0;
+			for (const group of groups) {
+				const title = group.title.toLowerCase();
+				group.found = query.length
+					? group.entries.filter((entry) => query.every((word) => haystack.get(entry)!.includes(word) || title.includes(word)))
+					: group.entries;
+				group.details.hidden = !group.found.length;
+				if (group.found.length) visible += 1;
+				rows += group.found.length;
+				if (query.length) group.details.open = group.found.length > 0 && group.found.length <= OPEN_AT;
+				if (group.details.open) draw(data, group);
+			}
+			count.textContent = query.length
+				? `${plural(rows, 'row')} in ${plural(visible, 'system')}`
+				: `${plural(data.entries.length, 'file')} in ${plural(groups.length, 'system')}`;
+		};
+
+		loadWanted(base, version).then((data) => {
+			const bySystem = new Map<string, Entry[]>();
+			for (const entry of data.entries) {
+				const titles = entry.s?.length ? entry.s.map((index) => data.systems[index]) : [OTHER];
+				for (const title of titles) {
+					if (!bySystem.has(title)) bySystem.set(title, []);
+					bySystem.get(title)!.push(entry);
+				}
+			}
+			const haystack = new Map(data.entries.map((entry) => [entry, [
+				entry.n, entry.d ?? '', ...(entry.s ?? []).map((index) => data.systems[index]),
+				...entry.w.map((index) => data.readers[index][2]),
+			].join(' ').toLowerCase()]));
+			// The list comes most useful first (sitewanted._order): a system
+			// comes where its first file does, and its rows keep that order.
+			const groups: Group[] = [...bySystem].map(([title, entries]) => {
+				const required = entries.filter((entry) => entry.r).length;
+				const summary = element('summary', element('span', title), ' ');
+				const counted = element('span', `${plural(entries.length, 'file')}${required ? `, ${required.toLocaleString('en')} required` : ''}`);
+				counted.className = 'rb-wanted-group-count';
+				summary.append(counted);
+				const list = element('ol');
+				list.className = 'rb-wanted-rows';
+				const details = element('details', summary, list);
+				details.className = 'rb-wanted-group';
+				return { title, entries, required, details, list, found: entries, drawn: null };
+			});
+			for (const group of groups) {
+				group.details.addEventListener('toggle', () => {
+					if (group.details.open) draw(data, group);
+				});
+			}
+			holder.replaceChildren(...groups.map((group) => group.details));
+			state.remove();
+			filter.hidden = false;
+			show(data, groups, haystack);
+			let pending = 0;
+			input.addEventListener('input', () => {
+				window.clearTimeout(pending);
+				pending = window.setTimeout(() => show(data, groups, haystack), 150);
+			});
+		}).catch((error) => {
+			console.error(error);
+			state.replaceChildren('The list could not load. The ', link(`${base}gaps/`, 'gaps page'), ' lists the same files.');
+		});
+
+		holder.addEventListener('click', async (event) => {
+			const button = (event.target as Element).closest?.<HTMLButtonElement>('button.rb-wanted-copy');
+			if (!button) return;
+			try {
+				await navigator.clipboard.writeText(button.dataset.value ?? '');
+				button.textContent = 'Copied';
+			} catch {
+				// No clipboard: the value is selected, for Ctrl+C.
+				const range = document.createRange();
+				range.selectNodeContents(button.previousElementSibling ?? button);
+				const selection = window.getSelection();
+				selection?.removeAllRanges();
+				selection?.addRange(range);
+			}
+		});
+	}
+</script>
+
+<style is:global>
+	.rb-wanted-group { border-top: 1px solid var(--rb-border); }
+	.rb-wanted-group:last-child { border-bottom: 1px solid var(--rb-border); }
+	.rb-wanted-group[hidden] { display: none; }
+	.rb-wanted-group > summary {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem 0.75rem;
+		align-items: baseline;
+		min-height: 44px;
+		padding: 0.6rem 0;
+		cursor: pointer;
+		font-weight: 600;
+	}
+	.rb-wanted-group-count { color: var(--rb-text-secondary); font-size: 0.85rem; font-weight: 400; }
+	.sl-markdown-content .rb-wanted-rows { margin: 0 0 1rem; padding: 0; list-style: none; }
+	.sl-markdown-content .rb-wanted-row {
+		margin: 0.75rem 0 0;
+		padding: 0.75rem;
+		border: 1px solid var(--rb-border);
+		border-radius: 6px;
+		overflow-wrap: anywhere;
+	}
+	.sl-markdown-content .rb-wanted-row > * { margin: 0.35rem 0 0; }
+	.sl-markdown-content .rb-wanted-row > :first-child { margin-top: 0; }
+	.rb-wanted-row-head code { font-weight: 600; }
+	.rb-wanted-named { color: var(--rb-text-secondary); }
+	.sl-markdown-content .rb-wanted-hashes {
+		display: grid;
+		grid-template-columns: max-content minmax(0, 1fr);
+		gap: 0.2rem 0.75rem;
+		font-size: 0.85rem;
+	}
+	.sl-markdown-content .rb-wanted-hashes > * { margin: 0; }
+	.sl-markdown-content .rb-wanted-hashes dt { color: var(--rb-text-secondary); }
+	.sl-markdown-content .rb-wanted-hashes code { overflow-wrap: anywhere; }
+</style>

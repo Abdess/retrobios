@@ -1,11 +1,12 @@
 """The files the collection lacks, as the wanted page reads them.
 
 A visitor drops files on wanted/, each is hashed in the browser and
-compared with this list. The list is the gaps page's: a file a platform
-lists that its own check finds missing or under another hash, a file an
-emulator loads that no platform lists and the collection does not hold,
-and a file not collected yet. A declaration that names no hash cannot be
-recognised by its bytes and is left out.
+compared with this list, and the page lists every entry under the drop
+box. The list is the gaps page's: a file a platform lists that its own
+check finds missing or under another hash, a file an emulator loads that
+no platform lists and the collection does not hold, and a file not
+collected yet. A declaration that names no hash is kept and marked: it
+is recognised by its name only, and the review of the upload decides.
 
 Each entry keeps the hashes its declaration writes, read as the resolver
 reads them (comma lists split, a crc32 counted only where no stronger hash
@@ -15,8 +16,9 @@ the review of the pull request asks for that same folder.
 
 from __future__ import annotations
 
+import re
 import urllib.parse
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Iterable, Mapping
 from pathlib import Path
 
 import archive_build
@@ -128,7 +130,8 @@ def gap_entries(profile: dict, name: str, identity: str, unsourceable: bool) -> 
 def wanted_declarations(profiles: dict, coverages: dict, gap_report: dict) -> list[dict]:
     """Every declaration of a file the gaps page reports as lacking.
 
-    Each is {name, system, required, reader: (kind, key, label), entry}.
+    Each is {name, system, required, reader: (kind, key, label), entry,
+    reason}, the reason a file not collected yet carries, empty otherwise.
     """
     found: list[dict] = []
     for key, coverage in sorted(coverages.items()):
@@ -143,6 +146,7 @@ def wanted_declarations(profiles: dict, coverages: dict, gap_report: dict) -> li
                         "name": str(entry["name"]), "system": system,
                         "required": bool(detail.get("required", True)),
                         "reader": ("platform", key, coverage["platform"]), "entry": entry,
+                        "reason": "",
                     })
     unique = unique_emulator_profiles(profiles)
     for key, data in sorted(gap_report.items()):
@@ -161,15 +165,54 @@ def wanted_declarations(profiles: dict, coverages: dict, gap_report: dict) -> li
                     "name": str(entry["name"]), "system": str(system),
                     "required": bool(row.get("required", False)),
                     "reader": ("emulator", key, str(data.get("emulator", key))), "entry": entry,
+                    "reason": str(row.get("reason") or "") if unsourceable else "",
                 })
     return found
+
+
+def catalog_listings(report: dict | None, labels: dict[str, str]) -> dict[tuple[str, str], list[tuple[str, str]]]:
+    """(profile, file name casefolded) -> (catalog or romset, the name it
+    lists the file under), from a provenance report built with the
+    profiles' needs: the "Listed in" column of the gaps page."""
+    out: dict[tuple[str, str], list[tuple[str, str]]] = {}
+    for source, data in sorted((report or {}).items()):
+        label = labels.get(source, source)
+        for entry in data.get("missing", []):
+            where = [(label, str(entry.get("name", "")))]
+            where += [(str(hit["source"]), str(hit["archive"])) for hit in entry.get("romsets", [])]
+            for need in entry.get("needed_by", []):
+                held = out.setdefault((need["emulator"], str(need["name"]).casefold()), [])
+                held += [w for w in where if w not in held]
+    return out
+
+
+# A name the code builds from the content (<serial>.txt, *.ini) is a
+# pattern, not a file anyone can upload.
+PATTERN = re.compile(r"[<>*?]")
+# What a row says the file is: the first sentence of the declaration's
+# description or note, cut at a word past this many characters.
+DESCRIPTION_LIMIT = 160
+SENTENCE_END = re.compile(r"(?:(?<=\w\w[.!?])|(?<=[)\]][.!?]))\s+(?=[A-Z])")
+
+
+def first_sentence(text: object, limit: int = DESCRIPTION_LIMIT) -> str:
+    """The first sentence of a description, on one line and at most about
+    *limit* characters."""
+    flat = " ".join(str(text or "").replace("`", "").split())
+    end = SENTENCE_END.search(flat)
+    if end:
+        flat = flat[:end.start()]
+    if len(flat) > limit:
+        flat = flat[:limit].rsplit(" ", 1)[0].rstrip(",;:(") + "..."
+    return flat
 
 
 def _settle_cut(records: list[dict]) -> None:
     """A cut md5 names a dump only if exactly one md5 starts with it.
 
     Matched against the wanted md5s: with one match the cut is that md5.
-    With several it names none, and with none the page compares by prefix.
+    With several it names none, and an entry left with no hash is known by
+    its name. With none the page compares by prefix.
     """
     full = {v for r in records for v in r["hashes"].get("md5", []) if len(v) == 32}
     for record in records:
@@ -207,10 +250,12 @@ class Placer:
         }
 
     def place(self, hashes: dict[str, list[str]], name: str) -> Placement:
+        """A declaration that writes no hash is known by its name alone,
+        as the review knows a file whose hashes nothing declares."""
         values = [value for algo in ("sha1", "md5", "sha256") for value in hashes.get(algo, [])
                   if len(value) == FULL_LENGTH[algo]]
         return placement(values, name, self.db, self.platform_hashes, self.profile_hashes,
-                         declared=True, exists=self.paths.__contains__)
+                         declared=bool(hashes), exists=self.paths.__contains__)
 
     def folder(self, entry: dict) -> str:
         """The folder an upload of a profile or platform entry goes to."""
@@ -226,6 +271,13 @@ def upload_href(root: str, folder: str) -> str:
     return root + urllib.parse.quote((folder or "bios/").rstrip("/"))
 
 
+def _order(record: dict) -> tuple:
+    """Most useful first: required before optional, then by how many
+    setups and emulators read the file."""
+    return (not record["required"], -len(record["readers"]), record["name"].casefold(),
+            sorted(record["readers"]))
+
+
 def build_wanted(
     profiles: dict,
     coverages: dict,
@@ -234,60 +286,81 @@ def build_wanted(
     placer: Placer,
     system_name: Callable[[str], str],
     ledger: Iterable[dict] = (),
+    catalogued: Mapping[tuple[str, str], list[tuple[str, str]]] | None = None,
 ) -> dict:
     """The wanted list, compact, as public/data/wanted.json carries it.
 
     Readers, systems and folders are written once and named by position.
-    An entry: n name, h hashes, w readers, s systems, r required, z sizes,
-    f folder, t the name it is uploaded under, v that name goes to the
-    folder's .variants/ with the first 8 characters of its sha1.
+    An entry: n name, h hashes (absent when the declarations write none:
+    the file is known by its name only), w readers, s systems, r required,
+    z sizes, d what the file is, u why it is not collected yet, l the
+    catalogs that list it with the name they give it, f folder, t the name
+    it is uploaded under, v that name goes to the folder's .variants/ with
+    the first 8 characters of its sha1. Entries come most useful first.
     """
     held = Held(db, ledger)
     records: dict[tuple, dict] = {}
     for declaration in wanted_declarations(profiles, coverages, gap_report):
+        if PATTERN.search(declaration["name"]):
+            continue
         entry = declaration["entry"]
         sizes = _sizes(entry)
         for hashes in _alternatives(declared_hashes(entry)):
-            if held.holds(hashes, sizes):
+            if hashes and held.holds(hashes, sizes):
                 continue
-            key = (declaration["name"], tuple(sorted((a, tuple(v)) for a, v in hashes.items())),
-                   tuple(sizes))
+            key = ((declaration["name"], tuple(sorted((a, tuple(v)) for a, v in hashes.items())),
+                    tuple(sizes)) if hashes
+                   else (declaration["name"].casefold(), declaration["system"]))
             record = records.setdefault(key, {
                 "name": declaration["name"], "hashes": {a: list(v) for a, v in hashes.items()},
                 "sizes": sizes, "systems": set(), "required": False, "readers": set(),
+                "description": "", "reason": "", "listed": [],
             })
             if declaration["system"]:
                 record["systems"].add(declaration["system"])
             record["required"] = record["required"] or declaration["required"]
             record["readers"].add(declaration["reader"])
-    ordered = sorted(records.values(), key=lambda r: (r["name"].casefold(), sorted(r["readers"])))
+            record["description"] = record["description"] or first_sentence(
+                entry.get("description") or entry.get("note"))
+            record["reason"] = record["reason"] or first_sentence(declaration["reason"])
+            kind, reader_key, _label = declaration["reader"]
+            if kind == "emulator":
+                for where in (catalogued or {}).get((reader_key, declaration["name"].casefold()), []):
+                    if where not in record["listed"]:
+                        record["listed"].append(where)
+    _merge_named(records)
+    ordered = sorted(records.values(), key=_order)
     _settle_cut(ordered)
-    ordered = [r for r in ordered if r["hashes"]]
 
     readers = sorted({reader for r in ordered for reader in r["readers"]},
                      key=lambda reader: (reader[0], reader[2].casefold(), reader[1]))
     reader_at = {reader: i for i, reader in enumerate(readers)}
+    titles = sorted({system_name(s) for r in ordered for s in r["systems"]}, key=str.casefold)
+    title_at = {title: i for i, title in enumerate(titles)}
     folders: list[str] = []
     folder_at: dict[str, int] = {}
-    titles: dict[str, str] = {}
     entries = []
     for record in ordered:
         spot = placer.place(record["hashes"], record["name"])
         if spot.folder and spot.folder not in folder_at:
             folder_at[spot.folder] = len(folders)
             folders.append(spot.folder)
-        systems = sorted({titles.setdefault(s, system_name(s)) for s in record["systems"]})
-        item: dict = {
-            "n": record["name"],
-            "h": {algo: record["hashes"][algo] for algo in ALGORITHMS if algo in record["hashes"]},
-            "w": sorted(reader_at[reader] for reader in record["readers"]),
-        }
+        item: dict = {"n": record["name"]}
+        if record["hashes"]:
+            item["h"] = {algo: record["hashes"][algo] for algo in ALGORITHMS if algo in record["hashes"]}
+        item["w"] = sorted(reader_at[reader] for reader in record["readers"])
+        systems = sorted({title_at[system_name(s)] for s in record["systems"]})
         if systems:
-            item["s"] = ", ".join(systems)
+            item["s"] = systems
         if record["required"]:
             item["r"] = 1
         if record["sizes"]:
             item["z"] = record["sizes"]
+        for field, value in (("d", record["description"]), ("u", record["reason"])):
+            if value:
+                item[field] = value
+        if record["listed"]:
+            item["l"] = [list(where) for where in record["listed"]]
         if spot.folder:
             item["f"] = folder_at[spot.folder]
         if spot.name:
@@ -300,9 +373,32 @@ def build_wanted(
         "issue": LARGE_FILE_ISSUE_URL,
         "limit": BROWSER_UPLOAD_LIMIT,
         "readers": [[kind[0], key, label] for kind, key, label in readers],
+        "systems": titles,
         "folders": folders,
         "entries": entries,
     }
+
+
+def _merge_named(records: dict[tuple, dict]) -> None:
+    """A declaration that writes no hash takes any file of its name: when
+    a declaration of the same name and system writes one, the file that
+    meets it meets both, so its readers join that entry."""
+    hashed: dict[tuple[str, str], list[dict]] = {}
+    for record in records.values():
+        if record["hashes"]:
+            for system in record["systems"] or {""}:
+                hashed.setdefault((record["name"].casefold(), system), []).append(record)
+    for key in [k for k, record in records.items() if not record["hashes"]]:
+        targets = hashed.get(key, [])
+        if len(targets) != 1:
+            continue
+        record = records.pop(key)
+        target = targets[0]
+        target["readers"] |= record["readers"]
+        target["required"] = target["required"] or record["required"]
+        target["description"] = target["description"] or record["description"]
+        target["reason"] = target["reason"] or record["reason"]
+        target["listed"] += [w for w in record["listed"] if w not in target["listed"]]
 
 
 def load_ledger(path: Path) -> list[dict]:
@@ -310,35 +406,58 @@ def load_ledger(path: Path) -> list[dict]:
     return list(archive_build.load_ledger(path).values())
 
 
-def page(known: int) -> str:
-    """The wanted page: the drop box, then what happens after an upload.
+def page(total: int, known: int) -> str:
+    """The wanted page: the drop box, the steps from a file in hand to a
+    file in the collection, then every wanted file (WantedList.astro).
 
     Held to the Start here budgets (tests/test_site_copy.py): anyone with a
     file in hand reads it.
     """
     return "\n".join([
         "---",
-        "terms: wanted list, donate, give a file, upload to github, help the collection",
+        "terms: wanted list, donate, give a file, upload to github, help the collection, missing bios",
         "---",
         "",
         "# Wanted",
         "",
-        "Have a file the collection lacks? Drop it below. The page says if we want it.",
+        "Have a file the collection lacks? Drop it below to see if it is wanted.",
+        "Files are read on this device. Nothing leaves it before an upload to GitHub.",
         "",
         "<WantedFiles />",
         "",
-        "Your files are read on this device. Nothing is sent until you upload one to GitHub.",
+        "Several files at once? Drop them all. Each gets its own answer and upload button.",
         "",
-        "## After the upload",
+        "## Where a file comes from",
         "",
-        "1. The button opens GitHub's upload page in the right folder. Sign in and drop the file there.",
-        "2. GitHub puts it in your own copy of the project and opens a pull request.",
-        "3. A check reads the file and says if it fits. Then we add it.",
+        "- A console or handheld at home: its BIOS, copied with a homebrew tool.",
+        "- An old SD card, or the BIOS folder of an emulator used before.",
+        "- A firmware update package from the maker.",
         "",
-        (f"The page knows {known:,} wanted files by their hash, a fingerprint of the contents. "
-        "The rest are listed on [the gaps page](gaps.md)."),
+        "When a catalog lists a file, its row in the list names it.",
+        "To check any other file, use [Find or check a file](files/index.md).",
         "",
-        ("To look up any file, use [Find or check a file](files/index.md). "
-        "More ways to help are on [Contributing](contributing.md)."),
+        "## Send it",
+        "",
+        "1. Make a free GitHub account once: [sign up](https://github.com/signup).",
+        "2. Press the upload button of the file. GitHub opens the right folder.",
+        "3. Rename the file if the page asks, then drop it there.",
+        "4. GitHub makes a copy of the project and opens a pull request, a request to add the file.",
+        "5. A check reads the file and comments on the request.",
+        "",
+        "The maintainer then merges it, and the file joins the downloads and the installer.",
+        "",
+        (f"A file over {BROWSER_UPLOAD_LIMIT // (1024 * 1024)} MB is too large for the upload page. "
+         "Its button opens an issue form with the details filled in."),
+        "",
+        "## The wanted list",
+        "",
+        (f"The list holds {total:,} files, most useful first. Of these, {known:,} have a "
+         "fingerprint (a hash), so a dropped copy is recognised."),
+        "",
+        "The others are known by name only: upload one and the check decides.",
+        "",
+        "<WantedList />",
+        "",
+        "More ways to help are on [Contributing](contributing.md).",
         "",
     ])

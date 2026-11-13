@@ -1,14 +1,18 @@
 ---
 // The wanted page: files dropped here are hashed on this device and
 // compared with public/data/wanted.json, the files the gaps page reports
-// the collection lacks (scripts/sitewanted.py). A file the collection
+// the collection lacks (scripts/sitewanted.py). A file no hash matches
+// may still be an entry known by its name only. A file the collection
 // holds is found in the hash lookup (api/v1/lookup/, one shard per first
 // two characters). Nothing is sent anywhere: a wanted file gets a link to
 // GitHub's upload page for its folder, and the visitor uploads it there.
+import { wantedVersion } from '../scripts/wanted-version.ts';
+
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const version = wantedVersion();
 ---
 
-<div class="rb-wanted" data-base={base}>
+<div class="rb-wanted" data-base={base} data-version={version}>
 	<div class="rb-wanted-drop">
 		<p><strong>Drop files here</strong></p>
 		<label class="rb-button" for="rb-wanted-input">Or choose them</label>
@@ -20,7 +24,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 
 <script>
 	import { type FileHashes, hashFile } from '../scripts/hashes.ts';
-	import { type Entry, type Wanted, issueUrl, matches, target, uploadUrl } from '../scripts/wanted.ts';
+	import { type Entry, type Wanted, byName, issueUrl, loadWanted, matches, target, uploadUrl } from '../scripts/wanted.ts';
 
 	type Item = { layer: string; value: string; url: string; archive?: string; sha1?: string };
 
@@ -41,11 +45,11 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 
 	for (const root of document.querySelectorAll<HTMLElement>('.rb-wanted')) {
 		const base = root.dataset.base ?? '/';
+		const version = root.dataset.version ?? '';
 		const drop = root.querySelector<HTMLElement>('.rb-wanted-drop')!;
 		const input = root.querySelector<HTMLInputElement>('.rb-wanted-input')!;
 		const status = root.querySelector<HTMLElement>('.rb-wanted-status')!;
 		const list = root.querySelector<HTMLOListElement>('.rb-wanted-list')!;
-		let wanted: Promise<Wanted> | null = null;
 		const shards = new Map<string, Promise<Item[]>>();
 		const shard = (value: string) => {
 			const prefix = value.slice(0, 2);
@@ -69,35 +73,41 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 				return [element('p', element('strong', 'Already held.'), ' The collection has this file. ',
 					link(new URL(bySha1.url, location.origin).href, 'See it'), '.')];
 			}
-			const data = await (wanted ??= fetch(`${base}data/wanted.json`).then((response) => response.json()));
+			const data = await loadWanted(base, version);
 			const found = matches(data, hashes, file.size);
-			if (found.length) return wantedBlock(data, found, file, hashes);
+			if (found.length) return wantedBlock(data, found, file, hashes, 'Wanted.');
 			const member = (await shard(hashes.crc32)).find((item) => item.value === hashes.crc32 && item.layer === 'archive-member');
 			if (member) {
 				return [element('p', element('strong', 'Already held.'), ' The collection has it inside ',
 					code(member.archive ?? ''), '. ', link(new URL(member.url, location.origin).href, 'See it'), '.')];
 			}
-			return [element('p', element('strong', 'Not wanted.'), ' No list we follow asks for this file.')];
+			const named = byName(data, file.name);
+			if (named.length) return wantedBlock(data, named, file, hashes, 'Maybe wanted.');
+			return [element('p', element('strong', 'Not wanted.'), ' No list the collection follows asks for this file.')];
 		};
 
-		const wantedBlock = (data: Wanted, found: Entry[], file: File, hashes: FileHashes): Node[] => {
+		const wantedBlock = (data: Wanted, found: Entry[], file: File, hashes: FileHashes, verdict: string): Node[] => {
 			const best = found[0];
 			const readers = [...new Set(found.flatMap((entry) => entry.w))].map((index) => {
 				const [kind, key, label] = data.readers[index];
 				return link(`${base}${kind === 'p' ? 'platforms' : 'emulators'}/${key}/`, label);
 			});
-			const systems = [...new Set(found.flatMap((entry) => (entry.s ? [entry.s] : [])))];
+			const systems = [...new Set(found.flatMap((entry) => entry.s ?? []))].map((index) => data.systems[index]);
 			const required = found.some((entry) => entry.r);
 			const blocks: Node[] = [
-				element('p', element('strong', 'Wanted.'), ' This is ', code(best.n),
+				element('p', element('strong', verdict), best.h ? ' This is ' : ' The list asks for ', code(best.n),
 					...(systems.length ? [`, for ${systems.join(', ')}`] : []), '. ',
 					required ? 'Needed by ' : 'Used by ', ...listed(readers), '.'),
 			];
+			if (!best.h) {
+				blocks.push(element('p', 'The list knows this file by its name only. ',
+					'The check after the upload compares its contents.'));
+			}
 			const place = target(data, best, hashes, file.name);
 			if (file.size > data.limit) {
 				blocks.push(element('p', `GitHub's upload page takes ${size(data.limit)} at most. `,
 					link(issueUrl(data, best.n, hashes, file.size), 'Open an issue'),
-					' with its hashes filled in, and we add it.'));
+					' with its hashes filled in.'));
 				return blocks;
 			}
 			if (place.name !== file.name) blocks.push(element('p', 'Rename it to ', code(place.name), ' first.'));

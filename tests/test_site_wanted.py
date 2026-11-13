@@ -2,10 +2,11 @@
 each file goes.
 
 A visitor drops a file on wanted/ and the page says whether the collection
-wants it. The list is built from the gaps page's own report, so a file the
-collection holds must never be on it, and its folder must be the one the
-review of the pull request asks for (validate_pr.placement): a page that
-sent a file elsewhere would have its upload flagged by the same project.
+wants it, then lists every wanted file with its own upload button. The list
+is built from the gaps page's own report, so a file the collection holds
+must never be on it, and its folder must be the one the review of the pull
+request asks for (validate_pr.placement): a page that sent a file elsewhere
+would have its upload flagged by the same project.
 """
 
 from __future__ import annotations
@@ -20,6 +21,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import re
 import zlib
 from pathlib import Path
 
@@ -30,9 +32,11 @@ import generate_site  # noqa: E402
 import sitewanted  # noqa: E402
 import validate_pr  # noqa: E402
 from common import load_database  # noqa: E402
+from tests.test_site_pronouns import pronouns  # noqa: E402
 
 WEBSITE = REPO_ROOT / "website"
 WANTED_TS = WEBSITE / "src" / "scripts" / "wanted.ts"
+COMPONENTS = WEBSITE / "src" / "components"
 PUBLISHED = WEBSITE / "public" / sitewanted.DATA_FILE
 
 HELD = b"held rom"
@@ -89,7 +93,7 @@ class _World(unittest.TestCase):
             f"  - name: b.bin\n    system: x\n    sha1: \"{sha1(WANTED)}\"\n    required: true\n"
             f"  - name: m.bin\n    system: x\n    sha1: \"{sha1(MEMBER)}\"\n"
             f"  - name: c.bin\n    system: x\n    crc32: \"{crc(CRC_ONLY)}\"\n    size: {len(CRC_ONLY)}\n"
-            "  - name: nohash.bin\n    system: x\n"
+            "  - name: nohash.bin\n    system: x\n    description: A boot ROM. Read at start.\n"
             "  - name: later.bin\n    system: x\n    unsourceable: not dumped yet\n"
             f"    md5: \"{md5(b'later')}\"\n"
         )
@@ -100,7 +104,7 @@ class _World(unittest.TestCase):
                 {"name": "b.bin", "system": "x", "sha1": sha1(WANTED), "required": True},
                 {"name": "m.bin", "system": "x", "sha1": sha1(MEMBER)},
                 {"name": "c.bin", "system": "x", "crc32": crc(CRC_ONLY), "size": len(CRC_ONLY)},
-                {"name": "nohash.bin", "system": "x"},
+                {"name": "nohash.bin", "system": "x", "description": "A boot ROM. Read at start."},
                 {"name": "later.bin", "system": "x", "unsourceable": "not dumped yet",
                  "md5": md5(b"later")},
             ],
@@ -152,16 +156,80 @@ class _World(unittest.TestCase):
 class TheListHoldsWhatTheGapsReportLacks(_World):
     def test_names(self):
         names = sorted(e["n"] for e in self.data["entries"])
-        # a.bin is held, m.bin is held inside set.zip, nohash.bin and z.zip
-        # (a zipped_file md5 names a ROM inside the archive) declare nothing
-        # a dropped file can be compared with, pkg.bin comes with its
-        # emulator: none is wanted. r.bin is one entry per revision.
-        self.assertEqual(names, ["b.bin", "c.bin", "cut.bin", "later.bin", "r.bin", "r.bin", "v.bin"])
+        # a.bin is held, m.bin is held inside set.zip, pkg.bin comes with
+        # its emulator: none is wanted. r.bin is one entry per revision.
+        self.assertEqual(names, ["b.bin", "c.bin", "cut.bin", "later.bin", "nohash.bin",
+                                 "r.bin", "r.bin", "v.bin", "z.zip"])
+
+    def test_an_entry_with_no_hash_is_kept_and_marked(self):
+        """nohash.bin declares no hash and z.zip only the md5 of a ROM
+        inside it: a dropped file cannot be compared with either, but a
+        person who has it can still upload it from the list."""
+        for name in ("nohash.bin", "z.zip"):
+            with self.subTest(name=name):
+                self.assertNotIn("h", self.entry(name))
+        self.assertEqual(self.entry("nohash.bin")["d"], "A boot ROM.")
+        self.assertIn("h", self.entry("b.bin"))
+
+    def test_required_entries_come_first(self):
+        needs = [bool(e.get("r")) for e in self.data["entries"]]
+        self.assertEqual(needs, sorted(needs, reverse=True))
+        self.assertTrue(any(needs) and not all(needs))
+
+    def test_more_readers_come_first(self):
+        records = [{"name": "a", "required": False, "readers": {("emulator", "e", "E")}},
+                   {"name": "b", "required": False,
+                    "readers": {("emulator", "e", "E"), ("platform", "p", "P")}},
+                   {"name": "c", "required": True, "readers": {("emulator", "e", "E")}}]
+        self.assertEqual([r["name"] for r in sorted(records, key=sitewanted._order)], ["c", "b", "a"])
+
+    def test_a_name_with_no_hash_joins_the_hashed_entry_of_its_name(self):
+        reader = ("emulator", "other", "Other")
+        records = {
+            ("b.bin", (("sha1", ("x",)),), ()): {
+                "name": "b.bin", "hashes": {"sha1": ["x"]}, "systems": {"x"}, "required": False,
+                "readers": {("emulator", "engine", "Engine")}, "description": "",
+                "reason": "", "listed": []},
+            ("b.bin", "x"): {
+                "name": "b.bin", "hashes": {}, "systems": {"x"}, "required": True,
+                "readers": {reader}, "description": "B", "reason": "", "listed": []},
+        }
+        sitewanted._merge_named(records)
+        self.assertEqual(len(records), 1)
+        merged = next(iter(records.values()))
+        self.assertIn(reader, merged["readers"])
+        self.assertTrue(merged["required"])
+
+    def test_a_pattern_is_not_a_file(self):
+        profiles = {"engine": {**self.profiles["engine"], "files": [
+            *self.profiles["engine"]["files"], {"name": "<serial>.txt", "system": "x"}]}}
+        report = {"engine": {**self.gap_report["engine"], "gap_details": [
+            *self.gap_report["engine"]["gap_details"],
+            {"name": "<serial>.txt", "source": "missing", "identity": ""}]}}
+        data = sitewanted.build_wanted(profiles, self.coverages, report, self.db, self.placer,
+                                       str, self.ledger)
+        self.assertNotIn("<serial>.txt", [e["n"] for e in data["entries"]])
+
+    def test_a_catalog_listing_reaches_its_entry(self):
+        listings = sitewanted.catalog_listings(
+            {"tosec": {"missing": [{"name": "Boot (1990)", "romsets": [],
+                                    "needed_by": [{"emulator": "engine", "name": "b.bin"}]}]}},
+            {"tosec": "TOSEC"})
+        data = sitewanted.build_wanted(self.profiles, self.coverages, self.gap_report, self.db,
+                                       self.placer, str, self.ledger, listings)
+        self.assertEqual(next(e for e in data["entries"] if e["n"] == "b.bin")["l"],
+                         [["TOSEC", "Boot (1990)"]])
+
+    def test_first_sentence(self):
+        self.assertEqual(sitewanted.first_sentence("One. Two."), "One.")
+        self.assertEqual(sitewanted.first_sentence("Ver. 1.0 of A"), "Ver. 1.0 of A")
+        cut = sitewanted.first_sentence("word " * 60)
+        self.assertTrue(cut.endswith("...") and len(cut) <= sitewanted.DESCRIPTION_LIMIT + 3)
 
     def test_an_entry_carries_its_readers_system_and_need(self):
         entry = self.entry("b.bin")
         self.assertEqual(entry["h"], {"sha1": [sha1(WANTED)]})
-        self.assertEqual(entry["s"], "System X")
+        self.assertEqual([self.data["systems"][i] for i in entry["s"]], ["System X"])
         self.assertEqual(entry["r"], 1)
         self.assertEqual([self.data["readers"][i] for i in entry["w"]], [["e", "engine", "Engine"]])
         self.assertEqual([self.data["readers"][i] for i in self.entry("v.bin")["w"]],
@@ -219,10 +287,10 @@ class EveryFolderIsTheReviewsFolder(_World):
 
     def test_each_entry_is_placed_by_validate_pr(self):
         for entry in self.data["entries"]:
-            values = [v for algo in ("sha1", "md5", "sha256") for v in entry["h"].get(algo, [])
+            values = [v for algo in ("sha1", "md5", "sha256") for v in entry.get("h", {}).get(algo, [])
                       if len(v) == sitewanted.FULL_LENGTH[algo]]
             spot = validate_pr.placement(values, entry["n"], self.db, self.platform_hashes,
-                                         self.profile_hashes, declared=True,
+                                         self.profile_hashes, declared="h" in entry,
                                          exists=self.placer.paths.__contains__)
             with self.subTest(entry=entry["n"]):
                 self.assertEqual(self.data["folders"][entry["f"]] if "f" in entry else "",
@@ -294,6 +362,38 @@ class ThePageReadsTheListAsTheResolverDoes(_World):
         self.assertEqual(variant, {"folder": "bios/Maker/Console/.variants/",
                                    "name": f"v.bin.{sha1(VARIANT)[:8]}"})
 
+    def test_every_row_uploads_to_the_reviews_folder(self):
+        """The list's own button on each row, against validate_pr.placement
+        for the declarations of that row."""
+        rows = json.loads(_node(
+            f"import {{ rowTarget, uploadUrl }} from {json.dumps(WANTED_TS.as_uri())};"
+            f"const data = {json.dumps(self.data)};"
+            "console.log(JSON.stringify(data.entries.map((e) => {"
+            " const place = rowTarget(data, e); return {...place, url: uploadUrl(data, place.folder)}; })));"
+        ))
+        self.assertEqual(len(rows), len(self.data["entries"]))
+        for entry, place in zip(self.data["entries"], rows):
+            spot = self.placer.place(entry.get("h", {}), entry["n"])
+            folder = (spot.folder or "bios/") + (".variants/" if spot.variant else "")
+            with self.subTest(entry=entry["n"]):
+                self.assertEqual(place["folder"], folder)
+                self.assertEqual(place["url"], sitewanted.upload_href(sitewanted.UPLOAD_ROOT, folder))
+                if spot.variant:
+                    self.assertEqual(place["name"], f"{spot.name}.{entry['h']['sha1'][0][:8]}"
+                                     if len(entry.get("h", {}).get("sha1", [])) == 1 else "")
+                else:
+                    self.assertEqual(place["name"], spot.name or entry["n"])
+
+    def test_a_dropped_file_meets_a_name_only_entry_by_its_name(self):
+        out = json.loads(_node(
+            f"import {{ byName, matches }} from {json.dumps(WANTED_TS.as_uri())};"
+            f"const data = {json.dumps(self.data)};"
+            "const file = {sha1: 'x', md5: 'x', crc32: 'x', sha256: 'x'};"
+            "console.log(JSON.stringify([byName(data, 'NOHASH.BIN').map((e) => e.n),"
+            " byName(data, 'b.bin').map((e) => e.n), matches(data, file, 1).map((e) => e.n)]));"
+        ))
+        self.assertEqual(out, [["nohash.bin"], [], []])
+
     def test_the_issue_form_is_filled_as_the_review_fills_it(self):
         result = validate_pr.ValidationResult("b.bin")
         result.sha1, result.md5, result.size = sha1(WANTED), md5(WANTED), len(WANTED)
@@ -306,7 +406,35 @@ class TheTwoPagesLinkEachOther(unittest.TestCase):
 
     def test_links(self):
         self.assertIn("[See if it is wanted](../wanted.md)", generate_site.generate_files_page())
-        self.assertIn("[Find or check a file](files/index.md)", sitewanted.page(1))
+        self.assertIn("[Find or check a file](files/index.md)", sitewanted.page(2, 1))
+
+
+class ThePageSpeaksWithoutPronouns(unittest.TestCase):
+    """The generated page is held by test_site_pronouns. The words the
+    components write at run time are held here."""
+
+    STRING = re.compile(r"'((?:[^'\\\n]|\\.)*)'|`([^`]*)`")
+    MARKUP_TEXT = re.compile(r">([^<>{}]+)<")
+
+    def test_page(self):
+        self.assertEqual(pronouns(sitewanted.page(1_165, 199)), [])
+
+    def test_components(self):
+        for name in ("WantedFiles.astro", "WantedList.astro"):
+            source = (COMPONENTS / name).read_text(encoding="utf-8")
+            script = source[source.index("<script>"):source.index("</script>")]
+            texts = [a or b for a, b in self.STRING.findall(script)]
+            texts += self.MARKUP_TEXT.findall(source[:source.index("<script>")])
+            with self.subTest(component=name):
+                self.assertTrue(texts)
+                self.assertEqual([t for t in texts if pronouns(t)], [])
+
+    def test_the_page_lists_the_steps(self):
+        text = sitewanted.page(1_165, 199)
+        for step in ("<WantedFiles />", "<WantedList />", "https://github.com/signup",
+                     "pull request", "issue form", "Drop them all", "1,165 files"):
+            self.assertIn(step, text)
+        self.assertLess(text.index("<WantedFiles />"), text.index("<WantedList />"))
 
 
 class ThePublishedList(unittest.TestCase):
@@ -323,21 +451,39 @@ class ThePublishedList(unittest.TestCase):
     def test_nothing_held_is_wanted(self):
         held = sitewanted.Held(self.db, sitewanted.load_ledger(REPO_ROOT / "recipes" / "archives.json"))
         for entry in self.data["entries"]:
+            if "h" not in entry:
+                continue
             with self.subTest(entry=entry["n"]):
                 self.assertFalse(held.holds(entry["h"], entry.get("z", [])))
+
+    def test_required_first_and_names_kept(self):
+        needs = [bool(e.get("r")) for e in self.data["entries"]]
+        self.assertEqual(needs, sorted(needs, reverse=True))
+        self.assertTrue(any("h" not in e for e in self.data["entries"]))
 
     def test_every_folder_is_the_reviews(self):
         placer = sitewanted.Placer(
             self.db, validate_pr.load_platform_hashes(str(REPO_ROOT / "platforms"), self.db),
             validate_pr.load_profile_hashes(str(REPO_ROOT / "emulators"), self.db))
         for entry in self.data["entries"]:
-            spot = placer.place(entry["h"], entry["n"])
+            spot = placer.place(entry.get("h", {}), entry["n"])
             with self.subTest(entry=entry["n"]):
                 self.assertEqual(self.data["folders"][entry["f"]] if "f" in entry else "", spot.folder)
                 self.assertEqual(entry.get("t", ""), spot.name)
 
     def test_weight(self):
         self.assertLess(PUBLISHED.stat().st_size, 200_000)
+
+    def test_the_built_page_asks_for_this_list(self):
+        """The list's address carries its version: a browser that cached an
+        older list (another shape) fetches this one."""
+        built = WEBSITE / "dist" / "wanted" / "index.html"
+        if not built.is_file():
+            self.skipTest("no built site")
+        html = built.read_text(encoding="utf-8")
+        version = hashlib.sha1(PUBLISHED.read_bytes()).hexdigest()[:12]
+        self.assertEqual(html.count(f'data-version="{version}"'), 2)
+        self.assertNotIn("data/wanted.json", html)
 
 
 if __name__ == "__main__":

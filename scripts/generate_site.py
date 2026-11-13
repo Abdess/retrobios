@@ -2538,7 +2538,7 @@ def _page_description(markdown: str, relative: Path, title: str) -> str:
         "explore.md": "Systems, emulators and installer options to explore, with the figures of the BIOS collection.",
         "which-pack.md": "Pick a device or setup and get its BIOS files: the folder they go in, one command that installs and checks them, or a ZIP pack to extract.",
         "contributing.md": "Add a BIOS file the collection lacks from the browser, checked on arrival, or add a platform or an emulator profile.",
-        "wanted.md": "Drop files on the page to learn if the collection wants them, then upload a wanted one to its folder on GitHub. Files are read on the device.",
+        "wanted.md": "Every file the collection lacks, by system, each with its upload button to GitHub. Drop files on the page to learn if they are wanted.",
     }
     if key in specific:
         return specific[key]
@@ -10664,17 +10664,10 @@ def _catalogued_needs(report: dict | None) -> dict[tuple[str, str], list[str]]:
     """(profile, file name casefolded) -> where a dump catalog or an
     imported romset lists that file, from a provenance report built with
     the profiles' needs."""
-    out: dict[tuple[str, str], list[str]] = {}
-    for source, data in sorted((report or {}).items()):
-        label = _PROVENANCE_LABELS.get(source, source)
-        for entry in data.get("missing", []):
-            where = [f"{label} `{_escape_tags(str(entry.get('name', '')))}`"]
-            where += [f"{_escape_tags(str(hit['source']))} `{_escape_tags(str(hit['archive']))}`"
-                      for hit in entry.get("romsets", [])]
-            for need in entry.get("needed_by", []):
-                held = out.setdefault((need["emulator"], str(need["name"]).casefold()), [])
-                held += [w for w in where if w not in held]
-    return out
+    return {
+        need: [f"{_escape_tags(where)} `{_escape_tags(name)}`" for where, name in listed]
+        for need, listed in sitewanted.catalog_listings(report, _PROVENANCE_LABELS).items()
+    }
 
 
 def _reason_cell(text: str) -> str:
@@ -11382,7 +11375,7 @@ def generate_gap_analysis(
                     f"{_source_ref_markdown(owner, m['source_ref'])} |"
                 )
             lines.extend(["### Files to source", "", counted,
-                          "[The wanted page](wanted.md) recognises the ones with a known hash.", ""])
+                          "[The wanted page](wanted.md) lists them, each with its upload button.", ""])
             if moved is None:
                 lines.extend([*head, *rows, ""])
             else:
@@ -12837,11 +12830,13 @@ def _generate(args: argparse.Namespace) -> None:
     wanted = sitewanted.build_wanted(
         profiles, coverages, gap_report, db, placer, system_name,
         sitewanted.load_ledger(archive_build.ARCHIVES_FILE),
+        sitewanted.catalog_listings(provenance_report, _PROVENANCE_LABELS),
     )
     (public / "data").mkdir(parents=True, exist_ok=True)
     write_if_changed(str(public / sitewanted.DATA_FILE),
                      json.dumps(wanted, ensure_ascii=False, separators=(",", ":")) + "\n")
-    write_if_changed(str(docs / "wanted.md"), sitewanted.page(len(wanted["entries"])))
+    write_if_changed(str(docs / "wanted.md"), sitewanted.page(
+        len(wanted["entries"]), sum(1 for entry in wanted["entries"] if "h" in entry)))
 
     print("Generating updated platform files page...")
     write_if_changed(
