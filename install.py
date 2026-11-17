@@ -8714,9 +8714,13 @@ def _claim_partial(path: Path) -> BinaryIO | None:
     handle = os.fdopen(os.open(path, flags, 0o644), "r+b")
     try:
         if os.name == "nt":
-            import msvcrt
+            import importlib
 
-            msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
+            # typeshed declares msvcrt for win32 only: the module is read
+            # as the runtime holds it.
+            msvcrt = importlib.import_module("msvcrt")
+            locking: Callable[[int, int, int], None] = msvcrt.locking
+            locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
         else:
             import fcntl
 
