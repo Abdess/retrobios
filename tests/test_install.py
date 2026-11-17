@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
 
+import argparse
 import contextlib
 import functools
 import hashlib
@@ -429,7 +430,7 @@ class TheDataTreesCountInTheFreeSpace(unittest.TestCase):
         files the first installed."""
         from types import SimpleNamespace
 
-        from test_install_selection import FakeRepository  # noqa: PLC0415
+        from test_install_selection import FakeRepository
 
         member = os.urandom(4096)
         results = []
@@ -1290,7 +1291,7 @@ class DetectionFollowsTheRegistry(unittest.TestCase):
     installer never read it: such a home detected nothing."""
 
     def test_the_table_is_the_registry(self):
-        import yaml  # noqa: PLC0415
+        import yaml
 
         registry = yaml.safe_load(
             (Path(__file__).resolve().parents[1] / "platforms" / "_registry.yml").read_text()
@@ -1308,7 +1309,7 @@ class DetectionFollowsTheRegistry(unittest.TestCase):
         Recalbox version file were detected by the installer and absent
         from every manifest's `detect`, and ROCKNIX was declared another
         way. A changed bios_path in the registry reached no installer."""
-        import yaml  # noqa: PLC0415
+        import yaml
 
         registry = yaml.safe_load(
             (Path(__file__).resolve().parents[1] / "platforms" / "_registry.yml").read_text()
@@ -1338,7 +1339,7 @@ class DetectionFollowsTheRegistry(unittest.TestCase):
         RetroDECK folder, but the installer also read Snap, the older macOS file,
         C:\\RetroArch, Program Files, ES-DE, Steam and RetroDECK's own
         config. A manifest reader saw a subset of what the installer does."""
-        import yaml  # noqa: PLC0415
+        import yaml
 
         registry = yaml.safe_load(
             (Path(__file__).resolve().parents[1] / "platforms" / "_registry.yml").read_text()
@@ -1370,12 +1371,12 @@ class DetectionFollowsTheRegistry(unittest.TestCase):
             def record(os_type: str):
                 def probe(path, *_args, **_kwargs):
                     read.add((os_type, str(Path(str(path).replace("\\", "/")))))
-                    return None
+                    return
                 return probe
 
             with unittest.mock.patch.dict(os.environ, env), \
-                    unittest.mock.patch.object(install, "_detect_embedded", lambda: []), \
-                    unittest.mock.patch.object(install, "_detect_android", lambda: []):
+                    unittest.mock.patch.object(install, "_detect_embedded", list), \
+                    unittest.mock.patch.object(install, "_detect_android", list):
                 for os_type in ("linux", "darwin", "windows"):
                     with unittest.mock.patch.object(
                         install, "_parse_retroarch_system_dir", record(os_type)
@@ -1449,7 +1450,7 @@ class DetectionFollowsTheRegistry(unittest.TestCase):
         self.assertFalse((home / ".config" / "BizHawk").exists())
 
     def test_the_executable_table_is_the_registry(self):
-        import yaml  # noqa: PLC0415
+        import yaml
 
         registry = yaml.safe_load(
             (Path(__file__).resolve().parents[1] / "platforms" / "_registry.yml").read_text()
@@ -1557,13 +1558,13 @@ class InstallerStaysOnPython38AndTheStdlib(unittest.TestCase):
     SOURCE = (REPO_ROOT / "install.py").read_text(encoding="utf-8")
 
     def test_the_grammar_is_python_38(self):
-        import ast  # noqa: PLC0415
+        import ast
 
         ast.parse(self.SOURCE, filename="install.py", feature_version=(3, 8))
 
     def test_every_import_is_standard_library(self):
-        import ast  # noqa: PLC0415
-        import sys  # noqa: PLC0415
+        import ast
+        import sys
 
         tree = ast.parse(self.SOURCE)
         imported = set()
@@ -1585,8 +1586,8 @@ class InstallerStaysOnPython38AndTheStdlib(unittest.TestCase):
     def test_a_python_38_interpreter_compiles_and_imports_it(self):
         """ast.parse(feature_version=(3, 8)) on 3.12 accepts parenthesized
         context managers and PEP 701 f-strings: only a 3.8 interpreter says."""
-        import shutil  # noqa: PLC0415
-        import subprocess  # noqa: PLC0415
+        import shutil
+        import subprocess
 
         python38 = shutil.which("python3.8")
         if python38 is None:
@@ -1611,8 +1612,8 @@ class InstallerStaysOnPython38AndTheStdlib(unittest.TestCase):
         the repository's own manifests served over loopback. CI installs the
         interpreter, so there it may not skip.
         """
-        import shutil  # noqa: PLC0415
-        import subprocess  # noqa: PLC0415
+        import shutil
+        import subprocess
 
         python38 = shutil.which("python3.8")
         if python38 is None:
@@ -1666,8 +1667,8 @@ class InstallerStaysOnPython38AndTheStdlib(unittest.TestCase):
     def test_no_syntax_a_312_parser_lets_through(self):
         """Parenthesized context managers (3.9) and f-strings reusing their
         own quote or a backslash inside a replacement field (3.12)."""
-        import io  # noqa: PLC0415
-        import tokenize  # noqa: PLC0415
+        import io
+        import tokenize
 
         found = []
         tokens = list(tokenize.generate_tokens(io.StringIO(self.SOURCE).readline))
@@ -1706,7 +1707,7 @@ class InstallerStaysOnPython38AndTheStdlib(unittest.TestCase):
 
     def test_no_runtime_generic_builtin(self):
         """dict[str, Path] outside an annotation runs on 3.9 and later only."""
-        import ast  # noqa: PLC0415
+        import ast
 
         tree = ast.parse(self.SOURCE)
         annotations = set()
@@ -1731,7 +1732,7 @@ class InstallerStaysOnPython38AndTheStdlib(unittest.TestCase):
         """ruff --select F in py38 mode is the installer's lint gate, and an
         unread `appdata` in _os_default_dests made it exit 1. The suite has
         no ruff, so the rule is read from the syntax tree."""
-        import ast  # noqa: PLC0415
+        import ast
 
         tree = ast.parse((Path(__file__).resolve().parents[1] / "install.py").read_text())
         unread = []
@@ -2509,7 +2510,7 @@ class TestAvailablePlatforms(unittest.TestCase):
         """Every edit to install.py meant a sha256sum pasted by hand into two
         files with two syntaxes, and the failing test named no command."""
         sys.path.insert(0, str(REPO_ROOT / "scripts"))
-        import pin_installer  # noqa: PLC0415
+        import pin_installer
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" / "tests") as directory:
             root = Path(directory)
@@ -2835,9 +2836,8 @@ class FileListsAreRetried(unittest.TestCase):
         with unittest.mock.patch.object(install.urllib.request, "urlopen",
                                         side_effect=failures), \
                 unittest.mock.patch.object(install.time, "sleep"), \
-                contextlib.redirect_stderr(err):
-            with self.assertRaises(SystemExit) as caught:
-                install.fetch_manifest("retroarch")
+                contextlib.redirect_stderr(err), self.assertRaises(SystemExit) as caught:
+            install.fetch_manifest("retroarch")
         self.assertEqual(caught.exception.code, 1)
         self.assertIn("HTTPS_PROXY", err.getvalue())
         self.assertIn(f"after {install.MAX_RETRIES} attempts", err.getvalue())
@@ -2874,9 +2874,8 @@ class ASilentServerIsBounded(unittest.TestCase):
                 unittest.mock.patch.object(install, "_retry_delay", return_value=0), \
                 unittest.mock.patch.object(install, "MANIFEST_URL",
                                            f"http://127.0.0.1:{port}/{{platform}}.json"), \
-                contextlib.redirect_stderr(err):
-            with self.assertRaises(SystemExit):
-                install.fetch_manifest("retroarch")
+                contextlib.redirect_stderr(err), self.assertRaises(SystemExit):
+            install.fetch_manifest("retroarch")
         elapsed = time.monotonic() - start
         self.assertLess(elapsed, 5)
         self.assertEqual(len(held), install.STALLED_ATTEMPTS)
@@ -3649,7 +3648,7 @@ class AndroidEmulatorsOutOfReachAreSaid(unittest.TestCase):
             (data / "com.flycast.emulator").mkdir()
             (storage / "Android/data/com.flycast.emulator/files/data").mkdir(parents=True)
         self.assertEqual(self._lines(make), [])
-        import yaml  # noqa: PLC0415
+        import yaml
 
         registry = yaml.safe_load((REPO_ROOT / "platforms" / "_registry.yml").read_text())
         copies = {entry.get("file"): entry for entry in registry["_standalone_copies"]}
@@ -3899,7 +3898,7 @@ class TheBoardTheSystemNamesIsTheTarget(unittest.TestCase):
         self.assertIn("--every-board", result.stderr)
 
     def test_the_sources_name_our_target_lists(self):
-        import yaml  # noqa: PLC0415
+        import yaml
 
         for platform in install._BOARD_SOURCES:
             with self.subTest(platform=platform):
@@ -3934,7 +3933,7 @@ class StandaloneCopiesReachFlatpakInstalls(unittest.TestCase):
     EMU_DATA_DIR), not azahar."""
 
     def test_flatpak_and_native_directories(self):
-        import yaml  # noqa: PLC0415
+        import yaml
 
         registry = yaml.safe_load((REPO_ROOT / "platforms" / "_registry.yml").read_text())
         linux = {
@@ -4297,7 +4296,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
         self.assertEqual(sorted(p.name for p in (bios / "dolphin-emu").iterdir()), ["Sys"])
 
     def test_the_run_ends_on_the_archive_bytes_too(self):
-        from test_install_selection import FakeRepository  # noqa: PLC0415
+        from test_install_selection import FakeRepository
 
         member = os.urandom(300_000)
         with FakeRepository() as repo:
@@ -4320,7 +4319,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
     def test_the_plan_announces_the_archive_not_the_tree(self):
         """yaps2's tarball is 21.2 MB for a 6.5 MB tree, Cemu's 21.4 MB for
         9.9 KB: the plan announced the tree, and the run downloaded far more."""
-        from test_install_selection import FakeRepository  # noqa: PLC0415
+        from test_install_selection import FakeRepository
 
         member = b"profile"
         archive_size = 21_360_579
@@ -4569,8 +4568,8 @@ class ACheckNamesWhatTheCollectionLacks(unittest.TestCase):
     unnamed for a user asking why Caesar III would not start."""
 
     def test_recalbox_caesar3(self):
-        import shutil  # noqa: PLC0415
-        import subprocess  # noqa: PLC0415
+        import shutil
+        import subprocess
 
         manifest = json.loads((REPO_ROOT / "install" / "recalbox.json").read_text())
         lacking = sorted(
@@ -4613,7 +4612,7 @@ class ARefusedStandaloneCopyIsNamed(unittest.TestCase):
     the BIOS folder and gave no advice."""
 
     def test_the_file_and_its_folder_reach_the_summary(self):
-        import contextlib  # noqa: PLC0415
+        import contextlib
 
         if os.name == "nt" or os.geteuid() == 0:
             self.skipTest("a read-only folder needs POSIX modes and a non-root user")
@@ -4711,7 +4710,7 @@ class ACheckThatFindsFilesMissingIsNoFailure(unittest.TestCase):
     BIOS folder to complete from a tool that never ran."""
 
     def test_missing_is_3_and_a_failure_stays_1(self):
-        from test_install_selection import FakeRepository  # noqa: PLC0415
+        from test_install_selection import FakeRepository
 
         with FakeRepository() as repo:
             missing = repo.run("--no-input", "--check")
@@ -4735,7 +4734,7 @@ class OneEmulatorsFilesInOneCommand(unittest.TestCase):
     }
 
     def test_only_its_files_and_its_systems(self):
-        import contextlib  # noqa: PLC0415
+        import contextlib
 
         files = [
             {"dest": "pcem/ibmpc.bin", "cores": ["pcem"], "systems": ["ibm-pc"]},
@@ -4749,7 +4748,7 @@ class OneEmulatorsFilesInOneCommand(unittest.TestCase):
         self.assertEqual(sorted(e["dest"] for e in kept), ["ibm.rom", "pcem/ibmpc.bin"])
 
     def test_an_unknown_name_is_refused(self):
-        import contextlib  # noqa: PLC0415
+        import contextlib
 
         with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
             install._narrow_to_emulators(["nope"], self.MANIFEST, "retroarch", [], [])
@@ -5085,9 +5084,9 @@ class TheInstallerSaysWhatItFound(unittest.TestCase):
     the file list was fetched ended on a socket traceback."""
 
     def setUp(self):
-        import functools  # noqa: PLC0415
-        import http.server  # noqa: PLC0415
-        import shutil  # noqa: PLC0415
+        import functools
+        import http.server
+        import shutil
 
         handler = functools.partial(
             http.server.SimpleHTTPRequestHandler, directory=str(REPO_ROOT)
@@ -5149,8 +5148,8 @@ class TheInstallerSaysWhatItFound(unittest.TestCase):
         self.assertGreater(error, banner, proc.stdout)
 
     def test_ctrl_c_before_the_downloads_is_a_stop(self):
-        import signal  # noqa: PLC0415
-        import socket  # noqa: PLC0415
+        import signal
+        import socket
 
         silent = socket.socket()
         silent.bind(("127.0.0.1", 0))
@@ -5162,7 +5161,7 @@ class TheInstallerSaysWhatItFound(unittest.TestCase):
              "--dest", str(self.home / "s")],
             cwd=REPO_ROOT, env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
         )
-        import time  # noqa: PLC0415
+        import time
 
         time.sleep(3)
         proc.send_signal(signal.SIGINT)
@@ -5674,8 +5673,8 @@ class AQuestionLeftWithCtrlDOrCtrlCIsAStop(unittest.TestCase):
 
     @unittest.skipIf(os.name == "nt", "needs a pseudo-terminal")
     def test_ctrl_d_at_the_platform_question_exits_130(self):
-        import pty  # noqa: PLC0415
-        import time  # noqa: PLC0415
+        import pty
+        import time
 
         home = Path(_tempdir(self))
         master, slave = pty.openpty()
@@ -6105,7 +6104,7 @@ class StandaloneEmulatorsWithoutAPlatformAreServed(unittest.TestCase, _LoopbackR
         self.assertIn("scph5501.bin", names)
         # Every image the DuckStation profile places in its bios folder,
         # its PS2 and OpenBIOS images included, and nothing else.
-        import yaml  # noqa: PLC0415
+        import yaml
 
         profile = yaml.safe_load((REPO_ROOT / "emulators" / "duckstation.yml").read_text())
         named = {PurePosixPath(entry["standalone_path"]).name
@@ -6265,7 +6264,7 @@ class RetroBatIsFoundWhereItSaysItIs(unittest.TestCase):
     RetroBat.exe writes its folder to the registry on every start."""
 
     def test_the_table_is_the_registry(self):
-        import yaml  # noqa: PLC0415
+        import yaml
 
         registry = yaml.safe_load((REPO_ROOT / "platforms" / "_registry.yml").read_text())
         rules = {
@@ -7051,7 +7050,7 @@ class EventsDescribeTheRun(unittest.TestCase, _SyntheticTree):
 
     def test_a_run_is_valid_against_the_published_schema(self):
         try:
-            from jsonschema import Draft202012Validator  # noqa: PLC0415
+            from jsonschema import Draft202012Validator
         except ImportError:
             self.skipTest("jsonschema is not installed")
         schema = json.loads(EVENT_SCHEMA_PATH.read_text(encoding="utf-8"))
@@ -7075,7 +7074,7 @@ class TheEventSchemaFileIsEventKeys(unittest.TestCase):
 
     def _generator(self):
         sys.path.insert(0, str(REPO_ROOT / "scripts"))
-        import generate_event_schema  # noqa: PLC0415
+        import generate_event_schema
 
         return generate_event_schema
 
@@ -7123,7 +7122,7 @@ class TheInstallerPageIsWrittenFromTheCode(unittest.TestCase):
 
     def setUp(self):
         sys.path.insert(0, str(REPO_ROOT / "scripts"))
-        import generate_installer_doc  # noqa: PLC0415
+        import generate_installer_doc
 
         self.generator = generate_installer_doc
         self.scratch = Path(_tempdir(self)) / "installer.md"
@@ -7247,7 +7246,7 @@ class NetworkFailuresInPlainWords(unittest.TestCase):
         return install.network_words(urllib.error.URLError(reason), **kwargs)
 
     def test_the_common_failures(self):
-        import ssl  # noqa: PLC0415
+        import ssl
 
         cases = (
             (socket.gaierror(-2, "Name or service not known"), "no internet connection"),
@@ -7273,8 +7272,8 @@ class NetworkFailuresInPlainWords(unittest.TestCase):
     def test_a_clock_in_the_past_is_named(self):
         """A handheld with no clock battery boots in 1980, and every
         certificate then reads as not yet valid."""
-        import datetime  # noqa: PLC0415
-        import ssl  # noqa: PLC0415
+        import datetime
+        import ssl
 
         error = ssl.SSLCertVerificationError(1, "certificate is not yet valid")
         with unittest.mock.patch.object(install, "_ca_bundle_found", return_value=True):
@@ -7286,7 +7285,7 @@ class NetworkFailuresInPlainWords(unittest.TestCase):
             self.assertEqual(code, "network")
 
     def test_no_certificate_list_names_ssl_cert_file(self):
-        import ssl  # noqa: PLC0415
+        import ssl
 
         error = ssl.SSLCertVerificationError(1, "unable to get local issuer certificate")
         with unittest.mock.patch.object(install, "_ca_bundle_found", return_value=False):

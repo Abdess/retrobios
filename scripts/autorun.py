@@ -191,7 +191,7 @@ class Context:
 def check_subject(subject: str, body: str = "") -> list[str]:
     """What the repository's commit rules refuse in this message, checked
     when the job list loads instead of two hours into the job."""
-    from commit_rules import problems  # noqa: PLC0415
+    from commit_rules import problems
 
     return problems(f"{subject}\n\n{body}" if body else subject)
 

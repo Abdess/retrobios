@@ -210,7 +210,7 @@ class AtomPool:
         """Write the digest cache back, when this run learned anything."""
         if self._digest_cache is None or not self._digests_changed:
             return
-        from artifacts import write_text_atomic  # noqa: PLC0415
+        from artifacts import write_text_atomic
 
         self._digest_cache.parent.mkdir(parents=True, exist_ok=True)
         write_text_atomic(
@@ -481,7 +481,7 @@ def print_missing(gap: dict) -> None:
 
 def run_capture(args: argparse.Namespace, db: dict) -> int:
     """Write recipes/archives.json for every archive the database lists."""
-    import archive_build  # noqa: PLC0415
+    import archive_build
 
     try:
         records, failed = archive_build.capture(
@@ -512,7 +512,7 @@ def run_capture(args: argparse.Namespace, db: dict) -> int:
 
 def run_build(args: argparse.Namespace, db: dict) -> int:
     """Build one archive, or all of them, from the members the collection holds."""
-    import archive_build  # noqa: PLC0415
+    import archive_build
 
     if not args.output_dir:
         print("ERROR: --build and --build-all need --output-dir", file=sys.stderr)

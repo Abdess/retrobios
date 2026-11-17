@@ -89,7 +89,7 @@ class Exporter(BaseExporter):
             and self._known_platform(fe.native_system)
         )
 
-    def writable(self, fe: NativeFile, require: str = "") -> bool:  # noqa: ARG002
+    def writable(self, fe: NativeFile, require: str = "") -> bool:
         """What RomM already ships stays. The conditions gate additions.
 
         An entry of theirs that could never verify is still theirs, and the

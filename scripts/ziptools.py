@@ -121,7 +121,7 @@ MAX_HASHED_MEMBER = 512 * 1024 * 1024
 
 
 def _read_member_cache(path: str) -> dict[str, list[list]]:
-    import json  # noqa: PLC0415
+    import json
 
     try:
         with open(path, encoding="utf-8") as fh:
@@ -135,7 +135,7 @@ def _read_member_cache(path: str) -> dict[str, list[list]]:
 
 
 def _write_member_cache(path: str, data: dict[str, list[list]]) -> None:
-    import json  # noqa: PLC0415
+    import json
 
     os.makedirs(os.path.dirname(path), exist_ok=True)
     fd, scratch = tempfile.mkstemp(dir=os.path.dirname(path), suffix=".tmp")

@@ -403,9 +403,9 @@ def _check_get_pages(
     recorded tag, and one without links none and gives the command.
     """
     sys.path.insert(0, str(Path(__file__).resolve().parent))
-    import release_record  # noqa: PLC0415
-    from siteguides import INSTALL_SH  # noqa: PLC0415
-    from common import list_registered_platforms, list_release_pack_platforms  # noqa: PLC0415
+    import release_record
+    from siteguides import INSTALL_SH
+    from common import list_registered_platforms, list_release_pack_platforms
 
     if not (platforms_dir / "_registry.yml").is_file():
         return [f"no platform registry in {platforms_dir}"]
@@ -499,7 +499,7 @@ def main() -> None:
         help="stop listing after this many errors (default: %(default)s)",
     )
     args = parser.parse_args()
-    from common import require_directory  # noqa: PLC0415
+    from common import require_directory
 
     require_directory(str(args.platforms_dir), "--platforms-dir")
 

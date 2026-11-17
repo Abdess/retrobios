@@ -324,7 +324,7 @@ class CoreResolutionTests(unittest.TestCase):
 
     def test_record_errors_are_one_line(self):
         """A mistyped core and an empty offline cache ended on a traceback."""
-        import subprocess  # noqa: PLC0415
+        import subprocess
 
         with tempfile.TemporaryDirectory() as tmp:
             proc = subprocess.run(
@@ -574,7 +574,7 @@ class ProfileSummaryTests(unittest.TestCase):
     def test_profile_sync_accepts_the_command_it_is_given(self):
         """--json with the detection flags was refused, so --profiles read an
         empty stdout and reported "unreadable report" on every run."""
-        import profile_sync  # noqa: PLC0415
+        import profile_sync
 
         captured = []
 
@@ -653,8 +653,8 @@ class RepositoryWiringTests(unittest.TestCase):
     def test_a_target_of_every_declared_core_does_not_age(self):
         """RetroBat, RetroDECK and RomM name one target that runs every core
         they declare. With nothing hand-kept, there is no date to watch."""
-        import tempfile  # noqa: PLC0415
-        from pathlib import Path as _Path  # noqa: PLC0415
+        import tempfile
+        from pathlib import Path as _Path
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             targets = _Path(tmp) / "targets"
@@ -668,8 +668,8 @@ class RepositoryWiringTests(unittest.TestCase):
     def test_a_scraped_target_offline_is_skipped_not_ok(self):
         """Offline, scraped target lists were labelled static and counted OK
         without any comparison, so a list 400 days old read as current."""
-        import tempfile  # noqa: PLC0415
-        from pathlib import Path as _Path  # noqa: PLC0415
+        import tempfile
+        from pathlib import Path as _Path
 
         scraped = sorted(cf._target_scrapers())
         self.assertTrue(scraped)
@@ -702,7 +702,7 @@ class RepositoryWiringTests(unittest.TestCase):
 
 class RepeatedDestinations(unittest.TestCase):
     def test_a_change_to_an_earlier_declaration_is_seen(self):
-        from check_freshness import diff_platform  # noqa: PLC0415
+        from check_freshness import diff_platform
 
         def platform(first_md5: str) -> dict:
             return {"systems": {"pce": {"files": [
@@ -716,7 +716,7 @@ class RepeatedDestinations(unittest.TestCase):
 
 class PinsWithExtras(unittest.TestCase):
     def test_an_extras_bracket_keeps_its_pin(self):
-        from check_freshness import parse_pip_pins  # noqa: PLC0415
+        from check_freshness import parse_pip_pins
 
         pins = parse_pip_pins('  run: pip install pyyaml "jsonschema[format-nongpl]==4.26.0"')
         self.assertEqual(pins["jsonschema"], "==4.26.0")

@@ -38,7 +38,7 @@ from pathlib import Path
 from typing import TypeVar
 
 sys.path.insert(0, os.path.dirname(__file__))
-from sitecollection import (  # noqa: E402
+from sitecollection import (
     _copy_places, _group_by_manufacturer, _profiles_in,
     _profiles_on_disk, _slug, collection_paths,
 )
@@ -77,7 +77,6 @@ from nativemode import check_label, digest_algorithm, reads_file_contents
 
 yaml = require_yaml()
 from generate_readme import (
-    compute_coverage,
     platform_coverages,
     NO_PACK,
     asset_links,
@@ -86,7 +85,6 @@ from generate_readme import (
     demo_facts,
     download_links,
     extract_notes,
-    extract_targets,
     release_totals,
 )
 from provenance_report import build_report, distinct_missing, profile_needs
@@ -109,8 +107,6 @@ from siteguides import (
     Guide,
     HandheldGuide,
     HandheldSystem,
-    FENCE_TITLES,
-    INSTALL_BASE,
     INSTALL_PS1,
     INSTALL_SH,
     PACKAGE_COMMAND,
@@ -118,7 +114,6 @@ from siteguides import (
     TRUST_ITEMS,
     detected_systems as _detected_systems,
     fence,
-    folder_list,
     install_command,
     setup_count,
     platform_args,
@@ -624,7 +619,7 @@ def _pack_version(pack_name: str, platforms: list[str]) -> str:
     Read past the platform part the builder writes, not at the last
     underscore: AmberELEC_prerelease-20261019_1835 read as 1835.
     """
-    from generate_pack import platform_pack_prefix  # noqa: PLC0415
+    from generate_pack import platform_pack_prefix
 
     stem = pack_name.removesuffix("_BIOS_Pack.zip")
     prefix = platform_pack_prefix(
@@ -1079,7 +1074,7 @@ def _release_pack_platforms() -> frozenset[str]:
     return _release_packs_in(str(siteinputs.current().platforms))
 
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def _release_packs_in(platforms_dir: str) -> frozenset[str]:
     return frozenset(list_release_pack_platforms(platforms_dir))
 
@@ -2807,7 +2802,7 @@ def platform_dat(manifest: dict, db: dict, member_digests: dict[str, dict[str, s
 
 def _logiqx(name: str, description: str, games: dict[str, list[dict]], generated_at: str) -> str:
     """Games of roms as a Logiqx datafile, each rom's `_rom` its name."""
-    import xml.etree.ElementTree as ET  # noqa: PLC0415
+    import xml.etree.ElementTree as ET
 
     root = ET.Element("datafile")
     header = ET.SubElement(root, "header")
@@ -3258,7 +3253,7 @@ def _front_matter(markdown: str) -> dict:
     return data if isinstance(data, dict) else {}
 
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def _sha1_by_prefix(db_path: str) -> dict[str, str]:
     return {sha1[:12]: sha1 for sha1 in load_database(db_path)["files"]}
 
@@ -3581,7 +3576,7 @@ def _collection_sha1_by_path() -> dict[str, str]:
     return _sha1_by_path_in(str(siteinputs.current().db))
 
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def _sha1_by_path_in(db_path: str) -> dict[str, str]:
     with open(db_path, encoding="utf-8") as handle:
         files = json.load(handle).get("files", {})
@@ -3724,7 +3719,7 @@ def _copy_hash(algorithm: str, value: str | list) -> str:
     """A declared hash cut to SHORT_HASH characters on a button that copies
     it whole. A list of accepted values (Recalbox) copies its first. Outside
     a form a button submits nothing, so it carries no type."""
-    from hashing import parse_hash_list  # noqa: PLC0415
+    from hashing import parse_hash_list
 
     values = parse_hash_list(value)
     if not values:
@@ -4123,7 +4118,7 @@ def _profiles_by_core_name() -> dict[str, list[str]]:
     return _core_names_in(str(siteinputs.current().emulators))
 
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def _profiles_with_page(emulators_dir: str) -> frozenset[str]:
     """The profiles the site writes a page for: no alias, no test core."""
     profiles = _profiles_in(emulators_dir, skip_aliases=True)
@@ -4132,7 +4127,7 @@ def _profiles_with_page(emulators_dir: str) -> frozenset[str]:
     )
 
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def _core_names_in(emulators_dir: str) -> dict[str, list[str]]:
     profiles = _profiles_in(emulators_dir, skip_aliases=True)
     with_page = _profiles_with_page(emulators_dir)
@@ -5060,8 +5055,8 @@ def _data_member_digests(
     whose copy in the tree's local cache has the sha1 the manifest records.
     The manifests carry sha1 alone: the MD5 of Dolphin's ApprovedInis.json
     found nothing although the pack ships it."""
-    from common import load_data_dir_registry  # noqa: PLC0415
-    from hashing import compute_hashes  # noqa: PLC0415
+    from common import load_data_dir_registry
+    from hashing import compute_hashes
 
     if data_registry is None:
         data_registry = load_data_dir_registry(str(siteinputs.current().platforms))
@@ -5356,7 +5351,7 @@ def _console_display(manufacturer: str, console: str) -> str:
     """A console section's name as the reader looks for it: the heading
     system_name gives its id, or the folder alone under a program's top
     (Other, Arcade), where "Other mame" would name nothing."""
-    from siterender import _PROGRAM_TOPS, _heading_name  # noqa: PLC0415
+    from siterender import _PROGRAM_TOPS, _heading_name
 
     return console if manufacturer in _PROGRAM_TOPS else _heading_name(manufacturer, console)
 
@@ -5838,7 +5833,7 @@ def _fetch_url(path: str) -> str:
     large-files release asset when .gitignore keeps it out of git."""
     global _RELEASE_ASSET_NAMES
     if _RELEASE_ASSET_NAMES is None:
-        from largefiles import (  # noqa: PLC0415
+        from largefiles import (
             LARGE_FILES_RELEASE,
             asset_names,
             load_registered_paths,
@@ -6484,7 +6479,7 @@ def system_install_choices(coverages: dict) -> dict[str, dict[str, list[tuple[st
     platform's install manifest records is offered: --system refuses any
     other name.
     """
-    from siterender import _page_by_norm  # noqa: PLC0415
+    from siterender import _page_by_norm
 
     choices: dict[str, dict[str, list[tuple[str, str]]]] = {}
     for name, cov in sorted(coverages.items()):
@@ -6652,7 +6647,7 @@ def _region_order() -> dict[str, int]:
     for every region is a region-free stand-in for the BIOS of each one:
     the PlayStation section opened on psxonpsp660.bin, which one emulator
     requires among the BIOS it accepts, above the scph files most read."""
-    from region import REGION_TREE, WORLD  # noqa: PLC0415
+    from region import REGION_TREE, WORLD
 
     ordered = []
     for parent, members in REGION_TREE.items():
@@ -6692,7 +6687,7 @@ _SECTION_ENTRIES: dict[int, tuple[object, dict[tuple[str, str], list]]] = {}
 def _entries_by_section(consumers: FileConsumers) -> dict[tuple[str, str], list]:
     """Each console section with the (sha1, emulator, entry, system) whose
     system leads to it, read once per build."""
-    from siterender import system_section  # noqa: PLC0415
+    from siterender import system_section
 
     cached = _SECTION_ENTRIES.get(id(consumers))
     if cached is not None and cached[0] is consumers:
@@ -6858,7 +6853,7 @@ def _start_groups(
     the Mega CD BIOS for its Genesis), and one under Other is a single
     emulator's, its shaders and fonts. A file the emulator ships with is
     no file to fetch."""
-    from siterender import _heading_name, _manufacturer_slug, system_name, system_section  # noqa: PLC0415
+    from siterender import _heading_name, _manufacturer_slug, system_name, system_section
 
     here = (_manufacturer_slug(section[0]), section[1]) if section else None
     held = {str(f.get("sha1", "")) for f in files}
@@ -7175,7 +7170,7 @@ def _group_start(group: _StartGroup, first_below: bool) -> list[tuple[str, str]]
     that run without it. The Game Boy opened on dmg_boot.bin, which Emux
     GB alone of 13 requires, under a home page that says the Game Boy
     needs no BIOS."""
-    from region import _PARENT  # noqa: PLC0415
+    from region import _PARENT
 
     def listed(names: list[str], below: bool = first_below) -> str:
         if len(names) <= START_WITH_NAMES:
@@ -7411,7 +7406,7 @@ def arcade_board_sections(
     folders. Each board is recorded (siterender.record_board_section) before
     any page links one, and a system's install commands follow its link to
     the board's section. Call after reset_console_pages()."""
-    from siterender import (  # noqa: PLC0415
+    from siterender import (
         arcade_board,
         arcade_boards,
         archive_machine,
@@ -7507,7 +7502,7 @@ def arcade_board_sections(
 def _boards_line(manufacturer: str, console: str) -> list[str]:
     """The line of a section whose board sets went to the boards' pages:
     the Dreamcast folder holds NAOMI's and Atomiswave's."""
-    from siterender import arcade_boards  # noqa: PLC0415
+    from siterender import arcade_boards
 
     boards = _BOARDS_FROM.get((manufacturer, console))
     if not boards:
@@ -7558,7 +7553,7 @@ def _part_weight() -> float:
     return SEARCH_WEIGHT.get("part", DEMOTED_WEIGHT)
 
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def _manifest_systems(platform: str) -> frozenset[str]:
     """The system ids a platform's install manifest records: --system
     refuses any other."""
@@ -7610,7 +7605,7 @@ def system_pages(
     (siterender.record_console_pages). An arcade board has a page of its
     own, systems/arcade-<board slug>/, under a heading of that id.
     """
-    from siterender import board_slug  # noqa: PLC0415
+    from siterender import board_slug
 
     slug = _slug(manufacturer)
     installs = installs or {}
@@ -7889,7 +7884,7 @@ def _named_system_link(sys_id: str, prefix: str = "") -> str:
     The emulator pages printed the id ("sony-playstation") where every
     other page says "Sony PlayStation". The id stays in the address only.
     """
-    from siterender import system_section  # noqa: PLC0415
+    from siterender import system_section
 
     name = system_name(sys_id).replace("[", r"\[").replace("]", r"\]")
     section = system_section(sys_id)
@@ -7920,7 +7915,7 @@ def _region_words(value: object, most: int = 0) -> str:
     """A region: value in words. ``most`` caps the regions named, the rest
     counted: one Saturn BIOS serves seven."""
     raw = value if isinstance(value, list) else [value] if value else []
-    from region import label  # noqa: PLC0415
+    from region import label
 
     words = [_REGION_WORDS.get(str(r)) or label(str(r)) for r in raw]
     if most and len(words) > most:
@@ -8064,7 +8059,7 @@ def comes_with_app(f: dict) -> bool:
     narrowed by ``mode`` is that build's alone: the other build reads its
     own entry, or nothing.
     """
-    from validation import installed_with_emulator  # noqa: PLC0415
+    from validation import installed_with_emulator
 
     return installed_with_emulator(f)
 
@@ -8254,7 +8249,7 @@ def _build_file_links(pin_build: list[dict]) -> list[str]:
     """Each platform build file that holds the revision, linked at the
     commit it was read at when the source record holds it. The prose of
     pin_frozen named the file as plain text."""
-    from sitesources import _browse_repo, _source_permalink, tree_holds  # noqa: PLC0415
+    from sitesources import _browse_repo, tree_holds
 
     links = []
     for build in pin_build:
@@ -8611,7 +8606,7 @@ def _more_words(lines: list[str]) -> list[str]:
 def _short_hash_line(f: dict) -> str:
     """The entry's strongest declared hash, cut to SHORT_HASH characters,
     with a copy button for the whole value. "" when it declares none."""
-    from hashing import parse_hash_list  # noqa: PLC0415
+    from hashing import parse_hash_list
 
     for field, label in (("sha1", "SHA1"), ("md5", "MD5"), ("sha256", "SHA256"), ("crc32", "CRC32")):
         values = parse_hash_list(f.get(field) or "")
@@ -8984,7 +8979,7 @@ def install_commands(args: str = "", indent: str = "",
 def _installer() -> object:
     """install.py, read as a module: the names `--emulator` accepts are its
     own (`emulator_names`)."""
-    import importlib.util  # noqa: PLC0415
+    import importlib.util
 
     spec = importlib.util.spec_from_file_location("install", _REPO_ROOT / "install.py")
     module = importlib.util.module_from_spec(spec)
@@ -9549,7 +9544,7 @@ def _hash_spans(value: str | list, copy: bool = False) -> str:
     that only a profile declares were out of reach of the site search: it
     indexes text, and a pasted sha1 matched nothing.
     """
-    from hashing import parse_hash_list  # noqa: PLC0415
+    from hashing import parse_hash_list
 
     return ", ".join(
         markup.hash_value(v, copy) for v in parse_hash_list(value)
@@ -10607,7 +10602,7 @@ def _declared_hashes(config: dict, detail: dict) -> dict[str, list[str]]:
     and named neither: the reader could not look for the dump RetroDECK asks
     for, nor report the difference.
     """
-    from hashing import parse_hash_list  # noqa: PLC0415
+    from hashing import parse_hash_list
 
     system = (config.get("systems") or {}).get(detail.get("system", "")) or {}
     for entry in system.get("files") or []:
@@ -10947,8 +10942,8 @@ def reading_platforms(emu_name: str, profile: dict, name: str,
     """Of the platforms running an emulator (name -> config), those whose
     build of it reads the entry: BlastEm's cdbios.bin is read by the
     standalone build only, and RetroBat hands that build other names."""
-    from common import platform_layouts, standalone_set  # noqa: PLC0415
-    from validation import filter_files_by_mode, unread_on  # noqa: PLC0415
+    from common import platform_layouts, standalone_set
+    from validation import filter_files_by_mode, unread_on
 
     return {
         platform for platform, config in configs.items()
@@ -12629,7 +12624,7 @@ def _generate(args: argparse.Namespace) -> None:
         _system_pages_from_data(manufacturers, coverages, db, profiles)
     )
     print(f"  {len(_system_page_map)} system IDs mapped to pages")
-    from siterender import link_coverage, system_ids  # noqa: PLC0415
+    from siterender import link_coverage, system_ids
 
     print("Generating system pages...")
 
@@ -12936,7 +12931,7 @@ def _generate(args: argparse.Namespace) -> None:
         print(f"Removed {stale} page(s) nothing produced this run")
 
 
-from sitediagrams import local_images, prepare_page, unresolved_images  # noqa: E402,F401
+from sitediagrams import local_images, prepare_page, unresolved_images  # noqa: E402
 from sitewrite import (  # noqa: E402,F401
     _produced,
     _record,

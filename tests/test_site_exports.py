@@ -187,9 +187,9 @@ class SiteReferenceContracts(unittest.TestCase):
         self.assertNotIn("\n    #if FEATURE", rendered)
 
     def test_browser_titles_distinguish_emulators_from_system_pages(self):
-        from unittest import mock  # noqa: PLC0415
+        from unittest import mock
 
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         pages = {"systems/qemu.md": {}, "emulators/qemu.md": {"hasPart": [{"name": "a"}]}}
         with mock.patch.dict(generate_site.PAGE_DATA, pages, clear=True):
@@ -214,7 +214,7 @@ class SiteReferenceContracts(unittest.TestCase):
         # Every reference resolves against the catalog's own URL, as an
         # RFC 3986 client resolves it: the url was relative to the site root
         # and the schema to api/v1/, so neither base resolved both.
-        import urllib.parse  # noqa: PLC0415
+        import urllib.parse
 
         site = "https://example.org/site/"
         base = site + "api/v1/catalog.json"
@@ -309,7 +309,7 @@ class AnEmulatorPageNamesItsRevision(unittest.TestCase):
     refers to sat in the YAML alone, for 178 profiles."""
 
     def test_each_repository_links_its_pinned_commit(self):
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         profile = {
             "emulator": "Caprice32", "type": "libretro",
@@ -334,7 +334,7 @@ class APlatformPageSaysWhereEachFileGoes(unittest.TestCase):
     goes to GC/USA, GC/EUR or GC/JAP."""
 
     def test_same_named_files_show_their_destinations(self):
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         regions = ("USA", "EUR", "JAP")
         declared = [{"name": "IPL.bin", "destination": f"dolphin-emu/Sys/GC/{r}/IPL.bin",
@@ -354,9 +354,9 @@ class AVariantShowsWhoPinsIt(unittest.TestCase):
     Batocera and RetroBat pin named no platform."""
 
     def test_the_variant_card_names_its_readers(self):
-        import types  # noqa: PLC0415
+        import types
 
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         primary = {"name": "advision.zip", "path": "bios/Entex/Adventure Vision/advision.zip",
                    "sha1": "a" * 40, "md5": "b" * 32, "size": 3000}
@@ -542,7 +542,7 @@ class AVersionPerBuildReadsAsVersions(unittest.TestCase):
     """MesenCE's page showed {'standalone': '2.2.1', 'libretro': '2.0.0'}."""
 
     def test_each_build_is_named(self):
-        from generate_site import generate_emulator_page  # noqa: PLC0415
+        from generate_site import generate_emulator_page
 
         page = generate_emulator_page(
             "mesence",
@@ -560,7 +560,7 @@ class EmulatorPartsCarryTheirIdentity(unittest.TestCase):
     no part the url of its card."""
 
     def test_identifiers_members_and_url(self):
-        from generate_site import emulator_file_anchors, emulator_structured_data  # noqa: PLC0415
+        from generate_site import emulator_file_anchors, emulator_structured_data
 
         files = [
             {"name": "BS-X.bin", "sha256": "aa,bb"},
@@ -582,9 +582,9 @@ class OnlyAPinnedProfileClaimsAPin(unittest.TestCase):
     """Redream, with no revision at all, was described as source-pinned."""
 
     def test_the_description_follows_the_pin(self):
-        from unittest import mock  # noqa: PLC0415
+        from unittest import mock
 
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         pages = {
             "emulators/pinned.md": {"about": {"version": "a" * 40}},
@@ -603,7 +603,7 @@ class ADataDirectorySaysWhatItIs(unittest.TestCase):
 
     @mock.patch("sitesources.tree_holds", lambda *_args: True)  # a path the record confirms
     def test_description_origin_mode_and_source(self):
-        from generate_site import generate_emulator_page  # noqa: PLC0415
+        from generate_site import generate_emulator_page
 
         profile = {
             "emulator": "Cemu", "type": "standalone + libretro", "systems": [],
@@ -627,7 +627,7 @@ class APlatformPageNamesTheFileItTranscribes(unittest.TestCase):
     batocera-systems revision every md5 on it comes from."""
 
     def test_pinned_and_moving_sources(self):
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         def page(source: str) -> str:
             cov = {"platform": "P", "config": {"source": source, "systems": {}},
@@ -650,10 +650,10 @@ class APerCoreDocumentValidates(unittest.TestCase):
 
     def test_shape(self):
         try:
-            import jsonschema  # noqa: PLC0415
+            import jsonschema
         except ImportError:
             self.skipTest("jsonschema is not installed")
-        import yaml  # noqa: PLC0415
+        import yaml
 
         root = Path(__file__).resolve().parents[1]
         source = (root / "scripts" / "generate_site.py").read_text(encoding="utf-8")
@@ -679,10 +679,10 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
         and 335 of its 337 zipped_file entries were unreachable that way."""
         import json as _json
 
-        import generate_site  # noqa: PLC0415
-        from common import load_platform_config  # noqa: PLC0415
-        from cross_reference import FileConsumers  # noqa: PLC0415
-        from ziptools import build_zip_contents_index  # noqa: PLC0415
+        import generate_site
+        from common import load_platform_config
+        from cross_reference import FileConsumers
+        from ziptools import build_zip_contents_index
 
         root = Path(__file__).resolve().parents[1]
         db = _json.loads((root / "database.json").read_text(encoding="utf-8"))
@@ -712,7 +712,7 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
         import tempfile
         import zlib
 
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         body = b"approved inis\n"
         sha1 = hashlib.sha1(body).hexdigest()
@@ -740,7 +740,7 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
         import json as _json
         import tempfile
 
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         sha1 = "ab" * 20
         md5 = "490f666e1afb15b7362b406ed1cea246"
@@ -794,9 +794,9 @@ class AnArchiveMemberIsFoundByItsCrc(unittest.TestCase):
     33,403."""
 
     def test_each_member_is_a_record_leading_to_its_archive(self):
-        import zipfile  # noqa: PLC0415
+        import zipfile
 
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         with tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1] / "tmp") as tmp:
             root = Path(tmp)
@@ -810,7 +810,7 @@ class AnArchiveMemberIsFoundByItsCrc(unittest.TestCase):
             plain = generate_site._archive_member_records(
                 {"name": "a.bin", "path": "bios/a.bin"}, "cd" * 20, "/retrobios/y/", root)
         self.assertEqual(plain, [])
-        import zlib  # noqa: PLC0415
+        import zlib
 
         self.assertEqual(records, [
             {"value": f"{zlib.crc32(b'rom'):08x}", "algorithm": "crc32", "layer": "archive-member",
@@ -820,9 +820,9 @@ class AnArchiveMemberIsFoundByItsCrc(unittest.TestCase):
         ])
 
     def test_the_lookup_and_the_schema_carry_the_layer(self):
-        import json as _json  # noqa: PLC0415
+        import json as _json
 
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         source = Path(generate_site.__file__).read_text(encoding="utf-8")
         self.assertIn("records += _archive_member_records(entry, sha1, item[\"url\"])", source)
@@ -840,7 +840,7 @@ class AWantedDumpIsFoundByItsHash(unittest.TestCase):
     the site knows has it."""
 
     def test_each_hash_of_a_wanted_row_is_a_record(self):
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         row = {"catalog": "redump", "dat": "Sony - PlayStation 2 - BIOS Images",
                "name": "ps2-dvd-212k.bin", "description": "", "size": "4194304",
@@ -856,9 +856,9 @@ class AWantedDumpIsFoundByItsHash(unittest.TestCase):
         ])
 
     def test_the_schema_and_the_page_carry_the_layer(self):
-        import json as _json  # noqa: PLC0415
+        import json as _json
 
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         root = Path(__file__).resolve().parents[1]
         schema = _json.loads((root / "schemas" / "site-api-envelope.schema.json").read_text())
@@ -875,9 +875,9 @@ class AMovedPartCardReachesItsPage(unittest.TestCase):
     site.js redirected only sha1- ids."""
 
     def test_a_part_page_sends_a_missing_card_to_the_emulator_page(self):
-        import re as _re  # noqa: PLC0415
+        import re as _re
 
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         script = (Path(__file__).resolve().parents[1] / "website" / "src" / "scripts"
                   / "site.ts").read_text(encoding="utf-8")
@@ -899,7 +899,7 @@ class AFileHasAnAddressByContent(unittest.TestCase):
     was not."""
 
     def test_index_page_and_resolver(self):
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         db = {"files": {
             "ab" * 20: {"path": "bios/Roland/mt32-roms/mt32_control.rom"},
@@ -914,7 +914,7 @@ class AFileHasAnAddressByContent(unittest.TestCase):
                   / "site.ts").read_text()
         self.assertIn("api/v1/lookup/", script)
         self.assertIn("params.has('sha1')", script)
-        from cross_reference import FileConsumers  # noqa: PLC0415
+        from cross_reference import FileConsumers
 
         card = "\n".join(generate_site._system_file_card(
             {"name": "x.rom", "sha1": "ab" * 20, "size": 1}, FileConsumers({"files": {}}),
@@ -1159,7 +1159,7 @@ class TheOneLinerIsWhereUsersLand(unittest.TestCase):
     options, and the platform and system pages offered only ZIP parts."""
 
     def test_download_page(self):
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         page = generate_site.generate_which_pack()
         self.assertIn("Android (Termux", page)
@@ -1167,8 +1167,8 @@ class TheOneLinerIsWhereUsersLand(unittest.TestCase):
         self.assertIn("--platform retroarch --dest", page)
 
     def test_platform_and_system_pages(self):
-        import generate_site  # noqa: PLC0415
-        from cross_reference import FileConsumers  # noqa: PLC0415
+        import generate_site
+        from cross_reference import FileConsumers
 
         cov = {"platform": "Batocera", "mode": "md5", "present": 0, "total": 0,
                "verified": 0, "missing": 0, "details": [], "config": {"systems": {}}}
@@ -1193,8 +1193,8 @@ class TheOneLinerIsWhereUsersLand(unittest.TestCase):
         self.assertIn("--platform batocera --system msx1", page)
 
     def test_a_system_is_offered_only_where_the_manifest_records_it(self):
-        import generate_site  # noqa: PLC0415
-        import siterender  # noqa: PLC0415
+        import generate_site
+        import siterender
 
         saved = dict(siterender._system_page_map)
         self.addCleanup(siterender.set_system_page_map, saved)
@@ -1210,7 +1210,7 @@ class TheGapPageOpensOnCounts(unittest.TestCase):
     for 5,437 of 5,438 files and "Missing 0", above a table of red cells."""
 
     def test_every_count_is_said(self):
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         text = generate_site._platform_lists_sentence(5438, 5437, 1, 0)
         self.assertIn("Of the 5,438 files", text)
@@ -1231,7 +1231,7 @@ class WhichPackDescribesNoPlatformByOpinion(unittest.TestCase):
     def test_no_ranking_words(self):
         import re
 
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         page = generate_site.generate_which_pack()
         rows = [line for line in page.splitlines() if line.startswith("| ")]
@@ -1250,8 +1250,8 @@ class EveryPageLinksItsOwnData(unittest.TestCase):
     it. A system page linked nothing either."""
 
     def test_platform_and_system_documents(self):
-        import generate_site  # noqa: PLC0415
-        from cross_reference import FileConsumers  # noqa: PLC0415
+        import generate_site
+        from cross_reference import FileConsumers
 
         cov = {"platform": "Batocera", "mode": "md5", "present": 0, "total": 0,
                "verified": 0, "missing": 0, "details": [], "config": {"systems": {}}}
@@ -1273,7 +1273,7 @@ class EveryPageLinksItsOwnData(unittest.TestCase):
             document = json.loads(path.read_text())
         self.assertEqual(document["count"], 1)
         try:
-            import jsonschema  # noqa: PLC0415
+            import jsonschema
         except ImportError:
             return
         root = Path(__file__).resolve().parents[1]

@@ -81,9 +81,9 @@ class APlaceholderIsAnsweredByEvidence(unittest.TestCase):
         import yaml
 
         sys.path.insert(0, str(REPO_ROOT / "scripts"))
-        from common import _emulator_profiles_cache  # noqa: PLC0415
-        from generate_pack import generate_emulator_pack  # noqa: PLC0415
-        from verify import verify_emulator  # noqa: PLC0415
+        from common import _emulator_profiles_cache
+        from generate_pack import generate_emulator_pack
+        from verify import verify_emulator
 
         _emulator_profiles_cache.clear()
         (REPO_ROOT / "tmp").mkdir(exist_ok=True)

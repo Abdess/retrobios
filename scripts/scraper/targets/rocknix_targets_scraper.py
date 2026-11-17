@@ -214,7 +214,7 @@ class Scraper(BaseTargetScraper):
         return fetch_bytes(f"{RAW_BASE.format(tag=self.tag)}/{path}").decode("utf-8")
 
     def _devices(self) -> list[str]:
-        import json  # noqa: PLC0415
+        import json
 
         listing = json.loads(fetch_bytes(
             f"{GITHUB_API}/{DEVICES_DIR}?ref={self.tag}", headers=github_headers()

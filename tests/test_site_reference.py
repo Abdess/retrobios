@@ -603,11 +603,11 @@ class TheContractsValidate(unittest.TestCase):
 
     def test_every_contract_validates_against_the_platform_schema(self):
         try:
-            from jsonschema import Draft202012Validator  # noqa: PLC0415
+            from jsonschema import Draft202012Validator
         except ImportError:
             self.skipTest("jsonschema is a tooling dependency")
 
-        from common import list_registered_platforms, load_platform_config  # noqa: PLC0415
+        from common import list_registered_platforms, load_platform_config
 
         schema = json.loads((REPO_ROOT / "schemas" / "platform.schema.json").read_text())
         validator = Draft202012Validator(schema)
@@ -634,7 +634,7 @@ class TheContractsValidate(unittest.TestCase):
 
     def test_the_built_api_validates(self):
         try:
-            from jsonschema import Draft202012Validator  # noqa: PLC0415
+            from jsonschema import Draft202012Validator
         except ImportError:
             self.skipTest("jsonschema is a tooling dependency")
 
@@ -782,7 +782,7 @@ class LookupUrlsResolve(unittest.TestCase):
     def test_each_record_names_its_system_as_the_pages_do(self):
         """Find a file opens on "a BIOS file for Sony PlayStation": the name
         comes from system_name, never built in the browser."""
-        from siterender import system_name  # noqa: PLC0415
+        from siterender import system_name
 
         db = {"files": {"ab" * 20: {"path": "bios/Sony/PlayStation/scph5501.bin",
                                     "name": "scph5501.bin", "md5": "490f666e1afb15b7362b406ed1cea246"}}}
@@ -913,7 +913,7 @@ class SourceLinksGoWhereTheFileIs(unittest.TestCase):
         tree of its repository holds."""
         if not sitesources.TREE_CACHE.is_dir():
             raise unittest.SkipTest("no cached tree listings")
-        from common import load_emulator_profiles  # noqa: PLC0415
+        from common import load_emulator_profiles
 
         link = re.compile(r"\(https://github\.com/([^/]+/[^/]+)/blob/([0-9a-f]{40})/([^#)]+)")
         checked, wrong = 0, []
@@ -924,7 +924,7 @@ class SourceLinksGoWhereTheFileIs(unittest.TestCase):
                     continue
                 for slug, pin, path in link.findall(
                         sitesources._source_ref_markdown(profile, entry["source_ref"])):
-                    import upstream  # noqa: PLC0415
+                    import upstream
 
                     repo = upstream.parse_repo(f"https://github.com/{slug}")
                     held = sitesources.tree_holds(repo, pin, urllib.parse.unquote(path))
@@ -1024,7 +1024,7 @@ class TheFolderCheckReadsEmuDecksWhitelist(unittest.TestCase):
             (api / "emudeck.json").write_text(json.dumps({"items": [{"contract": contract}]}))
             found = check_platform_folder.check("emudeck", root, api.as_uri() + "/")
             # The verifier's verdict on the matching entry, file by file.
-            from verify import verify_entry_md5  # noqa: PLC0415
+            from verify import verify_entry_md5
 
             verdicts = {name: verify_entry_md5(contract["systems"]["sony-playstation"]["files"][0],
                                                str(root / name))["status"]
@@ -1147,7 +1147,7 @@ class SourceLinksOnlyWhereTheFileIs(unittest.TestCase):
     def test_every_rendered_link_is_recorded(self):
         record = json.loads(sitesources.SOURCE_PATHS.read_text(encoding="utf-8"))
         pages = sorted(_built(DOCS / "emulators").rglob("*.md*")) + sorted(DOCS.glob("gaps*.md*"))
-        import measurement_records  # noqa: PLC0415
+        import measurement_records
 
         # A Tested block links a record line and its data file in this
         # repository. The records are append-only, so a file a permalink

@@ -14,8 +14,8 @@ from pathlib import Path
 import yaml
 
 from . import Fetcher, SourceError, load_sources, scrape_setup
-from upstream import UpstreamError  # noqa: E402  (the package puts scripts/ on sys.path)
-from artifacts import write_text_atomic  # noqa: E402
+from upstream import UpstreamError
+from artifacts import write_text_atomic
 from ..base_scraper import _PlatformDumper
 
 DEFAULT_DIR = Path("platforms") / "romfolders"

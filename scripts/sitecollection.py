@@ -13,8 +13,8 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
-import siteinputs  # noqa: E402
-from common import GAME_DATA_TOPS, load_emulator_profiles  # noqa: E402
+import siteinputs
+from common import GAME_DATA_TOPS, load_emulator_profiles
 
 
 def _copy_places(db: dict) -> dict[str, set[tuple[str, str, str]]]:
@@ -94,7 +94,7 @@ def _engine_sections(manufacturers: dict[str, dict[str, list]]) -> dict[str, dic
     top joins that top, and a folder named by a profile key is headed with
     the engine's name (SECTION_LABELS), its address unchanged.
     """
-    from siterender import _PROGRAM_TOPS, SECTION_LABELS, record_card_move  # noqa: PLC0415
+    from siterender import _PROGRAM_TOPS, SECTION_LABELS, record_card_move
 
     profiles = {key: profile for key, profile in _profiles_on_disk().items()
                 if profile.get("type") != "alias" and profile.get("role") != "test"}
@@ -164,6 +164,6 @@ def _profiles_on_disk() -> dict[str, dict]:
     return _profiles_in(str(siteinputs.current().emulators), skip_aliases=False)
 
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def _profiles_in(emulators_dir: str, skip_aliases: bool) -> dict[str, dict]:
     return load_emulator_profiles(emulators_dir, skip_aliases=skip_aliases)

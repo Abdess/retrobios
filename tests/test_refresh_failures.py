@@ -267,7 +267,7 @@ class AKeyMustServeThePlatform(unittest.TestCase):
     dolphin-sys was refreshed for RomM, which never reads it."""
 
     def test_a_key_outside_the_platform_is_refused(self):
-        import subprocess  # noqa: PLC0415
+        import subprocess
 
         root = Path(__file__).resolve().parents[1]
         refused = subprocess.run(

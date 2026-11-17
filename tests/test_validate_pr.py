@@ -123,7 +123,7 @@ class AFileOnlyACoreReadsIsKnown(_Fixture):
     config - needs manual review"."""
 
     def test_the_profiles_that_declare_the_hash_are_named(self):
-        import hashlib  # noqa: PLC0415
+        import hashlib
 
         emulators = self.tmp / "emulators"
         emulators.mkdir()
@@ -143,7 +143,7 @@ class AFileOnlyACoreReadsIsKnown(_Fixture):
     def test_a_missing_file_is_told_the_folder_of_its_system(self):
         """The folder came from platform lists only: a file only a profile
         declares, absent from the collection, got the generic advice."""
-        import hashlib  # noqa: PLC0415
+        import hashlib
 
         held, missing = b"held rom", b"missing rom"
         emulators = self.tmp / "emulators"
@@ -294,8 +294,8 @@ class HashRecognition(_Fixture):
     def test_a_zip_of_bios_files_is_read_member_by_member(self):
         """A card's BIOS folder zipped to upload it was hashed as one file,
         and its contributor was asked where that dump came from."""
-        import hashlib  # noqa: PLC0415
-        import zipfile  # noqa: PLC0415
+        import hashlib
+        import zipfile
 
         held, declared = b"HELD BIOS", b"DECLARED BIOS"
         with zipfile.ZipFile(self.tmp / "mybios.zip", "w") as archive:
@@ -490,7 +490,7 @@ class ThePlatformsOwnCheckDecides(_Fixture):
         return validate_pr.load_platform_hashes(str(platforms))
 
     def _zip(self) -> str:
-        import zipfile  # noqa: PLC0415
+        import zipfile
 
         path = self.tmp / "contrib" / "set.zip"
         path.parent.mkdir()
@@ -502,7 +502,7 @@ class ThePlatformsOwnCheckDecides(_Fixture):
         return validate_pr.validate_file(path, None, known).to_markdown()
 
     def test_a_member_pinned_by_zipped_file(self):
-        import hashlib  # noqa: PLC0415
+        import hashlib
 
         md5 = hashlib.md5(b"ROM").hexdigest()
         known = self._platforms(
@@ -513,7 +513,7 @@ class ThePlatformsOwnCheckDecides(_Fixture):
         self.assertNotIn(".variants/", markdown)
 
     def test_a_member_digest(self):
-        from hashing import md5_composite  # noqa: PLC0415
+        from hashing import md5_composite
 
         path = self._zip()
         known = self._platforms(
@@ -522,7 +522,7 @@ class ThePlatformsOwnCheckDecides(_Fixture):
         self.assertIn("Accepted by the platform's own check: p", self._verdict(path, known))
 
     def test_a_sha256(self):
-        import hashlib  # noqa: PLC0415
+        import hashlib
 
         path = self._zip()
         digest = hashlib.sha256((self.tmp / path).read_bytes()).hexdigest()
@@ -550,7 +550,7 @@ class FlagsAreAppliedOrRefused(unittest.TestCase):
     beside --markdown printed JSON and dropped the markdown."""
 
     def _run(self, *argv: str):
-        import subprocess  # noqa: PLC0415
+        import subprocess
 
         return subprocess.run(
             [sys.executable, "scripts/validate_pr.py", *argv], cwd=REPO_ROOT,
@@ -570,7 +570,7 @@ class FlagsAreAppliedOrRefused(unittest.TestCase):
     def test_a_failed_file_is_not_reported_new(self):
         """A path that does not exist came out as "outcome": "new", and a
         reader listing new contributions announced a BIOS nobody sent."""
-        import json  # noqa: PLC0415
+        import json
 
         result = self._run("--json", "bios/nope.bin")
         report = json.loads(result.stdout)

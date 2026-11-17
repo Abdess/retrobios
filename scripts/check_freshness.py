@@ -49,11 +49,11 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-import export_native  # noqa: E402
-import pin_installer  # noqa: E402
-import refresh_data_dirs  # noqa: E402
-import upstream  # noqa: E402
-from common import (  # noqa: E402
+import export_native
+import pin_installer
+import refresh_data_dirs
+import upstream
+from common import (
     InputMissing,
     apply_target_overrides,
     list_registered_platforms,
@@ -65,11 +65,11 @@ from common import (  # noqa: E402
     write_text_atomic,
     yaml_load,
 )
-from exporter import discover_exporters  # noqa: E402
-from exporter.baseline import build_native_model  # noqa: E402
-from scripts.scraper import game_dat_importer  # noqa: E402
-from scripts.scraper.redump_dat_scraper import fetch_snapshot  # noqa: E402
-from scripts.scraper.targets import discover_target_scrapers  # noqa: E402
+from exporter import discover_exporters
+from exporter.baseline import build_native_model
+from scripts.scraper import game_dat_importer
+from scripts.scraper.redump_dat_scraper import fetch_snapshot
+from scripts.scraper.targets import discover_target_scrapers
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 CORE_INFO_REPO = "https://github.com/libretro/libretro-core-info"
@@ -876,7 +876,7 @@ def core_info_blobs(cache_dir: str, offline: bool) -> dict[str, str] | None:
     repo = upstream.parse_repo(CORE_INFO_REPO)
     if repo is None:
         return None
-    payload = upstream._api(  # noqa: SLF001
+    payload = upstream._api(
         f"{repo.api_base}/repos/{repo.slug}/contents?per_page=100",
         cache_dir,
         offline,
@@ -1046,7 +1046,7 @@ def _check_buildbot_system() -> Finding:
     The registry entries are refreshed above. An asset published since, or
     one the buildbot no longer serves, is only seen by reading its .index.
     """
-    import check_buildbot_system  # noqa: PLC0415
+    import check_buildbot_system
 
     with contextlib.redirect_stdout(io.StringIO()):
         report = check_buildbot_system.check(
@@ -1094,7 +1094,7 @@ def _game_catalogs(source: str) -> list[dict]:
 def _no_intro_asset_date(cache_dir: str, offline: bool) -> str:
     """The day the mirror last rebuilt its No-Intro pack, empty if unlisted."""
     repo = upstream.parse_repo(NO_INTRO_MIRROR)
-    payload = upstream._api(  # noqa: SLF001
+    payload = upstream._api(
         f"{repo.api_base}/repos/{repo.slug}/releases/tags/{NO_INTRO_RELEASE}",
         cache_dir,
         offline,
@@ -1146,8 +1146,8 @@ def redump_datfile_version(code: str) -> str:
     request = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "retrobios/1.0"})
     with urllib.request.urlopen(request, timeout=60) as response:
         disposition = response.headers.get("Content-Disposition", "")
-    named = game_dat_importer._DISPOSITION.search(disposition)  # noqa: SLF001
-    match = game_dat_importer._REDUMP_FILE.match(named["file"]) if named else None  # noqa: SLF001
+    named = game_dat_importer._DISPOSITION.search(disposition)
+    match = game_dat_importer._REDUMP_FILE.match(named["file"]) if named else None
     if not match:
         raise ValueError(f"{url} names no datfile")
     return f"{match['date']} {match['time']}"
@@ -1225,7 +1225,7 @@ def _check_tosec(offline: bool) -> Finding:
     if offline:
         return Finding("catalogs", "tosec", SKIPPED, local=imported, detail="offline")
     try:
-        html = upstream._http_text(TOSEC_DOWNLOADS)  # noqa: SLF001
+        html = upstream._http_text(TOSEC_DOWNLOADS)
     except upstream.UpstreamError as exc:
         return Finding("catalogs", "tosec", UNKNOWN, local=imported, detail=str(exc))
     latest = tosec_latest_pack(html or "")
@@ -1297,7 +1297,7 @@ def _check_fbneo(cache_dir: str, offline: bool) -> Finding:
     if offline:
         return Finding("catalogs", "fbneo recipes", SKIPPED, local=imported, detail="offline")
     repo = upstream.parse_repo(FBNEO_REPO)
-    listing = upstream._api(  # noqa: SLF001
+    listing = upstream._api(
         f"{repo.api_base}/repos/{repo.slug}/contents/dats",
         cache_dir,
         offline,
@@ -1386,7 +1386,7 @@ def specifier_allows(spec: str, version: str) -> bool:
 
 
 def pypi_latest(name: str) -> str | None:
-    payload = upstream._http_json(PYPI_URL.format(name=name))  # noqa: SLF001
+    payload = upstream._http_json(PYPI_URL.format(name=name))
     if not isinstance(payload, dict):
         return None
     info = payload.get("info") or {}
@@ -1403,7 +1403,7 @@ def parse_npm_pins(text: str) -> dict[str, str]:
 
 
 def npm_latest(name: str) -> str | None:
-    payload = upstream._http_json(NPM_URL.format(name=name))  # noqa: SLF001
+    payload = upstream._http_json(NPM_URL.format(name=name))
     if not isinstance(payload, dict):
         return None
     return str(payload.get("version") or "") or None
@@ -1518,7 +1518,7 @@ def check_source_paths(profiles: dict) -> Finding:
     or a pinned tree the record lacks, means a pin moved or a profile was
     added and `sitesources.py --fetch` was not run after it. Every tree a run
     tries is recorded, read or not, so a lacking one was never tried."""
-    import sitesources  # noqa: PLC0415
+    import sitesources
 
     pinned = {
         sitesources.tree_key(repo, pin)

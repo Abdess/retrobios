@@ -23,7 +23,6 @@ from common import (
     name_match_size_ok,
     sanitize_pack_path,
     shape_fits,
-    size_fits,
 )
 from hashing import md5_composite, parse_hash_list, parse_md5_list
 from nativemode import SIZE_AND_ANY_HASH, digest_algorithm, hash_mismatch_excludes_file

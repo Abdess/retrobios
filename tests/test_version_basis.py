@@ -132,7 +132,7 @@ class ReadsTheRecordedSourceOffline(unittest.TestCase):
                     return int(exc.code or 0)
             return 0
 
-        import common  # noqa: PLC0415
+        import common
 
         common._emulator_profiles_cache.clear()
         self.assertEqual(run(), 0)
@@ -304,7 +304,7 @@ class TheWriterKeepsTheDocument(unittest.TestCase):
 class TheSchemaRefusesPlaceholders(unittest.TestCase):
     def setUp(self):
         try:
-            import jsonschema  # noqa: PLC0415
+            import jsonschema
         except ImportError:
             self.skipTest("jsonschema is not installed")
         schema = json.loads((ROOT / "schemas" / "emulator.schema.json").read_text())

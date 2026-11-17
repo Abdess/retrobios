@@ -104,7 +104,7 @@ def configs_root(cg: Configgen) -> dict[str, str]:
     starts an emulator from (shadPS4's configs/shadps4), with the lines that
     build it and BIOS.
     """
-    import posixpath  # noqa: PLC0415
+    import posixpath
 
     src = cg.source(f"{cg.generators.rsplit('/', 1)[0]}/batoceraPaths.py")
     if "CONFIGS" not in cg.paths:
@@ -1128,9 +1128,9 @@ def search_paths(cg: Configgen) -> list[Launcher]:
     """Every /userdata/bios path a generator's command line names, read as
     KNULLI's generic reader reads its fork of the same generator."""
     try:
-        from .knulli_launchers import GenericSites, bios_sites  # noqa: PLC0415
+        from .knulli_launchers import GenericSites, bios_sites
     except ImportError:
-        from knulli_launchers import GenericSites, bios_sites  # type: ignore[no-redef]  # noqa: PLC0415
+        from knulli_launchers import GenericSites, bios_sites  # type: ignore[no-redef]
     # A boot disk image the command line names (the Macintosh's
     # /userdata/bios/<boot_disk>.img) is a file, no search path.
     return [

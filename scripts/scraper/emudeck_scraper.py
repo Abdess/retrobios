@@ -335,19 +335,19 @@ class Scraper(BaseScraper):
             bios_col = ""
             for key in row:
                 if key and "bios" in key.lower():
-                    bios_col = self._clean_markdown((row[key] or ""))
+                    bios_col = self._clean_markdown(row[key] or "")
                     break
             if not bios_col or bios_col.lower() in ("not required", ""):
                 continue
             folder_col = ""
             for key in row:
                 if key and "folder" in key.lower():
-                    folder_col = self._clean_markdown((row[key] or ""))
+                    folder_col = self._clean_markdown(row[key] or "")
                     break
             system_col = ""
             for key in row:
                 if key and "system" in key.lower():
-                    system_col = self._clean_markdown((row[key] or ""))
+                    system_col = self._clean_markdown(row[key] or "")
                     break
             slug = None
             for part in re.split(r"[`\s/]+", folder_col):

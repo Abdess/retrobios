@@ -391,7 +391,7 @@ class SeveralAcceptedMd5BecomeAList(unittest.TestCase):
         """Run the produced script: either listed md5 passes, another fails."""
         produced, _, _, _ = self._export([dict(self.CORRECTED, md5=[C, SECOND])], LISTING)
         namespace: dict = {"__name__": "batocera_systems"}
-        exec(compile(produced, "batocera-systems", "exec"), namespace)  # noqa: S102
+        exec(compile(produced, "batocera-systems", "exec"), namespace)
         item = namespace["systems"]["psx"]["biosFiles"][0]
         self.assertEqual(item["md5"], [C, SECOND])
         scratch = REPO_ROOT / "tmp"

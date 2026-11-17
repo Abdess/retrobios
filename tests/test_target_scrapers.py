@@ -164,7 +164,7 @@ class BatoceraKconfig(unittest.TestCase):
     )
 
     def active(self, board: set[str]) -> frozenset[str]:
-        from scraper.targets.batocera_targets_scraper import (  # noqa: PLC0415
+        from scraper.targets.batocera_targets_scraper import (
             _active_symbols,
             _parse_meta_flags,
             _parse_owned_selects,
@@ -208,7 +208,7 @@ class BatoceraDerivedFlags(unittest.TestCase):
     )
 
     def active(self, board: set[str]) -> frozenset[str]:
-        from scraper.targets.batocera_targets_scraper import (  # noqa: PLC0415
+        from scraper.targets.batocera_targets_scraper import (
             _active_symbols,
             _parse_meta_flags,
             _parse_owned_selects,
@@ -221,7 +221,7 @@ class BatoceraDerivedFlags(unittest.TestCase):
         )
 
     def test_a_continued_condition_keeps_its_later_lines(self):
-        from scraper.targets.batocera_targets_scraper import (  # noqa: PLC0415
+        from scraper.targets.batocera_targets_scraper import (
             _parse_meta_flags,
         )
 
@@ -254,7 +254,7 @@ class CoreDownloaderReach(unittest.TestCase):
     those runs any core of the buildbot list, an aarch64 one none."""
 
     def test_each_architecture_reads_its_buildbot_list(self):
-        from scraper.targets.batocera_targets_scraper import buildbot_target  # noqa: PLC0415
+        from scraper.targets.batocera_targets_scraper import buildbot_target
 
         self.assertEqual(buildbot_target({"BR2_x86_64"}), "linux-x86_64")
         self.assertEqual(buildbot_target({"BR2_arm", "BR2_ARM_CPU_ARMV7A"}), "linux-armhf")
@@ -263,7 +263,7 @@ class CoreDownloaderReach(unittest.TestCase):
         self.assertIsNone(buildbot_target({"BR2_aarch64"}))
 
     def test_a_build_or_a_blank_url_turns_it_off(self):
-        from scraper.targets.batocera_targets_scraper import downloader_disabled  # noqa: PLC0415
+        from scraper.targets.batocera_targets_scraper import downloader_disabled
 
         self.assertIsNone(downloader_disabled("--enable-networking", {
             "a/retroarch.cfg": 'menu_show_core_updater = "false"\n'}))
@@ -272,7 +272,7 @@ class CoreDownloaderReach(unittest.TestCase):
             downloader_disabled("", {"a/retroarch.cfg": 'core_updater_buildbot_cores_url = ""\n'})
 
     def test_a_board_that_downloads_gets_the_buildbot_list(self):
-        from common import load_target_config  # noqa: PLC0415
+        from common import load_target_config
 
         root = str(REPO_ROOT / "platforms")
         x86 = set(load_target_config("retroarch", "linux-x86_64", root) or ())
@@ -283,9 +283,9 @@ class CoreDownloaderReach(unittest.TestCase):
         self.assertLessEqual(armhf, set(load_target_config("knulli", "r16", root) or ()))
 
     def test_the_platform_names_what_its_boards_install(self):
-        import yaml  # noqa: PLC0415
+        import yaml
 
-        from common import load_target_config  # noqa: PLC0415
+        from common import load_target_config
 
         root = str(REPO_ROOT / "platforms")
         for platform in ("batocera", "knulli"):
@@ -307,9 +307,9 @@ class CoreDownloaderReach(unittest.TestCase):
         """Batocera runs amiberry standalone, and its x86_64 boards fetch
         amiberry_libretro: removing every name the image builds lost the
         libretro core to the name it shares with the standalone package."""
-        from common import DUAL_MODE_PREFIX, resolve_platform_cores, standalone_set  # noqa: PLC0415
-        from scraper.batocera_scraper import installable_cores  # noqa: PLC0415
-        from scraper.targets.batocera_targets_scraper import BuildSelection  # noqa: PLC0415
+        from common import DUAL_MODE_PREFIX, resolve_platform_cores, standalone_set
+        from scraper.batocera_scraper import installable_cores
+        from scraper.targets.batocera_targets_scraper import BuildSelection
 
         selection = BuildSelection(
             targets={"x86_64": {"architecture": "x86_64", "cores": [],
@@ -341,7 +341,7 @@ class DownloadedCoresReachTheirBoards(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        from common import load_emulator_profiles, load_platform_config  # noqa: PLC0415
+        from common import load_emulator_profiles, load_platform_config
 
         cls.profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         cls.config = load_platform_config("batocera", str(REPO_ROOT / "platforms"))
@@ -350,7 +350,7 @@ class DownloadedCoresReachTheirBoards(unittest.TestCase):
         """Batocera lists higan_sfc_balanced and nside_sfc_balanced, and the
         buildbot offers the second: reading the first alone dropped the
         core from x86_64."""
-        from common import load_target_config, resolve_platform_cores  # noqa: PLC0415
+        from common import load_target_config, resolve_platform_cores
 
         root = str(REPO_ROOT / "platforms")
         x86 = load_target_config("batocera", "x86_64", root)
@@ -361,7 +361,7 @@ class DownloadedCoresReachTheirBoards(unittest.TestCase):
         self.assertIn("amiberry-7.1.1-332", resolved)
 
     def test_the_list_names_the_boards_of_each_downloaded_core(self):
-        import generate_pack  # noqa: PLC0415
+        import generate_pack
 
         core_names = {"amiberry": [], "higan_sfc_balanced": ["nside_sfc_balanced"]}
         boards = generate_pack._downloaded_cores(
@@ -428,7 +428,7 @@ class KnulliPerBoard(unittest.TestCase):
     }
 
     def test_each_board_gets_its_own_cores(self):
-        from scripts.scraper.targets import knulli_targets_scraper  # noqa: PLC0415
+        from scripts.scraper.targets import knulli_targets_scraper
 
         pin = knulli_targets_scraper.Scraper.pinned_revision("knulli")
         raw = f"https://raw.githubusercontent.com/knulli-cfw/knulli-linux/{pin}/"
@@ -533,7 +533,7 @@ class RocknixPerDevice(unittest.TestCase):
     )
 
     def test_each_device_gets_its_own_cores(self):
-        from scraper.targets.rocknix_targets_scraper import parse_device_cores  # noqa: PLC0415
+        from scraper.targets.rocknix_targets_scraper import parse_device_cores
 
         libretro, standalone = parse_device_cores(self.PACKAGE_MK, "H700", "aarch64", True)
         self.assertTrue({"gpsp-lr", "duckstation-lr", "beetle-psx-lr", "81-lr",
@@ -549,7 +549,7 @@ class RocknixPerDevice(unittest.TestCase):
     def test_a_package_names_the_cores_it_installs(self):
         """vice-lr builds ten EMUTYPEs: read as the package name, vice_x64
         and its siblings reached no ROCKNIX device."""
-        from scraper.targets.rocknix_targets_scraper import installed_cores  # noqa: PLC0415
+        from scraper.targets.rocknix_targets_scraper import installed_cores
 
         vice = ("makeinstall_target() {\n  mkdir -p ${INSTALL}/usr/lib/libretro\n"
                 "    cp -a built/vice_x128_libretro.so ${INSTALL}/usr/lib/libretro\n"
@@ -581,15 +581,15 @@ class RocknixPerDevice(unittest.TestCase):
         """vice-standalone answers to vice-sa only, as scummvm-standalone to
         scummvm-sa: stripped to vice, every targeted pack left them out
         while the untargeted one, read from the platform scraper, kept them."""
-        from scraper.rocknix_scraper import standalone_emulators  # noqa: PLC0415
-        from scraper.targets.rocknix_targets_scraper import parse_device_cores  # noqa: PLC0415
+        from scraper.rocknix_scraper import standalone_emulators
+        from scraper.targets.rocknix_targets_scraper import parse_device_cores
 
         _, standalone = parse_device_cores(self.PACKAGE_MK, "SM8550", "aarch64", False)
         names = set(standalone_emulators(standalone))
         self.assertTrue({"aethersx2-sa", "aethersx2", "dolphin-sa", "dolphin"} <= names)
 
     def test_a_metapackage_names_the_cores_it_installs(self):
-        from scraper.targets.rocknix_targets_scraper import metapackage_cores  # noqa: PLC0415
+        from scraper.targets.rocknix_targets_scraper import metapackage_cores
 
         self.assertEqual(metapackage_cores(self.IDTECH, "aarch64"), ["ecwolf-lr", "prboom-lr"])
         self.assertEqual(metapackage_cores(self.IDTECH, "x86_64"),
@@ -611,8 +611,8 @@ class RecalboxPerBoard(unittest.TestCase):
     )
 
     def test_a_board_gets_the_cores_its_defconfig_builds(self):
-        from scraper.recalbox_scraper import board_cores  # noqa: PLC0415
-        from scraper.targets.recalbox_targets_scraper import (  # noqa: PLC0415
+        from scraper.recalbox_scraper import board_cores
+        from scraper.targets.recalbox_targets_scraper import (
             defconfig_arch,
             enabled_packages,
         )
@@ -630,7 +630,7 @@ class RecalboxPerBoard(unittest.TestCase):
         self.assertEqual(defconfig_arch("BR2_aarch64=y\n"), "aarch64")
 
     def test_board_sections_read_key_by_key_as_romfs_does(self):
-        from scraper.recalbox_scraper import board_cores  # noqa: PLC0415
+        from scraper.recalbox_scraper import board_cores
 
         ini = (
             "[core.0]\npackage = BR2_PACKAGE_LIBRETRO_GAMBATTE\nemulator = \"libretro\"\n"
@@ -820,7 +820,7 @@ class HashScrapersRefuseAnUnknownVersion(unittest.TestCase):
     and cached it for a day, while the pipeline step still read OK."""
 
     def test_mame_raises(self):
-        from scripts.scraper import mame_hash_scraper  # noqa: PLC0415
+        from scripts.scraper import mame_hash_scraper
 
         with mock.patch.object(mame_hash_scraper.urllib.request, "urlopen", _refuse), \
                 self.assertRaises(RuntimeError):

@@ -302,7 +302,7 @@ class TheNoDedupListIsPinned(unittest.TestCase):
     three machines again, with the suite green."""
 
     def test_every_tree_read_by_path_stays_undeduplicated(self):
-        from scripts.dedup import NODEDUP_DIRS  # noqa: PLC0415
+        from scripts.dedup import NODEDUP_DIRS
 
         expected = {
             "RPG Maker", "ScummVM", "tzdata", "c64-emu", "PinMAME", "BBK",
@@ -350,7 +350,7 @@ class CloneChainsCollapse(unittest.TestCase):
     pointed at a file that no longer existed."""
 
     def test_clones_follow_to_the_canonical_that_exists(self):
-        import dedup  # noqa: PLC0415
+        import dedup
 
         chain = {
             "cpu20.zip": {"clones": ["cpu21.zip"], "sha1": "a", "total_copies": 1},
@@ -362,7 +362,7 @@ class CloneChainsCollapse(unittest.TestCase):
         })
 
     def test_a_loop_is_refused(self):
-        import dedup  # noqa: PLC0415
+        import dedup
 
         loop = {"a.zip": {"clones": ["b.zip"]}, "b.zip": {"clones": ["a.zip"]}}
         with self.assertRaises(ValueError):

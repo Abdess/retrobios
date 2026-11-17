@@ -1324,10 +1324,6 @@ def _collect_emulator_extras(
     extras_prefix = placement.prefix
     is_slug_based = placement.slug_based
 
-    # Use strict YAML names (no DB alias enrichment) so that files known
-    # under an alias still get packed at the emulator's expected path.
-    yaml_names = platform_declarations(config, db, enrich=False)
-
     if undeclared is None:
         undeclared = undeclared_report(
             config, emulators_dir, db, emu_profiles, target_cores, include_all
@@ -1454,8 +1450,8 @@ def _collect_emulator_extras(
             continue
         if emu_name not in relevant:
             continue
-        for profile, is_standalone in platform_layouts(emu_name, profile, standalone_set):
-            for f in profile.get("files", []):
+        for layout, is_standalone in platform_layouts(emu_name, profile, standalone_set):
+            for f in layout.get("files", []):
                 fname = f.get("name", "")
                 if not fname:
                     continue
@@ -1524,17 +1520,17 @@ def _collect_emulator_extras(
                     "destination": dest,
                     "required": f.get("required", False),
                     "hle_fallback": f.get("hle_fallback", False),
-                    "source_emulator": profile.get("emulator", emu_name),
+                    "source_emulator": layout.get("emulator", emu_name),
                     "source_profile": emu_name,
                     # The key the gap report gives the same entry.
                     "source_name": fname,
                     "source_path": raw,
                     "category": f.get("category", "bios"),
                     "source_system": f.get("system"),
-                    "source_systems": entry_system_ids(f, profile),
+                    "source_systems": entry_system_ids(f, layout),
                     "region": f.get("region"),
                     "selection_slot": f.get("selection_slot"),
-                    **set_fields(f, profile),
+                    **set_fields(f, layout),
                 }
                 # The same identity the first pass carries: without it the copy
                 # resolves on its name alone and a same-named file of another

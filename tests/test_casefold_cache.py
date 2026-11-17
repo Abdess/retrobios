@@ -34,8 +34,8 @@ class APrimaryUnderAnotherCasing(unittest.TestCase):
     platform pins, in the same directory."""
 
     def setUp(self):
-        import shutil  # noqa: PLC0415
-        import tempfile  # noqa: PLC0415
+        import shutil
+        import tempfile
 
         self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         self.addCleanup(shutil.rmtree, self.root, True)
@@ -43,7 +43,7 @@ class APrimaryUnderAnotherCasing(unittest.TestCase):
         self.by_name: dict = {}
 
     def _put(self, relative: str, data: bytes, indexed_as: str | None = None) -> None:
-        import hashlib  # noqa: PLC0415
+        import hashlib
 
         path = self.root / relative
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -56,7 +56,7 @@ class APrimaryUnderAnotherCasing(unittest.TestCase):
         self.by_name.setdefault(name, []).append(sha1)
 
     def _resolve(self, name: str) -> str:
-        from common import _casefold_index_cache, resolve_local_file  # noqa: PLC0415
+        from common import _casefold_index_cache, resolve_local_file
 
         _casefold_index_cache.clear()
         db = {"files": self.files, "indexes": {"by_name": self.by_name, "by_md5": {},

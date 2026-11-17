@@ -798,7 +798,7 @@ class TheInterpreterIsInTheSandbox(unittest.TestCase):
     crashed on the runner."""
 
     def test_each_link_to_the_interpreter_is_bound(self):
-        from unittest import mock  # noqa: PLC0415
+        from unittest import mock
 
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -826,7 +826,7 @@ class TheInterpreterIsInTheSandbox(unittest.TestCase):
     def test_a_link_in_a_shared_folder_binds_only_itself(self):
         """~/.local/bin/python3 must not expose ~/.local: only the link file
         and the proven Python prefix behind it are bound."""
-        from unittest import mock  # noqa: PLC0415
+        from unittest import mock
 
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

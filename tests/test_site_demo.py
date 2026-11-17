@@ -118,7 +118,7 @@ class TheTapeAndTheDriverAgree(unittest.TestCase):
         self.assertEqual(variant.mount, "/roms")
 
     def test_the_command_typed_is_the_one_the_pages_give(self):
-        from siteguides import install_command  # noqa: PLC0415
+        from siteguides import install_command
 
         self.assertIn(f'Type "{install_command("sh", "--for-games")}"\n', self.tape)
 
@@ -194,7 +194,7 @@ def _tab_bodies(markdown: str) -> dict[str, str]:
 
 class TheTwoPagesShowIt(unittest.TestCase):
     def test_home_shows_the_terminal_recording(self):
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         tag = generate_site.install_demo()[0]
         self.assertIn(f'description="{generate_readme.demo_description()}"', tag)
@@ -204,7 +204,7 @@ class TheTwoPagesShowIt(unittest.TestCase):
         self.assertIn("*install_demo(),", body)
 
     def test_each_tab_of_get_your_files_shows_its_variant(self):
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         tabs = _tab_bodies(generate_site.generate_which_pack())
         expected = {"Windows": None, "macOS": "default", "Linux": "default",
@@ -226,7 +226,7 @@ class TheTwoPagesShowIt(unittest.TestCase):
         self.assertEqual(page.count("<InstallDemo "), len(expected) - 1)
 
     def test_the_site_serves_the_videos_not_the_gif(self):
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         expected = tuple(name for variant in make_demo.VARIANTS.values()
                          for name in variant.outputs if not name.endswith(".gif"))
@@ -261,7 +261,7 @@ class TheTwoPagesShowIt(unittest.TestCase):
 
 
 def generate_site_assets() -> tuple[str, ...]:
-    import generate_site  # noqa: PLC0415
+    import generate_site
 
     return generate_site.DEMO_ASSETS
 

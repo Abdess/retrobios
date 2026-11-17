@@ -104,7 +104,7 @@ class ReadmeRegressions(unittest.TestCase):
         )
 
     def test_an_older_interpreter_is_refused_before_the_first_step(self):
-        import shutil  # noqa: PLC0415
+        import shutil
 
         python38 = shutil.which("python3.8")
         if python38 is None:
@@ -123,7 +123,7 @@ class ReadmeRegressions(unittest.TestCase):
     def test_the_readme_build_command_names_the_floor(self):
         """The README's first command is generate_pack.py. Under 3.8 it
         stopped on a raw SyntaxError at a parenthesized `with`."""
-        import shutil  # noqa: PLC0415
+        import shutil
 
         python38 = shutil.which("python3.8")
         if python38 is None:
@@ -142,7 +142,7 @@ class ReadmeRegressions(unittest.TestCase):
         """Only generate_pack.py and pipeline.py checked the version. verify.py,
         slots.py, validate_pr.py and cross_reference.py started under 3.8 and
         stopped halfway on a str.removeprefix AttributeError."""
-        import shutil  # noqa: PLC0415
+        import shutil
 
         python38 = shutil.which("python3.8")
         if python38 is None:
@@ -179,7 +179,7 @@ class ReadmeRegressions(unittest.TestCase):
         Compiling only checks the grammar: a module-level alias such as
         `tuple[int, int | None]` compiles under 3.9 and raises TypeError
         when the module loads."""
-        import shutil  # noqa: PLC0415
+        import shutil
 
         floor = re.search(
             r"sys\.version_info < \((\d+), (\d+)\)",
@@ -633,10 +633,9 @@ class APackIsSwappedInWhole(unittest.TestCase):
         pack = directory / "Pack.zip"
         with zipfile.ZipFile(pack, "w") as zf:
             zf.writestr("old.bin", b"complete")
-        with self.assertRaises(OSError):
-            with _writing_pack(str(pack)) as zf:
-                zf.writestr("new.bin", b"half")
-                raise OSError("disk full")
+        with self.assertRaises(OSError), _writing_pack(str(pack)) as zf:
+            zf.writestr("new.bin", b"half")
+            raise OSError("disk full")
         with zipfile.ZipFile(pack) as zf:
             self.assertEqual(zf.namelist(), ["old.bin"])
         self.assertEqual(sorted(p.name for p in directory.iterdir()), ["Pack.zip"])
@@ -1004,8 +1003,8 @@ class FaqRegressions(unittest.TestCase):
         # and FinalBurn Neo 1.0.0.2, versions no source at the pins states,
         # and the test holding them to the profiles kept the errors in step.
         sys.path.insert(0, str(ROOT / "scripts"))
-        import generate_site  # noqa: PLC0415
-        from common import load_emulator_profiles  # noqa: PLC0415
+        import generate_site
+        from common import load_emulator_profiles
 
         profiles = load_emulator_profiles(str(ROOT / "emulators"), skip_aliases=False)
         page = (ROOT / "wiki" / "technical-faq.md").read_text(encoding="utf-8")
@@ -1138,7 +1137,7 @@ class PipelineRegressions(unittest.TestCase):
     def test_integrity_checks_the_variants_step_4_built(self):
         """Step 6 ran --verify-packs without --all-variants: the five
         narrowed packs were never opened and an empty _Platform passed."""
-        import argparse  # noqa: PLC0415
+        import argparse
 
         def command(**flags) -> list[str]:
             base = {"output_dir": "dist", "target": None, "all_variants": False}
@@ -1331,7 +1330,7 @@ class SchemaFormatsAreChecked(unittest.TestCase):
 
     @unittest.skipUnless(HAS_JSONSCHEMA, "validating a schema needs jsonschema")
     def test_a_missing_checker_is_named(self):
-        import validate_schemas  # noqa: PLC0415
+        import validate_schemas
 
         empty = mock.Mock(checkers={})
         with mock.patch.object(validate_schemas, "FormatChecker", return_value=empty):
@@ -1878,7 +1877,7 @@ class RegionRegressions(unittest.TestCase):
     def test_region_audit_resolves_the_way_the_pack_does(self):
         """A private resolver read sha1, md5 and a lone name: an entry
         identified by its path (Dolphin's three IPL.bin) was never checked."""
-        import hashlib  # noqa: PLC0415
+        import hashlib
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             previous = os.getcwd()
@@ -1893,7 +1892,7 @@ class RegionRegressions(unittest.TestCase):
                 files[sha1] = {"path": rel, "name": "IPL.bin", "size": len(payload), "sha1": sha1,
                                "md5": hashlib.md5(payload).hexdigest(),
                                "sha256": hashlib.sha256(payload).hexdigest(), "crc32": "00000001"}
-            from scripts import generate_db  # noqa: PLC0415
+            from scripts import generate_db
 
             db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
             by_md5 = {e["md5"]: s for s, e in files.items()}
@@ -3128,7 +3127,7 @@ class TheProjectInstallsWithPip(unittest.TestCase):
     discovery found scripts/ and tests/ and refused to build."""
 
     def test_setuptools_discovers_nothing_to_package(self):
-        import importlib.util  # noqa: PLC0415
+        import importlib.util
 
         if importlib.util.find_spec("setuptools") is None:
             # The dev extra and CI install it: skipped there, the guard held
@@ -3147,7 +3146,7 @@ class TheProjectInstallsWithPip(unittest.TestCase):
                               capture_output=True, text=True, check=False)
         self.assertEqual(done.returncode, 0, done.stderr[-2000:])
         self.assertEqual(done.stdout.strip(), "[] []")
-        import tomllib  # noqa: PLC0415
+        import tomllib
 
         with (ROOT / "pyproject.toml").open("rb") as handle:
             build = tomllib.load(handle)["build-system"]
@@ -3212,7 +3211,7 @@ class ACheckThatCannotAnswerDoesNotPass(unittest.TestCase):
         """Every HEAD unanswered printed "16 unknown" and exited 0, so the
         online pipeline printed check_buildbot OK."""
         sys.path.insert(0, str(ROOT / "scripts"))
-        import check_buildbot_system as cbs  # noqa: PLC0415
+        import check_buildbot_system as cbs
 
         registry = str(ROOT / "platforms" / "_data_dirs.yml")
         tracked = cbs.load_tracked_entries(registry)
@@ -3899,7 +3898,7 @@ class AnUnreadableArchiveIsSaidOutLoud(unittest.TestCase):
     truncated archive read as a missing dump (not_found) or a wrong one."""
 
     def test_the_resolver_names_the_archive(self):
-        import common  # noqa: PLC0415
+        import common
 
         with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as tmp:
             broken = Path(tmp) / "neogeo.zip"
@@ -3922,7 +3921,7 @@ class GeneralUserGSReachesEveryCoreThatNamesIt(unittest.TestCase):
     shipped no General MIDI bank."""
 
     def test_each_name_resolves_to_the_one_file(self):
-        import common  # noqa: PLC0415
+        import common
 
         if not (ROOT / "database.json").exists():
             self.skipTest("database.json is not generated")
@@ -3946,7 +3945,7 @@ class APlatformPinDoesNotReplaceTheCoresRevision(unittest.TestCase):
     files to cores built against newer ones."""
 
     def test_the_profile_revision_serves_the_core(self):
-        import common  # noqa: PLC0415
+        import common
 
         if not (ROOT / "database.json").exists():
             self.skipTest("database.json is not generated")
@@ -3987,7 +3986,7 @@ class ADataDirectoryIsWalkedOnce(unittest.TestCase):
     resolution cost names x tree on every pack build."""
 
     def test_two_lookups_share_one_walk_and_keep_its_order(self):
-        import common  # noqa: PLC0415
+        import common
 
         with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as tmp:
             cache = Path(tmp) / "cache"
@@ -4022,7 +4021,7 @@ class ADuplicateYamlKeyIsRefused(unittest.TestCase):
     target_source keys for Recalbox and nothing noticed."""
 
     def test_the_loader_names_the_repeated_key(self):
-        from safeparse import yaml_load  # noqa: PLC0415
+        from safeparse import yaml_load
 
         with self.assertRaises(yaml.constructor.ConstructorError) as caught:
             yaml_load("platform: x\ntarget_source: a\ntarget_source: b\n")
@@ -4229,7 +4228,7 @@ class TriageSurvivesAForgeRefusal(unittest.TestCase):
         def check_version(profile, *_args):
             if "eden" in profile["source"]:
                 raise profile_sync.upstream.UpstreamError("HTTP 403")
-            return None
+            return
 
         args = SimpleNamespace(cache_dir="", offline=True)
         out = io.StringIO()
@@ -4289,7 +4288,7 @@ class OpenMsxRomsSitInItsSystemroms(unittest.TestCase):
     them there."""
 
     def test_every_entry_is_under_share_systemroms(self):
-        from scripts.common import (  # noqa: PLC0415
+        from scripts.common import (
             load_emulator_profiles,
             load_platform_config,
             platform_layouts,
@@ -4720,7 +4719,7 @@ class AReaderThatLeavesEarlyIsNoCrash(unittest.TestCase):
         # the close below never met the broken pipe and exited 0. A 4 KiB
         # pipe keeps it writing when the reader leaves.
         try:
-            import fcntl  # noqa: PLC0415
+            import fcntl
 
             fcntl.fcntl(proc.stdout.fileno(), fcntl.F_SETPIPE_SZ, 4096)
         except (ImportError, AttributeError, OSError):
@@ -5670,7 +5669,7 @@ class AHeldRevisionLinksItsBuildFile(unittest.TestCase):
             f"RetroPie-Setup/blob/{pin}/scriptmodules/emulators/advmame-1.4.sh)", rows[0])
 
     def test_the_record_holds_the_build_files(self):
-        import sitesources  # noqa: PLC0415
+        import sitesources
 
         files = sitesources.build_files({"pin_build": [
             {"repo": "https://github.com/o/r", "revision": "a" * 40, "path": "p.mk"},

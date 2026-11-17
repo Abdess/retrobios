@@ -63,7 +63,7 @@ class RetroDeckWritesWhatItCounts(unittest.TestCase):
     def test_an_appended_revision_is_not_counted_corrected(self):
         # 64DD_IPL.bin declared twice (A, B), truth C: the render keeps both
         # and appends C, and the summary said "1 hashes corrected".
-        from export_native import landed_changes  # noqa: PLC0415
+        from export_native import landed_changes
 
         appended: set = set()
         merged = RetroDeck._merge(
@@ -212,7 +212,7 @@ class RetroBatCountsOneAdditionPerPath(unittest.TestCase):
     added: 78 additions announced for 75 items written."""
 
     def test_an_addition_at_a_held_path_does_not_land(self):
-        from export_native import landed_changes  # noqa: PLC0415
+        from export_native import landed_changes
 
         theirs = NativeFile("scph1001.bin", "scph1001.bin", "psx",
                             platform={"md5": A}, truth={"md5": A})
@@ -399,7 +399,7 @@ class MisterCountsWhatItWrites(unittest.TestCase):
         # The truth took the entry on a size contradiction and has no md5:
         # the render kept MiSTer's hash, wrote the new size, and the summary
         # announced the hash cleared.
-        from export_native import landed_changes  # noqa: PLC0415
+        from export_native import landed_changes
 
         fe = NativeFile("boot.rom", "NES/boot.rom", "nes",
                         platform={"md5": A, "size": 100},
@@ -417,7 +417,7 @@ class MisterCountsWhatItWrites(unittest.TestCase):
 
 class OneMd5FormatsAddWhole(unittest.TestCase):
     def test_an_addition_with_several_md5_is_refused(self):
-        from exporter.batocera_exporter import Exporter as Batocera  # noqa: PLC0415
+        from exporter.batocera_exporter import Exporter as Batocera
 
         several = NativeFile("boot.bin", "boot.bin", "dc", truth={"md5": [A, B, C]},
                            runners=[(False, "flycast")])
@@ -430,7 +430,7 @@ class OneMd5FormatsAddWhole(unittest.TestCase):
     def test_retrobat_refuses_it_too(self):
         # RetroBat's batocera-systems.json holds one md5 per entry: the
         # addition was written with the first and counted added.
-        from exporter.retrobat_exporter import Exporter as RetroBat  # noqa: PLC0415
+        from exporter.retrobat_exporter import Exporter as RetroBat
 
         several = NativeFile("boot.bin", "boot.bin", "dc", truth={"md5": [A, B, C]})
         single = NativeFile("boot2.bin", "boot2.bin", "dc", truth={"md5": A})
@@ -454,7 +454,7 @@ class BizHawkKeepsItsOwnHashes(unittest.TestCase):
 
 class SystemDatKeepsItsQuoting(unittest.TestCase):
     def test_a_name_the_original_quotes_stays_quoted(self):
-        from exporter.systemdat_exporter import _quote  # noqa: PLC0415
+        from exporter.systemdat_exporter import _quote
 
         quoted = frozenset({"dolphin-emu/Sys/GC/USA/IPL.bin"})
         self.assertEqual(_quote("dolphin-emu/Sys/GC/USA/IPL.bin", quoted),
@@ -547,7 +547,7 @@ class RommKeepsItsOwnKeys(unittest.TestCase):
         """known_bios_files.json writes PLUTONIA.WAD's sha1 with a leading
         space, which RomM compares as stored and never matches. The export
         wrote it stripped and the summary named no change for it."""
-        from export_native import landed_changes  # noqa: PLC0415
+        from export_native import landed_changes
 
         sha1 = "8" * 40
         fe = NativeFile("PLUTONIA.WAD", "doom/PLUTONIA.WAD", "doom",
@@ -563,7 +563,7 @@ class RommKeepsItsOwnKeys(unittest.TestCase):
 
     def test_the_shared_helper_reads_every_exporter_the_same_way(self):
         """RomM's writable is per instance, but the base helper bound fe as self."""
-        from exporter import discover_exporters  # noqa: PLC0415
+        from exporter import discover_exporters
 
         theirs = NativeFile("boot.bin", "dc/boot.bin", "dc",
                             platform={"size": 2097152, "md5": A, "core": "libretro/flycast"})
@@ -609,7 +609,7 @@ class RommWritesOneEntryPerKey(unittest.TestCase):
     first in RomM's dict and both were counted landed."""
 
     def test_the_second_addition_under_a_key_is_not_writable(self):
-        from exporter.romm_exporter import Exporter as Romm  # noqa: PLC0415
+        from exporter.romm_exporter import Exporter as Romm
 
         first = NativeFile("basic.rom", "Acorn/basic.rom", "acpc",
                            truth={"size": 16384, "md5": A})
@@ -839,7 +839,7 @@ class RetroDeckCorrectsOnlyWhatItCarries(unittest.TestCase):
     def test_paths_and_description_stay_the_maintainers(self):
         """neogeo.zip lost its four search directories to a path that does
         not exist, and 26 descriptions were rewritten."""
-        from collections import OrderedDict  # noqa: PLC0415
+        from collections import OrderedDict
 
         existing = [{"filename": "neogeo.zip", "system": "neogeo", "md5": A,
                      "paths": ["$roms_path/neogeo", "$roms_path/fbneo", "$bios_path"],
@@ -854,7 +854,7 @@ class RetroDeckCorrectsOnlyWhatItCarries(unittest.TestCase):
     def test_a_hash_no_revision_shares_is_appended(self):
         """IPL.n64 declared twice, both contradicted: counted corrected,
         written nowhere."""
-        from collections import OrderedDict  # noqa: PLC0415
+        from collections import OrderedDict
 
         existing = [{"filename": "IPL.n64", "system": "n64dd", "md5": A},
                     {"filename": "IPL.n64", "system": "n64dd", "md5": B}]
@@ -868,7 +868,7 @@ class BatoceraKeepsTheRunnerKeys(unittest.TestCase):
         """checkBios skips a BIOS whose emulator or core is not installed.
         Rewritten without the keys, vectrex's MAME BIOS was wanted by every
         build."""
-        from exporter.batocera_exporter import Exporter as Batocera  # noqa: PLC0415
+        from exporter.batocera_exporter import Exporter as Batocera
 
         fe = NativeFile("bios.bin", "bios.bin", "vectrex", platform={"md5": A},
                         truth={"md5": B}, corrections=["md5"])
@@ -901,7 +901,7 @@ class SummaryCountsWhatTheTruthRewrites(unittest.TestCase):
         )
 
     def test_a_format_with_the_fields_counts_them(self):
-        from export_native import landed_changes  # noqa: PLC0415
+        from export_native import landed_changes
 
         entry = self._entry()
         changes = landed_changes(SystemDat(), {"neocd": NativeSystem("neocd", files=[entry])})
@@ -910,8 +910,8 @@ class SummaryCountsWhatTheTruthRewrites(unittest.TestCase):
         self.assertEqual(changes.applied, ["neocd/neocdz.zip sha1"])
 
     def test_a_format_without_them_does_not(self):
-        from export_native import landed_changes  # noqa: PLC0415
-        from exporter.batocera_exporter import Exporter as Batocera  # noqa: PLC0415
+        from export_native import landed_changes
+        from exporter.batocera_exporter import Exporter as Batocera
 
         entry = self._entry()
         changes = landed_changes(Batocera(), {"neocd": NativeSystem("neocd", files=[entry])})
@@ -929,7 +929,7 @@ class AStaleTruthIsRefused(unittest.TestCase):
         import shutil
         import tempfile
 
-        import export_native  # noqa: PLC0415
+        import export_native
 
         root = Path(__file__).resolve().parents[1]
         truth_dir = Path(tempfile.mkdtemp(dir=root / "tmp"))
@@ -954,7 +954,7 @@ class ACorruptOriginalIsRefused(unittest.TestCase):
         self.assertIn("does not parse", str(caught.exception))
 
     def test_retrobat_refuses_it(self):
-        from exporter.retrobat_exporter import Exporter as RetroBat  # noqa: PLC0415
+        from exporter.retrobat_exporter import Exporter as RetroBat
 
         fe = NativeFile("bios.bin", "bios.bin", "nes", platform={"md5": A})
         exporter = RetroBat()
@@ -978,8 +978,8 @@ class TheSummaryCountsWhatTheFileCarries(unittest.TestCase):
         )
 
     def test_romm_drops_the_hashes_it_counts_cleared(self):
-        from export_native import landed_changes  # noqa: PLC0415
-        from exporter.baseline import Report  # noqa: PLC0415
+        from export_native import landed_changes
+        from exporter.baseline import Report
 
         fe = self._contradicted()
         systems = {"psx": NativeSystem("psx", files=[fe])}
@@ -996,7 +996,7 @@ class TheSummaryCountsWhatTheFileCarries(unittest.TestCase):
         self.assertEqual(sorted(cleared), ["psx/scph5501.bin crc32", "psx/scph5501.bin sha1"])
 
     def test_a_fill_no_record_holds_is_not_counted(self):
-        from export_native import landed_changes  # noqa: PLC0415
+        from export_native import landed_changes
 
         fe = NativeFile(
             "scph5501.bin", "scph5501.bin", "psx",
@@ -1018,7 +1018,7 @@ class TheSummaryCountsWhatTheFileCarries(unittest.TestCase):
         self.assertNotIn("md5", merged[0])
 
     def test_recalbox_counts_nothing_on_an_element_it_keeps(self):
-        from export_native import landed_changes  # noqa: PLC0415
+        from export_native import landed_changes
 
         fe = NativeFile(
             "scph5501.bin", "scph5501.bin", "psx",
@@ -1035,7 +1035,7 @@ class BatoceraEntriesParseAsWritten(unittest.TestCase):
     gate and runner keys lost. The text was also run through exec."""
 
     def test_a_trailing_comment_and_no_execution(self):
-        from exporter.batocera_exporter import Exporter as Batocera  # noqa: PLC0415
+        from exporter.batocera_exporter import Exporter as Batocera
 
         entry = Batocera._parse_entry([
             '"gba": { "name": "GBA", "emulator": "libretro", "biosFiles": [',
@@ -1069,7 +1069,7 @@ class AnExtendedListIsReported(unittest.TestCase):
     nothing. Only Batocera named the list it writes."""
 
     def _records(self, exporter):
-        from export_native import landed_changes  # noqa: PLC0415
+        from export_native import landed_changes
 
         platform = {"name": "f.bin", "md5": A, "core": "libretro/mesen"}
         fe = NativeFile("f.bin", "f.bin", "s", platform=platform,
@@ -1087,7 +1087,7 @@ class AnExtendedListIsReported(unittest.TestCase):
                 )
 
     def test_an_unchanged_value_reports_nothing(self):
-        from export_native import landed_changes  # noqa: PLC0415
+        from export_native import landed_changes
 
         for exporter in (RetroDeck(), Recalbox()):
             fe = NativeFile("f.bin", "f.bin", "s",

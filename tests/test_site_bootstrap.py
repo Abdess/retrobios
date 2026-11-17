@@ -132,7 +132,7 @@ class ServedCopies(unittest.TestCase):
                     sitebootstrap.served_text(name, root, self.commit)
 
     def test_deploy_site_checks_the_copies_before_it_publishes(self):
-        import yaml  # noqa: PLC0415
+        import yaml
 
         steps = yaml.safe_load((REPO_ROOT / ".github/workflows/deploy-site.yml").read_text(
             encoding="utf-8"))["jobs"]["build"]["steps"]

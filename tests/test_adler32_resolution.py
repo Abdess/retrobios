@@ -119,7 +119,7 @@ class TheTwoRomsFormAPairTheCodeTakes(unittest.TestCase):
 
 class DolphinGetsAPairItTakes(unittest.TestCase):
     def test_each_dolphin_dsp_rom_resolves_to_an_accepted_dump(self):
-        from common import load_emulator_profiles  # noqa: PLC0415
+        from common import load_emulator_profiles
 
         database = REPO_ROOT / "database.json"
         if not database.exists():
@@ -139,7 +139,7 @@ class DolphinGetsAPairItTakes(unittest.TestCase):
 
 
     def test_every_paired_profile_resolves_a_pair_its_code_takes(self):
-        from common import load_emulator_profiles  # noqa: PLC0415
+        from common import load_emulator_profiles
 
         database = REPO_ROOT / "database.json"
         if not database.exists():

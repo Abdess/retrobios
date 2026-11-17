@@ -44,10 +44,8 @@ PAGES = ("which-pack", "wiki/first-install", "wiki/architecture", "wiki/what-are
          "wiki/installer", "platforms/retrodeck", "provenance-no-intro", "explore", "index")
 
 BLOCKS = frozenset(
-    "address article aside blockquote caption dd details dialog div dl dt fieldset figcaption "
-    "figure footer form h1 h2 h3 h4 h5 h6 header hr li main nav ol option p pre section select "
-    "summary table tbody td tfoot th thead tr ul".split())
-VOID = frozenset("area base br col embed hr img input link meta source track wbr".split())
+    ["address", "article", "aside", "blockquote", "caption", "dd", "details", "dialog", "div", "dl", "dt", "fieldset", "figcaption", "figure", "footer", "form", "h1", "h2", "h3", "h4", "h5", "h6", "header", "hr", "li", "main", "nav", "ol", "option", "p", "pre", "section", "select", "summary", "table", "tbody", "td", "tfoot", "th", "thead", "tr", "ul"])
+VOID = frozenset(["area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"])
 # What the stylesheet lays out as its own box beside the text before it:
 # the markup has to space it, a reader without the stylesheet sees no box.
 # A <br> breaks a line on screen only: a copy and textContent join across

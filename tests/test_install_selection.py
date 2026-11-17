@@ -515,7 +515,7 @@ class TheBoundaryChecksTheNewFields(unittest.TestCase):
 
 
 class _QuietHandler(http.server.SimpleHTTPRequestHandler):
-    def log_message(self, format, *args):  # noqa: A002 - stdlib signature
+    def log_message(self, format, *args):
         return
 
 
@@ -743,7 +743,7 @@ class TheOneLinerNarrows(unittest.TestCase):
 
     @unittest.skipIf(os.name == "nt", "a pseudo-terminal is a POSIX one")
     def test_ctrl_d_at_the_first_question_has_nothing_to_carry_on(self):
-        import pty  # noqa: PLC0415
+        import pty
 
         with FakeRepository() as repo:
             home = repo.root / "home"
@@ -1358,8 +1358,8 @@ class ThePlatformsOwnSystemNamesAreAccepted(unittest.TestCase):
     file records psx as the native_system of sony-playstation."""
 
     def test_the_names_come_from_the_platform_file(self):
-        from common import load_platform_config  # noqa: PLC0415
-        from common import platform_system_names  # noqa: PLC0415
+        from common import load_platform_config
+        from common import platform_system_names
 
         config = load_platform_config("batocera", str(REPO_ROOT / "platforms"))
         names = platform_system_names(config, list(config["systems"]))
@@ -1378,7 +1378,7 @@ class ThePlatformsOwnSystemNamesAreAccepted(unittest.TestCase):
 
     def test_every_listed_system_gets_the_title_the_site_prints(self):
         sys.path.insert(0, str(REPO_ROOT / "scripts"))
-        from generate_pack import system_titles  # noqa: PLC0415
+        from generate_pack import system_titles
 
         files = [{"dest": "a.bin", "systems": ["sony-playstation", "nintendo-gba"]}]
         omitted = [{"dest": "b.bin", "systems": ["3do"]}]

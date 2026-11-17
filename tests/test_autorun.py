@@ -959,7 +959,7 @@ class SubjectsFollowTheRepositoryRules(unittest.TestCase):
     calls: a copy in the hook alone let CI check only the shape."""
 
     def test_the_runner_reads_the_tracked_rules(self):
-        import commit_rules  # noqa: PLC0415
+        import commit_rules
 
         for subject in ("chore: fix the broken manifests", "update things", "chore: " + "a" * 60):
             with self.subTest(subject=subject):
@@ -970,7 +970,7 @@ class SubjectsFollowTheRepositoryRules(unittest.TestCase):
     def test_review_numbers_are_refused(self):
         """47 pushed subjects pointed at a numbered private review, which no
         clone can follow. The subject says what the change does."""
-        import commit_rules  # noqa: PLC0415
+        import commit_rules
 
         for subject in ("chore: audit 24 and 17 cases, host kept out",
                         "fix: polish the screens audit 11 named",

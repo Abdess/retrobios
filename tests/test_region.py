@@ -13,9 +13,9 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 
-import common  # noqa: E402
-import region  # noqa: E402
-from packextras import emulator_region_drops  # noqa: E402
+import common
+import region
+from packextras import emulator_region_drops
 
 
 class TestVocabulary(unittest.TestCase):
@@ -1009,9 +1009,9 @@ class EmulatorModeKeepsAHeldFile(unittest.TestCase):
     shipped no PlayStation BIOS."""
 
     def test_a_missing_match_does_not_withdraw_the_held_file(self):
-        import hashlib  # noqa: PLC0415
-        import shutil  # noqa: PLC0415
-        import tempfile  # noqa: PLC0415
+        import hashlib
+        import shutil
+        import tempfile
 
         root = Path(tempfile.mkdtemp(dir=Path(__file__).resolve().parents[1] / "tmp"))
         self.addCleanup(shutil.rmtree, root, True)
@@ -1458,7 +1458,7 @@ class RegionWordsInAPackReadme(unittest.TestCase):
     """The pack README title-cased each slug: asia-ntsc read "Asia Ntsc"."""
 
     def test_the_priority_line_reads_as_written(self):
-        from packreadme import _build_readme  # noqa: PLC0415
+        from packreadme import _build_readme
 
         readme = _build_readme(
             "retroarch", "RetroArch", "system", 1, 1,

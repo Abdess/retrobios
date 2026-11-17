@@ -230,7 +230,7 @@ def parse_xwd(data: bytes) -> tuple[int, int, bytes]:
 # --------------------------------------------------------------------------
 
 def github_releases(repo: str) -> list[dict]:
-    from scraper.base_scraper import github_headers  # noqa: PLC0415
+    from scraper.base_scraper import github_headers
 
     request = urllib.request.Request(f"https://api.github.com/repos/{repo}/releases",
                                      headers=github_headers())

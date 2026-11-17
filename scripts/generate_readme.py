@@ -37,7 +37,6 @@ from common import (
     unique_emulator_profiles,
     write_if_changed,
 )
-from nativemode import check_label
 import archive_build
 import release_record
 from siteguides import PACKAGE_COMMAND, install_command
@@ -50,7 +49,7 @@ from verify import verify_platform
 def _installer_words() -> object:
     """install.py read as a module, for the words its screen shows: the
     README named a line menu the one-liner never opens."""
-    import importlib.util  # noqa: PLC0415
+    import importlib.util
 
     spec = importlib.util.spec_from_file_location(
         "install", Path(__file__).resolve().parent.parent / "install.py")
@@ -591,7 +590,6 @@ def archive_line(counts: dict[str, int]) -> str:
 
 def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json") -> str:
     total_files = db.get("total_files", 0)
-    total_size = db.get("total_size", 0)
     ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     platform_names = list_registered_platforms(platforms_dir)
@@ -616,16 +614,6 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
                          / len(profile_files)) if profile_files else 0)
     closed_count = sum(1 for prof in profiles.values()
                        if str(prof.get("upstream") or "").startswith("closed"))
-    comp = compute_composition(db)
-    missing_total = len(set().union(*(c["missing_names"] for c in coverages.values())))
-    # The entries marked `unsourceable:` are never served by name, so a
-    # homonym cannot take their place: retail game data, per-user keys, slots
-    # the user fills. Each stays an acquisition target with its reason, and
-    # is counted apart from the files still to be found.
-    unsourceable_total = len(
-        set().union(*(c["unsourceable_names"] for c in coverages.values()))
-    )
-    acquirable_total = missing_total - unsourceable_total
 
     system_ids = system_index(profiles)
 

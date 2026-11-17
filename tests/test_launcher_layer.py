@@ -21,11 +21,11 @@ import zipfile
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 
-import yaml  # noqa: E402
+import yaml
 
-from common import _emulator_profiles_cache, load_emulator_profiles, load_platform_config  # noqa: E402
-from launchers import LauncherLayer, launcher_places, suffixed_stem  # noqa: E402
-from verify import find_undeclared_files, verify_platform  # noqa: E402
+from common import _emulator_profiles_cache, load_emulator_profiles, load_platform_config
+from launchers import LauncherLayer, launcher_places, suffixed_stem
+from verify import find_undeclared_files, verify_platform
 
 CONTENT = {
     "b.bin": b"REGION_B_IMAGE",

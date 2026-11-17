@@ -1455,7 +1455,7 @@ def load_oracle(path: Path | None) -> tuple[dict, dict | None]:
     """The oracle file's data and its identity, or nothing without a file."""
     if path is None or not path.is_file():
         return {}, None
-    import yaml  # noqa: PLC0415
+    import yaml
 
     data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     try:
@@ -1469,7 +1469,7 @@ def default_emulator(core_file: Path, library_name: str | None) -> str:
     """The profile whose cores: names the .so, else the library name as a slug."""
     stem = core_file.name.split(".")[0].removesuffix("_libretro")
     sys.path.insert(0, str(ROOT / "scripts"))
-    from common import load_emulator_profiles  # noqa: PLC0415
+    from common import load_emulator_profiles
 
     owners = sorted(key for key, profile in load_emulator_profiles(str(ROOT / "emulators")).items()
                     if stem == key or stem in (profile.get("cores") or []))
@@ -1485,7 +1485,7 @@ def default_emulator(core_file: Path, library_name: str | None) -> str:
 def default_subject(record: dict) -> str:
     """A slug shared by the reruns of one test: a check by its claim and
     method, a run or bench by its inputs."""
-    from measurement_records import canonical, sha256_hex, slugify  # noqa: PLC0415
+    from measurement_records import canonical, sha256_hex, slugify
 
     check = record.get("check")
     if check:
@@ -1501,7 +1501,7 @@ def default_subject(record: dict) -> str:
 def write_record(directory: Path, full: dict) -> tuple[Path, dict]:
     """Append the record, with its id, to its emulator's .jsonl. Returns the
     file and the record as written."""
-    from measurement_records import line_text, parse_lines, records_path, seal  # noqa: PLC0415
+    from measurement_records import line_text, parse_lines, records_path, seal
 
     sealed = seal(full)
     lines = directory / records_path(sealed["emulator"])
@@ -1546,7 +1546,7 @@ def _probe(args: argparse.Namespace) -> int:
         shutil.rmtree(work, ignore_errors=True)
     load_after = load_average()
     first = variants[0]["repetitions"][0]
-    from measurement_records import RECORD_VERSION  # noqa: PLC0415
+    from measurement_records import RECORD_VERSION
 
     record: dict = {
         "record_version": RECORD_VERSION,
@@ -1622,7 +1622,7 @@ def rejudged(record: dict, data: dict, identity: dict | None, now: str) -> dict 
     record's. The verdicts, their evidence, bios_used and inputs.oracle are
     computed again, and judged_at and judged_by say when and by what.
     """
-    import copy  # noqa: PLC0415
+    import copy
 
     # Another probe (standalone_probe, pack_probe) judges with its own rules.
     if record.get("record_version", 0) < 4 or record["frontend"].get("script") != "scripts/core_probe.py":
@@ -1656,8 +1656,8 @@ def rejudged(record: dict, data: dict, identity: dict | None, now: str) -> dict 
     return out
 
 
-def RECORD_VERSION_NOW() -> int:  # noqa: N802
-    from measurement_records import RECORD_VERSION  # noqa: PLC0415
+def RECORD_VERSION_NOW() -> int:
+    from measurement_records import RECORD_VERSION
 
     return RECORD_VERSION
 
@@ -1665,7 +1665,7 @@ def RECORD_VERSION_NOW() -> int:  # noqa: N802
 def rejudge_records(args: argparse.Namespace) -> int:
     """Append, for each live record whose judgement the oracle now gives
     otherwise, the record judged again, superseding it."""
-    from measurement_records import line_text, live, read_records, records_path, seal  # noqa: PLC0415
+    from measurement_records import line_text, live, read_records, records_path, seal
 
     root = Path(args.record)
     data, identity = load_oracle(Path(args.oracle) if args.oracle else DEFAULT_ORACLE)

@@ -61,7 +61,7 @@ UPSTREAM_CACHE = REPO_ROOT / ".cache" / "upstream-native"
 
 def _without_native_list() -> set[str]:
     """Registered platforms whose code names no BIOS file to hand back."""
-    import yaml  # noqa: PLC0415
+    import yaml
 
     registry = yaml.safe_load((REPO_ROOT / "platforms" / "_registry.yml").read_text())
     return {
@@ -341,9 +341,9 @@ class Reconciliation(unittest.TestCase):
         """armsx2 and yaps2 declare different revisions of GameIndex.yaml.
         The truth kept armsx2's, and the export wrote it over System.dat's
         line for LRPS2 as a hash and size correction."""
-        import contextlib  # noqa: PLC0415
+        import contextlib
 
-        import truth as truth_module  # noqa: PLC0415
+        import truth as truth_module
 
         entry = {"name": "GameIndex.yaml", "sha1": "1" * 40, "size": 2690355}
         with contextlib.redirect_stderr(io.StringIO()):
@@ -685,7 +685,7 @@ class ExporterRegistry(unittest.TestCase):
                     self.assertTrue(exporter.needs_original())
 
     def test_an_export_without_its_original_writes_nothing(self):
-        import export_native  # noqa: PLC0415
+        import export_native
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             output = Path(tmp) / "out"
@@ -749,7 +749,7 @@ class SearchOrder(unittest.TestCase):
         """PicoDrive loads the first file of each region's list. RetroPie
         names one per region, but the export appended three more, which the
         sentence reads as three more required files."""
-        from exporter.baseline import NativeSystem  # noqa: PLC0415
+        from exporter.baseline import NativeSystem
 
         def cd(name, region, rank):
             return NativeFile(name=name, destination=name, native_system="segacd", truth={
@@ -782,7 +782,7 @@ class SearchOrder(unittest.TestCase):
         """flycast's help names the Dreamcast BIOS, then the Naomi/Atomiswave
         ones. naomi2.zip, an arcade archive, went into the Dreamcast list:
         only the first BIOS clause was read."""
-        from exporter.baseline import NativeSystem  # noqa: PLC0415
+        from exporter.baseline import NativeSystem
 
         def entry(name, system):
             return NativeFile(name=name, destination=f"dc/{name}", native_system=system,
@@ -1004,7 +1004,7 @@ class PinnedRevision(unittest.TestCase):
         """Checked on five platforms by their base only: ROCKNIX's second
         file, RetroDECK's manifests and RetroPie's tarball were never
         looked at, and a URL that fell back to a branch passed."""
-        import export_native  # noqa: PLC0415
+        import export_native
 
         for name, exporter_class in discover_exporters().items():
             with self.subTest(platform=name):
@@ -1015,7 +1015,7 @@ class PinnedRevision(unittest.TestCase):
                 self.assertEqual(export_native.unpinned(wanted, config), [])
 
     def test_a_file_read_off_the_pinned_revision_is_named(self):
-        import export_native  # noqa: PLC0415
+        import export_native
 
         pinned = {"source": "https://raw.githubusercontent.com/o/r/v1.0/list.txt"}
         self.assertEqual(export_native.unpinned(
@@ -1152,10 +1152,10 @@ class CachedOriginal(unittest.TestCase):
     def test_the_bytes_are_written_under_the_index_lock(self):
         """Written under two locks, two runs wanting two URLs for one path
         could leave one's bytes beside the other's index entry."""
-        import fcntl  # noqa: PLC0415
-        from unittest import mock  # noqa: PLC0415
+        import fcntl
+        from unittest import mock
 
-        import export_native  # noqa: PLC0415
+        import export_native
 
         url = self._upstream("v1.txt", "one")
         target = self.cache / "plat" / "list.txt"
@@ -1209,10 +1209,10 @@ class CachedOriginal(unittest.TestCase):
         self.assertEqual((self.cache / "plat" / "db.zip").read_bytes(), cached)
 
     def test_an_incomplete_read_is_reported(self):
-        import http.client  # noqa: PLC0415
-        from unittest import mock  # noqa: PLC0415
+        import http.client
+        from unittest import mock
 
-        import export_native  # noqa: PLC0415
+        import export_native
 
         def cut(*_args, **_kwargs):
             raise http.client.IncompleteRead(b"par")
@@ -1273,7 +1273,7 @@ class RecalboxExport(unittest.TestCase):
     def test_an_addition_goes_where_the_core_reads_it(self):
         """DuckStation reads scph5000.bin at the BIOS root, but the export wrote
         psx/scph5000.bin, a path no core opens."""
-        import copy  # noqa: PLC0415
+        import copy
 
         truth = copy.deepcopy(TRUTH)
         truth["systems"]["sony-playstation"]["files"].append({
@@ -1548,7 +1548,7 @@ class AnExportLeavesNoStaleFile(unittest.TestCase):
     holding the six files of the first run."""
 
     def test_files_this_run_does_not_write_are_removed(self):
-        import export_native  # noqa: PLC0415
+        import export_native
 
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp) / "retropie"
@@ -1576,9 +1576,9 @@ class AnExportIsWrittenAsItsBytes(unittest.TestCase):
     place, and dropped the mode: rocknix-systems is 100755 upstream."""
 
     def test_bytes_mode_and_atomicity(self):
-        import stat  # noqa: PLC0415
+        import stat
 
-        import export_native  # noqa: PLC0415
+        import export_native
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             root = Path(tmp)
@@ -1604,7 +1604,7 @@ class AnExportWithoutTruthIsRefused(unittest.TestCase):
     uncorrected, said OK, and replaced the corrected export in exports/."""
 
     def test_nothing_is_written_and_the_run_fails(self):
-        import export_native  # noqa: PLC0415
+        import export_native
 
         exporter = discover_exporters()["batocera"]
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
@@ -1629,9 +1629,9 @@ class AnInvalidExportIsNotWritten(unittest.TestCase):
     code said so."""
 
     def test_the_published_file_stays(self):
-        from unittest import mock  # noqa: PLC0415
+        from unittest import mock
 
-        import export_native  # noqa: PLC0415
+        import export_native
 
         if not (UPSTREAM_CACHE / "romm").exists():
             self.skipTest("upstream cache not populated")
@@ -1841,7 +1841,7 @@ class RommSizeIsNeverNone(unittest.TestCase):
     def test_an_entry_the_truth_takes_without_a_size_stays_whole(self):
         """RomM compares the size before any hash: the new md5 beside the
         old size never verified, and the report said the size was removed."""
-        from export_native import landed_changes  # noqa: PLC0415
+        from export_native import landed_changes
 
         exporter, systems, _, data = self._export(524288)
         self.assertEqual(
@@ -1920,13 +1920,13 @@ class RecalboxPatchesAttributesNotElements(unittest.TestCase):
         self.assertEqual(produced["es_bios.xml"], original)
 
     def test_a_reordered_md5_list_states_the_same(self):
-        from exporter.recalbox_exporter import _stated  # noqa: PLC0415
+        from exporter.recalbox_exporter import _stated
 
         self.assertEqual(_stated('<bios path="a" md5="1,2" />'),
                          _stated('<bios path="a" md5="2,1" />'))
 
     def test_one_attribute_changes_in_place(self):
-        from exporter.recalbox_exporter import patch_element  # noqa: PLC0415
+        from exporter.recalbox_exporter import patch_element
 
         kept = '    <bios path="kick.rom"          md5="aa" core="libretro/puae" />'
         mine = '    <bios path="kick.rom" md5="aa" core="libretro/puae" mandatory="false" />'
@@ -1956,7 +1956,7 @@ class RetrobatListComesBackAsWritten(unittest.TestCase):
         self.assertEqual(produced["batocera-systems.json"], original)
 
     def test_an_added_system_takes_the_same_separator(self):
-        from exporter.retrobat_exporter import keep_blank_lines  # noqa: PLC0415
+        from exporter.retrobat_exporter import keep_blank_lines
 
         original = '{\n  "a": {},\n\n  "b": {}\n}\n'
         produced = '{\n  "a": {},\n  "b": {},\n  "c": {}\n}\n'
@@ -1988,7 +1988,7 @@ class MisterDatabaseComesBackAsWritten(unittest.TestCase):
 
     def test_a_rebuilt_archive_keeps_the_member_as_mister_writes_it(self):
         raw, _ = self._render({"systems": {}})
-        from exporter.misterfpga_exporter import rebuild_archive  # noqa: PLC0415
+        from exporter.misterfpga_exporter import rebuild_archive
 
         rebuilt = rebuild_archive(raw, "bios_db.json", '{"changed": true}')
         with zipfile.ZipFile(io.BytesIO(raw)) as before, \
@@ -2001,7 +2001,7 @@ class MisterDatabaseComesBackAsWritten(unittest.TestCase):
             )
 
     def test_bytes_are_written_untouched(self):
-        import export_native  # noqa: PLC0415
+        import export_native
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             export_native._write_produced(Path(tmp), {"a.zip": b"PK\x03\x04\xff"}, {})
@@ -2011,7 +2011,7 @@ class MisterDatabaseComesBackAsWritten(unittest.TestCase):
         """The Downloader checks each entry by size (fetch_file_worker.py:127):
         the old size beside the new hash described no file, and the report
         announced a size removal the database did not carry."""
-        from export_native import landed_changes  # noqa: PLC0415
+        from export_native import landed_changes
 
         database = {"db_id": "bios_db", "files": {
             "games/X/boot.rom": {"hash": "a" * 32, "size": 100, "url": "u"},
@@ -2112,14 +2112,14 @@ class RetrodeckManifestsComeBackAsWritten(unittest.TestCase):
                 self.assertEqual(text, originals[path])
 
     def test_no_md5_key_is_made_up(self):
-        from exporter.retrodeck_exporter import Exporter  # noqa: PLC0415
+        from exporter.retrodeck_exporter import Exporter
 
         mine = OrderedDict([("filename", "bios.bin"), ("system", "xbox"), ("required", "Yes")])
         (merged,) = Exporter._merge([OrderedDict(mine)], [OrderedDict(mine)])
         self.assertNotIn("md5", merged)
 
     def test_a_single_bios_object_stays_an_object(self):
-        from exporter.retrodeck_exporter import Exporter  # noqa: PLC0415
+        from exporter.retrodeck_exporter import Exporter
 
         theirs = OrderedDict([("filename", "ppge_atlas.zim"), ("system", "psp"),
                               ("md5", "a" * 32)])

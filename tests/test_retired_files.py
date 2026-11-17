@@ -70,7 +70,7 @@ class WhatLeftIsRecorded(unittest.TestCase):
 
 class TheLookupAnswersForIt(unittest.TestCase):
     def test_records_lead_to_the_card_in_its_place(self):
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         retired = {OLD: {"name": "a2diskiing.zip", "path": "bios/Arcade/Arcade/a2diskiing.zip",
                          "crc32": "292ef826", "left": "2026-10-22", "successor": "ee" * 20},

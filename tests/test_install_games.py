@@ -544,7 +544,7 @@ class KeepEveryRegionCases(unittest.TestCase):
         # The installer's own jobs (Python 3.8 with pyte alone) import this
         # module for its card builders, and install.py needs no pyyaml.
         try:
-            import yaml  # noqa: PLC0415
+            import yaml
         except ImportError as exc:
             raise unittest.SkipTest("pyyaml reads games/regions.yml") from exc
         with open(REPO_ROOT / "games" / "regions.yml", encoding="utf-8") as handle:
@@ -1015,7 +1015,7 @@ class DataTreesFollowTheGamesCores(unittest.TestCase):
 
 
 class _Quiet(http.server.SimpleHTTPRequestHandler):
-    def log_message(self, format, *args):  # noqa: A002 - stdlib signature
+    def log_message(self, format, *args):
         return
 
 

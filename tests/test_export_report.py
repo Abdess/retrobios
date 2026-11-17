@@ -17,8 +17,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
-import export_native  # noqa: E402
-from siteexports import generate_exports_page, load_export_reports  # noqa: E402
+import export_native
+from siteexports import generate_exports_page, load_export_reports
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -179,10 +179,10 @@ class TheRunReportStatesWhatTheFileCarries(unittest.TestCase):
     JUDGING = ("their", "corrected", "wrong", "drift", "left out", "never seen")
 
     def test_summary_and_messages(self):
-        import json  # noqa: PLC0415
-        from unittest import mock  # noqa: PLC0415
+        import json
+        from unittest import mock
 
-        from exporter.base_exporter import BaseExporter  # noqa: PLC0415
+        from exporter.base_exporter import BaseExporter
 
         class Plain(BaseExporter):
             @staticmethod
@@ -252,7 +252,7 @@ class TheRunReportStatesWhatTheFileCarries(unittest.TestCase):
                 self.assertNotIn(word, name)
 
     def test_the_committed_reports_use_the_same_names(self):
-        import json  # noqa: PLC0415
+        import json
 
         for path in sorted((ROOT / "exports").glob("*.json")):
             report = json.loads(path.read_text(encoding="utf-8"))
@@ -587,7 +587,7 @@ class ADestinationDeclaredTwiceIsNamed(unittest.TestCase):
     COCO = b"\x02" * 8194
 
     def setUp(self):
-        import hashlib  # noqa: PLC0415
+        import hashlib
 
         self._tmp = tempfile.TemporaryDirectory(dir=ROOT / "tmp")
         root = Path(self._tmp.name)
@@ -634,7 +634,7 @@ class ADestinationDeclaredTwiceIsNamed(unittest.TestCase):
         self._tmp.cleanup()
 
     def _doubled(self) -> list[dict]:
-        from exporter.doubled import doubled_destinations  # noqa: PLC0415
+        from exporter.doubled import doubled_destinations
 
         return doubled_destinations(self.scraped, self.profiles, self.db)
 
@@ -656,7 +656,7 @@ class ADestinationDeclaredTwiceIsNamed(unittest.TestCase):
         self.assertEqual(coco["readers"], [])
 
     def test_the_platform_entries_are_left_as_written(self):
-        import copy  # noqa: PLC0415
+        import copy
 
         before = copy.deepcopy(self.scraped)
         self._doubled()

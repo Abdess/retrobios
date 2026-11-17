@@ -85,9 +85,9 @@ class TheDownloadTablesFollowTheRegistry(unittest.TestCase):
     now: the row of each platform names every system it is detected on."""
 
     def test_every_detected_system_lists_the_platform(self):
-        import yaml  # noqa: PLC0415
+        import yaml
 
-        from common import load_platform_config  # noqa: PLC0415
+        from common import load_platform_config
 
         registry = yaml.safe_load(_read("platforms/_registry.yml"))
         page = _which_pack()
@@ -431,7 +431,7 @@ class PagesOpenOnTheirContent(unittest.TestCase):
     before saying anything about a pack."""
 
     def test_no_paragraph_announces_its_page(self):
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         text = generate_site.generate_which_pack()
         announcing = [
@@ -648,7 +648,7 @@ class ArchiveRecipesAreCountedFromTheRecipes(unittest.TestCase):
     that file, never typed."""
 
     def setUp(self) -> None:
-        import archive_build  # noqa: PLC0415
+        import archive_build
 
         records = archive_build.load_ledger().values()
         self.counts = {
@@ -660,7 +660,7 @@ class ArchiveRecipesAreCountedFromTheRecipes(unittest.TestCase):
         self.assertEqual(self.counts["exact"] + self.counts["canonical"], self.counts["total"])
 
     def test_the_readme_line(self) -> None:
-        from generate_readme import archive_line  # noqa: PLC0415
+        from generate_readme import archive_line
 
         line = archive_line(self.counts)
         self.assertIn(line, _read("README.md").splitlines())
@@ -670,7 +670,7 @@ class ArchiveRecipesAreCountedFromTheRecipes(unittest.TestCase):
         self.assertIn(f"({SITE_URL}wiki/archive-recipes/)", line)
 
     def test_the_page_counts(self) -> None:
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         page = _read("wiki/archive-recipes.md")
         self.assertEqual(generate_site.with_archive_counts(page, self.counts), page,

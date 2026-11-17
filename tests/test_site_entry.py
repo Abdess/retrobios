@@ -1107,7 +1107,7 @@ class TheSiteSaysWhatTheInstallerShows(unittest.TestCase):
         self.assertNotIn("offers to install everything or to choose systems", readme)
         source = (REPO_ROOT / "scripts" / "generate_readme.py").read_text(encoding="utf-8")
         self.assertIn("_installer_words().TUI_SYSTEMS_ROW", source)
-        import generate_installer_doc  # noqa: PLC0415
+        import generate_installer_doc
 
         page = (REPO_ROOT / "wiki" / "installer.md").read_text(encoding="utf-8")
         self.assertIn(generate_installer_doc.line_menu(), page)

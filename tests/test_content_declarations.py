@@ -16,8 +16,8 @@ import unittest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 
-from common import platform_declared_contents  # noqa: E402
-from validation import declaration_settles  # noqa: E402
+from common import platform_declared_contents
+from validation import declaration_settles
 
 SHA1 = "70cdf57469a208528f78a14275837352e90e20f1"
 DB = {

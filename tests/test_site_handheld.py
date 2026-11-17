@@ -33,7 +33,7 @@ PLATFORMS = str(REPO_ROOT / "platforms")
 
 def _pages() -> dict[str, str]:
     """Every page that carries a launcher, by site path."""
-    import generate_site  # noqa: PLC0415
+    import generate_site
 
     with contextlib.chdir(REPO_ROOT):
         pages = {f"get/{key}.md": generate_site.generate_get_page(key)
@@ -105,7 +105,7 @@ class WhereEachSystemFindsItsFile(unittest.TestCase):
     def test_the_group_page_sits_with_the_handheld_guide(self):
         """It shares the guide's name, so the sidebar files it with it, and
         the guide a muOS or ArkOS owner lands on links it."""
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         guide = generate_site.HANDHELD_GUIDE
         self.assertEqual(sitehandheld.GROUP_PAGE, guide.page)

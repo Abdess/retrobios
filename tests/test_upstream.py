@@ -293,7 +293,7 @@ class TestFetchRetry(unittest.TestCase):
 
     @staticmethod
     def _limited(retry_after: str | None = None) -> urllib.error.HTTPError:
-        import email.message  # noqa: PLC0415
+        import email.message
 
         headers = email.message.Message()
         if retry_after is not None:
@@ -327,7 +327,7 @@ class TestFetchRetry(unittest.TestCase):
         self.assertEqual((self.calls, self.slept), (1, []))
 
     def test_exhausted_github_quota_is_not_waited(self):
-        import email.message  # noqa: PLC0415
+        import email.message
 
         headers = email.message.Message()
         headers["X-RateLimit-Remaining"] = "0"

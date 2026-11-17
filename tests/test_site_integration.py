@@ -88,7 +88,7 @@ class PlatformLogos(unittest.TestCase):
         self.assertTrue(self.registry["minui"]["logo_flip"])
 
     def test_every_logo_copy_has_a_registry_or_tile_logo(self):
-        from siteguides import GROUP_TILES  # noqa: PLC0415
+        from siteguides import GROUP_TILES
 
         tiles = {re.sub(r"[^a-z0-9]+", "-", tile.name.lower()).strip("-"): tile.logo
                  for group in GROUP_TILES.values() for tile in group}
@@ -120,7 +120,7 @@ class NodeCompileCache(unittest.TestCase):
 
 class SourcePathsFreshness(unittest.TestCase):
     def test_the_committed_record_is_current(self):
-        from common import load_emulator_profiles  # noqa: PLC0415
+        from common import load_emulator_profiles
 
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"), skip_aliases=False)
         finding = check_freshness.check_source_paths(profiles)
@@ -129,7 +129,7 @@ class SourcePathsFreshness(unittest.TestCase):
     def test_a_recorded_build_file_tree_is_pinned(self):
         """The record holds the platform trees pin_build reads at a commit,
         and the check called them orphaned."""
-        import sitesources  # noqa: PLC0415
+        import sitesources
 
         pin = "a" * 40
         profile = {"pin_build": [{"repo": "https://github.com/o/r", "revision": pin,
@@ -152,7 +152,7 @@ class SourcePathsFreshness(unittest.TestCase):
         """fbneo moved to two new pins while fbneo_cps12 kept the old ones:
         no recorded tree was orphaned, so the check said OK and 174 citations
         stayed unlinked."""
-        import sitesources  # noqa: PLC0415
+        import sitesources
 
         profile = _profile("geolith")
         trees = [sitesources.tree_key(r, p) for r, p in sitesources.profile_trees(profile)]
@@ -170,7 +170,7 @@ class SourcePathsFreshness(unittest.TestCase):
         self.assertIn("1 pinned trees not recorded", finding.detail)
 
     def test_a_tree_read_with_no_cited_path_is_recorded(self):
-        import sitesources  # noqa: PLC0415
+        import sitesources
 
         profile = {"source": "https://github.com/o/r", "source_commit": "e" * 40,
                    "files": [{"source_ref": "src/a.c:5"}]}
@@ -227,7 +227,7 @@ class FaqInstallsFromWhatYouHold(unittest.TestCase):
     def test_the_cards_the_interface_finds(self):
         """Each system the SD card answer names is one install.py tells by
         its card: a release file (_CARD_RULES) or a card rule."""
-        import install  # noqa: PLC0415
+        import install
 
         section = " ".join(self._section("Fill an SD card from a computer?").split())
         self.assertIn("The interface finds a muOS, Onion, spruceOS, MinUI, KNULLI, ROCKNIX, Lakka "

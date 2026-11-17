@@ -32,9 +32,8 @@ class CheckReadsTheTargetLikeTheBuild(unittest.TestCase):
         # Left out of a targeted --all run rather than built unfiltered, and
         # a run where no platform has the target is refused.
         with tempfile.TemporaryDirectory() as platforms, \
-                contextlib.redirect_stdout(io.StringIO()):
-            with self.assertRaises(ValueError):
-                build_target_cores_cache(["recalbox"], "x86_64", platforms, is_all=True)
+                contextlib.redirect_stdout(io.StringIO()), self.assertRaises(ValueError):
+            build_target_cores_cache(["recalbox"], "x86_64", platforms, is_all=True)
         # The build never packs such a platform under the target, so the
         # check refuses it too instead of reading the full pack.
         with self.assertRaises(FileNotFoundError):
@@ -148,7 +147,7 @@ class ASplitBuildsOnlyTheTargetsSystems(unittest.TestCase):
         def record(*_a, **kw):
             if kw.get("system_filter"):
                 asked.append(kw["system_filter"])
-            return None
+            return
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as out, \
                 mock.patch.object(generate_pack, "generate_pack", record), \

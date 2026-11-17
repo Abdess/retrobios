@@ -46,7 +46,7 @@ from typing import BinaryIO
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from torrentzip import Source as Readable
-from torrentzip import write_torrentzip, zlib_ng_version  # noqa: E402
+from torrentzip import write_torrentzip, zlib_ng_version
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 ARCHIVES_FILE = REPO_ROOT / "recipes" / "archives.json"
@@ -105,7 +105,7 @@ def ledger_text(records: dict[str, dict]) -> str:
 
 
 def write_ledger(records: dict[str, dict], path: Path = ARCHIVES_FILE) -> bool:
-    from artifacts import write_if_changed  # noqa: PLC0415
+    from artifacts import write_if_changed
 
     path.parent.mkdir(parents=True, exist_ok=True)
     return write_if_changed(str(path), ledger_text(records))
@@ -236,7 +236,7 @@ def container_pins(platforms_dir: str, emulators_dir: str) -> dict[str, set[str]
     archive md5 is the composite of its members (``zip_digest: composite``,
     Bios.cpp:64-68): neither pins the container bytes.
     """
-    from common import (  # noqa: PLC0415
+    from common import (
         list_registered_platforms,
         load_emulator_profiles,
         load_platform_config,
@@ -269,8 +269,8 @@ def recipe_index(emulators_dir: str, recipes_dir: str) -> dict[MemberList, set[s
     Matching on the member list, not the archive name, credits a DAT that
     knows the set under another name (``aga.zip`` is MAME's ``isa_aga``).
     """
-    from common import load_emulator_profiles  # noqa: PLC0415
-    from romset_recipes import collect_recipes, load_dat_recipes  # noqa: PLC0415
+    from common import load_emulator_profiles
+    from romset_recipes import collect_recipes, load_dat_recipes
 
     index: dict[MemberList, set[str]] = defaultdict(set)
     profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)

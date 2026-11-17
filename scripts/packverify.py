@@ -40,7 +40,7 @@ import zipfile
 from collections.abc import Callable
 
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def _file_sha1(path: str) -> str:
     """SHA-1 of a cached data-directory file, read once per run."""
     digest = hashlib.sha1()

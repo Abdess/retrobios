@@ -56,7 +56,7 @@ class TheGuideDrivesTheInstaller(unittest.TestCase):
     fact is held to install.py, so the guide cannot drift from it."""
 
     def setUp(self) -> None:
-        import generate_installer_doc  # noqa: PLC0415
+        import generate_installer_doc
 
         self.doc = generate_installer_doc
         self.text = siteagents.llms_txt([("retroarch", "RetroArch")])
@@ -72,7 +72,7 @@ class TheGuideDrivesTheInstaller(unittest.TestCase):
         self.assertEqual(listed, in_table)
 
     def test_the_event_schema_is_the_installers(self) -> None:
-        import json  # noqa: PLC0415
+        import json
 
         self.assertEqual(siteagents.EVENT_SCHEMA, self.doc._install.EVENT_SCHEMA)
         schema = json.loads((REPO_ROOT / "schemas" / "install-events.schema.json").read_text(encoding="utf-8"))
@@ -104,7 +104,7 @@ class TheSkillIsAnAgentSkill(unittest.TestCase):
     plain Markdown entry): the setup steps are published as one."""
 
     def test_front_matter_then_instructions(self) -> None:
-        import yaml  # noqa: PLC0415
+        import yaml
 
         text = siteagents.skill_md()
         head, _, body = text.removeprefix("---\n").partition("\n---\n")
@@ -147,7 +147,7 @@ class EveryPageHasAMarkdownCopy(unittest.TestCase):
         self.assertIn("markdownCopies,", config)
 
     def test_a_page_keeps_its_commands_under_their_system(self) -> None:
-        import site_markdown  # noqa: PLC0415
+        import site_markdown
 
         html = ('<html><body><main><h1 id="_top">Demo</h1><div class="sl-markdown-content">'
                 '<p>Run it <a href="/retrobios/x/">here</a>.</p>'

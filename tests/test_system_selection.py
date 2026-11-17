@@ -46,8 +46,8 @@ class SpellingsAgree(unittest.TestCase):
 
 class TheListingCountsLikeTheSelection(unittest.TestCase):
     def test_one_system_is_listed_once_with_every_profile(self):
-        import contextlib  # noqa: PLC0415
-        import io  # noqa: PLC0415
+        import contextlib
+        import io
 
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
@@ -135,7 +135,7 @@ class AMistypedPlatformIsNamed(unittest.TestCase):
     def test_the_names_the_site_prints_are_accepted(self):
         """`--platform RetroArch` and `--platform "MiSTer FPGA"` were refused
         by verify and generate_pack while install.py took them."""
-        from common import platform_arg  # noqa: PLC0415
+        from common import platform_arg
 
         previous = os.getcwd()
         os.chdir(REPO_ROOT)
@@ -576,9 +576,9 @@ class EmulatorVerifyReadsNoArchiveItDoesNotNeed(unittest.TestCase):
     the 24 seconds of a run."""
 
     def test_the_member_index_is_not_built(self):
-        from unittest import mock  # noqa: PLC0415
+        from unittest import mock
 
-        import verify  # noqa: PLC0415
+        import verify
 
         if not (REPO_ROOT / "database.json").exists():
             self.skipTest("database.json is not generated")
@@ -595,7 +595,7 @@ class CoverageWithoutProfilesMatchesTheCli(unittest.TestCase):
     a neocdz.zip discrepancy the pack and the CLI do not have."""
 
     def test_omitting_profiles_gives_the_same_report(self):
-        import verify  # noqa: PLC0415
+        import verify
 
         if not (REPO_ROOT / "database.json").exists():
             self.skipTest("database.json is not generated")

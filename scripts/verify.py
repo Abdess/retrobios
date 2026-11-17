@@ -572,10 +572,10 @@ def find_undeclared_files(
         # (ARMSX2's arcade/proverb.zip once ROCKNIX binds bios/armsx2).
         agnostic = profile.get("bios_mode") == "agnostic"
 
-        for profile, is_standalone in platform_layouts(emu_name, profile, standalone_set):
+        for layout, is_standalone in platform_layouts(emu_name, profile, standalone_set):
 
             for f in expand_directory_entries(
-                profile.get("files", []), db, is_standalone
+                layout.get("files", []), db, is_standalone
             ):
                 if agnostic and not f.get("unplaced"):
                     continue
@@ -613,7 +613,7 @@ def find_undeclared_files(
                     # Below the save directory each core is handed a folder
                     # of its own: two cores reading hiscore.dat there read
                     # two files.
-                    ("save", core_save_folder(profile)) if save_root
+                    ("save", core_save_folder(layout)) if save_root
                     else (f["root"],) if f.get("root") in OUTER_ROOTS
                     # In the emulator's own folder: no other core reads it.
                     else ("emulator", emu_name) if f.get("unplaced") else None,
@@ -662,8 +662,8 @@ def find_undeclared_files(
                         )
                         archive_entries[archive_key] = {
                             "profile": emu_name,
-                            "emulator": profile.get("emulator", emu_name),
-                            "systems": entry_system_ids(f, profile),
+                            "emulator": layout.get("emulator", emu_name),
+                            "systems": entry_system_ids(f, layout),
                             "system": f.get("system"),
                             "region": f.get("region"),
                             "selection_slot": f.get("selection_slot"),
@@ -680,14 +680,14 @@ def find_undeclared_files(
                             "expected": {},
                             "archive_file_count": 0,
                             "archive_required_count": 0,
-                            "members": archive_members(archive, profile.get("files", [])),
+                            "members": archive_members(archive, layout.get("files", [])),
                         }
                         if f.get("system_dir"):
                             archive_entries[archive_key]["system_dir"] = f["system_dir"]
                         # The archive's own declaration names its sets: an
                         # archive is a member like a loose file.
-                        own = archive_entry(archive, profile.get("files", []))
-                        archive_entries[archive_key].update(set_fields(own, profile))
+                        own = archive_entry(archive, layout.get("files", []))
+                        archive_entries[archive_key].update(set_fields(own, layout))
                         set_records.append((
                             set_keys((emu_name, is_standalone), own), own, in_repo,
                             (archive_entries[archive_key], None),
@@ -761,15 +761,15 @@ def find_undeclared_files(
                         # ROM is not Basilisk II's ROM.
                         _lp, _st = resolve_local_file(owned, db, dest_hint=dest)
                         if core_size_refusal(
-                            f, _lp, same_slot_entries(profile.get("files"), fname, dest)
+                            f, _lp, same_slot_entries(layout.get("files"), fname, dest)
                         ):
                             in_repo = False
 
                 checks = _parse_validation(f.get("validation"))
                 entry = {
                     "profile": emu_name,
-                    "emulator": profile.get("emulator", emu_name),
-                    "systems": entry_system_ids(f, profile),
+                    "emulator": layout.get("emulator", emu_name),
+                    "systems": entry_system_ids(f, layout),
                     "system": f.get("system"),
                     "region": f.get("region"),
                     "selection_slot": f.get("selection_slot"),
@@ -782,7 +782,7 @@ def find_undeclared_files(
                     "in_repo": in_repo,
                     "note": f.get("note", ""),
                     "checks": sorted(checks) if checks else [],
-                    **set_fields(f, profile),
+                    **set_fields(f, layout),
                     "source_ref": f.get("source_ref"),
                     "expected": _build_expected(f, checks),
                     **_identity_of(f),
@@ -793,12 +793,12 @@ def find_undeclared_files(
                     entry["contents"] = f["contents"]
                 if save_root:
                     entry["root"] = "save"
-                    folder = core_save_folder(profile)
+                    folder = core_save_folder(layout)
                     if folder is not None:
                         entry["core_folder"] = folder
                 elif f.get("system_dir"):
                     entry["system_dir"] = f["system_dir"]
-                members = with_archive_members(f, profile.get("files", [])).get("members")
+                members = with_archive_members(f, layout.get("files", [])).get("members")
                 if members:
                     entry["members"] = members
                 if f.get("layout_path"):

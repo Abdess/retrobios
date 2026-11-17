@@ -33,7 +33,7 @@ class SystemExtras(unittest.TestCase):
         """One extra stands per destination and the other cores' claims ride on
         it. Their systems are the file's systems too: narrowed to one of them,
         pack and installer both keep the file the core reads."""
-        from manifestselect import SelectionIndex  # noqa: PLC0415
+        from manifestselect import SelectionIndex
 
         extras = [{
             "name": "floppy.wav", "destination": "mame/samples/floppy.wav",

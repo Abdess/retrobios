@@ -353,7 +353,7 @@ def _enable_ansi() -> bool:
     if os.name != "nt":
         return True
     try:
-        import ctypes  # noqa: PLC0415
+        import ctypes
 
         kernel32 = ctypes.windll.kernel32  # type: ignore[attr-defined]
         handle = kernel32.GetStdHandle(-11)
@@ -2857,7 +2857,7 @@ def _read_registry(key: str, value: str) -> str | None:
     """A string value of the Windows registry, read natively or, under WSL,
     through reg.exe. None when the key, the value or the means is missing."""
     if os.name == "nt":
-        import winreg  # noqa: PLC0415
+        import winreg
 
         hive, _, subkey = key.partition("\\")
         roots = {"HKCU": winreg.HKEY_CURRENT_USER, "HKLM": winreg.HKEY_LOCAL_MACHINE}
@@ -3476,7 +3476,7 @@ def did_you_mean(
     by the letters and digits of a typed name, the names it stands for
     here, suggested instead of the close ones.
     """
-    import difflib  # noqa: PLC0415
+    import difflib
 
     by_key: dict[str, str] = {}
     for name in known:
@@ -4624,7 +4624,7 @@ _RAW_ERRORS = threading.Event()
 
 def _default_ca_present() -> bool:
     """Whether the certificates this Python reads by default exist."""
-    import ssl  # noqa: PLC0415
+    import ssl
 
     paths = ssl.get_default_verify_paths()
     for value in (os.environ.get("SSL_CERT_FILE"), paths.cafile, paths.openssl_cafile):
@@ -5221,7 +5221,7 @@ def canonical_region(raw: str) -> str:
     key = raw.strip().lower()
     key = REGION_ALIASES.get(key, key)
     if key not in REGIONS:
-        import difflib  # noqa: PLC0415
+        import difflib
 
         close = difflib.get_close_matches(key, [*REGION_ALIASES, *REGIONS], n=3, cutoff=0.5)
         hint = f" Close matches: {', '.join(close)}." if close else ""
@@ -10150,7 +10150,7 @@ def standalone_plan(
     RetroArch had no tree to copy from. The first list that holds a name for
     a folder serves it.
     """
-    from fnmatch import fnmatch  # noqa: PLC0415
+    from fnmatch import fnmatch
 
     plan: dict[Path, dict[str, dict]] = {}
     for manifest in manifests:
@@ -10674,7 +10674,7 @@ def _drive_not_removable(mount: Path) -> bool:
     False where it says nothing."""
     if os.name == "nt":
         try:
-            import ctypes  # noqa: PLC0415
+            import ctypes
             kind = ctypes.windll.kernel32.GetDriveTypeW(str(mount))  # type: ignore[attr-defined]
         except (AttributeError, OSError):
             return False
@@ -14463,7 +14463,7 @@ def fat32_drive(folder: Path) -> bool:
         probe = probe.parent
     if os.name == "nt":
         try:
-            import ctypes  # noqa: PLC0415
+            import ctypes
             root = ctypes.create_unicode_buffer(261)
             kind = ctypes.create_unicode_buffer(261)
             kernel = ctypes.windll.kernel32  # type: ignore[attr-defined]
@@ -21766,7 +21766,7 @@ def tui_blocker(
         return (f"the terminal is {cols}x{rows}, smaller than "
                 f"{TUI_MIN_COLS}x{TUI_MIN_ROWS}")
     if os.name == "nt":
-        import importlib  # noqa: PLC0415
+        import importlib
 
         try:
             importlib.import_module("msvcrt")
@@ -21776,7 +21776,7 @@ def tui_blocker(
             return "this console does not draw escape sequences (Windows 10 or later does)"
         return ""
     try:
-        import termios  # noqa: PLC0415
+        import termios
     except ImportError:
         return "this Python has no termios to read keys"
     try:
@@ -25002,7 +25002,7 @@ def _tui_key(state: TuiState, key: TuiKey) -> list[tuple]:
             step = 1 if focus == 0 else -1
         order = list(range(focus, -1, -1) if step < 0 else range(focus, len(rows)))
         if wrap and moved:
-            order += range(last, focus, -1) if step < 0 else range(0, focus)
+            order += range(last, focus, -1) if step < 0 else range(focus)
         focus = next((index for index in order if rows[index].action != "heading"),
                      max(0, min(state.focus.get(screen, 0), last)))
     state.focus[screen] = focus
@@ -28963,7 +28963,7 @@ class _TuiTerminal:
 
     def enter(self) -> None:
         if os.name != "nt":
-            import termios  # noqa: PLC0415
+            import termios
 
             # Entered again after a stop, the mode to go back to stays the
             # one found the first time.
@@ -28993,7 +28993,7 @@ class _TuiTerminal:
                 self.write(_SCREEN_OFF)
         finally:
             if self.saved is not None:
-                import termios  # noqa: PLC0415
+                import termios
 
                 saved, self.saved = self.saved, None
                 termios.tcsetattr(self.fd, termios.TCSADRAIN, saved)
@@ -29036,7 +29036,7 @@ class _TuiTerminal:
         if self.ended:
             time.sleep(timeout)
             return []
-        import select  # noqa: PLC0415
+        import select
 
         if not select.select([self.fd], [], [], timeout)[0]:
             # A paste whose end never came, after a second of silence.
@@ -29063,7 +29063,7 @@ class _TuiTerminal:
         return self.decoder.feed(self.input.decode(data))
 
     def _console_keys(self, timeout: float) -> list[TuiKey]:
-        import msvcrt  # noqa: PLC0415
+        import msvcrt
 
         end = time.monotonic() + timeout
         keys: list[TuiKey] = []
@@ -29497,7 +29497,7 @@ def run_tui(args: argparse.Namespace) -> int:
             if terminating["signal"] and state.screen == "result":
                 # The result is printed in the terminal on the way out.
                 state.exit_code = state.code if state.code is not None else 1
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         if flags["term"] or _closed_terminal(exc, terminal):
             # The window closed under a screen that was changing, or the
             # SIGCONT that comes with its SIGHUP put the screen back: the
@@ -29587,7 +29587,7 @@ def _terminal_gone(terminal: _TuiTerminal) -> bool:
     error is taken as it reads."""
     if os.name == "nt":
         return True
-    import termios  # noqa: PLC0415
+    import termios
 
     try:
         termios.tcgetattr(terminal.fd)
@@ -29642,7 +29642,7 @@ def _tui_cleanup(
     """Stop the child, put the terminal and the signal handlers back: what failed."""
     failures: tuple = (OSError, ValueError)
     if os.name != "nt":
-        import termios  # noqa: PLC0415
+        import termios
 
         failures += (termios.error,)
     problems: list[str] = []

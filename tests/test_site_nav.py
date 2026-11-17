@@ -475,7 +475,7 @@ def _moved_platform_pages() -> list[Path]:
         return []
     # A guide page sits beside the setups (platforms/linux-handhelds) without
     # being a list moved off one of them.
-    from siteguides import HANDHELD_GUIDE  # noqa: PLC0415
+    from siteguides import HANDHELD_GUIDE
 
     guides = {Path(HANDHELD_GUIDE.path).stem} if HANDHELD_GUIDE else set()
     return [path for path in sorted(folder.glob("*.md*"))

@@ -13,8 +13,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 
-from common import resolve_local_file  # noqa: E402
-from generate_db import _path_suffixes  # noqa: E402
+from common import resolve_local_file
+from generate_db import _path_suffixes
 
 
 class TestPathSuffixes(unittest.TestCase):

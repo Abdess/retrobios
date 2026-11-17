@@ -582,7 +582,7 @@ class OneDumpIsCountedOnce(unittest.TestCase):
     the site's Wanted page published the larger number."""
 
     def test_a_dump_in_several_dats_is_one_missing_entry(self):
-        from scripts import provenance_report  # noqa: PLC0415
+        from scripts import provenance_report
 
         rom = {"name": "DICROM.rom", "sha1": "a" * 40, "size": 32768}
         held = {"name": "held.rom", "sha1": "b" * 40, "size": 16}
@@ -613,7 +613,7 @@ class AMissingDumpNamesTheProfileItFills(unittest.TestCase):
     }
 
     def _report(self, db):
-        from scripts import provenance_report  # noqa: PLC0415
+        from scripts import provenance_report
 
         snapshots = {"no-intro": {"entries": [
             {"dat": "FM-7", "name": "DICROM.rom", "sha1": "a" * 40, "size": 262144},
@@ -635,14 +635,14 @@ class AMissingDumpNamesTheProfileItFills(unittest.TestCase):
         self.assertIsNone(missing["unread.rom"])
 
     def test_a_size_outside_the_profile_range_fills_nothing(self):
-        from scripts import provenance_report  # noqa: PLC0415
+        from scripts import provenance_report
 
         needs = provenance_report.profile_needs(self.PROFILES, {"files": {}})
         small = {"name": "DICROM.rom", "size": 1024}
         self.assertEqual(provenance_report.needs_filled(small, needs), [])
 
     def test_a_need_the_collection_answers_is_not_one(self):
-        from scripts import provenance_report  # noqa: PLC0415
+        from scripts import provenance_report
 
         db = {"files": {"e" * 40: {"name": "dicrom.rom", "size": 262144}}}
         needs = provenance_report.profile_needs(self.PROFILES, db)
@@ -651,7 +651,7 @@ class AMissingDumpNamesTheProfileItFills(unittest.TestCase):
     def test_a_file_installed_with_the_emulator_is_not_a_need(self):
         """43 of 50 needs were bundled entries (samcoupe.rom, zesarux's
         tk90x.rom), burying the six xm7 ROMs a maintainer has to find."""
-        from scripts import provenance_report  # noqa: PLC0415
+        from scripts import provenance_report
 
         profiles = {
             "samcoupe": {"files": [{"name": "samcoupe.rom", "required": True,
@@ -669,7 +669,7 @@ class TheWantedPageAsksOnlyForWhatCannotBeMade(unittest.TestCase):
     already produces (a Kickstart's odd bytes, a character ROM's halves)."""
 
     def test_a_derivable_dump_moves_out_of_the_wanted_list(self):
-        from scripts import generate_site  # noqa: PLC0415
+        from scripts import generate_site
 
         report = {"tosec": {
             "imported_at": "2026-01-01", "dats": {}, "total": 2, "matched": 0,

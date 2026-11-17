@@ -62,7 +62,7 @@ BIG = {f"arcade/set{n}.zip": (_noise(str(n), 24 * 1024), ["arcade"], None, None)
 
 
 class _Quiet(http.server.SimpleHTTPRequestHandler):
-    def log_message(self, format, *args):  # noqa: A002 - stdlib signature
+    def log_message(self, format, *args):
         return
 
 

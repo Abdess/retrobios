@@ -311,9 +311,8 @@ class TestSourceMirror(unittest.TestCase):
             "source_commit": "87b176a",
             "upstream_commit": "07021f0",
         }
-        with tempfile.TemporaryDirectory() as cache:
-            with self.assertRaises(profile_sync.upstream.NotCachedError):
-                profile_sync.select_views(profile, cache, True)
+        with tempfile.TemporaryDirectory() as cache, self.assertRaises(profile_sync.upstream.NotCachedError):
+            profile_sync.select_views(profile, cache, True)
 
     def test_a_profile_without_a_mirror_is_unchanged(self):
         profile = {"source": "https://github.com/o/port"}
@@ -2640,7 +2639,7 @@ class TestWriteDryRun(unittest.TestCase):
         # untracked file, where outside one it answers nothing at all.
         subprocess.run(["git", "init", "-q"], cwd=self.dir, check=True)
         # The cited files gained nothing since the pin in these fixtures.
-        from unittest import mock  # noqa: PLC0415
+        from unittest import mock
 
         def nothing_gained(args, profile, report):
             report.new_files, report.new_hashes = [], []
@@ -2657,7 +2656,7 @@ class TestWriteDryRun(unittest.TestCase):
     def test_a_file_gained_since_the_pin_holds_the_bump(self):
         # mame2003_plus's zn.c gained two G-NET BIOS sets around refs that
         # only shifted.
-        from unittest import mock  # noqa: PLC0415
+        from unittest import mock
 
         def gained(args, profile, report):
             report.new_files = [{"path": "zn.c", "name": "coh3002t.zip", "since_pin": True}]
@@ -2704,7 +2703,7 @@ class TestWriteDryRun(unittest.TestCase):
         """The bumped profile was promoted before the prose under its new pin
         was read. Offline, an uncached cited file raised NotCachedError past
         the restore and the profile kept a pin the guard would refuse."""
-        from unittest import mock  # noqa: PLC0415
+        from unittest import mock
 
         before = self.path.read_bytes()
         cold = profile_sync.upstream.NotCachedError("x.c not cached")
@@ -3042,7 +3041,7 @@ class TestDeliberatelyFrozenPin(TestBuildReport):
         # reicast is the commit Recalbox's reicast.mk builds, 789 commits
         # behind master. Compared to HEAD it showed eight refs to review that
         # nobody could act on.
-        from common import load_emulator_profiles  # noqa: PLC0415
+        from common import load_emulator_profiles
 
         root = Path(__file__).resolve().parents[1] / "emulators"
         profiles = load_emulator_profiles(str(root))
@@ -3062,7 +3061,7 @@ class TestDeliberatelyFrozenPin(TestBuildReport):
         # RetroPie builds ppsspp-1.5.4 as PPSSPPSDL alone: the frozen build
         # is the standalone half of a project that also ships a core.
         builds_differ = {("duckstation-legacy", "duckstation"), ("ppsspp-1.5.4", "ppsspp")}
-        from common import load_emulator_profiles  # noqa: PLC0415
+        from common import load_emulator_profiles
 
         root = Path(__file__).resolve().parents[1] / "emulators"
         profiles = load_emulator_profiles(str(root))
@@ -3626,7 +3625,7 @@ class APassedReleaseIsNewerThanTheTag(unittest.TestCase):
     v0.2.20: the pin holds v0.2.20 without core_version being older."""
 
     def test_a_release_older_than_the_declared_tag_is_not_passed(self):
-        from unittest import mock  # noqa: PLC0415
+        from unittest import mock
 
         version = profile_sync.VersionReport(
             "v0.2.22", "v0.2.22", "v0.2.20", "2026-07-25", True, "tag22"
@@ -3641,7 +3640,7 @@ class ANewerReleaseThanTheTag(unittest.TestCase):
     """armsx2 sat on its 2.8 tag while 2.9 was out, and read as clean."""
 
     def _newer(self, after_tag, after_pin):
-        from unittest import mock  # noqa: PLC0415
+        from unittest import mock
 
         version = profile_sync.VersionReport("2.8", "2.9", "2.9", "2026-10-01", True, "tag28")
         args = argparse.Namespace(cache_dir="c", offline=True)
@@ -3679,7 +3678,7 @@ class AProjectThatOnlyTags(unittest.TestCase):
         self.assertEqual(profile_sync.published_version(version), "1.1")
 
     def test_a_newer_tag_is_named(self):
-        from unittest import mock  # noqa: PLC0415
+        from unittest import mock
 
         version = profile_sync.VersionReport("v1.2", "v1.3", None, None, True, "tag12")
         args = argparse.Namespace(cache_dir="c", offline=True)
@@ -3698,7 +3697,7 @@ class APassedReleaseUnderAnUntaggedVersion(unittest.TestCase):
         self.assertIn("already contains release v9.0-6", warning)
 
     def test_only_a_higher_number_counts_without_a_tag(self):
-        from unittest import mock  # noqa: PLC0415
+        from unittest import mock
 
         args = argparse.Namespace(cache_dir="c", offline=True)
         cases = {("9.0.5", "v9.0-6"): "v9.0-6", ("1.61", "1.53"): None,
@@ -5120,9 +5119,9 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
         return argparse.Namespace(**{**base, **kw})
 
     def test_only_a_real_online_write_refreshes(self):
-        from unittest import mock  # noqa: PLC0415
+        from unittest import mock
 
-        import sitesources  # noqa: PLC0415
+        import sitesources
 
         with mock.patch.object(sitesources, "build_source_paths", return_value=({}, [])) as built, \
                 mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""}), \
@@ -5143,10 +5142,10 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
     def test_the_record_reads_the_pins_just_written(self):
         # The loader caches by directory and the run had loaded the profiles
         # before writing them: the record kept the pins it had replaced.
-        from unittest import mock  # noqa: PLC0415
+        from unittest import mock
 
-        import common  # noqa: PLC0415
-        import sitesources  # noqa: PLC0415
+        import common
+        import sitesources
 
         with tempfile.TemporaryDirectory() as tmp:
             profile = Path(tmp) / "p.yml"
@@ -5170,7 +5169,7 @@ class AnUnreadTreeKeepsItsRecord(unittest.TestCase):
     trees it never read from source-paths.json."""
 
     def test_unread_trees_carry_over(self):
-        import sitesources  # noqa: PLC0415
+        import sitesources
 
         kept = sitesources.keep_unread(
             {"a@1": ["x.c"]}, ["b@2", "c@3"], {"b@2": ["y.c"], "a@1": ["old.c"]}
@@ -5379,9 +5378,8 @@ class TestRealignFlagMatrix(unittest.TestCase):
         saved = sys.argv
         try:
             sys.argv = argv
-            with contextlib.redirect_stderr(stderr):
-                with self.assertRaises(SystemExit) as caught:
-                    profile_sync.main()
+            with contextlib.redirect_stderr(stderr), self.assertRaises(SystemExit) as caught:
+                profile_sync.main()
         finally:
             sys.argv = saved
         return caught.exception.code, stderr.getvalue()
@@ -5491,9 +5489,8 @@ class TestEmulatorsDirStatus(unittest.TestCase):
     def test_a_tree_outside_any_repository_is_not_clean(self):
         with tempfile.TemporaryDirectory() as root, mock.patch.dict(
             os.environ, {"GIT_CEILING_DIRECTORIES": str(Path(root).parent)}
-        ):
-            with self.assertRaises(RuntimeError):
-                profile_sync.emulators_dir_is_dirty(root)
+        ), self.assertRaises(RuntimeError):
+            profile_sync.emulators_dir_is_dirty(root)
 
 
 class UpstreamVendoredAsASubmodule(unittest.TestCase):
@@ -5503,7 +5500,7 @@ class UpstreamVendoredAsASubmodule(unittest.TestCase):
     have moved upstream_commit past what libretro builds."""
 
     def _views(self, links: dict) -> list:
-        from unittest import mock  # noqa: PLC0415
+        from unittest import mock
 
         repo_s, repo_u = object(), object()
         views = [
@@ -5531,7 +5528,7 @@ class AMirrorOutlivesAGoneSource(unittest.TestCase):
     the source_mirror declared after it, so the profile stayed unchecked."""
 
     def test_the_mirror_is_read_when_the_source_is_gone(self):
-        from unittest import mock  # noqa: PLC0415
+        from unittest import mock
 
         gone_repo = profile_sync.upstream.make_repo("github.com", "yuzu-emu-mirror", "yuzu")
         mirror = profile_sync.upstream.make_repo("github.com", "fork", "yuzu")
@@ -5572,7 +5569,7 @@ class RealignReadsThePathAsWritten(unittest.TestCase):
     hatari/hatari's src/tos.c and proposed moving a correct citation."""
 
     def test_an_unmoved_repository_carrying_the_path_keeps_it(self):
-        from unittest import mock  # noqa: PLC0415
+        from unittest import mock
 
         fork = profile_sync.upstream.make_repo("github.com", "b", "hatariB")
         up = profile_sync.upstream.make_repo("github.com", "hatari", "hatari")
@@ -5598,7 +5595,7 @@ class RealignGivesASharedPathToTheFirstRepository(unittest.TestCase):
     upstream_commit moved, the fork's citations were read in upstream."""
 
     def test_the_source_declared_first_keeps_it(self):
-        from unittest import mock  # noqa: PLC0415
+        from unittest import mock
 
         fork = profile_sync.upstream.make_repo("github.com", "t", "freej2me-plus")
         up = profile_sync.upstream.make_repo("github.com", "hex007", "freej2me")
@@ -5621,7 +5618,7 @@ class UpstreamForkedByThePort(unittest.TestCase):
     past anything the port carries."""
 
     def _views(self, base, ancestry=None):
-        from unittest import mock  # noqa: PLC0415
+        from unittest import mock
 
         fork = profile_sync.upstream.make_repo("github.com", "f", "port")
         self.up = profile_sync.upstream.make_repo("github.com", "o", "up")
@@ -5804,7 +5801,7 @@ class TheUnknownProfileHintCountsTheListing(unittest.TestCase):
     listing of 530: the alias and test profiles it counted are not listed."""
 
     def test_the_count_matches(self):
-        import subprocess  # noqa: PLC0415
+        import subprocess
 
         root = Path(__file__).resolve().parents[1]
         hint = subprocess.run(
@@ -6257,7 +6254,7 @@ class TestBranchCheckIsWired(unittest.TestCase):
     def test_contributing_and_ci_use_the_flags(self):
         root = Path(__file__).resolve().parents[1]
         sys.path.insert(0, str(root / "scripts"))
-        import generate_readme  # noqa: PLC0415
+        import generate_readme
 
         text = generate_readme.generate_contributing()
         self.assertIn("profile_sync.py --added --strict", text)

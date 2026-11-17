@@ -560,9 +560,8 @@ class AnUnknownTargetStopsTheRunFirst(unittest.TestCase):
                 mock.patch.object(sys, "argv", ["install.py", "--target", "steamos",
                                                 "--list-systems", "--no-input"]), \
                 contextlib.redirect_stdout(io.StringIO()), \
-                contextlib.redirect_stderr(io.StringIO()) as err:
-            with self.assertRaises(SystemExit) as stop:
-                install.main()
+                contextlib.redirect_stderr(io.StringIO()) as err, self.assertRaises(SystemExit) as stop:
+            install.main()
         self.assertEqual(stop.exception.code, 2)
         self.assertIn("unknown target 'steamos' for RetroArch", err.getvalue())
         self.assertIn("Nothing was installed", err.getvalue())

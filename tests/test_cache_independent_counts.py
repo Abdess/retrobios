@@ -23,14 +23,14 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 class DeclaredFilesResolveWithoutDataCaches(unittest.TestCase):
     def test_no_platform_entry_rests_on_a_data_directory_cache(self):
-        from common import (  # noqa: PLC0415
+        from common import (
             build_zip_contents_index,
             list_registered_platforms,
             load_data_dir_registry,
             load_database,
             load_platform_config,
         )
-        from packresolve import resolve_declaration  # noqa: PLC0415
+        from packresolve import resolve_declaration
 
         platforms_dir = REPO_ROOT / "platforms"
         registry = load_data_dir_registry(str(platforms_dir))

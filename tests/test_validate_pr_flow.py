@@ -120,7 +120,7 @@ class OversizedFileAdvice(unittest.TestCase):
     def test_the_issue_form_is_filled_and_nothing_points_to_the_pr(self):
         """The link opened an empty form, and the same report said to put the
         file in the pull request and under bios/."""
-        import urllib.parse  # noqa: PLC0415
+        import urllib.parse
 
         path = self.tmp / "big.bin"
         path.write_bytes(b"x" * 8)

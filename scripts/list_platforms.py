@@ -27,7 +27,7 @@ def list_platforms() -> list[str]:
 def main() -> None:
     parser = argparse.ArgumentParser(allow_abbrev=False, description="List available platforms")
     args = parser.parse_args()
-    from common import work_from_repo_root  # noqa: PLC0415
+    from common import work_from_repo_root
 
     work_from_repo_root(args, parser, [])
 

@@ -162,8 +162,8 @@ def entry_hashes(entry: dict) -> list[str]:
     for source in (entry, *members):
         if not isinstance(source, dict):
             continue
-        for field in HASH_FIELDS:
-            for v in parse_hash_list(source.get(field)):
+        for field_name in HASH_FIELDS:
+            for v in parse_hash_list(source.get(field_name)):
                 if v not in tokens:
                     tokens.append(v)
     return tokens
@@ -463,11 +463,11 @@ def collect_citations(document: dict, text: str | None = None) -> list[Citation]
         if (repo := upstream.parse_repo(url)) is not None
     )
     citations: list[Citation] = []
-    for kind, field, holder, key, value in _walk_document(document):
+    for kind, field_name, holder, key, value in _walk_document(document):
         if kind == "ref":
             for label, ref in source_ref_values(value):
                 citations.append(Citation(
-                    field=field, kind="ref", ref=ref, entry=holder,
+                    field=field_name, kind="ref", ref=ref, entry=holder,
                     holder=holder, key=key, label=label,
                 ))
             if isinstance(value, str):
@@ -475,7 +475,7 @@ def collect_citations(document: dict, text: str | None = None) -> list[Citation]
                     ref_prose_text(value), known
                 ):
                     citations.append(Citation(
-                        field=field, kind="prose", ref=run, holder=holder,
+                        field=field_name, kind="prose", ref=run, holder=holder,
                         key=key, line=line, path_span=path_span, spans=spans,
                         parts=parts, wrapped=bool(joined_at), joined_at=joined_at,
                     ))
@@ -484,7 +484,7 @@ def collect_citations(document: dict, text: str | None = None) -> list[Citation]
             value, known
         ):
             citations.append(Citation(
-                field=field, kind="prose", ref=run, holder=holder, key=key,
+                field=field_name, kind="prose", ref=run, holder=holder, key=key,
                 line=line, path_span=path_span, spans=spans, parts=parts,
                 wrapped=bool(joined_at), joined_at=joined_at,
             ))
@@ -1108,8 +1108,8 @@ def select_repo(profile: dict) -> upstream.Repo | None:
     A source keyed by build mode with no upstream (uzdoom) names its
     repositories only in the dict, which a plain string read never parses.
     """
-    for field in ("source", "upstream"):
-        repo = upstream.parse_repo(str(profile.get(field) or ""))
+    for field_name in ("source", "upstream"):
+        repo = upstream.parse_repo(str(profile.get(field_name) or ""))
         if repo is not None:
             return repo
     for _, _, url in declared_repositories(profile):
@@ -1160,7 +1160,7 @@ def select_views(
     # A port living on a branch of a fork is absent from the default tip, so
     # the branch it was read from is followed when the profile names one.
     declared = str(profile.get("source_branch") or "") or None
-    for field, mode, url in declared_repositories(profile):
+    for field_name, mode, url in declared_repositories(profile):
         repo = upstream.parse_repo(url)
         if repo is None or (repo.host, repo.slug) in seen:
             continue
@@ -1168,7 +1168,7 @@ def select_views(
         # its pin is source_commit. It read `source_mirror_commit`, a field
         # no profile carries, and fell back to profiled_date, which a bump
         # never moves (eden judged from f6e76860 while pinned on d16735f5).
-        pin_field = "source" if field == "source_mirror" else field
+        pin_field = "source" if field_name == "source_mirror" else field_name
         branch = declared if pin_field == "source" else None
         head = None
         try:
@@ -1206,7 +1206,7 @@ def select_views(
             if relation and relation[0] == 0 and relation[1] > 0:
                 head = upstream.resolve_head(repo, cache_dir, offline, branch, fresh=True) or head
         seen.add((repo.host, repo.slug))
-        views.append(RepoView(repo, pin, head, origin, field, mode))
+        views.append(RepoView(repo, pin, head, origin, field_name, mode))
     if gone and not views:
         raise upstream.GoneError(f"{profile.get('emulator', '?')}: every declared repository is gone")
     views = _follow_fork_base(_follow_submodule(views, cache_dir, offline), cache_dir, offline)
@@ -1311,12 +1311,12 @@ def declared_repositories(profile: dict) -> list[tuple[str, str, str]]:
     a declared repository still answers.
     """
     urls: list[tuple[str, str, str]] = []
-    for field in ("source", "upstream", "source_mirror"):
-        value = profile.get(field)
+    for field_name in ("source", "upstream", "source_mirror"):
+        value = profile.get(field_name)
         if isinstance(value, dict):
-            urls.extend((field, str(k), str(v)) for k, v in value.items() if v)
+            urls.extend((field_name, str(k), str(v)) for k, v in value.items() if v)
         elif value:
-            urls.append((field, "", str(value)))
+            urls.append((field_name, "", str(value)))
     return urls
 
 
@@ -5520,9 +5520,9 @@ def _refresh_source_paths(args: argparse.Namespace) -> None:
     """
     if not _WRITTEN or args.dry_run or args.offline or os.environ.get("RETROBIOS_OFFLINE"):
         return
-    import common  # noqa: PLC0415
-    import sitesources  # noqa: PLC0415
-    from common import write_if_changed  # noqa: PLC0415
+    import common
+    import sitesources
+    from common import write_if_changed
 
     # The run loaded the profiles before writing them, and the loader caches
     # by directory: read again, the record described the pins just replaced

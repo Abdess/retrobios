@@ -24,7 +24,6 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import generate_site as gs  # noqa: E402
 import sitemarkup as markup  # noqa: E402
-from cross_reference import FileConsumers  # noqa: E402
 
 DIST = REPO_ROOT / "website" / "dist"
 SITE_TS = REPO_ROOT / "website" / "src" / "scripts" / "site.ts"

@@ -395,7 +395,7 @@ class StaleTruth(ValueError):
     """The truth file no longer describes the profiles it was built from."""
 
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def _truth_sources(platforms_dir: str) -> tuple[dict, dict, dict | None]:
     """Registry, profiles and database, as generate_truth reads them."""
     registry_path = Path(platforms_dir) / "_registry.yml"

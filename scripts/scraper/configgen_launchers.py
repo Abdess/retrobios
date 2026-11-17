@@ -188,9 +188,7 @@ def _calls(scope: ast.AST, attr: str | None = None, name: str | None = None) -> 
         if not isinstance(node, ast.Call):
             continue
         func = node.func
-        if attr is not None and isinstance(func, ast.Attribute) and func.attr == attr:
-            found.append(node)
-        elif name is not None and isinstance(func, ast.Name) and func.id == name:
+        if attr is not None and isinstance(func, ast.Attribute) and func.attr == attr or name is not None and isinstance(func, ast.Name) and func.id == name:
             found.append(node)
     return sorted(found, key=lambda call: (call.lineno, call.col_offset))
 

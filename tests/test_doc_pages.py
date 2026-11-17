@@ -1318,7 +1318,7 @@ class CitedOptionsExist(unittest.TestCase):
     def help_text(cls, target: str, module: bool, sub: str = "") -> str:
         key = (target, sub)
         if key not in cls._helps:
-            import subprocess  # noqa: PLC0415
+            import subprocess
 
             argv = [sys.executable, *(["-m", target] if module else [target])]
             proc = subprocess.run(
@@ -1376,7 +1376,7 @@ class PipelineStepsMatchTheRun(unittest.TestCase):
 
     @staticmethod
     def labels() -> list[str]:
-        import pipeline  # noqa: PLC0415
+        import pipeline
 
         return [pipeline.step_number(key) for key in pipeline.STEP_LABELS]
 
@@ -1739,7 +1739,7 @@ class ArchitectureStatesTheArbitration(unittest.TestCase):
     checks the content: RetroBat's ATARIOSB.ROM."""
 
     def test_the_page_says_what_arbitrate_decides(self):
-        import slots  # noqa: PLC0415
+        import slots
 
         page = (WIKI / "architecture.md").read_text(encoding="utf-8")
         self.assertNotIn("the profile takes precedence for pack generation", page)
@@ -1795,9 +1795,9 @@ class ReportExcerptIsTheRun(unittest.TestCase):
     naming one, and never showed the line that names it."""
 
     def test_every_quoted_line_is_printed(self):
-        import subprocess  # noqa: PLC0415
+        import subprocess
 
-        from restore_large_files import gitignored_paths  # noqa: PLC0415
+        from restore_large_files import gitignored_paths
 
         # The excerpt is a run over the whole collection. A checkout without
         # the release assets (the PR workflow restores none) prints other
@@ -1915,7 +1915,7 @@ class TheInstallerSamplesTravelWithTheManifests(unittest.TestCase):
     place for the samples the gate's pipeline rewrites."""
 
     def test_the_pages_and_the_nightly_carry_them(self):
-        import autorun  # noqa: PLC0415
+        import autorun
 
         guide = (WIKI / "testing-guide.md").read_text(encoding="utf-8")
         for name in ("wiki/installer.md", "derivable.json", "generate_installer_doc.py"):
@@ -1940,7 +1940,7 @@ class TheRemovalProofsAreTheExportersOwn(unittest.TestCase):
              "data_directory": "a data directory"}
 
     def test_the_page_names_each_proof_in_order(self):
-        from exporter.candidates import _PROOF_ORDER  # noqa: PLC0415
+        from exporter.candidates import _PROOF_ORDER
 
         page = (WIKI / "tools.md").read_text(encoding="utf-8")
         start = page.index("No entry the platform declares is removed.")
@@ -1969,10 +1969,10 @@ class NoTextClaimsAScheduledScrape(unittest.TestCase):
     `schedule:`."""
 
     def test_no_text_ties_the_registry_to_automation(self):
-        import generate_pack  # noqa: PLC0415
-        import generate_readme  # noqa: PLC0415
-        import generate_site  # noqa: PLC0415
-        import list_platforms  # noqa: PLC0415
+        import generate_pack
+        import generate_readme
+        import generate_site
+        import list_platforms
 
         texts = {
             "adding-a-platform.md": (WIKI / "adding-a-platform.md").read_text(encoding="utf-8"),

@@ -14,8 +14,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 
-import slots  # noqa: E402
-from slots import Claim, Conflict, arbitrate, format_decision  # noqa: E402
+import slots
+from slots import Claim, Conflict, arbitrate, format_decision
 
 
 def _db(entries: dict[str, dict]) -> dict:
@@ -601,7 +601,7 @@ class TestSelfContradictingDestinations(unittest.TestCase):
         )
 
     def test_the_database_and_the_arbiter_read_one_rule(self):
-        import generate_db  # noqa: PLC0415
+        import generate_db
 
         variant = Path("bios/M/C/.variants/aes.zip")
         self.assertEqual(generate_db._canonical_name(variant), "aes.zip")
@@ -951,7 +951,7 @@ class ARecordIsFoundByItsPathOnce(unittest.TestCase):
     """_accepted_by_all walked all 19 000 records for every path asked."""
 
     def test_the_files_are_walked_once(self):
-        import slots  # noqa: PLC0415
+        import slots
 
         class Counted(dict):
             walks = 0
@@ -1000,7 +1000,7 @@ class ACopierHeaderIsNotAnotherImage(unittest.TestCase):
     the core reads it as the 6d9a73ef image its profile lists."""
 
     def test_headered_file_satisfies_the_profile(self):
-        import zlib  # noqa: PLC0415
+        import zlib
 
         image = b"S" * 1024
         with tempfile.TemporaryDirectory() as tmp:
@@ -1036,7 +1036,7 @@ class TheSlotsSummaryClosesTheRun(unittest.TestCase):
     which it never does."""
 
     def test_order_and_help(self):
-        import subprocess  # noqa: PLC0415
+        import subprocess
 
         root = Path(__file__).resolve().parents[1]
         if not (root / "database.json").exists():

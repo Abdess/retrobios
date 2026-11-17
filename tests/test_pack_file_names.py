@@ -54,7 +54,7 @@ class SystemPackLeavesTheEmulatorPack(unittest.TestCase):
     """--system built under the emulator pack's name and renamed it away."""
 
     def test_both_packs_stay(self):
-        import subprocess  # noqa: PLC0415
+        import subprocess
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             for mode in (["--emulator", "emuscv"], ["--system", "scv"]):

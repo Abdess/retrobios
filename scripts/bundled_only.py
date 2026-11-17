@@ -119,7 +119,7 @@ def main() -> int:
     parser.add_argument("--json", action="store_true", help="print the list as JSON")
     parser.add_argument("--strict", action="store_true", help="exit 1 while a file is listed")
     args = parser.parse_args()
-    from common import work_from_repo_root  # noqa: PLC0415
+    from common import work_from_repo_root
 
     work_from_repo_root(args, parser, ["db", "emulators_dir", "platforms_dir", "install_dir"])
 

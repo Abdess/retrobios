@@ -483,7 +483,7 @@ LIST_SEPARATORS = {"advmame": ":", "advmame-0.94": ":", "advmame-1.4": ":"}
 DEFAULT_LIST_SEPARATOR = ";"
 
 
-def _search_list_in_roms(event: "Event", separator: str = DEFAULT_LIST_SEPARATOR) -> bool:
+def _search_list_in_roms(event: Event, separator: str = DEFAULT_LIST_SEPARATOR) -> bool:
     """An iniSet whose value is a list of folders below the roms root.
 
     One folder alone is where a program writes (cfg_directory, nvram_directory

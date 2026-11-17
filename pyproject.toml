@@ -76,3 +76,36 @@ cache_dir = "tmp/mypy_cache"
 baseline_path = "mypy-baseline.txt"
 ignore_categories = ["note"]
 sort_baseline = true
+
+# CI runs this rule set over every Python file (validate.yml, pr_checks.py).
+# C901 and the PLR limits hold function size: a function past them is split
+# by stage, not exempted.
+[tool.ruff]
+target-version = "py39"
+line-length = 120
+extend-exclude = ["bios", "tmp", "website", ".cache", "dist", "data"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B", "C90", "SIM", "PERF", "UP", "RET", "PIE", "PLR09", "PLW1510", "RUF100"]
+ignore = [
+    "E501",    # long lines are wrapped by hand where it reads better
+    "UP006", "UP007", "UP035", "UP045",  # install.py keeps 3.8 spellings
+    "SIM300",  # an ALL_CAPS name is not always a constant (_SYSTEM_ROOT)
+    "SIM108",  # a ternary is not always clearer than an if block
+    "PERF203", # try in a loop is the per-item error report
+    "RET504", "RET505", "RET506", "RET508",
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 15
+
+[tool.ruff.lint.pylint]
+max-branches = 15
+max-statements = 60
+max-args = 8
+max-returns = 10
+
+[tool.ruff.lint.per-file-ignores]
+"install.py" = ["UP"]
+# Shell fixtures inside string literals keep the tabs the real files have.
+"tests/test_launchers_*.py" = ["E101"]
