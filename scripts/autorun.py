@@ -587,11 +587,10 @@ def sync_worktree(worktree: Path) -> str:
     ahead = int(git(worktree, "rev-list", "--count", f"{upstream}..HEAD").stdout)
     if ahead == 0:
         git(worktree, "merge", "--ff-only", "--quiet", upstream)
-    elif git(worktree, "merge-base", "--is-ancestor", upstream, "HEAD",
-             check=False).returncode != 0:
-        if git(worktree, "rebase", "--quiet", upstream, check=False).returncode != 0:
-            git(worktree, "rebase", "--abort", check=False)
-            raise AutorunError(BLOCKED, f"{ahead} automation commits conflict with {upstream}")
+    elif (git(worktree, "merge-base", "--is-ancestor", upstream, "HEAD", check=False).returncode != 0
+          and git(worktree, "rebase", "--quiet", upstream, check=False).returncode != 0):
+        git(worktree, "rebase", "--abort", check=False)
+        raise AutorunError(BLOCKED, f"{ahead} automation commits conflict with {upstream}")
     return git(worktree, "rev-parse", upstream).stdout.strip()
 
 
@@ -608,11 +607,10 @@ def push_batch(worktree: Path, gate_base: str, regate: Callable[[], bool]) -> st
     upstream = f"{REMOTE}/{TARGET}"
     if int(git(worktree, "rev-list", "--count", f"{upstream}..HEAD").stdout) == 0:
         return ""
-    if git(worktree, "merge-base", "--is-ancestor", upstream, "HEAD",
-           check=False).returncode != 0:
-        if git(worktree, "rebase", "--quiet", upstream, check=False).returncode != 0:
-            git(worktree, "rebase", "--abort", check=False)
-            raise AutorunError(BLOCKED, f"rebase onto {upstream} conflicts, batch kept")
+    if (git(worktree, "merge-base", "--is-ancestor", upstream, "HEAD", check=False).returncode != 0
+            and git(worktree, "rebase", "--quiet", upstream, check=False).returncode != 0):
+        git(worktree, "rebase", "--abort", check=False)
+        raise AutorunError(BLOCKED, f"rebase onto {upstream} conflicts, batch kept")
     if git(worktree, "rev-parse", upstream).stdout.strip() != gate_base and not regate():
         raise AutorunError(FAILED, f"gate failed on the batch rebased onto {upstream}")
     git(worktree, "push", "--quiet", REMOTE, f"HEAD:{TARGET}", env=token_env())
