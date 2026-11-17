@@ -10177,6 +10177,21 @@ def standalone_plan(
     return [(folder, list(entries.values())) for folder, entries in plan.items() if entries]
 
 
+def _check_standalone_folder(to_download: list[dict], mismatched: list[dict],
+                             verbose: bool) -> None:
+    """What --check says of one standalone emulator folder."""
+    for entry in mismatched:
+        print(f"    wrong copy: {entry['dest']}")
+    wrong = {id(entry) for entry in mismatched}
+    missing = [entry for entry in to_download if id(entry) not in wrong]
+    for entry in missing[:10] if not verbose else missing:
+        print(f"    missing: {entry['dest']}")
+    if not verbose and len(missing) > 10:
+        print(f"    ... and {len(missing) - 10} more missing (--verbose lists them all)")
+    if not to_download:
+        print(f"  {EVERYTHING_IN_PLACE}")
+
+
 def _install_standalone_folders(
     args: argparse.Namespace, os_type: str, term: Terminal, interactive: bool,
 ) -> bool:
@@ -10190,9 +10205,7 @@ def _install_standalone_folders(
         # first refusal ended an --offline run that asked nothing of EmuDeck
         # on "No file list for emudeck".
         return False
-    manifests = []
-    for plat in STANDALONE_SOURCES:
-        manifests.append(fetch_manifest(plat))
+    manifests = [fetch_manifest(plat) for plat in STANDALONE_SOURCES]
     lb_root = launchbox_root(os_type)
     plan = standalone_plan(manifests, os_type,
                            launchbox_bios_dirs(lb_root) if lb_root else None)
@@ -10216,16 +10229,7 @@ def _install_standalone_folders(
         to_download.extend(mismatched)
         up_to_date_count += len(up_to_date)
         if args.check:
-            for entry in mismatched:
-                print(f"    wrong copy: {entry['dest']}")
-            wrong = {id(entry) for entry in mismatched}
-            missing = [entry for entry in to_download if id(entry) not in wrong]
-            for entry in missing[:10] if not args.verbose else missing:
-                print(f"    missing: {entry['dest']}")
-            if not args.verbose and len(missing) > 10:
-                print(f"    ... and {len(missing) - 10} more missing (--verbose lists them all)")
-            if not to_download:
-                print(f"  {EVERYTHING_IN_PLACE}")
+            _check_standalone_folder(to_download, mismatched, args.verbose)
             pending += len(to_download)
             continue
         if args.dry_run:
@@ -10264,6 +10268,73 @@ def _install_standalone_folders(
     return True
 
 
+def _print_standalone_note(entry: dict, os_type: str) -> None:
+    """A note entry's message, said when its emulator is found here."""
+    detect_paths = entry.get("detect", {}).get(os_type, [])
+    if not detect_paths and os_type == "wsl":
+        detect_paths = entry.get("detect", {}).get("linux", [])
+    for dp in detect_paths:
+        expanded = Path(os.path.expandvars(os.path.expanduser(dp)))
+        if _is_dir(expanded):
+            print(f"  {entry['note']}")
+            break
+
+
+def _standalone_sources(entry: dict, bios_path: Path) -> list[Path]:
+    """The files of the BIOS folder a standalone copy entry copies."""
+    from fnmatch import fnmatch
+
+    if "pattern" in entry:
+        # A kept file is never a source, when the backup had to go
+        # inside the BIOS folder.
+        return [
+            f for f in bios_path.rglob("*")
+            if fnmatch(f.name, entry["pattern"]) and f.is_file()
+            and BACKUP_DIR not in f.relative_to(bios_path).parts
+        ]
+    # `source` is where this platform's manifest put the file, and `file`
+    # names it as the registry does for every platform, and laid out
+    # that way it was missing wherever the pack places it elsewhere.
+    src = _destination_path(bios_path, entry.get("source") or entry["file"])
+    return [src] if _exists(src) else []
+
+
+def _copy_standalone_file(src: Path, dest: Path, resolved_dir: Path,
+                          failures: list[tuple[str, str]] | None) -> bool:
+    """Copy one file into an emulator folder, False when it was refused."""
+    linked = dest.is_symlink()
+    # A crafted source name would climb out of the directory.
+    if not linked and not _within(dest, resolved_dir):
+        print(f"  ERROR: {dest}: {OUTSIDE_TARGET}")
+        if failures is not None:
+            failures.append((str(dest), OUTSIDE_TARGET))
+        return False
+    try:
+        KEPT.keep(resolved_dir, PurePosixPath(dest.name), dest, {}, src)
+    except _NotKept as exc:
+        print(f"  ERROR: {dest}: {NOT_KEPT} ({exc})")
+        if failures is not None:
+            failures.append((str(dest), f"{NOT_KEPT} ({exc})"))
+        return False
+    try:
+        if linked:
+            # Writing through a link already at the name would
+            # leave the folder the user opted into. The link
+            # itself gives way to the file.
+            _replace_with_copy(src, dest)
+            print(f"  {dest}: link replaced by the file")
+        else:
+            shutil.copy2(src, dest)
+    except OSError as exc:
+        print(f"  ERROR: {dest}: {exc.strerror or exc}")
+        if failures is not None:
+            reason = NOT_WRITABLE if _write_refused(exc) else str(
+                exc.strerror or exc)
+            failures.append((str(dest), reason))
+        return False
+    return True
+
+
 def do_standalone_copies(
     manifest: dict, bios_path: Path, os_type: str,
     extra_dirs: dict[str, Path] | None = None,
@@ -10289,8 +10360,6 @@ def do_standalone_copies(
     Each failure is also appended to failures, by absolute path, for the
     summary to name.
     """
-    from fnmatch import fnmatch
-
     copies = manifest.get("standalone_copies", [])
     if not copies:
         return 0, 0, 0
@@ -10302,31 +10371,10 @@ def do_standalone_copies(
     for entry in copies:
         # Note entries: print message if emulator detected
         if "note" in entry:
-            detect_paths = entry.get("detect", {}).get(os_type, [])
-            if not detect_paths and os_type == "wsl":
-                detect_paths = entry.get("detect", {}).get("linux", [])
-            for dp in detect_paths:
-                expanded = Path(os.path.expandvars(os.path.expanduser(dp)))
-                if _is_dir(expanded):
-                    print(f"  {entry['note']}")
-                    break
+            _print_standalone_note(entry, os_type)
             continue
 
-        if "pattern" in entry:
-            # A kept file is never a source, when the backup had to go
-            # inside the BIOS folder.
-            sources = [
-                f for f in bios_path.rglob("*")
-                if fnmatch(f.name, entry["pattern"]) and f.is_file()
-                and BACKUP_DIR not in f.relative_to(bios_path).parts
-            ]
-        else:
-            # `source` is where this platform's manifest put the file, and `file`
-            # names it as the registry does for every platform, and laid out
-            # that way it was missing wherever the pack places it elsewhere.
-            src = _destination_path(bios_path, entry.get("source") or entry["file"])
-            sources = [src] if _exists(src) else []
-
+        sources = _standalone_sources(entry, bios_path)
         if not sources:
             continue
 
@@ -10345,39 +10393,10 @@ def do_standalone_copies(
             resolved_dir = target_dir.resolve()
             for src in sources:
                 dest = target_dir / (entry.get("as") or src.name)
-                linked = dest.is_symlink()
-                # A crafted source name would climb out of the directory.
-                if not linked and not _within(dest, resolved_dir):
-                    print(f"  ERROR: {dest}: {OUTSIDE_TARGET}")
-                    failed += 1
-                    if failures is not None:
-                        failures.append((str(dest), OUTSIDE_TARGET))
-                    continue
-                try:
-                    KEPT.keep(resolved_dir, PurePosixPath(dest.name), dest, {}, src)
-                except _NotKept as exc:
-                    print(f"  ERROR: {dest}: {NOT_KEPT} ({exc})")
-                    failed += 1
-                    if failures is not None:
-                        failures.append((str(dest), f"{NOT_KEPT} ({exc})"))
-                    continue
-                try:
-                    if linked:
-                        # Writing through a link already at the name would
-                        # leave the folder the user opted into. The link
-                        # itself gives way to the file.
-                        _replace_with_copy(src, dest)
-                        print(f"  {dest}: link replaced by the file")
-                    else:
-                        shutil.copy2(src, dest)
+                if _copy_standalone_file(src, dest, resolved_dir, failures):
                     copied += 1
-                except OSError as exc:
-                    print(f"  ERROR: {dest}: {exc.strerror or exc}")
+                else:
                     failed += 1
-                    if failures is not None:
-                        reason = NOT_WRITABLE if _write_refused(exc) else str(
-                            exc.strerror or exc)
-                        failures.append((str(dest), reason))
 
     return copied, skipped, failed
 
@@ -10412,7 +10431,16 @@ def format_size(n: int) -> str:
 def _row_name(row: TuiRow) -> str:
     """The name a setup row is typed back with: a platform id, or the name
     of a system that runs from its SD card."""
-    return row.value[1] if row.action == "cardsystem" else row.value
+    value = row.value
+    if row.action == "cardsystem" and isinstance(value, tuple):
+        return str(value[1])
+    return str(value)
+
+
+def _row_platform(row: TuiRow) -> str:
+    """The platform of the system a cardsystem row stands for."""
+    value = row.value
+    return str(value[0]) if isinstance(value, tuple) else ""
 
 
 def _line_setups(setups: list | None = None, mounted: set | None = None,
@@ -10432,7 +10460,7 @@ def _line_setups(setups: list | None = None, mounted: set | None = None,
         name = _row_name(row)
         if row.action == "cardsystem":
             listed = list(_SETUP_DEVICES.get(name, ()))
-            shown = devices(listed) or f"{display_name(row.value[0])} files"
+            shown = devices(listed) or f"{display_name(_row_platform(row))} files"
             choices.append((name, f"{row.label} ({shown})"))
         else:
             listed = list(_setup_devices(name, os_type or detect_os())) \
@@ -10861,6 +10889,7 @@ def ask_platform_folder(os_type: str, plat: str, ask: bool = True,
     while True:
         raw = _folder_answer(prompt, usage, default is not None, len(targets))
         if raw is None:
+            assert default is not None
             return default
         if raw.isdigit() and 1 <= int(raw) <= len(targets):
             # The screen's row, taken as it takes it.
@@ -11290,7 +11319,7 @@ def listed_systems(files: list[dict]) -> list[str]:
 
 
 def choosable_systems(files: list[dict], omitted: list[dict],
-                      cores: list[str] = (), regions: list[str] = ()) -> list[str]:
+                      cores: Collection[str] = (), regions: Collection[str] = ()) -> list[str]:
     """The systems a run with these cores and regions lets one choose
     among, --system aside: what the check reports (the choices event)."""
     if cores or regions:
@@ -11485,6 +11514,107 @@ def save_lines(files: list[dict], omitted: list[dict], bios_path: Path | None,
 INSTALLED_ONLY = "installed"
 
 
+def _menu_trees_kept(trees: list[dict], kept: list[dict], narrowed: bool,
+                     current: object) -> list[dict]:
+    """The data trees of the files a line menu choice keeps."""
+    return select_data_directories({"data_directories": trees}, kept,
+                                   narrowed or current is not None,
+                                   isinstance(current, GamesChoice) and current.required,
+                                   current.plan if isinstance(current, GamesChoice) else None,
+                                   chosen_systems(current))
+
+
+class _SelectionMenu(NamedTuple):
+    """What each round of the line menu reads, as it was given."""
+
+    plat: str
+    files: list[dict]
+    omitted: list[dict]
+    installed: tuple[list[dict], list[dict]] | None
+    manifest: dict | None
+    bios_path: Path | None
+    dry_run: bool
+    given: tuple[list[str], list[str], list[str]] | None
+    played: GamesPlan | None
+    cut: list[bool] | None
+
+    def choice(self, current: object, cutting: bool) -> tuple[list[dict], list[dict]]:
+        return menu_choice(self.files, self.omitted, self.installed, current, cutting)
+
+
+def _print_menu_enter(whole: str, emptied: str, dry_run: bool, offline: bool) -> None:
+    """The Enter line of the line menu, none for a choice that keeps no file."""
+    if emptied:
+        pass
+    elif dry_run:
+        print(f"  Enter) list {whole}, nothing is written")
+    elif offline and LOCAL.folders:
+        print("  Enter) install what is found in "
+              + ", ".join(screen_text(shown_path(index.label)) for index in LOCAL.folders))
+    elif offline:
+        print("  Enter) check the BIOS folder, nothing can be downloaded")
+    else:
+        print(f"  Enter) install {whole}")
+
+
+def _print_menu_keys(menu: _SelectionMenu, current: object, shown: list[dict],
+                     cutting: bool, games: Tally, emptied: str, axes: str) -> list[str]:
+    """The lettered lines of the line menu, and the keys it takes."""
+    played, installed = menu.played, menu.installed
+    playing = bool(played is not None and played.games)
+    if playing and isinstance(current, GamesChoice):
+        other = GamesChoice(current.plan, not current.required)
+        print(f"  r) {GAMES_REQUIRED_WORDS if other.required else 'every file the games read'}"
+              f": {_sized(menu.choice(other, cutting)[0])}")
+        print(f"  e) everything, whatever the games: {_sized(shown)}")
+    elif playing and played is not None:
+        kept_games = menu.choice(GamesChoice(played), cutting)[0]
+        print(f"  h) only for the games {played.where()}: {_sized(kept_games)}")
+    # The screen's "Same choice as last time: no": the whole list.
+    widen = (menu.plat in _RECORD_TAKEN and current is not None
+             and not (playing and isinstance(current, GamesChoice)))
+    if widen:
+        print(f"  e) everything: {_sized(shown)}")
+    if installed is not None and current != INSTALLED_ONLY:
+        print(f"  i) only what the installed cores read: {_sized(installed[0])}")
+    choosable = bool(axes)
+    if choosable:
+        print(f"  c) choose {axes}" + (" again" if current is not menu.given else ""))
+    # The screen's "Copy the BIOS files from an old card or a folder".
+    copying = not menu.dry_run
+    if copying:
+        print("  f) copy from a folder or an old card")
+    if menu.cut is not None and games.games:
+        # The screen's row: one label, its state first.
+        print(f"  g) {game_data_state(menu.cut[0], games)}: "
+              f"{'keep it' if menu.cut[0] else 'leave it out'}")
+    print("  q) quit")
+    return [*([] if emptied else [""]), "q", *(["c"] if choosable else []),
+            *((["r", "e"] if isinstance(current, GamesChoice) else ["h"]) if playing else []),
+            *(["e"] if widen else []),
+            *(["i"] if installed is not None and current != INSTALLED_ONLY else []),
+            *(["f"] if copying else []), *(["g"] if games.games else [])]
+
+
+def _menu_answered(
+    menu: _SelectionMenu, answer: str,
+    current: tuple[list[str], list[str], list[str]] | str | GamesChoice | None,
+) -> tuple[list[str], list[str], list[str]] | str | GamesChoice | None:
+    """The choice a key of the line menu makes, f copying from a folder."""
+    if answer == "r" and isinstance(current, GamesChoice):
+        return GamesChoice(current.plan, not current.required)
+    if answer == "e":
+        return None
+    if answer == "h" and menu.played is not None:
+        return GamesChoice(menu.played)
+    if answer == "i":
+        return INSTALLED_ONLY
+    if answer == "c":
+        return _choose_narrowing(menu.files, menu.omitted, menu.manifest, menu.bios_path)
+    _ask_from_folder(menu.files, menu.bios_path)
+    return current
+
+
 def _prompt_custom_selection(
     plat: str, files: list[dict], omitted: list[dict],
     installed: tuple[list[dict], list[dict]] | None = None,
@@ -11522,17 +11652,15 @@ def _prompt_custom_selection(
     away (e), and r keeps only what the games cannot start without.
     """
     trees = data_trees or []
-    current = given
+    menu = _SelectionMenu(plat, files, omitted, installed, manifest, bios_path, dry_run,
+                          given, played, cut)
+    current: tuple[list[str], list[str], list[str]] | str | GamesChoice | None = given
     if current is None and played is not None and played.games:
         current = GamesChoice(played)
     toggled = False
     if bios_path is not None and not dry_run and current != INSTALLED_ONLY:
-        kept = menu_choice(files, omitted, installed, current, False)[0]
-        kept_trees = select_data_directories({"data_directories": trees}, kept,
-                                             narrowed or current is not None,
-                                             isinstance(current, GamesChoice) and current.required,
-                                             current.plan if isinstance(current, GamesChoice) else None,
-                                             chosen_systems(current))
+        kept = menu.choice(current, False)[0]
+        kept_trees = _menu_trees_kept(trees, kept, narrowed, current)
         if kept and all_in_place(kept, kept_trees, bios_path):
             # Read before the menu, as the screen reads before it asks: a
             # rerun was offered an install that installs nothing, then told
@@ -11551,9 +11679,8 @@ def _prompt_custom_selection(
         # it or puts back: counted over the whole list, it said 5089 files
         # under a head counting 12 for one system. Not offered for a
         # choice that holds none.
-        games = tally(menu_choice(files, omitted, installed, current, False)[0]
-                      if cut is not None else [])
-        kept = menu_choice(files, omitted, installed, current, cutting)[0]
+        games = tally(menu.choice(current, False)[0] if cut is not None else [])
+        kept = menu.choice(current, cutting)[0]
         # A choice that keeps no file says so in the headline, as the screen
         # does, and offers no Enter and no command: both installed nothing.
         emptied = (emptied_words([system_title(name_, manifest) for name_ in current[0]],
@@ -11561,7 +11688,7 @@ def _prompt_custom_selection(
                    if isinstance(current, tuple) and not kept else "")
         _print_menu_head(plat, shown, shown_omitted, installed, name, trees, bios_path,
                          current, object() if toggled else given, manifest, narrowed,
-                         menu_choice(files, omitted, installed, current, cutting),
+                         menu.choice(current, cutting),
                          games.games if cutting else 0, emptied,
                          note if current is given else "")
         if (current is not given or toggled) and command is not None and not emptied:
@@ -11579,53 +11706,12 @@ def _prompt_custom_selection(
         whole = ("everything" if current is None
                  else f"what the games {played.where()} need"
                  if isinstance(current, GamesChoice) and played is not None else "these")
-        if emptied:
-            pass
-        elif dry_run:
-            print(f"  Enter) list {whole}, nothing is written")
-        elif offline and LOCAL.folders:
-            print("  Enter) install what is found in "
-                  + ", ".join(screen_text(shown_path(index.label)) for index in LOCAL.folders))
-        elif offline:
-            print("  Enter) check the BIOS folder, nothing can be downloaded")
-        else:
-            print(f"  Enter) install {whole}")
-        playing = bool(played is not None and played.games)
-        if playing and isinstance(current, GamesChoice):
-            other = GamesChoice(current.plan, not current.required)
-            print(f"  r) {GAMES_REQUIRED_WORDS if other.required else 'every file the games read'}"
-                  f": {_sized(menu_choice(files, omitted, installed, other, cutting)[0])}")
-            print(f"  e) everything, whatever the games: {_sized(shown)}")
-        elif playing and played is not None:
-            kept_games = menu_choice(files, omitted, installed, GamesChoice(played), cutting)[0]
-            print(f"  h) only for the games {played.where()}: {_sized(kept_games)}")
-        # The screen's "Same choice as last time: no": the whole list.
-        widen = (plat in _RECORD_TAKEN and current is not None
-                 and not (playing and isinstance(current, GamesChoice)))
-        if widen:
-            print(f"  e) everything: {_sized(shown)}")
-        if installed is not None and current != INSTALLED_ONLY:
-            print(f"  i) only what the installed cores read: {_sized(installed[0])}")
+        _print_menu_enter(whole, emptied, dry_run, offline)
         # What c asks, named: "systems, cores and regions" was offered with
         # a pack that records systems only.
         axes = narrowing_words(files, omitted) if choosable else ""
         choosable = bool(axes)
-        if choosable:
-            print(f"  c) choose {axes}" + (" again" if current is not given else ""))
-        # The screen's "Copy the BIOS files from an old card or a folder".
-        copying = not dry_run
-        if copying:
-            print("  f) copy from a folder or an old card")
-        if cut is not None and games.games:
-            # The screen's row: one label, its state first.
-            print(f"  g) {game_data_state(cut[0], games)}: "
-                  f"{'keep it' if cut[0] else 'leave it out'}")
-        print("  q) quit")
-        keys = [*([] if emptied else [""]), "q", *(["c"] if choosable else []),
-                *((["r", "e"] if isinstance(current, GamesChoice) else ["h"]) if playing else []),
-                *(["e"] if widen else []),
-                *(["i"] if installed is not None and current != INSTALLED_ONLY else []),
-                *(["f"] if copying else []), *(["g"] if games.games else [])]
+        keys = _print_menu_keys(menu, current, shown, cutting, games, emptied, axes)
         others = [key for key in keys if key not in ("", "q")]
         answer = _ask("> ").lower()
         while answer not in keys:
@@ -11638,18 +11724,8 @@ def _prompt_custom_selection(
         if answer == "g" and cut is not None and games.games:
             cut[0] = not cut[0]
             toggled = True
-        elif answer == "r" and isinstance(current, GamesChoice):
-            current = GamesChoice(current.plan, not current.required)
-        elif answer == "e":
-            current = None
-        elif answer == "h" and played is not None:
-            current = GamesChoice(played)
-        elif answer == "i":
-            current = INSTALLED_ONLY
-        elif answer == "c":
-            current = _choose_narrowing(files, omitted, manifest, bios_path)
         else:
-            _ask_from_folder(files, bios_path)
+            current = _menu_answered(menu, answer, current)
 
 
 def _print_menu_head(
@@ -11666,11 +11742,7 @@ def _print_menu_head(
     shown, kept_omitted = chosen or menu_choice(files, omitted, installed, current, False)
     # The trees of the systems kept: 2636 data files of blueMSX, Dolphin
     # and PPSSPP were counted for every --system tried.
-    kept_trees = select_data_directories({"data_directories": trees}, shown,
-                                         narrowed or current is not None,
-                                         isinstance(current, GamesChoice) and current.required,
-                                         current.plan if isinstance(current, GamesChoice) else None,
-                                         chosen_systems(current))
+    kept_trees = _menu_trees_kept(trees, shown, narrowed, current)
     data = sum(len(entry.get("files") or {}) for entry in kept_trees)
     data_size = sum(meta.get("size", 0) for entry in kept_trees
                     for meta in (entry.get("files") or {}).values())
@@ -11949,7 +12021,8 @@ def chosen_flags(choice: object) -> list[tuple[str, str | None]]:
         return [("--installed-cores", None)]
     if isinstance(choice, GamesChoice):
         return choice.flags()
-    systems, cores, regions = choice  # type: ignore[misc]
+    assert isinstance(choice, tuple)
+    systems, cores, regions = choice
     return [*(("--system", name) for name in systems), *(("--core", name) for name in cores),
             *([("--region", ",".join(regions))] if regions else [])]
 
@@ -12147,7 +12220,7 @@ def _older_list_advice(plat: str = "") -> str:
     the pack's: the one-line installer does not change it, and a current
     pack was said to come from an older release.
     """
-    if _pack_alone(plat):
+    if _pack_alone(plat) and LOCAL.pack is not None:
         return (f"  The list in {LOCAL.pack.name} does not record it: add --manifest FILE, "
                 f"a copy of install/{plat or '<platform>'}.json, or run without the option.")
     if RELEASE_REF != DEFAULT_RELEASE_REF:
@@ -12331,7 +12404,8 @@ def _requested_narrowing(
         # Without the field, a filter would match nothing and install
         # everything: refused rather than ignored, by the axis the list
         # lacks, with what works on it.
-        source = LOCAL.pack.name if pack_alone else f"the {plat} file list"
+        source = (LOCAL.pack.name if pack_alone and LOCAL.pack is not None
+                  else f"the {plat} file list")
         print(f"Error: {source} records no {axis}, so {flag} cannot narrow it.",
               file=sys.stderr)
         print(_narrowing_advice(plat, axis, flag, recorded, pack_alone), file=sys.stderr)
@@ -12507,6 +12581,38 @@ class GamesData:
         self.index = data
         return data
 
+    @staticmethod
+    def _doc_held(beside: Path | None, cached: Path | None, name: str, digest: str,
+                  limit: int) -> bytes | None:
+        """A listed document beside --manifest or in the cache, of its sha256."""
+        for source in (beside / name if beside is not None else None, cached):
+            if source is None:
+                continue
+            found = _read_capped(source, limit)
+            if found is not None and hashlib.sha256(found).hexdigest() == digest:
+                return found
+        return None
+
+    @staticmethod
+    def _doc_fetched(kind: str, name: str, digest: str, limit: int, attempts: int,
+                     cached: Path | None) -> bytes | None:
+        """A listed document downloaded and cached, None when offline."""
+        try:
+            fetched = _fetch_json(GAMES_URL.format(path=name), limit, f"games {kind}",
+                                  attempts=attempts, raw=True)
+        except _Offline:
+            return None
+        except (urllib.error.URLError, OSError, ValueError,
+                http.client.HTTPException) as exc:
+            raise GamesUnavailable(
+                "network", f"install/games/{name} could not be downloaded ({exc})") from exc
+        if hashlib.sha256(fetched).hexdigest() != digest:
+            raise GamesUnavailable("invalid", f"install/games/{name} is not the one "
+                                   "the games index lists")
+        if cached is not None:
+            _cache_write(cached, fetched)
+        return fetched
+
     def doc(self, kind: str, key: str, network: bool = True,
             attempts: int = 2) -> dict | None:
         """One listed document, None when the index lists none of that name."""
@@ -12520,33 +12626,11 @@ class GamesData:
         if name in self.docs:
             return self.docs[name]
         limit = min(int(entry.get("size") or 0), MAX_GAMES_DOC_BYTES)
-        raw = None
         beside = self.beside()
         cached = self.cached(f"{digest}.json")
-        for source in (beside / name if beside is not None else None, cached):
-            if source is None:
-                continue
-            found = _read_capped(source, limit)
-            if found is not None and hashlib.sha256(found).hexdigest() == digest:
-                raw = found
-                break
+        raw = self._doc_held(beside, cached, name, digest, limit)
         if raw is None and network:
-            try:
-                fetched = _fetch_json(GAMES_URL.format(path=name), limit, f"games {kind}",
-                                      attempts=attempts, raw=True)
-            except _Offline:
-                pass
-            except (urllib.error.URLError, OSError, ValueError,
-                    http.client.HTTPException) as exc:
-                raise GamesUnavailable(
-                    "network", f"install/games/{name} could not be downloaded ({exc})") from exc
-            else:
-                if hashlib.sha256(fetched).hexdigest() != digest:
-                    raise GamesUnavailable("invalid", f"install/games/{name} is not the one "
-                                           "the games index lists")
-                raw = fetched
-                if cached is not None:
-                    _cache_write(cached, raw)
+            raw = self._doc_fetched(kind, name, digest, limit, attempts, cached)
         if raw is None:
             raise GamesUnavailable("offline", f"install/games/{name} is not on this machine "
                                    f"and {offline_words()}")
@@ -12762,10 +12846,11 @@ def folder_games(folder: GameFolder, setup: dict | None,
                     pending.append((Path(entry.path), depth + 1))
                 continue
             if extensions or whole_names:
-                game = lowered in whole_names or any(lowered.endswith(ext) for ext in extensions)
+                is_game = lowered in whole_names or any(lowered.endswith(ext)
+                                                        for ext in extensions)
             else:
-                game = _suffix(name) not in _NOT_GAME_SUFFIXES
-            if game:
+                is_game = _suffix(name) not in _NOT_GAME_SUFFIXES
+            if is_game:
                 games.append(Path(entry.path))
             else:
                 others += 1
@@ -13043,7 +13128,8 @@ def _decoded(reader: dict, value: bytes | str) -> frozenset | str | None:
     if isinstance(value, bytes):
         if encoding in _INT_FORMS:
             size, order = _INT_FORMS[encoding]
-            number: object = int.from_bytes(value[:size], order)
+            number: object = int.from_bytes(value[:size],
+                                            "little" if order == "little" else "big")
             text = ""
         else:
             number = None
@@ -13157,44 +13243,39 @@ def identity_readers(system: SystemData) -> set[str]:
                  or "iso_file" in (reader.get("location") or {}))}
 
 
-def read_game(facts: GameFacts, system_id: str, system: SystemData, readers: set[str],
-              cache: _ScanCache) -> None:
-    """Fill facts from the file: its crc32 and size (a cartridge, a ZIP's
-    members), its serial and the header readings the cores use (a disc)."""
+def _read_game_catalog(facts: GameFacts, suffix: str, stamp: tuple[int, int],
+                       system: SystemData, cache: _ScanCache) -> None:
+    """The catalog's game for the file's crc32 and size, or a ZIP's members."""
     path = facts.path
-    facts.system = system_id
-    suffix = _suffix(path.name)
-    stamp = cache.stamp(path)
-    if stamp is None:
+    if suffix in (".7z", ".rar", ".chd"):
         facts.read = False
         return
-    packed = suffix in _PACKED_SUFFIXES
-    if system.games and suffix in (".7z", ".rar", ".chd"):
-        facts.read = False
-    elif system.games:
-        cached = cache.get(path, stamp)
-        crc = members = None
-        if cached is not None:
-            crc, members = cached[2], cached[3]
-        elif suffix == ".zip":
-            members = _zip_members(path)
-            cache.put(path, stamp, crc, members)
-        elif stamp[0] in system.sizes and stamp[0] <= MAX_HASHED_GAME:
-            crc = _crc32_file(path)
-            cache.put(path, stamp, crc, members)
-        candidates = [(crc, stamp[0])] if crc else []
-        candidates += [(str(m[0]), int(m[1])) for m in members or []
-                       if isinstance(m, list) and len(m) == 2]
-        for key in candidates:
-            found = system.games.get(key)
-            if found is not None:
-                facts.recognised = True
-                facts.dat_regions = system.region_of(found[0])
-                facts.title = found[1]
-                break
-    wanted = readers | identity_readers(system)
-    if not wanted:
-        return
+    cached = cache.get(path, stamp)
+    crc = members = None
+    if cached is not None:
+        crc, members = cached[2], cached[3]
+    elif suffix == ".zip":
+        members = _zip_members(path)
+        cache.put(path, stamp, crc, members)
+    elif stamp[0] in system.sizes and stamp[0] <= MAX_HASHED_GAME:
+        crc = _crc32_file(path)
+        cache.put(path, stamp, crc, members)
+    candidates = [(crc, stamp[0])] if crc else []
+    candidates += [(str(m[0]), int(m[1])) for m in members or []
+                   if isinstance(m, list) and len(m) == 2]
+    for key in candidates:
+        found = system.games.get(key)
+        if found is not None:
+            facts.recognised = True
+            facts.dat_regions = system.region_of(found[0])
+            facts.title = found[1]
+            break
+
+
+def _read_game_headers(facts: GameFacts, system: SystemData, wanted: set[str],
+                       packed: bool) -> None:
+    """The serial and the header readings of the readers wanted."""
+    path = facts.path
     image = DiscImage(path) if system.discs else None
     if system.discs and (image is None or image.data_path is None):
         # A CHD, an RVZ, a PBP: read by the core, not by this file.
@@ -13227,6 +13308,26 @@ def read_game(facts: GameFacts, system_id: str, system: SystemData, readers: set
             facts.recognised = True
             facts.title = facts.title or str(serial)
             facts.dat_regions = found or facts.dat_regions
+
+
+def read_game(facts: GameFacts, system_id: str, system: SystemData, readers: set[str],
+              cache: _ScanCache) -> None:
+    """Fill facts from the file: its crc32 and size (a cartridge, a ZIP's
+    members), its serial and the header readings the cores use (a disc)."""
+    path = facts.path
+    facts.system = system_id
+    suffix = _suffix(path.name)
+    stamp = cache.stamp(path)
+    if stamp is None:
+        facts.read = False
+        return
+    packed = suffix in _PACKED_SUFFIXES
+    if system.games:
+        _read_game_catalog(facts, suffix, stamp, system, cache)
+    wanted = readers | identity_readers(system)
+    if not wanted:
+        return
+    _read_game_headers(facts, system, wanted, packed)
 
 
 def core_regions(facts: GameFacts, system_id: str, system: SystemData,
