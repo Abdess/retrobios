@@ -13442,6 +13442,34 @@ def plan_games(plat: str, bios_path: Path, manifest: dict, folder: Path | None =
     fallback = data.doc("fallback", plat, network)
     if fallback is None:
         raise GamesUnavailable("no_sets", f"install/games/ holds no BIOS sets for {plat}")
+    setup, root = _games_setup_root(data, index, plat, bios_path, folder, os_type, network)
+    if root is None:
+        return None
+    folders = game_folders(setup, index, root, folder is not None)
+    plan = GamesPlan(root, folder is None)
+    entries = {str(entry.get("dest")): entry for entry in manifest.get("files") or []}
+    listed = set(entries)
+    found = _found_games(plan, folders, setup)
+    docs = _GamesDocs(data, network)
+    cache_root = cache_folder()
+    cache = _ScanCache(cache_root / GAMES_SCAN_FILE if cache_root is not None else None)
+    progress = _GamesProgress(sum(len(games) for _folder, games in found), term)
+    read = [(game_folder, _read_folder_games(plan, game_folder, games, docs, cache, progress))
+            for game_folder, games in found]
+    progress.end()
+    cache.save()
+    _plan_read_folders(plan, read, fallback, entries, docs)
+    missing = sorted((plan.keep | plan.required) - listed)
+    if missing:
+        raise GamesUnavailable("stale", "the games index does not describe this file list "
+                                        f"({missing[0]} is not in it)")
+    return plan
+
+
+def _games_setup_root(data: GamesData, index: dict, plat: str, bios_path: Path,
+                      folder: Path | None, os_type: str,
+                      network: bool) -> tuple[dict | None, Path | None]:
+    """The rom folder setup the card follows, and the root of its games."""
     setup = None
     root = folder
     for key in games_setups(index, plat, bios_path, os_type):
@@ -13454,12 +13482,12 @@ def plan_games(plat: str, bios_path: Path, manifest: dict, folder: Path | None =
             if found_root is not None:
                 setup, root = candidate, found_root
                 break
-    if root is None:
-        return None
-    folders = game_folders(setup, index, root, folder is not None)
-    plan = GamesPlan(root, folder is None)
-    entries = {str(entry.get("dest")): entry for entry in manifest.get("files") or []}
-    listed = set(entries)
+    return setup, root
+
+
+def _found_games(plan: GamesPlan, folders: list[GameFolder],
+                 setup: dict | None) -> list[tuple[GameFolder, list[Path]]]:
+    """The games of each folder, up to MAX_GAME_FILES in all."""
     budget = MAX_GAME_FILES
     found: list[tuple[GameFolder, list[Path]]] = []
     for game_folder in folders:
@@ -13470,104 +13498,142 @@ def plan_games(plat: str, bios_path: Path, manifest: dict, folder: Path | None =
         if budget <= 0:
             plan.truncated = True
             break
-    systems: dict[str, SystemData] = {}
+    return found
 
-    def system_data(system: str) -> SystemData:
-        if system not in systems:
-            systems[system] = SystemData(data.doc("systems", system, network))
-        return systems[system]
 
-    arcades: dict[str, dict] = {}
+def _arcade_lookup(doc: dict) -> dict:
+    """An arcade document as the lookups of _read_arcade read it."""
+    parents: dict[str, list[str]] = {}
+    for root_set, members in (doc.get("bios") or {}).items():
+        for member in members:
+            parents.setdefault(member, []).append(root_set)
+    devices: dict[str, list[str]] = {}
+    for device, members in (doc.get("devices") or {}).items():
+        for member in members:
+            devices.setdefault(member, []).append(device)
+    known = set(parents) | set(devices) | set(doc.get("no_bios") or [])
+    # FBNeo keys a console game by its driver (msx_1942): the
+    # MSX, NES and Arcade lists each hold a 1942.
+    consoles: dict[str, list[str]] = {}
+    for key in known:
+        driver, cut, stem = key.partition("_")
+        if cut and stem:
+            consoles.setdefault(stem, []).append(driver)
+    return {
+        "parents": parents, "devices": devices, "consoles": consoles,
+        "plain": set(doc.get("no_bios") or []),
+        "support": (set(doc.get("bios_sets") or []) | set(doc.get("bios") or {})
+                    | set(doc.get("devices") or {})),
+    }
 
-    def arcade_index(name: str) -> dict | None:
-        if name not in arcades:
-            doc = data.doc("arcade", name, network)
-            if doc is None:
-                arcades[name] = {}
-            else:
-                parents: dict[str, list[str]] = {}
-                for root_set, members in (doc.get("bios") or {}).items():
-                    for member in members:
-                        parents.setdefault(member, []).append(root_set)
-                devices: dict[str, list[str]] = {}
-                for device, members in (doc.get("devices") or {}).items():
-                    for member in members:
-                        devices.setdefault(member, []).append(device)
-                known = set(parents) | set(devices) | set(doc.get("no_bios") or [])
-                # FBNeo keys a console game by its driver (msx_1942): the
-                # MSX, NES and Arcade lists each hold a 1942.
-                consoles: dict[str, list[str]] = {}
-                for key in known:
-                    driver, cut, stem = key.partition("_")
-                    if cut and stem:
-                        consoles.setdefault(stem, []).append(driver)
-                arcades[name] = {
-                    "parents": parents, "devices": devices, "consoles": consoles,
-                    "plain": set(doc.get("no_bios") or []),
-                    "support": (set(doc.get("bios_sets") or []) | set(doc.get("bios") or {})
-                                | set(doc.get("devices") or {})),
-                }
-        return arcades[name] or None
 
-    cache_root = cache_folder()
-    cache = _ScanCache(cache_root / GAMES_SCAN_FILE if cache_root is not None else None)
-    total = sum(len(games) for _folder, games in found)
-    progress = {"done": 0, "evented": 0.0, "drawn": 0.0}
-    live = term is not None and term.live and not term.quiet
+class _GamesDocs:
+    """The system and arcade documents of install/games/, each read once."""
 
-    def step(final: bool = False) -> None:
+    def __init__(self, data: GamesData, network: bool) -> None:
+        self.data = data
+        self.network = network
+        self.systems: dict[str, SystemData] = {}
+        self.arcades: dict[str, dict] = {}
+
+    def system(self, system: str) -> SystemData:
+        if system not in self.systems:
+            self.systems[system] = SystemData(self.data.doc("systems", system, self.network))
+        return self.systems[system]
+
+    def arcade(self, name: str) -> dict | None:
+        if name not in self.arcades:
+            doc = self.data.doc("arcade", name, self.network)
+            self.arcades[name] = {} if doc is None else _arcade_lookup(doc)
+        return self.arcades[name] or None
+
+
+class _GamesProgress:
+    """The games read so far, as events and on the live line."""
+
+    def __init__(self, total: int, term: Terminal | None) -> None:
+        self.total = total
+        self.done = 0
+        self.evented = 0.0
+        self.drawn = 0.0
+        live = term is not None and term.live and not term.quiet
+        self.stream = term.stream if live and term is not None else None
+
+    def step(self, final: bool = False) -> None:
         now = time.monotonic()
-        if EVENTS.on and (final or now - progress["evented"] >= EVENT_PROGRESS_INTERVAL):
-            progress["evented"] = now
-            EVENTS.emit("games_reading", files_done=progress["done"], files_total=total)
-        if live and (final or now - progress["drawn"] >= 0.1):
-            progress["drawn"] = now
-            print(f"\r  read {progress['done']}/{total} games", end="", file=term.stream,
+        if EVENTS.on and (final or now - self.evented >= EVENT_PROGRESS_INTERVAL):
+            self.evented = now
+            EVENTS.emit("games_reading", files_done=self.done, files_total=self.total)
+        if self.stream is not None and (final or now - self.drawn >= 0.1):
+            self.drawn = now
+            print(f"\r  read {self.done}/{self.total} games", end="", file=self.stream,
                   flush=True)
 
-    read: list[tuple[GameFolder, list[GameFacts]]] = []
-    for game_folder, games in found:
-        row = game_folder.row
-        row_systems = [str(s) for s in row.get("systems") or []]
-        arcade = row.get("arcade") if isinstance(row.get("arcade"), str) else None
-        profiles = _folder_profiles(row)
-        if row_systems and not row.get("profile") and "fallback" not in row:
-            plan.unknown_core += [s for s in row_systems if s not in plan.unknown_core]
-        readers: set[str] = set()
-        if row_systems:
-            cores = system_data(row_systems[0]).cores
-            for profile in profiles:
-                readers |= {name for name in (cores.get(profile or "") or {}).get("order") or []
-                            if isinstance(name, str)}
-        group: list[GameFacts] = []
-        for path in games:
-            shown = os.path.relpath(path, root).replace(os.sep, "/")
-            facts = GameFacts(path, shown, game_folder)
-            progress["done"] += 1
-            if row.get("arcade"):
-                _read_arcade(facts, arcade_index(arcade) if arcade else None,
-                             _console_hints(game_folder))
-            elif row_systems:
-                read_game(facts, row_systems[0], system_data(row_systems[0]), readers, cache)
-            step()
-            if facts.kind == "support":
-                plan.support += 1
-                continue
-            plan.games.append(facts)
-            group.append(facts)
-            for system in row_systems:
-                info = plan.systems.setdefault(system, {"folders": [], "games": 0,
-                                                        "recognised": 0, "regions": None})
-                if game_folder.path.name not in info["folders"]:
-                    info["folders"].append(game_folder.path.name)
-                info["games"] += 1
-                info["recognised"] += int(facts.recognised)
-        read.append((game_folder, group))
-    if total:
-        step(final=True)
-        if live:
-            print("\r\033[K", end="", file=term.stream, flush=True)
-    cache.save()
+    def end(self) -> None:
+        if self.total:
+            self.step(final=True)
+            if self.stream is not None:
+                print("\r\033[K", end="", file=self.stream, flush=True)
+
+
+def _folder_readers(row_systems: list[str], profiles: list[str | None],
+                    docs: _GamesDocs) -> set[str]:
+    """The cores of a folder's profiles that read its first system."""
+    readers: set[str] = set()
+    if row_systems:
+        cores = docs.system(row_systems[0]).cores
+        for profile in profiles:
+            readers |= {name for name in (cores.get(profile or "") or {}).get("order") or []
+                        if isinstance(name, str)}
+    return readers
+
+
+def _count_game(plan: GamesPlan, game_folder: GameFolder, row_systems: list[str],
+                facts: GameFacts) -> None:
+    """Count a game under each system of its folder."""
+    for system in row_systems:
+        info = plan.systems.setdefault(system, {"folders": [], "games": 0,
+                                                "recognised": 0, "regions": None})
+        if game_folder.path.name not in info["folders"]:
+            info["folders"].append(game_folder.path.name)
+        info["games"] += 1
+        info["recognised"] += int(facts.recognised)
+
+
+def _read_folder_games(plan: GamesPlan, game_folder: GameFolder, games: list[Path],
+                       docs: _GamesDocs, cache: _ScanCache,
+                       progress: _GamesProgress) -> list[GameFacts]:
+    """Read the games of one folder: the ones that are not support sets."""
+    row = game_folder.row
+    row_systems = [str(s) for s in row.get("systems") or []]
+    arcade = row.get("arcade") if isinstance(row.get("arcade"), str) else None
+    profiles = _folder_profiles(row)
+    if row_systems and not row.get("profile") and "fallback" not in row:
+        plan.unknown_core += [s for s in row_systems if s not in plan.unknown_core]
+    readers = _folder_readers(row_systems, profiles, docs)
+    group: list[GameFacts] = []
+    for path in games:
+        shown = os.path.relpath(path, plan.root).replace(os.sep, "/")
+        facts = GameFacts(path, shown, game_folder)
+        progress.done += 1
+        if row.get("arcade"):
+            _read_arcade(facts, docs.arcade(arcade) if arcade else None,
+                         _console_hints(game_folder))
+        elif row_systems:
+            read_game(facts, row_systems[0], docs.system(row_systems[0]), readers, cache)
+        progress.step()
+        if facts.kind == "support":
+            plan.support += 1
+            continue
+        plan.games.append(facts)
+        group.append(facts)
+        _count_game(plan, game_folder, row_systems, facts)
+    return group
+
+
+def _plan_read_folders(plan: GamesPlan, read: list[tuple[GameFolder, list[GameFacts]]],
+                       fallback: dict, entries: dict[str, dict], docs: _GamesDocs) -> None:
+    """Add to the plan what the games read in each folder need."""
     for game_folder, group in read:
         if group:
             for profile in _folder_profiles(game_folder.row):
@@ -13576,14 +13642,9 @@ def plan_games(plat: str, bios_path: Path, manifest: dict, folder: Path | None =
                 else:
                     plan.any_core.update(str(s) for s in game_folder.row.get("systems") or [])
             arcade = game_folder.row.get("arcade")
-            sets = (arcade_index(arcade) or {}).get("support", set()) \
+            sets = (docs.arcade(arcade) or {}).get("support", set()) \
                 if isinstance(arcade, str) else set()
-            _plan_game_folder(plan, game_folder, group, fallback, entries, system_data, sets)
-    missing = sorted((plan.keep | plan.required) - listed)
-    if missing:
-        raise GamesUnavailable("stale", "the games index does not describe this file list "
-                                        f"({missing[0]} is not in it)")
-    return plan
+            _plan_game_folder(plan, game_folder, group, fallback, entries, docs.system, sets)
 
 
 # Systems whose folder an arcade core reads as arcade sets, by their bare
@@ -13637,6 +13698,91 @@ def _read_arcade(facts: GameFacts, index: dict | None,
         facts.reason = "unknown_set"
 
 
+def _read_by_profiles(entries: dict[str, dict], dest: str, profiles: list[str]) -> bool:
+    """Whether one of a folder's profiles reads dest, every core when the
+    entry names none."""
+    cores = (entries.get(dest) or {}).get("cores")
+    return cores is None or any(name in cores for name in profiles)
+
+
+def _plan_arcade_folder(plan: GamesPlan, games: list[GameFacts], entries: dict[str, dict],
+                        profiles: list[str], sets: dict[str, tuple[list[str], set[str]]],
+                        arcade_sets: Collection[str]) -> None:
+    """Add to the plan the BIOS and device sets an arcade folder's games need."""
+    # A BIOS set is looked for in the whole list, as the platform's own
+    # declaration (neogeo.zip) and as the core's (fbneo/neogeo.zip).
+    usable = [dest for dest in entries if _read_by_profiles(entries, dest, profiles)]
+    whole = False
+    for game in games:
+        if game.reason:
+            whole = True
+            continue
+        names = set(game.parents + game.devices)
+        needed = _named_dests([f"{name}.zip" for name in names], usable)
+        held = {Path(dest).name.casefold() for dest in needed}
+        if any(f"{name}.zip".casefold() not in held for name in names):
+            game.reason = "no_parent"
+            whole = True
+            continue
+        plan.keep.update(needed)
+        plan.required.update(needed)
+    if whole:
+        # Every set of the folder, and every BIOS set the core reads.
+        own = _named_dests([f"{name}.zip" for name in arcade_sets],
+                           [dest for dest in usable
+                            if (entries.get(dest) or {}).get("cores") is not None])
+        plan.keep.update(own)
+        plan.required.update(own)
+        for files, optional in sets.values():
+            plan.keep.update(files)
+            plan.required.update(dest for dest in files if dest not in optional)
+
+
+def _region_kept(files: list[str], games: list[GameFacts], entries: dict[str, dict],
+                 system: str, info: SystemData,
+                 profile: str) -> tuple[list[str], bool, frozenset | None]:
+    """The files of a set the games' regions keep, whether every region is
+    kept, and the regions it was narrowed to (None when not narrowed)."""
+    rule = info.rules.get(profile)
+    region_free = {str(name).casefold() for name in (rule or {}).get("region_free") or []}
+    tagged = any((entries.get(dest) or {}).get("regions") for dest in files)
+    if not tagged:
+        return list(files), False, None
+    if region_rule_keeps_all(rule, games):
+        return list(files), True, None
+    proofs = [core_regions(game, system, info, profile) for game in games]
+    needed = needed_regions(rule or {}, proofs)
+    if needed is None:
+        for game, proof in zip(games, proofs):
+            if proof is None and not game.reason:
+                game.reason = ("not_read" if not game.read
+                               else "not_recognised" if not game.recognised
+                               else "region_unknown")
+        return list(files), True, None
+    kept = keep_regions(files, entries, needed, region_free)
+    if len(kept) < len(files):
+        return kept, False, needed
+    return kept, True, None
+
+
+def _plan_set_extras(plan: GamesPlan, info: SystemData, profile: str, games: list[GameFacts],
+                     files: list[str], kept: list[str], entries: dict[str, dict],
+                     profiles: list[str]) -> None:
+    """Add to the plan the games/extras.yml files of a set that fire."""
+    for extra in info.extras:
+        if extra.get("profile") != profile or not _extra_fires(extra, games):
+            continue
+        if extra.get("region_files"):
+            named = [dest for dest in kept if (entries.get(dest) or {}).get("regions")]
+        else:
+            names = extra.get("files") or []
+            named = _named_dests(names, files) or _named_dests(
+                names, [dest for dest in entries if _read_by_profiles(entries, dest, profiles)])
+        plan.keep.update(named)
+        if extra.get("required") or extra.get("filename_override"):
+            plan.required.update(named)
+
+
 def _plan_game_folder(plan: GamesPlan, game_folder: GameFolder, games: list[GameFacts],
                       fallback: dict, entries: dict[str, dict],
                       system_data: Callable[[str], SystemData],
@@ -13645,10 +13791,6 @@ def _plan_game_folder(plan: GamesPlan, game_folder: GameFolder, games: list[Game
     BIOS and device sets of the folder's arcade index."""
     row = game_folder.row
     profiles = [name for name in _folder_profiles(row) if name]
-
-    def read_by_core(dest: str) -> bool:
-        cores = (entries.get(dest) or {}).get("cores")
-        return cores is None or any(name in cores for name in profiles)
 
     if not row.get("systems"):
         # A port's own folder, read by one core and named by no system: what
@@ -13661,75 +13803,21 @@ def _plan_game_folder(plan: GamesPlan, game_folder: GameFolder, games: list[Game
     keys = _folder_set_keys(row, fallback)
     sets: dict[str, tuple[list[str], set[str]]] = {key: _set_rows(fallback, key) for key in keys}
     if row.get("arcade"):
-        # A BIOS set is looked for in the whole list, as the platform's own
-        # declaration (neogeo.zip) and as the core's (fbneo/neogeo.zip).
-        usable = [dest for dest in entries if read_by_core(dest)]
-        whole = False
-        for game in games:
-            if game.reason:
-                whole = True
-                continue
-            names = set(game.parents + game.devices)
-            needed = _named_dests([f"{name}.zip" for name in names], usable)
-            held = {Path(dest).name.casefold() for dest in needed}
-            if any(f"{name}.zip".casefold() not in held for name in names):
-                game.reason = "no_parent"
-                whole = True
-                continue
-            plan.keep.update(needed)
-            plan.required.update(needed)
-        if whole:
-            # Every set of the folder, and every BIOS set the core reads.
-            own = _named_dests([f"{name}.zip" for name in arcade_sets],
-                               [dest for dest in usable
-                                if (entries.get(dest) or {}).get("cores") is not None])
-            plan.keep.update(own)
-            plan.required.update(own)
-            for files, optional in sets.values():
-                plan.keep.update(files)
-                plan.required.update(dest for dest in files if dest not in optional)
+        _plan_arcade_folder(plan, games, entries, profiles, sets, arcade_sets)
         return
     narrowed: dict[str, set[str]] = {}
     wide: set[str] = set()
     for key, (files, optional) in sets.items():
         system, _, profile = key.partition("|")
         info = system_data(system)
-        rule = info.rules.get(profile)
-        region_free = {str(name).casefold() for name in (rule or {}).get("region_free") or []}
-        tagged = any((entries.get(dest) or {}).get("regions") for dest in files)
-        kept = list(files)
-        if tagged and region_rule_keeps_all(rule, games):
+        kept, every, narrowed_to = _region_kept(files, games, entries, system, info, profile)
+        if every:
             wide.add(system)
-        elif tagged:
-            proofs = [core_regions(game, system, info, profile) for game in games]
-            needed = needed_regions(rule or {}, proofs)
-            if needed is None:
-                wide.add(system)
-                for game, proof in zip(games, proofs):
-                    if proof is None and not game.reason:
-                        game.reason = ("not_read" if not game.read
-                                       else "not_recognised" if not game.recognised
-                                       else "region_unknown")
-            else:
-                kept = keep_regions(files, entries, needed, region_free)
-                if len(kept) < len(files):
-                    narrowed.setdefault(system, set()).update(needed)
-                else:
-                    wide.add(system)
+        elif narrowed_to is not None:
+            narrowed.setdefault(system, set()).update(narrowed_to)
         plan.keep.update(kept)
         plan.required.update(dest for dest in kept if dest not in optional)
-        for extra in info.extras:
-            if extra.get("profile") != profile or not _extra_fires(extra, games):
-                continue
-            if extra.get("region_files"):
-                named = [dest for dest in kept if (entries.get(dest) or {}).get("regions")]
-            else:
-                names = extra.get("files") or []
-                named = _named_dests(names, files) or _named_dests(
-                    names, [dest for dest in entries if read_by_core(dest)])
-            plan.keep.update(named)
-            if extra.get("required") or extra.get("filename_override"):
-                plan.required.update(named)
+        _plan_set_extras(plan, info, profile, games, files, kept, entries, profiles)
     for system, regions in narrowed.items():
         state = plan.systems.get(system)
         # Said only where no core of the folder keeps the other regions.
@@ -13906,14 +13994,16 @@ MAX_MARKER_BYTES = 64 * 1024
 MAX_PARTS = 999
 
 
-class PackPart(NamedTuple):
+class PackPart:
     """What one part's marker says, and the folder it was found in."""
 
-    pack: str
-    index: int
-    count: int
-    parts: tuple[tuple[str, int], ...]
-    folder: Path
+    def __init__(self, pack: str, index: int, count: int,
+                 parts: tuple[tuple[str, int], ...], folder: Path) -> None:
+        self.pack = pack
+        self.index = index
+        self.count = count
+        self.parts = parts
+        self.folder = folder
 
 
 def read_part_marker(path: Path) -> PackPart | None:
@@ -14095,10 +14185,10 @@ class PackSource:
         whole = [p for p in chosen if not _PART_FILE.match(p.name)]
         if whole:
             return whole[:1]
-        count = int(_PART_FILE.match(chosen[0].name)["count"])
-        if count > MAX_PARTS or any(
-            int(_PART_FILE.match(p.name)["count"]) != count for p in chosen
-        ):
+        counts = [int(part["count"]) for part in (_PART_FILE.match(p.name) for p in chosen)
+                  if part is not None]
+        count = counts[0]
+        if count > MAX_PARTS or any(other != count for other in counts):
             raise ValueError(f"the parts of {name} disagree on how many there are")
         stem = name[: -len(".zip")]
         folders = list(dict.fromkeys(p.parent for p in chosen))
@@ -14225,13 +14315,12 @@ class PackSource:
                 return held
         return None
 
-    def tree(self, prefix: str) -> Iterator[tuple[str, int, Callable[[], BinaryIO]]]:
+    def tree(self, prefix: str) -> Iterator[tuple[str, int, Callable[[], IO[bytes]]]]:
         """(path in the tree, size, opener) of every member below prefix."""
         lead = f"{prefix.rstrip('/')}/" if prefix else ""
         for name, (archive, info) in self.members.items():
             if name.startswith(lead):
-                yield name[len(lead):], info.file_size, (
-                    lambda archive=archive, info=info: archive.open(info))
+                yield name[len(lead):], info.file_size, functools.partial(archive.open, info)
 
     def close(self) -> None:
         for archive in self.archives:
@@ -14823,14 +14912,42 @@ def write_pack(path: Path, manifest: bytes, members: list[PackMember],
     return _swap_in(path, scratches, finals)
 
 
+def _swap_named(path: Path, finals: list[Path]) -> list[Path]:
+    """The files beside path that the new pack may replace."""
+    stem = path.name[: -len(".zip")]
+    named: list[Path] = []
+    for old in _listed_paths(path.parent):
+        part = _PART_FILE.match(old.name)
+        if old == path or old in finals or (part is not None and part["stem"] == stem):
+            named.append(old)
+    return named
+
+
+def _swap_restore(exc: OSError | PackError, name: str, scratches: list[Path],
+                  finals: list[Path], aside: list[tuple[Path, Path]],
+                  placed: list[Path]) -> PackError:
+    """Undo a swap that failed: the new files discarded, the earlier pack put
+    back where it can be."""
+    left = _discard([*placed, *(scratch for scratch, final in zip(scratches, finals)
+                                if final not in placed)])
+    unrestored = []
+    for old, moved in reversed(aside):
+        try:
+            os.replace(moved, old)
+        except OSError:
+            unrestored.append((old, moved))
+    words = f"{name} could not be put in place: {exc.strerror or exc}" \
+        if isinstance(exc, OSError) else str(exc)
+    if unrestored:
+        words += ". The earlier pack is set aside as " + ", ".join(
+            f"{moved.name} (was {old.name})" for old, moved in unrestored)
+    return PackError(words, [*left, *(moved for _old, moved in unrestored)])
+
+
 def _swap_in(path: Path, scratches: list[Path], finals: list[Path]) -> PackWritten:
     """Put the new files in place of the earlier pack of this name."""
     name = path.name
-    stem = name[: -len(".zip")]
-    named = [old for old in _listed_paths(path.parent)
-             if old == path or old in finals or (
-                 _PART_FILE.match(old.name) is not None
-                 and _PART_FILE.match(old.name)["stem"] == stem)]  # type: ignore[index]
+    named = _swap_named(path, finals)
     kept: list[tuple[Path, str]] = []
     earlier: list[Path] = []
     aside: list[tuple[Path, Path]] = []
@@ -14853,20 +14970,7 @@ def _swap_in(path: Path, scratches: list[Path], finals: list[Path]) -> PackWritt
             os.replace(scratch, final)
             placed.append(final)
     except (OSError, PackError) as exc:
-        left = _discard([*placed, *(scratch for scratch, final in zip(scratches, finals)
-                                    if final not in placed)])
-        unrestored = []
-        for old, moved in reversed(aside):
-            try:
-                os.replace(moved, old)
-            except OSError:
-                unrestored.append((old, moved))
-        words = f"{name} could not be put in place: {exc.strerror or exc}" \
-            if isinstance(exc, OSError) else str(exc)
-        if unrestored:
-            words += ". The earlier pack is set aside as " + ", ".join(
-                f"{moved.name} (was {old.name})" for old, moved in unrestored)
-        raise PackError(words, [*left, *(moved for _old, moved in unrestored)]) from exc
+        raise _swap_restore(exc, name, scratches, finals, aside, placed) from exc
     removed = []
     for old, moved in aside:
         if old in finals:
@@ -14995,8 +15099,8 @@ def run_pack(args: argparse.Namespace, plat: str, manifest: dict, files: list[di
     staging = Path(tempfile.mkdtemp(prefix=f".{path.name}.", suffix=".staging",
                                     dir=str(path.parent)))
     try:
-        return _fill_pack(args, plat, path, body, members, sources, data_dirs, limit,
-                          staging, term)
+        return _fill_pack(args, _PackFill(plat, path, body, members, sources, data_dirs,
+                                          limit), staging, term)
     except KeyboardInterrupt:
         _stop.set()
         print("\n  Stopped. No pack was written.", file=sys.stderr)
@@ -15006,11 +15110,22 @@ def run_pack(args: argparse.Namespace, plat: str, manifest: dict, files: list[di
         shutil.rmtree(staging, ignore_errors=True)
 
 
-def _fill_pack(args: argparse.Namespace, plat: str, path: Path, body: bytes,
-               members: dict[str, tuple[str, int]], sources: dict[str, dict],
-               data_dirs: list[dict], limit: int | None, staging: Path,
+class _PackFill(NamedTuple):
+    """The pack _fill_pack writes: its path, manifest, members and their sources."""
+
+    plat: str
+    path: Path
+    body: bytes
+    members: dict[str, tuple[str, int]]
+    sources: dict[str, dict]
+    data_dirs: list[dict]
+    limit: int | None
+
+
+def _fill_pack(args: argparse.Namespace, pack: _PackFill, staging: Path,
                term: Terminal) -> int:
     """Fetch every member into staging, then write the pack from it."""
+    plat, path, body, members, sources, data_dirs, limit = pack
     staged = [{**{key: value for key, value in entry.items()
                   if key not in ("root", "core_folder", "case_variant")}, "dest": name}
               for name, entry in sorted(sources.items())]
@@ -15189,7 +15304,7 @@ def _extract_from_pack(
 
 
 @contextlib.contextmanager
-def _open_copy(copy: LocalCopy) -> Iterator[BinaryIO]:
+def _open_copy(copy: LocalCopy) -> Iterator[IO[bytes]]:
     """The bytes of a copy found on this machine, opened for reading only."""
     if not copy.member:
         with open(copy.path, "rb") as handle:
@@ -15227,9 +15342,24 @@ def unreadable_words(exc: BaseException) -> str:
     return str(exc) or type(exc).__name__
 
 
+def _place_verified(f: dict, bios_path: Path, dest: Path, tmp_path: Path, size: int,
+                    expected: dict[str, str], held_in: str) -> None:
+    """Put the written file at dest once its size and hashes are the list's."""
+    if size != f["size"]:
+        raise ValueError(f"{held_in} holds {size} bytes, the list records {f['size']}")
+    actual = _digest_file(tmp_path, tuple(expected))
+    for name, label in (("sha256", "SHA-256"), ("sha1", "SHA-1")):
+        if name in expected and actual[name] != expected[name]:
+            raise ValueError(f"{label} mismatch in {held_in}")
+    os.chmod(tmp_path, (0o777 if f.get("executable") else 0o666) & ~_UMASK)
+    _clear_read_only(dest)
+    KEPT.keep(*_kept_slot(*_entry_place(bios_path, f)), dest, expected, tmp_path)
+    os.replace(tmp_path, dest)
+
+
 def _write_verified(
     f: dict, bios_path: Path, dest: Path,
-    source: Callable[[], ContextManager[BinaryIO]], progress: Progress | None,
+    source: Callable[[], ContextManager[IO[bytes]]], progress: Progress | None,
     held_in: str, local: bool = False, named: str = "",
 ) -> tuple[str, bool, str]:
     """Write the bytes source opens at dest once they match the list's size
@@ -15275,16 +15405,7 @@ def _write_verified(
                 if progress is not None:
                     progress.add(len(chunk), resumed=local, network=False)
                     counted += len(chunk)
-        if size != f["size"]:
-            raise ValueError(f"{held_in} holds {size} bytes, the list records {f['size']}")
-        actual = _digest_file(tmp_path, tuple(expected))
-        for name, label in (("sha256", "SHA-256"), ("sha1", "SHA-1")):
-            if name in expected and actual[name] != expected[name]:
-                raise ValueError(f"{label} mismatch in {held_in}")
-        os.chmod(tmp_path, (0o777 if f.get("executable") else 0o666) & ~_UMASK)
-        _clear_read_only(dest)
-        KEPT.keep(*_kept_slot(*_entry_place(bios_path, f)), dest, expected, tmp_path)
-        os.replace(tmp_path, dest)
+        _place_verified(f, bios_path, dest, tmp_path, size, expected, held_in)
         tmp_path = None
         return f["dest"], True, ""
     except _Interrupted:
@@ -15349,15 +15470,18 @@ def shown_lines(lines: list[str]) -> list[str]:
             for line in lines]
 
 
-class LocalCopy(NamedTuple):
+class LocalCopy:
     """A file found on this machine with the contents an entry wants."""
-    index: FolderIndex
-    path: Path
-    # The member holding the bytes when path is a ZIP, else "".
-    member: str = ""
-    # In the BIOS folder at a place no entry of the list names: a mistake
-    # the copy fixes. A copy from another entry's place is no mistake.
-    misplaced: bool = False
+
+    def __init__(self, index: FolderIndex, path: Path, member: str = "",
+                 misplaced: bool = False) -> None:
+        self.index = index
+        self.path = path
+        # The member holding the bytes when path is a ZIP, else "".
+        self.member = member
+        # In the BIOS folder at a place no entry of the list names: a mistake
+        # the copy fixes. A copy from another entry's place is no mistake.
+        self.misplaced = misplaced
 
     def where(self) -> str:
         """The copy as the folder it was found in names it."""
@@ -15425,6 +15549,10 @@ class FolderIndex:
         # Folders below root on another drive, not entered.
         self.other_drives: list[Path] = []
         self.files = 0
+        self._walk(root)
+
+    def _walk(self, root: Path) -> None:
+        """Index the files under root, a ZIP named as root as its one archive."""
         if root.is_file():
             if root.name.casefold().endswith(".zip"):
                 self.archives.append(root)
@@ -15526,7 +15654,7 @@ class FolderIndex:
             return self._archive(path).infolist()
 
     @contextlib.contextmanager
-    def open_member(self, path: Path, member: str) -> Iterator[BinaryIO]:
+    def open_member(self, path: Path, member: str) -> Iterator[IO[bytes]]:
         """A member of an archive under the folder, read from any thread."""
         with self._zip_lock:
             if self._is_written(path):
@@ -15876,7 +16004,7 @@ def _content_owners(files: list[dict]) -> dict[str, list[dict]]:
     """SHA-1 -> the entries one of whose copies holds it, in the list's order."""
     owners: dict[str, list[dict]] = {}
     for other in files:
-        for sha1 in dict.fromkeys(c.get("sha1") for c in _copies(other) if c.get("sha1")):
+        for sha1 in dict.fromkeys(held for c in _copies(other) if (held := c.get("sha1"))):
             owners.setdefault(sha1, []).append(other)
     return owners
 
@@ -15992,8 +16120,8 @@ def _found_elsewhere(
         return ("a second name the pack leaves out: Windows and macOS see it "
                 "as the same file. Run the command without --check to add it"), ""
     name = dest.rsplit("/", 1)[-1]
-    sizes = {copy.get("size") for copy in _copies(entry) if isinstance(copy.get("size"), int)}
-    sha1s = {copy.get("sha1") for copy in _copies(entry) if copy.get("sha1")}
+    sizes = {size for copy in _copies(entry) if isinstance(size := copy.get("size"), int)}
+    sha1s = {sha1 for copy in _copies(entry) if (sha1 := copy.get("sha1"))}
     try:
         expected = _entry_path(bios_path, entry)
     except ValueError:
@@ -16045,7 +16173,8 @@ def _wrong_contents(
         return owner
     if head == b"PK\x03\x04" and not str(entry.get("dest", "")).casefold().endswith(".zip"):
         return "still zipped: this file is a ZIP archive, extract what it holds"
-    expected = {copy.get("size") for copy in _copies(entry) if isinstance(copy.get("size"), int)}
+    expected = {listed for copy in _copies(entry)
+                if isinstance(listed := copy.get("size"), int)}
     if size not in expected:
         want = " or ".join(f"{s:,}" for s in sorted(expected))
         return f"wrong size: {size:,} bytes, the list expects {want}"
@@ -16071,6 +16200,8 @@ def diagnose(
         return Diagnosis(reasons, deep)
     if index is None:
         index = bios_folder_index(bios_path, files, verified or [])
+        if index is None:
+            return Diagnosis(reasons, deep)
     known = _known_destinations(files)
     zipped = _ZippedLookup(index, known)
     for entry in missing:
@@ -16091,10 +16222,18 @@ def diagnose(
     return Diagnosis(reasons, deep)
 
 
+class CheckHeld(NamedTuple):
+    """What check_lines reads besides the list: the files verified, the BIOS
+    folder's index and the copies found on this machine."""
+
+    verified: list[dict] | None = None
+    bios_index: FolderIndex | None = None
+    copies: dict[int, LocalCopy] | None = None
+
+
 def check_lines(
     missing: list[dict], mismatched: list[dict], files: list[dict], manifest: dict,
-    bios_path: Path, every: bool, verified: list[dict] | None = None,
-    index: FolderIndex | None = None, copies: dict[int, LocalCopy] | None = None,
+    bios_path: Path, every: bool, held: CheckHeld | None = None,
 ) -> list[str]:
     """The files --check flags, each with why and where its cores read it.
 
@@ -16103,8 +16242,10 @@ def check_lines(
     listed, and so is one a folder named with --from holds. Plain missing
     ones stop at ten unless every is set.
     """
-    found = diagnose(missing, mismatched, files, bios_path, verified, index)
-    copies = copies or {}
+    held = held or CheckHeld()
+    index = held.bios_index
+    found = diagnose(missing, mismatched, files, bios_path, held.verified, index)
+    copies = held.copies or {}
     known = _known_destinations(files)
     lines = []
     for extra, count in sorted(found.deep.items(), key=lambda item: -item[1]):
@@ -16207,8 +16348,9 @@ def plan_local_copies(
         copy = None
         if bios_index is not None:
             copy = bios_index.find(entry, written) or _above(entry, bios_index)
-        if copy is not None:
-            copy = copy._replace(misplaced=_misplaced(entry, copy, bios_index))
+            if copy is not None:
+                copy = LocalCopy(copy.index, copy.path, copy.member,
+                                 _misplaced(entry, copy, bios_index))
         for index in folders:
             if copy is not None:
                 break
@@ -16322,13 +16464,15 @@ def emit_copies(
                     path=str(copy.path), member=copy.member, reason=reason)
 
 
-class Unreadable(NamedTuple):
+class Unreadable:
     """A file, ZIP member or folder below a --from folder that could not be
     read, and may be a file the run still needs."""
-    index: FolderIndex
-    path: Path
-    member: str
-    why: str
+
+    def __init__(self, index: FolderIndex, path: Path, member: str, why: str) -> None:
+        self.index = index
+        self.path = path
+        self.member = member
+        self.why = why
 
     def line(self) -> str:
         where = f"{self.member} inside {self.path}" if self.member else str(self.path)
@@ -16380,7 +16524,7 @@ def sources_line(
     if not any(count for count, _what in parts):
         return ""
     parts += [(downloaded, fetched), (failed, "failed"), (missing, "still missing")]
-    words = []
+    words: list[str] = []
     for count, what in parts:
         if count:
             words.append(f"{_plural(count, 'file') if not words else count} {what}")
@@ -16723,7 +16867,7 @@ def put_app(card: CardApp) -> dict:
             fields["reason"] = NOT_WRITABLE if _write_refused(exc) else _app_failure(exc)
             break
         _dest, ok, why = _write_verified(
-            target, card.root, path, lambda payload=payload: io.BytesIO(payload), None,
+            target, card.root, path, functools.partial(io.BytesIO, payload), None,
             "the RetroBIOS app")
         if not ok:
             fields["reason"] = f"{target['dest']}: {why}"
@@ -16768,7 +16912,7 @@ def app_refusal(args: argparse.Namespace, platforms: list[tuple[str, Path]]) -> 
                    "KNULLI or ROCKNIX card)")
         else:
             why = card.why
-        if why:
+        if card is None or why:
             EVENTS.emit("app", system=card.system if card else "",
                         folder=str(card.root if card else path), ok=False, reason=why,
                         dests=[], written=[], kept=[])
