@@ -33,8 +33,10 @@ import os
 import re
 import subprocess
 import sys
+from collections.abc import Callable
 from html.parser import HTMLParser
 from pathlib import Path
+from typing import ClassVar
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import run_cli
@@ -106,23 +108,37 @@ class _Converter(HTMLParser):
             return
         if tag not in ("br", "img", "hr", "input", "meta", "link", "source", "wbr"):
             self.depth_stack.append(tag)
+        if self._open_tabs(tag, attr) or self._open_skipped(tag, attr, classes):
+            return
+        if self.pre:
+            # Inside a code block a line is a div, never a paragraph.
+            if tag == "div" and "ec-line" in classes and not "".join(self.out[-1:]).endswith("```\n"):
+                self._emit("\n")
+            return
+        opener = self._OPENERS.get(tag)
+        if opener is not None:
+            opener(self, tag, attr, classes)
+
+    def _open_tabs(self, tag: str, attr: dict[str, str]) -> bool:
+        """A tab list, a tab's name or a tab panel: True when handled."""
         if attr.get("role") == "tablist":
             self.skip += 1
-            if tag == "a" or attr.get("role") == "tab":
-                pass
-            return
+            return True
         if self.skip and attr.get("role") == "tab" and attr.get("id"):
             self._tab = attr["id"]
             self.tab_names[self._tab] = ""
             self.skip += 1
-            return
+            return True
         if attr.get("role") == "tabpanel" and not self.skip:
             self._block()
             name = self.tab_names.get(attr.get("aria-labelledby", ""), "").strip()
             if name:
                 self._emit(f"**{' '.join(name.split())}:**")
                 self._block()
-            return
+            return True
+        return False
+
+    def _open_skipped(self, tag: str, attr: dict[str, str], classes: set[str]) -> bool:
         # A `hidden` element is chrome the page's script shows (a filter
         # box, the file picker, a setup's install chooser): a tab panel,
         # hidden too, was read above.
@@ -130,80 +146,117 @@ class _Converter(HTMLParser):
                 or classes & {"sr-only", "sl-anchor-link", "copy", "rb-anchor"}:
             if tag not in ("br", "img", "hr", "input", "wbr"):
                 self.skip += 1
-            return
-        if self.pre:
-            # Inside a code block a line is a div, never a paragraph.
-            if tag == "div" and "ec-line" in classes and not "".join(self.out[-1:]).endswith("```\n"):
-                self._emit("\n")
-            return
-        if tag in HEADINGS:
-            self._block()
-            self._emit("#" * HEADINGS[tag] + " ")
-        elif tag in ("p", "div", "section", "figure", "details", "blockquote", "dl"):
-            self._block()
-        elif tag == "summary":
-            self._block()
-            self._emit("**")
-        elif tag in ("ul", "ol"):
-            self._block()
-            self.lists.append([0 if tag == "ol" else -1])
-        elif tag == "li":
-            if self.out and not "".join(self.out[-1:]).endswith("\n"):
-                self._emit("\n")
-            level = len(self.lists) - 1
-            marker = "-"
-            if self.lists and self.lists[-1][0] >= 0:
-                self.lists[-1][0] += 1
-                marker = f"{self.lists[-1][0]}."
-            self._emit("  " * max(level, 0) + marker + " ")
-        elif tag == "pre":
-            self._block()
-            self.pre += 1
-            self._emit("```\n")
-        elif tag == "code" and not self.pre:
+            return True
+        return False
+
+    def _open_heading(self, tag: str, attr: dict[str, str], classes: set[str]) -> None:
+        self._block()
+        self._emit("#" * HEADINGS[tag] + " ")
+
+    def _open_block(self, tag: str, attr: dict[str, str], classes: set[str]) -> None:
+        self._block()
+
+    def _open_bold_block(self, tag: str, attr: dict[str, str], classes: set[str]) -> None:
+        self._block()
+        self._emit("**")
+
+    def _open_list(self, tag: str, attr: dict[str, str], classes: set[str]) -> None:
+        self._block()
+        self.lists.append([0 if tag == "ol" else -1])
+
+    def _open_item(self, tag: str, attr: dict[str, str], classes: set[str]) -> None:
+        if self.out and not "".join(self.out[-1:]).endswith("\n"):
+            self._emit("\n")
+        level = len(self.lists) - 1
+        marker = "-"
+        if self.lists and self.lists[-1][0] >= 0:
+            self.lists[-1][0] += 1
+            marker = f"{self.lists[-1][0]}."
+        self._emit("  " * max(level, 0) + marker + " ")
+
+    def _open_pre(self, tag: str, attr: dict[str, str], classes: set[str]) -> None:
+        self._block()
+        self.pre += 1
+        self._emit("```\n")
+
+    def _open_code(self, tag: str, attr: dict[str, str], classes: set[str]) -> None:
+        if not self.pre:
             self._emit("`")
-        elif tag in ("strong", "b"):
-            self._emit("**")
-        elif tag in ("em", "i"):
-            self._emit("*")
-        elif tag == "a" and "rb-card" in classes:
+
+    def _open_strong(self, tag: str, attr: dict[str, str], classes: set[str]) -> None:
+        self._emit("**")
+
+    def _open_em(self, tag: str, attr: dict[str, str], classes: set[str]) -> None:
+        self._emit("*")
+
+    def _open_link(self, tag: str, attr: dict[str, str], classes: set[str]) -> None:
+        href = attr.get("href", "")
+        if "rb-card" in classes:
             # A card of a grid: one list line each, its name then what it
             # says, instead of one run-on line of links.
-            href = attr.get("href", "")
             href = SITE + href if href.startswith("/") else href
             self._block()
             self._emit("- [")
             self.links.append(href or None)
             self._card = True
-        elif tag == "span" and self._card and self.links:
+            return
+        if href.startswith("#"):
+            href = self.page_url + href
+        elif href.startswith("/"):
+            href = SITE + href
+        self.links.append(href or None)
+        if href:
+            self._emit("[")
+
+    def _open_span(self, tag: str, attr: dict[str, str], classes: set[str]) -> None:
+        if self._card and self.links:
             self._emit(": ")
-        elif tag == "a":
-            href = attr.get("href", "")
-            if href.startswith("#"):
-                href = self.page_url + href
-            elif href.startswith("/"):
-                href = SITE + href
-            self.links.append(href or None)
-            if href:
-                self._emit("[")
-        elif tag == "img":
-            alt = attr.get("alt", "").strip()
-            if alt:
-                self._emit(alt)
-        elif tag == "table":
-            self._block()
-            self.table, self.header_rows = [], 0
-        elif tag == "tr" and self.table is not None:
+
+    def _open_img(self, tag: str, attr: dict[str, str], classes: set[str]) -> None:
+        alt = attr.get("alt", "").strip()
+        if alt:
+            self._emit(alt)
+
+    def _open_table(self, tag: str, attr: dict[str, str], classes: set[str]) -> None:
+        self._block()
+        self.table, self.header_rows = [], 0
+
+    def _open_row(self, tag: str, attr: dict[str, str], classes: set[str]) -> None:
+        if self.table is not None:
             self.row = []
-        elif tag in ("td", "th") and self.row is not None:
+
+    def _open_cell(self, tag: str, attr: dict[str, str], classes: set[str]) -> None:
+        if self.row is not None:
             self.cell = []
             if tag == "th" and not self.row:
                 self.header_rows = max(self.header_rows, len(self.table or []) + 1)
-        elif tag == "dt":
-            self._block()
-            self._emit("**")
-        elif tag == "dd":
-            self._emit(": ")
+
+    def _open_definition(self, tag: str, attr: dict[str, str], classes: set[str]) -> None:
+        self._emit(": ")
+
+    _OPENERS: ClassVar[dict[str, Callable[[_Converter, str, dict[str, str], set[str]], None]]] = {
+        **dict.fromkeys(HEADINGS, _open_heading),
+        **dict.fromkeys(("p", "div", "section", "figure", "details", "blockquote", "dl"), _open_block),
+        "summary": _open_bold_block,
+        "dt": _open_bold_block,
+        "ul": _open_list,
+        "ol": _open_list,
+        "li": _open_item,
+        "pre": _open_pre,
+        "code": _open_code,
+        "strong": _open_strong,
+        "b": _open_strong,
+        "em": _open_em,
+        "i": _open_em,
+        "a": _open_link,
+        "span": _open_span,
+        "img": _open_img,
+        "table": _open_table,
+        "tr": _open_row,
+        "td": _open_cell,
+        "th": _open_cell,
+        "dd": _open_definition,
+    }
 
     def handle_endtag(self, tag: str) -> None:
         if tag == "h1" and self._in_title:
@@ -223,51 +276,92 @@ class _Converter(HTMLParser):
             return
         if self.pre and tag != "pre":
             return
-        if tag in HEADINGS or tag in ("p", "section", "figure", "details", "blockquote", "dl"):
-            self._block()
-        elif tag == "summary":
-            self._emit("**")
-            self._block()
-        elif tag in ("ul", "ol"):
-            if self.lists:
-                self.lists.pop()
-            self._block()
-        elif tag == "pre":
-            self.pre -= 1
-            self._emit("\n```")
-            self._block()
-        elif tag == "code" and not self.pre:
+        closer = self._CLOSERS.get(tag)
+        if closer is not None:
+            closer(self, tag)
+
+    def _close_block(self, tag: str) -> None:
+        self._block()
+
+    def _close_summary(self, tag: str) -> None:
+        self._emit("**")
+        self._block()
+
+    def _close_list(self, tag: str) -> None:
+        if self.lists:
+            self.lists.pop()
+        self._block()
+
+    def _close_pre(self, tag: str) -> None:
+        self.pre -= 1
+        self._emit("\n```")
+        self._block()
+
+    def _close_code(self, tag: str) -> None:
+        if not self.pre:
             self._emit("`")
-        elif tag in ("strong", "b", "dt"):
-            self._emit("**")
-        elif tag in ("em", "i"):
-            self._emit("*")
-        elif tag == "a":
-            href = self.links.pop() if self.links else None
-            if href:
-                self._emit(f"]({href})")
-            if self._card:
-                self._card = False
-                self._emit("\n")
-        elif tag in ("td", "th") and self.cell is not None and self.row is not None:
+
+    def _close_strong(self, tag: str) -> None:
+        self._emit("**")
+
+    def _close_em(self, tag: str) -> None:
+        self._emit("*")
+
+    def _close_link(self, tag: str) -> None:
+        href = self.links.pop() if self.links else None
+        if href:
+            self._emit(f"]({href})")
+        if self._card:
+            self._card = False
+            self._emit("\n")
+
+    def _close_cell(self, tag: str) -> None:
+        if self.cell is not None and self.row is not None:
             self.row.append(" ".join("".join(self.cell).split()).replace("|", "\\|"))
             self.cell = None
-        elif tag == "tr" and self.row is not None and self.table is not None:
+
+    def _close_row(self, tag: str) -> None:
+        if self.row is not None and self.table is not None:
             self.table.append(self.row)
             self.row = None
-        elif tag == "table" and self.table is not None:
-            rows, self.table = self.table, None
-            if rows:
-                width = max(len(r) for r in rows)
-                rows = [r + [""] * (width - len(r)) for r in rows]
-                head = rows[0] if self.header_rows else [""] * width
-                body = rows[1:] if self.header_rows else rows
-                lines = ["| " + " | ".join(head) + " |", "|" + "---|" * width]
-                lines += ["| " + " | ".join(r) + " |" for r in body]
-                self.out.append("\n".join(lines))
-                self._block()
-        elif tag == "br":
-            self._emit("\n" if self.pre else "  \n")
+
+    def _close_table(self, tag: str) -> None:
+        if self.table is None:
+            return
+        rows, self.table = self.table, None
+        if rows:
+            width = max(len(r) for r in rows)
+            rows = [r + [""] * (width - len(r)) for r in rows]
+            head = rows[0] if self.header_rows else [""] * width
+            body = rows[1:] if self.header_rows else rows
+            lines = ["| " + " | ".join(head) + " |", "|" + "---|" * width]
+            lines += ["| " + " | ".join(r) + " |" for r in body]
+            self.out.append("\n".join(lines))
+            self._block()
+
+    def _close_break(self, tag: str) -> None:
+        self._emit("\n" if self.pre else "  \n")
+
+    _CLOSERS: ClassVar[dict[str, Callable[[_Converter, str], None]]] = {
+        **dict.fromkeys(HEADINGS, _close_block),
+        **dict.fromkeys(("p", "section", "figure", "details", "blockquote", "dl"), _close_block),
+        "summary": _close_summary,
+        "ul": _close_list,
+        "ol": _close_list,
+        "pre": _close_pre,
+        "code": _close_code,
+        "strong": _close_strong,
+        "b": _close_strong,
+        "dt": _close_strong,
+        "em": _close_em,
+        "i": _close_em,
+        "a": _close_link,
+        "td": _close_cell,
+        "th": _close_cell,
+        "tr": _close_row,
+        "table": _close_table,
+        "br": _close_break,
+    }
 
     def handle_startendtag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         self.handle_starttag(tag, attrs)
