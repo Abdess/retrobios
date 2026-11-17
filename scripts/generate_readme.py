@@ -18,6 +18,7 @@ import sys
 from collections.abc import Callable
 from datetime import datetime, timezone
 from pathlib import Path
+from types import ModuleType
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
@@ -46,13 +47,15 @@ import pr_checks
 from verify import verify_platform
 
 
-def _installer_words() -> object:
+def _installer_words() -> ModuleType:
     """install.py read as a module, for the words its screen shows: the
     README named a line menu the one-liner never opens."""
     import importlib.util
 
-    spec = importlib.util.spec_from_file_location(
-        "install", Path(__file__).resolve().parent.parent / "install.py")
+    path = Path(__file__).resolve().parent.parent / "install.py"
+    spec = importlib.util.spec_from_file_location("install", path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"cannot load {path}")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module

@@ -37,6 +37,7 @@ import json
 import os
 import re
 import shutil
+import socket
 import socketserver
 import subprocess
 import sys
@@ -44,16 +45,21 @@ import tempfile
 import threading
 import zipfile
 from pathlib import Path, PurePosixPath
-from typing import Callable
+from typing import TYPE_CHECKING, Any, Callable
 
 import sitehandheld
 from artifacts import write_text_atomic
+
+if TYPE_CHECKING:
+    from install import LocalCopy, Progress, _OsRule
 
 ROOT = Path(__file__).resolve().parent.parent
 PAGE = ROOT / "wiki" / "installer.md"
 INSTALLER = ROOT / "install.py"
 
 _spec = importlib.util.spec_from_file_location("install", INSTALLER)
+if _spec is None or _spec.loader is None:
+    raise ImportError(f"cannot load {INSTALLER}")
 _install = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_install)
 
@@ -183,7 +189,7 @@ def route_keys() -> str:
 _BARE_FILES = frozenset({"MiSTer"})
 
 
-def _marker(rule: _install._OsRule) -> str:
+def _marker(rule: _OsRule) -> str:
     """A card rule's evidence in words: the file or folder, and the line it
     holds for a rule that reads one."""
     if rule.method == "file_matches":
@@ -281,8 +287,9 @@ class _ListHandler(http.server.SimpleHTTPRequestHandler):
     """Serves the committed file lists, install/<platform>.json, and nothing
     else: a sample that asks for a file is a sample that downloads."""
 
-    def __init__(self, *args: object, **kwargs: object) -> None:
-        super().__init__(*args, directory=str(ROOT), **kwargs)
+    def __init__(self, request: socket.socket | tuple[bytes, socket.socket],
+                 client_address: tuple[str, int], server: socketserver.BaseServer) -> None:
+        super().__init__(request, client_address, server, directory=str(ROOT))
 
     def do_GET(self) -> None:
         if not re.fullmatch(r"/install/[a-z0-9_-]+\.json", self.path):
@@ -302,6 +309,8 @@ class _LoopbackServer(http.server.ThreadingHTTPServer):
     def server_bind(self) -> None:
         socketserver.TCPServer.server_bind(self)
         host, port = self.server_address[:2]
+        if not isinstance(host, str):
+            raise TypeError(f"the list server needs a host name, not {host!r}")
         self.server_name, self.server_port = host, port
 
 
@@ -340,20 +349,20 @@ def _child(spec: dict) -> int:
     them, and a held run finds every file and tree in place. The counts,
     sizes and words are the installer's own."""
     import concurrent.futures
-    import socket
     from unittest import mock
 
     real_connect = socket.create_connection
 
-    def loopback_only(address: tuple, *args: object, **kwargs: object) -> socket.socket:
+    # The rest of the arguments are create_connection's own, passed through.
+    def loopback_only(address: tuple[str, int], *args: Any, **kwargs: Any) -> socket.socket:
         if address[0] not in ("127.0.0.1", "localhost"):
             raise OSError(f"the sample makes no request to {address[0]}")
         return real_connect(address, *args, **kwargs)
 
     real_download = _install._download_one
 
-    def landed(f: dict, bios: Path, verbose: bool = False, progress: object = None,
-               copy: object = None) -> tuple[str, bool, str]:
+    def landed(f: dict, bios: Path, verbose: bool = False, progress: Progress | None = None,
+               copy: LocalCopy | None = None) -> tuple[str, bool, str]:
         if copy is not None:
             # A copy from this machine is made for real: it is local.
             return real_download(f, bios, verbose, progress, copy)
@@ -372,7 +381,7 @@ def _child(spec: dict) -> int:
     def tree_held(entry: dict, bios: Path, remember: bool = False) -> tuple:
         return bios / entry.get("dest", ""), {}, len(entry["files"])
 
-    patches = [
+    patches: list[contextlib.AbstractContextManager[object]] = [
         mock.patch.object(socket, "create_connection", loopback_only),
         # One worker and the submission order: the progress lines of a log.
         mock.patch.object(concurrent.futures, "as_completed", list),
@@ -463,7 +472,8 @@ class Sandbox:
         card = self.card / "userdata" / "bios" if platform != "retroarch" else None
         if card is not None:
             card.mkdir(parents=True, exist_ok=True)
-        spec = {"platform": platform, "argv": ["--plain", "--platform", platform, *argv],
+        args = ["--plain", "--platform", platform, *argv]
+        spec = {"platform": platform, "argv": args,
                 "card": str(card) if card else None, "landed": landed, "held": held}
         env = {"PATH": os.environ.get("PATH", ""), "HOME": str(home),
                "RETROBIOS_OS": "linux", "LANG": "C.UTF-8",
@@ -473,7 +483,7 @@ class Sandbox:
             cwd=ROOT, env=env, stdin=subprocess.DEVNULL, capture_output=True, text=True,
             check=False)
         if done.returncode not in codes:
-            raise SampleFailed(f"install.py {' '.join(spec['argv'])} exited "
+            raise SampleFailed(f"install.py {' '.join(args)} exited "
                                f"{done.returncode}: {done.stderr.strip()[-2000:]}")
         return done.stdout.replace(str(home), SHOWN_HOME).replace(str(self.card), SHOWN_CARD)
 
@@ -484,8 +494,8 @@ _RUNS: dict[tuple, str] = {}
 
 
 def _stamp(platform: str) -> tuple[int, int]:
-    return tuple(hash(path.read_bytes()) for path in
-                 (INSTALLER, ROOT / "install" / f"{platform}.json"))
+    return (hash(INSTALLER.read_bytes()),
+            hash((ROOT / "install" / f"{platform}.json").read_bytes()))
 
 
 class _LazySandbox:
@@ -495,14 +505,13 @@ class _LazySandbox:
         self.stack = stack
         self.box: Sandbox | None = None
 
-    def run(self, platform: str, *argv: str, **kinds: bool) -> str:
-        key = (platform, argv, kinds.get("landed", False), kinds.get("held", False),
-               _stamp(platform))
+    def run(self, platform: str, *argv: str, landed: bool = False, held: bool = False) -> str:
+        key = (platform, argv, landed, held, _stamp(platform))
         if key in _RUNS:
             return _RUNS[key]
         if self.box is None:
             self.box = self.stack.enter_context(Sandbox())
-        _RUNS[key] = self.box.run(platform, *argv, **kinds)
+        _RUNS[key] = self.box.run(platform, *argv, landed=landed, held=held)
         return _RUNS[key]
 
     def small(self, kind: str) -> str:
@@ -528,6 +537,8 @@ def _lines_from(text: str, first: str, last: str | None = None, count: int | Non
         raise SampleFailed(f"the run printed no line starting {first!r}")
     if count is not None:
         return lines[start:start + count]
+    if last is None:
+        raise ValueError("_lines_from needs last or count")
     end = next((i for i in range(start, len(lines)) if lines[i].startswith(last)), None)
     if end is None:
         raise SampleFailed(f"the run printed no line starting {last!r} after {first!r}")
@@ -561,15 +572,22 @@ def _bulk_line(box: Sandbox | _LazySandbox) -> str:
     return found[0]
 
 
-def sample_writers(box: Sandbox) -> dict[str, Callable[[str], str]]:
+def sample_writers(box: Sandbox | _LazySandbox) -> dict[str, Callable[[str], str]]:
     """The run samples, each from the run that prints it: the walk through a
     run reads its --verbose lines, the default sample the lines it hides them
     from."""
-    default_run = lambda: box.run(WALKTHROUGH, "--yes", "--jobs", "1", landed=True)  # noqa: E731
-    install_run = lambda: box.run(WALKTHROUGH, "--yes", "--jobs", "1", "--verbose",  # noqa: E731
-                                  landed=True)
-    check_run = lambda: box.run(WALKTHROUGH, "--check", "--verbose", held=True)  # noqa: E731
-    dry_run = lambda: box.run("retroarch", "--dry-run", "--verbose")  # noqa: E731
+    def default_run() -> str:
+        return box.run(WALKTHROUGH, "--yes", "--jobs", "1", landed=True)
+
+    def install_run() -> str:
+        return box.run(WALKTHROUGH, "--yes", "--jobs", "1", "--verbose", landed=True)
+
+    def check_run() -> str:
+        return box.run(WALKTHROUGH, "--check", "--verbose", held=True)
+
+    def dry_run() -> str:
+        return box.run("retroarch", "--dry-run", "--verbose")
+
     return {
         "run-default": lambda _body: _fenced(
             _lines_from(default_run(), "Installing ", "Next: ")),

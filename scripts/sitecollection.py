@@ -11,6 +11,7 @@ from __future__ import annotations
 import functools
 import os
 import sys
+from dataclasses import dataclass
 
 sys.path.insert(0, os.path.dirname(__file__))
 import siteinputs
@@ -94,10 +95,41 @@ def _engine_sections(manufacturers: dict[str, dict[str, list]]) -> dict[str, dic
     top joins that top, and a folder named by a profile key is headed with
     the engine's name (SECTION_LABELS), its address unchanged.
     """
-    from siterender import _PROGRAM_TOPS, SECTION_LABELS, record_card_move
+    from siterender import SECTION_LABELS
 
     profiles = {key: profile for key, profile in _profiles_on_disk().items()
                 if profile.get("type") != "alias" and profile.get("role") != "test"}
+    engines = _Engines(profiles, _file_readers(profiles))
+    out: dict[str, dict[str, list]] = {}
+    for mfr, consoles in manufacturers.items():
+        if mfr not in GAME_DATA_TOPS:
+            out[mfr] = dict(consoles)
+            continue
+        out[mfr] = _regroup_top(mfr, consoles, engines)
+    _join_other_folders(out)
+    for mfr in GAME_DATA_TOPS:
+        for console in out.get(mfr, {}):
+            named = console if console in profiles else None
+            if named and engines.engine(named) != console:
+                SECTION_LABELS[(mfr, console)] = engines.engine(named)
+    return {mfr: consoles for mfr, consoles in out.items() if consoles}
+
+
+@dataclass(frozen=True)
+class _Engines:
+    """The game-engine profiles, and the profiles that read each file name."""
+    profiles: dict[str, dict]
+    readers: dict[str, set[str]]
+
+    def engine(self, key: str) -> str:
+        return str(self.profiles[key].get("emulator") or key)
+
+    def profile_of(self, name: str) -> str | None:
+        return next((k for k in sorted(self.profiles)
+                     if name.casefold() in (k.casefold(), self.engine(k).casefold())), None)
+
+
+def _file_readers(profiles: dict[str, dict]) -> dict[str, set[str]]:
     readers: dict[str, set[str]] = {}
     for key, profile in profiles.items():
         for entry in profile.get("files") or []:
@@ -105,40 +137,38 @@ def _engine_sections(manufacturers: dict[str, dict[str, list]]) -> dict[str, dic
                 for name in [entry.get("name"), *(entry.get("aliases") or [])]:
                     if name:
                         readers.setdefault(str(name).rsplit("/", 1)[-1], set()).add(key)
+    return readers
 
-    def engine(key: str) -> str:
-        return str(profiles[key].get("emulator") or key)
 
-    def profile_of(name: str) -> str | None:
-        return next((k for k in sorted(profiles)
-                     if name.casefold() in (k.casefold(), engine(k).casefold())), None)
+def _regroup_top(mfr: str, consoles: dict[str, list], engines: _Engines) -> dict[str, list]:
+    from siterender import record_card_move
 
-    out: dict[str, dict[str, list]] = {}
-    for mfr, consoles in manufacturers.items():
-        if mfr not in GAME_DATA_TOPS:
-            out[mfr] = dict(consoles)
-            continue
-        own = profile_of(mfr)
-        regrouped: dict[str, list] = {}
-        for console, files in sorted(consoles.items(), key=lambda item: item[0].startswith(".")):
-            for f in files:
-                parts = str(f.get("path", "")).split("/")
-                target = console
-                if console.startswith(".") or (len(parts) == 3 and console == parts[-1]):
-                    # A variant answers its primary's name: scummvm.zip.a93f1c4b.
-                    base = parts[-1].rsplit(".", 1)[0] if console.startswith(".") else parts[-1]
-                    keys = sorted(readers.get(base, ()))
-                    reader = keys[0] if len(keys) == 1 else own
-                    found = next((c for c, held in regrouped.items()
-                                  if any(h.get("name") == base for h in held)), None)
-                    target = found or (next((c for c in consoles if c == reader), None)
-                                       or (engine(reader) if reader else base))
-                if target != console:
-                    record_card_move(mfr, console, str(f.get("sha1", "")), mfr, target)
-                regrouped.setdefault(target, []).append(f)
-        out[mfr] = regrouped
-    # The folder under Other an engine top is named after: ScummVM's
-    # engine data under Other/ScummVM, its themes under ScummVM/.
+    own = engines.profile_of(mfr)
+    regrouped: dict[str, list] = {}
+    for console, files in sorted(consoles.items(), key=lambda item: item[0].startswith(".")):
+        for f in files:
+            parts = str(f.get("path", "")).split("/")
+            target = console
+            if console.startswith(".") or (len(parts) == 3 and console == parts[-1]):
+                # A variant answers its primary's name: scummvm.zip.a93f1c4b.
+                base = parts[-1].rsplit(".", 1)[0] if console.startswith(".") else parts[-1]
+                keys = sorted(engines.readers.get(base, ()))
+                reader = keys[0] if len(keys) == 1 else own
+                found = next((c for c, held in regrouped.items()
+                              if any(h.get("name") == base for h in held)), None)
+                target = found or (next((c for c in consoles if c == reader), None)
+                                   or (engines.engine(reader) if reader else base))
+            if target != console:
+                record_card_move(mfr, console, str(f.get("sha1", "")), mfr, target)
+            regrouped.setdefault(target, []).append(f)
+    return regrouped
+
+
+def _join_other_folders(out: dict[str, dict[str, list]]) -> None:
+    """The folder under Other an engine top is named after: ScummVM's
+    engine data under Other/ScummVM, its themes under ScummVM/."""
+    from siterender import _PROGRAM_TOPS, record_card_move
+
     others = out.get("Other", {})
     for folder in sorted(others):
         top = next((t for t in out if t in GAME_DATA_TOPS and t.casefold() == folder.casefold()),
@@ -152,12 +182,6 @@ def _engine_sections(manufacturers: dict[str, dict[str, list]]) -> dict[str, dic
             record_card_move("Other", folder, str(f.get("sha1", "")), top, target)
         sections[target] = [*sections.get(target, []),
                             *(f for f in others.pop(folder) if str(f.get("sha1", "")) not in held)]
-    for mfr in GAME_DATA_TOPS:
-        for console in out.get(mfr, {}):
-            named = console if console in profiles else None
-            if named and engine(named) != console:
-                SECTION_LABELS[(mfr, console)] = engine(named)
-    return {mfr: consoles for mfr, consoles in out.items() if consoles}
 
 
 def _profiles_on_disk() -> dict[str, dict]:

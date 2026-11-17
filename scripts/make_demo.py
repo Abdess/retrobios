@@ -64,6 +64,7 @@ import shutil
 import subprocess
 import sys
 import threading
+import types
 from collections.abc import Iterator
 from contextlib import contextmanager
 from dataclasses import dataclass
@@ -363,7 +364,7 @@ def session_env(base_url: str, work: Path, card: Path,
     }
 
 
-def _installer() -> object:
+def _installer() -> types.ModuleType:
     spec = importlib.util.spec_from_file_location("retrobios_install", ROOT / "install.py")
     if spec is None or spec.loader is None:
         raise RuntimeError("install.py cannot be loaded")
@@ -374,7 +375,7 @@ def _installer() -> object:
 
 def format_size(size: int) -> str:
     """The size as the installer writes it."""
-    return str(_installer().format_size(size))  # type: ignore[attr-defined]
+    return str(_installer().format_size(size))
 
 
 def describe(variant: str, facts: dict) -> str:

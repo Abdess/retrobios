@@ -324,7 +324,7 @@ _archive_boards: dict[str, str] = {}
 _board_names: dict[str, str] = {}
 # sha1 -> the (manufacturer, console) sections of the machines whose own
 # set the archive is: neogeo.zip for the Neo Geo, mz2000.zip for the MZ.
-_archive_machines: dict[str, set[tuple[str, str]]] = {}
+_archive_machines: dict[str, set[tuple[str, str] | None]] = {}
 _boards_built = [False]
 
 
@@ -394,26 +394,17 @@ def _arcade_suffix_sha1s(db: dict) -> frozenset[str]:
 def _build_boards() -> None:
     if _boards_built[0]:
         return
-    from ziptools import zip_member_crcs
-
     _ensure_console_sections()
-    if _arcade_source[0] is None:
-        import json
-
-        from common import load_emulator_profiles
-
-        inputs = siteinputs.current()
-        database = inputs.db
-        if not database.exists():
+    source = _arcade_source[0]
+    if source is None:
+        source = _read_arcade_source()
+        if source is None:
             _archive_boards.clear()
             _board_names.clear()
             _boards_built[0] = True
             return
-        with open(database, encoding="utf-8") as handle:
-            db = json.load(handle)
-        profiles = load_emulator_profiles(str(inputs.emulators), skip_aliases=False)
-        _arcade_source[0] = (profiles, db)
-    profiles, db = _arcade_source[0]
+        _arcade_source[0] = source
+    profiles, db = source
     files = db.get("files", {})
     by_name = db.get("indexes", {}).get("by_name", {})
 
@@ -432,49 +423,84 @@ def _build_boards() -> None:
             owners = _owner_ids(entry, systems)
             if not owners:
                 continue
-            crcs = {
-                str(member["crc32"]).lower()
-                for member in entry.get("contents") or []
-                if isinstance(member, dict) and member.get("crc32")
-            }
-            names = {str(entry.get("name", ""))}
-            names.update(str(alias) for alias in entry.get("aliases") or [])
-            archives: set[str] = set()
-            for name in names:
-                found = by_name.get(name.rsplit("/", 1)[-1]) or []
-                for sha1 in [found] if isinstance(found, str) else found:
-                    if sha1 not in files:
-                        continue
-                    if crcs:
-                        held = zip_member_crcs(str(_REPO_ROOT / files[sha1]["path"]))
-                        # An archive the build cannot read keeps its name.
-                        if held and not held & crcs:
-                            continue
-                    archives.add(sha1)
-            for owner in owners:
-                role = _board_role(owner)
-                if role == _MACHINE:
-                    # The profile's only system stands for an entry that names
-                    # none: MAME's printer and expansion sets in a Dragon
-                    # profile. Only an entry naming the machine moves its set,
-                    # and only when every machine it names has that section:
-                    # epson_fx80.zip, which sixteen machines load, has none.
-                    declared = entry.get("system") or entry.get("systems")
-                    places = {_machine_section(o) for o in owners
-                              if _board_role(o) == _MACHINE} if declared else {None}
-                    section = next(iter(places)) if len(places) == 1 else None
-                    for sha1 in archives:
-                        votes[sha1] = None
-                        _archive_machines.setdefault(sha1, set()).add(section)
-                    continue
-                if role is None:
-                    continue
-                ids_by_name.setdefault(role.casefold(), set()).add(owner)
-                for sha1 in archives:
-                    ballot = votes.setdefault(sha1, {})
-                    if ballot is not None:
-                        ballot.setdefault(role.casefold(), set()).add(key)
+            archives = _entry_archives(entry, files, by_name)
+            _cast_votes(key, entry, owners, archives, votes, ids_by_name)
+    _elect_boards(votes, ids_by_name, db)
+    _boards_built[0] = True
 
+
+def _read_arcade_source() -> tuple[dict, dict] | None:
+    """The profiles and database of the repository, None without a database."""
+    import json
+
+    from common import load_emulator_profiles
+
+    inputs = siteinputs.current()
+    database = inputs.db
+    if not database.exists():
+        return None
+    with open(database, encoding="utf-8") as handle:
+        db = json.load(handle)
+    profiles = load_emulator_profiles(str(inputs.emulators), skip_aliases=False)
+    return profiles, db
+
+
+def _entry_archives(entry: dict, files: dict, by_name: dict) -> set[str]:
+    """The archives of the collection a ``bios_zip`` entry names."""
+    from ziptools import zip_member_crcs
+
+    crcs = {
+        str(member["crc32"]).lower()
+        for member in entry.get("contents") or []
+        if isinstance(member, dict) and member.get("crc32")
+    }
+    names = {str(entry.get("name", ""))}
+    names.update(str(alias) for alias in entry.get("aliases") or [])
+    archives: set[str] = set()
+    for name in names:
+        found = by_name.get(name.rsplit("/", 1)[-1]) or []
+        for sha1 in [found] if isinstance(found, str) else found:
+            if sha1 not in files:
+                continue
+            if crcs:
+                held = zip_member_crcs(str(_REPO_ROOT / files[sha1]["path"]))
+                # An archive the build cannot read keeps its name.
+                if held and not held & crcs:
+                    continue
+            archives.add(sha1)
+    return archives
+
+
+def _cast_votes(key: str, entry: dict, owners: set[str], archives: set[str],
+                votes: dict[str, dict[str, set[str]] | None],
+                ids_by_name: dict[str, set[str]]) -> None:
+    for owner in owners:
+        role = _board_role(owner)
+        if role == _MACHINE:
+            # The profile's only system stands for an entry that names
+            # none: MAME's printer and expansion sets in a Dragon
+            # profile. Only an entry naming the machine moves its set,
+            # and only when every machine it names has that section:
+            # epson_fx80.zip, which sixteen machines load, has none.
+            declared = entry.get("system") or entry.get("systems")
+            places = {_machine_section(o) for o in owners
+                      if _board_role(o) == _MACHINE} if declared else {None}
+            section = next(iter(places)) if len(places) == 1 else None
+            for sha1 in archives:
+                votes[sha1] = None
+                _archive_machines.setdefault(sha1, set()).add(section)
+            continue
+        if role is None:
+            continue
+        ids_by_name.setdefault(role.casefold(), set()).add(owner)
+        for sha1 in archives:
+            ballot = votes.setdefault(sha1, {})
+            if ballot is not None:
+                ballot.setdefault(role.casefold(), set()).add(key)
+
+
+def _elect_boards(votes: dict[str, dict[str, set[str]] | None],
+                  ids_by_name: dict[str, set[str]], db: dict) -> None:
     _archive_boards.clear()
     _board_names.clear()
     for sha1, ballot in votes.items():
@@ -493,7 +519,6 @@ def _build_boards() -> None:
     for sha1, board in list(_archive_boards.items()):
         if system_name(board).casefold() not in _board_names:
             del _archive_boards[sha1]
-    _boards_built[0] = True
 
 
 def _machine_section(sys_id: str) -> tuple[str, str] | None:
@@ -638,8 +663,7 @@ def _render_yaml_value(
                 lines.append(f"{pad}- {field_text(None, item)}")
         lines.append("")
     elif isinstance(val, str) and "\n" in val:
-        for line in val.split("\n"):
-            lines.append(f"{pad}{line}")
+        lines.extend(f"{pad}{line}" for line in val.split("\n"))
     else:
         lines.append(f"{pad}{field_text(None, val)}")
 

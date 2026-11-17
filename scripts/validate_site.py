@@ -93,6 +93,11 @@ class _PageParser(HTMLParser):
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         data = {key: value or "" for key, value in attrs}
+        self._count(tag, data)
+        self._open(tag, data)
+        self._references(tag, data)
+
+    def _count(self, tag: str, data: dict[str, str]) -> None:
         if tag not in ("script", "style"):
             self.page.elements += 1
         if tag in _LITERAL_TAGS:
@@ -106,6 +111,8 @@ class _PageParser(HTMLParser):
             self.page.runtime_diagrams += 1
         if tag == "script" and re.match(r"\s*(?:https?:)?//", data.get("src", "")):
             self.page.remote_scripts.append(data["src"])
+
+    def _open(self, tag: str, data: dict[str, str]) -> None:
         if tag == "html":
             self.page.lang = data.get("lang", "")
         elif tag == "title":
@@ -125,6 +132,7 @@ class _PageParser(HTMLParser):
             self._jsonld_depth += 1
             self._jsonld_parts = []
 
+    def _references(self, tag: str, data: dict[str, str]) -> None:
         element_id = data.get("id")
         if element_id is not None:
             self.page.ids.append(element_id)
@@ -264,76 +272,92 @@ def _check_pages(
     filled here for it.
     """
     issues: list[str] = []
-
-    def report(path: Path, message: str) -> None:
-        issues.append(f"{path.relative_to(site)}: {message}")
-
     for path, page in pages.items():
-        is_404 = path.relative_to(site) == Path("404.html")
-        if not page.title:
-            report(path, "missing document title")
-        elif not is_404:
-            titles[page.title].append(path)
-        if page.lang != "en":
-            report(path, f"expected lang='en', got {page.lang!r}")
-        if len(page.descriptions) != 1 or not page.descriptions[0]:
-            report(path, f"expected one non-empty description, got {len(page.descriptions)}")
-        elif not is_404:
-            descriptions[page.descriptions[0]].append(path)
-        if not is_404 and page.h1_count != 1:
-            report(path, f"expected one H1, got {page.h1_count}")
-        if page.main_count != 1:
-            report(path, f"expected one main landmark, got {page.main_count}")
-        if not is_404 and (
-            len(page.canonical) != 1
-            or not page.canonical[0].startswith("https://")
-        ):
-            report(path, f"expected one HTTPS canonical URL, got {page.canonical!r}")
-        duplicate_ids = [
-            value
-            for value, count in Counter(page.ids).items()
-            if value and count > 1
+        rel = path.relative_to(site)
+        is_404 = rel == Path("404.html")
+        messages = [
+            *_document_issues(path, page, is_404, titles, descriptions),
+            *_content_issues(page, rel.as_posix()),
+            *_jsonld_issues(page, is_404),
         ]
-        if duplicate_ids:
-            report(path, f"duplicate IDs: {duplicate_ids[:5]}")
-        if page.missing_alt:
-            report(path, f"images missing alt: {page.missing_alt[:5]}")
-        if page.remote_images:
-            report(path, f"images loaded from another host: {page.remote_images[:3]}")
-        if page.remote_scripts:
-            report(path, f"scripts loaded from another host: {page.remote_scripts[:3]}")
-        if page.runtime_diagrams:
-            report(path, f"{page.runtime_diagrams} diagram(s) drawn by a script at runtime")
-        if page.size > MAX_PAGE_BYTES:
-            report(path, f"{page.size:,} bytes of HTML, over the {MAX_PAGE_BYTES:,} budget")
-        if page.elements > MAX_PAGE_ELEMENTS \
-                and path.relative_to(site).as_posix() not in OVER_ELEMENT_BUDGET:
-            report(path, f"{page.elements:,} elements, over the {MAX_PAGE_ELEMENTS:,} budget")
-        jumps = _heading_jumps(page.headings)
-        if jumps:
-            report(path, f"heading levels skipped: {sorted(set(jumps))}")
-        if page.empty_headers:
-            report(path, f"{page.empty_headers} table header cell(s) without text")
-        if page.placeholders:
-            # scripts/sitediagrams.py knows no diagram of this name.
-            report(path, f"image placeholders left unresolved: {page.placeholders[:3]}")
-        if page.unrendered:
-            # Bold that reached the reader as asterisks: a block indented
-            # one level too deep is read as code (the clownmdemu analysis).
-            report(path, f"markdown left unrendered: {page.unrendered[:3]}")
-
-        if not is_404 and len(page.jsonld) != 1:
-            report(path, f"expected one JSON-LD block, got {len(page.jsonld)}")
-        for document in page.jsonld:
-            try:
-                payload = json.loads(document)
-            except json.JSONDecodeError as exc:
-                report(path, f"invalid JSON-LD: {exc}")
-                continue
-            if not isinstance(payload, dict) or payload.get("@context") != "https://schema.org":
-                report(path, "JSON-LD is not a schema.org object")
-
+        issues.extend(f"{rel}: {message}" for message in messages)
     return issues
+
+
+def _document_issues(path: Path, page: Page, is_404: bool, titles: dict, descriptions: dict) -> list[str]:
+    """The head and landmarks: title, language, description, H1, main, canonical."""
+    messages = []
+    if not page.title:
+        messages.append("missing document title")
+    elif not is_404:
+        titles[page.title].append(path)
+    if page.lang != "en":
+        messages.append(f"expected lang='en', got {page.lang!r}")
+    if len(page.descriptions) != 1 or not page.descriptions[0]:
+        messages.append(f"expected one non-empty description, got {len(page.descriptions)}")
+    elif not is_404:
+        descriptions[page.descriptions[0]].append(path)
+    if not is_404 and page.h1_count != 1:
+        messages.append(f"expected one H1, got {page.h1_count}")
+    if page.main_count != 1:
+        messages.append(f"expected one main landmark, got {page.main_count}")
+    if not is_404 and (
+        len(page.canonical) != 1
+        or not page.canonical[0].startswith("https://")
+    ):
+        messages.append(f"expected one HTTPS canonical URL, got {page.canonical!r}")
+    return messages
+
+
+def _content_issues(page: Page, rel: str) -> list[str]:
+    messages = []
+    duplicate_ids = [
+        value
+        for value, count in Counter(page.ids).items()
+        if value and count > 1
+    ]
+    if duplicate_ids:
+        messages.append(f"duplicate IDs: {duplicate_ids[:5]}")
+    if page.missing_alt:
+        messages.append(f"images missing alt: {page.missing_alt[:5]}")
+    if page.remote_images:
+        messages.append(f"images loaded from another host: {page.remote_images[:3]}")
+    if page.remote_scripts:
+        messages.append(f"scripts loaded from another host: {page.remote_scripts[:3]}")
+    if page.runtime_diagrams:
+        messages.append(f"{page.runtime_diagrams} diagram(s) drawn by a script at runtime")
+    if page.size > MAX_PAGE_BYTES:
+        messages.append(f"{page.size:,} bytes of HTML, over the {MAX_PAGE_BYTES:,} budget")
+    if page.elements > MAX_PAGE_ELEMENTS and rel not in OVER_ELEMENT_BUDGET:
+        messages.append(f"{page.elements:,} elements, over the {MAX_PAGE_ELEMENTS:,} budget")
+    jumps = _heading_jumps(page.headings)
+    if jumps:
+        messages.append(f"heading levels skipped: {sorted(set(jumps))}")
+    if page.empty_headers:
+        messages.append(f"{page.empty_headers} table header cell(s) without text")
+    if page.placeholders:
+        # scripts/sitediagrams.py knows no diagram of this name.
+        messages.append(f"image placeholders left unresolved: {page.placeholders[:3]}")
+    if page.unrendered:
+        # Bold that reached the reader as asterisks: a block indented
+        # one level too deep is read as code (the clownmdemu analysis).
+        messages.append(f"markdown left unrendered: {page.unrendered[:3]}")
+    return messages
+
+
+def _jsonld_issues(page: Page, is_404: bool) -> list[str]:
+    messages = []
+    if not is_404 and len(page.jsonld) != 1:
+        messages.append(f"expected one JSON-LD block, got {len(page.jsonld)}")
+    for document in page.jsonld:
+        try:
+            payload = json.loads(document)
+        except json.JSONDecodeError as exc:
+            messages.append(f"invalid JSON-LD: {exc}")
+            continue
+        if not isinstance(payload, dict) or payload.get("@context") != "https://schema.org":
+            messages.append("JSON-LD is not a schema.org object")
+    return messages
 
 
 def description_template(page: Page, site_name: str = "RetroBIOS") -> str:

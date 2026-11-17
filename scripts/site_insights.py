@@ -116,6 +116,8 @@ def fetch_queries(start: dt.date, end: dt.date) -> list[Query]:
         answer = _get_json(url, {"Authorization": f"Bearer {token}"}, {
             "startDate": start.isoformat(), "endDate": end.isoformat(),
             "dimensions": ["query", "page"], "rowLimit": 25000, "startRow": len(rows)})
+        if not isinstance(answer, dict):
+            raise SystemExit("Search Console answered with something other than an object")
         batch = answer.get("rows", [])
         rows += [Query(r["keys"][0], r["keys"][1], int(r["clicks"]), int(r["impressions"]),
                        float(r["position"])) for r in batch]
@@ -133,6 +135,8 @@ def fetch_goatcounter(start: dt.date, end: dt.date) -> dict:
     while True:
         params = urllib.parse.urlencode({**span, "limit": 100, "exclude_paths": ",".join(exclude)})
         answer = _get_json(f"{GOATCOUNTER}/stats/hits?{params}", auth)
+        if not isinstance(answer, dict):
+            raise SystemExit("GoatCounter answered with something other than an object")
         for hit in answer.get("hits", []):
             hits.append((hit["path"] + (" [404]" if hit.get("title") == "404" else ""), int(hit["count"])))
             exclude.append(str(hit["path_id"]))
