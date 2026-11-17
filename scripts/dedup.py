@@ -145,7 +145,7 @@ def _plan_group_removals(
 
     # True duplicates: same filename in multiple directories
     true_dupes_to_remove = []
-    for name, name_paths in by_name.items():
+    for name_paths in by_name.values():
         if len(name_paths) > 1:
             name_paths.sort(key=path_priority)
             true_dupes_to_remove.extend(name_paths[1:])
@@ -194,6 +194,115 @@ def _plan_group_removals(
     return true_dupes_to_remove
 
 
+def _read_clone_map(clone_path: str) -> object:
+    """The clone map an earlier run wrote, {} when there is none."""
+    # Read before anything is removed: the map is cumulative, and a run that
+    # stopped on an unreadable one after deleting clones would lose them.
+    try:
+        with open(clone_path) as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}
+    except json.JSONDecodeError as e:
+        raise SystemExit(
+            f"{clone_path} is not valid JSON ({e}). Restore it from git "
+            "before deduplicating again"
+        ) from e
+
+
+def _remove_copies(canonical: str, true_dupes_to_remove: list[str], dry_run: bool) -> list[str]:
+    """Remove (or name, in a dry run) each copy beside the canonical file."""
+    removed: list[str] = []
+    for dup in true_dupes_to_remove:
+        if dup == canonical:
+            continue
+        if not os.path.exists(dup):
+            continue
+        if dry_run:
+            print(f"  WOULD REMOVE: {dup}")
+        else:
+            try:
+                os.remove(dup)
+            except OSError as e:
+                print(f"  WARNING: cannot remove {dup}: {e}")
+                continue
+            # Clean up empty .variants/ directories
+            parent = os.path.dirname(dup)
+            if os.path.basename(parent) == ".variants" and not os.listdir(parent):
+                os.rmdir(parent)
+        removed.append(dup)
+    return removed
+
+
+def _settle_group(paths: list[str], true_dupes_to_remove: list[str], dry_run: bool) -> dict:
+    """Keep the best copy of one content and remove the others."""
+    # Find the best canonical across all paths
+    all_paths = [p for p in paths if p not in true_dupes_to_remove]
+    if not all_paths:
+        # All copies were marked for removal: keep the best one
+        all_paths_sorted = sorted(paths, key=path_priority)
+        all_paths = [all_paths_sorted[0]]
+        true_dupes_to_remove = [p for p in paths if p != all_paths[0]]
+
+    canonical = sorted(all_paths, key=path_priority)[0]
+    canonical_name = os.path.basename(canonical)
+
+    all_names = set(os.path.basename(p) for p in paths)
+    alias_names = sorted(all_names - {canonical_name})
+
+    size = os.path.getsize(canonical)
+    removed = _remove_copies(canonical, true_dupes_to_remove, dry_run)
+
+    if alias_names or true_dupes_to_remove:
+        action = "Would remove" if dry_run else "Removed"
+        dn = os.path.basename(canonical)
+        print(f"  {dn} (keep: {canonical})")
+        if true_dupes_to_remove:
+            print(f"    {action} {len(true_dupes_to_remove)} copies")
+        if alias_names:
+            print(f"    MAME clones: {alias_names}")
+    return {
+        "canonical": canonical,
+        "removed": removed,
+        "aliases": alias_names,
+        "saved": size * len(removed),
+    }
+
+
+def _remove_empty_dirs(bios_dir: str) -> int:
+    """Remove the directories the removals left empty, bottom up."""
+    empty_cleaned = 0
+    for root, dirs, files in os.walk(bios_dir, topdown=False):
+        if not files and not dirs and root != bios_dir:
+            os.rmdir(root)
+            empty_cleaned += 1
+    return empty_cleaned
+
+
+def _record_clone_map(
+    mame_clones: dict[str, dict], previous: object, clone_path: str, dry_run: bool
+) -> None:
+    """Write the clone map, merged with what earlier runs recorded."""
+    # A group is only visible while both copies are on disk, and this run
+    # has just deleted the clone. Writing only what was seen this time
+    # therefore erases every mapping an earlier run recorded, and the
+    # canonical zip stops answering to the names it stands in for. The
+    # older entries stay valid: their canonical file is still here.
+    if not dry_run and isinstance(previous, dict):
+        merged = dict(previous)
+        merged.update(mame_clones)
+        mame_clones = collapse_clone_chains(merged)
+    if dry_run:
+        print(f"\nWould write MAME clone map: {clone_path}")
+    else:
+        write_text_atomic(clone_path, json.dumps(mame_clones, indent=2, sort_keys=True))
+        print(f"\nWrote MAME clone map: {clone_path}")
+    print(
+        f"  {len(mame_clones)} canonical ZIPs with "
+        f"{sum(len(v['clones']) for v in mame_clones.values())} clones"
+    )
+
+
 def deduplicate(bios_dir: str, dry_run: bool = False) -> dict:
     """Remove true duplicates, map MAME device clones.
 
@@ -208,21 +317,10 @@ def deduplicate(bios_dir: str, dry_run: bool = False) -> dict:
     clone_path = os.path.join(
         os.path.dirname(os.path.abspath(bios_dir)), "_mame_clones.json"
     )
-    # Read before anything is removed: the map is cumulative, and a run that
-    # stopped on an unreadable one after deleting clones would lose them.
-    try:
-        with open(clone_path) as f:
-            previous = json.load(f)
-    except FileNotFoundError:
-        previous = {}
-    except json.JSONDecodeError as e:
-        raise SystemExit(
-            f"{clone_path} is not valid JSON ({e}). Restore it from git "
-            "before deduplicating again"
-        ) from e
+    previous = _read_clone_map(clone_path)
 
     sha1_groups = scan_duplicates(bios_dir)
-    results = {}
+    results: dict[str, dict] = {}
     total_removed = 0
     total_saved = 0
     mame_clones: dict[str, dict] = {}  # canonical_name -> {sha1, clones: [names]}
@@ -236,65 +334,13 @@ def deduplicate(bios_dir: str, dry_run: bool = False) -> dict:
         if not true_dupes_to_remove:
             continue
 
-        # Find the best canonical across all paths
-        all_paths = [p for p in paths if p not in true_dupes_to_remove]
-        if not all_paths:
-            # All copies were marked for removal: keep the best one
-            all_paths_sorted = sorted(paths, key=path_priority)
-            all_paths = [all_paths_sorted[0]]
-            true_dupes_to_remove = [p for p in paths if p != all_paths[0]]
-
-        canonical = sorted(all_paths, key=path_priority)[0]
-        canonical_name = os.path.basename(canonical)
-
-        all_names = set(os.path.basename(p) for p in paths)
-        alias_names = sorted(all_names - {canonical_name})
-
-        size = os.path.getsize(canonical)
-
-        results[sha1] = {
-            "canonical": canonical,
-            "removed": [],
-            "aliases": alias_names,
-        }
-
-        for dup in true_dupes_to_remove:
-            if dup == canonical:
-                continue
-            if not os.path.exists(dup):
-                continue
-            if dry_run:
-                print(f"  WOULD REMOVE: {dup}")
-            else:
-                try:
-                    os.remove(dup)
-                except OSError as e:
-                    print(f"  WARNING: cannot remove {dup}: {e}")
-                    continue
-                # Clean up empty .variants/ directories
-                parent = os.path.dirname(dup)
-                if os.path.basename(parent) == ".variants" and not os.listdir(parent):
-                    os.rmdir(parent)
-            results[sha1]["removed"].append(dup)
-            total_removed += 1
-            total_saved += size
-
-        if alias_names or true_dupes_to_remove:
-            action = "Would remove" if dry_run else "Removed"
-            dn = os.path.basename(canonical)
-            print(f"  {dn} (keep: {canonical})")
-            if true_dupes_to_remove:
-                print(f"    {action} {len(true_dupes_to_remove)} copies")
-            if alias_names:
-                print(f"    MAME clones: {alias_names}")
+        settled = _settle_group(paths, true_dupes_to_remove, dry_run)
+        total_removed += len(settled["removed"])
+        total_saved += settled.pop("saved")
+        results[sha1] = settled
 
     # Clean up empty directories
-    if not dry_run:
-        empty_cleaned = 0
-        for root, dirs, files in os.walk(bios_dir, topdown=False):
-            if not files and not dirs and root != bios_dir:
-                os.rmdir(root)
-                empty_cleaned += 1
+    empty_cleaned = 0 if dry_run else _remove_empty_dirs(bios_dir)
 
     prefix = "Would remove" if dry_run else "Removed"
     print(f"\n{prefix}: {total_removed} files")
@@ -305,29 +351,7 @@ def deduplicate(bios_dir: str, dry_run: bool = False) -> dict:
         print(f"Cleaned {empty_cleaned} empty directories")
 
     if mame_clones:
-        # A group is only visible while both copies are on disk, and this run
-        # has just deleted the clone. Writing only what was seen this time
-        # therefore erases every mapping an earlier run recorded, and the
-        # canonical zip stops answering to the names it stands in for. The
-        # older entries stay valid: their canonical file is still here.
-        if not dry_run:
-            if isinstance(previous, dict):
-                merged = dict(previous)
-                merged.update(mame_clones)
-                mame_clones = collapse_clone_chains(merged)
-        if dry_run:
-            print(f"\nWould write MAME clone map: {clone_path}")
-            print(
-                f"  {len(mame_clones)} canonical ZIPs with "
-                f"{sum(len(v['clones']) for v in mame_clones.values())} clones"
-            )
-        else:
-            write_text_atomic(clone_path, json.dumps(mame_clones, indent=2, sort_keys=True))
-            print(f"\nWrote MAME clone map: {clone_path}")
-            print(
-                f"  {len(mame_clones)} canonical ZIPs with "
-                f"{sum(len(v['clones']) for v in mame_clones.values())} clones"
-            )
+        _record_clone_map(mame_clones, previous, clone_path, dry_run)
 
     return results
 
