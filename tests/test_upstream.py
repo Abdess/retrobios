@@ -379,9 +379,9 @@ class TestGoneUpstream(unittest.TestCase):
         self._serve(urllib.error.URLError(
             socket.gaierror(socket.EAI_NONAME, "Name or service not known")
         ))
-        with mock.patch.object(upstream, "_resolver_answers", return_value=True):
-            with self.assertRaises(upstream.GoneError):
-                upstream._fetch("https://host/x")
+        with mock.patch.object(upstream, "_resolver_answers", return_value=True), \
+                self.assertRaises(upstream.GoneError):
+            upstream._fetch("https://host/x")
         self.assertEqual(self.calls, 1)
         self.assertEqual(self.slept, [])
 
@@ -391,9 +391,9 @@ class TestGoneUpstream(unittest.TestCase):
         for errno, resolver in ((socket.EAI_NONAME, False), (socket.EAI_AGAIN, True)):
             with self.subTest(errno=errno, resolver=resolver):
                 self._serve(urllib.error.URLError(socket.gaierror(errno, "no")))
-                with mock.patch.object(upstream, "_resolver_answers", return_value=resolver):
-                    with self.assertRaises(upstream.UpstreamError) as caught:
-                        upstream._fetch("https://host/x")
+                with mock.patch.object(upstream, "_resolver_answers", return_value=resolver), \
+                        self.assertRaises(upstream.UpstreamError) as caught:
+                    upstream._fetch("https://host/x")
                 self.assertNotIsInstance(caught.exception, upstream.GoneError)
 
     def test_a_gone_error_is_still_an_upstream_error(self):
@@ -1066,9 +1066,9 @@ class TestGitlabDirectoryArchive(unittest.TestCase):
         git.assert_called_once()
 
     def test_an_empty_archive_is_an_error_not_an_empty_directory(self):
-        with mock.patch.object(upstream, "_fetch", return_value=_tarball({"p/other/x": "y"})):
-            with self.assertRaises(upstream.UpstreamError):
-                upstream.cache_gitlab_directory(self.repo, "abc", "sys", self.tmp.name)
+        with mock.patch.object(upstream, "_fetch", return_value=_tarball({"p/other/x": "y"})), \
+                self.assertRaises(upstream.UpstreamError):
+            upstream.cache_gitlab_directory(self.repo, "abc", "sys", self.tmp.name)
 
 
 if __name__ == "__main__":

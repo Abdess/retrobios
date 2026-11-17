@@ -478,6 +478,7 @@ class TestDownloadPython(DownloaderCase):
             capture_output=True,
             text=True,
             timeout=120,
+            check=False,
         )
         if expect_success:
             self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
@@ -513,6 +514,7 @@ class TestDownloadPython(DownloaderCase):
             capture_output=True,
             text=True,
             timeout=60,
+            check=False,
         )
         self.assertNotEqual(proc.returncode, 0, proc.stdout + proc.stderr)
 
@@ -525,6 +527,7 @@ class TestDownloadPython(DownloaderCase):
             capture_output=True,
             text=True,
             timeout=60,
+            check=False,
         )
         self.assertNotEqual(proc.returncode, 0)
         self.assertIn("RETROBIOS_API", proc.stderr)
@@ -541,6 +544,7 @@ class TestDownloadShell(DownloaderCase):
             capture_output=True,
             text=True,
             timeout=120,
+            check=False,
         )
         if expect_success:
             self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
@@ -597,6 +601,7 @@ class TestDownloadShell(DownloaderCase):
         proc = subprocess.run(
             ["bash", str(SHELL), self.platform, str(self.dest)],
             env=env, capture_output=True, text=True, timeout=120,
+            check=False,
         )
         self.assertNotEqual(proc.returncode, 0)
         self.assertEqual(installed.read_bytes(), b"valid")
@@ -625,7 +630,8 @@ class TestDownloadShell(DownloaderCase):
         )
         time.sleep(0.5)
         second = subprocess.run(
-            command, env=env, capture_output=True, text=True, timeout=120
+            command, env=env, capture_output=True, text=True, timeout=120,
+            check=False,
         )
         out, err = first.communicate(timeout=120)
         self.assertEqual(first.returncode, 0, out + err)

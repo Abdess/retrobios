@@ -100,10 +100,14 @@ class EveryWriterGoesThroughIt(unittest.TestCase):
             for top in tree.body:
                 if path.name == "generate_installer_doc.py" and getattr(top, "name", "") in sandbox:
                     continue
-                for node in ast.walk(top):
-                    if (isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
-                            and node.func.attr in ("write_text", "write_bytes")):
-                        offenders.append(f"{path.name}:{node.lineno}")
+                offenders.extend(
+                    f"{path.name}:{node.lineno}"
+                    for node in ast.walk(top)
+                    if (
+                        isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
+                        and node.func.attr in ("write_text", "write_bytes")
+                    )
+                )
         self.assertEqual(offenders, [])
 
     def test_the_text_is_utf8_whatever_the_locale(self):

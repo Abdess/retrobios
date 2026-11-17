@@ -28,6 +28,7 @@ def _run(*argv: str) -> str:
     result = subprocess.run(
         [sys.executable, *argv], cwd=REPO_ROOT, capture_output=True, text=True,
         timeout=1800,
+        check=False,
     )
     if result.returncode != 0:
         raise AssertionError(result.stdout + result.stderr)

@@ -23,12 +23,13 @@ import urllib.error
 from pathlib import Path
 from unittest import mock
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
-import common  # noqa: E402
+import common
 import largefiles
-import check_release_assets  # noqa: E402
+import check_release_assets
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 PAYLOAD_A = b"A" * (256 * 1024)
 PAYLOAD_B = b"B" * (256 * 1024)

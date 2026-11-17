@@ -767,8 +767,7 @@ class EveryHandheldRowSaysWhere(unittest.TestCase):
         text = _plain_page(HANDHELDS.path)
         for system in HANDHELDS.systems:
             row = next(line for line in text.splitlines()
-                       if line.startswith(f"| {system.name} |")
-                       or line.startswith(f"| {system.name}, "))
+                       if line.startswith((f"| {system.name} |", f"| {system.name}, ")))
             with self.subTest(system=system.name):
                 self.assertEqual(generate_site.LINUX_ONLY_HINT in row, system.linux_only)
         self.assertTrue(any(s.linux_only for s in HANDHELDS.systems if s.name == "ArchR"))

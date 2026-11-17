@@ -58,6 +58,7 @@ class ABuildbotNameSelectsItsProfile(unittest.TestCase):
             return subprocess.run(
                 [sys.executable, "scripts/cross_reference.py", "--emulator", name],
                 cwd=REPO_ROOT, capture_output=True, text=True, timeout=600,
+                check=False,
             )
         by_core, by_profile = report("pcfx"), report("beetle_pcfx")
         self.assertEqual(by_core.returncode, 0, by_core.stderr)

@@ -379,10 +379,8 @@ class DecliningTheSizePointsAtTheChoice(unittest.TestCase):
                 mock.patch.object(install, "_is_terminal", return_value=True), \
                 mock.patch("builtins.input", lambda _prompt="": next(replies)), \
                 contextlib.redirect_stdout(out):
-            try:
+            with contextlib.suppress(SystemExit):
                 install.main()
-            except SystemExit:
-                pass
             self.assertEqual(repo.installed(), [])
         return out.getvalue()
 
@@ -1561,6 +1559,7 @@ class AnUnknownNativeNameIsRefusedBeforeAnyWork(unittest.TestCase):
                     [sys.executable, f"scripts/{script}", "--platform", "batocera",
                      "--system", "psxx", "--db", missing, *extra],
                     cwd=REPO_ROOT, capture_output=True, text=True, timeout=300,
+                    check=False,
                 )
                 self.assertEqual(proc.returncode, 2, proc.stdout + proc.stderr)
                 self.assertIn("unknown system psxx. Close matches: psx.", proc.stderr)
@@ -1572,6 +1571,7 @@ class AnUnknownNativeNameIsRefusedBeforeAnyWork(unittest.TestCase):
             [sys.executable, "scripts/verify.py", "--platform", "batocera",
              "--system", "psx", "--json"],
             cwd=REPO_ROOT, capture_output=True, text=True, timeout=600,
+            check=False,
         )
         if "database" in proc.stderr and proc.returncode:
             self.skipTest("database.json is not built")

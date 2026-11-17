@@ -368,8 +368,10 @@ class NoClauseSemicolons(unittest.TestCase):
         offenders = []
         for path in files:
             text = path.read_text(encoding="utf-8")
-            for line in _semicolons(extract(text)):
-                offenders.append(f"{path.relative_to(ROOT)}: {line[:100]}")
+            offenders.extend(
+                f"{path.relative_to(ROOT)}: {line[:100]}"
+                for line in _semicolons(extract(text))
+            )
         self.assertEqual(offenders, [], "\n".join(offenders[:40]))
 
     def test_markdown(self):
@@ -405,9 +407,11 @@ class NoClauseSemicolons(unittest.TestCase):
         offenders = []
         for page in sorted((ROOT / "wiki").glob("*.md")):
             text = FENCED.sub("", page.read_text(encoding="utf-8"))
-            for title in re.findall(r"(?m)^#{1,4} (.+)$", text):
-                if _sentence_case(title) != title:
-                    offenders.append(f"{page.name}: {title}")
+            offenders.extend(
+                f"{page.name}: {title}"
+                for title in re.findall(r"(?m)^#{1,4} (.+)$", text)
+                if _sentence_case(title) != title
+            )
         self.assertEqual(offenders, [], "\n".join(offenders))
 
     def test_yaml_prose_and_comments(self):
@@ -441,8 +445,10 @@ class NoClauseSemicolons(unittest.TestCase):
         offenders = []
         for path in sorted((ROOT / "schemas").glob("*.json")):
             text = path.read_text(encoding="utf-8")
-            for line in _semicolons(text) + GLYPHS.findall(text):
-                offenders.append(f"{path.relative_to(ROOT)}: {line[:100]}")
+            offenders.extend(
+                f"{path.relative_to(ROOT)}: {line[:100]}"
+                for line in _semicolons(text) + GLYPHS.findall(text)
+            )
         self.assertEqual(offenders, [], "\n".join(offenders))
 
 

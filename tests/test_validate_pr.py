@@ -192,7 +192,7 @@ class ADeclaredFileBesideItsHeldNameIsAVariant(_Fixture):
     left the copy to land on the held file of that name."""
 
     def test_place_copies_it_beside_the_held_name(self):
-        import hashlib  # noqa: PLC0415
+        import hashlib
 
         data = b"declared revision"
         emulators = self.tmp / "emulators"
