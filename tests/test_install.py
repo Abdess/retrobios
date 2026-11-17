@@ -367,12 +367,13 @@ class TestRunOutcome(unittest.TestCase):
             omitted=0,
             interrupted=False,
         )
+        details = {key: kw.pop(key) for key in list(kw) if key not in defaults}
         defaults.update(kw)
         buf = io.StringIO()
         code = 0
         with contextlib.redirect_stdout(buf):
             try:
-                install._report_outcome(**defaults)
+                install._report_outcome(**defaults, details=install.OutcomeDetails(**details))
             except SystemExit as exc:
                 code = exc.code
         return buf.getvalue(), code
@@ -680,11 +681,10 @@ class AFolderThatRefusesWritesIsNamed(unittest.TestCase):
     def _summary_for(self, assumed):
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf), self.assertRaises(SystemExit):
-            install._report_outcome(
-                paths=[Path("/userdata/bios")], downloaded=0, up_to_date=0, errors=1,
-                omitted=0, interrupted=False,
-                failures=[("neogeo.zip", install.NOT_WRITABLE)], assumed=assumed,
-            )
+            install._report_outcome(paths=[Path("/userdata/bios")], downloaded=0, up_to_date=0,
+                                    errors=1, omitted=0, interrupted=False,
+                                    details=install.OutcomeDetails(failures=[("neogeo.zip", install.NOT_WRITABLE)],
+                                                                   assumed=assumed))
         return buf.getvalue()
 
     def test_the_summary_says_sudo_on_the_console_and_dest_elsewhere(self):
@@ -4657,7 +4657,8 @@ class ARefusedStandaloneCopyIsNamed(unittest.TestCase):
 
         out = io.StringIO()
         with contextlib.redirect_stdout(out), self.assertRaises(SystemExit):
-            install._report_outcome([bios], 0, 1, failed, 0, False, failures=failures)
+            install._report_outcome([bios], 0, 1, failed, 0, False,
+                                    details=install.OutcomeDetails(failures=failures))
         text = out.getvalue()
         self.assertIn(str(target / "scph5501.bin"), text)
         self.assertIn(str(target), text.split("BIOS folder")[-1])
@@ -4702,7 +4703,7 @@ class AFullDriveIsSaidAsOne(unittest.TestCase):
         out = io.StringIO()
         with contextlib.redirect_stdout(out), self.assertRaises(SystemExit) as ended:
             install._report_outcome([bios], 7, 0, 1, 0, False,
-                                    failures=[("fbneo-cheats", install.DRIVE_FULL)])
+                                    details=install.OutcomeDetails(failures=[("fbneo-cheats", install.DRIVE_FULL)]))
         text = out.getvalue()
         self.assertEqual(ended.exception.code, 1)
         self.assertIn("is full: free up space, or install to another drive with --dest", text)
@@ -6227,7 +6228,8 @@ class ANetworkFailureNamesTheNetwork(unittest.TestCase):
                     ("b.bin", install.NetworkReason("Connection reset by peer"))]
         out = io.StringIO()
         with contextlib.redirect_stdout(out), self.assertRaises(SystemExit) as raised:
-            install._report_outcome([Path("/bios")], 0, 0, 2, 0, False, failures=failures)
+            install._report_outcome([Path("/bios")], 0, 0, 2, 0, False,
+                                    details=install.OutcomeDetails(failures=failures))
         self.assertEqual(raised.exception.code, 2)
         text = out.getvalue()
         self.assertIn("HTTPS_PROXY", text)
@@ -6246,7 +6248,7 @@ class AnHttpErrorNamesItsAddress(unittest.TestCase):
         with unittest.mock.patch.dict(os.environ, env), contextlib.redirect_stdout(out), \
                 self.assertRaises(SystemExit) as raised:
             install._report_outcome([Path("/bios")], 0, 0, len(failures), 0, False,
-                                    failures=failures)
+                                    details=install.OutcomeDetails(failures=failures))
         self.assertEqual(raised.exception.code, 2)
         return " ".join(out.getvalue().split())
 
@@ -6916,14 +6918,14 @@ class SystemEventsFollowTheChoice(unittest.TestCase):
         stream = io.StringIO()
         install.EVENTS.open(stream)
         self.addCleanup(setattr, install.EVENTS, "stream", None)
-        install._emit_check("retroarch", {}, Path("/b"), files, [], [], 0, 0,
+        install._emit_check("retroarch", {}, Path("/b"), install.CheckTally(files, [], []),
                             chosen=["nintendo-gba"])
         systems = [json.loads(line)["system"] for line in stream.getvalue().splitlines()
                    if json.loads(line)["event"] == "system"]
         self.assertEqual(systems, ["nintendo-gba"])
         stream.seek(0)
         stream.truncate()
-        install._emit_check("retroarch", {}, Path("/b"), files, [], [], 0, 0)
+        install._emit_check("retroarch", {}, Path("/b"), install.CheckTally(files, [], []))
         systems = [json.loads(line)["system"] for line in stream.getvalue().splitlines()
                    if json.loads(line)["event"] == "system"]
         self.assertEqual(systems, ["nintendo-gb", "nintendo-gba"])
@@ -7764,7 +7766,9 @@ class TheListVersionIsComparedWithTheSystems(unittest.TestCase):
                 buf = io.StringIO()
                 with contextlib.redirect_stdout(buf), contextlib.suppress(SystemExit):
                     install._report_outcome([Path("/userdata/bios")], omitted=0,
-                                            interrupted=False, notes=["Built for 43.1."],
+                                            interrupted=False,
+                                            details=install.OutcomeDetails(
+                                                notes=["Built for 43.1."]),
                                             **{"downloaded": 0, "up_to_date": 0,
                                                "errors": 0, **kw})
                 self.assertIn("Built for 43.1.", buf.getvalue())

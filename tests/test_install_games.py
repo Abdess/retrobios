@@ -1028,9 +1028,11 @@ class LineMenu(GamesTestCase):
         out = io.StringIO()
         with mock.patch.object(install, "_ask", side_effect=lambda _p: next(replies)), \
                 contextlib.redirect_stdout(out):
-            choice = install._prompt_custom_selection(
-                "retroarch", listed["files"], [], manifest=listed, played=plan, given=given,
-                command=lambda choice: install._INVOCATION.command("retroarch", "<dest>"))
+            choice = install._prompt_custom_selection(install.MenuContext("retroarch",
+                                                                          listed["files"], [],
+                                                                          manifest=listed),
+                                                      played=plan, given=given,
+                                                      command=lambda choice: install._INVOCATION.command("retroarch", "<dest>"))
         return choice, out.getvalue()
 
     def test_the_games_are_the_first_choice(self):

@@ -4390,7 +4390,8 @@ class LineModeOffline(unittest.TestCase):
         trees = [{"ref": "t", "files": {"x": {"size": 2048}, "y": {"size": 2048}}}]
         with mock.patch.object(install, "_ask", return_value=""), \
                 contextlib.redirect_stdout(io.StringIO()) as out:
-            install._prompt_custom_selection("retroarch", files, [], data_trees=trees)
+            install._prompt_custom_selection(install.MenuContext("retroarch", files, [],
+                                                                 data_trees=trees))
         # One total, the kinds under it adding up to it.
         self.assertIn("RetroArch: 3 files, 5.0 KB.\n  1 BIOS file (1.0 KB) and 2 data files "
                       "(4.0 KB).", out.getvalue())
@@ -7182,8 +7183,8 @@ class OneCardReading(unittest.TestCase):
         self.assertEqual(install.detected_os("retroarch", dest), "Onion")
         with mock.patch.object(install, "_ask", return_value=""), \
                 contextlib.redirect_stdout(io.StringIO()) as out:
-            install._prompt_custom_selection("retroarch", [], [], name="Onion",
-                                             bios_path=dest)
+            install._prompt_custom_selection(install.MenuContext("retroarch", [], [], name="Onion",
+                                                                 bios_path=dest))
         self.assertIn("Onion: 0 files", out.getvalue())
         self.assertIn(f"BIOS folder: {dest}", out.getvalue())
         proc = install_run("--platform", "onion", "--dest", str(cards[0]), "--dry-run",
@@ -8334,9 +8335,10 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
                     self.assertEqual(counts.size, sum(e.get("size") or 0 for e in files))
                 out = io.StringIO()
                 with contextlib.redirect_stdout(out):
-                    install._print_menu_head(
-                        manifest["platform"], manifest["files"], [], None, "", [], None,
-                        None, None, manifest, False)
+                    install._print_menu_head(install.MenuContext(manifest["platform"],
+                                                                 manifest["files"], [],
+                                                                 manifest=manifest),
+                                             current=None, given=None)
                 head = re.search(r"(\d+) files?, ", out.getvalue())
                 split = re.search(r"(\d+) BIOS files? \(.*?\) and (\d+) game data files?",
                                   out.getvalue())
@@ -8809,7 +8811,8 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         seen = [{**entry, "frontend": "ROCKNIX"} for entry in omitted]
         with contextlib.redirect_stdout(io.StringIO()) as out, \
                 contextlib.suppress(SystemExit):
-            install._report_outcome([self.here], 1, 0, 0, 3, False, omitted_entries=seen)
+            install._report_outcome([self.here], 1, 0, 0, 3, False,
+                                    details=install.OutcomeDetails(omitted_entries=seen))
         self.assertIn(said, out.getvalue())
 
     def test_the_drives_mounted_here_are_offered_in_both(self):
@@ -9076,7 +9079,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         with mock.patch.object(install, "_ask", return_value="q"), \
                 contextlib.redirect_stdout(io.StringIO()), \
                 self.assertRaises(SystemExit) as stop:
-            install._prompt_custom_selection("retroarch", [], [])
+            install._prompt_custom_selection(install.MenuContext("retroarch", [], []))
         self.assertEqual(stop.exception.code, 2)
         self.assertEqual(install.QUIT_CODE, 2)
         state = checked_state()
@@ -9171,9 +9174,10 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
                                          "files": {"a": {"size": 5}, "b": {"size": 5}}}]
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
-            install._print_menu_head("retroarch", manifest["files"], [], None, "",
-                                     manifest["data_directories"], None, None, None, manifest,
-                                     False)
+            install._print_menu_head(install.MenuContext("retroarch", manifest["files"], [],
+                                                         data_trees=manifest["data_directories"],
+                                                         manifest=manifest),
+                                     current=None, given=None)
         self.assertIn("1 BIOS file (3 B), 1 game data file (30 B) and 2 data files (10 B).",
                       out.getvalue())
         self.assertIn("Data files: the files an emulator reads from a data folder of its own",
@@ -9345,9 +9349,10 @@ class PacksWordingAndDocs(unittest.TestCase):
         with contextlib.redirect_stdout(io.StringIO()) as out, \
                 mock.patch.object(install, "_ask", side_effect=["c", "1", "q"]), \
                 contextlib.suppress(SystemExit):
-            install._prompt_custom_selection(
-                "retroarch", [{"dest": "a", "size": 1, "systems": ["x"], "cores": None}], [],
-                command=lambda _choice: "python3 install.py --dest '\x1b[2J'")
+            install._prompt_custom_selection(install.MenuContext("retroarch",
+                                                                 [{"dest": "a", "size": 1, "systems": ["x"], "cores": None}],
+                                                                 []),
+                                             command=lambda _choice: "python3 install.py --dest '\x1b[2J'")
         self.assertNotIn("\x1b", out.getvalue())
 
     def test_the_home_folder_is_said_on_the_plan(self):
@@ -10021,8 +10026,9 @@ class LineModeDecisions(unittest.TestCase):
         given = (["nintendo-gba"], [], [])
         patcher, _asked = self.ask("")
         with patcher, contextlib.redirect_stdout(io.StringIO()) as out:
-            chosen = install._prompt_custom_selection(
-                "retroarch", files, [], bios_path=self.root, given=given)
+            chosen = install._prompt_custom_selection(install.MenuContext("retroarch", files, [],
+                                                                          bios_path=self.root),
+                                                      given=given)
         self.assertEqual(chosen, given)
         text = out.getvalue()
         self.assertIn("RetroArch: 1 file, 1 B, for 1 of 2 systems (--system).", text)
@@ -10281,8 +10287,9 @@ class ScreenRowsAndFilters(unittest.TestCase):
                 contextlib.redirect_stdout(io.StringIO()) as out, \
                 self.assertRaises(SystemExit):
             install._report_outcome([self.root], 6, 0, 0, 1, False,
-                                    omitted_entries=unplaced, offline=16,
-                                    sources="6 files copied from OLD, 16 still missing.")
+                                    details=install.OutcomeDetails(omitted_entries=unplaced,
+                                                                   offline=16,
+                                                                   sources="6 files copied from OLD, 16 still missing."))
         lines = out.getvalue().splitlines()
         remedy = next(i for i, line in enumerate(lines) if "Copy them" in line
                       or "They are not in" in line)
@@ -14381,8 +14388,8 @@ class ProvenCardsAndCounts(unittest.TestCase):
         self.assertEqual(sources, "38 files copied from /media/OLD, 4 downloaded, 2 failed.")
         with contextlib.redirect_stdout(out), contextlib.suppress(SystemExit):
             install._report_outcome([self.here], 42, 0, 2, 0, False,
-                                    failures=[("x.bin", "timed out"), ("y.bin", "timed out")],
-                                    sources=sources)
+                                    details=install.OutcomeDetails(failures=[("x.bin", "timed out"), ("y.bin", "timed out")],
+                                                                   sources=sources))
         text = out.getvalue()
         self.assertIn(f"Finished with errors. {sources}", text)
         self.assertNotIn("42 files installed", text)
@@ -15050,7 +15057,7 @@ class CoresListAndFolderFailures(unittest.TestCase):
         with contextlib.redirect_stdout(out), contextlib.redirect_stderr(out), \
                 contextlib.suppress(SystemExit):
             install._report_outcome([Path("/b")], 3, 0, 1, 0, False,
-                                    failures=[("gba_bios.bin", "timed out")])
+                                    details=install.OutcomeDetails(failures=[("gba_bios.bin", "timed out")]))
         self.assertNotIn("gba_bios.bin", out.getvalue())
         self.assertIn("Run the same command again to retry only those.", out.getvalue())
 
