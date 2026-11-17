@@ -82,9 +82,9 @@ def shown(step: Step) -> str:
 def execute(step: Step) -> int:
     env = {**os.environ, **step.env}
     if not step.then:
-        return subprocess.run(argv(step.command), cwd=ROOT, env=env).returncode
-    first = subprocess.run(argv(step.command), cwd=ROOT, env=env, stdout=subprocess.PIPE)
-    return subprocess.run(argv(step.then), cwd=ROOT, env=env, input=first.stdout).returncode
+        return subprocess.run(argv(step.command), cwd=ROOT, env=env, check=False).returncode
+    first = subprocess.run(argv(step.command), cwd=ROOT, env=env, stdout=subprocess.PIPE, check=False)
+    return subprocess.run(argv(step.then), cwd=ROOT, env=env, input=first.stdout, check=False).returncode
 
 
 def run(steps: tuple[Step, ...] = STEPS) -> int:

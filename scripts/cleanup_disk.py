@@ -29,6 +29,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import contextlib
 import os
 import re
 import shutil
@@ -81,10 +82,8 @@ def busy_paths() -> set[str]:
         if not pid.name.isdigit():
             continue
         links = [pid / "cwd"]
-        try:
+        with contextlib.suppress(OSError):
             links += list((pid / "fd").iterdir())
-        except OSError:
-            pass
         for link in links:
             try:
                 found.add(os.readlink(link))

@@ -33,6 +33,13 @@ def _load_json(path: Path) -> object:
         return json.load(handle)
 
 
+def _json_object(path: Path) -> dict:
+    data = _load_json(path)
+    if not isinstance(data, dict):
+        raise ValueError(f"{path}: not a JSON object")
+    return data
+
+
 def _validator(name: str) -> Draft202012Validator:
     schema = _load_json(SCHEMAS / name)
     Draft202012Validator.check_schema(schema)
@@ -61,6 +68,16 @@ def _load_source(path: Path) -> object:
         with path.open(encoding="utf-8") as handle:
             _SOURCES[key] = yaml_load(handle)
     return _SOURCES[key]
+
+
+def _source_mapping(path: Path) -> dict:
+    """A source YAML that holds a mapping, empty when the file is."""
+    document = _load_source(path)
+    if not document:
+        return {}
+    if not isinstance(document, dict):
+        raise ValueError(f"{path}: not a mapping")
+    return document
 
 
 def _validate_yaml_directory(
@@ -149,12 +166,11 @@ def _config_reads_without_build(path: Path, document: object) -> list[str]:
             continue
         if read.get("revision") or read.get("binary_sha256"):
             continue
-        for platform in read.get("platforms") or []:
-            if str(platform) not in builds:
-                out.append(
-                    f"{path.relative_to(ROOT)}: config_reads[{index}] ({read.get('file')}) "
-                    f"names {platform}, which has no pin_build"
-                )
+        out.extend(
+            f"{path.relative_to(ROOT)}: config_reads[{index}] ({read.get('file')}) "
+            f"names {platform}, which has no pin_build"
+            for platform in read.get("platforms") or [] if str(platform) not in builds
+        )
     return out
 
 
@@ -272,12 +288,12 @@ def _data_only_source_refs(path: Path, document: object) -> list[str]:
         if not isinstance(entry, dict) or not entry.get("source_ref"):
             continue
         refs = entry["source_ref"]
-        for ref in refs.values() if isinstance(refs, dict) else [refs]:
-            if ref and not _ref_cites_code(str(ref)):
-                out.append(
-                    f"{path.relative_to(ROOT)}: files[{index}] ({entry.get('name')}) "
-                    f"source_ref cites no code that reads the file: {ref}"
-                )
+        out.extend(
+            f"{path.relative_to(ROOT)}: files[{index}] ({entry.get('name')}) "
+            f"source_ref cites no code that reads the file: {ref}"
+            for ref in (refs.values() if isinstance(refs, dict) else [refs])
+            if ref and not _ref_cites_code(str(ref))
+        )
     return out
 
 
@@ -310,7 +326,7 @@ def _checks_without_values(path: Path, document: object) -> list[str]:
 def _validate_json_files(
     paths: list[Path],
     schema_name: str,
-    semantic_check: Callable[[Path, object], list[str]] | None = None,
+    semantic_check: Callable[[Path, dict], list[str]] | None = None,
 ) -> list[str]:
     validator = _validator(schema_name)
     out: list[str] = []
@@ -322,7 +338,8 @@ def _validate_json_files(
             continue
         validation_errors = _errors(validator, data, str(path.relative_to(ROOT)))
         out.extend(validation_errors)
-        if not validation_errors and semantic_check is not None:
+        # Every schema a semantic check follows describes an object.
+        if not validation_errors and semantic_check is not None and isinstance(data, dict):
             out.extend(semantic_check(path, data))
     return out
 
@@ -420,11 +437,11 @@ def _unreachable_citations(path: Path, document: object) -> list[str]:
         elif isinstance(node, list):
             stack.extend(node)
         elif isinstance(node, str):
-            for match in _UNREACHABLE_REF.finditer(node):
-                out.append(
-                    f"{path.relative_to(ROOT)}: citation names a path outside "
-                    f"any repository: {match.group().strip(' ,;(')}"
-                )
+            out.extend(
+                f"{path.relative_to(ROOT)}: citation names a path outside "
+                f"any repository: {match.group().strip(' ,;(')}"
+                for match in _UNREACHABLE_REF.finditer(node)
+            )
     return out
 
 
@@ -464,7 +481,7 @@ def _unknown_data_dir_refs() -> list[str]:
         for path in source_yaml_paths(directory):
             if path.name.startswith("_"):
                 continue
-            document = _load_source(path) or {}
+            document = _source_mapping(path)
             systems = document.get("systems")
             holders = [document, *(systems.values() if isinstance(systems, dict) else [])]
             for holder in holders:
@@ -489,7 +506,7 @@ def _repository_layout_in_profiles() -> list[str]:
     """
     out: list[str] = []
     for path in source_yaml_paths(ROOT / "emulators"):
-        document = _load_source(path) or {}
+        document = _source_mapping(path)
         for entry in document.get("files") or []:
             if not isinstance(entry, dict):
                 continue
@@ -855,7 +872,7 @@ def _measurement_errors(root: Path | None = None) -> list[str]:
 
 def _defs_validator(name: str, definition: str) -> Draft202012Validator:
     """A validator for one $defs entry of a schema file."""
-    schema = _load_json(SCHEMAS / name)
+    schema = _json_object(SCHEMAS / name)
     Draft202012Validator.check_schema(schema)
     return Draft202012Validator(
         {**schema, "$ref": f"#/$defs/{definition}"}, format_checker=FormatChecker()
@@ -924,13 +941,13 @@ def _arcade_pin_errors() -> list[str]:
     code in place, and the installer kept serving it."""
     out: list[str] = []
     for path in sorted((ROOT / "games" / "arcade").glob("*.json")):
-        doc = _load_json(path)
+        doc = _json_object(path)
         profile_path = ROOT / "emulators" / f"{doc.get('profile')}.yml"
         label = str(path.relative_to(ROOT))
         if not profile_path.is_file():
             out.append(f"{label}: no profile emulators/{profile_path.name}")
             continue
-        profile = _load_source(profile_path) or {}
+        profile = _source_mapping(profile_path)
         pinned = profile.get("source_commit")
         pins = set(pinned.values()) if isinstance(pinned, dict) else {pinned}
         commit = (doc.get("source") or {}).get("commit")
@@ -956,7 +973,7 @@ def _games_index_errors() -> list[str]:
     if not index_path.exists():
         return []
     out: list[str] = []
-    index = _load_json(index_path)
+    index = _json_object(index_path)
     out.extend(_errors(_defs_validator("games-index.schema.json", "index"), index,
                        str(index_path.relative_to(ROOT))))
     kinds = {
@@ -978,9 +995,8 @@ def _games_index_errors() -> list[str]:
             if len(data) != entry["size"] or hashlib.sha256(data).hexdigest() != entry["sha256"]:
                 out.append(f"{label}: size or sha256 differs from index.json")
             out.extend(_errors(validator, json.loads(data), label))
-    for path in sorted(base.rglob("*.json")):
-        if path != index_path and path not in listed:
-            out.append(f"{path.relative_to(ROOT)}: not listed in index.json")
+    out.extend(f"{path.relative_to(ROOT)}: not listed in index.json"
+               for path in sorted(base.rglob("*.json")) if path != index_path and path not in listed)
     return out
 
 

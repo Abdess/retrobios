@@ -27,7 +27,6 @@ from __future__ import annotations
 
 import argparse
 import contextlib
-import datetime as dt
 import hashlib
 import json
 import os
@@ -49,6 +48,7 @@ from typing import IO
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import core_probe as cp
+from autorun import now_iso
 
 ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / ".cache" / "standalone"
@@ -293,10 +293,6 @@ def installed(emu: Emulator, sha256: str | None, cache: Path = CACHE) -> tuple[d
 # One repetition
 # --------------------------------------------------------------------------
 
-def now_iso() -> str:
-    return dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
-
-
 # The X server runs inside the sandbox, on the sandbox's own /tmp: the
 # display is private to the run, and the host's /tmp/.X11-unix (read-only
 # under WSLg) is never touched. Its fbdir option keeps the screen as an XWD
@@ -338,6 +334,35 @@ def read_lines(stream: IO[bytes], out: list[dict], samples: list) -> None:
             out.append({"frame": len(samples), "level": "info", "text": text})
 
 
+def wait_for_screen(proc: subprocess.Popen, screen_file: Path, logs: list[dict]) -> None:
+    deadline = time.monotonic() + 30
+    while not screen_file.exists():
+        if proc.poll() is not None or time.monotonic() > deadline:
+            raise cp.ProbeError(f"Xvfb did not start in the sandbox (exit {proc.poll()}): "
+                                f"{' / '.join(line['text'] for line in logs[-5:])}")
+        time.sleep(0.05)
+
+
+def sample_screen(proc: subprocess.Popen, screen_file: Path, args: argparse.Namespace,
+                  samples: list[tuple[float, str, bool]], png_dir: Path | None, started: float) -> dict | None:
+    """Hash the screen every interval. Returns how the emulator ended, None
+    while it still runs."""
+    for index in range(args.samples):
+        target = started + (index + 1) * args.interval
+        while time.monotonic() < target and proc.poll() is None:
+            time.sleep(min(0.05, max(0.0, target - time.monotonic())))
+        if proc.poll() is not None:
+            code = proc.returncode
+            return {"status": code if code >= 0 else None,
+                    "signal": signal.Signals(-code).name if code < 0 else None}
+        width, height, rgb = parse_xwd(screen_file.read_bytes())
+        sha1 = hashlib.sha1(rgb).hexdigest()
+        samples.append((round(time.monotonic() - started, 3), sha1, cp.uniform_frame(rgb, 3)))
+        if png_dir and not any(p.name.endswith(f"{sha1[:12]}.png") for p in png_dir.iterdir()):
+            (png_dir / f"{index:04d}-{sha1[:12]}.png").write_bytes(cp.png_bytes(width, height, rgb))
+    return None
+
+
 def run_once(args: argparse.Namespace, emu: Emulator, tree: Path, system_dir: Path, scratch: Path,
              png_dir: Path | None) -> dict:
     home = scratch / "home"
@@ -375,28 +400,9 @@ def run_once(args: argparse.Namespace, emu: Emulator, tree: Path, system_dir: Pa
     reader = threading.Thread(target=read_lines, args=(proc.stdout, logs, samples), daemon=True)
     reader.start()
     try:
-        deadline = time.monotonic() + 30
-        while not screen_file.exists():
-            if proc.poll() is not None or time.monotonic() > deadline:
-                raise cp.ProbeError(f"Xvfb did not start in the sandbox (exit {proc.poll()}): "
-                                    f"{' / '.join(line['text'] for line in logs[-5:])}")
-            time.sleep(0.05)
+        wait_for_screen(proc, screen_file, logs)
         started = time.monotonic()
-        ended = None
-        for index in range(args.samples):
-            target = started + (index + 1) * args.interval
-            while time.monotonic() < target and proc.poll() is None:
-                time.sleep(min(0.05, max(0.0, target - time.monotonic())))
-            if proc.poll() is not None:
-                code = proc.returncode
-                ended = {"status": code if code >= 0 else None,
-                         "signal": signal.Signals(-code).name if code < 0 else None}
-                break
-            width, height, rgb = parse_xwd(screen_file.read_bytes())
-            sha1 = hashlib.sha1(rgb).hexdigest()
-            samples.append((round(time.monotonic() - started, 3), sha1, cp.uniform_frame(rgb, 3)))
-            if png_dir and not any(p.name.endswith(f"{sha1[:12]}.png") for p in png_dir.iterdir()):
-                (png_dir / f"{index:04d}-{sha1[:12]}.png").write_bytes(cp.png_bytes(width, height, rgb))
+        ended = sample_screen(proc, screen_file, args, samples, png_dir, started)
         wall = time.monotonic() - started
     finally:
         stop(proc)
@@ -608,13 +614,23 @@ def _probe(args: argparse.Namespace, emu: Emulator) -> int:
     return 0
 
 
+def _check_mode_problems(args: argparse.Namespace) -> list[str]:
+    problems = []
+    if len({dest for dest, _ in args.vary}) != 1:
+        problems.append("--vary must name the same DEST in every occurrence")
+    problems.extend(f"--vary {dest}={src}: not a file"
+                    for dest, src in args.vary if src and not Path(src).is_file())
+    if args.observable not in OBSERVABLES:
+        problems.append(f"--observable {args.observable}: not one of {', '.join(OBSERVABLES)}")
+    return problems
+
+
 def validate(args: argparse.Namespace) -> list[str]:
     problems = []
     if not Path(args.content).is_file():
         problems.append(f"--content {args.content}: not a file")
-    for dest, src in args.bios_file:
-        if not Path(src).is_file():
-            problems.append(f"--bios-file {dest}={src}: not a file")
+    problems.extend(f"--bios-file {dest}={src}: not a file"
+                    for dest, src in args.bios_file if not Path(src).is_file())
     if args.oracle and not Path(args.oracle).is_file():
         problems.append(f"--oracle {args.oracle}: not a file")
     if args.samples < 2 or args.interval <= 0:
@@ -630,13 +646,7 @@ def validate(args: argparse.Namespace) -> list[str]:
     if args.subject and not re.fullmatch(r"[a-z0-9]+(?:[-_][a-z0-9]+)*", args.subject):
         problems.append(f"--subject {args.subject!r}: lowercase letters, digits, - and _ only")
     if args.mode == "check":
-        if len({dest for dest, _ in args.vary}) != 1:
-            problems.append("--vary must name the same DEST in every occurrence")
-        for dest, src in args.vary:
-            if src and not Path(src).is_file():
-                problems.append(f"--vary {dest}={src}: not a file")
-        if args.observable not in OBSERVABLES:
-            problems.append(f"--observable {args.observable}: not one of {', '.join(OBSERVABLES)}")
+        problems += _check_mode_problems(args)
     return problems
 
 
