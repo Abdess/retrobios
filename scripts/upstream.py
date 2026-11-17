@@ -419,9 +419,9 @@ def fetch_file(
         return None if text == ABSENT else text.splitlines()
     if offline:
         raise NotCachedError(f"{repo.slug}@{sha[:8]}:{path} is not in the offline cache")
-    text = _http_text(content_url(repo, sha, path))
-    write_cache(target, ABSENT if text is None else text)
-    return None if text is None else text.splitlines()
+    fetched = _http_text(content_url(repo, sha, path))
+    write_cache(target, ABSENT if fetched is None else fetched)
+    return None if fetched is None else fetched.splitlines()
 
 
 # How long an answer about a moving reference stays trusted. A branch tip, a
@@ -696,6 +696,15 @@ def _github_graphql(
     return payload
 
 
+def _dig(value: object, *keys: str) -> object:
+    """The value under nested keys of a JSON answer, None where one is missing."""
+    for key in keys:
+        if not isinstance(value, dict) or key not in value:
+            return None
+        value = value[key]
+    return value
+
+
 def newest_tag(repo: Repo, cache_dir: str, offline: bool = False) -> str | None:
     """The tag on the newest commit.
 
@@ -708,10 +717,7 @@ def newest_tag(repo: Repo, cache_dir: str, offline: bool = False) -> str | None:
             _NEWEST_TAG_QUERY, {"owner": repo.owner, "name": repo.name},
             cache_dir, offline,
         )
-        try:
-            nodes = payload["data"]["repository"]["refs"]["nodes"]
-        except (TypeError, KeyError):
-            nodes = None
+        nodes = _dig(payload, "data", "repository", "refs", "nodes")
         if isinstance(nodes, list):
             return nodes[0].get("name") if nodes else None
     tags = list_tags(repo, cache_dir, offline)
@@ -911,7 +917,7 @@ def ancestry(
     if ahead is None:
         return None
     if repo.family == "github":
-        behind = forward.get("behind_by")
+        behind = forward.get("behind_by") if isinstance(forward, dict) else None
     else:
         behind = _commits_ahead(
             _api(_compare_url(repo, head, base), cache_dir, offline), repo.family
@@ -1132,8 +1138,8 @@ def list_gitlinks(
             if len(payload) < TREE_PAGE_SIZE:
                 break
         return links
-    url = _tree_url(repo, sha)
-    payload = _api(url, cache_dir, offline) if url else None
+    tree_url = _tree_url(repo, sha)
+    payload = _api(tree_url, cache_dir, offline) if tree_url else None
     if not isinstance(payload, dict):
         return {}
     return {

@@ -22,6 +22,8 @@ from datetime import datetime, timezone
 import yaml
 
 from . import BaseTargetScraper
+from ..base_scraper import fetch_bytes
+from ..recalbox_scraper import SYSTEMS_TREE_URL, Scraper as PlatformScraper, board_cores
 
 PLATFORM_NAME = "recalbox"
 
@@ -32,13 +34,6 @@ CONFIGS_TREE_URL = (
 DEFCONFIG_URL = "https://gitlab.com/recalbox/recalbox/-/raw/{tag}/configs/{name}"
 _DEFCONFIG_RE = re.compile(r"^recalbox-(\w+)_defconfig$")
 _ENABLED_RE = re.compile(r"^(BR2_PACKAGE_\w+)=y\s*$", re.MULTILINE)
-
-try:
-    from ..base_scraper import fetch_bytes
-    from ..recalbox_scraper import SYSTEMS_TREE_URL, Scraper as PlatformScraper, board_cores
-except ImportError:
-    from scraper.base_scraper import fetch_bytes
-    from scraper.recalbox_scraper import SYSTEMS_TREE_URL, Scraper as PlatformScraper, board_cores
 
 
 def enabled_packages(defconfig: str) -> set[str]:

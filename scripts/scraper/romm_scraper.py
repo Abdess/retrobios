@@ -26,22 +26,13 @@ import json
 import re
 import sys
 
-try:
-    from .base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        fetch_bytes,
-        fetch_github_latest_version,
-        requirement_entry,
-    )
-except ImportError:
-    from base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        fetch_bytes,
-        fetch_github_latest_version,
-        requirement_entry,
-    )
+from .base_scraper import (
+    BaseScraper,
+    BiosRequirement,
+    fetch_bytes,
+    fetch_github_latest_version,
+    requirement_entry,
+)
 
 PLATFORM_NAME = "romm"
 
@@ -194,7 +185,7 @@ class Scraper(BaseScraper):
             raise ValueError("known_bios_files.json format validation failed")
 
         data = self._parse_json()
-        requirements = []
+        requirements: list[BiosRequirement] = []
 
         for key, entry in data.items():
             if ":" not in key:
@@ -216,21 +207,21 @@ class Scraper(BaseScraper):
                 for slug, names in FIRMWARE_MIRRORS.get(igdb_slug, {}).items()
                 if names is None or filename in names
             ]
-            for slug in (igdb_slug, *mirrors):
-                requirements.append(
-                    BiosRequirement(
-                        name=filename,
-                        system=SLUG_MAP[slug],
-                        sha1=sha1,
-                        md5=md5,
-                        crc32=crc32,
-                        size=size,
-                        destination=f"{slug}/{filename}",
-                        required=True,
-                        native_id=slug,
-                        mirror_of=None if slug == igdb_slug else igdb_slug,
-                    )
+            requirements.extend(
+                BiosRequirement(
+                    name=filename,
+                    system=SLUG_MAP[slug],
+                    sha1=sha1,
+                    md5=md5,
+                    crc32=crc32,
+                    size=size,
+                    destination=f"{slug}/{filename}",
+                    required=True,
+                    native_id=slug,
+                    mirror_of=None if slug == igdb_slug else igdb_slug,
                 )
+                for slug in (igdb_slug, *mirrors)
+            )
 
         return requirements
 

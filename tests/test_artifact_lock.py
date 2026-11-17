@@ -54,9 +54,10 @@ class ArtifactLockTest(unittest.TestCase):
             pass
 
     def test_writer_excludes_reader(self):
-        with artifact_lock(self.dir), self.assertRaises(ArtifactLockBusy):
-            with artifact_lock(self.dir, exclusive=False):
-                pass
+        with artifact_lock(self.dir), \
+                self.assertRaises(ArtifactLockBusy), \
+                artifact_lock(self.dir, exclusive=False):
+            pass
 
     def test_readers_share(self):
         with artifact_lock(self.dir, exclusive=False), artifact_lock(self.dir, exclusive=False):
@@ -121,6 +122,7 @@ class PackLockCliTest(unittest.TestCase):
             text=True,
             cwd=str(scratch_checkout()),
             timeout=300,
+            check=False,
         )
 
     def test_generate_pack_refuses_locked_output(self):
@@ -162,6 +164,7 @@ class PackLockCliTest(unittest.TestCase):
                     [sys.executable, "scripts/generate_pack.py", "--platform", "misterfpga",
                      "--platforms-dir", str(platforms), "--output-dir", str(output)],
                     capture_output=True, text=True, cwd=str(REPO_ROOT), timeout=120,
+                    check=False,
                 )
             except subprocess.TimeoutExpired:
                 self.fail("generate_pack waited on the data tree instead of refusing")
@@ -240,6 +243,7 @@ class PipelineHoldsItsFixedOutputs(unittest.TestCase):
                 [sys.executable, "scripts/pipeline.py", "--offline", "--skip-docs",
                  "--output-dir", scratch],
                 capture_output=True, text=True, cwd=str(checkout), timeout=120,
+                check=False,
             )
         self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
         self.assertIn("another run is writing database.json", proc.stderr)
@@ -260,21 +264,21 @@ class TheSuiteTakesTheRepositoryHoldInItsScratch(unittest.TestCase):
         scratch = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         self.addCleanup(shutil.rmtree, scratch, True)
         moved = scratch / "repository-lock"
-        with mock.patch.dict(os.environ, {artifacts.REPOSITORY_LOCK_ENV: str(moved)}):
-            with artifacts.hold_repository_outputs(str(REPO_ROOT)):
-                key = str(REPO_ROOT.resolve()).strip(os.sep).replace(os.sep, "__")
-                self.assertTrue((moved / key / ".lock").is_file())
-                # Held there: a second hold in the same tree is refused.
-                with self.assertRaises(artifacts.ArtifactLockBusy):
-                    with artifacts.hold_repository_outputs(str(REPO_ROOT)):
-                        pass
+        with mock.patch.dict(os.environ, {artifacts.REPOSITORY_LOCK_ENV: str(moved)}), \
+                artifacts.hold_repository_outputs(str(REPO_ROOT)):
+            key = str(REPO_ROOT.resolve()).strip(os.sep).replace(os.sep, "__")
+            self.assertTrue((moved / key / ".lock").is_file())
+            # Held there: a second hold in the same tree is refused.
+            with self.assertRaises(artifacts.ArtifactLockBusy), \
+                    artifacts.hold_repository_outputs(str(REPO_ROOT)):
+                pass
 
     def test_another_directory_keeps_its_own_lock(self):
         out = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         self.addCleanup(shutil.rmtree, out, True)
-        with mock.patch.dict(os.environ, {artifacts.REPOSITORY_LOCK_ENV: str(out / "x")}):
-            with artifacts.artifact_lock(str(out)):
-                self.assertTrue((out / ".lock").is_file())
+        with mock.patch.dict(os.environ, {artifacts.REPOSITORY_LOCK_ENV: str(out / "x")}), \
+                artifacts.artifact_lock(str(out)):
+            self.assertTrue((out / ".lock").is_file())
         self.assertFalse((out / "x").exists())
 
     def test_the_suite_sets_it(self):
@@ -401,6 +405,7 @@ class SiteGenerationHoldsDocs(unittest.TestCase):
             result = subprocess.run(
                 [sys.executable, "scripts/generate_site.py", "--docs-dir", docs],
                 cwd=scratch_checkout(), capture_output=True, text=True, timeout=600,
+                check=False,
             )
         self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
         self.assertIn("in use by another run", result.stderr)

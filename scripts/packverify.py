@@ -7,6 +7,8 @@ coverage report that disagree describe different collections."""
 from __future__ import annotations
 
 from collections import Counter
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, TypedDict
 
 from auto_fetch import DEFAULT_BIOS_DIR
 from artifacts import _build_timestamp
@@ -37,7 +39,14 @@ from gamedata import without_game_data
 from common import resolve_platform_cores
 from common import sanitize_pack_path
 import zipfile
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
+
+# Imported at run time where typing has it: a test reads the signature of
+# verify_pack_against_platform with its annotations evaluated.
+if sys.version_info >= (3, 11):
+    from typing import Unpack
+elif TYPE_CHECKING:
+    from typing_extensions import Unpack
 
 
 @functools.cache
@@ -121,6 +130,100 @@ def _same_members(pack: zipfile.ZipFile, name: str, source: str) -> bool:
         return False
 
 
+def _data_indexes(data_registry: dict | None) -> tuple[dict[str, list[str]], dict[str, str]]:
+    """The cached data directory files by name and by relative path."""
+    _data_index: dict[str, list[str]] = {}
+    _data_path_index: dict[str, str] = {}
+    if data_registry:
+        for _de in data_registry.values():
+            cache = _de.get("local_cache", "")
+            if not cache or not os.path.isdir(cache):
+                continue
+            for _r, _d, _fns in os.walk(cache):
+                for _fn in _fns:
+                    _fp = os.path.join(_r, _fn)
+                    _rel = os.path.relpath(_fp, cache)
+                    _data_path_index[_rel] = _fp
+                    _data_index.setdefault(_fn, []).append(_fp)
+    return _data_index, _data_path_index
+
+
+def _is_pack_note(name: str) -> bool:
+    """Whether a member is a note the builder composes, not a collected file."""
+    # The builder writes its notes beside the slot they explain
+    # (bios/INSTRUCTIONS_x.txt, games/keen6/INSTRUCTIONS_y.txt), so
+    # they are told by their own name, not by a root prefix.
+    base = name.rsplit("/", 1)[-1]
+    return base.startswith(("INSTRUCTIONS_", "RENAMED_")) or base == MEDIA_MARKER or name in (
+        "manifest.json",
+        "README.txt",
+    )
+
+
+def _member_digests(zf: zipfile.ZipFile, info: zipfile.ZipInfo) -> tuple[str, str, int]:
+    """(sha1, md5, size) of a pack member."""
+    with zf.open(info) as f:
+        sha1_h = hashlib.sha1()
+        md5_h = hashlib.md5()
+        size = 0
+        for chunk in iter(lambda: f.read(65536), b""):
+            sha1_h.update(chunk)
+            md5_h.update(chunk)
+            size += len(chunk)
+    return sha1_h.hexdigest(), md5_h.hexdigest(), size
+
+
+def _rebuilt_from(zf: zipfile.ZipFile, name: str, by_name: dict, files_db: dict) -> str | None:
+    """The name of a held archive a rebuilt ZIP carries the members of."""
+    _bn = os.path.basename(name)
+    for _src_sha1 in by_name.get(_bn, []):
+        if _src_sha1 not in files_db:
+            continue
+        _src_path = files_db[_src_sha1]["path"]
+        if not os.path.exists(_src_path):
+            continue
+        if _same_members(zf, name, _src_path):
+            return _bn
+    return None
+
+
+def _cached_as(
+    zf: zipfile.ZipFile,
+    name: str,
+    size: int,
+    sha1: str,
+    data_indexes: tuple[dict[str, list[str]], dict[str, str]],
+) -> str | None:
+    """The name of the data directory file a member is, or None."""
+    _data_index, _data_path_index = data_indexes
+    _bn = os.path.basename(name)
+    _pr = name
+    for _known_prefix in ("system/", "bios/", "BIOS/", "Firmware/"):
+        if name.startswith(_known_prefix):
+            _pr = name[len(_known_prefix):]
+            break
+    _cands = []
+    if _pr in _data_path_index:
+        _cands.append(_data_path_index[_pr])
+    for _dp in _data_index.get(_bn, []):
+        if _dp not in _cands:
+            _cands.append(_dp)
+    for _dp in _cands:
+        if not os.path.exists(_dp):
+            continue
+        # The content, not the size: a member written corrupt
+        # keeps its length, and a same-sized homonym from another
+        # cache is another file.
+        if os.path.getsize(_dp) == size and _file_sha1(_dp) == sha1:
+            return _bn
+        if (
+            name.endswith(".zip") and _dp.endswith(".zip")
+            and _same_members(zf, name, _dp)
+        ):
+            return _bn
+    return None
+
+
 def verify_pack(
     zip_path: str, db: dict, data_registry: dict | None = None
 ) -> tuple[bool, dict]:
@@ -138,53 +241,23 @@ def verify_pack(
     by_name = db.get("indexes", {}).get("by_name", {})  # name -> [SHA1]
 
     # Data directory file index
-    _data_index: dict[str, list[str]] = {}
-    _data_path_index: dict[str, str] = {}
-    if data_registry:
-        for _dk, _de in data_registry.items():
-            cache = _de.get("local_cache", "")
-            if not cache or not os.path.isdir(cache):
-                continue
-            for _r, _d, _fns in os.walk(cache):
-                for _fn in _fns:
-                    _fp = os.path.join(_r, _fn)
-                    _rel = os.path.relpath(_fp, cache)
-                    _data_path_index[_rel] = _fp
-                    _data_index.setdefault(_fn, []).append(_fp)
+    data_indexes = _data_indexes(data_registry)
 
-    manifest = {
+    manifest: dict = {
         "schema_version": 1,
         "version": 1,
         "generator": "retrobios generate_pack.py",
         "generated": _build_timestamp(db),
         "files": [],
     }
-    errors = []
+    errors: list[str] = []
 
     with zipfile.ZipFile(zip_path, "r") as zf:
         for info in zf.infolist():
-            if info.is_dir():
+            if info.is_dir() or _is_pack_note(info.filename):
                 continue
             name = info.filename
-            # The builder writes its notes beside the slot they explain
-            # (bios/INSTRUCTIONS_x.txt, games/keen6/INSTRUCTIONS_y.txt), so
-            # they are told by their own name, not by a root prefix.
-            base = name.rsplit("/", 1)[-1]
-            if base.startswith(("INSTRUCTIONS_", "RENAMED_")) or base == MEDIA_MARKER or name in (
-                "manifest.json",
-                "README.txt",
-            ):
-                continue
-            with zf.open(info) as f:
-                sha1_h = hashlib.sha1()
-                md5_h = hashlib.md5()
-                size = 0
-                for chunk in iter(lambda: f.read(65536), b""):
-                    sha1_h.update(chunk)
-                    md5_h.update(chunk)
-                    size += len(chunk)
-            sha1 = sha1_h.hexdigest()
-            md5 = md5_h.hexdigest()
+            sha1, md5, size = _member_digests(zf, info)
 
             # Look up in database: files_db keyed by SHA1
             db_entry = files_db.get(sha1)
@@ -195,61 +268,26 @@ def verify_pack(
             else:
                 # Try MD5 -> SHA1 lookup
                 ref_sha1 = by_md5.get(md5)
-                if ref_sha1:
-                    db_entry = files_db.get(ref_sha1)
-                    if db_entry:
-                        file_name = db_entry.get("name", "")
-                        status = "verified_md5"
-                    else:
-                        status = "untracked"
+                db_entry = files_db.get(ref_sha1) if ref_sha1 else None
+                if db_entry:
+                    file_name = db_entry.get("name", "")
+                    status = "verified_md5"
                 else:
                     status = "untracked"
 
             # Rebuilt ZIP: verify inner ROM CRC32s match source
             if status == "untracked" and name.endswith(".zip"):
-                _bn = os.path.basename(name)
-                for _src_sha1 in by_name.get(_bn, []):
-                    if _src_sha1 not in files_db:
-                        continue
-                    _src_path = files_db[_src_sha1]["path"]
-                    if not os.path.exists(_src_path):
-                        continue
-                    if _same_members(zf, name, _src_path):
-                        status = "verified_rebuild"
-                        file_name = _bn
-                        break
+                rebuilt = _rebuilt_from(zf, name, by_name, files_db)
+                if rebuilt:
+                    status = "verified_rebuild"
+                    file_name = rebuilt
 
             # Data directory: check against cached files
-            if status == "untracked" and _data_index:
-                _bn = os.path.basename(name)
-                _pr = name
-                for _known_prefix in ("system/", "bios/", "BIOS/", "Firmware/"):
-                    if name.startswith(_known_prefix):
-                        _pr = name[len(_known_prefix):]
-                        break
-                _cands = []
-                if _pr in _data_path_index:
-                    _cands.append(_data_path_index[_pr])
-                for _dp in _data_index.get(_bn, []):
-                    if _dp not in _cands:
-                        _cands.append(_dp)
-                for _dp in _cands:
-                    if not os.path.exists(_dp):
-                        continue
-                    # The content, not the size: a member written corrupt
-                    # keeps its length, and a same-sized homonym from another
-                    # cache is another file.
-                    if os.path.getsize(_dp) == size and _file_sha1(_dp) == sha1:
-                        status = "verified_data"
-                        file_name = _bn
-                        break
-                    if (
-                        name.endswith(".zip") and _dp.endswith(".zip")
-                        and _same_members(zf, name, _dp)
-                    ):
-                        status = "verified_data"
-                        file_name = _bn
-                        break
+            if status == "untracked" and data_indexes[0]:
+                cached = _cached_as(zf, name, size, sha1, data_indexes)
+                if cached:
+                    status = "verified_data"
+                    file_name = cached
 
             status, file_name = _settle_untracked(
                 status, name, zf, by_md5, held_inside, errors, file_name
@@ -374,8 +412,8 @@ def _check_member_hash(
             for h in digests.values():
                 h.update(chunk)
             crc = zlib.crc32(chunk, crc)
-    actual = {name: h.hexdigest() for name, h in digests.items()}
-    actual["crc32"] = format(crc & 0xFFFFFFFF, "08x")
+    computed = {name: h.hexdigest() for name, h in digests.items()}
+    computed["crc32"] = format(crc & 0xFFFFFFFF, "08x")
 
     def composite() -> str | None:
         # Recalbox's Md5Composite, over the sorted members of a ZIP.
@@ -390,10 +428,10 @@ def _check_member_hash(
             return None
 
     if digest_verdict(
-        file_entry, zf.getinfo(member).file_size, lambda: actual, mode, rule, composite
+        file_entry, zf.getinfo(member).file_size, lambda: computed, mode, rule, composite
     ):
         return None
-    return f"{member}: {mode} {actual[mode]} != declared {declared}"
+    return f"{member}: {mode} {computed[mode]} != declared {declared}"
 
 def _repo_satisfies_declaration(
     entries: list[dict], db: dict, mode: str
@@ -534,13 +572,14 @@ def _structural_errors(zf: zipfile.ZipFile, zip_set: set) -> list[str]:
             errors.append(f"path traversal: {n}")
 
     # Zero-byte check (exclude Dolphin GraphicMods markers)
-    for info in zf.infolist():
-        if info.file_size == 0 and not info.is_dir():
-            if "GraphicMods" not in info.filename and info.filename not in (
-                "manifest.json",
-                "README.txt",
-            ) and info.filename.rsplit("/", 1)[-1] != MEDIA_MARKER:
-                errors.append(f"zero-byte: {info.filename}")
+    errors.extend(
+        f"zero-byte: {info.filename}"
+        for info in zf.infolist()
+        if info.file_size == 0 and not info.is_dir()
+        and "GraphicMods" not in info.filename
+        and info.filename not in ("manifest.json", "README.txt")
+        and info.filename.rsplit("/", 1)[-1] != MEDIA_MARKER
+    )
 
     return errors
 
@@ -561,20 +600,11 @@ def _shipped_copy(
 
 
 def _builder_extras(
-    config: dict,
-    emulators_dir: str,
+    expect: _Expectation,
     db: dict,
-    emu_profiles: dict,
     baseline_groups: dict[str, list[dict]],
-    base_dest: str,
-    is_flat: bool,
-    zip_set: set[str],
-    zip_lower: dict[str, str],
-    target_cores: set[str] | None,
-    region_drops: set[str],
-    data_registry: dict | None,
+    view: _PackView,
     include_all: bool = False,
-    required_only: bool = False,
 ) -> dict[str, str]:
     """{full destination: local copy} of each core extra the builder writes.
 
@@ -588,15 +618,18 @@ def _builder_extras(
     from packextras import ExtraResolver, hidden_extras
     from validation import _build_validation_index, destination_owners
 
+    config, emu_profiles = expect.config, expect.emu_profiles
+    data_registry = expect.opts.data_registry
+    base_dest = expect.base_dest
     mode = config.get("verification_mode", "existence")
     hash_rule = config.get("hash_rule", "")
     shipped: dict[str, str | None] = {}
     for expected, declarations in baseline_groups.items():
-        if expected not in zip_set and expected.lower() not in zip_lower:
+        if not view.holds(expected):
             continue
         unflat = (
             f"{base_dest}/{expected}"
-            if is_flat and base_dest and not expected.startswith(f"{base_dest}/")
+            if view.is_flat and base_dest and not expected.startswith(f"{base_dest}/")
             else expected
         )
         if any(fe.get("storage") in ("user_provided", "external") for fe in declarations):
@@ -616,8 +649,8 @@ def _builder_extras(
     }
     placed_local: dict[str, str] = {}
     hidden_extras(
-        config, emulators_dir, db, emu_profiles, shipped, target_cores,
-        region_drops or None,
+        config, expect.opts.emulators_dir, db, emu_profiles, shipped, expect.target_cores,
+        expect.region_drops or None,
         resolver=ExtraResolver(
             db, DEFAULT_BIOS_DIR, build_zip_contents_index(db), data_registry,
             _build_validation_index(platform_profiles),
@@ -625,7 +658,7 @@ def _builder_extras(
         ),
         placed_local=placed_local,
         include_all=include_all,
-        required_only=required_only,
+        required_only=expect.opts.required_only,
     )
     return placed_local
 
@@ -639,19 +672,351 @@ def _same_content(zf: zipfile.ZipFile, member: str, local: str) -> bool:
     return local.lower().endswith(".zip") and _same_members(zf, member, local)
 
 
+class PlatformCheckOptions(TypedDict, total=False):
+    """The keyword options of verify_pack_against_platform."""
+
+    emulators_dir: str
+    emu_profiles: dict | None
+    regions: list[str] | None
+    data_registry: dict | None
+    source: str
+    required_only: bool
+    no_game_data: bool
+
+
+@dataclass(frozen=True)
+class _PlatformCheckSettings:
+    """PlatformCheckOptions with their defaults."""
+
+    emulators_dir: str = "emulators"
+    emu_profiles: dict | None = None
+    regions: list[str] | None = None
+    data_registry: dict | None = None
+    source: str = "full"
+    required_only: bool = False
+    no_game_data: bool = False
+
+
+@dataclass(frozen=True)
+class _Expectation:
+    """What the builder would have packed for a platform, before the pack is read."""
+
+    config: dict
+    emu_profiles: dict
+    expected_systems: dict
+    region_drops: set[str]
+    db: dict | None
+    target_cores: set[str] | None
+    opts: _PlatformCheckSettings
+
+    @property
+    def base_dest(self) -> str:
+        return self.config.get("base_destination", "")
+
+
+@dataclass(frozen=True)
+class _PackView:
+    """A pack's member names as the checks read them."""
+
+    zf: zipfile.ZipFile
+    zip_set: set[str]
+    zip_lower: dict[str, str]
+    zip_parents: set[str]
+    is_flat: bool
+
+    def holds(self, expected: str) -> bool:
+        return expected in self.zip_set or expected.lower() in self.zip_lower
+
+
+@dataclass
+class _BaselineCount:
+    """The baseline destinations checked, and what each came to."""
+
+    checked: int = 0
+    present: int = 0
+    excluded: int = 0
+    absent: int = 0
+    decl_by_member: dict[str, list[dict]] = field(default_factory=dict)
+
+
+def _reject_unknown(function: str, options: Mapping[str, object], known: frozenset[str]) -> None:
+    """Refuse a keyword the options do not declare, as a named parameter would."""
+    for key in options:
+        if key not in known:
+            raise TypeError(f"{function}() got an unexpected keyword argument '{key}'")
+
+
+def _cut_config(
+    platform_name: str,
+    platforms_dir: str,
+    target_cores: set[str] | None,
+    opts: _PlatformCheckSettings,
+) -> tuple[dict, dict]:
+    """The platform's config and the profiles, without game data when asked."""
+    config = load_platform_config(platform_name, platforms_dir)
+    emu_profiles = opts.emu_profiles
+    if emu_profiles is None:
+        emu_profiles = load_emulator_profiles(opts.emulators_dir)
+    if opts.no_game_data:
+        cut = without_game_data(config, emu_profiles, opts.data_registry, target_cores)
+        config, emu_profiles = cut.config, cut.profiles
+    return config, emu_profiles
+
+
+def _region_drops(
+    config: dict,
+    emu_profiles: dict,
+    expected_systems: dict,
+    db: dict | None,
+    *,
+    target_cores: set[str] | None,
+    opts: _PlatformCheckSettings,
+) -> set[str]:
+    """The regional variants the builder leaves out, by the same selection."""
+    region_drops: set[str] = set()
+    if not opts.regions:
+        return region_drops
+    region_index = region_mod.platform_region_index(
+        config, emu_profiles, target_cores
+    )
+    held: set[str] = set()
+    held_zip_contents = build_zip_contents_index(db) if db is not None else {}
+    region_groups, _extra_dests = platform_region_groups(
+        config,
+        expected_systems,
+        opts.emulators_dir,
+        db,
+        config.get("base_destination", ""),
+        emu_profiles,
+        target_cores=target_cores,
+        include_extras=(opts.source != "platform"),
+        include_all=(opts.source == "truth"),
+        required_only=opts.required_only,
+        held_out=held,
+        zip_contents=held_zip_contents,
+        data_registry=opts.data_registry,
+        slot_overrides=slots.pack_overrides(
+            config, emu_profiles, db, held_zip_contents, opts.data_registry,
+            target_cores=target_cores, source=opts.source,
+        ) if db is not None else None,
+    )
+    return region_mod.resolve_region_drops(
+        region_groups, region_index, opts.regions, held
+    )
+
+
+def _pack_view(zf: zipfile.ZipFile, config: dict, base_dest: str) -> _PackView:
+    zip_set = set(zf.namelist())
+    # A case twin stands in for the file only where the platform's
+    # filesystem folds case, as the builder decides: on Lakka bios.col
+    # and BIOS.col are two files two cores open, and either one missing
+    # was counted present through the other.
+    zip_lower = (
+        {n.lower(): n for n in zip_set}
+        if config.get("case_insensitive_fs", False) else {}
+    )
+
+    # Auto-detect flat vs nested ZIP
+    is_flat = bool(base_dest) and not any(
+        n.startswith(base_dest + "/")
+        for n in zip_set
+        if n not in ("README.txt", "manifest.json", MEDIA_MARKER) and not n.endswith("/")
+    )
+    # Mirror the builder's path-conflict logic: a declaration whose path
+    # collides file-vs-directory with a packed member was skipped by the
+    # builder (upstream declares e.g. both SGB1.sfc and SGB1.sfc/program.rom)
+    zip_parents: set[str] = set()
+    for n in zip_set:
+        parts = n.split("/")
+        for i in range(1, len(parts)):
+            zip_parents.add("/".join(parts[:i]))
+    return _PackView(zf, zip_set, zip_lower, zip_parents, is_flat)
+
+
+def _baseline_groups(
+    expect: _Expectation, is_flat: bool,
+) -> tuple[dict[str, list[dict]], dict[int, str]]:
+    """The platform's declarations by the path they expect in the pack, and
+    the system of each declaration."""
+    opts = expect.opts
+    base_dest = expect.base_dest
+    baseline_groups: dict[str, list[dict]] = {}
+    system_of: dict[int, str] = {}
+    for sys_id, system in (expect.expected_systems if opts.source != "truth" else {}).items():
+        for fe in system.get("files", []):
+            system_of[id(fe)] = sys_id
+            if opts.required_only and fe.get("required") is False:
+                continue
+            dest = sanitize_pack_path(fe.get("destination", fe.get("name", "")))
+            if not dest:
+                continue
+            if expect.region_drops and dest in expect.region_drops:
+                continue
+            expected = f"{base_dest}/{dest}" if base_dest and not is_flat else dest
+            baseline_groups.setdefault(expected, []).append(fe)
+    return baseline_groups, system_of
+
+
+def _count_baseline(
+    expect: _Expectation,
+    view: _PackView,
+    baseline_groups: dict[str, list[dict]],
+    system_of: dict[int, str],
+    errors: list[str],
+) -> _BaselineCount:
+    """Each baseline destination present, accounted for, or missing."""
+    db = expect.db
+    data_registry = expect.opts.data_registry
+    count = _BaselineCount(checked=len(baseline_groups))
+    # RetroBat's group: one packed file of it is enough, as verify counts it.
+    packed_groups = {
+        (system_of[id(fe)], fe["group"])
+        for expected, declarations in baseline_groups.items()
+        if view.holds(expected)
+        for fe in declarations
+        if fe.get("group")
+    }
+    exclusion_index = build_zip_contents_index(db) if db is not None else {}
+    categories = EntryCategories(expect.config, expect.emu_profiles, data_registry)
+    for expected, declarations in baseline_groups.items():
+        if expected in view.zip_set:
+            member = expected
+        elif expected.lower() in view.zip_lower:
+            member = view.zip_lower[expected.lower()]
+        elif _has_path_conflict(expected, view.zip_set, view.zip_parents):
+            # Skipped by the builder for the same reason: not an error
+            count.present += 1
+            continue
+        elif db is not None and _intentional_hash_exclusion(
+            declarations,
+            db,
+            zip_contents=exclusion_index,
+            data_dir_registry=data_registry,
+            verification_mode=expect.config.get("verification_mode", "existence"),
+            hash_rule=expect.config.get("hash_rule", ""),
+        ):
+            count.excluded += 1
+            continue
+        elif all(
+            fe.get("group") and (system_of[id(fe)], fe["group"]) in packed_groups
+            for fe in declarations
+        ):
+            count.absent += 1
+            continue
+        elif db is not None and all(
+            categories.category(fe, fe.get("destination", fe.get("name", "")),
+                                system_of[id(fe)]) != BIOS
+            for fe in declarations
+        ) and _held_nowhere(declarations, db, exclusion_index, data_registry):
+            # A game's data or an entry no core opens that the collection
+            # lacks: verify counts it apart. Missing firmware stays an error.
+            count.absent += 1
+            continue
+        else:
+            errors.append(f"baseline missing: {expected}")
+            continue
+        count.present += 1
+        count.decl_by_member.setdefault(member, []).extend(declarations)
+    return count
+
+
+def _native_hash_errors(
+    zf: zipfile.ZipFile, decl_by_member: dict[str, list[dict]], config: dict, db: dict | None,
+) -> list[str]:
+    """The platform's native hash check replayed on the pack's bytes."""
+    # Reproduce the platform's native hash check on pack bytes.
+    # A destination declared by several entries passes when the packed
+    # member satisfies any of them. A failure only counts as a pack
+    # error when the repo holds a file matching a declaration: without
+    # one, the pack ships its best effort and the gap is a data issue
+    # reported by verify.py, not a generation bug.
+    verification_mode = config.get("verification_mode", "existence")
+    digest = digest_algorithm(verification_mode)
+    hash_rule = config.get("hash_rule", "")
+    errors: list[str] = []
+    if not (reads_file_contents(verification_mode) and digest):
+        return errors
+    for member, decl_entries in decl_by_member.items():
+        checkable = [
+            fe
+            for fe in decl_entries
+            if str(fe.get(digest) or "").strip()
+        ]
+        if not checkable:
+            continue
+        # An archive declared once per ROM it must hold is checked
+        # once per ROM by the frontend: each such declaration has to
+        # pass on its own, where the repository holds an archive
+        # that would.
+        for fe in checkable:
+            if not fe.get("zipped_file"):
+                continue
+            err = _check_member_hash(zf, member, fe, digest, hash_rule)
+            if err is not None and (db is None or _repo_holds_member(fe, db)):
+                errors.append(err)
+        member_errors = []
+        satisfied = False
+        for fe in checkable:
+            err = _check_member_hash(zf, member, fe, digest, hash_rule)
+            if err is None:
+                satisfied = True
+                break
+            member_errors.append(err)
+        if satisfied:
+            continue
+        if db is None or _repo_satisfies_declaration(
+            checkable, db, verification_mode
+        ):
+            errors.append(member_errors[0])
+    return errors
+
+
+def _check_core_extras(
+    expect: _Expectation,
+    view: _PackView,
+    baseline_groups: dict[str, list[dict]],
+    errors: list[str],
+) -> tuple[int, int]:
+    """(checked, present) of the core extras the builder places."""
+    # 2. Core extras: the builder's own placement replayed
+    #    (packextras.hidden_extras, which verify reads too), after the
+    #    platform files it wrote. Each placed extra must sit at its path
+    #    with the bytes the builder resolved: an empty seen set and a
+    #    presence test credited a core file at a path where the pack
+    #    holds the platform's other dump.
+    core_checked = 0
+    core_present = 0
+    opts = expect.opts
+    db = expect.db
+    if db is None or opts.source == "platform":
+        return core_checked, core_present
+    placed_local = _builder_extras(
+        expect, db, baseline_groups, view, include_all=(opts.source == "truth"),
+    )
+    for full, local in sorted(placed_local.items()):
+        core_checked += 1
+        flat = _flat(full, expect.base_dest, view.is_flat)
+        member = flat if flat in view.zip_set else view.zip_lower.get(flat.lower())
+        if member is None:
+            errors.append(f"core missing: {full}")
+        elif not _same_content(view.zf, member, local):
+            errors.append(
+                f"core file differs: {member} is not the {os.path.basename(local)}"
+                " the builder places there"
+            )
+        else:
+            core_present += 1
+    return core_checked, core_present
+
+
 def verify_pack_against_platform(
     zip_path: str,
     platform_name: str,
     platforms_dir: str,
     db: dict | None = None,
-    emulators_dir: str = "emulators",
-    emu_profiles: dict | None = None,
-    regions: list[str] | None = None,
-    data_registry: dict | None = None,
+    *,
     target_cores: set[str] | None = None,
-    source: str = "full",
-    required_only: bool = False,
-    no_game_data: bool = False,
+    **options: Unpack[PlatformCheckOptions],
 ) -> tuple[bool, int, int, list[str], int, int, int, int, int, int]:
     """Verify a pack ZIP against its platform config and core requirements.
 
@@ -679,19 +1044,11 @@ def verify_pack_against_platform(
     holds no file for that are a game's data or that no core the platform
     runs opens. verify.py counts them apart from firmware.
     """
-
-    config = load_platform_config(platform_name, platforms_dir)
-    base_dest = config.get("base_destination", "")
-    errors: list[str] = []
-    checked = 0
-    present = 0
-
-    if emu_profiles is None:
-        emu_profiles = load_emulator_profiles(emulators_dir)
-    if no_game_data:
-        cut = without_game_data(config, emu_profiles, data_registry, target_cores)
-        config, emu_profiles = cut.config, cut.profiles
-
+    _reject_unknown(
+        "verify_pack_against_platform", options, PlatformCheckOptions.__optional_keys__
+    )
+    opts = _PlatformCheckSettings(**options)
+    config, emu_profiles = _cut_config(platform_name, platforms_dir, target_cores, opts)
     expected_systems = config.get("systems", {})
     if target_cores is not None:
         expected_systems = filter_systems_by_target(
@@ -700,221 +1057,35 @@ def verify_pack_against_platform(
             target_cores,
             resolve_platform_cores(config, emu_profiles),
         )
-
-    region_drops: set[str] = set()
-    if regions:
-        region_index = region_mod.platform_region_index(
-            config, emu_profiles, target_cores
-        )
-        held: set[str] = set()
-        held_zip_contents = build_zip_contents_index(db) if db is not None else {}
-        region_groups, _extra_dests = platform_region_groups(
-            config,
-            expected_systems,
-            emulators_dir,
-            db,
-            base_dest,
-            emu_profiles,
-            target_cores=target_cores,
-            include_extras=(source != "platform"),
-            include_all=(source == "truth"),
-            required_only=required_only,
-            held_out=held,
-            zip_contents=held_zip_contents,
-            data_registry=data_registry,
-            slot_overrides=slots.pack_overrides(
-                config, emu_profiles, db, held_zip_contents, data_registry,
-                target_cores=target_cores, source=source,
-            ) if db is not None else None,
-        )
-        region_drops = region_mod.resolve_region_drops(
-            region_groups, region_index, regions, held
-        )
+    expect = _Expectation(
+        config, emu_profiles, expected_systems,
+        _region_drops(
+            config, emu_profiles, expected_systems, db,
+            target_cores=target_cores, opts=opts,
+        ),
+        db, target_cores, opts,
+    )
+    errors: list[str] = []
 
     with zipfile.ZipFile(zip_path, "r") as zf:
-        zip_set = set(zf.namelist())
-        # A case twin stands in for the file only where the platform's
-        # filesystem folds case, as the builder decides: on Lakka bios.col
-        # and BIOS.col are two files two cores open, and either one missing
-        # was counted present through the other.
-        zip_lower = (
-            {n.lower(): n for n in zip_set}
-            if config.get("case_insensitive_fs", False) else {}
-        )
-
-        # Auto-detect flat vs nested ZIP
-        is_flat = bool(base_dest) and not any(
-            n.startswith(base_dest + "/")
-            for n in zip_set
-            if n not in ("README.txt", "manifest.json", MEDIA_MARKER) and not n.endswith("/")
-        )
-
-        errors.extend(_structural_errors(zf, zip_set))
+        view = _pack_view(zf, expect.config, expect.base_dest)
+        errors.extend(_structural_errors(zf, view.zip_set))
 
         # 1. Baseline file presence + native hash check
-        verification_mode = config.get("verification_mode", "existence")
-        baseline_checked = 0
-        baseline_present = 0
-        baseline_excluded = 0
-        baseline_absent = 0
-        decl_by_member: dict[str, list[dict]] = {}
-        # Mirror the builder's path-conflict logic: a declaration whose path
-        # collides file-vs-directory with a packed member was skipped by the
-        # builder (upstream declares e.g. both SGB1.sfc and SGB1.sfc/program.rom)
-        zip_parents: set[str] = set()
-        for n in zip_set:
-            parts = n.split("/")
-            for i in range(1, len(parts)):
-                zip_parents.add("/".join(parts[:i]))
-        baseline_groups: dict[str, list[dict]] = {}
-        system_of: dict[int, str] = {}
-        for sys_id, system in (expected_systems if source != "truth" else {}).items():
-            for fe in system.get("files", []):
-                system_of[id(fe)] = sys_id
-                if required_only and fe.get("required") is False:
-                    continue
-                dest = sanitize_pack_path(fe.get("destination", fe.get("name", "")))
-                if not dest:
-                    continue
-                if region_drops and dest in region_drops:
-                    continue
-                expected = f"{base_dest}/{dest}" if base_dest and not is_flat else dest
-                baseline_groups.setdefault(expected, []).append(fe)
-
-        baseline_checked = len(baseline_groups)
-        # RetroBat's group: one packed file of it is enough, as verify counts it.
-        packed_groups = {
-            (system_of[id(fe)], fe["group"])
-            for expected, declarations in baseline_groups.items()
-            if expected in zip_set or expected.lower() in zip_lower
-            for fe in declarations
-            if fe.get("group")
-        }
-        exclusion_index = build_zip_contents_index(db) if db is not None else {}
-        categories = EntryCategories(config, emu_profiles, data_registry)
-        for expected, declarations in baseline_groups.items():
-            if expected in zip_set:
-                member = expected
-            elif expected.lower() in zip_lower:
-                member = zip_lower[expected.lower()]
-            elif _has_path_conflict(expected, zip_set, zip_parents):
-                # Skipped by the builder for the same reason: not an error
-                baseline_present += 1
-                continue
-            elif db is not None and _intentional_hash_exclusion(
-                declarations,
-                db,
-                zip_contents=exclusion_index,
-                data_dir_registry=data_registry,
-                verification_mode=verification_mode,
-                hash_rule=config.get("hash_rule", ""),
-            ):
-                baseline_excluded += 1
-                continue
-            elif all(
-                fe.get("group") and (system_of[id(fe)], fe["group"]) in packed_groups
-                for fe in declarations
-            ):
-                baseline_absent += 1
-                continue
-            elif db is not None and all(
-                categories.category(fe, fe.get("destination", fe.get("name", "")),
-                                    system_of[id(fe)]) != BIOS
-                for fe in declarations
-            ) and _held_nowhere(declarations, db, exclusion_index, data_registry):
-                # A game's data or an entry no core opens that the collection
-                # lacks: verify counts it apart. Missing firmware stays an error.
-                baseline_absent += 1
-                continue
-            else:
-                errors.append(f"baseline missing: {expected}")
-                continue
-            baseline_present += 1
-            decl_by_member.setdefault(member, []).extend(declarations)
-
-        # Reproduce the platform's native hash check on pack bytes.
-        # A destination declared by several entries passes when the packed
-        # member satisfies any of them. A failure only counts as a pack
-        # error when the repo holds a file matching a declaration: without
-        # one, the pack ships its best effort and the gap is a data issue
-        # reported by verify.py, not a generation bug.
-        digest = digest_algorithm(verification_mode)
-        hash_rule = config.get("hash_rule", "")
-        if reads_file_contents(verification_mode) and digest:
-            for member, decl_entries in decl_by_member.items():
-                checkable = [
-                    fe
-                    for fe in decl_entries
-                    if str(fe.get(digest) or "").strip()
-                ]
-                if not checkable:
-                    continue
-                # An archive declared once per ROM it must hold is checked
-                # once per ROM by the frontend: each such declaration has to
-                # pass on its own, where the repository holds an archive
-                # that would.
-                for fe in checkable:
-                    if not fe.get("zipped_file"):
-                        continue
-                    err = _check_member_hash(zf, member, fe, digest, hash_rule)
-                    if err is not None and (db is None or _repo_holds_member(fe, db)):
-                        errors.append(err)
-                member_errors = []
-                satisfied = False
-                for fe in checkable:
-                    err = _check_member_hash(zf, member, fe, digest, hash_rule)
-                    if err is None:
-                        satisfied = True
-                        break
-                    member_errors.append(err)
-                if satisfied:
-                    continue
-                if db is None or _repo_satisfies_declaration(
-                    checkable, db, verification_mode
-                ):
-                    errors.append(member_errors[0])
-
-        # 2. Core extras: the builder's own placement replayed
-        #    (packextras.hidden_extras, which verify reads too), after the
-        #    platform files it wrote. Each placed extra must sit at its path
-        #    with the bytes the builder resolved: an empty seen set and a
-        #    presence test credited a core file at a path where the pack
-        #    holds the platform's other dump.
-        core_checked = 0
-        core_present = 0
-        if db is not None and source != "platform":
-            placed_local = _builder_extras(
-                config, emulators_dir, db, emu_profiles, baseline_groups,
-                base_dest, is_flat, zip_set, zip_lower, target_cores,
-                region_drops, data_registry,
-                include_all=(source == "truth"), required_only=required_only,
-            )
-            for full, local in sorted(placed_local.items()):
-                core_checked += 1
-                member = _flat(full, base_dest, is_flat)
-                member = member if member in zip_set else zip_lower.get(member.lower())
-                if member is None:
-                    errors.append(f"core missing: {full}")
-                elif not _same_content(zf, member, local):
-                    errors.append(
-                        f"core file differs: {member} is not the {os.path.basename(local)}"
-                        " the builder places there"
-                    )
-                else:
-                    core_present += 1
-
-        checked = baseline_checked + core_checked
-        present = baseline_present + core_present
+        baseline_groups, system_of = _baseline_groups(expect, view.is_flat)
+        baseline = _count_baseline(expect, view, baseline_groups, system_of, errors)
+        errors.extend(_native_hash_errors(zf, baseline.decl_by_member, expect.config, db))
+        core_checked, core_present = _check_core_extras(expect, view, baseline_groups, errors)
 
     return (
         len(errors) == 0,
-        checked,
-        present,
+        baseline.checked + core_checked,
+        baseline.present + core_present,
         errors,
-        baseline_checked,
-        baseline_present,
+        baseline.checked,
+        baseline.present,
         core_checked,
         core_present,
-        baseline_excluded,
-        baseline_absent,
+        baseline.excluded,
+        baseline.absent,
     )

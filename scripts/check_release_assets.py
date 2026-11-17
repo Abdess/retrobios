@@ -90,10 +90,11 @@ def compare(
         served = next(
             (name for name in _spellings(names[path]) if name in assets), None
         )
-        published = assets[served] if served else None
-        if published is None:
+        if not served:
             findings.append(AssetFinding("missing", path, size, None))
-        elif published != size:
+            continue
+        published = assets[served]
+        if published != size:
             findings.append(AssetFinding("size", path, size, published))
         else:
             ours = (expected_digests or {}).get(path)

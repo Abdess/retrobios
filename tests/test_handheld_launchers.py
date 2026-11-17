@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
 
+import contextlib
 import hashlib
 import importlib.util
 import json
@@ -87,7 +88,7 @@ def read_gptk(path: Path) -> dict[str, list[str]]:
     mapping: dict[str, list[str]] = {}
     for line in path.read_text(encoding="utf-8").splitlines():
         line = line.strip()
-        if not line or line.startswith("#") or line.startswith("["):
+        if not line or line.startswith(("#", "[")):
             continue
         key, sep, value = line.partition(" = ")
         assert sep, line
@@ -359,9 +360,9 @@ class TheArchives(unittest.TestCase):
         self.assertEqual(labels["retroarch"], "RetroArch")
         expected = "".join(f"{p}\t{label}\n" for p, label in sorted(labels.items()))
         for name, (_script, folder) in self.LAYOUT.items():
-            with self.subTest(archive=name):
-                with zipfile.ZipFile(build_port.build_archive(name, self.out / name)) as zf:
-                    self.assertEqual(zf.read(f"{folder}/packs.txt").decode(), expected)
+            with self.subTest(archive=name), \
+                    zipfile.ZipFile(build_port.build_archive(name, self.out / name)) as zf:
+                self.assertEqual(zf.read(f"{folder}/packs.txt").decode(), expected)
 
     def test_an_unpinned_installer_is_refused(self):
         root = _tempdir(self)
@@ -818,10 +819,8 @@ class Device:
         for name in ("mapper.pid", "ui.pid", "engine.pid"):
             path = self.state / name
             if path.exists():
-                try:
+                with contextlib.suppress(ProcessLookupError, ValueError):
                     os.kill(int(path.read_text()), signal.SIGKILL)
-                except (ProcessLookupError, ValueError):
-                    pass
 
     def _left(self) -> list[int]:
         """The processes a run on this device started that still run: each
@@ -881,10 +880,8 @@ class Device:
         pid = int((self.state / "mapper.pid").read_text())
         stopped = (self.state / "mapper.stopped").exists()
         if not stopped:
-            try:
+            with contextlib.suppress(ProcessLookupError):
                 os.kill(pid, signal.SIGKILL)
-            except ProcessLookupError:
-                pass
         self.test.assertTrue(stopped, "gptokeyb was left running")
 
     def assert_mapper_gone(self) -> None:

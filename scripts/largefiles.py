@@ -159,6 +159,30 @@ def fetch_large_file(
     return None
 
 
+def _download(name: str, tmp_path: str) -> bool:
+    """Stream the first release URL of *name* that answers into *tmp_path*."""
+    # Only a name no candidate answers is reported: a spaced name is
+    # published dotted, and logging its first 404 read as a missing asset.
+    failures: list[str] = []
+    for candidate, url in _asset_urls(name):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "retrobios/1.0"})
+            with urllib.request.urlopen(req, timeout=300) as resp, open(tmp_path, "wb") as f:
+                while True:
+                    chunk = resp.read(65536)
+                    if not chunk:
+                        break
+                    f.write(chunk)
+            return True
+        except (urllib.error.URLError, OSError, http.client.HTTPException) as exc:
+            # A stalled or cut stream is a timeout or IncompleteRead, not
+            # a URLError: it escaped this handler and left its scratch.
+            failures.append(f"  large file {candidate}: {exc}")
+    for failure in failures:
+        print(failure, file=sys.stderr)
+    return False
+
+
 def _fetch_asset(
     name: str,
     dest_dir: str,
@@ -209,28 +233,7 @@ def _fetch_asset(
     )
     os.close(tmp_fd)
     try:
-        downloaded = False
-        # Only a name no candidate answers is reported: a spaced name is
-        # published dotted, and logging its first 404 read as a missing asset.
-        failures: list[str] = []
-        for candidate, url in _asset_urls(name):
-            try:
-                req = urllib.request.Request(url, headers={"User-Agent": "retrobios/1.0"})
-                with urllib.request.urlopen(req, timeout=300) as resp, open(tmp_path, "wb") as f:
-                    while True:
-                        chunk = resp.read(65536)
-                        if not chunk:
-                            break
-                        f.write(chunk)
-                downloaded = True
-                break
-            except (urllib.error.URLError, OSError, http.client.HTTPException) as exc:
-                # A stalled or cut stream is a timeout or IncompleteRead, not
-                # a URLError: it escaped this handler and left its scratch.
-                failures.append(f"  large file {candidate}: {exc}")
-        if not downloaded:
-            for failure in failures:
-                print(failure, file=sys.stderr)
+        if not _download(name, tmp_path):
             return None
         snapshot = _read_once(tmp_path)
         if snapshot is None or not _matches(snapshot[0], expected_sha1, expected_md5):

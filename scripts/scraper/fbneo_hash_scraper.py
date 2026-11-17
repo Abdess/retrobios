@@ -196,12 +196,10 @@ def _format_diff(
         return "\n".join(lines)
 
     if show_added:
-        for label in added:
-            lines.append(f"    + {label}")
+        lines.extend(f"    + {label}" for label in added)
     elif added:
         lines.append(f"    + {len(added)} new ROMs available (main profile only)")
-    for label in updated:
-        lines.append(f"    ~ {label}")
+    lines.extend(f"    ~ {label}" for label in updated)
     lines.append(f"    = {diff['unchanged']} unchanged")
     if oos:
         lines.append(f"    . {oos} out of scope")

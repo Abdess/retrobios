@@ -162,7 +162,7 @@ def _ec_mul(k: int, p: tuple[int, int] | None) -> tuple[int, int] | None:
         return _INF
 
     result = _INF
-    addend = p
+    addend: tuple[int, int] | None = p
     while k:
         if k & 1:
             result = _ec_add(result, addend)

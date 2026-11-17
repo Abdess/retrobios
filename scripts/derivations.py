@@ -16,7 +16,7 @@ import hashlib
 import os
 import zipfile
 from collections import defaultdict
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Iterable, Sequence
 
 # A held file larger than this is not read: no chip image is near it.
 MAX_SOURCE_SIZE = 64 * 1024 * 1024
@@ -61,7 +61,7 @@ TRANSFORMS: tuple[tuple[str, Callable[[int], int | None], Callable[[bytes], byte
 )
 
 
-def _gf2_times(matrix: list[int], vector: int) -> int:
+def _gf2_times(matrix: Sequence[int], vector: int) -> int:
     total, row = 0, 0
     while vector:
         if vector & 1:
@@ -71,7 +71,7 @@ def _gf2_times(matrix: list[int], vector: int) -> int:
     return total
 
 
-def _gf2_square(matrix: list[int]) -> list[int]:
+def _gf2_square(matrix: Sequence[int]) -> list[int]:
     return [_gf2_times(matrix, matrix[n]) for n in range(32)]
 
 
@@ -127,10 +127,10 @@ def _read(held: dict, archives: dict[str, zipfile.ZipFile] | None = None) -> byt
             if archives is None:
                 with zipfile.ZipFile(held["archive"]) as zf:
                     return zf.read(held["member"])
-            zf = archives.get(held["archive"])
-            if zf is None:
-                zf = archives[held["archive"]] = zipfile.ZipFile(held["archive"])
-            return zf.read(held["member"])
+            opened = archives.get(held["archive"])
+            if opened is None:
+                opened = archives[held["archive"]] = zipfile.ZipFile(held["archive"])
+            return opened.read(held["member"])
         with open(held["path"], "rb") as handle:
             return handle.read()
     except (OSError, KeyError, zipfile.BadZipFile):
@@ -160,13 +160,15 @@ def _held_sources(db: dict) -> list[dict]:
                 infos = [i for i in zf.infolist() if not i.is_dir()]
         except (OSError, zipfile.BadZipFile):
             continue
-        for info in infos:
-            if 0 < info.file_size <= MAX_SOURCE_SIZE:
-                sources.append({
-                    "path": f"{path}/{info.filename}", "archive": path,
-                    "member": info.filename, "size": info.file_size,
-                    "crc32": f"{info.CRC:08x}", "group": path,
-                })
+        sources.extend(
+            {
+                "path": f"{path}/{info.filename}", "archive": path,
+                "member": info.filename, "size": info.file_size,
+                "crc32": f"{info.CRC:08x}", "group": path,
+            }
+            for info in infos
+            if 0 < info.file_size <= MAX_SOURCE_SIZE
+        )
     return sources
 
 
@@ -201,13 +203,29 @@ def _derivable(
     found: dict[str, dict] = {}
 
     files = _held_sources(db)
+    _find_transformed(files, wanted, sizes, archives, found)
+    _find_concatenated(files, by_size_crc, sizes, archives, found)
+    return found
+
+
+def _find_transformed(
+    files: list[dict],
+    wanted: dict[tuple[int, str], str],
+    sizes: set[int],
+    archives: dict[str, zipfile.ZipFile],
+    found: dict[str, dict],
+) -> None:
+    """Record each wanted sha1 one transform of a held file produces."""
     # The same chip sits in many archives. Its transforms are a function of
     # its bytes alone, and the first path read keeps the match, so a content
     # already transformed has nothing left to find.
     transformed: set[str] = set()
     for held in files:
         n = held["size"]
-        useful = [t for t in TRANSFORMS if t[1](n) in sizes]
+        useful = [
+            (name, size_out, transform) for name, out_size, transform in TRANSFORMS
+            if (size_out := out_size(n)) is not None and size_out in sizes
+        ]
         if not useful:
             continue
         data = _read(held, archives)
@@ -217,12 +235,21 @@ def _derivable(
         if content in transformed:
             continue
         transformed.add(content)
-        for name, out_size, transform in useful:
+        for name, size_out, transform in useful:
             out = transform(data)
-            sha1 = wanted.get((out_size(n), hashlib.sha1(out).hexdigest()))
+            sha1 = wanted.get((size_out, hashlib.sha1(out).hexdigest()))
             if sha1 and sha1 not in found:
                 found[sha1] = {"from": [held["path"]], "transform": name}
 
+
+def _find_concatenated(
+    files: list[dict],
+    by_size_crc: dict[tuple[int, int], list[str]],
+    sizes: set[int],
+    archives: dict[str, zipfile.ZipFile],
+    found: dict[str, dict],
+) -> None:
+    """Record each wanted sha1 two held files of one group make end to end."""
     # Romsets repeat the same chip pairs: a combined crc is computed once.
     combined: dict[tuple[str, str, int], int] = {}
     by_dir: dict[str, list[dict]] = defaultdict(list)
@@ -242,22 +269,33 @@ def _derivable(
                 if total not in sizes:
                     continue
                 for second in seconds:
-                    if first is second:
-                        continue
-                    key = (first["crc32"], second["crc32"], second["size"])
-                    crc = combined.get(key)
-                    if crc is None:
-                        crc = combined[key] = crc32_combine(
-                            int(first["crc32"], 16), int(second["crc32"], 16), second["size"])
-                    candidates = [s for s in by_size_crc.get((total, crc), [])
-                                  if s not in found]
-                    if not candidates:
-                        continue
-                    a, b = _read(first, archives), _read(second, archives)
-                    if a is None or b is None:
-                        continue
-                    sha1 = hashlib.sha1(a + b).hexdigest()
-                    if sha1 in candidates:
-                        found[sha1] = {"from": [first["path"], second["path"]],
-                                       "transform": "concatenated"}
-    return found
+                    if first is not second:
+                        _try_pair(first, second, total, combined, by_size_crc, archives, found)
+
+
+def _try_pair(
+    first: dict,
+    second: dict,
+    total: int,
+    combined: dict[tuple[str, str, int], int],
+    by_size_crc: dict[tuple[int, int], list[str]],
+    archives: dict[str, zipfile.ZipFile],
+    found: dict[str, dict],
+) -> None:
+    """Record the wanted sha1 first + second makes, if their crc names one."""
+    key = (first["crc32"], second["crc32"], second["size"])
+    crc = combined.get(key)
+    if crc is None:
+        crc = combined[key] = crc32_combine(
+            int(first["crc32"], 16), int(second["crc32"], 16), second["size"])
+    candidates = [s for s in by_size_crc.get((total, crc), [])
+                  if s not in found]
+    if not candidates:
+        return
+    a, b = _read(first, archives), _read(second, archives)
+    if a is None or b is None:
+        return
+    sha1 = hashlib.sha1(a + b).hexdigest()
+    if sha1 in candidates:
+        found[sha1] = {"from": [first["path"], second["path"]],
+                       "transform": "concatenated"}

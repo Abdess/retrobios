@@ -27,6 +27,7 @@ Verification logic (api_data_processing.sh:289-405):
 
 from __future__ import annotations
 
+import importlib
 import json
 import re
 import sys
@@ -34,29 +35,22 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-try:
-    from .base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        fetch_branch_head,
-        fetch_bytes,
-        fetch_github_latest_version,
-        github_headers,
-        requirement_entry,
-    )
-    from .retrodeck_launchers import extract_launchers
-except ImportError:
+if not __package__:
+    # Allow running directly: python scripts/scraper/retrodeck_scraper.py
     sys.path.insert(0, str(Path(__file__).parent.parent))
-    from scraper.base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        fetch_branch_head,
-        fetch_bytes,
-        fetch_github_latest_version,
-        github_headers,
-        requirement_entry,
-    )
-    from scraper.retrodeck_launchers import extract_launchers
+    importlib.import_module("scraper")
+    __package__ = "scraper"
+
+from .base_scraper import (
+    BaseScraper,
+    BiosRequirement,
+    fetch_branch_head,
+    fetch_bytes,
+    fetch_github_latest_version,
+    github_headers,
+    requirement_entry,
+)
+from .retrodeck_launchers import extract_launchers
 
 PLATFORM_NAME = "retrodeck"
 COMPONENTS_REPO = "RetroDECK/components"
@@ -253,9 +247,10 @@ def _extract_bios_entries(component_val: dict) -> list[dict]:
             bios_data = [bios_data]
         if not isinstance(bios_data, list):
             return
-        for entry in bios_data:
-            if isinstance(entry, dict) and entry.get("filename", "").strip():
-                entries.append(entry)
+        entries.extend(
+            entry for entry in bios_data
+            if isinstance(entry, dict) and entry.get("filename", "").strip()
+        )
 
     if "bios" in component_val:
         collect(component_val["bios"])
@@ -280,6 +275,112 @@ def _map_system(raw_system: str) -> str | None:
     if raw_system in SYSTEM_SLUG_MAP:
         return SYSTEM_SLUG_MAP[raw_system]
     return raw_system
+
+
+def _entry_folder(paths_raw: object) -> str | None:
+    """The folder a BIOS entry's paths resolve to, None for a saves-only entry."""
+    if isinstance(paths_raw, str):
+        resolved = _resolve_path(paths_raw)
+    elif isinstance(paths_raw, list):
+        resolved = ""
+        for p in paths_raw:
+            rp = _resolve_path(str(p))
+            if not rp.startswith("saves"):
+                resolved = rp
+                break
+        if not resolved:
+            return None
+    else:
+        resolved = ""
+
+    # Skip saves-only entries
+    if resolved.startswith("saves"):
+        return None
+    return resolved
+
+
+def _entry_md5(md5_raw: object) -> str:
+    """MD5 handling: sanitize upstream errors."""
+    if isinstance(md5_raw, list):
+        parts = [str(m).strip().lower() for m in md5_raw if m]
+    elif md5_raw:
+        parts = [str(md5_raw).strip().lower()]
+    else:
+        parts = []
+    # Keep only valid 32-char hex MD5 hashes
+    valid = [p for p in parts if re.fullmatch(r"[0-9a-f]{32}", p)]
+    return ",".join(valid)
+
+
+def _entry_requirement(entry: dict, comp_key: str, default_system: object) -> BiosRequirement | None:
+    filename = entry["filename"].strip()
+    raw_system = entry.get("system", default_system)
+    if isinstance(raw_system, list):
+        raw_system = raw_system[0] if raw_system else default_system
+
+    system = _map_system(str(raw_system))
+    if system is None:
+        return None
+
+    resolved = _entry_folder(entry.get("paths"))
+    if resolved is None:
+        return None
+
+    # Build destination: default to bios/ if no path specified
+    if resolved:
+        destination = f"{resolved}/{filename}"
+    else:
+        destination = f"bios/{filename}"
+
+    md5 = _entry_md5(entry.get("md5", ""))
+
+    required_raw = entry.get("required", "")
+    required = bool(required_raw) and str(required_raw).lower() not in (
+        "false",
+        "no",
+        "optional",
+        "",
+    )
+
+    native: dict[str, object] = {"component": comp_key}
+    description = str(entry.get("description", "")).strip()
+    if description:
+        native["description"] = description
+    if required_raw not in (None, ""):
+        native["required_label"] = str(required_raw)
+
+    sha256 = str(entry.get("sha256", "")).strip().lower()
+
+    return BiosRequirement(
+        name=filename,
+        system=system,
+        destination=destination,
+        md5=md5,
+        sha256=sha256 or None,
+        required=required,
+        native_id=str(raw_system),
+        native=native,
+    )
+
+
+def _warn_md5_conflict(
+    requirements: list[BiosRequirement], key: tuple[str, str], req: BiosRequirement
+) -> None:
+    existing = next(
+        (
+            r
+            for r in requirements
+            if (r.system, r.name.lower()) == key
+        ),
+        None,
+    )
+    md5 = req.md5
+    if existing and md5 and existing.md5 and md5 != existing.md5:
+        print(
+            f"  WARNING: {req.name} ({req.system}): MD5 conflict "
+            f"({existing.md5[:12]}... vs {md5[:12]}...)",
+            file=sys.stderr,
+        )
 
 
 class Scraper(BaseScraper):
@@ -416,7 +517,7 @@ class Scraper(BaseScraper):
         requirements: list[BiosRequirement] = []
         seen: set[tuple[str, str]] = set()
 
-        for comp_name, manifest in manifests:
+        for _comp_name, manifest in manifests:
             for comp_key, comp_val in manifest.items():
                 if not isinstance(comp_val, dict):
                     continue
@@ -426,100 +527,15 @@ class Scraper(BaseScraper):
                     default_system = default_system[0] if default_system else comp_key
 
                 for entry in _extract_bios_entries(comp_val):
-                    filename = entry["filename"].strip()
-                    raw_system = entry.get("system", default_system)
-                    if isinstance(raw_system, list):
-                        raw_system = raw_system[0] if raw_system else default_system
-
-                    system = _map_system(str(raw_system))
-                    if system is None:
+                    req = _entry_requirement(entry, comp_key, default_system)
+                    if req is None:
                         continue
-
-                    paths_raw = entry.get("paths")
-                    if isinstance(paths_raw, str):
-                        resolved = _resolve_path(paths_raw)
-                    elif isinstance(paths_raw, list):
-                        resolved = ""
-                        for p in paths_raw:
-                            rp = _resolve_path(str(p))
-                            if not rp.startswith("saves"):
-                                resolved = rp
-                                break
-                        if not resolved:
-                            continue
-                    else:
-                        resolved = ""
-
-                    # Skip saves-only entries
-                    if resolved.startswith("saves"):
-                        continue
-
-                    # Build destination: default to bios/ if no path specified
-                    if resolved:
-                        destination = f"{resolved}/{filename}"
-                    else:
-                        destination = f"bios/{filename}"
-
-                    # MD5 handling: sanitize upstream errors
-                    md5_raw = entry.get("md5", "")
-                    if isinstance(md5_raw, list):
-                        parts = [str(m).strip().lower() for m in md5_raw if m]
-                    elif md5_raw:
-                        parts = [str(md5_raw).strip().lower()]
-                    else:
-                        parts = []
-                    # Keep only valid 32-char hex MD5 hashes
-                    valid = [p for p in parts if re.fullmatch(r"[0-9a-f]{32}", p)]
-                    md5 = ",".join(valid)
-
-                    required_raw = entry.get("required", "")
-                    required = bool(required_raw) and str(required_raw).lower() not in (
-                        "false",
-                        "no",
-                        "optional",
-                        "",
-                    )
-
-                    key = (system, filename.lower())
+                    key = (req.system, req.name.lower())
                     if key in seen:
-                        existing = next(
-                            (
-                                r
-                                for r in requirements
-                                if (r.system, r.name.lower()) == key
-                            ),
-                            None,
-                        )
-                        if existing and md5 and existing.md5 and md5 != existing.md5:
-                            print(
-                                f"  WARNING: {filename} ({system}): MD5 conflict "
-                                f"({existing.md5[:12]}... vs {md5[:12]}...)",
-                                file=sys.stderr,
-                            )
+                        _warn_md5_conflict(requirements, key, req)
                         continue
                     seen.add(key)
-
-                    native: dict[str, object] = {"component": comp_key}
-                    description = str(entry.get("description", "")).strip()
-                    if description:
-                        native["description"] = description
-                    if required_raw not in (None, ""):
-                        native["required_label"] = str(required_raw)
-
-                    sha256 = str(entry.get("sha256", "")).strip().lower()
-
-                    requirements.append(
-                        BiosRequirement(
-                            name=filename,
-                            system=system,
-                            destination=destination,
-                            md5=md5,
-                            sha256=sha256 or None,
-                            required=required,
-                            native_id=str(raw_system),
-                            native=native,
-                        )
-                    )
+                    requirements.append(req)
 
         return requirements
 
@@ -578,10 +594,7 @@ class Scraper(BaseScraper):
 
 
 def main() -> None:
-    try:
-        from .base_scraper import scraper_cli
-    except ImportError:
-        from scraper.base_scraper import scraper_cli
+    from .base_scraper import scraper_cli
 
     scraper_cli(Scraper, "Scrape RetroDECK BIOS requirements")
 

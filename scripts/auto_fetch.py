@@ -243,6 +243,7 @@ def step2_scan_branches(entry: dict) -> bytes | None:
             ["git", "ls-tree", "-r", "--name-only", ref],
             capture_output=True,
             text=True,
+            check=False,
         )
 
         for filepath in result.stdout.strip().split("\n"):

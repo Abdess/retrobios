@@ -64,31 +64,29 @@ def _pick_yaml_loader() -> type[yaml.constructor.SafeConstructor] | None:
         return None
     base = getattr(yaml, "CSafeLoader", None) or yaml.SafeLoader
 
-    class _UniqueKeyLoader(base):
-        """Refuses a mapping that names a key twice.
+    def construct_mapping(
+        self: yaml.constructor.SafeConstructor, node: yaml.MappingNode, deep: bool = False
+    ) -> dict:
+        """Refuse a mapping that names a key twice.
 
         PyYAML keeps the last value without a word: the registry once
         carried two target_source keys for Recalbox and read only one. Only
         a mapping that came out shorter than its source is re-read. No data
         here uses merge keys (<<), which would count as repeats too.
         """
+        mapping = base.construct_mapping(self, node, deep=deep)
+        if len(mapping) < len(node.value):
+            seen: set = set()
+            for key_node, _value in node.value:
+                key = self.construct_object(key_node, deep=deep)
+                if key in seen:
+                    raise yaml.constructor.ConstructorError(
+                        None, None, f"duplicate key {key!r}", key_node.start_mark
+                    )
+                seen.add(key)
+        return mapping
 
-        def construct_mapping(
-            self, node: yaml.MappingNode, deep: bool = False
-        ) -> dict:
-            mapping = super().construct_mapping(node, deep=deep)
-            if len(mapping) < len(node.value):
-                seen: set = set()
-                for key_node, _value in node.value:
-                    key = self.construct_object(key_node, deep=deep)
-                    if key in seen:
-                        raise yaml.constructor.ConstructorError(
-                            None, None, f"duplicate key {key!r}", key_node.start_mark
-                        )
-                    seen.add(key)
-            return mapping
-
-    return _UniqueKeyLoader
+    return type("_UniqueKeyLoader", (base,), {"construct_mapping": construct_mapping})
 
 _YAML_LOADER = _pick_yaml_loader()
 

@@ -89,9 +89,14 @@ class Runs:
             name = next(
                 (posixpath.basename(w.text) for w in command if _SCRIPT.fullmatch(w.text)), None
             )
-            if name is None or (emu is None and arm is None):
+            if name is None:
                 continue
-            names, at = ([emu[0]], emu[1]) if emu else arm  # type: ignore[misc]
+            if emu is not None:
+                names, at = [emu[0]], emu[1]
+            elif arm is not None:
+                names, at = arm
+            else:
+                continue
             entry = self.by_script.setdefault(name, Dispatch())
             entry.emulators.extend(n for n in names if n not in entry.emulators)
             entry.lines |= {at, number}

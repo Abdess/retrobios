@@ -29,16 +29,10 @@ import tarfile
 import urllib.error
 import urllib.request
 
-try:
-    from .base_scraper import BaseScraper, BiosRequirement, fetch_branch_head
-    from .retropie_launchers import SCRIPTMODULES
-    from .retropie_launchers import SECTIONS as _SCRIPT_SECTIONS
-    from .retropie_launchers import extract_launchers
-except ImportError:
-    from base_scraper import BaseScraper, BiosRequirement, fetch_branch_head
-    from retropie_launchers import SCRIPTMODULES
-    from retropie_launchers import SECTIONS as _SCRIPT_SECTIONS
-    from retropie_launchers import extract_launchers
+from .base_scraper import BaseScraper, BiosRequirement, fetch_branch_head
+from .retropie_launchers import SCRIPTMODULES
+from .retropie_launchers import SECTIONS as _SCRIPT_SECTIONS
+from .retropie_launchers import extract_launchers
 
 PLATFORM_NAME = "retropie"
 
@@ -189,10 +183,7 @@ class Scraper(BaseScraper):
 
 
 def main() -> None:
-    try:
-        from .base_scraper import scraper_cli
-    except ImportError:
-        from base_scraper import scraper_cli
+    from .base_scraper import scraper_cli
 
     scraper_cli(Scraper, "Scrape the RetroPie package list")
 

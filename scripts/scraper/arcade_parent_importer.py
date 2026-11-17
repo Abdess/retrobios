@@ -37,8 +37,8 @@ from __future__ import annotations
 
 import argparse
 import ast
+import functools
 import hashlib
-import io
 import json
 import re
 import sys
@@ -48,6 +48,7 @@ from collections import Counter
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import IO
 
 from ..artifacts import write_if_changed
 from ..common import load_emulator_profiles, run_cli
@@ -137,7 +138,7 @@ def _attrs(raw: bytes) -> dict[str, str]:
     return {k.decode(): v.decode() for k, v in _ATTR.findall(raw)}
 
 
-def iter_sets(stream: io.BufferedIOBase) -> Iterator[SetEntry]:
+def iter_sets(stream: IO[bytes]) -> Iterator[SetEntry]:
     """Every machine or game element of a DAT or -listxml, streamed.
 
     Attributes come in any order (mame2003 writes ``<game runnable="no"
@@ -309,7 +310,7 @@ def _fbneo_driver_names(entries: list[SetEntry], names: dict[str, set[str]]) -> 
 
 
 def fbneo_sets(
-    openers: list[Callable[[], io.BufferedIOBase]], names: dict[str, set[str]]
+    openers: list[Callable[[], IO[bytes]]], names: dict[str, set[str]]
 ) -> tuple[dict[str, SetEntry], dict[str, str]]:
     """Every set of FBNeo's DATs keyed by its driver, and the archive of each
     set whose driver name is not its archive name.
@@ -634,54 +635,71 @@ class _Preprocessor:
                     out.append(line)
                 continue
             word, rest = directive.groups()
-            if word in ("if", "ifdef", "ifndef"):
-                if not active:
-                    stack.append((False, True, False))
-                    continue
-                if word == "if":
-                    value = bool(_condition_value(rest, defines))
-                else:
-                    value = (rest.split()[0] in defines) == (word == "ifdef")
-                stack.append((True, value, value))
-                active = value
-            elif word in ("elif", "else"):
-                if not stack:
-                    raise DriverSourceError(f"{path}: #{word} without #if")
-                outer, taken, _ = stack[-1]
-                value = (
-                    outer and not taken
-                    and (word == "else" or bool(_condition_value(rest, defines)))
-                )
-                stack[-1] = (outer, taken or value, value)
-                active = value
-            elif word == "endif":
-                if not stack:
-                    raise DriverSourceError(f"{path}: #endif without #if")
-                stack.pop()
-                active = stack[-1][2] if stack else True
-            elif not active:
-                continue
-            elif word == "define":
-                head = _MACRO_HEAD.match(rest)
-                if head:
-                    defines[head.group(1)] = head.group(3)
-                    if local is not None:
-                        params = head.group(2)
-                        local[head.group(1)] = (
-                            [a.strip() for a in params[1:-1].split(",")] if params else None,
-                            head.group(3),
-                        )
-            elif word == "undef":
-                defines.pop(rest.strip(), None)
-            elif word == "include":
-                target = _INCLUDE.match(rest)
-                header = self._resolve(target.group(1), path) if target else None
-                if header and header not in seen:
-                    seen.add(header)
-                    self.run(header, self.headers[header], defines, None, seen)
+            if word in _CONDITIONALS:
+                active = _branch(path, word, rest, defines, stack, active)
+            elif active:
+                self._define(path, word, rest, defines, local, seen)
         if stack:
             raise DriverSourceError(f"{path}: #if without #endif")
         return "\n".join(out)
+
+    def _define(
+        self, path: str, word: str, rest: str, defines: dict[str, str],
+        local: dict[str, tuple[list[str] | None, str]] | None, seen: set[str],
+    ) -> None:
+        """#define, #undef and #include in an active region."""
+        if word == "define":
+            head = _MACRO_HEAD.match(rest)
+            if head:
+                defines[head.group(1)] = head.group(3)
+                if local is not None:
+                    params = head.group(2)
+                    local[head.group(1)] = (
+                        [a.strip() for a in params[1:-1].split(",")] if params else None,
+                        head.group(3),
+                    )
+        elif word == "undef":
+            defines.pop(rest.strip(), None)
+        elif word == "include":
+            target = _INCLUDE.match(rest)
+            header = self._resolve(target.group(1), path) if target else None
+            if header and header not in seen:
+                seen.add(header)
+                self.run(header, self.headers[header], defines, None, seen)
+
+
+_CONDITIONALS = frozenset({"if", "ifdef", "ifndef", "elif", "else", "endif"})
+
+
+def _branch(
+    path: str, word: str, rest: str, defines: dict[str, str],
+    stack: list[tuple[bool, bool, bool]], active: bool,
+) -> bool:
+    """Apply one conditional directive to *stack*. Returns the new active state."""
+    if word in ("if", "ifdef", "ifndef"):
+        if not active:
+            stack.append((False, True, False))
+            return active
+        if word == "if":
+            value = bool(_condition_value(rest, defines))
+        else:
+            value = (rest.split()[0] in defines) == (word == "ifdef")
+        stack.append((True, value, value))
+        return value
+    if word in ("elif", "else"):
+        if not stack:
+            raise DriverSourceError(f"{path}: #{word} without #if")
+        outer, taken, _ = stack[-1]
+        value = (
+            outer and not taken
+            and (word == "else" or bool(_condition_value(rest, defines)))
+        )
+        stack[-1] = (outer, taken or value, value)
+        return value
+    if not stack:
+        raise DriverSourceError(f"{path}: #endif without #if")
+    stack.pop()
+    return stack[-1][2] if stack else True
 
 
 def _dumped(args: list[str]) -> bool:
@@ -691,6 +709,10 @@ def _dumped(args: list[str]) -> bool:
         return False
     crc = args[3] if len(args) > 3 else ""
     return not re.fullmatch(r"0[xX]0+|0", crc.strip())
+
+
+def _argument(values: dict[str, str], match: re.Match[str]) -> str:
+    return values.get(match.group(0), match.group(0))
 
 
 def _expand_declarations(text: str, local: dict[str, tuple[list[str] | None, str]]) -> str:
@@ -716,7 +738,7 @@ def _expand_declarations(text: str, local: dict[str, tuple[list[str] | None, str
             raise DriverSourceError(f"{match.group(1)} called with {len(args)} arguments")
         values = dict(zip(params, args))
         out.append(text[position : match.start()])
-        out.append(_IDENTIFIER.sub(lambda m: values.get(m.group(0), m.group(0)), body))
+        out.append(_IDENTIFIER.sub(functools.partial(_argument, values), body))
         position = end
     out.append(text[position:])
     return "".join(out)
@@ -730,6 +752,50 @@ def compiled_drivers(driver_c: str, preprocessor: _Preprocessor) -> list[str]:
         "src/driver.c", driver_c, {"DRIVER_RECURSIVE": "", "DRIVER": ""}, None, set()
     )
     return [n for n in _DRIVER_ENTRY.findall(text) if n != "NAME"]
+
+
+def _holds_roms(
+    body: str, local: dict[str, tuple[list[str] | None, str]], known: dict[str, bool],
+    seen: frozenset[str] = frozenset(),
+) -> bool:
+    for match in _ROM_LOAD.finditer(body):
+        if _dumped(_call_args(body, match.end())):
+            return True
+    # A ROM list shared through a macro of the same file (a BIOS
+    # block every game of the board pulls in).
+    for word in set(_IDENTIFIER.findall(body)) - seen:
+        if word in local:
+            if word not in known:
+                known[word] = _holds_roms(local[word][1], local, known, seen | {word})
+            if known[word]:
+                return True
+    return False
+
+
+def _read_driver(
+    path: str, source: str, preprocessor: _Preprocessor,
+    declared: dict[str, tuple[str | None, bool]], roms: dict[str, tuple[bool, bool]],
+) -> None:
+    """The ROM_START blocks and GAME declarations of one driver file."""
+    local: dict[str, tuple[list[str] | None, str]] = {}
+    text = _expand_declarations(preprocessor.run(path, source, {}, local, set()), local)
+    known: dict[str, bool] = {}
+    for match in _ROM_START.finditer(text):
+        body = match.group(2)
+        roms.setdefault(
+            match.group(1), (_holds_roms(body, local, known), bool(_DISK_IMAGE.search(body)))
+        )
+    for match in _GAME_MACRO.finditer(text):
+        args = _call_args(text, match.end())
+        if len(args) < 9:
+            raise DriverSourceError(f"{path}: {match.group(1)} with {len(args)} arguments")
+        name, parent = args[1], args[2]
+        if name in declared:
+            raise DriverSourceError(f"{path}: {name} declared twice")
+        declared[name] = (
+            None if parent == "0" else parent,
+            any("NOT_A_DRIVER" in a for a in args[3:]),
+        )
 
 
 def driver_source_sets(
@@ -746,38 +812,7 @@ def driver_source_sets(
     declared: dict[str, tuple[str | None, bool]] = {}
     roms: dict[str, tuple[bool, bool]] = {}
     for path, source in sorted(drivers.items()):
-        local: dict[str, tuple[list[str] | None, str]] = {}
-        text = _expand_declarations(preprocessor.run(path, source, {}, local, set()), local)
-        known: dict[str, bool] = {}
-
-        def holds_roms(body: str, seen: frozenset[str] = frozenset()) -> bool:
-            for match in _ROM_LOAD.finditer(body):
-                if _dumped(_call_args(body, match.end())):
-                    return True
-            # A ROM list shared through a macro of the same file (a BIOS
-            # block every game of the board pulls in).
-            for word in set(_IDENTIFIER.findall(body)) - seen:
-                if word in local:
-                    if word not in known:
-                        known[word] = holds_roms(local[word][1], seen | {word})
-                    if known[word]:
-                        return True
-            return False
-
-        for match in _ROM_START.finditer(text):
-            body = match.group(2)
-            roms.setdefault(match.group(1), (holds_roms(body), bool(_DISK_IMAGE.search(body))))
-        for match in _GAME_MACRO.finditer(text):
-            args = _call_args(text, match.end())
-            if len(args) < 9:
-                raise DriverSourceError(f"{path}: {match.group(1)} with {len(args)} arguments")
-            name, parent = args[1], args[2]
-            if name in declared:
-                raise DriverSourceError(f"{path}: {name} declared twice")
-            declared[name] = (
-                None if parent == "0" else parent,
-                any("NOT_A_DRIVER" in a for a in args[3:]),
-            )
+        _read_driver(path, source, preprocessor, declared, roms)
     compiled = compiled_drivers(driver_c, preprocessor)
     undeclared = [n for n in compiled if n not in declared]
     if undeclared:
@@ -973,7 +1008,11 @@ def _cached_repo_file(slug: str, commit: str, path: str, cache_dir: Path) -> tup
     return destination, git_blob_sha(destination.read_bytes())
 
 
-def _xml_streams(path: Path) -> Iterator[Callable[[], io.BufferedIOBase]]:
+def _file_opener(path: Path) -> Callable[[], IO[bytes]]:
+    return lambda: path.open("rb")
+
+
+def _xml_streams(path: Path) -> Iterator[Callable[[], IO[bytes]]]:
     """Openers for the XML documents a file holds: itself, or each XML or
     DAT member of a ZIP."""
     if path.suffix.lower() != ".zip":
@@ -984,16 +1023,15 @@ def _xml_streams(path: Path) -> Iterator[Callable[[], io.BufferedIOBase]]:
             n for n in archive.namelist() if n.lower().endswith((".xml", ".dat"))
         )
     for member in names:
-        def opener(member: str = member) -> io.BufferedIOBase:
-            archive = zipfile.ZipFile(path)
-            stream = archive.open(member)
-            stream.close_archive = archive  # keep the archive alive
-            return stream
+        def opener(member: str = member) -> IO[bytes]:
+            # The member keeps the archive alive: its shared file closes
+            # through the archive's own _fpclose.
+            return zipfile.ZipFile(path).open(member)
 
         yield opener
 
 
-def read_sets(openers: list[Callable[[], io.BufferedIOBase]]) -> dict[str, SetEntry]:
+def read_sets(openers: list[Callable[[], IO[bytes]]]) -> dict[str, SetEntry]:
     """Every set of several documents. A set read twice keeps its first
     reading: FBNeo's Arcade and Neogeo DATs both carry the neogeo BIOS."""
     sets: dict[str, SetEntry] = {}
@@ -1024,6 +1062,8 @@ def import_profile(
     commit = str(data.get("source_commit") or "")
     source_url = str(data.get("source") or "")
     kind = spec["kind"]
+    source: dict[str, object]
+    openers: list[Callable[[], IO[bytes]]]
     if kind == "listxml":
         tag = "mame" + str(data["core_version"]).replace(".", "").zfill(4)
         if offline:
@@ -1060,9 +1100,7 @@ def import_profile(
                 FBNEO_DRIVERLIST: listing_sha,
             },
         }
-        openers = [
-            (lambda p=folder / name: p.open("rb")) for name in sorted(blobs)
-        ]
+        openers = [_file_opener(folder / name) for name in sorted(blobs)]
         sets, archives = fbneo_sets(openers, fbneo_drivers(listing.read_text(encoding="utf-8")))
         index = build_index(sets, spec["marker"], archives)
     elif kind == "source":

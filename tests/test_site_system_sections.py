@@ -20,6 +20,7 @@ import json
 import os
 import sys
 import unittest
+from collections.abc import Iterable
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -89,6 +90,57 @@ def _archives_held(fe: dict, db: dict) -> set[str]:
     return held
 
 
+def _entries_by_system(platforms: list[dict], profiles: dict) -> dict[str, list[dict]]:
+    entries: dict[str, list[dict]] = {}
+    for config in platforms:
+        for sys_id, system in config.get("systems", {}).items():
+            entries.setdefault(sys_id, []).extend(system.get("files") or [])
+    for profile in profiles.values():
+        systems = [str(s) for s in profile.get("systems") or []]
+        for fe in profile.get("files") or []:
+            if not isinstance(fe, dict):
+                continue
+            owners = {str(fe["system"])} if fe.get("system") else set()
+            owners.update(str(s) for s in fe.get("systems") or [])
+            if not owners and len(systems) == 1:
+                owners = set(systems)
+            for owner in owners:
+                entries.setdefault(owner, []).append(fe)
+    return entries
+
+
+def _held_sections(
+    ids: Iterable[str], entries: dict[str, list[dict]], board_sections: dict, db: dict
+) -> dict[str, set[tuple[str, str]]]:
+    """Id -> the (manufacturer, console) sections holding its files."""
+    from common import resolve_local_file
+
+    # Where each content has a card.
+    places: dict[str, set[tuple[str, str, str]]] = {}
+    for mfr, consoles in board_sections.items():
+        for console, files in consoles.items():
+            for f in files:
+                places.setdefault(f["sha1"], set()).add((mfr, console, f["name"]))
+    by_path = {entry.get("path"): sha1 for sha1, entry in db["files"].items()}
+    held: dict[str, set[tuple[str, str]]] = {}
+    for sys_id in ids:
+        sections: set[tuple[str, str]] = set()
+        for fe in entries.get(sys_id, []):
+            if fe.get("category") == "bios_zip":
+                for sha1 in _archives_held(fe, db):
+                    sections.update((m, c) for m, c, _ in places.get(sha1, set()))
+                continue
+            local, status = resolve_local_file(fe, db)
+            if not _accepts(fe, local, status):
+                continue
+            sha1 = by_path.get(local)
+            if sha1 is not None:
+                sections.update((m, c) for m, c, _ in places.get(sha1, set()))
+        if sections:
+            held[sys_id] = sections
+    return held
+
+
 @unittest.skipUnless((REPO_ROOT / "database.json").exists(), "database.json is not built")
 class SystemLinks(unittest.TestCase):
 
@@ -101,7 +153,6 @@ class SystemLinks(unittest.TestCase):
                 list_registered_platforms,
                 load_emulator_profiles,
                 load_platform_config,
-                resolve_local_file,
             )
             from generate_site import _group_by_manufacturer, arcade_board_sections
 
@@ -124,46 +175,9 @@ class SystemLinks(unittest.TestCase):
             ]
             cls.ids = siterender.system_ids(profiles, platforms)
 
-            entries: dict[str, list[dict]] = {}
-            for config in platforms:
-                for sys_id, system in config.get("systems", {}).items():
-                    entries.setdefault(sys_id, []).extend(system.get("files") or [])
-            for profile in profiles.values():
-                systems = [str(s) for s in profile.get("systems") or []]
-                for fe in profile.get("files") or []:
-                    if not isinstance(fe, dict):
-                        continue
-                    owners = {str(fe["system"])} if fe.get("system") else set()
-                    owners.update(str(s) for s in fe.get("systems") or [])
-                    if not owners and len(systems) == 1:
-                        owners = set(systems)
-                    for owner in owners:
-                        entries.setdefault(owner, []).append(fe)
-
-            # Where each content has a card.
-            places: dict[str, set[tuple[str, str, str]]] = {}
-            for mfr, consoles in cls.sections.items():
-                for console, files in consoles.items():
-                    for f in files:
-                        places.setdefault(f["sha1"], set()).add((mfr, console, f["name"]))
-            by_path = {entry.get("path"): sha1 for sha1, entry in db["files"].items()}
-            # Id -> the (manufacturer, console) sections holding its files.
-            cls.held: dict[str, set[tuple[str, str]]] = {}
-            for sys_id in cls.ids:
-                sections: set[tuple[str, str]] = set()
-                for fe in entries.get(sys_id, []):
-                    if fe.get("category") == "bios_zip":
-                        for sha1 in _archives_held(fe, db):
-                            sections.update((m, c) for m, c, _ in places.get(sha1, set()))
-                        continue
-                    local, status = resolve_local_file(fe, db)
-                    if not _accepts(fe, local, status):
-                        continue
-                    sha1 = by_path.get(local)
-                    if sha1 is not None:
-                        sections.update((m, c) for m, c, _ in places.get(sha1, set()))
-                if sections:
-                    cls.held[sys_id] = sections
+            entries = _entries_by_system(platforms, profiles)
+            cls.held: dict[str, set[tuple[str, str]]] = _held_sections(
+                cls.ids, entries, cls.sections, db)
         finally:
             os.chdir(previous)
 

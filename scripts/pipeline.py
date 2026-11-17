@@ -58,6 +58,7 @@ import tempfile
 import time
 from collections.abc import Callable
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 # The build scripts need CPython 3.9, which builds the same database,
 # manifests and packs as 3.12.
@@ -79,6 +80,9 @@ from common import (
 )
 from refresh_data_dirs import hold_data_dirs
 from packpaths import MEDIA_MARKER
+
+if TYPE_CHECKING:
+    from generate_pack import PackRecord
 
 
 class StepResults(dict):
@@ -195,7 +199,7 @@ def run(cmd: list[str], label: str) -> tuple[bool, str]:
         cwd=repo_root,
         env={**os.environ, "PYTHONUNBUFFERED": "1", "NODE_DISABLE_COMPILE_CACHE": "1"},
     ) as proc:
-        for line in proc.stdout:
+        for line in proc.stdout or ():
             lines.append(line)
             print(line, end="", flush=True)
         returncode = proc.wait()
@@ -378,15 +382,19 @@ def check_consistency(
                 p_match = p_label
                 break
 
-        if p_match and p_match in pack_extras and v_label in verify_extras:
-            if verify_extras[v_label] != pack_extras[p_match]:
-                # The cores' share: the base check passed RomM while verify
-                # counted 412 core files and game data and the pack held 60.
-                print(
-                    f"  {v_label}: MISMATCH core files verify "
-                    f"{verify_extras[v_label]} != pack {pack_extras[p_match]}"
-                )
-                all_ok = False
+        if (
+            p_match
+            and p_match in pack_extras
+            and v_label in verify_extras
+            and verify_extras[v_label] != pack_extras[p_match]
+        ):
+            # The cores' share: the base check passed RomM while verify
+            # counted 412 core files and game data and the pack held 60.
+            print(
+                f"  {v_label}: MISMATCH core files verify "
+                f"{verify_extras[v_label]} != pack {pack_extras[p_match]}"
+            )
+            all_ok = False
         if p_match:
             p_ok, p_total = p[p_match]
             p_excluded = excluded.get(p_match, 0)
@@ -596,8 +604,9 @@ def check_emulator_packs(
             with contextlib.redirect_stdout(io.StringIO()), \
                     contextlib.redirect_stderr(io.StringIO()):
                 generate_pack.generate_emulator_pack(
-                    names, emulators_dir, db, "bios", "", standalone, zip_contents,
-                    offline=True, platforms_dir=platforms_dir, record=record, **narrowing,
+                    names, emulators_dir, db, "bios", "", standalone,
+                    zip_contents=zip_contents, offline=True, platforms_dir=platforms_dir,
+                    record=record, **narrowing,
                 )
                 report = verify.verify_emulator(
                     names, emulators_dir, db, standalone, platforms_dir=platforms_dir,
@@ -817,7 +826,7 @@ def check_narrowed_packs(
 
 
 def split_differences(
-    full: object, parts: dict[str, object], same_bytes: Callable[[str, str], bool],
+    full: PackRecord, parts: dict[str, PackRecord], same_bytes: Callable[[str, str], bool],
 ) -> list[str]:
     """Where the --split parts of a pack, together, are not the full pack.
 
@@ -1074,7 +1083,7 @@ def _truth_steps(args: argparse.Namespace, results: dict) -> bool:
     return all_ok
 
 
-def main() -> None:
+def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(allow_abbrev=False, description="Run the full retrobios pipeline")
     parser.add_argument(
         "--skip-packs",
@@ -1128,45 +1137,12 @@ def main() -> None:
         action="store_true",
         help="Export native formats (implies --with-truth)",
     )
-    args = parser.parse_args()
-    _refuse_unapplied_flags(parser, args)
-    _refuse_offline_without_caches(parser, args)
-    _refuse_offline_export_without_originals(parser, args)
-    if not args.offline:
-        # Read once and put in the environment every step inherits: the
-        # scrapers and refresh_data_dirs went anonymous unless the user had
-        # exported GITHUB_TOKEN by hand, though gh was logged in.
-        github_token()
-    args.output_dir = _output_dir(args.output_dir)
+    return parser
 
-    # A second run on the same output directory is refused before any work:
-    # the database rebuild alone takes minutes, and the reader holding the
-    # directory would otherwise see the answer only after all of it. The
-    # hold lasts until this process exits: taken step by step, it let another
-    # run purge the packs between the build and the integrity check, which
-    # then reported every platform SKIP and passed.
-    # database.json, install/, README.md, CONTRIBUTING.md and website/ sit at
-    # fixed paths (artifacts.REPOSITORY_OUTPUTS), so
-    # every run holds them too: a run on a scratch --output-dir otherwise
-    # rewrote them beside the run on dist/.
-    held = contextlib.ExitStack()
-    try:
-        root = str(Path(__file__).resolve().parent.parent)
-        held.enter_context(hold_repository_outputs(root))
-        # Its steps write database.json, install/ and README.md themselves,
-        # and take the same lock to do so.
-        held.enter_context(publish_hold(root))
-        if not args.skip_packs:
-            held.enter_context(hold_artifact_lock(args.output_dir))
-    except ArtifactLockBusy as exc:
-        held.close()
-        print(f"ERROR: {exc}", file=sys.stderr)
-        sys.exit(1)
 
+def _database_steps(results: dict) -> bool:
+    """Steps 0 to 1c: schemas, database, dump catalogs, romset recipes."""
     all_ok = True
-    total_start = time.monotonic()
-    results = StepResults(total_start)
-
     # Step 0: the schema check PR validation runs. Without it a profile with
     # `cores: [81]` unquoted passed the whole pipeline and failed CI on push.
     # jsonschema is tooling only, so its absence skips the step.
@@ -1188,7 +1164,7 @@ def main() -> None:
         all_ok = all_ok and ok
 
     # Step 1: Generate database
-    ok, out = run(
+    ok, _ = run(
         [
             sys.executable,
             "scripts/generate_db.py",
@@ -1219,7 +1195,7 @@ def main() -> None:
     # Step 1c: Which emulator version each arcade archive corresponds to, and
     # which pinned archive the collection could rebuild from ROMs it holds.
     # Read-only: writing reconstructions is an explicit --write invocation.
-    ok, out = run(
+    ok, _ = run(
         [sys.executable, "scripts/romset_recipes.py"],
         STEP_LABELS["romset_recipes"],
     )
@@ -1233,10 +1209,15 @@ def main() -> None:
     ok = ok and captured
     results["romset_recipes"] = ok
     all_ok = all_ok and ok
+    return all_ok
 
+
+def _refresh_steps(args: argparse.Namespace, results: dict) -> bool:
+    """Steps 2 to 2b2: data directories, hash scrapers, release assets."""
+    all_ok = True
     # Step 2: Refresh data directories
     if not args.offline:
-        ok, out = run(
+        ok, _ = run(
             [sys.executable, "scripts/refresh_data_dirs.py"],
             STEP_LABELS["refresh_data"],
         )
@@ -1295,9 +1276,18 @@ def main() -> None:
     else:
         skip_notice("check_release_assets", "--offline")
         results["check_release_assets"] = SKIPPED
+    return all_ok
 
-    all_ok = _truth_steps(args, results) and all_ok
 
+def _verify_steps(
+    args: argparse.Namespace, results: dict, held: contextlib.ExitStack
+) -> tuple[bool, str, str]:
+    """Steps 3 to 3b: verify, identities, slots.
+
+    Returns whether they passed, verify's output and the file of the paths
+    each pack holds by its report.
+    """
+    all_ok = True
     # Every step from here reads the data directory trees: verify, the packs,
     # the manifests and the integrity check. Held shared until the run ends,
     # a refresh from another session waits instead of swapping a tree
@@ -1352,52 +1342,70 @@ def main() -> None:
     ok, _ = run(slots_cmd, "3b slot arbitration")
     results["slots"] = ok
     all_ok &= ok
+    return all_ok, verify_output, destinations_file
 
+
+def _purge_stale_packs(output_dir: str) -> None:
+    """Remove the packs of earlier builds from the output directory."""
+    # Purge stale packs: leftover ZIPs from previous builds would be
+    # picked up by pack verification and shipped in releases.
+    out_dir = Path(output_dir)
+    if not out_dir.is_dir():
+        return
+    try:
+        with artifact_lock(str(out_dir)):
+            stale = [
+                p for p in out_dir.iterdir()
+                if p.is_file() and (
+                    p.suffix == ".zip"
+                    or ".zip." in p.name
+                    or p.name == "SHA256SUMS.txt"
+                )
+            ]
+            for p in stale:
+                p.unlink()
+            if stale:
+                print(f"Purged {len(stale)} stale pack file(s) from {out_dir}/")
+    except ArtifactLockBusy as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        sys.exit(1)
+
+
+def _pack_command(args: argparse.Namespace) -> list[str]:
+    """The step 4 command: every platform's pack."""
+    pack_cmd = [
+        sys.executable,
+        "scripts/generate_pack.py",
+        "--all",
+        "--output-dir",
+        args.output_dir,
+    ]
+    if args.offline:
+        pack_cmd.append("--offline")
+    else:
+        # Step 2 refreshed the trees once: refreshing again here let the
+        # pack and the manifest describe two revisions of a moving tree.
+        pack_cmd.append("--no-refresh-data")
+    if args.target:
+        pack_cmd.extend(["--target", args.target])
+    if args.source != "full":
+        pack_cmd.extend(["--source", args.source])
+    if args.all_variants:
+        pack_cmd.append("--all-variants")
+    return pack_cmd
+
+
+def _pack_steps(args: argparse.Namespace, results: dict) -> tuple[bool, str]:
+    """Steps 4 to 4c: packs, install manifests, target manifests.
+
+    Returns whether they passed and the pack build's output.
+    """
+    all_ok = True
     # Step 4: Generate packs
     pack_output = ""
     if not args.skip_packs:
-        # Purge stale packs: leftover ZIPs from previous builds would be
-        # picked up by pack verification and shipped in releases.
-        out_dir = Path(args.output_dir)
-        if out_dir.is_dir():
-            try:
-                with artifact_lock(str(out_dir)):
-                    stale = [
-                        p for p in out_dir.iterdir()
-                        if p.is_file() and (
-                            p.suffix == ".zip"
-                            or ".zip." in p.name
-                            or p.name == "SHA256SUMS.txt"
-                        )
-                    ]
-                    for p in stale:
-                        p.unlink()
-                    if stale:
-                        print(f"Purged {len(stale)} stale pack file(s) from {out_dir}/")
-            except ArtifactLockBusy as exc:
-                print(f"ERROR: {exc}", file=sys.stderr)
-                sys.exit(1)
-
-        pack_cmd = [
-            sys.executable,
-            "scripts/generate_pack.py",
-            "--all",
-            "--output-dir",
-            args.output_dir,
-        ]
-        if args.offline:
-            pack_cmd.append("--offline")
-        else:
-            # Step 2 refreshed the trees once: refreshing again here let the
-            # pack and the manifest describe two revisions of a moving tree.
-            pack_cmd.append("--no-refresh-data")
-        if args.target:
-            pack_cmd.extend(["--target", args.target])
-        if args.source != "full":
-            pack_cmd.extend(["--source", args.source])
-        if args.all_variants:
-            pack_cmd.append("--all-variants")
-        ok, pack_output = run(pack_cmd, STEP_LABELS["generate_packs"])
+        _purge_stale_packs(args.output_dir)
+        ok, pack_output = run(_pack_command(args), STEP_LABELS["generate_packs"])
         results["generate_packs"] = ok
         all_ok = all_ok and ok
     else:
@@ -1445,7 +1453,12 @@ def main() -> None:
     else:
         skip_notice("generate_target_manifests", "--skip-packs")
         results["generate_target_manifests"] = SKIPPED
+    return all_ok, pack_output
 
+
+def _index_steps(results: dict) -> bool:
+    """Steps 4d and 4e: bundled-only copies, the games index."""
+    all_ok = True
     # Step 4d: A collected copy that only an emulator's own install provides.
     # Packs leave such files out, so a copy nothing else asks for is weight
     # the collection carries for nobody. Read after the manifests, which say
@@ -1468,7 +1481,19 @@ def main() -> None:
     )
     results["games_index"] = ok
     all_ok &= ok
+    return all_ok
 
+
+def _check_steps(
+    args: argparse.Namespace,
+    results: dict,
+    *,
+    pack_output: str,
+    verify_output: str,
+    destinations_file: str,
+) -> bool:
+    """Steps 5 and 6: verify against the packs, then the packs' integrity."""
+    all_ok = True
     # Step 5: Consistency check. verify describes the full pack, and a run that
     # built only a reduced one (--source platform or truth) has nothing to
     # compare it with, and says so instead of failing on an empty parse.
@@ -1509,7 +1534,12 @@ def main() -> None:
     else:
         skip_notice("pack_integrity", "--skip-packs")
         results["pack_integrity"] = SKIPPED
+    return all_ok
 
+
+def _docs_steps(args: argparse.Namespace, results: dict) -> bool:
+    """Steps 7 to 8b: README and pages, site pages, the rendered site."""
+    all_ok = True
     # Step 7: Generate README
     if not args.skip_docs:
         ok, _ = run(
@@ -1565,8 +1595,11 @@ def main() -> None:
                         "8b validate site")
         results["render_site"] = ok
         all_ok = all_ok and ok
+    return all_ok
 
-    # Summary
+
+def _print_summary(results: StepResults, total_start: float, all_ok: bool) -> None:
+    """The table of every step's outcome and duration, then the verdict."""
     total_elapsed = time.monotonic() - total_start
     print(f"\n{'=' * 60}")
     warned = []
@@ -1590,8 +1623,70 @@ def main() -> None:
     if warned:
         print(f"  {', '.join(warned)} reported a difference, which does not fail the run")
     print(f"{'=' * 60}")
+
+
+def main() -> None:
+    parser = _parser()
+    args = parser.parse_args()
+    _refuse_unapplied_flags(parser, args)
+    _refuse_offline_without_caches(parser, args)
+    _refuse_offline_export_without_originals(parser, args)
+    if not args.offline:
+        # Read once and put in the environment every step inherits: the
+        # scrapers and refresh_data_dirs went anonymous unless the user had
+        # exported GITHUB_TOKEN by hand, though gh was logged in.
+        github_token()
+    args.output_dir = _output_dir(args.output_dir)
+    held = _hold_outputs(args)
+
+    total_start = time.monotonic()
+    results = StepResults(total_start)
+
+    all_ok = _database_steps(results)
+    all_ok = _refresh_steps(args, results) and all_ok
+    all_ok = _truth_steps(args, results) and all_ok
+    ok, verify_output, destinations_file = _verify_steps(args, results, held)
+    all_ok = all_ok and ok
+    ok, pack_output = _pack_steps(args, results)
+    all_ok = all_ok and ok
+    all_ok = _index_steps(results) and all_ok
+    all_ok = _check_steps(
+        args, results, pack_output=pack_output, verify_output=verify_output,
+        destinations_file=destinations_file,
+    ) and all_ok
+    all_ok = _docs_steps(args, results) and all_ok
+
+    _print_summary(results, total_start, all_ok)
     held.close()
     sys.exit(0 if all_ok else 1)
+
+
+def _hold_outputs(args: argparse.Namespace) -> contextlib.ExitStack:
+    """Take every lock the run holds until it exits, or exit when one is busy."""
+    # A second run on the same output directory is refused before any work:
+    # the database rebuild alone takes minutes, and the reader holding the
+    # directory would otherwise see the answer only after all of it. The
+    # hold lasts until this process exits: taken step by step, it let another
+    # run purge the packs between the build and the integrity check, which
+    # then reported every platform SKIP and passed.
+    # database.json, install/, README.md, CONTRIBUTING.md and website/ sit at
+    # fixed paths (artifacts.REPOSITORY_OUTPUTS), so
+    # every run holds them too: a run on a scratch --output-dir otherwise
+    # rewrote them beside the run on dist/.
+    held = contextlib.ExitStack()
+    try:
+        root = str(Path(__file__).resolve().parent.parent)
+        held.enter_context(hold_repository_outputs(root))
+        # Its steps write database.json, install/ and README.md themselves,
+        # and take the same lock to do so.
+        held.enter_context(publish_hold(root))
+        if not args.skip_packs:
+            held.enter_context(hold_artifact_lock(args.output_dir))
+    except ArtifactLockBusy as exc:
+        held.close()
+        print(f"ERROR: {exc}", file=sys.stderr)
+        sys.exit(1)
+    return held
 
 
 if __name__ == "__main__":

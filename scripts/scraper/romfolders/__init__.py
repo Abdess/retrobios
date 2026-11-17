@@ -20,12 +20,11 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 
-_SCRIPTS_DIR = str(Path(__file__).resolve().parents[2])
-if _SCRIPTS_DIR not in sys.path:
+if (_SCRIPTS_DIR := str(Path(__file__).resolve().parents[2])) not in sys.path:
     sys.path.insert(0, _SCRIPTS_DIR)
 
-import upstream  # noqa: E402
-from safeparse import yaml_load  # noqa: E402
+import upstream
+from safeparse import yaml_load
 
 CACHE_DIR = upstream.CACHE_DIR
 

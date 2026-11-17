@@ -68,9 +68,9 @@ class TheSiteServesTheLaunchers(unittest.TestCase):
         """build_port refuses an install.py the bootstraps do not pin: served,
         that launcher would refuse its own installer."""
         with mock.patch.dict(sitehandheld._built, clear=True), \
-                mock.patch.object(build_port, "pinned_installer_sha256", return_value="0" * 64):
-            with self.assertRaisesRegex(ValueError, "re-pin the bootstraps"):
-                sitehandheld.write_launchers(self.tmp / "public", REPO_ROOT)
+                mock.patch.object(build_port, "pinned_installer_sha256", return_value="0" * 64), \
+                self.assertRaisesRegex(ValueError, "re-pin the bootstraps"):
+            sitehandheld.write_launchers(self.tmp / "public", REPO_ROOT)
         self.assertFalse(list((self.tmp / "public").rglob("RetroBIOS*")))
 
     def test_every_archive_is_on_a_page_with_its_link_and_hash(self):

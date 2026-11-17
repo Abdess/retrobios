@@ -19,14 +19,13 @@ files hash/<list>.xml (attribute_softlists) and the floppy sound samples
 from __future__ import annotations
 
 import html
-import io
 import re
 import zipfile
 from collections.abc import Callable, Collection, Iterable, Iterator
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 from pathlib import Path
-from typing import NamedTuple
+from typing import IO, NamedTuple
 
 from common import yaml_load
 
@@ -96,7 +95,7 @@ def _device_roms(body: bytes) -> list[dict]:
 
 
 @contextmanager
-def open_listxml(path: Path) -> Iterator[io.BufferedIOBase]:
+def open_listxml(path: Path) -> Iterator[IO[bytes]]:
     """Byte stream over a -listxml document, plain or as MAME's release zip."""
     if path.suffix.lower() != ".zip":
         with path.open("rb") as stream:
@@ -133,7 +132,7 @@ class Release(NamedTuple):
     machines: dict[str, MachineLinks]
 
 
-def scan_release(stream: io.BufferedIOBase) -> Release:
+def scan_release(stream: IO[bytes]) -> Release:
     """Release tag, device sets with dumped ROMs and every element's links.
 
     The document is read through a sliding window, never whole: the 0.289
@@ -192,7 +191,7 @@ def scan_release(stream: io.BufferedIOBase) -> Release:
     return Release(tag, devices, machines)
 
 
-def scan_device_sets(stream: io.BufferedIOBase) -> tuple[str, dict[str, dict]]:
+def scan_device_sets(stream: IO[bytes]) -> tuple[str, dict[str, dict]]:
     """Release tag of a -listxml document and its device sets with dumped ROMs."""
     release = scan_release(stream)
     return release.tag, release.devices

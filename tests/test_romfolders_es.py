@@ -16,8 +16,7 @@ import sys
 import unittest
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 from romfolders import setup_paths, split_refs
 from scraper.romfolders import (
@@ -29,6 +28,8 @@ from scraper.romfolders import (
 )
 from scraper.romfolders.__main__ import dump_setup
 from scraper.romfolders.es import _module_valid
+
+ROOT = Path(__file__).resolve().parent.parent
 
 FIXTURES = ROOT / "tests" / "fixtures" / "romfolders" / "es"
 ROMFOLDERS = ROOT / "platforms" / "romfolders"

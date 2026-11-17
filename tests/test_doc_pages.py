@@ -47,9 +47,11 @@ def _section(text: str, heading: str) -> str:
 
 def _table_rows(text: str) -> list[list[str]]:
     rows = []
-    for line in text.splitlines():
-        if line.startswith("|") and not re.match(r"\|\s*-", line):
-            rows.append([cell.strip() for cell in line.strip().strip("|").split(" | ")])
+    rows.extend(
+        [cell.strip() for cell in line.strip().strip("|").split(" | ")]
+        for line in text.splitlines()
+        if line.startswith("|") and not re.match(r"\|\s*-", line)
+    )
     return rows[1:]
 
 
@@ -321,9 +323,11 @@ class PublishedHeadings(unittest.TestCase):
         offenders = []
         for page in (ROOT / "README.md", ROOT / "CONTRIBUTING.md"):
             text = FENCED.sub("", page.read_text(encoding="utf-8"))
-            for title in re.findall(r"(?m)^#{1,4} (.+)$", text):
-                if _sentence_case(title) != title:
-                    offenders.append(f"{page.name}: {title}")
+            offenders.extend(
+                f"{page.name}: {title}"
+                for title in re.findall(r"(?m)^#{1,4} (.+)$", text)
+                if _sentence_case(title) != title
+            )
         self.assertEqual(offenders, [], "\n".join(offenders))
 
 
@@ -388,9 +392,11 @@ class DocstringsWithoutInsistence(unittest.TestCase):
         offenders = []
         paths = sorted((ROOT / "scripts").rglob("*.py")) + [ROOT / "install.py"]
         for path in paths:
-            for line in _python_prose(path.read_text(encoding="utf-8")).splitlines():
-                if self.TICS.search(line):
-                    offenders.append(f"{path.relative_to(ROOT)}: {line.strip()[:80]}")
+            offenders.extend(
+                f"{path.relative_to(ROOT)}: {line.strip()[:80]}"
+                for line in _python_prose(path.read_text(encoding="utf-8")).splitlines()
+                if self.TICS.search(line)
+            )
         self.assertEqual(offenders, [], "\n".join(offenders))
 
 
@@ -1026,9 +1032,11 @@ def unknown_commands(text: str) -> list[str]:
             if not source:
                 wrong.append(name)
                 continue
-            for option in re.findall(r"(?<![\w-])(--[a-z][a-z0-9-]*)", command):
-                if f'"{option}"' not in source:
-                    wrong.append(f"{name} {option}")
+            wrong.extend(
+                f"{name} {option}"
+                for option in re.findall(r"(?<![\w-])(--[a-z][a-z0-9-]*)", command)
+                if f'"{option}"' not in source
+            )
     return sorted(set(wrong))
 
 
@@ -1324,6 +1332,7 @@ class CitedOptionsExist(unittest.TestCase):
             proc = subprocess.run(
                 [*argv, *([sub] if sub else []), "--help"],
                 cwd=ROOT, capture_output=True, text=True, timeout=120,
+                check=False,
             )
             cls._helps[key] = proc.stdout if proc.returncode == 0 else ""
         return cls._helps[key]
@@ -1520,9 +1529,11 @@ def stale_options(text: str, default: str | None) -> list[str]:
             if not part or part.lstrip().startswith(FOREIGN_COMMANDS):
                 continue
             program = _owner(part) or default
-            for option in OPTION.findall(part):
-                if program is None or not has(program, option):
-                    stale.append(f"{option} ({program}): {part.strip()}")
+            stale.extend(
+                f"{option} ({program}): {part.strip()}"
+                for option in OPTION.findall(part)
+                if program is None or not has(program, option)
+            )
     for paragraph in re.split(r"\n\s*\n", _prose(text)):
         named = {m.group(1) for m in SCRIPT.finditer(paragraph)} - {"install.sh", "install.ps1"}
         owners = named | page_scripts | ({default} if default else set())
@@ -1531,9 +1542,11 @@ def stale_options(text: str, default: str | None) -> list[str]:
                 continue
             own = _owner(span)
             candidates = {own} if own else owners
-            for option in OPTION.findall(span):
-                if not any(has(program, option) for program in candidates):
-                    stale.append(f"{option} ({', '.join(sorted(candidates))}): {span}")
+            stale.extend(
+                f"{option} ({', '.join(sorted(candidates))}): {span}"
+                for option in OPTION.findall(span)
+                if not any(has(program, option) for program in candidates)
+            )
     return stale
 
 
@@ -1891,8 +1904,9 @@ class SkipFlagsNameTheSteps(unittest.TestCase):
         for node in ast.walk(ast.parse(source)):
             if (isinstance(node, ast.Call) and getattr(node.func, "attr", "") == "add_argument"
                     and node.args and isinstance(node.args[0], ast.Constant)):
-                helps.update({node.args[0].value: ast.literal_eval(kw.value)
-                              for kw in node.keywords if kw.arg == "help"})
+                for kw in node.keywords:
+                    if kw.arg == "help":
+                        helps[node.args[0].value] = ast.literal_eval(kw.value)
         for flag in ("--skip-packs", "--skip-docs"):
             steps = set()
             for row in table.splitlines():
@@ -2094,10 +2108,10 @@ class LandingAChangeNamesTheCommitRules(unittest.TestCase):
             message = clone / "MSG"
             message.write_text("fix: address review 3 notes\n", encoding="utf-8")
             refused = subprocess.run([str(clone / ".git" / "hooks" / "commit-msg"), "MSG"],
-                                     cwd=clone, capture_output=True, text=True)
+                                     cwd=clone, capture_output=True, text=True, check=False)
             message.write_text("fix: say what the change does\n", encoding="utf-8")
             accepted = subprocess.run([str(clone / ".git" / "hooks" / "commit-msg"), "MSG"],
-                                      cwd=clone, capture_output=True, text=True)
+                                      cwd=clone, capture_output=True, text=True, check=False)
         self.assertEqual(refused.returncode, 1, refused.stderr)
         self.assertIn("which review asked for it", refused.stderr)
         self.assertEqual(accepted.returncode, 0, accepted.stderr)

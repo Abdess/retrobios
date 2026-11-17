@@ -266,7 +266,7 @@ class AMissingBiosDirIsRefused(unittest.TestCase):
 
 
 def _scripts_taking(flag: str) -> list[Path]:
-    pattern = re.compile(r'add_argument\(\s*"%s"' % re.escape(flag))
+    pattern = re.compile(rf'add_argument\(\s*"{re.escape(flag)}"')
     return [
         path for path in sorted((REPO_ROOT / "scripts").glob("*.py"))
         + sorted((REPO_ROOT / "scripts" / "scraper").glob("*.py"))
@@ -734,12 +734,14 @@ class ListingsKeepTheirColumns(unittest.TestCase):
         listing = subprocess.run(
             [sys.executable, "scripts/generate_pack.py", "--platform", "retroarch",
              "--list-systems"], cwd=REPO_ROOT, capture_output=True, text=True, timeout=300,
+             check=False,
         ).stdout.splitlines()
         starts = {line.index("[") for line in listing if "[" in line}
         self.assertEqual(len(starts), 1, listing[:5])
         emulators = subprocess.run(
             [sys.executable, "scripts/verify.py", "--list-emulators"],
             cwd=REPO_ROOT, capture_output=True, text=True, timeout=300,
+            check=False,
         ).stdout.splitlines()
         ends = {line.index("]") + 1 for line in emulators if "]" in line}
         tails = {len(line) - len(line[line.index("]") + 1:].lstrip())

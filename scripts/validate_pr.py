@@ -30,7 +30,10 @@ import zipfile
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any, TypedDict
+
+if TYPE_CHECKING:
+    from typing_extensions import Unpack
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
@@ -99,7 +102,7 @@ class ValidationResult:
     def __init__(self, filepath: str) -> None:
         self.filepath = filepath
         self.filename = os.path.basename(filepath)
-        self.checks = []  # (status, message) tuples
+        self.checks: list[tuple[str, str]] = []  # (status, message) tuples
         self.sha1 = ""
         self.md5 = ""
         self.crc32 = ""
@@ -410,46 +413,53 @@ def _archive_members(
     return described
 
 
-def validate_file(
-    filepath: str,
-    db: dict | None,
-    platform_hashes: dict,
-    profile_hashes: dict | None = None,
-) -> ValidationResult:
-    """Run all validation checks on a file."""
-    result = ValidationResult(filepath)
+@dataclass(frozen=True)
+class _Review:
+    """One file under review and the tables it is read against."""
 
+    filepath: str
+    db: dict | None
+    platform_hashes: dict
+    profile_hashes: dict
+
+
+@dataclass(frozen=True)
+class _Known:
+    """What declares the file: a platform's hash, its own check, a profile, its name."""
+
+    sha1: bool
+    md5: bool
+    other: bool
+    accepted_by: set[str]
+    by_profile: set[str] | None
+    name: bool
+
+    @property
+    def by_platform(self) -> bool:
+        return bool(self.sha1 or self.md5 or self.other or self.accepted_by)
+
+
+def _path_problem(filepath: str) -> str:
+    """Why the path cannot be reviewed, empty when it can."""
     # Whoever opened the pull request chose this path, so its shape is
     # settled before anything is read. A symlink to an endless device would
     # otherwise be hashed until the job timed out, and a symlink out of the
     # checkout would be reported as though its target had been contributed.
     if os.path.islink(filepath):
-        result.add_check(False, "Symlinks are not allowed")
-        return result
-
+        return "Symlinks are not allowed"
     if not os.path.exists(filepath):
-        result.add_check(False, f"File not found: {filepath}. A path is read from the folder "
-                                "the command runs in, or pass --changed to check the files "
-                                "changed under bios/")
-        return result
-
+        return (f"File not found: {filepath}. A path is read from the folder "
+                "the command runs in, or pass --changed to check the files "
+                "changed under bios/")
     if os.path.isdir(filepath):
-        result.add_check(False, "Folder with no file in it")
-        return result
-
+        return "Folder with no file in it"
     if not os.path.isfile(filepath):
-        result.add_check(False, "Not a regular file: a device, a pipe or a socket")
-        return result
+        return "Not a regular file: a device, a pipe or a socket"
+    return ""
 
-    result.size = os.path.getsize(filepath)
-    hashes = compute_hashes(filepath)
-    result.sha1 = hashes["sha1"]
-    result.md5 = hashes["md5"]
-    result.crc32 = hashes["crc32"]
 
-    ext = os.path.splitext(filepath)[1].lower()
-    blocked = ext in BLOCKED_EXTENSIONS
-
+def _check_size(result: ValidationResult) -> bool:
+    """The size checks, True when the file is too large for git."""
     too_large = result.size > MAX_FILE_SIZE
     if too_large:
         # GitHub refuses a pushed file over 100 MiB, so a pull request cannot
@@ -465,167 +475,179 @@ def validate_file(
         result.add_check(False, "File is empty (0 bytes)")
     else:
         result.add_check(True, f"File size within limits ({result.size:,} bytes)")
+    return too_large
 
+
+def _relative_path(filepath: str) -> str:
     # Paths are compared as the database writes them, relative to the
     # checkout: an absolute path to the file itself read as its duplicate.
-    relative = filepath
     if os.path.isabs(filepath):
         candidate = os.path.relpath(filepath, os.getcwd())
         if not candidate.startswith(".."):
-            relative = candidate
+            return candidate
+    return filepath
 
-    if db:
-        if result.sha1 in db.get("files", {}):
-            existing = db["files"][result.sha1]
-            held_at = {
-                os.path.normpath(p)
-                for p in [existing.get("path"), *(existing.get("paths") or [])] if p
-            }
-            if os.path.normpath(relative) in held_at:
-                # The file the database was built from, not a copy of it: a
-                # PR that regenerated database.json was told each new file
-                # duplicated itself.
-                result.add_check(True, "Already in the database at this path")
-            elif _in_nodedup_dir(relative):
-                result.add_info(
-                    f"Identical to `{existing['path']}`, kept: this tree is read by path"
-                )
-            else:
-                result.outcome = "held"
-                result.add_warning(
-                    f"Already held at `{existing['path']}`: nothing to add, "
-                    "leave this copy out of the pull request"
-                )
-        else:
-            result.add_check(True, "Not a duplicate in database")
 
+def _check_duplicate(result: ValidationResult, db: dict, relative: str) -> None:
+    if result.sha1 not in db.get("files", {}):
+        result.add_check(True, "Not a duplicate in database")
+        return
+    existing = db["files"][result.sha1]
+    held_at = {
+        os.path.normpath(p)
+        for p in [existing.get("path"), *(existing.get("paths") or [])] if p
+    }
+    if os.path.normpath(relative) in held_at:
+        # The file the database was built from, not a copy of it: a
+        # PR that regenerated database.json was told each new file
+        # duplicated itself.
+        result.add_check(True, "Already in the database at this path")
+    elif _in_nodedup_dir(relative):
+        result.add_info(
+            f"Identical to `{existing['path']}`, kept: this tree is read by path"
+        )
+    else:
+        result.outcome = "held"
+        result.add_warning(
+            f"Already held at `{existing['path']}`: nothing to add, "
+            "leave this copy out of the pull request"
+        )
+
+
+def _identify(review: _Review, result: ValidationResult, sha256: str) -> _Known:
+    platform_hashes, profile_hashes = review.platform_hashes, review.profile_hashes
     sha1_known = result.sha1 in platform_hashes.get("sha1", set())
     md5_known = result.md5 in platform_hashes.get("md5", set())
     other_known = (
-        hashes.get("sha256", "") in platform_hashes.get("sha256", set())
+        sha256 in platform_hashes.get("sha256", set())
         or (result.crc32, result.size) in platform_hashes.get("crc32", set())
     )
     accepted_by = (
         set() if sha1_known or md5_known or other_known
-        else _platforms_accepting(filepath, result.filename, platform_hashes)
+        else _platforms_accepting(review.filepath, result.filename, platform_hashes)
     )
-    name_known = result.filename in platform_hashes.get("names", set())
-
-    profile_hashes = profile_hashes or {}
     by_profile = (
         profile_hashes.get("sha1", {}).get(result.sha1)
-        or profile_hashes.get("sha256", {}).get(hashes.get("sha256", ""))
+        or profile_hashes.get("sha256", {}).get(sha256)
         or profile_hashes.get("md5", {}).get(result.md5)
         or profile_hashes.get("crc32", {}).get((result.crc32, result.size))
         or profile_hashes.get("crc32", {}).get((result.crc32, None))
     )
+    return _Known(sha1_known, md5_known, other_known, accepted_by, by_profile,
+                  result.filename in platform_hashes.get("names", set()))
 
-    if blocked:
-        # An executable is refused unless an emulator profile pins its exact
-        # bytes: PICO-8's pico8.exe and SDL2.dll are declared by sha1 from the
-        # official archive. A weak hash (md5, crc32) never vouches for code.
-        pinned = (
-            profile_hashes.get("sha1", {}).get(result.sha1)
-            or profile_hashes.get("sha256", {}).get(hashes.get("sha256", ""))
-        )
-        if pinned:
-            result.add_check(
-                True,
-                f"Executable whose bytes an emulator profile pins by sha1: {', '.join(sorted(pinned))}",
-            )
-        else:
-            result.add_check(False, f"Blocked file extension: {ext}")
 
-    # The files of a ZIP no list declares whole, when the upload is one.
-    members: list[str] | None = None
-    if sha1_known:
-        result.add_check(True, "SHA1 matches known platform requirement")
-    elif md5_known:
-        result.add_check(True, "MD5 matches known platform requirement")
-    elif other_known:
-        result.add_check(True, "Hash matches known platform requirement")
-    elif accepted_by:
+def _check_executable(result: ValidationResult, sha256: str, profile_hashes: dict, ext: str) -> None:
+    # An executable is refused unless an emulator profile pins its exact
+    # bytes: PICO-8's pico8.exe and SDL2.dll are declared by sha1 from the
+    # official archive. A weak hash (md5, crc32) never vouches for code.
+    pinned = (
+        profile_hashes.get("sha1", {}).get(result.sha1)
+        or profile_hashes.get("sha256", {}).get(sha256)
+    )
+    if pinned:
         result.add_check(
-            True, "Accepted by the platform's own check: " + ", ".join(sorted(accepted_by))
+            True,
+            f"Executable whose bytes an emulator profile pins by sha1: {', '.join(sorted(pinned))}",
         )
-    elif by_profile:
-        names = sorted(by_profile)
+    else:
+        result.add_check(False, f"Blocked file extension: {ext}")
+
+
+def _check_known(review: _Review, result: ValidationResult, known: _Known, too_large: bool) -> list[str] | None:
+    """What declares the file, and the files of a ZIP no list declares
+    whole, when the upload is one."""
+    if known.sha1:
+        result.add_check(True, "SHA1 matches known platform requirement")
+    elif known.md5:
+        result.add_check(True, "MD5 matches known platform requirement")
+    elif known.other:
+        result.add_check(True, "Hash matches known platform requirement")
+    elif known.accepted_by:
+        result.add_check(
+            True, "Accepted by the platform's own check: " + ", ".join(sorted(known.accepted_by))
+        )
+    elif known.by_profile:
+        names = sorted(known.by_profile)
         shown = ", ".join(names[:5]) + (f" and {len(names) - 5} more" if len(names) > 5 else "")
         result.add_check(True, f"Hash matches a file the emulator profile declares: {shown}")
-    elif name_known:
+    elif known.name:
         result.add_warning(
             "Filename matches a known requirement but hash differs - may be a variant"
         )
     else:
         result.outcome = "unknown"
         members = None if too_large else _archive_members(
-            filepath, db, platform_hashes, profile_hashes
+            review.filepath, review.db, review.platform_hashes, review.profile_hashes
         )
-        if members is not None:
-            # A folder zipped to upload many files at once was hashed as one
-            # file and its contributor asked where that dump came from.
-            shown = "; ".join(members[:10]) + (
-                f"; and {len(members) - 10} more" if len(members) > 10 else ""
-            )
-            result.add_warning(
-                "A ZIP no platform list or emulator profile declares as a whole: "
-                "add the files it holds, unzipped, not the archive. Inside: "
-                + (shown or "nothing")
-            )
-        else:
-            result.add_warning(
-                "Not recognised: no platform list or emulator profile declares this "
-                f"file. Say in the {'issue' if too_large else 'pull request'} which "
-                "emulator reads it, for which system, and where the dump comes from"
-            )
+        _report_unknown(result, members, too_large)
+        return members
+    return None
 
-    normalized = os.path.normpath(relative)
-    values = (result.sha1, result.md5, hashes.get("sha256", ""))
-    expected = expected_folders(values, platform_hashes, profile_hashes)
-    if too_large:
-        # The file stays out of the pull request, so no folder of bios/ is
-        # the contributor's to choose: the release asset is placed by hand.
-        pass
-    elif normalized.startswith("bios" + os.sep):
-        parts = normalized.split(os.sep)
-        here = f"bios/{parts[1]}/{parts[2]}/" if len(parts) >= 4 else ""
-        makers = {folder.split("/")[1] for folder in expected}
-        if expected and (len(parts) < 4 or parts[1] not in makers):
-            # Depth alone passed a PS1 BIOS filed under bios/Nintendo/Game Boy/.
-            result.add_warning(
-                "Placed under " + (here or "the bios/ root") + ", while the other files of "
-                "its system are in " + " or ".join(f"`{f}`" for f in expected)
-            )
-        elif len(parts) >= 4:
-            result.add_check(True, f"Correct placement: bios/{parts[1]}/{parts[2]}/")
-        else:
-            result.add_warning("File should be in bios/Manufacturer/Console/ structure")
-    elif result.outcome == "held" or members is not None:
-        # Nothing to place: a copy, or an archive whose files go in unzipped.
-        pass
+
+def _report_unknown(result: ValidationResult, members: list[str] | None, too_large: bool) -> None:
+    if members is not None:
+        # A folder zipped to upload many files at once was hashed as one
+        # file and its contributor asked where that dump came from.
+        shown = "; ".join(members[:10]) + (
+            f"; and {len(members) - 10} more" if len(members) > 10 else ""
+        )
+        result.add_warning(
+            "A ZIP no platform list or emulator profile declares as a whole: "
+            "add the files it holds, unzipped, not the archive. Inside: "
+            + (shown or "nothing")
+        )
     else:
-        # The contributor asks before forking: say where it goes.
-        spot = placement(
-            values, result.filename, db, platform_hashes, profile_hashes,
-            declared=bool(sha1_known or md5_known or other_known or accepted_by or by_profile),
+        result.add_warning(
+            "Not recognised: no platform list or emulator profile declares this "
+            f"file. Say in the {'issue' if too_large else 'pull request'} which "
+            "emulator reads it, for which system, and where the dump comes from"
         )
-        result.destination = spot.destination(result.sha1)
-        copies = f". --place copies it to `{result.destination}`" if result.destination else ""
-        if spot.folders:
-            result.add_warning(
-                "File is not under bios/ yet. Its system's files are in "
-                + " or ".join(f"`{f}`" for f in spot.folders) + copies
-            )
-        elif spot.home:
-            result.add_warning(
-                f"File is not under bios/ yet. The collection keeps this name in `{spot.home}`"
-                + copies
-            )
-        else:
-            result.add_warning(
-                "File is not under bios/ yet. Place it in bios/Manufacturer/Console/"
-            )
 
+
+def _check_bios_placement(result: ValidationResult, normalized: str, expected: list[str]) -> None:
+    parts = normalized.split(os.sep)
+    here = f"bios/{parts[1]}/{parts[2]}/" if len(parts) >= 4 else ""
+    makers = {folder.split("/")[1] for folder in expected}
+    if expected and (len(parts) < 4 or parts[1] not in makers):
+        # Depth alone passed a PS1 BIOS filed under bios/Nintendo/Game Boy/.
+        result.add_warning(
+            "Placed under " + (here or "the bios/ root") + ", while the other files of "
+            "its system are in " + " or ".join(f"`{f}`" for f in expected)
+        )
+    elif len(parts) >= 4:
+        result.add_check(True, f"Correct placement: bios/{parts[1]}/{parts[2]}/")
+    else:
+        result.add_warning("File should be in bios/Manufacturer/Console/ structure")
+
+
+def _suggest_destination(review: _Review, result: ValidationResult, values: tuple[str, ...],
+                         known: _Known) -> None:
+    # The contributor asks before forking: say where it goes.
+    spot = placement(
+        values, result.filename, review.db, review.platform_hashes, review.profile_hashes,
+        declared=bool(known.by_platform or known.by_profile),
+    )
+    result.destination = spot.destination(result.sha1)
+    copies = f". --place copies it to `{result.destination}`" if result.destination else ""
+    if spot.folders:
+        result.add_warning(
+            "File is not under bios/ yet. Its system's files are in "
+            + " or ".join(f"`{f}`" for f in spot.folders) + copies
+        )
+    elif spot.home:
+        result.add_warning(
+            f"File is not under bios/ yet. The collection keeps this name in `{spot.home}`"
+            + copies
+        )
+    else:
+        result.add_warning(
+            "File is not under bios/ yet. Place it in bios/Manufacturer/Console/"
+        )
+
+
+def _check_declared_size(result: ValidationResult, platform_hashes: dict, profile_hashes: dict) -> bool:
+    """True when the size fits every declaration of the name."""
     declared = [
         *platform_hashes.get("sizes", {}).get(result.filename, []),
         *profile_hashes.get("sizes", {}).get(result.filename, []),
@@ -639,27 +661,80 @@ def validate_file(
             f"Every declaration of {result.filename} expects {shown} bytes, "
             f"this file has {result.size:,}: truncated or another file"
         )
+    return size_fits
 
-    if (name_known and not (sha1_known or md5_known or other_known or accepted_by)
-            and not by_profile and size_fits):
-        owners = name_systems(result.filename, platform_hashes, profile_hashes)
-        home = _variant_home(db, result.filename, "", set() if len(owners) > 1 else {
-            d for table in (platform_hashes, profile_hashes or {}) for s in owners
-            for d in table.get("system_dirs", {}).get(s, ())
-        } if owners else None)
-        if not home and normalized.startswith("bios" + os.sep):
-            # Beside the file, in the folder the contributor chose.
-            home = os.path.dirname(normalized).replace(os.sep, "/") + "/"
-        slot = f"{home}.variants/{result.filename}.{result.sha1[:8]}"
-        if home and not normalized.startswith("bios" + os.sep):
-            result.destination = slot
-        if home:
-            result.add_info(
-                f"This may be a valid variant. If accepted, it will be placed in `{slot}`"
-            )
-        else:
-            result.add_info("This may be a valid variant of a file the collection lacks")
 
+def _note_variant(review: _Review, result: ValidationResult, normalized: str) -> None:
+    platform_hashes, profile_hashes = review.platform_hashes, review.profile_hashes
+    owners = name_systems(result.filename, platform_hashes, profile_hashes)
+    home = _variant_home(review.db, result.filename, "", set() if len(owners) > 1 else {
+        d for table in (platform_hashes, profile_hashes) for s in owners
+        for d in table.get("system_dirs", {}).get(s, ())
+    } if owners else None)
+    if not home and normalized.startswith("bios" + os.sep):
+        # Beside the file, in the folder the contributor chose.
+        home = os.path.dirname(normalized).replace(os.sep, "/") + "/"
+    slot = f"{home}.variants/{result.filename}.{result.sha1[:8]}"
+    if home and not normalized.startswith("bios" + os.sep):
+        result.destination = slot
+    if home:
+        result.add_info(
+            f"This may be a valid variant. If accepted, it will be placed in `{slot}`"
+        )
+    else:
+        result.add_info("This may be a valid variant of a file the collection lacks")
+
+
+def validate_file(
+    filepath: str,
+    db: dict | None,
+    platform_hashes: dict,
+    profile_hashes: dict | None = None,
+) -> ValidationResult:
+    """Run all validation checks on a file."""
+    result = ValidationResult(filepath)
+    problem = _path_problem(filepath)
+    if problem:
+        result.add_check(False, problem)
+        return result
+
+    result.size = os.path.getsize(filepath)
+    hashes = compute_hashes(filepath)
+    result.sha1 = hashes["sha1"]
+    result.md5 = hashes["md5"]
+    result.crc32 = hashes["crc32"]
+    sha256 = hashes.get("sha256", "")
+
+    ext = os.path.splitext(filepath)[1].lower()
+    too_large = _check_size(result)
+    relative = _relative_path(filepath)
+    if db:
+        _check_duplicate(result, db, relative)
+
+    review = _Review(filepath, db, platform_hashes, profile_hashes or {})
+    known = _identify(review, result, sha256)
+    if ext in BLOCKED_EXTENSIONS:
+        _check_executable(result, sha256, review.profile_hashes, ext)
+    members = _check_known(review, result, known, too_large)
+
+    normalized = os.path.normpath(relative)
+    values = (result.sha1, result.md5, sha256)
+    if too_large:
+        # The file stays out of the pull request, so no folder of bios/ is
+        # the contributor's to choose: the release asset is placed by hand.
+        pass
+    elif normalized.startswith("bios" + os.sep):
+        _check_bios_placement(result, normalized,
+                              expected_folders(values, platform_hashes, review.profile_hashes))
+    elif result.outcome == "held" or members is not None:
+        # Nothing to place: a copy, or an archive whose files go in unzipped.
+        pass
+    else:
+        _suggest_destination(review, result, values, known)
+
+    size_fits = _check_declared_size(result, platform_hashes, review.profile_hashes)
+    if known.name and not known.by_platform and not known.by_profile and size_fits:
+        _note_variant(review, result, normalized)
     return result
 
 
@@ -734,16 +809,24 @@ class Placement:
         return self.folder + self.name
 
 
+class PlacementOptions(TypedDict, total=False):
+    """How placement() tests a path, and the systems and directory a
+    declaration names."""
+
+    exists: Callable[[str], bool]
+    systems: Iterable[str]
+    directory: str
+
+
 def placement(
     values: Iterable[str],
     filename: str,
     db: dict | None,
     platform_hashes: dict,
     profile_hashes: dict | None,
+    *,
     declared: bool,
-    exists: Callable[[str], bool] = os.path.exists,
-    systems: Iterable[str] = (),
-    directory: str = "",
+    **options: Unpack[PlacementOptions],
 ) -> Placement:
     """Where a file goes, by its hashes and its name.
 
@@ -761,6 +844,9 @@ def placement(
     copy by name counts only in a directory of that tail, and a held
     directory of that tail is the folder.
     """
+    exists = options.get("exists", os.path.exists)
+    systems = options.get("systems", ())
+    directory = options.get("directory", "")
     values = [value for value in values if value]
     folders = expected_folders(values, platform_hashes, profile_hashes)
     if folders:
@@ -954,11 +1040,7 @@ def get_changed_files() -> list[str]:
             "staged, modified and untracked files only",
             file=sys.stderr,
         )
-    seen: set[str] = set()
-    return [
-        f for f in changed
-        if f.startswith("bios/") and not (f in seen or seen.add(f)) and os.path.isfile(f)
-    ]
+    return [f for f in dict.fromkeys(changed) if f.startswith("bios/") and os.path.isfile(f)]
 
 
 def expand_folders(paths: list[str]) -> list[str]:
@@ -1054,11 +1136,11 @@ def main() -> None:
     )
     # One output format: --json beside --markdown printed JSON and dropped
     # the markdown without a word.
-    output = parser.add_mutually_exclusive_group()
-    output.add_argument(
+    formats = parser.add_mutually_exclusive_group()
+    formats.add_argument(
         "--markdown", action="store_true", help="Output as markdown (for PR comments)"
     )
-    output.add_argument("--json", action="store_true", help="Output as JSON")
+    formats.add_argument("--json", action="store_true", help="Output as JSON")
     parser.add_argument(
         "--place", action="store_true",
         help="copy each recognised file from outside bios/ to the folder and name "
@@ -1095,21 +1177,20 @@ def main() -> None:
     all_passed = all(r.passed for r in results)
 
     if args.json:
-        output = []
-        for r in results:
-            output.append(
-                {
-                    "file": r.filepath,
-                    "passed": r.passed,
-                    # A file that failed, unread or refused, is not a new one.
-                    "outcome": r.outcome or ("new" if r.passed else "failed"),
-                    "destination": r.destination,
-                    "sha1": r.sha1,
-                    "md5": r.md5,
-                    "size": r.size,
-                    "checks": [{"status": s, "message": m} for s, m in r.checks],
-                }
-            )
+        output = [
+            {
+                "file": r.filepath,
+                "passed": r.passed,
+                # A file that failed, unread or refused, is not a new one.
+                "outcome": r.outcome or ("new" if r.passed else "failed"),
+                "destination": r.destination,
+                "sha1": r.sha1,
+                "md5": r.md5,
+                "size": r.size,
+                "checks": [{"status": s, "message": m} for s, m in r.checks],
+            }
+            for r in results
+        ]
         print(json.dumps(output, indent=2))
     elif args.markdown:
         lines = ["## BIOS Validation Report", ""]

@@ -20,22 +20,13 @@ from __future__ import annotations
 
 import re
 
-try:
-    from .base_scraper import (
-        requirement_entry,
-        BaseScraper,
-        BiosRequirement,
-        fetch_github_latest_version,
-        scraper_cli,
-    )
-except ImportError:
-    from base_scraper import (
-        requirement_entry,
-        BaseScraper,
-        BiosRequirement,
-        fetch_github_latest_version,
-        scraper_cli,
-    )
+from .base_scraper import (
+    requirement_entry,
+    BaseScraper,
+    BiosRequirement,
+    fetch_github_latest_version,
+    scraper_cli,
+)
 
 PLATFORM_NAME = "bizhawk"
 

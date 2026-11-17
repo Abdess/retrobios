@@ -47,6 +47,7 @@ class OneFolderPerConsole(unittest.TestCase):
         listed = subprocess.run(
             ["git", "ls-files", "-z", "--", "bios"],
             cwd=REPO_ROOT, capture_output=True, text=True,
+            check=False,
         )
         if listed.returncode != 0 or not listed.stdout:
             self.skipTest("not a git checkout with bios/")

@@ -36,16 +36,15 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
-_SCRIPTS_DIR = str(Path(__file__).resolve().parents[1])
-if _SCRIPTS_DIR not in sys.path:
+if (_SCRIPTS_DIR := str(Path(__file__).resolve().parents[1])) not in sys.path:
     sys.path.insert(0, _SCRIPTS_DIR)
 
-from artifacts import copy_stream_atomic, write_if_changed, write_text_atomic  # noqa: E402
-from common import parse_untrusted_xml  # noqa: E402
-from region import REGIONS, WORLD  # noqa: E402
-from region_audit import NOINTRO  # noqa: E402
+from artifacts import copy_stream_atomic, write_if_changed, write_text_atomic
+from common import parse_untrusted_xml
+from region import REGIONS, WORLD
+from region_audit import NOINTRO
 
-from .base_scraper import github_headers  # noqa: E402
+from .base_scraper import github_headers
 
 SOURCES = ("no-intro", "redump")
 CACHE_DIR = Path(".cache") / "game-dats"

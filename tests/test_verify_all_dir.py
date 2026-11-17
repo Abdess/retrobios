@@ -35,6 +35,7 @@ class AllReadsTheGivenDirectory(unittest.TestCase):
                 [sys.executable, "scripts/verify.py", "--all",
                  "--platforms-dir", str(plat), "--json"],
                 cwd=REPO_ROOT, capture_output=True, text=True,
+                check=False,
             )
         self.assertEqual(run.returncode, 0, run.stderr[-2000:])
         self.assertEqual(list(json.loads(run.stdout)), ["solo"])

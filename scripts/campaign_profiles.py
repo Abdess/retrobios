@@ -95,11 +95,11 @@ def key_lines(lines: list[str], first: int, stop: int, key_indent: int) -> dict[
         match = KEY.match(line)
         if match and len(match["indent"]) == key_indent:
             order.append((match["key"], i))
-    for position, (key, line) in enumerate(order):
+    for position, (key, start) in enumerate(order):
         end = order[position + 1][1] if position + 1 < len(order) else stop
-        while end > line + 1 and (not lines[end - 1].strip() or lines[end - 1].strip().startswith("#")):
+        while end > start + 1 and (not lines[end - 1].strip() or lines[end - 1].strip().startswith("#")):
             end -= 1
-        keys[key] = (line, end)
+        keys[key] = (start, end)
     return keys
 
 

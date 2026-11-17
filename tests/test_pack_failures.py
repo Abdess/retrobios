@@ -47,11 +47,11 @@ class FailedPlatformFailsTheRun(unittest.TestCase):
 
     def test_pack_mode(self):
         with mock.patch.object(gp, "generate_pack", _boom), \
-                mock.patch.object(gp, "verify_and_finalize_packs", return_value=True):
-            with self.assertRaises(SystemExit) as ctx:
-                gp._run_platform_packs(
-                    self._args(), [(["retropie"], "retropie")], {}, {}, {}, {}, {}, None
-                )
+                mock.patch.object(gp, "verify_and_finalize_packs", return_value=True), \
+                self.assertRaises(SystemExit) as ctx:
+            gp._run_platform_packs(
+                self._args(), [(["retropie"], "retropie")], {}, {}, {}, {}, {}, None
+            )
         self.assertEqual(ctx.exception.code, 1)
 
     def test_manifest_mode(self):

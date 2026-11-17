@@ -102,10 +102,7 @@ def check(registry_path: str = DEFAULT_REGISTRY) -> dict:
     buildbot_set = set(index_zips)
     tracked_set = set(tracked.keys())
 
-    results: list[dict] = []
-
-    for z in sorted(buildbot_set - tracked_set):
-        results.append({"zip": z, "status": "NEW", "key": None})
+    results: list[dict] = [{"zip": z, "status": "NEW", "key": None} for z in sorted(buildbot_set - tracked_set)]
 
     for z in sorted(tracked_set - buildbot_set):
         key, _ = tracked[z]

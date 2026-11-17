@@ -57,6 +57,23 @@ def _name_is(name: bytes, wanted: bytes, compared: int) -> bool:
     return True
 
 
+def _after_reset(data: bytes, reset_compare: int, missing_reset: str) -> int | None:
+    """The offset past the RESET entry, or past the last entry searched when
+    the walk goes on without one, None where the code gives up."""
+    pos = 0
+    for _ in range(SEARCH_ENTRIES):
+        if pos + ENTRY_SIZE > len(data):
+            return None
+        name = data[pos:pos + NAME_SIZE]
+        pos += ENTRY_SIZE
+        if _name_is(name, b"RESET", reset_compare):
+            break
+    else:
+        if missing_reset == REJECT:
+            return None
+    return pos
+
+
 def walk(data: bytes, spec: dict) -> Romdir | None:
     """The ROM directory walk one fork's LoadBiosVersion runs, or None.
 
@@ -84,18 +101,10 @@ def walk(data: bytes, spec: dict) -> Romdir | None:
     missing_reset = spec.get("missing_reset", ENDS_WALK)
     offset_mask = (1 << int(spec.get("offset_width", 64))) - 1
 
-    pos = 0
-    for _ in range(SEARCH_ENTRIES):
-        if pos + ENTRY_SIZE > size:
-            return None
-        name = data[pos:pos + NAME_SIZE]
-        pos += ENTRY_SIZE
-        if _name_is(name, b"RESET", reset_compare):
-            break
-    else:
-        if missing_reset == REJECT:
-            return None
-
+    found = _after_reset(data, reset_compare, missing_reset)
+    if found is None:
+        return None
+    pos = found
     entry = data[pos - ENTRY_SIZE:pos]
     offset = 0
     romver: bytes | None = None

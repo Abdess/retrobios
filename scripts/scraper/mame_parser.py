@@ -398,8 +398,7 @@ def _parse_rom_entries(block: str, keep_no_dump: bool = False) -> list[dict]:
 
     events: list[tuple[int, str, re.Match]] = []
     for tag, pat in token_patterns:
-        for m in pat.finditer(block):
-            events.append((m.start(), tag, m))
+        events.extend((m.start(), tag, m) for m in pat.finditer(block))
 
     # Walked in source order: a ROM_LOAD belongs to the last ROM_REGION above it.
     events.sort(key=lambda e: e[0])

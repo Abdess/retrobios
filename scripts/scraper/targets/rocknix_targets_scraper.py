@@ -23,6 +23,8 @@ from datetime import datetime, timezone
 import yaml
 
 from . import BaseTargetScraper
+from ..base_scraper import fetch_bytes, github_headers
+from ..rocknix_scraper import standalone_emulators
 
 PLATFORM_NAME = "rocknix"
 
@@ -30,13 +32,6 @@ RAW_BASE = "https://raw.githubusercontent.com/ROCKNIX/distribution/{tag}"
 GITHUB_API = "https://api.github.com/repos/ROCKNIX/distribution/contents"
 EMULATORS_MK = "projects/ROCKNIX/packages/virtual/emulators/package.mk"
 DEVICES_DIR = "projects/ROCKNIX/devices"
-
-try:
-    from ..base_scraper import fetch_bytes, github_headers
-    from ..rocknix_scraper import standalone_emulators
-except ImportError:
-    from scraper.base_scraper import fetch_bytes, github_headers
-    from scraper.rocknix_scraper import standalone_emulators
 
 # `NAME="a b \
 #   c"` or `NAME+=" a b"`, continuation lines joined first.
@@ -98,6 +93,33 @@ _CORE_FILE_RE = re.compile(r"([\w+.-]+)_libretro\.(?:so\b|\{[^}]*\bso\b[^}]*\})"
 _TEST_RE = re.compile(r'\[\s*"\$\{(\w+)\}"\s*=\s*"([^"]*)"\s*\]')
 
 
+def _holds(condition: str, values: dict[str, str]) -> bool:
+    tests = _TEST_RE.findall(condition)
+    if not tests or re.sub(_TEST_RE, "", condition).strip(" ;&") not in ("", "then"):
+        raise RuntimeError(f"makeinstall_target tests {condition.strip()!r}")
+    for variable, value in tests:
+        if variable not in values:
+            raise RuntimeError(f"makeinstall_target tests ${{{variable}}}")
+        if values[variable] != value:
+            return False
+    return True
+
+
+def _copied_cores(line: str) -> list[str]:
+    """The core files one line of makeinstall_target copies, by installed name."""
+    found: list[str] = []
+    for sources, target in _COPY_RE.findall(line):
+        if named := _CORE_FILE_RE.search(target):
+            found.append(named.group(1))
+            continue
+        found.extend(
+            named.group(1) for source in sources.split()
+            if not source.startswith("-")
+            and (named := _CORE_FILE_RE.search(source.rsplit("/", 1)[-1]))
+        )
+    return found
+
+
 def installed_cores(package_mk: str, arch: str, with_32bit: bool) -> list[str]:
     """The cores a libretro package installs on a device.
 
@@ -114,17 +136,6 @@ def installed_cores(package_mk: str, arch: str, with_32bit: bool) -> list[str]:
         raise RuntimeError("package.mk has no makeinstall_target")
     # config/options:36 sets TARGET_ARCH="${ARCH}".
     values = {"ARCH": arch, "TARGET_ARCH": arch, "ENABLE_32BIT": "true" if with_32bit else "false"}
-
-    def holds(condition: str) -> bool:
-        tests = _TEST_RE.findall(condition)
-        if not tests or re.sub(_TEST_RE, "", condition).strip(" ;&") not in ("", "then"):
-            raise RuntimeError(f"makeinstall_target tests {condition.strip()!r}")
-        for variable, value in tests:
-            if variable not in values:
-                raise RuntimeError(f"makeinstall_target tests ${{{variable}}}")
-            if values[variable] != value:
-                return False
-        return True
 
     found: list[str] = []
     stack: list[bool] = []
@@ -143,7 +154,7 @@ def installed_cores(package_mk: str, arch: str, with_32bit: bool) -> list[str]:
             stack[-1] = arch in arm.group(1).split("|") or arm.group(1) == "*"
             line = arm.group(2)
         if line.startswith("if "):
-            stack.append(holds(line[3:]))
+            stack.append(_holds(line[3:], values))
             continue
         if line == "else":
             stack[-1] = not stack[-1]
@@ -153,13 +164,7 @@ def installed_cores(package_mk: str, arch: str, with_32bit: bool) -> list[str]:
             continue
         if not all(stack):
             continue
-        for sources, target in _COPY_RE.findall(line):
-            if named := _CORE_FILE_RE.search(target):
-                found.append(named.group(1))
-                continue
-            for source in sources.split():
-                if not source.startswith("-") and (named := _CORE_FILE_RE.search(source.rsplit("/", 1)[-1])):
-                    found.append(named.group(1))
+        found.extend(_copied_cores(line))
     if not found:
         raise RuntimeError("makeinstall_target installs no libretro core")
     return sorted(set(found))

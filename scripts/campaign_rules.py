@@ -40,7 +40,7 @@ Standard library only.
 
 from __future__ import annotations
 
-from collections.abc import Iterable, Sequence
+from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass, field
 
 BOOTS = "boots"
@@ -122,7 +122,8 @@ def current(entry: dict, name: str) -> object:
 def agrees(entry: dict, verdict: Verdict) -> bool:
     """True when the profile already says what the run showed."""
     if verdict.field == "aliases":
-        return set(verdict.value or ()) <= set(entry.get("aliases") or ())
+        shown = verdict.value if isinstance(verdict.value, (list, tuple)) else ()
+        return set(shown) <= set(entry.get("aliases") or ())
     if verdict.field == "validation":
         return verdict.rule == "validation_agrees"
     return current(entry, verdict.field) == verdict.value
@@ -211,7 +212,8 @@ def rule_validation(zeros: Run | None, half: Run | None, none: Run, present: Run
                     entry: dict) -> Verdict | None:
     """Same-size and short wrong files against the right one: validation."""
     name = entry["name"]
-    content = {REFUSED: True, USED: False}.get(file_use(zeros, none, present)) if zeros else None
+    zeros_use = file_use(zeros, none, present) if zeros else None
+    content = {REFUSED: True, USED: False}.get(zeros_use) if zeros_use else None
     half_use = file_use(half, none, present) if half else None
     size: bool | None = None
     if half_use == USED:
@@ -297,7 +299,7 @@ def rule_variants(runs: Iterable[Run], entry: dict) -> Verdict | None:
 
 
 def merge_evidence(existing: dict | None, verdict: Verdict,
-                   keep: object = lambda rid: True) -> dict:
+                   keep: Callable[[str], bool] = lambda rid: True) -> dict:
     """The entry's evidence: map with the verdict's record ids added under its
     field. An id `keep` refuses is dropped from that field: a record from
     before the oracle no longer proves anything."""

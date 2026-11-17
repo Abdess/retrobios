@@ -283,6 +283,7 @@ def sha1_for_hash(hash_type: str, hash_val: str, db: dict) -> str | None:
     """The database key a looked-up hash names, or None."""
     files_db = db.get("files", {})
     indexes = db.get("indexes", {})
+    sha1: str | None
     if hash_type == "sha1":
         sha1 = hash_val
     elif hash_type == "crc32":
@@ -450,6 +451,53 @@ def resolve_declaration(
     ))
 
 
+def _declarations_by_destination(
+    pack_systems: dict, base_dest: str, required_only: bool,
+) -> dict[str, list[dict]]:
+    """The declarations of each full destination, in system order."""
+    dest_entries: dict[str, list[dict]] = {}
+    for _sys_id, system in sorted(pack_systems.items()):
+        for file_entry in system.get("files", []):
+            if required_only and file_entry.get("required") is False:
+                continue
+            dest = sanitize_pack_path(
+                file_entry.get("destination", file_entry.get("name", ""))
+            )
+            if not dest:
+                continue
+            full = f"{base_dest}/{dest}" if base_dest else dest
+            dest_entries.setdefault(full, []).append(file_entry)
+    return dest_entries
+
+
+def _archive_choice(
+    resolved: list[tuple[dict, str | None, str]], members: list[dict],
+) -> dict | None:
+    """The declaration whose archive the most per-ROM declarations accept."""
+    # One archive declared once per ROM it must hold: the archive
+    # to ship is the one the most declarations accept, not the first
+    # that answers one of them (adam_fdc.zip: a one-member MAME set
+    # answered first, the eight-member set sat beside it).
+    def accepted(path: str | None) -> int:
+        if not path or not path.endswith(".zip"):
+            return -1
+        return sum(inner_rom_check(fe, path) == "ok" for fe in members)
+
+    fe, path, _st = max(resolved, key=lambda item: accepted(item[1]))
+    return fe if accepted(path) > 0 else None
+
+
+def _hash_choice(resolved: list[tuple[dict, str | None, str]]) -> dict | None:
+    """The first declaration resolved by md5, else the first by any hash."""
+    best = None
+    for fe, _lp, _st in resolved:
+        if _lp and _st == "md5_exact":
+            return fe
+        if best is None and _lp and resolution_is_hash_exact(_st):
+            best = fe
+    return best
+
+
 def preferred_entries(
     pack_systems: dict,
     db: dict,
@@ -470,18 +518,7 @@ def preferred_entries(
     and could crown a declaration only a data/ cache satisfies.
     """
     preferred_entries: dict[str, int] = {}
-    dest_entries: dict[str, list[dict]] = {}
-    for sys_id, system in sorted(pack_systems.items()):
-        for file_entry in system.get("files", []):
-            if required_only and file_entry.get("required") is False:
-                continue
-            dest = sanitize_pack_path(
-                file_entry.get("destination", file_entry.get("name", ""))
-            )
-            if not dest:
-                continue
-            full = f"{base_dest}/{dest}" if base_dest else dest
-            dest_entries.setdefault(full, []).append(file_entry)
+    dest_entries = _declarations_by_destination(pack_systems, base_dest, required_only)
     for full, entries in dest_entries.items():
         if len(entries) < 2:
             continue
@@ -504,26 +541,11 @@ def preferred_entries(
         ]
         members = [fe for fe in entries if fe.get("zipped_file")]
         if members:
-            # One archive declared once per ROM it must hold: the archive
-            # to ship is the one the most declarations accept, not the first
-            # that answers one of them (adam_fdc.zip: a one-member MAME set
-            # answered first, the eight-member set sat beside it).
-            def accepted(path: str | None) -> int:
-                if not path or not path.endswith(".zip"):
-                    return -1
-                return sum(inner_rom_check(fe, path) == "ok" for fe in members)
-
-            fe, path, _st = max(resolved, key=lambda item: accepted(item[1]))
-            if accepted(path) > 0:
-                preferred_entries[full] = id(fe)
+            chosen = _archive_choice(resolved, members)
+            if chosen is not None:
+                preferred_entries[full] = id(chosen)
                 continue
-        best = None
-        for fe, _lp, _st in resolved:
-            if _lp and _st == "md5_exact":
-                best = fe
-                break
-            if best is None and _lp and resolution_is_hash_exact(_st):
-                best = fe
+        best = _hash_choice(resolved)
         if best is not None:
             preferred_entries[full] = id(best)
 

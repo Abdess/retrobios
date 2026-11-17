@@ -29,22 +29,13 @@ import urllib.parse
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 
-try:
-    from .base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        fetch_branch_head,
-        fetch_bytes,
-        github_headers,
-    )
-except ImportError:
-    from base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        fetch_branch_head,
-        fetch_bytes,
-        github_headers,
-    )
+from .base_scraper import (
+    BaseScraper,
+    BiosRequirement,
+    fetch_branch_head,
+    fetch_bytes,
+    github_headers,
+)
 
 PLATFORM_NAME = "minui"
 
@@ -264,6 +255,10 @@ def platform_config(
     }
 
 
+def _fetch_with_headers(url: str, headers: dict[str, str] | None = None) -> bytes:
+    return fetch_bytes(url, headers=headers)
+
+
 class Scraper(BaseScraper):
     """Pak scraper for one frontend of the MinUI family."""
 
@@ -275,7 +270,7 @@ class Scraper(BaseScraper):
         url: str | None = None,
         fetch: Callable[[str, dict[str, str] | None], bytes] | None = None,
     ) -> None:
-        self._fetch = fetch or (lambda u, h=None: fetch_bytes(u, headers=h))
+        self._fetch = fetch or _fetch_with_headers
         self.revision = ""
         if url is None:
             self.revision = fetch_branch_head(self.variant.repo, self.variant.branch)
@@ -336,10 +331,7 @@ class Scraper(BaseScraper):
 
 
 def main() -> None:
-    try:
-        from .base_scraper import scraper_cli
-    except ImportError:
-        from base_scraper import scraper_cli
+    from .base_scraper import scraper_cli
 
     scraper_cli(Scraper, "Scrape the MinUI pak list")
 

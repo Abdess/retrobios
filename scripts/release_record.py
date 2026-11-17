@@ -196,7 +196,7 @@ def manifest_mismatches(record: dict, install_dir: str | Path) -> list[str]:
     return found
 
 
-def _size(count: int) -> str:
+def size_text(count: int) -> str:
     if count >= 1024**3:
         return f"{count / 1024**3:.1f} GB"
     return f"{count / 1024**2:.0f} MB"
@@ -230,8 +230,8 @@ def main() -> int:
         return 1
     for name, pack in record["packs"].items():
         print(
-            f"{name:<44} download {_size(pack['download_size']):>8}"
-            f"   extracted {_size(pack['extracted_size']):>8}"
+            f"{name:<44} download {size_text(pack['download_size']):>8}"
+            f"   extracted {size_text(pack['extracted_size']):>8}"
             f"   {pack['files']:,} files   {len(pack['assets'])} asset(s)"
         )
     mismatches = manifest_mismatches(record, args.install_dir)

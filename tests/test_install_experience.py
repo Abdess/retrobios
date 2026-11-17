@@ -648,7 +648,7 @@ class ADetectedFolderUnderAClosedOne(unittest.TestCase):
             os.chmod(lock, 0o000)
             try:
                 runs = {name: subprocess.run(command + extra, env=env, capture_output=True,
-                                             text=True, timeout=60, stdin=subprocess.DEVNULL)
+                                             text=True, timeout=60, stdin=subprocess.DEVNULL, check=False)
                         for name, extra in (("check", ["--check"]), ("install", []))}
                 kinds = install.tell_apart([("retroarch", lock / "system", "RetroArch"),
                                             ("retroarch", repo.dest, "RetroArch")])
@@ -684,7 +684,7 @@ class AHomeThisUserCannotOpen(unittest.TestCase):
                         [sys.executable, str(REPO_ROOT / "install.py"), "--check",
                          "--no-input", "--verbose", *extra],
                         env=env, capture_output=True, text=True, timeout=60,
-                        stdin=subprocess.DEVNULL)
+                        stdin=subprocess.DEVNULL, check=False)
             finally:
                 os.chmod(home, 0o755)
         for name, proc in runs.items():
@@ -710,7 +710,7 @@ class AHomeThisUserCannotOpen(unittest.TestCase):
                     [sys.executable, str(REPO_ROOT / "install.py"), "--check",
                      "--no-input", "--platform", "retroarch"],
                     env=env, capture_output=True, text=True, timeout=60,
-                    stdin=subprocess.DEVNULL)
+                    stdin=subprocess.DEVNULL, check=False)
             finally:
                 os.chmod(home, 0o755)
         self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
@@ -809,7 +809,7 @@ class TheFrontendsOwnFolderClosed(unittest.TestCase):
                     [sys.executable, str(REPO_ROOT / "install.py"), "--platform", "retroarch",
                      "--dry-run", "--no-input"],
                     env=env, capture_output=True, text=True, timeout=60,
-                    stdin=subprocess.DEVNULL)
+                    stdin=subprocess.DEVNULL, check=False)
             finally:
                 os.chmod(flatpak, 0o755)
         self.assertNotIn("Traceback", proc.stderr)
@@ -877,7 +877,7 @@ class APartlyClosedHome(unittest.TestCase):
                         [sys.executable, str(REPO_ROOT / "install.py"), "--check",
                          "--no-input", "--verbose", *extra],
                         env=env, capture_output=True, text=True, timeout=60,
-                        stdin=subprocess.DEVNULL)
+                        stdin=subprocess.DEVNULL, check=False)
             finally:
                 os.chmod(closed, 0o755)
         refusal = (f"Could not look for setups: this user cannot open {closed} "
@@ -942,7 +942,7 @@ class AnUnreadableRetroArchConfigIsSaid(unittest.TestCase):
                     [sys.executable, str(REPO_ROOT / "install.py"), "--check",
                      "--no-input", "--events"],
                     env=env, capture_output=True, text=True, timeout=60,
-                    stdin=subprocess.DEVNULL)
+                    stdin=subprocess.DEVNULL, check=False)
             finally:
                 os.chmod(cfg, 0o644)
         self.assertNotIn("Traceback", proc.stderr)
@@ -1251,7 +1251,7 @@ class NotFoundWithAClosedFolder(unittest.TestCase):
                     [sys.executable, str(REPO_ROOT / "install.py"), "--platform", platform,
                      "--dry-run", "--no-input", "--events"],
                     env=env, capture_output=True, text=True, timeout=60,
-                    stdin=subprocess.DEVNULL)
+                    stdin=subprocess.DEVNULL, check=False)
             finally:
                 os.chmod(closed, 0o755)
         events = [json.loads(line) for line in proc.stdout.splitlines()]
@@ -1329,7 +1329,7 @@ class ADetectedClosedFolderSaysWhereItCameFrom(unittest.TestCase):
                 proc = subprocess.run(
                     [sys.executable, str(REPO_ROOT / "install.py"), "--check", "--no-input"],
                     env=env, capture_output=True, text=True, timeout=60,
-                    stdin=subprocess.DEVNULL)
+                    stdin=subprocess.DEVNULL, check=False)
             finally:
                 os.chmod(lock, 0o755)
         self.cfg = cfg
@@ -1373,7 +1373,7 @@ class OfflineWithNothingFound(unittest.TestCase):
                 [sys.executable, str(REPO_ROOT / "install.py"), "--offline", "--check",
                  "--no-input"],
                 env=env, capture_output=True, text=True, timeout=60,
-                stdin=subprocess.DEVNULL)
+                stdin=subprocess.DEVNULL, check=False)
         said = proc.stdout + proc.stderr
         self.assertEqual(proc.returncode, 1, said)
         self.assertNotIn("emudeck", said.lower())

@@ -2603,6 +2603,7 @@ class UpstreamFidelity(unittest.TestCase):
                 capture_output=True,
                 text=True,
                 timeout=120,
+                check=False,
             )
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertTrue(result.stdout.strip())
@@ -2625,6 +2626,7 @@ class UpstreamFidelity(unittest.TestCase):
                 capture_output=True,
                 text=True,
                 timeout=120,
+                check=False,
             )
         self.assertEqual(result.returncode, 0, result.stderr)
 
@@ -2639,7 +2641,8 @@ class UpstreamFidelity(unittest.TestCase):
             script = Path(tmp) / "checkBIOS.sh"
             script.write_text(produced["checkBIOS.sh"], encoding="utf-8")
             result = subprocess.run(
-                ["bash", "-n", str(script)], capture_output=True, text=True, timeout=60
+                ["bash", "-n", str(script)], capture_output=True, text=True, timeout=60,
+                check=False,
             )
         self.assertEqual(result.returncode, 0, result.stderr)
 
@@ -2759,6 +2762,7 @@ class UpstreamFidelity(unittest.TestCase):
                     capture_output=True,
                     text=True,
                     timeout=60,
+                    check=False,
                 )
                 with self.subTest(module=relative):
                     self.assertEqual(result.returncode, 0, result.stderr)
