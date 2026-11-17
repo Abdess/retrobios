@@ -30,9 +30,6 @@ class Step:
     needs: str = ""
     provider: str = ""
     env: dict[str, str] = field(default_factory=dict)
-    # A second command that reads the first one's output, as a shell pipe
-    # would: mypy's report goes through mypy-baseline filter.
-    then: str = ""
     # validate.yml marks the step continue-on-error: its failure is shown
     # and does not fail the run.
     may_fail: bool = False
@@ -43,8 +40,10 @@ class Step:
 STEPS: tuple[Step, ...] = (
     Step("python scripts/validate_pr.py --changed", "the BIOS files the branch adds"),
     Step("python scripts/validate_schemas.py --source-only", "profiles and platform files"),
-    Step("mypy", "no type error beyond mypy-baseline.txt", needs="mypy",
-         provider="the pip line of CONTRIBUTING.md", then="mypy-baseline filter --no-colors"),
+    Step("mypy", "no type error in install.py and scripts/", needs="mypy",
+         provider='pip install -e ".[dev]"'),
+    Step("ruff check .", "the lint rules of pyproject.toml", needs="ruff",
+         provider='pip install -e ".[dev]"'),
     Step("python scripts/profile_sync.py --added --strict", "each profile the branch adds"),
     Step("vermin --no-tips -t=3.8- --violations install.py", "install.py stays on Python 3.8",
          needs="vermin", provider="the pip line of CONTRIBUTING.md"),
@@ -76,15 +75,12 @@ def argv(command: str) -> list[str]:
 
 
 def shown(step: Step) -> str:
-    return f"{step.command} | {step.then}" if step.then else step.command
+    return step.command
 
 
 def execute(step: Step) -> int:
     env = {**os.environ, **step.env}
-    if not step.then:
-        return subprocess.run(argv(step.command), cwd=ROOT, env=env, check=False).returncode
-    first = subprocess.run(argv(step.command), cwd=ROOT, env=env, stdout=subprocess.PIPE, check=False)
-    return subprocess.run(argv(step.then), cwd=ROOT, env=env, input=first.stdout, check=False).returncode
+    return subprocess.run(argv(step.command), cwd=ROOT, env=env, check=False).returncode
 
 
 def run(steps: tuple[Step, ...] = STEPS) -> int:

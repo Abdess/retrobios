@@ -85,7 +85,8 @@ does, and names at the end each check that failed or could not run:
 ```bash
 python scripts/validate_pr.py --changed                  # the BIOS files the branch adds
 python scripts/validate_schemas.py --source-only         # profiles and platform files
-mypy | mypy-baseline filter --no-colors                  # no type error beyond mypy-baseline.txt
+mypy                                                     # no type error in install.py and scripts/
+ruff check .                                             # the lint rules of pyproject.toml
 python scripts/profile_sync.py --added --strict          # each profile the branch adds
 vermin --no-tips -t=3.8- --violations install.py         # install.py stays on Python 3.8
 shellcheck --version                                     # the launcher test runs shellcheck

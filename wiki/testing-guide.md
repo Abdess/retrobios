@@ -530,16 +530,22 @@ with BIOS validation and auto-labeling too. Those two read pull request context
 and stay behind an event guard.
 
 The schema job also runs mypy over `install.py` and `scripts/`. The code
-carried 993 type errors when the check started, so they sit in
-`mypy-baseline.txt` and only a new one fails. An error the change removes fails
-too until the baseline is synced, so the file never hides a later error that
-reads the same:
+carried 993 type errors when the check started. They sat in a baseline until the
+last one was fixed, and the baseline is gone: the code carries no type error and
+any new one fails.
 
 ```bash
 pip install -e ".[dev]"
-mypy > tmp/mypy.txt
-mypy-baseline filter < tmp/mypy.txt   # what CI runs
-mypy-baseline sync < tmp/mypy.txt     # after a fix, commit the new baseline
+mypy
+```
+
+The same job runs ruff with the rule set of `pyproject.toml`: pyflakes, the B
+rules, simplify, perf, pyupgrade, and the complexity and size limits (15 branches,
+60 statements, 8 arguments per function). A long function is split by stage and
+its shared state carried in a dataclass, never waived: there is no lint baseline.
+
+```bash
+ruff check .
 ```
 
 A push series collapses to the tip, so what a green run states is that the head
