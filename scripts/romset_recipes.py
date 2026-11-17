@@ -581,6 +581,25 @@ def _resolve_modes(args: argparse.Namespace) -> None:
         args.identify = args.missing = True
 
 
+def print_identification(ident: dict) -> None:
+    """Which recipe reproduces each local archive, counted by recipe."""
+    print(
+        f"\nIdentification: {len(ident['identified'])} archives reproduced "
+        f"by a recipe, {len(ident['unidentified'])} unidentified"
+    )
+    print(
+        "  The label is the oldest version producing these bytes: a recipe "
+        "unchanged since 0.177 is counted there, not at its own version."
+    )
+    by_recipe: dict[str, int] = defaultdict(int)
+    for record in ident["identified"]:
+        by_recipe[record["recipe"]] += 1
+    for label, count in sorted(by_recipe.items(), key=lambda kv: (-kv[1], kv[0])):
+        print(f"  {label}: {count}")
+    for record in ident["unidentified"][:10]:
+        print(f"  UNIDENTIFIED: {record['path']}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         allow_abbrev=False,
@@ -692,22 +711,7 @@ def main() -> int:
         print(f"  UNREADABLE: {problem}")
 
     if args.identify:
-        ident = result["identify"]
-        print(
-            f"\nIdentification: {len(ident['identified'])} archives reproduced "
-            f"by a recipe, {len(ident['unidentified'])} unidentified"
-        )
-        print(
-            "  The label is the oldest version producing these bytes: a recipe "
-            "unchanged since 0.177 is counted there, not at its own version."
-        )
-        by_recipe: dict[str, int] = defaultdict(int)
-        for record in ident["identified"]:
-            by_recipe[record["recipe"]] += 1
-        for label, count in sorted(by_recipe.items(), key=lambda kv: (-kv[1], kv[0])):
-            print(f"  {label}: {count}")
-        for record in ident["unidentified"][:10]:
-            print(f"  UNIDENTIFIED: {record['path']}")
+        print_identification(result["identify"])
 
     if args.missing:
         print_missing(result["missing"])

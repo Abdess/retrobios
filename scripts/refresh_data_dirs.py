@@ -278,9 +278,7 @@ def _is_safe_tar_member(member: tarfile.TarInfo, dest: Path) -> bool:
         return False
     resolved = (dest / member.name).resolve()
     dest_str = str(dest.resolve()) + os.sep
-    if not str(resolved).startswith(dest_str) and str(resolved) != str(dest.resolve()):
-        return False
-    return True
+    return str(resolved).startswith(dest_str) or str(resolved) == str(dest.resolve())
 
 
 def _download_and_extract(
@@ -349,11 +347,11 @@ def _download_and_extract(
                 elif member.isfile():
                     dest_file = extract_dir / rel
                     dest_file.parent.mkdir(parents=True, exist_ok=True)
-                    with tf.extractfile(member) as src:
-                        if src is None:
-                            continue
-                        with open(dest_file, "wb") as dst:
-                            shutil.copyfileobj(src, dst)
+                    src = tf.extractfile(member)
+                    if src is None:
+                        continue
+                    with src, open(dest_file, "wb") as dst:
+                        shutil.copyfileobj(src, dst)
                     file_count += 1
 
         if not file_count:

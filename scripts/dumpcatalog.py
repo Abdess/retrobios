@@ -20,7 +20,7 @@ def load_provenance_snapshots(provenance_dir: str = DEFAULT_PROVENANCE_DIR) -> d
     entries written by the redump scraper or the pack importer. Missing
     directory means no snapshots: returns an empty dict.
     """
-    snapshots = {}
+    snapshots: dict[str, dict] = {}
     prov_path = Path(provenance_dir)
     if not prov_path.is_dir():
         return snapshots

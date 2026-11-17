@@ -10,7 +10,7 @@ import os
 import zipfile
 import zlib
 from pathlib import Path
-from typing import BinaryIO
+from typing import IO, BinaryIO
 from collections.abc import Iterable
 
 
@@ -85,16 +85,16 @@ def _compute_hashes(filepath: str | Path, algos: frozenset[str]) -> dict[str, st
         result["adler32"] = format(adler & 0xFFFFFFFF, "08x")
     return result
 
-def md5sum(source: str | Path | object) -> str:
+def md5sum(source: str | os.PathLike[str] | IO[bytes]) -> str:
     """Compute MD5 of a file path or file-like object - matches Batocera's md5sum()."""
     h = hashlib.md5()
-    if hasattr(source, "read"):
-        for chunk in iter(lambda: source.read(65536), b""):
-            h.update(chunk)
-    else:
+    if isinstance(source, (str, os.PathLike)):
         with open(source, "rb") as f:
             for chunk in iter(lambda: f.read(65536), b""):
                 h.update(chunk)
+    else:
+        for chunk in iter(lambda: source.read(65536), b""):
+            h.update(chunk)
     return h.hexdigest()
 
 _md5_composite_cache: dict[str, str] = {}

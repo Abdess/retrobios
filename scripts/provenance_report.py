@@ -139,7 +139,9 @@ def profile_needs(profiles: dict, db: dict) -> dict:
 def needs_filled(entry: dict, needs: dict) -> list[dict]:
     """The profile needs a catalog dump answers, required ones first."""
     found: dict[tuple[str, str], dict] = {}
-    keys = [(field, v) for field in HASH_FIELDS for v in _values(entry, field)]
+    keys: list[tuple[object, ...]] = [
+        (field, v) for field in HASH_FIELDS for v in _values(entry, field)
+    ]
     if entry.get("size") is not None:
         keys += [("crc32", _crc_key(v), entry["size"]) for v in _values(entry, "crc32")]
     for key in keys:
@@ -344,17 +346,37 @@ def build_report(
         out_of_scope = len({
             dump_identity(e) for e in unmatched if e.get("dat", "") not in covered_dats
         })
-        matched = len(matched)
         report[source] = {
             "imported_at": snapshot.get("imported_at", ""),
             "dats": snapshot.get("dats", {}),
             "total": len(snapshot["entries"]),
-            "matched": matched,
+            "matched": len(matched),
             "covered_dats": sorted(covered_dats),
             "missing": missing,
             "out_of_scope": out_of_scope,
         }
     return report
+
+
+def _print_missing(entry: dict, derived: dict[str, dict]) -> None:
+    """One missing dump, with what derives it, reads it and holds it."""
+    label = entry.get("description") or entry["name"]
+    source = derived.get(entry.get("sha1", ""))
+    if source:
+        print(f"    DERIVABLE {entry['name']} ({label}): {source['transform']} "
+              f"of {' + '.join(source['from'])}")
+    else:
+        print(f"    MISSING {entry['name']} ({label}) sha1={entry.get('sha1')}")
+    for need in entry.get("needed_by", []):
+        print(f"      needed by {need['emulator']} as {need['name']} "
+              f"({'required' if need['required'] else 'optional'}, "
+              f"matched by {need['by']})")
+    for hit in entry.get("romsets", []):
+        versions = hit["dats"][0] if len(hit["dats"]) == 1 else (
+            f"{hit['dats'][0]} to {hit['dats'][-1]}"
+        )
+        print(f"      in {hit['source']} {hit['archive']} as "
+              f"{hit['member']} ({versions})")
 
 
 def main() -> int:
@@ -437,23 +459,7 @@ def main() -> int:
         if args.missing:
             # A dump an emulator reads comes first: it fills a hole in a pack.
             for entry in sorted(data["missing"], key=lambda e: not e.get("needed_by")):
-                label = entry.get("description") or entry["name"]
-                source = derived.get(entry.get("sha1", ""))
-                if source:
-                    print(f"    DERIVABLE {entry['name']} ({label}): {source['transform']} "
-                          f"of {' + '.join(source['from'])}")
-                else:
-                    print(f"    MISSING {entry['name']} ({label}) sha1={entry.get('sha1')}")
-                for need in entry.get("needed_by", []):
-                    print(f"      needed by {need['emulator']} as {need['name']} "
-                          f"({'required' if need['required'] else 'optional'}, "
-                          f"matched by {need['by']})")
-                for hit in entry.get("romsets", []):
-                    versions = hit["dats"][0] if len(hit["dats"]) == 1 else (
-                        f"{hit['dats'][0]} to {hit['dats'][-1]}"
-                    )
-                    print(f"      in {hit['source']} {hit['archive']} as "
-                          f"{hit['member']} ({versions})")
+                _print_missing(entry, derived)
 
     total_missing = distinct_missing(report)
     if total_missing:
