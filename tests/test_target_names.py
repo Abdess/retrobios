@@ -7,7 +7,7 @@ and `--verify-packs --target nx` looked for a pack nobody had built.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import subprocess
 import sys
@@ -15,10 +15,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from common import canonical_target_name
 
-from common import canonical_target_name  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 class EveryBuildbotCoreIsNamed(unittest.TestCase):

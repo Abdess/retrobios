@@ -10,19 +10,17 @@ it, and these tests make the agreement checkable instead of reviewable.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import io
 import json
-import sys
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import nativemode
 
-import nativemode  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 class ModeVocabulary(unittest.TestCase):
@@ -86,7 +84,9 @@ class BothConsumersAgree(unittest.TestCase):
 
     def test_builder_and_verifier_share_one_predicate(self):
         from generate_pack import _intentional_hash_exclusion
-        from verify import compute_severity  # noqa: F401  (import proves wiring)
+        from verify import compute_severity
+
+        self.assertTrue(callable(compute_severity))
 
         for mode in nativemode.MODES:
             # No entries is never an exclusion, whatever the mode.

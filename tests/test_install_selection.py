@@ -9,7 +9,7 @@ to one answer.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import functools
@@ -30,10 +30,9 @@ import unittest
 from unittest import mock
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import region
 
-import region  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 _spec = importlib.util.spec_from_file_location("install", REPO_ROOT / "install.py")
 install = importlib.util.module_from_spec(_spec)
@@ -1375,7 +1374,6 @@ class ThePlatformsOwnSystemNamesAreAccepted(unittest.TestCase):
                       source)
 
     def test_every_listed_system_gets_the_title_the_site_prints(self):
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         from generate_pack import system_titles
 
         files = [{"dest": "a.bin", "systems": ["sony-playstation", "nintendo-gba"]}]

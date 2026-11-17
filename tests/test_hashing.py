@@ -2,19 +2,17 @@
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import shutil
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import hashing
 
-import hashing  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 class HashesAreReadOncePerContent(unittest.TestCase):

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
 import subprocess
@@ -11,14 +11,13 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from region import REGIONS
+from scripts.scraper import game_dat_importer as importer
+
 ROOT = Path(__file__).resolve().parent.parent
 TMP_ROOT = ROOT / "tmp" / "tests"
 TMP_ROOT.mkdir(parents=True, exist_ok=True)
 FIXTURES = ROOT / "tests" / "fixtures" / "game_dats"
-sys.path.insert(0, str(ROOT / "scripts"))
-
-from region import REGIONS  # noqa: E402
-from scripts.scraper import game_dat_importer as importer  # noqa: E402
 
 try:
     from jsonschema import Draft202012Validator

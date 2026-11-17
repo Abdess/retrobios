@@ -9,20 +9,16 @@ discrepancy that does not exist. Content decides, as everywhere else here.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import pathlib
 import subprocess
 import sys
 import tempfile
 import unittest
-from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-from exporter.baseline import pair_entries  # noqa: E402
-from truth import (  # noqa: E402
+from exporter.baseline import pair_entries
+from truth import (
     _diff_system,
     _merge_file_into_system,
     generate_platform_truth,

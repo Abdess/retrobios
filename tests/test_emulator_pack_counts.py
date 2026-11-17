@@ -9,7 +9,7 @@ names and ten "missing".
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import re
 import subprocess
@@ -80,7 +80,6 @@ class APlaceholderIsAnsweredByEvidence(unittest.TestCase):
 
         import yaml
 
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         from common import _emulator_profiles_cache
         from generate_pack import generate_emulator_pack
         from verify import verify_emulator

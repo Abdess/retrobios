@@ -9,20 +9,18 @@ check left out lets through a file the emulator refuses.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import re
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from validation import _build_validation_index, check_file_validation
 
-from validation import _build_validation_index, check_file_validation  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 def _profile(name: str) -> dict:

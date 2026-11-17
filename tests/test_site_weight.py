@@ -9,20 +9,15 @@ is looked up by content, an emulator card's anchor sits on its row.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import unittest
-from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-import generate_site  # noqa: E402
-import sitestarlight  # noqa: E402
-import siterender  # noqa: E402
-import sitemarkup as markup  # noqa: E402
-from cross_reference import FileConsumers  # noqa: E402
+import generate_site
+import sitestarlight
+import siterender
+import sitemarkup as markup
+from cross_reference import FileConsumers
 
 
 def _file(name: str, index: int, console: str, maker: str = "Maker") -> dict:

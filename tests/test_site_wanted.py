@@ -11,29 +11,27 @@ would have its upload flagged by the same project.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import json
 import os
 import shutil
 import subprocess
-import sys
 import tempfile
 import unittest
 import re
 import zlib
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import generate_site
+import sitewanted
+import validate_pr
+import yaml
+from common import load_database
+from tests.test_site_pronouns import pronouns
 
-import generate_site  # noqa: E402
-import sitewanted  # noqa: E402
-import validate_pr  # noqa: E402
-import yaml  # noqa: E402
-from common import load_database  # noqa: E402
-from tests.test_site_pronouns import pronouns  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 WEBSITE = REPO_ROOT / "website"
 WANTED_TS = WEBSITE / "src" / "scripts" / "wanted.ts"

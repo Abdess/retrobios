@@ -9,20 +9,18 @@ an empty repo_path, and the installer refused the whole manifest.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import ast
 import json
-import sys
 import unittest
 from pathlib import Path
 from unittest import mock
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import generate_pack as gp
+from manifestselect import SelectionIndex
 
-import generate_pack as gp  # noqa: E402
-from manifestselect import SelectionIndex  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def _held_file(db: dict) -> tuple[str, dict] | None:

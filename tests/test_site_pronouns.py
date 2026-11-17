@@ -9,7 +9,7 @@ are not prose.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import html
 import re
@@ -189,7 +189,6 @@ class SitePronouns(unittest.TestCase):
     def test_release_notes(self):
         """The release page is public text too. Rendered from the committed
         record, and once more with a pack in parts, its own paragraph."""
-        sys.path.insert(0, str(ROOT / "scripts"))
         import release_notes
         import release_record
 

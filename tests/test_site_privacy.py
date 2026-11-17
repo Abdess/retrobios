@@ -6,7 +6,7 @@ page looking different.
 """
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import re
 import unittest

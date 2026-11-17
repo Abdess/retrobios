@@ -11,7 +11,7 @@ profiles, placed below that folder.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import hashlib
@@ -19,7 +19,6 @@ import io
 import json
 import os
 import shutil
-import sys
 import tempfile
 import unittest
 import zipfile
@@ -28,12 +27,10 @@ from pathlib import Path
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-sys.path.insert(0, str(REPO_ROOT))
+from common import load_emulator_profiles, load_platform_config
+from scraper import minui_scraper
 
-from common import load_emulator_profiles, load_platform_config  # noqa: E402
-from scraper import minui_scraper  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 MINARCH = (
     "void Core_open(const char* core_path, const char* tag_name) {\n"

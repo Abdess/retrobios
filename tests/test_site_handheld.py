@@ -9,24 +9,22 @@ starts it.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import hashlib
 import re
 import shutil
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import build_port
+import common
+import sitehandheld
 
-import build_port  # noqa: E402
-import common  # noqa: E402
-import sitehandheld  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 PLATFORMS = str(REPO_ROOT / "platforms")
 

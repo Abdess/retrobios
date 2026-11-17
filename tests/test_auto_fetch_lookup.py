@@ -3,23 +3,19 @@ content, and nothing it serves is kept unless every declared hash holds."""
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import hashlib
 import io
 import os
-import sys
 import tempfile
 import unittest
 import urllib.error
 from pathlib import Path
 from unittest import mock
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-import auto_fetch  # noqa: E402
+import auto_fetch
 
 PAYLOAD = b"keyboard mcu"
 SHA1 = hashlib.sha1(PAYLOAD).hexdigest()

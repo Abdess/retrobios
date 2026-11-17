@@ -6,17 +6,15 @@ one. validate_schemas now refuses it.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import subprocess
-import sys
 import unittest
 from pathlib import Path
 
 import yaml
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 
 class ChecksHaveValues(unittest.TestCase):

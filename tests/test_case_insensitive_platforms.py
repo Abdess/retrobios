@@ -7,22 +7,21 @@ went red. The flag lived in retrobat.yml and vanished at the next scrape.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import hashlib
 import io
 import os
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 import yaml
 
+from common import load_platform_config
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-from common import load_platform_config  # noqa: E402
 
 
 class CaseInsensitiveWhereTheFilesystemIs(unittest.TestCase):

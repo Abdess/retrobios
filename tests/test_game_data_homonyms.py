@@ -12,19 +12,15 @@ carries `unsourceable:` until its own bytes are held.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import os
 import re
-import sys
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-from common import (  # noqa: E402
+from common import (
     build_zip_contents_index,
     load_data_dir_registry,
     load_database,
@@ -32,6 +28,8 @@ from common import (  # noqa: E402
     resolution_is_hash_exact,
     resolve_local_file,
 )
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 def homonyms(claims: list[tuple[str, str, str, str]]) -> list[tuple[str, str, str]]:

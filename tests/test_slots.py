@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import os
 import re
@@ -11,8 +11,6 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 
 import slots
 from slots import Claim, Conflict, arbitrate, format_decision

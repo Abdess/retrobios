@@ -9,21 +9,17 @@ frontend hashes bios/disk.rom for xroar and finds the PC-88 ROM.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import os
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-import common  # noqa: E402
-import generate_db  # noqa: E402
-from verify import verify_platform  # noqa: E402
+import common
+import generate_db
+from verify import verify_platform
 
 
 class TwinDeclarations(unittest.TestCase):

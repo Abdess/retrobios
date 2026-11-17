@@ -3,16 +3,14 @@ records settle."""
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import unittest
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
+import region_check as rc
 
-import region_check as rc  # noqa: E402
+ROOT = Path(__file__).resolve().parent.parent
 
 PROFILE = {
     "systems": ["sony-playstation"],

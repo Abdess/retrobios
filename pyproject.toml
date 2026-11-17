@@ -89,6 +89,10 @@ ignore = [
     "RET504", "RET505", "RET506", "RET508",
 ]
 
+[tool.ruff.lint.pyflakes]
+# Each test module imports the tests package first for its isolation (offline, scratch under tmp/).
+allowed-unused-imports = ["tests"]
+
 [tool.ruff.lint.mccabe]
 max-complexity = 15
 

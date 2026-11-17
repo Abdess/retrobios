@@ -8,7 +8,7 @@ it is an untrusted-input boundary with nothing behind it.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import os
 import sys
@@ -16,10 +16,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import validate_pr
 
-import validate_pr  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 EMPTY_HASHES: dict = {"sha1": set(), "md5": set(), "names": set()}
 

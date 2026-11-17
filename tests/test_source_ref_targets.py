@@ -12,20 +12,18 @@ mirror pages its tree, and read as one page it could not confirm a path.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import unittest
 from pathlib import Path
 from unittest import mock
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import sitesources
+import upstream
+from common import load_emulator_profiles
+from sourceref import ref_role, source_ref_values, split_source_ref
 
-import sitesources  # noqa: E402
-import upstream  # noqa: E402
-from common import load_emulator_profiles  # noqa: E402
-from sourceref import ref_role, source_ref_values, split_source_ref  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 PROFILES = ("trident", "future-pinball-fploader", "pce-emu", "uqm", "nesoid",
             "ryujinx", "stonesoup")

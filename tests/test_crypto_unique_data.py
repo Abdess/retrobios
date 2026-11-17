@@ -18,20 +18,16 @@ Layouts, from Azahar src/core/hw/unique_data.cpp and src/core/file_sys/otp.cpp:
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import struct
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-import crypto_verify  # noqa: E402
-import sect233r1 as ec  # noqa: E402
+import crypto_verify
+import sect233r1 as ec
 
 # A 2048-bit RSA key, the size the 3DS signatures use, from two fixed primes
 # so the fixture is reproducible and costs nothing to build.

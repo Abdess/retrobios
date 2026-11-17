@@ -7,22 +7,20 @@ is two held ROMs end to end. The gap report listed them as acquisition targets.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import os
 import shutil
-import sys
 import tempfile
 import unittest
 import unittest.mock
 import zlib
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import derivations
 
-import derivations  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def _held(path: Path, data: bytes) -> dict:

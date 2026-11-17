@@ -9,16 +9,11 @@ builder still shipped its ROMs as ep128emu extras.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import unittest
-from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-from common import filter_systems_by_target  # noqa: E402
+from common import filter_systems_by_target
 
 PROFILES = {
     "ep128emu_core": {

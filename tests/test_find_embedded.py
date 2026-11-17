@@ -3,7 +3,7 @@ the offset of every window that holds it, in a file or a ZIP member."""
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import hashlib
@@ -18,10 +18,7 @@ import zlib
 from pathlib import Path
 from unittest import mock
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-import find_embedded  # noqa: E402
+import find_embedded
 
 ROM = bytes(random.Random(8039).randrange(256) for _ in range(2048))
 CRC = zlib.crc32(ROM)

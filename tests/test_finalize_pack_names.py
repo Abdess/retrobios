@@ -7,7 +7,7 @@ attached to misterfpga by substring and checked against the full list:
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import os
 import sys
@@ -16,9 +16,9 @@ import unittest
 import zipfile
 from pathlib import Path
 
+from generate_pack import verify_and_finalize_packs
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-from generate_pack import verify_and_finalize_packs  # noqa: E402
 
 
 class FinalizeByExactName(unittest.TestCase):

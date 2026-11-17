@@ -9,17 +9,15 @@ those members were never read there, and the archive matched no recipe.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
-import sys
 import unittest
 import zipfile
 from collections import defaultdict
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 # Sets whose archive also carries the ROMs of devices the machine references
 # (listxml device_ref). A device looks for its ROMs under its own name, then

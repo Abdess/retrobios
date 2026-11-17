@@ -14,19 +14,17 @@ Reads the repository: skips when the database is absent.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
 import os
-import sys
 import unittest
 from collections.abc import Iterable
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import siterender
 
-import siterender  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 # Ids whose files the collection holds and that lead to no section.
 UNLINKED: dict[str, str] = {

@@ -9,11 +9,10 @@ reported missing while 3 584 collected files stayed out of every pack.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import json
-import sys
 import tempfile
 import unittest
 from unittest import mock
@@ -23,19 +22,16 @@ from pathlib import Path
 import yaml
 
 try:
-    import jsonschema  # noqa: F401
+    import jsonschema
 except ImportError:
-    HAS_JSONSCHEMA = False
-else:
-    HAS_JSONSCHEMA = True
+    jsonschema = None
+import common
+import generate_db
+import generate_pack as builder
+import verify
 
+HAS_JSONSCHEMA = jsonschema is not None
 REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-import common  # noqa: E402
-import generate_db  # noqa: E402
-import generate_pack as builder  # noqa: E402
-import verify  # noqa: E402
 
 PROFILE = """\
 emulator: Demo

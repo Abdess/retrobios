@@ -12,24 +12,22 @@ styles, and hold the page to one reading of each thing it says.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
 import re
 import shutil
 import subprocess
-import sys
 import unittest
 from html.parser import HTMLParser
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
+import sitediagrams
+import siteentries
+import sitesteps
+from siteguides import TERMINALS
 
-import sitediagrams  # noqa: E402
-import siteentries  # noqa: E402
-import sitesteps  # noqa: E402
-from siteguides import TERMINALS  # noqa: E402
+ROOT = Path(__file__).resolve().parent.parent
 
 WEBSITE = ROOT / "website"
 DOCS = WEBSITE / "src" / "content" / "docs"

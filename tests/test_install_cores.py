@@ -8,7 +8,7 @@ which cores keep each system, the rule a pack built for a target follows.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import io
@@ -22,12 +22,10 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT))
-sys.path.insert(0, str(REPO_ROOT / "tests"))
+import install
+from tests.test_install_selection import FakeRepository
 
-import install  # noqa: E402
-from test_install_selection import FakeRepository  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 class CoreDirectories(unittest.TestCase):
@@ -267,7 +265,6 @@ class TheBuildersOrder(unittest.TestCase):
         db_path = REPO_ROOT / "database.json"
         if not db_path.exists():
             self.skipTest("database.json is not built")
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         import generate_pack as gp
         from common import load_emulator_profiles
 
@@ -369,7 +366,6 @@ class APlatformOmissionKeepsItsClaim(unittest.TestCase):
         self.assertEqual(omitted, [])
 
     def test_the_generator_files_the_core_behind_the_platform(self):
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         import generate_pack as gp
 
         held = {"cores": None}

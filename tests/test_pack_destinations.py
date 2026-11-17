@@ -9,7 +9,7 @@ it and counted one more file from the cores.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import hashlib
@@ -17,7 +17,6 @@ import io
 import json
 import os
 import shutil
-import sys
 import tempfile
 import unittest
 import zipfile
@@ -26,7 +25,6 @@ from pathlib import Path
 import yaml
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 
 class _Fixture(unittest.TestCase):

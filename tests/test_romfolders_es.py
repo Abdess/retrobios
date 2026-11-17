@@ -9,14 +9,11 @@ naming a declared source, and a second dump giving the same bytes.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
-import sys
 import unittest
 from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 from romfolders import setup_paths, split_refs
 from scraper.romfolders import (

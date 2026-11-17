@@ -14,19 +14,17 @@ the other by flagging the divergence. This report agreed with neither.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import os
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import verify
 
-import verify  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def _db(path: Path, name: str) -> dict:

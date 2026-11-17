@@ -11,23 +11,21 @@ any flash image whose size is a whole number of 64 KiB.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import struct
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import common
+import generate_pack as builder
+import packextras
+from romdir import romdir_accepts, walk
+from validation import _build_validation_index, check_file_validation
 
-import common  # noqa: E402
-import generate_pack as builder  # noqa: E402
-import packextras  # noqa: E402
-from romdir import romdir_accepts, walk  # noqa: E402
-from validation import _build_validation_index, check_file_validation  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 # How each fork reads the table, as the profiles declare it.
 WX = {"reset_compare": 5, "missing_reset": "rejects", "terminated_names": False,

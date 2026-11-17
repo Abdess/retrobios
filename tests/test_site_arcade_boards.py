@@ -11,7 +11,7 @@ link or carry their reason below.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
 import tempfile
@@ -19,14 +19,11 @@ import unittest
 import zipfile
 from pathlib import Path
 
+
+import siterender
+from sitestarlight import toc_slug
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
-
-import sys  # noqa: E402
-
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-import siterender  # noqa: E402
-from sitestarlight import toc_slug  # noqa: E402
 
 # The boards the audit found with no section (N1, T-F3), by an id each.
 NAMED_BOARDS = {

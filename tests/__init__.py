@@ -13,10 +13,17 @@ temporary directory instead of naming the missing parent.
 from __future__ import annotations
 
 import os
+import sys
 import tempfile
 from pathlib import Path
 
 os.environ.setdefault("RETROBIOS_OFFLINE", "1")
+# The modules under test import each other by bare name (common, verify), as
+# the scripts do when run from scripts/, and install.py sits at the root.
+_REPOSITORY = Path(__file__).resolve().parent.parent
+for _path in (str(_REPOSITORY), str(_REPOSITORY / "scripts")):
+    if _path not in sys.path:
+        sys.path.insert(0, _path)
 # The installer reads the XDG base directories as RetroArch and the
 # emulators do. The CI runner sets XDG_CONFIG_HOME to its own home, so tests
 # that fake HOME found the runner's folders instead of theirs. A test that

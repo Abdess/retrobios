@@ -11,21 +11,19 @@ terminal recording under the others.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
 import re
 import struct
-import sys
 import unittest
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
+import generate_readme
+import make_demo
+import sitestarlight
 
-import generate_readme  # noqa: E402
-import make_demo  # noqa: E402
-import sitestarlight  # noqa: E402
+ROOT = Path(__file__).resolve().parent.parent
 
 DEMO = ROOT / "docs_assets" / "demo"
 COMPONENT = ROOT / "website" / "src" / "components" / "InstallDemo.astro"

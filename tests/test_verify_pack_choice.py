@@ -8,19 +8,17 @@ regional one. A pack built with --source truth answered SKIP and exit 0.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import argparse
 import json
 import os
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 
 def _ok_result() -> tuple:

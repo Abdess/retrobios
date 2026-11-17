@@ -9,7 +9,7 @@ platform and compare each (dest, sha1) with what the installer keeps.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import copy
@@ -27,7 +27,6 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 # install.py runs on 3.8, the scripts it is compared with need 3.9.
 BUILDER_FLOOR = (3, 9)
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 _spec = importlib.util.spec_from_file_location("install", REPO_ROOT / "install.py")
 install = importlib.util.module_from_spec(_spec)

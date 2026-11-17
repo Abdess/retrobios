@@ -17,7 +17,7 @@ Covers:
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import hashlib
@@ -30,8 +30,6 @@ import unittest
 import zipfile
 from pathlib import Path
 from unittest import mock
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 
 import largefiles
 import yaml
@@ -65,11 +63,10 @@ from verify import (
 )
 
 try:
-    import jsonschema  # noqa: F401
+    import jsonschema
 except ImportError:
-    HAS_JSONSCHEMA = False
-else:
-    HAS_JSONSCHEMA = True
+    jsonschema = None
+HAS_JSONSCHEMA = jsonschema is not None
 
 
 def _h(data: bytes) -> dict:
@@ -2949,7 +2946,6 @@ class TestE2E(unittest.TestCase):
         """--platform + --system is accepted (not rejected at validation stage)."""
         import argparse
 
-        sys.path.insert(0, "scripts")
         # Build the same parser as generate_pack.main()
         parser = argparse.ArgumentParser()
         parser.add_argument("--platform", "-p")
@@ -3913,7 +3909,6 @@ class TestE2E(unittest.TestCase):
 
     def test_93_parse_retroarch_cfg(self):
         """Parse system_directory from retroarch.cfg."""
-        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         from install import _parse_retroarch_system_dir
 
         cfg = os.path.join(self.root, "retroarch.cfg")
@@ -3935,7 +3930,6 @@ class TestE2E(unittest.TestCase):
 
     def test_94_parse_emudeck_settings(self):
         """Parse emulationPath from EmuDeck settings.sh."""
-        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         from install import _parse_bash_var
 
         settings = os.path.join(self.root, "settings.sh")
@@ -3948,7 +3942,6 @@ class TestE2E(unittest.TestCase):
 
     def test_95_parse_ps1_var(self):
         """Parse $emulationPath from EmuDeck settings.ps1."""
-        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         from install import _parse_ps1_var
 
         settings = os.path.join(self.root, "settings.ps1")
@@ -3959,7 +3952,6 @@ class TestE2E(unittest.TestCase):
 
     def test_96_target_filtering(self):
         """--target filters files by cores field."""
-        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         from install import _filter_by_target
 
         files = [
@@ -3975,7 +3967,6 @@ class TestE2E(unittest.TestCase):
 
     def test_97_standalone_copies(self):
         """Standalone keys copied to existing emulator dirs."""
-        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         from install import do_standalone_copies
 
         bios_dir = Path(self.root) / "bios"

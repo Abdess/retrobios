@@ -7,18 +7,16 @@ does not hold the file.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import re
-import sys
 import unittest
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "scripts"))
+import upstream
+from safeparse import yaml_load
 
-import upstream  # noqa: E402
-from safeparse import yaml_load  # noqa: E402
+ROOT = Path(__file__).resolve().parents[1]
 
 CACHE = ROOT / ".cache" / "upstream"
 

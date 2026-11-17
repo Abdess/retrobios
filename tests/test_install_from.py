@@ -11,7 +11,7 @@ never moved, and checked again once written.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import copy
@@ -30,15 +30,13 @@ import zipfile
 from pathlib import Path
 from unittest import mock
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT))
-sys.path.insert(0, str(REPO_ROOT / "tests"))
-
-import install  # noqa: E402
-from test_install_offline import (  # noqa: E402
+import install
+from tests.test_install_offline import (
     EXTRA, GBA, JP, PAYLOAD, US, Scratch, _entry, _offline_env,
 )
-from test_install_selection import FakeRepository  # noqa: E402
+from tests.test_install_selection import FakeRepository
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def _zip(path: Path, members: dict[str, bytes]) -> Path:

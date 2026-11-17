@@ -10,19 +10,17 @@ role of each reference named by one word that a legend defines once.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import html
 import re
-import sys
 import unittest
 from html.parser import HTMLParser
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import generate_site
 
-import generate_site  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 _SKIPPED = frozenset({"script", "style", "template"})
 _VOID = frozenset({"area", "base", "br", "col", "embed", "hr", "img", "input",

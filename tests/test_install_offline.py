@@ -9,7 +9,7 @@ installs again from disk, --from-pack, every file checked by its hash.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import hashlib
@@ -27,14 +27,11 @@ import unittest.mock
 import zipfile
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT))
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-sys.path.insert(0, str(REPO_ROOT / "tests"))
+import install
+import split_pack
+from tests.test_install_selection import FakeRepository
 
-import install  # noqa: E402
-import split_pack  # noqa: E402
-from test_install_selection import FakeRepository  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 US = b"us bios " * 64
 JP = b"jp bios " * 64
@@ -435,7 +432,6 @@ class ABoardWithoutTheNetwork(Scratch):
                 if p.is_file()}
 
     def test_the_builder_writes_both_into_the_pack_list(self):
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         import generate_pack
 
         install_list = manifest()
@@ -725,7 +721,7 @@ class OfflineMakesNoRequest(Scratch):
     learn its platform, since nothing said "make no request"."""
 
     def _served(self, *options: str, env: dict | None = None):
-        import test_install_selection
+        from tests import test_install_selection
 
         hits: list[str] = []
         with FakeRepository() as repo, unittest.mock.patch.object(
@@ -1029,7 +1025,7 @@ class OneOfflineVocabulary(Scratch):
 
     def test_the_command_suggested_keeps_the_offline_setting(self):
         """Sudo does not pass RETROBIOS_INSTALL_OFFLINE on."""
-        import test_install_tui as tui
+        from tests import test_install_tui as tui
 
         args = tui._args(platform="retroarch", declared_only=False, offline=False)
         hint = install.Invocation()
@@ -1048,7 +1044,7 @@ class OneOfflineVocabulary(Scratch):
 
     def test_the_screen_says_missing_not_failed(self):
         """On the full screen: "Finished with errors, 20 failed"."""
-        import test_install_tui as tui
+        from tests import test_install_tui as tui
 
         reason = f"not fetched: {install.OFFLINE_WORDS}"
         state = tui._installed_state(self.dest, 1, [{"dest": f"f{n}.bin", "reason": reason}

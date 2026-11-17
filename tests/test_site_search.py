@@ -19,11 +19,10 @@ built, the site.
 """
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import ast
 import re
-import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -31,15 +30,14 @@ import yaml
 import json
 from html.parser import HTMLParser
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import generate_site as gs
+import sitestarlight
+import validate_site
+import generate_site
+from common import list_registered_platforms, load_emulator_profiles
+from tests.test_site_nav import ANCHORS, _nav, _present
 
-import generate_site as gs  # noqa: E402
-import sitestarlight  # noqa: E402
-import validate_site  # noqa: E402
-import generate_site  # noqa: E402
-from common import list_registered_platforms, load_emulator_profiles  # noqa: E402
-from tests.test_site_nav import ANCHORS, _nav, _present  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 TOOLS = REPO_ROOT / "website" / "tools"

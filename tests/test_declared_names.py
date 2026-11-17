@@ -8,20 +8,18 @@ set, enriched with every spelling the database knows.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-from cross_reference import (  # noqa: E402
+from cross_reference import (
     cross_reference,
     declared_names,
     load_platform_files,
 )
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 class FlatDeclaredSet(unittest.TestCase):

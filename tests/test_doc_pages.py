@@ -7,7 +7,7 @@ code moves, and nothing else notices.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import ast
 import hashlib
@@ -20,11 +20,10 @@ import unittest
 import zipfile
 from pathlib import Path
 
+from tests.test_prose_style import _python_prose, _sentence_case
+
 ROOT = Path(__file__).resolve().parent.parent
 WIKI = ROOT / "wiki"
-sys.path.insert(0, str(ROOT / "scripts"))
-
-from tests.test_prose_style import _python_prose, _sentence_case  # noqa: E402
 
 FENCED = re.compile(r"^```.*?^```", re.S | re.M)
 PUBLISHED = sorted(WIKI.glob("*.md")) + [ROOT / "README.md", ROOT / "CONTRIBUTING.md"]

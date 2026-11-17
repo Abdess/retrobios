@@ -7,7 +7,7 @@ probe on it: staging, the worker process, strace, the record and its schema.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import argparse
 import contextlib
@@ -24,8 +24,6 @@ import unittest
 import unittest.mock
 from pathlib import Path
 from typing import ClassVar
-
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 import core_probe
 import measurement_records

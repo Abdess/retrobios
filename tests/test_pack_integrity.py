@@ -14,7 +14,7 @@ date pack stays a failure.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import glob
 import os
@@ -32,7 +32,6 @@ def _pack_path(platform_name: str) -> str | None:
     """Path of the platform's full pack, by the exact name the builder writes."""
     if not os.path.isdir(DIST_DIR):
         return None
-    sys.path.insert(0, os.path.join(REPO_ROOT, "scripts"))
     from generate_pack import _expected_pack_names
 
     names = _expected_pack_names([platform_name], PLATFORMS_DIR, [], None)
@@ -44,7 +43,6 @@ def _pack_path(platform_name: str) -> str | None:
 
 
 def _registered_platforms() -> list[str]:
-    sys.path.insert(0, os.path.join(REPO_ROOT, "scripts"))
     from common import list_registered_platforms
 
     return list_registered_platforms(PLATFORMS_DIR)
@@ -57,7 +55,6 @@ def _profiles_newer_than(path: str, platform_name: str) -> list[str]:
     comment edited in any of 500 profiles used to disarm the integrity
     check of every pack on disk.
     """
-    sys.path.insert(0, os.path.join(REPO_ROOT, "scripts"))
     from common import load_emulator_profiles, load_platform_config, resolve_platform_cores
 
     built = os.path.getmtime(path)

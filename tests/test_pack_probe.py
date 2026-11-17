@@ -11,7 +11,7 @@ on disk.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import io
@@ -22,14 +22,11 @@ import unittest
 import zipfile
 from pathlib import Path
 
+
+import measurement_records as mr
+import pack_probe as pp
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
-
-import sys  # noqa: E402
-
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-import measurement_records as mr  # noqa: E402
-import pack_probe as pp  # noqa: E402
 
 TMP = REPO_ROOT / "tmp" / "tests" / "pack_probe"
 

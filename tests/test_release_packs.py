@@ -13,7 +13,7 @@ platform has a permanent page at get/<platform>/ instead.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import io
@@ -26,11 +26,10 @@ from unittest import mock
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import common
+import release_record
 
-import common  # noqa: E402
-import release_record  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 PLATFORMS = str(REPO_ROOT / "platforms")
 TMP_ROOT = REPO_ROOT / "tmp"

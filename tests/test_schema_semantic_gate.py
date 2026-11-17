@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import io
 import json
@@ -14,7 +14,6 @@ from pathlib import Path
 from unittest import mock
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 try:
     import validate_schemas

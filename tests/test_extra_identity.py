@@ -8,18 +8,16 @@ Galaksija ROM and a PS2 ROM2.BIN.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from common import PROFILE_IDENTITY_FIELDS
+from packextras import _collect_emulator_extras
+from verify import find_undeclared_files
 
-from common import PROFILE_IDENTITY_FIELDS  # noqa: E402
-from packextras import _collect_emulator_extras  # noqa: E402
-from verify import find_undeclared_files  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 ENTRY = {
     "name": "bios.rom",

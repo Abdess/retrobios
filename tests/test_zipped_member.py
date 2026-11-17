@@ -6,10 +6,9 @@ level1.rom went out as OK where verify said "not found inside ZIP".
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
-import sys
 import tempfile
 import unittest
 import zipfile
@@ -17,11 +16,10 @@ from pathlib import Path
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from common import build_zip_contents_index
+from generate_pack import generate_pack
 
-from common import build_zip_contents_index  # noqa: E402
-from generate_pack import generate_pack  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 class ZippedMemberIsChecked(unittest.TestCase):

@@ -9,18 +9,17 @@ libretro's System.dat (N88EXT0-3.ROM) as if libretro declared them.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import common
+from export_native import load_inputs
 
-import common  # noqa: E402
-from export_native import load_inputs  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 class TheNativeLayerIsThePlatformsOwn(unittest.TestCase):

@@ -7,7 +7,7 @@ verify reported the same scope OK.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import sys
@@ -15,10 +15,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from generate_pack import _name_part, generate_emulator_pack
 
-from generate_pack import _name_part, generate_emulator_pack  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 class PackFileNames(unittest.TestCase):

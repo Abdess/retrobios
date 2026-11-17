@@ -11,20 +11,18 @@ Reads the repository: skips when the database or the files are absent.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import copy
 import hashlib
 import os
-import sys
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from common import load_database, load_platform_config
+import slots
 
-from common import load_database, load_platform_config  # noqa: E402
-import slots  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 MAME_ADAM = "bios/Arcade/MAME/adam_fdc.zip"
 MSX_DISK = "bios/Microsoft/MSX/DISK.ROM"

@@ -8,7 +8,7 @@ path in bios/: a scan running beside the copy hashed the truncated file.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import os
 import sys
@@ -17,10 +17,9 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import artifacts
 
-import artifacts  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 class WholeOrNothing(unittest.TestCase):

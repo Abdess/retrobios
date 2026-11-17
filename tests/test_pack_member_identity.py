@@ -8,21 +8,20 @@ recognised by their members.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import io
 import json
 import re
-import sys
 import tempfile
 import unittest
 import zipfile
 from pathlib import Path
 
+from packverify import verify_pack
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-from packverify import verify_pack  # noqa: E402
 
 
 class MembersMustBeKnown(unittest.TestCase):
@@ -93,7 +92,6 @@ class OneComparisonOfArchiveMembers(unittest.TestCase):
         import tempfile
         import zipfile
 
-        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
         from packverify import _same_members
 
         def archive(members: dict) -> bytes:

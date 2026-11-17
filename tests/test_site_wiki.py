@@ -31,26 +31,23 @@ setup guides or the generator that writes the page a link opens.
 """
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import fnmatch
 import json
 import re
-import sys
 import unittest
 from pathlib import Path
 import yaml
 import importlib.util
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-sys.path.insert(0, str(REPO_ROOT))
+import sitediagrams
+from siteguides import INSTALL_SH
+from tests import sitepages
+import build_port
+from check_release import SUMS, Asset, compare_release
 
-import sitediagrams  # noqa: E402
-from siteguides import INSTALL_SH  # noqa: E402
-from tests import sitepages  # noqa: E402
-import build_port  # noqa: E402
-from check_release import SUMS, Asset, compare_release  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 WIKI = REPO_ROOT / "wiki"

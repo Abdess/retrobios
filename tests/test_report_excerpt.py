@@ -3,16 +3,11 @@ went stale with every file the collection gained."""
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import unittest
-from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-import generate_report_excerpt  # noqa: E402
+import generate_report_excerpt
 
 RUN = [
     "RetroDECK: 9/10 OK, 1 untested [md5]",

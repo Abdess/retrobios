@@ -6,19 +6,14 @@ today's upstream no longer carries, but the bytes are in the project's history.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
-import sys
 import unittest
-from pathlib import Path
 from unittest import mock
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-import find_pinned_revision  # noqa: E402
-import upstream  # noqa: E402
+import find_pinned_revision
+import upstream
 
 
 class ThePinnedRevisionIsInTheHistory(unittest.TestCase):

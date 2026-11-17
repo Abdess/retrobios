@@ -8,7 +8,7 @@ to a basis, and hold a pin advance to reading the version again.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import copy
@@ -23,14 +23,13 @@ from unittest import mock
 
 import yaml
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
+import profile_sync
+import upstream
+import version_basis
+from common import load_emulator_profiles
+from profile_sync import ProfileReport, bump_commit
 
-import profile_sync  # noqa: E402
-import upstream  # noqa: E402
-import version_basis  # noqa: E402
-from common import load_emulator_profiles  # noqa: E402
-from profile_sync import ProfileReport, bump_commit  # noqa: E402
+ROOT = Path(__file__).resolve().parent.parent
 
 FIXTURE = ROOT / "tests" / "fixtures" / "version_basis.json"
 

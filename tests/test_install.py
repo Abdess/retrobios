@@ -1,7 +1,7 @@
 """Tests for install.py platform detection and config parsing."""
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import argparse
 import contextlib
@@ -32,13 +32,12 @@ import urllib.error
 import zipfile
 from pathlib import Path, PurePosixPath
 
+from tests.netguard import module_guard
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 _spec = importlib.util.spec_from_file_location("install", REPO_ROOT / "install.py")
 install = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(install)
-
-sys.path.insert(0, str(REPO_ROOT / "tests"))
-from netguard import module_guard  # noqa: E402
 
 # What a stale pin's failure says: the fix is one command.
 PIN_ADVICE = "install.py changed: python scripts/pin_installer.py rewrites both pins"
@@ -477,7 +476,7 @@ class TheDataTreesCountInTheFreeSpace(unittest.TestCase):
         files the first installed."""
         from types import SimpleNamespace
 
-        from test_install_selection import FakeRepository
+        from tests.test_install_selection import FakeRepository
 
         member = os.urandom(4096)
         results = []
@@ -1829,9 +1828,6 @@ class TargetFlagIsAppliedOrRefused(unittest.TestCase):
                 self.assertEqual(targets[alias], targets["nintendo-switch"])
 
     def test_every_alias_resolves_to_its_canonical_core_list(self):
-        import sys as _sys
-
-        _sys.path.insert(0, str(REPO_ROOT / "scripts"))
         from common import load_target_config
 
         for name in ("install/targets/retroarch.json",):
@@ -1865,9 +1861,6 @@ class TargetFlagIsAppliedOrRefused(unittest.TestCase):
         "unknown target" on one side only, and a published null left behind
         once the builder filters a target makes the installer serve every core.
         """
-        import sys as _sys
-
-        _sys.path.insert(0, str(REPO_ROOT / "scripts"))
         from common import list_available_targets, load_target_config
 
         platforms = str(REPO_ROOT / "platforms")
@@ -2493,9 +2486,6 @@ class TestAvailablePlatforms(unittest.TestCase):
 
     def test_every_registered_platform_is_installable(self):
         """The installer serves every registered platform from its manifest."""
-        import sys as _sys
-
-        _sys.path.insert(0, str(REPO_ROOT / "scripts"))
         from common import list_registered_platforms
 
         registered = set(
@@ -2527,7 +2517,6 @@ class TestAvailablePlatforms(unittest.TestCase):
     def test_pin_script_writes_both_pins(self):
         """Every edit to install.py meant a sha256sum pasted by hand into two
         files with two syntaxes, and the failing test named no command."""
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         import pin_installer
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" / "tests") as directory:
@@ -3418,7 +3407,6 @@ class CaseVariants(unittest.TestCase):
         folded = {e["dest"] for e in manifest["files"]}
         # A case-keeping RetroArch install is the Lakka list, less what
         # Lakka's own core packages install (installed_on: lakka).
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         from common import load_emulator_profiles
 
         installed = {
@@ -4318,7 +4306,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
         self.assertEqual(sorted(p.name for p in (bios / "dolphin-emu").iterdir()), ["Sys"])
 
     def test_the_run_ends_on_the_archive_bytes_too(self):
-        from test_install_selection import FakeRepository
+        from tests.test_install_selection import FakeRepository
 
         member = os.urandom(300_000)
         with FakeRepository() as repo:
@@ -4341,7 +4329,7 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
     def test_the_plan_announces_the_archive_not_the_tree(self):
         """yaps2's tarball is 21.2 MB for a 6.5 MB tree, Cemu's 21.4 MB for
         9.9 KB: the plan announced the tree, and the run downloaded far more."""
-        from test_install_selection import FakeRepository
+        from tests.test_install_selection import FakeRepository
 
         member = b"profile"
         archive_size = 21_360_579
@@ -4483,7 +4471,6 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
         manifest = json.loads((REPO_ROOT / "install" / "retroarch.json").read_text())
         dirs = manifest.get("data_directories") or []
         files = sum(len(d["files"]) for d in dirs)
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         import generate_pack
 
         written = generate_pack.PACK_DOCUMENTS + generate_pack.pack_markers(
@@ -4733,7 +4720,7 @@ class ACheckThatFindsFilesMissingIsNoFailure(unittest.TestCase):
     BIOS folder to complete from a tool that never ran."""
 
     def test_missing_is_3_and_a_failure_stays_1(self):
-        from test_install_selection import FakeRepository
+        from tests.test_install_selection import FakeRepository
 
         with FakeRepository() as repo:
             missing = repo.run("--no-input", "--check")
@@ -7100,7 +7087,6 @@ class TheEventSchemaFileIsEventKeys(unittest.TestCase):
     outside Python could check a stream against."""
 
     def _generator(self):
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         import generate_event_schema
 
         return generate_event_schema
@@ -7148,7 +7134,6 @@ class TheInstallerPageIsWrittenFromTheCode(unittest.TestCase):
     PAGE = REPO_ROOT / "wiki" / "installer.md"
 
     def setUp(self):
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         import generate_installer_doc
 
         self.generator = generate_installer_doc
@@ -7743,7 +7728,6 @@ class TheListVersionIsComparedWithTheSystems(unittest.TestCase):
         """A handheld without network installs from the pack: its manifest.json
         records the list's version, which generate_pack takes from the
         install list built with the same choices."""
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         import generate_pack
         data = b"bios"
         install_list = {"version": "43.1", "files": [

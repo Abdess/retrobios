@@ -8,21 +8,19 @@ and a RetroArch target pack lost LRPS2's files.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import re
-import sys
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-from common import (  # noqa: E402
+from common import (
     preferred_profile,
     resolve_platform_cores,
     upstream_profile_index,
 )
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 PROFILES = {
     "lrps2": {"type": "libretro", "cores": ["lrps2", "pcsx2"]},

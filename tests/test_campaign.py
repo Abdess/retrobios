@@ -10,7 +10,7 @@ resume and rerun on a changed core.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import hashlib
@@ -20,7 +20,6 @@ import os
 import shutil
 import struct
 import subprocess
-import sys
 import tempfile
 import unittest
 import unittest.mock
@@ -28,8 +27,6 @@ from pathlib import Path
 from types import MappingProxyType
 
 import yaml
-
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 import campaign
 import campaign_profiles

@@ -8,22 +8,19 @@ that then replaced the cache entry.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import io
 import json
 import os
 import shutil
-import sys
 import tempfile
 import threading
 import unittest
 import urllib.error
 from pathlib import Path
 from unittest import mock
-
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 import common
 import largefiles

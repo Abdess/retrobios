@@ -8,18 +8,16 @@ contribution of a file the collection had held.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import retired_files
 
-import retired_files  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 OLD = "bd" * 20
 NEW = "d9" * 20

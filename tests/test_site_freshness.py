@@ -6,20 +6,18 @@ the pages whose words changed for IndexNow."""
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
+import indexnow
+import siteagents
+import site_markdown
 
-import indexnow  # noqa: E402
-import siteagents  # noqa: E402
-import site_markdown  # noqa: E402
+ROOT = Path(__file__).resolve().parent.parent
 
 STAMP = {"commit": "0123456789abcdef0123456789abcdef01234567", "date": "2026-11-09T08:00:00+01:00"}
 # The two parts a built Starlight page gives the copy: its title and its content.

@@ -8,7 +8,7 @@ report is folded, since each of those decides whether a row says STALE.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
 import os
@@ -18,11 +18,10 @@ import unittest
 from unittest import mock
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import check_freshness as cf
+from common import yaml_load
 
-import check_freshness as cf  # noqa: E402
-from common import yaml_load  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 class NativeCacheTests(unittest.TestCase):

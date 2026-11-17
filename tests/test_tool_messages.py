@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import io
@@ -15,14 +15,13 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import common
+import diff_truth
+import pipeline
+import truth
+import verify
 
-import common  # noqa: E402
-import diff_truth  # noqa: E402
-import pipeline  # noqa: E402
-import truth  # noqa: E402
-import verify  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 class ABuildbotNameSelectsItsProfile(unittest.TestCase):

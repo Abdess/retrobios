@@ -9,17 +9,15 @@ have vanished with it.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from common import load_platform_config, load_platform_registry
+from generate_readme import extract_notes, extract_targets
 
-from common import load_platform_config, load_platform_registry  # noqa: E402
-from generate_readme import extract_notes, extract_targets  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 PLATFORMS = str(REPO_ROOT / "platforms")
 
@@ -69,7 +67,6 @@ class ThePackGuideNamesTheInstallerDefault(unittest.TestCase):
             rule["path"] for rule in registry["retrobat"]["install"]["detect"]
             if rule["os"] == "windows" and rule["method"] == "path_exists"
         )
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         from siteguides import pack_manual
 
         # The pack guide text is data (platforms/_guides.yml): read what the

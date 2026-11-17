@@ -7,7 +7,7 @@ ZIPs, which surfaces as BadZipFile far from its cause.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import os
 import subprocess
@@ -17,19 +17,18 @@ import tempfile
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-from common import (  # noqa: E402
+from common import (
     ArtifactLockBusy,
     artifact_lock,
     hold_artifact_lock,
     hold_repository_outputs,
     publish_hold,
 )
-from tests.scratchtree import scratch_checkout  # noqa: E402
-import artifacts  # noqa: E402
-from unittest import mock  # noqa: E402
+from tests.scratchtree import scratch_checkout
+import artifacts
+from unittest import mock
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def _tempdir(test: unittest.TestCase) -> str:

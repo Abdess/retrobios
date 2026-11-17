@@ -9,23 +9,21 @@ upstream files.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-from scraper import amberelec_scraper, emuelec_scraper, knulli_scraper  # noqa: E402
-from scraper.es_emulators import (  # noqa: E402
+from scraper import amberelec_scraper, emuelec_scraper, knulli_scraper
+from scraper.es_emulators import (
     attach_system_cores,
     es_cores,
     json_systems,
     system_cores,
     xml_systems,
 )
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 CHECKER = '''
 

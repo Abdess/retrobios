@@ -8,20 +8,16 @@ is checked against the revision itself.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import dataclasses
 import json
-import sys
 import unittest
 from pathlib import Path
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-from scraper.batocera_launchers import (  # noqa: E402
+from scraper.batocera_launchers import (
     CONFIGGEN,
     GENERATORS,
     IMPORTER,
@@ -35,7 +31,9 @@ from scraper.batocera_launchers import (  # noqa: E402
     hatari,
     lexaloffle,
 )
-from scraper.retropie_launchers import Launcher as PackageLauncher  # noqa: E402
+from scraper.retropie_launchers import Launcher as PackageLauncher
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 PATHS = """from pathlib import Path
 from typing import Final

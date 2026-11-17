@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import subprocess
 import sys
@@ -57,7 +57,6 @@ class VerifyRefusesWhatAModeDoesNotRead(unittest.TestCase):
                 self.assertIn(flag, result.stderr)
 
     def test_emulator_mode_reads_the_given_platforms_dir(self):
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         import verify
 
         seen: list[str] = []
@@ -90,7 +89,6 @@ class VerifyAppliesWhatItAccepts(unittest.TestCase):
 
 class EmulatorPackReadsThePlatformsDir(unittest.TestCase):
     def test_the_registry_comes_from_the_given_dir(self):
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         import generate_pack
 
         seen: list[str] = []
@@ -119,7 +117,6 @@ class CoreArchivesAreCounted(unittest.TestCase):
         import contextlib
         import io
 
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         import verify
 
         result = {"undeclared_files": [
@@ -138,7 +135,6 @@ class ExistenceReportsWhatThePackReports(unittest.TestCase):
         """30 RetroArch entries printed DISCREPANCY in the pack, nothing in verify."""
         import tempfile
 
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         import verify
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
@@ -154,7 +150,6 @@ class ExistenceReportsWhatThePackReports(unittest.TestCase):
     def test_the_file_found_is_named(self):
         """RetroArch, Lakka and RetroPie pages showed no "Served by" line:
         existence mode returned no path, where the hash modes return one."""
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         import verify
 
         found = verify.verify_entry_existence({"name": "a.bin"}, "bios/X/Y/a.bin")
@@ -198,7 +193,6 @@ class EveryGapCountedIsNamed(unittest.TestCase):
         import contextlib
         import io
 
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         import verify
 
         result = {"undeclared_files": [
@@ -225,7 +219,6 @@ class BundledGameDataIsNotMissing(unittest.TestCase):
         import contextlib
         import io
 
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         import verify
 
         result = {"undeclared_files": [
@@ -251,7 +244,6 @@ class TheBundledLineSaysWhatItLeavesOut(unittest.TestCase):
         import contextlib
         import io
 
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         import verify
 
         result = {"undeclared_files": [
@@ -287,7 +279,6 @@ class TheCheckLineSaysWhatItIs(unittest.TestCase):
         import contextlib
         import io
 
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         import verify
 
         entry = {"name": "FBASIC30.ROM", "emulator": "XM7", "checks": ["size"]}
@@ -309,7 +300,6 @@ class CoreCopiesWithoutAGapEntryAreCounted(unittest.TestCase):
         import contextlib
         import io
 
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         import verify
 
         for packed, expected in (({"bios": 6, "game_data": 0}, "Core files: 6 in pack"),

@@ -9,33 +9,31 @@ a list, and verify accepts any listed md5.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
-import sys
 import tempfile
 import unittest
 import zipfile
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-from common import resolve_local_file  # noqa: E402
-from exporter import discover_exporters  # noqa: E402
-from export_native import landed_changes  # noqa: E402
-from exporter.baseline import NativeFile, build_native_model  # noqa: E402
-from exporter.batocera_exporter import md5_list_support  # noqa: E402
-from scraper import rocknix_scraper  # noqa: E402
-from scraper.base_scraper import md5_field, requirement_entry  # noqa: E402
-from scraper.batocera_scraper import (  # noqa: E402
+from common import resolve_local_file
+from exporter import discover_exporters
+from export_native import landed_changes
+from exporter.baseline import NativeFile, build_native_model
+from exporter.batocera_exporter import md5_list_support
+from scraper import rocknix_scraper
+from scraper.base_scraper import md5_field, requirement_entry
+from scraper.batocera_scraper import (
     SYSTEM_SLUG_MAP,
     extract_systems_dict,
     platform_systems,
     requirements_from_systems,
 )
-from siteexports import describe_change  # noqa: E402
-from verify import Status, verify_entry_md5  # noqa: E402
+from siteexports import describe_change
+from verify import Status, verify_entry_md5
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 A = "dc2b9bf8da62ec93e868cfd29f0d067d"
 B = "924e392ed05558ffdb115408c263dccf"

@@ -7,7 +7,7 @@ so a test pins the join and not the state of the data.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
 import shutil
@@ -16,14 +16,12 @@ import tempfile
 import unittest
 from pathlib import Path
 
+import generate_games_index as gi
+from romfolders import SystemResolver, load_setups
+
 ROOT = Path(__file__).resolve().parent.parent
 TMP_ROOT = ROOT / "tmp" / "tests"
 TMP_ROOT.mkdir(parents=True, exist_ok=True)
-sys.path.insert(0, str(ROOT / "scripts"))
-sys.path.insert(0, str(ROOT))
-
-import generate_games_index as gi  # noqa: E402
-from romfolders import SystemResolver, load_setups  # noqa: E402
 
 SETUP = """\
 setup: fixture

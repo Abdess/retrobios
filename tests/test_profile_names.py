@@ -7,16 +7,14 @@ own name that way.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from common import load_emulator_profiles
 
-from common import load_emulator_profiles  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 STEM_NAMED = {
     # Template and test cores, no emulator page.

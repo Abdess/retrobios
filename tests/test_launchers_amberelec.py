@@ -8,20 +8,18 @@ that is gone must stop the scrape.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import textwrap
 import unittest
 from pathlib import Path
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from scraper import amberelec_launchers as al
+from scraper.configgen_launchers import LauncherShapeError
 
-from scraper import amberelec_launchers as al  # noqa: E402
-from scraper.configgen_launchers import LauncherShapeError  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def text(block: str) -> str:

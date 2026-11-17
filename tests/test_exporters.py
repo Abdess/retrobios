@@ -14,7 +14,7 @@ and skip when it has not been populated (python scripts/export_native.py
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import difflib
 import io
@@ -30,18 +30,15 @@ import zipfile
 from collections import OrderedDict
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-from common import (  # noqa: E402
+from common import (
     list_registered_platforms,
     load_platform_config,
     native_layer,
     parse_untrusted_xml,
 )
-from exporter import discover_exporters  # noqa: E402
-from exporter.base_exporter import BaseExporter  # noqa: E402
-from export_native import (  # noqa: E402
+from exporter import discover_exporters
+from exporter.base_exporter import BaseExporter
+from export_native import (
     SOURCES_INDEX,
     collect_originals,
     fetch,
@@ -49,12 +46,14 @@ from export_native import (  # noqa: E402
     pinned_base,
     source_key,
 )
-from exporter.baseline import (  # noqa: E402
+from exporter.baseline import (
     NativeFile,
     NativeSystem,
     Report,
     build_native_model,
 )
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 UPSTREAM_CACHE = REPO_ROOT / ".cache" / "upstream-native"
 
@@ -1605,7 +1604,9 @@ class AnExportIsWrittenAsItsBytes(unittest.TestCase):
                 "rocknix-systems": "#!/usr/bin/python\n",
             }, {"rocknix-systems": 0o755})
             self.assertEqual((root / "FirmwareDatabase.cs").read_bytes(), b"a\r\nb\r\n")
-            mode = lambda name: stat.S_IMODE((root / name).stat().st_mode)  # noqa: E731
+            def mode(name: str) -> int:
+                return stat.S_IMODE((root / name).stat().st_mode)
+
             self.assertEqual(mode("rocknix-systems"), 0o755)
             self.assertEqual(mode("FirmwareDatabase.cs"), 0o644)
             self.assertEqual(sorted(p.name for p in root.iterdir()),

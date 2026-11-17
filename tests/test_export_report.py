@@ -7,15 +7,12 @@ file from and no list to check the diff against.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import re
-import sys
 import tempfile
 import unittest
 from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 import export_native
 from siteexports import generate_exports_page, load_export_reports

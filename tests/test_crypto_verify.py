@@ -14,21 +14,17 @@ constants rather than against itself. The AES vector is from NIST SP 800-38A.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import shutil
-import sys
 import tempfile
 import unittest
 import unittest.mock
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-import crypto_verify  # noqa: E402
-import sect233r1 as ec  # noqa: E402
+import crypto_verify
+import sect233r1 as ec
 
 
 class FieldArithmetic(unittest.TestCase):

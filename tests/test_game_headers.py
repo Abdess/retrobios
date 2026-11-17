@@ -2,21 +2,19 @@
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
 import re
-import sys
 import unittest
 from pathlib import Path
 
 import yaml
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
+from common import load_emulator_profiles
+from region import REGIONS
 
-from common import load_emulator_profiles  # noqa: E402
-from region import REGIONS  # noqa: E402
+ROOT = Path(__file__).resolve().parent.parent
 
 try:
     from jsonschema import Draft202012Validator

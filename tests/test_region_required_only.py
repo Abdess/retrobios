@@ -8,16 +8,15 @@ the optional winner: the slot shipped empty.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import ast
-import sys
 import unittest
 from pathlib import Path
 
+from packextras import platform_region_groups
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-from packextras import platform_region_groups  # noqa: E402
 
 
 class RequiredOnlyBeforeRegion(unittest.TestCase):

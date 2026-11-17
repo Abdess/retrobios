@@ -8,20 +8,18 @@ CDN. These tests hold the replacements in place.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
 import re
-import sys
 import tempfile
 import unittest
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
+import sitediagrams
 
-import sitediagrams  # noqa: E402
+ROOT = Path(__file__).resolve().parent.parent
 
 SVG = "{http://www.w3.org/2000/svg}"
 

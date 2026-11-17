@@ -9,7 +9,7 @@ filed under the systems of the machines that can load it, never guessed.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import io
 import json
@@ -626,9 +626,6 @@ class APickReadsTheEntrySystems(unittest.TestCase):
         self.assertTrue(entry_serves_systems({}, profile, ["snk-neogeo-mvs"]))
 
     def test_the_gap_report_and_the_extras_carry_them(self):
-        import sys
-
-        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
         from packextras import _collect_emulator_extras, _extra_system_ids
         from verify import find_undeclared_files
 
@@ -1009,7 +1006,7 @@ class TheRepositoryProfile(unittest.TestCase):
 class Cli(unittest.TestCase):
 
     def test_devices_needs_a_listxml(self):
-        from scripts.scraper.mame_hash_scraper import build_parser, main  # noqa: F401
+        from scripts.scraper.mame_hash_scraper import main
         import sys
         from unittest import mock
 

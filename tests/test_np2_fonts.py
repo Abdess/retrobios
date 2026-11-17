@@ -9,22 +9,20 @@ which fontpc98_read cannot parse, and FONT.ROM was never placed under its name.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import os
 import shutil
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from common import resolve_local_file
 
-from common import resolve_local_file  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 V98_SIZE = 0x46800
 
