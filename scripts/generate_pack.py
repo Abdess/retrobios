@@ -621,14 +621,10 @@ class _TreeWalkOptions(TypedDict, total=False):
     reclaim: dict[str, str] | None
 
 
-def _carried_tree(
-    dd: dict, data_registry: dict | None, platform_name: str, required_only: bool,
-) -> str | None:
+def _carried_tree(dd: dict, data_registry: dict | None, platform_name: str) -> str | None:
     """The cache folder of a tree reference the pack carries, or None."""
     ref_key = dd.get("ref", "")
     if not ref_key or not data_registry or ref_key not in data_registry:
-        return None
-    if required_only and dd.get("required") is False:
         return None
     if ref_key in installed_data_refs(platform_name):
         return None
@@ -693,11 +689,13 @@ def _data_directory_members(
     core_trees = options.get("core_trees", ())
     # Data directories from _data_dirs.yml
     for systems, dd in _tree_references(pack_systems, core_trees):
-        local_path = _carried_tree(dd, data_registry, platform_name, required_only)
+        needed = dd.get("required") is not False
+        if required_only and not needed:
+            continue
+        local_path = _carried_tree(dd, data_registry, platform_name)
         if local_path is None:
             continue
         ref_key = dd.get("ref", "")
-        needed = dd.get("required") is not False
         dd_dest = dd.get("destination", "")
         dd_prefix = f"{base_dest}/{dd_dest}" if base_dest and dd_dest else base_dest or dd_dest
         # Held while the caller writes what is yielded: a refresh swapping
@@ -1242,6 +1240,34 @@ class _PlatformPackBuild:
         self._pack_trees()
         self._write_readme()
 
+    def _judge_conflict(self, file_entry: dict, full_dest: str) -> None:
+        # Content ships under the conflicting shape (file vs dir,
+        # e.g. SGB1.sfc). verify.py resolves each declaration on
+        # its own, so this one is counted by what it resolves to:
+        # an unresolved one counted OK had the pack claim a file
+        # verify reports missing.
+        plan = self.plan
+        conflict_path, conflict_status = resolve_file(
+            file_entry, plan.db, plan.bios_dir, plan.zip_contents,
+            data_dir_registry=plan.opts.data_registry, offline=plan.opts.offline,
+        )
+        # The verdict of the main path: a zipped_file archive is
+        # judged by the member inside, and a frontend that hashes
+        # one digest accepts a file another declared hash
+        # contradicts, as verify judges it.
+        conflict_status, refusal = baseline_verdict(
+            file_entry, conflict_path, conflict_status, plan.verification_mode,
+            plan.config.get("hash_rule", ""),
+        )
+        if conflict_status == "not_found":
+            self.file_status[full_dest] = "missing"
+            self.file_reasons[full_dest] = "not found"
+        elif refusal:
+            self.file_status[full_dest] = "excluded"
+            self.file_reasons[full_dest] = refusal
+        else:
+            self.file_status.setdefault(full_dest, "ok")
+
     def _pack_declared(self, sys_id: str, file_entry: dict) -> None:
         plan, opts = self.plan, self.plan.opts
         if opts.required_only and file_entry.get("required") is False:
@@ -1261,7 +1287,8 @@ class _PlatformPackBuild:
         if self.placed.conflicts(full_dest):
             self._judge_conflict(file_entry, full_dest)
             return
-        if file_entry.get("storage", "embedded") == "user_provided":
+        storage = file_entry.get("storage", "embedded")
+        if storage == "user_provided":
             if not already_packed:
                 self._write_instructions(file_entry, full_dest)
             return
@@ -1296,31 +1323,6 @@ class _PlatformPackBuild:
             self.file_status[fkey] = "excluded"
         else:
             self.file_status.setdefault(fkey, "ok")
-
-    def _judge_conflict(self, file_entry: dict, full_dest: str) -> None:
-        # Content ships under the conflicting shape (file vs dir,
-        # e.g. SGB1.sfc). verify.py resolves each declaration on
-        # its own, so this one is counted by what it resolves to:
-        # an unresolved one counted OK had the pack claim a file
-        # verify reports missing.
-        plan = self.plan
-        conflict_path, conflict_status = resolve_file(
-            file_entry, plan.db, plan.bios_dir, plan.zip_contents,
-            data_dir_registry=plan.opts.data_registry, offline=plan.opts.offline,
-        )
-        # The verdict of the main path: a zipped_file archive is
-        # judged by the member inside, and a frontend that hashes
-        # one digest accepts a file another declared hash
-        # contradicts, as verify judges it.
-        conflict_status, refusal = self.verdict(file_entry, conflict_path, conflict_status)
-        if conflict_status == "not_found":
-            self.file_status[full_dest] = "missing"
-            self.file_reasons[full_dest] = "not found"
-        elif refusal:
-            self.file_status[full_dest] = "excluded"
-            self.file_reasons[full_dest] = refusal
-        else:
-            self.file_status.setdefault(full_dest, "ok")
 
     def _write_instructions(self, file_entry: dict, full_dest: str) -> None:
         base_dest = self.plan.base_dest
@@ -1640,11 +1642,13 @@ class _PlatformPackBuild:
     def _pack_data_directories(self, pack_systems: dict, core_trees: Iterable[dict]) -> int:
         """Add the data directories to the pack. Returns how many files went in."""
         plan = self.plan
+        required_only = plan.opts.required_only
+        seen_parents = self.placed.parents
         added = 0
         for src, full in _data_directory_members(
             pack_systems, plan.opts.data_registry, plan.platform_name, plan.base_dest,
             self.placed.fold, self.placed.destinations, self.placed.lower,
-            self.placed.parents, required_only=plan.opts.required_only,
+            seen_parents, required_only=required_only,
             core_trees=core_trees,
         ):
             _add_pack_member(self.zf, src, self._flat(full))
@@ -2293,10 +2297,11 @@ class _EmulatorPackBuild:
         # profile declares wins over the copy a tree bundles at the same
         # path (Dolphin's real dsp_rom.bin over Sys/GC's free one).
         # A tree only one build reads follows that build, like a file.
+        required_only = self.required_only
         for dd in deliverable(
             profile.get("data_directories", []), self.standalone
         ):
-            if self.required_only and dd.get("required") is False:
+            if required_only and dd.get("required") is False:
                 continue
             ref_key = dd.get("ref", "")
             if not ref_key or not self.data_registry or ref_key not in self.data_registry:
@@ -3425,54 +3430,6 @@ class _PackCheck:
     no_game_data: bool
 
 
-def _verify_found_pack(
-    check: _PackCheck, platform_name: str, zip_path: str, target_cores: set[str] | None,
-) -> bool:
-    """Check one pack of a platform and print its line; False when it fails."""
-    pack_name = os.path.basename(zip_path)
-    variant = _pack_variant(pack_name)
-    if variant is None:
-        # One BIOS per slot: the slot choice is not replayed here.
-        print(
-            f"  {platform_name} [{pack_name}]: hashes checked during the build; "
-            "one per slot by design, so not compared to the platform's full list"
-        )
-        return True
-    source, required_only = variant
-    result = verify_pack_against_platform(
-        zip_path,
-        platform_name,
-        check.platforms_dir,
-        db=check.db,
-        emulators_dir=check.emulators_dir,
-        emu_profiles=check.profiles,
-        regions=check.regions,
-        data_registry=check.data_registry,
-        target_cores=target_cores,
-        source=source,
-        required_only=required_only,
-        no_game_data=check.no_game_data,
-    )
-    (ok, _checked, _present, errors, bl_checked, bl_present,
-     core_checked, core_present, bl_excluded, bl_absent) = result
-    # These explain a baseline short of its total: a dump whose hash
-    # the frontend refuses is left out on purpose, and a file the
-    # collection does not hold cannot be packed (verify reports it).
-    shortfall = ", ".join(_baseline_shortfall(bl_excluded, bl_absent))
-    excluded = f" ({shortfall})" if shortfall else ""
-    counts = (
-        f"{bl_present}/{bl_checked} baseline{excluded}, "
-        f"{core_present}/{core_checked} cores"
-    )
-    if ok:
-        print(f"  {platform_name} [{pack_name}]: OK ({counts})")
-        return True
-    print(f"  {platform_name} [{pack_name}]: FAIL ({counts}, {len(errors)} errors)")
-    for err in errors:
-        print(f"    {err}")
-    return False
-
-
 def _verify_packs_scope(args: argparse.Namespace) -> tuple[list[str], dict[str, set[str] | None]]:
     """The platforms --verify-packs checks, and the cores of the target."""
     if args.platform:
@@ -3554,11 +3511,56 @@ def _run_verify_packs(args: argparse.Namespace) -> None:
         # A group pack and a pack built for the platform alone can both be
         # present, and each one is a pack of this platform.
         for pack_name in found:
+            variant = _pack_variant(pack_name)
+            if variant is None:
+                # One BIOS per slot: the slot choice is not replayed here.
+                print(
+                    f"  {platform_name} [{pack_name}]: hashes checked during the build; "
+                    "one per slot by design, so not compared to the platform's full list"
+                )
+                continue
+            source, required_only = variant
             zip_path = os.path.join(args.output_dir, pack_name)
-            if not _verify_found_pack(check, platform_name, zip_path, tc):
+            result = verify_pack_against_platform(
+                zip_path,
+                platform_name,
+                check.platforms_dir,
+                db=check.db,
+                emulators_dir=check.emulators_dir,
+                emu_profiles=check.profiles,
+                regions=check.regions,
+                data_registry=check.data_registry,
+                target_cores=tc,
+                source=source,
+                required_only=required_only,
+                no_game_data=check.no_game_data,
+            )
+            (ok, _checked, _present, errors, bl_checked, bl_present,
+             core_checked, core_present, bl_excluded, bl_absent) = result
+            # These explain a baseline short of its total: a dump whose hash
+            # the frontend refuses is left out on purpose, and a file the
+            # collection does not hold cannot be packed (verify reports it).
+            shortfall = ", ".join(_baseline_shortfall(bl_excluded, bl_absent))
+            excluded = f" ({shortfall})" if shortfall else ""
+            counts = (
+                f"{bl_present}/{bl_checked} baseline{excluded}, "
+                f"{core_present}/{core_checked} cores"
+            )
+            if ok:
+                print(f"  {platform_name} [{pack_name}]: OK ({counts})")
+            else:
+                print(f"  {platform_name} [{pack_name}]: FAIL ({counts}, {len(errors)} errors)")
+                for err in errors:
+                    print(f"    {err}")
                 all_ok = False
                 failing.append(f"{platform_name} ({pack_name})")
 
+    if not _verification_summary(failing, verified, args.output_dir) or not all_ok:
+        sys.exit(1)
+
+
+def _verification_summary(failing: list[str], verified: int, output_dir: str) -> bool:
+    """Print how --verify-packs ended; False when nothing was verified."""
     if failing:
         # Named at the end, where the log is read, and on stderr, as the
         # build path does: a failing pack sat among its own error lines.
@@ -3571,10 +3573,9 @@ def _run_verify_packs(args: argparse.Namespace) -> None:
     if not verified:
         # Every platform skipped is no check at all: a mistyped or purged
         # output directory read as a passed integrity check.
-        print(f"ERROR: no pack to verify in {args.output_dir}", file=sys.stderr)
-        all_ok = False
-    if not all_ok:
-        sys.exit(1)
+        print(f"ERROR: no pack to verify in {output_dir}", file=sys.stderr)
+        return False
+    return True
 
 
 # The source x required combinations --all-variants builds, in build order.
@@ -5769,6 +5770,7 @@ class _ManifestBuild:
         below records, the same tree the pack carries.
         """
         opts = self.opts
+        required_only = opts.required_only
         data_refs: dict[str, tuple[str, tuple[str, ...], str, bool]] = {}
         reclaim = {full: path for full, (path, _size) in self.cache_held.items()}
         core_trees = ([] if opts.source == "platform"
@@ -5777,7 +5779,7 @@ class _ManifestBuild:
         self.data_members = list(_data_directory_members(
             self.pack_systems, self.data_registry, self.platform_name, self.base_dest,
             self.case_insensitive, self.placed.destinations, self.placed.lower,
-            self.placed.parents, refs_out=data_refs, required_only=opts.required_only,
+            self.placed.parents, refs_out=data_refs, required_only=required_only,
             core_trees=core_trees,
             reclaim=reclaim,
         ))
