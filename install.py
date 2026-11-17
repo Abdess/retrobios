@@ -8589,7 +8589,7 @@ def _claim_partial(path: Path) -> BinaryIO | None:
     flags = os.O_RDWR | os.O_CREAT | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_BINARY", 0)
     handle = os.fdopen(os.open(path, flags, 0o644), "r+b")
     try:
-        if sys.platform == "win32":
+        if os.name == "nt":
             import msvcrt
 
             msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
