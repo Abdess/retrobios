@@ -68,8 +68,11 @@ class AnEntryWithoutSourceIsAnOmission(unittest.TestCase):
         with mock.patch.object(gp, "compute_hashes", return_value=hashes):
             gp._manifest_core_entries(
                 [extra], {}, self.db, str(REPO_ROOT / "bios"), "", str(REPO_ROOT),
-                {}, True, set(), False, set(), set(), set(), files, {},
-                record, pack_only, SelectionIndex.build({}, {}, {}, []),
+                {}, True,
+                region_drops=set(), case_insensitive=False, seen_destinations=set(),
+                seen_lower=set(), seen_parents=set(), manifest_files=files,
+                omitted_by_destination={}, record_omission=record,
+                pack_only_sizes=pack_only, selection=SelectionIndex.build({}, {}, {}, []),
             )
         return files, omitted, pack_only
 
