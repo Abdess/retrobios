@@ -315,7 +315,7 @@ class Scraper(BaseScraper):
 
     def _parse_csv_bios(self, csv_text: str) -> list[dict]:
         """Parse BIOS file info from a cheat sheet CSV."""
-        entries = []
+        entries: list[dict] = []
         if not csv_text.strip():
             return entries
         reader = csv.DictReader(io.StringIO(csv_text))
@@ -402,17 +402,17 @@ class Scraper(BaseScraper):
                     )
                 )
 
-            for md5 in system_hashes:
-                requirements.append(
-                    BiosRequirement(
-                        name=f"{system}:{md5}",
-                        system=system,
-                        md5=md5,
-                        destination="",
-                        required=True,
-                        native_id=system,
-                    )
+            requirements.extend(
+                BiosRequirement(
+                    name=f"{system}:{md5}",
+                    system=system,
+                    md5=md5,
+                    destination="",
+                    required=True,
+                    native_id=system,
                 )
+                for md5 in system_hashes
+            )
 
         for sheet in CSV_SHEETS:
             csv_text = self._fetch_csv(sheet)

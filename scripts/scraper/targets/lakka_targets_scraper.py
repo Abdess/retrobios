@@ -81,6 +81,91 @@ def _expand(value: str, env: dict[str, str]) -> str:
     )
 
 
+class _Evaluation:
+    """The state of one evaluate() run over an options file."""
+
+    def __init__(self, env: dict[str, str]) -> None:
+        self.env = dict(env)
+        # One frame per open if: [parent state, branch taken, this branch's state],
+        # each True, False, or None where a condition read an unknown variable.
+        self.stack: list[list[bool | None]] = []
+        self.case_depth = self.loop_depth = 0
+
+    def state(self) -> bool | None:
+        states = [frame[2] for frame in self.stack]
+        if False in states:
+            return False
+        return None if None in states else True
+
+    def nesting(self, line: str) -> bool:
+        """Follow case and loop nesting. True when the line is consumed."""
+        if re.match(r"^case\b", line):
+            self.case_depth += 1
+            return True
+        if line == "esac":
+            self.case_depth -= 1
+            return True
+        if re.match(r"^(for|while)\b", line):
+            self.loop_depth += 1
+            return True
+        if line == "done":
+            self.loop_depth -= 1
+            return True
+        return bool(self.loop_depth)
+
+    def branch(self, line: str) -> bool:
+        """Follow if/elif/else/fi. True when the line is one of them."""
+        go: bool | None
+        branch = _IF_RE.match(line)
+        if branch and branch.group(1) == "if":
+            parent = self.state()
+            go = False if parent is False else (
+                None if parent is None else _condition(branch.group(2), self.env)
+            )
+            self.stack.append([parent, go, go])
+            return True
+        if branch and branch.group(1) == "elif":
+            frame = self.stack[-1]
+            if frame[0] is False or frame[1] is True:
+                go = False
+            elif frame[0] is None or frame[1] is None:
+                go = None
+            else:
+                go = _condition(branch.group(2), self.env)
+            frame[1] = True if go is True else (None if go is None else frame[1])
+            frame[2] = go
+            return True
+        if line == "else":
+            frame = self.stack[-1]
+            if frame[0] is False or frame[1] is True:
+                go = False
+            elif frame[0] is None or frame[1] is None:
+                go = None
+            else:
+                go = True
+            frame[1], frame[2] = True, go
+            return True
+        if line == "fi":
+            self.stack.pop()
+            return True
+        return False
+
+    def assign(self, line: str) -> None:
+        assign = _ASSIGN_RE.match(line)
+        current = self.state()
+        if not assign or current is False:
+            return
+        name, op, value = assign.groups()
+        if self.case_depth or current is None:
+            if name in WATCHED:
+                where = "a case statement" if self.case_depth else "an undecidable branch"
+                raise ShellSubsetError(f"{name} assigned inside {where}")
+            return
+        value = " ".join(_expand(value, self.env).split())
+        env = self.env
+        env[name] = f"{env.get(name, '')} {value}".strip() if op == "+=" else value
+
+
 def evaluate(text: str, env: dict[str, str]) -> dict[str, str]:
     """Run the assignments and if/elif/else blocks of a LibreELEC options file.
 
@@ -89,82 +174,13 @@ def evaluate(text: str, env: dict[str, str]) -> dict[str, str]:
     as a set difference. A watched variable set inside a case statement is
     ambiguous and stops the scrape rather than guess.
     """
-    env = dict(env)
-    lines = re.sub(r"\\\n", " ", text).splitlines()
-    # One frame per open if: [parent state, branch taken, this branch's state],
-    # each True, False, or None where a condition read an unknown variable.
-    stack: list[list[bool | None]] = []
-    case_depth = loop_depth = 0
-
-    def state() -> bool | None:
-        states = [frame[2] for frame in stack]
-        if False in states:
-            return False
-        return None if None in states else True
-
-    for raw in lines:
+    run = _Evaluation(env)
+    for raw in re.sub(r"\\\n", " ", text).splitlines():
         line = raw.split("#", 1)[0].strip()
-        if not line:
+        if not line or run.nesting(line) or run.branch(line):
             continue
-        if re.match(r"^case\b", line):
-            case_depth += 1
-            continue
-        if line == "esac":
-            case_depth -= 1
-            continue
-        if re.match(r"^(for|while)\b", line):
-            loop_depth += 1
-            continue
-        if line == "done":
-            loop_depth -= 1
-            continue
-        if loop_depth:
-            continue
-        branch = _IF_RE.match(line)
-        if branch and branch.group(1) == "if":
-            parent = state()
-            go = False if parent is False else (
-                None if parent is None else _condition(branch.group(2), env)
-            )
-            stack.append([parent, go, go])
-            continue
-        if branch and branch.group(1) == "elif":
-            frame = stack[-1]
-            if frame[0] is False or frame[1] is True:
-                go = False
-            elif frame[0] is None or frame[1] is None:
-                go = None
-            else:
-                go = _condition(branch.group(2), env)
-            frame[1] = True if go is True else (None if go is None else frame[1])
-            frame[2] = go
-            continue
-        if line == "else":
-            frame = stack[-1]
-            if frame[0] is False or frame[1] is True:
-                go = False
-            elif frame[0] is None or frame[1] is None:
-                go = None
-            else:
-                go = True
-            frame[1], frame[2] = True, go
-            continue
-        if line == "fi":
-            stack.pop()
-            continue
-        assign = _ASSIGN_RE.match(line)
-        current = state()
-        if not assign or current is False:
-            continue
-        name, op, value = assign.groups()
-        if case_depth or current is None:
-            if name in WATCHED:
-                where = "a case statement" if case_depth else "an undecidable branch"
-                raise ShellSubsetError(f"{name} assigned inside {where}")
-            continue
-        value = " ".join(_expand(value, env).split())
-        env[name] = f"{env.get(name, '')} {value}".strip() if op == "+=" else value
-    return env
+        run.assign(line)
+    return run.env
 
 
 def device_cores(cores_mk: str, env: dict[str, str]) -> list[str]:

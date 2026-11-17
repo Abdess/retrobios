@@ -281,7 +281,10 @@ class Scraper(BaseScraper):
                 {
                     "files": [],
                     "native_id": req.native_id,
-                    "name": names.get(req.native_id, req.system),
+                    "name": (
+                        names.get(req.native_id, req.system)
+                        if req.native_id is not None else req.system
+                    ),
                 },
             )
             entry["files"].append(requirement_entry(req))

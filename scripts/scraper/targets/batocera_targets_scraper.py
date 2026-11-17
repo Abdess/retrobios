@@ -302,7 +302,7 @@ def _parse_es_systems(text: str) -> dict[str, list[str]]:
 
     package_to_emulators: dict[str, list[str]] = {}
 
-    for _system_name, system_data in data.items():
+    for system_data in data.values():
         if not isinstance(system_data, dict):
             continue
         emulators = system_data.get("emulators")

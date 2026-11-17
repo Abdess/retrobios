@@ -262,7 +262,7 @@ class Scraper(BaseScraper):
             return False
 
         has_bios = False
-        for sys_key, sys_data in data.items():
+        for sys_data in data.values():
             if isinstance(sys_data, dict) and "biosFiles" in sys_data:
                 has_bios = True
                 break
@@ -296,9 +296,9 @@ class Scraper(BaseScraper):
 
         version = fetch_github_latest_version(GITHUB_REPO)
         es_url = ES_SYSTEMS_URL.format(tag=version)
-        req = urllib.request.Request(es_url, headers={"User-Agent": "retrobios-scraper/1.0"})
+        request = urllib.request.Request(es_url, headers={"User-Agent": "retrobios-scraper/1.0"})
         try:
-            with urllib.request.urlopen(req, timeout=30) as resp:
+            with urllib.request.urlopen(request, timeout=30) as resp:
                 es_text = resp.read().decode("utf-8")
             cores, standalone = es_systems_cores(es_text)
             dual = es_systems_dual(es_text)

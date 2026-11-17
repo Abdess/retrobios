@@ -255,6 +255,10 @@ def platform_config(
     }
 
 
+def _fetch_with_headers(url: str, headers: dict[str, str] | None = None) -> bytes:
+    return fetch_bytes(url, headers=headers)
+
+
 class Scraper(BaseScraper):
     """Pak scraper for one frontend of the MinUI family."""
 
@@ -266,7 +270,7 @@ class Scraper(BaseScraper):
         url: str | None = None,
         fetch: Callable[[str, dict[str, str] | None], bytes] | None = None,
     ) -> None:
-        self._fetch = fetch or (lambda u, h=None: fetch_bytes(u, headers=h))
+        self._fetch = fetch or _fetch_with_headers
         self.revision = ""
         if url is None:
             self.revision = fetch_branch_head(self.variant.repo, self.variant.branch)

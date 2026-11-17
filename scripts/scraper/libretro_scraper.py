@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import urllib.error
 import urllib.request
+from typing import TypedDict
 
 from .base_scraper import (
     BaseScraper,
@@ -124,6 +125,15 @@ def _core_info_files() -> list[str]:
     return info_files
 
 
+class _ExtraSystem(TypedDict):
+    """A system System.dat lacks, with the files RetroArch needs for it."""
+
+    files: list[dict[str, object]]
+    core: str
+    manufacturer: str
+    docs: str
+
+
 class Scraper(BaseScraper):
     """Scraper for libretro System.dat."""
 
@@ -234,6 +244,31 @@ class Scraper(BaseScraper):
         metadata = self.fetch_metadata()
         core_meta = self._fetch_core_metadata()
 
+        systems = self._system_entries(requirements, core_meta)
+        self._add_extra_systems(systems)
+        self._add_arcade_files(systems)
+        self._add_system_files(systems)
+        self._add_includes_and_data(systems)
+
+        return {
+            "platform": "RetroArch",
+            "version": metadata["retroarch_version"] or "",
+            "dat_version": metadata["dat_version"] or "",
+            "homepage": "https://www.retroarch.com",
+            "source": (
+                f"https://github.com/{DATABASE_REPO}/blob/"
+                f"{self.revision or 'master'}/dat/System.dat"
+            ),
+            "base_destination": "system",
+            "hash_type": "sha1",
+            "verification_mode": "existence",
+            "systems": systems,
+        }
+
+    @staticmethod
+    def _system_entries(
+        requirements: list[BiosRequirement], core_meta: dict[str, dict]
+    ) -> dict[str, dict]:
         systems = {}
         for req in requirements:
             if req.system not in systems:
@@ -252,10 +287,14 @@ class Scraper(BaseScraper):
 
             systems[req.system]["files"].append(requirement_entry(req))
 
+        return systems
+
+    @staticmethod
+    def _add_extra_systems(systems: dict[str, dict]) -> None:
         # Systems not in System.dat but needed for RetroArch: added via
         # shared groups in _shared.yml. The includes directive is resolved
         # at load time by load_platform_config().
-        EXTRA_SYSTEMS = {
+        EXTRA_SYSTEMS: dict[str, _ExtraSystem] = {
             # ref: Vircon32/libretro.c, virtual console, single BIOS
             "vircon32": {
                 "files": [
@@ -292,6 +331,9 @@ class Scraper(BaseScraper):
                     "files": [{**f, "curated": True} for f in sys_data["files"]],
                 }
 
+
+    @staticmethod
+    def _add_arcade_files(systems: dict[str, dict]) -> None:
         # Arcade BIOS present in the repo but absent from System.dat.
         # FBNeo expects them in system/ or system/fbneo/.
         # ref: fbneo/src/burner/libretro/libretro.cpp
@@ -336,6 +378,9 @@ class Scraper(BaseScraper):
                     }
                 )
 
+
+    @staticmethod
+    def _add_system_files(systems: dict[str, dict]) -> None:
         # Extra files missing from System.dat for specific systems.
         # Each traced to the core's source code.
         EXTRA_SYSTEM_FILES = {
@@ -455,6 +500,9 @@ class Scraper(BaseScraper):
                         systems[sys_id]["files"].append({**ef, "curated": True})
                         existing.add(key)
 
+
+    @staticmethod
+    def _add_includes_and_data(systems: dict[str, dict]) -> None:
         # Inject shared group references for systems that have core-specific
         # subdirectory requirements already defined in _shared.yml.
         # Note: fuse/ prefix NOT injected for sinclair-zx-spectrum.
@@ -510,20 +558,6 @@ class Scraper(BaseScraper):
             if sys_id in systems:
                 systems[sys_id]["data_directories"] = data_dirs
 
-        return {
-            "platform": "RetroArch",
-            "version": metadata["retroarch_version"] or "",
-            "dat_version": metadata["dat_version"] or "",
-            "homepage": "https://www.retroarch.com",
-            "source": (
-                f"https://github.com/{DATABASE_REPO}/blob/"
-                f"{self.revision or 'master'}/dat/System.dat"
-            ),
-            "base_destination": "system",
-            "hash_type": "sha1",
-            "verification_mode": "existence",
-            "systems": systems,
-        }
 
 
 def main() -> None:
