@@ -293,7 +293,9 @@ BEFORE_WEIGHT = {
     # same size. The "Wanted files" link in the header of every page adds
     # about 80 bytes a page: 1,398,008 bytes on the site deployed from
     # aada55e65.
-    "batocera": (13, 18_854, 1_398_008),
+    # Astro 7.4.12 names itself in the generator meta of every page, one
+    # byte longer than 7.4.4: 1,398,021 bytes on the site deployed from 55e7616eb.
+    "batocera": (13, 18_854, 1_398_021),
     # AmberELEC's MSX files cite the fMSX ROM loader since 2026-11-11 (fMSX
     # named 82 times instead of 28, the same 295 files): the section moved
     # to a part page of its own, 2 pages, 7,160 elements and 545,681 bytes
@@ -304,13 +306,17 @@ BEFORE_WEIGHT = {
     # 546,403 bytes on the built site of 82d134cd8. The "Wanted files" link
     # in the header of every page: 546,565 bytes on the site deployed from
     # aada55e65.
-    "amberelec": (2, 7_928, 546_565),
+    # Astro 7.4.12 names itself in the generator meta of every page, one
+    # byte longer than 7.4.4: 546,567 bytes on the site deployed from 55e7616eb.
+    "amberelec": (2, 7_928, 546_567),
     # RomM's PS2 page names scph10000.bin, the label LRPS2 reads through
     # RetroDECK's pcsx2_bios option, beside SCPH-10000.bin since 2026-11-13:
     # 572,528 bytes on the built site of that day. The "Wanted files" link
     # in the header of every page: 572,690 bytes on the site deployed from
     # aada55e65.
-    "romm": (2, 9_561, 572_690),
+    # Astro 7.4.12 names itself in the generator meta of every page, one
+    # byte longer than 7.4.4: 572,692 bytes on the site deployed from 55e7616eb.
+    "romm": (2, 9_561, 572_692),
     # RetroArch's MSX files cite the fMSX ROM loader and its ScummVM files
     # the readers of each data file since 2026-11-11 (46,737 and 9,275 bytes
     # more): 1,433,702 bytes on the built site of 964875572. Its PS2 page
@@ -318,7 +324,9 @@ BEFORE_WEIGHT = {
     # 1,434,426 bytes on the built site of that day. The "Wanted files" link
     # in the header of every page: 1,435,479 bytes on the site deployed from
     # aada55e65.
-    "retroarch": (14, 21_503, 1_435_479),
+    # Astro 7.4.12 names itself in the generator meta of every page, one
+    # byte longer than 7.4.4: 1,435,492 bytes on the site deployed from 55e7616eb.
+    "retroarch": (14, 21_503, 1_435_492),
 }
 
 
