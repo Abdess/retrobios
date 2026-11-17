@@ -23,9 +23,12 @@ import signal
 import sys
 import zipfile
 from pathlib import Path
-from typing import Any, TextIO
+from typing import TYPE_CHECKING, Any, TextIO, TypedDict
 
 from alternatives import derive_member_requirements
+
+if TYPE_CHECKING:
+    from typing_extensions import Unpack
 
 # Re-exported so the existing call sites keep working while the
 # modules above become the place to import from.
@@ -1168,18 +1171,24 @@ def resolution_is_hash_exact(status: str) -> bool:
     return status in HASH_EXACT_RESOLUTION_STATUSES
 
 
+class DeclaredHashes(TypedDict):
+    """What an entry declares about its content, as declared_hash_verdict reads it."""
+
+    has_strong_hash: bool
+    sha1_candidates: Collection[str]
+    sha256_candidates: Collection[str]
+    md5_list: list[str]
+    crc_candidates: Collection[str]
+    zipped_file: str | None
+    declared_size: int | list[int] | None
+
+
 def declared_hash_verdict(
     candidate: str,
     *,
-    has_strong_hash: bool,
-    sha1_candidates: Collection[str],
-    sha256_candidates: Collection[str],
-    md5_list: list[str],
-    crc_candidates: Collection[str],
-    zipped_file: str | None,
-    declared_size: int | list[int] | None,
     file_entry: dict | None = None,
     db: dict | None = None,
+    **declared: Unpack[DeclaredHashes],
 ) -> str:
     """Judge a candidate found by name against everything the entry declares.
 
@@ -1188,7 +1197,13 @@ def declared_hash_verdict(
     about its content is checked here before the walk may return it,
     including the size and Adler-32 the name steps over bios/ apply.
     """
-    if not has_strong_hash:
+    sha1_candidates = declared["sha1_candidates"]
+    sha256_candidates = declared["sha256_candidates"]
+    md5_list = declared["md5_list"]
+    crc_candidates = declared["crc_candidates"]
+    zipped_file = declared["zipped_file"]
+    declared_size = declared["declared_size"]
+    if not declared["has_strong_hash"]:
         if file_entry is not None and not (
             name_match_size_ok(file_entry, os.path.getsize(candidate))
             and adler32_fits(file_entry, candidate, db)
