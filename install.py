@@ -20978,7 +20978,7 @@ def _pass_check_missing(run: _InstallRun, p: _PlatformPass) -> None:
           + ("not in place." if offline or LOCAL.pack is not None
              else "to download."))
     for line in check_lines(missing, mismatched, p.files, p.manifest, bios_path,
-                            args.verbose, p.up_to_date, p.bios_index, copies):
+                            args.verbose, CheckHeld(p.up_to_date, p.bios_index, copies)):
         print(line)
     for line in unreadable_lines(p.unread, args.verbose):
         print(line)
