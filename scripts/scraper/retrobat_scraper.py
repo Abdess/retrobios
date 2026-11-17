@@ -14,30 +14,17 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-try:
-    from .base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        fetch_branch_head,
-        fetch_bytes,
-        fetch_github_latest_version,
-        requirement_entry,
-    )
-    from .batocera_scraper import SYSTEM_SLUG_MAP as BATOCERA_SLUGS
-    from .retrobat_launchers import SOURCE_FILES as LAUNCHER_FILES
-    from .retrobat_launchers import extract_launchers
-except ImportError:
-    from base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        fetch_branch_head,
-        fetch_bytes,
-        fetch_github_latest_version,
-        requirement_entry,
-    )
-    from batocera_scraper import SYSTEM_SLUG_MAP as BATOCERA_SLUGS
-    from retrobat_launchers import SOURCE_FILES as LAUNCHER_FILES
-    from retrobat_launchers import extract_launchers
+from .base_scraper import (
+    BaseScraper,
+    BiosRequirement,
+    fetch_branch_head,
+    fetch_bytes,
+    fetch_github_latest_version,
+    requirement_entry,
+)
+from .batocera_scraper import SYSTEM_SLUG_MAP as BATOCERA_SLUGS
+from .retrobat_launchers import SOURCE_FILES as LAUNCHER_FILES
+from .retrobat_launchers import extract_launchers
 
 PLATFORM_NAME = "retrobat"
 PLATFORM_FILE = Path(__file__).resolve().parents[2] / "platforms" / "retrobat.yml"

@@ -29,22 +29,13 @@ import urllib.parse
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 
-try:
-    from .base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        fetch_branch_head,
-        fetch_bytes,
-        github_headers,
-    )
-except ImportError:
-    from base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        fetch_branch_head,
-        fetch_bytes,
-        github_headers,
-    )
+from .base_scraper import (
+    BaseScraper,
+    BiosRequirement,
+    fetch_branch_head,
+    fetch_bytes,
+    github_headers,
+)
 
 PLATFORM_NAME = "minui"
 
@@ -336,10 +327,7 @@ class Scraper(BaseScraper):
 
 
 def main() -> None:
-    try:
-        from .base_scraper import scraper_cli
-    except ImportError:
-        from base_scraper import scraper_cli
+    from .base_scraper import scraper_cli
 
     scraper_cli(Scraper, "Scrape the MinUI pak list")
 

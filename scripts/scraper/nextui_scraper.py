@@ -3,10 +3,7 @@
 
 from __future__ import annotations
 
-try:
-    from . import minui_scraper
-except ImportError:
-    import minui_scraper
+from . import minui_scraper
 
 PLATFORM_NAME = "nextui"
 
@@ -18,10 +15,7 @@ class Scraper(minui_scraper.Scraper):
 
 
 def main() -> None:
-    try:
-        from .base_scraper import scraper_cli
-    except ImportError:
-        from base_scraper import scraper_cli
+    from .base_scraper import scraper_cli
 
     scraper_cli(Scraper, "Scrape the NextUI pak list")
 

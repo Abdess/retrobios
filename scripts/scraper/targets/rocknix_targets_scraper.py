@@ -23,6 +23,8 @@ from datetime import datetime, timezone
 import yaml
 
 from . import BaseTargetScraper
+from ..base_scraper import fetch_bytes, github_headers
+from ..rocknix_scraper import standalone_emulators
 
 PLATFORM_NAME = "rocknix"
 
@@ -30,13 +32,6 @@ RAW_BASE = "https://raw.githubusercontent.com/ROCKNIX/distribution/{tag}"
 GITHUB_API = "https://api.github.com/repos/ROCKNIX/distribution/contents"
 EMULATORS_MK = "projects/ROCKNIX/packages/virtual/emulators/package.mk"
 DEVICES_DIR = "projects/ROCKNIX/devices"
-
-try:
-    from ..base_scraper import fetch_bytes, github_headers
-    from ..rocknix_scraper import standalone_emulators
-except ImportError:
-    from scraper.base_scraper import fetch_bytes, github_headers
-    from scraper.rocknix_scraper import standalone_emulators
 
 # `NAME="a b \
 #   c"` or `NAME+=" a b"`, continuation lines joined first.

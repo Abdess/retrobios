@@ -27,6 +27,7 @@ Verification logic (api_data_processing.sh:289-405):
 
 from __future__ import annotations
 
+import importlib
 import json
 import re
 import sys
@@ -34,29 +35,22 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-try:
-    from .base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        fetch_branch_head,
-        fetch_bytes,
-        fetch_github_latest_version,
-        github_headers,
-        requirement_entry,
-    )
-    from .retrodeck_launchers import extract_launchers
-except ImportError:
+if not __package__:
+    # Allow running directly: python scripts/scraper/retrodeck_scraper.py
     sys.path.insert(0, str(Path(__file__).parent.parent))
-    from scraper.base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        fetch_branch_head,
-        fetch_bytes,
-        fetch_github_latest_version,
-        github_headers,
-        requirement_entry,
-    )
-    from scraper.retrodeck_launchers import extract_launchers
+    importlib.import_module("scraper")
+    __package__ = "scraper"
+
+from .base_scraper import (
+    BaseScraper,
+    BiosRequirement,
+    fetch_branch_head,
+    fetch_bytes,
+    fetch_github_latest_version,
+    github_headers,
+    requirement_entry,
+)
+from .retrodeck_launchers import extract_launchers
 
 PLATFORM_NAME = "retrodeck"
 COMPONENTS_REPO = "RetroDECK/components"
@@ -578,10 +572,7 @@ class Scraper(BaseScraper):
 
 
 def main() -> None:
-    try:
-        from .base_scraper import scraper_cli
-    except ImportError:
-        from scraper.base_scraper import scraper_cli
+    from .base_scraper import scraper_cli
 
     scraper_cli(Scraper, "Scrape RetroDECK BIOS requirements")
 

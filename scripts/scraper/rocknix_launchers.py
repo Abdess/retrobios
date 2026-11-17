@@ -16,32 +16,18 @@ import re
 from collections.abc import Callable
 from dataclasses import dataclass
 
-try:
-    from .configgen_launchers import Launcher
-    from .shell_launchers import config_placement, evidence_fields
-    from .shell_launchers import (
-        LauncherPatternMissing,
-        Link,
-        RepoTree,
-        Script,
-        Setting,
-        describe_keys,
-        settings,
-        source_ref,
-    )
-except ImportError:
-    from configgen_launchers import Launcher
-    from shell_launchers import config_placement, evidence_fields  # type: ignore[no-redef]
-    from shell_launchers import (
-        LauncherPatternMissing,
-        Link,
-        RepoTree,
-        Script,
-        Setting,
-        describe_keys,
-        settings,
-        source_ref,
-    )
+from .configgen_launchers import Launcher
+from .shell_launchers import config_placement, evidence_fields
+from .shell_launchers import (
+    LauncherPatternMissing,
+    Link,
+    RepoTree,
+    Script,
+    Setting,
+    describe_keys,
+    settings,
+    source_ref,
+)
 
 ROCKNIX = "projects/ROCKNIX"
 DEVICES = f"{ROCKNIX}/devices"

@@ -30,13 +30,9 @@ import yaml
 from safeparse import yaml_load_upstream
 
 from . import BaseTargetScraper
+from ..base_scraper import github_headers
 
 PLATFORM_NAME = "batocera"
-
-try:
-    from ..base_scraper import github_headers
-except ImportError:
-    from scraper.base_scraper import github_headers
 
 _TARGET_FLAG_RE = re.compile(r"^(BR2_PACKAGE_BATOCERA_TARGET_\w+)=y", re.MULTILINE)
 

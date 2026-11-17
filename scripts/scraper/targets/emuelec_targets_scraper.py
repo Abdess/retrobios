@@ -35,6 +35,12 @@ from typing import NamedTuple
 import yaml
 
 from . import BaseTargetScraper
+from ..base_scraper import fetch_bytes, github_headers
+from ..batocera_scraper import _not_cores
+from ..emuelec_scraper import (
+    BUILDS_OF, ES_SYSTEMS_TEMPLATE, PORTS_TEMPLATE, RUNNERS, port_engines, with_ports,
+)
+from ..es_emulators import SystemEmulators, es_cores
 
 PLATFORM_NAME = "emuelec"
 
@@ -44,21 +50,6 @@ RELEASE_API = "https://api.github.com/repos/EmuELEC/EmuELEC/releases/tags/{ref}"
 META_MK = "packages/sx05re/emuelec/package.mk"
 OPTIONS = "distributions/EmuELEC/options"
 ES_MK = "packages/sx05re/emuelec-emulationstation/package.mk"
-
-try:
-    from ..base_scraper import fetch_bytes, github_headers
-    from ..batocera_scraper import _not_cores
-    from ..emuelec_scraper import (
-        BUILDS_OF, ES_SYSTEMS_TEMPLATE, PORTS_TEMPLATE, RUNNERS, port_engines, with_ports,
-    )
-    from ..es_emulators import SystemEmulators, es_cores
-except ImportError:
-    from scraper.base_scraper import fetch_bytes, github_headers
-    from scraper.batocera_scraper import _not_cores
-    from scraper.emuelec_scraper import (
-        BUILDS_OF, ES_SYSTEMS_TEMPLATE, PORTS_TEMPLATE, RUNNERS, port_engines, with_ports,
-    )
-    from scraper.es_emulators import SystemEmulators, es_cores
 
 _ASSET_RE = re.compile(r"^EmuELEC-(?P<device>[A-Za-z0-9-]+)\.(?P<arch>[a-z0-9_]+)-")
 

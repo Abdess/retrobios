@@ -423,7 +423,7 @@ def duckstation_legacy(cg: Configgen) -> list[Launcher]:
 
     list_nodes = {name: src.assignment(name, generate) for name, _v, _f, _d in loops}
     tracked = {*list_nodes, *(v for _l, v, _f, _d in loops), flag}
-    first_list = min(list_nodes.values(), key=lambda node: node.lineno)
+    first_list = min(list_nodes.values(), key=lambda node: node.lineno).node
     body, index = _locate(generate, lambda stmt: stmt is first_list)  # type: ignore[misc]
     sections = {section for section, _key in writes.values()}
     first, last = _run(body, index, lambda stmt: _mentions(stmt, sections, tracked))
@@ -1127,10 +1127,7 @@ SEARCH_PATH_GENERATORS = ("mame/mameGenerator.py",)
 def search_paths(cg: Configgen) -> list[Launcher]:
     """Every /userdata/bios path a generator's command line names, read as
     KNULLI's generic reader reads its fork of the same generator."""
-    try:
-        from .knulli_launchers import GenericSites, bios_sites
-    except ImportError:
-        from knulli_launchers import GenericSites, bios_sites  # type: ignore[no-redef]
+    from .knulli_launchers import GenericSites, bios_sites
     # A boot disk image the command line names (the Macintosh's
     # /userdata/bios/<boot_disk>.img) is a file, no search path.
     return [

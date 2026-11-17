@@ -10,11 +10,28 @@ from __future__ import annotations
 import ast
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass
-from typing import Any, NoReturn
+from typing import Any, NoReturn, Protocol
 
 
 class LauncherShapeError(ValueError):
     """A generator no longer has the shape its extractor reads."""
+
+
+class Located(Protocol):
+    """A node that carries source lines: a statement, an expression, an argument."""
+
+    @property
+    def lineno(self) -> int: ...
+
+    @property
+    def end_lineno(self) -> int | None: ...
+
+
+def end_line(node: Located) -> int:
+    """The last line of a parsed node, which ast.parse always sets."""
+    if node.end_lineno is None:
+        raise LauncherShapeError(f"node at line {node.lineno} has no end line")
+    return node.end_lineno
 
 
 @dataclass
@@ -60,6 +77,22 @@ class Launcher:
         return {key: getattr(self, key) for key in order if getattr(self, key) is not None}
 
 
+@dataclass(frozen=True)
+class Assignment:
+    """A single-name assignment statement and the value it binds."""
+
+    node: ast.Assign | ast.AnnAssign
+    value: ast.expr
+
+    @property
+    def lineno(self) -> int:
+        return self.node.lineno
+
+    @property
+    def end_lineno(self) -> int | None:
+        return self.node.end_lineno
+
+
 class Source:
     """One configgen file, parsed, with the lines its nodes span."""
 
@@ -83,27 +116,28 @@ class Source:
             self.fail(f"expected one function {name}, found {len(found)}")
         return found[0]
 
-    def assignment(self, name: str, scope: ast.AST | None = None) -> ast.Assign | ast.AnnAssign:
+    def assignment(self, name: str, scope: ast.AST | None = None) -> Assignment:
         found = [
-            node for node in ast.walk(scope or self.tree)
-            if _assigned_name(node) == name
+            Assignment(node, assigned[1]) for node in ast.walk(scope or self.tree)
+            if isinstance(node, (ast.Assign, ast.AnnAssign))
+            and (assigned := assigned_value(node)) is not None and assigned[0] == name
         ]
         if len(found) != 1:
             self.fail(f"expected one assignment to {name}, found {len(found)}")
         return found[0]
 
-    def literal(self, node: ast.AST | None, what: str) -> Any:
+    def literal(self, node: ast.AST, what: str) -> Any:
         try:
-            return ast.literal_eval(node)  # type: ignore[arg-type]
+            return ast.literal_eval(node)
         except (ValueError, TypeError, SyntaxError) as e:
             self.fail(f"{what} is not a literal: {e}")
 
-    def span(self, node: ast.AST) -> tuple[int, int]:
+    def span(self, node: Located) -> tuple[int, int]:
         """Lines of a node, with the comment lines written right above it."""
-        start = node.lineno  # type: ignore[attr-defined]
+        start = node.lineno
         while start > 1 and self.lines[start - 2].strip().startswith("#"):
             start -= 1
-        return start, node.end_lineno  # type: ignore[attr-defined]
+        return start, end_line(node)
 
     def ref(self, spans: list[tuple[int, int]]) -> str:
         """`path:a-b, c-d`, ranges joined across blank and comment lines."""
@@ -123,14 +157,20 @@ class Source:
         )
 
 
-def _assigned_name(node: ast.AST) -> str | None:
+def assigned_value(node: ast.AST) -> tuple[str, ast.expr] | None:
+    """The name a single-name assignment binds, and the value it binds."""
     if isinstance(node, ast.Assign) and len(node.targets) == 1:
-        target = node.targets[0]
+        target, value = node.targets[0], node.value
     elif isinstance(node, ast.AnnAssign) and node.value is not None:
-        target = node.target
+        target, value = node.target, node.value
     else:
         return None
-    return target.id if isinstance(target, ast.Name) else None
+    return (target.id, value) if isinstance(target, ast.Name) else None
+
+
+def _assigned_name(node: ast.AST) -> str | None:
+    assigned = assigned_value(node)
+    return assigned[0] if assigned is not None else None
 
 
 def _statement_lists(node: ast.AST) -> Iterator[list[ast.stmt]]:
@@ -202,11 +242,11 @@ def _enclosing_test(scope: ast.AST, node: ast.AST) -> str | None:
     return None
 
 
-def _innermost_function(src: Source, node: ast.AST) -> ast.FunctionDef:
+def _innermost_function(src: Source, node: ast.stmt | ast.expr) -> ast.FunctionDef:
     holders = [
         f for f in ast.walk(src.tree)
         if isinstance(f, ast.FunctionDef) and any(child is node for child in ast.walk(f))
     ]
     if not holders:
-        src.fail(f"line {node.lineno} is outside any function")  # type: ignore[attr-defined]
+        src.fail(f"line {node.lineno} is outside any function")
     return max(holders, key=lambda f: f.lineno)

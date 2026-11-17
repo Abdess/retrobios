@@ -28,62 +28,31 @@ from typing import Any
 
 import yaml
 
-try:
-    from .batocera_launchers import (
-        PATH_PATCHES,
-        Configgen,
-        config_directories,
-        _path_value,
-        _render,
-        _system_branches,
-        duckstation,
-        duckstation_legacy,
-        environment_directories,
-        hatari,
-        melonds,
-        mupen64plus,
-        patched_paths,
-        x16emu,
-        working_directories,
-        xemu,
-    )
-    from .configgen_launchers import (
-        Launcher,
-        LauncherShapeError,
-        Source,
-        _assigned_name,
-    )
-    from .shell_launchers import LauncherPatternMissing, Script, source_ref
-except ImportError:
-    from batocera_launchers import (  # type: ignore[no-redef]
-        PATH_PATCHES,
-        Configgen,
-        config_directories,
-        _path_value,
-        _render,
-        _system_branches,
-        duckstation,
-        duckstation_legacy,
-        environment_directories,
-        hatari,
-        melonds,
-        mupen64plus,
-        patched_paths,
-        x16emu,
-        working_directories,
-        xemu,
-    )
-    from configgen_launchers import (  # type: ignore[no-redef]
-        Launcher,
-        LauncherShapeError,
-        Source,
-        _assigned_name,
-    )
-    from shell_launchers import (  # type: ignore[no-redef]
-        LauncherPatternMissing,
-        Script,
-        source_ref,
-    )
+from .batocera_launchers import (
+    PATH_PATCHES,
+    Configgen,
+    config_directories,
+    _path_value,
+    _render,
+    _system_branches,
+    duckstation,
+    duckstation_legacy,
+    environment_directories,
+    hatari,
+    melonds,
+    mupen64plus,
+    patched_paths,
+    x16emu,
+    working_directories,
+    xemu,
+)
+from .configgen_launchers import (
+    Launcher,
+    LauncherShapeError,
+    Source,
+    _assigned_name,
+)
+from .shell_launchers import LauncherPatternMissing, Script, source_ref
 
 CONFIGGEN = "package/system/knulli-configgen/configgen/configgen"
 GENERATORS = f"{CONFIGGEN}/generators"

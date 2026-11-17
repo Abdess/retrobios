@@ -14,28 +14,16 @@ import posixpath
 import re
 from collections.abc import Callable
 
-try:
-    from .configgen_launchers import Launcher
-    from .shell_launchers import (
-        LauncherPatternMissing,
-        RepoTree,
-        Script,
-        describe_keys,
-        settings,
-        source_ref,
-        words,
-    )
-except ImportError:
-    from configgen_launchers import Launcher
-    from shell_launchers import (
-        LauncherPatternMissing,
-        RepoTree,
-        Script,
-        describe_keys,
-        settings,
-        source_ref,
-        words,
-    )
+from .configgen_launchers import Launcher
+from .shell_launchers import (
+    LauncherPatternMissing,
+    RepoTree,
+    Script,
+    describe_keys,
+    settings,
+    source_ref,
+    words,
+)
 
 EMUSCRIPTS = "functions/EmuScripts"
 CONFIGS = "configs"

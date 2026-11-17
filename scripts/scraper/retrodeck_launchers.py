@@ -23,10 +23,7 @@ from collections.abc import Callable
 from pathlib import PurePosixPath
 from typing import Any
 
-try:
-    from .retropie_launchers import Launcher, LauncherPatternMissing, merge_records, source_ref
-except ImportError:
-    from retropie_launchers import Launcher, LauncherPatternMissing, merge_records, source_ref
+from .retropie_launchers import Launcher, LauncherPatternMissing, merge_records, source_ref
 
 BIOS = "$bios_path"
 PLACEHOLDER = "RETRODECKBIOSDIR"

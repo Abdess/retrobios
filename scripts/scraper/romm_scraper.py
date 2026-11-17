@@ -26,22 +26,13 @@ import json
 import re
 import sys
 
-try:
-    from .base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        fetch_bytes,
-        fetch_github_latest_version,
-        requirement_entry,
-    )
-except ImportError:
-    from base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        fetch_bytes,
-        fetch_github_latest_version,
-        requirement_entry,
-    )
+from .base_scraper import (
+    BaseScraper,
+    BiosRequirement,
+    fetch_bytes,
+    fetch_github_latest_version,
+    requirement_entry,
+)
 
 PLATFORM_NAME = "romm"
 

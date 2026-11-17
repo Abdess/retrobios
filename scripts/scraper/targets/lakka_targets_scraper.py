@@ -21,6 +21,7 @@ from datetime import datetime, timezone
 import yaml
 
 from . import BaseTargetScraper
+from ..base_scraper import fetch_bytes, github_headers
 
 PLATFORM_NAME = "lakka"
 
@@ -28,11 +29,6 @@ REPO = "libretro/Lakka-LibreELEC"
 RAW_BASE = "https://raw.githubusercontent.com/" + REPO + "/{tag}"
 API_BASE = "https://api.github.com/repos/" + REPO
 CORES_MK = "packages/lakka/libretro_cores/package.mk"
-
-try:
-    from ..base_scraper import fetch_bytes, github_headers
-except ImportError:
-    from scraper.base_scraper import fetch_bytes, github_headers
 
 _IF_RE = re.compile(r"^(if|elif)\s+\[\s+(.*?)\s+\];?\s*(?:then)?\s*$")
 _TEST_RE = re.compile(r'^(!\s+)?"\$\{?(\w+)\}?"\s*(=|!=)\s*"?([^"\s]*)"?$')

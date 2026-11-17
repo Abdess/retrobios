@@ -14,10 +14,7 @@ import bisect
 import re
 from collections.abc import Callable, Iterator
 
-try:
-    from .shell_launchers import is_feature_ref, split_ref
-except ImportError:
-    from shell_launchers import is_feature_ref, split_ref  # type: ignore[no-redef]
+from .shell_launchers import is_feature_ref, split_ref
 
 GENERATORS = "emulatorLauncher/Generators"
 FEATURES = ".emulationstation/es_features.cfg"

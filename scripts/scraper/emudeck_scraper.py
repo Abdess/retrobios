@@ -17,28 +17,16 @@ import re
 import urllib.error
 import urllib.request
 
-try:
-    from .base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        fetch_branch_head,
-        fetch_github_latest_version,
-        github_headers,
-        requirement_entry,
-    )
-    from .emudeck_launchers import emulator_of_script, extract_launchers
-    from .shell_launchers import RepoTree
-except ImportError:
-    from base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        fetch_branch_head,
-        fetch_github_latest_version,
-        github_headers,
-        requirement_entry,
-    )
-    from emudeck_launchers import emulator_of_script, extract_launchers
-    from shell_launchers import RepoTree
+from .base_scraper import (
+    BaseScraper,
+    BiosRequirement,
+    fetch_branch_head,
+    fetch_github_latest_version,
+    github_headers,
+    requirement_entry,
+)
+from .emudeck_launchers import emulator_of_script, extract_launchers
+from .shell_launchers import RepoTree
 
 PLATFORM_NAME = "emudeck"
 
