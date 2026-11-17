@@ -5,8 +5,15 @@ goes, and which ones the user has to rename."""
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING, TypedDict
+
+from packextras import reject_unknown
 from region import label as region_label
 from siteguides import INSTALL_PS1, INSTALL_SH, pack_manual
+
+if TYPE_CHECKING:
+    from typing_extensions import Unpack
+
 
 def _detect_systems(detect: list[dict]) -> list[str]:
     """The operating systems the registry's detection rules cover, in order."""
@@ -187,27 +194,33 @@ def _save_section(
     return "\n".join(lines) + "\n\n"
 
 
+class ReadmeOptions(TypedDict, total=False):
+    """What a pack's README states besides its platform and its counts."""
+
+    source: str
+    contributors: list[dict] | None
+    regions: list[str] | None
+    fallback_systems: list[str] | None
+    one_per_slot: bool
+    undecidable_slots: list[str] | None
+    narrowings: list[tuple[str, str]] | None
+    system_filter: list[str] | None
+    detect: list[dict] | None
+    standalone_copies: list[dict] | None
+    launch_folders: int
+    save_folder: str
+    save_where: str
+    save_by_system: bool
+    case_twins: list[tuple[str, str]] | None
+
+
 def _build_readme(
     platform_name: str,
     platform_display: str,
     base_dest: str,
     total_files: int,
     num_systems: int,
-    source: str = "full",
-    contributors: list[dict] | None = None,
-    regions: list[str] | None = None,
-    fallback_systems: list[str] | None = None,
-    one_per_slot: bool = False,
-    undecidable_slots: list[str] | None = None,
-    narrowings: list[tuple[str, str]] | None = None,
-    system_filter: list[str] | None = None,
-    detect: list[dict] | None = None,
-    standalone_copies: list[dict] | None = None,
-    launch_folders: int = 0,
-    save_folder: str = "",
-    save_where: str = "",
-    save_by_system: bool = False,
-    case_twins: list[tuple[str, str]] | None = None,
+    **options: Unpack[ReadmeOptions],
 ) -> str:
     """Build a personalized step-by-step README for each platform pack.
 
@@ -222,7 +235,9 @@ def _build_readme(
     where names keep their case (EmuDeck and RetroArch on Linux), where the
     core asking for the other spelling finds nothing.
     """
-    narrowings = narrowings or []
+    reject_unknown("_build_readme", options, ReadmeOptions.__optional_keys__)
+    regions = options.get("regions")
+    launch_folders = options.get("launch_folders", 0)
     sep = "=" * 50
     scope = (
         f"{launch_folders} launch folders" if launch_folders and not num_systems
@@ -235,40 +250,7 @@ def _build_readme(
         f"{sep}\n\n"
     )
 
-    detect = list(detect or [])
-    bios_paths = [str(rule.get("bios_path", "")) for rule in detect]
-    if any(rule.get("method") == "card_marker" for rule in detect):
-        guide = (
-            "INSTALLATION GUIDE\n\n"
-            + _card_section(platform_name, platform_display)
-            + _card_manual(platform_display)
-        )
-    else:
-        guide = (
-            "INSTALLATION GUIDE\n\n"
-            + _automatic_section(platform_name, platform_display, detect, standalone_copies)
-            + (pack_manual(platform_name) or _generic_manual(bios_paths))
-        )
-
-    if case_twins:
-        listed = "".join(
-            f"    {missing}  (the pack has {held})\n" for missing, held in case_twins
-        )
-        guide += (
-            "NAMES THAT DIFFER ONLY BY CASE\n\n"
-            "  Some cores open the same file under another spelling. This\n"
-            "  pack holds one spelling of each, all Windows and macOS can\n"
-            "  store in one folder. Linux, SteamOS and Android keep both:\n"
-            "  there, run the installer, which adds these spellings, or\n"
-            "  copy each file under the name below.\n\n"
-            f"{listed}\n"
-        )
-
-    if save_folder:
-        guide += _save_section(
-            platform_display, save_folder, save_where, save_by_system,
-            in_frontend_settings=not save_by_system, in_place=not base_dest,
-        )
+    guide = _install_guide(platform_name, platform_display, base_dest, options)
 
     if regions:
         region_help = (
@@ -292,82 +274,157 @@ def _build_readme(
         f"{sep}\n"
     )
 
-    source_info = ""
-    if source == "platform":
-        source_info = (
-            "PACK TYPE: Platform Only\n\n"
-            f"  This pack contains only files declared by {platform_display}.\n"
-            "  Core extras from emulator profiles are not included.\n"
-            "  Use the Full pack for maximum coverage.\n\n"
-        )
-    elif source == "truth":
-        source_info = (
-            "PACK TYPE: Ground Truth\n\n"
-            "  This pack contains files that emulators actually load,\n"
-            "  based on source code analysis of emulator profiles.\n"
-            "  Independent of platform scraper accuracy.\n\n"
-        )
-
-    region_info = ""
-    if regions:
-        pretty = ", ".join(region_label(slug) for slug in regions)
-        region_info = (
-            "PACK TYPE: Region Filtered\n\n"
-            f"  Region priority: {pretty}\n\n"
-            "  Only the best-matching BIOS was kept for each system.\n"
-        )
-        if fallback_systems:
-            listed = "\n".join(f"    {_group_label(s)}" for s in fallback_systems)
-            region_info += (
-                "\n  These systems have no BIOS in those regions, so every\n"
-                "  BIOS file for them was kept:\n"
-                f"{listed}\n"
-            )
-        region_info += (
-            "\n  This shrinks the pack. It does not change how cores pick\n"
-            "  a BIOS: most already select per region from fixed filename\n"
-            "  lists driven by the game's region. Loading imports from\n"
-            "  another region may need the unfiltered pack.\n\n"
-        )
-
-    slot_info = ""
-    if one_per_slot:
-        slot_info = (
-            "  Where a core declares which BIOS it prefers, only that one was\n"
-            "  kept for each system and region. Systems whose cores declare no\n"
-            "  order keep every BIOS file.\n"
-        )
-        if undecidable_slots:
-            slot_info += (
-                f"  {len(undecidable_slots)} slot(s) had no declared order.\n"
-            )
-        slot_info += "\n"
-
-    narrowed = ""
-    labels = [label for _tag, label in narrowings]
-    if system_filter:
-        labels.append(f"systems {', '.join(system_filter)}")
-    if labels:
-        listed = "".join(f"    {label}\n" for label in labels)
-        narrowed = (
-            "PACK TYPE: Narrowed\n\n"
-            "  This pack holds fewer files than the full one:\n"
-            f"{listed}"
-            "\n  The unfiltered pack is the one to use when in doubt.\n\n"
-        )
-
-    credits = ""
-    if contributors:
-        credits = "\nCONTRIBUTORS\n\n"
-        for cb in contributors:
-            username = cb.get("username", "")
-            credits += f"  @{username}\n"
-        credits += "\n"
+    source_info = _source_info(options.get("source", "full"), platform_display)
+    region_info = _region_info(regions, options.get("fallback_systems"))
+    slot_info = _slot_info(
+        options.get("one_per_slot", False), options.get("undecidable_slots")
+    )
+    narrowed = _narrowed_info(
+        options.get("narrowings") or [], options.get("system_filter")
+    )
+    credits = _credits(options.get("contributors"))
 
     return (
         header + narrowed + source_info + region_info + slot_info
         + guide + credits + footer
     )
+
+
+def _install_guide(
+    platform_name: str, platform_display: str, base_dest: str, options: ReadmeOptions
+) -> str:
+    """The installation steps, the case twins and the save folder."""
+    detect = list(options.get("detect") or [])
+    bios_paths = [str(rule.get("bios_path", "")) for rule in detect]
+    if any(rule.get("method") == "card_marker" for rule in detect):
+        guide = (
+            "INSTALLATION GUIDE\n\n"
+            + _card_section(platform_name, platform_display)
+            + _card_manual(platform_display)
+        )
+    else:
+        guide = (
+            "INSTALLATION GUIDE\n\n"
+            + _automatic_section(
+                platform_name, platform_display, detect, options.get("standalone_copies")
+            )
+            + (pack_manual(platform_name) or _generic_manual(bios_paths))
+        )
+
+    case_twins = options.get("case_twins")
+    if case_twins:
+        listed = "".join(
+            f"    {missing}  (the pack has {held})\n" for missing, held in case_twins
+        )
+        guide += (
+            "NAMES THAT DIFFER ONLY BY CASE\n\n"
+            "  Some cores open the same file under another spelling. This\n"
+            "  pack holds one spelling of each, all Windows and macOS can\n"
+            "  store in one folder. Linux, SteamOS and Android keep both:\n"
+            "  there, run the installer, which adds these spellings, or\n"
+            "  copy each file under the name below.\n\n"
+            f"{listed}\n"
+        )
+
+    save_folder = options.get("save_folder", "")
+    if save_folder:
+        save_by_system = options.get("save_by_system", False)
+        guide += _save_section(
+            platform_display, save_folder, options.get("save_where", ""), save_by_system,
+            in_frontend_settings=not save_by_system, in_place=not base_dest,
+        )
+    return guide
+
+
+def _source_info(source: str, platform_display: str) -> str:
+    """The PACK TYPE block of a platform-only or ground-truth pack."""
+    if source == "platform":
+        return (
+            "PACK TYPE: Platform Only\n\n"
+            f"  This pack contains only files declared by {platform_display}.\n"
+            "  Core extras from emulator profiles are not included.\n"
+            "  Use the Full pack for maximum coverage.\n\n"
+        )
+    if source == "truth":
+        return (
+            "PACK TYPE: Ground Truth\n\n"
+            "  This pack contains files that emulators actually load,\n"
+            "  based on source code analysis of emulator profiles.\n"
+            "  Independent of platform scraper accuracy.\n\n"
+        )
+    return ""
+
+
+def _region_info(regions: list[str] | None, fallback_systems: list[str] | None) -> str:
+    """The PACK TYPE block of a region-filtered pack."""
+    if not regions:
+        return ""
+    pretty = ", ".join(region_label(slug) for slug in regions)
+    region_info = (
+        "PACK TYPE: Region Filtered\n\n"
+        f"  Region priority: {pretty}\n\n"
+        "  Only the best-matching BIOS was kept for each system.\n"
+    )
+    if fallback_systems:
+        listed = "\n".join(f"    {_group_label(s)}" for s in fallback_systems)
+        region_info += (
+            "\n  These systems have no BIOS in those regions, so every\n"
+            "  BIOS file for them was kept:\n"
+            f"{listed}\n"
+        )
+    region_info += (
+        "\n  This shrinks the pack. It does not change how cores pick\n"
+        "  a BIOS: most already select per region from fixed filename\n"
+        "  lists driven by the game's region. Loading imports from\n"
+        "  another region may need the unfiltered pack.\n\n"
+    )
+    return region_info
+
+
+def _slot_info(one_per_slot: bool, undecidable_slots: list[str] | None) -> str:
+    """What --one-per-slot kept."""
+    if not one_per_slot:
+        return ""
+    slot_info = (
+        "  Where a core declares which BIOS it prefers, only that one was\n"
+        "  kept for each system and region. Systems whose cores declare no\n"
+        "  order keep every BIOS file.\n"
+    )
+    if undecidable_slots:
+        slot_info += (
+            f"  {len(undecidable_slots)} slot(s) had no declared order.\n"
+        )
+    return slot_info + "\n"
+
+
+def _narrowed_info(
+    narrowings: list[tuple[str, str]], system_filter: list[str] | None
+) -> str:
+    """The PACK TYPE block of a pack holding fewer files than the full one."""
+    labels = [label for _tag, label in narrowings]
+    if system_filter:
+        labels.append(f"systems {', '.join(system_filter)}")
+    if not labels:
+        return ""
+    listed = "".join(f"    {label}\n" for label in labels)
+    return (
+        "PACK TYPE: Narrowed\n\n"
+        "  This pack holds fewer files than the full one:\n"
+        f"{listed}"
+        "\n  The unfiltered pack is the one to use when in doubt.\n\n"
+    )
+
+
+def _credits(contributors: list[dict] | None) -> str:
+    """The CONTRIBUTORS block."""
+    if not contributors:
+        return ""
+    credits = "\nCONTRIBUTORS\n\n"
+    for cb in contributors:
+        username = cb.get("username", "")
+        credits += f"  @{username}\n"
+    return credits + "\n"
+
 
 def _build_agnostic_rename_readme(
     destination: str,
@@ -382,8 +439,7 @@ def _build_agnostic_rename_readme(
     ]
     if alternatives:
         lines.append("All variants included in this pack:")
-        for alt in sorted(alternatives):
-            lines.append(f"  {alt}")
+        lines.extend(f"  {alt}" for alt in sorted(alternatives))
         lines.append("")
         lines.append(f"To use a different variant, rename it to: {destination}")
     return "\n".join(lines) + "\n"
