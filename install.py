@@ -7061,6 +7061,16 @@ def _record_folder(run: Path, path: Path) -> tuple[Path, str] | None:
     return None
 
 
+def _record_without(gone: set[str]) -> Callable[[dict | None], dict | None]:
+    """The change taking out a setup's entries at the folded dests of gone."""
+    def change(setup: dict | None) -> dict | None:
+        return None if setup is None else {
+            **setup, "files": [item for item in setup["files"]
+                               if str(item.get("root") or "") not in ("", "data")
+                               or item["dest"].casefold() not in gone]}
+    return change
+
+
 def _record_after_restore(run: Path, put_back: list[Path]) -> str:
     """The record of the folder files went back into, made to say what is
     there now: "" once written, else why not. A removal's backup gives its
@@ -7088,14 +7098,9 @@ def _record_after_restore(run: Path, put_back: list[Path]) -> str:
         found = _record_folder(run, path)
         if found is not None:
             by_folder.setdefault(found[0], set()).add(found[1].casefold())
-    problems = []
-    for folder, gone in by_folder.items():
-        read = load_record(folder)
-        for plat in sorted((read.data or {}).get("setups") or {}):
-            problems.append(_update_record(folder, plat, lambda setup: None if setup is None else {
-                **setup, "files": [item for item in setup["files"]
-                                   if str(item.get("root") or "") not in ("", "data")
-                                   or item["dest"].casefold() not in gone]}))
+    problems = [_update_record(folder, plat, _record_without(gone))
+                for folder, gone in by_folder.items()
+                for plat in sorted((load_record(folder).data or {}).get("setups") or {})]
     return next((problem for problem in problems if problem), "")
 
 
@@ -7391,29 +7396,36 @@ def _choice_without(choice: list[str], flag: str, names: Collection[str],
     return record_argv(kept)
 
 
-def plan_removal(
-    plat: str, folder: Path, record: dict, manifest: dict, *,
-    systems: Collection[str] = (), cores: Collection[str] = (),
-    emulators: Collection[str] = (), files: Collection[str] = (),
-) -> Removal:
-    """What removing the chosen part of a setup takes and leaves.
+class _RemovalScope(NamedTuple):
+    """What a removal takes out, and what stays chosen once it is done."""
 
-    Only the record of plat in folder says what may go: every file it
-    lists, or those of systems, of cores (or of the emulators' cores), or
-    the dests in files. A file still needed by what stays (a system or a
-    core still chosen, another setup of the same folder) stays, and so do a
-    file changed since, a link, anything that is not a regular file, any
-    file outside the BIOS folder, and any the list can no longer serve. A
-    drive that folds case compares dests folded, as FAT and exFAT open them.
-    """
-    folder = Path(os.path.abspath(folder))
-    setup = record["setups"][plat]
-    fold = not keeps_case(folder)
+    fold: bool
+    known: dict[str, list[str]]
+    options: list[tuple[str, str | None]]
+    chosen_systems: set[str]
+    chosen_cores: set[str]
+    staying_systems: set[str]
+    staying_cores: set[str]
+    named_cores: list[str]
+    others: dict[tuple[str, str], str]
+    wanted: set[str]
+
+    def norm(self, dest: str) -> str:
+        """dest as the drive compares it, folded where it folds case."""
+        return dest.casefold() if self.fold else dest
+
+
+def _removal_scope(
+    plat: str, record: dict, manifest: dict, fold: bool, *,
+    systems: Collection[str], cores: Collection[str],
+    emulators: Collection[str], files: Collection[str],
+) -> _RemovalScope:
+    """The scope of a removal of plat's setup from record."""
 
     def norm(dest: str) -> str:
         return dest.casefold() if fold else dest
 
-    served = _served(manifest, fold)
+    setup = record["setups"][plat]
     known = available_choices(list(manifest.get("files") or []),
                               list(manifest.get("omitted_files") or []))
     options = record_options(setup.get("choice") or [])
@@ -7433,70 +7445,124 @@ def plan_removal(
     staying_cores = (designated_cores(manifest, named_cores) if named_cores
                      else set(known["cores"]) | set(manifest.get("core_names") or {})
                      ) - chosen_cores
-    remove, kept, gone, picked = [], [], [], set()
+    return _RemovalScope(fold, known, options, chosen_systems, chosen_cores,
+                         staying_systems, staying_cores, named_cores, others, wanted)
+
+
+def _removal_takes(scope: _RemovalScope, found: tuple, dest: str) -> bool:
+    """Whether the removal's choice reaches a recorded file at dest."""
+    _sha1s, item_systems, readers, own = found
+    if scope.chosen_systems and not (scope.chosen_systems & set(item_systems) or (
+            not item_systems and OTHER_SYSTEMS in scope.chosen_systems)):
+        return False
+    # The platform's own list keeps its files whatever core is removed.
+    if scope.chosen_cores and (own or not readers & scope.chosen_cores):
+        return False
+    return not (scope.wanted and scope.norm(dest) not in scope.wanted)
+
+
+def _removal_needed(scope: _RemovalScope, manifest: dict, item: dict, key: tuple[str, str],
+                    found: tuple) -> tuple[str, str]:
+    """Why a file of ours on disk stays, and what still needs it: ("", "") when it goes."""
+    sha1s, item_systems, readers, _own = found
+    if item["sha1"] not in sha1s:
+        return "not_servable", ""
+    if key in scope.others:
+        return "shared", display_name(scope.others[key])
+    if scope.chosen_systems and set(item_systems) & scope.staying_systems:
+        return "shared", ", ".join(system_title(name, manifest) for name in sorted(
+            set(item_systems) & scope.staying_systems))
+    if scope.chosen_cores and readers and readers & scope.staying_cores:
+        return "shared", ", ".join(sorted(readers & scope.staying_cores))
+    return "", ""
+
+
+def _removal_entry(scope: _RemovalScope, manifest: dict, folder: Path, item: dict,
+                   found: tuple) -> tuple[str, dict]:
+    """Where a picked file of the record goes: ("remove", entry), ("kept",
+    entry) or ("gone", item)."""
+    root, dest = str(item.get("root") or ""), str(item["dest"])
+    entry = {"dest": dest, "root": root, "sha1": item["sha1"], "size": item["size"],
+             "systems": found[1]}
+    if root not in ("", "data"):
+        return "kept", {**entry, "reason": "outside", "what": ""}
+    path, why = _below(folder, dest)
+    info = None
+    if path is not None:
+        why, info = _check_ours(path, item)
+    if why == "gone":
+        return "gone", item
+    what = ""
+    if not why:
+        why, what = _removal_needed(scope, manifest, item, (root, scope.norm(dest)), found)
+    if why or path is None or info is None:
+        return "kept", {**entry, "reason": why or "unreadable", "what": what}
+    return "remove", {**entry, "path": path, "inode": _stamp(info)}
+
+
+def _removal_choice(scope: _RemovalScope, recorded: list[str], *, files: Collection[str],
+                    cores: Collection[str], emulators: Collection[str]) -> list | None:
+    """The setup's choice once the removal is done, None when it goes."""
+    if files:
+        return recorded
+    if scope.chosen_systems:
+        choice = _choice_without(recorded, "--system", scope.chosen_systems,
+                                 sorted(scope.staying_systems | scope.chosen_systems))
+        if not _choice_names(record_options(choice), "--system"):
+            return None
+        return choice
+    if scope.chosen_cores and emulators and _choice_names(scope.options, "--emulator"):
+        return _choice_without(recorded, "--emulator", emulators, [])
+    if scope.chosen_cores:
+        left = ([] if scope.named_cores
+                else sorted(set(scope.known["cores"]) - scope.chosen_cores))
+        return _choice_without(recorded, "--core", scope.chosen_cores | set(cores), left)
+    return None
+
+
+def plan_removal(
+    plat: str, folder: Path, record: dict, manifest: dict, *,
+    systems: Collection[str] = (), cores: Collection[str] = (),
+    emulators: Collection[str] = (), files: Collection[str] = (),
+) -> Removal:
+    """What removing the chosen part of a setup takes and leaves.
+
+    Only the record of plat in folder says what may go: every file it
+    lists, or those of systems, of cores (or of the emulators' cores), or
+    the dests in files. A file still needed by what stays (a system or a
+    core still chosen, another setup of the same folder) stays, and so do a
+    file changed since, a link, anything that is not a regular file, any
+    file outside the BIOS folder, and any the list can no longer serve. A
+    drive that folds case compares dests folded, as FAT and exFAT open them.
+    """
+    folder = Path(os.path.abspath(folder))
+    setup = record["setups"][plat]
+    fold = not keeps_case(folder)
+    served = _served(manifest, fold)
+    scope = _removal_scope(plat, record, manifest, fold, systems=systems, cores=cores,
+                           emulators=emulators, files=files)
+    planned_entries: dict[str, list] = {"remove": [], "kept": [], "gone": []}
+    picked: set[str] = set()
     planned: set[tuple[str, str]] = set()
     for item in setup.get("files") or []:
-        root, dest = str(item.get("root") or ""), str(item["dest"])
-        sha1s, item_systems, readers, own = served.get(
-            (root, norm(dest)), (set(), [], set(), False))
-        if chosen_systems and not (chosen_systems & set(item_systems) or (
-                not item_systems and OTHER_SYSTEMS in chosen_systems)):
+        key = (str(item.get("root") or ""), scope.norm(str(item["dest"])))
+        found = served.get(key, (set(), [], set(), False))
+        if not _removal_takes(scope, found, str(item["dest"])):
             continue
-        # The platform's own list keeps its files whatever core is removed.
-        if chosen_cores and (own or not readers & chosen_cores):
-            continue
-        if files and norm(dest) not in wanted:
-            continue
-        if (root, norm(dest)) in planned:
+        if key in planned:
             # Two entries the drive opens as one file: planned once.
             continue
-        planned.add((root, norm(dest)))
-        picked.add(norm(dest))
-        entry = {"dest": dest, "root": root, "sha1": item["sha1"], "size": item["size"],
-                 "systems": item_systems}
-        if root not in ("", "data"):
-            kept.append({**entry, "reason": "outside", "what": ""})
-            continue
-        path, why = _below(folder, dest)
-        info = None
-        if path is not None:
-            why, info = _check_ours(path, item)
-        if why == "gone":
-            gone.append(item)
-            continue
-        what = ""
-        if not why and item["sha1"] not in sha1s:
-            why = "not_servable"
-        if not why and (root, norm(dest)) in others:
-            why, what = "shared", display_name(others[(root, norm(dest))])
-        if not why and chosen_systems and set(item_systems) & staying_systems:
-            why, what = "shared", ", ".join(system_title(name, manifest) for name in sorted(
-                set(item_systems) & staying_systems))
-        if not why and chosen_cores and readers and readers & staying_cores:
-            why, what = "shared", ", ".join(sorted(readers & staying_cores))
-        if why or path is None or info is None:
-            kept.append({**entry, "reason": why or "unreadable", "what": what})
-            continue
-        remove.append({**entry, "path": path, "inode": _stamp(info)})
+        planned.add(key)
+        picked.add(key[1])
+        where, entry = _removal_entry(scope, manifest, folder, item, found)
+        planned_entries[where].append(entry)
+    remove, kept, gone = (planned_entries["remove"], planned_entries["kept"],
+                          planned_entries["gone"])
     kept += [{"dest": dest, "root": "", "sha1": "", "size": 0, "systems": [],
               "reason": "not_recorded", "what": ""}
-             for dest in files if norm(dest) not in picked]
-    recorded: list[str] = list(setup.get("choice") or [])
-    choice: list | None = recorded
-    if files:
-        pass
-    elif chosen_systems:
-        choice = _choice_without(recorded, "--system", chosen_systems,
-                                 sorted(staying_systems | chosen_systems))
-        if not _choice_names(record_options(choice), "--system"):
-            choice = None
-    elif chosen_cores and emulators and _choice_names(options, "--emulator"):
-        choice = _choice_without(recorded, "--emulator", emulators, [])
-    elif chosen_cores:
-        left = [] if named_cores else sorted(set(known["cores"]) - chosen_cores)
-        choice = _choice_without(recorded, "--core", chosen_cores | set(cores), left)
-    else:
-        choice = None
+             for dest in files if scope.norm(dest) not in picked]
+    choice = _removal_choice(scope, list(setup.get("choice") or []), files=files,
+                             cores=cores, emulators=emulators)
     lost = sorted({name for entry in remove for name in entry["systems"]})
     return Removal(plat, folder, remove, kept, gone, choice, lost)
 
@@ -7505,6 +7571,62 @@ def _parent_of(dest: str) -> str:
     """The folder of a dest, "" at the top: dc for dc/dc_boot.bin."""
     parent = PurePosixPath(dest).parent.as_posix()
     return "" if parent == "." else parent
+
+
+def _misplaced_known(record: dict, manifests: list[dict], fold: bool
+                     ) -> tuple[set[str], bool, set[str]]:
+    """The places any list of manifests reads or any setup recorded, whether
+    a list places files at the top, and the game data dests."""
+
+    def norm(dest: str) -> str:
+        return dest.casefold() if fold else dest
+
+    known: set[str] = set()
+    top_placed = False
+    # Game data sits in folders a frontend lists as games: DOOM2.WAD beside
+    # doom2.wad is a game entry of its own there, never a copy.
+    games = {norm(str(entry.get("dest", ""))) for manifest in manifests
+             for entry in manifest.get("files") or [] if entry.get("category") == "game_data"}
+    for manifest in manifests:
+        for root, dest in _served(manifest, fold):
+            known.add(dest)
+            top_placed = top_placed or (root == "" and "/" not in dest)
+        known |= {norm(str(entry.get("dest", "")))
+                  for entry in manifest.get("omitted_files") or []}
+    known |= {norm(str(item["dest"])) for setup in record["setups"].values()
+              for item in setup.get("files") or []}
+    return known, top_placed, games
+
+
+def _misplaced_entries(folder: Path, rel_dir: str) -> list[os.DirEntry[str]]:
+    """The entries of a folder the installer placed files in, by name: none
+    when it is reached through a link or cannot be read."""
+    # The folder reached through no link, as _below reaches a file in it.
+    inside, why = _below(folder, f"{rel_dir}/-" if rel_dir else "-")
+    if inside is None or why:
+        return []
+    try:
+        return sorted(os.scandir(inside.parent), key=lambda entry: entry.name)
+    except OSError:
+        return []
+
+
+def _misplaced_candidate(entry: os.DirEntry[str], sizes: Collection[int]
+                         ) -> tuple[Path, os.stat_result, str] | None:
+    """The path, lstat and sha1 of a lone regular file of a placed file's size."""
+    path = Path(entry.path)
+    try:
+        info = os.lstat(path)
+    except OSError:
+        return None
+    if (not stat.S_ISREG(info.st_mode) or _is_link(info) or info.st_nlink != 1
+            or info.st_size not in sizes):
+        return None
+    try:
+        sha1 = _digest_file(path, ("sha1",))["sha1"]
+    except OSError:
+        return None
+    return path, info, sha1
 
 
 def plan_misplaced_removal(
@@ -7534,20 +7656,7 @@ def plan_misplaced_removal(
     def norm(dest: str) -> str:
         return dest.casefold() if fold else dest
 
-    known: set[str] = set()
-    top_placed = False
-    # Game data sits in folders a frontend lists as games: DOOM2.WAD beside
-    # doom2.wad is a game entry of its own there, never a copy.
-    games = {norm(str(entry.get("dest", ""))) for manifest in manifests
-             for entry in manifest.get("files") or [] if entry.get("category") == "game_data"}
-    for manifest in manifests:
-        for root, dest in _served(manifest, fold):
-            known.add(dest)
-            top_placed = top_placed or (root == "" and "/" not in dest)
-        known |= {norm(str(entry.get("dest", "")))
-                  for entry in manifest.get("omitted_files") or []}
-    known |= {norm(str(item["dest"])) for setup in record["setups"].values()
-              for item in setup.get("files") or []}
+    known, top_placed, games = _misplaced_known(record, manifests, fold)
     placed: dict[int, list[dict]] = {}
     # The folders read: each one the installer placed a file in, and the
     # top where the list places files there itself.
@@ -7580,30 +7689,14 @@ def plan_misplaced_removal(
 
     remove: list[dict] = []
     for rel_dir in sorted(folders.values()):
-        # The folder reached through no link, as _below reaches a file in it.
-        inside, why = _below(folder, f"{rel_dir}/-" if rel_dir else "-")
-        if inside is None or why:
-            continue
-        try:
-            entries = sorted(os.scandir(inside.parent), key=lambda entry: entry.name)
-        except OSError:
-            continue
-        for entry in entries:
+        for entry in _misplaced_entries(folder, rel_dir):
             rel = f"{rel_dir}/{entry.name}" if rel_dir else entry.name
             if entry.name in (".nomedia", BACKUP_DIR) or read_somewhere(rel):
                 continue
-            path = Path(entry.path)
-            try:
-                info = os.lstat(path)
-            except OSError:
+            candidate = _misplaced_candidate(entry, placed)
+            if candidate is None:
                 continue
-            if (not stat.S_ISREG(info.st_mode) or _is_link(info) or info.st_nlink != 1
-                    or info.st_size not in placed):
-                continue
-            try:
-                sha1 = _digest_file(path, ("sha1",))["sha1"]
-            except OSError:
-                continue
+            path, info, sha1 = candidate
             found = [(other, hit) for other in placed[info.st_size] if other["sha1"] == sha1
                      for hit in [in_place(other)] if hit is not None]
             if any(norm(str(other["dest"])) in games for other, _hit in found):
@@ -7805,105 +7898,62 @@ def _named_files(values: Iterable[Path], folder: Path) -> list[str] | None:
     return files
 
 
-def run_removal(args: argparse.Namespace) -> int:
-    """--remove: the plan, one confirmation, then each file deleted (or
-    moved with --backup), and the record made to say so. 0 done, 1 a file
-    or the record failed, 2 nothing done."""
-    plat, folder = _action_setup(args)
-    if not os.path.isdir(folder):
-        # An unmounted card looks like every file gone: nothing is touched.
-        message = (f"Nothing was removed: {shown_path(folder)} is not there (a card "
-                   "not mounted?).")
-        print(message, file=sys.stderr)
-        EVENTS.emit("removal_plan", platform=plat, folder=str(folder), files=0, bytes=0,
-                    systems=[], dests=[], kept=[], gone=0, backup=bool(args.backup),
-                    message=message)
-        return 2
-    read = load_record(folder)
-    setup, _path, problem = setup_record(plat, folder)
-    if setup is None or read.data is None:
-        why = problem or (f"its install record holds nothing for {display_name(plat)}"
-                          if read.data is not None else
-                          "no install record is beside it, so no file is known to be "
-                          "the installer's")
-        message = f"Nothing was removed from {shown_path(folder)}: {why}."
-        print(message, file=sys.stderr)
-        EVENTS.emit("removal_plan", platform=plat, folder=str(folder), files=0, bytes=0,
-                    systems=[], dests=[], kept=[], gone=0, backup=bool(args.backup),
-                    message=message)
-        return 2
-    manifest = fetch_manifest(plat)
-    every = list(manifest.get("files") or [])
-    omitted = list(manifest.get("omitted_files") or [])
-    known = available_choices(every, omitted)
-    try:
-        systems = resolve_choices(args.system, known["systems"], "system") \
-            if args.system else []
-        cores = resolve_choices(args.core, known["cores"], "core") if args.core else []
-        emulators = resolve_choices(args.emulator, sorted(emulator_names(
-            manifest, every, omitted)), "emulator") if args.emulator else []
-    except ValueError as exc:
-        refuse_name(plat, f"Error: {plat}: {exc}")
-    files = _named_files(args.file or [], folder)
-    if files is None:
-        return 2
-    misplaced = bool(getattr(args, "misplaced", False))
-    if misplaced:
-        # Every setup of the folder protects the places its list reads: one
-        # whose list or record entry cannot be read leaves nothing to tell
-        # its files from copies, so nothing is removed.
-        message = ""
-        if read.dropped:
-            message = (f"Nothing was removed from {shown_path(folder)}: the install "
-                       f"record's entry for {display_name(read.dropped[0])}, which shares "
-                       "the folder, cannot be used, so its files would not be told from "
-                       f"copies. Install {display_name(read.dropped[0])} again, with the "
-                       "choice it was installed with, to rewrite it.")
-        others = []
-        for name in read.data["setups"]:
-            if name == plat or message:
-                continue
-            other, why = _other_setup_list(name)
-            if other is None:
-                message = (f"Nothing was removed from {shown_path(folder)}: the file list "
-                           f"of {display_name(name)}, which shares the folder, is needed "
-                           f"to tell its files from copies, and {why}.")
-            else:
-                others.append(other)
-        if message:
-            print(message, file=sys.stderr)
-            EVENTS.emit("removal_plan", platform=plat, folder=str(folder), files=0, bytes=0,
-                        systems=[], dests=[], kept=[], gone=0, backup=False,
-                        message=message)
-            return 2
-        removal = plan_misplaced_removal(plat, folder, read.data, [manifest, *others])
-    else:
-        removal = plan_removal(plat, folder, read.data, manifest, systems=systems,
-                               cores=cores, emulators=emulators, files=files)
-    size = sum(entry["size"] for entry in removal.remove)
-    whole = not (systems or cores or emulators or files or misplaced)
-    by_hand = _left_by_hand(folder, read.data, not keeps_case(folder)) if whole else []
-    where = f"{shown_path(folder)} for {display_name(plat, manifest)}"
+def _removal_refused(plat: str, folder: Path, message: str, backup: bool) -> int:
+    """A removal that touches nothing: the reason said and sent, exit 2."""
+    print(message, file=sys.stderr)
+    EVENTS.emit("removal_plan", platform=plat, folder=str(folder), files=0, bytes=0,
+                systems=[], dests=[], kept=[], gone=0, backup=backup,
+                message=message)
+    return 2
+
+
+def _misplaced_others(plat: str, folder: Path, dropped: tuple, setups: dict
+                      ) -> tuple[list[dict], str]:
+    """The lists of the other setups of folder, or why nothing is removed."""
+    # Every setup of the folder protects the places its list reads: one
+    # whose list or record entry cannot be read leaves nothing to tell
+    # its files from copies, so nothing is removed.
+    message = ""
+    if dropped:
+        message = (f"Nothing was removed from {shown_path(folder)}: the install "
+                   f"record's entry for {display_name(dropped[0])}, which shares "
+                   "the folder, cannot be used, so its files would not be told from "
+                   f"copies. Install {display_name(dropped[0])} again, with the "
+                   "choice it was installed with, to rewrite it.")
+    others = []
+    for name in setups:
+        if name == plat or message:
+            continue
+        other, why = _other_setup_list(name)
+        if other is None:
+            message = (f"Nothing was removed from {shown_path(folder)}: the file list "
+                       f"of {display_name(name)}, which shares the folder, is needed "
+                       f"to tell its files from copies, and {why}.")
+        else:
+            others.append(other)
+    return others, message
+
+
+def _removal_headline(removal: Removal, where: str, size: int, *, misplaced: bool,
+                      backup: bool) -> str:
+    """The plan's first line: what goes from where, and the space freed."""
     if not removal.remove:
-        headline = (f"No copy in the wrong place of {where}." if misplaced
-                    else f"Nothing to remove from {where}.")
-    elif misplaced:
-        headline = (f"Remove {_plural(len(removal.remove), 'copy')} in the wrong "
-                    f"place of {where}, {format_size(size)} freed. Each is a file "
-                    "RetroBIOS placed where the cores read it.")
-    elif args.backup:
-        headline = (f"Move {_plural(len(removal.remove), 'file')} "
-                    f"({format_size(size)}) from {where} to a backup.")
-    else:
-        headline = (f"Remove {_plural(len(removal.remove), 'file')} from {where}, "
-                    f"{format_size(size)} freed.")
-    EVENTS.emit("removal_plan", platform=plat, folder=str(folder), files=len(removal.remove),
-                bytes=size, systems=removal.systems,
-                dests=[entry["dest"] for entry in removal.remove],
-                kept=[{"dest": item["dest"], "reason": item["reason"]}
-                      for item in removal.kept],
-                gone=len(removal.gone), backup=bool(args.backup), message=headline)
-    print(headline)
+        return (f"No copy in the wrong place of {where}." if misplaced
+                else f"Nothing to remove from {where}.")
+    if misplaced:
+        return (f"Remove {_plural(len(removal.remove), 'copy')} in the wrong "
+                f"place of {where}, {format_size(size)} freed. Each is a file "
+                "RetroBIOS placed where the cores read it.")
+    if backup:
+        return (f"Move {_plural(len(removal.remove), 'file')} "
+                f"({format_size(size)}) from {where} to a backup.")
+    return (f"Remove {_plural(len(removal.remove), 'file')} from {where}, "
+            f"{format_size(size)} freed.")
+
+
+def _print_removal_plan(args: argparse.Namespace, removal: Removal, by_hand: list[str],
+                        misplaced: bool) -> None:
+    """The files a removal takes and those it leaves, as the plan lists them."""
     # The copies are the user's: they are named before any question.
     listed = (removal.remove if args.dry_run or args.verbose
               else removal.remove[:REMOVAL_KEPT_SHOWN] if misplaced else [])
@@ -7926,9 +7976,10 @@ def run_removal(args: argparse.Namespace) -> int:
         if args.verbose:
             for rel in by_hand:
                 print(f"  {rel}")
-    if not removal.remove:
-        # The record keeps what it says until a removal is confirmed.
-        return 2
+
+
+def _removal_answer(args: argparse.Namespace) -> int | None:
+    """The exit code when the plan stops before removing, None to go on."""
     if args.dry_run:
         print("Nothing was removed (--dry-run).")
         return 0
@@ -7942,10 +7993,12 @@ def run_removal(args: argparse.Namespace) -> int:
         if not _answer_yes(question):
             print("Nothing was removed.")
             return QUIT_CODE
-    KEPT.reset()
-    removed, failed, run = remove_files(removal, setup, bool(args.backup))
-    # The copies were never the record's: it stays as it is.
-    problem = "" if misplaced else _record_after_removal(removal, removed)
+    return None
+
+
+def _report_removal(removed: list[dict], failed: list[dict], run: Path | None, *,
+                    misplaced: bool, problem: str) -> int:
+    """What a removal did, said once it is done: 0 done, 1 a file or the record failed."""
     freed = sum(entry["size"] for entry in removed)
     if run is not None:
         print(f"Moved {_plural(len(removed), 'file')} ({format_size(freed)}) to "
@@ -7970,6 +8023,76 @@ def run_removal(args: argparse.Namespace) -> int:
     if problem:
         print(f"The install record could not be updated ({problem}).", file=sys.stderr)
     return 1 if failed or problem else 0
+
+
+def run_removal(args: argparse.Namespace) -> int:
+    """--remove: the plan, one confirmation, then each file deleted (or
+    moved with --backup), and the record made to say so. 0 done, 1 a file
+    or the record failed, 2 nothing done."""
+    plat, folder = _action_setup(args)
+    if not os.path.isdir(folder):
+        # An unmounted card looks like every file gone: nothing is touched.
+        message = (f"Nothing was removed: {shown_path(folder)} is not there (a card "
+                   "not mounted?).")
+        return _removal_refused(plat, folder, message, bool(args.backup))
+    read = load_record(folder)
+    setup, _path, problem = setup_record(plat, folder)
+    if setup is None or read.data is None:
+        why = problem or (f"its install record holds nothing for {display_name(plat)}"
+                          if read.data is not None else
+                          "no install record is beside it, so no file is known to be "
+                          "the installer's")
+        message = f"Nothing was removed from {shown_path(folder)}: {why}."
+        return _removal_refused(plat, folder, message, bool(args.backup))
+    manifest = fetch_manifest(plat)
+    every = list(manifest.get("files") or [])
+    omitted = list(manifest.get("omitted_files") or [])
+    known = available_choices(every, omitted)
+    try:
+        systems = resolve_choices(args.system, known["systems"], "system") \
+            if args.system else []
+        cores = resolve_choices(args.core, known["cores"], "core") if args.core else []
+        emulators = resolve_choices(args.emulator, sorted(emulator_names(
+            manifest, every, omitted)), "emulator") if args.emulator else []
+    except ValueError as exc:
+        refuse_name(plat, f"Error: {plat}: {exc}")
+    files = _named_files(args.file or [], folder)
+    if files is None:
+        return 2
+    misplaced = bool(getattr(args, "misplaced", False))
+    if misplaced:
+        others, message = _misplaced_others(plat, folder, read.dropped, read.data["setups"])
+        if message:
+            return _removal_refused(plat, folder, message, False)
+        removal = plan_misplaced_removal(plat, folder, read.data, [manifest, *others])
+    else:
+        removal = plan_removal(plat, folder, read.data, manifest, systems=systems,
+                               cores=cores, emulators=emulators, files=files)
+    size = sum(entry["size"] for entry in removal.remove)
+    whole = not (systems or cores or emulators or files or misplaced)
+    by_hand = _left_by_hand(folder, read.data, not keeps_case(folder)) if whole else []
+    where = f"{shown_path(folder)} for {display_name(plat, manifest)}"
+    headline = _removal_headline(removal, where, size, misplaced=misplaced,
+                                 backup=bool(args.backup))
+    EVENTS.emit("removal_plan", platform=plat, folder=str(folder), files=len(removal.remove),
+                bytes=size, systems=removal.systems,
+                dests=[entry["dest"] for entry in removal.remove],
+                kept=[{"dest": item["dest"], "reason": item["reason"]}
+                      for item in removal.kept],
+                gone=len(removal.gone), backup=bool(args.backup), message=headline)
+    print(headline)
+    _print_removal_plan(args, removal, by_hand, misplaced)
+    if not removal.remove:
+        # The record keeps what it says until a removal is confirmed.
+        return 2
+    stop = _removal_answer(args)
+    if stop is not None:
+        return stop
+    KEPT.reset()
+    removed, failed, run = remove_files(removal, setup, bool(args.backup))
+    # The copies were never the record's: it stays as it is.
+    problem = "" if misplaced else _record_after_removal(removal, removed)
+    return _report_removal(removed, failed, run, misplaced=misplaced, problem=problem)
 
 
 # The files a removal leaves named one by one by default: past this, a
