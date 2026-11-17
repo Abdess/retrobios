@@ -17,28 +17,16 @@ import re
 import urllib.error
 import urllib.request
 
-try:
-    from .base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        fetch_branch_head,
-        fetch_github_latest_version,
-        github_headers,
-        requirement_entry,
-    )
-    from .emudeck_launchers import emulator_of_script, extract_launchers
-    from .shell_launchers import RepoTree
-except ImportError:
-    from base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        fetch_branch_head,
-        fetch_github_latest_version,
-        github_headers,
-        requirement_entry,
-    )
-    from emudeck_launchers import emulator_of_script, extract_launchers
-    from shell_launchers import RepoTree
+from .base_scraper import (
+    BaseScraper,
+    BiosRequirement,
+    fetch_branch_head,
+    fetch_github_latest_version,
+    github_headers,
+    requirement_entry,
+)
+from .emudeck_launchers import emulator_of_script, extract_launchers
+from .shell_launchers import RepoTree
 
 PLATFORM_NAME = "emudeck"
 
@@ -327,7 +315,7 @@ class Scraper(BaseScraper):
 
     def _parse_csv_bios(self, csv_text: str) -> list[dict]:
         """Parse BIOS file info from a cheat sheet CSV."""
-        entries = []
+        entries: list[dict] = []
         if not csv_text.strip():
             return entries
         reader = csv.DictReader(io.StringIO(csv_text))
@@ -414,17 +402,17 @@ class Scraper(BaseScraper):
                     )
                 )
 
-            for md5 in system_hashes:
-                requirements.append(
-                    BiosRequirement(
-                        name=f"{system}:{md5}",
-                        system=system,
-                        md5=md5,
-                        destination="",
-                        required=True,
-                        native_id=system,
-                    )
+            requirements.extend(
+                BiosRequirement(
+                    name=f"{system}:{md5}",
+                    system=system,
+                    md5=md5,
+                    destination="",
+                    required=True,
+                    native_id=system,
                 )
+                for md5 in system_hashes
+            )
 
         for sheet in CSV_SHEETS:
             csv_text = self._fetch_csv(sheet)

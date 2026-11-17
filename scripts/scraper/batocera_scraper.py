@@ -333,18 +333,8 @@ def _resolve_truncated_md5(md5: str, md5_index: dict[str, str]) -> str:
     return md5
 
 
-def extract_systems_dict(raw: str) -> dict:
-    """The `systems` dict of a batocera-systems style script.
-
-    Read with ast.literal_eval, never executed: the text is the platform's
-    code. A key written twice keeps its later value, as it does when Python
-    runs the script.
-    """
-    match = re.search(r"^systems\s*=\s*\{", raw, re.MULTILINE)
-    if not match:
-        raise ValueError("no 'systems = {' in the script")
-
-    start = match.start() + raw[match.start() :].index("{")
+def _closing_brace(raw: str, start: int) -> int:
+    """Index of the brace closing the one at `start`, past strings and comments."""
     depth = 0
     i = start
     in_str = False
@@ -370,35 +360,51 @@ def extract_systems_dict(raw: str) -> dict:
             while i < len(raw) and raw[i] != "\n":
                 i += 1
         i += 1
+    return i
 
-    dict_str = raw[start : i + 1]
 
-    lines = []
-    for line in dict_str.split("\n"):
-        in_string = False
-        string_char = None
-        clean = []
-        j = 0
-        while j < len(line):
-            ch = line[j]
-            if ch == "\\" and j + 1 < len(line):
-                clean.append(ch)
-                clean.append(line[j + 1])
-                j += 2
-                continue
-            if ch in ('"', "'") and not in_string:
-                in_string = True
-                string_char = ch
-                clean.append(ch)
-            elif ch == string_char and in_string:
-                in_string = False
-                clean.append(ch)
-            elif ch == "#" and not in_string:
-                break
-            else:
-                clean.append(ch)
-            j += 1
-        lines.append("".join(clean))
+def _strip_comment(line: str) -> str:
+    """The line without a trailing # comment, strings kept whole."""
+    in_string = False
+    string_char = None
+    clean = []
+    j = 0
+    while j < len(line):
+        ch = line[j]
+        if ch == "\\" and j + 1 < len(line):
+            clean.append(ch)
+            clean.append(line[j + 1])
+            j += 2
+            continue
+        if ch in ('"', "'") and not in_string:
+            in_string = True
+            string_char = ch
+            clean.append(ch)
+        elif ch == string_char and in_string:
+            in_string = False
+            clean.append(ch)
+        elif ch == "#" and not in_string:
+            break
+        else:
+            clean.append(ch)
+        j += 1
+    return "".join(clean)
+
+
+def extract_systems_dict(raw: str) -> dict:
+    """The `systems` dict of a batocera-systems style script.
+
+    Read with ast.literal_eval, never executed: the text is the platform's
+    code. A key written twice keeps its later value, as it does when Python
+    runs the script.
+    """
+    match = re.search(r"^systems\s*=\s*\{", raw, re.MULTILINE)
+    if not match:
+        raise ValueError("no 'systems = {' in the script")
+
+    start = match.start() + raw[match.start() :].index("{")
+    dict_str = raw[start : _closing_brace(raw, start) + 1]
+    lines = [_strip_comment(line) for line in dict_str.split("\n")]
 
     clean_dict_str = "\n".join(lines)
 

@@ -21,28 +21,16 @@ import re
 from collections.abc import Callable
 from typing import Any
 
-try:
-    from .configgen_launchers import Launcher, Source
-    from .shell_launchers import (
-        LauncherPatternMissing,
-        Script,
-        config_placement,
-        describe_keys,
-        evidence_fields,
-        settings,
-        source_ref,
-    )
-except ImportError:
-    from configgen_launchers import Launcher, Source  # type: ignore[no-redef]
-    from shell_launchers import (  # type: ignore[no-redef]
-        LauncherPatternMissing,
-        Script,
-        config_placement,
-        describe_keys,
-        evidence_fields,
-        settings,
-        source_ref,
-    )
+from .configgen_launchers import Launcher, Source
+from .shell_launchers import (
+    LauncherPatternMissing,
+    Script,
+    config_placement,
+    describe_keys,
+    evidence_fields,
+    settings,
+    source_ref,
+)
 
 BIOS = "/storage/roms/bios"
 RUNEMU = "packages/amberelec/sources/scripts/runemu.py"

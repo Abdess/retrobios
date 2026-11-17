@@ -24,22 +24,15 @@ from datetime import datetime, timezone
 import yaml
 
 from . import BaseTargetScraper
+from ..amberelec_scraper import BUILDS_OF, ES_SYSTEMS_TEMPLATE, RUNNERS
+from ..base_scraper import fetch_bytes
+from ..batocera_scraper import _not_cores
+from ..es_emulators import es_cores, xml_systems
 
 PLATFORM_NAME = "amberelec"
 
 RAW_BASE = "https://raw.githubusercontent.com/AmberELEC/AmberELEC/{ref}"
 META_MK = "packages/amberelec/package.mk"
-
-try:
-    from ..amberelec_scraper import BUILDS_OF, ES_SYSTEMS_TEMPLATE, RUNNERS
-    from ..base_scraper import fetch_bytes
-    from ..batocera_scraper import _not_cores
-    from ..es_emulators import es_cores, xml_systems
-except ImportError:
-    from scraper.amberelec_scraper import BUILDS_OF, ES_SYSTEMS_TEMPLATE, RUNNERS
-    from scraper.base_scraper import fetch_bytes
-    from scraper.batocera_scraper import _not_cores
-    from scraper.es_emulators import es_cores, xml_systems
 
 _DEVICE_RE = re.compile(
     r"^(\w+):\n\tDEVICE=(\w+) ARCH=(\w+) \./scripts/build_distro$", re.MULTILINE

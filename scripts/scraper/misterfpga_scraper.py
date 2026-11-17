@@ -28,22 +28,13 @@ import urllib.request
 import zipfile
 from datetime import datetime, timezone
 
-try:
-    from .base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        _read_limited,
-        fetch_branch_head,
-        requirement_entry,
-    )
-except ImportError:
-    from base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        _read_limited,
-        fetch_branch_head,
-        requirement_entry,
-    )
+from .base_scraper import (
+    BaseScraper,
+    BiosRequirement,
+    _read_limited,
+    fetch_branch_head,
+    requirement_entry,
+)
 
 PLATFORM_NAME = "misterfpga"
 
@@ -238,10 +229,7 @@ class Scraper(BaseScraper):
 
 def main() -> None:
     """Entry point."""
-    try:
-        from .base_scraper import scraper_cli
-    except ImportError:
-        from base_scraper import scraper_cli
+    from .base_scraper import scraper_cli
 
     scraper_cli(Scraper, "Scrape MiSTer FPGA BIOS requirements")
 

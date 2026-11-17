@@ -74,7 +74,7 @@ def discover_target_scrapers() -> dict[str, type]:
     if _scrapers:
         return _scrapers
     package_dir = Path(__file__).parent
-    for finder, name, ispkg in pkgutil.iter_modules([str(package_dir)]):
+    for _finder, name, _ispkg in pkgutil.iter_modules([str(package_dir)]):
         if not name.endswith("_targets_scraper"):
             continue
         module = importlib.import_module(f".{name}", package=__package__)

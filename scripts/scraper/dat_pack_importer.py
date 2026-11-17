@@ -77,7 +77,7 @@ def import_pack(source: str, pack: Path) -> tuple[dict, list[dict], int]:
     dats = {}
     entries = []
     skipped = 0
-    for member, content in _iter_dat_contents(pack):
+    for _member, content in _iter_dat_contents(pack):
         try:
             dat = parse_logiqx(content)
         except (ValueError, SyntaxError):

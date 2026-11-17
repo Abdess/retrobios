@@ -31,7 +31,6 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import io
 import json
 import os
 import re
@@ -41,8 +40,10 @@ import urllib.parse
 import urllib.request
 import zipfile
 from collections.abc import Callable, Iterator
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import IO
 
 from ..common import (
     list_registered_platforms,
@@ -62,9 +63,9 @@ DEFAULT_OUTPUT = "recipes/{source}.json"
 def relevant_archives(emulators_dir: str, platforms_dir: str) -> set[str]:
     """Archive names any profile or platform refers to."""
     names: set[str] = set()
-    for _profile_name, profile in load_emulator_profiles(
+    for profile in load_emulator_profiles(
         emulators_dir, skip_aliases=False
-    ).items():
+    ).values():
         for entry in profile.get("files", []) or []:
             name = entry.get("name", "")
             if name.endswith(".zip"):
@@ -283,7 +284,7 @@ def _machine_roms(blob: bytes) -> list[dict]:
 
 
 def _scan_listxml(
-    stream: io.BufferedIOBase,
+    stream: IO[bytes],
     selector: Callable[[str], bool],
     targets: Targets | None = None,
 ) -> dict[str, tuple[str | None, list[dict]]]:
@@ -326,7 +327,7 @@ def _scan_listxml(
 
 
 def listxml_entries(
-    open_stream: Callable[[], io.BufferedIOBase],
+    open_stream: Callable[[], IO[bytes]],
     label: str,
     keep: set[str] | None,
     targets: Targets | None = None,
@@ -575,6 +576,8 @@ def fetch_pack(
     if not sha:
         raise BlobMismatchError(f"libretro/FBNeo has no revision {tag}")
     listing = _api_json(f"{FBNEO_API}/contents/dats?ref={sha}")
+    if not isinstance(listing, list):
+        raise BlobMismatchError(f"libretro/FBNeo lists no dats at {sha}")
     target = cache_dir / "fbneo-dats"
     target.mkdir(parents=True, exist_ok=True)
     blobs: dict[str, str] = {}
@@ -616,21 +619,21 @@ def _is_listxml(pack: Path) -> bool:
         return b"<!ELEMENT mame" in handle.read(4096)
 
 
-def _listxml_opener(pack: Path) -> Callable[[], io.BufferedIOBase]:
+def _listxml_opener(pack: Path) -> Callable[[], IO[bytes]]:
     """A callable giving a fresh byte stream over the listxml document."""
     if pack.suffix.lower() == ".zip":
-        def opener() -> zipfile.ZipExtFile:
+        def opener() -> IO[bytes]:
             archive = zipfile.ZipFile(pack)
             name = next(n for n in archive.namelist() if n.lower().endswith(".xml"))
-            stream = archive.open(name)
-            stream.close_archive = archive  # keep the archive alive
-            return stream
+            # The member keeps the archive alive: its shared file closes
+            # through the archive's own _fpclose.
+            return archive.open(name)
 
         return opener
     return lambda: pack.open("rb")
 
 
-def main() -> int:
+def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(allow_abbrev=False, description=__doc__)
     parser.add_argument(
         "--source", choices=SOURCES, required=True,
@@ -677,6 +680,76 @@ def main() -> int:
         "--dry-run", action="store_true",
         help="print what would change and write nothing",
     )
+    return parser
+
+
+@dataclass(frozen=True)
+class _Selection:
+    """Which sets a snapshot keeps: None everywhere keeps every set."""
+
+    keep: set[str] | None = None
+    targets: Targets | None = None
+    by_members: ByMembers | None = None
+
+
+def _selection(args: argparse.Namespace) -> _Selection:
+    if args.all:
+        return _Selection()
+    held, by_members = collection_archives(args.db)
+    keep = relevant_archives(args.emulators_dir, args.platforms_dir) | held
+    targets = catalog_targets(args.provenance_dir, args.db)
+    return _Selection(keep, targets, by_members)
+
+
+def _import_listxml(pack: Path, args: argparse.Namespace, output: str, chosen: _Selection) -> int:
+    label = f"MAME {pack.stem.replace('lx', '')}"
+    entries = listxml_entries(
+        _listxml_opener(pack), label, chosen.keep, chosen.targets, chosen.by_members
+    )
+    dats = {label: pack.stem}
+    print(f"  {label}: {len(entries)} sets retenus")
+    members = sum(len(entry["members"]) for entry in entries)
+    print(f"{len(entries)} recettes, {members} membres, depuis 1 listxml")
+    if args.dry_run:
+        return 0
+    changed = merge_snapshot(output, args.source, dats, entries)
+    print(f"{'Wrote' if changed else 'Unchanged'} {output}")
+    return 0
+
+
+def _dat_recipes(
+    pack: Path, revision: str, chosen: _Selection
+) -> tuple[dict[str, str], list[dict]]:
+    """Recipes of every Logiqx DAT a pack holds, and each DAT's version."""
+    dats: dict[str, str] = {}
+    entries: list[dict] = []
+    skipped = 0
+    for member, content in _iter_dat_contents(pack):
+        try:
+            dat = parse_logiqx(content)
+        except (ValueError, SyntaxError) as exc:
+            print(f"  Skipped {member}: {exc}", file=sys.stderr)
+            skipped += 1
+            continue
+        if not dat.roms:
+            skipped += 1
+            continue
+        if revision:
+            dat.name = f"{dat.name or member} @ {revision}"
+        found = recipe_entries(dat, chosen.keep, chosen.targets, chosen.by_members)
+        if not found:
+            continue
+        dats[dat.name or member] = dat.version
+        entries.extend(found)
+        print(f"  {dat.name or member}: {len(found)} sets retenus")
+
+    if skipped:
+        print(f"  {skipped} fichier(s) ignore(s) (non-Logiqx ou vides)")
+    return dats, entries
+
+
+def main() -> int:
+    parser = _parser()
     args = parser.parse_args()
 
     blobs: dict[str, str] = {}
@@ -708,54 +781,12 @@ def main() -> int:
 
     output = args.output or DEFAULT_OUTPUT.format(source=args.source)
     Path(output).parent.mkdir(parents=True, exist_ok=True)
-    keep: set[str] | None = None
-    targets = None
-    by_members: ByMembers | None = None
-    if not args.all:
-        held, by_members = collection_archives(args.db)
-        keep = relevant_archives(args.emulators_dir, args.platforms_dir) | held
-        targets = catalog_targets(args.provenance_dir, args.db)
-
-    dats: dict[str, str] = {}
-    entries: list[dict] = []
-    skipped = 0
+    chosen = _selection(args)
 
     if _is_listxml(pack):
-        label = f"MAME {pack.stem.replace('lx', '')}"
-        entries = listxml_entries(
-            _listxml_opener(pack), label, keep, targets, by_members
-        )
-        dats[label] = pack.stem
-        print(f"  {label}: {len(entries)} sets retenus")
-        members = sum(len(entry["members"]) for entry in entries)
-        print(f"{len(entries)} recettes, {members} membres, depuis 1 listxml")
-        if args.dry_run:
-            return 0
-        changed = merge_snapshot(output, args.source, dats, entries)
-        print(f"{'Wrote' if changed else 'Unchanged'} {output}")
-        return 0
+        return _import_listxml(pack, args, output, chosen)
 
-    for member, content in _iter_dat_contents(pack):
-        try:
-            dat = parse_logiqx(content)
-        except (ValueError, SyntaxError) as exc:
-            print(f"  Skipped {member}: {exc}", file=sys.stderr)
-            skipped += 1
-            continue
-        if not dat.roms:
-            skipped += 1
-            continue
-        if revision:
-            dat.name = f"{dat.name or member} @ {revision}"
-        found = recipe_entries(dat, keep, targets, by_members)
-        if not found:
-            continue
-        dats[dat.name or member] = dat.version
-        entries.extend(found)
-        print(f"  {dat.name or member}: {len(found)} sets retenus")
-
-    if skipped:
-        print(f"  {skipped} fichier(s) ignore(s) (non-Logiqx ou vides)")
+    dats, entries = _dat_recipes(pack, revision, chosen)
     members = sum(len(entry["members"]) for entry in entries)
     print(f"{len(entries)} recettes, {members} membres, depuis {len(dats)} DAT")
 

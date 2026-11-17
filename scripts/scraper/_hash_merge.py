@@ -461,6 +461,82 @@ def _patch_scalar(text: str, key: str, value: str) -> str:
     )
 
 
+def _owned_end(lines: list[str], start_line: int) -> int:
+    """The last "owned" line of the entry starting at start_line.
+
+    Owned = indented with 4+ spaces (field lines of this entry).
+    """
+    last_owned = start_line
+    for j in range(start_line + 1, len(lines)):
+        stripped = lines[j].strip()
+        if not stripped:
+            break  # blank line = end of entry
+        if stripped.startswith("#"):
+            break  # comment = belongs to next entry
+        if re.match(r"^  - ", lines[j]):
+            break  # next list item
+        if re.match(r"^    ", lines[j]) or re.match(r"^  \w", lines[j]):
+            last_owned = j
+        else:
+            break
+    return last_owned
+
+
+def _patch_source_ref(lines: list[str], start_line: int, last_owned: int, source_ref: str) -> int:
+    """Patch source_ref in-place, or add it. Returns the new last owned line."""
+    for j in range(start_line + 1, last_owned + 1):
+        if re.match(r"^    source_ref:", lines[j]):
+            lines[j] = f'    source_ref: "{source_ref}"'
+            return last_owned
+    lines.insert(last_owned + 1, f'    source_ref: "{source_ref}"')
+    return last_owned + 1
+
+
+def _drop_contents(lines: list[str], start_line: int, last_owned: int) -> int:
+    """Remove an existing contents block. Returns the new last owned line."""
+    contents_start = None
+    contents_end = None
+    for j in range(start_line + 1, last_owned + 1):
+        if re.match(r"^    contents:", lines[j]):
+            contents_start = j
+        elif contents_start is not None:
+            if re.match(r"^      ", lines[j]):
+                contents_end = j
+            else:
+                break
+    if contents_start is None:
+        return last_owned
+    if contents_end is None:
+        contents_end = contents_start
+    del lines[contents_start : contents_end + 1]
+    return last_owned - (contents_end - contents_start + 1)
+
+
+def _patch_entry(lines: list[str], start_line: int, fe: dict) -> None:
+    contents = fe.get("contents", [])
+    source_ref = fe.get("source_ref", "")
+
+    last_owned = _owned_end(lines, start_line)
+
+    if source_ref:
+        last_owned = _patch_source_ref(lines, start_line, last_owned, source_ref)
+
+    # The source settles required for a set the machine runs without
+    if "required" in fe:
+        for j in range(start_line + 1, last_owned + 1):
+            if re.match(r"^    required:", lines[j]):
+                lines[j] = f"    required: {str(fe['required']).lower()}"
+                break
+
+    last_owned = _drop_contents(lines, start_line, last_owned)
+
+    # Insert new contents after last owned line
+    if contents:
+        new_lines = _format_contents(contents).split("\n")
+        for k, cl in enumerate(new_lines):
+            lines.insert(last_owned + 1 + k, cl)
+
+
 def _patch_bios_entries(text: str, files: list[dict]) -> str:
     """Patch contents, source_ref and required of bios_zip entries in-place.
 
@@ -469,8 +545,6 @@ def _patch_bios_entries(text: str, files: list[dict]) -> str:
     lines that follow (4+ spaces), stopping at blank lines, comments,
     or the next `- name:`.
     """
-    import re
-
     patches: dict[str, dict] = {}
     for fe in files:
         if fe.get("category") != "bios_zip":
@@ -491,71 +565,8 @@ def _patch_bios_entries(text: str, files: list[dict]) -> str:
     # Process in reverse so line insertions don't shift indices
     for idx in range(len(entry_starts) - 1, -1, -1):
         start_line, entry_name = entry_starts[idx]
-        if entry_name not in patches:
-            continue
-
-        fe = patches[entry_name]
-        contents = fe.get("contents", [])
-        source_ref = fe.get("source_ref", "")
-
-        # Find the last "owned" line of this entry
-        # Owned = indented with 4+ spaces (field lines of this entry)
-        last_owned = start_line
-        for j in range(start_line + 1, len(lines)):
-            stripped = lines[j].strip()
-            if not stripped:
-                break  # blank line = end of entry
-            if stripped.startswith("#"):
-                break  # comment = belongs to next entry
-            if re.match(r"^  - ", lines[j]):
-                break  # next list item
-            if re.match(r"^    ", lines[j]) or re.match(r"^  \w", lines[j]):
-                last_owned = j
-            else:
-                break
-
-        # Patch source_ref in-place
-        if source_ref:
-            found_sr = False
-            for j in range(start_line + 1, last_owned + 1):
-                if re.match(r"^    source_ref:", lines[j]):
-                    lines[j] = f'    source_ref: "{source_ref}"'
-                    found_sr = True
-                    break
-            if not found_sr:
-                lines.insert(last_owned + 1, f'    source_ref: "{source_ref}"')
-                last_owned += 1
-
-        # The source settles required for a set the machine runs without
-        if "required" in fe:
-            for j in range(start_line + 1, last_owned + 1):
-                if re.match(r"^    required:", lines[j]):
-                    lines[j] = f"    required: {str(fe['required']).lower()}"
-                    break
-
-        # Remove existing contents block if present
-        contents_start = None
-        contents_end = None
-        for j in range(start_line + 1, last_owned + 1):
-            if re.match(r"^    contents:", lines[j]):
-                contents_start = j
-            elif contents_start is not None:
-                if re.match(r"^      ", lines[j]):
-                    contents_end = j
-                else:
-                    break
-        if contents_end is None and contents_start is not None:
-            contents_end = contents_start
-
-        if contents_start is not None:
-            del lines[contents_start : contents_end + 1]
-            last_owned -= contents_end - contents_start + 1
-
-        # Insert new contents after last owned line
-        if contents:
-            new_lines = _format_contents(contents).split("\n")
-            for k, cl in enumerate(new_lines):
-                lines.insert(last_owned + 1 + k, cl)
+        if entry_name in patches:
+            _patch_entry(lines, start_line, patches[entry_name])
 
     return "\n".join(lines)
 

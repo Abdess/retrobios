@@ -61,7 +61,7 @@ def parse_dat(content: str) -> list[DatRom]:
                 continue
             current_system = value
 
-        elif stripped.startswith("rom (") or stripped.startswith("rom("):
+        elif stripped.startswith(("rom (", "rom(")):
             rom = _parse_rom_line(stripped, current_system)
             if rom:
                 roms.append(rom)
