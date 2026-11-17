@@ -5,6 +5,8 @@ capping a real romset: the largest pack is already several gigabytes."""
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 import functools
 import hashlib
 import os
@@ -235,6 +237,109 @@ MAX_ZIP_COMPRESSION_RATIO = 1_100
 _BOUNDED_RATIO_METHODS = (zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED)
 
 
+@dataclass(frozen=True)
+class _ZipLimits:
+    """The resource bounds safe_extract_zip enforces."""
+
+    members: int
+    member_size: int
+    total_size: int
+    compression_ratio: int
+
+
+def _member_path(member: zipfile.ZipInfo, seen: set[str]) -> tuple[str, list[str], int]:
+    """(name, path components, mode) of a member whose path and type are safe."""
+    # Archives written on Windows store a backslash separator. It is a
+    # separator, not a filename character, so it is normalized before
+    # the component checks rather than rejected.
+    name = member.filename.replace("\\", "/")
+    if not name or "\x00" in name:
+        raise ValueError(f"Unsafe ZIP member name: {member.filename!r}")
+    if name.startswith("/") or re.match(r"^[A-Za-z]:", name):
+        raise ValueError(f"Absolute ZIP member path: {name}")
+    parts = [part for part in name.split("/") if part]
+    if any(part in (".", "..") for part in parts):
+        raise ValueError(f"ZIP traversal detected: {name}")
+    normalized = "/".join(parts)
+    if normalized in seen:
+        raise ValueError(f"Duplicate ZIP member path: {name}")
+    seen.add(normalized)
+
+    mode = (member.external_attr >> 16) & 0xFFFF
+    file_type = stat.S_IFMT(mode)
+    if file_type not in (0, stat.S_IFREG, stat.S_IFDIR):
+        raise ValueError(f"ZIP link or special file rejected: {name}")
+    if member.flag_bits & 0x1:
+        raise ValueError(f"Encrypted ZIP member rejected: {name}")
+    return name, parts, mode
+
+
+def _check_member_size(
+    member: zipfile.ZipInfo, name: str, declared_total: int, limits: _ZipLimits,
+) -> int:
+    """The declared total with this member, after its size limits are checked."""
+    if member.file_size > limits.member_size:
+        raise ValueError(
+            f"ZIP member {name} is {member.file_size} bytes; "
+            f"limit is {limits.member_size}"
+        )
+    declared_total += member.file_size
+    if declared_total > limits.total_size:
+        raise ValueError(
+            f"ZIP expands to {declared_total} bytes, limit is {limits.total_size}"
+        )
+    if member.file_size and member.compress_type in _BOUNDED_RATIO_METHODS:
+        if member.compress_size == 0:
+            raise ValueError(f"Invalid compression size for ZIP member: {name}")
+        if member.file_size / member.compress_size > limits.compression_ratio:
+            raise ValueError(f"Suspicious compression ratio for ZIP member: {name}")
+    return declared_total
+
+
+def _install_member(
+    zf: zipfile.ZipFile,
+    member: zipfile.ZipInfo,
+    name: str,
+    target: str,
+    mode: int,
+    umask: int,
+    max_member_size: int,
+) -> None:
+    """Stream a member to a temporary sibling, check it, then move it in place."""
+    os.makedirs(os.path.dirname(target), exist_ok=True)
+    tmp_path = ""
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="wb", dir=os.path.dirname(target), delete=False
+        ) as tmp_file:
+            tmp_path = tmp_file.name
+            actual_size = 0
+            with zf.open(member, "r") as source:
+                while True:
+                    chunk = source.read(1024 * 1024)
+                    if not chunk:
+                        break
+                    actual_size += len(chunk)
+                    if actual_size > member.file_size or actual_size > max_member_size:
+                        raise ValueError(
+                            f"ZIP member exceeded declared or configured size: {name}"
+                        )
+                    tmp_file.write(chunk)
+        if actual_size != member.file_size:
+            raise ValueError(
+                f"ZIP member size mismatch for {name}: "
+                f"{actual_size} != {member.file_size}"
+            )
+        # The member's own mode, else what a plain open() gives. The
+        # temporary file is private and would keep 0600 otherwise.
+        os.chmod(tmp_path, ((mode & 0o777) or 0o666) & ~umask)
+        os.replace(tmp_path, target)
+        tmp_path = ""
+    finally:
+        if tmp_path and os.path.exists(tmp_path):
+            os.unlink(tmp_path)
+
+
 def safe_extract_zip(
     zip_path: str,
     dest_dir: str,
@@ -249,56 +354,22 @@ def safe_extract_zip(
     Files are streamed to a temporary sibling and atomically installed only
     after their declared length and CRC have been checked by ``zipfile``.
     """
+    limits = _ZipLimits(max_members, max_member_size, max_total_size, max_compression_ratio)
     dest = os.path.realpath(dest_dir)
     os.makedirs(dest, exist_ok=True)
     umask = process_umask()
     with zipfile.ZipFile(zip_path, "r") as zf:
         members = zf.infolist()
-        if len(members) > max_members:
+        if len(members) > limits.members:
             raise ValueError(
-                f"ZIP has {len(members)} members, limit is {max_members}"
+                f"ZIP has {len(members)} members, limit is {limits.members}"
             )
 
         declared_total = 0
         seen: set[str] = set()
         for member in members:
-            # Archives written on Windows store a backslash separator. It is a
-            # separator, not a filename character, so it is normalized before
-            # the component checks rather than rejected.
-            name = member.filename.replace("\\", "/")
-            if not name or "\x00" in name:
-                raise ValueError(f"Unsafe ZIP member name: {member.filename!r}")
-            if name.startswith("/") or re.match(r"^[A-Za-z]:", name):
-                raise ValueError(f"Absolute ZIP member path: {name}")
-            parts = [part for part in name.split("/") if part]
-            if any(part in (".", "..") for part in parts):
-                raise ValueError(f"ZIP traversal detected: {name}")
-            normalized = "/".join(parts)
-            if normalized in seen:
-                raise ValueError(f"Duplicate ZIP member path: {name}")
-            seen.add(normalized)
-
-            mode = (member.external_attr >> 16) & 0xFFFF
-            file_type = stat.S_IFMT(mode)
-            if file_type not in (0, stat.S_IFREG, stat.S_IFDIR):
-                raise ValueError(f"ZIP link or special file rejected: {name}")
-            if member.flag_bits & 0x1:
-                raise ValueError(f"Encrypted ZIP member rejected: {name}")
-            if member.file_size > max_member_size:
-                raise ValueError(
-                    f"ZIP member {name} is {member.file_size} bytes; "
-                    f"limit is {max_member_size}"
-                )
-            declared_total += member.file_size
-            if declared_total > max_total_size:
-                raise ValueError(
-                    f"ZIP expands to {declared_total} bytes, limit is {max_total_size}"
-                )
-            if member.file_size and member.compress_type in _BOUNDED_RATIO_METHODS:
-                if member.compress_size == 0:
-                    raise ValueError(f"Invalid compression size for ZIP member: {name}")
-                if member.file_size / member.compress_size > max_compression_ratio:
-                    raise ValueError(f"Suspicious compression ratio for ZIP member: {name}")
+            name, parts, mode = _member_path(member, seen)
+            declared_total = _check_member_size(member, name, declared_total, limits)
 
             target = os.path.realpath(os.path.join(dest, *parts))
             if not target.startswith(dest + os.sep) and target != dest:
@@ -306,36 +377,4 @@ def safe_extract_zip(
             if member.is_dir() or name.endswith("/"):
                 os.makedirs(target, exist_ok=True)
                 continue
-
-            os.makedirs(os.path.dirname(target), exist_ok=True)
-            tmp_path = ""
-            try:
-                with tempfile.NamedTemporaryFile(
-                    mode="wb", dir=os.path.dirname(target), delete=False
-                ) as tmp_file:
-                    tmp_path = tmp_file.name
-                    actual_size = 0
-                    with zf.open(member, "r") as source:
-                        while True:
-                            chunk = source.read(1024 * 1024)
-                            if not chunk:
-                                break
-                            actual_size += len(chunk)
-                            if actual_size > member.file_size or actual_size > max_member_size:
-                                raise ValueError(
-                                    f"ZIP member exceeded declared or configured size: {name}"
-                                )
-                            tmp_file.write(chunk)
-                if actual_size != member.file_size:
-                    raise ValueError(
-                        f"ZIP member size mismatch for {name}: "
-                        f"{actual_size} != {member.file_size}"
-                    )
-                # The member's own mode, else what a plain open() gives. The
-                # temporary file is private and would keep 0600 otherwise.
-                os.chmod(tmp_path, ((mode & 0o777) or 0o666) & ~umask)
-                os.replace(tmp_path, target)
-                tmp_path = ""
-            finally:
-                if tmp_path and os.path.exists(tmp_path):
-                    os.unlink(tmp_path)
+            _install_member(zf, member, name, target, mode, umask, limits.member_size)
