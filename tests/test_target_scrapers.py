@@ -33,6 +33,57 @@ def _refuse(*_args, **_kwargs):
     raise urllib.error.HTTPError("https://api.github.com/x", 403, "rate limited", {}, None)
 
 
+class _Body:
+    def __init__(self, body: str | bytes):
+        self.body = body.encode() if isinstance(body, str) else body
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+    def read(self):
+        return self.body
+
+
+def _serve_batocera(boards: list[str], refuse_board: bool):
+    def urlopen(request, *_a, **_k):
+        url = request.full_url
+        if "/tags" in url:
+            return _Body(b'[{"name": "batocera-43"}]')
+        if "/contents/configs" in url:
+            return _Body(json.dumps([{"name": b} for b in boards]).encode())
+        if "/contents/buildroot" in url:
+            return _Body(b'{"sha": "0123abc"}')
+        if url.endswith("x86_wow64.board"):
+            # Builds the 32-bit Wine package, not an image.
+            return _Body(b"BR2_PACKAGE_BATOCERA_TARGET_X86=y\n")
+        if url.endswith(".board"):
+            if refuse_board:
+                _refuse()
+            return _Body(b"BR2_PACKAGE_BATOCERA_TARGET_X86_64=y\n"
+                         b"BR2_PACKAGE_BATOCERA_SYSTEM=y\n")
+        if "/git/trees/" in url:
+            return _Body(b'{"tree": [], "truncated": false}')
+        if url.endswith("retroarch.mk"):
+            return _Body(b"RETROARCH_CONF_OPTS = --enable-networking\n")
+        if url.startswith("https://raw.githubusercontent.com/") and url.count("/") == 6:
+            return _Body(b'source "$BR2_EXTERNAL_BATOCERA_PATH/'
+                         b'package/batocera/core/batocera-system/Config.in"\n')
+        if url.endswith("Config.in"):
+            return _Body(b"config BR2_PACKAGE_BATOCERA_SYSTEM\n"
+                         b"\tselect BR2_PACKAGE_MGBA\n\n"
+                         b"config BR2_TARGET_BATOCERA_IMAGES\n\tstring \"x\"\n"
+                         b"\tdefault \"x86_64\" if BR2_PACKAGE_BATOCERA_TARGET_X86_64\n")
+        return _Body(
+            b"gba:\n  emulators:\n    libretro:\n"
+            b"      mgba: {requireAnyOf: [BR2_PACKAGE_MGBA]}\n"
+        )
+
+    return urlopen
+
+
 class FailedRequestsStopTheScrape(unittest.TestCase):
     def test_every_scraper_raises(self):
         for module in (
@@ -66,68 +117,18 @@ class FailedRequestsStopTheScrape(unittest.TestCase):
     def test_batocera_needs_its_boards(self):
         """No board listed, or one board unreadable, used to print a warning
         and write the targets file without those boards."""
-
-        class _Body:
-            def __init__(self, body: bytes):
-                self.body = body
-
-            def __enter__(self):
-                return self
-
-            def __exit__(self, *exc):
-                return False
-
-            def read(self):
-                return self.body
-
-        def serve(boards: list[str], refuse_board: bool):
-            def urlopen(request, *_a, **_k):
-                url = request.full_url
-                if "/tags" in url:
-                    return _Body(b'[{"name": "batocera-43"}]')
-                if "/contents/configs" in url:
-                    return _Body(json.dumps([{"name": b} for b in boards]).encode())
-                if "/contents/buildroot" in url:
-                    return _Body(b'{"sha": "0123abc"}')
-                if url.endswith("x86_wow64.board"):
-                    # Builds the 32-bit Wine package, not an image.
-                    return _Body(b"BR2_PACKAGE_BATOCERA_TARGET_X86=y\n")
-                if url.endswith(".board"):
-                    if refuse_board:
-                        _refuse()
-                    return _Body(b"BR2_PACKAGE_BATOCERA_TARGET_X86_64=y\n"
-                                 b"BR2_PACKAGE_BATOCERA_SYSTEM=y\n")
-                if "/git/trees/" in url:
-                    return _Body(b'{"tree": [], "truncated": false}')
-                if url.endswith("retroarch.mk"):
-                    return _Body(b"RETROARCH_CONF_OPTS = --enable-networking\n")
-                if url.startswith("https://raw.githubusercontent.com/") and url.count("/") == 6:
-                    return _Body(b'source "$BR2_EXTERNAL_BATOCERA_PATH/'
-                                 b'package/batocera/core/batocera-system/Config.in"\n')
-                if url.endswith("Config.in"):
-                    return _Body(b"config BR2_PACKAGE_BATOCERA_SYSTEM\n"
-                                 b"\tselect BR2_PACKAGE_MGBA\n\n"
-                                 b"config BR2_TARGET_BATOCERA_IMAGES\n\tstring \"x\"\n"
-                                 b"\tdefault \"x86_64\" if BR2_PACKAGE_BATOCERA_TARGET_X86_64\n")
-                return _Body(
-                    b"gba:\n  emulators:\n    libretro:\n"
-                    b"      mgba: {requireAnyOf: [BR2_PACKAGE_MGBA]}\n"
-                )
-
-            return urlopen
-
         for boards, refuse_board in (([], False), (["batocera-x86_64.board"], True)):
             with self.subTest(boards=boards), mock.patch.object(
                 batocera_targets_scraper.urllib.request,
                 "urlopen",
-                serve(boards, refuse_board),
+                _serve_batocera(boards, refuse_board),
             ), self.assertRaises(RuntimeError):
                 batocera_targets_scraper.Scraper().fetch_targets()
 
         with mock.patch.object(
             batocera_targets_scraper.urllib.request,
             "urlopen",
-            serve(["batocera-x86_64.board", "batocera-x86_wow64.board"], False),
+            _serve_batocera(["batocera-x86_64.board", "batocera-x86_wow64.board"], False),
         ):
             targets = batocera_targets_scraper.Scraper().fetch_targets()["targets"]
         self.assertEqual(targets["x86_64"]["cores"], ["mgba"])
@@ -434,41 +435,28 @@ class KnulliPerBoard(unittest.TestCase):
         raw = f"https://raw.githubusercontent.com/knulli-cfw/knulli-linux/{pin}/"
         api = "https://api.github.com/repos/knulli-cfw/knulli-linux/contents/"
         seen: list[str] = []
-
-        class _Body:
-            def __init__(self, body: str):
-                self.body = body.encode()
-
-            def __enter__(self):
-                return self
-
-            def __exit__(self, *exc):
-                return False
-
-            def read(self):
-                return self.body
+        names = [p.removeprefix("configs/") for p in self.FILES if p.startswith("configs/")]
+        exact = {
+            f"{api}configs?ref={pin}": json.dumps([{"name": n} for n in names]),
+            f"{api}buildroot?ref={pin}": '{"sha": "c2d7985b"}',
+            f"{api}batocera?ref={pin}": '{"sha": "487014d9"}',
+            f"{raw}board/r16/retroarch.cfg": 'menu_show_core_updater = "false"\n',
+            f"{raw}package/retroarch/retroarch/retroarch.mk":
+                "RETROARCH_CONF_OPTS = --enable-networking\n",
+            ("https://raw.githubusercontent.com/batocera-linux/batocera.linux/"
+             "487014d9/package/batocera/emulators/ppsspp/Config.in"):
+                "config BR2_PACKAGE_PPSSPP\n\tselect BR2_PACKAGE_PPSSPP_ASSETS\n",
+        }
 
         def urlopen(request, *_a, **_k):
             url = request.full_url
             seen.append(url)
-            if url == f"{api}configs?ref={pin}":
-                names = [p.removeprefix("configs/") for p in self.FILES if p.startswith("configs/")]
-                return _Body(json.dumps([{"name": n} for n in names]))
-            if url == f"{api}buildroot?ref={pin}":
-                return _Body('{"sha": "c2d7985b"}')
-            if url == f"{api}batocera?ref={pin}":
-                return _Body('{"sha": "487014d9"}')
+            if url in exact:
+                return _Body(exact[url])
             if "/git/trees/" in url:
                 # A board config that hides the downloader leaves its URL.
                 cfg = "board/r16/retroarch.cfg" if "knulli-linux" in url else "x"
                 return _Body(json.dumps({"tree": [{"path": cfg}], "truncated": False}))
-            if url == f"{raw}board/r16/retroarch.cfg":
-                return _Body('menu_show_core_updater = "false"\n')
-            if url == f"{raw}package/retroarch/retroarch/retroarch.mk":
-                return _Body("RETROARCH_CONF_OPTS = --enable-networking\n")
-            if url == ("https://raw.githubusercontent.com/batocera-linux/batocera.linux/"
-                       "487014d9/package/batocera/emulators/ppsspp/Config.in"):
-                return _Body("config BR2_PACKAGE_PPSSPP\n\tselect BR2_PACKAGE_PPSSPP_ASSETS\n")
             if url == f"{raw}package/utils/vtree/Config.in":
                 raise urllib.error.HTTPError(url, 404, "Not Found", {}, None)
             if url.endswith("/c2d7985b/arch/Config.in.arm"):
@@ -478,7 +466,7 @@ class KnulliPerBoard(unittest.TestCase):
             path = url.removeprefix(raw)
             if path in self.FILES:
                 return _Body(self.FILES[path])
-            _refuse()
+            return _refuse()
 
         with mock.patch.object(batocera_targets_scraper.urllib.request, "urlopen", urlopen):
             data = knulli_targets_scraper.Scraper().fetch_targets()
