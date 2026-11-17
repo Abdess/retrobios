@@ -5870,7 +5870,7 @@ def _digest_file(path: Path, algorithms: tuple[str, ...]) -> dict[str, str]:
         return _digest_handle(fh, algorithms)
 
 
-def _digest_handle(fh: BinaryIO, algorithms: tuple[str, ...]) -> dict[str, str]:
+def _digest_handle(fh: IO[bytes], algorithms: tuple[str, ...]) -> dict[str, str]:
     """Digests of an open file, read from its start."""
     hashers = {name: hashlib.new(name) for name in algorithms}
     fh.seek(0)
@@ -21369,18 +21369,18 @@ class KeyDecoder:
         self.buffer = ""
         self.paste: str | None = None
 
-    def feed(self, text: str) -> list[TuiKey]:
+    def feed(self, text: str) -> list[TuiKey | TuiMouse]:
         self.buffer += text
         return self._drain(final=False)
 
-    def flush(self) -> list[TuiKey]:
+    def flush(self) -> list[TuiKey | TuiMouse]:
         """What is left once the wait for the rest of a sequence is over.
 
         An open paste stays open: over SSH its end arrives later than 40 ms.
         """
         return self._drain(final=True)
 
-    def close_paste(self) -> list[TuiKey]:
+    def close_paste(self) -> list[TuiKey | TuiMouse]:
         """The paste so far, its end never seen, without its newlines."""
         text = "".join(char for char in self.paste or "" if char >= " " and char != "\x7f")
         self.paste = None
@@ -21390,8 +21390,8 @@ class KeyDecoder:
     def waiting(self) -> bool:
         return bool(self.buffer) or self.paste is not None
 
-    def _drain(self, final: bool) -> list[TuiKey]:
-        keys: list[TuiKey] = []
+    def _drain(self, final: bool) -> list[TuiKey | TuiMouse]:
+        keys: list[TuiKey | TuiMouse] = []
         while self.buffer:
             if self.paste is not None:
                 end = self.buffer.find(_PASTE_END)
@@ -25833,7 +25833,7 @@ def _pager_last(state: TuiState, items: list) -> int:
     return 0 if total <= height else max(0, total - max(1, height - 1))
 
 
-def tui_update(state: TuiState, key: TuiKey) -> list[tuple]:
+def tui_update(state: TuiState, key: TuiKey | TuiMouse) -> list[tuple]:
     """What a key does on the current screen, and the work it starts. A
     choice that --standalone cannot sit beside turns it off, said once."""
     effects = _tui_key(state, key)
@@ -26027,10 +26027,10 @@ def _tui_screen_key(state: TuiState, key: TuiKey) -> list[tuple]:
     return _tui_row_key(state, key, char, rows)
 
 
-def _tui_key(state: TuiState, key: TuiKey) -> list[tuple]:
+def _tui_key(state: TuiState, key: TuiKey | TuiMouse) -> list[tuple]:
     """tui_update for one key."""
-    if key.name == "mouse":
-        return tui_mouse(state, key)  # type: ignore[arg-type]
+    if isinstance(key, TuiMouse):
+        return tui_mouse(state, key)
     # A key moves the focus its own way: the next tap focuses again.
     state.tapped = None
     if key.name in ("ctrl-c", "ctrl-d"):
@@ -30366,7 +30366,7 @@ class _TuiTerminal:
         if out:
             self.write("".join(out))
 
-    def keys(self, timeout: float) -> list[TuiKey]:
+    def keys(self, timeout: float) -> list[TuiKey | TuiMouse]:
         if os.name == "nt":
             return self._console_keys(timeout)
         if self.ended:
@@ -30389,7 +30389,7 @@ class _TuiTerminal:
                 break
         return keys
 
-    def _read(self) -> list[TuiKey]:
+    def _read(self) -> list[TuiKey | TuiMouse]:
         data = os.read(self.fd, 4096)
         self.heard = time.monotonic()
         if not data:
@@ -30398,11 +30398,11 @@ class _TuiTerminal:
             return [TuiKey("ctrl-d")]
         return self.decoder.feed(self.input.decode(data))
 
-    def _console_keys(self, timeout: float) -> list[TuiKey]:
+    def _console_keys(self, timeout: float) -> list[TuiKey | TuiMouse]:
         import msvcrt
 
         end = time.monotonic() + timeout
-        keys: list[TuiKey] = []
+        keys: list[TuiKey | TuiMouse] = []
         while True:
             while msvcrt.kbhit():  # type: ignore[attr-defined]
                 key = decode_windows_key(msvcrt.getwch(),  # type: ignore[attr-defined]
