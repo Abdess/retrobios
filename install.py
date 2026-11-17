@@ -50,8 +50,9 @@ import weakref
 import xml.etree.ElementTree as ET
 import zipfile
 from collections.abc import Callable, Collection, Iterable, Iterator, Mapping
+from dataclasses import dataclass, replace
 from pathlib import Path, PurePosixPath, PureWindowsPath
-from typing import Any, BinaryIO, ContextManager, NamedTuple, NoReturn, TextIO
+from typing import IO, Any, BinaryIO, ContextManager, NamedTuple, NoReturn, TextIO
 
 # Built as C extensions that a Python compiled without their libraries
 # lacks: the run stopped on a ModuleNotFoundError traceback.
@@ -14095,16 +14096,15 @@ MAX_MARKER_BYTES = 64 * 1024
 MAX_PARTS = 999
 
 
+@dataclass(frozen=True)
 class PackPart:
     """What one part's marker says, and the folder it was found in."""
 
-    def __init__(self, pack: str, index: int, count: int,
-                 parts: tuple[tuple[str, int], ...], folder: Path) -> None:
-        self.pack = pack
-        self.index = index
-        self.count = count
-        self.parts = parts
-        self.folder = folder
+    pack: str
+    index: int
+    count: int
+    parts: tuple[tuple[str, int], ...]
+    folder: Path
 
 
 def read_part_marker(path: Path) -> PackPart | None:
@@ -15571,18 +15571,17 @@ def shown_lines(lines: list[str]) -> list[str]:
             for line in lines]
 
 
+@dataclass(frozen=True)
 class LocalCopy:
     """A file found on this machine with the contents an entry wants."""
 
-    def __init__(self, index: FolderIndex, path: Path, member: str = "",
-                 misplaced: bool = False) -> None:
-        self.index = index
-        self.path = path
-        # The member holding the bytes when path is a ZIP, else "".
-        self.member = member
-        # In the BIOS folder at a place no entry of the list names: a mistake
-        # the copy fixes. A copy from another entry's place is no mistake.
-        self.misplaced = misplaced
+    index: FolderIndex
+    path: Path
+    # The member holding the bytes when path is a ZIP, else "".
+    member: str = ""
+    # In the BIOS folder at a place no entry of the list names: a mistake
+    # the copy fixes. A copy from another entry's place is no mistake.
+    misplaced: bool = False
 
     def where(self) -> str:
         """The copy as the folder it was found in names it."""
@@ -16450,8 +16449,7 @@ def plan_local_copies(
         if bios_index is not None:
             copy = bios_index.find(entry, written) or _above(entry, bios_index)
             if copy is not None:
-                copy = LocalCopy(copy.index, copy.path, copy.member,
-                                 _misplaced(entry, copy, bios_index))
+                copy = replace(copy, misplaced=_misplaced(entry, copy, bios_index))
         for index in folders:
             if copy is not None:
                 break
@@ -16565,15 +16563,15 @@ def emit_copies(
                     path=str(copy.path), member=copy.member, reason=reason)
 
 
+@dataclass(frozen=True)
 class Unreadable:
     """A file, ZIP member or folder below a --from folder that could not be
     read, and may be a file the run still needs."""
 
-    def __init__(self, index: FolderIndex, path: Path, member: str, why: str) -> None:
-        self.index = index
-        self.path = path
-        self.member = member
-        self.why = why
+    index: FolderIndex
+    path: Path
+    member: str
+    why: str
 
     def line(self) -> str:
         where = f"{self.member} inside {self.path}" if self.member else str(self.path)
