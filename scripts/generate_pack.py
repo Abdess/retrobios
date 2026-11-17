@@ -19,7 +19,7 @@ import sys
 if sys.version_info < (3, 9):
     sys.exit(f"generate_pack.py needs Python 3.9 or newer, this is {sys.version.split()[0]}")
 
-from collections.abc import Callable, Iterable, Iterator
+from collections.abc import Callable, Iterable, Iterator, Mapping
 
 from artifacts import _build_timestamp, set_plain_mode
 import argparse
@@ -34,7 +34,8 @@ import shutil
 import tempfile
 import zipfile
 from pathlib import Path, PurePosixPath
-from typing import Any
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, TypedDict
 
 sys.path.insert(0, os.path.dirname(__file__))
 from alternatives import core_file_spares, settle_sets, slot_set_keys
@@ -133,9 +134,84 @@ from validation import (
     extra_alternatives,
 )
 
+from packpaths import (
+    MEDIA_MARKER,
+    lands_on_android,
+    _archive_destination,
+    _has_path_conflict,
+    _register_path,
+    _flat,
+    _resolve_destination,
+    placement_block,
+    save_layout,
+)
+from packextras import (
+    ExtraResolver,
+    extra_full_destination,
+    extra_region_key,
+    prefixed_destination,
+    save_entry_fields,
+    save_manifest_dest,
+    _detect_extras_prefix,
+    _collect_emulator_extras,
+    _extra_system_ids,
+    extras_for_systems as _extras_for_systems,
+    platform_region_groups,
+    emulator_region_drops,
+    emulator_required_spares,
+    _emulator_region_group as _emulator_region_group,
+    expand_agnostic_entries,
+    undeclared_report,
+)
+from packreadme import (
+    _build_readme,
+    _build_agnostic_rename_readme,
+    save_place,
+)
+from packverify import (
+    _check_member_hash as _check_member_hash,
+    _hash_matches as _hash_matches,
+    _intentional_hash_exclusion as _intentional_hash_exclusion,
+    verify_pack_against_platform,
+    verify_pack,
+    generate_sha256sums,
+)
+# _OFFLINE is deliberately not re-exported: importing a value copies it, so a
+# facade name would keep saying False after set_offline() changed the flag.
+from packresolve import (
+    ACCEPTED_HASHES,
+    sha1_for_hash,
+    preferred_entries as _preferred_entries,
+    parse_hash_input,
+    parse_hash_file,
+    lookup_hashes,
+    resolve_declaration,
+    resolve_file,
+    download_external,
+)
+
+if TYPE_CHECKING:
+    from typing_extensions import Unpack
+
+    # How a manifest settles a platform declaration: the copy served, or None
+    # and why not.
+    _Settle = Callable[[dict, str, str, str | None], tuple[str | None, str]]
+    # What a destination came to: its entries, whether it was filled, and the
+    # report to make if no other member of its set fills it.
+    _Outcome = tuple[list[dict], bool, Callable[[], None] | None]
+
 yaml = require_yaml()
 
 DEFAULT_PLATFORMS_DIR = "platforms"
+
+
+def _reject_unknown(function: str, options: Mapping[str, object], known: frozenset[str]) -> None:
+    """Refuse a keyword the options do not declare, as a named parameter would."""
+    for key in options:
+        if key not in known:
+            raise TypeError(f"{function}() got an unexpected keyword argument '{key}'")
+
+
 DEFAULT_DB_FILE = "database.json"
 DEFAULT_OUTPUT_DIR = "dist"
 DEFAULT_BIOS_DIR = "bios"
@@ -536,6 +612,49 @@ def _tree_references(
         yield tuple(tree["source_systems"]), tree
 
 
+class _TreeWalkOptions(TypedDict, total=False):
+    """The keyword options of _data_directory_members."""
+
+    refs_out: dict | None
+    required_only: bool
+    core_trees: Iterable[dict]
+    reclaim: dict[str, str] | None
+
+
+def _carried_tree(
+    dd: dict, data_registry: dict | None, platform_name: str, required_only: bool,
+) -> str | None:
+    """The cache folder of a tree reference the pack carries, or None."""
+    ref_key = dd.get("ref", "")
+    if not ref_key or not data_registry or ref_key not in data_registry:
+        return None
+    if required_only and dd.get("required") is False:
+        return None
+    if ref_key in installed_data_refs(platform_name):
+        return None
+    entry = data_registry[ref_key]
+    allowed = entry.get("for_platforms")
+    if allowed and platform_name not in allowed:
+        return None
+    local_path = entry.get("local_cache", "")
+    if not local_path or not os.path.isdir(local_path):
+        print(
+            f"  WARNING: data directory '{ref_key}' not cached at {local_path} (run refresh_data_dirs.py)"
+        )
+        _MISSING_DATA_DIRS.add(ref_key)
+        return None
+    return local_path
+
+
+def _tree_files(local_path: str, dd_prefix: str) -> Iterator[tuple[str, str]]:
+    """(source, destination) of every file of a cached tree."""
+    for root, _dirs, filenames in os.walk(local_path):
+        for fname in filenames:
+            src = os.path.join(root, fname)
+            rel = os.path.relpath(src, local_path)
+            yield src, f"{dd_prefix}/{rel}" if dd_prefix else rel
+
+
 def _data_directory_members(
     pack_systems: dict,
     data_registry: dict | None,
@@ -545,10 +664,7 @@ def _data_directory_members(
     seen_destinations: set,
     seen_lower: set,
     seen_parents: set,
-    refs_out: dict | None = None,
-    required_only: bool = False,
-    core_trees: Iterable[dict] = (),
-    reclaim: dict[str, str] | None = None,
+    **options: Unpack[_TreeWalkOptions],
 ) -> Iterator[tuple[str, str]]:
     """Yield (source, destination) for the cached data directories a
     platform's systems declare, then those its cores read (``core_trees``,
@@ -570,91 +686,40 @@ def _data_directory_members(
     ``required_only`` leaves out a tree declared ``required: false``, one the
     core runs without, as it leaves out such a file.
     """
+    _reject_unknown("_data_directory_members", options, _TreeWalkOptions.__optional_keys__)
+    refs_out = options.get("refs_out")
+    reclaim = options.get("reclaim")
+    required_only = options.get("required_only", False)
+    core_trees = options.get("core_trees", ())
     # Data directories from _data_dirs.yml
     for systems, dd in _tree_references(pack_systems, core_trees):
+        local_path = _carried_tree(dd, data_registry, platform_name, required_only)
+        if local_path is None:
+            continue
         ref_key = dd.get("ref", "")
-        if not ref_key or not data_registry or ref_key not in data_registry:
-            continue
         needed = dd.get("required") is not False
-        if required_only and not needed:
-            continue
-        if ref_key in installed_data_refs(platform_name):
-            continue
-        entry = data_registry[ref_key]
-        allowed = entry.get("for_platforms")
-        if allowed and platform_name not in allowed:
-            continue
-        local_path = entry.get("local_cache", "")
-        if not local_path or not os.path.isdir(local_path):
-            print(
-                f"  WARNING: data directory '{ref_key}' not cached at {local_path} (run refresh_data_dirs.py)"
-            )
-            _MISSING_DATA_DIRS.add(ref_key)
-            continue
         dd_dest = dd.get("destination", "")
-        if base_dest and dd_dest:
-            dd_prefix = f"{base_dest}/{dd_dest}"
-        elif base_dest:
-            dd_prefix = base_dest
-        else:
-            dd_prefix = dd_dest
+        dd_prefix = f"{base_dest}/{dd_dest}" if base_dest and dd_dest else base_dest or dd_dest
         # Held while the caller writes what is yielded: a refresh swapping
         # the tree waits until the walk is done.
         with cache_lock(local_path, shared=True):
-            for root, _dirs, filenames in os.walk(local_path):
-                for fname in filenames:
-                    src = os.path.join(root, fname)
-                    rel = os.path.relpath(src, local_path)
-                    full = f"{dd_prefix}/{rel}" if dd_prefix else rel
-                    if reclaim and full in reclaim and (
-                        os.path.normpath(reclaim[full]) == os.path.normpath(src)
-                    ):
-                        del reclaim[full]
-                        if refs_out is not None:
-                            refs_out[full] = (ref_key, systems, dd_prefix, needed)
-                        yield src, full
-                        continue
-                    if full in seen_destinations or (
-                        full.lower() in seen_lower and case_insensitive
-                    ):
-                        continue
-                    if _has_path_conflict(full, seen_destinations, seen_parents):
-                        continue
+            for src, full in _tree_files(local_path, dd_prefix):
+                if reclaim and full in reclaim and (
+                    os.path.normpath(reclaim[full]) == os.path.normpath(src)
+                ):
+                    del reclaim[full]
+                elif full in seen_destinations or (
+                    full.lower() in seen_lower and case_insensitive
+                ) or _has_path_conflict(full, seen_destinations, seen_parents):
+                    continue
+                else:
                     seen_destinations.add(full)
                     _register_path(full, seen_destinations, seen_parents)
                     if case_insensitive:
                         seen_lower.add(full.lower())
-                    if refs_out is not None:
-                        refs_out[full] = (ref_key, systems, dd_prefix, needed)
-                    yield src, full
-
-
-def _pack_data_directories(
-    zf: zipfile.ZipFile | PackRecord,
-    pack_systems: dict,
-    data_registry: dict | None,
-    platform_name: str,
-    base_dest: str,
-    flatten: bool,
-    case_insensitive: bool,
-    seen_destinations: set,
-    seen_lower: set,
-    seen_parents: set,
-    required_only: bool = False,
-    core_trees: Iterable[dict] = (),
-) -> int:
-    """Add the data directories to the pack. Returns how many files went in."""
-    added = 0
-    for src, full in _data_directory_members(
-        pack_systems, data_registry, platform_name, base_dest,
-        case_insensitive, seen_destinations, seen_lower, seen_parents,
-        required_only=required_only, core_trees=core_trees,
-    ):
-        _add_pack_member(zf, src, _flat(full, base_dest, flatten))
-        if isinstance(zf, PackRecord):
-            zf.trees.append(_flat(full, base_dest, flatten))
-        added += 1
-    return added
+                if refs_out is not None:
+                    refs_out[full] = (ref_key, systems, dd_prefix, needed)
+                yield src, full
 
 
 def _case_twin_pairs(
@@ -714,6 +779,18 @@ def _report_pack_counts(
             f"{trees}{core_count} from cores), {', '.join(parts)} [{verification_mode}]"
         )
 
+class _VariantOptions(TypedDict, total=False):
+    """The keyword options of _select_variants."""
+
+    regions: list[str] | None
+    one_per_slot: bool
+    required_only: bool
+    undeclared: list[dict] | None
+    zip_contents: dict | None
+    data_registry: dict | None
+    slot_overrides: dict[str, str] | None
+
+
 def _select_variants(
     config: dict,
     pack_systems: dict,
@@ -723,13 +800,7 @@ def _select_variants(
     emu_profiles: dict | None,
     target_cores: set[str] | None,
     source: str,
-    regions: list[str] | None,
-    one_per_slot: bool,
-    required_only: bool = False,
-    undeclared: list[dict] | None = None,
-    zip_contents: dict | None = None,
-    data_registry: dict | None = None,
-    slot_overrides: dict[str, str] | None = None,
+    **options: Unpack[_VariantOptions],
 ) -> tuple[set, list, list]:
     """Which regional and slot alternatives this pack leaves out.
 
@@ -739,6 +810,9 @@ def _select_variants(
     Returns the destinations to drop, the groups kept only as a
     fallback, and the slots no profile puts in order.
     """
+    _reject_unknown("_select_variants", options, _VariantOptions.__optional_keys__)
+    regions = options.get("regions")
+    one_per_slot = options.get("one_per_slot", False)
     region_drops: set[str] = set()
     region_fallbacks: list[str] = []
     # One grouping for both passes: a file judged in its own system by one
@@ -756,12 +830,12 @@ def _select_variants(
             target_cores=target_cores,
             include_extras=(source != "platform"),
             include_all=(source == "truth"),
-            required_only=required_only,
+            required_only=options.get("required_only", False),
             held_out=held,
-            undeclared=undeclared,
-            zip_contents=zip_contents,
-            data_registry=data_registry,
-            slot_overrides=slot_overrides,
+            undeclared=options.get("undeclared"),
+            zip_contents=options.get("zip_contents"),
+            data_registry=options.get("data_registry"),
+            slot_overrides=options.get("slot_overrides"),
         )
     if regions:
         region_index = region_mod.platform_region_index(
@@ -868,31 +942,829 @@ def _report_left_out(cut: GameDataCut, systems: set[str], cores: bool) -> None:
         print(f"  {line}")
 
 
+class PackNarrowing(TypedDict, total=False):
+    """How a platform pack is narrowed, shared by a pack and its split parts."""
+
+    emulators_dir: str
+    zip_contents: dict | None
+    data_registry: dict | None
+    emu_profiles: dict | None
+    target_cores: set[str] | None
+    required_only: bool
+    source: str
+    regions: list[str] | None
+    target_name: str | None
+    one_per_slot: bool
+    offline: bool | None
+    no_game_data: bool
+
+
+class _PartScope(TypedDict, total=False):
+    """What one split part keeps of the platform."""
+
+    system_filter: list[str] | None
+    precomputed_extras: list[dict] | None
+    extras_only: bool
+
+
+class PackOptions(PackNarrowing, _PartScope, total=False):
+    """The keyword options of generate_pack."""
+
+    flatten: bool
+    pack_name: str | None
+    record: PackRecord | None
+    within: dict[str, str] | None
+
+
+@dataclass(frozen=True)
+class _PackSettings:
+    """PackOptions with their defaults."""
+
+    emulators_dir: str = "emulators"
+    zip_contents: dict | None = None
+    data_registry: dict | None = None
+    emu_profiles: dict | None = None
+    target_cores: set[str] | None = None
+    required_only: bool = False
+    system_filter: list[str] | None = None
+    precomputed_extras: list[dict] | None = None
+    extras_only: bool = False
+    source: str = "full"
+    flatten: bool = True
+    regions: list[str] | None = None
+    target_name: str | None = None
+    one_per_slot: bool = False
+    offline: bool | None = None
+    pack_name: str | None = None
+    no_game_data: bool = False
+    record: PackRecord | None = None
+    within: dict[str, str] | None = None
+
+
+@dataclass
+class _Placed:
+    """The destinations a build has taken, and the folders they open.
+
+    ``fold`` is whether a case twin of a taken path counts as taken.
+    """
+
+    fold: bool
+    destinations: set[str] = field(default_factory=set)
+    lower: set[str] = field(default_factory=set)  # only used when fold=True
+    parents: set[str] = field(default_factory=set)  # parent dirs of added files (path conflict detection)
+
+    def take(self, dest: str) -> None:
+        self.destinations.add(dest)
+        _register_path(dest, self.destinations, self.parents)
+        if self.fold:
+            self.lower.add(dest.lower())
+
+    def holds(self, dest: str) -> bool:
+        return dest in self.destinations or (self.fold and dest.lower() in self.lower)
+
+    def conflicts(self, dest: str) -> bool:
+        return _has_path_conflict(dest, self.destinations, self.parents)
+
+    def block(self, dest: str) -> str | None:
+        return placement_block(dest, self.destinations, self.lower, self.parents, self.fold)
+
+
+@dataclass
+class _PlatformPlan:
+    """What a platform pack is built from, settled before its first member."""
+
+    platform_name: str
+    platforms_dir: str
+    db: dict
+    bios_dir: str
+    opts: _PackSettings
+    config: dict
+    emu_profiles: dict
+    zip_contents: dict
+    cut: GameDataCut | None
+    narrowings: list[tuple[str, str]]
+    zip_path: str
+    validation_index: dict
+    platform_profiles: dict[str, dict]
+    validation_owners: dict
+    slot_overrides: dict[str, str]
+    pack_systems: dict
+    preferred_entries: dict[str, int] = field(default_factory=dict)
+    undeclared: list[dict] | None = None
+    region_drops: set[str] = field(default_factory=set)
+    region_fallbacks: list = field(default_factory=list)
+    slot_undecidable: list[str] = field(default_factory=list)
+
+    @property
+    def verification_mode(self) -> str:
+        return self.config.get("verification_mode", "existence")
+
+    @property
+    def platform_display(self) -> str:
+        return self.config.get("platform", self.platform_name)
+
+    @property
+    def base_dest(self) -> str:
+        return self.config.get("base_destination", "")
+
+    @property
+    def case_insensitive(self) -> bool:
+        # Case-insensitive dedup only for platforms targeting Windows/macOS.
+        # Linux-only platforms (Batocera, Recalbox, RetroDECK, Lakka, RomM)
+        # are case-sensitive and may have distinct files like DISK.ROM vs disk.rom.
+        return self.config.get("case_insensitive_fs", False)
+
+
+def _plan_platform_pack(
+    platform_name: str,
+    platforms_dir: str,
+    db: dict,
+    bios_dir: str,
+    output_dir: str,
+    opts: _PackSettings,
+) -> _PlatformPlan | None:
+    """The configuration, scope and checks a platform pack reads, or None
+    when the systems asked for leave nothing to build."""
+    config = load_platform_config(platform_name, platforms_dir)
+    if opts.target_name:
+        config = {**config, TARGET_KEY: opts.target_name}
+    zip_contents = {} if opts.zip_contents is None else opts.zip_contents
+    emu_profiles = opts.emu_profiles
+    if emu_profiles is None:
+        # The pipeline always passes them, but a caller that does not must get the
+        # same pack, not one built without validation, slots or agnostic cores.
+        emu_profiles = load_emulator_profiles(opts.emulators_dir)
+    # Cut from the full config and profiles: the category of a platform
+    # entry is read from the profiles' game data entries.
+    cut = (
+        without_game_data(config, emu_profiles, opts.data_registry, opts.target_cores)
+        if opts.no_game_data else None
+    )
+    if cut is not None:
+        config, emu_profiles = cut.config, cut.profiles
+
+    narrowings = _narrowings(
+        opts.source, opts.regions, opts.target_name, opts.one_per_slot, opts.required_only,
+        no_game_data=opts.no_game_data,
+    )
+    zip_path = os.path.join(
+        output_dir,
+        _platform_pack_name(
+            platform_name, platforms_dir, narrowings, opts.system_filter, opts.pack_name
+        ),
+    )
+    if opts.record is None:
+        os.makedirs(output_dir, exist_ok=True)
+
+    # Build emulator-level validation index from the platform's own
+    # emulators (same scope as verify.py)
+    from common import resolve_platform_cores
+
+    validation_index = {}
+    platform_profiles: dict[str, dict] = {}
+    if emu_profiles:
+        platform_profiles = {
+            name: emu_profiles[name]
+            for name in resolve_platform_cores(config, emu_profiles)
+        }
+        validation_index = _build_validation_index(platform_profiles)
+    validation_owners = destination_owners(platform_profiles)
+    slot_overrides = slots.pack_overrides(
+        config, emu_profiles or {}, db, zip_contents, opts.data_registry,
+        target_cores=opts.target_cores, source=opts.source,
+    )
+
+    pack_systems = platform_scope_systems(
+        config, emu_profiles or {}, opts.target_cores, opts.system_filter
+    )
+    if opts.system_filter and not pack_systems:
+        reason = system_scope_error(config, platform_name, opts.system_filter, opts.target_name)
+        print(f"  WARNING: {reason}")
+        return None
+    if opts.extras_only:
+        # The part of a split that carries the core extras no platform system
+        # owns: the platform's own files and trees went to the other parts.
+        pack_systems = {}
+
+    plan = _PlatformPlan(
+        platform_name, platforms_dir, db, bios_dir, opts, config, emu_profiles,
+        zip_contents, cut, narrowings, zip_path, validation_index, platform_profiles,
+        validation_owners, slot_overrides, pack_systems,
+    )
+    _settle_pack_choices(plan)
+    return plan
+
+
+def _settle_pack_choices(plan: _PlatformPlan) -> None:
+    """The declaration each destination takes and the variants left out."""
+    opts = plan.opts
+    if opts.source != "truth":
+        # Decided among the declarations this pack keeps: a preferred entry
+        # that --required-only drops must not silence its required twin, or
+        # the destination leaves the pack without a trace (RetroDECK's four
+        # Atari 5200 ROMs, optional under atari-400-800 and required under
+        # atari-5200). No data directories: the choice is about the baseline.
+        plan.preferred_entries = _preferred_entries(
+            plan.pack_systems, plan.db, plan.bios_dir, plan.base_dest, opts.required_only,
+            plan.zip_contents, opts.offline,
+        )
+
+    # Region selection is decided once, over both the platform baseline and the
+    # core extras, so the two phases below consult a single set. Grouping uses a
+    # dedicated extras pass with an empty seen set: it only needs group
+    # membership, never destinations, and a superset of members is the safe
+    # direction. Runs only when --region is given.
+    # The gap report both extras passes read, computed once: the region
+    # grouping and the core complement below ask it the same question.
+    plan.undeclared = (
+        undeclared_report(
+            plan.config, opts.emulators_dir, plan.db, plan.emu_profiles, opts.target_cores,
+            include_all=(opts.source == "truth"),
+        )
+        if opts.source != "platform" and opts.precomputed_extras is None
+        else None
+    )
+    plan.region_drops, plan.region_fallbacks, plan.slot_undecidable = _select_variants(
+        plan.config, plan.pack_systems, opts.emulators_dir, plan.db, plan.base_dest,
+        plan.emu_profiles, opts.target_cores, opts.source, regions=opts.regions,
+        one_per_slot=opts.one_per_slot, required_only=opts.required_only,
+        undeclared=plan.undeclared, zip_contents=plan.zip_contents,
+        data_registry=opts.data_registry, slot_overrides=plan.slot_overrides,
+    )
+
+
+_STATUS_LABELS = {"untested": "UNTESTED", "excluded": "EXCLUDED", "missing": "MISSING"}
+
+
+@dataclass
+class _PlatformPackBuild:
+    """One platform pack being written: its members and what each slot came to.
+
+    The four lookups are bound by generate_pack, the one place that says how
+    a platform file and a core extra are found and judged.
+    """
+
+    plan: _PlatformPlan
+    zf: zipfile.ZipFile | PackRecord
+    resolve: Callable[[dict, str], tuple[str | None, str]]
+    verdict: Callable[[dict, str | None, str], tuple[str, str | None]]
+    judge: Callable[[dict, str | None, str], tuple[str | None, str | None]]
+    resolve_extra: Callable[[dict, str], tuple[str | None, str, str]]
+    placed: _Placed = field(init=False)
+    total_files: int = 0
+    core_count: int = 0
+    save_count: int = 0
+    tree_count: int = 0
+    # Per-destination status.  ``excluded`` means a same-named local payload
+    # exists but contradicts the declaration and is intentionally not shipped.
+    # It is distinct from a genuine coverage gap (``missing``).
+    file_status: dict[str, str] = field(default_factory=dict)
+    file_reasons: dict[str, str] = field(default_factory=dict)
+    # Core extras whose local copy contradicts the profile hash: packed,
+    # reported, and never counted against the platform's own file total.
+    core_discrepancies: list[str] = field(default_factory=list)
+    # Spellings left out as case twins of a packed file, for the README.
+    case_twins: list[str] = field(default_factory=list)
+
+    def __post_init__(self) -> None:
+        self.placed = _Placed(self.plan.case_insensitive)
+
+    def _flat(self, path: str) -> str:
+        return _flat(path, self.plan.base_dest, self.plan.opts.flatten)
+
+    def run(self) -> None:
+        if self.plan.opts.source != "truth":
+            for sys_id, system in sorted(self.plan.pack_systems.items()):
+                for file_entry in system.get("files", []):
+                    self._pack_declared(sys_id, file_entry)
+        # Core requirements: files platform's cores need but YAML doesn't declare
+        self._pack_core_files()
+        self._pack_trees()
+        self._write_readme()
+
+    def _pack_declared(self, sys_id: str, file_entry: dict) -> None:
+        plan, opts = self.plan, self.plan.opts
+        if opts.required_only and file_entry.get("required") is False:
+            return
+        dest = sanitize_pack_path(file_entry.get("destination", file_entry["name"]))
+        if plan.region_drops and dest in plan.region_drops:
+            return
+        if not dest:
+            self._judge_unnamed(sys_id, file_entry)
+            return
+        full_dest = f"{plan.base_dest}/{dest}" if plan.base_dest else dest
+        already_packed = self.placed.holds(full_dest)
+
+        preferred = plan.preferred_entries.get(full_dest)
+        if preferred is not None and id(file_entry) != preferred:
+            return
+        if self.placed.conflicts(full_dest):
+            self._judge_conflict(file_entry, full_dest)
+            return
+        if file_entry.get("storage", "embedded") == "user_provided":
+            if not already_packed:
+                self._write_instructions(file_entry, full_dest)
+            return
+
+        local_path, status = self.resolve(file_entry, full_dest)
+        if status == "external":
+            self._pack_external(file_entry, full_dest)
+            return
+        if status == "not_found":
+            local_path = self._agnostic_fallback(sys_id, file_entry, full_dest, already_packed)
+            if local_path is None:
+                return
+            status = "agnostic_fallback"
+            # Fall through to normal packing below
+        chosen = self._settle_declared(file_entry, full_dest, dest, local_path, status, already_packed)
+        if chosen is not None:
+            self._ship_declared(file_entry, full_dest, chosen, already_packed)
+
+    def _judge_unnamed(self, sys_id: str, file_entry: dict) -> None:
+        # EmuDeck-style entries (system:md5 whitelist, no filename).
+        # Judged as verify judges it: resolved on disk, the md5
+        # list parsed once (case, comma lists).
+        plan = self.plan
+        fkey = f"{sys_id}/{file_entry.get('name', '')}"
+        held, held_status = resolve_file(
+            file_entry, plan.db, plan.bios_dir, plan.zip_contents,
+            data_dir_registry=plan.opts.data_registry, offline=plan.opts.offline,
+        )
+        if held_status == "not_found" or not held:
+            self.file_status[fkey] = "missing"
+        elif self.verdict(file_entry, held, held_status)[1]:
+            self.file_status[fkey] = "excluded"
+        else:
+            self.file_status.setdefault(fkey, "ok")
+
+    def _judge_conflict(self, file_entry: dict, full_dest: str) -> None:
+        # Content ships under the conflicting shape (file vs dir,
+        # e.g. SGB1.sfc). verify.py resolves each declaration on
+        # its own, so this one is counted by what it resolves to:
+        # an unresolved one counted OK had the pack claim a file
+        # verify reports missing.
+        plan = self.plan
+        conflict_path, conflict_status = resolve_file(
+            file_entry, plan.db, plan.bios_dir, plan.zip_contents,
+            data_dir_registry=plan.opts.data_registry, offline=plan.opts.offline,
+        )
+        # The verdict of the main path: a zipped_file archive is
+        # judged by the member inside, and a frontend that hashes
+        # one digest accepts a file another declared hash
+        # contradicts, as verify judges it.
+        conflict_status, refusal = self.verdict(file_entry, conflict_path, conflict_status)
+        if conflict_status == "not_found":
+            self.file_status[full_dest] = "missing"
+            self.file_reasons[full_dest] = "not found"
+        elif refusal:
+            self.file_status[full_dest] = "excluded"
+            self.file_reasons[full_dest] = refusal
+        else:
+            self.file_status.setdefault(full_dest, "ok")
+
+    def _write_instructions(self, file_entry: dict, full_dest: str) -> None:
+        base_dest = self.plan.base_dest
+        self.placed.take(full_dest)
+        self.file_status.setdefault(full_dest, "ok")
+        instructions = file_entry.get(
+            "instructions", "Please provide this file manually."
+        )
+        instr_name = f"INSTRUCTIONS_{file_entry['name']}.txt"
+        instr_path = (
+            f"{base_dest}/{instr_name}" if base_dest else instr_name
+        )
+        _write_generated_member(
+            self.zf,
+            self._flat(instr_path),
+            f"File needed: {file_entry['name']}\n\n{instructions}\n",
+        )
+        self.total_files += 1
+
+    def _pack_external(self, file_entry: dict, full_dest: str) -> None:
+        file_ext = os.path.splitext(file_entry["name"])[1] or ""
+        with tempfile.NamedTemporaryFile(
+            delete=False, suffix=file_ext, dir=packresolve.scratch_dir()
+        ) as tmp:
+            tmp_path = tmp.name
+
+        # The slot is the platform's file whether the download
+        # arrives or not: verify cannot fetch, and a core file
+        # filling it on a failed download made the two differ.
+        self.placed.take(full_dest)
+        try:
+            if self.plan.opts.record is None and download_external(file_entry, tmp_path):
+                extract = file_entry.get("extract", False)
+                if extract and tmp_path.endswith(".zip"):
+                    _extract_zip_to_archive(tmp_path, self._flat(full_dest), self.zf)
+                else:
+                    _add_pack_member(self.zf, tmp_path, self._flat(full_dest))
+                self.file_status.setdefault(full_dest, "ok")
+                self.total_files += 1
+            else:
+                self.file_status[full_dest] = "missing"
+                self.file_reasons[full_dest] = "external download failed"
+        finally:
+            if os.path.exists(tmp_path):
+                os.unlink(tmp_path)
+
+    def _agnostic_fallback(
+        self, sys_id: str, file_entry: dict, full_dest: str, already_packed: bool,
+    ) -> str | None:
+        # A filename-agnostic core takes any image of its system,
+        # renamed. Only an existence frontend accepts that.
+        plan = self.plan
+        found = None
+        if not reads_file_contents(plan.verification_mode):
+            found = agnostic_substitute(file_entry, sys_id, plan.db, plan.platform_profiles)
+        if not found or not found[0]:
+            if not already_packed:
+                self.file_status[full_dest] = "missing"
+                self.file_reasons[full_dest] = "not found"
+            return None
+        local_path, agnostic_path = found
+        original_name = os.path.basename(local_path)
+        dest_name = file_entry.get("name", "")
+        if original_name != dest_name and agnostic_path:
+            alt_names = [
+                entry.get("name", "")
+                for entry in plan.db.get("files", {}).values()
+                if entry.get("path", "").startswith(agnostic_path)
+                and entry.get("name", "") and entry.get("name", "") != original_name
+            ]
+            readme_text = _build_agnostic_rename_readme(dest_name, original_name, alt_names)
+            readme_name = f"RENAMED_{dest_name}.txt"
+            readme_full = f"{plan.base_dest}/{readme_name}" if plan.base_dest else readme_name
+            if readme_full not in self.placed.destinations:
+                _write_generated_member(self.zf, self._flat(readme_full), readme_text)
+                self.placed.destinations.add(readme_full)
+        return local_path
+
+    def _settle_declared(
+        self,
+        file_entry: dict,
+        full_dest: str,
+        dest: str,
+        local_path: str | None,
+        status: str,
+        already_packed: bool,
+    ) -> str | None:
+        """The copy a declaration ships once judged, or None when refused."""
+        plan = self.plan
+        # The verdict the install manifest reads too: a member missing
+        # from a zipped_file archive, or a hash the frontend rejects.
+        status, refusal = self.verdict(file_entry, local_path, status)
+        if refusal:
+            # An earlier declaration of this path shipped a file this
+            # one refuses: it is in the pack, untested as verify
+            # counts it, not excluded.
+            self.file_status[full_dest] = "untested" if already_packed else "excluded"
+            self.file_reasons[full_dest] = refusal
+            return None
+        if not hash_mismatch_excludes_file(plan.verification_mode) and (
+            status == "hash_mismatch" and local_path
+        ):
+            # Existence platforms accept any file at the declared path:
+            # their code never reads the bytes. An upstream hash that
+            # contradicts a local dump is reported, not acted on.
+            self.file_reasons.setdefault(
+                full_dest,
+                existence_discrepancy(file_entry, local_path, plan.platform_display),
+            )
+        if self.file_status.get(full_dest) == "missing":
+            # An earlier declaration of this path found nothing, and this
+            # one fills it, as verify counts it.
+            del self.file_status[full_dest]
+            self.file_reasons.pop(full_dest, None)
+        self.file_status.setdefault(full_dest, "ok")
+
+        # Emulator-level validation: informational only for platform packs.
+        # Platform verification (existence/md5) is the authority for pack status.
+        # Emulator checks are supplementary: logged but don't downgrade.
+        # When a discrepancy is found, try to find a file satisfying both.
+        if self.file_status.get(full_dest) == "ok":
+            local_path, disagreement = self.judge(file_entry, local_path, dest)
+            if disagreement:
+                self.file_reasons.setdefault(
+                    full_dest, f"{plan.platform_display} says OK but {disagreement}"
+                )
+        return local_path
+
+    def _ship_declared(
+        self, file_entry: dict, full_dest: str, local_path: str, already_packed: bool,
+    ) -> None:
+        within = self.plan.opts.within
+        if already_packed:
+            if full_dest not in self.placed.destinations:
+                self.case_twins.append(self._flat(full_dest))
+            return
+        if within is not None and not _same_bytes(local_path, within.get(self._flat(full_dest))):
+            # The full pack holds another system's file here.
+            return
+        if self.file_status.get(full_dest) == "excluded":
+            # An earlier declaration refused the file this one ships.
+            self.file_status[full_dest] = "untested"
+        self.placed.take(full_dest)
+
+        extract = file_entry.get("extract", False)
+        flat_dest = self._flat(full_dest)
+        if extract and local_path.endswith(".zip"):
+            _extract_zip_to_archive(local_path, flat_dest, self.zf)
+        elif local_path.endswith(".zip"):
+            _add_zip_to_pack(local_path, flat_dest, self.zf, file_entry)
+        else:
+            _add_pack_member(self.zf, local_path, flat_dest)
+        self.total_files += 1
+
+    def _region_dropped(self, fe: dict) -> bool:
+        drops = self.plan.region_drops
+        return bool(drops) and extra_region_key(fe, declared_root(self.plan.config)) in drops
+
+    def _spares(self, files: list[dict]) -> set[int]:
+        if not self.plan.opts.required_only:
+            return set()
+        return core_file_spares(files, self._region_dropped)
+
+    def _core_files(self) -> list[dict]:
+        plan, opts = self.plan, self.plan.opts
+        if opts.source == "platform":
+            return []
+        if opts.precomputed_extras is not None:
+            return opts.precomputed_extras
+        if opts.system_filter:
+            # The systems asked for, with what their cores need: the split
+            # packs get exactly this, and a full pack of one system had none.
+            return _extras_for_systems(
+                _collect_emulator_extras(
+                    plan.config, opts.emulators_dir, plan.db, set(), plan.base_dest,
+                    plan.emu_profiles, target_cores=opts.target_cores,
+                    include_all=(opts.source == "truth"), undeclared=plan.undeclared,
+                ),
+                opts.system_filter,
+            )
+        return _collect_emulator_extras(
+            plan.config,
+            opts.emulators_dir,
+            plan.db,
+            self.placed.destinations,
+            plan.base_dest,
+            plan.emu_profiles,
+            target_cores=opts.target_cores,
+            include_all=(opts.source == "truth"),
+            undeclared=plan.undeclared,
+        )
+
+    def _pack_core_files(self) -> None:
+        core_files = self._core_files()
+        spares = self._spares(core_files)
+        for fe in core_files:
+            if self.plan.opts.required_only and (fe.get("required") is False or id(fe) in spares):
+                continue
+            self._pack_core_file(fe)
+
+    def _pack_core_file(self, fe: dict) -> None:
+        plan = self.plan
+        dest = sanitize_pack_path(fe.get("destination", fe["name"]))
+        if self._region_dropped(fe):
+            return
+        if not dest:
+            return
+        if fe.get("root") in OUTER_ROOTS:
+            # Read below the roms directory or in an emulator folder: the
+            # pack is extracted into the BIOS folder and cannot reach
+            # them, the installer places these files.
+            return
+        # Core extras: _collect_emulator_extras already adjusted
+        # destinations for slug-based platforms.  Apply the effective
+        # prefix (base_dest, or inferred from YAML when base_dest is
+        # empty, as RetroDECK infers "bios"). A file read below the save
+        # directory goes to the pack's save folder instead.
+        full_dest = extra_full_destination(
+            fe, _detect_extras_prefix(plan.config, plan.base_dest)
+        )
+        if not full_dest:
+            return
+        # Taken, a case twin on a case-insensitive filesystem, or a
+        # file/directory conflict (SGB1.sfc vs SGB1.sfc/): verify replays
+        # the same rule (packextras.hidden_extras).
+        block = self.placed.block(full_dest)
+        if block:
+            if block == "case_twin" and self.resolve_extra(fe, dest)[0]:
+                self.case_twins.append(self._flat(full_dest))
+            return
+
+        # The emulator's own check picks the copy, as for a declared file
+        # and in the emulator pack: the name led RetroArch's GC/dsp_rom.bin
+        # to Dolphin's obsolete v0.3.1 free ROM, beside Nintendo's coef
+        # ROM, a pair Dolphin warns about at every start.
+        local_path, status, disagreement = self.resolve_extra(fe, dest)
+        if not local_path:
+            return
+        self._note_core_discrepancy(fe, full_dest, local_path, status, disagreement)
+
+        flat_dest = self._flat(full_dest)
+        within = plan.opts.within
+        if within is not None and not _same_bytes(local_path, within.get(flat_dest)):
+            return
+        if local_path.endswith(".zip"):
+            _add_zip_to_pack(local_path, flat_dest, self.zf, fe)
+        else:
+            _add_pack_member(self.zf, local_path, flat_dest)
+        if self.file_status.get(full_dest) in ("missing", "excluded"):
+            self._core_fills_declaration(fe, full_dest)
+        self.placed.take(full_dest)
+        self.core_count += 1
+        if fe.get("root") == "save":
+            self.save_count += 1
+        self.total_files += 1
+
+    def _note_core_discrepancy(
+        self, fe: dict, full_dest: str, local_path: str, status: str, disagreement: str,
+    ) -> None:
+        if disagreement:
+            self.core_discrepancies.append(f"{full_dest}: {disagreement}")
+        if status == "hash_mismatch" and not _matches_an_alternative(
+            fe, local_path, self.plan.emu_profiles or {}
+        ):
+            # The core's declared hash comes from its source, the local dump
+            # is what the collection holds. Shipping it keeps the emulator
+            # working when the code never reads the hash, and the divergence is
+            # reported so it can be resolved at the profile or the dump.
+            # file_status tracks platform declarations only, so the report
+            # goes to its own list and never moves the pack's own count.
+            self.core_discrepancies.append(
+                f"{full_dest}: declared hash of "
+                f"{fe.get('source_profile') or fe.get('source_emulator', 'core profile')}"
+                " does not match the packed copy"
+            )
+
+    def _core_fills_declaration(self, fe: dict, full_dest: str) -> None:
+        source_name = fe.get("source_profile") or fe.get(
+            "source_emulator", "core profile"
+        )
+        if reads_file_contents(self.plan.verification_mode):
+            # The frontend hashes what sits at the path, and the core's
+            # copy is not the hash it declares: the file ships for the
+            # core, the platform's own check still fails, as verify says.
+            self.file_reasons[full_dest] = (
+                "platform-declared hash unavailable; "
+                f"packed the validated {source_name} requirement, "
+                "which the platform check does not accept"
+            )
+        else:
+            # An existence frontend is satisfied by any file at the path.
+            self.file_status[full_dest] = "ok"
+            self.file_reasons.pop(full_dest, None)
+
+    def _pack_trees(self) -> None:
+        plan, opts = self.plan, self.plan.opts
+        # The trees the cores read follow them as their extras do: by the
+        # systems asked for, and those of no system in the part of their own.
+        core_trees = (
+            [] if opts.source == "platform"
+            else core_data_trees(
+                plan.config, plan.emu_profiles, plan.platform_name, opts.data_registry,
+                opts.target_cores,
+            )
+        )
+        if opts.extras_only:
+            owned = list(platform_scope_systems(plan.config, plan.emu_profiles, opts.target_cores))
+            core_trees = [t for t in core_trees if not _extras_for_systems([t], owned)]
+        elif opts.system_filter:
+            core_trees = _extras_for_systems(core_trees, opts.system_filter)
+        # Counted apart: the trees a core reads are not on the platform's
+        # list. MyMinUI declares nothing and its line read "6944 baseline".
+        self.total_files += self._pack_data_directories(plan.pack_systems, ())
+        self.tree_count = self._pack_data_directories({}, core_trees)
+        self.total_files += self.tree_count
+
+    def _pack_data_directories(self, pack_systems: dict, core_trees: Iterable[dict]) -> int:
+        """Add the data directories to the pack. Returns how many files went in."""
+        plan = self.plan
+        added = 0
+        for src, full in _data_directory_members(
+            pack_systems, plan.opts.data_registry, plan.platform_name, plan.base_dest,
+            self.placed.fold, self.placed.destinations, self.placed.lower,
+            self.placed.parents, required_only=plan.opts.required_only,
+            core_trees=core_trees,
+        ):
+            _add_pack_member(self.zf, src, self._flat(full))
+            if isinstance(self.zf, PackRecord):
+                self.zf.trees.append(self._flat(full))
+            added += 1
+        return added
+
+    def _unfolded_twins(self) -> None:
+        # The spellings a folded platform counts as declared never reach
+        # the extras: collected as the filesystem that keeps case sees
+        # them, as the manifest's case_variants are (Mesen-CE's bios.col
+        # beside the declared BIOS.col).
+        plan, opts = self.plan, self.plan.opts
+        unfolded = _collect_emulator_extras(
+            {**plan.config, "case_insensitive_fs": False}, opts.emulators_dir, plan.db, set(),
+            plan.base_dest, plan.emu_profiles, target_cores=opts.target_cores,
+            include_all=(opts.source == "truth"),
+        )
+        if opts.system_filter:
+            unfolded = _extras_for_systems(unfolded, opts.system_filter)
+        prefix = _detect_extras_prefix(plan.config, plan.base_dest)
+        unfolded_spares = self._spares(unfolded)
+        for fe in unfolded:
+            if opts.required_only and (fe.get("required") is False or id(fe) in unfolded_spares):
+                continue
+            if self._region_dropped(fe):
+                continue
+            full = extra_full_destination(fe, prefix)
+            if (
+                full and full not in self.placed.destinations and full.lower() in self.placed.lower
+                and self.resolve_extra(
+                    fe, sanitize_pack_path(fe.get("destination", fe["name"]))
+                )[0]
+            ):
+                self.case_twins.append(self._flat(full))
+
+    def _write_readme(self) -> None:
+        # README.txt for users: personalized step-by-step per platform
+        plan, opts = self.plan, self.plan.opts
+        registry = _platform_registry(plan.platforms_dir).get(plan.platform_name, {})
+        install = registry.get("install", {}) or {}
+        keeps_case = plan.case_insensitive and any(
+            d.get("os") not in CASE_FOLDING_OS for d in install.get("detect", [])
+        )
+        if keeps_case and opts.source != "platform" and opts.precomputed_extras is None:
+            self._unfolded_twins()
+        save_count = self.save_count
+        readme_text = _build_readme(
+            plan.platform_name, plan.platform_display, plan.base_dest, self.total_files,
+            len(plan.pack_systems),
+            source=opts.source,
+            contributors=registry.get("contributed_by", []),
+            regions=opts.regions,
+            fallback_systems=plan.region_fallbacks,
+            one_per_slot=opts.one_per_slot,
+            undecidable_slots=plan.slot_undecidable,
+            narrowings=plan.narrowings,
+            system_filter=opts.system_filter,
+            detect=install.get("detect", []),
+            standalone_copies=install.get("standalone_copies", []),
+            launch_folders=len(plan.config.get("core_system_dirs") or {}),
+            save_folder=(save_layout(plan.config).in_pack if save_count else ""),
+            save_where=(
+                save_place(
+                    str(registry.get("extract_to") or ""),
+                    save_layout(plan.config).folder, plan.base_dest,
+                ) if save_count else ""
+            ),
+            save_by_system=bool(save_count and save_layout(plan.config).by_system),
+            case_twins=(
+                _case_twin_pairs(
+                    self.case_twins, self.placed.destinations, plan.base_dest, opts.flatten
+                )
+                if keeps_case else []
+            ),
+        )
+        _write_generated_member(self.zf, "README.txt", readme_text)
+        for marker in pack_markers(plan.platform_name, opts.target_name, plan.platforms_dir):
+            _write_generated_member(
+                self.zf,
+                self._flat(f"{plan.base_dest}/{marker}" if plan.base_dest else marker),
+                "",
+            )
+
+    def report(self) -> None:
+        plan, opts = self.plan, self.plan.opts
+        _report_pack_counts(
+            plan.zip_path, self.file_status, self.total_files, self.core_count, opts.source,
+            plan.verification_mode, tree_count=self.tree_count,
+        )
+        if plan.cut is not None:
+            _report_left_out(
+                plan.cut,
+                systems=set(plan.pack_systems) if opts.source != "truth" else set(),
+                cores=opts.source != "platform" and opts.precomputed_extras is None,
+            )
+        for key, reason in sorted(self.file_reasons.items()):
+            label = _STATUS_LABELS.get(self.file_status.get(key, ""), "DISCREPANCY")
+            print(f"  {label}: {key}: {reason}")
+        for note in sorted(self.core_discrepancies):
+            print(f"  DISCREPANCY: {note}")
+
+
+def _platform_registry(platforms_dir: str) -> dict:
+    """The platforms of _registry.yml, or nothing when the file is absent."""
+    registry_path = Path(platforms_dir) / "_registry.yml"
+    if not registry_path.exists():
+        return {}
+    with open(registry_path) as f:
+        return (yaml_load(f) or {}).get("platforms", {})
+
+
 def generate_pack(
     platform_name: str,
     platforms_dir: str,
     db: dict,
     bios_dir: str,
     output_dir: str,
-    emulators_dir: str = "emulators",
-    zip_contents: dict | None = None,
-    data_registry: dict | None = None,
-    emu_profiles: dict | None = None,
-    target_cores: set[str] | None = None,
-    required_only: bool = False,
-    system_filter: list[str] | None = None,
-    precomputed_extras: list[dict] | None = None,
-    extras_only: bool = False,
-    source: str = "full",
-    flatten: bool = True,
-    regions: list[str] | None = None,
-    target_name: str | None = None,
-    one_per_slot: bool = False,
-    offline: bool | None = None,
-    pack_name: str | None = None,
-    no_game_data: bool = False,
-    record: PackRecord | None = None,
-    within: dict[str, str] | None = None,
+    **options: Unpack[PackOptions],
 ) -> str | None:
     """Generate a ZIP pack for a platform.
 
@@ -914,657 +1786,51 @@ def generate_pack(
 
     Returns the path to the generated ZIP, or None on failure.
     """
-    config = load_platform_config(platform_name, platforms_dir)
-    if target_name:
-        config = {**config, TARGET_KEY: target_name}
-    if zip_contents is None:
-        zip_contents = {}
-    if emu_profiles is None:
-        # The pipeline always passes them, but a caller that does not must get the
-        # same pack, not one built without validation, slots or agnostic cores.
-        emu_profiles = load_emulator_profiles(emulators_dir)
-    # Cut from the full config and profiles: the category of a platform
-    # entry is read from the profiles' game data entries.
-    cut = (
-        without_game_data(config, emu_profiles, data_registry, target_cores)
-        if no_game_data else None
-    )
-    if cut is not None:
-        config, emu_profiles = cut.config, cut.profiles
-
-    verification_mode = config.get("verification_mode", "existence")
-    platform_display = config.get("platform", platform_name)
-    base_dest = config.get("base_destination", "")
-
-    narrowings = _narrowings(
-        source, regions, target_name, one_per_slot, required_only,
-        no_game_data=no_game_data,
-    )
-    zip_path = os.path.join(
-        output_dir,
-        _platform_pack_name(
-            platform_name, platforms_dir, narrowings, system_filter, pack_name
-        ),
-    )
-    if record is None:
-        os.makedirs(output_dir, exist_ok=True)
-
-    # Case-insensitive dedup only for platforms targeting Windows/macOS.
-    # Linux-only platforms (Batocera, Recalbox, RetroDECK, Lakka, RomM)
-    # are case-sensitive and may have distinct files like DISK.ROM vs disk.rom.
-    case_insensitive = config.get("case_insensitive_fs", False)
-
-    total_files = 0
-    missing_files = []
-    # Core extras whose local copy contradicts the profile hash: packed,
-    # reported, and never counted against the platform's own file total.
-    core_discrepancies: list[str] = []
-    user_provided = []
-    seen_destinations: set[str] = set()
-    seen_lower: set[str] = set()  # only used when case_insensitive=True
-    # Spellings left out as case twins of a packed file, for the README.
-    case_twins: list[str] = []
-    seen_parents: set[str] = (
-        set()
-    )  # parent dirs of added files (path conflict detection)
-    # Per-destination status.  ``excluded`` means a same-named local payload
-    # exists but contradicts the declaration and is intentionally not shipped.
-    # It is distinct from a genuine coverage gap (``missing``).
-    file_status: dict[str, str] = {}
-    file_reasons: dict[str, str] = {}
-
-    # Build emulator-level validation index from the platform's own
-    # emulators (same scope as verify.py)
-    from common import resolve_platform_cores
-
-    validation_index = {}
-    platform_profiles: dict[str, dict] = {}
-    if emu_profiles:
-        platform_profiles = {
-            name: emu_profiles[name]
-            for name in resolve_platform_cores(config, emu_profiles)
-        }
-        validation_index = _build_validation_index(platform_profiles)
-    validation_owners = destination_owners(platform_profiles)
-    slot_overrides = slots.pack_overrides(
-        config, emu_profiles or {}, db, zip_contents, data_registry,
-        target_cores=target_cores, source=source,
-    )
-
-    pack_systems = platform_scope_systems(
-        config, emu_profiles or {}, target_cores, system_filter
-    )
-    if system_filter and not pack_systems:
-        reason = system_scope_error(config, platform_name, system_filter, target_name)
-        print(f"  WARNING: {reason}")
+    _reject_unknown("generate_pack", options, PackOptions.__optional_keys__)
+    opts = _PackSettings(**options)
+    plan = _plan_platform_pack(platform_name, platforms_dir, db, bios_dir, output_dir, opts)
+    if plan is None:
         return None
-    if extras_only:
-        # The part of a split that carries the core extras no platform system
-        # owns: the platform's own files and trees went to the other parts.
-        pack_systems = {}
 
-    preferred_entries: dict[str, int] = {}
-    if source != "truth":
-        # Decided among the declarations this pack keeps: a preferred entry
-        # that --required-only drops must not silence its required twin, or
-        # the destination leaves the pack without a trace (RetroDECK's four
-        # Atari 5200 ROMs, optional under atari-400-800 and required under
-        # atari-5200). No data directories: the choice is about the baseline.
-        preferred_entries = _preferred_entries(
-            pack_systems, db, bios_dir, base_dest, required_only,
-            zip_contents, offline,
+    def resolve(file_entry: dict, full_dest: str) -> tuple[str | None, str]:
+        return resolve_declaration(
+            file_entry,
+            db,
+            bios_dir,
+            plan.zip_contents,
+            opts.data_registry,
+            plan.slot_overrides.get(full_dest),
+            offline=opts.offline,
         )
 
-    # Region selection is decided once, over both the platform baseline and the
-    # core extras, so the two phases below consult a single set. Grouping uses a
-    # dedicated extras pass with an empty seen set: it only needs group
-    # membership, never destinations, and a superset of members is the safe
-    # direction. Runs only when --region is given.
-    # The gap report both extras passes read, computed once: the region
-    # grouping and the core complement below ask it the same question.
-    undeclared = (
-        undeclared_report(
-            config, emulators_dir, db, emu_profiles, target_cores,
-            include_all=(source == "truth"),
+    def verdict(file_entry: dict, local_path: str | None, status: str) -> tuple[str, str | None]:
+        return baseline_verdict(
+            file_entry, local_path, status, plan.verification_mode,
+            plan.config.get("hash_rule", ""),
         )
-        if source != "platform" and precomputed_extras is None
-        else None
+
+    def judge(file_entry: dict, local_path: str | None, dest: str) -> tuple[str | None, str | None]:
+        return validated_choice(
+            file_entry, local_path, db, plan.validation_index, bios_dir,
+            digest_algorithm(plan.verification_mode), dest, plan.validation_owners,
+        )
+
+    extra_resolver = ExtraResolver(
+        db, bios_dir, plan.zip_contents, opts.data_registry, plan.validation_index,
+        plan.validation_owners, opts.offline, profiles=plan.emu_profiles,
     )
-    region_drops, region_fallbacks, slot_undecidable = _select_variants(
-        config, pack_systems, emulators_dir, db, base_dest, emu_profiles,
-        target_cores, source, regions, one_per_slot, required_only,
-        undeclared=undeclared, zip_contents=zip_contents,
-        data_registry=data_registry, slot_overrides=slot_overrides,
-    )
+
+    def resolve_extra(fe: dict, dest: str) -> tuple[str | None, str, str]:
+        return extra_resolver.resolve(fe, dest)
 
     with (
-        contextlib.nullcontext(record) if record is not None
-        else _writing_pack(zip_path)
+        contextlib.nullcontext(opts.record) if opts.record is not None
+        else _writing_pack(plan.zip_path)
     ) as zf:
-      if source != "truth":
-        for sys_id, system in sorted(pack_systems.items()):
-            for file_entry in system.get("files", []):
-                if required_only and file_entry.get("required") is False:
-                    continue
-                dest = sanitize_pack_path(file_entry.get("destination", file_entry["name"]))
-                if region_drops and dest in region_drops:
-                    continue
-                if not dest:
-                    # EmuDeck-style entries (system:md5 whitelist, no filename).
-                    # Judged as verify judges it: resolved on disk, the md5
-                    # list parsed once (case, comma lists).
-                    fkey = f"{sys_id}/{file_entry.get('name', '')}"
-                    held, held_status = resolve_file(
-                        file_entry, db, bios_dir, zip_contents,
-                        data_dir_registry=data_registry, offline=offline,
-                    )
-                    if held_status == "not_found" or not held:
-                        file_status[fkey] = "missing"
-                    elif baseline_verdict(
-                        file_entry, held, held_status, verification_mode,
-                        config.get("hash_rule", ""),
-                    )[1]:
-                        file_status[fkey] = "excluded"
-                    else:
-                        file_status.setdefault(fkey, "ok")
-                    continue
-                if base_dest:
-                    full_dest = f"{base_dest}/{dest}"
-                else:
-                    full_dest = dest
-
-                dedup_key = full_dest
-                already_packed = dedup_key in seen_destinations or (
-                    case_insensitive and dedup_key.lower() in seen_lower
-                )
-
-                preferred = preferred_entries.get(dedup_key)
-                if preferred is not None and id(file_entry) != preferred:
-                    continue
-
-                if _has_path_conflict(full_dest, seen_destinations, seen_parents):
-                    # Content ships under the conflicting shape (file vs dir,
-                    # e.g. SGB1.sfc). verify.py resolves each declaration on
-                    # its own, so this one is counted by what it resolves to:
-                    # an unresolved one counted OK had the pack claim a file
-                    # verify reports missing.
-                    conflict_path, conflict_status = resolve_file(
-                        file_entry, db, bios_dir, zip_contents,
-                        data_dir_registry=data_registry, offline=offline,
-                    )
-                    # The verdict of the main path: a zipped_file archive is
-                    # judged by the member inside, and a frontend that hashes
-                    # one digest accepts a file another declared hash
-                    # contradicts, as verify judges it.
-                    conflict_status, refusal = baseline_verdict(
-                        file_entry, conflict_path, conflict_status, verification_mode,
-                        config.get("hash_rule", ""),
-                    )
-                    if conflict_status == "not_found":
-                        file_status[dedup_key] = "missing"
-                        file_reasons[dedup_key] = "not found"
-                    elif refusal:
-                        file_status[dedup_key] = "excluded"
-                        file_reasons[dedup_key] = refusal
-                    else:
-                        file_status.setdefault(dedup_key, "ok")
-                    continue
-
-                storage = file_entry.get("storage", "embedded")
-
-                if storage == "user_provided":
-                    if already_packed:
-                        continue
-                    seen_destinations.add(dedup_key)
-                    _register_path(dedup_key, seen_destinations, seen_parents)
-                    if case_insensitive:
-                        seen_lower.add(dedup_key.lower())
-                    file_status.setdefault(dedup_key, "ok")
-                    instructions = file_entry.get(
-                        "instructions", "Please provide this file manually."
-                    )
-                    instr_name = f"INSTRUCTIONS_{file_entry['name']}.txt"
-                    instr_path = (
-                        f"{base_dest}/{instr_name}" if base_dest else instr_name
-                    )
-                    _write_generated_member(
-                        zf,
-                        _flat(instr_path, base_dest, flatten),
-                        f"File needed: {file_entry['name']}\n\n{instructions}\n",
-                    )
-                    user_provided.append(file_entry["name"])
-                    total_files += 1
-                    continue
-
-                local_path, status = resolve_declaration(
-                    file_entry,
-                    db,
-                    bios_dir,
-                    zip_contents,
-                    data_registry,
-                    slot_overrides.get(full_dest),
-                    offline=offline,
-                )
-
-                if status == "external":
-                    file_ext = os.path.splitext(file_entry["name"])[1] or ""
-                    with tempfile.NamedTemporaryFile(
-                        delete=False, suffix=file_ext, dir=packresolve.scratch_dir()
-                    ) as tmp:
-                        tmp_path = tmp.name
-
-                    # The slot is the platform's file whether the download
-                    # arrives or not: verify cannot fetch, and a core file
-                    # filling it on a failed download made the two differ.
-                    seen_destinations.add(dedup_key)
-                    _register_path(dedup_key, seen_destinations, seen_parents)
-                    if case_insensitive:
-                        seen_lower.add(dedup_key.lower())
-                    try:
-                        if record is None and download_external(file_entry, tmp_path):
-                            extract = file_entry.get("extract", False)
-                            if extract and tmp_path.endswith(".zip"):
-                                _extract_zip_to_archive(tmp_path, _flat(full_dest, base_dest, flatten), zf)
-                            else:
-                                _add_pack_member(zf, tmp_path, _flat(full_dest, base_dest, flatten))
-                            file_status.setdefault(dedup_key, "ok")
-                            total_files += 1
-                        else:
-                            file_status[dedup_key] = "missing"
-                            file_reasons[dedup_key] = "external download failed"
-                    finally:
-                        if os.path.exists(tmp_path):
-                            os.unlink(tmp_path)
-                    continue
-
-                if status == "not_found":
-                    # A filename-agnostic core takes any image of its system,
-                    # renamed. Only an existence frontend accepts that.
-                    files_db = db.get("files", {})
-                    agnostic_path = None
-                    agnostic_resolved = False
-                    if not reads_file_contents(verification_mode):
-                        found = agnostic_substitute(file_entry, sys_id, db, platform_profiles)
-                        if found:
-                            local_path, agnostic_path = found
-                            agnostic_resolved = True
-
-                    if agnostic_resolved and local_path:
-                        original_name = os.path.basename(local_path)
-                        dest_name = file_entry.get("name", "")
-                        if original_name != dest_name and agnostic_path:
-                            alt_names = []
-                            for _s, _e in files_db.items():
-                                _p = _e.get("path", "")
-                                if _p.startswith(agnostic_path):
-                                    _n = _e.get("name", "")
-                                    if _n and _n != original_name:
-                                        alt_names.append(_n)
-                            readme_text = _build_agnostic_rename_readme(
-                                dest_name,
-                                original_name,
-                                alt_names,
-                            )
-                            readme_name = f"RENAMED_{dest_name}.txt"
-                            readme_full = (
-                                f"{base_dest}/{readme_name}"
-                                if base_dest
-                                else readme_name
-                            )
-                            if readme_full not in seen_destinations:
-                                _write_generated_member(
-                                    zf,
-                                    _flat(readme_full, base_dest, flatten),
-                                    readme_text,
-                                )
-                                seen_destinations.add(readme_full)
-                        status = "agnostic_fallback"
-                        # Fall through to normal packing below
-                    else:
-                        if not already_packed:
-                            file_status[dedup_key] = "missing"
-                            file_reasons[dedup_key] = "not found"
-                        continue
-
-                # The verdict the install manifest reads too: a member missing
-                # from a zipped_file archive, or a hash the frontend rejects.
-                status, refusal = baseline_verdict(
-                    file_entry, local_path, status, verification_mode,
-                    config.get("hash_rule", ""),
-                )
-                if refusal:
-                    # An earlier declaration of this path shipped a file this
-                    # one refuses: it is in the pack, untested as verify
-                    # counts it, not excluded.
-                    file_status[dedup_key] = "untested" if already_packed else "excluded"
-                    file_reasons[dedup_key] = refusal
-                    continue
-                if not hash_mismatch_excludes_file(verification_mode) and (
-                    status == "hash_mismatch" and local_path
-                ):
-                    # Existence platforms accept any file at the declared path:
-                    # their code never reads the bytes. An upstream hash that
-                    # contradicts a local dump is reported, not acted on.
-                    file_reasons.setdefault(
-                        dedup_key,
-                        existence_discrepancy(file_entry, local_path, platform_display),
-                    )
-                if file_status.get(dedup_key) == "missing":
-                    # An earlier declaration of this path found nothing, and this
-                    # one fills it, as verify counts it.
-                    del file_status[dedup_key]
-                    file_reasons.pop(dedup_key, None)
-                file_status.setdefault(dedup_key, "ok")
-
-                # Emulator-level validation: informational only for platform packs.
-                # Platform verification (existence/md5) is the authority for pack status.
-                # Emulator checks are supplementary: logged but don't downgrade.
-                # When a discrepancy is found, try to find a file satisfying both.
-                if file_status.get(dedup_key) == "ok":
-                    local_path, disagreement = validated_choice(
-                        file_entry, local_path, db, validation_index, bios_dir,
-                        digest_algorithm(verification_mode), dest, validation_owners,
-                    )
-                    if disagreement:
-                        file_reasons.setdefault(
-                            dedup_key, f"{platform_display} says OK but {disagreement}"
-                        )
-
-                if already_packed:
-                    if dedup_key not in seen_destinations:
-                        case_twins.append(_flat(full_dest, base_dest, flatten))
-                    continue
-                if within is not None and not _same_bytes(
-                    local_path, within.get(_flat(full_dest, base_dest, flatten))
-                ):
-                    # The full pack holds another system's file here.
-                    continue
-                if file_status.get(dedup_key) == "excluded":
-                    # An earlier declaration refused the file this one ships.
-                    file_status[dedup_key] = "untested"
-                seen_destinations.add(dedup_key)
-                _register_path(dedup_key, seen_destinations, seen_parents)
-                if case_insensitive:
-                    seen_lower.add(dedup_key.lower())
-
-                extract = file_entry.get("extract", False)
-                flat_dest = _flat(full_dest, base_dest, flatten)
-                if extract and local_path.endswith(".zip"):
-                    _extract_zip_to_archive(local_path, flat_dest, zf)
-                elif local_path.endswith(".zip"):
-                    _add_zip_to_pack(local_path, flat_dest, zf, file_entry)
-                else:
-                    _add_pack_member(zf, local_path, flat_dest)
-                total_files += 1
-
-      # Core requirements: files platform's cores need but YAML doesn't declare
-      if emu_profiles is None:
-          emu_profiles = load_emulator_profiles(emulators_dir)
-      if source == "platform":
-          core_files = []
-      elif precomputed_extras is not None:
-          core_files = precomputed_extras
-      elif system_filter:
-          # The systems asked for, with what their cores need: the split
-          # packs get exactly this, and a full pack of one system had none.
-          core_files = _extras_for_systems(
-              _collect_emulator_extras(
-                  config, emulators_dir, db, set(), base_dest, emu_profiles,
-                  target_cores=target_cores, include_all=(source == "truth"),
-                  undeclared=undeclared,
-              ),
-              system_filter,
-          )
-      else:
-          core_files = _collect_emulator_extras(
-              config,
-              emulators_dir,
-              db,
-              seen_destinations,
-              base_dest,
-              emu_profiles,
-              target_cores=target_cores,
-              include_all=(source == "truth"),
-              undeclared=undeclared,
-          )
-
-      core_count = 0
-      save_count = 0
-      extra_resolver = ExtraResolver(
-          db, bios_dir, zip_contents, data_registry, validation_index,
-          validation_owners, offline, profiles=emu_profiles,
-      )
-      spares = core_file_spares(
-          core_files,
-          lambda fe: bool(region_drops)
-          and extra_region_key(fe, declared_root(config)) in region_drops,
-      ) if required_only else set()
-      for fe in core_files:
-          if required_only and (fe.get("required") is False or id(fe) in spares):
-              continue
-          dest = sanitize_pack_path(fe.get("destination", fe["name"]))
-          if region_drops and extra_region_key(fe, declared_root(config)) in region_drops:
-              continue
-          if not dest:
-              continue
-          if fe.get("root") in OUTER_ROOTS:
-              # Read below the roms directory or in an emulator folder: the
-              # pack is extracted into the BIOS folder and cannot reach
-              # them, the installer places these files.
-              continue
-          # Core extras: _collect_emulator_extras already adjusted
-          # destinations for slug-based platforms.  Apply the effective
-          # prefix (base_dest, or inferred from YAML when base_dest is
-          # empty, as RetroDECK infers "bios"). A file read below the save
-          # directory goes to the pack's save folder instead.
-          full_dest = extra_full_destination(
-              fe, _detect_extras_prefix(config, base_dest)
-          )
-          if not full_dest:
-              continue
-          # Taken, a case twin on a case-insensitive filesystem, or a
-          # file/directory conflict (SGB1.sfc vs SGB1.sfc/): verify replays
-          # the same rule (packextras.hidden_extras).
-          block = placement_block(
-              full_dest, seen_destinations, seen_lower, seen_parents,
-              case_insensitive,
-          )
-          if block:
-              if block == "case_twin" and extra_resolver.resolve(fe, dest)[0]:
-                  case_twins.append(_flat(full_dest, base_dest, flatten))
-              continue
-
-          # The emulator's own check picks the copy, as for a declared file
-          # and in the emulator pack: the name led RetroArch's GC/dsp_rom.bin
-          # to Dolphin's obsolete v0.3.1 free ROM, beside Nintendo's coef
-          # ROM, a pair Dolphin warns about at every start.
-          local_path, status, disagreement = extra_resolver.resolve(fe, dest)
-          if not local_path:
-              continue
-          if disagreement:
-              core_discrepancies.append(f"{full_dest}: {disagreement}")
-          if status == "hash_mismatch" and not _matches_an_alternative(
-              fe, local_path, emu_profiles or {}
-          ):
-              # The core's declared hash comes from its source, the local dump
-              # is what the collection holds. Shipping it keeps the emulator
-              # working when the code never reads the hash, and the divergence is
-              # reported so it can be resolved at the profile or the dump.
-              # file_status tracks platform declarations only, so the report
-              # goes to its own list and never moves the pack's own count.
-              core_discrepancies.append(
-                  f"{full_dest}: declared hash of "
-                  f"{fe.get('source_profile') or fe.get('source_emulator', 'core profile')}"
-                  " does not match the packed copy"
-              )
-
-          flat_dest = _flat(full_dest, base_dest, flatten)
-          if within is not None and not _same_bytes(local_path, within.get(flat_dest)):
-              continue
-          if local_path.endswith(".zip"):
-              _add_zip_to_pack(local_path, flat_dest, zf, fe)
-          else:
-              _add_pack_member(zf, local_path, flat_dest)
-          if file_status.get(full_dest) in ("missing", "excluded"):
-              source_name = fe.get("source_profile") or fe.get(
-                  "source_emulator", "core profile"
-              )
-              if reads_file_contents(verification_mode):
-                  # The frontend hashes what sits at the path, and the core's
-                  # copy is not the hash it declares: the file ships for the
-                  # core, the platform's own check still fails, as verify says.
-                  file_reasons[full_dest] = (
-                      "platform-declared hash unavailable; "
-                      f"packed the validated {source_name} requirement, "
-                      "which the platform check does not accept"
-                  )
-              else:
-                  # An existence frontend is satisfied by any file at the path.
-                  file_status[full_dest] = "ok"
-                  file_reasons.pop(full_dest, None)
-          seen_destinations.add(full_dest)
-          _register_path(full_dest, seen_destinations, seen_parents)
-          if case_insensitive:
-              seen_lower.add(full_dest.lower())
-          core_count += 1
-          if fe.get("root") == "save":
-              save_count += 1
-          total_files += 1
-
-      # The trees the cores read follow them as their extras do: by the
-      # systems asked for, and those of no system in the part of their own.
-      core_trees = (
-          [] if source == "platform"
-          else core_data_trees(
-              config, emu_profiles, platform_name, data_registry, target_cores
-          )
-      )
-      if extras_only:
-          owned = list(platform_scope_systems(config, emu_profiles, target_cores))
-          core_trees = [t for t in core_trees if not _extras_for_systems([t], owned)]
-      elif system_filter:
-          core_trees = _extras_for_systems(core_trees, system_filter)
-      # Counted apart: the trees a core reads are not on the platform's
-      # list. MyMinUI declares nothing and its line read "6944 baseline".
-      total_files += _pack_data_directories(
-          zf, pack_systems, data_registry, platform_name, base_dest,
-          flatten, case_insensitive, seen_destinations, seen_lower,
-          seen_parents, required_only=required_only,
-      )
-      tree_count = _pack_data_directories(
-          zf, {}, data_registry, platform_name, base_dest,
-          flatten, case_insensitive, seen_destinations, seen_lower,
-          seen_parents, required_only=required_only, core_trees=core_trees,
-      )
-      total_files += tree_count
-
-      # README.txt for users: personalized step-by-step per platform
-      num_systems = len(pack_systems)
-      _registry_path = Path(platforms_dir) / "_registry.yml"
-      _pack_registry: dict = {}
-      if _registry_path.exists():
-          with open(_registry_path) as _rf:
-              _pack_registry = (yaml_load(_rf) or {}).get("platforms", {})
-      keeps_case = case_insensitive and any(
-          d.get("os") not in CASE_FOLDING_OS
-          for d in (_pack_registry.get(platform_name, {}).get("install", {}) or {})
-          .get("detect", [])
-      )
-      if keeps_case and source != "platform" and precomputed_extras is None:
-          # The spellings a folded platform counts as declared never reach
-          # the extras: collected as the filesystem that keeps case sees
-          # them, as the manifest's case_variants are (Mesen-CE's bios.col
-          # beside the declared BIOS.col).
-          unfolded = _collect_emulator_extras(
-              {**config, "case_insensitive_fs": False}, emulators_dir, db, set(),
-              base_dest, emu_profiles, target_cores=target_cores,
-              include_all=(source == "truth"),
-          )
-          if system_filter:
-              unfolded = _extras_for_systems(unfolded, system_filter)
-          prefix = _detect_extras_prefix(config, base_dest)
-          unfolded_spares = core_file_spares(
-              unfolded,
-              lambda fe: bool(region_drops)
-              and extra_region_key(fe, declared_root(config)) in region_drops,
-          ) if required_only else set()
-          for fe in unfolded:
-              if required_only and (fe.get("required") is False or id(fe) in unfolded_spares):
-                  continue
-              if region_drops and extra_region_key(fe, declared_root(config)) in region_drops:
-                  continue
-              full = extra_full_destination(fe, prefix)
-              if (
-                  full and full not in seen_destinations and full.lower() in seen_lower
-                  and extra_resolver.resolve(
-                      fe, sanitize_pack_path(fe.get("destination", fe["name"]))
-                  )[0]
-              ):
-                  case_twins.append(_flat(full, base_dest, flatten))
-      readme_text = _build_readme(
-          platform_name, platform_display, base_dest, total_files, num_systems,
-          source=source,
-          contributors=_pack_registry.get(platform_name, {}).get("contributed_by", []),
-          regions=regions,
-          fallback_systems=region_fallbacks,
-          one_per_slot=one_per_slot,
-          undecidable_slots=slot_undecidable,
-          narrowings=narrowings,
-          system_filter=system_filter,
-          detect=(
-              _pack_registry.get(platform_name, {}).get("install", {}) or {}
-          ).get("detect", []),
-          standalone_copies=(
-              _pack_registry.get(platform_name, {}).get("install", {}) or {}
-          ).get("standalone_copies", []),
-          launch_folders=len(config.get("core_system_dirs") or {}),
-          save_folder=(save_layout(config).in_pack if save_count else ""),
-          save_where=(
-              save_place(
-                  str(_pack_registry.get(platform_name, {}).get("extract_to") or ""),
-                  save_layout(config).folder, base_dest,
-              ) if save_count else ""
-          ),
-          save_by_system=bool(save_count and save_layout(config).by_system),
-          case_twins=(
-              _case_twin_pairs(case_twins, seen_destinations, base_dest, flatten)
-              if keeps_case else []
-          ),
-      )
-      _write_generated_member(zf, "README.txt", readme_text)
-      for marker in pack_markers(platform_name, target_name, platforms_dir):
-          _write_generated_member(
-              zf, _flat(f"{base_dest}/{marker}" if base_dest else marker, base_dest, flatten), ""
-          )
-
-    _report_pack_counts(
-        zip_path, file_status, total_files, core_count, source,
-        verification_mode, tree_count=tree_count,
-    )
-    if cut is not None:
-        _report_left_out(
-            cut,
-            systems=set(pack_systems) if source != "truth" else set(),
-            cores=source != "platform" and precomputed_extras is None,
-        )
-
-
-    for key, reason in sorted(file_reasons.items()):
-        status = file_status.get(key, "")
-        if status == "untested":
-            label = "UNTESTED"
-        elif status == "excluded":
-            label = "EXCLUDED"
-        elif status == "missing":
-            label = "MISSING"
-        else:
-            label = "DISCREPANCY"
-        print(f"  {label}: {key}: {reason}")
-    for name in missing_files:
-        print(f"  MISSING: {name}")
-    for note in sorted(core_discrepancies):
-        print(f"  DISCREPANCY: {note}")
-    return zip_path
+        build = _PlatformPackBuild(plan, zf, resolve, verdict, judge, resolve_extra)
+        build.run()
+    build.report()
+    return plan.zip_path
 
 
 def _extract_zip_to_archive(
@@ -1712,6 +1978,385 @@ def _bounded_pack_name(display_names: list[str], keys: list[str], suffix: str) -
     return f"{display_names[0]}_and_{len(display_names) - 1}_more_{digest}{suffix}"
 
 
+class EmulatorPackOptions(TypedDict, total=False):
+    """The keyword options of generate_emulator_pack."""
+
+    zip_contents: dict | None
+    offline: bool | None
+    platforms_dir: str | None
+    pack_name: str | None
+    system_ids: list[str] | None
+    final_dir: str | None
+    record: PackRecord | None
+
+
+@dataclass
+class _EmulatorPackBuild:
+    """One emulator pack being written, and what each destination came to."""
+
+    db: dict
+    bios_dir: str
+    standalone: bool
+    required_only: bool
+    zip_contents: dict
+    data_registry: dict
+    validation_index: dict
+    region_drops: set[str]
+    all_profiles: dict
+    zf: zipfile.ZipFile | PackRecord
+    offline: bool | None = None
+    system_ids: list[str] | None = None
+    record: PackRecord | None = None
+    total_files: int = 0
+    data_files: int = 0
+    missing_files: list[str] = field(default_factory=list)
+    rejected_files: list[str] = field(default_factory=list)
+    discrepancies: list[str] = field(default_factory=list)
+    unsourceable_files: list[str] = field(default_factory=list)
+    instruction_files: list[str] = field(default_factory=list)
+    placed: _Placed = field(default_factory=lambda: _Placed(True))
+    seen_hashes: set[str] = field(default_factory=set)  # SHA1 dedup for same file, different path
+    # Loose file packed at each folded destination, to tell a profile asking
+    # for the same file there from one asking for other bytes.
+    packed_at: dict[str, str] = field(default_factory=dict)
+    # A destination is missing once, however many profiles ask for it:
+    # verify --emulator counts by destination.
+    missing_at: set[str] = field(default_factory=set)
+    data_dir_notices: list[str] = field(default_factory=list)
+
+    def report_missing(self, name: str, destination: str) -> None:
+        if destination not in self.missing_at:
+            self.missing_at.add(destination)
+            self.missing_files.append(name)
+
+    def _add(self, local_path: str, dest: str, fe: dict | None) -> None:
+        """Write a loose file or an archive at dest and count it."""
+        if fe is not None and local_path.endswith(".zip"):
+            _add_zip_to_pack(local_path, dest, self.zf, fe)
+        else:
+            _add_pack_member(self.zf, local_path, dest)
+        self.placed.take(dest)
+        self.total_files += 1
+        if self.record is not None:
+            self.record.files.append(dest)
+
+    def pack_profile(self, emu_name: str, profile: dict) -> None:
+        pack_structure = profile.get("pack_structure")
+        files = expand_agnostic_entries(
+            expand_directory_entries(
+                deliverable(profile.get("files", []), self.standalone),
+                self.db,
+                self.standalone,
+            ),
+            emu_name, profile, self.db, self.standalone, self.all_profiles,
+        )
+        if self.system_ids:
+            files = [
+                fe for fe in files if entry_serves_systems(fe, profile, self.system_ids)
+            ]
+        if not files and not profile.get("data_directories"):
+            print(f"  No files needed for {profile.get('emulator', emu_name)}")
+
+        # What each destination came to, settled by set once the
+        # profile is read: a member another member fills is not missing,
+        # and a set nobody holds is reported once (alternatives.py). An
+        # archive unit is a member like a loose file.
+        outcomes: list[_Outcome] = []
+        spares = emulator_required_spares(
+            emu_name, profile, files, self.standalone, self.region_drops, self.db,
+            self.validation_index, self.zip_contents, data_registry=self.data_registry,
+        ) if self.required_only else set()
+
+        # Pack archives as units
+        archive_prefix = profile.get("archive_prefix", "")
+        for archive_name in sorted({fe["archive"] for fe in files if fe.get("archive")}):
+            archive_dest = _archive_destination(
+                archive_name, archive_prefix, pack_structure, self.standalone
+            )
+            own_entry = archive_entry(archive_name, files)
+            if self.required_only and archive_is_optional(own_entry, archive_name, files):
+                continue
+            if archive_dest in spares:
+                continue
+            outcomes.append(self._pack_archive(own_entry, archive_name, archive_dest))
+
+        for dest, alternatives in self._slots(files, spares).items():
+            outcome = self._pack_slot(emu_name, files, dest, alternatives)
+            if outcome is not None:
+                outcomes.append(outcome)
+
+        excused, _standing = settle_sets([
+            (slot_set_keys(emu_name, entries), entries[0], fills)
+            for entries, fills, _report in outcomes
+        ])
+        for position, (_entries, _fills, report) in enumerate(outcomes):
+            if report is not None and position not in excused:
+                report()
+        self._pack_trees(profile, pack_structure)
+
+    def _pack_archive(self, own_entry: dict, archive_name: str, archive_dest: str) -> _Outcome:
+        local_path, status = resolve_file(
+            own_entry,
+            self.db,
+            self.bios_dir,
+            self.zip_contents,
+            data_dir_registry=self.data_registry,
+            offline=self.offline,
+        )
+        taken = archive_dest.lower() in self.placed.lower
+        if taken or self.placed.conflicts(archive_dest):
+            # Another profile's file holds this path. The same archive
+            # asked for twice is served. Anything else leaves this
+            # profile without its archive, which used to pass in
+            # silence: a neocdz.zip lacking 000-lo.lo shipped as the
+            # one the second core needs.
+            if not (taken and local_path and _same_bytes(
+                local_path, self.packed_at.get(archive_dest.lower())
+            )):
+                return ([own_entry], False, functools.partial(
+                    self.report_missing, archive_name, archive_dest
+                ))
+            return ([own_entry], True, None)
+        if local_path and status not in ("not_found",):
+            self._add(local_path, archive_dest, own_entry)
+            self.packed_at[archive_dest.lower()] = local_path
+            return ([own_entry], True, None)
+        return ([own_entry], False, functools.partial(
+            self.report_missing, archive_name, archive_dest
+        ))
+
+    def _slots(self, files: list[dict], spares: set) -> dict[str, list[dict]]:
+        # Pack individual files (skip archive members). The entries of one
+        # profile on one destination are the releases the code accepts
+        # there (raze's seven SW.GRP): the first one the core accepts
+        # fills the slot, as verify --emulator credits it, and the slot
+        # has one outcome however many alternatives it lists.
+        slots: dict[str, list[dict]] = {}
+        for fe in files:
+            if self.required_only and fe.get("required") is False:
+                continue
+            if fe.get("archive"):
+                continue
+            dest = _resolve_destination(fe, self.standalone)
+            if not dest or dest in spares:
+                continue
+            if self.region_drops and dest in self.region_drops:
+                continue
+            slots.setdefault(dest, []).append(fe)
+        return slots
+
+    def _write_instructions(self, provided: dict, dest: str) -> None:
+        # Instructions, not a file: written beside the slot the
+        # user fills, and counted apart from what the pack holds.
+        self.placed.take(dest)
+        instr = provided.get("instructions", "Please provide this file manually.")
+        folder = dest.rsplit("/", 1)[0] + "/" if "/" in dest else ""
+        _write_generated_member(
+            self.zf,
+            f"{folder}INSTRUCTIONS_{provided['name']}.txt",
+            f"File needed: {provided['name']}\n\n{instr}\n",
+        )
+        # verify --emulator counts an unsourceable one as such.
+        (self.unsourceable_files if provided.get("unsourceable") else self.instruction_files).append(
+            provided["name"]
+        )
+
+    def _choose(
+        self, emu_name: str, files: list[dict], alternatives: list[dict],
+    ) -> tuple[tuple[dict, str, str | None] | None, str | None, str | None]:
+        """The alternative the core accepts, with the refusal of the first
+        one it turned away and that copy."""
+        fallback: tuple[dict, str, str | None] | None = None
+        refusal: str | None = None
+        refused_path: str | None = None
+        for fe in alternatives:
+            local_path, status = resolve_file(
+                {**with_archive_members(fe, files), "source_profile": emu_name},
+                self.db,
+                self.bios_dir,
+                self.zip_contents,
+                dest_hint=fe.get("path", ""),
+                data_dir_registry=self.data_registry,
+                offline=self.offline,
+            )
+            if status == "external":
+                return (fe, "", "external"), refusal, refused_path
+            if status in ("not_found", "user_provided") or not local_path:
+                continue
+            # The file verify --emulator credits is the one shipped:
+            # a dump the core's own check rejects gives way to a held
+            # one it accepts (azahar's otp.bin, dolphin's dsp_rom.bin).
+            better, disagreement = validated_choice(
+                fe, local_path, self.db, self.validation_index, self.bios_dir, None,
+                emulators={emu_name},
+            )
+            if disagreement:
+                reason = disagreement.split(" says ", 1)[-1]
+                refusal = refusal or f"{fe['name']}: {reason}"
+                refused_path = refused_path or local_path
+                continue
+            if better != local_path:
+                return (fe, better, None), refusal, refused_path
+            if status == "hash_mismatch":
+                # Not a check the core runs, so the file still serves,
+                # but it is not the dump the profile documents.
+                fallback = fallback or (fe, local_path, "mismatch")
+                continue
+            return (fe, local_path, None), refusal, refused_path
+        return fallback, refusal, refused_path
+
+    def _pack_slot(
+        self, emu_name: str, files: list[dict], dest: str, alternatives: list[dict],
+    ) -> _Outcome | None:
+        # Name order, first file wins, case folded: verify replays
+        # the rule and reports a later profile's file as missing.
+        block = self.placed.block(dest)
+
+        provided = next(
+            (fe for fe in alternatives if fe.get("storage") == "user_provided"),
+            None,
+        )
+        if provided is not None:
+            if not block:
+                self._write_instructions(provided, dest)
+            return None
+
+        chosen, refusal, refused_path = self._choose(emu_name, files, alternatives)
+        if block:
+            held = (
+                chosen[1] if chosen is not None and chosen[2] != "external"
+                else None if chosen is not None else refused_path
+            )
+            if chosen is not None or held is not None:
+                if block == "taken" and held and _same_bytes(
+                    held, self.packed_at.get(dest.lower())
+                ):
+                    # The file already at this path, asked for twice.
+                    return (alternatives, True, None)
+                return (alternatives, False, functools.partial(
+                    self.report_missing, alternatives[0]["name"], dest
+                ))
+
+        if chosen is None:
+            return self._unfilled(alternatives, dest, refusal)
+        fe, local_path, how = chosen
+        if how == "external":
+            return self._pack_external(fe, dest, alternatives)
+        if how == "mismatch":
+            self.discrepancies.append(
+                f"{fe['name']}: not the dump the {emu_name} profile declares"
+            )
+
+        # SHA1 dedup: skip if same physical file AND same destination
+        # (but allow same file to be packed under different destinations,
+        # e.g., IPL.bin in GC/USA/ and GC/EUR/ from same source)
+        dedup_key_hash = f"{os.path.realpath(local_path)}:{dest}"
+        if dedup_key_hash not in self.seen_hashes:
+            self.seen_hashes.add(dedup_key_hash)
+            self._add(local_path, dest, fe)
+            self.packed_at[dest.lower()] = local_path
+        return (alternatives, True, None)
+
+    def _unfilled(self, alternatives: list[dict], dest: str, refusal: str | None) -> _Outcome:
+        if refusal:
+            self.rejected_files.append(refusal)
+            return (alternatives, False, None)
+        if all(fe.get("unsourceable") for fe in alternatives):
+            return (alternatives, False, functools.partial(
+                self.unsourceable_files.append, alternatives[0]["name"]
+            ))
+        return (alternatives, False, functools.partial(
+            self.report_missing, alternatives[0]["name"], dest
+        ))
+
+    def _pack_external(self, fe: dict, dest: str, alternatives: list[dict]) -> _Outcome:
+        file_ext = os.path.splitext(fe["name"])[1] or ""
+        with tempfile.NamedTemporaryFile(
+            delete=False, suffix=file_ext, dir=packresolve.scratch_dir()
+        ) as tmp:
+            tmp_path = tmp.name
+        try:
+            # Built in memory, nothing is fetched: verify --emulator
+            # cannot fetch either and reports the file missing.
+            if self.record is None and download_external(fe, tmp_path):
+                self._add(tmp_path, dest, None)
+                return (alternatives, True, None)
+            return (alternatives, False, functools.partial(
+                self.missing_files.append, fe["name"]
+            ))
+        finally:
+            if os.path.exists(tmp_path):
+                os.unlink(tmp_path)
+
+    def _pack_trees(self, profile: dict, pack_structure: dict | None) -> None:
+        # The trees after the files, as in a platform pack: a dump the
+        # profile declares wins over the copy a tree bundles at the same
+        # path (Dolphin's real dsp_rom.bin over Sys/GC's free one).
+        # A tree only one build reads follows that build, like a file.
+        for dd in deliverable(
+            profile.get("data_directories", []), self.standalone
+        ):
+            if self.required_only and dd.get("required") is False:
+                continue
+            ref_key = dd.get("ref", "")
+            if not ref_key or not self.data_registry or ref_key not in self.data_registry:
+                if ref_key:
+                    self.data_dir_notices.append(ref_key)
+                continue
+            local_cache = self.data_registry[ref_key].get("local_cache", "")
+            if not local_cache or not os.path.isdir(local_cache):
+                self.data_dir_notices.append(ref_key)
+                continue
+            dd_dest = dd.get("destination", "")
+            if pack_structure:
+                mode_key = "standalone" if self.standalone else "libretro"
+                prefix = pack_structure.get(mode_key, "")
+                if prefix:
+                    dd_dest = f"{prefix}/{dd_dest}" if dd_dest else prefix
+            self.data_files += _pack_data_tree(
+                self.zf, local_cache, dd_dest, self.placed.destinations,
+                self.placed.parents, self.placed.lower, self.packed_at,
+            )
+
+    def nothing_needed(self) -> bool:
+        return self.total_files + self.data_files == 0 and not (
+            self.missing_files or self.rejected_files or self.instruction_files
+            or self.unsourceable_files
+        )
+
+    def report(self, shown: str) -> None:
+        # Report. The members of data trees are counted apart: verify --emulator
+        # counts the profile's files, and folding 3500 tree members into the
+        # same number made the two impossible to compare.
+        parts = [f"{self.total_files} files packed"]
+        if self.data_files:
+            parts.append(f"{self.data_files} from data directories")
+        if self.missing_files:
+            parts.append(f"{len(self.missing_files)} missing")
+        if self.rejected_files:
+            parts.append(f"{len(self.rejected_files)} refused by the core")
+        if self.unsourceable_files:
+            parts.append(f"{len(self.unsourceable_files)} unsourceable")
+        if self.instruction_files:
+            parts.append(f"{len(self.instruction_files)} to provide")
+        print(f"  {shown}: {', '.join(parts)}")
+        for name in self.missing_files:
+            print(f"  MISSING: {name}")
+        for name in self.unsourceable_files:
+            print(f"  UNSOURCEABLE: {name}")
+        for name in self.instruction_files:
+            print(f"  TO PROVIDE: {name} (instructions in the pack)")
+        for line in self.rejected_files:
+            print(f"  REFUSED: {line}")
+        for line in self.discrepancies:
+            print(f"  DISCREPANCY: {line}")
+        for ref in sorted(set(self.data_dir_notices)):
+            print(
+                f"  Note: data directory '{ref}' required but not included (use refresh_data_dirs.py)"
+            )
+        _MISSING_DATA_DIRS.update(self.data_dir_notices)
+
+
 def generate_emulator_pack(
     profile_names: list[str],
     emulators_dir: str,
@@ -1719,15 +2364,10 @@ def generate_emulator_pack(
     bios_dir: str,
     output_dir: str,
     standalone: bool = False,
-    zip_contents: dict | None = None,
+    *,
     required_only: bool = False,
     regions: list[str] | None = None,
-    offline: bool | None = None,
-    platforms_dir: str | None = None,
-    pack_name: str | None = None,
-    system_ids: list[str] | None = None,
-    final_dir: str | None = None,
-    record: PackRecord | None = None,
+    **options: Unpack[EmulatorPackOptions],
 ) -> str | None:
     """Generate a ZIP pack for specific emulator profiles.
 
@@ -1742,7 +2382,9 @@ def generate_emulator_pack(
     `record` builds the pack in memory instead (PackRecord): nothing is
     written or read, and the paths are kept on it.
     """
+    _reject_unknown("generate_emulator_pack", options, EmulatorPackOptions.__optional_keys__)
     all_profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
+    zip_contents = options.get("zip_contents")
     if zip_contents is None:
         zip_contents = build_zip_contents_index(db)
 
@@ -1752,6 +2394,7 @@ def generate_emulator_pack(
         print(f"Error: {exc}", file=sys.stderr)
         return None
 
+    record = options.get("record")
     # ZIP naming
     display_names = [_name_part(p.get("emulator", n)) for n, p in selected]
     validation_index = _build_validation_index(dict(selected))
@@ -1761,7 +2404,7 @@ def generate_emulator_pack(
             "full", regions, None, False, required_only, standalone
         )
     )
-    zip_name = pack_name or _bounded_pack_name(
+    zip_name = options.get("pack_name") or _bounded_pack_name(
         display_names, [n for n, _p in selected], f"{narrow_tags}_BIOS_Pack.zip"
     )
     zip_path = os.path.join(output_dir, zip_name)
@@ -1769,7 +2412,7 @@ def generate_emulator_pack(
         os.makedirs(output_dir, exist_ok=True)
 
     data_registry = load_data_dir_registry(
-        platforms_dir or os.path.join(os.path.dirname(__file__), "..", "platforms")
+        options.get("platforms_dir") or os.path.join(os.path.dirname(__file__), "..", "platforms")
     )
     region_drops: set[str] = (
         emulator_region_drops(
@@ -1779,345 +2422,20 @@ def generate_emulator_pack(
         if regions
         else set()
     )
-
-    total_files = 0
-    data_files = 0
-    missing_files = []
-    rejected_files: list[str] = []
-    discrepancies: list[str] = []
-    unsourceable_files: list[str] = []
-    instruction_files: list[str] = []
-    seen_destinations: set[str] = set()
-    seen_lower: set[str] = set()
-    seen_parents: set[str] = (
-        set()
-    )  # parent dirs of added files (path conflict detection)
-    seen_hashes: set[str] = set()  # SHA1 dedup for same file, different path
-    # Loose file packed at each folded destination, to tell a profile asking
-    # for the same file there from one asking for other bytes.
-    packed_at: dict[str, str] = {}
-    # A destination is missing once, however many profiles ask for it:
-    # verify --emulator counts by destination.
-    missing_at: set[str] = set()
-
-    def report_missing(name: str, destination: str) -> None:
-        if destination not in missing_at:
-            missing_at.add(destination)
-            missing_files.append(name)
-
-    data_dir_notices: list[str] = []
-
     with (
         contextlib.nullcontext(record) if record is not None
         else _writing_pack(zip_path)
     ) as zf:
+        build = _EmulatorPackBuild(
+            db, bios_dir, standalone, required_only, zip_contents, data_registry,
+            validation_index, region_drops, all_profiles, zf,
+            offline=options.get("offline"), system_ids=options.get("system_ids"), record=record,
+        )
         for emu_name, profile in sorted(selected):
-            pack_structure = profile.get("pack_structure")
-            files = expand_agnostic_entries(
-                expand_directory_entries(
-                    deliverable(profile.get("files", []), standalone),
-                    db,
-                    standalone,
-                ),
-                emu_name, profile, db, standalone, all_profiles,
-            )
-            if system_ids:
-                files = [
-                    fe for fe in files if entry_serves_systems(fe, profile, system_ids)
-                ]
-            if not files and not profile.get("data_directories"):
-                print(f"  No files needed for {profile.get('emulator', emu_name)}")
-
-            archives: set[str] = set()
-            for fe in files:
-                archive = fe.get("archive")
-                if archive:
-                    archives.add(archive)
-
-            # What each destination came to, settled by set once the
-            # profile is read: a member another member fills is not missing,
-            # and a set nobody holds is reported once (alternatives.py). An
-            # archive unit is a member like a loose file.
-            outcomes: list[tuple[list[dict], bool, Callable[[], None] | None]] = []
-            spares = emulator_required_spares(
-                emu_name, profile, files, standalone, region_drops, db,
-                validation_index, zip_contents, data_registry,
-            ) if required_only else set()
-
-            # Pack archives as units
-            archive_prefix = profile.get("archive_prefix", "")
-            for archive_name in sorted(archives):
-                archive_dest = _archive_destination(
-                    archive_name, archive_prefix, pack_structure, standalone
-                )
-
-                own_entry = archive_entry(archive_name, files)
-                if required_only and archive_is_optional(own_entry, archive_name, files):
-                    continue
-                if archive_dest in spares:
-                    continue
-                local_path, status = resolve_file(
-                    own_entry,
-                    db,
-                    bios_dir,
-                    zip_contents,
-                    data_dir_registry=data_registry,
-                    offline=offline,
-                )
-                taken = archive_dest.lower() in seen_lower
-                if taken or _has_path_conflict(archive_dest, seen_destinations, seen_parents):
-                    # Another profile's file holds this path. The same archive
-                    # asked for twice is served. Anything else leaves this
-                    # profile without its archive, which used to pass in
-                    # silence: a neocdz.zip lacking 000-lo.lo shipped as the
-                    # one the second core needs.
-                    if not (taken and local_path and _same_bytes(
-                        local_path, packed_at.get(archive_dest.lower())
-                    )):
-                        outcomes.append(([own_entry], False, functools.partial(
-                            report_missing, archive_name, archive_dest
-                        )))
-                    else:
-                        outcomes.append(([own_entry], True, None))
-                    continue
-                if local_path and status not in ("not_found",):
-                    if local_path.endswith(".zip"):
-                        _add_zip_to_pack(local_path, archive_dest, zf, own_entry)
-                    else:
-                        _add_pack_member(zf, local_path, archive_dest)
-                    seen_destinations.add(archive_dest)
-                    _register_path(archive_dest, seen_destinations, seen_parents)
-                    seen_lower.add(archive_dest.lower())
-                    packed_at[archive_dest.lower()] = local_path
-                    total_files += 1
-                    if record is not None:
-                        record.files.append(archive_dest)
-                    outcomes.append(([own_entry], True, None))
-                else:
-                    outcomes.append(([own_entry], False, functools.partial(
-                        report_missing, archive_name, archive_dest
-                    )))
-
-            # Pack individual files (skip archive members). The entries of one
-            # profile on one destination are the releases the code accepts
-            # there (raze's seven SW.GRP): the first one the core accepts
-            # fills the slot, as verify --emulator credits it, and the slot
-            # has one outcome however many alternatives it lists.
-            slots: dict[str, list[dict]] = {}
-            for fe in files:
-                if required_only and fe.get("required") is False:
-                    continue
-                if fe.get("archive"):
-                    continue
-                dest = _resolve_destination(fe, standalone)
-                if not dest or dest in spares:
-                    continue
-                if region_drops and dest in region_drops:
-                    continue
-                slots.setdefault(dest, []).append(fe)
-
-            for dest, alternatives in slots.items():
-                # Name order, first file wins, case folded: verify replays
-                # the rule and reports a later profile's file as missing.
-                block = placement_block(
-                    dest, seen_destinations, seen_lower, seen_parents, True
-                )
-
-                provided = next(
-                    (fe for fe in alternatives if fe.get("storage") == "user_provided"),
-                    None,
-                )
-                if provided is not None and block:
-                    continue
-                if provided is not None:
-                    # Instructions, not a file: written beside the slot the
-                    # user fills, and counted apart from what the pack holds.
-                    seen_destinations.add(dest)
-                    _register_path(dest, seen_destinations, seen_parents)
-                    seen_lower.add(dest.lower())
-                    instr = provided.get("instructions", "Please provide this file manually.")
-                    folder = dest.rsplit("/", 1)[0] + "/" if "/" in dest else ""
-                    _write_generated_member(
-                        zf,
-                        f"{folder}INSTRUCTIONS_{provided['name']}.txt",
-                        f"File needed: {provided['name']}\n\n{instr}\n",
-                    )
-                    # verify --emulator counts an unsourceable one as such.
-                    (unsourceable_files if provided.get("unsourceable") else instruction_files).append(
-                        provided["name"]
-                    )
-                    continue
-
-                chosen: tuple[dict, str, str | None] | None = None
-                fallback: tuple[dict, str, str | None] | None = None
-                refusal: str | None = None
-                refused_path: str | None = None
-                for fe in alternatives:
-                    local_path, status = resolve_file(
-                        {**with_archive_members(fe, files), "source_profile": emu_name},
-                        db,
-                        bios_dir,
-                        zip_contents,
-                        dest_hint=fe.get("path", ""),
-                        data_dir_registry=data_registry,
-                        offline=offline,
-                    )
-                    if status == "external":
-                        chosen = (fe, "", "external")
-                        break
-                    if status in ("not_found", "user_provided") or not local_path:
-                        continue
-                    # The file verify --emulator credits is the one shipped:
-                    # a dump the core's own check rejects gives way to a held
-                    # one it accepts (azahar's otp.bin, dolphin's dsp_rom.bin).
-                    better, disagreement = validated_choice(
-                        fe, local_path, db, validation_index, bios_dir, None,
-                        emulators={emu_name},
-                    )
-                    if disagreement:
-                        reason = disagreement.split(" says ", 1)[-1]
-                        refusal = refusal or f"{fe['name']}: {reason}"
-                        refused_path = refused_path or local_path
-                        continue
-                    if better != local_path:
-                        chosen = (fe, better, None)
-                        break
-                    if status == "hash_mismatch":
-                        # Not a check the core runs, so the file still serves,
-                        # but it is not the dump the profile documents.
-                        fallback = fallback or (fe, local_path, "mismatch")
-                        continue
-                    chosen = (fe, local_path, None)
-                    break
-                chosen = chosen or fallback
-
-                if block:
-                    held = (
-                        chosen[1] if chosen is not None and chosen[2] != "external"
-                        else None if chosen is not None else refused_path
-                    )
-                    if chosen is not None or held is not None:
-                        if block == "taken" and held and _same_bytes(
-                            held, packed_at.get(dest.lower())
-                        ):
-                            # The file already at this path, asked for twice.
-                            outcomes.append((alternatives, True, None))
-                            continue
-                        outcomes.append((alternatives, False, functools.partial(
-                            report_missing, alternatives[0]["name"], dest
-                        )))
-                        continue
-
-                if chosen is None:
-                    if refusal:
-                        rejected_files.append(refusal)
-                        outcomes.append((alternatives, False, None))
-                    elif all(fe.get("unsourceable") for fe in alternatives):
-                        outcomes.append((alternatives, False, functools.partial(
-                            unsourceable_files.append, alternatives[0]["name"]
-                        )))
-                    else:
-                        outcomes.append((alternatives, False, functools.partial(
-                            report_missing, alternatives[0]["name"], dest
-                        )))
-                    continue
-
-                fe, local_path, how = chosen
-                if how == "external":
-                    file_ext = os.path.splitext(fe["name"])[1] or ""
-                    with tempfile.NamedTemporaryFile(
-                        delete=False, suffix=file_ext, dir=packresolve.scratch_dir()
-                    ) as tmp:
-                        tmp_path = tmp.name
-                    try:
-                        # Built in memory, nothing is fetched: verify --emulator
-                        # cannot fetch either and reports the file missing.
-                        if record is None and download_external(fe, tmp_path):
-                            _add_pack_member(zf, tmp_path, dest)
-                            seen_destinations.add(dest)
-                            _register_path(dest, seen_destinations, seen_parents)
-                            seen_lower.add(dest.lower())
-                            total_files += 1
-                            if record is not None:
-                                record.files.append(dest)
-                            outcomes.append((alternatives, True, None))
-                        else:
-                            outcomes.append((alternatives, False, functools.partial(
-                                missing_files.append, fe["name"]
-                            )))
-                    finally:
-                        if os.path.exists(tmp_path):
-                            os.unlink(tmp_path)
-                    continue
-                if how == "mismatch":
-                    discrepancies.append(
-                        f"{fe['name']}: not the dump the {emu_name} profile declares"
-                    )
-
-                # SHA1 dedup: skip if same physical file AND same destination
-                # (but allow same file to be packed under different destinations,
-                # e.g., IPL.bin in GC/USA/ and GC/EUR/ from same source)
-                dedup_key_hash = f"{os.path.realpath(local_path)}:{dest}"
-                outcomes.append((alternatives, True, None))
-                if dedup_key_hash in seen_hashes:
-                    continue
-                seen_hashes.add(dedup_key_hash)
-
-                if local_path.endswith(".zip"):
-                    _add_zip_to_pack(local_path, dest, zf, fe)
-                else:
-                    _add_pack_member(zf, local_path, dest)
-                seen_destinations.add(dest)
-                _register_path(dest, seen_destinations, seen_parents)
-                seen_lower.add(dest.lower())
-                packed_at[dest.lower()] = local_path
-                total_files += 1
-                if record is not None:
-                    record.files.append(dest)
-
-            excused, _standing = settle_sets([
-                (slot_set_keys(emu_name, entries), entries[0], fills)
-                for entries, fills, _report in outcomes
-            ])
-            for position, (_entries, _fills, report) in enumerate(outcomes):
-                if report is not None and position not in excused:
-                    report()
-
-            # The trees after the files, as in a platform pack: a dump the
-            # profile declares wins over the copy a tree bundles at the same
-            # path (Dolphin's real dsp_rom.bin over Sys/GC's free one).
-            # A tree only one build reads follows that build, like a file.
-            for dd in deliverable(
-                profile.get("data_directories", []), standalone
-            ):
-                if required_only and dd.get("required") is False:
-                    continue
-                ref_key = dd.get("ref", "")
-                if not ref_key or not data_registry or ref_key not in data_registry:
-                    if ref_key:
-                        data_dir_notices.append(ref_key)
-                    continue
-                entry = data_registry[ref_key]
-                local_cache = entry.get("local_cache", "")
-                if not local_cache or not os.path.isdir(local_cache):
-                    data_dir_notices.append(ref_key)
-                    continue
-                dd_dest = dd.get("destination", "")
-                if pack_structure:
-                    mode_key = "standalone" if standalone else "libretro"
-                    prefix = pack_structure.get(mode_key, "")
-                    if prefix:
-                        dd_dest = f"{prefix}/{dd_dest}" if dd_dest else prefix
-                data_files += _pack_data_tree(
-                    zf, local_cache, dd_dest, seen_destinations, seen_parents, seen_lower,
-                    packed_at,
-                )
+            build.pack_profile(emu_name, profile)
 
     # Remove empty ZIP (no files packed and no missing = nothing to ship)
-    nothing_needed = total_files + data_files == 0 and not (
-        missing_files or rejected_files or instruction_files or unsourceable_files
-    )
-    if record is None and nothing_needed:
+    if record is None and build.nothing_needed():
         os.unlink(zip_path)
         # What verify --emulator reports as 0/0 OK: no file is needed, so
         # no pack is written and the run succeeds. Printed with the path,
@@ -2125,46 +2443,18 @@ def generate_emulator_pack(
         print(f"  {', '.join(display_names)}: no file needed, no pack written")
         return ""
 
-    # Report. The members of data trees are counted apart: verify --emulator
-    # counts the profile's files, and folding 3500 tree members into the
-    # same number made the two impossible to compare.
-    missing_count = len(missing_files)
-    ok_count = total_files
-    parts = [f"{ok_count} files packed"]
-    if data_files:
-        parts.append(f"{data_files} from data directories")
-    if missing_count:
-        parts.append(f"{missing_count} missing")
-    if rejected_files:
-        parts.append(f"{len(rejected_files)} refused by the core")
-    if unsourceable_files:
-        parts.append(f"{len(unsourceable_files)} unsourceable")
-    if instruction_files:
-        parts.append(f"{len(instruction_files)} to provide")
-    shown = os.path.join(final_dir, zip_name) if final_dir else zip_path
-    print(f"  {shown}: {', '.join(parts)}")
-    for name in missing_files:
-        print(f"  MISSING: {name}")
-    for name in unsourceable_files:
-        print(f"  UNSOURCEABLE: {name}")
-    for name in instruction_files:
-        print(f"  TO PROVIDE: {name} (instructions in the pack)")
-    for line in rejected_files:
-        print(f"  REFUSED: {line}")
-    for line in discrepancies:
-        print(f"  DISCREPANCY: {line}")
-    for ref in sorted(set(data_dir_notices)):
-        print(
-            f"  Note: data directory '{ref}' required but not included (use refresh_data_dirs.py)"
-        )
-    _MISSING_DATA_DIRS.update(data_dir_notices)
+    final_dir = options.get("final_dir")
+    build.report(os.path.join(final_dir, zip_name) if final_dir else zip_path)
+    return None if build.nothing_needed() else zip_path
 
-    return (
-        zip_path
-        if total_files + data_files > 0 or missing_files or rejected_files or instruction_files
-        or unsourceable_files
-        else None
-    )
+
+class SystemPackOptions(TypedDict, total=False):
+    """The keyword options of generate_system_pack."""
+
+    required_only: bool
+    regions: list[str] | None
+    offline: bool | None
+    platforms_dir: str | None
 
 
 def generate_system_pack(
@@ -2175,15 +2465,17 @@ def generate_system_pack(
     output_dir: str,
     standalone: bool = False,
     zip_contents: dict | None = None,
-    required_only: bool = False,
-    regions: list[str] | None = None,
-    offline: bool | None = None,
-    platforms_dir: str | None = None,
+    **options: Unpack[SystemPackOptions],
 ) -> str | None:
     """Generate a ZIP pack for all emulators supporting given system IDs.
 
     Returns the path, "" when no file is needed, None on failure.
     """
+    _reject_unknown("generate_system_pack", options, SystemPackOptions.__optional_keys__)
+    required_only = options.get("required_only", False)
+    regions = options.get("regions")
+    offline = options.get("offline")
+    platforms_dir = options.get("platforms_dir")
     profiles = load_emulator_profiles(emulators_dir)
     matching = profiles_for_systems(profiles, system_ids, standalone)
 
@@ -2237,7 +2529,7 @@ def generate_system_pack(
             bios_dir,
             scratch,
             standalone,
-            zip_contents,
+            zip_contents=zip_contents,
             required_only=required_only,
             regions=regions,
             offline=offline,
@@ -2281,6 +2573,40 @@ def _group_systems_by_manufacturer(
     return groups
 
 
+class SplitOptions(PackNarrowing, total=False):
+    """The keyword options of generate_split_packs."""
+
+    records: dict[str, PackRecord] | None
+
+
+def _split_extras(config: dict, db: dict, narrowing: PackNarrowing) -> list[dict]:
+    """The core extras of every part, collected once (expensive: scans 260+
+    emulator profiles), then distributed per group by system overlap."""
+    emu_profiles = narrowing["emu_profiles"] or {}
+    source = narrowing["source"]
+    target_cores = narrowing["target_cores"]
+    base_dest = config.get("base_destination", "")
+    # Each part cuts the platform's own entries from the full profiles. The
+    # extras are collected once here, already without the cores' game data.
+    cut = (
+        without_game_data(config, emu_profiles, narrowing["data_registry"], target_cores)
+        if narrowing["no_game_data"] else None
+    )
+    if source == "platform":
+        all_extras = []
+    elif emu_profiles:
+        all_extras = _collect_emulator_extras(
+            cut.config if cut else config, narrowing["emulators_dir"], db,
+            set(), base_dest, cut.profiles if cut else emu_profiles,
+            target_cores=target_cores, include_all=(source == "truth"),
+        )
+    else:
+        all_extras = []
+    if cut is not None and source != "platform":
+        _report_left_out(cut, systems=set(), cores=True)
+    return all_extras
+
+
 def generate_split_packs(
     platform_name: str,
     platforms_dir: str,
@@ -2288,19 +2614,7 @@ def generate_split_packs(
     bios_dir: str,
     output_dir: str,
     group_by: str = "system",
-    emulators_dir: str = "emulators",
-    zip_contents: dict | None = None,
-    data_registry: dict | None = None,
-    emu_profiles: dict | None = None,
-    target_cores: set[str] | None = None,
-    required_only: bool = False,
-    source: str = "full",
-    regions: list[str] | None = None,
-    target_name: str | None = None,
-    one_per_slot: bool = False,
-    offline: bool | None = None,
-    no_game_data: bool = False,
-    records: dict[str, PackRecord] | None = None,
+    **options: Unpack[SplitOptions],
 ) -> list[str]:
     """Generate split packs (one ZIP per system or manufacturer).
 
@@ -2308,14 +2622,31 @@ def generate_split_packs(
     own placement (``within``). ``records`` builds the parts in memory, keyed
     by part name, with no archive written.
     """
+    _reject_unknown("generate_split_packs", options, SplitOptions.__optional_keys__)
     config = load_platform_config(platform_name, platforms_dir)
+    records = options.get("records")
+    narrowing: PackNarrowing = {
+        "emulators_dir": options.get("emulators_dir", "emulators"),
+        "zip_contents": options.get("zip_contents"),
+        "data_registry": options.get("data_registry"),
+        "emu_profiles": options.get("emu_profiles"),
+        "target_cores": options.get("target_cores"),
+        "required_only": options.get("required_only", False),
+        "source": options.get("source", "full"),
+        "regions": options.get("regions"),
+        "target_name": options.get("target_name"),
+        "one_per_slot": options.get("one_per_slot", False),
+        "offline": options.get("offline"),
+        "no_game_data": options.get("no_game_data", False),
+    }
     # The split directory carries the same tags as the packs inside it, or two
     # differently narrowed runs write into one another.
     split_tags = "".join(
         tag
         for tag, _label in _narrowings(
-            source, regions, target_name, one_per_slot, required_only,
-            no_game_data=no_game_data,
+            narrowing["source"], narrowing["regions"], narrowing["target_name"],
+            narrowing["one_per_slot"], narrowing["required_only"],
+            no_game_data=narrowing["no_game_data"],
         )
     )
     # Two groupings write different files. Without the tag they accumulate in
@@ -2333,16 +2664,10 @@ def generate_split_packs(
     if records is None:
         os.makedirs(split_dir, exist_ok=True)
 
+    emu_profiles = narrowing["emu_profiles"]
     if emu_profiles is None:
-        emu_profiles = load_emulator_profiles(emulators_dir)
-    narrowing = {
-        "emulators_dir": emulators_dir, "zip_contents": zip_contents,
-        "data_registry": data_registry, "emu_profiles": emu_profiles,
-        "target_cores": target_cores, "required_only": required_only,
-        "source": source, "regions": regions, "target_name": target_name,
-        "one_per_slot": one_per_slot, "offline": offline,
-        "no_game_data": no_game_data,
-    }
+        emu_profiles = load_emulator_profiles(narrowing["emulators_dir"])
+        narrowing["emu_profiles"] = emu_profiles
     full = PackRecord()
     with contextlib.redirect_stdout(io.StringIO()):
         generate_pack(
@@ -2350,52 +2675,32 @@ def generate_split_packs(
             record=full, **narrowing,
         )
 
-    def part(pack_name: str, **scope: object) -> str | None:
+    def part(pack_name: str, scope: _PartScope) -> str | None:
         record = PackRecord() if records is not None else None
         zip_path = generate_pack(
             platform_name, platforms_dir, db, bios_dir, split_dir,
             pack_name=pack_name, record=record, within=full.sources,
             **scope, **narrowing,
         )
-        if record is not None and zip_path:
+        if records is not None and record is not None and zip_path:
             records[pack_name] = record
         return zip_path
     # The systems a core of the target runs: a part per declared system sent
     # each one the target drops to a refusal naming it as unknown.
-    systems = platform_scope_systems(config, emu_profiles, target_cores)
+    systems = platform_scope_systems(config, emu_profiles, narrowing["target_cores"])
 
     if group_by == "manufacturer":
         groups = _group_systems_by_manufacturer(systems, db, bios_dir)
     else:
         groups = {_system_display_name(sid): [sid] for sid in systems}
 
-    # Pre-compute core extras once (expensive: scans 260+ emulator profiles)
-    # then distribute per group based on emulator system overlap
-    base_dest = config.get("base_destination", "")
-    # Each part cuts the platform's own entries from the full profiles. The
-    # extras are collected once here, already without the cores' game data.
-    cut = (
-        without_game_data(config, emu_profiles, data_registry, target_cores)
-        if no_game_data else None
-    )
-    if source == "platform":
-        all_extras = []
-    elif emu_profiles:
-        all_extras = _collect_emulator_extras(
-            cut.config if cut else config, emulators_dir, db, set(), base_dest,
-            cut.profiles if cut else emu_profiles,
-            target_cores=target_cores, include_all=(source == "truth"),
-        )
-    else:
-        all_extras = []
-    if cut is not None and source != "platform":
-        _report_left_out(cut, systems=set(), cores=True)
+    all_extras = _split_extras(config, db, narrowing)
     results = []
     for group_name, group_system_ids in sorted(groups.items()):
         group_extras = _extras_for_systems(all_extras, group_system_ids)
         zip_path = part(
             f"{part_prefix}_{_name_part(group_name, '_')}_BIOS_Pack.zip",
-            system_filter=group_system_ids, precomputed_extras=group_extras,
+            {"system_filter": group_system_ids, "precomputed_extras": group_extras},
         )
         if zip_path:
             results.append(zip_path)
@@ -2413,7 +2718,7 @@ def generate_split_packs(
     if undistributed:
         zip_path = part(
             f"{part_prefix}_Other_Cores_BIOS_Pack.zip",
-            precomputed_extras=undistributed, extras_only=True,
+            {"precomputed_extras": undistributed, "extras_only": True},
         )
         if zip_path:
             results.append(zip_path)
@@ -2448,23 +2753,44 @@ def _entry_for_file(candidates: list[dict], held: dict) -> dict:
     return candidates[-1]
 
 
-def generate_md5_pack(
-    hashes: list[tuple[str, str]],
-    db: dict,
-    bios_dir: str,
-    output_dir: str,
-    zip_contents: dict | None = None,
-    platform_name: str | None = None,
-    platforms_dir: str | None = None,
-    emulator_name: str | None = None,
-    emulators_dir: str | None = None,
-    standalone: bool = False,
-) -> str | None:
-    """Build a pack from an explicit list of hashes with layout context."""
-    files_db = db.get("files", {})
-    if zip_contents is None:
-        zip_contents = {}
+class Md5PackOptions(TypedDict, total=False):
+    """The keyword options of generate_md5_pack: the layout to follow."""
 
+    platform_name: str | None
+    platforms_dir: str | None
+    emulator_name: str | None
+    emulators_dir: str | None
+    standalone: bool
+
+
+@dataclass(frozen=True)
+class _Md5Settings:
+    """Md5PackOptions with their defaults."""
+
+    platform_name: str | None = None
+    platforms_dir: str | None = None
+    emulator_name: str | None = None
+    emulators_dir: str | None = None
+    standalone: bool = False
+
+
+@dataclass(frozen=True)
+class _Md5Layout:
+    """Where a hash-selected pack puts each file: the declarations by
+    lowercased name, the platform's base destination, and the pack's name."""
+
+    index: dict[str, list[dict]]
+    base_dest: str
+    context_name: str
+
+
+def _md5_layout(opts: _Md5Settings) -> _Md5Layout | None:
+    """The platform or emulator layout a hash list is packed in, or None
+    when the emulator named is refused."""
+    platform_name = opts.platform_name
+    platforms_dir = opts.platforms_dir
+    emulator_name = opts.emulator_name
+    emulators_dir = opts.emulators_dir
     plat_file_index: dict[str, list[dict]] = {}
     base_dest = ""
     plat_display = "Custom"
@@ -2472,7 +2798,7 @@ def generate_md5_pack(
         config = load_platform_config(platform_name, platforms_dir)
         base_dest = config.get("base_destination", "")
         plat_display = config.get("platform", platform_name)
-        for _sys_id, system in config.get("systems", {}).items():
+        for system in config.get("systems", {}).values():
             for fe in system.get("files", []):
                 plat_file_index.setdefault(fe.get("name", "").lower(), []).append(fe)
 
@@ -2484,7 +2810,7 @@ def generate_md5_pack(
         # core with no standalone build has no standalone layout either.
         try:
             (_name, profile), = select_emulator_profiles(
-                [emulator_name], profiles, standalone
+                [emulator_name], profiles, opts.standalone
             )
         except ProfileSelectionError as exc:
             print(f"Error: {exc}", file=sys.stderr)
@@ -2496,17 +2822,26 @@ def generate_md5_pack(
                 plat_file_index.setdefault(alias.lower(), []).append(fe)
 
     context_name = plat_display if platform_name else (emu_display or "Custom")
+    return _Md5Layout(plat_file_index, base_dest, context_name)
+
+
+def _md5_pack_name(
+    context_name: str, hashes: list[tuple[str, str]], opts: _Md5Settings,
+) -> str:
+    """The file name of a hash-selected pack."""
     # The selection mode is part of the name, as for --system: BizHawk is
     # both a platform and a profile display name, and the two layouts
     # (Firmware/ under the platform, the profile's paths under the core)
     # wrote one file, the second run replacing the first without a word.
-    mode_part = "_Emulator" if emulator_name and not platform_name else ""
+    mode_part = (
+        "_Emulator" if opts.emulator_name and not opts.platform_name else ""
+    )
     # --standalone changes the destination layout, so a run with it must not
     # take the name of a run without it.
     custom_tags = "".join(
         tag
         for tag, _label in _narrowings(
-            "full", None, None, False, False, standalone=standalone
+            "full", None, None, False, False, standalone=opts.standalone
         )
     )
     # The hash list is what chooses the content: two lists under one name
@@ -2514,11 +2849,58 @@ def generate_md5_pack(
     selection = hashlib.sha1(
         "\n".join(sorted(f"{kind}:{value.lower()}" for kind, value in hashes)).encode()
     ).hexdigest()[:8]
-    zip_name = (
+    return (
         f"{_name_part(context_name, '_')}{mode_part}_Custom_{selection}{custom_tags}"
         "_BIOS_Pack.zip"
     )
-    zip_path = os.path.join(output_dir, zip_name)
+
+
+def _md5_destination(entry: dict, layout: _Md5Layout, opts: _Md5Settings) -> str:
+    """Where a held file goes in a hash-selected pack."""
+    name = entry.get("name", "")
+    aliases = entry.get("aliases") or []
+    paths = entry.get("paths") or []
+
+    dest = name
+    matched_fe = None
+    for lookup_name in [name] + aliases:
+        if lookup_name.lower() in layout.index:
+            matched_fe = _entry_for_file(layout.index[lookup_name.lower()], entry)
+            break
+
+    if matched_fe:
+        if opts.emulator_name:
+            # Laid out as the emulator pack lays it out: its path and
+            # its standalone_path, which --standalone has to reach.
+            dest = _resolve_destination(matched_fe, opts.standalone)
+        else:
+            dest = matched_fe.get("destination", matched_fe.get("name", name))
+    elif paths:
+        dest = paths[0]
+
+    if layout.base_dest and not dest.startswith(layout.base_dest):
+        return f"{layout.base_dest}/{dest}"
+    return dest
+
+
+def generate_md5_pack(
+    hashes: list[tuple[str, str]],
+    db: dict,
+    bios_dir: str,
+    output_dir: str,
+    zip_contents: dict | None = None,
+    **options: Unpack[Md5PackOptions],
+) -> str | None:
+    """Build a pack from an explicit list of hashes with layout context."""
+    files_db = db.get("files", {})
+    if zip_contents is None:
+        zip_contents = {}
+    _reject_unknown("generate_md5_pack", options, Md5PackOptions.__optional_keys__)
+    opts = _Md5Settings(**options)
+    layout = _md5_layout(opts)
+    if layout is None:
+        return None
+    zip_path = os.path.join(output_dir, _md5_pack_name(layout.context_name, hashes, opts))
     os.makedirs(output_dir, exist_ok=True)
 
     packed: list[tuple[str, str]] = []
@@ -2535,33 +2917,7 @@ def generate_md5_pack(
 
             entry = files_db[sha1]
             name = entry.get("name", "")
-            aliases = entry.get("aliases") or []
-            paths = entry.get("paths") or []
-
-            dest = name
-            matched_fe = None
-            for lookup_name in [name] + aliases:
-                if lookup_name.lower() in plat_file_index:
-                    matched_fe = _entry_for_file(
-                        plat_file_index[lookup_name.lower()], entry
-                    )
-                    break
-
-            if matched_fe:
-                if emulator_name:
-                    # Laid out as the emulator pack lays it out: its path and
-                    # its standalone_path, which --standalone has to reach.
-                    dest = _resolve_destination(matched_fe, standalone)
-                else:
-                    dest = matched_fe.get("destination", matched_fe.get("name", name))
-            elif paths:
-                dest = paths[0]
-
-            if base_dest and not dest.startswith(base_dest):
-                full_dest = f"{base_dest}/{dest}"
-            else:
-                full_dest = dest
-
+            full_dest = _md5_destination(entry, layout, opts)
             if full_dest in seen:
                 continue
             seen.add(full_dest)
@@ -2829,96 +3185,76 @@ def _refuse_for_verify_packs(args: argparse.Namespace, parser: argparse.Argument
             parser.error(f"{flag} is incompatible with --verify-packs")
 
 
-def _validate_args(args: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
-    """Validate argument combinations and mutual exclusion rules."""
-    _refuse_for_verify_packs(args, parser)
+def _argument_conflicts(args: argparse.Namespace) -> list[tuple[bool, str]]:
+    """Each refused combination of arguments with its message, in the order
+    they are checked: the first one that applies is the error reported."""
     has_platform = bool(args.platform)
     has_all = args.all
     has_emulator = bool(args.emulator)
     has_system = bool(args.system)
-    has_from_md5 = bool(args.from_md5 or getattr(args, "from_md5_file", None))
-
-    if args.from_md5 and getattr(args, "from_md5_file", None):
-        parser.error("--from-md5 and --from-md5-file are mutually exclusive")
-    if has_from_md5 and has_all:
-        parser.error("--from-md5 requires --platform or --emulator, not --all")
-    if has_from_md5 and has_system:
-        parser.error("--from-md5 and --system are mutually exclusive")
-    if has_from_md5 and args.split:
-        parser.error("--split and --from-md5 are mutually exclusive")
-
-    # --platform/--all and --system can combine (system filters within platform)
-    # --emulator is exclusive with everything else
-    if has_emulator and (has_platform or has_all or has_system):
-        parser.error(
-            "--emulator is mutually exclusive with --platform, --all, and --system"
-        )
-    if has_platform and has_all:
-        parser.error("--platform and --all are mutually exclusive")
-    if not (has_platform or has_all or has_emulator or has_system or has_from_md5):
-        parser.error("Specify --platform, --all, --emulator, --system, or --from-md5")
-    if args.standalone and not (
-        has_emulator or (has_system and not has_platform and not has_all)
-    ):
-        parser.error(
-            "--standalone requires --emulator or --system (without --platform)"
-        )
-    if args.split and not (has_platform or has_all):
-        parser.error("--split requires --platform or --all")
-    if args.split and has_emulator:
-        parser.error("--split is incompatible with --emulator")
-    if args.group_by is not None and not args.split:
-        parser.error("--group-by requires --split")
-    if args.target and not (has_platform or has_all):
-        parser.error("--target requires --platform or --all")
-    if args.target and has_emulator:
-        parser.error("--target is incompatible with --emulator")
-    if args.manifest and not (has_platform or has_all):
-        parser.error("--manifest requires --platform or --all")
-    if args.manifest and has_emulator:
-        parser.error("--manifest is incompatible with --emulator")
-    if args.manifest and args.split:
-        parser.error("--manifest is incompatible with --split")
-    if getattr(args, "region", None) and has_from_md5:
-        parser.error("--region and --from-md5 are mutually exclusive")
+    md5_file = getattr(args, "from_md5_file", None)
+    has_from_md5 = bool(args.from_md5 or md5_file)
     # A mode either applies a narrowing flag or refuses it. Swallowing one
     # answers about an artifact the caller did not ask for, and the name on
     # disk then asserts a narrowing the contents do not carry.
     # --source and --group-by default to None so a typed default value is
     # seen: compared with "full", `--emulator X --source full` went through.
     source_given = getattr(args, "source", None) is not None
-    if source_given and (has_emulator or (has_system and not has_platform)):
-        parser.error("--source requires --platform or --all")
-    if has_from_md5:
-        for flag, given in (
-            ("--manifest", args.manifest),
-            ("--target", args.target),
-            ("--required-only", args.required_only),
-            ("--source", source_given),
-        ):
-            if given:
-                parser.error(f"{flag} is incompatible with --from-md5")
-    if has_system and (has_platform or has_all):
-        if args.manifest:
-            parser.error("--system is incompatible with --manifest")
-        if args.split:
-            parser.error("--system is incompatible with --split")
-
+    with_platform = has_system and (has_platform or has_all)
     # Game data is categorized against a platform's list and the cores it
     # runs: a pack of one emulator or of a system's emulators has neither.
-    if getattr(args, "no_game_data", False) and not (has_platform or has_all):
-        parser.error("--no-game-data requires --platform or --all")
-    if getattr(args, "no_game_data", False) and has_from_md5:
-        parser.error("--no-game-data is incompatible with --from-md5")
-    if getattr(args, "one_per_slot", False):
-        if has_from_md5:
-            parser.error("--one-per-slot and --from-md5 are mutually exclusive")
-        if args.manifest:
-            parser.error("--one-per-slot is incompatible with --manifest")
-        if has_emulator:
-            parser.error("--one-per-slot is incompatible with --emulator")
-        if has_system:
-            parser.error("--one-per-slot is incompatible with --system")
+    no_game_data = getattr(args, "no_game_data", False)
+    one_per_slot = getattr(args, "one_per_slot", False)
+    return [
+        (bool(args.from_md5 and md5_file), "--from-md5 and --from-md5-file are mutually exclusive"),
+        (has_from_md5 and has_all, "--from-md5 requires --platform or --emulator, not --all"),
+        (has_from_md5 and has_system, "--from-md5 and --system are mutually exclusive"),
+        (has_from_md5 and args.split, "--split and --from-md5 are mutually exclusive"),
+        # --platform/--all and --system can combine (system filters within platform)
+        # --emulator is exclusive with everything else
+        (has_emulator and (has_platform or has_all or has_system),
+         "--emulator is mutually exclusive with --platform, --all, and --system"),
+        (has_platform and has_all, "--platform and --all are mutually exclusive"),
+        (not (has_platform or has_all or has_emulator or has_system or has_from_md5),
+         "Specify --platform, --all, --emulator, --system, or --from-md5"),
+        (args.standalone and not (
+            has_emulator or (has_system and not has_platform and not has_all)
+        ), "--standalone requires --emulator or --system (without --platform)"),
+        (args.split and not (has_platform or has_all), "--split requires --platform or --all"),
+        (args.split and has_emulator, "--split is incompatible with --emulator"),
+        (args.group_by is not None and not args.split, "--group-by requires --split"),
+        (args.target and not (has_platform or has_all), "--target requires --platform or --all"),
+        (args.target and has_emulator, "--target is incompatible with --emulator"),
+        (args.manifest and not (has_platform or has_all),
+         "--manifest requires --platform or --all"),
+        (args.manifest and has_emulator, "--manifest is incompatible with --emulator"),
+        (args.manifest and args.split, "--manifest is incompatible with --split"),
+        (getattr(args, "region", None) and has_from_md5,
+         "--region and --from-md5 are mutually exclusive"),
+        (source_given and (has_emulator or (has_system and not has_platform)),
+         "--source requires --platform or --all"),
+        (has_from_md5 and args.manifest, "--manifest is incompatible with --from-md5"),
+        (has_from_md5 and args.target, "--target is incompatible with --from-md5"),
+        (has_from_md5 and args.required_only, "--required-only is incompatible with --from-md5"),
+        (has_from_md5 and source_given, "--source is incompatible with --from-md5"),
+        (with_platform and args.manifest, "--system is incompatible with --manifest"),
+        (with_platform and args.split, "--system is incompatible with --split"),
+        (no_game_data and not (has_platform or has_all),
+         "--no-game-data requires --platform or --all"),
+        (no_game_data and has_from_md5, "--no-game-data is incompatible with --from-md5"),
+        (one_per_slot and has_from_md5, "--one-per-slot and --from-md5 are mutually exclusive"),
+        (one_per_slot and args.manifest, "--one-per-slot is incompatible with --manifest"),
+        (one_per_slot and has_emulator, "--one-per-slot is incompatible with --emulator"),
+        (one_per_slot and has_system, "--one-per-slot is incompatible with --system"),
+    ]
+
+
+def _validate_args(args: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
+    """Validate argument combinations and mutual exclusion rules."""
+    _refuse_for_verify_packs(args, parser)
+    for refused, message in _argument_conflicts(args):
+        if refused:
+            parser.error(message)
 
 
 def _write_manifest_if_changed(path: str, manifest: dict) -> None:
@@ -3076,16 +3412,69 @@ def _baseline_shortfall(excluded: int, absent: int) -> list[str]:
     return parts
 
 
-def _run_verify_packs(args: argparse.Namespace) -> None:
-    """Verify each pack in the output directory against its platform.
+@dataclass(frozen=True)
+class _PackCheck:
+    """What --verify-packs checks every pack against."""
 
-    Delegates to verify_pack_against_platform so the command answers the same
-    question the pipeline asks: baseline files, core extras and structure. A
-    second implementation here answered a narrower one and reported OK while
-    the core extras went unchecked.
-    """
-    verify_db = load_database(args.db)
+    db: dict
+    platforms_dir: str
+    emulators_dir: str
+    profiles: dict
+    regions: list[str] | None
+    data_registry: dict
+    no_game_data: bool
 
+
+def _verify_found_pack(
+    check: _PackCheck, platform_name: str, zip_path: str, target_cores: set[str] | None,
+) -> bool:
+    """Check one pack of a platform and print its line; False when it fails."""
+    pack_name = os.path.basename(zip_path)
+    variant = _pack_variant(pack_name)
+    if variant is None:
+        # One BIOS per slot: the slot choice is not replayed here.
+        print(
+            f"  {platform_name} [{pack_name}]: hashes checked during the build; "
+            "one per slot by design, so not compared to the platform's full list"
+        )
+        return True
+    source, required_only = variant
+    result = verify_pack_against_platform(
+        zip_path,
+        platform_name,
+        check.platforms_dir,
+        db=check.db,
+        emulators_dir=check.emulators_dir,
+        emu_profiles=check.profiles,
+        regions=check.regions,
+        data_registry=check.data_registry,
+        target_cores=target_cores,
+        source=source,
+        required_only=required_only,
+        no_game_data=check.no_game_data,
+    )
+    (ok, _checked, _present, errors, bl_checked, bl_present,
+     core_checked, core_present, bl_excluded, bl_absent) = result
+    # These explain a baseline short of its total: a dump whose hash
+    # the frontend refuses is left out on purpose, and a file the
+    # collection does not hold cannot be packed (verify reports it).
+    shortfall = ", ".join(_baseline_shortfall(bl_excluded, bl_absent))
+    excluded = f" ({shortfall})" if shortfall else ""
+    counts = (
+        f"{bl_present}/{bl_checked} baseline{excluded}, "
+        f"{core_present}/{core_checked} cores"
+    )
+    if ok:
+        print(f"  {platform_name} [{pack_name}]: OK ({counts})")
+        return True
+    print(f"  {platform_name} [{pack_name}]: FAIL ({counts}, {len(errors)} errors)")
+    for err in errors:
+        print(f"    {err}")
+    return False
+
+
+def _verify_packs_scope(args: argparse.Namespace) -> tuple[list[str], dict[str, set[str] | None]]:
+    """The platforms --verify-packs checks, and the cores of the target."""
     if args.platform:
         platforms = [args.platform]
     elif args.all:
@@ -3107,20 +3496,35 @@ def _run_verify_packs(args: argparse.Namespace) -> None:
         except (FileNotFoundError, ValueError) as e:
             print(f"ERROR: {e}", file=sys.stderr)
             sys.exit(1)
+    return platforms, target_cores_cache
+
+
+def _run_verify_packs(args: argparse.Namespace) -> None:
+    """Verify each pack in the output directory against its platform.
+
+    Delegates to verify_pack_against_platform so the command answers the same
+    question the pipeline asks: baseline files, core extras and structure. A
+    second implementation here answered a narrower one and reported OK while
+    the core extras went unchecked.
+    """
+    verify_db = load_database(args.db)
+    platforms, target_cores_cache = _verify_packs_scope(args)
 
     all_ok = True
-    verify_regions = getattr(args, "regions", None)
-    verify_profiles = load_emulator_profiles(args.emulators_dir)
-    verify_data_registry = load_data_dir_registry(args.platforms_dir)
+    check = _PackCheck(
+        verify_db, args.platforms_dir, args.emulators_dir,
+        load_emulator_profiles(args.emulators_dir), getattr(args, "regions", None),
+        load_data_dir_registry(args.platforms_dir), getattr(args, "no_game_data", False),
+    )
     # After an --all-variants build every variant is named, so none of the
     # six packs the run wrote passes unmentioned.
     expected = _expected_pack_names(
         platforms,
         args.platforms_dir,
-        verify_regions,
+        check.regions,
         args.target,
         ALL_VARIANTS if args.all_variants else (("full", False),),
-        no_game_data=getattr(args, "no_game_data", False),
+        no_game_data=check.no_game_data,
     )
     on_disk = (
         set(os.listdir(args.output_dir)) if os.path.isdir(args.output_dir) else set()
@@ -3150,47 +3554,8 @@ def _run_verify_packs(args: argparse.Namespace) -> None:
         # A group pack and a pack built for the platform alone can both be
         # present, and each one is a pack of this platform.
         for pack_name in found:
-            variant = _pack_variant(pack_name)
-            if variant is None:
-                # One BIOS per slot: the slot choice is not replayed here.
-                print(
-                    f"  {platform_name} [{pack_name}]: hashes checked during the build; "
-                    "one per slot by design, so not compared to the platform's full list"
-                )
-                continue
-            source, required_only = variant
             zip_path = os.path.join(args.output_dir, pack_name)
-            result = verify_pack_against_platform(
-                zip_path,
-                platform_name,
-                args.platforms_dir,
-                db=verify_db,
-                emulators_dir=args.emulators_dir,
-                emu_profiles=verify_profiles,
-                regions=verify_regions,
-                data_registry=verify_data_registry,
-                target_cores=tc,
-                source=source,
-                required_only=required_only,
-                no_game_data=getattr(args, "no_game_data", False),
-            )
-            (ok, _checked, _present, errors, bl_checked, bl_present,
-             core_checked, core_present, bl_excluded, bl_absent) = result
-            # These explain a baseline short of its total: a dump whose hash
-            # the frontend refuses is left out on purpose, and a file the
-            # collection does not hold cannot be packed (verify reports it).
-            shortfall = ", ".join(_baseline_shortfall(bl_excluded, bl_absent))
-            excluded = f" ({shortfall})" if shortfall else ""
-            counts = (
-                f"{bl_present}/{bl_checked} baseline{excluded}, "
-                f"{core_present}/{core_checked} cores"
-            )
-            if ok:
-                print(f"  {platform_name} [{pack_name}]: OK ({counts})")
-            else:
-                print(f"  {platform_name} [{pack_name}]: FAIL ({counts}, {len(errors)} errors)")
-                for err in errors:
-                    print(f"    {err}")
+            if not _verify_found_pack(check, platform_name, zip_path, tc):
                 all_ok = False
                 failing.append(f"{platform_name} ({pack_name})")
 
@@ -3335,26 +3700,13 @@ def _run_platform_packs(
                     # renamed, it overwrote and carried away a
                     # `--platform retroarch` pack already in the directory,
                     # and os.rename refused an existing target on Windows.
-                    group_name = None
-                    if aliases:
-                        narrow_tags = "".join(
-                            tag
-                            for tag, _label in _narrowings(
-                                source,
-                                getattr(args, "regions", None),
-                                named_target,
-                                args.one_per_slot,
-                                required_only,
-                                no_game_data=getattr(args, "no_game_data", False),
-                            )
+                    group_name = (
+                        _group_pack_name(
+                            args, group_platforms, representative, (source, required_only),
+                            named_target, system_filter,
                         )
-                        stem = _platform_pack_stem(
-                            group_platforms, representative, args.platforms_dir
-                        )
-                        group_name = (
-                            f"{stem}{narrow_tags}_BIOS_Pack"
-                            f"{_system_tag(system_filter)}.zip"
-                        )
+                        if aliases else None
+                    )
                     zip_path = generate_pack(
                         representative,
                         args.platforms_dir,
@@ -3406,6 +3758,55 @@ def _run_platform_packs(
                         no_game_data=getattr(args, "no_game_data", False),
                     ), target_list(board_list) if board_list.is_file() else None)
 
+    all_ok = _finalize_platform_packs(args, db, data_registry, built, systems_for, system_filter)
+    if failed:
+        # Verification only sees the ZIPs that exist, so a pack that was never
+        # written does not fail it.
+        print(f"ERROR: no pack for {', '.join(sorted(set(failed)))}", file=sys.stderr)
+        sys.exit(1)
+    if not all_ok:
+        sys.exit(1)
+
+
+def _group_pack_name(
+    args: argparse.Namespace,
+    group_platforms: list[str],
+    representative: str,
+    variant: tuple[str, bool],
+    named_target: str | None,
+    system_filter: list[str] | None,
+) -> str:
+    """The file name of a pack shared by a group of identical platforms."""
+    source, required_only = variant
+    narrow_tags = "".join(
+        tag
+        for tag, _label in _narrowings(
+            source,
+            getattr(args, "regions", None),
+            named_target,
+            args.one_per_slot,
+            required_only,
+            no_game_data=getattr(args, "no_game_data", False),
+        )
+    )
+    stem = _platform_pack_stem(
+        group_platforms, representative, args.platforms_dir
+    )
+    return (
+        f"{stem}{narrow_tags}_BIOS_Pack"
+        f"{_system_tag(system_filter)}.zip"
+    )
+
+
+def _finalize_platform_packs(
+    args: argparse.Namespace,
+    db: dict,
+    data_registry: dict | None,
+    built: set[str],
+    systems_for: dict[str, dict],
+    system_filter: list[str] | None,
+) -> bool:
+    """Verify the packs this run wrote and write their manifests."""
     print("\nVerifying packs and generating manifests...")
     skip_conf = bool(system_filter or args.split)
     all_ok = verify_and_finalize_packs(
@@ -3439,13 +3840,7 @@ def _run_platform_packs(
                     regions=getattr(args, "regions", None),
                 )
                 all_ok = all_ok and ok
-    if failed:
-        # Verification only sees the ZIPs that exist, so a pack that was never
-        # written does not fail it.
-        print(f"ERROR: no pack for {', '.join(sorted(set(failed)))}", file=sys.stderr)
-        sys.exit(1)
-    if not all_ok:
-        sys.exit(1)
+    return all_ok
 
 
 def _refuse_for_all_variants(args: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
@@ -3608,7 +4003,8 @@ def main() -> None:
         sys.exit(1)
 
 
-def _main(held: contextlib.ExitStack) -> None:
+def _build_parser() -> argparse.ArgumentParser:
+    """The command line of generate_pack.py."""
     parser = argparse.ArgumentParser(allow_abbrev=False, description="Generate platform BIOS ZIP packs")
     parser.add_argument(
         "--platform", "-p", type=platform_arg,
@@ -3739,20 +4135,14 @@ def _main(held: contextlib.ExitStack) -> None:
         action="store_true",
         help="Extract and verify pack integrity (path + hash)",
     )
-    args = parser.parse_args()
-    from verify import work_from_repo_root
+    return parser
 
-    work_from_repo_root(
-        args, parser,
-        ["db", "platforms_dir", "bios_dir", "output_dir", "emulators_dir", "from_md5_file"],
-    )
-    packresolve.set_offline(bool(args.offline))
-    if args.platform:
-        require_platform(args.platform, args.platforms_dir)
-    require_directory(args.bios_dir)
 
-    _refuse_unapplied_flags(args, parser)
-    _refuse_for_verify_packs(args, parser)
+def _run_quick_mode(
+    args: argparse.Namespace, parser: argparse.ArgumentParser, held: contextlib.ExitStack,
+) -> bool:
+    """Run a mode that builds nothing (a check of existing packs, the target
+    lists, a listing); True when one ran."""
     # Quick-exit modes: --verify-packs alone = verify existing packs only
     # Combined with --all-variants, generation runs first then verify
     if args.verify_packs and not args.all_variants:
@@ -3761,26 +4151,26 @@ def _main(held: contextlib.ExitStack) -> None:
         hold_data_dirs(held, load_data_dir_registry(args.platforms_dir))
         with _pack_output_lock(args.output_dir, exclusive=False):
             _run_verify_packs(args)
-        return
+        return True
     if args.manifest_targets:
         _refuse_mixed_output(args.output_dir, "targets")
         with _pack_output_lock(args.output_dir):
             generate_target_manifests(
                 os.path.join(args.platforms_dir, "targets"), args.output_dir
             )
-        return
+        return True
     if args.list:
         print_platform_listing(args.platforms_dir)
-        return
+        return True
     if args.list_emulators:
         list_emulator_profiles(args.emulators_dir)
-        return
+        return True
     if args.list_systems:
         if args.platform:
             list_platform_system_ids(args.platform, args.platforms_dir)
         else:
             list_system_ids(args.emulators_dir)
-        return
+        return True
     if args.list_targets:
         if not args.platform:
             parser.error("--list-targets requires --platform")
@@ -3789,71 +4179,61 @@ def _main(held: contextlib.ExitStack) -> None:
         targets = list_available_targets(args.platform, args.platforms_dir)
         if not targets:
             print(f"No targets configured for platform '{args.platform}'")
-            return
+            return True
         for t in targets:
             print(target_listing_line(t))
-        return
+        return True
+    return False
 
-    _validate_args(args, parser)
-    _resolve_systems(args, parser)
-    # Unset until every refusal has run, so a typed default value is seen.
-    args.source = args.source or "full"
-    args.group_by = args.group_by or "system"
 
-    # Hash lookup / pack mode
-    # A platform run may refresh the trees below, under the exclusive lock:
-    # it takes the shared ones after that. Every other mode reads them now.
-    if not (args.platform or args.all) or args.offline or args.no_refresh_data:
-        hold_data_dirs(held, load_data_dir_registry(args.platforms_dir))
-    has_from_md5 = bool(args.from_md5 or getattr(args, "from_md5_file", None))
-    if has_from_md5:
-        try:
-            hashes = (
-                parse_hash_input(args.from_md5)
-                if args.from_md5
-                else parse_hash_file(args.from_md5_file)
-            )
-        except ValueError as exc:
-            print(f"ERROR: {exc}", file=sys.stderr)
-            sys.exit(1)
-        except OSError as exc:
-            print(f"ERROR: --from-md5-file {args.from_md5_file}: {exc.strerror}", file=sys.stderr)
-            sys.exit(1)
-        if not hashes:
-            print(
-                f"ERROR: no hash in the input. Accepted: {ACCEPTED_HASHES}",
-                file=sys.stderr,
-            )
-            sys.exit(1)
-        db = load_database(args.db)
-        if not args.platform and not args.emulator:
-            # A lookup that found nothing is an answer a script must see.
-            if lookup_hashes(
-                hashes, db, args.bios_dir, args.emulators_dir, args.platforms_dir
-            ):
-                sys.exit(1)
-            return
-        zip_contents = build_zip_contents_index(db)
-        with _pack_output_lock(args.output_dir):
-            result = generate_md5_pack(
-                hashes=hashes,
-                db=db,
-                bios_dir=args.bios_dir,
-                output_dir=args.output_dir,
-                zip_contents=zip_contents,
-                platform_name=args.platform,
-                platforms_dir=args.platforms_dir,
-                emulator_name=args.emulator,
-                emulators_dir=args.emulators_dir,
-                standalone=getattr(args, "standalone", False),
-            )
-        if not result:
-            sys.exit(1)
-        return
-
+def _run_hash_mode(args: argparse.Namespace) -> None:
+    """--from-md5 and --from-md5-file: look the hashes up, or pack them."""
+    try:
+        hashes = (
+            parse_hash_input(args.from_md5)
+            if args.from_md5
+            else parse_hash_file(args.from_md5_file)
+        )
+    except ValueError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        sys.exit(1)
+    except OSError as exc:
+        print(f"ERROR: --from-md5-file {args.from_md5_file}: {exc.strerror}", file=sys.stderr)
+        sys.exit(1)
+    if not hashes:
+        print(
+            f"ERROR: no hash in the input. Accepted: {ACCEPTED_HASHES}",
+            file=sys.stderr,
+        )
+        sys.exit(1)
     db = load_database(args.db)
+    if not args.platform and not args.emulator:
+        # A lookup that found nothing is an answer a script must see.
+        if lookup_hashes(
+            hashes, db, args.bios_dir, args.emulators_dir, args.platforms_dir
+        ):
+            sys.exit(1)
+        return
     zip_contents = build_zip_contents_index(db)
+    with _pack_output_lock(args.output_dir):
+        result = generate_md5_pack(
+            hashes=hashes,
+            db=db,
+            bios_dir=args.bios_dir,
+            output_dir=args.output_dir,
+            zip_contents=zip_contents,
+            platform_name=args.platform,
+            platforms_dir=args.platforms_dir,
+            emulator_name=args.emulator,
+            emulators_dir=args.emulators_dir,
+            standalone=getattr(args, "standalone", False),
+        )
+    if not result:
+        sys.exit(1)
 
+
+def _run_profile_mode(args: argparse.Namespace, db: dict, zip_contents: dict) -> None:
+    """--emulator, or --system without a platform: the emulators' own layout."""
     # Emulator mode
     if args.emulator:
         names = [n.strip() for n in args.emulator.split(",") if n.strip()]
@@ -3865,7 +4245,7 @@ def _main(held: contextlib.ExitStack) -> None:
                 args.bios_dir,
                 args.output_dir,
                 args.standalone,
-                zip_contents,
+                zip_contents=zip_contents,
                 required_only=args.required_only,
                 regions=getattr(args, "regions", None),
                 offline=args.offline,
@@ -3876,44 +4256,69 @@ def _main(held: contextlib.ExitStack) -> None:
         return
 
     # System mode (standalone, without platform context)
-    if args.system and not args.platform and not args.all:
-        system_ids = [s.strip() for s in args.system.split(",") if s.strip()]
-        with _pack_output_lock(args.output_dir):
-            built = generate_system_pack(
-                system_ids,
-                args.emulators_dir,
-                db,
-                args.bios_dir,
-                args.output_dir,
-                args.standalone,
-                zip_contents,
-                required_only=args.required_only,
-                regions=getattr(args, "regions", None),
-                offline=args.offline,
-                platforms_dir=args.platforms_dir,
-            )
-        if built is None:
-            sys.exit(1)
-        return
+    system_ids = [s.strip() for s in args.system.split(",") if s.strip()]
+    with _pack_output_lock(args.output_dir):
+        built = generate_system_pack(
+            system_ids,
+            args.emulators_dir,
+            db,
+            args.bios_dir,
+            args.output_dir,
+            args.standalone,
+            zip_contents=zip_contents,
+            required_only=args.required_only,
+            regions=getattr(args, "regions", None),
+            offline=args.offline,
+            platforms_dir=args.platforms_dir,
+        )
+    if built is None:
+        sys.exit(1)
 
-    system_filter = getattr(args, "system_ids", None)
 
-    # Platform mode
+def _requested_platforms(args: argparse.Namespace, parser: argparse.ArgumentParser) -> list[str]:
+    """The platforms a platform run builds for."""
     if args.all and args.manifest:
         # Install manifests cover every registered platform: the installer
         # serves each one, with or without a release pack.
-        platforms = list_registered_platforms(args.platforms_dir)
-    elif args.all:
+        return list_registered_platforms(args.platforms_dir)
+    if args.all:
         # A release publishes the packs the registry marks release_pack and
         # nothing else: a pack built for another platform is one nobody uploads.
         platforms = list_release_pack_platforms(args.platforms_dir)
         if not platforms:
             parser.error("no registered platform has release_pack: true")
-    elif args.platform:
-        platforms = [args.platform]
-    else:
+        return platforms
+    if not args.platform:
         parser.error("Specify --platform or --all")
-        return
+    return [args.platform]
+
+
+def _refresh_data_directories(args: argparse.Namespace, data_registry: dict) -> None:
+    """Bring the data directory caches up to date before a build reads them."""
+    from refresh_data_dirs import load_registry, refresh_all
+
+    registry = load_registry(os.path.join(args.platforms_dir, "_data_dirs.yml"))
+    results = refresh_all(registry, force=args.refresh_data)
+    updated = sum(1 for v in results.values() if v)
+    if updated:
+        print(f"Refreshed {updated} data director{'ies' if updated > 1 else 'y'}")
+    failed = sorted(k for k, v in results.items() if v is None)
+    if failed:
+        print(f"WARNING: data directory refresh failed: {', '.join(failed)}")
+
+
+def _run_platform_mode(
+    args: argparse.Namespace,
+    parser: argparse.ArgumentParser,
+    held: contextlib.ExitStack,
+    db: dict,
+    zip_contents: dict,
+) -> None:
+    """--platform or --all: packs or manifests in each platform's layout."""
+    system_filter = getattr(args, "system_ids", None)
+
+    # Platform mode
+    platforms = _requested_platforms(args, parser)
 
     # A mistyped target is refused before the output lock and the data
     # directory refresh: checked after them, `--target swich` waited on a
@@ -3957,16 +4362,7 @@ def _main(held: contextlib.ExitStack) -> None:
     # during a pipeline sat silent for hours instead of being refused.
     with _pack_output_lock(args.output_dir):
         if data_registry and not args.offline and not args.no_refresh_data:
-            from refresh_data_dirs import load_registry, refresh_all
-
-            registry = load_registry(os.path.join(args.platforms_dir, "_data_dirs.yml"))
-            results = refresh_all(registry, force=args.refresh_data)
-            updated = sum(1 for v in results.values() if v)
-            if updated:
-                print(f"Refreshed {updated} data director{'ies' if updated > 1 else 'y'}")
-            failed = sorted(k for k, v in results.items() if v is None)
-            if failed:
-                print(f"WARNING: data directory refresh failed: {', '.join(failed)}")
+            _refresh_data_directories(args, data_registry)
         if data_registry:
             hold_data_dirs(held, data_registry)
 
@@ -3993,6 +4389,48 @@ def _main(held: contextlib.ExitStack) -> None:
     if not args.manifest and args.verify_packs:
         with _pack_output_lock(args.output_dir, exclusive=False):
             _run_verify_packs(args)
+
+
+def _main(held: contextlib.ExitStack) -> None:
+    parser = _build_parser()
+    args = parser.parse_args()
+    from verify import work_from_repo_root
+
+    work_from_repo_root(
+        args, parser,
+        ["db", "platforms_dir", "bios_dir", "output_dir", "emulators_dir", "from_md5_file"],
+    )
+    packresolve.set_offline(bool(args.offline))
+    if args.platform:
+        require_platform(args.platform, args.platforms_dir)
+    require_directory(args.bios_dir)
+
+    _refuse_unapplied_flags(args, parser)
+    _refuse_for_verify_packs(args, parser)
+    if _run_quick_mode(args, parser, held):
+        return
+
+    _validate_args(args, parser)
+    _resolve_systems(args, parser)
+    # Unset until every refusal has run, so a typed default value is seen.
+    args.source = args.source or "full"
+    args.group_by = args.group_by or "system"
+
+    # Hash lookup / pack mode
+    # A platform run may refresh the trees below, under the exclusive lock:
+    # it takes the shared ones after that. Every other mode reads them now.
+    if not (args.platform or args.all) or args.offline or args.no_refresh_data:
+        hold_data_dirs(held, load_data_dir_registry(args.platforms_dir))
+    if args.from_md5 or getattr(args, "from_md5_file", None):
+        _run_hash_mode(args)
+        return
+
+    db = load_database(args.db)
+    zip_contents = build_zip_contents_index(db)
+    if args.emulator or (args.system and not args.platform and not args.all):
+        _run_profile_mode(args, db, zip_contents)
+        return
+    _run_platform_mode(args, parser, held, db, zip_contents)
 
 
 # Manifest generation (JSON inventory for install.py)
@@ -4129,6 +4567,35 @@ def _one_content(held: list[str], entries: dict[str, dict], emulator: str) -> li
     return [min(own or held, key=lambda dest: (dest.count("/"), len(dest), dest))]
 
 
+def _profile_roots(profile: dict) -> dict[str, str]:
+    """The data_root of each system the profile names a findable place for."""
+    return {
+        _DATA_ROOT_SYSTEMS[key]: target
+        for key, value in (profile.get("data_root") or {}).items()
+        if key in _DATA_ROOT_SYSTEMS and isinstance(value, dict)
+        and (target := _data_root_target(_DATA_ROOT_SYSTEMS[key], value.get("path", "")))
+    }
+
+
+def _copy_source(
+    entry: dict,
+    by_tail: dict[str, list[str]],
+    entries: dict[str, dict] | None,
+    profile_name: str,
+) -> str | None:
+    """The manifest dest a profile entry's standalone copy is taken from."""
+    standalone = entry.get("standalone_path")
+    if (not standalone or standalone.endswith("/") or entry.get("mode") == "libretro"
+            or entry.get("type") == "directory" or entry.get("found_by") == "content"):
+        return None
+    held = by_tail.get(entry.get("path") or entry["name"], [])
+    if len(held) > 1 and entries is not None:
+        held = _one_content(held, entries, profile_name)
+    if len(held) != 1:
+        return None
+    return held[0]
+
+
 def _profile_copies(
     profiles: dict[str, dict], dests: list[str], declared: list[dict],
     entries: dict[str, dict] | None = None,
@@ -4172,26 +4639,14 @@ def _profile_copies(
     copies: list[dict] = []
     for profile_name in sorted(profiles):
         profile = profiles[profile_name]
-        roots = {
-            _DATA_ROOT_SYSTEMS[key]: target
-            for key, value in (profile.get("data_root") or {}).items()
-            if key in _DATA_ROOT_SYSTEMS and isinstance(value, dict)
-            and (target := _data_root_target(_DATA_ROOT_SYSTEMS[key], value.get("path", "")))
-        }
+        roots = _profile_roots(profile)
         if not roots:
             continue
         for entry in profile.get("files", []):
-            standalone = entry.get("standalone_path")
-            if (not standalone or standalone.endswith("/") or entry.get("mode") == "libretro"
-                    or entry.get("type") == "directory" or entry.get("found_by") == "content"):
+            source = _copy_source(entry, by_tail, entries, profile_name)
+            if source is None:
                 continue
-            held = by_tail.get(entry.get("path") or entry["name"], [])
-            if len(held) > 1 and entries is not None:
-                held = _one_content(held, entries, profile_name)
-            if len(held) != 1:
-                continue
-            source = held[0]
-            where = PurePosixPath(standalone)
+            where = PurePosixPath(entry["standalone_path"])
             placed: dict[str, list[str]] = {}
             for system, root in roots.items():
                 sep = "\\" if system == "windows" else "/"
@@ -4296,7 +4751,7 @@ def _manifest_entry(
         "cores": cores,
         **selection_fields,
     }
-    if is_release_asset:
+    if local_path and is_release_asset:
         entry["storage"] = "release"
         entry["release_asset"] = _release_asset_name(local_path, repo_root)
     # The installer writes what it downloads with the umask's mode, but a program
@@ -4323,20 +4778,27 @@ def _is_program(path: str) -> bool:
     return any(head.startswith(magic) for magic in _PROGRAM_MAGIC)
 
 
+@dataclass(frozen=True)
+class _ClaimContext:
+    """How a manifest resolves and judges the copy a core claim names."""
+
+    db: dict
+    bios_dir: str
+    zip_contents: dict | None
+    offline: bool | None
+    required_only: bool
+    validation_index: dict | None
+    owners: dict | None
+    repo_root: str
+    data_registry: dict | None = None
+
+
 def _attach_claims(
     entry: dict,
     claims: list[dict],
-    db: dict,
-    bios_dir: str,
-    zip_contents: dict | None,
-    offline: bool | None,
-    required_only: bool,
-    validation_index: dict | None,
-    owners: dict | None,
+    ctx: _ClaimContext,
     dest: str,
     manifest_dest: str,
-    repo_root: str,
-    data_registry: dict | None = None,
 ) -> None:
     """Every other core that reads this destination, in the order the builder
     meets them: a pack built without the earlier cores, or without the
@@ -4355,35 +4817,26 @@ def _attach_claims(
         if not claim_emu or claim_emu in claimed:
             continue
         claimed.add(claim_emu)
-        if required_only and claim.get("required") is False:
+        if ctx.required_only and claim.get("required") is False:
             continue
         claim_path, claim_status = resolve_file(
-            claim, db, bios_dir, zip_contents,
+            claim, ctx.db, ctx.bios_dir, ctx.zip_contents,
             dest_hint=claim.get("destination", ""),
-            data_dir_registry=data_registry, offline=offline,
+            data_dir_registry=ctx.data_registry, offline=ctx.offline,
         )
         if claim_status in ("not_found", "external", "user_provided") or not claim_path:
             # Nothing held for this core: narrowed to it without the cores
             # served above, the slot is a file left out (installer replays it).
-            systems = _extra_system_ids(claim)
-            entry.setdefault("absent_claims", []).append({
-                "name": str(claim.get("name") or ""),
-                "system": systems[0] if systems else "",
-                "required": bool(claim.get("required", True)),
-                "reason": (
-                    claim_status
-                    if claim_status in ("not_found", "external", "user_provided")
-                    else "not_found"
-                ),
-                "cores": [claim_emu],
-            })
+            entry.setdefault("absent_claims", []).append(
+                _absent_claim(claim, claim_emu, claim_status)
+            )
             continue
         claim_path, _ = validated_choice(
-            claim, claim_path, db, validation_index or {}, bios_dir, None,
-            claim.get("layout_path") or dest, owners,
+            claim, claim_path, ctx.db, ctx.validation_index or {}, ctx.bios_dir, None,
+            claim.get("layout_path") or dest, ctx.owners,
         )
         copy, _size = _manifest_entry(
-            claim_path, manifest_dest, [claim_emu], db, repo_root, {}
+            claim_path, manifest_dest, [claim_emu], ctx.db, ctx.repo_root, {}
         )
         if copy is None:
             continue
@@ -4397,6 +4850,22 @@ def _attach_claims(
         alternatives.append(copy)
     if not entry.get("alternatives"):
         entry.pop("alternatives", None)
+
+
+def _absent_claim(claim: dict, claim_emu: str, claim_status: str) -> dict:
+    """The omission a claim with nothing held stands for."""
+    systems = _extra_system_ids(claim)
+    return {
+        "name": str(claim.get("name") or ""),
+        "system": systems[0] if systems else "",
+        "required": bool(claim.get("required", True)),
+        "reason": (
+            claim_status
+            if claim_status in ("not_found", "external", "user_provided")
+            else "not_found"
+        ),
+        "cores": [claim_emu],
+    }
 
 
 def _record_slot_choices(
@@ -4459,114 +4928,125 @@ def _record_slot_choices(
     entry["declared_choices"] = declared
 
 
-def _manifest_core_entries(
-    core_files: list,
-    config: dict,
-    db: dict,
-    bios_dir: str,
-    base_dest: str,
-    repo_root: str,
-    zip_contents: dict | None,
-    offline: bool | None,
-    region_drops: set,
-    case_insensitive: bool,
-    seen_destinations: set,
-    seen_lower: set,
-    seen_parents: set,
-    manifest_files: list,
-    omitted_by_destination: dict,
-    record_omission: Callable[..., None],
-    pack_only_sizes: list[int],
-    selection: SelectionIndex,
-    required_only: bool = False,
-    validation_index: dict | None = None,
-    owners: dict | None = None,
-    data_registry: dict | None = None,
-    profiles: dict | None = None,
-) -> int:
-    """Add the files a platform's cores need but its list does not name.
+class _CoreEntryState(TypedDict):
+    """What _manifest_core_entries reads and fills of the manifest being listed."""
 
-    The installer fetches by hash, so an entry records the copy this
-    repository holds rather than the value the profile declares: an
-    upstream hash carried by no local file leaves the entry with no URL.
-    Returns the bytes added.
-    """
-    total_size = 0
-    extras_pfx = _detect_extras_prefix(config, base_dest)
-    resolver = ExtraResolver(
-        db, bios_dir, zip_contents, data_registry, validation_index or {},
-        owners, offline, profiles=profiles,
-    )
-    spares = core_file_spares(
-        core_files,
-        lambda fe: bool(region_drops)
-        and extra_region_key(fe, declared_root(config)) in region_drops,
-    ) if required_only else set()
-    for fe in core_files:
-        if required_only and (fe.get("required") is False or id(fe) in spares):
-            continue
+    region_drops: set
+    case_insensitive: bool
+    seen_destinations: set
+    seen_lower: set
+    seen_parents: set
+    manifest_files: list
+    omitted_by_destination: dict
+    record_omission: Callable[..., None]
+    pack_only_sizes: list[int]
+    selection: SelectionIndex
+
+
+class _CoreEntryParts(_CoreEntryState, total=False):
+    """_CoreEntryState and the optional keywords of _manifest_core_entries."""
+
+    required_only: bool
+    validation_index: dict | None
+    owners: dict | None
+    data_registry: dict | None
+    profiles: dict | None
+
+
+@dataclass
+class _CoreEntryLister:
+    """Lists a platform's core extras into the manifest, one at a time."""
+
+    config: dict
+    base_dest: str
+    ctx: _ClaimContext
+    state: _CoreEntryParts
+    resolver: ExtraResolver
+    total_size: int = 0
+    extras_pfx: str = field(init=False)
+
+    def __post_init__(self) -> None:
+        self.extras_pfx = _detect_extras_prefix(self.config, self.base_dest)
+
+    def region_key(self, fe: dict) -> str:
+        return extra_region_key(fe, declared_root(self.config))
+
+    def region_dropped(self, fe: dict) -> bool:
+        drops = self.state["region_drops"]
+        return bool(drops) and self.region_key(fe) in drops
+
+    def list_extra(self, fe: dict) -> None:
+        state = self.state
         dest = sanitize_pack_path(fe.get("destination", fe["name"]))
         if not dest:
-            continue
-        region_key = extra_region_key(fe, declared_root(config))
-        if region_drops and region_key in region_drops:
-            continue
-        full_dest = extra_full_destination(fe, extras_pfx)
+            return
+        region_key = self.region_key(fe)
+        if state["region_drops"] and region_key in state["region_drops"]:
+            return
+        full_dest = extra_full_destination(fe, self.extras_pfx)
         if not full_dest:
-            continue
-        save_root = fe.get("root") == "save"
+            return
 
         if (
-            case_insensitive
-            and full_dest not in seen_destinations
-            and full_dest.lower() in seen_lower
+            state["case_insensitive"]
+            and full_dest not in state["seen_destinations"]
+            and full_dest.lower() in state["seen_lower"]
         ):
-            # One file under two spellings: BlastEm opens 32X_M_BIOS.bin and
-            # PicoDrive 32X_M_BIOS.BIN. The second core's claim joins the
-            # entry kept, or a pack built without the first core loses the
-            # file the installer would still have to place. Collisions are
-            # rare, so the entry is looked up only when one happens.
-            folded = (
-                save_manifest_dest(fe) if save_root
-                else _manifest_dest_of(full_dest, base_dest)
-            ).lower()
-            held = next(
-                (e for e in manifest_files
-                 if e["dest"].lower() == folded
-                 and (e.get("root") == "save") == save_root),
-                None,
-            )
-            if held is not None and held.get("cores") is not None:
-                _attach_claims(
-                    held, [fe], db, bios_dir, zip_contents, offline, required_only,
-                    validation_index, owners, dest, held["dest"], repo_root,
-                    data_registry,
-                )
-            continue
+            self._join_spelling(fe, full_dest, dest)
+            return
 
         if placement_block(
-            full_dest, seen_destinations, seen_lower, seen_parents,
-            case_insensitive,
+            full_dest, state["seen_destinations"], state["seen_lower"], state["seen_parents"],
+            state["case_insensitive"],
         ):
-            continue
+            return
 
         # The builder's own lookup (ExtraResolver): the data directories, the
         # copy the emulator accepts, and the size its code checks. Without
         # the data directories blueMSX's MSX2P.rom named a different dump
         # than the one its pack carried.
-        local_path, status, _disagreement = resolver.resolve(fe, dest)
+        local_path, status, _disagreement = self.resolver.resolve(fe, dest)
         if not local_path:
-            source_emu = fe.get("source_profile") or fe.get("source_emulator", "")
-            if not _claim_platform_omission(
-                omitted_by_destination.get(full_dest), source_emu
-            ):
-                systems = _extra_system_ids(fe)
-                record_omission(
-                    full_dest, fe, systems[0] if systems else "", status, _claim_cores(fe),
-                )
-            continue
+            self._omit(fe, full_dest, status)
+            return
+        self._list_held(fe, dest, full_dest, region_key, local_path)
 
+    def _join_spelling(self, fe: dict, full_dest: str, dest: str) -> None:
+        # One file under two spellings: BlastEm opens 32X_M_BIOS.bin and
+        # PicoDrive 32X_M_BIOS.BIN. The second core's claim joins the
+        # entry kept, or a pack built without the first core loses the
+        # file the installer would still have to place. Collisions are
+        # rare, so the entry is looked up only when one happens.
+        save_root = fe.get("root") == "save"
+        folded = (
+            save_manifest_dest(fe) if save_root
+            else _manifest_dest_of(full_dest, self.base_dest)
+        ).lower()
+        held = next(
+            (e for e in self.state["manifest_files"]
+             if e["dest"].lower() == folded
+             and (e.get("root") == "save") == save_root),
+            None,
+        )
+        if held is not None and held.get("cores") is not None:
+            _attach_claims(held, [fe], self.ctx, dest, held["dest"])
+
+    def _omit(self, fe: dict, full_dest: str, reason: str) -> None:
         source_emu = fe.get("source_profile") or fe.get("source_emulator", "")
+        if not _claim_platform_omission(
+            self.state["omitted_by_destination"].get(full_dest), source_emu
+        ):
+            systems = _extra_system_ids(fe)
+            self.state["record_omission"](
+                full_dest, fe, systems[0] if systems else "", reason, _claim_cores(fe),
+            )
+
+    def _list_held(
+        self, fe: dict, dest: str, full_dest: str, region_key: str, local_path: str,
+    ) -> None:
+        state = self.state
+        source_emu = fe.get("source_profile") or fe.get("source_emulator", "")
+        save_root = fe.get("root") == "save"
 
         # Manifest dests are relative to base_destination. Keep the inferred
         # extras prefix when it is an internal layout dir (RetroDECK bios/).
@@ -4579,42 +5059,31 @@ def _manifest_core_entries(
             # Relative to the roms or emulators folder the entry names.
             manifest_dest = dest
         else:
-            manifest_dest = _manifest_dest_of(full_dest, base_dest)
+            manifest_dest = _manifest_dest_of(full_dest, self.base_dest)
 
         entry, file_size = _manifest_entry(
             local_path, manifest_dest, [source_emu] if source_emu else [],
-            db, repo_root,
-            selection.fields(region_key, fe.get("name", "")),
+            self.ctx.db, self.ctx.repo_root,
+            state["selection"].fields(region_key, fe.get("name", "")),
         )
         if entry is not None and save_root:
             entry.update(save_entry_fields(fe))
         elif entry is not None and outer_root:
             entry["root"] = outer_root
         if entry is None:
-            if not _claim_platform_omission(
-                omitted_by_destination.get(full_dest), source_emu
-            ):
-                systems = _extra_system_ids(fe)
-                record_omission(
-                    full_dest, fe, systems[0] if systems else "", "not_found",
-                    _claim_cores(fe),
-                )
+            self._omit(fe, full_dest, "not_found")
             if file_size:
-                pack_only_sizes.append(file_size)
-            continue
+                state["pack_only_sizes"].append(file_size)
+            return
 
         if is_game_data(fe) and all(
             is_game_data(claim) for claim in fe.get("other_claims", [])
         ):
             entry["category"] = GAME_DATA
-        _attach_claims(
-            entry, fe.get("other_claims", []), db, bios_dir, zip_contents,
-            offline, required_only, validation_index, owners, dest,
-            manifest_dest, repo_root, data_registry,
-        )
+        _attach_claims(entry, fe.get("other_claims", []), self.ctx, dest, manifest_dest)
 
-        manifest_files.append(entry)
-        displaced = omitted_by_destination.pop(full_dest, None)
+        state["manifest_files"].append(entry)
+        displaced = state["omitted_by_destination"].pop(full_dest, None)
         if displaced and displaced.get("cores"):
             # A core that wants this slot and has nothing held: a pack built
             # without the cores served here leaves the slot to it, missing,
@@ -4622,13 +5091,54 @@ def _manifest_core_entries(
             entry.setdefault("absent_claims", []).append(
                 {k: v for k, v in displaced.items() if k not in ("dest", "held")}
             )
-        total_size += file_size
-        seen_destinations.add(full_dest)
-        _register_path(full_dest, seen_destinations, seen_parents)
-        if case_insensitive:
-            seen_lower.add(full_dest.lower())
+        self.total_size += file_size
+        state["seen_destinations"].add(full_dest)
+        _register_path(full_dest, state["seen_destinations"], state["seen_parents"])
+        if state["case_insensitive"]:
+            state["seen_lower"].add(full_dest.lower())
 
-    return total_size
+
+def _manifest_core_entries(
+    core_files: list,
+    config: dict,
+    db: dict,
+    bios_dir: str,
+    base_dest: str,
+    repo_root: str,
+    zip_contents: dict | None,
+    offline: bool | None,
+    **state: Unpack[_CoreEntryParts],
+) -> int:
+    """Add the files a platform's cores need but its list does not name.
+
+    The installer fetches by hash, so an entry records the copy this
+    repository holds rather than the value the profile declares: an
+    upstream hash carried by no local file leaves the entry with no URL.
+    Returns the bytes added.
+    """
+    _reject_unknown(
+        "_manifest_core_entries", state,
+        _CoreEntryParts.__required_keys__ | _CoreEntryParts.__optional_keys__,
+    )
+    required_only = state.get("required_only", False)
+    ctx = _ClaimContext(
+        db, bios_dir, zip_contents, offline, required_only,
+        state.get("validation_index"), state.get("owners"), repo_root,
+        state.get("data_registry"),
+    )
+    lister = _CoreEntryLister(
+        config, base_dest, ctx, state,
+        ExtraResolver(
+            db, bios_dir, zip_contents, ctx.data_registry, ctx.validation_index or {},
+            ctx.owners, offline, profiles=state.get("profiles"),
+        ),
+    )
+    spares = core_file_spares(core_files, lister.region_dropped) if required_only else set()
+    for fe in core_files:
+        if required_only and (fe.get("required") is False or id(fe) in spares):
+            continue
+        lister.list_extra(fe)
+    return lister.total_size
 
 
 def _manifest_dest_of(full_dest: str, base_dest: str) -> str:
@@ -4655,6 +5165,18 @@ def _claim_platform_omission(held: dict | None, emulator: str) -> bool:
     return True
 
 
+class _SelectionOptions(TypedDict, total=False):
+    """The keyword options of _manifest_selection."""
+
+    required_only: bool
+    regions: list[str] | None
+    undeclared: list[dict] | None
+    zip_contents: dict | None
+    data_registry: dict | None
+    slot_overrides: dict[str, str] | None
+    one_per_slot: bool
+
+
 def _manifest_selection(
     config: dict,
     pack_systems: dict,
@@ -4664,13 +5186,7 @@ def _manifest_selection(
     emu_profiles: dict,
     target_cores: set[str] | None,
     source: str,
-    required_only: bool,
-    regions: list[str] | None,
-    undeclared: list[dict] | None = None,
-    zip_contents: dict | None = None,
-    data_registry: dict | None = None,
-    slot_overrides: dict[str, str] | None = None,
-    one_per_slot: bool = False,
+    **options: Unpack[_SelectionOptions],
 ) -> tuple[set[str], SelectionIndex, set[str]]:
     """Destinations a region list and --one-per-slot remove, the groups the
     installer replays, and the destinations the builder holds.
@@ -4679,6 +5195,10 @@ def _manifest_selection(
     decides on the full manifest withdraws what `--region` and
     `--one-per-slot` withdraw from the pack.
     """
+    _reject_unknown("_manifest_selection", options, _SelectionOptions.__optional_keys__)
+    required_only = options.get("required_only", False)
+    regions = options.get("regions")
+    one_per_slot = options.get("one_per_slot", False)
     extras: list[dict] = []
     held: set[str] = set()
     region_groups, _extra_dests = platform_region_groups(
@@ -4694,10 +5214,10 @@ def _manifest_selection(
         required_only=required_only,
         extras_out=extras,
         held_out=held,
-        undeclared=undeclared,
-        zip_contents=zip_contents,
-        data_registry=data_registry,
-        slot_overrides=slot_overrides,
+        undeclared=options.get("undeclared"),
+        zip_contents=options.get("zip_contents"),
+        data_registry=options.get("data_registry"),
+        slot_overrides=options.get("slot_overrides"),
     )
     region_index = region_mod.platform_region_index(
         config, emu_profiles, target_cores
@@ -4863,27 +5383,622 @@ def system_titles(*entry_lists: Iterable[dict]) -> dict[str, str]:
     return titles
 
 
+class InstallListOptions(TypedDict, total=False):
+    """The keyword options of generate_install_list, which it hands to
+    generate_manifest."""
+
+    emulators_dir: str
+    zip_contents: dict | None
+    emu_profiles: dict | None
+    target_cores: set[str] | None
+    source: str
+    regions: list[str] | None
+    target_name: str | None
+    offline: bool | None
+    required_only: bool
+    data_registry: dict | None
+    fold_case: bool | None
+    no_game_data: bool
+    one_per_slot: bool
+
+
+class ManifestOptions(InstallListOptions, total=False):
+    """The keyword options of generate_manifest."""
+
+    known_slot_choices: dict | None
+    build_out: dict | None
+
+
+@dataclass(frozen=True)
+class _ManifestSettings:
+    """ManifestOptions with their defaults."""
+
+    emulators_dir: str = "emulators"
+    zip_contents: dict | None = None
+    emu_profiles: dict | None = None
+    target_cores: set[str] | None = None
+    source: str = "full"
+    regions: list[str] | None = None
+    target_name: str | None = None
+    offline: bool | None = None
+    required_only: bool = False
+    data_registry: dict | None = None
+    fold_case: bool | None = None
+    no_game_data: bool = False
+    one_per_slot: bool = False
+    known_slot_choices: dict | None = None
+    build_out: dict | None = None
+
+
+@dataclass
+class _ManifestBuild:
+    """One install manifest being listed: its files, omissions and the slots
+    they take, settled by the rules the pack builder follows."""
+
+    platform_name: str
+    platforms_dir: str
+    db: dict
+    bios_dir: str
+    opts: _ManifestSettings
+    config: dict
+    emu_profiles: dict
+    zip_contents: dict
+    data_registry: dict
+    game_entries: set[int]
+    install_section: dict
+    repo_root: str
+    pack_systems: dict
+    manifest_profiles: dict = field(default_factory=dict)
+    manifest_validation: dict = field(default_factory=dict)
+    manifest_owners: dict = field(default_factory=dict)
+    game_destinations: set[str] = field(default_factory=set)
+    placed: _Placed = field(init=False)
+    # Destination -> (entry, full destination, manifest destination) of each
+    # platform file, for the core claims a target build would fall back on.
+    platform_entries: dict[str, tuple[dict, str, str]] = field(default_factory=dict)
+    # Full destination -> the platform systems declaring it. A file's
+    # `systems` also names the systems whose cores read it there. A pack built
+    # for a target keeps the file only while a declaring system stays.
+    declared_by: dict[str, set[str]] = field(default_factory=dict)
+    manifest_files: list[dict] = field(default_factory=list)
+    omitted_by_destination: dict[str, dict] = field(default_factory=dict)
+    total_size: int = 0
+    # Sizes of the files the pack carries and the installer cannot fetch: the
+    # collection does not index them, a data directory cache answered.
+    pack_only_sizes: list[int] = field(default_factory=list)
+    # Platform entries resolved into a data directory cache: destination ->
+    # (cache file, size). Settled once the trees are walked.
+    cache_held: dict[str, tuple[str, int]] = field(default_factory=dict)
+    rename_notes: set[str] = field(default_factory=set)
+    slot_choices: dict = field(default_factory=dict)
+    slot_overrides: dict[str, str] = field(default_factory=dict)
+    undeclared: list[dict] | None = None
+    region_drops: set[str] = field(default_factory=set)
+    selection: SelectionIndex | None = None
+    builder_held: set[str] = field(default_factory=set)
+    declarations: dict[str, dict[str, list[dict]]] = field(default_factory=dict)
+    data_members: list[tuple[str, str]] = field(default_factory=list)
+    data_directories: list[dict] = field(default_factory=list)
+
+    def __post_init__(self) -> None:
+        self.placed = _Placed(self.case_insensitive)
+
+    @property
+    def base_dest(self) -> str:
+        return self.config.get("base_destination", "")
+
+    @property
+    def case_insensitive(self) -> bool:
+        return self.config.get("case_insensitive_fs", False)
+
+    @property
+    def verification_mode(self) -> str:
+        return self.config.get("verification_mode", "existence")
+
+    @property
+    def fields(self) -> SelectionIndex:
+        assert self.selection is not None
+        return self.selection
+
+    def manifest_destination(self, full_destination: str) -> str:
+        return _manifest_dest_of(full_destination, self.base_dest)
+
+    def record_omission(
+        self,
+        full_destination: str,
+        file_entry: dict,
+        system_id: str,
+        reason: str,
+        cores: list[str] | None,
+    ) -> None:
+        # A core extra (cores given) is keyed as the region pass keys it.
+        bare = (
+            sanitize_pack_path(file_entry.get("destination", file_entry.get("name", "")))
+            if cores is None else extra_region_key(file_entry, declared_root(self.config))
+        )
+        self.omitted_by_destination[full_destination] = {
+            **self._omission_dest(full_destination, file_entry),
+            "name": str(file_entry.get("name") or ""),
+            "system": system_id,
+            "required": bool(file_entry.get("required", True)),
+            "reason": reason,
+            "cores": cores,
+            # An omission keeps its region groups, as the builder groups it:
+            # a requested file the collection lacks answers the request
+            # without displacing a held fallback (resolve_region_drops,
+            # held). One the builder holds and the installer cannot fetch
+            # does displace it in the pack, so it says so, and the installer
+            # drops the same fallback.
+            **self.fields.fields(bare, str(file_entry.get("name") or "")),
+            **({"held": True} if bare in self.builder_held else {}),
+            **(
+                {"category": GAME_DATA}
+                if (bare in self.game_destinations if cores is None else is_game_data(file_entry))
+                else {}
+            ),
+        }
+
+    def _omission_dest(self, full_destination: str, file_entry: dict) -> dict:
+        # Read in the emulator's own folder, outside the BIOS tree: dest is
+        # the path the emulator reads, relative to that folder.
+        if file_entry.get("unplaced"):
+            return {"dest": sanitize_pack_path(file_entry.get("path") or ""),
+                    "root": "emulator"}
+        if file_entry.get("root") in OUTER_ROOTS:
+            return {"dest": sanitize_pack_path(
+                file_entry.get("destination") or file_entry.get("path") or ""
+            ), "root": file_entry["root"]}
+        if file_entry.get("root") == "save":
+            return {"dest": save_manifest_dest(file_entry), **save_entry_fields(file_entry)}
+        return {"dest": self.manifest_destination(full_destination)}
+
+    def kept_declarations(self) -> Iterator[tuple[str, dict, str, str]]:
+        """(system, entry, destination, full destination) of each platform
+        declaration this manifest keeps, in the builder's order."""
+        opts = self.opts
+        for sys_id, system in sorted(self.pack_systems.items()):
+            for file_entry in system.get("files", []):
+                if opts.required_only and file_entry.get("required") is False:
+                    continue
+                dest = sanitize_pack_path(file_entry.get("destination", file_entry["name"]))
+                if not dest:
+                    continue
+                if self.region_drops and dest in self.region_drops:
+                    continue
+                full_dest = f"{self.base_dest}/{dest}" if self.base_dest else dest
+                yield sys_id, file_entry, dest, full_dest
+
+    def declaration_order(self, full_dest: str) -> list[tuple[list[str], dict, str]]:
+        """The declarations answering a destination as its systems drop.
+
+        A pack built for a target loses the systems no available core
+        reads, and the next declaration takes the destination by the
+        same rule: RetroArch's bare nintendo-ds dsi_bios9.bin once the
+        pinned nintendo-dsi one is gone.
+        """
+        remaining = dict(self.declarations.get(full_dest, {}))
+        order: list[tuple[list[str], dict, str]] = []
+        while remaining:
+            winner = _preferred_entries(
+                {sid: {"files": fes} for sid, fes in remaining.items()},
+                self.db, self.bios_dir, self.base_dest, self.opts.required_only,
+                self.zip_contents, self.opts.offline,
+            ).get(full_dest)
+            first_sys, first = next(
+                (sid, fe) for sid, fes in sorted(remaining.items()) for fe in fes
+                if winner is None or id(fe) == winner
+            )
+            systems = sorted(
+                sid for sid, fes in remaining.items()
+                if any(fe is first for fe in fes)
+            )
+            order.append((systems, first, first_sys))
+            for sid in systems:
+                del remaining[sid]
+        return order
+
+    def list_baseline(self, settle: _Settle) -> None:
+        """Phase 1: the platform's own files."""
+        # The same destination can be declared by more than one system, bare
+        # in one and hash-constrained in another. The builder lets the
+        # constrained sibling claim it. Without the same rule here the
+        # manifest named whatever answered to the name, so the pack and the
+        # installer disagreed about which file a destination means.
+        # Decided among the declarations this manifest keeps, as the pack
+        # does. A manifest carries no data directories.
+        preferred_entries = _preferred_entries(
+            self.pack_systems, self.db, self.bios_dir, self.base_dest,
+            self.opts.required_only, self.zip_contents, self.opts.offline,
+        )
+        for sys_id, file_entry, _dest, full_dest in self.kept_declarations():
+            self.declarations.setdefault(full_dest, {}).setdefault(sys_id, []).append(
+                file_entry
+            )
+        for sys_id, file_entry, dest, full_dest in self.kept_declarations():
+            self.declared_by.setdefault(full_dest, set()).add(sys_id)
+            preferred = preferred_entries.get(full_dest)
+            if preferred is not None and id(file_entry) != preferred:
+                continue
+            if self.placed.holds(full_dest) or self.placed.conflicts(full_dest):
+                continue
+            if file_entry.get("storage", "embedded") == "user_provided":
+                self._list_instructions(file_entry, sys_id, full_dest)
+                continue
+            local_path, status = settle(
+                file_entry, sys_id, dest, self.slot_overrides.get(full_dest)
+            )
+            if local_path is None:
+                self.record_omission(full_dest, file_entry, sys_id, status, None)
+                continue
+            self._list_declared(file_entry, sys_id, dest, full_dest, local_path, settle)
+
+    def _list_instructions(self, file_entry: dict, sys_id: str, full_dest: str) -> None:
+        self.record_omission(
+            full_dest,
+            file_entry,
+            sys_id,
+            "user_provided",
+            None,
+        )
+        # The pack writes the instructions in the slot's place
+        # and holds it: one more member than the files listed.
+        instructions = file_entry.get(
+            "instructions", "Please provide this file manually."
+        )
+        self.pack_only_sizes.append(len(
+            f"File needed: {file_entry['name']}\n\n{instructions}\n".encode()
+        ))
+        self.placed.take(full_dest)
+
+    def _list_declared(
+        self,
+        file_entry: dict,
+        sys_id: str,
+        dest: str,
+        full_dest: str,
+        local_path: str,
+        settle: _Settle,
+    ) -> None:
+        entry, file_size = _manifest_entry(
+            local_path, dest, None, self.db, self.repo_root,
+            self.fields.fields(dest, file_entry["name"]),
+        )
+        if entry is not None and dest in self.game_destinations:
+            entry["category"] = GAME_DATA
+        if entry is not None and self.opts.target_cores is None:
+            order = self.declaration_order(full_dest)
+            if full_dest in self.slot_choices or len(order) > 1:
+                _record_slot_choices(
+                    entry, self.slot_choices.get(full_dest, []), order,
+                    settle, dest, self.db, self.repo_root,
+                )
+        if entry is None:
+            self.record_omission(full_dest, file_entry, sys_id, "not_found", None)
+            if file_size and full_dest not in self.placed.destinations:
+                if _in_data_cache(local_path, self.data_registry):
+                    self.cache_held[full_dest] = (local_path, file_size)
+                else:
+                    self.pack_only_sizes.append(file_size)
+                self.placed.take(full_dest)
+            return
+
+        self.manifest_files.append(entry)
+        self.platform_entries[full_dest] = (entry, full_dest, dest)
+        self.omitted_by_destination.pop(full_dest, None)
+        self.total_size += file_size
+        self.placed.take(full_dest)
+
+    def claim_context(self) -> _ClaimContext:
+        return _ClaimContext(
+            self.db, self.bios_dir, self.zip_contents, self.opts.offline,
+            self.opts.required_only, self.manifest_validation, self.manifest_owners,
+            self.repo_root, self.data_registry,
+        )
+
+    def list_core_files(self) -> None:
+        """Phase 2: core complement (emulator extras)."""
+        opts = self.opts
+        unplaceable: list[dict] = []
+        baseline_claims: dict[str, dict] = {}
+        absent: list[dict] = []
+        if opts.source != "platform":
+            core_files = _collect_emulator_extras(
+                self.config,
+                opts.emulators_dir,
+                self.db,
+                self.placed.destinations,
+                self.base_dest,
+                self.emu_profiles,
+                target_cores=opts.target_cores,
+                include_all=(opts.source == "truth"),
+                unplaceable=unplaceable,
+                baseline_claims=baseline_claims,
+                absent=absent,
+                undeclared=self.undeclared,
+            )
+        else:
+            core_files = []
+        _record_unplaceable(unplaceable, self.record_omission, self.config, self.emu_profiles)
+        _record_absent(
+            absent, self.config, self.base_dest, self.region_drops, opts.required_only,
+            self.placed.destinations, self.omitted_by_destination, self.record_omission,
+        )
+        self.total_size += _manifest_core_entries(
+            core_files, self.config, self.db, self.bios_dir, self.base_dest, self.repo_root,
+            self.zip_contents, opts.offline,
+            region_drops=self.region_drops, case_insensitive=self.case_insensitive,
+            seen_destinations=self.placed.destinations, seen_lower=self.placed.lower,
+            seen_parents=self.placed.parents, manifest_files=self.manifest_files,
+            omitted_by_destination=self.omitted_by_destination,
+            record_omission=self.record_omission, pack_only_sizes=self.pack_only_sizes,
+            selection=self.fields, required_only=opts.required_only,
+            validation_index=self.manifest_validation, owners=self.manifest_owners,
+            data_registry=self.data_registry, profiles=self.emu_profiles,
+        )
+        self._settle_claims(baseline_claims)
+
+    def _settle_claims(self, baseline_claims: dict[str, dict]) -> None:
+        ctx = self.claim_context()
+        for key, (entry, full_dest, dest) in self.platform_entries.items():
+            declared = self.declared_by.get(full_dest, set())
+            if declared and declared != set(entry.get("systems") or []):
+                entry["declared_in"] = sorted(declared)
+            claims = baseline_claims.get(key, {}).get("other_claims")
+            if claims and any(not is_game_data(claim) for claim in claims):
+                # A core reads this path as firmware: a pack without game data
+                # still fills it.
+                entry.pop("category", None)
+            if claims:
+                _attach_claims(entry, claims, ctx, dest, dest)
+        # A platform omission narrows like a platform file: by the systems
+        # declaring it, which can be fewer than the ones whose cores read it.
+        for full_dest, omission in self.omitted_by_destination.items():
+            declared = self.declared_by.get(full_dest, set())
+            if (
+                omission.get("cores") is None
+                and declared
+                and declared != set(omission.get("systems") or [])
+            ):
+                omission["declared_in"] = sorted(declared)
+
+    def list_data_directories(self) -> list[int]:
+        """Phase 3: data directories, and the sizes the pack alone holds.
+
+        They are not files of the collection: the installer fetches each
+        from its source archive and keeps the members whose hash the list
+        below records, the same tree the pack carries.
+        """
+        opts = self.opts
+        data_refs: dict[str, tuple[str, tuple[str, ...], str, bool]] = {}
+        reclaim = {full: path for full, (path, _size) in self.cache_held.items()}
+        core_trees = ([] if opts.source == "platform"
+                      else core_data_trees(self.config, self.emu_profiles, self.platform_name,
+                                           self.data_registry, opts.target_cores))
+        self.data_members = list(_data_directory_members(
+            self.pack_systems, self.data_registry, self.platform_name, self.base_dest,
+            self.case_insensitive, self.placed.destinations, self.placed.lower,
+            self.placed.parents, refs_out=data_refs, required_only=opts.required_only,
+            core_trees=core_trees,
+            reclaim=reclaim,
+        ))
+        # A platform entry found in a tree the pack carries is that tree's member:
+        # the installer rebuilds it from the tree's archive. One found in a tree
+        # the pack does not carry stays omitted, held by the pack alone.
+        for full_dest, (_path, size) in self.cache_held.items():
+            if full_dest in reclaim:
+                self.pack_only_sizes.append(size)
+            else:
+                self.omitted_by_destination.pop(full_dest, None)
+        self.data_directories = _manifest_data_directories(
+            self.data_members, data_refs, self.data_registry or {}, self.base_dest,
+            tree_readers(self.pack_systems, core_trees), self.pack_systems,
+        )
+        return self.pack_only_sizes + [os.path.getsize(src) for src, _dest in self.data_members]
+
+    def result(self, data_sizes: list[int]) -> dict:
+        opts, config, pack_systems = self.opts, self.config, self.pack_systems
+        manifest_files, platform_name = self.manifest_files, self.platform_name
+        omitted = self.omitted_by_destination
+        # The pack is unzipped into the BIOS folder: an entry the installer puts
+        # in the roms, emulators or configs folder is in its list, not in the ZIP.
+        outer = [e for e in manifest_files if e.get("root") in OUTER_ROOTS]
+        core_names, system_cores = _manifest_core_index(
+            config, self.emu_profiles, manifest_files, list(omitted.values())
+        )
+        result: dict = {
+            "manifest_version": 2,
+            "source": opts.source,
+            "regions": list(opts.regions or []),
+            # A target-filtered manifest is only distinguishable from the full one
+            # by its filename, so it records the filter the way regions does.
+            # Absent on an unfiltered manifest rather than empty, to leave the
+            # twelve default files byte-identical.
+            **({"target": opts.target_name} if opts.target_name else {}),
+            # Every game data file below says so: the installer's --no-game-data
+            # relies on it, and refuses a list that does not record categories.
+            "categorized": True,
+            # The entries a slot decides carry `slot`, which --one-per-slot
+            # reads: without this mark the installer refuses it.
+            "slot_fields": True,
+            **({"no_game_data": True} if opts.no_game_data else {}),
+            "platform": platform_name,
+            "display_name": config.get("platform", platform_name),
+            "version": platform_list_version(config, platform_name),
+            "generated": _build_timestamp(self.db),
+            "base_destination": self.base_dest,
+            "detect": self.install_section.get("detect", []),
+            "standalone_copies": _standalone_copies(
+                self.install_section.get("standalone_copies", []), self.manifest_profiles,
+                manifest_files,
+            ),
+            "total_files": len(manifest_files),
+            "total_size": self.total_size,
+            "pack_files": (
+                len(manifest_files) - len(outer) + len(data_sizes) + len(PACK_DOCUMENTS)
+                + len(self.rename_notes)
+                + len(pack_markers(platform_name, opts.target_name, self.platforms_dir))
+            ),
+            "pack_size": self.total_size - sum(int(e.get("size") or 0) for e in outer)
+            + sum(data_sizes),
+            "total_omitted": len(omitted),
+            "omitted_files": sorted(
+                omitted.values(), key=lambda entry: entry["dest"]
+            ),
+            "core_names": core_names,
+            **({"downloaded_cores": downloaded} if (downloaded := _downloaded_cores(
+                config, self.emu_profiles, core_names, self.platforms_dir,
+            )) else {}),
+            **({"offered_boards": offered} if (offered := _offered_boards(
+                config, self.emu_profiles, core_names,
+                [*manifest_files, *omitted.values()],
+            )) else {}),
+            "system_cores": system_cores,
+            # The names the platform itself gives its systems (Batocera's psx),
+            # which --system accepts beside the ids.
+            "system_names": platform_system_names(config, list(pack_systems)),
+            "system_titles": system_titles(manifest_files, omitted.values()),
+            "files": manifest_files,
+        }
+        if self.data_directories:
+            result["data_directories"] = self.data_directories
+        self._outer_directories(result)
+        return result
+
+    def _outer_directories(self, result: dict) -> None:
+        for root in OUTER_ROOTS:
+            layout = outer_layout(self.config, root) or {}
+            if layout and any(entry.get("root") == root
+                              for entry in [*self.manifest_files, *result["omitted_files"]]):
+                # Where the installer finds the folder: relative to the folder
+                # holding the BIOS folder, which the platform names bios_folder.
+                result[f"{root}_directory"] = {
+                    key: layout[key] for key in MANIFEST_OUTER_FIELDS if key in layout
+                }
+        saved = [entry for entry in self.manifest_files if entry.get("root") == "save"]
+        if saved:
+            save = save_layout(self.config)
+            result["save_directory"] = {"folder": save.folder, "by_core": save.by_core}
+            if save.by_system:
+                # The launcher writes the directory at each launch, one folder
+                # per system: each dest starts with that folder.
+                result["save_directory"]["by_system"] = True
+
+
+def _start_manifest(
+    platform_name: str,
+    platforms_dir: str,
+    db: dict,
+    bios_dir: str,
+    registry_path: str,
+    opts: _ManifestSettings,
+) -> tuple[_ManifestBuild, dict]:
+    """The manifest's configuration and scope, and the profiles before the
+    game data cut."""
+    config = load_platform_config(platform_name, platforms_dir)
+    if opts.fold_case is not None:
+        config = {**config, "case_insensitive_fs": opts.fold_case}
+    if opts.target_name:
+        config = {**config, TARGET_KEY: opts.target_name}
+    zip_contents = {} if opts.zip_contents is None else opts.zip_contents
+    emu_profiles = opts.emu_profiles
+    if emu_profiles is None:
+        emu_profiles = load_emulator_profiles(opts.emulators_dir)
+    data_registry = opts.data_registry
+    if data_registry is None:
+        data_registry = load_data_dir_registry(platforms_dir)
+    full_profiles = emu_profiles
+    game_entries: set[int] = set()
+    if opts.no_game_data:
+        cut = without_game_data(config, emu_profiles, data_registry, opts.target_cores)
+        config, emu_profiles = cut.config, cut.profiles
+    else:
+        game_entries = platform_game_data(config, emu_profiles, data_registry)
+
+    # Load registry for install metadata
+    registry: dict = {}
+    if os.path.exists(registry_path):
+        with open(registry_path) as f:
+            registry = yaml_load(f) or {}
+    plat_registry = registry.get("platforms", {}).get(platform_name, {})
+
+    plat_cores = _platform_cores(config, emu_profiles) if opts.target_cores else None
+    pack_systems = filter_systems_by_target(
+        config.get("systems", {}),
+        emu_profiles,
+        opts.target_cores,
+        platform_cores=plat_cores,
+    )
+    build = _ManifestBuild(
+        platform_name, platforms_dir, db, bios_dir, opts, config, emu_profiles,
+        zip_contents, data_registry, game_entries, plat_registry.get("install", {}),
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))), pack_systems,
+    )
+    build.manifest_profiles = {
+        name: emu_profiles[name]
+        for name in _platform_cores(config, emu_profiles)
+    }
+    build.manifest_validation = _build_validation_index(build.manifest_profiles)
+    build.manifest_owners = destination_owners(build.manifest_profiles)
+    _settle_manifest_scope(build)
+    return build, full_profiles
+
+
+def _settle_manifest_scope(build: _ManifestBuild) -> None:
+    """Game data destinations, slot choices and the region selection."""
+    opts, config, emu_profiles = build.opts, build.config, build.emu_profiles
+    # A destination is game data when every declaration of it is: a firmware
+    # declaration of the same path keeps it in a pack built without game data.
+    declared_kinds: dict[str, set[bool]] = {}
+    for system in build.pack_systems.values():
+        for fe in system.get("files", []):
+            bare = sanitize_pack_path(fe.get("destination", fe.get("name", "")))
+            if bare:
+                declared_kinds.setdefault(bare, set()).add(id(fe) in build.game_entries)
+    build.game_destinations = {d for d, kinds in declared_kinds.items() if kinds == {True}}
+
+    # The full manifest records every core's answer at a contested slot, so a
+    # target narrowed from it gets what that target's own pack serves.
+    whole = opts.target_cores is None and opts.source != "platform" and bool(emu_profiles)
+    # The truth list read inside this run takes the choices already made.
+    build.slot_choices = (
+        opts.known_slot_choices if opts.known_slot_choices is not None and whole
+        else slots.slot_choices(config, emu_profiles, build.db, build.zip_contents,
+                                build.data_registry)
+        if whole else {}
+    )
+    # Derived from the same choices: computed twice, it was 8% of a run.
+    build.slot_overrides = slots.pack_overrides(
+        config, emu_profiles, build.db, build.zip_contents, build.data_registry,
+        target_cores=opts.target_cores, source=opts.source,
+        choices=build.slot_choices if whole else None,
+    )
+
+    # Read by the region grouping and by phase 2 with the same arguments.
+    build.undeclared = (
+        undeclared_report(
+            config, opts.emulators_dir, build.db, emu_profiles, opts.target_cores,
+            include_all=(opts.source == "truth"),
+        )
+        if opts.source != "platform"
+        else None
+    )
+    build.region_drops, build.selection, build.builder_held = _manifest_selection(
+        config, build.pack_systems, opts.emulators_dir, build.db, build.base_dest,
+        emu_profiles, opts.target_cores, opts.source,
+        required_only=opts.required_only, regions=opts.regions,
+        undeclared=build.undeclared, zip_contents=build.zip_contents,
+        data_registry=build.data_registry, slot_overrides=build.slot_overrides,
+        one_per_slot=opts.one_per_slot,
+    )
+
+
 def generate_manifest(
     platform_name: str,
     platforms_dir: str,
     db: dict,
     bios_dir: str,
     registry_path: str,
-    emulators_dir: str = "emulators",
-    zip_contents: dict | None = None,
-    emu_profiles: dict | None = None,
-    target_cores: set[str] | None = None,
-    source: str = "full",
-    regions: list[str] | None = None,
-    target_name: str | None = None,
-    offline: bool | None = None,
-    required_only: bool = False,
-    data_registry: dict | None = None,
-    fold_case: bool | None = None,
-    no_game_data: bool = False,
-    one_per_slot: bool = False,
-    known_slot_choices: dict | None = None,
-    build_out: dict | None = None,
+    **options: Unpack[ManifestOptions],
 ) -> dict:
     """Generate a JSON manifest for a platform (same resolution as generate_pack).
 
@@ -4898,520 +6013,57 @@ def generate_manifest(
     --standalone read. `build_out` receives the slot choices and the
     profiles this build read, which that second build takes over.
     """
-    config = load_platform_config(platform_name, platforms_dir)
-    if fold_case is not None:
-        config = {**config, "case_insensitive_fs": fold_case}
-    if target_name:
-        config = {**config, TARGET_KEY: target_name}
-    if zip_contents is None:
-        zip_contents = {}
-    if emu_profiles is None:
-        emu_profiles = load_emulator_profiles(emulators_dir)
-    if data_registry is None:
-        data_registry = load_data_dir_registry(platforms_dir)
-    full_profiles = emu_profiles
-    game_entries: set[int] = set()
-    if no_game_data:
-        cut = without_game_data(config, emu_profiles, data_registry, target_cores)
-        config, emu_profiles = cut.config, cut.profiles
-    else:
-        game_entries = platform_game_data(config, emu_profiles, data_registry)
-
-    platform_display = config.get("platform", platform_name)
-    base_dest = config.get("base_destination", "")
-    case_insensitive = config.get("case_insensitive_fs", False)
-    verification_mode = config.get("verification_mode", "existence")
-    manifest_profiles = {
-        name: emu_profiles[name]
-        for name in _platform_cores(config, emu_profiles)
-    }
-    manifest_validation = _build_validation_index(manifest_profiles)
-    manifest_owners = destination_owners(manifest_profiles)
-
-    # Load registry for install metadata
-    registry: dict = {}
-    if os.path.exists(registry_path):
-        with open(registry_path) as f:
-            registry = yaml_load(f) or {}
-    plat_registry = registry.get("platforms", {}).get(platform_name, {})
-    install_section = plat_registry.get("install", {})
-    detect = install_section.get("detect", [])
-    standalone_copies = install_section.get("standalone_copies", [])
-
-    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-    plat_cores = _platform_cores(config, emu_profiles) if target_cores else None
-    pack_systems = filter_systems_by_target(
-        config.get("systems", {}),
-        emu_profiles,
-        target_cores,
-        platform_cores=plat_cores,
+    _reject_unknown("generate_manifest", options, ManifestOptions.__optional_keys__)
+    opts = _ManifestSettings(**options)
+    build, full_profiles = _start_manifest(
+        platform_name, platforms_dir, db, bios_dir, registry_path, opts
     )
+    config, verification_mode = build.config, build.verification_mode
 
-    # A destination is game data when every declaration of it is: a firmware
-    # declaration of the same path keeps it in a pack built without game data.
-    declared_kinds: dict[str, set[bool]] = {}
-    for system in pack_systems.values():
-        for fe in system.get("files", []):
-            bare = sanitize_pack_path(fe.get("destination", fe.get("name", "")))
-            if bare:
-                declared_kinds.setdefault(bare, set()).add(id(fe) in game_entries)
-    game_destinations = {d for d, kinds in declared_kinds.items() if kinds == {True}}
-
-    seen_destinations: set[str] = set()
-    # Destination -> (entry, full destination, manifest destination) of each
-    # platform file, for the core claims a target build would fall back on.
-    platform_entries: dict[str, tuple[dict, str, str]] = {}
-    # Full destination -> the platform systems declaring it. A file's
-    # `systems` also names the systems whose cores read it there. A pack built
-    # for a target keeps the file only while a declaring system stays.
-    declared_by: dict[str, set[str]] = {}
-    seen_lower: set[str] = set()
-    seen_parents: set[str] = set()
-    manifest_files: list[dict] = []
-    omitted_by_destination: dict[str, dict] = {}
-    total_size = 0
-    # Sizes of the files the pack carries and the installer cannot fetch: the
-    # collection does not index them, a data directory cache answered.
-    pack_only_sizes: list[int] = []
-    # Platform entries resolved into a data directory cache: destination ->
-    # (cache file, size). Settled once the trees are walked.
-    cache_held: dict[str, tuple[str, int]] = {}
-    rename_notes: set[str] = set()
-    # The full manifest records every core's answer at a contested slot, so a
-    # target narrowed from it gets what that target's own pack serves.
-    whole = target_cores is None and source != "platform" and bool(emu_profiles)
-    # The truth list read inside this run takes the choices already made.
-    slot_choices = (
-        known_slot_choices if known_slot_choices is not None and whole
-        else slots.slot_choices(config, emu_profiles, db, zip_contents, data_registry)
-        if whole else {}
-    )
-    # Derived from the same choices: computed twice, it was 8% of a run.
-    slot_overrides = slots.pack_overrides(
-        config, emu_profiles, db, zip_contents, data_registry,
-        target_cores=target_cores, source=source,
-        choices=slot_choices if whole else None,
-    )
-
-    def manifest_destination(full_destination: str) -> str:
-        if base_dest and full_destination.startswith(f"{base_dest}/"):
-            return full_destination[len(base_dest) + 1:]
-        return full_destination
-
-    def record_omission(
-        full_destination: str,
-        file_entry: dict,
-        system_id: str,
-        reason: str,
-        cores: list[str] | None,
-    ) -> None:
-        # A core extra (cores given) is keyed as the region pass keys it.
-        bare = (
-            sanitize_pack_path(file_entry.get("destination", file_entry.get("name", "")))
-            if cores is None else extra_region_key(file_entry, declared_root(config))
-        )
-        save_root = file_entry.get("root") == "save"
-        # Read in the emulator's own folder, outside the BIOS tree: dest is
-        # the path the emulator reads, relative to that folder.
-        outside = bool(file_entry.get("unplaced"))
-        if outside:
-            dest_fields: dict = {"dest": sanitize_pack_path(file_entry.get("path") or ""),
-                                 "root": "emulator"}
-        elif file_entry.get("root") in OUTER_ROOTS:
-            dest_fields = {"dest": sanitize_pack_path(
-                file_entry.get("destination") or file_entry.get("path") or ""
-            ), "root": file_entry["root"]}
-        elif save_root:
-            dest_fields = {"dest": save_manifest_dest(file_entry), **save_entry_fields(file_entry)}
-        else:
-            dest_fields = {"dest": manifest_destination(full_destination)}
-        omitted_by_destination[full_destination] = {
-            **dest_fields,
-            "name": str(file_entry.get("name") or ""),
-            "system": system_id,
-            "required": bool(file_entry.get("required", True)),
-            "reason": reason,
-            "cores": cores,
-            # An omission keeps its region groups, as the builder groups it:
-            # a requested file the collection lacks answers the request
-            # without displacing a held fallback (resolve_region_drops,
-            # held). One the builder holds and the installer cannot fetch
-            # does displace it in the pack, so it says so, and the installer
-            # drops the same fallback.
-            **selection.fields(bare, str(file_entry.get("name") or "")),
-            **({"held": True} if bare in builder_held else {}),
-            **(
-                {"category": GAME_DATA}
-                if (bare in game_destinations if cores is None else is_game_data(file_entry))
-                else {}
-            ),
-        }
-
-    # Read by the region grouping and by phase 2 with the same arguments.
-    undeclared = (
-        undeclared_report(
-            config, emulators_dir, db, emu_profiles, target_cores,
-            include_all=(source == "truth"),
-        )
-        if source != "platform"
-        else None
-    )
-    region_drops, selection, builder_held = _manifest_selection(
-        config, pack_systems, emulators_dir, db, base_dest, emu_profiles,
-        target_cores, source, required_only, regions, undeclared=undeclared,
-        zip_contents=zip_contents, data_registry=data_registry,
-        slot_overrides=slot_overrides, one_per_slot=one_per_slot,
-    )
-
-    # Phase 1: baseline files
-    if source != "truth":
-        # The same destination can be declared by more than one system, bare
-        # in one and hash-constrained in another. The builder lets the
-        # constrained sibling claim it. Without the same rule here the
-        # manifest named whatever answered to the name, so the pack and the
-        # installer disagreed about which file a destination means.
-        # Decided among the declarations this manifest keeps, as the pack
-        # does. A manifest carries no data directories.
-        preferred_entries = _preferred_entries(
-            pack_systems, db, bios_dir, base_dest, required_only,
-            zip_contents, offline,
-        )
-        declarations: dict[str, dict[str, list[dict]]] = {}
-        for sys_id, system in sorted(pack_systems.items()):
-            for file_entry in system.get("files", []):
-                if required_only and file_entry.get("required") is False:
-                    continue
-                dest = sanitize_pack_path(file_entry.get("destination", file_entry["name"]))
-                if dest and not (region_drops and dest in region_drops):
-                    full_dest = f"{base_dest}/{dest}" if base_dest else dest
-                    declarations.setdefault(full_dest, {}).setdefault(sys_id, []).append(
-                        file_entry
-                    )
-
-        def declaration_order(full_dest: str) -> list[tuple[list[str], dict, str]]:
-            """The declarations answering a destination as its systems drop.
-
-            A pack built for a target loses the systems no available core
-            reads, and the next declaration takes the destination by the
-            same rule: RetroArch's bare nintendo-ds dsi_bios9.bin once the
-            pinned nintendo-dsi one is gone.
-            """
-            remaining = dict(declarations.get(full_dest, {}))
-            order: list[tuple[list[str], dict, str]] = []
-            while remaining:
-                winner = _preferred_entries(
-                    {sid: {"files": fes} for sid, fes in remaining.items()},
-                    db, bios_dir, base_dest, required_only, zip_contents, offline,
-                ).get(full_dest)
-                first_sys, first = next(
-                    (sid, fe) for sid, fes in sorted(remaining.items()) for fe in fes
-                    if winner is None or id(fe) == winner
-                )
-                systems = sorted(
-                    sid for sid, fes in remaining.items()
-                    if any(fe is first for fe in fes)
-                )
-                order.append((systems, first, first_sys))
-                for sid in systems:
-                    del remaining[sid]
-            return order
-
-        def settle(
-            file_entry: dict, sys_id: str, dest: str, override: str | None
-        ) -> tuple[str | None, str]:
-            """The file served once the slot is settled, or None and why not."""
-            local_path, status = resolve_declaration(
-                file_entry,
-                db,
-                bios_dir,
-                zip_contents,
-                data_registry,
-                override,
-                offline=offline,
-            )
-            if status == "not_found" and not reads_file_contents(verification_mode):
-                found = agnostic_substitute(file_entry, sys_id, db, manifest_profiles)
-                if found:
-                    local_path, status = found[0], "agnostic_fallback"
-                    if os.path.basename(local_path) != file_entry.get("name", ""):
-                        # The pack explains the rename in a note of its own.
-                        rename_notes.add(file_entry.get("name", ""))
-            # The builder's verdict: a hash platform omits what its frontend
-            # would reject, a zipped_file archive included when the member is
-            # missing whatever the outer resolution said. An existence
-            # platform never reads the bytes.
-            status, refusal = baseline_verdict(
-                file_entry, local_path, status, verification_mode,
-                config.get("hash_rule", ""),
-            )
-            if refusal or status in ("not_found", "external"):
-                return None, "hash_mismatch" if refusal else status
-            # The variant the pack ships when an emulator rejects the
-            # resolved file: the installer must place the same bytes.
-            local_path, _disagreement = validated_choice(
-                file_entry, local_path, db, manifest_validation, bios_dir,
-                digest_algorithm(verification_mode), dest, manifest_owners,
-            )
-            return local_path, status
-
-        for sys_id, system in sorted(pack_systems.items()):
-            for file_entry in system.get("files", []):
-                if required_only and file_entry.get("required") is False:
-                    continue
-                dest = sanitize_pack_path(file_entry.get("destination", file_entry["name"]))
-                if not dest:
-                    continue
-                if region_drops and dest in region_drops:
-                    continue
-                full_dest = f"{base_dest}/{dest}" if base_dest else dest
-                declared_by.setdefault(full_dest, set()).add(sys_id)
-
-                preferred = preferred_entries.get(full_dest)
-                if preferred is not None and id(file_entry) != preferred:
-                    continue
-
-                dedup_key = full_dest
-                if dedup_key in seen_destinations:
-                    continue
-                if case_insensitive and dedup_key.lower() in seen_lower:
-                    continue
-                if _has_path_conflict(full_dest, seen_destinations, seen_parents):
-                    continue
-
-                storage = file_entry.get("storage", "embedded")
-                if storage == "user_provided":
-                    record_omission(
-                        full_dest,
-                        file_entry,
-                        sys_id,
-                        "user_provided",
-                        None,
-                    )
-                    # The pack writes the instructions in the slot's place
-                    # and holds it: one more member than the files listed.
-                    instructions = file_entry.get(
-                        "instructions", "Please provide this file manually."
-                    )
-                    pack_only_sizes.append(len(
-                        f"File needed: {file_entry['name']}\n\n{instructions}\n".encode()
-                    ))
-                    seen_destinations.add(dedup_key)
-                    _register_path(dedup_key, seen_destinations, seen_parents)
-                    if case_insensitive:
-                        seen_lower.add(dedup_key.lower())
-                    continue
-
-                local_path, status = settle(
-                    file_entry, sys_id, dest, slot_overrides.get(full_dest)
-                )
-                if local_path is None:
-                    record_omission(full_dest, file_entry, sys_id, status, None)
-                    continue
-
-                entry, file_size = _manifest_entry(
-                    local_path, dest, None, db, repo_root,
-                    selection.fields(dest, file_entry["name"]),
-                )
-                if entry is not None and dest in game_destinations:
-                    entry["category"] = GAME_DATA
-                if entry is not None and target_cores is None:
-                    order = declaration_order(full_dest)
-                    if full_dest in slot_choices or len(order) > 1:
-                        _record_slot_choices(
-                            entry, slot_choices.get(full_dest, []), order,
-                            settle, dest, db, repo_root,
-                        )
-                if entry is None:
-                    record_omission(full_dest, file_entry, sys_id, "not_found", None)
-                    if file_size and full_dest not in seen_destinations:
-                        if _in_data_cache(local_path, data_registry):
-                            cache_held[full_dest] = (local_path, file_size)
-                        else:
-                            pack_only_sizes.append(file_size)
-                        seen_destinations.add(dedup_key)
-                        _register_path(dedup_key, seen_destinations, seen_parents)
-                        if case_insensitive:
-                            seen_lower.add(dedup_key.lower())
-                    continue
-
-                manifest_files.append(entry)
-                platform_entries[dedup_key] = (entry, full_dest, dest)
-                omitted_by_destination.pop(full_dest, None)
-                total_size += file_size
-                seen_destinations.add(dedup_key)
-                _register_path(dedup_key, seen_destinations, seen_parents)
-                if case_insensitive:
-                    seen_lower.add(dedup_key.lower())
-
-    # Phase 2: core complement (emulator extras)
-    unplaceable: list[dict] = []
-    baseline_claims: dict[str, dict] = {}
-    absent: list[dict] = []
-    if source != "platform":
-        core_files = _collect_emulator_extras(
-            config,
-            emulators_dir,
+    def settle(
+        file_entry: dict, sys_id: str, dest: str, override: str | None
+    ) -> tuple[str | None, str]:
+        """The file served once the slot is settled, or None and why not."""
+        local_path, status = resolve_declaration(
+            file_entry,
             db,
-            seen_destinations,
-            base_dest,
-            emu_profiles,
-            target_cores=target_cores,
-            include_all=(source == "truth"),
-            unplaceable=unplaceable,
-            baseline_claims=baseline_claims,
-            absent=absent,
-            undeclared=undeclared,
+            bios_dir,
+            build.zip_contents,
+            build.data_registry,
+            override,
+            offline=opts.offline,
         )
-    else:
-        core_files = []
-    _record_unplaceable(unplaceable, record_omission, config, emu_profiles)
-    _record_absent(
-        absent, config, base_dest, region_drops, required_only,
-        seen_destinations, omitted_by_destination, record_omission,
-    )
-    total_size += _manifest_core_entries(
-        core_files, config, db, bios_dir, base_dest, repo_root,
-        zip_contents, offline, region_drops, case_insensitive,
-        seen_destinations, seen_lower, seen_parents, manifest_files,
-        omitted_by_destination, record_omission, pack_only_sizes, selection,
-        required_only, manifest_validation, manifest_owners, data_registry,
-        emu_profiles,
-    )
-    for key, (entry, full_dest, dest) in platform_entries.items():
-        declared = declared_by.get(full_dest, set())
-        if declared and declared != set(entry.get("systems") or []):
-            entry["declared_in"] = sorted(declared)
-        claims = baseline_claims.get(key, {}).get("other_claims")
-        if claims and any(not is_game_data(claim) for claim in claims):
-            # A core reads this path as firmware: a pack without game data
-            # still fills it.
-            entry.pop("category", None)
-        if claims:
-            _attach_claims(
-                entry, claims, db, bios_dir, zip_contents, offline, required_only,
-                manifest_validation, manifest_owners, dest, dest, repo_root,
-                data_registry,
-            )
-    # A platform omission narrows like a platform file: by the systems
-    # declaring it, which can be fewer than the ones whose cores read it.
-    for full_dest, omission in omitted_by_destination.items():
-        declared = declared_by.get(full_dest, set())
-        if (
-            omission.get("cores") is None
-            and declared
-            and declared != set(omission.get("systems") or [])
-        ):
-            omission["declared_in"] = sorted(declared)
+        if status == "not_found" and not reads_file_contents(verification_mode):
+            found = agnostic_substitute(file_entry, sys_id, db, build.manifest_profiles)
+            if found:
+                local_path, status = found[0], "agnostic_fallback"
+                if os.path.basename(local_path) != file_entry.get("name", ""):
+                    # The pack explains the rename in a note of its own.
+                    build.rename_notes.add(file_entry.get("name", ""))
+        # The builder's verdict: a hash platform omits what its frontend
+        # would reject, a zipped_file archive included when the member is
+        # missing whatever the outer resolution said. An existence
+        # platform never reads the bytes.
+        status, refusal = baseline_verdict(
+            file_entry, local_path, status, verification_mode,
+            config.get("hash_rule", ""),
+        )
+        if refusal or status in ("not_found", "external"):
+            return None, "hash_mismatch" if refusal else status
+        # The variant the pack ships when an emulator rejects the
+        # resolved file: the installer must place the same bytes.
+        local_path, _disagreement = validated_choice(
+            file_entry, local_path, db, build.manifest_validation, bios_dir,
+            digest_algorithm(verification_mode), dest, build.manifest_owners,
+        )
+        return local_path, status
 
-    # Phase 3: data directories. They are not files of the collection: the
-    # installer fetches each from its source archive and keeps the members
-    # whose hash the list below records, the same tree the pack carries.
-    data_refs: dict[str, tuple[str, tuple[str, ...], str, bool]] = {}
-    reclaim = {full: path for full, (path, _size) in cache_held.items()}
-    core_trees = ([] if source == "platform"
-                  else core_data_trees(config, emu_profiles, platform_name, data_registry,
-                                       target_cores))
-    data_members = list(_data_directory_members(
-        pack_systems, data_registry, platform_name, base_dest,
-        case_insensitive, seen_destinations, seen_lower, seen_parents,
-        data_refs, required_only=required_only,
-        core_trees=core_trees,
-        reclaim=reclaim,
-    ))
-    # A platform entry found in a tree the pack carries is that tree's member:
-    # the installer rebuilds it from the tree's archive. One found in a tree
-    # the pack does not carry stays omitted, held by the pack alone.
-    for full_dest, (_path, size) in cache_held.items():
-        if full_dest in reclaim:
-            pack_only_sizes.append(size)
-        else:
-            omitted_by_destination.pop(full_dest, None)
-    data_sizes = pack_only_sizes + [os.path.getsize(src) for src, _dest in data_members]
-    data_directories = _manifest_data_directories(
-        data_members, data_refs, data_registry or {}, base_dest,
-        tree_readers(pack_systems, core_trees), pack_systems,
-    )
-
-    # The pack is unzipped into the BIOS folder: an entry the installer puts
-    # in the roms, emulators or configs folder is in its list, not in the ZIP.
-    outer = [e for e in manifest_files if e.get("root") in OUTER_ROOTS]
-    now = _build_timestamp(db)
-    core_names, system_cores = _manifest_core_index(
-        config, emu_profiles, manifest_files, omitted_by_destination.values()
-    )
-
-    result: dict = {
-        "manifest_version": 2,
-        "source": source,
-        "regions": list(regions or []),
-        # A target-filtered manifest is only distinguishable from the full one
-        # by its filename, so it records the filter the way regions does.
-        # Absent on an unfiltered manifest rather than empty, to leave the
-        # twelve default files byte-identical.
-        **({"target": target_name} if target_name else {}),
-        # Every game data file below says so: the installer's --no-game-data
-        # relies on it, and refuses a list that does not record categories.
-        "categorized": True,
-        # The entries a slot decides carry `slot`, which --one-per-slot
-        # reads: without this mark the installer refuses it.
-        "slot_fields": True,
-        **({"no_game_data": True} if no_game_data else {}),
-        "platform": platform_name,
-        "display_name": platform_display,
-        "version": platform_list_version(config, platform_name),
-        "generated": now,
-        "base_destination": base_dest,
-        "detect": detect,
-        "standalone_copies": _standalone_copies(
-            standalone_copies, manifest_profiles, manifest_files,
-        ),
-        "total_files": len(manifest_files),
-        "total_size": total_size,
-        "pack_files": (
-            len(manifest_files) - len(outer) + len(data_sizes) + len(PACK_DOCUMENTS)
-            + len(rename_notes) + len(pack_markers(platform_name, target_name, platforms_dir))
-        ),
-        "pack_size": total_size - sum(int(e.get("size") or 0) for e in outer) + sum(data_sizes),
-        "total_omitted": len(omitted_by_destination),
-        "omitted_files": sorted(
-            omitted_by_destination.values(), key=lambda entry: entry["dest"]
-        ),
-        "core_names": core_names,
-        **({"downloaded_cores": downloaded} if (downloaded := _downloaded_cores(
-            config, emu_profiles, core_names, platforms_dir,
-        )) else {}),
-        **({"offered_boards": offered} if (offered := _offered_boards(
-            config, emu_profiles, core_names,
-            [*manifest_files, *omitted_by_destination.values()],
-        )) else {}),
-        "system_cores": system_cores,
-        # The names the platform itself gives its systems (Batocera's psx),
-        # which --system accepts beside the ids.
-        "system_names": platform_system_names(config, list(pack_systems)),
-        "system_titles": system_titles(manifest_files, omitted_by_destination.values()),
-        "files": manifest_files,
-    }
-    if data_directories:
-        result["data_directories"] = data_directories
-    for root in OUTER_ROOTS:
-        layout = outer_layout(config, root) or {}
-        if layout and any(entry.get("root") == root
-                          for entry in [*manifest_files, *result["omitted_files"]]):
-            # Where the installer finds the folder: relative to the folder
-            # holding the BIOS folder, which the platform names bios_folder.
-            result[f"{root}_directory"] = {
-                key: layout[key] for key in MANIFEST_OUTER_FIELDS if key in layout
-            }
-    saved = [entry for entry in manifest_files if entry.get("root") == "save"]
-    if saved:
-        layout = save_layout(config)
-        result["save_directory"] = {"folder": layout.folder, "by_core": layout.by_core}
-        if layout.by_system:
-            # The launcher writes the directory at each launch, one folder
-            # per system: each dest starts with that folder.
-            result["save_directory"]["by_system"] = True
-    if case_insensitive and fold_case is None and any(
+    if opts.source != "truth":
+        build.list_baseline(settle)
+    build.list_core_files()
+    result = build.result(build.list_data_directories())
+    detect = build.install_section.get("detect", [])
+    if build.case_insensitive and opts.fold_case is None and any(
         d.get("os") not in CASE_FOLDING_OS for d in detect
     ):
         # RetroArch also runs where case is kept: there Mesen-CE opens
@@ -5421,11 +6073,13 @@ def generate_manifest(
         # or macOS too, stays folded.
         kept = generate_manifest(
             platform_name, platforms_dir, db, bios_dir, registry_path,
-            emulators_dir, zip_contents, full_profiles, target_cores, source,
-            regions, target_name, offline, required_only, data_registry,
-            fold_case=False, no_game_data=no_game_data,
+            emulators_dir=opts.emulators_dir, zip_contents=build.zip_contents,
+            emu_profiles=full_profiles, target_cores=opts.target_cores, source=opts.source,
+            regions=opts.regions, target_name=opts.target_name, offline=opts.offline,
+            required_only=opts.required_only, data_registry=build.data_registry,
+            fold_case=False, no_game_data=opts.no_game_data,
         )
-        folded = {entry["dest"] for entry in manifest_files}
+        folded = {entry["dest"] for entry in build.manifest_files}
         folded_lower = {dest.lower() for dest in folded}
         variants = [
             entry for entry in kept["files"]
@@ -5433,8 +6087,8 @@ def generate_manifest(
         ]
         if variants:
             result["case_variants"] = variants
-    if build_out is not None:
-        build_out.update(slot_choices=slot_choices, profiles=manifest_profiles)
+    if opts.build_out is not None:
+        opts.build_out.update(slot_choices=build.slot_choices, profiles=build.manifest_profiles)
     return result
 
 
@@ -5445,7 +6099,7 @@ def generate_install_list(
     bios_dir: str,
     registry_path: str,
     standalone_out: dict | None = None,
-    **options: Any,
+    **options: Unpack[InstallListOptions],
 ) -> dict:
     """The list install.py reads: the full manifest, the files and omissions
     the --source truth build holds apart from it, and the emulators with a
@@ -5457,22 +6111,23 @@ def generate_install_list(
     A manifest narrowed by a target, a case fold or --one-per-slot is no
     list install.py reads by default and gets neither.
     """
+    settings = _ManifestSettings(**options)
     built: dict = {}
     result = generate_manifest(platform_name, platforms_dir, db, bios_dir, registry_path,
                                build_out=built, **options)
-    if (options.get("source", "full") != "full" or options.get("target_cores") is not None
-            or options.get("fold_case") is not None or options.get("one_per_slot")):
+    if (settings.source != "full" or settings.target_cores is not None
+            or settings.fold_case is not None or settings.one_per_slot):
         return result
+    truth_options: InstallListOptions = {**options, "source": "truth"}
     with contextlib.redirect_stdout(io.StringIO()):
         truth = generate_manifest(
             platform_name, platforms_dir, db, bios_dir, registry_path,
-            **{**options, "source": "truth"}, known_slot_choices=built["slot_choices"],
+            **truth_options, known_slot_choices=built["slot_choices"],
         )
     _mark_truth(result, truth)
     layouts = _standalone_layouts(
-        built["profiles"], options.get("emulators_dir", "emulators"), db, bios_dir,
-        options.get("zip_contents") or {}, options.get("offline"), platforms_dir,
-        os.path.dirname(os.path.dirname(os.path.abspath(__file__))), result,
+        built["profiles"], settings.emulators_dir, db, bios_dir,
+        settings.zip_contents or {}, settings.offline, platforms_dir, result,
     )
     if layouts:
         result["standalone_builds"] = sorted(layouts)
@@ -5539,7 +6194,6 @@ def _standalone_layouts(
     zip_contents: dict,
     offline: bool | None,
     platforms_dir: str,
-    repo_root: str,
     result: dict,
 ) -> dict[str, list]:
     """Per emulator with a standalone build, the files `--emulator X
@@ -5550,6 +6204,7 @@ def _standalone_layouts(
     that entry. Another is written whole. A data tree member is left to the
     list's data directories.
     """
+    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     known = {
         copy["sha1"]
         for entry in [*result["files"], *result.get("truth_files", [])]
@@ -5596,6 +6251,45 @@ def tree_readers(pack_systems: dict, core_trees: Iterable[dict]) -> dict[str, li
     return {ref: sorted(names) for ref, names in cores.items() if ref not in declared}
 
 
+def _tree_group(
+    ref: str, prefix: str, entry: dict, base_dest: str, versions: dict[str, dict[str, dict]],
+) -> dict:
+    """The manifest record of one data directory, before its files.
+
+    ``versions`` caches each .versions.json read, by path.
+    """
+    version = str(entry.get("version", "master"))
+    dest = prefix
+    if base_dest and (dest == base_dest or dest.startswith(base_dest + "/")):
+        dest = dest[len(base_dest):].lstrip("/")
+    group: dict = {
+        "ref": ref,
+        "dest": dest,
+        "url": str(entry.get("source_url", "")).format(version=version),
+        "type": "zip" if entry.get("source_type") == "zip" else "tarball",
+        "systems": [],
+        "files": {},
+    }
+    if group["type"] == "zip":
+        group["strip_components"] = int(entry.get("strip_components", 0))
+    else:
+        group["source_path"] = str(entry.get("source_path", "")).format(version=version)
+    if entry.get("exclude"):
+        group["exclude"] = [str(e) for e in entry["exclude"]]
+    cache = entry.get("local_cache")
+    if cache:
+        recorded = Path(cache).parent / ".versions.json"
+        if str(recorded) not in versions:
+            try:
+                versions[str(recorded)] = json.loads(recorded.read_text())
+            except FileNotFoundError:
+                versions[str(recorded)] = {}
+        size = versions[str(recorded)].get(ref, {}).get("archive_size")
+        if isinstance(size, int) and size > 0:
+            group["archive_size"] = size
+    return group
+
+
 def _manifest_data_directories(
     members: list[tuple[str, str]],
     refs: dict[str, tuple[str, tuple[str, ...], str, bool]],
@@ -5633,39 +6327,12 @@ def _manifest_data_directories(
         ref, systems, prefix, needed = refs[full]
         if platform_systems is not None:
             systems = tuple(own for sid in systems for own in by_norm.get(_norm_system_id(sid), ()))
-        entry = registry.get(ref, {})
         key = (ref, prefix)
         group = grouped.get(key)
         if group is None:
-            version = str(entry.get("version", "master"))
-            dest = prefix
-            if base_dest and (dest == base_dest or dest.startswith(base_dest + "/")):
-                dest = dest[len(base_dest):].lstrip("/")
-            group = grouped[key] = {
-                "ref": ref,
-                "dest": dest,
-                "url": str(entry.get("source_url", "")).format(version=version),
-                "type": "zip" if entry.get("source_type") == "zip" else "tarball",
-                "systems": [],
-                "files": {},
-            }
-            if group["type"] == "zip":
-                group["strip_components"] = int(entry.get("strip_components", 0))
-            else:
-                group["source_path"] = str(entry.get("source_path", "")).format(version=version)
-            if entry.get("exclude"):
-                group["exclude"] = [str(e) for e in entry["exclude"]]
-            cache = entry.get("local_cache")
-            if cache:
-                recorded = Path(cache).parent / ".versions.json"
-                if str(recorded) not in versions:
-                    try:
-                        versions[str(recorded)] = json.loads(recorded.read_text())
-                    except FileNotFoundError:
-                        versions[str(recorded)] = {}
-                size = versions[str(recorded)].get(ref, {}).get("archive_size")
-                if isinstance(size, int) and size > 0:
-                    group["archive_size"] = size
+            group = grouped[key] = _tree_group(
+                ref, prefix, registry.get(ref, {}), base_dest, versions
+            )
         if needed:
             group["needed"] = True
         group["systems"].extend(s for s in systems if s not in group["systems"])
@@ -6006,23 +6673,18 @@ def _content_narrowing_tags() -> tuple[str, ...]:
     Region and target are absent on purpose: both are handed to the check
     itself, which narrows its expectation instead of skipping it.
     """
+    # (source, one_per_slot, required_only), one dimension at a time.
     dimensions = (
-        {"source": "platform"},
-        {"source": "truth"},
-        {"one_per_slot": True},
-        {"required_only": True},
+        ("platform", False, False),
+        ("truth", False, False),
+        ("full", True, False),
+        ("full", False, True),
     )
     tags: list[str] = []
-    for dimension in dimensions:
+    for source, one_per_slot, required_only in dimensions:
         tags.extend(
             tag
-            for tag, _label in _narrowings(
-                dimension.get("source", "full"),
-                None,
-                None,
-                dimension.get("one_per_slot", False),
-                dimension.get("required_only", False),
-            )
+            for tag, _label in _narrowings(source, None, None, one_per_slot, required_only)
         )
     return tuple(tags)
 
@@ -6087,18 +6749,79 @@ def _pack_archives(output_dir: str) -> list[str]:
 _PACK_NAME = re.compile(r"_BIOS_Pack(?:_[^/]+)?\.zip$")
 
 
+class FinalizeOptions(TypedDict, total=False):
+    """The keyword options of verify_and_finalize_packs."""
+
+    platforms_dir: str
+    skip_conformance: bool
+    data_registry: dict | None
+    regions: list[str] | None
+    target_name: str | None
+    emulators_dir: str
+    no_game_data: bool
+    pack_systems_by_name: dict[str, dict] | None
+    built: Iterable[str] | None
+
+
+@dataclass(frozen=True)
+class _FinalizeSettings:
+    """FinalizeOptions with their defaults."""
+
+    platforms_dir: str = "platforms"
+    skip_conformance: bool = False
+    data_registry: dict | None = None
+    regions: list[str] | None = None
+    target_name: str | None = None
+    emulators_dir: str = "emulators"
+    no_game_data: bool = False
+    pack_systems_by_name: dict[str, dict] | None = None
+    built: Iterable[str] | None = None
+
+
+def _conforms(zip_path: str, pname: str, db: dict, opts: _FinalizeSettings) -> bool:
+    """Stage 2 for one platform of a pack: extract and verify against its
+    config. Prints the platform's line and its errors."""
+    (
+        p_ok,
+        _total,
+        _matched,
+        p_errors,
+        bl_checked,
+        bl_present,
+        core_checked,
+        core_present,
+        bl_excluded,
+        bl_absent,
+    ) = verify_pack_against_platform(
+        zip_path,
+        pname,
+        opts.platforms_dir,
+        db=db,
+        emulators_dir=opts.emulators_dir,
+        regions=opts.regions,
+        data_registry=opts.data_registry,
+        target_cores=_target_cores_for(pname, opts.target_name, opts.platforms_dir),
+        no_game_data=opts.no_game_data,
+    )
+    status = "OK" if p_ok else "FAILED"
+    exclusion_note = "".join(
+        f", {part}" for part in _baseline_shortfall(bl_excluded, bl_absent)
+    )
+    print(
+        f"  platform {pname}: {bl_present}/{bl_checked} baseline present"
+        f"{exclusion_note}, "
+        f"{core_present}/{core_checked} cores present, {status}"
+    )
+    if not p_ok:
+        for err in p_errors:
+            print(f"    {err}")
+    return p_ok
+
+
 def verify_and_finalize_packs(
     output_dir: str,
     db: dict,
-    platforms_dir: str = "platforms",
-    skip_conformance: bool = False,
-    data_registry: dict | None = None,
-    regions: list[str] | None = None,
-    target_name: str | None = None,
-    emulators_dir: str = "emulators",
-    no_game_data: bool = False,
-    pack_systems_by_name: dict[str, dict] | None = None,
-    built: Iterable[str] | None = None,
+    **options: Unpack[FinalizeOptions],
 ) -> bool:
     """Verify all packs, inject manifests, generate SHA256SUMS.
 
@@ -6116,19 +6839,22 @@ def verify_and_finalize_packs(
 
     Returns True if all packs pass verification.
     """
+    _reject_unknown("verify_and_finalize_packs", options, FinalizeOptions.__optional_keys__)
+    opts = _FinalizeSettings(**options)
     all_ok = True
 
     # Map ZIP names to platform names
     # By the exact name this run's reduction gives a platform's pack, never by
     # substring: a _Custom or regional pack left by another run was judged
     # against this run's expectation and failed it.
-    registered = list_registered_platforms(platforms_dir)
+    registered = list_registered_platforms(opts.platforms_dir)
     expected = _expected_pack_names(
-        registered, platforms_dir, regions, target_name, no_game_data=no_game_data
+        registered, opts.platforms_dir, opts.regions, opts.target_name,
+        no_game_data=opts.no_game_data,
     )
     packs = _pack_archives(output_dir)
-    if built is not None:
-        packs = [name for name in packs if name in set(built)]
+    if opts.built is not None:
+        packs = [name for name in packs if name in set(opts.built)]
     pack_to_platform: dict[str, list[str]] = {}
     for name in packs:
         for pname in registered:
@@ -6140,7 +6866,7 @@ def verify_and_finalize_packs(
         zip_path = os.path.join(output_dir, name)
 
         # Stage 1: database integrity
-        ok, manifest = verify_pack(zip_path, db, data_registry=data_registry)
+        ok, manifest = verify_pack(zip_path, db, data_registry=opts.data_registry)
         summary = manifest["summary"]
         status = "OK" if ok else "ERRORS"
         print(
@@ -6152,51 +6878,17 @@ def verify_and_finalize_packs(
                 print(f"    ERROR: {err}")
             all_ok = False
             failing.append(name)
-        annotate_pack_systems(manifest, (pack_systems_by_name or {}).get(name))
+        annotate_pack_systems(manifest, (opts.pack_systems_by_name or {}).get(name))
         inject_manifest(zip_path, manifest)
 
         # Stage 2: platform conformance (extract + verify)
         # Skipped for filtered/split/custom packs (intentionally partial)
-        if skip_conformance:
+        if opts.skip_conformance:
             continue
         if _narrows_contents(name):
             continue
-        platforms = pack_to_platform.get(name, [])
-        for pname in platforms:
-            (
-                p_ok,
-                total,
-                matched,
-                p_errors,
-                bl_checked,
-                bl_present,
-                core_checked,
-                core_present,
-                bl_excluded,
-                bl_absent,
-            ) = verify_pack_against_platform(
-                zip_path,
-                pname,
-                platforms_dir,
-                db=db,
-                emulators_dir=emulators_dir,
-                regions=regions,
-                data_registry=data_registry,
-                target_cores=_target_cores_for(pname, target_name, platforms_dir),
-                no_game_data=no_game_data,
-            )
-            status = "OK" if p_ok else "FAILED"
-            exclusion_note = "".join(
-                f", {part}" for part in _baseline_shortfall(bl_excluded, bl_absent)
-            )
-            print(
-                f"  platform {pname}: {bl_present}/{bl_checked} baseline present"
-                f"{exclusion_note}, "
-                f"{core_present}/{core_checked} cores present, {status}"
-            )
-            if not p_ok:
-                for err in p_errors:
-                    print(f"    {err}")
+        for pname in pack_to_platform.get(name, []):
+            if not _conforms(zip_path, pname, db, opts):
                 all_ok = False
                 failing.append(f"{name} ({pname})")
 
@@ -6205,71 +6897,6 @@ def verify_and_finalize_packs(
         # Named at the end, where a 4,000-line log is read, and on stderr.
         print(f"ERROR: packs failed verification: {', '.join(failing)}", file=sys.stderr)
     return all_ok
-
-from packpaths import (  # noqa: E402,F401
-    MEDIA_MARKER,
-    lands_on_android,
-    _archive_destination,
-    _path_parents,
-    _has_path_conflict,
-    _register_path,
-    _flat,
-    _resolve_destination,
-    placement_block,
-    save_layout,
-)
-from packextras import (  # noqa: E402,F401
-    ExtraResolver,
-    extra_full_destination,
-    extra_region_key,
-    prefixed_destination,
-    save_entry_fields,
-    save_manifest_dest,
-    _detect_extras_prefix,
-    _detect_slug_structure,
-    _map_emulator_to_slug,
-    _collect_emulator_extras,
-    _extra_system_ids,
-    extras_for_systems as _extras_for_systems,
-    platform_region_groups,
-    emulator_region_drops,
-    emulator_required_spares,
-    _emulator_region_group,
-    expand_agnostic_entries,
-    undeclared_report,
-)
-
-
-from packreadme import (  # noqa: E402
-    _build_readme,
-    _build_agnostic_rename_readme,
-    save_place,
-)
-from packverify import (  # noqa: E402,F401
-    _check_member_hash,
-    _hash_matches,
-    _repo_satisfies_declaration,
-    _intentional_hash_exclusion,
-    verify_pack_against_platform,
-    verify_pack,
-    generate_sha256sums,
-)
-
-
-# _OFFLINE is deliberately not re-exported: importing a value copies it, so a
-# facade name would keep saying False after set_offline() changed the flag.
-from packresolve import (  # noqa: E402,F401
-    ACCEPTED_HASHES,
-    _detect_hash_type,
-    sha1_for_hash,
-    preferred_entries as _preferred_entries,
-    parse_hash_input,
-    parse_hash_file,
-    lookup_hashes,
-    resolve_declaration,
-    resolve_file,
-    download_external,
-)
 
 if __name__ == "__main__":
     from common import run_cli
