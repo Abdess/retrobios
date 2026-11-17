@@ -42,7 +42,7 @@ import archive_build
 import release_record
 from siteguides import PACKAGE_COMMAND, install_command
 from validate_pr import LARGE_FILE_ISSUE_URL
-from largefiles import load_registered_paths
+from largefiles import LARGE_FILES_CACHE, load_registered_paths
 import pr_checks
 from verify import verify_platform
 
@@ -143,15 +143,18 @@ _REPO = Path(__file__).resolve().parent.parent
 # stores it here and the second reads it back, instead of verifying every
 # platform twice (about a minute of the site build).
 COVERAGE_CACHE_DIR = _REPO / "tmp" / "coverage-cache"
-_COVERAGE_CACHE_FORMAT = "2"
+_COVERAGE_CACHE_FORMAT = "3"
 
 
 def _coverage_inputs(db_path: Path, platforms_dir: str, emulators_dir: str) -> str:
     """A digest of everything coverage is computed from.
 
     The database, the platform and emulator files, the code, the install
-    manifests, the data directory revisions and the state of bios/ on disk:
-    a change to any of them computes the coverage again.
+    manifests, the data directory revisions, the state of bios/ on disk, and
+    what a release asset resolves to: the large-file cache and whether this
+    run may download. A test run is offline with its own cache, and its
+    result was read back by the next normal run (Lakka 534/535 for 535/535).
+    A change to any of them computes the coverage again.
     """
     import hashlib
 
@@ -170,6 +173,13 @@ def _coverage_inputs(db_path: Path, platforms_dir: str, emulators_dir: str) -> s
     for path in (_REPO / ".gitignore", _REPO / "_mame_clones.json",
                  _REPO / "data" / ".versions.json"):
         add_file(path)
+    digest.update(b"offline\0" + (b"1" if os.environ.get("RETROBIOS_OFFLINE") else b"0") + b"\n")
+    large = Path(LARGE_FILES_CACHE).resolve()
+    digest.update(str(large).encode() + b"\0")
+    for path in sorted(large.glob("*")) if large.is_dir() else ():
+        if path.is_file():
+            stat = path.stat()
+            digest.update(f"{path.name}\0{stat.st_size}\0{stat.st_mtime_ns}\n".encode())
     bios = _REPO / "bios"
     for path in sorted(bios.rglob("*")):
         if path.is_file():
