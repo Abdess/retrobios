@@ -303,8 +303,7 @@ def _format_diff(
     elif added:
         lines.append(f"    + {len(added)} new sets available (main profile only)")
 
-    for set_name in updated:
-        lines.append(f"    ~ {set_name}.zip (refreshed)")
+    lines.extend(f"    ~ {set_name}.zip (refreshed)" for set_name in updated)
 
     oos = diff.get("out_of_scope", 0)
     lines.append(f"    = {unchanged} unchanged")
@@ -318,9 +317,9 @@ def _format_diff(
 
 def _fetch_hashes(force: bool) -> dict[str, Any]:
     cache = _load_cache()
-    if not force and not _is_stale(cache):
+    if not force and cache is not None and not _is_stale(cache):
         log.info("using cached data from %s", cache.get("fetched_at", ""))
-        return cache  # type: ignore[return-value]
+        return cache
 
     try:
         tag = _get_release_tag()
@@ -540,8 +539,10 @@ def _platform_archives() -> list[tuple[str, str]]:
     for name in list_registered_platforms(str(_PLATFORMS_DIR)):
         config = load_platform_config(name, str(_PLATFORMS_DIR))
         for system, data in (config.get("systems") or {}).items():
-            for entry in (data or {}).get("files") or []:
-                stated.append((str(entry.get("name") or ""), str(system)))
+            stated.extend(
+                (str(entry.get("name") or ""), str(system))
+                for entry in (data or {}).get("files") or []
+            )
     return stated
 
 
