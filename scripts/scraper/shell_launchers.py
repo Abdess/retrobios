@@ -159,7 +159,7 @@ class _Lexer:
             self.text += LITERAL_DOLLAR if char == "$" else char
 
     def double(self, i: int) -> int:
-        """The character at i inside double quotes; the index of the last one read."""
+        """The character at i inside double quotes, and the index of the last one read."""
         line, char = self.line, self.line[i]
         self.raw += char
         if char == "\\" and i + 1 < len(line) and line[i + 1] in '"\\$`':
@@ -174,7 +174,7 @@ class _Lexer:
         return i
 
     def plain(self, i: int) -> int | None:
-        """The character at i outside quotes; the index of the last one read, None at a comment."""
+        """The character at i outside quotes, and the index of the last one read (None at a comment)."""
         line, char = self.line, self.line[i]
         if char in "'\"":
             self.close_segment()
