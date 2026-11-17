@@ -27,7 +27,7 @@ SOURCE_URL = (
 _MD5 = re.compile(r"^[0-9a-f]{32}$")
 
 
-class Exporter(BaseExporter):
+class Exporter(BaseExporter[str]):
     """Write EmuDeck's checkBIOS.sh, corrected."""
 
     @staticmethod
@@ -227,7 +227,5 @@ class Exporter(BaseExporter):
             if not _RE_LOCAL_HASHES.search(body):
                 # A check with no hash list is a path check, not a hash check.
                 continue
-            for md5 in md5s:
-                if md5 not in body:
-                    issues.append(f"absent from {name}: {md5}")
+            issues.extend(f"absent from {name}: {md5}" for md5 in md5s if md5 not in body)
         return issues

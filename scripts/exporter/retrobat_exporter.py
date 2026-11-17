@@ -46,7 +46,7 @@ def keep_blank_lines(original: str, produced: str) -> str:
     return _TOP_KEY.sub(separate, produced)
 
 
-class Exporter(BaseExporter):
+class Exporter(BaseExporter[str]):
     """Write RetroBat's batocera-systems.json, corrected."""
 
     # One md5 per entry, compared as Batocera's checkBios does.
@@ -152,9 +152,10 @@ class Exporter(BaseExporter):
                 if fe.platform is not None and fe.platform.get("required") is False:
                     entry["optional"] = True
                 ours.setdefault(path, entry)
-            bios_files = []
-            for theirs in (base.get(key) or {}).get("biosFiles", []):
-                bios_files.append(ours.pop(theirs.get("file"), theirs))
+            bios_files = [
+                ours.pop(theirs.get("file"), theirs)
+                for theirs in (base.get(key) or {}).get("biosFiles", [])
+            ]
             bios_files.extend(ours.values())
             system_entry: OrderedDict[str, object] = OrderedDict()
             system_entry["name"] = self.display_name(system)
@@ -181,11 +182,13 @@ class Exporter(BaseExporter):
                 issues.append(f"system without a name: {key}")
             if not entry.get("biosFiles"):
                 issues.append(f"empty entry: {key}")
-            for bios in entry.get("biosFiles", []):
-                # RetroBat states an unhashed file with an empty md5, so only
-                # a missing path makes an entry unusable.
-                if "md5" not in bios or not bios.get("file"):
-                    issues.append(f"incomplete entry: {key}/{bios.get('file', '?')}")
+            # RetroBat states an unhashed file with an empty md5, so only
+            # a missing path makes an entry unusable.
+            issues.extend(
+                f"incomplete entry: {key}/{bios.get('file', '?')}"
+                for bios in entry.get("biosFiles", [])
+                if "md5" not in bios or not bios.get("file")
+            )
 
         for system, files in self.exportable(systems, require="md5"):
             entry = data.get(system.native_id)
@@ -193,7 +196,9 @@ class Exporter(BaseExporter):
                 issues.append(f"system absent: {system.native_id}")
                 continue
             declared = {bios.get("file") for bios in entry.get("biosFiles", [])}
-            for fe in files:
-                if self._path(fe) not in declared:
-                    issues.append(f"absent: {system.native_id}/{fe.name}")
+            issues.extend(
+                f"absent: {system.native_id}/{fe.name}"
+                for fe in files
+                if self._path(fe) not in declared
+            )
         return issues

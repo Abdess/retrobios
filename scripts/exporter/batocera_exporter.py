@@ -134,6 +134,35 @@ def md5_list_support(script: str) -> frozenset[str]:
     return frozenset(support)
 
 
+def _md5_patched(item: str, md5: str | list[str]) -> str:
+    """An item's text with only its md5 value replaced."""
+    return _MD5_VALUE.sub(
+        lambda m: m.group(1) + _md5_literal(
+            md5, spaced=not m.group(2).startswith("[\"")
+        ),
+        item,
+        count=1,
+    )
+
+
+def _appended_items(
+    added: list[str], last: re.Match[str], joined: str, original: list[str],
+) -> str:
+    """The text that follows an entry's last item with the items it gains,
+    in the form that item is written."""
+    # Their spacing before the closing brace: '"x"}' or '"x" }'.
+    tight = not last.group(0).endswith(" }")
+    added = [a[:-2] + "}" if tight and a.endswith(" }") else a for a in added]
+    if len(original) == 1:
+        return ", " + ", ".join(added)
+    line_start = joined.rfind("\n", 0, last.start()) + 1
+    indent = joined[line_start:last.start()]
+    return "," + "".join(
+        f"\n{indent}{a}" + ("," if i < len(added) - 1 else "")
+        for i, a in enumerate(added)
+    )
+
+
 def _md5_literal(value: str | list[str], spaced: bool = True) -> str:
     """An md5 as the script writes it: a quoted string, or a list of them
     with Batocera's spacing inside the brackets (`[ "a", "b" ]`)."""
@@ -152,7 +181,7 @@ def _note_key(text: str) -> tuple[str, str]:
     return (path.group(1) if path else "", member.group(1) if member else "")
 
 
-class Exporter(BaseExporter):
+class Exporter(BaseExporter[str]):
     """Write Batocera's batocera-systems, corrected."""
 
     # checkBios compares one md5 for a plain file. altmd5 is read only for
@@ -180,7 +209,7 @@ class Exporter(BaseExporter):
         super().__init__()
         # The emulator and core each system entry of the original is gated
         # on, read by render.
-        self._gates: dict[str, tuple[str, str] | None] = {}
+        self._gates: dict[str, tuple[str, str | None] | None] = {}
         # The items the pinned checker reads an md5 list for, read by
         # render from the platform's own file.
         self._md5_lists: frozenset[str] = frozenset()
@@ -338,11 +367,11 @@ class Exporter(BaseExporter):
             for item in (before or {}).get("biosFiles", [])
             if isinstance(item, dict)
         }
-        parts: list[str] = []
-        for fe in files:
-            for runner in self._item_runners(fe):
-                parts.append(self._bios_item(fe, runner, originals))
-        return parts
+        return [
+            self._bios_item(fe, runner, originals)
+            for fe in files
+            for runner in self._item_runners(fe)
+        ]
 
     def _item_runners(self, fe: NativeFile) -> list[list[str] | None]:
         """One item per runner an addition names. None keeps the original's."""
@@ -431,7 +460,6 @@ class Exporter(BaseExporter):
                 trailing[key] = line[hash_at:].rstrip()
         return trailing, leading
 
-
     def _entry_block(
         self,
         system: NativeSystem,
@@ -443,7 +471,9 @@ class Exporter(BaseExporter):
         before = self._parse_entry(original)
         own = self._own_entry(system, before)
         items = self._bios_items(files, own)
-        indent = _ENTRY_START.match(original[0]).group(1)
+        start = _ENTRY_START.match(original[0])
+        assert start is not None, original[0]
+        indent = start.group(1)
         one_line = len(original) == 1 and not trailing and not leading
         if one_line:
             return [self._entry_line(system, files, before, indent)]
@@ -483,7 +513,7 @@ class Exporter(BaseExporter):
         before = self._parse_entry(original)
         own = self._own_entry(system, before)
         wanted: dict[tuple, list[dict]] = {}
-        order: list[tuple[tuple, dict]] = []
+        order: list[tuple[tuple, str]] = []
         for text in self._bios_items(files, own):
             item = ast.literal_eval(text)
             key = tuple(item.get(k) for k in ("file", "zippedFile", "emulator", "core"))
@@ -517,14 +547,7 @@ class Exporter(BaseExporter):
                 continue
             if {k for k in {*ours, *theirs} if ours.get(k) != theirs.get(k)} - {"md5"}:
                 return None
-            patched = _MD5_VALUE.sub(
-                lambda m: m.group(1) + _md5_literal(
-                    ours["md5"], spaced=not m.group(2).startswith("[\"")
-                ),
-                match.group(0),
-                count=1,
-            )
-            edits.append((match.start(), match.end(), patched))
+            edits.append((match.start(), match.end(), _md5_patched(match.group(0), ours["md5"])))
         if last is None:
             return None
 
@@ -535,19 +558,7 @@ class Exporter(BaseExporter):
             if seen[key] > consumed.get(key, 0):
                 added.append(text)
         if added:
-            # Their spacing before the closing brace: '"x"}' or '"x" }'.
-            tight = not last.group(0).endswith(" }")
-            added = [a[:-2] + "}" if tight and a.endswith(" }") else a for a in added]
-            if len(original) == 1:
-                insert = ", " + ", ".join(added)
-            else:
-                line_start = joined.rfind("\n", 0, last.start()) + 1
-                indent = joined[line_start:last.start()]
-                insert = "," + "".join(
-                    f"\n{indent}{a}" + ("," if i < len(added) - 1 else "")
-                    for i, a in enumerate(added)
-                )
-            edits.append((last.end(), last.end(), insert))
+            edits.append((last.end(), last.end(), _appended_items(added, last, joined, original)))
 
         for start, end, text in sorted(edits, reverse=True):
             joined = joined[:start] + text + joined[end:]
@@ -638,7 +649,8 @@ class Exporter(BaseExporter):
         spans = self._entry_spans(body)
         for key, (start, end) in spans.items():
             parsed = self._parse_entry(body[start:end + 1]) or {}
-            own = parsed.get(key) if isinstance(parsed.get(key), dict) else {}
+            value = parsed.get(key)
+            own = value if isinstance(value, dict) else {}
             emulator, core = own.get("emulator"), own.get("core")
             self._gates[key] = (
                 (emulator, core if isinstance(core, str) else None)
@@ -716,9 +728,11 @@ class Exporter(BaseExporter):
                 issues.append(f"system absent: {system.native_id}")
                 continue
             declared = {bios.get("file", "") for bios in entry.get("biosFiles", [])}
-            for fe in files:
-                if self.declared_path(fe) not in declared:
-                    issues.append(f"absent: {system.native_id}/{fe.name}")
+            issues.extend(
+                f"absent: {system.native_id}/{fe.name}"
+                for fe in files
+                if self.declared_path(fe) not in declared
+            )
 
         for native_id, entry in exported.items():
             if not entry.get("biosFiles"):

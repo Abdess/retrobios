@@ -121,7 +121,7 @@ def _field_sets(entry: dict | None) -> dict[str, set[str]]:
     return {f: set(_hash_values(entry or {}, f)) for f in HASH_FIELDS}
 
 
-def _single_size(value: object) -> int | None:
+def _single_size(value: int | str | list[int | str]) -> int | None:
     """One size, or None: a list names several accepted revisions, which a
     single size field cannot state (int() on it stopped the whole export)."""
     if isinstance(value, list):
@@ -499,22 +499,9 @@ def platform_declares(truth_entry: dict, candidates: list[dict]) -> bool:
     )
 
 
-def build_native_model(
-    truth: dict,
-    scraped: dict | None,
-) -> tuple[dict[str, NativeSystem], Report]:
-    """Rebuild the platform's systems, corrected by the truth.
-
-    Returns the systems keyed by native id, in the platform's own order
-    first and truth-only additions after, plus what changed.
-    """
-    report = Report()
+def _platform_systems(scraped_systems: dict, report: Report) -> dict[str, NativeSystem]:
+    """Pass 1: the platform's own file, grouped as the platform groups it."""
     systems: dict[str, NativeSystem] = {}
-
-    scraped_systems = (scraped or {}).get("systems", {})
-    composite_zips = (scraped or {}).get("zip_digest") == "composite"
-
-    # Pass 1: the platform's own file, grouped as the platform groups it.
     for sys_key, sys_data in scraped_systems.items():
         for file_entry in sys_data.get("files", []):
             native_id = _native_id_of(sys_key, sys_data, file_entry)
@@ -540,31 +527,83 @@ def build_native_model(
                 )
             )
             report.files_kept += 1
+    return systems
 
+
+def _correct_matched(matched: NativeFile, truth_entry: dict, report: Report) -> None:
+    """Record what the truth corrects or fills on the platform's own entry."""
+    matched.truth = truth_entry
+    checked = checked_hashes(truth_entry) or {}
+    contradicted = contradicted_hashes(truth_entry, matched.platform)
+    for field_name in HASH_FIELDS:
+        if field_name == "md5" and matched.composite_md5:
+            continue
+        if field_name in contradicted:
+            matched.corrections.append(field_name)
+            report.hashes_corrected.append(
+                f"{matched.native_system}/{matched.name} {field_name}"
+            )
+        elif _hash_values(checked, field_name) and not _hash_values(
+            comparable(matched.platform), field_name
+        ):
+            matched.filled.append(field_name)
+    t_req = truth_entry.get("required")
+    p_req = (matched.platform or {}).get("required")
+    # A file a core takes as one of a set has no requirement of
+    # its own: a platform line cannot say "one of these", so
+    # truth leaves its value as written rather than claim
+    # every member optional or every member needed.
+    if (
+        t_req is not None
+        and p_req is not None
+        and bool(t_req) != bool(p_req)
+        and not (truth_entry.get("one_of_required") and not t_req)
+    ):
+        matched.corrections.append("required")
+        report.required_corrected.append(
+            f"{matched.native_system}/{matched.name}"
+        )
+
+
+@dataclass
+class _TruthPass:
+    """Pass 2: the truth applied onto the platform's grouping."""
+
+    systems: dict[str, NativeSystem]
+    report: Report
+    scraped_systems: dict
+    composite_zips: bool
     # Which native ids a truth system may contribute to.
-    norm_to_scraped: dict[str, str] = {
-        _norm_system_id(key): key for key in scraped_systems
-    }
+    norm_to_scraped: dict[str, str] = field(init=False)
     # Every system the platform names, files or none: an addition elsewhere
     # is filed under our own slug.
-    platform_ids = {
-        native_id
-        for key, sys_data in scraped_systems.items()
-        for native_id in (
-            sys_data.get("native_id") or key,
-            *(_native_id_of(key, sys_data, fe) for fe in sys_data.get("files", [])),
-        )
-    }
-    native_by_norm: dict[str, str] = {}
-    for system in systems.values():
-        native_by_norm.setdefault(_norm_system_id(system.native_id), system.native_id)
+    platform_ids: set[str] = field(init=False)
+    native_by_norm: dict[str, str] = field(init=False)
 
-    def _target_native_ids(truth_sid: str) -> tuple[list[str], bool]:
+    def __post_init__(self) -> None:
+        scraped_systems = self.scraped_systems
+        self.norm_to_scraped = {
+            _norm_system_id(key): key for key in scraped_systems
+        }
+        self.platform_ids = {
+            native_id
+            for key, sys_data in scraped_systems.items()
+            for native_id in (
+                sys_data.get("native_id") or key,
+                *(_native_id_of(key, sys_data, fe) for fe in sys_data.get("files", [])),
+            )
+        }
+        self.native_by_norm = {}
+        for system in self.systems.values():
+            self.native_by_norm.setdefault(_norm_system_id(system.native_id), system.native_id)
+
+    def target_native_ids(self, truth_sid: str) -> tuple[list[str], bool]:
         """The native ids a truth system spans, and whether the first one
         is where an addition belongs without asking which core reads it."""
+        scraped_systems = self.scraped_systems
         scraped_key = truth_sid if truth_sid in scraped_systems else None
         if scraped_key is None:
-            scraped_key = norm_to_scraped.get(_norm_system_id(truth_sid))
+            scraped_key = self.norm_to_scraped.get(_norm_system_id(truth_sid))
         if scraped_key is not None:
             sys_data = scraped_systems[scraped_key]
             ids = {
@@ -583,28 +622,28 @@ def build_native_model(
                 ordered.remove(primary)
                 ordered.insert(0, primary)
             return ordered, primary in ids or len(ordered) == 1
-        direct = native_by_norm.get(_norm_system_id(truth_sid))
+        direct = self.native_by_norm.get(_norm_system_id(truth_sid))
         return ([direct] if direct else [truth_sid]), True
 
-    # Pass 2: apply the truth onto that grouping.
-    for truth_sid in sorted(truth.get("systems", {})):
-        truth_sys = truth["systems"][truth_sid]
+    def _files_of(self, target_ids: list[str]) -> list[NativeFile]:
+        return [
+            candidate
+            for native_id in target_ids
+            for candidate in self.systems.get(native_id, NativeSystem(native_id)).files
+        ]
+
+    def apply(self, truth_sid: str, truth_sys: dict) -> None:
         truth_files = truth_sys.get("files", [])
         if not truth_files:
-            continue
+            return
 
-        target_ids, settled_id = _target_native_ids(truth_sid)
+        target_ids, settled_id = self.target_native_ids(truth_sid)
         truth_files = [
             entry for entry in truth_files
             if (name := str(entry.get("name", "")))
             and not name.startswith("_") and not _is_placeholder(name)
         ]
-        candidates = [
-            candidate
-            for native_id in target_ids
-            for candidate in systems.get(native_id, NativeSystem(native_id)).files
-            if candidate.truth is None
-        ]
+        candidates = [c for c in self._files_of(target_ids) if c.truth is None]
         pairs = pair_entries(truth_files, [c.platform or {} for c in candidates])
         # The cores that read what the platform files under each native id,
         # from the truth entries its declarations pair with.
@@ -613,109 +652,102 @@ def build_native_model(
             readers.setdefault(candidates[index].native_system, set()).update(
                 truth_files[t_index].get("_cores") or ()
             )
-        for candidate in (
-            c
-            for native_id in target_ids
-            for c in systems.get(native_id, NativeSystem(native_id)).files
-            if c.platform is not None
-        ):
+        for candidate in (c for c in self._files_of(target_ids) if c.platform is not None):
             own = str(candidate.name).casefold()
             candidate.namesakes.extend(
                 entry for entry in truth_files if own in _names(entry)
             )
 
         for t_index, truth_entry in enumerate(truth_files):
-            name = str(truth_entry["name"])
-            index = pairs.get(t_index)
-            matched = candidates[index] if index is not None else None
-
-            if matched is not None:
-                matched.truth = truth_entry
-                checked = checked_hashes(truth_entry) or {}
-                contradicted = contradicted_hashes(truth_entry, matched.platform)
-                for field_name in HASH_FIELDS:
-                    if field_name == "md5" and matched.composite_md5:
-                        continue
-                    if field_name in contradicted:
-                        matched.corrections.append(field_name)
-                        report.hashes_corrected.append(
-                            f"{matched.native_system}/{matched.name} {field_name}"
-                        )
-                    elif _hash_values(checked, field_name) and not _hash_values(
-                        comparable(matched.platform), field_name
-                    ):
-                        matched.filled.append(field_name)
-                t_req = truth_entry.get("required")
-                p_req = (matched.platform or {}).get("required")
-                # A file a core takes as one of a set has no requirement of
-                # its own: a platform line cannot say "one of these", so
-                # truth leaves its value as written rather than claim
-                # every member optional or every member needed.
-                if (
-                    t_req is not None
-                    and p_req is not None
-                    and bool(t_req) != bool(p_req)
-                    and not (truth_entry.get("one_of_required") and not t_req)
-                ):
-                    matched.corrections.append("required")
-                    report.required_corrected.append(
-                        f"{matched.native_system}/{matched.name}"
-                    )
+            paired = pairs.get(t_index)
+            if paired is not None:
+                _correct_matched(candidates[paired], truth_entry, self.report)
                 continue
+            self._add(truth_sid, truth_entry, target_ids, settled_id, readers)
 
-            if is_label(truth_entry):
-                report.labels += 1
-                continue
-            # The emulator installs it: no user is asked to bring it.
-            if truth_entry.get("bundled"):
-                continue
+    def _add(
+        self,
+        truth_sid: str,
+        truth_entry: dict,
+        target_ids: list[str],
+        settled_id: bool,
+        readers: dict[str, set[str]],
+    ) -> None:
+        """File a truth entry the platform does not declare, when it can be."""
+        name = str(truth_entry["name"])
+        if is_label(truth_entry):
+            self.report.labels += 1
+            return
+        # The emulator installs it: no user is asked to bring it.
+        if truth_entry.get("bundled"):
+            return
 
-            # A file another core's entry already claimed is still the
-            # platform's file, not a new one: scph101.bin, declared by two
-            # PSX cores, was written into RetroDECK's manifest a second time.
-            declared = [
-                candidate.platform
-                for native_id in target_ids
-                for candidate in systems.get(native_id, NativeSystem(native_id)).files
-                if candidate.platform is not None
-            ]
-            if platform_declares(truth_entry, declared):
-                continue
+        # A file another core's entry already claimed is still the
+        # platform's file, not a new one: scph101.bin, declared by two
+        # PSX cores, was written into RetroDECK's manifest a second time.
+        declared = [
+            candidate.platform
+            for candidate in self._files_of(target_ids)
+            if candidate.platform is not None
+        ]
+        if platform_declares(truth_entry, declared):
+            return
 
-            # The truth knows a file the platform does not declare. Across
-            # several native ids and no primary, it joins the one whose files
-            # its cores read: RetroDECK's arcade spans mame and fbneo, and
-            # MAME device archives were filed as FBNeo BIOS because fbneo
-            # sorts first. With no single answer it is not written.
-            native_id = target_ids[0]
-            if not settled_id:
-                wanted = set(truth_entry.get("_cores") or ())
-                shared = {nid: len(readers.get(nid, set()) & wanted) for nid in target_ids}
-                best = max(shared.values())
-                winners = [nid for nid, count in shared.items() if count == best]
-                if not best or len(winners) > 1:
-                    report.unattributed.append(f"{truth_sid}/{name}")
-                    continue
-                native_id = winners[0]
-            system = systems.get(native_id)
-            if system is None:
-                system = NativeSystem(native_id=native_id, from_platform=False)
-                systems[native_id] = system
-                report.systems_added += 1
-            destination = str(
-                truth_entry.get("path") or truth_entry.get("destination") or name
+        # The truth knows a file the platform does not declare. Across
+        # several native ids and no primary, it joins the one whose files
+        # its cores read: RetroDECK's arcade spans mame and fbneo, and
+        # MAME device archives were filed as FBNeo BIOS because fbneo
+        # sorts first. With no single answer it is not written.
+        native_id = target_ids[0]
+        if not settled_id:
+            wanted = set(truth_entry.get("_cores") or ())
+            shared = {nid: len(readers.get(nid, set()) & wanted) for nid in target_ids}
+            best = max(shared.values())
+            winners = [nid for nid, count in shared.items() if count == best]
+            if not best or len(winners) > 1:
+                self.report.unattributed.append(f"{truth_sid}/{name}")
+                return
+            native_id = winners[0]
+        system = self.systems.get(native_id)
+        if system is None:
+            system = NativeSystem(native_id=native_id, from_platform=False)
+            self.systems[native_id] = system
+            self.report.systems_added += 1
+        destination = str(
+            truth_entry.get("path") or truth_entry.get("destination") or name
+        )
+        system.files.append(
+            NativeFile(
+                name=name,
+                destination=destination,
+                native_system=native_id,
+                truth=truth_entry,
+                foreign_system=native_id not in self.platform_ids,
+                composite_md5=self.composite_zips and name.lower().endswith(".zip"),
             )
-            system.files.append(
-                NativeFile(
-                    name=name,
-                    destination=destination,
-                    native_system=native_id,
-                    truth=truth_entry,
-                    foreign_system=native_id not in platform_ids,
-                    composite_md5=composite_zips and name.lower().endswith(".zip"),
-                )
-            )
-            report.files_added += 1
+        )
+        self.report.files_added += 1
+
+
+def build_native_model(
+    truth: dict,
+    scraped: dict | None,
+) -> tuple[dict[str, NativeSystem], Report]:
+    """Rebuild the platform's systems, corrected by the truth.
+
+    Returns the systems keyed by native id, in the platform's own order
+    first and truth-only additions after, plus what changed.
+    """
+    report = Report()
+    scraped_systems = (scraped or {}).get("systems", {})
+    systems = _platform_systems(scraped_systems, report)
+
+    truth_pass = _TruthPass(
+        systems, report, scraped_systems,
+        (scraped or {}).get("zip_digest") == "composite",
+    )
+    for truth_sid in sorted(truth.get("systems", {})):
+        truth_pass.apply(truth_sid, truth["systems"][truth_sid])
 
     # A reader takes the files in the order the list gives, so the one the
     # code looks for first is named first. Only what we add is ordered: what

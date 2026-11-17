@@ -18,7 +18,7 @@ SOURCE_URL = (
 )
 
 
-class Exporter(BaseExporter):
+class Exporter(BaseExporter[str]):
     """Serve BizHawk's FirmwareDatabase.cs as BizHawk wrote it."""
 
     @staticmethod

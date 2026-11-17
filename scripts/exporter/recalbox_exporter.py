@@ -42,6 +42,36 @@ _SYSTEM_BLOCK = re.compile(r"<system\b.*?</system>", re.S)
 _BIOS_ELEMENT = re.compile(r"[ \t]*<bios\b.*?/>", re.S)
 
 
+def _bios_line(attrs: dict[str, str]) -> str:
+    rendered = " ".join(f"{k}={quoteattr(v)}" for k, v in attrs.items())
+    return f"    <bios {rendered} />"
+
+
+def _block_body(
+    children: list[dict[str, str] | str],
+    elements: dict[str, tuple[NativeFile, str]],
+    raw: dict[str, str],
+) -> list[str]:
+    """One block of theirs, each element corrected where ours differs."""
+    body: list[str] = []
+    for child in children:
+        if isinstance(child, str):
+            body.append(f"    {child}")
+            continue
+        path = child.get("path", "")
+        mine = elements.pop(path, None)
+        kept = raw.get(" ".join(path.split()))
+        if kept is not None and (mine is None or _stated(mine[1]) == _stated(kept)):
+            body.append(kept)
+        elif kept is not None and mine is not None and _stated(
+            patched := patch_element(kept, mine[1])
+        ) == _stated(mine[1]):
+            body.append(patched)
+        else:
+            body.append(mine[1] if mine else _bios_line(child))
+    return body
+
+
 def _stated(text: str) -> dict[str, str]:
     """What an element says, without its layout: attribute order, spacing,
     line breaks inside a value and the case of a digest are not content."""
@@ -110,7 +140,7 @@ def _original_elements(original: str) -> list[dict[str, str]]:
     return blocks
 
 
-class Exporter(BaseExporter):
+class Exporter(BaseExporter[str]):
     """Write Recalbox's es_bios.xml, corrected."""
 
     @staticmethod
@@ -299,6 +329,50 @@ class Exporter(BaseExporter):
             return False
         return bool(fe.hashes("md5")) and bool(fe.cores())
 
+    def _their_blocks(self, original: str) -> list[tuple[str, str, list[dict[str, str] | str]]]:
+        """Recalbox's blocks: platform, full name, and each bios element or
+        comment they hold."""
+        if not original:
+            return []
+        try:
+            root = parse_untrusted_xml(original, self.native_filename(), comments=True)
+        except (ParseError, ValueError) as exc:
+            # Rebuilt from our model alone, the export would drop every
+            # system we do not transcribe and the maintainer's comments.
+            raise ValueError(
+                f"Recalbox's {self.native_filename()} does not parse ({exc}); "
+                "fetch it again with --refresh-cache"
+            ) from exc
+        if root is None:
+            return []
+        return [
+            (s.get("platform", ""), s.get("fullname", ""), [
+                f"<!--{child.text}-->" if child.tag is Comment else dict(child.attrib)
+                for child in s
+                if child.tag is Comment or child.tag == "bios"
+            ])
+            for s in root.iter("system")
+        ]
+
+    def _our_elements(
+        self, systems: dict[str, NativeSystem],
+    ) -> dict[str, tuple[NativeSystem, dict[str, tuple[NativeFile, str]]]]:
+        ours: dict[str, tuple[NativeSystem, dict[str, tuple[NativeFile, str]]]] = {}
+        for system in systems.values():
+            # Two additions at one path (two cores, two dumps) are one
+            # element: keyed by path, the second replaced the first and its
+            # md5 left the file while both were counted added.
+            at_path: dict[str, list[NativeFile]] = {}
+            for fe in system.files:
+                if self.writable(fe):
+                    at_path.setdefault(self._path(fe), []).append(fe)
+            if at_path:
+                ours[system.native_id] = (system, {
+                    path: (group[0], self._bios_element(group[0], system.native_id, tuple(group[1:])))
+                    for path, group in at_path.items()
+                })
+        return ours
+
     def render(
         self,
         systems: dict[str, NativeSystem],
@@ -316,27 +390,8 @@ class Exporter(BaseExporter):
         # and its system order with it. A platform can hold several blocks
         # (Pentagon and Scorpion are both zxspectrum), and an entry the
         # maintainer commented out stays commented out.
-        theirs: list[tuple[str, str, list[dict[str, str] | str]]] = []
         original = originals.get(self.native_filename(), "")
-        if original:
-            try:
-                root = parse_untrusted_xml(original, self.native_filename(), comments=True)
-            except (ParseError, ValueError) as exc:
-                # Rebuilt from our model alone, the export would drop every
-                # system we do not transcribe and the maintainer's comments.
-                raise ValueError(
-                    f"Recalbox's {self.native_filename()} does not parse ({exc}); "
-                    "fetch it again with --refresh-cache"
-                ) from exc
-            if root is not None:
-                theirs = [
-                    (s.get("platform", ""), s.get("fullname", ""), [
-                        f"<!--{child.text}-->" if child.tag is Comment else dict(child.attrib)
-                        for child in s
-                        if child.tag is Comment or child.tag == "bios"
-                    ])
-                    for s in root.iter("system")
-                ]
+        theirs = self._their_blocks(original)
 
         # Elements of theirs written back as they stand, by (platform, path).
         held = {
@@ -353,24 +408,7 @@ class Exporter(BaseExporter):
             and not self.writable(fe)
             and (system.native_id, " ".join(self._path(fe).split())) in held
         }
-        ours: dict[str, tuple[NativeSystem, dict[str, tuple[NativeFile, str]]]] = {}
-        for system in systems.values():
-            # Two additions at one path (two cores, two dumps) are one
-            # element: keyed by path, the second replaced the first and its
-            # md5 left the file while both were counted added.
-            at_path: dict[str, list[NativeFile]] = {}
-            for fe in system.files:
-                if self.writable(fe):
-                    at_path.setdefault(self._path(fe), []).append(fe)
-            if at_path:
-                ours[system.native_id] = (system, {
-                    path: (group[0], self._bios_element(group[0], system.native_id, tuple(group[1:])))
-                    for path, group in at_path.items()
-                })
-
-        def element(attrs: dict[str, str]) -> str:
-            rendered = " ".join(f"{k}={quoteattr(v)}" for k, v in attrs.items())
-            return f"    <bios {rendered} />"
+        ours = self._our_elements(systems)
 
         def emit(platform: str, fullname: str, body: list[str], opening: str = "") -> None:
             stated = _stated(opening) if opening else {}
@@ -392,23 +430,7 @@ class Exporter(BaseExporter):
         for index, (platform, fullname, children) in enumerate(theirs):
             elements = ours.get(platform, (None, {}))[1]
             raw = written[index] if index < len(written) else {}
-            body: list[str] = []
-            for child in children:
-                if isinstance(child, str):
-                    body.append(f"    {child}")
-                    continue
-                path = child.get("path", "")
-                mine = elements.pop(path, None)
-                kept = raw.get(" ".join(path.split()))
-                if kept is not None and (mine is None or _stated(mine[1]) == _stated(kept)):
-                    body.append(kept)
-                elif kept is not None and mine is not None and _stated(
-                    patched := patch_element(kept, mine[1])
-                ) == _stated(mine[1]):
-                    body.append(patched)
-                else:
-                    body.append(mine[1] if mine else element(child))
-            blocks.append((platform, fullname, body))
+            blocks.append((platform, fullname, _block_body(children, elements, raw)))
 
         # An addition joins the block named like its file, else the first
         # block of its platform.
@@ -446,18 +468,20 @@ class Exporter(BaseExporter):
             return [f"the XML does not parse: {exc}"]
 
         for element in root.iter("bios"):
-            for attribute in ("path", "md5", "core"):
-                if not element.get(attribute):
-                    issues.append(
-                        f"es_bios.xsd requires {attribute}: "
-                        f"{element.get('path', '?')}"
-                    )
+            issues.extend(
+                f"es_bios.xsd requires {attribute}: "
+                f"{element.get('path', '?')}"
+                for attribute in ("path", "md5", "core")
+                if not element.get(attribute)
+            )
         for element in root.iter("system"):
             if not list(element):
                 issues.append(f"empty system: {element.get('platform', '?')}")
-            for attribute in ("fullname", "platform"):
-                if not element.get(attribute):
-                    issues.append(f"es_bios.xsd requires {attribute} on system")
+            issues.extend(
+                f"es_bios.xsd requires {attribute} on system"
+                for attribute in ("fullname", "platform")
+                if not element.get(attribute)
+            )
 
         exported = {
             element.get("path", "").casefold() for element in root.iter("bios")

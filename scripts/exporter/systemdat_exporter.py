@@ -77,7 +77,25 @@ def _sections(original: str) -> list[tuple[str, list[str]]]:
     return sections
 
 
-class Exporter(BaseExporter):
+def _rom_fields(fe: NativeFile, name: str) -> list[str]:
+    """The fields of a rom line, in the order clrmamepro writes them."""
+    parts = [f"name {name}"]
+    size = fe.size()
+    if size:
+        parts.append(f"size {size}")
+    crc = fe.record_hash("crc32")
+    if crc:
+        parts.append(f"crc {crc.upper()}")
+    md5 = fe.record_hash("md5")
+    if md5:
+        parts.append(f"md5 {md5}")
+    sha1 = fe.record_hash("sha1")
+    if sha1:
+        parts.append(f"sha1 {sha1}")
+    return parts
+
+
+class Exporter(BaseExporter[str]):
     """Write libretro's System.dat, corrected."""
 
     @staticmethod
@@ -184,19 +202,7 @@ class Exporter(BaseExporter):
                 if not any(fe.hash(h) for h in ("crc32", "md5", "sha1")):
                     continue
                 name = _quote(self._rom_name(fe), quoted)
-                parts = [f"name {name}"]
-                size = fe.size()
-                if size:
-                    parts.append(f"size {size}")
-                crc = fe.record_hash("crc32")
-                if crc:
-                    parts.append(f"crc {crc.upper()}")
-                md5 = fe.record_hash("md5")
-                if md5:
-                    parts.append(f"md5 {md5}")
-                sha1 = fe.record_hash("sha1")
-                if sha1:
-                    parts.append(f"sha1 {sha1}")
+                parts = _rom_fields(fe, name)
                 if name in rendered:
                     if fe.platform is None:
                         self._shadowed.add(id(fe))

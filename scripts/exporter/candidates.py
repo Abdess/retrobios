@@ -22,6 +22,7 @@ from common import _norm_system_id, resolve_platform_cores, unresolved_platform_
 from exporter.baseline import HASH_FIELDS, NativeSystem, _hash_values
 from launchers import _names as launcher_names
 
+
 def _tails(path: str) -> list[str]:
     """Every trailing run of segments of a path, longest first."""
     parts = [p for p in path.casefold().strip("/").split("/") if p]
@@ -431,11 +432,12 @@ class EntryCategories:
         def cited(f: dict) -> dict:
             return {k: f[k] for k in ("name", "source_ref") if f.get(k)}
 
-        found: dict[int, dict] = {}
-        for values in declared.values():
-            for value in values:
-                for position, f in by_hash_index.get(value, ()):
-                    found[position] = f
+        found: dict[int, dict] = {
+            position: f
+            for values in declared.values()
+            for value in values
+            for position, f in by_hash_index.get(value, ())
+        }
         if found:
             return [cited(found[p]) for p in sorted(found)]
         named = {position: f for n in names for position, f in by_name_index.get(n, ())}
