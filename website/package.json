@@ -10,7 +10,7 @@
     "@astrojs/markdown-satteri": "0.4.6",
     "@astrojs/sitemap": "3.7.4",
     "@astrojs/starlight": "0.42.7",
-    "astro": "7.4.4",
+    "astro": "7.4.12",
     "starlight-links-validator": "0.27.0",
     "starlight-sidebar-topics": "0.9.0"
   },
