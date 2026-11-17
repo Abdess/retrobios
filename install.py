@@ -344,6 +344,14 @@ _UMASK = os.umask(0)
 os.umask(_UMASK)
 
 
+def _kernel32() -> Any:
+    """kernel32 from ctypes.windll, which typeshed declares for win32 only.
+    AttributeError where the system has no windll."""
+    import importlib
+
+    return importlib.import_module("ctypes").windll.kernel32
+
+
 def _enable_ansi() -> bool:
     """Whether escape sequences reach the terminal as colour and redraws.
 
@@ -355,7 +363,7 @@ def _enable_ansi() -> bool:
     try:
         import ctypes
 
-        kernel32 = ctypes.windll.kernel32  # type: ignore[attr-defined]
+        kernel32 = _kernel32()
         handle = kernel32.GetStdHandle(-11)
         mode = ctypes.c_uint32()
         if not kernel32.GetConsoleMode(handle, ctypes.byref(mode)):
@@ -11213,8 +11221,7 @@ def _drive_not_removable(mount: Path) -> bool:
     False where it says nothing."""
     if os.name == "nt":
         try:
-            import ctypes
-            kind = ctypes.windll.kernel32.GetDriveTypeW(str(mount))  # type: ignore[attr-defined]
+            kind = _kernel32().GetDriveTypeW(str(mount))
         except (AttributeError, OSError):
             return False
         return kind in _NOT_REMOVABLE_TYPES
@@ -15183,7 +15190,7 @@ def fat32_drive(folder: Path) -> bool:
             import ctypes
             root = ctypes.create_unicode_buffer(261)
             kind = ctypes.create_unicode_buffer(261)
-            kernel = ctypes.windll.kernel32  # type: ignore[attr-defined]
+            kernel = _kernel32()
             if not kernel.GetVolumePathNameW(str(probe), root, 261):
                 return False
             if not kernel.GetVolumeInformationW(root, None, 0, None, None, None, kind, 261):
@@ -15369,14 +15376,19 @@ def plan_pack_parts(name: str, manifest_size: int, members: list[PackMember],
         count = len(parts)
 
 
+# ZipInfo's level is private before Python 3.13 (compress_level there, the
+# old name kept as its alias), so typeshed does not declare it.
+_ZIPINFO_LEVEL = "_compresslevel"
+
+
 def _pack_info(name: str, compress: int = zipfile.ZIP_DEFLATED) -> zipfile.ZipInfo:
     """A member header that depends on its name alone."""
     info = zipfile.ZipInfo(name, date_time=PACK_MEMBER_DATE)
     info.compress_type = compress
     # A ZipInfo given to writestr or open keeps its own level, the
     # archive's left unread: without it every member was deflated at 6.
-    info._compresslevel = (  # type: ignore[attr-defined]
-        PACK_COMPRESSLEVEL if compress == zipfile.ZIP_DEFLATED else None)
+    setattr(info, _ZIPINFO_LEVEL,
+            PACK_COMPRESSLEVEL if compress == zipfile.ZIP_DEFLATED else None)
     info.create_system = 3
     info.external_attr = 0o100644 << 16
     return info
@@ -15408,7 +15420,7 @@ def _patch_marker(path: Path, marker: str, body: bytes) -> None:
     data, and the CRC-32 of the local and the central header."""
     with zipfile.ZipFile(path) as archive:
         first = archive.infolist()[0]
-        central = int(archive.start_dir)  # type: ignore[attr-defined]
+        central = int(archive.start_dir)
     if first.filename != marker or first.file_size != len(body) or first.header_offset:
         raise PackError(f"{path.name} does not start with its marker")
     crc = zlib.crc32(body).to_bytes(4, "little")
@@ -30558,8 +30570,8 @@ class _EngineRun:
         if os.name == "nt" or not self.running():
             return
         try:
-            os.killpg(self.proc.pid, signal.SIGSTOP if stopped  # type: ignore[attr-defined]
-                      else signal.SIGCONT)  # type: ignore[attr-defined]
+            os.killpg(self.proc.pid, signal.SIGSTOP if stopped
+                      else signal.SIGCONT)
         except ProcessLookupError:
             # It ended between the two calls: there is nothing to stop.
             return
@@ -30572,7 +30584,9 @@ class _EngineRun:
         elif from_key:
             # The child shares the console: Ctrl-C read as a key reached no
             # one, so it is sent to the console, this process ignoring it.
-            os.kill(0, signal.CTRL_C_EVENT)  # type: ignore[attr-defined]
+            # typeshed declares CTRL_C_EVENT for win32 only.
+            ctrl_c: int = vars(signal)["CTRL_C_EVENT"]
+            os.kill(0, ctrl_c)
 
     def stop(self, grace: float) -> None:
         """End the child, letting it write its summary for up to grace seconds."""
@@ -30836,14 +30850,18 @@ class _TuiTerminal:
         return self.decoder.feed(self.input.decode(data))
 
     def _console_keys(self, timeout: float) -> list[TuiKey | TuiMouse]:
-        import msvcrt
+        import importlib
 
+        # typeshed declares msvcrt for win32 only: the module is read as the
+        # runtime holds it.
+        msvcrt = importlib.import_module("msvcrt")
+        kbhit: Callable[[], bool] = msvcrt.kbhit
+        getwch: Callable[[], str] = msvcrt.getwch
         end = time.monotonic() + timeout
         keys: list[TuiKey | TuiMouse] = []
         while True:
-            while msvcrt.kbhit():  # type: ignore[attr-defined]
-                key = decode_windows_key(msvcrt.getwch(),  # type: ignore[attr-defined]
-                                         msvcrt.getwch)  # type: ignore[attr-defined]
+            while kbhit():
+                key = decode_windows_key(getwch(), getwch)
                 if key is not None:
                     keys.append(key)
             if keys or time.monotonic() >= end:
@@ -31038,9 +31056,9 @@ def tui_suspend(runs: list[_EngineRun], whole: bool) -> None:
     if whole:
         # SIGSTOP and not SIGTSTP: a group no shell watches over (the
         # installer started on a terminal of its own) discards SIGTSTP.
-        os.killpg(os.getpgrp(), signal.SIGSTOP)  # type: ignore[attr-defined]
+        os.killpg(os.getpgrp(), signal.SIGSTOP)
     else:
-        os.kill(os.getpid(), signal.SIGSTOP)  # type: ignore[attr-defined]
+        os.kill(os.getpid(), signal.SIGSTOP)
     for run in runs:
         run.pause(False)
 
