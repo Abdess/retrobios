@@ -13,7 +13,6 @@ import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
 import hashlib
 import io
 import json
-import os
 import shutil
 import stat
 import subprocess
@@ -218,7 +217,7 @@ class TheList(unittest.TestCase):
                     if "repo_path" in entry else entry["content"].encode())
                    for entry in launcher["members"]]
         data = install.app_archive(members)
-        import build_port  # noqa: PLC0415
+        import build_port
         built = _tempdir(self) / build_port.MUOS_APP
         build_port.build_archive(build_port.MUOS_APP, built)
         with zipfile.ZipFile(built) as release, zipfile.ZipFile(io.BytesIO(data)) as ours:

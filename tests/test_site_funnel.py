@@ -10,7 +10,6 @@ from __future__ import annotations
 import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
 
 import contextlib
-import os
 import re
 import sys
 import tempfile
@@ -213,7 +212,7 @@ class DeepLinksCarryALabel(unittest.TestCase):
     ANSWERS = ("/retrobios/wiki/technical-faq/#which-mame-version-do-the-arcade-bios-sets-match",)
 
     def test_start_and_setup_pages(self):
-        import sitestarlight  # noqa: PLC0415
+        import sitestarlight
 
         pages = _docs_pages()
         levels = {page: _level(page) for page in pages}

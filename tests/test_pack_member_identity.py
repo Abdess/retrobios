@@ -94,7 +94,7 @@ class OneComparisonOfArchiveMembers(unittest.TestCase):
         import zipfile
 
         sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
-        from packverify import _same_members  # noqa: PLC0415
+        from packverify import _same_members
 
         def archive(members: dict) -> bytes:
             buffer = io.BytesIO()

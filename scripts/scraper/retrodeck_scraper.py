@@ -310,7 +310,7 @@ class Scraper(BaseScraper):
 
     def _fetch_remote_manifests(self) -> list[tuple[str, dict]]:
         """Fetch component manifests via GitHub API."""
-        from common import github_token  # noqa: PLC0415
+        from common import github_token
 
         token = github_token()
         headers = {"User-Agent": "retrobios-scraper/1.0"}

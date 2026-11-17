@@ -335,9 +335,7 @@ def main() -> None:
         found = 0
         missing = []
         for r in reqs:
-            if r.name in db["indexes"]["by_name"]:
-                found += 1
-            elif r.md5 and r.md5 in db["indexes"]["by_md5"]:
+            if r.name in db["indexes"]["by_name"] or r.md5 and r.md5 in db["indexes"]["by_md5"]:
                 found += 1
             else:
                 missing.append(r)

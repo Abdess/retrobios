@@ -173,7 +173,7 @@ def tree_key(repo: upstream.Repo, pin: str) -> str:
     return f"{repo.host}/{repo.slug}@{pin}"
 
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def _verified() -> dict[str, frozenset[str]]:
     """The committed record, empty when it has not been written."""
     try:
@@ -183,7 +183,7 @@ def _verified() -> dict[str, frozenset[str]]:
     return {key: frozenset(paths) for key, paths in data.items()}
 
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def _tree_paths(repo: upstream.Repo, pin: str) -> frozenset[str]:
     """The cited paths of a repository at a revision that its tree holds."""
     return _verified().get(tree_key(repo, pin), frozenset())
@@ -767,7 +767,7 @@ def main() -> int:
     if not args.fetch and not any(path.is_dir() for path in cache_dirs):
         print(f"Error: no tree cache at {', '.join(map(str, cache_dirs))}", file=sys.stderr)
         return 1
-    from common import (  # noqa: PLC0415
+    from common import (
         load_emulator_profiles,
         repository_output_lock,
         write_if_changed,

@@ -119,7 +119,7 @@ class RefreshConcurrency(unittest.TestCase):
         """A pipeline reads every tree for its whole run. A build beside it
         waited on the exclusive lock before asking the remote, which would
         have answered that nothing changed."""
-        import fcntl  # noqa: PLC0415
+        import fcntl
 
         self.cache.mkdir(parents=True)
         rdd._record_version("pak", {"sha": "e1", "archive_size": 1}, self.versions)
@@ -143,7 +143,7 @@ class RefreshConcurrency(unittest.TestCase):
     def test_a_waiting_refresh_names_the_lock_and_the_way_around(self):
         """"waiting for data/dolphin-sys: another run holds it" named
         neither the lock nor its holder, and the build waited unbounded."""
-        import fcntl  # noqa: PLC0415
+        import fcntl
 
         self.cache.mkdir(parents=True)
         lock_path = self.cache.with_name(".pak.lock")
@@ -172,9 +172,8 @@ class RefreshConcurrency(unittest.TestCase):
     def test_version_file_is_never_left_truncated(self):
         Path(self.versions).parent.mkdir(parents=True)
         Path(self.versions).write_text(json.dumps({"keep": {"sha": "1"}}))
-        with mock.patch.object(rdd.json, "dump", side_effect=OSError("disk full")):
-            with self.assertRaises(OSError):
-                rdd._save_versions({"keep": {"sha": "2"}}, self.versions)
+        with mock.patch.object(rdd.json, "dump", side_effect=OSError("disk full")), self.assertRaises(OSError):
+            rdd._save_versions({"keep": {"sha": "2"}}, self.versions)
         self.assertEqual(json.loads(Path(self.versions).read_text()), {"keep": {"sha": "1"}})
 
     def test_concurrent_writers_keep_each_other(self):
@@ -194,7 +193,7 @@ class RefreshConcurrency(unittest.TestCase):
 
 class PackWalkHoldsTheCache(unittest.TestCase):
     def test_a_refresh_waits_for_the_walk(self):
-        import fcntl  # noqa: PLC0415
+        import fcntl
 
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
@@ -217,9 +216,9 @@ class PackWalkHoldsTheCache(unittest.TestCase):
 
 class EmulatorPackHoldsTheCache(unittest.TestCase):
     def test_the_walk_holds_a_shared_lock(self):
-        import fcntl  # noqa: PLC0415
+        import fcntl
 
-        from generate_pack import _pack_data_tree  # noqa: PLC0415
+        from generate_pack import _pack_data_tree
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             cache = Path(tmp) / "data" / "scummvm"
@@ -305,7 +304,7 @@ class TheManifestCarriesTheArchiveSize(unittest.TestCase):
     the installer announces as the tree's download."""
 
     def test_recorded_size_is_written_and_an_unrecorded_one_left_out(self):
-        from generate_pack import _manifest_data_directories  # noqa: PLC0415
+        from generate_pack import _manifest_data_directories
 
         (REPO_ROOT / "tmp").mkdir(exist_ok=True)
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:

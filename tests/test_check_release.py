@@ -15,7 +15,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
-import build_port  # noqa: E402
+import build_port
 from check_release import SIGNATURE, SUMS, Asset, compare_release, parse_sums
 
 A = "a" * 64

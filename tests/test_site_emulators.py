@@ -57,7 +57,7 @@ def _profile(name: str) -> dict:
     member's required from its groups (DuckStation's ps-bios), which the raw
     YAML no longer writes on the files."""
     if not _LOADED:
-        from common import load_emulator_profiles  # noqa: PLC0415
+        from common import load_emulator_profiles
 
         _LOADED.update(load_emulator_profiles(str(REPO_ROOT / "emulators"), skip_aliases=False))
     return _LOADED[name]
@@ -809,7 +809,7 @@ class AnEmulatorPageNamesItsSetups(unittest.TestCase):
         self.assertEqual(gs.emulator_setups(coverages, profiles)["handy"], ["a", "b"])
 
     def test_the_page_names_them(self):
-        from tests import sitepages  # noqa: PLC0415
+        from tests import sitepages
 
         sitepages.require()
         text = sitepages.page("emulators/handy.md").read_text(encoding="utf-8")

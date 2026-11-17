@@ -252,7 +252,7 @@ class ReadAndIndex(Workspace):
         self.assertEqual(sm.result_of(full_record("alpha", "c", "2026-10-06T10:00:00+00:00"))[0], "differs")
 
     def test_a_boot_on_the_built_in_bios_is_named_so(self) -> None:
-        import core_probe  # noqa: PLC0415
+        import core_probe
 
         record = full_record("alpha", "region-x-game-others", "2026-10-28T10:00:00+00:00",
                              kind="run", observable="frame_hashes")
@@ -343,7 +343,7 @@ class ReadAndIndex(Workspace):
             from jsonschema import Draft202012Validator
         except ImportError:
             self.skipTest("jsonschema is not installed")
-        import validate_schemas  # noqa: PLC0415
+        import validate_schemas
 
         self.assertEqual(validate_schemas._measurement_errors(self.tree), [])
         lines = self.tree / mr.records_path("beta")
@@ -377,7 +377,7 @@ class ReadAndIndex(Workspace):
             from jsonschema import Draft202012Validator  # noqa: F401
         except ImportError:
             self.skipTest("jsonschema is not installed")
-        import validate_schemas  # noqa: PLC0415
+        import validate_schemas
 
         lines = self.tree / mr.records_path("beta")
         record = json.loads(lines.read_text())
@@ -653,8 +653,8 @@ class SitePages(unittest.TestCase):
 
 class Freshness(unittest.TestCase):
     def test_no_measurements_area(self) -> None:
-        import check_freshness  # noqa: PLC0415
-        import refresh_stale  # noqa: PLC0415
+        import check_freshness
+        import refresh_stale
 
         self.assertNotIn("measurements", check_freshness.AREAS)
         self.assertNotIn("measurements", refresh_stale.AUTO_AREAS)

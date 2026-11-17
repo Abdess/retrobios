@@ -206,8 +206,8 @@ class DiffAndExportShareOneMismatchRule(unittest.TestCase):
     )
 
     def test_the_diff_names_what_the_export_corrects(self):
-        from exporter.baseline import build_native_model  # noqa: PLC0415
-        from truth import diff_platform_truth  # noqa: PLC0415
+        from exporter.baseline import build_native_model
+        from truth import diff_platform_truth
 
         for t_hashes, p_hashes in self.CASES:
             with self.subTest(truth=t_hashes, platform=p_hashes):
@@ -327,7 +327,7 @@ class ASizeOutsideARangeIsAnotherFile(unittest.TestCase):
     def test_two_cores_do_not_merge_across_a_declared_range(self):
         """bk's 24 KB BASIC10.ROM and oricutron's basic10.rom (max_size
         16384) merged into one entry, which took the Oric md5."""
-        from truth import _merge_file_into_system  # noqa: PLC0415
+        from truth import _merge_file_into_system
 
         system: dict = {}
         _merge_file_into_system(system, {"name": "BASIC10.ROM", "size": 24576,

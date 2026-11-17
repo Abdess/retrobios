@@ -10,7 +10,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
-import site_insights as si  # noqa: E402
+import site_insights as si
 
 PAGE = "https://abdess.github.io/retrobios/emulators/mgba/"
 

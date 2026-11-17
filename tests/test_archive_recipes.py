@@ -90,14 +90,14 @@ class HeldArchivesMatchTheirRecipes(unittest.TestCase):
         bios = REPO_ROOT / "bios"
         if not bios.is_dir() or not (REPO_ROOT / "recipes").is_dir():
             self.skipTest("bios/ or recipes/ is not present")
-        from common import (  # noqa: PLC0415
+        from common import (
             list_registered_platforms,
             load_emulator_profiles,
             load_platform_config,
             variant_base_name,
         )
-        from hashing import md5_composite_of  # noqa: PLC0415
-        from romset_recipes import load_dat_recipes  # noqa: PLC0415
+        from hashing import md5_composite_of
+        from romset_recipes import load_dat_recipes
 
         allowed: dict[str, set[str]] = defaultdict(set)
         for archive, per_label in load_dat_recipes(REPO_ROOT / "recipes").items():

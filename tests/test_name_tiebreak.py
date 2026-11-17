@@ -38,7 +38,7 @@ class DeclaredSizeOrders(unittest.TestCase):
 class OwnerOutranksSharedTree(unittest.TestCase):
     def test_the_owners_copy_beats_two_matching_segments(self):
         """armsx2's fxaa.fx lost to NetherSX2's under shaders/common/."""
-        from common import _by_affinity  # noqa: PLC0415
+        from common import _by_affinity
 
         paths = [
             "bios/Other/nethersx2/assets/shaders/common/fxaa.fx",

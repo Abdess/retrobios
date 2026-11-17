@@ -436,7 +436,7 @@ class ABoardWithoutTheNetwork(Scratch):
 
     def test_the_builder_writes_both_into_the_pack_list(self):
         sys.path.insert(0, str(REPO_ROOT / "scripts"))
-        import generate_pack  # noqa: PLC0415
+        import generate_pack
 
         install_list = manifest()
         board_file = REPO_ROOT / "platforms" / "targets" / "batocera.yml"
@@ -725,7 +725,7 @@ class OfflineMakesNoRequest(Scratch):
     learn its platform, since nothing said "make no request"."""
 
     def _served(self, *options: str, env: dict | None = None):
-        import test_install_selection  # noqa: PLC0415
+        import test_install_selection
 
         hits: list[str] = []
         with FakeRepository() as repo, unittest.mock.patch.object(
@@ -818,13 +818,13 @@ class ANetworkThatDroppedFailsFast(unittest.TestCase):
         self.assertLessEqual(install.MAX_RETRIES * install.CONNECT_TIMEOUT + waited, 15)
 
     def test_a_slow_answer_on_an_open_connection_still_arrives(self):
-        import http.server  # noqa: PLC0415
-        import threading  # noqa: PLC0415
+        import http.server
+        import threading
 
         delay = install.CONNECT_TIMEOUT + 1
 
         class Slow(http.server.BaseHTTPRequestHandler):
-            def do_GET(self):  # noqa: N802 - stdlib name
+            def do_GET(self):
                 time.sleep(delay)
                 body = b'{"ok": true}'
                 self.send_response(200)

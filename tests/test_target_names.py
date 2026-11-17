@@ -28,9 +28,9 @@ class EveryBuildbotCoreIsNamed(unittest.TestCase):
     their libretro build from all_libretro."""
 
     def test_retroarch_names_every_buildbot_core(self):
-        import yaml  # noqa: PLC0415
+        import yaml
 
-        from common import (  # noqa: PLC0415
+        from common import (
             load_emulator_profiles,
             load_platform_config,
             load_target_config,
@@ -73,7 +73,7 @@ class AliasesResolveToOneName(unittest.TestCase):
     def test_linux_on_arm_and_32_bit_x86_is_a_target(self):
         """The buildbot's linux/aarch64 (232 cores) and linux/x86 builds were
         not scraped: --target refused RetroArch on Raspberry Pi OS 64-bit."""
-        import yaml  # noqa: PLC0415
+        import yaml
 
         platforms = str(REPO_ROOT / "platforms")
         targets = yaml.safe_load((REPO_ROOT / "platforms" / "targets" / "retroarch.yml")
@@ -116,10 +116,10 @@ class EachPlatformNamesTheTargetItsOwnWay(unittest.TestCase):
     answered SKIP for a pack the --all build had written."""
 
     def test_the_all_run_and_the_platform_run_agree(self):
-        import contextlib  # noqa: PLC0415
-        import io  # noqa: PLC0415
+        import contextlib
+        import io
 
-        import generate_pack  # noqa: PLC0415
+        import generate_pack
 
         platforms_dir = str(REPO_ROOT / "platforms")
         with contextlib.redirect_stdout(io.StringIO()):
@@ -145,7 +145,7 @@ class OneTruthModelPerTarget(unittest.TestCase):
     rebuilt the same slug by hand to find it."""
 
     def test_aliases_share_a_directory(self):
-        from common import truth_target_dir  # noqa: PLC0415
+        from common import truth_target_dir
 
         platforms = str(REPO_ROOT / "platforms")
         dirs = {
@@ -174,7 +174,7 @@ class TheListingCountsWhatTheFilterUses(unittest.TestCase):
     filters on 187 once _overrides.yml removes machine variants and launchers."""
 
     def test_every_listed_count_is_the_filtered_set(self):
-        from common import list_available_targets, load_target_config  # noqa: PLC0415
+        from common import list_available_targets, load_target_config
 
         platforms = str(REPO_ROOT / "platforms")
         checked = 0
@@ -195,11 +195,11 @@ class ASingleTargetFiltersNothing(unittest.TestCase):
     from a pack the user had only asked to name."""
 
     def test_the_only_target_resolves_every_declared_core(self):
-        import glob  # noqa: PLC0415
+        import glob
 
-        import yaml  # noqa: PLC0415
+        import yaml
 
-        from common import (  # noqa: PLC0415
+        from common import (
             load_emulator_profiles,
             load_platform_config,
             load_target_config,
@@ -234,7 +234,7 @@ class PublishedListsAreNotNarrowed(unittest.TestCase):
         self.assertNotIn('manifest_cmd.extend(["--target"', pipeline)
 
     def test_every_install_list_is_a_whole_platform(self):
-        import json  # noqa: PLC0415
+        import json
 
         for path in sorted((REPO_ROOT / "install").glob("*.json")):
             data = json.loads(path.read_text(encoding="utf-8"))

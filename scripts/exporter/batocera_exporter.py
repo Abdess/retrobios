@@ -421,13 +421,13 @@ class Exporter(BaseExporter):
                 continue
             key = _note_key(line)
             if not key[0]:
-                if 0 <= hash_at and "[" in line[:hash_at]:
+                if hash_at >= 0 and "[" in line[:hash_at]:
                     pending.append(line[hash_at:].strip())
                 continue
             if pending:
                 leading[key] = pending
                 pending = []
-            if 0 <= hash_at and hash_at > line.index(key[0]):
+            if hash_at >= 0 and hash_at > line.index(key[0]):
                 trailing[key] = line[hash_at:].rstrip()
         return trailing, leading
 

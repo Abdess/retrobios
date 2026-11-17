@@ -3997,7 +3997,7 @@ def _main(held: contextlib.ExitStack) -> None:
 
 # Manifest generation (JSON inventory for install.py)
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def _registered(repo_root: str) -> frozenset[str]:
     """The paths a repository's .gitignore registers as release assets, read
     by the parser the fetcher and the release check use, once per root."""
@@ -4149,7 +4149,7 @@ def _profile_copies(
     the emulator, else the shortest path. DuckStation's ps2_scph50006.bin
     sits at the BIOS root and under pcsx2/bios/ for the libretro PS2 cores.
     """
-    from fnmatch import fnmatch  # noqa: PLC0415
+    from fnmatch import fnmatch
 
     taken: list[tuple[str, str, str, bool]] = []
     for copy in declared:
@@ -5704,7 +5704,7 @@ def _offered_boards(
     pairs = content_folder_boards(config)
     if all(on is None for on in pairs.values()):
         return {}
-    from launchers import _roms_place  # noqa: PLC0415
+    from launchers import _roms_place
 
     by_key: dict[str, set[str]] = {}
     for name, claimants in upstream_profile_index(profiles).items():
@@ -6240,7 +6240,7 @@ from packextras import (  # noqa: E402,F401
 )
 
 
-from packreadme import (  # noqa: E402,F401
+from packreadme import (  # noqa: E402
     _build_readme,
     _build_agnostic_rename_readme,
     save_place,

@@ -35,7 +35,7 @@ import urllib.parse
 from collections import Counter
 from collections.abc import Callable
 from dataclasses import dataclass, field
-from functools import lru_cache
+from functools import cache
 from pathlib import Path
 from xml.sax.saxutils import escape
 
@@ -415,7 +415,7 @@ def registry() -> dict:
     return _registry_in(str(siteinputs.current().platforms))
 
 
-@lru_cache(maxsize=None)
+@cache
 def _registry_in(platforms_dir: str) -> dict:
     import yaml
 
@@ -429,7 +429,7 @@ def setups() -> tuple[str, ...]:
     return _setups_in(str(siteinputs.current().platforms))
 
 
-@lru_cache(maxsize=None)
+@cache
 def _setups_in(platforms_dir: str) -> tuple[str, ...]:
     from common import list_registered_platforms
 
@@ -449,7 +449,7 @@ def platform_modes() -> dict[str, tuple[str, str, str | None]]:
     return _platform_modes_in(str(siteinputs.current().platforms))
 
 
-@lru_cache(maxsize=None)
+@cache
 def _platform_modes_in(platforms_dir: str) -> dict[str, tuple[str, str, str | None]]:
     from common import load_platform_config
 
@@ -478,7 +478,7 @@ def emulator_names() -> dict[str, str]:
     return _emulator_names_in(str(siteinputs.current().emulators))
 
 
-@lru_cache(maxsize=None)
+@cache
 def _emulator_names_in(emulators_dir: str) -> dict[str, str]:
     import yaml
 
@@ -562,7 +562,7 @@ def _mode_summary() -> str:
 MINUI_EXAMPLES = (("Sony PlayStation", "PS"), ("Game Boy Advance", "GBA"), ("Sega Genesis", "MD"))
 
 
-@lru_cache(maxsize=None)
+@cache
 def minui_files() -> dict[str, list[str]]:
     manifest = json.loads((ROOT / "install" / "minui.json").read_text(encoding="utf-8"))
     by_tag: dict[str, list[str]] = {}
@@ -747,7 +747,7 @@ def _figures() -> dict[str, Figure]:
     }
 
 
-@lru_cache(maxsize=None)
+@cache
 def figures() -> dict[str, Figure]:
     return _figures()
 
@@ -818,7 +818,7 @@ IMAGE_LINK = re.compile(r"(!\[[^\]\n]*\]\()(https?://[^)\s]+)(\))")
 IMG_SRC = re.compile(r'(<img\b[^>]*?\bsrc=")(https?://[^"]+)(")')
 
 
-@lru_cache(maxsize=None)
+@cache
 def local_images() -> dict[str, str]:
     """Remote URL -> path under the site root, from the two source manifests."""
     mapping: dict[str, str] = {}
@@ -928,7 +928,7 @@ def _string(node: ast.expr, constants: dict[str, str]) -> str:
     raise ValueError(f"install.py: an option help that is not a string: {ast.unparse(node)}")
 
 
-@lru_cache(maxsize=None)
+@cache
 def installer_options() -> tuple[tuple[str, str], ...]:
     """(usage, help) for each option of install.py, in the order --help lists them."""
     tree = ast.parse((ROOT / "install.py").read_text(encoding="utf-8"))

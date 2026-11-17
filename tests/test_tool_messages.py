@@ -585,7 +585,7 @@ class OneSpellingPerOption(unittest.TestCase):
     OTHER_MEANING = {("migrate.py", "--target")}
 
     def test_every_script_takes_the_short_forms(self):
-        import ast  # noqa: PLC0415
+        import ast
 
         missing = []
         for path in sorted((REPO_ROOT / "scripts").rglob("*.py")):
@@ -606,7 +606,7 @@ class OneSpellingPerOption(unittest.TestCase):
     def test_one_long_name_per_option(self):
         """arcade_parent_importer took --database where every other script
         takes --db, and refused `--db database.json`."""
-        import ast  # noqa: PLC0415
+        import ast
 
         renamed = {"--database": "--db"}
         found = []
@@ -646,14 +646,14 @@ class ThePipelineCountsItsRealSteps(unittest.TestCase):
     the log never printed."""
 
     def test_every_recorded_step_has_a_label(self):
-        import re  # noqa: PLC0415
+        import re
 
         source = (REPO_ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
         keys = set(re.findall(r'results\["(\w+)"\] =', source))
         self.assertEqual(keys - set(pipeline.STEP_LABELS), set())
 
     def test_a_label_written_out_is_one_of_the_list(self):
-        import re  # noqa: PLC0415
+        import re
 
         source = (REPO_ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
         written = re.findall(r'run\([^()]*?, "([^"]+)"\)', source)
@@ -666,7 +666,7 @@ class ThePipelineCountsItsRealSteps(unittest.TestCase):
     def test_no_title_counts_eight_steps(self):
         """Three print() headers of step 5 still read "5/8" beside the
         computed "5 consistency check [20/24]"."""
-        import re  # noqa: PLC0415
+        import re
 
         source = (REPO_ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
         self.assertEqual(re.findall(r'"[^"\n]*---[^"\n]*\b\d+[a-z]?/\d+\b[^"\n]*"', source), [])
@@ -866,9 +866,9 @@ class TheGitHubTokenComesFromGh(unittest.TestCase):
         run.assert_not_called()
 
     def test_every_api_caller_reads_it(self):
-        import profile_sync  # noqa: PLC0415
-        import upstream  # noqa: PLC0415
-        from scraper import base_scraper  # noqa: PLC0415
+        import profile_sync
+        import upstream
+        from scraper import base_scraper
 
         with self._gh():
             self.assertEqual(
@@ -884,7 +884,7 @@ class TheGitHubTokenComesFromGh(unittest.TestCase):
             profile_sync._check_quota(606, offline=False)
 
     def test_another_forge_never_triggers_gh(self):
-        import upstream  # noqa: PLC0415
+        import upstream
 
         with self._gh() as run:
             headers = upstream._headers("https://gitlab.com/api/v4/projects/1")
@@ -901,7 +901,7 @@ class CitedCommandsRunWhenPasted(unittest.TestCase):
     CITED = re.compile(r"(?:^|run |with |then |, )([a-z_]+\.py) --[a-z]")
 
     def test_no_message_cites_a_bare_script(self):
-        import ast  # noqa: PLC0415
+        import ast
 
         offenders = []
         for path in sorted((REPO_ROOT / "scripts").rglob("*.py")):

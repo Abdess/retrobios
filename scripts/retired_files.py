@@ -25,7 +25,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from common import run_cli, write_if_changed  # noqa: E402
+from common import run_cli, write_if_changed
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 RETIRED_FILE = REPO_ROOT / "retired.json"

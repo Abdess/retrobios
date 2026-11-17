@@ -118,7 +118,7 @@ class LauncherIndex(unittest.TestCase):
     the archives built from the same tree, each with its size and hash."""
 
     def test_the_committed_list_is_current(self):
-        import generate_launcher_index  # noqa: PLC0415
+        import generate_launcher_index
 
         text = generate_launcher_index.render(generate_launcher_index.build_index())
         self.assertEqual(
@@ -134,7 +134,7 @@ class LauncherIndex(unittest.TestCase):
         self.assertIn("scripts/generate_launcher_index.py", section)
 
     def test_every_member_of_the_archives_is_listed(self):
-        import generate_launcher_index  # noqa: PLC0415
+        import generate_launcher_index
 
         index = json.loads(generate_launcher_index.OUTPUT.read_text(encoding="utf-8"))
         places = {place.key: place for place in install.APP_PLACES.values()}
@@ -152,7 +152,7 @@ class LauncherIndex(unittest.TestCase):
                         self.assertEqual(hashlib.sha256(data).hexdigest(), entry["sha256"])
 
     def test_the_list_refuses_an_installer_the_bootstraps_do_not_pin(self):
-        import generate_launcher_index  # noqa: PLC0415
+        import generate_launcher_index
 
         root = _tempdir(self)
         shutil.copyfile(REPO_ROOT / "install.py", root / "install.py")

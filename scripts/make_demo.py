@@ -198,7 +198,7 @@ def build_card(card: Path) -> None:
 
 
 class QuietHandler(http.server.SimpleHTTPRequestHandler):
-    def log_message(self, format: str, *args: object) -> None:  # noqa: A002
+    def log_message(self, format: str, *args: object) -> None:
         pass
 
 

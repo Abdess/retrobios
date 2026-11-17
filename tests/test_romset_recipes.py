@@ -687,10 +687,10 @@ class TheMissingReportNamesItsTargets(unittest.TestCase):
     only in --json."""
 
     def test_every_target_is_named(self):
-        import contextlib  # noqa: PLC0415
-        import io  # noqa: PLC0415
+        import contextlib
+        import io
 
-        import romset_recipes  # noqa: PLC0415
+        import romset_recipes
 
         gap = {
             "constructible": [],
@@ -715,9 +715,9 @@ class IdentificationReadsTheDirectoryFirst(unittest.TestCase):
     whose members could never match."""
 
     def test_a_recipe_with_other_members_is_never_built(self):
-        from torrentzip import build_torrentzip  # noqa: PLC0415
+        from torrentzip import build_torrentzip
 
-        import romset_recipes  # noqa: PLC0415
+        import romset_recipes
 
         rom = b"rom bytes"
         crc = format(zlib.crc32(rom), "08x")
@@ -733,7 +733,7 @@ class IdentificationReadsTheDirectoryFirst(unittest.TestCase):
                     return build_torrentzip([(name, rom) for name, _crc in recipe])
 
                 def digest(self, recipe):
-                    import hashlib  # noqa: PLC0415
+                    import hashlib
 
                     blob = self.build(recipe)
                     return hashlib.md5(blob).hexdigest(), len(blob)
@@ -776,9 +776,9 @@ class WriteRunsTheReportItWrites(unittest.TestCase):
     --write saves come from the missing-pins report, which did not run."""
 
     def test_write_implies_missing(self):
-        import argparse  # noqa: PLC0415
+        import argparse
 
-        import romset_recipes  # noqa: PLC0415
+        import romset_recipes
 
         args = argparse.Namespace(identify=True, missing=False, write=True)
         romset_recipes._resolve_modes(args)

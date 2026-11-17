@@ -257,8 +257,8 @@ class SavedFindings(unittest.TestCase):
     def test_dry_run_json_prints_the_plan_as_json(self):
         """--dry-run --json printed the text plan, and a caller parsing it
         as JSON failed on the first line."""
-        import json  # noqa: PLC0415
-        import subprocess  # noqa: PLC0415
+        import json
+        import subprocess
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" / "tests") as directory:
             path = Path(directory) / "freshness.json"
@@ -280,7 +280,7 @@ class SavedFindings(unittest.TestCase):
         """romfolders was added to check_freshness and not here: its rows
         were dropped from a saved report without a word, and --only
         romfolders was refused."""
-        import check_freshness  # noqa: PLC0415
+        import check_freshness
 
         self.assertEqual(set(check_freshness.AREAS), set(rs.AUTO_AREAS + rs.MANUAL_AREAS))
         jobs, surfaced, _ = rs.plan_jobs([finding("romfolders", "muos")], REGISTRY, {})
@@ -302,7 +302,7 @@ class AFailedCheckIsNamed(unittest.TestCase):
     def _run(self, raises: Exception | None = None, **result):
         proc = subprocess.CompletedProcess([], **result) if result else None
         with mock.patch.object(rs.subprocess, "run", side_effect=raises, return_value=proc):
-            return rs._run_check_freshness(("coreinfo",), [])  # noqa: SLF001
+            return rs._run_check_freshness(("coreinfo",), [])
 
     def test_a_crash_shows_its_stderr(self):
         with self.assertRaises(RuntimeError) as raised:

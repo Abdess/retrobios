@@ -15,10 +15,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 
-import yaml  # noqa: E402
+import yaml
 
-from common import load_platform_config  # noqa: E402
-from launchers import (  # noqa: E402
+from common import load_platform_config
+from launchers import (
     bound_launchers,
     config_evidence,
     config_target,
@@ -26,9 +26,9 @@ from launchers import (  # noqa: E402
     launcher_places,
     launcher_unproven,
 )
-from profile_sync import _check_build_refs, shipped_build_holders  # noqa: E402
-from scraper.retrobat_launchers import _choices_apart  # noqa: E402
-from scraper.shell_launchers import (  # noqa: E402
+from profile_sync import _check_build_refs, shipped_build_holders
+from scraper.retrobat_launchers import _choices_apart
+from scraper.shell_launchers import (
     LauncherPatternMissing,
     Script,
     config_placement,
@@ -41,7 +41,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 def schema_checks(test: unittest.TestCase):
     """validate_schemas, or a skip: it needs jsonschema, the build does not."""
     try:
-        import validate_schemas  # noqa: PLC0415
+        import validate_schemas
     except ImportError as exc:
         test.skipTest(f"validate_schemas needs jsonschema: {exc}")
     return validate_schemas

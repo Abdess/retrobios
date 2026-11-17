@@ -5,7 +5,6 @@ from __future__ import annotations
 import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
 
 import json
-import os
 import re
 import sys
 import tempfile
@@ -376,7 +375,7 @@ class PlatformPagesPrintTheDeclaredCrc32(unittest.TestCase):
     only its sha1 and md5, so the crc a clrmamepro user pastes found nothing."""
 
     def test_the_rendered_page(self):
-        from tests import sitepages  # noqa: PLC0415
+        from tests import sitepages
 
         sitepages.require()
         # The page and the systems moved to pages of their own.

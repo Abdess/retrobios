@@ -715,7 +715,7 @@ class _Repository:
 
 
 class _Quiet(http.server.SimpleHTTPRequestHandler):
-    def log_message(self, *args) -> None:  # noqa: D102
+    def log_message(self, *args) -> None:
         pass
 
 

@@ -6504,9 +6504,9 @@ struct BurnDriver BurnDrvneogeo = {
         gap report (system, systems) to platform_region_groups, not a
         dictionary built by hand. Without it every extra stood alone and
         --region compared nothing."""
-        import hashlib  # noqa: PLC0415
+        import hashlib
 
-        from packextras import platform_region_groups  # noqa: PLC0415
+        from packextras import platform_region_groups
 
         files, by_name = {}, {}
         for name in ("core_us.bin", "core_jp.bin"):
@@ -6542,9 +6542,9 @@ struct BurnDriver BurnDrvneogeo = {
         """RetroDECK files the Master System as sega-master-system, the
         profiles as sega-mastersystem. Two groups reduced apart, and a
         --region us pack kept the declared Japanese BIOS."""
-        import hashlib  # noqa: PLC0415
+        import hashlib
 
-        from packextras import platform_region_groups  # noqa: PLC0415
+        from packextras import platform_region_groups
 
         files, by_name = {}, {}
         for name in ("bios_U.sms", "bios_J.sms"):

@@ -137,7 +137,7 @@ def opened(record: dict) -> str | None:
 def load_observations(path: Path) -> dict[str, dict]:
     """Each record id or subject an observation covers, with its issue
     number and words."""
-    import yaml  # noqa: PLC0415
+    import yaml
 
     if not path.is_file():
         return {}
@@ -430,7 +430,7 @@ class Built:
 
 
 def load_profiles(emulators_dir: Path) -> dict:
-    from common import load_emulator_profiles  # noqa: PLC0415
+    from common import load_emulator_profiles
 
     return load_emulator_profiles(str(emulators_dir), skip_aliases=False)
 

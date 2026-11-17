@@ -14,7 +14,6 @@ import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
 import sys
 import unittest
 from pathlib import Path
-from types import SimpleNamespace
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
@@ -155,7 +154,7 @@ class TheTableOfContentsOfACardPageStopsAtLevelTwo(unittest.TestCase):
     @staticmethod
     @staticmethod
     def _contents(rel: str, sections: int):
-        import yaml  # noqa: PLC0415
+        import yaml
 
         body = "# T\n\n" + "".join(f"## S{i}\n\n### card\n\n" for i in range(sections))
         _target, text = sitestarlight.finalize_page(

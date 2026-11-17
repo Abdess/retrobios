@@ -817,13 +817,11 @@ class AnUnreadableCloneStopsTheScrape(unittest.TestCase):
         from scripts.scraper import mame_hash_scraper as scraper
 
         failing = subprocess.CalledProcessError(128, ["git", "rev-parse", "HEAD"])
-        with mock.patch.object(scraper, "_run_git", side_effect=failing):
-            with self.assertRaises(RuntimeError):
-                scraper._get_commit()
+        with mock.patch.object(scraper, "_run_git", side_effect=failing), self.assertRaises(RuntimeError):
+            scraper._get_commit()
         empty = subprocess.CompletedProcess(["git"], 0, stdout="\n", stderr="")
-        with mock.patch.object(scraper, "_run_git", return_value=empty):
-            with self.assertRaises(RuntimeError):
-                scraper._get_commit()
+        with mock.patch.object(scraper, "_run_git", return_value=empty), self.assertRaises(RuntimeError):
+            scraper._get_commit()
 
 
 

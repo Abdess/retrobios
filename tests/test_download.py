@@ -102,9 +102,8 @@ class TestPackGrouping(unittest.TestCase):
     def test_info_on_an_unknown_platform_fails(self):
         """--info printed "not found" and exited 0."""
         release = _release(["EmuDeck_2.3.8_BIOS_Pack.zip"])
-        with contextlib.redirect_stdout(io.StringIO()) as out:
-            with self.assertRaises(SystemExit) as caught:
-                download.show_info("emudek", release)
+        with contextlib.redirect_stdout(io.StringIO()) as out, self.assertRaises(SystemExit) as caught:
+            download.show_info("emudek", release)
         self.assertEqual(caught.exception.code, 1)
         self.assertIn("EmuDeck", out.getvalue())
 

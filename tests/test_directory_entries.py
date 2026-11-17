@@ -236,7 +236,7 @@ class PackCarriesADirectory(DirectoryFixture):
             self.assertEqual(
                 archive.read("rtp/2000/Backdrop/a.png"), b"backdrop"
             )
-        self.assertTrue(self.EXPECTED <= names, sorted(names))
+        self.assertTrue(names >= self.EXPECTED, sorted(names))
         self.assertFalse([n for n in names if ".variants" in n])
 
     def test_the_install_manifest_lists_the_tree(self):
@@ -248,7 +248,7 @@ class PackCarriesADirectory(DirectoryFixture):
             offline=True,
         )
         dests = {entry["dest"] for entry in manifest["files"]}
-        self.assertTrue(self.EXPECTED <= dests, sorted(dests))
+        self.assertTrue(dests >= self.EXPECTED, sorted(dests))
         json.dumps(manifest)
 
     def test_the_gap_report_is_computed_once_per_build(self):
@@ -291,7 +291,7 @@ class PackCarriesADirectory(DirectoryFixture):
         )
         with zipfile.ZipFile(zip_path) as archive:
             names = set(archive.namelist())
-        self.assertTrue(self.EXPECTED <= names, sorted(names))
+        self.assertTrue(names >= self.EXPECTED, sorted(names))
 
     def test_verify_counts_what_the_emulator_pack_ships(self):
         self._profiles()

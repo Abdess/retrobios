@@ -50,32 +50,27 @@ class ArtifactLockTest(unittest.TestCase):
         self.dir = _tempdir(self)
 
     def test_writer_excludes_writer(self):
-        with artifact_lock(self.dir):
-            with self.assertRaises(ArtifactLockBusy):
-                with artifact_lock(self.dir):
-                    pass
+        with artifact_lock(self.dir), self.assertRaises(ArtifactLockBusy), artifact_lock(self.dir):
+            pass
 
     def test_writer_excludes_reader(self):
-        with artifact_lock(self.dir):
-            with self.assertRaises(ArtifactLockBusy):
-                with artifact_lock(self.dir, exclusive=False):
-                    pass
-
-    def test_readers_share(self):
-        with artifact_lock(self.dir, exclusive=False):
+        with artifact_lock(self.dir), self.assertRaises(ArtifactLockBusy):
             with artifact_lock(self.dir, exclusive=False):
                 pass
+
+    def test_readers_share(self):
+        with artifact_lock(self.dir, exclusive=False), artifact_lock(self.dir, exclusive=False):
+            pass
 
     def test_a_reader_never_creates_the_directory(self):
         """A mistyped --output-dir given to --verify-packs or release_record
         was created holding a .lock, and the next run with the same typo no
         longer said the path did not exist."""
-        from common import ArtifactDirectoryMissing  # noqa: PLC0415
+        from common import ArtifactDirectoryMissing
 
         missing = os.path.join(self.dir, "sub", "dsit")
-        with self.assertRaises(ArtifactDirectoryMissing):
-            with artifact_lock(missing, exclusive=False):
-                pass
+        with self.assertRaises(ArtifactDirectoryMissing), artifact_lock(missing, exclusive=False):
+            pass
         self.assertFalse(os.path.exists(os.path.join(self.dir, "sub")))
 
     def test_split_refuses_a_missing_target_before_locking(self):
@@ -95,17 +90,15 @@ class ArtifactLockTest(unittest.TestCase):
             pass
 
     def test_lock_is_released_on_error(self):
-        with self.assertRaises(ValueError):
-            with artifact_lock(self.dir):
-                raise ValueError("boom")
+        with self.assertRaises(ValueError), artifact_lock(self.dir):
+            raise ValueError("boom")
         with artifact_lock(self.dir):
             pass
 
     def test_separate_directories_do_not_contend(self):
         other = _tempdir(self)
-        with artifact_lock(self.dir):
-            with artifact_lock(other):
-                pass
+        with artifact_lock(self.dir), artifact_lock(other):
+            pass
 
     def test_lock_survives_a_missing_directory(self):
         missing = os.path.join(self.dir, "not-created-yet")
@@ -149,7 +142,7 @@ class PackLockCliTest(unittest.TestCase):
         """The refresh waits for every run holding a data tree, and a
         pipeline holds them all for its whole run: probed after the refresh,
         a second build sat silent for hours instead of being refused."""
-        from refresh_data_dirs import cache_lock  # noqa: PLC0415
+        from refresh_data_dirs import cache_lock
 
         platforms = Path(self.dir) / "platforms"
         platforms.mkdir()
@@ -254,9 +247,8 @@ class PipelineHoldsItsFixedOutputs(unittest.TestCase):
 
     def test_two_holds_of_the_repository_exclude_each_other(self):
         with hold_repository_outputs(str(REPO_ROOT)), \
-                self.assertRaises(ArtifactLockBusy):
-            with hold_repository_outputs(str(REPO_ROOT)):
-                pass
+                self.assertRaises(ArtifactLockBusy), hold_repository_outputs(str(REPO_ROOT)):
+            pass
 
 
 class TheSuiteTakesTheRepositoryHoldInItsScratch(unittest.TestCase):

@@ -123,7 +123,7 @@ _WITH_CARDS = (
 
 
 class _Quiet(http.server.SimpleHTTPRequestHandler):
-    def log_message(self, format, *args):  # noqa: A002 - stdlib signature
+    def log_message(self, format, *args):
         return
 
 

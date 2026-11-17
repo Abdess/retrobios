@@ -55,11 +55,10 @@ class FailedPlatformFailsTheRun(unittest.TestCase):
         self.assertEqual(ctx.exception.code, 1)
 
     def test_manifest_mode(self):
-        with mock.patch.object(gp, "generate_manifest", _boom):
-            with self.assertRaises(SystemExit) as ctx:
-                gp._run_manifest_mode(
-                    self._args(), [(["retropie"], "retropie")], {}, {}, {}, {}
-                )
+        with mock.patch.object(gp, "generate_manifest", _boom), self.assertRaises(SystemExit) as ctx:
+            gp._run_manifest_mode(
+                self._args(), [(["retropie"], "retropie")], {}, {}, {}, {}
+            )
         self.assertEqual(ctx.exception.code, 1)
 
 

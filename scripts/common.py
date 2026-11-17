@@ -12,6 +12,7 @@ from collections import Counter
 import argparse
 import filecmp
 import hashlib
+import importlib.util
 import functools
 import json
 import os
@@ -106,7 +107,7 @@ def load_database(db_path: str) -> dict:
     except FileNotFoundError:
         # A mistyped --db beside the real database was told to rescan the
         # whole collection into a second file under the typo.
-        import difflib  # noqa: PLC0415
+        import difflib
 
         typed = Path(db_path)
         close = difflib.get_close_matches(
@@ -235,8 +236,8 @@ def adler32_of(path: str, byteswap: bool = False) -> str:
     Dolphin swaps every 16-bit word of its DSP ROMs before hashing them
     (Common::swap16 in DSPLLE.cpp:LoadDSPRom).
     """
-    import struct  # noqa: PLC0415
-    import zlib  # noqa: PLC0415
+    import struct
+    import zlib
 
     with open(path, "rb") as f:
         data = f.read()
@@ -335,7 +336,7 @@ def declared_content_checks(file_entry: dict) -> set[str]:
 
 @functools.lru_cache(maxsize=4096)
 def _romdir_verdict(path: str, size: int, mtime_ns: int, spec: str) -> bool:
-    from romdir import romdir_accepts  # noqa: PLC0415
+    from romdir import romdir_accepts
 
     with open(path, "rb") as f:
         data = f.read()
@@ -722,8 +723,8 @@ SHORT_LIST = 12
 @functools.lru_cache(maxsize=1)
 def _gh_cli_token() -> str:
     """What `gh auth token` prints, or "" when gh is absent or logged out."""
-    import logging  # noqa: PLC0415
-    import subprocess  # noqa: PLC0415
+    import logging
+    import subprocess
 
     log = logging.getLogger(__name__)
     try:
@@ -775,7 +776,7 @@ def suggest_names(
     `listed` is how many entries the listing shows when `available` also
     holds aliases of them.
     """
-    import difflib  # noqa: PLC0415
+    import difflib
 
     total = len(available) if listed is None else listed
     close = sorted({m for name in typed
@@ -845,7 +846,7 @@ def require_platform(name: str, platforms_dir: str = "platforms") -> None:
         )
     if os.path.exists(os.path.join(platforms_dir, f"{name}.yml")):
         return
-    import difflib  # noqa: PLC0415
+    import difflib
 
     known = list_registered_platforms(platforms_dir)
     close = difflib.get_close_matches(name, known, n=1)
@@ -2485,9 +2486,7 @@ def load_emulator_profiles(
         }
         _emulator_profiles_cache[cache_key] = profiles
         return profiles
-    try:
-        import yaml
-    except ImportError:
+    if importlib.util.find_spec("yaml") is None:
         # Every consumer reads {} as "this repo documents no emulator", which
         # is what a broken install looks like from the outside: zero coverage,
         # no gap, nothing to fix.
@@ -3003,7 +3002,7 @@ def standalone_set(config: dict) -> set[str]:
         for core in entry.get("cores") or []
     }
     if names - {n for n in names if n.startswith(CORE_DIR_PREFIX)}:
-        from launchers import executed_files, handed_directories  # noqa: PLC0415
+        from launchers import executed_files, handed_directories
 
         handed = handed_directories(config)
         # The record's position travels too: a search list is read in order.
@@ -3023,7 +3022,7 @@ def standalone_set(config: dict) -> set[str]:
             if f.get("name")
         }
         # The machines a record offers under its systems, by normalized id.
-        from launchers import native_systems  # noqa: PLC0415
+        from launchers import native_systems
 
         natives = native_systems(config)
         names |= {
@@ -3059,7 +3058,7 @@ def merged_standalone_set(configs: Iterable[dict]) -> set[str]:
 
 def _handed(standalone_cores: Iterable[str]) -> list:
     """The directories a standalone set carries, as launchers built them."""
-    from launchers import HandedDirectory  # noqa: PLC0415
+    from launchers import HandedDirectory
 
     found = []
     for tag in standalone_cores:
@@ -3103,7 +3102,7 @@ def entry_launch_systems(entry: dict, index: Mapping[str, set[str]]) -> frozense
 
 def _executed(standalone_cores: Iterable[str]) -> list:
     """The files a standalone set's launchers execute, as launchers read them."""
-    from launchers import ExecutedFile  # noqa: PLC0415
+    from launchers import ExecutedFile
 
     found = []
     for tag in standalone_cores:
@@ -3198,7 +3197,7 @@ def standalone_destination(
     layout = standalone_layout_path(entry, profile)
     if layout is None or not bindings:
         return None
-    from launchers import bound_path  # noqa: PLC0415
+    from launchers import bound_path
 
     return bound_path(layout, bindings)
 
@@ -3211,7 +3210,7 @@ def standalone_bindings_for(
 
     ``systems`` are those the entry is launched for (entry_launch_systems).
     """
-    from launchers import directory_handles, pool_folders, standalone_bindings  # noqa: PLC0415
+    from launchers import directory_handles, pool_folders, standalone_bindings
 
     declared = directory_handles(profile)
     pools = pool_folders(profile)
@@ -3332,7 +3331,7 @@ def _build_layouts(
 
     # The layout folders a search setting stands for (standalone_pools):
     # bound, the launcher passes the setting and the default is not read.
-    from launchers import pool_folders as _pool_folders  # noqa: PLC0415
+    from launchers import pool_folders as _pool_folders
 
     pool_folders = {v.strip("/") for v in _pool_folders(profile).values()} - {""}
 
@@ -3428,7 +3427,7 @@ def _branch_holds(branch: str, board: str) -> bool:
     variable, _, pattern = branch.strip().partition(" ")
     if variable != "DEVICE" or not pattern.strip():
         return True
-    import fnmatch  # noqa: PLC0415
+    import fnmatch
 
     return any(
         fnmatch.fnmatchcase(board.upper(), p.strip().upper()) for p in pattern.split("|")
@@ -3539,7 +3538,7 @@ def content_folder_tags(config: dict) -> set[str]:
     boards = content_folder_boards(config)
     target = config.get(TARGET_KEY)
     pairs = {pair for pair, on in boards.items() if not target or on is None or target in on}
-    from launchers import _roms_place  # noqa: PLC0415
+    from launchers import _roms_place
 
     def place(folder: str) -> list:
         return list(_roms_place(config, folder) or ())
@@ -3712,7 +3711,7 @@ def content_layout(
         # path with stand for these: libretro MAME hands MAME
         # <system>/mame/bios unless the content's command line names
         # another (retro_init.cpp Set_Path_Option, execute_game_cmd).
-        from launchers import pool_folders  # noqa: PLC0415
+        from launchers import pool_folders
 
         pools = set(pool_folders({"standalone_pools": view.get("libretro_pools")}).values())
         for f in files:
@@ -4279,7 +4278,7 @@ SYSTEM_ALIASES: dict[str, str] = {
 }
 
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def _norm_system_id(sid: str) -> str:
     """Normalize system ID for cross-platform matching.
 
@@ -4605,7 +4604,7 @@ def declared_root(config: dict) -> str:
     list also names folders beside the BIOS one states it as
     core_destination: EmuELEC's ports/ entries are a quarter of its list.
     """
-    if config.get("base_destination", None) != "":
+    if config.get("base_destination") != "":
         return ""
     if config.get("core_destination"):
         return str(config["core_destination"])
@@ -4820,7 +4819,7 @@ def build_target_cores_cache(
 
 def _unknown_target_message(target: str, platforms: list[str], platforms_dir: str) -> str:
     """A target no platform has, with the closest names any of them knows."""
-    import difflib  # noqa: PLC0415
+    import difflib
 
     targets_dir = os.path.join(platforms_dir, "targets")
     owners: dict[str, list[str]] = {}

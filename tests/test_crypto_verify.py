@@ -118,7 +118,7 @@ def _sign(message: bytes, private: int, nonce: int) -> bytes:
     point = ec._ec_mul(nonce, g)
     r = point[0] % ec._N
     digest = int.from_bytes(hashlib.sha256(message).digest(), "big")
-    if 256 > ec._N_BITLEN:
+    if ec._N_BITLEN < 256:
         digest >>= 256 - ec._N_BITLEN
     s = (ec._modinv(nonce, ec._N) * (digest + r * private)) % ec._N
     return r.to_bytes(30, "big") + s.to_bytes(30, "big")

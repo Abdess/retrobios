@@ -27,11 +27,11 @@ from unittest import mock
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 
-import yaml  # noqa: E402
+import yaml
 
-import verify  # noqa: E402
-from common import _emulator_profiles_cache, load_emulator_profiles, load_platform_config  # noqa: E402
-from cross_reference import (  # noqa: E402
+import verify
+from common import _emulator_profiles_cache, load_emulator_profiles, load_platform_config
+from cross_reference import (
     LAUNCHER_READS_KEY,
     LAUNCHER_UNPROVEN_KEY,
     launcher_file_names,

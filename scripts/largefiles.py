@@ -216,13 +216,12 @@ def _fetch_asset(
         for candidate, url in _asset_urls(name):
             try:
                 req = urllib.request.Request(url, headers={"User-Agent": "retrobios/1.0"})
-                with urllib.request.urlopen(req, timeout=300) as resp:
-                    with open(tmp_path, "wb") as f:
-                        while True:
-                            chunk = resp.read(65536)
-                            if not chunk:
-                                break
-                            f.write(chunk)
+                with urllib.request.urlopen(req, timeout=300) as resp, open(tmp_path, "wb") as f:
+                    while True:
+                        chunk = resp.read(65536)
+                        if not chunk:
+                            break
+                        f.write(chunk)
                 downloaded = True
                 break
             except (urllib.error.URLError, OSError, http.client.HTTPException) as exc:
@@ -389,7 +388,7 @@ def _served_digests() -> dict[str, str]:
         f"{LARGE_FILES_RELEASE}"
     )
     headers = {"User-Agent": "retrobios/1.0", "Accept": "application/vnd.github+json"}
-    from common import github_token  # noqa: PLC0415 (common imports this module)
+    from common import github_token
 
     token = github_token()
     if token:

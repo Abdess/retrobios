@@ -70,7 +70,7 @@ class ThePackGuideNamesTheInstallerDefault(unittest.TestCase):
             if rule["os"] == "windows" and rule["method"] == "path_exists"
         )
         sys.path.insert(0, str(REPO_ROOT / "scripts"))
-        from siteguides import pack_manual  # noqa: PLC0415
+        from siteguides import pack_manual
 
         # The pack guide text is data (platforms/_guides.yml): read what the
         # pack README prints, not the source of the script that prints it.

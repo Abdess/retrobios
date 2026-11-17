@@ -76,7 +76,7 @@ class ScriptsNeedOnlyPyyaml(unittest.TestCase):
     there and fail for a contributor following the documented setup."""
 
     def test_no_script_imports_another_package(self):
-        import ast  # noqa: PLC0415
+        import ast
 
         scripts = Path(__file__).resolve().parents[1] / "scripts"
         local = {p.stem for p in scripts.rglob("*.py")} | {
@@ -112,7 +112,7 @@ class TheDownloaderRunsWithoutPyyaml(unittest.TestCase):
     import, every CI job (which installs pyyaml) would stay green."""
 
     def test_help_runs_with_yaml_unimportable(self):
-        import subprocess  # noqa: PLC0415
+        import subprocess
 
         root = Path(__file__).resolve().parents[1]
         code = (

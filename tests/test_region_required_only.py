@@ -49,7 +49,7 @@ class EmulatorModeToo(unittest.TestCase):
     the optional US cards won the group, then --required-only removed them."""
 
     def test_the_required_card_survives(self):
-        from packextras import emulator_region_drops  # noqa: PLC0415
+        from packextras import emulator_region_drops
 
         profile = {"systems": ["nec-pc-engine"], "files": [
             {"name": "syscard3.pce", "required": True, "region": ["japan"]},

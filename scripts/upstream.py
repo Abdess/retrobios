@@ -230,7 +230,7 @@ def _headers(url: str, accept_json: bool = False) -> dict[str, str]:
     if accept_json:
         headers["Accept"] = "application/json"
     if urllib.parse.urlsplit(url).netloc in GITHUB_HOSTS:
-        from common import github_token  # noqa: PLC0415
+        from common import github_token
 
         # GITHUB_TOKEN, else the one gh is logged in with.
         token = github_token()
@@ -667,7 +667,7 @@ def _github_graphql(
     GraphQL refuses anonymous calls, so an untokened run keeps the REST
     answer it already had.
     """
-    from common import github_token  # noqa: PLC0415
+    from common import github_token
 
     body = json.dumps({"query": query, "variables": variables}, sort_keys=True)
     target = Path(cache_dir) / "_api" / f"{hashlib.sha256(body.encode()).hexdigest()}.json"

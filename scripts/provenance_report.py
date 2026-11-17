@@ -384,7 +384,7 @@ def main() -> int:
         "(the pipeline writes derivable.json)",
     )
     args = parser.parse_args()
-    from common import work_from_repo_root  # noqa: PLC0415
+    from common import work_from_repo_root
 
     work_from_repo_root(args, parser, ["db", "provenance_dir", "emulators_dir", "write_derivable"])
     if args.write_derivable and not args.derive:
@@ -400,7 +400,7 @@ def main() -> int:
     report = build_report(db, snapshots, archive_members(db), needs=needs)
     derived: dict[str, dict] = {}
     if args.derive:
-        from derivations import derivable  # noqa: PLC0415
+        from derivations import derivable
 
         derived = derivable((e for d in report.values() for e in d["missing"]), db)
         for data in report.values():

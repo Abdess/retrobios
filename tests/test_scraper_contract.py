@@ -134,8 +134,8 @@ class RateLimitedForge(unittest.TestCase):
 
     @staticmethod
     def _limited(retry_after: str | None):
-        import email.message  # noqa: PLC0415
-        import io  # noqa: PLC0415
+        import email.message
+        import io
 
         headers = email.message.Message()
         if retry_after is not None:
@@ -143,9 +143,9 @@ class RateLimitedForge(unittest.TestCase):
         return urllib.error.HTTPError("u", 429, "Too Many Requests", headers, io.BytesIO())
 
     def test_a_rate_limit_is_waited_out(self):
-        import io  # noqa: PLC0415
+        import io
 
-        from scraper.base_scraper import fetch_bytes  # noqa: PLC0415
+        from scraper.base_scraper import fetch_bytes
 
         waits: list[float] = []
         answers = [self._limited("7"), self._limited(None), io.BytesIO(b"ok")]
@@ -161,22 +161,20 @@ class RateLimitedForge(unittest.TestCase):
         self.assertEqual(waits, [7.0, 4.0])
 
     def test_a_lasting_limit_or_a_missing_file_fails(self):
-        from scraper.base_scraper import fetch_bytes  # noqa: PLC0415
+        from scraper.base_scraper import fetch_bytes
 
         def limited(_request, timeout):
             raise self._limited(None)
 
-        with mock.patch("urllib.request.urlopen", limited):
-            with self.assertRaises(ConnectionError):
-                fetch_bytes("https://x", attempts=3, sleep=lambda _s: None)
+        with mock.patch("urllib.request.urlopen", limited), self.assertRaises(ConnectionError):
+            fetch_bytes("https://x", attempts=3, sleep=lambda _s: None)
 
         def gone(_request, timeout):
             raise urllib.error.HTTPError("u", 404, "Not Found", None, None)
 
         waits: list[float] = []
-        with mock.patch("urllib.request.urlopen", gone):
-            with self.assertRaises(ConnectionError):
-                fetch_bytes("https://x", sleep=waits.append)
+        with mock.patch("urllib.request.urlopen", gone), self.assertRaises(ConnectionError):
+            fetch_bytes("https://x", sleep=waits.append)
         self.assertEqual(waits, [])
 
 
@@ -185,9 +183,9 @@ class RecalboxReadsItsSystemsInBatches(unittest.TestCase):
     scrape past its half-hour timeout."""
 
     def test_one_query_per_fifty_systems(self):
-        import json as _json  # noqa: PLC0415
+        import json as _json
 
-        from scraper import recalbox_scraper  # noqa: PLC0415
+        from scraper import recalbox_scraper
 
         systems = [f"sys{i:03}" for i in range(120)]
         queries: list[list[str]] = []
@@ -217,7 +215,7 @@ class EveryNamedScraperExists(unittest.TestCase):
     of stale targets would have failed on its import."""
 
     def test_registry_scrapers_are_modules(self):
-        import yaml  # noqa: PLC0415
+        import yaml
 
         registry = yaml.safe_load((REPO_ROOT / "platforms" / "_registry.yml").read_text())
         scraper_dir = REPO_ROOT / "scripts" / "scraper"
@@ -664,7 +662,7 @@ class UnreadableReleaseStopsTheScrape(unittest.TestCase):
     def _registry_scrapers() -> list[str]:
         """Every platform scraper the registry names: a hand-written list
         left rocknix, retrodeck, minui, nextui and myminui unchecked."""
-        import yaml  # noqa: PLC0415
+        import yaml
 
         registry = yaml.safe_load((REPO_ROOT / "platforms" / "_registry.yml").read_text())
         return sorted({entry["scraper"] for entry in registry["platforms"].values()
@@ -766,7 +764,7 @@ class UnreadableReleaseStopsTheScrape(unittest.TestCase):
     def test_a_core_info_file_the_forge_refuses_raises(self):
         """Read as empty, the core left the result and --compare-db counted
         none of its firmware missing."""
-        from scraper import coreinfo_scraper  # noqa: PLC0415
+        from scraper import coreinfo_scraper
 
         scraper = coreinfo_scraper.Scraper()
         with mock.patch.object(
@@ -802,7 +800,7 @@ class EveryGitHubApiCallerSendsTheToken(unittest.TestCase):
     def test_each_function_building_an_api_request_reads_the_token(self):
         """Per module, one call of github_headers anywhere covered them all:
         fetch_github_latest_tag sent no token beside a helper that did."""
-        import ast  # noqa: PLC0415
+        import ast
 
         scripts = Path(__file__).resolve().parent.parent / "scripts"
         silent = []
@@ -829,7 +827,7 @@ class EveryGitHubApiCallerSendsTheToken(unittest.TestCase):
         self.assertEqual(silent, [])
 
     def test_the_tag_helper_sends_the_token_and_raises(self):
-        from scraper import base_scraper  # noqa: PLC0415
+        from scraper import base_scraper
 
         seen = {}
 
@@ -936,7 +934,7 @@ class OneNativeIdOneSystem(unittest.TestCase):
     FOLDS = {"fbneo", "pcenginecd"}
 
     def test_scrapers_agree_on_every_shared_native_id(self):
-        from common import _norm_system_id  # noqa: PLC0415
+        from common import _norm_system_id
 
         seen: dict[str, dict[str, str]] = {}
         for path in sorted((REPO_ROOT / "scripts" / "scraper").glob("*_scraper.py")):
@@ -956,9 +954,9 @@ class OneNativeIdOneSystem(unittest.TestCase):
     def test_retrobat_files_its_systems_as_batocera_does(self):
         """RetroBat kept psx, nds and atari800: no profile system met them,
         so no core extra joined them and --system found nothing."""
-        import yaml  # noqa: PLC0415
+        import yaml
 
-        from scraper import batocera_scraper, retrobat_scraper  # noqa: PLC0415
+        from scraper import batocera_scraper, retrobat_scraper
 
         for native, slug in batocera_scraper.SYSTEM_SLUG_MAP.items():
             self.assertEqual(retrobat_scraper.SYSTEM_SLUG_MAP[native], slug)
@@ -979,9 +977,9 @@ class OneNativeIdOneSystem(unittest.TestCase):
     }
 
     def test_every_platform_system_meets_a_profile_system(self):
-        import yaml  # noqa: PLC0415
+        import yaml
 
-        from common import (  # noqa: PLC0415
+        from common import (
             _norm_system_id,
             load_emulator_profiles,
             load_platform_config,
@@ -1002,9 +1000,9 @@ class OneNativeIdOneSystem(unittest.TestCase):
                 self.assertEqual(stray, set())
 
     def test_xroar_machines_reach_the_platforms_that_run_it(self):
-        import yaml  # noqa: PLC0415
+        import yaml
 
-        from common import _norm_system_id  # noqa: PLC0415
+        from common import _norm_system_id
 
         xroar = yaml.safe_load((REPO_ROOT / "emulators" / "xroar.yml").read_text())
         machines = {_norm_system_id(s) for s in xroar["systems"]}
@@ -1025,13 +1023,13 @@ class HashScraperRefusesAnEmptyRead(unittest.TestCase):
     """
 
     def _fresh(self, sets: dict) -> dict:
-        from datetime import datetime, timezone  # noqa: PLC0415
+        from datetime import datetime, timezone
 
         return {"fetched_at": datetime.now(timezone.utc).isoformat(),
                 "commit": "abc", "bios_sets": sets}
 
     def test_mame_raises_and_writes_no_cache(self):
-        from scraper import mame_hash_scraper as m  # noqa: PLC0415
+        from scraper import mame_hash_scraper as m
 
         with tempfile.TemporaryDirectory() as tmp:
             cache = Path(tmp) / "mame-hashes.json"
@@ -1040,19 +1038,18 @@ class HashScraperRefusesAnEmptyRead(unittest.TestCase):
                     mock.patch.object(m, "_sparse_clone"), \
                     mock.patch.object(m, "_cleanup"), \
                     mock.patch.object(m, "_get_commit", return_value="abc"), \
-                    mock.patch.object(m, "parse_mame_source_tree", return_value={}):
-                with self.assertRaises(RuntimeError):
-                    m._fetch_hashes(force=True)
+                    mock.patch.object(m, "parse_mame_source_tree", return_value={}), self.assertRaises(RuntimeError):
+                m._fetch_hashes(force=True)
             self.assertFalse(cache.exists())
 
     def test_mame_does_not_serve_an_empty_cache(self):
-        from scraper import mame_hash_scraper as m  # noqa: PLC0415
+        from scraper import mame_hash_scraper as m
 
         self.assertTrue(m._is_stale(self._fresh({})))
         self.assertFalse(m._is_stale(self._fresh({"neogeo": {}})))
 
     def test_fbneo_raises_and_writes_no_cache(self):
-        from scraper import fbneo_hash_scraper as f  # noqa: PLC0415
+        from scraper import fbneo_hash_scraper as f
 
         with tempfile.TemporaryDirectory() as tmp:
             cache = Path(tmp) / "fbneo-hashes.json"
@@ -1060,13 +1057,12 @@ class HashScraperRefusesAnEmptyRead(unittest.TestCase):
                     mock.patch.object(f, "_sparse_clone"), \
                     mock.patch.object(f, "_cleanup"), \
                     mock.patch.object(f, "_extract_version", return_value=("v1.0.0.03", "abc")), \
-                    mock.patch.object(f, "parse_fbneo_source_tree", return_value={}):
-                with self.assertRaises(RuntimeError):
-                    f.fetch_and_cache(force=True)
+                    mock.patch.object(f, "parse_fbneo_source_tree", return_value={}), self.assertRaises(RuntimeError):
+                f.fetch_and_cache(force=True)
             self.assertFalse(cache.exists())
 
     def test_fbneo_does_not_serve_an_empty_cache(self):
-        from scraper import fbneo_hash_scraper as f  # noqa: PLC0415
+        from scraper import fbneo_hash_scraper as f
 
         with tempfile.TemporaryDirectory() as tmp:
             cache = Path(tmp) / "fbneo-hashes.json"
@@ -1083,7 +1079,7 @@ class EmptyScrapeWritesNothing(unittest.TestCase):
     the committed platform file stays as it was."""
 
     def _run(self, scraper_class, output: Path) -> int:
-        from scraper.base_scraper import scraper_cli  # noqa: PLC0415
+        from scraper.base_scraper import scraper_cli
 
         argv = ["scraper", "-o", str(output)]
         with mock.patch.object(sys, "argv", argv), \
@@ -1131,7 +1127,7 @@ class EmptyScrapeWritesNothing(unittest.TestCase):
         archive = RetroPiePackageList._archive(
             {"scriptmodules/supplementary/autostart.sh": 'rp_module_id="autostart"\n'}
         )
-        from scraper.retropie_scraper import Scraper  # noqa: PLC0415
+        from scraper.retropie_scraper import Scraper
 
         scraper = Scraper(url="https://codeload.github.com/RetroPie/RetroPie-Setup/tar.gz/" + "0" * 40)
         with self.assertRaises(ValueError):

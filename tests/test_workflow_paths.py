@@ -199,7 +199,7 @@ class DocumentedSteps(unittest.TestCase):
     def test_the_profiling_reference_names_every_profile_field(self):
         """built_by, source_branch, bios_mode, standalone_path and
         on_mismatch change what the tools do and no page named them."""
-        import json  # noqa: PLC0415
+        import json
 
         schema = json.loads((REPO_ROOT / "schemas/emulator.schema.json").read_text(encoding="utf-8"))
         item = schema["properties"]["files"]["items"]
@@ -277,7 +277,7 @@ class DocumentedSteps(unittest.TestCase):
         """The page listed pyyaml and mkdocs and left out jsonschema: a
         maintainer following it could not run the contract check."""
         sys.path.insert(0, str(SCRIPTS))
-        from check_freshness import parse_pip_pins  # noqa: PLC0415
+        from check_freshness import parse_pip_pins
 
         workflow = (REPO_ROOT / ".github/workflows/deploy-site.yml").read_text(encoding="utf-8")
         page = (REPO_ROOT / "wiki/release-process.md").read_text(encoding="utf-8")

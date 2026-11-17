@@ -250,7 +250,7 @@ class TheFrontendOffersWhatTheDeviceKeeps(unittest.TestCase):
 
 class TheCommittedListFollowsTheRules(unittest.TestCase):
     def test_the_handhelds_list_no_core_they_do_not_build(self):
-        import yaml  # noqa: PLC0415
+        import yaml
 
         targets = yaml.safe_load((REPO_ROOT / "platforms" / "targets" / "emuelec.yml")
                                  .read_text(encoding="utf-8"))["targets"]

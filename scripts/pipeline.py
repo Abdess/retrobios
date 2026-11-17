@@ -331,7 +331,7 @@ def _match_key(label: str) -> set[str]:
 def release_pack_keys(platforms_dir: str = "platforms") -> set[str]:
     """Comparable identities of the platforms --all builds a pack for: their
     registry ids and display names, normalized as _match_key does."""
-    from common import list_release_pack_platforms, load_platform_config  # noqa: PLC0415
+    from common import list_release_pack_platforms, load_platform_config
 
     keys: set[str] = set()
     for name in list_release_pack_platforms(platforms_dir):
@@ -446,9 +446,9 @@ def _tree_members(
     platform: str, platforms_dir: str, emulators_dir: str = "emulators",
 ) -> dict[str, int]:
     """Archive path -> size of every file the platform's data trees can add."""
-    import generate_pack  # noqa: PLC0415
-    from common import load_emulator_profiles, load_platform_config  # noqa: PLC0415
-    from packpaths import _flat  # noqa: PLC0415
+    import generate_pack
+    from common import load_emulator_profiles, load_platform_config
+    from packpaths import _flat
 
     config = load_platform_config(platform, platforms_dir)
     base_dest = config.get("base_destination", "")
@@ -488,8 +488,8 @@ def check_pack_destinations(
     set aside when its path and size are the cached file's and verify does
     not credit the path.
     """
-    import json  # noqa: PLC0415
-    import zipfile  # noqa: PLC0415
+    import json
+    import zipfile
 
     print(f"\n--- {step_title(STEP_LABELS['consistency'])}, destinations ---")
     try:
@@ -542,7 +542,7 @@ def emulator_variants(profiles: list[dict], full: bool) -> list[tuple[str, dict]
     sampled as check_narrowed_packs samples them unless *full*. A profile
     without a regional file has nothing --region could withdraw.
     """
-    import region as region_mod  # noqa: PLC0415
+    import region as region_mod
 
     regions = sorted({
         r for profile in profiles for fe in profile.get("files") or []
@@ -568,10 +568,10 @@ def check_emulator_packs(
     required-only rules are written twice, once per side, and only this
     comparison holds them together. No archive is written and no file read.
     """
-    import generate_pack  # noqa: PLC0415
-    import packresolve  # noqa: PLC0415
-    import verify  # noqa: PLC0415
-    from common import (  # noqa: PLC0415
+    import generate_pack
+    import packresolve
+    import verify
+    from common import (
         ProfileSelectionError,
         _norm_system_id,
         build_zip_contents_index,
@@ -690,8 +690,8 @@ def narrowed_variants(
     target, every system, --no-game-data and --required-only. Without
     *full*, regions, targets and systems are sampled (_matrix_coverage).
     """
-    import region as region_mod  # noqa: PLC0415
-    from common import list_available_targets  # noqa: PLC0415
+    import region as region_mod
+    from common import list_available_targets
 
     regions = sorted({
         r for entry in region_mod.platform_region_index(config, profiles).values()
@@ -739,10 +739,10 @@ def check_narrowed_packs(
     compares every value. NARROWINGS_NOT_COMPARED says why --source and
     --one-per-slot are not compared.
     """
-    import generate_pack  # noqa: PLC0415
-    import packresolve  # noqa: PLC0415
-    import verify  # noqa: PLC0415
-    from common import (  # noqa: PLC0415
+    import generate_pack
+    import packresolve
+    import verify
+    from common import (
         build_zip_contents_index,
         group_identical_platforms,
         list_registered_platforms,
@@ -851,9 +851,9 @@ def check_split_packs(
     RetroBat's 21 openmsx/ twins of openMSX/ files. Offline, as every
     comparison of this step.
     """
-    import generate_pack  # noqa: PLC0415
-    import packresolve  # noqa: PLC0415
-    from common import (  # noqa: PLC0415
+    import generate_pack
+    import packresolve
+    from common import (
         build_zip_contents_index,
         group_identical_platforms,
         list_registered_platforms,
@@ -993,7 +993,7 @@ def _refuse_offline_export_without_originals(
     """
     if not (args.offline and args.with_export):
         return
-    from exporter import discover_exporters  # noqa: PLC0415
+    from exporter import discover_exporters
 
     lacking = sorted(
         name for name, exporter in discover_exporters().items()

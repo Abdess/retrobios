@@ -86,8 +86,8 @@ def find_missing(config: dict, db: dict) -> list[dict]:
     checks them inside the zip and holds them, and saw none of the files
     the cores need that no platform lists.
     """
-    from nativemode import reads_file_contents  # noqa: PLC0415
-    from verify import Status, verify_platform  # noqa: PLC0415
+    from nativemode import reads_file_contents
+    from verify import Status, verify_platform
 
     result = verify_platform(config, db)
     hashed = reads_file_contents(config.get("verification_mode", "existence"))

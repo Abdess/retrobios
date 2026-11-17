@@ -13,6 +13,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import logging
 import os
@@ -51,9 +52,7 @@ def load_tracked_entries(
 
     Returns {decoded_zip_name: (key, source_url)}.
     """
-    try:
-        import yaml
-    except ImportError:
+    if importlib.util.find_spec("yaml") is None:
         print("Error: PyYAML required", file=sys.stderr)
         sys.exit(1)
     with open(registry_path) as f:

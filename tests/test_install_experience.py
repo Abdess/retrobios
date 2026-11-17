@@ -41,10 +41,10 @@ class _RangeHandler(http.server.BaseHTTPRequestHandler):
     ranges: list[str] = []
     fail_first: list[int] = []
 
-    def log_message(self, *args) -> None:  # noqa: D102
+    def log_message(self, *args) -> None:
         pass
 
-    def do_GET(self) -> None:  # noqa: N802, D102
+    def do_GET(self) -> None:
         if self.fail_first:
             code = self.fail_first.pop(0)
             self.send_response(code)
@@ -441,10 +441,10 @@ class _HeldHandler(http.server.BaseHTTPRequestHandler):
     manifest = b""
     release = threading.Event()
 
-    def log_message(self, *args) -> None:  # noqa: D102
+    def log_message(self, *args) -> None:
         pass
 
-    def do_GET(self) -> None:  # noqa: N802, D102
+    def do_GET(self) -> None:
         if self.path.endswith(".json"):
             body = self.manifest
         else:
@@ -465,8 +465,8 @@ class AStoppedRunCountsWhatLanded(unittest.TestCase):
 
     @unittest.skipIf(os.name == "nt", "SIGINT is sent the POSIX way")
     def test_only_the_written_file_is_counted(self):
-        import signal  # noqa: PLC0415
-        import time  # noqa: PLC0415
+        import signal
+        import time
 
         files = {name: name.encode() * 64 for name in ("first.bin", "second.bin", "third.bin")}
         manifest = {"manifest_version": 2, "platform": "retroarch", "files": [

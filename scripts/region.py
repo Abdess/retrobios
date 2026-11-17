@@ -125,7 +125,7 @@ def unknown_region_message(raw: str, aliases: dict[str, str], regions: frozenset
 
     `unknown region: 'uss'` left the user to read the source for `us`.
     """
-    import difflib  # noqa: PLC0415
+    import difflib
 
     spelled = raw.strip()
     close = difflib.get_close_matches(spelled.lower(), [*aliases, *regions], n=3, cutoff=0.5)

@@ -461,7 +461,7 @@ def _github_token_env() -> dict[str, str]:
     emudeck and retropie target scrapers hit the GitHub API. Without a token
     the unauthenticated rate limit (60/h) is burnt within a few platforms.
     """
-    from common import github_token  # noqa: PLC0415
+    from common import github_token
 
     env = os.environ.copy()
     token = github_token()

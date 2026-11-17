@@ -75,8 +75,8 @@ class TheTruthDiffReadsTheSameLayer(unittest.TestCase):
     """
 
     def test_a_curated_file_is_missing_from_the_platform(self):
-        import json  # noqa: PLC0415
-        import subprocess  # noqa: PLC0415
+        import json
+        import subprocess
 
         with tempfile.TemporaryDirectory(dir=str(REPO_ROOT / "tmp")) as tmp:
             root = Path(tmp)
@@ -110,7 +110,7 @@ class TheTruthDiffReadsTheSameLayer(unittest.TestCase):
 
     def test_every_truth_diff_caller_reads_the_native_layer(self):
         """The site's platform-vs-source table answers the same question."""
-        import re  # noqa: PLC0415
+        import re
 
         for path in sorted((REPO_ROOT / "scripts").glob("*.py")):
             text = path.read_text(encoding="utf-8")

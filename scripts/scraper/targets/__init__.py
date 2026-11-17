@@ -57,8 +57,8 @@ class BaseTargetScraper(ABC):
         """Write target data to YAML file."""
         try:
             import yaml
-        except ImportError:
-            raise ImportError("PyYAML required: pip install pyyaml")
+        except ImportError as exc:
+            raise ImportError("PyYAML required: pip install pyyaml") from exc
         from common import write_text_atomic
 
         write_text_atomic(

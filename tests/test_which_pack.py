@@ -30,8 +30,8 @@ class WhichPackRows(unittest.TestCase):
     def test_platform_rows_name_their_own_pack(self):
         """A row links its own get/ page, never another setup's and never a
         release asset: the asset URL dies with its tag."""
-        import generate_site  # noqa: PLC0415
-        import release_record  # noqa: PLC0415
+        import generate_site
+        import release_record
 
         record = release_record.load_advertised()
         page = generate_site.generate_which_pack()

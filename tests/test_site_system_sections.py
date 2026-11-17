@@ -310,8 +310,8 @@ class AnEntryListingSystemsIsFiledUnderEach(unittest.TestCase):
     under neither Arcade nor NEC PC-88, and kept on pages it does not serve."""
 
     def test_the_site_reads_the_common_rule(self):
-        import generate_site as gs  # noqa: PLC0415
-        from common import entry_system_ids  # noqa: PLC0415
+        import generate_site as gs
+        from common import entry_system_ids
 
         entry = {"name": "ym2608.zip", "systems": ["arcade", "pc80"]}
         self.assertEqual(gs._entry_systems("mame", entry), ["arcade", "pc80"])

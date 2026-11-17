@@ -359,7 +359,7 @@ class TitleLogoOnAPlate(unittest.TestCase):
     def test_a_setup_with_no_logo_gets_its_initials(self):
         # Every setup has a logo today: the fallback is read where it is
         # written, the tile's and the title's.
-        import sitemarkup  # noqa: PLC0415
+        import sitemarkup
 
         self.assertIn('data-initials="MM" aria-hidden="true"></span>', sitemarkup._tile_mark("MyMinUI", ""))
         component = _read(REPO_ROOT / "website" / "src" / "components" / "PageTitle.astro")

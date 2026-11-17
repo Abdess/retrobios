@@ -705,7 +705,7 @@ class Device:
         test.addCleanup(os.close, master)
         test.addCleanup(os.close, slave)
         termios.tcsetattr(slave, termios.TCSANOW, termios.tcgetattr(slave))
-        import fcntl  # noqa: PLC0415
+        import fcntl
         # Wide enough that no path in a message is folded.
         fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack("HHHH", 50, 250, 0, 0))
         self.master, self.slave = master, slave
@@ -1570,7 +1570,7 @@ class TheBatoceraPort(unittest.TestCase):
         device.tool("xterm", FAKE_TERMAPP + "")
         socket_dir = device.root / "x11"
         socket_dir.mkdir()
-        import socket as _socket  # noqa: PLC0415
+        import socket as _socket
         sock = _socket.socket(_socket.AF_UNIX)
         sock.bind(str(socket_dir / "X0"))
         self.addCleanup(sock.close)

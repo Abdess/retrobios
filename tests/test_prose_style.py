@@ -11,7 +11,6 @@ from __future__ import annotations
 import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
 
 import io
-import os
 import re
 import subprocess
 import tokenize
@@ -73,9 +72,7 @@ def _python_prose(source: str) -> str:
     parts: list[str] = []
     previous = tokenize.INDENT
     for token in tokenize.generate_tokens(io.StringIO(source).readline):
-        if token.type == tokenize.COMMENT:
-            parts.append(token.string)
-        elif token.type == tokenize.STRING and previous in (
+        if token.type == tokenize.COMMENT or token.type == tokenize.STRING and previous in (
             tokenize.INDENT, tokenize.NEWLINE, tokenize.NL, tokenize.DEDENT,
         ):
             parts.append(token.string)
@@ -117,16 +114,7 @@ def _yaml_prose(text: str) -> str:
 
 
 # Words a heading keeps capitalized: names of platforms, systems and programs.
-_HEADING_KEEP = set("""Batocera Recalbox Lakka Dolphin Redump Linux Windows Android Python Steam Deck
-macOS Termux Flatpak Switch Raspberry Pi Mega Drive Genesis Saturn Dreamcast Amiga Atari Sega
-Nintendo Sony Neo Geo Lynx Jaguar Commodore Apple Mac Spectrum Sinclair Amstrad MSX GameCube Wii
-Game Boy Advance Famicom Disk System Super Master PlayStation Vita Xbox Arcade English French
-Spanish I Lua Unity Qt Kodi Discord Pages Actions Docker Windows Mac Ubuntu Debian Arch
-SteamOS Chihiro NAOMI Triforce Lindbergh Model PinMAME ScummVM Dinothawr Cemu Citra Yuzu Ryujinx
-Mednafen Beetle Stella Hatari Caprice Vice Fuse Daphne Hypseus Singe Supermodel Flycast Redream
-DuckStation SwanStation Opera Gearsystem Picodrive Snes9x Nestopia Mesen Gambatte SameBoy
-mGBA melonDS DeSmuME Azahar Eden Sudachi Torzu Xemu Cxbx PCSX2 AetherSX2 NetherSX2 ARMSX2
-RPCS3 Vita3K Zinc Raine FBNeo FinalBurn Neo MAME Clrmamepro RomVault""".split())
+_HEADING_KEEP = set(["Batocera", "Recalbox", "Lakka", "Dolphin", "Redump", "Linux", "Windows", "Android", "Python", "Steam", "Deck", "macOS", "Termux", "Flatpak", "Switch", "Raspberry", "Pi", "Mega", "Drive", "Genesis", "Saturn", "Dreamcast", "Amiga", "Atari", "Sega", "Nintendo", "Sony", "Neo", "Geo", "Lynx", "Jaguar", "Commodore", "Apple", "Mac", "Spectrum", "Sinclair", "Amstrad", "MSX", "GameCube", "Wii", "Game", "Boy", "Advance", "Famicom", "Disk", "System", "Super", "Master", "PlayStation", "Vita", "Xbox", "Arcade", "English", "French", "Spanish", "I", "Lua", "Unity", "Qt", "Kodi", "Discord", "Pages", "Actions", "Docker", "Windows", "Mac", "Ubuntu", "Debian", "Arch", "SteamOS", "Chihiro", "NAOMI", "Triforce", "Lindbergh", "Model", "PinMAME", "ScummVM", "Dinothawr", "Cemu", "Citra", "Yuzu", "Ryujinx", "Mednafen", "Beetle", "Stella", "Hatari", "Caprice", "Vice", "Fuse", "Daphne", "Hypseus", "Singe", "Supermodel", "Flycast", "Redream", "DuckStation", "SwanStation", "Opera", "Gearsystem", "Picodrive", "Snes9x", "Nestopia", "Mesen", "Gambatte", "SameBoy", "mGBA", "melonDS", "DeSmuME", "Azahar", "Eden", "Sudachi", "Torzu", "Xemu", "Cxbx", "PCSX2", "AetherSX2", "NetherSX2", "ARMSX2", "RPCS3", "Vita3K", "Zinc", "Raine", "FBNeo", "FinalBurn", "Neo", "MAME", "Clrmamepro", "RomVault"])
 
 
 def _sentence_case(title: str) -> str:
@@ -462,12 +450,12 @@ class GeneratedSiteProse(unittest.TestCase):
     """The site pages carry strings no tracked file shows verbatim."""
 
     def test_generated_pages(self):
-        import sys  # noqa: PLC0415
+        import sys
 
         sys.path.insert(0, str(ROOT / "scripts"))
-        from generate_site import LOCAL_NOTE_DIRS  # noqa: PLC0415
+        from generate_site import LOCAL_NOTE_DIRS
 
-        from tests import sitepages  # noqa: PLC0415
+        from tests import sitepages
 
         pages = [p for p in sitepages.pages()
                  if not set(p.relative_to(sitepages.CONTENT).parts[:-1]) & set(LOCAL_NOTE_DIRS)]

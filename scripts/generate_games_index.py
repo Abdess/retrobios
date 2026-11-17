@@ -45,7 +45,6 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from common import (  # noqa: E402
-    list_registered_platforms,
     load_emulator_profiles,
     load_platform_config,
     native_layer,
@@ -584,8 +583,9 @@ def folder_systems(setups: dict[str, dict]) -> dict[str, list[str]]:
     return {name: sorted(systems) for name, systems in sorted(names.items())}
 
 
-def render(output: Path = OUTPUT, inputs: Inputs = Inputs()) -> tuple[dict[Path, str], dict]:
+def render(output: Path = OUTPUT, inputs: Inputs | None = None) -> tuple[dict[Path, str], dict]:
     """Every published file's text, keyed by its path, and the coverage."""
+    inputs = inputs or Inputs()
     resolver = SystemResolver.from_repo(inputs.emulators, inputs.platforms)
     profiles = Profiles(load_emulator_profiles(inputs.emulators), resolver)
     arcade = build_arcade(inputs.games / "arcade")

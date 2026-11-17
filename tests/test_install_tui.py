@@ -4996,7 +4996,7 @@ class Pty:
 class _SlowHandler(_QuietHandler):
     """Serves each file after a pause, so a test can stop a download midway."""
 
-    def do_GET(self) -> None:  # noqa: N802, D102
+    def do_GET(self) -> None:
         if self.path.startswith("/bios/"):
             time.sleep(0.6)
         super().do_GET()
@@ -5056,7 +5056,7 @@ class SaveDirectoryRepository(FakeRepository):
 
 def _app_card(test: unittest.TestCase, system: str) -> tuple[Path, Path]:
     """A card of system in the repository's tmp/, its root and BIOS folder."""
-    from test_install_app import make_card  # noqa: PLC0415
+    from test_install_app import make_card
 
     (REPO_ROOT / "tmp").mkdir(exist_ok=True)
     root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
@@ -5238,7 +5238,7 @@ class EndToEnd(unittest.TestCase):
 
 
     def card_repo(self, system: str) -> tuple[Path, Path]:
-        from test_install_app import AppRepository, make_card  # noqa: PLC0415
+        from test_install_app import AppRepository, make_card
 
         repo = self.repo(AppRepository)
         root = repo.root / "card"
@@ -7113,9 +7113,7 @@ class OneCardReading(unittest.TestCase):
         for before, after in zip(body, body[1:]):
             count = blank_before(after)
             with self.subTest(line=after.lineno):
-                if isinstance(after, definitions):
-                    self.assertEqual(count, 2)
-                elif isinstance(before, definitions):
+                if isinstance(after, definitions) or isinstance(before, definitions):
                     self.assertEqual(count, 2)
 
     def test_a_refusal_is_said_once_and_another_card_names_its_remedy(self):
@@ -7381,7 +7379,7 @@ class WhatEachScreenOffers(unittest.TestCase):
 
         def menu(_plat, files, *_rest, **_named):
             menus.append([entry["dest"] for entry in files])
-            return None
+            return
 
         with SaveDirectoryRepository() as repo:
             argv = ["install.py", "--platform", "retroarch", "--dest", str(repo.dest),
@@ -7581,7 +7579,7 @@ class _CardFixtures:
               regions: bool = True) -> tuple[Path, Path, dict]:
         """A list of plat's shape (the MinUI family records cores and regions,
         no system), the pack built from it and the files' payloads."""
-        from test_install_offline import GBA, JP, US  # noqa: PLC0415
+        from test_install_offline import GBA, JP, US
 
         payloads = {"Bios/MGBA/gba_bios.bin": (GBA, "nintendo-gba", "mgba", None),
                     "Bios/PS/scph5501.bin": (US, "sony-playstation", "pcsx_rearmed",
@@ -7604,7 +7602,7 @@ class _CardFixtures:
             return listing, None, {}
         sys.path.insert(0, str(REPO_ROOT / "scripts"))
         self.addCleanup(sys.path.remove, str(REPO_ROOT / "scripts"))
-        import generate_pack  # noqa: PLC0415
+        import generate_pack
 
         pack_list = {"files": [{"path": dest, "sha1": entry["sha1"], "size": entry["size"]}
                                for dest, entry in zip(payloads, files)]}
@@ -7846,7 +7844,7 @@ class _OutsideTextFindings:
         return out.getvalue() + err.getvalue() + events.getvalue()
 
     def test_a_pack_member_path_is_refused(self):
-        from test_install_offline import _pack, GBA  # noqa: PLC0415
+        from test_install_offline import _pack, GBA
 
         pack = _pack(self.root, "RetroArch_v1_BIOS_Pack.zip", {f"x{self.OSC}.bin": GBA})
         text = self.run_install(_args(platform="retroarch", dest=self.dest,
@@ -8356,7 +8354,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
         with mock.patch.object(install, "_ask", side_effect=["2", "q"]), \
                 contextlib.redirect_stdout(io.StringIO()) as out, \
                 self.assertRaises(SystemExit):
-            install._prompt_platform_choice([("retroarch", self.here)], other=lambda: [])
+            install._prompt_platform_choice([("retroarch", self.here)], other=list)
         self.assertIn("Type 1, o for another setup or folder, or q to quit.", out.getvalue())
         self.assertNotIn("1 to 1", out.getvalue())
 
@@ -9232,7 +9230,7 @@ class PacksWordingAndDocs(unittest.TestCase):
     def test_a_pack_records_the_systems_of_its_files(self):
         sys.path.insert(0, str(REPO_ROOT / "scripts"))
         self.addCleanup(sys.path.remove, str(REPO_ROOT / "scripts"))
-        import generate_pack  # noqa: PLC0415
+        import generate_pack
 
         install_list = {"files": [{"dest": "a.bin", "systems": ["3do"]},
                                   {"dest": "b/c.bin", "systems": []}],
@@ -9249,7 +9247,7 @@ class PacksWordingAndDocs(unittest.TestCase):
         self.assertIn("systems", schema["properties"]["files"]["items"]["properties"])
 
     def pack(self, systems: bool) -> Path:
-        from test_install_offline import GBA, US  # noqa: PLC0415
+        from test_install_offline import GBA, US
 
         members = {"scph5501.bin": US, "gba_bios.bin": GBA}
         listed = [{"path": path, "sha1": hashlib.sha1(data).hexdigest(),
@@ -9298,7 +9296,7 @@ class PacksWordingAndDocs(unittest.TestCase):
     def test_a_pack_cannot_write_escapes_through_its_system_names(self):
         """The titles and ids a pack
         records reached print() raw in the systems list."""
-        from test_install_offline import GBA, US  # noqa: PLC0415
+        from test_install_offline import GBA, US
 
         members = {"scph5501.bin": US, "gba_bios.bin": GBA}
         listed = [{"path": path, "sha1": hashlib.sha1(data).hexdigest(), "size": len(data),
@@ -9955,7 +9953,7 @@ class LineModeDecisions(unittest.TestCase):
         patcher, asked = self.ask("")
         with patcher, contextlib.redirect_stdout(io.StringIO()) as out:
             chosen = install._prompt_platform_choice(
-                found, labels={("retroarch", here): "RetroArch"}, other=lambda: [])
+                found, labels={("retroarch", here): "RetroArch"}, other=list)
         self.assertEqual(chosen, found)
         self.assertEqual(asked, ["> [Enter for RetroArch] "])
         self.assertIn("o) another setup or folder", out.getvalue())
@@ -10281,7 +10279,7 @@ class ScreenRowsAndFilters(unittest.TestCase):
 
     def test_a_folder_that_cannot_be_created_ends_on_an_error_and_a_summary(self):
         """Cannot create, then end 2 and nothing else."""
-        import subprocess  # noqa: PLC0415
+        import subprocess
 
         from test_install_offline import PAYLOAD, _offline_env, _pack
 
@@ -10604,7 +10602,7 @@ class CardNamesAndHelp(_CardFixtures, unittest.TestCase):
         is a row, about.info among them."""
         sys.path.insert(0, str(REPO_ROOT / "scripts"))
         self.addCleanup(sys.path.remove, str(REPO_ROOT / "scripts"))
-        import generate_installer_doc  # noqa: PLC0415
+        import generate_installer_doc
 
         page = (REPO_ROOT / "wiki" / "installer.md").read_text(encoding="utf-8")
         block = page[page.index("<!-- generated: card-markers -->"):
@@ -10910,7 +10908,7 @@ class MouseOnEveryScreen(unittest.TestCase):
 
     @staticmethod
     def twin(state: install.TuiState) -> install.TuiState:
-        import copy  # noqa: PLC0415
+        import copy
 
         return copy.deepcopy(state)
 
@@ -12830,7 +12828,7 @@ class TapsOnAPtySeeFirst(unittest.TestCase):
         term.close()
 
     def test_the_game_data_row_keeps_the_ticks_to_the_install(self):
-        from test_install_tui import GameDataRepository  # noqa: PLC0415
+        from test_install_tui import GameDataRepository
 
         repo = self.repo(GameDataRepository)
         term = self.start()
@@ -14682,7 +14680,7 @@ class ProvenCardsAndCounts(unittest.TestCase):
         where Install and Choose systems are, the second screen."""
         sys.path.insert(0, str(REPO_ROOT / "scripts"))
         self.addCleanup(sys.path.remove, str(REPO_ROOT / "scripts"))
-        import generate_site  # noqa: PLC0415
+        import generate_site
 
         words = " ".join(generate_site.first_screen_words())
         found, nothing = fresh_state(), install.TuiState(os_type="linux", home=HOME)
@@ -15096,7 +15094,7 @@ class CoresListAndFolderFailures(unittest.TestCase):
     def test_no_connection_leaves_the_loopback_nor_a_card_comes_in(self):
         """261 connections to GitHub left this module,
         and tests failed with an AmberELEC card in the reader."""
-        import socket  # noqa: PLC0415
+        import socket
 
         log = Path(os.environ["RETROBIOS_TEST_NETLOG"])
         before = log.read_text(encoding="utf-8")
@@ -15261,7 +15259,7 @@ class GamesEndToEnd(unittest.TestCase):
     """The real --tui on a card with games, against a loopback repository."""
 
     def test_the_plan_opens_on_the_games_and_installs_only_them(self):
-        import test_install_games as games  # noqa: PLC0415
+        import test_install_games as games
 
         card = games.Card()
         self.addCleanup(card.close)
@@ -16290,9 +16288,8 @@ class DeviceAndEmulatorReview(unittest.TestCase):
             opened.append(archive)
             return archive
 
-        with mock.patch.object(install.zipfile, "ZipFile", side_effect=tracked):
-            with self.assertRaises(ValueError):
-                install.PackSource([notpack])
+        with mock.patch.object(install.zipfile, "ZipFile", side_effect=tracked), self.assertRaises(ValueError):
+            install.PackSource([notpack])
         self.assertTrue(opened)
         self.assertTrue(all(archive.fp is None for archive in opened))
 

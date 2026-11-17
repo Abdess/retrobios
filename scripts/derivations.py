@@ -82,7 +82,7 @@ def crc32_combine(crc1: int, crc2: int, len2: int) -> int:
     return _gf2_times(_shift_operator(len2), crc1) ^ crc2
 
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def _byte_shift(power: int) -> tuple[int, ...]:
     """The operator for 2**power zero bytes appended, as zlib squares it:
     three squarings of the one-bit operator give one byte, and each power
@@ -95,7 +95,7 @@ def _byte_shift(power: int) -> tuple[int, ...]:
     return tuple(operator)
 
 
-@functools.lru_cache(maxsize=None)
+@functools.cache
 def _shift_operator(len2: int) -> tuple[int, ...]:
     """The linear map zlib applies to crc(A) for len2 bytes appended.
 

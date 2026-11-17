@@ -132,9 +132,8 @@ class TestCommandLine(unittest.TestCase):
         with mock.patch.object(sys, "argv", ["fileless_audit.py", *argv,
                                              "--emulators-dir", self.tmp.name]), \
                 mock.patch.object(fileless_audit, "audit", side_effect=fake), \
-                mock.patch("sys.stderr"), mock.patch("sys.stdout"):
-            with self.assertRaises(SystemExit) as caught:
-                fileless_audit.main()
+                mock.patch("sys.stderr"), mock.patch("sys.stdout"), self.assertRaises(SystemExit) as caught:
+            fileless_audit.main()
         return caught.exception.code, read
 
     def test_all_reads_only_the_profiles_nobody_answered(self):

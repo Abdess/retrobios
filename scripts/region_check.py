@@ -46,7 +46,7 @@ if sys.version_info < (3, 9):
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-import yaml  # noqa: E402
+import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
 CONTENT_FILE = ROOT / "tests" / "campaign" / "content.yml"
@@ -254,7 +254,7 @@ def content_file(item: dict, content_dir: Path) -> Path:
 
 def nightly_core(core: str) -> tuple[Path, str]:
     """The buildbot nightly of a core, downloaded once, and its URL."""
-    import zipfile  # noqa: PLC0415
+    import zipfile
 
     url = NIGHTLY.format(core=core)
     target = CORES / f"{core}_libretro.so"
@@ -277,7 +277,7 @@ def nightly_core(core: str) -> tuple[Path, str]:
 def pack_files(emulator: str, region: str, work: Path) -> dict[str, Path]:
     """The files generate_pack puts in the emulator's pack for one region,
     extracted, by their path in the pack."""
-    from ziptools import safe_extract_zip  # noqa: PLC0415
+    from ziptools import safe_extract_zip
 
     out_dir = work / "pack"
     subprocess.run([sys.executable, str(ROOT / "scripts" / "generate_pack.py"), "--emulator", emulator,
@@ -293,7 +293,7 @@ def pack_files(emulator: str, region: str, work: Path) -> dict[str, Path]:
 
 
 def local_resolver() -> Callable[[dict], Path | None]:
-    from common import load_database, resolve_local_file  # noqa: PLC0415
+    from common import load_database, resolve_local_file
 
     db = load_database(str(ROOT / "database.json"))
 
@@ -329,7 +329,7 @@ def probe_when_idle(argv: list[str], max_wait: float,
 
 
 def run(args: argparse.Namespace) -> int:
-    from common import load_emulator_profiles  # noqa: PLC0415
+    from common import load_emulator_profiles
 
     profile = load_emulator_profiles(str(ROOT / "emulators"))[args.emulator]
     entries = region_entries(profile, args.system)
@@ -373,8 +373,8 @@ def collect(root: Path = ROOT, stored_records: list | None = None) -> list[dict]
     """Every region outcome the records under measurements/ hold. A game
     listed under several systems (sega-megacd and mega-cd) is judged under
     the one whose profile ran it."""
-    from common import load_emulator_profiles  # noqa: PLC0415
-    from measurement_records import live, read_records  # noqa: PLC0415
+    from common import load_emulator_profiles
+    from measurement_records import live, read_records
 
     content: dict[str, list[tuple[str, dict]]] = {}
     for system, items in load_content(root / "tests" / "campaign" / "content.yml").items():

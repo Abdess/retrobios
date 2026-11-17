@@ -232,8 +232,8 @@ def line_menu() -> str:
     prints it for the RetroArch list (install/retroarch.json): the very
     function line mode runs, its questions answered here. The page carried
     a copy typed by hand, whose keys and counts drifted from the installer."""
-    import io  # noqa: PLC0415
-    from unittest import mock  # noqa: PLC0415
+    import io
+    from unittest import mock
 
     manifest = json.loads((ROOT / "install" / "retroarch.json").read_text(encoding="utf-8"))
     files = [*manifest["files"], *(manifest.get("case_variants") or [])]
@@ -284,7 +284,7 @@ class _ListHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args: object, **kwargs: object) -> None:
         super().__init__(*args, directory=str(ROOT), **kwargs)
 
-    def do_GET(self) -> None:  # noqa: N802
+    def do_GET(self) -> None:
         if not re.fullmatch(r"/install/[a-z0-9_-]+\.json", self.path):
             self.send_error(404)
             return
@@ -317,7 +317,7 @@ SMALL_LIST = {
 
 
 def write_small_list(path: Path) -> None:
-    import hashlib  # noqa: PLC0415
+    import hashlib
 
     files = []
     for dest, (data, systems, regions, cores) in SMALL_LIST.items():
@@ -339,9 +339,9 @@ def _child(spec: dict) -> int:
     data tree of a landed run reports its bytes written without fetching
     them, and a held run finds every file and tree in place. The counts,
     sizes and words are the installer's own."""
-    import concurrent.futures  # noqa: PLC0415
-    import socket  # noqa: PLC0415
-    from unittest import mock  # noqa: PLC0415
+    import concurrent.futures
+    import socket
+    from unittest import mock
 
     real_connect = socket.create_connection
 
@@ -382,7 +382,7 @@ def _child(spec: dict) -> int:
         patches += [
             mock.patch.object(_install, "detect_platforms",
                               lambda _os: [(spec["platform"], Path(spec["card"]))]),
-            mock.patch.object(_install, "_mounted_cards", lambda: []),
+            mock.patch.object(_install, "_mounted_cards", list),
         ]
     if spec.get("landed"):
         patches.append(mock.patch.object(_install, "_download_one", landed))

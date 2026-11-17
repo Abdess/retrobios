@@ -572,7 +572,7 @@ def hatari_libretro(sources: dict[str, Source]) -> list[Record]:
     guard = src.find(r'if \(core != "hatarib"\)', "hatarib guard")
     method = src.enclosing(guard.start())
     tos_img = src.find(
-        rf'string (\w+) = Path\.Combine\((\w+), "([^"]+)"\);', "hatarib tos.img path",
+        r'string (\w+) = Path\.Combine\((\w+), "([^"]+)"\);', "hatarib tos.img path",
         method[0], method[1],
     )
     own = src.find(

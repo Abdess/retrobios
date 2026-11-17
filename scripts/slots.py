@@ -201,7 +201,7 @@ def profile_claims(
     standalone_cores = standalone_cores or set()
     placement = None
     if config is not None:
-        from packextras import ExtraPlacement  # noqa: PLC0415
+        from packextras import ExtraPlacement
 
         placement = ExtraPlacement(config, base_dest, profiles)
     claims: list[Claim] = []
@@ -212,14 +212,14 @@ def profile_claims(
         # carries its scan candidates, never its named entries.
         if profile.get("bios_mode") == "agnostic":
             continue
-        for profile, is_standalone in platform_layouts(emu_name, profile, standalone_cores):
+        for layout, is_standalone in platform_layouts(emu_name, profile, standalone_cores):
             claims.extend(
                 _archive_claims(
-                    emu_name, profile, is_standalone, db, base_dest, placement,
+                    emu_name, layout, is_standalone, db, base_dest, placement,
                     zip_contents, data_dir_registry,
                 )
             )
-            for entry in profile.get("files") or []:
+            for entry in layout.get("files") or []:
                 if not isinstance(entry, dict):
                     continue
                 # The same rule as the gap report and the builder: an entry the
@@ -249,7 +249,7 @@ def profile_claims(
                         {
                             "profile": emu_name,
                             "system": entry.get("system"),
-                            "systems": entry_system_ids(entry, profile),
+                            "systems": entry_system_ids(entry, layout),
                         },
                         dest,
                     )
@@ -259,7 +259,7 @@ def profile_claims(
                 # The owner's own copy is the one the builder ships.
                 local, status = resolve_local_file(
                     {
-                        **with_archive_members(entry, profile.get("files") or []),
+                        **with_archive_members(entry, layout.get("files") or []),
                         "source_profile": emu_name,
                     },
                     db,
@@ -269,7 +269,7 @@ def profile_claims(
                 )
                 if status == "name_exact" and _size_the_code_reads(entry, local):
                     status = SIZE_EXACT
-                accepts = tuple(content_alternatives(entry, profile))
+                accepts = tuple(content_alternatives(entry, layout))
                 claims.append(
                     Claim(
                         origin="profile",
@@ -1038,7 +1038,7 @@ def main() -> int:
         "without it the run reports them and exits 0",
     )
     args = parser.parse_args()
-    from common import work_from_repo_root  # noqa: PLC0415
+    from common import work_from_repo_root
 
     work_from_repo_root(args, parser, ["db", "platforms_dir", "emulators_dir"])
 

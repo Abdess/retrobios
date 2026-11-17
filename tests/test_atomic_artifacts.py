@@ -180,7 +180,7 @@ class ScratchFilesGetThePlainMode(unittest.TestCase):
     def test_threads_reading_the_mode_leave_the_umask_alone(self):
         """mame_devices fetches on eight threads and every cache write reads
         the umask: unguarded, two readers interleaved and left it at 0."""
-        import threading  # noqa: PLC0415
+        import threading
 
         interval = sys.getswitchinterval()
         sys.setswitchinterval(1e-6)
@@ -210,9 +210,9 @@ class ScratchFilesGetThePlainMode(unittest.TestCase):
         self.assertEqual(offenders, [])
 
     def test_packs_and_their_manifest(self):
-        import zipfile  # noqa: PLC0415
+        import zipfile
 
-        import generate_pack  # noqa: PLC0415
+        import generate_pack
 
         pack = self.dir / "Pack.zip"
         with generate_pack._writing_pack(str(pack)) as zf:
@@ -230,7 +230,7 @@ class ScratchFilesGetThePlainMode(unittest.TestCase):
         copy_file_atomic is the one exception: copy2 gives the scratch the
         source file's own mode.
         """
-        import ast  # noqa: PLC0415
+        import ast
 
         def name_of(node: ast.AST) -> str | None:
             return node.id if isinstance(node, ast.Name) else None
@@ -317,8 +317,8 @@ class ATerminatedBuildLeavesNoScratch(unittest.TestCase):
     )
 
     def test_sigterm_removes_the_partial_pack(self):
-        import signal  # noqa: PLC0415
-        import subprocess  # noqa: PLC0415
+        import signal
+        import subprocess
 
         if not hasattr(signal, "SIGTERM") or os.name != "posix":
             self.skipTest("POSIX signals")

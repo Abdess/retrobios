@@ -21,7 +21,7 @@ import urllib.parse
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import upstream  # noqa: E402
+import upstream
 
 # Commits listed per page and the most pages walked: a data file older than
 # 2 000 commits on its own path is not one a platform list still pins.

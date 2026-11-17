@@ -303,13 +303,12 @@ def _download_and_extract(
         log.info("downloading %s", source_url)
 
         req = urllib.request.Request(source_url, headers={"User-Agent": USER_AGENT})
-        with urllib.request.urlopen(req, timeout=DOWNLOAD_TIMEOUT) as resp:
-            with open(tarball_path, "wb") as f:
-                while True:
-                    chunk = resp.read(65536)
-                    if not chunk:
-                        break
-                    f.write(chunk)
+        with urllib.request.urlopen(req, timeout=DOWNLOAD_TIMEOUT) as resp, open(tarball_path, "wb") as f:
+            while True:
+                chunk = resp.read(65536)
+                if not chunk:
+                    break
+                f.write(chunk)
         if measured is not None:
             measured(tarball_path.stat().st_size)
 
@@ -385,13 +384,12 @@ def _download_and_extract_zip(
         log.info("downloading %s", source_url)
 
         req = urllib.request.Request(source_url, headers={"User-Agent": USER_AGENT})
-        with urllib.request.urlopen(req, timeout=DOWNLOAD_TIMEOUT) as resp:
-            with open(zip_path, "wb") as f:
-                while True:
-                    chunk = resp.read(65536)
-                    if not chunk:
-                        break
-                    f.write(chunk)
+        with urllib.request.urlopen(req, timeout=DOWNLOAD_TIMEOUT) as resp, open(zip_path, "wb") as f:
+            while True:
+                chunk = resp.read(65536)
+                if not chunk:
+                    break
+                f.write(chunk)
         if measured is not None:
             measured(zip_path.stat().st_size)
 
@@ -652,7 +650,7 @@ def refresh_all(
         )
     if any(results.values()):
         # A cache the resolver indexed in this process has changed under it.
-        from common import forget_data_dir_index  # noqa: PLC0415
+        from common import forget_data_dir_index
 
         forget_data_dir_index()
     return results

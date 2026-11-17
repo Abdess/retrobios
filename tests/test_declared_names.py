@@ -30,7 +30,7 @@ class FlatDeclaredSet(unittest.TestCase):
         another that no alias joins: per system the ids never meet.
         nintendo-sgb and nintendo-super-game-boy were such a pair until
         SYSTEM_ALIASES joined them."""
-        import tempfile  # noqa: PLC0415
+        import tempfile
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             platforms = Path(tmp)

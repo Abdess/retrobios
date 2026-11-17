@@ -70,9 +70,9 @@ class OneWinnerRuleForEveryReader(unittest.TestCase):
     won in the report and lost in the pack. The rule takes no registry."""
 
     def test_the_rule_reads_no_data_directory(self):
-        import inspect  # noqa: PLC0415
+        import inspect
 
-        import generate_pack  # noqa: PLC0415
+        import generate_pack
 
         parameters = inspect.signature(generate_pack._preferred_entries).parameters
         self.assertFalse([name for name in parameters if "registry" in name])

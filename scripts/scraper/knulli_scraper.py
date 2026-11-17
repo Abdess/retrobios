@@ -94,9 +94,9 @@ class Scraper(BaseScraper):
 
     def submodule_revision(self) -> str:
         """The batocera.linux commit KNULLI's batocera submodule pins at the tag."""
-        import json  # noqa: PLC0415
+        import json
 
-        from .base_scraper import github_headers  # noqa: PLC0415
+        from .base_scraper import github_headers
 
         url = _SUBMODULE.format(path=BATOCERA_SUBMODULE, ref=self.tag)
         req = urllib.request.Request(url, headers=github_headers())

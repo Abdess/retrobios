@@ -284,7 +284,7 @@ def config_target(record: dict) -> tuple[str, list[str]]:
     if "." not in head or head.startswith("<"):
         # The file is the one the record installs, named by its path or,
         # when a variable spells the path, by the config file it cites.
-        from scraper.shell_launchers import config_ref, is_feature_ref, ref_path  # noqa: PLC0415
+        from scraper.shell_launchers import config_ref, is_feature_ref, ref_path
 
         installed = str((record.get("installs") or {}).get("path") or "").rsplit("/", 1)[-1]
         cited = [
@@ -392,7 +392,7 @@ def _file_matches(read_file: str, file: str, record: dict) -> bool:
     any file the launcher passes), a path, or the flag the launcher passes
     it with (amiberry's -f).
     """
-    from fnmatch import fnmatch  # noqa: PLC0415
+    from fnmatch import fnmatch
 
     spelled = read_file.rsplit("/", 1)[-1].casefold()
     if file and fnmatch(file.casefold(), spelled):
@@ -449,7 +449,7 @@ def config_evidence(
     values a menu offers: it goes in ``choices_from``, beside the code that
     writes the choice, and such a record needs (c) and (d) too.
     """
-    from scraper.shell_launchers import config_ref, is_feature_ref  # noqa: PLC0415
+    from scraper.shell_launchers import config_ref, is_feature_ref
 
     cited = config_ref(str(record.get("source_ref") or ""))
     choices = str(record.get("choices_from") or "")
@@ -503,13 +503,13 @@ _DEFAULT_PROFILES: dict[str, dict] | None = None
 
 def _profiles_or_repo(profiles: Mapping[str, dict] | None) -> Mapping[str, dict]:
     """The profiles given, else this repository's, read once."""
-    global _DEFAULT_PROFILES  # noqa: PLW0603
+    global _DEFAULT_PROFILES
     if profiles is not None:
         return profiles
     if _DEFAULT_PROFILES is None:
-        from pathlib import Path  # noqa: PLC0415
+        from pathlib import Path
 
-        from common import load_emulator_profiles  # noqa: PLC0415
+        from common import load_emulator_profiles
 
         _DEFAULT_PROFILES = load_emulator_profiles(
             str(Path(__file__).resolve().parent.parent / "emulators")
@@ -518,7 +518,7 @@ def _profiles_or_repo(profiles: Mapping[str, dict] | None) -> Mapping[str, dict]
 
 
 def _cites_config(record: dict) -> bool:
-    from scraper.shell_launchers import config_ref  # noqa: PLC0415
+    from scraper.shell_launchers import config_ref
 
     return bool(record.get("choices_from")) or bool(config_ref(str(record.get("source_ref") or "")))
 
@@ -887,7 +887,7 @@ def _roms_place(config: dict, path: str | None) -> Place | None:
     platform installs above its BIOS folder (AmberELEC), else the roms tree."""
     if path is None:
         return None
-    from common import ROMS_ROOT, outer_layout  # noqa: PLC0415
+    from common import ROMS_ROOT, outer_layout
 
     layout = outer_layout(config, ROMS_ROOT) or {}
     if "install_prefix" in layout:
@@ -903,7 +903,7 @@ def folder_in_configs(directory: str, config: dict) -> str | None:
     (``configs_root.path``): Batocera's /userdata/system/configs, where its
     generators start shadPS4 from configs/shadps4.
     """
-    from common import CONFIGS_ROOT  # noqa: PLC0415
+    from common import CONFIGS_ROOT
 
     return folder_in_root(directory, config, CONFIGS_ROOT)
 
@@ -915,7 +915,7 @@ def folder_in_roms(directory: str, config: dict) -> str | None:
     (``roms_root.path``): ROCKNIX's /storage/roms, which holds its BIOS
     folder and the folders its launchers run programs from.
     """
-    from common import ROMS_ROOT, outer_layout  # noqa: PLC0415
+    from common import ROMS_ROOT, outer_layout
 
     spelled = directory.strip().rstrip("/")
     for variable in ROMS_ROOT_VARIABLES:
@@ -929,7 +929,7 @@ def folder_in_roms(directory: str, config: dict) -> str | None:
 
 def folder_in_root(directory: str, config: dict, root: str) -> str | None:
     """A directory relative to an outer root's path, None outside it."""
-    from common import outer_layout  # noqa: PLC0415
+    from common import outer_layout
 
     roms = str((outer_layout(config, root) or {}).get("path") or "").rstrip("/")
     directory = directory.strip().rstrip("/")

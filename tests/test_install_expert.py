@@ -559,11 +559,10 @@ class ExpertRuns(Lists):
         install._validate_manifest(good, "retroarch")
         for broken in ([["../x.bin", LAYOUTS["standalone_layouts"]["duckstation"][0][1]]],
                        [["ds/x.bin", "0" * 40]]):
-            with self.subTest(layout=broken):
-                with self.assertRaises(ValueError):
-                    install._check_standalone_layouts(
-                        {**LAYOUTS, "standalone_layouts": {"duckstation": broken}},
-                        LIST, "retroarch")
+            with self.subTest(layout=broken), self.assertRaises(ValueError):
+                install._check_standalone_layouts(
+                    {**LAYOUTS, "standalone_layouts": {"duckstation": broken}},
+                    LIST, "retroarch")
         with self.assertRaises(ValueError):
             install._check_standalone_layouts({**LAYOUTS, "standalone_layouts": {}},
                                               LIST, "retroarch")

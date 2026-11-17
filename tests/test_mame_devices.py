@@ -1014,9 +1014,8 @@ class Cli(unittest.TestCase):
         from unittest import mock
 
         with mock.patch.object(sys, "argv", ["x", "--devices"]), \
-                mock.patch("sys.stderr", new=io.StringIO()):
-            with self.assertRaises(SystemExit) as raised:
-                main()
+                mock.patch("sys.stderr", new=io.StringIO()), self.assertRaises(SystemExit) as raised:
+            main()
         self.assertEqual(raised.exception.code, 2)
 
 

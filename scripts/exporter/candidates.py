@@ -46,10 +46,7 @@ def _declared_hashes(entry: dict) -> dict[str, set[str]]:
 def _accepts(accepted: set[str], declared: dict[str, set[str]]) -> bool:
     """True when the hashes a profile entry accepts, the members of its
     archive included, hold one the platform entry declares."""
-    for values in declared.values():
-        if values & accepted:
-            return True
-    return False
+    return any(values & accepted for values in declared.values())
 
 
 def _contradicts(profile_entry: dict, declared: dict[str, set[str]]) -> bool:

@@ -1551,9 +1551,8 @@ class AbsentConstructStopsTheScrape(unittest.TestCase):
     def test_each_extractor_raises_on_an_empty_source(self):
         empty = {path: rl.Source(path, "") for path in rl.SOURCE_FILES}
         for extractor in rl.EXTRACTORS:
-            with self.subTest(extractor=extractor.__name__):
-                with self.assertRaises(rl.LauncherPatternMissing):
-                    extractor(empty)
+            with self.subTest(extractor=extractor.__name__), self.assertRaises(rl.LauncherPatternMissing):
+                extractor(empty)
 
     def test_chain_without_fallback_is_not_a_search(self):
         single = ARES.split("        if (!File.Exists(bios_japan))")[0] + "    }\n"
@@ -1581,7 +1580,7 @@ class Helpers(unittest.TestCase):
         self.assertEqual(src.lines(*src.block_at(0)), (2, 4))
 
     def test_a_rescrape_reads_the_pinned_commit(self):
-        from scraper import retrobat_scraper as rs  # noqa: PLC0415
+        from scraper import retrobat_scraper as rs
 
         pin = "ca486005f598551600d04a33b3156a5d764368d6"
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as scratch:

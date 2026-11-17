@@ -226,7 +226,7 @@ def ecdsa_verify_sha256(
     h = hashlib.sha256(message).digest()
     e = int.from_bytes(h, "big")
     # Truncate to bit length of n
-    if 256 > _N_BITLEN:
+    if _N_BITLEN < 256:
         e >>= 256 - _N_BITLEN
 
     # w = s^(-1) mod n

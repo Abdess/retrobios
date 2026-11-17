@@ -116,7 +116,7 @@ def _config_records_without_evidence(path: Path, document: object) -> list[str]:
     """
     if not isinstance(document, dict):
         return []
-    from scraper.shell_launchers import config_ref, is_feature_ref  # noqa: PLC0415
+    from scraper.shell_launchers import config_ref, is_feature_ref
 
     out: list[str] = []
     for index, record in enumerate(document.get("launchers") or []):
@@ -213,9 +213,7 @@ def _group_requirement_split(path: Path, document: object) -> list[str]:
 
 
 _CODE_SUFFIXES = frozenset(
-    "c cc cpp cxx c++ h hh hpp hxx inc inl ipp m mm mjs cjs js jsx ts tsx py cs java kt "
-    "go rs lua pas pp asm s sh bash zsh ps1 bat cmd vbs swift d zig nim qml qc rb pl php "
-    "scala ml hs dart vue ino z80 smali".split()
+    ["c", "cc", "cpp", "cxx", "c++", "h", "hh", "hpp", "hxx", "inc", "inl", "ipp", "m", "mm", "mjs", "cjs", "js", "jsx", "ts", "tsx", "py", "cs", "java", "kt", "go", "rs", "lua", "pas", "pp", "asm", "s", "sh", "bash", "zsh", "ps1", "bat", "cmd", "vbs", "swift", "d", "zig", "nim", "qml", "qc", "rb", "pl", "php", "scala", "ml", "hs", "dart", "vue", "ino", "z80", "smali"]
 )
 _CODE_FILE = re.compile(r"(?<=[\w+-])\.([A-Za-z0-9+]+)\b")
 # A compiled image: a part that names one has to say where in it the file
@@ -788,7 +786,7 @@ def _semantic_standalone_checks(path: Path, layouts: object) -> list[str]:
 
 def _event_schema_errors() -> list[str]:
     """install-events.schema.json is EVENT_KEYS written out, and a valid schema."""
-    import generate_event_schema  # noqa: PLC0415
+    import generate_event_schema
 
     path = ROOT / "schemas" / generate_event_schema.OUTPUT.name
     label = path.relative_to(ROOT).as_posix()
@@ -828,7 +826,7 @@ def _format_errors() -> list[str]:
 def _measurement_errors(root: Path | None = None) -> list[str]:
     """Every record line under measurements/, against its schema and the
     rules measurement_records.read_records applies."""
-    import measurement_records as mr  # noqa: PLC0415
+    import measurement_records as mr
 
     root = root or ROOT
     validator = _validator("core-probe-record.schema.json")

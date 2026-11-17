@@ -65,9 +65,9 @@ class TheMemberIndexIsCachedByContent(unittest.TestCase):
     archive members again, about 23 s a step."""
 
     def test_a_second_process_reads_the_cache(self):
-        from unittest import mock  # noqa: PLC0415
+        from unittest import mock
 
-        import ziptools  # noqa: PLC0415
+        import ziptools
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             archive = Path(tmp) / "set.zip"

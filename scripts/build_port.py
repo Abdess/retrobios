@@ -141,12 +141,12 @@ def release_pack_labels(root: Path = REPO_ROOT) -> dict[str, str]:
     refuses a pack whose name does not spell the platform, so a platform
     outside these groups has no pack to copy, whatever its file list.
     """
-    from common import (  # noqa: PLC0415
+    from common import (
         group_identical_platforms,
         list_release_pack_platforms,
         load_platform_config,
     )
-    from generate_pack import _name_part, _platform_pack_stem  # noqa: PLC0415
+    from generate_pack import _name_part, _platform_pack_stem
 
     platforms_dir = str(root / "platforms")
     pool = list_release_pack_platforms(platforms_dir)
@@ -178,7 +178,7 @@ def build_archive(name: str, output: Path, root: Path = REPO_ROOT) -> Path:
         )
     # The packs' member writer: imported here, as it loads the whole
     # pack builder, which a caller reading ARCHIVES does not need.
-    from generate_pack import _add_pack_member  # noqa: PLC0415
+    from generate_pack import _add_pack_member
 
     members = archive_members(name, root)
     output.parent.mkdir(parents=True, exist_ok=True)

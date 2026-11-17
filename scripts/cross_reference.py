@@ -1187,9 +1187,7 @@ class _NameHolder:
         base = name.rsplit("/", 1)[-1]
         found: tuple[str, bool] | None = None
         stem = suffixed_stem(base)
-        if base in self.by_name or any(map(self._entry_held, self.exact.get(base, []))):
-            found = (base, True)
-        elif stem is not None and any(map(self._entry_held, self.exact.get(stem, []))):
+        if base in self.by_name or any(map(self._entry_held, self.exact.get(base, []))) or stem is not None and any(map(self._entry_held, self.exact.get(stem, []))):
             found = (base, True)
         else:
             path, _status = resolve_local_file(
@@ -1554,7 +1552,7 @@ def main() -> None:
         "--list-emulators", action="store_true", help="List available emulators"
     )
     args = parser.parse_args()
-    from common import work_from_repo_root  # noqa: PLC0415
+    from common import work_from_repo_root
 
     work_from_repo_root(args, parser, ["emulators_dir", "platforms_dir", "db"])
     if args.list_emulators:

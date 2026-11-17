@@ -68,7 +68,7 @@ _MODULE_FLAGS_RE = re.compile(r'rp_module_flags\s*=\s*["\']([^"\']*)["\']')
 
 def _fetch(url: str, accept: str = "text/plain") -> str:
     headers = {"User-Agent": "retrobios-scraper/1.0", "Accept": accept}
-    from common import github_token  # noqa: PLC0415
+    from common import github_token
 
     token = github_token()
     if token and "api.github.com" in url:
