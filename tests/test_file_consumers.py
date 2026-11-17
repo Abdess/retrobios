@@ -8,19 +8,17 @@ homonym tests/test_game_data_homonyms.py forbids the resolver to serve.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from cross_reference import FileConsumers, entry_target
+from generate_site import generate_system_page
 
-from cross_reference import FileConsumers, entry_target  # noqa: E402
-from generate_site import generate_system_page  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 _TMP = tempfile.TemporaryDirectory()
 _ROOT = Path(_TMP.name)

@@ -8,10 +8,9 @@ is checked against the tag itself.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
-import sys
 import unittest
 from collections.abc import Callable
 from pathlib import Path
@@ -19,11 +18,8 @@ from unittest import mock
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-from scraper import recalbox_scraper  # noqa: E402
-from scraper.recalbox_launchers import (  # noqa: E402
+from scraper import recalbox_scraper
+from scraper.recalbox_launchers import (
     ALL_CORES,
     AMIBERRY_CONFIG,
     AMIBERRY_GLOBAL,
@@ -62,7 +58,9 @@ from scraper.recalbox_launchers import (  # noqa: E402
     xroar,
 )
 
-from tests.test_launchers import placed  # noqa: E402
+from tests.test_launchers import placed
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 # recalboxFiles.py:1-12, 173-174
 FILES_MODULE_BLOCKS = {

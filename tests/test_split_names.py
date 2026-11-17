@@ -10,22 +10,18 @@ SHA256SUMS.txt.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import os
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-import common  # noqa: E402
-from common import build_zip_contents_index, compute_hashes  # noqa: E402
-from generate_pack import generate_split_packs  # noqa: E402
+import common
+from common import build_zip_contents_index, compute_hashes
+from generate_pack import generate_split_packs
 
 
 class SplitPartNames(unittest.TestCase):

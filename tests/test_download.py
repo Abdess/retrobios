@@ -9,7 +9,7 @@ checksum of each layout and the staging location.
 """
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import functools
@@ -30,6 +30,8 @@ import unittest
 import zipfile
 from pathlib import Path
 
+import split_pack
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 _spec = importlib.util.spec_from_file_location(
     "download", REPO_ROOT / "scripts" / "download.py"
@@ -41,9 +43,6 @@ sys.modules["download"] = download
 _spec.loader.exec_module(download)
 
 SHELL = REPO_ROOT / "scripts" / "download.sh"
-
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-import split_pack  # noqa: E402
 
 # A slice of a real release: two whole packs, three split, and the checksums.
 RELEASE_ASSETS = [

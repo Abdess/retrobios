@@ -6,19 +6,17 @@ the repository, five on the site, under two different titles.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import re
-import sys
 import unittest
 from pathlib import Path
 from unittest import mock
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import generate_readme
+import generate_site
 
-import generate_readme  # noqa: E402
-import generate_site  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def _normalized(text: str) -> str:

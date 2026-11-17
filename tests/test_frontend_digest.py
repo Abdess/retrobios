@@ -8,11 +8,10 @@ the pack and the manifest while verify, comparing md5, called it OK.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import os
-import sys
 import tempfile
 import unittest
 import zipfile
@@ -20,11 +19,11 @@ from pathlib import Path
 
 import yaml
 
+from common import load_platform_config
+from generate_pack import generate_manifest, generate_pack
+from verify import verify_platform
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-from common import load_platform_config  # noqa: E402
-from generate_pack import generate_manifest, generate_pack  # noqa: E402
-from verify import verify_platform  # noqa: E402
 
 
 class FrontendDigestDecides(unittest.TestCase):

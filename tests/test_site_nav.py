@@ -21,12 +21,11 @@ are built, the pages and the site.
 """
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
 import re
 import struct
-import sys
 import tempfile
 import unittest
 from html.parser import HTMLParser
@@ -34,16 +33,17 @@ from pathlib import Path
 import ast
 from html import unescape
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-import generate_site  # noqa: E402
-import sitestarlight  # noqa: E402
-from common import (  # noqa: E402
+import generate_site
+import sitestarlight
+from common import (
     list_registered_platforms,
     load_platform_config,
     load_platform_registry,
 )
+
+from siteguides import DEVICE_GROUPS
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 DIST = REPO_ROOT / "website" / "dist"
 ROUTE = REPO_ROOT / "website" / "src" / "routeData.ts"
@@ -71,8 +71,6 @@ def _targets(value: object) -> set[str]:
     return set().union(*(_targets(v) for v in value.values()))
 def _present(nav: list) -> set[str]:
     return {t for t in _targets(nav) if not t.startswith("http")}
-
-from siteguides import DEVICE_GROUPS  # noqa: E402
 
 
 def _index_anchors(markdown: str) -> set[str]:

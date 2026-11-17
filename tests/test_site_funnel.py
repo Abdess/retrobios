@@ -7,22 +7,20 @@ reader two levels deeper without saying so.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import re
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import generate_site
+from tests import sitepages
+from common import list_registered_platforms, load_platform_config, load_platform_registry
+from siteguides import DEVICE_GROUPS, GROUP_ANCHORS, GUIDES
 
-import generate_site  # noqa: E402
-from tests import sitepages  # noqa: E402
-from common import list_registered_platforms, load_platform_config, load_platform_registry  # noqa: E402
-from siteguides import DEVICE_GROUPS, GROUP_ANCHORS, GUIDES  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 DOCS = sitepages.CONTENT
 ORDER = list(generate_site.LEVELS)

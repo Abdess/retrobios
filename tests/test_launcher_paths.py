@@ -10,19 +10,15 @@ extractor writes.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import textwrap
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-from launchers import handed_directories, standalone_bindings  # noqa: E402
-from scraper import retrobat_launchers as rl  # noqa: E402
-from scraper.batocera_launchers import (  # noqa: E402
+from launchers import handed_directories, standalone_bindings
+from scraper import retrobat_launchers as rl
+from scraper.batocera_launchers import (
     GENERATORS,
     IMPORTER,
     PATHS_MODULE,
@@ -31,6 +27,8 @@ from scraper.batocera_launchers import (  # noqa: E402
     patched_paths,
     working_directories,
 )
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 PATCH = "package/batocera/emulators/citron/002-adjust-paths.patch"
 PATCH_TEXT = textwrap.dedent("""\

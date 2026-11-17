@@ -8,7 +8,7 @@ menu) is not exercised.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import io
@@ -23,13 +23,10 @@ import zipfile
 from pathlib import Path
 from unittest import mock
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT))
-sys.path.insert(0, str(REPO_ROOT / "tests"))
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import install
+from tests.test_install_selection import FakeRepository
 
-import install  # noqa: E402
-from test_install_selection import FakeRepository  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 INDEX = REPO_ROOT / "install" / "launchers" / "index.json"
 

@@ -11,17 +11,13 @@ delete on the critical path and is why these tests exist.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-import sitewrite  # noqa: E402
+import sitewrite
 
 BODY = "# Title\n\nSome prose.\n\n*Generated on 2026-01-01T00:00:00Z*\n"
 FRONT = (

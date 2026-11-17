@@ -8,7 +8,7 @@ test fails if either hands the index the whole profile set again.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import re
 import unittest
@@ -57,10 +57,8 @@ class ContentFoundLabelsTakeTheirRegionSlot(unittest.TestCase):
 
     def test_an_alternative_dump_passes_under_the_label(self):
         import hashlib
-        import sys
         import tempfile
 
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         from validation import _build_validation_index, check_file_validation
 
         with tempfile.TemporaryDirectory() as tmp:
@@ -94,12 +92,10 @@ class GearcolecoWarnsOnAnUnknownRevision(unittest.TestCase):
     928-935 at be1a3716): another OS-7 revision of 8 KiB runs."""
 
     def test_another_revision_passes(self):
-        import sys
         import tempfile
 
         import yaml
 
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         from validation import _build_validation_index, check_file_validation
 
         profile = yaml.safe_load(

@@ -12,17 +12,13 @@ naomi.zip took the place of MAME's.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import textwrap
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-from common import (  # noqa: E402
+from common import (
     entry_launch_systems,
     load_emulator_profiles,
     load_platform_config,
@@ -32,13 +28,15 @@ from common import (  # noqa: E402
     standalone_set,
     system_file_index,
 )
-from launchers import (  # noqa: E402
+from launchers import (
     SEARCHED_FILES,
     bound_path,
     handed_directories,
     normalize_handle,
     standalone_bindings,
 )
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def link(emulator: str, search_dir: str, passes_to: str, **fields: object) -> dict:

@@ -8,26 +8,25 @@ against HEAD.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import copy
 import html
+import importlib.util
 import json
 import os
 import re
 import shutil
 import sqlite3
 import subprocess
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import measurement_records as mr
+import sitemeasurements as sm
 
-import measurement_records as mr  # noqa: E402
-import sitemeasurements as sm  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 REPO_URL = "https://github.com/Abdess/retrobios"
 COMMIT = "e" * 40
@@ -300,7 +299,9 @@ class ReadAndIndex(Workspace):
         tables = [row[0] for row in connection.execute(
             "SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY rowid")]
         self.assertEqual(tuple(tables), sm.TABLES)
-        count = lambda table: connection.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]  # noqa: E731
+        def count(table: str) -> int:
+            return connection.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
+
         records = [s.record for s in mr.read_records(self.tree)]
         self.assertEqual(count("runs"), len(records))
         self.assertEqual(count("checks"), sum(1 for r in records if r.get("check")))
@@ -373,9 +374,7 @@ class ReadAndIndex(Workspace):
         self.assertTrue(list(Draft202012Validator(schema).iter_errors(record)))
 
     def test_a_version_4_record_needs_its_verdicts(self) -> None:
-        try:
-            from jsonschema import Draft202012Validator  # noqa: F401
-        except ImportError:
+        if importlib.util.find_spec("jsonschema") is None:
             self.skipTest("jsonschema is not installed")
         import validate_schemas
 

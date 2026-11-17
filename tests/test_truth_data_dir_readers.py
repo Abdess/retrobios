@@ -9,21 +9,18 @@ revision, and hash_conflict did not see LRPS2's value.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import os
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-sys.path.insert(0, str(REPO_ROOT / "scripts" / "exporter"))
+from exporter.baseline import checked_hashes
+from truth import generate_platform_truth
 
-from exporter.baseline import checked_hashes  # noqa: E402
-from truth import generate_platform_truth  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 GAME_INDEX = "pcsx2/resources/GameIndex.yaml"
 DECLARED = b"the revision armsx2 declares"

@@ -7,12 +7,11 @@ until some unrelated file moved.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import ast
 import fnmatch
 import re
-import sys
 import unittest
 from pathlib import Path
 
@@ -276,7 +275,6 @@ class DocumentedSteps(unittest.TestCase):
     def test_the_release_page_names_every_installed_package(self):
         """The page listed pyyaml and mkdocs and left out jsonschema: a
         maintainer following it could not run the contract check."""
-        sys.path.insert(0, str(SCRIPTS))
         from check_freshness import parse_pip_pins
 
         workflow = (REPO_ROOT / ".github/workflows/deploy-site.yml").read_text(encoding="utf-8")

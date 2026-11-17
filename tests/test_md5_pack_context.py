@@ -8,7 +8,7 @@ the bare file names under a pack called Standalone.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
 import subprocess
@@ -75,7 +75,6 @@ class SystemAndEmulatorPacksKeepTheirNames(unittest.TestCase):
 
         import yaml
 
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         import common
         import generate_db
         import generate_pack as gp

@@ -8,7 +8,7 @@ index, published by scripts/generate_games_index.py.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import functools
@@ -30,11 +30,10 @@ import zlib
 from pathlib import Path
 from unittest import mock
 
+import install
+
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT))
-
-import install  # noqa: E402
 
 TMP_ROOT = REPO_ROOT / "tmp" / "tests"
 TMP_ROOT.mkdir(parents=True, exist_ok=True)

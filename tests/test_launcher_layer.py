@@ -8,18 +8,15 @@ and a fixed path the launcher passes (Batocera's x16emu shape).
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import inspect
 import os
 import shutil
-import sys
 import tempfile
 import unittest
 import zipfile
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 
 import yaml
 

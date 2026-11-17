@@ -9,7 +9,7 @@ tests read what it wrote and run it.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import configparser
 import email.parser
@@ -23,10 +23,9 @@ import unittest
 import zipfile
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import build_pypi
 
-import build_pypi  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 MODULE_FILES = {"retrobios/__init__.py", "retrobios/__main__.py", "retrobios/install.py"}
 

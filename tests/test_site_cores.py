@@ -7,23 +7,21 @@ where its pack is built from 321.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import re
-import sys
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-import generate_site  # noqa: E402
-from common import (  # noqa: E402
+import generate_site
+from common import (
     list_registered_platforms,
     load_emulator_profiles,
     load_platform_config,
     resolve_platform_cores,
 )
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 class SiteCoreCounts(unittest.TestCase):

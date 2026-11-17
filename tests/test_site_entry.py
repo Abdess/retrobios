@@ -32,28 +32,25 @@ Linux handheld rows sent the reader to a menu.
 """
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
 import re
-import sys
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-sys.path.insert(0, str(REPO_ROOT))
+import generate_readme
+import generate_site
+import release_record
+import siteguides
+import sitemarkup
+from common import load_platform_config, load_platform_registry
+from tests import sitepages
 
-import generate_readme  # noqa: E402
-import generate_site  # noqa: E402
-import release_record  # noqa: E402
-import siteguides  # noqa: E402
-import sitemarkup  # noqa: E402
-from common import load_platform_config, load_platform_registry  # noqa: E402
-from tests import sitepages  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 REGISTRY = load_platform_registry(str(REPO_ROOT / "platforms"))

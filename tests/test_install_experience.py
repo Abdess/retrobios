@@ -7,7 +7,7 @@ honours Retry-After, and large files that resume where they stopped.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import errno
@@ -25,12 +25,10 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT))
-sys.path.insert(0, str(REPO_ROOT / "tests"))
+import install
+from tests.test_install_selection import FakeRepository
 
-import install  # noqa: E402
-from test_install_selection import FakeRepository  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 PAYLOAD = bytes(range(256)) * 400  # 102400 bytes
 
@@ -199,7 +197,6 @@ class ProgramsAreMarked(unittest.TestCase):
     the git mode cannot, hundreds of MAME archives carrying an execute bit."""
 
     def test_header_decides(self):
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         import generate_pack
 
         with tempfile.TemporaryDirectory() as tmp:
@@ -227,7 +224,6 @@ class ManifestHashesMatchTheScan(unittest.TestCase):
     file holds, the same wrong value in two runs."""
 
     def test_a_contradicted_hash_is_refused(self):
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         import generate_pack
 
         with tempfile.TemporaryDirectory() as tmp:
@@ -245,7 +241,6 @@ class ManifestHashesMatchTheScan(unittest.TestCase):
         """The retries went through the hash cache and got the first, wrong
         value back: one read of the file, then a refusal a second read would
         have avoided."""
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         import generate_pack
         import hashing
 

@@ -10,23 +10,21 @@ console folders, so the ids to name are the platforms' and the profiles'.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
-import sys
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-import siterender  # noqa: E402
-from common import (  # noqa: E402
+import siterender
+from common import (
     list_registered_platforms,
     load_emulator_profiles,
     load_platform_config,
 )
-from generate_site import _group_by_manufacturer  # noqa: E402
+from generate_site import _group_by_manufacturer
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 def _profile_system_ids(profiles: dict[str, dict]) -> set[str]:

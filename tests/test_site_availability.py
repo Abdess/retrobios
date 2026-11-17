@@ -8,19 +8,17 @@ held across the site while the gaps page listed them as known absences.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import unittest
 from pathlib import Path
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from common import load_database
+from generate_site import _availability_check, _file_badges
 
-from common import load_database  # noqa: E402
-from generate_site import _availability_check, _file_badges  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 SHA1 = "a" * 40
 DB = {

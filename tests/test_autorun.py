@@ -7,7 +7,7 @@ a function returning canned CI runs.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import io
@@ -23,13 +23,12 @@ import unittest.mock
 from pathlib import Path
 from types import MappingProxyType
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import autorun as ar
+import bios_integrity as bib
+import cleanup_disk as cd
+import sync_release_assets as sra
 
-import autorun as ar  # noqa: E402
-import bios_integrity as bib  # noqa: E402
-import cleanup_disk as cd  # noqa: E402
-import sync_release_assets as sra  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 PY = "python"
 _ENV_KEYS = ("GIT_CONFIG_GLOBAL", "GIT_CONFIG_NOSYSTEM")

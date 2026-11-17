@@ -9,11 +9,10 @@ empty JSON document.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import io
 import json
-import sys
 import tempfile
 import threading
 import unittest
@@ -21,11 +20,10 @@ import zipfile
 from pathlib import Path
 from unittest import mock
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import refresh_data_dirs as rdd
+from generate_pack import _data_directory_members
 
-import refresh_data_dirs as rdd  # noqa: E402
-from generate_pack import _data_directory_members  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 def _zip_bytes(files: dict[str, bytes]) -> bytes:

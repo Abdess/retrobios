@@ -8,7 +8,7 @@ out on RetroBat, EmuDeck and RetroDECK.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
 import os
@@ -18,10 +18,9 @@ import sys
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from truth import generate_platform_truth
 
-from truth import generate_platform_truth  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 def _names(truth: dict) -> set[str]:

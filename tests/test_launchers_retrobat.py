@@ -8,19 +8,17 @@ the fixture's own lines, and a construct that is gone must stop the scrape.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import tempfile
 import textwrap
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from scraper import retrobat_launchers as rl
+from scraper.retrobat_scraper import launcher_revision
 
-from scraper import retrobat_launchers as rl  # noqa: E402
-from scraper.retrobat_scraper import launcher_revision  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 G = rl.GENERATORS
 

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
 import re
@@ -11,12 +11,11 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from validate_site import validate_site
+
 ROOT = Path(__file__).resolve().parent.parent
 TMP_ROOT = ROOT / "tmp" / "tests"
 TMP_ROOT.mkdir(parents=True, exist_ok=True)
-sys.path.insert(0, str(ROOT / "scripts"))
-
-from validate_site import validate_site  # noqa: E402
 
 
 def _page(title: str, description: str, body: str = "") -> str:

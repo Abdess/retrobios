@@ -8,24 +8,22 @@ needs no Python change, and a mistake stops the build with its name.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import ast
 import re
 import shutil
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import generate_site
+import siteguides
+from siteguides import GUIDES, GuideError, load_guides
 
-import generate_site  # noqa: E402
-import siteguides  # noqa: E402
-from siteguides import GUIDES, GuideError, load_guides  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 GUIDES_FILE = REPO_ROOT / "platforms" / "_guides.yml"
 WIKI = REPO_ROOT / "wiki"

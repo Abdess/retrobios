@@ -7,16 +7,14 @@ names, while the split packs, built per system, carried them.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from generate_pack import _extras_for_systems
 
-from generate_pack import _extras_for_systems  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 class SystemExtras(unittest.TestCase):

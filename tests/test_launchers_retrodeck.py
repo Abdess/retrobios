@@ -8,19 +8,17 @@ cites. A construct that is gone or unknown must stop the scrape.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import textwrap
 import unittest
 from pathlib import Path
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from scraper import retrodeck_launchers as rd
 
-from scraper import retrodeck_launchers as rd  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def at(first_line: int, text: str) -> str:

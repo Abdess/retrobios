@@ -15,23 +15,21 @@ path each entry comes from.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import hashlib
 import json
 import os
 import re
-import sys
 import unittest
 import zipfile
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
+import common
+from nativemode import reads_file_contents
 
-import common  # noqa: E402
-from nativemode import reads_file_contents  # noqa: E402
+ROOT = Path(__file__).resolve().parent.parent
 
 
 def _declared_digests(entry: dict) -> dict[str, set[str]]:

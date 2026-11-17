@@ -30,10 +30,9 @@ three times before the first file.
 """
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import re
-import sys
 import types
 import unittest
 from pathlib import Path
@@ -41,14 +40,13 @@ from unittest import mock
 import zipfile
 import json
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import generate_site as gs
+import siterender
+from cross_reference import FileConsumers
+import make_og_cards
+from sitestarlight import toc_slug
 
-import generate_site as gs  # noqa: E402
-import siterender  # noqa: E402
-from cross_reference import FileConsumers  # noqa: E402
-import make_og_cards  # noqa: E402
-from sitestarlight import toc_slug  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 DIST = REPO_ROOT / "website" / "dist"

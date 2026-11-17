@@ -6,7 +6,7 @@ plus recipes/archives.json, without a copy of that archive from elsewhere.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import json
@@ -18,13 +18,12 @@ import zipfile
 from pathlib import Path
 from unittest import mock
 
+import archive_build
+from torrentzip import build_torrentzip
+
 ROOT = Path(__file__).resolve().parent.parent
 TMP_ROOT = ROOT / "tmp" / "tests"
 TMP_ROOT.mkdir(parents=True, exist_ok=True)
-sys.path.insert(0, str(ROOT / "scripts"))
-
-import archive_build  # noqa: E402
-from torrentzip import build_torrentzip  # noqa: E402
 
 ROM_A = b"first rom payload" * 50
 ROM_B = b"second rom payload" * 40

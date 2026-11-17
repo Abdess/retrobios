@@ -9,17 +9,15 @@ the Batocera BIOS folder.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import unittest
 from pathlib import Path
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from packextras import _companion_extensions, _companions
 
-from packextras import _companion_extensions, _companions  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 class Companions(unittest.TestCase):

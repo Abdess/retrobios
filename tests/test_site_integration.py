@@ -9,12 +9,11 @@ Node's compile cache into /tmp.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import glob
 import json
 import re
-import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -22,13 +21,12 @@ from unittest import mock
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import check_freshness
+import generate_site as gs
+import sitediagrams
+import siterender
 
-import check_freshness  # noqa: E402
-import generate_site as gs  # noqa: E402
-import sitediagrams  # noqa: E402
-import siterender  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 DIST = REPO_ROOT / "website" / "dist"
 

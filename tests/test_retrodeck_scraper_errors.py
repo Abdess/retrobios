@@ -7,20 +7,15 @@ PS2 BIOS and the pcsx2 standalone core, exit code 0.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import io
 import json
-import sys
 import unittest
 import urllib.error
-from pathlib import Path
 from unittest import mock
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT))
-
-from scripts.scraper.retrodeck_scraper import Scraper  # noqa: E402
+from scripts.scraper.retrodeck_scraper import Scraper
 
 TREE = {"tree": [{"path": "pcsx2", "type": "tree"}, {"path": "ppsspp", "type": "tree"}]}
 

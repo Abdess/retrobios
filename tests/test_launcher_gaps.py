@@ -10,7 +10,7 @@ two emulators, and a name held under another casing.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import hashlib
@@ -24,8 +24,6 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 
 import yaml
 

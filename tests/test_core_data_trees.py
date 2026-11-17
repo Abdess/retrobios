@@ -10,19 +10,17 @@ reader now gets the tree, or the profile says its package installs it.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import os
-import sys
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import common
+import generate_pack as builder
+from validation import deliverable, read_from_system_dir
 
-import common  # noqa: E402
-import generate_pack as builder  # noqa: E402
-from validation import deliverable, read_from_system_dir  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 PROFILES = {
     "demo": {

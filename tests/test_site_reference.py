@@ -31,7 +31,7 @@ it has not been generated.
 """
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import csv
 import io
@@ -51,25 +51,24 @@ import zipfile
 import runpy
 import urllib.error
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-import generate_site  # noqa: E402
-import sitewanted  # noqa: E402
-import siterender  # noqa: E402
-from common import (  # noqa: E402
+import generate_site
+import sitewanted
+import siterender
+from common import (
     list_registered_platforms,
     load_emulator_profiles,
     load_platform_config,
     list_release_pack_platforms,
 )
-from exporter.baseline import HASH_FIELDS, _hash_values  # noqa: E402
-from exporter.candidates import EntryCategories  # noqa: E402
-from sitesources import launcher_ref_markdown, list_source  # noqa: E402
-import check_platform_folder  # noqa: E402
-import sitesources  # noqa: E402
-import release_record  # noqa: E402
-import upstream  # noqa: E402
+from exporter.baseline import HASH_FIELDS, _hash_values
+from exporter.candidates import EntryCategories
+from sitesources import launcher_ref_markdown, list_source
+import check_platform_folder
+import sitesources
+import release_record
+import upstream
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 PLATFORMS = str(REPO_ROOT / "platforms")
@@ -522,7 +521,9 @@ class AFolderCheckAgreesWithTheVerifier(unittest.TestCase):
         (root / "plain.bin").write_bytes(b"plain")
         (root / "wrong.bin").write_bytes(b"not it")
         (root / "nohash.bin").write_bytes(b"x")
-        md5 = lambda data: hashlib.md5(data).hexdigest()  # noqa: E731
+        def md5(data: bytes) -> str:
+            return hashlib.md5(data).hexdigest()
+
         contract = {"verification_mode": "md5", "systems": {"s": {"files": [
             {"name": "bbcb.zip", "destination": "bbcb.zip", "md5": md5(member),
              "zipped_file": "basic1.rom"},

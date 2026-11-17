@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import io
@@ -10,8 +10,6 @@ import os
 import sys
 import unittest
 from pathlib import Path
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 
 import common
 import region
@@ -475,7 +473,6 @@ class TestFallbackGroups(unittest.TestCase):
         )
 
     def test_the_readme_names_a_slot_as_a_reader_does(self):
-        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
         from packreadme import _group_label
 
         self.assertEqual(_group_label("PicoDrive:variant:megacd"), "megacd (PicoDrive)")
@@ -697,7 +694,6 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
         return tmp, root, db, config
 
     def test_the_report_withdraws_what_the_builder_withdraws(self):
-        sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
         import common
         import generate_pack as builder
         import verify as reporter
@@ -741,7 +737,6 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
         """A missing platform file is grouped and withdrawn under --region, but a
         missing core file was never grouped and stayed "required missing"
         for a region the request excludes."""
-        sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
         import common
         import verify as reporter
 
@@ -771,7 +766,6 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
     def test_the_report_names_the_fallback_groups(self):
         """The pack README lists the systems kept whole because nothing
         answers the request. verify said all OK and named none."""
-        sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
         import common
         import verify as reporter
 

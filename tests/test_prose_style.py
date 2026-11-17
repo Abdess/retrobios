@@ -8,7 +8,7 @@ not write them. This module names every place one comes back.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import io
 import re
@@ -456,9 +456,6 @@ class GeneratedSiteProse(unittest.TestCase):
     """The site pages carry strings no tracked file shows verbatim."""
 
     def test_generated_pages(self):
-        import sys
-
-        sys.path.insert(0, str(ROOT / "scripts"))
         from generate_site import LOCAL_NOTE_DIRS
 
         from tests import sitepages

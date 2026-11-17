@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import http.client
 import os
-import sys
 import tempfile
 import socket
 import unittest
@@ -15,8 +14,6 @@ from unittest import mock
 import urllib.error
 import urllib.request
 from pathlib import Path
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 
 import upstream
 from upstream import make_repo, parse_repo, raw_url

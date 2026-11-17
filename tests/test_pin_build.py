@@ -8,18 +8,16 @@ file, and check_freshness reads it again where the platform now stands.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import check_freshness as cf
 
-import check_freshness as cf  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 RECALBOX = "https://gitlab.com/recalbox/recalbox"
 

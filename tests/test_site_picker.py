@@ -9,19 +9,17 @@ list the page shows is not what the command it prints installs.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import importlib.util
 import json
 import random
 import re
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 _spec = importlib.util.spec_from_file_location("install", REPO_ROOT / "install.py")
 install = importlib.util.module_from_spec(_spec)

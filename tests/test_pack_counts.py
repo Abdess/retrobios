@@ -10,7 +10,7 @@ installer fetches and leaves out the data directories a pack also carries.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import io
@@ -25,23 +25,20 @@ from unittest import mock
 import yaml
 
 try:
-    import jsonschema  # noqa: F401
+    import jsonschema
 except ImportError:
-    HAS_JSONSCHEMA = False
-else:
-    HAS_JSONSCHEMA = True
+    jsonschema = None
+import common
+import generate_db
+import generate_pack as builder
+import generate_readme
+import generate_site
+import release_notes
+import release_record
+import split_pack
 
+HAS_JSONSCHEMA = jsonschema is not None
 REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-import common  # noqa: E402
-import generate_db  # noqa: E402
-import generate_pack as builder  # noqa: E402
-import generate_readme  # noqa: E402
-import generate_site  # noqa: E402
-import release_notes  # noqa: E402
-import release_record  # noqa: E402
-import split_pack  # noqa: E402
 
 PROFILE = """\
 emulator: Demo

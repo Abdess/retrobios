@@ -9,7 +9,7 @@ installs it).
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import argparse
 import contextlib
@@ -40,16 +40,14 @@ import zipfile
 from pathlib import Path, PurePosixPath, PureWindowsPath
 from unittest import mock
 
+import install
+from tests.test_install_app import make_card
+from tests.test_install_selection import FakeRepository, _QuietHandler
+from tests.netguard import module_guard
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 # install.py runs on 3.8, the scripts it is compared with need 3.9.
 BUILDER_FLOOR = (3, 9)
-sys.path.insert(0, str(REPO_ROOT))
-sys.path.insert(0, str(REPO_ROOT / "tests"))
-
-import install  # noqa: E402
-from test_install_app import make_card  # noqa: E402
-from test_install_selection import FakeRepository, _QuietHandler  # noqa: E402
-from netguard import module_guard  # noqa: E402
 
 # No connection off the loopback and no card of the host reaches a test, in
 # this process or one it starts: 261 connections to
@@ -3373,21 +3371,19 @@ class AReadErrorIsNotAClosedWindow(unittest.TestCase):
         import pty
 
         master, slave = pty.openpty()
-        screen = open(os.dup(slave), "w", encoding="utf-8")  # noqa: SIM115
-        terminal = mock.Mock(fd=slave, stdout=screen)
         try:
-            card = OSError(errno.EIO, "Input/output error", "/media/card/bios/x.bin")
-            self.assertFalse(install._closed_terminal(card, terminal))
-            self.assertFalse(install._closed_terminal(
-                OSError(errno.ENOENT, "No such file"), terminal))
-            os.close(master)
-            master = -1
-            self.assertTrue(install._closed_terminal(card, terminal))
-            self.assertTrue(install._closed_terminal(termios.error(errno.EIO, "gone"),
-                                                     terminal))
+            with open(os.dup(slave), "w", encoding="utf-8") as screen:
+                terminal = mock.Mock(fd=slave, stdout=screen)
+                card = OSError(errno.EIO, "Input/output error", "/media/card/bios/x.bin")
+                self.assertFalse(install._closed_terminal(card, terminal))
+                self.assertFalse(install._closed_terminal(
+                    OSError(errno.ENOENT, "No such file"), terminal))
+                os.close(master)
+                master = -1
+                self.assertTrue(install._closed_terminal(card, terminal))
+                self.assertTrue(install._closed_terminal(termios.error(errno.EIO, "gone"),
+                                                         terminal))
         finally:
-            with contextlib.suppress(OSError):
-                screen.close()
             os.close(slave)
             if master >= 0:
                 os.close(master)
@@ -5076,7 +5072,7 @@ class SaveDirectoryRepository(FakeRepository):
 
 def _app_card(test: unittest.TestCase, system: str) -> tuple[Path, Path]:
     """A card of system in the repository's tmp/, its root and BIOS folder."""
-    from test_install_app import make_card
+    from tests.test_install_app import make_card
 
     (REPO_ROOT / "tmp").mkdir(exist_ok=True)
     root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
@@ -5258,7 +5254,7 @@ class EndToEnd(unittest.TestCase):
 
 
     def card_repo(self, system: str) -> tuple[Path, Path]:
-        from test_install_app import AppRepository, make_card
+        from tests.test_install_app import AppRepository, make_card
 
         repo = self.repo(AppRepository)
         root = repo.root / "card"
@@ -7599,7 +7595,7 @@ class _CardFixtures:
               regions: bool = True) -> tuple[Path, Path, dict]:
         """A list of plat's shape (the MinUI family records cores and regions,
         no system), the pack built from it and the files' payloads."""
-        from test_install_offline import GBA, JP, US
+        from tests.test_install_offline import GBA, JP, US
 
         payloads = {"Bios/MGBA/gba_bios.bin": (GBA, "nintendo-gba", "mgba", None),
                     "Bios/PS/scph5501.bin": (US, "sony-playstation", "pcsx_rearmed",
@@ -7620,8 +7616,6 @@ class _CardFixtures:
         if sys.version_info < BUILDER_FLOOR:
             # generate_pack.py's context managers need Python 3.9.
             return listing, None, {}
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
-        self.addCleanup(sys.path.remove, str(REPO_ROOT / "scripts"))
         import generate_pack
 
         pack_list = {"files": [{"path": dest, "sha1": entry["sha1"], "size": entry["size"]}
@@ -7864,7 +7858,7 @@ class _OutsideTextFindings:
         return out.getvalue() + err.getvalue() + events.getvalue()
 
     def test_a_pack_member_path_is_refused(self):
-        from test_install_offline import _pack, GBA
+        from tests.test_install_offline import _pack, GBA
 
         pack = _pack(self.root, "RetroArch_v1_BIOS_Pack.zip", {f"x{self.OSC}.bin": GBA})
         text = self.run_install(_args(platform="retroarch", dest=self.dest,
@@ -8461,7 +8455,7 @@ class LineModeAndScreenDecideAlike(_LineModeFindings, _OutsideTextFindings,
     def test_a_pack_gets_the_menu_and_its_folder_named(self):
         """No menu and no folder before the copy, the pack's list
         recording no system."""
-        from test_install_offline import _pack, PAYLOAD
+        from tests.test_install_offline import _pack, PAYLOAD
 
         downloads = self.root / "downloads"
         downloads.mkdir()
@@ -9251,8 +9245,6 @@ class PacksWordingAndDocs(unittest.TestCase):
     @unittest.skipIf(sys.version_info < BUILDER_FLOOR,
                      "generate_pack.py's context managers need Python 3.9")
     def test_a_pack_records_the_systems_of_its_files(self):
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
-        self.addCleanup(sys.path.remove, str(REPO_ROOT / "scripts"))
         import generate_pack
 
         install_list = {"files": [{"dest": "a.bin", "systems": ["3do"]},
@@ -9270,7 +9262,7 @@ class PacksWordingAndDocs(unittest.TestCase):
         self.assertIn("systems", schema["properties"]["files"]["items"]["properties"])
 
     def pack(self, systems: bool) -> Path:
-        from test_install_offline import GBA, US
+        from tests.test_install_offline import GBA, US
 
         members = {"scph5501.bin": US, "gba_bios.bin": GBA}
         listed = [{"path": path, "sha1": hashlib.sha1(data).hexdigest(),
@@ -9319,7 +9311,7 @@ class PacksWordingAndDocs(unittest.TestCase):
     def test_a_pack_cannot_write_escapes_through_its_system_names(self):
         """The titles and ids a pack
         records reached print() raw in the systems list."""
-        from test_install_offline import GBA, US
+        from tests.test_install_offline import GBA, US
 
         members = {"scph5501.bin": US, "gba_bios.bin": GBA}
         listed = [{"path": path, "sha1": hashlib.sha1(data).hexdigest(), "size": len(data),
@@ -10307,7 +10299,7 @@ class ScreenRowsAndFilters(unittest.TestCase):
         """Cannot create, then end 2 and nothing else."""
         import subprocess
 
-        from test_install_offline import PAYLOAD, _offline_env, _pack
+        from tests.test_install_offline import PAYLOAD, _offline_env, _pack
 
         if os.name == "nt" or os.geteuid() == 0:
             self.skipTest("a folder that refuses writes is POSIX, and root writes anyway")
@@ -10626,8 +10618,6 @@ class CardNamesAndHelp(_CardFixtures, unittest.TestCase):
         """The table left out the
         SHARE drives. It is generated: every card rule and SHARE drive file
         is a row, about.info among them."""
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
-        self.addCleanup(sys.path.remove, str(REPO_ROOT / "scripts"))
         import generate_installer_doc
 
         page = (REPO_ROOT / "wiki" / "installer.md").read_text(encoding="utf-8")
@@ -11257,22 +11247,20 @@ class MouseOnAPty(unittest.TestCase):
         master, slave = os.openpty()
         self.addCleanup(os.close, master)
         self.addCleanup(os.close, slave)
-        given = open(slave, encoding="utf-8", closefd=False)  # noqa: SIM115
-        shown = open(slave, "w", encoding="utf-8", closefd=False)  # noqa: SIM115
-        self.addCleanup(given.close)
-        self.addCleanup(shown.close)
-        terminal = install._TuiTerminal(given, shown)
-        terminal.mouse_allowed = True
-        terminal.enter()
-        terminal.set_mouse(True)
-        problems = install._tui_cleanup(terminal, [], {}, fresh_state())
-        self.assertEqual(problems, [])
-        raw = b""
-        while select.select([master], [], [], 0.2)[0]:
-            raw += os.read(master, 65536)
-        for mode in (b"1000", b"1006"):
-            self.assertGreater(raw.rfind(b"\x1b[?" + mode + b"l"),
-                               raw.rfind(b"\x1b[?" + mode + b"h"))
+        with open(slave, encoding="utf-8", closefd=False) as given, \
+                open(slave, "w", encoding="utf-8", closefd=False) as shown:
+            terminal = install._TuiTerminal(given, shown)
+            terminal.mouse_allowed = True
+            terminal.enter()
+            terminal.set_mouse(True)
+            problems = install._tui_cleanup(terminal, [], {}, fresh_state())
+            self.assertEqual(problems, [])
+            raw = b""
+            while select.select([master], [], [], 0.2)[0]:
+                raw += os.read(master, 65536)
+            for mode in (b"1000", b"1006"):
+                self.assertGreater(raw.rfind(b"\x1b[?" + mode + b"l"),
+                                   raw.rfind(b"\x1b[?" + mode + b"h"))
 
 
 def _painted_roles(text: str, style: str = "", colour: bool = True) -> list[tuple[str, str]]:
@@ -12854,7 +12842,7 @@ class TapsOnAPtySeeFirst(unittest.TestCase):
         term.close()
 
     def test_the_game_data_row_keeps_the_ticks_to_the_install(self):
-        from test_install_tui import GameDataRepository
+        from tests.test_install_tui import GameDataRepository
 
         repo = self.repo(GameDataRepository)
         term = self.start()
@@ -14704,8 +14692,6 @@ class ProvenCardsAndCounts(unittest.TestCase):
     def test_which_pack_names_the_first_screen(self):
         """Which-pack said the command opens a screen
         where Install and Choose systems are, the second screen."""
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
-        self.addCleanup(sys.path.remove, str(REPO_ROOT / "scripts"))
         import generate_site
 
         words = " ".join(generate_site.first_screen_words())
@@ -15285,7 +15271,7 @@ class GamesEndToEnd(unittest.TestCase):
     """The real --tui on a card with games, against a loopback repository."""
 
     def test_the_plan_opens_on_the_games_and_installs_only_them(self):
-        import test_install_games as games
+        from tests import test_install_games as games
 
         card = games.Card()
         self.addCleanup(card.close)
@@ -16177,7 +16163,6 @@ class EmulatorChoiceMatchesTheEmulatorPack(unittest.TestCase):
         if sys.version_info < BUILDER_FLOOR:
             # The builder's floor: install.py alone keeps 3.8.
             raise unittest.SkipTest("generate_pack.py needs Python 3.9 or newer")
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         import generate_pack as gp
         from common import build_zip_contents_index
 

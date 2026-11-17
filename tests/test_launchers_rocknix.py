@@ -9,21 +9,19 @@ configs differ, and a construct that is gone must stop the scrape.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import textwrap
 import unittest
 from pathlib import Path
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from scraper import rocknix_launchers as rl
+from scraper.rocknix_scraper import launcher_revision
+from scraper.shell_launchers import LauncherPatternMissing, RepoTree
 
-from scraper import rocknix_launchers as rl  # noqa: E402
-from scraper.rocknix_scraper import launcher_revision  # noqa: E402
-from scraper.shell_launchers import LauncherPatternMissing, RepoTree  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 SA = rl.STANDALONE
 

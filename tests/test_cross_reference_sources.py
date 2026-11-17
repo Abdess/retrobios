@@ -9,22 +9,20 @@ a directory called ROM).
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-from cross_reference import (  # noqa: E402
+from cross_reference import (
     _build_supplemental_index,
     cross_reference,
     entry_source,
     print_report,
 )
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def _index(**over) -> dict:

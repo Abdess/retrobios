@@ -7,10 +7,9 @@ and in no part (4507 of RetroArch's 5430).
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
-import sys
 import tempfile
 import unittest
 import zipfile
@@ -18,11 +17,10 @@ from pathlib import Path
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from common import build_zip_contents_index, compute_hashes, load_emulator_profiles
+from generate_pack import PackRecord, generate_pack, generate_split_packs
 
-from common import build_zip_contents_index, compute_hashes, load_emulator_profiles  # noqa: E402
-from generate_pack import PackRecord, generate_pack, generate_split_packs  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 class SplitPartsCoverTheExtras(unittest.TestCase):

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import subprocess
 import unittest
@@ -74,9 +74,6 @@ class SharedGroupsAddNoSecondSpelling(unittest.TestCase):
     and verify counted one more required file."""
 
     def test_no_group_entry_respells_a_declared_destination(self) -> None:
-        import sys
-
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         from common import (
             list_registered_platforms,
             load_emulator_profiles,
@@ -120,9 +117,6 @@ class Np2kaiRhythmSamplesAreTwoSets(unittest.TestCase):
     from the profile shipped one spelling and reported both OK."""
 
     def test_each_spelling_is_its_own_entry(self):
-        import sys
-
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
         from common import load_emulator_profiles
 
         files = load_emulator_profiles(str(REPO_ROOT / "emulators"))["np2kai"]["files"]

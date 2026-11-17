@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import ast
 import contextlib
@@ -24,15 +24,9 @@ from unittest import mock
 import yaml
 
 try:
-    import jsonschema  # noqa: F401
+    import jsonschema
 except ImportError:
-    HAS_JSONSCHEMA = False
-else:
-    HAS_JSONSCHEMA = True
-
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
-
+    jsonschema = None
 import install
 from scripts import pipeline, region, region_audit
 from scripts.common import resolve_local_file, safe_extract_zip
@@ -42,6 +36,7 @@ from scripts.generate_pack import (
     verify_pack_against_platform,
 )
 
+HAS_JSONSCHEMA = jsonschema is not None
 ROOT = Path(__file__).resolve().parent.parent
 TMP_ROOT = ROOT / "tmp" / "tests"
 TMP_ROOT.mkdir(parents=True, exist_ok=True)
@@ -1003,7 +998,6 @@ class FaqRegressions(unittest.TestCase):
         # Typed by hand, the table and the prose under it kept MAME 0.160
         # and FinalBurn Neo 1.0.0.2, versions no source at the pins states,
         # and the test holding them to the profiles kept the errors in step.
-        sys.path.insert(0, str(ROOT / "scripts"))
         import generate_site
         from common import load_emulator_profiles
 
@@ -3200,7 +3194,6 @@ class ACheckThatCannotAnswerDoesNotPass(unittest.TestCase):
     def test_an_unreachable_buildbot_is_not_a_fresh_verdict(self):
         """Every HEAD unanswered printed "16 unknown" and exited 0, so the
         online pipeline printed check_buildbot OK."""
-        sys.path.insert(0, str(ROOT / "scripts"))
         import check_buildbot_system as cbs
 
         registry = str(ROOT / "platforms" / "_data_dirs.yml")
@@ -3306,7 +3299,6 @@ class ContributorsSurviveAFailedRequest(unittest.TestCase):
     def _block(self, text: str):
         import tempfile
 
-        sys.path.insert(0, str(ROOT / "scripts"))
         from generate_readme import _existing_contributor_block
 
         with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False) as handle:
@@ -3335,7 +3327,6 @@ class ContributorsSurviveAFailedRequest(unittest.TestCase):
         self.assertEqual(self._block("# Title\n\n## Other\n\ntext\n"), [])
 
     def test_an_unreadable_file_yields_nothing(self):
-        sys.path.insert(0, str(ROOT / "scripts"))
         from generate_readme import _existing_contributor_block
 
         self.assertEqual(_existing_contributor_block("/nonexistent/README.md"), [])
@@ -3862,7 +3853,6 @@ class HashMergeBackupsAreNotSources(unittest.TestCase):
     """
 
     def test_the_validator_skips_a_backup(self):
-        sys.path.insert(0, str(ROOT / "scripts"))
         try:
             from validate_schemas import _validate_yaml_directory
         except ImportError as exc:
@@ -5286,7 +5276,6 @@ class PipelineDocstringNamesThePrintedSteps(unittest.TestCase):
         source = (ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
         doc = ast.get_docstring(ast.parse(source))
         listed = set(re.findall(r"^  (\d[a-z0-9]*)\s{2,}", doc, re.M))
-        sys.path.insert(0, str(ROOT / "scripts"))
         import pipeline
 
         printed = {pipeline.step_number(key) for key in pipeline.STEP_LABELS}
@@ -5300,7 +5289,6 @@ class VerifyAllSummaryNamesWhatIsWrong(unittest.TestCase):
     say which platform carried it."""
 
     def test_counts_carry_platforms_and_core_misses(self):
-        sys.path.insert(0, str(ROOT / "scripts"))
         import verify
 
         clean = {"severity_counts": {}, "undeclared_files": []}
@@ -5322,7 +5310,6 @@ class VerifyAllSummaryNamesWhatIsWrong(unittest.TestCase):
     def test_a_file_missing_on_several_platforms_is_counted_once(self):
         """sfiii2a.zip missing on 15 platforms read '24 core file(s)' for 10
         distinct files, the name printed 15 times on one line."""
-        sys.path.insert(0, str(ROOT / "scripts"))
         import verify
 
         def missing(*names: str) -> dict:
@@ -5372,7 +5359,6 @@ class BundledFilesAreNotToSource(unittest.TestCase):
     listed among the files to source, with 19 more like it."""
 
     def test_verify_does_not_count_it_missing(self):
-        sys.path.insert(0, str(ROOT / "scripts"))
         import verify
 
         entry = {"name": "n64.psh", "required": True, "in_repo": False,
@@ -5384,7 +5370,6 @@ class BundledFilesAreNotToSource(unittest.TestCase):
         self.assertNotIn("n64.psh", summary)
 
     def test_the_site_gives_it_its_own_status(self):
-        sys.path.insert(0, str(ROOT / "scripts"))
         import generate_site
 
         rows = generate_site._gap_export_rows({}, {"daedalusx64": {
@@ -5397,7 +5382,6 @@ class BundledFilesAreNotToSource(unittest.TestCase):
     def test_a_held_bundled_file_is_not_packed(self):
         """A file installed with the emulator is already on the user's
         machine, so the pack leaves it out even when the collection holds it."""
-        sys.path.insert(0, str(ROOT / "scripts"))
         import verify
 
         entry = {"name": "n64.psh", "required": True, "in_repo": True,
@@ -5410,7 +5394,6 @@ class BundledFilesAreNotToSource(unittest.TestCase):
     def test_a_build_scope_keeps_it_for_the_other_build(self):
         """PPSSPP's standalone release ships assets/, its libretro core does
         not: bundled for one build, the entry still reaches a core's pack."""
-        sys.path.insert(0, str(ROOT / "scripts"))
         from validation import deliverable
 
         entries = [{"ref": "ppsspp-assets", "mode": "libretro"},
@@ -5423,7 +5406,6 @@ class BundledFilesAreNotToSource(unittest.TestCase):
     def test_a_platform_package_can_differ_both_ways(self):
         """Batocera's hcl package installs the binary alone, its blueMSX core
         package copies the machines beside the core."""
-        sys.path.insert(0, str(ROOT / "scripts"))
         from validation import installed_with_emulator
 
         hcl = {"name": "data.pak", "bundled": True, "not_bundled_on": ["batocera"]}
@@ -5435,7 +5417,6 @@ class BundledFilesAreNotToSource(unittest.TestCase):
         self.assertTrue(installed_with_emulator(hcl))
 
     def test_every_platform_named_is_registered(self):
-        sys.path.insert(0, str(ROOT / "scripts"))
         from common import list_registered_platforms, load_emulator_profiles
 
         known = set(list_registered_platforms(str(ROOT / "platforms")))
@@ -5457,7 +5438,6 @@ class BundledFilesAreNotToSource(unittest.TestCase):
 
         import yaml as _yaml
 
-        sys.path.insert(0, str(ROOT / "scripts"))
         import common
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
@@ -5540,7 +5520,6 @@ class GapsPageCountsOneWay(unittest.TestCase):
 
     def test_the_destination_is_the_list_entrys(self):
         from scripts.generate_site import _declared_destination
-        sys.path.insert(0, str(ROOT / "scripts"))
         from common import load_platform_config
 
         config = load_platform_config("amberelec", str(ROOT / "platforms"))
@@ -5548,7 +5527,6 @@ class GapsPageCountsOneWay(unittest.TestCase):
         self.assertEqual(_declared_destination(config, detail), "bios/quasi88/N88_KNJ1.ROM")
 
     def test_verify_marks_the_settled_entry(self):
-        sys.path.insert(0, str(ROOT / "scripts"))
         import verify
 
         result = {"name": "cdibios.zip", "status": verify.Status.UNTESTED}
@@ -7373,7 +7351,6 @@ class SkipPacksHelpSaysWhatRuns(unittest.TestCase):
         self.assertNotIn("docs/", text)
 
     def test_every_step_it_names_is_one_it_skips(self):
-        sys.path.insert(0, str(ROOT / "scripts"))
         import pipeline
 
         source = (ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")

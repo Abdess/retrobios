@@ -12,20 +12,16 @@ BIOS root of platforms that do not run that emulator.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-import common  # noqa: E402
-import generate_pack as builder  # noqa: E402
-import packextras  # noqa: E402
+import common
+import generate_pack as builder
+import packextras
 
 SIZE = 1024
 

@@ -10,7 +10,7 @@ the pad reaching the console, a compositor covering it) is not exercised.
 """
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import hashlib
@@ -33,11 +33,10 @@ from pathlib import Path
 
 import yaml
 
+import build_port
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PORTS = REPO_ROOT / "ports"
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-import build_port  # noqa: E402
 
 _spec = importlib.util.spec_from_file_location("install", REPO_ROOT / "install.py")
 install = importlib.util.module_from_spec(_spec)

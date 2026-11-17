@@ -7,21 +7,17 @@ schema and their own declared sources.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
-import sys
 import unittest
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
-
-from romfolders import split_refs  # noqa: E402
-from safeparse import yaml_load  # noqa: E402
-from scraper.romfolders import SourceError, load_sources, scrape_setup  # noqa: E402
-from scraper.romfolders.__main__ import dump_setup  # noqa: E402
-from scraper.romfolders.card import (  # noqa: E402
+from romfolders import split_refs
+from safeparse import yaml_load
+from scraper.romfolders import SourceError, load_sources, scrape_setup
+from scraper.romfolders.__main__ import dump_setup
+from scraper.romfolders.card import (
     libretro_core,
     parse_allium,
     parse_bizhawk,
@@ -38,6 +34,8 @@ from scraper.romfolders.card import (  # noqa: E402
     parse_toml_subset,
     ref,
 )
+
+ROOT = Path(__file__).resolve().parent.parent
 
 FIXTURES = json.loads(
     (ROOT / "tests" / "fixtures" / "romfolders_card" / "files.json").read_text(encoding="utf-8")

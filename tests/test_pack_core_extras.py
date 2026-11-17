@@ -9,11 +9,10 @@ builder's in the same run.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import os
-import sys
 import tempfile
 import unittest
 import zipfile
@@ -21,10 +20,9 @@ from pathlib import Path
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import packverify
 
-import packverify  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def _held(files: dict, by_name: dict, path: str, payload: bytes) -> str:

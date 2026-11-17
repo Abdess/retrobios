@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import json
@@ -13,12 +13,7 @@ import zipfile
 import zlib
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-TMP_ROOT = ROOT / "tmp" / "tests"
-TMP_ROOT.mkdir(parents=True, exist_ok=True)
-sys.path.insert(0, str(ROOT / "scripts"))
-
-from romset_recipes import (  # noqa: E402
+from romset_recipes import (
     AtomPool,
     collect_recipes,
     identify_archive,
@@ -29,7 +24,7 @@ from romset_recipes import (  # noqa: E402
     reconstruct,
     write_reconstructions,
 )
-from scripts.scraper.romset_dat_importer import (  # noqa: E402
+from scripts.scraper.romset_dat_importer import (
     catalog_targets,
     compact_entries,
     holds_target,
@@ -38,8 +33,12 @@ from scripts.scraper.romset_dat_importer import (  # noqa: E402
     merge_snapshot,
     recipe_entries,
 )
-from scripts.scraper.logiqx_parser import parse_logiqx  # noqa: E402
-from torrentzip import build_torrentzip, is_torrentzip  # noqa: E402
+from scripts.scraper.logiqx_parser import parse_logiqx
+from torrentzip import build_torrentzip, is_torrentzip
+
+ROOT = Path(__file__).resolve().parent.parent
+TMP_ROOT = ROOT / "tmp" / "tests"
+TMP_ROOT.mkdir(parents=True, exist_ok=True)
 
 ROM_A = b"first rom payload"
 ROM_B = b"second rom payload"

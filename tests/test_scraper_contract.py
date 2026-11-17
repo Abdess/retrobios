@@ -10,7 +10,7 @@ exercised is a promise to contributors backed by nothing.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import importlib
 import io
@@ -23,17 +23,16 @@ import urllib.error
 from pathlib import Path
 from unittest import mock
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-from scraper import emudeck_scraper, libretro_scraper  # noqa: E402
-from scraper.base_scraper import (  # noqa: E402
+from scraper import emudeck_scraper, libretro_scraper
+from scraper.base_scraper import (
     BaseScraper,
     BiosRequirement,
     ChangeSet,
     fetch_github_latest_version,
     github_headers,
 )
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 class _StubScraper(BaseScraper):
@@ -611,7 +610,6 @@ class EveryTargetCoreReachesAProfile(unittest.TestCase):
 
         import yaml
 
-        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
         import check_freshness
         from common import load_emulator_profiles
 

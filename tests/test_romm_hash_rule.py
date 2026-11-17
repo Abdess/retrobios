@@ -8,22 +8,20 @@ a wrong declared size passed here and failed there.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import json
-import sys
 import tempfile
 import unittest
 import zlib
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from nativemode import HASH_RULES, SIZE_AND_ANY_HASH
+from validation import baseline_verdict, frontend_digest_matches
+from verify import Status, verify_entry_md5
 
-from nativemode import HASH_RULES, SIZE_AND_ANY_HASH  # noqa: E402
-from validation import baseline_verdict, frontend_digest_matches  # noqa: E402
-from verify import Status, verify_entry_md5  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 PAYLOAD = b"romm firmware"
 

@@ -9,21 +9,17 @@ tool prints, and a size is the one the release record holds.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import ast
 import contextlib
 import re
-import sys
 import unittest
 from functools import cache
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-import release_record  # noqa: E402
-from generate_readme import (  # noqa: E402
+import release_record
+from generate_readme import (
     SITE_URL,
     asset_links,
     contributing_text,
@@ -31,6 +27,8 @@ from generate_readme import (  # noqa: E402
     download_table,
     format_size,
 )
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 RECORD = release_record.load_record(REPO_ROOT / "release.json")
 REPO = "https://github.com/Abdess/retrobios"

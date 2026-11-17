@@ -12,7 +12,7 @@ one that lengthens it has to say so here too.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import functools
 import hashlib
@@ -29,13 +29,11 @@ import time
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT))
-sys.path.insert(0, str(REPO_ROOT / "tests"))
+import install
+from tests import test_install_games as games
+from tests.test_install_tui import DOWN, UP, Pty, pty, pyte
 
-import install  # noqa: E402
-import test_install_games as games  # noqa: E402
-from test_install_tui import DOWN, UP, Pty, pty, pyte  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 END = "\x1b[F"
 ESC = "\x1b"

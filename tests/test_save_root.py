@@ -11,7 +11,7 @@ directory the frontend's config names.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import functools
 import hashlib
@@ -29,24 +29,23 @@ import zipfile
 from pathlib import Path
 from unittest import mock
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import yaml
 
-import yaml  # noqa: E402
-
-from packpaths import (  # noqa: E402
+from packpaths import (
     EMULATOR_PACK_SAVE_FOLDER,
     SaveLayout,
     _resolve_destination,
     save_destination,
     save_layout,
 )
-from validation import (  # noqa: E402
+from validation import (
     entry_root,
     outside_gap_scope,
     read_from_save_dir,
     read_from_system_dir,
 )
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 _spec = importlib.util.spec_from_file_location("install", REPO_ROOT / "install.py")
 install = importlib.util.module_from_spec(_spec)
@@ -795,10 +794,6 @@ class TheProfilesFollowTheContract(unittest.TestCase):
 
 class TheScrapersReadTheSystemLists(unittest.TestCase):
     """libretro_systems, read from each platform's own system list."""
-
-    def setUp(self) -> None:
-        sys.path.insert(0, str(REPO_ROOT))
-        self.addCleanup(sys.path.remove, str(REPO_ROOT))
 
     def test_batocera_and_knulli_es_systems_yml(self):
         from scripts.scraper.batocera_scraper import es_systems_libretro_systems

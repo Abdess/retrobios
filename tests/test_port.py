@@ -8,7 +8,7 @@ route of the port, and the other launchers, are in test_handheld_launchers.
 """
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import importlib.util
@@ -24,12 +24,11 @@ import unittest
 import zipfile
 from pathlib import Path
 
+import build_port
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PORT = REPO_ROOT / "ports" / "RetroBIOS"
 SHARED = REPO_ROOT / "ports" / "shared"
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-import build_port  # noqa: E402
 
 _spec = importlib.util.spec_from_file_location("install", REPO_ROOT / "install.py")
 install = importlib.util.module_from_spec(_spec)

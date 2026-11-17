@@ -8,23 +8,21 @@ across 14 destinations on six platforms.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import ast
 import hashlib
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-from validation import (  # noqa: E402
+from validation import (
     _build_validation_index,
     destination_owners,
     validated_choice,
 )
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 class ValidatedChoice(unittest.TestCase):

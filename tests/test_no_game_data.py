@@ -9,7 +9,7 @@ full manifest.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import functools
@@ -28,16 +28,14 @@ from pathlib import Path
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-sys.path.insert(0, str(REPO_ROOT))
+import common
+import generate_db
+import generate_pack as builder
+import install
+import packverify
+import verify
 
-import common  # noqa: E402
-import generate_db  # noqa: E402
-import generate_pack as builder  # noqa: E402
-import install  # noqa: E402
-import packverify  # noqa: E402
-import verify  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 PAYLOADS = {
     "System/firmware.rom": b"firmware of the console",

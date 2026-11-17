@@ -2,13 +2,12 @@
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import json
 import os
 import sqlite3
-import sys
 import tempfile
 import unittest
 from unittest import mock
@@ -16,10 +15,7 @@ from pathlib import Path
 
 import yaml
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
-
-from generate_site import (  # noqa: E402
+from generate_site import (
     _admonition_body,
     _browser_title,
     _forge_sources,
@@ -27,6 +23,8 @@ from generate_site import (  # noqa: E402
     decorate_markdown_pages,
     generate_data_exports,
 )
+
+ROOT = Path(__file__).resolve().parent.parent
 
 
 class SiteReferenceContracts(unittest.TestCase):

@@ -9,26 +9,24 @@ refusal read first left "excluded" behind the file the second one ships.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import contextlib
 import hashlib
 import io
 import os
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import common
+import generate_db
+import generate_pack as builder
+from verify import Status, verify_platform
 
-import common  # noqa: E402
-import generate_db  # noqa: E402
-import generate_pack as builder  # noqa: E402
-from verify import Status, verify_platform  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 PAYLOAD = b"a console firmware"
 SHA1 = hashlib.sha1(PAYLOAD).hexdigest()

@@ -27,10 +27,9 @@ Linux, Windows and Android commands, for MAME4droid an Android-only app.
 """
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import re
-import sys
 import unittest
 from pathlib import Path
 import yaml
@@ -38,12 +37,11 @@ import tempfile
 import importlib.util
 import json
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import generate_site as gs
+import siterender
+import validate_site
 
-import generate_site as gs  # noqa: E402
-import siterender  # noqa: E402
-import validate_site  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 EMPTY_DB = {"files": {}, "indexes": {"by_name": {}}}

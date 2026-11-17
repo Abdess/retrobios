@@ -9,20 +9,18 @@ and the words never disagree. And it draws in the theme's colours.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import re
-import sys
 import unittest
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
+import sitediagrams
+import sitesteps
+from siteguides import TERMINALS
 
-import sitediagrams  # noqa: E402
-import sitesteps  # noqa: E402
-from siteguides import TERMINALS  # noqa: E402
+ROOT = Path(__file__).resolve().parent.parent
 
 SVG = "{http://www.w3.org/2000/svg}"
 DIST = ROOT / "website" / "dist"

@@ -7,7 +7,7 @@ cannot hold has to be an action the contributor can take.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
 import os
@@ -20,10 +20,9 @@ from pathlib import Path
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import validate_pr
 
-import validate_pr  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 WORKFLOW = REPO_ROOT / ".github" / "workflows" / "validate.yml"
 SAME_REPO = "github.event.pull_request.head.repo.full_name == github.repository"

@@ -9,23 +9,21 @@ directory, so a get/ page said "No ZIP" for a setup the API marked as released.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import ast
 import json
 import os
 import shutil
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import generate_site
+import sitediagrams
+import siteinputs
 
-import generate_site  # noqa: E402
-import sitediagrams  # noqa: E402
-import siteinputs  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 SHA1 = "0123456789ab" + "c" * 28
 

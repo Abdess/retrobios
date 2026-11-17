@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import argparse
 import contextlib
@@ -17,8 +17,6 @@ from pathlib import Path
 from unittest import mock
 
 import yaml
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 
 import profile_sync
 from profile_sync import (
@@ -6255,7 +6253,6 @@ class TestBranchCheckIsWired(unittest.TestCase):
 
     def test_contributing_and_ci_use_the_flags(self):
         root = Path(__file__).resolve().parents[1]
-        sys.path.insert(0, str(root / "scripts"))
         import generate_readme
 
         text = generate_readme.generate_contributing()

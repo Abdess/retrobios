@@ -3,19 +3,17 @@ framebuffer reader, the settings it writes and the oracle it judges with."""
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import struct
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
+import core_probe as cp
+import standalone_probe as sp
 
-import core_probe as cp  # noqa: E402
-import standalone_probe as sp  # noqa: E402
+ROOT = Path(__file__).resolve().parent.parent
 
 
 def xwd(width: int, height: int, pixels: bytes, ncolors: int = 0, pad: int = 0) -> bytes:

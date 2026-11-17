@@ -9,28 +9,26 @@ from a file other than the one the hash describes.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
-import sys
 import unittest
 from collections import OrderedDict
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from exporter.baseline import NativeFile, NativeSystem, Report, build_native_model
+from exporter.bizhawk_exporter import Exporter as BizHawk
+from exporter.misterfpga_exporter import Exporter as Mister
+from exporter.romm_exporter import Exporter as Romm
+from scraper.emudeck_scraper import FUNCTION_HASH_MAP
+from exporter.emudeck_exporter import Exporter as EmuDeck
+from exporter.retrobat_exporter import Exporter as RetroBat
+from exporter.retrodeck_exporter import Exporter as RetroDeck
+from exporter.recalbox_exporter import Exporter as Recalbox
+from exporter.retropie_exporter import Exporter as RetroPie
+from exporter.systemdat_exporter import Exporter as SystemDat
 
-from exporter.baseline import NativeFile, NativeSystem, Report, build_native_model  # noqa: E402
-from exporter.bizhawk_exporter import Exporter as BizHawk  # noqa: E402
-from exporter.misterfpga_exporter import Exporter as Mister  # noqa: E402
-from exporter.romm_exporter import Exporter as Romm  # noqa: E402
-from scraper.emudeck_scraper import FUNCTION_HASH_MAP  # noqa: E402
-from exporter.emudeck_exporter import Exporter as EmuDeck  # noqa: E402
-from exporter.retrobat_exporter import Exporter as RetroBat  # noqa: E402
-from exporter.retrodeck_exporter import Exporter as RetroDeck  # noqa: E402
-from exporter.recalbox_exporter import Exporter as Recalbox  # noqa: E402
-from exporter.retropie_exporter import Exporter as RetroPie  # noqa: E402
-from exporter.systemdat_exporter import Exporter as SystemDat  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 A = "a" * 32
 B = "b" * 32

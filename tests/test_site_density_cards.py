@@ -10,20 +10,18 @@ sits in closed folds, every fact still on the page.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import re
-import sys
 import types
 import unittest
 from html.parser import HTMLParser
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import generate_site as gs
+import sitemarkup as markup
 
-import generate_site as gs  # noqa: E402
-import sitemarkup as markup  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 DIST = REPO_ROOT / "website" / "dist"
 SITE_TS = REPO_ROOT / "website" / "src" / "scripts" / "site.ts"

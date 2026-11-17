@@ -5,17 +5,15 @@ the fewest files the games need, and every address they give must exist.
 """
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import re
-import sys
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import siteagents
 
-import siteagents  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 DIST = REPO_ROOT / "website" / "dist"
 TOOLS = REPO_ROOT / "website" / "src" / "scripts" / "agent-tools.ts"

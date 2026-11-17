@@ -7,12 +7,11 @@ seven of the eight members Batocera checks were missing.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import os
 import shutil
-import sys
 import tempfile
 import unittest
 import zipfile
@@ -20,7 +19,6 @@ import zlib
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 
 class PreferredArchive(unittest.TestCase):

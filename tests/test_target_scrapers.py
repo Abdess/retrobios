@@ -8,25 +8,23 @@ packs built for it shrank without an error.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
 import os
-import sys
 import unittest
 import urllib.error
 from pathlib import Path
 from unittest import mock
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT))
-
-from scripts.scraper.targets import (  # noqa: E402
+from scripts.scraper.targets import (
     batocera_targets_scraper,
     emudeck_targets_scraper,
     retroarch_targets_scraper,
     retropie_targets_scraper,
 )
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def _refuse(*_args, **_kwargs):

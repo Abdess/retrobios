@@ -7,7 +7,7 @@ Oric and Tangerine: one machine, two folders, two pages.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import subprocess
 import unittest

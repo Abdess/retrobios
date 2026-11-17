@@ -1,7 +1,7 @@
 """Tests for the TorrentZip builder against real MAME romsets."""
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import os
@@ -10,15 +10,14 @@ import tempfile
 import unittest
 import zipfile
 
-REPO_ROOT = os.path.join(os.path.dirname(__file__), "..")
-sys.path.insert(0, os.path.join(REPO_ROOT, "scripts"))
-
-from torrentzip import (  # noqa: E402
+from torrentzip import (
     build_torrentzip,
     identify_romset,
     is_torrentzip,
     rebuild_torrentzip,
 )
+
+REPO_ROOT = os.path.join(os.path.dirname(__file__), "..")
 
 
 class TorrentZipTest(unittest.TestCase):

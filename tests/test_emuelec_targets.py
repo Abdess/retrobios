@@ -9,17 +9,15 @@ firmware of cores its image never had.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import json
-import sys
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from scraper.targets import emuelec_targets_scraper as scraper
 
-from scraper.targets import emuelec_targets_scraper as scraper  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 # packages/sx05re/emuelec/package.mk:8-77 at v4.8, PKG_EMUS and
 # PKG_EXPERIMENTAL shortened.

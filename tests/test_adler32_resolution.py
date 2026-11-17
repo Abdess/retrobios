@@ -9,21 +9,19 @@ corrected it later, every other reader of the resolution did not.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import json
 import shutil
-import sys
 import tempfile
 import unittest
 import zlib
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from common import adler32_of, resolve_local_file
 
-from common import adler32_of, resolve_local_file  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 class TheAcceptedChecksumWins(unittest.TestCase):

@@ -8,18 +8,13 @@ checking a dump against the page was told the wrong hash.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import unittest
 from unittest import mock
-from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-import siterender  # noqa: E402
-from generate_site import _render_platform_systems  # noqa: E402
+import siterender
+from generate_site import _render_platform_systems
 
 A, B, C = "a" * 32, "b" * 32, "c" * 32
 

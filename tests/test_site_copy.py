@@ -12,7 +12,7 @@ print the measures of every page held here.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import re
 import statistics
@@ -21,9 +21,7 @@ import unittest
 from dataclasses import dataclass, field
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT))
-from tests import sitepages  # noqa: E402
+from tests import sitepages
 
 DOCS = sitepages.CONTENT
 

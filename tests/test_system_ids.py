@@ -9,17 +9,15 @@ channelf.zip and SNES DSP sets to colecovision/.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
-import sys
 import unittest
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from common import SYSTEM_ALIASES, _norm_system_id, load_emulator_profiles
+from packextras import _names_content, _slug_for
 
-from common import SYSTEM_ALIASES, _norm_system_id, load_emulator_profiles  # noqa: E402
-from packextras import _names_content, _slug_for  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 class ProfilesSpellEachMachineOnce(unittest.TestCase):

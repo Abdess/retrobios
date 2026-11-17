@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import io
 import json
@@ -11,13 +11,13 @@ import unittest
 import zipfile
 from pathlib import Path
 
+from scripts.scraper import arcade_parent_importer as api
+
 ROOT = Path(__file__).resolve().parent.parent
 TMP_ROOT = ROOT / "tmp" / "tests"
 TMP_ROOT.mkdir(parents=True, exist_ok=True)
 FIXTURES = ROOT / "tests" / "fixtures" / "arcade_parents"
 COMMITTED = ROOT / "games" / "arcade"
-
-from scripts.scraper import arcade_parent_importer as api  # noqa: E402
 
 try:
     from jsonschema import Draft202012Validator
@@ -411,10 +411,8 @@ class CommittedIndex(unittest.TestCase):
     @unittest.skipIf(Draft202012Validator is None, "jsonschema not installed")
     def test_each_file_is_read_at_its_profile_pin(self) -> None:
         """A bumped profile kept the game-to-BIOS map of the old code."""
-        import sys
         from unittest import mock
 
-        sys.path.insert(0, str(ROOT / "scripts"))
         import validate_schemas
 
         self.assertEqual(validate_schemas._arcade_pin_errors(), [])

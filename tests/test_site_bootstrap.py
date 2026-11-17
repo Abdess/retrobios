@@ -9,26 +9,23 @@ that long, so each copy reads install.py from the commit it was built from.
 
 from __future__ import annotations
 
-import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
+import tests
 
 import hashlib
 import json
 import os
 import re
 import subprocess
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT))
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import install
+import sitebootstrap
+from siteguides import INSTALL_BASE, INSTALL_PS1, INSTALL_SH, install_command
 
-import install  # noqa: E402
-import sitebootstrap  # noqa: E402
-from siteguides import INSTALL_BASE, INSTALL_PS1, INSTALL_SH, install_command  # noqa: E402
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 WEBSITE = REPO_ROOT / "website"
 DOCS = WEBSITE / "src" / "content" / "docs"
