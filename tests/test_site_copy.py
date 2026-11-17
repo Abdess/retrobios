@@ -41,6 +41,8 @@ START_PAGES = {
 START_LEVEL_PAGES = {
     "wiki/measurements.md": 300,
     "wiki/archive-recipes.md": 160,
+    # The drop box, then the steps from a file in hand to its merge.
+    "wanted.md": 260,
 }
 # Level 1: the guide part of each setup page, above its Reference heading.
 SETUP_CEILING = 220
@@ -229,7 +231,8 @@ def parse(markdown: str) -> Page:
             flush()
             tab = 0
             continue
-        if "rb-button" in stripped or "rb-tile" in stripped or stripped.startswith("<FilePicker"):
+        if "rb-button" in stripped or "rb-tile" in stripped or stripped.startswith(
+                ("<FilePicker", "<WantedFiles")):
             act()
             continue
         if re.match(r"</?(?!abbr\b|a\b|code\b|strong\b|em\b)[A-Za-z]", stripped):

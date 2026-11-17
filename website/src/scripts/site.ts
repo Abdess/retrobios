@@ -7,6 +7,8 @@
 // Which tables stack on a phone is decided when the page is built
 // (src/plugins/rehype-stack-tables.mjs), so the layout is right on first paint.
 
+import { type FileHashes, hashFile } from './hashes.ts';
+
 const HASH_LENGTHS: Record<number, string> = { 8: 'CRC32', 32: 'MD5', 40: 'SHA1', 64: 'SHA256' };
 // One line of api/v1/lookup/. `system_name` is read when a record carries it.
 // `algorithm` is the hash the value was found under, `declared` the hash
@@ -261,79 +263,6 @@ const breakPaths = () => {
 			if (unbrokenPath(code)) observer.observe(code);
 		}
 	});
-};
-
-// Hashing a file on this device: SHA1 and SHA256 by Web Crypto, MD5 and
-// CRC32 here, since Web Crypto has neither. The bytes never leave the page.
-
-const CRC_TABLE = (() => {
-	const table = new Uint32Array(256);
-	for (let n = 0; n < 256; n += 1) {
-		let c = n;
-		for (let k = 0; k < 8; k += 1) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
-		table[n] = c >>> 0;
-	}
-	return table;
-})();
-
-const crc32 = (bytes: Uint8Array): string => {
-	let crc = 0xffffffff;
-	for (let i = 0; i < bytes.length; i += 1) crc = CRC_TABLE[(crc ^ bytes[i]) & 0xff] ^ (crc >>> 8);
-	return ((crc ^ 0xffffffff) >>> 0).toString(16).padStart(8, '0');
-};
-
-const MD5_SHIFTS = [7, 12, 17, 22, 5, 9, 14, 20, 4, 11, 16, 23, 6, 10, 15, 21];
-const MD5_TABLE = Array.from({ length: 64 }, (_, i) => Math.floor(Math.abs(Math.sin(i + 1)) * 2 ** 32) >>> 0);
-
-const hexBytes = (bytes: Uint8Array) => [...bytes].map((byte) => byte.toString(16).padStart(2, '0')).join('');
-
-// RFC 1321, block by block over the file's own buffer: no padded copy of a
-// 500 MB file.
-const md5 = (bytes: Uint8Array): string => {
-	const state = new Int32Array([0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476]);
-	const words = new Int32Array(16);
-	const block = (view: DataView, offset: number) => {
-		for (let i = 0; i < 16; i += 1) words[i] = view.getInt32(offset + i * 4, true);
-		let [a, b, c, d] = state;
-		for (let i = 0; i < 64; i += 1) {
-			const round = i >> 4;
-			const f = round === 0 ? (b & c) | (~b & d) : round === 1 ? (d & b) | (~d & c) : round === 2 ? b ^ c ^ d : c ^ (b | ~d);
-			const g = round === 0 ? i : round === 1 ? (5 * i + 1) % 16 : round === 2 ? (3 * i + 5) % 16 : (7 * i) % 16;
-			const shift = MD5_SHIFTS[round * 4 + (i % 4)];
-			const sum = (a + f + MD5_TABLE[i] + words[g]) | 0;
-			a = d;
-			d = c;
-			c = b;
-			b = (b + ((sum << shift) | (sum >>> (32 - shift)))) | 0;
-		}
-		state[0] += a;
-		state[1] += b;
-		state[2] += c;
-		state[3] += d;
-	};
-	const whole = bytes.length - (bytes.length % 64);
-	const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
-	for (let offset = 0; offset < whole; offset += 64) block(view, offset);
-	const tail = new Uint8Array(bytes.length - whole < 56 ? 64 : 128);
-	tail.set(bytes.subarray(whole));
-	tail[bytes.length - whole] = 0x80;
-	const tailView = new DataView(tail.buffer);
-	const bits = bytes.length * 8;
-	tailView.setUint32(tail.length - 8, bits >>> 0, true);
-	tailView.setUint32(tail.length - 4, Math.floor(bits / 2 ** 32), true);
-	for (let offset = 0; offset < tail.length; offset += 64) block(tailView, offset);
-	return hexBytes(new Uint8Array(state.buffer));
-};
-
-type FileHashes = { sha1: string; md5: string; crc32: string; sha256: string };
-
-const hashFile = async (file: Blob): Promise<FileHashes> => {
-	const buffer = await file.arrayBuffer();
-	const bytes = new Uint8Array(buffer);
-	const [sha1, sha256] = await Promise.all(
-		['SHA-1', 'SHA-256'].map(async (name) => hexBytes(new Uint8Array(await crypto.subtle.digest(name, buffer)))),
-	);
-	return { sha1, md5: md5(bytes), crc32: crc32(bytes), sha256 };
 };
 
 // files/?hash= reads one shard of the lookup, named by the first two hex

@@ -1,0 +1,139 @@
+---
+// Every file of public/data/wanted.json (scripts/sitewanted.py) in one
+// table, a header row per system, most useful first: what someone needs
+// to search for a file. The list is fetched when the page runs, never
+// written in the HTML. A name links to the page holding the file's
+// details, and an upload starts from the drop box above.
+import { wantedVersion } from '../scripts/wanted-version.ts';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const version = wantedVersion();
+---
+
+<div class="rb-wanted-browse" data-base={base} data-version={version}>
+	<div class="rb-table-filter rb-wanted-filter" hidden data-pagefind-ignore="all">
+		<label for="rb-wanted-filter">Filter the list</label>
+		<input id="rb-wanted-filter" type="search" autocomplete="off"
+			placeholder="Name or hash" aria-describedby="rb-wanted-filter-count" />
+		<span id="rb-wanted-filter-count" class="rb-table-filter-count" aria-live="polite"></span>
+	</div>
+	<p class="rb-wanted-state">The list loads with the page. Without JavaScript, the <a href={`${base}gaps/`}>gaps page</a> lists the same files.</p>
+	<div class="rb-wanted-scroll">
+		<table class="rb-wanted-table" hidden>
+			<thead><tr><th scope="col">File name</th><th scope="col">Size</th><th scope="col">CRC32</th><th scope="col">MD5</th><th scope="col">SHA1</th></tr></thead>
+		</table>
+	</div>
+</div>
+
+<script>
+	import { type Entry, loadWanted } from '../scripts/wanted.ts';
+
+	const OTHER = 'Other files';
+
+	const size = (bytes: number) =>
+		bytes >= 1024 ** 3 ? `${(bytes / 1024 ** 3).toFixed(1)} GB`
+		: bytes >= 1024 ** 2 ? `${(bytes / 1024 ** 2).toFixed(1)} MB`
+		: bytes >= 1024 ? `${(bytes / 1024).toFixed(1)} KB`
+		: `${bytes} B`;
+	const element = <K extends keyof HTMLElementTagNameMap>(tag: K, ...content: (Node | string)[]) => {
+		const node = document.createElement(tag);
+		node.append(...content);
+		return node;
+	};
+	const plural = (count: number, noun: string) => `${count.toLocaleString('en')} ${noun}${count === 1 ? '' : 's'}`;
+	// One value per line, as plain text to select and copy.
+	const hashCell = (values: string[] = []) => {
+		const cell = element('td');
+		values.forEach((value, i) => {
+			if (i) cell.append(element('br'));
+			cell.append(element('code', value));
+		});
+		return cell;
+	};
+
+	for (const root of document.querySelectorAll<HTMLElement>('.rb-wanted-browse')) {
+		const base = root.dataset.base ?? '/';
+		const version = root.dataset.version ?? '';
+		const filter = root.querySelector<HTMLElement>('.rb-wanted-filter')!;
+		const input = root.querySelector<HTMLInputElement>('#rb-wanted-filter')!;
+		const count = root.querySelector<HTMLElement>('#rb-wanted-filter-count')!;
+		const state = root.querySelector<HTMLElement>('.rb-wanted-state')!;
+		const table = root.querySelector<HTMLTableElement>('.rb-wanted-table')!;
+
+		loadWanted(base, version).then((data) => {
+			const row = (entry: Entry) => {
+				const name = element('a', entry.n);
+				name.href = `${base}${entry.a}`;
+				const tr = element('tr', element('td', name), element('td', (entry.z ?? []).map(size).join(' or ')),
+					hashCell(entry.h?.crc32 ?? entry.c), hashCell(entry.h?.md5), hashCell(entry.h?.sha1));
+				tr.dataset.find = [entry.n, ...Object.values(entry.h ?? {}).flat(), ...(entry.c ?? [])].join(' ').toLowerCase();
+				return tr;
+			};
+			// The list comes most useful first (sitewanted._order): a system
+			// comes where its first file does, and its rows keep that order.
+			const bySystem = new Map<string, Entry[]>();
+			for (const entry of data.entries) {
+				for (const title of entry.s?.length ? entry.s.map((index) => data.systems[index]) : [OTHER]) {
+					if (!bySystem.has(title)) bySystem.set(title, []);
+					bySystem.get(title)!.push(entry);
+				}
+			}
+			const groups = [...bySystem].map(([title, entries]) => {
+				const head = element('th', title);
+				head.colSpan = 5;
+				head.scope = 'colgroup';
+				const body = element('tbody', element('tr', head), ...entries.map(row));
+				return { title: title.toLowerCase(), body, rows: [...body.rows].slice(1) };
+			});
+			table.append(...groups.map((group) => group.body));
+			const show = () => {
+				const words = input.value.toLowerCase().split(/\s+/).filter(Boolean);
+				let shown = 0;
+				for (const group of groups) {
+					let kept = 0;
+					for (const tr of group.rows) {
+						const hit = words.every((word) => tr.dataset.find!.includes(word) || group.title.includes(word));
+						tr.hidden = !hit;
+						if (hit) kept += 1;
+					}
+					group.body.hidden = !kept;
+					shown += kept;
+				}
+				count.textContent = words.length ? plural(shown, 'row') : plural(data.entries.length, 'file');
+			};
+			state.remove();
+			table.hidden = false;
+			filter.hidden = false;
+			show();
+			let pending = 0;
+			input.addEventListener('input', () => {
+				window.clearTimeout(pending);
+				pending = window.setTimeout(show, 150);
+			});
+		}).catch((error) => {
+			console.error(error);
+			const gaps = element('a', 'gaps page');
+			gaps.href = `${base}gaps/`;
+			state.replaceChildren('The list could not load. The ', gaps, ' lists the same files.');
+		});
+	}
+</script>
+
+<style is:global>
+	/* The table scrolls inside its box on a phone, never the page. */
+	.rb-wanted-scroll { overflow-x: auto; }
+	.sl-markdown-content table.rb-wanted-table { display: table; width: 100%; font-size: 0.85rem; }
+	.rb-wanted-table[hidden], .rb-wanted-table tbody[hidden], .rb-wanted-table tr[hidden] { display: none; }
+	.rb-wanted-table tbody th { text-align: left; background: var(--rb-surface); }
+	.rb-wanted-table td { vertical-align: top; }
+	.rb-wanted-table td:nth-child(2) { white-space: nowrap; }
+	.rb-wanted-table thead th { white-space: nowrap; }
+	/* Hashes keep two lines at most: on a phone the box scrolls sideways. */
+	.rb-wanted-table td:nth-child(3) { min-width: 9ch; }
+	.rb-wanted-table td:nth-child(4) { min-width: 17ch; }
+	.rb-wanted-table td:nth-child(5) { min-width: 21ch; }
+	.rb-wanted-table td:nth-child(n+3) { font-family: var(--sl-font-mono); }
+	/* A hash breaks anywhere rather than widen the table, and a click
+	   selects it whole for copying. */
+	.sl-markdown-content .rb-wanted-table code { padding: 0; background: none; word-break: break-all; user-select: all; }
+</style>

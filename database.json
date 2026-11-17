@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-13T03:31:25Z",
-  "total_files": 22018,
-  "total_size": 17367945863,
+  "generated_at": "2026-11-13T11:31:17Z",
+  "total_files": 22058,
+  "total_size": 17380393930,
   "bios_dir": "bios",
   "files": {
     "738c7f5fd0c8b57ee2e87ae7a97bf8e21a821d07": {
@@ -36455,6 +36455,16 @@
       "crc32": "16433b36",
       "adler32": "fe6bbf17"
     },
+    "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86": {
+      "path": "bios/Commodore/Amiga/.variants/boot-data.zip.28b7fd41",
+      "name": "boot-data.zip",
+      "size": 297373,
+      "sha1": "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86",
+      "md5": "28b7fd41cd5d1b345324aa2571fb1c5d",
+      "sha256": "24572d3642585ffdc79f5b61b22483e08a869dcb037029d40977db224fbd1eda",
+      "crc32": "0ea2cf94",
+      "adler32": "c3170463"
+    },
     "c6d5bb001ed01f3f2b4f097d732c7aebdc723627": {
       "path": "bios/Commodore/Amiga/.variants/boot-data.zip.4a36c9d0",
       "name": "boot-data.zip",
@@ -36605,6 +36615,16 @@
       "crc32": "eb21a7fe",
       "adler32": "b5c15966"
     },
+    "3ae8939c8f1cdd721eabd7d73c2d6277a038672a": {
+      "path": "bios/Commodore/Amiga/.variants/host-quit.a491e6bc",
+      "name": "host-quit",
+      "size": 3180,
+      "sha1": "3ae8939c8f1cdd721eabd7d73c2d6277a038672a",
+      "md5": "a491e6bc79db7e968d35577cee2769a5",
+      "sha256": "99b5442273d01c10a5b2792b7c0c534b17c734aa0334dde472bbe6ebcbbfb615",
+      "crc32": "8ef13553",
+      "adler32": "6c9676de"
+    },
     "5bc114bba29f60a614a311745b3e2464bfa06846": {
       "path": "bios/Commodore/Amiga/.variants/kick34005.CDTV.ceae68d2",
       "name": "kick34005.CDTV",
@@ -36621,6 +36641,16 @@
           "description": "CDTV Extended-ROM v2.7 (1992)(Commodore)(CDTV)"
         }
       }
+    },
+    "6540ae1a35080e3dbeacfba5139e4781eb74ca86": {
+      "path": "bios/Commodore/Amiga/.variants/whdload_db.json.51d44cd2",
+      "name": "whdload_db.json",
+      "size": 6741053,
+      "sha1": "6540ae1a35080e3dbeacfba5139e4781eb74ca86",
+      "md5": "51d44cd24e16fbb395b1bfefbaacd375",
+      "sha256": "836357cb2f82cfe35e419d0e3dc6f07cff217cda9714dee19a00763547f0af56",
+      "crc32": "d50e6275",
+      "adler32": "5ae989a1"
     },
     "bc88b7a664b1b2229a9a9870914b9a7104eaf1aa": {
       "path": "bios/Commodore/Amiga/.variants/whdload_db.json.b6012c4c",
@@ -36651,6 +36681,23 @@
       "sha256": "61f4381ebe81b7fcaf71d79db2d834419f165e3c3b818131ae6d778a485b93ce",
       "crc32": "2a77eec4",
       "adler32": "c989729d"
+    },
+    "ba93b8b85ca0d83a68225cc33b95050d72d2fdd7": {
+      "path": "bios/Commodore/Amiga/A1000 bootstrap ROM.rom",
+      "name": "A1000 bootstrap ROM.rom",
+      "size": 65536,
+      "sha1": "ba93b8b85ca0d83a68225cc33b95050d72d2fdd7",
+      "md5": "7be4a34d91e5dd7377e9b5c4ac64fc5a",
+      "sha256": "c67d47d0ff4a4cd29104e96fe7920a2ec13dff4f7f0fbcf7be645e2ae493262c",
+      "crc32": "0b1ad2d0",
+      "adler32": "6869ac00",
+      "provenance": {
+        "tosec": {
+          "dat": "Commodore Amiga - Firmware",
+          "name": "Amiga 1000 ROM Bootstrap (1985)(Commodore)(A1000)[!].rom",
+          "description": "Amiga 1000 ROM Bootstrap (1985)(Commodore)(A1000)[!]"
+        }
+      }
     },
     "e787dc05de227f30a47ac5b9ee7a355c2e9e693b": {
       "path": "bios/Commodore/Amiga/D8039HLC.rom",
@@ -36722,6 +36769,87 @@
           "description": "Kickstart v2.04 r37.175 (1991-05)(Commodore)(A3000)"
         }
       }
+    },
+    "87508de834dc7eb47359cede72d2e3c8a2e5d8db": {
+      "path": "bios/Commodore/Amiga/KS ROM v2.05 (A600).rom",
+      "name": "KS ROM v2.05 (A600).rom",
+      "size": 524288,
+      "sha1": "87508de834dc7eb47359cede72d2e3c8a2e5d8db",
+      "md5": "72ffce8541f100885da4b68a3bcf10f7",
+      "sha256": "59e7df327a7a680e4f2f185e17161e3257bf41247911f34ddf6564399645d703",
+      "crc32": "83028fb5",
+      "adler32": "0b8466af",
+      "provenance": {
+        "no-intro": {
+          "dat": "Commodore - Amiga",
+          "name": "[BIOS] Kickstart (USA, Europe) (v2.05) (Rev 37.299) (A600).rom",
+          "description": "[BIOS] Kickstart (USA, Europe) (v2.05) (Rev 37.299) (A600)"
+        },
+        "tosec": {
+          "dat": "Commodore Amiga - Firmware",
+          "name": "Kickstart v2.05 r37.299 (1991-11)(Commodore)(A600)[!].rom",
+          "description": "Kickstart v2.05 r37.299 (1991-11)(Commodore)(A600)[!]"
+        }
+      }
+    },
+    "f72d89148dac39c696e30b10859ebc859226637b": {
+      "path": "bios/Commodore/Amiga/KS ROM v2.05 (A600HD).rom",
+      "name": "KS ROM v2.05 (A600HD).rom",
+      "size": 524288,
+      "sha1": "f72d89148dac39c696e30b10859ebc859226637b",
+      "md5": "fa4acc75b49e880679fe02716af24d71",
+      "sha256": "339deebab62f772775d7afb27bd50dbb56391480c911114c72b0a06709181ca4",
+      "crc32": "64466c2a",
+      "adler32": "624068ad",
+      "provenance": {
+        "no-intro": {
+          "dat": "Commodore - Amiga",
+          "name": "[BIOS] Kickstart (USA, Europe) (v2.05) (Rev 37.300) (A600HD).rom",
+          "description": "[BIOS] Kickstart (USA, Europe) (v2.05) (Rev 37.300) (A600HD)"
+        },
+        "tosec": {
+          "dat": "Commodore Amiga - Firmware",
+          "name": "Kickstart v2.05 r37.300 (1991-11)(Commodore)(A600HD)[!].rom",
+          "description": "Kickstart v2.05 r37.300 (1991-11)(Commodore)(A600HD)[!]"
+        }
+      }
+    },
+    "81c631dd096bbb31d2af90299c76b774db74076c": {
+      "path": "bios/Commodore/Amiga/KS ROM v3.1 (A4000).rom",
+      "name": "KS ROM v3.1 (A4000).rom",
+      "size": 524288,
+      "sha1": "81c631dd096bbb31d2af90299c76b774db74076c",
+      "md5": "402dc47a03e01fcd466742d0760b5913",
+      "sha256": "ac16eb9876550b8e07826b786269eb7c0d2afd0e5dc001a8b128c8ce8f9c0179",
+      "crc32": "2b4566f1",
+      "adler32": "aa874a58",
+      "provenance": {
+        "tosec": {
+          "dat": "Commodore Amiga - Firmware",
+          "name": "Kickstart v3.1 r40.070 (1994-02)(Commodore)(A4000)(beta)[!].rom",
+          "description": "Kickstart v3.1 r40.070 (1994-02)(Commodore)(A4000)(beta)[!]"
+        }
+      }
+    },
+    "bad0ae388442db02eaeb6a5363ef43eb4e308ae6": {
+      "path": "bios/Commodore/Amiga/KS ROM v3.1.4-1 (A4000).rom",
+      "name": "KS ROM v3.1.4-1 (A4000).rom",
+      "size": 524288,
+      "sha1": "bad0ae388442db02eaeb6a5363ef43eb4e308ae6",
+      "md5": "7431253a40972a3340197c7cc6a28daf",
+      "sha256": "990272a0e53accc5cde6989210af0f0bd40e428946c2c769e11f0fef875ce759",
+      "crc32": "d47e18fd",
+      "adler32": "cf6948b8"
+    },
+    "5b2982876fec2166673be447643881262c84090e": {
+      "path": "bios/Commodore/Amiga/KS ROM v3.2 (A1200).rom",
+      "name": "KS ROM v3.2 (A1200).rom",
+      "size": 524288,
+      "sha1": "5b2982876fec2166673be447643881262c84090e",
+      "md5": "cad62a102848e13bf04d8a3b0f8be6ab",
+      "sha256": "ffcf6993c1a2df032fee1125036e2192cf29f70add547a50fc2cfff8f4fb9f7a",
+      "crc32": "bd1ff75e",
+      "adler32": "b90458e7"
     },
     "7a9095f1107966f90267dc4cb3c1972efb4b78a8": {
       "path": "bios/Commodore/Amiga/KS ROM v3.2 (Walker).rom",
@@ -37073,6 +37201,16 @@
       "sha256": "dbd98d87653b9a4b38a6d59aad24989ca15f7cb16911f8cde404a214bbd47366",
       "crc32": "185f2bbd",
       "adler32": "fad9c859"
+    },
+    "0990ea8c509ead367391741df2d4542ccb9d8fb7": {
+      "path": "bios/Commodore/Amiga/expansion/a1060-bios-2.07.rom",
+      "name": "a1060-bios-2.07.rom",
+      "size": 16384,
+      "sha1": "0990ea8c509ead367391741df2d4542ccb9d8fb7",
+      "md5": "943ab9db4e61ec7e57b7c8500dfc5c0f",
+      "sha256": "34b61b406c4f72ad02e3c46f4ef042a47a7daec75bf15fc713b27d0ee4fa9e86",
+      "crc32": "e44ac214",
+      "adler32": "6a5ecc59"
     },
     "d1defdee1c0eae4107d81e2674915cd29d352f2e": {
       "path": "bios/Commodore/Amiga/expansion/a2088-bios-3.4.rom",
@@ -37742,6 +37880,16 @@
       "crc32": "ce270bc0",
       "adler32": "447e2a5e"
     },
+    "ea0409700fefb5267ef5a29472e7810b77d4d88c": {
+      "path": "bios/Commodore/Amiga/expansion/blizzard-ppc-68040-v44.69.rom",
+      "name": "blizzard-ppc-68040-v44.69.rom",
+      "size": 524288,
+      "sha1": "ea0409700fefb5267ef5a29472e7810b77d4d88c",
+      "md5": "8b5719e8a4eb291881c90f51e0fd07cf",
+      "sha256": "affc2165c2818755235b028a825db1c4f7a90ac8e0ba8a9a188c0f4901edc8a4",
+      "crc32": "da937e46",
+      "adler32": "9ac12d0c"
+    },
     "25d2cc5bf44997b04870187720f8411c4b60f7d7": {
       "path": "bios/Commodore/Amiga/expansion/blizzard-ppc-68040-v44.71.rom",
       "name": "blizzard-ppc-68040-v44.71.rom",
@@ -37751,6 +37899,16 @@
       "sha256": "fa69d6a67ac949c1cb2482aeff80f8eb73e641bd4244622fe6b2184a55505fbb",
       "crc32": "11ad3164",
       "adler32": "b3bc1002"
+    },
+    "3441410e991a916e8bf9b130181fa169a9b859bf": {
+      "path": "bios/Commodore/Amiga/expansion/blizzard-ppc-68060-v44.69.rom",
+      "name": "blizzard-ppc-68060-v44.69.rom",
+      "size": 524288,
+      "sha1": "3441410e991a916e8bf9b130181fa169a9b859bf",
+      "md5": "f122ceeb76599ede4eb5f0752b2bb440",
+      "sha256": "d6a28ffd0e621a15692a77ecc149e4d2a26b5f8597017b9171353894552b7bb6",
+      "crc32": "f0a26cbb",
+      "adler32": "8e335cf1"
     },
     "d206ada7edb18664fbead3e38dd6232297df20b1": {
       "path": "bios/Commodore/Amiga/expansion/blizzard-ppc-68060-v44.71.rom",
@@ -37781,6 +37939,26 @@
       "sha256": "8db02ac6ad52c9cd5ffde1243af1df051eb0d3ad3ffca6d63c4322881f30b036",
       "crc32": "f53a0fca",
       "adler32": "03c1d17f"
+    },
+    "c9f86e18a1004e9cfe4eede2e0b399701c54323b": {
+      "path": "bios/Commodore/Amiga/expansion/blizzardppc_040.rom",
+      "name": "blizzardppc_040.rom",
+      "size": 524288,
+      "sha1": "c9f86e18a1004e9cfe4eede2e0b399701c54323b",
+      "md5": "14ad62b9a0328a5421cdaf033dff9479",
+      "sha256": "1c59eee74b32c7c9e173cea4de066d9087c407416cf77d81bfb1f06113f06e40",
+      "crc32": "e1133b61",
+      "adler32": "9c590e82"
+    },
+    "ad1f450962c094ba2d970a501714b4997ba444ba": {
+      "path": "bios/Commodore/Amiga/expansion/blizzardppc_060.rom",
+      "name": "blizzardppc_060.rom",
+      "size": 524288,
+      "sha1": "ad1f450962c094ba2d970a501714b4997ba444ba",
+      "md5": "079e077d70929bbc652aceedf064cf3d",
+      "sha256": "e765fab490f3daa906277cbad30a0aa84e5d8b1d637000bc07e663cf27ab1efd",
+      "crc32": "5dcacf11",
+      "adler32": "6da3e7bd"
     },
     "ec17a58962c373a2892090ec9b1722d2c326d631": {
       "path": "bios/Commodore/Amiga/expansion/buddha-v103.17.rom",
@@ -37929,6 +38107,16 @@
       "crc32": "4e71ec63",
       "adler32": "c80c5623"
     },
+    "44f667df433d64bb99b8632eb78c65e5b445acbf": {
+      "path": "bios/Commodore/Amiga/expansion/cyberstorm-mk-iii-v44.69.rom",
+      "name": "cyberstorm-mk-iii-v44.69.rom",
+      "size": 131072,
+      "sha1": "44f667df433d64bb99b8632eb78c65e5b445acbf",
+      "md5": "33f5febee37d7b01b8c6a741db0006e9",
+      "sha256": "885da97a35cb86bacd3c3ec8996bd536658ea01295e45d09890e15dbc77e6a30",
+      "crc32": "3820850f",
+      "adler32": "7bb9a01a"
+    },
     "1c0e95c39e822597ad0e2945c37b556e5dc67828": {
       "path": "bios/Commodore/Amiga/expansion/cyberstorm-mk-iii-v44.71.rom",
       "name": "cyberstorm-mk-iii-v44.71.rom",
@@ -37939,6 +38127,16 @@
       "crc32": "7b3356f0",
       "adler32": "77157e52"
     },
+    "1df506c9a170dca2ab8736fa1865f75f62e8663a": {
+      "path": "bios/Commodore/Amiga/expansion/cyberstorm-ppc-v44.69.rom",
+      "name": "cyberstorm-ppc-v44.69.rom",
+      "size": 131072,
+      "sha1": "1df506c9a170dca2ab8736fa1865f75f62e8663a",
+      "md5": "bbac31c18b694b4789e82c05a8688bac",
+      "sha256": "28910ab61bee40147aaeed6b627664e0427dea3c451cd908bc048452c9809e29",
+      "crc32": "9bd97cf5",
+      "adler32": "a5b4a229"
+    },
     "3908d0630ec5c8b3cd47b2a01195e04b1bb8c54d": {
       "path": "bios/Commodore/Amiga/expansion/cyberstorm-ppc-v44.71.rom",
       "name": "cyberstorm-ppc-v44.71.rom",
@@ -37948,6 +38146,26 @@
       "sha256": "b6bda28c52cd2766731a3f475d092e2bddcdd240582f995b055abfff9046cdb3",
       "crc32": "30c73f6a",
       "adler32": "003c822d"
+    },
+    "8adc960a086202f8de77a1eebb579036552840ad": {
+      "path": "bios/Commodore/Amiga/expansion/cyberstormmk3.rom",
+      "name": "cyberstormmk3.rom",
+      "size": 131072,
+      "sha1": "8adc960a086202f8de77a1eebb579036552840ad",
+      "md5": "debb74e2e97f08044c7762043491368e",
+      "sha256": "3db42c51f0682e68de7dc3ec6f02c8509a0eb7890b9fcd9cefd56c077bccfde5",
+      "crc32": "7b3adae5",
+      "adler32": "67e620df"
+    },
+    "41f30a0acbe93d2f309f1dd2077fffa21be8f8e2": {
+      "path": "bios/Commodore/Amiga/expansion/cyberstormppc.rom",
+      "name": "cyberstormppc.rom",
+      "size": 131072,
+      "sha1": "41f30a0acbe93d2f309f1dd2077fffa21be8f8e2",
+      "md5": "c72cf1bc8138a0f9e53f605281157684",
+      "sha256": "8005e9fb0b6fbe2627875d8edf02ab95811739a20aa2b291b884a36d01ead183",
+      "crc32": "c12fb632",
+      "adler32": "63002220"
     },
     "b62a68efb9378d740be174521ad07d2ea461a313": {
       "path": "bios/Commodore/Amiga/expansion/dkb-1230-1240-cobra-plus-ferret-v1.23.rom",
@@ -39308,6 +39526,226 @@
       "crc32": "8ff26cf8",
       "adler32": "9e15d797"
     },
+    "35d01bccc0062bc7943310dc9c9466e02fb561df": {
+      "path": "bios/Commodore/Amiga/whdboot/Libs/68040.library",
+      "name": "68040.library",
+      "size": 44040,
+      "sha1": "35d01bccc0062bc7943310dc9c9466e02fb561df",
+      "md5": "e89fde60ffe63e16a6dabcd31662d496",
+      "sha256": "0b2e62713e8b2cb48b3607ac71d8aa41ab6bfdd3f44448a88348e005ab699a05",
+      "crc32": "d477d040",
+      "adler32": "b5308f8a"
+    },
+    "17f92f7647b1cec0c17f90b7d0b562f48278af02": {
+      "path": "bios/Commodore/Amiga/whdboot/Libs/680x0.library",
+      "name": "680x0.library",
+      "size": 11688,
+      "sha1": "17f92f7647b1cec0c17f90b7d0b562f48278af02",
+      "md5": "a73fb6fcddb30069ef1468aea1a2b38d",
+      "sha256": "22d550efc3bd8cc882e25610a4a57069d486d1a66d8791dfecdfba8d36b28aba",
+      "crc32": "cafb0682",
+      "adler32": "4068773b"
+    },
+    "a2a76c10cb06315e51990911fa050669cc89830d": {
+      "path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkCBR0.library",
+      "name": "xpkCBR0.library",
+      "size": 1300,
+      "sha1": "a2a76c10cb06315e51990911fa050669cc89830d",
+      "md5": "2461c65dcd95124cc98327324d9bb184",
+      "sha256": "2572b3228725a9bd32b008aa4fd225d176ca6af47d03978f44be13d77fe6f462",
+      "crc32": "f86d3c50",
+      "adler32": "e1c57678"
+    },
+    "ca64f89919c2869cb6fd75346b9a21245a6d04a8": {
+      "path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkDLTA.library",
+      "name": "xpkDLTA.library",
+      "size": 960,
+      "sha1": "ca64f89919c2869cb6fd75346b9a21245a6d04a8",
+      "md5": "d7474dd89a09009fa84937b01e742171",
+      "sha256": "26b8e5721012e6d3bde59782c24747a6799dc86882655f4bae4939f6d36597a4",
+      "crc32": "7035bf8e",
+      "adler32": "e101fd38"
+    },
+    "8102d77ae0a3d64496436ee56a9c577c84b11992": {
+      "path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkDUKE.library",
+      "name": "xpkDUKE.library",
+      "size": 3280,
+      "sha1": "8102d77ae0a3d64496436ee56a9c577c84b11992",
+      "md5": "d6a9aafb790d40423c4ed0acbc6e85c3",
+      "sha256": "70af41004441e1d793dd70cfe9f491d9e09a667969bf3360e64ae39999260e5b",
+      "crc32": "db24e9df",
+      "adler32": "14a82f40"
+    },
+    "4599430f3baa302635a85b26a7b70a4116dc5f09": {
+      "path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkFAST.library",
+      "name": "xpkFAST.library",
+      "size": 2136,
+      "sha1": "4599430f3baa302635a85b26a7b70a4116dc5f09",
+      "md5": "7e4ad7cdd26cb6badc571ce79ab91693",
+      "sha256": "c27e93d5f11004e186ac9bdef75ff9dd121c0651eb44e8a987d4179e6bfcb049",
+      "crc32": "14e639c6",
+      "adler32": "04dac7f5"
+    },
+    "d0746429187ab38e886a47820203315f734e8d89": {
+      "path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkFRLE.library",
+      "name": "xpkFRLE.library",
+      "size": 1124,
+      "sha1": "d0746429187ab38e886a47820203315f734e8d89",
+      "md5": "7a2c0a4eb36241ca6ed9303a13da9821",
+      "sha256": "5d4f8f16bd935249a88c64afd450c0b8ca9adda960629b00ba9314e13e2e5b4e",
+      "crc32": "8e52f98c",
+      "adler32": "860a3f8f"
+    },
+    "f4a8dbe69e386d87d9ab8cbaf7fc3881b358fdb2": {
+      "path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkHFMN.library",
+      "name": "xpkHFMN.library",
+      "size": 2124,
+      "sha1": "f4a8dbe69e386d87d9ab8cbaf7fc3881b358fdb2",
+      "md5": "4d600301435d442f59068e52265cc9f2",
+      "sha256": "f40ab6ee8670eb0493e66e2f335c11bdc4e97fb56d97c01e13d51d6275d667ad",
+      "crc32": "482e44a6",
+      "adler32": "30bb681c"
+    },
+    "f22d099b81d2d039c4fbb3fea47cc9700b01fecf": {
+      "path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkHUFF.library",
+      "name": "xpkHUFF.library",
+      "size": 2284,
+      "sha1": "f22d099b81d2d039c4fbb3fea47cc9700b01fecf",
+      "md5": "0b752081f321d324f47c9ec7440531d0",
+      "sha256": "3e3977cd7627c845468eef9737ff50540700c4e3197e13c8255e4cf92eeeddba",
+      "crc32": "71bcf51a",
+      "adler32": "10cb4904"
+    },
+    "0e00bc18aec757d86f9831131c2236a704c175db": {
+      "path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkIMPL.library",
+      "name": "xpkIMPL.library",
+      "size": 4048,
+      "sha1": "0e00bc18aec757d86f9831131c2236a704c175db",
+      "md5": "6aa281fa42b10e3ff01be01d2f3bbf22",
+      "sha256": "07e7d0d0e2e429726003dad04cefc003dcb8375076cadb7a3daba7dab6254d33",
+      "crc32": "8c2ca755",
+      "adler32": "3ac6f822"
+    },
+    "1093133a17cb635c21c5532ae26ded83b6d359ce": {
+      "path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkMASH.library",
+      "name": "xpkMASH.library",
+      "size": 2816,
+      "sha1": "1093133a17cb635c21c5532ae26ded83b6d359ce",
+      "md5": "1527b4f331464f3013ba90ca44a91e54",
+      "sha256": "244c4e807e8cc1d80a6a197a8b0071ebf71591233efd5e518c09927015cc4328",
+      "crc32": "4ef3bab9",
+      "adler32": "f5814053"
+    },
+    "46dca6e2ff2176f7a12c52ea992a7a49ae5ef269": {
+      "path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkNONE.library",
+      "name": "xpkNONE.library",
+      "size": 812,
+      "sha1": "46dca6e2ff2176f7a12c52ea992a7a49ae5ef269",
+      "md5": "2e98fd5760fb158d697c3c183eb16827",
+      "sha256": "732b07e66d11cf507b4c5884ad93057fabdb936666117e69bb59233747ad1392",
+      "crc32": "bfa564e8",
+      "adler32": "46409469"
+    },
+    "168bee97805be1f85b65f615e6931c4942caf4e4": {
+      "path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkNUKE.library",
+      "name": "xpkNUKE.library",
+      "size": 2900,
+      "sha1": "168bee97805be1f85b65f615e6931c4942caf4e4",
+      "md5": "d644cfccffa44a284bc6e4050e2f2029",
+      "sha256": "8dd05bd2a4becddfb5fc0945255fd13b5c73920c1e46e9fd3acc4b2e834b6428",
+      "crc32": "b73c89a4",
+      "adler32": "e35bcf30"
+    },
+    "50cd2a19bee1ebd6b54b31c5b9461d5a81a2e910": {
+      "path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkRAKE.library",
+      "name": "xpkRAKE.library",
+      "size": 6604,
+      "sha1": "50cd2a19bee1ebd6b54b31c5b9461d5a81a2e910",
+      "md5": "c1c5d4aad555f1ce3049127bfb911cea",
+      "sha256": "c8286e4bc4f922262351ef00ab410955b4ad3216bad9b17d5647378fc755e06e",
+      "crc32": "9a908635",
+      "adler32": "30a225d6"
+    },
+    "c81cf6d99de56faa6154cc81a9876517c2a8efc0": {
+      "path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkRLEN.library",
+      "name": "xpkRLEN.library",
+      "size": 1008,
+      "sha1": "c81cf6d99de56faa6154cc81a9876517c2a8efc0",
+      "md5": "91531faa9caaff395ba3b5bbdd7996c2",
+      "sha256": "8c5bbdc3f3f57e874b1a09ff40cea41f292bc5b4caaa88df9366a1798437d493",
+      "crc32": "12b10dea",
+      "adler32": "53ddd153"
+    },
+    "fc96d367e7b3409074841c7f145ab6daef0a6a4d": {
+      "path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkSHRI.library",
+      "name": "xpkSHRI.library",
+      "size": 9272,
+      "sha1": "fc96d367e7b3409074841c7f145ab6daef0a6a4d",
+      "md5": "0807f616ba364d5e1151de505a4845d4",
+      "sha256": "25f27d71d13e26b0331441370833cdd985a6c22777f873acc3aa2c5f5e13e218",
+      "crc32": "8e29d45a",
+      "adler32": "9a5ea2c1"
+    },
+    "d140b4e87a2ff76cf94616d97fe7b127d128d973": {
+      "path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkSMPL.library",
+      "name": "xpkSMPL.library",
+      "size": 1740,
+      "sha1": "d140b4e87a2ff76cf94616d97fe7b127d128d973",
+      "md5": "069b09e57a18c0f24a72564eaa15199e",
+      "sha256": "9ccd9bc15c809325d21a6924fa1056d1cba44f8d02529004ff2055a2f6aed0d1",
+      "crc32": "53543641",
+      "adler32": "1d2bca01"
+    },
+    "2191b616abd4b2fb34c89ae243c35feea2b71104": {
+      "path": "bios/Commodore/Amiga/whdboot/Libs/Compressors/xpkSQSH.library",
+      "name": "xpkSQSH.library",
+      "size": 2936,
+      "sha1": "2191b616abd4b2fb34c89ae243c35feea2b71104",
+      "md5": "0545456a27a23c3ee10686ab525ade94",
+      "sha256": "6f399a668b7d136a29f834b425b1c226732a87f28bd35bf0f3a7c6edcefa64da",
+      "crc32": "87c5de68",
+      "adler32": "77aa3fe7"
+    },
+    "c29ac7a92db4837703049af91d0d35b2a592f03d": {
+      "path": "bios/Commodore/Amiga/whdboot/Libs/explode.library",
+      "name": "explode.library",
+      "size": 1784,
+      "sha1": "c29ac7a92db4837703049af91d0d35b2a592f03d",
+      "md5": "a3a6c7fa59ef63b0b432d32f98efa09e",
+      "sha256": "a681ba94e29a791ae280fc8eb4592d704ddfe414cafc414bebe87d529559cd9a",
+      "crc32": "c1e31c87",
+      "adler32": "a3fc2d01"
+    },
+    "4313334a01dd02eaf60ea7eb95dee72c97835645": {
+      "path": "bios/Commodore/Amiga/whdboot/Libs/medplayer.library",
+      "name": "medplayer.library",
+      "size": 15340,
+      "sha1": "4313334a01dd02eaf60ea7eb95dee72c97835645",
+      "md5": "57c19c020dafc309ff6f238ae6934cb9",
+      "sha256": "f80334d84d9915c4cd8dffa3ac870807cbfbdb5fd866cffe0b1f9604c391079e",
+      "crc32": "39919294",
+      "adler32": "6acdc963"
+    },
+    "d35699de96ff56478871c7839757ba52a9d2717a": {
+      "path": "bios/Commodore/Amiga/whdboot/Libs/mmu.library",
+      "name": "mmu.library",
+      "size": 49524,
+      "sha1": "d35699de96ff56478871c7839757ba52a9d2717a",
+      "md5": "c0131a845f33750aeb4b9e94e261d3ef",
+      "sha256": "d88a1f01a4c84b2571325e5285cb7598dfbc7fc560885696c2c7acb842ce0b66",
+      "crc32": "b019a4a5",
+      "adler32": "8fdaca75"
+    },
+    "5bd19f9503b59c5d19bfe1c6a6e3b6e7c0e9eae2": {
+      "path": "bios/Commodore/Amiga/whdboot/Libs/xpkmaster.library",
+      "name": "xpkmaster.library",
+      "size": 16496,
+      "sha1": "5bd19f9503b59c5d19bfe1c6a6e3b6e7c0e9eae2",
+      "md5": "94bf2832dc8588e4b1b96da05c90d495",
+      "sha256": "3e709afeb8506a88fc8a43c05fd056825e0f06bd95cf48f81338733e7d521a39",
+      "crc32": "c59aab67",
+      "adler32": "306a5374"
+    },
     "c3ecdaf43cc554026c8ef1c440a08c81144f810b": {
       "path": "bios/Commodore/Amiga/whdboot/WHDLoad",
       "name": "WHDLoad",
@@ -39318,35 +39756,35 @@
       "crc32": "9df148c1",
       "adler32": "c9aed2dd"
     },
-    "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86": {
+    "b1e841768bf18b0d7d0ffbbe7f7788742b641677": {
       "path": "bios/Commodore/Amiga/whdboot/boot-data.zip",
       "name": "boot-data.zip",
-      "size": 297373,
-      "sha1": "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86",
-      "md5": "28b7fd41cd5d1b345324aa2571fb1c5d",
-      "sha256": "24572d3642585ffdc79f5b61b22483e08a869dcb037029d40977db224fbd1eda",
-      "crc32": "0ea2cf94",
-      "adler32": "c3170463"
+      "size": 187033,
+      "sha1": "b1e841768bf18b0d7d0ffbbe7f7788742b641677",
+      "md5": "3f04bc22c0ac3e2aa1611c3ced93ae74",
+      "sha256": "2cc5bebf1b97a8dd35359652e655c1d5ebbded8922f93f42170cd351a06c067b",
+      "crc32": "c79884ee",
+      "adler32": "574947d3"
     },
-    "6540ae1a35080e3dbeacfba5139e4781eb74ca86": {
+    "7554061aa6f928bd41acdbcafe2d20322a0e188c": {
       "path": "bios/Commodore/Amiga/whdboot/game-data/whdload_db.json",
       "name": "whdload_db.json",
-      "size": 6741053,
-      "sha1": "6540ae1a35080e3dbeacfba5139e4781eb74ca86",
-      "md5": "51d44cd24e16fbb395b1bfefbaacd375",
-      "sha256": "836357cb2f82cfe35e419d0e3dc6f07cff217cda9714dee19a00763547f0af56",
-      "crc32": "d50e6275",
-      "adler32": "5ae989a1"
+      "size": 6750282,
+      "sha1": "7554061aa6f928bd41acdbcafe2d20322a0e188c",
+      "md5": "932a2c1b886e6daf87f0e72ed7533146",
+      "sha256": "cca5012f0963cd08df48b6a841e944947269afa0a8ce05b0d0cc14db2ae0097c",
+      "crc32": "b2267d3c",
+      "adler32": "95735c5c"
     },
-    "3ae8939c8f1cdd721eabd7d73c2d6277a038672a": {
+    "f717cb754078a350908e2839b3095843ccd90fa7": {
       "path": "bios/Commodore/Amiga/whdboot/host-quit",
       "name": "host-quit",
-      "size": 3180,
-      "sha1": "3ae8939c8f1cdd721eabd7d73c2d6277a038672a",
-      "md5": "a491e6bc79db7e968d35577cee2769a5",
-      "sha256": "99b5442273d01c10a5b2792b7c0c534b17c734aa0334dde472bbe6ebcbbfb615",
-      "crc32": "8ef13553",
-      "adler32": "6c9676de"
+      "size": 1736,
+      "sha1": "f717cb754078a350908e2839b3095843ccd90fa7",
+      "md5": "9a42e69421e3148c69be679b18b9444e",
+      "sha256": "31bf26b3ade19706f029f023415b6becf4283993ff89d1d6956bb016626b895e",
+      "crc32": "3069c8f9",
+      "adler32": "8018ca7c"
     },
     "9fa14825c40a2475a2eba5cf325bd483c447e7c1": {
       "path": "bios/Commodore/Amiga CD32/kick40060.CD32.full",
@@ -229297,6 +229735,7 @@
       "48d38fc3fcf2ad7bca5ec5191d02e451": "7a0168bd3eea08b64acfddc5d1cfc0d538e1ac1e",
       "617dea67233bdce742b96f4c7e54dd89": "7062b45b23ab34006f6fbb96bd78829b10b5c40c",
       "9e638f3d531eb7cd82594f49a4cf03b7": "18a9dba5cfe2f375f111dd5148691ecaecc6293b",
+      "28b7fd41cd5d1b345324aa2571fb1c5d": "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86",
       "4a36c9d0cecb54025fd189db497412b6": "c6d5bb001ed01f3f2b4f097d732c7aebdc723627",
       "115a9016868dbd154ddf4c67d8b53102": "7825186c424b8f4b81b2684a8e7063f56acbbbc9",
       "507883be8e49caa7ba41eea44b6698b6": "20989d172ded09c3d015dc8ed4ea5346b21625b8",
@@ -229312,15 +229751,23 @@
       "b70b29f944a25ce2ebbd67e9f94e2c4c": "236ba653ca233c22f5d3086f2d66748793449dcf",
       "d7f3c90ce3efe4e8f9ffd6cf2fe69102": "67ce3ecf669c6867c9f3c645a13210eb5e30ee93",
       "fcad55245170925dfc255c782d84fbee": "b0c58ce4d343b794bf1e70964c93dcf953e2e4fd",
+      "a491e6bc79db7e968d35577cee2769a5": "3ae8939c8f1cdd721eabd7d73c2d6277a038672a",
       "d1145ab3a0f89340f94c9e734762c198": "5bc114bba29f60a614a311745b3e2464bfa06846",
+      "51d44cd24e16fbb395b1bfefbaacd375": "6540ae1a35080e3dbeacfba5139e4781eb74ca86",
       "b6012c4c6a6c82bbcdd208e4ee47a143": "bc88b7a664b1b2229a9a9870914b9a7104eaf1aa",
       "49fcec5e46d21b935059abde97d4e286": "83b21d0c8b93fc9b9b3b287fde4ec8f3badac5a2",
       "cc609f0d1c905b6e4d1054bb5a7be1ec": "301ec6a69404457d912c89e3fc54095eda9f0e93",
+      "7be4a34d91e5dd7377e9b5c4ac64fc5a": "ba93b8b85ca0d83a68225cc33b95050d72d2fdd7",
       "e6d8a5ae3763657147ede8a8d429767b": "e787dc05de227f30a47ac5b9ee7a355c2e9e693b",
       "d8dbff05f1d39d5b687a5dacb76f8535": "00c15406beb4b8ab1a16aa66c05860e1a7c1ad79",
       "0cbbaacbabcb4b5806438039acc0ff02": "c39bd9094d4e5f4e28c1411f3086950406062e87",
       "7a220b3da82de67a31cf31e7dacba913": "f76316bf36dff14b20fa349ed02e4b11dd932b07",
       "c5fd2322c53d25c0972e6fc54b705d17": "d82ebb59afc53540ddf2d7187ecf239b7ea91590",
+      "72ffce8541f100885da4b68a3bcf10f7": "87508de834dc7eb47359cede72d2e3c8a2e5d8db",
+      "fa4acc75b49e880679fe02716af24d71": "f72d89148dac39c696e30b10859ebc859226637b",
+      "402dc47a03e01fcd466742d0760b5913": "81c631dd096bbb31d2af90299c76b774db74076c",
+      "7431253a40972a3340197c7cc6a28daf": "bad0ae388442db02eaeb6a5363ef43eb4e308ae6",
+      "cad62a102848e13bf04d8a3b0f8be6ab": "5b2982876fec2166673be447643881262c84090e",
       "c403a6e4322d976e499fabeadcfa5a4b": "7a9095f1107966f90267dc4cb3c1972efb4b78a8",
       "68c9c0826f6c0ca20546d588ee77391c": "6a7bfb5dbd6b8f179f03da84d8d9528267b6273b",
       "82a21c1890cae844b3df741f2762d48d": "891e9a547772fe0c6c19b610baf8bc4ea7fcb785",
@@ -229345,6 +229792,7 @@
       "1c8bbf475d1adf52ef01b24f50becf37": "03ca81c7a7b259cf64bc9582863eca0f6529f435",
       "650c452bebe20f748f99f2b53ff8db9d": "a3bab2add955535364d6e5fc5bedac05e35fad0b",
       "14554fa5e01259fef21401795a127549": "eba74ad1000a5351a5d99179bf75f831ac2d2402",
+      "943ab9db4e61ec7e57b7c8500dfc5c0f": "0990ea8c509ead367391741df2d4542ccb9d8fb7",
       "107ffb9e0b21e4d4bf4870e925a0b777": "d1defdee1c0eae4107d81e2674915cd29d352f2e",
       "ca81b7fb010431a3087db4ea8936449d": "45a2b7db6e86fe805cfef63c65c331a716a6e9e8",
       "d8fd4acccf8a52881dc7faf87e5ccb74": "c1b707a8a62907d75299f10aa60efd1f44514b26",
@@ -229409,10 +229857,14 @@
       "e793c052f9185f83379578c734442da8": "a39a6d232cb9a81b5f3694d3688737825ad581bc",
       "1f60fe21f7a4daa005db4b18eb8aa130": "003577b84e1f2e593add6c9ffd65a7b42abaa933",
       "3e81c33e836d6aca84e31dc07c0e5911": "e043c1aa3bb06e06d4dabff30a8c6317abfef2bb",
+      "8b5719e8a4eb291881c90f51e0fd07cf": "ea0409700fefb5267ef5a29472e7810b77d4d88c",
       "4112ca6af7a4c862d41dce66f3f6bc16": "25d2cc5bf44997b04870187720f8411c4b60f7d7",
+      "f122ceeb76599ede4eb5f0752b2bb440": "3441410e991a916e8bf9b130181fa169a9b859bf",
       "dd0463932d84a40c8e868856671451db": "d206ada7edb18664fbead3e38dd6232297df20b1",
       "34be735c9de80f9db7c49f358b657463": "1411c24872f7cb8decbe4744f0b8d12a1aaaad44",
       "a27235bcba36990790de580d1d64c022": "efe17ca588c44a7f0f8c62be20f23278cfe06727",
+      "14ad62b9a0328a5421cdaf033dff9479": "c9f86e18a1004e9cfe4eede2e0b399701c54323b",
+      "079e077d70929bbc652aceedf064cf3d": "ad1f450962c094ba2d970a501714b4997ba444ba",
       "8a4acdc3468ceaf5a1cf064e1214e56a": "ec17a58962c373a2892090ec9b1722d2c326d631",
       "1467c589d27f90acdaa52c0122305a7f": "7113add04c782ed7a56a74ba3378d55c5605eaf6",
       "030ea6565af3ed82f1b95d1a5a1729ec": "a7c4b709494f403442b8ec11090dc1d018098ebc",
@@ -229427,8 +229879,12 @@
       "3df73c40105ebececfe60b9331248623": "c1f29093491339cddc81f9940f0965dfa3a193f2",
       "0557cc37be19d995010b7db894270c7a": "8f4bdda010338a4851e4a2fbb4aa6d6e202fe98e",
       "7278137efc73893b5bcd230b5a62000c": "8e95bc8da06050fcb596b5b4c8cf91021ff4aeb3",
+      "33f5febee37d7b01b8c6a741db0006e9": "44f667df433d64bb99b8632eb78c65e5b445acbf",
       "88e3bb500a66cc64225f579abaaa3736": "1c0e95c39e822597ad0e2945c37b556e5dc67828",
+      "bbac31c18b694b4789e82c05a8688bac": "1df506c9a170dca2ab8736fa1865f75f62e8663a",
       "2aff456707a7a1a3804c97a9b6899273": "3908d0630ec5c8b3cd47b2a01195e04b1bb8c54d",
+      "debb74e2e97f08044c7762043491368e": "8adc960a086202f8de77a1eebb579036552840ad",
+      "c72cf1bc8138a0f9e53f605281157684": "41f30a0acbe93d2f309f1dd2077fffa21be8f8e2",
       "9dde380a21d812c0241d62c319073e2a": "b62a68efb9378d740be174521ad07d2ea461a313",
       "b0380ea502aa4a6227654e29539f306a": "f0431d02ac0f83d345db18c023f0cefb33d17217",
       "a393f6a24d1ec1f58e9114987a665f3e": "a66f8ef6901e0e41f8b72bba12165788a452cf01",
@@ -229556,10 +230012,32 @@
       "743b4b9f0ca645c4c2a34953b5e01e45": "38e63f700ee6a5be71ded6c057267562c00f3e31",
       "36ab26d3b855e634fdda062c052cd52b": "faaaa08b29b391381771222f10b7b22c3b99f4ca",
       "2a3a61bbd7c351751506e22a4354b76a": "55dd3ecd5086528fa984e82db6474b954fc54ad5",
+      "e89fde60ffe63e16a6dabcd31662d496": "35d01bccc0062bc7943310dc9c9466e02fb561df",
+      "a73fb6fcddb30069ef1468aea1a2b38d": "17f92f7647b1cec0c17f90b7d0b562f48278af02",
+      "2461c65dcd95124cc98327324d9bb184": "a2a76c10cb06315e51990911fa050669cc89830d",
+      "d7474dd89a09009fa84937b01e742171": "ca64f89919c2869cb6fd75346b9a21245a6d04a8",
+      "d6a9aafb790d40423c4ed0acbc6e85c3": "8102d77ae0a3d64496436ee56a9c577c84b11992",
+      "7e4ad7cdd26cb6badc571ce79ab91693": "4599430f3baa302635a85b26a7b70a4116dc5f09",
+      "7a2c0a4eb36241ca6ed9303a13da9821": "d0746429187ab38e886a47820203315f734e8d89",
+      "4d600301435d442f59068e52265cc9f2": "f4a8dbe69e386d87d9ab8cbaf7fc3881b358fdb2",
+      "0b752081f321d324f47c9ec7440531d0": "f22d099b81d2d039c4fbb3fea47cc9700b01fecf",
+      "6aa281fa42b10e3ff01be01d2f3bbf22": "0e00bc18aec757d86f9831131c2236a704c175db",
+      "1527b4f331464f3013ba90ca44a91e54": "1093133a17cb635c21c5532ae26ded83b6d359ce",
+      "2e98fd5760fb158d697c3c183eb16827": "46dca6e2ff2176f7a12c52ea992a7a49ae5ef269",
+      "d644cfccffa44a284bc6e4050e2f2029": "168bee97805be1f85b65f615e6931c4942caf4e4",
+      "c1c5d4aad555f1ce3049127bfb911cea": "50cd2a19bee1ebd6b54b31c5b9461d5a81a2e910",
+      "91531faa9caaff395ba3b5bbdd7996c2": "c81cf6d99de56faa6154cc81a9876517c2a8efc0",
+      "0807f616ba364d5e1151de505a4845d4": "fc96d367e7b3409074841c7f145ab6daef0a6a4d",
+      "069b09e57a18c0f24a72564eaa15199e": "d140b4e87a2ff76cf94616d97fe7b127d128d973",
+      "0545456a27a23c3ee10686ab525ade94": "2191b616abd4b2fb34c89ae243c35feea2b71104",
+      "a3a6c7fa59ef63b0b432d32f98efa09e": "c29ac7a92db4837703049af91d0d35b2a592f03d",
+      "57c19c020dafc309ff6f238ae6934cb9": "4313334a01dd02eaf60ea7eb95dee72c97835645",
+      "c0131a845f33750aeb4b9e94e261d3ef": "d35699de96ff56478871c7839757ba52a9d2717a",
+      "94bf2832dc8588e4b1b96da05c90d495": "5bd19f9503b59c5d19bfe1c6a6e3b6e7c0e9eae2",
       "6670a9571f235ec31b8bbd48fc18f428": "c3ecdaf43cc554026c8ef1c440a08c81144f810b",
-      "28b7fd41cd5d1b345324aa2571fb1c5d": "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86",
-      "51d44cd24e16fbb395b1bfefbaacd375": "6540ae1a35080e3dbeacfba5139e4781eb74ca86",
-      "a491e6bc79db7e968d35577cee2769a5": "3ae8939c8f1cdd721eabd7d73c2d6277a038672a",
+      "3f04bc22c0ac3e2aa1611c3ced93ae74": "b1e841768bf18b0d7d0ffbbe7f7788742b641677",
+      "932a2c1b886e6daf87f0e72ed7533146": "7554061aa6f928bd41acdbcafe2d20322a0e188c",
+      "9a42e69421e3148c69be679b18b9444e": "f717cb754078a350908e2839b3095843ccd90fa7",
       "f2f241bf094168cfb9e7805dc2856433": "9fa14825c40a2475a2eba5cf325bd483c447e7c1",
       "1b1e985ea5325a1f46eb7fd9681707bf": "b1a5b826304d3df2a27d7163c6a81a532e040d32",
       "41c6cc528e9515ffd0ed9b180f8467c0": "d4b79b60cf1eaa399d0932200eb7811e00455249",
@@ -258434,8 +258912,9 @@
       ],
       "boot-data.zip": [
         "18a9dba5cfe2f375f111dd5148691ecaecc6293b",
+        "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86",
         "c6d5bb001ed01f3f2b4f097d732c7aebdc723627",
-        "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86"
+        "b1e841768bf18b0d7d0ffbbe7f7788742b641677"
       ],
       "capsimg.dll": [
         "7825186c424b8f4b81b2684a8e7063f56acbbbc9",
@@ -258457,19 +258936,27 @@
         "b0c58ce4d343b794bf1e70964c93dcf953e2e4fd",
         "6c1889c75ffa990468ca365973a344dae3d39e2c"
       ],
+      "host-quit": [
+        "3ae8939c8f1cdd721eabd7d73c2d6277a038672a",
+        "f717cb754078a350908e2839b3095843ccd90fa7"
+      ],
       "kick34005.CDTV": [
         "5bc114bba29f60a614a311745b3e2464bfa06846",
         "7ba40ffa17e500ed9fed041f3424bd81d9c907be"
       ],
       "whdload_db.json": [
+        "6540ae1a35080e3dbeacfba5139e4781eb74ca86",
         "bc88b7a664b1b2229a9a9870914b9a7104eaf1aa",
-        "6540ae1a35080e3dbeacfba5139e4781eb74ca86"
+        "7554061aa6f928bd41acdbcafe2d20322a0e188c"
       ],
       "6570-036.rom": [
         "83b21d0c8b93fc9b9b3b287fde4ec8f3badac5a2"
       ],
       "68HC05.rom": [
         "301ec6a69404457d912c89e3fc54095eda9f0e93"
+      ],
+      "A1000 bootstrap ROM.rom": [
+        "ba93b8b85ca0d83a68225cc33b95050d72d2fdd7"
       ],
       "D8039HLC.rom": [
         "e787dc05de227f30a47ac5b9ee7a355c2e9e693b"
@@ -258485,6 +258972,21 @@
       ],
       "KS ROM v2.04 (A3000).rom": [
         "d82ebb59afc53540ddf2d7187ecf239b7ea91590"
+      ],
+      "KS ROM v2.05 (A600).rom": [
+        "87508de834dc7eb47359cede72d2e3c8a2e5d8db"
+      ],
+      "KS ROM v2.05 (A600HD).rom": [
+        "f72d89148dac39c696e30b10859ebc859226637b"
+      ],
+      "KS ROM v3.1 (A4000).rom": [
+        "81c631dd096bbb31d2af90299c76b774db74076c"
+      ],
+      "KS ROM v3.1.4-1 (A4000).rom": [
+        "bad0ae388442db02eaeb6a5363ef43eb4e308ae6"
+      ],
+      "KS ROM v3.2 (A1200).rom": [
+        "5b2982876fec2166673be447643881262c84090e"
       ],
       "KS ROM v3.2 (Walker).rom": [
         "7a9095f1107966f90267dc4cb3c1972efb4b78a8"
@@ -258545,6 +259047,9 @@
       ],
       "a1060-bios-2.06.rom": [
         "eba74ad1000a5351a5d99179bf75f831ac2d2402"
+      ],
+      "a1060-bios-2.07.rom": [
+        "0990ea8c509ead367391741df2d4542ccb9d8fb7"
       ],
       "a2088-bios-3.4.rom": [
         "d1defdee1c0eae4107d81e2674915cd29d352f2e"
@@ -258738,8 +259243,14 @@
       "blizzard-2060-v8.5.rom": [
         "e043c1aa3bb06e06d4dabff30a8c6317abfef2bb"
       ],
+      "blizzard-ppc-68040-v44.69.rom": [
+        "ea0409700fefb5267ef5a29472e7810b77d4d88c"
+      ],
       "blizzard-ppc-68040-v44.71.rom": [
         "25d2cc5bf44997b04870187720f8411c4b60f7d7"
+      ],
+      "blizzard-ppc-68060-v44.69.rom": [
+        "3441410e991a916e8bf9b130181fa169a9b859bf"
       ],
       "blizzard-ppc-68060-v44.71.rom": [
         "d206ada7edb18664fbead3e38dd6232297df20b1"
@@ -258749,6 +259260,12 @@
       ],
       "blizzard-scsi-kit-iv.rom": [
         "efe17ca588c44a7f0f8c62be20f23278cfe06727"
+      ],
+      "blizzardppc_040.rom": [
+        "c9f86e18a1004e9cfe4eede2e0b399701c54323b"
+      ],
+      "blizzardppc_060.rom": [
+        "ad1f450962c094ba2d970a501714b4997ba444ba"
       ],
       "buddha-v103.17.rom": [
         "ec17a58962c373a2892090ec9b1722d2c326d631"
@@ -258792,11 +259309,23 @@
       "cyberstorm-mk-i-cyberscsi-module.rom": [
         "8e95bc8da06050fcb596b5b4c8cf91021ff4aeb3"
       ],
+      "cyberstorm-mk-iii-v44.69.rom": [
+        "44f667df433d64bb99b8632eb78c65e5b445acbf"
+      ],
       "cyberstorm-mk-iii-v44.71.rom": [
         "1c0e95c39e822597ad0e2945c37b556e5dc67828"
       ],
+      "cyberstorm-ppc-v44.69.rom": [
+        "1df506c9a170dca2ab8736fa1865f75f62e8663a"
+      ],
       "cyberstorm-ppc-v44.71.rom": [
         "3908d0630ec5c8b3cd47b2a01195e04b1bb8c54d"
+      ],
+      "cyberstormmk3.rom": [
+        "8adc960a086202f8de77a1eebb579036552840ad"
+      ],
+      "cyberstormppc.rom": [
+        "41f30a0acbe93d2f309f1dd2077fffa21be8f8e2"
       ],
       "dkb-1230-1240-cobra-plus-ferret-v1.23.rom": [
         "b62a68efb9378d740be174521ad07d2ea461a313"
@@ -259179,11 +259708,74 @@
       "JST": [
         "55dd3ecd5086528fa984e82db6474b954fc54ad5"
       ],
+      "68040.library": [
+        "35d01bccc0062bc7943310dc9c9466e02fb561df"
+      ],
+      "680x0.library": [
+        "17f92f7647b1cec0c17f90b7d0b562f48278af02"
+      ],
+      "xpkCBR0.library": [
+        "a2a76c10cb06315e51990911fa050669cc89830d"
+      ],
+      "xpkDLTA.library": [
+        "ca64f89919c2869cb6fd75346b9a21245a6d04a8"
+      ],
+      "xpkDUKE.library": [
+        "8102d77ae0a3d64496436ee56a9c577c84b11992"
+      ],
+      "xpkFAST.library": [
+        "4599430f3baa302635a85b26a7b70a4116dc5f09"
+      ],
+      "xpkFRLE.library": [
+        "d0746429187ab38e886a47820203315f734e8d89"
+      ],
+      "xpkHFMN.library": [
+        "f4a8dbe69e386d87d9ab8cbaf7fc3881b358fdb2"
+      ],
+      "xpkHUFF.library": [
+        "f22d099b81d2d039c4fbb3fea47cc9700b01fecf"
+      ],
+      "xpkIMPL.library": [
+        "0e00bc18aec757d86f9831131c2236a704c175db"
+      ],
+      "xpkMASH.library": [
+        "1093133a17cb635c21c5532ae26ded83b6d359ce"
+      ],
+      "xpkNONE.library": [
+        "46dca6e2ff2176f7a12c52ea992a7a49ae5ef269"
+      ],
+      "xpkNUKE.library": [
+        "168bee97805be1f85b65f615e6931c4942caf4e4"
+      ],
+      "xpkRAKE.library": [
+        "50cd2a19bee1ebd6b54b31c5b9461d5a81a2e910"
+      ],
+      "xpkRLEN.library": [
+        "c81cf6d99de56faa6154cc81a9876517c2a8efc0"
+      ],
+      "xpkSHRI.library": [
+        "fc96d367e7b3409074841c7f145ab6daef0a6a4d"
+      ],
+      "xpkSMPL.library": [
+        "d140b4e87a2ff76cf94616d97fe7b127d128d973"
+      ],
+      "xpkSQSH.library": [
+        "2191b616abd4b2fb34c89ae243c35feea2b71104"
+      ],
+      "explode.library": [
+        "c29ac7a92db4837703049af91d0d35b2a592f03d"
+      ],
+      "medplayer.library": [
+        "4313334a01dd02eaf60ea7eb95dee72c97835645"
+      ],
+      "mmu.library": [
+        "d35699de96ff56478871c7839757ba52a9d2717a"
+      ],
+      "xpkmaster.library": [
+        "5bd19f9503b59c5d19bfe1c6a6e3b6e7c0e9eae2"
+      ],
       "WHDLoad": [
         "c3ecdaf43cc554026c8ef1c440a08c81144f810b"
-      ],
-      "host-quit": [
-        "3ae8939c8f1cdd721eabd7d73c2d6277a038672a"
       ],
       "kick40060.CD32.full": [
         "9fa14825c40a2475a2eba5cf325bd483c447e7c1"
@@ -308426,6 +309018,54 @@
       "whdboot/save-data/Kickstarts/kick33192.A500.RTB": [
         "1d1c557f4a0f5ea88aeb96d68b09f41990340f70"
       ],
+      "Compressors/xpkCBR0.library": [
+        "a2a76c10cb06315e51990911fa050669cc89830d"
+      ],
+      "Compressors/xpkDLTA.library": [
+        "ca64f89919c2869cb6fd75346b9a21245a6d04a8"
+      ],
+      "Compressors/xpkDUKE.library": [
+        "8102d77ae0a3d64496436ee56a9c577c84b11992"
+      ],
+      "Compressors/xpkFAST.library": [
+        "4599430f3baa302635a85b26a7b70a4116dc5f09"
+      ],
+      "Compressors/xpkFRLE.library": [
+        "d0746429187ab38e886a47820203315f734e8d89"
+      ],
+      "Compressors/xpkHFMN.library": [
+        "f4a8dbe69e386d87d9ab8cbaf7fc3881b358fdb2"
+      ],
+      "Compressors/xpkHUFF.library": [
+        "f22d099b81d2d039c4fbb3fea47cc9700b01fecf"
+      ],
+      "Compressors/xpkIMPL.library": [
+        "0e00bc18aec757d86f9831131c2236a704c175db"
+      ],
+      "Compressors/xpkMASH.library": [
+        "1093133a17cb635c21c5532ae26ded83b6d359ce"
+      ],
+      "Compressors/xpkNONE.library": [
+        "46dca6e2ff2176f7a12c52ea992a7a49ae5ef269"
+      ],
+      "Compressors/xpkNUKE.library": [
+        "168bee97805be1f85b65f615e6931c4942caf4e4"
+      ],
+      "Compressors/xpkRAKE.library": [
+        "50cd2a19bee1ebd6b54b31c5b9461d5a81a2e910"
+      ],
+      "Compressors/xpkRLEN.library": [
+        "c81cf6d99de56faa6154cc81a9876517c2a8efc0"
+      ],
+      "Compressors/xpkSHRI.library": [
+        "fc96d367e7b3409074841c7f145ab6daef0a6a4d"
+      ],
+      "Compressors/xpkSMPL.library": [
+        "d140b4e87a2ff76cf94616d97fe7b127d128d973"
+      ],
+      "Compressors/xpkSQSH.library": [
+        "2191b616abd4b2fb34c89ae243c35feea2b71104"
+      ],
       "atari_osb.rom": [
         "db1031585968cfc6ec2ecda5c9a5a52f61444a3b"
       ],
@@ -313295,6 +313935,7 @@
       "7fe47845": "7a0168bd3eea08b64acfddc5d1cfc0d538e1ac1e",
       "0b30240a": "7062b45b23ab34006f6fbb96bd78829b10b5c40c",
       "16433b36": "18a9dba5cfe2f375f111dd5148691ecaecc6293b",
+      "0ea2cf94": "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86",
       "ebf4e118": "c6d5bb001ed01f3f2b4f097d732c7aebdc723627",
       "d5efaf4b": "7825186c424b8f4b81b2684a8e7063f56acbbbc9",
       "f6ef7291": "20989d172ded09c3d015dc8ed4ea5346b21625b8",
@@ -313310,15 +313951,23 @@
       "4520dc9c": "236ba653ca233c22f5d3086f2d66748793449dcf",
       "75d152cf": "67ce3ecf669c6867c9f3c645a13210eb5e30ee93",
       "eb21a7fe": "b0c58ce4d343b794bf1e70964c93dcf953e2e4fd",
+      "8ef13553": "3ae8939c8f1cdd721eabd7d73c2d6277a038672a",
       "ceae68d2": "5bc114bba29f60a614a311745b3e2464bfa06846",
+      "d50e6275": "6540ae1a35080e3dbeacfba5139e4781eb74ca86",
       "9712274c": "bc88b7a664b1b2229a9a9870914b9a7104eaf1aa",
       "4a3fc332": "83b21d0c8b93fc9b9b3b287fde4ec8f3badac5a2",
       "2a77eec4": "301ec6a69404457d912c89e3fc54095eda9f0e93",
+      "0b1ad2d0": "ba93b8b85ca0d83a68225cc33b95050d72d2fdd7",
       "fb92a773": "e787dc05de227f30a47ac5b9ee7a355c2e9e693b",
       "299790ff": "00c15406beb4b8ab1a16aa66c05860e1a7c1ad79",
       "e0f37258": "c39bd9094d4e5f4e28c1411f3086950406062e87",
       "bc0ec13f": "f76316bf36dff14b20fa349ed02e4b11dd932b07",
       "234a7233": "d82ebb59afc53540ddf2d7187ecf239b7ea91590",
+      "83028fb5": "87508de834dc7eb47359cede72d2e3c8a2e5d8db",
+      "64466c2a": "f72d89148dac39c696e30b10859ebc859226637b",
+      "2b4566f1": "81c631dd096bbb31d2af90299c76b774db74076c",
+      "d47e18fd": "bad0ae388442db02eaeb6a5363ef43eb4e308ae6",
+      "bd1ff75e": "5b2982876fec2166673be447643881262c84090e",
       "261339f8": "7a9095f1107966f90267dc4cb3c1972efb4b78a8",
       "9ed783d0": "6a7bfb5dbd6b8f179f03da84d8d9528267b6273b",
       "c4f0f55f": "891e9a547772fe0c6c19b610baf8bc4ea7fcb785",
@@ -313343,6 +313992,7 @@
       "c35c37bf": "03ca81c7a7b259cf64bc9582863eca0f6529f435",
       "f5384f6a": "a3bab2add955535364d6e5fc5bedac05e35fad0b",
       "185f2bbd": "eba74ad1000a5351a5d99179bf75f831ac2d2402",
+      "e44ac214": "0990ea8c509ead367391741df2d4542ccb9d8fb7",
       "05552160": "d1defdee1c0eae4107d81e2674915cd29d352f2e",
       "f8e1ad83": "45a2b7db6e86fe805cfef63c65c331a716a6e9e8",
       "5fd93e56": "c1b707a8a62907d75299f10aa60efd1f44514b26",
@@ -313407,10 +314057,14 @@
       "17c8dcbe": "a39a6d232cb9a81b5f3694d3688737825ad581bc",
       "2f42af81": "003577b84e1f2e593add6c9ffd65a7b42abaa933",
       "ce270bc0": "e043c1aa3bb06e06d4dabff30a8c6317abfef2bb",
+      "da937e46": "ea0409700fefb5267ef5a29472e7810b77d4d88c",
       "11ad3164": "25d2cc5bf44997b04870187720f8411c4b60f7d7",
+      "f0a26cbb": "3441410e991a916e8bf9b130181fa169a9b859bf",
       "8e088ed0": "d206ada7edb18664fbead3e38dd6232297df20b1",
       "fd2c772f": "1411c24872f7cb8decbe4744f0b8d12a1aaaad44",
       "f53a0fca": "efe17ca588c44a7f0f8c62be20f23278cfe06727",
+      "e1133b61": "c9f86e18a1004e9cfe4eede2e0b399701c54323b",
+      "5dcacf11": "ad1f450962c094ba2d970a501714b4997ba444ba",
       "2b7b24e0": "ec17a58962c373a2892090ec9b1722d2c326d631",
       "9366d357": "7113add04c782ed7a56a74ba3378d55c5605eaf6",
       "e60b1ce6": "a7c4b709494f403442b8ec11090dc1d018098ebc",
@@ -313425,8 +314079,12 @@
       "2a74074d": "c1f29093491339cddc81f9940f0965dfa3a193f2",
       "33a8ff3a": "8f4bdda010338a4851e4a2fbb4aa6d6e202fe98e",
       "4e71ec63": "8e95bc8da06050fcb596b5b4c8cf91021ff4aeb3",
+      "3820850f": "44f667df433d64bb99b8632eb78c65e5b445acbf",
       "7b3356f0": "1c0e95c39e822597ad0e2945c37b556e5dc67828",
+      "9bd97cf5": "1df506c9a170dca2ab8736fa1865f75f62e8663a",
       "30c73f6a": "3908d0630ec5c8b3cd47b2a01195e04b1bb8c54d",
+      "7b3adae5": "8adc960a086202f8de77a1eebb579036552840ad",
+      "c12fb632": "41f30a0acbe93d2f309f1dd2077fffa21be8f8e2",
       "da878913": "b62a68efb9378d740be174521ad07d2ea461a313",
       "15ac5257": "f0431d02ac0f83d345db18c023f0cefb33d17217",
       "68725e50": "a66f8ef6901e0e41f8b72bba12165788a452cf01",
@@ -313554,10 +314212,32 @@
       "d746cc1e": "38e63f700ee6a5be71ded6c057267562c00f3e31",
       "cc190c8a": "faaaa08b29b391381771222f10b7b22c3b99f4ca",
       "8ff26cf8": "55dd3ecd5086528fa984e82db6474b954fc54ad5",
+      "d477d040": "35d01bccc0062bc7943310dc9c9466e02fb561df",
+      "cafb0682": "17f92f7647b1cec0c17f90b7d0b562f48278af02",
+      "f86d3c50": "a2a76c10cb06315e51990911fa050669cc89830d",
+      "7035bf8e": "ca64f89919c2869cb6fd75346b9a21245a6d04a8",
+      "db24e9df": "8102d77ae0a3d64496436ee56a9c577c84b11992",
+      "14e639c6": "4599430f3baa302635a85b26a7b70a4116dc5f09",
+      "8e52f98c": "d0746429187ab38e886a47820203315f734e8d89",
+      "482e44a6": "f4a8dbe69e386d87d9ab8cbaf7fc3881b358fdb2",
+      "71bcf51a": "f22d099b81d2d039c4fbb3fea47cc9700b01fecf",
+      "8c2ca755": "0e00bc18aec757d86f9831131c2236a704c175db",
+      "4ef3bab9": "1093133a17cb635c21c5532ae26ded83b6d359ce",
+      "bfa564e8": "46dca6e2ff2176f7a12c52ea992a7a49ae5ef269",
+      "b73c89a4": "168bee97805be1f85b65f615e6931c4942caf4e4",
+      "9a908635": "50cd2a19bee1ebd6b54b31c5b9461d5a81a2e910",
+      "12b10dea": "c81cf6d99de56faa6154cc81a9876517c2a8efc0",
+      "8e29d45a": "fc96d367e7b3409074841c7f145ab6daef0a6a4d",
+      "53543641": "d140b4e87a2ff76cf94616d97fe7b127d128d973",
+      "87c5de68": "2191b616abd4b2fb34c89ae243c35feea2b71104",
+      "c1e31c87": "c29ac7a92db4837703049af91d0d35b2a592f03d",
+      "39919294": "4313334a01dd02eaf60ea7eb95dee72c97835645",
+      "b019a4a5": "d35699de96ff56478871c7839757ba52a9d2717a",
+      "c59aab67": "5bd19f9503b59c5d19bfe1c6a6e3b6e7c0e9eae2",
       "9df148c1": "c3ecdaf43cc554026c8ef1c440a08c81144f810b",
-      "0ea2cf94": "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86",
-      "d50e6275": "6540ae1a35080e3dbeacfba5139e4781eb74ca86",
-      "8ef13553": "3ae8939c8f1cdd721eabd7d73c2d6277a038672a",
+      "c79884ee": "b1e841768bf18b0d7d0ffbbe7f7788742b641677",
+      "b2267d3c": "7554061aa6f928bd41acdbcafe2d20322a0e188c",
+      "3069c8f9": "f717cb754078a350908e2839b3095843ccd90fa7",
       "f5d4f3c8": "9fa14825c40a2475a2eba5cf325bd483c447e7c1",
       "dd409902": "b1a5b826304d3df2a27d7163c6a81a532e040d32",
       "fe6cac6d": "d4b79b60cf1eaa399d0932200eb7811e00455249",
@@ -335314,6 +335994,7 @@
       "d583ff8f40c73b1584a1395bb0869a909a96d2366a4ae9f4c15ab6a3d868ea62": "7a0168bd3eea08b64acfddc5d1cfc0d538e1ac1e",
       "1ec08a1691d8eb78a87d00a716ec69be3b1dd282864d9fb4d4ca62e5f386a986": "7062b45b23ab34006f6fbb96bd78829b10b5c40c",
       "88f9528b168604036afd0091efbb496534cd276fe7b1d3276896d53403ef1837": "18a9dba5cfe2f375f111dd5148691ecaecc6293b",
+      "24572d3642585ffdc79f5b61b22483e08a869dcb037029d40977db224fbd1eda": "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86",
       "74e57eddccec91f51b9f64aed711887542b27a0c59ce1ec24ca863d0643ef0be": "c6d5bb001ed01f3f2b4f097d732c7aebdc723627",
       "579db482ee32ecc61a24b110bd97f4b0591395651d19510f86fff80d7fd33e14": "7825186c424b8f4b81b2684a8e7063f56acbbbc9",
       "8b6d28253abf807d93789fd228240e76c376ad418bb9c392fe23b8cc22b08cb7": "20989d172ded09c3d015dc8ed4ea5346b21625b8",
@@ -335329,15 +336010,23 @@
       "5a8eccb89a199119f90f7a8754cdaed710c632b24cfec88c28e18a52a1534eb9": "236ba653ca233c22f5d3086f2d66748793449dcf",
       "3329d15538e8d6f588d66f446dedf018b01a6e04640560de8588b5d4c3c91990": "67ce3ecf669c6867c9f3c645a13210eb5e30ee93",
       "ffc7cef78cfdf476fe4901356f4d3452c3b243a8a0b48ae07e8b88b5ed8289a2": "b0c58ce4d343b794bf1e70964c93dcf953e2e4fd",
+      "99b5442273d01c10a5b2792b7c0c534b17c734aa0334dde472bbe6ebcbbfb615": "3ae8939c8f1cdd721eabd7d73c2d6277a038672a",
       "d78ab119983d6960e3ae1accaf42c5d5c3ca4c7e7c7e00479afb3ff5ba0ab03d": "5bc114bba29f60a614a311745b3e2464bfa06846",
+      "836357cb2f82cfe35e419d0e3dc6f07cff217cda9714dee19a00763547f0af56": "6540ae1a35080e3dbeacfba5139e4781eb74ca86",
       "a20a48eea0ec31522f3f97b5cb8cf70bddac5c60897759f6bbb8f6850b00e025": "bc88b7a664b1b2229a9a9870914b9a7104eaf1aa",
       "5616a4105d5bd4c2a566b474203fd624ac1a3c454e4c900c7ef2f97c83464418": "83b21d0c8b93fc9b9b3b287fde4ec8f3badac5a2",
       "61f4381ebe81b7fcaf71d79db2d834419f165e3c3b818131ae6d778a485b93ce": "301ec6a69404457d912c89e3fc54095eda9f0e93",
+      "c67d47d0ff4a4cd29104e96fe7920a2ec13dff4f7f0fbcf7be645e2ae493262c": "ba93b8b85ca0d83a68225cc33b95050d72d2fdd7",
       "920a252af58081bfcbc7f052b933319a39cdc86dab83bfc6225bf6694d6fb34f": "e787dc05de227f30a47ac5b9ee7a355c2e9e693b",
       "f0ecb1b000bc0317c886e6d4d4b3665aac0a26c9388bb1874eff51c6470dc03f": "00c15406beb4b8ab1a16aa66c05860e1a7c1ad79",
       "fafb349f6137eaac97aa54cef2251247d1770b8da90b41266682cf6a82fbe3ec": "c39bd9094d4e5f4e28c1411f3086950406062e87",
       "08d564e782972b59e16db013049117f9c73a650d946a52d2abe736f27e4713d7": "f76316bf36dff14b20fa349ed02e4b11dd932b07",
       "563f948af19c09daed1f06b8760221ff4b2789c1690cdcfbce2c941157af23d1": "d82ebb59afc53540ddf2d7187ecf239b7ea91590",
+      "59e7df327a7a680e4f2f185e17161e3257bf41247911f34ddf6564399645d703": "87508de834dc7eb47359cede72d2e3c8a2e5d8db",
+      "339deebab62f772775d7afb27bd50dbb56391480c911114c72b0a06709181ca4": "f72d89148dac39c696e30b10859ebc859226637b",
+      "ac16eb9876550b8e07826b786269eb7c0d2afd0e5dc001a8b128c8ce8f9c0179": "81c631dd096bbb31d2af90299c76b774db74076c",
+      "990272a0e53accc5cde6989210af0f0bd40e428946c2c769e11f0fef875ce759": "bad0ae388442db02eaeb6a5363ef43eb4e308ae6",
+      "ffcf6993c1a2df032fee1125036e2192cf29f70add547a50fc2cfff8f4fb9f7a": "5b2982876fec2166673be447643881262c84090e",
       "3913ea4124cc1d0b24bca3e9d7b6f8fd5935f41d8dcfb17781c1ca09424cf120": "7a9095f1107966f90267dc4cb3c1972efb4b78a8",
       "86a0de3a6e390fe0804e8d8e3d39091552f3f5020d8bd4989a77bb996bbc50b7": "6a7bfb5dbd6b8f179f03da84d8d9528267b6273b",
       "ee05862d8102a08436ac4056da7d549db31625c7d47b24dfb7b3c9a5c113ca53": "891e9a547772fe0c6c19b610baf8bc4ea7fcb785",
@@ -335362,6 +336051,7 @@
       "680e654880c891a3b03e6107ed30b10903efca16c1dac1b4c8e7835f4e37acb6": "03ca81c7a7b259cf64bc9582863eca0f6529f435",
       "d49e12852f7cb9332e74d5c3340720a7aef84157b411a454e075e9dad5e23b17": "a3bab2add955535364d6e5fc5bedac05e35fad0b",
       "dbd98d87653b9a4b38a6d59aad24989ca15f7cb16911f8cde404a214bbd47366": "eba74ad1000a5351a5d99179bf75f831ac2d2402",
+      "34b61b406c4f72ad02e3c46f4ef042a47a7daec75bf15fc713b27d0ee4fa9e86": "0990ea8c509ead367391741df2d4542ccb9d8fb7",
       "a2e89ece12c1df7248f3e7ecb3d3d17b857d44d2dd1716c44a3d9645f19d0e2d": "d1defdee1c0eae4107d81e2674915cd29d352f2e",
       "5badad452afb33e2ed8937f1377450aefd372bb56035f563fadbb89e65e08032": "45a2b7db6e86fe805cfef63c65c331a716a6e9e8",
       "e3c08697d0a15fca9d2be04eb72485c67b421a8eb0a251a44201756d9ab19e52": "c1b707a8a62907d75299f10aa60efd1f44514b26",
@@ -335426,10 +336116,14 @@
       "48328410e0cfff5e2b5d923969a9f3dc801fc48d76ab1d416928b15c3a0a94b8": "a39a6d232cb9a81b5f3694d3688737825ad581bc",
       "ea0f30367739a1dd2570998263b1e31f6e4f3f45b138fe725783cd0d28c60cc8": "003577b84e1f2e593add6c9ffd65a7b42abaa933",
       "7857c68397cc54970ccf42eb1b8679548cc36a26e2209717fd61db9ff792e69e": "e043c1aa3bb06e06d4dabff30a8c6317abfef2bb",
+      "affc2165c2818755235b028a825db1c4f7a90ac8e0ba8a9a188c0f4901edc8a4": "ea0409700fefb5267ef5a29472e7810b77d4d88c",
       "fa69d6a67ac949c1cb2482aeff80f8eb73e641bd4244622fe6b2184a55505fbb": "25d2cc5bf44997b04870187720f8411c4b60f7d7",
+      "d6a28ffd0e621a15692a77ecc149e4d2a26b5f8597017b9171353894552b7bb6": "3441410e991a916e8bf9b130181fa169a9b859bf",
       "d1f6b42898834f9e0c44c994f67be6d43a5ec00f8bfa881bfeb38fcc4d0ab3ae": "d206ada7edb18664fbead3e38dd6232297df20b1",
       "d2ff49d902a479ab387f848e3bfb2c27ca277f5ebf1533175a9dfb1a0f249b29": "1411c24872f7cb8decbe4744f0b8d12a1aaaad44",
       "8db02ac6ad52c9cd5ffde1243af1df051eb0d3ad3ffca6d63c4322881f30b036": "efe17ca588c44a7f0f8c62be20f23278cfe06727",
+      "1c59eee74b32c7c9e173cea4de066d9087c407416cf77d81bfb1f06113f06e40": "c9f86e18a1004e9cfe4eede2e0b399701c54323b",
+      "e765fab490f3daa906277cbad30a0aa84e5d8b1d637000bc07e663cf27ab1efd": "ad1f450962c094ba2d970a501714b4997ba444ba",
       "d093f63747fbe64b5ed4e05ecb2cde31a067c5c89f5b8f80288194a25b440209": "ec17a58962c373a2892090ec9b1722d2c326d631",
       "ab99ebaa493e89a6b2d13706ecfc78505eb0156d05a49056890fab993f90e179": "7113add04c782ed7a56a74ba3378d55c5605eaf6",
       "bcb9ffbcca1393ea9f2565769b8444acb4daa28290a625574034ac60981fe1a6": "a7c4b709494f403442b8ec11090dc1d018098ebc",
@@ -335444,8 +336138,12 @@
       "778bcb79f0fd0b88f661956595cf5fdaeecfea01b84e22f4fdeee51f6d372083": "c1f29093491339cddc81f9940f0965dfa3a193f2",
       "062481b561984e2b552455899117b91e63c5df4f22d79391f241c9bd2bffa686": "8f4bdda010338a4851e4a2fbb4aa6d6e202fe98e",
       "42bc4c720ea4847e5e782ca5a6dea4780c4fddc0874bfe1535fb77de0bf608bd": "8e95bc8da06050fcb596b5b4c8cf91021ff4aeb3",
+      "885da97a35cb86bacd3c3ec8996bd536658ea01295e45d09890e15dbc77e6a30": "44f667df433d64bb99b8632eb78c65e5b445acbf",
       "af53c1e327d88a075da9d9aeca6823b61b42e47b76eb5b0cc5a14e37812d61e9": "1c0e95c39e822597ad0e2945c37b556e5dc67828",
+      "28910ab61bee40147aaeed6b627664e0427dea3c451cd908bc048452c9809e29": "1df506c9a170dca2ab8736fa1865f75f62e8663a",
       "b6bda28c52cd2766731a3f475d092e2bddcdd240582f995b055abfff9046cdb3": "3908d0630ec5c8b3cd47b2a01195e04b1bb8c54d",
+      "3db42c51f0682e68de7dc3ec6f02c8509a0eb7890b9fcd9cefd56c077bccfde5": "8adc960a086202f8de77a1eebb579036552840ad",
+      "8005e9fb0b6fbe2627875d8edf02ab95811739a20aa2b291b884a36d01ead183": "41f30a0acbe93d2f309f1dd2077fffa21be8f8e2",
       "a2f119bc6019c0dda5df3edd0ac8058ed98011afc6d57a1439644ff7e6ed3fff": "b62a68efb9378d740be174521ad07d2ea461a313",
       "c9e75bb4eecad5f917900ed2d37ce3c2192831b21b2c890d7a55c6eb0ce193d4": "f0431d02ac0f83d345db18c023f0cefb33d17217",
       "f319fc21c315b95ed7298b3da824f82ac274671b838fad8d73af11350e843ad7": "a66f8ef6901e0e41f8b72bba12165788a452cf01",
@@ -335573,10 +336271,32 @@
       "db98bbdea142379ed60466cd3a9d8d0160f91d9549cf155e8f320d7d1ddde29c": "38e63f700ee6a5be71ded6c057267562c00f3e31",
       "40acff2a2425a223e4e2ad2e3c16ad76ce7ed303d9801835aaf028db0e96f0b0": "faaaa08b29b391381771222f10b7b22c3b99f4ca",
       "173e866329e4d91e1c03db79687b96f6011b2c4940c358b01ad921f22b5c7112": "55dd3ecd5086528fa984e82db6474b954fc54ad5",
+      "0b2e62713e8b2cb48b3607ac71d8aa41ab6bfdd3f44448a88348e005ab699a05": "35d01bccc0062bc7943310dc9c9466e02fb561df",
+      "22d550efc3bd8cc882e25610a4a57069d486d1a66d8791dfecdfba8d36b28aba": "17f92f7647b1cec0c17f90b7d0b562f48278af02",
+      "2572b3228725a9bd32b008aa4fd225d176ca6af47d03978f44be13d77fe6f462": "a2a76c10cb06315e51990911fa050669cc89830d",
+      "26b8e5721012e6d3bde59782c24747a6799dc86882655f4bae4939f6d36597a4": "ca64f89919c2869cb6fd75346b9a21245a6d04a8",
+      "70af41004441e1d793dd70cfe9f491d9e09a667969bf3360e64ae39999260e5b": "8102d77ae0a3d64496436ee56a9c577c84b11992",
+      "c27e93d5f11004e186ac9bdef75ff9dd121c0651eb44e8a987d4179e6bfcb049": "4599430f3baa302635a85b26a7b70a4116dc5f09",
+      "5d4f8f16bd935249a88c64afd450c0b8ca9adda960629b00ba9314e13e2e5b4e": "d0746429187ab38e886a47820203315f734e8d89",
+      "f40ab6ee8670eb0493e66e2f335c11bdc4e97fb56d97c01e13d51d6275d667ad": "f4a8dbe69e386d87d9ab8cbaf7fc3881b358fdb2",
+      "3e3977cd7627c845468eef9737ff50540700c4e3197e13c8255e4cf92eeeddba": "f22d099b81d2d039c4fbb3fea47cc9700b01fecf",
+      "07e7d0d0e2e429726003dad04cefc003dcb8375076cadb7a3daba7dab6254d33": "0e00bc18aec757d86f9831131c2236a704c175db",
+      "244c4e807e8cc1d80a6a197a8b0071ebf71591233efd5e518c09927015cc4328": "1093133a17cb635c21c5532ae26ded83b6d359ce",
+      "732b07e66d11cf507b4c5884ad93057fabdb936666117e69bb59233747ad1392": "46dca6e2ff2176f7a12c52ea992a7a49ae5ef269",
+      "8dd05bd2a4becddfb5fc0945255fd13b5c73920c1e46e9fd3acc4b2e834b6428": "168bee97805be1f85b65f615e6931c4942caf4e4",
+      "c8286e4bc4f922262351ef00ab410955b4ad3216bad9b17d5647378fc755e06e": "50cd2a19bee1ebd6b54b31c5b9461d5a81a2e910",
+      "8c5bbdc3f3f57e874b1a09ff40cea41f292bc5b4caaa88df9366a1798437d493": "c81cf6d99de56faa6154cc81a9876517c2a8efc0",
+      "25f27d71d13e26b0331441370833cdd985a6c22777f873acc3aa2c5f5e13e218": "fc96d367e7b3409074841c7f145ab6daef0a6a4d",
+      "9ccd9bc15c809325d21a6924fa1056d1cba44f8d02529004ff2055a2f6aed0d1": "d140b4e87a2ff76cf94616d97fe7b127d128d973",
+      "6f399a668b7d136a29f834b425b1c226732a87f28bd35bf0f3a7c6edcefa64da": "2191b616abd4b2fb34c89ae243c35feea2b71104",
+      "a681ba94e29a791ae280fc8eb4592d704ddfe414cafc414bebe87d529559cd9a": "c29ac7a92db4837703049af91d0d35b2a592f03d",
+      "f80334d84d9915c4cd8dffa3ac870807cbfbdb5fd866cffe0b1f9604c391079e": "4313334a01dd02eaf60ea7eb95dee72c97835645",
+      "d88a1f01a4c84b2571325e5285cb7598dfbc7fc560885696c2c7acb842ce0b66": "d35699de96ff56478871c7839757ba52a9d2717a",
+      "3e709afeb8506a88fc8a43c05fd056825e0f06bd95cf48f81338733e7d521a39": "5bd19f9503b59c5d19bfe1c6a6e3b6e7c0e9eae2",
       "5e66d140e12b09769ba0bba87dc5a6f683261fd40eb43b94c390d1c62db1adb5": "c3ecdaf43cc554026c8ef1c440a08c81144f810b",
-      "24572d3642585ffdc79f5b61b22483e08a869dcb037029d40977db224fbd1eda": "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86",
-      "836357cb2f82cfe35e419d0e3dc6f07cff217cda9714dee19a00763547f0af56": "6540ae1a35080e3dbeacfba5139e4781eb74ca86",
-      "99b5442273d01c10a5b2792b7c0c534b17c734aa0334dde472bbe6ebcbbfb615": "3ae8939c8f1cdd721eabd7d73c2d6277a038672a",
+      "2cc5bebf1b97a8dd35359652e655c1d5ebbded8922f93f42170cd351a06c067b": "b1e841768bf18b0d7d0ffbbe7f7788742b641677",
+      "cca5012f0963cd08df48b6a841e944947269afa0a8ce05b0d0cc14db2ae0097c": "7554061aa6f928bd41acdbcafe2d20322a0e188c",
+      "31bf26b3ade19706f029f023415b6becf4283993ff89d1d6956bb016626b895e": "f717cb754078a350908e2839b3095843ccd90fa7",
       "53c6053fb5ef9068db57d62c6565dfa30365d35349824525f02aa715962c446a": "9fa14825c40a2475a2eba5cf325bd483c447e7c1",
       "2de4d06b4aa2a1b1129cc641a01cbac7e631de362dbd6fe2129eec7336afad53": "b1a5b826304d3df2a27d7163c6a81a532e040d32",
       "4c0277542ec3d4cc93ece8a5c5dcc2a3fedafd3521a3be06f5d2d9ffbde85355": "d4b79b60cf1eaa399d0932200eb7811e00455249",
@@ -382380,6 +383100,15 @@
       ".variants/boot-data.zip.18a9dba5": [
         "18a9dba5cfe2f375f111dd5148691ecaecc6293b"
       ],
+      "Commodore/Amiga/.variants/boot-data.zip.28b7fd41": [
+        "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86"
+      ],
+      "Amiga/.variants/boot-data.zip.28b7fd41": [
+        "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86"
+      ],
+      ".variants/boot-data.zip.28b7fd41": [
+        "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86"
+      ],
       "Commodore/Amiga/.variants/boot-data.zip.4a36c9d0": [
         "c6d5bb001ed01f3f2b4f097d732c7aebdc723627"
       ],
@@ -382515,6 +383244,15 @@
       ".variants/capsimg.so.fcad5524": [
         "b0c58ce4d343b794bf1e70964c93dcf953e2e4fd"
       ],
+      "Commodore/Amiga/.variants/host-quit.a491e6bc": [
+        "3ae8939c8f1cdd721eabd7d73c2d6277a038672a"
+      ],
+      "Amiga/.variants/host-quit.a491e6bc": [
+        "3ae8939c8f1cdd721eabd7d73c2d6277a038672a"
+      ],
+      ".variants/host-quit.a491e6bc": [
+        "3ae8939c8f1cdd721eabd7d73c2d6277a038672a"
+      ],
       "Commodore/Amiga/.variants/kick34005.CDTV.ceae68d2": [
         "5bc114bba29f60a614a311745b3e2464bfa06846"
       ],
@@ -382523,6 +383261,15 @@
       ],
       ".variants/kick34005.CDTV.ceae68d2": [
         "5bc114bba29f60a614a311745b3e2464bfa06846"
+      ],
+      "Commodore/Amiga/.variants/whdload_db.json.51d44cd2": [
+        "6540ae1a35080e3dbeacfba5139e4781eb74ca86"
+      ],
+      "Amiga/.variants/whdload_db.json.51d44cd2": [
+        "6540ae1a35080e3dbeacfba5139e4781eb74ca86"
+      ],
+      ".variants/whdload_db.json.51d44cd2": [
+        "6540ae1a35080e3dbeacfba5139e4781eb74ca86"
       ],
       "Commodore/Amiga/.variants/whdload_db.json.b6012c4c": [
         "bc88b7a664b1b2229a9a9870914b9a7104eaf1aa"
@@ -382544,6 +383291,12 @@
       ],
       "Amiga/68HC05.rom": [
         "301ec6a69404457d912c89e3fc54095eda9f0e93"
+      ],
+      "Commodore/Amiga/A1000 bootstrap ROM.rom": [
+        "ba93b8b85ca0d83a68225cc33b95050d72d2fdd7"
+      ],
+      "Amiga/A1000 bootstrap ROM.rom": [
+        "ba93b8b85ca0d83a68225cc33b95050d72d2fdd7"
       ],
       "Commodore/Amiga/D8039HLC.rom": [
         "e787dc05de227f30a47ac5b9ee7a355c2e9e693b"
@@ -382574,6 +383327,36 @@
       ],
       "Amiga/KS ROM v2.04 (A3000).rom": [
         "d82ebb59afc53540ddf2d7187ecf239b7ea91590"
+      ],
+      "Commodore/Amiga/KS ROM v2.05 (A600).rom": [
+        "87508de834dc7eb47359cede72d2e3c8a2e5d8db"
+      ],
+      "Amiga/KS ROM v2.05 (A600).rom": [
+        "87508de834dc7eb47359cede72d2e3c8a2e5d8db"
+      ],
+      "Commodore/Amiga/KS ROM v2.05 (A600HD).rom": [
+        "f72d89148dac39c696e30b10859ebc859226637b"
+      ],
+      "Amiga/KS ROM v2.05 (A600HD).rom": [
+        "f72d89148dac39c696e30b10859ebc859226637b"
+      ],
+      "Commodore/Amiga/KS ROM v3.1 (A4000).rom": [
+        "81c631dd096bbb31d2af90299c76b774db74076c"
+      ],
+      "Amiga/KS ROM v3.1 (A4000).rom": [
+        "81c631dd096bbb31d2af90299c76b774db74076c"
+      ],
+      "Commodore/Amiga/KS ROM v3.1.4-1 (A4000).rom": [
+        "bad0ae388442db02eaeb6a5363ef43eb4e308ae6"
+      ],
+      "Amiga/KS ROM v3.1.4-1 (A4000).rom": [
+        "bad0ae388442db02eaeb6a5363ef43eb4e308ae6"
+      ],
+      "Commodore/Amiga/KS ROM v3.2 (A1200).rom": [
+        "5b2982876fec2166673be447643881262c84090e"
+      ],
+      "Amiga/KS ROM v3.2 (A1200).rom": [
+        "5b2982876fec2166673be447643881262c84090e"
       ],
       "Commodore/Amiga/KS ROM v3.2 (Walker).rom": [
         "7a9095f1107966f90267dc4cb3c1972efb4b78a8"
@@ -382724,6 +383507,15 @@
       ],
       "expansion/a1060-bios-2.06.rom": [
         "eba74ad1000a5351a5d99179bf75f831ac2d2402"
+      ],
+      "Commodore/Amiga/expansion/a1060-bios-2.07.rom": [
+        "0990ea8c509ead367391741df2d4542ccb9d8fb7"
+      ],
+      "Amiga/expansion/a1060-bios-2.07.rom": [
+        "0990ea8c509ead367391741df2d4542ccb9d8fb7"
+      ],
+      "expansion/a1060-bios-2.07.rom": [
+        "0990ea8c509ead367391741df2d4542ccb9d8fb7"
       ],
       "Commodore/Amiga/expansion/a2088-bios-3.4.rom": [
         "d1defdee1c0eae4107d81e2674915cd29d352f2e"
@@ -383301,6 +384093,15 @@
       "expansion/blizzard-2060-v8.5.rom": [
         "e043c1aa3bb06e06d4dabff30a8c6317abfef2bb"
       ],
+      "Commodore/Amiga/expansion/blizzard-ppc-68040-v44.69.rom": [
+        "ea0409700fefb5267ef5a29472e7810b77d4d88c"
+      ],
+      "Amiga/expansion/blizzard-ppc-68040-v44.69.rom": [
+        "ea0409700fefb5267ef5a29472e7810b77d4d88c"
+      ],
+      "expansion/blizzard-ppc-68040-v44.69.rom": [
+        "ea0409700fefb5267ef5a29472e7810b77d4d88c"
+      ],
       "Commodore/Amiga/expansion/blizzard-ppc-68040-v44.71.rom": [
         "25d2cc5bf44997b04870187720f8411c4b60f7d7"
       ],
@@ -383309,6 +384110,15 @@
       ],
       "expansion/blizzard-ppc-68040-v44.71.rom": [
         "25d2cc5bf44997b04870187720f8411c4b60f7d7"
+      ],
+      "Commodore/Amiga/expansion/blizzard-ppc-68060-v44.69.rom": [
+        "3441410e991a916e8bf9b130181fa169a9b859bf"
+      ],
+      "Amiga/expansion/blizzard-ppc-68060-v44.69.rom": [
+        "3441410e991a916e8bf9b130181fa169a9b859bf"
+      ],
+      "expansion/blizzard-ppc-68060-v44.69.rom": [
+        "3441410e991a916e8bf9b130181fa169a9b859bf"
       ],
       "Commodore/Amiga/expansion/blizzard-ppc-68060-v44.71.rom": [
         "d206ada7edb18664fbead3e38dd6232297df20b1"
@@ -383336,6 +384146,24 @@
       ],
       "expansion/blizzard-scsi-kit-iv.rom": [
         "efe17ca588c44a7f0f8c62be20f23278cfe06727"
+      ],
+      "Commodore/Amiga/expansion/blizzardppc_040.rom": [
+        "c9f86e18a1004e9cfe4eede2e0b399701c54323b"
+      ],
+      "Amiga/expansion/blizzardppc_040.rom": [
+        "c9f86e18a1004e9cfe4eede2e0b399701c54323b"
+      ],
+      "expansion/blizzardppc_040.rom": [
+        "c9f86e18a1004e9cfe4eede2e0b399701c54323b"
+      ],
+      "Commodore/Amiga/expansion/blizzardppc_060.rom": [
+        "ad1f450962c094ba2d970a501714b4997ba444ba"
+      ],
+      "Amiga/expansion/blizzardppc_060.rom": [
+        "ad1f450962c094ba2d970a501714b4997ba444ba"
+      ],
+      "expansion/blizzardppc_060.rom": [
+        "ad1f450962c094ba2d970a501714b4997ba444ba"
       ],
       "Commodore/Amiga/expansion/buddha-v103.17.rom": [
         "ec17a58962c373a2892090ec9b1722d2c326d631"
@@ -383463,6 +384291,15 @@
       "expansion/cyberstorm-mk-i-cyberscsi-module.rom": [
         "8e95bc8da06050fcb596b5b4c8cf91021ff4aeb3"
       ],
+      "Commodore/Amiga/expansion/cyberstorm-mk-iii-v44.69.rom": [
+        "44f667df433d64bb99b8632eb78c65e5b445acbf"
+      ],
+      "Amiga/expansion/cyberstorm-mk-iii-v44.69.rom": [
+        "44f667df433d64bb99b8632eb78c65e5b445acbf"
+      ],
+      "expansion/cyberstorm-mk-iii-v44.69.rom": [
+        "44f667df433d64bb99b8632eb78c65e5b445acbf"
+      ],
       "Commodore/Amiga/expansion/cyberstorm-mk-iii-v44.71.rom": [
         "1c0e95c39e822597ad0e2945c37b556e5dc67828"
       ],
@@ -383472,6 +384309,15 @@
       "expansion/cyberstorm-mk-iii-v44.71.rom": [
         "1c0e95c39e822597ad0e2945c37b556e5dc67828"
       ],
+      "Commodore/Amiga/expansion/cyberstorm-ppc-v44.69.rom": [
+        "1df506c9a170dca2ab8736fa1865f75f62e8663a"
+      ],
+      "Amiga/expansion/cyberstorm-ppc-v44.69.rom": [
+        "1df506c9a170dca2ab8736fa1865f75f62e8663a"
+      ],
+      "expansion/cyberstorm-ppc-v44.69.rom": [
+        "1df506c9a170dca2ab8736fa1865f75f62e8663a"
+      ],
       "Commodore/Amiga/expansion/cyberstorm-ppc-v44.71.rom": [
         "3908d0630ec5c8b3cd47b2a01195e04b1bb8c54d"
       ],
@@ -383480,6 +384326,24 @@
       ],
       "expansion/cyberstorm-ppc-v44.71.rom": [
         "3908d0630ec5c8b3cd47b2a01195e04b1bb8c54d"
+      ],
+      "Commodore/Amiga/expansion/cyberstormmk3.rom": [
+        "8adc960a086202f8de77a1eebb579036552840ad"
+      ],
+      "Amiga/expansion/cyberstormmk3.rom": [
+        "8adc960a086202f8de77a1eebb579036552840ad"
+      ],
+      "expansion/cyberstormmk3.rom": [
+        "8adc960a086202f8de77a1eebb579036552840ad"
+      ],
+      "Commodore/Amiga/expansion/cyberstormppc.rom": [
+        "41f30a0acbe93d2f309f1dd2077fffa21be8f8e2"
+      ],
+      "Amiga/expansion/cyberstormppc.rom": [
+        "41f30a0acbe93d2f309f1dd2077fffa21be8f8e2"
+      ],
+      "expansion/cyberstormppc.rom": [
+        "41f30a0acbe93d2f309f1dd2077fffa21be8f8e2"
       ],
       "Commodore/Amiga/expansion/dkb-1230-1240-cobra-plus-ferret-v1.23.rom": [
         "b62a68efb9378d740be174521ad07d2ea461a313"
@@ -384567,6 +385431,318 @@
       "whdboot/JST": [
         "55dd3ecd5086528fa984e82db6474b954fc54ad5"
       ],
+      "Commodore/Amiga/whdboot/Libs/68040.library": [
+        "35d01bccc0062bc7943310dc9c9466e02fb561df"
+      ],
+      "Amiga/whdboot/Libs/68040.library": [
+        "35d01bccc0062bc7943310dc9c9466e02fb561df"
+      ],
+      "whdboot/Libs/68040.library": [
+        "35d01bccc0062bc7943310dc9c9466e02fb561df"
+      ],
+      "Libs/68040.library": [
+        "35d01bccc0062bc7943310dc9c9466e02fb561df"
+      ],
+      "Commodore/Amiga/whdboot/Libs/680x0.library": [
+        "17f92f7647b1cec0c17f90b7d0b562f48278af02"
+      ],
+      "Amiga/whdboot/Libs/680x0.library": [
+        "17f92f7647b1cec0c17f90b7d0b562f48278af02"
+      ],
+      "whdboot/Libs/680x0.library": [
+        "17f92f7647b1cec0c17f90b7d0b562f48278af02"
+      ],
+      "Libs/680x0.library": [
+        "17f92f7647b1cec0c17f90b7d0b562f48278af02"
+      ],
+      "Commodore/Amiga/whdboot/Libs/Compressors/xpkCBR0.library": [
+        "a2a76c10cb06315e51990911fa050669cc89830d"
+      ],
+      "Amiga/whdboot/Libs/Compressors/xpkCBR0.library": [
+        "a2a76c10cb06315e51990911fa050669cc89830d"
+      ],
+      "whdboot/Libs/Compressors/xpkCBR0.library": [
+        "a2a76c10cb06315e51990911fa050669cc89830d"
+      ],
+      "Libs/Compressors/xpkCBR0.library": [
+        "a2a76c10cb06315e51990911fa050669cc89830d"
+      ],
+      "Compressors/xpkCBR0.library": [
+        "a2a76c10cb06315e51990911fa050669cc89830d"
+      ],
+      "Commodore/Amiga/whdboot/Libs/Compressors/xpkDLTA.library": [
+        "ca64f89919c2869cb6fd75346b9a21245a6d04a8"
+      ],
+      "Amiga/whdboot/Libs/Compressors/xpkDLTA.library": [
+        "ca64f89919c2869cb6fd75346b9a21245a6d04a8"
+      ],
+      "whdboot/Libs/Compressors/xpkDLTA.library": [
+        "ca64f89919c2869cb6fd75346b9a21245a6d04a8"
+      ],
+      "Libs/Compressors/xpkDLTA.library": [
+        "ca64f89919c2869cb6fd75346b9a21245a6d04a8"
+      ],
+      "Compressors/xpkDLTA.library": [
+        "ca64f89919c2869cb6fd75346b9a21245a6d04a8"
+      ],
+      "Commodore/Amiga/whdboot/Libs/Compressors/xpkDUKE.library": [
+        "8102d77ae0a3d64496436ee56a9c577c84b11992"
+      ],
+      "Amiga/whdboot/Libs/Compressors/xpkDUKE.library": [
+        "8102d77ae0a3d64496436ee56a9c577c84b11992"
+      ],
+      "whdboot/Libs/Compressors/xpkDUKE.library": [
+        "8102d77ae0a3d64496436ee56a9c577c84b11992"
+      ],
+      "Libs/Compressors/xpkDUKE.library": [
+        "8102d77ae0a3d64496436ee56a9c577c84b11992"
+      ],
+      "Compressors/xpkDUKE.library": [
+        "8102d77ae0a3d64496436ee56a9c577c84b11992"
+      ],
+      "Commodore/Amiga/whdboot/Libs/Compressors/xpkFAST.library": [
+        "4599430f3baa302635a85b26a7b70a4116dc5f09"
+      ],
+      "Amiga/whdboot/Libs/Compressors/xpkFAST.library": [
+        "4599430f3baa302635a85b26a7b70a4116dc5f09"
+      ],
+      "whdboot/Libs/Compressors/xpkFAST.library": [
+        "4599430f3baa302635a85b26a7b70a4116dc5f09"
+      ],
+      "Libs/Compressors/xpkFAST.library": [
+        "4599430f3baa302635a85b26a7b70a4116dc5f09"
+      ],
+      "Compressors/xpkFAST.library": [
+        "4599430f3baa302635a85b26a7b70a4116dc5f09"
+      ],
+      "Commodore/Amiga/whdboot/Libs/Compressors/xpkFRLE.library": [
+        "d0746429187ab38e886a47820203315f734e8d89"
+      ],
+      "Amiga/whdboot/Libs/Compressors/xpkFRLE.library": [
+        "d0746429187ab38e886a47820203315f734e8d89"
+      ],
+      "whdboot/Libs/Compressors/xpkFRLE.library": [
+        "d0746429187ab38e886a47820203315f734e8d89"
+      ],
+      "Libs/Compressors/xpkFRLE.library": [
+        "d0746429187ab38e886a47820203315f734e8d89"
+      ],
+      "Compressors/xpkFRLE.library": [
+        "d0746429187ab38e886a47820203315f734e8d89"
+      ],
+      "Commodore/Amiga/whdboot/Libs/Compressors/xpkHFMN.library": [
+        "f4a8dbe69e386d87d9ab8cbaf7fc3881b358fdb2"
+      ],
+      "Amiga/whdboot/Libs/Compressors/xpkHFMN.library": [
+        "f4a8dbe69e386d87d9ab8cbaf7fc3881b358fdb2"
+      ],
+      "whdboot/Libs/Compressors/xpkHFMN.library": [
+        "f4a8dbe69e386d87d9ab8cbaf7fc3881b358fdb2"
+      ],
+      "Libs/Compressors/xpkHFMN.library": [
+        "f4a8dbe69e386d87d9ab8cbaf7fc3881b358fdb2"
+      ],
+      "Compressors/xpkHFMN.library": [
+        "f4a8dbe69e386d87d9ab8cbaf7fc3881b358fdb2"
+      ],
+      "Commodore/Amiga/whdboot/Libs/Compressors/xpkHUFF.library": [
+        "f22d099b81d2d039c4fbb3fea47cc9700b01fecf"
+      ],
+      "Amiga/whdboot/Libs/Compressors/xpkHUFF.library": [
+        "f22d099b81d2d039c4fbb3fea47cc9700b01fecf"
+      ],
+      "whdboot/Libs/Compressors/xpkHUFF.library": [
+        "f22d099b81d2d039c4fbb3fea47cc9700b01fecf"
+      ],
+      "Libs/Compressors/xpkHUFF.library": [
+        "f22d099b81d2d039c4fbb3fea47cc9700b01fecf"
+      ],
+      "Compressors/xpkHUFF.library": [
+        "f22d099b81d2d039c4fbb3fea47cc9700b01fecf"
+      ],
+      "Commodore/Amiga/whdboot/Libs/Compressors/xpkIMPL.library": [
+        "0e00bc18aec757d86f9831131c2236a704c175db"
+      ],
+      "Amiga/whdboot/Libs/Compressors/xpkIMPL.library": [
+        "0e00bc18aec757d86f9831131c2236a704c175db"
+      ],
+      "whdboot/Libs/Compressors/xpkIMPL.library": [
+        "0e00bc18aec757d86f9831131c2236a704c175db"
+      ],
+      "Libs/Compressors/xpkIMPL.library": [
+        "0e00bc18aec757d86f9831131c2236a704c175db"
+      ],
+      "Compressors/xpkIMPL.library": [
+        "0e00bc18aec757d86f9831131c2236a704c175db"
+      ],
+      "Commodore/Amiga/whdboot/Libs/Compressors/xpkMASH.library": [
+        "1093133a17cb635c21c5532ae26ded83b6d359ce"
+      ],
+      "Amiga/whdboot/Libs/Compressors/xpkMASH.library": [
+        "1093133a17cb635c21c5532ae26ded83b6d359ce"
+      ],
+      "whdboot/Libs/Compressors/xpkMASH.library": [
+        "1093133a17cb635c21c5532ae26ded83b6d359ce"
+      ],
+      "Libs/Compressors/xpkMASH.library": [
+        "1093133a17cb635c21c5532ae26ded83b6d359ce"
+      ],
+      "Compressors/xpkMASH.library": [
+        "1093133a17cb635c21c5532ae26ded83b6d359ce"
+      ],
+      "Commodore/Amiga/whdboot/Libs/Compressors/xpkNONE.library": [
+        "46dca6e2ff2176f7a12c52ea992a7a49ae5ef269"
+      ],
+      "Amiga/whdboot/Libs/Compressors/xpkNONE.library": [
+        "46dca6e2ff2176f7a12c52ea992a7a49ae5ef269"
+      ],
+      "whdboot/Libs/Compressors/xpkNONE.library": [
+        "46dca6e2ff2176f7a12c52ea992a7a49ae5ef269"
+      ],
+      "Libs/Compressors/xpkNONE.library": [
+        "46dca6e2ff2176f7a12c52ea992a7a49ae5ef269"
+      ],
+      "Compressors/xpkNONE.library": [
+        "46dca6e2ff2176f7a12c52ea992a7a49ae5ef269"
+      ],
+      "Commodore/Amiga/whdboot/Libs/Compressors/xpkNUKE.library": [
+        "168bee97805be1f85b65f615e6931c4942caf4e4"
+      ],
+      "Amiga/whdboot/Libs/Compressors/xpkNUKE.library": [
+        "168bee97805be1f85b65f615e6931c4942caf4e4"
+      ],
+      "whdboot/Libs/Compressors/xpkNUKE.library": [
+        "168bee97805be1f85b65f615e6931c4942caf4e4"
+      ],
+      "Libs/Compressors/xpkNUKE.library": [
+        "168bee97805be1f85b65f615e6931c4942caf4e4"
+      ],
+      "Compressors/xpkNUKE.library": [
+        "168bee97805be1f85b65f615e6931c4942caf4e4"
+      ],
+      "Commodore/Amiga/whdboot/Libs/Compressors/xpkRAKE.library": [
+        "50cd2a19bee1ebd6b54b31c5b9461d5a81a2e910"
+      ],
+      "Amiga/whdboot/Libs/Compressors/xpkRAKE.library": [
+        "50cd2a19bee1ebd6b54b31c5b9461d5a81a2e910"
+      ],
+      "whdboot/Libs/Compressors/xpkRAKE.library": [
+        "50cd2a19bee1ebd6b54b31c5b9461d5a81a2e910"
+      ],
+      "Libs/Compressors/xpkRAKE.library": [
+        "50cd2a19bee1ebd6b54b31c5b9461d5a81a2e910"
+      ],
+      "Compressors/xpkRAKE.library": [
+        "50cd2a19bee1ebd6b54b31c5b9461d5a81a2e910"
+      ],
+      "Commodore/Amiga/whdboot/Libs/Compressors/xpkRLEN.library": [
+        "c81cf6d99de56faa6154cc81a9876517c2a8efc0"
+      ],
+      "Amiga/whdboot/Libs/Compressors/xpkRLEN.library": [
+        "c81cf6d99de56faa6154cc81a9876517c2a8efc0"
+      ],
+      "whdboot/Libs/Compressors/xpkRLEN.library": [
+        "c81cf6d99de56faa6154cc81a9876517c2a8efc0"
+      ],
+      "Libs/Compressors/xpkRLEN.library": [
+        "c81cf6d99de56faa6154cc81a9876517c2a8efc0"
+      ],
+      "Compressors/xpkRLEN.library": [
+        "c81cf6d99de56faa6154cc81a9876517c2a8efc0"
+      ],
+      "Commodore/Amiga/whdboot/Libs/Compressors/xpkSHRI.library": [
+        "fc96d367e7b3409074841c7f145ab6daef0a6a4d"
+      ],
+      "Amiga/whdboot/Libs/Compressors/xpkSHRI.library": [
+        "fc96d367e7b3409074841c7f145ab6daef0a6a4d"
+      ],
+      "whdboot/Libs/Compressors/xpkSHRI.library": [
+        "fc96d367e7b3409074841c7f145ab6daef0a6a4d"
+      ],
+      "Libs/Compressors/xpkSHRI.library": [
+        "fc96d367e7b3409074841c7f145ab6daef0a6a4d"
+      ],
+      "Compressors/xpkSHRI.library": [
+        "fc96d367e7b3409074841c7f145ab6daef0a6a4d"
+      ],
+      "Commodore/Amiga/whdboot/Libs/Compressors/xpkSMPL.library": [
+        "d140b4e87a2ff76cf94616d97fe7b127d128d973"
+      ],
+      "Amiga/whdboot/Libs/Compressors/xpkSMPL.library": [
+        "d140b4e87a2ff76cf94616d97fe7b127d128d973"
+      ],
+      "whdboot/Libs/Compressors/xpkSMPL.library": [
+        "d140b4e87a2ff76cf94616d97fe7b127d128d973"
+      ],
+      "Libs/Compressors/xpkSMPL.library": [
+        "d140b4e87a2ff76cf94616d97fe7b127d128d973"
+      ],
+      "Compressors/xpkSMPL.library": [
+        "d140b4e87a2ff76cf94616d97fe7b127d128d973"
+      ],
+      "Commodore/Amiga/whdboot/Libs/Compressors/xpkSQSH.library": [
+        "2191b616abd4b2fb34c89ae243c35feea2b71104"
+      ],
+      "Amiga/whdboot/Libs/Compressors/xpkSQSH.library": [
+        "2191b616abd4b2fb34c89ae243c35feea2b71104"
+      ],
+      "whdboot/Libs/Compressors/xpkSQSH.library": [
+        "2191b616abd4b2fb34c89ae243c35feea2b71104"
+      ],
+      "Libs/Compressors/xpkSQSH.library": [
+        "2191b616abd4b2fb34c89ae243c35feea2b71104"
+      ],
+      "Compressors/xpkSQSH.library": [
+        "2191b616abd4b2fb34c89ae243c35feea2b71104"
+      ],
+      "Commodore/Amiga/whdboot/Libs/explode.library": [
+        "c29ac7a92db4837703049af91d0d35b2a592f03d"
+      ],
+      "Amiga/whdboot/Libs/explode.library": [
+        "c29ac7a92db4837703049af91d0d35b2a592f03d"
+      ],
+      "whdboot/Libs/explode.library": [
+        "c29ac7a92db4837703049af91d0d35b2a592f03d"
+      ],
+      "Libs/explode.library": [
+        "c29ac7a92db4837703049af91d0d35b2a592f03d"
+      ],
+      "Commodore/Amiga/whdboot/Libs/medplayer.library": [
+        "4313334a01dd02eaf60ea7eb95dee72c97835645"
+      ],
+      "Amiga/whdboot/Libs/medplayer.library": [
+        "4313334a01dd02eaf60ea7eb95dee72c97835645"
+      ],
+      "whdboot/Libs/medplayer.library": [
+        "4313334a01dd02eaf60ea7eb95dee72c97835645"
+      ],
+      "Libs/medplayer.library": [
+        "4313334a01dd02eaf60ea7eb95dee72c97835645"
+      ],
+      "Commodore/Amiga/whdboot/Libs/mmu.library": [
+        "d35699de96ff56478871c7839757ba52a9d2717a"
+      ],
+      "Amiga/whdboot/Libs/mmu.library": [
+        "d35699de96ff56478871c7839757ba52a9d2717a"
+      ],
+      "whdboot/Libs/mmu.library": [
+        "d35699de96ff56478871c7839757ba52a9d2717a"
+      ],
+      "Libs/mmu.library": [
+        "d35699de96ff56478871c7839757ba52a9d2717a"
+      ],
+      "Commodore/Amiga/whdboot/Libs/xpkmaster.library": [
+        "5bd19f9503b59c5d19bfe1c6a6e3b6e7c0e9eae2"
+      ],
+      "Amiga/whdboot/Libs/xpkmaster.library": [
+        "5bd19f9503b59c5d19bfe1c6a6e3b6e7c0e9eae2"
+      ],
+      "whdboot/Libs/xpkmaster.library": [
+        "5bd19f9503b59c5d19bfe1c6a6e3b6e7c0e9eae2"
+      ],
+      "Libs/xpkmaster.library": [
+        "5bd19f9503b59c5d19bfe1c6a6e3b6e7c0e9eae2"
+      ],
       "Commodore/Amiga/whdboot/WHDLoad": [
         "c3ecdaf43cc554026c8ef1c440a08c81144f810b"
       ],
@@ -384577,34 +385753,34 @@
         "c3ecdaf43cc554026c8ef1c440a08c81144f810b"
       ],
       "Commodore/Amiga/whdboot/boot-data.zip": [
-        "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86"
+        "b1e841768bf18b0d7d0ffbbe7f7788742b641677"
       ],
       "Amiga/whdboot/boot-data.zip": [
-        "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86"
+        "b1e841768bf18b0d7d0ffbbe7f7788742b641677"
       ],
       "whdboot/boot-data.zip": [
-        "bce26f64e0ad02a1f7ccc4a8ff43ef6ecd635f86"
+        "b1e841768bf18b0d7d0ffbbe7f7788742b641677"
       ],
       "Commodore/Amiga/whdboot/game-data/whdload_db.json": [
-        "6540ae1a35080e3dbeacfba5139e4781eb74ca86"
+        "7554061aa6f928bd41acdbcafe2d20322a0e188c"
       ],
       "Amiga/whdboot/game-data/whdload_db.json": [
-        "6540ae1a35080e3dbeacfba5139e4781eb74ca86"
+        "7554061aa6f928bd41acdbcafe2d20322a0e188c"
       ],
       "whdboot/game-data/whdload_db.json": [
-        "6540ae1a35080e3dbeacfba5139e4781eb74ca86"
+        "7554061aa6f928bd41acdbcafe2d20322a0e188c"
       ],
       "game-data/whdload_db.json": [
-        "6540ae1a35080e3dbeacfba5139e4781eb74ca86"
+        "7554061aa6f928bd41acdbcafe2d20322a0e188c"
       ],
       "Commodore/Amiga/whdboot/host-quit": [
-        "3ae8939c8f1cdd721eabd7d73c2d6277a038672a"
+        "f717cb754078a350908e2839b3095843ccd90fa7"
       ],
       "Amiga/whdboot/host-quit": [
-        "3ae8939c8f1cdd721eabd7d73c2d6277a038672a"
+        "f717cb754078a350908e2839b3095843ccd90fa7"
       ],
       "whdboot/host-quit": [
-        "3ae8939c8f1cdd721eabd7d73c2d6277a038672a"
+        "f717cb754078a350908e2839b3095843ccd90fa7"
       ],
       "Commodore/Amiga CD32/kick40060.CD32.full": [
         "9fa14825c40a2475a2eba5cf325bd483c447e7c1"

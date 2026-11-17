@@ -43,6 +43,7 @@ _ONLINE = mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""})
 # a bare name no registered path carries is never asked of the release.
 TEST_REGISTERED = [
     "bios/Test/asset.bin",
+    "bios/Test/spaced asset.bin",
     "bios/Test/big.bin",
     "bios/Sony/PlayStation 3/PS3UPDAT.PUP",
 ]
@@ -141,6 +142,34 @@ class LargeFileCacheTest(unittest.TestCase):
         largefiles.urllib.request.urlopen = fail
         self.assertIsNone(common.fetch_large_file("asset.bin", dest_dir=self.dir))
         self.assertEqual(os.listdir(self.dir), [])
+
+    def test_a_spaced_name_served_dotted_reports_nothing(self):
+        """GitHub publishes "spaced asset.bin" as "spaced.asset.bin": the
+        404 on the spaced name came first and was printed as a failure."""
+        asked: list[str] = []
+
+        def urlopen(req, timeout=None):
+            asked.append(req.full_url)
+            if "spaced%20asset" in req.full_url:
+                raise urllib.error.HTTPError(req.full_url, 404, "Not Found", {}, None)
+            return _SlowResponse(PAYLOAD_A)
+
+        largefiles.urllib.request.urlopen = urlopen
+        with mock.patch("sys.stderr", new_callable=io.StringIO) as err:
+            result = common.fetch_large_file("spaced asset.bin", dest_dir=self.dir)
+        self.assertIsNotNone(result)
+        self.assertEqual(len(asked), 2)
+        self.assertEqual(err.getvalue(), "")
+
+    def test_no_candidate_answering_reports_each(self):
+        def fail(req, timeout=None):
+            raise urllib.error.HTTPError(req.full_url, 404, "Not Found", {}, None)
+
+        largefiles.urllib.request.urlopen = fail
+        with mock.patch("sys.stderr", new_callable=io.StringIO) as err:
+            self.assertIsNone(common.fetch_large_file("spaced asset.bin", dest_dir=self.dir))
+        self.assertIn("spaced asset.bin", err.getvalue())
+        self.assertIn("spaced.asset.bin", err.getvalue())
 
     def test_hash_mismatch_leaves_no_scratch_file(self):
         largefiles.urllib.request.urlopen = lambda req, timeout=None: _SlowResponse(

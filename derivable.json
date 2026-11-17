@@ -66,6 +66,12 @@
     ],
     "transform": "quarter 1"
   },
+  "138d8cb43b8312fe16d69070de607469b3d4078e": {
+    "from": [
+      "bios/Commodore/Amiga/KS ROM v3.1 (A4000).rom"
+    ],
+    "transform": "even words, byte-swapped"
+  },
   "196e9f3f9cad934e181c07da33083b1f0a3c702f": {
     "from": [
       "bios/Commodore/Amiga/kick39106.A4000"
@@ -83,6 +89,12 @@
       "bios/Commodore/PET/vice/PET/basic-2.901465-01-02.bin"
     ],
     "transform": "quarter 3"
+  },
+  "2155b4887f064c5e01e0a2ebb4a0cc2a3e88d9e8": {
+    "from": [
+      "bios/Commodore/Amiga/A1000 bootstrap ROM.rom"
+    ],
+    "transform": "even bytes"
   },
   "21a90256a3572a890f8027a085d851bf818b0dda": {
     "from": [
@@ -107,6 +119,12 @@
       "bios/Arcade/Arcade/mz800.zip/mz800.rom"
     ],
     "transform": "quarter 1"
+  },
+  "2c307d02f10ad332a479b50767fd0463efc2844b": {
+    "from": [
+      "bios/Commodore/Amiga/A1000 bootstrap ROM.rom"
+    ],
+    "transform": "odd bytes"
   },
   "2e51c562ef5ae6aa4cd333c560afed0c34902e28": {
     "from": [
@@ -348,6 +366,12 @@
   "c05c9c52d014c66f9019152b3f2a2adc2c678794": {
     "from": [
       "bios/Commodore/Amiga/KS ROM v1.4 (A3000).rom"
+    ],
+    "transform": "odd words, byte-swapped"
+  },
+  "c23795479fae3910c185512ca268b82f1ae4fe05": {
+    "from": [
+      "bios/Commodore/Amiga/KS ROM v3.1 (A4000).rom"
     ],
     "transform": "odd words, byte-swapped"
   },

@@ -57,6 +57,7 @@ on:
       - "scripts/site_markdown.py"
       - "scripts/sitebootstrap.py"
       - "scripts/sitehandheld.py"
+      - "scripts/sitewanted.py"
       - "scripts/sitecollection.py"
       - "scripts/sitediagrams.py"
       - "scripts/siteentries.py"

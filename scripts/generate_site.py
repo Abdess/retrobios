@@ -125,6 +125,8 @@ import release_record
 import sitebootstrap
 import sitehandheld
 import sitemeasurements
+import sitewanted
+from validate_pr import load_platform_hashes, load_profile_hashes
 
 # The Starlight project, and where its pages go inside it.
 STARLIGHT_DIR = "website"
@@ -2531,6 +2533,7 @@ def _page_description(markdown: str, relative: Path, title: str) -> str:
         "explore.md": "Systems, emulators and installer options to explore, with the figures of the BIOS collection.",
         "which-pack.md": "Pick a device or setup and get its BIOS files: the folder they go in, one command that installs and checks them, or a ZIP pack to extract.",
         "contributing.md": "Add a BIOS file the collection lacks from the browser, checked on arrival, or add a platform or an emulator profile.",
+        "wanted.md": "Every file the collection lacks, by system, each with its upload button to GitHub. Drop files on the page to learn if they are wanted.",
     }
     if key in specific:
         return specific[key]
@@ -3232,7 +3235,7 @@ def page_level(relative: Path) -> str:
         return "explore"
     if path in _REFERENCE_PAGES:
         return "reference"
-    if path == "contributing.md":
+    if path in ("contributing.md", "wanted.md"):
         return "contribute"
     return ""
 
@@ -4879,6 +4882,8 @@ def generate_files_page() -> str:
         "`scph5501.bin`, the PlayStation BIOS v3.0. "
         "To look a file up by its name, use the search at the top of the page.",
         "",
+        "Have a file the collection lacks? [See if it is wanted](../wanted.md).",
+        "",
         "## Permanent links",
         "",
         "A file's card lives on its manufacturer's page, and a file refiled "
@@ -5902,6 +5907,19 @@ def _emulator_card_anchor(emulator: str, files: list, index: int) -> str:
     if cached is None or cached[0] is not files:
         cached = _card_anchors[emulator] = (files, emulator_file_anchors(files))
     return cached[1][index] if 0 <= index < len(cached[1]) else ""
+
+
+def _wanted_link(profiles: dict) -> Callable[[str, str, dict], str]:
+    """The page a row of the wanted list links: an emulator entry's card,
+    where its notes, hashes and source line are, else the setup's page."""
+    def link(kind: str, key: str, entry: dict) -> str:
+        files = (profiles.get(key) or {}).get("files") or [] if kind == "emulator" else []
+        index = next((i for i, f in enumerate(files) if f is entry), -1)
+        anchor = _emulator_card_anchor(key, files, index) if index >= 0 else ""
+        if anchor:
+            return f"emulators/{emulator_card_page(key, anchor)}/#{anchor}"
+        return sitewanted.reader_page(kind, key, entry)
+    return link
 
 
 def _emulator_links(sha1: str, consumers: FileConsumers) -> list[str]:
@@ -10654,17 +10672,10 @@ def _catalogued_needs(report: dict | None) -> dict[tuple[str, str], list[str]]:
     """(profile, file name casefolded) -> where a dump catalog or an
     imported romset lists that file, from a provenance report built with
     the profiles' needs."""
-    out: dict[tuple[str, str], list[str]] = {}
-    for source, data in sorted((report or {}).items()):
-        label = _PROVENANCE_LABELS.get(source, source)
-        for entry in data.get("missing", []):
-            where = [f"{label} `{_escape_tags(str(entry.get('name', '')))}`"]
-            where += [f"{_escape_tags(str(hit['source']))} `{_escape_tags(str(hit['archive']))}`"
-                      for hit in entry.get("romsets", [])]
-            for need in entry.get("needed_by", []):
-                held = out.setdefault((need["emulator"], str(need["name"]).casefold()), [])
-                held += [w for w in where if w not in held]
-    return out
+    return {
+        need: [f"{_escape_tags(where)} `{_escape_tags(name)}`" for where, name in listed]
+        for need, listed in sitewanted.catalog_listings(report, _PROVENANCE_LABELS).items()
+    }
 
 
 def _reason_cell(text: str) -> str:
@@ -10919,22 +10930,10 @@ def _ratio_cell(done: int, total: int, alarm: int = 0) -> str:
 
 # GitHub's upload page for a folder of bios/: a browser upload by someone
 # without write access lands on a fork and opens a pull request.
-UPLOAD_URL = f"{REPO_URL}/upload/main/bios"
+UPLOAD_URL = f"{sitewanted.UPLOAD_ROOT}bios"
 # Rows of Files to source on one page: 601 on one page made a phone page
 # 274,509 px long.
 FILES_TO_SOURCE_PART = 100
-
-
-def _upload_folder(profile: dict) -> str:
-    """The bios/ folder a file the emulator loads is uploaded into: the
-    console folder of its first system that has one, else none."""
-    from siterender import _own_section
-
-    for sys_id in profile.get("systems") or []:
-        own = _own_section(str(sys_id))
-        if own is not None:
-            return "/".join(own)
-    return ""
 
 
 def reading_platforms(emu_name: str, profile: dict, name: str,
@@ -10962,8 +10961,12 @@ def generate_gap_analysis(
     gap_report: dict | None = None,
     moved: dict[str, str] | None = None,
     catalogued: dict | None = None,
+    placer: sitewanted.Placer | None = None,
 ) -> str:
     """Generate a unified gap analysis page.
+
+    ``placer`` gives each file to source the folder its upload goes to,
+    the one validate_pr asks for. Without it the link opens bios/.
 
     ``catalogued`` is a provenance report built with the profiles' needs:
     a file the collection does not hold yet names the catalog or romset
@@ -11039,7 +11042,8 @@ def generate_gap_analysis(
         "",
         "Each file here is a request: for a file under \"Files to source\", "
         "[adding it](contributing.md) fills the gap for "
-        "every platform at once.",
+        "every platform at once. Have some of these? [Drop them on the wanted "
+        "page](wanted.md): it says which ones are wanted and where each goes.",
         "",
         " ".join([
             markup.button("Download gaps CSV", "downloads/gaps.csv"),
@@ -11260,10 +11264,10 @@ def generate_gap_analysis(
         for emu_name, data in sorted(emulator_gaps, key=lambda x: -x[1]["gaps"]):
             display = data["emulator"]
             sources = _gap_sources(data)
-            m = sources["missing"]
+            to_source = sources["missing"]
             missing_str = (
-                f'<span class="rb-badge rb-badge-danger">{m}</span>'
-                if m > 0
+                f'<span class="rb-badge rb-badge-danger">{to_source}</span>'
+                if to_source > 0
                 else '<span class="rb-badge rb-badge-success">0</span>'
             )
             lines.append(
@@ -11369,14 +11373,17 @@ def generate_gap_analysis(
                     f"[{_escape_tags(display)}](emulators/{key}.md)"
                     for display, key in zip(m["emulators"], m["emu_keys"])
                 )
-                folder = _upload_folder(profiles[m["emu_keys"][0]])
-                upload = f"{UPLOAD_URL}/{urllib.parse.quote(folder)}" if folder else UPLOAD_URL
+                owner = profiles[m["emu_keys"][0]]
+                declared = sitewanted.gap_entries(owner, m["name"], m["identity"], False)
+                folder = placer.folder(declared[0]) if placer and declared else ""
+                upload = sitewanted.upload_href(sitewanted.UPLOAD_ROOT, folder)
                 rows.append(
                     f"| `{m['name']}` [Have it? Upload]({upload}) | {destination} | {expected} "
                     f"| {emulators} | {req} | {plat_badges} | "
-                    f"{_source_ref_markdown(profiles[m['emu_keys'][0]], m['source_ref'])} |"
+                    f"{_source_ref_markdown(owner, m['source_ref'])} |"
                 )
-            lines.extend(["### Files to source", "", counted, ""])
+            lines.extend(["### Files to source", "", counted,
+                          "[The wanted page](wanted.md) lists them, each with its upload button.", ""])
             if moved is None:
                 lines.extend([*head, *rows, ""])
             else:
@@ -12422,7 +12429,7 @@ def generate_nav(
             (68, {"Updated platform files": "exports.md"}, "Data"),
             (69, {"Measurements": sitemeasurements.EXPLORER_PAGE}, "Data"),
         ],
-        "contribute": [(0, "contributing.md")],
+        "contribute": [(0, "contributing.md"), (5, {"Wanted": "wanted.md"})],
     }
     wiki = wiki_nav(wiki_dir)
     nav = []
@@ -12809,17 +12816,35 @@ def _generate(args: argparse.Namespace) -> None:
     provenance_report = build_report(
         db, load_provenance_snapshots(), needs=profile_needs(profiles, db))
 
+    # Where an upload goes, by validate_pr's own rule: the gaps page and the
+    # wanted page send a file to the folder the review asks for.
+    placer = sitewanted.Placer(
+        db, load_platform_hashes(args.platforms_dir, db),
+        load_profile_hashes(args.emulators_dir, db),
+    )
     print("Generating gap analysis page...")
     gap_pages: dict[str, str] = {}
     write_if_changed(
         str(docs / "gaps.md"),
         tables_out_of_search(generate_gap_analysis(
             profiles, coverages, db, suppl_names, registry, gap_report, gap_pages,
-            catalogued=provenance_report,
+            catalogued=provenance_report, placer=placer,
         )) + reference_next(),
     )
     for stem, page in gap_pages.items():
         write_if_changed(str(docs / f"{stem}.md"), tables_out_of_search(page))
+
+    print("Generating the wanted page...")
+    wanted = sitewanted.build_wanted(
+        profiles, coverages, gap_report, db, placer, system_name,
+        sitewanted.load_ledger(archive_build.ARCHIVES_FILE),
+        _wanted_link(profiles),
+    )
+    (public / "data").mkdir(parents=True, exist_ok=True)
+    write_if_changed(str(public / sitewanted.DATA_FILE),
+                     json.dumps(wanted, ensure_ascii=False, separators=(",", ":")) + "\n")
+    write_if_changed(str(docs / "wanted.md"), sitewanted.page(
+        len(wanted["entries"]), sum(1 for entry in wanted["entries"] if "h" in entry)))
 
     print("Generating updated platform files page...")
     write_if_changed(

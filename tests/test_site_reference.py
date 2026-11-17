@@ -55,6 +55,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import generate_site  # noqa: E402
+import sitewanted  # noqa: E402
 import siterender  # noqa: E402
 from common import (  # noqa: E402
     list_registered_platforms,
@@ -1256,10 +1257,18 @@ class FilesToSourceOnAPhone(unittest.TestCase):
             for row in rows:
                 self.assertIn(f"[Have it? Upload]({generate_site.UPLOAD_URL}", row)
 
-    def test_the_upload_lands_in_the_console_folder(self):
-        with mock.patch("siterender._own_section", return_value=("Sony", "PlayStation")):
-            self.assertEqual(generate_site._upload_folder({"systems": ["sony-playstation"]}),
-                             "Sony/PlayStation")
+    def test_the_upload_lands_in_the_folder_the_review_asks_for(self):
+        """The link read the profile's first system: Raze's Duke Nukem 3D
+        files were sent to bios/Monolith/Blood/. It reads validate_pr's
+        placement now (tests/test_site_wanted.py)."""
+        held = "a" * 40
+        db = {"files": {held: {"path": "bios/Sony/PlayStation/scph1001.bin"}},
+              "indexes": {"by_md5": {}, "by_sha256": {}, "by_name": {}}}
+        profile_hashes = {"folders": {"b" * 40: {"bios/Sony/PlayStation/"}}, "named": {}}
+        placer = sitewanted.Placer(db, {}, profile_hashes)
+        self.assertEqual(placer.folder({"name": "scph5501.bin", "sha1": "b" * 40}),
+                         "bios/Sony/PlayStation/")
+        self.assertEqual(placer.folder({"name": "x.bin"}), "")
 
 
 GENERATED = REPO_ROOT / "website" / "src" / "generated"

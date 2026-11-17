@@ -520,6 +520,14 @@
         "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
       ],
       [
+        "KS ROM v2.05 (A600).rom",
+        "87508de834dc7eb47359cede72d2e3c8a2e5d8db"
+      ],
+      [
+        "KS ROM v2.05 (A600HD).rom",
+        "f72d89148dac39c696e30b10859ebc859226637b"
+      ],
+      [
         "amiga-os-205-a600.rom",
         "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
       ],
@@ -534,6 +542,10 @@
       [
         "amiga-os-300-a4000.rom",
         "f0b4e9e29e12218c2d5bd7020e4e785297d91fd7"
+      ],
+      [
+        "KS ROM v3.1 (A4000).rom",
+        "81c631dd096bbb31d2af90299c76b774db74076c"
       ],
       [
         "amiga-os-310-a600.rom",
@@ -556,8 +568,20 @@
         "b0ec8b84d6768321e01209f11e6248f2f5281a21"
       ],
       [
+        "KS ROM v3.1.4-1 (A4000).rom",
+        "bad0ae388442db02eaeb6a5363ef43eb4e308ae6"
+      ],
+      [
+        "KS ROM v3.2 (A1200).rom",
+        "5b2982876fec2166673be447643881262c84090e"
+      ],
+      [
         "KS ROM v3.2 (Walker).rom",
         "7a9095f1107966f90267dc4cb3c1972efb4b78a8"
+      ],
+      [
+        "A1000 bootstrap ROM.rom",
+        "ba93b8b85ca0d83a68225cc33b95050d72d2fdd7"
       ],
       [
         "The Diagnostic 2.0 (Logica).rom",
@@ -840,12 +864,44 @@
         "8e95bc8da06050fcb596b5b4c8cf91021ff4aeb3"
       ],
       [
+        "cyberstormmk3.rom",
+        "8adc960a086202f8de77a1eebb579036552840ad"
+      ],
+      [
+        "cyberstorm-mk-iii-v44.69.rom",
+        "44f667df433d64bb99b8632eb78c65e5b445acbf"
+      ],
+      [
         "cyberstorm-mk-iii-v44.71.rom",
         "1c0e95c39e822597ad0e2945c37b556e5dc67828"
       ],
       [
+        "cyberstormppc.rom",
+        "41f30a0acbe93d2f309f1dd2077fffa21be8f8e2"
+      ],
+      [
+        "cyberstorm-ppc-v44.69.rom",
+        "1df506c9a170dca2ab8736fa1865f75f62e8663a"
+      ],
+      [
         "cyberstorm-ppc-v44.71.rom",
         "3908d0630ec5c8b3cd47b2a01195e04b1bb8c54d"
+      ],
+      [
+        "blizzardppc_040.rom",
+        "c9f86e18a1004e9cfe4eede2e0b399701c54323b"
+      ],
+      [
+        "blizzardppc_060.rom",
+        "ad1f450962c094ba2d970a501714b4997ba444ba"
+      ],
+      [
+        "blizzard-ppc-68040-v44.69.rom",
+        "ea0409700fefb5267ef5a29472e7810b77d4d88c"
+      ],
+      [
+        "blizzard-ppc-68060-v44.69.rom",
+        "3441410e991a916e8bf9b130181fa169a9b859bf"
       ],
       [
         "blizzard-ppc-68040-v44.71.rom",
@@ -1268,6 +1324,10 @@
         "eba74ad1000a5351a5d99179bf75f831ac2d2402"
       ],
       [
+        "a1060-bios-2.07.rom",
+        "0990ea8c509ead367391741df2d4542ccb9d8fb7"
+      ],
+      [
         "a2088-bios-3.4.rom",
         "d1defdee1c0eae4107d81e2674915cd29d352f2e"
       ],
@@ -1342,6 +1402,94 @@
       [
         "mt32-roms/pcm_cm32l.rom",
         "289cc298ad532b702461bfc738009d9ebe8025ea"
+      ],
+      [
+        "whdboot/Libs/xpkmaster.library",
+        "5bd19f9503b59c5d19bfe1c6a6e3b6e7c0e9eae2"
+      ],
+      [
+        "whdboot/Libs/Compressors/xpkCBR0.library",
+        "a2a76c10cb06315e51990911fa050669cc89830d"
+      ],
+      [
+        "whdboot/Libs/Compressors/xpkDLTA.library",
+        "ca64f89919c2869cb6fd75346b9a21245a6d04a8"
+      ],
+      [
+        "whdboot/Libs/Compressors/xpkDUKE.library",
+        "8102d77ae0a3d64496436ee56a9c577c84b11992"
+      ],
+      [
+        "whdboot/Libs/Compressors/xpkFAST.library",
+        "4599430f3baa302635a85b26a7b70a4116dc5f09"
+      ],
+      [
+        "whdboot/Libs/Compressors/xpkFRLE.library",
+        "d0746429187ab38e886a47820203315f734e8d89"
+      ],
+      [
+        "whdboot/Libs/Compressors/xpkHFMN.library",
+        "f4a8dbe69e386d87d9ab8cbaf7fc3881b358fdb2"
+      ],
+      [
+        "whdboot/Libs/Compressors/xpkHUFF.library",
+        "f22d099b81d2d039c4fbb3fea47cc9700b01fecf"
+      ],
+      [
+        "whdboot/Libs/Compressors/xpkIMPL.library",
+        "0e00bc18aec757d86f9831131c2236a704c175db"
+      ],
+      [
+        "whdboot/Libs/Compressors/xpkMASH.library",
+        "1093133a17cb635c21c5532ae26ded83b6d359ce"
+      ],
+      [
+        "whdboot/Libs/Compressors/xpkNONE.library",
+        "46dca6e2ff2176f7a12c52ea992a7a49ae5ef269"
+      ],
+      [
+        "whdboot/Libs/Compressors/xpkNUKE.library",
+        "168bee97805be1f85b65f615e6931c4942caf4e4"
+      ],
+      [
+        "whdboot/Libs/Compressors/xpkRAKE.library",
+        "50cd2a19bee1ebd6b54b31c5b9461d5a81a2e910"
+      ],
+      [
+        "whdboot/Libs/Compressors/xpkRLEN.library",
+        "c81cf6d99de56faa6154cc81a9876517c2a8efc0"
+      ],
+      [
+        "whdboot/Libs/Compressors/xpkSHRI.library",
+        "fc96d367e7b3409074841c7f145ab6daef0a6a4d"
+      ],
+      [
+        "whdboot/Libs/Compressors/xpkSMPL.library",
+        "d140b4e87a2ff76cf94616d97fe7b127d128d973"
+      ],
+      [
+        "whdboot/Libs/Compressors/xpkSQSH.library",
+        "2191b616abd4b2fb34c89ae243c35feea2b71104"
+      ],
+      [
+        "whdboot/Libs/68040.library",
+        "35d01bccc0062bc7943310dc9c9466e02fb561df"
+      ],
+      [
+        "whdboot/Libs/mmu.library",
+        "d35699de96ff56478871c7839757ba52a9d2717a"
+      ],
+      [
+        "whdboot/Libs/680x0.library",
+        "17f92f7647b1cec0c17f90b7d0b562f48278af02"
+      ],
+      [
+        "whdboot/Libs/explode.library",
+        "c29ac7a92db4837703049af91d0d35b2a592f03d"
+      ],
+      [
+        "whdboot/Libs/medplayer.library",
+        "4313334a01dd02eaf60ea7eb95dee72c97835645"
       ],
       [
         "whdboot/WHDLoad",
@@ -1430,6 +1578,14 @@
         "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
       ],
       [
+        "KS ROM v2.05 (A600).rom",
+        "87508de834dc7eb47359cede72d2e3c8a2e5d8db"
+      ],
+      [
+        "KS ROM v2.05 (A600HD).rom",
+        "f72d89148dac39c696e30b10859ebc859226637b"
+      ],
+      [
         "amiga-os-205-a600.rom",
         "02843c4253bbd29aba535b0aa3bd9a85034ecde4"
       ],
@@ -1444,6 +1600,10 @@
       [
         "amiga-os-300-a4000.rom",
         "f0b4e9e29e12218c2d5bd7020e4e785297d91fd7"
+      ],
+      [
+        "KS ROM v3.1 (A4000).rom",
+        "81c631dd096bbb31d2af90299c76b774db74076c"
       ],
       [
         "amiga-os-310-a600.rom",
@@ -1468,6 +1628,14 @@
       [
         "amiga-os-310-a4000t.rom",
         "b0ec8b84d6768321e01209f11e6248f2f5281a21"
+      ],
+      [
+        "KS ROM v3.1.4-1 (A4000).rom",
+        "bad0ae388442db02eaeb6a5363ef43eb4e308ae6"
+      ],
+      [
+        "KS ROM v3.2 (A1200).rom",
+        "5b2982876fec2166673be447643881262c84090e"
       ],
       [
         "KS ROM v3.2 (Walker).rom",
@@ -1524,6 +1692,10 @@
       [
         "cdtv-cr-extended-rom-v3.44.rom",
         "3b160c5abe79f10ae69243328004bb9e3162b648"
+      ],
+      [
+        "A1000 bootstrap ROM.rom",
+        "ba93b8b85ca0d83a68225cc33b95050d72d2fdd7"
       ],
       [
         "The Diagnostic 2.0 (Logica).rom",
@@ -2154,12 +2326,44 @@
         "8e95bc8da06050fcb596b5b4c8cf91021ff4aeb3"
       ],
       [
+        "cyberstormmk3.rom",
+        "8adc960a086202f8de77a1eebb579036552840ad"
+      ],
+      [
+        "cyberstorm-mk-iii-v44.69.rom",
+        "44f667df433d64bb99b8632eb78c65e5b445acbf"
+      ],
+      [
         "cyberstorm-mk-iii-v44.71.rom",
         "1c0e95c39e822597ad0e2945c37b556e5dc67828"
       ],
       [
+        "cyberstormppc.rom",
+        "41f30a0acbe93d2f309f1dd2077fffa21be8f8e2"
+      ],
+      [
+        "cyberstorm-ppc-v44.69.rom",
+        "1df506c9a170dca2ab8736fa1865f75f62e8663a"
+      ],
+      [
         "cyberstorm-ppc-v44.71.rom",
         "3908d0630ec5c8b3cd47b2a01195e04b1bb8c54d"
+      ],
+      [
+        "blizzardppc_040.rom",
+        "c9f86e18a1004e9cfe4eede2e0b399701c54323b"
+      ],
+      [
+        "blizzardppc_060.rom",
+        "ad1f450962c094ba2d970a501714b4997ba444ba"
+      ],
+      [
+        "blizzard-ppc-68040-v44.69.rom",
+        "ea0409700fefb5267ef5a29472e7810b77d4d88c"
+      ],
+      [
+        "blizzard-ppc-68060-v44.69.rom",
+        "3441410e991a916e8bf9b130181fa169a9b859bf"
       ],
       [
         "blizzard-ppc-68040-v44.71.rom",
@@ -2180,6 +2384,10 @@
       [
         "a1060-bios-2.06.rom",
         "eba74ad1000a5351a5d99179bf75f831ac2d2402"
+      ],
+      [
+        "a1060-bios-2.07.rom",
+        "0990ea8c509ead367391741df2d4542ccb9d8fb7"
       ],
       [
         "a2088-bios-3.4.rom",

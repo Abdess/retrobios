@@ -186,6 +186,33 @@ class AFileOnlyACoreReadsIsKnown(_Fixture):
         self.assertTrue(any("Placed under bios/Other/Place/" in m for _s, m in placed.checks))
 
 
+class ADeclaredFileBesideItsHeldNameIsAVariant(_Fixture):
+    """A file a profile declares, of a system the collection files nowhere
+    yet, whose name the collection holds: the review named the folder and
+    left the copy to land on the held file of that name."""
+
+    def test_place_copies_it_beside_the_held_name(self):
+        import hashlib  # noqa: PLC0415
+
+        data = b"declared revision"
+        emulators = self.tmp / "emulators"
+        emulators.mkdir()
+        (emulators / "engine.yml").write_text(
+            "emulator: Engine\ntype: standalone\nsystems: [x, y]\nfiles:\n"
+            f"  - name: \"v.bin\"\n    sha1: \"{hashlib.sha1(data).hexdigest()}\"\n"
+        )
+        db = {"files": {"a" * 40: {"path": "bios/Maker/Console/v.bin"}},
+              "indexes": {"by_md5": {}, "by_sha256": {}, "by_name": {"v.bin": ["a" * 40]}}}
+        known = validate_pr.load_profile_hashes(str(emulators), db)
+        result = validate_pr.validate_file(
+            self._bios_file("card/v.bin", data), db, EMPTY_HASHES, known)
+        slot = f"bios/Maker/Console/.variants/v.bin.{result.sha1[:8]}"
+        self.assertEqual(result.destination, slot)
+        self.assertIn(("WARN", "File is not under bios/ yet. The collection keeps this name in "
+                               f"`bios/Maker/Console/`. --place copies it to `{slot}`"),
+                      result.checks)
+
+
 class ASizeEveryDeclarationRulesOutIsNotAVariant(_Fixture):
     """1024 random bytes named scph5501.bin, a name every declaration sizes
     at 524288, were told "File size OK" and offered a .variants slot at the
@@ -450,7 +477,8 @@ class PlatformHashLoading(_Fixture):
         known = validate_pr.load_platform_hashes(str(self.tmp / "absent"))
         self.assertEqual(known, {"sha1": set(), "md5": set(), "sha256": set(), "crc32": set(),
                                  "names": set(), "folders": {}, "sizes": {}, "entries": {},
-                                 "named": {}})
+                                 "named": {}, "name_systems": {}, "system_dirs": {},
+                                 "system_folders": {}})
 
     def test_declared_hashes_and_names_are_collected(self):
         platforms = self.tmp / "platforms"
