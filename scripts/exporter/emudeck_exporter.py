@@ -135,7 +135,9 @@ class Exporter(BaseExporter[str]):
             if system.native_id != system_id:
                 continue
             for fe in system.files:
-                if not cls.writable(fe):
+                # The base writable rule, which EmuDeck keeps: it needs no
+                # render state, so the class answers it.
+                if not cls._carried(fe, "", cls.SINGLE_HASH_FIELD):
                     continue
                 for value in cls._entry_md5s(fe):
                     if _MD5.match(value) and value not in seen:

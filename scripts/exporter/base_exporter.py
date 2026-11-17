@@ -167,8 +167,7 @@ class BaseExporter(ABC, Generic[Content]):
         list carries."""
         return False
 
-    @classmethod
-    def writable(cls, fe: NativeFile, require: str = "") -> bool:
+    def writable(self, fe: NativeFile, require: str = "") -> bool:
         """Whether this format can carry the entry.
 
         An entry the platform already declares is always carried, hash or
@@ -176,7 +175,7 @@ class BaseExporter(ABC, Generic[Content]):
         hands back a file poorer than the one it corrects. The requirement
         only gates what we would be adding.
         """
-        return cls._carried(fe, require, cls.SINGLE_HASH_FIELD)
+        return self._carried(fe, require, self.SINGLE_HASH_FIELD)
 
     @classmethod
     def _carried(cls, fe: NativeFile, require: str, single: str | None) -> bool:

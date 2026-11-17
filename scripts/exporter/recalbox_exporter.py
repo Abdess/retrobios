@@ -318,8 +318,7 @@ class Exporter(BaseExporter[str]):
             for label in sorted(getattr(self, "_held_whole", {}).values())
         ]
 
-    @classmethod
-    def writable(cls, fe: NativeFile, require: str = "") -> bool:
+    def writable(self, fe: NativeFile, require: str = "") -> bool:
         """es_bios.xsd makes md5 and core required: without them, no element.
 
         An entry Recalbox already ships has both, so this only ever gates

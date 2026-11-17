@@ -83,8 +83,7 @@ class Exporter(BaseExporter[str]):
         # one from BIOS data alone would throw the component away.
         return True
 
-    @classmethod
-    def writable(cls, fe: NativeFile, require: str = "") -> bool:
+    def writable(self, fe: NativeFile, require: str = "") -> bool:
         """An addition lands only in a manifest it can be placed in."""
         if fe.platform is None and not fe.native("component", ""):
             return False

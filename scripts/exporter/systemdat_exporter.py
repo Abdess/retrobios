@@ -114,8 +114,7 @@ class Exporter(BaseExporter[str]):
     def native_sources() -> dict[str, str]:
         return {"System.dat": SOURCE_URL}
 
-    @classmethod
-    def writable(cls, fe: NativeFile, require: str = "") -> bool:
+    def writable(self, fe: NativeFile, require: str = "") -> bool:
         """A clrmamepro rom line is a hash record, and the DAT has no other.
 
         The original never states a rom it cannot hash, so neither do we.
