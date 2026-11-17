@@ -17,6 +17,7 @@ import re
 import unicodedata
 import urllib.parse
 from collections.abc import Callable, Iterator, Mapping
+from dataclasses import dataclass, field
 from html import unescape
 from pathlib import Path, PurePosixPath
 
@@ -539,6 +540,22 @@ def next_step(body: str) -> dict | None:
     return {"link": link["url"], "label": re.sub(r"[*_`]", "", link["text"]).strip()}
 
 
+@dataclass(frozen=True)
+class PageMeta:
+    """What render_page writes around a page body."""
+    level: str
+    weight: float | None
+    browser_title: str
+    description: str
+    structured: dict
+    terms: dict[str, str]
+    search: bool = True
+    logo: str = ""
+    parent: dict | None = None
+    authored: dict | None = None
+    words_by_page: Mapping[str, set[str]] | None = None
+
+
 def finalize_page(
     rel: str,
     markdown: str,
@@ -555,6 +572,14 @@ def finalize_page(
     authored: dict | None = None,
     words_by_page: Mapping[str, set[str]] | None = None,
 ) -> tuple[str, str]:
+    """render_page with the fields of PageMeta as keywords."""
+    return render_page(rel, markdown, PageMeta(
+        level=level, weight=weight, browser_title=browser_title, description=description,
+        structured=structured, terms=terms, search=search, logo=logo, parent=parent,
+        authored=authored, words_by_page=words_by_page))
+
+
+def render_page(rel: str, markdown: str, meta: PageMeta) -> tuple[str, str]:
     """The Starlight file for a page body: its path under the content
     collection and its text. *parent* ({label, link}, the link written
     relative to the page) is the page a part page belongs to: the route
@@ -569,7 +594,19 @@ def finalize_page(
     *words_by_page* holds the console words of every system page, by path
     without extension: a console another page's words cover is written
     once more, in `exact`."""
-    authored = authored or {}
+    authored = meta.authored or {}
+    title, body = _page_body(rel, markdown, meta.terms, authored, meta.words_by_page or {})
+    components = used_components(body)
+    stem = rel.rsplit(".", 1)[0]
+    if components:
+        body = _with_imports(mdx_safe(body), components, rel)
+    front = _page_front(rel, stem, body, title, authored, meta)
+    return stem + (".mdx" if components else ".md"), _front_matter(front) + body
+
+
+def _page_body(rel: str, markdown: str, terms: dict[str, str], authored: dict,
+               words_by_page: Mapping[str, set[str]]) -> tuple[str, str]:
+    """The page's title and its body, links rewritten and search fields added."""
     title, title_id, body = split_title(markdown)
     body = body.lstrip("\n")
     body = rewrite_links(body, rel)
@@ -595,46 +632,68 @@ def finalize_page(
         body += file_names_meta(body) + search_field("aliases", page_aliases(rel))
     consoles = field_words(authored.get("consoles"))
     body += search_field("consoles", consoles)
-    body += search_field("exact", covered_names(consoles, rel.rsplit(".", 1)[0], words_by_page or {}))
+    body += search_field("exact", covered_names(consoles, rel.rsplit(".", 1)[0], words_by_page))
     body += search_field("terms", field_words(authored.get("terms")) + console_words(consoles))
-    components = used_components(body)
-    stem = rel.rsplit(".", 1)[0]
-    if components:
-        body = mdx_safe(body)
-        imports: dict[str, list[str]] = {}
-        for name in components:
-            imports.setdefault(COMPONENTS[name], []).append(name)
-        # Our own components are imported from src/, two levels above the
-        # content collection plus the page's own folders.
-        up = "../" * (rel.count("/") + 2)
-        body = "".join(f"import {{ {', '.join(names)} }} from '{source}';\n"
-                       if source.startswith("@") else f"import {names[0]} from '{up}{source}';\n"
-                       for source, names in imports.items()) + "\n" + body
-    front: dict = {"title": title or browser_title, "description": description}
+    return title, body
+
+
+def _with_imports(body: str, components: list[str], rel: str) -> str:
+    imports: dict[str, list[str]] = {}
+    for name in components:
+        imports.setdefault(COMPONENTS[name], []).append(name)
+    # Our own components are imported from src/, two levels above the
+    # content collection plus the page's own folders.
+    up = "../" * (rel.count("/") + 2)
+    return "".join(f"import {{ {', '.join(names)} }} from '{source}';\n"
+                   if source.startswith("@") else f"import {names[0]} from '{up}{source}';\n"
+                   for source, names in imports.items()) + "\n" + body
+
+
+def _page_front(rel: str, stem: str, body: str, title: str, authored: dict,
+                meta: PageMeta) -> dict:
+    level = meta.level
+    browser_title = meta.browser_title
+    structured = meta.structured
+    front: dict = {"title": title or browser_title, "description": meta.description}
     # Starlight's slugger drops dots and plus signs: the address stays MkDocs'.
     if re.search(r"[^a-z0-9_/-]", stem):
         front["slug"] = stem
     if level:
         front["level"] = level
-    if logo:
-        front["logo"] = logo
+    if meta.logo:
+        front["logo"] = meta.logo
+    parent = meta.parent
     if parent:
         front["parent"] = {"label": str(parent["label"]),
                            "link": resolve(rel, str(parent["link"]))}
-    weight = authored.get("searchWeight", weight)
+    weight = authored.get("searchWeight", meta.weight)
     if weight:
         front["searchWeight"] = weight
+    toc = _table_of_contents(rel, body)
+    if toc is not None:
+        front["tableOfContents"] = toc
+    if not meta.search:
+        front["pagefind"] = False
+    _neighbours(front, rel, body, authored)
+    front["head"] = page_head(rel, level, front["title"], browser_title, structured)
+    if structured.get("dateModified"):
+        front["lastmod"] = str(structured["dateModified"])
+    return front
+
+
+def _table_of_contents(rel: str, body: str) -> dict | bool | None:
     if rel == NOT_FOUND:
-        front["tableOfContents"] = False
-    elif rel.startswith(CARD_PAGES):
+        return False
+    if rel.startswith(CARD_PAGES):
         sections = len(re.findall(r"^## ", body, re.M))
         # A page of cards under one or two headings has nothing to list, and
         # the table of contents watches every block of the page to follow
         # the reader: 2 x 430 ms of a phone's main thread on 400 cards.
-        front["tableOfContents"] = (
-            {"minHeadingLevel": 2, "maxHeadingLevel": 2} if sections > 2 else False)
-    if not search:
-        front["pagefind"] = False
+        return {"minHeadingLevel": 2, "maxHeadingLevel": 2} if sections > 2 else False
+    return None
+
+
+def _neighbours(front: dict, rel: str, body: str, authored: dict) -> None:
     step = next_step(body)
     if rel == NOT_FOUND or not reads_in_order(rel):
         front["prev"] = False
@@ -645,10 +704,6 @@ def finalize_page(
     for side in ("prev", "next"):
         if rel != NOT_FOUND and side in authored:
             front[side] = _neighbour(rel, authored[side])
-    front["head"] = page_head(rel, level, front["title"], browser_title, structured)
-    if structured.get("dateModified"):
-        front["lastmod"] = str(structured["dateModified"])
-    return stem + (".mdx" if components else ".md"), _front_matter(front) + body
 
 
 # Navigation
@@ -724,58 +779,73 @@ def sidebar(nav: list, present: set[str], anchors: dict[str, set[str]] | None = 
     `reading` is the order of the previous and next links, one list per run
     of tabs read in sequence.
     """
-    anchors = anchors or {}
-    owner: dict[str, str] = {}
-    groups: dict[str, dict] = {}
-
-    def label_of(entry: object) -> str:
-        return next(iter(entry)) if isinstance(entry, dict) else ""
-
-    def overview_of(value: list) -> str | None:
-        return next((v for v in value if isinstance(v, str)), None)
-
-    def item(entry: object, topic: str, trail: tuple[str, ...], parent: str | None) -> dict | None:
-        if isinstance(entry, str):
-            owner[entry] = topic
-            return {"label": "Overview", "link": _sidebar_link(entry)} if entry in present else None
-        (label, value), = entry.items()
-        if isinstance(value, str):
-            if value.startswith("http"):
-                return {"label": label, "link": value}
-            owner[value] = topic
-            return {"label": label, "link": _sidebar_link(value)} if value in present else None
-        if "/" in label:
-            raise ValueError(f"a navigation group label holds a slash: {label!r}")
-        own = overview_of(value)
-        here = (*trail, label)
-        href = None
-        if own and own in present:
-            href = page_url(own)
-        elif parent and parent in present:
-            anchor = toc_slug(label)
-            if anchor in anchors.get(parent, set()):
-                href = f"{page_url(parent)}#{anchor}"
-            elif topic in PRUNED_TABS:
-                # Drawn as a link, it needs an address: the overview it
-                # sits under, never one of its own pages.
-                href = page_url(parent)
-        children = [child for child in (item(v, topic, here, own or parent) for v in value) if child]
-        if not children:
-            return None
-        groups["/".join(here)] = {"href": href, "prune": topic in PRUNED_TABS and href is not None,
-                                  "crumb": not by_initial(label, children)}
-        return {"label": label, "items": children, "collapsed": True}
-
+    walk = _NavWalk(present, anchors or {})
     topics = []
     for tab in nav:
         (label, value), = tab.items()
         topic = topic_id(label)
-        children = [child for child in (item(v, topic, (label,), overview_of(value)) for v in value)
+        children = [child for child in (walk.item(v, topic, (label,), _overview_of(value)) for v in value)
                     if child]
         if children:
             topics.append({"id": topic, "label": label, "link": next(_links(children))["link"],
                            "items": children})
+    extra = _unlisted_pages(walk.owner, present, topics)
+    return {"topics": topics, "options": {"topics": extra, "exclude": []},
+            "groups": walk.groups, "reading": _reading(nav, present)}
 
+
+def _overview_of(value: list) -> str | None:
+    return next((v for v in value if isinstance(v, str)), None)
+
+
+@dataclass
+class _NavWalk:
+    """The sidebar items of the navigation, the topic of each page it
+    lists, and the entry of each group in `groups`."""
+    present: set[str]
+    anchors: dict[str, set[str]]
+    owner: dict[str, str] = field(default_factory=dict)
+    groups: dict[str, dict] = field(default_factory=dict)
+
+    def item(self, entry: str | dict, topic: str, trail: tuple[str, ...],
+             parent: str | None) -> dict | None:
+        if isinstance(entry, str):
+            self.owner[entry] = topic
+            return {"label": "Overview", "link": _sidebar_link(entry)} if entry in self.present else None
+        (label, value), = entry.items()
+        if isinstance(value, str):
+            if value.startswith("http"):
+                return {"label": label, "link": value}
+            self.owner[value] = topic
+            return {"label": label, "link": _sidebar_link(value)} if value in self.present else None
+        if "/" in label:
+            raise ValueError(f"a navigation group label holds a slash: {label!r}")
+        own = _overview_of(value)
+        here = (*trail, label)
+        href = self._group_href(label, own, parent, topic)
+        children = [child for child in (self.item(v, topic, here, own or parent) for v in value) if child]
+        if not children:
+            return None
+        self.groups["/".join(here)] = {"href": href, "prune": topic in PRUNED_TABS and href is not None,
+                                       "crumb": not by_initial(label, children)}
+        return {"label": label, "items": children, "collapsed": True}
+
+    def _group_href(self, label: str, own: str | None, parent: str | None, topic: str) -> str | None:
+        if own and own in self.present:
+            return page_url(own)
+        if parent and parent in self.present:
+            anchor = toc_slug(label)
+            if anchor in self.anchors.get(parent, set()):
+                return f"{page_url(parent)}#{anchor}"
+            if topic in PRUNED_TABS:
+                # Drawn as a link, it needs an address: the overview it
+                # sits under, never one of its own pages.
+                return page_url(parent)
+        return None
+
+
+def _unlisted_pages(owner: dict[str, str], present: set[str], topics: list[dict]) -> dict[str, list[str]]:
+    """The pages each topic holds beyond the ones the navigation lists."""
     votes: dict[str, dict[str, int]] = {}
     for rel, topic in owner.items():
         tally = votes.setdefault(rel.rpartition("/")[0], {})
@@ -804,16 +874,15 @@ def sidebar(nav: list, present: set[str], anchors: dict[str, set[str]] | None = 
             tally[topic] = tally.get(topic, 0) + count
     for rel in unlisted:
         folder = rel.rpartition("/")[0]
-        tally = votes.get(folder) or adopted.get(folder)
-        if tally:
-            topic = max(tally, key=tally.get)
+        chosen = votes.get(folder) or adopted.get(folder)
+        if chosen:
+            topic = max(chosen, key=chosen.__getitem__)
         elif topics:
             topic = topics[0]["id"]
         else:
             continue
         extra.setdefault(topic, []).append("/" + (_sidebar_link(rel).strip("/") or "index"))
-    return {"topics": topics, "options": {"topics": extra, "exclude": []},
-            "groups": groups, "reading": _reading(nav, present)}
+    return extra
 
 
 def _reading(nav: list, present: set[str]) -> list[list[dict]]:
