@@ -64,6 +64,7 @@ import argparse
 import contextlib
 import datetime as dt
 import hashlib
+import http.client
 import io
 import json
 import os
@@ -82,6 +83,10 @@ import zipfile
 from collections.abc import Callable, Iterator, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import IO, TYPE_CHECKING, TypedDict, TypeVar
+
+if TYPE_CHECKING:
+    from typing_extensions import Unpack
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
@@ -95,6 +100,9 @@ import autorun
 import campaign_profiles
 import campaign_rules as rules
 import measurement_records as mr
+from autorun import now_iso
+
+T = TypeVar("T")
 
 ROOT = Path(__file__).resolve().parent.parent
 CONTENT_FILE = ROOT / "tests" / "campaign" / "content.yml"
@@ -133,10 +141,6 @@ class Unavailable(RuntimeError):
 # --------------------------------------------------------------------------
 # Small helpers
 # --------------------------------------------------------------------------
-
-def now_iso() -> str:
-    return dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
-
 
 def slug(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-") or "x"
@@ -213,8 +217,18 @@ def is_bios(entry: dict) -> bool:
 # Host
 # --------------------------------------------------------------------------
 
+class PopenOptions(TypedDict, total=False):
+    """The Popen arguments the campaign passes through run_group."""
+
+    cwd: str | Path
+    env: dict[str, str]
+    text: bool
+    stdout: int | IO[str] | IO[bytes]
+    stderr: int | IO[str] | IO[bytes]
+
+
 def run_group(argv: Sequence[str], *, timeout: float | None = None, check: bool = False,
-              capture_output: bool = False, **kwargs: object) -> subprocess.CompletedProcess:
+              capture_output: bool = False, **kwargs: Unpack[PopenOptions]) -> subprocess.CompletedProcess:
     """subprocess.run in a process group of its own, the whole group killed
     on a timeout or an interruption: a hung core never outlives its run."""
     if capture_output:
@@ -245,7 +259,7 @@ class Host:
     free_gb: Callable[[Path], float] = autorun.free_gb
     poll: float = 60.0
     run: Callable[..., subprocess.CompletedProcess] = run_group
-    urlopen: Callable[..., object] = urllib.request.urlopen
+    urlopen: Callable[..., http.client.HTTPResponse] = urllib.request.urlopen
 
     @property
     def max_load(self) -> float:
@@ -413,11 +427,11 @@ def export_commit(mirror: Callable[[str], Path], url: str, commit: str, dest: Pa
         except subprocess.CalledProcessError:
             git_out("-C", str(bare), "fetch", "--quiet", repo_url, sha)
         extract_tar(git_out("-C", str(bare), "archive", "--format=tar", sha), target)
-        links = {}
+        links: dict[str, str] = {}
         for entry in git_out("-C", str(bare), "ls-tree", "-r", "-z", sha).split(b"\0"):
             if entry.startswith(b"160000 commit "):
-                meta, path = entry.split(b"\t", 1)
-                links[path.decode()] = meta.split()[2].decode()
+                meta, raw_path = entry.split(b"\t", 1)
+                links[raw_path.decode()] = meta.split()[2].decode()
         if not links:
             return
         try:
@@ -739,7 +753,7 @@ class Cores:
         self.c = campaign
         self.listing: set[str] | None = None
 
-    def retrying(self, what: str, call: Callable[[], object]) -> object:
+    def retrying(self, what: str, call: Callable[[], T]) -> T:
         for attempt, delay in enumerate((*self.c.settings.delays, None)):
             try:
                 return call()
@@ -894,6 +908,28 @@ class Unit:
     # A game engine or utility profile: run when the buildbot has its core,
     # otherwise it is a standalone program.
     buildbot_only: bool = False
+
+
+@dataclass(frozen=True)
+class Trial:
+    """One core on one content: what every check of that pairing shares."""
+
+    unit: Unit
+    core: Core
+    content: Content
+    load: Path
+    frames: list[str]
+    digest: str
+
+
+@dataclass(frozen=True)
+class Held:
+    """A declared file the collection holds, at its place."""
+
+    index: int
+    entry: dict
+    dest: str
+    local: Path
 
 
 @dataclass
@@ -1168,12 +1204,7 @@ class Campaign:
             if local and entry_dest(entry) not in staged:
                 staged[entry_dest(entry)] = (index, entry, local)
         tested = {dest: item for dest, item in staged.items() if region_matches(item[1], content.region)}
-        keys = {"files": self.check_key(core, content, "files"),
-                "none": self.check_key(core, content, "none")}
-        for dest in tested:
-            keys[f"negative:{dest}"] = self.check_key(core, content, f"negative:{dest}")
-        if self.settings.bench:
-            keys["bench"] = self.check_key(core, content, "bench")
+        keys = self.content_keys(core, content, tested)
         # The rules run on every pass, from the records kept when nothing
         # needs to run again: a change of the table applies without a run.
         try:
@@ -1185,73 +1216,103 @@ class Campaign:
                     self.pending(emulator, key, str(exc), digest)
             return
         frames = ["--frames", str(content.frames), "--frame-hash-every", str(content.frame_hash_every)]
-        repeat = ["--repeat", str(self.settings.check_repeat)]
-        stem = f"{core.name}-{slug(content.name)}"
-
-        # files: every declared file the collection holds, at its place.
-        argv = self.probe_args("run", core, emulator, slug(f"files-{stem}"), content, load) + frames + repeat
-        for dest, (_, _, local) in sorted(staged.items()):
-            argv += ["--system-file", f"{dest}={local}"]
-        files_record = self.check(emulator, keys["files"], core, digest, argv, f"{emulator}-{stem}-files")
-        # none: no BIOS at all.
-        argv = self.probe_args("run", core, emulator, slug(f"none-{stem}"), content, load) + frames + repeat
-        none_record = self.check(emulator, keys["none"], core, digest, argv, f"{emulator}-{stem}-none")
-        if not files_record or not none_record:
+        trial = Trial(unit, core, content, load, frames, digest)
+        records = self.reference_runs(trial, keys, staged)
+        if not records:
             return
+        files_record, none_record = records
         full = rules.run_of(files_record, files_record["variants"][0]["label"])
         none = rules.run_of(none_record, none_record["variants"][0]["label"])
         self.log(f"{emulator}: {core.name} on {content.name}: full set {full.verdict}, "
                  f"no BIOS {none.verdict}")
 
         for dest, (index, entry, local) in sorted(tested.items()):
-            record = self.negative(unit, core, content, load, frames, digest, keys[f"negative:{dest}"],
-                                   dest, entry, local, staged)
-            if not record:
-                continue
-            labels = [v["label"] for v in record["variants"]]
-            present = rules.run_of(record, labels[0])
-            zeros, half = (rules.run_of(record, label) for label in labels[1:3])
-            for label in labels[3:]:
-                self.log(f"{emulator}: {rules.rule_region(rules.run_of(record, label), present, entry, content.region)}")
-            if dest in self.opened(files_record, 0) or dest in self.opened(record, 0):
-                verdicts = rules.rule_need(none, present, entry, rules.read(none, present, zeros, half))
-                validation = rules.rule_validation(zeros, half, none, present, entry)
-                if validation:
-                    verdicts.append(validation)
-                self.settle(emulator, content, core, index, entry, verdicts)
-                variants = self.variant_files(entry, local)
-                if variants:
-                    self.run_variants(unit, core, content, load, frames, digest, index, entry, dest,
-                                      local, variants)
-            else:
-                self.moved(unit, core, content, load, frames, digest, index, entry, dest, local,
-                           files_record, record)
+            self.test_entry(trial, keys[f"negative:{dest}"], Held(index, entry, dest, local), staged,
+                            files_record, none)
 
         boot = self.boot_entry(entries, content)
         if boot and entry_dest(boot[1]) in tested:
             index, entry = boot
-            self.follow_aliases(unit, core, content, load, frames, digest, index, entry,
-                                tested[entry_dest(entry)][2], none_record)
+            self.follow_aliases(trial, index, entry, tested[entry_dest(entry)][2], none_record)
 
         if self.settings.bench and full.verdict == rules.BOOTS:
-            argv = self.probe_args("bench", core, emulator, slug(f"bench-{stem}"), content, load)
-            argv += ["--warmup", str(self.settings.bench_warmup), "--frames",
-                     str(self.settings.bench_frames), "--repeat", str(self.settings.bench_repeat),
-                     "--no-trace"]
-            if boot:
-                argv += ["--system-file", f"{entry_dest(boot[1])}={self.local_file(boot[1])}"]
-            self.check(emulator, keys["bench"], core, digest, argv, f"{emulator}-{stem}-bench")
+            self.bench(trial, keys["bench"], boot)
 
-    def negative(self, unit: Unit, core: Core, content: Content, load: Path, frames: list[str],
-                 digest: str, key: str, dest: str, entry: dict, local: Path,
+    def content_keys(self, core: Core, content: Content,
+                     tested: dict[str, tuple[int, dict, Path]]) -> dict[str, str]:
+        keys = {"files": self.check_key(core, content, "files"),
+                "none": self.check_key(core, content, "none")}
+        for dest in tested:
+            keys[f"negative:{dest}"] = self.check_key(core, content, f"negative:{dest}")
+        if self.settings.bench:
+            keys["bench"] = self.check_key(core, content, "bench")
+        return keys
+
+    def reference_runs(self, trial: Trial, keys: dict[str, str],
+                       staged: dict[str, tuple[int, dict, Path]]) -> tuple[dict, dict] | None:
+        """The full set and no BIOS at all, or None while either is missing."""
+        core, emulator, content, load = trial.core, trial.unit.emulator, trial.content, trial.load
+        repeat = ["--repeat", str(self.settings.check_repeat)]
+        stem = f"{core.name}-{slug(content.name)}"
+
+        # files: every declared file the collection holds, at its place.
+        argv = self.probe_args("run", core, emulator, slug(f"files-{stem}"), content, load) + trial.frames + repeat
+        for dest, (_, _, local) in sorted(staged.items()):
+            argv += ["--system-file", f"{dest}={local}"]
+        files_record = self.check(emulator, keys["files"], core, trial.digest, argv, f"{emulator}-{stem}-files")
+        # none: no BIOS at all.
+        argv = self.probe_args("run", core, emulator, slug(f"none-{stem}"), content, load) + trial.frames + repeat
+        none_record = self.check(emulator, keys["none"], core, trial.digest, argv, f"{emulator}-{stem}-none")
+        if not files_record or not none_record:
+            return None
+        return files_record, none_record
+
+    def test_entry(self, trial: Trial, key: str, held: Held, staged: dict[str, tuple[int, dict, Path]],
+                   files_record: dict, none: rules.Run) -> None:
+        """One declared file alone and replaced, then what its runs settle."""
+        emulator, content, entry = trial.unit.emulator, trial.content, held.entry
+        record = self.negative(trial, key, held, staged)
+        if not record:
+            return
+        labels = [v["label"] for v in record["variants"]]
+        present = rules.run_of(record, labels[0])
+        zeros, half = (rules.run_of(record, label) for label in labels[1:3])
+        for label in labels[3:]:
+            self.log(f"{emulator}: {rules.rule_region(rules.run_of(record, label), present, entry, content.region)}")
+        if held.dest in self.opened(files_record, 0) or held.dest in self.opened(record, 0):
+            verdicts = rules.rule_need(none, present, entry, rules.read(none, present, zeros, half))
+            validation = rules.rule_validation(zeros, half, none, present, entry)
+            if validation:
+                verdicts.append(validation)
+            self.settle(emulator, content, trial.core, held.index, entry, verdicts)
+            variants = self.variant_files(entry, held.local)
+            if variants:
+                self.run_variants(trial, held, variants)
+        else:
+            self.moved(trial, held, files_record, record)
+
+    def bench(self, trial: Trial, key: str, boot: tuple[int, dict] | None) -> None:
+        core, emulator, content = trial.core, trial.unit.emulator, trial.content
+        stem = f"{core.name}-{slug(content.name)}"
+        argv = self.probe_args("bench", core, emulator, slug(f"bench-{stem}"), content, trial.load)
+        argv += ["--warmup", str(self.settings.bench_warmup), "--frames",
+                 str(self.settings.bench_frames), "--repeat", str(self.settings.bench_repeat),
+                 "--no-trace"]
+        if boot:
+            argv += ["--system-file", f"{entry_dest(boot[1])}={self.local_file(boot[1])}"]
+        self.check(emulator, key, core, trial.digest, argv, f"{emulator}-{stem}-bench")
+
+    def negative(self, trial: Trial, key: str, held: Held,
                  staged: dict[str, tuple[int, dict, Path]]) -> dict | None:
         """The file alone, then wrong files under its name: zeros of its
         size, its first half, and other regions' dumps."""
+        core, content, entry, dest, local = trial.core, trial.content, held.entry, held.dest, held.local
+        unit = trial.unit
         stem = f"{core.name}-{slug(content.name)}"
         size = local.stat().st_size
         others = self.other_regions(entry, staged, local)
         argv = self.probe_args("check", core, unit.emulator, slug(f"negative-{entry['name']}-{stem}"),
-                               content, load) + frames
+                               content, trial.load) + trial.frames
         argv += ["--vary", f"{dest}={local}", "--vary", f"{dest}=@zeros:{size}",
                  "--vary", f"{dest}=@head:{size // 2}:{local}"]
         for other in others:
@@ -1266,20 +1327,19 @@ class Campaign:
                               f"{content.frames} frames with no button pressed, every "
                               f"{content.frame_hash_every}th frame hashed. The boot oracle judges "
                               f"each variant against the reference frames of {content.name}.")]
-        return self.check(unit.emulator, key, core, digest, argv, f"{unit.emulator}-{stem}-negative")
+        return self.check(unit.emulator, key, core, trial.digest, argv, f"{unit.emulator}-{stem}-negative")
 
-    def moved(self, unit: Unit, core: Core, content: Content, load: Path, frames: list[str],
-              digest: str, index: int, entry: dict, dest: str, local: Path, files_record: dict,
-              alone: dict) -> None:
+    def moved(self, trial: Trial, held: Held, files_record: dict, alone: dict) -> None:
         """A file the core opened neither in the full set nor alone: where
         else it looked for a file of that name, else flagged."""
+        unit, core, content = trial.unit, trial.core, trial.content
+        index, entry, dest = held.index, held.entry, held.dest
         probed = [p for record in (files_record, alone) for r in record["variants"][0]["repetitions"]
                   for p in r.get("files_probed_absent") or ()]
         others = [p for p in dict.fromkeys(probed) if p != dest
                   and p.rsplit("/", 1)[-1].casefold() == dest.rsplit("/", 1)[-1].casefold()]
         for candidate in others[:MAX_ALIAS_CANDIDATES]:
-            found = self.follow_up(unit, core, content, load, frames, digest, entry, local, candidate,
-                                   f"path:{entry['name']}:{candidate}")
+            found = self.follow_up(trial, entry, held.local, candidate, f"path:{entry['name']}:{candidate}")
             if found and candidate in self.opened(found, 0):
                 verdict = rules.rule_path(entry, dest, rules.Opened(candidate, found["id"]))
                 if verdict:
@@ -1308,7 +1368,7 @@ class Campaign:
     def judged(self, emulator: str, rid: str) -> bool:
         """True for a record the boot oracle judged: only those prove a field."""
         record = self.read_record(emulator, rid)
-        return bool(record) and record.get("record_version", 0) >= 4
+        return record is not None and record.get("record_version", 0) >= 4
 
     @staticmethod
     def opened(record: dict, position: int) -> set[str]:
@@ -1317,18 +1377,18 @@ class Campaign:
             out |= {item["path"] for item in rep.get("files_opened") or ()}
         return out
 
-    def follow_up(self, unit: Unit, core: Core, content: Content, load: Path, frames: list[str],
-                  digest: str, entry: dict, local: Path, dest: str, check: str) -> dict | None:
+    def follow_up(self, trial: Trial, entry: dict, local: Path, dest: str, check: str) -> dict | None:
         """The file staged at dest alone: does the core open it there."""
+        unit, core, content = trial.unit, trial.core, trial.content
         stem = f"{core.name}-{slug(content.name)}"
-        argv = self.probe_args("run", core, unit.emulator, slug(f"{check}-{stem}"), content, load)
-        argv += frames + ["--system-file", f"{dest}={local}"]
-        return self.check(unit.emulator, self.check_key(core, content, check), core, digest, argv,
+        argv = self.probe_args("run", core, unit.emulator, slug(f"{check}-{stem}"), content, trial.load)
+        argv += trial.frames + ["--system-file", f"{dest}={local}"]
+        return self.check(unit.emulator, self.check_key(core, content, check), core, trial.digest, argv,
                           f"{unit.emulator}-{stem}-{slug(check)}")
 
-    def follow_aliases(self, unit: Unit, core: Core, content: Content, load: Path, frames: list[str],
-                       digest: str, index: int, entry: dict, local: Path, none_record: dict) -> None:
+    def follow_aliases(self, trial: Trial, index: int, entry: dict, local: Path, none_record: dict) -> None:
         """Names the core looked for, with no BIOS, that no entry declares."""
+        unit, core, content = trial.unit, trial.core, trial.content
         declared = {e["name"] for e in unit.profile.get("files") or ()}
         declared |= {a for e in unit.profile.get("files") or () for a in e.get("aliases") or ()}
         suffix = Path(entry["name"]).suffix.casefold()
@@ -1343,23 +1403,23 @@ class Campaign:
                         and path not in probed):
                     probed.append(path)
         for candidate in probed[:MAX_ALIAS_CANDIDATES]:
-            found = self.follow_up(unit, core, content, load, frames, digest, entry, local, candidate,
+            found = self.follow_up(trial, entry, local, candidate,
                                    f"alias:{entry['name']}:{candidate.rsplit('/', 1)[-1]}")
             if found and candidate in self.opened(found, 0):
                 verdict = rules.rule_alias(self.reload_entry(unit, index), rules.Opened(candidate, found["id"]))
                 if verdict:
                     self.settle(unit.emulator, content, core, index, self.reload_entry(unit, index), [verdict])
 
-    def run_variants(self, unit: Unit, core: Core, content: Content, load: Path, frames: list[str],
-                     digest: str, index: int, entry: dict, dest: str, primary: Path,
-                     variants: list[Path]) -> None:
+    def run_variants(self, trial: Trial, held: Held, variants: list[Path]) -> None:
+        unit, core, content, digest = trial.unit, trial.core, trial.content, trial.digest
+        index, entry, dest = held.index, held.entry, held.dest
         key = self.check_key(core, content, f"variants:{entry['name']}")
         if not self.needed(unit.emulator, key, core, digest):
             return
         stem = f"{core.name}-{slug(content.name)}"
         argv = self.probe_args("check", core, unit.emulator, slug(f"variants-{entry['name']}-{stem}"),
-                               content, load) + frames
-        for path in [primary, *variants]:
+                               content, trial.load) + trial.frames
+        for path in [held.local, *variants]:
             argv += ["--vary", f"{dest}={path}"]
         argv += ["--observable", "frame_hashes", "--repeat", str(self.settings.check_repeat),
                  "--claim", f"every copy of {entry['name']} boots {content.name} on {core.name}",
@@ -1508,7 +1568,7 @@ class Campaign:
                     argv += ["--frames", str(content.frames), "--frame-hash-every",
                              str(content.frame_hash_every), "--repeat", str(self.settings.check_repeat),
                              "--png-dir", str(target)]
-                    for index, entry in self.system_entries(unit.profile, content.system):
+                    for _, entry in self.system_entries(unit.profile, content.system):
                         local = self.local_file(entry)
                         if local and f"{entry_dest(entry)}=" not in " ".join(argv):
                             argv += ["--system-file", f"{entry_dest(entry)}={local}"]
@@ -1821,10 +1881,9 @@ def render_status(report: dict) -> str:
     counts = report["counts"]
     lines.append(f"{counts.get(DONE, 0)} done, {counts.get(FAILED, 0)} failed, "
                  f"{counts.get(PENDING, 0)} pending")
-    for reason, number in sorted(report["pending_reasons"].items(), key=lambda kv: -kv[1]):
-        lines.append(f"  pending {number:5}  {reason}")
-    for item in report["failed"]:
-        lines.append(f"  FAILED {item['emulator']} {item['check']}: {item['reason']}")
+    lines.extend(f"  pending {number:5}  {reason}"
+                 for reason, number in sorted(report["pending_reasons"].items(), key=lambda kv: -kv[1]))
+    lines.extend(f"  FAILED {item['emulator']} {item['check']}: {item['reason']}" for item in report["failed"])
     for emulator, checks in report["emulators"].items():
         ran = [k for k, v in checks.items() if v["status"] != PENDING]
         if ran:
@@ -1894,7 +1953,7 @@ def review_finding(root: Path, key: str, status: str, reason: str,
 # Command line
 # --------------------------------------------------------------------------
 
-def main(argv: Sequence[str] | None = None) -> int:
+def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(allow_abbrev=False, description=__doc__.split("\n\n")[0],
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -1942,44 +2001,72 @@ def main(argv: Sequence[str] | None = None) -> int:
                           help="with --status applied, a field to write into the entry")
     review_p.add_argument("--index", type=int, help="the entry's position when several share its name")
     sub.add_parser("gate", help="tests, schemas, verify and pack of the changed profiles")
+    return parser
+
+
+def _review(parser: argparse.ArgumentParser, args: argparse.Namespace, paths: Paths) -> int:
+    updates: dict[str, object] = {}
+    for item in args.set:
+        name, sep, value = item.partition("=")
+        if not sep or not name:
+            parser.error(f"--set {item!r}: FIELD=YAML")
+        updates[name] = yaml.safe_load(value)
+    try:
+        line = review_finding(paths.root, args.key, args.status, args.reason, updates,
+                              args.index)
+    except (ValueError, campaign_profiles.ProfileEditError) as exc:
+        print(f"campaign: {exc}", file=sys.stderr)
+        return 1
+    print(f"{line['status']} {line['key']} [{line['id']}]")
+    return 0
+
+
+def _findings(args: argparse.Namespace, paths: Paths) -> int:
+    lines = open_findings(paths.root, args.all)
+    if args.json:
+        print(json.dumps(lines, indent=2))
+    for line in [] if args.json else lines:
+        print(f"{line['status']:8} {line['key']}: profile says {json.dumps(line['profile_says'])}, "
+              f"run shows {json.dumps(line['run_shows'])}. {line['statement']} "
+              f"[{', '.join(line['evidence'])}]")
+    return 0
+
+
+def _settings(args: argparse.Namespace) -> Settings:
+    if args.command == "run":
+        return Settings(budget=args.budget, max_load_wait=args.max_load_wait,
+                        min_free_gb=args.min_free_gb, cache_cap_gb=args.cache_cap_gb,
+                        romfetch=args.romfetch, network=not args.offline,
+                        allow_unsandboxed=args.allow_unsandboxed, bench=args.bench)
+    if args.command == "references":
+        return Settings(romfetch=args.romfetch, network=not args.offline,
+                        allow_unsandboxed=args.allow_unsandboxed)
+    return Settings()
+
+
+def _references(campaign: Campaign, args: argparse.Namespace, only: set[str]) -> int:
+    try:
+        with host_lock(campaign.lock_path):
+            listed = campaign.references(only, args.system, Path(args.png_dir))
+    except autorun.LockBusy as exc:
+        print(f"campaign: deferred, {exc}", file=sys.stderr)
+        return 75
+    print(json.dumps(listed, indent=2))
+    return 0
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    parser = _parser()
     args = parser.parse_args(argv)
 
     paths = Paths.default()
     if args.command == "gate":
         return gate(paths.root, changed_profiles(paths.root))
     if args.command == "review":
-        updates: dict[str, object] = {}
-        for item in args.set:
-            name, sep, value = item.partition("=")
-            if not sep or not name:
-                parser.error(f"--set {item!r}: FIELD=YAML")
-            updates[name] = yaml.safe_load(value)
-        try:
-            line = review_finding(paths.root, args.key, args.status, args.reason, updates,
-                                  args.index)
-        except (ValueError, campaign_profiles.ProfileEditError) as exc:
-            print(f"campaign: {exc}", file=sys.stderr)
-            return 1
-        print(f"{line['status']} {line['key']} [{line['id']}]")
-        return 0
+        return _review(parser, args, paths)
     if args.command == "findings":
-        lines = open_findings(paths.root, args.all)
-        if args.json:
-            print(json.dumps(lines, indent=2))
-        for line in [] if args.json else lines:
-            print(f"{line['status']:8} {line['key']}: profile says {json.dumps(line['profile_says'])}, "
-                  f"run shows {json.dumps(line['run_shows'])}. {line['statement']} "
-                  f"[{', '.join(line['evidence'])}]")
-        return 0
-    settings = Settings()
-    if args.command == "run":
-        settings = Settings(budget=args.budget, max_load_wait=args.max_load_wait,
-                            min_free_gb=args.min_free_gb, cache_cap_gb=args.cache_cap_gb,
-                            romfetch=args.romfetch, network=not args.offline,
-                            allow_unsandboxed=args.allow_unsandboxed, bench=args.bench)
-    elif args.command == "references":
-        settings = Settings(romfetch=args.romfetch, network=not args.offline,
-                            allow_unsandboxed=args.allow_unsandboxed)
+        return _findings(args, paths)
+    settings = _settings(args)
     if args.command in ("run", "references"):
         paths.content_file = Path(args.content_file)
     campaign = Campaign(paths, settings)
@@ -1989,17 +2076,14 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0
     only = {item.strip() for item in args.only.split(",") if item.strip()}
     if args.command == "references":
-        try:
-            with host_lock(campaign.lock_path):
-                listed = campaign.references(only, args.system, Path(args.png_dir))
-        except autorun.LockBusy as exc:
-            print(f"campaign: deferred, {exc}", file=sys.stderr)
-            return 75
-        print(json.dumps(listed, indent=2))
-        return 0
+        return _references(campaign, args, only)
     if args.dry_run:
         campaign.run(only, args.system, dry_run=True)
         return 0
+    return _run_pass(campaign, args, only, paths)
+
+
+def _run_pass(campaign: Campaign, args: argparse.Namespace, only: set[str], paths: Paths) -> int:
     campaign.dirty_at_start = set(autorun.changed_files(paths.root)) if args.commit else set()
 
     def stop(signum: int, frame: object) -> None:
