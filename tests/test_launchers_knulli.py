@@ -391,7 +391,7 @@ def configgen(**overrides: str) -> kl.Configgen:
 
 
 def sites(path: str, kind: str, **fields: object) -> list[dict]:
-    spec = kl.GenericSites(path, kind, **fields)  # type: ignore[arg-type]
+    spec = kl.GenericSites(path, kind, **fields)
     return [launcher.entry() for launcher in kl.bios_sites(configgen(), spec)]
 
 

@@ -41,7 +41,7 @@ class BinaryContinuationsAreNotLinked(unittest.TestCase):
 
     def _render(self, value: str) -> str:
         original = sitesources._tree_paths
-        sitesources._tree_paths = lambda repo, pin: frozenset({"FPLoader.cpp"})  # type: ignore[assignment]
+        sitesources._tree_paths = lambda repo, pin: frozenset({"FPLoader.cpp"})
         try:
             return sitesources._source_ref_markdown(self.PROFILE, value)
         finally:

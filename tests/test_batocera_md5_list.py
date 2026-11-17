@@ -118,7 +118,7 @@ class BatoceraScraper(unittest.TestCase):
 class RocknixScraper(unittest.TestCase):
     def _requirements(self, script: str):
         scraper = rocknix_scraper.Scraper(url="https://example.invalid/rocknix-systems")
-        scraper._fetch_raw = lambda: script  # type: ignore[method-assign]
+        scraper._fetch_raw = lambda: script
         return {req.name: requirement_entry(req) for req in scraper.fetch_requirements()}
 
     def test_string_and_list(self):

@@ -890,7 +890,7 @@ class SourceLinksGoWhereTheFileIs(unittest.TestCase):
 
     def _render(self, tree: frozenset[str]) -> str:
         original = sitesources._tree_paths
-        sitesources._tree_paths = lambda repo, pin: tree  # type: ignore[assignment]
+        sitesources._tree_paths = lambda repo, pin: tree
         try:
             return sitesources._source_ref_markdown(
                 self.PROFILE, "src/emulator.cpp:234; src/core/loader/ncch.cpp:151-164")

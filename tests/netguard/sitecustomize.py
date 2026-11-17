@@ -67,9 +67,9 @@ def guard() -> None:
             _refuse(host)
         return getaddrinfo(host, *args, **kwargs)
 
-    socket.socket.connect = guarded_connect  # type: ignore[method-assign]
-    socket.socket.connect_ex = guarded_connect_ex  # type: ignore[method-assign]
-    socket.getaddrinfo = guarded_getaddrinfo  # type: ignore[assignment]
+    socket.socket.connect = guarded_connect
+    socket.socket.connect_ex = guarded_connect_ex
+    socket.getaddrinfo = guarded_getaddrinfo
 
     ismount = os.path.ismount
 
@@ -81,7 +81,7 @@ def guard() -> None:
             return False
         return ismount(path)
 
-    os.path.ismount = guarded_ismount  # type: ignore[assignment]
+    os.path.ismount = guarded_ismount
 
 
 def unguard() -> None:

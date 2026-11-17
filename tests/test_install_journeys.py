@@ -201,7 +201,7 @@ class Journeys(unittest.TestCase):
             self.screens.append(screen)
             return screen
 
-        term.wait = wait  # type: ignore[method-assign]
+        term.wait = wait
         return term
 
     def press(self, term: Pty, *keys: str) -> None:
