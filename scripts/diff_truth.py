@@ -44,6 +44,50 @@ def _where(entry: dict) -> str:
     return entry.get("destination") or entry["name"]
 
 
+_TOTAL_LABELS = (
+    ("total_missing", "missing"),
+    ("total_extra_phantom", "unpaired"),
+    ("total_extra_unprofiled", "unprofiled"),
+    ("total_hash_mismatch", "hash"),
+    ("total_required_mismatch", "required"),
+)
+
+_DIVERGENCE_LABELS = (
+    ("missing", "MISSING"),
+    ("extra_phantom", "UNPAIRED"),
+    ("extra_unprofiled", "UNPROF"),
+    ("hash_mismatch", "HASH"),
+    ("required_mismatch", "REQ"),
+)
+
+
+def _terminal_divergence(sys_id: str, div: dict) -> list[str]:
+    labels = [f"{label}:{len(div[key])}" for key, label in _DIVERGENCE_LABELS if div.get(key)]
+    lines = [f"  {sys_id}: {' '.join(labels)}"]
+    lines.extend(
+        f"    + {_where(m)}  [{', '.join(m.get('cores', []))}]"
+        for m in div.get("missing", [])
+    )
+    lines.extend(
+        f"    ~ {_where(h)}  {h['hash_type']}: "
+        f"{h['truth_' + h['hash_type']]} != {h['scraped_' + h['hash_type']]}"
+        for h in div.get("hash_mismatch", [])
+    )
+    lines.extend(
+        f"    - {_where(p)}  (no profile entry of this system matches it)"
+        for p in div.get("extra_phantom", [])
+    )
+    lines.extend(
+        f"    ? {_where(u)}  (unprofiled cores)"
+        for u in div.get("extra_unprofiled", [])
+    )
+    lines.extend(
+        f"    ! {_where(r)}  required: {r['truth_required']} != {r['scraped_required']}"
+        for r in div.get("required_mismatch", [])
+    )
+    return lines
+
+
 def _format_terminal(report: dict) -> str:
     lines: list[str] = []
     platform = report.get("platform", "unknown")
@@ -57,58 +101,53 @@ def _format_terminal(report: dict) -> str:
         f"{s['systems_uncovered']} uncovered"
     )
 
-    totals = []
-    if s["total_missing"]:
-        totals.append(f"{s['total_missing']} missing")
-    if s["total_extra_phantom"]:
-        totals.append(f"{s['total_extra_phantom']} unpaired")
-    if s["total_extra_unprofiled"]:
-        totals.append(f"{s['total_extra_unprofiled']} unprofiled")
-    if s["total_hash_mismatch"]:
-        totals.append(f"{s['total_hash_mismatch']} hash")
-    if s["total_required_mismatch"]:
-        totals.append(f"{s['total_required_mismatch']} required")
+    totals = [f"{s[key]} {label}" for key, label in _TOTAL_LABELS if s[key]]
     if totals:
         lines.append(f"  divergences: {', '.join(totals)}")
     else:
         lines.append("  no divergences")
 
     for sys_id, div in sorted(report.get("divergences", {}).items()):
-        labels: list[str] = []
-        if div.get("missing"):
-            labels.append(f"MISSING:{len(div['missing'])}")
-        if div.get("extra_phantom"):
-            labels.append(f"UNPAIRED:{len(div['extra_phantom'])}")
-        if div.get("extra_unprofiled"):
-            labels.append(f"UNPROF:{len(div['extra_unprofiled'])}")
-        if div.get("hash_mismatch"):
-            labels.append(f"HASH:{len(div['hash_mismatch'])}")
-        if div.get("required_mismatch"):
-            labels.append(f"REQ:{len(div['required_mismatch'])}")
-        lines.append(f"  {sys_id}: {' '.join(labels)}")
-
-        for m in div.get("missing", []):
-            cores = ", ".join(m.get("cores", []))
-            lines.append(f"    + {_where(m)}  [{cores}]")
-        for h in div.get("hash_mismatch", []):
-            ht = h["hash_type"]
-            lines.append(
-                f"    ~ {_where(h)}  {ht}: {h[f'truth_{ht}']} != {h[f'scraped_{ht}']}"
-            )
-        for p in div.get("extra_phantom", []):
-            lines.append(f"    - {_where(p)}  (no profile entry of this system matches it)")
-        for u in div.get("extra_unprofiled", []):
-            lines.append(f"    ? {_where(u)}  (unprofiled cores)")
-        for r in div.get("required_mismatch", []):
-            lines.append(
-                f"    ! {_where(r)}  required: {r['truth_required']} != {r['scraped_required']}"
-            )
+        lines.extend(_terminal_divergence(sys_id, div))
 
     uncovered = report.get("uncovered_systems", [])
     if uncovered:
         lines.append(f"  uncovered ({len(uncovered)}): {', '.join(uncovered)}")
 
     return "\n".join(lines)
+
+
+def _markdown_divergence(sys_id: str, div: dict) -> list[str]:
+    lines = [f"## {sys_id}", ""]
+    for m in div.get("missing", []):
+        refs = ""
+        if m.get("source_refs"):
+            refs = " " + " ".join(f"`{r}`" for r in m["source_refs"])
+        lines.append(f"- **Add** `{_where(m)}`{refs}")
+    lines.extend(
+        f"- **Fix hash** `{_where(h)}` {h['hash_type']}: "
+        f"`{h['truth_' + h['hash_type']]}` != `{h['scraped_' + h['hash_type']]}`"
+        for h in div.get("hash_mismatch", [])
+    )
+    # Evidence, not a request: an entry leaves a platform's file only on
+    # proof (export_native's removal_candidates). A core can read a
+    # file its profile does not pair with this declaration.
+    lines.extend(
+        f"- **Unpaired** `{_where(p)}`: no profile entry of this system matches it "
+        "by path, name or hash"
+        for p in div.get("extra_phantom", [])
+    )
+    lines.extend(
+        f"- **Unpaired** `{_where(u)}`: some cores of this platform "
+        "have no profile yet"
+        for u in div.get("extra_unprofiled", [])
+    )
+    lines.extend(
+        f"- **Fix required** `{_where(r)}`: truth={r['truth_required']}, scraped={r['scraped_required']}"
+        for r in div.get("required_mismatch", [])
+    )
+    lines.append("")
+    return lines
 
 
 def _format_markdown(report: dict) -> str:
@@ -134,43 +173,13 @@ def _format_markdown(report: dict) -> str:
     lines.append("")
 
     for sys_id, div in sorted(report.get("divergences", {}).items()):
-        lines.append(f"## {sys_id}")
-        lines.append("")
-        for m in div.get("missing", []):
-            refs = ""
-            if m.get("source_refs"):
-                refs = " " + " ".join(f"`{r}`" for r in m["source_refs"])
-            lines.append(f"- **Add** `{_where(m)}`{refs}")
-        for h in div.get("hash_mismatch", []):
-            ht = h["hash_type"]
-            lines.append(
-                f"- **Fix hash** `{_where(h)}` {ht}: `{h[f'truth_{ht}']}` != `{h[f'scraped_{ht}']}`"
-            )
-        # Evidence, not a request: an entry leaves a platform's file only on
-        # proof (export_native's removal_candidates). A core can read a
-        # file its profile does not pair with this declaration.
-        for p in div.get("extra_phantom", []):
-            lines.append(
-                f"- **Unpaired** `{_where(p)}`: no profile entry of this system matches it "
-                "by path, name or hash"
-            )
-        for u in div.get("extra_unprofiled", []):
-            lines.append(
-                f"- **Unpaired** `{_where(u)}`: some cores of this platform "
-                "have no profile yet"
-            )
-        for r in div.get("required_mismatch", []):
-            lines.append(
-                f"- **Fix required** `{_where(r)}`: truth={r['truth_required']}, scraped={r['scraped_required']}"
-            )
-        lines.append("")
+        lines.extend(_markdown_divergence(sys_id, div))
 
     uncovered = report.get("uncovered_systems", [])
     if uncovered:
         lines.append("## Uncovered systems")
         lines.append("")
-        for u in uncovered:
-            lines.append(f"- {u}")
+        lines.extend(f"- {u}" for u in uncovered)
         lines.append("")
 
     return "\n".join(lines)

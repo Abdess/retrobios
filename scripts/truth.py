@@ -9,6 +9,7 @@ from __future__ import annotations
 import copy
 import os
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 
 from common import (
@@ -30,8 +31,8 @@ from validation import (
 )
 
 
-
 _CONFLICTS_SHOWN: set[tuple[str, ...]] = set()
+
 
 def _serialize_source_ref(sr: object) -> str:
     """Convert a source_ref value to a clean string for serialization."""
@@ -41,6 +42,19 @@ def _serialize_source_ref(sr: object) -> str:
         parts = [f"{k}: {v}" for k, v in sr.items()]
         return "; ".join(parts)
     return str(sr)
+
+
+def _indexed_record(value: object, index: dict, files_db: dict) -> dict | None:
+    """The database record a hash index points a single hash value to."""
+    if not (value and isinstance(value, str)):
+        return None
+    ref = index.get(value.lower())
+    if not ref:
+        return None
+    ref_sha1 = ref if isinstance(ref, str) else (ref[0] if ref else None)
+    if not ref_sha1:
+        return None
+    return files_db.get(ref_sha1)
 
 
 def _enrich_hashes(entry: dict, db: dict) -> None:
@@ -67,30 +81,18 @@ def _enrich_hashes(entry: dict, db: dict) -> None:
 
     # Anchor 2: MD5 (strong)
     if record is None:
-        md5 = entry.get("md5")
-        if md5 and isinstance(md5, str):
-            by_md5 = indexes.get("by_md5", {})
-            ref = by_md5.get(md5.lower())
-            if ref:
-                ref_sha1 = ref if isinstance(ref, str) else (ref[0] if ref else None)
-                if ref_sha1:
-                    record = files_db.get(ref_sha1)
+        record = _indexed_record(entry.get("md5"), indexes.get("by_md5", {}), files_db)
 
     # Anchor 3: CRC32 (32-bit, collisions theoretically possible).
     # Require size match when profile has a size to guard against collisions.
     if record is None:
-        crc = entry.get("crc32")
-        if crc and isinstance(crc, str):
-            by_crc32 = indexes.get("by_crc32", {})
-            ref = by_crc32.get(crc.lower())
-            if ref:
-                ref_sha1 = ref if isinstance(ref, str) else (ref[0] if ref else None)
-                if ref_sha1:
-                    candidate = files_db.get(ref_sha1)
-                    if candidate is not None:
-                        profile_size = entry.get("size")
-                        if not profile_size or candidate.get("size") == profile_size:
-                            record = candidate
+        candidate = _indexed_record(
+            entry.get("crc32"), indexes.get("by_crc32", {}), files_db,
+        )
+        if candidate is not None:
+            profile_size = entry.get("size")
+            if not profile_size or candidate.get("size") == profile_size:
+                record = candidate
 
     if record is None:
         return
@@ -653,6 +655,160 @@ def _fold_data_directory_readers(
                             _fold_into(entry, dict(declaration), emu_name)
 
 
+@dataclass(frozen=True)
+class _SystemMap:
+    """How a profile's systems and entries map onto a platform's systems."""
+
+    platform_sys_ids: set[str]
+    # Every platform declaration of a name, in the platform's order. The
+    # last one used to win, whatever the content.
+    declared_by_name: dict[str, list[tuple[str, dict]]]
+    # Normalized ID -> platform system ID. Walked in the platform's order,
+    # not the set's: two IDs normalizing alike went to whichever the hash
+    # seed put last.
+    norm_to_platform: dict[str, str]
+    db: dict | None
+
+    @classmethod
+    def of(cls, config: dict, db: dict | None) -> _SystemMap:
+        declared_by_name: dict[str, list[tuple[str, dict]]] = {}
+        for psid, sys_data in config.get("systems", {}).items():
+            for fe in sys_data.get("files", []):
+                fname = fe.get("name", "").lower()
+                if fname:
+                    declared_by_name.setdefault(fname, []).append((psid, fe))
+        norm_to_platform: dict[str, str] = {}
+        for psid in config.get("systems", {}):
+            norm_to_platform.setdefault(_norm_system_id(psid), psid)
+        return cls(
+            set(config.get("systems", {}).keys()), declared_by_name, norm_to_platform, db,
+        )
+
+    def map_sys_id(self, profile_sid: str) -> str:
+        """Map a profile system ID to the platform's system ID."""
+        if profile_sid in self.platform_sys_ids:
+            return profile_sid
+        return self.norm_to_platform.get(_norm_system_id(profile_sid), profile_sid)
+
+    def attribute(self, fe: dict, own: str | None, on_platform: set[str]) -> list[str]:
+        """The platform systems an entry belongs to, [] when nothing decides.
+
+        A declaration of the same name settles the system only when it can
+        be the same file: a shared hash, or no contradicting size. fmsx's
+        16 KB DISK.ROM is not quasi88's 2 KB disk.rom, and dosbox's SC-55
+        ROM1.BIN is not galaksija's. The same content declared under two
+        systems is filed under both.
+        """
+        verdicts = [
+            (psid, _declaration_verdict(fe, decl, self.db))
+            for psid, decl in self.declared_by_name.get(fe.get("name", "").lower(), [])
+        ]
+        same = sorted({psid for psid, v in verdicts if v == "same"})
+        undecided = sorted({psid for psid, v in verdicts if v == "undecided"})
+        if own is not None:
+            mapped = self.map_sys_id(own)
+            if any(psid == mapped and v != "other" for psid, v in verdicts):
+                return [mapped]
+            if same:
+                return same
+            if len(undecided) == 1:
+                return undecided
+            return [mapped]
+        if same:
+            return same
+        if len(undecided) == 1:
+            return undecided
+        if undecided:
+            ours = [psid for psid in undecided if psid in on_platform]
+            return ours if len(ours) == 1 else []
+        return [next(iter(on_platform))] if len(on_platform) == 1 else []
+
+    def targets(self, fe: dict, profile: dict, on_platform: set[str]) -> list[str]:
+        """The platform systems an entry is filed under."""
+        profile_sid = fe.get("system", "")
+        sys_ids = profile.get("systems", [])
+        if profile_sid:
+            own: str | None = profile_sid
+        elif len(sys_ids) == 1:
+            own = sys_ids[0]
+        elif not sys_ids:
+            # A profile that names no system: a platform declaration of
+            # the same file files it, and the placeholder takes only a
+            # name the platform does not declare. mess2015's hiscore.dat
+            # beside the arcade one put an "unknown" section in System.dat.
+            own = None
+        else:
+            # A multi-system profile's entry without a system is filed by
+            # the platform's own declaration of the same file, or the one
+            # profile system the platform has. Otherwise it is not filed:
+            # the first system was a guess, and CLK's Apple, Mac, ZX and
+            # Amiga ROMs went to RomM as Amstrad CPC firmware.
+            own = None
+        sys_targets = self.attribute(fe, own, on_platform)
+        if not sys_ids and not profile_sid and not sys_targets \
+                and fe.get("name", "").lower() not in self.declared_by_name:
+            sys_targets = [self.map_sys_id("unknown")]
+        return sys_targets
+
+
+def _cover(
+    system_cores: dict[str, dict[str, set[str]]], sys_id: str, kind: str, emu_name: str,
+) -> None:
+    sys_cov = system_cores.setdefault(
+        sys_id,
+        {
+            "profiled": set(),
+            "unprofiled": set(),
+        },
+    )
+    sys_cov[kind].add(emu_name)
+
+
+def _platform_entries(
+    emu_name: str, profile: dict, standalone_set: set[str], platform_name: str,
+) -> list[dict]:
+    # The pack's rule (validation.deliverable), per build: a file the
+    # emulator installs is kept and marked, one the launcher never opens
+    # is left out.
+    return _archives_not_members([
+        {
+            **fe,
+            "_opens_by_name": opens_by_name(fe, profile, standalone),
+            "_brought": None if installed_with_emulator(fe, platform_name)
+            else f"{emu_name}:{'standalone' if standalone else 'libretro'}",
+        }
+        for view, standalone in platform_layouts(emu_name, profile, standalone_set)
+        for fe in _system_dir_files(view, standalone)
+        if not unread_on(fe, platform_name)
+    ])
+
+
+def _serialize_systems(
+    systems: dict[str, dict], system_cores: dict[str, dict[str, set[str]]],
+) -> None:
+    # Convert sets to sorted lists for serialization
+    for sys_id, sys_data in systems.items():
+        for fe in sys_data.get("files", []):
+            fe.pop("_hash_by", None)
+            fe.pop("_region_void", None)
+            fe["_cores"] = sorted(fe.get("_cores", set()))
+            fe["_required_by"] = sorted(fe.get("_required_by", set()))
+            one_of = fe.pop("_one_of", None)
+            if one_of:
+                fe["one_of"] = sorted(one_of)
+            fe["_named_by"] = sorted(fe.get("_named_by", set()))
+            fe["_brought_by"] = sorted(fe.get("_brought_by", set()))
+            if not fe["_brought_by"]:
+                fe["bundled"] = True
+            fe["_source_refs"] = sorted(fe.get("_source_refs", set()))
+        # Add per-system coverage
+        cov = system_cores.get(sys_id, {})
+        sys_data["_coverage"] = {
+            "cores_profiled": sorted(cov.get("profiled", set())),
+            "cores_unprofiled": sorted(cov.get("unprofiled", set())),
+        }
+
+
 def generate_platform_truth(
     platform_name: str,
     config: dict,
@@ -690,62 +846,7 @@ def generate_platform_truth(
     # 1. File-based: if the scraped platform already has this file, use its system
     # 2. Exact match: profile system ID == platform system ID
     # 3. Normalized match: strip manufacturer prefix + separators
-    platform_sys_ids = set(config.get("systems", {}).keys())
-
-    # Every platform declaration of a name, in the platform's order. The
-    # last one used to win, whatever the content.
-    declared_by_name: dict[str, list[tuple[str, dict]]] = {}
-    for psid, sys_data in config.get("systems", {}).items():
-        for fe in sys_data.get("files", []):
-            fname = fe.get("name", "").lower()
-            if fname:
-                declared_by_name.setdefault(fname, []).append((psid, fe))
-
-    # Normalized ID -> platform system ID. Walked in the platform's order,
-    # not the set's: two IDs normalizing alike went to whichever the hash
-    # seed put last.
-    norm_to_platform: dict[str, str] = {}
-    for psid in config.get("systems", {}):
-        norm_to_platform.setdefault(_norm_system_id(psid), psid)
-
-    def _map_sys_id(profile_sid: str) -> str:
-        """Map a profile system ID to the platform's system ID."""
-        if profile_sid in platform_sys_ids:
-            return profile_sid
-        return norm_to_platform.get(_norm_system_id(profile_sid), profile_sid)
-
-    def _attribute(fe: dict, own: str | None, on_platform: set[str]) -> list[str]:
-        """The platform systems an entry belongs to, [] when nothing decides.
-
-        A declaration of the same name settles the system only when it can
-        be the same file: a shared hash, or no contradicting size. fmsx's
-        16 KB DISK.ROM is not quasi88's 2 KB disk.rom, and dosbox's SC-55
-        ROM1.BIN is not galaksija's. The same content declared under two
-        systems is filed under both.
-        """
-        verdicts = [
-            (psid, _declaration_verdict(fe, decl, db))
-            for psid, decl in declared_by_name.get(fe.get("name", "").lower(), [])
-        ]
-        same = sorted({psid for psid, v in verdicts if v == "same"})
-        undecided = sorted({psid for psid, v in verdicts if v == "undecided"})
-        if own is not None:
-            mapped = _map_sys_id(own)
-            if any(psid == mapped and v != "other" for psid, v in verdicts):
-                return [mapped]
-            if same:
-                return same
-            if len(undecided) == 1:
-                return undecided
-            return [mapped]
-        if same:
-            return same
-        if len(undecided) == 1:
-            return undecided
-        if undecided:
-            ours = [psid for psid in undecided if psid in on_platform]
-            return ours if len(ours) == 1 else []
-        return [next(iter(on_platform))] if len(on_platform) == 1 else []
+    mapping = _SystemMap.of(config, db)
 
     systems: dict[str, dict] = {}
     unattributed: dict[str, int] = {}
@@ -761,48 +862,11 @@ def generate_platform_truth(
             continue
         cores_profiled.add(emu_name)
 
-        # The pack's rule (validation.deliverable), per build: a file the
-        # emulator installs is kept and marked, one the launcher never opens
-        # is left out.
-        filtered = _archives_not_members([
-            {
-                **fe,
-                "_opens_by_name": opens_by_name(fe, profile, standalone),
-                "_brought": None if installed_with_emulator(fe, platform_name)
-                else f"{emu_name}:{'standalone' if standalone else 'libretro'}",
-            }
-            for view, standalone in platform_layouts(emu_name, profile, standalone_set)
-            for fe in _system_dir_files(view, standalone)
-            if not unread_on(fe, platform_name)
-        ])
-
         on_platform = {
-            _map_sys_id(sid) for sid in profile.get("systems", [])
-        } & platform_sys_ids
-        for fe in filtered:
-            profile_sid = fe.get("system", "")
-            sys_ids = profile.get("systems", [])
-            if profile_sid:
-                own: str | None = profile_sid
-            elif len(sys_ids) == 1:
-                own = sys_ids[0]
-            elif not sys_ids:
-                # A profile that names no system: a platform declaration of
-                # the same file files it, and the placeholder takes only a
-                # name the platform does not declare. mess2015's hiscore.dat
-                # beside the arcade one put an "unknown" section in System.dat.
-                own = None
-            else:
-                # A multi-system profile's entry without a system is filed by
-                # the platform's own declaration of the same file, or the one
-                # profile system the platform has. Otherwise it is not filed:
-                # the first system was a guess, and CLK's Apple, Mac, ZX and
-                # Amiga ROMs went to RomM as Amstrad CPC firmware.
-                own = None
-            sys_targets = _attribute(fe, own, on_platform)
-            if not sys_ids and not profile_sid and not sys_targets \
-                    and fe.get("name", "").lower() not in declared_by_name:
-                sys_targets = [_map_sys_id("unknown")]
+            mapping.map_sys_id(sid) for sid in profile.get("systems", [])
+        } & mapping.platform_sys_ids
+        for fe in _platform_entries(emu_name, profile, standalone_set, platform_name):
+            sys_targets = mapping.targets(fe, profile, on_platform)
             if not sys_targets:
                 unattributed[emu_name] = unattributed.get(emu_name, 0) + 1
                 continue
@@ -811,14 +875,7 @@ def generate_platform_truth(
                 _merge_file_into_system(
                     system, fe if position == 0 else copy.deepcopy(fe), emu_name, db
                 )
-                sys_cov = system_cores.setdefault(
-                    sys_id,
-                    {
-                        "profiled": set(),
-                        "unprofiled": set(),
-                    },
-                )
-                sys_cov["profiled"].add(emu_name)
+                _cover(system_cores, sys_id, "profiled", emu_name)
 
     # Ensure all systems of resolved cores have entries (even with 0 files).
     # This documents that the system is covered: the core was analyzed and
@@ -827,28 +884,14 @@ def generate_platform_truth(
     for emu_name in sorted(cores_profiled):
         profile = profiles[emu_name]
         for prof_sid in profile.get("systems", []):
-            sys_id = _map_sys_id(prof_sid)
+            sys_id = mapping.map_sys_id(prof_sid)
             systems.setdefault(sys_id, {})
-            sys_cov = system_cores.setdefault(
-                sys_id,
-                {
-                    "profiled": set(),
-                    "unprofiled": set(),
-                },
-            )
-            sys_cov["profiled"].add(emu_name)
+            _cover(system_cores, sys_id, "profiled", emu_name)
 
     # Track unprofiled cores per system based on profile system lists
     for emu_name in cores_unprofiled:
         for sys_id in systems:
-            sys_cov = system_cores.setdefault(
-                sys_id,
-                {
-                    "profiled": set(),
-                    "unprofiled": set(),
-                },
-            )
-            sys_cov["unprofiled"].add(emu_name)
+            _cover(system_cores, sys_id, "unprofiled", emu_name)
 
     _fold_data_directory_readers(
         systems, profiles, sorted(cores_profiled), standalone_set, platform_name,
@@ -868,27 +911,7 @@ def generate_platform_truth(
         if files_list:
             sys_data["files"] = [fe for fe in files_list if _has_exploitable_data(fe)]
 
-    # Convert sets to sorted lists for serialization
-    for sys_id, sys_data in systems.items():
-        for fe in sys_data.get("files", []):
-            fe.pop("_hash_by", None)
-            fe.pop("_region_void", None)
-            fe["_cores"] = sorted(fe.get("_cores", set()))
-            fe["_required_by"] = sorted(fe.get("_required_by", set()))
-            one_of = fe.pop("_one_of", None)
-            if one_of:
-                fe["one_of"] = sorted(one_of)
-            fe["_named_by"] = sorted(fe.get("_named_by", set()))
-            fe["_brought_by"] = sorted(fe.get("_brought_by", set()))
-            if not fe["_brought_by"]:
-                fe["bundled"] = True
-            fe["_source_refs"] = sorted(fe.get("_source_refs", set()))
-        # Add per-system coverage
-        cov = system_cores.get(sys_id, {})
-        sys_data["_coverage"] = {
-            "cores_profiled": sorted(cov.get("profiled", set())),
-            "cores_unprofiled": sorted(cov.get("unprofiled", set())),
-        }
+    _serialize_systems(systems, system_cores)
 
     return {
         "platform": platform_name,
@@ -1007,7 +1030,7 @@ def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
     # An archive declared once per ROM it holds (zipped_file) is still one
     # file.
     seen_extra: set[tuple[str, str]] = set()
-    for s_key, s_entry in unmatched_scraped.items():
+    for s_entry in unmatched_scraped.values():
         key = (s_entry["name"].lower(), _path_tail(s_entry.get("destination")))
         if key in seen_extra:
             continue
