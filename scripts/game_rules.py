@@ -186,10 +186,10 @@ class Checker:
             self._files(where, entry["profile"], profile, entry.get("files") or [])
             header = (entry.get("trigger") or {}).get("header")
             if header and self.readers is not None:
-                self._header(where, header)
+                self._header(where, header, self.readers)
 
-    def _header(self, where: str, header: dict) -> None:
-        reader = self.readers.get(header["reader"])
+    def _header(self, where: str, header: dict, readers: dict[str, dict]) -> None:
+        reader = readers.get(header["reader"])
         if reader is None:
             self.errors.append(f"{where}: games/headers.yml has no reader {header['reader']}")
             return

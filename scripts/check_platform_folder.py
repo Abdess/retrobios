@@ -23,14 +23,14 @@ def accepts(entry: dict, path: Path, mode: str) -> bool:
             with zipfile.ZipFile(path) as archive:
                 names = {name.casefold(): name for name in archive.namelist()}
                 member = names.get(entry["zipped_file"].casefold())
-                return bool(member) and hashlib.new(digest, archive.read(member)).hexdigest() in values
+                return member is not None and hashlib.new(digest, archive.read(member)).hexdigest() in values
         actual = hashlib.new(digest, path.read_bytes()).hexdigest()
         if entry.get("zip_digest") != "composite" and actual in values:
             return True  # whole digests, as batocera-systems:1088 compares them
         if digest == DIGESTS["md5"] and path.suffix.lower() == ".zip":  # Recalbox: members in name order
             with zipfile.ZipFile(path) as archive:
-                names = sorted(name for name in archive.namelist() if not name.endswith("/"))
-                return hashlib.md5(b"".join(map(archive.read, names))).hexdigest() in values
+                members = sorted(name for name in archive.namelist() if not name.endswith("/"))
+                return hashlib.md5(b"".join(map(archive.read, members))).hexdigest() in values
     except (OSError, zipfile.BadZipFile):
         return False
     return False
@@ -60,7 +60,7 @@ if __name__ == "__main__":
     except urllib.request.HTTPError as error:  # a 404: no platform has that name
         with urllib.request.urlopen(API.replace("platforms/", "catalog.json")) as response:
             known = sorted(i["url"][10:-5] for i in json.load(response)["items"] if i["url"].startswith("manifests/"))
-        sys.exit(f"unknown platform: {sys.argv[1]}. Known: {', '.join(known)}" if error.code == 404 else error)
+        sys.exit(f"unknown platform: {sys.argv[1]}. Known: {', '.join(known)}" if error.code == 404 else str(error))
     except OSError as error:  # no such folder, or no network (URLError)
         sys.exit(f"error: {error}")
     for verdict in ("ok", "wrong", "missing"):

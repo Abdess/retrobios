@@ -40,7 +40,7 @@ import subprocess
 import sys
 import tempfile
 import urllib.request
-from collections.abc import Iterator
+from collections.abc import Container, Iterator
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
@@ -585,7 +585,7 @@ def _platform_overrides(overrides: dict, platform: str) -> dict:
 
 
 def unresolved_target_cores(
-    targets: dict, index: dict[str, str], overrides: dict
+    targets: dict, index: Container[str], overrides: dict
 ) -> dict[str, list[str]]:
     """Core names a target ends up with that no profile claims.
 
@@ -618,7 +618,7 @@ def check_targets(
 ) -> list[Finding]:
     targets_dir = platforms_dir / "targets"
     overrides_path = targets_dir / "_overrides.yml"
-    overrides = {}
+    overrides: dict = {}
     if overrides_path.is_file():
         with overrides_path.open(encoding="utf-8") as fh:
             overrides = yaml_load(fh) or {}
@@ -1380,7 +1380,7 @@ def specifier_allows(spec: str, version: str) -> bool:
     for clause in filter(None, (c.strip() for c in spec.split(","))):
         match = _SPEC_CLAUSE.fullmatch(clause)
         test = _SPEC_TESTS.get(match.group(1)) if match else None
-        if test is None or not test(target, _version_tuple(match.group(2))):
+        if match is None or test is None or not test(target, _version_tuple(match.group(2))):
             return False
     return True
 
