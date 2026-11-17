@@ -4346,6 +4346,22 @@ def _check_standalone_layouts(data: object, manifest: dict, plat: str) -> dict:
     return layouts
 
 
+def _check_data_directory_files(files: object, where: str) -> None:
+    """A data directory's file list: relative paths, each with sha1 and size."""
+    if not isinstance(files, dict) or not files or len(files) > MAX_MANIFEST_FILES:
+        raise ValueError(f"{where}.files is invalid")
+    for rel, meta in files.items():
+        _safe_relative_path(rel, f"{where}.files")
+        if (
+            not isinstance(meta, dict)
+            or not isinstance(meta.get("sha1"), str)
+            or not _SHA1_RE.fullmatch(meta["sha1"])
+            or not isinstance(meta.get("size"), int)
+            or not 0 <= meta["size"] <= MAX_DOWNLOAD_SIZE
+        ):
+            raise ValueError(f"{where}.files[{rel!r}] is invalid")
+
+
 def _check_data_directory(entry: object, where: str) -> None:
     """A data directory: its source archive, its mapping, its file list."""
     if not isinstance(entry, dict):
@@ -4382,19 +4398,7 @@ def _check_data_directory(entry: object, where: str) -> None:
     cores = entry.get("cores", ["-"])
     if not isinstance(cores, list) or not cores or not all(isinstance(c, str) and c for c in cores):
         raise ValueError(f"{where}.cores is invalid")
-    files = entry.get("files")
-    if not isinstance(files, dict) or not files or len(files) > MAX_MANIFEST_FILES:
-        raise ValueError(f"{where}.files is invalid")
-    for rel, meta in files.items():
-        _safe_relative_path(rel, f"{where}.files")
-        if (
-            not isinstance(meta, dict)
-            or not isinstance(meta.get("sha1"), str)
-            or not _SHA1_RE.fullmatch(meta["sha1"])
-            or not isinstance(meta.get("size"), int)
-            or not 0 <= meta["size"] <= MAX_DOWNLOAD_SIZE
-        ):
-            raise ValueError(f"{where}.files[{rel!r}] is invalid")
+    _check_data_directory_files(entry.get("files"), where)
 
 
 def _clean_strings(value: object, keep: str = "") -> object:
@@ -4405,25 +4409,21 @@ def _clean_strings(value: object, keep: str = "") -> object:
         return _CONTROLS.sub(lambda found: found.group() if found.group() in keep else "?",
                              value)
     if isinstance(value, dict):
-        return {_clean_strings(key, keep): _clean_strings(item, keep)
-                for key, item in value.items()}
+        return _clean_mapping(value, keep)
     if isinstance(value, (list, tuple)):
         return [_clean_strings(item, keep) for item in value]
     return value
 
 
-def _validate_manifest(data: object, plat: str) -> dict:
-    """Validate the untrusted install-manifest boundary using stdlib only."""
-    if not isinstance(data, dict):
-        raise ValueError("manifest root must be an object")
-    if data.get("manifest_version") not in (1, 2):
-        raise ValueError("unsupported manifest_version")
-    if data.get("platform") != plat:
-        raise ValueError("manifest platform does not match request")
-    files = data.get("files")
-    if not isinstance(files, list) or len(files) > MAX_MANIFEST_FILES:
-        raise ValueError("invalid manifest files list")
+def _clean_mapping(value: dict, keep: str = "") -> dict:
+    """value with its keys and items through _clean_strings."""
+    return {_clean_strings(key, keep): _clean_strings(item, keep)
+            for key, item in value.items()}
 
+
+def _check_manifest_entries(data: dict, files: list) -> tuple[set[str], int, int]:
+    """The files and case_variants lists: their destinations, the declared
+    total and the largest total a download can reach."""
     seen_destinations: set[str] = set()
     total_size = 0
     largest_total = 0
@@ -4443,6 +4443,11 @@ def _validate_manifest(data: object, plat: str) -> dict:
         largest_total += largest
         if largest_total > MAX_TOTAL_DOWNLOAD_SIZE:
             raise ValueError("manifest total size exceeds safety limit")
+    return seen_destinations, total_size, largest_total
+
+
+def _check_manifest_directories(data: dict) -> None:
+    """The data directories and the save, relative and emulators folders."""
     data_dirs = data.get("data_directories", [])
     if not isinstance(data_dirs, list) or len(data_dirs) > MAX_SELECTION_TAGS:
         raise ValueError("invalid data_directories list")
@@ -4452,16 +4457,9 @@ def _validate_manifest(data: object, plat: str) -> dict:
     _check_relative_directories(data)
     _check_emulators_directory(data)
 
-    declared_total_files = data.get("total_files")
-    if declared_total_files is not None and declared_total_files != len(files):
-        raise ValueError("manifest total_files does not match files list")
-    declared_total_size = data.get("total_size")
-    if declared_total_size is not None and declared_total_size != total_size:
-        raise ValueError("manifest total_size does not match file sizes")
 
-    omitted = data.get("omitted_files", [])
-    if not isinstance(omitted, list) or len(omitted) > MAX_MANIFEST_FILES:
-        raise ValueError("invalid omitted_files list")
+def _check_omitted_list(omitted: list, seen_destinations: set[str]) -> None:
+    """Each omitted file: an object at a destination no other entry holds."""
     seen_omitted: set[str] = set()
     for index, entry in enumerate(omitted):
         if not isinstance(entry, dict):
@@ -4476,20 +4474,10 @@ def _validate_manifest(data: object, plat: str) -> dict:
             raise ValueError(f"duplicate or conflicting omitted destination: {dest}")
         seen_omitted.add(key)
         _check_omitted_entry(entry, dest)
-    if data.get("slot_fields", True) is not True:
-        raise ValueError("invalid slot_fields")
-    largest_total += _check_truth_lists(data, seen_destinations)
-    if "standalone_builds" in data:
-        _check_tags(data, "standalone_builds", "the file list")
-    if largest_total > MAX_TOTAL_DOWNLOAD_SIZE:
-        raise ValueError("manifest total size exceeds safety limit")
-    declared_total_omitted = data.get("total_omitted")
-    if (
-        declared_total_omitted is not None
-        and declared_total_omitted != len(omitted)
-    ):
-        raise ValueError("manifest total_omitted does not match omitted_files")
 
+
+def _check_manifest_mappings(data: dict) -> None:
+    """The core and system mappings, the offered boards and the system titles."""
     for field in ("core_names", "downloaded_cores", "system_cores", "system_names"):
         mapping = data.get(field)
         if mapping is None:
@@ -4504,89 +4492,157 @@ def _validate_manifest(data: object, plat: str) -> dict:
                 raise ValueError(f"invalid {field} for {key}")
     offered = data.get("offered_boards")
     if offered is not None:
-        if not isinstance(offered, dict) or len(offered) > MAX_MANIFEST_FILES:
-            raise ValueError("invalid offered_boards")
-        for key, places in offered.items():
-            if not isinstance(key, str) or not 0 < len(key) <= 256:
-                raise ValueError("invalid offered_boards key")
-            if not isinstance(places, list) or not all(
-                isinstance(p, dict) and isinstance(p.get("folder"), str)
-                and p.get("root") in ("roms", "install")
-                and isinstance(p.get("boards"), list)
-                and all(isinstance(b, str) for b in p["boards"])
-                for p in places
-            ):
-                raise ValueError(f"invalid offered_boards for {key}")
+        _check_offered_boards(offered)
     titles = data.get("system_titles")
     if titles is not None:
-        if not isinstance(titles, dict) or len(titles) > MAX_MANIFEST_FILES:
-            raise ValueError("invalid system_titles")
-        for key, title in titles.items():
-            if not isinstance(key, str) or not 0 < len(key) <= 256:
-                raise ValueError("invalid system_titles key")
-            if not isinstance(title, str) or not 0 < len(title) <= 256:
-                raise ValueError(f"invalid system_titles for {key}")
+        _check_system_titles(titles)
+
+
+def _check_offered_boards(offered: object) -> None:
+    """offered_boards: per name, the folders and boards it is offered on."""
+    if not isinstance(offered, dict) or len(offered) > MAX_MANIFEST_FILES:
+        raise ValueError("invalid offered_boards")
+    for key, places in offered.items():
+        if not isinstance(key, str) or not 0 < len(key) <= 256:
+            raise ValueError("invalid offered_boards key")
+        if not isinstance(places, list) or not all(
+            isinstance(p, dict) and isinstance(p.get("folder"), str)
+            and p.get("root") in ("roms", "install")
+            and isinstance(p.get("boards"), list)
+            and all(isinstance(b, str) for b in p["boards"])
+            for p in places
+        ):
+            raise ValueError(f"invalid offered_boards for {key}")
+
+
+def _check_system_titles(titles: object) -> None:
+    """system_titles: a short title per system."""
+    if not isinstance(titles, dict) or len(titles) > MAX_MANIFEST_FILES:
+        raise ValueError("invalid system_titles")
+    for key, title in titles.items():
+        if not isinstance(key, str) or not 0 < len(key) <= 256:
+            raise ValueError("invalid system_titles key")
+        if not isinstance(title, str) or not 0 < len(title) <= 256:
+            raise ValueError(f"invalid system_titles for {key}")
+
+
+def _check_copy_note(entry: dict, where: str) -> None:
+    """A note of standalone_copies: its text and the detect lists."""
+    detect = entry.get("detect", {})
+    if not isinstance(entry["note"], str) or not isinstance(detect, dict):
+        raise ValueError(f"invalid note entry at {where}")
+    for values in detect.values():
+        if not isinstance(values, list) or not all(
+            isinstance(value, str) for value in values
+        ):
+            raise ValueError(f"invalid note entry at {where}")
+
+
+def _check_copy_targets(entry: dict, index: int) -> None:
+    """The target folders of a standalone copy."""
+    targets = entry.get("targets", {})
+    if targets and not isinstance(targets, dict):
+        raise ValueError(f"invalid standalone copy targets at index {index}")
+    for values in (targets or {}).values():
+        if not isinstance(values, list) or len(values) > 100:
+            raise ValueError(f"invalid standalone copy targets at index {index}")
+        for value in values:
+            _safe_target_dir(value, f"standalone_copies[{index}].targets")
+
+
+def _check_standalone_copy(entry: object, index: int) -> None:
+    """One entry of standalone_copies."""
+    if not isinstance(entry, dict):
+        raise ValueError(f"standalone_copies[{index}] must be an object")
+    # The shape do_standalone_copies reads, checked here: a note with a
+    # list for detect, a copy naming neither file nor pattern, or a list
+    # for emulator passed and crashed the copy step after the download.
+    where = f"standalone_copies[{index}]"
+    if "note" in entry:
+        _check_copy_note(entry, where)
+        return
+    if "file" not in entry and "pattern" not in entry:
+        raise ValueError(f"{where} names neither a file nor a pattern")
+    if not isinstance(entry.get("emulator", ""), str):
+        raise ValueError(f"invalid emulator at {where}")
+    if "file" in entry:
+        _safe_relative_path(
+            entry["file"], f"standalone_copies[{index}].file"
+        )
+    if "source" in entry:
+        _safe_relative_path(
+            entry["source"], f"standalone_copies[{index}].source"
+        )
+    if "as" in entry and (
+        "file" not in entry or not isinstance(entry["as"], str)
+        or PurePosixPath(_safe_relative_path(
+            entry["as"], f"standalone_copies[{index}].as")).name != entry["as"]
+    ):
+        raise ValueError(f"invalid standalone copy name at {where}")
+    if "pattern" in entry:
+        pattern = entry["pattern"]
+        if (
+            not isinstance(pattern, str)
+            or not pattern
+            or len(pattern) > 256
+            or "/" in pattern
+            or "\\" in pattern
+            or ".." in pattern
+        ):
+            raise ValueError(f"invalid standalone copy pattern: {pattern!r}")
+    _check_copy_targets(entry, index)
+
+
+def _validate_manifest(data: object, plat: str) -> dict:
+    """Validate the untrusted install-manifest boundary using stdlib only."""
+    if not isinstance(data, dict):
+        raise ValueError("manifest root must be an object")
+    if data.get("manifest_version") not in (1, 2):
+        raise ValueError("unsupported manifest_version")
+    if data.get("platform") != plat:
+        raise ValueError("manifest platform does not match request")
+    files = data.get("files")
+    if not isinstance(files, list) or len(files) > MAX_MANIFEST_FILES:
+        raise ValueError("invalid manifest files list")
+
+    seen_destinations, total_size, largest_total = _check_manifest_entries(data, files)
+    _check_manifest_directories(data)
+
+    declared_total_files = data.get("total_files")
+    if declared_total_files is not None and declared_total_files != len(files):
+        raise ValueError("manifest total_files does not match files list")
+    declared_total_size = data.get("total_size")
+    if declared_total_size is not None and declared_total_size != total_size:
+        raise ValueError("manifest total_size does not match file sizes")
+
+    omitted = data.get("omitted_files", [])
+    if not isinstance(omitted, list) or len(omitted) > MAX_MANIFEST_FILES:
+        raise ValueError("invalid omitted_files list")
+    _check_omitted_list(omitted, seen_destinations)
+    if data.get("slot_fields", True) is not True:
+        raise ValueError("invalid slot_fields")
+    largest_total += _check_truth_lists(data, seen_destinations)
+    if "standalone_builds" in data:
+        _check_tags(data, "standalone_builds", "the file list")
+    if largest_total > MAX_TOTAL_DOWNLOAD_SIZE:
+        raise ValueError("manifest total size exceeds safety limit")
+    declared_total_omitted = data.get("total_omitted")
+    if (
+        declared_total_omitted is not None
+        and declared_total_omitted != len(omitted)
+    ):
+        raise ValueError("manifest total_omitted does not match omitted_files")
+
+    _check_manifest_mappings(data)
 
     copies = data.get("standalone_copies", [])
     if not isinstance(copies, list) or len(copies) > 10_000:
         raise ValueError("invalid standalone_copies")
     for index, entry in enumerate(copies):
-        if not isinstance(entry, dict):
-            raise ValueError(f"standalone_copies[{index}] must be an object")
-        # The shape do_standalone_copies reads, checked here: a note with a
-        # list for detect, a copy naming neither file nor pattern, or a list
-        # for emulator passed and crashed the copy step after the download.
-        where = f"standalone_copies[{index}]"
-        if "note" in entry:
-            detect = entry.get("detect", {})
-            if not isinstance(entry["note"], str) or not isinstance(detect, dict):
-                raise ValueError(f"invalid note entry at {where}")
-            for values in detect.values():
-                if not isinstance(values, list) or not all(
-                    isinstance(value, str) for value in values
-                ):
-                    raise ValueError(f"invalid note entry at {where}")
-            continue
-        if "file" not in entry and "pattern" not in entry:
-            raise ValueError(f"{where} names neither a file nor a pattern")
-        if not isinstance(entry.get("emulator", ""), str):
-            raise ValueError(f"invalid emulator at {where}")
-        if "file" in entry:
-            _safe_relative_path(
-                entry["file"], f"standalone_copies[{index}].file"
-            )
-        if "source" in entry:
-            _safe_relative_path(
-                entry["source"], f"standalone_copies[{index}].source"
-            )
-        if "as" in entry and (
-            "file" not in entry or not isinstance(entry["as"], str)
-            or PurePosixPath(_safe_relative_path(
-                entry["as"], f"standalone_copies[{index}].as")).name != entry["as"]
-        ):
-            raise ValueError(f"invalid standalone copy name at {where}")
-        if "pattern" in entry:
-            pattern = entry["pattern"]
-            if (
-                not isinstance(pattern, str)
-                or not pattern
-                or len(pattern) > 256
-                or "/" in pattern
-                or "\\" in pattern
-                or ".." in pattern
-            ):
-                raise ValueError(f"invalid standalone copy pattern: {pattern!r}")
-        targets = entry.get("targets", {})
-        if targets and not isinstance(targets, dict):
-            raise ValueError(f"invalid standalone copy targets at index {index}")
-        for values in (targets or {}).values():
-            if not isinstance(values, list) or len(values) > 100:
-                raise ValueError(f"invalid standalone copy targets at index {index}")
-            for value in values:
-                _safe_target_dir(value, f"standalone_copies[{index}].targets")
+        _check_standalone_copy(entry, index)
     # Its paths checked above, every other string (a system's title, a
     # core's name) is shown as the terminal shows text.
-    return _clean_strings(data)
+    return _clean_mapping(data)
 
 
 def _validate_targets(data: object) -> dict[str, dict]:
