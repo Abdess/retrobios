@@ -399,9 +399,48 @@ def build_wanted(
     sha1. Entries come most useful first (_order). A file no one can share
     (the reason says so, NOT_SHAREABLE) is left out.
     """
-    held = Held(db, ledger)
+    records = _collect_records(wanted_declarations(profiles, coverages, gap_report),
+                               Held(db, ledger), link)
+    _merge_named(records)
+    ordered = sorted(records.values(), key=_order)
+    _settle_cut(ordered)
+
+    readers = sorted({reader for r in ordered for reader in r["readers"]},
+                     key=lambda reader: (reader[0], reader[2].casefold(), reader[1]))
+    reader_at = {reader: i for i, reader in enumerate(readers)}
+    titles = sorted({system_name(s) for r in ordered for s in r["systems"]}, key=str.casefold)
+    title_at = {title: i for i, title in enumerate(titles)}
+    folders: list[str] = []
+    folder_at: dict[str, int] = {}
+    entries = []
+    for record in ordered:
+        spot = placer.place(record["hashes"], record["name"], record["systems"],
+                            record["directory"])
+        if spot.folder and spot.folder not in folder_at:
+            folder_at[spot.folder] = len(folders)
+            folders.append(spot.folder)
+        entries.append(_compact(record, spot, reader_at,
+                                {s: title_at[system_name(s)] for s in record["systems"]},
+                                folder_at))
+    return {
+        "upload": UPLOAD_ROOT,
+        "issue": LARGE_FILE_ISSUE_URL,
+        "limit": BROWSER_UPLOAD_LIMIT,
+        "readers": [[kind[0], key, label] for kind, key, label in readers],
+        "systems": titles,
+        "folders": folders,
+        "entries": entries,
+    }
+
+
+def _collect_records(declarations: Iterable[dict], held: Held,
+                     link: Callable[[str, str, dict], str]) -> dict[tuple, dict]:
+    """One record per wanted file, keyed by name and hashes (or name,
+    system and folder when no hash is written), merging every declaration
+    of it. A file the collection holds, a pattern and a file no one can
+    share are left out."""
     records: dict[tuple, dict] = {}
-    for declaration in wanted_declarations(profiles, coverages, gap_report):
+    for declaration in declarations:
         if PATTERN.search(declaration["name"]) or not shareable(declaration["reason"]):
             continue
         entry = declaration["entry"]
@@ -428,54 +467,33 @@ def build_wanted(
             record["crc"] |= {v.zfill(8) for v in parse_hash_list(entry.get("crc32")) if len(v) <= 8}
             kind, reader_key, _label = declaration["reader"]
             record["links"].setdefault((kind != "emulator", reader_key), link(kind, reader_key, entry))
-    _merge_named(records)
-    ordered = sorted(records.values(), key=_order)
-    _settle_cut(ordered)
+    return records
 
-    readers = sorted({reader for r in ordered for reader in r["readers"]},
-                     key=lambda reader: (reader[0], reader[2].casefold(), reader[1]))
-    reader_at = {reader: i for i, reader in enumerate(readers)}
-    titles = sorted({system_name(s) for r in ordered for s in r["systems"]}, key=str.casefold)
-    title_at = {title: i for i, title in enumerate(titles)}
-    folders: list[str] = []
-    folder_at: dict[str, int] = {}
-    entries = []
-    for record in ordered:
-        spot = placer.place(record["hashes"], record["name"], record["systems"],
-                            record["directory"])
-        if spot.folder and spot.folder not in folder_at:
-            folder_at[spot.folder] = len(folders)
-            folders.append(spot.folder)
-        item: dict = {"n": record["name"]}
-        if record["hashes"]:
-            item["h"] = {algo: record["hashes"][algo] for algo in ALGORITHMS if algo in record["hashes"]}
-        if record["crc"] and "crc32" not in record["hashes"]:
-            item["c"] = sorted(record["crc"])
-        item["w"] = sorted(reader_at[reader] for reader in record["readers"])
-        systems = sorted({title_at[system_name(s)] for s in record["systems"]})
-        if systems:
-            item["s"] = systems
-        if record["required"]:
-            item["r"] = 1
-        if record["sizes"]:
-            item["z"] = record["sizes"]
-        item["a"] = record["links"][min(record["links"])]
-        if spot.folder:
-            item["f"] = folder_at[spot.folder]
-        if spot.name:
-            item["t"] = spot.name
-            if spot.variant:
-                item["v"] = 1
-        entries.append(item)
-    return {
-        "upload": UPLOAD_ROOT,
-        "issue": LARGE_FILE_ISSUE_URL,
-        "limit": BROWSER_UPLOAD_LIMIT,
-        "readers": [[kind[0], key, label] for kind, key, label in readers],
-        "systems": titles,
-        "folders": folders,
-        "entries": entries,
-    }
+
+def _compact(record: dict, spot: Placement, reader_at: dict, system_at: dict[str, int],
+             folder_at: dict[str, int]) -> dict:
+    """The compact entry of one record, as build_wanted describes it."""
+    item: dict = {"n": record["name"]}
+    if record["hashes"]:
+        item["h"] = {algo: record["hashes"][algo] for algo in ALGORITHMS if algo in record["hashes"]}
+    if record["crc"] and "crc32" not in record["hashes"]:
+        item["c"] = sorted(record["crc"])
+    item["w"] = sorted(reader_at[reader] for reader in record["readers"])
+    systems = sorted(set(system_at.values()))
+    if systems:
+        item["s"] = systems
+    if record["required"]:
+        item["r"] = 1
+    if record["sizes"]:
+        item["z"] = record["sizes"]
+    item["a"] = record["links"][min(record["links"])]
+    if spot.folder:
+        item["f"] = folder_at[spot.folder]
+    if spot.name:
+        item["t"] = spot.name
+        if spot.variant:
+            item["v"] = 1
+    return item
 
 
 def _merge_named(records: dict[tuple, dict]) -> None:
