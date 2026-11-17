@@ -139,10 +139,12 @@ def without_game_data(
                 ))
         systems[sys_id] = {**system, "files": kept} if len(kept) != len(files) else system
 
-    for key in examined:
-        for fe in profiles[key].get("files") or []:
-            if isinstance(fe, dict) and is_game_data(fe):
-                left_out.append(LeftOut("core", "", str(fe.get("name") or ""), (key,)))
+    left_out.extend(
+        LeftOut("core", "", str(fe.get("name") or ""), (key,))
+        for key in examined
+        for fe in profiles[key].get("files") or []
+        if isinstance(fe, dict) and is_game_data(fe)
+    )
 
     stripped = {
         key: (

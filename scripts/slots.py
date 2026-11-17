@@ -75,6 +75,7 @@ def _size_the_code_reads(entry: dict, local: str | None) -> bool:
     except OSError:
         return False
 
+
 # A core that reads ROMs inside an archive proves the archive by its members:
 # FBNeo's neocdz.zip is any copy holding neocd.bin and 000-lo.lo by crc.
 MEMBERS_HELD = "members_held"

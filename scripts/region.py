@@ -403,8 +403,9 @@ def resolve_region_drops(
                 for destination, name in members
                 if destination in rivals
             ]
-            known = None not in world_ranks
-            best_world = min(world_ranks) if known and world_ranks else None
+            ranked = [rank for rank in world_ranks if rank is not None]
+            known = len(ranked) == len(world_ranks)
+            best_world = min(ranked) if known and ranked else None
             for _r, destination in regional:
                 name = next(n for d, n in members if d == destination)
                 ours = lookup_priority(index, destination, name)
