@@ -9953,11 +9953,6 @@ def _archive_validator(headers: http.client.HTTPMessage | Mapping[str, str] | No
     return etag if etag and not etag.startswith("W/") else headers.get("Last-Modified", "") or ""
 
 
-TYPE_CHECKING = False
-if TYPE_CHECKING:
-    from typing import IO
-
-
 class _ArchiveCount:
     """The bytes one attempt at an archive drew on the progress."""
 
