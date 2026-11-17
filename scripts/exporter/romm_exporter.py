@@ -30,7 +30,7 @@ SOURCE_URL = (
 _FIELDS = (("size", "size"), ("crc", "crc32"), ("md5", "md5"), ("sha1", "sha1"))
 
 
-class Exporter(BaseExporter):
+class Exporter(BaseExporter[str]):
     """Write RomM's known_bios_files.json, corrected."""
 
     def __init__(self) -> None:

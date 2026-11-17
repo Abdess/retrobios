@@ -62,7 +62,7 @@ def _matching_keys(
     return named if len(named) == 1 else []
 
 
-class Exporter(BaseExporter):
+class Exporter(BaseExporter[str]):
     """Write RetroDECK's component manifests, corrected."""
 
     @staticmethod
@@ -83,8 +83,7 @@ class Exporter(BaseExporter):
         # one from BIOS data alone would throw the component away.
         return True
 
-    @classmethod
-    def writable(cls, fe: NativeFile, require: str = "") -> bool:
+    def writable(self, fe: NativeFile, require: str = "") -> bool:
         """An addition lands only in a manifest it can be placed in."""
         if fe.platform is None and not fe.native("component", ""):
             return False
@@ -229,10 +228,10 @@ class Exporter(BaseExporter):
         # ATARIOSB.ROM for atari5200 and atari800 with different md5 lists,
         # and a name-only key wrote the first of ours over both.
         by_key: OrderedDict[tuple[str, str], OrderedDict] = OrderedDict()
-        for entry in ours:
-            key = (str(entry.get("filename", "")), str(entry.get("system", "")))
+        for own in ours:
+            key = (str(own.get("filename", "")), str(own.get("system", "")))
             if key[0] and key not in by_key:
-                by_key[key] = entry
+                by_key[key] = own
 
         merged: list[OrderedDict] = []
         corrected: set[tuple[str, str]] = set()
@@ -261,31 +260,7 @@ class Exporter(BaseExporter):
             if other_revision or not keys:
                 merged.append(OrderedDict(entry))
                 continue
-            declared = entry.get("system")
-            combined = OrderedDict(entry)
-            # Only what the format says it corrects: the maintainer's
-            # description and search paths are theirs (neogeo.zip lost its
-            # four roms directories to a path that does not exist).
-            combined.update(
-                (field, value) for field, value in by_key[keys[0]].items()
-                if field in cls.carries() and not (field == "system" and declared)
-            )
-            # A hash of theirs that ours no longer carries is one the truth
-            # contradicts: kept, it went on rejecting the dump the emulator
-            # loads while the summary counted it cleared.
-            for field in ("md5", "sha256"):
-                if field in cls.carries() and field not in by_key[keys[0]]:
-                    combined.pop(field, None)
-            if _md5_set(entry.get("md5")) == _md5_set(combined.get("md5")):
-                # Their own spelling, and no key where they wrote none: an
-                # equal empty set wrote "md5": null 39 times.
-                if "md5" in entry:
-                    combined["md5"] = entry["md5"]
-                else:
-                    combined.pop("md5", None)
-            elif isinstance(entry.get("md5"), list) and isinstance(combined.get("md5"), str):
-                combined["md5"] = [combined["md5"]]
-            merged.append(combined)
+            merged.append(cls._corrected(entry, by_key[keys[0]]))
             corrected.update(keys)
 
         uncorrected = [key for key in by_key if key not in corrected]
@@ -302,14 +277,46 @@ class Exporter(BaseExporter):
             for e in merged
             for system in (_systems_of(e) or [""])
         }
-        for index, entry in enumerate(additions or []):
-            key = (str(entry.get("filename", "")), str(entry.get("system", "")), _paths_key(entry))
-            if key[0] and key not in held:
-                held.add(key)
-                merged.append(entry)
+        for index, addition in enumerate(additions or []):
+            slot = (
+                str(addition.get("filename", "")), str(addition.get("system", "")),
+                _paths_key(addition),
+            )
+            if slot[0] and slot not in held:
+                held.add(slot)
+                merged.append(addition)
             elif held_back is not None:
                 held_back.append(index)
         return merged
+
+    @classmethod
+    def _corrected(cls, entry: dict, own: OrderedDict) -> OrderedDict:
+        """The platform's entry with the fields ours corrects."""
+        declared = entry.get("system")
+        combined = OrderedDict(entry)
+        # Only what the format says it corrects: the maintainer's
+        # description and search paths are theirs (neogeo.zip lost its
+        # four roms directories to a path that does not exist).
+        combined.update(
+            (field, value) for field, value in own.items()
+            if field in cls.carries() and not (field == "system" and declared)
+        )
+        # A hash of theirs that ours no longer carries is one the truth
+        # contradicts: kept, it went on rejecting the dump the emulator
+        # loads while the summary counted it cleared.
+        for field in ("md5", "sha256"):
+            if field in cls.carries() and field not in own:
+                combined.pop(field, None)
+        if _md5_set(entry.get("md5")) == _md5_set(combined.get("md5")):
+            # Their own spelling, and no key where they wrote none: an
+            # equal empty set wrote "md5": null 39 times.
+            if "md5" in entry:
+                combined["md5"] = entry["md5"]
+            else:
+                combined.pop("md5", None)
+        elif isinstance(entry.get("md5"), list) and isinstance(combined.get("md5"), str):
+            combined["md5"] = [combined["md5"]]
+        return combined
 
     def lands(self, fe: NativeFile) -> bool:
         """An addition the list already held is not written a second time."""

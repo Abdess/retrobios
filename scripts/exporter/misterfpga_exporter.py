@@ -11,6 +11,7 @@ import io
 import json
 import zipfile
 from collections import OrderedDict
+from typing import Union
 
 from .base_exporter import BaseExporter
 from .baseline import NativeFile, NativeSystem, Report
@@ -42,7 +43,7 @@ def rebuild_archive(original: bytes, member: str, text: str) -> bytes:
     return buffer.getvalue()
 
 
-class Exporter(BaseExporter):
+class Exporter(BaseExporter[Union[str, bytes]]):
     """Write MiSTer's bios_db.json, corrected."""
 
     @staticmethod
@@ -99,8 +100,8 @@ class Exporter(BaseExporter):
         """
         return fe.record_hash(field_name)
 
-    def _by_path(self, systems: dict[str, NativeSystem]) -> dict[str, object]:
-        indexed: dict[str, object] = {}
+    def _by_path(self, systems: dict[str, NativeSystem]) -> dict[str, NativeFile]:
+        indexed: dict[str, NativeFile] = {}
         for system in systems.values():
             for fe in system.files:
                 if fe.destination:
@@ -173,7 +174,7 @@ class Exporter(BaseExporter):
     def validate(
         self,
         systems: dict[str, NativeSystem],
-        produced: dict[str, str],
+        produced: dict[str, str | bytes],
     ) -> list[str]:
         try:
             database = json.loads(produced[_DB_NAME])

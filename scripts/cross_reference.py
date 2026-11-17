@@ -20,7 +20,10 @@ import sys
 import zipfile
 import zlib
 from collections import Counter
+import dataclasses
+from dataclasses import dataclass
 from pathlib import Path
+from typing import TYPE_CHECKING, TypedDict
 
 sys.path.insert(0, os.path.dirname(__file__))
 from alternatives import set_keys, set_requirements, settle_sets
@@ -79,6 +82,9 @@ from validation import (
     with_archive_members,
 )
 
+if TYPE_CHECKING:
+    from typing_extensions import Unpack
+
 yaml = require_yaml()
 
 DEFAULT_EMULATORS_DIR = "emulators"
@@ -97,8 +103,8 @@ def load_platform_files(
     RetroArch writes `sega-mega-cd`, and an exact match called 924 declared
     files undeclared.
     """
-    declared = {}
-    platform_data_dirs = {}
+    declared: dict[str, set[str]] = {}
+    platform_data_dirs: dict[str, set[str]] = {}
     for platform_name in platforms or list_registered_platforms(
         platforms_dir
     ):
@@ -277,11 +283,10 @@ def _resolve_source(
     key = fname.lower()
     if key in by_name_lower and _folded_hit(by_name_lower[key]):
         return "bios"
-    if basename:
-        if basename.lower() in by_name_lower and _folded_hit(
-            by_name_lower[basename.lower()]
-        ):
-            return "bios"
+    if basename and basename.lower() in by_name_lower and _folded_hit(
+        by_name_lower[basename.lower()]
+    ):
+        return "bios"
     # bios/ via by_path_suffix (regional variants)
     if by_path_suffix and fname in by_path_suffix and _can_be(by_path_suffix[fname]):
         return "bios"
@@ -749,129 +754,89 @@ def profile_breakdown(data: dict) -> str:
     return ", ".join(parts)
 
 
-def _cross_reference_profile(
-    emu_name: str,
-    profile: dict,
-    declared: dict[str, set[str]],
-    report: dict,
-    index: dict,
-    standalone_cores: set[str] | None = None,
-    platform: str = "",
-) -> None:
-    """Compare one emulator profile against what the platforms declare.
+def _effective_path(f: dict, fname: str, is_standalone: bool, save_root: bool) -> str:
+    # The destination the running build reads, as find_undeclared_files
+    # takes it: Batocera's standalone Cemu reads keys.txt at
+    # standalone_path, and the libretro Cemu/keys.txt reported here
+    # settled the declaration on a slot the platform never fills.
+    if is_standalone:
+        return f.get("standalone_path") or f.get("path") or fname
+    if save_root:
+        return f.get("path") or fname
+    return system_dir_path(f, f.get("path") or fname)
 
-    *platform* is the platform key under --platform, empty for the whole
-    tree. It decides, through the functions verify reads, which entries the
-    platform's launcher never opens and which ones its emulator package
-    already installs.
 
-    Split out of cross_reference, where it was a 200-line loop body that
-    carried the whole function's branching: every file is resolved by name,
-    by path, by hash and by archive membership before it can be called a
-    gap. *index* carries the database lookups those steps share.
-    """
-    by_name = index["by_name"]
-    by_name_lower = index["by_name_lower"]
-    by_path_suffix = index["by_path_suffix"]
-    data_names = index["data_names"]
-    all_declared = index["all_declared"]
-    emu_files = profile.get("files", [])
-    systems = profile.get("systems", [])
+@dataclass
+class _ProfileComparison:
+    """One profile's entries against the platforms' declarations."""
 
-    # Skip filename-agnostic profiles (BIOS detected without fixed names)
-    if profile.get("bios_mode") == "agnostic":
-        return
-
-    if all_declared is not None:
-        platform_names = all_declared
-    else:
-        platform_names = set()
-        for sys_id in systems:
-            platform_names.update(declared.get(_norm_system_id(sys_id), set()))
-
-    # The build a platform runs decides which entries it reads, as in
-    # find_undeclared_files: without a platform, the libretro build.
-    layouts = platform_layouts(emu_name, profile, standalone_cores or set())
-    # Each file under each layout the platform gives the emulator: both, for
-    # one it launches as a libretro core and standalone.
-    layout_files = [(f, standalone) for view, standalone in layouts for f in view.get("files", [])]
-    gaps = []
-    covered = []
-    unsourceable_list: list[dict] = []
-    archive_gaps: dict[tuple, dict] = {}
-    seen_files: set[tuple] = set()
-
-    # The entries of one profile on one slot are the versions its code
-    # accepts there (raze's ten DUKE3D.GRP): holding any of them fills the
-    # slot, as verify --emulator credits it.
-    versions: dict[tuple, list[dict]] = {}
-    for f, is_standalone in layout_files:
-        versions.setdefault(slot_key(f, is_standalone), []).append(f)
-
-    # What became of each entry, so the heading adds up: a file a platform
-    # declares, one it does not, or one set aside and why. An entry read by
-    # two builds keeps the first answer that compares it. Each layout lists
-    # the profile's entries in their order, so a position names one entry.
-    position = {id(f): i for view, _ in layouts for i, f in enumerate(view.get("files", []))}
-    fates: dict[int, str] = {}
+    emu_name: str
+    profile: dict
+    index: dict
+    platform_names: set[str]
+    platform: str
+    layouts: list
+    versions: dict[tuple, list[dict]] = dataclasses.field(default_factory=dict)
+    position: dict[int, int] = dataclasses.field(default_factory=dict)
+    gaps: list[dict] = dataclasses.field(default_factory=list)
+    covered: list[dict] = dataclasses.field(default_factory=list)
+    unsourceable_list: list[dict] = dataclasses.field(default_factory=list)
+    archive_gaps: dict[tuple, dict] = dataclasses.field(default_factory=dict)
+    seen_files: set[tuple] = dataclasses.field(default_factory=set)
+    fates: dict[int, str] = dataclasses.field(default_factory=dict)
     # Grouped entries met, as (set keys, entry, fills, the list holding
     # its row, the row): settled once the profile is read.
-    set_records: list[tuple[tuple, dict, bool, list | None, dict | None]] = []
-    archive_rows: list[dict] = []
+    set_records: list[tuple[tuple, dict, bool, list | None, dict | None]] = dataclasses.field(
+        default_factory=list
+    )
+    archive_rows: list[dict] = dataclasses.field(default_factory=list)
 
-    def fate(f: dict, what: str) -> None:
-        key = position[id(f)]
-        current = fates.get(key)
+    def fate(self, f: dict, what: str) -> None:
+        key = self.position[id(f)]
+        current = self.fates.get(key)
         if current is None or (current in SET_ASIDE and what not in SET_ASIDE):
-            fates[key] = what
+            self.fates[key] = what
 
-    for f, is_standalone in layout_files:
+    def compare(self, f: dict, is_standalone: bool) -> None:
+        """File one entry of one build: declared, a gap, or set aside."""
         fname = f.get("name", "")
-        # The destination the running build reads, as find_undeclared_files
-        # takes it: Batocera's standalone Cemu reads keys.txt at
-        # standalone_path, and the libretro Cemu/keys.txt reported here
-        # settled the declaration on a slot the platform never fills.
+        platform = self.platform
         save_root = read_from_save_dir(f, is_standalone)
-        if is_standalone:
-            effective_path = f.get("standalone_path") or f.get("path") or fname
-        elif save_root:
-            effective_path = f.get("path") or fname
-        else:
-            effective_path = system_dir_path(f, f.get("path") or fname)
+        effective_path = _effective_path(f, fname, is_standalone, save_root)
         slot = slot_key(f, is_standalone)
         seen_key = slot
-        if len(layouts) > 1:
+        if len(self.layouts) > 1:
             # One file read at one path by both builds counts once.
             seen_key = (effective_path.casefold(), seen_key)
         if not fname:
-            fate(f, "outside_scope")
-            continue
-        if seen_key in seen_files:
-            fate(f, "other_versions")
-            continue
+            self.fate(f, "outside_scope")
+            return
+        if seen_key in self.seen_files:
+            self.fate(f, "other_versions")
+            return
         if unread_on(f, platform):
-            fate(f, "not_read")
-            continue
+            self.fate(f, "not_read")
+            return
 
         # Collect unsourceable files separately (documented, not a gap)
         unsourceable_reason = f.get("unsourceable", "")
-        keys = set_keys((emu_name, is_standalone), f)
+        keys = set_keys((self.emu_name, is_standalone), f)
         if unsourceable_reason:
-            seen_files.add(seen_key)
-            fate(f, "unsourceable")
+            self.seen_files.add(seen_key)
+            self.fate(f, "unsourceable")
             row = {
                 "name": fname,
                 "required": f.get("required", False),
                 "reason": unsourceable_reason,
                 "source_ref": f.get("source_ref", ""),
             }
-            unsourceable_list.append(row)
-            set_records.append((keys, f, False, unsourceable_list, row))
-            continue
+            self.unsourceable_list.append(row)
+            self.set_records.append((keys, f, False, self.unsourceable_list, row))
+            return
 
         if outside_gap_scope(f, is_standalone):
-            fate(f, "outside_scope")
-            continue
+            self.fate(f, "outside_scope")
+            return
 
         archive = f.get("archive")
 
@@ -881,77 +846,88 @@ def _cross_reference_profile(
         # A platform declares files of its BIOS tree: none answers for one
         # the core reads below the save directory.
         in_platform = not save_root and f.get("root") not in OUTER_ROOTS and declaration_settles(
-            f, fname, platform_names, effective_path, index.get("folded_slots", frozenset()),
-            index.get("declared_contents"),
+            f, fname, self.platform_names, effective_path,
+            self.index.get("folded_slots", frozenset()),
+            self.index.get("declared_contents"),
         )
 
         if in_platform:
-            seen_files.add(seen_key)
-            fate(f, "declared")
-            set_records.append((keys, f, True, None, None))
-            covered.append({
+            self.seen_files.add(seen_key)
+            self.fate(f, "declared")
+            self.set_records.append((keys, f, True, None, None))
+            self.covered.append({
                 "name": fname,
                 "path": effective_path,
                 "required": f.get("required", False),
                 "in_platform": True,
             })
-            continue
+            return
 
-        seen_files.add(seen_key)
-        fate(f, "undeclared")
+        self.seen_files.add(seen_key)
+        self.fate(f, "undeclared")
 
         if archive:
-            archive_key = (
-                archive,
-                f.get("system"),
-                f.get("selection_slot"),
-                f.get("mode", "both"),
-            )
-            if archive_key not in archive_gaps:
-                source = _resolve_archive_source(
-                    archive, by_name, by_name_lower, data_names,
-                    by_path_suffix,
-                )
-                archive_gaps[archive_key] = {
-                    "name": archive,
-                    "path": archive,
-                    "required": False,
-                    "note": "",
-                    "source_ref": "",
-                    "in_platform": False,
-                    "in_repo": source != "missing",
-                    "source": source,
-                    "archive": archive,
-                    "archive_file_count": 0,
-                    "archive_required_count": 0,
-                }
-            entry = archive_gaps[archive_key]
-            if entry["archive_file_count"] == 0:
-                # The archive's own declaration names its sets: an archive
-                # is a member like a loose file (Kronos' stvbios.zip).
-                own = archive_entry(archive, emu_files)
-                set_records.append((
-                    set_keys((emu_name, is_standalone), own), own,
-                    entry["in_repo"], archive_rows, entry,
-                ))
-                archive_rows.append(entry)
-            entry["archive_file_count"] += 1
-            if f.get("required", False):
-                entry["archive_required_count"] += 1
-                entry["required"] = True
-            if not entry["source_ref"] and f.get("source_ref"):
-                entry["source_ref"] = f["source_ref"]
-            continue
+            self._archive_gap(f, archive, is_standalone)
+            return
+        self._loose_gap(f, fname, is_standalone, save_root, effective_path, slot, keys)
 
+    def _archive_gap(self, f: dict, archive: str, is_standalone: bool) -> None:
+        archive_key = (
+            archive,
+            f.get("system"),
+            f.get("selection_slot"),
+            f.get("mode", "both"),
+        )
+        if archive_key not in self.archive_gaps:
+            source = _resolve_archive_source(
+                archive, self.index["by_name"], self.index["by_name_lower"],
+                self.index["data_names"], self.index["by_path_suffix"],
+            )
+            self.archive_gaps[archive_key] = {
+                "name": archive,
+                "path": archive,
+                "required": False,
+                "note": "",
+                "source_ref": "",
+                "in_platform": False,
+                "in_repo": source != "missing",
+                "source": source,
+                "archive": archive,
+                "archive_file_count": 0,
+                "archive_required_count": 0,
+            }
+        entry = self.archive_gaps[archive_key]
+        if entry["archive_file_count"] == 0:
+            # The archive's own declaration names its sets: an archive
+            # is a member like a loose file (Kronos' stvbios.zip).
+            own = archive_entry(archive, self.profile.get("files", []))
+            self.set_records.append((
+                set_keys((self.emu_name, is_standalone), own), own,
+                entry["in_repo"], self.archive_rows, entry,
+            ))
+            self.archive_rows.append(entry)
+        entry["archive_file_count"] += 1
+        if f.get("required", False):
+            entry["archive_required_count"] += 1
+            entry["required"] = True
+        if not entry["source_ref"] and f.get("source_ref"):
+            entry["source_ref"] = f["source_ref"]
+
+    def _loose_gap(
+        self, f: dict, fname: str, is_standalone: bool, save_root: bool,
+        effective_path: str, slot: tuple, keys: tuple,
+    ) -> None:
+        emu_name = self.emu_name
+        platform = self.platform
         # --- resolve source provenance ---
         # A release asset is held when the database records it, as any other
         # file: storage says where the bytes are served from, not that the
         # collection has them (kenji-nx's user-picked firmware package).
         source = next(
             (
-                found for version in versions[slot]
+                found for version in self.versions[slot]
                 if (found := entry_source(
-                    {**version, "source_profile": emu_name}, index,
+                    {**version, "source_profile": emu_name}, self.index,
                 )) is not None
             ),
             "missing",
@@ -980,64 +956,130 @@ def _cross_reference_profile(
             entry["unplaced"] = f["unplaced"]
         elif f.get("root") in OUTER_ROOTS:
             entry["root"] = f["root"]
-        elif index.get("launcher_candidates") is not None:
+        elif self.index.get("launcher_candidates") is not None:
             # What verify hands the launcher layer for the same entry.
             probe = {
                 **f,
                 "profile": emu_name,
-                "emulator": profile.get("emulator", emu_name),
+                "emulator": self.profile.get("emulator", emu_name),
                 "path": effective_path,
                 "in_repo": in_repo,
                 "bundled": entry["bundled"],
             }
-            index["launcher_candidates"].append(
+            self.index["launcher_candidates"].append(
                 (emu_name, is_standalone, f, probe, entry)
             )
-        gaps.append(entry)
-        set_records.append((keys, f, in_repo, gaps, entry))
+        self.gaps.append(entry)
+        self.set_records.append((keys, f, in_repo, self.gaps, entry))
 
-    # One need per set: a member another one fills is not a gap, and a set
-    # nobody holds is one gap under its first member (alternatives.py), as
-    # verify and the packs count it.
-    # Archive units rank first among equals, as the builder orders them.
-    grouped = sorted(
-        (r for r in set_records if r[0]), key=lambda r: r[3] is not archive_rows
-    )
-    requirements = set_requirements(profile)
-    excused, standing = settle_sets(
-        [(keys, f, fills) for keys, f, fills, _l, _r in grouped],
-        lambda key: requirements.get(key[1], True),
-    )
-    for at, (_keys, member, _fills, rows, set_row) in enumerate(grouped):
-        if set_row is None or rows is None:
-            continue
-        if at in standing:
-            set_row["alternatives"] = standing[at].others
-            set_row["required"] = standing[at].required
-        if at in excused:
-            rows.remove(set_row)
-            if id(member) in position:
-                fates[position[id(member)]] = "other_versions"
+    def settle(self) -> None:
+        # One need per set: a member another one fills is not a gap, and a set
+        # nobody holds is one gap under its first member (alternatives.py), as
+        # verify and the packs count it.
+        # Archive units rank first among equals, as the builder orders them.
+        grouped = sorted(
+            (r for r in self.set_records if r[0]), key=lambda r: r[3] is not self.archive_rows
+        )
+        requirements = set_requirements(self.profile)
+        excused, standing = settle_sets(
+            [(keys, f, fills) for keys, f, fills, _l, _r in grouped],
+            lambda key: requirements.get(key[1], True),
+        )
+        for at, (_keys, member, _fills, rows, set_row) in enumerate(grouped):
+            if set_row is None or rows is None:
+                continue
+            if at in standing:
+                set_row["alternatives"] = standing[at].others
+                set_row["required"] = standing[at].required
+            if at in excused:
+                rows.remove(set_row)
+                if id(member) in self.position:
+                    self.fates[self.position[id(member)]] = "other_versions"
 
-    for ag in sorted(archive_gaps.values(), key=lambda e: e["name"]):
-        if any(ag is row for row in archive_rows):
-            gaps.append(ag)
+        for ag in sorted(self.archive_gaps.values(), key=lambda e: e["name"]):
+            if any(ag is row for row in self.archive_rows):
+                self.gaps.append(ag)
 
-    tally = Counter(fates.values())
-    report[emu_name] = {
-        "emulator": profile.get("emulator", emu_name),
-        "systems": systems,
-        "total_files": len(emu_files),
-        "platform_covered": len(covered),
-        **_gap_counts(gaps),
-        "gap_details": gaps,
-        "unsourceable": unsourceable_list,
-        # Entries, not rows: an archive's members are one gap row.
-        "declared_files": tally["declared"],
-        "undeclared_files": tally["undeclared"],
-        "unsourceable_files": tally["unsourceable"],
-        "set_aside": {key: tally[key] for key in SET_ASIDE},
+    def summary(self) -> dict:
+        tally = Counter(self.fates.values())
+        profile = self.profile
+        return {
+            "emulator": profile.get("emulator", self.emu_name),
+            "systems": profile.get("systems", []),
+            "total_files": len(profile.get("files", [])),
+            "platform_covered": len(self.covered),
+            **_gap_counts(self.gaps),
+            "gap_details": self.gaps,
+            "unsourceable": self.unsourceable_list,
+            # Entries, not rows: an archive's members are one gap row.
+            "declared_files": tally["declared"],
+            "undeclared_files": tally["undeclared"],
+            "unsourceable_files": tally["unsourceable"],
+            "set_aside": {key: tally[key] for key in SET_ASIDE},
+        }
+
+
+def _cross_reference_profile(
+    emu_name: str,
+    profile: dict,
+    declared: dict[str, set[str]],
+    report: dict,
+    index: dict,
+    standalone_cores: set[str] | None = None,
+    platform: str = "",
+) -> None:
+    """Compare one emulator profile against what the platforms declare.
+
+    *platform* is the platform key under --platform, empty for the whole
+    tree. It decides, through the functions verify reads, which entries the
+    platform's launcher never opens and which ones its emulator package
+    already installs.
+
+    Split out of cross_reference, where it was a 200-line loop body that
+    carried the whole function's branching: every file is resolved by name,
+    by path, by hash and by archive membership before it can be called a
+    gap. *index* carries the database lookups those steps share.
+    """
+    all_declared = index["all_declared"]
+    systems = profile.get("systems", [])
+
+    # Skip filename-agnostic profiles (BIOS detected without fixed names)
+    if profile.get("bios_mode") == "agnostic":
+        return
+
+    if all_declared is not None:
+        platform_names = all_declared
+    else:
+        platform_names = set()
+        for sys_id in systems:
+            platform_names.update(declared.get(_norm_system_id(sys_id), set()))
+
+    # The build a platform runs decides which entries it reads, as in
+    # find_undeclared_files: without a platform, the libretro build.
+    layouts = platform_layouts(emu_name, profile, standalone_cores or set())
+    comparison = _ProfileComparison(emu_name, profile, index, platform_names, platform, layouts)
+    # Each file under each layout the platform gives the emulator: both, for
+    # one it launches as a libretro core and standalone.
+    layout_files = [(f, standalone) for view, standalone in layouts for f in view.get("files", [])]
+
+    # The entries of one profile on one slot are the versions its code
+    # accepts there (raze's ten DUKE3D.GRP): holding any of them fills the
+    # slot, as verify --emulator credits it.
+    for f, is_standalone in layout_files:
+        comparison.versions.setdefault(slot_key(f, is_standalone), []).append(f)
+
+    # What became of each entry, so the heading adds up: a file a platform
+    # declares, one it does not, or one set aside and why. An entry read by
+    # two builds keeps the first answer that compares it. Each layout lists
+    # the profile's entries in their order, so a position names one entry.
+    comparison.position = {
+        id(f): i for view, _ in layouts for i, f in enumerate(view.get("files", []))
     }
+
+    for f, is_standalone in layout_files:
+        comparison.compare(f, is_standalone)
+    comparison.settle()
+    report[emu_name] = comparison.summary()
 
 
 def _gap_counts(gaps: list[dict]) -> dict[str, int]:
@@ -1208,6 +1250,76 @@ class _NameHolder:
         return found
 
 
+def _held_by_setting(
+    name: str,
+    settings: dict,
+    readers: list[str],
+    profiles: dict[str, dict],
+    holder: _NameHolder,
+    db: dict,
+) -> bool:
+    """Whether the setting the name is written to reads a held file.
+
+    A placeholder read from the setting takes the held dump the
+    catalogues name after the model the launcher's name spells.
+    """
+    entries = [
+        entry
+        for key in readers
+        for entry in profiles[key].get("files") or []
+        if settings[name] and set_by(entry, settings[name])
+    ]
+    return any(holder._entry_held(entry) for entry in entries) or any(
+        "<" in str(entry.get("name", ""))
+        and any(
+            name_match_size_ok(entry, found.get("size"))
+            for found in catalogued_model_files(name, db)
+        )
+        for entry in entries
+    )
+
+
+def _unsourceable_names(readers: list[str], profiles: dict[str, dict]) -> dict[str, str]:
+    return {
+        str(n).rsplit("/", 1)[-1]: str(entry["unsourceable"])
+        for key in readers
+        for entry in profiles[key].get("files") or []
+        if entry.get("unsourceable")
+        for n in (entry.get("name"), *(entry.get("aliases") or []))
+        if n
+    }
+
+
+def _add_name_row(
+    by_key: dict[str, dict],
+    platform: str,
+    name: str,
+    found: tuple[str, bool] | None,
+    folds: bool,
+    reader: dict,
+    unsourceable: dict[str, str],
+) -> None:
+    """Add a launcher record to the row of a name the collection lacks."""
+    key = name.casefold() if folds else name
+    row = by_key.get(key)
+    if row is None:
+        row = by_key[key] = {
+            "platform": platform,
+            "name": name,
+            "emulators": [],
+            "readers": [],
+        }
+        if found:
+            row["held_as"] = found[0]
+    reason = unsourceable.get(name.rsplit("/", 1)[-1])
+    if reason and "unsourceable" not in row:
+        row["unsourceable"] = reason
+    if reader["emulator"] not in row["emulators"]:
+        row["emulators"].append(reader["emulator"])
+    if reader not in row["readers"]:
+        row["readers"].append(reader)
+
+
 def launcher_reads_not_held(
     configs: dict[str, dict],
     db: dict,
@@ -1265,29 +1377,10 @@ def launcher_reads_not_held(
             if str(record.get("search_dir") or "") in PLATFORM_OWN_FOLDERS:
                 continue
             settings = name_settings(record, names)
-
-            def by_setting(name: str) -> bool:
-                """Whether the setting the name is written to reads a held file.
-
-                A placeholder read from the setting takes the held dump the
-                catalogues name after the model the launcher's name spells.
-                """
-                entries = [
-                    entry
-                    for key in readers
-                    for entry in profiles[key].get("files") or []
-                    if settings[name] and set_by(entry, settings[name])
-                ]
-                return any(holder._entry_held(entry) for entry in entries) or any(
-                    "<" in str(entry.get("name", ""))
-                    and any(
-                        name_match_size_ok(entry, found.get("size"))
-                        for found in catalogued_model_files(name, db)
-                    )
-                    for entry in entries
-                )
-
-            by_model = {name for name in names if by_setting(name)}
+            by_model = {
+                name for name in names
+                if _held_by_setting(name, settings, readers, profiles, holder, db)
+            }
             if record.get("kind") == "names_searched" and any(
                 (found := holder.held(name)) and (found[1] or folds) for name in names
             ):
@@ -1301,36 +1394,12 @@ def launcher_reads_not_held(
             }
             # A name a reader's entry declares unsourceable is no gap: its
             # row carries the reason and is counted apart.
-            unsourceable = {
-                str(n).rsplit("/", 1)[-1]: str(entry["unsourceable"])
-                for key in readers
-                for entry in profiles[key].get("files") or []
-                if entry.get("unsourceable")
-                for n in (entry.get("name"), *(entry.get("aliases") or []))
-                if n
-            }
+            unsourceable = _unsourceable_names(readers, profiles)
             for name in names:
                 found = holder.held(name)
                 if found and (found[1] or folds) or name in by_model:
                     continue
-                key = name.casefold() if folds else name
-                row = by_key.get(key)
-                if row is None:
-                    row = by_key[key] = {
-                        "platform": platform,
-                        "name": name,
-                        "emulators": [],
-                        "readers": [],
-                    }
-                    if found:
-                        row["held_as"] = found[0]
-                reason = unsourceable.get(name.rsplit("/", 1)[-1])
-                if reason and "unsourceable" not in row:
-                    row["unsourceable"] = reason
-                if reader["emulator"] not in row["emulators"]:
-                    row["emulators"].append(reader["emulator"])
-                if reader not in row["readers"]:
-                    row["readers"].append(reader)
+                _add_name_row(by_key, platform, name, found, folds, reader, unsourceable)
         rows.extend(by_key[key] for key in sorted(by_key, key=str.casefold))
     return rows
 
@@ -1390,18 +1459,24 @@ def print_launcher_reads(rows: list[dict]) -> None:
         )
 
 
+class ReportScope(TypedDict, total=False):
+    """What a cross_reference run compares against and answers for."""
+
+    all_declared: dict[str, list[tuple[int | None, str]]] | None
+    standalone_cores: set[str] | None
+    folded_slots: frozenset[str]
+    platform: str
+    launcher_layer: LauncherLayer | None
+    declared_contents: dict[str, set[str]] | None
+
+
 def cross_reference(
     profiles: dict[str, dict],
     declared: dict[str, set[str]],
     db: dict,
     platform_data_dirs: dict[str, set[str]] | None = None,
     data_names: set[str] | None = None,
-    all_declared: dict[str, list[tuple[int | None, str]]] | None = None,
-    standalone_cores: set[str] | None = None,
-    folded_slots: frozenset[str] = frozenset(),
-    platform: str = "",
-    launcher_layer: LauncherLayer | None = None,
-    declared_contents: dict[str, set[str]] | None = None,
+    **scope: Unpack[ReportScope],
 ) -> dict:
     """Compare emulator profiles against platform declarations.
 
@@ -1418,6 +1493,15 @@ def cross_reference(
     instead of the per-system lookup.  This is appropriate for the global
     gap analysis page where "undeclared" means "no platform declares it at all".
     """
+    unknown = sorted(set(scope) - set(ReportScope.__annotations__))
+    if unknown:
+        raise TypeError(f"cross_reference() got an unexpected keyword argument '{unknown[0]}'")
+    all_declared = scope.get("all_declared")
+    standalone_cores = scope.get("standalone_cores")
+    folded_slots = scope.get("folded_slots", frozenset())
+    platform = scope.get("platform", "")
+    launcher_layer = scope.get("launcher_layer")
+    declared_contents = scope.get("declared_contents")
     platform_data_dirs = platform_data_dirs or {}
     by_name = db.get("indexes", {}).get("by_name", {})
     by_name_lower = {k.lower(): k for k in by_name}
@@ -1426,7 +1510,7 @@ def cross_reference(
     by_sha256 = db.get("indexes", {}).get("by_sha256", {})
     by_path_suffix = db.get("indexes", {}).get("by_path_suffix", {})
     db_files = db.get("files", {})
-    report = {}
+    report: dict[str, dict] = {}
 
     index = {
         "by_name": by_name,
@@ -1474,7 +1558,7 @@ def print_report(
     # collection by design, as verify and the gaps page say: not a file to find.
     bundled = 0
 
-    for emu_name, data in sorted(report.items()):
+    for _emu_name, data in sorted(report.items()):
         gaps = data["gaps"]
         if gaps == 0 and not show_clean:
             continue
@@ -1528,7 +1612,7 @@ def print_report(
         print(f"  {bundled} bundled with their emulator, not packed")
 
 
-def main() -> None:
+def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(allow_abbrev=False, description="Emulator vs platform gap analysis")
     parser.add_argument(
         "--emulators-dir", default=DEFAULT_EMULATORS_DIR,
@@ -1551,6 +1635,87 @@ def main() -> None:
     parser.add_argument(
         "--list-emulators", action="store_true", help="List available emulators"
     )
+    return parser
+
+
+@dataclass(frozen=True)
+class _PlatformScope:
+    """The profiles a --platform run compares, and how the platform runs them."""
+
+    profiles: dict[str, dict]
+    standalone_cores: set[str]
+    config: dict
+    relevant: set[str]
+    run_anywhere: set[str]
+
+
+def _platform_scope(
+    args: argparse.Namespace, parser: argparse.ArgumentParser, profiles: dict[str, dict],
+) -> _PlatformScope:
+    from common import load_target_config, resolve_platform_cores
+
+    try:
+        target_cores = (
+            load_target_config(args.platform, args.target, args.platforms_dir)
+            if args.target
+            else None
+        )
+    except (FileNotFoundError, ValueError) as exc:
+        # A typo ended in a traceback where verify and slots name the
+        # closest target.
+        parser.error(str(exc))
+    config = load_platform_config(args.platform, args.platforms_dir)
+    relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
+    run_anywhere = (
+        set(resolve_platform_cores(config, profiles)) if args.target else relevant
+    )
+    return _PlatformScope(
+        {k: v for k, v in profiles.items() if k in relevant},
+        standalone_set(config),
+        config,
+        relevant,
+        run_anywhere,
+    )
+
+
+def _launcher_rows(
+    args: argparse.Namespace,
+    selected: list[str] | None,
+    db: dict,
+    all_profiles: dict[str, dict],
+    registry: dict,
+    emulator: str | None,
+) -> tuple[list[dict], list[dict]]:
+    """The names a launcher reads that the collection lacks, and the
+    launcher records nothing proves."""
+    # Counted apart from the profile gaps: a name only a launcher reads is
+    # reported, not yet judged.
+    launcher_reads = launcher_reads_not_held(
+        {
+            name: load_platform_config(name, args.platforms_dir)
+            for name in (selected or list_registered_platforms(args.platforms_dir))
+        },
+        db, all_profiles, registry, emulator or "",
+    )
+
+    unproven = [
+        row for row in launcher_unproven(
+            {
+                name: load_platform_config(name, args.platforms_dir)
+                for name in (selected or list_registered_platforms(args.platforms_dir))
+            },
+            all_profiles,
+        )
+        if not emulator or any(
+            emulator in LauncherLayer._profiles_named(part, all_profiles, set(all_profiles))
+            for part in row["emulator"].split(", ")
+        )
+    ]
+    return launcher_reads, unproven
+
+
+def main() -> None:
+    parser = _build_parser()
     args = parser.parse_args()
     from common import work_from_repo_root
 
@@ -1595,32 +1760,17 @@ def main() -> None:
     if args.target and not args.platform:
         parser.error("--target requires --platform")
 
+    platform_scope: _PlatformScope | None = None
     standalone_cores: set[str] = set()
     if args.platform:
-        from common import load_target_config, resolve_platform_cores
-
-        try:
-            target_cores = (
-                load_target_config(args.platform, args.target, args.platforms_dir)
-                if args.target
-                else None
-            )
-        except (FileNotFoundError, ValueError) as exc:
-            # A typo ended in a traceback where verify and slots name the
-            # closest target.
-            parser.error(str(exc))
-        config = load_platform_config(args.platform, args.platforms_dir)
-        relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
-        run_anywhere = (
-            set(resolve_platform_cores(config, profiles)) if args.target else relevant
-        )
-        profiles = {k: v for k, v in profiles.items() if k in relevant}
-        standalone_cores = standalone_set(config)
+        platform_scope = _platform_scope(args, parser, profiles)
+        profiles = platform_scope.profiles
+        standalone_cores = platform_scope.standalone_cores
     else:
         # The tree as every platform runs it: a profile some platform runs
         # standalone keeps its standalone entries. Laid out as libretro only,
         # eka2l1, dolphin and xenia-edge lost 133 files no platform declares.
-        from common import list_registered_platforms, merged_standalone_set
+        from common import merged_standalone_set
 
         standalone_cores = merged_standalone_set(
             load_platform_config(name, args.platforms_dir)
@@ -1628,7 +1778,8 @@ def main() -> None:
         )
 
     if not profiles:
-        if emulator and args.target and emulator in run_anywhere:
+        if (emulator and args.target and platform_scope is not None
+                and emulator in platform_scope.run_anywhere):
             raise SystemExit(
                 f"ERROR: {emulator} is not built for {args.platform}'s "
                 f"{args.target} target; {args.platform} runs it elsewhere "
@@ -1655,52 +1806,35 @@ def main() -> None:
             ],
             db,
         ),
-        platform=config.get("_key", args.platform) if args.platform else "",
+        platform=(
+            platform_scope.config.get("_key", args.platform) if platform_scope else ""
+        ),
         # What the platform's launchers open, as verify and the builder read it.
         launcher_layer=LauncherLayer(
-            config, profiles, relevant, db, declared_destinations(config)
-        ) if args.platform else None,
+            platform_scope.config, profiles, platform_scope.relevant, db,
+            declared_destinations(platform_scope.config),
+        ) if platform_scope else None,
     )
 
-    # Counted apart from the profile gaps: a name only a launcher reads is
-    # reported, not yet judged.
-    launcher_reads = launcher_reads_not_held(
-        {
-            name: load_platform_config(name, args.platforms_dir)
-            for name in (selected or list_registered_platforms(args.platforms_dir))
-        },
-        db, all_profiles, registry, emulator or "",
+    launcher_reads, unproven = _launcher_rows(
+        args, selected, db, all_profiles, registry, emulator,
     )
-
-    unproven = [
-        row for row in launcher_unproven(
-            {
-                name: load_platform_config(name, args.platforms_dir)
-                for name in (selected or list_registered_platforms(args.platforms_dir))
-            },
-            all_profiles,
-        )
-        if not emulator or any(
-            emulator in LauncherLayer._profiles_named(part, all_profiles, set(all_profiles))
-            for part in row["emulator"].split(", ")
-        )
-    ]
 
     if args.json:
         print(json.dumps(
             {**report, LAUNCHER_READS_KEY: launcher_reads, LAUNCHER_UNPROVEN_KEY: unproven},
             indent=2,
         ))
+        return
+    if emulator:
+        scope = emulator
+    elif args.platform:
+        scope = f"the emulators {args.platform} runs"
     else:
-        if emulator:
-            scope = emulator
-        elif args.platform:
-            scope = f"the emulators {args.platform} runs"
-        else:
-            scope = "all emulators"
-        print_report(report, scope, show_clean=bool(args.emulator))
-        print_launcher_reads(launcher_reads)
-        print_launcher_unproven(unproven)
+        scope = "all emulators"
+    print_report(report, scope, show_clean=bool(args.emulator))
+    print_launcher_reads(launcher_reads)
+    print_launcher_unproven(unproven)
 
 
 if __name__ == "__main__":

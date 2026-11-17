@@ -145,7 +145,7 @@ class RetroDeckWritesWhatItCounts(unittest.TestCase):
         written = json.loads(produced["duckstation/component_manifest.json"])
         names = [e["filename"] for e in written["duckstation"]["bios"]]
         self.assertIn("b.bin", names)
-        self.assertFalse(RetroDeck.writable(spread.files[2]))
+        self.assertFalse(RetroDeck().writable(spread.files[2]))
 
 
 class HashesTheFormatCannotHold(unittest.TestCase):
@@ -434,8 +434,8 @@ class OneMd5FormatsAddWhole(unittest.TestCase):
 
         several = NativeFile("boot.bin", "boot.bin", "dc", truth={"md5": [A, B, C]})
         single = NativeFile("boot2.bin", "boot2.bin", "dc", truth={"md5": A})
-        self.assertFalse(RetroBat.writable(several))
-        self.assertTrue(RetroBat.writable(single))
+        self.assertFalse(RetroBat().writable(several))
+        self.assertTrue(RetroBat().writable(single))
 
 
 class BizHawkKeepsItsOwnHashes(unittest.TestCase):

@@ -50,7 +50,15 @@ from common import (
     yaml_load,
 )
 from exporter import discover_exporters
-from exporter.baseline import HASH_FIELDS, _hash_values, _single_size, build_native_model
+from exporter.base_exporter import BaseExporter
+from exporter.baseline import (
+    HASH_FIELDS,
+    NativeFile,
+    Report,
+    _hash_values,
+    _single_size,
+    build_native_model,
+)
 from exporter.candidates import removal_candidates
 from exporter.doubled import doubled_destinations
 from truth import generate_platform_truth
@@ -252,14 +260,15 @@ def _raw_url(url: str) -> str:
 
 
 def wanted_sources(
-    exporter: object, systems: dict, scraped: dict | None = None
+    exporter: BaseExporter, systems: dict, scraped: dict | None = None
 ) -> dict[str, str]:
     """Cache-relative name -> URL of every file the exporter patches."""
     wanted = dict(exporter.native_sources())
     components = getattr(exporter, "components", None)
-    if callable(components):
+    component_url = getattr(exporter, "component_url", None)
+    if callable(components) and callable(component_url):
         for component in components(systems):
-            wanted[f"{component}/component_manifest.json"] = exporter.component_url(
+            wanted[f"{component}/component_manifest.json"] = component_url(
                 component
             )
 
@@ -343,7 +352,7 @@ def _at_revision(url: str, base: str) -> str:
 
 
 def collect_originals(
-    exporter: object,
+    exporter: BaseExporter,
     systems: dict,
     upstream_dir: Path,
     allow_fetch: bool,
@@ -364,8 +373,12 @@ def collect_originals(
     unpack = getattr(exporter, "unpack", None)
     for relative, url in wanted.items():
         path = root / relative
-        archive = callable(unpack) and relative.endswith((".zip", ".tar.gz"))
-        check = (lambda raw: _read_archive(unpack, raw)) if archive else _read_text
+        reader: Callable[[bytes], dict[str, str]] | None = (
+            unpack if callable(unpack) and relative.endswith((".zip", ".tar.gz")) else None
+        )
+        check: Callable[[bytes], object] = (
+            functools.partial(_read_archive, reader) if reader is not None else _read_text
+        )
         try:
             if allow_fetch:
                 payload = fetch(url, path, index, refresh, check)
@@ -376,8 +389,8 @@ def collect_originals(
                     f"{relative}: not in {root}; rerun with --fetch to download it"
                 )
                 continue
-            if archive:
-                originals.update(_read_archive(unpack, payload))
+            if reader is not None:
+                originals.update(_read_archive(reader, payload))
                 keep = getattr(exporter, "keep_archive", None)
                 if callable(keep):
                     keep(relative, payload)
@@ -459,7 +472,7 @@ def refresh_cache(
     except StaleTruth as exc:
         return False, [str(exc)]
     systems, _ = build_native_model(truth or {}, scraped)
-    exporter = exporter_class()
+    exporter: BaseExporter = exporter_class()
     wanted = wanted_sources(exporter, systems, scraped)
     off_pin = unpinned(wanted, scraped)
     if off_pin:
@@ -548,7 +561,7 @@ class LandedChanges:
 
 
 def _change(
-    kind: str, entry: object, field_name: str | None, old: object, new: object
+    kind: str, entry: NativeFile, field_name: str | None, old: object, new: object
 ) -> dict:
     return {
         "kind": kind,
@@ -561,21 +574,21 @@ def _change(
     }
 
 
-def _platform_value(entry: object, field_name: str) -> str | list[str]:
+def _platform_value(entry: NativeFile, field_name: str) -> str | list[str]:
     values = _hash_values(entry.platform or {}, field_name)
     if (entry.platform or {}).get(f"{field_name}_list"):
         return values
     return ",".join(values)
 
 
-def _written_value(exporter: object, entry: object, field_name: str) -> str | list[str]:
+def _written_value(exporter: BaseExporter, entry: NativeFile, field_name: str) -> str | list[str]:
     """A hash field as the render writes it: a list where the checker reads
     one, so the report never shows several values as one."""
     listed = exporter.written_list(entry, field_name)
     return listed if listed is not None else exporter.written(entry, field_name)
 
 
-def _added_fields(exporter: object, entry: object) -> dict:
+def _added_fields(exporter: BaseExporter, entry: NativeFile) -> dict:
     """The fields an addition is written with, as the render chooses them."""
     carried = exporter.carries()
     written: dict[str, object] = {
@@ -590,7 +603,7 @@ def _added_fields(exporter: object, entry: object) -> dict:
     return written
 
 
-def landed_changes(exporter: object, systems: dict) -> LandedChanges:
+def landed_changes(exporter: BaseExporter, systems: dict) -> LandedChanges:
     """The changes the written file carries, with their values.
 
     Only what the format states: a correction to a field the file has no
@@ -706,8 +719,6 @@ def export_platform(
     allow_fetch: bool,
 ) -> tuple[bool, list[str]]:
     """Write one platform's corrected file. Returns (ok, messages)."""
-    messages: list[str] = []
-
     try:
         truth, scraped = load_inputs(platform, truth_dir, platforms_dir)
     except StaleTruth as exc:
@@ -724,34 +735,12 @@ def export_platform(
     if not systems:
         return False, ["nothing to write: neither the platform nor the truth has data"]
 
-    exporter = exporter_class()
-    off_pin = unpinned(wanted_sources(exporter, systems, scraped), scraped)
-    if off_pin:
-        return False, off_pin
-    originals, missing = collect_originals(
-        exporter, systems, upstream_dir, allow_fetch, scraped
+    exporter: BaseExporter = exporter_class()
+    produced, issues, stopped = _produce(
+        exporter, systems, report, scraped, upstream_dir, allow_fetch,
     )
-    if missing:
-        return False, [f"the platform's own file is required: {m}" for m in missing]
-    if exporter.needs_original() and not originals:
-        return False, ["the platform's own file is required and none was read"]
-
-    try:
-        produced = exporter.render(systems, report, originals, scraped)
-    except ValueError as exc:
-        return False, [str(exc)]
-
-    if not produced and not exporter.may_write_nothing():
-        return False, ["the exporter produced no file"]
-
-    issues = exporter.validate(systems, produced)
-    if issues:
-        # Written first, a file its own validator refused replaced the
-        # published export and only the exit code said so.
-        invalid = [f"INVALID: {issue}" for issue in issues[:10]]
-        if len(issues) > 10:
-            invalid.append(f"and {len(issues) - 10} more validation failures")
-        return False, invalid
+    if stopped:
+        return False, stopped
 
     platform_dir = output_dir / platform
     _remove_stale(platform_dir, set(produced))
@@ -762,61 +751,15 @@ def export_platform(
     resized, cleared = changes.resized, changes.cleared
     unsized = changes.unsized
     requirements = changes.requirements
-    lists = changes.lists
 
-    landed = 0
-    refused = 0
-    lost = 0
-    for system in systems.values():
-        for entry in system.files:
-            if not entry.name:
-                continue
-            if exporter.lands(entry):
-                landed += entry.platform is None
-            elif entry.platform is None:
-                refused += 1
-            else:
-                # The platform declares it and the format still cannot state
-                # it, so their own file loses a line. Worth saying out loud.
-                lost += 1
+    landed, refused, lost = _entry_outcomes(exporter, systems)
 
     own_summary = exporter.outcome(systems, produced)
     summary = own_summary
     if summary is None:
-        # What the written file carries, in the terms the exports page uses.
-        # What it does not carry is counted on a line of its own below.
-        parts = [f"{report.files_kept} kept"]
-        landed_counts = (
-            (landed, "file", "", "added"),
-            (len(applied), "hash", "", "updated to the emulator source"),
-            (requirements, "required flag", "", "aligned with the code"),
-            (len(filled), "hash", "", "added to an existing entry"),
-            (len(resized), "size", "", "updated to the emulator source"),
-            (len(unsized), "size", "", "removed"),
-            (len(cleared), "hash", "", "removed"),
-            (lost, "entry", "entries", "removed, the format cannot state them"),
-            (lists, "md5 list", "", "written, any listed value passes"),
-        )
-        parts += [
-            f"{_count(number, noun, plural)} {verb}"
-            for number, noun, plural, verb in landed_counts
-            if number
-        ]
-        summary = ", ".join(parts)
+        summary = _landed_summary(report, changes, landed, lost)
     withheld = exporter.withheld()
-    unwritten = [
-        f"{_count(number, noun, plural)} {what}"
-        for number, noun, plural, what in (
-            (refused, "file", "", "the format or its checker cannot carry"),
-            (len(withheld), "update", "", "withheld"),
-            # A content-scanning core's names are labels: a list checked
-            # by path cannot hold them.
-            (report.labels, "entry", "entries", "found by content"),
-            (len(report.unattributed), "file", "",
-             "no single native system of the platform takes"),
-        )
-        if number
-    ]
+    unwritten = _unwritten(refused, withheld, report)
     # Reported, never removed: the platform's file keeps every entry.
     candidates = removal_candidates(
         systems, scraped, load_emulator_profiles("emulators"),
@@ -824,32 +767,7 @@ def export_platform(
     )
     # Reported, never rewritten: both declarations stay as the platform wrote them.
     doubled = doubled_in(scraped, platforms_dir)
-    messages.append(summary)
-    if unwritten:
-        messages.append("not in the file: " + ", ".join(unwritten))
-    if candidates:
-        open_question = sum(c["verdict"] == "undetermined" for c in candidates)
-        messages.append(
-            f"{_count(len(candidates), 'entry', 'entries')} no examined core is known to open"
-            + (f" ({open_question} undetermined)" if open_question else "")
-            + ", listed in the report"
-        )
-    if doubled:
-        messages.append(
-            f"{_count(len(doubled), 'destination')} declared twice for two files"
-            ", listed in the report"
-        )
-    messages.extend(f"withheld: {reason}" for reason in withheld)
-    for heading, labels in (
-        ("hash updated", applied),
-        ("hash added", filled),
-        ("size updated", resized),
-        ("size removed", unsized),
-        ("hash removed", cleared),
-    ):
-        messages.extend(f"{heading}: {label}" for label in labels[:5])
-        if len(labels) > 5:
-            messages.append(f"and {len(labels) - 5} more")
+    messages = _export_messages(summary, unwritten, candidates, doubled, withheld, changes)
 
     write_report(output_dir / f"{platform}.json", {
         "platform": platform,
@@ -877,6 +795,142 @@ def export_platform(
         "invalid": issues,
     })
     return True, messages
+
+
+def _produce(
+    exporter: BaseExporter,
+    systems: dict,
+    report: Report,
+    scraped: dict | None,
+    upstream_dir: Path,
+    allow_fetch: bool,
+) -> tuple[dict, list[str], list[str]]:
+    """The files the exporter renders, its validator's issues, and why the
+    export stops before writing (empty when it goes on)."""
+    off_pin = unpinned(wanted_sources(exporter, systems, scraped), scraped)
+    if off_pin:
+        return {}, [], off_pin
+    originals, missing = collect_originals(
+        exporter, systems, upstream_dir, allow_fetch, scraped
+    )
+    if missing:
+        return {}, [], [f"the platform's own file is required: {m}" for m in missing]
+    if exporter.needs_original() and not originals:
+        return {}, [], ["the platform's own file is required and none was read"]
+
+    try:
+        produced = exporter.render(systems, report, originals, scraped)
+    except ValueError as exc:
+        return {}, [], [str(exc)]
+
+    if not produced and not exporter.may_write_nothing():
+        return {}, [], ["the exporter produced no file"]
+
+    issues = exporter.validate(systems, produced)
+    if issues:
+        # Written first, a file its own validator refused replaced the
+        # published export and only the exit code said so.
+        invalid = [f"INVALID: {issue}" for issue in issues[:10]]
+        if len(issues) > 10:
+            invalid.append(f"and {len(issues) - 10} more validation failures")
+        return {}, issues, invalid
+    return produced, issues, []
+
+
+def _entry_outcomes(exporter: BaseExporter, systems: dict) -> tuple[int, int, int]:
+    """Additions written, additions refused, and platform entries lost."""
+    landed = 0
+    refused = 0
+    lost = 0
+    for system in systems.values():
+        for entry in system.files:
+            if not entry.name:
+                continue
+            if exporter.lands(entry):
+                landed += entry.platform is None
+            elif entry.platform is None:
+                refused += 1
+            else:
+                # The platform declares it and the format still cannot state
+                # it, so their own file loses a line. Worth saying out loud.
+                lost += 1
+    return landed, refused, lost
+
+
+def _landed_summary(report: Report, changes: LandedChanges, landed: int, lost: int) -> str:
+    # What the written file carries, in the terms the exports page uses.
+    # What it does not carry is counted on a line of its own below.
+    parts = [f"{report.files_kept} kept"]
+    landed_counts = (
+        (landed, "file", "", "added"),
+        (len(changes.applied), "hash", "", "updated to the emulator source"),
+        (changes.requirements, "required flag", "", "aligned with the code"),
+        (len(changes.filled), "hash", "", "added to an existing entry"),
+        (len(changes.resized), "size", "", "updated to the emulator source"),
+        (len(changes.unsized), "size", "", "removed"),
+        (len(changes.cleared), "hash", "", "removed"),
+        (lost, "entry", "entries", "removed, the format cannot state them"),
+        (changes.lists, "md5 list", "", "written, any listed value passes"),
+    )
+    parts += [
+        f"{_count(number, noun, plural)} {verb}"
+        for number, noun, plural, verb in landed_counts
+        if number
+    ]
+    return ", ".join(parts)
+
+
+def _unwritten(refused: int, withheld: list[str], report: Report) -> list[str]:
+    return [
+        f"{_count(number, noun, plural)} {what}"
+        for number, noun, plural, what in (
+            (refused, "file", "", "the format or its checker cannot carry"),
+            (len(withheld), "update", "", "withheld"),
+            # A content-scanning core's names are labels: a list checked
+            # by path cannot hold them.
+            (report.labels, "entry", "entries", "found by content"),
+            (len(report.unattributed), "file", "",
+             "no single native system of the platform takes"),
+        )
+        if number
+    ]
+
+
+def _export_messages(
+    summary: str,
+    unwritten: list[str],
+    candidates: list[dict],
+    doubled: list[dict],
+    withheld: list[str],
+    changes: LandedChanges,
+) -> list[str]:
+    messages = [summary]
+    if unwritten:
+        messages.append("not in the file: " + ", ".join(unwritten))
+    if candidates:
+        open_question = sum(c["verdict"] == "undetermined" for c in candidates)
+        messages.append(
+            f"{_count(len(candidates), 'entry', 'entries')} no examined core is known to open"
+            + (f" ({open_question} undetermined)" if open_question else "")
+            + ", listed in the report"
+        )
+    if doubled:
+        messages.append(
+            f"{_count(len(doubled), 'destination')} declared twice for two files"
+            ", listed in the report"
+        )
+    messages.extend(f"withheld: {reason}" for reason in withheld)
+    for heading, labels in (
+        ("hash updated", changes.applied),
+        ("hash added", changes.filled),
+        ("size updated", changes.resized),
+        ("size removed", changes.unsized),
+        ("hash removed", changes.cleared),
+    ):
+        messages.extend(f"{heading}: {label}" for label in labels[:5])
+        if len(labels) > 5:
+            messages.append(f"and {len(labels) - 5} more")
+    return messages
 
 
 def _write_produced(

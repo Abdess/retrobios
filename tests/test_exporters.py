@@ -558,7 +558,7 @@ class Reconciliation(unittest.TestCase):
         }
         systems, _ = build_native_model({"systems": {}}, scraped)
         entry = systems["nds"].files[0]
-        self.assertTrue(BaseExporter.writable(entry, require="md5"))
+        self.assertTrue(_BaseRule().writable(entry, require="md5"))
 
     def test_no_format_drops_what_the_platform_already_declares(self):
         """An export poorer than the file it corrects is not usable."""
@@ -579,7 +579,25 @@ class Reconciliation(unittest.TestCase):
         }
         systems, _ = build_native_model(truth, None)
         entry = systems["nintendo-ds"].files[0]
-        self.assertFalse(BaseExporter.writable(entry, require="md5"))
+        self.assertFalse(_BaseRule().writable(entry, require="md5"))
+
+
+class _BaseRule(BaseExporter):
+    """A concrete exporter that keeps every rule of the base class."""
+
+    @staticmethod
+    def platform_name() -> str:
+        return "base"
+
+    @staticmethod
+    def native_filename() -> str:
+        return "base"
+
+    def render(self, systems, report, originals, scraped=None):
+        return {}
+
+    def validate(self, systems, produced):
+        return []
 
 
 class ExporterRegistry(unittest.TestCase):

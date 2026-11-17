@@ -9,11 +9,16 @@ the data block hands the maintainer something that no longer runs.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from typing import Generic, TypeVar, Union
 
 from .baseline import NativeFile, NativeSystem, Report
 
+# What a produced file holds: text for every format, bytes besides for one
+# that also hands back an archive (MiSTer's bios_db.json.zip).
+Content = TypeVar("Content", bound=Union[str, bytes])
 
-class BaseExporter(ABC):
+
+class BaseExporter(ABC, Generic[Content]):
     """Base class for writing a platform's own BIOS file, corrected."""
 
     # A hash field the checker compares to one value: an addition the
@@ -77,14 +82,14 @@ class BaseExporter(ABC):
         report: Report,
         originals: dict[str, str],
         scraped: dict | None = None,
-    ) -> dict[str, str]:
+    ) -> dict[str, Content]:
         """Return {relative output path: file content}."""
 
     @abstractmethod
     def validate(
         self,
         systems: dict[str, NativeSystem],
-        produced: dict[str, str],
+        produced: dict[str, Content],
     ) -> list[str]:
         """Check the produced files against what was asked of them."""
 
@@ -162,8 +167,7 @@ class BaseExporter(ABC):
         list carries."""
         return False
 
-    @classmethod
-    def writable(cls, fe: NativeFile, require: str = "") -> bool:
+    def writable(self, fe: NativeFile, require: str = "") -> bool:
         """Whether this format can carry the entry.
 
         An entry the platform already declares is always carried, hash or
@@ -171,7 +175,7 @@ class BaseExporter(ABC):
         hands back a file poorer than the one it corrects. The requirement
         only gates what we would be adding.
         """
-        return cls._carried(fe, require, cls.SINGLE_HASH_FIELD)
+        return self._carried(fe, require, self.SINGLE_HASH_FIELD)
 
     @classmethod
     def _carried(cls, fe: NativeFile, require: str, single: str | None) -> bool:

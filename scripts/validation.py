@@ -10,7 +10,8 @@ from __future__ import annotations
 import os
 import re
 import zipfile
-from collections.abc import Callable, Iterator, Mapping, Sequence
+from collections.abc import Callable, Collection, Iterator, Mapping, Sequence
+from typing import TYPE_CHECKING, TypedDict
 
 from common import (
     adler32_of,
@@ -27,6 +28,9 @@ from common import (
 from hashing import md5_composite, parse_hash_list, parse_md5_list
 from nativemode import SIZE_AND_ANY_HASH, digest_algorithm, hash_mismatch_excludes_file
 from ziptools import check_inside_zip
+
+if TYPE_CHECKING:
+    from typing_extensions import Unpack
 
 # Validation types that require console-specific cryptographic keys.
 # verify.py cannot reproduce these: size checks still apply if combined.
@@ -62,7 +66,7 @@ def _parse_validation(validation: list | dict | None) -> list[str]:
     return []
 
 
-def _entry_rule(emu_name: str, f: dict, checks: set[str]) -> dict:
+def _entry_rule(emu_name: str, f: dict, checks: Collection[str]) -> dict:
     """One profile entry's own checks, kept apart from the merged view.
 
     Merged by name, Azahar's crypto check on the 3DS otp.bin judged Cemu's
@@ -101,7 +105,7 @@ def _entry_rule(emu_name: str, f: dict, checks: set[str]) -> dict:
     }
 
 
-def warned_checks(f: dict, checks: set[str]) -> set[str]:
+def warned_checks(f: dict, checks: Collection[str]) -> set[str]:
     """The checks of an entry the code warns about instead of refusing.
 
     `on_mismatch: warn` covers every check, while a map names them one by one, as
@@ -116,6 +120,21 @@ def warned_checks(f: dict, checks: set[str]) -> set[str]:
     return set()
 
 
+def _rule_size_failure(rule: dict, local_path: str) -> str | None:
+    """Why one entry's size check rejects a file, or None."""
+    actual_size = os.path.getsize(local_path)
+    if rule["sizes"] and actual_size not in rule["sizes"]:
+        accepted = ",".join(str(s) for s in sorted(rule["sizes"]))
+        return f"size mismatch: got {actual_size}, accepted [{accepted}]"
+    if rule["min_size"] is not None and actual_size < rule["min_size"]:
+        return f"size too small: min {rule['min_size']}, got {actual_size}"
+    if rule["max_size"] is not None and actual_size > rule["max_size"]:
+        return f"size too large: max {rule['max_size']}, got {actual_size}"
+    if rule.get("size_multiple") and actual_size % int(rule["size_multiple"]):
+        return f"size mismatch: got {actual_size}, accepted multiples of {rule['size_multiple']}"
+    return None
+
+
 def _rule_failure(
     rule: dict, local_path: str, filename: str, bios_dir: str, hashes: dict,
     strict: bool = False,
@@ -126,16 +145,9 @@ def _rule_failure(
     """
     skip = set() if strict else rule["warn"]
     if "size" not in skip:
-        actual_size = os.path.getsize(local_path)
-        if rule["sizes"] and actual_size not in rule["sizes"]:
-            accepted = ",".join(str(s) for s in sorted(rule["sizes"]))
-            return f"size mismatch: got {actual_size}, accepted [{accepted}]"
-        if rule["min_size"] is not None and actual_size < rule["min_size"]:
-            return f"size too small: min {rule['min_size']}, got {actual_size}"
-        if rule["max_size"] is not None and actual_size > rule["max_size"]:
-            return f"size too large: max {rule['max_size']}, got {actual_size}"
-        if rule.get("size_multiple") and actual_size % int(rule["size_multiple"]):
-            return f"size mismatch: got {actual_size}, accepted multiples of {rule['size_multiple']}"
+        refused = _rule_size_failure(rule, local_path)
+        if refused:
+            return refused
     for hash_type in ("crc32", "md5", "sha1", "sha256"):
         if rule[hash_type] and hash_type not in skip:
             if not hashes:
@@ -229,6 +241,144 @@ def _labels_widened(profile: dict) -> list[dict]:
     return widened
 
 
+def _new_index_entry() -> dict:
+    return {
+        "checks": set(),
+        "sizes": set(),
+        "min_size": None,
+        "max_size": None,
+        "size_multiples": set(),
+        "crc32": set(),
+        "md5": set(),
+        "sha1": set(),
+        "sha256": set(),
+        "adler32": set(),
+        "adler32_byteswap": False,
+        "crypto_only": set(),
+        "emulators": set(),
+        "per_emulator": {},
+        "rules": [],
+    }
+
+
+def _merge_sizes(item: dict, f: dict) -> None:
+    raw_size = f.get("size")
+    if raw_size is not None:
+        if isinstance(raw_size, list):
+            item["sizes"].update(raw_size)
+        else:
+            item["sizes"].add(raw_size)
+    if f.get("min_size") is not None:
+        cur = item["min_size"]
+        item["min_size"] = (
+            min(cur, f["min_size"]) if cur is not None else f["min_size"]
+        )
+    if f.get("size_multiple"):
+        item["size_multiples"].add(int(f["size_multiple"]))
+    if f.get("max_size") is not None:
+        cur = item["max_size"]
+        item["max_size"] = (
+            max(cur, f["max_size"]) if cur is not None else f["max_size"]
+        )
+
+
+def _hex_values(value: object) -> list[str]:
+    """Hash values without their 0x prefix, lowercased."""
+    values = value if isinstance(value, list) else [value] if value else []
+    out = []
+    for item in values:
+        norm = str(item).lower()
+        if norm.startswith("0x"):
+            norm = norm[2:]
+        out.append(norm)
+    return out
+
+
+def _merge_hashes(item: dict, f: dict, checks: list[str]) -> None:
+    # Hash checks: collect all accepted hashes as sets (multiple valid
+    # versions of the same file, e.g. MT-32 ROM versions)
+    if "crc32" in checks and f.get("crc32"):
+        item["crc32"].update(_hex_values(f["crc32"]))
+    # A hash field may carry several accepted values, as a list or as
+    # the comma-separated string the schema spells out
+    for hash_type in ("md5", "sha1", "sha256"):
+        if hash_type in checks and f.get(hash_type):
+            val = f[hash_type]
+            values = val if isinstance(val, list) else str(val).split(",")
+            item[hash_type].update(
+                str(h).strip().lower() for h in values if str(h).strip()
+            )
+    # Adler32: stored as known_hash_adler32 field (not in validation: list
+    # for Dolphin, but support it in both forms for future profiles)
+    item["adler32"].update(_hex_values(f.get("known_hash_adler32") or f.get("adler32")))
+    if f.get("adler32_byteswap"):
+        item["adler32_byteswap"] = True
+
+
+def _expected_values(f: dict, checks: list[str]) -> dict:
+    """The values an entry's checks compare, for ground truth reporting."""
+    expected: dict = {}
+    if "size" in checks:
+        for key in ("size", "min_size", "max_size", "size_multiple"):
+            if f.get(key) is not None:
+                expected[key] = f[key]
+    for hash_type in ("crc32", "md5", "sha1", "sha256"):
+        if hash_type in checks and f.get(hash_type):
+            expected[hash_type] = f[hash_type]
+    adler_val_pe = f.get("known_hash_adler32") or f.get("adler32")
+    if adler_val_pe:
+        expected["adler32"] = adler_val_pe
+    for check in sorted(CONTENT_CHECKS & set(checks)):
+        expected[check] = f.get(check) or {}
+    return expected
+
+
+def _merge_per_emulator(item: dict, emu_name: str, f: dict, checks: list[str]) -> None:
+    # Per-emulator ground truth detail
+    pe = item["per_emulator"]
+    expected = _expected_values(f, checks)
+    if emu_name in pe:
+        # Merge checks from multiple file entries for same emulator
+        existing = pe[emu_name]
+        merged_checks = sorted(
+            set(existing["checks"]) | set(checks)
+        )
+        existing["checks"] = merged_checks
+        existing["expected"].update(expected)
+        if f.get("source_ref") and not existing["source_ref"]:
+            existing["source_ref"] = f.get("source_ref")
+    else:
+        pe[emu_name] = {
+            "checks": sorted(checks),
+            "source_ref": f.get("source_ref"),
+            "expected": expected,
+        }
+
+
+def _index_entry(index: dict[str, dict], emu_name: str, f: dict, checks: list[str]) -> None:
+    """Merge one checked profile entry into the index."""
+    fname = f.get("name", "")
+    if fname not in index:
+        index[fname] = _new_index_entry()
+    item = index[fname]
+    item["rules"].append(_entry_rule(emu_name, f, checks))
+    item["emulators"].add(emu_name)
+    # A warned check is never a rejection, so it stays out of the
+    # merged rejection rules.
+    warned = warned_checks(f, set(checks))
+    checks = [check for check in checks if check not in warned]
+    if not checks:
+        return
+    item["checks"].update(checks)
+    # Track non-reproducible crypto checks
+    item["crypto_only"].update(c for c in checks if c in _CRYPTO_CHECKS)
+    # Size checks
+    if "size" in checks:
+        _merge_sizes(item, f)
+    _merge_hashes(item, f, checks)
+    _merge_per_emulator(item, emu_name, f, checks)
+
+
 def _build_validation_index(profiles: dict) -> dict[str, dict]:
     """Build per-filename validation rules from emulator profiles.
 
@@ -264,116 +414,7 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
                 unchecked.add(slot)
                 continue
             checked.add(slot)
-            if fname not in index:
-                index[fname] = {
-                    "checks": set(),
-                    "sizes": set(),
-                    "min_size": None,
-                    "max_size": None,
-                    "size_multiples": set(),
-                    "crc32": set(),
-                    "md5": set(),
-                    "sha1": set(),
-                    "sha256": set(),
-                    "adler32": set(),
-                    "adler32_byteswap": False,
-                    "crypto_only": set(),
-                    "emulators": set(),
-                    "per_emulator": {},
-                    "rules": [],
-                }
-            index[fname]["rules"].append(_entry_rule(emu_name, f, checks))
-            index[fname]["emulators"].add(emu_name)
-            # A warned check is never a rejection, so it stays out of the
-            # merged rejection rules.
-            warned = warned_checks(f, set(checks))
-            checks = [check for check in checks if check not in warned]
-            if not checks:
-                continue
-            index[fname]["checks"].update(checks)
-            # Track non-reproducible crypto checks
-            index[fname]["crypto_only"].update(c for c in checks if c in _CRYPTO_CHECKS)
-            # Size checks
-            if "size" in checks:
-                raw_size = f.get("size")
-                if raw_size is not None:
-                    if isinstance(raw_size, list):
-                        index[fname]["sizes"].update(raw_size)
-                    else:
-                        index[fname]["sizes"].add(raw_size)
-                if f.get("min_size") is not None:
-                    cur = index[fname]["min_size"]
-                    index[fname]["min_size"] = (
-                        min(cur, f["min_size"]) if cur is not None else f["min_size"]
-                    )
-                if f.get("size_multiple"):
-                    index[fname]["size_multiples"].add(int(f["size_multiple"]))
-                if f.get("max_size") is not None:
-                    cur = index[fname]["max_size"]
-                    index[fname]["max_size"] = (
-                        max(cur, f["max_size"]) if cur is not None else f["max_size"]
-                    )
-            # Hash checks: collect all accepted hashes as sets (multiple valid
-            # versions of the same file, e.g. MT-32 ROM versions)
-            if "crc32" in checks and f.get("crc32"):
-                crc_val = f["crc32"]
-                crc_list = crc_val if isinstance(crc_val, list) else [crc_val]
-                for cv in crc_list:
-                    norm = str(cv).lower()
-                    if norm.startswith("0x"):
-                        norm = norm[2:]
-                    index[fname]["crc32"].add(norm)
-            # A hash field may carry several accepted values, as a list or as
-            # the comma-separated string the schema spells out
-            for hash_type in ("md5", "sha1", "sha256"):
-                if hash_type in checks and f.get(hash_type):
-                    val = f[hash_type]
-                    values = val if isinstance(val, list) else str(val).split(",")
-                    for h in values:
-                        if str(h).strip():
-                            index[fname][hash_type].add(str(h).strip().lower())
-            # Adler32: stored as known_hash_adler32 field (not in validation: list
-            # for Dolphin, but support it in both forms for future profiles)
-            adler_val = f.get("known_hash_adler32") or f.get("adler32")
-            for value in adler_val if isinstance(adler_val, list) else [adler_val] if adler_val else []:
-                norm = str(value).lower()
-                if norm.startswith("0x"):
-                    norm = norm[2:]
-                index[fname]["adler32"].add(norm)
-            if f.get("adler32_byteswap"):
-                index[fname]["adler32_byteswap"] = True
-            # Per-emulator ground truth detail
-            expected: dict = {}
-            if "size" in checks:
-                for key in ("size", "min_size", "max_size", "size_multiple"):
-                    if f.get(key) is not None:
-                        expected[key] = f[key]
-            for hash_type in ("crc32", "md5", "sha1", "sha256"):
-                if hash_type in checks and f.get(hash_type):
-                    expected[hash_type] = f[hash_type]
-            adler_val_pe = f.get("known_hash_adler32") or f.get("adler32")
-            if adler_val_pe:
-                expected["adler32"] = adler_val_pe
-            for check in sorted(CONTENT_CHECKS & set(checks)):
-                expected[check] = f.get(check) or {}
-            pe_entry = {
-                "checks": sorted(checks),
-                "source_ref": f.get("source_ref"),
-                "expected": expected,
-            }
-            pe = index[fname]["per_emulator"]
-            if emu_name in pe:
-                # Merge checks from multiple file entries for same emulator
-                existing = pe[emu_name]
-                merged_checks = sorted(
-                    set(existing["checks"]) | set(pe_entry["checks"])
-                )
-                existing["checks"] = merged_checks
-                existing["expected"].update(pe_entry["expected"])
-                if pe_entry["source_ref"] and not existing["source_ref"]:
-                    existing["source_ref"] = pe_entry["source_ref"]
-            else:
-                pe[emu_name] = pe_entry
+            _index_entry(index, emu_name, f, checks)
     for fname, emu_name, _path in sorted(checked & unchecked):
         index[fname]["rules"].append(_entry_rule(emu_name, {}, set()))
     # Convert sets to sorted tuples/lists for determinism
@@ -418,9 +459,11 @@ def _emulators_for_check(
         if check_type in emu_checks:
             result.append(emu)
         # adler32 is stored as known_hash, not always in validation list
-        if check_type == "adler32" and detail.get("expected", {}).get("adler32"):
-            if emu not in result:
-                result.append(emu)
+        if (
+            check_type == "adler32" and detail.get("expected", {}).get("adler32")
+            and emu not in result
+        ):
+            result.append(emu)
     return sorted(result)
 
 
@@ -433,8 +476,8 @@ def _merged_reason(reasons: list[str]) -> str:
     Raze lists three BLOOD.RFF sizes and the message named the first one
     alone. Reasons of one kind are merged into a single accepted list.
     """
-    parsed = [_REASON.match(reason) for reason in reasons]
-    if all(parsed) and len({(m.group(1), m.group(2)) for m in parsed}) == 1:
+    parsed = [m for m in (_REASON.match(reason) for reason in reasons) if m]
+    if len(parsed) == len(reasons) and len({(m.group(1), m.group(2)) for m in parsed}) == 1:
         accepted = sorted({v for m in parsed for v in m.group(3).split(",") if v},
                           key=lambda v: (len(v), v))
         return f"{parsed[0].group(1)}: got {parsed[0].group(2)}, accepted [{','.join(accepted)}]"
@@ -469,43 +512,17 @@ def check_file_validation(
     if not entry:
         return None
     if emulators is not None:
-        hashes: dict = {}
-        failures: dict[str, str] = {}
-        for emu in sorted(emulators):
-            rules = [r for r in entry.get("rules", []) if r["emulator"] == emu]
-            if not rules:
-                continue
-            reasons = [
-                _rule_failure(rule, local_path, filename, bios_dir, hashes, strict)
-                for rule in rules
-            ]
-            if all(reasons):
-                failures[emu] = _merged_reason(reasons)
-        if not failures:
-            return None
-        first = sorted(failures)[0]
-        return failures[first], sorted(failures)
+        return _per_emulator_failure(
+            entry, local_path, filename, bios_dir, emulators, strict,
+        )
     checks = entry["checks"]
     pe = entry.get("per_emulator", {})
 
     # Size checks: sizes is a set of accepted values
     if "size" in checks:
-        actual_size = os.path.getsize(local_path)
-        if entry["sizes"] and actual_size not in entry["sizes"]:
-            expected = ",".join(str(s) for s in sorted(entry["sizes"]))
-            emus = _emulators_for_check("size", pe)
-            return f"size mismatch: got {actual_size}, accepted [{expected}]", emus
-        if entry["min_size"] is not None and actual_size < entry["min_size"]:
-            emus = _emulators_for_check("size", pe)
-            return f"size too small: min {entry['min_size']}, got {actual_size}", emus
-        if entry["max_size"] is not None and actual_size > entry["max_size"]:
-            emus = _emulators_for_check("size", pe)
-            return f"size too large: max {entry['max_size']}, got {actual_size}", emus
-        multiples = entry.get("size_multiples") or set()
-        if multiples and all(actual_size % m for m in multiples):
-            emus = _emulators_for_check("size", pe)
-            accepted = ",".join(str(m) for m in sorted(multiples))
-            return f"size mismatch: got {actual_size}, accepted multiples of [{accepted}]", emus
+        refused = _merged_size_failure(entry, local_path, pe)
+        if refused:
+            return refused
 
     # A content test passes when one of the entries declaring it accepts
     # the file, each read as its own code reads it.
@@ -516,34 +533,9 @@ def check_file_validation(
         ):
             return _CONTENT_REASONS[check], _emulators_for_check(check, pe)
 
-    # Hash checks: compute once, reuse for all hash types.
-    # Each hash field is a set of accepted values (multiple valid ROM versions).
-    need_hashes = any(
-        h in checks and entry.get(h) for h in ("crc32", "md5", "sha1", "sha256")
-    ) or entry.get("adler32")
-    if need_hashes:
-        hashes = compute_hashes(local_path)
-        for hash_type in ("crc32", "md5", "sha1", "sha256"):
-            if hash_type in checks and entry[hash_type]:
-                if hashes[hash_type].lower() not in entry[hash_type]:
-                    expected = ",".join(sorted(entry[hash_type]))
-                    emus = _emulators_for_check(hash_type, pe)
-                    return (
-                        f"{hash_type} mismatch: got {hashes[hash_type]}, "
-                        f"accepted [{expected}]",
-                        emus,
-                    )
-        if entry["adler32"]:
-            actual_adler = hashes["adler32"].lower()
-            if entry.get("adler32_byteswap"):
-                actual_adler = _adler32_byteswapped(local_path)
-            if actual_adler not in entry["adler32"]:
-                expected = ",".join(sorted(entry["adler32"]))
-                emus = _emulators_for_check("adler32", pe)
-                return (
-                    f"adler32 mismatch: got 0x{actual_adler}, accepted [{expected}]",
-                    emus,
-                )
+    refused = _merged_hash_failure(entry, local_path, checks, pe)
+    if refused:
+        return refused
 
     # Signature/crypto checks (3DS RSA, AES)
     if entry["crypto_only"]:
@@ -554,6 +546,89 @@ def check_file_validation(
             emus = sorted(entry.get("emulators", []))
             return crypto_reason, emus
 
+    return None
+
+
+def _per_emulator_failure(
+    entry: dict, local_path: str, filename: str, bios_dir: str,
+    emulators: set[str], strict: bool,
+) -> tuple[str, list[str]] | None:
+    """Each core judges the file by its own entries for the name."""
+    hashes: dict = {}
+    failures: dict[str, str] = {}
+    for emu in sorted(emulators):
+        rules = [r for r in entry.get("rules", []) if r["emulator"] == emu]
+        if not rules:
+            continue
+        reasons = [
+            _rule_failure(rule, local_path, filename, bios_dir, hashes, strict)
+            for rule in rules
+        ]
+        refused = [reason for reason in reasons if reason]
+        if len(refused) == len(reasons):
+            failures[emu] = _merged_reason(refused)
+    if not failures:
+        return None
+    first = sorted(failures)[0]
+    return failures[first], sorted(failures)
+
+
+def _merged_size_failure(
+    entry: dict, local_path: str, pe: dict[str, dict],
+) -> tuple[str, list[str]] | None:
+    actual_size = os.path.getsize(local_path)
+    if entry["sizes"] and actual_size not in entry["sizes"]:
+        expected = ",".join(str(s) for s in sorted(entry["sizes"]))
+        emus = _emulators_for_check("size", pe)
+        return f"size mismatch: got {actual_size}, accepted [{expected}]", emus
+    if entry["min_size"] is not None and actual_size < entry["min_size"]:
+        emus = _emulators_for_check("size", pe)
+        return f"size too small: min {entry['min_size']}, got {actual_size}", emus
+    if entry["max_size"] is not None and actual_size > entry["max_size"]:
+        emus = _emulators_for_check("size", pe)
+        return f"size too large: max {entry['max_size']}, got {actual_size}", emus
+    multiples = entry.get("size_multiples") or set()
+    if multiples and all(actual_size % m for m in multiples):
+        emus = _emulators_for_check("size", pe)
+        accepted = ",".join(str(m) for m in sorted(multiples))
+        return f"size mismatch: got {actual_size}, accepted multiples of [{accepted}]", emus
+    return None
+
+
+def _merged_hash_failure(
+    entry: dict, local_path: str, checks: list[str], pe: dict[str, dict],
+) -> tuple[str, list[str]] | None:
+    # Hash checks: compute once, reuse for all hash types.
+    # Each hash field is a set of accepted values (multiple valid ROM versions).
+    need_hashes = any(
+        h in checks and entry.get(h) for h in ("crc32", "md5", "sha1", "sha256")
+    ) or entry.get("adler32")
+    if not need_hashes:
+        return None
+    hashes = compute_hashes(local_path)
+    for hash_type in ("crc32", "md5", "sha1", "sha256"):
+        if (
+            hash_type in checks and entry[hash_type]
+            and hashes[hash_type].lower() not in entry[hash_type]
+        ):
+            expected = ",".join(sorted(entry[hash_type]))
+            emus = _emulators_for_check(hash_type, pe)
+            return (
+                f"{hash_type} mismatch: got {hashes[hash_type]}, "
+                f"accepted [{expected}]",
+                emus,
+            )
+    if entry["adler32"]:
+        actual_adler = hashes["adler32"].lower()
+        if entry.get("adler32_byteswap"):
+            actual_adler = _adler32_byteswapped(local_path)
+        if actual_adler not in entry["adler32"]:
+            expected = ",".join(sorted(entry["adler32"]))
+            emus = _emulators_for_check("adler32", pe)
+            return (
+                f"adler32 mismatch: got 0x{actual_adler}, accepted [{expected}]",
+                emus,
+            )
     return None
 
 
@@ -784,6 +859,37 @@ def deliverable(entries: list[dict], standalone: bool, platform: str = "") -> li
     ]
 
 
+def _platform_accepted(file_entry: dict, platform_digest: str) -> set[str]:
+    """The values of the digest the frontend compares that the entry declares."""
+    declared = file_entry.get(platform_digest) or ""
+    if platform_digest == "md5":
+        return set(parse_md5_list(declared))
+    if isinstance(declared, str) and declared:
+        return {declared.lower()}
+    if isinstance(declared, list):
+        return {str(value).lower() for value in declared}
+    return set()
+
+
+def _variant_candidates(expected: dict, indexes: dict, fname: str) -> Iterator[str]:
+    """The sha1 of each held file that may stand for a name, best evidence first."""
+    # Sorted: the index holds sets, whose order follows the per-process
+    # string hash, and the first passing candidate is the one shipped.
+    for hash_type, index_key in (
+        ("sha1", None), ("md5", "by_md5"), ("crc32", "by_crc32"), ("sha256", "by_sha256"),
+    ):
+        for value in sorted(expected.get(hash_type) or []):
+            if index_key is None:
+                yield value
+                continue
+            found = indexes.get(index_key, {}).get(value)
+            if isinstance(found, str):
+                yield found
+            elif isinstance(found, list):
+                yield from found
+    yield from indexes.get("by_name", {}).get(fname, [])
+
+
 def find_validated_variant(
     file_entry: dict,
     db: dict,
@@ -811,38 +917,14 @@ def find_validated_variant(
     if platform_digest:
         if file_entry.get("zipped_file"):
             return None
-        declared = file_entry.get(platform_digest) or ""
-        if platform_digest == "md5":
-            accepted = set(parse_md5_list(declared))
-        elif isinstance(declared, str) and declared:
-            accepted = {declared.lower()}
-        elif isinstance(declared, list):
-            accepted = {str(value).lower() for value in declared}
+        accepted = _platform_accepted(file_entry, platform_digest)
 
     files_db = db.get("files", {})
     indexes = db.get("indexes", {})
     current_real = os.path.realpath(current_path)
     seen: set[str] = set()
 
-    def candidates() -> Iterator[str]:
-        # Sorted: the index holds sets, whose order follows the per-process
-        # string hash, and the first passing candidate is the one shipped.
-        expected = validation_index[fname]
-        for hash_type, index_key in (
-            ("sha1", None), ("md5", "by_md5"), ("crc32", "by_crc32"), ("sha256", "by_sha256"),
-        ):
-            for value in sorted(expected.get(hash_type) or []):
-                if index_key is None:
-                    yield value
-                    continue
-                found = indexes.get(index_key, {}).get(value)
-                if isinstance(found, str):
-                    yield found
-                elif isinstance(found, list):
-                    yield from found
-        yield from indexes.get("by_name", {}).get(fname, [])
-
-    for sha1 in candidates():
+    for sha1 in _variant_candidates(validation_index[fname], indexes, fname):
         entry = files_db.get(sha1) or {}
         path = entry.get("path", "")
         if not path or not os.path.exists(path):
@@ -900,7 +982,7 @@ def agnostic_substitute(
 
 
 def frontend_digest_matches(
-    file_entry: dict, local_path: str, algorithm: str, rule: str = ""
+    file_entry: dict, local_path: str | None, algorithm: str, rule: str = ""
 ) -> bool:
     """Whether the frontend's own digest accepts the file.
 
@@ -947,9 +1029,9 @@ def digest_verdict(
         # RomM reads an absent size as 0: such an entry never verifies.
         if size != int(file_entry.get("size") or 0):
             return False
-        actual = hashes()
+        digests = hashes()
         return any(
-            actual[field].lower() == str(file_entry[field]).strip().lower()
+            digests[field].lower() == str(file_entry[field]).strip().lower()
             for field in ("md5", "sha1", "crc32")
             if file_entry.get(field)
         )
@@ -970,7 +1052,9 @@ def digest_verdict(
     if not composite_only and actual in declared:
         return True
     member_digest = composite()
-    return bool(member_digest) and member_digest.lower() in declared
+    if not member_digest:
+        return False
+    return member_digest.lower() in declared
 
 
 def inner_rom_check(file_entry: dict, local_path: str) -> str:
@@ -1060,6 +1144,12 @@ def _owners_of(destination: str, name: str, owners: dict) -> set[str]:
     return {emu for tail, emu in matching if len(tail) == longest}
 
 
+class Judges(TypedDict, total=False):
+    """The cores that judge a file in validated_choice, each by its own entries."""
+
+    emulators: set[str] | None
+
+
 def validated_choice(
     file_entry: dict,
     local_path: str | None,
@@ -1069,7 +1159,7 @@ def validated_choice(
     platform_digest: str | None,
     destination: str = "",
     owners: dict | None = None,
-    emulators: set[str] | None = None,
+    **judging: Unpack[Judges],
 ) -> tuple[str | None, str | None]:
     """The file a platform destination ships, and the disagreement if any.
 
@@ -1079,6 +1169,10 @@ def validated_choice(
     another emulator declares more precisely is that emulator's: ZEsarUX's
     48 KB cpc6128.rom check has no say over ep128emu/roms/cpc6128.rom.
     """
+    unknown = sorted(set(judging) - set(Judges.__annotations__))
+    if unknown:
+        raise TypeError(f"validated_choice() got an unexpected keyword argument '{unknown[0]}'")
+    emulators = judging.get("emulators")
     if not local_path or not validation_index:
         return local_path, None
     name = file_entry.get("name", "")
@@ -1093,6 +1187,7 @@ def validated_choice(
         # The cores that read this destination judge it, each by its own
         # entries.
         judges = owning & set(rules["emulators"])
+
     def check(path: str, strict: bool) -> tuple[str, list[str]] | None:
         return check_file_validation(path, name, validation_index, bios_dir, judges, strict)
 
@@ -1151,8 +1246,8 @@ def slot_index(files: list) -> dict[tuple[str, str], list[dict]]:
     matches them: one pass, then one lookup per extra."""
     index: dict[tuple[str, str], list[dict]] = {}
     for entry in files or []:
-        if isinstance(entry, dict):
-            name = entry.get("name")
+        if isinstance(entry, dict) and isinstance(entry.get("name"), str):
+            name = entry["name"]
             index.setdefault((name, entry.get("path") or name), []).append(entry)
     return index
 

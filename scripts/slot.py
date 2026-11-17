@@ -193,7 +193,7 @@ def resolve_slot_drops(
             keep.update(dest for dest, _p in candidates)
             continue
 
-        best = min(p for _d, p in candidates)
+        best = min(p for _d, p in candidates if p is not None)
         winners = [dest for dest, p in candidates if p == best]
         if len(winners) != 1:
             undecidable.append(f"{group_id}|{','.join(tier)}" if tier else group_id)

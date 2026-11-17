@@ -53,7 +53,13 @@ _SEPARATOR = re.compile(r"\s*(?:,\s*(?:and\s+)?|and\s+)")
 _EXAMPLES = re.compile(r"\b(?:e\.?g\b|for example|for instance|such as|like)\W*$", re.I)
 
 
-class Exporter(BaseExporter):
+def _aliases(fe: NativeFile) -> list[object]:
+    """The other names a file is declared under."""
+    aliases = fe.native("aliases", []) or []
+    return list(aliases) if isinstance(aliases, (list, tuple)) else []
+
+
+class Exporter(BaseExporter[str]):
     """Write RetroPie's scriptmodules, corrected."""
 
     @staticmethod
@@ -332,107 +338,123 @@ class Exporter(BaseExporter):
         systems_of: dict[str, set[str]] = {}
         for system in systems.values():
             for fe in system.files:
-                for name in [fe.name, *(fe.native("aliases", []) or [])]:
+                for name in [fe.name, *_aliases(fe)]:
                     systems_of.setdefault(str(name).lower(), set()).add(fe.native_system)
-        known = set(systems_of)
         self._skipped: dict[str, list[str]] = {}
         # Rewritten, with a file of a system no clause lists left out.
         self._partial: list[str] = []
         self._named: set[int] = set()
         produced: dict[str, str] = {}
 
-        def skip(reason: str, module: str) -> None:
-            self._skipped.setdefault(reason, []).append(module)
-
         for relative, (module_id, help_text) in sorted(modules.items()):
             build = "libretro" if module_id.startswith("lr-") else "standalone"
             core = index[build].get(module_id.removeprefix("lr-").replace("-", "_").lower())
             files = by_core.get(core or "", [])
             if not files:
-                skip("which no profiled core matches", module_id)
+                self._skip("which no profiled core matches", module_id)
                 continue
-
-            listed = self._listed(help_text)
-            unknown = sorted(listed - known)
-            if unknown:
-                skip(
-                    f"whose help text names a file no profile documents yet ({', '.join(unknown)})",
-                    module_id,
-                )
+            new_help = self._new_help(module_id, help_text, files, core, systems_of)
+            if new_help is None:
                 continue
-
-            # A file already listed under one of its other names is not
-            # missing: proposing the primary would name the same bytes twice.
-            # A system RetroPie does not have is no package's: lr-geargrafx
-            # adds pcengine only, not the LaserActive its core also reads.
-            candidates = [
-                fe
-                for fe in files
-                if not fe.foreign_system
-                and self._required_for(fe, core)
-                and not (
-                    {fe.name.lower()}
-                    | {str(a).lower() for a in (fe.native("aliases", []) or [])}
-                )
-                & listed
-            ]
-            filled = {
-                slot
-                for fe in files
-                if ({fe.name.lower()}
-                    | {str(a).lower() for a in (fe.native("aliases", []) or [])}) & listed
-                and (slot := self._slot_of(fe)) is not None
-            }
-            proposed = self._one_per_slot(candidates, filled)
-            if not proposed:
-                continue
-
-            # A file joins the list of its own system: the clause whose
-            # names the platform files under that system, and only one.
-            clauses = self._clauses(help_text)
-            homes: dict[int, list[NativeFile]] = {}
-            homeless = False
-            for fe in proposed:
-                owners = [
-                    i for i, (_, names, _) in enumerate(clauses)
-                    if fe.native_system in set().union(
-                        *(systems_of.get(n.lower(), set()) for n in names))
-                ]
-                if len(owners) == 1 and clauses[owners[0]][2] is not None:
-                    homes.setdefault(owners[0], []).append(fe)
-                else:
-                    homeless = True
-            # No enumeration of that system to extend, and a sentence we
-            # would have to write ourselves is a documentation change, not a
-            # correction. With nothing placed the package is left as is.
-            if not homes:
-                skip("whose help text lists no files of that system to add to", module_id)
-                continue
-
-            added = sum(len(self._in_search_order(fes)) for fes in homes.values())
-            if len(listed) + added > self._longest:
-                skip("whose help text would grow longer than any it has today", module_id)
-                continue
-
-            new_help = help_text
-            for i in sorted(homes, reverse=True):
-                start, _, enumeration = clauses[i]
-                missing = self._in_search_order(homes[i])
-                new_help = self._extended(new_help, enumeration, missing)
-                if len(enumeration[2]) + len(missing) > 1:
-                    new_help = new_help[:start] + _BIOS_NOUN.sub(
-                        r"\1 files", new_help[start:enumeration[0]], count=1
-                    ) + new_help[enumeration[0]:]
-                self._named.update(id(fe) for fe in homes[i])
             produced[relative] = originals[relative].replace(
                 f'rp_module_help="{help_text}"',
                 f'rp_module_help="{new_help}"',
                 1,
             )
-            if homeless:
-                self._partial.append(module_id)
 
         return produced
+
+    def _skip(self, reason: str, module: str) -> None:
+        self._skipped.setdefault(reason, []).append(module)
+
+    def _new_help(
+        self,
+        module_id: str,
+        help_text: str,
+        files: list[NativeFile],
+        core: str | None,
+        systems_of: dict[str, set[str]],
+    ) -> str | None:
+        """The help sentence with the files it lacks, None when left as is."""
+        listed = self._listed(help_text)
+        unknown = sorted(listed - set(systems_of))
+        if unknown:
+            self._skip(
+                f"whose help text names a file no profile documents yet ({', '.join(unknown)})",
+                module_id,
+            )
+            return None
+
+        # A file already listed under one of its other names is not
+        # missing: proposing the primary would name the same bytes twice.
+        # A system RetroPie does not have is no package's: lr-geargrafx
+        # adds pcengine only, not the LaserActive its core also reads.
+        candidates = [
+            fe
+            for fe in files
+            if not fe.foreign_system
+            and self._required_for(fe, core)
+            and not (
+                {fe.name.lower()}
+                | {str(a).lower() for a in _aliases(fe)}
+            )
+            & listed
+        ]
+        filled = {
+            slot
+            for fe in files
+            if ({fe.name.lower()}
+                | {str(a).lower() for a in _aliases(fe)}) & listed
+            and (slot := self._slot_of(fe)) is not None
+        }
+        proposed = self._one_per_slot(candidates, filled)
+        if not proposed:
+            return None
+
+        # A file joins the list of its own system: the clause whose
+        # names the platform files under that system, and only one.
+        clauses = self._clauses(help_text)
+        homes: dict[int, list[NativeFile]] = {}
+        enumerations: dict[int, tuple[int, int, list[str]]] = {}
+        homeless = False
+        for fe in proposed:
+            owners = [
+                i for i, (_, names, _) in enumerate(clauses)
+                if fe.native_system in set().union(
+                    *(systems_of.get(n.lower(), set()) for n in names))
+            ]
+            enumeration = clauses[owners[0]][2] if len(owners) == 1 else None
+            if enumeration is not None:
+                homes.setdefault(owners[0], []).append(fe)
+                enumerations[owners[0]] = enumeration
+            else:
+                homeless = True
+        # No enumeration of that system to extend, and a sentence we
+        # would have to write ourselves is a documentation change, not a
+        # correction. With nothing placed the package is left as is.
+        if not homes:
+            self._skip("whose help text lists no files of that system to add to", module_id)
+            return None
+
+        added = sum(len(self._in_search_order(fes)) for fes in homes.values())
+        if len(listed) + added > self._longest:
+            self._skip("whose help text would grow longer than any it has today", module_id)
+            return None
+
+        new_help = help_text
+        for i in sorted(homes, reverse=True):
+            start = clauses[i][0]
+            enumeration = enumerations[i]
+            missing = self._in_search_order(homes[i])
+            new_help = self._extended(new_help, enumeration, missing)
+            if len(enumeration[2]) + len(missing) > 1:
+                new_help = new_help[:start] + _BIOS_NOUN.sub(
+                    r"\1 files", new_help[start:enumeration[0]], count=1
+                ) + new_help[enumeration[0]:]
+            self._named.update(id(fe) for fe in homes[i])
+        if homeless:
+            self._partial.append(module_id)
+        return new_help
 
     def lands(self, fe: NativeFile) -> bool:
         """An addition lands only where a help sentence now names it.

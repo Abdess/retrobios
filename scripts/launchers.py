@@ -568,6 +568,16 @@ def launcher_unproven(
     return rows
 
 
+def _place_paths(name: str, directories: list[str] | None) -> tuple[str, ...]:
+    """The paths a name is opened at: under each directory, or bare when the
+    record anchors it nowhere."""
+    if directories is None:
+        return (name,)
+    return tuple(
+        sanitize_pack_path(f"{d}/{name}" if d else name) for d in directories
+    )
+
+
 def launcher_places(
     config: dict, profiles: Mapping[str, dict] | None = None
 ) -> list[LauncherPlace]:
@@ -583,14 +593,6 @@ def launcher_places(
         if not names or directories == []:
             continue
         anchored = directories is not None
-
-        def paths_of(name: str) -> tuple[str, ...]:
-            if not anchored:
-                return (name,)
-            return tuple(
-                sanitize_pack_path(f"{d}/{name}" if d else name) for d in directories
-            )
-
         common = {
             "emulator": str(record.get("emulator", "")),
             "build": str(record.get("build", "")),
@@ -607,8 +609,10 @@ def launcher_places(
         settings = name_settings(record, names)
         if kind == "names_searched":
             # Each directory in turn, every name in it.
-            depth = len(directories) if anchored else 1
-            ordered = tuple(paths_of(name)[i] for i in range(depth) for name in names)
+            depth = len(directories) if directories is not None else 1
+            ordered = tuple(
+                _place_paths(name, directories)[i] for i in range(depth) for name in names
+            )
             places.append(LauncherPlace(
                 paths=ordered, passes_to=str(record.get("passes_to") or ""), **common
             ))
@@ -616,7 +620,9 @@ def launcher_places(
         # A fixed name is the one file passed, and a core option offers
         # each value as the file the user picks: one place per name.
         places.extend(
-            LauncherPlace(paths=paths_of(name), passes_to=settings[name], **common)
+            LauncherPlace(
+                paths=_place_paths(name, directories), passes_to=settings[name], **common
+            )
             for name in names
         )
     return places
@@ -852,8 +858,8 @@ def handed_directories(
                         if (handle := normalize_handle(token, home)) and handle != directory
                     ) | ini_keys(passes_to)
                 folder = _folder_in_bios(part, base)
-                for emulator in (e.strip() for e in str(record.get("emulator", "")).split(",")):
-                    found.append(HandedDirectory(
+                found.extend(
+                    HandedDirectory(
                         emulator=emulator,
                         folder=folder,
                         directory=directory,
@@ -868,7 +874,9 @@ def handed_directories(
                         holds_declared=bool(folder) and any(
                             d.startswith(f"{(folder or '').lower()}/") for d in declared
                         ),
-                    ))
+                    )
+                    for emulator in (e.strip() for e in str(record.get("emulator", "")).split(","))
+                )
     return found
 
 
@@ -999,10 +1007,12 @@ def executed_files(config: dict) -> list[ExecutedFile]:
                 place = (EMULATORS_TREE, sanitize_pack_path(f"{emulator_folder}/{name}"))
             else:
                 place = None
-            for emulator in (e.strip() for e in str(record.get("emulator", "")).split(",")):
-                found.append(ExecutedFile(
+            found.extend(
+                ExecutedFile(
                     emulator, name.rsplit("/", 1)[-1], place, str(record.get("source_ref", ""))
-                ))
+                )
+                for emulator in (e.strip() for e in str(record.get("emulator", "")).split(","))
+            )
     return found
 
 
@@ -1440,6 +1450,26 @@ class LauncherLayer:
         pool = self.declared_names_folded if place.case_insensitive else self.declared_names
         return bool(place.basenames() & pool)
 
+    def _add_unoffered(
+        self,
+        by_layout: dict[tuple[str, bool], list[tuple[dict, dict]]],
+        offered: set[int],
+        resolve_held: Callable[[dict], dict | None],
+    ) -> None:
+        """The entries the report left out, each answering only through a
+        launcher's setting or extended name."""
+        for layout, members in self._unoffered.items():
+            for entry, report in members:
+                if id(entry) in offered:
+                    continue
+                if "<" not in str(entry.get("name", "")):
+                    report["in_repo"] = resolve_held(report) is not None
+                report["unoffered"] = True
+                if (*layout, str(entry.get("name", "")),
+                        str(entry.get("path") or "")) in self._declared_elsewhere:
+                    report["declared_elsewhere"] = True
+                by_layout.setdefault(layout, []).append((entry, report))
+
     def settle(
         self,
         candidates: list[tuple[str, bool, dict, dict]],
@@ -1470,18 +1500,9 @@ class LauncherLayer:
         by_layout: dict[tuple[str, bool], list[tuple[dict, dict]]] = {}
         for emulator, standalone, entry, report in candidates:
             by_layout.setdefault((emulator, standalone), []).append((entry, report))
-        offered = {id(entry) for _e, _s, entry, _r in candidates}
-        for layout, members in self._unoffered.items():
-            for entry, report in members:
-                if id(entry) in offered:
-                    continue
-                if "<" not in str(entry.get("name", "")):
-                    report["in_repo"] = resolve_held(report) is not None
-                report["unoffered"] = True
-                if (*layout, str(entry.get("name", "")),
-                        str(entry.get("path") or "")) in self._declared_elsewhere:
-                    report["declared_elsewhere"] = True
-                by_layout.setdefault(layout, []).append((entry, report))
+        self._add_unoffered(
+            by_layout, {id(entry) for _e, _s, entry, _r in candidates}, resolve_held,
+        )
         placed: set[str] = set()
         for (emulator, standalone), members in sorted(by_layout.items()):
             for place in self.places_for(emulator, standalone):
@@ -1621,9 +1642,9 @@ class LauncherLayer:
                 continue
             if not report.get("in_repo"):
                 continue
-            record = resolve_held(report)
-            if record is not None:
-                return report, record
+            held = resolve_held(report)
+            if held is not None:
+                return report, held
         for candidate, report in matched:
             if key not in candidate.names or not set_by(candidate.entry, place.passes_to):
                 continue
