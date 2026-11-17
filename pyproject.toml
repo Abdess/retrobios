@@ -90,6 +90,7 @@ select = ["E", "F", "W", "B", "C90", "SIM", "PERF", "UP", "RET", "PIE", "PLR09",
 ignore = [
     "E501",    # long lines are wrapped by hand where it reads better
     "UP006", "UP007", "UP035", "UP045",  # install.py keeps 3.8 spellings
+    "UP036",   # the runtime floor guards (sys.version_info < (3, 9)) are the point
     "SIM300",  # an ALL_CAPS name is not always a constant (_SYSTEM_ROOT)
     "SIM108",  # a ternary is not always clearer than an if block
     "PERF203", # try in a loop is the per-item error report
