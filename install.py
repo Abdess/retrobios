@@ -29000,27 +29000,35 @@ def _outcome_head(state: TuiState, counts: _OutcomeCounts) -> tuple[str, str]:
                                         counts.left)
     errors, total = counts.errors, counts.total
     if summary.get("interrupted") or state.code == 130:
-        return "Stopped", (f"Stopped: {installed} of {total} installed, run again to finish."
-                           if total
-                           else "Stopped. Run again to carry on: what is done stays done.")
-    if left and installed:
-        return ("Finished with files missing",
-                f"{installed} installed, {left} not fetched ({offline_named()}){errors}.")
-    if left:
-        return ("Nothing installed",
-                f"Nothing was installed: {_plural(left, 'file')} not fetched "
+        title = "Stopped"
+        head = (f"Stopped: {installed} of {total} installed, run again to finish."
+                if total else "Stopped. Run again to carry on: what is done stays done.")
+    elif left and installed:
+        title = "Finished with files missing"
+        head = f"{installed} installed, {left} not fetched ({offline_named()}){errors}."
+    elif left:
+        title = "Nothing installed"
+        head = (f"Nothing was installed: {_plural(left, 'file')} not fetched "
                 f"({offline_named()}){errors}.")
-    if failed and installed:
-        return "Finished with errors", f"{installed} installed, {len(failed)} failed."
-    if failed:
-        return "Nothing installed", f"Nothing was installed: {_plural(len(failed), 'file')} failed."
-    if not summary and counts.space:
-        return "Not enough space", counts.space
-    if not summary:
-        return "Stopped", f"The installer stopped with code {state.code}."
-    if installed:
-        return "Done", _done_head(state, counts)
-    return "Done", EVERYTHING_IN_PLACE
+    elif failed and installed:
+        title = "Finished with errors"
+        head = f"{installed} installed, {len(failed)} failed."
+    elif failed:
+        title = "Nothing installed"
+        head = f"Nothing was installed: {_plural(len(failed), 'file')} failed."
+    elif not summary and counts.space:
+        title = "Not enough space"
+        head = counts.space
+    elif not summary:
+        title = "Stopped"
+        head = f"The installer stopped with code {state.code}."
+    elif installed:
+        title = "Done"
+        head = _done_head(state, counts)
+    else:
+        title = "Done"
+        head = EVERYTHING_IN_PLACE
+    return title, head
 
 
 def _outcome_counted(state: TuiState, counts: _OutcomeCounts, title: str,
