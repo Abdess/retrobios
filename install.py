@@ -17823,11 +17823,8 @@ def say_raw_errors(verbose: bool) -> None:
         _RAW_ERRORS.clear()
 
 
-def main() -> None:
-    """Entry point."""
-    _INVOCATION.os_type = detect_os()
-    parser = build_parser()
-    args = parser.parse_args()
+def _main_settle(args: argparse.Namespace) -> None:
+    """Options that set others, and the record of the command."""
     say_raw_errors(args.verbose)
     if args.cores_dir:
         args.installed_cores = True
@@ -17843,6 +17840,10 @@ def main() -> None:
         # command naming it fails once the screen is gone.
         _INVOCATION.options = [option for option in _INVOCATION.options
                                if option[0] != "--manifest"]
+
+
+def _main_check_values(parser: argparse.ArgumentParser, args: argparse.Namespace) -> None:
+    """Refuse values out of range and options that ask for two things."""
     if not 1 <= args.jobs <= 32:
         parser.error("--jobs must be between 1 and 32")
     if args.region:
@@ -17867,10 +17868,14 @@ def main() -> None:
     if args.required_only and args.for_games is None:
         parser.error("--required-only applies to --for-games: the list alone does not "
                      "say which files a game cannot start without")
-    if args.for_games is not None:
-        if (args.list_platforms or args.list_targets or args.list_systems
-                or args.list_cores or args.list_emulators):
-            parser.error("--for-games narrows an install, not a listing")
+    if args.for_games is not None and (
+            args.list_platforms or args.list_targets or args.list_systems
+            or args.list_cores or args.list_emulators):
+        parser.error("--for-games narrows an install, not a listing")
+
+
+def _main_check_listings(parser: argparse.ArgumentParser, args: argparse.Namespace) -> None:
+    """Refuse two listings, or a listing with an option it does not read."""
     # Applied or refused, never ignored: a run prints one list, and the
     # narrowing options apply to --list-systems and --list-cores only, past
     # --target and --installed-cores, which --list-emulators also reads.
@@ -17883,8 +17888,9 @@ def main() -> None:
                      "one at a time")
     if listings and listings[0] in ("--list-platforms", "--list-targets",
                                     "--list-emulators"):
-        unread = (("--system", args.system), ("--core", args.core),
-                  ("--region", args.region), ("--emulator", args.emulator))
+        unread: tuple[tuple[str, object], ...] = (
+            ("--system", args.system), ("--core", args.core),
+            ("--region", args.region), ("--emulator", args.emulator))
         if listings[0] != "--list-emulators":
             unread += (("--target", args.target), ("--every-board", args.every_board),
                        ("--installed-cores", args.installed_cores))
@@ -17894,6 +17900,11 @@ def main() -> None:
         if given:
             parser.error(f"{listings[0]} prints the whole list, which {given} "
                          "does not narrow")
+
+
+def _main_check_declared_only(parser: argparse.ArgumentParser,
+                              args: argparse.Namespace) -> None:
+    """Refuse --declared-only with an option it leaves without effect."""
     if args.declared_only:
         # Applied or refused, never ignored.
         for given, reason in (
@@ -17911,22 +17922,10 @@ def main() -> None:
         ):
             if given:
                 parser.error(reason)
-    _check_expert(parser, args)
-    if args.tui:
-        reason = tui_blocker(args)
-        if reason:
-            # The reason alone: fourteen lines of usage hid it.
-            print(f"{parser.prog}: error: --tui cannot open the full-screen interface "
-                  f"here: {reason}", file=sys.stderr)
-            sys.exit(2)
-    _check_actions(parser, args)
-    _check_pack(parser, args)
-    if args.restore is not None:
-        _run_action(args, lambda given: restore_kept(given.restore, given.dry_run))
-    if args.delete_backup is not None:
-        _run_action(args, run_delete_backup)
-    if args.every_board and args.target:
-        parser.error("--every-board installs every board, and --target names one")
+
+
+def _main_check_add_app(parser: argparse.ArgumentParser, args: argparse.Namespace) -> None:
+    """Refuse --add-app where the run writes or downloads nothing."""
     if args.add_app:
         # Applied or refused, never ignored.
         for given, reason in (
@@ -17943,6 +17942,10 @@ def main() -> None:
         ):
             if given:
                 parser.error(reason)
+
+
+def _main_check_offline(parser: argparse.ArgumentParser, args: argparse.Namespace) -> None:
+    """Record --offline, and refuse --target where no core list can be read."""
     if args.offline:
         # The runs the full-screen interface starts read it from here, and
         # the words name the option given.
@@ -17959,10 +17962,10 @@ def main() -> None:
         # of a --manifest (targets/<platform>.json).
         parser.error(f"--target needs a core list, which {offline_named()} does not fetch: "
                      "give --from-pack, or --manifest with targets/<platform>.json beside it")
-    install_bounded_opener()
-    if args.remove or args.backups:
-        _open_local_sources(args)
-        _run_action(args, run_removal if args.remove else run_backups)
+
+
+def _main_check_sources(parser: argparse.ArgumentParser, args: argparse.Namespace) -> None:
+    """Refuse a source of files given with a listing that reads none."""
     if getattr(args, "from") and (
         args.list_platforms or args.list_targets or args.list_systems
         or args.list_cores or args.list_emulators
@@ -17976,6 +17979,30 @@ def main() -> None:
     if args.no_game_data and (args.list_platforms or args.list_targets):
         parser.error("--no-game-data narrows a file list, not --list-platforms "
                      "or --list-targets")
+
+
+def _main_run_events(args: argparse.Namespace) -> None:
+    """Run with --events, the run framed by start and end."""
+    # The events own stdout. The text a person reads goes to stderr, so a
+    # program never has to tell one from the other.
+    args.no_input = True
+    EVENTS.open(sys.stdout)
+    sys.stdout = sys.stderr
+    EVENTS.emit("start", schema=EVENT_SCHEMA, installer=installer_id(),
+                mode=_event_mode(args))
+    try:
+        _run(args)
+    except SystemExit as exc:
+        EVENTS.emit("end", code=_event_exit_code(exc.code))
+        raise
+    except KeyboardInterrupt:
+        EVENTS.emit("end", code=130)
+        raise
+    EVENTS.emit("end", code=0)
+
+
+def _main_dispatch(args: argparse.Namespace) -> None:
+    """Open the full screen, or run line by line, with events or JSON."""
     # The screens have no choice for --declared-only: the questions ask the
     # rest, and the run keeps the platform's own list.
     # Nor for --source truth and --find, which choose the files themselves.
@@ -17991,22 +18018,7 @@ def main() -> None:
         if said:
             print(fold_line(said))
     if args.events:
-        # The events own stdout. The text a person reads goes to stderr, so a
-        # program never has to tell one from the other.
-        args.no_input = True
-        EVENTS.open(sys.stdout)
-        sys.stdout = sys.stderr
-        EVENTS.emit("start", schema=EVENT_SCHEMA, installer=installer_id(),
-                    mode=_event_mode(args))
-        try:
-            _run(args)
-        except SystemExit as exc:
-            EVENTS.emit("end", code=_event_exit_code(exc.code))
-            raise
-        except KeyboardInterrupt:
-            EVENTS.emit("end", code=130)
-            raise
-        EVENTS.emit("end", code=0)
+        _main_run_events(args)
         return
     if args.json:
         # The matches own stdout, the text a person reads goes to stderr.
@@ -18019,6 +18031,41 @@ def main() -> None:
             sys.stdout = args.json_out
         return
     _run(args)
+
+
+def main() -> None:
+    """Entry point."""
+    _INVOCATION.os_type = detect_os()
+    parser = build_parser()
+    args = parser.parse_args()
+    _main_settle(args)
+    _main_check_values(parser, args)
+    _main_check_listings(parser, args)
+    _main_check_declared_only(parser, args)
+    _check_expert(parser, args)
+    if args.tui:
+        reason = tui_blocker(args)
+        if reason:
+            # The reason alone: fourteen lines of usage hid it.
+            print(f"{parser.prog}: error: --tui cannot open the full-screen interface "
+                  f"here: {reason}", file=sys.stderr)
+            sys.exit(2)
+    _check_actions(parser, args)
+    _check_pack(parser, args)
+    if args.restore is not None:
+        _run_action(args, lambda given: restore_kept(given.restore, given.dry_run))
+    if args.delete_backup is not None:
+        _run_action(args, run_delete_backup)
+    if args.every_board and args.target:
+        parser.error("--every-board installs every board, and --target names one")
+    _main_check_add_app(parser, args)
+    _main_check_offline(parser, args)
+    install_bounded_opener()
+    if args.remove or args.backups:
+        _open_local_sources(args)
+        _run_action(args, run_removal if args.remove else run_backups)
+    _main_check_sources(parser, args)
+    _main_dispatch(args)
 
 
 # What each action reads beside its own option: anything else given with
@@ -18215,7 +18262,7 @@ def _system_folder(folder: Path) -> str:
     text = str(resolved)
     if any(text == pseudo or text.startswith(pseudo + "/") for pseudo in PSEUDO_FOLDERS):
         return "is a folder the system makes up, it holds no copy"
-    system_drive = os.environ.get("SystemDrive", "C:") if os.name == "nt" else ""
+    system_drive = os.environ.get("SYSTEMDRIVE", "C:") if os.name == "nt" else ""
     if resolved == Path(resolved.anchor) and (
             os.name != "nt" or resolved.drive.casefold() == system_drive.casefold()):
         return "is the root of the whole system"
@@ -18274,8 +18321,8 @@ def _ask_from_folder(files: list[dict] | None = None, bios_path: Path | None = N
     drives = [mount for mount in _mounted_cards() if not copy_source_refusal(mount, bios_path)]
     if drives:
         print("\nCopy from:")
-        for index, mount in enumerate(drives, 1):
-            print(f"  {index}) {card_line(mount)}")
+        for number, mount in enumerate(drives, 1):
+            print(f"  {number}) {card_line(mount)}")
     numbers = "" if not drives else " or 1" if len(drives) == 1 else f" or 1 to {len(drives)}"
     while True:
         raw = _ask(f"Folder, old card or ZIP to copy from{numbers} (Enter to go back, "
@@ -18310,7 +18357,7 @@ def _ask_from_folder(files: list[dict] | None = None, bios_path: Path | None = N
             LOCAL.folders.remove(index)
             print(f"  {name} holds none of these files.")
             return
-        if held > 0:
+        if files and held > 0:
             print(f"  {held} of {len(files)} found in {name}.")
         _INVOCATION.options.append(("--from", label))
         return
@@ -18623,7 +18670,7 @@ def card_system(root: Path) -> tuple[str, Path, str] | None:
     if len({(rule.manifest, rule.bios) for rule in matched}) != 1:
         return None
     rule = matched[0]
-    return rule.manifest, root / rule.bios, rule.name
+    return rule.manifest, root / (rule.bios or ""), rule.name
 
 
 # The SHARE drive of a system a computer reaches over the network, by the
@@ -18732,7 +18779,7 @@ def _card_matches(root: Path, above: bool = False) -> list[_OsRule]:
     one bare folder name (muOS's MUOS) then needs the system's BIOS folder
     too, a folder of backups holding a MUOS copy being no muOS card."""
     matched = [rule for rule in _card_rules() if _card_rule_matches(rule, root)
-               and not (above and _bare_marker(rule) and not _is_dir(root / rule.bios))]
+               and not (above and _bare_marker(rule) and not _is_dir(root / (rule.bios or "")))]
     bases = {rule.base for rule in matched if rule.base}
     return [rule for rule in matched if rule.name not in bases]
 
@@ -18810,7 +18857,7 @@ def card_setups() -> list[CardSetup]:
     # KNULLI is named by two files: one setup holding both rules.
     shares = {rule.name: tuple(each for each in _SHARE_RULES if each.name == rule.name)
               for rule in _SHARE_RULES}
-    setups += [CardSetup(name, rules[0].manifest, rules[0].bios, rules, True)
+    setups += [CardSetup(name, rules[0].manifest, rules[0].bios or "", rules, True)
                for name, rules in shares.items()]
     # AmberELEC and EmuELEC mount their card's games part as /storage/roms,
     # the folder their list is written below: AmberELEC 5a3882cb fs-resize
