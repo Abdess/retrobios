@@ -29542,33 +29542,35 @@ def tui_suspend(runs: list[_EngineRun], whole: bool) -> None:
         run.pause(False)
 
 
-def run_tui(args: argparse.Namespace) -> int:
-    """The full-screen interface, until it closes: the exit code it ends with."""
-    flags = {"interrupt": False, "resized": False, "suspend": False, "resume": False,
-             "term": 0}
-    handlers: dict[int, object] = {}
+class _TuiSignals:
+    """What the signal handlers saw, read by the screen between frames."""
 
-    def on_stop(signum: int, _frame: object) -> None:
-        flags["term"] = flags["term"] or signum
+    def __init__(self) -> None:
+        self.interrupt = False
+        self.resized = False
+        # True from SIGTSTP, "key" from Ctrl-Z read as a key.
+        self.suspend: bool | str = False
+        self.resume = False
+        self.term = 0
 
-    # Before the start, whose detection and pack opening take seconds on a
-    # handheld: a Select+Start then ended on the default action, without a
-    # word or the terminal put back.
-    for name in ("SIGTERM", "SIGHUP"):
-        number = getattr(signal, name, None)
-        if number is not None:
-            handlers[number] = signal.signal(number, on_stop)
-    try:
-        started = _tui_startup(args)
-    except BaseException:
-        _restore_handlers(handlers)
-        raise
-    if started is None:
-        _restore_handlers(handlers)
-        return 1
-    state, effects = started
-    if flags["term"]:
-        state.exit_code = 128 + flags["term"]
+    def on_stop(self, signum: int, _frame: object) -> None:
+        self.term = self.term or signum
+
+    def on_interrupt(self, _signum: int, _frame: object) -> None:
+        self.interrupt = True
+
+    def on_resize(self, _signum: int, _frame: object) -> None:
+        self.resized = True
+
+    def on_suspend(self, _signum: int, _frame: object) -> None:
+        self.suspend = True
+
+    def on_resume(self, _signum: int, _frame: object) -> None:
+        self.resume = True
+
+
+def _tui_work_folder(handlers: dict[int, object]) -> Path | None:
+    """The run's own work folder, marked as this process's, or None (said)."""
     try:
         work = Path(tempfile.mkdtemp(prefix=TUI_WORK_PREFIX))
     except OSError as exc:
@@ -29576,7 +29578,7 @@ def run_tui(args: argparse.Namespace) -> int:
         print(f"Error: no work folder could be made in {tempfile.gettempdir()}: {exc}. "
               "Free some space there, or point TMPDIR (TEMP on Windows) at another "
               "folder.", file=sys.stderr)
-        return 1
+        return None
     try:
         (work / TUI_OWNER).write_text(str(os.getpid()), encoding="utf-8")
     except OSError as exc:
@@ -29584,94 +29586,202 @@ def run_tui(args: argparse.Namespace) -> int:
         # it a week like any unknown one. The logs fail as they come.
         print(f"The work folder {work} could not be marked as this run's: {exc}",
               file=sys.stderr)
-    script = str(Path(__file__).resolve())
-    inbox: queue.Queue = queue.Queue()
-    current: list[_EngineRun] = []
-    written: dict[str, Path] = {}
-    # Select+Start on a handheld is gptokeyb's pkill: SIGTERM, then SIGKILL
-    # 3 s later. The install gets 2 s to say what it wrote.
-    terminating = {"signal": 0, "deadline": 0.0}
-    ignore_interrupt_until = [0.0]
-    terminal = _TuiTerminal(sys.stdin, sys.stdout)
-    state.mouse = getattr(terminal, "mouse_allowed", False)
-    real_out, real_err = sys.stdout, sys.stderr
-    buffer = io.StringIO()
+    return work
 
-    def perform(todo: list[tuple], from_key: bool = True) -> None:
+
+class _TuiSession:
+    """One full-screen run: its state, its child runs, and the frame loop."""
+
+    def __init__(self, state: TuiState, work: Path, signals: _TuiSignals) -> None:
+        self.state = state
+        self.work = work
+        self.signals = signals
+        self.script = str(Path(__file__).resolve())
+        self.inbox: queue.Queue = queue.Queue()
+        self.current: list[_EngineRun] = []
+        self.written: dict[str, Path] = {}
+        # Select+Start on a handheld is gptokeyb's pkill: SIGTERM, then SIGKILL
+        # 3 s later. The install gets 2 s to say what it wrote.
+        self.terminating = 0
+        self.deadline = 0.0
+        self.ignore_interrupt_until = 0.0
+        self.buffer = io.StringIO()
+        self.quiet_since = 0.0
+        self.pressed = False
+
+    def write_lists(self) -> None:
+        """The list and its boards beside it, for a run the list is not given to."""
+        state, work, written = self.state, self.work, self.written
+        if state.platform not in written:
+            path = work / f"{state.platform}.json"
+            path.write_text(json.dumps(state.manifest), encoding="utf-8")
+            written[state.platform] = path
+        state.manifest_path = written[state.platform]
+        if state.targets_for == state.platform and state.targets:
+            # Beside the list, where a --target run without the
+            # internet reads the boards (local_targets).
+            boards = work / "targets" / f"{state.platform}.json"
+            boards.parent.mkdir(exist_ok=True)
+            boards.write_text(json.dumps(state.targets), encoding="utf-8")
+            written[f"targets:{state.platform}"] = boards
+
+    def start_run(self, run: str) -> None:
+        state = self.state
+        for engine in self.current:
+            engine.stop(0)
+        self.current.clear()
+        if not state.manifest_given and not state.packs and state.manifest:
+            self.write_lists()
+        log = self.work / f"{run}.log"
+        if run == "install":
+            state.log = str(log)
+        own_list = state.manifest_path in self.written.values()
+        try:
+            self.current.append(_EngineRun(
+                tui_argv(state, run, sys.executable, self.script), log, self.inbox,
+                state.run_id, tui_run_env(state, own_list)))
+        except OSError as exc:
+            self.inbox.put(("ended", state.run_id, 1,
+                            [f"The installer could not be started: {exc}"]))
+
+    def perform_aside(self, effect: tuple) -> None:
+        """An effect that starts no child run and stops none."""
+        kind, state, inbox = effect[0], self.state, self.inbox
+        if kind == "fetch":
+            threading.Thread(target=_tui_fetch_games,
+                             args=(effect[1], inbox, self.buffer, state.dest,
+                                   state.games_choice not in ("user", "cli", "record")),
+                             daemon=True).start()
+        elif kind == "app":
+            threading.Thread(target=_tui_put_app, args=(effect[1], inbox),
+                             daemon=True).start()
+        elif kind == "targets":
+            threading.Thread(target=_tui_fetch_targets, args=(effect[1], inbox, self.buffer),
+                             daemon=True).start()
+        elif kind == "pack":
+            inbox.put(("pack_opened", effect[1],
+                       *open_tui_pack(effect[1], state.platform)))
+        elif kind == "use_pack":
+            use_tui_pack(effect[1])
+        elif kind == "close_pack":
+            effect[1].close()
+        elif kind == "offline":
+            set_offline(effect[1])
+
+    def perform(self, todo: list[tuple], from_key: bool = True) -> None:
         for effect in todo:
             kind = effect[0]
-            if kind == "fetch":
-                threading.Thread(target=_tui_fetch_games,
-                                 args=(effect[1], inbox, buffer, state.dest,
-                                       state.games_choice not in ("user", "cli", "record")),
-                                 daemon=True).start()
-            elif kind == "run":
-                for run in current:
-                    run.stop(0)
-                current.clear()
-                if not state.manifest_given and not state.packs and state.manifest:
-                    if state.platform not in written:
-                        path = work / f"{state.platform}.json"
-                        path.write_text(json.dumps(state.manifest), encoding="utf-8")
-                        written[state.platform] = path
-                    state.manifest_path = written[state.platform]
-                    if state.targets_for == state.platform and state.targets:
-                        # Beside the list, where a --target run without the
-                        # internet reads the boards (local_targets).
-                        boards = work / "targets" / f"{state.platform}.json"
-                        boards.parent.mkdir(exist_ok=True)
-                        boards.write_text(json.dumps(state.targets), encoding="utf-8")
-                        written[f"targets:{state.platform}"] = boards
-                log = work / f"{effect[1]}.log"
-                if effect[1] == "install":
-                    state.log = str(log)
-                own_list = state.manifest_path in written.values()
-                try:
-                    current.append(_EngineRun(
-                        tui_argv(state, effect[1], sys.executable, script), log, inbox,
-                        state.run_id, tui_run_env(state, own_list)))
-                except OSError as exc:
-                    inbox.put(("ended", state.run_id, 1,
-                               [f"The installer could not be started: {exc}"]))
+            if kind == "run":
+                self.start_run(effect[1])
             elif kind == "stop":
-                for run in current:
+                for run in self.current:
                     run.interrupt(from_key)
                 if os.name == "nt" and from_key:
-                    ignore_interrupt_until[0] = time.monotonic() + 1.0
+                    self.ignore_interrupt_until = time.monotonic() + 1.0
             elif kind == "kill":
-                for run in current:
+                for run in self.current:
                     run.stop(0)
-            elif kind == "app":
-                threading.Thread(target=_tui_put_app, args=(effect[1], inbox),
-                                 daemon=True).start()
-            elif kind == "targets":
-                threading.Thread(target=_tui_fetch_targets, args=(effect[1], inbox, buffer),
-                                 daemon=True).start()
-            elif kind == "pack":
-                inbox.put(("pack_opened", effect[1],
-                           *open_tui_pack(effect[1], state.platform)))
-            elif kind == "use_pack":
-                use_tui_pack(effect[1])
-            elif kind == "close_pack":
-                effect[1].close()
-            elif kind == "offline":
-                set_offline(effect[1])
+            else:
+                self.perform_aside(effect)
 
-    def on_interrupt(_signum: int, _frame: object) -> None:
-        flags["interrupt"] = True
+    def wake(self, terminal: _TuiTerminal) -> tuple[int, int]:
+        """The terminal back after a suspend, and its size."""
+        state, signals = self.state, self.signals
+        if signals.suspend:
+            # The shell gets its terminal back as it lent it, and the
+            # screen returns on fg.
+            whole = signals.suspend == "key"
+            signals.suspend = False
+            terminal.leave()
+            tui_suspend(self.current, whole)
+            signals.resume = True
+        if signals.resume:
+            signals.resume = False
+            terminal.enter()
+            terminal.frame = []
+        cols, rows = terminal.size()
+        if (cols, rows) != (state.cols, state.rows) or signals.resized:
+            signals.resized = False
+            state.cols, state.rows = cols, rows
+            terminal.frame = []
+        return cols, rows
 
-    def on_resize(_signum: int, _frame: object) -> None:
-        flags["resized"] = True
+    def draw(self, terminal: _TuiTerminal, cols: int, rows: int) -> None:
+        state = self.state
+        state.now = time.monotonic()
+        lines = tui_view(state, cols, rows)
+        # A click is read against the frame it was made on.
+        before = state.hits
+        hits = state.hits = tui_hits(state, lines)
+        # Before the frame: a frame on screen takes clicks as it shows.
+        terminal.set_mouse(tui_wants_mouse(state, lines))
+        terminal.draw(lines, cols)
+        if before is None or hits.shown != before.shown:
+            # A new screen's settle runs from when it is on the screen,
+            # after its layout and its write: the second click of a
+            # double click waited out a slow layout in the input and
+            # acted on the screen it had never seen.
+            state.hits = hits._replace(shown=time.monotonic())
 
-    def on_suspend(_signum: int, _frame: object) -> None:
-        flags["suspend"] = True
+    def take_keys(self, terminal: _TuiTerminal) -> None:
+        state = self.state
+        for key in terminal.keys(TUI_FRAME):
+            if key.name == "ctrl-z":
+                # ISIG is off, so Ctrl-Z comes as a key: it stops what
+                # the terminal's would, where a shell can resume it.
+                if tui_ctrl_z(state):
+                    self.signals.suspend = "key"
+                    break
+                continue
+            self.pressed = True
+            state.now = time.monotonic()
+            self.perform(tui_update(state, key))
+            if state.exit_code is not None:
+                break
 
-    def on_resume(_signum: int, _frame: object) -> None:
-        flags["resume"] = True
+    def take_signals(self, idle: float | None) -> None:
+        """The idle timer, Ctrl-C and a stop signal, between frames."""
+        state, signals = self.state, self.signals
+        if state.running:
+            self.quiet_since = time.monotonic()
+        elif (idle is not None and not self.pressed and state.exit_code is None
+                and time.monotonic() - self.quiet_since >= idle):
+            state.idle_closed, state.exit_code = True, tui_idle_code(state)
+        if signals.interrupt:
+            signals.interrupt = False
+            if time.monotonic() >= self.ignore_interrupt_until:
+                self.perform(tui_interrupt(state), from_key=False)
+        if signals.term and not self.terminating:
+            self.terminating = signals.term
+            if state.run == "install" and state.running:
+                self.deadline = time.monotonic() + 2
+                if not state.stopping:
+                    self.perform(tui_interrupt(state))
+            elif state.screen == "result" and state.code is not None:
+                state.exit_code = state.code
+            else:
+                state.exit_code = 128 + self.terminating
+        if self.terminating and state.running and time.monotonic() > self.deadline:
+            self.perform([("kill",)])
 
-    try:
-        for name, handler in (("SIGINT", on_interrupt), ("SIGWINCH", on_resize),
-                              ("SIGTSTP", on_suspend), ("SIGCONT", on_resume)):
+    def take_messages(self) -> None:
+        state = self.state
+        while state.exit_code is None:
+            try:
+                message = self.inbox.get_nowait()
+            except queue.Empty:
+                break
+            state.now = time.monotonic()
+            self.perform(tui_receive(state, message))
+        if self.terminating and state.screen == "result":
+            # The result is printed in the terminal on the way out.
+            state.exit_code = state.code if state.code is not None else 1
+
+    def loop(self, terminal: _TuiTerminal, effects: list[tuple],
+             handlers: dict[int, object]) -> None:
+        state, signals = self.state, self.signals
+        for name, handler in (("SIGINT", signals.on_interrupt), ("SIGWINCH", signals.on_resize),
+                              ("SIGTSTP", signals.on_suspend), ("SIGCONT", signals.on_resume)):
             number = getattr(signal, name, None)
             if number is not None:
                 handlers[number] = signal.signal(number, handler)
@@ -29679,115 +29789,27 @@ def run_tui(args: argparse.Namespace) -> int:
         # Counted from the moment the screen last waited for a key with no
         # run going: given --platform, the first screen moves on by itself
         # to the plan once the check is read, and no key comes either.
-        quiet_since, pressed = time.monotonic(), False
-        sys.stdout = sys.stderr = buffer
+        self.quiet_since, self.pressed = time.monotonic(), False
+        sys.stdout = sys.stderr = self.buffer
         try:
-            _prune_work_folders(work.parent, time.time())
+            _prune_work_folders(self.work.parent, time.time())
         except OSError as exc:
             # What earlier runs left stays until a later run: this one opens.
             print(f"Earlier work folders could not be removed: {exc}", file=sys.stderr)
         if state.exit_code is None:
             # Stopped while it started: the screen never opens.
             terminal.enter()
-            perform(effects)
+            self.perform(effects)
         while state.exit_code is None:
-            if flags["suspend"]:
-                # The shell gets its terminal back as it lent it, and the
-                # screen returns on fg.
-                whole = flags["suspend"] == "key"
-                flags["suspend"] = False
-                terminal.leave()
-                tui_suspend(current, whole)
-                flags["resume"] = True
-            if flags["resume"]:
-                flags["resume"] = False
-                terminal.enter()
-                terminal.frame = []
-            cols, rows = terminal.size()
-            if (cols, rows) != (state.cols, state.rows) or flags["resized"]:
-                flags["resized"] = False
-                state.cols, state.rows = cols, rows
-                terminal.frame = []
-            state.now = time.monotonic()
-            lines = tui_view(state, cols, rows)
-            # A click is read against the frame it was made on.
-            before = state.hits
-            state.hits = tui_hits(state, lines)
-            # Before the frame: a frame on screen takes clicks as it shows.
-            terminal.set_mouse(tui_wants_mouse(state, lines))
-            terminal.draw(lines, cols)
-            if before is None or state.hits.shown != before.shown:
-                # A new screen's settle runs from when it is on the screen,
-                # after its layout and its write: the second click of a
-                # double click waited out a slow layout in the input and
-                # acted on the screen it had never seen.
-                state.hits = state.hits._replace(shown=time.monotonic())
-            for key in terminal.keys(TUI_FRAME):
-                if key.name == "ctrl-z":
-                    # ISIG is off, so Ctrl-Z comes as a key: it stops what
-                    # the terminal's would, where a shell can resume it.
-                    if tui_ctrl_z(state):
-                        flags["suspend"] = "key"
-                        break
-                    continue
-                pressed = True
-                state.now = time.monotonic()
-                perform(tui_update(state, key))
-                if state.exit_code is not None:
-                    break
-            if state.running:
-                quiet_since = time.monotonic()
-            elif (idle is not None and not pressed and state.exit_code is None
-                    and time.monotonic() - quiet_since >= idle):
-                state.idle_closed, state.exit_code = True, tui_idle_code(state)
-            if flags["interrupt"]:
-                flags["interrupt"] = False
-                if time.monotonic() >= ignore_interrupt_until[0]:
-                    perform(tui_interrupt(state), from_key=False)
-            if flags["term"] and not terminating["signal"]:
-                terminating["signal"] = flags["term"]
-                if state.run == "install" and state.running:
-                    terminating["deadline"] = time.monotonic() + 2
-                    if not state.stopping:
-                        perform(tui_interrupt(state))
-                elif state.screen == "result" and state.code is not None:
-                    state.exit_code = state.code
-                else:
-                    state.exit_code = 128 + terminating["signal"]
-            if terminating["signal"] and state.running and \
-                    time.monotonic() > terminating["deadline"]:
-                perform([("kill",)])
-            while state.exit_code is None:
-                try:
-                    message = inbox.get_nowait()
-                except queue.Empty:
-                    break
-                state.now = time.monotonic()
-                perform(tui_receive(state, message))
-            if terminating["signal"] and state.screen == "result":
-                # The result is printed in the terminal on the way out.
-                state.exit_code = state.code if state.code is not None else 1
-    except Exception as exc:
-        if flags["term"] or _closed_terminal(exc, terminal):
-            # The window closed under a screen that was changing, or the
-            # SIGCONT that comes with its SIGHUP put the screen back: the
-            # write failed before the signal was read. That is its exit.
-            state.exit_code = 128 + (flags["term"] or getattr(signal, "SIGHUP", 1))
-        else:
-            _tui_crashed(state, work)
-    finally:
-        # Each step on its own: a write the closed window refuses, or a
-        # second signal while the install writes its summary, must not
-        # skip the ones after it and leave the terminal raw.
-        problems = _tui_cleanup(terminal, current, handlers, state)
-        sys.stdout, sys.stderr = real_out, real_err
-        for path in written.values():
-            if path.exists():
-                path.unlink()
-        if not tui_keeps_log(state):
-            shutil.rmtree(work, ignore_errors=True)
-        else:
-            _mark_kept(work)
+            cols, rows = self.wake(terminal)
+            self.draw(terminal, cols, rows)
+            self.take_keys(terminal)
+            self.take_signals(idle)
+            self.take_messages()
+
+
+def _tui_goodbye(state: TuiState, problems: list) -> int:
+    """The farewell printed in the terminal, and the exit code."""
     # A quit chosen goes where an error goes, its code not 0: a launcher
     # reads its first line there and stays silent (ports/shared/tui.txt).
     stream = (sys.stderr if state.screen in ("error", "crashed") or tui_quit_chosen(state)
@@ -29806,6 +29828,61 @@ def run_tui(args: argparse.Namespace) -> int:
         # flush at exit would replace it with 120.
         _drop_closed_terminal()
     return state.exit_code if state.exit_code is not None else 1
+
+
+def run_tui(args: argparse.Namespace) -> int:
+    """The full-screen interface, until it closes: the exit code it ends with."""
+    signals = _TuiSignals()
+    handlers: dict[int, object] = {}
+    # Before the start, whose detection and pack opening take seconds on a
+    # handheld: a Select+Start then ended on the default action, without a
+    # word or the terminal put back.
+    for name in ("SIGTERM", "SIGHUP"):
+        number = getattr(signal, name, None)
+        if number is not None:
+            handlers[number] = signal.signal(number, signals.on_stop)
+    try:
+        started = _tui_startup(args)
+    except BaseException:
+        _restore_handlers(handlers)
+        raise
+    if started is None:
+        _restore_handlers(handlers)
+        return 1
+    state, effects = started
+    if signals.term:
+        state.exit_code = 128 + signals.term
+    work = _tui_work_folder(handlers)
+    if work is None:
+        return 1
+    session = _TuiSession(state, work, signals)
+    terminal = _TuiTerminal(sys.stdin, sys.stdout)
+    state.mouse = getattr(terminal, "mouse_allowed", False)
+    real_out, real_err = sys.stdout, sys.stderr
+    try:
+        session.loop(terminal, effects, handlers)
+    except Exception as exc:
+        if signals.term or _closed_terminal(exc, terminal):
+            # The window closed under a screen that was changing, or the
+            # SIGCONT that comes with its SIGHUP put the screen back: the
+            # write failed before the signal was read. That is its exit.
+            state.exit_code = 128 + (signals.term or getattr(signal, "SIGHUP", 1))
+        else:
+            _tui_crashed(state, work)
+    finally:
+        # Each step on its own: a write the closed window refuses, or a
+        # second signal while the install writes its summary, must not
+        # skip the ones after it and leave the terminal raw.
+        problems = _tui_cleanup(terminal, session.current, handlers, state)
+        sys.stdout, sys.stderr = real_out, real_err
+        for path in session.written.values():
+            if path.exists():
+                path.unlink()
+        if not tui_keeps_log(state):
+            shutil.rmtree(work, ignore_errors=True)
+        else:
+            _mark_kept(work)
+    return _tui_goodbye(state, problems)
 
 
 def _tui_startup(args: argparse.Namespace) -> tuple[TuiState, list[tuple]] | None:
