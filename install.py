@@ -8140,12 +8140,19 @@ def _action_setup(args: argparse.Namespace) -> tuple[str, Path]:
     sys.exit(2)
 
 
-def _download_one(
-    f: dict, bios_path: Path, verbose: bool = False,
-    progress: Progress | None = None, copy: LocalCopy | None = None,
-) -> tuple[str, bool, str]:
-    """Download a single file, or copy it from where copy found it on this
-    machine. Returns (dest, success, reason it failed)."""
+def _folder_failure(exc: OSError) -> str:
+    """Why the folder a file goes in could not be made."""
+    if _write_refused(exc):
+        return NOT_WRITABLE
+    if _drive_full(exc):
+        return DRIVE_FULL
+    return exc.strerror or str(exc)
+
+
+def _download_dest(
+    f: dict, bios_path: Path, copy: LocalCopy | None,
+) -> Path | tuple[str, bool, str]:
+    """Where f goes, its folder made, or the result of a file that cannot go there."""
     if _stop.is_set():
         return str(f.get("dest", "?")), False, "stopped"
     try:
@@ -8161,11 +8168,7 @@ def _download_one(
     try:
         dest.parent.mkdir(parents=True, exist_ok=True)
     except OSError as exc:
-        if _write_refused(exc):
-            return f["dest"], False, NOT_WRITABLE
-        if _drive_full(exc):
-            return f["dest"], False, DRIVE_FULL
-        return f["dest"], False, exc.strerror or str(exc)
+        return f["dest"], False, _folder_failure(exc)
     try:
         in_place_folder = dest.is_dir()
     except OSError as exc:
@@ -8173,28 +8176,47 @@ def _download_one(
     if in_place_folder:
         # Fetched, it failed only at the rename, on an errno and two paths.
         return f["dest"], False, FOLDER_IN_PLACE
+    return dest
 
+
+def _download_copied(
+    f: dict, bios_path: Path, dest: Path, copy: LocalCopy, verbose: bool,
+    progress: Progress | None,
+) -> tuple[str, bool, str]:
+    """Copy f from where copy found it on this machine, fetched when the copy fails."""
+    result = _copy_local(f, bios_path, dest, copy, progress)
+    if result[1]:
+        copy.index.count_copy(copy.misplaced)
+        return result
+    if result[2] in ("stopped", NOT_WRITABLE, READ_ONLY) or result[2].startswith(NOT_KEPT):
+        return result
+    # The copy went or changed since it was read (a card pulled out, a
+    # file another run replaced): the file is fetched as if never found,
+    # and a fetch that fails too names both reasons.
+    if verbose:
+        print(f"    {f['dest']}: {result[2]}, fetching it instead", file=sys.stderr)
+    fetched = _download_one(f, bios_path, verbose, progress)
+    why = fetched[2]
+    if (fetched[1] or why in ("stopped", NOT_WRITABLE, READ_ONLY)
+            or why.startswith(NOT_KEPT)):
+        return fetched
+    both = f"{result[2]}, and {why}"
+    # The fetch's kind of failure stays, so the advice is the right one.
+    kind = type(why) if isinstance(why, (NetworkReason, OfflineReason)) else str
+    return fetched[0], False, kind(both)
+
+
+def _download_one(
+    f: dict, bios_path: Path, verbose: bool = False,
+    progress: Progress | None = None, copy: LocalCopy | None = None,
+) -> tuple[str, bool, str]:
+    """Download a single file, or copy it from where copy found it on this
+    machine. Returns (dest, success, reason it failed)."""
+    dest = _download_dest(f, bios_path, copy)
+    if not isinstance(dest, Path):
+        return dest
     if copy is not None:
-        result = _copy_local(f, bios_path, dest, copy, progress)
-        if result[1]:
-            copy.index.count_copy(copy.misplaced)
-            return result
-        if result[2] in ("stopped", NOT_WRITABLE, READ_ONLY) or result[2].startswith(NOT_KEPT):
-            return result
-        # The copy went or changed since it was read (a card pulled out, a
-        # file another run replaced): the file is fetched as if never found,
-        # and a fetch that fails too names both reasons.
-        if verbose:
-            print(f"    {f['dest']}: {result[2]}, fetching it instead", file=sys.stderr)
-        fetched = _download_one(f, bios_path, verbose, progress)
-        why = fetched[2]
-        if (fetched[1] or why in ("stopped", NOT_WRITABLE, READ_ONLY)
-                or why.startswith(NOT_KEPT)):
-            return fetched
-        both = f"{result[2]}, and {why}"
-        # The fetch's kind of failure stays, so the advice is the right one.
-        kind = type(why) if isinstance(why, (NetworkReason, OfflineReason)) else str
-        return fetched[0], False, kind(both)
+        return _download_copied(f, bios_path, dest, copy, verbose, progress)
 
     if LOCAL.pack is not None:
         return _extract_from_pack(f, bios_path, dest, progress)
@@ -8204,207 +8226,287 @@ def _download_one(
         url = RELEASE_URL.format(asset=urllib.parse.quote(f["release_asset"], safe=""))
     else:
         url = RAW_FILE_URL.format(path=urllib.parse.quote(f["repo_path"], safe="/"))
+    return _fetch_file(_FileFetch(f, bios_path, dest, url, verbose, progress))
 
-    expected_size = f["size"]
-    # A large file keeps a fixed partial name so the next attempt, or the
-    # next run, asks only for what is missing.
-    resumable = expected_size >= RESUME_FROM_SIZE
-    reason = "download failed"
+
+class _FileFetch:
+    """One file's download: where it goes, and what the current attempt holds."""
+
+    def __init__(self, f: dict, bios_path: Path, dest: Path, url: str, verbose: bool,
+                 progress: Progress | None) -> None:
+        self.f = f
+        self.bios_path = bios_path
+        self.dest = dest
+        self.url = url
+        self.verbose = verbose
+        self.progress = progress
+        self.expected_size: int = f["size"]
+        # A large file keeps a fixed partial name so the next attempt, or the
+        # next run, asks only for what is missing.
+        self.resumable = self.expected_size >= RESUME_FROM_SIZE
+        self.full_partial = False
+        self.mismatch = ""
+        self.tmp_path: Path | None = None
+        self.partial: BinaryIO | None = None
+        self.counted = 0
+        self.resumed_count = 0
+
+    def begin(self) -> None:
+        """Start an attempt holding nothing."""
+        self.tmp_path = None
+        self.counted = 0
+        self.resumed_count = 0
+        self.partial = None
+
+    def drop_private(self) -> None:
+        """Remove the private copy of this attempt, never the locked partial."""
+        if self.tmp_path is not None and self.partial is None and self.tmp_path.exists():
+            self.tmp_path.unlink()
+
+    def take_back(self) -> None:
+        """Take the bytes a failed attempt drew off the progress."""
+        if self.progress is not None and self.counted:
+            self.progress.add(-self.counted)
+            if self.resumed_count:
+                self.progress.forget_resumed(self.resumed_count)
+
+
+def _fetch_file(job: _FileFetch) -> tuple[str, bool, str]:
+    """Fetch job's file, retried, verified and moved into place."""
+    f = job.f
+    reason: str = "download failed"
     refused = False
-    full_partial = False
     for attempt in range(1, MAX_RETRIES + 1):
-        tmp_path: Path | None = None
-        counted = 0
-        resumed_count = 0
-        partial = None
+        job.begin()
         try:
-            offset = 0
-            if resumable:
-                tmp_path = dest.parent / f".{dest.name}.part"
-                _partial_size(tmp_path)
-                # Two runs into one BIOS folder used to append to the same
-                # partial copy: the one that finds it locked downloads into
-                # a private file instead.
-                partial = _claim_partial(tmp_path)
-                if partial is None:
-                    tmp_path = None
-                else:
-                    offset = os.fstat(partial.fileno()).st_size
-                    if offset >= expected_size and _NO_RENAME_WHILE_OPEN:
-                        # The run that verified this copy releases its lock
-                        # to rename it: truncating it there destroyed that
-                        # copy and failed the rename. It is left alone and
-                        # this run writes a private file.
-                        partial.close()
-                        partial = None
-                        tmp_path = None
-                        offset = 0
-                        full_partial = True
-                    elif offset >= expected_size:
-                        partial.truncate(0)
-                        offset = 0
-            request = urllib.request.Request(url)
-            if offset:
-                request.add_header("Range", f"bytes={offset}-")
-            with urllib.request.urlopen(request, timeout=60) as resp:
-                if offset and getattr(resp, "status", 200) != 206:
-                    offset = 0  # the server sent the whole file again
-                    partial.truncate(0)
-                raw_length = resp.headers.get("Content-Length") if resp.headers else None
-                if raw_length and int(raw_length) != expected_size - offset:
-                    raise ValueError(
-                        f"Content-Length {raw_length} != expected {expected_size - offset}"
-                    )
-                if partial is not None:
-                    partial.seek(offset)
-                    out = _Unclosed(partial)
-                else:
-                    out = tempfile.NamedTemporaryFile(
-                        mode="wb", dir=dest.parent, prefix=f".{dest.name}.",
-                        suffix=".part", delete=False,
-                    )
-                    tmp_path = Path(out.name)
-                with out:
-                    downloaded = offset
-                    if progress is not None and offset:
-                        progress.add(offset, resumed=True)
-                        counted += offset
-                        resumed_count = offset
-                    while True:
-                        if _stop.is_set():
-                            raise _Interrupted()
-                        chunk = resp.read(1024 * 1024)
-                        if not chunk:
-                            break
-                        downloaded += len(chunk)
-                        if downloaded > expected_size or downloaded > MAX_DOWNLOAD_SIZE:
-                            raise ValueError("download exceeded declared size")
-                        out.write(chunk)
-                        if progress is not None:
-                            progress.add(len(chunk))
-                            counted += len(chunk)
-                if downloaded != expected_size:
-                    raise ValueError(
-                        f"downloaded {downloaded} bytes, expected {expected_size}"
-                    )
-
-            expected = {
-                name: f[name].lower() for name in ("sha256", "sha1") if f.get(name)
-            }
-            # A large file is hashed through the handle that holds its lock.
-            # On Windows that lock is mandatory: reopening the path to read
-            # it failed with a sharing violation, which read as an unwritable
-            # folder for every file of 16 MB or more (issue 82).
-            if partial is not None:
-                actual = _digest_handle(partial, tuple(expected))
-            else:
-                actual = _digest_file(tmp_path, tuple(expected))
-            if "sha256" in expected and actual["sha256"] != expected["sha256"]:
-                reason = "SHA-256 mismatch"
-                raise _Corrupt()
-            if "sha1" in expected and actual["sha1"] != expected["sha1"]:
-                reason = "SHA-1 mismatch"
-                raise _Corrupt()
-
-            # The mode a plain open() gives, executable where the repository
-            # file is: the temporary file is private, and a BIOS folder
-            # written with sudo has to stay readable by the emulator's user.
-            os.chmod(tmp_path, (0o777 if f.get("executable") else 0o666) & ~_UMASK)
-            _clear_read_only(dest)
-            # The file in place, a personal dump or another revision, is
-            # moved aside first: replaced, it was gone for good.
-            KEPT.keep(*_kept_slot(*_entry_place(bios_path, f)), dest, expected, tmp_path)
-            if partial is not None and _NO_RENAME_WHILE_OPEN:
-                # Windows renames no open file. Elsewhere the lock is held
-                # until the copy has its final name.
-                partial.close()
-                _replace_released(tmp_path, dest, expected)
-            else:
-                os.replace(tmp_path, dest)
-            if full_partial:
-                _drop_full_partial(dest, expected_size)
+            _fetch_attempt(job)
             return f["dest"], True, ""
 
         except _Interrupted:
             # Stopped mid-transfer: a large file keeps its partial copy for
             # the next run, and a small one is dropped rather than left beside
             # the destination.
-            if tmp_path is not None and partial is None and tmp_path.exists():
-                tmp_path.unlink()
+            job.drop_private()
             return f["dest"], False, "stopped"
 
         except _NotKept as exc:
             # No attempt changes it, and the file in place stays as it is.
-            if partial is None and tmp_path is not None and tmp_path.exists():
-                tmp_path.unlink()
+            job.drop_private()
             return f["dest"], False, f"{NOT_KEPT} ({exc})"
 
         except _Corrupt:
-            if verbose:
+            reason = job.mismatch
+            if job.verbose:
                 print(f"    {reason} on attempt {attempt}", file=sys.stderr)
             # Closed before the delete: Windows refuses to remove a file
             # still open (WinError 32), and the error ended the run.
-            if partial is not None:
-                partial.close()
-            if tmp_path is not None and tmp_path.exists():
-                tmp_path.unlink()
+            if job.partial is not None:
+                job.partial.close()
+            if job.tmp_path is not None and job.tmp_path.exists():
+                job.tmp_path.unlink()
             delay = 0.0
 
         except urllib.error.HTTPError as exc:
-            reason = f"HTTP {exc.code}"
-            if exc.code in (403, 429):
-                reason += " (GitHub rate limit or access refused)"
-            reason = (NetworkReason if exc.code >= 500 or exc.code == 429
-                      else HttpReason)(reason)
-            reason.url = url
-            if verbose:
-                print(f"    Attempt {attempt} failed: {exc}", file=sys.stderr)
-            if tmp_path is not None and partial is None and tmp_path.exists():
-                tmp_path.unlink()
-            if exc.code == 416 and tmp_path is not None and tmp_path.exists():
-                if partial is not None:
-                    partial.close()
-                tmp_path.unlink()  # the partial copy no longer fits the file
+            reason = _http_attempt_failure(job, exc, attempt)
             delay = _retry_delay(attempt, exc.headers.get("Retry-After") if exc.headers else None)
 
         # http.client raises IncompleteRead (an HTTPException, not an
         # OSError) when a chunked transfer is cut, as a proxy re-encoding
         # the stream does: it is a dropped connection like any other.
         except (urllib.error.URLError, OSError, ValueError, http.client.HTTPException) as exc:
-            if (isinstance(exc, OSError) and not isinstance(exc, urllib.error.URLError)
-                    and _write_refused(exc)):
-                # No attempt can change a refused write. A read-only file in
-                # place is not a folder this user cannot write.
-                reason = READ_ONLY if _read_only_file(dest) else NOT_WRITABLE
-                refused = True
-            elif _drive_full(exc):
-                # No attempt frees space either. A private copy is still
-                # removed below: it holds the space the next file needs.
-                reason = DRIVE_FULL
-            elif _transfer_failure(exc):
-                reason = NetworkReason(network_words(exc)[1])
-            else:
-                reason = str(getattr(exc, "reason", "") or exc)
-            if verbose:
+            reason, refused = _attempt_failure_reason(job.dest, exc)
+            if job.verbose:
                 print(f"    Attempt {attempt} failed: {exc}", file=sys.stderr)
-            if not refused and tmp_path is not None and partial is None and tmp_path.exists():
-                tmp_path.unlink()
+            if not refused:
+                job.drop_private()
             delay = _retry_delay(attempt, None)
 
         finally:
-            if partial is not None:
-                partial.close()
+            if job.partial is not None:
+                job.partial.close()
 
-        if progress is not None and counted:
-            progress.add(-counted)
-            if resumed_count:
-                progress.forget_resumed(resumed_count)
+        job.take_back()
         if refused or reason == DRIVE_FULL:
             return f["dest"], False, reason
         if attempt < MAX_RETRIES and delay and _stop.wait(delay):
             return f["dest"], False, "stopped"
 
     return f["dest"], False, reason
+
+
+def _http_attempt_failure(job: _FileFetch, exc: urllib.error.HTTPError, attempt: int) -> str:
+    """The reason an attempt the server refused gives, its copy dropped."""
+    words = f"HTTP {exc.code}"
+    if exc.code in (403, 429):
+        words += " (GitHub rate limit or access refused)"
+    reason = (NetworkReason if exc.code >= 500 or exc.code == 429
+              else HttpReason)(words)
+    reason.url = job.url
+    if job.verbose:
+        print(f"    Attempt {attempt} failed: {exc}", file=sys.stderr)
+    job.drop_private()
+    if exc.code == 416 and job.tmp_path is not None and job.tmp_path.exists():
+        if job.partial is not None:
+            job.partial.close()
+        job.tmp_path.unlink()  # the partial copy no longer fits the file
+    return reason
+
+
+def _attempt_failure_reason(dest: Path, exc: Exception) -> tuple[str, bool]:
+    """The reason a failed attempt gives, and whether no attempt can change it."""
+    if (isinstance(exc, OSError) and not isinstance(exc, urllib.error.URLError)
+            and _write_refused(exc)):
+        # No attempt can change a refused write. A read-only file in
+        # place is not a folder this user cannot write.
+        return (READ_ONLY if _read_only_file(dest) else NOT_WRITABLE), True
+    if _drive_full(exc):
+        # No attempt frees space either. A private copy is still
+        # removed below: it holds the space the next file needs.
+        return DRIVE_FULL, False
+    if _transfer_failure(exc):
+        return NetworkReason(network_words(exc)[1]), False
+    return str(getattr(exc, "reason", "") or exc), False
+
+
+def _fetch_attempt(job: _FileFetch) -> None:
+    """One attempt: the bytes received, checked and moved into place."""
+    offset = _resume_offset(job)
+    request = urllib.request.Request(job.url)
+    if offset:
+        request.add_header("Range", f"bytes={offset}-")
+    with urllib.request.urlopen(request, timeout=60) as resp:
+        if job.partial is not None and offset and getattr(resp, "status", 200) != 206:
+            offset = 0  # the server sent the whole file again
+            job.partial.truncate(0)
+        raw_length = resp.headers.get("Content-Length") if resp.headers else None
+        if raw_length and int(raw_length) != job.expected_size - offset:
+            raise ValueError(
+                f"Content-Length {raw_length} != expected {job.expected_size - offset}"
+            )
+        written = _receive_file(job, resp, offset)
+    _place_fetched(job, written)
+
+
+def _resume_offset(job: _FileFetch) -> int:
+    """Where the transfer starts: past the bytes the locked partial copy holds."""
+    if not job.resumable:
+        return 0
+    tmp_path = job.dest.parent / f".{job.dest.name}.part"
+    job.tmp_path = tmp_path
+    _partial_size(tmp_path)
+    # Two runs into one BIOS folder used to append to the same
+    # partial copy: the one that finds it locked downloads into
+    # a private file instead.
+    partial = _claim_partial(tmp_path)
+    job.partial = partial
+    if partial is None:
+        job.tmp_path = None
+        return 0
+    offset = os.fstat(partial.fileno()).st_size
+    if offset >= job.expected_size and _NO_RENAME_WHILE_OPEN:
+        # The run that verified this copy releases its lock
+        # to rename it: truncating it there destroyed that
+        # copy and failed the rename. It is left alone and
+        # this run writes a private file.
+        partial.close()
+        job.partial = None
+        job.tmp_path = None
+        job.full_partial = True
+        return 0
+    if offset >= job.expected_size:
+        partial.truncate(0)
+        return 0
+    return offset
+
+
+def _receive_file(job: _FileFetch, resp: http.client.HTTPResponse, offset: int) -> Path:
+    """Write the response into the partial copy or a private file, and
+    return the path written."""
+    partial, tmp_path = job.partial, job.tmp_path
+    if partial is not None and tmp_path is not None:
+        partial.seek(offset)
+        out = _Unclosed(partial)
+        with out:
+            downloaded = _stream_response(job, resp, out.write, offset)
+        written = tmp_path
+    else:
+        with tempfile.NamedTemporaryFile(
+            mode="wb", dir=job.dest.parent, prefix=f".{job.dest.name}.",
+            suffix=".part", delete=False,
+        ) as temp:
+            written = job.tmp_path = Path(temp.name)
+            downloaded = _stream_response(job, resp, temp.write, offset)
+    if downloaded != job.expected_size:
+        raise ValueError(
+            f"downloaded {downloaded} bytes, expected {job.expected_size}"
+        )
+    return written
+
+
+def _stream_response(job: _FileFetch, resp: http.client.HTTPResponse,
+                     write: Callable[[bytes], object], offset: int) -> int:
+    """Copy the response through write, counted on the progress. Returns
+    the bytes the file holds."""
+    progress = job.progress
+    downloaded = offset
+    if progress is not None and offset:
+        progress.add(offset, resumed=True)
+        job.counted += offset
+        job.resumed_count = offset
+    while True:
+        if _stop.is_set():
+            raise _Interrupted()
+        chunk = resp.read(1024 * 1024)
+        if not chunk:
+            break
+        downloaded += len(chunk)
+        if downloaded > job.expected_size or downloaded > MAX_DOWNLOAD_SIZE:
+            raise ValueError("download exceeded declared size")
+        write(chunk)
+        if progress is not None:
+            progress.add(len(chunk))
+            job.counted += len(chunk)
+    return downloaded
+
+
+def _place_fetched(job: _FileFetch, written: Path) -> None:
+    """Check the bytes written against the list, then give them the file's name."""
+    f, dest = job.f, job.dest
+    expected = {
+        name: f[name].lower() for name in ("sha256", "sha1") if f.get(name)
+    }
+    # A large file is hashed through the handle that holds its lock.
+    # On Windows that lock is mandatory: reopening the path to read
+    # it failed with a sharing violation, which read as an unwritable
+    # folder for every file of 16 MB or more (issue 82).
+    if job.partial is not None:
+        actual = _digest_handle(job.partial, tuple(expected))
+    else:
+        actual = _digest_file(written, tuple(expected))
+    if "sha256" in expected and actual["sha256"] != expected["sha256"]:
+        job.mismatch = "SHA-256 mismatch"
+        raise _Corrupt()
+    if "sha1" in expected and actual["sha1"] != expected["sha1"]:
+        job.mismatch = "SHA-1 mismatch"
+        raise _Corrupt()
+
+    # The mode a plain open() gives, executable where the repository
+    # file is: the temporary file is private, and a BIOS folder
+    # written with sudo has to stay readable by the emulator's user.
+    os.chmod(written, (0o777 if f.get("executable") else 0o666) & ~_UMASK)
+    _clear_read_only(dest)
+    # The file in place, a personal dump or another revision, is
+    # moved aside first: replaced, it was gone for good.
+    KEPT.keep(*_kept_slot(*_entry_place(job.bios_path, f)), dest, expected, written)
+    if job.partial is not None and _NO_RENAME_WHILE_OPEN:
+        # Windows renames no open file. Elsewhere the lock is held
+        # until the copy has its final name.
+        job.partial.close()
+        _replace_released(written, dest, expected)
+    else:
+        os.replace(written, dest)
+    if job.full_partial:
+        _drop_full_partial(dest, job.expected_size)
 
 
 # Windows renames no file another handle holds open, and Python opens files
@@ -8460,16 +8562,14 @@ def _drop_full_partial(dest: Path, expected_size: int) -> None:
     with handle:
         complete = os.fstat(handle.fileno()).st_size >= expected_size
     if complete:
-        try:
+        # another run opened it meanwhile and finishes with it
+        with contextlib.suppress(OSError):
             path.unlink()
-        except OSError:
-            pass  # another run opened it meanwhile and finishes with it
     else:
-        try:
+        # created by the claim and taken since by another run
+        with contextlib.suppress(OSError):
             if path.stat().st_size == 0:
                 path.unlink()
-        except OSError:
-            pass  # created by the claim and taken since by another run
 
 
 def _partial_size(path: Path) -> int:
@@ -8490,7 +8590,7 @@ def _claim_partial(path: Path) -> BinaryIO | None:
     flags = os.O_RDWR | os.O_CREAT | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_BINARY", 0)
     handle = os.fdopen(os.open(path, flags, 0o644), "r+b")
     try:
-        if os.name == "nt":
+        if sys.platform == "win32":
             import msvcrt
 
             msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
@@ -8524,10 +8624,9 @@ def _release_claim(handle: BinaryIO, path: Path) -> None:
         path.unlink(missing_ok=True)
     handle.close()
     if _NO_RENAME_WHILE_OPEN:
-        try:
+        # another run holds it now and removes it when done
+        with contextlib.suppress(OSError):
             path.unlink(missing_ok=True)
-        except OSError:
-            pass  # another run holds it now and removes it when done
 
 
 class _Unclosed:
@@ -8979,6 +9078,258 @@ def _status_print(term: Terminal | None) -> Callable[..., None]:
     return say
 
 
+class _Ending(NamedTuple):
+    """What every ending of a run reads, worked out by _report_outcome."""
+
+    say: Callable[..., None]
+    paths: list[Path]
+    downloaded: int
+    up_to_date: int
+    errors: int
+    omitted: int
+    offline: int
+    failures: list[tuple[str, str]] | None
+    sources: str
+    kept: list[str]
+    advice: list[str]
+    same_lines: list[str]
+    installed_kinds: str
+    omitted_entries: list[dict]
+    unplaced: int
+    platform_of: dict[Path, str]
+    hints: list[str]
+    same_choice: str
+    missing: Tally | None
+
+
+def _say_failures(say: Callable[..., None], failures: list[tuple[str, str]] | None) -> None:
+    """The failed files the progress has not named, one cause said once."""
+    reasons = {reason for _dest, reason in failures or []}
+    # A failure the progress already named on its FAILED line is not named
+    # again: line mode listed each one twice.
+    unsaid = [failure for failure in failures or [] if failure[0] not in SAID_FAILED]
+    if failures and len(failures) > 1 and len(reasons) == 1 and reasons != {""}:
+        # One cause, said once: a read-only folder listed ten of its files
+        # and "... and 266 more" above the advice that fixes them all.
+        said = f", first {unsaid[0][0]}" if unsaid else ""
+        say(f"  failed: {_plural(len(failures), 'file')} ({reasons.pop()}){said}")
+    else:
+        for dest, reason in unsaid[:10]:
+            say(f"  failed: {dest}" + (f" ({reason})" if reason else ""))
+        if len(unsaid) > 10:
+            say(f"  ... and {len(unsaid) - 10} more")
+
+
+def _failure_advice(
+    paths: list[Path], failures: list[tuple[str, str]], assumed: set[Path] | None,
+    platform_of: dict[Path, str] | None,
+) -> list[str]:
+    """What to do about the causes of the failed files, one line each."""
+    refused = any(reason == NOT_WRITABLE for dest, reason in failures
+                  if not Path(dest).is_absolute())
+    advice = [
+        _write_advice(path, path in (assumed or set()), (platform_of or {}).get(path, ""))
+        for path in paths
+    ] if refused else []
+    advice += [_write_advice(folder, False) for folder in sorted({
+        Path(dest).parent for dest, reason in failures
+        if Path(dest).is_absolute() and reason == NOT_WRITABLE
+    })]
+    if any(reason == DRIVE_FULL for _dest, reason in failures):
+        advice.append(f"  The drive holding {_locations(paths)} is full: free up space, or "
+                      "install to another drive with --dest, then run again.")
+    if any(reason == READ_ONLY for _dest, reason in failures):
+        advice.append("  Files marked read-only are in the way: clear that attribute "
+                      "(or delete them), then run again.")
+    advice += _http_failure_lines(failures)
+    if any(isinstance(reason, NetworkReason) for _dest, reason in failures):
+        advice.append(NETWORK_FAILURE_ADVICE)
+        if os.environ.get("RETROBIOS_BASE_URL"):
+            # A mirror that is down read as this machine's connection.
+            advice += _address_lines(BASE_URL)[1:]
+    if any(str(reason).startswith(NOT_KEPT) for _dest, reason in failures):
+        # The same run fails the same way: "retry only those" sent a phone
+        # user round the loop with nothing changed.
+        advice.append("  The files in place were left as they were, as no backup folder could "
+                      "be made for them. Move them out of the folder, then run again to "
+                      "install the new ones.")
+    return advice
+
+
+def _kept_and_unplaced(omitted_entries: list[dict], notes: list[str] | None,
+                       ) -> tuple[list[str], int]:
+    """The lines every ending repeats, and the count of files left out for
+    an unknown save directory."""
+    # Left out for an unknown save directory, said with that reason in
+    # every ending: "the collection does not hold it" blamed the collection.
+    unplaced = [entry for entry in omitted_entries
+                if entry.get("reason") == "no_save_directory"]
+    kept = _kept_lines() + ([
+        f"{_plural(len(unplaced), 'file')} read from "
+        f"{unplaced[0].get('frontend') or 'the frontend'}'s save directory left out: "
+        + (f"{unplaced[0]['save_why']}." if unplaced[0].get("save_why")
+           else f"its place is not known. {LINE_SAVE_REMEDY}")] if unplaced else [])
+    kept += list(notes or [])
+    return kept, len(unplaced)
+
+
+def _end_offline(end: _Ending) -> NoReturn:
+    """End a run --offline left files out of."""
+    say, paths, downloaded, errors, offline = (
+        end.say, end.paths, end.downloaded, end.errors, end.offline)
+    sources = end.sources
+    remedy = _offline_remedy()
+    if not downloaded and not errors:
+        say(f"\nNothing installed: {agree(offline, 'file needs', 'files need')} "
+            "the internet, which "
+            f"{offline_named()} does not use.")
+        say(f"  {remedy}")
+        for line in end.kept:
+            say(line)
+        if end.up_to_date:
+            say(f"{_plural(end.up_to_date, 'file')} already in place at "
+                f"{_locations(paths)}.")
+        for line in end.same_lines:
+            say(line)
+        sys.exit(2)
+    failed = f", {errors} failed" if errors else ""
+    if downloaded and sources:
+        # One count, the remedy under it, as the screen's result: the
+        # count came twice, "installed" then "copied". The failed files are
+        # in it.
+        say(f"\nFinished with files missing. {sources}")
+        sources = ""
+    elif downloaded:
+        say(f"\nFinished with files missing. {_plural(downloaded, 'file')} installed, "
+            f"{offline} not fetched ({offline_named()}){failed}.")
+    else:
+        # Nothing written: "Finished with files missing. 0 files installed"
+        # read as a part done.
+        say(f"\nNothing installed: {_plural(offline, 'file')} not fetched "
+            f"({offline_named()}){failed}.")
+    if sources:
+        say(f"  {sources}")
+    if end.installed_kinds:
+        say(end.installed_kinds)
+    missing = end.missing
+    if missing is not None and missing.bios and missing.games:
+        # The kinds still missing, as the screen's result says them,
+        # before the remedy: "They are not in OLD" followed the files
+        # installed.
+        say(f"  Still missing: {installed_words(missing.bios, missing.games)}.")
+    # Under the files it is about: after the save-directory line, "They"
+    # read as that one file.
+    say(f"  {remedy}")
+    say(f"BIOS folder: {_locations(paths)}")
+    for line in end.kept + end.advice + end.same_lines:
+        say(line)
+    sys.exit(1 if downloaded else 2)
+
+
+def _end_nothing_installed(end: _Ending) -> NoReturn:
+    """End a run whose every file failed."""
+    say, paths, failures = end.say, end.paths, end.failures
+    say(f"\nNothing was installed. {_plural(end.errors, 'file')} failed.")
+    if failures and all(isinstance(r, (NetworkReason, HttpReason, OfflineReason))
+                        for _d, r in failures):
+        # The folder was never the problem: naming it as the place being
+        # written to sent people looking at their disk.
+        say(f"BIOS folder: {_locations(paths)}")
+    elif _retry_words(failures):
+        # Nothing was written: every file is one the pack lacks.
+        say(f"BIOS folder: {_locations(paths)}")
+    else:
+        say(f"BIOS folder that was being written to: {_locations(paths)}")
+    for line in end.kept + end.advice:
+        say(line)
+    say(_retry_words(failures) or "Run the same command again once that is resolved. "
+        "Files already installed are kept.")
+    for line in end.same_lines:
+        say(line)
+    sys.exit(2)
+
+
+def _end_with_errors(end: _Ending) -> NoReturn:
+    """End a run that installed files and failed others."""
+    say, failures = end.say, end.failures
+    # One count: "42 files installed, 2 files failed." over "38 files
+    # copied from E:\, 4 downloaded, 2 still missing." said it twice,
+    # the failed files as missing ones.
+    say(f"\nFinished with errors. {end.sources}" if end.sources else
+        f"\nFinished with errors. {_plural(end.downloaded, 'file')} installed, "
+        f"{_plural(end.errors, 'file')} failed.")
+    if end.installed_kinds:
+        say(end.installed_kinds)
+    say(f"BIOS folder: {_locations(end.paths)}")
+    for line in end.kept + end.advice:
+        say(line)
+    retry = _retry_words(failures)
+    if retry:
+        say(retry)
+    elif not all(str(reason).startswith(NOT_KEPT) or reason == DRIVE_FULL
+                 for _dest, reason in failures or []):
+        say("Run the same command again to retry only those.")
+    for line in end.same_lines:
+        say(line)
+    sys.exit(1)
+
+
+def _say_left_out(end: _Ending) -> None:
+    """The files a run that ended well did not install, and the hints after them."""
+    say, paths = end.say, end.paths
+    skipped = [entry for entry in end.omitted_entries
+               if entry.get("reason") != "no_save_directory"]
+    if end.omitted > end.unplaced and OUTPUT.verbose:
+        for line in _omission_lines(end.omitted - end.unplaced, skipped,
+                                    Path(paths[0]) if len(paths) == 1 else None):
+            say(line)
+    elif end.omitted > end.unplaced and any(entry.get("required") for entry in skipped):
+        # A file an emulator cannot start without is no detail: counted.
+        say(needed_absent_words(sum(1 for entry in skipped if entry.get("required")),
+                                "--verbose"))
+    # RomM's scan is the step after the install: the other hints say how to
+    # install less, a detail.
+    for line in end.hints:
+        if OUTPUT.verbose or line == ROMM_SCAN_WORDS:
+            say(line)
+
+
+def _end_done(end: _Ending) -> None:
+    """End a run that installed every file it could."""
+    say, paths, downloaded, up_to_date = end.say, end.paths, end.downloaded, end.up_to_date
+    sources = end.sources
+    # No zero count, the screen's words: "Done. 0 files installed, 22
+    # files already up to date" beside its "Everything is in place"
+    in_place = f" {_plural(up_to_date, 'file')} already in place." if up_to_date else ""
+    if not downloaded:
+        say(f"\nDone. {EVERYTHING_IN_PLACE}")
+    elif sources and "," not in sources and not KEPT.summary():
+        # Every file from one place: "22 files installed." over "22 files
+        # copied from packx." said one count twice.
+        say(f"\nDone. {sources}{in_place}")
+        sources = ""
+    else:
+        say(f"\nDone. {_plural(downloaded, 'file')} installed.{in_place}")
+    if sources:
+        say(f"  {sources}")
+    if end.installed_kinds:
+        say(end.installed_kinds)
+    if OUTPUT.verbose or not OUTPUT.where_said:
+        say(f"BIOS folder: {_locations(paths)}")
+    for line in end.kept:
+        say(line)
+    _say_left_out(end)
+    if end.same_choice and OUTPUT.verbose:
+        # After the questions, as the screen's result ends: "the same
+        # command" was one that asked them.
+        for line in end.same_lines:
+            say(line)
+        say("To check this later, run that command with --check.")
+    elif OUTPUT.verbose:
+        say("To check this later, run the same command with --check.")
+    say(next_step_words(end.platform_of, paths))
+
+
 def _report_outcome(
     paths: list[Path],
     downloaded: int,
@@ -8986,6 +9337,7 @@ def _report_outcome(
     errors: int,
     omitted: int,
     interrupted: bool,
+    *,
     failures: list[tuple[str, str]] | None = None,
     transferred: int = 0,
     seconds: float = 0.0,
@@ -9035,20 +9387,7 @@ def _report_outcome(
         verb = "copied from the pack" if LOCAL.pack is not None else "downloaded"
         say(f"\n{format_size(transferred)} {verb} in "
             f"{format_duration(seconds)} ({format_size(int(transferred / seconds))}/s).")
-    reasons = {reason for _dest, reason in failures or []}
-    # A failure the progress already named on its FAILED line is not named
-    # again: line mode listed each one twice.
-    unsaid = [failure for failure in failures or [] if failure[0] not in SAID_FAILED]
-    if failures and len(failures) > 1 and len(reasons) == 1 and reasons != {""}:
-        # One cause, said once: a read-only folder listed ten of its files
-        # and "... and 266 more" above the advice that fixes them all.
-        said = f", first {unsaid[0][0]}" if unsaid else ""
-        say(f"  failed: {_plural(len(failures), 'file')} ({reasons.pop()}){said}")
-    else:
-        for dest, reason in unsaid[:10]:
-            say(f"  failed: {dest}" + (f" ({reason})" if reason else ""))
-        if len(unsaid) > 10:
-            say(f"  ... and {len(unsaid) - 10} more")
+    _say_failures(say, failures)
     if declined and not downloaded and not errors and not interrupted and not offline:
         say(f"\nNothing installed: {_plural(declined, 'file')} not downloaded, as answered.")
         if up_to_date:
@@ -9056,16 +9395,7 @@ def _report_outcome(
         for note in notes or []:
             say(note)
         return
-    # Left out for an unknown save directory, said with that reason in
-    # every ending: "the collection does not hold it" blamed the collection.
-    unplaced = [entry for entry in omitted_entries or []
-                if entry.get("reason") == "no_save_directory"]
-    kept = _kept_lines() + ([
-        f"{_plural(len(unplaced), 'file')} read from "
-        f"{unplaced[0].get('frontend') or 'the frontend'}'s save directory left out: "
-        + (f"{unplaced[0]['save_why']}." if unplaced[0].get("save_why")
-           else f"its place is not known. {LINE_SAVE_REMEDY}")] if unplaced else [])
-    kept += list(notes or [])
+    kept, unplaced = _kept_and_unplaced(omitted_entries or [], notes)
     if interrupted:
         say(f"\nStopped. {_plural(downloaded, 'file')} installed.")
         for line in kept:
@@ -9077,173 +9407,28 @@ def _report_outcome(
     # rather than the BIOS folder: that folder is where the write went.
     elsewhere = sorted({Path(dest).parent for dest, _reason in failures or []
                         if Path(dest).is_absolute()})
-    refused = any(reason == NOT_WRITABLE for dest, reason in failures or []
-                  if not Path(dest).is_absolute())
-    advice = [
-        _write_advice(path, path in (assumed or set()), (platform_of or {}).get(path, ""))
-        for path in paths
-    ] if refused else []
-    advice += [_write_advice(folder, False) for folder in sorted({
-        Path(dest).parent for dest, reason in failures or []
-        if Path(dest).is_absolute() and reason == NOT_WRITABLE
-    })]
-    if any(reason == DRIVE_FULL for _dest, reason in failures or []):
-        advice.append(f"  The drive holding {_locations(paths)} is full: free up space, or "
-                      "install to another drive with --dest, then run again.")
-    if any(reason == READ_ONLY for _dest, reason in failures or []):
-        advice.append("  Files marked read-only are in the way: clear that attribute "
-                      "(or delete them), then run again.")
-    advice += _http_failure_lines(failures or [])
-    if any(isinstance(reason, NetworkReason) for _dest, reason in failures or []):
-        advice.append(NETWORK_FAILURE_ADVICE)
-        if os.environ.get("RETROBIOS_BASE_URL"):
-            # A mirror that is down read as this machine's connection.
-            advice += _address_lines(BASE_URL)[1:]
-    if any(str(reason).startswith(NOT_KEPT) for _dest, reason in failures or []):
-        # The same run fails the same way: "retry only those" sent a phone
-        # user round the loop with nothing changed.
-        advice.append("  The files in place were left as they were, as no backup folder could "
-                      "be made for them. Move them out of the folder, then run again to "
-                      "install the new ones.")
+    advice = _failure_advice(paths, failures or [], assumed, platform_of)
     paths = paths + [folder for folder in elsewhere if folder not in paths]
 
     # The kinds installed, on every end that installed some, under where
     # they came from: as the screen's result says them.
     installed_kinds = (f"  Installed: {installed_words(kinds[0].bios, kinds[0].games, kinds[1])}."
                        if kinds and kinds[0].files and downloaded and OUTPUT.verbose else "")
+    end = _Ending(
+        say=say, paths=paths, downloaded=downloaded, up_to_date=up_to_date, errors=errors,
+        omitted=omitted, offline=offline, failures=failures, sources=sources, kept=kept,
+        advice=advice, same_lines=same_lines, installed_kinds=installed_kinds,
+        omitted_entries=omitted_entries or [], unplaced=unplaced,
+        platform_of=platform_of or {}, hints=hints or [], same_choice=same_choice,
+        missing=missing,
+    )
     if offline:
-        remedy = _offline_remedy()
-        if not downloaded and not errors:
-            say(f"\nNothing installed: {agree(offline, 'file needs', 'files need')} "
-                "the internet, which "
-                f"{offline_named()} does not use.")
-            say(f"  {remedy}")
-            for line in kept:
-                say(line)
-            if up_to_date:
-                say(f"{_plural(up_to_date, 'file')} already in place at "
-                    f"{_locations(paths)}.")
-            for line in same_lines:
-                say(line)
-            sys.exit(2)
-        failed = f", {errors} failed" if errors else ""
-        if downloaded and sources:
-            # One count, the remedy under it, as the screen's result: the
-            # count came twice, "installed" then "copied". The failed files are
-            # in it.
-            say(f"\nFinished with files missing. {sources}")
-            sources = ""
-        elif downloaded:
-            say(f"\nFinished with files missing. {_plural(downloaded, 'file')} installed, "
-                f"{offline} not fetched ({offline_named()}){failed}.")
-        else:
-            # Nothing written: "Finished with files missing. 0 files installed"
-            # read as a part done.
-            say(f"\nNothing installed: {_plural(offline, 'file')} not fetched "
-                f"({offline_named()}){failed}.")
-        if sources:
-            say(f"  {sources}")
-        if installed_kinds:
-            say(installed_kinds)
-        if missing is not None and missing.bios and missing.games:
-            # The kinds still missing, as the screen's result says them,
-            # before the remedy: "They are not in OLD" followed the files
-            # installed.
-            say(f"  Still missing: {installed_words(missing.bios, missing.games)}.")
-        # Under the files it is about: after the save-directory line, "They"
-        # read as that one file.
-        say(f"  {remedy}")
-        say(f"BIOS folder: {_locations(paths)}")
-        for line in kept + advice + same_lines:
-            say(line)
-        sys.exit(1 if downloaded else 2)
-
+        _end_offline(end)
     if errors and not downloaded:
-        say(f"\nNothing was installed. {_plural(errors, 'file')} failed.")
-        if failures and all(isinstance(r, (NetworkReason, HttpReason, OfflineReason))
-                            for _d, r in failures):
-            # The folder was never the problem: naming it as the place being
-            # written to sent people looking at their disk.
-            say(f"BIOS folder: {_locations(paths)}")
-        elif _retry_words(failures):
-            # Nothing was written: every file is one the pack lacks.
-            say(f"BIOS folder: {_locations(paths)}")
-        else:
-            say(f"BIOS folder that was being written to: {_locations(paths)}")
-        for line in kept + advice:
-            say(line)
-        say(_retry_words(failures) or "Run the same command again once that is resolved. "
-            "Files already installed are kept.")
-        for line in same_lines:
-            say(line)
-        sys.exit(2)
-
+        _end_nothing_installed(end)
     if errors:
-        # One count: "42 files installed, 2 files failed." over "38 files
-        # copied from E:\, 4 downloaded, 2 still missing." said it twice,
-        # the failed files as missing ones.
-        say(f"\nFinished with errors. {sources}" if sources else
-            f"\nFinished with errors. {_plural(downloaded, 'file')} installed, "
-            f"{_plural(errors, 'file')} failed.")
-        if installed_kinds:
-            say(installed_kinds)
-        say(f"BIOS folder: {_locations(paths)}")
-        for line in kept + advice:
-            say(line)
-        retry = _retry_words(failures)
-        if retry:
-            say(retry)
-        elif not all(str(reason).startswith(NOT_KEPT) or reason == DRIVE_FULL
-                     for _dest, reason in failures or []):
-            say("Run the same command again to retry only those.")
-        for line in same_lines:
-            say(line)
-        sys.exit(1)
-
-    # No zero count, the screen's words: "Done. 0 files installed, 22
-    # files already up to date" beside its "Everything is in place"
-    in_place = f" {_plural(up_to_date, 'file')} already in place." if up_to_date else ""
-    if not downloaded:
-        say(f"\nDone. {EVERYTHING_IN_PLACE}")
-    elif sources and "," not in sources and not KEPT.summary():
-        # Every file from one place: "22 files installed." over "22 files
-        # copied from packx." said one count twice.
-        say(f"\nDone. {sources}{in_place}")
-        sources = ""
-    else:
-        say(f"\nDone. {_plural(downloaded, 'file')} installed.{in_place}")
-    if sources:
-        say(f"  {sources}")
-    if installed_kinds:
-        say(installed_kinds)
-    if OUTPUT.verbose or not OUTPUT.where_said:
-        say(f"BIOS folder: {_locations(paths)}")
-    for line in kept:
-        say(line)
-    skipped = [entry for entry in omitted_entries or []
-               if entry.get("reason") != "no_save_directory"]
-    if omitted > len(unplaced) and OUTPUT.verbose:
-        for line in _omission_lines(omitted - len(unplaced), skipped,
-                                    Path(paths[0]) if len(paths) == 1 else None):
-            say(line)
-    elif omitted > len(unplaced) and any(entry.get("required") for entry in skipped):
-        # A file an emulator cannot start without is no detail: counted.
-        say(needed_absent_words(sum(1 for entry in skipped if entry.get("required")),
-                                "--verbose"))
-    # RomM's scan is the step after the install: the other hints say how to
-    # install less, a detail.
-    for line in hints or []:
-        if OUTPUT.verbose or line == ROMM_SCAN_WORDS:
-            say(line)
-    if same_choice and OUTPUT.verbose:
-        # After the questions, as the screen's result ends: "the same
-        # command" was one that asked them.
-        for line in same_lines:
-            say(line)
-        say("To check this later, run that command with --check.")
-    elif OUTPUT.verbose:
-        say("To check this later, run the same command with --check.")
-    say(next_step_words(platform_of or {}, paths))
+        _end_with_errors(end)
+    _end_done(end)
 
 
 NEXT_ON_CARD = "Next: put the card back in the device and start a game."
@@ -9276,8 +9461,8 @@ def _offline_remedy(folders: list[str] | None = None, named: bool = False) -> st
     if labels and named:
         return f"Run the installer again with a pack (--from-pack) or {offline_undo()}."
     if labels:
-        named = ", ".join(screen_text(shown_path(label)) for label in labels)
-        return (f"They are not in {named}: run the installer again with a pack "
+        names = ", ".join(screen_text(shown_path(label)) for label in labels)
+        return (f"They are not in {names}: run the installer again with a pack "
                 f"(--from-pack) or {offline_undo()}.")
     return ("Copy them from an old card or a folder (--from), or run the installer "
             f"again with a pack (--from-pack) or {offline_undo()}.")
@@ -9499,11 +9684,71 @@ def _confirm(prompt: str) -> bool:
     return not (answer.startswith("n") or answer in _REFUSALS)
 
 
+def _plan_by_system(
+    to_download: list[dict], verbose: bool, manifest: dict | None,
+) -> tuple[dict[str, list[dict]], dict[str, str]]:
+    """The files of a plan by system, and the title each system is listed by."""
+    by_system: dict[str, list[dict]] = {}
+    titles: dict[str, str] = {}
+    for entry in to_download:
+        names = [system_title(name, manifest) for name in entry_systems(entry)]
+        system = ", ".join(names) or OTHER_TITLE
+        by_system.setdefault(system, []).append(entry)
+        # Batocera's group of systems sharing MAME's device ROMs was one line
+        # of 732 characters, ten rows on an 80-column terminal.
+        titles[system] = (system if verbose or len(names) <= PLAN_GROUP_TITLES
+                          else f"{', '.join(names[:2])} and {len(names) - 2} more systems")
+    return by_system, titles
+
+
+def _plan_listing(
+    by_system: dict[str, list[dict]], titles: dict[str, str], term: Terminal, verbose: bool,
+) -> list[tuple[str, str]]:
+    """Each system of a plan and its files."""
+    shown = None if verbose else PLAN_FILES_PER_SYSTEM
+    # (line, its text without styles), the second measuring the rows it takes.
+    listing: list[tuple[str, str]] = []
+    for system in sorted(by_system):
+        entries = sorted(by_system[system], key=lambda e: e["dest"])
+        listing.append((f"  {term.bold(titles[system])}  {_sized(entries)}",
+                        f"  {titles[system]}  {_sized(entries)}"))
+        listing += [(f"    {entry['dest']}  {term.dim(format_size(entry.get('size', 0)))}",
+                     f"    {entry['dest']}  {format_size(entry.get('size', 0))}")
+                    for entry in entries[:shown]]
+        if shown is not None and len(entries) > shown:
+            more = f"    ... and {len(entries) - shown} more"
+            listing.append((more, more))
+    return listing
+
+
+def _print_largest_systems(
+    to_download: list[dict], by_system: dict[str, list[dict]], titles: dict[str, str],
+    term: Terminal,
+) -> None:
+    """The largest systems of a plan taller than the screen."""
+    largest = sorted(by_system, key=lambda s: (-_bytes(by_system[s]), s))
+    # A file several systems share is a group of its own: "88 systems"
+    # were 66 systems, as the full screen counts them, and 22 groups.
+    systems = {name for entry in to_download for name in entry_systems(entry)}
+    groups = (f"{_plural(len(systems), 'system')} in {len(largest)} groups"
+              if systems and len(systems) != len(largest)
+              else _plural(len(largest), 'system'))
+    print(f"  {groups}, the largest first:")
+    for system in largest[:PLAN_LARGEST_SYSTEMS]:
+        print(f"  {term.bold(titles[system])}  {_sized(by_system[system])}")
+    if len(largest) > PLAN_LARGEST_SYSTEMS:
+        # Counted as the line above counts: the groups, when it names them.
+        unit = "group" if "groups" in groups else "system"
+        more = len(largest) - PLAN_LARGEST_SYSTEMS
+        print(f"  ... and {more} more {unit}{'s' if more > 1 else ''}: --verbose lists "
+              "every system and its files.")
+
+
 def _print_plan(
     to_download: list[dict], bios_path: Path, term: Terminal,
-    trees: list[tuple[dict, dict[str, dict]]] = (),
+    trees: Collection[tuple[dict, dict[str, dict]]] = (),
     kept: dict[Path, list[int]] | None = None,
-    copied: list[str] = (),
+    copied: Collection[str] = (),
     verbose: bool = False,
     manifest: dict | None = None,
 ) -> None:
@@ -9517,21 +9762,21 @@ def _print_plan(
     largest systems, and --verbose lists every file.
     """
     counts = tally(to_download)
-    trees = [(entry, needed) for entry, needed in trees if needed]
-    tree_counts = tally(meta for _entry, needed in trees for meta in needed.values())
+    filled = [(entry, needed) for entry, needed in trees if needed]
+    tree_counts = tally(meta for _entry, needed in filled for meta in needed.values())
     tree_files = tree_counts.files
     # One count for the plan, the screen's: "8252
     # files, and 2636 data files" read as two kinds of one thing. The kinds
     # follow, adding up to it.
     total = counts.files + tree_files
-    tree_bytes = sum(data_fetch_bytes(entry, needed) for entry, needed in trees)
+    tree_bytes = sum(data_fetch_bytes(entry, needed) for entry, needed in filled)
     parts = ([f"{_plural(total, 'file')} ({format_size(counts.size + tree_bytes)})"]
              if total else [])
     split = parts_words(counts if (manifest or {}).get("categorized")
                         else tally({"size": e.get("size")} for e in to_download),
                         tree_files, tree_bytes)
-    if split and trees:
-        split += f", the data files extracted from {_plural(len(trees), 'archive')}"
+    if split and filled:
+        split += f", the data files extracted from {_plural(len(filled), 'archive')}"
     # A pack is copied from, not downloaded: "Would download 23 files" was
     # said of a run that makes no network request.
     verb = "copy" if LOCAL.pack is not None else "download"
@@ -9555,54 +9800,18 @@ def _print_plan(
         print(line)
     if not parts:
         print(f"\n  Nothing to {verb}.")
-    by_system: dict[str, list[dict]] = {}
-    titles: dict[str, str] = {}
-    for entry in to_download:
-        names = [system_title(name, manifest) for name in entry_systems(entry)]
-        system = ", ".join(names) or OTHER_TITLE
-        by_system.setdefault(system, []).append(entry)
-        # Batocera's group of systems sharing MAME's device ROMs was one line
-        # of 732 characters, ten rows on an 80-column terminal.
-        titles[system] = (system if verbose or len(names) <= PLAN_GROUP_TITLES
-                          else f"{', '.join(names[:2])} and {len(names) - 2} more systems")
-    shown = None if verbose else PLAN_FILES_PER_SYSTEM
-    # (line, its text without styles), the second measuring the rows it takes.
-    listing: list[tuple[str, str]] = []
-    for system in sorted(by_system):
-        entries = sorted(by_system[system], key=lambda e: e["dest"])
-        listing.append((f"  {term.bold(titles[system])}  {_sized(entries)}",
-                        f"  {titles[system]}  {_sized(entries)}"))
-        listing += [(f"    {entry['dest']}  {term.dim(format_size(entry.get('size', 0)))}",
-                     f"    {entry['dest']}  {format_size(entry.get('size', 0))}")
-                    for entry in entries[:shown]]
-        if shown is not None and len(entries) > shown:
-            more = f"    ... and {len(entries) - shown} more"
-            listing.append((more, more))
+    by_system, titles = _plan_by_system(to_download, verbose, manifest)
+    listing = _plan_listing(by_system, titles, term, verbose)
     columns, screen = terminal_size()
     # A line wider than the terminal wraps: counted as one, the total the
     # listing must leave in view scrolled out of sight.
     rows = sum(-(-max(1, cell_width(plain)) // max(1, columns)) for _line, plain in listing)
-    if verbose or rows + len(trees) + PLAN_FRAME_LINES <= screen:
+    if verbose or rows + len(filled) + PLAN_FRAME_LINES <= screen:
         for line, _plain in listing:
             print(line)
     else:
-        largest = sorted(by_system, key=lambda s: (-_bytes(by_system[s]), s))
-        # A file several systems share is a group of its own: "88 systems"
-        # were 66 systems, as the full screen counts them, and 22 groups.
-        systems = {name for entry in to_download for name in entry_systems(entry)}
-        groups = (f"{_plural(len(systems), 'system')} in {len(largest)} groups"
-                  if systems and len(systems) != len(largest)
-                  else _plural(len(largest), 'system'))
-        print(f"  {groups}, the largest first:")
-        for system in largest[:PLAN_LARGEST_SYSTEMS]:
-            print(f"  {term.bold(titles[system])}  {_sized(by_system[system])}")
-        if len(largest) > PLAN_LARGEST_SYSTEMS:
-            # Counted as the line above counts: the groups, when it names them.
-            unit = "group" if "groups" in groups else "system"
-            more = len(largest) - PLAN_LARGEST_SYSTEMS
-            print(f"  ... and {more} more {unit}{'s' if more > 1 else ''}: --verbose lists "
-                  "every system and its files.")
-    for entry, needed in trees:
+        _print_largest_systems(to_download, by_system, titles, term)
+    for entry, needed in filled:
         source = LOCAL.pack.name if LOCAL.pack is not None else entry["url"]
         fetched = data_fetch_bytes(entry, needed)
         archive = ("" if fetched == sum(meta.get("size", 0) for meta in needed.values())
@@ -9734,7 +9943,7 @@ def download_files(
     return failed, interrupted
 
 
-def _archive_validator(headers: object) -> str:
+def _archive_validator(headers: http.client.HTTPMessage | Mapping[str, str] | None) -> str:
     """What names this revision of an archive to its server: an If-Range
     with it gets the rest of the same bytes, or the whole new archive."""
     if not headers:
@@ -9742,6 +9951,91 @@ def _archive_validator(headers: object) -> str:
     etag = headers.get("ETag", "") or ""
     # A weak tag never answers a range (RFC 9110 13.1.5).
     return etag if etag and not etag.startswith("W/") else headers.get("Last-Modified", "") or ""
+
+
+TYPE_CHECKING = False
+if TYPE_CHECKING:
+    from typing import IO
+
+
+class _ArchiveCount:
+    """The bytes one attempt at an archive drew on the progress."""
+
+    def __init__(self, progress: Progress | None) -> None:
+        self.progress = progress
+        self.received = 0
+        self.resumed = 0
+
+    def take_back(self) -> None:
+        """Take a failed attempt's bytes off the progress."""
+        if self.progress is not None:
+            if self.received:
+                self.progress.add(-self.received)
+            if self.resumed:
+                self.progress.add(-self.resumed)
+                self.progress.forget_resumed(self.resumed)
+
+
+def _archive_resume_point(url: str, keep: Path | None, note: Path | None) -> tuple[int, str]:
+    """(bytes the kept archive holds, its validator) when its note names
+    url, else (0, "")."""
+    if keep is None or note is None:
+        return 0, ""
+    try:
+        recorded = note.read_text(encoding="utf-8").split("\n")
+        if recorded[0] == url and len(recorded) > 1 and recorded[1]:
+            return keep.stat().st_size, recorded[1]
+    except (OSError, UnicodeError):
+        return 0, ""
+    return 0, ""
+
+
+def _archive_file(keep: Path | None, offset: int, directory: Path) -> IO[bytes]:
+    """The file an attempt writes: the kept archive, or a scratch file in directory."""
+    if keep is not None:
+        return open(keep, "r+b" if offset else "wb")
+    return tempfile.NamedTemporaryFile(dir=directory, suffix=".archive", delete=False)
+
+
+def _receive_archive(
+    resp: http.client.HTTPResponse, handle: IO[bytes], offset: int, url: str,
+    note: Path | None, count: _ArchiveCount,
+) -> None:
+    """Write the response into handle, past offset when the server sent the rest."""
+    headers: http.client.HTTPMessage | Mapping[str, str] = resp.headers or {}
+    ranged = (offset and getattr(resp, "status", 200) == 206 and str(
+        headers.get("Content-Range", "")).startswith(f"bytes {offset}-"))
+    if not ranged:
+        offset = 0
+    handle.seek(offset)
+    handle.truncate()
+    if note is not None and not offset:
+        # Written before the first byte: a cut transfer is then
+        # resumed only against the revision it holds.
+        note.write_text(f"{url}\n{_archive_validator(headers)}\n",
+                        encoding="utf-8")
+    progress = count.progress
+    if progress is not None:
+        length = headers.get("Content-Length", "")
+        if length.isdigit():
+            progress.expect(offset + int(length))
+        if offset:
+            progress.add(offset, resumed=True)
+            count.resumed = offset
+    total = offset
+    while True:
+        if _stop.is_set():
+            raise _Interrupted()
+        chunk = resp.read(1024 * 1024)
+        if not chunk:
+            break
+        count.received += len(chunk)
+        total += len(chunk)
+        if total > MAX_DATA_ARCHIVE_SIZE:
+            raise ValueError("archive exceeds the size limit")
+        handle.write(chunk)
+        if progress is not None:
+            progress.add(len(chunk))
 
 
 def _fetch_archive(url: str, directory: Path, progress: Progress | None = None,
@@ -9760,59 +10054,16 @@ def _fetch_archive(url: str, directory: Path, progress: Progress | None = None,
     note = keep.with_name(keep.name + ".source") if keep is not None else None
     reason: Exception | None = None
     for attempt in range(1, MAX_RETRIES + 1):
-        offset = 0
-        validator = ""
-        if keep is not None:
-            try:
-                recorded = note.read_text(encoding="utf-8").split("\n")
-                if recorded[0] == url and len(recorded) > 1 and recorded[1]:
-                    validator = recorded[1]
-                    offset = keep.stat().st_size
-            except (OSError, UnicodeError):
-                offset = 0
+        offset, validator = _archive_resume_point(url, keep, note)
         request = urllib.request.Request(url)
         if offset:
             request.add_header("Range", f"bytes={offset}-")
             request.add_header("If-Range", validator)
-        handle = (open(keep, "r+b" if offset else "wb") if keep is not None else
-                  tempfile.NamedTemporaryFile(dir=directory, suffix=".archive", delete=False))
-        received = 0
-        resumed = 0
+        handle = _archive_file(keep, offset, directory)
+        count = _ArchiveCount(progress)
         try:
             with handle, urllib.request.urlopen(request, timeout=60) as resp:
-                headers = resp.headers or {}
-                ranged = (offset and getattr(resp, "status", 200) == 206 and str(
-                    headers.get("Content-Range", "")).startswith(f"bytes {offset}-"))
-                if not ranged:
-                    offset = 0
-                handle.seek(offset)
-                handle.truncate()
-                if keep is not None and not offset:
-                    # Written before the first byte: a cut transfer is then
-                    # resumed only against the revision it holds.
-                    note.write_text(f"{url}\n{_archive_validator(headers)}\n",
-                                    encoding="utf-8")
-                if progress is not None:
-                    length = headers.get("Content-Length", "")
-                    if length.isdigit():
-                        progress.expect(offset + int(length))
-                    if offset:
-                        progress.add(offset, resumed=True)
-                        resumed = offset
-                total = offset
-                while True:
-                    if _stop.is_set():
-                        raise _Interrupted()
-                    chunk = resp.read(1024 * 1024)
-                    if not chunk:
-                        break
-                    received += len(chunk)
-                    total += len(chunk)
-                    if total > MAX_DATA_ARCHIVE_SIZE:
-                        raise ValueError("archive exceeds the size limit")
-                    handle.write(chunk)
-                    if progress is not None:
-                        progress.add(len(chunk))
+                _receive_archive(resp, handle, offset, url, note, count)
             return keep if keep is not None else Path(handle.name)
         except urllib.error.HTTPError as exc:
             if keep is None or exc.code == 416 or exc.code < 500 and exc.code != 429:
@@ -9834,12 +10085,7 @@ def _fetch_archive(url: str, directory: Path, progress: Progress | None = None,
             if keep is None:
                 Path(handle.name).unlink(missing_ok=True)
             raise
-        if progress is not None:
-            if received:
-                progress.add(-received)
-            if resumed:
-                progress.add(-resumed)
-                progress.forget_resumed(resumed)
+        count.take_back()
         if attempt < MAX_RETRIES:
             time.sleep(_retry_delay(attempt, None))
     raise reason if reason else OSError("download failed")
@@ -9852,9 +10098,16 @@ def _drop_archive(path: Path, note: Path | None) -> None:
         note.unlink(missing_ok=True)
 
 
+def _tar_member(tf: tarfile.TarFile, member: tarfile.TarInfo) -> IO[bytes]:
+    """The bytes of a regular file of a tarball, which extractfile always opens."""
+    handle = tf.extractfile(member)
+    assert handle is not None
+    return handle
+
+
 def _archive_members(
     archive: Path, entry: dict
-) -> Iterator[tuple[str, int, Callable[[], BinaryIO]]]:
+) -> Iterator[tuple[str, int, Callable[[], IO[bytes]]]]:
     """(path in the tree, declared size, opener) for each file the archive
     maps into it.
 
@@ -9878,7 +10131,7 @@ def _archive_members(
                     parts = parts[strip:]
                 if parts[0] in exclude:
                     continue
-                yield "/".join(parts), info.file_size, (lambda info=info: zf.open(info))
+                yield "/".join(parts), info.file_size, functools.partial(zf.open, info)
         return
     prefix = entry["source_path"].rstrip("/") + "/"
     with tarfile.open(archive, "r:gz") as tf:
@@ -9888,7 +10141,7 @@ def _archive_members(
             rel = member.name[len(prefix):]
             if not rel or ".." in rel.split("/") or rel.split("/")[0] in exclude:
                 continue
-            yield rel, member.size, (lambda member=member: tf.extractfile(member))
+            yield rel, member.size, functools.partial(_tar_member, tf, member)
 
 
 def data_directory_state(entry: dict, bios_path: Path,
@@ -9957,14 +10210,18 @@ def install_data_directory(entry: dict, bios_path: Path,
     root, needed, present = state or data_directory_state(entry, bios_path)
     needed = dict(needed)
     written: list[dict] = []
-    counts = {"present": present, "installed": 0, "changed": 0, "absent": 0, "error": "",
-              "not_kept": [], "written": written}
+    not_kept: list[tuple[str, str]] = []
+    tallies = {"installed": 0, "changed": 0}
+    counts: dict[str, object] = {
+        "present": present, "installed": 0, "changed": 0, "absent": 0, "error": "",
+        "not_kept": not_kept, "written": written}
     if not needed:
         return counts
     _writing.set()
     fetched: Path | None = None
     lock: BinaryIO | None = None
     lock_path = root / f".{entry['ref']}.archive.lock"
+    members: Iterable[tuple[str, int, Callable[[], IO[bytes]]]]
     try:
         root.mkdir(parents=True, exist_ok=True)
         with tempfile.TemporaryDirectory(dir=root) as scratch:
@@ -9991,15 +10248,15 @@ def install_data_directory(entry: dict, bios_path: Path,
                 # expected size whatever the member claims, so a member that
                 # inflates without end costs one byte past it.
                 if declared != meta["size"]:
-                    counts["changed"] += 1
+                    tallies["changed"] += 1
                     continue
                 target = _destination_path(root, rel)
                 target.parent.mkdir(parents=True, exist_ok=True)
                 slot = f"{entry['dest']}/{rel}" if entry.get("dest") else rel
                 outcome = _install_data_member(
-                    opener, meta, target, bios_path, slot, rel, counts["not_kept"])
+                    opener, meta, target, bios_path, slot, rel, not_kept)
                 if outcome:
-                    counts[outcome] += 1
+                    tallies[outcome] += 1
                 if outcome == "installed":
                     written.append({"dest": slot, "sha1": meta["sha1"], "size": meta["size"]})
     except _Offline as exc:
@@ -10024,12 +10281,14 @@ def install_data_directory(entry: dict, bios_path: Path,
             _drop_archive(fetched, fetched.with_name(fetched.name + ".source"))
         if lock is not None:
             _release_claim(lock, lock_path)
+    counts["installed"] = tallies["installed"]
+    counts["changed"] = tallies["changed"]
     counts["absent"] = len(needed)
     return counts
 
 
 def _install_data_member(
-    opener: Callable[[], ContextManager[BinaryIO]], meta: dict, target: Path,
+    opener: Callable[[], ContextManager[IO[bytes]]], meta: dict, target: Path,
     bios_path: Path, slot: str, rel: str, not_kept: list[tuple[str, str]],
 ) -> str:
     """Write one member of a data tree's archive at target once its bytes
