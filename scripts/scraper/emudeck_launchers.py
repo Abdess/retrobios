@@ -158,7 +158,8 @@ def setter_records(tree: RepoTree, name: str, option_key: str | None = None) -> 
     """
     script = _script(tree, name)
     emulator = _emulator(name)
-    records: list[Launcher] = []
+    # Each record with the config file it names.
+    records: list[tuple[Launcher, str]] = []
     groups: dict[tuple[str, str], tuple[list[tuple[str, str]], list[str], set[int]]] = {}
     for file, section, key, value, lines in setters(script):
         config = posixpath.basename(file)
@@ -177,7 +178,7 @@ def setter_records(tree: RepoTree, name: str, option_key: str | None = None) -> 
             continue
         if key not in DIRECTORY_KINDS:
             raise script.missing(f"known directory key, got {key}")
-        records.append(
+        records.append((
             Launcher(
                 emulator=emulator,
                 build="libretro" if emulator == "retroarch" else "standalone",
@@ -186,10 +187,11 @@ def setter_records(tree: RepoTree, name: str, option_key: str | None = None) -> 
                 source_ref=source_ref([(script.path, lines)]),
                 search_dir=value,
                 passes_to=describe_keys(config, ((section, key),)),
-            )
-        )
+            ),
+            config,
+        ))
     for (config, folder), (keys, names, refs) in groups.items():
-        records.append(
+        records.append((
             Launcher(
                 emulator=emulator,
                 build="standalone",
@@ -198,19 +200,22 @@ def setter_records(tree: RepoTree, name: str, option_key: str | None = None) -> 
                 source_ref=source_ref([(script.path, refs)]),
                 search_dir=folder,
                 passes_to=describe_keys(config, tuple(keys)),
-            )
-        )
+            ),
+            config,
+        ))
     if not records:
         raise script.missing(f"setter writing a path under {BIOS}")
     if option_key:
-        for record in records:
-            _add_option(tree, script, record, option_key)
-    return records
+        for record, config in records:
+            # passes_to starts with the config name, cut at its first space.
+            _add_option(tree, script, record, config.split(" ", 1)[0], option_key)
+    return [record for record, _config in records]
 
 
-def _add_option(tree: RepoTree, script: Script, record: Launcher, option_key: str) -> None:
+def _add_option(
+    tree: RepoTree, script: Script, record: Launcher, config: str, option_key: str
+) -> None:
     """depends_on_option from the value the shipped config gives option_key."""
-    config = record.passes_to.split(" ", 1)[0]
     file_var = script.assignment_ending("/" + config)
     if file_var is None:
         raise script.missing(f"config variable for {config}")
@@ -383,7 +388,7 @@ def configured(tree: RepoTree) -> list[Launcher]:
 
 
 def links(tree: RepoTree) -> list[Launcher]:
-    records = []
+    records: list[Launcher] = []
     for name in LINK_SCRIPTS:
         script = _script(tree, name)
         found = script.links(BIOS)

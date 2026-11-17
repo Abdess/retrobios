@@ -23,6 +23,7 @@ import re
 import shlex
 from collections.abc import Iterator
 from dataclasses import dataclass, field
+from functools import partial
 from itertools import product
 from pathlib import PurePosixPath
 from typing import Any
@@ -224,8 +225,8 @@ class Scripts:
         lines = text.splitlines()
         fields: dict[str, tuple[str, int]] = {}
         for found in _MODULE_FIELD.finditer(text):
-            line = text.count("\n", 0, found.start()) + 1
-            fields.setdefault(found.group(1), (found.group(2), line))
+            field_line = text.count("\n", 0, found.start()) + 1
+            fields.setdefault(found.group(1), (found.group(2), field_line))
         if "id" not in fields:
             return None
         repo = fields.get("repo")
@@ -299,21 +300,15 @@ class Scripts:
         for number, text, opener in _logical_lines(module.lines, start + 1, end - 1):
             stripped = text.strip()
             if array is not None:
-                body = re.sub(r"\s+#.*$", "", stripped)
-                closed = body.endswith(")")
-                array[1].append(body[:-1] if closed else body)
-                if closed:
-                    words = _split(" ".join(array[1]))
-                    env[array[0]] = [v for w in words for v in self.expand(w, package, env)]
+                if self._array_line(array, stripped, package, env):
                     array = None
                 continue
             if opener is not None:
                 if self._live(branches):
-                    words = [self.expand(w, package, env) for w in stripped.split()]
                     events.setdefault((module.path, number), Event(
-                        module.path, number, words, stripped,
-                        conditions + self._shown(branches, package, env), True,
-                        [self.expand(w, package, env) for w in _split(opener)],
+                        module.path, number, self._expand_all(stripped.split(), package, env),
+                        stripped, conditions + self._shown(branches, package, env), True,
+                        self._expand_all(_split(opener), package, env),
                     ))
                 continue
             if not stripped or stripped.startswith("#"):
@@ -322,35 +317,16 @@ class Scripts:
                 continue
             if not self._live(branches):
                 continue
-            loop = _FOR.match(stripped)
-            if loop is not None:
-                values = [v for w in _split(loop.group(2)) for v in self.expand(w, package, env)]
-                loops.append((loop.group(1), env.get(loop.group(1))))
-                env[loop.group(1)] = values
-                continue
-            if re.match(r"^(while|until)\b|^for\s*\(\(", stripped):
-                loops.append((None, None))
-                continue
-            if stripped == "done" or stripped.startswith("done ") or stripped.startswith("done;"):
-                if loops:
-                    var, previous = loops.pop()
-                    if var is not None:
-                        if previous is None:
-                            env.pop(var, None)
-                        else:
-                            env[var] = previous
+            if self._loop(stripped, package, env, loops):
                 continue
             if stripped in ("do", "then", "else", "fi", "esac", "{", "}"):
                 continue
-            guard = re.match(r"^\[\[\s*(.*?)\s*\]\]\s*&&\s*(.*)$", stripped)
-            shown = conditions + self._shown(branches, package, env)
-            if guard is not None:
-                verdict = self._md_id_test(f"[[ {guard.group(1)} ]]", package)
-                if verdict is False or "$md_mode" in guard.group(1) or "$mode" in guard.group(1):
-                    continue
-                if verdict is None:
-                    shown = shown + [self._render(guard.group(1), package, env)]
-                stripped = guard.group(2)
+            guarded = self._guard(
+                stripped, package, env, conditions + self._shown(branches, package, env)
+            )
+            if guarded is None:
+                continue
+            stripped, shown = guarded
             opens = re.match(r"^(?:local\s+)?([A-Za-z_]\w*)=\(([^)]*)$", stripped)
             if opens is not None:
                 array = (opens.group(1), [opens.group(2)])
@@ -362,10 +338,79 @@ class Scripts:
             events.setdefault(
                 (module.path, number), Event(module.path, number, words, stripped, shown, False)
             )
-            callee = words[0][0] if words and words[0] else None
-            if callee in self.owner and callee != name:
-                call_args = {str(i): w for i, w in enumerate(words[1:], 1)}
-                self._walk(package, callee, call_args, shown, stack | {name}, events)
+            self._descend(package, name, words, shown, stack, events)
+
+    def _descend(
+        self,
+        package: Module,
+        name: str,
+        words: list[list[str]],
+        shown: list[str],
+        stack: set[str],
+        events: dict[tuple[str, int], Event],
+    ) -> None:
+        """Walk the function a statement calls, with the words it passes."""
+        callee = words[0][0] if words and words[0] else None
+        if callee in self.owner and callee != name:
+            call_args = {str(i): w for i, w in enumerate(words[1:], 1)}
+            self._walk(package, callee, call_args, shown, stack | {name}, events)
+
+    def _expand_all(
+        self, words: list[str], package: Module, env: dict[str, list[str]]
+    ) -> list[list[str]]:
+        return [self.expand(w, package, env) for w in words]
+
+    def _array_line(
+        self, array: tuple[str, list[str]], stripped: str, package: Module,
+        env: dict[str, list[str]],
+    ) -> bool:
+        """Add one line to a multi-line array, and say whether it closed it."""
+        body = re.sub(r"\s+#.*$", "", stripped)
+        closed = body.endswith(")")
+        array[1].append(body[:-1] if closed else body)
+        if closed:
+            words = _split(" ".join(array[1]))
+            env[array[0]] = [v for w in words for v in self.expand(w, package, env)]
+        return closed
+
+    def _loop(
+        self, stripped: str, package: Module, env: dict[str, list[str]],
+        loops: list[tuple[str | None, list[str] | None]],
+    ) -> bool:
+        """Track for/while/until/done, and say whether the line was one of them."""
+        loop = _FOR.match(stripped)
+        if loop is not None:
+            values = [v for w in _split(loop.group(2)) for v in self.expand(w, package, env)]
+            loops.append((loop.group(1), env.get(loop.group(1))))
+            env[loop.group(1)] = values
+            return True
+        if re.match(r"^(while|until)\b|^for\s*\(\(", stripped):
+            loops.append((None, None))
+            return True
+        if stripped == "done" or stripped.startswith(("done ", "done;")):
+            if loops:
+                var, previous = loops.pop()
+                if var is not None:
+                    if previous is None:
+                        env.pop(var, None)
+                    else:
+                        env[var] = previous
+            return True
+        return False
+
+    def _guard(
+        self, stripped: str, package: Module, env: dict[str, list[str]], shown: list[str]
+    ) -> tuple[str, list[str]] | None:
+        """The statement a `[[ test ]] && statement` runs and its conditions, None if never."""
+        guard = re.match(r"^\[\[\s*(.*?)\s*\]\]\s*&&\s*(.*)$", stripped)
+        if guard is None:
+            return stripped, shown
+        verdict = self._md_id_test(f"[[ {guard.group(1)} ]]", package)
+        if verdict is False or "$md_mode" in guard.group(1) or "$mode" in guard.group(1):
+            return None
+        if verdict is None:
+            shown = shown + [self._render(guard.group(1), package, env)]
+        return guard.group(2), shown
 
     def _branch(
         self, stripped: str, package: Module, env: dict[str, list[str]],
@@ -462,14 +507,10 @@ class Scripts:
             if not bound:
                 results.append(braced)
                 continue
-            for values in product(*(env[n] for n in bound)):
-                chosen = dict(zip(bound, values))
-
-                def replace(found: re.Match[str]) -> str:
-                    key = found.group(1) or found.group(3)
-                    return chosen.get(key, found.group(0))
-
-                results.append(_VAR.sub(replace, braced))
+            results.extend(
+                _VAR.sub(partial(_bound_value, dict(zip(bound, values))), braced)
+                for values in product(*(env[n] for n in bound))
+            )
         return results
 
 
@@ -483,6 +524,11 @@ LIST_SEPARATORS = {"advmame": ":", "advmame-0.94": ":", "advmame-1.4": ":"}
 DEFAULT_LIST_SEPARATOR = ";"
 
 
+def _bound_value(chosen: dict[str, str], found: re.Match[str]) -> str:
+    key = found.group(1) or found.group(3)
+    return chosen.get(key, found.group(0))
+
+
 def _search_list_in_roms(event: Event, separator: str = DEFAULT_LIST_SEPARATOR) -> bool:
     """An iniSet whose value is a list of folders below the roms root.
 
@@ -494,7 +540,7 @@ def _search_list_in_roms(event: Event, separator: str = DEFAULT_LIST_SEPARATOR) 
         return False
     parts = [p for p in event.words[2][0].split(separator) if p]
     return len(parts) > 1 and all(
-        p.startswith(ROMDIR + "/") or p.startswith("${romdir}/") for p in parts
+        p.startswith((ROMDIR + "/", "${romdir}/")) for p in parts
     )
 
 
@@ -541,9 +587,11 @@ class PackageReader:
     def read(self) -> list[Launcher]:
         events = self.scripts.walk(self.package)
         for event in events:
-            if not event.heredoc and event.words and event.words[0] == ["copyDefaultConfig"]:
-                if len(event.words) >= 3 and len(event.words[1]) == 1 and len(event.words[2]) == 1:
-                    self.installed_as.setdefault(event.words[1][0], event.words[2][0])
+            if (
+                not event.heredoc and event.words and event.words[0] == ["copyDefaultConfig"]
+                and len(event.words) >= 3 and len(event.words[1]) == 1 and len(event.words[2]) == 1
+            ):
+                self.installed_as.setdefault(event.words[1][0], event.words[2][0])
         links: list[Event] = []
         for event in events:
             if not event.words or not event.words[0]:
@@ -825,8 +873,8 @@ class PackageReader:
             if flag.startswith("-") and _mentions_bios(value)
         ]
         found += [
-            tuple(token.split("=", 1)) for token in tokens
-            if token.startswith("-") and "=" in token and _mentions_bios(token.split("=", 1)[1])
+            (head, tail) for head, sep, tail in (token.partition("=") for token in tokens)
+            if head.startswith("-") and sep and _mentions_bios(tail)
         ]
         if not found:
             raise LauncherPatternMissing(

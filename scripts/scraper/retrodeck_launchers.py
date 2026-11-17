@@ -167,18 +167,7 @@ class Component:
                 words = [self.resolve(w) for w in words]
                 raw = " ".join(words)
             if command == "set_setting_value" and len(words) >= 4:
-                value = _unquote(words[3])
-                if _mentions_bios(value):
-                    section = words[5] if len(words) > 5 else None
-                    where = f"[{section}] {words[2]}" if section else words[2]
-                    target = self.config_name(words[1])
-                    if _is_file(value):
-                        settings.setdefault(("fixed_name", target, depends or ""), []).append(
-                            (number, value, where)
-                        )
-                    else:
-                        key = ("passes_path", target, where, depends or "")
-                        settings.setdefault(key, []).append((number, value, where))
+                self._setting(number, words, depends, settings)
                 continue
             if command == "dir_prep" and len(words) == 3:
                 self._dir_prep(path, number, words[1], words[2], depends)
@@ -192,18 +181,7 @@ class Component:
                 copies.setdefault((folder, depends), []).append((number, name, target))
                 continue
             if command == "tar" and "-C" in words and _mentions_bios(words[words.index("-C") + 1]):
-                if "-czf" in words:
-                    continue
-                archive = next((w for w in words if w.endswith((".tar.gz", ".tgz", ".tar"))), None)
-                if archive is None:
-                    raise LauncherPatternMissing(
-                        f"{path}:{number}", f"tar into bios/ of no archive: {raw}"
-                    )
-                self.record(
-                    "copies", [], [(path, number)], search_dir=archive,
-                    passes_to=words[words.index("-C") + 1], fails_when_missing=False,
-                    depends_on_option=depends,
-                )
+                self._tar(path, number, words, raw, depends)
                 continue
             if command == "sed" and PLACEHOLDER in raw:
                 self._preset(script, number, words)
@@ -215,8 +193,8 @@ class Component:
             raise LauncherPatternMissing(
                 f"{path}:{number}", f"unrecognised use of $bios_path: {raw}"
             )
-        for key, hits in settings.items():
-            self._settings(path, key, hits)
+        for setting, hits in settings.items():
+            self._settings(path, setting, hits)
         for (folder, depends), hits in copies.items():
             names = [name for _n, name, _t in hits]
             targets = [target for _n, _name, target in hits]
@@ -225,6 +203,40 @@ class Component:
                 passes_to=_render_targets(names, targets), fails_when_missing=False,
                 depends_on_option=depends or None,
             )
+
+    def _setting(
+        self, number: int, words: list[str], depends: str | None,
+        settings: dict[tuple[str, ...], list[tuple[int, str, str]]],
+    ) -> None:
+        """A set_setting_value that writes a bios/ path into a config."""
+        value = _unquote(words[3])
+        if not _mentions_bios(value):
+            return
+        section = words[5] if len(words) > 5 else None
+        where = f"[{section}] {words[2]}" if section else words[2]
+        target = self.config_name(words[1])
+        if _is_file(value):
+            settings.setdefault(("fixed_name", target, depends or ""), []).append(
+                (number, value, where)
+            )
+        else:
+            key = ("passes_path", target, where, depends or "")
+            settings.setdefault(key, []).append((number, value, where))
+
+    def _tar(self, path: str, number: int, words: list[str], raw: str, depends: str | None) -> None:
+        """A tar that extracts an archive into bios/."""
+        if "-czf" in words:
+            return
+        archive = next((w for w in words if w.endswith((".tar.gz", ".tgz", ".tar"))), None)
+        if archive is None:
+            raise LauncherPatternMissing(
+                f"{path}:{number}", f"tar into bios/ of no archive: {raw}"
+            )
+        self.record(
+            "copies", [], [(path, number)], search_dir=archive,
+            passes_to=words[words.index("-C") + 1], fails_when_missing=False,
+            depends_on_option=depends,
+        )
 
     def _settings(self, path: str, key: tuple[str, ...], hits: list[tuple[int, str, str]]) -> None:
         kind, target = key[0], key[1]

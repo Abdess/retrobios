@@ -13,8 +13,9 @@ from __future__ import annotations
 
 import posixpath
 import re
-from collections.abc import Callable
+from collections.abc import Callable, Hashable
 from dataclasses import dataclass
+from typing import TypeVar
 
 from .configgen_launchers import Launcher
 from .shell_launchers import config_placement, evidence_fields
@@ -39,6 +40,8 @@ CONFIG_ROOT = "/storage/.config"
 USERCONFIG = f"{ROCKNIX}/packages/sysutils/systemd/scripts/userconfig-setup"
 
 Lines = list[tuple[str, set[int]]]
+# What per_device groups configs by: equal values make one group.
+Found = TypeVar("Found", bound=Hashable)
 
 
 @dataclass
@@ -68,13 +71,13 @@ def device_configs(
         if not re.search(rf"CONFIG=|\$\{{PKG_DIR\}}/{folder}/", body):
             continue
         offset = block.start(1)
-        for arm in re.finditer(r"^\s*([\w*|]+)\)(.*?);;", body, re.M | re.S):
+        for case_arm in re.finditer(r"^\s*([\w*|]+)\)(.*?);;", body, re.M | re.S):
             chosen = re.search(
-                rf'CONFIG="([^"]+)"|\$\{{PKG_DIR\}}/{folder}/([^/\s]+)', arm.group(2)
+                rf'CONFIG="([^"]+)"|\$\{{PKG_DIR\}}/{folder}/([^/\s]+)', case_arm.group(2)
             )
             if chosen:
-                arms.append((arm.group(1).split("|"), chosen.group(1) or chosen.group(2)))
-                mk_lines.add(mk.text.count("\n", 0, offset + arm.start(2)) + 1)
+                arms.append((case_arm.group(1).split("|"), chosen.group(1) or chosen.group(2)))
+                mk_lines.add(mk.text.count("\n", 0, offset + case_arm.start(2)) + 1)
         break
     if not arms:
         number, _ = mk.find(
@@ -107,15 +110,15 @@ def per_device(
     tree: RepoTree,
     configs: list[DeviceConfig],
     mk_path: str,
-    read: Callable[[str, str], tuple[object, set[int]]],
-) -> list[tuple[str | None, object, Lines]]:
+    read: Callable[[str, str], tuple[Found, set[int]]],
+) -> list[tuple[str | None, Found, Lines]]:
     """Configs grouped by what read() finds in them.
 
     read(path, text) returns a comparable value and the lines it comes from.
     One group gives one result without a device. Otherwise each group names
     its devices, in the order of the devices directory.
     """
-    groups: dict[object, tuple[list[str], Lines]] = {}
+    groups: dict[Found, tuple[list[str], Lines]] = {}
     for config in configs:
         value, lines = read(config.path, tree.read(config.path))
         devices, refs = groups.setdefault(value, ([], []))
@@ -209,6 +212,14 @@ def _keys(value: FixedPaths) -> list[str]:
     return [f"[{section}] {key}" if section else key for section, key in value.keys]
 
 
+@dataclass(frozen=True)
+class Installed:
+    """Where the launch puts a per-device config, and the start script doing it."""
+
+    target: str = ""
+    start: Script | None = None
+
+
 def config_records(
     tree: RepoTree,
     emulator: str,
@@ -216,8 +227,7 @@ def config_records(
     file: str,
     passes_to_suffix: str = "",
     depends_on_option: str | None = None,
-    target: str = "",
-    start: Script | None = None,
+    installed: Installed | None = None,
     unread: Callable[[tuple[str, str]], bool] = lambda key: False,
 ) -> list[Launcher]:
     """fixed_name records for the bios paths of a config installed per device.
@@ -225,11 +235,12 @@ def config_records(
     ``unread`` drops the keys the shipped configs leave the emulator
     reading no file from.
     """
+    installed = installed or Installed()
     configs = device_configs(tree, package, file)
     keys = [k for k in bios_keys(tree, [c.path for c in configs]) if not unread(k)]
     name = posixpath.basename(file)
 
-    def read(path: str, text: str) -> tuple[object, set[int]]:
+    def read(path: str, text: str) -> tuple[FixedPaths, set[int]]:
         return fixed_paths(settings(text), keys, path)
 
     records = []
@@ -251,9 +262,9 @@ def config_records(
                 device=device,
                 depends_on_option=depends_on_option,
             ),
-            target or f"{CONFIG_ROOT}/{posixpath.basename(package)}/{name}",
+            installed.target or f"{CONFIG_ROOT}/{posixpath.basename(package)}/{name}",
             _keys(value),
-            start,
+            installed.start,
         ))
     return records
 
@@ -263,7 +274,7 @@ def retroarch(tree: RepoTree) -> list[Launcher]:
     configs = device_configs(tree, RETROARCH, "retroarch.cfg", folder="sources")
     wanted = ("system_directory", "systemfiles_in_content_dir")
 
-    def read(path: str, text: str) -> tuple[object, set[int]]:
+    def read(path: str, text: str) -> tuple[tuple[tuple[str, str], ...], set[int]]:
         found = {s.key: s for s in settings(text) if s.key in wanted}
         if "system_directory" not in found:
             raise LauncherPatternMissing(path, "system_directory")
@@ -483,7 +494,7 @@ def melonds(tree: RepoTree) -> list[Launcher]:
     conf_line, conf = script.find(r'^\s*CONF_DIR="([^"]+)"', "CONF_DIR")
     records = config_records(
         tree, "melonds", package, "melonDS.ini", depends_on_option=condition,
-        target=f"{conf.group(1)}/melonDS.ini", start=script, unread=unread,
+        installed=Installed(f"{conf.group(1)}/melonDS.ini", script), unread=unread,
     )
     for record in records:
         record.source_ref += (
@@ -500,7 +511,7 @@ def dsperate(tree: RepoTree) -> list[Launcher]:
     run_line, _ = script.find(r"/usr/bin/dsperate --config ", "dsperate --config")
     records = config_records(
         tree, "dsperate", package, "dsperate.ini", " (--config)",
-        target=script.expand("${DSPERATE_INI}", run_line, set()), start=script,
+        installed=Installed(script.expand("${DSPERATE_INI}", run_line, set()), script),
     )
     for record in records:
         record.source_ref += f", {source_ref([(script.path, {run_line})])}"
@@ -517,7 +528,7 @@ def xemu(tree: RepoTree) -> list[Launcher]:
     )
     records = config_records(
         tree, "xemu", package, "xemu.toml", " (copied at each launch)",
-        target=script.expand("${CONF_DIR}/${XEMU_INI}", copy_line, set()), start=script,
+        installed=Installed(script.expand("${CONF_DIR}/${XEMU_INI}", copy_line, set()), script),
     )
     for record in records:
         record.source_ref += f", {source_ref([(script.path, {copy_line})])}"
@@ -653,7 +664,7 @@ def directory_records(
     configs = device_configs(tree, package, file)
     name = posixpath.basename(file)
 
-    def read(path: str, text: str) -> tuple[object, set[int]]:
+    def read(path: str, text: str) -> tuple[str, set[int]]:
         found = {(s.section, s.key): s for s in settings(text)}
         if folder_key not in found:
             raise LauncherPatternMissing(path, f"[{folder_key[0]}] {folder_key[1]}")
@@ -816,7 +827,7 @@ def patched_directories(tree: RepoTree) -> list[Launcher]:
                 ),
                 None,
             )
-        if returned is None:
+        if start is None or returned is None:
             raise LauncherPatternMissing(path, f"{function}() patched to return a fixed path")
         number, directory = returned
         records.append(Launcher(

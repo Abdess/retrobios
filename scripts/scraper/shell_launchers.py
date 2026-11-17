@@ -116,62 +116,89 @@ def words(line: str) -> list[Word]:
     ended a name ("$a""b") still ends it. A "$" inside single quotes is kept
     as LITERAL_DOLLAR so a later expansion leaves it alone.
     """
-    result: list[Word] = []
-    raw, text, quote, started, segment = "", "", "", False, 0
-
-    def close_segment() -> None:
-        nonlocal text, segment
-        text = text[:segment] + re.sub(rf"\$({NAME})", r"${\1}", text[segment:])
-        segment = len(text)
-
+    lexer = _Lexer(line)
     i = 0
     while i < len(line):
-        char = line[i]
-        if quote == "'":
-            raw += char
-            if char == "'":
-                quote = ""
-                segment = len(text)
-            else:
-                text += LITERAL_DOLLAR if char == "$" else char
-        elif quote == '"':
-            raw += char
-            if char == "\\" and i + 1 < len(line) and line[i + 1] in '"\\$`':
-                raw += line[i + 1]
-                text += LITERAL_DOLLAR if line[i + 1] == "$" else line[i + 1]
-                i += 1
-            elif char == '"':
-                quote = ""
-                close_segment()
-            else:
-                text += char
-        elif char in "'\"":
-            close_segment()
-            quote, started = char, True
-            raw += char
-        elif char == "\\" and i + 1 < len(line):
-            raw += char + line[i + 1]
-            text += line[i + 1]
-            started = True
-            i += 1
-        elif char == "#" and not started:
-            break
-        elif char.isspace() or char == ";":
-            if started:
-                close_segment()
-                result.append(Word(raw, text))
-            raw, text, started, segment = "", "", False, 0
-            if char == ";":
-                result.append(Word(";", ";"))
+        if lexer.quote == "'":
+            lexer.single(line[i])
+        elif lexer.quote == '"':
+            i = lexer.double(i)
         else:
-            raw += char
-            text += char
-            started = True
+            step = lexer.plain(i)
+            if step is None:
+                break
+            i = step
         i += 1
-    if started:
-        close_segment()
-        result.append(Word(raw, text))
-    return result
+    if lexer.started:
+        lexer.close_segment()
+        lexer.result.append(Word(lexer.raw, lexer.text))
+    return lexer.result
+
+
+class _Lexer:
+    """The state words() keeps while it reads a line character by character."""
+
+    def __init__(self, line: str) -> None:
+        self.line = line
+        self.result: list[Word] = []
+        self.raw, self.text, self.quote, self.started, self.segment = "", "", "", False, 0
+
+    def close_segment(self) -> None:
+        self.text = self.text[:self.segment] + re.sub(
+            rf"\$({NAME})", r"${\1}", self.text[self.segment:]
+        )
+        self.segment = len(self.text)
+
+    def single(self, char: str) -> None:
+        """One character inside single quotes."""
+        self.raw += char
+        if char == "'":
+            self.quote = ""
+            self.segment = len(self.text)
+        else:
+            self.text += LITERAL_DOLLAR if char == "$" else char
+
+    def double(self, i: int) -> int:
+        """The character at i inside double quotes; the index of the last one read."""
+        line, char = self.line, self.line[i]
+        self.raw += char
+        if char == "\\" and i + 1 < len(line) and line[i + 1] in '"\\$`':
+            self.raw += line[i + 1]
+            self.text += LITERAL_DOLLAR if line[i + 1] == "$" else line[i + 1]
+            return i + 1
+        if char == '"':
+            self.quote = ""
+            self.close_segment()
+        else:
+            self.text += char
+        return i
+
+    def plain(self, i: int) -> int | None:
+        """The character at i outside quotes; the index of the last one read, None at a comment."""
+        line, char = self.line, self.line[i]
+        if char in "'\"":
+            self.close_segment()
+            self.quote, self.started = char, True
+            self.raw += char
+        elif char == "\\" and i + 1 < len(line):
+            self.raw += char + line[i + 1]
+            self.text += line[i + 1]
+            self.started = True
+            return i + 1
+        elif char == "#" and not self.started:
+            return None
+        elif char.isspace() or char == ";":
+            if self.started:
+                self.close_segment()
+                self.result.append(Word(self.raw, self.text))
+            self.raw, self.text, self.started, self.segment = "", "", False, 0
+            if char == ";":
+                self.result.append(Word(";", ";"))
+        else:
+            self.raw += char
+            self.text += char
+            self.started = True
+        return i
 
 
 @dataclass
@@ -488,6 +515,58 @@ def _quoted_glob(command: str) -> bool:
     return "*" in raw and "*" not in re.sub(r'"[^"]*"|\'[^\']*\'', "", raw)
 
 
+def _copy_skips(
+    script: Script,
+    number: int,
+    line: str,
+    copy: re.Match[str],
+    target: str,
+    source_name: str,
+    sources: tuple[str, ...],
+) -> bool | None:
+    """For a copy that installs ``target``, whether it leaves a file already there.
+
+    None when the copy installs something else.
+    """
+    args = []
+    for word in words(line[copy.start(1):])[1:]:
+        # The command ends at a separator or a redirection.
+        if word.raw in {";", "&&", "||", "|"} or re.match(r"\d*>|&>", word.raw):
+            break
+        args.append(word.text)
+    operands = [a for a in args if not a.startswith("-")]
+    if not operands:
+        return None
+    # A quoted "*" is a file named *, which no package installs:
+    # the copy does nothing (EmuELEC's duckstation.sh).
+    if _quoted_glob(line[copy.start(1):]):
+        return None
+    destination = script.expand(operands[-1], number, set()).rstrip("/")
+    source = script.expand(operands[0], number, set()).rstrip("/")
+    hits = target == destination or target.startswith(
+        (destination + "/", f"{destination}/{source.rsplit('/', 1)[-1]}")
+    )
+    # A copy of another file into the same place is another
+    # record's: amiberry copies the A500 or the A1200 setup.
+    named = source.rsplit("/", 1)[-1]
+    if not hits or (source_name and "." in named and named != source_name):
+        return None
+    # A named file copied into a folder above the target is
+    # another file of that folder (ARMSX2's secrets.ini).
+    if (
+        not source_name and "." in named and "*" not in named
+        and destination != target and named != target.rsplit("/", 1)[-1]
+    ):
+        return None
+    if sources and not source.startswith(sources):
+        return None
+    # cp -i fed by false answers no to every overwrite.
+    prompted = any(
+        a.startswith("-") and not a.startswith("--") and "i" in a[1:] for a in args
+    ) and re.search(r"\bfalse\s*\|\s*$", line[:copy.start(1)])
+    return "-n" in args or "--ignore-existing" in args or bool(prompted)
+
+
 def config_placement(
     script: Script,
     target: str,
@@ -513,43 +592,10 @@ def config_placement(
     for number, line in script.code():
         if (copy := _COPY.search(line)) or (writer and writer.search(line)):
             if copy:
-                args = []
-                for word in words(line[copy.start(1):])[1:]:
-                    # The command ends at a separator or a redirection.
-                    if word.raw in {";", "&&", "||", "|"} or re.match(r"\d*>|&>", word.raw):
-                        break
-                    args.append(word.text)
-                operands = [a for a in args if not a.startswith("-")]
-                if not operands:
+                copied = _copy_skips(script, number, line, copy, target, source_name, sources)
+                if copied is None:
                     continue
-                # A quoted "*" is a file named *, which no package installs:
-                # the copy does nothing (EmuELEC's duckstation.sh).
-                if _quoted_glob(line[copy.start(1):]):
-                    continue
-                destination = script.expand(operands[-1], number, set()).rstrip("/")
-                source = script.expand(operands[0], number, set()).rstrip("/")
-                hits = target == destination or target.startswith(destination + "/") or (
-                    target.startswith(f"{destination}/{source.rsplit('/', 1)[-1]}")
-                )
-                # A copy of another file into the same place is another
-                # record's: amiberry copies the A500 or the A1200 setup.
-                named = source.rsplit("/", 1)[-1]
-                if not hits or (source_name and "." in named and named != source_name):
-                    continue
-                # A named file copied into a folder above the target is
-                # another file of that folder (ARMSX2's secrets.ini).
-                if (
-                    not source_name and "." in named and "*" not in named
-                    and destination != target and named != target.rsplit("/", 1)[-1]
-                ):
-                    continue
-                if sources and not source.startswith(sources):
-                    continue
-                # cp -i fed by false answers no to every overwrite.
-                prompted = any(
-                    a.startswith("-") and not a.startswith("--") and "i" in a[1:] for a in args
-                ) and re.search(r"\bfalse\s*\|\s*$", line[:copy.start(1)])
-                skip = "-n" in args or "--ignore-existing" in args or bool(prompted)
+                skip = copied
             else:
                 skip = False
             install.add(number)
@@ -557,9 +603,10 @@ def config_placement(
                 kept = False
         elif re.search(r"\bsed\b.*\s-i\b|\bsed -i", line) and bare:
             expanded = script.expand(line, number, set())
-            if target in expanded or target.rsplit("/", 1)[-1] in expanded:
-                if any(re.search(rf"\b{re.escape(k)}\b", expanded) for k in bare):
-                    overrides.add(number)
+            if (target in expanded or target.rsplit("/", 1)[-1] in expanded) and any(
+                re.search(rf"\b{re.escape(k)}\b", expanded) for k in bare
+            ):
+                overrides.add(number)
     if not install and required:
         raise script.missing(f"install of {target}")
     return ConfigPlacement(script.path, target, install, kept, overrides)
