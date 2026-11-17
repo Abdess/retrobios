@@ -23,7 +23,6 @@ from collections import Counter
 import dataclasses
 from dataclasses import dataclass
 from pathlib import Path
-from typing import TYPE_CHECKING, TypedDict
 
 sys.path.insert(0, os.path.dirname(__file__))
 from alternatives import set_keys, set_requirements, settle_sets
@@ -81,9 +80,6 @@ from validation import (
     unread_on,
     with_archive_members,
 )
-
-if TYPE_CHECKING:
-    from typing_extensions import Unpack
 
 yaml = require_yaml()
 
@@ -1459,25 +1455,18 @@ def print_launcher_reads(rows: list[dict]) -> None:
         )
 
 
-class ReportScope(TypedDict, total=False):
-    """What narrows a cross_reference run: the declarations it compares
-    against and the platform it answers for."""
-
-    all_declared: dict[str, list[tuple[int | None, str]]] | None
-    standalone_cores: set[str] | None
-    folded_slots: frozenset[str]
-    platform: str
-    launcher_layer: LauncherLayer | None
-    declared_contents: dict[str, set[str]] | None
-
-
 def cross_reference(
     profiles: dict[str, dict],
     declared: dict[str, set[str]],
     db: dict,
     platform_data_dirs: dict[str, set[str]] | None = None,
     data_names: set[str] | None = None,
-    **scope: Unpack[ReportScope],
+    all_declared: dict[str, list[tuple[int | None, str]]] | None = None,
+    standalone_cores: set[str] | None = None,
+    folded_slots: frozenset[str] = frozenset(),
+    platform: str = "",
+    launcher_layer: LauncherLayer | None = None,
+    declared_contents: dict[str, set[str]] | None = None,
 ) -> dict:
     """Compare emulator profiles against platform declarations.
 
@@ -1494,15 +1483,6 @@ def cross_reference(
     instead of the per-system lookup.  This is appropriate for the global
     gap analysis page where "undeclared" means "no platform declares it at all".
     """
-    unknown = [key for key in scope if key not in ReportScope.__annotations__]
-    if unknown:
-        raise TypeError(f"cross_reference() got an unexpected keyword argument '{unknown[0]}'")
-    all_declared = scope.get("all_declared")
-    standalone_cores = scope.get("standalone_cores")
-    folded_slots = scope.get("folded_slots", frozenset())
-    platform = scope.get("platform", "")
-    launcher_layer = scope.get("launcher_layer")
-    declared_contents = scope.get("declared_contents")
     platform_data_dirs = platform_data_dirs or {}
     by_name = db.get("indexes", {}).get("by_name", {})
     by_name_lower = {k.lower(): k for k in by_name}

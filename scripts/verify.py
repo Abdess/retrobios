@@ -33,7 +33,7 @@ from collections import Counter
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import TYPE_CHECKING, TypedDict
+from typing import TYPE_CHECKING
 
 import slots
 
@@ -137,8 +137,6 @@ from validation import (
 from packpaths import core_save_folder
 
 if TYPE_CHECKING:
-    from typing_extensions import Unpack
-
     from packextras import ExtraResolver
 
 yaml = require_yaml()
@@ -600,7 +598,8 @@ class _GapScan:
             # In the emulator's own folder: no other core reads it.
             else ("emulator", emu_name) if f.get("unplaced") else None,
         )
-        if not fname or unread_on(f, self.config.get("_key", "")):
+        config = self.config
+        if not fname or unread_on(f, config.get("_key", "")):
             return
         first = self.reported.get(seen_key)
         duplicate = seen_key in self.seen_files
@@ -1380,15 +1379,6 @@ def _resolve_for_platform(
     return local_path, status
 
 
-class PackNarrowing(TypedDict, total=False):
-    """The narrowings of a platform pack that verify_platform reports on."""
-
-    regions: list[str] | None
-    system_filter: list[str] | None
-    no_game_data: bool
-    required_only: bool
-
-
 @dataclass(frozen=True)
 class _PlatformRun:
     """The inputs of one verify_platform run, read by each of its stages."""
@@ -1457,6 +1447,7 @@ class _PlatformTally:
         )
         self.details.append(result)
         config = self.run.config
+        mode = self.run.mode
         # Occupied only where the builder ships the declaration: a hash
         # the frontend refuses is left out, and the destination stays free
         # for a core's file the pack does carry.
@@ -1464,8 +1455,7 @@ class _PlatformTally:
             local_path
             and result["status"] != Status.MISSING
             and baseline_verdict(
-                file_entry, local_path, resolve_status, self.run.mode,
-                config.get("hash_rule", ""),
+                file_entry, local_path, resolve_status, mode, config.get("hash_rule", "")
             )[1] is None
         ):
             self.packed_order.append((sys_id, self.run.full(destination), local_path))
@@ -1623,14 +1613,6 @@ class _PlatformTally:
                 continue
             counts[s] = counts.get(s, 0) + 1
         return counts, not_firmware
-
-
-def _refuse_unknown_narrowings(narrowing: Mapping[str, object]) -> None:
-    unknown = [key for key in narrowing if key not in PackNarrowing.__annotations__]
-    if unknown:
-        raise TypeError(
-            f"verify_platform() got an unexpected keyword argument '{unknown[0]}'"
-        )
 
 
 def _cut_game_data(
@@ -1813,7 +1795,10 @@ def verify_platform(
     emu_profiles: dict | None = None,
     target_cores: set[str] | None = None,
     data_dir_registry: dict | None = None,
-    **narrowing: Unpack[PackNarrowing],
+    regions: list[str] | None = None,
+    system_filter: list[str] | None = None,
+    no_game_data: bool = False,
+    required_only: bool = False,
 ) -> dict:
     """Verify all BIOS files for a platform, including cross-reference gaps.
 
@@ -1828,11 +1813,6 @@ def verify_platform(
     declarations, trees and core extras marked ``required: false`` are left
     out before any of them takes a path, as the builder leaves them out.
     """
-    _refuse_unknown_narrowings(narrowing)
-    regions = narrowing.get("regions")
-    system_filter = narrowing.get("system_filter")
-    no_game_data = narrowing.get("no_game_data", False)
-    required_only = narrowing.get("required_only", False)
     left_out: list[str] = []
     if no_game_data:
         config, emu_profiles, left_out = _cut_game_data(
@@ -2520,7 +2500,8 @@ def print_platform_result(
     label = " / ".join(group)
     if result.get("systems"):
         label += f" ({', '.join(result['systems'])})"
-    print(f"{label}: {', '.join(_platform_summary_parts(result))} [{mode}]")
+    parts = _platform_summary_parts(result)
+    print(f"{label}: {', '.join(parts)} [{mode}]")
     _print_release_assets(result["details"])
     _print_platform_notices(result, verbose)
 
@@ -2630,78 +2611,6 @@ def _emulator_files(
                 or _resolve_destination(fe, standalone) not in region_drops
         ]
     return files
-
-
-def _loose_result(
-    file_entry: dict, name: str, required: bool, local_path: str | None,
-    resolve_status: str, chosen_check: Callable[[], tuple[str | None, str | None]],
-) -> dict:
-    """The verdict on a loose profile entry, from its resolution."""
-    stored = _storage_verdict(file_entry, emulator_pack=True)
-    if stored is not None:
-        return stored
-    if resolve_status == RELEASE_ASSET_PENDING:
-        return {
-            "name": name,
-            "status": Status.OK,
-            "required": required,
-            "path": local_path,
-            "release_asset": local_path,
-            "reason": "release asset, fetched when the pack is built",
-        }
-    if not local_path:
-        result = {"name": name, "status": Status.MISSING, "required": required}
-        # An entry the profile documents as unsourceable is absent by
-        # design: a per-user key, a slot the user fills, a dump nobody
-        # has made. Counting it beside a file somebody could still
-        # find invites the wrong repair: dropping the flag, or
-        # chasing a vendor's whole install tree.
-        unsourceable = file_entry.get("unsourceable")
-        if unsourceable:
-            result["unsourceable"] = (
-                unsourceable if isinstance(unsourceable, str) else ""
-            )
-        return result
-    # Apply emulator validation
-    # Judged by this emulator's own entries, as it runs its check,
-    # through the selection the emulator pack makes.
-    chosen, disagreement = chosen_check()
-    if disagreement:
-        return {
-            "name": name,
-            "status": Status.UNTESTED,
-            "required": required,
-            "path": local_path,
-            "reason": disagreement.split(" says ", 1)[-1],
-        }
-    if chosen != local_path:
-        return {
-            "name": name,
-            "status": Status.OK,
-            "required": required,
-            "path": chosen,
-        }
-    if resolve_status == "hash_mismatch":
-        # Nothing in validation: caught it, but the name matched
-        # while the bytes contradict the hash the profile
-        # declares. That is a different file wearing the right
-        # name (config.ini and ROM collide across systems), so
-        # calling it covered reports the collection as holding
-        # something it does not. Validation runs first because it
-        # names the specific field that disagrees.
-        return {
-            "name": name,
-            "status": Status.UNTESTED,
-            "required": required,
-            "path": local_path,
-            "reason": "declared hash contradicted by the local file",
-        }
-    return {
-        "name": name,
-        "status": Status.OK,
-        "required": required,
-        "path": local_path,
-    }
 
 
 def _archive_result(
@@ -2975,13 +2884,8 @@ class _EmulatorPack:
             required = file_entry.get("required", True)
             hle = file_entry.get("hle_fallback", False)
 
-            result = _loose_result(
-                file_entry, name, required, local_path, resolve_status,
-                functools.partial(
-                    validated_choice, file_entry, local_path, self.db,
-                    self.validation_index, DEFAULT_BIOS_DIR, None,
-                    emulators={emu_name},
-                ),
+            result = self._loose_result(
+                file_entry, name, required, local_path, resolve_status, emu_name,
             )
             result["system"] = file_entry.get("system", "")
             result["hle_fallback"] = hle
@@ -2991,6 +2895,80 @@ class _EmulatorPack:
             dest = _resolve_destination(file_entry, self.standalone) or name
             emu_results.setdefault(dest, []).append((result, required, hle, file_entry))
         return emu_results
+
+    def _loose_result(
+        self, file_entry: dict, name: str, required: bool, local_path: str | None,
+        resolve_status: str, emu_name: str,
+    ) -> dict:
+        """The verdict on a loose profile entry, from its resolution."""
+        stored = _storage_verdict(file_entry, emulator_pack=True)
+        if stored is not None:
+            return stored
+        if resolve_status == RELEASE_ASSET_PENDING:
+            return {
+                "name": name,
+                "status": Status.OK,
+                "required": required,
+                "path": local_path,
+                "release_asset": local_path,
+                "reason": "release asset, fetched when the pack is built",
+            }
+        if not local_path:
+            result = {"name": name, "status": Status.MISSING, "required": required}
+            # An entry the profile documents as unsourceable is absent by
+            # design: a per-user key, a slot the user fills, a dump nobody
+            # has made. Counting it beside a file somebody could still
+            # find invites the wrong repair: dropping the flag, or
+            # chasing a vendor's whole install tree.
+            unsourceable = file_entry.get("unsourceable")
+            if unsourceable:
+                result["unsourceable"] = (
+                    unsourceable if isinstance(unsourceable, str) else ""
+                )
+            return result
+        # Apply emulator validation
+        # Judged by this emulator's own entries, as it runs its check,
+        # through the selection the emulator pack makes.
+        chosen, disagreement = validated_choice(
+            file_entry, local_path, self.db, self.validation_index, DEFAULT_BIOS_DIR,
+            None, emulators={emu_name},
+        )
+        if disagreement:
+            return {
+                "name": name,
+                "status": Status.UNTESTED,
+                "required": required,
+                "path": local_path,
+                "reason": disagreement.split(" says ", 1)[-1],
+            }
+        if chosen != local_path:
+            return {
+                "name": name,
+                "status": Status.OK,
+                "required": required,
+                "path": chosen,
+            }
+        if resolve_status == "hash_mismatch":
+            # Nothing in validation: caught it, but the name matched
+            # while the bytes contradict the hash the profile
+            # declares. That is a different file wearing the right
+            # name (config.ini and ROM collide across systems), so
+            # calling it covered reports the collection as holding
+            # something it does not. Validation runs first because it
+            # names the specific field that disagrees.
+            return {
+                "name": name,
+                "status": Status.UNTESTED,
+                "required": required,
+                "path": local_path,
+                "reason": "declared hash contradicted by the local file",
+            }
+        return {
+            "name": name,
+            "status": Status.OK,
+            "required": required,
+            "path": local_path,
+        }
 
     def _place_loose(
         self, emu_name: str,
@@ -3336,7 +3314,8 @@ def print_emulator_result(result: dict, verbose: bool = False) -> None:
     """Print verification result for emulator/system mode."""
     label = " + ".join(result["emulators"])
     mode = result["verification_mode"]
-    print(f"{label}: {', '.join(_emulator_summary_parts(result))} [{mode}]")
+    parts = _emulator_summary_parts(result)
+    print(f"{label}: {', '.join(parts)} [{mode}]")
     fetched = sorted({d["name"] for d in result["details"] if d.get("release_asset")})
     if fetched:
         shown = ", ".join(fetched[:10]) + (f" (+{len(fetched) - 10})" if len(fetched) > 10 else "")
@@ -3550,7 +3529,7 @@ def _requested_regions(args: argparse.Namespace, parser: argparse.ArgumentParser
 
 
 def _check_mode(args: argparse.Namespace, parser: argparse.ArgumentParser) -> bool:
-    """Refuse a request naming no mode or several; returns the system mode."""
+    """Refuse a request naming no mode or several, and say if it is the system mode."""
     # --system beside --platform narrows that platform, as in generate_pack.
     system_mode = bool(args.system) and not args.platform
     modes = sum(1 for x in (args.platform, args.all, args.emulator, system_mode) if x)
