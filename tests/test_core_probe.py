@@ -25,11 +25,12 @@ import unittest.mock
 from pathlib import Path
 from typing import ClassVar
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 import core_probe
 import measurement_records
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 STRACE_SAMPLE = """\
 4242  openat(AT_FDCWD, "/sys/bios/card.bin", O_RDONLY) = 5

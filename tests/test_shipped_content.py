@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
 
+import contextlib
 import hashlib
 import json
 import os
@@ -116,10 +117,8 @@ class ShippedFilesSatisfyTheirDeclaration(unittest.TestCase):
                 # md5_composite computes and what the resolver matches on.
                 # A variant carries its hash after the extension
                 # (cdimono1.zip.e6714b3d), so the name is not the test.
-                try:
+                with contextlib.suppress(zipfile.BadZipFile, OSError):
                     digests["md5"].append(common.md5_composite(str(blob_path)))
-                except (zipfile.BadZipFile, OSError):
-                    pass
                 # A declared MD5 can be shorter than 32 characters: compare by prefix.
                 satisfied = any(
                     all(

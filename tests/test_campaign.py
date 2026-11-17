@@ -29,13 +29,14 @@ from types import MappingProxyType
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 import campaign
 import campaign_profiles
 import campaign_rules as rules
 import measurement_records as mr
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 TMP = REPO_ROOT / "tmp" / "tests"
 

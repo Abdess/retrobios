@@ -25,6 +25,8 @@ import unittest
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+# install.py runs on 3.8, the scripts it is compared with need 3.9.
+BUILDER_FLOOR = (3, 9)
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 _spec = importlib.util.spec_from_file_location("install", REPO_ROOT / "install.py")
@@ -44,7 +46,7 @@ class RealListParity(unittest.TestCase):
         db_path = REPO_ROOT / "database.json"
         if not db_path.exists():
             raise unittest.SkipTest("database.json is not built")
-        if sys.version_info < (3, 9):
+        if sys.version_info < BUILDER_FLOOR:
             # The builder's floor: install.py alone keeps 3.8.
             raise unittest.SkipTest("generate_pack.py needs Python 3.9 or newer")
         import generate_pack as gp
@@ -261,7 +263,7 @@ class TheSlotRuleIsTheBuilders(unittest.TestCase):
                    _copy("b.bin", b"b", slot=_slot(_claims(px68k=2), groups=("x68000",)))]
         self.assertEqual(self.drops(entries), set())
 
-    @unittest.skipIf(sys.version_info < (3, 9), "slot.py needs Python 3.9 or newer")
+    @unittest.skipIf(sys.version_info < BUILDER_FLOOR, "slot.py needs Python 3.9 or newer")
     def test_random_slots_against_the_builder(self):
         import random
 
@@ -293,7 +295,7 @@ class TheSlotRuleIsTheBuilders(unittest.TestCase):
                       for name in entries]
             self.assertEqual(self.drops(listed, reach), expected)
 
-    @unittest.skipIf(sys.version_info < (3, 9), "slot.py needs Python 3.9 or newer")
+    @unittest.skipIf(sys.version_info < BUILDER_FLOOR, "slot.py needs Python 3.9 or newer")
     def test_a_destination_two_groups_name_apart(self):
         """One destination a platform declares under one name and a core
         under another: each group looks its own name up, as the builder
@@ -583,7 +585,7 @@ class ExpertRuns(Lists):
         self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
         self.assertIn("which --source truth needs", proc.stderr)
 
-    @unittest.skipIf(sys.version_info < (3, 9), "validate_schemas.py needs Python 3.9 or newer")
+    @unittest.skipIf(sys.version_info < BUILDER_FLOOR, "validate_schemas.py needs Python 3.9 or newer")
     def test_the_schema_check_reads_a_null_truth_list(self):
         from unittest import mock
 

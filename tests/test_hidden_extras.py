@@ -109,7 +109,7 @@ class TheReportSaysSo(unittest.TestCase):
         for u in self.results[platform]["undeclared_files"]:
             if u.get("emulator") == emulator and (u.get("path") or u.get("name")) == path:
                 return u
-        self.skipTest(f"{emulator} {path} is not in the cross-reference")
+        raise unittest.SkipTest(f"{emulator} {path} is not in the cross-reference")
 
     def _listed(self, emulator: str, path: str, platform: str) -> bool:
         return any(

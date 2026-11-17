@@ -390,8 +390,8 @@ class AFlaggedDumpIsNotVerified(unittest.TestCase):
             "tosec": {"name": "Sony PlayStation BIOS (v2.2)(Sony)(JP)[b].bin"},
             "redump": {"name": "SCPH-5000 BIOS v2.2"},
         }, "../")
-        tosec = next(l for l in lines if "TOSEC" in l)
-        redump = next(l for l in lines if "Redump" in l)
+        tosec = next(line for line in lines if "TOSEC" in line)
+        redump = next(line for line in lines if "Redump" in line)
         self.assertIn("rb-badge-warning", tosec)
         self.assertIn("bad dump", tosec)
         self.assertIn("(JP)[b].bin", tosec)

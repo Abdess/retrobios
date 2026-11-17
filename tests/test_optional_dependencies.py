@@ -9,10 +9,12 @@ from __future__ import annotations
 
 import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
 
+import ast
 import re
 import subprocess
 import sys
 import unittest
+from collections.abc import Iterator
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -69,6 +71,47 @@ MAINTENANCE_TOOLS = {
 }
 
 
+def _is_type_checking(test: ast.expr) -> bool:
+    if isinstance(test, ast.Name):
+        return test.id == "TYPE_CHECKING"
+    return (isinstance(test, ast.Attribute) and test.attr == "TYPE_CHECKING"
+            and isinstance(test.value, ast.Name) and test.value.id == "typing")
+
+
+def _runtime_nodes(node: ast.AST) -> Iterator[ast.AST]:
+    """Every node that can run: the body of an `if TYPE_CHECKING:` never does."""
+    yield node
+    for child in ast.iter_child_nodes(node):
+        if isinstance(child, ast.If) and _is_type_checking(child.test):
+            for branch in child.orelse:
+                yield from _runtime_nodes(branch)
+            continue
+        yield from _runtime_nodes(child)
+
+
+def _foreign_imports(source: str, file_name: str, local: set[str]) -> list[str]:
+    """The top-level packages a script imports at run time beyond the
+    standard library, pyyaml and the repository's own modules."""
+    allowed = {"yaml"}
+    found = []
+    for node in _runtime_nodes(ast.parse(source)):
+        if isinstance(node, ast.Import):
+            names = [a.name.split(".")[0] for a in node.names]
+        elif isinstance(node, ast.ImportFrom) and node.level == 0 and node.module:
+            names = [node.module.split(".")[0]]
+        else:
+            continue
+        for name in names:
+            if name in sys.stdlib_module_names or name in local or name in allowed:
+                continue
+            if name == "jsonschema" and file_name == "validate_schemas.py":
+                continue
+            if MAINTENANCE_TOOLS.get(file_name) == name:
+                continue
+            found.append(name)
+    return found
+
+
 class ScriptsNeedOnlyPyyaml(unittest.TestCase):
     """The build scripts need the standard library and pyyaml. jsonschema is
     validate_schemas.py's alone. CI installs jsonschema with its whole tree
@@ -76,8 +119,6 @@ class ScriptsNeedOnlyPyyaml(unittest.TestCase):
     there and fail for a contributor following the documented setup."""
 
     def test_no_script_imports_another_package(self):
-        import ast
-
         scripts = Path(__file__).resolve().parents[1] / "scripts"
         local = {p.stem for p in scripts.rglob("*.py")} | {
             p.name for p in scripts.iterdir() if p.is_dir()
@@ -85,25 +126,34 @@ class ScriptsNeedOnlyPyyaml(unittest.TestCase):
         # install.py is the repository's own single file, stdlib only (its
         # tests hold it to that): generate_games_index reads its narrowing.
         local.add("install")
-        allowed = {"yaml"}
-        found = []
-        for path in sorted(scripts.rglob("*.py")):
-            for node in ast.walk(ast.parse(path.read_text(encoding="utf-8"))):
-                if isinstance(node, ast.Import):
-                    names = [a.name.split(".")[0] for a in node.names]
-                elif isinstance(node, ast.ImportFrom) and node.level == 0 and node.module:
-                    names = [node.module.split(".")[0]]
-                else:
-                    continue
-                for name in names:
-                    if name in sys.stdlib_module_names or name in local or name in allowed:
-                        continue
-                    if name == "jsonschema" and path.name == "validate_schemas.py":
-                        continue
-                    if MAINTENANCE_TOOLS.get(path.name) == name:
-                        continue
-                    found.append(f"{path.relative_to(scripts)}: {name}")
+        found = [
+            f"{path.relative_to(scripts)}: {name}"
+            for path in sorted(scripts.rglob("*.py"))
+            for name in _foreign_imports(path.read_text(encoding="utf-8"), path.name, local)
+        ]
         self.assertEqual(found, [])
+
+    def test_an_import_only_a_type_checker_runs_is_no_dependency(self):
+        guarded = (
+            "from typing import TYPE_CHECKING\n"
+            "import typing\n"
+            "if TYPE_CHECKING:\n"
+            "    from typing_extensions import Unpack\n"
+            "if typing.TYPE_CHECKING:\n"
+            "    import typing_extensions\n"
+        )
+        self.assertEqual(_foreign_imports(guarded, "x.py", set()), [])
+        self.assertEqual(_foreign_imports("import typing_extensions\n", "x.py", set()),
+                         ["typing_extensions"])
+        # The else branch of the guard runs: it stays a dependency.
+        branch = (
+            "from typing import TYPE_CHECKING\n"
+            "if TYPE_CHECKING:\n"
+            "    pass\n"
+            "else:\n"
+            "    import typing_extensions\n"
+        )
+        self.assertEqual(_foreign_imports(branch, "x.py", set()), ["typing_extensions"])
 
 
 class TheDownloaderRunsWithoutPyyaml(unittest.TestCase):

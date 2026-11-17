@@ -2884,6 +2884,7 @@ class TestE2E(unittest.TestCase):
             ["python", "scripts/generate_pack.py", "--emulator", "test", "--split"],
             capture_output=True,
             text=True,
+            check=False,
         )
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("error", result.stderr.lower())
@@ -2902,6 +2903,7 @@ class TestE2E(unittest.TestCase):
             ],
             capture_output=True,
             text=True,
+            check=False,
         )
         self.assertNotEqual(result.returncode, 0)
 
@@ -2920,6 +2922,7 @@ class TestE2E(unittest.TestCase):
             ],
             capture_output=True,
             text=True,
+            check=False,
         )
         self.assertNotEqual(result.returncode, 0)
 
@@ -2938,6 +2941,7 @@ class TestE2E(unittest.TestCase):
             ],
             capture_output=True,
             text=True,
+            check=False,
         )
         self.assertNotEqual(result.returncode, 0)
 
@@ -6293,10 +6297,12 @@ struct BurnDriver BurnDrvneogeo = {
         ]
         for mode, flag, expected in matrix:
             with self.subTest(mode=mode, flag=flag):
+                self.assertEqual(expected, "refuse")
                 result = subprocess.run(
                     [sys.executable, "scripts/generate_pack.py", *mode, *flag,
                      "--output-dir", os.path.join(self.root, "modecheck")],
                     capture_output=True, text=True, cwd=repo, timeout=120,
+                    check=False,
                 )
                 combined = result.stdout + result.stderr
                 self.assertNotEqual(
@@ -6405,6 +6411,7 @@ struct BurnDriver BurnDrvneogeo = {
                 [sys.executable, "scripts/generate_pack.py", "--system",
                  "atari-lynx", "--offline", *extra, "--output-dir", out],
                 capture_output=True, text=True, cwd=repo, timeout=300,
+                check=False,
             )
             self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
             names[label] = sorted(
@@ -6427,6 +6434,7 @@ struct BurnDriver BurnDrvneogeo = {
             [sys.executable, "scripts/generate_pack.py", "--platform", "misterfpga",
              "--offline", "--source", "truth", "--output-dir", out],
             capture_output=True, text=True, cwd=repo, timeout=300,
+            check=False,
         )
         self.assertNotEqual(proc.returncode, 0)
         self.assertIn("a truth pack would hold nothing", proc.stderr)
@@ -6445,6 +6453,7 @@ struct BurnDriver BurnDrvneogeo = {
             [sys.executable, "scripts/generate_pack.py", "--emulator", "handy",
              "--required-only", "--offline", "--output-dir", out],
             capture_output=True, text=True, cwd=repo, timeout=300,
+            check=False,
         )
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertIn("no file needed, no pack written", proc.stdout)
@@ -6452,6 +6461,7 @@ struct BurnDriver BurnDrvneogeo = {
         verify = subprocess.run(
             [sys.executable, "scripts/verify.py", "--emulator", "handy", "--required-only"],
             capture_output=True, text=True, cwd=repo, timeout=300,
+            check=False,
         )
         self.assertEqual(verify.returncode, proc.returncode)
 
@@ -6477,6 +6487,7 @@ struct BurnDriver BurnDrvneogeo = {
                 proc = subprocess.run(
                     [sys.executable, *argv, *extra],
                     capture_output=True, text=True, cwd=repo, timeout=300,
+                    check=False,
                 )
                 self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
                 self.assertIn("runs no core a profile describes", proc.stderr)

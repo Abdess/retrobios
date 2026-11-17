@@ -370,13 +370,15 @@ class TheManifestResolvesLikeThePack(unittest.TestCase):
         for fn in ast.walk(ast.parse(source)):
             if not isinstance(fn, ast.FunctionDef) or fn.name == "generate_md5_pack":
                 continue
-            for node in ast.walk(fn):
+            missing.extend(
+                f"{fn.name}:{node.lineno}"
+                for node in ast.walk(fn)
                 if (
                     isinstance(node, ast.Call)
                     and getattr(node.func, "id", None) == "resolve_file"
                     and "data_dir_registry" not in {k.arg for k in node.keywords}
-                ):
-                    missing.append(f"{fn.name}:{node.lineno}")
+                )
+            )
         self.assertEqual(missing, [])
 
 

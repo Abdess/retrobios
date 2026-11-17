@@ -92,6 +92,7 @@ class PackIntegrityTest(unittest.TestCase):
             capture_output=True,
             text=True,
             cwd=REPO_ROOT,
+            check=False,
         )
         if result.returncode == 0:
             return

@@ -353,9 +353,11 @@ class ProfileContract(unittest.TestCase):
         offenders = []
         for path in sorted((REPO_ROOT / "emulators").glob("*.yml")):
             document = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
-            for entry in document.get("files") or []:
-                if self._errors_for_directory_rules(entry):
-                    offenders.append(f"{path.name}: {entry.get('name')}")
+            offenders.extend(
+                f"{path.name}: {entry.get('name')}"
+                for entry in document.get("files") or []
+                if self._errors_for_directory_rules(entry)
+            )
         self.assertEqual(offenders, [])
 
     @staticmethod
@@ -402,6 +404,7 @@ class CollectionScanAndIgnoreRules(unittest.TestCase):
         listed = subprocess.run(
             ["git", "ls-files", "--others", "--ignored", "--exclude-standard", "bios"],
             cwd=REPO_ROOT, capture_output=True, text=True,
+            check=False,
         )
         if listed.returncode != 0:
             self.skipTest("not a git checkout")

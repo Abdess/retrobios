@@ -59,9 +59,11 @@ class StandaloneDestinations(unittest.TestCase):
                 if not isinstance(entry, dict):
                     continue
                 dest = _destination(entry)
-                for folder in FRONTEND_FOLDERS:
-                    if dest.startswith(folder) and folder not in allowed:
-                        wrong.append(f"{name}: {entry.get('name')} at {dest}")
+                wrong.extend(
+                    f"{name}: {entry.get('name')} at {dest}"
+                    for folder in FRONTEND_FOLDERS
+                    if dest.startswith(folder) and folder not in allowed
+                )
         self.assertEqual(wrong, [])
 
     def test_every_allowed_folder_is_read(self):

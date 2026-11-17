@@ -209,6 +209,7 @@ class APlatformWithoutAPackFailsNoCheck(unittest.TestCase):
                 [sys.executable, "scripts/generate_pack.py", "--all", "--verify-packs",
                  "--output-dir", directory],
                 capture_output=True, text=True, cwd=REPO_ROOT, timeout=600,
+                check=False,
             )
         swept = {line.split(":")[0].strip() for line in proc.stdout.splitlines()
                  if "SKIP (no pack in" in line}

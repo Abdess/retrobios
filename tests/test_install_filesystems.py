@@ -38,7 +38,7 @@ class AndroidMediaScanner(unittest.TestCase):
         proc = subprocess.run(self.repo.command("--yes", "--no-input", *options),
                               env={**self.repo.env(), "RETROBIOS_OS": os_name},
                               capture_output=True, text=True, timeout=60,
-                              stdin=subprocess.DEVNULL)
+                              stdin=subprocess.DEVNULL, check=False)
         return self.repo, proc
 
     def test_an_android_install_writes_one(self):

@@ -273,6 +273,7 @@ class LauncherGapTest(unittest.TestCase):
              "--platforms-dir", self.platforms_dir, "--emulators-dir", self.emulators_dir,
              "--db", str(db_path), "--json"],
             cwd=ROOT, capture_output=True, text=True, timeout=300,
+            check=False,
         )
         self.assertEqual(result.returncode, 0, result.stderr)
         report = json.loads(result.stdout)

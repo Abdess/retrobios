@@ -512,7 +512,7 @@ class Commits(Origin):
         with contextlib.redirect_stdout(io.StringIO()):
             self.assertEqual(ar.run_job(ctx, "n"), (ar.OK, "dry run"))
         lines = ar.describe(ctx.jobs["n"], ctx)
-        would = sorted(l.split("would commit ")[1] for l in lines if "would commit" in l)
+        would = sorted(line.split("would commit ")[1] for line in lines if "would commit" in line)
         self.assertEqual(would, ["database.json", "install/b.json"])
         self.assertEqual(run_git(wt, "diff", "--cached", "--name-only"), "")
         self.assertFalse(ctx.state_path.exists())
@@ -620,7 +620,7 @@ class Push(Origin):
 
 class RunnerPush(Origin):
     def _ctx(self, value: int, push: bool) -> ar.Context:
-        write = "open('database.json', 'w').write('{\"n\": %d}')" % value
+        write = f"open('database.json', 'w').write('{{\"n\": {value:d}}}')"
         jobs = {"n": {"min_free_gb": 0, "steps": [[PY, "-c", write]], "commits": [
             {"subject": "chore: regenerate collection records", "paths": ["database.json"]}]}}
         return ar.Context(repo=self.repo, jobs=ar.parse_jobs({"jobs": jobs}),

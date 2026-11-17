@@ -30,11 +30,8 @@ except ImportError:
 else:
     HAS_JSONSCHEMA = True
 
-ROOT = Path(__file__).resolve().parent.parent
-TMP_ROOT = ROOT / "tmp" / "tests"
-TMP_ROOT.mkdir(parents=True, exist_ok=True)
-sys.path.insert(0, str(ROOT))
-sys.path.insert(0, str(ROOT / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 import install
 from scripts import pipeline, region, region_audit
@@ -44,6 +41,10 @@ from scripts.generate_pack import (
     generate_target_manifests,
     verify_pack_against_platform,
 )
+
+ROOT = Path(__file__).resolve().parent.parent
+TMP_ROOT = ROOT / "tmp" / "tests"
+TMP_ROOT.mkdir(parents=True, exist_ok=True)
 
 
 class ReadmeRegressions(unittest.TestCase):
@@ -1283,7 +1284,7 @@ class PipelineRegressions(unittest.TestCase):
             "2a2 refresh FBNeo hashes",
         ):
             with self.subTest(failed_label=failed_label):
-                def fake_run(_command, label):
+                def fake_run(_command, label, failed_label=failed_label):
                     return label != failed_label, "RetroArch: 1/1 OK\n"
 
                 argv = ["pipeline.py", "--skip-packs", "--skip-docs"]
@@ -2227,7 +2228,7 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
         for position, step in enumerate(steps):
             if needle in step.get("name", "") or needle in str(step.get("run", "")):
                 return position
-        self.fail(f"no step matching {needle!r}")
+        raise self.failureException(f"no step matching {needle!r}")
 
     def test_site_deploy_completes_the_checkout_before_generating(self):
         steps = self._steps("deploy-site.yml", "build")
@@ -2281,6 +2282,7 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
                 [sys.executable, str(ROOT / "scripts" / "restore_large_files.py"),
                  "--gitignore", missing, "--cache", directory],
                 capture_output=True, text=True, timeout=120,
+                check=False,
             )
             self.assertEqual(proc.returncode, 2, proc.stdout + proc.stderr)
             self.assertIn("lists the release assets", proc.stderr)
@@ -2868,6 +2870,7 @@ class PreservedBytesAreNeverNormalised(unittest.TestCase):
         out = subprocess.run(
             ["git", "check-attr", "text", "--", path],
             capture_output=True, text=True, cwd=ROOT,
+            check=False,
         ).stdout
         return out.rsplit(":", 1)[-1].strip()
 
@@ -2984,14 +2987,16 @@ class AMissingDependencyStopsTheBuild(unittest.TestCase):
         offenders = []
         for path in sorted((ROOT / "scripts").rglob("*.py")):
             tree = ast.parse(path.read_text(encoding="utf-8"))
-            for node in ast.walk(tree):
+            offenders.extend(
+                f"{path.relative_to(ROOT)}:{node.lineno}"
+                for node in ast.walk(tree)
                 if (
                     isinstance(node, ast.ExceptHandler)
                     and isinstance(node.type, ast.Name)
                     and node.type.id in ("ImportError", "ModuleNotFoundError")
                     and all(isinstance(stmt, ast.Pass) for stmt in node.body)
-                ):
-                    offenders.append(f"{path.relative_to(ROOT)}:{node.lineno}")
+                )
+            )
         self.assertEqual(offenders, [])
 
 
@@ -3168,6 +3173,7 @@ class ACheckThatCannotAnswerDoesNotPass(unittest.TestCase):
                 [sys.executable, "scripts/generate_pack.py", "--platform",
                  "retroarch", "--verify-packs", "--output-dir", directory],
                 capture_output=True, text=True, cwd=str(ROOT), timeout=300,
+                check=False,
             )
             self.assertNotEqual(
                 named.returncode, 0,
@@ -3180,6 +3186,7 @@ class ACheckThatCannotAnswerDoesNotPass(unittest.TestCase):
                 [sys.executable, "scripts/generate_pack.py", "--all",
                  "--verify-packs", "--output-dir", directory],
                 capture_output=True, text=True, cwd=str(ROOT), timeout=300,
+                check=False,
             )
             self.assertIn("SKIP (no pack in", swept.stdout)
             self.assertNotEqual(swept.returncode, 0, swept.stdout + swept.stderr)
@@ -3285,6 +3292,7 @@ class ScriptsImportThreeWays(unittest.TestCase):
         return subprocess.run(
             [sys.executable, *args],
             capture_output=True, text=True, cwd=str(ROOT), timeout=300,
+            check=False,
         )
 
     def test_imported_as_a_package(self):
@@ -3761,9 +3769,9 @@ class TheDatabaseCacheIsWrittenWhole(unittest.TestCase):
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             path = os.path.join(directory, "cache", "db_cache.json")
             generate_db.save_cache(path, {"a": 1})
-            with mock.patch.object(json, "dumps", side_effect=TypeError("miscomputed")):
-                with self.assertRaises(TypeError):
-                    generate_db.save_cache(path, {"a": 2})
+            with mock.patch.object(json, "dumps", side_effect=TypeError("miscomputed")), \
+                    self.assertRaises(TypeError):
+                generate_db.save_cache(path, {"a": 2})
             self.assertEqual(generate_db.load_cache(path), {"a": 1})
             self.assertEqual(os.listdir(os.path.dirname(path)), ["db_cache.json"])
 
@@ -4240,7 +4248,7 @@ class TriageSurvivesAForgeRefusal(unittest.TestCase):
         # A header row and a closing count frame the ranking.
         lines = out.getvalue().splitlines()[1:-1]
         self.assertEqual(len(lines), 2)
-        self.assertTrue(any("eden" in l and "unreachable" in l for l in lines))
+        self.assertTrue(any("eden" in line and "unreachable" in line for line in lines))
 
 
 class VerifyStrictAppliesInEveryMode(unittest.TestCase):
@@ -4266,6 +4274,7 @@ class VerifyStrictAppliesInEveryMode(unittest.TestCase):
         return subprocess.run(
             [sys.executable, "scripts/verify.py", *flags], cwd=ROOT,
             capture_output=True, text=True,
+            check=False,
         ).returncode
 
     def test_emulator_and_system_modes_fail_on_a_missing_required_file(self):
@@ -4608,6 +4617,7 @@ class EveryToolRefusesAFlagItWouldDrop(unittest.TestCase):
                     proc = subprocess.run(
                         [sys.executable, script, *argv], cwd=ROOT,
                         capture_output=True, text=True, timeout=120,
+                        check=False,
                     )
                     self.assertEqual(proc.returncode, 2, proc.stdout + proc.stderr)
 
@@ -4746,8 +4756,8 @@ class TheToolsPageSaysWhatDedupDoes(unittest.TestCase):
         from scripts import dedup
 
         line = next(
-            l for l in (ROOT / "wiki" / "tools.md").read_text().splitlines()
-            if l.startswith("| `dedup.py`")
+            row for row in (ROOT / "wiki" / "tools.md").read_text().splitlines()
+            if row.startswith("| `dedup.py`")
         )
         self.assertNotIn(".variants", line)
         for name in dedup.NODEDUP_DIRS:
@@ -4868,6 +4878,7 @@ class GeneratedArtifactsMeetTheirSchemas(unittest.TestCase):
         proc = subprocess.run(
             [sys.executable, "scripts/validate_schemas.py"], cwd=ROOT,
             capture_output=True, text=True, timeout=600,
+            check=False,
         )
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
 
@@ -6139,6 +6150,7 @@ class ATargetIsNamedWhenItRemovesTheCore(unittest.TestCase):
             [sys.executable, "scripts/cross_reference.py", "--platform", "batocera",
              "--target", "bcm2711", "--emulator", "dolphin"],
             cwd=ROOT, capture_output=True, text=True, timeout=600,
+            check=False,
         )
         self.assertEqual(result.returncode, 1)
         self.assertIn("bcm2711 target", result.stderr)
@@ -6156,6 +6168,7 @@ class ANamedPackThatIsAbsentFails(unittest.TestCase):
                 [sys.executable, "scripts/generate_pack.py", "--platform", "retroarch",
                  "--verify-packs", "--output-dir", directory],
                 cwd=ROOT, capture_output=True, text=True, timeout=600,
+                check=False,
             )
         self.assertEqual(result.returncode, 1)
         self.assertIn("retroarch: FAIL (no pack in", result.stdout)
@@ -6169,6 +6182,7 @@ class ANamedPackThatIsAbsentFails(unittest.TestCase):
                 [sys.executable, "scripts/generate_pack.py", "--all",
                  "--verify-packs", "--output-dir", directory],
                 cwd=ROOT, capture_output=True, text=True, timeout=600,
+                check=False,
             )
         self.assertEqual(result.returncode, 1)
         self.assertIn("no pack to verify", result.stderr)
@@ -6343,6 +6357,7 @@ class VerifyPacksRefusesWhatItCannotDo(unittest.TestCase):
                 result = subprocess.run(
                     [sys.executable, "scripts/generate_pack.py", *extra, "--output-dir", out],
                     cwd=ROOT, capture_output=True, text=True, timeout=300,
+                    check=False,
                 )
                 self.assertEqual(result.returncode, 2, result.stderr[-300:])
                 self.assertIn("--verify-packs", result.stderr)
@@ -6857,7 +6872,7 @@ class DocsDescribeTheRegistriesTheyName(unittest.TestCase):
     def test_the_dedup_list_is_named_whole_or_by_its_constant(self):
         from dedup import NODEDUP_DIRS
         tools = (ROOT / "wiki" / "tools.md").read_text(encoding="utf-8")
-        line = next(l for l in tools.splitlines() if "NODEDUP_DIRS" in l)
+        line = next(entry for entry in tools.splitlines() if "NODEDUP_DIRS" in entry)
         # Compared as list items: `mame` was missing while the substring
         # test found it in `_mame_clones.json` on the same line.
         listed = line.split("`NODEDUP_DIRS`", 1)[1].split(":", 1)[1].rstrip(" |")
@@ -7193,6 +7208,7 @@ class InstallerJsonKindsNeverOverwriteEachOther(unittest.TestCase):
                 [sys.executable, "scripts/generate_pack.py", *flags,
                  "--offline", "--output-dir", tmp],
                 cwd=ROOT, capture_output=True, text=True, timeout=600,
+                check=False,
             )
             return proc, before, target.read_text(encoding="utf-8")
 
@@ -7334,6 +7350,7 @@ class ToolsRunFromAnyDirectory(unittest.TestCase):
         return subprocess.run(
             [sys.executable, *argv], cwd=cwd, capture_output=True, text=True,
             timeout=600,
+            check=False,
         )
 
     def test_listing_works_from_scripts(self):
@@ -7528,6 +7545,7 @@ class ATargetTypoIsAnErrorInEveryTool(unittest.TestCase):
                     [sys.executable, f"scripts/{script}", "--platform", "retroarch",
                      "--target", "swich"],
                     cwd=ROOT, capture_output=True, text=True, timeout=300,
+                    check=False,
                 )
                 output = proc.stdout + proc.stderr
                 self.assertNotEqual(proc.returncode, 0)
@@ -7548,6 +7566,7 @@ class AnUnknownSystemIsRefusedBeforeAnyWork(unittest.TestCase):
                     [sys.executable, "scripts/generate_pack.py", "--platform", "batocera",
                      "--system", "playstaton-nothing", "--output-dir", str(out)],
                     cwd=ROOT, capture_output=True, text=True, timeout=120,
+                    check=False,
                 )
             self.assertEqual(proc.returncode, 2, proc.stdout + proc.stderr)
             self.assertIn(
@@ -7651,9 +7670,11 @@ class ProfileNotesDescribeTheCoreAlone(unittest.TestCase):
             for number, line in enumerate(text.splitlines(), 1):
                 if self.SHOUT.search(line):
                     found.append(f"{path.stem}:{number}")
-                for match in re.finditer(r"\bunlike (?:the )?([\w+-]+)", line, re.I):
-                    if match.group(1).casefold() in names:
-                        found.append(f"{path.stem}:{number}")
+                found.extend(
+                    f"{path.stem}:{number}"
+                    for match in re.finditer(r"\bunlike (?:the )?([\w+-]+)", line, re.I)
+                    if match.group(1).casefold() in names
+                )
         self.assertEqual(found, [])
 
 
@@ -7677,13 +7698,15 @@ class Ps2BiosImagesAreFoundByContent(unittest.TestCase):
             # Whatever the profile's own flags: TeknoParrot documents its
             # pcsx2x6 component, whose scan is the same (BiosTools.cpp:268-291
             # at 583f0e90), and carries no agnostic flag.
-            for entry in profile.get("files") or []:
+            named.extend(
+                f"{path.stem}: {entry['name']}"
+                for entry in profile.get("files") or []
                 if (
                     entry.get("min_size") in (2097152, 4194304)
                     and entry.get("max_size") == 8388608
                     and opens_by_name(entry, profile)
-                ):
-                    named.append(f"{path.stem}: {entry['name']}")
+                )
+            )
         self.assertEqual(named, [])
 
 
@@ -7723,11 +7746,15 @@ class Dev9FilesAreReadFromTheWorkingDirectory(unittest.TestCase):
         unset = []
         for path in sorted((ROOT / "emulators").glob("*.yml")):
             profile = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
-            for entry in profile.get("files") or []:
-                if entry.get("name") in ("eeprom.dat", "flash.dat") and "DEV9" in str(
-                    entry.get("source_ref")
-                ) and entry.get("load_from") != "working_directory":
-                    unset.append(f"{path.stem}: {entry['name']}")
+            unset.extend(
+                f"{path.stem}: {entry['name']}"
+                for entry in profile.get("files") or []
+                if (
+                    entry.get("name") in ("eeprom.dat", "flash.dat")
+                    and "DEV9" in str(entry.get("source_ref"))
+                    and entry.get("load_from") != "working_directory"
+                )
+            )
         self.assertEqual(unset, [])
 
 
