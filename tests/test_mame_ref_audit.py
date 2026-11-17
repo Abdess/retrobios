@@ -14,11 +14,12 @@ import tempfile
 import unittest
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 import mame_ref_audit
 from mame_ref_audit import declares
+
+ROOT = Path(__file__).resolve().parent.parent
 
 
 DRIVER = [

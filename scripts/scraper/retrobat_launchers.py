@@ -14,10 +14,7 @@ import bisect
 import re
 from collections.abc import Callable, Iterator
 
-try:
-    from .shell_launchers import is_feature_ref, split_ref
-except ImportError:
-    from shell_launchers import is_feature_ref, split_ref  # type: ignore[no-redef]
+from .shell_launchers import is_feature_ref, split_ref
 
 GENERATORS = "emulatorLauncher/Generators"
 FEATURES = ".emulationstation/es_features.cfg"
@@ -1534,20 +1531,19 @@ def cxbx(sources: dict[str, Source]) -> list[Record]:
         f"{CXBX_DATA_FOLDER}, the folder holding {settings.group(1)},"
         " which the launcher writes beside the binary"
     )
-    records = []
-    for match in named:
-        records.append(
-            _record(
-                match.group(1),
-                "standalone",
-                "passes_path",
-                [],
-                source_ref((src.path, [src.lines(match.start(), match.end()), settings_span])),
-                search_dir=f'<AppConfig.GetFullPath("{match.group(2)}")>',
-                passes_to=passes_to,
-                fails_when_missing=False,
-            )
+    records = [
+        _record(
+            match.group(1),
+            "standalone",
+            "passes_path",
+            [],
+            source_ref((src.path, [src.lines(match.start(), match.end()), settings_span])),
+            search_dir=f'<AppConfig.GetFullPath("{match.group(2)}")>',
+            passes_to=passes_to,
+            fails_when_missing=False,
         )
+        for match in named
+    ]
     first, *rest = fallbacks
     others = "neither core nor emulator is " + " or ".join(f'"{m.group(1)}"' for m in named)
     records.append(
@@ -1793,8 +1789,8 @@ def _negate(condition: str) -> str:
     anything else is wrapped in not (...).
     """
     tests = condition.split(" && ")
-    compared = [re.fullmatch(rf"(\w+) != ({STRING})", t) for t in tests]
-    if all(compared):
+    compared = [m for t in tests if (m := re.fullmatch(rf"(\w+) != ({STRING})", t))]
+    if len(compared) == len(tests):
         return " || ".join(f"{m.group(1)} == {m.group(2)}" for m in compared)
     return f"not ({condition})"
 
@@ -2071,7 +2067,7 @@ def _wrapped(expr: str, opener: str) -> str | None:
         return None
     inner = expr[len(opener) + 1 : -1]
     depth = 0
-    for offset, char in _code_chars(inner):
+    for _offset, char in _code_chars(inner):
         depth += {"(": 1, ")": -1}.get(char, 0)
         if depth < 0:
             return None
@@ -2165,16 +2161,9 @@ def _braceless_if(src: Source, offset: int) -> str | None:
 def _render(src: Source, expr: str, scope: int, before: int) -> Rendered | None:
     """A path expression as text, with the lines of the declarations it read."""
     expr = " ".join(expr.split())
-    if re.fullmatch(_BIOS_ROOT, expr):
-        return "bios", []
-    changed = re.fullmatch(r'Path\.ChangeExtension\(exe, "(\.\w+)"\)', expr)
-    if changed:
-        return f"<exe>{changed.group(1)}", []
-    named = re.fullmatch(r'(?:Program\.)?AppConfig\.GetFullPath\("([\w.-]+)"\)', expr)
-    if named:
-        return f"<{named.group(1)}>", []
-    if expr in _KNOWN:
-        return _KNOWN[expr], []
+    fixed = _render_fixed(expr)
+    if fixed is not None:
+        return fixed
     replaced = re.fullmatch(rf"(.+)\.Replace\({STRING}, {STRING}\)", expr)
     if replaced:
         return _render(src, replaced.group(1), scope, before)
@@ -2186,28 +2175,10 @@ def _render(src: Source, expr: str, scope: int, before: int) -> Rendered | None:
     if len(ternary) == 2:
         branches = _split_top(ternary[1], ":")
         if len(branches) == 2:
-            first = _render(src, branches[0], scope, before)
-            second = _render(src, branches[1], scope, before)
-            if first is None or second is None:
-                return None
-            return f"{first[0]} when {ternary[0]}, else {second[0]}", first[1] + second[1]
+            return _render_choice(src, ternary[0], branches, scope, before)
     terms = _split_top(expr, " + ")
     if len(terms) > 1:
-        while terms and terms[0] == '"\\""':
-            terms = terms[1:]
-        while terms and terms[-1] in ('"\\""', '"\\\\"'):
-            terms = terms[:-1]
-        pieces, spans = [], []
-        for term in terms:
-            if term == '";"':
-                pieces.append(";")
-                continue
-            done = _render(src, term, scope, before)
-            if done is None:
-                return None
-            pieces.append(done[0])
-            spans += done[1]
-        return "".join(pieces), spans
+        return _render_terms(src, terms, scope, before)
     combine = _wrapped(expr, "Path.Combine")
     if combine is not None:
         base, *rest = _split_top(combine, ",")
@@ -2219,26 +2190,76 @@ def _render(src: Source, expr: str, scope: int, before: int) -> Rendered | None:
     if expr in _PATH_PARAMS:
         return _PATH_PARAMS[expr], []
     if re.fullmatch(r"\w+", expr):
-        code = _code(src)
-        decls = list(re.compile(rf"(?:string|var)\s+{expr}\s*=\s*").finditer(code, scope, before))
-        if not decls:
-            return (_PATH_PARAMS[expr], []) if expr in _PATH_PARAMS else None
-        decl = decls[-1]
-        decl_end = _statement_end(src, decl.end())
-        base = _render(src, src.text[decl.end() : decl_end], scope, decl.start())
-        if base is None:
-            return None
-        text, spans = base[0], [*base[1], src.lines(decl.start(), decl_end)]
-        for again in re.compile(rf"(?<![\w.]){expr}\s*=(?!=)\s*").finditer(code, decl_end, before):
-            again_end = _statement_end(src, again.end())
-            value = _render(src, src.text[again.end() : again_end], scope, again.start())
-            if value is None:
-                return None
-            condition = _braceless_if(src, again.start())
-            text += f", or {value[0]}" + (f" when {_readable(condition)}" if condition else "")
-            spans += [*value[1], src.lines(_statement_start(src, again.start()), again_end)]
-        return text, spans
+        return _render_variable(src, expr, scope, before)
     return None
+
+
+def _render_fixed(expr: str) -> Rendered | None:
+    """The expressions that name one known folder or file."""
+    if re.fullmatch(_BIOS_ROOT, expr):
+        return "bios", []
+    changed = re.fullmatch(r'Path\.ChangeExtension\(exe, "(\.\w+)"\)', expr)
+    if changed:
+        return f"<exe>{changed.group(1)}", []
+    named = re.fullmatch(r'(?:Program\.)?AppConfig\.GetFullPath\("([\w.-]+)"\)', expr)
+    if named:
+        return f"<{named.group(1)}>", []
+    if expr in _KNOWN:
+        return _KNOWN[expr], []
+    return None
+
+
+def _render_choice(
+    src: Source, condition: str, branches: list[str], scope: int, before: int
+) -> Rendered | None:
+    """A `condition ? a : b` expression."""
+    first = _render(src, branches[0], scope, before)
+    second = _render(src, branches[1], scope, before)
+    if first is None or second is None:
+        return None
+    return f"{first[0]} when {condition}, else {second[0]}", first[1] + second[1]
+
+
+def _render_terms(src: Source, terms: list[str], scope: int, before: int) -> Rendered | None:
+    """A concatenation, the quotes wrapped around it dropped."""
+    while terms and terms[0] == '"\\""':
+        terms = terms[1:]
+    while terms and terms[-1] in ('"\\""', '"\\\\"'):
+        terms = terms[:-1]
+    pieces, spans = [], []
+    for term in terms:
+        if term == '";"':
+            pieces.append(";")
+            continue
+        done = _render(src, term, scope, before)
+        if done is None:
+            return None
+        pieces.append(done[0])
+        spans += done[1]
+    return "".join(pieces), spans
+
+
+def _render_variable(src: Source, expr: str, scope: int, before: int) -> Rendered | None:
+    """A local variable, from its declaration and every later assignment before use."""
+    code = _code(src)
+    decls = list(re.compile(rf"(?:string|var)\s+{expr}\s*=\s*").finditer(code, scope, before))
+    if not decls:
+        return (_PATH_PARAMS[expr], []) if expr in _PATH_PARAMS else None
+    decl = decls[-1]
+    decl_end = _statement_end(src, decl.end())
+    declared = _render(src, src.text[decl.end() : decl_end], scope, decl.start())
+    if declared is None:
+        return None
+    text, spans = declared[0], [*declared[1], src.lines(decl.start(), decl_end)]
+    for again in re.compile(rf"(?<![\w.]){expr}\s*=(?!=)\s*").finditer(code, decl_end, before):
+        again_end = _statement_end(src, again.end())
+        value = _render(src, src.text[again.end() : again_end], scope, again.start())
+        if value is None:
+            return None
+        condition = _braceless_if(src, again.start())
+        text += f", or {value[0]}" + (f" when {_readable(condition)}" if condition else "")
+        spans += [*value[1], src.lines(_statement_start(src, again.start()), again_end)]
+    return text, spans
 
 
 _OPTION_FORMS = (

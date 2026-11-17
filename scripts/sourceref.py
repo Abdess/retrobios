@@ -356,6 +356,95 @@ def resolve_project_word(path: str, trees: Iterable[list[str] | None]) -> str | 
     return None
 
 
+def _joined_line(lines: list[str], number: int) -> tuple[str, int, int]:
+    """(line, boundary, joined_at) of one scalar line, its wrapped run joined.
+
+    boundary is where the line's own text ends, joined_at where the next
+    line's text starts in the joined line, 0 when nothing was joined.
+    """
+    # A literal block keeps its line breaks, so a citation wrapped after
+    # `file:` or after a range's comma lost the ranges on the next line
+    # (gearcoleco `libretro.cpp:` then four ranges). The next line is
+    # read as the run's continuation, and a run reaching into it is wrapped.
+    line = lines[number].rstrip()
+    boundary = len(line)
+    joined_at = 0
+    following = lines[number + 1].lstrip() if number + 1 < len(lines) else ""
+    if PROSE_WRAPPED_RANGE_RE.match(following) and line[-1:].isalnum():
+        # The break can fall before the colon too: jgenesis wraps
+        # `.../src/config.rs` then `:76-78,95-99` on the next line.
+        joined_at = len(line)
+        line += following
+        following = ""
+    # A numbered list after a colon (abuse: `setup.cpp:` then `1. -datadir`)
+    # is not a range.
+    if not following[:1].isdigit() or PROSE_LIST_ITEM_RE.match(following):
+        following = ""
+    if following and line.endswith(":"):
+        joined_at = len(line)
+        line += following
+    elif following and line.endswith(","):
+        joined_at = len(line) + 1
+        line += " " + following
+    return line, boundary, joined_at
+
+
+def _prose_events(line: str) -> list[tuple[int, int, re.Match]]:
+    """Citations, file names and abbreviated locations of a line, in order."""
+    return sorted(
+        [(m.start(), 0, m) for m in PROSE_CITE_RE.finditer(line)]
+        + [(m.start(), 1, m) for m in _PROSE_FILE_NAMED_RE.finditer(line)]
+        + [(m.start(), 2, m) for m in _PROSE_ABBREVIATED_RE.finditer(line)],
+        key=lambda event: (event[0], event[1]),
+    )
+
+
+def _locate_run(
+    kind: int, match: re.Match, line: str, lines: list[str], number: int,
+    known: frozenset[str] | set[str], named: tuple[str, str] | None,
+) -> tuple[tuple[str, str, int, tuple[int, int]] | None, tuple[str, str] | None]:
+    """(path, role, start, span) of the run an event opens, None when it
+    opens none, and the file named for the locations after it."""
+    if kind == 1:
+        if "://" not in line[max(0, match.start() - 3):match.end()]:
+            named = (match.group("path"), "")
+        return None, named
+    if kind == 2:
+        if named is None:
+            return None, named
+        path, role = named
+        path_start = match.start()
+        return (path, role, path_start, (path_start, path_start)), named
+    found, role, path_start, path_span = _prose_path(line, lines, number, match, known)
+    if found is None:
+        return None, named
+    return (found, role, path_start, path_span), (found, role)
+
+
+def _run_spans(line: str, match: re.Match) -> tuple[list[tuple[int, int]], int]:
+    """Range spans of the run a match opens, and where the run ends."""
+    spans = [(match.start("range"), match.end("range"))]
+    end = match.end()
+    while True:
+        cont = PROSE_CONT_RE.match(line, end)
+        if cont is None and (listed := PROSE_CONT_LIST_RE.match(line, end)):
+            spans.extend(
+                (item.start(), item.end())
+                for item in _PROSE_LIST_RANGE_RE.finditer(
+                    line, end, listed.end()
+                )
+            )
+            end = listed.end()
+            break
+        if cont is None:
+            cont = PROSE_CONT_SPACED_RE.match(line, end)
+        if cont is None:
+            break
+        spans.append((cont.start("range"), cont.end("range")))
+        end = cont.end()
+    return spans, end
+
+
 def _prose_runs(
     text: str, known: frozenset[str] | set[str] = frozenset()
 ) -> Iterator[tuple[
@@ -380,79 +469,19 @@ def _prose_runs(
     # Where the run wrapped from the line before ends in this one: its
     # ranges are that run's, not abbreviated locations of their own.
     carried = 0
-    for number, own in enumerate(lines):
-        # A literal block keeps its line breaks, so a citation wrapped after
-        # `file:` or after a range's comma lost the ranges on the next line
-        # (gearcoleco `libretro.cpp:` then four ranges). The next line is
-        # read as the run's continuation, and a run reaching into it is wrapped.
-        line = own.rstrip()
-        boundary = len(line)
-        joined_at = 0
-        following = lines[number + 1].lstrip() if number + 1 < len(lines) else ""
-        if PROSE_WRAPPED_RANGE_RE.match(following) and line[-1:].isalnum():
-            # The break can fall before the colon too: jgenesis wraps
-            # `.../src/config.rs` then `:76-78,95-99` on the next line.
-            joined_at = len(line)
-            line += following
-            following = ""
-        # A numbered list after a colon (abuse: `setup.cpp:` then `1. -datadir`)
-        # is not a range.
-        if not following[:1].isdigit() or PROSE_LIST_ITEM_RE.match(following):
-            following = ""
-        if following and line.endswith(":"):
-            joined_at = len(line)
-            line += following
-        elif following and line.endswith(","):
-            joined_at = len(line) + 1
-            line += " " + following
+    for number in range(len(lines)):
+        line, boundary, joined_at = _joined_line(lines, number)
         consumed, carried = carried, 0
-        events = sorted(
-            [(m.start(), 0, m) for m in PROSE_CITE_RE.finditer(line)]
-            + [(m.start(), 1, m) for m in _PROSE_FILE_NAMED_RE.finditer(line)]
-            + [(m.start(), 2, m) for m in _PROSE_ABBREVIATED_RE.finditer(line)],
-            key=lambda event: (event[0], event[1]),
-        )
-        for _start, kind, match in events:
+        for _start, kind, match in _prose_events(line):
             if match.start() >= boundary:
                 break
             if match.start() < consumed:
                 continue
-            if kind == 1:
-                if "://" not in line[max(0, match.start() - 3):match.end()]:
-                    named = (match.group("path"), "")
+            located, named = _locate_run(kind, match, line, lines, number, known, named)
+            if located is None:
                 continue
-            if kind == 2:
-                if named is None:
-                    continue
-                path, role = named
-                path_start = match.start()
-                path_span = (path_start, path_start)
-            else:
-                path, role, path_start, path_span = _prose_path(
-                    line, lines, number, match, known
-                )
-                if path is None:
-                    continue
-                named = (path, role)
-            spans = [(match.start("range"), match.end("range"))]
-            end = match.end()
-            while True:
-                cont = PROSE_CONT_RE.match(line, end)
-                if cont is None and (listed := PROSE_CONT_LIST_RE.match(line, end)):
-                    spans.extend(
-                        (item.start(), item.end())
-                        for item in _PROSE_LIST_RANGE_RE.finditer(
-                            line, end, listed.end()
-                        )
-                    )
-                    end = listed.end()
-                    break
-                if cont is None:
-                    cont = PROSE_CONT_SPACED_RE.match(line, end)
-                if cont is None:
-                    break
-                spans.append((cont.start("range"), cont.end("range")))
-                end = cont.end()
+            path, role, path_start, path_span = located
+            spans, end = _run_spans(line, match)
             consumed = end
             if end > boundary:
                 indent = len(lines[number + 1]) - len(lines[number + 1].lstrip())

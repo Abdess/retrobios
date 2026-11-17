@@ -124,6 +124,15 @@ class HeldPinsReadTheirBuildFileAgain(unittest.TestCase):
         self.assertEqual(row.items, ["raine"])
 
 
+def _names_the_pin(value: str, profile: dict, source: str, pins: set, versions: set) -> bool:
+    if profile.get("pin_follows"):
+        # A build of the branch tip names the repository it
+        # clones, at no revision: RetroPie's advmame.
+        return value.split()[-1].rstrip("/").removesuffix(".git") == source
+    token = value.split()[-1].rsplit("/", 1)[-1].removesuffix(".tar.gz")
+    return value in pins or any(token in v or v in value for v in versions)
+
+
 class EveryBuildReferenceNamesThePin(unittest.TestCase):
     """Reads the repository: a pin_build value is what the platform builds,
     so it is the profile's source_commit or names its core_version, and the
@@ -147,23 +156,20 @@ class EveryBuildReferenceNamesThePin(unittest.TestCase):
 
             source = str(profile.get("source") or "").rstrip("/").removesuffix(".git")
 
-            def names_it(value: str) -> bool:
-                if profile.get("pin_follows"):
-                    # A build of the branch tip names the repository it
-                    # clones, at no revision: RetroPie's advmame.
-                    return value.split()[-1].rstrip("/").removesuffix(".git") == source
-                token = value.split()[-1].rsplit("/", 1)[-1].removesuffix(".tar.gz")
-                return value in pins or any(token in v or v in value for v in versions)
-
             # A reference that only dates a config_reads entry names the build
             # the platform reads that file at, not this profile's pin.
             justifies_pin = profile.get("pin_frozen") or profile.get("pin_follows")
-            if justifies_pin and not any(names_it(str(r["value"])) for r in references):
+            if justifies_pin and not any(
+                _names_the_pin(str(r["value"]), profile, source, pins, versions)
+                for r in references
+            ):
                 disagree.append(name)
-            for reference in references:
-                if not cf.pin_build_revision(reference, REPO_ROOT / "platforms"):
-                    disagree.append(f"{name}: {reference['platform']} is not read from "
-                                    f"{reference['repo']}")
+            disagree.extend(
+                f"{name}: {reference['platform']} is not read from "
+                f"{reference['repo']}"
+                for reference in references
+                if not cf.pin_build_revision(reference, REPO_ROOT / "platforms")
+            )
         self.assertEqual(disagree, [])
 
 

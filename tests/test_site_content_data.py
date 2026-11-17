@@ -135,9 +135,11 @@ class NoPlatformProseInScripts(unittest.TestCase):
         scripts = REPO_ROOT / "scripts"
         for path in [scripts / name for name in _RENDERERS] + sorted(scripts.glob("site*.py")):
             for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
-                for match in _PLATFORM_BRANCH.finditer(line):
-                    if (match.group(1) or match.group(2)) in platforms:
-                        found.append(f"{path.name}:{number}: {line.strip()}")
+                found.extend(
+                    f"{path.name}:{number}: {line.strip()}"
+                    for match in _PLATFORM_BRANCH.finditer(line)
+                    if (match.group(1) or match.group(2)) in platforms
+                )
         self.assertEqual(found, [], "a guide field says what one platform needs")
 
 

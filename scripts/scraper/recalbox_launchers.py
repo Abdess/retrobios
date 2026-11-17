@@ -16,7 +16,8 @@ from __future__ import annotations
 import ast
 import posixpath
 import re
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Iterable, Iterator, Mapping
+from dataclasses import dataclass, field
 from functools import partial
 from typing import Any
 
@@ -29,6 +30,8 @@ from .configgen_launchers import (
     _enclosing_test,
     _innermost_function,
     _locate,
+    assigned_value,
+    end_line,
 )
 
 CONFIGGEN = "projects/configgen/configgen"
@@ -75,6 +78,34 @@ FILE_OPTIONS = {"o2em_bios": "o2em"}
 BUILTIN_TOKEN = re.compile(r"<[^<>/]+>")
 
 
+def _string(node: ast.AST | None) -> str | None:
+    """The value of a string constant."""
+    if isinstance(node, ast.Constant) and isinstance(node.value, str):
+        return node.value
+    return None
+
+
+def _text(source: Source, node: ast.AST | None, what: str) -> str | None:
+    """The value of a string constant, None for any other node. A constant
+    that is not a string is a shape the reader does not know."""
+    if not isinstance(node, ast.Constant):
+        return None
+    if not isinstance(node.value, str):
+        source.fail(f"line {node.lineno}: {what} is not a string: {node.value!r}")
+    return node.value
+
+
+def _assignments(
+    nodes: Iterable[ast.AST],
+) -> Iterator[tuple[ast.Assign | ast.AnnAssign, str, ast.expr]]:
+    """Each single-name assignment among `nodes`, its name and its value."""
+    for node in nodes:
+        if isinstance(node, (ast.Assign, ast.AnnAssign)):
+            assigned = assigned_value(node)
+            if assigned is not None:
+                yield node, assigned[0], assigned[1]
+
+
 def spell(node: ast.AST | None, env: Mapping[str, str]) -> str | None:
     """The string an expression always evaluates to, if it can be read."""
     if isinstance(node, ast.Constant):
@@ -97,8 +128,9 @@ def spell(node: ast.AST | None, env: Mapping[str, str]) -> str | None:
             parts.append(part)
         return "".join(parts)
     if isinstance(node, ast.Call) and not node.keywords:
-        args = [spell(arg, env) for arg in node.args]
-        if any(arg is None for arg in args):
+        spelled = [spell(arg, env) for arg in node.args]
+        args = [arg for arg in spelled if arg is not None]
+        if len(args) != len(spelled):
             return None
         func = ast.unparse(node.func)
         if func == "os.path.join" and args:
@@ -111,12 +143,10 @@ def spell(node: ast.AST | None, env: Mapping[str, str]) -> str | None:
 def module_strings(source: Source, prefix: str) -> dict[str, str]:
     """Module-level string constants, keyed as `prefix.NAME`."""
     local: dict[str, str] = {}
-    for node in source.tree.body:
-        name = _assigned_name(node)
-        if name is not None:
-            value = spell(node.value, local)
-            if value is not None:
-                local[name] = value
+    for _node, name, expr in _assignments(source.tree.body):
+        value = spell(expr, local)
+        if value is not None:
+            local[name] = value
     return {f"{prefix}.{name}": value for name, value in local.items()}
 
 
@@ -128,14 +158,11 @@ def _class_strings(source: Source, env: dict[str, str]) -> dict[str, Any]:
             continue
         # The class body reads its own attributes by their bare names.
         bare: dict[str, str] = {}
-        for node in cls.body:
-            name = _assigned_name(node)
-            if name is None:
-                continue
+        for _node, name, expr in _assignments(cls.body):
             scope = {**env, **found, **bare}
-            value: Any = spell(node.value, scope)
-            if value is None and isinstance(node.value, ast.Tuple):
-                items = [spell(e, scope) for e in node.value.elts]
+            value: Any = spell(expr, scope)
+            if value is None and isinstance(expr, ast.Tuple):
+                items = [spell(e, scope) for e in expr.elts]
                 value = items if all(isinstance(i, str) for i in items) else None
             if value is None:
                 continue
@@ -149,17 +176,13 @@ def _class_strings(source: Source, env: dict[str, str]) -> dict[str, Any]:
 def _bound_once(scope: ast.AST, env: dict[str, str]) -> dict[str, str]:
     """Names a function binds exactly once to a readable string."""
     counts: dict[str, int] = {}
-    nodes = []
-    for node in ast.walk(scope):
-        name = _assigned_name(node)
-        if name is not None:
-            counts[name] = counts.get(name, 0) + 1
-            nodes.append(node)
+    found = list(_assignments(ast.walk(scope)))
+    for _node, name, _expr in found:
+        counts[name] = counts.get(name, 0) + 1
     local: dict[str, str] = {}
-    for node in sorted(nodes, key=lambda n: n.lineno):
-        name = _assigned_name(node)
-        if name is not None and counts[name] == 1:
-            value = spell(node.value, {**env, **local})
+    for _node, name, expr in sorted(found, key=lambda item: item[0].lineno):
+        if counts[name] == 1:
+            value = spell(expr, {**env, **local})
             if value is not None:
                 local[name] = value
     return local
@@ -173,12 +196,15 @@ def launcher_names(source: Source) -> dict[str, list[str]]:
             isinstance(node, ast.If)
             and isinstance(node.test, ast.Compare)
             and isinstance(node.test.ops[0], ast.Eq)
-            and isinstance(node.test.comparators[0], ast.Constant)
         ):
             continue
+        emulator = _text(source, node.test.comparators[0], "emulator name")
+        if emulator is None:
+            continue
         for call in _calls(ast.Module(body=node.body, type_ignores=[]), name="__import__"):
-            if call.args and isinstance(call.args[0], ast.Constant):
-                names.setdefault(call.args[0].value, []).append(node.test.comparators[0].value)
+            module = _text(source, call.args[0], "generator module") if call.args else None
+            if module is not None:
+                names.setdefault(module, []).append(emulator)
     if not names:
         source.fail("getGenerator imports no generator module")
     return names
@@ -191,8 +217,9 @@ def _handler_map(source: Source, function: str, table: str) -> dict[str, list[st
         source.fail(f"{table} is not a dict display")
     handlers: dict[str, list[str]] = {}
     for key, value in zip(node.keys, node.values):
-        if isinstance(key, ast.Constant) and isinstance(value, ast.Attribute):
-            handlers.setdefault(value.attr, []).append(key.value)
+        name = _text(source, key, f"{table} key")
+        if name is not None and isinstance(value, ast.Attribute):
+            handlers.setdefault(value.attr, []).append(name)
     if not handlers:
         source.fail(f"{table} sends nothing to a handler")
     return handlers
@@ -271,21 +298,27 @@ def _expr_call(stmt: ast.stmt) -> ast.Call | None:
     return None
 
 
-def _systems(test: ast.expr, lists: Mapping[str, list[str]]) -> list[str] | None:
+def _systems(
+    source: Source, test: ast.expr, lists: Mapping[str, list[str]]
+) -> list[str] | None:
     """The systems a `system.Name == x`, `or` or `in list` test accepts."""
     if isinstance(test, ast.BoolOp) and isinstance(test.op, ast.Or):
-        parts = [_systems(value, lists) for value in test.values]
-        if any(part is None for part in parts):
-            return None
-        return [system for part in parts for system in part]
+        parts = [_systems(source, value, lists) for value in test.values]
+        systems: list[str] = []
+        for part in parts:
+            if part is None:
+                return None
+            systems += part
+        return systems
     if (
         isinstance(test, ast.Compare)
         and len(test.ops) == 1
         and ast.unparse(test.left) in SYSTEM_NAMES
     ):
         right = test.comparators[0]
-        if isinstance(test.ops[0], ast.Eq) and isinstance(right, ast.Constant):
-            return [right.value]
+        system = _text(source, right, "system name")
+        if isinstance(test.ops[0], ast.Eq) and system is not None:
+            return [system]
         if isinstance(test.ops[0], ast.In) and isinstance(right, ast.Name) and right.id in lists:
             return list(lists[right.id])
     return None
@@ -304,7 +337,7 @@ def _condition(source: Source, tests: list[ast.expr], negated: bool,
     systems: list[str] = []
     flags: list[str] = []
     for test in tests:
-        found = _systems(test, lists)
+        found = _systems(source, test, lists)
         flag = _flag(test)
         if found is not None:
             systems += found
@@ -372,12 +405,12 @@ def _branch(
 
 
 def _local_lists(source: Source, scope: ast.AST) -> dict[str, tuple[list[str], ast.stmt]]:
-    found = {}
-    for node in ast.walk(scope):
-        name = _assigned_name(node)
-        if name is not None and isinstance(node.value, ast.List):
-            values = [e.value for e in node.value.elts if isinstance(e, ast.Constant)]
-            if len(values) == len(node.value.elts):
+    found: dict[str, tuple[list[str], ast.stmt]] = {}
+    for node, name, value in _assignments(ast.walk(scope)):
+        if isinstance(value, ast.List):
+            values = [text for e in value.elts
+                      if (text := _text(source, e, f"{name} item")) is not None]
+            if len(values) == len(value.elts):
                 found[name] = (values, node)
     return found
 
@@ -415,8 +448,9 @@ def system_directories(cg: Configgen) -> list[Launcher]:
             src.fail(f"line {case.pattern.lineno}: a guarded case is not read")
         pattern = case.pattern
         options = pattern.patterns if isinstance(pattern, ast.MatchOr) else [pattern]
-        cores = [p.value.value for p in options
-                 if isinstance(p, ast.MatchValue) and isinstance(p.value, ast.Constant)]
+        cores = [core for p in options
+                 if isinstance(p, ast.MatchValue)
+                 and (core := _text(src, p.value, "core name")) is not None]
         wildcard = isinstance(pattern, ast.MatchAs) and pattern.pattern is None
         if not wildcard and len(cores) != len(options):
             src.fail(f"line {pattern.lineno}: case pattern is not a list of core names")
@@ -429,10 +463,13 @@ def system_directories(cg: Configgen) -> list[Launcher]:
                 condition = ", ".join(words)
             launchers.append(record(
                 ", ".join(cores) or ALL_CORES, condition, call,
-                [(pattern.lineno, pattern.lineno), (start, call.end_lineno)],
+                [(pattern.lineno, pattern.lineno), (start, end_line(call))],
             ))
 
-    body, index = _locate(scope, lambda stmt: stmt is match)
+    located = _locate(scope, lambda stmt: stmt is match)
+    if located is None:
+        src.fail(f"no statement list holds the match on the core writing {SYSTEM_DIRECTORY}")
+    body, index = located
     overrides = _setter_branches(src, body[index + 1:], SYSTEM_DIRECTORY, lists)
     if not overrides:
         src.fail(f"no per-system {SYSTEM_DIRECTORY} after the match on the core")
@@ -442,7 +479,7 @@ def system_directories(cg: Configgen) -> list[Launcher]:
             src.fail(f"line {call.lineno}: {SYSTEM_DIRECTORY} rewritten for every system")
         read = {n.id for n in ast.walk(tests[start]) if isinstance(n, ast.Name)} \
             if start in tests else set()
-        spans = [(start, call.end_lineno)]
+        spans = [(start, end_line(call))]
         spans += [src.span(node) for name, (_v, node) in local_lists.items() if name in read]
         launchers.append(record(
             ALL_CORES, f"{condition}, replacing the directory chosen by core", call, spans,
@@ -473,18 +510,20 @@ def core_assets(cg: Configgen) -> list[Launcher]:
             and isinstance(node.test, ast.Compare)
             and ast.unparse(node.test.left) == "self.system.Core"
             and isinstance(node.test.ops[0], ast.Eq)
-            and isinstance(node.test.comparators[0], ast.Constant)
         ):
+            continue
+        core = _text(src, node.test.comparators[0], "core name")
+        if core is None:
             continue
         calls = [c for stmt in node.body if (c := _expr_call(stmt)) and _setter(c, CORE_ASSETS)]
         if len(calls) != 1:
             continue
         call = calls[0]
         launchers.append(Launcher(
-            emulator=node.test.comparators[0].value, build="libretro", kind="passes_path",
+            emulator=core, build="libretro", kind="passes_path",
             names=[], search_dir=cg.bios_dir(spell(call.args[1], env), src, CORE_ASSETS),
             passes_to=f"retroarch {CORE_ASSETS}",
-            source_ref=src.ref([(node.lineno, call.end_lineno)]),
+            source_ref=src.ref([(node.lineno, end_line(call))]),
         ))
     if not launchers:
         src.fail(f"no core is given a {CORE_ASSETS}")
@@ -516,101 +555,202 @@ def _skip_imports(body: list[ast.stmt], index: int) -> int:
     return index
 
 
-def tos_cascade(cg: Configgen, src: Source, scope: ast.FunctionDef, emulator: str,
-                build: str) -> list[Launcher]:
-    """A TOS path chosen per machine, then tried down an existence cascade."""
-    env = cg.env(src, scope)
+def _written_path(call: ast.Call, paths: set[str]) -> str | None:
+    """X when the last argument of `call` is str(X), X one of `paths`."""
+    if not call.args:
+        return None
+    last = call.args[-1]
+    if (
+        isinstance(last, ast.Call)
+        and ast.unparse(last.func) == "str"
+        and isinstance(last.args[0], ast.Name)
+        and last.args[0].id in paths
+    ):
+        return last.args[0].id
+    return None
+
+
+def _tos_setter(
+    src: Source, scope: ast.FunctionDef, env: Mapping[str, str]
+) -> tuple[ast.Call, str, str]:
+    """The setting written from str(<path>), the path variable, and where it goes."""
     paths = {
-        name for node in ast.walk(scope)
-        if (name := _assigned_name(node)) is not None
-        and isinstance(node.value, ast.Call)
-        and ast.unparse(node.value.func) == "os.path.join"
+        name for _node, name, value in _assignments(ast.walk(scope))
+        if isinstance(value, ast.Call) and ast.unparse(value.func) == "os.path.join"
     }
     setters = [
-        call for call in _calls(scope, attr="setString")
-        if call.args
-        and isinstance(call.args[-1], ast.Call)
-        and ast.unparse(call.args[-1].func) == "str"
-        and isinstance(call.args[-1].args[0], ast.Name)
-        and call.args[-1].args[0].id in paths
+        (call, var) for call in _calls(scope, attr="setString")
+        if (var := _written_path(call, paths)) is not None
     ]
     if len(setters) != 1:
         src.fail(f"{scope.name}: expected one setting written from str(<path>)")
-    setter = setters[0]
-    var = setter.args[-1].args[0].id
+    setter, var = setters[0]
     keys = [spell(arg, env) for arg in setter.args[:-1]]
     if None in keys or len(keys) not in (1, 2):
         src.fail(f"{scope.name}: the TOS is written under a key that is not read")
     passes_to = f"[{keys[0]}] {keys[1]}" if len(keys) == 2 else f"core option {keys[0]}"
+    return setter, var, passes_to
+
+
+@dataclass
+class _Cascade:
+    """What the branches between the TOS assignment and its setter decide."""
+
+    end: ast.stmt
+    chosen: dict[str, str | None] = field(default_factory=dict)
+    fallbacks: list[str] = field(default_factory=list)
+    absolute: bool | None = None
+    override: tuple[str, str] | None = None
+
+
+def _is_machine_branch(stmt: ast.If) -> bool:
+    return (
+        isinstance(stmt.test, ast.Compare)
+        and isinstance(stmt.test.comparators[0], ast.Name)
+        and stmt.test.comparators[0].id.startswith("MACHINE_")
+    )
+
+
+def _machine_branches(
+    src: Source, env: Mapping[str, str], stmt: ast.If, var: str, cascade: _Cascade
+) -> None:
+    """`if machine == MACHINE_X: var = ...` down its elif chain."""
+    node: ast.If | None = stmt
+    while node is not None:
+        value = _assigns(node.body[0], var) if len(node.body) == 1 else None
+        machine = node.test.comparators[0] if isinstance(node.test, ast.Compare) else None
+        if value is None or not isinstance(machine, ast.Name):
+            src.fail(f"line {node.lineno}: machine branch does not set {var}")
+        cascade.chosen[machine.id] = spell(value, env)
+        orelse = node.orelse
+        node = orelse[0] if len(orelse) == 1 and isinstance(orelse[0], ast.If) else None
+
+
+def _existence_steps(
+    cg: Configgen, src: Source, env: Mapping[str, str], stmt: ast.If, var: str,
+    cascade: _Cascade,
+) -> None:
+    """`if not os.path.exists(var): var = ...`, each step nested in the last."""
+    node: ast.If | None = stmt
+    while node is not None:
+        tested = _exists_arg(node.test)
+        is_abs = isinstance(tested, ast.Name) and tested.id == var
+        is_rel = (
+            isinstance(tested, ast.Call)
+            and ast.unparse(tested.func) == "os.path.join"
+            and spell(tested.args[0], env) == cg.bios
+            and ast.unparse(tested.args[1]) == var
+        )
+        if not (is_abs or is_rel) or (
+            cascade.absolute is not None and cascade.absolute != is_abs
+        ):
+            src.fail(f"line {node.lineno}: the cascade tests something else than {var}")
+        cascade.absolute = is_abs
+        value = _assigns(node.body[0], var)
+        if value is None:
+            src.fail(f"line {node.lineno}: cascade step does not set {var}")
+        fallback = spell(value, env)
+        if fallback is None:
+            src.fail(f"line {node.lineno}: cascade step sets {var} to a path that is not read")
+        cascade.fallbacks.append(fallback)
+        inner = node.body[1:]
+        node = inner[0] if len(inner) == 1 and isinstance(inner[0], ast.If) else None
+
+
+def _rom_override(src: Source, stmt: ast.If, var: str) -> tuple[str, ast.expr] | None:
+    """(marker, value) for `if "marker" in rom: var = value`."""
+    if not (
+        isinstance(stmt.test, ast.Compare)
+        and isinstance(stmt.test.ops[0], ast.In)
+        and ast.unparse(stmt.test.comparators[0]) in ("rom", "self.rom", "args.rom")
+        and len(stmt.body) == 1
+    ):
+        return None
+    marker = _text(src, stmt.test.left, "rom path marker")
+    value = _assigns(stmt.body[0], var)
+    return None if marker is None or value is None else (marker, value)
+
+
+def _read_cascade(
+    cg: Configgen, src: Source, env: Mapping[str, str], body: list[ast.stmt], index: int,
+    setter_stmt: ast.stmt | None, var: str,
+) -> _Cascade:
+    """The machine choice, the existence cascade and the rom path override."""
+    cascade = _Cascade(end=body[index])
+    i = _skip_imports(body, index + 1)
+    while i < len(body) and body[i] is not setter_stmt:
+        stmt = body[i]
+        if not isinstance(stmt, ast.If):
+            src.fail(f"line {stmt.lineno}: unexpected statement in the TOS cascade")
+        override = _rom_override(src, stmt, var)
+        if _is_machine_branch(stmt):
+            _machine_branches(src, env, stmt, var, cascade)
+        elif _exists_arg(stmt.test) is not None:
+            _existence_steps(cg, src, env, stmt, var, cascade)
+        elif override is not None:
+            value = spell(override[1], env)
+            if value is None:
+                src.fail(f"line {stmt.lineno}: rom path override sets {var} to a path that is not read")
+            cascade.override = (override[0], value)
+        else:
+            src.fail(f"line {stmt.lineno}: unexpected branch in the TOS cascade")
+        cascade.end = stmt
+        i = _skip_imports(body, i + 1)
+    return cascade
+
+
+def _machine_table(src: Source, scope: ast.FunctionDef) -> ast.stmt:
+    """The one dict display mapping rom paths to MACHINE_ constants."""
+    dicts = [
+        node for node in scope.body
+        if isinstance(node, (ast.Assign, ast.AnnAssign)) and isinstance(node.value, ast.Dict)
+        and all(isinstance(v, ast.Name) and v.id.startswith("MACHINE_") for v in node.value.values)
+    ]
+    if len(dicts) != 1:
+        src.fail(f"{scope.name}: no single rom path -> machine table")
+    return dicts[0]
+
+
+def _machine_depends(src: Source, scope: ast.FunctionDef, table: ast.stmt) -> str:
+    """The machine comes from the rom path table, else from the config options read."""
+    bound = {a.arg for a in scope.args.args} | {
+        n for node in ast.walk(scope) if (n := _assigned_name(node))
+    }
+    options = [
+        option for call in _calls(scope, attr="getInt")
+        if call.args and (option := _text(src, call.args[0], "machine option")) is not None
+        and isinstance(call.func, ast.Attribute)
+        and isinstance(call.func.value, ast.Name) and call.func.value.id in bound
+    ]
+    depends = f"machine read from the rom path through {_assigned_name(table)}"
+    if options:
+        depends += f", else option {', '.join(options)}"
+    return depends
+
+
+def tos_cascade(cg: Configgen, src: Source, scope: ast.FunctionDef, emulator: str,
+                build: str) -> list[Launcher]:
+    """A TOS path chosen per machine, then tried down an existence cascade."""
+    env = cg.env(src, scope)
+    setter, var, passes_to = _tos_setter(src, scope, env)
 
     located = _locate(scope, lambda stmt: _assigns(stmt, var) is not None)
     if located is None:
         src.fail(f"{scope.name}: {var} is never assigned")
     body, index = located
-    initial = spell(body[index].value, env)
-    chosen: dict[str, str] = {}
-    fallbacks: list[str] = []
-    absolute = None
-    override: tuple[str, str] | None = None
-    end = body[index]
-    i = _skip_imports(body, index + 1)
-    while i < len(body) and body[i] is not _outermost_stmt(body, setter):
-        stmt = body[i]
-        if not isinstance(stmt, ast.If):
-            src.fail(f"line {stmt.lineno}: unexpected statement in the TOS cascade")
-        if (
-            isinstance(stmt.test, ast.Compare)
-            and isinstance(stmt.test.comparators[0], ast.Name)
-            and stmt.test.comparators[0].id.startswith("MACHINE_")
-        ):
-            node: ast.If | None = stmt
-            while node is not None:
-                value = _assigns(node.body[0], var) if len(node.body) == 1 else None
-                machine = node.test.comparators[0]
-                if value is None or not isinstance(machine, ast.Name):
-                    src.fail(f"line {node.lineno}: machine branch does not set {var}")
-                chosen[machine.id] = spell(value, env)
-                orelse = node.orelse
-                node = orelse[0] if len(orelse) == 1 and isinstance(orelse[0], ast.If) else None
-        elif _exists_arg(stmt.test) is not None:
-            node = stmt
-            while node is not None:
-                tested = _exists_arg(node.test)
-                is_abs = isinstance(tested, ast.Name) and tested.id == var
-                is_rel = (
-                    isinstance(tested, ast.Call)
-                    and ast.unparse(tested.func) == "os.path.join"
-                    and spell(tested.args[0], env) == cg.bios
-                    and ast.unparse(tested.args[1]) == var
-                )
-                if not (is_abs or is_rel) or (absolute is not None and absolute != is_abs):
-                    src.fail(f"line {node.lineno}: the cascade tests something else than {var}")
-                absolute = is_abs
-                value = _assigns(node.body[0], var)
-                if value is None:
-                    src.fail(f"line {node.lineno}: cascade step does not set {var}")
-                fallbacks.append(spell(value, env))
-                inner = node.body[1:]
-                node = inner[0] if len(inner) == 1 and isinstance(inner[0], ast.If) else None
-        elif (
-            isinstance(stmt.test, ast.Compare)
-            and isinstance(stmt.test.left, ast.Constant)
-            and isinstance(stmt.test.ops[0], ast.In)
-            and ast.unparse(stmt.test.comparators[0]) in ("rom", "self.rom", "args.rom")
-            and len(stmt.body) == 1
-            and _assigns(stmt.body[0], var) is not None
-        ):
-            override = (stmt.test.left.value, spell(_assigns(stmt.body[0], var), env))
-        else:
-            src.fail(f"line {stmt.lineno}: unexpected branch in the TOS cascade")
-        end = stmt
-        i = _skip_imports(body, i + 1)
+    initial = spell(_assigns(body[index], var), env)
+    setter_stmt = _outermost_stmt(body, setter)
+    cascade = _read_cascade(cg, src, env, body, index, setter_stmt, var)
     machines = [
         (name, name.removeprefix("MACHINE_").replace("_", "").lower())
         for node in scope.body if (name := _assigned_name(node)) and name.startswith("MACHINE_")
         and name != "MACHINE_UNKNOWN"
     ]
-    if not chosen or not fallbacks or absolute is None or not machines or initial is None:
+    absolute = cascade.absolute
+    if (
+        not cascade.chosen or not cascade.fallbacks or absolute is None or not machines
+        or initial is None
+    ):
         src.fail(f"{scope.name}: no machine choice followed by an existence cascade")
 
     def relative(value: str | None) -> str:
@@ -619,48 +759,37 @@ def tos_cascade(cg: Configgen, src: Source, scope: ast.FunctionDef, emulator: st
             src.fail(f"{scope.name}: {value} is not under {cg.bios}")
         return name
 
-    tokens = [v for v in fallbacks if BUILTIN_TOKEN.fullmatch(posixpath.basename(v))]
-    files = [relative(v) for v in fallbacks if v not in tokens]
+    tokens = [v for v in cascade.fallbacks if BUILTIN_TOKEN.fullmatch(posixpath.basename(v))]
+    files = [relative(v) for v in cascade.fallbacks if v not in tokens]
     if tokens:
         passes_to += f" ({', '.join(tokens)} when none is found)"
-    dicts = [
-        node for node in scope.body
-        if isinstance(node, (ast.Assign, ast.AnnAssign)) and isinstance(node.value, ast.Dict)
-        and all(isinstance(v, ast.Name) and v.id.startswith("MACHINE_") for v in node.value.values)
-    ]
-    if len(dicts) != 1:
-        src.fail(f"{scope.name}: no single rom path -> machine table")
-    bound = {a.arg for a in scope.args.args} | {
-        n for node in ast.walk(scope) if (n := _assigned_name(node))
-    }
-    options = [
-        call.args[0].value for call in _calls(scope, attr="getInt")
-        if call.args and isinstance(call.args[0], ast.Constant)
-        and isinstance(call.func.value, ast.Name) and call.func.value.id in bound
-    ]
-    depends = f"machine read from the rom path through {_assigned_name(dicts[0])}"
-    if options:
-        depends += f", else option {', '.join(options)}"
+    table = _machine_table(src, scope)
+    depends = _machine_depends(src, scope, table)
     machine_lines = [n.lineno for n in scope.body if _assigned_name(n) in dict(machines)]
-    cascade = body[index:body.index(_outermost_stmt(body, setter)) + 1]
-    read = {n.id for stmt in cascade for n in ast.walk(stmt) if isinstance(n, ast.Name)}
-    helpers = [src.span(n) for n in scope.body
-               if _assigned_name(n) in read - {var} and spell(n.value, env) is not None]
+    if setter_stmt is None:
+        src.fail(f"{scope.name}: the setting is not written in the block assigning {var}")
+    read = {
+        n.id for stmt in body[index:body.index(setter_stmt) + 1]
+        for n in ast.walk(stmt) if isinstance(n, ast.Name)
+    }
+    helpers = [src.span(node) for node, name, value in _assignments(scope.body)
+               if name in read - {var} and spell(value, env) is not None]
     ref = src.ref([
         (min(machine_lines), max(machine_lines)),
-        src.span(dicts[0]),
+        src.span(table),
         *helpers,
-        (src.span(body[index])[0], max(end.end_lineno, setter.end_lineno)),
+        (src.span(body[index])[0], max(end_line(cascade.end), end_line(setter))),
     ])
     launchers = []
     for constant, slot in machines:
-        first = relative(chosen.get(constant, initial))
+        first = relative(cascade.chosen.get(constant, initial))
         launchers.append(Launcher(
             emulator=emulator, build=build, kind="names_searched", slot=slot,
             names=list(dict.fromkeys([first, *files])), case_insensitive=False,
             search_dir=cg.bios, passes_to=passes_to, fails_when_missing=False,
             depends_on_option=depends, source_ref=ref,
         ))
+    override = cascade.override
     if override is not None and not BUILTIN_TOKEN.search(override[1]):
         launchers.append(Launcher(
             emulator=emulator, build=build, kind="fixed_name", slot=override[0],
@@ -692,13 +821,11 @@ def hatari_libretro(cg: Configgen) -> list[Launcher]:
     ]
 
 
-def gsplus(cg: Configgen) -> list[Launcher]:
-    """A path tried with os.path.exists down an else chain, and the
-    placeholders a per-game .gsplus file can name."""
-    src = cg.source(GSPLUS)
-    generate = src.function("generate")
-    env = cg.env(src, generate)
-    emulator = cg.emulator(GSPLUS)
+def _gsplus_tries(
+    cg: Configgen, src: Source, env: Mapping[str, str], body: list[ast.stmt], index: int
+) -> tuple[list[str], str, ast.stmt]:
+    """The paths tried down the else chain, the key the found one is written to,
+    and the last statement of the chain."""
 
     def exists_of(test: ast.expr, var: str) -> bool:
         return (
@@ -707,34 +834,32 @@ def gsplus(cg: Configgen) -> list[Launcher]:
             and ast.unparse(test.args[0]) == var
         )
 
-    located = _locate(generate, lambda stmt: (
-        _assigned_name(stmt) is not None
-        and cg.under_bios(spell(stmt.value, env)) is not None
-    ))
-    if located is None:
-        src.fail("generate assigns no path under BIOS")
-    body, index = located
     names: list[str] = []
-    key = None
+    key: str | None = None
     stmts, i = body, index
-    last: ast.stmt = body[index]
     while True:
-        var = _assigned_name(stmts[i])
-        name = cg.under_bios(spell(stmts[i].value, env))
+        assigned = assigned_value(stmts[i])
+        var = assigned[0] if assigned is not None else None
+        name = cg.under_bios(spell(assigned[1], env)) if assigned is not None else None
         test = stmts[i + 1] if i + 1 < len(stmts) else None
-        tried = isinstance(test, ast.If) and var is not None and exists_of(test.test, var)
-        if name is None or not tried:
+        if name is None or not (
+            isinstance(test, ast.If) and var is not None and exists_of(test.test, var)
+        ):
             src.fail(f"line {stmts[i].lineno}: path is not tried with os.path.exists")
+        calls = [c for stmt in test.body if (c := _expr_call(stmt))]
+        for c in calls:
+            if not isinstance(c.func, ast.Attribute):
+                src.fail(f"line {c.lineno}: a call of the found branch is not a method call")
         written = [
-            c for stmt in test.body
-            if (c := _expr_call(stmt)) and c.func.attr == "setString"
+            c for c in calls
+            if isinstance(c.func, ast.Attribute) and c.func.attr == "setString"
             and ast.unparse(c.args[1]) == var
         ]
-        if len(written) != 1 or (key is not None and written[0].args[0].value != key):
+        found = _string(written[0].args[0]) if len(written) == 1 else None
+        if found is None or (key is not None and found != key):
             src.fail(f"line {test.lineno}: the found path is not written to one key")
-        key = written[0].args[0].value
+        key = found
         names.append(name)
-        last = test
         orelse = test.orelse
         if len(orelse) == 2 and isinstance(orelse[1], ast.If):
             stmts, i = orelse, 0
@@ -744,19 +869,37 @@ def gsplus(cg: Configgen) -> list[Launcher]:
         ]
         if len(orelse) != 1 or not removed:
             src.fail(f"line {test.lineno}: the last miss does not remove {key}")
-        break
+        return names, key, test
+
+
+def gsplus(cg: Configgen) -> list[Launcher]:
+    """A path tried with os.path.exists down an else chain, and the
+    placeholders a per-game .gsplus file can name."""
+    src = cg.source(GSPLUS)
+    generate = src.function("generate")
+    env = cg.env(src, generate)
+    emulator = cg.emulator(GSPLUS)
+
+    located = _locate(generate, lambda stmt: (
+        (assigned := assigned_value(stmt)) is not None
+        and cg.under_bios(spell(assigned[1], env)) is not None
+    ))
+    if located is None:
+        src.fail("generate assigns no path under BIOS")
+    body, index = located
+    names, key, last = _gsplus_tries(cg, src, env, body, index)
     guard = next(
         node for node in ast.walk(generate)
         if isinstance(node, ast.If) and any(child is body[index] for child in node.orelse)
     )
-    if not (isinstance(guard.test, ast.Compare) and isinstance(guard.test.left, ast.Constant)):
+    marker = _string(guard.test.left) if isinstance(guard.test, ast.Compare) else None
+    if marker is None:
         src.fail("the BIOS search is not the else of a rom path test")
-    marker = guard.test.left.value
     launchers = [Launcher(
         emulator=emulator, build="standalone", kind="names_searched", names=names,
         case_insensitive=False, search_dir=cg.bios, passes_to=key, fails_when_missing=False,
         depends_on_option=f'rom path without "{marker}"',
-        source_ref=src.ref([(src.span(body[index])[0], last.end_lineno)]),
+        source_ref=src.ref([(src.span(body[index])[0], end_line(last))]),
     )]
     for node in ast.walk(ast.Module(body=guard.body, type_ignores=[])):
         if not (
@@ -764,20 +907,21 @@ def gsplus(cg: Configgen) -> list[Launcher]:
             and isinstance(node.test, ast.Compare)
             and isinstance(node.test.left, ast.Call)
             and _setter(node.test.left, key, "getString")
-            and isinstance(node.test.comparators[0], ast.Constant)
         ):
+            continue
+        placeholder = _text(src, node.test.comparators[0], "placeholder")
+        if placeholder is None:
             continue
         written = [c for stmt in node.body if (c := _expr_call(stmt)) and _setter(c, key)]
         name = cg.under_bios(spell(written[0].args[1], env)) if len(written) == 1 else None
         if name is None:
             src.fail(f"line {node.lineno}: placeholder branch writes no BIOS path")
-        placeholder = node.test.comparators[0].value
         launchers.append(Launcher(
             emulator=emulator, build="standalone", kind="fixed_name", slot=placeholder,
             names=[name], case_insensitive=False, search_dir=cg.bios, passes_to=key,
             fails_when_missing=False,
             depends_on_option=f'"{marker}" game file whose {key} is {placeholder}',
-            source_ref=src.ref([(node.lineno, written[0].end_lineno)]),
+            source_ref=src.ref([(node.lineno, end_line(written[0]))]),
         ))
     if len(launchers) == 1:
         src.fail("no placeholder of a .gsplus game file is replaced")
@@ -812,30 +956,31 @@ def amiberry(cg: Configgen) -> list[Launcher]:
         kick.fail("BIOS_PER_SYSTEM is not a dict display")
     chooser = kick.function("GetKickstartsFor")
     messages = [
-        node.exc.args[0].value for node in ast.walk(chooser)
+        message for node in ast.walk(chooser)
         if isinstance(node, ast.Raise) and isinstance(node.exc, ast.Call)
-        and node.exc.args and isinstance(node.exc.args[0], ast.Constant)
+        and node.exc.args
+        and (message := _text(kick, node.exc.args[0], "failure message")) is not None
     ]
     aros = [
-        call.args[0].value for call in _calls(chooser, name="AmigaBios")
-        if call.args and isinstance(call.args[0], ast.Constant)
+        aros_name for call in _calls(chooser, name="AmigaBios")
+        if call.args and (aros_name := _text(kick, call.args[0], "AROS name")) is not None
     ]
     builtin = [
-        node.value.value for node in ast.walk(chooser)
+        rom for node in ast.walk(chooser)
         if isinstance(node, ast.Assign) and ast.unparse(node.targets[0]) == "self.rom"
-        and isinstance(node.value, ast.Constant)
+        and (rom := _text(kick, node.value, "built-in rom")) is not None
     ]
     if len(messages) != 2 or len(aros) != 2 or len(builtin) != 1:
         kick.fail("GetKickstartsFor no longer has two failures, the AROS pair and a built-in")
     config = cg.source(AMIBERRY_CONFIG)
     setter = config.function("SetKickstarts")
-    keys = [c.args[0].value for c in _calls(setter, attr="setString")
-            if isinstance(c.args[0], ast.Constant)]
+    keys = [setting for c in _calls(setter, attr="setString")
+            if (setting := _text(config, c.args[0], "kickstart key")) is not None]
     if len(keys) != 2:
         config.fail("SetKickstarts no longer writes a kickstart and an extended ROM")
     rom_key, ext_key = keys
-    tail = [(helper.lineno, helper.end_lineno), (chooser.lineno, chooser.end_lineno)]
-    config_ref = config.ref([(setter.lineno, setter.end_lineno)])
+    tail = [(helper.lineno, end_line(helper)), (chooser.lineno, end_line(chooser))]
+    config_ref = config.ref([(setter.lineno, end_line(setter))])
 
     emulator = cg.emulator(AMIBERRY_GENERATOR)
     launchers = []
@@ -889,19 +1034,19 @@ def _amiberry_rom_path(cg: Configgen, emulator: str) -> Launcher:
     return Launcher(
         emulator=emulator, build="standalone", kind="passes_path", names=[],
         search_dir=directory, passes_to="written: rom_path in amiberry.conf",
-        source_ref=src.ref([(call.lineno, call.end_lineno)]),
+        source_ref=src.ref([(call.lineno, end_line(call))]),
     )
 
 
-def pcsx2(cg: Configgen) -> list[Launcher]:
-    """A region token of the rom name picks a BIOS, then a fixed order."""
-    src = cg.source(PCSX2)
-    env = cg.env(src)
-    chooser = src.function("__CheckPs2Bios")
+def _ps2_exists_helper(
+    cg: Configgen, src: Source, env: Mapping[str, str], chooser: ast.FunctionDef
+) -> tuple[str, str]:
+    """The directory the nested existence helper joins a name to, and its name."""
     exists = next((f for f in chooser.body if isinstance(f, ast.FunctionDef)), None)
-    joined = exists.body[-1].value.args[0] if exists and isinstance(exists.body[-1], ast.Return) \
-        and isinstance(exists.body[-1].value, ast.Call) and exists.body[-1].value.args else None
-    if not (
+    returned = exists.body[-1] if exists is not None else None
+    joined = returned.value.args[0] if isinstance(returned, ast.Return) \
+        and isinstance(returned.value, ast.Call) and returned.value.args else None
+    if exists is None or not (
         isinstance(joined, ast.Call) and ast.unparse(joined.func) == "os.path.join"
         and ast.unparse(joined.args[-1]) == exists.args.args[0].arg
     ):
@@ -909,36 +1054,67 @@ def pcsx2(cg: Configgen) -> list[Launcher]:
     search_dir = cg.bios_dir(
         spell(ast.Call(func=joined.func, args=joined.args[:-1], keywords=[]), env), src, "Exists"
     )
-    helper = exists.name
+    return search_dir, exists.name
 
+
+def _region_branch(node: ast.If, helper: str) -> tuple[str, ast.expr, ast.expr | None] | None:
+    """(token, name tested, name returned) for `if token in rom and Exists(name): return x`."""
+    test = node.test
+    if not (
+        isinstance(test, ast.BoolOp) and isinstance(test.op, ast.And) and len(test.values) == 2
+    ):
+        return None
+    compare, call = test.values
+    token = _string(compare.left) if isinstance(compare, ast.Compare) else None
+    if not (
+        token is not None
+        and isinstance(call, ast.Call)
+        and ast.unparse(call.func) == helper
+        and len(node.body) == 1 and isinstance(node.body[0], ast.Return)
+    ):
+        return None
+    return token, call.args[0], node.body[0].value
+
+
+def _ps2_region_groups(
+    src: Source, env: Mapping[str, str], chooser: ast.FunctionDef, helper: str
+) -> dict[tuple[str, str], list[str]]:
+    """(name returned, name tested) -> the rom name tokens that pick it."""
     groups: dict[tuple[str, str], list[str]] = {}
-    chain = next((s for s in chooser.body if isinstance(s, ast.If)), None)
-    node = chain
+    node = next((s for s in chooser.body if isinstance(s, ast.If)), None)
     while node is not None:
-        test = node.test
-        ok = (
-            isinstance(test, ast.BoolOp) and isinstance(test.op, ast.And) and len(test.values) == 2
-            and isinstance(test.values[0], ast.Compare)
-            and isinstance(test.values[0].left, ast.Constant)
-            and isinstance(test.values[1], ast.Call)
-            and ast.unparse(test.values[1].func) == helper
-            and len(node.body) == 1 and isinstance(node.body[0], ast.Return)
-        )
-        if not ok:
+        branch = _region_branch(node, helper)
+        if branch is None:
             src.fail(f"line {node.lineno}: region branch is not `token in rom and Exists(name)`")
-        tested = spell(test.values[1].args[0], env)
-        given = spell(node.body[0].value, env)
+        token, tested_node, given_node = branch
+        tested = spell(tested_node, env)
+        given = spell(given_node, env)
         if tested is None or given is None:
             src.fail(f"line {node.lineno}: region branch names no BIOS constant")
-        groups.setdefault((given, tested), []).append(test.values[0].left.value)
+        groups.setdefault((given, tested), []).append(token)
         orelse = node.orelse
         node = orelse[0] if len(orelse) == 1 and isinstance(orelse[0], ast.If) else None
-    loops = [s for s in chooser.body if isinstance(s, ast.For) and isinstance(s.iter, ast.Tuple)]
+    return groups
+
+
+def pcsx2(cg: Configgen) -> list[Launcher]:
+    """A region token of the rom name picks a BIOS, then a fixed order."""
+    src = cg.source(PCSX2)
+    env = cg.env(src)
+    chooser = src.function("__CheckPs2Bios")
+    search_dir, helper = _ps2_exists_helper(cg, src, env, chooser)
+
+    groups = _ps2_region_groups(src, env, chooser, helper)
+    loops = [
+        (s, s.iter) for s in chooser.body
+        if isinstance(s, ast.For) and isinstance(s.iter, ast.Tuple)
+    ]
     if not groups or len(loops) != 1:
         src.fail("__CheckPs2Bios no longer tries region tokens then a fixed order")
-    fallback = [spell(e, env) for e in loops[0].iter.elts]
-    if None in fallback:
-        src.fail(f"line {loops[0].lineno}: fallback names are not BIOS constants")
+    loop, names = loops[0]
+    fallback = [name for e in names.elts if (name := spell(e, env)) is not None]
+    if len(fallback) != len(names.elts):
+        src.fail(f"line {loop.lineno}: fallback names are not BIOS constants")
 
     writes = [
         call for call in _calls(src.tree, attr="setString")
@@ -952,10 +1128,10 @@ def pcsx2(cg: Configgen) -> list[Launcher]:
         src.fail("the chosen BIOS is not written to one config key")
     constants = {v: k.removeprefix("self.").removeprefix("Pcsx2Generator.")
                  for k, v in env.items() if k.startswith("Pcsx2Generator.BIOS_")}
-    names_lines = [n.lineno for n in ast.walk(src.tree)
-                   if _assigned_name(n) in {c for c in constants.values()}]
-    ref = src.ref([(min(names_lines), max(names_lines)), (chooser.lineno, chooser.end_lineno),
-                   (writes[0].lineno, writes[0].end_lineno)])
+    names_lines = [node.lineno for node, name, _value in _assignments(ast.walk(src.tree))
+                   if name in set(constants.values())]
+    ref = src.ref([(min(names_lines), max(names_lines)), (chooser.lineno, end_line(chooser)),
+                   (writes[0].lineno, end_line(writes[0]))])
     make = partial(Launcher, emulator=cg.emulator(PCSX2), build="standalone",
                    case_insensitive=False, search_dir=search_dir,
                    passes_to=f"[{section}] {key}", fails_when_missing=False, source_ref=ref)
@@ -989,19 +1165,19 @@ def _presence(cg: Configgen, src: Source, scope: ast.FunctionDef) -> tuple[list[
         if not (isinstance(node, ast.If) and isinstance(node.test, ast.BoolOp)
                 and isinstance(node.test.op, ast.Or)):
             continue
-        names = [
+        found = [
             cg.under_bios(spell(value.args[0], env)) for value in node.test.values
             if isinstance(value, ast.Call) and ast.unparse(value.func) == "os.path.exists"
         ]
-        if names and len(names) == len(node.test.values) and None not in names:
+        names = [name for name in found if name is not None]
+        if names and len(names) == len(node.test.values) and len(names) == len(found):
             return names, node
-    src.fail(f"{scope.name}: no presence test of BIOS paths")
+    raise LauncherShapeError(f"{src.path}: {scope.name}: no presence test of BIOS paths")
 
 
 def _returned(stmts: list[ast.stmt]) -> str | None:
     if len(stmts) == 1 and isinstance(stmts[0], ast.Return):
-        value = stmts[0].value
-        return value.value if isinstance(value, ast.Constant) else None
+        return _string(stmts[0].value)
     return None
 
 
@@ -1013,46 +1189,46 @@ def dolphin(cg: Configgen) -> list[Launcher]:
     names, test = _presence(cg, src, checker)
     found, missing = _returned(test.body), _returned(test.orelse)
     calls = [
-        call for call in _calls(src.tree, attr="setString")
-        if len(call.args) == 3 and isinstance(call.args[2], ast.Name)
+        (call, bound.id) for call in _calls(src.tree, attr="setString")
+        if len(call.args) == 3 and isinstance(bound := call.args[2], ast.Name)
         and any(
-            _assigned_name(n) == call.args[2].id and isinstance(n.value, ast.Call)
-            and isinstance(n.value.func, ast.Attribute) and n.value.func.attr == checker.name
-            for n in ast.walk(src.tree)
+            name == bound.id and isinstance(value, ast.Call)
+            and isinstance(value.func, ast.Attribute) and value.func.attr == checker.name
+            for _node, name, value in _assignments(ast.walk(src.tree))
         )
     ]
     if found is None or missing is None or len(calls) != 1:
         src.fail("CheckGamecubeIpl's answer is not written to one config key")
-    call = calls[0]
+    call, answer = calls[0]
     section, key = spell(call.args[0], env), spell(call.args[1], env)
-    binding = next(n for n in ast.walk(src.tree)
-                   if _assigned_name(n) == call.args[2].id)
+    binding = next(node for node, name, _value in _assignments(ast.walk(src.tree))
+                   if name == answer)
     standalone = Launcher(
         emulator=cg.emulator(DOLPHIN), build="standalone", kind="fixed_name", names=names,
         case_insensitive=False, search_dir=cg.bios,
         passes_to=f"[{section}] {key} ({found} when one is present, else {missing})",
         fails_when_missing=False,
-        source_ref=src.ref([(checker.lineno, checker.end_lineno), src.span(binding),
-                            (call.lineno, call.end_lineno)]),
+        source_ref=src.ref([(checker.lineno, end_line(checker)), src.span(binding),
+                            (call.lineno, end_line(call))]),
     )
     cores = cg.source(CORES)
     configure = cores.function("configureDolphin")
     names, test = _presence(cg, cores, configure)
-    options = [(c.args[0].value, c.args[1].value) for branch in (test.body, test.orelse)
+    options = [(option, value) for branch in (test.body, test.orelse)
                for stmt in branch if (c := _expr_call(stmt)) and len(c.args) == 2
-               and all(isinstance(a, ast.Constant) for a in c.args)]
+               and (option := _text(cores, c.args[0], "core option")) is not None
+               and (value := _text(cores, c.args[1], "core option value")) is not None]
     if len(options) != 2 or options[0][0] != options[1][0]:
         cores.fail("configureDolphin's presence test does not set one core option both ways")
     option = options[0][0]
     on, off = (value.strip('"') for _o, value in options)
-    first = min(n.lineno for n in ast.walk(configure)
-                if _assigned_name(n) is not None and cg.under_bios(
-                    spell(n.value, cg.env(cores, configure))) is not None)
+    first = min(node.lineno for node, _name, value in _assignments(ast.walk(configure))
+                if cg.under_bios(spell(value, cg.env(cores, configure))) is not None)
     libretro = Launcher(
         emulator=cg.core("configureDolphin"), build="libretro", kind="fixed_name", names=names,
         case_insensitive=False, search_dir=cg.bios,
         passes_to=f"core option {option} ({on} when one is present, else {off})",
-        fails_when_missing=False, source_ref=cores.ref([(first, test.end_lineno)]),
+        fails_when_missing=False, source_ref=cores.ref([(first, end_line(test))]),
     )
     return [standalone, libretro]
 
@@ -1073,18 +1249,18 @@ def _config_paths(cg: Configgen, path: str, emulator: str) -> Launcher:
     if not writes:
         src.fail("writes no BIOS path into its config")
     conditions: list[str] = []
-    spans = []
+    spans: list[tuple[int, int]] = []
     for function, call, *_rest in writes:
-        spans.append((call.lineno, call.end_lineno))
+        spans.append((call.lineno, end_line(call)))
         test = next(
             (n for n in ast.walk(function) if isinstance(n, ast.If)
              and any(child is call for stmt in n.body for child in ast.walk(stmt))), None,
         )
         if test is not None:
             spans.append((test.lineno, test.lineno))
-            systems = _systems(test.test, {})
+            systems = _systems(src, test.test, {})
             words = f"system {', '.join(systems)}" if systems else _enclosing_test(function, call)
-            if words not in conditions:
+            if words is not None and words not in conditions:
                 conditions.append(words)
         read = {ast.unparse(n) for arg in call.args for n in ast.walk(arg)
                 if isinstance(n, (ast.Name, ast.Attribute))}
@@ -1122,8 +1298,10 @@ def content_files(cg: Configgen) -> list[Launcher]:
             isinstance(node, ast.If)
             and isinstance(node.test, ast.Compare)
             and ast.unparse(node.test.left) == "core"
-            and isinstance(node.test.comparators[0], ast.Constant)
         ):
+            continue
+        core = _text(src, node.test.comparators[0], "core name")
+        if core is None:
             continue
         refs = [n for n in ast.walk(node) if isinstance(n, ast.Attribute)
                 and ast.unparse(n.value) == "recalboxFiles"]
@@ -1141,11 +1319,11 @@ def content_files(cg: Configgen) -> list[Launcher]:
         constants = {n.attr for n in refs if cg.under_bios(spell(n, env)) is not None}
         lines = [n.lineno for n in files.tree.body if _assigned_name(n) in constants]
         launchers.append(Launcher(
-            emulator=node.test.comparators[0].value, build="libretro", kind="fixed_name",
+            emulator=core, build="libretro", kind="fixed_name",
             names=names, case_insensitive=False, search_dir=cg.bios,
             passes_to=f"written into {target}, which is loaded as the content",
             fails_when_missing=False,
-            source_ref=f"{src.ref([(node.lineno, node.end_lineno)])}, "
+            source_ref=f"{src.ref([(node.lineno, end_line(node))])}, "
                        f"{files.ref([(line, line) for line in lines])}",
         ))
     if not launchers:
@@ -1157,7 +1335,11 @@ def core_file_options(cg: Configgen, directories: list[Launcher]) -> list[Launch
     """System handlers that set a core option naming the file the core opens."""
     src = cg.source(CORES)
     handlers = _handler_map(src, "fillCoresConfiguration", "specificSystemHandlers")
-    table = src.assignment("specificSystemHandlers", src.function("fillCoresConfiguration"))
+    table = src.assignment(
+        "specificSystemHandlers", src.function("fillCoresConfiguration")
+    ).value
+    if not isinstance(table, ast.Dict):
+        src.fail("specificSystemHandlers is not a dict display")
     defined = {n.name: n for n in ast.walk(src.tree) if isinstance(n, ast.FunctionDef)}
     launchers = []
     for function_name, systems in handlers.items():
@@ -1166,16 +1348,19 @@ def core_file_options(cg: Configgen, directories: list[Launcher]) -> list[Launch
             continue
         for call in _calls(function, attr="setString"):
             if not (len(call.args) == 2 and all(isinstance(a, ast.Constant) for a in call.args)
-                    and call.args[0].value in FILE_OPTIONS):
+                    and _string(call.args[0]) in FILE_OPTIONS):
                 continue
-            option = call.args[0].value
+            option = _text(src, call.args[0], "core option")
+            value = _text(src, call.args[1], "core option value")
+            if option is None or value is None:
+                continue
             core = FILE_OPTIONS[option]
             directory = core_directory(directories, core)
-            spans = [(k.lineno, k.lineno) for k, v in zip(table.value.keys, table.value.values)
-                     if isinstance(v, ast.Attribute) and v.attr == function_name]
+            spans = [(k.lineno, k.lineno) for k, v in zip(table.keys, table.values)
+                     if k is not None and isinstance(v, ast.Attribute) and v.attr == function_name]
             launchers.append(Launcher(
                 emulator=core, build="libretro", kind="core_option",
-                names=[call.args[1].value.strip('"')], search_dir=directory.search_dir,
+                names=[value.strip('"')], search_dir=directory.search_dir,
                 passes_to=f"core option {option}",
                 depends_on_option=f"system {', '.join(systems)}",
                 source_ref=f"{src.ref([(function.lineno, function.end_lineno or function.lineno), *spans])}, "

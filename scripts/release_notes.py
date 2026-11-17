@@ -53,12 +53,6 @@ SITE = "https://abdess.github.io/retrobios/"
 HANDHELD_PAGE = "wiki/installer/#on-a-handheld-the-retrobios-port"
 
 
-def _size(count: int) -> str:
-    if count >= 1024**3:
-        return f"{count / 1024**3:.1f} GB"
-    return f"{count / 1024**2:.0f} MB"
-
-
 def _display(pack: str) -> str:
     """RetroArch_Lakka_v1.22.2_BIOS_Pack.zip reads as RetroArch Lakka v1.22.2."""
     return pack.split("_BIOS_Pack", 1)[0].replace("_", " ")
@@ -273,7 +267,7 @@ def render(record: dict, platforms_dir: str, whats_new: str,
         folder = folders.get(name)
         lines.append(
             f"| {_display(name)} | {_link(pack, tag)} |"
-            f" {_size(pack['extracted_size'])} | {pack['files']:,} |"
+            f" {release_record.size_text(pack['extracted_size'])} | {pack['files']:,} |"
             f" {f'`{folder}`' if folder else '-'} |"
         )
     lines += [

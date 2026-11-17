@@ -252,55 +252,30 @@ def sha1_blob(data: bytes) -> str:
     return hashlib.sha1(data).hexdigest()
 
 
-def classify_file(filepath: str) -> tuple:
-    """Determine (Manufacturer, Console) for a file path from a branch.
+ARCADE_ROM_PREFIXES = (
+    "roms/fba/",
+    "roms/fbneo/",
+    "roms/mame/",
+    "roms/mame-libretro/",
+    "roms/neogeo/",
+    "roms/naomi/",
+    "roms/atomiswave/",
+    "roms/macintosh/",
+)
 
-    Returns None if the file should be skipped.
-    """
-    name = os.path.basename(filepath)
 
-    if name in SKIP_FILES:
+def _strip_branch_prefix(filepath: str) -> str | None:
+    """The path below its bios/ or arcade roms/ folder, None for any other
+    roms/ path."""
+    if filepath.startswith("roms/") and not filepath.startswith(ARCADE_ROM_PREFIXES):
         return None
-    ext = os.path.splitext(name)[1].lower()
-    if ext in SKIP_EXTENSIONS:
-        return None
+    for prefix in ("bios/", "BIOS/", *ARCADE_ROM_PREFIXES):
+        if filepath.startswith(prefix):
+            return filepath[len(prefix) :]
+    return filepath
 
-    clean = filepath
-    for prefix in (
-        "bios/",
-        "BIOS/",
-        "roms/fba/",
-        "roms/fbneo/",
-        "roms/mame/",
-        "roms/mame-libretro/",
-        "roms/neogeo/",
-        "roms/naomi/",
-        "roms/atomiswave/",
-        "roms/macintosh/",
-    ):
-        if clean.startswith(prefix):
-            clean = clean[len(prefix) :]
-            break
 
-    if filepath.startswith("roms/") and not any(
-        filepath.startswith(p)
-        for p in (
-            "roms/fba/",
-            "roms/fbneo/",
-            "roms/mame/",
-            "roms/mame-libretro/",
-            "roms/neogeo/",
-            "roms/naomi/",
-            "roms/atomiswave/",
-            "roms/macintosh/",
-        )
-    ):
-        return None
-
-    for prefix, target in PATH_PREFIX_MAP.items():
-        if clean.startswith(prefix):
-            return target
-
+def _classify_by_name(name: str, filepath: str) -> tuple[str, str] | None:
     if name in BIOS_FILE_MAP:
         return BIOS_FILE_MAP[name]
 
@@ -324,17 +299,31 @@ def classify_file(filepath: str) -> tuple:
 
     if name.endswith(".zip") and filepath.startswith(("roms/", "BIOS/")):
         return ("Arcade", "Arcade")
-
-    if "saves/" in filepath:
-        return None
-
-    if name.endswith(".chd"):
-        return None
-
-    if name.endswith((".img", ".lst", ".dat")) and "saves/" in filepath:
-        return None
-
     return None
+
+
+def classify_file(filepath: str) -> tuple[str, str] | None:
+    """Determine (Manufacturer, Console) for a file path from a branch.
+
+    Returns None if the file should be skipped.
+    """
+    name = os.path.basename(filepath)
+
+    if name in SKIP_FILES:
+        return None
+    ext = os.path.splitext(name)[1].lower()
+    if ext in SKIP_EXTENSIONS:
+        return None
+
+    clean = _strip_branch_prefix(filepath)
+    if clean is None:
+        return None
+
+    for prefix, target in PATH_PREFIX_MAP.items():
+        if clean.startswith(prefix):
+            return target
+
+    return _classify_by_name(name, filepath)
 
 
 def get_subpath(filepath: str, manufacturer: str, console: str) -> str:
@@ -373,7 +362,7 @@ def extract_from_branches(target: Path, dry_run: bool, existing_hashes: set) -> 
             continue
 
         result = subprocess.run(
-            ["git", "ls-tree", "-r", "--name-only", ref], capture_output=True, text=True
+            ["git", "ls-tree", "-r", "--name-only", ref], capture_output=True, text=True, check=False
         )
         files = result.stdout.strip().split("\n")
         print(f"\n  Branch '{branch}': {len(files)} files")
@@ -551,9 +540,8 @@ def main() -> None:
             ".gitignore",
         }
         for d in sorted(source.iterdir()):
-            if d.name not in known and not d.name.startswith("."):
-                if d.is_dir():
-                    print(f"\nWARNING: Unmapped directory: {d.name}")
+            if d.name not in known and not d.name.startswith(".") and d.is_dir():
+                print(f"\nWARNING: Unmapped directory: {d.name}")
 
     print(f"\nTotal: {moved} files migrated, {len(existing_hashes)} unique hashes")
 

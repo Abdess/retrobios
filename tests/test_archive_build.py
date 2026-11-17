@@ -198,9 +198,9 @@ class Capture(Fixture):
         self.assertEqual(records["bios/set.zip"]["members"][0]["sha1"], "kept")
 
     def test_zlib_ng_refuses_to_capture(self):
-        with mock.patch.object(archive_build, "zlib_ng_version", lambda: "2.2.4"):
-            with self.assertRaises(archive_build.ZlibNgError):
-                self.capture()
+        with mock.patch.object(archive_build, "zlib_ng_version", lambda: "2.2.4"), \
+                self.assertRaises(archive_build.ZlibNgError):
+            self.capture()
 
     def test_composite_and_zipped_pins_name_no_container(self):
         platforms = self.root / "platforms"

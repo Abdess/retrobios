@@ -56,6 +56,7 @@ import re
 import subprocess
 import sys
 import time
+from collections.abc import Callable
 from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from dataclasses import dataclass
 from functools import lru_cache
@@ -220,7 +221,7 @@ def plan_jobs(
 
     for finding in findings:
         status = finding.get("status")
-        area = finding.get("area")
+        area = str(finding.get("area") or "")
         subject = str(finding.get("subject") or "")
 
         if status == "ERROR":
@@ -360,6 +361,96 @@ def _export_refresh(platform: str) -> list[str]:
     return [sys.executable, "scripts/export_native.py", "--platform", platform]
 
 
+def _platform_command(subject: str, registry: dict[str, dict]) -> list[str] | None:
+    entry = registry.get(subject) or {}
+    scraper = entry.get("scraper")
+    if not scraper:
+        return None
+    return [
+        sys.executable,
+        "-m",
+        f"scripts.scraper.{scraper}_scraper",
+        "-o",
+        f"platforms/{subject}.yml",
+        *(str(a) for a in entry.get("rescrape_args") or ()),
+    ]
+
+
+def _target_command(subject: str, registry: dict[str, dict]) -> list[str] | None:
+    # "<platform> cores" rows list buildbot names without a profile. No
+    # scraper fixes that, a human writes `cores:` or _overrides.yml.
+    if subject.endswith(" cores"):
+        return None
+    entry = registry.get(subject) or {}
+    module = entry.get("target_scraper")
+    if not module:
+        return None
+    return [
+        sys.executable,
+        "-m",
+        f"scripts.scraper.targets.{module}_scraper",
+        "-o",
+        f"platforms/targets/{subject}.yml",
+    ]
+
+
+def _data_command(subject: str, registry: dict[str, dict]) -> list[str] | None:
+    if subject not in _data_dir_keys():
+        # "_data_dirs.yml" and "buildbot system" name the registry and
+        # what it does not track yet: a human adds the entry.
+        return None
+    return [
+        sys.executable,
+        "scripts/refresh_data_dirs.py",
+        "--key",
+        subject,
+        "--force",
+    ]
+
+
+def _catalog_command(subject: str, registry: dict[str, dict]) -> list[str] | None:
+    if subject == "mame recipes":
+        return [
+            sys.executable,
+            "-m",
+            "scripts.scraper.romset_dat_importer",
+            "--source",
+            "mame",
+            "--fetch",
+        ]
+    if subject == "fbneo recipes":
+        return [
+            sys.executable,
+            "-m",
+            "scripts.scraper.romset_dat_importer",
+            "--source",
+            "fbneo",
+            "--fetch",
+        ]
+    if subject in ("no-intro games", "redump games"):
+        # The game DATs download without a browser, unlike the BIOS ones.
+        return [
+            sys.executable,
+            "-m",
+            "scripts.scraper.game_dat_importer",
+            "--source",
+            subject.split()[0],
+            "--fetch",
+            "--refresh",
+            "--floor",
+        ]
+    # redump / no-intro / tosec need manual DAT download.
+    return None
+
+
+_AREA_COMMANDS: dict[str, Callable[[str, dict[str, dict]], list[str] | None]] = {
+    "platforms": _platform_command,
+    "targets": _target_command,
+    "data": _data_command,
+    "catalogs": _catalog_command,
+}
+
+
 def _command_for(
     area: str, subject: str, registry: dict[str, dict]
 ) -> list[str] | None:
@@ -369,87 +460,13 @@ def _command_for(
         # truth comes first and the original follows (Job.then).
         return _truth_refresh(subject)
 
-    if area == "platforms":
-        entry = registry.get(subject) or {}
-        scraper = entry.get("scraper")
-        if not scraper:
-            return None
-        return [
-            sys.executable,
-            "-m",
-            f"scripts.scraper.{scraper}_scraper",
-            "-o",
-            f"platforms/{subject}.yml",
-            *(str(a) for a in entry.get("rescrape_args") or ()),
-        ]
-
-    if area == "targets":
-        # "<platform> cores" rows list buildbot names without a profile. No
-        # scraper fixes that, a human writes `cores:` or _overrides.yml.
-        if subject.endswith(" cores"):
-            return None
-        entry = registry.get(subject) or {}
-        module = entry.get("target_scraper")
-        if not module:
-            return None
-        return [
-            sys.executable,
-            "-m",
-            f"scripts.scraper.targets.{module}_scraper",
-            "-o",
-            f"platforms/targets/{subject}.yml",
-        ]
-
-    if area == "data":
-        if subject not in _data_dir_keys():
-            # "_data_dirs.yml" and "buildbot system" name the registry and
-            # what it does not track yet: a human adds the entry.
-            return None
-        return [
-            sys.executable,
-            "scripts/refresh_data_dirs.py",
-            "--key",
-            subject,
-            "--force",
-        ]
-
     if area == "ci" and subject == "install.py pin":
         # The pin is the hash of the committed install.py, nothing to judge.
         return [sys.executable, "scripts/pin_installer.py"]
 
-    if area == "catalogs":
-        if subject == "mame recipes":
-            return [
-                sys.executable,
-                "-m",
-                "scripts.scraper.romset_dat_importer",
-                "--source",
-                "mame",
-                "--fetch",
-            ]
-        if subject == "fbneo recipes":
-            return [
-                sys.executable,
-                "-m",
-                "scripts.scraper.romset_dat_importer",
-                "--source",
-                "fbneo",
-                "--fetch",
-            ]
-        if subject in ("no-intro games", "redump games"):
-            # The game DATs download without a browser, unlike the BIOS ones.
-            return [
-                sys.executable,
-                "-m",
-                "scripts.scraper.game_dat_importer",
-                "--source",
-                subject.split()[0],
-                "--fetch",
-                "--refresh",
-                "--floor",
-            ]
-        # redump / no-intro / tosec need manual DAT download.
-        return None
+    builder = _AREA_COMMANDS.get(area)
+    if builder:
+        return builder(subject, registry)
 
     # coreinfo, ci, profiles: never auto-refresh.
     return None

@@ -17,11 +17,10 @@ from pathlib import Path
 # they share helpers with the rest of scripts/. Putting that directory on the
 # path once here is what lets every submodule say `from common import ...`
 # instead of carrying its own bootstrap.
-_SCRIPTS_DIR = str(Path(__file__).resolve().parent.parent)
-if _SCRIPTS_DIR not in sys.path:
+if (_SCRIPTS_DIR := str(Path(__file__).resolve().parent.parent)) not in sys.path:
     sys.path.insert(0, _SCRIPTS_DIR)
 
-from .base_scraper import BaseScraper  # noqa: E402
+from .base_scraper import BaseScraper
 
 _scrapers: dict[str, type] = {}
 
@@ -33,7 +32,7 @@ def discover_scrapers() -> dict[str, type]:
 
     package_dir = Path(__file__).parent
 
-    for finder, name, ispkg in pkgutil.iter_modules([str(package_dir)]):
+    for _finder, name, _ispkg in pkgutil.iter_modules([str(package_dir)]):
         if not name.endswith("_scraper"):
             continue
 

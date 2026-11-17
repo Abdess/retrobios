@@ -173,7 +173,7 @@ class AmberelecCarriesTheMachines(unittest.TestCase):
                 (full, src) for src, full in builder._data_directory_members(
                     config.get("systems", {}), registry, "amberelec",
                     config.get("base_destination", ""), False, set(), set(), set(),
-                    refs, core_trees=trees,
+                    refs_out=refs, core_trees=trees,
                 )
             )
         finally:
@@ -204,7 +204,7 @@ class TheCountLineKeepsTreesOutOfTheBaseline(unittest.TestCase):
                 "myminui", "platforms", db, "bios", "tmp", offline=True, record=record,
                 data_registry=common.load_data_dir_registry("platforms"),
             )
-        line = next(l for l in out.getvalue().splitlines() if "files packed" in l)
+        line = next(entry for entry in out.getvalue().splitlines() if "files packed" in entry)
         self.assertIn("(0 baseline + ", line)
         if record.trees:
             self.assertIn(f"+ {len(record.trees)} in core data trees + ", line)

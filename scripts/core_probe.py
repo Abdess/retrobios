@@ -36,9 +36,10 @@ import sys
 import tempfile
 import time
 import zlib
-from collections.abc import Iterable, Iterator, Sequence
+from collections.abc import Callable, Iterable, Iterator, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import IO
 
 # The probe tools do not import common.py, which states the 3.9 floor for the
 # other scripts. Under 3.8 they stopped on a str.removesuffix AttributeError.
@@ -396,7 +397,7 @@ InputFn = ctypes.CFUNCTYPE(ctypes.c_int16, ctypes.c_uint, ctypes.c_uint, ctypes.
 class Frontend:
     """The libretro callbacks for one run."""
 
-    def __init__(self, spec: dict) -> None:
+    def __init__(self, spec: dict, events: IO[str] | None = None) -> None:
         self.spec = spec
         self.system_dir = spec["system_dir"].encode()
         self.save_dir = spec["save_dir"].encode()
@@ -417,10 +418,19 @@ class Frontend:
         self.unanswered: dict[int, int] = {}
         self.input_queries = 0
         self.input_pressed = 0
-        # What a run showed so far, one JSON line per event, flushed at once:
-        # a core that kills the worker leaves its logs and frames behind.
-        events = spec.get("events")
-        self.events = open(events, "a", encoding="utf-8", buffering=1) if events else None  # noqa: SIM115
+        self.events = events
+        self.env_handlers: dict[int, Callable[[int, int], bool]] = {
+            ENV_GET_CAN_DUPE: self.env_can_dupe,
+            ENV_GET_SYSTEM_DIRECTORY: self.env_directory,
+            ENV_GET_SAVE_DIRECTORY: self.env_directory,
+            ENV_SET_PIXEL_FORMAT: self.env_pixel_format,
+            ENV_SET_VARIABLES: self.env_set_variables,
+            ENV_GET_VARIABLE: self.env_get_variable,
+            ENV_GET_VARIABLE_UPDATE: self.env_variable_update,
+            ENV_SET_SUPPORT_NO_GAME: lambda cmd, data: True,
+            ENV_GET_LOG_INTERFACE: self.env_log_interface,
+            ENV_GET_CORE_OPTIONS_VERSION: self.env_core_options_version,
+        }
         self.callbacks = (
             EnvFn(self.environment), VideoFn(self.video_refresh), AudioFn(self.audio_sample),
             AudioBatchFn(self.audio_batch), PollFn(lambda: None), InputFn(self.input_state),
@@ -439,53 +449,62 @@ class Frontend:
 
     def environment(self, cmd: int, data: int) -> bool:
         cmd &= ~ENV_EXPERIMENTAL
-        if cmd == ENV_GET_CAN_DUPE:
-            ctypes.cast(data, ctypes.POINTER(ctypes.c_bool))[0] = True
-            return True
-        if cmd in (ENV_GET_SYSTEM_DIRECTORY, ENV_GET_SAVE_DIRECTORY):
-            value = self.system_dir if cmd == ENV_GET_SYSTEM_DIRECTORY else self.save_dir
-            buffer = ctypes.create_string_buffer(value)
-            self.option_buffers.append(buffer)
-            ctypes.cast(data, ctypes.POINTER(ctypes.c_char_p))[0] = ctypes.cast(buffer, ctypes.c_char_p)
-            return True
-        if cmd == ENV_SET_PIXEL_FORMAT:
-            fmt = ctypes.cast(data, ctypes.POINTER(ctypes.c_int))[0]
-            if fmt not in PIXEL_BYTES:
-                return False
-            self.pixel_format = fmt
-            return True
-        if cmd == ENV_SET_VARIABLES:
-            array = ctypes.cast(data, ctypes.POINTER(RetroVariable))
-            index = 0
-            while array[index].key:
-                key, desc = array[index].key, (array[index].value or b"").decode("utf-8", "replace")
-                values = desc.split(";", 1)[-1].strip().split("|")
-                self.declared[key.decode()] = values
-                self.defaults[key] = values[0].encode()
-                index += 1
-            return True
-        if cmd == ENV_GET_VARIABLE:
-            var = ctypes.cast(data, ctypes.POINTER(RetroVariable))[0]
-            value = self.options.get(var.key, self.defaults.get(var.key))
-            if value is None:
-                return False
-            buffer = ctypes.create_string_buffer(value)
-            self.option_buffers.append(buffer)
-            ctypes.cast(data, ctypes.POINTER(RetroVariable))[0].value = ctypes.cast(buffer, ctypes.c_char_p)
-            return True
-        if cmd == ENV_GET_VARIABLE_UPDATE:
-            ctypes.cast(data, ctypes.POINTER(ctypes.c_bool))[0] = False
-            return True
-        if cmd == ENV_SET_SUPPORT_NO_GAME:
-            return True
-        if cmd == ENV_GET_LOG_INTERFACE:
-            ctypes.cast(data, ctypes.POINTER(RetroLogCallback))[0] = self.log_callback
-            return True
-        if cmd == ENV_GET_CORE_OPTIONS_VERSION:
-            ctypes.cast(data, ctypes.POINTER(ctypes.c_uint))[0] = 0
-            return True
+        handler = self.env_handlers.get(cmd)
+        if handler:
+            return handler(cmd, data)
         self.unanswered[cmd] = self.unanswered.get(cmd, 0) + 1
         return False
+
+    def env_can_dupe(self, cmd: int, data: int) -> bool:
+        ctypes.cast(data, ctypes.POINTER(ctypes.c_bool))[0] = True
+        return True
+
+    def env_directory(self, cmd: int, data: int) -> bool:
+        value = self.system_dir if cmd == ENV_GET_SYSTEM_DIRECTORY else self.save_dir
+        buffer = ctypes.create_string_buffer(value)
+        self.option_buffers.append(buffer)
+        ctypes.cast(data, ctypes.POINTER(ctypes.c_char_p))[0] = ctypes.cast(buffer, ctypes.c_char_p)
+        return True
+
+    def env_pixel_format(self, cmd: int, data: int) -> bool:
+        fmt = ctypes.cast(data, ctypes.POINTER(ctypes.c_int))[0]
+        if fmt not in PIXEL_BYTES:
+            return False
+        self.pixel_format = fmt
+        return True
+
+    def env_set_variables(self, cmd: int, data: int) -> bool:
+        array = ctypes.cast(data, ctypes.POINTER(RetroVariable))
+        index = 0
+        while array[index].key:
+            key, desc = array[index].key, (array[index].value or b"").decode("utf-8", "replace")
+            values = desc.split(";", 1)[-1].strip().split("|")
+            self.declared[key.decode()] = values
+            self.defaults[key] = values[0].encode()
+            index += 1
+        return True
+
+    def env_get_variable(self, cmd: int, data: int) -> bool:
+        var = ctypes.cast(data, ctypes.POINTER(RetroVariable))[0]
+        value = self.options.get(var.key, self.defaults.get(var.key))
+        if value is None:
+            return False
+        buffer = ctypes.create_string_buffer(value)
+        self.option_buffers.append(buffer)
+        ctypes.cast(data, ctypes.POINTER(RetroVariable))[0].value = ctypes.cast(buffer, ctypes.c_char_p)
+        return True
+
+    def env_variable_update(self, cmd: int, data: int) -> bool:
+        ctypes.cast(data, ctypes.POINTER(ctypes.c_bool))[0] = False
+        return True
+
+    def env_log_interface(self, cmd: int, data: int) -> bool:
+        ctypes.cast(data, ctypes.POINTER(RetroLogCallback))[0] = self.log_callback
+        return True
+
+    def env_core_options_version(self, cmd: int, data: int) -> bool:
+        ctypes.cast(data, ctypes.POINTER(ctypes.c_uint))[0] = 0
+        return True
 
     def video_refresh(self, data: int, width: int, height: int, pitch: int) -> None:
         if data and data != ctypes.c_void_p(-1).value:
@@ -530,7 +549,15 @@ def run_worker(spec: dict) -> dict:
     os.environ.clear()
     os.environ.update(spec["env"])
     core = ctypes.CDLL(spec["core"])
-    front = Frontend(spec)
+    # What a run showed so far, one JSON line per event, flushed at once:
+    # a core that kills the worker leaves its logs and frames behind.
+    events_path = spec.get("events")
+    with (open(events_path, "a", encoding="utf-8", buffering=1) if events_path
+          else contextlib.nullcontext()) as events:
+        return drive_core(core, Frontend(spec, events), spec)
+
+
+def drive_core(core: ctypes.CDLL, front: Frontend, spec: dict) -> dict:
     for name, fn in zip(("retro_set_environment", "retro_set_video_refresh", "retro_set_audio_sample",
                          "retro_set_audio_sample_batch", "retro_set_input_poll", "retro_set_input_state"),
                         front.callbacks):
@@ -578,7 +605,7 @@ def run_worker(spec: dict) -> dict:
     if spec.get("state_out"):
         Path(spec["state_out"]).write_bytes(state)
     state_vars = mednafen_state_vars(state)
-    observables = {
+    observables: dict[str, object] = {
         "frame_sha1": hashlib.sha1(front.last_frame).hexdigest(),
         "video_sha1": front.video.hexdigest(),
         "audio_sha1": front.audio.hexdigest(),
@@ -697,13 +724,20 @@ class Synthetic:
     def label(self, dest: str) -> str:
         if self.kind == "zeros":
             return f"{dest}-zeros-{self.size}"
-        return f"{dest}-head-{self.size}-of-{self.source.name}"
+        return f"{dest}-head-{self.size}-of-{self.head_source.name}"
+
+    @property
+    def head_source(self) -> Path:
+        """The file a head is cut from: parse() refuses a head without one."""
+        if self.source is None:
+            raise ValueError(f"@head:{self.size} names no file")
+        return self.source
 
     def write(self, out: Path) -> None:
         if self.kind == "zeros":
             out.write_bytes(bytes(self.size))
             return
-        with self.source.open("rb") as handle:
+        with self.head_source.open("rb") as handle:
             out.write_bytes(handle.read(self.size))
 
 
@@ -889,7 +923,7 @@ def exit_description(returncode: int) -> dict:
 
 def partial_result(events: Path, spec: dict) -> dict:
     """A repetition rebuilt from the events a worker wrote before it died."""
-    lines = []
+    lines: list[dict] = []
     if events.is_file():
         for line in events.read_text(encoding="utf-8", errors="replace").splitlines():
             with contextlib.suppress(ValueError):
@@ -1034,7 +1068,8 @@ def run_variant(args: argparse.Namespace, base: dict[str, Path], variant: Varian
     reference = reps[0].get("observables")
     for index, rep in enumerate(reps[1:], 1):
         if rep.get("observables") != reference:
-            differing = sorted(k for k in (reference or {}) if (rep.get("observables") or {}).get(k) != reference[k])
+            shown = reference or {}
+            differing = sorted(k for k in shown if (rep.get("observables") or {}).get(k) != shown[k])
             flags.append(f"repetition {index} disagrees with repetition 0 on {', '.join(differing)}")
     out = {
         "label": variant.label,
@@ -1153,15 +1188,14 @@ def not_a_checkout_root(directory: Path) -> str | None:
     return None
 
 
-def validate_args(args: argparse.Namespace) -> list[str]:
+def _input_problems(args: argparse.Namespace) -> list[str]:
     problems: list[str] = []
     if not Path(args.core).is_file():
         problems.append(f"--core {args.core}: not a file")
     if args.content and not Path(args.content).is_file():
         problems.append(f"--content {args.content}: not a file")
-    for dest, src in args.system_file:
-        if not Path(src).is_file():
-            problems.append(f"--system-file {dest}={src}: not a file")
+    problems.extend(f"--system-file {dest}={src}: not a file"
+                    for dest, src in args.system_file if not Path(src).is_file())
     if args.repeat < 1:
         problems.append("--repeat must be >= 1")
     if args.frames < 1 or args.warmup < 0:
@@ -1176,13 +1210,18 @@ def validate_args(args: argparse.Namespace) -> list[str]:
         # A library the loader cannot find is skipped without a word, and
         # the run would record a fixed clock it never had. Only a file that
         # exists is bound into the sandbox and recorded by sha256.
-        for library in value.replace(":", " ").split():
-            if not (Path(library).is_absolute() and Path(library).is_file()):
-                problems.append(f"--env LD_PRELOAD: {library} is not an absolute path to a file")
+        problems.extend(f"--env LD_PRELOAD: {library} is not an absolute path to a file"
+                        for library in value.replace(":", " ").split()
+                        if not (Path(library).is_absolute() and Path(library).is_file()))
     if args.oracle and not Path(args.oracle).is_file():
         problems.append(f"--oracle {args.oracle}: not a file")
     if args.png_dir and not args.frame_hash_every:
         problems.append("--png-dir needs --frame-hash-every")
+    return problems
+
+
+def _record_problems(args: argparse.Namespace) -> list[str]:
+    problems: list[str] = []
     if args.record:
         wrong = not_a_checkout_root(Path(args.record))
         if wrong:
@@ -1199,26 +1238,40 @@ def validate_args(args: argparse.Namespace) -> list[str]:
             problems.append(f"{flag} {value!r}: lowercase letters, digits, - and _ only")
     if args.mode == "bench" and args.record and args.repeat < MIN_BENCH_REPETITIONS:
         problems.append(f"a recorded benchmark needs --repeat >= {MIN_BENCH_REPETITIONS}")
+    return problems
+
+
+def _vary_problem(dest: str, src: str) -> str:
+    if src.startswith("@"):
+        try:
+            made = Synthetic.parse(src)
+        except argparse.ArgumentTypeError as exc:
+            return f"--vary {dest}: {exc}"
+        if made.source and not made.source.is_file():
+            return f"--vary {dest}={src}: {made.source} is not a file"
+    elif src and not Path(src).is_file():
+        return f"--vary {dest}={src}: not a file"
+    return ""
+
+
+def _check_mode_problems(args: argparse.Namespace) -> list[str]:
+    problems: list[str] = []
+    dests = {dest for dest, _ in args.vary}
+    if len(dests) != 1:
+        problems.append("--vary must name the same DEST in every occurrence")
+    problems.extend(problem for dest, src in args.vary if (problem := _vary_problem(dest, src)))
+    names = set(BASE_OBSERVABLES) | {f"state:{v}" for v in args.state_var}
+    if args.frame_hash_every:
+        names.update(("frame_hashes", "uniform_frames"))
+    if args.observable not in names:
+        problems.append(f"--observable {args.observable}: not one of {', '.join(sorted(names))}")
+    return problems
+
+
+def validate_args(args: argparse.Namespace) -> list[str]:
+    problems = _input_problems(args) + _record_problems(args)
     if args.mode == "check":
-        dests = {dest for dest, _ in args.vary}
-        if len(dests) != 1:
-            problems.append("--vary must name the same DEST in every occurrence")
-        for dest, src in args.vary:
-            if src.startswith("@"):
-                try:
-                    made = Synthetic.parse(src)
-                except argparse.ArgumentTypeError as exc:
-                    problems.append(f"--vary {dest}: {exc}")
-                    continue
-                if made.source and not made.source.is_file():
-                    problems.append(f"--vary {dest}={src}: {made.source} is not a file")
-            elif src and not Path(src).is_file():
-                problems.append(f"--vary {dest}={src}: not a file")
-        names = set(BASE_OBSERVABLES) | {f"state:{v}" for v in args.state_var}
-        if args.frame_hash_every:
-            names.update(("frame_hashes", "uniform_frames"))
-        if args.observable not in names:
-            problems.append(f"--observable {args.observable}: not one of {', '.join(sorted(names))}")
+        problems += _check_mode_problems(args)
     return problems
 
 

@@ -65,6 +65,18 @@ def parse_sums(text: str) -> dict[str, str]:
     return sums
 
 
+def _registry_findings(packs: dict, released: set[str]) -> list[Finding]:
+    """Each platform marked release_pack has a pack, and each pack serves one."""
+    served = {p for pack in packs.values() for p in pack.get("platforms", ())}
+    findings = [Finding("no-pack", platform, "release_pack: true, no pack in release.json")
+                for platform in sorted(released - served)]
+    findings.extend(Finding(
+        "not-released", pack_name,
+        "serves no platform marked release_pack in platforms/_registry.yml",
+    ) for pack_name, pack in sorted(packs.items()) if not set(pack.get("platforms", ())) & released)
+    return findings
+
+
 def compare_release(
     record: dict,
     sums: dict[str, str],
@@ -84,18 +96,7 @@ def compare_release(
     if record.get("tag") != tag:
         findings.append(Finding("tag", tag, f"release.json records {record.get('tag')}"))
     if released is not None:
-        packs = record.get("packs", {})
-        served = {p for pack in packs.values() for p in pack.get("platforms", ())}
-        for platform in sorted(released - served):
-            findings.append(Finding(
-                "no-pack", platform, "release_pack: true, no pack in release.json"
-            ))
-        for pack_name, pack in sorted(packs.items()):
-            if not set(pack.get("platforms", ())) & released:
-                findings.append(Finding(
-                    "not-released", pack_name,
-                    "serves no platform marked release_pack in platforms/_registry.yml",
-                ))
+        findings += _registry_findings(record.get("packs", {}), released)
 
     recorded = {
         name: pack_name
@@ -105,14 +106,14 @@ def compare_release(
     expected = set(recorded) | set(sums) | {SUMS} | set(local_files or ())
     allowed = expected | {SIGNATURE}
 
-    for name in sorted(expected - set(assets)):
-        findings.append(Finding("missing", name, "not attached to the release"))
-    for name in sorted(set(assets) - allowed):
-        findings.append(Finding("extra", name, "attached but neither recorded nor listed"))
-    for name in sorted(set(recorded) - set(sums)):
-        findings.append(Finding("unlisted", name, f"absent from {SUMS}"))
-    for name in sorted(set(sums) - set(recorded)):
-        findings.append(Finding("unrecorded", name, f"listed in {SUMS}, absent from release.json"))
+    findings.extend(Finding("missing", name, "not attached to the release")
+                    for name in sorted(expected - set(assets)))
+    findings.extend(Finding("extra", name, "attached but neither recorded nor listed")
+                    for name in sorted(set(assets) - allowed))
+    findings.extend(Finding("unlisted", name, f"absent from {SUMS}")
+                    for name in sorted(set(recorded) - set(sums)))
+    findings.extend(Finding("unrecorded", name, f"listed in {SUMS}, absent from release.json")
+                    for name in sorted(set(sums) - set(recorded)))
 
     wanted = {**sums, **(local_files or {})}
     for name, digest in sorted(wanted.items()):

@@ -571,11 +571,11 @@ class TestProfileConformance(unittest.TestCase):
                         f"{os.path.basename(path)}: {f.get('name')} not a list"
                     )
                     continue
-                for value in raw:
-                    if value not in region.REGIONS:
-                        offenders.append(
-                            f"{os.path.basename(path)}: {f.get('name')} -> {value!r}"
-                        )
+                offenders.extend(
+                    f"{os.path.basename(path)}: {f.get('name')} -> {value!r}"
+                    for value in raw
+                    if value not in region.REGIONS
+                )
         self.assertEqual(offenders, [], "\n".join(offenders))
 
     def test_index_builds_over_every_repo_profile(self):

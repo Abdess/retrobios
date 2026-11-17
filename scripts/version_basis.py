@@ -29,6 +29,7 @@ build mode, the way it keys core_version.
 from __future__ import annotations
 
 import re
+from collections.abc import Callable
 from dataclasses import dataclass
 
 import upstream
@@ -175,6 +176,123 @@ def _ancestry(
     return relation
 
 
+@dataclass(frozen=True)
+class _Request:
+    """One basis read for one build mode, and what its readings carry."""
+
+    profile: dict
+    mode: str
+    basis: dict
+    kind: str
+    stated: str | None
+    cache_dir: str
+    offline: bool
+    profiles: dict | None
+    recompute: bool
+
+    def reading(self, value: str | None, where: str, updates: tuple = ()) -> Reading:
+        status = MATCH if value == self.stated else DRIFT
+        return Reading(self.mode, self.kind, self.stated, value, where, status, updates)
+
+    def unreadable(self, reason: str) -> Reading:
+        return Reading(self.mode, self.kind, self.stated, None, reason, UNREADABLE)
+
+    def repo_and_pin(self) -> tuple[upstream.Repo, str]:
+        return _repo_and_pin(self.profile, self.basis, self.mode, self.cache_dir, self.offline)
+
+
+def _read_none(req: _Request) -> Reading:
+    if req.recompute:
+        # A release tagged since the basis was written gives the
+        # code a version: the advance has to name it.
+        repo, pin = req.repo_and_pin()
+        described = upstream.describe(repo, pin, req.cache_dir, req.offline)
+        if described is not None:
+            tag, distance = described
+            return Reading(req.mode, req.kind, req.stated, describe_form(tag, distance, pin),
+                           f"{repo.slug}: tag {tag} is now in "
+                           f"{pin[:7]}'s history", DRIFT)
+    return req.reading(None, "the code states no version")
+
+
+def _read_unverified(req: _Request) -> Reading:
+    return Reading(req.mode, req.kind, req.stated, None, f"not verified: {req.basis.get('why')}",
+                   UNCHECKED)
+
+
+def _read_package(req: _Request) -> Reading:
+    artifact = str(req.basis.get("artifact") or "")
+    if req.basis.get("pattern"):
+        # An artefact named after its version says it in its name:
+        # advancemame-0.94.0.tar.gz.
+        found = read_text_version(artifact, str(req.basis["pattern"]), req.basis.get("format"))
+        if found is None:
+            return req.unreadable(f"{artifact}: pattern not found")
+        return req.reading(found[0], f"named by {artifact}")
+    return Reading(req.mode, req.kind, req.stated, None, f"read from {artifact}", UNCHECKED)
+
+
+def _read_alias(req: _Request) -> Reading:
+    other = (req.profiles or {}).get(str(req.basis.get("of") or ""))
+    if other is None:
+        return req.unreadable(f"alias of {req.basis.get('of')}: no such profile")
+    return req.reading(declared(other, req.mode) if isinstance(other.get("core_version"), dict)
+                       else declared(other, ""), f"alias of {req.basis['of']}")
+
+
+def _read_file(req: _Request, repo: upstream.Repo, pin: str) -> Reading:
+    path = str(req.basis.get("path") or "")
+    lines = upstream.fetch_file(repo, pin, path, req.cache_dir, req.offline)
+    if lines is None:
+        return req.unreadable(f"{repo.slug}@{pin[:7]}:{path}: absent")
+    found = read_text_version("\n".join(lines), str(req.basis.get("pattern") or ""),
+                              req.basis.get("format"))
+    if found is None:
+        return req.unreadable(f"{repo.slug}@{pin[:7]}:{path}: pattern not found")
+    value, line = found
+    return req.reading(value, f"{repo.slug}@{pin[:7]}:{path}:{line}")
+
+
+def _read_tag(req: _Request, repo: upstream.Repo, pin: str) -> Reading:
+    basis = req.basis
+    if req.recompute:
+        described = upstream.describe(repo, pin, req.cache_dir, req.offline, basis.get("match"))
+        if described is None:
+            return req.unreadable(f"{repo.slug}@{pin[:7]}: no tag in its history")
+        tag, distance = described
+    else:
+        tag, distance = str(basis.get("tag") or ""), basis.get("distance")
+        commit = upstream.tag_commit(repo, tag, req.cache_dir, req.offline)
+        if commit is None:
+            return req.unreadable(f"{repo.slug}: no tag {tag}")
+        relation = (0, 0) if commit == pin else _ancestry(
+            repo, commit, pin, req.cache_dir, req.offline)
+        if relation is None:
+            return req.unreadable(f"{repo.slug}: {tag}...{pin[:7]} not comparable")
+        if relation[1]:
+            return req.unreadable(f"{repo.slug}: tag {tag} is not in {pin[:7]}'s history")
+        if relation[0] != distance:
+            return Reading(req.mode, req.kind, req.stated, describe_form(tag, relation[0], pin),
+                           f"{repo.slug}: {pin[:7]} is {relation[0]} commits after "
+                           f"{tag}, the basis says {distance}", DRIFT,
+                           (("distance", relation[0]),))
+    return req.reading(describe_form(tag, distance, pin),
+                       f"{repo.slug}: tag {tag} + {distance}",
+                       (("tag", tag), ("distance", distance)))
+
+
+_OFF_FORGE: dict[str, Callable[[_Request], Reading]] = {
+    "none": _read_none,
+    "unverified": _read_unverified,
+    "package": _read_package,
+    "alias": _read_alias,
+}
+_ON_FORGE: dict[str, Callable[[_Request, upstream.Repo, str], Reading]] = {
+    "file": _read_file,
+    "tag": _read_tag,
+}
+
+
 def read(
     profile: dict, mode: str, basis: dict, cache_dir: str, offline: bool,
     profiles: dict | None = None, recompute: bool = False,
@@ -185,87 +303,20 @@ def read(
     has to: a recorded tag only proves its own distance, and a tag released
     between the two pins would go unseen.
     """
-    stated = declared(profile, mode)
     kind = str(basis.get("kind") or "")
-
-    def reading(value: str | None, where: str, updates: tuple = ()) -> Reading:
-        status = MATCH if value == stated else DRIFT
-        return Reading(mode, kind, stated, value, where, status, updates)
-
-    def unreadable(reason: str) -> Reading:
-        return Reading(mode, kind, stated, None, reason, UNREADABLE)
-
+    req = _Request(profile, mode, basis, kind, declared(profile, mode),
+                   cache_dir, offline, profiles, recompute)
     try:
-        if kind == "none":
-            if recompute:
-                # A release tagged since the basis was written gives the
-                # code a version: the advance has to name it.
-                repo, pin = _repo_and_pin(profile, basis, mode, cache_dir, offline)
-                described = upstream.describe(repo, pin, cache_dir, offline)
-                if described is not None:
-                    return Reading(mode, kind, stated, describe_form(*described, pin),
-                                   f"{repo.slug}: tag {described[0]} is now in "
-                                   f"{pin[:7]}'s history", DRIFT)
-            return reading(None, "the code states no version")
-        if kind == "unverified":
-            return Reading(mode, kind, stated, None, f"not verified: {basis.get('why')}",
-                           UNCHECKED)
-        if kind == "package":
-            artifact = str(basis.get("artifact") or "")
-            if basis.get("pattern"):
-                # An artefact named after its version says it in its name:
-                # advancemame-0.94.0.tar.gz.
-                found = read_text_version(artifact, str(basis["pattern"]), basis.get("format"))
-                if found is None:
-                    return unreadable(f"{artifact}: pattern not found")
-                return reading(found[0], f"named by {artifact}")
-            return Reading(mode, kind, stated, None, f"read from {artifact}", UNCHECKED)
-        if kind == "alias":
-            other = (profiles or {}).get(str(basis.get("of") or ""))
-            if other is None:
-                return unreadable(f"alias of {basis.get('of')}: no such profile")
-            return reading(declared(other, mode) if isinstance(other.get("core_version"), dict)
-                           else declared(other, ""), f"alias of {basis['of']}")
-        repo, pin = _repo_and_pin(profile, basis, mode, cache_dir, offline)
-        if kind == "file":
-            path = str(basis.get("path") or "")
-            lines = upstream.fetch_file(repo, pin, path, cache_dir, offline)
-            if lines is None:
-                return unreadable(f"{repo.slug}@{pin[:7]}:{path}: absent")
-            found = read_text_version("\n".join(lines), str(basis.get("pattern") or ""),
-                                      basis.get("format"))
-            if found is None:
-                return unreadable(f"{repo.slug}@{pin[:7]}:{path}: pattern not found")
-            value, line = found
-            return reading(value, f"{repo.slug}@{pin[:7]}:{path}:{line}")
-        if kind == "tag":
-            if recompute:
-                described = upstream.describe(repo, pin, cache_dir, offline, basis.get("match"))
-                if described is None:
-                    return unreadable(f"{repo.slug}@{pin[:7]}: no tag in its history")
-                tag, distance = described
-            else:
-                tag, distance = str(basis.get("tag") or ""), basis.get("distance")
-                commit = upstream.tag_commit(repo, tag, cache_dir, offline)
-                if commit is None:
-                    return unreadable(f"{repo.slug}: no tag {tag}")
-                relation = (0, 0) if commit == pin else _ancestry(
-                    repo, commit, pin, cache_dir, offline)
-                if relation is None:
-                    return unreadable(f"{repo.slug}: {tag}...{pin[:7]} not comparable")
-                if relation[1]:
-                    return unreadable(f"{repo.slug}: tag {tag} is not in {pin[:7]}'s history")
-                if relation[0] != distance:
-                    return Reading(mode, kind, stated, describe_form(tag, relation[0], pin),
-                                   f"{repo.slug}: {pin[:7]} is {relation[0]} commits after "
-                                   f"{tag}, the basis says {distance}", DRIFT,
-                                   (("distance", relation[0]),))
-            return reading(describe_form(tag, distance, pin),
-                           f"{repo.slug}: tag {tag} + {distance}",
-                           (("tag", tag), ("distance", distance)))
+        off_forge = _OFF_FORGE.get(kind)
+        if off_forge is not None:
+            return off_forge(req)
+        repo, pin = req.repo_and_pin()
+        on_forge = _ON_FORGE.get(kind)
+        if on_forge is not None:
+            return on_forge(req, repo, pin)
     except (upstream.UpstreamError, VersionUnreadable) as exc:
-        return unreadable(str(exc))
-    return unreadable(f"unknown kind {kind!r}")
+        return req.unreadable(str(exc))
+    return req.unreadable(f"unknown kind {kind!r}")
 
 
 def check(

@@ -17,26 +17,15 @@ from __future__ import annotations
 
 import re
 
-try:
-    from .base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        fetch_github_latest_version,
-        md5_field,
-        requirement_entry,
-    )
-    from .rocknix_launchers import extract_launchers
-    from .shell_launchers import RepoTree
-except ImportError:
-    from base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        fetch_github_latest_version,
-        md5_field,
-        requirement_entry,
-    )
-    from rocknix_launchers import extract_launchers
-    from shell_launchers import RepoTree
+from .base_scraper import (
+    BaseScraper,
+    BiosRequirement,
+    fetch_github_latest_version,
+    md5_field,
+    requirement_entry,
+)
+from .rocknix_launchers import extract_launchers
+from .shell_launchers import RepoTree
 
 PLATFORM_NAME = "rocknix"
 
@@ -292,7 +281,10 @@ class Scraper(BaseScraper):
                 {
                     "files": [],
                     "native_id": req.native_id,
-                    "name": names.get(req.native_id, req.system),
+                    "name": (
+                        names.get(req.native_id, req.system)
+                        if req.native_id is not None else req.system
+                    ),
                 },
             )
             entry["files"].append(requirement_entry(req))
@@ -321,10 +313,7 @@ class Scraper(BaseScraper):
 
 def main() -> None:
     """Entry point."""
-    try:
-        from .base_scraper import scraper_cli
-    except ImportError:
-        from base_scraper import scraper_cli
+    from .base_scraper import scraper_cli
 
     scraper_cli(Scraper, "Scrape ROCKNIX BIOS requirements")
 

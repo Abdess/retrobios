@@ -5099,9 +5099,10 @@ class TestRateLimitEndsOneProfile(unittest.TestCase):
                                       return_value={"cemu": {}, "after": {}}), \
                     mock.patch.object(profile_sync, "_check_quota"), \
                     mock.patch.object(profile_sync, "build_report", side_effect=build), \
-                    contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
-                with self.assertRaises(SystemExit) as caught:
-                    profile_sync.main()
+                    contextlib.redirect_stdout(out), \
+                    contextlib.redirect_stderr(err), \
+                    self.assertRaises(SystemExit) as caught:
+                profile_sync.main()
         finally:
             sys.argv = saved
         self.assertEqual(caught.exception.code, 1)
@@ -5316,9 +5317,10 @@ class TestOutputModesApplyTheirFlags(unittest.TestCase):
                                       return_value={"clean": {}, "drift": {}}), \
                     mock.patch.object(profile_sync, "_check_quota"), \
                     mock.patch.object(profile_sync, "build_report", side_effect=build), \
-                    contextlib.redirect_stdout(out), contextlib.redirect_stderr(io.StringIO()):
-                with self.assertRaises(SystemExit) as caught:
-                    profile_sync.main()
+                    contextlib.redirect_stdout(out), \
+                    contextlib.redirect_stderr(io.StringIO()), \
+                    self.assertRaises(SystemExit) as caught:
+                profile_sync.main()
         finally:
             sys.argv = saved
         self.assertEqual(caught.exception.code, 1)

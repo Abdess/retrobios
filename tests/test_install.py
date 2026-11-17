@@ -61,6 +61,52 @@ def _tempdir(test: unittest.TestCase) -> str:
     return path
 
 
+def _parenthesized_withs(tokens: list) -> list[str]:
+    import tokenize
+
+    found = []
+    for i, tok in enumerate(tokens):
+        if tok.type == tokenize.NAME and tok.string == "with" and i + 1 < len(tokens):
+            if tokens[i + 1].string != "(":
+                continue
+            depth = 0
+            for inner in tokens[i + 1:]:
+                if inner.string in "([{" and inner.type == tokenize.OP:
+                    depth += 1
+                elif inner.string in ")]}" and inner.type == tokenize.OP:
+                    depth -= 1
+                    if depth == 0:
+                        break
+                elif depth == 1 and inner.type == tokenize.NAME and inner.string == "as":
+                    found.append(f"line {tok.start[0]}: parenthesized with")
+                    break
+    return found
+
+
+def _nested_fstrings(tokens: list) -> list[str]:
+    import tokenize
+
+    found: list[str] = []
+    fstring_start = getattr(tokenize, "FSTRING_START", None)
+    if fstring_start is None:
+        return found
+    stack = []
+    for tok in tokens:
+        if tok.type == fstring_start:
+            if stack:
+                found.append(f"line {tok.start[0]}: f-string inside an f-string")
+            stack.append(tok.string[-1])
+        elif tok.type == tokenize.FSTRING_END:
+            stack.pop()
+        elif stack and tok.type == tokenize.STRING and stack[-1] in tok.string:
+            found.append(f"line {tok.start[0]}: f-string reuses its quote")
+        elif stack and tok.type == tokenize.FSTRING_MIDDLE:
+            continue
+        elif stack and tok.type == tokenize.ERRORTOKEN and tok.string == "\\":
+            found.append(f"line {tok.start[0]}: backslash in an f-string field")
+    return found
+
+
 class TestShellUnquote(unittest.TestCase):
     def test_plain_value(self):
         self.assertEqual(install._shell_unquote("/userdata/bios"), "/userdata/bios")
@@ -1670,39 +1716,8 @@ class InstallerStaysOnPython38AndTheStdlib(unittest.TestCase):
         import io
         import tokenize
 
-        found = []
         tokens = list(tokenize.generate_tokens(io.StringIO(self.SOURCE).readline))
-        for i, tok in enumerate(tokens):
-            if tok.type == tokenize.NAME and tok.string == "with" and i + 1 < len(tokens):
-                if tokens[i + 1].string != "(":
-                    continue
-                depth = 0
-                for inner in tokens[i + 1:]:
-                    if inner.string in "([{" and inner.type == tokenize.OP:
-                        depth += 1
-                    elif inner.string in ")]}" and inner.type == tokenize.OP:
-                        depth -= 1
-                        if depth == 0:
-                            break
-                    elif depth == 1 and inner.type == tokenize.NAME and inner.string == "as":
-                        found.append(f"line {tok.start[0]}: parenthesized with")
-                        break
-        fstring_start = getattr(tokenize, "FSTRING_START", None)
-        if fstring_start is not None:
-            stack = []
-            for tok in tokens:
-                if tok.type == fstring_start:
-                    if stack:
-                        found.append(f"line {tok.start[0]}: f-string inside an f-string")
-                    stack.append(tok.string[-1])
-                elif tok.type == tokenize.FSTRING_END:
-                    stack.pop()
-                elif stack and tok.type == tokenize.STRING and stack[-1] in tok.string:
-                    found.append(f"line {tok.start[0]}: f-string reuses its quote")
-                elif stack and tok.type == tokenize.FSTRING_MIDDLE:
-                    continue
-                elif stack and tok.type == tokenize.ERRORTOKEN and tok.string == "\\":
-                    found.append(f"line {tok.start[0]}: backslash in an f-string field")
+        found = _parenthesized_withs(tokens) + _nested_fstrings(tokens)
         self.assertEqual(found, [])
 
     def test_no_runtime_generic_builtin(self):
@@ -2194,9 +2209,9 @@ class TestManualPlatformPrompt(unittest.TestCase):
     def test_quit_stops_like_ctrl_c(self):
         """`install.sh && retroarch` went on to start RetroArch with no BIOS
         after a q, which left with 0 where Ctrl+C leaves with 130."""
-        with unittest.mock.patch("builtins.input", lambda _prompt="": "q"):
-            with self.assertRaises(SystemExit) as raised:
-                install._prompt_manual_platform("linux")
+        with unittest.mock.patch("builtins.input", lambda _prompt="": "q"), \
+                self.assertRaises(SystemExit) as raised:
+            install._prompt_manual_platform("linux")
         self.assertEqual(raised.exception.code, install.QUIT_CODE)
 
     def test_quotes_around_a_typed_folder_are_dropped(self):
@@ -2207,7 +2222,8 @@ class TestManualPlatformPrompt(unittest.TestCase):
                       f'  "{root}/My Card/bios"  '):
             answers = iter(["1", typed])
             with self.subTest(typed=typed), \
-                    unittest.mock.patch("builtins.input", lambda _prompt="": next(answers)), \
+                    unittest.mock.patch("builtins.input",
+                                        lambda _prompt="", answers=answers: next(answers)), \
                     contextlib.redirect_stdout(io.StringIO()):
                 chosen = install._prompt_manual_platform("linux")
             self.assertEqual(chosen, [("retroarch", root / "My Card" / "bios")])
@@ -2217,7 +2233,8 @@ class TestManualPlatformPrompt(unittest.TestCase):
             answers = iter(["1", '"~/$RB_TEST_DIR/bios"'])
             with self.subTest(os_type=os_type), \
                     unittest.mock.patch.dict(os.environ, {"RB_TEST_DIR": "cards"}), \
-                    unittest.mock.patch("builtins.input", lambda _prompt="": next(answers)), \
+                    unittest.mock.patch("builtins.input",
+                                        lambda _prompt="", answers=answers: next(answers)), \
                     contextlib.redirect_stdout(io.StringIO()):
                 chosen = install._prompt_manual_platform(os_type)
             self.assertEqual(chosen[0][1], Path.home() / "cards" / "bios")
@@ -2313,6 +2330,7 @@ class TestLaunchboxDetectionPowershell(unittest.TestCase):
                 capture_output=True,
                 text=True,
                 timeout=60,
+                check=False,
             )
         finally:
             httpd.shutdown()
@@ -2576,6 +2594,7 @@ class TestAvailablePlatforms(unittest.TestCase):
                 capture_output=True,
                 text=True,
                 timeout=30,
+                check=False,
             )
             self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
             self.assertTrue(marker.is_file(), "piped bootstrap did not download install.py")
@@ -2693,7 +2712,7 @@ class TestAvailablePlatforms(unittest.TestCase):
         proc = subprocess.run(
             [shutil.which("sh"), str(root / "install.sh")],
             env={"PATH": f"{fake_bin}{os.pathsep}{tools}", "HOME": str(root)},
-            capture_output=True, text=True, timeout=60, stdin=subprocess.DEVNULL)
+            capture_output=True, text=True, timeout=60, stdin=subprocess.DEVNULL, check=False)
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertIn("ran True", proc.stdout)
 
@@ -3174,7 +3193,7 @@ class TermuxStorageIsSetUpByTheBootstrap(unittest.TestCase):
                    f"TERMUX_VERSION=0.118 /bin/sh {shlex.quote(str(root / 'install.sh'))}")
         proc = subprocess.run(
             [shutil.which("script"), "-qec", command, "/dev/null"],
-            capture_output=True, text=True, timeout=120, stdin=subprocess.DEVNULL)
+            capture_output=True, text=True, timeout=120, stdin=subprocess.DEVNULL, check=False)
         return proc, root
 
     def test_it_runs_once_then_the_installer(self):
@@ -3209,7 +3228,7 @@ class APyLauncherWithoutARuntimeIsPassed(unittest.TestCase):
         proc = subprocess.run(
             [shutil.which("pwsh"), "-NoProfile", "-File", str(folder / "install.ps1")],
             env={**os.environ, "PATH": f"{fake_bin}{os.pathsep}/usr/bin/nonexistent"},
-            capture_output=True, text=True, timeout=120, stdin=subprocess.DEVNULL)
+            capture_output=True, text=True, timeout=120, stdin=subprocess.DEVNULL, check=False)
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         self.assertIn("installer ran", proc.stdout)
 
@@ -3231,7 +3250,7 @@ class APowerShellDownloadThatNeverAnswersEnds(unittest.TestCase):
                 ["pwsh", "-NoProfile", "-File", str(folder / "install.ps1"), "--check"],
                 env={**os.environ,
                      "RETROBIOS_INSTALL_URL": f"https://127.0.0.1:{port}/install.py"},
-                capture_output=True, text=True, timeout=150, stdin=subprocess.DEVNULL)
+                capture_output=True, text=True, timeout=150, stdin=subprocess.DEVNULL, check=False)
         self.assertLess(time.monotonic() - started, 120)
         self.assertNotEqual(proc.returncode, 0)
         self.assertIn("could not be downloaded", " ".join((proc.stdout + proc.stderr).split()))
@@ -3251,6 +3270,7 @@ class ThePowerShellWrapperPassesTheStatusOn(unittest.TestCase):
                 proc = subprocess.run(
                     ["pwsh", "-NoProfile", "-File", str(folder / "install.ps1")],
                     capture_output=True, text=True, timeout=120,
+                    check=False,
                 )
                 self.assertEqual(proc.returncode, code, proc.stderr)
                 self.assertNotIn("installer failed", proc.stdout + proc.stderr)
@@ -3274,6 +3294,7 @@ class ThePowerShellWrapperPassesEveryArgument(unittest.TestCase):
                 proc = subprocess.run(
                     ["pwsh", "-NoProfile", "-File", str(folder / "install.ps1"), *args],
                     capture_output=True, text=True, timeout=120,
+                    check=False,
                 )
                 self.assertEqual(proc.returncode, 0, proc.stderr)
                 self.assertEqual(json.loads(proc.stdout), args)
@@ -3707,7 +3728,7 @@ class ACardPreparedOnAComputerGetsItsBoard(unittest.TestCase):
             [sys.executable, "-c", code, str(REPO_ROOT), str(self.boot),
              "--platform", "batocera", "--dest", str(self.share), "--manifest",
              str(self.list), "--offline", "--check", "--events", *extra],
-            env=env, capture_output=True, text=True, timeout=120, stdin=subprocess.DEVNULL)
+            env=env, capture_output=True, text=True, timeout=120, stdin=subprocess.DEVNULL, check=False)
         events = [json.loads(line) for line in proc.stdout.splitlines()
                   if line.startswith("{")]
         return proc.stdout + proc.stderr, events
@@ -3795,7 +3816,7 @@ class APlatformWithoutTargetsSaysSoOffline(unittest.TestCase):
                     [sys.executable, str(REPO_ROOT / "install.py"), "--platform", "misterfpga",
                      "--dest", str(dest), "--target", "de10-nano", "--offline", "--no-input",
                      "--dry-run", *extra],
-                    capture_output=True, text=True, timeout=120, stdin=subprocess.DEVNULL)
+                    capture_output=True, text=True, timeout=120, stdin=subprocess.DEVNULL, check=False)
                 self.assertEqual(proc.returncode, 2, proc.stderr)
                 self.assertIn("MiSTer FPGA has no hardware targets", proc.stderr)
                 self.assertNotIn("targets/misterfpga.json", proc.stderr)
@@ -3893,6 +3914,7 @@ class TheBoardTheSystemNamesIsTheTarget(unittest.TestCase):
             [sys.executable, str(REPO_ROOT / "install.py"), "--every-board",
              "--target", "bcm2711", "--platform", "batocera", "--dry-run"],
             capture_output=True, text=True, timeout=120,
+            check=False,
         )
         self.assertEqual(result.returncode, 2)
         self.assertIn("--every-board", result.stderr)
@@ -4837,7 +4859,10 @@ class WindowsSeenFromWsl(unittest.TestCase):
             self.assertEqual(os.environ["USERPROFILE"], str(self.root / "c" / "Users" / "me"))
             self.assertEqual(os.environ["APPDATA"],
                              str(self.root / "c" / "Users" / "me" / "AppData" / "Roaming"))
-            self.assertEqual(os.environ["ProgramFiles"], "")
+            # ProgramFiles among them: cmd answered %ProgramFiles% unexpanded.
+            for name in sorted(set(install._WINDOWS_VARIABLES) - answers.keys()):
+                with self.subTest(variable=name):
+                    self.assertEqual(os.environ[name], "")
 
 
     def test_a_steam_client_outside_program_files_is_found(self):
@@ -5331,7 +5356,7 @@ class AnUnknownNameIsAnEvent(unittest.TestCase):
                 [sys.executable, str(REPO_ROOT / "install.py"), "--dest", dest,
                  "--check", "--events", "--no-input", *argv],
                 env=env, capture_output=True, text=True, timeout=120,
-                stdin=subprocess.DEVNULL)
+                stdin=subprocess.DEVNULL, check=False)
         return proc.returncode, [json.loads(line) for line in proc.stdout.splitlines()]
 
     def test_each_refusal_says_why(self):
@@ -5653,7 +5678,7 @@ class ThePowerShellOneLinerLeavesTheSessionAlone(unittest.TestCase):
         env = {**os.environ, "RETROBIOS_INSTALL_URL": "http://127.0.0.1/install.py"}
         env.pop("RETROBIOS_BOOTSTRAP", None)
         proc = subprocess.run(["pwsh", "-NoProfile", "-Command", script], cwd=REPO_ROOT,
-                              env=env, capture_output=True, text=True, timeout=120)
+                              env=env, capture_output=True, text=True, timeout=120, check=False)
         self.assertIn("must use HTTPS", proc.stderr)
         self.assertIn("EAP=Continue temporary=[] installer=[] bootstrap=[]", proc.stdout)
 
@@ -7217,7 +7242,7 @@ class AStrippedPythonIsNamed(unittest.TestCase):
         return subprocess.run(
             [sys.executable, "-c", code, str(REPO_ROOT / "install.py"), *argv],
             env=env, capture_output=True, text=True, timeout=60,
-            stdin=subprocess.DEVNULL)
+            stdin=subprocess.DEVNULL, check=False)
 
     def test_a_missing_c_module_is_named(self):
         for hidden in ("zlib", "unicodedata"):

@@ -31,38 +31,37 @@ Nothing here is written by hand: a second run writes the same bytes.
 from __future__ import annotations
 
 import argparse
+import functools
 import gzip
 import hashlib
 import json
 import posixpath
 import sys
-from collections.abc import Iterable
-from dataclasses import dataclass
+from collections.abc import Callable, Iterable
+from dataclasses import dataclass, field
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from common import (  # noqa: E402
+from common import (
     load_emulator_profiles,
     load_platform_config,
     native_layer,
     repository_output_lock,
     run_cli,
 )
-from region import normalize_declared  # noqa: E402
-from romfolders import (  # noqa: E402
+from region import normalize_declared
+from romfolders import (
     ProfileResolver,
     Resolution,
     SystemResolver,
     folder_names,
     load_setups,
 )
-from artifacts import write_text_atomic  # noqa: E402
-from safeparse import yaml_load  # noqa: E402
+from artifacts import write_text_atomic
+from safeparse import yaml_load
 
-import install  # noqa: E402
+import install
 
 FORMAT_VERSION = 1
 OUTPUT = Path("install") / "games"
@@ -221,9 +220,8 @@ def fallback_set(
                 platform_required.get((s, base), True) for s in systems & wanted
             )
         else:
-            if systems:
-                if not systems & wanted:
-                    continue
+            if systems and not systems & wanted:
+                continue
             declared = profiles.entries_named(profile or "", base)
             if not systems and not any(profiles.serves(profile or "", e, system) for e in declared):
                 continue
@@ -333,6 +331,104 @@ def emulator_profile(row: dict, platform: str, cores: ProfileResolver,
     return candidate if any(resolver.equivalents(sid) & declared for sid in systems) else None
 
 
+@dataclass
+class _FallbackTables:
+    """The fallback sets of a folder's systems under one core, computed
+    once per platform."""
+
+    profiles: Profiles
+    tables: dict[str, dict[str, dict]] = field(default_factory=dict)
+    narrowed: dict = field(default_factory=dict)
+
+    def keys(self, platform: str, manifest: dict, required: dict[tuple[str, str], bool],
+             systems: list[str], chosen: str | None) -> list[str]:
+        keys = []
+        table = self.tables.setdefault(platform, {})
+        for system in systems:
+            key = f"{system}|{chosen or ''}"
+            if key not in table:
+                table[key] = fallback_set(manifest, required, self.profiles, system, chosen, self.narrowed)
+            keys.append(key)
+        return keys
+
+
+@dataclass
+class _SetupContext:
+    resolver: SystemResolver
+    cores: ProfileResolver
+    profiles: Profiles
+    arcade: set[str]
+    inputs: Inputs
+    fallbacks: _FallbackTables
+    manifests: dict[str, dict] = field(default_factory=dict)
+    required: dict[str, dict[tuple[str, str], bool]] = field(default_factory=dict)
+
+    def manifest(self, platform: str) -> dict | None:
+        if platform and platform not in self.manifests:
+            path = self.inputs.install / f"{platform}.json"
+            if path.exists():
+                self.manifests[platform] = _load_json(path)
+                self.required[platform] = _platform_required(platform, self.inputs.platforms)
+        return self.manifests.get(platform)
+
+
+def _board_defaults(ctx: _SetupContext, row: dict,
+                    fallback_keys: Callable[[str | None], list[str]] | None) -> dict:
+    boards = {}
+    for board, spec in sorted((row.get("board_defaults") or {}).items()):
+        boards[board] = {"core": spec["core"]}
+        board_profile = ctx.cores.resolve(spec["core"])
+        if board_profile:
+            boards[board]["profile"] = board_profile
+            if board_profile in ctx.arcade:
+                boards[board]["arcade"] = board_profile
+        if fallback_keys:
+            # A card moves between boards, and the installer reads
+            # it on a computer: each board's core has its set.
+            boards[board]["fallback"] = fallback_keys(board_profile)
+    return boards
+
+
+def _publish_folder(ctx: _SetupContext, row: dict, platform: str, manifest: dict | None,
+                    counts: dict[str, int]) -> dict:
+    counts["folders"] += 1
+    profile = (ctx.cores.resolve(row.get("core"))
+               or emulator_profile(row, platform, ctx.cores, ctx.resolver, ctx.profiles))
+    resolution = resolve_folder(row, platform, profile, ctx.resolver, ctx.profiles, ctx.arcade)
+    published: dict = {
+        "folder": row["folder"],
+        "systems": resolution.systems,
+        "basis": resolution.basis,
+    }
+    for key in ("name", "aliases", "extensions", "files", "core", "emulator", "note"):
+        if row.get(key):
+            published[key] = row[key]
+    if profile:
+        published["profile"] = profile
+        counts["profile"] += 1
+    if resolution.systems:
+        counts["resolved"] += 1
+
+    fallback_keys = None
+    if manifest is not None and resolution.systems:
+        fallback_keys = functools.partial(ctx.fallbacks.keys, platform, manifest, ctx.required[platform],
+                                          resolution.systems)
+    boards = _board_defaults(ctx, row, fallback_keys)
+    if boards:
+        published["board_defaults"] = boards
+    if profile and profile in ctx.arcade:
+        published["arcade"] = profile
+    elif row.get("arcade"):
+        published["arcade"] = True
+    if fallback_keys:
+        keys = fallback_keys(profile)
+        published["fallback"] = keys
+        if any(ctx.fallbacks.tables[platform][k]["files"] for k in keys):
+            counts["fallback"] += 1
+    published["source_ref"] = row["source_ref"]
+    return published
+
+
 def build_setups(
     setups: dict[str, dict],
     resolver: SystemResolver,
@@ -342,80 +438,14 @@ def build_setups(
     inputs: Inputs,
 ) -> tuple[dict[str, dict], dict[str, dict], dict]:
     """Published setup documents, fallback tables per platform, coverage."""
-    manifests: dict[str, dict] = {}
-    required: dict[str, dict] = {}
-    fallbacks: dict[str, dict[str, dict]] = {}
-    narrowed: dict = {}
+    ctx = _SetupContext(resolver, cores, profiles, arcade, inputs, _FallbackTables(profiles))
     out: dict[str, dict] = {}
     coverage: dict[str, dict] = {}
     for setup, doc in sorted(setups.items()):
         platform = doc.get("platform") or ""
-        if platform and platform not in manifests:
-            path = inputs.install / f"{platform}.json"
-            if path.exists():
-                manifests[platform] = _load_json(path)
-                required[platform] = _platform_required(platform, inputs.platforms)
-        manifest = manifests.get(platform)
-        folders: list[dict] = []
+        manifest = ctx.manifest(platform)
         counts = {"folders": 0, "resolved": 0, "profile": 0, "fallback": 0}
-        for row in doc.get("folders", []):
-            counts["folders"] += 1
-            profile = (cores.resolve(row.get("core"))
-                       or emulator_profile(row, platform, cores, resolver, profiles))
-            resolution = resolve_folder(row, platform, profile, resolver, profiles, arcade)
-            published: dict = {
-                "folder": row["folder"],
-                "systems": resolution.systems,
-                "basis": resolution.basis,
-            }
-            for key in ("name", "aliases", "extensions", "files", "core", "emulator", "note"):
-                if row.get(key):
-                    published[key] = row[key]
-            if profile:
-                published["profile"] = profile
-                counts["profile"] += 1
-            if resolution.systems:
-                counts["resolved"] += 1
-
-            def fallback_keys(chosen: str | None) -> list[str]:
-                """The fallback sets of the folder's systems under one core,
-                computed once per platform."""
-                keys = []
-                table = fallbacks.setdefault(platform, {})
-                for system in resolution.systems:
-                    key = f"{system}|{chosen or ''}"
-                    if key not in table:
-                        table[key] = fallback_set(manifest, required[platform], profiles, system,
-                                                  chosen, narrowed)
-                    keys.append(key)
-                return keys
-
-            sets_known = manifest is not None and bool(resolution.systems)
-            boards = {}
-            for board, spec in sorted((row.get("board_defaults") or {}).items()):
-                boards[board] = {"core": spec["core"]}
-                board_profile = cores.resolve(spec["core"])
-                if board_profile:
-                    boards[board]["profile"] = board_profile
-                    if board_profile in arcade:
-                        boards[board]["arcade"] = board_profile
-                if sets_known:
-                    # A card moves between boards, and the installer reads
-                    # it on a computer: each board's core has its set.
-                    boards[board]["fallback"] = fallback_keys(board_profile)
-            if boards:
-                published["board_defaults"] = boards
-            if profile and profile in arcade:
-                published["arcade"] = profile
-            elif row.get("arcade"):
-                published["arcade"] = True
-            if sets_known:
-                keys = fallback_keys(profile)
-                published["fallback"] = keys
-                if any(fallbacks[platform][k]["files"] for k in keys):
-                    counts["fallback"] += 1
-            published["source_ref"] = row["source_ref"]
-            folders.append(published)
+        folders = [_publish_folder(ctx, row, platform, manifest, counts) for row in doc.get("folders", [])]
         out[setup] = {
             "format_version": FORMAT_VERSION,
             "setup": setup,
@@ -429,7 +459,7 @@ def build_setups(
         }
         coverage[setup] = counts
     published_fallbacks = {
-        platform: _shared_table(platform, table) for platform, table in sorted(fallbacks.items())
+        platform: _shared_table(platform, table) for platform, table in sorted(ctx.fallbacks.tables.items())
     }
     return out, published_fallbacks, coverage
 
@@ -441,6 +471,32 @@ def _catalogs(directory: Path) -> Iterable[dict]:
     if directory.is_dir():
         for path in sorted(directory.glob("*/*.json")):
             yield _load_json(path)
+
+
+def _add_catalog(doc: dict, catalog: dict) -> None:
+    regions_table = catalog["regions"]
+    fields = catalog["fields"]
+    col = {name: i for i, name in enumerate(fields)}
+    ident = doc.setdefault("identify", {"sources": [], "regions": [], "games": [], "serials": {}})
+    region_index: dict[tuple[str, ...], int] = {
+        tuple(r): i for i, r in enumerate(ident["regions"])
+    }
+
+    def reindex(i: int) -> int:
+        value = tuple(regions_table[i]) if i is not None and i >= 0 else ()
+        if value not in region_index:
+            region_index[value] = len(ident["regions"])
+            ident["regions"].append(list(value))
+        return region_index[value]
+
+    ident["sources"].append({
+        k: catalog[k] for k in ("source", "dat", "version", "fetched_from", "licence", "serial_note") if k in catalog
+    })
+    for row in catalog["games"]:
+        region = reindex(row[col["region"]])
+        ident["games"].append([row[col["crc32"]], row[col["size"]], region, row[col["title"]]])
+        for serial in row[col["serials"]] if "serials" in col else []:
+            ident["serials"].setdefault(serial, set()).add(region)
 
 
 def build_systems(
@@ -467,30 +523,7 @@ def build_systems(
         return docs.setdefault(key, {"format_version": FORMAT_VERSION, "system": key})
 
     for catalog in _catalogs(games / "catalogs"):
-        doc = doc_for(catalog["system"])
-        regions_table = catalog["regions"]
-        fields = catalog["fields"]
-        col = {name: i for i, name in enumerate(fields)}
-        ident = doc.setdefault("identify", {"sources": [], "regions": [], "games": [], "serials": {}})
-        region_index: dict[tuple[str, ...], int] = {
-            tuple(r): i for i, r in enumerate(ident["regions"])
-        }
-
-        def reindex(i: int) -> int:
-            value = tuple(regions_table[i]) if i is not None and i >= 0 else ()
-            if value not in region_index:
-                region_index[value] = len(ident["regions"])
-                ident["regions"].append(list(value))
-            return region_index[value]
-
-        ident["sources"].append({
-            k: catalog[k] for k in ("source", "dat", "version", "fetched_from", "licence", "serial_note") if k in catalog
-        })
-        for row in catalog["games"]:
-            region = reindex(row[col["region"]])
-            ident["games"].append([row[col["crc32"]], row[col["size"]], region, row[col["title"]]])
-            for serial in row[col["serials"]] if "serials" in col else []:
-                ident["serials"].setdefault(serial, set()).add(region)
+        _add_catalog(doc_for(catalog["system"]), catalog)
     for doc in docs.values():
         ident = doc.get("identify")
         if ident:

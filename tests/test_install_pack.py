@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import tests  # noqa: F401  offline, scratch under tmp/, the suite's own cache
 
+import argparse
 import functools
 import hashlib
 import http.server
@@ -632,7 +633,7 @@ class PartSizes(unittest.TestCase):
         for text in ("big", "1K", "-5M"):
             with self.subTest(text=text), \
                     mock.patch("sys.stderr", io.StringIO()), \
-                    self.assertRaises(Exception):
+                    self.assertRaises(argparse.ArgumentTypeError):
                 install.parse_part_size(text)
 
 

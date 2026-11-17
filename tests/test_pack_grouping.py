@@ -34,7 +34,8 @@ class SlotPassReadsTheRegionGrouping(unittest.TestCase):
         config = load_platform_config("retroarch", "platforms")
         drops, _fallbacks, _undecided = gp._select_variants(
             config, config["systems"], "emulators", db,
-            config.get("base_destination", ""), profiles, None, "full", None, True,
+            config.get("base_destination", ""), profiles, None, "full",
+            regions=None, one_per_slot=True,
         )
         names = {os.path.basename(d) for d in drops}
         for name in ("jp_mcd1_9111.bin", "eu_mcd1_9210.bin"):
@@ -68,7 +69,7 @@ class VariantGroupSpansSystems(unittest.TestCase):
         drops, _fallbacks, _undecided = gp._select_variants(
             config, config["systems"], "emulators", db,
             config.get("base_destination", ""), profiles, None, "full",
-            region_mod.parse_requested("us"), False,
+            regions=region_mod.parse_requested("us"), one_per_slot=False,
         )
         names = {os.path.basename(d) for d in drops}
         for name in ("jp_mcd1_9111.bin", "eu_mcd2_9306.bin"):

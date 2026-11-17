@@ -230,6 +230,7 @@ class CommittedData(unittest.TestCase):
         result = subprocess.run(
             [sys.executable, "scripts/generate_games_index.py", "--check", "--quiet"],
             cwd=ROOT, capture_output=True, text=True,
+            check=False,
         )
         self.assertEqual(result.returncode, 0, result.stderr[-2000:])
 

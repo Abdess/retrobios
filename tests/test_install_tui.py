@@ -41,6 +41,8 @@ from pathlib import Path, PurePosixPath, PureWindowsPath
 from unittest import mock
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+# install.py runs on 3.8, the scripts it is compared with need 3.9.
+BUILDER_FLOOR = (3, 9)
 sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(REPO_ROOT / "tests"))
 
@@ -949,6 +951,13 @@ class Widgets(unittest.TestCase):
 
 def golden_states() -> dict:
     """One state per screen, filled as a run fills it."""
+    states = _golden_setup_states()
+    states.update(_golden_plan_states())
+    states.update(_golden_run_states())
+    return states
+
+
+def _golden_setup_states() -> dict:
     states = {}
     states["setup"] = fresh_state()
     states["setup"].notes = ["ES-DE found: its BIOS files go to each emulator, not to "
@@ -985,6 +994,11 @@ def golden_states() -> dict:
     checking.platform, checking.dest, checking.stack = "retroarch", SYSTEM_DIR, ["checking"]
     checking.manifest, checking.started, checking.now = MANIFEST, 10.0, 14.2
     states["checking"] = checking
+    return states
+
+
+def _golden_plan_states() -> dict:
+    states = {}
     states["plan"] = checked_state()
     done = checked_state()
     done.check = {**CHECK, "present": 5, "missing": 0, "wrong_hash": 0, "bytes_needed": 0,
@@ -1039,6 +1053,11 @@ def golden_states() -> dict:
     confirm.dry = {**CHECK, "files": 1, "present": 0, "missing": 1, "wrong_hash": 0,
                    "bytes_needed": 16384, "not_installable": 0}
     states["confirm"] = confirm
+    return states
+
+
+def _golden_run_states() -> dict:
+    states = {}
     installing = checked_state()
     installing.stack.append("installing")
     installing.run, installing.running = "install", True
@@ -2509,7 +2528,7 @@ class WorkFolders(unittest.TestCase):
                 self.addCleanup(signal.signal, number, previous)
                 interrupt = signal.getsignal(signal.SIGINT)
 
-                def starting(*_args, **_kwargs):
+                def starting(*_args, number=number, **_kwargs):
                     os.kill(os.getpid(), number)
                     return fresh_state(), [("fetch", "retroarch")]
 
@@ -2521,7 +2540,7 @@ class WorkFolders(unittest.TestCase):
                 with mock.patch.object(install, "_TuiTerminal", self.Terminal), \
                         mock.patch.object(install.tempfile, "mkdtemp", return_value=str(work)), \
                         mock.patch.object(self.Terminal, "enter",
-                                          lambda _t: entered.append(True)), \
+                                          lambda _t, entered=entered: entered.append(True)), \
                         mock.patch.object(install, "tui_start", side_effect=starting), \
                         mock.patch.object(install, "_open_local_sources"), \
                         mock.patch.object(install, "_tui_fetch") as fetch, \
@@ -7597,7 +7616,7 @@ class _CardFixtures:
         listing = self.root / f"{plat}.json"
         install_list = {"manifest_version": 2, "platform": plat, "files": files}
         listing.write_text(json.dumps(install_list))
-        if sys.version_info < (3, 9):
+        if sys.version_info < BUILDER_FLOOR:
             # generate_pack.py's context managers need Python 3.9.
             return listing, None, {}
         sys.path.insert(0, str(REPO_ROOT / "scripts"))
@@ -7725,7 +7744,7 @@ class _LineModeFindings(_CardFixtures):
                                           region=["us"])
         self.assertEqual(code, 0, text)
 
-    @unittest.skipIf(sys.version_info < (3, 9),
+    @unittest.skipIf(sys.version_info < BUILDER_FLOOR,
                      "generate_pack.py's context managers need Python 3.9")
     def test_a_pack_names_its_list_only_when_that_list_records_it(self):
         """A MinUI pack sent --core to install/minui.json,
@@ -9225,7 +9244,7 @@ class PacksWordingAndDocs(unittest.TestCase):
 
     # a pack's own list records its systems.
 
-    @unittest.skipIf(sys.version_info < (3, 9),
+    @unittest.skipIf(sys.version_info < BUILDER_FLOOR,
                      "generate_pack.py's context managers need Python 3.9")
     def test_a_pack_records_the_systems_of_its_files(self):
         sys.path.insert(0, str(REPO_ROOT / "scripts"))
@@ -14673,7 +14692,7 @@ class ProvenCardsAndCounts(unittest.TestCase):
 
     # Root cause 6: the pages say what the installer shows.
 
-    @unittest.skipIf(sys.version_info < (3, 9),
+    @unittest.skipIf(sys.version_info < BUILDER_FLOOR,
                      "the site generator needs Python 3.9")
     def test_which_pack_names_the_first_screen(self):
         """Which-pack said the command opens a screen
@@ -16148,7 +16167,7 @@ class EmulatorChoiceMatchesTheEmulatorPack(unittest.TestCase):
         db_path = REPO_ROOT / "database.json"
         if not db_path.exists():
             raise unittest.SkipTest("database.json is not built")
-        if sys.version_info < (3, 9):
+        if sys.version_info < BUILDER_FLOOR:
             # The builder's floor: install.py alone keeps 3.8.
             raise unittest.SkipTest("generate_pack.py needs Python 3.9 or newer")
         sys.path.insert(0, str(REPO_ROOT / "scripts"))

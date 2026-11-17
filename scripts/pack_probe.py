@@ -41,7 +41,6 @@ from __future__ import annotations
 
 import argparse
 import contextlib
-import datetime as dt
 import fcntl
 import hashlib
 import json
@@ -62,6 +61,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import autorun
 import campaign
 import measurement_records as mr
+from autorun import now_iso
 from common import (
     _norm_system_id,
     load_emulator_profiles,
@@ -272,7 +272,7 @@ def so_names(name: str, profile: dict, buildbot: set[str], target: set[str] | No
 def choose_cores(config: dict, profiles: dict[str, dict], system: str, buildbot: set[str],
                  target: set[str] | None) -> list[CoreChoice]:
     wanted = _norm_system_id(system)
-    out = []
+    out: list[CoreChoice] = []
     for name in sorted(resolve_platform_cores(config, profiles, target)):
         profile = profiles[name]
         if wanted not in {_norm_system_id(s) for s in profile.get("systems") or ()}:
@@ -389,9 +389,8 @@ def map_run(layout: Layout, staged: set[str], rep: dict, profile: dict) -> tuple
         else:
             kind = "missing_declared" if names else "missing_undeclared"
         findings.append({"kind": kind, "path": path, "declared_by": names, "paths": elsewhere})
-    for item in opened:
-        if item["path"] in staged and item["entry"] is None:
-            findings.append({"kind": "unlisted", "path": item["path"], "declared_by": [], "paths": []})
+    findings.extend({"kind": "unlisted", "path": item["path"], "declared_by": [], "paths": []}
+                    for item in opened if item["path"] in staged and item["entry"] is None)
     return opened, findings
 
 
@@ -455,10 +454,6 @@ def content_folder(content: campaign.Content, fetch: bool) -> Path:
 # --------------------------------------------------------------------------
 # One probe: a core, a game, a layout
 # --------------------------------------------------------------------------
-
-def now_iso() -> str:
-    return dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
-
 
 def wait_idle(limit: float = IDLE_WAIT, poll: float = 30.0) -> None:
     """Wait for the load core_probe records under, a quarter of the CPUs.
@@ -535,10 +530,22 @@ def subject_for(platform: str, install: str, system: str, so: str, content: str)
     return f"{mr.PACK_SUBJECT_PREFIX}{subject}"
 
 
-def probe_one(layout: Layout, platform: str, config: dict, profile: dict, choice: CoreChoice,
-              core: dict, system: str, content: campaign.Content, load: Path, work: Path) -> dict:
+@dataclass(frozen=True)
+class ProbeTarget:
+    """One core of one system, on the game loaded for it."""
+
+    choice: CoreChoice
+    core: dict
+    system: str
+    content: campaign.Content
+    load: Path
+
+
+def probe_one(layout: Layout, platform: str, config: dict, profile: dict, target: ProbeTarget,
+              work: Path) -> dict:
     """Run until the staging is closed. The first run is recorded, and when
     the staging grew, the closed one is recorded too and supersedes it."""
+    choice, core, system, content, load = target.choice, target.core, target.system, target.content, target.load
     native = platform_system(config, system)
     dests = [f.get("destination") or f.get("name")
              for f in ((config.get("systems") or {}).get(native) or {}).get("files") or ()]
@@ -626,7 +633,7 @@ def plan(platform: str, systems: set[str] | None, cores: set[str] | None,
     config = load_platform_config(platform, str(ROOT / "platforms"))
     profiles = load_emulator_profiles(str(ROOT / "emulators"))
     target = load_target_config(platform, TARGETS[platform], str(ROOT / "platforms"))
-    units = []
+    units: list[Unit] = []
     for system, contents in sorted(load_contents([campaign.CONTENT_FILE, PACK_CONTENT_FILE]).items()):
         if systems and system not in systems:
             continue
@@ -668,8 +675,9 @@ def run(args: argparse.Namespace) -> int:
                     continue
                 for choice in unit.cores:
                     core = fetch_core(choice.so_name, args.refresh_cores)
-                    line = probe_one(layout, args.platform, config, profiles[choice.emulator], choice,
-                                     core, unit.system, unit.content, load, work / "runs")
+                    target = ProbeTarget(choice, core, unit.system, unit.content, load)
+                    line = probe_one(layout, args.platform, config, profiles[choice.emulator], target,
+                                     work / "runs")
                     sealed = append_line(line)
                     print(f"{args.platform} {install} {unit.system} {choice.so_name}: {line['verdict']}, "
                           f"{len(line['files_opened'])} opened, {len(line['findings'])} findings, "

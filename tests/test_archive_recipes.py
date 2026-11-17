@@ -85,56 +85,86 @@ def _hashes(values: object) -> set[str]:
     return {str(value).strip().lower() for value in raw if str(value).strip()}
 
 
+def _allowed_members() -> dict[str, set[str]]:
+    from common import load_emulator_profiles
+    from romset_recipes import load_dat_recipes
+
+    allowed: dict[str, set[str]] = defaultdict(set)
+    for archive, per_label in load_dat_recipes(REPO_ROOT / "recipes").items():
+        for recipe in per_label.values():
+            allowed[archive.lower()] |= {crc for _name, crc in recipe}
+    profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"), skip_aliases=False)
+    for profile in profiles.values():
+        for entry in profile.get("files", []) or []:
+            crcs = {
+                str(member.get("crc32") or "").lower()
+                for member in entry.get("contents") or []
+            }
+            crcs.discard("")
+            if not crcs:
+                continue
+            for name in [entry.get("name", "")] + list(entry.get("aliases") or []):
+                if name:
+                    allowed[str(name).lower()] |= crcs
+    for name, devices in DEVICE_ROMS.items():
+        for device in devices:
+            allowed[name] |= allowed.get(device, set())
+    return allowed
+
+
+def _platform_pins() -> tuple[set[str], dict[str, set[tuple[str, str]]]]:
+    from common import list_registered_platforms, load_platform_config
+
+    pinned: set[str] = set()
+    zipped: dict[str, set[tuple[str, str]]] = defaultdict(set)
+    platforms_dir = str(REPO_ROOT / "platforms")
+    for platform in list_registered_platforms(platforms_dir):
+        config = load_platform_config(platform, platforms_dir)
+        for system in config.get("systems", {}).values():
+            for entry in system.get("files", []) or []:
+                if entry.get("zipped_file"):
+                    for md5 in _hashes(entry.get("md5")):
+                        zipped[str(entry.get("name", "")).lower()].add(
+                            (str(entry["zipped_file"]).casefold(), md5)
+                        )
+                    continue
+                for key in ("md5", "sha1", "alt_md5"):
+                    pinned |= _hashes(entry.get(key))
+    return pinned, zipped
+
+
+def _extra_members(
+    path: Path, name: str, allowed: set[str], zipped: set[tuple[str, str]]
+) -> list[zipfile.ZipInfo] | None:
+    stem = name[:-4]
+    try:
+        with zipfile.ZipFile(path) as archive:
+            extra = [
+                info for info in archive.infolist()
+                if not info.is_dir()
+                and f"{info.CRC:08x}" not in allowed
+                # a merged set keeps each clone in a folder of its name
+                and not ("/" in info.filename and info.filename.split("/")[0] != stem)
+            ]
+            return [
+                info for info in extra
+                if (info.filename.casefold(),
+                    hashlib.md5(archive.read(info)).hexdigest()) not in zipped
+            ]
+    except zipfile.BadZipFile:
+        return None
+
+
 class HeldArchivesMatchTheirRecipes(unittest.TestCase):
     def test_no_member_outside_every_recipe_of_the_name(self):
         bios = REPO_ROOT / "bios"
         if not bios.is_dir() or not (REPO_ROOT / "recipes").is_dir():
             self.skipTest("bios/ or recipes/ is not present")
-        from common import (
-            list_registered_platforms,
-            load_emulator_profiles,
-            load_platform_config,
-            variant_base_name,
-        )
+        from common import variant_base_name
         from hashing import md5_composite_of
-        from romset_recipes import load_dat_recipes
 
-        allowed: dict[str, set[str]] = defaultdict(set)
-        for archive, per_label in load_dat_recipes(REPO_ROOT / "recipes").items():
-            for recipe in per_label.values():
-                allowed[archive.lower()] |= {crc for _name, crc in recipe}
-        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"), skip_aliases=False)
-        for profile in profiles.values():
-            for entry in profile.get("files", []) or []:
-                crcs = {
-                    str(member.get("crc32") or "").lower()
-                    for member in entry.get("contents") or []
-                }
-                crcs.discard("")
-                if not crcs:
-                    continue
-                for name in [entry.get("name", "")] + list(entry.get("aliases") or []):
-                    if name:
-                        allowed[str(name).lower()] |= crcs
-        for name, devices in DEVICE_ROMS.items():
-            for device in devices:
-                allowed[name] |= allowed.get(device, set())
-
-        pinned: set[str] = set()
-        zipped: dict[str, set[tuple[str, str]]] = defaultdict(set)
-        platforms_dir = str(REPO_ROOT / "platforms")
-        for platform in list_registered_platforms(platforms_dir):
-            config = load_platform_config(platform, platforms_dir)
-            for system in config.get("systems", {}).values():
-                for entry in system.get("files", []) or []:
-                    if entry.get("zipped_file"):
-                        for md5 in _hashes(entry.get("md5")):
-                            zipped[str(entry.get("name", "")).lower()].add(
-                                (str(entry["zipped_file"]).casefold(), md5)
-                            )
-                        continue
-                    for key in ("md5", "sha1", "alt_md5"):
-                        pinned |= _hashes(entry.get(key))
+        allowed = _allowed_members()
+        pinned, zipped = _platform_pins()
 
         offenders = []
         for path in sorted(bios.rglob("*")):
@@ -143,22 +173,8 @@ class HeldArchivesMatchTheirRecipes(unittest.TestCase):
                 continue
             if path.parent.name in NOT_ROMSETS:
                 continue
-            stem = name[:-4]
-            try:
-                with zipfile.ZipFile(path) as archive:
-                    extra = [
-                        info for info in archive.infolist()
-                        if not info.is_dir()
-                        and f"{info.CRC:08x}" not in allowed[name]
-                        # a merged set keeps each clone in a folder of its name
-                        and not ("/" in info.filename and info.filename.split("/")[0] != stem)
-                    ]
-                    extra = [
-                        info for info in extra
-                        if (info.filename.casefold(),
-                            hashlib.md5(archive.read(info)).hexdigest()) not in zipped[name]
-                    ]
-            except zipfile.BadZipFile:
+            extra = _extra_members(path, name, allowed[name], zipped[name])
+            if extra is None:
                 continue
             if len(extra) < MIN_EXTRA or str(path.relative_to(REPO_ROOT)) in KEPT:
                 continue

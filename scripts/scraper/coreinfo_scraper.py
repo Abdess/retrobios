@@ -13,30 +13,26 @@ Complements libretro_scraper (System.dat) with:
 
 from __future__ import annotations
 
+import importlib
 import json
+import os
 import re
 import sys
 import urllib.error
 import urllib.request
 
-try:
-    from .base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        fetch_github_latest_version,
-        github_headers,
-    )
-except ImportError:
+if not __package__:
     # Allow running directly: python scripts/scraper/coreinfo_scraper.py
-    import os
-
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-    from scraper.base_scraper import (
-        BaseScraper,
-        BiosRequirement,
-        fetch_github_latest_version,
-        github_headers,
-    )
+    importlib.import_module("scraper")
+    __package__ = "scraper"
+
+from .base_scraper import (
+    BaseScraper,
+    BiosRequirement,
+    fetch_github_latest_version,
+    github_headers,
+)
 
 PLATFORM_NAME = "libretro_coreinfo"
 

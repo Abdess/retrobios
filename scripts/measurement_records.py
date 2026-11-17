@@ -156,9 +156,8 @@ def check_line(record: dict) -> list[str]:
             problems.append(f"{rid}: id does not hash the first-layout record ({digest})")
     elif record_id(record) != rid:
         problems.append(f"{rid}: id does not hash the record ({record_id(record)})")
-    for key in ("emulator", "subject"):
-        if not SLUG_PATTERN.match(str(record.get(key, ""))):
-            problems.append(f"{rid}: {key} {record.get(key)!r} is not a lowercase slug")
+    problems.extend(f"{rid}: {key} {record.get(key)!r} is not a lowercase slug"
+                    for key in ("emulator", "subject") if not SLUG_PATTERN.match(str(record.get(key, ""))))
     return problems
 
 
@@ -227,7 +226,7 @@ def read_records(root: Path) -> list[Stored]:
             continue
         if emulator in CAMPAIGN_FILES:
             continue
-        seen: set[str] = set()
+        seen: set[str | None] = set()
         try:
             records = parse_lines(files[path].read_text(encoding="utf-8"), path)
         except RecordError as exc:

@@ -657,11 +657,13 @@ class BuiltSearchAndCrumbs(unittest.TestCase):
         for path in (DIST / "systems").rglob("index.html"):
             # The search fields are attributes on empty spans. The title
             # meta reads the visible h1.
-            for match in re.finditer(r'<(\w+)[^>]*data-pagefind-meta="(?:files|aliases|devices|consoles|terms):'
-                                     r'[^>]*>([^<]*)</\1>',
-                                     path.read_text(encoding="utf-8")):
-                if match[2].strip():
-                    texts.append(str(path.relative_to(DIST)))
+            texts.extend(
+                str(path.relative_to(DIST))
+                for match in re.finditer(r'<(\w+)[^>]*data-pagefind-meta="(?:files|aliases|devices|consoles|terms):'
+                r'[^>]*>([^<]*)</\1>',
+                path.read_text(encoding="utf-8"))
+                if match[2].strip()
+            )
         self.assertEqual(texts, [])
 
     def test_a_setups_console_page_names_its_setup(self) -> None:

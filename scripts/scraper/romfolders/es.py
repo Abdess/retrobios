@@ -160,8 +160,8 @@ def batocera_es(spec: dict, fetcher: Fetcher) -> list[dict]:
             continue
         if not system.get("emulators") and not system.get("force"):
             continue
-        path = system.get("path", name)
-        if not path or str(path).startswith("/"):
+        folder = system.get("path", name)
+        if not folder or str(folder).startswith("/"):
             continue
         base = defaults.get(name) or {}
         emulator, core = base.get("emulator"), base.get("core")
@@ -175,7 +175,7 @@ def batocera_es(spec: dict, fetcher: Fetcher) -> list[dict]:
         if name in def_lines:
             refs.append(_ref(key, def_path, def_lines[name]))
         rows.append({
-            "folder": str(path),
+            "folder": str(folder),
             "name": name,
             "extensions": _extensions(system.get("extensions")),
             "core": str(core) if core else None,
@@ -393,6 +393,40 @@ def _conf_values(text: str) -> tuple[dict[str, str], dict[str, int]]:
     return values, lines
 
 
+def _nesting(line: str, stack: list[list[str]]) -> bool:
+    """Follow case and if nesting. True when the line is consumed."""
+    match = re.match(r'case\s+"?\$\{?(\w+)\}?"?\s+in', line)
+    if match:
+        stack.append(["case", match.group(1), ""])
+        return True
+    if line == "esac":
+        stack.pop()
+        return True
+    if line.startswith("if ") or line.startswith("[") and "&&" not in line and line.endswith("then"):
+        stack.append(["if", line, ""])
+        return True
+    if line in ("fi",):
+        if stack and stack[-1][0] == "if":
+            stack.pop()
+        return True
+    return line in ("then", "else") or line.startswith("elif ")
+
+
+def _record_call(
+    words: list[str], number: int, stack: list[list[str]],
+    cores: list[dict], systems: dict[str, list[int]],
+) -> None:
+    branches = [(s[1], s[2]) for s in stack]
+    if words[:1] == ["add_emu_core"] and len(words) >= 4:
+        cores.append({
+            "system": words[1], "emulator": words[2], "core": words[3],
+            "default": len(words) > 4 and words[4] == "true",
+            "branches": branches, "line": number,
+        })
+    elif words[:1] == ["add_es_system"] and len(words) >= 2:
+        systems.setdefault(words[1], []).append(number)
+
+
 def _package_calls(text: str) -> tuple[list[dict], dict[str, list[int]]]:
     """add_emu_core and add_es_system calls of makeinstall_target, each
     with the `case` branches it sits under as (variable, pattern) pairs.
@@ -412,21 +446,7 @@ def _package_calls(text: str) -> tuple[list[dict], dict[str, list[int]]]:
             continue
         if raw.startswith("}"):
             break
-        match = re.match(r'case\s+"?\$\{?(\w+)\}?"?\s+in', line)
-        if match:
-            stack.append(["case", match.group(1), ""])
-            continue
-        if line == "esac":
-            stack.pop()
-            continue
-        if line.startswith("if ") or line.startswith("[") and "&&" not in line and line.endswith("then"):
-            stack.append(["if", line, ""])
-            continue
-        if line in ("fi",):
-            if stack and stack[-1][0] == "if":
-                stack.pop()
-            continue
-        if line in ("then", "else") or line.startswith("elif "):
+        if _nesting(line, stack):
             continue
         ends = line.endswith(";;")
         if ends:
@@ -436,16 +456,7 @@ def _package_calls(text: str) -> tuple[list[dict], dict[str, list[int]]]:
             if match and not line.startswith(("add_", "[", "sed", "cp", "mkdir")):
                 stack[-1][2] = match.group(1).strip()
                 line = match.group(2).strip()
-        words = line.split()
-        branches = [(s[1], s[2]) for s in stack]
-        if words[:1] == ["add_emu_core"] and len(words) >= 4:
-            cores.append({
-                "system": words[1], "emulator": words[2], "core": words[3],
-                "default": len(words) > 4 and words[4] == "true",
-                "branches": branches, "line": number,
-            })
-        elif words[:1] == ["add_es_system"] and len(words) >= 2:
-            systems.setdefault(words[1], []).append(number)
+        _record_call(line.split(), number, stack, cores, systems)
         if ends and stack and stack[-1][0] == "case":
             stack[-1][2] = ""
     return cores, systems
@@ -487,7 +498,8 @@ def elec_conf(spec: dict, fetcher: Fetcher) -> list[dict]:
         flagged = [c for c in mine if c["default"]]
         plain = [c for c in flagged if not c["branches"]]
         star = [c for c in flagged if c["branches"] and c["branches"][-1][1] == "*"]
-        pick = (plain or star or flagged or [None])[0]
+        candidates = plain or star or flagged
+        pick: dict | None = candidates[0] if candidates else None
         if pick is None:
             pick = next((c for c in mine if not c["branches"]), mine[0] if mine else None)
         board_defaults = {}
@@ -861,10 +873,11 @@ def recalbox(spec: dict, fetcher: Fetcher) -> list[dict]:
                 core, core_line = _recalbox_get(sections, lines, section, "core", board)
                 emulator, _ = _recalbox_get(sections, lines, section, "emulator", board)
                 exts, _ = _recalbox_get(sections, lines, section, "extensions", board)
-                if (exts or "").startswith(_FILES_PREFIX):
-                    names.update(_recalbox_names(exts[len(_FILES_PREFIX):]))
+                listed = exts or ""
+                if listed.startswith(_FILES_PREFIX):
+                    names.update(_recalbox_names(listed[len(_FILES_PREFIX):]))
                 else:
-                    extensions.update((exts or "").split())
+                    extensions.update(listed.split())
                 cores.append({
                     "core": core, "emulator": emulator, "priority": int(priority or "255"),
                     "source_ref": "; ".join([
@@ -968,8 +981,8 @@ def retropie(spec: dict, fetcher: Fetcher) -> list[dict]:
     cfg_path = params["platforms_cfg"]
     cfg = fetcher.text(key, cfg_path)
     exts: dict[str, tuple[str, int]] = {}
-    for number, line in enumerate(cfg.splitlines(), 1):
-        match = re.match(r'^([\w-]+)_exts="([^"]*)"', line)
+    for number, cfg_line in enumerate(cfg.splitlines(), 1):
+        match = re.match(r'^([\w-]+)_exts="([^"]*)"', cfg_line)
         if match:
             exts[match.group(1)] = (match.group(2), number)
     platform = set(params["platform_flags"])

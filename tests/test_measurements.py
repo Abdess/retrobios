@@ -84,7 +84,7 @@ def full_record(emulator: str, subject: str, when: str, kind: str = "check",
     }
     if kind == "check":
         groups: dict[str, list[str]] = {}
-        for variant, value in zip(variants, values):
+        for variant, _value in zip(variants, values):
             key = json.dumps(variant["repetitions"][0]["observables"][observable], sort_keys=True)
             groups.setdefault(key, []).append(variant["label"])
         record["check"] = {

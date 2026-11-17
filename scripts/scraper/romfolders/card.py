@@ -208,14 +208,20 @@ def parse_crossmix(spec: dict, fetcher: Fetcher) -> list[dict]:
 
 # Koriki
 
+class _CaseConfigParser(ConfigParser):
+    """Option names kept as written: Koriki's keys are case-sensitive."""
+
+    def optionxform(self, optionstr: str) -> str:
+        return optionstr
+
+
 @register("koriki")
 def parse_koriki(spec: dict, fetcher: Fetcher) -> list[dict]:
     params = spec["params"]
     key = params["source"]
     path = params["sections"]
     text = fetcher.text(key, path)
-    parser = ConfigParser(interpolation=None, strict=False)
-    parser.optionxform = str  # type: ignore[assignment]
+    parser = _CaseConfigParser(interpolation=None, strict=False)
     parser.read_string(text)
     skip = set(params.get("skip", []))
     rows = []
@@ -353,8 +359,8 @@ def parse_minui(spec: dict, fetcher: Fetcher) -> list[dict]:
         match = re.match(r"^skeleton/[^/]+/Roms/([^/]+)/", path)
         if match:
             name = match.group(1)
-            tag = re.search(r"\(([^()]*)\)\s*$", name)
-            shipped.setdefault(tag.group(1) if tag else name, name)
+            paren = re.search(r"\(([^()]*)\)\s*$", name)
+            shipped.setdefault(paren.group(1) if paren else name, name)
     paks: dict[str, dict[str, tuple[str, str]]] = {}
     for path in tree:
         match = _PAK.match(path)
@@ -492,12 +498,12 @@ def parse_gmenu2x(spec: dict, fetcher: Fetcher) -> list[dict]:
         }
     key = params["source"]
     for path in fetcher.tree(key, params["shipped_roms"] + "/"):
-        folder = path[len(params["shipped_roms"]) + 1:].split("/")
-        if len(folder) < 2 or folder[0] in rows:
+        parts = path[len(params["shipped_roms"]) + 1:].split("/")
+        if len(parts) < 2 or parts[0] in rows:
             continue
-        rows[folder[0]] = {
-            "folder": folder[0],
-            "source_ref": ref(key, f"{params['shipped_roms']}/{folder[0]}"),
+        rows[parts[0]] = {
+            "folder": parts[0],
+            "source_ref": ref(key, f"{params['shipped_roms']}/{parts[0]}"),
             "note": "folder the image ships. Its emulator link lives in a release package no repository holds",
         }
     return list(rows.values())

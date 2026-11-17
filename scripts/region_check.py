@@ -91,8 +91,7 @@ def plan_variants(entries: Iterable[dict], region: str,
                   local: Callable[[dict], Path | None]) -> dict[str, dict[str, Path]]:
     """The staged files of `full`, `own` and `others`, dest -> file. An entry
     the collection does not hold is left out of every variant."""
-    held = [(entry, local(entry)) for entry in entries]
-    held = [(entry, path) for entry, path in held if path]
+    held = [(entry, path) for entry in entries if (path := local(entry))]
     full = {entry_dest(e): p for e, p in held}
     own = {entry_dest(e): p for e, p in held if region in regions_of(e)}
     others = {entry_dest(e): p for e, p in held if region not in regions_of(e)}

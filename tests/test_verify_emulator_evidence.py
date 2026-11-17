@@ -63,7 +63,7 @@ def _pack_files(root: Path, emulators: Path, db: dict) -> set[str]:
     os.chdir(root)
     try:
         generate_pack.generate_emulator_pack(
-            ["demo"], str(emulators), db, "bios", "", False, {}, offline=True,
+            ["demo"], str(emulators), db, "bios", "", False, zip_contents={}, offline=True,
             record=record,
         )
     finally:

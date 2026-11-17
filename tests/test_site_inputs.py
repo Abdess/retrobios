@@ -144,9 +144,11 @@ class NoPageModuleReadsTheRepositoryInputs(unittest.TestCase):
                         "load_platform_config", "load_platform_registry", "load_emulator_profiles",
                         "list_registered_platforms", "load_database", "extract_notes",
                         "load_data_dir_registry"):
-                    for arg in node.args:
-                        if isinstance(arg, ast.Constant) and arg.value in self.INPUTS:
-                            found.append(f"{module}:{node.lineno}")
+                    found.extend(
+                        f"{module}:{node.lineno}"
+                        for arg in node.args
+                        if isinstance(arg, ast.Constant) and arg.value in self.INPUTS
+                    )
         self.assertEqual(found, [])
 
     def test_generate_installs_the_inputs_first(self) -> None:

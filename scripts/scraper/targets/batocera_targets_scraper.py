@@ -30,13 +30,9 @@ import yaml
 from safeparse import yaml_load_upstream
 
 from . import BaseTargetScraper
+from ..base_scraper import github_headers
 
 PLATFORM_NAME = "batocera"
-
-try:
-    from ..base_scraper import github_headers
-except ImportError:
-    from scraper.base_scraper import github_headers
 
 _TARGET_FLAG_RE = re.compile(r"^(BR2_PACKAGE_BATOCERA_TARGET_\w+)=y", re.MULTILINE)
 
@@ -306,7 +302,7 @@ def _parse_es_systems(text: str) -> dict[str, list[str]]:
 
     package_to_emulators: dict[str, list[str]] = {}
 
-    for _system_name, system_data in data.items():
+    for system_data in data.values():
         if not isinstance(system_data, dict):
             continue
         emulators = system_data.get("emulators")
