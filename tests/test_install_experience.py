@@ -342,10 +342,9 @@ class ProgressOutput(unittest.TestCase):
         install.OUTPUT.verbose = True
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf), self.assertRaises(SystemExit):
-            install._report_outcome(
-                [Path("/b")], 1, 0, 1, 0, False,
-                failures=[("x.bin", "HTTP 404")], transferred=2048, seconds=2.0,
-            )
+            install._report_outcome([Path("/b")], 1, 0, 1, 0, False,
+                                    details=install.OutcomeDetails(failures=[("x.bin", "HTTP 404")],
+                                                                   transferred=2048, seconds=2.0))
         out = buf.getvalue()
         self.assertIn("failed: x.bin (HTTP 404)", out)
         self.assertIn("2.0 KB downloaded in 0:02", out)
@@ -356,10 +355,8 @@ class ProgressOutput(unittest.TestCase):
         reason = f"{install.NOT_KEPT} (/sdcard/RetroArch/retrobios-backup belongs to another user)"
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf), self.assertRaises(SystemExit) as end:
-            install._report_outcome(
-                [Path("/b")], 3, 0, 2, 0, False,
-                failures=[("a.zip", reason), ("b.zip", reason)],
-            )
+            install._report_outcome([Path("/b")], 3, 0, 2, 0, False,
+                                    details=install.OutcomeDetails(failures=[("a.zip", reason), ("b.zip", reason)]))
         out = buf.getvalue()
         self.assertEqual(end.exception.code, 1)
         self.assertIn("The files in place were left as they were", out)
@@ -400,7 +397,8 @@ class ReviewCases(unittest.TestCase):
     def test_declining_is_not_done(self):
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
-            install._report_outcome([Path("/b")], 0, 3, 0, 0, False, declined=12)
+            install._report_outcome([Path("/b")], 0, 3, 0, 0, False,
+                                    details=install.OutcomeDetails(declined=12))
         out = buf.getvalue()
         self.assertNotIn("Done.", out)
         self.assertIn("12 files not downloaded", out)
@@ -1059,7 +1057,8 @@ class TheEndOfARunPaintsItsStatusWords(unittest.TestCase):
         term.colour = colour
         out = io.StringIO()
         with contextlib.redirect_stdout(out), contextlib.suppress(SystemExit):
-            install._report_outcome([Path("bios")], *counts, term=term, **given)
+            install._report_outcome([Path("bios")], *counts, term=term,
+                                    details=install.OutcomeDetails(**given))
         return out.getvalue()
 
     def test_the_same_words_with_and_without_colour(self):
@@ -1390,7 +1389,8 @@ class TheDryRunWords(unittest.TestCase):
         files = [{"dest": "a.bin", "size": 1, "systems": ["x"]}]
         with mock.patch.object(install, "_ask", return_value=""), \
                 contextlib.redirect_stdout(out):
-            install._prompt_custom_selection("retroarch", files, [], None, "RetroArch",
+            install._prompt_custom_selection(install.MenuContext("retroarch", files, [],
+                                                                 name="RetroArch"),
                                              dry_run=True)
         self.assertNotIn("install everything", out.getvalue())
         self.assertIn("nothing is written", out.getvalue())

@@ -263,10 +263,12 @@ def line_menu() -> str:
                 + ([("--no-game-data", None)] if cut[0] else []))
             return invocation.command("retroarch", folder)
 
+        context = _install.MenuContext(
+            "retroarch", files, manifest.get("omitted_files") or [], name="RetroArch",
+            data_trees=manifest.get("data_directories") or [], bios_path=folder,
+            manifest=manifest)
         _install._prompt_custom_selection(
-            "retroarch", files, manifest.get("omitted_files") or [], None, "RetroArch",
-            False, manifest.get("data_directories") or [], folder,
-            _install.records_selection(files), None, manifest, False, command, cut)
+            context, choosable=_install.records_selection(files), command=command, cut=cut)
     return "```\n" + out.getvalue().strip("\n") + "\n```"
 
 

@@ -714,7 +714,7 @@ class TheSummaryNamesTheBulk(unittest.TestCase):
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
             install._report_outcome([Path("/x")], 3, 0, 0, 0, False,
-                                    hints=["  arcade pulls most of it."])
+                                    details=install.OutcomeDetails(hints=["  arcade pulls most of it."]))
         text = out.getvalue()
         self.assertIn("  arcade pulls most of it.", text)
         self.assertLess(text.index("Done."), text.index("arcade pulls"))
@@ -904,8 +904,8 @@ class OfflineLeavesFilesMissing(Scratch):
         with contextlib.redirect_stdout(out), self.assertRaises(SystemExit) as stop:
             install._report_outcome([self.dest], counts.get("installed", 0), 0,
                                     counts.get("errors", 0), 0, False,
-                                    sources=counts.get("sources", ""),
-                                    offline=counts["offline"])
+                                    details=install.OutcomeDetails(sources=counts.get("sources", ""),
+                                                                   offline=counts["offline"]))
         return stop.exception.code, out.getvalue()
 
     def test_some_installed_is_not_done(self):
@@ -1020,8 +1020,8 @@ class OneOfflineVocabulary(Scratch):
         failures = [("a.bin", install.NOT_WRITABLE), ("b.bin", install.NOT_WRITABLE)]
         with contextlib.redirect_stdout(io.StringIO()) as out, \
                 self.assertRaises(SystemExit) as stop:
-            install._report_outcome([self.dest], 0, 0, 2, 0, False, failures=failures,
-                                    offline=20)
+            install._report_outcome([self.dest], 0, 0, 2, 0, False,
+                                    details=install.OutcomeDetails(failures=failures, offline=20))
         self.assertEqual(stop.exception.code, 2)
         self.assertIn("Nothing installed: 20 files not fetched (--offline), 2 failed.",
                       out.getvalue())
@@ -1074,7 +1074,8 @@ class OneOfflineVocabulary(Scratch):
         with unittest.mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}), \
                 unittest.mock.patch.object(install, "_ask", lambda _prompt: next(answers)), \
                 contextlib.redirect_stdout(io.StringIO()) as out:
-            self.assertIsNone(install._prompt_custom_selection("retroarch", [], []))
+            context = install.MenuContext("retroarch", [], [])
+            self.assertIsNone(install._prompt_custom_selection(context))
         text = out.getvalue()
         self.assertIn("Enter) check the BIOS folder, nothing can be downloaded", text)
         self.assertIn("f) copy from a folder or an old card", text)
@@ -1136,7 +1137,8 @@ class OfflineAndPackLeaveOut(Scratch):
                 unittest.mock.patch.object(install, "_ask", lambda _prompt: next(answers)), \
                 contextlib.redirect_stdout(io.StringIO()) as out, \
                 self.assertRaises(SystemExit):
-            install._prompt_custom_selection("retroarch", files, [], bios_path=self.dest)
+            install._prompt_custom_selection(install.MenuContext("retroarch", files, [],
+                                                                 bios_path=self.dest))
         text = out.getvalue()
         self.assertIn("empty holds none of these files.", text)
         self.assertNotIn("install what is found", text)
@@ -1149,7 +1151,8 @@ class OfflineAndPackLeaveOut(Scratch):
                 unittest.mock.patch.object(install, "_ask", lambda _prompt: next(answers)), \
                 contextlib.redirect_stdout(io.StringIO()) as out, \
                 self.assertRaises(SystemExit):
-            install._prompt_custom_selection("retroarch", files, [], bios_path=self.dest)
+            install._prompt_custom_selection(install.MenuContext("retroarch", files, [],
+                                                                 bios_path=self.dest))
         self.assertIn("1 of 4 found in empty.", out.getvalue())
         self.assertIn("Enter) install what is found in", out.getvalue())
 

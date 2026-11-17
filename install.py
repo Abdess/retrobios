@@ -50,7 +50,6 @@ import weakref
 import xml.etree.ElementTree as ET
 import zipfile
 from collections.abc import Callable, Collection, Iterable, Iterator, Mapping
-from dataclasses import dataclass, replace
 from pathlib import Path, PurePosixPath, PureWindowsPath
 from typing import IO, Any, BinaryIO, ContextManager, NamedTuple, NoReturn, TextIO
 
@@ -922,10 +921,20 @@ def _os_name() -> str:
     return release.get("PRETTY_NAME") or release.get("NAME") or platform.system()
 
 
+class CheckTally(NamedTuple):
+    """What a check found, as _emit_check says it."""
+
+    files: list[dict]
+    up_to_date: list[dict]
+    mismatched: list[dict]
+    data_missing: int = 0
+    not_installable: int = 0
+    data_bytes: int = 0
+
+
 def _emit_check(
-    plat: str, manifest: dict, bios_path: Path, files: list[dict], up_to_date: list[dict],
-    mismatched: list[dict], data_missing: int, not_installable: int,
-    *, chosen: list[str] | None = None, data_bytes: int = 0,
+    plat: str, manifest: dict, bios_path: Path, tally: CheckTally,
+    *, chosen: list[str] | None = None,
 ) -> None:
     """One event per file, per system and per platform after a check, then
     one for the files of the platform's own list.
@@ -934,6 +943,7 @@ def _emit_check(
     carries four systems, and --system nintendo-gba described gb, gbc and
     ds by the few files the choice kept of them.
     """
+    files, up_to_date, mismatched = tally.files, tally.up_to_date, tally.mismatched
     present = {id(entry) for entry in up_to_date}
     wrong = {id(entry) for entry in mismatched}
     systems: dict[str, dict[str, int]] = {}
@@ -964,7 +974,7 @@ def _emit_check(
         files=len(files), present=len(up_to_date), missing=len(needed) - len(mismatched),
         wrong_hash=len(mismatched),
         bytes_needed=sum(entry.get("size", 0) for entry in needed),
-        data_missing=data_missing, not_installable=not_installable,
+        data_missing=tally.data_missing, not_installable=tally.not_installable,
     )
     # The copy the platform itself checks at each of its slots, which is
     # what --declared-only checks: a core's copy served in its place is
@@ -988,7 +998,7 @@ def _emit_check(
         bytes_needed=sum(size for _d, size, state in own_states if state != "present"),
         dests=[dest for dest, _s, _state in own_states],
     )
-    EVENTS.emit("data", platform=plat, files=data_missing, bytes=data_bytes)
+    EVENTS.emit("data", platform=plat, files=tally.data_missing, bytes=tally.data_bytes)
 
 
 def _declared_state(copy: dict, entry: dict, bios_path: Path) -> str:
@@ -9566,6 +9576,25 @@ def _end_done(end: _Ending) -> None:
     say(next_step_words(end.platform_of, paths))
 
 
+class OutcomeDetails(NamedTuple):
+    """What a run's end says besides its counts (_report_outcome)."""
+
+    failures: list[tuple[str, str]] | None = None
+    transferred: int = 0
+    seconds: float = 0.0
+    declined: int = 0
+    assumed: set[Path] | None = None
+    omitted_entries: list[dict] | None = None
+    platform_of: dict[Path, str] | None = None
+    hints: list[str] | None = None
+    sources: str = ""
+    offline: int = 0
+    kinds: tuple[Tally, int] | None = None
+    same_choice: str = ""
+    notes: list[str] | None = None
+    missing: Tally | None = None
+
+
 def _report_outcome(
     paths: list[Path],
     downloaded: int,
@@ -9574,21 +9603,8 @@ def _report_outcome(
     omitted: int,
     interrupted: bool,
     *,
-    failures: list[tuple[str, str]] | None = None,
-    transferred: int = 0,
-    seconds: float = 0.0,
-    declined: int = 0,
-    assumed: set[Path] | None = None,
-    omitted_entries: list[dict] | None = None,
-    platform_of: dict[Path, str] | None = None,
-    hints: list[str] | None = None,
-    sources: str = "",
-    offline: int = 0,
-    kinds: tuple[Tally, int] | None = None,
-    same_choice: str = "",
+    details: OutcomeDetails | None = None,
     term: Terminal | None = None,
-    notes: list[str] | None = None,
-    missing: Tally | None = None,
 ) -> None:
     """Close the run on what happened, and leave with a status that says so.
     kinds is the count of the files installed (tally) and of the data
@@ -9605,6 +9621,9 @@ def _report_outcome(
     that failed do, 1 when some were installed and 2 when none were, the
     codes the full screen's run gives. term paints the status words.
     """
+    d = details or OutcomeDetails()
+    failures, transferred, seconds, declined = d.failures, d.transferred, d.seconds, d.declined
+    offline, same_choice, notes = d.offline, d.same_choice, d.notes
     say = _status_print(term)
     # The command making the same choice ends every result the screen ends
     # with it: "Finished with files missing" gave none.
@@ -9631,7 +9650,7 @@ def _report_outcome(
         for note in notes or []:
             say(note)
         return
-    kept, unplaced = _kept_and_unplaced(omitted_entries or [], notes)
+    kept, unplaced = _kept_and_unplaced(d.omitted_entries or [], notes)
     if interrupted:
         say(f"\nStopped. {_plural(downloaded, 'file')} installed.")
         for line in kept:
@@ -9643,20 +9662,20 @@ def _report_outcome(
     # rather than the BIOS folder: that folder is where the write went.
     elsewhere = sorted({Path(dest).parent for dest, _reason in failures or []
                         if Path(dest).is_absolute()})
-    advice = _failure_advice(paths, failures or [], assumed, platform_of)
+    advice = _failure_advice(paths, failures or [], d.assumed, d.platform_of)
     paths = paths + [folder for folder in elsewhere if folder not in paths]
 
     # The kinds installed, on every end that installed some, under where
     # they came from: as the screen's result says them.
-    installed_kinds = (f"  Installed: {installed_words(kinds[0].bios, kinds[0].games, kinds[1])}."
-                       if kinds and kinds[0].files and downloaded and OUTPUT.verbose else "")
+    installed_kinds = (f"  Installed: {installed_words(d.kinds[0].bios, d.kinds[0].games, d.kinds[1])}."
+                       if d.kinds and d.kinds[0].files and downloaded and OUTPUT.verbose else "")
     end = _Ending(
         say=say, paths=paths, downloaded=downloaded, up_to_date=up_to_date, errors=errors,
-        omitted=omitted, offline=offline, failures=failures, sources=sources, kept=kept,
+        omitted=omitted, offline=offline, failures=failures, sources=d.sources, kept=kept,
         advice=advice, same_lines=same_lines, installed_kinds=installed_kinds,
-        omitted_entries=omitted_entries or [], unplaced=unplaced,
-        platform_of=platform_of or {}, hints=hints or [], same_choice=same_choice,
-        missing=missing,
+        omitted_entries=d.omitted_entries or [], unplaced=unplaced,
+        platform_of=d.platform_of or {}, hints=d.hints or [], same_choice=same_choice,
+        missing=d.missing,
     )
     if offline:
         _end_offline(end)
@@ -10753,7 +10772,8 @@ def _install_standalone_folders(
         return True
     _report_outcome(
         [folder for folder, _entries in plan], downloaded, up_to_date_count, errors,
-        0, interrupted, failures=failures, transferred=transferred, seconds=seconds,
+        0, interrupted,
+        details=OutcomeDetails(failures=failures, transferred=transferred, seconds=seconds),
         term=term,
     )
     return True
@@ -12025,7 +12045,7 @@ class _SelectionMenu(NamedTuple):
     manifest: dict | None
     bios_path: Path | None
     dry_run: bool
-    given: tuple[list[str], list[str], list[str]] | None
+    given: tuple[list[str], list[str], list[str]] | GamesChoice | None
     played: GamesPlan | None
     cut: list[bool] | None
 
@@ -12106,13 +12126,23 @@ def _menu_answered(
     return current
 
 
+class MenuContext(NamedTuple):
+    """The list the line menu narrows, and the folder and setup it is for."""
+
+    plat: str
+    files: list[dict]
+    omitted: list[dict]
+    installed: tuple[list[dict], list[dict]] | None = None
+    name: str = ""
+    data_trees: list[dict] | None = None
+    bios_path: Path | None = None
+    manifest: dict | None = None
+    narrowed: bool = False
+
+
 def _prompt_custom_selection(
-    plat: str, files: list[dict], omitted: list[dict],
-    installed: tuple[list[dict], list[dict]] | None = None,
-    name: str = "", dry_run: bool = False, data_trees: list[dict] | None = None,
-    bios_path: Path | None = None, choosable: bool = True,
-    given: tuple[list[str], list[str], list[str]] | None = None,
-    manifest: dict | None = None, narrowed: bool = False,
+    context: MenuContext, *, dry_run: bool = False, choosable: bool = True,
+    given: tuple[list[str], list[str], list[str]] | GamesChoice | None = None,
     command: Callable[[object], str] | None = None, cut: list[bool] | None = None,
     note: str = "", played: GamesPlan | None = None,
 ) -> tuple[list[str], list[str], list[str]] | str | GamesChoice | None:
@@ -12142,7 +12172,11 @@ def _prompt_custom_selection(
     when it holds some, is the first choice (h), the whole list one key
     away (e), and r keeps only what the games cannot start without.
     """
-    trees = data_trees or []
+    plat, files, omitted, installed = (context.plat, context.files, context.omitted,
+                                       context.installed)
+    name, bios_path, manifest, narrowed = (context.name, context.bios_path, context.manifest,
+                                           context.narrowed)
+    trees = context.data_trees or []
     menu = _SelectionMenu(plat, files, omitted, installed, manifest, bios_path, dry_run,
                           given, played, cut)
     current: tuple[list[str], list[str], list[str]] | str | GamesChoice | None = given
@@ -12177,11 +12211,11 @@ def _prompt_custom_selection(
         emptied = (emptied_words([system_title(name_, manifest) for name_ in current[0]],
                                  cutting)
                    if isinstance(current, tuple) and not kept else "")
-        _print_menu_head(plat, shown, shown_omitted, installed, name, trees, bios_path,
-                         current, object() if toggled else given, manifest, narrowed,
-                         menu.choice(current, cutting),
-                         games.games if cutting else 0, emptied,
-                         note if current is given else "")
+        _print_menu_head(context._replace(files=shown, omitted=shown_omitted, data_trees=trees),
+                         current, object() if toggled else given,
+                         chosen=menu.choice(current, cutting),
+                         cut_games=games.games if cutting else 0, emptied=emptied,
+                         note=note if current is given else "")
         if (current is not given or toggled) and command is not None and not emptied:
             print(f"  Same choice without questions: {screen_text(command(current))}")
         offline = _offline_only()
@@ -12220,16 +12254,18 @@ def _prompt_custom_selection(
 
 
 def _print_menu_head(
-    plat: str, files: list[dict], omitted: list[dict],
-    installed: tuple[list[dict], list[dict]] | None, name: str, trees: list[dict],
-    bios_path: Path | None, current: object, given: object, manifest: dict | None,
-    narrowed: bool, chosen: tuple[list[dict], list[dict]] | None = None,
+    context: MenuContext, current: object, given: object, *,
+    chosen: tuple[list[dict], list[dict]] | None = None,
     cut_games: int = 0, emptied: str = "", note: str = "",
 ) -> None:
     """The plan above the line menu: what the choice holds, its folder, what
     stands in its way and where the save files go, as the screen's plan.
     chosen is what the choice keeps (menu_choice), the list every count of
     the head is taken from. cut_games is the game data g left out of it."""
+    plat, files, omitted, installed = (context.plat, context.files, context.omitted,
+                                       context.installed)
+    name, bios_path, manifest = context.name, context.bios_path, context.manifest
+    trees, narrowed = context.data_trees or [], context.narrowed
     shown, kept_omitted = chosen or menu_choice(files, omitted, installed, current, False)
     # The trees of the systems kept: 2636 data files of blueMSX, Dolphin
     # and PPSSPP were counted for every --system tried.
@@ -14586,15 +14622,16 @@ MAX_MARKER_BYTES = 64 * 1024
 MAX_PARTS = 999
 
 
-@dataclass(frozen=True)
 class PackPart:
     """What one part's marker says, and the folder it was found in."""
 
-    pack: str
-    index: int
-    count: int
-    parts: tuple[tuple[str, int], ...]
-    folder: Path
+    def __init__(self, pack: str, index: int, count: int,
+                 parts: tuple[tuple[str, int], ...], folder: Path) -> None:
+        self.pack = pack
+        self.index = index
+        self.count = count
+        self.parts = parts
+        self.folder = folder
 
 
 def read_part_marker(path: Path) -> PackPart | None:
@@ -16061,17 +16098,18 @@ def shown_lines(lines: list[str]) -> list[str]:
             for line in lines]
 
 
-@dataclass(frozen=True)
 class LocalCopy:
     """A file found on this machine with the contents an entry wants."""
 
-    index: FolderIndex
-    path: Path
-    # The member holding the bytes when path is a ZIP, else "".
-    member: str = ""
-    # In the BIOS folder at a place no entry of the list names: a mistake
-    # the copy fixes. A copy from another entry's place is no mistake.
-    misplaced: bool = False
+    def __init__(self, index: FolderIndex, path: Path, member: str = "",
+                 misplaced: bool = False) -> None:
+        self.index = index
+        self.path = path
+        # The member holding the bytes when path is a ZIP, else "".
+        self.member = member
+        # In the BIOS folder at a place no entry of the list names: a mistake
+        # the copy fixes. A copy from another entry's place is no mistake.
+        self.misplaced = misplaced
 
     def where(self) -> str:
         """The copy as the folder it was found in names it."""
@@ -16939,7 +16977,8 @@ def plan_local_copies(
         if bios_index is not None:
             copy = bios_index.find(entry, written) or _above(entry, bios_index)
             if copy is not None:
-                copy = replace(copy, misplaced=_misplaced(entry, copy, bios_index))
+                copy = LocalCopy(copy.index, copy.path, copy.member,
+                                 _misplaced(entry, copy, bios_index))
         for index in folders:
             if copy is not None:
                 break
@@ -17053,15 +17092,15 @@ def emit_copies(
                     path=str(copy.path), member=copy.member, reason=reason)
 
 
-@dataclass(frozen=True)
 class Unreadable:
     """A file, ZIP member or folder below a --from folder that could not be
     read, and may be a file the run still needs."""
 
-    index: FolderIndex
-    path: Path
-    member: str
-    why: str
+    def __init__(self, index: FolderIndex, path: Path, member: str, why: str) -> None:
+        self.index = index
+        self.path = path
+        self.member = member
+        self.why = why
 
     def line(self) -> str:
         where = f"{self.member} inside {self.path}" if self.member else str(self.path)
@@ -20662,20 +20701,21 @@ def _pass_menu(run: _InstallRun, p: _PlatformPass, bare: list[dict], bare_omitte
     # The record's options, which the menu's commands overwrite.
     record_options_kept = _INVOCATION.chosen.get(plat_name)
     answer = _prompt_custom_selection(
-        plat_name, bare, bare_omitted + p.unplaced, installed,
-        detected_shown(plat_name, bios_path) or p.display,
-        args.dry_run, manifest.get("data_directories") or [], bios_path,
-        records_selection(files), given, manifest,
-        bool(p.target or args.installed_cores or args.declared_only
-             or len(files) + p.game_data_cut + len(p.unplaced) != listed),
-        command_for, cut,
-        " ".join(filter(None, [
+        MenuContext(
+            plat_name, bare, bare_omitted + p.unplaced, installed,
+            detected_shown(plat_name, bios_path) or p.display,
+            manifest.get("data_directories") or [], bios_path, manifest,
+            bool(p.target or args.installed_cores or args.declared_only
+                 or len(files) + p.game_data_cut + len(p.unplaced) != listed)),
+        dry_run=args.dry_run, choosable=records_selection(files), given=given,
+        command=command_for, cut=cut,
+        note=" ".join(filter(None, [
             record_menu_words(_RECORD_TAKEN.get(plat_name)),
             game_data_only_words([system_title(system, manifest) for system in
                                   game_data_only(given[0] if isinstance(given, tuple)
                                                  else [], files)])
             if args.no_game_data else ""])),
-        None if p.games_applied else p.games_plan,
+        played=None if p.games_applied else p.games_plan,
     )
     # Its head named the BIOS folder: the result does not again.
     OUTPUT.where_said = True
@@ -20938,11 +20978,12 @@ def _pass_check_existing(run: _InstallRun, p: _PlatformPass) -> None:
 
     if EVENTS.on:
         _emit_check(
-            p.plat_name, p.manifest, bios_path, files, up_to_date, mismatched,
-            sum(len(state[1]) for _entry, state in data_states), len(p.omitted_files),
+            p.plat_name, p.manifest, bios_path,
+            CheckTally(files, up_to_date, mismatched,
+                       sum(len(state[1]) for _entry, state in data_states),
+                       len(p.omitted_files),
+                       sum(data_fetch_bytes(entry, state[1]) for entry, state in data_states)),
             chosen=selection[0] if selection else None,
-            data_bytes=sum(data_fetch_bytes(entry, state[1])
-                           for entry, state in data_states),
         )
         emit_copies(p.plat_name, to_download, copies, bios_index, bios_path, files)
         emit_unreadable(p.plat_name, unread)
@@ -21509,24 +21550,26 @@ def _finish_install(run: _InstallRun, real_stdout: TextIO) -> None:
             run.total_errors,
             run.total_omitted,
             run.total_interrupted,
-            failures=run.failures,
-            transferred=run.total_bytes,
-            seconds=run.total_seconds,
-            declined=run.total_declined,
-            assumed=run.assumed_dests,
-            omitted_entries=run.omitted_seen,
-            platform_of={path: plat for plat, path in platforms},
-            hints=run.bulk_lines,
-            kinds=((tally(run.landed), run.data_landed) if run.categorized else None),
-            same_choice=(_INVOCATION.command(*platforms[0])
-                         if run.interactive and len(platforms) == 1 else ""),
-            sources=_run_sources(run.bios_indexes, run.total_downloaded,
-                                 run.total_offline - run.total_wrong_left, run.total_wrong_left,
-                                 run.total_errors),
-            offline=run.total_offline,
+            details=OutcomeDetails(
+                failures=run.failures,
+                transferred=run.total_bytes,
+                seconds=run.total_seconds,
+                declined=run.total_declined,
+                assumed=run.assumed_dests,
+                omitted_entries=run.omitted_seen,
+                platform_of={path: plat for plat, path in platforms},
+                hints=run.bulk_lines,
+                kinds=((tally(run.landed), run.data_landed) if run.categorized else None),
+                same_choice=(_INVOCATION.command(*platforms[0])
+                             if run.interactive and len(platforms) == 1 else ""),
+                sources=_run_sources(run.bios_indexes, run.total_downloaded,
+                                     run.total_offline - run.total_wrong_left,
+                                     run.total_wrong_left, run.total_errors),
+                offline=run.total_offline,
+                notes=run.version_notes,
+                missing=tally(run.offline_left) if run.categorized else None,
+            ),
             term=run.term,
-            notes=run.version_notes,
-            missing=tally(run.offline_left) if run.categorized else None,
         )
         finish_app(args, platforms, run.app_cards, run.interactive and not run.total_declined)
 

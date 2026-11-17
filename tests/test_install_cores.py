@@ -472,7 +472,8 @@ class APlatformFileSettledByCoresAndSystems(unittest.TestCase):
         def declared_event(files: list[dict]) -> dict:
             _todo, fine, wrong = install.check_local(files, tmp)
             with mock.patch.object(install.EVENTS, "emit") as emit:
-                install._emit_check("retroarch", manifest, tmp, files, fine, wrong, 0, 0)
+                install._emit_check("retroarch", manifest, tmp,
+                                    install.CheckTally(files, fine, wrong))
             return next(call.kwargs for call in emit.call_args_list
                         if call.args[0] == "declared")
 

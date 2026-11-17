@@ -427,7 +427,7 @@ class ACoreWithNoFileOfItsOwn(unittest.TestCase):
         out = io.StringIO()
         with mock.patch("builtins.input", lambda _prompt="": next(answers)), \
                 contextlib.redirect_stdout(out):
-            install._prompt_custom_selection("retroarch", self.FILES, [])
+            install._prompt_custom_selection(install.MenuContext("retroarch", self.FILES, []))
         line = self._line(out.getvalue(), "pcsx_rearmed")
         self.assertNotIn("0 files", line)
         self.assertIn("always kept", line)
@@ -464,7 +464,7 @@ class FilesSharedBySystemsAreCountedApart(unittest.TestCase):
         out = io.StringIO()
         with mock.patch("builtins.input", lambda _prompt="": next(answers)), \
                 contextlib.redirect_stdout(out):
-            install._prompt_custom_selection("retroarch", self.FILES, [])
+            install._prompt_custom_selection(install.MenuContext("retroarch", self.FILES, []))
         self.assertIn("1 file, 4 B, and 2 files, 150 B shared with other systems",
                       out.getvalue())
 
@@ -731,7 +731,7 @@ class TheOneLinerNarrows(unittest.TestCase):
         menus = (
             lambda: install._choose_platform("Platform:"),
             lambda: install._pick("Systems:", [("nintendo-gba", files)]),
-            lambda: install._prompt_custom_selection("retroarch", files, []),
+            lambda: install._prompt_custom_selection(install.MenuContext("retroarch", files, [])),
         )
         for menu in menus:
             with self.subTest(menu=menu), \
