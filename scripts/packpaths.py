@@ -161,9 +161,7 @@ def _has_path_conflict(dest: str, seen_files: set[str], seen_parents: set[str]) 
     for parent in _path_parents(dest):
         if parent in seen_files:
             return True
-    if dest in seen_parents:
-        return True
-    return False
+    return dest in seen_parents
 
 def placement_block(
     dest: str,

@@ -217,6 +217,8 @@ def main() -> int:
     parser.add_argument("--rebuild", metavar="ZIP", help="normalize an archive")
     parser.add_argument("--output", "-o", help="output path for --rebuild")
     args = parser.parse_args()
+    if not (args.check or args.rebuild):
+        parser.error("nothing to do: pass --check or --rebuild")
 
     if args.check:
         data = Path(args.check).read_bytes()
@@ -228,14 +230,11 @@ def main() -> int:
         print(f"  conform:   {data == rebuilt}")
         return 0 if data == rebuilt else 1
 
-    if args.rebuild:
-        data = rebuild_torrentzip(args.rebuild)
-        dest = args.output or args.rebuild
-        Path(dest).write_bytes(data)
-        print(f"{dest}: {len(data)} bytes, md5 {hashlib.md5(data).hexdigest()}")
-        return 0
-
-    parser.error("nothing to do: pass --check or --rebuild")
+    data = rebuild_torrentzip(args.rebuild)
+    dest = args.output or args.rebuild
+    Path(dest).write_bytes(data)
+    print(f"{dest}: {len(data)} bytes, md5 {hashlib.md5(data).hexdigest()}")
+    return 0
 
 
 if __name__ == "__main__":
