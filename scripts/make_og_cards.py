@@ -23,11 +23,12 @@ import argparse
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
-from common import list_registered_platforms, load_platform_config  # noqa: E402
-from sitediagrams import OG_SECTIONS, og_card_svg, wrap  # noqa: E402
+from common import list_registered_platforms, load_platform_config
+from sitediagrams import OG_SECTIONS, og_card_svg, wrap
+
+ROOT = Path(__file__).resolve().parent.parent
 
 OUT = ROOT / "docs_assets" / "og"
 LOGO = ROOT / "docs_assets" / "brand" / "logo.svg"

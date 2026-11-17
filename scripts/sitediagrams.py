@@ -39,11 +39,12 @@ from functools import cache
 from pathlib import Path
 from xml.sax.saxutils import escape
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-import siteinputs  # noqa: E402
-import sitemarkup as markup  # noqa: E402
+import siteinputs
+import sitemarkup as markup
+
+ROOT = Path(__file__).resolve().parent.parent
 
 PLACEHOLDER = re.compile(r"(?m)^([ \t]*)<!--\s*image:\s*([A-Za-z0-9_-]+)\s*-->[ \t]*$")
 PLACEHOLDER_ANYWHERE = re.compile(r"<!--\s*image:\s*([A-Za-z0-9_-]+)\s*-->")
@@ -626,9 +627,15 @@ def _pipeline_boxes() -> list[Box]:
     """The steps pipeline.py runs, read from its STEP_LABELS literal."""
     tree = ast.parse((ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8"))
     for node in ast.walk(tree):
-        target = getattr(node, "target", None) or (getattr(node, "targets", [None]) or [None])[0]
-        if isinstance(target, ast.Name) and target.id == "STEP_LABELS":
-            labels = ast.literal_eval(node.value)
+        if isinstance(node, ast.Assign):
+            target: ast.expr = node.targets[0]
+            value: ast.expr | None = node.value
+        elif isinstance(node, ast.AnnAssign):
+            target, value = node.target, node.value
+        else:
+            continue
+        if isinstance(target, ast.Name) and target.id == "STEP_LABELS" and value is not None:
+            labels = ast.literal_eval(value)
             break
     else:
         raise RuntimeError("STEP_LABELS not found in scripts/pipeline.py")
@@ -945,7 +952,8 @@ def installer_options() -> tuple[tuple[str, str], ...]:
         if not (isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
                 and node.func.attr == "add_argument"):
             continue
-        flags = [arg.value for arg in node.args if isinstance(arg, ast.Constant)]
+        flags = [arg.value for arg in node.args
+                 if isinstance(arg, ast.Constant) and isinstance(arg.value, str)]
         keywords = {kw.arg: kw.value for kw in node.keywords}
         action = keywords.get("action")
         takes_value = not (isinstance(action, ast.Constant)
@@ -953,7 +961,8 @@ def installer_options() -> tuple[tuple[str, str], ...]:
         metavar = ""
         if takes_value:
             given = keywords.get("metavar")
-            metavar = given.value if isinstance(given, ast.Constant) else flags[0].lstrip("-").upper()
+            metavar = (given.value if isinstance(given, ast.Constant) and isinstance(given.value, str)
+                       else flags[0].lstrip("-").upper())
         usage = ", ".join(f"{flag} {metavar}".strip() for flag in flags)
         options.append((usage, _string(keywords["help"], constants) if "help" in keywords else ""))
     # argparse's own, added to every parser.

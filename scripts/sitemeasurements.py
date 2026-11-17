@@ -143,7 +143,10 @@ def load_observations(path: Path) -> dict[str, dict]:
         return {}
     out = {}
     for issue, entries in (yaml.safe_load(path.read_text(encoding="utf-8")) or {}).items():
-        number = ISSUE_SUBJECT.match(f"{issue}-")["number"]
+        named = ISSUE_SUBJECT.match(f"{issue}-")
+        if named is None:
+            raise ValueError(f"{path}: {issue!r} is not an issue<number> key")
+        number = named["number"]
         for entry in entries:
             for key in [*entry.get("records", ()), *entry.get("subjects", ())]:
                 out[key] = {"issue": number, "said": entry["said"]}
@@ -221,7 +224,7 @@ def build_index(stored: list[mr.Stored], source: dict | None, profiles: dict,
         entries = by_subject[key]
         latest = max(entries, key=lambda s: (s.record["recorded_at"], s.line))
         profile = profiles.get(key[0]) or {}
-        records = [{"url": permalink((source or {}).get("repo"), (source or {}).get("commit"),
+        records = [{"url": permalink((source or {})["repo"], (source or {})["commit"],
                                      mr.records_path(s.emulator), s.line),
                     "proves": proves(ancestors.get(s.record["id"]) or {s.record["id"]}, profile),
                     "shown": shown_of(s.record),

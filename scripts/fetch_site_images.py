@@ -91,7 +91,7 @@ def square_image(data: bytes, size: int, kind: str = "PNG", flip: bool = False,
 
 def is_svg(data: bytes) -> bool:
     head = data[:512].lstrip().lower()
-    return head.startswith(b"<?xml") or head.startswith(b"<svg")
+    return head.startswith((b"<?xml", b"<svg"))
 
 
 def safe_svg(data: bytes, url: str) -> bytes:
