@@ -16,6 +16,7 @@ import os
 import shutil
 import sys
 import tempfile
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -129,10 +130,52 @@ def _takes_primary(current: str, candidate: str) -> bool:
     return _emulator_tree(current) and not _emulator_tree(candidate)
 
 
+def _add_scanned(
+    files: dict[str, dict],
+    aliases: dict[str, list[dict]],
+    filepath: Path,
+    rel_path: str,
+    size: int,
+    hashes: dict,
+) -> None:
+    """Record a scanned file as its content's primary, or as an alias of it."""
+    sha1 = hashes["sha1"]
+    entry = {
+        "path": rel_path,
+        "name": _canonical_name(filepath),
+        "size": size,
+        **hashes,
+    }
+    if sha1 not in files:
+        files[sha1] = entry
+    elif _takes_primary(files[sha1]["path"], rel_path):
+        aliases.setdefault(sha1, []).append(
+            {"name": files[sha1]["name"], "path": files[sha1]["path"]}
+        )
+        files[sha1] = entry
+    else:
+        aliases.setdefault(sha1, []).append({"name": entry["name"], "path": rel_path})
+
+
+def _cached_hashes(cached: dict | None, mtime: float, size: int) -> dict | None:
+    """The cache's digests of a file that has not changed since."""
+    if cached is None:
+        return None
+    fresh = cached.get("mtime") == mtime and cached.get("size") == size
+    # Rebuilding the hash dict by hand dropped whichever digest the
+    # list forgot, and the entry was then written back to the cache
+    # without it, so the loss survived every later run. Requiring the
+    # full set instead turns a partial cache entry into a miss, which
+    # heals it.
+    if fresh and all(name in cached for name in CACHED_HASHES):
+        return {name: cached[name] for name in CACHED_HASHES}
+    return None
+
+
 def scan_bios_dir(bios_dir: Path, cache: dict, force: bool) -> tuple[dict, dict, dict]:
     """Scan bios directory and compute hashes, using cache when possible."""
-    files = {}
-    aliases = {}
+    files: dict[str, dict] = {}
+    aliases: dict[str, list[dict]] = {}
     new_cache = {}
 
     for filepath in sorted(bios_dir.rglob("*")):
@@ -147,76 +190,10 @@ def scan_bios_dir(bios_dir: Path, cache: dict, force: bool) -> tuple[dict, dict,
         size = stat.st_size
         cache_key = rel_path
 
-        if not force and cache_key in cache:
-            cached = cache[cache_key]
-            fresh = cached.get("mtime") == mtime and cached.get("size") == size
-            # Rebuilding the hash dict by hand dropped whichever digest the
-            # list forgot, and the entry was then written back to the cache
-            # without it, so the loss survived every later run. Requiring the
-            # full set instead turns a partial cache entry into a miss, which
-            # heals it.
-            if fresh and all(name in cached for name in CACHED_HASHES):
-                hashes = {name: cached[name] for name in CACHED_HASHES}
-                sha1 = hashes["sha1"]
-                if sha1 in files:
-                    if _takes_primary(files[sha1]["path"], rel_path):
-                        if sha1 not in aliases:
-                            aliases[sha1] = []
-                        aliases[sha1].append(
-                            {"name": files[sha1]["name"], "path": files[sha1]["path"]}
-                        )
-                        files[sha1] = {
-                            "path": rel_path,
-                            "name": _canonical_name(filepath),
-                            "size": size,
-                            **hashes,
-                        }
-                    else:
-                        if sha1 not in aliases:
-                            aliases[sha1] = []
-                        aliases[sha1].append(
-                            {"name": _canonical_name(filepath), "path": rel_path}
-                        )
-                else:
-                    entry = {
-                        "path": rel_path,
-                        "name": _canonical_name(filepath),
-                        "size": size,
-                        **hashes,
-                    }
-                    files[sha1] = entry
-                new_cache[cache_key] = {**hashes, "mtime": mtime, "size": size}
-                continue
-
-        hashes = _settled_hashes(filepath, cache.get(cache_key), mtime, size)
-        sha1 = hashes["sha1"]
-        if sha1 in files:
-            if _takes_primary(files[sha1]["path"], rel_path):
-                if sha1 not in aliases:
-                    aliases[sha1] = []
-                aliases[sha1].append(
-                    {"name": files[sha1]["name"], "path": files[sha1]["path"]}
-                )
-                files[sha1] = {
-                    "path": rel_path,
-                    "name": _canonical_name(filepath),
-                    "size": size,
-                    **hashes,
-                }
-            else:
-                if sha1 not in aliases:
-                    aliases[sha1] = []
-                aliases[sha1].append(
-                    {"name": _canonical_name(filepath), "path": rel_path}
-                )
-        else:
-            entry = {
-                "path": rel_path,
-                "name": _canonical_name(filepath),
-                "size": size,
-                **hashes,
-            }
-            files[sha1] = entry
+        hashes = None if force else _cached_hashes(cache.get(cache_key), mtime, size)
+        if hashes is None:
+            hashes = _settled_hashes(filepath, cache.get(cache_key), mtime, size)
+        _add_scanned(files, aliases, filepath, rel_path, size, hashes)
         new_cache[cache_key] = {**hashes, "mtime": mtime, "size": size}
 
     return files, aliases, new_cache
@@ -244,11 +221,11 @@ def _path_suffixes(rel_path: str) -> list[str]:
 
 def build_indexes(files: dict, aliases: dict) -> dict:
     """Build secondary indexes for fast lookup."""
-    by_md5 = {}
-    by_name = {}
-    by_crc32 = {}
-    by_sha256 = {}
-    by_path_suffix = {}
+    by_md5: dict[str, str] = {}
+    by_name: dict[str, list[str]] = {}
+    by_crc32: dict[str, str] = {}
+    by_sha256: dict[str, str] = {}
+    by_path_suffix: dict[str, list[str]] = {}
 
     for sha1, entry in files.items():
         by_md5[entry["md5"]] = sha1
@@ -624,25 +601,38 @@ class UnreadableSource(Exception):
         self.sources = sources
 
 
-def _collect_all_aliases(
-    files: dict,
-    copies: dict | None = None,
-    shadowed: list[tuple[str, set[str], list[str]]] | None = None,
-) -> dict:
-    """Collect alternate filenames from platform YAMLs, core-info, and known aliases.
+@dataclass
+class _AliasBook:
+    """The alternate names collected so far, and what designates a content."""
 
-    Registers alternate names so generate_pack can resolve files stored under different names.
-    ``copies`` maps a sha1 to the other files the scan found with that content.
-    ``shadowed`` receives, per profile entry, its name, the contents its hashes
-    designate and the aliases a primary's name already carries.
-    """
+    files: dict
+    md5_to_sha1: dict[str, str]
+    name_to_sha1: dict[str, str]
+    # The contents held under each name, every copy counted.
+    holders: dict[str, set[str]]
+    # The files a name designates once case is folded.
+    families: dict[str, set[str]]
+    # A name only .variants/ copies carry is not a primary's.
+    named_primaries: set[str]
+    aliases: dict[str, list[dict]] = field(default_factory=dict)
+
+    def add(self, name: str, matched_sha1: str) -> None:
+        if not name or name in self.named_primaries:
+            return
+        if matched_sha1 not in self.aliases:
+            self.aliases[matched_sha1] = []
+        existing = {a["name"] for a in self.aliases[matched_sha1]}
+        if name not in existing:
+            self.aliases[matched_sha1].append({"name": name, "path": ""})
+
+
+def _alias_book(files: dict, copies: dict | None) -> _AliasBook:
+    """Index the scanned files by md5, name and folded name."""
     md5_to_sha1 = {}
     name_to_sha1 = {}
-    name_count: dict[str, int] = {}
     for sha1, entry in files.items():
         md5_to_sha1[entry["md5"]] = sha1
         name_to_sha1[entry["name"]] = sha1
-        name_count[entry["name"]] = name_count.get(entry["name"], 0) + 1
     # The contents held under each name, every copy counted and not only the
     # primary: which copy of identical bytes is primary follows path order.
     # Keyed on primaries alone, project64's 64DD_IPL_v12_JPN.bin stopped
@@ -670,8 +660,6 @@ def _collect_all_aliases(
             for copy in copy_list:
                 _hold(copy["name"], copy["path"], sha1)
 
-    aliases = {}
-
     # A name only .variants/ copies carry is not a primary's: those copies are
     # the other revisions of whatever the name designates. Retroarch pins
     # bios_E.sms to v1.3, and with the name refused, Genesis Plus GX got the
@@ -679,177 +667,210 @@ def _collect_all_aliases(
     named_primaries = {
         entry["name"] for entry in files.values() if "/.variants/" not in entry["path"]
     }
+    return _AliasBook(files, md5_to_sha1, name_to_sha1, holders, families, named_primaries)
 
-    def _add_alias(name: str, matched_sha1: str) -> None:
-        if not name or name in named_primaries:
-            return
-        if matched_sha1 not in aliases:
-            aliases[matched_sha1] = []
-        existing = {a["name"] for a in aliases[matched_sha1]}
-        if name not in existing:
-            aliases[matched_sha1].append({"name": name, "path": ""})
+
+def _platform_aliases(book: _AliasBook, unreadable: list[str]) -> None:
+    """Register the names platform YAMLs give a held content."""
+    platforms_dir = Path("platforms")
+    if not platforms_dir.is_dir():
+        return
+    for platform_name in list_registered_platforms(
+        str(platforms_dir)
+    ):
+        config_file = platforms_dir / f"{platform_name}.yml"
+        try:
+            with open(config_file) as f:
+                config = yaml_load(f) or {}
+        except (yaml.YAMLError, OSError) as e:
+            unreadable.append(f"{config_file}: {e}")
+            continue
+
+        for system in config.get("systems", {}).values():
+            for file_entry in system.get("files", []):
+                name = file_entry.get("name", "")
+                sha1 = file_entry.get("sha1", "")
+                md5 = file_entry.get("md5", "")
+
+                # A zipped_file entry verifies a ROM INSIDE the
+                # archive, so its hash describes the member and not
+                # the file the name designates. Registering the name
+                # against that hash made d2fdc.zip an alias of a
+                # loose 256-byte state-machine-16.rom, which three
+                # platforms were then served in place of the archive.
+                if file_entry.get("zipped_file"):
+                    continue
+
+                matched = None
+                if sha1 and sha1 in book.files:
+                    matched = sha1
+                elif md5 and md5 in book.md5_to_sha1:
+                    matched = book.md5_to_sha1[md5]
+
+                if matched:
+                    book.add(name, matched)
+
+
+def _profile_entry_aliases(
+    book: _AliasBook,
+    file_entry: dict,
+    primary_names: set[str],
+    shadowed: list[tuple[str, set[str], list[str]]] | None,
+) -> None:
+    """Register the aliases one profile entry gives the contents it designates."""
+    entry_name = file_entry.get("name", "")
+    entry_aliases = _own_aliases(file_entry, primary_names)
+    # A profile may accept several revisions: each held one
+    # is designated by the entry, none of them by guess.
+    matched: set[str] = {
+        value for value in _as_list(file_entry.get("sha1"))
+        if value in book.files
+    }
+    matched |= {
+        book.md5_to_sha1[value]
+        for value in _as_list(file_entry.get("md5"))
+        if value in book.md5_to_sha1
+    }
+    if matched:
+        # Proven by content, the profile's own name designates
+        # the file whatever the collection calls it.
+        entry_aliases.insert(0, entry_name)
+    if not entry_aliases:
+        return
+    if shadowed is not None:
+        taken = [
+            alias for alias in entry_aliases
+            if alias != entry_name and alias in book.named_primaries
+        ]
+        if taken:
+            shadowed.append((entry_name, set(matched), taken))
+    held = book.holders.get(entry_name, set())
+    if (
+        not matched
+        and len(held) == 1
+        and len(book.families[entry_name.casefold()]) == 1
+    ):
+        # A name carried by several contents names none of them:
+        # quasi88's disk.rom aliases went to whichever
+        # disk.rom the scan met last, a Tandy CoCo ROM.
+        matched = set(held)
+    for sha in sorted(matched):
+        for alias_name in entry_aliases:
+            book.add(alias_name, sha)
+
+
+def _profile_aliases(
+    book: _AliasBook,
+    shadowed: list[tuple[str, set[str], list[str]]] | None,
+    unreadable: list[str],
+) -> None:
+    """Register the aliases emulator YAMLs give (aliases field on file entries)."""
+    emulators_dir = Path("emulators")
+    if not emulators_dir.is_dir():
+        return
+    for emu_file in source_yaml_paths(emulators_dir):
+        try:
+            with open(emu_file) as f:
+                emu_config = yaml_load(f) or {}
+        except (yaml.YAMLError, OSError) as e:
+            unreadable.append(f"{emu_file}: {e}")
+            continue
+        # A profile whose entries name each other (dosbox-x opens
+        # MT32_CONTROL.ROM and CM32L_CONTROL.ROM alike, so each entry
+        # aliases the other) states that ITS slot takes either name.
+        # Indexed globally that became evidence for every emulator:
+        # ScummVM's MT-32 slot received the CM-32L ROMs.
+        primary_names = _primary_names(emu_config.get("files", []))
+        for file_entry in emu_config.get("files", []):
+            _profile_entry_aliases(book, file_entry, primary_names, shadowed)
+
+
+# Identical content named differently across platforms/cores
+KNOWN_ALIAS_GROUPS = [
+    # ColecoVision - all these are the same 8KB BIOS
+    ["colecovision.rom", "coleco.rom", "BIOS.col", "bioscv.rom"],
+    # Game Boy - DMG boot ROM
+    ["gb_bios.bin", "dmg_boot.bin", "dmg_rom.bin", "dmg0_rom.bin"],
+    # Game Boy Color - CGB boot ROM
+    ["gbc_bios.bin", "cgb_boot.bin", "cgb0_boot.bin", "cgb_agb_boot.bin"],
+    # Super Game Boy
+    ["sgb_bios.bin", "sgb_boot.bin", "sgb.boot.rom"],
+    ["sgb2_bios.bin", "sgb2_boot.bin", "sgb2.boot.rom"],
+    ["sgb1.program.rom", "SGB1.sfc/program.rom"],
+    ["sgb2.program.rom", "SGB2.sfc/program.rom"],
+    # Nintendo DS. DraStic opens nds_bios_arm9.bin, nds_bios_arm7.bin
+    # and nds_firmware.bin and checks their size only: the collection
+    # answers those names with its DS dumps.
+    ["NDS_Bios7.bin", "bios7.bin", "nds7.bin", "nds_bios_arm7.bin"],
+    ["NDS_Bios9.bin", "bios9.bin", "nds9.bin", "nds_bios_arm9.bin"],
+    ["NDS_Lite_Firmware.bin", "nds_firmware.bin"],
+    ["dsi_sd_card.bin", "nds_sd_card.bin"],
+    # MSX
+    ["MSX.ROM", "MSX.rom", "Machines/Shared Roms/MSX.rom"],
+    # NEC PC-98
+    ["N88KNJ1.ROM", "n88knj1.rom", "quasi88/n88knj1.rom"],
+    # Enterprise
+    ["zt19uk.rom", "zt19hfnt.rom", "ep128emu/roms/zt19hfnt.rom"],
+    # ZX Spectrum
+    ["48.rom", "zx48.rom"],
+    # SquirrelJME - all JARs are the same
+    [
+        "squirreljme.sqc",
+        "squirreljme.jar",
+        "squirreljme-fast.jar",
+        "squirreljme-slow.jar",
+        "squirreljme-slow-test.jar",
+        "squirreljme-0.3.0.jar",
+        "squirreljme-0.3.0-fast.jar",
+        "squirreljme-0.3.0-slow.jar",
+        "squirreljme-0.3.0-slow-test.jar",
+    ],
+    # Arcade - FBNeo spectrum
+    ["spectrum.zip", "fbneo/spectrum.zip", "spec48k.zip"],
+]
+
+
+def _collect_all_aliases(
+    files: dict,
+    copies: dict | None = None,
+    shadowed: list[tuple[str, set[str], list[str]]] | None = None,
+) -> dict:
+    """Collect alternate filenames from platform YAMLs, core-info, and known aliases.
+
+    Registers alternate names so generate_pack can resolve files stored under different names.
+    ``copies`` maps a sha1 to the other files the scan found with that content.
+    ``shadowed`` receives, per profile entry, its name, the contents its hashes
+    designate and the aliases a primary's name already carries.
+    """
+    book = _alias_book(files, copies)
 
     # A source that does not parse is reported and the run refused: written
     # without it, the database lost every alias the file proves and the
     # command exited 0 (dosbox-x's wqy fonts answered not_found).
     unreadable: list[str] = []
-    platforms_dir = Path("platforms")
-    if platforms_dir.is_dir():
-        for platform_name in list_registered_platforms(
-            str(platforms_dir)
-        ):
-            config_file = platforms_dir / f"{platform_name}.yml"
-            try:
-                with open(config_file) as f:
-                    config = yaml_load(f) or {}
-            except (yaml.YAMLError, OSError) as e:
-                unreadable.append(f"{config_file}: {e}")
-                continue
-
-            for sys_id, system in config.get("systems", {}).items():
-                for file_entry in system.get("files", []):
-                    name = file_entry.get("name", "")
-                    sha1 = file_entry.get("sha1", "")
-                    md5 = file_entry.get("md5", "")
-
-                    # A zipped_file entry verifies a ROM INSIDE the
-                    # archive, so its hash describes the member and not
-                    # the file the name designates. Registering the name
-                    # against that hash made d2fdc.zip an alias of a
-                    # loose 256-byte state-machine-16.rom, which three
-                    # platforms were then served in place of the archive.
-                    if file_entry.get("zipped_file"):
-                        continue
-
-                    matched = None
-                    if sha1 and sha1 in files:
-                        matched = sha1
-                    elif md5 and md5 in md5_to_sha1:
-                        matched = md5_to_sha1[md5]
-
-                    if matched:
-                        _add_alias(name, matched)
+    _platform_aliases(book, unreadable)
 
     # core-info is not read here: it was the only network call of a build
     # that must give the same database offline, and the one name it added
     # (gearcoleco's writer.rom) is a profile entry proven by its sha1, which
     # the profile pass below now registers.
 
-    # Collect aliases from emulator YAMLs (aliases field on file entries)
-    emulators_dir = Path("emulators")
-    if emulators_dir.is_dir():
-        for emu_file in source_yaml_paths(emulators_dir):
-            try:
-                with open(emu_file) as f:
-                    emu_config = yaml_load(f) or {}
-            except (yaml.YAMLError, OSError) as e:
-                unreadable.append(f"{emu_file}: {e}")
-                continue
-            # A profile whose entries name each other (dosbox-x opens
-            # MT32_CONTROL.ROM and CM32L_CONTROL.ROM alike, so each entry
-            # aliases the other) states that ITS slot takes either name.
-            # Indexed globally that became evidence for every emulator:
-            # ScummVM's MT-32 slot received the CM-32L ROMs.
-            primary_names = _primary_names(emu_config.get("files", []))
-            for file_entry in emu_config.get("files", []):
-                entry_name = file_entry.get("name", "")
-                entry_aliases = _own_aliases(file_entry, primary_names)
-                # A profile may accept several revisions: each held one
-                # is designated by the entry, none of them by guess.
-                matched: set[str] = {
-                    value for value in _as_list(file_entry.get("sha1"))
-                    if value in files
-                }
-                matched |= {
-                    md5_to_sha1[value]
-                    for value in _as_list(file_entry.get("md5"))
-                    if value in md5_to_sha1
-                }
-                if matched:
-                    # Proven by content, the profile's own name designates
-                    # the file whatever the collection calls it.
-                    entry_aliases.insert(0, entry_name)
-                if not entry_aliases:
-                    continue
-                if shadowed is not None:
-                    taken = [
-                        alias for alias in entry_aliases
-                        if alias != entry_name and alias in named_primaries
-                    ]
-                    if taken:
-                        shadowed.append((entry_name, set(matched), taken))
-                held = holders.get(entry_name, set())
-                if (
-                    not matched
-                    and len(held) == 1
-                    and len(families[entry_name.casefold()]) == 1
-                ):
-                    # A name carried by several contents names none of them:
-                    # quasi88's disk.rom aliases went to whichever
-                    # disk.rom the scan met last, a Tandy CoCo ROM.
-                    matched = set(held)
-                for sha in sorted(matched):
-                    for alias_name in entry_aliases:
-                        _add_alias(alias_name, sha)
-
-    # Identical content named differently across platforms/cores
-    KNOWN_ALIAS_GROUPS = [
-        # ColecoVision - all these are the same 8KB BIOS
-        ["colecovision.rom", "coleco.rom", "BIOS.col", "bioscv.rom"],
-        # Game Boy - DMG boot ROM
-        ["gb_bios.bin", "dmg_boot.bin", "dmg_rom.bin", "dmg0_rom.bin"],
-        # Game Boy Color - CGB boot ROM
-        ["gbc_bios.bin", "cgb_boot.bin", "cgb0_boot.bin", "cgb_agb_boot.bin"],
-        # Super Game Boy
-        ["sgb_bios.bin", "sgb_boot.bin", "sgb.boot.rom"],
-        ["sgb2_bios.bin", "sgb2_boot.bin", "sgb2.boot.rom"],
-        ["sgb1.program.rom", "SGB1.sfc/program.rom"],
-        ["sgb2.program.rom", "SGB2.sfc/program.rom"],
-        # Nintendo DS. DraStic opens nds_bios_arm9.bin, nds_bios_arm7.bin
-        # and nds_firmware.bin and checks their size only: the collection
-        # answers those names with its DS dumps.
-        ["NDS_Bios7.bin", "bios7.bin", "nds7.bin", "nds_bios_arm7.bin"],
-        ["NDS_Bios9.bin", "bios9.bin", "nds9.bin", "nds_bios_arm9.bin"],
-        ["NDS_Lite_Firmware.bin", "nds_firmware.bin"],
-        ["dsi_sd_card.bin", "nds_sd_card.bin"],
-        # MSX
-        ["MSX.ROM", "MSX.rom", "Machines/Shared Roms/MSX.rom"],
-        # NEC PC-98
-        ["N88KNJ1.ROM", "n88knj1.rom", "quasi88/n88knj1.rom"],
-        # Enterprise
-        ["zt19uk.rom", "zt19hfnt.rom", "ep128emu/roms/zt19hfnt.rom"],
-        # ZX Spectrum
-        ["48.rom", "zx48.rom"],
-        # SquirrelJME - all JARs are the same
-        [
-            "squirreljme.sqc",
-            "squirreljme.jar",
-            "squirreljme-fast.jar",
-            "squirreljme-slow.jar",
-            "squirreljme-slow-test.jar",
-            "squirreljme-0.3.0.jar",
-            "squirreljme-0.3.0-fast.jar",
-            "squirreljme-0.3.0-slow.jar",
-            "squirreljme-0.3.0-slow-test.jar",
-        ],
-        # Arcade - FBNeo spectrum
-        ["spectrum.zip", "fbneo/spectrum.zip", "spec48k.zip"],
-    ]
+    _profile_aliases(book, shadowed, unreadable)
 
     for group in KNOWN_ALIAS_GROUPS:
         matched_sha1 = None
         for name in group:
-            if name in name_to_sha1:
-                matched_sha1 = name_to_sha1[name]
+            if name in book.name_to_sha1:
+                matched_sha1 = book.name_to_sha1[name]
                 break
         if not matched_sha1:
             continue
         for name in group:
-            _add_alias(name, matched_sha1)
+            book.add(name, matched_sha1)
 
     if unreadable:
         raise UnreadableSource(unreadable)
-    return aliases
+    return book.aliases
 
 
 if __name__ == "__main__":

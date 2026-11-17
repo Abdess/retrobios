@@ -6,8 +6,10 @@ and file resolution - eliminates DRY violations across scripts.
 
 from __future__ import annotations
 
-from collections.abc import Callable, Collection, Iterable, Mapping
+from collections.abc import Callable, Collection, Iterable, Iterator, Mapping
 from collections import Counter
+import dataclasses
+from dataclasses import dataclass
 
 import argparse
 import filecmp
@@ -21,9 +23,73 @@ import signal
 import sys
 import zipfile
 from pathlib import Path
-from typing import Any, TextIO
+from typing import TYPE_CHECKING, Any, TextIO, TypedDict
 
 from alternatives import derive_member_requirements
+
+if TYPE_CHECKING:
+    from typing_extensions import Unpack
+
+# Re-exported so the existing call sites keep working while the
+# modules above become the place to import from.
+from safeparse import (
+    parse_untrusted_xml as parse_untrusted_xml,
+    require_yaml as require_yaml,
+    yaml_load as yaml_load,
+    _pick_yaml_loader as _pick_yaml_loader,
+    _YAML_LOADER as _YAML_LOADER,
+)
+from hashing import (
+    compute_hashes as compute_hashes,
+    md5sum as md5sum,
+    md5_composite as md5_composite,
+    parse_md5_list as parse_md5_list,
+    cut_md5_owner as cut_md5_owner,
+    _ALL_ALGORITHMS as _ALL_ALGORITHMS,
+    _md5_composite_cache as _md5_composite_cache,
+)
+from ziptools import (
+    check_inside_zip as check_inside_zip,
+    build_zip_contents_index as build_zip_contents_index,
+    MAX_ZIP_MEMBERS as MAX_ZIP_MEMBERS,
+    MAX_ZIP_MEMBER_SIZE as MAX_ZIP_MEMBER_SIZE,
+    MAX_ZIP_TOTAL_SIZE as MAX_ZIP_TOTAL_SIZE,
+    MAX_ZIP_COMPRESSION_RATIO as MAX_ZIP_COMPRESSION_RATIO,
+    safe_extract_zip as safe_extract_zip,
+    _zip_contents_cache as _zip_contents_cache,
+    _BOUNDED_RATIO_METHODS as _BOUNDED_RATIO_METHODS,
+    zip_member_crcs as zip_member_crcs,
+    zip_member_names as zip_member_names,
+)
+from artifacts import (
+    write_if_changed as write_if_changed,
+    write_text_atomic as write_text_atomic,
+    copy_file_atomic as copy_file_atomic,
+    plain_file_mode as plain_file_mode,
+    set_plain_mode as set_plain_mode,
+    ArtifactDirectoryMissing as ArtifactDirectoryMissing,
+    ArtifactLockBusy as ArtifactLockBusy,
+    artifact_lock as artifact_lock,
+    hold_artifact_lock as hold_artifact_lock,
+    hold_repository_outputs as hold_repository_outputs,
+    publish_hold as publish_hold,
+    repository_output_lock as repository_output_lock,
+    _TIMESTAMP_PATTERNS as _TIMESTAMP_PATTERNS,
+    _strip_timestamps as _strip_timestamps,
+)
+from largefiles import (
+    LARGE_FILES_RELEASE as LARGE_FILES_RELEASE,
+    LARGE_FILES_REPO as LARGE_FILES_REPO,
+    LARGE_FILES_CACHE as LARGE_FILES_CACHE,
+    fetch_large_file as fetch_large_file,
+)
+from dumpcatalog import (
+    DEFAULT_PROVENANCE_DIR as DEFAULT_PROVENANCE_DIR,
+    load_provenance_snapshots as load_provenance_snapshots,
+    build_provenance_index as build_provenance_index,
+    annotate_provenance as annotate_provenance,
+    write_provenance_snapshot as write_provenance_snapshot,
+)
 
 # Every build script imports this module. verify.py, slots.py, validate_pr.py
 # and cross_reference.py started under 3.8 and stopped halfway on a
@@ -139,9 +205,9 @@ _casefold_index_cache: list[tuple[dict, int, dict[str, list[str]]]] = []
 def _casefold_name_index(by_name: dict) -> dict[str, list[str]]:
     """Build (and cache) a casefolded view of the by_name index."""
     if _casefold_index_cache:
-        source, size, folded = _casefold_index_cache[0]
+        source, size, cached = _casefold_index_cache[0]
         if source is by_name and size == len(by_name):
-            return folded
+            return cached
     folded: dict[str, list[str]] = {}
     for name, sha1s in by_name.items():
         folded.setdefault(name.casefold(), []).extend(sha1s)
@@ -482,55 +548,33 @@ def _inherited_yaml(platform_name: str, platforms_dir: str) -> tuple[dict, list[
     return merged, [platform_name, *chain]
 
 
-def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -> dict:
-    """Load a platform config with inheritance and shared group resolution.
+def _cached_platform_yaml(path: str) -> dict:
+    """A registry or shared-group file, parsed once per real path."""
+    real = os.path.realpath(path)
+    if real not in _shared_yml_cache:
+        with open(path) as f:
+            _shared_yml_cache[real] = source_yaml(f) or {}
+    return _shared_yml_cache[real]
 
-    This is the SINGLE implementation used by generate_pack, generate_readme,
-    verify, and auto_fetch. No other copy should exist.
-    """
-    cache_key = (platform_name, os.path.realpath(platforms_dir))
-    if cache_key in _platform_config_cache:
-        return _platform_config_cache[cache_key]
 
-    config, chain = _inherited_yaml(platform_name, platforms_dir)
+def _merge_registry_cores(config: dict, reg_entry: dict, depth: int) -> None:
+    """Merge cores (union for lists, override for all_libretro), a
+    parent's only where the platform names none."""
+    reg_cores = reg_entry.get("cores")
+    if reg_cores is None or not (depth == 0 or "cores" not in config):
+        return
+    cfg_cores = config.get("cores")
+    if reg_cores == "all_libretro":
+        config["cores"] = "all_libretro"
+    elif isinstance(reg_cores, list) and isinstance(cfg_cores, list):
+        merged_set = {str(c) for c in cfg_cores} | {str(c) for c in reg_cores}
+        config["cores"] = sorted(merged_set)
+    elif isinstance(reg_cores, list) and cfg_cores is None:
+        config["cores"] = reg_cores
 
-    shared_path = os.path.join(platforms_dir, "_shared.yml")
-    # Merge metadata from _registry.yml. The registry is our curated source,
-    # while the scraped YAML may be incomplete (missing cores, metadata fields).
-    # Registry fields supplement (not replace) the scraped config.
-    registry_path = os.path.join(platforms_dir, "_registry.yml")
-    if os.path.exists(registry_path):
-        reg_real = os.path.realpath(registry_path)
-        if reg_real not in _shared_yml_cache:
-            with open(registry_path) as f:
-                _shared_yml_cache[reg_real] = source_yaml(f) or {}
-        reg = _shared_yml_cache[reg_real]
-        # The platform's own entry first, then its parents' for what it does
-        # not say: RetroPie's status, scraper and install are its own, its
-        # verification mode is RetroArch's.
-        for depth, name in enumerate(chain):
-            reg_entry = reg.get("platforms", {}).get(name, {})
 
-            # Merge cores (union for lists, override for all_libretro), a
-            # parent's only where the platform names none.
-            reg_cores = reg_entry.get("cores")
-            if reg_cores is not None and (depth == 0 or "cores" not in config):
-                cfg_cores = config.get("cores")
-                if reg_cores == "all_libretro":
-                    config["cores"] = "all_libretro"
-                elif isinstance(reg_cores, list) and isinstance(cfg_cores, list):
-                    merged_set = {str(c) for c in cfg_cores} | {str(c) for c in reg_cores}
-                    config["cores"] = sorted(merged_set)
-                elif isinstance(reg_cores, list) and cfg_cores is None:
-                    config["cores"] = reg_cores
-
-            # Merge all registry fields absent from config (except cores,
-            # handled above with union logic). No hardcoded list: any field
-            # added to the registry is automatically available in the config.
-            for key, val in reg_entry.items():
-                if key != "cores" and key not in config:
-                    config[key] = val
-
+def _apply_shared_groups(config: dict, shared_groups: dict) -> None:
+    """Add each included shared group's files to the systems naming it."""
     # A shared group's file joins a system unless the platform already has
     # it there. Case only makes two names one where the filesystem folds it:
     # Lakka and RetroPie run on Linux, and np2kai opens 2608_bd.wav beside
@@ -538,56 +582,59 @@ def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -
     def fold(destination: str) -> str:
         return destination.lower() if config.get("case_insensitive_fs") else destination
 
-    if os.path.exists(shared_path):
-        shared_real = os.path.realpath(shared_path)
-        if shared_real not in _shared_yml_cache:
-            with open(shared_path) as f:
-                _shared_yml_cache[shared_real] = source_yaml(f) or {}
-        shared = _shared_yml_cache[shared_real]
-        shared_groups = shared.get("shared_groups", {})
-        for system in config.get("systems", {}).values():
-            for group_name in system.get("includes", []):
-                if group_name in shared_groups:
-                    existing = {
-                        (f.get("name"), f.get("destination", f.get("name")))
-                        for f in system.get("files", [])
-                    }
-                    existing_lower = {
-                        fold(f.get("destination", f.get("name", "")))
-                        for f in system.get("files", [])
-                    }
-                    for gf in shared_groups[group_name]:
-                        key = (gf.get("name"), gf.get("destination", gf.get("name")))
-                        dest_lower = fold(gf.get("destination", gf.get("name", "")))
-                        if key not in existing and dest_lower not in existing_lower:
-                            # Marked as ours: the platform's own file does not
-                            # carry it, and an export must not count it kept.
-                            system.setdefault("files", []).append(
-                                {**gf, "shared_group": group_name}
-                            )
-                            existing.add(key)
-
-    # Recalbox hashes a .zip by its members, so a plain md5 never answers one
-    # of its archive declarations: the resolver reads the mark per entry.
-    if config.get("zip_digest") == "composite":
-        config["systems"] = {
-            sys_id: {
-                **system,
-                "files": [
-                    {**f, "zip_digest": "composite"}
-                    if str(f.get("name", "")).lower().endswith(".zip")
-                    else f
-                    for f in system.get("files", [])
-                ],
+    for system in config.get("systems", {}).values():
+        for group_name in system.get("includes", []):
+            if group_name not in shared_groups:
+                continue
+            existing = {
+                (f.get("name"), f.get("destination", f.get("name")))
+                for f in system.get("files", [])
             }
-            for sys_id, system in config.get("systems", {}).items()
-        }
+            existing_lower = {
+                fold(f.get("destination", f.get("name", "")))
+                for f in system.get("files", [])
+            }
+            for gf in shared_groups[group_name]:
+                key = (gf.get("name"), gf.get("destination", gf.get("name")))
+                dest_lower = fold(gf.get("destination", gf.get("name", "")))
+                if key not in existing and dest_lower not in existing_lower:
+                    # Marked as ours: the platform's own file does not
+                    # carry it, and an export must not count it kept.
+                    system.setdefault("files", []).append(
+                        {**gf, "shared_group": group_name}
+                    )
+                    existing.add(key)
 
-    # Each entry carries the system that declares it: a hashless name match is
-    # narrowed to the maker folder that system names (resolve_local_file).
-    # A system that names its own cores (EmuELEC, AmberELEC, KNULLI) also
-    # passes them on, so another emulator's tree is foreign to its entries.
-    # Fresh dicts, since a YAML anchor can share one entry between systems.
+
+def _mark_composite_archives(config: dict) -> None:
+    """Mark every .zip entry as hashed by its members.
+
+    Recalbox hashes a .zip by its members, so a plain md5 never answers one
+    of its archive declarations: the resolver reads the mark per entry.
+    """
+    config["systems"] = {
+        sys_id: {
+            **system,
+            "files": [
+                {**f, "zip_digest": "composite"}
+                if str(f.get("name", "")).lower().endswith(".zip")
+                else f
+                for f in system.get("files", [])
+            ],
+        }
+        for sys_id, system in config.get("systems", {}).items()
+    }
+
+
+def _tag_platform_systems(config: dict) -> None:
+    """Each entry carries the system that declares it.
+
+    A hashless name match is narrowed to the maker folder that system names
+    (resolve_local_file). A system that names its own cores (EmuELEC,
+    AmberELEC, KNULLI) also passes them on, so another emulator's tree is
+    foreign to its entries. Fresh dicts, since a YAML anchor can share one
+    entry between systems.
+    """
     config["systems"] = {
         sys_id: {
             **system,
@@ -609,21 +656,69 @@ def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -
         for sys_id, system in config.get("systems", {}).items()
     }
 
+
+def _attach_rom_folders(config: dict, platform_name: str, platforms_dir: str) -> None:
+    """Where the platform's games live, as its rom folders file records it
+    from the OS's own source (platforms/romfolders/<key>.yml, roms_root)."""
+    romfolders = os.path.join(platforms_dir, "romfolders", f"{platform_name}.yml")
+    if not os.path.exists(romfolders):
+        return
+    with open(romfolders) as f:
+        roms_root = (source_yaml(f) or {}).get("roms_root")
+    if isinstance(roms_root, dict):
+        config["_roms_root"] = roms_root
+    with open(romfolders) as f:
+        folders = (source_yaml(f) or {}).get("folders")
+    if isinstance(folders, list):
+        config["_rom_folders"] = [row for row in folders if isinstance(row, dict)]
+
+
+def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -> dict:
+    """Load a platform config with inheritance and shared group resolution.
+
+    This is the SINGLE implementation used by generate_pack, generate_readme,
+    verify, and auto_fetch. No other copy should exist.
+    """
+    cache_key = (platform_name, os.path.realpath(platforms_dir))
+    if cache_key in _platform_config_cache:
+        return _platform_config_cache[cache_key]
+
+    config, chain = _inherited_yaml(platform_name, platforms_dir)
+
+    shared_path = os.path.join(platforms_dir, "_shared.yml")
+    # Merge metadata from _registry.yml. The registry is our curated source,
+    # while the scraped YAML may be incomplete (missing cores, metadata fields).
+    # Registry fields supplement (not replace) the scraped config.
+    registry_path = os.path.join(platforms_dir, "_registry.yml")
+    if os.path.exists(registry_path):
+        reg = _cached_platform_yaml(registry_path)
+        # The platform's own entry first, then its parents' for what it does
+        # not say: RetroPie's status, scraper and install are its own, its
+        # verification mode is RetroArch's.
+        for depth, name in enumerate(chain):
+            reg_entry = reg.get("platforms", {}).get(name, {})
+            _merge_registry_cores(config, reg_entry, depth)
+
+            # Merge all registry fields absent from config (except cores,
+            # handled above with union logic). No hardcoded list: any field
+            # added to the registry is automatically available in the config.
+            for key, val in reg_entry.items():
+                if key != "cores" and key not in config:
+                    config[key] = val
+
+    if os.path.exists(shared_path):
+        shared = _cached_platform_yaml(shared_path)
+        _apply_shared_groups(config, shared.get("shared_groups", {}))
+
+    if config.get("zip_digest") == "composite":
+        _mark_composite_archives(config)
+
+    _tag_platform_systems(config)
+
     # The registry key, which per-platform profile fields (installed_on,
     # not_bundled_on) name: the display name differs (MiSTer FPGA).
     config["_key"] = platform_name
-    # Where the platform's games live, as its rom folders file records it
-    # from the OS's own source (platforms/romfolders/<key>.yml, roms_root).
-    romfolders = os.path.join(platforms_dir, "romfolders", f"{platform_name}.yml")
-    if os.path.exists(romfolders):
-        with open(romfolders) as f:
-            roms_root = (source_yaml(f) or {}).get("roms_root")
-        if isinstance(roms_root, dict):
-            config["_roms_root"] = roms_root
-        with open(romfolders) as f:
-            folders = (source_yaml(f) or {}).get("folders")
-        if isinstance(folders, list):
-            config["_rom_folders"] = [row for row in folders if isinstance(row, dict)]
+    _attach_rom_folders(config, platform_name, platforms_dir)
     _platform_config_cache[cache_key] = config
     return config
 
@@ -1076,18 +1171,24 @@ def resolution_is_hash_exact(status: str) -> bool:
     return status in HASH_EXACT_RESOLUTION_STATUSES
 
 
+class DeclaredHashes(TypedDict):
+    """What an entry declares about its content, as declared_hash_verdict reads it."""
+
+    has_strong_hash: bool
+    sha1_candidates: Collection[str]
+    sha256_candidates: Collection[str]
+    md5_list: list[str]
+    crc_candidates: Collection[str]
+    zipped_file: str | None
+    declared_size: int | list[int] | None
+
+
 def declared_hash_verdict(
     candidate: str,
     *,
-    has_strong_hash: bool,
-    sha1_candidates: set,
-    sha256_candidates: set,
-    md5_list: list,
-    crc_candidates: set,
-    zipped_file: str | None,
-    declared_size: int | list[int] | None,
     file_entry: dict | None = None,
     db: dict | None = None,
+    **declared: Unpack[DeclaredHashes],
 ) -> str:
     """Judge a candidate found by name against everything the entry declares.
 
@@ -1096,7 +1197,13 @@ def declared_hash_verdict(
     about its content is checked here before the walk may return it,
     including the size and Adler-32 the name steps over bios/ apply.
     """
-    if not has_strong_hash:
+    sha1_candidates = declared["sha1_candidates"]
+    sha256_candidates = declared["sha256_candidates"]
+    md5_list = declared["md5_list"]
+    crc_candidates = declared["crc_candidates"]
+    zipped_file = declared["zipped_file"]
+    declared_size = declared["declared_size"]
+    if not declared["has_strong_hash"]:
         if file_entry is not None and not (
             name_match_size_ok(file_entry, os.path.getsize(candidate))
             and adler32_fits(file_entry, candidate, db)
@@ -1149,7 +1256,7 @@ def _resolve_in_data_dirs(
     rather than shipping the file.
     """
     mismatch: str | None = None
-    for _key, dd_entry in data_dir_registry.items():
+    for dd_entry in data_dir_registry.values():
         cache_dir = dd_entry.get("local_cache", "")
         if not cache_dir or not os.path.isdir(cache_dir):
             continue
@@ -1262,7 +1369,7 @@ def _resolve_agnostic(
     prefix = file_entry.get("agnostic_path_prefix", "")
     if not prefix:
         return None
-    for _sha1, entry in files_db.items():
+    for entry in files_db.values():
         path = entry.get("path", "")
         if not path.startswith(prefix):
             continue
@@ -1611,6 +1718,774 @@ def _warn_unreadable_archive(path: str, exc: Exception) -> None:
         print(f"warning: unreadable archive {path}: {exc}", file=sys.stderr)
 
 
+Resolution = tuple[str, str]
+
+
+@dataclass(frozen=True)
+class _Lookup:
+    """One entry as resolve_local_file reads it: its names and declared hashes."""
+
+    file_entry: dict
+    db: dict
+    dest_hint: str
+    name: str
+    zipped_file: str | None
+    names_to_try: list[str]
+    own_names: list[str]
+    md5_list: list[str]
+    sha1_candidates: list[str]
+    sha256_candidates: list[str]
+    crc_candidates: dict[str, None]
+    declared_size: Any
+    files_db: dict
+    by_name: dict
+    by_path_suffix: dict
+    composite_only: bool
+
+    @property
+    def has_strong_hash(self) -> bool:
+        return bool(
+            self.sha1_candidates or self.sha256_candidates or self.md5_list or self.crc_candidates
+        )
+
+
+def _lookup_names(name: str, aliases: list, dest_hint: str) -> tuple[list[str], list[str]]:
+    """The names an entry answers to, and the part of them that is its own."""
+    names_to_try = [name] + [a for a in aliases if a != name]
+
+    # When name contains a path separator (e.g. "res/tilemap.bin"), also
+    # try the basename since by_name indexes filenames without directories
+    if "/" in name:
+        name_base = name.rsplit("/", 1)[-1]
+        if name_base and name_base not in names_to_try:
+            names_to_try.append(name_base)
+
+    # When dest_hint contains a path, also try its basename as a name
+    # (handles emulator profiles where name: is descriptive and path: is
+    # the actual filename, e.g. name: "MDA font ROM", path: "mda.rom")
+    own_names = list(names_to_try)
+    if dest_hint:
+        hint_base = dest_hint.rsplit("/", 1)[-1] if "/" in dest_hint else dest_hint
+        if hint_base and hint_base not in names_to_try:
+            names_to_try.append(hint_base)
+    return names_to_try, own_names
+
+
+def _lookup(
+    file_entry: dict, db: dict, dest_hint: str, md5_list: list[str], *, composite_only: bool
+) -> _Lookup:
+    """Read the names and every declared hash of an entry once."""
+    sha1 = file_entry.get("sha1")
+    name = file_entry.get("name", "")
+    names_to_try, own_names = _lookup_names(name, file_entry.get("aliases", []), dest_hint)
+    sha1_candidates = [
+        str(value).strip().lower()
+        for value in (sha1 if isinstance(sha1, list) else [sha1] if sha1 else [])
+        if str(value).strip()
+    ]
+    sha256_raw = file_entry.get("sha256")
+    sha256_values = sha256_raw if isinstance(sha256_raw, list) else [sha256_raw]
+    sha256_candidates = [
+        candidate.strip().lower()
+        for value in sha256_values
+        if value
+        for candidate in str(value).split(",")
+        if len(candidate.strip()) == 64
+    ]
+    # One value, a list, or a comma-separated string, like the other hashes.
+    crc_values = file_entry.get("crc32") or []
+    # Kept in the order declared, which is the order a lookup tries them.
+    crc_candidates = dict.fromkeys(
+        candidate.strip().lower().removeprefix("0x")
+        for value in (crc_values if isinstance(crc_values, list) else [crc_values])
+        for candidate in str(value).split(",")
+        if candidate.strip()
+    )
+    indexes = db.get("indexes", {})
+    return _Lookup(
+        file_entry=file_entry,
+        db=db,
+        dest_hint=dest_hint,
+        name=name,
+        zipped_file=file_entry.get("zipped_file"),
+        names_to_try=names_to_try,
+        own_names=own_names,
+        md5_list=md5_list,
+        sha1_candidates=sha1_candidates,
+        sha256_candidates=sha256_candidates,
+        crc_candidates=crc_candidates,
+        declared_size=file_entry.get("size"),
+        files_db=db.get("files", {}),
+        by_name=indexes.get("by_name", {}),
+        by_path_suffix=indexes.get("by_path_suffix", {}),
+        composite_only=composite_only,
+    )
+
+
+def _record_match_status(q: _Lookup, match_sha1: str) -> str | None:
+    """Return hash evidence when a DB record satisfies every declaration."""
+    entry = q.files_db.get(match_sha1)
+    if not entry:
+        return None
+    statuses: list[str] = []
+    if q.sha1_candidates:
+        if match_sha1.lower() not in q.sha1_candidates:
+            return None
+        statuses.append("sha1_exact")
+    if q.sha256_candidates:
+        if str(entry.get("sha256", "")).lower() not in q.sha256_candidates:
+            return None
+        statuses.append("sha256_exact")
+    # With zipped_file the MD5 identifies the member, not the container.
+    if q.md5_list and not q.zipped_file:
+        actual_md5 = str(entry.get("md5", "")).lower()
+        if actual_md5 not in q.md5_list:
+            return None
+        statuses.append("md5_exact")
+    if q.crc_candidates:
+        if str(entry.get("crc32", "")).lower() not in q.crc_candidates:
+            return None
+        if q.declared_size is not None:
+            allowed_sizes = (
+                q.declared_size if isinstance(q.declared_size, list) else [q.declared_size]
+            )
+            if entry.get("size") not in allowed_sizes:
+                return None
+        statuses.append("crc32_exact")
+    return statuses[0] if statuses else None
+
+
+def _held_record(q: _Lookup, match_sha1: str) -> Resolution | None:
+    """The record's path and evidence, when it satisfies the entry and is on disk."""
+    path = q.files_db[match_sha1]["path"]
+    status = _record_match_status(q, match_sha1)
+    if status and os.path.exists(path):
+        return path, status
+    return None
+
+
+def _by_sha1(q: _Lookup) -> Resolution | None:
+    """SHA1 exact match (accept list-valued sha1 from profiles)."""
+    for cand in q.sha1_candidates:
+        if cand in q.files_db:
+            found = _held_record(q, cand)
+            if found:
+                return found
+    return None
+
+
+def _by_sha256(q: _Lookup) -> Resolution | None:
+    """SHA256 exact match, through the by_sha256 index."""
+    if not q.sha256_candidates:
+        return None
+    by_sha256 = q.db.get("indexes", {}).get("by_sha256", {})
+    for cand in q.sha256_candidates:
+        match = by_sha256.get(cand)
+        if match and match in q.files_db:
+            found = _held_record(q, match)
+            if found:
+                return found
+    return None
+
+
+def _by_crc32(q: _Lookup) -> Resolution | None:
+    """CRC32 lookup, only when no stronger hash is declared."""
+    if (
+        not q.crc_candidates
+        or q.zipped_file
+        or q.md5_list
+        or q.sha1_candidates
+        or q.sha256_candidates
+    ):
+        return None
+    by_crc32 = q.db.get("indexes", {}).get("by_crc32", {})
+    crc_matches: list[Resolution] = []
+    for crc in q.crc_candidates:
+        match = by_crc32.get(crc)
+        if match and match in q.files_db:
+            found = _held_record(q, match)
+            if found:
+                crc_matches.append(found)
+    # A primary copy over a .variants/ one, as everywhere else.
+    for path, status in crc_matches:
+        if "/.variants/" not in path:
+            return path, status
+    if crc_matches:
+        return crc_matches[0]
+    return None
+
+
+def _md5_hits(q: _Lookup) -> Iterator[tuple[str, str, str]]:
+    """Each held record a declared md5 names: path, evidence, md5 asked.
+
+    Skipped for zipped_file: the md5 is the inner ROM's, not the container's.
+    """
+    if not q.md5_list or q.zipped_file or q.composite_only:
+        return
+    by_md5 = q.db.get("indexes", {}).get("by_md5", {})
+    for md5_candidate in q.md5_list:
+        sha1_match = by_md5.get(md5_candidate)
+        if sha1_match and sha1_match in q.files_db:
+            found = _held_record(q, sha1_match)
+            if found:
+                yield found[0], found[1], md5_candidate
+
+
+def _named_or_variant(names: frozenset[str], candidate_path: str) -> bool:
+    """Whether a path's file name is one of these names, or a variant of one."""
+    bn = os.path.basename(candidate_path)
+    if bn in names:
+        return True
+    # .variants/ pattern: filename like "neogeo.zip.fc398ab4"
+    return any(bn.startswith(n + ".") for n in names)
+
+
+def _tail_candidates(q: _Lookup, start: int, tail: str, owners: set[str]) -> list[str]:
+    """The records a destination tail names, ranked, ambiguity read."""
+    candidates = _rank_tail_candidates(
+        q.by_path_suffix.get(tail, []), start, tail, q.files_db, owners,
+        frozenset(_owner_tokens(q.file_entry)),
+    )
+    raw = q.by_path_suffix.get(tail, [])
+    if start and len(raw) > 1:
+        # Ambiguity is read before the foreign trees are set aside:
+        # PCSX2x6's bin/resources/GameIndex.yaml met four copies
+        # under resources/GameIndex.yaml, three in other emulators'
+        # trees, and the fourth (PCSX2's console database, not
+        # PCSX2x6's arcade one) passed for proof. Only the asker's own
+        # tree still answers a tail several files share.
+        candidates = [
+            h for h in candidates
+            if _own_tree(q.files_db.get(h, {}).get("path", ""), owners)
+        ]
+    return candidates
+
+
+def _tail_match(q: _Lookup, candidates: list[str]) -> Resolution | None:
+    """The first candidate of a tail on disk that the entry accepts."""
+    for match_sha1 in candidates:
+        if match_sha1 not in q.files_db:
+            continue
+        path = q.files_db[match_sha1]["path"]
+        if not os.path.exists(path):
+            continue
+        if not q.has_strong_hash:
+            # A path names the file, the size the code checks still
+            # bounds it, as on the name step: ZEsarUX's 48 KB
+            # cpc6128.rom is not cap32's 32 KB one at the same tail.
+            if not name_match_size_ok(
+                q.file_entry, q.files_db[match_sha1].get("size")
+            ) or not adler32_fits(q.file_entry, path, q.db) or not content_fits(
+                q.file_entry, path
+            ):
+                continue
+            return path, "path_exact"
+        status = _record_match_status(q, match_sha1)
+        if status:
+            return path, status
+    return None
+
+
+def _by_path_suffix(q: _Lookup) -> tuple[Resolution | None, bool]:
+    """The file at the destination's tail, and whether the indexed one is absent."""
+    own_file_absent = False
+    if not (q.dest_hint and q.by_path_suffix):
+        return None, own_file_absent
+    # A destination is written from the emulator's point of view
+    # ("pcsx2/resources/GameIndex.yaml") and the index from the repo's
+    # layout, so the two meet on a tail rather than on the whole string.
+    # Longest tail first, and never down to the bare filename: that is the
+    # weaker step below, and five files answer to GameIndex.yaml.
+    # Two kinds of ambiguity appear once every tail is indexed. A
+    # shortened tail can be claimed by several emulators shipping the same
+    # asset tree, and it then proves nothing: skip it. The full tail can be
+    # claimed twice as well, one storing it at the root of its own
+    # directory and one nested deeper. There the file whose path carries
+    # the least on top of the destination is the one that IS the
+    # destination.
+    # The descent drops at most one leading segment. A destination and the
+    # tree differ by the wrapper directory at most. Beyond that the tail
+    # stops describing this file and starts describing whichever emulator
+    # happens to store the same asset tree.
+    hint_parts = q.dest_hint.split("/")
+    # The asking profile and the destination's own directories both name
+    # whose tree a copy may come from.
+    owners = _owner_tokens(q.file_entry) | _affinity_tokens("/".join(hint_parts[:-1]))
+    for start in range(min(2, len(hint_parts) - 1)):
+        candidates = _tail_candidates(q, start, "/".join(hint_parts[start:]), owners)
+        if start and len(candidates) > 1:
+            continue
+        # The index names the file this destination designates. Not on
+        # disk, it is a release asset the checkout does not hold, and no
+        # other file of that name is it.
+        if not start and candidates and not any(
+            os.path.exists(q.files_db.get(h, {}).get("path", ""))
+            for h in candidates
+        ):
+            own_file_absent = True
+        found = _tail_match(q, candidates)
+        if found:
+            return found, own_file_absent
+    return None, own_file_absent
+
+
+def _by_data_dir_tail(q: _Lookup, data_dir_registry: dict | None) -> Resolution | None:
+    """The same tail in a data directory, for a platform's hashless entry."""
+    # by_path_suffix indexes bios/
+    # only, so AmberELEC's Machines/MSX - Arabic/config.ini fell through to
+    # the name step and got msx-emu's ColecoVision config.ini, while
+    # data/bluemsx held blueMSX's own at that very path. A platform
+    # declaration is resolved without a hint, and its destination is that
+    # path. The descent and the ambiguity rule are those of the bios/ tails.
+    # A profile's entry is not asked here: it names its owner, the name step
+    # sends it to its data directories when another emulator's copy answers,
+    # and a dump it declares outranks the free one its tree bundles at the
+    # same path (Dolphin's dsp_coef.bin over Sys/GC's).
+    tail_hint = q.dest_hint or str(q.file_entry.get("destination") or "")
+    if (
+        tail_hint
+        and data_dir_registry
+        and not q.has_strong_hash
+        and not _owner_tokens(q.file_entry)
+    ):
+        hit = _data_dir_tail(tail_hint, data_dir_registry, q.file_entry, q.db)
+        if hit:
+            return hit, "path_exact"
+    return None
+
+
+def _name_size_ok(q: _Lookup, match_sha1: str) -> bool:
+    """Whether a record found by name has the shape the entry's code checks."""
+    record = q.files_db.get(match_sha1, {})
+    return name_match_size_ok(q.file_entry, record.get("size")) and adler32_fits(
+        q.file_entry, record.get("path", ""), q.db
+    ) and content_fits(q.file_entry, record.get("path", ""))
+
+
+def _exact_name_candidates(q: _Lookup) -> list[str]:
+    """The held files answering to the entry's names, exact casing."""
+    candidates: list[str] = []
+    # The entry's own names first, the destination's basename only when
+    # none of them answers. melonDS Nightly's dsi_nand.bin is read at
+    # dsi/nand.bin: with the DSi image absent from the checkout, the
+    # basename let the Wii nand.bin outrank the entry's own DSi variant.
+    # A name whose held file no declaration proves, while declarations
+    # of that name prove another dump beside it, means that dump: the
+    # DSi devkit boot ROMs filed as dsi_bios7.bin went to RetroBat.
+    by_proven_name = q.db.get("indexes", {}).get("by_proven_name", {})
+    for tier in (q.own_names, q.names_to_try[len(q.own_names):]):
+        for try_name in tier:
+            for match_sha1 in (
+                by_proven_name.get(try_name) or q.by_name.get(try_name, [])
+            ):
+                if match_sha1 in q.files_db and _name_size_ok(q, match_sha1):
+                    path = q.files_db[match_sha1]["path"]
+                    if os.path.exists(path) and path not in candidates:
+                        candidates.append(path)
+        if candidates:
+            break
+    return candidates
+
+
+def _add_variant_primaries(q: _Lookup, candidates: list[str]) -> None:
+    """Add the primaries that variants answering the exact casing stand in for."""
+    # Only variants answer the exact casing, but the primary they
+    # stand in for may be stored under another one: x1 asked for
+    # IPLROM.X1 and got Recalbox's second md5 while iplrom.x1, the
+    # dump every platform pins, sat in the same directory. A primary
+    # counts here only in a variant's own directory and under its own
+    # file name: an alias (iplrom.x1t names a font in System.dat) or
+    # another machine's font.rom is not that file.
+    homes = {p.split("/.variants/", 1)[0] for p in candidates}
+    folded = _casefold_name_index(q.by_name)
+    for try_name in q.names_to_try:
+        wanted = try_name.rsplit("/", 1)[-1].casefold()
+        for match_sha1 in folded.get(try_name.casefold(), []):
+            path = q.files_db.get(match_sha1, {}).get("path", "")
+            if (
+                "/.variants/" not in path
+                and os.path.dirname(path) in homes
+                and os.path.basename(path).casefold() == wanted
+                and _name_size_ok(q, match_sha1)
+                and os.path.exists(path)
+                and path not in candidates
+            ):
+                candidates.append(path)
+
+
+def _add_casefold_candidates(q: _Lookup, candidates: list[str], owners: set[str]) -> None:
+    """Add the held files answering to the entry's names in another casing."""
+    # Case-insensitive fallback: upstream platforms disagree on
+    # casing (VEC_MineStorm.vec vs VEC_Minestorm.vec). Two casings
+    # can name two contents (FONT.ROM and font.rom), so this only
+    # runs when no casing matches exactly, or when only another
+    # emulator's tree does: xm6typeg got XM6 Utility's synthesized
+    # SCSIINROM.DAT while the X68000 dump sat as scsiinrom.dat.
+    # Another casing in another emulator's tree proves nothing:
+    # reminiscence's music module reunion took skyline's
+    # zoneinfo/Indian/Reunion.
+    folded = _casefold_name_index(q.by_name)
+    for try_name in q.names_to_try:
+        for match_sha1 in folded.get(try_name.casefold(), []):
+            if match_sha1 in q.files_db and _name_size_ok(q, match_sha1):
+                path = q.files_db[match_sha1]["path"]
+                if _foreign_tree(path, owners):
+                    continue
+                if os.path.exists(path) and path not in candidates:
+                    candidates.append(path)
+
+
+def _same_maker(q: _Lookup, candidates: list[str], makers: frozenset[str]) -> list[str]:
+    """The candidates filed under the system's maker, or its shadowed aliases."""
+    candidates = [p for p in candidates if not other_maker(p, makers, q.db)]
+    if candidates:
+        return candidates
+    # The name belongs to another maker's file here. An emulator
+    # of this system may still read it as an alias of one of its
+    # own files, an alias by_name leaves out because a primary
+    # already carries the name: QUASI88 reads DISK.ROM as
+    # n88sub.rom.
+    shadowed = q.db.get("indexes", {}).get("by_shadowed_alias", {})
+    for try_name in q.own_names:
+        for match_sha1 in shadowed.get(try_name, []):
+            path = q.files_db.get(match_sha1, {}).get("path", "")
+            if (
+                _maker_folder(path, str(q.db.get("bios_dir") or "bios"))
+                in makers
+                and _name_size_ok(q, match_sha1)
+                and os.path.exists(path)
+                and path not in candidates
+            ):
+                candidates.append(path)
+    return candidates
+
+
+def _choose_by_name(
+    q: _Lookup,
+    candidates: list[str],
+    owners: set[str],
+    exact_foreign: bool,
+    data_dir_registry: dict | None,
+) -> Resolution | None:
+    """The best of the files a name step found, or the data directory's own."""
+    if q.zipped_file:
+        candidates = [p for p in candidates if ".zip" in os.path.basename(p)]
+    members = q.file_entry.get("members") or contents_members(q.file_entry)
+    if members or (len(candidates) > 1 and q.name.casefold().endswith(".zip")):
+        # Another emulator's own copy takes no part in the ranking:
+        # Demul's naomi.zip holds more NAOMI BIOS rows than any MAME
+        # set and broke the superset the MAME cores were served.
+        candidates = [
+            p for p in candidates if not _foreign_tree(p, owners)
+        ] or candidates
+    if members:
+        candidates = _holding_members(candidates, members)
+    elif len(candidates) > 1 and q.name.casefold().endswith(".zip"):
+        candidates = _covering_archives(candidates)
+    candidates = _by_affinity(candidates, q.file_entry, q.dest_hint)
+    best = candidates[0] if candidates else ""
+    # A copy outside another emulator's tree comes first: the
+    # affinity read pcsx2 in bios/Other/armsx2/pcsx2/ and served
+    # upstream PCSX2 the patches.zip of ARMSX2.
+    candidates = [
+        p for p in candidates if not _foreign_tree(p, owners)
+    ] or candidates
+    primary = [p for p in candidates if "/.variants/" not in p]
+    if not (primary or candidates):
+        return None
+    chosen = primary[0] if primary else candidates[0]
+    # The best of them is another emulator's own copy, served or
+    # set aside: the name says nothing about this profile's file,
+    # and a data directory it reads may hold it. Dolphin got
+    # Dolphin-MMJR's codehandler.bin while data/dolphin-sys held
+    # its own, and blueMSX got the 16 KB RS232.ROM once msx-emu's
+    # 8 KB copy was set aside, while data/bluemsx held its own,
+    # and MSX2P.ROM of another dump once only msx-emu answered
+    # the exact casing.
+    if data_dir_registry and (exact_foreign or _foreign_tree(best, owners)):
+        hit, _mismatch = _resolve_in_data_dirs(
+            q.names_to_try, data_dir_registry,
+            functools.partial(
+                declared_hash_verdict,
+                has_strong_hash=False,
+                sha1_candidates=set(),
+                sha256_candidates=set(),
+                md5_list=[],
+                crc_candidates=set(),
+                zipped_file=q.zipped_file,
+                declared_size=q.declared_size,
+                file_entry=q.file_entry,
+                db=q.db,
+            ),
+        )
+        if hit:
+            return hit
+    return chosen, "name_exact"
+
+
+def _by_name(
+    q: _Lookup, makers: frozenset[str], data_dir_registry: dict | None
+) -> tuple[Resolution | None, bool]:
+    """Any file with that name or alias (existence check).
+
+    The second value says the name proved nothing, which makes the entry
+    unsourceable for the steps after this one.
+    """
+    candidates = _exact_name_candidates(q)
+    if candidates and all("/.variants/" in p for p in candidates):
+        _add_variant_primaries(q, candidates)
+    owners = _owner_tokens(q.file_entry)
+    # Only another emulator's tree answers the exact casing: what it
+    # holds there says nothing about this entry's file.
+    exact_foreign = bool(candidates) and all(
+        _foreign_tree(p, owners) for p in candidates
+    )
+    if not candidates or exact_foreign:
+        _add_casefold_candidates(q, candidates, owners)
+    # A platform entry names no profile, but a system that lists its
+    # cores says whose files it asks for. A name only another emulator's
+    # tree answers is no evidence, and the data directories hold those
+    # emulators' trees too: EmuELEC's VVVVVV data.zip was served xrick's
+    # archive of the same name, then xrick's data directory copy.
+    core_owners = {
+        token
+        for core in q.file_entry.get("platform_cores") or ()
+        for token in _affinity_tokens(str(core))
+    }
+    if (
+        not owners
+        and core_owners
+        and candidates
+        and all(_foreign_tree(p, core_owners) for p in candidates)
+    ):
+        return None, True
+    if makers and candidates:
+        candidates = _same_maker(q, candidates, makers)
+    if not candidates:
+        return None, False
+    return _choose_by_name(q, candidates, owners, exact_foreign, data_dir_registry), False
+
+
+def _named_candidates(q: _Lookup, makers: frozenset[str]) -> list[tuple[str, str, int | None]]:
+    """Every held file of the entry's names: path, md5, size."""
+    named: list[tuple[str, str, int | None]] = []
+    seen_paths = set()
+    for try_name in q.names_to_try:
+        for match_sha1 in q.by_name.get(try_name, []):
+            if match_sha1 in q.files_db:
+                entry = q.files_db[match_sha1]
+                path = entry["path"]
+                if os.path.exists(path) and path not in seen_paths:
+                    seen_paths.add(path)
+                    named.append(
+                        (path, entry.get("md5", ""), entry.get("size"))
+                    )
+
+    if q.zipped_file:
+        named = [c for c in named if ".zip" in os.path.basename(c[0])]
+    # Another maker's file is no mismatch of this one, it is another file.
+    named = [c for c in named if not other_maker(c[0], makers, q.db)]
+    # A size the emulator itself verifies settles a name collision, so a
+    # candidate that fits is preferred over one that does not: "ROM" answers
+    # both an Apple IIgs image and a Macintosh one. It ranks rather than
+    # excludes, because a present file of the wrong size is reported as
+    # present and untested, and dropping it would report it as absent.
+    sized = [
+        c for c in named
+        if name_match_size_ok(q.file_entry, c[2]) and content_fits(q.file_entry, c[0])
+    ]
+    if sized:
+        named = sized
+    return named
+
+
+def _named_md5_match(q: _Lookup, named: list[tuple[str, str, int | None]]) -> Resolution | None:
+    """A named file whose md5, or archive composite, is a declared one.
+
+    Sorts *named* in place for a composite-only entry, as the steps after
+    this one read it.
+    """
+    md5_set = set(q.md5_list)
+    if not md5_set or q.sha1_candidates or q.sha256_candidates or q.crc_candidates:
+        return None
+    if q.composite_only:
+        named.sort(key=lambda c: "/.variants/" in c[0])
+    for path, db_md5, _size in named:
+        if ".zip" in os.path.basename(path):
+            try:
+                composite = md5_composite(path).lower()
+                # A zipped_file md5 is the member's: one member of
+                # another name has the same composite, and Batocera
+                # looks the member up by name.
+                if composite in md5_set and (
+                    not q.zipped_file
+                    or check_inside_zip(path, q.zipped_file, composite) == "ok"
+                ):
+                    return path, "md5_composite_exact"
+            except (zipfile.BadZipFile, OSError) as exc:
+                _warn_unreadable_archive(path, exc)
+        if db_md5.lower() in md5_set and not q.composite_only:
+            return path, "md5_exact"
+    return None
+
+
+def _zipped_named(
+    q: _Lookup, named: list[tuple[str, str, int | None]], zipped_file: str
+) -> Resolution | None:
+    """When zipped_file is set, only accept candidates that contain it."""
+    valid = []
+    for path, m, size in named:
+        try:
+            with zipfile.ZipFile(path) as zf:
+                inner_names = {n.casefold() for n in zf.namelist()}
+                if zipped_file.casefold() in inner_names:
+                    valid.append((path, m, size))
+        except (zipfile.BadZipFile, OSError) as exc:
+            _warn_unreadable_archive(path, exc)
+    # The archive whose member carries the declared md5 is the one:
+    # neogeo.zip is held twice, each with its own sfix.sfix, and the
+    # first by name was returned as a mismatch while the other matched.
+    for path, _m, _size in sorted(valid, key=lambda c: "/.variants/" in c[0]):
+        if any(check_inside_zip(path, zipped_file, md5) == "ok" for md5 in q.md5_list):
+            return path, "zip_exact"
+    if valid:
+        primary = [c[0] for c in valid if "/.variants/" not in c[0]]
+        return (primary[0] if primary else valid[0][0]), "hash_mismatch"
+    # No candidate contains the zipped_file: fall through to step 5
+    return None
+
+
+def _ranked_mismatch(q: _Lookup, named: list[tuple[str, str, int | None]]) -> Resolution:
+    """The named file the entry would take, reported as a hash mismatch."""
+    ordered = _by_affinity([c[0] for c in named], q.file_entry, q.dest_hint)
+    primary = [c for c in ordered if "/.variants/" not in c]
+    return (primary[0] if primary else ordered[0]), "hash_mismatch"
+
+
+def _by_zip_contents(q: _Lookup, zip_contents: dict | None) -> Resolution | None:
+    """zipped_file content match via pre-built index.
+
+    Last resort: matches inner ROM MD5 across ALL ZIPs in the repo, so only
+    used when name-based resolution failed entirely.
+    """
+    if not (
+        q.zipped_file
+        and q.md5_list
+        and zip_contents
+        and not (q.sha1_candidates or q.sha256_candidates or q.crc_candidates)
+    ):
+        return None
+    for md5_candidate in q.md5_list:
+        if md5_candidate in zip_contents:
+            zip_sha1 = zip_contents[md5_candidate]
+            if zip_sha1 in q.files_db:
+                path = q.files_db[zip_sha1]["path"]
+                if os.path.exists(path):
+                    return path, "zip_exact"
+    return None
+
+
+def _by_mame_clone(
+    q: _Lookup, zip_contents: dict | None, depth: int, data_dir_registry: dict | None
+) -> Resolution | None:
+    """If a file was deduped, resolve via canonical."""
+    clone_map = get_mame_clone_map(q.db.get("bios_dir"))
+    canonical = clone_map.get(q.name)
+    if not canonical or canonical == q.name:
+        return None
+    canonical_entry = {
+        field: q.file_entry[field]
+        for field in (
+            "size", "min_size", "max_size", "size_multiple", "validation",
+            *sorted(CONTENT_CHECKS),
+        )
+        if field in q.file_entry
+    }
+    canonical_entry["name"] = canonical
+    result = resolve_local_file(
+        canonical_entry,
+        q.db,
+        zip_contents,
+        q.dest_hint,
+        _depth=depth + 1,
+        data_dir_registry=data_dir_registry,
+    )
+    if result[0] and result[1] != "hash_mismatch":
+        return result[0], "mame_clone"
+    return None
+
+
+def _in_data_dirs(q: _Lookup, data_dir_registry: dict) -> tuple[Resolution | None, str | None]:
+    """Data directory fallback: scan data/ caches for matching filename."""
+    verdict = functools.partial(
+        declared_hash_verdict,
+        has_strong_hash=q.has_strong_hash,
+        sha1_candidates=q.sha1_candidates,
+        sha256_candidates=q.sha256_candidates,
+        md5_list=q.md5_list,
+        crc_candidates=set(q.crc_candidates),
+        zipped_file=q.zipped_file,
+        declared_size=q.declared_size,
+        file_entry=q.file_entry,
+        db=q.db,
+    )
+    return _resolve_in_data_dirs(q.names_to_try, data_dir_registry, verdict)
+
+
+def _resolve_layout(
+    file_entry: dict,
+    db: dict,
+    zip_contents: dict | None,
+    dest_hint: str,
+    *,
+    depth: int,
+    data_dir_registry: dict | None,
+) -> tuple[str | None, str]:
+    """Resolve an entry whose launcher moves it, at both destinations."""
+    layout = file_entry.get("layout_path")
+    plain = {k: v for k, v in file_entry.items() if k != "layout_path"}
+    # A destination outside the BIOS tree says nothing of the collection:
+    # EmuELEC's roms/mame/konamigv.zip is not bios/Arcade/MAME's set.
+    outside = file_entry.get("unprefixed") or file_entry.get("root")
+    answers = [
+        resolve_local_file(
+            plain, db, zip_contents, dest_hint=hint, _depth=depth,
+            data_dir_registry=data_dir_registry,
+        )
+        for hint in ((str(layout),) if outside else (dest_hint, str(layout)))
+    ]
+    for found in answers:
+        if found[0] is not None and (
+            resolution_is_hash_exact(found[1]) or found[1] == "path_exact"
+        ):
+            return found
+    for found in answers:
+        if found[0] is not None and found[1] not in ("not_found", "hash_mismatch"):
+            return found
+    return next((found for found in answers if found[0] is not None), answers[0])
+
+
+def _entry_hint(file_entry: dict, dest_hint: str) -> str:
+    """The destination tail the collection indexes the entry under."""
+    # A platform that hands each core a system directory of its own (MinUI's
+    # Bios/<TAG>/) writes that folder in front of the core's path. The tail
+    # the collection indexes is the core's path alone.
+    system_dir = file_entry.get("system_dir")
+    if system_dir and dest_hint.startswith(f"{system_dir}/"):
+        dest_hint = dest_hint[len(system_dir) + 1:]
+    return dest_hint
+
+
+def _name_as_hint(name: str, dest_hint: str) -> str:
+    """A name written with its directory is the destination when no path is given."""
+    # gam4980/E.BIN resolved by its basename took another model's OS
+    # in verify --emulator and the emulator pack, while the platform pack,
+    # which passes the destination, served the GAM4980's.
+    if not dest_hint and "/" in name.strip("/"):
+        return name
+    return dest_hint
+
+
 def resolve_local_file(
     file_entry: dict,
     db: dict,
@@ -1636,68 +2511,18 @@ def resolve_local_file(
 
     A path or filename is never allowed to override a declared strong hash.
     """
-    sha1 = file_entry.get("sha1")
-    name = file_entry.get("name", "")
-    # A platform that hands each core a system directory of its own (MinUI's
-    # Bios/<TAG>/) writes that folder in front of the core's path. The tail
-    # the collection indexes is the core's path alone.
-    system_dir = file_entry.get("system_dir")
-    if system_dir and dest_hint.startswith(f"{system_dir}/"):
-        dest_hint = dest_hint[len(system_dir) + 1:]
+    dest_hint = _entry_hint(file_entry, dest_hint)
     # A launcher that moves the layout (EmuDeck links azahar's sysdata to
     # bios/azahar/keys) changes where the file goes, not the tail the
     # collection indexes it under. Both are asked, and the stronger proof
     # wins: a content or path match over a name, the destination on a tie.
     layout = file_entry.get("layout_path")
     if layout and layout != dest_hint:
-        plain = {k: v for k, v in file_entry.items() if k != "layout_path"}
-        # A destination outside the BIOS tree says nothing of the collection:
-        # EmuELEC's roms/mame/konamigv.zip is not bios/Arcade/MAME's set.
-        outside = file_entry.get("unprefixed") or file_entry.get("root")
-        answers = [
-            resolve_local_file(
-                plain, db, zip_contents, dest_hint=hint, _depth=_depth,
-                data_dir_registry=data_dir_registry,
-            )
-            for hint in ((str(layout),) if outside else (dest_hint, str(layout)))
-        ]
-        for found in answers:
-            if found[0] is not None and (
-                resolution_is_hash_exact(found[1]) or found[1] == "path_exact"
-            ):
-                return found
-        for found in answers:
-            if found[0] is not None and found[1] not in ("not_found", "hash_mismatch"):
-                return found
-        return next((found for found in answers if found[0] is not None), answers[0])
-    # A name written with its directory is the destination when no path is
-    # given: gam4980/E.BIN resolved by its basename took another model's OS
-    # in verify --emulator and the emulator pack, while the platform pack,
-    # which passes the destination, served the GAM4980's.
-    if not dest_hint and "/" in name.strip("/"):
-        dest_hint = name
-    zipped_file = file_entry.get("zipped_file")
-    aliases = file_entry.get("aliases", [])
-    names_to_try = [name] + [a for a in aliases if a != name]
-
-    # When name contains a path separator (e.g. "res/tilemap.bin"), also
-    # try the basename since by_name indexes filenames without directories
-    if "/" in name:
-        name_base = name.rsplit("/", 1)[-1]
-        if name_base and name_base not in names_to_try:
-            names_to_try.append(name_base)
-
-    # When dest_hint contains a path, also try its basename as a name
-    # (handles emulator profiles where name: is descriptive and path: is
-    # the actual filename, e.g. name: "MDA font ROM", path: "mda.rom")
-    own_names = list(names_to_try)
-    if dest_hint:
-        hint_base = dest_hint.rsplit("/", 1)[-1] if "/" in dest_hint else dest_hint
-        if hint_base and hint_base not in names_to_try:
-            names_to_try.append(hint_base)
-
+        return _resolve_layout(
+            file_entry, db, zip_contents, dest_hint,
+            depth=_depth, data_dir_registry=data_dir_registry,
+        )
     md5_list = parse_md5_list(file_entry.get("md5"))
-    files_db = db.get("files", {})
     by_md5 = db.get("indexes", {}).get("by_md5", {})
     # A value cut short stands for the one held md5 it starts, and only
     # then (cut_md5_owner): the dump it names is still name-guarded below.
@@ -1705,248 +2530,58 @@ def resolve_local_file(
         cut: owner for cut in md5_list
         if len(cut) < 32 and (owner := cut_md5_owner(cut, by_md5))
     }
-    md5_list = [cut_owners.get(value, value) for value in md5_list]
-    sha1_candidates = [
-        str(value).strip().lower()
-        for value in (sha1 if isinstance(sha1, list) else [sha1] if sha1 else [])
-        if str(value).strip()
-    ]
-    sha256_raw = file_entry.get("sha256")
-    sha256_values = sha256_raw if isinstance(sha256_raw, list) else [sha256_raw]
-    sha256_candidates = [
-        candidate.strip().lower()
-        for value in sha256_values
-        if value
-        for candidate in str(value).split(",")
-        if len(candidate.strip()) == 64
-    ]
-    # One value, a list, or a comma-separated string, like the other hashes.
-    crc_values = file_entry.get("crc32") or []
-    # Kept in the order declared, which is the order a lookup tries them.
-    crc_candidates = dict.fromkeys(
-        candidate.strip().lower().removeprefix("0x")
-        for value in (crc_values if isinstance(crc_values, list) else [crc_values])
-        for candidate in str(value).split(",")
-        if candidate.strip()
-    )
-    declared_size = file_entry.get("size")
-    has_strong_hash = bool(
-        sha1_candidates or sha256_candidates or md5_list or crc_candidates
-    )
-    by_name = db.get("indexes", {}).get("by_name", {})
-    by_path_suffix = db.get("indexes", {}).get("by_path_suffix", {})
-
-    def _record_match_status(match_sha1: str) -> str | None:
-        """Return hash evidence when a DB record satisfies every declaration."""
-        entry = files_db.get(match_sha1)
-        if not entry:
-            return None
-        statuses: list[str] = []
-        if sha1_candidates:
-            if match_sha1.lower() not in sha1_candidates:
-                return None
-            statuses.append("sha1_exact")
-        if sha256_candidates:
-            if str(entry.get("sha256", "")).lower() not in sha256_candidates:
-                return None
-            statuses.append("sha256_exact")
-        # With zipped_file the MD5 identifies the member, not the container.
-        if md5_list and not zipped_file:
-            actual_md5 = str(entry.get("md5", "")).lower()
-            if actual_md5 not in md5_list:
-                return None
-            statuses.append("md5_exact")
-        if crc_candidates:
-            if str(entry.get("crc32", "")).lower() not in crc_candidates:
-                return None
-            if declared_size is not None:
-                allowed_sizes = (
-                    declared_size if isinstance(declared_size, list) else [declared_size]
-                )
-                if entry.get("size") not in allowed_sizes:
-                    return None
-            statuses.append("crc32_exact")
-        return statuses[0] if statuses else None
-
-    # 1. SHA1 exact match (accept list-valued sha1 from profiles)
-    for cand in sha1_candidates:
-        if cand in files_db:
-            path = files_db[cand]["path"]
-            status = _record_match_status(cand)
-            if status and os.path.exists(path):
-                return path, status
-
-    # 1b. SHA256 exact match (profiles hashed from sources that publish
-    # sha256, e.g. MesenCE). A full sha256 is a strong identifier.
-    if sha256_candidates:
-        by_sha256 = db.get("indexes", {}).get("by_sha256", {})
-        for cand in sha256_candidates:
-            match = by_sha256.get(cand)
-            if match and match in files_db:
-                path = files_db[match]["path"]
-                status = _record_match_status(match)
-                if status and os.path.exists(path):
-                    return path, status
-
-    # 1c. CRC32 lookup, only when no stronger hash is declared.  A declared
-    # size confirms it when available. A handful of emulators validate CRC32
-    # alone, so those entries retain the same (weaker) evidence as the core.
-    if (
-        crc_candidates
-        and not zipped_file
-        and not md5_list
-        and not sha1_candidates
-        and not sha256_candidates
-    ):
-        by_crc32 = db.get("indexes", {}).get("by_crc32", {})
-        crc_matches: list[tuple[str, str]] = []
-        for crc in crc_candidates:
-            match = by_crc32.get(crc)
-            if match and match in files_db:
-                path = files_db[match]["path"]
-                status = _record_match_status(match)
-                if status and os.path.exists(path):
-                    crc_matches.append((path, status))
-        # A primary copy over a .variants/ one, as everywhere else.
-        for path, status in crc_matches:
-            if "/.variants/" not in path:
-                return path, status
-        if crc_matches:
-            return crc_matches[0]
-
-    # 2. MD5 direct lookup (skip for zipped_file: md5 is inner ROM, not container)
-    # Guard: only accept if the found file's name matches the requested name
-    # (or is a .variants/ derivative). Prevents cross-contamination when an
-    # unrelated file happens to share the same MD5 in the index.
-    _name_set = set(names_to_try)
-
-    def _md5_name_ok(candidate_path: str) -> bool:
-        bn = os.path.basename(candidate_path)
-        if bn in _name_set:
-            return True
-        # .variants/ pattern: filename like "neogeo.zip.fc398ab4"
-        return any(bn.startswith(n + ".") for n in _name_set)
-
     # A frontend that hashes an archive by its members (Recalbox) never reads
     # the container's own md5: neocd.bin's md5 is also the composite of a
     # one-member neocdz.zip, and the raw ROM shipped under the archive's name.
     composite_only = file_entry.get("zip_digest") == "composite"
+    q = _lookup(
+        file_entry, db, _name_as_hint(file_entry.get("name", ""), dest_hint),
+        [cut_owners.get(value, value) for value in md5_list],
+        composite_only=composite_only,
+    )
+    has_strong_hash = q.has_strong_hash
+    # Guard of step 2: only accept if the found file's name matches the
+    # requested name (or is a .variants/ derivative). Prevents
+    # cross-contamination when an unrelated file happens to share the same
+    # MD5 in the index.
+    _md5_name_ok = functools.partial(_named_or_variant, frozenset(q.names_to_try))
 
-    if md5_list and not zipped_file and not composite_only:
-        for md5_candidate in md5_list:
-            sha1_match = by_md5.get(md5_candidate)
-            if sha1_match and sha1_match in files_db:
-                path = files_db[sha1_match]["path"]
-                # A full md5 as declared is a strong identifier: trusted
-                # without name guard. One completed from a cut value still
-                # needs the name check to avoid cross-contamination.
-                status = _record_match_status(sha1_match)
-                if status and os.path.exists(path):
-                    if md5_candidate not in cut_owners.values() or _md5_name_ok(path):
-                        return path, status
+    found = (
+        # 1. SHA1 exact match (accept list-valued sha1 from profiles)
+        _by_sha1(q)
+        # 1b. SHA256 exact match (profiles hashed from sources that publish
+        # sha256, e.g. MesenCE). A full sha256 is a strong identifier.
+        or _by_sha256(q)
+        # 1c. CRC32 lookup, only when no stronger hash is declared.  A declared
+        # size confirms it when available. A handful of emulators validate CRC32
+        # alone, so those entries retain the same (weaker) evidence as the core.
+        or _by_crc32(q)
+        # 2. MD5 direct lookup (skip for zipped_file: md5 is inner ROM, not container)
+        # A full md5 as declared is a strong identifier: trusted without
+        # name guard. One completed from a cut value still needs the name
+        # check to avoid cross-contamination.
+        or next(
+            (
+                (path, status)
+                for path, status, md5_candidate in _md5_hits(q)
+                if md5_candidate not in cut_owners.values() or _md5_name_ok(path)
+            ),
+            None,
+        )
+    )
+    if found:
+        return found
 
     # 2b. Path suffix lookup is useful for same-named regional files, but it
     # is identity evidence only when no content hash was declared.  A stale
     # or incorrect destination can therefore never mask a hash mismatch.
-    own_file_absent = False
-    if dest_hint and by_path_suffix:
-        # A destination is written from the emulator's point of view
-        # ("pcsx2/resources/GameIndex.yaml") and the index from the repo's
-        # layout, so the two meet on a tail rather than on the whole string.
-        # Longest tail first, and never down to the bare filename: that is the
-        # weaker step below, and five files answer to GameIndex.yaml.
-        # Two kinds of ambiguity appear once every tail is indexed. A
-        # shortened tail can be claimed by several emulators shipping the same
-        # asset tree, and it then proves nothing: skip it. The full tail can be
-        # claimed twice as well, one storing it at the root of its own
-        # directory and one nested deeper. There the file whose path carries
-        # the least on top of the destination is the one that IS the
-        # destination.
-        # The descent drops at most one leading segment. A destination and the
-        # tree differ by the wrapper directory at most. Beyond that the tail
-        # stops describing this file and starts describing whichever emulator
-        # happens to store the same asset tree.
-        hint_parts = dest_hint.split("/")
-        # The asking profile and the destination's own directories both name
-        # whose tree a copy may come from.
-        owners = _owner_tokens(file_entry) | _affinity_tokens("/".join(hint_parts[:-1]))
-        for start in range(min(2, len(hint_parts) - 1)):
-            tail = "/".join(hint_parts[start:])
-            candidates = _rank_tail_candidates(
-                by_path_suffix.get(tail, []), start, tail, files_db, owners,
-                frozenset(_owner_tokens(file_entry)),
-            )
-            raw = by_path_suffix.get(tail, [])
-            if start and len(raw) > 1:
-                # Ambiguity is read before the foreign trees are set aside:
-                # PCSX2x6's bin/resources/GameIndex.yaml met four copies
-                # under resources/GameIndex.yaml, three in other emulators'
-                # trees, and the fourth (PCSX2's console database, not
-                # PCSX2x6's arcade one) passed for proof. Only the asker's own
-                # tree still answers a tail several files share.
-                candidates = [
-                    h for h in candidates
-                    if _own_tree(files_db.get(h, {}).get("path", ""), owners)
-                ]
-            if start and len(candidates) > 1:
-                continue
-            # The index names the file this destination designates. Not on
-            # disk, it is a release asset the checkout does not hold, and no
-            # other file of that name is it.
-            if not start and candidates and not any(
-                os.path.exists(files_db.get(h, {}).get("path", ""))
-                for h in candidates
-            ):
-                own_file_absent = True
-            for match_sha1 in candidates:
-                if match_sha1 not in files_db:
-                    continue
-                path = files_db[match_sha1]["path"]
-                if not os.path.exists(path):
-                    continue
-                if not has_strong_hash:
-                    # A path names the file, the size the code checks still
-                    # bounds it, as on the name step: ZEsarUX's 48 KB
-                    # cpc6128.rom is not cap32's 32 KB one at the same tail.
-                    if not name_match_size_ok(
-                        file_entry, files_db[match_sha1].get("size")
-                    ) or not adler32_fits(file_entry, path, db) or not content_fits(
-                        file_entry, path
-                    ):
-                        continue
-                    return path, "path_exact"
-                status = _record_match_status(match_sha1)
-                if status:
-                    return path, status
-
-    # 2c. The same tail in a data directory. by_path_suffix indexes bios/
-    # only, so AmberELEC's Machines/MSX - Arabic/config.ini fell through to
-    # the name step and got msx-emu's ColecoVision config.ini, while
-    # data/bluemsx held blueMSX's own at that very path. A platform
-    # declaration is resolved without a hint, and its destination is that
-    # path. The descent and the ambiguity rule are those of the bios/ tails.
-    # A profile's entry is not asked here: it names its owner, the name step
-    # sends it to its data directories when another emulator's copy answers,
-    # and a dump it declares outranks the free one its tree bundles at the
-    # same path (Dolphin's dsp_coef.bin over Sys/GC's).
-    tail_hint = dest_hint or str(file_entry.get("destination") or "")
-    if (
-        tail_hint
-        and data_dir_registry
-        and not has_strong_hash
-        and not _owner_tokens(file_entry)
-    ):
-        hit = _data_dir_tail(tail_hint, data_dir_registry, file_entry, db)
-        if hit:
-            return hit, "path_exact"
+    found, own_file_absent = _by_path_suffix(q)
+    # 2c. The same tail in a data directory.
+    found = found or _by_data_dir_tail(q, data_dir_registry)
+    if found:
+        return found
 
     # 3. No MD5 = any file with that name or alias (existence check)
-    def _size_ok(match_sha1: str) -> bool:
-        record = files_db.get(match_sha1, {})
-        return name_match_size_ok(file_entry, record.get("size")) and adler32_fits(
-            file_entry, record.get("path", ""), db
-        ) and content_fits(file_entry, record.get("path", ""))
-
     # An entry the profile documents as unsourceable is one the collection
     # cannot hold: a font that only exists inside a paid package, cheat codes
     # written per title. A file answering to its name is therefore a homonym
@@ -1958,324 +2593,52 @@ def resolve_local_file(
     # A platform's own hashless entry whose system names a maker takes no copy
     # filed under another maker: AmberELEC's nec-pc-88 DISK.ROM, which QUASI88
     # reads as the 2 KB PC-88 disk ROM, got the 16 KB MSX one by name.
-    makers = frozenset() if has_strong_hash else system_makers(file_entry, db)
+    makers: frozenset[str] = frozenset() if has_strong_hash else system_makers(file_entry, db)
 
     if not has_strong_hash and not unsourceable:
-        candidates = []
-        # The entry's own names first, the destination's basename only when
-        # none of them answers. melonDS Nightly's dsi_nand.bin is read at
-        # dsi/nand.bin: with the DSi image absent from the checkout, the
-        # basename let the Wii nand.bin outrank the entry's own DSi variant.
-        # A name whose held file no declaration proves, while declarations
-        # of that name prove another dump beside it, means that dump: the
-        # DSi devkit boot ROMs filed as dsi_bios7.bin went to RetroBat.
-        by_proven_name = db.get("indexes", {}).get("by_proven_name", {})
-        for tier in (own_names, names_to_try[len(own_names):]):
-            for try_name in tier:
-                for match_sha1 in (
-                    by_proven_name.get(try_name) or by_name.get(try_name, [])
-                ):
-                    if match_sha1 in files_db and _size_ok(match_sha1):
-                        path = files_db[match_sha1]["path"]
-                        if os.path.exists(path) and path not in candidates:
-                            candidates.append(path)
-            if candidates:
-                break
-        if candidates and all("/.variants/" in p for p in candidates):
-            # Only variants answer the exact casing, but the primary they
-            # stand in for may be stored under another one: x1 asked for
-            # IPLROM.X1 and got Recalbox's second md5 while iplrom.x1, the
-            # dump every platform pins, sat in the same directory. A primary
-            # counts here only in a variant's own directory and under its own
-            # file name: an alias (iplrom.x1t names a font in System.dat) or
-            # another machine's font.rom is not that file.
-            homes = {p.split("/.variants/", 1)[0] for p in candidates}
-            folded = _casefold_name_index(by_name)
-            for try_name in names_to_try:
-                wanted = try_name.rsplit("/", 1)[-1].casefold()
-                for match_sha1 in folded.get(try_name.casefold(), []):
-                    path = files_db.get(match_sha1, {}).get("path", "")
-                    if (
-                        "/.variants/" not in path
-                        and os.path.dirname(path) in homes
-                        and os.path.basename(path).casefold() == wanted
-                        and _size_ok(match_sha1)
-                        and os.path.exists(path)
-                        and path not in candidates
-                    ):
-                        candidates.append(path)
-        owners = _owner_tokens(file_entry)
-        # Only another emulator's tree answers the exact casing: what it
-        # holds there says nothing about this entry's file.
-        exact_foreign = bool(candidates) and all(
-            _foreign_tree(p, owners) for p in candidates
-        )
-        if not candidates or exact_foreign:
-            # Case-insensitive fallback: upstream platforms disagree on
-            # casing (VEC_MineStorm.vec vs VEC_Minestorm.vec). Two casings
-            # can name two contents (FONT.ROM and font.rom), so this only
-            # runs when no casing matches exactly, or when only another
-            # emulator's tree does: xm6typeg got XM6 Utility's synthesized
-            # SCSIINROM.DAT while the X68000 dump sat as scsiinrom.dat.
-            # Another casing in another emulator's tree proves nothing:
-            # reminiscence's music module reunion took skyline's
-            # zoneinfo/Indian/Reunion.
-            folded = _casefold_name_index(by_name)
-            for try_name in names_to_try:
-                for match_sha1 in folded.get(try_name.casefold(), []):
-                    if match_sha1 in files_db and _size_ok(match_sha1):
-                        path = files_db[match_sha1]["path"]
-                        if _foreign_tree(path, owners):
-                            continue
-                        if os.path.exists(path) and path not in candidates:
-                            candidates.append(path)
-        # A platform entry names no profile, but a system that lists its
-        # cores says whose files it asks for. A name only another emulator's
-        # tree answers is no evidence, and the data directories hold those
-        # emulators' trees too: EmuELEC's VVVVVV data.zip was served xrick's
-        # archive of the same name, then xrick's data directory copy.
-        core_owners = {
-            token
-            for core in file_entry.get("platform_cores") or ()
-            for token in _affinity_tokens(str(core))
-        }
-        if (
-            not owners
-            and core_owners
-            and candidates
-            and all(_foreign_tree(p, core_owners) for p in candidates)
-        ):
-            candidates = []
-            unsourceable = True
-        if makers and candidates:
-            candidates = [p for p in candidates if not other_maker(p, makers, db)]
-            if not candidates:
-                # The name belongs to another maker's file here. An emulator
-                # of this system may still read it as an alias of one of its
-                # own files, an alias by_name leaves out because a primary
-                # already carries the name: QUASI88 reads DISK.ROM as
-                # n88sub.rom.
-                shadowed = db.get("indexes", {}).get("by_shadowed_alias", {})
-                for try_name in own_names:
-                    for match_sha1 in shadowed.get(try_name, []):
-                        path = files_db.get(match_sha1, {}).get("path", "")
-                        if (
-                            _maker_folder(path, str(db.get("bios_dir") or "bios"))
-                            in makers
-                            and _size_ok(match_sha1)
-                            and os.path.exists(path)
-                            and path not in candidates
-                        ):
-                            candidates.append(path)
-        if candidates:
-            if zipped_file:
-                candidates = [p for p in candidates if ".zip" in os.path.basename(p)]
-            members = file_entry.get("members") or contents_members(file_entry)
-            if members or (len(candidates) > 1 and name.casefold().endswith(".zip")):
-                # Another emulator's own copy takes no part in the ranking:
-                # Demul's naomi.zip holds more NAOMI BIOS rows than any MAME
-                # set and broke the superset the MAME cores were served.
-                candidates = [
-                    p for p in candidates if not _foreign_tree(p, owners)
-                ] or candidates
-            if members:
-                candidates = _holding_members(candidates, members)
-            elif len(candidates) > 1 and name.casefold().endswith(".zip"):
-                candidates = _covering_archives(candidates)
-            candidates = _by_affinity(candidates, file_entry, dest_hint)
-            best = candidates[0] if candidates else ""
-            # A copy outside another emulator's tree comes first: the
-            # affinity read pcsx2 in bios/Other/armsx2/pcsx2/ and served
-            # upstream PCSX2 the patches.zip of ARMSX2.
-            candidates = [
-                p for p in candidates if not _foreign_tree(p, owners)
-            ] or candidates
-            primary = [p for p in candidates if "/.variants/" not in p]
-            if primary or candidates:
-                chosen = primary[0] if primary else candidates[0]
-                # The best of them is another emulator's own copy, served or
-                # set aside: the name says nothing about this profile's file,
-                # and a data directory it reads may hold it. Dolphin got
-                # Dolphin-MMJR's codehandler.bin while data/dolphin-sys held
-                # its own, and blueMSX got the 16 KB RS232.ROM once msx-emu's
-                # 8 KB copy was set aside, while data/bluemsx held its own,
-                # and MSX2P.ROM of another dump once only msx-emu answered
-                # the exact casing.
-                if data_dir_registry and (exact_foreign or _foreign_tree(best, owners)):
-                    hit, _mismatch = _resolve_in_data_dirs(
-                        names_to_try, data_dir_registry,
-                        functools.partial(
-                            declared_hash_verdict,
-                            has_strong_hash=False,
-                            sha1_candidates=set(),
-                            sha256_candidates=set(),
-                            md5_list=[],
-                            crc_candidates=set(),
-                            zipped_file=zipped_file,
-                            declared_size=declared_size,
-                            file_entry=file_entry,
-                            db=db,
-                        ),
-                    )
-                    if hit:
-                        return hit
-                return chosen, "name_exact"
+        found, unsourceable = _by_name(q, makers, data_dir_registry)
+        if found:
+            return found
 
     # 4. Name + alias fallback with md5_composite + direct MD5 per candidate
-    md5_set = set(md5_list)
-    named: list[tuple[str, str, int | None]] = []
-    seen_paths = set()
-    for try_name in names_to_try:
-        for match_sha1 in by_name.get(try_name, []):
-            if match_sha1 in files_db:
-                entry = files_db[match_sha1]
-                path = entry["path"]
-                if os.path.exists(path) and path not in seen_paths:
-                    seen_paths.add(path)
-                    named.append(
-                        (path, entry.get("md5", ""), entry.get("size"))
-                    )
-
-    if zipped_file:
-        named = [c for c in named if ".zip" in os.path.basename(c[0])]
-    # Another maker's file is no mismatch of this one, it is another file.
-    named = [c for c in named if not other_maker(c[0], makers, db)]
-    # A size the emulator itself verifies settles a name collision, so a
-    # candidate that fits is preferred over one that does not: "ROM" answers
-    # both an Apple IIgs image and a Macintosh one. It ranks rather than
-    # excludes, because a present file of the wrong size is reported as
-    # present and untested, and dropping it would report it as absent.
-    sized = [
-        c for c in named
-        if name_match_size_ok(file_entry, c[2]) and content_fits(file_entry, c[0])
-    ]
-    if sized:
-        named = sized
-
+    named = _named_candidates(q, makers)
     if named:
-        if md5_set and not (sha1_candidates or sha256_candidates or crc_candidates):
-            if composite_only:
-                named.sort(key=lambda c: "/.variants/" in c[0])
-            for path, db_md5, _size in named:
-                if ".zip" in os.path.basename(path):
-                    try:
-                        composite = md5_composite(path).lower()
-                        # A zipped_file md5 is the member's: one member of
-                        # another name has the same composite, and Batocera
-                        # looks the member up by name.
-                        if composite in md5_set and (
-                            not zipped_file
-                            or check_inside_zip(path, zipped_file, composite) == "ok"
-                        ):
-                            return path, "md5_composite_exact"
-                    except (zipfile.BadZipFile, OSError) as exc:
-                        _warn_unreadable_archive(path, exc)
-                if db_md5.lower() in md5_set and not composite_only:
-                    return path, "md5_exact"
-        # When zipped_file is set, only accept candidates that contain it
-        if zipped_file:
-            valid = []
-            for path, m, size in named:
-                try:
-                    with zipfile.ZipFile(path) as zf:
-                        inner_names = {n.casefold() for n in zf.namelist()}
-                        if zipped_file.casefold() in inner_names:
-                            valid.append((path, m, size))
-                except (zipfile.BadZipFile, OSError) as exc:
-                    _warn_unreadable_archive(path, exc)
-            # The archive whose member carries the declared md5 is the one:
-            # neogeo.zip is held twice, each with its own sfix.sfix, and the
-            # first by name was returned as a mismatch while the other matched.
-            for path, _m, _size in sorted(valid, key=lambda c: "/.variants/" in c[0]):
-                if any(check_inside_zip(path, zipped_file, md5) == "ok" for md5 in md5_list):
-                    return path, "zip_exact"
-            if valid:
-                primary = [c[0] for c in valid if "/.variants/" not in c[0]]
-                return (primary[0] if primary else valid[0][0]), "hash_mismatch"
-            # No candidate contains the zipped_file: fall through to step 5
+        found = _named_md5_match(q, named)
+        if q.zipped_file:
+            found = found or _zipped_named(q, named, q.zipped_file)
         elif not unsourceable:
-            ordered = _by_affinity([c[0] for c in named], file_entry, dest_hint)
-            primary = [c for c in ordered if "/.variants/" not in c]
-            return (primary[0] if primary else ordered[0]), "hash_mismatch"
+            found = found or _ranked_mismatch(q, named)
+        if found:
+            return found
 
     # 5. zipped_file content match via pre-built index (last resort:
     # matches inner ROM MD5 across ALL ZIPs in the repo, so only use
     # when name-based resolution failed entirely)
-    if (
-        zipped_file
-        and md5_list
-        and zip_contents
-        and not (sha1_candidates or sha256_candidates or crc_candidates)
-    ):
-        for md5_candidate in md5_list:
-            if md5_candidate in zip_contents:
-                zip_sha1 = zip_contents[md5_candidate]
-                if zip_sha1 in files_db:
-                    path = files_db[zip_sha1]["path"]
-                    if os.path.exists(path):
-                        return path, "zip_exact"
+    found = _by_zip_contents(q, zip_contents)
 
     # MAME clone fallback: if a file was deduped, resolve via canonical. The
     # clone name is a name step like the others: an unsourceable entry skips
     # it, and the size the code checks travels with it (dedup only merges
     # identical bytes, so the canonical copy has the clone's size).
     if _depth < 3 and not has_strong_hash and not unsourceable:
-        clone_map = get_mame_clone_map(db.get("bios_dir"))
-        canonical = clone_map.get(name)
-        if canonical and canonical != name:
-            canonical_entry = {
-                field: file_entry[field]
-                for field in (
-                    "size", "min_size", "max_size", "size_multiple", "validation",
-                    *sorted(CONTENT_CHECKS),
-                )
-                if field in file_entry
-            }
-            canonical_entry["name"] = canonical
-            result = resolve_local_file(
-                canonical_entry,
-                db,
-                zip_contents,
-                dest_hint,
-                _depth=_depth + 1,
-                data_dir_registry=data_dir_registry,
-            )
-            if result[0] and result[1] != "hash_mismatch":
-                return result[0], "mame_clone"
+        found = found or _by_mame_clone(q, zip_contents, _depth, data_dir_registry)
+    if found:
+        return found
 
     # Data directory fallback: scan data/ caches for matching filename
-
     data_dir_mismatch: str | None = None
     # Without a hash the cache walk matches on filename alone, which is the
     # step an unsourceable entry has to skip: hiscore.dat names one file per
     # driver set, so FBNeo's copy would answer for MAME's.
     if data_dir_registry and (has_strong_hash or not unsourceable):
-        verdict = functools.partial(
-            declared_hash_verdict,
-            has_strong_hash=has_strong_hash,
-            sha1_candidates=sha1_candidates,
-            sha256_candidates=sha256_candidates,
-            md5_list=md5_list,
-            crc_candidates=set(crc_candidates),
-            zipped_file=zipped_file,
-            declared_size=declared_size,
-            file_entry=file_entry,
-            db=db,
-        )
-        hit, data_dir_mismatch = _resolve_in_data_dirs(
-            names_to_try, data_dir_registry, verdict
-        )
-        if hit:
-            return hit
+        found, data_dir_mismatch = _in_data_dirs(q, data_dir_registry)
+    if found:
+        return found
 
     if data_dir_mismatch and not unsourceable:
         return data_dir_mismatch, "hash_mismatch"
 
-    agnostic = _resolve_agnostic(file_entry, files_db, has_strong_hash)
-    if agnostic:
-        return agnostic
-
-    return None, "not_found"
+    return _resolve_agnostic(file_entry, q.files_db, has_strong_hash) or (None, "not_found")
 
 
 _mame_clone_map_cache: dict[str, dict[str, str]] = {}
@@ -3262,6 +3625,137 @@ def platform_layouts(
     ]
 
 
+@dataclass
+class _StandaloneLaunches:
+    """Where a platform's launches of a standalone emulator read its files."""
+
+    emu_name: str
+    profile: dict
+    standalone_cores: set[str]
+    per_system: bool
+    index: Mapping[str, set[str]]
+    # A profile system the platform launches under a system of its own, as
+    # its list says for one entry, is launched there for every entry.
+    family: dict[str, set[str]]
+    # The systems the launcher records name.
+    named_systems: frozenset[str]
+    # The layout folders a search setting stands for (standalone_pools).
+    pool_folders: set[str]
+    # Bindings can depend on the system an entry is launched for, so each
+    # set of launch systems gets its own.
+    by_systems: dict[frozenset[str], dict[str, tuple[str, str]]] = dataclasses.field(default_factory=dict)
+
+    @classmethod
+    def of(cls, emu_name: str, profile: dict, standalone_cores: set[str]) -> _StandaloneLaunches:
+        names = {emu_name, *(str(c) for c in profile.get("cores") or [])}
+        per_system = bool(
+            profile.get("standalone_directories") or profile.get("standalone_pools")
+        ) and any(h.systems and h.emulator in names for h in _handed(standalone_cores))
+        index = system_file_index(standalone_cores) if per_system else {}
+        # A profile system the platform launches under a system of its own, as
+        # its list says for one entry, is launched there for every entry:
+        # Recalbox lists mc10.rom under trs80coco, so alice.rom is read there.
+        family: dict[str, set[str]] = {}
+        for f in (profile.get("files") or []) if per_system else []:
+            if isinstance(f, dict):
+                own = entry_launch_systems(f, {})
+                for system in own:
+                    family.setdefault(system, set()).update(entry_launch_systems(f, index) - own)
+
+        # The systems the launcher records name: a launch for one of them reads
+        # the folder its record gives, every other launch the folder the records
+        # naming none give.
+        named_systems = frozenset().union(*(
+            h.systems for h in _handed(standalone_cores) if h.emulator in names
+        )) if per_system else frozenset()
+
+        # The layout folders a search setting stands for (standalone_pools):
+        # bound, the launcher passes the setting and the default is not read.
+        from launchers import pool_folders as _pool_folders
+
+        pool_folders = {v.strip("/") for v in _pool_folders(profile).values()} - {""}
+        return cls(
+            emu_name, profile, standalone_cores, per_system, index, family,
+            named_systems, pool_folders,
+        )
+
+    def launch_systems(self, entry: dict) -> frozenset[str]:
+        systems: frozenset[str] = frozenset()
+        if self.per_system:
+            own = entry_launch_systems(entry, {})
+            systems = entry_launch_systems(entry, self.index)
+            if systems == own:
+                systems = systems.union(*(self.family.get(s, set()) for s in own))
+            if systems == own:
+                # The platform's list names none of the entry's names: its
+                # own system selects the launch that offers it as a machine
+                # (RetroBat runs XRoar's coco3 under coco).
+                systems = systems.union(*(
+                    self.index.get(MACHINE_KEY + _norm_system_id(s), set()) for s in own
+                ))
+        return systems
+
+    def bindings_for(self, systems: frozenset[str]) -> dict[str, tuple[str, str]]:
+        if systems not in self.by_systems:
+            self.by_systems[systems] = standalone_bindings_for(
+                self.emu_name, self.profile, self.standalone_cores, systems
+            )
+        return self.by_systems[systems]
+
+    def bindings_of(self, entry: dict) -> dict[str, tuple[str, str]]:
+        return self.bindings_for(self.launch_systems(entry))
+
+    def passed_setting(self, entry: dict) -> bool:
+        layout = str(standalone_layout_path(entry, self.profile) or "")
+        bindings = self.bindings_of(entry)
+        return any(
+            folder in bindings and (layout == folder or layout.startswith(folder + "/"))
+            for folder in self.pool_folders
+        )
+
+    def destinations(self, entry: dict) -> list[tuple[str, str] | None]:
+        """Each place the entry's launches read it from, in launch order.
+
+        An entry of a system a record names is read where that record puts
+        it. One also launched for systems no record names is read, for those
+        launches, where the records naming none put it: EmuELEC starts
+        AdvanceMAME with dir_rom roms/arcade for arcade and roms/mame for
+        mame and cps1-3 (advmame.sh:26-30), and an arcade set is read in both.
+        """
+        systems = self.launch_systems(entry)
+        found = [standalone_destination(entry, self.profile, self.bindings_for(systems))]
+        # A system the platform's list or machines put the entry under
+        # stands for the entry's own ids: XRoar's coco3 is launched as coco.
+        own = entry_launch_systems(entry, {})
+        launched = (systems - own) | (own & self.named_systems) if systems != own else systems
+        if launched & self.named_systems and launched - self.named_systems:
+            generic = standalone_destination(entry, self.profile, self.bindings_for(frozenset()))
+            if generic not in found:
+                found.append(generic)
+        return found
+
+    def placed_files(self) -> list:
+        """The profile's files, each layout entry at the folders its launches read."""
+        files = []
+        for f in self.profile.get("files") or []:
+            if not isinstance(f, dict) or standalone_layout_path(f, self.profile) is None:
+                files.append(f)
+                continue
+            places = [p for p in self.destinations(f) if p is not None and p[0] != "outside"]
+            if not places:
+                files.append({**f, "unplaced": OUTSIDE_BIOS_FOLDER})
+                continue
+            moved = f
+            if f.get("bundled") and self.passed_setting(f):
+                # The copy installed with the emulator sits where the setting
+                # pointed before the launcher moved it: RetroBat passes MAME
+                # -hash bios/mame/hash (Mame64.Generator.cs:172, 177-178), and
+                # the hash/ beside mame.exe is no longer read.
+                moved = {k: v for k, v in f.items() if k != "bundled"}
+            files.extend(_placed_entry(moved, self.profile, placed) for placed in places)
+        return files
+
+
 def _build_layouts(
     emu_name: str, profile: dict, standalone_cores: set[str]
 ) -> list[tuple[dict, bool]]:
@@ -3278,97 +3772,13 @@ def _build_layouts(
             return [(profile, False)]
         return [(system_dir_view(profile, d), False) for d in directories]
     standalone = profile
-    # Bindings can depend on the system an entry is launched for, so each
-    # set of launch systems gets its own.
-    by_systems: dict[frozenset[str], dict[str, tuple[str, str]]] = {}
-    names = {emu_name, *(str(c) for c in profile.get("cores") or [])}
-    per_system = bool(
-        profile.get("standalone_directories") or profile.get("standalone_pools")
-    ) and any(h.systems and h.emulator in names for h in _handed(standalone_cores))
-    index = system_file_index(standalone_cores) if per_system else {}
-    # A profile system the platform launches under a system of its own, as
-    # its list says for one entry, is launched there for every entry:
-    # Recalbox lists mc10.rom under trs80coco, so alice.rom is read there.
-    family: dict[str, set[str]] = {}
-    for f in (profile.get("files") or []) if per_system else []:
-        if isinstance(f, dict):
-            own = entry_launch_systems(f, {})
-            for system in own:
-                family.setdefault(system, set()).update(entry_launch_systems(f, index) - own)
-
-    # The systems the launcher records name: a launch for one of them reads
-    # the folder its record gives, every other launch the folder the records
-    # naming none give.
-    named_systems = frozenset().union(*(
-        h.systems for h in _handed(standalone_cores) if h.emulator in names
-    )) if per_system else frozenset()
-
-    def launch_systems(entry: dict) -> frozenset[str]:
-        systems: frozenset[str] = frozenset()
-        if per_system:
-            own = entry_launch_systems(entry, {})
-            systems = entry_launch_systems(entry, index)
-            if systems == own:
-                systems = systems.union(*(family.get(s, set()) for s in own))
-            if systems == own:
-                # The platform's list names none of the entry's names: its
-                # own system selects the launch that offers it as a machine
-                # (RetroBat runs XRoar's coco3 under coco).
-                systems = systems.union(*(
-                    index.get(MACHINE_KEY + _norm_system_id(s), set()) for s in own
-                ))
-        return systems
-
-    def bindings_for(systems: frozenset[str]) -> dict[str, tuple[str, str]]:
-        if systems not in by_systems:
-            by_systems[systems] = standalone_bindings_for(
-                emu_name, profile, standalone_cores, systems
-            )
-        return by_systems[systems]
-
-    def bindings_of(entry: dict) -> dict[str, tuple[str, str]]:
-        return bindings_for(launch_systems(entry))
-
-    # The layout folders a search setting stands for (standalone_pools):
-    # bound, the launcher passes the setting and the default is not read.
-    from launchers import pool_folders as _pool_folders
-
-    pool_folders = {v.strip("/") for v in _pool_folders(profile).values()} - {""}
-
-    def passed_setting(entry: dict) -> bool:
-        layout = str(standalone_layout_path(entry, profile) or "")
-        bindings = bindings_of(entry)
-        return any(
-            folder in bindings and (layout == folder or layout.startswith(folder + "/"))
-            for folder in pool_folders
-        )
-
-    def destinations(entry: dict) -> list[tuple[str, str] | None]:
-        """Each place the entry's launches read it from, in launch order.
-
-        An entry of a system a record names is read where that record puts
-        it. One also launched for systems no record names is read, for those
-        launches, where the records naming none put it: EmuELEC starts
-        AdvanceMAME with dir_rom roms/arcade for arcade and roms/mame for
-        mame and cps1-3 (advmame.sh:26-30), and an arcade set is read in both.
-        """
-        systems = launch_systems(entry)
-        found = [standalone_destination(entry, profile, bindings_for(systems))]
-        # A system the platform's list or machines put the entry under
-        # stands for the entry's own ids: XRoar's coco3 is launched as coco.
-        own = entry_launch_systems(entry, {})
-        launched = (systems - own) | (own & named_systems) if systems != own else systems
-        if launched & named_systems and launched - named_systems:
-            generic = standalone_destination(entry, profile, bindings_for(frozenset()))
-            if generic not in found:
-                found.append(generic)
-        return found
+    launches = _StandaloneLaunches.of(emu_name, profile, standalone_cores)
 
     layout_entries = [
         f for f in profile.get("files") or []
         if isinstance(f, dict) and standalone_layout_path(f, profile) is not None
     ]
-    if any(bindings_of(f) for f in layout_entries):
+    if any(launches.bindings_of(f) for f in layout_entries):
         # The standalone view carries the platform's destination, so every
         # reader of standalone_path (builder, manifest, verify, slots) places
         # the file in the folder the platform hands the emulator.
@@ -3376,24 +3786,7 @@ def _build_layouts(
         # platform keeps outside the BIOS tree: UAE4All2's kick.rom in
         # RetroPie's $md_inst. It is marked, never left at the BIOS root
         # where the emulator does not read it.
-        files = []
-        for f in profile.get("files") or []:
-            if not isinstance(f, dict) or standalone_layout_path(f, profile) is None:
-                files.append(f)
-                continue
-            places = [p for p in destinations(f) if p is not None and p[0] != "outside"]
-            if not places:
-                files.append({**f, "unplaced": OUTSIDE_BIOS_FOLDER})
-                continue
-            moved = f
-            if f.get("bundled") and passed_setting(f):
-                # The copy installed with the emulator sits where the setting
-                # pointed before the launcher moved it: RetroBat passes MAME
-                # -hash bios/mame/hash (Mame64.Generator.cs:172, 177-178), and
-                # the hash/ beside mame.exe is no longer read.
-                moved = {k: v for k, v in f.items() if k != "bundled"}
-            files.extend(_placed_entry(moved, profile, placed) for placed in places)
-        standalone = {**profile, "files": files}
+        standalone = {**profile, "files": launches.placed_files()}
     dual = {c.removeprefix(DUAL_MODE_PREFIX) for c in standalone_cores
             if c.startswith(DUAL_MODE_PREFIX)}
     if "libretro" in str(profile.get("type", "")) and dual & {
@@ -3641,6 +4034,125 @@ def _rom_search_sets(
     return frozenset(found | members)
 
 
+def _search_reads(emu_name: str, searches: list, name: str) -> list[tuple[str, str]]:
+    """The (tree, folder) places a passed ROM search reads this set from."""
+    stem = name.rsplit(".", 1)[0]
+    return sorted({
+        tuple(where) for _emu, where, system, machines, any_machine, _ref, _build in searches
+        if where and stem in rom_search_sets(emu_name, system, machines, any_machine)
+    })
+
+
+def _roms_entry(entry: dict, tree: str, folder: str, rel: str) -> dict:
+    """The entry placed in a roms folder."""
+    # Below the roms root inside the install tree (EmuELEC's
+    # /storage/roms): a plain dest the platform prefix skips, as a
+    # standalone entry placed there (_placed_entry).
+    where: dict[str, object] = (
+        {"unprefixed": True} if tree == "install" else {"root": ROMS_ROOT}
+    )
+    return {**entry, **where, "path": f"{folder}/{rel}", "layout_path": rel}
+
+
+def _content_folder_boards(tags: list[str], names: set[str]) -> dict[tuple, set[str] | None]:
+    """Each roms folder the platform launches the core from, with its boards."""
+    # A place keeps the boards its core is offered on there, every board
+    # when one folder offers it everywhere.
+    on_boards: dict[tuple, set[str] | None] = {}
+    for core, _folder, where, on in (
+        json.loads(t[len(CONTENT_FOLDER_PREFIX):])
+        for t in tags if t.startswith(CONTENT_FOLDER_PREFIX)
+    ):
+        if core not in names or not where:
+            continue
+        place = tuple(where)
+        known = on_boards.get(place, set())
+        on_boards[place] = None if on is None or known is None else known | set(on)
+    return on_boards
+
+
+def _libretro_content_layout(
+    emu_name: str, view: dict, tags: list[str], names: set[str], searches: list,
+) -> dict:
+    """The libretro layout with each file read beside the content placed there."""
+    on_boards = _content_folder_boards(tags, names)
+    folders = sorted(on_boards)
+    # The folders a passed `-rompath` replaces the build's own search
+    # path with stand for these: libretro MAME hands MAME
+    # <system>/mame/bios unless the content's command line names
+    # another (retro_init.cpp Set_Path_Option, execute_game_cmd).
+    from launchers import pool_folders
+
+    pools = set(pool_folders({"standalone_pools": view.get("libretro_pools")}).values())
+    out: list = []
+    changed = False
+    for f in view.get("files") or []:
+        if not isinstance(f, dict):
+            out.append(f)
+            continue
+        if _content_load(f) != "content_dir" or f.get("category") == "game_data":
+            # Game data read beside the content is the game's own.
+            out.append(f)
+            parent, _, rel = str(f.get("path") or "").rpartition("/")
+            if searches and parent in pools and rel:
+                reads = _search_reads(emu_name, searches, rel)
+                changed |= bool(reads)
+                out.extend(_roms_entry(f, tree, folder, rel) for tree, folder in reads)
+            continue
+        changed = True
+        plain = _without_libretro_load(f)
+        if not folders:
+            out.append({**plain, "unplaced": OUTSIDE_BIOS_FOLDER})
+            continue
+        rel = str(f.get("path") or f.get("name") or "")
+        out.extend(
+            {**_roms_entry(plain, tree, folder, rel),
+             **({"boards": sorted(on)} if (on := on_boards[(tree, folder)]) is not None else {})}
+            for tree, folder in folders
+        )
+    return {**view, "files": out} if changed else view
+
+
+def _standalone_content_layout(emu_name: str, view: dict, searches: list) -> dict:
+    """The standalone layout with each set a passed search reads placed there."""
+    pools = {str(v).strip("/") for v in (view.get("standalone_pools") or {}).values()}
+    if not searches or "" not in pools:
+        return view
+    out: list = []
+    changed = False
+    for f in view.get("files") or []:
+        layout = (
+            (f.get("layout_path") or standalone_layout_path(f, view)) if isinstance(f, dict) else None
+        )
+        if not layout or "/" in layout:
+            out.append(f)
+            continue
+        reads = _search_reads(emu_name, searches, layout)
+        if f.get("unplaced") != OUTSIDE_BIOS_FOLDER:
+            # A set a launcher record placed stays there: EmuDeck's
+            # mame.ini rompath is read when Steam ROM Manager starts MAME
+            # with no `-rompath` (tools/launchers/mame.sh), and ES-DE's
+            # commands read the folders they pass.
+            out.append(f)
+            held = {(f.get("root") or "", f.get("standalone_path") or "")}
+            extra = [
+                _placed_entry(f, view, (tree, f"{folder}/{layout}")) for tree, folder in reads
+            ]
+            extra = [e for e in extra if (e.get("root") or "", e["standalone_path"]) not in held]
+            changed |= bool(extra)
+            out.extend(extra)
+            continue
+        if not reads:
+            out.append(f)
+            continue
+        changed = True
+        placed = {k: v for k, v in f.items() if k != "unplaced"}
+        out.extend(
+            _placed_entry(placed, view, (tree, f"{folder}/{layout}")) for tree, folder in reads
+        )
+    return {**view, "files": out} if changed else view
+
+
 def content_layout(
     emu_name: str, view: dict, standalone: bool, standalone_cores: Iterable[str],
 ) -> dict:
@@ -3667,112 +4179,15 @@ def content_layout(
     if CONTENT_SCOPE_TAG not in tags:
         return view
     names = {_core_key(n) for n in {emu_name, *(str(c) for c in view.get("cores") or [])}}
-    files = view.get("files") or []
-    out: list = []
-    changed = False
     searches = [
         json.loads(t[len(ROM_SEARCH_PREFIX):])
         for t in tags if t.startswith(ROM_SEARCH_PREFIX)
     ]
     build = "standalone" if standalone else "libretro"
     searches = [s for s in searches if _core_key(s[0]) in names and s[6] == build]
-
-    def search_reads(name: str) -> list[tuple[str, str]]:
-        stem = name.rsplit(".", 1)[0]
-        return sorted({
-            tuple(where) for _emu, where, system, machines, any_machine, _ref, _build in searches
-            if where and stem in rom_search_sets(emu_name, system, machines, any_machine)
-        })
-
-    def roms_entry(entry: dict, tree: str, folder: str, rel: str) -> dict:
-        # Below the roms root inside the install tree (EmuELEC's
-        # /storage/roms): a plain dest the platform prefix skips, as a
-        # standalone entry placed there (_placed_entry).
-        where: dict[str, object] = (
-            {"unprefixed": True} if tree == "install" else {"root": ROMS_ROOT}
-        )
-        return {**entry, **where, "path": f"{folder}/{rel}", "layout_path": rel}
-
     if not standalone:
-        # A place keeps the boards its core is offered on there, every board
-        # when one folder offers it everywhere.
-        on_boards: dict[tuple, set[str] | None] = {}
-        for core, _folder, where, on in (
-            json.loads(t[len(CONTENT_FOLDER_PREFIX):])
-            for t in tags if t.startswith(CONTENT_FOLDER_PREFIX)
-        ):
-            if core not in names or not where:
-                continue
-            place = tuple(where)
-            known = on_boards.get(place, set())
-            on_boards[place] = None if on is None or known is None else known | set(on)
-        folders = sorted(on_boards)
-        # The folders a passed `-rompath` replaces the build's own search
-        # path with stand for these: libretro MAME hands MAME
-        # <system>/mame/bios unless the content's command line names
-        # another (retro_init.cpp Set_Path_Option, execute_game_cmd).
-        from launchers import pool_folders
-
-        pools = set(pool_folders({"standalone_pools": view.get("libretro_pools")}).values())
-        for f in files:
-            if not isinstance(f, dict):
-                out.append(f)
-                continue
-            if _content_load(f) != "content_dir" or f.get("category") == "game_data":
-                # Game data read beside the content is the game's own.
-                out.append(f)
-                parent, _, rel = str(f.get("path") or "").rpartition("/")
-                if searches and parent in pools and rel:
-                    reads = search_reads(rel)
-                    changed |= bool(reads)
-                    out.extend(roms_entry(f, tree, folder, rel) for tree, folder in reads)
-                continue
-            changed = True
-            plain = _without_libretro_load(f)
-            if not folders:
-                out.append({**plain, "unplaced": OUTSIDE_BIOS_FOLDER})
-                continue
-            rel = str(f.get("path") or f.get("name") or "")
-            out.extend(
-                {**roms_entry(plain, tree, folder, rel),
-                 **({"boards": sorted(on)} if (on := on_boards[(tree, folder)]) is not None else {})}
-                for tree, folder in folders
-            )
-        return {**view, "files": out} if changed else view
-    pools = {str(v).strip("/") for v in (view.get("standalone_pools") or {}).values()}
-    if not searches or "" not in pools:
-        return view
-    for f in files:
-        layout = (
-            (f.get("layout_path") or standalone_layout_path(f, view)) if isinstance(f, dict) else None
-        )
-        if not layout or "/" in layout:
-            out.append(f)
-            continue
-        reads = search_reads(layout)
-        if f.get("unplaced") != OUTSIDE_BIOS_FOLDER:
-            # A set a launcher record placed stays there: EmuDeck's
-            # mame.ini rompath is read when Steam ROM Manager starts MAME
-            # with no `-rompath` (tools/launchers/mame.sh), and ES-DE's
-            # commands read the folders they pass.
-            out.append(f)
-            held = {(f.get("root") or "", f.get("standalone_path") or "")}
-            extra = [
-                _placed_entry(f, view, (tree, f"{folder}/{layout}")) for tree, folder in reads
-            ]
-            extra = [e for e in extra if (e.get("root") or "", e["standalone_path"]) not in held]
-            changed |= bool(extra)
-            out.extend(extra)
-            continue
-        if not reads:
-            out.append(f)
-            continue
-        changed = True
-        placed = {k: v for k, v in f.items() if k != "unplaced"}
-        out.extend(
-            _placed_entry(placed, view, (tree, f"{folder}/{layout}")) for tree, folder in reads
-        )
-    return {**view, "files": out} if changed else view
+        return _libretro_content_layout(emu_name, view, tags, names, searches)
+    return _standalone_content_layout(emu_name, view, searches)
 
 
 def _content_load(entry: dict) -> str:
@@ -4409,6 +4824,25 @@ def designated_profiles(profiles: dict[str, dict], names: set[str]) -> set[str]:
     return {profile for c in names for profile in index.get(c, {c})}
 
 
+def _destination_cores(profiles: dict[str, dict]) -> dict[str, set[str]]:
+    """Each lowercased destination with a directory -> the cores reading it."""
+    dest_cores: dict[str, set[str]] = {}
+    for name, p in profiles.items():
+        if p.get("type") == "alias":
+            continue
+        for f in p.get("files", []):
+            for key in ("path", "standalone_path"):
+                dest = f.get(key)
+                if not isinstance(dest, str):
+                    continue
+                if dest.endswith("/"):
+                    dest += f.get("name", "")
+                dest = sanitize_pack_path(dest).lower()
+                if "/" in dest:
+                    dest_cores.setdefault(dest, set()).add(name)
+    return dest_cores
+
+
 def system_core_reach(
     systems: dict[str, dict],
     profiles: dict[str, dict],
@@ -4448,20 +4882,7 @@ def system_core_reach(
     # The evidence only keeps: a path shared with an off-target core says
     # nothing of the other files, and Batocera's bbc runs on MAME, which no
     # profile ties to bbcb.zip, while CLK reads two of its ROMs.
-    dest_cores: dict[str, set[str]] = {}
-    for name, p in profiles.items():
-        if p.get("type") == "alias":
-            continue
-        for f in p.get("files", []):
-            for key in ("path", "standalone_path"):
-                dest = f.get(key)
-                if not isinstance(dest, str):
-                    continue
-                if dest.endswith("/"):
-                    dest += f.get("name", "")
-                dest = sanitize_pack_path(dest).lower()
-                if "/" in dest:
-                    dest_cores.setdefault(dest, set()).add(name)
+    dest_cores = _destination_cores(profiles)
 
     reach: dict[str, set[str] | None] = {}
     for sys_id, sys_data in systems.items():
@@ -4498,7 +4919,7 @@ def filter_systems_by_target(
     return {
         sys_id: sys_data
         for sys_id, sys_data in systems.items()
-        if reach[sys_id] is None or reach[sys_id] & available
+        if (cores := reach[sys_id]) is None or cores & available
     }
 
 
@@ -4680,11 +5101,6 @@ def expand_platform_declared_names(config: dict, db: dict) -> set[str]:
     return set(platform_declarations(config, db))
 
 
-import re
-
-
-
-
 # Validation and mode filtering: extracted to validation.py for SoC.
 # Re-exported below for backward compatibility.
 
@@ -4839,68 +5255,6 @@ def _unknown_target_message(target: str, platforms: list[str], platforms_dir: st
         return f"{message} Close matches: {named}."
     return (f"{message} python scripts/verify.py --platform <name> --list-targets "
             "lists the targets of one platform.")
-
-
-# Re-exported so the existing call sites keep working while the
-# modules above become the place to import from.
-from safeparse import (  # noqa: E402,F401
-    parse_untrusted_xml,
-    require_yaml,
-    yaml_load,
-    _pick_yaml_loader,
-    _YAML_LOADER,
-)
-from hashing import (  # noqa: E402,F401
-    compute_hashes,
-    md5sum,
-    md5_composite,
-    parse_md5_list,
-    cut_md5_owner,
-    _ALL_ALGORITHMS,
-    _md5_composite_cache,
-)
-from ziptools import (  # noqa: E402,F401
-    check_inside_zip,
-    build_zip_contents_index,
-    MAX_ZIP_MEMBERS,
-    MAX_ZIP_MEMBER_SIZE,
-    MAX_ZIP_TOTAL_SIZE,
-    MAX_ZIP_COMPRESSION_RATIO,
-    safe_extract_zip,
-    _zip_contents_cache,
-    _BOUNDED_RATIO_METHODS,
-    zip_member_crcs,
-    zip_member_names,
-)
-from artifacts import (  # noqa: E402,F401
-    write_if_changed,
-    write_text_atomic,
-    copy_file_atomic,
-    plain_file_mode,
-    set_plain_mode,
-    ArtifactDirectoryMissing,
-    ArtifactLockBusy,
-    artifact_lock,
-    hold_artifact_lock,
-    hold_repository_outputs,
-    publish_hold,
-    repository_output_lock,
-    _TIMESTAMP_PATTERNS,
-    _strip_timestamps,
-)
-from largefiles import (  # noqa: E402,F401
-    LARGE_FILES_RELEASE,
-    LARGE_FILES_REPO,
-    LARGE_FILES_CACHE,
-    fetch_large_file,
-)
-from dumpcatalog import (  # noqa: E402,F401
-    DEFAULT_PROVENANCE_DIR,
-    load_provenance_snapshots,
-    build_provenance_index,
-    annotate_provenance,
-    write_provenance_snapshot,
-)
 
 
 def _exit_on_signal(signum: int, _frame: object) -> None:
