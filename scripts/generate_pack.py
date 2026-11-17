@@ -195,10 +195,10 @@ if TYPE_CHECKING:
 
     # How a manifest settles a platform declaration: the copy served, or None
     # and why not.
-    _Settle = Callable[[dict, str, str, str | None], tuple[str | None, str]]
+    _Settle = Callable[[dict, str, str, "str | None"], "tuple[str | None, str]"]
     # What a destination came to: its entries, whether it was filled, and the
     # report to make if no other member of its set fills it.
-    _Outcome = tuple[list[dict], bool, Callable[[], None] | None]
+    _Outcome = tuple[list[dict], bool, "Callable[[], None] | None"]
 
 yaml = require_yaml()
 
@@ -3560,7 +3560,7 @@ def _run_verify_packs(args: argparse.Namespace) -> None:
 
 
 def _verification_summary(failing: list[str], verified: int, output_dir: str) -> bool:
-    """Print how --verify-packs ended; False when nothing was verified."""
+    """Print how --verify-packs ended. False when nothing was verified."""
     if failing:
         # Named at the end, where the log is read, and on stderr, as the
         # build path does: a failing pack sat among its own error lines.
@@ -4143,7 +4143,7 @@ def _run_quick_mode(
     args: argparse.Namespace, parser: argparse.ArgumentParser, held: contextlib.ExitStack,
 ) -> bool:
     """Run a mode that builds nothing (a check of existing packs, the target
-    lists, a listing); True when one ran."""
+    lists, a listing). True when one ran."""
     # Quick-exit modes: --verify-packs alone = verify existing packs only
     # Combined with --all-variants, generation runs first then verify
     if args.verify_packs and not args.all_variants:
