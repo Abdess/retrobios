@@ -61,9 +61,19 @@ def _gate_queries() -> dict:
 
 
 def _finalize(rel: str, body: str, authored: dict) -> dict:
-    _target, text = sitestarlight.finalize_page(
-        rel, body, level="", weight=None, browser_title="T", description="d",
-        structured={}, terms={}, authored=authored)
+    _target, text = sitestarlight.render_page(
+        rel,
+        body,
+        sitestarlight.PageMeta(
+            level="",
+            weight=None,
+            browser_title="T",
+            description="d",
+            structured={},
+            terms={},
+            authored=authored,
+        ),
+    )
     return {"front": _front(text), "text": text}
 
 
@@ -391,11 +401,7 @@ class ConsoleWordsReachTheConsole(unittest.TestCase):
                          ["SNES BIOS", "Super Famicom BIOS"])
 
     def test_the_terms_field_carries_them(self):
-        _target, text = sitestarlight.finalize_page(
-            "systems/nintendo-snes.md", "# SNES\n\nNo file needed.\n", level="0",
-            weight=None, browser_title="SNES", description="d",
-            structured={"@type": "TechArticle"}, terms={},
-            authored={"consoles": ["SNES"]})
+        _target, text = sitestarlight.render_page("systems/nintendo-snes.md", "# SNES\n\nNo file needed.\n", sitestarlight.PageMeta(level="0", weight=None, browser_title="SNES", description="d", structured={"@type": "TechArticle"}, terms={}, authored={"consoles": ["SNES"]}))
         self.assertIn('data-pagefind-meta="consoles:SNES"', text)
         self.assertIn('data-pagefind-meta="terms:SNES BIOS"', text)
 
@@ -434,19 +440,22 @@ class ANameAnotherPageCovers(unittest.TestCase):
     def test_names_another_page_covers(self):
         covered = {page: sitestarlight.covered_names(names, page, self.words())
                    for page, names in self.PAGES.items()}
-        self.assertEqual(covered, {
-            "systems/sony-playstation": ["PlayStation"],
-            "systems/sony-playstation-2": [],
-            # Every word of PlayStation 3 is on the PlayStation 2 page, but
-            # not "3" itself: no page covers it.
-            "systems/sony": [],
-            "systems/nintendo-nintendo-ds": ["Nintendo DS"],
-            "systems/nintendo-nintendo-dsi": [],
-            "systems/nintendo": [],
-            # Nintendo, Super and System, each in another name.
-            "systems/arcade-nintendo-super-system": ["Nintendo Super System"],
-            "systems/sega-saturn": [],
-        })
+        self.assertEqual(
+            covered,
+            {
+                "systems/sony-playstation": ["PlayStation"],
+                "systems/sony-playstation-2": [],
+                # Every word of PlayStation 3 is on the PlayStation 2 page, but
+                # not "3" itself: no page covers it.
+                "systems/sony": [],
+                "systems/nintendo-nintendo-ds": ["Nintendo DS"],
+                "systems/nintendo-nintendo-dsi": [],
+                "systems/nintendo": [],
+                # Nintendo, Super and System, each in another name.
+                "systems/arcade-nintendo-super-system": ["Nintendo Super System"],
+                "systems/sega-saturn": [],
+            },
+        )
 
     def test_words_of_a_decorated_page(self):
         text = '<span data-pagefind-meta="consoles:Nintendo DS" hidden></span>'
@@ -457,10 +466,7 @@ class ANameAnotherPageCovers(unittest.TestCase):
         words = self.words()
 
         def text(page: str) -> str:
-            return sitestarlight.finalize_page(
-                f"{page}.md", "# T\n\nBody.\n", level="0", weight=None,
-                browser_title="T", description="d", structured={"@type": "TechArticle"},
-                terms={}, authored={"consoles": self.PAGES[page]}, words_by_page=words)[1]
+            return sitestarlight.render_page(f"{page}.md", "# T\n\nBody.\n", sitestarlight.PageMeta(level="0", weight=None, browser_title="T", description="d", structured={"@type": "TechArticle"}, terms={}, authored={"consoles": self.PAGES[page]}, words_by_page=words))[1]
 
         self.assertIn('data-pagefind-meta="exact:PlayStation"', text("systems/sony-playstation"))
         for page in ("systems/sony-playstation-2", "systems/sega-saturn"):

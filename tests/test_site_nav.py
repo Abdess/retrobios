@@ -99,10 +99,18 @@ class NotFoundPage(unittest.TestCase):
         self.assertIn("/404", side["options"]["topics"]["start-here"])
 
     def test_the_404_has_no_contents_no_index_and_no_structured_data(self):
-        _target, text = sitestarlight.finalize_page(
-            "404.md", "# Page not found\n\nGone.\n", level="", weight=None,
-            browser_title="Page not found", description="d",
-            structured={"@type": "TechArticle"}, terms={})
+        _target, text = sitestarlight.render_page(
+            "404.md",
+            "# Page not found\n\nGone.\n",
+            sitestarlight.PageMeta(
+                level="",
+                weight=None,
+                browser_title="Page not found",
+                description="d",
+                structured={"@type": "TechArticle"},
+                terms={},
+            ),
+        )
         front = generate_site._front_matter(text)
         self.assertIs(front["tableOfContents"], False)
         self.assertIs(front["prev"], False)
@@ -212,9 +220,7 @@ class OneNextPerPage(unittest.TestCase):
 
     def test_card_pages_turn_pagination_off(self):
         for rel in ("systems/sony.md", "emulators/duckstation.md", "platforms/batocera.md"):
-            _target, text = sitestarlight.finalize_page(
-                rel, "# T\n\nBody.\n", level="explore", weight=None, browser_title="T",
-                description="d", structured={}, terms={})
+            _target, text = sitestarlight.render_page(rel, "# T\n\nBody.\n", sitestarlight.PageMeta(level="explore", weight=None, browser_title="T", description="d", structured={}, terms={}))
             front = generate_site._front_matter(text)
             with self.subTest(page=rel):
                 self.assertIs(front["prev"], False)
@@ -223,16 +229,12 @@ class OneNextPerPage(unittest.TestCase):
     def test_the_next_link_is_the_first_of_next_steps(self):
         body = ("# Troubleshooting\n\nText.\n\n## Next steps\n\n"
                 "- [Common questions](faq.md)\n- [Glossary](glossary.md)\n")
-        _target, text = sitestarlight.finalize_page(
-            "wiki/troubleshooting.md", body, level="start", weight=None,
-            browser_title="Troubleshooting", description="d", structured={}, terms={})
+        _target, text = sitestarlight.render_page("wiki/troubleshooting.md", body, sitestarlight.PageMeta(level="start", weight=None, browser_title="Troubleshooting", description="d", structured={}, terms={}))
         front = generate_site._front_matter(text)
         self.assertEqual(front["next"], {"link": "/retrobios/wiki/faq/", "label": "Common questions"})
 
     def test_a_page_without_next_steps_keeps_the_reading_order(self):
-        _target, text = sitestarlight.finalize_page(
-            "wiki/faq.md", "# FAQ\n\nText.\n", level="start", weight=None,
-            browser_title="FAQ", description="d", structured={}, terms={})
+        _target, text = sitestarlight.render_page("wiki/faq.md", "# FAQ\n\nText.\n", sitestarlight.PageMeta(level="start", weight=None, browser_title="FAQ", description="d", structured={}, terms={}))
         self.assertNotIn("next", generate_site._front_matter(text))
 
 
@@ -565,11 +567,7 @@ class MovedPlatformPages(unittest.TestCase):
                 self.assertRegex(front, r"parent:\n  label: .+\n  link: /retrobios/platforms/[a-z0-9_-]+/\n")
 
     def test_parent_link_resolves_against_the_page(self) -> None:
-        _target, text = sitestarlight.finalize_page(
-            "platforms/retroarch-sony-playstation.md", "# RetroArch: Sony PlayStation\n\nBody.\n",
-            level="reference", weight=0.5, browser_title="x", description="d",
-            structured={}, terms={}, parent={"label": "RetroArch", "link": "retroarch.md"},
-        )
+        _target, text = sitestarlight.render_page("platforms/retroarch-sony-playstation.md", "# RetroArch: Sony PlayStation\n\nBody.\n", sitestarlight.PageMeta(level="reference", weight=0.5, browser_title="x", description="d", structured={}, terms={}, parent={"label": "RetroArch", "link": "retroarch.md"}))
         self.assertIn("parent:\n  label: RetroArch\n  link: /retrobios/platforms/retroarch/\n", text)
 
     def test_the_schema_accepts_parent(self) -> None:

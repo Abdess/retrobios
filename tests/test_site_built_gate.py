@@ -256,10 +256,19 @@ class TheRules(unittest.TestCase):
     def test_the_logo_reaches_the_front_matter(self):
         import sitestarlight
 
-        _target, text = sitestarlight.finalize_page(
-            "platforms/x.md", "# X\n\nBody.\n", level="setup", weight=None,
-            browser_title="X", description="d", structured={}, terms={},
-            logo="assets/logos/x.svg")
+        _target, text = sitestarlight.render_page(
+            "platforms/x.md",
+            "# X\n\nBody.\n",
+            sitestarlight.PageMeta(
+                level="setup",
+                weight=None,
+                browser_title="X",
+                description="d",
+                structured={},
+                terms={},
+                logo="assets/logos/x.svg",
+            ),
+        )
         self.assertIn("logo: assets/logos/x.svg", text)
 
     def test_a_large_data_directory_is_listed_on_pages_of_its_own(self):

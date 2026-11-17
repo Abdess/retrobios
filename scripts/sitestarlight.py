@@ -556,29 +556,6 @@ class PageMeta:
     words_by_page: Mapping[str, set[str]] | None = None
 
 
-def finalize_page(
-    rel: str,
-    markdown: str,
-    *,
-    level: str,
-    weight: float | None,
-    browser_title: str,
-    description: str,
-    structured: dict,
-    terms: dict[str, str],
-    search: bool = True,
-    logo: str = "",
-    parent: dict | None = None,
-    authored: dict | None = None,
-    words_by_page: Mapping[str, set[str]] | None = None,
-) -> tuple[str, str]:
-    """render_page with the fields of PageMeta as keywords."""
-    return render_page(rel, markdown, PageMeta(
-        level=level, weight=weight, browser_title=browser_title, description=description,
-        structured=structured, terms=terms, search=search, logo=logo, parent=parent,
-        authored=authored, words_by_page=words_by_page))
-
-
 def render_page(rel: str, markdown: str, meta: PageMeta) -> tuple[str, str]:
     """The Starlight file for a page body: its path under the content
     collection and its text. *parent* ({label, link}, the link written

@@ -157,9 +157,13 @@ class TheTableOfContentsOfACardPageStopsAtLevelTwo(unittest.TestCase):
         import yaml
 
         body = "# T\n\n" + "".join(f"## S{i}\n\n### card\n\n" for i in range(sections))
-        _target, text = sitestarlight.finalize_page(
-            rel, body, level="", weight=None, browser_title="T", description="d",
-            structured={}, terms={})
+        _target, text = sitestarlight.render_page(
+            rel,
+            body,
+            sitestarlight.PageMeta(
+                level="", weight=None, browser_title="T", description="d", structured={}, terms={}
+            ),
+        )
         return yaml.safe_load(text.split("---\n")[1]).get("tableOfContents", "default")
 
     def test_cards_leave_the_toc_and_wiki_pages_keep_level_three(self):
