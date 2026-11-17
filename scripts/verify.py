@@ -33,7 +33,7 @@ from collections import Counter
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, TypedDict
 
 import slots
 
@@ -137,6 +137,8 @@ from validation import (
 from packpaths import core_save_folder
 
 if TYPE_CHECKING:
+    from typing_extensions import Unpack
+
     from packextras import ExtraResolver
 
 yaml = require_yaml()
@@ -1788,6 +1790,15 @@ def _profile_coverage(
     return with_validation, with_profile
 
 
+class PlatformNarrowing(TypedDict, total=False):
+    """The narrowings of a platform pack verify_platform reports on."""
+
+    regions: list[str] | None
+    system_filter: list[str] | None
+    no_game_data: bool
+    required_only: bool
+
+
 def verify_platform(
     config: dict,
     db: dict,
@@ -1795,10 +1806,7 @@ def verify_platform(
     emu_profiles: dict | None = None,
     target_cores: set[str] | None = None,
     data_dir_registry: dict | None = None,
-    regions: list[str] | None = None,
-    system_filter: list[str] | None = None,
-    no_game_data: bool = False,
-    required_only: bool = False,
+    **narrowing: Unpack[PlatformNarrowing],
 ) -> dict:
     """Verify all BIOS files for a platform, including cross-reference gaps.
 
@@ -1813,6 +1821,13 @@ def verify_platform(
     declarations, trees and core extras marked ``required: false`` are left
     out before any of them takes a path, as the builder leaves them out.
     """
+    unknown = sorted(set(narrowing) - set(PlatformNarrowing.__annotations__))
+    if unknown:
+        raise TypeError(f"verify_platform() got an unexpected keyword argument '{unknown[0]}'")
+    regions = narrowing.get("regions")
+    system_filter = narrowing.get("system_filter")
+    no_game_data = narrowing.get("no_game_data", False)
+    required_only = narrowing.get("required_only", False)
     left_out: list[str] = []
     if no_game_data:
         config, emu_profiles, left_out = _cut_game_data(

@@ -11,6 +11,7 @@ import os
 import re
 import zipfile
 from collections.abc import Callable, Collection, Iterator, Mapping, Sequence
+from typing import TYPE_CHECKING, TypedDict
 
 from common import (
     adler32_of,
@@ -27,6 +28,9 @@ from common import (
 from hashing import md5_composite, parse_hash_list, parse_md5_list
 from nativemode import SIZE_AND_ANY_HASH, digest_algorithm, hash_mismatch_excludes_file
 from ziptools import check_inside_zip
+
+if TYPE_CHECKING:
+    from typing_extensions import Unpack
 
 # Validation types that require console-specific cryptographic keys.
 # verify.py cannot reproduce these: size checks still apply if combined.
@@ -1140,6 +1144,12 @@ def _owners_of(destination: str, name: str, owners: dict) -> set[str]:
     return {emu for tail, emu in matching if len(tail) == longest}
 
 
+class Judges(TypedDict, total=False):
+    """The cores that judge a file in validated_choice, each by its own entries."""
+
+    emulators: set[str] | None
+
+
 def validated_choice(
     file_entry: dict,
     local_path: str | None,
@@ -1149,7 +1159,7 @@ def validated_choice(
     platform_digest: str | None,
     destination: str = "",
     owners: dict | None = None,
-    emulators: set[str] | None = None,
+    **judging: Unpack[Judges],
 ) -> tuple[str | None, str | None]:
     """The file a platform destination ships, and the disagreement if any.
 
@@ -1159,6 +1169,10 @@ def validated_choice(
     another emulator declares more precisely is that emulator's: ZEsarUX's
     48 KB cpc6128.rom check has no say over ep128emu/roms/cpc6128.rom.
     """
+    unknown = sorted(set(judging) - set(Judges.__annotations__))
+    if unknown:
+        raise TypeError(f"validated_choice() got an unexpected keyword argument '{unknown[0]}'")
+    emulators = judging.get("emulators")
     if not local_path or not validation_index:
         return local_path, None
     name = file_entry.get("name", "")
