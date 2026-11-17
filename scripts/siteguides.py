@@ -296,6 +296,50 @@ def _handheld_guide(data: object, registry: dict, guides: dict, where: str) -> H
     )
 
 
+def _terminals(raw: dict, file_name: str) -> dict[str, tuple[str, str, str]]:
+    terminals: dict[str, tuple[str, str, str]] = {}
+    for key, entry in raw.items():
+        at = f"{file_name}: terminals.{key}"
+        if not isinstance(entry, dict):
+            raise GuideError(f"{at}: expected a mapping")
+        _unknown(entry, _TERMINAL_KEYS, at)
+        label, how, shell = (_text(entry.get(k), f"{at}.{k}") for k in _TERMINAL_KEYS)
+        terminals[key] = (label, how, shell)
+        if entry["shell"] not in ("sh", "powershell"):
+            raise GuideError(f"{at}.shell: sh or powershell, found {entry['shell']!r}")
+    return terminals
+
+
+def _also_runs(raw: list, raw_guides: dict, at: str) -> tuple[tuple[str, str, str, str, str], ...]:
+    rows = []
+    for i, row in enumerate(raw):
+        row_at = f"{at}.also_runs[{i}]"
+        if not isinstance(row, dict):
+            raise GuideError(f"{row_at}: expected a mapping")
+        _unknown(row, _ALSO_KEYS, row_at)
+        setup, summary, uses, runs_on, folder = (_text(row.get(k), f"{row_at}.{k}")
+                                                 for k in _ALSO_KEYS)
+        if uses not in raw_guides:
+            raise GuideError(f"{row_at}.uses: {uses!r} is not a platform with a guide")
+        rows.append((setup, summary, uses, runs_on, folder))
+    return tuple(rows)
+
+
+def _group_tiles(raw: list, at: str) -> tuple[Tile, ...]:
+    group_tiles = []
+    for i, row in enumerate(raw):
+        row_at = f"{at}.tiles[{i}]"
+        if not isinstance(row, dict):
+            raise GuideError(f"{row_at}: expected a mapping")
+        _unknown(row, _TILE_KEYS + _TILE_LOGO_KEYS, row_at)
+        if row.get("logo") and not all(row.get(k) for k in _TILE_LOGO_KEYS):
+            raise GuideError(f"{row_at}: a logo needs logo_owner and logo_licence")
+        group_tiles.append(Tile(
+            *(_text(row.get(k), f"{row_at}.{k}") for k in _TILE_KEYS),
+            *(_text(row[k], f"{row_at}.{k}") if row.get(k) else "" for k in _TILE_LOGO_KEYS)))
+    return tuple(group_tiles)
+
+
 def load_guides(path: Path = GUIDES_FILE, registry: dict | None = None) -> dict:
     """The guides file, checked against the registry.
 
@@ -313,16 +357,7 @@ def load_guides(path: Path = GUIDES_FILE, registry: dict | None = None) -> dict:
         raise GuideError(f"{path.name}: expected a mapping")
     _unknown(data, _TOP_KEYS, path.name)
 
-    terminals: dict[str, tuple[str, str, str]] = {}
-    for key, entry in (data.get("terminals") or {}).items():
-        at = f"{path.name}: terminals.{key}"
-        if not isinstance(entry, dict):
-            raise GuideError(f"{at}: expected a mapping")
-        _unknown(entry, _TERMINAL_KEYS, at)
-        terminals[key] = tuple(_text(entry.get(k), f"{at}.{k}") for k in _TERMINAL_KEYS)
-        if entry["shell"] not in ("sh", "powershell"):
-            raise GuideError(f"{at}.shell: sh or powershell, found {entry['shell']!r}")
-
+    terminals = _terminals(data.get("terminals") or {}, path.name)
     raw_guides = data.get("guides") or {}
     groups: dict[str, tuple[str, str]] = {}
     anchors: dict[str, str] = {}
@@ -336,31 +371,12 @@ def load_guides(path: Path = GUIDES_FILE, registry: dict | None = None) -> dict:
         groups[key] = (_text(entry.get("label"), f"{at}.label"),
                        _text(entry.get("description"), f"{at}.description"))
         anchors[key] = _text(entry.get("anchor"), f"{at}.anchor")
-        rows = []
-        for i, row in enumerate(entry.get("also_runs") or []):
-            row_at = f"{at}.also_runs[{i}]"
-            if not isinstance(row, dict):
-                raise GuideError(f"{row_at}: expected a mapping")
-            _unknown(row, _ALSO_KEYS, row_at)
-            values = tuple(_text(row.get(k), f"{row_at}.{k}") for k in _ALSO_KEYS)
-            if values[2] not in raw_guides:
-                raise GuideError(f"{row_at}.uses: {values[2]!r} is not a platform with a guide")
-            rows.append(values)
+        rows = _also_runs(entry.get("also_runs") or [], raw_guides, at)
         if rows:
-            also_runs[key] = tuple(rows)
-        group_tiles = []
-        for i, row in enumerate(entry.get("tiles") or []):
-            row_at = f"{at}.tiles[{i}]"
-            if not isinstance(row, dict):
-                raise GuideError(f"{row_at}: expected a mapping")
-            _unknown(row, _TILE_KEYS + _TILE_LOGO_KEYS, row_at)
-            if row.get("logo") and not all(row.get(k) for k in _TILE_LOGO_KEYS):
-                raise GuideError(f"{row_at}: a logo needs logo_owner and logo_licence")
-            group_tiles.append(Tile(
-                *(_text(row.get(k), f"{row_at}.{k}") for k in _TILE_KEYS),
-                *(_text(row[k], f"{row_at}.{k}") if row.get(k) else "" for k in _TILE_LOGO_KEYS)))
+            also_runs[key] = rows
+        group_tiles = _group_tiles(entry.get("tiles") or [], at)
         if group_tiles:
-            tiles[key] = tuple(group_tiles)
+            tiles[key] = group_tiles
 
     unregistered = sorted(set(raw_guides) - set(registry))
     if unregistered:
