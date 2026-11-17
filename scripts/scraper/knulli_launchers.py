@@ -51,6 +51,7 @@ from .configgen_launchers import (
     LauncherShapeError,
     Source,
     _assigned_name,
+    end_line,
 )
 from .shell_launchers import LauncherPatternMissing, Script, source_ref
 
@@ -135,7 +136,10 @@ def lexaloffle(cg: Configgen) -> list[Launcher]:
         and isinstance(t.operand, ast.Call) and ast.unparse(t.operand.func).endswith(".exists"),
         "not <binary>.exists()",
     )
-    binary = ast.unparse(missing.test.operand.func).removesuffix(".exists")  # type: ignore[attr-defined]
+    tested = missing.test
+    if not (isinstance(tested, ast.UnaryOp) and isinstance(tested.operand, ast.Call)):
+        src.fail("not <binary>.exists() tests no call")
+    binary = ast.unparse(tested.operand.func).removesuffix(".exists")
     access, access_message = _error_guard(
         src, generate,
         lambda t: isinstance(t, ast.UnaryOp) and isinstance(t.op, ast.Not)
@@ -153,12 +157,13 @@ def lexaloffle(cg: Configgen) -> list[Launcher]:
     launchers = []
     for system, branch in _system_branches(generate):
         bound = [
-            stmt for stmt in branch.body
-            if _assigned_name(stmt) == binary and isinstance(_bound(stmt), ast.Name)
+            (stmt, held) for stmt in branch.body
+            if _assigned_name(stmt) == binary and isinstance((held := _bound(stmt)), ast.Name)
         ]
         if len(bound) != 1:
             src.fail(f"the {system} branch does not set {binary} once")
-        constant = ast.unparse(bound[0].value)  # type: ignore[attr-defined]
+        bound_stmt, bound_value = bound[0]
+        constant = ast.unparse(bound_value)
         path = constants.get(constant)
         if path is None or not path.startswith(prefix):
             src.fail(f"{constant} is not a path under {cg.bios}")
@@ -169,7 +174,7 @@ def lexaloffle(cg: Configgen) -> list[Launcher]:
             search_dir=cg.bios, passes_to="exec",
             fails_when_missing=", ".join(messages),
             source_ref=src.ref([
-                src.span(defined[constant]), src.span(branch.test), src.span(bound[0]),
+                src.span(defined[constant]), src.span(branch.test), src.span(bound_stmt),
                 _lines(missing), _lines(access),
                 src.span(commands[0]),
             ]),
@@ -432,8 +437,10 @@ class _Reader:
                 if isinstance(part, ast.Constant):
                     parts.append(str(part.value))
                 else:
-                    inner = self.resolve(part.value)  # type: ignore[attr-defined]
-                    parts.append(inner if inner is not None else f"<{ast.unparse(part.value)}>")  # type: ignore[attr-defined]
+                    # The other parts of an f-string are its {placeholders}.
+                    expr = part.value if isinstance(part, ast.FormattedValue) else part
+                    inner = self.resolve(expr)
+                    parts.append(inner if inner is not None else f"<{ast.unparse(expr)}>")
             return "".join(parts).strip('"')
         if (
             isinstance(node, ast.BinOp)
@@ -466,7 +473,7 @@ class _Reader:
                         return (name.id, values) if values else None
         return None
 
-    def _literal_list(self, node: ast.AST, scope_of: ast.AST) -> list[str] | None:
+    def _literal_list(self, node: ast.AST | None, scope_of: ast.AST) -> list[str] | None:
         if isinstance(node, ast.List):
             return [str(e.value) for e in node.elts if isinstance(e, ast.Constant)]
         if isinstance(node, ast.Name):
@@ -476,14 +483,15 @@ class _Reader:
                 if _assigned_name(n) == node.id and isinstance(_bound(n), ast.List)
             ]
             if len(bound) == 1:
-                return self._literal_list(_bound(bound[0]), scope_of)  # type: ignore[arg-type]
+                return self._literal_list(_bound(bound[0]), scope_of)
         return None
 
     def function_of(self, node: ast.AST) -> ast.FunctionDef | None:
-        while node is not None:
-            node = self.parents.get(id(node))  # type: ignore[assignment]
-            if isinstance(node, ast.FunctionDef):
-                return node
+        current: ast.AST | None = node
+        while current is not None:
+            current = self.parents.get(id(current))
+            if isinstance(current, ast.FunctionDef):
+                return current
         return None
 
     def statement_of(self, node: ast.AST) -> ast.stmt:
@@ -504,7 +512,7 @@ class _Reader:
                 if written and isinstance(parent, ast.Call) and ast.unparse(parent.func).endswith(".write"):
                     yield node, written.group(0)
                 continue
-            if not self.under_bios(value):
+            if value is None or not self.under_bios(value):
                 continue
             parent = self.parents.get(id(node))
             if isinstance(parent, (ast.FormattedValue, ast.JoinedStr)):
@@ -513,7 +521,7 @@ class _Reader:
                 continue
             if isinstance(parent, ast.Call) and ast.unparse(parent.func) == "str":
                 continue
-            yield node, value  # type: ignore[misc]
+            yield node, value
 
     def conditions(
         self, node: ast.AST, guards: bool = False
@@ -626,64 +634,76 @@ class _Reader:
 
     def consumer(self, node: ast.AST, value: str) -> tuple[str | None, str | None]:
         parent = self.parents.get(id(node))
-        if isinstance(parent, ast.Attribute):
-            return None, None
         if isinstance(parent, (ast.List, ast.Tuple)):
-            holder = self.parents.get(id(parent))
-            if isinstance(holder, (ast.For, ast.comprehension)):
-                return None, None
-            if not self._command_line(parent):
-                return None, None
-            index = next(i for i, e in enumerate(parent.elts) if e is node)
-            if isinstance(node, ast.JoinedStr) and isinstance(node.values[0], ast.Constant):
-                flag = str(node.values[0].value)
-                if flag.startswith("-") and flag.endswith("=") and value.startswith(flag):
-                    return f"command line {flag[:-1]}", None
-            previous = parent.elts[index - 1] if index else None
-            if isinstance(previous, ast.Constant) and str(previous.value).startswith("-"):
-                return f"command line {previous.value!s}", None
-            if index:
-                return f"command line argument {index}", None
-            return None, None
+            return self._listed_consumer(node, parent, value)
         if isinstance(parent, ast.Call):
-            func = parent.func
-            attr = func.attr if isinstance(func, ast.Attribute) else None
-            consts = [a.value for a in parent.args if isinstance(a, ast.Constant)]
-            if attr == "save" and len(parent.args) == 2 and parent.args[1] is node and consts:
-                return str(consts[0]), None
-            if attr == "set" and len(parent.args) == 3 and parent.args[2] is node and len(consts) >= 2:
-                return f"[{consts[0]!s}] {consts[1]!s}", None
-            receiver = func.value if isinstance(func, ast.Attribute) else None
-            if attr in ("copy", "copyfile", "copy2") and receiver is not None and ast.unparse(receiver) == "shutil":
-                source, target = parent.args[0], parent.args[1]
-                self.copy_sources[id(node)] = value if source is node else (
-                    self.resolve(source) or ast.unparse(source)
-                )
-                return (value if target is node else self.resolve(target) or ast.unparse(target)), "copies"
-            if (
-                attr == "append"
-                and isinstance(receiver, ast.Name)
-                and receiver.id in COMMAND_NAMES
-                and isinstance(node, ast.JoinedStr)
-                and isinstance(node.values[0], ast.Constant)
-            ):
-                flag = str(node.values[0].value)
-                if flag.startswith("-") and flag.endswith("=") and value.startswith(flag):
-                    return f"command line {flag[:-1]}", None
-            if attr == "write" and isinstance(node, ast.Constant):
-                return f"written: {str(node.value).strip()}", None
-            return None, None
+            return self._call_consumer(node, parent, value)
         if isinstance(parent, ast.Dict):
-            key = next(
-                (k for k, v in zip(parent.keys, parent.values) if v is node), None
-            )
-            if isinstance(key, ast.Constant):
-                holder = self.parents.get(id(parent))
-                is_env = (
-                    isinstance(holder, ast.keyword) and holder.arg == "env"
-                ) or _assigned_name(holder) == "env"  # type: ignore[arg-type]
-                return (f"environment {key.value!s}" if is_env else str(key.value)), None
+            return self._dict_consumer(node, parent)
         return None, None
+
+    def _listed_consumer(
+        self, node: ast.AST, parent: ast.List | ast.Tuple, value: str
+    ) -> tuple[str | None, str | None]:
+        holder = self.parents.get(id(parent))
+        if isinstance(holder, (ast.For, ast.comprehension)):
+            return None, None
+        if not self._command_line(parent):
+            return None, None
+        index = next(i for i, e in enumerate(parent.elts) if e is node)
+        if isinstance(node, ast.JoinedStr) and isinstance(node.values[0], ast.Constant):
+            flag = str(node.values[0].value)
+            if flag.startswith("-") and flag.endswith("=") and value.startswith(flag):
+                return f"command line {flag[:-1]}", None
+        previous = parent.elts[index - 1] if index else None
+        if isinstance(previous, ast.Constant) and str(previous.value).startswith("-"):
+            return f"command line {previous.value!s}", None
+        if index:
+            return f"command line argument {index}", None
+        return None, None
+
+    def _call_consumer(
+        self, node: ast.AST, parent: ast.Call, value: str
+    ) -> tuple[str | None, str | None]:
+        func = parent.func
+        attr = func.attr if isinstance(func, ast.Attribute) else None
+        consts = [a.value for a in parent.args if isinstance(a, ast.Constant)]
+        if attr == "save" and len(parent.args) == 2 and parent.args[1] is node and consts:
+            return str(consts[0]), None
+        if attr == "set" and len(parent.args) == 3 and parent.args[2] is node and len(consts) >= 2:
+            return f"[{consts[0]!s}] {consts[1]!s}", None
+        receiver = func.value if isinstance(func, ast.Attribute) else None
+        if attr in ("copy", "copyfile", "copy2") and receiver is not None and ast.unparse(receiver) == "shutil":
+            source, target = parent.args[0], parent.args[1]
+            self.copy_sources[id(node)] = value if source is node else (
+                self.resolve(source) or ast.unparse(source)
+            )
+            return (value if target is node else self.resolve(target) or ast.unparse(target)), "copies"
+        if (
+            attr == "append"
+            and isinstance(receiver, ast.Name)
+            and receiver.id in COMMAND_NAMES
+            and isinstance(node, ast.JoinedStr)
+            and isinstance(node.values[0], ast.Constant)
+        ):
+            flag = str(node.values[0].value)
+            if flag.startswith("-") and flag.endswith("=") and value.startswith(flag):
+                return f"command line {flag[:-1]}", None
+        if attr == "write" and isinstance(node, ast.Constant):
+            return f"written: {str(node.value).strip()}", None
+        return None, None
+
+    def _dict_consumer(self, node: ast.AST, parent: ast.Dict) -> tuple[str | None, str | None]:
+        key = next(
+            (k for k, v in zip(parent.keys, parent.values) if v is node), None
+        )
+        if not isinstance(key, ast.Constant):
+            return None, None
+        holder = self.parents.get(id(parent))
+        is_env = (
+            isinstance(holder, ast.keyword) and holder.arg == "env"
+        ) or (holder is not None and _assigned_name(holder) == "env")
+        return (f"environment {key.value!s}" if is_env else str(key.value)), None
 
     def sites(self) -> list[_Site]:
         found: list[_Site] = []
@@ -743,7 +763,7 @@ class _Reader:
         tests, spans = self.conditions(test)
         return _Site(
             value, f"presence sets {described}", None,
-            [(test.lineno, first.end_lineno), *spans],  # type: ignore[list-item]
+            [(test.lineno, end_line(first)), *spans],
             tests, self.cores(test), self._expands(read),
         )
 
@@ -768,7 +788,7 @@ def _caller_cores(cg: Configgen, caller: tuple[str, str]) -> list[str]:
             for stmt in node.body for n in ast.walk(stmt)
         ):
             return _cores_of(node.test)
-    src.fail(f"no core test calls {function}")
+    return src.fail(f"no core test calls {function}")
 
 
 def bios_sites(cg: Configgen, spec: GenericSites) -> list[Launcher]:
@@ -875,7 +895,7 @@ def relative_folders(
                 and all(isinstance(a, ast.Constant) for a in call.args)
             ):
                 continue
-            section, key, value = (str(a.value) for a in call.args)  # type: ignore[attr-defined]
+            section, key, value = (str(a.value) for a in call.args if isinstance(a, ast.Constant))
             if not value.startswith("../"):
                 continue
             resolved = posixpath.normpath(posixpath.join(base, value))

@@ -15,6 +15,7 @@ launcher looks for nothing".
 from __future__ import annotations
 
 import ast
+import posixpath
 import re
 from collections.abc import Callable, Iterable
 from typing import Any
@@ -23,6 +24,8 @@ from .configgen_launchers import (
     Launcher,
     LauncherShapeError,
     Source,
+    assigned_value,
+    end_line,
     _assigned_name,
     _calls,
     _enclosing_test,
@@ -56,7 +59,7 @@ def _config_option(node: ast.AST) -> tuple[str, Any] | None:
         return None
     second = node.args[1] if len(node.args) > 1 else None
     default = second.value if isinstance(second, ast.Constant) else None
-    return node.args[0].value, default
+    return str(node.args[0].value), default
 
 
 def _option_names(node: ast.AST) -> list[str]:
@@ -86,10 +89,11 @@ def path_constants(source: Source) -> dict[str, str]:
     """batoceraPaths' module constants that are plain paths."""
     constants: dict[str, str] = {}
     for node in source.tree.body:
-        name = _assigned_name(node)
-        if name is None:
+        assigned = assigned_value(node)
+        if assigned is None:
             continue
-        value = _path_value(node.value, constants)  # type: ignore[union-attr]
+        name, expr = assigned
+        value = _path_value(expr, constants)
         if value is not None:
             constants[name] = value
     if "BIOS" not in constants:
@@ -104,8 +108,6 @@ def configs_root(cg: Configgen) -> dict[str, str]:
     starts an emulator from (shadPS4's configs/shadps4), with the lines that
     build it and BIOS.
     """
-    import posixpath
-
     src = cg.source(f"{cg.generators.rsplit('/', 1)[0]}/batoceraPaths.py")
     if "CONFIGS" not in cg.paths:
         src.fail("no CONFIGS path constant")
@@ -227,10 +229,10 @@ class Configgen:
             value = node.value.strip('"')
             prefix = self.bios.rstrip("/") + "/"
             return value[len(prefix):] if value.startswith(prefix) else None
-        value = _path_value(node, self.paths)
+        path = _path_value(node, self.paths)
         prefix = self.bios.rstrip("/") + "/"
-        if value is not None and value.startswith(prefix):
-            return value[len(prefix):]
+        if path is not None and path.startswith(prefix):
+            return path[len(prefix):]
         return None
 
     def option_name(self, node: ast.AST) -> tuple[str, str] | None:
@@ -252,7 +254,7 @@ class Configgen:
         return option[1], option[0]
 
 
-def _raise_message(source: Source, scope: ast.AST, guard: str) -> str:
+def _raise_message(source: Source, scope: ast.AST, guard: str | None) -> str:
     """The message of `if not <guard>: raise X("...")` in scope."""
     for node in ast.walk(scope):
         if (
@@ -266,7 +268,7 @@ def _raise_message(source: Source, scope: ast.AST, guard: str) -> str:
             exc = node.body[0].exc
             if isinstance(exc, ast.Call) and exc.args and isinstance(exc.args[0], ast.Constant):
                 return str(exc.args[0].value)
-    source.fail(f"no `if not {guard}: raise` with a message")
+    return source.fail(f"no `if not {guard}: raise` with a message")
 
 
 def _string_lists(source: Source, node: ast.AST, what: str) -> dict[str, list[str]]:
@@ -291,13 +293,13 @@ def duckstation(cg: Configgen) -> list[Launcher]:
     lists = _string_lists(src, lists_node.value, "bios_lists")
     finder = src.function("find_bios")
     listed = [
-        call for call in _calls(finder, attr="iterdir")
-        if isinstance(call.func.value, ast.Name)  # type: ignore[attr-defined]
+        call.func.value.id for call in _calls(finder, attr="iterdir")
+        if isinstance(call.func, ast.Attribute) and isinstance(call.func.value, ast.Name)
     ]
     lowered = _calls(finder, attr="lower")
     if len(listed) != 1 or not lowered:
         src.fail("find_bios no longer lists the BIOS directory and compares lowercased names")
-    search_dir = cg.paths.get(listed[0].func.value.id)  # type: ignore[attr-defined]
+    search_dir = cg.paths.get(listed[0])
     if search_dir is None:
         src.fail("find_bios lists a directory that is not a batoceraPaths constant")
 
@@ -320,7 +322,7 @@ def duckstation(cg: Configgen) -> list[Launcher]:
         src.assignment("region_mapping", generate).value, "region_mapping"
     )
     branches = [
-        node for node in ast.walk(generate)
+        (node, node.test.left.value) for node in ast.walk(generate)
         if isinstance(node, ast.If)
         and isinstance(node.test, ast.Compare)
         and isinstance(node.test.left, ast.Constant)
@@ -329,9 +331,11 @@ def duckstation(cg: Configgen) -> list[Launcher]:
     ]
     if len(branches) != 1:
         src.fail(f"generate no longer branches once on a slot found in {found_var}")
-    branch = branches[0]
+    branch, branch_slot = branches[0]
     writes = _calls(branch, attr="set")
-    sections = {call.args[0].value for call in writes if isinstance(call.args[0], ast.Constant)}
+    sections = {
+        str(call.args[0].value) for call in writes if isinstance(call.args[0], ast.Constant)
+    }
     if len(sections) != 1 or not any(
         isinstance(call.args[1], ast.Subscript)
         and ast.unparse(call.args[1].value) == "region_mapping"
@@ -340,16 +344,16 @@ def duckstation(cg: Configgen) -> list[Launcher]:
         src.fail("the region paths are not written to one config section through region_mapping")
     section = sections.pop()
     shared = {
-        branch.test.left.value: [
-            call.args[1].value for stmt in branch.body for call in _calls(stmt, attr="set")
+        branch_slot: [
+            str(call.args[1].value) for stmt in branch.body for call in _calls(stmt, attr="set")
             if isinstance(call.args[1], ast.Constant)
         ]
     }
 
     first, last = _run(body, index, lambda stmt: _mentions(stmt, {section}, {found_var}))
     ref = src.ref([
-        (src.span(first)[0], last.end_lineno),
-        (finder.lineno, finder.end_lineno),
+        (src.span(first)[0], end_line(last)),
+        (finder.lineno, end_line(finder)),
         src.span(lists_node),
     ])
     launchers = []
@@ -379,7 +383,10 @@ def duckstation_legacy(cg: Configgen) -> list[Launcher]:
             and isinstance(node.target, ast.Name)
         ):
             continue
-        test = node.body[0].test if isinstance(node.body[0], ast.If) else None
+        guard = node.body[0]
+        if not isinstance(guard, ast.If):
+            continue
+        test = guard.test
         if not (
             isinstance(test, ast.Call)
             and isinstance(test.func, ast.Attribute)
@@ -390,11 +397,11 @@ def duckstation_legacy(cg: Configgen) -> list[Launcher]:
         ):
             continue
         bound = {
-            _assigned_name(stmt): stmt for stmt in node.body[0].body
+            _assigned_name(stmt): stmt for stmt in guard.body
             if isinstance(stmt, ast.Assign) and ast.unparse(stmt.value) == node.target.id
         }
         flags = {
-            _assigned_name(stmt) for stmt in node.body[0].body
+            _assigned_name(stmt) for stmt in guard.body
             if isinstance(stmt, ast.Assign)
             and isinstance(stmt.value, ast.Constant)
             and stmt.value.value is True
@@ -414,20 +421,30 @@ def duckstation_legacy(cg: Configgen) -> list[Launcher]:
 
     writes: dict[str, tuple[str, str]] = {}
     for call in _calls(generate, attr="set"):
+        if len(call.args) != 3:
+            continue
+        section_node, key_node, var_node = call.args
         if (
-            len(call.args) == 3
-            and all(isinstance(a, ast.Constant) for a in call.args[:2])
-            and isinstance(call.args[2], ast.Name)
+            isinstance(section_node, ast.Constant)
+            and isinstance(key_node, ast.Constant)
+            and isinstance(var_node, ast.Name)
         ):
-            writes[call.args[2].id] = (call.args[0].value, call.args[1].value)
+            writes[var_node.id] = (str(section_node.value), str(key_node.value))
 
     list_nodes = {name: src.assignment(name, generate) for name, _v, _f, _d in loops}
-    tracked = {*list_nodes, *(v for _l, v, _f, _d in loops), flag}
+    # A name never bound (None) is mentioned by no statement.
+    tracked = {
+        name for name in (*list_nodes, *(v for _l, v, _f, _d in loops), flag)
+        if name is not None
+    }
     first_list = min(list_nodes.values(), key=lambda node: node.lineno).node
-    body, index = _locate(generate, lambda stmt: stmt is first_list)  # type: ignore[misc]
+    located = _locate(generate, lambda stmt: stmt is first_list)
+    if located is None:
+        src.fail(f"line {first_list.lineno} is outside generate")
+    body, index = located
     sections = {section for section, _key in writes.values()}
     first, last = _run(body, index, lambda stmt: _mentions(stmt, sections, tracked))
-    ref = src.ref([(src.span(first)[0], last.end_lineno)])
+    ref = src.ref([(src.span(first)[0], end_line(last))])
 
     launchers = []
     for list_name, var, _flag, _dir in loops:
@@ -482,20 +499,8 @@ def _trace(body: list[ast.stmt], index: int) -> list[ast.stmt]:
     return sorted(kept, key=lambda stmt: stmt.lineno)
 
 
-def hatari(cg: Configgen) -> list[Launcher]:
-    """findBestTos: per machine, each TOS version in each language."""
-    module = "hatari.hatariGenerator"
-    src = cg.generator(module)
-    finder = src.function("findBestTos")
-    languages = src.literal(src.assignment("all_languages", finder).value, "all_languages")
-    machines = _string_lists(
-        src, src.assignment("all_machines_bios", finder).value, "all_machines_bios"
-    )
-    if not (
-        isinstance(languages, list) and languages and all(isinstance(x, str) for x in languages)
-    ):
-        src.fail("all_languages is not a list of strings")
-
+def _tos_name_parts(src: Source, finder: ast.FunctionDef) -> tuple[str, str, str]:
+    """(marker, prefix, suffix) of the names findBestTos builds."""
     marker = prefix = suffix = None
     for node in ast.walk(finder):
         if (
@@ -513,7 +518,7 @@ def hatari(cg: Configgen) -> list[Launcher]:
                 and isinstance(parts[0], ast.Constant)
                 and isinstance(parts[1], ast.FormattedValue)
             ):
-                marker, prefix = node.test.left.value, parts[0].value
+                marker, prefix = str(node.test.left.value), str(parts[0].value)
     # Batocera: tos_path = biosdir / f"{biosversion}{v_language}.img".
     # KNULLI: filename = f"{biosversion}{v_language}.img".
     names_built = []
@@ -528,11 +533,55 @@ def hatari(cg: Configgen) -> list[Launcher]:
                 and all(isinstance(p, ast.FormattedValue) for p in parts[:2])
                 and isinstance(parts[2], ast.Constant)
             ):
-                names_built.append(parts[2].value)
+                names_built.append(str(parts[2].value))
     if len(names_built) == 1:
         suffix = names_built[0]
     if marker is None or prefix is None or suffix is None:
         src.fail("findBestTos no longer builds <tos{version} or etos*><language>.img")
+    return marker, prefix, suffix
+
+
+def _tos_command_args(
+    kept: list[ast.stmt], *, machine_var: str | None, tos_var: str | None,
+    search_dir: str, paths: dict[str, str],
+) -> list[str]:
+    """The command-line additions of the traced statements, the TOS as <file>."""
+    args: list[str] = []
+    for stmt in kept:
+        if isinstance(stmt, ast.AugAssign) and isinstance(stmt.value, ast.List):
+            for element in stmt.value.elts:
+                if isinstance(element, ast.Constant):
+                    args.append(str(element.value))
+                elif isinstance(element, ast.Name) and element.id == machine_var:
+                    args.append("{machine}")
+                elif isinstance(element, ast.Name) and element.id == tos_var:
+                    args.append("<file>")
+                elif (
+                    isinstance(element, ast.BinOp)
+                    and isinstance(element.right, ast.Name)
+                    and element.right.id == tos_var
+                    and _path_value(element.left, paths) == search_dir
+                ):
+                    # KNULLI returns the bare name and joins it: BIOS / tos.
+                    args.append("<file>")
+    return args
+
+
+def hatari(cg: Configgen) -> list[Launcher]:
+    """findBestTos: per machine, each TOS version in each language."""
+    module = "hatari.hatariGenerator"
+    src = cg.generator(module)
+    finder = src.function("findBestTos")
+    languages = src.literal(src.assignment("all_languages", finder).value, "all_languages")
+    machines = _string_lists(
+        src, src.assignment("all_machines_bios", finder).value, "all_machines_bios"
+    )
+    if not (
+        isinstance(languages, list) and languages and all(isinstance(x, str) for x in languages)
+    ):
+        src.fail("all_languages is not a list of strings")
+
+    marker, prefix, suffix = _tos_name_parts(src, finder)
     raised = [node for node in ast.walk(finder) if isinstance(node, ast.Raise)]
     exc = raised[0].exc if len(raised) == 1 else None
     if not (isinstance(exc, ast.Call) and exc.args and isinstance(exc.args[0], ast.JoinedStr)):
@@ -548,34 +597,21 @@ def hatari(cg: Configgen) -> list[Launcher]:
     if located is None:
         src.fail("generate no longer calls findBestTos")
     body, index = located
-    call = body[index].value  # type: ignore[attr-defined]
+    found = body[index]
+    if not (isinstance(found, ast.Assign) and isinstance(found.value, ast.Call)):
+        src.fail("generate no longer calls findBestTos")
+    call = found.value
     if not call.args or not isinstance(call.args[0], ast.Name) or call.args[0].id not in cg.paths:
         src.fail("findBestTos is not given a batoceraPaths directory")
     search_dir = cg.paths[call.args[0].id]
     kept = _trace(body, index)
     options = list(dict.fromkeys(name for stmt in kept for name in _option_names(stmt)))
-    spans = [src.span(stmt) for stmt in kept] + [(finder.lineno, finder.end_lineno)]
-    args: list[str] = []
+    spans = [src.span(stmt) for stmt in kept] + [(finder.lineno, end_line(finder))]
     second = call.args[1] if len(call.args) > 1 else None
-    machine_var = second.id if isinstance(second, ast.Name) else None
-    tos_var = _assigned_name(body[index])
-    for stmt in kept:
-        if isinstance(stmt, ast.AugAssign) and isinstance(stmt.value, ast.List):
-            for element in stmt.value.elts:
-                if isinstance(element, ast.Constant):
-                    args.append(str(element.value))
-                elif isinstance(element, ast.Name) and element.id == machine_var:
-                    args.append("{machine}")
-                elif isinstance(element, ast.Name) and element.id == tos_var:
-                    args.append("<file>")
-                elif (
-                    isinstance(element, ast.BinOp)
-                    and isinstance(element.right, ast.Name)
-                    and element.right.id == tos_var
-                    and _path_value(element.left, cg.paths) == search_dir
-                ):
-                    # KNULLI returns the bare name and joins it: BIOS / tos.
-                    args.append("<file>")
+    args = _tos_command_args(
+        kept, machine_var=second.id if isinstance(second, ast.Name) else None,
+        tos_var=_assigned_name(found), search_dir=search_dir, paths=cg.paths,
+    )
     if "<file>" not in args:
         src.fail("the TOS findBestTos returns is not put on the command line")
 
@@ -605,11 +641,14 @@ def _config_writes(cg: Configgen, src: Source, emulator: str) -> Launcher:
     """parser.set(section, key, <path under BIOS>) calls of one module."""
     writes = []
     for call in _calls(src.tree, attr="set"):
-        if len(call.args) != 3 or not all(isinstance(a, ast.Constant) for a in call.args[:2]):
+        if len(call.args) != 3:
             continue
-        name = cg.bios_name(call.args[2])
+        section_node, key_node, path = call.args
+        if not (isinstance(section_node, ast.Constant) and isinstance(key_node, ast.Constant)):
+            continue
+        name = cg.bios_name(path)
         if name is not None:
-            writes.append((call, call.args[0].value, call.args[1].value, name))
+            writes.append((call, str(section_node.value), str(key_node.value), name))
     if not writes:
         src.fail("writes no /userdata/bios path into its config")
     spans = []
@@ -666,27 +705,31 @@ def melonds(cg: Configgen) -> list[Launcher]:
     ]
     if len(console) != 1 or len(enabled) != 1:
         src.fail("generate no longer sets Emu.ConsoleType from an option with external BIOS on")
-    option = _option_names(console[0].value)[0]  # type: ignore[attr-defined]
+    option = _option_names(console[0].value)[0]
+    enabled_key, enabled_value = enabled[0]
+    if enabled_key is None:
+        src.fail("base_config unpacks the section that enables the external BIOS")
     launchers = []
     for key, value in zip(base.value.keys, base.value.values):
         if not isinstance(value, ast.Dict) or not isinstance(key, ast.Constant):
             continue
-        entries = [
-            (k.value, cg.bios_name(v)) for k, v in zip(value.keys, value.values)
+        read = [
+            (str(k.value), cg.bios_name(v)) for k, v in zip(value.keys, value.values)
             if isinstance(k, ast.Constant)
         ]
-        entries = [(k, name) for k, name in entries if name is not None]
+        entries = [(k, name) for k, name in read if name is not None]
         if not entries:
             continue
+        section = str(key.value)
         launchers.append(Launcher(
             emulator=cg.emulator(module), build="standalone", kind="fixed_name",
             names=[name for _k, name in entries], case_insensitive=False,
             search_dir=cg.bios,
-            passes_to=", ".join(f"{key.value}.{k}" for k, _n in entries),
+            passes_to=", ".join(f"{section}.{k}" for k, _n in entries),
             depends_on_option=option,
             source_ref=src.ref([
-                (key.lineno, value.end_lineno),
-                (enabled[0][0].lineno, enabled[0][1].end_lineno),
+                (key.lineno, end_line(value)),
+                (enabled_key.lineno, end_line(enabled_value)),
                 src.span(console[0]),
             ]),
         ))
@@ -704,17 +747,20 @@ def x16emu(cg: Configgen) -> list[Launcher]:
         if isinstance(node, ast.List):
             for flag, value in zip(node.elts, node.elts[1:]):
                 name = cg.bios_name(value)
-                is_flag = isinstance(flag, ast.Constant) and str(flag.value).startswith("-")
-                if is_flag and name is not None:
-                    found.append((flag, value, name))
+                if (
+                    isinstance(flag, ast.Constant)
+                    and str(flag.value).startswith("-")
+                    and name is not None
+                ):
+                    found.append((flag, str(flag.value), value, name))
     if not found:
         src.fail("the command line passes no /userdata/bios path")
     return [Launcher(
         emulator=cg.emulator(module), build="standalone", kind="fixed_name",
-        names=[name for _f, _v, name in found], case_insensitive=False,
+        names=[name for _f, _t, _v, name in found], case_insensitive=False,
         search_dir=cg.bios,
-        passes_to=", ".join(f"command line {f.value}" for f, _v, _n in found),
-        source_ref=src.ref([(f.lineno, v.end_lineno) for f, v, _n in found]),
+        passes_to=", ".join(f"command line {text}" for _f, text, _v, _n in found),
+        source_ref=src.ref([(f.lineno, end_line(v)) for f, _t, v, _n in found]),
     )]
 
 
@@ -727,7 +773,7 @@ def gsplus(cg: Configgen) -> list[Launcher]:
         if len(call.args) == 2 and isinstance(call.args[0], ast.Constant):
             named = cg.option_name(call.args[1])
             if named is not None:
-                found.append((call, call.args[0].value, *named))
+                found.append((call, str(call.args[0].value), *named))
     if len(found) != 1:
         src.fail(f"expected one ROM path built from an option, found {len(found)}")
     call, key, name, option = found[0]
@@ -762,19 +808,29 @@ def _guard_message(
 ) -> tuple[ast.If, ast.JoinedStr]:
     """The `if not <test>: raise X(f"...")` statement and its message."""
     found = [
-        node for node in ast.walk(scope)
+        (node, message) for node in ast.walk(scope)
         if isinstance(node, ast.If)
         and isinstance(node.test, ast.UnaryOp)
         and isinstance(node.test.op, ast.Not)
         and test(node.test.operand)
-        and isinstance(node.body[0], ast.Raise)
-        and isinstance(node.body[0].exc, ast.Call)
-        and node.body[0].exc.args
-        and isinstance(node.body[0].exc.args[0], ast.JoinedStr)
+        and (message := _raised_fstring(node)) is not None
     ]
     if len(found) != 1:
         src.fail(f"expected one `if not {what}: raise` with a message, found {len(found)}")
-    return found[0], found[0].body[0].exc.args[0]  # type: ignore[attr-defined, no-any-return]
+    return found[0]
+
+
+def _raised_fstring(node: ast.If) -> ast.JoinedStr | None:
+    """The f-string message of `raise X(f"...")` opening the if body."""
+    first = node.body[0]
+    if (
+        isinstance(first, ast.Raise)
+        and isinstance(first.exc, ast.Call)
+        and first.exc.args
+        and isinstance(first.exc.args[0], ast.JoinedStr)
+    ):
+        return first.exc.args[0]
+    return None
 
 
 def _render(message: ast.JoinedStr, var: str, value: str) -> str:
@@ -782,10 +838,13 @@ def _render(message: ast.JoinedStr, var: str, value: str) -> str:
     for part in message.values:
         if isinstance(part, ast.Constant):
             parts.append(str(part.value))
-        elif isinstance(part.value, ast.Name) and part.value.id == var:  # type: ignore[attr-defined]
+            continue
+        # The other parts of an f-string are its {placeholders}.
+        expr = part.value if isinstance(part, ast.FormattedValue) else part
+        if isinstance(expr, ast.Name) and expr.id == var:
             parts.append(value)
         else:
-            parts.append(f"{{{ast.unparse(part.value)}}}")  # type: ignore[attr-defined]
+            parts.append(f"{{{ast.unparse(expr)}}}")
     return "".join(parts)
 
 
@@ -804,15 +863,17 @@ def lexaloffle(cg: Configgen) -> list[Launcher]:
     generate = src.function("generate")
 
     command = [
-        node for node in ast.walk(generate)
-        if _assigned_name(node) == "commandArray"
-        and isinstance(node.value, ast.List)  # type: ignore[attr-defined]
-        and node.value.elts  # type: ignore[attr-defined]
-        and isinstance(node.value.elts[0], ast.Name)  # type: ignore[attr-defined]
+        (node, head.id) for node in ast.walk(generate)
+        if isinstance(node, (ast.Assign, ast.AnnAssign))
+        and (assigned := assigned_value(node)) is not None
+        and assigned[0] == "commandArray"
+        and isinstance(assigned[1], ast.List)
+        and assigned[1].elts
+        and isinstance((head := assigned[1].elts[0]), ast.Name)
     ]
     if len(command) != 1:
         src.fail("generate no longer starts commandArray with the binary it runs")
-    binary = command[0].value.elts[0].id  # type: ignore[attr-defined]
+    command_stmt, binary = command[0]
 
     exists, missing = _guard_message(src, generate, lambda test: (
         isinstance(test, ast.Call)
@@ -842,35 +903,37 @@ def lexaloffle(cg: Configgen) -> list[Launcher]:
     launchers = []
     for system, branch in _system_branches(generate):
         bound = {
-            name: (stmt, _path_value(stmt.value, constants))  # type: ignore[attr-defined]
-            for stmt in branch.body if (name := _assigned_name(stmt)) is not None
+            assigned[0]: (stmt, assigned[1], _path_value(assigned[1], constants))
+            for stmt in branch.body if (assigned := assigned_value(stmt)) is not None
         }
-        if binary not in bound or not (bound[binary][1] or "").startswith(prefix):
+        if binary not in bound or not (bound[binary][2] or "").startswith(prefix):
             src.fail(f"the {system} branch binds {binary} to no path under {cg.bios}")
         library = [
             name for name in bound
             if name != binary and _mentions(env_value, set(), {name})
         ]
-        if len(library) != 1 or not (bound[library[0]][1] or "").startswith(prefix):
+        if len(library) != 1 or not (bound[library[0]][2] or "").startswith(prefix):
             src.fail(f"the {system} branch puts no /userdata/bios folder on LD_LIBRARY_PATH")
-        binary_stmt, path = bound[binary]
-        library_stmt, folder = bound[library[0]]
+        binary_stmt, binary_value, path = bound[binary]
+        library_stmt, _library_value, folder = bound[library[0]]
+        if path is None:
+            src.fail(f"the {system} branch binds {binary} to no path under {cg.bios}")
         test_line = src.span(branch.test)
         constant = next(
-            (defined[n.id] for n in ast.walk(binary_stmt.value)  # type: ignore[attr-defined]
+            (defined[n.id] for n in ast.walk(binary_value)
              if isinstance(n, ast.Name) and n.id in defined),
             None,
         )
         spans = [test_line, src.span(binary_stmt), src.span(exists), src.span(access),
-                 src.span(command[0])]
+                 src.span(command_stmt)]
         if constant is not None:
             spans.append(src.span(constant))
         launchers.append(Launcher(
             emulator=cg.emulator(module), build="standalone", kind="fixed_name",
-            slot=system, names=[path[len(prefix):]],  # type: ignore[index]
+            slot=system, names=[path[len(prefix):]],
             case_insensitive=False, search_dir=cg.bios, passes_to="exec",
             fails_when_missing=", ".join(
-                _render(message, binary, path) for message in (missing, not_executable)  # type: ignore[arg-type]
+                _render(message, binary, path) for message in (missing, not_executable)
             ),
             source_ref=src.ref(spans),
         ))
@@ -893,7 +956,7 @@ ENVIRONMENT_GENERATORS = (("flycast.flycastGenerator", "flycast/flycastPaths.py"
 
 def environment_directories(cg: Configgen) -> list[Launcher]:
     """Command(..., env={KEY: <path under BIOS>}) in the generator."""
-    launchers = []
+    launchers: list[Launcher] = []
     for module, paths_module in ENVIRONMENT_GENERATORS:
         src = cg.generator(module)
         constants = dict(cg.paths)
@@ -904,7 +967,7 @@ def environment_directories(cg: Configgen) -> list[Launcher]:
                 constants[name] = value
         prefix = cg.bios.rstrip("/")
         found = [
-            (key.value, value, key)
+            (str(key.value), value, key)
             for call in _calls(src.tree, attr="Command")
             for keyword in call.keywords
             if keyword.arg == "env" and isinstance(keyword.value, ast.Dict)
@@ -919,7 +982,7 @@ def environment_directories(cg: Configgen) -> list[Launcher]:
             Launcher(
                 emulator=cg.emulator(module), build="standalone", kind="passes_path",
                 names=[], search_dir=value, passes_to=f"environment {key}",
-                source_ref=src.ref([(node.lineno, node.end_lineno)]),
+                source_ref=src.ref([(node.lineno, end_line(node))]),
             )
             for key, value, node in found
         )
@@ -1032,7 +1095,7 @@ def core_file_options(cg: Configgen) -> list[Launcher]:
     cores: dict[str, list[str]] = {}
     for key, value in zip(table.keys, table.values):
         if isinstance(key, ast.Constant) and isinstance(value, ast.Name):
-            cores.setdefault(value.id, []).append(key.value)
+            cores.setdefault(value.id, []).append(str(key.value))
     launchers = []
     for function_name, setting in FILE_OPTIONS:
         function = src.function(function_name)
@@ -1048,17 +1111,17 @@ def core_file_options(cg: Configgen) -> list[Launcher]:
             src.fail(f"{function_name} no longer sets {setting} once")
         call = calls[0]
         named = call.args[3] if len(call.args) > 3 else None
-        option = named.value if isinstance(named, ast.Constant) else setting
+        option = str(named.value) if isinstance(named, ast.Constant) else setting
         default = next((k.value for k in call.keywords if k.arg == "default"), None)
         if isinstance(default, ast.Constant):
-            names = [default.value]
+            names = [str(default.value)]
             condition = None
         elif (
             isinstance(default, ast.IfExp)
             and isinstance(default.body, ast.Constant)
             and isinstance(default.orelse, ast.Constant)
         ):
-            names = [default.body.value, default.orelse.value]
+            names = [str(default.body.value), str(default.orelse.value)]
             condition = ast.unparse(default.test)
         else:
             src.fail(f"{setting} has no literal default")
