@@ -925,7 +925,7 @@ def _os_name() -> str:
 def _emit_check(
     plat: str, manifest: dict, bios_path: Path, files: list[dict], up_to_date: list[dict],
     mismatched: list[dict], data_missing: int, not_installable: int,
-    chosen: list[str] | None = None, data_bytes: int = 0,
+    *, chosen: list[str] | None = None, data_bytes: int = 0,
 ) -> None:
     """One event per file, per system and per platform after a check, then
     one for the files of the platform's own list.
@@ -1328,7 +1328,7 @@ def _enter_wsl() -> None:
             result = subprocess.run(
                 ["cmd.exe", "/c", f"echo %{variable}%"],
                 capture_output=True, text=True, timeout=10, stdin=subprocess.DEVNULL,
-                cwd="/mnt/c" if Path("/mnt/c").is_dir() else None,
+                cwd="/mnt/c" if Path("/mnt/c").is_dir() else None, check=False,
             )
         except (OSError, subprocess.SubprocessError) as exc:
             # The others would wait as long: detection is told the Windows
@@ -1427,6 +1427,12 @@ def _steam_libraries() -> list[Path]:
     return libraries
 
 
+def _scoop_root(variable: str, parent: str) -> str:
+    """%variable%, else %parent%\\scoop, else nothing."""
+    folder = os.environ.get(parent)
+    return os.environ.get(variable) or (str(Path(folder) / "scoop") if folder else "")
+
+
 def _windows_retroarch_dirs() -> list[Path]:
     """Folders holding retroarch.exe where its installers put it.
 
@@ -1451,14 +1457,7 @@ def _windows_retroarch_dirs() -> list[Path]:
     # %SCOOP% or ~\scoop for a user install, %SCOOP_GLOBAL% or
     # %ProgramData%\scoop for a global one. Its system folder is persisted
     # through a junction, so the folder beside retroarch.exe is the real one.
-    scoop_roots = [
-        os.environ.get("SCOOP") or (
-            str(Path(os.environ["USERPROFILE"]) / "scoop") if os.environ.get("USERPROFILE") else ""
-        ),
-        os.environ.get("SCOOP_GLOBAL") or (
-            str(Path(os.environ["ProgramData"]) / "scoop") if os.environ.get("ProgramData") else ""
-        ),
-    ]
+    scoop_roots = [_scoop_root("SCOOP", "USERPROFILE"), _scoop_root("SCOOP_GLOBAL", "ProgramData")]
     candidates += [
         Path(root) / "apps" / "retroarch" / "current" for root in scoop_roots if root
     ]
@@ -2558,11 +2557,11 @@ def launchbox_emulators(emulators_xml: Path) -> dict[str, Path]:
         # ElementTree expands internal entities, and LaunchBox writes no doctype
         if "<!DOCTYPE" in raw.upper():
             return found
-        tree = ET.ElementTree(ET.fromstring(raw))
+        root = ET.fromstring(raw)
     except (ET.ParseError, OSError):
         return found
     lb_root = emulators_xml.parent.parent
-    for emu in tree.getroot().iter("Emulator"):
+    for emu in root.iter("Emulator"):
         app_path = (emu.findtext("ApplicationPath") or "").replace("\\", "/")
         if not app_path:
             continue
@@ -2601,12 +2600,10 @@ def _pcsx2_bios_dir(emu_dir: Path) -> Path:
     portable = _exists(emu_dir / "portable.ini") or _exists(portable_txt)
     if portable:
         subpath = ""
-        try:
+        with contextlib.suppress(OSError):
             subpath = portable_txt.read_text(
                 encoding="utf-8", errors="replace"
             ).strip()
-        except OSError:
-            pass
         data_root = emu_dir / subpath if subpath else emu_dir
     else:
         data_root = documents / "PCSX2"
@@ -2854,20 +2851,27 @@ _REGISTRY_RULES: tuple[tuple[str, str, str, str, str], ...] = (
 )
 
 
+def _winreg_value(key: str, value: str) -> str | None:
+    """A string value of the Windows registry, read natively."""
+    if sys.platform != "win32":
+        return None
+    import winreg
+
+    hive, _, subkey = key.partition("\\")
+    roots = {"HKCU": winreg.HKEY_CURRENT_USER, "HKLM": winreg.HKEY_LOCAL_MACHINE}
+    try:
+        with winreg.OpenKey(roots[hive], subkey) as handle:
+            data, _kind = winreg.QueryValueEx(handle, value)
+    except (OSError, KeyError):
+        return None
+    return data.strip() if isinstance(data, str) and data.strip() else None
+
+
 def _read_registry(key: str, value: str) -> str | None:
     """A string value of the Windows registry, read natively or, under WSL,
     through reg.exe. None when the key, the value or the means is missing."""
     if os.name == "nt":
-        import winreg
-
-        hive, _, subkey = key.partition("\\")
-        roots = {"HKCU": winreg.HKEY_CURRENT_USER, "HKLM": winreg.HKEY_LOCAL_MACHINE}
-        try:
-            with winreg.OpenKey(roots[hive], subkey) as handle:
-                data, _kind = winreg.QueryValueEx(handle, value)
-        except (OSError, KeyError):
-            return None
-        return data.strip() if isinstance(data, str) and data.strip() else None
+        return _winreg_value(key, value)
     if not _WSL["active"]:
         return None
     try:
@@ -2875,6 +2879,7 @@ def _read_registry(key: str, value: str) -> str | None:
             ["reg.exe", "query", key, "/v", value],
             capture_output=True, text=True, errors="replace", timeout=10,
             stdin=subprocess.DEVNULL, cwd="/mnt/c" if Path("/mnt/c").is_dir() else None,
+            check=False,
         )
     except (OSError, subprocess.SubprocessError) as exc:
         _windows_unasked("reg.exe", exc)
@@ -4816,13 +4821,12 @@ def _address_lines(url: str) -> list[str]:
 
 
 def _open_socket(
-    address: tuple[str, int], timeout: object, source_address: object = None,
+    address: tuple[str, int], timeout: object, source_address: tuple[str, int] | None = None,
 ) -> socket.socket:
     """A connection given CONNECT_TIMEOUT to open, then the caller's timeout."""
-    bounded = isinstance(timeout, (int, float))
-    limit = min(CONNECT_TIMEOUT, timeout) if bounded else CONNECT_TIMEOUT
+    limit = min(CONNECT_TIMEOUT, timeout) if isinstance(timeout, (int, float)) else CONNECT_TIMEOUT
     sock = socket.create_connection(address, limit, source_address)
-    sock.settimeout(timeout if bounded else socket.getdefaulttimeout())
+    sock.settimeout(timeout if isinstance(timeout, (int, float)) else socket.getdefaulttimeout())
     return sock
 
 
@@ -4912,7 +4916,7 @@ def _fetch_json(
                 if isinstance(exc, http.client.HTTPException):
                     raise ConnectionError(f"connection cut: {exc!r}") from exc
                 # How many were made, for the line that says so.
-                exc.attempts = attempt  # type: ignore[union-attr]
+                exc.__dict__["attempts"] = attempt
                 raise
             delay = _retry_delay(attempt, None)
             if _stalled(exc):
@@ -4922,6 +4926,79 @@ def _fetch_json(
               f"({attempt + 1}/{tries}) in {delay:.0f} s.", file=sys.stderr)
         time.sleep(delay)
     raise AssertionError("unreachable")
+
+
+def _manifest_invalid(plat: str, url: str, exc: ValueError) -> NoReturn:
+    """Stop on a file list that arrived and is not valid."""
+    words = f"the file list is not valid: {exc}"
+    if isinstance(exc.__cause__, (json.JSONDecodeError, UnicodeDecodeError)):
+        # The parser's "Expecting value: line 1 column 1" told no one
+        # anything, where the full screen names the usual cause.
+        words = ("what arrived is not a file list: a Wi-Fi sign-in page or a cut "
+                 "download looks like this")
+    EVENTS.emit("error", stage="manifest", reason="invalid", platform=plat,
+                message=words)
+    print(f"  For {display_name(plat)}, {words}.", file=sys.stderr)
+    if words.startswith("what arrived"):
+        for line in _address_lines(url):
+            print(line, file=sys.stderr)
+        print("  Check the connection (sign in to the Wi-Fi if it asks), then run the "
+              "same command again.", file=sys.stderr)
+    sys.exit(1)
+
+
+def _manifest_http_error(plat: str, url: str, exc: urllib.error.HTTPError) -> NoReturn:
+    """Stop on a file list the server answered with an HTTP error."""
+    EVENTS.emit(
+        "error", stage="manifest", reason="not_found" if exc.code == 404 else "network",
+        platform=plat, message=f"the file list could not be fetched: HTTP {exc.code}",
+    )
+    if exc.code == 404 and os.environ.get("RETROBIOS_BASE_URL"):
+        print(f"  No file list for {plat} there.", file=sys.stderr)
+        for line in _address_lines(url):
+            print(line, file=sys.stderr)
+        sys.exit(1)
+    if exc.code == 404:
+        # Asked once, a 4xx being final. The name was checked before any
+        # request, so the revision is what has no such list.
+        print(f"  No file list for {plat} at {RELEASE_REF}.", file=sys.stderr)
+        if RELEASE_REF != DEFAULT_RELEASE_REF:
+            print(f"  RETROBIOS_REF={RELEASE_REF} has no list for {plat}: unset it, or "
+                  "pick a newer tag from https://github.com/Abdess/retrobios/releases.",
+                  file=sys.stderr)
+        else:
+            print("  The repository may be moving its files: run the same command "
+                  "again in a few minutes.", file=sys.stderr)
+        sys.exit(1)
+    print(f"  Could not fetch the file list for {plat}: HTTP {exc.code}", file=sys.stderr)
+    for line in _address_lines(url):
+        print(line, file=sys.stderr)
+    print(NETWORK_ADVICE, file=sys.stderr)
+    sys.exit(1)
+
+
+def _manifest_unreachable(plat: str, url: str, exc: OSError) -> NoReturn:
+    """Stop on a file list the network did not bring."""
+    code, words = network_words(exc)
+    EVENTS.emit("error", stage="manifest", reason=code, platform=plat,
+                message=words if code != "network"
+                else f"the file list could not be fetched: {words}")
+    if code == "offline":
+        print(f"  No file list for {plat}: {offline_words()}. Give --manifest FILE "
+              f"(a copy of install/{plat}.json) or --from-pack PACK, or run "
+              f"{offline_undo()}.", file=sys.stderr)
+        sys.exit(1)
+    if code != "network":
+        print(f"  Could not fetch the file list for {plat}.", file=sys.stderr)
+        print(f"  {words}.", file=sys.stderr)
+        sys.exit(1)
+    tries = getattr(exc, "attempts", MAX_RETRIES)
+    print(f"  Could not fetch the file list for {plat} after {tries} "
+          f"attempts: {words}", file=sys.stderr)
+    for line in _address_lines(url):
+        print(line, file=sys.stderr)
+    print(NETWORK_ADVICE, file=sys.stderr)
+    sys.exit(1)
 
 
 def fetch_manifest(plat: str) -> dict:
@@ -4939,69 +5016,11 @@ def fetch_manifest(plat: str) -> dict:
     try:
         return _validate_manifest(_fetch_json(url, MAX_MANIFEST_BYTES, "file list"), plat)
     except ValueError as exc:
-        words = f"the file list is not valid: {exc}"
-        if isinstance(exc.__cause__, (json.JSONDecodeError, UnicodeDecodeError)):
-            # The parser's "Expecting value: line 1 column 1" told no one
-            # anything, where the full screen names the usual cause.
-            words = ("what arrived is not a file list: a Wi-Fi sign-in page or a cut "
-                     "download looks like this")
-        EVENTS.emit("error", stage="manifest", reason="invalid", platform=plat,
-                    message=words)
-        print(f"  For {display_name(plat)}, {words}.", file=sys.stderr)
-        if words.startswith("what arrived"):
-            for line in _address_lines(url):
-                print(line, file=sys.stderr)
-            print("  Check the connection (sign in to the Wi-Fi if it asks), then run the "
-                  "same command again.", file=sys.stderr)
-        sys.exit(1)
+        _manifest_invalid(plat, url, exc)
     except urllib.error.HTTPError as exc:
-        EVENTS.emit(
-            "error", stage="manifest", reason="not_found" if exc.code == 404 else "network",
-            platform=plat, message=f"the file list could not be fetched: HTTP {exc.code}",
-        )
-        if exc.code == 404 and os.environ.get("RETROBIOS_BASE_URL"):
-            print(f"  No file list for {plat} there.", file=sys.stderr)
-            for line in _address_lines(url):
-                print(line, file=sys.stderr)
-            sys.exit(1)
-        if exc.code == 404:
-            # Asked once, a 4xx being final. The name was checked before any
-            # request, so the revision is what has no such list.
-            print(f"  No file list for {plat} at {RELEASE_REF}.", file=sys.stderr)
-            if RELEASE_REF != DEFAULT_RELEASE_REF:
-                print(f"  RETROBIOS_REF={RELEASE_REF} has no list for {plat}: unset it, or "
-                      "pick a newer tag from https://github.com/Abdess/retrobios/releases.",
-                      file=sys.stderr)
-            else:
-                print("  The repository may be moving its files: run the same command "
-                      "again in a few minutes.", file=sys.stderr)
-            sys.exit(1)
-        print(f"  Could not fetch the file list for {plat}: HTTP {exc.code}", file=sys.stderr)
-        for line in _address_lines(url):
-            print(line, file=sys.stderr)
-        print(NETWORK_ADVICE, file=sys.stderr)
-        sys.exit(1)
+        _manifest_http_error(plat, url, exc)
     except (urllib.error.URLError, OSError) as exc:
-        code, words = network_words(exc)
-        EVENTS.emit("error", stage="manifest", reason=code, platform=plat,
-                    message=words if code != "network"
-                    else f"the file list could not be fetched: {words}")
-        if code == "offline":
-            print(f"  No file list for {plat}: {offline_words()}. Give --manifest FILE "
-                  f"(a copy of install/{plat}.json) or --from-pack PACK, or run "
-                  f"{offline_undo()}.", file=sys.stderr)
-            sys.exit(1)
-        if code != "network":
-            print(f"  Could not fetch the file list for {plat}.", file=sys.stderr)
-            print(f"  {words}.", file=sys.stderr)
-            sys.exit(1)
-        tries = getattr(exc, "attempts", MAX_RETRIES)
-        print(f"  Could not fetch the file list for {plat} after {tries} "
-              f"attempts: {words}", file=sys.stderr)
-        for line in _address_lines(url):
-            print(line, file=sys.stderr)
-        print(NETWORK_ADVICE, file=sys.stderr)
-        sys.exit(1)
+        _manifest_unreachable(plat, url, exc)
 
 
 def _pack_alone(plat: str) -> bool:
@@ -5366,7 +5385,7 @@ def region_drops(
     if not requested:
         return set()
     kept_systems = set(systems) if systems else None
-    groups: dict[str, list[tuple[set, str, object]]] = {}
+    groups: dict[str, list[tuple[set, str, int | None]]] = {}
     for entry in entries:
         regions = entry.get("regions")
         if not regions:
@@ -5410,7 +5429,8 @@ def region_drops(
             drop |= {dest for _rank, dest in regional if dest not in keep}
         elif rivals:
             world_ranks = [ranks[dest] for dest in rivals]
-            best_world = min(world_ranks) if None not in world_ranks else None
+            known_ranks = [rank for rank in world_ranks if rank is not None]
+            best_world = min(known_ranks) if len(known_ranks) == len(world_ranks) else None
             for _rank, dest in regional:
                 ours = ranks[dest]
                 if best_world is not None and ours is not None and ours < best_world:
@@ -5657,7 +5677,7 @@ def find_by_hash(files: list[dict], value: str) -> tuple[str, list[dict], bool]:
     return kind, matches, recorded
 
 
-def recorded_axes(files: list[dict], omitted: list[dict] = ()) -> frozenset:
+def recorded_axes(files: list[dict], omitted: Iterable[dict] = ()) -> frozenset:
     """What a file list lets --system, --core and --region narrow by: its
     systems, its cores, its regions. A list from an older release records
     none. The MinUI family's records cores and regions and no system: all
@@ -5706,7 +5726,7 @@ def available_choices(files: list[dict], omitted: list[dict]) -> dict[str, list[
 
 
 def choosable_cores(files: list[dict], omitted: list[dict],
-                    systems: list[str] = ()) -> list[str]:
+                    systems: Collection[str] = ()) -> list[str]:
     """The cores a choice is made among, for the files a run keeps once
     the save entries it cannot place and the game data --no-game-data cuts
     are left out, of the systems chosen (every system for none). Cores on
@@ -5761,11 +5781,11 @@ def resolve_choices(
         for token in (t.strip() for t in tokens):
             if not token:
                 continue
-            name = by_lower.get(token.lower()) or by_key.get(_name_key(token))
-            if name is None:
+            picked = by_lower.get(token.lower()) or by_key.get(_name_key(token))
+            if picked is None:
                 unknown.append(token)
-            elif name not in chosen:
-                chosen.append(name)
+            elif picked not in chosen:
+                chosen.append(picked)
     if unknown:
         if not known:
             raise ValueError(f"unknown {label}: {', '.join(unknown)}. This list records none.")
@@ -6365,7 +6385,7 @@ def check_local(
             verdicts = pool.map(
                 lambda item: (item[0], _classify_local(item[0], item[1])), present
             )
-            live = term is not None and term.live and not term.quiet
+            shown = term if term is not None and term.live and not term.quiet else None
             last = evented = 0.0
             for done, (entry, verdict) in enumerate(verdicts, 1):
                 if verdict == "up_to_date":
@@ -6380,12 +6400,12 @@ def check_local(
                                   or done == len(present)):
                     evented = now
                     EVENTS.emit("checking", files_done=done, files_total=len(present))
-                if live and (now - last >= 0.1 or done == len(present)):
+                if shown is not None and (now - last >= 0.1 or done == len(present)):
                     last = now
-                    print(f"\r  read {done}/{len(present)}", end="", file=term.stream,
+                    print(f"\r  read {done}/{len(present)}", end="", file=shown.stream,
                           flush=True)
-            if live:
-                print("\r\033[K", end="", file=term.stream, flush=True)
+            if shown is not None:
+                print("\r\033[K", end="", file=shown.stream, flush=True)
 
     return to_download, up_to_date, mismatched
 
