@@ -22,10 +22,11 @@ from collections.abc import Callable, Iterable
 from pathlib import Path
 
 import archive_build
-from common import unique_emulator_profiles
+from common import runs_standalone, unique_emulator_profiles
 from cross_reference import _first_hash
 from hashing import cut_md5_owner, parse_hash_list
 from validate_pr import LARGE_FILE_ISSUE_URL, Placement, placement
+from validation import deliverable, filter_files_by_mode, installed_with_emulator
 
 ALGORITHMS = ("sha1", "sha256", "md5", "crc32")
 # GitHub's upload page takes 25 MB per file. A larger file goes in by a
@@ -156,13 +157,41 @@ def _paired(files: list, details: list[dict]) -> Iterable[tuple[dict, dict]]:
             yield detail, same[position]
 
 
+def _brought_by_readers(detail: dict, config: dict, platform: str, profiles: dict) -> bool:
+    """Whether every core that reads a platform entry installs it itself.
+
+    The readers are those verify names for the entry's category, the cores
+    of its system first. A reader brings the file when the entries of its
+    build that read it are all installed with it (validation.deliverable,
+    the rule the pack builder applies).
+    """
+    readers = (detail.get("category_evidence") or {}).get("read_by") or []
+    own = [r for r in readers if r.get("runs_system")] or readers
+    standalone_cores = set(config.get("standalone_cores") or [])
+    verdicts = []
+    for reader in own:
+        profile = profiles.get(reader.get("emulator", ""))
+        if not profile:
+            continue
+        names = {str(e.get("name")) for e in reader.get("entries") or []}
+        read = [f for f in profile.get("files") or []
+                if isinstance(f, dict) and str(f.get("name")) in names]
+        standalone = runs_standalone(reader["emulator"], profile, standalone_cores)
+        if filter_files_by_mode(read, standalone):
+            verdicts.append(not deliverable(read, standalone, platform))
+    return bool(verdicts) and all(verdicts)
+
+
 def wanted_declarations(profiles: dict, coverages: dict, gap_report: dict) -> list[dict]:
     """Every declaration of a file the gaps page reports as lacking.
 
     Each is {name, system, required, reader: (kind, key, label), entry,
     reason, category, directory}: the reason a file not collected yet
-    carries, empty otherwise, and game_data or bios as verify (a
-    platform's entry) or the profile (an emulator's) gives it.
+    carries, empty otherwise, and bios or unread as verify (a platform's
+    entry) or the profile (an emulator's) gives it. Game data is no
+    contributor's to send, and a file the emulator installs itself
+    (`bundled`, scoped by the build that reads it) is no gap: neither is
+    a declaration here.
     """
     found: list[dict] = []
     for key, coverage in sorted(coverages.items()):
@@ -174,6 +203,9 @@ def wanted_declarations(profiles: dict, coverages: dict, gap_report: dict) -> li
             files = (systems.get(system) or {}).get("files") or []
             for detail, entry in _paired(files, details):
                 if detail.get("settled_by") or detail.get("status") not in ("missing", "untested"):
+                    continue
+                if detail.get("category") == GAME_DATA or _brought_by_readers(
+                        detail, coverage.get("config", {}), key, profiles):
                     continue
                 found.append({
                     "name": str(entry["name"]), "system": system,
@@ -195,13 +227,15 @@ def wanted_declarations(profiles: dict, coverages: dict, gap_report: dict) -> li
         for row, unsourceable in rows:
             for entry in gap_entries(profile, str(row.get("name", "")),
                                       str(row.get("identity") or ""), unsourceable):
+                if entry.get("category") == GAME_DATA or installed_with_emulator(entry):
+                    continue
                 system = entry.get("system") or (systems[0] if len(systems) == 1 else "")
                 found.append({
                     "name": str(entry["name"]), "system": str(system),
                     "required": bool(row.get("required", False)),
                     "reader": ("emulator", key, str(data.get("emulator", key))), "entry": entry,
                     "reason": str(row.get("reason") or "") if unsourceable else "",
-                    "category": GAME_DATA if entry.get("category") == GAME_DATA else BIOS,
+                    "category": BIOS,
                     "directory": _directory(entry),
                 })
     return found
@@ -227,9 +261,8 @@ BIOS = "bios"
 GAME_DATA = "game_data"
 # verify's category for a platform entry no core the platform runs reads.
 UNREAD = "unread"
-# Firmware first, then what a platform lists and no core reads, then game
-# data. The value is also the list's k field, absent for firmware.
-RANK = {BIOS: 0, UNREAD: 1, GAME_DATA: 2}
+# Firmware first, then what a platform lists and no core reads.
+RANK = {BIOS: 0, UNREAD: 1}
 # A name the code builds from the content (<serial>.txt, *.ini) is a
 # pattern, not a file anyone can upload.
 PATTERN = re.compile(r"[<>*?]")
@@ -331,9 +364,8 @@ def upload_href(root: str, folder: str) -> str:
 
 
 def _order(record: dict) -> tuple:
-    """Most useful first: required firmware, optional firmware, then the
-    files no core reads, then game data, required first, and within each
-    by how many setups and emulators read the file."""
+    """Most useful first: firmware, then the files no core reads, required
+    first in each, then by how many setups and emulators read the file."""
     return (RANK[record["category"]], not record["required"], -len(record["readers"]),
             record["name"].casefold(), sorted(record["readers"]))
 
@@ -384,7 +416,7 @@ def build_wanted(
             record = records.setdefault(key, {
                 "name": declaration["name"], "hashes": {a: list(v) for a, v in hashes.items()},
                 "sizes": sizes, "systems": set(), "required": False, "readers": set(),
-                "category": GAME_DATA, "directory": declaration["directory"],
+                "category": UNREAD, "directory": declaration["directory"],
                 "crc": set(), "links": {},
             })
             if RANK[declaration["category"]] < RANK[record["category"]]:
@@ -520,7 +552,7 @@ def page(total: int, known: int) -> str:
         "",
         "## The wanted list",
         "",
-        (f"{total:,} files, firmware first and game data last. A name opens its details. "
+        (f"{total:,} files, required firmware first. A name opens its details. "
          f"{known:,} have a fingerprint (a hash), so a dropped copy is recognised."),
         "",
         "The others are known by name only: a dropped file of that name gets a button too.",

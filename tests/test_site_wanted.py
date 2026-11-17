@@ -176,9 +176,9 @@ class TheListHoldsWhatTheGapsReportLacks(_World):
     def test_names(self):
         names = sorted(e["n"] for e in self.data["entries"])
         # a.bin is held, m.bin is held inside set.zip, pkg.bin comes with
-        # its emulator, own.cfg is the user's own: none is wanted. r.bin is
-        # one entry per revision.
-        self.assertEqual(names, ["b.bin", "c.bin", "cut.bin", "g.bin", "later.bin", "nohash.bin",
+        # its emulator, own.cfg is the user's own, g.bin is game data: none
+        # is wanted. r.bin is one entry per revision.
+        self.assertEqual(names, ["b.bin", "c.bin", "cut.bin", "later.bin", "nohash.bin",
                                  "r.bin", "r.bin", "v.bin", "z.zip"])
 
     def test_an_entry_with_no_hash_is_kept_and_marked(self):
@@ -190,9 +190,9 @@ class TheListHoldsWhatTheGapsReportLacks(_World):
                 self.assertNotIn("h", self.entry(name))
         self.assertIn("h", self.entry("b.bin"))
 
-    # The world's categories: g.bin is game data, cut.bin a file a
-    # platform lists and no core reads, the others firmware.
-    KIND = {"g.bin": 2, "cut.bin": 1}
+    # cut.bin is a file a platform lists and no core reads, the others
+    # firmware.
+    KIND = {"cut.bin": 1}
 
     def test_required_entries_come_first(self):
         firmware = [e for e in self.data["entries"] if e["n"] not in self.KIND]
@@ -203,10 +203,52 @@ class TheListHoldsWhatTheGapsReportLacks(_World):
     def test_firmware_comes_before_game_data(self):
         kinds = [self.KIND.get(e["n"], 0) for e in self.data["entries"]]
         self.assertEqual(kinds, sorted(kinds))
-        # g.bin is required, and still after every optional firmware file.
-        self.assertEqual(self.data["entries"][-1]["n"], "g.bin")
-        self.assertEqual(self.entry("g.bin").get("r"), 1)
+        self.assertEqual(self.data["entries"][-1]["n"], "cut.bin")
 
+    def test_game_data_is_not_wanted(self):
+        """Game data is the player's own: a retail pak0.pk3 that ioquake3
+        reads, and a platform entry verify files as game data, stay out."""
+        profile = yaml.safe_load((REPO_ROOT / "emulators" / "ioquake3.yml").read_text(encoding="utf-8"))
+        report = {"ioquake3": {"emulator": "ioquake3", "systems": profile.get("systems") or [],
+                               "gap_details": [{"name": "pak0.pk3", "source": "missing",
+                                                "identity": ""}],
+                               "unsourceable": [{"name": "pak0.pk3", "required": True,
+                                                 "reason": "retail data"}]}}
+        self.assertEqual(sitewanted.wanted_declarations({"ioquake3": profile}, {}, report), [])
+        coverages = {"plat": {**self.coverages["plat"], "details": [
+            {**d, "category": "game_data"} if d["name"] == "v.bin" else d
+            for d in self.coverages["plat"]["details"]]}}
+        names = [d["name"] for d in sitewanted.wanted_declarations({}, coverages, {})]
+        self.assertNotIn("v.bin", names)
+
+    def test_a_file_the_emulator_installs_is_not_wanted(self):
+        """Amiberry's standalone release installs whdboot/boot-data.zip, its
+        libretro core does not: only the core's entry can be a gap."""
+        profile = yaml.safe_load((REPO_ROOT / "emulators" / "amiberry.yml").read_text(encoding="utf-8"))
+        both = [f for f in profile["files"] if isinstance(f, dict) and f.get("name") == "boot-data.zip"]
+        self.assertEqual(sorted(str(f.get("mode")) for f in both), ["libretro", "standalone"])
+        report = {"amiberry": {"emulator": "Amiberry", "systems": profile.get("systems") or [],
+                               "gap_details": [{"name": "boot-data.zip", "source": "missing",
+                                                "identity": ""}]}}
+        found = sitewanted.wanted_declarations({"amiberry": profile}, {}, report)
+        self.assertEqual([d["entry"].get("mode") for d in found], ["libretro"])
+
+    def test_a_platform_file_its_core_installs_is_not_wanted(self):
+        """v.bin is read by engine, whose build installs it: no gap. When
+        only the standalone build installs it, the libretro core still
+        needs it."""
+        def declarations(entry: dict) -> list[str]:
+            profiles = {"engine": {"emulator": "Engine", "type": "libretro", "files": [entry]}}
+            coverages = {"plat": {**self.coverages["plat"], "details": [
+                {**d, "category_evidence": {"read_by": [
+                    {"emulator": "engine", "runs_system": True, "entries": [{"name": "v.bin"}]}]}}
+                if d["name"] == "v.bin" else d
+                for d in self.coverages["plat"]["details"]]}}
+            return [d["name"] for d in sitewanted.wanted_declarations(profiles, coverages, {})]
+
+        self.assertNotIn("v.bin", declarations({"name": "v.bin", "bundled": True}))
+        self.assertIn("v.bin", declarations({"name": "v.bin", "bundled": True, "mode": "standalone"}))
+        self.assertIn("v.bin", declarations({"name": "v.bin"}))
     def test_a_file_nobody_can_share_is_left_out(self):
         """The reason a profile gives decides, read from the profiles
         themselves: emucorev's config.txt and puae's WHDLoad.key leave,
@@ -234,14 +276,12 @@ class TheListHoldsWhatTheGapsReportLacks(_World):
                    {"name": "b", "required": False,
                     "readers": {("emulator", "e", "E"), ("platform", "p", "P")}},
                    {"name": "c", "required": True, "readers": {("emulator", "e", "E")}},
-                   {"name": "d", "required": True, "readers": {("emulator", "e", "E")},
-                    "category": sitewanted.GAME_DATA},
                    {"name": "u", "required": True, "readers": {("platform", "p", "P")},
                     "category": sitewanted.UNREAD}]
         for record in records:
             record.setdefault("category", sitewanted.BIOS)
         self.assertEqual([r["name"] for r in sorted(records, key=sitewanted._order)],
-                         ["c", "b", "a", "u", "d"])
+                         ["c", "b", "a", "u"])
 
     def test_a_name_with_no_hash_joins_the_hashed_entry_of_its_name(self):
         reader = ("emulator", "other", "Other")
@@ -249,7 +289,7 @@ class TheListHoldsWhatTheGapsReportLacks(_World):
             ("b.bin", (("sha1", ("x",)),), ()): {
                 "name": "b.bin", "hashes": {"sha1": ["x"]}, "systems": {"x"}, "required": False,
                 "readers": {("emulator", "engine", "Engine")}, "description": "",
-                "category": sitewanted.GAME_DATA, "crc": set(), "links": {(False, "engine"): "e"}},
+                "category": sitewanted.UNREAD, "crc": set(), "links": {(False, "engine"): "e"}},
             ("b.bin", "x", ""): {
                 "name": "b.bin", "hashes": {}, "systems": {"x"}, "required": True,
                 "readers": {reader}, "crc": {"1234abcd"}, "links": {(False, "other"): "o"},
@@ -611,6 +651,25 @@ class ThePublishedList(unittest.TestCase):
 
     def test_weight(self):
         self.assertLess(PUBLISHED.stat().st_size, 200_000)
+
+    def test_no_game_data_and_nothing_the_emulator_installs(self):
+        """Each emulator a row names declares that file as firmware it does
+        not install itself: pak0.pk3, game data for every profile, is gone."""
+        from common import load_emulator_profiles
+        from validation import installed_with_emulator
+
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        self.assertNotIn("pak0.pk3", [e["n"] for e in self.data["entries"]])
+        for entry in self.data["entries"]:
+            for index in entry["w"]:
+                kind, key, _label = self.data["readers"][index]
+                if kind != "e":
+                    continue
+                declared = [f for f in profiles[key].get("files") or []
+                            if isinstance(f, dict) and f.get("name") == entry["n"]]
+                with self.subTest(entry=entry["n"], emulator=key):
+                    self.assertTrue([f for f in declared if f.get("category") != "game_data"
+                                     and not installed_with_emulator(f)])
 
     def test_every_link_lands_on_its_details(self):
         """Each name's link is a built page, and a card anchor is on it."""
