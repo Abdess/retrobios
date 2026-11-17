@@ -2913,152 +2913,144 @@ def _detect_by_path(os_type: str, found: list[tuple[str, Path]]) -> None:
             found.append((platform_name, _rule_path(bios or path)))
 
 
-@_detection_guarded
-def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
-    """Detect installed emulator platforms and their BIOS directories."""
-    found: list[tuple[str, Path]] = []
-    if os_type == "wsl":
-        _note_windows_unasked()
+def _detect_emudeck_unix(found: list[tuple[str, Path]]) -> None:
+    """Add EmuDeck on Linux or macOS."""
+    # EmuDeck on Linux and macOS: functions/all.sh:3-4 and 24 (EmuDeck
+    # dddb3022) reads $emudeckFolder/settings.sh on both, and vars.sh:2
+    # sets emudeckFolder to $HOME/.config/EmuDeck.
+    emudeck_settings = Path.home() / ".config" / "EmuDeck" / "settings.sh"
+    if _exists(emudeck_settings):
+        emu_path = _parse_bash_var(emudeck_settings, "emulationPath")
+        if emu_path:
+            found.append(("emudeck", Path(emu_path) / "bios"))
 
-    if os_type == "android":
-        found.extend(_detect_android())
-        for line in android_unreachable_folders():
-            print(line, file=sys.stderr)
 
-    if os_type in ("linux", "wsl"):
-        found.extend(_detect_embedded())
-
-    if os_type in ("linux", "wsl", "darwin"):
-        # EmuDeck on Linux and macOS: functions/all.sh:3-4 and 24 (EmuDeck
-        # dddb3022) reads $emudeckFolder/settings.sh on both, and vars.sh:2
-        # sets emudeckFolder to $HOME/.config/EmuDeck.
-        emudeck_settings = Path.home() / ".config" / "EmuDeck" / "settings.sh"
-        if _exists(emudeck_settings):
-            emu_path = _parse_bash_var(emudeck_settings, "emulationPath")
-            if emu_path:
-                found.append(("emudeck", Path(emu_path) / "bios"))
-
-    if os_type in ("linux", "wsl"):
-        home = Path.home()
-        # RetroDECK: retrodeck.json since the cfg-to-json migration, which
-        # renames the old retrodeck.cfg to retrodeck.bak (global.sh:149-153)
-        retrodeck_conf_dir = home / ".var" / "app" / "net.retrodeck.retrodeck" / "config" / "retrodeck"
-        retrodeck_json = retrodeck_conf_dir / "retrodeck.json"
-        retrodeck_cfg = retrodeck_conf_dir / "retrodeck.cfg"
-        if _exists(retrodeck_json):
-            rd_home = _parse_json_path(retrodeck_json, "paths", "rd_home_path")
-            if not rd_home:
-                # A home moved to an SD card lives only in this file: the
-                # default is a guess, and the user is told so.
-                print(
-                    f"Warning: could not read paths.rd_home_path from "
-                    f"{retrodeck_json}: assuming {home / 'retrodeck'}",
-                    file=sys.stderr,
-                )
-            rd_root = Path(rd_home) if rd_home else home / "retrodeck"
-            _record_moved_folders(rd_root, retrodeck_json)
-            found.append(("retrodeck", rd_root))
-        elif _exists(retrodeck_cfg):
-            rd_home = _parse_bash_var(retrodeck_cfg, "rdhome")
-            found.append(("retrodeck", Path(rd_home) if rd_home else home / "retrodeck"))
-
-        # RetroArch Flatpak
-        flatpak_cfg = home / ".var" / "app" / "org.libretro.RetroArch" / "config" / "retroarch" / "retroarch.cfg"
-        ra_dir = _parse_retroarch_system_dir(flatpak_cfg)
-        if ra_dir:
-            found.append(("retroarch", ra_dir))
-
-        # RetroArch Snap
-        snap_cfg = home / "snap" / "retroarch" / "current" / ".config" / "retroarch" / "retroarch.cfg"
-        ra_dir = _parse_retroarch_system_dir(snap_cfg)
-        if ra_dir:
-            found.append(("retroarch", ra_dir))
-
-        # RetroArch native: the config under its base folder, then
-        # ~/.retroarch.cfg when that one is missing (open_default_config_file
-        # in configuration.c). Either way the system folder defaults to the
-        # base folder's.
-        native_base = _unix_retroarch_base()
-        for native_cfg in (native_base / "retroarch.cfg", home / ".retroarch.cfg"):
-            ra_dir = _parse_retroarch_system_dir(native_cfg, native_base)
-            if ra_dir:
-                found.append(("retroarch", ra_dir))
-                break
-
-        found.extend(("retroarch", ra_dir) for ra_dir in _retroarch_appimage_dirs(home))
-
-    if os_type == "darwin":
-        # open_default_config_file reads <Application Support>/RetroArch/config
-        # (configuration.c). A value left at default is the documents folder,
-        # or Application Support itself for a portable install
-        # (platform_darwin.m). The config beside it is where older builds
-        # kept it.
-        support = Path.home() / "Library" / "Application Support" / "RetroArch"
-        for mac_cfg in (support / "config" / "retroarch.cfg", support / "retroarch.cfg"):
-            ra_dir = _parse_retroarch_system_dir(mac_cfg, _macos_retroarch_base())
-            if ra_dir:
-                found.append(("retroarch", ra_dir))
-                break
-
-    if os_type in ("windows", "wsl"):
-        emudeck = _emudeck_windows_bios()
-        if emudeck is not None:
-            found.append(("emudeck", emudeck))
-
-        # RetroArch Windows: open_default_config_file reads retroarch.cfg
-        # beside the exe, then under %APPDATA%\RetroArch, and a value left at
-        # default is <exe folder>\system (configuration.c, platform_win32.c).
-        appdata = os.environ.get("APPDATA", "")
-        appdata_cfg = Path(appdata) / "RetroArch" / "retroarch.cfg" if appdata else None
-        exe_dirs = _windows_retroarch_dirs()
-        for exe_dir in exe_dirs:
-            ra_dir = _parse_retroarch_system_dir(exe_dir / "retroarch.cfg", exe_dir)
-            if ra_dir is None and appdata_cfg is not None:
-                ra_dir = _parse_retroarch_system_dir(appdata_cfg, exe_dir)
-            found.append(("retroarch", ra_dir or exe_dir / "system"))
-            break
-        if not exe_dirs and appdata_cfg is not None:
-            ra_dir = _parse_retroarch_system_dir(appdata_cfg)
-            if ra_dir:
-                found.append(("retroarch", ra_dir))
-
-        # RetroArch from Steam: a portable install in a Steam library
-        for library in _steam_libraries():
-            steam_cfg = library / "steamapps" / "common" / "RetroArch" / "retroarch.cfg"
-            ra_dir = _parse_retroarch_system_dir(steam_cfg)
-            if ra_dir and not any(name == "retroarch" for name, _ in found):
-                found.append(("retroarch", ra_dir))
-                break
-
-        # The UWP/MSIX package (sideloaded, or Xbox in dev mode)
-        if not any(name == "retroarch" for name, _ in found):
-            uwp = _retroarch_uwp_system_dir()
-            if uwp is not None:
-                found.append(("retroarch", uwp))
-
-        # Portable RetroArch referenced by LaunchBox
-        lb_root = launchbox_root(os_type)
-        if lb_root and not any(name == "retroarch" for name, _ in found):
-            system_dir = _launchbox_retroarch_system_dir(
-                lb_root / "Data" / "Emulators.xml"
+def _detect_retrodeck(home: Path, found: list[tuple[str, Path]]) -> None:
+    """Add RetroDECK's home folder."""
+    # RetroDECK: retrodeck.json since the cfg-to-json migration, which
+    # renames the old retrodeck.cfg to retrodeck.bak (global.sh:149-153)
+    retrodeck_conf_dir = home / ".var" / "app" / "net.retrodeck.retrodeck" / "config" / "retrodeck"
+    retrodeck_json = retrodeck_conf_dir / "retrodeck.json"
+    retrodeck_cfg = retrodeck_conf_dir / "retrodeck.cfg"
+    if _exists(retrodeck_json):
+        rd_home = _parse_json_path(retrodeck_json, "paths", "rd_home_path")
+        if not rd_home:
+            # A home moved to an SD card lives only in this file: the
+            # default is a guess, and the user is told so.
+            print(
+                f"Warning: could not read paths.rd_home_path from "
+                f"{retrodeck_json}: assuming {home / 'retrodeck'}",
+                file=sys.stderr,
             )
-            if system_dir:
-                found.append(("retroarch", system_dir))
-        # BizHawk is a portable archive reading <EmuHawk folder>\Firmware
-        # (PathExtensions.cs DataDirectoryPath, PathEntryCollection "Firmware").
-        if lb_root and not any(name == "bizhawk" for name, _ in found):
-            emu_dir = launchbox_emulators(lb_root / "Data" / "Emulators.xml").get("emuhawk.exe")
-            if emu_dir is not None:
-                found.append(("bizhawk", emu_dir / "Firmware"))
+        rd_root = Path(rd_home) if rd_home else home / "retrodeck"
+        _record_moved_folders(rd_root, retrodeck_json)
+        found.append(("retrodeck", rd_root))
+    elif _exists(retrodeck_cfg):
+        rd_home = _parse_bash_var(retrodeck_cfg, "rdhome")
+        found.append(("retrodeck", Path(rd_home) if rd_home else home / "retrodeck"))
 
-    if os_type in ("linux", "wsl", "darwin"):
-        bizhawk = _bizhawk_unix_firmware()
-        if bizhawk is not None and not any(name == "bizhawk" for name, _ in found):
-            found.append(("bizhawk", bizhawk))
 
-    _detect_by_executable(os_type, found)
-    _detect_by_registry(os_type, found)
-    _detect_by_path(os_type, found)
+def _detect_linux_retroarch(home: Path, found: list[tuple[str, Path]]) -> None:
+    """Add RetroArch's Linux builds: Flatpak, Snap, native and AppImage."""
+    # RetroArch Flatpak
+    flatpak_cfg = home / ".var" / "app" / "org.libretro.RetroArch" / "config" / "retroarch" / "retroarch.cfg"
+    ra_dir = _parse_retroarch_system_dir(flatpak_cfg)
+    if ra_dir:
+        found.append(("retroarch", ra_dir))
+
+    # RetroArch Snap
+    snap_cfg = home / "snap" / "retroarch" / "current" / ".config" / "retroarch" / "retroarch.cfg"
+    ra_dir = _parse_retroarch_system_dir(snap_cfg)
+    if ra_dir:
+        found.append(("retroarch", ra_dir))
+
+    # RetroArch native: the config under its base folder, then
+    # ~/.retroarch.cfg when that one is missing (open_default_config_file
+    # in configuration.c). Either way the system folder defaults to the
+    # base folder's.
+    native_base = _unix_retroarch_base()
+    for native_cfg in (native_base / "retroarch.cfg", home / ".retroarch.cfg"):
+        ra_dir = _parse_retroarch_system_dir(native_cfg, native_base)
+        if ra_dir:
+            found.append(("retroarch", ra_dir))
+            break
+
+    found.extend(("retroarch", ra_dir) for ra_dir in _retroarch_appimage_dirs(home))
+
+
+def _detect_darwin_retroarch(found: list[tuple[str, Path]]) -> None:
+    """Add RetroArch on macOS."""
+    # open_default_config_file reads <Application Support>/RetroArch/config
+    # (configuration.c). A value left at default is the documents folder,
+    # or Application Support itself for a portable install
+    # (platform_darwin.m). The config beside it is where older builds
+    # kept it.
+    support = Path.home() / "Library" / "Application Support" / "RetroArch"
+    for mac_cfg in (support / "config" / "retroarch.cfg", support / "retroarch.cfg"):
+        ra_dir = _parse_retroarch_system_dir(mac_cfg, _macos_retroarch_base())
+        if ra_dir:
+            found.append(("retroarch", ra_dir))
+            break
+
+
+def _detect_windows_retroarch(found: list[tuple[str, Path]]) -> None:
+    """Add EmuDeck and RetroArch on Windows: installed, Steam, then UWP."""
+    emudeck = _emudeck_windows_bios()
+    if emudeck is not None:
+        found.append(("emudeck", emudeck))
+
+    # RetroArch Windows: open_default_config_file reads retroarch.cfg
+    # beside the exe, then under %APPDATA%\RetroArch, and a value left at
+    # default is <exe folder>\system (configuration.c, platform_win32.c).
+    appdata = os.environ.get("APPDATA", "")
+    appdata_cfg = Path(appdata) / "RetroArch" / "retroarch.cfg" if appdata else None
+    exe_dirs = _windows_retroarch_dirs()
+    for exe_dir in exe_dirs:
+        ra_dir = _parse_retroarch_system_dir(exe_dir / "retroarch.cfg", exe_dir)
+        if ra_dir is None and appdata_cfg is not None:
+            ra_dir = _parse_retroarch_system_dir(appdata_cfg, exe_dir)
+        found.append(("retroarch", ra_dir or exe_dir / "system"))
+        break
+    if not exe_dirs and appdata_cfg is not None:
+        ra_dir = _parse_retroarch_system_dir(appdata_cfg)
+        if ra_dir:
+            found.append(("retroarch", ra_dir))
+
+    # RetroArch from Steam: a portable install in a Steam library
+    for library in _steam_libraries():
+        steam_cfg = library / "steamapps" / "common" / "RetroArch" / "retroarch.cfg"
+        ra_dir = _parse_retroarch_system_dir(steam_cfg)
+        if ra_dir and not any(name == "retroarch" for name, _ in found):
+            found.append(("retroarch", ra_dir))
+            break
+
+    # The UWP/MSIX package (sideloaded, or Xbox in dev mode)
+    if not any(name == "retroarch" for name, _ in found):
+        uwp = _retroarch_uwp_system_dir()
+        if uwp is not None:
+            found.append(("retroarch", uwp))
+
+
+def _detect_windows_launchbox(os_type: str, found: list[tuple[str, Path]]) -> None:
+    """Add RetroArch and BizHawk as LaunchBox references them."""
+    # Portable RetroArch referenced by LaunchBox
+    lb_root = launchbox_root(os_type)
+    if lb_root and not any(name == "retroarch" for name, _ in found):
+        system_dir = _launchbox_retroarch_system_dir(
+            lb_root / "Data" / "Emulators.xml"
+        )
+        if system_dir:
+            found.append(("retroarch", system_dir))
+    # BizHawk is a portable archive reading <EmuHawk folder>\Firmware
+    # (PathExtensions.cs DataDirectoryPath, PathEntryCollection "Firmware").
+    if lb_root and not any(name == "bizhawk" for name, _ in found):
+        emu_dir = launchbox_emulators(lb_root / "Data" / "Emulators.xml").get("emuhawk.exe")
+        if emu_dir is not None:
+            found.append(("bizhawk", emu_dir / "Firmware"))
+
+
+def _without_unnameable(found: list[tuple[str, Path]]) -> list[tuple[str, Path]]:
+    """found once each, less a folder named with a control character."""
     # An embedded system's config read again as the home folder's one (HOME is
     # /storage on the ELEC family) is the same folder.
     kept = []
@@ -3076,6 +3068,47 @@ def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
             continue
         kept.append((name, path))
     return kept
+
+
+@_detection_guarded
+def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
+    """Detect installed emulator platforms and their BIOS directories."""
+    found: list[tuple[str, Path]] = []
+    if os_type == "wsl":
+        _note_windows_unasked()
+
+    if os_type == "android":
+        found.extend(_detect_android())
+        for line in android_unreachable_folders():
+            print(line, file=sys.stderr)
+
+    if os_type in ("linux", "wsl"):
+        found.extend(_detect_embedded())
+
+    if os_type in ("linux", "wsl", "darwin"):
+        _detect_emudeck_unix(found)
+
+    if os_type in ("linux", "wsl"):
+        home = Path.home()
+        _detect_retrodeck(home, found)
+        _detect_linux_retroarch(home, found)
+
+    if os_type == "darwin":
+        _detect_darwin_retroarch(found)
+
+    if os_type in ("windows", "wsl"):
+        _detect_windows_retroarch(found)
+        _detect_windows_launchbox(os_type, found)
+
+    if os_type in ("linux", "wsl", "darwin"):
+        bizhawk = _bizhawk_unix_firmware()
+        if bizhawk is not None and not any(name == "bizhawk" for name, _ in found):
+            found.append(("bizhawk", bizhawk))
+
+    _detect_by_executable(os_type, found)
+    _detect_by_registry(os_type, found)
+    _detect_by_path(os_type, found)
+    return _without_unnameable(found)
 
 
 def _emudeck_windows_bios() -> Path | None:
