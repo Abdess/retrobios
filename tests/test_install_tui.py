@@ -7397,8 +7397,8 @@ class WhatEachScreenOffers(unittest.TestCase):
         the collection for the file whose save directory is unknown."""
         menus = []
 
-        def menu(_plat, files, *_rest, **_named):
-            menus.append([entry["dest"] for entry in files])
+        def menu(context, **_named):
+            menus.append([entry["dest"] for entry in context.files])
             return
 
         with SaveDirectoryRepository() as repo:

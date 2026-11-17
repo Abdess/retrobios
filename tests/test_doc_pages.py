@@ -856,7 +856,7 @@ class FirstInstallWalkthrough(unittest.TestCase):
         for ending in ("Done", "Finished with errors", "Nothing installed"):
             with self.subTest(ending=ending):
                 self.assertIn(f"**{ending}**", _section(self.text, "5. Read the result"))
-                self.assertIn(f'title = "{ending}"', source)
+                self.assertRegex(source, rf'return \(?"{ending}",')
         self.assertNotRegex(self.text, r"\d+ (in place|missing|files installed)")
         self.assertIn(f"  {install.EVERYTHING_IN_PLACE}", self.text)
         step3 = _generated(self.run, "run-index")
