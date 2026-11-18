@@ -2121,7 +2121,7 @@ Tests refuse any 3.9 syntax or API, and one runs the installer end to end under
 a real 3.8 interpreter, which CI installs beside 3.12 so the check cannot skip.
 The build scripts need 3.9 and are not bound by this.
 
-`install.py` is generated: its source is the `installer/` package, one module
+`install.py` is built from the `installer/` package, one module
 per concern (detection, file lists, downloads, the full screen), each importing
 from the others what it uses, so ruff and mypy read every module on its own.
 Edit the modules, then run `python scripts/build_installer.py`. It joins them
