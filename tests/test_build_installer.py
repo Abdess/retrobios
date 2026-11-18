@@ -54,6 +54,26 @@ class TheCommittedFileIsTheBuiltOne(unittest.TestCase):
                 if path.name != "__init__.py":
                     self.assertIn("from __future__ import annotations\n", source)
 
+    def test_every_module_says_its_concern_in_one_line(self):
+        for path in sorted((REPO_ROOT / "installer").glob("*.py")):
+            if path.name == "__init__.py":
+                continue
+            docstring = ast.get_docstring(ast.parse(path.read_text(encoding="utf-8")), clean=False) or ""
+            with self.subTest(module=path.name):
+                self.assertTrue(docstring.strip())
+                self.assertNotIn("\n", docstring)
+
+    def test_the_architecture_page_names_every_module(self):
+        """wiki/architecture.md groups the modules by concern: a module added,
+        renamed or merged changes the table in the same commit."""
+        page = (REPO_ROOT / "wiki" / "architecture.md").read_text(encoding="utf-8")
+        section = page.split("## Installer modules", 1)[1].split("\n## ", 1)[0]
+        listed = [name for row in section.splitlines() if row.startswith("| ") and "`" in row
+                  for name in row.split("|")[2].replace("`", "").replace(",", " ").split()]
+        modules = sorted(path.stem for path in (REPO_ROOT / "installer").glob("*.py")
+                         if path.name != "__init__.py")
+        self.assertEqual(sorted(listed), modules)
+
 
 class JoiningRefusesWhatOneNamespaceCannotHold(unittest.TestCase):
     def setUp(self):

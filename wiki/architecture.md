@@ -467,6 +467,24 @@ The cross-platform installer (`install.py`) uses these manifests to auto-detect 
 user's platform, filter files by hardware target, and download with SHA256/SHA1,
 size, path-containment and atomic-write checks.
 
+## Installer modules
+
+Each module of `installer/` holds one concern, named in its first line.
+`build_installer.py` refuses an import cycle and joins the modules each after
+those it imports:
+
+| Concern | Modules |
+|---------|---------|
+| Shared words and limits | `remote`, `regions`, `platforms`, `manifest`, `embedded`, `text`, `events`, `invocation` |
+| Terminal and line output | `terminal`, `console` |
+| Files and folders | `host_fs`, `paths`, `filesystems`, `config_values`, `local_check`, `safe_replace` |
+| This machine | `detect_os`, `detect_frontends`, `cards`, `device`, `cores`, `frontend_folders`, `setups` |
+| Sources of files | `offline`, `network`, `pack_source`, `from_folders`, `diagnosis`, `download`, `datadirs`, `standalone` |
+| What a run keeps | `narrowing`, `choices`, `romm`, `install_record`, `game_files`, `games`, `tally` |
+| Line mode | `destination`, `line_folder`, `line_menu`, `plan_words`, `plan`, `outcome` |
+| Runs and actions | `arguments`, `run_setups`, `run_files`, `run`, `pack`, `removal`, `handheld_app`, `cli` |
+| Full screen | `tui_state`, `tui_routes`, `tui_commands`, `tui_keys`, `tui_paint`, `tui_choice`, `tui_rows`, `tui_frame`, `tui_plan_view`, `tui_outcome`, `tui_screens`, `tui_actions`, `tui_input`, `tui_receive`, `tui_engine`, `tui_session` |
+
 ## Tests
 
 The suite is discovered dynamically rather than maintained as a hand-counted
