@@ -18,6 +18,7 @@ from pathlib import Path
 
 from resolve.launchers import handed_directories, standalone_bindings
 from scraper import retrobat_launchers as rl
+from scraper.csharp_source import Source
 from scraper.batocera_configgen import GENERATORS, IMPORTER, PATHS_MODULE, Configgen
 from scraper.batocera_launchers import LauncherShapeError, patched_paths, working_directories
 
@@ -176,9 +177,9 @@ class APortableUserFolder(unittest.TestCase):
         }
     """
 
-    def sources(self) -> dict[str, rl.Source]:
-        def source(ref: str, text: str) -> rl.Source:
-            return rl.Source(ref, textwrap.dedent(text).lstrip("\n"))
+    def sources(self) -> dict[str, Source]:
+        def source(ref: str, text: str) -> Source:
+            return Source(ref, textwrap.dedent(text).lstrip("\n"))
 
         def yuzu_like(exe: str) -> str:
             return self.CITRON.replace("citron.exe", exe)

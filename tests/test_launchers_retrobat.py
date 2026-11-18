@@ -16,6 +16,7 @@ import unittest
 from pathlib import Path
 
 from scraper import retrobat_launchers as rl
+from scraper.csharp_source import LauncherPatternMissing, Source, render_concat
 from scraper.retrobat_scraper import launcher_revision
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -23,9 +24,9 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 G = rl.GENERATORS
 
 
-def _sources(**texts: str) -> dict[str, rl.Source]:
+def _sources(**texts: str) -> dict[str, Source]:
     return {
-        path: rl.Source(path, textwrap.dedent(text).lstrip("\n")) for path, text in texts.items()
+        path: Source(path, textwrap.dedent(text).lstrip("\n")) for path, text in texts.items()
     }
 
 
@@ -343,7 +344,7 @@ REASSIGNED = """
 """
 
 
-def _psx_sources() -> dict[str, rl.Source]:
+def _psx_sources() -> dict[str, Source]:
     return _sources(
         **{
             f"{G}/Mednafen.Generator.cs": MEDNAFEN,
@@ -438,7 +439,7 @@ class NamesInLauncherOrder(unittest.TestCase):
 
     def test_amiberry_copy_without_its_staleness_test_raises(self):
         broken = AMIBERRY.replace(" || dst.LastWriteTimeUtc < src.LastWriteTimeUtc", "")
-        with self.assertRaises(rl.LauncherPatternMissing):
+        with self.assertRaises(LauncherPatternMissing):
             rl.amiberry(_sources(**{f"{G}/Amiberry.Generator.cs": broken}))
 
     def test_psx_cascade_splits_searched_from_fallback(self):
@@ -557,14 +558,14 @@ class GuardedConfigWrites(unittest.TestCase):
         )
 
     def test_reassigned_path_is_not_a_fixed_name(self):
-        with self.assertRaises(rl.LauncherPatternMissing):
+        with self.assertRaises(LauncherPatternMissing):
             _one(REASSIGNED, "kronos")
 
     def test_write_inside_a_loop_is_not_read(self):
         looped = KEGA.replace("// BIOS", "foreach (var x in xs)\n            {").replace(
             '"32XM68KBIOS", bios32Xg);', '"32XM68KBIOS", bios32Xg);\n            }'
         )
-        with self.assertRaises(rl.LauncherPatternMissing):
+        with self.assertRaises(LauncherPatternMissing):
             _one(looped, "kega-fusion")
 
     def test_pinned_kega_fusion_generator_is_read(self):
@@ -1061,7 +1062,7 @@ XROAR = """
 """
 
 
-def _feature_sources(path: str, text: str, features: str) -> dict[str, rl.Source]:
+def _feature_sources(path: str, text: str, features: str) -> dict[str, Source]:
     return _sources(**{path: text, rl.FEATURES: features})
 
 
@@ -1533,12 +1534,12 @@ class EveryBiosReferenceIsRead(unittest.TestCase):
             '        string other = Path.Combine(AppConfig.GetFullPath("bios"), "other.bin");\n'
             "    }\n"
         )
-        with self.assertRaises(rl.LauncherPatternMissing) as caught:
+        with self.assertRaises(LauncherPatternMissing) as caught:
             rl.eka2l1(_sources(**{f"{G}/Eka2l1.Generator.cs": extra}))
         self.assertIn("bios reference at line", str(caught.exception))
 
     def test_semicolon_inside_a_string_does_not_end_the_value(self):
-        src = rl.Source(
+        src = Source(
             "x.cs",
             'void f(string rom)\n{\n    string p = AppConfig.GetFullPath("bios") + ";" + Path.GetDirectoryName(rom);\n}\n',
         )
@@ -1547,34 +1548,34 @@ class EveryBiosReferenceIsRead(unittest.TestCase):
 
 class AbsentConstructStopsTheScrape(unittest.TestCase):
     def test_each_extractor_raises_on_an_empty_source(self):
-        empty = {path: rl.Source(path, "") for path in rl.SOURCE_FILES}
+        empty = {path: Source(path, "") for path in rl.SOURCE_FILES}
         for extractor in rl.EXTRACTORS:
-            with self.subTest(extractor=extractor.__name__), self.assertRaises(rl.LauncherPatternMissing):
+            with self.subTest(extractor=extractor.__name__), self.assertRaises(LauncherPatternMissing):
                 extractor(empty)
 
     def test_chain_without_fallback_is_not_a_search(self):
         single = ARES.split("        if (!File.Exists(bios_japan))")[0] + "    }\n"
-        with self.assertRaises(rl.LauncherPatternMissing):
+        with self.assertRaises(LauncherPatternMissing):
             rl.ares(_sources(**{f"{G}/Ares.Generator.cs": single}))
 
     def test_missing_source_file_is_named(self):
-        with self.assertRaises(rl.LauncherPatternMissing) as caught:
+        with self.assertRaises(LauncherPatternMissing) as caught:
             rl.extract_launchers({})
         self.assertIn(rl.SOURCE_FILES[0], str(caught.exception))
 
     def test_the_error_is_a_scrape_error(self):
-        self.assertTrue(issubclass(rl.LauncherPatternMissing, ValueError))
+        self.assertTrue(issubclass(LauncherPatternMissing, ValueError))
 
 
 class Helpers(unittest.TestCase):
     def test_concatenation_renders_operands(self):
         self.assertEqual(
-            rl.render_concat('"BIOS file " + name + " does not exist in \'" + dir + "\'."'),
+            render_concat('"BIOS file " + name + " does not exist in \'" + dir + "\'."'),
             "BIOS file <name> does not exist in '<dir>'.",
         )
 
     def test_braces_inside_strings_do_not_close_blocks(self):
-        src = rl.Source("x.cs", 'void f()\n{\n    s = "}";\n}\n')
+        src = Source("x.cs", 'void f()\n{\n    s = "}";\n}\n')
         self.assertEqual(src.lines(*src.block_at(0)), (2, 4))
 
     def test_a_rescrape_reads_the_pinned_commit(self):
