@@ -334,6 +334,12 @@ def _read_one(
             # The guard already left the file untouched, so keep going.
             print(f"{name}: write refused: {exc}", file=sys.stderr)
             failed.add(name)
+        except upstream.UpstreamError as exc:
+            # A prose read the writes need could not be made (offline with
+            # a cold cache, a forge down): the profile was put back, and one
+            # profile must not end the pass for the others.
+            print(f"{name}: not written: {exc}", file=sys.stderr)
+            failed.add(name)
 
 
 # Profiles this run wrote. Their new pins name trees the site's record of

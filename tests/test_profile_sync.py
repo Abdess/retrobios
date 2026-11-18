@@ -2718,6 +2718,27 @@ class TestWriteDryRun(unittest.TestCase):
             self._run(self._args(rebase_refs=True, dry_run=False), self._shifted())
         self.assertEqual(self.path.read_bytes(), before)
 
+    def test_a_write_pass_names_a_profile_the_cache_cannot_answer(self):
+        """--rebase-refs --offline on a profile whose cited files were never
+        cached ended the whole pass on a NotCachedError traceback."""
+        from unittest import mock
+
+        before = self.path.read_bytes()
+        skipped = ProfileReport(name="p", entries=[], counts={}, skipped="offline: not cached")
+        cold = upstream.NotCachedError("o/n@pin:a.c is not in the offline cache")
+        reports: list[ProfileReport] = []
+        failed: set[str] = set()
+        with mock.patch.object(profiling_run, "_build_full_report", return_value=skipped), \
+                mock.patch.object(profiling_run, "realign_prose", side_effect=cold), \
+                contextlib.redirect_stderr(io.StringIO()) as err:
+            profiling_run._read_one(
+                self._args(rebase_refs=True), "p", yaml.safe_load(SAMPLE), reports, failed, True
+            )
+        self.assertEqual(reports, [skipped])
+        self.assertEqual(failed, {"p"})
+        self.assertIn("p: not written: o/n@pin:a.c is not in the offline cache", err.getvalue())
+        self.assertEqual(self.path.read_bytes(), before)
+
     def test_rebase_states_the_move_and_leaves_the_file(self):
         before = self.path.read_text()
         output = self._run(self._args(rebase_refs=True), self._shifted())
