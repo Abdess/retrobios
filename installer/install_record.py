@@ -1,4 +1,4 @@
-"""Files kept aside, the install record and --restore."""
+"""The install record a run leaves beside the BIOS folder, and --restore."""
 from __future__ import annotations
 
 import argparse
@@ -7,254 +7,32 @@ import errno
 import json
 import os
 import re
-import shutil
 import stat
 import sys
 import tempfile
-import threading
-import time
 from collections.abc import Callable, Iterable
 from pathlib import Path, PurePosixPath
 from typing import NamedTuple
 
 from installer.arguments import build_parser
-from installer.constants import OTHER_SYSTEMS
 from installer.events import EVENTS
+from installer.host_fs import _clear_read_only, _is_dir, _is_link, _replace_with_copy
 from installer.invocation import _INVOCATION, _VALUED_OPTIONS, _command_rank, installer_id
-from installer.local_files import BACKUP_DIR, BACKUP_MARKER, _check_holder, _digest_file, _same_folder
+from installer.local_check import _digest_file
 from installer.offline import LOCAL
-from installer.paths import _MOVED_FOLDERS, _entry_path, _entry_place, _note_spelling, _safe_relative_path, spelled
-from installer.probe import _is_dir, _is_file
-from installer.terminal import OUTPUT
+from installer.paths import _safe_relative_path
+from installer.platforms import system_title
+from installer.safe_replace import (
+    BACKUP_DIR,
+    KEPT,
+    REMOVED_NOTE,
+    KeptFiles,
+    _NotKept,
+    _backup_files,
+    _check_holder,
+    _is_backup_run,
+)
 from installer.text import _plural, format_size
-
-
-class _NotKept(Exception):
-    """The file in place differs and could not be set aside: it stays."""
-
-
-class KeptFiles:
-    """The files this run moved aside before replacing them.
-
-    A file is kept at <holder>/<run>/<folder name>/<path below the folder>,
-    the holder being retrobios-backup beside the folder written to. The run
-    folder is named by date and time, so a second run never mixes with the
-    first, and copying its contents into the holder's parent puts every file
-    back where it was. Only when nothing can be written beside the folder
-    (a drive root, a read-only parent) does the holder go inside it, with
-    no folder name, and the same copy puts the files back.
-    """
-
-    def __init__(self) -> None:
-        self._lock = threading.Lock()
-        self.stamp = ""
-        # Holder -> the run folder this run created in it.
-        self._runs: dict[Path, Path] = {}
-        # Run folder -> [files, bytes] kept (or, under --dry-run, to keep).
-        self.counts: dict[Path, list[int]] = {}
-
-    def reset(self) -> None:
-        with self._lock:
-            self.stamp = ""
-            self._runs.clear()
-            self.counts.clear()
-
-    def _stamp(self) -> str:
-        if not self.stamp:
-            self.stamp = time.strftime("%Y%m%d-%H%M%S")
-        return self.stamp
-
-    @staticmethod
-    def _holders(folder: Path) -> list[tuple[Path, str]]:
-        beside = [(folder.parent / BACKUP_DIR, folder.name)] if (
-            folder.name and folder.parent != folder) else []
-        return beside + [(folder / BACKUP_DIR, "")]
-
-    def place(self, folder: Path, create: bool) -> tuple[Path, Path]:
-        """(run folder, folder the relative path goes under) for files of folder."""
-        with self._lock:
-            stamp = self._stamp()
-            failure: OSError | None = None
-            for holder, prefix in self._holders(folder):
-                if not create:
-                    return holder / stamp, holder / stamp / prefix
-                run = self._runs.get(holder)
-                if run is None:
-                    try:
-                        holder.mkdir(parents=True, exist_ok=True)
-                        checked = _check_holder(holder)
-                        for n in range(1, 1000):
-                            run = holder / (stamp if n == 1 else f"{stamp}-{n}")
-                            try:
-                                run.mkdir(mode=0o700)
-                                break
-                            except FileExistsError:
-                                continue
-                        else:
-                            # Every name taken: never reuse a folder this run
-                            # did not create.
-                            raise OSError(errno.EEXIST, f"no free folder name in {holder}")
-                        # The holder checked before is still the one the run
-                        # folder was made in, and the run folder is a folder.
-                        if not (_same_folder(holder, checked)
-                                and stat.S_ISDIR(os.lstat(run).st_mode)):
-                            raise OSError(errno.ELOOP, f"{holder} changed while in use")
-                        (run / BACKUP_MARKER).write_text(
-                            "Files the RetroBIOS installer replaced.\n", encoding="utf-8")
-                    except OSError as exc:
-                        failure = exc
-                        continue
-                    self._runs[holder] = run
-                return run, run / prefix
-            raise failure or OSError(errno.EEXIST, "no backup folder name left")
-
-    def plan(self, folder: Path, size: int) -> Path:
-        """Count a file a real run would keep, writing nothing. Returns its run folder."""
-        run, _under = self.place(folder, create=False)
-        with self._lock:
-            tally = self.counts.setdefault(run, [0, 0])
-            tally[0] += 1
-            tally[1] += size
-        return run
-
-    def keep(
-        self, folder: Path, rel: PurePosixPath, dest: Path,
-        expected: dict[str, str], fresh: Path | None = None,
-    ) -> None:
-        """Move the file at dest aside when its content is not the one coming.
-
-        Nothing is done for a missing file, a link (its target is not
-        touched by the replace) or a file already holding the content, by
-        the manifest's hashes or, without them, byte for byte against the
-        fresh copy. Raises _NotKept when the file could not be set aside:
-        the replace must not happen then.
-        """
-        try:
-            info = os.lstat(dest)
-        except FileNotFoundError:
-            return
-        except OSError as exc:
-            raise _NotKept(exc.strerror or str(exc)) from exc
-        if not stat.S_ISREG(info.st_mode):
-            return
-        try:
-            if expected:
-                same = _digest_file(dest, tuple(expected)) == expected
-            else:
-                same = fresh is not None and _same_bytes(dest, fresh)
-        except FileNotFoundError:
-            return  # another run replaced it meanwhile
-        except OSError as exc:
-            raise _NotKept(exc.strerror or str(exc)) from exc
-        if same:
-            return
-        try:
-            run, under = self.place(folder, create=True)
-            kept = under / Path(*rel.parts)
-            if os.path.lexists(kept):
-                # This run kept the user's file at that path already: the
-                # one in place now is one this run wrote.
-                return
-            kept.parent.mkdir(parents=True, exist_ok=True)
-            _move_aside(dest, kept)
-        except FileNotFoundError:
-            if not os.path.lexists(dest):
-                return  # another run moved or replaced it meanwhile
-            raise _NotKept("the backup folder could not be written") from None
-        except OSError as exc:
-            raise _NotKept(exc.strerror or str(exc)) from exc
-        with self._lock:
-            tally = self.counts.setdefault(run, [0, 0])
-            tally[0] += 1
-            tally[1] += info.st_size
-
-    def summary(self) -> list[dict]:
-        """[{folder, files, bytes}], one per run folder, for the report and events."""
-        with self._lock:
-            # Named as the run names its BIOS folder: /sdcard, not the
-            # /storage/emulated/0 the link resolves to.
-            return [{"folder": str(spelled(run)), "files": files, "bytes": size}
-                    for run, (files, size) in sorted(self.counts.items())]
-
-
-KEPT = KeptFiles()
-
-
-def _same_bytes(a: Path, b: Path) -> bool:
-    if a.stat().st_size != b.stat().st_size:
-        return False
-    return _digest_file(a, ("sha1",)) == _digest_file(b, ("sha1",))
-
-
-def _move_aside(dest: Path, kept: Path) -> None:
-    """Move dest to kept: a rename on one drive, else a copy then a delete.
-
-    The copy goes under a temporary name first, so an interrupted copy
-    never leaves a cut file under the kept name, and dest is only deleted
-    once its copy is whole.
-    """
-    try:
-        os.rename(dest, kept)
-        return
-    except OSError:
-        if not _is_file(dest):
-            raise
-    scratch = kept.parent / f".{kept.name}.part"
-    try:
-        shutil.copy2(dest, scratch)
-        os.replace(scratch, kept)
-    except OSError:
-        if os.path.lexists(scratch):
-            os.unlink(scratch)
-        raise
-    dest.unlink()
-
-
-def _kept_slot(root: Path, value: object) -> tuple[Path, PurePosixPath]:
-    """The folder a manifest destination is written in, and its path below
-    it, as _destination_path places it: a RetroDECK folder moved elsewhere
-    is its own folder."""
-    relative = _safe_relative_path(value, "dest")
-    moved = _MOVED_FOLDERS.get(root, {})
-    if len(relative.parts) > 1 and relative.parts[0] in moved:
-        return moved[relative.parts[0]].resolve(), PurePosixPath(*relative.parts[1:])
-    return _note_spelling(root), relative
-
-
-def plan_kept(entries: list[dict], root: Path) -> dict[Path, list[int]]:
-    """Count, under --dry-run, the files in place a real run would keep.
-
-    entries are files whose content check failed. Returns {run folder:
-    [files, bytes]} for these entries, also counted in KEPT for the summary.
-    """
-    planned: dict[Path, list[int]] = {}
-    for entry in entries:
-        try:
-            dest = _entry_path(root, entry)
-            info = os.lstat(dest)
-        except (OSError, ValueError):
-            continue
-        if stat.S_ISREG(info.st_mode):
-            run = KEPT.plan(_kept_slot(*_entry_place(root, entry))[0], info.st_size)
-            tally = planned.setdefault(run, [0, 0])
-            tally[0] += 1
-            tally[1] += info.st_size
-    return planned
-
-
-def _kept_lines() -> list[str]:
-    """Where the files this run replaced are, and how to put them back."""
-    lines = []
-    for item in KEPT.summary():
-        folder = Path(item["folder"])
-        lines.append(f"Kept {_plural(item['files'], 'file')} already there "
-                     f"({format_size(item['bytes'])}), which the collection's "
-                     f"copies replaced, in {folder}")
-        if OUTPUT.verbose:
-            lines.append(f"  To put them back: {_INVOCATION.launcher()} --restore "
-                         f"{_INVOCATION.word(str(folder))}")
-    return lines
-
 
 # The install record: what the runs placed in a BIOS folder, each file with
 # its hash, and the choice they made, which the next run's plan takes. It
@@ -669,58 +447,6 @@ def apply_record(args: argparse.Namespace, plat: str, folder: Path) -> dict | No
     return setup
 
 
-def _is_link(info: os.stat_result) -> bool:
-    """Whether what lstat read is a link: a symbolic link, or on Windows a
-    junction or any other reparse point."""
-    return stat.S_ISLNK(info.st_mode) or bool(
-        getattr(info, "st_file_attributes", 0) & _REPARSE_POINT)
-
-
-def _tree(top: Path) -> list[tuple[Path, os.stat_result]]:
-    """Every entry below top with what lstat read of it, children before
-    their folder. A link (a junction too) is listed, never entered."""
-    found: list[tuple[Path, os.stat_result]] = []
-    try:
-        names = sorted(os.listdir(top))
-    except OSError:
-        return found
-    for name in names:
-        path = top / name
-        try:
-            info = os.lstat(path)
-        except OSError:
-            continue
-        if stat.S_ISDIR(info.st_mode) and not _is_link(info):
-            found += _tree(path)
-        found.append((path, info))
-    return found
-
-
-def _is_backup_run(run: Path) -> bool:
-    """Whether run is a dated folder a run of the installer made: a real
-    folder holding the marker, inside a retrobios-backup holder that is no
-    link."""
-    try:
-        info, holder = os.lstat(run), os.lstat(run.parent)
-        marker = os.lstat(run / BACKUP_MARKER)
-    except OSError:
-        return False
-    return (stat.S_ISDIR(info.st_mode) and stat.S_ISDIR(holder.st_mode)
-            and not _is_link(info) and not _is_link(holder)
-            and run.parent.name == BACKUP_DIR and stat.S_ISREG(marker.st_mode))
-
-
-def _backup_files(run: Path) -> list[Path]:
-    """The files a backup run folder holds, its marker and note aside. Links
-    inside it, junctions included, are never followed nor put back."""
-    return sorted(
-        path for path, info in _tree(run)
-        if stat.S_ISREG(info.st_mode) and not _is_link(info)
-        and not (path.name.startswith(".") and path.name.endswith(".part"))
-        and not (path.parent == run and path.name in (BACKUP_MARKER, REMOVED_NOTE))
-    )
-
-
 def _backup_note(run: Path) -> dict | None:
     """What a removal wrote beside the files it moved into run: the setup,
     its folder, its choice before and the record's entries. None for the
@@ -943,11 +669,6 @@ def restore_kept(run: Path, dry_run: bool = False) -> int:
     return 1 if failed or problem else 0
 
 
-# Written into a backup that a removal made: the setup, its folder, its
-# choice before and the record's entries, so --restore gives them back.
-REMOVED_NOTE = ".retrobios-removed.json"
-
-
 def _below(folder: Path, dest: str) -> tuple[Path | None, str]:
     """The file a record's dest names below folder, reached through no link:
     (path, "") or (None, why it is left). A dest that climbs or is absolute
@@ -992,68 +713,3 @@ def _check_ours(path: Path, item: dict) -> tuple[str, os.stat_result | None]:
     except OSError:
         return "unreadable", info
     return ("" if same else "changed"), info
-
-
-def _clear_read_only(dest: Path) -> None:
-    """Let the verified copy replace a read-only file the user already has.
-
-    Windows refuses to replace a file carrying the read-only attribute
-    (WinError 5) even in a writable folder. The file is about to be replaced
-    by the copy the manifest names, so its attribute is cleared first.
-    Elsewhere a rename only needs the folder to be writable.
-    """
-    if os.name != "nt":
-        return
-    try:
-        if dest.is_file() and not os.access(dest, os.W_OK):
-            os.chmod(dest, stat.S_IREAD | stat.S_IWRITE)
-    except OSError:
-        pass  # the replace that follows reports the refusal with its reason
-
-
-def _replace_with_copy(src: Path, dest: Path) -> None:
-    """Put a copy of src at dest's name without following what is there."""
-    fd, scratch = tempfile.mkstemp(dir=dest.parent, prefix=f".{dest.name}.", suffix=".part")
-    os.close(fd)
-    try:
-        shutil.copy2(src, scratch)
-        os.replace(scratch, dest)
-    except OSError:
-        if os.path.lexists(scratch):
-            os.unlink(scratch)
-        raise
-
-
-def system_title(system: str, manifest: dict | None) -> str:
-    """A system as the screen's Choose systems names it (_tui_system_label)."""
-    names = ((manifest or {}).get("system_names") or {}).get(system)
-    titles = (manifest or {}).get("system_titles")
-    return _tui_system_label({"system": system, "name": ", ".join(names or [system])},
-                             titles if isinstance(titles, dict) else {})
-
-
-# FILE_ATTRIBUTE_REPARSE_POINT: a junction, a mount point or a link on Windows.
-# Before Python 3.12 lstat does not report a junction as a link, and
-# os.walk(followlinks=False) descends into it.
-_REPARSE_POINT = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
-
-
-def _tui_system_label(row: dict, titles: dict | None = None) -> str:
-    """The name a person reads: the file list's title when it has one, the
-    platform's own name when it is one (Sony - PlayStation), the id with the
-    platform's short name otherwise (psx)."""
-    title = (titles or {}).get(row["system"])
-    if isinstance(title, str) and title.strip():
-        return title.strip()
-    if row["system"] == OTHER_SYSTEMS:
-        return OTHER_TITLE
-    name = row.get("name") or row["system"]
-    if name == row["system"]:
-        return name
-    if " " in name or any(char.isupper() for char in name):
-        return name
-    return f"{row['system']} ({name})"
-
-
-# What the "other" row of the systems holds, in words (OTHER_SYSTEMS).
-OTHER_TITLE = "Other systems and game engines"

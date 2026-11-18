@@ -1,18 +1,13 @@
-"""Colours, the progress line and the terminal facts the output depends on."""
+"""The terminal: what the output stream shows, its size, its colours and its TERM description."""
 from __future__ import annotations
 
 import os
 import re
 import shutil
 import sys
-import threading
-import time
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any, TextIO
-
-from installer.events import EVENTS
-from installer.text import format_size
 
 
 def _kernel32() -> Any:
@@ -181,33 +176,6 @@ class Terminal:
         return self.paint(text, "strong")
 
 
-class _Output:
-    """What a run's text says. By default: what will happen, where, the
-    progress, the result and the next step. --verbose adds every step, list
-    and reason, the lines a beginner lost the result among. where_said is
-    set once the BIOS folder was named before the result."""
-
-    verbose = False
-    where_said = False
-
-
-OUTPUT = _Output()
-
-
-def detail(*args: Any, **kwargs: Any) -> None:
-    """Print a line only --verbose shows."""
-    if OUTPUT.verbose:
-        print(*args, **kwargs)
-
-
-def format_duration(seconds: float) -> str:
-    """0:42, 3:05 or 1:02:09."""
-    seconds = max(0, int(seconds + 0.5))
-    hours, rest = divmod(seconds, 3600)
-    minutes, secs = divmod(rest, 60)
-    return f"{hours}:{minutes:02}:{secs:02}" if hours else f"{minutes}:{secs:02}"
-
-
 # The fewest columns a line question lays itself out in: below it a row is
 # all number, and the terminal folds what is printed whatever it is.
 LINE_MIN_COLS = 20
@@ -222,158 +190,6 @@ def terminal_size() -> tuple[int, int]:
     size = shutil.get_terminal_size((80, 24))
     return max(size.columns or 80, LINE_MIN_COLS), size.lines or 24
 
-
-class Progress:
-    """Bytes and files across the parallel downloads, shown as they move.
-
-    On a terminal one line redraws in place: a bar, the bytes, the speed and
-    the time left. Elsewhere each finished file gets its line with --verbose,
-    as a log wants it. Failures are always printed, quiet or not.
-    """
-
-    BAR = 24
-
-    def __init__(self, total_files: int, total_bytes: int, term: Terminal,
-                 events: bool = True) -> None:
-        self.total_files = total_files
-        self.expected_bytes = total_bytes
-        self.total_bytes = max(total_bytes, 1)
-        self.term = term
-        self.files = 0
-        self.bytes = 0
-        self.resumed = 0
-        # Bytes that came from this machine and not the network: a copy
-        # found here, the pack, a resumed partial copy.
-        self.local = 0
-        # Files written to their place, which a stopped run counts: the
-        # queue's length said "118 files installed" over 8 on disk.
-        self.installed = 0
-        # The entries of those files, which the end of the run counts apart.
-        self.landed: list[dict] = []
-        self.start = time.monotonic()
-        self._drawn = 0.0
-        self._evented = self.start
-        self._lock = threading.Lock()
-        # A data tree's archive draws the line and writes no event: the
-        # progress events count the files of the download event.
-        self.events = events
-
-    def expect(self, total_bytes: int) -> None:
-        """The size the transfer turns out to have, once its server says it."""
-        with self._lock:
-            self.expected_bytes = total_bytes
-            self.total_bytes = max(total_bytes, 1)
-
-    def add(self, count: int, resumed: bool = False, network: bool | None = None) -> None:
-        """count bytes written, resumed ones left out of the speed. network
-        is whether they came over the network, by default unless resumed."""
-        with self._lock:
-            self.bytes += count
-            if resumed:
-                self.resumed += count
-            fetched = not resumed if network is None else network
-            if not fetched:
-                self.local += count
-            now = time.monotonic()
-            if self.term.live and not self.term.quiet and now - self._drawn >= 0.1:
-                self._drawn = now
-                self._draw()
-            if self.events and EVENTS.on and now - self._evented >= EVENT_PROGRESS_INTERVAL:
-                self._evented = now
-                EVENTS.emit("progress", files_done=self.files, files_total=self.total_files,
-                            bytes_done=self.bytes, bytes_total=self.expected_bytes)
-                self.emit_transfer()
-
-    def emit_transfer(self) -> None:
-        """The transfer event: of the bytes done, those this machine held
-        and those the network brought."""
-        EVENTS.emit("transfer", bytes_local=self.local,
-                    bytes_network=self.bytes - self.local)
-
-    def forget_resumed(self, count: int) -> None:
-        with self._lock:
-            self.resumed -= count
-            self.local -= count
-
-    def transferred(self) -> int:
-        """Bytes fetched by this run, a resumed partial copy excluded."""
-        return self.bytes - self.resumed
-
-    def done(self, dest: str, ok: bool, reason: str = "") -> None:
-        with self._lock:
-            self.files += 1
-            line = None
-            if not ok and not self.term.quiet:
-                why = f" ({reason})" if reason else ""
-                line = f"  {self.term.bad('FAILED')} {dest}{why}"
-                SAID_FAILED.add(dest)
-            elif not self.term.live and not self.term.quiet and OUTPUT.verbose:
-                line = f"  [{self.files}/{self.total_files}] {dest} {self.term.ok('ok')}"
-            if line is not None:
-                self._clear()
-                print(line, file=self.term.stream, flush=True)
-            if self.term.live and not self.term.quiet:
-                self._draw()
-
-    def finish(self) -> None:
-        with self._lock:
-            self._clear()
-
-    def elapsed(self) -> float:
-        return time.monotonic() - self.start
-
-    def _clear(self) -> None:
-        if self.term.live and not self.term.quiet:
-            print("\r\033[K", end="", file=self.term.stream, flush=True)
-
-    def _draw(self) -> None:
-        share = min(self.bytes / self.total_bytes, 1.0)
-        elapsed = self.elapsed()
-        # A resumed partial copy was on disk before the run started: counted
-        # in the share, never in the speed.
-        speed = self.transferred() / elapsed if elapsed > 0 else 0
-        left = (self.total_bytes - self.bytes) / speed if speed > 0 else 0
-        # Copies from a folder here count in no speed: "0 B/s  0:00 left"
-        # was drawn under them, as the screen does not.
-        timed = [f"{format_size(int(speed))}/s", f"{format_duration(left)} left"] \
-            if self.transferred() > 0 else []
-        parts = [
-            f"{share * 100:5.1f}%",
-            f"{format_size(self.bytes)} / {format_size(self.total_bytes)}",
-            *timed,
-            f"({self.files}/{self.total_files} files)",
-        ]
-        # One physical line, whatever the width: \r\033[K clears only the
-        # line the cursor is on, so a wrapped line left a ghost per redraw
-        # on an 80-column console. The bar gives way first, then the least
-        # telling figures.
-        width = terminal_size()[0] - 1
-        while True:
-            tail = "  ".join(parts)
-            room = width - len(tail) - 6
-            if room >= 10 or len(parts) == 1:
-                break
-            parts.pop()
-        if room >= 10:
-            bar_width = min(self.BAR, room)
-            filled = int(share * bar_width)
-            text = f"  [{'#' * filled}{'-' * (bar_width - filled)}] {tail}"
-        else:
-            text = f"  {tail}"
-        print(f"\r\033[K{text[:width]}", end="", file=self.term.stream, flush=True)
-
-
-# --events: one JSON object per line on stdout, for a program driving the
-# installer (the handheld port shows its screens from them). Each kind has
-# exactly these keys besides "event", in this order, and nothing else.
-EVENT_SCHEMA = 1
-
-# Seconds between two progress events while bytes arrive.
-EVENT_PROGRESS_INTERVAL = 0.5
-
-# The files a FAILED line of the progress named in this run: the end of
-# the run names the others.
-SAID_FAILED: set[str] = set()
 
 # Where ncurses finds a terminal's compiled description after $TERMINFO,
 # ~/.terminfo and $TERMINFO_DIRS.
@@ -506,3 +322,9 @@ def terminal_without_ansi(env: Mapping[str, str]) -> str:
     if cup is not None and not cup.startswith(("\x1b[", "\x9b")):
         return f"TERM={term} does not take the escape sequences the screen is drawn with"
     return ""
+
+
+TUI_MIN_COLS = 40
+
+
+TUI_MIN_ROWS = 12

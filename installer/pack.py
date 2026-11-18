@@ -10,32 +10,35 @@ import os
 import re
 import shutil
 import stat
-import subprocess
 import sys
 import tempfile
 import zipfile
 import zlib
 from collections.abc import Iterable
 from pathlib import Path, PurePosixPath
-from typing import NamedTuple
+from typing import TYPE_CHECKING, NamedTuple
 
 from installer.arguments import PACK_NAME_END
-from installer.constants import PLATFORM_NAMES, TARGET_PLATFORMS, _stop
+from installer.console import OUTPUT, detail
 from installer.datadirs import install_data_directory
-from installer.download import _drive_full
-from installer.embedded import display_name, shown_path
+from installer.download import download_files
 from installer.events import EVENTS
+from installer.filesystems import fat32_drive
 from installer.from_folders import plan_local_copies
-from installer.games import MAX_MARKER_BYTES, _PART_MARKER
-from installer.local_files import BACKUP_DIR
+from installer.host_fs import DRIVE_FULL, _drive_full, _is_dir, _stop
 from installer.network import fetch_targets, local_targets
 from installer.offline import LOCAL
-from installer.outcome import DRIVE_FULL
 from installer.pack_source import MAX_PARTS, _PART_FILE, pack_name_platforms
-from installer.plan import download_files
-from installer.probe import _is_dir
-from installer.terminal import OUTPUT, Terminal, _kernel32, detail
+from installer.paths import shown_path
+from installer.platforms import PLATFORM_NAMES, TARGET_PLATFORMS, display_name
+from installer.safe_replace import BACKUP_DIR
 from installer.text import _plural, format_size, screen_text
+
+if TYPE_CHECKING:
+    from installer.terminal import Terminal
+
+_PART_MARKER = re.compile(r"^(?P<stem>.+_BIOS_Pack)\.part(?P<index>\d+)of(?P<count>\d+)\.txt$")
+MAX_MARKER_BYTES = 64 * 1024
 
 
 class PackPart:
@@ -145,39 +148,6 @@ def split_pack_lines(root: Path) -> list[str]:
     return lines
 
 
-def pack_lacks(entries: list[dict]) -> list[dict]:
-    """The entries the pack given to this run does not hold, none without
-    a pack: they cannot be installed from it."""
-    return [] if LOCAL.pack is None else [e for e in entries if LOCAL.pack.find(e) is None]
-
-
-def pack_holds_trees(data_dirs: list[dict]) -> bool:
-    """Whether the pack given to this run holds a file of any of these data
-    trees, which an install takes from it. A file of the tree, by its path:
-    a member below the tree's folder was the test, and blueMSX's tree,
-    whose folder is the BIOS folder itself, held every BIOS file of any
-    pack. One holding none of the files offered and focused Install, and
-    its result counted 8252 failed beside 10888 missing."""
-    if LOCAL.pack is None:
-        return False
-    names = LOCAL.pack.members
-    for entry in data_dirs:
-        lead = f"{str(entry.get('dest') or '').rstrip('/')}/" if entry.get("dest") else ""
-        if any(f"{lead}{rel}" in names for rel in entry.get("files") or {}):
-            return True
-    return False
-
-
-def pack_lacks_words(count: int, total: int) -> str:
-    """The pack's missing files, said before the plan names a size."""
-    name = LOCAL.pack.name if LOCAL.pack is not None else "the pack"
-    if count >= total:
-        return (f"{name} holds none of these {_plural(total, 'file')}: nothing can be "
-                "installed from it.")
-    return (f"{count} of these {total} files {'is' if count == 1 else 'are'} not in "
-            f"{name}: {'it' if count == 1 else 'they'} cannot be installed from it.")
-
-
 PACK_MEMBER_DATE = (1980, 1, 1, 0, 0, 0)
 PACK_COMPRESSLEVEL = 9
 # FAT32 holds no file of 4 GiB or more (its size field is 32 bits). A pack
@@ -241,72 +211,6 @@ def pack_path(given: Path, plat: str, narrowed: bool) -> Path:
     if _is_dir(path) or str(given).endswith(("/", os.sep)):
         path = path / pack_default_name(plat, narrowed)
     return path.absolute()
-
-
-def mountinfo_types(text: str) -> list[tuple[str, str]]:
-    """(mount point, file system type) of each line of /proc/self/mountinfo:
-    the point is field 5, its space, tab and backslash written as octal
-    escapes, the type the first field after the " - " separator (proc(5))."""
-    mounts = []
-    for line in text.splitlines():
-        head, _sep, tail = line.partition(" - ")
-        fields = head.split(" ")
-        if len(fields) > 4 and tail:
-            point = re.sub(r"\\([0-7]{3})", lambda m: chr(int(m.group(1), 8)), fields[4])
-            mounts.append((point, tail.split(" ")[0]))
-    return mounts
-
-
-def mount_list_types(text: str) -> list[tuple[str, str]]:
-    """(mount point, file system type) of each line macOS's mount prints:
-    "/dev/disk4s1 on /Volumes/CARD (msdos, local, nodev)"."""
-    return [(found[1], found[2]) for found in
-            (re.match(r".+? on (.+) \(([^,)]+)", line) for line in text.splitlines())
-            if found]
-
-
-def fat_mounted(target: Path, mounts: list[tuple[str, str]]) -> bool:
-    """Whether the deepest mount holding target is FAT (vfat on Linux,
-    msdos on macOS)."""
-    best = ""
-    kind = ""
-    for point, fstype in mounts:
-        mount = Path(point)
-        if (target == mount or mount in target.parents) and len(point) >= len(best):
-            best, kind = point, fstype
-    return kind.lower() in ("vfat", "msdos", "fat")
-
-
-def fat32_drive(folder: Path) -> bool:
-    """Whether folder is on a FAT32 (or FAT16) drive, which holds no file of
-    4 GiB: the mount table's type on Linux, the volume's file system on
-    Windows, the mount list on macOS. False where the system does not say."""
-    probe = folder
-    while not _is_dir(probe) and probe != probe.parent:
-        probe = probe.parent
-    if os.name == "nt":
-        try:
-            import ctypes
-            root = ctypes.create_unicode_buffer(261)
-            kind = ctypes.create_unicode_buffer(261)
-            kernel = _kernel32()
-            if not kernel.GetVolumePathNameW(str(probe), root, 261):
-                return False
-            if not kernel.GetVolumeInformationW(root, None, 0, None, None, None, kind, 261):
-                return False
-        except (AttributeError, OSError):
-            return False
-        return kind.value.upper() in ("FAT32", "FAT")
-    try:
-        target = probe.resolve()
-        if sys.platform == "darwin":
-            listing = subprocess.run(["/sbin/mount"], capture_output=True, text=True,
-                                     timeout=5, check=False).stdout
-            return fat_mounted(target, mount_list_types(listing))
-        text = Path("/proc/self/mountinfo").read_text(encoding="utf-8", errors="replace")
-    except (OSError, subprocess.SubprocessError):
-        return False
-    return fat_mounted(target, mountinfo_types(text))
 
 
 def pack_layout(files: list[dict], data_dirs: list[dict]) -> tuple[

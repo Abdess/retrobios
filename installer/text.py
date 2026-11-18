@@ -1,4 +1,4 @@
-"""Counts, sizes and words wrapped to the width of a line or a cell."""
+"""Counts, sizes, durations and words wrapped to the width of a line or a cell."""
 from __future__ import annotations
 
 import re
@@ -279,3 +279,42 @@ def _wrap(text: str, width: int, indent: str = "  ", whole: str = "",
                 line = piece
     lines.append(close(line))
     return lines
+
+
+def _names_and(names: list[str]) -> str:
+    """Names in a sentence: A, A and B, A, B and C."""
+    return " and ".join(names) if len(names) < 3 else f"{', '.join(names[:-1])} and {names[-1]}"
+
+
+def _no_widow(lines: list[str], room: int) -> list[str]:
+    """Wrapped lines whose last one is not a word alone: "shared" stood on a
+    line of its own under its size at 40 columns. The
+    word before it goes down with it where both fit."""
+    if len(lines) < 2 or len(_glued_words(lines[-1])) > 1:
+        return lines
+    # A size goes down with its unit: "1.4" / "MB shared" split it.
+    words = _glued_words(lines[-2])
+    lead = lines[-2][:len(lines[-2]) - len(lines[-2].lstrip(" "))]
+    moved = f"{words[-1]} {lines[-1].strip()}"
+    if len(words) < 2 or cell_width(moved) > room:
+        return lines
+    return [*lines[:-2], lead + " ".join(words[:-1]), moved]
+
+
+def format_duration(seconds: float) -> str:
+    """0:42, 3:05 or 1:02:09."""
+    seconds = max(0, int(seconds + 0.5))
+    hours, rest = divmod(seconds, 3600)
+    minutes, secs = divmod(rest, 60)
+    return f"{hours}:{minutes:02}:{secs:02}" if hours else f"{minutes}:{secs:02}"
+
+
+def shown_lines(lines: list[str]) -> list[str]:
+    """Lines for the terminal, a blank line opening one kept as it is: the
+    paths in them come from folders anyone may have filled."""
+    return [("\n" + screen_text(line[1:])) if line.startswith("\n") else screen_text(line)
+            for line in lines]
+
+
+def _pad(text: str, width: int) -> str:
+    return text + " " * max(0, width - cell_width(text))

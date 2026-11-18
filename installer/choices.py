@@ -1,133 +1,271 @@
-"""RomM firmware layout and the narrowing a command or a record asks for."""
+"""What a file list lets one choose, and the choice a command or a record asks for."""
 from __future__ import annotations
 
 import argparse
 import sys
-from pathlib import Path
+from collections.abc import Collection, Iterable
+from typing import TYPE_CHECKING
 
-from installer.constants import DEFAULT_RELEASE_REF, RELEASE_REF
-from installer.cores import entry_systems, key_file_holders, refuse_name
-from installer.embedded import display_name
-from installer.line_ui import emulator_names, system_aliases
-from installer.narrowing import (
-    available_choices,
-    designated_cores,
-    narrow_to_cores,
-    recorded_axes,
-    resolve_choices,
-    resolve_regions,
-    standalone_layout,
-)
+from installer.console import detail
+from installer.install_record import drop_recorded
+from installer.manifest import OTHER_SYSTEMS
+from installer.narrowing import _filter_by_target, designated_cores, narrow, narrow_to_cores, standalone_layout
 from installer.network import _pack_alone, fetch_standalone
 from installer.offline import LOCAL
-from installer.probe import _is_dir
-from installer.record import drop_recorded
-from installer.terminal import detail
+from installer.platforms import (
+    SYSTEM_KEY_FILES,
+    SYSTEM_SHORT_NAMES,
+    _name_key,
+    did_you_mean,
+    display_name,
+    entry_systems,
+    key_file_holders,
+    refuse_name,
+)
+from installer.regions import WORLD_REGION, resolve_regions
+from installer.remote import DEFAULT_RELEASE_REF, RELEASE_REF
+from installer.text import _plural
+
+if TYPE_CHECKING:
+    from installer.games import GamesPlan
 
 
-# RomM 5.4 places each platform's firmware by `filesystem.structure.firmware`
-# in config.yml, "bios/{platform}" by default, relative to the library
-# (rommapp/romm 5.4.0 68f71259, backend/config/config_manager.py:58,101-109,
-# 205-225,564-568). The library and config.yml both sit under the RomM base
-# folder (config/__init__.py:46-48, config_manager.py:264-265). A library
-# laid out as {platform}/roms makes RomM stop until config.yml declares its
-# templates, and RomM suggests firmware: "{platform}/bios" there
-# (config_manager.py:1105-1124).
+def recorded_axes(files: list[dict], omitted: Iterable[dict] = ()) -> frozenset:
+    """What a file list lets --system, --core and --region narrow by: its
+    systems, its cores, its regions. A list from an older release records
+    none. The MinUI family's records cores and regions and no system: all
+    three were refused on it, by a remedy that fetched the same list."""
+    entries = [*files, *omitted]
+    systems = any("systems" in entry for entry in entries)
+    if not systems and not any("regions" in entry for entry in entries):
+        # Systems and regions came in one release: a list with neither is
+        # older, its cores read by nothing that narrows.
+        return frozenset()
+    # A current list records the regions of the files a region selects, and
+    # none when it has no such file: --region then keeps every file, as the
+    # pack built with it does.
+    axes = {"regions", *(["systems"] if systems else [])}
+    if any(copy.get("cores") for entry in files
+           for copy in [entry, *entry.get("alternatives", []), *entry.get("slot_choices", [])]):
+        axes.add("cores")
+    return frozenset(axes)
 
 
-def parse_romm_firmware(template: str) -> tuple[tuple[str, ...], tuple[str, ...]]:
-    """The literal folders before and after {platform}, as RomM parses them."""
-    sections = [section for section in template.strip().split("/") if section]
-    if not sections:
-        raise ValueError("the RomM firmware template is empty")
-
-    def macro(section: str) -> str | None:
-        if section.startswith("{") and section.endswith("}"):
-            return section[1:-1].strip()
-        return None
-
-    if any(section in (".", "..") for section in sections):
-        raise ValueError(f"the RomM firmware template {template!r} climbs out of the library")
-    platform_at = [i for i, section in enumerate(sections) if macro(section) == "platform"]
-    if len(platform_at) != 1:
-        raise ValueError(f"the RomM firmware template {template!r} needs one '{{platform}}'")
-    before, after = sections[:platform_at[0]], sections[platform_at[0] + 1:]
-    if any(macro(section) is not None for section in before + after):
-        raise ValueError(f"the RomM firmware template {template!r} takes literal folder "
-                         "names around '{platform}'")
-    return tuple(before), tuple(after)
+def records_selection(files: list[dict]) -> bool:
+    """Whether a manifest records anything narrowing reads. Older ones do not."""
+    return bool(recorded_axes(files))
 
 
-def _romm_configured_firmware(config: Path) -> str | None:
-    """filesystem.structure.firmware from RomM's config.yml, read without a
-    YAML library: only that nested scalar is needed."""
-    try:
-        lines = config.read_text(encoding="utf-8", errors="replace").splitlines()
-    except OSError:
-        return None
-    path: list[tuple[int, str]] = []
-    for line in lines:
-        stripped = line.split(" #", 1)[0].rstrip()
-        if not stripped.strip() or stripped.lstrip().startswith(("#", "-")):
-            continue
-        indent = len(stripped) - len(stripped.lstrip())
-        key, sep, value = stripped.strip().partition(":")
-        if not sep:
-            continue
-        while path and path[-1][0] >= indent:
-            path.pop()
-        keys = [name for _indent, name in path] + [key.strip().strip("'\"")]
-        if keys == ["filesystem", "structure", "firmware"] and value.strip():
-            return value.strip().strip("'\"")
-        path.append((indent, key.strip().strip("'\"")))
-    return None
+def available_choices(files: list[dict], omitted: list[dict]) -> dict[str, list[str]]:
+    """The systems, cores and regions a manifest lets one narrow to."""
+    systems = {s for e in files + omitted for s in entry_systems(e)}
+    ordered = sorted(systems)
+    if any(not entry_systems(f) for f in files):
+        ordered.append(OTHER_SYSTEMS)
+    cores = {
+        c for f in files
+        for copy in [f, *f.get("alternatives", []), *f.get("slot_choices", [])]
+        for c in (copy.get("cores") or [])
+    }
+    regions = {
+        r for e in files + omitted for r in (e.get("regions") or [])
+        if r != WORLD_REGION
+    }
+    return {
+        "systems": ordered,
+        "cores": sorted(cores),
+        "regions": sorted(regions),
+    }
 
 
-def romm_firmware_layout(
-    bios_path: Path, template: str | None
-) -> tuple[tuple[str, ...], tuple[str, ...]] | None:
-    """Where RomM reads each platform's firmware, relative to its library.
+def choosable_cores(files: list[dict], omitted: list[dict],
+                    systems: Collection[str] = ()) -> list[str]:
+    """The cores a choice is made among, for the files a run keeps once
+    the save entries it cannot place and the game data --no-game-data cuts
+    are left out, of the systems chosen (every system for none). Cores on
+    the screen and c in line mode list these and count "N of M" out of
+    them: the screen listed the whole file list's 189 where the run
+    accepted 181."""
+    if systems:
+        files, omitted = narrow(files, omitted, list(systems), [], [])
+    return available_choices(files, omitted)["cores"]
 
-    bios_path is the folder the default template names, so its parent is the
-    library. The template comes from --romm-firmware, else from config.yml
-    beside the library. None keeps the pack's own bios/<platform> layout.
+
+def core_files(files: list[dict], core: str) -> list[dict]:
+    """The files one core adds to the platform's own: what line mode's
+    Cores question and the screen's Cores rows size."""
+    return _filter_by_target([entry for entry in files if entry.get("cores") is not None],
+                             [core])
+
+
+def resolve_choices(
+    values: list[str], known: list[str], label: str,
+    aliases: dict[str, str] | None = None,
+    holders: dict[str, list[str]] | None = None,
+) -> list[str]:
+    """Names given on the command line, matched without regard to case.
+
+    Each value is one name or a comma-separated list. A whole value that is
+    itself a name wins over splitting it: Recalbox names one system
+    `msx1,msx2,msxturbor`. An unknown name is refused, never ignored, since
+    carrying on would install something other than what was asked.
+    aliases maps another name of a known one to it, as Batocera's `psx`
+    stands for sony-playstation. A known name always wins over an alias.
+    holders maps a system the list files under other ids to those ids
+    (key_file_holders): an unknown name for it is answered with them.
     """
-    library = bios_path.parent
-    if template is None:
-        template = _romm_configured_firmware(library.parent / "config" / "config.yml")
-    if template is not None:
-        return parse_romm_firmware(template)
-    platform_first = not _is_dir(library / "roms") and any(
-        _is_dir(path) for path in library.glob("*/roms")
-    )
-    if platform_first:
+    aliases = {alias: name for alias, name in (aliases or {}).items() if name in known}
+    by_lower = {name.lower(): name for name in known}
+    for alias, name in aliases.items():
+        by_lower.setdefault(alias.lower(), name)
+    # Spelled as the site writes it (Sony PlayStation), a name is still one
+    # name when no other one reads the same once case and spacing go.
+    by_key: dict[str, str | None] = {}
+    for name in known:
+        key = _name_key(name)
+        by_key[key] = None if key in by_key else name
+    for alias, name in aliases.items():
+        by_key.setdefault(_name_key(alias), name)
+    chosen: list[str] = []
+    unknown: list[str] = []
+    for value in values:
+        value = value.strip()
+        tokens = [value] if value.lower() in by_lower else value.split(",")
+        for token in (t.strip() for t in tokens):
+            if not token:
+                continue
+            picked = by_lower.get(token.lower()) or by_key.get(_name_key(token))
+            if picked is None:
+                unknown.append(token)
+            elif picked not in chosen:
+                chosen.append(picked)
+    if unknown:
+        if not known:
+            raise ValueError(f"unknown {label}: {', '.join(unknown)}. This list records none.")
+        listing = {"system": "--list-systems", "emulator": "--list-emulators"}.get(
+            label, "--list-cores")
+        hints, inside_from = aliases, 4
+        held = holders or {}
+        stands_for: dict[str, str] = {}
+        notes = ""
+        if label == "system":
+            # gba is the end of nintendo-gba: three letters are enough here.
+            hints = {**{short: name for short, name in SYSTEM_SHORT_NAMES.items()
+                        if name in known}, **aliases}
+            inside_from = 3
+            stands_for = {_name_key(system): system for system in held}
+            for short, name in SYSTEM_SHORT_NAMES.items():
+                if name in held:
+                    stands_for.setdefault(_name_key(short), name)
+            named = dict.fromkeys(
+                stands_for[_name_key(token)] for token in unknown
+                if _name_key(token) in stands_for)
+            notes = "".join(
+                f"This list files {SYSTEM_KEY_FILES[system]} under "
+                f"{', '.join(held[system])}. " for system in named)
+        meant = {key: held[system] for key, system in stands_for.items()}
         raise ValueError(
-            f"{library} keeps its roms inside each platform folder, and RomM then "
-            "reads firmware where filesystem.structure.firmware in its config.yml "
-            "says, which was not found here. RomM suggests \"{platform}/bios\" for "
-            "this layout: run again with --romm-firmware \"{platform}/bios\", or "
-            "with the value config.yml holds."
+            f"unknown {label}: {', '.join(unknown)}. {notes}"
+            f"{did_you_mean(unknown, known, listing, hints, inside_from, meant)}"
         )
-    return None
+    if values and not chosen:
+        raise ValueError(f"--{label} needs at least one name")
+    return chosen
 
 
-def romm_relayout(
-    files: list[dict], bios_path: Path,
-    before: tuple[str, ...], after: tuple[str, ...],
-) -> tuple[list[dict], Path]:
-    """The manifest's bios/<platform>/<file> entries under RomM's template,
-    with the library as the root they are relative to."""
-    if (before, after) == (("bios",), ()):
-        return files, bios_path
-    moved = []
-    for entry in files:
-        slug, _, rest = str(entry["dest"]).partition("/")
-        if not rest:
-            # Firmware of no platform: RomM lists none, the default place stays.
-            moved.append({**entry, "dest": f"bios/{slug}"})
+def parse_selection(text: str, count: int, ordered: bool = False) -> list[int]:
+    """Numbers typed at a prompt: `3`, `1,4`, `2-5`, or `all`, 1-based.
+
+    Returned sorted, or in the typed order when the order is a priority.
+    """
+    if text.strip().lower() in ("all", "*"):
+        return list(range(1, count + 1))
+    chosen: list[int] = []
+    for token in (t.strip() for t in text.split(",")):
+        if not token:
             continue
-        moved.append({**entry, "dest": "/".join((*before, slug, *after, rest))})
-    return moved, bios_path.parent
+        low, sep, high = token.partition("-")
+        try:
+            start = int(low)
+            end = int(high) if sep else start
+        except ValueError:
+            raise ValueError(f"not a number or range: {token}") from None
+        if start > end or start < 1 or end > count:
+            raise ValueError(f"out of range: {token} (1-{count})")
+        for number in range(start, end + 1):
+            if number not in chosen:
+                chosen.append(number)
+    return chosen if ordered else sorted(chosen)
+
+
+def system_aliases(manifest: dict | None) -> dict[str, str]:
+    """The platform's own names for its systems, then the titles the site
+    and the installer print (SNK Neo Geo CD), each with the system id.
+
+    A title two systems share names neither, and the platform's own name
+    wins over a title spelled the same.
+    """
+    aliases = {
+        alias: system
+        for system, names in ((manifest or {}).get("system_names") or {}).items()
+        for alias in names
+    }
+    taken = {_name_key(alias) for alias in aliases}
+    titles = (manifest or {}).get("system_titles") or {}
+    counts: dict[str, int] = {}
+    for title in titles.values():
+        counts[_name_key(title)] = counts.get(_name_key(title), 0) + 1
+    for system, title in titles.items():
+        key = _name_key(title)
+        if key and counts[key] == 1 and key not in taken:
+            aliases[title] = system
+    return aliases
+
+
+def emulator_names(manifest: dict, files: list[dict], omitted: list[dict]) -> dict[str, str]:
+    """Every name --emulator accepts, with the profile each one stands for.
+
+    A profile answers to its own name and to the names its core is built
+    under (core_names: beetle_psx and mednafen_psx). A core named by a file
+    and by no profile stands for itself.
+    """
+    names = {core: core for core in available_choices(files, omitted)["cores"]}
+    for profile, aliases in (manifest.get("core_names") or {}).items():
+        names[profile] = profile
+        for alias in aliases:
+            names.setdefault(alias, profile)
+    return names
+
+
+GAMES_REQUIRED_WORDS = "only what the games need to start"
+
+
+class GamesChoice:
+    """The line menu's choice of what the games of the card need, all of it
+    or only what they cannot start without (required)."""
+
+    def __init__(self, plan: GamesPlan, required: bool = False) -> None:
+        self.plan = plan
+        self.required = required
+
+    def __eq__(self, other: object) -> bool:
+        return (isinstance(other, GamesChoice) and other.plan is self.plan
+                and other.required == self.required)
+
+    def __hash__(self) -> int:
+        return hash((id(self.plan), self.required))
+
+    def apply(self, files: list[dict], omitted: list[dict]) -> tuple[list[dict], list[dict]]:
+        return self.plan.apply(files, omitted, self.required)
+
+    def flags(self) -> list[tuple[str, str | None]]:
+        folder = None if self.plan.card else str(self.plan.root)
+        return [("--for-games", folder), *([("--required-only", None)] if self.required else [])]
+
+    def words(self) -> str:
+        """What the choice keeps, after a comma on the menu's head."""
+        named = f"for the {_plural(len(self.plan.games), 'game')} {self.plan.where()}"
+        return f"{named}, {GAMES_REQUIRED_WORDS}" if self.required else named
 
 
 def _older_list_advice(plat: str = "") -> str:

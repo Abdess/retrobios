@@ -1,23 +1,49 @@
-"""The checks a file list passes before any of it is trusted."""
+"""The file list: the words its fields use, and the checks it passes before any of it is trusted."""
 from __future__ import annotations
 
+import re
 import urllib.parse
 from pathlib import PurePosixPath
 
-from installer.constants import (
-    MAX_DOWNLOAD_SIZE,
-    MAX_MANIFEST_FILES,
-    MAX_SELECTION_TAGS,
-    MAX_TOTAL_DOWNLOAD_SIZE,
-    OMISSION_REASONS,
-    SELECTION_FIELDS,
-    TROUBLESHOOTING_PAGE,
-    _LOOPBACK_HOSTS,
-    _SHA1_RE,
-    _SHA256_RE,
-)
 from installer.events import _clean_mapping
 from installer.paths import RELATIVE_ROOTS, _entry_key, _roms_relation, _safe_relative_path, _safe_target_dir
+from installer.remote import MAX_DOWNLOAD_SIZE, MAX_MANIFEST_FILES, MAX_TOTAL_DOWNLOAD_SIZE, _LOOPBACK_HOSTS
+
+# Why a manifest leaves a file out, as the installer words it. The manifest
+# schema and the generator are held to this list by the tests.
+OMISSION_REASONS = {
+    "hash_mismatch": "hash mismatch",
+    "not_found": "not found",
+    "external": "external",
+    "user_provided": "user provided",
+    "no_platform_slug": "no platform folder",
+    "below_platform_folder": "below the platform folder",
+    "no_save_directory": "no save directory",
+    "no_core_folder": "no core folder",
+    "no_save_system": "no system runs the core",
+    "outside_bios_folder": "read outside the BIOS folder",
+    "no_roms_directory": "no roms folder",
+    "no_configs_directory": "no configs folder",
+    "no_emulators_directory": "no emulator folder",
+}
+# What a file is when it is not firmware, as the manifest's category field
+# says, and as the installer words it. Firmware carries no category.
+GAME_DATA = "game_data"
+CATEGORY_LABELS = {GAME_DATA: "game data"}
+# The manifest writes its digests in lowercase, as hashlib gives them, and
+# every comparison reads them as written.
+_SHA1_RE = re.compile(r"^[0-9a-f]{40}$")
+_SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
+
+
+# Marks a region group named after one file that no system names.
+FILE_GROUP = ":file:"
+MAX_SELECTION_TAGS = 1000
+SELECTION_FIELDS = ("systems", "regions", "region_groups", "region_system_groups")
+# The files cores load for systems the platform does not list (game engines,
+# computers): no system of the platform owns them, and choosing systems
+# leaves them out unless this name is chosen too.
+OTHER_SYSTEMS = "other"
 
 
 def _check_root(entry: dict, dest: str, omitted: bool = False) -> None:
@@ -752,18 +778,3 @@ def _validate_targets(data: object) -> dict[str, dict]:
             raise ValueError(f"invalid image list for target {target}")
         normalized[target]["images"] = images
     return normalized
-
-
-def board_target(board: str, targets: dict[str, dict]) -> str | None:
-    """The target a board name stands for: the name itself, else the one
-    target whose images carry it. A card names its image (Batocera writes
-    anbernic-rg35xx-plus for the h700 target, x86-64-v3 for zen3)."""
-    if board in targets:
-        return board
-    owners = [name for name, info in targets.items() if board in info.get("images", ())]
-    return owners[0] if len(owners) == 1 else None
-
-
-NETWORK_ADVICE = ("  Check the connection, and HTTPS_PROXY if this network needs a "
-                  "proxy, then run the same command again.\n"
-                  f"  More help: {TROUBLESHOOTING_PAGE}")

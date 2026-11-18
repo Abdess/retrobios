@@ -1,78 +1,25 @@
-"""Packs read in place of the network, and the checked writes every copy goes through."""
+"""Packs read in place of the network, whole or in parts, and the files they lack."""
 from __future__ import annotations
 
-import contextlib
-import errno
 import functools
 import json
-import os
 import re
-import sys
-import tempfile
 import zipfile
-import zlib
 from collections.abc import Callable, Iterator
 from pathlib import Path
-from typing import IO, ContextManager
+from typing import IO, TYPE_CHECKING
 
 from installer.arguments import PACK_NAME_END
-from installer.constants import (
-    AVAILABLE_PLATFORMS,
-    MAX_MANIFEST_BYTES,
-    PLATFORM_NAMES,
-    _SHA1_RE,
-    _UMASK,
-    _Interrupted,
-    _stop,
-)
-from installer.detect_os import _VERSION_TEXT
-from installer.events import EVENTS
-from installer.local_files import _digest_file
-from installer.manifest import _validate_manifest, _validate_targets
+from installer.device import _VERSION_TEXT
+from installer.manifest import _SHA1_RE, _validate_targets
 from installer.offline import LOCAL
-from installer.paths import _entry_place
-from installer.probe import _exists, _is_file
-from installer.record import KEPT, _NotKept, _clear_read_only, _kept_slot
-from installer.terminal import Progress
-from installer.text import _CONTROLS
+from installer.platforms import AVAILABLE_PLATFORMS, PLATFORM_NAMES
+from installer.remote import MAX_MANIFEST_BYTES
+from installer.safe_replace import _write_verified
+from installer.text import _CONTROLS, _plural
 
-_SHARING_VIOLATIONS = (32, 33)
-
-# A write refused by the file system: retrying cannot change it, and the
-# summary names the two ways out.
-NOT_WRITABLE = "folder not writable"
-
-
-def _write_refused(exc: OSError) -> bool:
-    # A sharing violation is a file another process holds open, which a
-    # later attempt can find released: no refusal of the folder.
-    if getattr(exc, "winerror", None) in _SHARING_VIOLATIONS:
-        return False
-    return isinstance(exc, PermissionError) or exc.errno == errno.EROFS
-
-
-# A file already at the destination, marked read-only, whose content differs,
-# and whose attribute could not be cleared: replacing it is refused while its
-# folder stays writable.
-READ_ONLY = "file in place is read-only"
-# A file in place whose content differs, which could not be moved aside: it
-# is left as it is rather than lost.
-NOT_KEPT = "file in place could not be kept aside"
-
-
-def _read_only_file(dest: Path) -> bool:
-    return _is_file(dest) and not os.access(dest, os.W_OK) and _folder_writable(dest.parent)
-
-
-def _folder_writable(path: Path) -> bool:
-    """Whether a file can be created under path, read from its nearest
-    existing folder: a BIOS folder not created yet is as writable as the
-    folder it would go in."""
-    probe = path
-    while not _exists(probe) and probe.parent != probe:
-        probe = probe.parent
-    return os.access(probe, os.W_OK)
-
+if TYPE_CHECKING:
+    from installer.console import Progress
 
 # A pack too large for one release file is published as ZIP parts
 # (scripts/split_pack.py), each holding at its root a marker that names the
@@ -321,29 +268,6 @@ def pack_name_platforms(name: str) -> list[str]:
             if f"_{PLATFORM_NAMES[plat].replace(' ', '_')}_" in stem]
 
 
-def read_local_manifest(path: Path, plat: str) -> dict:
-    """A file list saved on disk, checked as a downloaded one is."""
-    try:
-        with open(path, "rb") as handle:
-            raw = handle.read(MAX_MANIFEST_BYTES + 1)
-    except OSError as exc:
-        print(f"  Cannot read the file list {path}: {exc.strerror or exc}.", file=sys.stderr)
-        sys.exit(1)
-    try:
-        if len(raw) > MAX_MANIFEST_BYTES:
-            raise ValueError(f"it exceeds {MAX_MANIFEST_BYTES} bytes")
-        try:
-            data = json.loads(raw.decode("utf-8"))
-        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
-            raise ValueError(f"not JSON ({exc})") from exc
-        return _validate_manifest(data, plat)
-    except ValueError as exc:
-        EVENTS.emit("error", stage="manifest", reason="invalid", platform=plat,
-                    message=f"the file list is not valid: {exc}")
-        print(f"  The file list {path} is not valid for {plat}: {exc}", file=sys.stderr)
-        sys.exit(1)
-
-
 def _extract_from_pack(
     f: dict, bios_path: Path, dest: Path, progress: Progress | None,
 ) -> tuple[str, bool, str]:
@@ -357,106 +281,34 @@ def _extract_from_pack(
                            "the pack", named=f"{info.filename} inside {archive.filename}")
 
 
-class _SourceUnreadable(Exception):
-    """The bytes to write could not be read: the source's fault, never the
-    folder's, so it falls back like any copy that failed."""
+def pack_lacks(entries: list[dict]) -> list[dict]:
+    """The entries the pack given to this run does not hold, none without
+    a pack: they cannot be installed from it."""
+    return [] if LOCAL.pack is None else [e for e in entries if LOCAL.pack.find(e) is None]
 
 
-def unreadable_words(exc: BaseException) -> str:
-    """Why a file or a ZIP member could not be read, in words."""
-    if isinstance(exc, RuntimeError) and "encrypted" in str(exc):
-        return "it is encrypted, a password is needed"
-    if isinstance(exc, NotImplementedError):
-        return "it is packed with a compression method this installer cannot read"
-    if isinstance(exc, (zipfile.BadZipFile, zlib.error, EOFError)):
-        return "it is damaged"
-    if isinstance(exc, OSError) and exc.strerror:
-        return exc.strerror
-    return str(exc) or type(exc).__name__
+def pack_holds_trees(data_dirs: list[dict]) -> bool:
+    """Whether the pack given to this run holds a file of any of these data
+    trees, which an install takes from it. A file of the tree, by its path:
+    a member below the tree's folder was the test, and blueMSX's tree,
+    whose folder is the BIOS folder itself, held every BIOS file of any
+    pack. One holding none of the files offered and focused Install, and
+    its result counted 8252 failed beside 10888 missing."""
+    if LOCAL.pack is None:
+        return False
+    names = LOCAL.pack.members
+    for entry in data_dirs:
+        lead = f"{str(entry.get('dest') or '').rstrip('/')}/" if entry.get("dest") else ""
+        if any(f"{lead}{rel}" in names for rel in entry.get("files") or {}):
+            return True
+    return False
 
 
-def _place_verified(f: dict, bios_path: Path, dest: Path, tmp_path: Path, size: int,
-                    expected: dict[str, str], held_in: str) -> None:
-    """Put the written file at dest once its size and hashes are the list's."""
-    if size != f["size"]:
-        raise ValueError(f"{held_in} holds {size} bytes, the list records {f['size']}")
-    actual = _digest_file(tmp_path, tuple(expected))
-    for name, label in (("sha256", "SHA-256"), ("sha1", "SHA-1")):
-        if name in expected and actual[name] != expected[name]:
-            raise ValueError(f"{label} mismatch in {held_in}")
-    os.chmod(tmp_path, (0o777 if f.get("executable") else 0o666) & ~_UMASK)
-    _clear_read_only(dest)
-    KEPT.keep(*_kept_slot(*_entry_place(bios_path, f)), dest, expected, tmp_path)
-    os.replace(tmp_path, dest)
-
-
-def _write_verified(
-    f: dict, bios_path: Path, dest: Path,
-    source: Callable[[], ContextManager[IO[bytes]]], progress: Progress | None,
-    held_in: str, local: bool = False, named: str = "",
-) -> tuple[str, bool, str]:
-    """Write the bytes source opens at dest once they match the list's size
-    and hashes, the file in place kept aside first when it differs.
-
-    The source is opened before the temporary file, and its read errors
-    are told apart from the write errors: a copy that could not be read
-    was reported as a folder not writable. named is the source in the
-    reason then, held_in when empty."""
-    expected = {name: f[name].lower() for name in ("sha256", "sha1") if f.get(name)}
-    tmp_path: Path | None = None
-    counted = 0
-
-    def unreadable(exc: BaseException) -> _SourceUnreadable:
-        return _SourceUnreadable(f"{named or held_in} could not be read: "
-                                 f"{unreadable_words(exc)}")
-
-    try:
-        with contextlib.ExitStack() as stack:
-            try:
-                src = stack.enter_context(source())
-            except _MEMBER_ERRORS as exc:
-                raise unreadable(exc) from exc
-            out = stack.enter_context(tempfile.NamedTemporaryFile(
-                mode="wb", dir=dest.parent, prefix=f".{dest.name}.", suffix=".part",
-                delete=False,
-            ))
-            tmp_path = Path(out.name)
-            size = 0
-            while True:
-                if _stop.is_set():
-                    raise _Interrupted()
-                try:
-                    chunk = src.read(min(1024 * 1024, f["size"] + 1 - size))
-                except _MEMBER_ERRORS as exc:
-                    raise unreadable(exc) from exc
-                if not chunk:
-                    break
-                size += len(chunk)
-                if size > f["size"]:
-                    raise ValueError(f"{held_in} holds more bytes than the list records")
-                out.write(chunk)
-                if progress is not None:
-                    progress.add(len(chunk), resumed=local, network=False)
-                    counted += len(chunk)
-        _place_verified(f, bios_path, dest, tmp_path, size, expected, held_in)
-        tmp_path = None
-        return f["dest"], True, ""
-    except _Interrupted:
-        return f["dest"], False, "stopped"
-    except _NotKept as exc:
-        return f["dest"], False, f"{NOT_KEPT} ({exc})"
-    except (_SourceUnreadable, ValueError, *_MEMBER_ERRORS) as exc:
-        if progress is not None and counted:
-            progress.add(-counted, resumed=local, network=False)
-        if isinstance(exc, OSError) and _write_refused(exc):
-            return f["dest"], False, READ_ONLY if _read_only_file(dest) else NOT_WRITABLE
-        return f["dest"], False, str(exc)
-    finally:
-        if tmp_path is not None and tmp_path.exists():
-            tmp_path.unlink()
-
-
-# Errors a member of someone's ZIP can raise on reading: damaged, encrypted
-# (RuntimeError), or packed with a method zipfile lacks.
-_MEMBER_ERRORS = (OSError, EOFError, RuntimeError, NotImplementedError,
-                  zipfile.BadZipFile, zlib.error)
+def pack_lacks_words(count: int, total: int) -> str:
+    """The pack's missing files, said before the plan names a size."""
+    name = LOCAL.pack.name if LOCAL.pack is not None else "the pack"
+    if count >= total:
+        return (f"{name} holds none of these {_plural(total, 'file')}: nothing can be "
+                "installed from it.")
+    return (f"{count} of these {total} files {'is' if count == 1 else 'are'} not in "
+            f"{name}: {'it' if count == 1 else 'they'} cannot be installed from it.")

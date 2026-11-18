@@ -1,4 +1,4 @@
-"""The installer copied onto a card as a launcher of the handheld."""
+"""The installer copied onto a handheld's card as a launcher of its own."""
 from __future__ import annotations
 
 import argparse
@@ -17,19 +17,30 @@ import zipfile
 from pathlib import Path, PurePosixPath
 from typing import NamedTuple
 
-from installer.constants import MAX_RETRIES, RAW_FILE_URL
-from installer.embedded import card_system
+from installer.cards import card_system
+from installer.console import _ask
 from installer.events import EVENTS
-from installer.from_folders import APP_SCHEMA, LAUNCHERS_URL, MAX_APP_FILES, MAX_APP_FILE_SIZE, MAX_LAUNCHERS_BYTES
-from installer.local_files import _sha256_file
+from installer.host_fs import NOT_WRITABLE, _write_refused
+from installer.local_check import _sha256_file
 from installer.network import _fetch_json, _retry_delay, network_words
 from installer.offline import LOCAL, _Offline, _network_allowed
 from installer.outcome import _transfer_failure
-from installer.pack_source import NOT_WRITABLE, _write_refused, _write_verified
 from installer.paths import _destination_path, _safe_relative_path
-from installer.prompt import _ask
-from installer.record import KEPT
+from installer.remote import BASE_URL, MAX_RETRIES, RAW_FILE_URL
+from installer.safe_replace import KEPT, _write_verified
 from installer.text import _plural
+
+# The RetroBIOS app on a handheld's card. A card prepared on a computer can
+# also carry the launcher of ports/ for its system, so the player checks and
+# updates the BIOS files from the console later. The files come from the
+# same ref as the file lists, listed with their hashes in
+# install/launchers/index.json, which scripts/generate_launcher_index.py
+# writes from the members of the launcher archives.
+LAUNCHERS_URL = f"{BASE_URL}/install/launchers/index.json"
+MAX_LAUNCHERS_BYTES = 256 * 1024
+MAX_APP_FILE_SIZE = 8 * 1024 * 1024
+MAX_APP_FILES = 64
+APP_SCHEMA = 1
 
 
 class AppPlace(NamedTuple):

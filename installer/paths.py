@@ -1,50 +1,14 @@
-"""Where each entry of a file list lands, kept under its BIOS folder."""
+"""Where each entry of a file list lands, kept under its BIOS folder, and how a path is shown."""
 from __future__ import annotations
 
-import http.client
 import json
 import os
 import re
 from pathlib import Path, PurePosixPath, PureWindowsPath
 from typing import NamedTuple
 
-from installer.text import _CONTROLS
-
-
-def _read_limited_json(
-    response: http.client.HTTPResponse, limit: int, label: str, raw: bool = False
-) -> object:
-    """Read a bounded UTF-8 JSON response, its bytes as they came with raw.
-
-    A body shorter than its Content-Length is a dropped connection, raised
-    as one so the caller retries: parsed, the cut read as an invalid file
-    list and the run ended without the network advice.
-    """
-    raw_length = response.headers.get("Content-Length") if response.headers else None
-    expected: int | None = None
-    if raw_length:
-        try:
-            expected = int(raw_length)
-        except ValueError:
-            expected = None
-        if expected is not None and expected > limit:
-            raise ValueError(f"{label} exceeds {limit} bytes")
-    try:
-        payload = response.read(limit + 1)
-    except http.client.IncompleteRead as exc:
-        raise ConnectionError(
-            f"{label} cut after {len(exc.partial)} bytes"
-        ) from exc
-    if len(payload) > limit:
-        raise ValueError(f"{label} exceeds {limit} bytes")
-    if expected is not None and len(payload) < expected:
-        raise ConnectionError(f"{label} cut after {len(payload)} of {expected} bytes")
-    if raw:
-        return payload
-    try:
-        return json.loads(payload.decode("utf-8"))
-    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
-        raise ValueError(f"invalid {label}: {exc}") from exc
+from installer.host_fs import _WSL
+from installer.text import _CONTROLS, screen_text
 
 
 def _path_characters(value: object, field: str, colons: bool = True) -> str:
@@ -330,3 +294,18 @@ def _entry_key(entry: dict) -> str:
         # A path in one emulator's own folder: two emulators read two files.
         return f"emulator\0{','.join(entry.get('cores') or [])}\0{dest}"
     return f"{root}\0{dest}" if root in ("save", "emulators", *RELATIVE_ROOTS) else dest
+
+
+def shown_path(path: Path | str) -> str:
+    """A path as the person names it: under WSL, /mnt/d/BIOS is D:\\BIOS, the
+    drive the card row calls D:."""
+    text = str(spelled(path)) if os.path.isabs(str(path)) else str(path)
+    root = _WSL["root"].rstrip("/") + "/"
+    match = (re.match(rf"^{re.escape(root)}([a-z])(?:/(.*))?$", text)
+             if _WSL["active"] else None)
+    if match:
+        text = f"{match.group(1).upper()}:\\" + (match.group(2) or "").replace("/", "\\")
+    # A folder's name comes from whoever named it: a card's label, a
+    # retroarch.cfg, a pack. Printed raw, a control character in it is a
+    # terminal command.
+    return screen_text(text)

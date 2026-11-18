@@ -9,21 +9,22 @@ import threading
 import zipfile
 from collections.abc import Callable, Collection, Iterator
 from pathlib import Path
-from typing import IO, Any, NamedTuple
+from typing import IO, TYPE_CHECKING, Any
 
-from installer.constants import BASE_URL, GAME_DATA, WORLD_REGION
-from installer.cores import entry_systems, normalize_platform
-from installer.embedded import display_name, shown_path
+from installer.console import SAID_FAILED
 from installer.events import EVENTS
-from installer.local_files import BACKUP_DIR, _digest_file, _digest_handle, _sha1_file
-from installer.narrowing import _filter_by_target
+from installer.host_fs import _REPARSE_POINT
+from installer.local_check import _digest_file, _digest_handle, _sha1_file
 from installer.offline import LOCAL, local_manifest_platform
-from installer.pack_source import _MEMBER_ERRORS, _PART_FILE, PackSource, _write_verified, unreadable_words
-from installer.paths import _entry_path, _safe_relative_path
-from installer.probe import _is_file
-from installer.record import _REPARSE_POINT
-from installer.terminal import SAID_FAILED, Progress
-from installer.text import _plural, format_size, screen_text
+from installer.pack_source import _PART_FILE, PackSource
+from installer.paths import _entry_path, _safe_relative_path, shown_path
+from installer.platforms import display_name, normalize_platform
+from installer.safe_replace import BACKUP_DIR, _MEMBER_ERRORS, _write_verified, unreadable_words
+from installer.tally import _bytes
+from installer.text import _plural, format_size, screen_text, shown_lines
+
+if TYPE_CHECKING:
+    from installer.console import Progress
 
 FOLDER_IN_PLACE = "a folder sits where this file goes: move it away, then run again"
 
@@ -68,13 +69,6 @@ SYSTEM_FOLDERS = frozenset(name.casefold() for name in (
 APPLE_DOUBLE = "._"
 # Folders the kernel makes up on the fly: endless, and never a copy.
 PSEUDO_FOLDERS = frozenset() if os.name == "nt" else frozenset(("/proc", "/sys", "/dev"))
-
-
-def shown_lines(lines: list[str]) -> list[str]:
-    """Lines for the terminal, a blank line opening one kept as it is: the
-    paths in them come from folders anyone may have filled."""
-    return [("\n" + screen_text(line[1:])) if line.startswith("\n") else screen_text(line)
-            for line in lines]
 
 
 class LocalCopy:
@@ -547,99 +541,8 @@ def _inside(path: Path, root: Path) -> bool:
     return True
 
 
-def _copies(entry: dict) -> list[dict]:
-    """Every copy the list knows for an entry: its own, other cores', the
-    platform's declared one."""
-    return [entry, *entry.get("alternatives", []), *entry.get("slot_choices", []),
-            *entry.get("declared_choices", [])]
-
-
-# id(manifest) -> (manifest, the cores its entries name), read once per list.
-_LISTED_CORES: dict[int, tuple[dict, frozenset]] = {}
-
-
-def _listed_cores(manifest: dict) -> frozenset:
-    """Every core a copy of the list's entries names: the platform's own.
-
-    system_cores reaches every profile, the target rule needing the cores off
-    the platform too, and the "read by" line named Recalbox's mame0258 on
-    Batocera and BizHawk on RetroArch.
-    """
-    cached = _LISTED_CORES.get(id(manifest))
-    if cached is None or cached[0] is not manifest:
-        cores = frozenset(
-            core for entry in [*manifest.get("files", []), *manifest.get("omitted_files", [])]
-            for copy in _copies(entry) for core in copy.get("cores") or [])
-        cached = _LISTED_CORES[id(manifest)] = (manifest, cores)
-    return cached[1]
-
-
-def readers(entry: dict, manifest: dict) -> list[str]:
-    """The cores that open an entry: as its copies name them, else the cores
-    of its systems that the platform's own list names."""
-    named = sorted({core for copy in _copies(entry) for core in copy.get("cores") or []})
-    if named:
-        return named
-    system_cores = manifest.get("system_cores") or {}
-    listed = _listed_cores(manifest)
-    return sorted({core for system in entry_systems(entry)
-                   for core in system_cores.get(system, []) if core in listed})
-
-
-def opened_line(entry: dict, manifest: dict, bios_path: Path) -> str:
-    """Where the emulators read an entry, and which ones: "read by mgba at
-    ...", "expected at ..." where the list names none. "opened at" under
-    "missing:" read as a file that was opened."""
-    try:
-        where = _entry_path(bios_path, entry)
-    except ValueError:
-        where = bios_path / str(entry.get("dest"))
-    cores = readers(entry, manifest)
-    if not cores:
-        return f"expected at {where}"
-    shown = ", ".join(cores[:SHOWN_CORES])
-    if len(cores) > SHOWN_CORES:
-        shown += f" and {len(cores) - SHOWN_CORES} more"
-    return f"read by {shown} at {where}"
-
-
 def _known_destinations(files: list[dict]) -> set[str]:
     return {str(f.get("dest", "")).casefold() for f in files}
-
-
-def _content_owners(files: list[dict]) -> dict[str, list[dict]]:
-    """SHA-1 -> the entries one of whose copies holds it, in the list's order."""
-    owners: dict[str, list[dict]] = {}
-    for other in files:
-        for sha1 in dict.fromkeys(held for c in _copies(other) if (held := c.get("sha1"))):
-            owners.setdefault(sha1, []).append(other)
-    return owners
-
-
-def _content_owner(
-    sha1: str, entry: dict, files: list[dict],
-    owners: dict[str, list[dict]] | None = None,
-) -> str:
-    """Why a file holding sha1 is not the one entry wants, if the list knows."""
-    for copy in entry.get("alternatives", []) + entry.get("slot_choices", []):
-        if copy.get("sha1") == sha1 and copy.get("cores"):
-            return (f"another revision: the copy {', '.join(copy['cores'])} "
-                    "reads, not the one this list installs here")
-    for copy in entry.get("declared_choices", []):
-        if copy.get("sha1") == sha1:
-            return ("another revision: the one the platform's own list declares, "
-                    "not the one the cores read")
-    if owners is None:
-        owners = _content_owners(files)
-    for other in owners.get(sha1, []):
-        if other is entry or other.get("dest") == entry.get("dest"):
-            continue
-        regions = [r for r in other.get("regions") or [] if r != WORLD_REGION]
-        if regions:
-            return (f"another region: the contents of {other['dest']} "
-                    f"({', '.join(regions)})")
-        return f"another file: the contents of {other['dest']}"
-    return ""
 
 
 def _place_reason(
@@ -693,227 +596,6 @@ def _copy_reason(entry: dict, copy: LocalCopy, bios_path: Path, known: set[str])
     except ValueError:
         return ""
     return _place_reason(entry, copy.path, copy.index, expected, known)[0]
-
-
-def _twin_in_place(entry: dict, files: list[dict], bios_path: Path) -> bool:
-    """Whether the name a case variant shares with another entry, but for
-    the case (bios.col and BIOS.col), is in place."""
-    folded = str(entry.get("dest", "")).casefold()
-    for twin in files:
-        if twin is entry or twin.get("case_variant") or \
-                str(twin.get("dest", "")).casefold() != folded:
-            continue
-        try:
-            if _is_file(_entry_path(bios_path, twin)):
-                return True
-        except ValueError:
-            continue
-    return False
-
-
-def _found_elsewhere(
-    entry: dict, index: FolderIndex, bios_path: Path, files: list[dict],
-    known: set[str], zipped: _ZippedLookup | None = None,
-) -> tuple[str, str]:
-    """(reason, folder too deep) for an entry missing at its place."""
-    dest = str(entry.get("dest", ""))
-    if entry.get("case_variant") and _twin_in_place(entry, files, bios_path):
-        # A pack is read on Windows and macOS too, where two names that
-        # differ only by case are one file: it carries one of the pair. Moving
-        # the other copy here would take it from the core that opens it.
-        # Only its twin in place says a pack was used: on an empty folder the
-        # note named a pack never downloaded and pushed the BIOS files the
-        # user looked for into "... and N more".
-        return ("a second name the pack leaves out: Windows and macOS see it "
-                "as the same file. Run the command without --check to add it"), ""
-    name = dest.rsplit("/", 1)[-1]
-    sizes = {size for copy in _copies(entry) if isinstance(size := copy.get("size"), int)}
-    sha1s = {sha1 for copy in _copies(entry) if (sha1 := copy.get("sha1"))}
-    try:
-        expected = _entry_path(bios_path, entry)
-    except ValueError:
-        return "", ""
-    same_name = [p for p in index.by_name.get(name.casefold(), []) if p != expected]
-    matching = [p for p in same_name if index.size[p] in sizes and index.sha1(p) in sha1s]
-    held = set(matching)
-    for path in matching or same_name:
-        contents = "" if path in held else ", with other contents"
-        found = _place_reason(entry, path, index, expected, known, contents)
-        if found[0]:
-            return found
-    above = index.root.parent / dest
-    if index.root.parent != index.root and above.is_file():
-        return f"one folder too high: it is at {above}", ""
-    holder = index.first_holding(sizes, sha1s)
-    if holder is not None:
-        return _place_reason(entry, holder, index, expected, known)
-    if name.casefold().endswith(_ARCHIVE_SUFFIXES):
-        return "", ""
-    if zipped is None:
-        zipped = _ZippedLookup(index, known)
-    reason = zipped.reason(name, {expected.parent, index.root})
-    if reason:
-        return reason, ""
-    for path in index.apple_double.get(name.casefold(), []):
-        if path.parent == expected.parent:
-            return (f"only a Mac's ._ file: {path.name} holds Finder data, not the "
-                    f"file itself. Copy {name} again"), ""
-    return "", ""
-
-
-def _wrong_contents(
-    entry: dict, path: Path, index: FolderIndex, files: list[dict],
-    owners: dict[str, list[dict]] | None = None,
-) -> str:
-    """Why the file at an entry's place is not the one the list installs."""
-    try:
-        if path.is_dir():
-            return FOLDER_IN_PLACE
-        size = path.stat().st_size
-        with open(path, "rb") as handle:
-            head = handle.read(4)
-    except OSError as exc:
-        return f"could not be read ({exc.strerror or exc}): its contents are unknown"
-    sha1 = index.sha1(path)
-    owner = _content_owner(sha1, entry, files, owners)
-    if owner:
-        return owner
-    if head == b"PK\x03\x04" and not str(entry.get("dest", "")).casefold().endswith(".zip"):
-        return "still zipped: this file is a ZIP archive, extract what it holds"
-    expected = {listed for copy in _copies(entry)
-                if isinstance(listed := copy.get("size"), int)}
-    if size not in expected:
-        want = " or ".join(f"{s:,}" for s in sorted(expected))
-        return f"wrong size: {size:,} bytes, the list expects {want}"
-    return "same size, other contents: another dump, or a damaged copy"
-
-
-class Diagnosis(NamedTuple):
-    reasons: dict[int, str]
-    deep: dict[str, int]
-
-
-def diagnose(
-    missing: list[dict], mismatched: list[dict], files: list[dict], bios_path: Path,
-    verified: list[dict] | None = None, index: FolderIndex | None = None,
-) -> Diagnosis:
-    """The reason --check gives for each file it flags, from what the folder
-    holds and what the list records: id(entry) -> reason, and the folders
-    holding files too deep with how many. The files the check verified are
-    not read again: their SHA-1 is the one the list records."""
-    reasons: dict[int, str] = {}
-    deep: dict[str, int] = {}
-    if not bios_path.is_dir() or not (missing or mismatched):
-        return Diagnosis(reasons, deep)
-    if index is None:
-        index = bios_folder_index(bios_path, files, verified or [])
-        if index is None:
-            return Diagnosis(reasons, deep)
-    known = _known_destinations(files)
-    zipped = _ZippedLookup(index, known)
-    for entry in missing:
-        reason, extra = _found_elsewhere(entry, index, bios_path, files, known, zipped)
-        if reason:
-            reasons[id(entry)] = reason
-        if extra:
-            deep[extra] = deep.get(extra, 0) + 1
-    owners = _content_owners(files) if mismatched else {}
-    for entry in mismatched:
-        try:
-            path = _entry_path(bios_path, entry)
-        except ValueError:
-            continue
-        reason = _wrong_contents(entry, path, index, files, owners)
-        if reason:
-            reasons[id(entry)] = reason
-    return Diagnosis(reasons, deep)
-
-
-class CheckHeld(NamedTuple):
-    """What check_lines reads besides the list: the files verified, the BIOS
-    folder's index and the copies found on this machine."""
-
-    verified: list[dict] | None = None
-    bios_index: FolderIndex | None = None
-    copies: dict[int, LocalCopy] | None = None
-
-
-def check_lines(
-    missing: list[dict], mismatched: list[dict], files: list[dict], manifest: dict,
-    bios_path: Path, every: bool, held: CheckHeld | None = None,
-) -> list[str]:
-    """The files --check flags, each with why and where its cores read it.
-
-    "missing: scph5501.bin" left a user with the file one folder too deep,
-    or still in its ZIP, to guess. A flagged file with a reason is always
-    listed, and so is one a folder named with --from holds. Plain missing
-    ones stop at ten unless every is set.
-    """
-    held = held or CheckHeld()
-    index = held.bios_index
-    found = diagnose(missing, mismatched, files, bios_path, held.verified, index)
-    copies = held.copies or {}
-    known = _known_destinations(files)
-    lines = []
-    for extra, count in sorted(found.deep.items(), key=lambda item: -item[1]):
-        if count >= 3:
-            lines.append(f"  {_plural(count, 'file')} sit too deep, in "
-                         f"{bios_path / extra}: move what it holds up into {bios_path}.")
-    lines += _check_copy_lines(missing + mismatched, copies, index)
-    explained = [e for e in missing if id(e) in found.reasons or id(e) in copies]
-    plain = [e for e in missing if id(e) not in found.reasons and id(e) not in copies]
-    # A missing file with no more to say is a list: --verbose names each.
-    shown = plain if every else []
-
-    def block(label: str, entry: dict) -> list[str]:
-        game = " (game data)" if entry.get("category") == GAME_DATA else ""
-        rows = [f"    {label}: {entry['dest']}{game}"]
-        if id(entry) in found.reasons:
-            rows.append(f"      {found.reasons[id(entry)]}")
-        copy = copies.get(id(entry))
-        if copy is not None and copy.index is index and not copy.misplaced:
-            rows.append(f"      a run without --check copies it from {copy.where()}")
-        elif copy is not None and copy.index is index:
-            where = _copy_reason(entry, copy, bios_path, known)
-            if where and where != found.reasons.get(id(entry)):
-                rows.append(f"      the right file: {where}")
-            rows.append("      a run without --check copies it into place")
-        elif copy is not None:
-            rows.append(f"      in {shown_path(copy.index.label)}: {copy.where()}")
-        rows.append(f"      {opened_line(entry, manifest, bios_path)}")
-        return rows
-
-    for entry in mismatched:
-        lines += block("wrong copy", entry)
-    for entry in explained:
-        lines += block("missing", entry)
-    for entry in shown:
-        lines += block("missing", entry)
-    if len(shown) < len(plain) and lines:
-        lines.append(f"    ... and {len(plain) - len(shown)} more missing "
-                     "(--verbose lists them all)")
-    return shown_lines(lines)
-
-
-def bios_folder_index(
-    bios_path: Path, files: list[dict], verified: list[dict],
-) -> FolderIndex | None:
-    """The BIOS folder read for files misplaced in it. The files the check
-    verified are not read again: their SHA-1 is the one the list records.
-    An archive the list installs is not unpacked for its members: a MAME
-    set holding a ROM a core also reads loose is that core's to open."""
-    if not bios_path.is_dir():
-        return None
-    index = FolderIndex(bios_path)
-    for entry in verified:
-        if entry.get("sha1"):
-            try:
-                index.seed(_entry_path(bios_path, entry), entry["sha1"].lower())
-            except ValueError:
-                continue
-    index.sealed = _known_destinations(files)
-    index.listed = {str(f.get("dest", "")) for f in files}
-    return index
 
 
 def _above(entry: dict, index: FolderIndex) -> LocalCopy | None:
@@ -978,26 +660,6 @@ def _misplaced(entry: dict, copy: LocalCopy, index: FolderIndex) -> bool:
         return False
     own = str(entry.get("dest", "")).casefold()
     return rel.casefold() not in index.sealed or rel.casefold() == own
-
-
-def _check_copy_lines(
-    entries: list[dict], copies: dict[int, LocalCopy], bios_index: FolderIndex | None,
-) -> list[str]:
-    """What --check says a run would copy instead of downloading."""
-    fixed = sum(1 for e in entries if id(e) in copies and copies[id(e)].misplaced)
-    lines = []
-    if fixed:
-        verb = "is" if fixed == 1 else "are"
-        them = "it" if fixed == 1 else "them"
-        lines.append(f"  {fixed} of these files {verb} in the BIOS folder in the wrong place: "
-                     f"a run without --check copies {them} where the cores open {them}, and "
-                     f"leaves the {'copy' if fixed == 1 else 'copies'} found as "
-                     f"{'it is' if fixed == 1 else 'they are'}.")
-    for label, count in _counts_by_folder(entries, copies, bios_index):
-        them = "it" if count == 1 else "them"
-        lines.append(f"  {label} holds {count} of these files: a run without --check "
-                     f"copies {them}.")
-    return shown_lines(lines)
 
 
 def _counts_by_folder(
@@ -1138,81 +800,6 @@ def sources_line(
     if wrong:
         words.append(f"{_plural(wrong, 'wrong copy')} left")
     return ", ".join(words) + "."
-
-
-# Below this a download is small enough that narrowing it is not worth a line.
-BULK_HINT_FROM = 100 * 1024 * 1024
-
-
-def _bytes(files: list[dict]) -> int:
-    return sum(f.get("size", 0) for f in files)
-
-
-def bulk_hint(
-    to_download: list[dict], manifest: dict, systems_chosen: bool, cores_chosen: bool,
-    accepted: Collection[str] = (),
-) -> list[str]:
-    """Name what pulls most of a download, when narrowing saves over half of it.
-
-    `--system 3do` fetched 349 MB for RetroArch, and `--core opera` 12.5 MB:
-    the arcade cores that also read 3DO pulled the rest, and nothing said so.
-    accepted holds the names --core takes. Drawn from every core of the
-    system, the advice named ares, which loads no file of its own, and
-    `--core ares` was then refused.
-    """
-    total = _bytes(to_download)
-    if total < BULK_HINT_FROM:
-        return []
-    systems = {s for entry in to_download for s in entry_systems(entry)}
-    if not cores_chosen and len(systems) == 1:
-        system = next(iter(systems))
-        candidates = [core for core in (manifest.get("system_cores") or {}).get(system) or []
-                      if core in accepted]
-        by_core: dict[str, int] = {}
-        for entry in to_download:
-            for core in entry.get("cores") or []:
-                by_core[core] = by_core.get(core, 0) + entry.get("size", 0)
-        kept = {core: _bytes(_filter_by_target(to_download, [core])) for core in candidates}
-        if by_core and kept:
-            heavy = max(sorted(by_core), key=lambda core: by_core[core])
-            light = min(sorted(kept), key=lambda core: kept[core])
-            saved = total - kept[light]
-            if saved * 2 > total:
-                return [
-                    f"  {heavy} pulls {format_size(by_core[heavy])} of this "
-                    f"{format_size(total)} download for {system}. --core {light} "
-                    f"keeps {format_size(kept[light])} of it and saves "
-                    f"{format_size(saved)} ({saved * 100 // total}%)."
-                ]
-    if not systems_chosen and len(systems) > 1:
-        alone: dict[str, int] = {}
-        for entry in to_download:
-            own = entry_systems(entry)
-            if len(own) == 1:
-                alone[own[0]] = alone.get(own[0], 0) + entry.get("size", 0)
-        if alone:
-            heavy = max(sorted(alone), key=lambda system: alone[system])
-            if alone[heavy] * 2 > total:
-                return [
-                    f"  {heavy} pulls {format_size(alone[heavy])} of this "
-                    f"{format_size(total)} download. --system naming the systems "
-                    f"played leaves it out and saves {format_size(alone[heavy])} "
-                    f"({alone[heavy] * 100 // total}%), --list-systems names them."
-                ]
-    return []
-
-
-# The RetroBIOS app on a handheld's card. A card prepared on a computer can
-# also carry the launcher of ports/ for its system, so the player checks and
-# updates the BIOS files from the console later. The files come from the
-# same ref as the file lists, listed with their hashes in
-# install/launchers/index.json, which scripts/generate_launcher_index.py
-# writes from the members of the launcher archives.
-LAUNCHERS_URL = f"{BASE_URL}/install/launchers/index.json"
-MAX_LAUNCHERS_BYTES = 256 * 1024
-MAX_APP_FILE_SIZE = 8 * 1024 * 1024
-MAX_APP_FILES = 64
-APP_SCHEMA = 1
 
 
 def _open_local_sources(args: argparse.Namespace) -> None:

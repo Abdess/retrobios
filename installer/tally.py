@@ -1,26 +1,24 @@
-"""What a check counts, and the files a list leaves out, in words and in events."""
+"""What a check counts, and the files a list leaves out or cannot supply, in words and in events."""
 from __future__ import annotations
 
-import platform
+import os
 from collections.abc import Iterable
 from pathlib import Path
 from typing import NamedTuple
 
-from installer.constants import CATEGORY_LABELS, GAME_DATA, OMISSION_REASONS, OTHER_SYSTEMS
-from installer.cores import entry_systems
-from installer.detect_os import _parse_os_release
-from installer.embedded import display_name
 from installer.events import EVENTS
-from installer.local_files import _classify_local
+from installer.host_fs import _is_file
+from installer.local_check import _classify_local
+from installer.manifest import CATEGORY_LABELS, GAME_DATA, OMISSION_REASONS, OTHER_SYSTEMS
 from installer.narrowing import _settle_slot
-from installer.paths import _entry_path
-from installer.text import _plural, format_size
+from installer.paths import _entry_path, shown_path
+from installer.platforms import display_name, entry_systems
+from installer.remote import SITE_URL
+from installer.text import _plural, agree, format_size
 
 
-def _os_name() -> str:
-    """The OS's own name, from os-release, else the kernel's."""
-    release = _parse_os_release()
-    return release.get("PRETTY_NAME") or release.get("NAME") or platform.system()
+def _bytes(files: list[dict]) -> int:
+    return sum(f.get("size", 0) for f in files)
 
 
 class CheckTally(NamedTuple):
@@ -318,3 +316,125 @@ GAME_DATA_WORDS = "game data: files a game or a game engine reads, of no use to 
 # entry of the list), apart from BIOS files and game data.
 DATA_FILES_WORDS = ("data files: the files an emulator reads from a data folder of its own, "
                     "such as Dolphin's Sys and PPSSPP's assets")
+
+
+def game_data_missing(names: str, count: int, folders: list[Path]) -> str:
+    """The game data a run could not supply, and the folder each goes in:
+    "Copy it from your own copy of the game" named no folder."""
+    one = count == 1
+    places = list(dict.fromkeys(f"{shown_path(folder)}{os.sep}" for folder in folders))
+    where = (f" into {', '.join(places[:3])}" + (f" and {len(places) - 3} more folders"
+                                                  if len(places) > 3 else "")) if places else ""
+    # The names first, the kind after them in a word: the definition was
+    # spliced into this sentence, and said again on its own line.
+    return (f"Not available here: {names}, game data "
+            f"{'its game reads' if one else 'their games read'}. Copy "
+            f"{'it' if one else 'them'} from an owned copy of the game{where}.")
+
+
+def not_installable_words(count: int, required: int, reasons: dict[str, int]) -> str:
+    """The line under the index count for the files the list leaves out:
+    "(1 required, not found: 37)" read as a sum."""
+    need = ("" if not required else ", required" if count == 1
+            else f", {required} of them required")
+    if set(reasons) == {"not_found"}:
+        return (f"Not installable: {agree(count, 'file is', 'files are')} not in the "
+                f"collection{need}.")
+    why = ", ".join(f"{OMISSION_REASONS.get(reason, reason)} ({number})"
+                    for reason, number in sorted(reasons.items()))
+    return f"Not installable: {_plural(count, 'file')}{need}. Why: {why}."
+
+
+def _omission_lines(count: int, entries: list[dict], bios_path: Path | None = None) -> list[str]:
+    """What was skipped, the files an emulator cannot start without first.
+
+    "395 file are not in the collection yet" named nothing and gave one
+    reason for all, while the manifest says which file and why. Game data
+    is said apart, with the folder it goes in, as the screen says it.
+    """
+    one = count == 1
+    lines = [f"{_plural(count, 'file')} {'was' if one else 'were'} not installed: "
+             f"the collection does not hold {'it' if one else 'them'}, or its copy "
+             f"fails {'its' if one else 'their'} check."]
+    needed = [e for e in entries if e.get("required")]
+    games = [e for e in needed if e.get("category") == GAME_DATA]
+    lines += _needed_lines([e for e in needed if e.get("category") != GAME_DATA],
+                           "Needed to start an emulator")
+    if games:
+        names = ", ".join(str(e.get("dest") or e.get("name")) for e in games[:3]) + (
+            f" and {len(games) - 3} more" if len(games) > 3 else "")
+        folders = []
+        for entry in games:
+            try:
+                folders.append(_entry_path(bios_path, entry).parent if bios_path else None)
+            except ValueError:
+                continue
+        lines.append("  " + game_data_missing(names, len(games), [f for f in folders if f]))
+        # Defined on a line of its own, the sentence above naming the files.
+        lines.append("  " + kinds_definition(True, False))
+    return lines
+
+
+def needed_absent_words(count: int, where: str) -> str:
+    """The count of files an emulator cannot start without that the
+    collection does not hold, said in every mode: where names what lists
+    them, --verbose in line mode, Details on the screen."""
+    return (f"{_plural(count, 'file')} an emulator needs {'is' if count == 1 else 'are'} "
+            f"not available here ({where} names "
+            f"{'it' if count == 1 else 'them'}).")
+
+
+def _absent_required(omitted: list[dict], bios_path: Path) -> list[dict]:
+    """Required entries the manifest leaves out that the user has not placed."""
+    absent = []
+    for entry in omitted:
+        dest = entry.get("dest") or entry.get("name", "")
+        if not entry.get("required", True) or not dest:
+            continue
+        try:
+            placed = _is_file(_entry_path(bios_path, {**entry, "dest": dest}))
+        except ValueError:
+            # A path climbing out of the folder is never one we read, and one
+            # below a save directory this run does not know is not looked at.
+            placed = False
+        if not placed:
+            absent.append(entry)
+    return absent
+
+
+def _needed_lines(entries: list[dict], heading: str, every: bool = False) -> list[str]:
+    """Required files the collection lacks, by system with the emulators reading them.
+
+    A bare list (DARK.GOB, Data.rsdk, ... and 69 more) left a Batocera user
+    unable to tell whether their PlayStation was concerned.
+    """
+    by_system: dict[str, tuple[set[str], set[str]]] = {}
+    for entry in entries:
+        system = str(entry.get("system") or ", ".join(entry_systems(entry)) or OTHER_SYSTEMS)
+        names, cores = by_system.setdefault(system, (set(), set()))
+        names.add(str(entry.get("dest") or entry.get("name")))
+        cores.update(str(core) for core in entry.get("cores") or [])
+    if not by_system:
+        return []
+    count = sum(len(names) for names, _cores in by_system.values())
+    lines = [f"  {heading} ({_plural(count, 'file')}):"]
+    systems = sorted(by_system)
+    shown = systems if every else systems[:8]
+    for system in shown:
+        names, cores = by_system[system]
+        readers = f" ({', '.join(sorted(cores))})" if cores else ""
+        lines.append(f"    {system}{readers}: {', '.join(sorted(names))}")
+        # Each emulator's own page, one click away: the index alone sent the
+        # user searching several hundred pages for theforceengine.
+        lines += [f"      {SITE_URL}emulators/{core}/" for core in sorted(cores)]
+    if not every and len(systems) > 8:
+        # A file several systems share is a group of its own, counted as one.
+        unit = "groups" if any(", " in system for system in systems) else "systems"
+        more = len(systems) - 8
+        lines.append(f"    ... and {more} more {unit if more > 1 else unit[:-1]} "
+                     "(--check --verbose lists them all)")
+    if all(by_system[system][1] for system in shown):
+        lines.append("  Each emulator's page, linked above, says what these files are.")
+    else:
+        lines.append(f"  Each emulator's page says what these files are: {SITE_URL}emulators/")
+    return lines

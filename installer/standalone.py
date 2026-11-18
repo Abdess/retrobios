@@ -6,20 +6,44 @@ import os
 import shutil
 import sys
 from pathlib import Path, PurePosixPath
+from typing import TYPE_CHECKING
 
-from installer.datadirs import _copy_targets
+from installer.console import Progress, _confirm
 from installer.detect_frontends import launchbox_bios_dirs, launchbox_root
+from installer.download import download_files
+from installer.host_fs import NOT_WRITABLE, _closed_to_this_user, _exists, _is_dir, _replace_with_copy, _write_refused
 from installer.invocation import offline_requested
-from installer.line_ui import _sized
-from installer.local_files import BACKUP_DIR, check_local, unreachable_words
+from installer.local_check import check_local, unreachable_words
 from installer.network import fetch_manifest
 from installer.outcome import EVERYTHING_IN_PLACE, OutcomeDetails, _check_fetch_line, _report_outcome
-from installer.pack_source import NOT_KEPT, NOT_WRITABLE, _write_refused
 from installer.paths import _destination_path, _within
-from installer.plan import _check_free_space, _confirm, _print_plan, download_files
-from installer.probe import _closed_to_this_user, _exists, _is_dir
-from installer.record import KEPT, _NotKept, _replace_with_copy, plan_kept
-from installer.terminal import Progress, Terminal
+from installer.plan import _check_free_space, _print_plan
+from installer.plan_words import _sized
+from installer.safe_replace import BACKUP_DIR, KEPT, NOT_KEPT, _NotKept, plan_kept
+
+if TYPE_CHECKING:
+    from installer.terminal import Terminal
+
+
+def _copy_targets(
+    entry: dict, os_type: str, extra_dirs: dict[str, Path] | None = None,
+) -> list[Path]:
+    """The emulator folders a standalone copy entry names on this OS.
+
+    WSL falls back to the Linux ones, and extra_dirs adds the folder a
+    frontend such as LaunchBox keeps the emulator in.
+    """
+    targets = entry.get("targets", {}).get(os_type, [])
+    if not targets and os_type == "wsl":
+        targets = entry.get("targets", {}).get("linux", [])
+    target_dirs = [Path(os.path.expandvars(os.path.expanduser(t))) for t in targets]
+    extra_root = (extra_dirs or {}).get(entry.get("emulator", ""))
+    if extra_root is not None:
+        subdir = PurePosixPath(entry.get("file", "")).parent
+        extra = extra_root if str(subdir) == "." else extra_root / subdir
+        if extra not in target_dirs:
+            target_dirs.append(extra)
+    return target_dirs
 
 
 def standalone_folders_here(

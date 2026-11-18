@@ -7,8 +7,9 @@ import weakref
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from installer.constants import AVAILABLE_PLATFORMS, MAX_MANIFEST_BYTES
 from installer.invocation import OFFLINE_VARIABLE, offline_requested
+from installer.platforms import AVAILABLE_PLATFORMS
+from installer.remote import MAX_MANIFEST_BYTES
 
 if TYPE_CHECKING:
     from installer.from_folders import FolderIndex
@@ -112,3 +113,8 @@ def local_manifest_platform(path: Path) -> str | None:
         return None
     plat = data.get("platform") if isinstance(data, dict) else None
     return plat if plat in AVAILABLE_PLATFORMS else None
+
+
+def _offline_only() -> bool:
+    """--offline without a pack: what is not on this machine cannot come."""
+    return offline_requested() and LOCAL.pack is None

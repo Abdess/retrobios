@@ -5,9 +5,9 @@ import argparse
 import re
 from pathlib import Path
 
-from installer.constants import INSTALLER_PAGE, RELEASE_REF
 from installer.invocation import OFFLINE_VARIABLE, _INVOCATION, installer_id
-from installer.local_files import BACKUP_DIR
+from installer.remote import INSTALLER_PAGE, RELEASE_REF
+from installer.safe_replace import BACKUP_DIR
 from installer.text import format_size
 
 # --pack writes the narrowed choice as a pack --from-pack reads: each file

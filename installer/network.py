@@ -1,4 +1,4 @@
-"""TLS, connections and the downloads of file lists."""
+"""TLS, connections, and the file lists downloaded or read from disk."""
 from __future__ import annotations
 
 import datetime
@@ -15,7 +15,12 @@ import urllib.request
 from pathlib import Path
 from typing import Any, NoReturn
 
-from installer.constants import (
+from installer.events import EVENTS
+from installer.host_fs import _is_file
+from installer.manifest import _check_standalone_layouts, _validate_manifest, _validate_targets
+from installer.offline import LOCAL, _Offline, _network_allowed, offline_named, offline_undo, offline_words
+from installer.platforms import TARGET_PLATFORMS, display_name
+from installer.remote import (
     CONNECT_TIMEOUT,
     DEFAULT_RELEASE_REF,
     MANIFEST_URL,
@@ -27,15 +32,73 @@ from installer.constants import (
     STANDALONE_DIR,
     STANDALONE_URL,
     TARGETS_URL,
-    TARGET_PLATFORMS,
+    TROUBLESHOOTING_PAGE,
 )
-from installer.embedded import display_name
-from installer.events import EVENTS
-from installer.manifest import NETWORK_ADVICE, _check_standalone_layouts, _validate_manifest, _validate_targets
-from installer.offline import LOCAL, _Offline, _network_allowed, offline_named, offline_undo, offline_words
-from installer.pack_source import read_local_manifest
-from installer.paths import _read_limited_json
-from installer.probe import _is_file
+
+
+def _read_limited_json(
+    response: http.client.HTTPResponse, limit: int, label: str, raw: bool = False
+) -> object:
+    """Read a bounded UTF-8 JSON response, its bytes as they came with raw.
+
+    A body shorter than its Content-Length is a dropped connection, raised
+    as one so the caller retries: parsed, the cut read as an invalid file
+    list and the run ended without the network advice.
+    """
+    raw_length = response.headers.get("Content-Length") if response.headers else None
+    expected: int | None = None
+    if raw_length:
+        try:
+            expected = int(raw_length)
+        except ValueError:
+            expected = None
+        if expected is not None and expected > limit:
+            raise ValueError(f"{label} exceeds {limit} bytes")
+    try:
+        payload = response.read(limit + 1)
+    except http.client.IncompleteRead as exc:
+        raise ConnectionError(
+            f"{label} cut after {len(exc.partial)} bytes"
+        ) from exc
+    if len(payload) > limit:
+        raise ValueError(f"{label} exceeds {limit} bytes")
+    if expected is not None and len(payload) < expected:
+        raise ConnectionError(f"{label} cut after {len(payload)} of {expected} bytes")
+    if raw:
+        return payload
+    try:
+        return json.loads(payload.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise ValueError(f"invalid {label}: {exc}") from exc
+
+
+NETWORK_ADVICE = ("  Check the connection, and HTTPS_PROXY if this network needs a "
+                  "proxy, then run the same command again.\n"
+                  f"  More help: {TROUBLESHOOTING_PAGE}")
+
+
+def read_local_manifest(path: Path, plat: str) -> dict:
+    """A file list saved on disk, checked as a downloaded one is."""
+    try:
+        with open(path, "rb") as handle:
+            raw = handle.read(MAX_MANIFEST_BYTES + 1)
+    except OSError as exc:
+        print(f"  Cannot read the file list {path}: {exc.strerror or exc}.", file=sys.stderr)
+        sys.exit(1)
+    try:
+        if len(raw) > MAX_MANIFEST_BYTES:
+            raise ValueError(f"it exceeds {MAX_MANIFEST_BYTES} bytes")
+        try:
+            data = json.loads(raw.decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+            raise ValueError(f"not JSON ({exc})") from exc
+        return _validate_manifest(data, plat)
+    except ValueError as exc:
+        EVENTS.emit("error", stage="manifest", reason="invalid", platform=plat,
+                    message=f"the file list is not valid: {exc}")
+        print(f"  The file list {path} is not valid for {plat}: {exc}", file=sys.stderr)
+        sys.exit(1)
+
 
 # The installer was written after this day. A clock that reads earlier is
 # wrong, and TLS then finds every certificate not yet valid: a handheld

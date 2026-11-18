@@ -9,24 +9,29 @@ import sys
 import urllib.error
 from collections.abc import Callable
 from pathlib import Path
-from typing import Any, NamedTuple, NoReturn
+from typing import TYPE_CHECKING, Any, NamedTuple, NoReturn
 
-from installer.cards import dest_drive
-from installer.constants import BASE_URL, GAME_DATA, OMISSION_REASONS, OTHER_SYSTEMS, SITE_URL, TROUBLESHOOTING_PAGE
-from installer.cores import entry_systems
+from installer.cards import _mounted_cards
+from installer.console import OUTPUT, SAID_FAILED
+from installer.destination import on_its_card
 from installer.detect_os import detected_os
-from installer.embedded import _mounted_cards, card_bound, display_name, shown_path
-from installer.invocation import _INVOCATION, Invocation, offline_requested
-from installer.local_files import BACKUP_DIR
+from installer.host_fs import DRIVE_FULL, NOT_WRITABLE, READ_ONLY, _held
+from installer.invocation import _INVOCATION
 from installer.network import _address_lines
-from installer.offline import LOCAL, OFFLINE_WORDS, offline_named, offline_undo
-from installer.pack_source import NOT_IN_PACK, NOT_KEPT, NOT_WRITABLE, READ_ONLY
-from installer.paths import _entry_path
-from installer.probe import _held, _is_file
-from installer.record import KEPT, _kept_lines
-from installer.tally import Tally, installed_words, kinds_definition
-from installer.terminal import OUTPUT, SAID_FAILED, Terminal, format_duration
-from installer.text import _plural, agree, format_size, screen_text
+from installer.offline import LOCAL, OFFLINE_WORDS, _offline_only, offline_named, offline_undo
+from installer.pack_source import NOT_IN_PACK
+from installer.paths import shown_path
+from installer.platforms import display_name
+from installer.remote import BASE_URL, TROUBLESHOOTING_PAGE
+from installer.romm import ROMM_SCAN_WORDS
+from installer.safe_replace import BACKUP_DIR, KEPT, NOT_KEPT, _kept_lines
+from installer.tally import _omission_lines, installed_words, needed_absent_words
+from installer.text import _plural, agree, format_duration, format_size, screen_text
+
+if TYPE_CHECKING:
+    from installer.invocation import Invocation
+    from installer.tally import Tally
+    from installer.terminal import Terminal
 
 
 def _locations(paths: list[Path]) -> str:
@@ -34,23 +39,9 @@ def _locations(paths: list[Path]) -> str:
     return ", ".join(shown_path(p) for p in paths) if paths else "nowhere"
 
 
-# A write the drive had no room for: the same run fails the same way until
-# space is freed or another drive is named.
-DRIVE_FULL = "the drive is full"
-
 # What a run says when every file is in place, on the screen and in line
 # mode: the site's "How to check" quotes it (scripts/generate_site.py).
 EVERYTHING_IN_PLACE = "Every file on the list is in place."
-# The plan's two rows a beginner reads first: the README and the site name
-# them from here, so they say what the screen shows.
-TUI_INSTALL_ROW = "Install"
-TUI_SYSTEMS_ROW = "Choose systems"
-# The first screen's title: a setup found here, or none, and the list.
-# which-pack names them from here.
-TUI_FOUND_TITLE = "Where to install?"
-TUI_CHOOSE_TITLE = "Which setup?"
-# Asked after Which setup? where nothing was found, and on a card.
-TUI_FOLDER_TITLE = "Which folder?"
 
 
 def _on_read_only_mount(path: Path) -> bool:
@@ -670,164 +661,5 @@ _SHORT_DEFINITIONS = (
     ("Data files:", "Data files: an emulator's own data folder."),
 )
 
-
-def game_data_missing(names: str, count: int, folders: list[Path]) -> str:
-    """The game data a run could not supply, and the folder each goes in:
-    "Copy it from your own copy of the game" named no folder."""
-    one = count == 1
-    places = list(dict.fromkeys(f"{shown_path(folder)}{os.sep}" for folder in folders))
-    where = (f" into {', '.join(places[:3])}" + (f" and {len(places) - 3} more folders"
-                                                  if len(places) > 3 else "")) if places else ""
-    # The names first, the kind after them in a word: the definition was
-    # spliced into this sentence, and said again on its own line.
-    return (f"Not available here: {names}, game data "
-            f"{'its game reads' if one else 'their games read'}. Copy "
-            f"{'it' if one else 'them'} from an owned copy of the game{where}.")
-
-
-def not_installable_words(count: int, required: int, reasons: dict[str, int]) -> str:
-    """The line under the index count for the files the list leaves out:
-    "(1 required, not found: 37)" read as a sum."""
-    need = ("" if not required else ", required" if count == 1
-            else f", {required} of them required")
-    if set(reasons) == {"not_found"}:
-        return (f"Not installable: {agree(count, 'file is', 'files are')} not in the "
-                f"collection{need}.")
-    why = ", ".join(f"{OMISSION_REASONS.get(reason, reason)} ({number})"
-                    for reason, number in sorted(reasons.items()))
-    return f"Not installable: {_plural(count, 'file')}{need}. Why: {why}."
-
-
-def _omission_lines(count: int, entries: list[dict], bios_path: Path | None = None) -> list[str]:
-    """What was skipped, the files an emulator cannot start without first.
-
-    "395 file are not in the collection yet" named nothing and gave one
-    reason for all, while the manifest says which file and why. Game data
-    is said apart, with the folder it goes in, as the screen says it.
-    """
-    one = count == 1
-    lines = [f"{_plural(count, 'file')} {'was' if one else 'were'} not installed: "
-             f"the collection does not hold {'it' if one else 'them'}, or its copy "
-             f"fails {'its' if one else 'their'} check."]
-    needed = [e for e in entries if e.get("required")]
-    games = [e for e in needed if e.get("category") == GAME_DATA]
-    lines += _needed_lines([e for e in needed if e.get("category") != GAME_DATA],
-                           "Needed to start an emulator")
-    if games:
-        names = ", ".join(str(e.get("dest") or e.get("name")) for e in games[:3]) + (
-            f" and {len(games) - 3} more" if len(games) > 3 else "")
-        folders = []
-        for entry in games:
-            try:
-                folders.append(_entry_path(bios_path, entry).parent if bios_path else None)
-            except ValueError:
-                continue
-        lines.append("  " + game_data_missing(names, len(games), [f for f in folders if f]))
-        # Defined on a line of its own, the sentence above naming the files.
-        lines.append("  " + kinds_definition(True, False))
-    return lines
-
-
-def needed_absent_words(count: int, where: str) -> str:
-    """The count of files an emulator cannot start without that the
-    collection does not hold, said in every mode: where names what lists
-    them, --verbose in line mode, Details on the screen."""
-    return (f"{_plural(count, 'file')} an emulator needs {'is' if count == 1 else 'are'} "
-            f"not available here ({where} names "
-            f"{'it' if count == 1 else 'them'}).")
-
-
-def _absent_required(omitted: list[dict], bios_path: Path) -> list[dict]:
-    """Required entries the manifest leaves out that the user has not placed."""
-    absent = []
-    for entry in omitted:
-        dest = entry.get("dest") or entry.get("name", "")
-        if not entry.get("required", True) or not dest:
-            continue
-        try:
-            placed = _is_file(_entry_path(bios_path, {**entry, "dest": dest}))
-        except ValueError:
-            # A path climbing out of the folder is never one we read, and one
-            # below a save directory this run does not know is not looked at.
-            placed = False
-        if not placed:
-            absent.append(entry)
-    return absent
-
-
-def _needed_lines(entries: list[dict], heading: str, every: bool = False) -> list[str]:
-    """Required files the collection lacks, by system with the emulators reading them.
-
-    A bare list (DARK.GOB, Data.rsdk, ... and 69 more) left a Batocera user
-    unable to tell whether their PlayStation was concerned.
-    """
-    by_system: dict[str, tuple[set[str], set[str]]] = {}
-    for entry in entries:
-        system = str(entry.get("system") or ", ".join(entry_systems(entry)) or OTHER_SYSTEMS)
-        names, cores = by_system.setdefault(system, (set(), set()))
-        names.add(str(entry.get("dest") or entry.get("name")))
-        cores.update(str(core) for core in entry.get("cores") or [])
-    if not by_system:
-        return []
-    count = sum(len(names) for names, _cores in by_system.values())
-    lines = [f"  {heading} ({_plural(count, 'file')}):"]
-    systems = sorted(by_system)
-    shown = systems if every else systems[:8]
-    for system in shown:
-        names, cores = by_system[system]
-        readers = f" ({', '.join(sorted(cores))})" if cores else ""
-        lines.append(f"    {system}{readers}: {', '.join(sorted(names))}")
-        # Each emulator's own page, one click away: the index alone sent the
-        # user searching several hundred pages for theforceengine.
-        lines += [f"      {SITE_URL}emulators/{core}/" for core in sorted(cores)]
-    if not every and len(systems) > 8:
-        # A file several systems share is a group of its own, counted as one.
-        unit = "groups" if any(", " in system for system in systems) else "systems"
-        more = len(systems) - 8
-        lines.append(f"    ... and {more} more {unit if more > 1 else unit[:-1]} "
-                     "(--check --verbose lists them all)")
-    if all(by_system[system][1] for system in shown):
-        lines.append("  Each emulator's page, linked above, says what these files are.")
-    else:
-        lines.append(f"  Each emulator's page says what these files are: {SITE_URL}emulators/")
-    return lines
-
-
-# Asked before, in an interactive run: past this size a download is worth a
-# second thought, and --system, --core or --region can make it smaller.
-CONFIRM_FROM_BYTES = 1024 * 1024 * 1024
-
-# A --dry-run plan: file names per system, the systems shown when the
-# listing is taller than the screen, and the lines around the listing.
-PLAN_FILES_PER_SYSTEM = 8
-PLAN_LARGEST_SYSTEMS = 10
-PLAN_FRAME_LINES = 6
-# Past this many systems a group sharing files is named by its first two.
-PLAN_GROUP_TITLES = 3
-
-# Answers that stop: every menu before this one taught q as quit.
-_REFUSALS = ("n", "q", "quit", "exit", "stop", "abort")
-
-
-def _offline_only() -> bool:
-    """--offline without a pack: what is not on this machine cannot come."""
-    return offline_requested() and LOCAL.pack is None
-
-
-def on_its_card(plat: str, dest: Path, system: str = "") -> bool:
-    """Whether dest, a card mounted here, is the SD card of the system it
-    is for (system, else the one detection names): line mode and the
-    screen say "free some space on the card" alike."""
-    system = system or detected_os(plat, dest)
-    return bool(system and card_bound(system, plat) and dest_drive(dest) is not None)
-
-
-# RomM serves the firmware rows its library scan records (rommapp/romm 5.4.0,
-# backend/endpoints/firmware.py:148,175 read db_firmware_handler.list_firmware),
-# and its folder watcher is off unless ENABLE_RESCAN_ON_FILESYSTEM_CHANGE is
-# set (backend/config/__init__.py:284, backend/watcher.py:106): files put in
-# place stay unseen by the player until a scan.
-ROMM_SCAN_WORDS = ("RomM lists the firmware its library scan has recorded: start a scan "
-                   "in RomM so that its player finds these files.")
 
 LINE_SAVE_REMEDY = "Name it with --save-dir next time."

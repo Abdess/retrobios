@@ -1,44 +1,97 @@
-"""The plan shown before a download, and the download of every file."""
+"""The plan shown before a download: what comes, its size and the space it needs."""
 from __future__ import annotations
 
-import concurrent.futures
 import shutil
 import sys
 from collections.abc import Collection
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-from installer.constants import _stop, _writing
-from installer.cores import entry_systems
 from installer.datadirs import data_fetch_bytes
-from installer.download import _download_one
-from installer.embedded import shown_path
-from installer.events import EVENTS
-from installer.from_folders import LocalCopy, _bytes
+from installer.host_fs import _exists
 from installer.invocation import _INVOCATION
-from installer.line_ui import _sized
-from installer.offline import LOCAL, offline_named, offline_undo
-from installer.outcome import (
-    EVERYTHING_IN_PLACE,
-    PLAN_FILES_PER_SYSTEM,
-    PLAN_FRAME_LINES,
-    PLAN_GROUP_TITLES,
-    PLAN_LARGEST_SYSTEMS,
-    _REFUSALS,
-    _offline_only,
-)
-from installer.pack_source import NOT_WRITABLE, _folder_writable
-from installer.probe import _exists
-from installer.prompt import _ask
-from installer.record import OTHER_TITLE, system_title
-from installer.tally import parts_words, tally
-from installer.terminal import Progress, Terminal, terminal_size
+from installer.narrowing import _filter_by_target
+from installer.offline import LOCAL, _offline_only, offline_named, offline_undo
+from installer.outcome import EVERYTHING_IN_PLACE
+from installer.paths import shown_path
+from installer.plan_words import _sized
+from installer.platforms import OTHER_TITLE, entry_systems, system_title
+from installer.tally import _bytes, parts_words, tally
+from installer.terminal import terminal_size
 from installer.text import _plural, cell_width, format_size
 
+if TYPE_CHECKING:
+    from installer.terminal import Terminal
 
-def _confirm(prompt: str) -> bool:
-    """Yes unless the answer refuses: n, no, or one of the quit words."""
-    answer = _ask(prompt).strip().lower()
-    return not (answer.startswith("n") or answer in _REFUSALS)
+# Below this a download is small enough that narrowing it is not worth a line.
+BULK_HINT_FROM = 100 * 1024 * 1024
+
+
+def bulk_hint(
+    to_download: list[dict], manifest: dict, systems_chosen: bool, cores_chosen: bool,
+    accepted: Collection[str] = (),
+) -> list[str]:
+    """Name what pulls most of a download, when narrowing saves over half of it.
+
+    `--system 3do` fetched 349 MB for RetroArch, and `--core opera` 12.5 MB:
+    the arcade cores that also read 3DO pulled the rest, and nothing said so.
+    accepted holds the names --core takes. Drawn from every core of the
+    system, the advice named ares, which loads no file of its own, and
+    `--core ares` was then refused.
+    """
+    total = _bytes(to_download)
+    if total < BULK_HINT_FROM:
+        return []
+    systems = {s for entry in to_download for s in entry_systems(entry)}
+    if not cores_chosen and len(systems) == 1:
+        system = next(iter(systems))
+        candidates = [core for core in (manifest.get("system_cores") or {}).get(system) or []
+                      if core in accepted]
+        by_core: dict[str, int] = {}
+        for entry in to_download:
+            for core in entry.get("cores") or []:
+                by_core[core] = by_core.get(core, 0) + entry.get("size", 0)
+        kept = {core: _bytes(_filter_by_target(to_download, [core])) for core in candidates}
+        if by_core and kept:
+            heavy = max(sorted(by_core), key=lambda core: by_core[core])
+            light = min(sorted(kept), key=lambda core: kept[core])
+            saved = total - kept[light]
+            if saved * 2 > total:
+                return [
+                    f"  {heavy} pulls {format_size(by_core[heavy])} of this "
+                    f"{format_size(total)} download for {system}. --core {light} "
+                    f"keeps {format_size(kept[light])} of it and saves "
+                    f"{format_size(saved)} ({saved * 100 // total}%)."
+                ]
+    if not systems_chosen and len(systems) > 1:
+        alone: dict[str, int] = {}
+        for entry in to_download:
+            own = entry_systems(entry)
+            if len(own) == 1:
+                alone[own[0]] = alone.get(own[0], 0) + entry.get("size", 0)
+        if alone:
+            heavy = max(sorted(alone), key=lambda system: alone[system])
+            if alone[heavy] * 2 > total:
+                return [
+                    f"  {heavy} pulls {format_size(alone[heavy])} of this "
+                    f"{format_size(total)} download. --system naming the systems "
+                    f"played leaves it out and saves {format_size(alone[heavy])} "
+                    f"({alone[heavy] * 100 // total}%), --list-systems names them."
+                ]
+    return []
+
+
+# Asked before, in an interactive run: past this size a download is worth a
+# second thought, and --system, --core or --region can make it smaller.
+CONFIRM_FROM_BYTES = 1024 * 1024 * 1024
+
+# A --dry-run plan: file names per system, the systems shown when the
+# listing is taller than the screen, and the lines around the listing.
+PLAN_FILES_PER_SYSTEM = 8
+PLAN_LARGEST_SYSTEMS = 10
+PLAN_FRAME_LINES = 6
+# Past this many systems a group sharing files is named by its first two.
+PLAN_GROUP_TITLES = 3
 
 
 def _plan_by_system(
@@ -218,83 +271,3 @@ def _check_free_space(bios_path: Path, needed: int, plat: str = "", code: int = 
           f"    {_INVOCATION.command(plat, '<folder on another drive>')}",
           file=sys.stderr)
     sys.exit(code)
-
-
-def download_files(
-    files: list[dict], bios_path: Path, jobs: int = 8, verbose: bool = False,
-    term: Terminal | None = None, progress: Progress | None = None,
-    copies: dict[int, LocalCopy] | None = None,
-) -> tuple[list[tuple[str, str]], bool]:
-    """Download files in parallel.
-
-    Returns the destinations that failed, each with its reason, and whether
-    the run was interrupted. progress.installed counts the files written.
-    Every future is submitted up front, so a bare KeyboardInterrupt would
-    let the pool drain the queue in full: the stop flag is what makes Ctrl+C
-    end the run rather than only stop the reporting.
-    """
-    failed: list[tuple[str, str]] = []
-    interrupted = False
-    _stop.clear()
-    _writing.set()
-    term = term or Terminal()
-    if progress is None:
-        progress = Progress(len(files), sum(f.get("size", 0) for f in files), term)
-
-    with concurrent.futures.ThreadPoolExecutor(max_workers=jobs) as pool:
-        future_map = {
-            pool.submit(_download_one, f, bios_path, verbose, progress,
-                        (copies or {}).get(id(f))): f
-            for f in files
-        }
-        refused = False
-        refused_events = 0
-        try:
-            for future in concurrent.futures.as_completed(future_map):
-                dest, success, reason = future.result()
-                if refused:
-                    # The folder they all go in refused the first: each
-                    # would fail alike, counted without a line of its own,
-                    # though a program reading the events still gets one.
-                    if not success:
-                        failed.append((dest, NOT_WRITABLE))
-                        refused_events += 1
-                        EVENTS.emit(
-                            "downloaded", dest=dest, ok=False, reason=NOT_WRITABLE,
-                            size=future_map[future].get("size", 0),
-                            files_done=progress.files + refused_events,
-                            files_total=progress.total_files, bytes_done=progress.bytes,
-                            bytes_total=progress.expected_bytes,
-                        )
-                    continue
-                if _stop.is_set():
-                    continue
-                progress.done(dest, success, reason)
-                EVENTS.emit(
-                    "downloaded", dest=dest, ok=success, reason=reason,
-                    size=future_map[future].get("size", 0), files_done=progress.files,
-                    files_total=progress.total_files, bytes_done=progress.bytes,
-                    bytes_total=progress.expected_bytes,
-                )
-                if not success:
-                    failed.append((dest, reason))
-                    if reason == NOT_WRITABLE and not _folder_writable(bios_path):
-                        # A read-only card or share: hundreds of identical
-                        # FAILED lines buried the one cause and its advice.
-                        refused = True
-                        _stop.set()
-        except KeyboardInterrupt:
-            interrupted = True
-            _stop.set()
-            progress.finish()
-            print("\n  Stopping. Files already installed are kept.")
-    # The pool has run every future by now: a file that landed after Ctrl+C
-    # is on disk and counts.
-    progress.landed = [
-        entry for future, entry in future_map.items()
-        if not future.cancelled() and future.exception() is None and future.result()[1]
-    ]
-    progress.installed = len(progress.landed)
-    progress.finish()
-    progress.emit_transfer()
-    return failed, interrupted

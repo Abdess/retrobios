@@ -251,3 +251,12 @@ def _clean_mapping(value: dict, keep: str = "") -> dict:
     """value with its keys and items through _clean_strings."""
     return {_clean_strings(key, keep): _clean_strings(item, keep)
             for key, item in value.items()}
+
+
+# --events: one JSON object per line on stdout, for a program driving the
+# installer (the handheld port shows its screens from them). Each kind has
+# exactly these keys besides "event", in this order, and nothing else.
+EVENT_SCHEMA = 1
+
+# Seconds between two progress events while bytes arrive.
+EVENT_PROGRESS_INTERVAL = 0.5

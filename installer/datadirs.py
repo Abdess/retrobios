@@ -12,22 +12,32 @@ import urllib.error
 import urllib.request
 import zipfile
 from collections.abc import Callable, Iterable, Iterator, Mapping
-from pathlib import Path, PurePosixPath
+from pathlib import Path
 from typing import IO, TYPE_CHECKING, BinaryIO, ContextManager
 
-from installer.constants import MAX_DATA_ARCHIVE_SIZE, MAX_RETRIES, OTHER_SYSTEMS, _Interrupted, _stop, _writing
-from installer.cores import entry_systems
-from installer.download import _claim_partial, _drive_full, _release_claim
-from installer.local_files import _read_digests
+from installer.download import _claim_partial, _release_claim
+from installer.host_fs import (
+    DRIVE_FULL,
+    NOT_WRITABLE,
+    _Interrupted,
+    _drive_full,
+    _folder_writable,
+    _stop,
+    _write_refused,
+    _writing,
+)
+from installer.local_check import _read_digests
+from installer.manifest import OTHER_SYSTEMS
 from installer.network import _retry_delay
-from installer.offline import LOCAL, _Offline, _network_allowed
-from installer.outcome import DRIVE_FULL, OfflineReason, _offline_only
-from installer.pack_source import NOT_WRITABLE, _MEMBER_ERRORS, _folder_writable, _write_refused, unreadable_words
+from installer.offline import LOCAL, _Offline, _network_allowed, _offline_only
+from installer.outcome import OfflineReason
 from installer.paths import _destination_path
-from installer.record import KEPT, _NotKept, _kept_slot
-from installer.terminal import Progress
+from installer.platforms import entry_systems
+from installer.remote import MAX_DATA_ARCHIVE_SIZE, MAX_RETRIES
+from installer.safe_replace import KEPT, _MEMBER_ERRORS, _NotKept, _kept_slot, unreadable_words
 
 if TYPE_CHECKING:
+    from installer.console import Progress
     from installer.games import GamesPlan
 
 
@@ -438,24 +448,3 @@ def select_data_directories(manifest: dict, files: list[dict], narrowed: bool,
              any(not entry_systems(f) for f in files))
     return [e for e in entries if kept & set(e.get("systems") or [])
             or (other and not e.get("systems"))]
-
-
-def _copy_targets(
-    entry: dict, os_type: str, extra_dirs: dict[str, Path] | None = None,
-) -> list[Path]:
-    """The emulator folders a standalone copy entry names on this OS.
-
-    WSL falls back to the Linux ones, and extra_dirs adds the folder a
-    frontend such as LaunchBox keeps the emulator in.
-    """
-    targets = entry.get("targets", {}).get(os_type, [])
-    if not targets and os_type == "wsl":
-        targets = entry.get("targets", {}).get("linux", [])
-    target_dirs = [Path(os.path.expandvars(os.path.expanduser(t))) for t in targets]
-    extra_root = (extra_dirs or {}).get(entry.get("emulator", ""))
-    if extra_root is not None:
-        subdir = PurePosixPath(entry.get("file", "")).parent
-        extra = extra_root if str(subdir) == "." else extra_root / subdir
-        if extra not in target_dirs:
-            target_dirs.append(extra)
-    return target_dirs

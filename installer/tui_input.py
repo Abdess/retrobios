@@ -1,56 +1,154 @@
-"""Keys, taps and the events of a child run, turned into a new state."""
+"""Keys, taps and the wheel turned into a new state, and what a click reaches on a frame."""
 from __future__ import annotations
 
-from collections.abc import Callable
-from typing import TYPE_CHECKING
+import re
+from typing import TYPE_CHECKING, NamedTuple
 
-from installer.detect_os import detect_board
-from installer.embedded import display_name
-from installer.line_ui import TUI_MIN_COLS
-from installer.removal import list_backups
-from installer.run import TUI_MIN_ROWS
-from installer.setups import TuiRow
+from installer.host_fs import closed_folder
+from installer.terminal import TUI_MIN_COLS, TUI_MIN_ROWS
+from installer.text import cell_width
 from installer.tui_actions import (
     _activate,
+    _back,
+    _card_refusal,
     _checklist,
-    _device_focus,
-    _filter_key,
-    _install_now,
-    _known_choice,
-    _move_region,
+    _choose_card,
+    _closed_status,
+    _open_details,
     _option,
-    _page_step,
-    _pager_key,
-    _pager_last,
-    _path_key,
-    _same_plan,
+    _push,
+    _start_run,
     _tick,
     _toggle_region,
-    _tui_folder_facts,
     tui_interrupt,
     tui_quit,
+    typed_path,
 )
-from installer.tui_results import _action_ended, _fail, _open_details, _take_action_event, tui_view
-from installer.tui_rows import (
-    TUI_TICK_ROWS,
-    _CHECKLISTS,
-    _PAGERS,
-    _back,
-    _first_item,
-    _focus_plan,
-    _needed,
-    _push,
-    _replace,
-    _start_check,
-    _start_run,
-    tui_rows,
-)
-from installer.tui_state import TUI_ACTION_RUNS, TuiState, _tui_standalone_fits
-from installer.tui_text import TuiKey, TuiMouse, _styled
-from installer.tui_view import _armed, _bar_commits, _pager_items
+from installer.tui_commands import _tui_standalone_fits
+from installer.tui_frame import _armed, _bar_click, _bar_commits, _pager_starts
+from installer.tui_keys import TuiKey, TuiMouse
+from installer.tui_rows import TUI_TICK_ROWS, _CHECKLISTS, _PAGERS, _first_item, tui_rows
+from installer.tui_screens import _only_match, _pager_items, tui_view
+from installer.tui_state import TUI_MAX_WIDTH
 
 if TYPE_CHECKING:
-    from installer.tui_session import TuiHits
+    from installer.tui_state import TuiRow, TuiState
+
+
+def _move_region(state: TuiState, name: str, step: int) -> None:
+    """Left and Right: the region's rank, its row staying where it is."""
+    if name not in state.regions:
+        return
+    index = state.regions.index(name)
+    target = max(0, min(len(state.regions) - 1, index + step))
+    state.regions.insert(target, state.regions.pop(index))
+    rows = tui_rows(state)
+    state.focus["regions"] = next((i for i, row in enumerate(rows) if row.value == name), 0)
+
+
+def _edit_text(text: str, key: TuiKey, selected: bool = False) -> str | None:
+    """The field after a key, None when the key is not an edit. A selected
+    text is replaced by what is typed or pasted, and cleared by Backspace."""
+    if key.name in ("char", "paste"):
+        return key.text if selected else text + key.text
+    if key.name in ("backspace", "delete"):
+        return "" if selected else text[:-1]
+    if key.name == "ctrl-u":
+        return ""
+    return None
+
+
+def _filter_key(state: TuiState, key: TuiKey) -> list[tuple]:
+    """Typing in a list's filter. It never ticks or unticks anything, and
+    focus never lands on All or None: the next A or X there undid a choice."""
+    screen = state.screen
+    edited = _edit_text(state.filters.get(screen, ""), key)
+    rows = tui_rows(state)
+    filter_row = next((i for i, row in enumerate(rows) if row.action == "filter"), 0)
+    if edited is not None:
+        state.filters[screen] = edited
+        state.focus[screen] = filter_row
+        return []
+    if key.name == "esc":
+        state.filters[screen] = ""
+    state.editing = ""
+    rows = tui_rows(state)
+    only = _only_match(state)
+    if key.name == "enter" and only is not None:
+        return _activate(state, only)
+    if key.name in ("enter", "down") and len(rows) > filter_row + 1:
+        state.focus[screen] = filter_row + 1
+    else:
+        state.focus[screen] = filter_row
+    return []
+
+
+def _path_key(state: TuiState, key: TuiKey) -> list[tuple]:
+    edited = _edit_text(state.path_text, key, state.path_selected)
+    if edited is not None:
+        state.path_text, state.path_selected = edited, False
+        return []
+    if key.name == "esc":
+        return _back(state)
+    if key.name == "enter":
+        path = typed_path(state.path_text)
+        if path is None:
+            state.status = "Type a folder first."
+            return []
+        closed = closed_folder(path)
+        if closed is not None:
+            state.status = _closed_status(state, closed)
+            return []
+        if _card_refusal(state, path):
+            return []
+        state.stack.pop()
+        return _choose_card(state, path)
+    return []
+
+
+def _page_step(state: TuiState) -> int:
+    """The rows the current screen draws, measured on its view at the
+    window's size: its intro wraps to more lines on a narrow window."""
+    state.page_rows = 0
+    tui_view(state, state.cols, state.rows)
+    return state.page_rows or max(1, state.rows - 6)
+
+
+def _pager_key(state: TuiState, key: TuiKey) -> list[tuple]:
+    screen = state.screen
+    top = state.focus.get(screen, 0)
+    page = max(1, state.rows - 5)
+    name, char = key.name, key.text if key.name == "char" else ""
+    if name == "up" or char == "k":
+        top -= 1
+    elif name == "down" or char == "j":
+        top += 1
+    elif name == "pgup":
+        top -= page
+    elif name == "pgdn":
+        top += page
+    elif name == "home" or char == "g":
+        top = 0
+    elif name == "end" or char == "G":
+        top = 1 << 30
+    elif name in ("enter", "esc", "backspace") or char == " ":
+        if screen == "result":
+            return tui_quit(state)
+        if screen == "details":
+            # Never _back: a run counting under the plan goes on.
+            state.stack.pop()
+            return []
+        return _back(state)
+    state.focus[screen] = max(0, min(top, _pager_last(state, _pager_items(state))))
+    return []
+
+
+def _pager_last(state: TuiState, items: list) -> int:
+    """The first line shown when the end of a pager is in view: the view's
+    own height (tui_view), less the line that counts."""
+    total = _pager_starts(state, items, min(state.cols, TUI_MAX_WIDTH) - 2)[-1]
+    height = state.rows - 3
+    return 0 if total <= height else max(0, total - max(1, height - 1))
 
 
 def tui_update(state: TuiState, key: TuiKey | TuiMouse) -> list[tuple]:
@@ -499,247 +597,72 @@ def _space(state: TuiState, row: TuiRow) -> list[tuple]:
     return _activate(state, row)
 
 
-def _take_scan_event(state: TuiState, kind: str | None, event: dict) -> bool:
-    """A check run's reading of the folder: games, files found, choices."""
-    if kind == "games":
-        state.games = event
-    elif kind == "games_unavailable":
-        state.games_unavailable = event
-    elif kind == "found":
-        state.found.append(event)
-    elif kind == "scanned":
-        state.scanned.append(event)
-    elif kind == "unreadable":
-        state.unreadable.append(event)
-    elif kind == "choices":
-        state.choices = list(event["systems"])
-    elif kind == "set_aside":
-        state.set_aside = set(event["dests"])
-    else:
-        return False
-    return True
+class TuiHits(NamedTuple):
+    """What a click reaches on one drawn frame (tui_hits): each target is
+    (line, first column, column past the last, what it does), lines and
+    columns counted from 0. listing is (first row shown, rows shown, rows)
+    for a list taller than its room, scroll "pager" or "error" for a text
+    that scrolls."""
+
+    screen: str
+    help: bool
+    size: tuple[int, int]
+    targets: tuple
+    listing: tuple | None = None
+    scroll: str = ""
+    # How many screens deep the frame was drawn, and its number: a frame
+    # whose targets differ from the one before it is another frame.
+    depth: int = 0
+    frame: int = 0
+    # When this screen was first drawn (state.now): a press sooner than
+    # TUI_TAP_SETTLE after it belongs to a tap made on the screen before.
+    shown: float = 0.0
+
+    def at(self, col: int, line: int) -> tuple | None:
+        return next((target for row, first, end, target in self.targets
+                     if row == line and first <= col < end), None)
 
 
-def _take_check_event(state: TuiState, kind: str | None, event: dict) -> None:
-    if _take_scan_event(state, kind, event):
-        return
-    if kind == "board":
-        state.board = str(event["message"])
-        # Read on the device itself, or named by the card in a reader: a
-        # computer preparing a card has no board of its own.
-        state.board_seen = (state.platform, state.dest, str(event["board"]),
-                            bool(event["applied"]), detect_board(state.platform) is not None)
-    elif kind == "version":
-        state.version = str(event["message"])
-        state.version_short = (f"List for {display_name(state.platform, state.manifest)} "
-                               f"{event['list_version']}, this is "
-                               f"{event['installed_version']}.")
-    elif kind == "saves":
-        state.saves = event
-    elif kind == "data" and state.check is not None:
-        state.check["data_bytes"] = event["bytes"]
-    elif kind == "check":
-        state.check = event
-    elif kind == "file":
-        state.checked_dests.add(event.get("dest"))
-        if event.get("state") != "present":
-            state.files.append(event)
-    elif kind == "system":
-        state.systems.append(event)
-    elif kind == "summary":
-        state.check_summary = event
+_BAR_ENTRY = re.compile(r"\S+(?: \S+)*")
 
 
-def _take_dry_event(state: TuiState, kind: str | None, event: dict) -> None:
-    if kind == "saves":
-        state.dry_saves = event
-    elif kind == "data" and state.dry is not None:
-        state.dry["data_bytes"] = event["bytes"]
-    elif kind == "check":
-        state.dry = event
-    elif kind == "file" and event.get("state") != "present":
-        state.dry_files.append(event)
-    elif kind == "summary":
-        state.dry_summary = event
-
-
-def _take_install_event(state: TuiState, kind: str | None, event: dict) -> None:
-    if kind == "app":
-        state.app = event
-    elif kind == "error" and event.get("stage") == "dest":
-        # The BIOS folder could not be created: every file fails for that
-        # one reason, said as it happened.
-        state.dest_error = event
-    elif kind == "saves":
-        state.done_saves = event
-    elif kind == "found":
-        state.local_dests[event["dest"]] = (event["folder"], event["reason"])
-    elif kind == "download":
-        state.download = event
-    elif kind == "transfer":
-        state.network = event["bytes_network"]
-        state.samples = [sample for sample in state.samples
-                         if sample[0] >= state.now - 10] + [(state.now, state.network)]
-    elif kind in ("progress", "downloaded"):
-        state.progress = event
-        if kind == "downloaded":
-            state.finished.append((event["dest"], event["ok"], event["reason"]))
-    elif kind == "summary":
-        state.summary = event
-
-
-def _take_event(state: TuiState, event: dict) -> None:
-    if _take_action_event(state, event):
-        return
-    kind = event.get("event")
-    if kind == "checking" and state.run in ("check", "install"):
-        state.reading = (event["files_done"], event["files_total"])
-    elif kind == "games_reading" and state.run in ("check", "install"):
-        state.games_reading = (event["files_done"], event["files_total"])
-    elif state.run == "check":
-        _take_check_event(state, kind, event)
-    elif state.run in ("confirm", "preview"):
-        _take_dry_event(state, kind, event)
-    elif state.run == "install":
-        _take_install_event(state, kind, event)
-
-
-def _receive_games_here(state: TuiState, message: tuple) -> list[tuple]:
-    _kind, plat, dest, count = message
-    if plat == state.platform and dest == state.dest:
-        state.games_probed = (plat, dest)
-        if state.games_choice not in ("user", "cli", "record"):
-            state.games_here = count or 0
-            state.for_games, state.games_choice = bool(count), "probe"
-    return []
-
-
-def _receive_manifest(state: TuiState, message: tuple) -> list[tuple]:
-    _kind, plat, manifest = message
-    if plat != state.platform or state.screen != "checking":
-        return []
-    state.manifest, state.manifest_for = manifest, plat
-    _known_choice(state, plat, manifest)
-    if state.games_probed is None:
-        state.games_probed = (plat, state.dest)
-    return _start_run(state, "check")
-
-
-def _receive_targets(state: TuiState, message: tuple) -> list[tuple]:
-    _kind, plat, targets, problem = message
-    if plat == state.platform:
-        # Held only once read: a list that could not be read is fetched
-        # again the next time Device opens.
-        state.targets, state.targets_problem = targets, problem
-        state.targets_for = plat if targets is not None else ""
-        if state.screen == "device":
-            state.focus["device"] = _device_focus(state)
-    return []
-
-
-def _receive_pack_opened(state: TuiState, message: tuple) -> list[tuple]:
-    _kind, path, pack, problem = message
-    if state.screen != "browse" or state.browse_for != "pack":
-        # Left before it opened: never read, closed.
-        return [("close_pack", pack)] if pack is not None else []
-    if problem:
-        state.status = _styled(problem, "refusal")
-        return []
-    # The pack's own list, as --from-pack reads it: the list fetched
-    # before is fetched again from the pack.
-    state.packs = [path]
-    state.browse_for = "dest"
-    state.manifest, state.manifest_for = None, ""
-    if not state.manifest_given:
-        state.manifest_path = None
-    state.targets_for = ""
-    return [("use_pack", pack), *_start_check(state)]
-
-
-def _receive_app(state: TuiState, message: tuple) -> list[tuple]:
-    # Put from the result screen, in this process.
-    state.app, state.app_running = message[1], False
-    if not state.app["ok"] and state.code == 0:
-        state.code = 1
-    return []
-
-
-def _receive_manifest_failed(state: TuiState, message: tuple) -> list[tuple]:
-    _kind, plat, title, lines, code = message
-    if plat != state.platform or state.screen != "checking":
-        return []
-    _fail(state, lines, code)
-    state.error_title = title
-    return []
-
-
-_TUI_RECEIVERS: dict[str, Callable[[TuiState, tuple], list[tuple]]] = {
-    "games_here": _receive_games_here,
-    "manifest": _receive_manifest,
-    "targets": _receive_targets,
-    "pack_opened": _receive_pack_opened,
-    "app": _receive_app,
-    "manifest_failed": _receive_manifest_failed,
-}
-
-
-def _check_ended(state: TuiState, code: int, tail: list[str]) -> list[tuple]:
-    if state.check is None:
-        return _fail(state, tail, code)
-    state.ticked = {row["system"] for row in state.systems if _needed(row)}
-    state.emptied = []
-    state.hidden_ticks = set()
-    if state.keep_ticked is not None:
-        listed = {row["system"] for row in state.systems}
-        state.ticked = state.keep_ticked & listed
-        state.hidden_ticks = state.keep_ticked - listed
-        if state.keep_ticked and not state.ticked:
-            # Every system chosen holds nothing under these options:
-            # said, never taken as every system.
-            state.emptied = sorted(state.ticked_names.get(name, name)
-                                   for name in state.keep_ticked)
-        state.keep_ticked = None
-    state.facts = _tui_folder_facts(state)
-    state.has_backups = state.dest is not None and bool(list_backups(state.dest))
-    _replace(state, "plan")
-    refocus, state.refocus = state.refocus, ""
-    _focus_plan(state, refocus)
-    if state.widen:
-        state.widen = False
-        plan = tui_rows(state)
-        row = next((row for row in plan if row.action == "systems"), None)
-        if row is not None:
-            return _activate(state, row)
-    return []
-
-
-def tui_receive(state: TuiState, message: tuple) -> list[tuple]:
-    """What the file list fetch and the child runs report back."""
-    kind = message[0]
-    receiver = _TUI_RECEIVERS.get(kind)
-    if receiver is not None:
-        return receiver(state, message)
-    _kind, run_id, *rest = message
-    if run_id != state.run_id:
-        return []
-    if kind == "event":
-        _take_event(state, rest[0])
-        return []
-    code, tail = rest
-    state.running = False
-    state.tail = [line for line in tail if not line.startswith("RetroBIOS ")]
-    tail = state.tail
-    if state.run in TUI_ACTION_RUNS:
-        return _action_ended(state, code, tail)
-    if state.run == "check":
-        return _check_ended(state, code, tail)
-    if state.run == "confirm" and state.screen == "confirm":
-        if state.dry is None:
-            return _fail(state, tail, code)
-        if _same_plan(state.check, state.dry) and not state.must_confirm:
-            state.stack.pop()
-            return _install_now(state)
-    elif state.run == "install":
-        state.code = 130 if state.stopping and code < 0 else code if code >= 0 else 128 - code
-        _replace(state, "result")
-    return []
+def tui_hits(state: TuiState, lines: list[str]) -> TuiHits:
+    """The targets of the frame tui_view drew: a row of the list across
+    the whole width, its text or not, each entry of the bar that names a
+    key, and the line saying which lines are in view."""
+    cols = max([state.cols, *(cell_width(str(line)) for line in lines)])
+    targets: list[tuple] = []
+    shown: list[int] = []
+    listed = None
+    scroll = ""
+    for number, line in enumerate(lines):
+        mark = getattr(line, "mark", None)
+        if not mark:
+            continue
+        if mark[0] == "row":
+            targets.append((number, 0, cols, mark))
+            shown.append(mark[1])
+        elif mark[0] == "scroll":
+            targets.append((number, 0, cols, mark))
+            if mark[1] == "list":
+                listed = mark[2]
+            else:
+                scroll = mark[1]
+        elif mark[0] == "bar" and not state.help:
+            for entry in _BAR_ENTRY.finditer(str(line)):
+                key = _bar_click(state, entry.group().split(" ", 1)[0])
+                if key is not None:
+                    targets.append((number, entry.start(), entry.end(), ("key", key)))
+    rows = (min(shown), len(shown), listed) if listed is not None and shown else None
+    hits = TuiHits(state.screen, state.help, (state.cols, state.rows), tuple(targets),
+                   rows, scroll, len(state.stack))
+    before = state.hits
+    if before is None:
+        return hits._replace(frame=0, shown=state.now)
+    same = before[:7] == hits[:7]
+    # Another screen, its help or its size: what a finger aimed at was
+    # elsewhere, and the settle time starts again.
+    moved = (before.screen, before.help, before.size, before.depth) != (
+        hits.screen, hits.help, hits.size, hits.depth)
+    return hits._replace(frame=before.frame if same else before.frame + 1,
+                         shown=state.now if moved else before.shown)

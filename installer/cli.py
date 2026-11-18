@@ -10,26 +10,24 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import NoReturn
 
-from installer.app import app_not_added
 from installer.arguments import PACK_NAME_END, build_parser
-from installer.constants import AVAILABLE_PLATFORMS, TARGET_PLATFORMS, _writing
-from installer.cores import refuse_name
+from installer.console import OUTPUT, fold_line
 from installer.detect_os import detect_os
-from installer.embedded import _name_key, display_name
-from installer.events import EVENTS, _event_exit_code, _event_mode
+from installer.events import EVENTS, EVENT_SCHEMA, _event_exit_code, _event_mode
 from installer.from_folders import _open_local_sources
+from installer.handheld_app import app_not_added
+from installer.host_fs import _is_dir, _writing
+from installer.install_record import restore_kept
 from installer.invocation import OFFLINE_VARIABLE, _INVOCATION, installer_id, offline_requested
-from installer.line_ui import fold_line
-from installer.narrowing import FIND_KINDS, resolve_regions
+from installer.narrowing import FIND_KINDS
 from installer.network import _RAW_ERRORS, install_bounded_opener
 from installer.offline import LOCAL, OFFLINE_FLAG_VALUE, offline_named
-from installer.probe import _is_dir
-from installer.record import restore_kept
+from installer.platforms import AVAILABLE_PLATFORMS, TARGET_PLATFORMS, _name_key, display_name, refuse_name
+from installer.regions import resolve_regions
 from installer.removal import run_backups, run_delete_backup, run_removal
-from installer.run import TUI_LIST_ENV, TUI_RECORD_ENV, _install
-from installer.terminal import EVENT_SCHEMA, OUTPUT
+from installer.run import _install
+from installer.tui_routes import TUI_LIST_ENV, TUI_RECORD_ENV, line_mode_reason, plain_requested, tui_blocker
 from installer.tui_session import run_tui
-from installer.tui_state import line_mode_reason, plain_requested, tui_blocker
 
 
 def _check_expert(parser: argparse.ArgumentParser, args: argparse.Namespace) -> None:

@@ -14,42 +14,43 @@ from collections.abc import Collection, Iterable
 from pathlib import Path, PurePosixPath
 from typing import NamedTuple
 
-from installer.cards import card_dest
-from installer.constants import MANIFEST_URL, MAX_MANIFEST_BYTES, OTHER_SYSTEMS
-from installer.cores import entry_systems, keeps_case, normalize_platform, refuse_name
+from installer.choices import available_choices, emulator_names, resolve_choices
+from installer.console import QUIT_CODE, _answer_yes
+from installer.destination import card_dest
 from installer.detect_frontends import detect_platforms
 from installer.detect_os import detect_os
-from installer.embedded import display_name, shown_path
 from installer.events import EVENTS
-from installer.invocation import _INVOCATION, offline_requested
-from installer.line_ui import emulator_names
-from installer.local_files import BACKUP_DIR, _digest_file
-from installer.manifest import _validate_manifest
-from installer.narrowing import available_choices, designated_cores, resolve_choices
-from installer.network import _fetch_json, fetch_manifest
-from installer.paths import spelled
-from installer.prompt import QUIT_CODE, _ask
-from installer.record import (
-    KEPT,
-    REMOVED_NOTE,
+from installer.filesystems import keeps_case
+from installer.host_fs import _clear_read_only, _is_link
+from installer.install_record import (
     _MONTHS,
-    KeptFiles,
-    _backup_files,
     _backup_note,
     _below,
     _check_ours,
-    _clear_read_only,
-    _is_backup_run,
-    _is_link,
-    _move_aside,
     _record_now,
-    _tree,
     _update_record,
     load_record,
     record_argv,
     record_options,
     setup_record,
-    system_title,
+)
+from installer.invocation import _INVOCATION, offline_requested
+from installer.local_check import _digest_file
+from installer.manifest import OTHER_SYSTEMS, _validate_manifest
+from installer.narrowing import designated_cores
+from installer.network import _fetch_json, fetch_manifest
+from installer.paths import shown_path, spelled
+from installer.platforms import display_name, entry_systems, normalize_platform, refuse_name, system_title
+from installer.remote import MANIFEST_URL, MAX_MANIFEST_BYTES
+from installer.safe_replace import (
+    BACKUP_DIR,
+    KEPT,
+    REMOVED_NOTE,
+    KeptFiles,
+    _backup_files,
+    _is_backup_run,
+    _move_aside,
+    _tree,
 )
 from installer.text import _plural, agree, format_size
 
@@ -624,11 +625,6 @@ def _record_after_removal(removal: Removal, removed: list[dict]) -> str:
                 "files": files}
 
     return _update_record(removal.folder, removal.plat, change)
-
-
-def _answer_yes(prompt: str) -> bool:
-    """Yes only to y or yes: a removal is never the default answer."""
-    return _ask(prompt).strip().lower() in ("y", "yes")
 
 
 def _named_files(values: Iterable[Path], folder: Path) -> list[str] | None:

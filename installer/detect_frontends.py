@@ -10,27 +10,148 @@ import xml.etree.ElementTree as ET
 from collections.abc import Callable, Iterator
 from pathlib import Path
 
-from installer.detect_os import (
-    ANDROID_APP_DATA,
-    ANDROID_RETROARCH_PACKAGES,
-    _detect_embedded,
-    _macos_retroarch_base,
-    _note_windows_unasked,
+from installer.config_values import (
     _parse_bash_var,
     _parse_json_path,
     _parse_ps1_var,
     _parse_retroarch_system_dir,
-    _read_registry,
-    _retroarch_appimage_dirs,
     _retroarch_cfg_dir,
-    _steam_libraries,
-    _unix_retroarch_base,
-    _windows_retroarch_dirs,
 )
-from installer.embedded import display_name, shown_path
-from installer.paths import _record_moved_folders
-from installer.probe import _SETUP_SEARCH, _exists, _host_path, _is_dir, _is_file, _note_refused
+from installer.detect_os import (
+    _detect_embedded,
+    _macos_retroarch_base,
+    _note_windows_unasked,
+    _read_registry,
+    _unix_retroarch_base,
+)
+from installer.host_fs import _SETUP_SEARCH, _exists, _host_path, _is_dir, _is_file, _note_refused
+from installer.paths import _record_moved_folders, shown_path
+from installer.platforms import display_name
 from installer.text import _CONTROLS
+
+# The three RetroArch packages published for Android, newest ABI first.
+ANDROID_RETROARCH_PACKAGES = (
+    "com.retroarch.aarch64",
+    "com.retroarch",
+    "com.retroarch.ra32",
+)
+# Where Android keeps each app's private data.
+ANDROID_APP_DATA = Path("/data/data")
+
+
+def _steam_libraries() -> list[Path]:
+    """Every Steam library, the default one first.
+
+    Steam lists the others in steamapps/libraryfolders.vdf, each as a
+    "path" line. A RetroArch installed on D:/SteamLibrary was not found
+    when only Program Files was searched. The client's own folder is the
+    SteamPath value it writes under HKCU\\Software\\Valve\\Steam, read the
+    same way by Playnite (PlayniteExtensions 886468f6,
+    source/Libraries/SteamLibrary/Steam.cs:34-38): a client installed in
+    D:\\Steam hid every library.
+    """
+    roots: list[Path] = []
+    steam_path = _read_registry("HKCU\\Software\\Valve\\Steam", "SteamPath")
+    candidates = [_host_path(steam_path.replace("/", "\\"))] if steam_path else []
+    for var in ("ProgramFiles(x86)", "ProgramFiles"):
+        base = os.environ.get(var, "")
+        if base:
+            candidates.append(Path(base) / "Steam")
+    for candidate in candidates:
+        if candidate not in roots and _is_dir(candidate):
+            roots.append(candidate)
+    libraries = list(roots)
+    for root in roots:
+        vdf = root / "steamapps" / "libraryfolders.vdf"
+        try:
+            text = vdf.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        for raw in re.findall(r'"path"\s+"([^"]+)"', text):
+            library = Path(raw.replace("\\\\", "\\"))
+            if library not in libraries:
+                libraries.append(library)
+    return libraries
+
+
+def _scoop_root(variable: str, parent: str) -> str:
+    """%variable%, else %parent%\\scoop, else nothing."""
+    folder = os.environ.get(parent)
+    return os.environ.get(variable) or (str(Path(folder) / "scoop") if folder else "")
+
+
+def _windows_retroarch_dirs() -> list[Path]:
+    """Folders holding retroarch.exe where its installers put it.
+
+    C:/RetroArch-Win64 by default, C:/RetroArch for 32-bit builds, the same
+    names under Program Files, every Steam library, the Emulators folder of
+    an installed ES-DE (es_find_rules.xml lists all of them), and a Scoop
+    install, user or global.
+    """
+    candidates = [_host_path("C:/RetroArch-Win64"), _host_path("C:/RetroArch")]
+    for var in ("ProgramFiles", "ProgramFiles(x86)"):
+        root = os.environ.get(var, "")
+        if root:
+            candidates += [Path(root) / "RetroArch-Win64", Path(root) / "RetroArch"]
+            candidates += [
+                Path(root) / "ES-DE" / "Emulators" / name
+                for name in ("RetroArch-Win64", "RetroArch")
+            ]
+    candidates += [
+        library / "steamapps" / "common" / "RetroArch" for library in _steam_libraries()
+    ]
+    # Scoop's Extras bucket: <root>\apps\retroarch\current, the root being
+    # %SCOOP% or ~\scoop for a user install, %SCOOP_GLOBAL% or
+    # %ProgramData%\scoop for a global one. Its system folder is persisted
+    # through a junction, so the folder beside retroarch.exe is the real one.
+    scoop_roots = [_scoop_root("SCOOP", "USERPROFILE"), _scoop_root("SCOOP_GLOBAL", "ProgramData")]
+    candidates += [
+        Path(root) / "apps" / "retroarch" / "current" for root in scoop_roots if root
+    ]
+    return [folder for folder in candidates if _is_file(folder / "retroarch.exe")]
+
+
+def _retroarch_appimage_dirs(home: Path) -> list[Path]:
+    """The system folder of each RetroArch AppImage kept with a portable
+    folder, up to two folders below home.
+
+    The buildbot's Linux build unpacks RetroArch-Linux-x86_64.AppImage beside
+    RetroArch-Linux-x86_64.AppImage.home/.config/retroarch. The AppImage
+    runtime sets HOME to <AppImage>.home and XDG_CONFIG_HOME to
+    <AppImage>.config when those folders exist (type2-runtime fedfad51,
+    src/runtime/runtime.c:1449-1462), so this RetroArch never reads
+    ~/.config/retroarch. The archive holds no retroarch.cfg: until the first
+    run writes one, the system folder is the base folder's (frontend_unix_get_env
+    in platform_unix.c).
+    """
+    images: list[Path] = []
+    for depth in ("", "*/", "*/*/"):
+        for suffix in (".home", ".config"):
+            try:
+                hits = sorted(home.glob(f"{depth}*.AppImage{suffix}"))
+            except OSError:
+                continue
+            for hit in hits:
+                image = hit.with_name(hit.name[:-len(suffix)])
+                if image not in images and _is_file(image):
+                    images.append(image)
+    dirs: list[Path] = []
+    for image in images:
+        portable_home = image.with_name(image.name + ".home")
+        portable_config = image.with_name(image.name + ".config")
+        if _is_dir(portable_config):
+            base = portable_config / "retroarch"
+        elif _is_dir(portable_home) and "XDG_CONFIG_HOME" not in os.environ:
+            base = portable_home / ".config" / "retroarch"
+        else:
+            continue
+        tilde = portable_home if _is_dir(portable_home) else home
+        system = _parse_retroarch_system_dir(base / "retroarch.cfg", base, tilde)
+        if system is None and _is_dir(base):
+            system = base / "system"
+        if system is not None and system not in dirs:
+            dirs.append(system)
+    return dirs
 
 
 def _android_storage_root() -> Path:

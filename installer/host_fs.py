@@ -1,10 +1,13 @@
-"""File system probes that note a folder this user may not read instead of failing."""
+"""Probes that note a folder this user may not read, WSL paths, and the stops and errors a write meets."""
 from __future__ import annotations
 
 import errno
 import os
 import re
+import shutil
+import stat
 import sys
+import tempfile
 import threading
 from collections.abc import Callable
 from pathlib import Path
@@ -12,6 +15,22 @@ from typing import Any
 
 from installer.events import EVENTS
 from installer.text import screen_text
+
+# Set when the run is interrupted, so queued downloads end instead of draining
+# the pool: every future is submitted before the first one completes.
+_stop = threading.Event()
+# Set once a run starts writing: Ctrl+C before that has nothing to carry on.
+_writing = threading.Event()
+
+
+class _Interrupted(Exception):
+    """Raised inside a worker once the run has been stopped."""
+
+
+# Read once, before any download thread runs: reading the umask sets it.
+_UMASK = os.umask(0)
+os.umask(_UMASK)
+
 
 # Set under WSL: a Windows path read from a config or a rule names a drive
 # that Linux sees under /mnt (drvfs). C:\\RetroBat\\bios was used as a relative
@@ -172,3 +191,101 @@ def closed_folder(path: Path) -> tuple[Path, str] | None:
                 return closed_folder(real) or (real.parent, why)
             return folder.parent, why
     return probe, failure.strerror or str(failure)
+
+
+def _is_link(info: os.stat_result) -> bool:
+    """Whether what lstat read is a link: a symbolic link, or on Windows a
+    junction or any other reparse point."""
+    return stat.S_ISLNK(info.st_mode) or bool(
+        getattr(info, "st_file_attributes", 0) & _REPARSE_POINT)
+
+
+def _clear_read_only(dest: Path) -> None:
+    """Let the verified copy replace a read-only file the user already has.
+
+    Windows refuses to replace a file carrying the read-only attribute
+    (WinError 5) even in a writable folder. The file is about to be replaced
+    by the copy the manifest names, so its attribute is cleared first.
+    Elsewhere a rename only needs the folder to be writable.
+    """
+    if os.name != "nt":
+        return
+    try:
+        if dest.is_file() and not os.access(dest, os.W_OK):
+            os.chmod(dest, stat.S_IREAD | stat.S_IWRITE)
+    except OSError:
+        pass  # the replace that follows reports the refusal with its reason
+
+
+def _replace_with_copy(src: Path, dest: Path) -> None:
+    """Put a copy of src at dest's name without following what is there."""
+    fd, scratch = tempfile.mkstemp(dir=dest.parent, prefix=f".{dest.name}.", suffix=".part")
+    os.close(fd)
+    try:
+        shutil.copy2(src, scratch)
+        os.replace(scratch, dest)
+    except OSError:
+        if os.path.lexists(scratch):
+            os.unlink(scratch)
+        raise
+
+
+# FILE_ATTRIBUTE_REPARSE_POINT: a junction, a mount point or a link on Windows.
+# Before Python 3.12 lstat does not report a junction as a link, and
+# os.walk(followlinks=False) descends into it.
+_REPARSE_POINT = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
+
+
+_SHARING_VIOLATIONS = (32, 33)
+
+# A write refused by the file system: retrying cannot change it, and the
+# summary names the two ways out.
+NOT_WRITABLE = "folder not writable"
+
+
+def _write_refused(exc: OSError) -> bool:
+    # A sharing violation is a file another process holds open, which a
+    # later attempt can find released: no refusal of the folder.
+    if getattr(exc, "winerror", None) in _SHARING_VIOLATIONS:
+        return False
+    return isinstance(exc, PermissionError) or exc.errno == errno.EROFS
+
+
+# A file already at the destination, marked read-only, whose content differs,
+# and whose attribute could not be cleared: replacing it is refused while its
+# folder stays writable.
+READ_ONLY = "file in place is read-only"
+
+
+def _read_only_file(dest: Path) -> bool:
+    return _is_file(dest) and not os.access(dest, os.W_OK) and _folder_writable(dest.parent)
+
+
+def _folder_writable(path: Path) -> bool:
+    """Whether a file can be created under path, read from its nearest
+    existing folder: a BIOS folder not created yet is as writable as the
+    folder it would go in."""
+    probe = path
+    while not _exists(probe) and probe.parent != probe:
+        probe = probe.parent
+    return os.access(probe, os.W_OK)
+
+
+# A write the drive had no room for: the same run fails the same way until
+# space is freed or another drive is named.
+DRIVE_FULL = "the drive is full"
+
+
+_FULL_ERRNOS = (errno.ENOSPC, getattr(errno, "EDQUOT", errno.ENOSPC))
+
+
+def _drive_full(exc: BaseException) -> bool:
+    return isinstance(exc, OSError) and exc.errno in _FULL_ERRNOS
+
+
+def _nearest_folder(path: Path) -> Path:
+    """The deepest folder on path that exists and can be looked at."""
+    probe = path.absolute()
+    while not _is_dir(probe) and probe.parent != probe:
+        probe = probe.parent
+    return probe

@@ -9,7 +9,7 @@ import shlex
 import sys
 from pathlib import Path
 
-from installer.constants import BOOTSTRAP_URL
+from installer.remote import BOOTSTRAP_URL
 
 # Options that take a value, as a hint gives them back.
 _VALUED_OPTIONS = (

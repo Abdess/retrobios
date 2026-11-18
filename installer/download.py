@@ -1,8 +1,8 @@
-"""Downloading a file: resume, retries, partial copies and write errors."""
+"""Downloading files in parallel: each resumed, retried and checked before it takes its name."""
 from __future__ import annotations
 
+import concurrent.futures
 import contextlib
-import errno
 import http.client
 import os
 import stat
@@ -14,38 +14,40 @@ import urllib.parse
 import urllib.request
 from collections.abc import Callable
 from pathlib import Path
-from typing import BinaryIO
+from typing import TYPE_CHECKING, BinaryIO
 
-from installer.constants import (
-    MAX_DOWNLOAD_SIZE,
-    MAX_RETRIES,
-    RAW_FILE_URL,
-    RELEASE_URL,
-    RESUME_FROM_SIZE,
-    _UMASK,
-    _Interrupted,
-    _stop,
-)
-from installer.from_folders import FOLDER_IN_PLACE, LocalCopy, _copy_local
-from installer.invocation import offline_requested
-from installer.local_files import _digest_file, _digest_handle, unreachable_words
-from installer.network import _retry_delay, network_words
-from installer.offline import LOCAL, offline_words
-from installer.outcome import DRIVE_FULL, HttpReason, NetworkReason, OfflineReason, _transfer_failure
-from installer.pack_source import (
-    NOT_IN_PACK,
-    NOT_KEPT,
+from installer.console import Progress
+from installer.events import EVENTS
+from installer.from_folders import FOLDER_IN_PLACE, _copy_local
+from installer.host_fs import (
+    DRIVE_FULL,
     NOT_WRITABLE,
     READ_ONLY,
     _SHARING_VIOLATIONS,
-    _extract_from_pack,
+    _UMASK,
+    _Interrupted,
+    _clear_read_only,
+    _drive_full,
+    _folder_writable,
+    _is_file,
     _read_only_file,
+    _stop,
     _write_refused,
+    _writing,
 )
+from installer.invocation import offline_requested
+from installer.local_check import _digest_file, _digest_handle, unreachable_words
+from installer.network import _retry_delay, network_words
+from installer.offline import LOCAL, offline_words
+from installer.outcome import HttpReason, NetworkReason, OfflineReason, _transfer_failure
+from installer.pack_source import NOT_IN_PACK, _extract_from_pack
 from installer.paths import _entry_path, _entry_place
-from installer.probe import _is_file
-from installer.record import KEPT, _NotKept, _clear_read_only, _kept_slot
-from installer.terminal import Progress
+from installer.remote import MAX_DOWNLOAD_SIZE, MAX_RETRIES, RAW_FILE_URL, RELEASE_URL, RESUME_FROM_SIZE
+from installer.safe_replace import KEPT, NOT_KEPT, _NotKept, _kept_slot
+from installer.terminal import Terminal
+
+if TYPE_CHECKING:
+    from installer.from_folders import LocalCopy
 
 
 def _folder_failure(exc: OSError) -> str:
@@ -560,8 +562,81 @@ class _Corrupt(Exception):
     """The bytes arrived but are not the file the manifest names."""
 
 
-_FULL_ERRNOS = (errno.ENOSPC, getattr(errno, "EDQUOT", errno.ENOSPC))
+def download_files(
+    files: list[dict], bios_path: Path, jobs: int = 8, verbose: bool = False,
+    term: Terminal | None = None, progress: Progress | None = None,
+    copies: dict[int, LocalCopy] | None = None,
+) -> tuple[list[tuple[str, str]], bool]:
+    """Download files in parallel.
 
+    Returns the destinations that failed, each with its reason, and whether
+    the run was interrupted. progress.installed counts the files written.
+    Every future is submitted up front, so a bare KeyboardInterrupt would
+    let the pool drain the queue in full: the stop flag is what makes Ctrl+C
+    end the run rather than only stop the reporting.
+    """
+    failed: list[tuple[str, str]] = []
+    interrupted = False
+    _stop.clear()
+    _writing.set()
+    term = term or Terminal()
+    if progress is None:
+        progress = Progress(len(files), sum(f.get("size", 0) for f in files), term)
 
-def _drive_full(exc: BaseException) -> bool:
-    return isinstance(exc, OSError) and exc.errno in _FULL_ERRNOS
+    with concurrent.futures.ThreadPoolExecutor(max_workers=jobs) as pool:
+        future_map = {
+            pool.submit(_download_one, f, bios_path, verbose, progress,
+                        (copies or {}).get(id(f))): f
+            for f in files
+        }
+        refused = False
+        refused_events = 0
+        try:
+            for future in concurrent.futures.as_completed(future_map):
+                dest, success, reason = future.result()
+                if refused:
+                    # The folder they all go in refused the first: each
+                    # would fail alike, counted without a line of its own,
+                    # though a program reading the events still gets one.
+                    if not success:
+                        failed.append((dest, NOT_WRITABLE))
+                        refused_events += 1
+                        EVENTS.emit(
+                            "downloaded", dest=dest, ok=False, reason=NOT_WRITABLE,
+                            size=future_map[future].get("size", 0),
+                            files_done=progress.files + refused_events,
+                            files_total=progress.total_files, bytes_done=progress.bytes,
+                            bytes_total=progress.expected_bytes,
+                        )
+                    continue
+                if _stop.is_set():
+                    continue
+                progress.done(dest, success, reason)
+                EVENTS.emit(
+                    "downloaded", dest=dest, ok=success, reason=reason,
+                    size=future_map[future].get("size", 0), files_done=progress.files,
+                    files_total=progress.total_files, bytes_done=progress.bytes,
+                    bytes_total=progress.expected_bytes,
+                )
+                if not success:
+                    failed.append((dest, reason))
+                    if reason == NOT_WRITABLE and not _folder_writable(bios_path):
+                        # A read-only card or share: hundreds of identical
+                        # FAILED lines buried the one cause and its advice.
+                        refused = True
+                        _stop.set()
+        except KeyboardInterrupt:
+            interrupted = True
+            _stop.set()
+            progress.finish()
+            print("\n  Stopping. Files already installed are kept.")
+    # The pool has run every future by now: a file that landed after Ctrl+C
+    # is on disk and counts.
+    progress.landed = [
+        entry for future, entry in future_map.items()
+        if not future.cancelled() and future.exception() is None and future.result()[1]
+    ]
+    progress.installed = len(progress.landed)
+    progress.finish()
+    progress.emit_transfer()
+    return failed, interrupted
