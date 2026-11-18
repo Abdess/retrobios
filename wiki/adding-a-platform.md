@@ -304,7 +304,7 @@ how the installer finds the folder goes in `reference_notes`, which open the
 Reference part of the page. The guide part of every setup page is held to the
 word budgets of [Pages for newcomers](testing-guide.md#pages-for-newcomers).
 
-`scripts/siteguides.py` loads the file and stops the build with the key at
+`scripts/model/guides.py` loads the file and stops the build with the key at
 fault: a registered platform without a guide, a guide for no registered
 platform, a misspelt key, an unknown terminal, a group the file does not
 describe. `tests/test_site_content_data.py` also fails when a script holds a

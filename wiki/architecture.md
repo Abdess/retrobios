@@ -38,6 +38,7 @@ scripts/                 all tooling (Python and pyyaml, jsonschema for schema c
   scraper/               upstream scrapers (libretro, batocera, recalbox...)
   scraper/targets/       hardware target scrapers (one *_targets_scraper.py per platform)
   exporter/              native format exporters (batocera, recalbox, emudeck...)
+  sitegen/               the site and README generators: pages, navigation, data files
 install/                 JSON install manifests per platform
   targets/               JSON target manifests per platform (cores per architecture)
 install.py               the installer, with install.sh and install.ps1 to start it,
@@ -72,7 +73,7 @@ the card's anchor, under its console or a Files heading, and every platform
 system a heading of its own: a file name typed in the search opens that card,
 not the top of the page. On pages of cards (systems, emulators, platforms) the
 table of contents stops at level 2, and a page of cards under one or two
-headings has none (`scripts/sitestarlight.py`).
+headings has none (`scripts/sitegen/starlight.py`).
 
 The search is Pagefind, which loads its index in pieces: the words typed pick
 the chunks it fetches. The index holds names and prose only. Hashes, lists of
@@ -81,7 +82,7 @@ other pages, install commands, member tables and long reference tables carry
 reads one shard of `api/v1/lookup/` named by the first two characters of the
 value.
 
-A page has a budget, set by constants in `scripts/generate_site.py`. A
+A page has a budget, set by constants in `scripts/sitegen/`. A
 manufacturer page over `SYSTEM_PAGE_BUDGET` becomes a summary: its largest
 consoles move to pages of their own, cut into parts when one console alone is
 over the budget, and every console keeps its heading on the summary. An

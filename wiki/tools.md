@@ -1092,7 +1092,7 @@ merge cleanly: `.gitattributes` marks `measurements/*.jsonl` `merge=union`.
 same rules, written by `campaign.py`, and no profile takes those names.
 
 `generate_site.py` compiles the records into files it never commits
-(`sitemeasurements.py`): `public/data/measurements/index.json` (one item per
+(`sitegen/measurements.py`): `public/data/measurements/index.json` (one item per
 emulator and subject, its latest record not superseded, with method, host and
 the permalink of its line), `public/downloads/measurements.sqlite`
 (normalised tables, indexed on emulator, system and claim, `meta` naming the
