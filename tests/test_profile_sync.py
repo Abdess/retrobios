@@ -19,11 +19,11 @@ from unittest import mock
 import yaml
 
 import profile_sync
+from model import sourceref
 from profile_sync import (
     EntryReport,
     PartResult,
     ProfileReport,
-    RefPart,
     VersionReport,
     YamlWriteError,
     anchor_block,
@@ -45,20 +45,19 @@ from profile_sync import (
     format_markdown,
     format_report,
     insert_after_line,
-    parse_source_ref,
     rebase_refs,
     replace_field_line,
     report_to_dict,
     resolve_rename,
     select_profiles,
     select_repo,
-    split_source_ref,
     tree_diff,
     unified_for_path,
     version_warning,
     watch_hashes,
     worst_status,
 )
+from model.sourceref import RefPart, parse_source_ref, split_source_ref
 from core import upstream
 from profiling import version_basis
 from core.upstream import CompareResult, FileChange
@@ -694,7 +693,7 @@ class TestExternalCitation(unittest.TestCase):
         for text in ("Makefile:36-37", "src/Makefile:36", "README:27",
                      "configure:120"):
             with self.subTest(text=text):
-                match = profile_sync.PROSE_CITE_RE.search(text)
+                match = sourceref.PROSE_CITE_RE.search(text)
                 self.assertIsNotNone(match, text)
                 self.assertEqual(match.group("path"), text.split(":")[0])
 
@@ -702,7 +701,7 @@ class TestExternalCitation(unittest.TestCase):
         """Widening the pattern to any dotless word swallows these."""
         for text in ("ALTERNATEROMS:23", "F000:12", "C000:4"):
             with self.subTest(text=text):
-                self.assertIsNone(profile_sync.PROSE_CITE_RE.search(text), text)
+                self.assertIsNone(sourceref.PROSE_CITE_RE.search(text), text)
 
     def test_plain_paths_are_not_citations(self):
         for path in ("src/midi/mt32.cpp", "libretro.c", "a/b/c.h"):
@@ -730,24 +729,24 @@ class TestBinaryCitation(unittest.TestCase):
     """A ref read by disassembly has no source path to anchor."""
 
     def test_hex_address_is_binary(self):
-        self.assertTrue(profile_sync.is_binary_citation(
+        self.assertTrue(sourceref.is_binary_citation(
             "BAM.dll 1.5-408 .text:0x100c3960-0x100c3a97"
         ))
-        self.assertTrue(profile_sync.is_binary_citation("libmain.so LoadNES 0x3bb49"))
+        self.assertTrue(sourceref.is_binary_citation("libmain.so LoadNES 0x3bb49"))
 
     def test_binary_suffix_followed_by_words_is_binary(self):
-        self.assertTrue(profile_sync.is_binary_citation("BAM-Tracker.exe import directory"))
+        self.assertTrue(sourceref.is_binary_citation("BAM-Tracker.exe import directory"))
 
     def test_section_name_is_binary(self):
-        self.assertTrue(profile_sync.is_binary_citation(".rdata dialog filter"))
+        self.assertTrue(sourceref.is_binary_citation(".rdata dialog filter"))
 
     def test_bare_library_name_is_binary(self):
-        self.assertTrue(profile_sync.is_binary_citation("DesktopKinect.dll"))
-        self.assertFalse(profile_sync.is_binary_citation("Makefile"))
+        self.assertTrue(sourceref.is_binary_citation("DesktopKinect.dll"))
+        self.assertFalse(sourceref.is_binary_citation("Makefile"))
 
     def test_a_source_path_is_not_binary(self):
         for path in ("src/foo.c", "libs/libCg.so", "Source/Core/hook.c", "resources/font.h"):
-            self.assertFalse(profile_sync.is_binary_citation(path), path)
+            self.assertFalse(sourceref.is_binary_citation(path), path)
 
     def test_binary_part_is_reported_not_reviewed(self):
         result = anchor_part(
@@ -3995,9 +3994,9 @@ class TestCollectCitations(unittest.TestCase):
         ):
             with self.subTest(line=line):
                 start = line.index("src/lynx/system.cpp:86")
-                self.assertTrue(profile_sync._prose_external(line, start))
+                self.assertTrue(sourceref._prose_external(line, start))
         line = "boot; then src/lynx/system.cpp:86"
-        self.assertFalse(profile_sync._prose_external(line, line.index("src/")))
+        self.assertFalse(sourceref._prose_external(line, line.index("src/")))
 
     def test_spans_locate_the_tokens_on_the_line(self):
         document = {"notes": "See main.c:112,1624-1633 for the boot path.\n"}
@@ -4117,7 +4116,7 @@ class TestCollectCitations(unittest.TestCase):
             "mupen64plus-video-gln64/src/Config.cpp",
             "mupen64plus-core/upstream/src/device/pif/bootrom_hle.c",
         ]
-        resolve = profile_sync.resolve_project_word
+        resolve = sourceref.resolve_project_word
         self.assertEqual(
             resolve("rice Config.cpp", [tree]),
             "mupen64plus-video-rice/upstream/src/Config.cpp",
@@ -5580,7 +5579,7 @@ class RealignReadsThePathAsWritten(unittest.TestCase):
         def fetch(repo, sha, path, *a, **k):
             return ["line"] * 40 if path in trees.get((repo, sha), set()) else None
 
-        part = profile_sync.RefPart("hatari/src/tos.c", 10, 10, "10")
+        part = sourceref.RefPart("hatari/src/tos.c", 10, 10, "10")
         with mock.patch.object(profile_sync.upstream, "fetch_file", side_effect=fetch), \
                 mock.patch.object(profile_sync, "_resolve_at",
                                   return_value=("found", ("src/tos.c", ["x"] * 40))):
@@ -5600,7 +5599,7 @@ class RealignGivesASharedPathToTheFirstRepository(unittest.TestCase):
 
         fork = profile_sync.upstream.make_repo("github.com", "t", "freej2me-plus")
         up = profile_sync.upstream.make_repo("github.com", "hex007", "freej2me")
-        part = profile_sync.RefPart("src/libretro/freej2me_libretro.c", 39, 46, "39-46")
+        part = sourceref.RefPart("src/libretro/freej2me_libretro.c", 39, 46, "39-46")
         with mock.patch.object(
             profile_sync.upstream, "fetch_file", return_value=["line"] * 99
         ), mock.patch.object(
@@ -5865,7 +5864,7 @@ class ARecaleKeepsTheRepositoryWord(unittest.TestCase):
         ):
             with self.subTest(raw=raw):
                 p = split_source_ref(raw)[0]
-                part = profile_sync.RefPart(
+                part = sourceref.RefPart(
                     profile_sync.strip_repo_word(p.path, {"stella"}), p.start, p.end, p.raw)
                 result = profile_sync.PartResult(part, "SHIFTED", None, 140, 150, [], "")
                 self.assertEqual(profile_sync._rendered_part(result), expected)
@@ -5957,7 +5956,7 @@ class ARoleIsReadPerPart(unittest.TestCase):
         )
         profile_sync.upstream.compare = (
             lambda repo, base, head, cache_dir, offline=False:
-            profile_sync.CompareResult([], False)
+            upstream.CompareResult([], False)
         )
         text = (
             'emulator: T\n'

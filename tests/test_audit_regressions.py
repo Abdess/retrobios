@@ -4188,7 +4188,7 @@ class ACitationInsideASourceRefIsTracked(unittest.TestCase):
                          [("prose", "src/pce_fast/huc.cpp:284-304")])
 
     def test_offsets_match_the_scalar(self):
-        from scripts.profile_sync import ref_prose_text
+        from scripts.model.sourceref import ref_prose_text
 
         ref = "a.c:1-2, 5 (see b.c:7)"
         masked = ref_prose_text(ref)
