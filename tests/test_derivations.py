@@ -18,7 +18,7 @@ import unittest.mock
 import zlib
 from pathlib import Path
 
-import derivations
+from acquire import derivations
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -153,7 +153,7 @@ class CombineMatchesZlib(unittest.TestCase):
         import os
         import zlib
 
-        from derivations import crc32_combine
+        from acquire.derivations import crc32_combine
 
         for size in (1, 2, 3, 7, 100, 4096, 65537, 1000003):
             with self.subTest(size=size):

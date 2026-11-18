@@ -12,7 +12,7 @@ import hashlib
 import unittest
 from unittest import mock
 
-import find_pinned_revision
+from acquire import history
 from core import upstream
 
 
@@ -28,10 +28,10 @@ class ThePinnedRevisionIsInTheHistory(unittest.TestCase):
             return next(data for sha, data in blobs.items() if f"/{sha}/" in url)
 
         with mock.patch.object(upstream, "_api", api), mock.patch.object(upstream, "_fetch", fetch):
-            found = find_pinned_revision.find_revision(
+            found = history.find_revision(
                 repo, "dists/engine-data/queen.tbl",
                 hashlib.md5(b"pinned").hexdigest(), "unused")
-            missing = find_pinned_revision.find_revision(
+            missing = history.find_revision(
                 repo, "dists/engine-data/queen.tbl", "0" * 32, "unused")
         self.assertEqual(found, ("c2", b"pinned"))
         self.assertIsNone(missing)

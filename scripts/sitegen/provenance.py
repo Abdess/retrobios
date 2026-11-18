@@ -7,7 +7,7 @@ import json
 from datetime import datetime
 
 from model.composition import compute_composition, count_catalog_matched
-from provenance_report import distinct_missing
+from acquire.provenance import distinct_missing
 from sitegen import entries as siteentries, markup
 from sitegen.cards import _PROVENANCE_LABELS, _ROMSET_SOURCES
 from sitegen.config import _date_line

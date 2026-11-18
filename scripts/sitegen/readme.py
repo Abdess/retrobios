@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from types import ModuleType
 
-import archive_build
+from recipes import ledger
 import pr_checks
 import release_record
 from core.artifacts import write_if_changed
@@ -728,7 +728,7 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
         " the file name for RetroArch, as their own code does",
         f"- **{len(system_ids)} systems**, {total_files:,} files in the collection,"
         f" [what is still missing]({SITE_URL}gaps/) named file by file",
-        archive_line(archive_build.rebuild_counts()),
+        archive_line(ledger.rebuild_counts()),
         f"- Public data: [JSON, CSV and SQLite]({SITE_URL}data/), the metadata under MIT",
         "",
         "<details>",

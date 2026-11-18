@@ -650,15 +650,15 @@ class ArchiveRecipesAreCountedFromTheRecipes(unittest.TestCase):
     that file, never typed."""
 
     def setUp(self) -> None:
-        import archive_build
+        from recipes import ledger
 
-        records = archive_build.load_ledger().values()
+        records = ledger.load_ledger().values()
         self.counts = {
             "total": len(records),
             "exact": sum(r["rebuild"] == "exact" for r in records),
             "canonical": sum(r["rebuild"] == "canonical" for r in records),
         }
-        self.assertEqual(archive_build.rebuild_counts(), self.counts)
+        self.assertEqual(ledger.rebuild_counts(), self.counts)
         self.assertEqual(self.counts["exact"] + self.counts["canonical"], self.counts["total"])
 
     def test_the_readme_line(self) -> None:

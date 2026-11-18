@@ -19,6 +19,7 @@ from pathlib import Path
 from unittest import mock
 
 import find_embedded
+from acquire import embedded
 
 ROM = bytes(random.Random(8039).randrange(256) for _ in range(2048))
 CRC = zlib.crc32(ROM)
@@ -29,11 +30,11 @@ class RollingWindow(unittest.TestCase):
     def test_every_offset_matches_a_direct_crc(self):
         noise = random.Random(1).randbytes(5000)
         data = noise[:777] + ROM + noise[777:3000] + ROM + noise[3000:]
-        self.assertEqual(find_embedded.offsets(data, CRC, len(ROM)), [777, 777 + 2048 + 2223])
+        self.assertEqual(embedded.offsets(data, CRC, len(ROM)), [777, 777 + 2048 + 2223])
 
     def test_the_file_itself_and_a_short_file(self):
-        self.assertEqual(find_embedded.offsets(ROM, CRC, len(ROM)), [0])
-        self.assertEqual(find_embedded.offsets(ROM[:100], CRC, len(ROM)), [])
+        self.assertEqual(embedded.offsets(ROM, CRC, len(ROM)), [0])
+        self.assertEqual(embedded.offsets(ROM[:100], CRC, len(ROM)), [])
 
 
 class Command(unittest.TestCase):

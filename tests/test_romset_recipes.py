@@ -13,13 +13,11 @@ import zipfile
 import zlib
 from pathlib import Path
 
-from romset_recipes import (
-    AtomPool,
-    collect_recipes,
+from recipes.pool import AtomPool
+from recipes.romsets import collect_recipes, load_dat_recipes, merge_recipes
+from recipes.identify import (
     identify_archive,
     identify_report,
-    load_dat_recipes,
-    merge_recipes,
     missing_report,
     reconstruct,
     write_reconstructions,
@@ -717,7 +715,7 @@ class IdentificationReadsTheDirectoryFirst(unittest.TestCase):
     def test_a_recipe_with_other_members_is_never_built(self):
         from core.torrentzip import build_torrentzip
 
-        import romset_recipes
+        from recipes import identify
 
         rom = b"rom bytes"
         crc = format(zlib.crc32(rom), "08x")
@@ -739,7 +737,7 @@ class IdentificationReadsTheDirectoryFirst(unittest.TestCase):
                     return hashlib.md5(blob).hexdigest(), len(blob)
 
             pool = Pool()
-            label = romset_recipes.identify_archive(
+            label = identify.identify_archive(
                 archive, {"other": [("b.rom", crc)], "match": [("a.rom", crc)]}, pool)
         self.assertEqual(label, "match")
         self.assertEqual(pool.built, [[("a.rom", crc)]])

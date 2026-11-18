@@ -18,7 +18,9 @@ import zipfile
 from pathlib import Path
 from unittest import mock
 
-import archive_build
+from recipes import build as recipes_build
+from recipes import capture as recipes_capture
+from recipes import ledger
 from core.torrentzip import build_torrentzip
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -41,8 +43,8 @@ class TheLedgerCoversTheCollection(unittest.TestCase):
     def setUpClass(cls):
         with (ROOT / "database.json").open(encoding="utf-8") as handle:
             cls.db = json.load(handle)
-        cls.ledger = archive_build.load_ledger()
-        cls.archives = archive_build.database_archives(cls.db)
+        cls.ledger = ledger.load_ledger()
+        cls.archives = ledger.database_archives(cls.db)
 
     def test_every_database_archive_has_a_recipe(self):
         absent = sorted(set(self.archives) - set(self.ledger))
@@ -77,15 +79,15 @@ class TheLedgerCoversTheCollection(unittest.TestCase):
     def test_every_member_is_held_in_the_collection(self):
         """The list printed here is the acquisition list: a member neither held
         as a loose file nor inside any archive the database lists."""
-        missing = archive_build.missing_members(self.ledger, self.db)
+        missing = ledger.missing_members(self.ledger, self.db)
         listing = "\n".join(
             f"  {m['archive']}: {m['member']} ({m['sha1']})" for m in missing
         )
         self.assertEqual(missing, [], f"members held nowhere:\n{listing}")
 
     def test_the_file_is_written_the_one_way(self):
-        text = archive_build.ARCHIVES_FILE.read_text(encoding="utf-8")
-        self.assertEqual(text, archive_build.ledger_text(self.ledger))
+        text = ledger.ARCHIVES_FILE.read_text(encoding="utf-8")
+        self.assertEqual(text, ledger.ledger_text(self.ledger))
 
     def test_recipes_describe_the_archives_on_disk(self):
         """Names in order, sizes and crc32 against each central directory."""
@@ -139,7 +141,7 @@ class Fixture(unittest.TestCase):
         self.temp.cleanup()
 
     def capture(self, **kwargs) -> dict[str, dict]:
-        records, failed = archive_build.capture(
+        records, failed = recipes_capture.capture(
             self.db, kwargs.get("previous", {}), kwargs.get("index", {}),
             kwargs.get("pins", {}), workers=1, log=lambda _line: None,
         )
@@ -175,7 +177,7 @@ class Capture(Fixture):
         self.assertEqual(exact["sources"], ["collection"])
 
     def test_dat_agreement_and_pins_are_recorded(self):
-        key = archive_build.member_key(
+        key = recipes_capture.member_key(
             [{"name": n, "crc32": c} for n, c in (
                 ("a.rom", self._crc(ROM_A)), ("b.rom", self._crc(ROM_B)),
                 ("c.rom", self._crc(ROM_C)),
@@ -197,8 +199,8 @@ class Capture(Fixture):
         self.assertEqual(records["bios/set.zip"]["members"][0]["sha1"], "kept")
 
     def test_zlib_ng_refuses_to_capture(self):
-        with mock.patch.object(archive_build, "zlib_ng_version", lambda: "2.2.4"), \
-                self.assertRaises(archive_build.ZlibNgError):
+        with mock.patch.object(recipes_build, "zlib_ng_version", lambda: "2.2.4"), \
+                self.assertRaises(recipes_capture.ZlibNgError):
             self.capture()
 
     def test_composite_and_zipped_pins_name_no_container(self):
@@ -229,7 +231,7 @@ class Capture(Fixture):
             f"  - name: set.zip\n    sha1: {'d' * 40}\n",
             encoding="utf-8",
         )
-        pins = archive_build.container_pins(str(platforms), str(emulators))
+        pins = recipes_capture.container_pins(str(platforms), str(emulators))
         self.assertEqual(pins, {"a" * 32: {"platform:plain"}, "d" * 40: {"profile:core"}})
 
     @staticmethod
@@ -248,11 +250,11 @@ class Build(Fixture):
         os.chdir(self.root)
         self.ledger = self.capture()
         os.chdir(self._cwd)
-        self.atoms = archive_build.AtomIndex.from_collection(self.ledger, self.db, self.root)
+        self.atoms = recipes_build.AtomIndex.from_collection(self.ledger, self.db, self.root)
         self.out = self.root / "out"
 
     def build(self, path: str):
-        return archive_build.build_archive(self.ledger[path], self.atoms, self.out, self.root)
+        return recipes_build.build_archive(self.ledger[path], self.atoms, self.out, self.root)
 
     def test_an_exact_recipe_rebuilds_the_bytes(self):
         result = self.build("bios/set.zip")
@@ -279,14 +281,14 @@ class Build(Fixture):
         record["members"] = record["members"] + [
             {"name": "gone.rom", "size": 1, "crc32": "00000000", "sha1": "f" * 40}
         ]
-        result = archive_build.build_archive(record, self.atoms, self.out, self.root)
+        result = recipes_build.build_archive(record, self.atoms, self.out, self.root)
         self.assertEqual(result.status, "impossible")
         self.assertEqual([m["name"] for m in result.missing], ["gone.rom"])
         self.assertFalse(self.out.exists())
 
     def test_a_mismatch_is_never_promoted(self):
         record = dict(self.ledger["bios/set.zip"], sha1="0" * 40)
-        result = archive_build.build_archive(record, self.atoms, self.out, self.root)
+        result = recipes_build.build_archive(record, self.atoms, self.out, self.root)
         self.assertEqual(result.status, "failed")
         self.assertIn("is not the recorded", result.detail)
         self.assertEqual(list(self.out.rglob("*")), [], "no file, no scratch left")
@@ -295,37 +297,37 @@ class Build(Fixture):
         record = dict(self.ledger["bios/other.zip"])
         record["members"] = [dict(m) for m in record["members"]]
         record["members"][0]["crc32"] = "00000000"
-        result = archive_build.build_archive(record, self.atoms, self.out, self.root)
+        result = recipes_build.build_archive(record, self.atoms, self.out, self.root)
         self.assertEqual(result.status, "failed")
         self.assertEqual(list(self.out.rglob("*")), [])
 
     def test_zlib_ng_never_claims_exact(self):
-        with mock.patch.object(archive_build, "zlib_ng_version", lambda: "2.2.4"):
+        with mock.patch.object(recipes_build, "zlib_ng_version", lambda: "2.2.4"):
             result = self.build("bios/set.zip")
         self.assertEqual(result.status, "canonical")
         self.assertIn("zlib-ng 2.2.4", result.detail)
 
     def test_an_archive_is_named_by_path_or_by_name(self):
         self.assertEqual(
-            [r["path"] for r in archive_build.select(self.ledger, "set.zip", self.root)],
+            [r["path"] for r in recipes_build.select(self.ledger, "set.zip", self.root)],
             ["bios/set.zip"],
         )
         self.assertEqual(
-            len(archive_build.select(self.ledger, str(self.exact_path), self.root)), 1
+            len(recipes_build.select(self.ledger, str(self.exact_path), self.root)), 1
         )
-        self.assertEqual(archive_build.select(self.ledger, "none.zip", self.root), [])
+        self.assertEqual(recipes_build.select(self.ledger, "none.zip", self.root), [])
 
     def test_missing_members_reads_the_committed_data(self):
-        self.assertEqual(archive_build.missing_members(self.ledger, self.db), [])
+        self.assertEqual(ledger.missing_members(self.ledger, self.db), [])
         del self.db["files"][_sha1(self.exact_path.read_bytes())]
-        missing = archive_build.missing_members(self.ledger, self.db)
+        missing = ledger.missing_members(self.ledger, self.db)
         self.assertEqual(
             [(m["archive"], m["member"]) for m in missing], [("bios/set.zip", "c.rom")]
         )
 
     def test_the_command_reports_each_archive(self):
         archives = self.root / "archives.json"
-        archives.write_text(archive_build.ledger_text(self.ledger), encoding="utf-8")
+        archives.write_text(ledger.ledger_text(self.ledger), encoding="utf-8")
         db = self.root / "database.json"
         db.write_text(json.dumps(self.db), encoding="utf-8")
         run = subprocess.run(

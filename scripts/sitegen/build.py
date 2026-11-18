@@ -11,7 +11,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
-import archive_build
+from recipes import ledger
 import release_record
 from model import siteinputs
 from model.collection import _group_by_manufacturer, _slug
@@ -24,7 +24,7 @@ from model.registry import list_registered_platforms
 from model.safeparse import yaml_load
 from model.systemnames import program_names, set_console_sections, system_name
 from packs.crossref import FileConsumers
-from provenance_report import build_report, profile_needs
+from acquire.provenance import build_report, profile_needs
 from resolve.cores import resolve_platform_cores
 from resolve.review import load_platform_hashes, load_profile_hashes
 from sitegen import (
@@ -492,7 +492,7 @@ def _write_gap_pages(run: _SiteRun, provenance_report: dict) -> None:
     print("Generating the wanted page...")
     wanted = sitewanted.build_wanted(
         profiles, coverages, run.gap_report, db, placer, system_name,
-        sitewanted.load_ledger(archive_build.ARCHIVES_FILE),
+        sitewanted.load_ledger(ledger.ARCHIVES_FILE),
         _wanted_link(profiles),
     )
     (public / "data").mkdir(parents=True, exist_ok=True)
@@ -547,7 +547,7 @@ def _write_wiki_pages(run: _SiteRun, measured: sitemeasurements.Built) -> None:
     recipes_page = _REPO_ROOT / ARCHIVE_RECIPES_PAGE
     if recipes_page.is_file():
         write_if_changed(str(recipes_page), with_archive_counts(
-            recipes_page.read_text(encoding="utf-8"), archive_build.rebuild_counts()))
+            recipes_page.read_text(encoding="utf-8"), ledger.rebuild_counts()))
     if wiki_src.is_dir():
         for src_file in wiki_src.glob("*.md"):
             shutil.copy2(src_file, wiki_dest / src_file.name)

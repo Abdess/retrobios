@@ -43,10 +43,8 @@ Every archive the collection holds also has a recipe of its own in
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import sys
-import zipfile
 from collections import defaultdict
 from pathlib import Path
 
@@ -56,402 +54,11 @@ from core.cli import require_directory
 from core.paths import REPO_ROOT
 from model.database import load_database
 from model.profiles import load_emulator_profiles
-from model.platforms import load_platform_config
-from model.registry import list_registered_platforms
-from core.torrentzip import build_torrentzip, is_torrentzip
+from recipes.identify import identify_report, missing_report, write_reconstructions
+from recipes.pool import AtomPool, DIGEST_CACHE
+from recipes.romsets import collect_recipes, load_dat_recipes, merge_recipes
 
 ARCHIVES_FILE = REPO_ROOT / "recipes" / "archives.json"
-
-Recipe = list[tuple[str, str]]
-
-
-def load_dat_recipes(path: str | Path) -> dict[str, dict[str, Recipe]]:
-    """Recipes imported from MAME or FBNeo DATs.
-
-    A DAT documents every set of one emulator version, where profiles only
-    document the few hundred the collection curates by hand. Labels are
-    prefixed so an identification says which DAT decided it.
-    """
-    target = Path(path)
-    if target.is_dir():
-        merged: dict[str, dict[str, Recipe]] = {}
-        for snapshot_file in sorted(target.glob("*.json")):
-            merged = merge_recipes(merged, load_dat_recipes(snapshot_file))
-        return merged
-    snapshot_path = target
-    if not snapshot_path.is_file():
-        return {}
-    with snapshot_path.open(encoding="utf-8") as handle:
-        snapshot = json.load(handle)
-    source = snapshot.get("source", "dat")
-    # A recipe shared by several versions is stored once under the earliest.
-    # The label therefore reads "unchanged since", not "is this version".
-    recipes: dict[str, dict[str, Recipe]] = defaultdict(dict)
-    for entry in snapshot.get("entries", []):
-        archive = entry.get("name", "")
-        members = entry.get("members", []) or []
-        recipe = [
-            (str(member["name"]), str(member.get("crc32") or "").lower())
-            for member in members
-            if member.get("name") is not None
-        ]
-        if not archive or not recipe or not all(crc for _name, crc in recipe):
-            continue
-        label = f"{source}:{entry.get('dat', 'unnamed')}"
-        recipes[archive][label] = recipe
-    return dict(recipes)
-
-
-def merge_recipes(*sources: dict[str, dict[str, Recipe]]) -> dict[str, dict[str, Recipe]]:
-    """Combine recipe sets, keeping every label distinct."""
-    merged: dict[str, dict[str, Recipe]] = defaultdict(dict)
-    for source in sources:
-        for archive, per_label in source.items():
-            merged[archive].update(per_label)
-    return dict(merged)
-
-
-def collect_recipes(profiles: dict) -> dict[str, dict[str, Recipe]]:
-    """Map each archive name to one recipe per profile that documents it.
-
-    A recipe is only usable when every member carries a CRC32: the pool is
-    addressed by content, so a member without one cannot be located.
-    """
-    recipes: dict[str, dict[str, Recipe]] = defaultdict(dict)
-    for profile_name, profile in sorted(profiles.items()):
-        for entry in profile.get("files", []) or []:
-            contents = entry.get("contents")
-            archive = entry.get("name", "")
-            if not contents or not archive:
-                continue
-            recipe = [
-                (str(member["name"]), str(member.get("crc32") or "").lower())
-                for member in contents
-                if member.get("name") is not None
-            ]
-            if recipe and all(crc for _name, crc in recipe):
-                recipes[archive][profile_name] = recipe
-    return dict(recipes)
-
-
-class AtomPool:
-    """ROM bytes in the collection, addressed by CRC32.
-
-    Members are located once and read on demand: arcade sample sets reach
-    hundreds of megabytes and a whole-pool preload buys nothing.
-    """
-
-    def __init__(
-        self, bios_dir: Path, digest_cache: Path | None = None, db: dict | None = None
-    ) -> None:
-        # crc32 -> (archive, member), or (file, None) for a loose ROM.
-        self._index: dict[str, tuple[Path, str | None]] = {}
-        # (md5, size) of each build, kept across runs: TorrentZip bytes are a
-        # function of the members alone, so a recipe hashed once is known
-        # until the writer changes. Rebuilding the 1 221 archives took 70 s
-        # of every pipeline run, 63 s of it in zlib.
-        self._digest_cache = digest_cache
-        self._digests: dict[str, list] = _read_digests(digest_cache)
-        self._digests_changed = False
-        # A recipe is built once: identification and reconstruction ask for the
-        # same archives, and every build re-reads and re-deflates its ROMs.
-        self._built: dict[tuple[tuple[str, str], ...], bytes | None] = {}
-        self.unreadable: list[str] = []
-        for archive in sorted(bios_dir.rglob("*.zip")):
-            try:
-                with zipfile.ZipFile(archive) as handle:
-                    for info in handle.infolist():
-                        if not info.is_dir():
-                            self._index.setdefault(
-                                f"{info.CRC:08x}", (archive, info.filename)
-                            )
-            except (OSError, zipfile.BadZipFile) as exc:
-                self.unreadable.append(f"{archive}: {exc}")
-        # Loose ROMs, by the crc32 the database already computed: nmk004.zip
-        # needs nmk004.bin, which the collection holds only as a file.
-        root = bios_dir.resolve()
-        for entry in ((db or {}).get("files") or {}).values():
-            crc, path = str(entry.get("crc32") or "").lower(), entry.get("path", "")
-            if not crc or not path or path.lower().endswith(".zip"):
-                continue
-            loose = Path(path)
-            if root in loose.resolve().parents and loose.is_file():
-                self._index.setdefault(crc, (loose, None))
-
-    def __len__(self) -> int:
-        return len(self._index)
-
-    def __contains__(self, crc32: str) -> bool:
-        return crc32.lower() in self._index
-
-    def read(self, crc32: str) -> bytes:
-        archive, member = self._index[crc32.lower()]
-        if member is None:
-            return archive.read_bytes()
-        with zipfile.ZipFile(archive) as handle:
-            return handle.read(member)
-
-    def digest(self, recipe: Recipe) -> tuple[str, int] | None:
-        """(md5, size) of the recipe's TorrentZip build, None if incomplete."""
-        if not all(crc in self for _name, crc in recipe):
-            return None
-        key = _recipe_key(recipe)
-        known = self._digests.get(key)
-        if known is None:
-            blob = self.build(recipe)
-            if blob is None:
-                return None
-            known = self._digests[key] = [hashlib.md5(blob).hexdigest(), len(blob)]
-            self._digests_changed = True
-        return known[0], known[1]
-
-    def save_digests(self) -> None:
-        """Write the digest cache back, when this run learned anything."""
-        if self._digest_cache is None or not self._digests_changed:
-            return
-        from core.artifacts import write_text_atomic
-
-        self._digest_cache.parent.mkdir(parents=True, exist_ok=True)
-        write_text_atomic(
-            str(self._digest_cache), json.dumps(self._digests, sort_keys=True) + "\n"
-        )
-
-    def build(self, recipe: Recipe) -> bytes | None:
-        """Return the TorrentZip bytes for *recipe*, or None if incomplete."""
-        key = tuple(recipe)
-        if key not in self._built:
-            if all(crc in self for _name, crc in recipe):
-                self._built[key] = build_torrentzip(
-                    [(name, self.read(crc)) for name, crc in recipe]
-                )
-            else:
-                self._built[key] = None
-        return self._built[key]
-
-
-DIGEST_CACHE = REPO_ROOT / ".cache" / "romset_digests.json"
-# The writer's own source is part of every key: a change to how TorrentZip
-# bytes are laid out invalidates every digest it produced.
-_WRITER = hashlib.sha256(
-    (REPO_ROOT / "scripts" / "core" / "torrentzip.py").read_bytes()
-).hexdigest()[:16]
-
-
-def _recipe_key(recipe: Recipe) -> str:
-    members = json.dumps([[name, crc.lower()] for name, crc in recipe])
-    return hashlib.sha256(f"{_WRITER}:{members}".encode()).hexdigest()
-
-
-def _read_digests(path: Path | None) -> dict[str, list]:
-    if path is None:
-        return {}
-    try:
-        with open(path, encoding="utf-8") as handle:
-            data = json.load(handle)
-    except FileNotFoundError:
-        return {}
-    except (OSError, ValueError) as exc:
-        print(f"  digest cache {path} unreadable, rebuilding: {exc}", file=sys.stderr)
-        return {}
-    return data if isinstance(data, dict) else {}
-
-
-def identify_archive(
-    path: Path, recipes: dict[str, Recipe], pool: AtomPool
-) -> str | None:
-    """Return the recipe label that reproduces *path* byte for byte.
-
-    Equal bytes need equal (name, crc32) members, which the archive's
-    central directory gives without inflating anything: building every
-    recipe at DEFLATE level 9 first took 94 s and 1 GB at pipeline step 1c.
-    """
-    held = _member_list(path)
-    if held is None:
-        return None
-    original = path.read_bytes()
-    md5, size = hashlib.md5(original).hexdigest(), len(original)
-    for label, recipe in sorted(recipes.items()):
-        if sorted((name, crc.lower()) for name, crc in recipe) != held:
-            continue
-        if pool.digest(recipe) == (md5, size):
-            return label
-    return None
-
-
-def _member_list(path: Path) -> list[tuple[str, str]] | None:
-    """Sorted (name, crc32) of an archive's members, from its directory."""
-    try:
-        with zipfile.ZipFile(path) as archive:
-            return sorted(
-                (info.filename, format(info.CRC, "08x"))
-                for info in archive.infolist() if not info.is_dir()
-            )
-    except (zipfile.BadZipFile, OSError) as exc:
-        print(f"  UNREADABLE: {path}: {exc}", file=sys.stderr)
-        return None
-
-
-def reconstruct(
-    target_md5: str, recipes: dict[str, Recipe], pool: AtomPool
-) -> tuple[str, bytes] | None:
-    """Return the (label, bytes) whose TorrentZip build matches *target_md5*."""
-    target = target_md5.lower()
-    for label, recipe in sorted(recipes.items()):
-        known = pool.digest(recipe)
-        if known is not None and known[0] == target:
-            blob = pool.build(recipe)
-            if blob is not None and hashlib.md5(blob).hexdigest() == target:
-                return label, blob
-    return None
-
-
-def platform_targets(platforms_dir: str) -> dict[str, set[str]]:
-    """Container MD5s the platforms pin, per archive name.
-
-    ``zipped_file`` entries pin an inner ROM instead of the container, so
-    their MD5 is not an archive hash and is skipped. So is a Recalbox md5,
-    the composite of the members (``zip_digest: composite``, Bios.cpp:64-68):
-    no container build can ever give it.
-    """
-    targets: dict[str, set[str]] = defaultdict(set)
-    for name in list_registered_platforms(platforms_dir):
-        config = load_platform_config(name, platforms_dir)
-        for system in config.get("systems", {}).values():
-            for entry in system.get("files", []) or []:
-                archive = entry.get("name", "")
-                if (
-                    not archive.endswith(".zip")
-                    or entry.get("zipped_file")
-                    or entry.get("zip_digest") == "composite"
-                ):
-                    continue
-                for value in str(entry.get("md5") or "").split(","):
-                    value = value.strip().lower()
-                    if len(value) == 32:
-                        targets[archive].add(value)
-    return dict(targets)
-
-
-def _is_archive(path: Path) -> bool:
-    """Whether *path* is a readable ZIP.
-
-    A name index entry can be an alias: ``d2fdc.zip`` names a loose Apple II
-    ROM, not an archive. Recipes only describe archives.
-    """
-    try:
-        with zipfile.ZipFile(path):
-            return True
-    except (OSError, zipfile.BadZipFile):
-        return False
-
-
-def _local_paths(archive: str, db: dict) -> list[Path]:
-    matches = db["indexes"]["by_name"].get(archive) or []
-    if isinstance(matches, str):
-        matches = [matches]
-    paths = [Path(db["files"][sha1]["path"]) for sha1 in matches if sha1 in db["files"]]
-    return [path for path in paths if path.is_file() and _is_archive(path)]
-
-
-def identify_report(
-    recipes: dict[str, dict[str, Recipe]], pool: AtomPool, db: dict
-) -> dict:
-    """Label every archive the collection holds with the version it matches."""
-    identified: list[dict] = []
-    unidentified: list[dict] = []
-    for archive, per_profile in sorted(recipes.items()):
-        for path in _local_paths(archive, db):
-            label = identify_archive(path, per_profile, pool)
-            record = {
-                "archive": archive,
-                "path": str(path),
-                "torrentzip": is_torrentzip(path),
-            }
-            if label:
-                record["recipe"] = label
-                identified.append(record)
-            else:
-                record["candidates"] = sorted(per_profile)
-                unidentified.append(record)
-    return {"identified": identified, "unidentified": unidentified}
-
-
-def missing_report(
-    recipes: dict[str, dict[str, Recipe]],
-    pool: AtomPool,
-    db: dict,
-    platforms_dir: str,
-) -> dict:
-    """Pinned archives the collection lacks, split by why they are absent."""
-    have = set(db["indexes"]["by_md5"])
-    constructible: list[dict] = []
-    no_recipe: list[dict] = []
-    unreproducible: list[dict] = []
-    for archive, pinned in sorted(platform_targets(platforms_dir).items()):
-        per_profile = recipes.get(archive, {})
-        for target in sorted(pinned - have):
-            if not per_profile:
-                no_recipe.append({"archive": archive, "md5": target})
-                continue
-            found = reconstruct(target, per_profile, pool)
-            if found:
-                label, blob = found
-                constructible.append(
-                    {
-                        "archive": archive,
-                        "md5": target,
-                        "recipe": label,
-                        "size": len(blob),
-                    }
-                )
-            else:
-                usable = [
-                    label
-                    for label, recipe in per_profile.items()
-                    if all(crc in pool for _name, crc in recipe)
-                ]
-                unreproducible.append(
-                    {
-                        "archive": archive,
-                        "md5": target,
-                        "recipes_tried": sorted(usable),
-                        "reason": (
-                            "no recipe reproduces this MD5: the pinned archive is "
-                            "not TorrentZip or follows a recipe not documented here"
-                            if usable
-                            else "ROMs for every documented recipe are missing"
-                        ),
-                    }
-                )
-    return {
-        "constructible": constructible,
-        "unreproducible": unreproducible,
-        "no_recipe": no_recipe,
-    }
-
-
-def write_reconstructions(
-    entries: list[dict],
-    recipes: dict[str, dict[str, Recipe]],
-    pool: AtomPool,
-    bios_dir: Path,
-    db: dict,
-) -> list[str]:
-    """Write each constructible archive beside its set, as a variant."""
-    written: list[str] = []
-    for entry in entries:
-        archive = entry["archive"]
-        recipe = recipes[archive][entry["recipe"]]
-        blob = pool.build(recipe)
-        if blob is None:
-            continue
-        siblings = _local_paths(archive, db)
-        parent = siblings[0].parent if siblings else bios_dir
-        destination = parent / ".variants" / f"{archive}.{entry['md5'][:8]}"
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_bytes(blob)
-        written.append(str(destination))
-    return written
 
 
 def print_missing(gap: dict) -> None:
@@ -480,21 +87,22 @@ def print_missing(gap: dict) -> None:
 
 def run_capture(args: argparse.Namespace, db: dict) -> int:
     """Write recipes/archives.json for every archive the database lists."""
-    import archive_build
+    from recipes import capture
+    from recipes import ledger as recipes_ledger
 
     try:
-        records, failed = archive_build.capture(
+        records, failed = capture.capture(
             db,
-            archive_build.load_ledger(Path(args.archives)),
-            archive_build.recipe_index(args.emulators_dir, args.dat_recipes),
-            archive_build.container_pins(args.platforms_dir, args.emulators_dir),
+            recipes_ledger.load_ledger(Path(args.archives)),
+            capture.recipe_index(args.emulators_dir, args.dat_recipes),
+            capture.container_pins(args.platforms_dir, args.emulators_dir),
         )
-    except archive_build.ZlibNgError as exc:
+    except capture.ZlibNgError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
     for path, reason in sorted(failed.items()):
         print(f"  UNREADABLE: {path}: {reason}", file=sys.stderr)
-    changed = archive_build.write_ledger(records, Path(args.archives))
+    changed = recipes_ledger.write_ledger(records, Path(args.archives))
     by_class: dict[str, int] = defaultdict(int)
     for record in records.values():
         by_class[record["rebuild"]] += 1
@@ -511,31 +119,33 @@ def run_capture(args: argparse.Namespace, db: dict) -> int:
 
 def run_build(args: argparse.Namespace, db: dict) -> int:
     """Build one archive, or all of them, from the members the collection holds."""
-    import archive_build
+    from core import torrentzip
+    from recipes import build as recipes_build
+    from recipes import ledger as recipes_ledger
 
     if not args.output_dir:
         print("ERROR: --build and --build-all need --output-dir", file=sys.stderr)
         return 2
-    ledger = archive_build.load_ledger(Path(args.archives))
+    ledger = recipes_ledger.load_ledger(Path(args.archives))
     if args.build_all:
         records = [ledger[path] for path in sorted(ledger)]
     else:
-        records = archive_build.select(ledger, args.build)
+        records = recipes_build.select(ledger, args.build)
         if not records:
             print(f"ERROR: no archive recipe named {args.build}", file=sys.stderr)
             return 2
-    ng = archive_build.zlib_ng_version()
+    ng = torrentzip.zlib_ng_version()
     if ng:
         print(
             f"  zlib-ng {ng} in use: TorrentZip bytes are stock zlib's output, so no "
             "build is claimed exact here; exact recipes are checked by their members"
         )
     root = Path(args.bios_dir).resolve().parent
-    atoms = archive_build.AtomIndex.from_collection(ledger, db, root)
+    atoms = recipes_build.AtomIndex.from_collection(ledger, db, root)
     counts: dict[str, int] = defaultdict(int)
     own: list[tuple[str, int]] = []
     for record in records:
-        result = archive_build.build_archive(record, atoms, Path(args.output_dir), root)
+        result = recipes_build.build_archive(record, atoms, Path(args.output_dir), root)
         counts[result.status] += 1
         if result.own_members:
             own.append((result.path, result.own_members))

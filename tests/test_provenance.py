@@ -17,7 +17,7 @@ from scripts.model.dumpcatalog import (
     write_provenance_snapshot,
 )
 from scripts.sitegen.provenance import generate_provenance_page
-from scripts.provenance_report import build_report
+from scripts.acquire.provenance import build_report
 from scripts.scraper.dat_pack_importer import _bios_entries, import_pack
 from scripts.scraper.logiqx_parser import parse_logiqx, validate_logiqx_format
 from scripts.scraper.redump_dat_scraper import discover_bios_datfiles, parse_redump_dat
@@ -430,7 +430,7 @@ class HeldUnderAnAlias(unittest.TestCase):
     }
 
     def _needs(self, **fields):
-        from scripts.provenance_report import profile_needs
+        from scripts.acquire.provenance import profile_needs
 
         entry = {"name": "KANJI2.ROM", "size": 131072, **fields}
         return profile_needs({"emu": {"files": [entry]}}, self.DB)["by_name"]
@@ -555,7 +555,7 @@ class ArchiveMembersAreHeld(unittest.TestCase):
         import hashlib
         import zlib
 
-        from scripts.provenance_report import archive_members
+        from scripts.acquire.provenance import archive_members
 
         data = b"bally" * 400
         with tempfile.TemporaryDirectory() as tmp:
@@ -582,7 +582,7 @@ class OneDumpIsCountedOnce(unittest.TestCase):
     the site's Wanted page published the larger number."""
 
     def test_a_dump_in_several_dats_is_one_missing_entry(self):
-        from scripts import provenance_report
+        from scripts.acquire import provenance as acquire_provenance
 
         rom = {"name": "DICROM.rom", "sha1": "a" * 40, "size": 32768}
         held = {"name": "held.rom", "sha1": "b" * 40, "size": 16}
@@ -591,13 +591,13 @@ class OneDumpIsCountedOnce(unittest.TestCase):
             {**rom, "dat": "FM-7 (Flux)"}, {**held, "dat": "FM-7 (Flux)"},
         ]}}
         db = {"files": {"b" * 40: {"md5": "", "size": 16}}}
-        report = provenance_report.build_report(db, snapshots, {})
+        report = acquire_provenance.build_report(db, snapshots, {})
         (entry,) = report["no-intro"]["missing"]
         self.assertEqual(entry["dats"], ["FM-7 (Bitstream)", "FM-7 (Flux)"])
         self.assertEqual(report["no-intro"]["matched"], 1)
-        self.assertEqual(provenance_report.distinct_missing(report), 1)
+        self.assertEqual(acquire_provenance.distinct_missing(report), 1)
         twice = {"redump": report["no-intro"], "no-intro": report["no-intro"]}
-        self.assertEqual(provenance_report.distinct_missing(twice), 1)
+        self.assertEqual(acquire_provenance.distinct_missing(twice), 1)
 
 
 class AMissingDumpNamesTheProfileItFills(unittest.TestCase):
@@ -613,7 +613,7 @@ class AMissingDumpNamesTheProfileItFills(unittest.TestCase):
     }
 
     def _report(self, db):
-        from scripts import provenance_report
+        from scripts.acquire import provenance as acquire_provenance
 
         snapshots = {"no-intro": {"entries": [
             {"dat": "FM-7", "name": "DICROM.rom", "sha1": "a" * 40, "size": 262144},
@@ -621,8 +621,8 @@ class AMissingDumpNamesTheProfileItFills(unittest.TestCase):
             {"dat": "FM-7", "name": "Other Name.rom", "sha1": "c" * 40, "size": 8},
             {"dat": "FM-7", "name": "unread.rom", "sha1": "d" * 40, "size": 8},
         ]}}
-        needs = provenance_report.profile_needs(self.PROFILES, db)
-        return provenance_report.build_report(db, snapshots, {}, {}, needs)
+        needs = acquire_provenance.profile_needs(self.PROFILES, db)
+        return acquire_provenance.build_report(db, snapshots, {}, {}, needs)
 
     def test_a_dump_a_profile_reads_names_it(self):
         db = {"files": {"b" * 40: {"name": "held.rom", "md5": "", "size": 16}}}
@@ -635,23 +635,23 @@ class AMissingDumpNamesTheProfileItFills(unittest.TestCase):
         self.assertIsNone(missing["unread.rom"])
 
     def test_a_size_outside_the_profile_range_fills_nothing(self):
-        from scripts import provenance_report
+        from scripts.acquire import provenance as acquire_provenance
 
-        needs = provenance_report.profile_needs(self.PROFILES, {"files": {}})
+        needs = acquire_provenance.profile_needs(self.PROFILES, {"files": {}})
         small = {"name": "DICROM.rom", "size": 1024}
-        self.assertEqual(provenance_report.needs_filled(small, needs), [])
+        self.assertEqual(acquire_provenance.needs_filled(small, needs), [])
 
     def test_a_need_the_collection_answers_is_not_one(self):
-        from scripts import provenance_report
+        from scripts.acquire import provenance as acquire_provenance
 
         db = {"files": {"e" * 40: {"name": "dicrom.rom", "size": 262144}}}
-        needs = provenance_report.profile_needs(self.PROFILES, db)
+        needs = acquire_provenance.profile_needs(self.PROFILES, db)
         self.assertNotIn("dicrom.rom", needs["by_name"])
 
     def test_a_file_installed_with_the_emulator_is_not_a_need(self):
         """43 of 50 needs were bundled entries (samcoupe.rom, zesarux's
         tk90x.rom), burying the six xm7 ROMs a maintainer has to find."""
-        from scripts import provenance_report
+        from scripts.acquire import provenance as acquire_provenance
 
         profiles = {
             "samcoupe": {"files": [{"name": "samcoupe.rom", "required": True,
@@ -659,7 +659,7 @@ class AMissingDumpNamesTheProfileItFills(unittest.TestCase):
             "hcl": {"files": [{"name": "kanji.rom", "required": True, "bundled": True,
                                "not_bundled_on": ["batocera"], "sha1": "9" * 40}]},
         }
-        needs = provenance_report.profile_needs(profiles, {"files": {}})
+        needs = acquire_provenance.profile_needs(profiles, {"files": {}})
         self.assertNotIn(("sha1", "f" * 40), needs["by_hash"])
         self.assertIn(("sha1", "9" * 40), needs["by_hash"])
 
@@ -695,7 +695,7 @@ class MissingDumpsNameTheirRomsets(unittest.TestCase):
     spectrum.zip: the report said MISSING and nothing about where to look."""
 
     def _index(self, entries: list[dict]) -> dict:
-        from scripts.provenance_report import romset_index
+        from scripts.acquire.provenance import romset_index
 
         with tempfile.TemporaryDirectory() as tmp:
             Path(tmp, "mame.json").write_text(
@@ -704,7 +704,7 @@ class MissingDumpsNameTheirRomsets(unittest.TestCase):
             return romset_index(Path(tmp))
 
     def test_versions_of_one_set_merge(self):
-        from scripts.provenance_report import romsets_holding
+        from scripts.acquire.provenance import romsets_holding
 
         member = {"name": "1986es.rom", "size": 16384, "crc32": "aaaa0001", "sha1": "f9"}
         index = self._index([
@@ -718,7 +718,7 @@ class MissingDumpsNameTheirRomsets(unittest.TestCase):
         self.assertEqual(hits[0]["dats"], ["MAME mame0190", "MAME mame0220", "MAME mame0289"])
 
     def test_a_disagreeing_sha1_is_not_the_dump(self):
-        from scripts.provenance_report import romsets_holding
+        from scripts.acquire.provenance import romsets_holding
 
         member = {"name": "a.rom", "size": 8, "crc32": "00000001", "sha1": "aa"}
         index = self._index([{"name": "set.zip", "members": [member], "dats": ["MAME mame0190"]}])

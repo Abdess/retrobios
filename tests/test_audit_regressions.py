@@ -922,17 +922,17 @@ class AutoFetchReadsListsAndPlacesWithoutClobbering(unittest.TestCase):
     def test_a_hash_list_is_every_accepted_revision(self):
         import hashlib
 
-        from scripts import auto_fetch
+        from scripts.acquire import fetch as acquire_fetch
 
         data = b"second revision"
         entry = {"sha1": ["0" * 40, hashlib.sha1(data).hexdigest()]}
-        self.assertTrue(auto_fetch.verify_content(data, entry))
+        self.assertTrue(acquire_fetch.verify_content(data, entry))
         db = {"files": {hashlib.sha1(data).hexdigest(): {"path": "bios/x/n64.psh"}},
               "indexes": {"by_md5": {}}}
-        self.assertEqual(auto_fetch.step1_crossref_db(entry, db), "bios/x/n64.psh")
+        self.assertEqual(acquire_fetch.step1_crossref_db(entry, db), "bios/x/n64.psh")
 
     def test_the_whole_slug_picks_the_folder_and_nothing_is_overwritten(self):
-        from scripts import auto_fetch
+        from scripts.acquire import fetch as acquire_fetch
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             bios = Path(directory)
@@ -940,7 +940,7 @@ class AutoFetchReadsListsAndPlacesWithoutClobbering(unittest.TestCase):
                 (bios / folder).mkdir(parents=True)
             held = bios / "Nintendo" / "N64" / "n64.psh"
             held.write_bytes(b"other revision")
-            placed = Path(auto_fetch.place_file(
+            placed = Path(acquire_fetch.place_file(
                 b"fetched", {"name": "n64.psh", "system": "nintendo-64"}, str(bios), {}
             ))
             self.assertEqual(placed.parent.parent, bios / "Nintendo" / "N64")
@@ -4623,7 +4623,7 @@ class TheWantedPageCountsRomsetMembers(unittest.TestCase):
     Wanted page asked for dumps the collection holds inside romsets."""
 
     def test_members_are_read_unless_given(self):
-        from scripts import provenance_report
+        from scripts.acquire import provenance
 
         calls = []
 
@@ -4631,9 +4631,9 @@ class TheWantedPageCountsRomsetMembers(unittest.TestCase):
             calls.append(db)
             return {}
 
-        with mock.patch.object(provenance_report, "archive_members", members):
-            provenance_report.build_report({"files": {}}, {})
-            provenance_report.build_report({"files": {}}, {}, {})
+        with mock.patch.object(provenance, "archive_members", members):
+            provenance.build_report({"files": {}}, {})
+            provenance.build_report({"files": {}}, {}, {})
         self.assertEqual(len(calls), 1)
 
 
@@ -4644,7 +4644,7 @@ class AutoFetchAsksVerifyWhatIsMissing(unittest.TestCase):
     file was ever one. 721 announced where verify saw none critical."""
 
     def test_the_targets_are_verify_verdicts(self):
-        from scripts import auto_fetch
+        from scripts.acquire import fetch as acquire_fetch
         from packs import coverage as packs_coverage
         from packs import verdicts
 
@@ -4671,7 +4671,7 @@ class AutoFetchAsksVerifyWhatIsMissing(unittest.TestCase):
             ],
         }
         with mock.patch.object(packs_coverage, "verify_platform", lambda c, d: result):
-            names = [m["name"] for m in auto_fetch.find_missing(config, {})]
+            names = [m["name"] for m in acquire_fetch.find_missing(config, {})]
         self.assertEqual(names, ["gone.bin", "bad.bin", "diabdat.mpq"])
 
 
@@ -6668,7 +6668,7 @@ class AnUnansweredSearchIsNotANotFound(unittest.TestCase):
     def _fetch(self, error):
         from unittest import mock
 
-        from scripts import auto_fetch
+        from scripts.acquire import fetch as acquire_fetch
 
         def refuse(*_args, **_kwargs):
             raise error
@@ -6676,9 +6676,9 @@ class AnUnansweredSearchIsNotANotFound(unittest.TestCase):
         entry = {"name": "nowhere.bin", "system": "test-system", "sha1": "0" * 40}
         db = {"files": {}, "indexes": {"by_md5": {}, "by_name": {}}}
         with mock.patch("urllib.request.urlopen", refuse), \
-                mock.patch.object(auto_fetch, "step2_scan_branches", lambda e: None), \
+                mock.patch.object(acquire_fetch, "step2_scan_branches", lambda e: None), \
                 contextlib.redirect_stdout(io.StringIO()):
-            return auto_fetch.fetch_missing([entry], db, "bios")
+            return acquire_fetch.fetch_missing([entry], db, "bios")
 
     def test_offline_is_not_searched(self):
         import urllib.error
@@ -6705,21 +6705,21 @@ class AutoFetchProvesEveryHashItIsGiven(unittest.TestCase):
     def test_a_sha256_proves_a_download(self):
         import hashlib
 
-        from scripts import auto_fetch
+        from scripts.acquire import fetch as acquire_fetch
 
         sha256 = {"sha256": hashlib.sha256(self.DATA).hexdigest()}
-        self.assertTrue(auto_fetch.verify_content(self.DATA, sha256))
-        self.assertFalse(auto_fetch.verify_content(b"other", sha256))
+        self.assertTrue(acquire_fetch.verify_content(self.DATA, sha256))
+        self.assertFalse(acquire_fetch.verify_content(b"other", sha256))
 
     def test_every_declared_cryptographic_hash_must_match(self):
         import hashlib
 
-        from scripts import auto_fetch
+        from scripts.acquire import fetch as acquire_fetch
 
         both = {"sha256": hashlib.sha256(self.DATA).hexdigest(), "md5": "0" * 32}
-        self.assertFalse(auto_fetch.verify_content(self.DATA, both))
+        self.assertFalse(acquire_fetch.verify_content(self.DATA, both))
         both["md5"] = hashlib.md5(self.DATA).hexdigest()
-        self.assertTrue(auto_fetch.verify_content(self.DATA, both))
+        self.assertTrue(acquire_fetch.verify_content(self.DATA, both))
 
     def test_crc32_and_size_never_accept_a_download(self):
         """A crc32 can be forged: bytes a source crafts to it would land in
@@ -6728,44 +6728,44 @@ class AutoFetchProvesEveryHashItIsGiven(unittest.TestCase):
         import zlib
         from unittest import mock
 
-        from scripts import auto_fetch
+        from scripts.acquire import fetch as acquire_fetch
 
         crc = {"name": "forged.bin", "system": "test-system",
                "crc32": f"{zlib.crc32(self.DATA):08X}", "size": len(self.DATA)}
-        self.assertFalse(auto_fetch.verify_content(self.DATA, crc))
-        self.assertFalse(auto_fetch.verifiable(crc))
+        self.assertFalse(acquire_fetch.verify_content(self.DATA, crc))
+        self.assertFalse(acquire_fetch.verifiable(crc))
 
         served = io.BytesIO(self.DATA)
         with tempfile.TemporaryDirectory() as bios, \
                 mock.patch.object(urllib.request, "urlopen", lambda *a, **k: served), \
-                mock.patch.object(auto_fetch, "step2_scan_branches",
+                mock.patch.object(acquire_fetch, "step2_scan_branches",
                                   lambda e: self.DATA), \
                 contextlib.redirect_stdout(io.StringIO()) as out:
-            result = auto_fetch.fetch_missing([crc], {"files": {}}, bios)
+            result = acquire_fetch.fetch_missing([crc], {"files": {}}, bios)
             self.assertEqual(list(Path(bios).rglob("*")), [])
         self.assertEqual(result["stats"]["found"], 0)
         self.assertEqual(result["stats"]["unverifiable"], 1)
         self.assertIn("declares no cryptographic hash", out.getvalue())
 
     def test_a_held_sha256_is_found_in_the_database(self):
-        from scripts import auto_fetch
+        from scripts.acquire import fetch as acquire_fetch
 
         db = {"files": {"s": {"path": "bios/x/dsi.bin", "size": 3}},
               "indexes": {"by_sha256": {"f" * 64: "s"}}}
         self.assertEqual(
-            auto_fetch.step1_crossref_db({"sha256": "F" * 64}, db), "bios/x/dsi.bin"
+            acquire_fetch.step1_crossref_db({"sha256": "F" * 64}, db), "bios/x/dsi.bin"
         )
 
     def test_an_entry_without_a_hash_is_not_searched(self):
         from unittest import mock
 
-        from scripts import auto_fetch
+        from scripts.acquire import fetch as acquire_fetch
 
         entry = {"name": "DICROM.ROM", "system": "fujitsu-fm7"}
         out = io.StringIO()
-        with mock.patch.object(auto_fetch, "step2_scan_branches") as branches, \
+        with mock.patch.object(acquire_fetch, "step2_scan_branches") as branches, \
                 contextlib.redirect_stdout(out):
-            result = auto_fetch.fetch_missing([entry], {"files": {}}, "bios", dry_run=True)
+            result = acquire_fetch.fetch_missing([entry], {"files": {}}, "bios", dry_run=True)
         branches.assert_not_called()
         self.assertEqual(result["stats"]["unverifiable"], 1)
         self.assertNotIn("Would search", out.getvalue())
@@ -7848,9 +7848,9 @@ class AutoFetchIssueBodyReadsAsWritten(unittest.TestCase):
              "md5": "490f666e1afb15b7362b406ed1cea246"}
 
     def test_full_hashes_and_no_template_phrasing(self):
-        from scripts import auto_fetch
+        from scripts.acquire import fetch as acquire_fetch
 
-        body = auto_fetch.generate_issue_body([self.ENTRY], "RetroArch")
+        body = acquire_fetch.generate_issue_body([self.ENTRY], "RetroArch")
         self.assertIn(f"`{self.ENTRY['sha1']}`", body)
         self.assertIn(f"`{self.ENTRY['md5']}`", body)
         self.assertNotIn("...", body)

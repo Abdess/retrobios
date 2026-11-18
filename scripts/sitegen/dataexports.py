@@ -19,7 +19,7 @@ from core.artifacts import json_text as _json_text
 from model import retired as model_retired
 from model.dumpcatalog import load_provenance_snapshots
 from packs.crossref import FileConsumers
-from provenance_report import build_report
+from acquire.provenance import build_report
 from sitegen.apiitems import _sha1_by_path, core_index_items, system_index_items
 from sitegen.config import DATA_LICENSE, REPO_URL, _REPO_ROOT, _timestamp
 from sitegen.install import _release_pack_platforms
