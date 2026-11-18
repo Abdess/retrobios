@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import urllib.request
+import urllib.parse
 from collections.abc import Callable
 
 from model.collection import _group_by_manufacturer, _slug

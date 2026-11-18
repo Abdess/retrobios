@@ -5,7 +5,7 @@ from __future__ import annotations
 import functools
 import re
 import sys
-import urllib.request
+import urllib.parse
 from pathlib import Path
 
 import release_record

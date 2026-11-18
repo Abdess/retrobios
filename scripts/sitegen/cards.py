@@ -7,7 +7,7 @@ import html
 import json
 import re
 import sys
-import urllib.request
+import urllib.parse
 import zipfile
 from collections.abc import Callable
 

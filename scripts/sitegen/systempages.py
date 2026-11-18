@@ -7,7 +7,7 @@ import functools
 import html
 import json
 import re
-import urllib.request
+import urllib.parse
 from dataclasses import dataclass
 
 from model.collection import SECTION_LABELS, _slug

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import html
 import re
-import urllib.request
+import urllib.parse
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 

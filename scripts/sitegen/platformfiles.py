@@ -6,7 +6,7 @@ import functools
 import html
 import json
 import re
-import urllib.request
+import urllib.parse
 
 from model import siteinputs
 from model.collection import _profiles_in, _profiles_on_disk

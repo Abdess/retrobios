@@ -10,6 +10,7 @@ import re
 import subprocess
 import tempfile
 import time
+import urllib.parse
 import urllib.request
 from collections import defaultdict
 from dataclasses import dataclass

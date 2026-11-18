@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import re
-import urllib.request
+import urllib.parse
 from pathlib import Path
 
 from model.collection import collection_paths

@@ -5,7 +5,7 @@ from __future__ import annotations
 import html
 import os
 import re
-import urllib.request
+import urllib.parse
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from pathlib import Path
