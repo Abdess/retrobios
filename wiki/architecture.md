@@ -40,7 +40,9 @@ scripts/                 all tooling (Python and pyyaml, jsonschema for schema c
   exporter/              native format exporters (batocera, recalbox, emudeck...)
 install/                 JSON install manifests per platform
   targets/               JSON target manifests per platform (cores per architecture)
-install.py               the installer, with install.sh and install.ps1 to start it
+install.py               the installer, with install.sh and install.ps1 to start it,
+                         built from installer/ by scripts/build_installer.py
+installer/               the installer's source, one module per concern
 ports/                   launchers that run the installer on handhelds
 automation/              jobs.yml, the unattended jobs scripts/autorun.py runs
 data/                    cached data directories (not BIOS, fetched at build)
