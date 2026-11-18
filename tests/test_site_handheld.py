@@ -10,6 +10,7 @@ starts it.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import contextlib
 import hashlib
@@ -103,11 +104,11 @@ class WhereEachSystemFindsItsFile(unittest.TestCase):
     def test_the_group_page_sits_with_the_handheld_guide(self):
         """It shares the guide's name, so the sidebar files it with it, and
         the guide a muOS or ArkOS owner lands on links it."""
-        import generate_site
+        from model import guides
         from sitegen import getpages
         from sitegen import guidepage
 
-        guide = generate_site.HANDHELD_GUIDE
+        guide = guides.HANDHELD_GUIDE
         self.assertEqual(sitehandheld.GROUP_PAGE, guide.page)
         with contextlib.chdir(REPO_ROOT):
             self.assertIn(f"(../get/{sitehandheld.GROUP_PAGE}.md)",
@@ -158,7 +159,7 @@ class WhereEachSystemFindsItsFile(unittest.TestCase):
             self.assertIn(f"](../{sitehandheld.SERVED_DIR}/{name})", block.group(1))
 
     def test_the_generator_writes_them(self):
-        source = (REPO_ROOT / "scripts" / "generate_site.py").read_text(encoding="utf-8")
+        source = script_source("generate_site.py")
         self.assertIn("sitehandheld.write_launchers(public, _REPO_ROOT)", source)
         self.assertIn("sitehandheld.platform_block(platform_name, _REPO_ROOT)", source)
         self.assertIn("sitehandheld.group_page(_REPO_ROOT)", source)

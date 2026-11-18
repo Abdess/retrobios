@@ -50,9 +50,11 @@ def name(path: Path) -> str:
 
 
 def generator_sources() -> list[Path]:
-    """Every module whose strings reach a page: generate_site.py, each
-    scripts/site*.py and the pack README writer. Listed by glob, so text
-    moved out of generate_site.py stays under the guards that read it."""
+    """Every module whose strings reach a page: the commands that write the
+    site, each module of scripts/sitegen/, the guides and system names it
+    prints, and the pack README writer. Listed by glob, so text moved
+    between the site modules stays under the guards that read it."""
     scripts = REPO_ROOT / "scripts"
     return sorted({*scripts.glob("site*.py"), scripts / "generate_site.py",
-                   scripts / "packs" / "readme.py"})
+                   *(scripts / "sitegen").glob("*.py"), scripts / "model" / "guides.py",
+                   scripts / "model" / "systemnames.py", scripts / "packs" / "readme.py"})

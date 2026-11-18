@@ -12,6 +12,7 @@ would have its upload flagged by the same project.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import hashlib
 import json
@@ -444,7 +445,7 @@ class EveryFolderIsTheReviewsFolder(_World):
         self.assertEqual(spot.folder, "bios/Maker/Console/")
 
     def test_the_gaps_page_upload_link_reads_the_same_rule(self):
-        source = (REPO_ROOT / "scripts" / "generate_site.py").read_text(encoding="utf-8")
+        source = script_source("generate_site.py")
         self.assertIn("folder = placer.folder(declared[0]) if placer and declared else \"\"", source)
         self.assertNotIn("def _upload_folder", source)
         self.assertEqual(self.placer.folder(self.profiles["engine"]["files"][1]),

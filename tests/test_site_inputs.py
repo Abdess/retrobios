@@ -10,6 +10,7 @@ directory, so a get/ page said "No ZIP" for a setup the API marked as released.
 from __future__ import annotations
 
 import tests
+from tests.sources import SCRIPTS, script_paths
 
 import ast
 import json
@@ -19,7 +20,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import generate_site
+from model import collection
 from sitegen import decorate
 from sitegen import guidepage
 from sitegen import install
@@ -68,7 +69,7 @@ class TheGivenProfilesAndPlatforms(_Inputs):
 
     def test_emulator_names_come_from_the_given_profiles(self) -> None:
         self.use(emulators=self.emulators)
-        self.assertEqual(set(generate_site._profiles_on_disk()), {"fixturecore"})
+        self.assertEqual(set(collection._profiles_on_disk()), {"fixturecore"})
         self.assertEqual(platformfiles._emulator_named_link("fixturecore"),
                          "[Fixture Core](emulators/fixturecore.md)")
 
@@ -120,7 +121,7 @@ class TheCollectionDoesNotDependOnTheWorkingDirectory(unittest.TestCase):
         self.assertEqual(siteinputs.bios_dir({"bios_dir": "/abs/bios"}), Path("/abs/bios"))
 
     def test_the_image_tools_do_not_load_the_page_generator(self) -> None:
-        for module in ("make_og_cards.py", "fetch_site_images.py", "siterender.py"):
+        for module in ("make_og_cards.py", "fetch_site_images.py", "sitegen/render.py"):
             with self.subTest(module=module):
                 source = (REPO_ROOT / "scripts" / module).read_text(encoding="utf-8")
                 self.assertNotIn("from generate_site import", source)
@@ -130,33 +131,36 @@ class NoPageModuleReadsTheRepositoryInputs(unittest.TestCase):
     """A helper that opens the repository's database, profiles or platform
     files itself bypasses the flags. siteinputs.current() is the one source."""
 
-    MODULES = ("generate_site.py", "siterender.py", "sitediagrams.py", "sitecollection.py")
+    MODULES = (*script_paths("generate_site.py"), SCRIPTS / "sitegen" / "render.py",
+               SCRIPTS / "sitegen" / "diagrams.py", SCRIPTS / "model" / "collection.py",
+               SCRIPTS / "model" / "systemnames.py")
     INPUTS = {"database.json", "emulators", "platforms"}
 
     def test_no_literal_input_path(self) -> None:
         found = []
         for module in self.MODULES:
-            tree = ast.parse((REPO_ROOT / "scripts" / module).read_text(encoding="utf-8"))
+            tree = ast.parse(module.read_text(encoding="utf-8"))
             for node in ast.walk(tree):
                 if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div) \
-                        and getattr(node.left, "id", "") in ("_REPO_ROOT", "ROOT") \
+                        and getattr(node.left, "id", "") in ("_REPO_ROOT", "ROOT", "REPO_ROOT") \
                         and isinstance(node.right, ast.Constant) and node.right.value in self.INPUTS:
-                    found.append(f"{module}:{node.lineno}")
+                    found.append(f"{module.name}:{node.lineno}")
                 if isinstance(node, ast.Call) and getattr(node.func, "id", getattr(node.func, "attr", "")) in (
                         "load_platform_config", "load_platform_registry", "load_emulator_profiles",
                         "list_registered_platforms", "load_database", "extract_notes",
                         "load_data_dir_registry"):
                     found.extend(
-                        f"{module}:{node.lineno}"
+                        f"{module.name}:{node.lineno}"
                         for arg in node.args
                         if isinstance(arg, ast.Constant) and arg.value in self.INPUTS
                     )
         self.assertEqual(found, [])
 
     def test_generate_installs_the_inputs_first(self) -> None:
+        build = (SCRIPTS / "sitegen" / "build.py").read_text(encoding="utf-8")
         source = ast.get_source_segment(
-            (REPO_ROOT / "scripts" / "generate_site.py").read_text(encoding="utf-8"),
-            next(n for n in ast.parse((REPO_ROOT / "scripts" / "generate_site.py").read_text(encoding="utf-8")).body
+            build,
+            next(n for n in ast.parse(build).body
                  if isinstance(n, ast.FunctionDef) and n.name == "_generate"))
         self.assertLess(source.index("siteinputs.use("), source.index("load_database("))
 

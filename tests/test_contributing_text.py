@@ -13,7 +13,6 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-import generate_readme
 from sitegen import readme
 from sitegen import reference
 
@@ -47,8 +46,8 @@ class CoverageReadsTheGivenProfiles(unittest.TestCase):
             seen.append(emulators_dir)
             return {"status_counts": {}, "total_files": 0, "undeclared_files": [], "details": []}
 
-        with mock.patch.object(generate_readme, "verify_platform", fake_verify), \
-                mock.patch.object(generate_readme, "load_emulator_profiles", return_value={}):
+        with mock.patch.object(readme, "verify_platform", fake_verify), \
+                mock.patch.object(readme, "load_emulator_profiles", return_value={}):
             readme.compute_coverage(
                 "retroarch", str(REPO_ROOT / "platforms"), {"files": {}}, emulators_dir="elsewhere"
             )

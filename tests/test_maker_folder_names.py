@@ -35,7 +35,7 @@ from resolve.localfile import resolve_local_file
 from resolve.ownership import BUCKET_FOLDERS, names_manufacturer
 import generate_db
 from packs import manifest as packs_manifest, md5pack, naming as packs_naming, platformpack
-import generate_site
+from resolve import ownership
 from packs.coverage import verify_platform
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -236,8 +236,8 @@ class DiskRomGoesToThePc88File(_Collection):
 
 class SiteSharesTheMakerTest(unittest.TestCase):
     def test_one_copy(self):
-        self.assertIs(generate_site.names_manufacturer, names_manufacturer)
-        self.assertIs(generate_site.BUCKET_FOLDERS, BUCKET_FOLDERS)
+        self.assertIs(ownership.names_manufacturer, names_manufacturer)
+        self.assertIs(ownership.BUCKET_FOLDERS, BUCKET_FOLDERS)
 
 
 class NoHashlessNameMatchCrossesMakers(unittest.TestCase):

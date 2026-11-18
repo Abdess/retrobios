@@ -22,6 +22,7 @@ are built, the pages and the site.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import json
 import re
@@ -33,7 +34,6 @@ from pathlib import Path
 import ast
 from html import unescape
 
-import generate_site
 from sitegen import decorate
 from sitegen import emulatorsindex
 from sitegen import nav as sitegen_nav
@@ -296,7 +296,7 @@ class Redirects(unittest.TestCase):
         self.assertEqual(sitestarlight.redirects({}, present), {})
 
     def test_the_generator_writes_the_file(self):
-        source = Path(generate_site.__file__).read_text(encoding="utf-8")
+        source = script_source("generate_site.py")
         self.assertIn('generated / "redirects.json"', source)
 
     def test_a_list_part_gone_with_its_rows_redirects_to_its_page(self):
@@ -545,7 +545,7 @@ class SystemPartsSitUnderTheirMaker(unittest.TestCase):
 
 class MovedPlatformPages(unittest.TestCase):
     def test_a_setups_list_for_one_console_is_a_reference(self) -> None:
-        source = Path(generate_site.__file__).read_text(encoding="utf-8")
+        source = script_source("generate_site.py")
         block = source[source.index("for stem, page in moved.items():"):]
         block = block[: block.index("PAGE_DATA[f\"platforms/{name}.md\"]")]
         self.assertIn('SEARCH_DEMOTED.add(f"platforms/{stem}.md")', block)

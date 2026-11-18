@@ -33,6 +33,7 @@ Linux handheld rows sent the reader to a menu.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import json
 import re
@@ -43,7 +44,6 @@ from pathlib import Path
 import yaml
 
 from sitegen import readme as sitegen_readme
-import generate_site
 from sitegen import config
 from sitegen import descriptions
 from sitegen import guidepage
@@ -812,7 +812,7 @@ class EntryCopy(unittest.TestCase):
         self.assertIn("- Have a file? [Check it](/retrobios/files/)", _plain_page("index.md"))
 
     def test_the_explore_cards_have_bare_links(self):
-        source = Path(generate_site.__file__).read_text(encoding="utf-8")
+        source = script_source("generate_site.py")
         self.assertNotIn('"Reference: [How each platform checks files]', source)
         self.assertNotIn('"Reference: [Data and API]', source)
 
@@ -911,7 +911,7 @@ class GetPagesGiveTheSetupsOwnRoutes(unittest.TestCase):
         self.assertEqual(_tab_labels(install), {"Steam Deck", "Linux"})
 
     def test_one_helper_writes_both_pages(self):
-        source = Path(generate_site.__file__).read_text(encoding="utf-8")
+        source = script_source("generate_site.py")
         get_page = source.split("def generate_get_page", 1)[1].split("\ndef ", 1)[0]
         guide = source.split("def _platform_guide", 1)[1].split("\ndef ", 1)[0]
         self.assertNotIn("install_commands(", get_page)
@@ -1111,7 +1111,7 @@ class TheSiteSaysWhatTheInstallerShows(unittest.TestCase):
         readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
         self.assertIn(f"fewer under **{installer.TUI_SYSTEMS_ROW}**", readme)
         self.assertNotIn("offers to install everything or to choose systems", readme)
-        source = (REPO_ROOT / "scripts" / "generate_readme.py").read_text(encoding="utf-8")
+        source = script_source("generate_readme.py")
         self.assertIn("_installer_words().TUI_SYSTEMS_ROW", source)
         import generate_installer_doc
 

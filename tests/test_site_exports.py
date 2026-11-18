@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import hashlib
 import json
@@ -15,9 +16,9 @@ from pathlib import Path
 
 import yaml
 
-from generate_site import _admonition_body, _source_ref_markdown
-from sitegen.sources import _forge_sources
+from sitegen.render import _admonition_body
 from sitegen.descriptions import _browser_title
+from sitegen.sources import _forge_sources, _source_ref_markdown
 from sitegen.decorate import decorate_markdown_pages
 from sitegen.dataexports import generate_data_exports
 
@@ -289,7 +290,7 @@ class PerModeSourcePins(unittest.TestCase):
         )
 
     def test_sqlite_export_accepts_a_per_mode_commit(self):
-        from generate_site import _json_text
+        from core.artifacts import json_text as _json_text
 
         self.assertEqual(
             _json_text(self.PROFILE["source_commit"]),
@@ -652,7 +653,7 @@ class APerCoreDocumentValidates(unittest.TestCase):
         import yaml
 
         root = Path(__file__).resolve().parents[1]
-        source = (root / "scripts" / "generate_site.py").read_text(encoding="utf-8")
+        source = script_source("generate_site.py")
         self.assertNotIn('json.dumps({"id": name, **profile}', source)
         envelope = json.loads((root / "schemas" / "site-api-envelope.schema.json").read_text())
         schema = json.loads((root / "schemas" / "emulator.schema.json").read_text())
@@ -708,7 +709,7 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
         import tempfile
         import zlib
 
-        from sitegen import lookup
+        from sitegen import lookup, structured
 
         body = b"approved inis\n"
         sha1 = hashlib.sha1(body).hexdigest()
@@ -726,7 +727,8 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
             "sha1": sha1, "md5": hashlib.md5(body).hexdigest(),
             "sha256": hashlib.sha256(body).hexdigest(),
             "crc32": f"{zlib.crc32(body):08x}"}})
-        with mock.patch.object(lookup, "_data_member_digests", return_value=digests):
+        with mock.patch.object(lookup, "_data_member_digests", return_value=digests), \
+                mock.patch.object(structured, "_data_member_digests", return_value=digests):
             records = lookup.file_lookup_records(
                 {"files": {}}, {}, {}, [{"sha1": sha1, "url": "u"}],
                 {"dolphin-sys": {"ApprovedInis.json": {"sha1": sha1}}})
@@ -818,9 +820,8 @@ class AnArchiveMemberIsFoundByItsCrc(unittest.TestCase):
     def test_the_lookup_and_the_schema_carry_the_layer(self):
         import json as _json
 
-        import generate_site
 
-        source = Path(generate_site.__file__).read_text(encoding="utf-8")
+        source = script_source("generate_site.py")
         self.assertIn("records += _archive_member_records(entry, sha1, item[\"url\"])", source)
         schema = _json.loads((Path(__file__).resolve().parents[1] / "schemas"
                               / "site-api-envelope.schema.json").read_text())
@@ -854,13 +855,12 @@ class AWantedDumpIsFoundByItsHash(unittest.TestCase):
     def test_the_schema_and_the_page_carry_the_layer(self):
         import json as _json
 
-        import generate_site
 
         root = Path(__file__).resolve().parents[1]
         schema = _json.loads((root / "schemas" / "site-api-envelope.schema.json").read_text())
         self.assertIn('"wanted"', _json.dumps(schema))
         self.assertIn("byLayer('wanted')", (root / "website" / "src" / "scripts" / "site.ts").read_text())
-        source = Path(generate_site.__file__).read_text(encoding="utf-8")
+        source = script_source("generate_site.py")
         self.assertIn('model_retired.load(_REPO_ROOT / "retired.json"), wanted)', source)
 
 
@@ -1216,7 +1216,7 @@ class TheGapPageOpensOnCounts(unittest.TestCase):
         self.assertIn("1 is held but not verified", text)
         self.assertIn("0 are missing", text)
         self.assertNotIn("%", text)
-        source = (Path(__file__).resolve().parents[1] / "scripts" / "generate_site.py").read_text()
+        source = script_source("generate_site.py")
         self.assertNotIn("Unified view of BIOS verification", source)
 
 

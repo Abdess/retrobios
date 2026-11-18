@@ -17,7 +17,7 @@ import os
 import unittest
 from pathlib import Path
 
-import generate_site as gs
+from model import collection
 from sitegen import places
 from sitegen import platformfiles
 from sitegen import startwith
@@ -54,7 +54,7 @@ class LinksFollowContent(unittest.TestCase):
         db = load_database("database.json")
         config = load_platform_config("misterfpga")
         names: dict = {}
-        for mfr, consoles in gs._group_by_manufacturer(db).items():
+        for mfr, consoles in collection._group_by_manufacturer(db).items():
             for console, entries in consoles.items():
                 for entry in entries:
                     names.setdefault(entry["name"], set()).add((mfr, console))
@@ -136,7 +136,7 @@ class ACopyIsOnItsOwnFoldersPage(unittest.TestCase):
                     "Fairchild/Channel F/sl31253.bin": ["s"], "Channel F/sl31253.bin": ["s"],
                 }},
             }
-            groups = gs._group_by_manufacturer(db)
+            groups = collection._group_by_manufacturer(db)
         self.assertEqual(sorted(groups), ["Arcade", "Fairchild"])
         self.assertEqual(list(groups["Fairchild"]), ["Channel F"])
         # The copy is listed twice and counted once.
@@ -210,7 +210,7 @@ class ACopyFiledByEmulatorDoesNotMoveAMachine(unittest.TestCase):
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             db = self._db(tmp)
-            manufacturers = gs._group_by_manufacturer(db)
+            manufacturers = collection._group_by_manufacturer(db)
             config = {"systems": {"nintendo-nes": {"files": [
                 {"name": "FDS_disksys-nintendo.rom", "sha1": "d" * 40}]}}}
             pages = places._system_pages_from_data(
@@ -227,7 +227,7 @@ class ACopyFiledByEmulatorDoesNotMoveAMachine(unittest.TestCase):
         from model.profiles import load_emulator_profiles
 
         db = load_database("database.json")
-        manufacturers = gs._group_by_manufacturer(db)
+        manufacturers = collection._group_by_manufacturer(db)
         pages = places._system_pages_from_data(
             manufacturers, {}, db, load_emulator_profiles("emulators", skip_aliases=False))
         expected = {
@@ -295,7 +295,7 @@ class EverySystemLinkLandsOnItsSection(unittest.TestCase):
 
         db = load_database(str(REPO_ROOT / "database.json"))
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"), skip_aliases=False)
-        systemnames.set_console_sections(gs._group_by_manufacturer(db), systemnames.program_names(profiles))
+        systemnames.set_console_sections(collection._group_by_manufacturer(db), systemnames.program_names(profiles))
         platforms = REPO_ROOT / "platforms"
         ids = {str(sid) for profile in profiles.values() for sid in profile.get("systems") or []}
         for name in list_registered_platforms(str(platforms)):

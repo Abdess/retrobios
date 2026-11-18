@@ -16,7 +16,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-import generate_readme
+from core import cli
 from sitegen import readme
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -120,11 +120,11 @@ class CoverageCache(unittest.TestCase):
         kept = sorted((self.work / "cache").glob("*.pickle"))
 
         def missing(*_args, **_kwargs):
-            raise generate_readme.InputMissing("no emulator profile directory at nosuch")
+            raise cli.InputMissing("no emulator profile directory at nosuch")
 
         with mock.patch.object(readme, "compute_coverage", missing), \
                 mock.patch.object(readme, "_coverage_inputs", return_value="other"), \
-                self.assertRaises(generate_readme.InputMissing):
+                self.assertRaises(cli.InputMissing):
             self._run()
         self.assertEqual(sorted((self.work / "cache").glob("*.pickle")), kept)
 

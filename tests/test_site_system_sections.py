@@ -15,6 +15,7 @@ Reads the repository: skips when the database is absent.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import json
 import os
@@ -151,7 +152,7 @@ class SystemLinks(unittest.TestCase):
             from model.registry import list_registered_platforms
             from model.profiles import load_emulator_profiles
             from model.platforms import load_platform_config
-            from generate_site import _group_by_manufacturer
+            from model.collection import _group_by_manufacturer
             from sitegen.systempages import arcade_board_sections
 
             with open("database.json", encoding="utf-8") as handle:
@@ -311,7 +312,7 @@ class SearchAliases(unittest.TestCase):
 class BuildCount(unittest.TestCase):
 
     def test_generator_prints_the_count(self) -> None:
-        source = (REPO_ROOT / "scripts" / "generate_site.py").read_text(encoding="utf-8")
+        source = script_source("generate_site.py")
         self.assertIn("link_coverage(", source)
         self.assertIn("system ids linked", source)
 

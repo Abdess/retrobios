@@ -19,6 +19,7 @@ node and skip without it.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import json
 import re
@@ -734,7 +735,7 @@ class EverySonyConsoleHasItsPage(unittest.TestCase):
     found the PlayStation page before the Sony page holding the PS3."""
 
     def test_sony_is_split_by_console(self):
-        source = (REPO_ROOT / "scripts" / "generate_site.py").read_text(encoding="utf-8")
+        source = script_source("generate_site.py")
         self.assertIn('CONSOLE_PAGES = frozenset({"Sony"})', source)
         self.assertIn("manufacturer in CONSOLE_PAGES", source)
 
@@ -1228,7 +1229,7 @@ class AChecksumLineIsAHash(unittest.TestCase):
         ])
 
     def test_the_form_takes_the_line(self):
-        source = _read(REPO_ROOT / "scripts" / "generate_site.py")
+        source = script_source("generate_site.py")
         start = source.index('<input id="rb-hash"')
         self.assertNotIn("pattern=", source[start:source.index("required>", start)])
 

@@ -10,6 +10,7 @@ have vanished with it.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import unittest
 from pathlib import Path
@@ -51,8 +52,8 @@ class ExtractTargets(unittest.TestCase):
     def test_no_generator_keeps_its_own_table(self):
         """The which-pack page describes setups per OS, and these two were the
         per-platform copies of the registry."""
-        readme = (REPO_ROOT / "scripts" / "generate_readme.py").read_text(encoding="utf-8")
-        site = (REPO_ROOT / "scripts" / "generate_site.py").read_text(encoding="utf-8")
+        readme = script_source("generate_readme.py")
+        site = script_source("generate_site.py")
         self.assertNotIn('"RetroDECK": "`~/retrodeck/`"', readme)
         self.assertNotIn('"    | RetroDECK | `~/retrodeck/` |"', site)
 

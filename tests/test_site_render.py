@@ -42,7 +42,7 @@ class IconsComeFromTheLocalCopies(unittest.TestCase):
         self.assertIn("A%20-%20One.png", siterender.system_icon_markdown("A", "One"))
 
     def test_no_request_is_made(self):
-        self.assertNotIn("urllib.request", (REPO_ROOT / "scripts" / "siterender.py").read_text())
+        self.assertNotIn("urllib.request", (REPO_ROOT / "scripts" / "sitegen" / "render.py").read_text())
 
 
 class EveryPageAddressesPlatformsAsPeers(unittest.TestCase):

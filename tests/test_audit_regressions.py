@@ -98,7 +98,7 @@ class ReadmeRegressions(unittest.TestCase):
             with self.subTest(page=page):
                 self.assertIn(version, (ROOT / page).read_text(encoding="utf-8"))
         self.assertIn(
-            version, (ROOT / "scripts" / "generate_readme.py").read_text(encoding="utf-8")
+            version, script_source("generate_readme.py")
         )
 
     def test_an_older_interpreter_is_refused_before_the_first_step(self):
@@ -4836,7 +4836,7 @@ class AFileToSourceIsAFileNotAName(unittest.TestCase):
     master.dat disappeared behind Fallout 1's."""
 
     def test_rows_are_keyed_by_name_and_hash(self):
-        source = (ROOT / "scripts" / "generate_site.py").read_text()
+        source = script_source("generate_site.py")
         self.assertIn('key = (g["name"], g.get("identity") or f"emulator:{emu_name}")', source)
         from scripts.packs.crossref import _first_hash
 
@@ -5613,7 +5613,7 @@ class CollectionCardsCarryFullHashes(unittest.TestCase):
     CRC32 or SHA256."""
 
     def test_every_hash_in_full(self):
-        from scripts.generate_site import FileConsumers
+        from scripts.packs.crossref import FileConsumers
         from scripts.sitegen.cards import _system_file_card
 
         entry = {"name": "DUKE.RTS", "path": "bios/x/DUKE.RTS", "size": 10,
@@ -5667,7 +5667,7 @@ class AVariantCardSaysWhatToSaveItAs(unittest.TestCase):
     the storage name, and nothing said RetroBat looks for advision.zip."""
 
     def test_the_name_to_save_it_under(self):
-        from scripts.generate_site import FileConsumers
+        from scripts.packs.crossref import FileConsumers
         from scripts.sitegen.cards import _system_file_card
 
         entry = {"name": "advision.zip", "size": 10, "sha1": "a" * 40,
@@ -5772,8 +5772,10 @@ class SitemapDatesComeFromThePage(unittest.TestCase):
     def test_the_page_date_or_none_reaches_the_sitemap(self):
         import tempfile
 
-        from scripts.sitegen import decorate
-        from scripts.sitegen import descriptions as sitegen_descriptions
+        # decorate reads PAGE_DATA through its own import (sitegen.descriptions,
+        # bare): the dict filled here is that one.
+        from sitegen import decorate
+        from sitegen import descriptions as sitegen_descriptions
 
         saved = dict(sitegen_descriptions.PAGE_DATA)
         self.addCleanup(lambda: (sitegen_descriptions.PAGE_DATA.clear(),
@@ -6861,7 +6863,7 @@ class DocsDescribeTheRegistriesTheyName(unittest.TestCase):
             sorted(item.strip() for item in listed.split(",")),
             sorted(NODEDUP_DIRS),
         )
-        readme_gen = (ROOT / "scripts" / "generate_readme.py").read_text(encoding="utf-8")
+        readme_gen = script_source("generate_readme.py")
         self.assertIn("NODEDUP_DIRS", readme_gen)
 
 

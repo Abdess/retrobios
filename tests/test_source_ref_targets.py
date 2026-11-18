@@ -18,7 +18,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-import sitesources
+from model import sourceref
 from sitegen import sources
 from core import upstream
 from model.profiles import load_emulator_profiles
@@ -109,7 +109,7 @@ class TheSevenProfilesCiteHeldPaths(unittest.TestCase):
                 for _label, refs in source_ref_values(value):
                     for part in split_source_ref(refs):
                         _role, path = ref_role(part.path)
-                        if " " in path or sitesources.is_binary_citation(path):
+                        if " " in path or sourceref.is_binary_citation(path):
                             continue
                         verdicts = [sources.tree_holds(r, p, path) for r, p in candidates]
                         if None in verdicts:

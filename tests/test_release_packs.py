@@ -14,6 +14,7 @@ platform has a permanent page at get/<platform>/ instead.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import contextlib
 import io
@@ -254,7 +255,7 @@ class TheTablesFollowTheField(unittest.TestCase):
 
 class EverySurfaceSaysWhy(unittest.TestCase):
     def test_a_setup_page_says_no_zip_with_the_command_beside_it(self):
-        import generate_site
+        from model import guides
         from sitegen import guidepage
 
         line = guidepage.no_zip_line("KNULLI")
@@ -262,7 +263,7 @@ class EverySurfaceSaysWhy(unittest.TestCase):
         with contextlib.chdir(REPO_ROOT):
             block = guidepage._pack_buttons("knulli")
             guide = guidepage._guide_download(
-                "knulli", "KNULLI", generate_site.GUIDES["knulli"], None, "## Download")
+                "knulli", "KNULLI", guides.GUIDES["knulli"], None, "## Download")
         self.assertIn(line, block)
         self.assertIn(guidepage.NO_ZIP_FAQ, block)
         self.assertIn(line, "\n".join(guide))
@@ -491,11 +492,10 @@ class EveryPlatformHasAPermanentPage(unittest.TestCase):
                         self.assertIn("No ZIP for ", page)
 
     def test_the_generator_writes_and_sweeps_them(self):
-        import generate_site
         from sitegen import config
 
         self.assertIn(release_record.GET_DIR, config.GENERATED_DIRS)
-        source = Path(generate_site.__file__).read_text(encoding="utf-8")
+        source = script_source("generate_site.py")
         self.assertIn('write_if_changed(str(get_dir / f"{name}.md"), generate_get_page(name))',
                       source)
 
@@ -548,7 +548,7 @@ class TheSiteCheckResolvesEveryGetPage(unittest.TestCase):
         self.assertNotIn("get/retroarch/", joined)
 
     def test_the_cli_runs_the_check(self):
-        source = (REPO_ROOT / "scripts" / "validate_site.py").read_text(encoding="utf-8")
+        source = script_source("validate_site.py")
         self.assertIn("validate_site(Path(args.site_dir), args.base, args.platforms_dir, args.record)",
                       source)
 

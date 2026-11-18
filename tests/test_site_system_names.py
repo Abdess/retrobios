@@ -20,7 +20,7 @@ from model import systemnames
 from model.registry import list_registered_platforms
 from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config
-from generate_site import _group_by_manufacturer
+from model.collection import _group_by_manufacturer
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 

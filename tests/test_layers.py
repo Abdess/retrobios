@@ -19,7 +19,8 @@ from pathlib import Path
 
 SCRIPTS = Path(__file__).resolve().parent.parent / "scripts"
 
-PACKAGE_LAYERS = {"core": 0, "model": 1, "resolve": 2, "packs": 3, "scraper": 3, "exporter": 3, "profiling": 3}
+PACKAGE_LAYERS = {"core": 0, "model": 1, "resolve": 2, "packs": 3, "scraper": 3, "exporter": 3,
+                  "profiling": 3, "sitegen": 3}
 LIBRARY_LAYER = 3
 COMMAND_LAYER = 4
 
@@ -28,6 +29,7 @@ COMMAND_LAYER = 4
 SIBLING_IMPORTS: dict[str, frozenset[str]] = {
     "packs": frozenset(),
     "profiling": frozenset(),
+    "sitegen": frozenset({"packs"}),
 }
 
 # Top-level modules other modules of scripts/ import: library code that a
@@ -35,19 +37,34 @@ SIBLING_IMPORTS: dict[str, frozenset[str]] = {
 NOT_YET_PACKAGED = frozenset({
     "archive_build", "autorun", "build_port", "campaign", "campaign_profiles", "campaign_rules",
     "check_buildbot_system", "check_release_assets", "commit_rules", "core_probe", "derivations",
-    "generate_event_schema", "generate_readme", "generate_site", "measurement_records",
-    "pin_installer", "pr_checks", "provenance_report", "release_record", "romfolders",
-    "romset_recipes", "siteagents", "sitebootstrap", "sitecollection", "sitediagrams",
-    "siteentries", "siteexports", "siteguides", "sitehandheld", "siteinputs", "sitemarkup",
-    "sitemeasurements", "siterender", "sitesources", "sitestarlight", "sitesteps", "sitewanted",
-    "sitewrite",
+    "generate_event_schema", "measurement_records", "pin_installer", "pr_checks",
+    "provenance_report", "release_record", "romfolders", "romset_recipes",
 })
 
 # Imports from a package module to a top-level module, left for the wave that
 # packages the top-level side.
 PENDING_TOP_LEVEL_IMPORTS = frozenset({
-    ("packs.readme", "siteguides"),
-    ("packs.scope", "siterender"),
+    ("sitegen.build", "archive_build"),
+    ("sitegen.build", "provenance_report"),
+    ("sitegen.build", "release_record"),
+    ("sitegen.config", "release_record"),
+    ("sitegen.dataexports", "provenance_report"),
+    ("sitegen.decorate", "release_record"),
+    ("sitegen.descriptions", "release_record"),
+    ("sitegen.getpages", "release_record"),
+    ("sitegen.guidepage", "release_record"),
+    ("sitegen.handheld", "build_port"),
+    ("sitegen.measurements", "measurement_records"),
+    ("sitegen.platformindex", "release_record"),
+    ("sitegen.provenance", "provenance_report"),
+    ("sitegen.publish", "release_record"),
+    ("sitegen.readme", "archive_build"),
+    ("sitegen.readme", "pr_checks"),
+    ("sitegen.readme", "release_record"),
+    ("sitegen.validate", "release_record"),
+    ("sitegen.versions", "release_record"),
+    ("sitegen.wanted", "archive_build"),
+    ("sitegen.whichpack", "release_record"),
 })
 
 

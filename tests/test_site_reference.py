@@ -32,6 +32,7 @@ it has not been generated.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import csv
 import io
@@ -51,8 +52,8 @@ import zipfile
 import runpy
 import urllib.error
 
-import generate_site
 from sitegen import apiitems
+from sitegen import cards
 from sitegen import config as sitegen_config
 from sitegen import crossref
 from sitegen import dataexports
@@ -65,6 +66,7 @@ from sitegen import platformindex
 from sitegen import platformpage
 from sitegen import provenance
 from sitegen import publish
+from sitegen import render
 from sitegen import wanted as sitewanted
 from model import systemnames
 from model.registry import list_registered_platforms, list_release_pack_platforms
@@ -74,7 +76,7 @@ from resolve.reconcile import HASH_FIELDS, _hash_values
 from resolve.categories import EntryCategories
 from sitegen.sources import launcher_ref_markdown, list_source
 import check_platform_folder
-import sitesources
+import core
 from sitegen import sources
 import release_record
 from core import upstream
@@ -322,7 +324,7 @@ class GapsPageNumbers(unittest.TestCase):
         self.assertEqual(gaps._missing_required_firmware(cov), 1)
 
     def test_headings_and_header(self):
-        source = Path(generate_site.__file__).read_text(encoding="utf-8")
+        source = script_source("generate_site.py")
         body = source[source.index("def generate_gap_analysis("):]
         body = body[:body.index("\ndef ", 10)]
         self.assertIn('"# What the packs do not hold"', body)
@@ -500,7 +502,7 @@ class TheExportsKeepWhatACheckNeeds(unittest.TestCase):
         self.assertEqual(flagged["zipped_file"], "")
 
     def test_the_csv_header_and_the_table_name_them(self):
-        source = Path(generate_site.__file__).read_text(encoding="utf-8")
+        source = script_source("generate_site.py")
         self.assertIn('"collection_path", "resolved_sha1", *ENTRY_EXPORT_FIELDS,', source)
         for field in dataexports.ENTRY_EXPORT_FIELDS:
             self.assertIn(f":{field}", source)
@@ -688,7 +690,7 @@ class EveryEnvelopeCarriesTheCommit(unittest.TestCase):
     """8.5: emulators/ and systems/ lacked `commit` (716 documents)."""
 
     def test_the_writers_pass_it(self):
-        source = Path(generate_site.__file__).read_text(encoding="utf-8")
+        source = script_source("generate_site.py")
         self.assertIn('str(db.get("generated_at") or _timestamp()), _source_commit(),\n        )\n'
                       "    clash", source)
         block = source[source.index("public_profiles = {"):source.index("pages = emulator_pages(")]
@@ -727,7 +729,7 @@ class ManifestsArePublished(unittest.TestCase):
         schema = json.loads((REPO_ROOT / "schemas" / "install-manifest.schema.json").read_text())
         for field in ("dest", "repo_path", "release_asset", "cores"):
             description = schema["$defs"]["file"]["properties"][field]["description"]
-            self.assertIn(f"| `{field}` | {generate_site._escape_tags(description)} |", page)
+            self.assertIn(f"| `{field}` | {render._escape_tags(description)} |", page)
         self.assertIn("## Platform manifests", page)
         self.assertIn("**Licence:**", page)
         self.assertIn("## Hosting, rate limits and caching", page)
@@ -837,7 +839,7 @@ class PlatformPagesLinkTheirSystemsAndEmulators(unittest.TestCase):
         self.assertNotEqual(link, "[beetle_psx](../emulators/beetle_psx.md)")
 
     def test_the_overview_column_uses_it(self):
-        source = Path(generate_site.__file__).read_text(encoding="utf-8")
+        source = script_source("generate_site.py")
         block = source[source.index("### Systems overview"):source.index("_render_platform_systems(by_system")]
         self.assertIn("_emulator_named_link(e, \"../\")", block)
         self.assertNotIn('", ".join(sys_emus[:3])', block)
@@ -859,7 +861,7 @@ class PlatformPagesLinkTheirSystemsAndEmulators(unittest.TestCase):
         sitegen_parts._list_pages("gaps-x", "T", "intro", [], [["| a |"]], moved,
                                   parent=("What the packs do not hold", "/gaps/"))
         self.assertIn('parent:\n  label: "What the packs do not hold"\n  link: "/gaps/"', moved["gaps-x"])
-        source = Path(generate_site.__file__).read_text(encoding="utf-8")
+        source = script_source("generate_site.py")
         self.assertIn('_parent_front_matter(("Cores by platform", "/cross-reference/"))', source)
         self.assertIn('parent=("Dump provenance", "/provenance/")', source)
 
@@ -882,7 +884,7 @@ class TablesFitTheirColumn(unittest.TestCase):
         row = next(line for line in table.splitlines() if "x.bin" in line)
         self.assertIn(f'<code title="{"b" * 32}">{"b" * 12}</code>', row)
         self.assertIn('<span class="rb-reason">expected md5 differs</span>', row)
-        source = Path(generate_site.__file__).read_text(encoding="utf-8")
+        source = script_source("generate_site.py")
         self.assertIn('expected = f"{algorithm} {short_hash(value)}"', source)
         self.assertIn("{_reason_cell(u['reason'])}", source)
 
@@ -980,7 +982,8 @@ class LookupRecordsUnderEveryHash(unittest.TestCase):
                              "files": [{"name": "bios.bin", "crc32": "c" * 8}]}}
         with mock.patch.object(lookup, "_console_system_names", return_value={}), \
                 mock.patch.object(lookup, "_lookup_system_name", return_value=None), \
-                mock.patch.object(generate_site, "emulator_card_page", side_effect=lambda k, a: k):
+                mock.patch.object(lookup, "emulator_card_page", side_effect=lambda k, a: k), \
+                mock.patch.object(cards, "emulator_card_page", side_effect=lambda k, a: k):
             return lookup.file_lookup_records(
                 db, coverages, profiles, [{"sha1": self.SHA1, "url": "/x"}])
 
@@ -1152,7 +1155,7 @@ class SourceLinksOnlyWhereTheFileIs(unittest.TestCase):
         profile = {"source": "https://github.com/o/r", "source_commit": "e" * 40,
                    "files": [{"source_ref": "src/a.c:5"}]}
         with mock.patch.object(sources, "_cached_tree", return_value=None), \
-                mock.patch.object(sitesources.upstream, "list_directory",
+                mock.patch.object(core.upstream, "list_directory",
                                   side_effect=upstream.UpstreamError("HTTP 404")):
             held, unread = sources.build_source_paths({"p": profile}, [TMP])
         self.assertEqual(held, {})
@@ -1391,7 +1394,8 @@ class LookupCountsEmulatorsLikeTheCard(unittest.TestCase):
             {"name": "bios.bin", "md5": "b" * 32}]}}}}}
         with mock.patch.object(lookup, "_console_system_names", return_value={}), \
                 mock.patch.object(lookup, "_lookup_system_name", return_value=None), \
-                mock.patch.object(generate_site, "emulator_card_page", side_effect=lambda k, a: k):
+                mock.patch.object(lookup, "emulator_card_page", side_effect=lambda k, a: k), \
+                mock.patch.object(cards, "emulator_card_page", side_effect=lambda k, a: k):
             return lookup.file_lookup_records(
                 db, coverages, {}, [{"sha1": self.SHA1, "url": "/x"}], None,
                 FakeConsumers(self.SHA1))

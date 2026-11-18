@@ -32,6 +32,7 @@ setup guides or the generator that writes the page a link opens.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import fnmatch
 import json
@@ -1092,7 +1093,7 @@ class FaqAnswersLeadSomewhere(unittest.TestCase):
 
     def setUp(self):
         self.text = _wiki("faq.md")
-        self.generator = (REPO_ROOT / "scripts" / "generate_site.py").read_text(encoding="utf-8")
+        self.generator = script_source("generate_site.py")
 
     def test_ios_goes_to_the_iphone_section(self):
         section = _flat(_section(self.text, "A setup is not in the list"))

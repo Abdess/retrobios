@@ -18,10 +18,10 @@ import unittest
 from html.parser import HTMLParser
 from pathlib import Path
 
-import generate_site
 from sitegen import cards
 from sitegen import platformfiles
 from sitegen import platformpage
+from sitegen import sources
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -173,7 +173,7 @@ class ReferencesNameTheirRoleOnce(unittest.TestCase):
             self.assertIn(f"**{word}**", platformfiles.ROLE_LEGEND)
 
     def test_other_pages_keep_the_role_after_each_reference(self):
-        text = generate_site._source_ref_markdown(self.PROFILE, self.REFS)
+        text = sources._source_ref_markdown(self.PROFILE, self.REFS)
         self.assertEqual(text.count("(emulator code, libretro port)"), 2)
         self.assertIn("`src/c.c:4` (upstream emulator)", text)
 

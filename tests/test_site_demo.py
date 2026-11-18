@@ -12,6 +12,7 @@ terminal recording under the others.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import json
 import re
@@ -192,12 +193,11 @@ def _tab_bodies(markdown: str) -> dict[str, str]:
 
 class TheTwoPagesShowIt(unittest.TestCase):
     def test_home_shows_the_terminal_recording(self):
-        import generate_site
         from sitegen import home
 
         tag = home.install_demo()[0]
         self.assertIn(f'description="{sitegen_readme.demo_description()}"', tag)
-        source = Path(generate_site.__file__).read_text(encoding="utf-8")
+        source = script_source("generate_site.py")
         body = source[source.index("def generate_home("):]
         body = body[:body.index("\ndef ", 1)]
         self.assertIn("*install_demo(),", body)

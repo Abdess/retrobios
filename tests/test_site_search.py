@@ -20,6 +20,7 @@ built, the site.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import ast
 import re
@@ -37,7 +38,6 @@ from sitegen import getpages
 from sitegen import structured
 from sitegen import starlight as sitestarlight
 from sitegen import validate
-from sitegen import structured
 from model.registry import list_registered_platforms
 from model.profiles import load_emulator_profiles
 from tests.test_site_nav import ANCHORS, _nav, _present
@@ -154,7 +154,7 @@ class FieldsFromFrontMatter(unittest.TestCase):
         self.assertNotRegex(text, r">[^<]*bios missing[^<]*<")
 
     def test_no_search_word_is_typed_in_the_module(self) -> None:
-        source = (REPO_ROOT / "scripts" / "sitestarlight.py").read_text(encoding="utf-8")
+        source = (REPO_ROOT / "scripts" / "sitegen" / "starlight.py").read_text(encoding="utf-8")
         for words in ("bios not found", "mame version", "WonderSwan"):
             self.assertNotIn(words, source)
 
@@ -177,7 +177,7 @@ class FindOrCheckAFile(unittest.TestCase):
         self.assertIn('data-pagefind-meta="terms:check dump md5 check"', text)
 
     def test_the_sidebar_names_it_as_its_title(self) -> None:
-        source = (REPO_ROOT / "scripts" / "generate_site.py").read_text(encoding="utf-8")
+        source = script_source("generate_site.py")
         self.assertIn('{"Find or check a file": "files/index.md"}', source)
         self.assertNotIn('{"Find a file": "files/index.md"}', source)
 
@@ -327,7 +327,7 @@ class Descriptions(unittest.TestCase):
         self.assertTrue(text.startswith("Common questions: Are BIOS files needed?"))
 
     def test_a_written_description_wins(self) -> None:
-        source = (REPO_ROOT / "scripts" / "generate_site.py").read_text(encoding="utf-8")
+        source = script_source("generate_site.py")
         self.assertIn('authored.get("description") or _page_description(', source)
 
     def test_the_check_counts_templates(self) -> None:
@@ -409,7 +409,7 @@ class ConsoleWordsReachTheConsole(unittest.TestCase):
         self.assertIn('data-pagefind-meta="terms:SNES BIOS"', text)
 
     def test_no_search_word_is_typed_in_the_generator(self):
-        tree = ast.parse((REPO_ROOT / "scripts" / "sitestarlight.py").read_text(encoding="utf-8"))
+        tree = ast.parse((REPO_ROOT / "scripts" / "sitegen" / "starlight.py").read_text(encoding="utf-8"))
         docstrings = {id(node.value) for node in ast.walk(tree) if isinstance(node, ast.Expr)}
         strings = {node.value.casefold() for node in ast.walk(tree)
                    if isinstance(node, ast.Constant) and isinstance(node.value, str)

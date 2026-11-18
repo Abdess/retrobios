@@ -40,7 +40,8 @@ from unittest import mock
 import zipfile
 import json
 
-import generate_site as gs
+from model import collection
+import sitegen
 from sitegen import cards as sitegen_cards
 from sitegen import consolecards
 from sitegen import decorate
@@ -304,8 +305,8 @@ class TheSystemsIndexListsConsoles(unittest.TestCase):
     be known to be under Sony."""
 
     def test_one_row_per_console_by_its_name(self):
-        gs.reset_console_pages()
-        self.addCleanup(gs.reset_console_pages)
+        siterender.reset_console_pages()
+        self.addCleanup(siterender.reset_console_pages)
         groups = {
             "Sony": {"PlayStation": [_sony_file("a.bin", "a")], "PlayStation 2": [_sony_file("b.bin", "b")]},
             "Other": {"ScummVM": [_sony_file("c.bin", "c")]},
@@ -536,7 +537,9 @@ class CardsSayWhichReleaseTheSetMatches(unittest.TestCase):
     def card(self) -> str:
         f = {"name": "set.zip", "sha1": "e" * 40, "md5": "e" * 32, "size": 4,
              "path": str(self.path)}
-        with mock.patch.object(sitegen_cards, "_romset_releases", return_value=self.releases):
+        with mock.patch.object(sitegen_cards, "_romset_releases", return_value=self.releases), \
+                mock.patch.object(consolecards, "_romset_releases", return_value=self.releases), \
+                mock.patch.object(startwith, "_romset_releases", return_value=self.releases):
             return "\n".join(sitegen_cards._system_file_card(f, _consumers_with_db({})))
 
     def test_the_matching_releases_as_runs(self) -> None:
@@ -557,7 +560,9 @@ class CardsSayWhichReleaseTheSetMatches(unittest.TestCase):
 
     def test_a_page_of_sets_links_the_version_answer(self) -> None:
         f = {"name": "set.zip", "sha1": "e" * 40, "path": "bios/SNK/Neo Geo/set.zip"}
-        with mock.patch.object(sitegen_cards, "_romset_releases", return_value=self.releases):
+        with mock.patch.object(sitegen_cards, "_romset_releases", return_value=self.releases), \
+                mock.patch.object(consolecards, "_romset_releases", return_value=self.releases), \
+                mock.patch.object(startwith, "_romset_releases", return_value=self.releases):
             page = systempages.generate_system_page("SNK", {"Neo Geo": [f]}, _consumers_with_db({}))
         self.assertIn("MAME and FBNeo sets must match the emulator's version. [Which version "
                       f"each core reads]({sitegen_cards.ROMSET_FAQ}).", page)
@@ -653,7 +658,9 @@ class InstallBoxesCountTowardTheSummary(unittest.TestCase):
             return ["x" * box] if console == "Boxed" else []
 
         with mock.patch.object(sitegen_install, "_console_install_block", side_effect=install), \
-                mock.patch.object(consolecards, "SYSTEM_SUMMARY_HTML", 50_000):
+                mock.patch.object(systempages, "_console_install_block", side_effect=install), \
+                mock.patch.object(consolecards, "SYSTEM_SUMMARY_HTML", 50_000), \
+                mock.patch.object(systempages, "SYSTEM_SUMMARY_HTML", 50_000):
             return systempages.system_pages("Maker", self.consoles, _consumers_with_db({}), budget=30_000)
 
     def test_a_section_with_a_heavy_install_box_moves(self) -> None:
@@ -845,7 +852,7 @@ class CardsNameEmulatorsByName(unittest.TestCase):
     def test_no_built_card_link_reads_an_id(self) -> None:
         if not (DIST / "systems").is_dir():
             self.skipTest("site not built")
-        profiles = gs._profiles_on_disk()
+        profiles = collection._profiles_on_disk()
         bad = set()
         for page in (DIST / "systems").glob("*/index.html"):
             for emulator, text in re.findall(
@@ -860,7 +867,7 @@ class CardsNameEmulatorsByName(unittest.TestCase):
 class PartPagesKnowWhereTheyAre(unittest.TestCase):
     def tearDown(self) -> None:
         # system_pages records where consoles went, for every later page.
-        gs.reset_console_pages()
+        siterender.reset_console_pages()
 
     """6.7: 128 system pages had no parent, parts were "part 3 of 5"."""
 
@@ -884,7 +891,7 @@ class PartPagesKnowWhereTheyAre(unittest.TestCase):
         files = [_game_boy_file(f"rom{i:02}.bin", "0123456789"[i], f"bios/Sony/PlayStation 2/rom{i:02}.bin")
                  for i in range(10)]
         consumers = _consumers_by_system({})
-        with gs.markup.using("mkdocs"):
+        with sitegen.markup.using("mkdocs"):
             one = sum(len(line) + 1 for line in sitegen_cards._system_file_card(files[0], consumers))
         pages = systempages.system_pages("Sony", {"PlayStation 2": files}, consumers, budget=one * 7)
         parts = [stem for stem in pages if stem != "sony"]
@@ -909,7 +916,7 @@ def _consoles(page: str) -> list[str]:
 class ConsolesFieldNamesMachinesOnce(unittest.TestCase):
     def tearDown(self) -> None:
         # system_pages records where consoles went, for every later page.
-        gs.reset_console_pages()
+        siterender.reset_console_pages()
 
     """The consoles search field: only machine sections, and a console
     with a page of its own is that page's, or "dolphin" found Other and
@@ -918,14 +925,14 @@ class ConsolesFieldNamesMachinesOnce(unittest.TestCase):
     def test_no_emulator_folder_is_a_console(self) -> None:
         for maker in ("Other", "Game Engines"):
             page = systempages.system_pages(maker, {"dolphin": [_game_boy_file("a.bin", "a")]}, _consumers_by_system({}))
-            self.assertEqual(_consoles(page[gs._slug(maker)][0]), [], maker)
+            self.assertEqual(_consoles(page[collection._slug(maker)][0]), [], maker)
 
     def test_a_console_with_its_own_page_is_left_to_it(self) -> None:
         big = [_game_boy_file(f"r{i:02}.bin", "0123456789"[i], f"bios/Sega/Saturn/r{i:02}.bin")
                for i in range(10)]
         small = [_game_boy_file("pico.bin", "p", "bios/Sega/Pico/pico.bin")]
         consumers = _consumers_by_system({})
-        with gs.markup.using("mkdocs"):
+        with sitegen.markup.using("mkdocs"):
             one = sum(len(line) + 1 for line in sitegen_cards._system_file_card(big[0], consumers))
         # Sega splits by size. Every Sony console has a page whatever its size.
         pages = systempages.system_pages("Sega", {"Saturn": big, "Pico": small},
@@ -933,7 +940,7 @@ class ConsolesFieldNamesMachinesOnce(unittest.TestCase):
         self.assertIn("sega-saturn", pages)
         self.assertEqual(_consoles(pages["sega"][0]), ["Pico"])
         self.assertEqual(_consoles(pages["sega-saturn"][0]), ["Saturn"])
-        self.addCleanup(gs.reset_console_pages)
+        self.addCleanup(siterender.reset_console_pages)
         sony = systempages.system_pages("Sony", {"PlayStation": big, "PocketStation": small},
                                consumers, budget=one * 12)
         self.assertEqual(_consoles(sony["sony"][0]), [])

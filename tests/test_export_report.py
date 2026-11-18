@@ -8,6 +8,7 @@ file from and no list to check the diff against.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import re
 import tempfile
@@ -95,7 +96,7 @@ class CorrectedFilesPage(unittest.TestCase):
         entry named it: a maintainer had to scrape the HTML."""
         for platform in ("recalbox", "retropie"):
             self.assertIn(f'href="api/v1/exports/{platform}.json"', self.page)
-        source = (ROOT / "scripts" / "generate_site.py").read_text(encoding="utf-8")
+        source = script_source("generate_site.py")
         publish = source[source.index("def _publish_manifests("):]
         publish = publish[:publish.index("\ndef ")]
         self.assertIn('(_REPO_ROOT / "exports").glob("*.json")', publish)
@@ -118,7 +119,7 @@ class CorrectedFilesPage(unittest.TestCase):
         self.assertIn("export_native.py --all --fetch", generate_exports_page([], {}))
 
     def test_site_has_the_page_in_its_nav(self):
-        source = (ROOT / "scripts" / "generate_site.py").read_text(encoding="utf-8")
+        source = script_source("generate_site.py")
         self.assertIn('{"Updated platform files": "exports.md"}', source)
         workflow = (ROOT / ".github" / "workflows" / "deploy-site.yml").read_text(encoding="utf-8")
         self.assertIn('"exports/**"', workflow)
