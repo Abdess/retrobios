@@ -393,7 +393,7 @@ class TheCopyKeepsTheCheckoutOutOfReach(unittest.TestCase):
         checkout = scratch_checkout()
         proc = subprocess.run(
             [sys.executable, "-c", "import sys; sys.path.insert(0, 'scripts'); "
-             "import generate_site; print(generate_site._REPO_ROOT)"],
+             "from sitegen import config; print(config._REPO_ROOT)"],
             capture_output=True, text=True, cwd=str(checkout), timeout=300, check=True,
         )
         self.assertEqual(Path(proc.stdout.strip()), checkout.resolve())

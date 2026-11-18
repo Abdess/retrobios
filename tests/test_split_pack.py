@@ -15,6 +15,7 @@ parts extracted into one folder are the pack.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import contextlib
 import io
@@ -292,6 +293,8 @@ class PartsAreExplainedWhereTheyAreDownloaded(unittest.TestCase):
     )
 
     def _text(self, relative: str) -> str:
+        if relative.startswith("scripts/"):
+            return script_source(relative.removeprefix("scripts/"))
         return (REPO_ROOT / relative).read_text(encoding="utf-8")
 
     def test_every_page_names_the_parts(self):

@@ -16,7 +16,6 @@ import unittest
 from sitegen import cards
 from sitegen import emulatorpage
 from sitegen import nav as sitegen_nav
-from sitegen import parts as sitegen_parts
 from sitegen import platformfiles
 from sitegen import systempages
 from sitegen import starlight as sitestarlight
@@ -119,13 +118,13 @@ class APlatformSystemOverItsBudgetMoves(unittest.TestCase):
         files = [{"name": f"f{i:04d}.zip", "status": "ok"} for i in range(40)]
         config = {("arcade", f["name"]): [{"name": f["name"], "md5": "a" * 32}] for f in files}
         moved: dict[str, str] = {}
-        budget = sitegen_parts.PLATFORM_SECTION_BUDGET
-        sitegen_parts.PLATFORM_SECTION_BUDGET = 5
+        budget = platformfiles.PLATFORM_SECTION_BUDGET
+        platformfiles.PLATFORM_SECTION_BUDGET = 5
         try:
             lines = platformfiles._render_platform_systems(
                 {"arcade": files}, config, {}, ("deck", "Deck"), moved)
         finally:
-            sitegen_parts.PLATFORM_SECTION_BUDGET = budget
+            platformfiles.PLATFORM_SECTION_BUDGET = budget
         text = "\n".join(lines)
         self.assertIn("{ #arcade }", text)
         self.assertIn("](deck-arcade.md)", text)

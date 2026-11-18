@@ -1063,7 +1063,7 @@ class CatalogRatioRegressions(unittest.TestCase):
 
     def test_no_surface_counts_matches_on_its_own(self):
         for relative in self._SURFACES:
-            tree = ast.parse((ROOT / relative).read_text(encoding="utf-8"))
+            tree = ast.parse(script_source(relative.removeprefix("scripts/")))
             inline = [
                 node.lineno
                 for node in ast.walk(tree)
