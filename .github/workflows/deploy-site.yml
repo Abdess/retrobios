@@ -93,6 +93,7 @@ on:
       # The site serves install.sh and install.ps1 pinned to install.py
       # of the commit it is built from (scripts/sitebootstrap.py).
       - "install.py"
+      - "installer/**"
       - "install.sh"
       - "install.ps1"
       # The handheld launchers it serves are built from ports/ at the same

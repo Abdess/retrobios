@@ -18,7 +18,7 @@ version = "1.0.0"
 description = "BIOS collection manager for retrogaming platforms"
 # install.py is the only entry point a user runs before cloning, and both
 # bootstraps accept 3.8, so the floor stays where the bootstraps put it. That
-# floor covers install.py alone: the build scripts under scripts/ need 3.9
+# floor covers install.py and its installer/ source: the build scripts need 3.9
 # (common.py, which every build script imports, checks it), and CI runs the
 # test suite on 3.12.
 requires-python = ">=3.8"
@@ -33,7 +33,7 @@ dev = [
     "jsonschema[format-nongpl]>=4.23",
     "markdown>=3.7",
     # The installer's full-screen tests: pyte reads the screen back,
-    # hypothesis fuzzes the key decoder, vermin holds install.py to 3.8.
+    # hypothesis fuzzes the key decoder, vermin holds the installer to 3.8.
     "pyte>=0.8.2",
     "hypothesis>=6.100",
     "vermin>=1.9",
@@ -59,8 +59,10 @@ Repository = "https://github.com/Abdess/retrobios"
 # has installed: yaml, jsonschema and the rest read as Any everywhere. The
 # code carries no type error and CI fails on any.
 [tool.mypy]
-files = ["install.py", "scripts"]
-# The oldest target mypy 2 checks against. install.py's own floor, 3.8, is
+# installer/ is the source of install.py and both are checked: the modules one
+# by one, and the file they are joined into, which is the one people run.
+files = ["install.py", "installer", "scripts"]
+# The oldest target mypy 2 checks against. The installer's own floor, 3.8, is
 # held by vermin (pr_checks.py, validate.yml).
 python_version = "3.10"
 explicit_package_bases = true
@@ -81,7 +83,7 @@ extend-exclude = ["bios", "tmp", "website", ".cache", "dist", "data"]
 select = ["E", "F", "W", "B", "C90", "SIM", "PERF", "UP", "RET", "PIE", "PLR09", "PLW1510", "RUF100"]
 ignore = [
     "E501",    # long lines are wrapped by hand where it reads better
-    "UP006", "UP007", "UP035", "UP045",  # install.py keeps 3.8 spellings
+    "UP006", "UP007", "UP035", "UP045",  # the installer keeps 3.8 spellings
     "UP036",   # the runtime floor guards (sys.version_info < (3, 9)) are the point
     "SIM300",  # an ALL_CAPS name is not always a constant (_SYSTEM_ROOT)
     "SIM108",  # a ternary is not always clearer than an if block
@@ -104,5 +106,6 @@ max-returns = 10
 
 [tool.ruff.lint.per-file-ignores]
 "install.py" = ["UP"]
+"installer/*.py" = ["UP"]
 # Shell fixtures inside string literals keep the tabs the real files have.
 "tests/test_launchers_*.py" = ["E101"]

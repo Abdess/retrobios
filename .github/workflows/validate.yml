@@ -13,8 +13,10 @@ on:
       - "scripts/**"
       - "tests/**"
       # The bootstraps pin install.py's SHA-256 and a test enforces the pin,
-      # so editing one without the other has to fail the PR.
+      # so editing one without the other has to fail the PR. install.py is
+      # built from installer/, and a step fails when the two differ.
       - "install.py"
+      - "installer/**"
       - "install.sh"
       - "install.ps1"
       # The handheld port bundles install.py and its tests read both.
@@ -49,6 +51,7 @@ on:
       - "scripts/**"
       - "tests/**"
       - "install.py"
+      - "installer/**"
       - "install.sh"
       - "install.ps1"
       - "ports/**"
@@ -187,6 +190,11 @@ jobs:
           pip install "ruff==0.17.3"
           ruff check --output-format=github .
 
+      # install.py is generated from the installer/ package: an edit made to
+      # one side only fails here.
+      - name: Check that install.py is the one installer/ builds
+        run: python scripts/build_installer.py --check
+
   # A profile written from a clone can cite lines that do not hold the value
   # it declares, and schemas and tests pass it. Each profile a change adds is
   # confronted with its upstream, both roads into main. An edited profile is
@@ -248,7 +256,8 @@ jobs:
       # markdown: the site validation test renders a wiki line to prove the
       # heading guard's premise, and skipped on every run without it. pyte
       # reads the installer's full screen back in its end-to-end tests,
-      # hypothesis fuzzes its key decoder, and vermin holds install.py to 3.8.
+      # hypothesis fuzzes its key decoder, and vermin holds install.py and its
+      # installer/ source to 3.8.
       # setuptools reads pyproject.toml for the packaging guard, and uv builds
       # the PyPI package the way a release builds it.
       - name: Install dependencies
@@ -259,8 +268,8 @@ jobs:
       - name: Install the screen tests' dependency for Python 3.8
         run: python3.8 -m pip install "pyte==0.8.2"
 
-      - name: Hold install.py to Python 3.8
-        run: vermin --no-tips -t=3.8- --violations install.py
+      - name: Hold the installer to Python 3.8
+        run: vermin --no-tips -t=3.8- --violations install.py installer
 
       # The handheld launchers' test runs shellcheck and fails under CI
       # without it. The Ubuntu image ships it: this names it if one stops.

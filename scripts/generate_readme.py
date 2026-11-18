@@ -910,6 +910,14 @@ Full walkthrough: [adding a platform]({link("wiki/adding-a-platform")}).
 
 Full walkthrough: [profiling guide]({link("wiki/profiling")}).
 
+## Change the installer
+
+`install.py` is built from the `installer/` package, one module per concern:
+edit the module, then run `python scripts/build_installer.py` and
+`python scripts/pin_installer.py`. CI fails when `install.py` is not the file
+the package builds. [Changing the installer]({link("wiki/installer")}#changing-the-installer)
+lists what else a change rewrites.
+
 ## File conventions
 
 - `bios/Manufacturer/Console/filename` for canonical files
