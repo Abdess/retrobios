@@ -19,8 +19,9 @@ from pathlib import Path
 import sitemarkup as markup
 from model.safeparse import require_yaml
 from sitebootstrap import PS1_NAME, SH_NAME
+from core.paths import REPO_ROOT
 
-PLATFORMS_DIR = Path(__file__).resolve().parent.parent / "platforms"
+PLATFORMS_DIR = REPO_ROOT / "platforms"
 GUIDES_FILE = PLATFORMS_DIR / "_guides.yml"
 
 

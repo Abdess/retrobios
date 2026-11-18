@@ -39,6 +39,7 @@ from resolve.review import LARGE_FILE_ISSUE_URL
 from model.largefiles import LARGE_FILES_CACHE, load_registered_paths
 import pr_checks
 from packs.coverage import verify_platform
+from core.paths import REPO_ROOT
 
 
 def _installer_words() -> ModuleType:
@@ -46,7 +47,7 @@ def _installer_words() -> ModuleType:
     README named a line menu the one-liner never opens."""
     import importlib.util
 
-    path = Path(__file__).resolve().parent.parent / "install.py"
+    path = REPO_ROOT / "install.py"
     spec = importlib.util.spec_from_file_location("install", path)
     if spec is None or spec.loader is None:
         raise ImportError(f"cannot load {path}")
@@ -57,7 +58,7 @@ def _installer_words() -> ModuleType:
 
 # The repository's profiles wherever the script is run from: a bare
 # "emulators" read the working directory, and a run elsewhere counted 0 cores.
-_EMULATORS_DIR = str(Path(__file__).resolve().parent.parent / "emulators")
+_EMULATORS_DIR = str(REPO_ROOT / "emulators")
 
 
 def compute_coverage(
@@ -132,7 +133,7 @@ def compute_coverage(
     }
 
 
-_REPO = Path(__file__).resolve().parent.parent
+_REPO = REPO_ROOT
 # The site and the README read the same coverage: the first generator to run
 # stores it here and the second reads it back, instead of verifying every
 # platform twice (about a minute of the site build).
@@ -451,7 +452,7 @@ def format_size(size: int) -> str:
 
 SITE_URL = "https://abdess.github.io/retrobios/"
 # The installer demo (scripts/make_demo.py): the recording and what it shows.
-DEMO_DIR = Path(__file__).resolve().parent.parent / "docs_assets" / "demo"
+DEMO_DIR = REPO_ROOT / "docs_assets" / "demo"
 DEMO_GIF = "docs_assets/demo/install.gif"
 REPO_PATH = "../.."
 REPO = "Abdess/retrobios"

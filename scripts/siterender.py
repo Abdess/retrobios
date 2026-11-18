@@ -5,16 +5,16 @@ from __future__ import annotations
 import re
 import urllib.parse
 from collections.abc import Callable
-from pathlib import Path
 
 import siteinputs
 import sitemarkup as markup
+from core.paths import REPO_ROOT
 
 
 WIKI_SRC_DIR = "wiki"  # manually maintained wiki sources
 SYSTEM_ICON_BASE = "https://raw.githubusercontent.com/libretro/retroarch-assets/master/xmb/systematic/png"
 # Local copies of the upstream icons, named as upstream names them.
-ICON_DIR = Path(__file__).resolve().parent.parent / "docs_assets" / "system-icons"
+ICON_DIR = REPO_ROOT / "docs_assets" / "system-icons"
 
 # Icon names the site holds a copy of. A name mapped to False has none.
 _icon_available: dict[str, bool] = {}
@@ -793,7 +793,7 @@ def set_console_sections(
 
 
 _sections_installed = [False]
-_REPO_ROOT = Path(__file__).resolve().parent.parent
+_REPO_ROOT = REPO_ROOT
 
 
 def _ensure_console_sections() -> None:

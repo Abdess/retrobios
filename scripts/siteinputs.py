@@ -11,7 +11,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+from core.paths import REPO_ROOT
+
+ROOT = REPO_ROOT
 
 
 @dataclass(frozen=True)

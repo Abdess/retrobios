@@ -40,6 +40,7 @@ from typing import ClassVar
 
 sys.path.insert(0, os.path.dirname(__file__))
 from core.cli import run_cli
+from core.paths import REPO_ROOT
 
 SITE = "https://abdess.github.io"
 BASE = "/retrobios/"
@@ -400,7 +401,7 @@ def page_markdown(html: str, page_url: str) -> str:
     return converter.markdown()
 
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = REPO_ROOT
 
 
 def build_stamp() -> dict[str, str]:

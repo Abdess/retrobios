@@ -47,8 +47,8 @@ from core.github import github_token
 from model.database import load_database
 from model.profiles import load_emulator_profiles
 from core.cli import run_cli
+from core.paths import REPO_ROOT
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
 CONFIG = Path(os.environ.get("RETROBIOS_CONFIG", Path.home() / ".config" / "retrobios"))
 SITE_PROPERTY = "https://abdess.github.io/retrobios/"
 GOATCOUNTER = "https://retrobios.goatcounter.com/api/v0"

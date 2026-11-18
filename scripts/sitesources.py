@@ -26,6 +26,7 @@ from model.sourceref import (
     source_ref_values,
     split_source_ref,
 )
+from core.paths import REPO_ROOT
 
 
 def _repo_pins(profile: dict, field: str, label: str) -> list[tuple[str, str, str]]:
@@ -167,8 +168,8 @@ def _source_permalink(repo: upstream.Repo, pin: str, path: str,
 # writes SOURCE_PATHS. The pages read that file: the deploy has no tree
 # cache, and a citation it could not check was linked into whichever
 # repository the profile declared, 30 of them to a 404.
-TREE_CACHE = Path(__file__).resolve().parent.parent / upstream.CACHE_DIR
-SOURCE_PATHS = (Path(__file__).resolve().parent.parent
+TREE_CACHE = REPO_ROOT / upstream.CACHE_DIR
+SOURCE_PATHS = (REPO_ROOT
                 / "website" / "src" / "data" / "source-paths.json")
 
 

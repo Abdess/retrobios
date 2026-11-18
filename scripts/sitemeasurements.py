@@ -35,8 +35,9 @@ import measurement_records as mr
 import sitemarkup as markup
 from core.artifacts import json_text, write_if_changed
 from siterender import _escape_tags
+from core.paths import REPO_ROOT
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = REPO_ROOT
 REPO = "https://github.com/Abdess/retrobios"
 EXPLORER_PAGE = "measurements.md"
 METHOD_PAGE = "wiki/measurements.md"

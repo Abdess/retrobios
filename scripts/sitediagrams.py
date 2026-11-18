@@ -43,8 +43,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import siteinputs
 import sitemarkup as markup
+from core.paths import REPO_ROOT
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = REPO_ROOT
 
 PLACEHOLDER = re.compile(r"(?m)^([ \t]*)<!--\s*image:\s*([A-Za-z0-9_-]+)\s*-->[ \t]*$")
 PLACEHOLDER_ANYWHERE = re.compile(r"<!--\s*image:\s*([A-Za-z0-9_-]+)\s*-->")

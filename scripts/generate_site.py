@@ -169,6 +169,7 @@ from siterender import (
     _icon_name,
     prime_system_icons,
 )
+from core.paths import REPO_ROOT
 
 yaml = require_yaml()
 
@@ -3547,7 +3548,7 @@ PLATFORM_REFERENCE_BUDGET = 600
 # gaps-files-to-source-7.md -> gaps.md. When a budget or a list changes, a
 # part can fold back or the list shrink, and its address then redirects to
 # that page instead of ending on the 404 page.
-PUBLISHED_PARTS_FILE = (Path(__file__).resolve().parent.parent
+PUBLISHED_PARTS_FILE = (REPO_ROOT
                         / "website" / "src" / "data" / "published-parts.json")
 
 
@@ -5010,7 +5011,7 @@ def generate_files_page() -> str:
     ])
 
 
-_REPO_ROOT = Path(__file__).resolve().parent.parent
+_REPO_ROOT = REPO_ROOT
 
 
 def data_directory_members(install_dir: Path = _REPO_ROOT / "install") -> dict[str, dict[str, dict]]:
@@ -12444,7 +12445,7 @@ def _build_file_consumers(db: dict, coverages: dict, profiles: dict) -> FileCons
     consumers = FileConsumers(db, build_zip_contents_index(db))
     consumers.add_platforms({name: cov["config"] for name, cov in coverages.items()})
     consumers.add_emulators(profiles)
-    consumers.add_manifests(Path(__file__).resolve().parent.parent / "install")
+    consumers.add_manifests(REPO_ROOT / "install")
     return consumers
 
 

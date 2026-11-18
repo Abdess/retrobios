@@ -24,8 +24,8 @@ from pathlib import Path
 import sitemarkup as markup
 from core.artifacts import write_bytes_atomic
 from build_port import ARCHIVES, BATOCERA_ZIP, MUOS_APP, PORT_ZIP, TOOLS_ZIP, build_archive
+from core.paths import REPO_ROOT
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
 # Below the site's root: get/handheld/RetroBIOS.zip.
 SERVED_DIR = "get/handheld"
 # The page of the systems no registered platform answers for. It shares

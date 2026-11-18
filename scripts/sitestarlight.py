@@ -21,6 +21,8 @@ from dataclasses import dataclass, field
 from html import unescape
 from pathlib import Path, PurePosixPath
 
+from core.paths import REPO_ROOT
+
 BASE = "/retrobios/"
 SITE_URL = "https://abdess.github.io/retrobios/"
 
@@ -336,7 +338,7 @@ def og_section(rel: str, level: str) -> str:
 
 # Sharing cards of their own, made by scripts/make_og_cards.py: one per
 # platform page, titled with the platform's name.
-OG_DIR = Path(__file__).resolve().parent.parent / "docs_assets" / "og"
+OG_DIR = REPO_ROOT / "docs_assets" / "og"
 
 
 # An emulator page's card is that of the maker of the first system it runs,

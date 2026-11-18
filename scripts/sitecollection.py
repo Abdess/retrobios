@@ -9,11 +9,8 @@ bios folder comes from siteinputs, never the working directory.
 from __future__ import annotations
 
 import functools
-import os
-import sys
 from dataclasses import dataclass
 
-sys.path.insert(0, os.path.dirname(__file__))
 import siteinputs
 from model.composition import GAME_DATA_TOPS
 from model.profiles import load_emulator_profiles
