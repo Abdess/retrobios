@@ -10,10 +10,11 @@ from pathlib import Path
 from typing import TYPE_CHECKING, TypedDict
 
 from core.hashing import compute_hashes
+from core.options import reject_unknown
 from model.declarations import declared_root
 from model.profiles import entry_system_ids, installed_data_refs
 from model.systems import _norm_system_id
-from packs.archive import PackRecord, _add_pack_member, _reject_unknown
+from packs.archive import PackRecord, _add_pack_member
 from packs.datadirs import cache_lock
 from packs.extras import prefixed_destination
 from packs.paths import MEDIA_MARKER, _has_path_conflict, _register_path, lands_on_android
@@ -204,7 +205,7 @@ def _data_directory_members(
     ``required_only`` leaves out a tree declared ``required: false``, one the
     core runs without, as it leaves out such a file.
     """
-    _reject_unknown("_data_directory_members", options, _TreeWalkOptions.__optional_keys__)
+    reject_unknown("_data_directory_members", options, _TreeWalkOptions.__optional_keys__)
     refs_out = options.get("refs_out")
     reclaim = options.get("reclaim")
     required_only = options.get("required_only", False)

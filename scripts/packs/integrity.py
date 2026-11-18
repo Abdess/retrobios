@@ -24,6 +24,7 @@ import zlib
 import sys
 from resolve.cores import filter_systems_by_target
 from core.hashing import md5_composite_of, parse_md5_list
+from core.options import reject_unknown
 import io
 from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config
@@ -39,7 +40,7 @@ from resolve.gamedata import without_game_data
 from resolve.cores import resolve_platform_cores
 from core.paths import sanitize_pack_path
 import zipfile
-from collections.abc import Callable, Mapping
+from collections.abc import Callable
 
 # Imported at run time where typing has it: a test reads the signature of
 # verify_pack_against_platform with its annotations evaluated.
@@ -739,13 +740,6 @@ class _BaselineCount:
     decl_by_member: dict[str, list[dict]] = field(default_factory=dict)
 
 
-def _reject_unknown(function: str, options: Mapping[str, object], known: frozenset[str]) -> None:
-    """Refuse a keyword the options do not declare, as a named parameter would."""
-    for key in options:
-        if key not in known:
-            raise TypeError(f"{function}() got an unexpected keyword argument '{key}'")
-
-
 def _cut_config(
     platform_name: str,
     platforms_dir: str,
@@ -1044,7 +1038,7 @@ def verify_pack_against_platform(
     holds no file for that are a game's data or that no core the platform
     runs opens. verify.py counts them apart from firmware.
     """
-    _reject_unknown(
+    reject_unknown(
         "verify_pack_against_platform", options, PlatformCheckOptions.__optional_keys__
     )
     opts = _PlatformCheckSettings(**options)

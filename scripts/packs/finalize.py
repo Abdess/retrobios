@@ -14,9 +14,10 @@ from pathlib import Path
 from typing import TYPE_CHECKING, TypedDict
 
 from core.artifacts import set_plain_mode
+from core.options import reject_unknown
 from model.registry import list_registered_platforms
 from model.targets import load_target_config
-from packs.archive import _reject_unknown, _write_generated_member
+from packs.archive import _write_generated_member
 from packs.integrity import generate_sha256sums, verify_pack, verify_pack_against_platform
 from packs.naming import _expected_pack_names, _narrows_contents, _pack_archives
 from packs.scope import annotate_pack_systems
@@ -182,7 +183,7 @@ def verify_and_finalize_packs(
 
     Returns True if all packs pass verification.
     """
-    _reject_unknown("verify_and_finalize_packs", options, FinalizeOptions.__optional_keys__)
+    reject_unknown("verify_and_finalize_packs", options, FinalizeOptions.__optional_keys__)
     opts = _FinalizeSettings(**options)
     all_ok = True
 

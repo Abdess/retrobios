@@ -6,12 +6,12 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypedDict
 
+from core.options import reject_unknown
 from core.paths import sanitize_pack_path
 from model.alternatives import core_file_spares
 from model.declarations import OUTER_ROOTS, ROMS_ROOT, declared_root
 from model.profiles import upstream_profile_index
 from model.targets import list_available_targets, load_target_config
-from packs.archive import _reject_unknown
 from packs.extras import (
     ExtraResolver,
     _detect_extras_prefix,
@@ -235,7 +235,7 @@ def _manifest_core_entries(
     upstream hash carried by no local file leaves the entry with no URL.
     Returns the bytes added.
     """
-    _reject_unknown(
+    reject_unknown(
         "_manifest_core_entries", state,
         _CoreEntryParts.__required_keys__ | _CoreEntryParts.__optional_keys__,
     )
@@ -290,7 +290,7 @@ def _manifest_selection(
     decides on the full manifest withdraws what `--region` and
     `--one-per-slot` withdraw from the pack.
     """
-    _reject_unknown("_manifest_selection", options, _SelectionOptions.__optional_keys__)
+    reject_unknown("_manifest_selection", options, _SelectionOptions.__optional_keys__)
     required_only = options.get("required_only", False)
     regions = options.get("regions")
     one_per_slot = options.get("one_per_slot", False)

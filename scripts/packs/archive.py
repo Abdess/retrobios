@@ -7,7 +7,7 @@ import os
 import shutil
 import tempfile
 import zipfile
-from collections.abc import Iterator, Mapping
+from collections.abc import Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -16,13 +16,6 @@ from core.deterministic_zip import _FIXED_DATE_TIME
 from core.hashing import compute_hashes
 from core.paths import sanitize_pack_path
 from packs.paths import _has_path_conflict, _register_path, placement_block
-
-
-def _reject_unknown(function: str, options: Mapping[str, object], known: frozenset[str]) -> None:
-    """Refuse a keyword the options do not declare, as a named parameter would."""
-    for key in options:
-        if key not in known:
-            raise TypeError(f"{function}() got an unexpected keyword argument '{key}'")
 
 
 # Formats that are already compressed: deflating them again took 28 s of the

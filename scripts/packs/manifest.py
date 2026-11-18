@@ -10,6 +10,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypedDict
 
 from core.artifacts import _build_timestamp
+from core.options import reject_unknown
 from core.paths import REPO_ROOT, sanitize_pack_path
 from model.declarations import OUTER_ROOTS, declared_root, outer_layout
 from model.platforms import load_platform_config
@@ -18,7 +19,7 @@ from model.registry import load_data_dir_registry
 from model.safeparse import yaml_load
 from model.systems import platform_system_names
 from packs import slots
-from packs.archive import CASE_FOLDING_OS, PACK_DOCUMENTS, _Placed, _reject_unknown
+from packs.archive import CASE_FOLDING_OS, PACK_DOCUMENTS, _Placed
 from packs.datatrees import (
     _data_directory_members,
     _in_data_cache,
@@ -709,7 +710,7 @@ def generate_manifest(
     --standalone read. `build_out` receives the slot choices and the
     profiles this build read, which that second build takes over.
     """
-    _reject_unknown("generate_manifest", options, ManifestOptions.__optional_keys__)
+    reject_unknown("generate_manifest", options, ManifestOptions.__optional_keys__)
     opts = _ManifestSettings(**options)
     build, full_profiles = _start_manifest(
         platform_name, platforms_dir, db, bios_dir, registry_path, opts

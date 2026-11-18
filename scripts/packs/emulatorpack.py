@@ -14,6 +14,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypedDict
 
 from core.cli import suggest_names
+from core.options import reject_unknown
 from core.paths import REPO_ROOT
 from core.ziptools import build_zip_contents_index
 from model.alternatives import settle_sets, slot_set_keys
@@ -31,7 +32,6 @@ from packs.archive import (
     _Placed,
     _add_pack_member,
     _add_zip_to_pack,
-    _reject_unknown,
     _same_bytes,
     _write_generated_member,
     _writing_pack,
@@ -469,7 +469,7 @@ def generate_emulator_pack(
     `record` builds the pack in memory instead (PackRecord): nothing is
     written or read, and the paths are kept on it.
     """
-    _reject_unknown("generate_emulator_pack", options, EmulatorPackOptions.__optional_keys__)
+    reject_unknown("generate_emulator_pack", options, EmulatorPackOptions.__optional_keys__)
     all_profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
     zip_contents = options.get("zip_contents")
     if zip_contents is None:
@@ -558,7 +558,7 @@ def generate_system_pack(
 
     Returns the path, "" when no file is needed, None on failure.
     """
-    _reject_unknown("generate_system_pack", options, SystemPackOptions.__optional_keys__)
+    reject_unknown("generate_system_pack", options, SystemPackOptions.__optional_keys__)
     required_only = options.get("required_only", False)
     regions = options.get("regions")
     offline = options.get("offline")

@@ -8,9 +8,10 @@ import sys
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, TypedDict
 
+from core.options import reject_unknown
 from model.platforms import load_platform_config
 from model.profiles import ProfileSelectionError, load_emulator_profiles, select_emulator_profiles
-from packs.archive import _add_pack_member, _reject_unknown, _writing_pack
+from packs.archive import _add_pack_member, _writing_pack
 from packs.naming import _name_part, _narrowings
 from packs.paths import _resolve_destination
 from resolve.packfiles import resolve_file, sha1_for_hash
@@ -188,7 +189,7 @@ def generate_md5_pack(
     files_db = db.get("files", {})
     if zip_contents is None:
         zip_contents = {}
-    _reject_unknown("generate_md5_pack", options, Md5PackOptions.__optional_keys__)
+    reject_unknown("generate_md5_pack", options, Md5PackOptions.__optional_keys__)
     opts = _Md5Settings(**options)
     layout = _md5_layout(opts)
     if layout is None:

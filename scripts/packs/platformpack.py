@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, TypedDict
 
 from core.hashing import compute_hashes
+from core.options import reject_unknown
 from core.paths import sanitize_pack_path
 from model.alternatives import core_file_spares
 from model.declarations import OUTER_ROOTS, declared_root
@@ -27,7 +28,6 @@ from packs.archive import (
     _add_pack_member,
     _add_zip_to_pack,
     _extract_zip_to_archive,
-    _reject_unknown,
     _same_bytes,
     _write_generated_member,
     _writing_pack,
@@ -161,7 +161,7 @@ def _select_variants(
     Returns the destinations to drop, the groups kept only as a
     fallback, and the slots no profile puts in order.
     """
-    _reject_unknown("_select_variants", options, _VariantOptions.__optional_keys__)
+    reject_unknown("_select_variants", options, _VariantOptions.__optional_keys__)
     regions = options.get("regions")
     one_per_slot = options.get("one_per_slot", False)
     region_drops: set[str] = set()
@@ -1097,7 +1097,7 @@ def generate_pack(
 
     Returns the path to the generated ZIP, or None on failure.
     """
-    _reject_unknown("generate_pack", options, PackOptions.__optional_keys__)
+    reject_unknown("generate_pack", options, PackOptions.__optional_keys__)
     opts = _PackSettings(**options)
     plan = _plan_platform_pack(platform_name, platforms_dir, db, bios_dir, output_dir, opts)
     if plan is None:
@@ -1208,7 +1208,7 @@ def generate_split_packs(
     own placement (``within``). ``records`` builds the parts in memory, keyed
     by part name, with no archive written.
     """
-    _reject_unknown("generate_split_packs", options, SplitOptions.__optional_keys__)
+    reject_unknown("generate_split_packs", options, SplitOptions.__optional_keys__)
     config = load_platform_config(platform_name, platforms_dir)
     records = options.get("records")
     narrowing: PackNarrowing = {

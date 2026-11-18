@@ -20,6 +20,7 @@ on:
       - "scripts/core/deterministic_zip.py"
       - "scripts/core/github.py"
       - "scripts/core/hashing.py"
+      - "scripts/core/options.py"
       - "scripts/core/paths.py"
       - "scripts/core/romdir.py"
       - "scripts/core/sect233r1.py"

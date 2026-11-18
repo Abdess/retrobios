@@ -6,10 +6,11 @@ this module builds so the report and the pack withdraw the same files."""
 
 from __future__ import annotations
 
-from collections.abc import Iterable, Mapping
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypedDict
 
+from core.options import reject_unknown
 from model.profiles import PROFILE_IDENTITY_FIELDS, entry_system_ids
 from model.systems import _norm_system_id
 from model.alternatives import core_file_spares, required_only_spares, set_fields
@@ -31,13 +32,6 @@ from resolve.regions import FILE_GROUP
 
 if TYPE_CHECKING:
     from typing_extensions import Unpack
-
-
-def reject_unknown(function: str, options: Mapping[str, object], known: frozenset[str]) -> None:
-    """Refuse a keyword the options do not declare, as a named parameter would."""
-    for key in options:
-        if key not in known:
-            raise TypeError(f"{function}() got an unexpected keyword argument '{key}'")
 
 
 def _detect_extras_prefix(config: dict, base_dest: str) -> str:
