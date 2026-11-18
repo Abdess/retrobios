@@ -280,7 +280,7 @@ class CitationsKeepTheirAnnotations(unittest.TestCase):
         self.assertTrue(texts[4].endswith(")"), texts[4])
 
     def test_the_annotation_is_what_follows_the_location(self):
-        from sourceref import ref_annotation
+        from model.sourceref import ref_annotation
 
         self.assertEqual(ref_annotation("munt ROMInfo.cpp:206-213"), "")
         self.assertEqual(ref_annotation("source atari800/src/sysrom.c:91"), "")

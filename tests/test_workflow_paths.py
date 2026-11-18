@@ -104,7 +104,7 @@ class DeploySiteTriggers(unittest.TestCase):
         """sitesources imported two parsing functions from profile_sync, so
         every change to the comparison tool rebuilt an unchanged site."""
         self.assertNotIn("scripts/profile_sync.py", closure(["generate_site.py"]))
-        self.assertIn("scripts/sourceref.py", closure(["generate_site.py"]))
+        self.assertIn("scripts/model/sourceref.py", closure(["generate_site.py"]))
 
 
 class ThePullRequestBuildsTheSite(unittest.TestCase):

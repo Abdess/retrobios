@@ -52,7 +52,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import export_native
 import pin_installer
 import refresh_data_dirs
-import upstream
+from core import upstream
 from core.cli import InputMissing, require_directory, suggest_names
 from model.targets import apply_target_overrides
 from model.registry import list_registered_platforms, load_platform_registry

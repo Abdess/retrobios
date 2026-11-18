@@ -59,9 +59,9 @@ from profile_sync import (
     watch_hashes,
     worst_status,
 )
-import upstream
-import version_basis
-from upstream import CompareResult, FileChange
+from core import upstream
+from profiling import version_basis
+from core.upstream import CompareResult, FileChange
 
 
 def _version_read_as_written(profile, cache_dir, offline, profiles=None, recompute=False):
@@ -5856,7 +5856,7 @@ class ARecaleKeepsTheRepositoryWord(unittest.TestCase):
     path is read without the word, and a recale wrote it back without it."""
 
     def test_the_word_stays_in_front_of_the_new_span(self):
-        from sourceref import split_source_ref
+        from model.sourceref import split_source_ref
 
         for raw, expected in (
             ("stella src/a.c:120-130", "stella src/a.c:140-150"),
@@ -6014,7 +6014,7 @@ class ARoleIsReadPerPart(unittest.TestCase):
         self.assertEqual(prose[0].parts[0].repo, "alek/x")
 
     def test_the_prose_grammar_keeps_the_role(self):
-        from sourceref import _prose_runs
+        from model.sourceref import _prose_runs
 
         runs = list(_prose_runs(
             "# ref: source src/a.cpp:1656-1685, 1709-1738, upstream b.c:5"
@@ -6027,7 +6027,7 @@ class ARoleIsReadPerPart(unittest.TestCase):
     def test_an_abbreviated_location_reads_in_the_file_named_last(self):
         """devilutionx writes `Source/engine/assets.cpp:` then `(:507)` for
         each loader, and its pin moved under five uncollected numbers."""
-        from sourceref import _prose_runs
+        from model.sourceref import _prose_runs
 
         text = (
             "Load order is defined in Source/engine/assets.cpp:\n"
@@ -6053,7 +6053,7 @@ class ARoleIsReadPerPart(unittest.TestCase):
         ])
 
     def test_an_abbreviated_location_needs_a_file_before_it(self):
-        from sourceref import _prose_runs
+        from model.sourceref import _prose_runs
 
         self.assertEqual(list(_prose_runs("read at boot (:507), devilutionx.mpq")), [])
 

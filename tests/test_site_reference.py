@@ -63,7 +63,7 @@ from sitesources import launcher_ref_markdown, list_source
 import check_platform_folder
 import sitesources
 import release_record
-import upstream
+from core import upstream
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -924,7 +924,7 @@ class SourceLinksGoWhereTheFileIs(unittest.TestCase):
                     continue
                 for slug, pin, path in link.findall(
                         sitesources._source_ref_markdown(profile, entry["source_ref"])):
-                    import upstream
+                    from core import upstream
 
                     repo = upstream.parse_repo(f"https://github.com/{slug}")
                     held = sitesources.tree_holds(repo, pin, urllib.parse.unquote(path))

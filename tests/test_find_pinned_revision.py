@@ -13,7 +13,7 @@ import unittest
 from unittest import mock
 
 import find_pinned_revision
-import upstream
+from core import upstream
 
 
 class ThePinnedRevisionIsInTheHistory(unittest.TestCase):

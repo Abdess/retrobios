@@ -14,7 +14,7 @@ from pathlib import Path
 import yaml
 
 from . import Fetcher, SourceError, load_sources, scrape_setup
-from upstream import UpstreamError
+from core.upstream import UpstreamError
 from core.artifacts import write_text_atomic
 from ..base_scraper import _PlatformDumper
 

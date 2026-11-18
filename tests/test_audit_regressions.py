@@ -7804,7 +7804,7 @@ class PrboomPlusCitesFullPaths(unittest.TestCase):
     def test_every_cited_file_has_its_directory(self):
         import yaml
 
-        from scripts.sourceref import source_ref_values, split_source_ref
+        from scripts.model.sourceref import source_ref_values, split_source_ref
 
         profile = yaml.safe_load((ROOT / "emulators" / "prboom-plus.yml").read_text(encoding="utf-8"))
         refs: list[str] = []

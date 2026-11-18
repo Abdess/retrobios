@@ -31,7 +31,7 @@ from model.profiles import source_yaml_paths
 from core.artifacts import write_text_atomic
 from model.safeparse import yaml_load
 
-import upstream
+from core import upstream
 
 from ._hash_merge import (
     _build_contents,

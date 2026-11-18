@@ -15,10 +15,14 @@ from collections.abc import Iterator
 from dataclasses import dataclass
 from pathlib import Path
 
-import upstream
+from core import upstream
 from siterender import _by_mode, _escape_tags
-from sourceref import (
-    _HEX_ADDRESS_RE, _prose_runs, is_binary_citation, ref_annotation, ref_role,
+from model.sourceref import (
+    _HEX_ADDRESS_RE,
+    _prose_runs,
+    is_binary_citation,
+    ref_annotation,
+    ref_role,
     source_ref_values,
     split_source_ref,
 )

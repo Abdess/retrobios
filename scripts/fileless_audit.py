@@ -24,7 +24,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 
-import upstream
+from core import upstream
 from core.cli import require_directory, suggest_names
 from profile_sync import collect_citations, ref_role, select_views, split_source_ref
 from model.safeparse import yaml_load

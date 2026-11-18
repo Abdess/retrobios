@@ -18,7 +18,7 @@ from pathlib import Path
 
 import yaml
 
-import upstream
+from core import upstream
 from profile_sync import declared_repositories
 
 REPO_ROOT = Path(__file__).resolve().parent.parent

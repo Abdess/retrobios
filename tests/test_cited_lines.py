@@ -13,7 +13,7 @@ import re
 import unittest
 from pathlib import Path
 
-import upstream
+from core import upstream
 from model.safeparse import yaml_load
 
 ROOT = Path(__file__).resolve().parents[1]

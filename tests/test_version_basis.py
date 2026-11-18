@@ -24,8 +24,8 @@ from unittest import mock
 import yaml
 
 import profile_sync
-import upstream
-import version_basis
+from core import upstream
+from profiling import version_basis
 from model.profiles import load_emulator_profiles
 from profile_sync import ProfileReport, bump_commit
 

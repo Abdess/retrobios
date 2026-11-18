@@ -26,7 +26,7 @@ from dataclasses import dataclass
 
 sys.path.insert(0, os.path.dirname(__file__))
 
-import upstream
+from core import upstream
 from core.cli import require_directory
 from model.safeparse import yaml_load
 from scraper.mame_parser import _MACHINE_MACROS, strip_comments

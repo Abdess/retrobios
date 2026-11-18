@@ -19,9 +19,9 @@ from pathlib import Path
 from unittest import mock
 
 import sitesources
-import upstream
+from core import upstream
 from model.profiles import load_emulator_profiles
-from sourceref import ref_role, source_ref_values, split_source_ref
+from model.sourceref import ref_role, source_ref_values, split_source_ref
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 

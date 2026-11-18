@@ -286,7 +286,7 @@ class CachedDirectory(unittest.TestCase):
     def test_file_missing_from_the_archive_is_absent(self) -> None:
         from unittest import mock
 
-        import upstream
+        from core import upstream
 
         fetcher = Fetcher({"os": {"repo": "https://gitlab.com/g/p", "commit": "0" * 40}})
         with mock.patch.object(upstream, "cache_gitlab_directory", return_value={"sys/a/system.ini"}):

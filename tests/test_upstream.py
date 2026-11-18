@@ -15,8 +15,8 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-import upstream
-from upstream import make_repo, parse_repo, raw_url
+from core import upstream
+from core.upstream import make_repo, parse_repo, raw_url
 
 
 def _no_network(url: str):
@@ -127,7 +127,7 @@ class TestRawUrl(unittest.TestCase):
     def test_forgejo_fetches_through_the_api(self):
         # git.ngram.ca serves an HTML proof-of-work page on /raw/commit,
         # which fetch_file would have cached as the file's lines.
-        import upstream
+        from core import upstream
 
         repo = parse_repo("https://git.ngram.ca/mirrors/Ryujinx")
         self.assertEqual(

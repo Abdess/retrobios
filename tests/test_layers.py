@@ -19,7 +19,7 @@ from pathlib import Path
 
 SCRIPTS = Path(__file__).resolve().parent.parent / "scripts"
 
-PACKAGE_LAYERS = {"core": 0, "model": 1, "resolve": 2, "scraper": 3, "exporter": 3}
+PACKAGE_LAYERS = {"core": 0, "model": 1, "resolve": 2, "scraper": 3, "exporter": 3, "profiling": 3}
 LIBRARY_LAYER = 3
 COMMAND_LAYER = 4
 
@@ -35,8 +35,7 @@ NOT_YET_PACKAGED = frozenset({
     "release_record", "romfolders", "romset_recipes", "siteagents", "sitebootstrap",
     "sitecollection", "sitediagrams", "siteentries", "siteexports", "siteguides", "sitehandheld",
     "siteinputs", "sitemarkup", "sitemeasurements", "siterender", "sitesources", "sitestarlight",
-    "sitesteps", "sitewanted", "sitewrite", "slots", "sourceref", "split_pack", "upstream",
-    "validate_pr", "verify", "version_basis",
+    "sitesteps", "sitewanted", "sitewrite", "slots", "split_pack", "validate_pr", "verify",
 })
 
 # Imports from a package module to a top-level module, left for the wave that
@@ -44,9 +43,6 @@ NOT_YET_PACKAGED = frozenset({
 PENDING_TOP_LEVEL_IMPORTS = frozenset({
     ("exporter.doubled", "slots"),
     ("scraper.game_dat_importer", "region_audit"),
-    ("scraper.mame_hash_scraper", "upstream"),
-    ("scraper.romfolders", "upstream"),
-    ("scraper.romfolders.__main__", "upstream"),
 })
 
 

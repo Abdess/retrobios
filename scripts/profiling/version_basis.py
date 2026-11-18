@@ -32,7 +32,7 @@ import re
 from collections.abc import Callable
 from dataclasses import dataclass
 
-import upstream
+from core import upstream
 
 KINDS = ("file", "tag", "alias", "package", "none", "unverified")
 # Values copied from a .info or a branch name, which name no version.

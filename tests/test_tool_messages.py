@@ -871,7 +871,7 @@ class TheGitHubTokenComesFromGh(unittest.TestCase):
 
     def test_every_api_caller_reads_it(self):
         import profile_sync
-        import upstream
+        from core import upstream
         from scraper import base_scraper
 
         with self._gh():
@@ -888,7 +888,7 @@ class TheGitHubTokenComesFromGh(unittest.TestCase):
             profile_sync._check_quota(606, offline=False)
 
     def test_another_forge_never_triggers_gh(self):
-        import upstream
+        from core import upstream
 
         with self._gh() as run:
             headers = upstream._headers("https://gitlab.com/api/v4/projects/1")

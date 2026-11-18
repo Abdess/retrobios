@@ -32,8 +32,8 @@ import yaml
 
 sys.path.insert(0, os.path.dirname(__file__))
 
-import upstream
-import version_basis
+from core import upstream
+from profiling import version_basis
 from model.systems import _norm_system_id, system_index
 from core.github import github_token
 from model.registry import list_registered_platforms
@@ -42,7 +42,7 @@ from model.platforms import load_platform_config
 from resolve.cores import resolve_platform_cores
 from core.cli import suggest_names
 from core.hashing import parse_hash_list
-from sourceref import (  # re-exported for callers and tests
+from model.sourceref import (
     _ANNOTATION_RE as _ANNOTATION_RE,
     _BARE_RANGE_RE as _BARE_RANGE_RE,
     _LOCATED_RE as _LOCATED_RE,
@@ -73,7 +73,7 @@ from sourceref import (  # re-exported for callers and tests
     split_outside_parentheses as split_outside_parentheses,
     split_source_ref as split_source_ref,
 )
-from upstream import CompareResult, find_renamed
+from core.upstream import CompareResult, find_renamed
 
 DEFAULT_CACHE = upstream.CACHE_DIR
 ANON_QUOTA = 60

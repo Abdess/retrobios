@@ -261,7 +261,7 @@ def _ref_cites_code(ref: str) -> bool:
     IL method says only that the binary exists: "import directory",
     "string table" and "readelf -d" are not the code that reads a file.
     """
-    from sourceref import split_source_ref
+    from model.sourceref import split_source_ref
 
     cited = False
     for part in split_source_ref(ref):
