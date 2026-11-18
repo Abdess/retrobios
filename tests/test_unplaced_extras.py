@@ -97,9 +97,9 @@ class SlugPlatform(unittest.TestCase):
     def test_the_readme_fraction_does_not_count_it(self):
         # The README's second column is what the pack has: a held file the
         # platform has no folder for was counted there.
-        import generate_readme
+        from sitegen import readme
 
-        coverage = generate_readme.compute_coverage(
+        coverage = readme.compute_coverage(
             "slugs", "platforms", self.db, emulators_dir="emulators"
         )
         self.assertEqual(coverage["core_present"], 0)

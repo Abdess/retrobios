@@ -36,7 +36,7 @@ from packs import archive as packs_archive
 from packs import datatrees
 from packs import manifest as packs_manifest
 from packs import platformpack
-import generate_readme
+from sitegen import readme as sitegen_readme
 import generate_site
 import release_notes
 import release_record
@@ -368,21 +368,21 @@ class TheTableDescribesTheRelease(unittest.TestCase):
     def test_a_platform_reads_the_pack_that_serves_it(self):
         for platform in ("retroarch", "lakka"):
             self.assertEqual(
-                generate_readme.release_totals(platform, RECORD),
+                sitegen_readme.release_totals(platform, RECORD),
                 (4525, 5882727352),
             )
         self.assertEqual(
-            generate_readme.release_totals("misterfpga", RECORD), (74, 17000000)
+            sitegen_readme.release_totals("misterfpga", RECORD), (74, 17000000)
         )
 
     def test_a_platform_the_release_does_not_carry_has_no_figure(self):
         self.assertEqual(
-            generate_readme.release_totals("vita3k", RECORD), (None, None)
+            sitegen_readme.release_totals("vita3k", RECORD), (None, None)
         )
-        self.assertEqual(generate_readme.release_totals("retroarch", {}), (None, None))
+        self.assertEqual(sitegen_readme.release_totals("retroarch", {}), (None, None))
 
     def test_the_download_table_gives_the_file_count_of_each_pack(self):
-        rows = generate_readme.download_table(
+        rows = sitegen_readme.download_table(
             {"retroarch": {"platform": "RetroArch"}, "vita3k": {"platform": "Vita3K"}},
             {"RetroArch": "`system/`"},
             RECORD,
@@ -397,7 +397,7 @@ class TheTableDescribesTheRelease(unittest.TestCase):
             self.skipTest("no release.json")
         record = json.loads(record_path.read_text(encoding="utf-8"))
         readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
-        files, _size = generate_readme.release_totals("retroarch", record)
+        files, _size = sitegen_readme.release_totals("retroarch", record)
         self.assertTrue(f"| RetroArch | {files:,} |" in readme)
 
 
@@ -509,7 +509,7 @@ class TheCollectionTotalNamesTheCollection(unittest.TestCase):
     }
 
     def test_in_the_readme(self):
-        line = generate_readme.collection_line(10375, self.COMPOSITION)
+        line = sitegen_readme.collection_line(10375, self.COMPOSITION)
         self.assertIn("**10,375 files in the collection**", line)
         self.assertIn("no pack holds them all", line)
 
@@ -534,7 +534,7 @@ class RefusedFilesAreNotPresent(unittest.TestCase):
 
         from model.platforms import _platform_config_cache
         import generate_db
-        import generate_readme
+        from sitegen import readme as sitegen_readme
 
         with tempfile.TemporaryDirectory() as tmp:
             previous = os.getcwd()
@@ -567,7 +567,7 @@ class RefusedFilesAreNotPresent(unittest.TestCase):
             )
             _platform_config_cache.clear()
             self.addCleanup(_platform_config_cache.clear)
-            coverage = generate_readme.compute_coverage(
+            coverage = sitegen_readme.compute_coverage(
                 "hashy", "platforms", db, emulators_dir="emulators"
             )
         self.assertEqual((coverage["present"], coverage["total"]), (1, 2))

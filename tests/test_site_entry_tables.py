@@ -21,7 +21,7 @@ import yaml
 
 import generate_site as gs
 from sitegen import entries as siteentries
-import validate_site
+from sitegen import validate
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -330,9 +330,9 @@ class TheBuiltPagesStayShort(unittest.TestCase):
         for pattern, _ceiling in VISIBLE_CEILINGS.values():
             for page in self._pages(pattern):
                 with self.subTest(page=page):
-                    parsed = validate_site._PageParser(DIST / page / "index.html")
+                    parsed = validate._PageParser(DIST / page / "index.html")
                     parsed.feed((DIST / page / "index.html").read_text(encoding="utf-8"))
-                    self.assertLessEqual(parsed.page.elements, validate_site.MAX_PAGE_ELEMENTS)
+                    self.assertLessEqual(parsed.page.elements, validate.MAX_PAGE_ELEMENTS)
 
     def test_every_mame_set_and_member_is_on_a_part(self):
         profile = yaml.safe_load((REPO_ROOT / "emulators" / "mame.yml").read_text(encoding="utf-8"))

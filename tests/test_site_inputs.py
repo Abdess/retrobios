@@ -20,7 +20,7 @@ import unittest
 from pathlib import Path
 
 import generate_site
-import sitediagrams
+from sitegen import diagrams
 from model import siteinputs
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -82,7 +82,7 @@ class TheGivenProfilesAndPlatforms(_Inputs):
         registry.write_text(registry.read_text().replace("release_pack: true", "release_pack: false"))
         self.use(platforms=self.platforms)
         self.assertFalse(generate_site.has_release_pack("retroarch"))
-        self.assertEqual(sitediagrams.registry()["retroarch"].get("release_pack"), False)
+        self.assertEqual(diagrams.registry()["retroarch"].get("release_pack"), False)
 
 
 class TheCollectionDoesNotDependOnTheWorkingDirectory(unittest.TestCase):

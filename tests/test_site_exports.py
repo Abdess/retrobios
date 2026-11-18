@@ -142,7 +142,7 @@ class SiteReferenceContracts(unittest.TestCase):
         }
         return db, coverages, profiles, stats
 
-    @mock.patch("sitesources.tree_holds", lambda *_args: True)  # a path the record confirms
+    @mock.patch("sitegen.sources.tree_holds", lambda *_args: True)  # a path the record confirms
     def test_source_references_are_revision_pinned_links(self):
         _, _, profiles, _ = self._fixtures()
         rendered = _source_ref_markdown(
@@ -173,7 +173,7 @@ class SiteReferenceContracts(unittest.TestCase):
         prefixed = _source_ref_markdown(profile, "example/jg.c:213-214")
         self.assertEqual(prefixed, "`example/jg.c:213-214`")
 
-    @mock.patch("sitesources.tree_holds", lambda *_args: True)  # a path the record confirms
+    @mock.patch("sitegen.sources.tree_holds", lambda *_args: True)  # a path the record confirms
     def test_a_single_repository_links_the_path_as_written(self):
         profile = {"source": "https://github.com/PCSX2/pcsx2", "source_commit": "c" * 40}
         rendered = _source_ref_markdown(profile, "pcsx2/ImGui/FullscreenUI.cpp:755-759")
@@ -599,7 +599,7 @@ class OnlyAPinnedProfileClaimsAPin(unittest.TestCase):
 class ADataDirectorySaysWhatItIs(unittest.TestCase):
     """The page said `dolphin-sys` > `Sys` and nothing of the tree it packs."""
 
-    @mock.patch("sitesources.tree_holds", lambda *_args: True)  # a path the record confirms
+    @mock.patch("sitegen.sources.tree_holds", lambda *_args: True)  # a path the record confirms
     def test_description_origin_mode_and_source(self):
         from generate_site import generate_emulator_page
 
@@ -952,9 +952,9 @@ class ProseCitationsLinkToThePin(unittest.TestCase):
                "source_commit": "76c7a84f1f7e80f3e6f2bba96fe100cb24e99124",
                "files": [{"name": "x", "source_ref": "libretro.c:10"}]}
 
-    @mock.patch("sitesources.tree_holds", lambda *_args: True)  # a path the record confirms
+    @mock.patch("sitegen.sources.tree_holds", lambda *_args: True)  # a path the record confirms
     def test_a_rooted_or_structured_path_is_linked(self):
-        from sitesources import link_prose_citations
+        from sitegen.sources import link_prose_citations
 
         text = link_prose_citations(
             self.PROFILE, "BIOS loading is in src/libretro.c:186-208 and libretro.c:12.")
@@ -963,7 +963,7 @@ class ProseCitationsLinkToThePin(unittest.TestCase):
         self.assertIn("[`libretro.c:12`](", text)
 
     def test_what_cannot_be_placed_stays_text(self):
-        from sitesources import link_prose_citations
+        from sitegen.sources import link_prose_citations
 
         self.assertEqual(link_prose_citations(self.PROFILE, "see memory.c:5"), "see memory.c:5")
         self.assertEqual(link_prose_citations(self.PROFILE, "in `src/a.c:5`"), "in `src/a.c:5`")
@@ -973,14 +973,14 @@ class ProseCitationsLinkToThePin(unittest.TestCase):
     def test_two_repositories_link_into_the_one_holding_the_path(self):
         """1,044 citations in 86 profiles that read two repositories stayed
         text, the swanstation note on FindBIOSImageInDirectory among them."""
-        from sitesources import link_prose_citations
+        from sitegen.sources import link_prose_citations
 
         two = {**self.PROFILE, "upstream": "https://github.com/x/y", "upstream_commit": "a" * 40}
 
         def holds(repo, _pin, path):
             return path == "src/both.c" or (path == "src/port.c") == (repo.owner == "libretro")
 
-        with mock.patch("sitesources.tree_holds", holds):
+        with mock.patch("sitegen.sources.tree_holds", holds):
             text = link_prose_citations(two, "src/port.c:5, src/emu.c:7 and src/both.c:9")
             upstream_only = link_prose_citations(two, "upstream src/port.c:5")
             named = link_prose_citations(two, "upstream src/both.c:9")
@@ -1001,9 +1001,9 @@ class ACitationSaysWhoseCodeItIs(unittest.TestCase):
                "upstream": "https://github.com/alekmaul/a5200",
                "source_commit": "a" * 40, "upstream_commit": "b" * 40}
 
-    @mock.patch("sitesources.tree_holds", lambda *_args: True)  # a path the record confirms
+    @mock.patch("sitegen.sources.tree_holds", lambda *_args: True)  # a path the record confirms
     def test_each_part_links_to_its_repository_with_its_label(self):
-        from sitesources import _source_ref_markdown, requested_by
+        from sitegen.sources import _source_ref_markdown, requested_by
 
         ref = "source libretro.c:5, upstream emu/memory.c:46, 50-52"
         text = _source_ref_markdown(self.PROFILE, ref)
@@ -1017,7 +1017,7 @@ class ACitationSaysWhoseCodeItIs(unittest.TestCase):
                          "upstream emulator")
 
     def test_a_role_without_a_pin_links_nowhere_else(self):
-        from sitesources import _source_ref_markdown
+        from sitegen.sources import _source_ref_markdown
 
         profile = {**self.PROFILE, "upstream_commit": ""}
         self.assertEqual(_source_ref_markdown(profile, "upstream emu/memory.c:46"),

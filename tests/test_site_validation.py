@@ -11,7 +11,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from validate_site import validate_site
+from sitegen.validate import validate_site
 
 ROOT = Path(__file__).resolve().parent.parent
 TMP_ROOT = ROOT / "tmp" / "tests"
@@ -209,9 +209,9 @@ class TheSiteStaysWithinItsBudgets(unittest.TestCase):
             '<script src="javascripts/site.js"></script>'), [])
 
     def test_a_page_over_its_size(self):
-        import validate_site as module
+        from sitegen import validate
 
-        issues = self._issues("<p>" + "x" * module.MAX_PAGE_BYTES + "</p>")
+        issues = self._issues("<p>" + "x" * validate.MAX_PAGE_BYTES + "</p>")
         self.assertTrue(any("over the" in issue and "HTML" in issue for issue in issues), issues)
 
     def test_a_skipped_heading_level(self):
@@ -230,13 +230,13 @@ class TheSiteStaysWithinItsBudgets(unittest.TestCase):
         self.assertTrue(any("drawn by a script at runtime" in issue for issue in issues))
 
     def test_a_search_index_over_its_budget(self):
-        import validate_site as module
+        from sitegen import validate
 
         index = self.site / "pagefind" / "index"
         index.mkdir(parents=True)
-        (index / "en_big.pf_index").write_bytes(b"x" * (module.MAX_PAGEFIND_CHUNK_BYTES + 1))
+        (index / "en_big.pf_index").write_bytes(b"x" * (validate.MAX_PAGEFIND_CHUNK_BYTES + 1))
         (self.site / "pagefind" / "pagefind.en_x.pf_meta").write_bytes(
-            b"x" * (module.MAX_PAGEFIND_META_BYTES + 1))
+            b"x" * (validate.MAX_PAGEFIND_META_BYTES + 1))
         issues = self._issues("")
         self.assertTrue(any("en_big.pf_index" in issue for issue in issues), issues)
         self.assertTrue(any(".pf_meta" in issue for issue in issues), issues)
@@ -307,7 +307,7 @@ class EveryTestDependencyIsInstalledInCi(unittest.TestCase):
     def test_a_contributor_installs_what_ci_installs(self):
         # The contributing page installed pyyaml and jsonschema only, so the
         # markdown test skipped on a contributor's machine and ran in CI.
-        from generate_readme import generate_contributing
+        from sitegen.readme import generate_contributing
 
         command = next(
             line for line in generate_contributing().splitlines() if "pip install" in line

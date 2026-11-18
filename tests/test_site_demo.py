@@ -19,7 +19,7 @@ import struct
 import unittest
 from pathlib import Path
 
-import generate_readme
+from sitegen import readme as sitegen_readme
 import make_demo
 from sitegen import starlight as sitestarlight
 
@@ -47,7 +47,7 @@ class TheFilesAreThereAndSmall(unittest.TestCase):
 
     def test_only_the_readme_variant_has_a_gif(self):
         gifs = sorted(p.name for p in DEMO.glob("*.gif"))
-        self.assertEqual(gifs, [Path(generate_readme.DEMO_GIF).name])
+        self.assertEqual(gifs, [Path(sitegen_readme.DEMO_GIF).name])
         self.assertEqual([v.name for v in make_demo.VARIANTS.values() if v.gif], ["default"])
 
     def test_the_gif_and_the_posters_have_the_recorded_size(self):
@@ -130,14 +130,14 @@ class TheTapeAndTheDriverAgree(unittest.TestCase):
 class TheReadmeShowsTheGif(unittest.TestCase):
     def test_the_gif_sits_under_the_commands_with_its_description(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        line = f"![{generate_readme.demo_description()}]({generate_readme.DEMO_GIF})"
+        line = f"![{sitegen_readme.demo_description()}]({sitegen_readme.DEMO_GIF})"
         self.assertIn(line, readme)
         self.assertLess(readme.index("## Install in one line"), readme.index(line))
         self.assertLess(readme.index(line), readme.index("## Or download a ZIP"))
 
     def test_the_description_names_what_the_recording_measured(self):
         facts = _facts()
-        words = generate_readme.demo_description(facts)
+        words = sitegen_readme.demo_description(facts)
         for value in (facts["setup"], f"{facts['games']} games", f"{facts['files']} BIOS files",
                       facts["size"]):
             self.assertIn(str(value), words)
@@ -195,7 +195,7 @@ class TheTwoPagesShowIt(unittest.TestCase):
         import generate_site
 
         tag = generate_site.install_demo()[0]
-        self.assertIn(f'description="{generate_readme.demo_description()}"', tag)
+        self.assertIn(f'description="{sitegen_readme.demo_description()}"', tag)
         source = Path(generate_site.__file__).read_text(encoding="utf-8")
         body = source[source.index("def generate_home("):]
         body = body[:body.index("\ndef ", 1)]

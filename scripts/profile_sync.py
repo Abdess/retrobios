@@ -654,7 +654,7 @@ def _refresh_source_paths(args: argparse.Namespace) -> None:
     if not _WRITTEN or args.dry_run or args.offline or os.environ.get("RETROBIOS_OFFLINE"):
         return
     from model.profiles import _emulator_profiles_cache
-    import sitesources
+    from sitegen import sources
     from core.artifacts import write_if_changed
 
     # The run loaded the profiles before writing them, and the loader caches
@@ -662,19 +662,19 @@ def _refresh_source_paths(args: argparse.Namespace) -> None:
     # (linapple, then ten profiles in one advance).
     _emulator_profiles_cache.clear()
     profiles = load_emulator_profiles(args.emulators_dir, skip_aliases=False)
-    held, unread = sitesources.build_source_paths(
-        profiles, [sitesources.TREE_CACHE], fetch=True
+    held, unread = sources.build_source_paths(
+        profiles, [sources.TREE_CACHE], fetch=True
     )
-    held = sitesources.keep_unread(
-        held, unread, sitesources.read_record(sitesources.SOURCE_PATHS)
+    held = sources.keep_unread(
+        held, unread, sources.read_record(sources.SOURCE_PATHS)
     )
-    sitesources.SOURCE_PATHS.parent.mkdir(parents=True, exist_ok=True)
+    sources.SOURCE_PATHS.parent.mkdir(parents=True, exist_ok=True)
     write_if_changed(
-        str(sitesources.SOURCE_PATHS), json.dumps(held, indent=1, sort_keys=True) + "\n"
+        str(sources.SOURCE_PATHS), json.dumps(held, indent=1, sort_keys=True) + "\n"
     )
     print(
         f"source paths: {sum(map(len, held.values()))} in {len(held)} trees, "
-        f"{len(unread)} trees not cached: {sitesources.SOURCE_PATHS}",
+        f"{len(unread)} trees not cached: {sources.SOURCE_PATHS}",
         file=sys.stderr,
     )
 

@@ -23,7 +23,7 @@ import yaml
 
 import check_freshness
 import generate_site as gs
-import sitediagrams
+from sitegen import diagrams
 from model import collection
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -127,7 +127,7 @@ class SourcePathsFreshness(unittest.TestCase):
     def test_a_recorded_build_file_tree_is_pinned(self):
         """The record holds the platform trees pin_build reads at a commit,
         and the check called them orphaned."""
-        import sitesources
+        from sitegen import sources as sitegen_sources
 
         pin = "a" * 40
         profile = {"pin_build": [{"repo": "https://github.com/o/r", "revision": pin,
@@ -135,7 +135,7 @@ class SourcePathsFreshness(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "source-paths.json"
             path.write_text(json.dumps({f"github.com/o/r@{pin}": ["p.mk"]}), encoding="utf-8")
-            with mock.patch.object(sitesources, "SOURCE_PATHS", path):
+            with mock.patch.object(sitegen_sources, "SOURCE_PATHS", path):
                 finding = check_freshness.check_source_paths({"p": profile})
         self.assertEqual(finding.status, check_freshness.OK, finding.detail)
 
@@ -150,11 +150,11 @@ class SourcePathsFreshness(unittest.TestCase):
         """fbneo moved to two new pins while fbneo_cps12 kept the old ones:
         no recorded tree was orphaned, so the check said OK and 174 citations
         stayed unlinked."""
-        import sitesources
+        from sitegen import sources as sitegen_sources
 
         profile = _profile("geolith")
-        trees = [sitesources.tree_key(r, p) for r, p in sitesources.profile_trees(profile)]
-        record = json.loads(sitesources.SOURCE_PATHS.read_text(encoding="utf-8"))
+        trees = [sitegen_sources.tree_key(r, p) for r, p in sitegen_sources.profile_trees(profile)]
+        record = json.loads(sitegen_sources.SOURCE_PATHS.read_text(encoding="utf-8"))
         for key in trees:
             record.pop(key, None)
         # Kept pinned by another profile, as fbneo_cps12 kept the old FBNeo trees.
@@ -162,18 +162,18 @@ class SourcePathsFreshness(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "source-paths.json"
             path.write_text(json.dumps(record), encoding="utf-8")
-            with mock.patch.object(sitesources, "SOURCE_PATHS", path):
+            with mock.patch.object(sitegen_sources, "SOURCE_PATHS", path):
                 finding = check_freshness.check_source_paths({"geolith": profile})
         self.assertEqual(finding.status, check_freshness.STALE)
         self.assertIn("1 pinned trees not recorded", finding.detail)
 
     def test_a_tree_read_with_no_cited_path_is_recorded(self):
-        import sitesources
+        from sitegen import sources as sitegen_sources
 
         profile = {"source": "https://github.com/o/r", "source_commit": "e" * 40,
                    "files": [{"source_ref": "src/a.c:5"}]}
-        with mock.patch.object(sitesources, "_cached_tree", return_value=frozenset({"x.c"})):
-            held, unread = sitesources.build_source_paths({"p": profile}, [Path("tmp")])
+        with mock.patch.object(sitegen_sources, "_cached_tree", return_value=frozenset({"x.c"})):
+            held, unread = sitegen_sources.build_source_paths({"p": profile}, [Path("tmp")])
         self.assertEqual(held, {"github.com/o/r@" + "e" * 40: []})
         self.assertEqual(unread, [])
 
@@ -183,14 +183,14 @@ class OptionsGlanceFromTheParser(unittest.TestCase):
     table, and not the hand-written glance above it."""
 
     def test_every_parser_option_has_a_group(self):
-        named = {flag for _label, flags in sitediagrams.GLANCE_GROUPS for flag in flags}
-        self.assertEqual(set(sitediagrams.installer_flags()) - named, set())
-        self.assertEqual(named - set(sitediagrams.installer_flags()), set())
+        named = {flag for _label, flags in diagrams.GLANCE_GROUPS for flag in flags}
+        self.assertEqual(set(diagrams.installer_flags()) - named, set())
+        self.assertEqual(named - set(diagrams.installer_flags()), set())
 
     def test_an_option_no_group_names_still_lands(self):
-        with mock.patch.object(sitediagrams, "installer_flags",
+        with mock.patch.object(diagrams, "installer_flags",
                                return_value=["--platform", "--brand-new"]):
-            lines = sitediagrams.options_glance()
+            lines = diagrams.options_glance()
         self.assertEqual(lines, [
             "- **Where and for what**: [`--platform`](#option-platform)",
             "- **Other**: [`--brand-new`](#option-brand-new)",
@@ -198,10 +198,10 @@ class OptionsGlanceFromTheParser(unittest.TestCase):
 
     def test_the_source_holds_no_list(self):
         text = (REPO_ROOT / "wiki" / "installer.md").read_text(encoding="utf-8")
-        section = text[text.index(sitediagrams.GLANCE_HEADING):text.index("\n## One line")]
+        section = text[text.index(diagrams.GLANCE_HEADING):text.index("\n## One line")]
         self.assertNotIn("\n- ", section)
         with self.assertRaises(ValueError):
-            sitediagrams.expand_glance(f"# x\n\n{sitediagrams.GLANCE_HEADING}\n\n- a\n\n## y\n")
+            diagrams.expand_glance(f"# x\n\n{diagrams.GLANCE_HEADING}\n\n- a\n\n## y\n")
 
 
 class FaqInstallsFromWhatYouHold(unittest.TestCase):

@@ -20,7 +20,7 @@ from functools import cache
 from pathlib import Path
 
 import release_record
-from generate_readme import (
+from sitegen.readme import (
     SITE_URL,
     asset_links,
     contributing_text,
@@ -662,7 +662,7 @@ class ArchiveRecipesAreCountedFromTheRecipes(unittest.TestCase):
         self.assertEqual(self.counts["exact"] + self.counts["canonical"], self.counts["total"])
 
     def test_the_readme_line(self) -> None:
-        from generate_readme import archive_line
+        from sitegen.readme import archive_line
 
         line = archive_line(self.counts)
         self.assertIn(line, _read("README.md").splitlines())

@@ -19,6 +19,7 @@ from pathlib import Path
 from unittest import mock
 
 import sitesources
+from sitegen import sources
 from core import upstream
 from model.profiles import load_emulator_profiles
 from model.sourceref import ref_role, source_ref_values, split_source_ref
@@ -37,15 +38,15 @@ class BinaryContinuationsAreNotLinked(unittest.TestCase):
     }
 
     def tearDown(self):
-        sitesources._tree_paths.cache_clear()
+        sources._tree_paths.cache_clear()
 
     def _render(self, value: str) -> str:
-        original = sitesources._tree_paths
-        sitesources._tree_paths = lambda repo, pin: frozenset({"FPLoader.cpp"})
+        original = sources._tree_paths
+        sources._tree_paths = lambda repo, pin: frozenset({"FPLoader.cpp"})
         try:
-            return sitesources._source_ref_markdown(self.PROFILE, value)
+            return sources._source_ref_markdown(self.PROFILE, value)
         finally:
-            sitesources._tree_paths = original
+            sources._tree_paths = original
 
     def test_an_address_continuing_a_binary_range(self):
         text = self._render("BAM.dll 1.5-408 .text:0x100ae843-0x100ae8a7, 0x10037130-0x100371de")
@@ -99,7 +100,7 @@ class TheSevenProfilesCiteHeldPaths(unittest.TestCase):
         missing, checked = [], 0
         for key in PROFILES:
             profile = profiles[key]
-            candidates = sitesources._forge_sources(profile)
+            candidates = sources._forge_sources(profile)
             values = [e["source_ref"] for e in profile.get("files") or []
                       if isinstance(e, dict) and e.get("source_ref")]
             values += [d["source_ref"] for d in profile.get("data_directories") or []
@@ -110,7 +111,7 @@ class TheSevenProfilesCiteHeldPaths(unittest.TestCase):
                         _role, path = ref_role(part.path)
                         if " " in path or sitesources.is_binary_citation(path):
                             continue
-                        verdicts = [sitesources.tree_holds(r, p, path) for r, p in candidates]
+                        verdicts = [sources.tree_holds(r, p, path) for r, p in candidates]
                         if None in verdicts:
                             continue
                         checked += 1

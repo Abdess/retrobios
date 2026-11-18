@@ -42,7 +42,7 @@ from pathlib import Path
 
 import yaml
 
-import generate_readme
+from sitegen import readme as sitegen_readme
 import generate_site
 import release_record
 from model import guides
@@ -325,10 +325,10 @@ class CommandBlocks(unittest.TestCase):
 
 class ContributingOpensOnTheAction(unittest.TestCase):
     def test_both_generators_open_on_the_upload(self):
-        for text in (generate_readme.generate_contributing(), generate_site.generate_contributing()):
+        for text in (sitegen_readme.generate_contributing(), generate_site.generate_contributing()):
             body = text.split("## Add a BIOS file", 1)[1]
             self.assertTrue(body.lstrip().startswith("Have a file the collection lacks?"))
-            self.assertLess(body.index(generate_readme.UPLOAD_URL), body.index("## What happens next"))
+            self.assertLess(body.index(sitegen_readme.UPLOAD_URL), body.index("## What happens next"))
             self.assertLess(body.index("gaps"), body.index("## What happens next"))
             self.assertLess(body.index("## What happens next"), body.index("CI hashes"))
 

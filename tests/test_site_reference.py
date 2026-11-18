@@ -59,9 +59,10 @@ from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config
 from resolve.reconcile import HASH_FIELDS, _hash_values
 from resolve.categories import EntryCategories
-from sitesources import launcher_ref_markdown, list_source
+from sitegen.sources import launcher_ref_markdown, list_source
 import check_platform_folder
 import sitesources
+from sitegen import sources
 import release_record
 from core import upstream
 
@@ -884,16 +885,16 @@ class SourceLinksGoWhereTheFileIs(unittest.TestCase):
     }
 
     def tearDown(self):
-        sitesources._tree_paths.cache_clear()
+        sources._tree_paths.cache_clear()
 
     def _render(self, tree: frozenset[str]) -> str:
-        original = sitesources._tree_paths
-        sitesources._tree_paths = lambda repo, pin: tree
+        original = sources._tree_paths
+        sources._tree_paths = lambda repo, pin: tree
         try:
-            return sitesources._source_ref_markdown(
+            return sources._source_ref_markdown(
                 self.PROFILE, "src/emulator.cpp:234; src/core/loader/ncch.cpp:151-164")
         finally:
-            sitesources._tree_paths = original
+            sources._tree_paths = original
 
     def test_a_path_the_tree_lacks_is_not_linked(self):
         text = self._render(frozenset({"src/emulator.cpp"}))
@@ -911,7 +912,7 @@ class SourceLinksGoWhereTheFileIs(unittest.TestCase):
     def test_every_rendered_link_is_in_its_cached_tree(self):
         """Offline: each link the pages render points at a path the cached
         tree of its repository holds."""
-        if not sitesources.TREE_CACHE.is_dir():
+        if not sources.TREE_CACHE.is_dir():
             raise unittest.SkipTest("no cached tree listings")
         from model.profiles import load_emulator_profiles
 
@@ -923,11 +924,11 @@ class SourceLinksGoWhereTheFileIs(unittest.TestCase):
                 if not isinstance(entry, dict) or not entry.get("source_ref"):
                     continue
                 for slug, pin, path in link.findall(
-                        sitesources._source_ref_markdown(profile, entry["source_ref"])):
+                        sources._source_ref_markdown(profile, entry["source_ref"])):
                     from core import upstream
 
                     repo = upstream.parse_repo(f"https://github.com/{slug}")
-                    held = sitesources.tree_holds(repo, pin, urllib.parse.unquote(path))
+                    held = sources.tree_holds(repo, pin, urllib.parse.unquote(path))
                     if held is None:
                         continue
                     checked += 1
@@ -1103,7 +1104,7 @@ class SourceLinksOnlyWhereTheFileIs(unittest.TestCase):
 
     def test_an_address_in_a_binary_reads_as_one(self):
         profile = {"source": "https://github.com/o/r", "source_commit": "e" * 40}
-        text = sitesources._source_ref_markdown(
+        text = sources._source_ref_markdown(
             profile, "Nesoid 2.5.0 libnes.so 0x455a4-0x45694 (setter), 0x8094-0x80ac")
         self.assertEqual(text, "offset `0x455a4-0x45694` in `Nesoid 2.5.0 libnes.so` (setter), "
                                "offset `0x8094-0x80ac` in `Nesoid 2.5.0 libnes.so`")
@@ -1111,13 +1112,13 @@ class SourceLinksOnlyWhereTheFileIs(unittest.TestCase):
     def test_only_a_recorded_path_links(self):
         profile = {"source": "https://github.com/o/r", "source_commit": "e" * 40}
         repo = upstream.parse_repo("https://github.com/o/r")
-        record = {sitesources.tree_key(repo, "e" * 40): frozenset({"src/a.c"})}
-        with mock.patch.object(sitesources, "_verified", return_value=record):
-            sitesources._tree_paths.cache_clear()
+        record = {sources.tree_key(repo, "e" * 40): frozenset({"src/a.c"})}
+        with mock.patch.object(sources, "_verified", return_value=record):
+            sources._tree_paths.cache_clear()
             try:
-                text = sitesources._source_ref_markdown(profile, "src/a.c:5, src/b.c:7")
+                text = sources._source_ref_markdown(profile, "src/a.c:5, src/b.c:7")
             finally:
-                sitesources._tree_paths.cache_clear()
+                sources._tree_paths.cache_clear()
         self.assertIn("[`src/a.c:5`](https://github.com/o/r/blob/" + "e" * 40 + "/src/a.c#L5)", text)
         self.assertIn("`src/b.c:7`", text)
         self.assertNotIn("src/b.c#", text)
@@ -1125,9 +1126,9 @@ class SourceLinksOnlyWhereTheFileIs(unittest.TestCase):
     def test_the_writer_keeps_held_paths_only(self):
         profile = {"source": "https://github.com/o/r", "source_commit": "e" * 40,
                    "notes": "see src/c.c:3", "files": [{"source_ref": "src/a.c:5, gone.c:1"}]}
-        with mock.patch.object(sitesources, "_cached_tree",
+        with mock.patch.object(sources, "_cached_tree",
                                return_value=frozenset({"src/a.c", "src/c.c", "x.c"})):
-            held, unread = sitesources.build_source_paths({"p": profile}, [TMP])
+            held, unread = sources.build_source_paths({"p": profile}, [TMP])
         self.assertEqual(held, {"github.com/o/r@" + "e" * 40: ["src/a.c", "src/c.c"]})
         self.assertEqual(unread, [])
 
@@ -1137,15 +1138,15 @@ class SourceLinksOnlyWhereTheFileIs(unittest.TestCase):
         # cached tree dropped its four recorded paths.
         profile = {"source": "https://github.com/o/r", "source_commit": "e" * 40,
                    "files": [{"source_ref": "src/a.c:5"}]}
-        with mock.patch.object(sitesources, "_cached_tree", return_value=None), \
+        with mock.patch.object(sources, "_cached_tree", return_value=None), \
                 mock.patch.object(sitesources.upstream, "list_directory",
                                   side_effect=upstream.UpstreamError("HTTP 404")):
-            held, unread = sitesources.build_source_paths({"p": profile}, [TMP])
+            held, unread = sources.build_source_paths({"p": profile}, [TMP])
         self.assertEqual(held, {})
         self.assertEqual(unread, ["github.com/o/r@" + "e" * 40])
 
     def test_every_rendered_link_is_recorded(self):
-        record = json.loads(sitesources.SOURCE_PATHS.read_text(encoding="utf-8"))
+        record = json.loads(sources.SOURCE_PATHS.read_text(encoding="utf-8"))
         pages = sorted(_built(DOCS / "emulators").rglob("*.md*")) + sorted(DOCS.glob("gaps*.md*"))
         import measurement_records
 
@@ -1170,7 +1171,7 @@ class SourceLinksOnlyWhereTheFileIs(unittest.TestCase):
 
     def test_the_record_is_read_by_the_deploy(self):
         """The record is committed where the build reads it, sorted."""
-        record = json.loads(sitesources.SOURCE_PATHS.read_text(encoding="utf-8"))
+        record = json.loads(sources.SOURCE_PATHS.read_text(encoding="utf-8"))
         self.assertGreater(len(record), 300)
         for key, paths in record.items():
             self.assertRegex(key, r"^[a-z0-9.-]+/.+@[0-9a-f]{40}$")

@@ -15,7 +15,7 @@ from pathlib import Path
 
 import indexnow
 from sitegen import agents as siteagents
-import site_markdown
+from sitegen import pagemarkdown
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -39,7 +39,7 @@ class BuildStamp(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory(dir=ROOT / "tmp")
         self.dist = _site(Path(self.tmp.name))
-        site_markdown.convert_site(self.dist, STAMP)
+        pagemarkdown.convert_site(self.dist, STAMP)
 
     def tearDown(self):
         self.tmp.cleanup()
@@ -65,7 +65,7 @@ class BuildStamp(unittest.TestCase):
         first = json.loads((self.dist / "digests.json").read_text(encoding="utf-8"))
         with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as other:
             dist = _site(Path(other))
-            site_markdown.convert_site(dist, {"commit": "f" * 40, "date": "2026-11-10T00:00:00Z"})
+            pagemarkdown.convert_site(dist, {"commit": "f" * 40, "date": "2026-11-10T00:00:00Z"})
             second = json.loads((dist / "digests.json").read_text(encoding="utf-8"))
         self.assertEqual(first, second)
         self.assertIn("https://abdess.github.io/retrobios/llms.txt", first)

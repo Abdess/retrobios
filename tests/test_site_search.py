@@ -32,7 +32,7 @@ from html.parser import HTMLParser
 
 import generate_site as gs
 from sitegen import starlight as sitestarlight
-import validate_site
+from sitegen import validate
 import generate_site
 from model.registry import list_registered_platforms
 from model.profiles import load_emulator_profiles
@@ -329,24 +329,24 @@ class Descriptions(unittest.TestCase):
     def test_the_check_counts_templates(self) -> None:
         pages = {}
         for n in range(12):
-            page = validate_site.Page(Path(f"/s/p{n}/index.html"))
+            page = validate.Page(Path(f"/s/p{n}/index.html"))
             page.h1 = f"Core {n}"
             page.title = f"Core {n} BIOS files - RetroBIOS"
             page.descriptions = [f"Core {n}: emulator firmware profile with paths."]
             pages[page.path] = page
-        issues = validate_site._check_description_templates(pages, Path("/s"))
+        issues = validate._check_description_templates(pages, Path("/s"))
         self.assertEqual(len(issues), 1)
         self.assertIn("12 pages share", issues[0])
         for page in list(pages.values())[:2]:
             page.descriptions = [f"{page.h1} emulates a console of its own {page.h1[-1]}x."]
-        self.assertEqual(validate_site._check_description_templates(pages, Path("/s")), [])
+        self.assertEqual(validate._check_description_templates(pages, Path("/s")), [])
 
     def test_built_descriptions_are_not_templates(self) -> None:
         if not (DIST / "index.html").is_file():
             self.skipTest("site not built")
-        pages = {path.resolve(): validate_site._parse_page(path) for path in DIST.rglob("*.html")}
+        pages = {path.resolve(): validate._parse_page(path) for path in DIST.rglob("*.html")}
         content = {path: page for path, page in pages.items() if not page.redirect}
-        self.assertEqual(validate_site._check_description_templates(content, DIST.resolve()), [])
+        self.assertEqual(validate._check_description_templates(content, DIST.resolve()), [])
 
 
 QUERIES = _gate_queries()

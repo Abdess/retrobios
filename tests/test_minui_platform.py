@@ -425,7 +425,7 @@ class TheSitePageOfACardPlatform(unittest.TestCase):
         import generate_site
         from model.database import load_database
         from model.registry import load_platform_registry
-        from generate_readme import compute_coverage
+        from sitegen.readme import compute_coverage
 
         if not (REPO_ROOT / "database.json").is_file():
             self.skipTest("database.json absent")

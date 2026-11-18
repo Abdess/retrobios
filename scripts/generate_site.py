@@ -78,7 +78,7 @@ from core.artifacts import json_text as _json_text
 from packs.crossref import FileConsumers, entry_target, held_copy
 from resolve.nativemode import check_label, digest_algorithm, reads_file_contents
 
-from generate_readme import (
+from sitegen.readme import (
     platform_coverages,
     NO_PACK,
     asset_links,
@@ -95,7 +95,7 @@ from sitegen import entries as siteentries
 from model import siteinputs
 from model import retired as model_retired
 from sitegen import agents as siteagents
-import sitediagrams
+from sitegen import diagrams
 from sitegen import starlight as sitestarlight
 from sitegen import steps as sitesteps
 from sitegen.exports import generate_exports_page, load_export_reports
@@ -126,7 +126,7 @@ from sitegen import handheld as sitehandheld
 from sitegen import measurements as sitemeasurements
 from sitegen import wanted as sitewanted
 from resolve.review import load_platform_hashes, load_profile_hashes
-from sitediagrams import local_images, prepare_page, unresolved_images
+from sitegen.diagrams import local_images, prepare_page, unresolved_images
 from sitegen.write import (
     _record,
     _undecorated,
@@ -135,7 +135,7 @@ from sitegen.write import (
     _sweep_generated,
     _sweep_top_pages,
 )
-from sitesources import (
+from sitegen.sources import (
     link_prose_citations,
     requested_by,
     revision_markdown,
@@ -3725,7 +3725,7 @@ def _launcher_refs(config: dict) -> dict[str, list[str]]:
     """Entry name, casefolded -> each launcher record that opens it, rendered."""
     from resolve.launchers import _names as launcher_names
     from resolve.launchers import bound_launchers
-    from sitesources import launcher_ref_markdown, list_source
+    from sitegen.sources import launcher_ref_markdown, list_source
 
     # Every scraper reads its launchers in the repository and at the revision
     # of the list it scrapes, so `source` pins each source_ref. A record a
@@ -3754,7 +3754,7 @@ def _launcher_unproven_section(config: dict) -> list[str]:
     reading it are shown: these records place no file.
     """
     from resolve.launchers import launcher_unproven
-    from sitesources import launcher_ref_markdown, list_source
+    from sitegen.sources import launcher_ref_markdown, list_source
 
     rows = launcher_unproven({str(config.get("_key") or ""): config})
     if not rows:
@@ -4126,7 +4126,7 @@ ROLE_LEGEND = (
 def _refs_by_role(profile: dict, value: str | dict | None) -> str:
     """A source_ref's parts grouped by whose code they cite, each role named
     once by its ROLE_WORDS word: `glue a.c:1, b.c:2 and port c.c:3`."""
-    from sitesources import source_ref_items
+    from sitegen.sources import source_ref_items
 
     texts = []
     for label, items in source_ref_items(profile, value):
@@ -4723,7 +4723,7 @@ _HASH_WORDS = {"md5": "MD5", "sha1": "SHA-1", "sha256": "SHA-256", "crc32": "CRC
 def _transcribed_row(config: dict) -> list[str]:
     """The file every declaration on this page was read from: without it
     a hash could not be traced to the revision that states it."""
-    from sitesources import list_source
+    from sitegen.sources import list_source
 
     transcribed = str(config.get("source") or "")
     if not transcribed:
@@ -8596,7 +8596,7 @@ def _build_file_links(pin_build: list[dict]) -> list[str]:
     """Each platform build file that holds the revision, linked at the
     commit it was read at when the source record holds it. The prose of
     pin_frozen named the file as plain text."""
-    from sitesources import _browse_repo, tree_holds
+    from sitegen.sources import _browse_repo, tree_holds
 
     links = []
     for build in pin_build:
@@ -13091,8 +13091,8 @@ def _write_public_assets(docs: Path, public: Path) -> None:
         if source.is_dir():
             shutil.copytree(source, public / "assets" / dest, dirs_exist_ok=True)
     # The diagrams and the drawn install steps, one SVG per layout and theme.
-    sitediagrams.write_diagram_files(public / sitediagrams.DIAGRAM_DIR,
-                                     {**sitediagrams.figure_files(), **sitesteps.steps_files()})
+    diagrams.write_diagram_files(public / diagrams.DIAGRAM_DIR,
+                                     {**diagrams.figure_files(), **sitesteps.steps_files()})
     demo_dest = public / "assets" / "demo"
     demo_dest.mkdir(parents=True, exist_ok=True)
     for name in DEMO_ASSETS:

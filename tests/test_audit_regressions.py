@@ -3302,7 +3302,7 @@ class ContributorsSurviveAFailedRequest(unittest.TestCase):
     def _block(self, text: str):
         import tempfile
 
-        from generate_readme import _existing_contributor_block
+        from sitegen.readme import _existing_contributor_block
 
         with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False) as handle:
             handle.write(text)
@@ -3330,7 +3330,7 @@ class ContributorsSurviveAFailedRequest(unittest.TestCase):
         self.assertEqual(self._block("# Title\n\n## Other\n\ntext\n"), [])
 
     def test_an_unreadable_file_yields_nothing(self):
-        from generate_readme import _existing_contributor_block
+        from sitegen.readme import _existing_contributor_block
 
         self.assertEqual(_existing_contributor_block("/nonexistent/README.md"), [])
 
@@ -5653,9 +5653,9 @@ class AHeldRevisionLinksItsBuildFile(unittest.TestCase):
             f"RetroPie-Setup/blob/{pin}/scriptmodules/emulators/advmame-1.4.sh)", rows[0])
 
     def test_the_record_holds_the_build_files(self):
-        import sitesources
+        from sitegen import sources as sitegen_sources
 
-        files = sitesources.build_files({"pin_build": [
+        files = sitegen_sources.build_files({"pin_build": [
             {"repo": "https://github.com/o/r", "revision": "a" * 40, "path": "p.mk"},
             {"repo": "https://github.com/o/r", "revision": "v1", "path": "q.mk"}]})
         self.assertEqual([(f[1], f[2]) for f in files], [("a" * 40, "p.mk")])

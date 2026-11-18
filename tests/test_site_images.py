@@ -17,7 +17,7 @@ import unittest
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-import sitediagrams
+from sitegen import diagrams
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -26,11 +26,11 @@ SVG = "{http://www.w3.org/2000/svg}"
 
 class EveryDiagramIsAccessibleSvg(unittest.TestCase):
     def test_each_layout_parses_and_is_named(self):
-        for image_id in sitediagrams.IMAGE_IDS:
-            figure = sitediagrams.figures()[image_id]
+        for image_id in diagrams.IMAGE_IDS:
+            figure = diagrams.figures()[image_id]
             for layout in ("wide", "narrow"):
                 with self.subTest(image=image_id, layout=layout):
-                    root = ET.fromstring(sitediagrams.svg(figure, layout, ""))
+                    root = ET.fromstring(diagrams.svg(figure, layout, ""))
                     self.assertEqual(root.tag, f"{SVG}svg")
                     self.assertEqual(root.get("role"), "img")
                     title, desc = root.find(f"{SVG}title"), root.find(f"{SVG}desc")
@@ -42,19 +42,19 @@ class EveryDiagramIsAccessibleSvg(unittest.TestCase):
                     self.assertTrue(root.findall(f".//{SVG}text"))
 
     def test_the_output_does_not_change_between_runs(self):
-        first = [sitediagrams.figure_html(i) for i in sitediagrams.IMAGE_IDS]
-        sitediagrams.figures.cache_clear()
-        self.assertEqual(first, [sitediagrams.figure_html(i) for i in sitediagrams.IMAGE_IDS])
+        first = [diagrams.figure_html(i) for i in diagrams.IMAGE_IDS]
+        diagrams.figures.cache_clear()
+        self.assertEqual(first, [diagrams.figure_html(i) for i in diagrams.IMAGE_IDS])
 
     def test_text_carries_no_typographic_tics(self):
-        for image_id in sitediagrams.IMAGE_IDS:
-            html = sitediagrams.figure_html(image_id)
+        for image_id in diagrams.IMAGE_IDS:
+            html = diagrams.figure_html(image_id)
             with self.subTest(image=image_id):
                 self.assertIsNone(re.search("[\u2013\u2014\u2190-\u21ff\u2500-\u257f\u2026]", html))
                 self.assertNotIn("; ", re.sub(r"<[^>]+>", " ", html))
 
     def test_a_second_copy_on_one_page_gets_its_own_ids(self):
-        page = sitediagrams.resolve_images(
+        page = diagrams.resolve_images(
             "<!-- image: install-flow -->\n\ntext\n\n<!-- image: install-flow -->\n"
         )
         ids = re.findall(r'\bid="([^"]+)"', page)
@@ -70,19 +70,19 @@ class PlaceholdersResolve(unittest.TestCase):
         found = 0
         for path in sources:
             text = path.read_text(encoding="utf-8")
-            for image_id in sitediagrams.PLACEHOLDER_ANYWHERE.findall(text):
+            for image_id in diagrams.PLACEHOLDER_ANYWHERE.findall(text):
                 found += 1
                 with self.subTest(page=path.name, image=image_id):
-                    self.assertIn(image_id, sitediagrams.IMAGE_IDS)
+                    self.assertIn(image_id, diagrams.IMAGE_IDS)
         self.assertGreater(found, 0)
 
     def test_a_block_placeholder_becomes_a_figure(self):
-        page = sitediagrams.resolve_images("Intro\n\n<!-- image: bios-chain -->\n\nMore\n")
+        page = diagrams.resolve_images("Intro\n\n<!-- image: bios-chain -->\n\nMore\n")
         self.assertIn('<figure class="rb-figure"', page)
         self.assertNotIn("<!-- image:", page)
 
     def test_an_indented_placeholder_keeps_its_indent_and_escapes_markdown(self):
-        page = sitediagrams.resolve_images("1. Step\n\n    <!-- image: data-layers -->\n")
+        page = diagrams.resolve_images("1. Step\n\n    <!-- image: data-layers -->\n")
         line = page.splitlines()[2]
         self.assertTrue(line.startswith("    <span class=\"rb-figure"))
         self.assertNotIn("_shared", line)
@@ -90,16 +90,16 @@ class PlaceholdersResolve(unittest.TestCase):
 
     def test_an_unknown_name_is_left_for_the_validator(self):
         page = "<!-- image: no-such-diagram -->\n"
-        self.assertEqual(sitediagrams.resolve_images(page), page)
-        self.assertEqual(sitediagrams.unresolved_images(page), ["no-such-diagram"])
+        self.assertEqual(diagrams.resolve_images(page), page)
+        self.assertEqual(diagrams.unresolved_images(page), ["no-such-diagram"])
 
 
 class DiagramsMatchTheData(unittest.TestCase):
     def test_every_platform_appears_under_its_mode(self):
-        text = sitediagrams.figures()["verification-modes"].caption
-        for display, mode, _ in sitediagrams.platform_modes().values():
+        text = diagrams.figures()["verification-modes"].caption
+        for display, mode, _ in diagrams.platform_modes().values():
             with self.subTest(platform=display):
-                self.assertIn(mode, sitediagrams.MODE_TEXT)
+                self.assertIn(mode, diagrams.MODE_TEXT)
                 self.assertIn(display, text)
 
     def test_each_example_platform_runs_its_emulator(self):
@@ -108,7 +108,7 @@ class DiagramsMatchTheData(unittest.TestCase):
         from resolve.cores import resolve_platform_cores
 
         profiles = load_emulator_profiles(str(ROOT / "emulators"), skip_aliases=False)
-        for platform, emulator in sitediagrams.CHAIN_EXAMPLES:
+        for platform, emulator in diagrams.CHAIN_EXAMPLES:
             with self.subTest(platform=platform, emulator=emulator):
                 config = load_platform_config(platform, str(ROOT / "platforms"))
                 self.assertIn(emulator, resolve_platform_cores(config, profiles))
@@ -118,15 +118,15 @@ class DiagramsMatchTheData(unittest.TestCase):
 
         config = yaml.safe_load((ROOT / "platforms" / "minui.yml").read_text(encoding="utf-8"))
         folders = set(config["core_system_dirs"])
-        for _, tag in sitediagrams.MINUI_EXAMPLES:
+        for _, tag in diagrams.MINUI_EXAMPLES:
             with self.subTest(tag=tag):
                 self.assertIn(f"Bios/{tag}", folders)
-                self.assertTrue(sitediagrams.minui_files().get(tag))
+                self.assertTrue(diagrams.minui_files().get(tag))
 
     def test_the_pipeline_drawing_is_the_step_list(self):
         from pipeline import STEP_LABELS
 
-        numbers = [box.number for box in sitediagrams._pipeline_boxes()]
+        numbers = [box.number for box in diagrams._pipeline_boxes()]
         self.assertEqual(numbers, [label.split(" ", 1)[0] for label in STEP_LABELS.values()])
 
 
@@ -166,17 +166,17 @@ class ImagesAreServedFromTheSite(unittest.TestCase):
     def test_remote_links_with_a_copy_are_rewritten(self):
         logo = self._manifest("logos")[0]
         page = f"| ![X]({logo['source']}){{ width=20 }} | <img src=\"{logo['source']}\"> |"
-        local = sitediagrams.localize_images(page, Path("platforms/x.md"))
+        local = diagrams.localize_images(page, Path("platforms/x.md"))
         self.assertNotIn(logo["source"], local)
         self.assertEqual(local.count(f"../assets/logos/{logo['file']}"), 2)
 
     def test_icon_paths_are_link_safe(self):
         icon = self._manifest("system-icons")[0]
-        local = sitediagrams.localize_images(f"![a]({icon['source']})", Path("systems/x.md"))
+        local = diagrams.localize_images(f"![a]({icon['source']})", Path("systems/x.md"))
         self.assertNotIn(" ", local)
 
     def test_the_validator_refuses_a_remote_image(self):
-        from validate_site import _parse_page
+        from sitegen.validate import _parse_page
 
         with tempfile.TemporaryDirectory(dir=ROOT / "tests") as tmp:
             path = Path(tmp) / "index.html"
@@ -193,13 +193,13 @@ class SharingCards(unittest.TestCase):
     def test_one_card_per_section_at_the_open_graph_size(self):
         import struct
 
-        for section in sitediagrams.OG_SECTIONS:
+        for section in diagrams.OG_SECTIONS:
             with self.subTest(section=section):
                 data = (ROOT / "docs_assets" / "og" / f"{section}.png").read_bytes()
                 self.assertEqual(data[:8], b"\x89PNG\r\n\x1a\n")
                 self.assertEqual(struct.unpack(">II", data[16:24]), (1200, 630))
                 mark = (ROOT / "docs_assets" / "brand" / "logo.svg").read_text(encoding="utf-8")
-                ET.fromstring(sitediagrams.og_card_svg(section, mark))
+                ET.fromstring(diagrams.og_card_svg(section, mark))
 
     def test_the_template_names_every_section(self):
         from sitegen import starlight as sitestarlight
@@ -207,7 +207,7 @@ class SharingCards(unittest.TestCase):
         named = {sitestarlight.og_section("index.md", "")} | {
             sitestarlight.og_section("wiki/page.md", level)
             for level in ("start", "setup", "explore", "reference", "contribute")}
-        self.assertEqual(named, set(sitediagrams.OG_SECTIONS))
+        self.assertEqual(named, set(diagrams.OG_SECTIONS))
         for section in named:
             with self.subTest(section=section):
                 self.assertTrue((ROOT / "docs_assets" / "og" / f"{section}.png").is_file())

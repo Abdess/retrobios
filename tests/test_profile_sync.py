@@ -5153,9 +5153,9 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
     def test_only_a_real_online_write_refreshes(self):
         from unittest import mock
 
-        import sitesources
+        from sitegen import sources
 
-        with mock.patch.object(sitesources, "build_source_paths", return_value=({}, [])) as built, \
+        with mock.patch.object(sources, "build_source_paths", return_value=({}, [])) as built, \
                 mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""}), \
                 mock.patch.object(profile_sync, "load_emulator_profiles", return_value={}), \
                 mock.patch("core.artifacts.write_if_changed") as written, \
@@ -5178,7 +5178,7 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
 
         from model import profiles as model_profiles
         from model.profiles import _emulator_profiles_cache
-        import sitesources
+        from sitegen import sources
 
         with tempfile.TemporaryDirectory() as tmp:
             profile = Path(tmp) / "p.yml"
@@ -5187,7 +5187,7 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
             self.addCleanup(_emulator_profiles_cache.clear)
             model_profiles.load_emulator_profiles(tmp, skip_aliases=False)
             profile.write_text('emulator: P\nsource_commit: "new"\n', encoding="utf-8")
-            with mock.patch.object(sitesources, "build_source_paths", return_value=({}, [])) as built, \
+            with mock.patch.object(sources, "build_source_paths", return_value=({}, [])) as built, \
                     mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""}), \
                     mock.patch("core.artifacts.write_if_changed"), \
                     contextlib.redirect_stderr(io.StringIO()), \
@@ -5202,9 +5202,9 @@ class AnUnreadTreeKeepsItsRecord(unittest.TestCase):
     trees it never read from source-paths.json."""
 
     def test_unread_trees_carry_over(self):
-        import sitesources
+        from sitegen import sources
 
-        kept = sitesources.keep_unread(
+        kept = sources.keep_unread(
             {"a@1": ["x.c"]}, ["b@2", "c@3"], {"b@2": ["y.c"], "a@1": ["old.c"]}
         )
         # c@3 was never read: recorded empty, it confirms no path.
@@ -6287,9 +6287,9 @@ class TestBranchCheckIsWired(unittest.TestCase):
 
     def test_contributing_and_ci_use_the_flags(self):
         root = Path(__file__).resolve().parents[1]
-        import generate_readme
+        from sitegen import readme
 
-        text = generate_readme.generate_contributing()
+        text = readme.generate_contributing()
         self.assertIn("profile_sync.py --added --strict", text)
         # The default base is fetched by the tool: a documented upstream
         # remote failed every clone that had origin alone.

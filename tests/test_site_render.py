@@ -136,7 +136,7 @@ class StructuredBlocks(unittest.TestCase):
 
         return "\n".join(generate_site._render_structured_blocks(profile))
 
-    @mock.patch("sitesources.tree_holds", lambda *_args: True)  # a path the record confirms
+    @mock.patch("sitegen.sources.tree_holds", lambda *_args: True)  # a path the record confirms
     def test_a_source_ref_in_a_block_is_a_pinned_link(self):
         """186 citations in analysis and firmware blocks were plain code."""
         page = self.render(self.profile("analysis", {"tmss": {
@@ -264,15 +264,15 @@ class CitationsKeepTheirAnnotations(unittest.TestCase):
     reused it: abuse's two lsf lines lost "(lsf default)" and "(lsf
     override)", the only words saying which one wins."""
 
-    @mock.patch("sitesources.tree_holds", lambda *_args: True)
+    @mock.patch("sitegen.sources.tree_holds", lambda *_args: True)
     def test_each_part_shows_what_the_profile_wrote_beside_it(self):
-        import sitesources
+        from sitegen import sources
 
         profile = {"source": "https://github.com/Xenoveritas/abuse",
                    "source_commit": "a" * 40}
         ref = ("src/loader2.cpp:284 (lsf default), src/netcfg.cpp:204 (lsf override), "
                "libretro.cpp:1520-1521 candidates_a1200, 30-31 (see <system_dir>), src/x.c:1")
-        (label, items), = sitesources.source_ref_items(profile, ref)
+        (label, items), = sources.source_ref_items(profile, ref)
         texts = [text for text, _role in items]
         self.assertTrue(texts[0].endswith(") (lsf default)"), texts[0])
         self.assertTrue(texts[1].endswith(") (lsf override)"), texts[1])
@@ -290,9 +290,9 @@ class CitationsKeepTheirAnnotations(unittest.TestCase):
         self.assertEqual(ref_annotation("0x53c338-0x53c36f (dreamBios row)"), "(dreamBios row)")
 
     def test_a_binary_citation_keeps_its_annotation(self):
-        import sitesources
+        from sitegen import sources
 
-        (_label, items), = sitesources.source_ref_items(
+        (_label, items), = sources.source_ref_items(
             {}, "demul.exe 0x6b4d80-0x6b4ea3 (dc table), 0x53ca4d-0x53ca7e (load, fatal)")
         self.assertEqual([text for text, _ in items], [
             "offset `0x6b4d80-0x6b4ea3` in `demul.exe` (dc table)",
@@ -304,13 +304,13 @@ class ForgesUpstreamDoesNotRead(unittest.TestCase):
     """Profiles pinned on SourceForge, voidpoint.io, Bitbucket or Software
     Heritage showed no revision, and their citations were plain code."""
 
-    @mock.patch("sitesources.tree_holds", lambda *_args: True)  # a path the record confirms
+    @mock.patch("sitegen.sources.tree_holds", lambda *_args: True)  # a path the record confirms
     def links(self, url: str, ref: str, **extra: str) -> tuple[str, str]:
-        import sitesources
+        from sitegen import sources
 
         profile = {"source": url, "source_commit": "f6c00044" + "0" * 32, **extra}
-        return (sitesources.revision_markdown(profile),
-                sitesources._source_ref_markdown(profile, ref))
+        return (sources.revision_markdown(profile),
+                sources._source_ref_markdown(profile, ref))
 
     def test_bitbucket(self):
         revision, ref = self.links("https://bitbucket.org/linuxwolf6/splitwolf",

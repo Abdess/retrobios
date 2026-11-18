@@ -145,7 +145,7 @@ class EveryPageHasAMarkdownCopy(unittest.TestCase):
         self.assertIn("markdownCopies,", config)
 
     def test_a_page_keeps_its_commands_under_their_system(self) -> None:
-        import site_markdown
+        from sitegen import pagemarkdown
 
         html = ('<html><body><main><h1 id="_top">Demo</h1><div class="sl-markdown-content">'
                 '<p>Run it <a href="/retrobios/x/">here</a>.</p>'
@@ -157,7 +157,7 @@ class EveryPageHasAMarkdownCopy(unittest.TestCase):
                 '<div class="ec-line"><div class="code">curl x | sh</div></div></code></pre></div>'
                 '<table><tr><th>File</th><th>MD5</th></tr><tr><td>a.bin</td><td>ff</td></tr></table>'
                 '<button>Copy</button><span class="sr-only">hidden</span></div></main></body></html>')
-        text = site_markdown.page_markdown(html, "https://abdess.github.io/retrobios/demo/")
+        text = pagemarkdown.page_markdown(html, "https://abdess.github.io/retrobios/demo/")
         self.assertTrue(text.startswith("# Demo\n\nSource: https://abdess.github.io/retrobios/demo/"))
         self.assertIn("[here](https://abdess.github.io/retrobios/x/)", text)
         self.assertIn("**Windows:**\n\n```\nirm x | iex\n```", text)

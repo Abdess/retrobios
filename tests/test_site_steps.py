@@ -16,7 +16,7 @@ import unittest
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-import sitediagrams
+from sitegen import diagrams
 from sitegen import steps as sitesteps
 from model.guides import TERMINALS
 
@@ -85,11 +85,11 @@ class TheBuiltPageHoldsThem(unittest.TestCase):
         html = page.read_text(encoding="utf-8")
         for tab in sitesteps.STEPS:
             for layout in ("wide", "narrow"):
-                for theme in sitediagrams.THEMES:
+                for theme in diagrams.THEMES:
                     name = f"{sitesteps.stem(tab)}-{layout}-{theme}.svg"
                     with self.subTest(file=name):
-                        self.assertIn(f"/retrobios/{sitediagrams.DIAGRAM_DIR}/{name}", html)
-                        self.assertTrue((DIST / sitediagrams.DIAGRAM_DIR / name).is_file())
+                        self.assertIn(f"/retrobios/{diagrams.DIAGRAM_DIR}/{name}", html)
+                        self.assertTrue((DIST / diagrams.DIAGRAM_DIR / name).is_file())
 
 
 if __name__ == "__main__":

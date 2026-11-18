@@ -24,7 +24,7 @@ from dataclasses import dataclass
 from xml.sax.saxutils import escape
 
 from sitegen import markup
-from sitediagrams import (
+from sitegen.diagrams import (
     MONO_STYLE,
     NARROW,
     STROKE,

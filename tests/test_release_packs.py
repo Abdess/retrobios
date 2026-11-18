@@ -517,12 +517,12 @@ class TheSiteCheckResolvesEveryGetPage(unittest.TestCase):
         return site
 
     def test_missing_and_wrong_pages_are_reported(self):
-        import validate_site
+        from sitegen import validate
 
         record = {"tag": "v1", "packs": {"RomM_BIOS_Pack.zip": {
             "platforms": ["romm"], "assets": ["RomM_BIOS_Pack.zip"],
             "files": 1, "extracted_size": 1, "download_size": 1}}}
-        download = validate_site.RELEASE_DOWNLOAD
+        download = validate.RELEASE_DOWNLOAD
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
             root = Path(tmp)
             record_path = root / "release.json"
@@ -535,8 +535,8 @@ class TheSiteCheckResolvesEveryGetPage(unittest.TestCase):
             pages["get/knulli/index.html"] = f'<a href="{download}v1/K_BIOS_Pack.zip">x</a>'
             del pages["get/lakka/index.html"]
             site = self._site(root, pages)
-            parsed = {p.resolve(): validate_site._parse_page(p) for p in site.rglob("*.html")}
-            issues = validate_site._check_get_pages(parsed, site.resolve(), Path(PLATFORMS),
+            parsed = {p.resolve(): validate._parse_page(p) for p in site.rglob("*.html")}
+            issues = validate._check_get_pages(parsed, site.resolve(), Path(PLATFORMS),
                                                     record_path)
         joined = "\n".join(issues)
         self.assertIn("get/lakka/index.html: no download page", joined)

@@ -779,9 +779,9 @@ class ReadmeInstallerOptions(unittest.TestCase):
     README never linked."""
 
     def test_quick_install_gives_the_powershell_form_and_the_page(self):
-        import generate_readme
+        from sitegen import readme as sitegen_readme
 
-        source = inspect.getsource(generate_readme.generate_readme)
+        source = inspect.getsource(sitegen_readme.generate_readme)
         self.assertIn("wiki/installer/#passing-options", source)
         self.assertIn("## Passing options", _page("installer.md"))
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
@@ -797,13 +797,13 @@ class PublishedNumbersShareOneFormat(unittest.TestCase):
     the site home as 15.6 GB, and the emulators page `10095 files`."""
 
     def test_generators_format_counts_and_sizes_alike(self):
-        import generate_readme
+        from sitegen import readme as sitegen_readme
 
-        readme_source = inspect.getsource(generate_readme.generate_readme)
+        readme_source = inspect.getsource(sitegen_readme.generate_readme)
         self.assertNotIn("size_mb", readme_source)
         self.assertIn("format_size(size)", readme_source)
         self.assertIn("{total_files:,}", script_source("generate_site.py"))
-        self.assertEqual(generate_readme.format_size(16011 * 1024 * 1024), "15.6 GB")
+        self.assertEqual(sitegen_readme.format_size(16011 * 1024 * 1024), "15.6 GB")
 
     def test_the_readme_has_no_bare_large_count(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
@@ -2051,10 +2051,10 @@ class BuildYourOwnPackSaysWhatTheCloneCosts(unittest.TestCase):
     command and no size, and the clone runs to several gigabytes."""
 
     def test_readme_gives_the_clone_command_and_its_size(self):
-        import generate_readme
+        from sitegen import readme as sitegen_readme
 
         db = json.loads((ROOT / "database.json").read_text(encoding="utf-8"))
-        line = generate_readme.clone_line(db)
+        line = sitegen_readme.clone_line(db)
         self.assertIn("git clone --depth 1", line)
         self.assertRegex(line, r"over \d+(\.\d)? GB")
         readme = (ROOT / "README.md").read_text(encoding="utf-8")

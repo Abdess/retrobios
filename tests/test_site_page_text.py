@@ -22,7 +22,7 @@ import unittest
 from html.parser import HTMLParser
 from pathlib import Path
 
-import sitediagrams
+from sitegen import diagrams
 from sitegen import entries as siteentries
 from sitegen import steps as sitesteps
 from model.guides import TERMINALS
@@ -184,8 +184,8 @@ class PageReadsOnce:
     def test_a_figure_says_its_words_once(self):
         for name, page in self.pages.items():
             text = _letters(page.text)
-            for image_id in sitediagrams.IMAGE_IDS:
-                figure = sitediagrams.figures()[image_id]
+            for image_id in diagrams.IMAGE_IDS:
+                figure = diagrams.figures()[image_id]
                 with self.subTest(page=name, image=image_id):
                     self.assertLessEqual(text.count(_letters(figure.desc)), 1)
                     self.assertLessEqual(text.count(_letters(figure.caption)), 1)
@@ -322,26 +322,26 @@ class DiagramsAreImages(unittest.TestCase):
     the words once. Each theme has its files, coloured as the page is."""
 
     def test_no_inline_drawing_and_no_alt(self):
-        for html in [*(sitediagrams.figure_html(i) for i in sitediagrams.IMAGE_IDS),
+        for html in [*(diagrams.figure_html(i) for i in diagrams.IMAGE_IDS),
                      *("".join(sitesteps.steps_figure(tab)) for tab in sitesteps.STEPS)]:
             with self.subTest(html=html[:60]):
                 self.assertNotIn("<svg", html)
                 self.assertEqual(set(re.findall(r'<img [^>]*alt="([^"]*)"', html)), {""})
-                self.assertEqual(len(re.findall(r"<picture ", html)), len(sitediagrams.THEMES))
+                self.assertEqual(len(re.findall(r"<picture ", html)), len(diagrams.THEMES))
 
     def test_every_image_has_its_file(self):
-        files = {**sitediagrams.figure_files(), **sitesteps.steps_files()}
-        pages = [*(sitediagrams.figure_html(i) for i in sitediagrams.IMAGE_IDS),
+        files = {**diagrams.figure_files(), **sitesteps.steps_files()}
+        pages = [*(diagrams.figure_html(i) for i in diagrams.IMAGE_IDS),
                  *("".join(sitesteps.steps_figure(tab)) for tab in sitesteps.STEPS)]
         named = {url.rsplit("/", 1)[1] for html in pages
                  for url in re.findall(r'(?:src|srcset)="([^"]+)"', html)}
         self.assertEqual(named, set(files))
 
     def test_the_figure_says_its_desc_once(self):
-        for image_id in sitediagrams.IMAGE_IDS:
-            figure = sitediagrams.figures()[image_id]
+        for image_id in diagrams.IMAGE_IDS:
+            figure = diagrams.figures()[image_id]
             with self.subTest(image=image_id):
-                text = read(sitediagrams.figure_html(image_id)).text
+                text = read(diagrams.figure_html(image_id)).text
                 self.assertEqual(text.count(figure.desc), 1)
                 self.assertIn(figure.caption, text)
 
@@ -355,13 +355,13 @@ class DiagramsAreImages(unittest.TestCase):
             for key, token in tokens.items():
                 with self.subTest(theme=theme, token=token):
                     value = re.search(rf"{token}:\s*(#[0-9a-f]+);", block).group(1)
-                    self.assertEqual(sitediagrams.THEMES[theme][key], value)
+                    self.assertEqual(diagrams.THEMES[theme][key], value)
 
     def test_a_file_carries_its_theme(self):
         for name, text in sitesteps.steps_files().items():
             theme = name.rsplit("-", 1)[1].removesuffix(".svg")
             with self.subTest(file=name):
-                self.assertIn(f".rb-d-box{{fill:{sitediagrams.THEMES[theme]['fill']}", text)
+                self.assertIn(f".rb-d-box{{fill:{diagrams.THEMES[theme]['fill']}", text)
                 self.assertTrue(text.startswith("<svg "))
 
 

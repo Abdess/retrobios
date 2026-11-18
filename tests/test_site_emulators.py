@@ -40,7 +40,7 @@ import json
 import generate_site as gs
 from sitegen import render as siterender
 from model import systemnames
-import validate_site
+from sitegen import validate
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -376,20 +376,20 @@ class DataDirectoryPagesStayOutOfSearch(unittest.TestCase):
 
 class AnElementBudget(unittest.TestCase):
     def test_validate_site_reports_a_crowded_page(self):
-        self.assertEqual(validate_site.MAX_PAGE_ELEMENTS, 10_000)
+        self.assertEqual(validate.MAX_PAGE_ELEMENTS, 10_000)
         (REPO_ROOT / "tmp").mkdir(exist_ok=True)
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             page = Path(tmp) / "crowded" / "index.html"
             page.parent.mkdir()
             page.write_text("<html><body>" + "<i></i>" * 10_001
                             + "<script>" + "<b>" * 5 + "</script></body></html>")
-            issues = validate_site.validate_site(Path(tmp))
+            issues = validate.validate_site(Path(tmp))
         self.assertTrue(any("elements, over the 10,000 budget" in issue for issue in issues))
 
     @unittest.skipUnless((DIST / "emulators" / "mame" / "index.html").is_file(), "site not built")
     def test_mame_is_under_it(self):
-        page = validate_site._parse_page(DIST / "emulators" / "mame" / "index.html")
-        self.assertLess(page.elements, validate_site.MAX_PAGE_ELEMENTS)
+        page = validate._parse_page(DIST / "emulators" / "mame" / "index.html")
+        self.assertLess(page.elements, validate.MAX_PAGE_ELEMENTS)
 
 
 def _pages(name: str, profile: dict | None = None) -> dict[str, str]:

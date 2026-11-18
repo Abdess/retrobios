@@ -187,7 +187,7 @@ class NothingIsLost(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         from model.database import load_database
-        from generate_readme import compute_coverage
+        from sitegen.readme import compute_coverage
 
         db = load_database(str(REPO_ROOT / "database.json"))
         cls.pages = {}
@@ -337,7 +337,7 @@ class APlatformWeighsNoMoreThanBefore(unittest.TestCase):
     with its parts rose from 18,854 to 21,875 elements."""
 
     def test_pages_elements_and_bytes(self):
-        from validate_site import _PageParser
+        from sitegen.validate import _PageParser
 
         for name, (pages, elements, size) in BEFORE_WEIGHT.items():
             paths, weight = [], 0

@@ -1521,20 +1521,20 @@ def check_source_paths(profiles: dict) -> Finding:
     or a pinned tree the record lacks, means a pin moved or a profile was
     added and `sitesources.py --fetch` was not run after it. Every tree a run
     tries is recorded, read or not, so a lacking one was never tried."""
-    import sitesources
+    from sitegen import sources as sitegen_sources
 
     pinned = {
-        sitesources.tree_key(repo, pin)
-        for profile in profiles.values() if sitesources.cited_paths(profile)
-        for repo, pin in sitesources.profile_trees(profile)
+        sitegen_sources.tree_key(repo, pin)
+        for profile in profiles.values() if sitegen_sources.cited_paths(profile)
+        for repo, pin in sitegen_sources.profile_trees(profile)
     } | {
         # The platform build files pin_build names, linked from a page too.
-        sitesources.tree_key(repo, pin)
+        sitegen_sources.tree_key(repo, pin)
         for profile in profiles.values()
-        for repo, pin, _path in sitesources.build_files(profile)
+        for repo, pin, _path in sitegen_sources.build_files(profile)
     }
     try:
-        recorded = set(json.loads(sitesources.SOURCE_PATHS.read_text(encoding="utf-8")))
+        recorded = set(json.loads(sitegen_sources.SOURCE_PATHS.read_text(encoding="utf-8")))
     except (OSError, ValueError) as exc:
         return Finding("profiles", "source-paths.json", ERROR, detail=str(exc))
     orphaned = sorted(recorded - pinned)

@@ -41,7 +41,7 @@ from pathlib import Path
 import yaml
 import importlib.util
 
-import sitediagrams
+from sitegen import diagrams
 from model.guides import INSTALL_SH
 from tests import sitepages
 import build_port
@@ -134,7 +134,7 @@ class InstallCommandsHaveEveryForm(unittest.TestCase):
             "<!-- os-tabs windows: --platform retroarch --dest E:\\x -->\n```sh\n"
             f"curl -fsSL {INSTALL_SH} \\\n  | sh -s -- --platform retroarch --dest /a/b\n```\n"
         )
-        text = sitediagrams.expand_commands(page)
+        text = diagrams.expand_commands(page)
         windows, rest = text.split('<TabItem label="macOS">', 1)
         self.assertIn("--dest E:\\x", windows)
         self.assertNotIn("/a/b", windows)
@@ -142,7 +142,7 @@ class InstallCommandsHaveEveryForm(unittest.TestCase):
 
     def test_a_marked_block_without_an_install_command_fails_the_build(self):
         with self.assertRaises(ValueError):
-            sitediagrams.expand_commands("<!-- os-tabs -->\n```sh\nls -l\n```\n")
+            diagrams.expand_commands("<!-- os-tabs -->\n```sh\nls -l\n```\n")
 
 
 class FirstInstallEnds(unittest.TestCase):
@@ -248,7 +248,7 @@ class SetupCount(unittest.TestCase):
     def test_one_count(self):
         from model.registry import list_registered_platforms
 
-        self.assertEqual(len(sitediagrams.setups()),
+        self.assertEqual(len(diagrams.setups()),
                          len(list_registered_platforms(str(REPO_ROOT / "platforms"))))
 
     def test_every_rendered_count_agrees(self):
@@ -258,9 +258,9 @@ class SetupCount(unittest.TestCase):
             text = path.read_text(encoding="utf-8")
             found.update(int(n) for n in re.findall(r"(?:RetroArch|EmuDeck|Batocera) and (\d+) more", text))
         found.update(int(n) for n in re.findall(
-            r"and (\d+) more", sitediagrams.og_card_svg("home", "<svg></svg>")))
+            r"and (\d+) more", diagrams.og_card_svg("home", "<svg></svg>")))
         self.assertTrue(found)
-        self.assertEqual(found, {len(sitediagrams.setups()) - 3})
+        self.assertEqual(found, {len(diagrams.setups()) - 3})
 
 
 class Vocabulary(unittest.TestCase):
@@ -281,7 +281,7 @@ class Vocabulary(unittest.TestCase):
                 self.assertNotIn("game menu", text)
         for figure in ("bios-chain", "install-flow"):
             with self.subTest(figure=figure):
-                self.assertNotIn("rontend", sitediagrams.figure_html(figure))
+                self.assertNotIn("rontend", diagrams.figure_html(figure))
 
 
 class NavigationPlaces(unittest.TestCase):
@@ -338,30 +338,30 @@ class DiagramText(unittest.TestCase):
     """V17: 11 px text in fixed-height boxes, paths broken mid-token."""
 
     def test_text_reads_at_14_px_in_the_column(self):
-        self.assertGreaterEqual(sitediagrams.TEXT_SIZE * sitediagrams.COLUMN / sitediagrams.WIDE, 14)
+        self.assertGreaterEqual(diagrams.TEXT_SIZE * diagrams.COLUMN / diagrams.WIDE, 14)
 
     def test_no_box_holds_more_than_three_lines(self):
-        wide = sitediagrams.WIDE - 2
+        wide = diagrams.WIDE - 2
         layouts = {  # the box width of each wide layout: flow, grid of two, columns
-            "bios-chain": (sitediagrams._bios_chain_boxes(), (wide - 26 * 3) / 4),
-            "install-flow": (sitediagrams._install_boxes(), (wide - 18) / 2),
-            "verification-modes": (sitediagrams._mode_boxes(), (wide - 16 * 2) / 3),
+            "bios-chain": (diagrams._bios_chain_boxes(), (wide - 26 * 3) / 4),
+            "install-flow": (diagrams._install_boxes(), (wide - 18) / 2),
+            "verification-modes": (diagrams._mode_boxes(), (wide - 16 * 2) / 3),
         }
         for name, (boxes, box_width) in layouts.items():
-            for width in (sitediagrams.NARROW - 2, box_width):
+            for width in (diagrams.NARROW - 2, box_width):
                 for box in boxes:
                     with self.subTest(figure=name, box=box.title, width=width):
-                        self.assertLessEqual(len(sitediagrams.box_lines(box, width)[1]),
-                                             sitediagrams.MAX_BOX_LINES)
+                        self.assertLessEqual(len(diagrams.box_lines(box, width)[1]),
+                                             diagrams.MAX_BOX_LINES)
 
     def test_a_path_is_mono_on_its_own_line(self):
-        html = sitediagrams.svg(sitediagrams.figures()["bios-chain"], "wide")
+        html = diagrams.svg(diagrams.figures()["bios-chain"], "wide")
         self.assertRegex(html, r'<text [^>]*style="font-family: var\(--sl-font-mono[^>]*>/userdata/bios/</text>')
 
     def test_boxes_of_a_row_share_one_height(self):
-        for layout in (sitediagrams.flow, sitediagrams.columns):
-            for vertical, total in ((False, sitediagrams.WIDE), (True, sitediagrams.NARROW)):
-                _width, _height, body = layout(sitediagrams._bios_chain_boxes(), vertical, total)
+        for layout in (diagrams.flow, diagrams.columns):
+            for vertical, total in ((False, diagrams.WIDE), (True, diagrams.NARROW)):
+                _width, _height, body = layout(diagrams._bios_chain_boxes(), vertical, total)
                 heights = {float(h) for h in re.findall(r'<rect [^>]*height="([\d.]+)"[^>]*class="rb-d-box',
                                                          "".join(body))}
                 with self.subTest(layout=layout.__name__, vertical=vertical):
@@ -381,13 +381,13 @@ class ExampleHashesStayOutOfSearch(unittest.TestCase):
                 self.assertIn("data-pagefind-ignore", context)
 
     def test_a_fenced_hash_is_wrapped(self):
-        out = sitediagrams.hide_hashes("```sh\nx 490f666e1afb15b7362b406ed1cea246\n```\n")
+        out = diagrams.hide_hashes("```sh\nx 490f666e1afb15b7362b406ed1cea246\n```\n")
         self.assertTrue(out.startswith("<div data-pagefind-ignore>\n\n```sh"))
 
     def test_only_wiki_pages_are_touched(self):
         page = "Hash `490f666e1afb15b7362b406ed1cea246`.\n"
-        self.assertEqual(sitediagrams.prepare_page(page, Path("systems/sony.md")), page)
-        self.assertIn("data-pagefind-ignore", sitediagrams.prepare_page(page, Path("wiki/x.md")))
+        self.assertEqual(diagrams.prepare_page(page, Path("systems/sony.md")), page)
+        self.assertIn("data-pagefind-ignore", diagrams.prepare_page(page, Path("wiki/x.md")))
 
 
 class InstallerOptionsAtAGlance(unittest.TestCase):
@@ -397,7 +397,7 @@ class InstallerOptionsAtAGlance(unittest.TestCase):
     def test_every_option_of_the_parser_has_a_row(self):
         source = (REPO_ROOT / "install.py").read_text(encoding="utf-8")
         declared = set(re.findall(r'parser\.add_argument\(\s*"(--[a-z-]+)"', source))
-        listed = {usage.split()[0].rstrip(",") for usage, _ in sitediagrams.installer_options()}
+        listed = {usage.split()[0].rstrip(",") for usage, _ in diagrams.installer_options()}
         self.assertEqual(declared | {"--help"}, listed)
 
     def test_the_built_page_opens_on_a_link_per_option(self):
@@ -405,7 +405,7 @@ class InstallerOptionsAtAGlance(unittest.TestCase):
         glance = text.index("## Options at a glance")
         self.assertLess(glance, text.index("## One line"))
         listed = text[glance:text.index("## One line")]
-        for usage, _ in sitediagrams.installer_options():
+        for usage, _ in diagrams.installer_options():
             flag = usage.split()[0].rstrip(",")
             with self.subTest(option=flag):
                 self.assertIn(f"[`{flag}`](#option-{flag.lstrip('-')})", listed)
@@ -969,11 +969,11 @@ class OneOptionsTable(unittest.TestCase):
 
     def test_each_option_links_to_its_row(self):
         # The glance is written from the parser when the page is built.
-        glance = _section(sitediagrams.expand_glance(self.text), "Options at a glance")
+        glance = _section(diagrams.expand_glance(self.text), "Options at a glance")
         table = _section(self.text, "Options")
         self.assertNotIn("installer-options", glance)
         self.assertNotIn("|", glance)
-        for usage, _ in sitediagrams.installer_options():
+        for usage, _ in diagrams.installer_options():
             flag = usage.split()[0].rstrip(",")
             anchor = f"option-{flag.lstrip('-')}"
             with self.subTest(option=flag):
@@ -1032,7 +1032,7 @@ class NoSetupFoundGivesEachSystemItsFolder(unittest.TestCase):
         self.assertEqual(folders["Linux"], f"`{expected['Linux']}/`")
         self.assertEqual(folders["Steam Deck and Linux Flatpak"], f"`{expected['Steam Deck']}/`")
 
-        tabs = sitediagrams.expand_commands(self.section)
+        tabs = diagrams.expand_commands(self.section)
         parts = re.split(r'<TabItem label="([^"]+)">', tabs)
         bodies = dict(zip(parts[1::2], parts[2::2]))
         self.assertEqual(set(bodies), set(expected))
@@ -1061,7 +1061,7 @@ class OsTabsTakeOptionsPerSystem(unittest.TestCase):
             f"```sh\ncurl -fsSL {INSTALL_SH} | sh -s -- --dest /l\n```\n")
 
     def test_each_named_tab_uses_its_own(self):
-        parts = re.split(r'<TabItem label="([^"]+)">', sitediagrams.expand_commands(self.PAGE))
+        parts = re.split(r'<TabItem label="([^"]+)">', diagrams.expand_commands(self.PAGE))
         bodies = dict(zip(parts[1::2], parts[2::2]))
         self.assertIn("--dest E:\\x\n", bodies["Windows"])
         self.assertIn("--dest /m\n", bodies["macOS"])
@@ -1071,7 +1071,7 @@ class OsTabsTakeOptionsPerSystem(unittest.TestCase):
     def test_text_before_a_system_name_fails_the_build(self):
         page = self.PAGE.replace("os-tabs windows:", "os-tabs typo windows:")
         with self.assertRaises(ValueError):
-            sitediagrams.expand_commands(page)
+            diagrams.expand_commands(page)
 
 
 class MostEmulatorsNotEvery(unittest.TestCase):

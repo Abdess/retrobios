@@ -14,6 +14,7 @@ from pathlib import Path
 from unittest import mock
 
 import generate_readme
+from sitegen import readme
 import generate_site
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -30,7 +31,7 @@ def _normalized(text: str) -> str:
 class OneContributingText(unittest.TestCase):
     def test_repository_and_site_pages_match(self):
         self.assertEqual(
-            _normalized(generate_readme.generate_contributing()),
+            _normalized(readme.generate_contributing()),
             _normalized(generate_site.generate_contributing()),
         )
 
@@ -48,7 +49,7 @@ class CoverageReadsTheGivenProfiles(unittest.TestCase):
 
         with mock.patch.object(generate_readme, "verify_platform", fake_verify), \
                 mock.patch.object(generate_readme, "load_emulator_profiles", return_value={}):
-            generate_readme.compute_coverage(
+            readme.compute_coverage(
                 "retroarch", str(REPO_ROOT / "platforms"), {"files": {}}, emulators_dir="elsewhere"
             )
         self.assertEqual(seen, ["elsewhere"])
@@ -81,7 +82,7 @@ class BeforeOpeningAPullRequest(unittest.TestCase):
     def test_it_names_the_site_build_and_the_packages_ci_runs(self):
         """A wiki-only change passed every listed check and failed CI on
         validate_site.py, which the list did not name."""
-        text = generate_readme.generate_contributing()
+        text = readme.generate_contributing()
         section = text.split("## Before opening a PR", 1)[1].split("\n## ", 1)[0]
         workflow = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
         for command in ("npm ci --prefix website", "npm run build --prefix website",
@@ -102,7 +103,7 @@ class BeforeOpeningAPullRequest(unittest.TestCase):
         refuses past 100 MB, and only a maintainer can write to the release."""
         from resolve import review
 
-        text = generate_readme.generate_contributing()
+        text = readme.generate_contributing()
         section = text.split("## What happens next", 1)[1].split("\n## ", 1)[0]
         self.assertEqual(review.MAX_FILE_SIZE, 100 * 1024 * 1024)
         self.assertIn("100 MB", section)
@@ -111,7 +112,7 @@ class BeforeOpeningAPullRequest(unittest.TestCase):
     def test_it_installs_what_the_checks_need_and_no_site_package(self):
         """The site is built by Node from website/package-lock.json: a pip
         line naming the old theme installed packages nothing reads."""
-        text = generate_readme.generate_contributing()
+        text = readme.generate_contributing()
         section = text.split("## Before opening a PR", 1)[1].split("\n## ", 1)[0]
         self.assertIn('pip install pyyaml "jsonschema[format-nongpl]==', section)
         self.assertNotIn("mkdocs", section)
@@ -125,7 +126,7 @@ class TheChecklistInstallsWhatCiInstalls(unittest.TestCase):
 
     def test_the_pip_lines_are_the_workflow_lines(self):
         workflow = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
-        text = generate_readme.generate_contributing()
+        text = readme.generate_contributing()
         section = text.split("## Before opening a PR", 1)[1].split("\n## ", 1)[0]
         pinned = [line.split("run: ", 1)[1] for line in workflow.splitlines()
                   if re.match(r"\s*run: (python3\.8 -m )?pip install .*==", line)
@@ -137,7 +138,7 @@ class TheChecklistInstallsWhatCiInstalls(unittest.TestCase):
 
     def test_it_names_the_system_tools_ci_installs(self):
         workflow = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
-        text = generate_readme.generate_contributing()
+        text = readme.generate_contributing()
         section = text.split("## Before opening a PR", 1)[1].split("\n## ", 1)[0]
         for tool, step in (("shellcheck", "shellcheck --version"),
                            ("bwrap", "bwrap --ro-bind"),
@@ -157,21 +158,21 @@ class OneFileThroughTheBrowser(unittest.TestCase):
     def test_the_guide_and_the_issue_chooser_offer_the_upload(self):
         import yaml
 
-        text = generate_readme.generate_contributing()
+        text = readme.generate_contributing()
         section = text.split("## Add a BIOS file", 1)[1].split("\n## ", 1)[0]
-        self.assertIn(generate_readme.UPLOAD_URL, section)
+        self.assertIn(readme.UPLOAD_URL, section)
         self.assertNotIn("Fork this repository", section)
         self.assertNotIn("reported in a comment", text)
         chooser = yaml.safe_load(
             (REPO_ROOT / ".github" / "ISSUE_TEMPLATE" / "config.yml").read_text(encoding="utf-8")
         )
-        self.assertIn(generate_readme.UPLOAD_URL, [link["url"] for link in chooser["contact_links"]])
+        self.assertIn(readme.UPLOAD_URL, [link["url"] for link in chooser["contact_links"]])
 
     def test_ci_comments_only_on_branches_of_this_repository(self):
         workflow = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
         self.assertIn("github.event.pull_request.head.repo.full_name == github.repository", workflow)
         self.assertIn('>> "$GITHUB_STEP_SUMMARY"', workflow)
-        self.assertIn("summary of the Validation run", generate_readme.generate_contributing())
+        self.assertIn("summary of the Validation run", readme.generate_contributing())
 
     def test_an_upload_at_the_bios_root_is_told_its_folder(self):
         import os
@@ -278,7 +279,7 @@ class OneCommandRunsTheChecks(unittest.TestCase):
     def test_the_guide_gives_the_runner_and_what_it_runs(self):
         import pr_checks
 
-        text = generate_readme.generate_contributing()
+        text = readme.generate_contributing()
         section = text.split("## Before opening a PR", 1)[1].split("\n## ", 1)[0]
         self.assertIn("python scripts/pr_checks.py\n", section)
         for step in pr_checks.STEPS:

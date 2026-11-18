@@ -27,7 +27,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 from model.registry import list_registered_platforms
 from model.platforms import load_platform_config
-from sitediagrams import OG_SECTIONS, og_card_svg, wrap
+from sitegen.diagrams import OG_SECTIONS, og_card_svg, wrap
 
 ROOT = Path(__file__).resolve().parent.parent
 

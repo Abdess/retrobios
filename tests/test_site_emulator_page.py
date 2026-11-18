@@ -72,12 +72,12 @@ class WhoShipsTheBuildAndWhy(unittest.TestCase):
         """`0.97, stated in libretro/handy.h` was bare text beside a pinned
         Revision link: the #define it reads was one search away."""
         import generate_site as gs
-        import sitesources
+        from sitegen import sources
         import yaml
 
         handy = yaml.safe_load((REPO_ROOT / "emulators" / "handy.yml").read_text(encoding="utf-8"))
         path = handy["version_basis"]["path"]
-        self.assertIn(path, sitesources.cited_paths(handy))
+        self.assertIn(path, sources.cited_paths(handy))
         self.assertIn(f"stated in [`{path}`](https://github.com/libretro/libretro-handy/blob/"
                       f"{handy['source_commit']}/{path})", gs.version_markdown(handy))
         tagged = {"source": "https://github.com/owner/emu", "source_commit": "a" * 40,

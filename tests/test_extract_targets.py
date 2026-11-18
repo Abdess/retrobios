@@ -16,7 +16,7 @@ from pathlib import Path
 
 from model.platforms import load_platform_config
 from model.registry import load_platform_registry
-from generate_readme import extract_notes, extract_targets
+from sitegen.readme import extract_notes, extract_targets
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
