@@ -374,7 +374,7 @@ def collect(root: Path = REPO_ROOT, stored_records: list | None = None) -> list[
     listed under several systems (sega-megacd and mega-cd) is judged under
     the one whose profile ran it."""
     from model.profiles import load_emulator_profiles
-    from measurement_records import live, read_records
+    from model.measurements import live, read_records
 
     content: dict[str, list[tuple[str, dict]]] = {}
     for system, items in load_content(root / "tests" / "campaign" / "content.yml").items():

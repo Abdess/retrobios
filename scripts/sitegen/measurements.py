@@ -31,7 +31,7 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-import measurement_records as mr
+from model import measurements as mr
 from sitegen import markup
 from core.artifacts import json_text, write_if_changed
 from sitegen.render import _escape_tags

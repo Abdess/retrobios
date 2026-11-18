@@ -31,7 +31,7 @@ import yaml
 import campaign
 import campaign_profiles
 import campaign_rules as rules
-import measurement_records as mr
+from model import measurements as mr
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

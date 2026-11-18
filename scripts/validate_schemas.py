@@ -844,7 +844,7 @@ def _format_errors() -> list[str]:
 def _measurement_errors(root: Path | None = None) -> list[str]:
     """Every record line under measurements/, against its schema and the
     rules measurement_records.read_records applies."""
-    import measurement_records as mr
+    from model import measurements as mr
 
     root = root or ROOT
     validator = _validator("core-probe-record.schema.json")

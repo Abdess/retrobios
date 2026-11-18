@@ -26,7 +26,7 @@ from pathlib import Path
 from typing import ClassVar
 
 import core_probe
-import measurement_records
+from model import measurements as measurement_records
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

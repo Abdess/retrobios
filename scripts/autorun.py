@@ -44,16 +44,25 @@ import shutil
 import subprocess
 import sys
 import time
-from collections.abc import Callable, Iterator, Sequence
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
+
+from core.childenv import is_secret, safe_env
+from core.hostguard import (
+    DEFAULT_LOCK,
+    LOCK_ENV,
+    LOCK_HELD_ENV,
+    LockBusy,
+    free_gb,
+    global_lock,
+    lock_busy,
+)
+from core.statefile import now_iso, save_state
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 JOBS_FILE = REPO_ROOT / "automation" / "jobs.yml"
 AUTORUN_DIR = Path(".cache") / "autorun"
-DEFAULT_LOCK = Path.home() / ".local" / "state" / "retrobios" / "auto.lock"
-LOCK_ENV = "RETROBIOS_AUTO_LOCK"
-LOCK_HELD_ENV = "RETROBIOS_AUTO_LOCK_HELD"
 
 BRANCH = "autorun"
 REMOTE = "origin"
@@ -89,10 +98,6 @@ class AutorunError(RuntimeError):
         super().__init__(detail)
         self.result = result
         self.detail = detail
-
-
-class LockBusy(RuntimeError):
-    """Another job holds the host-wide lock."""
 
 
 @dataclass(frozen=True)
@@ -312,35 +317,6 @@ def load_jobs(path: Path = JOBS_FILE) -> dict[str, Job]:
 # Host guards
 
 
-@contextlib.contextmanager
-def global_lock(path: Path) -> Iterator[None]:
-    """Hold the host-wide automation lock, or raise LockBusy at once."""
-    import fcntl
-
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("a+", encoding="utf-8") as handle:
-        try:
-            fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except OSError as exc:
-            raise LockBusy(f"{path} is held by another job") from exc
-        handle.seek(0)
-        handle.truncate()
-        handle.write(f"{os.getpid()}\n")
-        handle.flush()
-        try:
-            yield
-        finally:
-            fcntl.flock(handle, fcntl.LOCK_UN)
-
-
-def lock_busy(path: Path) -> bool:
-    try:
-        with global_lock(path):
-            return False
-    except LockBusy:
-        return True
-
-
 def wait_for_load(host: Host, max_wait: float) -> bool:
     """True once the 1-minute load is at most a quarter of the CPUs."""
     deadline = host.clock() + max_wait
@@ -351,10 +327,6 @@ def wait_for_load(host: Host, max_wait: float) -> bool:
         if left <= 0:
             return False
         host.sleep(min(host.poll, left))
-
-
-def free_gb(path: Path) -> float:
-    return shutil.disk_usage(path).free / 1024 ** 3
 
 
 def host_misread(returncode: int, text: str) -> bool:
@@ -707,10 +679,6 @@ def may_push(state: dict) -> str:
 # State and logs
 
 
-def now_iso() -> str:
-    return dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
-
-
 def load_state(path: Path) -> dict:
     try:
         return json.loads(path.read_text(encoding="utf-8"))
@@ -718,13 +686,6 @@ def load_state(path: Path) -> dict:
         return {}
     except ValueError as exc:
         raise AutorunError(FAILED, f"{path} is unreadable: {exc}") from exc
-
-
-def save_state(path: Path, state: dict) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    scratch = path.with_suffix(".tmp")
-    scratch.write_text(json.dumps(state, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    os.replace(scratch, path)
 
 
 def prune_logs(logs: Path, days: int = LOG_DAYS, now: float | None = None) -> int:
@@ -746,31 +707,6 @@ def set_alert(state: dict, name: str, active: bool, detail: str, now: str) -> No
 
 
 # Running a job
-
-
-# What a job step inherits. A step can run third-party code (a buildbot
-# core, a scraped page, a downloaded tool), so it gets the variables a
-# program needs to run and nothing it could leak: no token, no password.
-SAFE_ENV = frozenset({"PATH", "HOME", "LANG", "TZ", "TMPDIR"})
-SECRET_NAMES = frozenset({"GITHUB_TOKEN", "GH_TOKEN", "ROMSTATION_USER", "ROMSTATION_PASS"})
-SECRET_MARKERS = ("TOKEN", "SECRET", "PASS")
-
-
-def is_secret(name: str) -> bool:
-    upper = name.upper()
-    return name in SECRET_NAMES or any(marker in upper for marker in SECRET_MARKERS)
-
-
-def safe_env(names: Sequence[str] = (), add: dict[str, str] | None = None,
-             source: dict[str, str] | None = None) -> dict[str, str]:
-    """The allowlisted environment, plus the variables a step names
-    explicitly. A secret is dropped even when named."""
-    source = dict(os.environ) if source is None else source
-    wanted = set(names)
-    env = {key: value for key, value in source.items()
-           if (key in SAFE_ENV or key.startswith("LC_") or key in wanted) and not is_secret(key)}
-    env.update({key: value for key, value in (add or {}).items() if not is_secret(key)})
-    return env
 
 
 def token_env() -> dict[str, str]:

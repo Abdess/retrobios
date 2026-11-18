@@ -48,7 +48,7 @@ from typing import IO
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import core_probe as cp
-from autorun import now_iso
+from core.statefile import now_iso
 
 ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / ".cache" / "standalone"
@@ -592,7 +592,7 @@ def _probe(args: argparse.Namespace, emu: Emulator) -> int:
     if args.mode == "check":
         record["check"] = {"claim": args.claim, "method": args.method, "observable": args.observable,
                            "variable": args.vary[0][0], "result": check_result(variants, args.observable)}
-    from measurement_records import canonical, sha256_hex, slugify
+    from model.measurements import canonical, sha256_hex, slugify
 
     if args.subject:
         record["subject"] = args.subject

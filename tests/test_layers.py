@@ -42,7 +42,7 @@ SIBLING_IMPORTS: dict[str, frozenset[str]] = {
 NOT_YET_PACKAGED = frozenset({
     "autorun", "build_port", "campaign", "campaign_profiles", "campaign_rules",
     "check_buildbot_system", "check_release_assets", "commit_rules", "core_probe",
-    "generate_event_schema", "measurement_records", "pin_installer", "pr_checks",
+    "generate_event_schema", "pin_installer", "pr_checks",
     "release_record", "romfolders",
 })
 
@@ -56,7 +56,6 @@ PENDING_TOP_LEVEL_IMPORTS = frozenset({
     ("sitegen.getpages", "release_record"),
     ("sitegen.guidepage", "release_record"),
     ("sitegen.handheld", "build_port"),
-    ("sitegen.measurements", "measurement_records"),
     ("sitegen.platformindex", "release_record"),
     ("sitegen.publish", "release_record"),
     ("sitegen.readme", "pr_checks"),

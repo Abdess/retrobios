@@ -97,17 +97,20 @@ import core_probe
 import yaml
 
 import autorun
+from core import childenv
+from core import hostguard
+from core import statefile
 import campaign_profiles
 import campaign_rules as rules
-import measurement_records as mr
-from autorun import now_iso
+from model import measurements as mr
+from core.statefile import now_iso
 from core.paths import REPO_ROOT
 
 T = TypeVar("T")
 
 CONTENT_FILE = REPO_ROOT / "tests" / "campaign" / "content.yml"
 BUILDBOT = "https://buildbot.libretro.com/nightly/linux/x86_64/latest/"
-LOCK_HELD_ENV = autorun.LOCK_HELD_ENV
+LOCK_HELD_ENV = hostguard.LOCK_HELD_ENV
 ROMFETCH_ENV = "RETROBIOS_ROMFETCH"
 STATE_VERSION = 1
 
@@ -256,7 +259,7 @@ class Host:
     sleep: Callable[[float], None] = time.sleep
     clock: Callable[[], float] = time.monotonic
     cpu_count: int = os.cpu_count() or 1
-    free_gb: Callable[[Path], float] = autorun.free_gb
+    free_gb: Callable[[Path], float] = hostguard.free_gb
     poll: float = 60.0
     run: Callable[..., subprocess.CompletedProcess] = run_group
     urlopen: Callable[..., http.client.HTTPResponse] = urllib.request.urlopen
@@ -329,7 +332,7 @@ def child_env(romfetch: bool = False) -> dict[str, str]:
     names: list[str] = [core_probe.PROBE_LOCK_ENV, core_probe.PROBE_LOCK_HELD_ENV]
     if romfetch:
         names += [k for k in os.environ if k.startswith("ROMFETCH_")] + list(ROMFETCH_PASSED)
-    return autorun.safe_env(names)
+    return childenv.safe_env(names)
 
 
 # Host-side git on a third-party project. It only ever touches bare mirrors
@@ -501,7 +504,7 @@ def host_lock(lock_path: Path) -> Iterator[None]:
     if os.environ.get(LOCK_HELD_ENV):
         yield
         return
-    with autorun.global_lock(lock_path):
+    with hostguard.global_lock(lock_path):
         yield
 
 
@@ -521,7 +524,7 @@ def load_state(path: Path) -> dict:
 
 
 def save_state(path: Path, state: dict) -> None:
-    autorun.save_state(path, state)
+    statefile.save_state(path, state)
 
 
 def should_run(previous: dict | None, core_sha: str, digest: str, oracle_sha: str = "") -> bool:
@@ -949,7 +952,7 @@ class Campaign:
         self.settings = settings or Settings()
         self.host = host or Host()
         self.probe_script = probe_script or REPO_ROOT / "scripts" / "core_probe.py"
-        self.lock_path = lock_path or Path(os.environ.get(autorun.LOCK_ENV) or autorun.DEFAULT_LOCK)
+        self.lock_path = lock_path or Path(os.environ.get(hostguard.LOCK_ENV) or hostguard.DEFAULT_LOCK)
         self.state = load_state(paths.state)
         self.cores = Cores(self)
         self.store = ContentStore(self)
@@ -2048,7 +2051,7 @@ def _references(campaign: Campaign, args: argparse.Namespace, only: set[str]) ->
     try:
         with host_lock(campaign.lock_path):
             listed = campaign.references(only, args.system, Path(args.png_dir))
-    except autorun.LockBusy as exc:
+    except hostguard.LockBusy as exc:
         print(f"campaign: deferred, {exc}", file=sys.stderr)
         return 75
     print(json.dumps(listed, indent=2))
@@ -2094,7 +2097,7 @@ def _run_pass(campaign: Campaign, args: argparse.Namespace, only: set[str], path
         with host_lock(campaign.lock_path):
             current = campaign.run(only, args.system, commit_every=args.commit_every,
                                    commit=args.commit)
-    except autorun.LockBusy as exc:
+    except hostguard.LockBusy as exc:
         print(f"campaign: deferred, {exc}", file=sys.stderr)
         return 75
     counts, _, _ = campaign.counts()

@@ -60,8 +60,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import autorun
 import campaign
-import measurement_records as mr
-from autorun import now_iso
+from model import measurements as mr
+from core.statefile import now_iso
 from model.systems import _norm_system_id
 from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config

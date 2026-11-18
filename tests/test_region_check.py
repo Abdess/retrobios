@@ -242,7 +242,7 @@ class SitePages(unittest.TestCase):
     def test_a_region_run_reaches_a_page_only_as_the_proof_of_a_field(self) -> None:
         """No page shows region outcomes. The Beetle PSX page names the runs
         its required: false rests on, each with the BIOS the core ran."""
-        import measurement_records as mr
+        from model import measurements as mr
         from sitegen import measurements as sm
 
         stored = mr.read_records(ROOT)

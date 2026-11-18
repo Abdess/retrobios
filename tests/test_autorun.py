@@ -24,6 +24,9 @@ from pathlib import Path
 from types import MappingProxyType
 
 import autorun as ar
+from core import childenv
+from core import hostguard
+from core import statefile
 import bios_integrity as bib
 import cleanup_disk as cd
 import sync_release_assets as sra
@@ -136,16 +139,16 @@ class Registry(Scratch):
 class Lock(Scratch):
     def test_a_second_holder_is_refused(self):
         path = self.tmp / "auto.lock"
-        with ar.global_lock(path):
-            self.assertTrue(ar.lock_busy(path))
-            with self.assertRaises(ar.LockBusy), ar.global_lock(path):
+        with hostguard.global_lock(path):
+            self.assertTrue(hostguard.lock_busy(path))
+            with self.assertRaises(hostguard.LockBusy), hostguard.global_lock(path):
                 pass
-        self.assertFalse(ar.lock_busy(path))
+        self.assertFalse(hostguard.lock_busy(path))
 
     def test_a_job_waiting_on_the_lock_is_deferred_and_recorded(self):
         ctx = self.context({"x": {"worktree": False, "min_free_gb": 0,
                                   "steps": [[PY, "-c", "open('ran', 'w')"]]}})
-        with ar.global_lock(ctx.lock_path):
+        with hostguard.global_lock(ctx.lock_path):
             result, detail = ar.run_job(ctx, "x")
         self.assertEqual(result, ar.DEFERRED)
         self.assertIn("held", detail)
@@ -155,7 +158,7 @@ class Lock(Scratch):
     def test_a_job_that_takes_no_lock_runs_beside_a_holder(self):
         ctx = self.context({"x": {"worktree": False, "lock": False, "min_free_gb": 0,
                                   "steps": [[PY, "-c", "open('ran', 'w')"]]}})
-        with ar.global_lock(ctx.lock_path):
+        with hostguard.global_lock(ctx.lock_path):
             self.assertEqual(ar.run_job(ctx, "x")[0], ar.OK)
         self.assertTrue((ctx.repo / "ran").exists())
 
@@ -208,7 +211,7 @@ class StepEnvironment(Scratch):
         "DB_PASSWORD": "p2", "ROMFETCH_CONTENT_DIR": "/c", "EDITOR": "vi"})
 
     def test_the_allowlist(self):
-        env = ar.safe_env(["ROMFETCH_CONTENT_DIR", "GITHUB_TOKEN"], {"RETROBIOS_AUTO": "1"},
+        env = childenv.safe_env(["ROMFETCH_CONTENT_DIR", "GITHUB_TOKEN"], {"RETROBIOS_AUTO": "1"},
                           source=dict(self.HOST))
         self.assertEqual(env, {"PATH": "/usr/bin", "HOME": "/home/u", "LANG": "C.UTF-8",
                                "LC_ALL": "C", "TZ": "UTC", "TMPDIR": "/t",
@@ -232,7 +235,7 @@ class StepEnvironment(Scratch):
         seen = json.loads((ctx.repo / "env.json").read_text())
         self.assertFalse({"GITHUB_TOKEN", "GH_TOKEN", "ROMSTATION_PASS", "EDITOR"} & set(seen))
         self.assertEqual((seen["ROMFETCH_CONTENT_DIR"], seen["RETROBIOS_AUTO"]), ("/c", "1"))
-        self.assertEqual(seen[ar.LOCK_HELD_ENV], "1")
+        self.assertEqual(seen[hostguard.LOCK_HELD_ENV], "1")
         # The push and gh are the phases that get it.
         self.assertEqual(given["GITHUB_TOKEN"], "t1")
 
@@ -393,7 +396,7 @@ class DoubleComputation(Scratch):
             "gate": [[PY, "gen.py", "db.json"]],
             "twice": [{"artifact": "db.json", "run": [PY, "gen.py", "{out}"]}],
         }})
-        ar.save_state(ctx.state_path, {"alerts": {"host-integrity": {"since": "x"}}})
+        statefile.save_state(ctx.state_path, {"alerts": {"host-integrity": {"since": "x"}}})
         self.assertEqual(ar.run_job(ctx, "x")[0], ar.OK)
         self.assertNotIn("host-integrity", self.state(ctx).get("alerts", {}))
 
@@ -453,7 +456,7 @@ class CircuitBreaker(Scratch):
         gh, _ = self._gh({"a" * 40: [ci_run("a" * 40, "failure", "t")]}, [])
         ctx = self.context({"x": {"min_free_gb": 0, "commits": [
             {"subject": "chore: add a", "paths": ["a"]}]}}, gh=gh)
-        ar.save_state(ctx.state_path, {"push": {"sha": "a" * 40, "ci": "pending"}})
+        statefile.save_state(ctx.state_path, {"push": {"sha": "a" * 40, "ci": "pending"}})
         result, _ = ar.run_job(ctx, "x")
         self.assertEqual(result, ar.BLOCKED)
         self.assertFalse(ctx.worktree.exists())

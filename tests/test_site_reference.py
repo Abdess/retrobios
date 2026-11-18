@@ -1164,7 +1164,7 @@ class SourceLinksOnlyWhereTheFileIs(unittest.TestCase):
     def test_every_rendered_link_is_recorded(self):
         record = json.loads(sources.SOURCE_PATHS.read_text(encoding="utf-8"))
         pages = sorted(_built(DOCS / "emulators").rglob("*.md*")) + sorted(DOCS.glob("gaps*.md*"))
-        import measurement_records
+        from model import measurements as measurement_records
 
         # A Tested block links a record line and its data file in this
         # repository. The records are append-only, so a file a permalink

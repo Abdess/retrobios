@@ -1538,7 +1538,7 @@ def default_emulator(core_file: Path, library_name: str | None) -> str:
 def default_subject(record: dict) -> str:
     """A slug shared by the reruns of one test: a check by its claim and
     method, a run or bench by its inputs."""
-    from measurement_records import canonical, sha256_hex, slugify
+    from model.measurements import canonical, sha256_hex, slugify
 
     check = record.get("check")
     if check:
@@ -1554,7 +1554,7 @@ def default_subject(record: dict) -> str:
 def write_record(directory: Path, full: dict) -> tuple[Path, dict]:
     """Append the record, with its id, to its emulator's .jsonl. Returns the
     file and the record as written."""
-    from measurement_records import line_text, parse_lines, records_path, seal
+    from model.measurements import line_text, parse_lines, records_path, seal
 
     sealed = seal(full)
     lines = directory / records_path(sealed["emulator"])
@@ -1599,7 +1599,7 @@ def _probe(args: argparse.Namespace) -> int:
         shutil.rmtree(work, ignore_errors=True)
     load_after = load_average()
     first = variants[0]["repetitions"][0]
-    from measurement_records import RECORD_VERSION
+    from model.measurements import RECORD_VERSION
 
     record: dict = {
         "record_version": RECORD_VERSION,
@@ -1710,7 +1710,7 @@ def rejudged(record: dict, data: dict, identity: dict | None, now: str) -> dict 
 
 
 def RECORD_VERSION_NOW() -> int:
-    from measurement_records import RECORD_VERSION
+    from model.measurements import RECORD_VERSION
 
     return RECORD_VERSION
 
@@ -1718,7 +1718,7 @@ def RECORD_VERSION_NOW() -> int:
 def rejudge_records(args: argparse.Namespace) -> int:
     """Append, for each live record whose judgement the oracle now gives
     otherwise, the record judged again, superseding it."""
-    from measurement_records import line_text, live, read_records, records_path, seal
+    from model.measurements import line_text, live, read_records, records_path, seal
 
     root = Path(args.record)
     data, identity = load_oracle(Path(args.oracle) if args.oracle else DEFAULT_ORACLE)

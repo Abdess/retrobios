@@ -23,7 +23,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import measurement_records as mr
+from model import measurements as mr
 from sitegen import measurements as sm
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
