@@ -265,14 +265,14 @@ class TheBuildersOrder(unittest.TestCase):
         db_path = REPO_ROOT / "database.json"
         if not db_path.exists():
             self.skipTest("database.json is not built")
-        import generate_pack as gp
+        from packs import manifest as packs_manifest
         from model.profiles import load_emulator_profiles
 
         db = json.loads(db_path.read_text(encoding="utf-8"))
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
 
         def manifest(cores):
-            return gp.generate_manifest(
+            return packs_manifest.generate_manifest(
                 "retropie", str(REPO_ROOT / "platforms"), db, str(REPO_ROOT / "bios"),
                 str(REPO_ROOT / "platforms" / "_registry.yml"),
                 emulators_dir=str(REPO_ROOT / "emulators"), emu_profiles=profiles,
@@ -366,14 +366,14 @@ class APlatformOmissionKeepsItsClaim(unittest.TestCase):
         self.assertEqual(omitted, [])
 
     def test_the_generator_files_the_core_behind_the_platform(self):
-        import generate_pack as gp
+        from packs import manifestentry
 
         held = {"cores": None}
-        self.assertTrue(gp._claim_platform_omission(held, "melonds"))
-        self.assertTrue(gp._claim_platform_omission(held, "melonds"))
+        self.assertTrue(manifestentry._claim_platform_omission(held, "melonds"))
+        self.assertTrue(manifestentry._claim_platform_omission(held, "melonds"))
         self.assertEqual(held["alternatives"], [{"cores": ["melonds"]}])
-        self.assertFalse(gp._claim_platform_omission({"cores": ["x"]}, "melonds"))
-        self.assertFalse(gp._claim_platform_omission(None, "melonds"))
+        self.assertFalse(manifestentry._claim_platform_omission({"cores": ["x"]}, "melonds"))
+        self.assertFalse(manifestentry._claim_platform_omission(None, "melonds"))
 
     def test_the_boundary_takes_only_core_names(self):
         manifest = {"manifest_version": 2, "platform": "retroarch", "files": [],

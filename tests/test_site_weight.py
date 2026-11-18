@@ -17,7 +17,7 @@ import generate_site
 import sitestarlight
 import siterender
 import sitemarkup as markup
-from cross_reference import FileConsumers
+from packs.crossref import FileConsumers
 
 
 def _file(name: str, index: int, console: str, maker: str = "Maker") -> dict:

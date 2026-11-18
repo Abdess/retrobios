@@ -27,9 +27,10 @@ import unittest
 import zipfile
 from pathlib import Path
 
-import generate_pack as builder
+from packs import finalize
+from packs import naming
 from core.artifacts import artifact_lock
-import split_pack
+from packs import parts as packs_parts
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -70,7 +71,7 @@ class SplitFixture(unittest.TestCase):
             with zipfile.ZipFile(part) as archive:
                 self.assertIsNone(archive.testzip())
                 for name in archive.namelist():
-                    if split_pack.is_marker(name):
+                    if packs_parts.is_marker(name):
                         continue
                     self.assertNotIn(name, found, "a file sits in two parts")
                     found[name] = archive.read(name)
@@ -79,21 +80,21 @@ class SplitFixture(unittest.TestCase):
 
 class PartsAreArchives(SplitFixture):
     def test_a_pack_under_the_limit_stays_one_file(self):
-        parts = split_pack.split_pack(self.pack, limit=1 << 20)
+        parts = packs_parts.split_pack(self.pack, limit=1 << 20)
         self.assertEqual(parts, [self.pack])
         self.assertTrue(self.pack.is_file())
 
     def test_the_parts_extracted_together_are_the_pack(self):
-        parts = split_pack.split_pack(self.pack, limit=LIMIT)
+        parts = packs_parts.split_pack(self.pack, limit=LIMIT)
         self.assertGreater(len(parts), 1)
         self.assertEqual(self._read(parts), self.members)
 
     def test_every_part_fits_the_asset_limit(self):
-        for part in split_pack.split_pack(self.pack, limit=LIMIT):
+        for part in packs_parts.split_pack(self.pack, limit=LIMIT):
             self.assertLess(part.stat().st_size, LIMIT)
 
     def test_a_part_name_says_how_many_there_are(self):
-        parts = split_pack.split_pack(self.pack, limit=LIMIT)
+        parts = packs_parts.split_pack(self.pack, limit=LIMIT)
         count = len(parts)
         self.assertEqual(
             [part.name for part in parts],
@@ -104,23 +105,23 @@ class PartsAreArchives(SplitFixture):
         )
 
     def test_the_whole_archive_leaves_once_its_parts_are_checked(self):
-        split_pack.split_pack(self.pack, limit=LIMIT)
+        packs_parts.split_pack(self.pack, limit=LIMIT)
         self.assertFalse(self.pack.exists())
 
     def test_the_same_pack_gives_the_same_parts(self):
-        first = [p.read_bytes() for p in split_pack.split_pack(self.pack, limit=LIMIT)]
+        first = [p.read_bytes() for p in packs_parts.split_pack(self.pack, limit=LIMIT)]
         other = self.dist / "again"
         other.mkdir()
         again = other / self.pack.name
         self._build(again, self.members)
-        second = [p.read_bytes() for p in split_pack.split_pack(again, limit=LIMIT)]
+        second = [p.read_bytes() for p in packs_parts.split_pack(again, limit=LIMIT)]
         self.assertEqual(first, second)
 
     def test_a_file_no_part_can_hold_is_refused(self):
         big = self.dist / "Big_BIOS_Pack.zip"
         self._build(big, {"huge.bin": _payload(1, LIMIT * 2), "small.bin": b"x"})
         with self.assertRaises(ValueError):
-            split_pack.split_pack(big, limit=LIMIT)
+            packs_parts.split_pack(big, limit=LIMIT)
         self.assertTrue(big.is_file(), "the pack is kept when it cannot be split")
         self.assertEqual(sorted(p.name for p in self.dist.glob("Big*")), [big.name])
 
@@ -133,7 +134,7 @@ class PartsAreArchives(SplitFixture):
             archive.writestr(info, _payload(3, 3000))
             for n in range(4):
                 archive.writestr(f"data{n}.bin", _payload(n, 900))
-        parts = split_pack.split_pack(tool, limit=LIMIT)
+        parts = packs_parts.split_pack(tool, limit=LIMIT)
         modes = {}
         for part in parts:
             with zipfile.ZipFile(part) as archive:
@@ -151,13 +152,13 @@ class EachPartNamesItsSiblings(SplitFixture):
         found = {}
         for part in parts:
             with zipfile.ZipFile(part) as archive:
-                names = [n for n in archive.namelist() if split_pack.is_marker(n)]
+                names = [n for n in archive.namelist() if packs_parts.is_marker(n)]
                 self.assertEqual(len(names), 1, part.name)
                 found[part.name] = archive.read(names[0]).decode("utf-8")
         return found
 
     def test_every_part_carries_one_marker(self):
-        parts = split_pack.split_pack(self.pack, limit=LIMIT)
+        parts = packs_parts.split_pack(self.pack, limit=LIMIT)
         count = len(parts)
         for index, part in enumerate(parts, 1):
             with zipfile.ZipFile(part) as archive:
@@ -165,7 +166,7 @@ class EachPartNamesItsSiblings(SplitFixture):
                               archive.namelist())
 
     def test_the_marker_names_the_pack_the_part_and_every_size(self):
-        parts = split_pack.split_pack(self.pack, limit=LIMIT)
+        parts = packs_parts.split_pack(self.pack, limit=LIMIT)
         count = len(parts)
         for index, (name, text) in enumerate(self._markers(parts).items(), 1):
             with self.subTest(part=name):
@@ -179,7 +180,7 @@ class EachPartNamesItsSiblings(SplitFixture):
                 )
 
     def test_the_parts_still_fit_with_their_markers(self):
-        for part in split_pack.split_pack(self.pack, limit=LIMIT):
+        for part in packs_parts.split_pack(self.pack, limit=LIMIT):
             self.assertLess(part.stat().st_size, LIMIT)
 
     def test_a_pack_holding_a_marker_name_is_refused(self):
@@ -188,13 +189,13 @@ class EachPartNamesItsSiblings(SplitFixture):
         self.pack.unlink()
         self._build(self.pack, members)
         with self.assertRaises(ValueError):
-            split_pack.split_pack(self.pack, limit=LIMIT)
+            packs_parts.split_pack(self.pack, limit=LIMIT)
         self.assertTrue(self.pack.is_file())
 
     def test_a_marker_is_not_a_part(self):
-        self.assertTrue(split_pack.is_marker("Demo_BIOS_Pack.part2of3.txt"))
-        self.assertFalse(split_pack.is_part("Demo_BIOS_Pack.part2of3.txt"))
-        self.assertFalse(split_pack.is_marker("Demo_BIOS_Pack.part2of3.zip"))
+        self.assertTrue(packs_parts.is_marker("Demo_BIOS_Pack.part2of3.txt"))
+        self.assertFalse(packs_parts.is_part("Demo_BIOS_Pack.part2of3.txt"))
+        self.assertFalse(packs_parts.is_marker("Demo_BIOS_Pack.part2of3.zip"))
 
 
 class SplitHoldsTheDirectory(SplitFixture):
@@ -221,15 +222,15 @@ class SplitHoldsTheDirectory(SplitFixture):
 
 class PartsAreNotTakenForPacks(SplitFixture):
     def test_a_part_is_recognised_by_its_name(self):
-        self.assertTrue(split_pack.is_part("RetroArch_BIOS_Pack.part1of2.zip"))
-        self.assertFalse(split_pack.is_part("RetroArch_BIOS_Pack.zip"))
-        self.assertFalse(split_pack.is_part("RetroArch_BIOS_Pack.zip.001"))
+        self.assertTrue(packs_parts.is_part("RetroArch_BIOS_Pack.part1of2.zip"))
+        self.assertFalse(packs_parts.is_part("RetroArch_BIOS_Pack.zip"))
+        self.assertFalse(packs_parts.is_part("RetroArch_BIOS_Pack.zip.001"))
 
     def test_pack_verification_skips_the_parts(self):
         """A part holds half a platform by design: judged as a pack it fails."""
-        parts = split_pack.split_pack(self.pack, limit=LIMIT)
+        parts = packs_parts.split_pack(self.pack, limit=LIMIT)
         self.assertEqual(
-            builder._pack_archives(str(self.dist)), [],
+            naming._pack_archives(str(self.dist)), [],
             [p.name for p in parts],
         )
 
@@ -240,15 +241,15 @@ class PartsAreNotTakenForPacks(SplitFixture):
         for name in ("RetroBIOS.zip", "RetroBIOS-tools.zip", "RetroBIOS-batocera.zip"):
             self._build(self.dist / name, {"RetroBIOS.sh": b"#!/bin/sh\n"})
         before = {p.name: p.read_bytes() for p in self.dist.glob("RetroBIOS*.zip")}
-        self.assertEqual(builder._pack_archives(str(self.dist)), [self.pack.name])
+        self.assertEqual(naming._pack_archives(str(self.dist)), [self.pack.name])
         # A --system platform pack carries its system after the suffix.
         system = self.dist / "Demo_1.0_BIOS_Pack_Playstation.zip"
         self._build(system, {"one.bin": b"1"})
-        self.assertEqual(builder._pack_archives(str(self.dist)),
+        self.assertEqual(naming._pack_archives(str(self.dist)),
                          sorted([self.pack.name, system.name]))
         system.unlink()
         with contextlib.redirect_stdout(io.StringIO()):
-            builder.verify_and_finalize_packs(str(self.dist), {"files": {}, "indexes": {}},
+            finalize.verify_and_finalize_packs(str(self.dist), {"files": {}, "indexes": {}},
                                               skip_conformance=True)
         self.assertEqual({p.name: p.read_bytes() for p in self.dist.glob("RetroBIOS*.zip")},
                          before)
@@ -256,7 +257,7 @@ class PartsAreNotTakenForPacks(SplitFixture):
     def test_the_directory_form_splits_only_what_is_too_large(self):
         small = self.dist / "Small_BIOS_Pack.zip"
         self._build(small, {"one.bin": b"1"})
-        written = split_pack.split_directory(self.dist, limit=LIMIT)
+        written = packs_parts.split_directory(self.dist, limit=LIMIT)
         names = sorted(path.name for path in written)
         self.assertIn("Small_BIOS_Pack.zip", names)
         self.assertNotIn("Demo_1.0_BIOS_Pack.zip", names)

@@ -86,7 +86,7 @@ class IntegrityChecksEveryMember(unittest.TestCase):
     def test_a_missing_member_is_an_error_when_the_repository_holds_it(self):
         import yaml
 
-        import packverify
+        from packs import integrity as packverify
 
         roms = {f"r{i}.bin": bytes([i]) * 32 for i in range(3)}
         with tempfile.TemporaryDirectory() as tmp:
@@ -173,7 +173,7 @@ class TheArchiveHoldingTheCoreMembers(unittest.TestCase):
         self.assertTrue(path.endswith("bios/neocdz.zip"))
 
     def test_the_extras_carry_the_members(self):
-        from packextras import _report_extra
+        from packs.extras import _report_extra
 
         members = [{"crc32": "5a86cff2", "required": True}]
         extra = _report_extra(
@@ -444,7 +444,7 @@ class AnArchiveRankedByWhatItHolds(unittest.TestCase):
                          "bios/MAME/hod2bios.zip")
 
     def test_every_claim_path_carries_the_layout(self):
-        from packextras import _report_extra
+        from packs.extras import _report_extra
 
         contents = [{"name": "epr-21329.ic27", "size": 16}]
         extra = _report_extra({"name": "hod2bios.zip", "contents": contents},
@@ -470,8 +470,8 @@ class ALooseEntryNamingItsArchive(unittest.TestCase):
         import yaml
 
         from model.profiles import _emulator_profiles_cache
-        from generate_pack import generate_emulator_pack
-        from verify import verify_emulator
+        from packs.emulatorpack import generate_emulator_pack
+        from packs.emulatorcheck import verify_emulator
 
         _emulator_profiles_cache.clear()
         (REPO_ROOT / "tmp").mkdir(exist_ok=True)

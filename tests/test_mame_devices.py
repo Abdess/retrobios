@@ -626,8 +626,8 @@ class APickReadsTheEntrySystems(unittest.TestCase):
         self.assertTrue(entry_serves_systems({}, profile, ["snk-neogeo-mvs"]))
 
     def test_the_gap_report_and_the_extras_carry_them(self):
-        from packextras import _collect_emulator_extras, _extra_system_ids
-        from verify import find_undeclared_files
+        from packs.extras import _collect_emulator_extras, _extra_system_ids
+        from packs.gaps import find_undeclared_files
 
         profile = {
             "emulator": "MAME", "type": "libretro", "systems": self.SYSTEMS,

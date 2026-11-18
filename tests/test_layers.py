@@ -19,35 +19,35 @@ from pathlib import Path
 
 SCRIPTS = Path(__file__).resolve().parent.parent / "scripts"
 
-PACKAGE_LAYERS = {"core": 0, "model": 1, "resolve": 2, "scraper": 3, "exporter": 3, "profiling": 3}
+PACKAGE_LAYERS = {"core": 0, "model": 1, "resolve": 2, "packs": 3, "scraper": 3, "exporter": 3, "profiling": 3}
 LIBRARY_LAYER = 3
 COMMAND_LAYER = 4
 
 # The other domain packages a domain package may import. A package listed
 # here imports no sibling outside its set.
 SIBLING_IMPORTS: dict[str, frozenset[str]] = {
+    "packs": frozenset(),
     "profiling": frozenset(),
 }
 
 # Top-level modules other modules of scripts/ import: library code that a
 # later wave moves into a package.
 NOT_YET_PACKAGED = frozenset({
-    "archive_build", "autorun", "build_port", "campaign", "campaign_profiles",
-    "campaign_rules", "check_buildbot_system", "check_release_assets", "commit_rules", "core_probe",
-    "cross_reference", "dedup", "derivations", "generate_event_schema",
-    "generate_pack", "generate_readme", "generate_site", "manifestselect", "measurement_records",
-    "packextras", "packpaths", "packreadme", "packresolve", "packverify", "pin_installer",
-    "pr_checks", "provenance_report", "refresh_data_dirs",
-    "release_record", "romfolders", "romset_recipes", "siteagents", "sitebootstrap",
-    "sitecollection", "sitediagrams", "siteentries", "siteexports", "siteguides", "sitehandheld",
-    "siteinputs", "sitemarkup", "sitemeasurements", "siterender", "sitesources", "sitestarlight",
-    "sitesteps", "sitewanted", "sitewrite", "slots", "split_pack", "validate_pr", "verify",
+    "archive_build", "autorun", "build_port", "campaign", "campaign_profiles", "campaign_rules",
+    "check_buildbot_system", "check_release_assets", "commit_rules", "core_probe", "derivations",
+    "generate_event_schema", "generate_readme", "generate_site", "measurement_records",
+    "pin_installer", "pr_checks", "provenance_report", "release_record", "romfolders",
+    "romset_recipes", "siteagents", "sitebootstrap", "sitecollection", "sitediagrams",
+    "siteentries", "siteexports", "siteguides", "sitehandheld", "siteinputs", "sitemarkup",
+    "sitemeasurements", "siterender", "sitesources", "sitestarlight", "sitesteps", "sitewanted",
+    "sitewrite",
 })
 
 # Imports from a package module to a top-level module, left for the wave that
 # packages the top-level side.
 PENDING_TOP_LEVEL_IMPORTS = frozenset({
-    ("exporter.doubled", "slots"),
+    ("packs.readme", "siteguides"),
+    ("packs.scope", "siterender"),
 })
 
 

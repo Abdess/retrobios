@@ -41,6 +41,8 @@ from pathlib import Path, PurePosixPath, PureWindowsPath
 from unittest import mock
 
 import install
+from packs import archive as packs_archive
+from packs import emulatorpack
 from tests.test_install_app import make_card
 from tests.test_install_selection import FakeRepository, _QuietHandler
 from tests.netguard import module_guard
@@ -7617,11 +7619,11 @@ class _CardFixtures:
         if sys.version_info < BUILDER_FLOOR:
             # generate_pack.py's context managers need Python 3.9.
             return listing, None, {}
-        import generate_pack
+        from packs import scope
 
         pack_list = {"files": [{"path": dest, "sha1": entry["sha1"], "size": entry["size"]}
                                for dest, entry in zip(payloads, files)]}
-        generate_pack.annotate_pack_systems(pack_list, generate_pack.pack_systems(install_list))
+        scope.annotate_pack_systems(pack_list, scope.pack_systems(install_list))
         name = {"minui": "MinUI", "misterfpga": "MiSTer_FPGA"}[plat]
         pack = self.root / f"{name}_v1_BIOS_Pack.zip"
         with zipfile.ZipFile(pack, "w") as archive:
@@ -9246,14 +9248,14 @@ class PacksWordingAndDocs(unittest.TestCase):
     @unittest.skipIf(sys.version_info < BUILDER_FLOOR,
                      "generate_pack.py's context managers need Python 3.9")
     def test_a_pack_records_the_systems_of_its_files(self):
-        import generate_pack
+        from packs import scope
 
         install_list = {"files": [{"dest": "a.bin", "systems": ["3do"]},
                                   {"dest": "b/c.bin", "systems": []}],
                         "system_titles": {"3do": "3DO Interactive Multiplayer"},
                         "system_names": {"3do": ["3do"]}}
         manifest = {"files": [{"path": "a.bin"}, {"path": "b/c.bin"}, {"path": "README.md"}]}
-        generate_pack.annotate_pack_systems(manifest, generate_pack.pack_systems(install_list))
+        scope.annotate_pack_systems(manifest, scope.pack_systems(install_list))
         self.assertEqual([entry.get("systems") for entry in manifest["files"]],
                          [["3do"], [], None])
         self.assertEqual(manifest["system_titles"], {"3do": "3DO Interactive Multiplayer"})
@@ -16164,18 +16166,15 @@ class EmulatorChoiceMatchesTheEmulatorPack(unittest.TestCase):
         if sys.version_info < BUILDER_FLOOR:
             # The builder's floor: install.py alone keeps 3.8.
             raise unittest.SkipTest("generate_pack.py needs Python 3.9 or newer")
-        import generate_pack as gp
         from core.ziptools import build_zip_contents_index
-
-        cls.gp = gp
         cls.db = json.loads(db_path.read_text(encoding="utf-8"))
         cls.zip_contents = build_zip_contents_index(cls.db)
         cls.by_path = {entry["path"]: sha1 for sha1, entry in cls.db["files"].items()}
 
     def pack(self, emulator: str) -> dict[str, str]:
-        record = self.gp.PackRecord()
+        record = packs_archive.PackRecord()
         with contextlib.redirect_stdout(io.StringIO()):
-            self.gp.generate_emulator_pack(
+            emulatorpack.generate_emulator_pack(
                 [emulator], str(REPO_ROOT / "emulators"), self.db, str(REPO_ROOT / "bios"),
                 str(REPO_ROOT / "tmp"), zip_contents=self.zip_contents, offline=True,
                 record=record)

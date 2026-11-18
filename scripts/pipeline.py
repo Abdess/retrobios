@@ -78,11 +78,11 @@ from core.artifacts import (
 )
 from core.github import github_token
 from model.registry import load_data_dir_registry
-from refresh_data_dirs import hold_data_dirs
-from packpaths import MEDIA_MARKER
+from packs.datadirs import hold_data_dirs
+from packs.paths import MEDIA_MARKER
 
 if TYPE_CHECKING:
-    from generate_pack import PackRecord
+    from packs.archive import PackRecord
 
 
 class StepResults(dict):
@@ -455,20 +455,20 @@ def _tree_members(
     platform: str, platforms_dir: str, emulators_dir: str = "emulators",
 ) -> dict[str, int]:
     """Archive path -> size of every file the platform's data trees can add."""
-    import generate_pack
+    from packs import datatrees
     from model.profiles import load_emulator_profiles
     from model.platforms import load_platform_config
-    from packpaths import _flat
+    from packs.paths import _flat
 
     config = load_platform_config(platform, platforms_dir)
     base_dest = config.get("base_destination", "")
     registry = load_data_dir_registry(platforms_dir)
-    core_trees = generate_pack.core_data_trees(
+    core_trees = datatrees.core_data_trees(
         config, load_emulator_profiles(emulators_dir), platform, registry,
     )
     members: dict[str, int] = {}
     with contextlib.redirect_stdout(io.StringIO()):
-        for src, full in generate_pack._data_directory_members(
+        for src, full in datatrees._data_directory_members(
             config.get("systems", {}), registry,
             platform, base_dest, False, set(), set(), set(),
             core_trees=core_trees,
@@ -578,9 +578,10 @@ def check_emulator_packs(
     required-only rules are written twice, once per side, and only this
     comparison holds them together. No archive is written and no file read.
     """
-    import generate_pack
-    import packresolve
-    import verify
+    from packs import archive
+    from packs import emulatorpack
+    from resolve import packfiles as packresolve
+    from packs import emulatorcheck
     from model.profiles import (
         ProfileSelectionError,
         load_emulator_profiles,
@@ -597,7 +598,7 @@ def check_emulator_packs(
     profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
 
     def compare(names: list[str], standalone: bool, label: str, **narrowing: object) -> bool:
-        record = generate_pack.PackRecord()
+        record = archive.PackRecord()
         was_offline = packresolve._OFFLINE
         # The pack is built offline: verify counts a release asset the cache
         # lacks the same way, missing, as the narrowed-pack step does.
@@ -605,12 +606,12 @@ def check_emulator_packs(
         try:
             with contextlib.redirect_stdout(io.StringIO()), \
                     contextlib.redirect_stderr(io.StringIO()):
-                generate_pack.generate_emulator_pack(
+                emulatorpack.generate_emulator_pack(
                     names, emulators_dir, db, "bios", "", standalone,
                     zip_contents=zip_contents, offline=True, platforms_dir=platforms_dir,
                     record=record, **narrowing,
                 )
-                report = verify.verify_emulator(
+                report = emulatorcheck.verify_emulator(
                     names, emulators_dir, db, standalone, platforms_dir=platforms_dir,
                     **narrowing,
                 )
@@ -750,9 +751,10 @@ def check_narrowed_packs(
     compares every value. NARROWINGS_NOT_COMPARED says why --source and
     --one-per-slot are not compared.
     """
-    import generate_pack
-    import packresolve
-    import verify
+    from packs import archive
+    from packs import platformpack
+    from resolve import packfiles as packresolve
+    from packs import coverage
     from core.ziptools import build_zip_contents_index
     from resolve.grouping import group_identical_platforms
     from model.registry import list_registered_platforms
@@ -784,17 +786,17 @@ def check_narrowed_packs(
                 target_cores = (
                     load_target_config(platform, target, platforms_dir) if target else None
                 )
-                record = generate_pack.PackRecord()
+                record = archive.PackRecord()
                 with contextlib.redirect_stdout(io.StringIO()), \
                         contextlib.redirect_stderr(io.StringIO()):
-                    built = generate_pack.generate_pack(
+                    built = platformpack.generate_pack(
                         platform, platforms_dir, db, "bios", "",
                         emulators_dir=emulators_dir, zip_contents=zip_contents,
                         data_registry=registry, emu_profiles=profiles,
                         target_cores=target_cores, offline=True, record=record,
                         **narrowing,
                     )
-                    report = verify.verify_platform(
+                    report = coverage.verify_platform(
                         load_platform_config(platform, platforms_dir), db,
                         emulators_dir, profiles, target_cores=target_cores,
                         data_dir_registry=registry,
@@ -860,8 +862,10 @@ def check_split_packs(
     RetroBat's 21 openmsx/ twins of openMSX/ files. Offline, as every
     comparison of this step.
     """
-    import generate_pack
-    import packresolve
+    from packs import archive
+    from packs import bysystem
+    from packs import platformpack
+    from resolve import packfiles as packresolve
     from core.ziptools import build_zip_contents_index
     from resolve.grouping import group_identical_platforms
     from model.registry import list_registered_platforms, load_data_dir_registry
@@ -886,17 +890,17 @@ def check_split_packs(
                 emulators_dir=emulators_dir, zip_contents=zip_contents,
                 data_registry=registry, emu_profiles=profiles, offline=True,
             )
-            full = generate_pack.PackRecord()
-            parts: dict[str, generate_pack.PackRecord] = {}
+            full = archive.PackRecord()
+            parts: dict[str, archive.PackRecord] = {}
             with contextlib.redirect_stdout(io.StringIO()), \
                     contextlib.redirect_stderr(io.StringIO()):
-                generate_pack.generate_pack(
+                platformpack.generate_pack(
                     platform, platforms_dir, db, "bios", "", record=full, **args,
                 )
-                generate_pack.generate_split_packs(
+                bysystem.generate_split_packs(
                     platform, platforms_dir, db, "bios", "", records=parts, **args,
                 )
-            lines = split_differences(full, parts, generate_pack._same_bytes)
+            lines = split_differences(full, parts, archive._same_bytes)
             if lines:
                 all_ok = False
                 print(f"  {platform} --split: {len(lines)} differences")

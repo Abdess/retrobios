@@ -25,8 +25,8 @@ import yaml
 
 from model.profiles import _emulator_profiles_cache
 from model.platforms import load_platform_config
-from generate_pack import generate_pack
-from verify import verify_platform
+from packs.platformpack import generate_pack
+from packs.coverage import verify_platform
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -151,6 +151,8 @@ class AMissingDataDirectoryFailsTheRun(unittest.TestCase):
 
     def test_the_pack_records_it_and_main_exits_non_zero(self):
         import generate_pack as gp
+        from packs import datatrees
+        from packs import platformpack
 
         root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         self.addCleanup(shutil.rmtree, root, True)
@@ -166,18 +168,18 @@ class AMissingDataDirectoryFailsTheRun(unittest.TestCase):
         }))
         db = {"files": {}, "indexes": {"by_md5": {}, "by_name": {}, "by_crc32": {},
                                       "by_path_suffix": {}}}
-        gp._MISSING_DATA_DIRS.clear()
-        self.addCleanup(gp._MISSING_DATA_DIRS.clear)
+        datatrees._MISSING_DATA_DIRS.clear()
+        self.addCleanup(datatrees._MISSING_DATA_DIRS.clear)
         with redirect_stdout(io.StringIO()):
-            gp.generate_pack(
+            platformpack.generate_pack(
                 "fakeplat", str(root / "platforms"), db, str(root / "bios"),
                 str(root / "out"), emulators_dir=str(root / "emulators"),
                 data_registry={"assets": {"local_cache": str(root / "absent")}},
                 offline=True,
             )
-        self.assertEqual(gp._MISSING_DATA_DIRS, {"assets"})
+        self.assertEqual(datatrees._MISSING_DATA_DIRS, {"assets"})
         # main() starts each run with no notices, so the run itself records it.
-        with mock.patch.object(gp, "_main", lambda held: gp._MISSING_DATA_DIRS.add("assets")), \
+        with mock.patch.object(gp, "_main", lambda held: datatrees._MISSING_DATA_DIRS.add("assets")), \
                 contextlib.redirect_stderr(io.StringIO()), \
                 self.assertRaises(SystemExit) as stop:
             gp.main()
@@ -191,7 +193,7 @@ class AFileNobodyHoldsIsAnOmission(unittest.TestCase):
     showed no notice and said everything was verified."""
 
     def test_the_manifest_names_it(self):
-        from generate_pack import generate_manifest
+        from packs.manifest import generate_manifest
 
         _emulator_profiles_cache.clear()
         root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
@@ -232,7 +234,7 @@ class AMemberNameIsNotALooseFile(unittest.TestCase):
     no archive member names, shipped nothing."""
 
     def test_verify_reads_undeclared_files_as_the_builder_does(self):
-        import cross_reference
+        from packs import crossref
 
         _emulator_profiles_cache.clear()
         root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
@@ -252,7 +254,7 @@ class AMemberNameIsNotALooseFile(unittest.TestCase):
         db = {"files": {}, "indexes": {"by_md5": {}, "by_name": {}, "by_crc32": {},
                                       "by_path_suffix": {}}}
         config = load_platform_config("fakeplat", str(root / "platforms"))
-        with mock.patch.object(cross_reference, "_build_supplemental_index",
+        with mock.patch.object(crossref, "_build_supplemental_index",
                                lambda *a, **k: {"315-6146.bin"}):
             result = verify_platform(config, db, str(root / "emulators"))
         self.assertEqual(

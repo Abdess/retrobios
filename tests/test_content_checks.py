@@ -23,7 +23,7 @@ from model.profiles import _emulator_profiles_cache, load_emulator_profiles
 from resolve.content import content_fits, size_fits, _masked_sha1_verdict
 from resolve.localfile import resolve_local_file
 import generate_pack as builder
-import packextras
+from packs import extras as packextras
 from core.romdir import romdir_accepts, walk
 from resolve.validation import _build_validation_index, check_file_validation
 

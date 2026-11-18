@@ -15,7 +15,7 @@ import os
 import unittest
 from pathlib import Path
 
-from packpaths import _resolve_destination
+from packs.paths import _resolve_destination
 from resolve.validation import outside_gap_scope, read_from_save_dir, read_from_system_dir
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -63,7 +63,7 @@ class RetroArchCarriesDolphinWhereItReads(unittest.TestCase):
         from model.database import load_database
         from model.profiles import load_emulator_profiles
         from model.platforms import load_platform_config
-        from packextras import _collect_emulator_extras
+        from packs.extras import _collect_emulator_extras
 
         config = load_platform_config("retroarch")
         extras = _collect_emulator_extras(

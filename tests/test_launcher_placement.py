@@ -26,8 +26,9 @@ import yaml
 from model.profiles import _emulator_profiles_cache, load_emulator_profiles
 from model.platforms import load_platform_config
 from resolve.standalone import platform_layouts, standalone_set
-from generate_pack import generate_manifest, generate_pack
-from verify import verify_platform
+from packs.manifest import generate_manifest
+from packs.platformpack import generate_pack
+from packs.coverage import verify_platform
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 

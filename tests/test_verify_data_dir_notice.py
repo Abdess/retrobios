@@ -19,7 +19,8 @@ import unittest
 from pathlib import Path
 
 import generate_db
-from verify import print_platform_result, verify_platform
+from packs.report import print_platform_result
+from packs.coverage import verify_platform
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

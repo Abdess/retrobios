@@ -22,7 +22,9 @@ from model.profiles import load_emulator_profiles, installed_data_refs
 from model.registry import load_data_dir_registry, list_registered_platforms
 from resolve.cores import resolve_platform_cores
 from resolve.standalone import platform_layouts, standalone_set
-import generate_pack as builder
+from packs import archive
+from packs import datatrees
+from packs import platformpack
 from resolve.validation import deliverable, read_from_system_dir
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -67,7 +69,7 @@ CONFIG = {
 
 class CoreDataTreesTest(unittest.TestCase):
     def trees(self, platform: str = "plat", registry: dict | None = None) -> list[dict]:
-        return builder.core_data_trees(
+        return datatrees.core_data_trees(
             CONFIG, PROFILES, platform, REGISTRY if registry is None else registry
         )
 
@@ -96,17 +98,17 @@ class CoreDataTreesTest(unittest.TestCase):
         twin = {**PROFILES["demo"], "emulator": "Twin", "cores": ["twin"]}
         profiles = {**PROFILES, "twin": twin}
         config = {**CONFIG, "cores": ["demo", "solo", "twin"]}
-        trees = builder.core_data_trees(config, profiles, "plat", REGISTRY)
+        trees = datatrees.core_data_trees(config, profiles, "plat", REGISTRY)
         shared = [t for t in trees if t["ref"] == "shared"]
         self.assertEqual(len(shared), 1)
         self.assertEqual(shared[0]["readers"], ["demo", "twin"])
-        self.assertEqual(builder.tree_readers({}, trees)["shared"], ["demo", "twin"])
+        self.assertEqual(datatrees.tree_readers({}, trees)["shared"], ["demo", "twin"])
 
     def test_a_tree_a_system_declares_names_no_core(self) -> None:
         trees = self.trees()
         declared = {"demo-system": {"data_directories": [{"ref": "shared"}]}}
-        self.assertNotIn("shared", builder.tree_readers(declared, trees))
-        self.assertIn("shared", builder.tree_readers({}, trees))
+        self.assertNotIn("shared", datatrees.tree_readers(declared, trees))
+        self.assertIn("shared", datatrees.tree_readers({}, trees))
 
     def test_tree_below_the_declared_bios_folder(self) -> None:
         config = {
@@ -114,13 +116,13 @@ class CoreDataTreesTest(unittest.TestCase):
             "base_destination": "",
             "systems": {"demo-system": {"files": [{"name": "a.bin", "destination": "bios/a.bin"}]}},
         }
-        trees = builder.core_data_trees(config, PROFILES, "plat", REGISTRY)
+        trees = datatrees.core_data_trees(config, PROFILES, "plat", REGISTRY)
         self.assertEqual(
             [t["destination"] for t in trees if t["ref"] == "shared"], ["bios/Demo/Sys"]
         )
 
     def test_no_registry_no_tree(self) -> None:
-        self.assertEqual(builder.core_data_trees(CONFIG, PROFILES, "plat", None), [])
+        self.assertEqual(datatrees.core_data_trees(CONFIG, PROFILES, "plat", None), [])
 
 
 class EveryReaderHasTheTreeOrAReason(unittest.TestCase):
@@ -170,10 +172,10 @@ class AmberelecCarriesTheMachines(unittest.TestCase):
             config = load_platform_config("amberelec", platforms_dir)
             registry = load_data_dir_registry(platforms_dir)
             profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
-            trees = builder.core_data_trees(config, profiles, "amberelec", registry)
+            trees = datatrees.core_data_trees(config, profiles, "amberelec", registry)
             refs: dict = {}
             members = dict(
-                (full, src) for src, full in builder._data_directory_members(
+                (full, src) for src, full in datatrees._data_directory_members(
                     config.get("systems", {}), registry, "amberelec",
                     config.get("base_destination", ""), False, set(), set(), set(),
                     refs_out=refs, core_trees=trees,
@@ -200,10 +202,10 @@ class TheCountLineKeepsTreesOutOfTheBaseline(unittest.TestCase):
         os.chdir(REPO_ROOT)
         self.addCleanup(os.chdir, previous)
         db = load_database("database.json")
-        record = builder.PackRecord()
+        record = archive.PackRecord()
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
-            builder.generate_pack(
+            platformpack.generate_pack(
                 "myminui", "platforms", db, "bios", "tmp", offline=True, record=record,
                 data_registry=load_data_dir_registry("platforms"),
             )

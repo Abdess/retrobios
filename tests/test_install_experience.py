@@ -197,7 +197,7 @@ class ProgramsAreMarked(unittest.TestCase):
     the git mode cannot, hundreds of MAME archives carrying an execute bit."""
 
     def test_header_decides(self):
-        import generate_pack
+        from packs import manifestentry
 
         with tempfile.TemporaryDirectory() as tmp:
             for data, expected in ((b"\x7fELF\x02", True), (b"#!/bin/sh\n", True),
@@ -205,7 +205,7 @@ class ProgramsAreMarked(unittest.TestCase):
                 path = Path(tmp) / "f"
                 path.write_bytes(data)
                 with self.subTest(head=data):
-                    self.assertEqual(generate_pack._is_program(str(path)), expected)
+                    self.assertEqual(manifestentry._is_program(str(path)), expected)
 
     def test_retrodeck_launchers_are_executable(self):
         manifest = json.loads((REPO_ROOT / "install" / "retrodeck.json").read_text())
@@ -224,24 +224,24 @@ class ManifestHashesMatchTheScan(unittest.TestCase):
     file holds, the same wrong value in two runs."""
 
     def test_a_contradicted_hash_is_refused(self):
-        import generate_pack
+        from packs import manifestentry
 
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "nand.bin"
             path.write_bytes(b"real")
             real = hashlib.sha1(b"real").hexdigest()
             good = {"files": {real: {"path": str(path)}}}
-            self.assertEqual(generate_pack._stable_hashes(str(path), good)["sha1"], real)
+            self.assertEqual(manifestentry._stable_hashes(str(path), good)["sha1"], real)
             bad = {"files": {"0" * 40: {"path": str(path)}}}
             with self.assertRaises(RuntimeError):
-                generate_pack._stable_hashes(str(path), bad)
-            self.assertEqual(generate_pack._stable_hashes(str(path), {"files": {}})["sha1"], real)
+                manifestentry._stable_hashes(str(path), bad)
+            self.assertEqual(manifestentry._stable_hashes(str(path), {"files": {}})["sha1"], real)
 
     def test_a_wrong_first_reading_is_read_again_from_disk(self):
         """The retries went through the hash cache and got the first, wrong
         value back: one read of the file, then a refusal a second read would
         have avoided."""
-        import generate_pack
+        from packs import manifestentry
         from core import hashing
 
         real_compute = hashing._compute_hashes
@@ -260,7 +260,7 @@ class ManifestHashesMatchTheScan(unittest.TestCase):
             real = hashlib.sha1(b"flaky").hexdigest()
             db = {"files": {real: {"path": str(path)}}}
             with mock.patch.object(hashing, "_compute_hashes", flaky):
-                self.assertEqual(generate_pack._stable_hashes(str(path), db)["sha1"], real)
+                self.assertEqual(manifestentry._stable_hashes(str(path), db)["sha1"], real)
         self.assertEqual(len(reads), 2)
 
     def test_the_cache_is_keyed_by_what_was_checked(self):

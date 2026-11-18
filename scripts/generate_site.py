@@ -70,7 +70,7 @@ from resolve.layout import runs_standalone
 from siterender import SECTION_LABELS, WIKI_SRC_DIR
 from core.artifacts import ArtifactLockBusy, artifact_lock
 from core.artifacts import json_text as _json_text
-from cross_reference import FileConsumers, entry_target, held_copy
+from packs.crossref import FileConsumers, entry_target, held_copy
 from resolve.nativemode import check_label, digest_algorithm, reads_file_contents
 
 from generate_readme import (
@@ -123,7 +123,7 @@ import sitebootstrap
 import sitehandheld
 import sitemeasurements
 import sitewanted
-from validate_pr import load_platform_hashes, load_profile_hashes
+from resolve.review import load_platform_hashes, load_profile_hashes
 from sitediagrams import local_images, prepare_page, unresolved_images
 from sitewrite import (
     _record,
@@ -688,7 +688,7 @@ def _pack_version(pack_name: str, platforms: list[str]) -> str:
     Read past the platform part the builder writes, not at the last
     underscore: AmberELEC_prerelease-20261019_1835 read as 1835.
     """
-    from generate_pack import platform_pack_prefix
+    from packs.naming import platform_pack_prefix
 
     stem = pack_name.removesuffix("_BIOS_Pack.zip")
     prefix = platform_pack_prefix(
@@ -1231,7 +1231,7 @@ def build_emulator_gap_report(
     """
     from model.systems import _norm_system_id
     from model.declarations import merged_platform_declarations
-    from cross_reference import cross_reference as run_cross_reference
+    from packs.crossref import cross_reference as run_cross_reference
 
     # Enriched with alias resolution, with each declaration's size and slot:
     # a name alone settled DOSBox's 32 KiB SC-55 ROM1.BIN on Galaksija's.
@@ -9975,7 +9975,7 @@ def _availability_check(
     missing while the gap report called it held would describe a
     different collection on two pages of the same site.
     """
-    from cross_reference import entry_source
+    from packs.crossref import entry_source
 
     by_name = db.get("indexes", {}).get("by_name", {})
     by_name_lower = {k.lower(): k for k in by_name}
@@ -10006,7 +10006,7 @@ def _availability_check(
 def _emulator_slots(files: list[dict]) -> list[list[dict]]:
     """The entries of each slot, as verify --emulator and the gaps page
     count them, leaving out the slots the app ships."""
-    from cross_reference import slot_key
+    from packs.crossref import slot_key
 
     slots: dict[tuple, list[dict]] = {}
     for f in files:
@@ -13044,7 +13044,7 @@ def main() -> None:
 
         from model.registry import load_data_dir_registry
         from core.artifacts import repository_output_lock
-        from refresh_data_dirs import hold_data_dirs
+        from packs.datadirs import hold_data_dirs
 
         # The coverage pages resolve against data/, held while they are read.
         # Whatever --docs-dir says, website/src/data and wiki/ are written.
@@ -13131,7 +13131,7 @@ class _SiteRun:
 def _load_site_run(args: argparse.Namespace, db: dict, docs: Path, public: Path) -> _SiteRun:
     """The registry, the coverage of every platform and the profiles."""
     from model.registry import load_data_dir_registry
-    from cross_reference import _build_supplemental_index
+    from packs.crossref import _build_supplemental_index
 
     registry = _load_registry(args.platforms_dir)
 

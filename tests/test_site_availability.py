@@ -75,7 +75,7 @@ class AHeldEntrySaysWhere(unittest.TestCase):
         import zipfile
 
         import generate_site
-        from cross_reference import FileConsumers, held_copy
+        from packs.crossref import FileConsumers, held_copy
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             data, bios = Path(tmp) / "data", Path(tmp) / "bios"

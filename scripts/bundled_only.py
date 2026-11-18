@@ -24,7 +24,7 @@ from model.registry import list_registered_platforms
 from model.database import load_database
 from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config
-from cross_reference import FileConsumers
+from packs.crossref import FileConsumers
 
 
 def _entries(profile: dict, db: dict) -> list[dict]:

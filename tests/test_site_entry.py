@@ -471,7 +471,7 @@ class PackNamesItsVersion(unittest.TestCase):
     def test_a_version_with_an_underscore_is_read_whole(self):
         """AmberELEC's prerelease-20261019_1835 read as 1835, and the page
         said the pack was built for another version."""
-        from generate_pack import _platform_pack_stem
+        from packs.naming import _platform_pack_stem
 
         version = load_platform_config("amberelec", "platforms")["version"]
         name = _platform_pack_stem(["amberelec"], "amberelec", "platforms") + "_BIOS_Pack.zip"

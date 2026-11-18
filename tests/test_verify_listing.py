@@ -58,6 +58,7 @@ class VerifyRefusesWhatAModeDoesNotRead(unittest.TestCase):
 
     def test_emulator_mode_reads_the_given_platforms_dir(self):
         import verify
+        from packs import emulatorcheck
 
         seen: list[str] = []
 
@@ -67,7 +68,7 @@ class VerifyRefusesWhatAModeDoesNotRead(unittest.TestCase):
 
         db = {"files": {}, "indexes": {"by_name": {}, "by_md5": {}}}
         with mock.patch.object(verify, "load_data_dir_registry", registry):
-            verify.verify_emulator(
+            emulatorcheck.verify_emulator(
                 ["handy"], str(REPO_ROOT / "emulators"), db, platforms_dir="elsewhere"
             )
         self.assertEqual(seen, ["elsewhere"])
@@ -90,6 +91,7 @@ class VerifyAppliesWhatItAccepts(unittest.TestCase):
 class EmulatorPackReadsThePlatformsDir(unittest.TestCase):
     def test_the_registry_comes_from_the_given_dir(self):
         import generate_pack
+        from packs import emulatorpack
 
         seen: list[str] = []
 
@@ -100,7 +102,7 @@ class EmulatorPackReadsThePlatformsDir(unittest.TestCase):
         db = {"files": {}, "indexes": {"by_name": {}, "by_md5": {}}}
         out = REPO_ROOT / "tmp" / "emupack-registry"
         with mock.patch.object(generate_pack, "load_data_dir_registry", registry):
-            generate_pack.generate_emulator_pack(
+            emulatorpack.generate_emulator_pack(
                 ["handy"], str(REPO_ROOT / "emulators"), db, "bios", str(out),
                 zip_contents={}, platforms_dir="elsewhere",
             )
@@ -117,7 +119,7 @@ class CoreArchivesAreCounted(unittest.TestCase):
         import contextlib
         import io
 
-        import verify
+        from packs import report
 
         result = {"undeclared_files": [
             {"name": "neogeo.zip", "category": "bios_zip", "required": True,
@@ -125,7 +127,7 @@ class CoreArchivesAreCounted(unittest.TestCase):
         ]}
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
-            verify._print_undeclared_section(result, verbose=False)
+            report._print_undeclared_section(result, verbose=False)
         self.assertIn("1 required missing", out.getvalue())
         self.assertIn("neogeo.zip", out.getvalue())
 
@@ -135,26 +137,26 @@ class ExistenceReportsWhatThePackReports(unittest.TestCase):
         """30 RetroArch entries printed DISCREPANCY in the pack, nothing in verify."""
         import tempfile
 
-        import verify
+        from packs import verdicts
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             path = Path(tmp) / "aes.zip"
             path.write_bytes(b"local dump")
             entry = {"name": "aes.zip", "md5": "9d2ff2333e23910cf56f7f785609d36a"}
-            result = verify.verify_entry_existence(
+            result = verdicts.verify_entry_existence(
                 entry, str(path), resolve_status="hash_mismatch", platform_display="RetroArch"
             )
-        self.assertEqual(result["status"], verify.Status.OK)
+        self.assertEqual(result["status"], verdicts.Status.OK)
         self.assertIn("declared hash 9d2ff233", result["discrepancy"])
 
     def test_the_file_found_is_named(self):
         """RetroArch, Lakka and RetroPie pages showed no "Served by" line:
         existence mode returned no path, where the hash modes return one."""
-        import verify
+        from packs import verdicts
 
-        found = verify.verify_entry_existence({"name": "a.bin"}, "bios/X/Y/a.bin")
+        found = verdicts.verify_entry_existence({"name": "a.bin"}, "bios/X/Y/a.bin")
         self.assertEqual(found["path"], "bios/X/Y/a.bin")
-        self.assertNotIn("path", verify.verify_entry_existence({"name": "a.bin"}, None))
+        self.assertNotIn("path", verdicts.verify_entry_existence({"name": "a.bin"}, None))
 
 
 class TheDestinationsFlagNeedsAPack(unittest.TestCase):
@@ -193,7 +195,7 @@ class EveryGapCountedIsNamed(unittest.TestCase):
         import contextlib
         import io
 
-        import verify
+        from packs import report
 
         result = {"undeclared_files": [
             {"name": "opt.rom", "emulator": "core", "required": False, "in_repo": False},
@@ -201,11 +203,11 @@ class EveryGapCountedIsNamed(unittest.TestCase):
              "category": "game_data"},
         ]}
         with contextlib.redirect_stdout(io.StringIO()) as quiet:
-            verify._print_undeclared_section(result, verbose=False)
+            report._print_undeclared_section(result, verbose=False)
         self.assertIn("1 optional missing (--verbose lists them)", quiet.getvalue())
         self.assertIn("1 missing (--verbose lists them)", quiet.getvalue())
         with contextlib.redirect_stdout(io.StringIO()) as verbose:
-            verify._print_undeclared_section(result, verbose=True)
+            report._print_undeclared_section(result, verbose=True)
         self.assertIn("MISSING (optional): core needs opt.rom", verbose.getvalue())
         self.assertIn("MISSING (game data): engine needs level.dat", verbose.getvalue())
 
@@ -219,7 +221,7 @@ class BundledGameDataIsNotMissing(unittest.TestCase):
         import contextlib
         import io
 
-        import verify
+        from packs import report
 
         result = {"undeclared_files": [
             {"name": "abuse.lsp", "emulator": "Abuse", "required": True,
@@ -229,7 +231,7 @@ class BundledGameDataIsNotMissing(unittest.TestCase):
              "in_repo": False, "category": "game_data"},
         ]}
         with contextlib.redirect_stdout(io.StringIO()) as out:
-            verify._print_undeclared_section(result, verbose=True)
+            report._print_undeclared_section(result, verbose=True)
         self.assertIn("Game data: 0 in pack, 1 missing", out.getvalue())
         self.assertNotIn("needs abuse.lsp", out.getvalue())
         self.assertIn("Bundled with their emulator, not collected: 1 (abuse.lsp)",
@@ -244,7 +246,7 @@ class TheBundledLineSaysWhatItLeavesOut(unittest.TestCase):
         import contextlib
         import io
 
-        import verify
+        from packs import report
 
         result = {"undeclared_files": [
             {"name": name, "emulator": "e", "required": required, "in_repo": False,
@@ -252,21 +254,21 @@ class TheBundledLineSaysWhatItLeavesOut(unittest.TestCase):
             for name, required in (("fw.bin", True), ("a.frag", False), ("b.dll", False))
         ]}
         with contextlib.redirect_stdout(io.StringIO()) as quiet:
-            verify._print_undeclared_section(result, verbose=False)
+            report._print_undeclared_section(result, verbose=False)
         self.assertIn(
             "Bundled with their emulator, not collected: 3 "
             "(fw.bin, 2 more, --verbose lists them)",
             quiet.getvalue(),
         )
         with contextlib.redirect_stdout(io.StringIO()) as verbose:
-            verify._print_undeclared_section(result, verbose=True)
+            report._print_undeclared_section(result, verbose=True)
         self.assertIn(
             "Bundled with their emulator, not collected: 3 (a.frag, b.dll, fw.bin)",
             verbose.getvalue(),
         )
         result["undeclared_files"] = result["undeclared_files"][1:]
         with contextlib.redirect_stdout(io.StringIO()) as unnamed:
-            verify._print_undeclared_section(result, verbose=False)
+            report._print_undeclared_section(result, verbose=False)
         self.assertIn("Bundled with their emulator, not collected: 2 (--verbose lists them)",
                       unnamed.getvalue())
 
@@ -279,11 +281,11 @@ class TheCheckLineSaysWhatItIs(unittest.TestCase):
         import contextlib
         import io
 
-        import verify
+        from packs import report
 
         entry = {"name": "FBASIC30.ROM", "emulator": "XM7", "checks": ["size"]}
         with contextlib.redirect_stdout(io.StringIO()) as out:
-            verify._print_undeclared_entry(entry, "MISSING (required)", False, set())
+            report._print_undeclared_entry(entry, "MISSING (required)", False, set())
         self.assertEqual(out.getvalue().splitlines(), [
             "    MISSING (required): XM7 needs FBASIC30.ROM",
             "      validates size",
@@ -300,20 +302,20 @@ class CoreCopiesWithoutAGapEntryAreCounted(unittest.TestCase):
         import contextlib
         import io
 
-        import verify
+        from packs import report
 
         for packed, expected in (({"bios": 6, "game_data": 0}, "Core files: 6 in pack"),
                                  ({"bios": 0, "game_data": 3}, "Game data: 3 in pack")):
             out = io.StringIO()
             with contextlib.redirect_stdout(out):
-                verify._print_undeclared_section(
+                report._print_undeclared_section(
                     {"undeclared_files": [], "packed_extras": packed}, verbose=False
                 )
             with self.subTest(packed=packed):
                 self.assertIn(expected, out.getvalue())
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
-            verify._print_undeclared_section(
+            report._print_undeclared_section(
                 {"undeclared_files": [], "packed_extras": {"bios": 0, "game_data": 0}}, False
             )
         self.assertEqual(out.getvalue(), "")

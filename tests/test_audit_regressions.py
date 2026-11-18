@@ -28,15 +28,13 @@ try:
 except ImportError:
     jsonschema = None
 import install
+from packs import verdicts
 from scripts import pipeline
 from scripts.resolve import regionaudit, regions
 from scripts.resolve.localfile import resolve_local_file
 from scripts.core.ziptools import safe_extract_zip
-from scripts.generate_pack import (
-    _emulator_region_group,
-    generate_target_manifests,
-    verify_pack_against_platform,
-)
+from scripts.generate_pack import _emulator_region_group, verify_pack_against_platform
+from scripts.packs.targets import generate_target_manifests
 
 HAS_JSONSCHEMA = jsonschema is not None
 ROOT = Path(__file__).resolve().parent.parent
@@ -625,7 +623,7 @@ class APackIsSwappedInWhole(unittest.TestCase):
     def test_a_failed_build_keeps_the_previous_pack(self):
         import zipfile
 
-        from generate_pack import _writing_pack
+        from packs.archive import _writing_pack
 
         directory = self._dir()
         pack = directory / "Pack.zip"
@@ -641,7 +639,7 @@ class APackIsSwappedInWhole(unittest.TestCase):
     def test_a_finished_build_replaces_it(self):
         import zipfile
 
-        from generate_pack import _writing_pack
+        from packs.archive import _writing_pack
 
         directory = self._dir()
         pack = directory / "Pack.zip"
@@ -705,7 +703,7 @@ class StandaloneCopiesNameTheirSource(unittest.TestCase):
     switch/prod.keys)."""
 
     def _placed(self, copies, dests):
-        from generate_pack import _placed_copies
+        from packs.standalone import _placed_copies
 
         return _placed_copies(copies, dests)
 
@@ -758,7 +756,7 @@ class StandaloneCopiesComeFromTheProfiles(unittest.TestCase):
     }
 
     def _copies(self, profiles, dests, declared=()):
-        from generate_pack import _profile_copies
+        from packs.standalone import _profile_copies
 
         return _profile_copies(profiles, dests, list(declared))
 
@@ -823,7 +821,7 @@ class ADamagedArchiveIsNotPacked(unittest.TestCase):
     def test_the_rebuild_refusal_reaches_the_run(self):
         import zipfile
 
-        from generate_pack import DamagedArchiveError, _add_zip_to_pack
+        from packs.archive import DamagedArchiveError, _add_zip_to_pack
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             source = Path(directory) / "set.zip"
@@ -849,7 +847,7 @@ class APackedArchiveKeepsItsBytes(unittest.TestCase):
         import hashlib
         import zipfile
 
-        from generate_pack import _add_zip_to_pack
+        from packs.archive import _add_zip_to_pack
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             source = Path(directory) / "set.zip"
@@ -870,7 +868,7 @@ class PackReadmesSayWhatTheInstallerDoes(unittest.TestCase):
     RetroArch README offered only `| sh`, which Windows cannot run."""
 
     def _guide(self, platform: str) -> str:
-        from packreadme import _build_readme
+        from packs.readme import _build_readme
 
         registry = yaml.safe_load((ROOT / "platforms" / "_registry.yml").read_text())
         install = registry["platforms"][platform].get("install") or {}
@@ -1447,7 +1445,7 @@ class OneBaselineVerdict(unittest.TestCase):
         without d32.rom is one the builder left out on purpose."""
         import hashlib
 
-        from scripts.packverify import _intentional_hash_exclusion
+        from scripts.packs.integrity import _intentional_hash_exclusion
 
         entry = {"name": "dragon32.zip", "zipped_file": "d32.rom", "md5": ""}
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
@@ -1518,7 +1516,7 @@ class OneBaselineVerdict(unittest.TestCase):
             self.assertTrue(digest_verdict(plain, 0, lambda: {"md5": raw}, "md5"))
 
     def test_a_release_asset_keeps_its_answer(self):
-        from scripts.packresolve import apply_override
+        from scripts.resolve.packfiles import apply_override
 
         self.assertEqual(
             apply_override("bios/x.bin", "/cache/big.bin", "release_asset"),
@@ -1563,8 +1561,8 @@ class OneBaselineVerdict(unittest.TestCase):
 
     def test_verify_finds_the_cached_release_asset(self):
         # verify imports the scripts directory's modules by their bare names.
-        import packresolve
-        from scripts.verify import _resolve_for_platform
+        from resolve import packfiles as packresolve
+        from scripts.packs.coverage import _resolve_for_platform
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             cached = Path(directory) / "BIG.PUP"
@@ -1856,7 +1854,7 @@ class RegionRegressions(unittest.TestCase):
         under none of its four systems: emulator mode grouped them and
         dropped pac-n1.bin for --region us, platform mode isolated each and
         kept it."""
-        from packextras import extra_region_groups
+        from packs.extras import extra_region_groups
 
         profile = {"systems": ["nec-pc-engine", "nec-pc-engine-cd", "nec-supergrafx",
                                "pioneer-laseractive"]}
@@ -2012,26 +2010,21 @@ class NoMd5IsNotNothingChecked(unittest.TestCase):
     sha256 and no md5.
     """
 
-    def setUp(self):
-        import verify
-
-        self.verify = verify
-
     def _entry(self):
         return {"name": "dsifirmware.bin", "sha256": "b" * 64}
 
     def test_a_contradicted_sha256_is_not_reported_ok(self):
-        result = self.verify.verify_entry_md5(
+        result = verdicts.verify_entry_md5(
             self._entry(), "bios/whatever.bin", "hash_mismatch"
         )
-        self.assertNotEqual(result["status"], self.verify.Status.OK)
+        self.assertNotEqual(result["status"], verdicts.Status.OK)
         self.assertIn("contradicted", result.get("reason", ""))
 
     def test_a_clean_resolution_is_still_ok(self):
-        result = self.verify.verify_entry_md5(
+        result = verdicts.verify_entry_md5(
             self._entry(), "bios/whatever.bin", "sha256_exact"
         )
-        self.assertEqual(result["status"], self.verify.Status.OK)
+        self.assertEqual(result["status"], verdicts.Status.OK)
 
 
 class InstallerBoundaryRegressions(unittest.TestCase):
@@ -2147,7 +2140,7 @@ class InstallerBoundaryRegressions(unittest.TestCase):
         in the pack's manifest.json, which install.py reads with the pack
         alone. The pack schema refused both keys, and each is checked under
         its own contract."""
-        import generate_pack
+        from packs import scope
         import validate_schemas
 
         install_list = json.loads((ROOT / "install" / "romm.json").read_text(encoding="utf-8"))
@@ -2159,8 +2152,8 @@ class InstallerBoundaryRegressions(unittest.TestCase):
             "summary": {"total_files": 0, "verified": 0, "untracked": 0, "errors": 0},
             "errors": [],
         }
-        generate_pack.annotate_pack_systems(
-            document, generate_pack.pack_systems(install_list, targets))
+        scope.annotate_pack_systems(
+            document, scope.pack_systems(install_list, targets))
         self.assertIn("install_list", document)
         self.assertIn("targets", document)
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
@@ -2641,7 +2634,7 @@ class ReleaseAssetCriterion(unittest.TestCase):
         return directory
 
     def test_a_large_committed_file_is_served_by_the_repository(self):
-        from scripts import generate_pack
+        from scripts.packs import manifestentry
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             root = self._repo(directory, "bios/elsewhere.bin")
@@ -2649,44 +2642,44 @@ class ReleaseAssetCriterion(unittest.TestCase):
             big.parent.mkdir()
             with big.open("wb") as handle:
                 handle.truncate(60_000_000)
-            generate_pack._registered.cache_clear()
+            manifestentry._registered.cache_clear()
             try:
-                self.assertFalse(generate_pack._is_release_asset(str(big), root))
+                self.assertFalse(manifestentry._is_release_asset(str(big), root))
             finally:
-                generate_pack._registered.cache_clear()
+                manifestentry._registered.cache_clear()
 
     def test_the_manifest_names_the_asset_as_github_serves_it(self):
         # GitHub publishes a space as a dot. The site linked the dotted
         # name while the manifest gave install.py the spaced one, a 404.
-        from scripts import generate_pack
+        from scripts.packs import manifestentry
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             root = self._repo(directory, "bios/MAME/MAME 0.174 Arcade XML.dat")
             target = Path(root, "bios", "MAME", "MAME 0.174 Arcade XML.dat")
             target.parent.mkdir(parents=True)
             target.write_bytes(b"x")
-            generate_pack._registered.cache_clear()
+            manifestentry._registered.cache_clear()
             try:
                 self.assertEqual(
-                    generate_pack._release_asset_name(str(target), root),
+                    manifestentry._release_asset_name(str(target), root),
                     "MAME.0.174.Arcade.XML.dat",
                 )
             finally:
-                generate_pack._registered.cache_clear()
+                manifestentry._registered.cache_clear()
 
     def test_a_gitignored_file_is_served_by_the_release_whatever_its_size(self):
-        from scripts import generate_pack
+        from scripts.packs import manifestentry
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             root = self._repo(directory, "bios/small.zip")
             small = Path(root, "bios", "small.zip")
             small.parent.mkdir()
             small.write_bytes(b"PK")
-            generate_pack._registered.cache_clear()
+            manifestentry._registered.cache_clear()
             try:
-                self.assertTrue(generate_pack._is_release_asset(str(small), root))
+                self.assertTrue(manifestentry._is_release_asset(str(small), root))
             finally:
-                generate_pack._registered.cache_clear()
+                manifestentry._registered.cache_clear()
 
 
 class ReleaseAssetsMatchTheCollection(unittest.TestCase):
@@ -3355,7 +3348,7 @@ class APackNameFitsAFileName(unittest.TestCase):
     before writing anything, while verify --system snes reported."""
 
     def test_a_long_selection_is_bounded_and_told_apart(self):
-        from scripts.generate_pack import MAX_PACK_NAME_BYTES, _bounded_pack_name
+        from scripts.packs.naming import MAX_PACK_NAME_BYTES, _bounded_pack_name
 
         names = [f"Emulator_Number_{i}" for i in range(23)]
         long_name = _bounded_pack_name(names, names, "_BIOS_Pack.zip")
@@ -3367,7 +3360,7 @@ class APackNameFitsAFileName(unittest.TestCase):
 
     def test_a_long_system_list_is_bounded(self):
         """Thirty systems joined made a 261-byte platform pack name."""
-        from scripts.generate_pack import MAX_SYSTEM_TAG_BYTES, _system_tag
+        from scripts.packs.naming import MAX_SYSTEM_TAG_BYTES, _system_tag
 
         systems = [f"vendor-console-number-{i}" for i in range(30)]
         tag = _system_tag(systems)
@@ -3378,7 +3371,7 @@ class APackNameFitsAFileName(unittest.TestCase):
     def test_two_systems_never_name_one_system(self):
         """sega-dreamcast,arcade and sega-dreamcast-arcade both wrote
         RetroArch_..._Dreamcast_Arcade.zip, and the second replaced the first."""
-        from scripts.generate_pack import _system_tag
+        from scripts.packs.naming import _system_tag
 
         pairs = [
             (["sega-dreamcast", "arcade"], ["sega-dreamcast-arcade"]),
@@ -3420,7 +3413,7 @@ class ARegionDroppedExtraBlocksNothing(unittest.TestCase):
     def test_the_report_skips_what_the_region_pass_drops(self):
         from unittest import mock
 
-        from scripts import packextras
+        from scripts.packs import extras as packextras
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             other = Path(directory) / "FOO.ROM"
@@ -3503,7 +3496,7 @@ class AnotherEmulatorsTreeProvesNothing(unittest.TestCase):
             self.assertTrue(patches.endswith("PlayStation 2/patches.zip"))
 
     def test_no_desktop_retroarch_pack_serves_armsx2s_tree(self):
-        from scripts import slots
+        from scripts.packs import slots
         from scripts.model.registry import load_data_dir_registry
         from scripts.model.database import load_database
         from scripts.model.profiles import load_emulator_profiles
@@ -3531,7 +3524,7 @@ class APinnedCoreFileTakesTheSlotFirst(unittest.TestCase):
     def test_the_content_naming_claim_is_placed_first(self):
         from unittest import mock
 
-        from scripts import packextras
+        from scripts.packs import extras as packextras
 
         undeclared = [
             {"profile": "hypseus", "emulator": "hypseus", "name": "db.txt",
@@ -3540,7 +3533,7 @@ class APinnedCoreFileTakesTheSlotFirst(unittest.TestCase):
              "path": "db.txt", "in_repo": True, "systems": ["b"], "sha1": "a" * 40},
         ]
         config = {"systems": {}, "base_destination": "bios"}
-        with mock.patch("verify.find_undeclared_files", return_value=undeclared), \
+        with mock.patch("packs.gaps.find_undeclared_files", return_value=undeclared), \
                 mock.patch.object(packextras, "resolve_platform_cores",
                                   return_value=set()) as cores:
             extras = packextras._collect_emulator_extras(
@@ -3673,7 +3666,7 @@ class APackNoteBesideItsSlotIsANote(unittest.TestCase):
     a pack holding games/keen6/INSTRUCTIONS_egagraph.ck6.txt."""
 
     def test_a_nested_note_is_not_hashed_against_the_collection(self):
-        from scripts.packverify import verify_pack
+        from scripts.packs.integrity import verify_pack
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             path = Path(directory) / "Pack.zip"
@@ -4037,7 +4030,7 @@ class AnAcceptedVersionIsNoCoreDiscrepancy(unittest.TestCase):
                 "source_path": "NWINTER.GRP", "source_profile": "eduke32"}
 
     def test_a_sibling_version_matches(self):
-        from scripts.generate_pack import _matches_an_alternative
+        from scripts.packs.platformpack import _matches_an_alternative
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
             held = Path(tmp) / "NWINTER.GRP"
@@ -4048,7 +4041,7 @@ class AnAcceptedVersionIsNoCoreDiscrepancy(unittest.TestCase):
                 self._extra(), str(held), {"eduke32": profile}))
 
     def test_a_copy_no_entry_declares_still_disagrees(self):
-        from scripts.generate_pack import _matches_an_alternative
+        from scripts.packs.platformpack import _matches_an_alternative
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
             held = Path(tmp) / "NWINTER.GRP"
@@ -4310,7 +4303,7 @@ class ASameNamedMemberIsNotTheFile(unittest.TestCase):
     while verify --emulator said missing."""
 
     def test_a_declared_hash_decides_a_member_or_data_hit(self):
-        from scripts import cross_reference as xr
+        from scripts.packs import crossref
 
         tmp = Path(tempfile.mkdtemp(dir=TMP_ROOT))
         self.addCleanup(lambda: __import__("shutil").rmtree(tmp, True))
@@ -4319,16 +4312,16 @@ class ASameNamedMemberIsNotTheFile(unittest.TestCase):
         (tmp / "bios").mkdir()
         with zipfile.ZipFile(tmp / "bios" / "extras.zip", "w") as zf:
             zf.writestr("files/other.ttf", b"MEMBER FONT")
-        names = xr._build_supplemental_index(str(tmp / "data"), str(tmp / "bios"))
-        locations = xr._supplemental_locations(str(tmp / "data"), str(tmp / "bios"))
-        with mock.patch.object(xr, "_supplemental_locations", lambda: locations):
+        names = crossref._build_supplemental_index(str(tmp / "data"), str(tmp / "bios"))
+        locations = crossref._supplemental_locations(str(tmp / "data"), str(tmp / "bios"))
+        with mock.patch.object(crossref, "_supplemental_locations", lambda: locations):
             for fname, data in (("font.ttf", b"DATA FONT"), ("other.ttf", b"MEMBER FONT")):
                 with self.subTest(name=fname):
                     held = {"name": fname, "sha1": hashlib.sha1(data).hexdigest()}
                     other = {"name": fname, "sha1": "0" * 40}
-                    self.assertTrue(xr._data_hit(fname, None, held, names))
-                    self.assertFalse(xr._data_hit(fname, None, other, names))
-                    self.assertTrue(xr._data_hit(fname, None, {"name": fname}, names))
+                    self.assertTrue(crossref._data_hit(fname, None, held, names))
+                    self.assertFalse(crossref._data_hit(fname, None, other, names))
+                    self.assertTrue(crossref._data_hit(fname, None, {"name": fname}, names))
 
 
 class AnEmptyTargetIsNotEveryCore(unittest.TestCase):
@@ -4337,7 +4330,7 @@ class AnEmptyTargetIsNotEveryCore(unittest.TestCase):
 
     def test_the_published_list_is_the_builder_reading(self):
         from scripts.model.targets import load_target_config
-        from scripts.generate_pack import generate_target_manifests
+        from scripts.packs.targets import generate_target_manifests
 
         tmp = Path(tempfile.mkdtemp(dir=TMP_ROOT))
         self.addCleanup(lambda: __import__("shutil").rmtree(tmp, True))
@@ -4386,7 +4379,7 @@ class ADataDirectoryIsHeldWhileRead(unittest.TestCase):
     def test_a_holder_makes_the_refresh_lock_wait(self):
         import fcntl
 
-        from scripts import refresh_data_dirs
+        from scripts.packs import datadirs
 
         cache = self.tmp / "bluemsx"
         cache.mkdir()
@@ -4402,7 +4395,7 @@ class ADataDirectoryIsHeldWhileRead(unittest.TestCase):
                 return True
 
         with contextlib.ExitStack() as held:
-            refresh_data_dirs.hold_data_dirs(held, {"bluemsx": {"local_cache": str(cache)}})
+            datadirs.hold_data_dirs(held, {"bluemsx": {"local_cache": str(cache)}})
             self.assertFalse(exclusive_free())
         self.assertTrue(exclusive_free())
 
@@ -4411,12 +4404,12 @@ class ADataDirectoryIsHeldWhileRead(unittest.TestCase):
         missing for verify and present for the packs of the same run."""
         import fcntl
 
-        from scripts import refresh_data_dirs
+        from scripts.packs import datadirs
 
         cache = self.tmp / "absent"
         lock = cache.with_name(f".{cache.name}.lock")
         with contextlib.ExitStack() as held:
-            refresh_data_dirs.hold_data_dirs(held, {"absent": {"local_cache": str(cache)}})
+            datadirs.hold_data_dirs(held, {"absent": {"local_cache": str(cache)}})
             self.assertFalse(cache.exists())
             with open(lock, "a") as handle, self.assertRaises(BlockingIOError):
                 fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
@@ -4442,15 +4435,15 @@ class EachRootReadsItsOwnRegistry(unittest.TestCase):
     was asked: a second tree got the first tree's .gitignore."""
 
     def test_two_roots_in_one_process(self):
-        from scripts import generate_pack
+        from scripts.packs import manifestentry
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as a, \
                 tempfile.TemporaryDirectory(dir=TMP_ROOT) as b:
             Path(a, ".gitignore").write_text("bios/one.bin\n")
             Path(b, ".gitignore").write_text("bios/two.bin\n")
-            self.assertTrue(generate_pack._is_release_asset(str(Path(a, "bios/one.bin")), a))
-            self.assertFalse(generate_pack._is_release_asset(str(Path(b, "bios/one.bin")), b))
-            self.assertTrue(generate_pack._is_release_asset(str(Path(b, "bios/two.bin")), b))
+            self.assertTrue(manifestentry._is_release_asset(str(Path(a, "bios/one.bin")), a))
+            self.assertFalse(manifestentry._is_release_asset(str(Path(b, "bios/one.bin")), b))
+            self.assertTrue(manifestentry._is_release_asset(str(Path(b, "bios/two.bin")), b))
 
     def test_one_parser_reads_the_registry(self):
         for module in ("generate_pack.py", "generate_db.py"):
@@ -4485,7 +4478,7 @@ class EveryReadmeNamesItsFolder(unittest.TestCase):
     /storage/system, the folder the registry and the installer use."""
 
     def test_the_registry_folder_is_in_the_guide(self):
-        from scripts.packreadme import _build_readme
+        from scripts.packs.readme import _build_readme
 
         registry = yaml.safe_load((ROOT / "platforms" / "_registry.yml").read_text())
         for name, entry in registry["platforms"].items():
@@ -4650,7 +4643,8 @@ class AutoFetchAsksVerifyWhatIsMissing(unittest.TestCase):
 
     def test_the_targets_are_verify_verdicts(self):
         from scripts import auto_fetch
-        import verify as verify_mod
+        from packs import coverage as packs_coverage
+        from packs import verdicts
 
         config = {"verification_mode": "md5", "systems": {"s": {"files": [
             {"name": "ok.bin", "md5": "1" * 32},
@@ -4659,9 +4653,9 @@ class AutoFetchAsksVerifyWhatIsMissing(unittest.TestCase):
         ]}}}
         result = {
             "details": [
-                {"system": "s", "name": "ok.bin", "status": verify_mod.Status.OK},
-                {"system": "s", "name": "gone.bin", "status": verify_mod.Status.MISSING},
-                {"system": "s", "name": "bad.bin", "status": verify_mod.Status.UNTESTED},
+                {"system": "s", "name": "ok.bin", "status": verdicts.Status.OK},
+                {"system": "s", "name": "gone.bin", "status": verdicts.Status.MISSING},
+                {"system": "s", "name": "bad.bin", "status": verdicts.Status.UNTESTED},
             ],
             "undeclared_files": [
                 {"name": "diabdat.mpq", "in_repo": False, "required": True,
@@ -4674,7 +4668,7 @@ class AutoFetchAsksVerifyWhatIsMissing(unittest.TestCase):
                  "bundled": True, "emulator": "ZEsarUX"},
             ],
         }
-        with mock.patch.object(verify_mod, "verify_platform", lambda c, d: result):
+        with mock.patch.object(packs_coverage, "verify_platform", lambda c, d: result):
             names = [m["name"] for m in auto_fetch.find_missing(config, {})]
         self.assertEqual(names, ["gone.bin", "bad.bin", "diabdat.mpq"])
 
@@ -4733,14 +4727,14 @@ class TheToolsPageSaysWhatDedupDoes(unittest.TestCase):
     named 2 of the 11 directories dedup leaves alone."""
 
     def test_every_protected_tree_is_named(self):
-        from scripts import dedup
+        from scripts.model import nodedup
 
         line = next(
             row for row in (ROOT / "wiki" / "tools.md").read_text().splitlines()
             if row.startswith("| `dedup.py`")
         )
         self.assertNotIn(".variants", line)
-        for name in dedup.NODEDUP_DIRS:
+        for name in nodedup.NODEDUP_DIRS:
             self.assertIn(name, line)
 
 
@@ -4842,7 +4836,7 @@ class AFileToSourceIsAFileNotAName(unittest.TestCase):
     def test_rows_are_keyed_by_name_and_hash(self):
         source = (ROOT / "scripts" / "generate_site.py").read_text()
         self.assertIn('key = (g["name"], g.get("identity") or f"emulator:{emu_name}")', source)
-        from scripts.cross_reference import _first_hash
+        from scripts.packs.crossref import _first_hash
 
         self.assertEqual(_first_hash({"md5": ["AB", "cd"]}), "md5:ab")
         self.assertEqual(_first_hash({"crc32": "1", "sha1": "F" * 40}), "sha1:" + "f" * 40)
@@ -4946,6 +4940,7 @@ class AManifestHashesAFileOnce(unittest.TestCase):
 
     def test_verified_hashes_are_reused(self):
         from scripts import generate_pack
+        from scripts.packs import manifestentry
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
             path = Path(tmp, "a.bin")
@@ -4960,8 +4955,8 @@ class AManifestHashesAFileOnce(unittest.TestCase):
                 return real(file_path, algorithms)
 
             with mock.patch.object(generate_pack, "compute_hashes", counting):
-                first = generate_pack._stable_hashes(str(path), db)
-                second = generate_pack._stable_hashes(str(path), db)
+                first = manifestentry._stable_hashes(str(path), db)
+                second = manifestentry._stable_hashes(str(path), db)
         self.assertEqual(first, second)
         self.assertEqual(len(calls), 1)
         self.assertEqual(calls[0], frozenset({"sha1", "sha256"}))
@@ -4999,7 +4994,7 @@ class CompanionsComeFromADirectoryIndex(unittest.TestCase):
     """_companions walked the whole database per scanned image."""
 
     def test_same_answer_one_walk(self):
-        from scripts import packextras
+        from scripts.packs import extras as packextras
 
         files_db = {
             "a": {"path": "bios/Sony/PS2/ps2.bin", "name": "ps2.bin"},
@@ -5090,7 +5085,7 @@ class ATreeNobodyHoldsIsMissingNotAnAsset(unittest.TestCase):
 
     def test_directory_entries_never_reach_the_asset_store(self):
         from scripts.model import largefiles
-        from scripts import packresolve
+        from scripts.resolve import packfiles as packresolve
 
         db = {"files": {}, "indexes": {"by_name": {}, "by_md5": {}, "by_crc32": {},
                                       "by_path_suffix": {}}}
@@ -5302,9 +5297,10 @@ class VerifyAllSummaryNamesWhatIsWrong(unittest.TestCase):
 
     def test_counts_carry_platforms_and_core_misses(self):
         import verify
+        from packs import verdicts
 
         clean = {"severity_counts": {}, "undeclared_files": []}
-        warned = {"severity_counts": {verify.Severity.WARNING: 1}, "undeclared_files": []}
+        warned = {"severity_counts": {verdicts.Severity.WARNING: 1}, "undeclared_files": []}
         core_miss = {
             "severity_counts": {},
             "undeclared_files": [{
@@ -5372,10 +5368,11 @@ class BundledFilesAreNotToSource(unittest.TestCase):
 
     def test_verify_does_not_count_it_missing(self):
         import verify
+        from packs import report as packs_report
 
         entry = {"name": "n64.psh", "required": True, "in_repo": False,
                  "category": "bios", "in_pack": True, "bundled": True}
-        self.assertEqual(verify._core_required_missing([entry]), [])
+        self.assertEqual(packs_report._core_required_missing([entry]), [])
         summary = verify._overall_summary(
             [({"severity_counts": {}, "undeclared_files": [entry]}, ["ROCKNIX"])]
         )
@@ -5394,12 +5391,12 @@ class BundledFilesAreNotToSource(unittest.TestCase):
     def test_a_held_bundled_file_is_not_packed(self):
         """A file installed with the emulator is already on the user's
         machine, so the pack leaves it out even when the collection holds it."""
-        import verify
+        from packs import coverage as packs_coverage
 
         entry = {"name": "n64.psh", "required": True, "in_repo": True,
                  "emulator": "daedalusx64", "category": "bios", "bundled": True}
-        with mock.patch("packextras.unplaceable_extras", return_value={}):
-            verify._mark_unplaced({}, [entry], {})
+        with mock.patch("packs.extras.unplaceable_extras", return_value={}):
+            packs_coverage._mark_unplaced({}, [entry], {})
         self.assertFalse(entry["in_pack"])
         self.assertIn("installed with its emulator", entry["omitted"])
 
@@ -5540,10 +5537,11 @@ class GapsPageCountsOneWay(unittest.TestCase):
         self.assertEqual(_declared_destination(config, detail), "bios/quasi88/N88_KNJ1.ROM")
 
     def test_verify_marks_the_settled_entry(self):
-        import verify
+        from packs import coverage as packs_coverage
+        from packs import verdicts
 
-        result = {"name": "cdibios.zip", "status": verify.Status.UNTESTED}
-        self.assertTrue(verify._twin_unmet(result, "arcade"))
+        result = {"name": "cdibios.zip", "status": verdicts.Status.UNTESTED}
+        self.assertTrue(packs_coverage._twin_unmet(result, "arcade"))
         self.assertEqual(result["settled_by"], "arcade")
 
 
@@ -5914,7 +5912,7 @@ class ZippedFileMd5IsParsedOnce(unittest.TestCase):
         import zipfile as zf_mod
 
         from scripts.resolve.validation import inner_rom_check
-        from scripts.verify import verify_entry_md5
+        from scripts.packs.verdicts import verify_entry_md5
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             archive = Path(directory, "x.zip")
@@ -5942,7 +5940,7 @@ class AHashListIsReadOneWay(unittest.TestCase):
     profile_sync looked the whole string up and called it missing."""
 
     def test_every_reader_splits_the_list(self):
-        from scripts.cross_reference import _declared_content
+        from scripts.packs.crossref import _declared_content
         from scripts.core.hashing import parse_hash_list
         from scripts.profiling.citations import entry_hashes
 
@@ -6015,7 +6013,7 @@ class RommNeoGeoFoldersGetTheirBios(unittest.TestCase):
         # into neogeoaes/, and FBNeo's CPS3 sets already sat in colecovision/:
         # a system the platform lacks has no folder, and a mirror-only
         # folder attracts no system-less file.
-        from scripts.packextras import _slug_for
+        from scripts.packs.extras import _slug_for
 
         config_systems = {"arcade", "snk-neogeo-aes", "nintendo-ds"}
         sys_to_slug = {"arcade": "arcade", "snk-neogeo-aes": "neogeoaes",
@@ -6226,7 +6224,8 @@ class TheGroundTruthFooterSaysWhatItCounts(unittest.TestCase):
         import io as _io
         from contextlib import redirect_stdout
 
-        from scripts.verify import Severity, print_platform_result
+        from scripts.packs.verdicts import Severity
+        from scripts.packs.report import print_platform_result
 
         out = _io.StringIO()
         counts = {Severity.OK: 1, Severity.INFO: 0, Severity.WARNING: 0, Severity.CRITICAL: 0}
@@ -6275,7 +6274,7 @@ class StrictFailsOnMissingOnly(unittest.TestCase):
 
     def test_the_contract(self):
         from scripts import verify as verify_mod
-        from scripts.verify import Severity
+        from scripts.packs.verdicts import Severity
 
         verify_mod._exit_if_strict(True, [{"severity_counts": {Severity.WARNING: 2}}])
         with self.assertRaises(SystemExit), contextlib.redirect_stderr(io.StringIO()):
@@ -6615,7 +6614,7 @@ class ThePackCheckAppliesTheFrontendRule(unittest.TestCase):
         import hashlib
         import zipfile
 
-        from scripts.packverify import _check_member_hash
+        from scripts.packs.integrity import _check_member_hash
 
         payload = b"revision B"
         entry = {
@@ -6846,7 +6845,7 @@ class DocsDescribeTheRegistriesTheyName(unittest.TestCase):
         self.assertEqual(offenders, [])
 
     def test_the_dedup_list_is_named_whole_or_by_its_constant(self):
-        from dedup import NODEDUP_DIRS
+        from model.nodedup import NODEDUP_DIRS
         tools = (ROOT / "wiki" / "tools.md").read_text(encoding="utf-8")
         line = next(entry for entry in tools.splitlines() if "NODEDUP_DIRS" in entry)
         # Compared as list items: `mame` was missing while the substring
@@ -7100,7 +7099,7 @@ class RequiredOnlyReachesDataDirectories(unittest.TestCase):
     keypad when absent (FreeIntv src/libretro.c:294-296, 350-369)."""
 
     def _members(self, required_only: bool) -> list[str]:
-        from scripts import generate_pack as gp
+        from scripts.packs import datatrees
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
             for key in ("needed", "optional"):
@@ -7120,7 +7119,7 @@ class RequiredOnlyReachesDataDirectories(unittest.TestCase):
             }
             return [
                 dest
-                for _src, dest in gp._data_directory_members(
+                for _src, dest in datatrees._data_directory_members(
                     systems, registry, "retroarch", "", False, set(), set(), set(),
                     required_only=required_only,
                 )
@@ -7213,12 +7212,12 @@ class PlatformSystemTypoGetsTheClosestNames(unittest.TestCase):
     systems of the alphabet, 3do to coleco-colecovision."""
 
     def test_the_hint_names_the_close_systems(self):
-        from scripts import generate_pack as gp
+        from scripts.packs import platformpack
 
         out = io.StringIO()
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp, \
                 contextlib.redirect_stdout(out):
-            result = gp.generate_pack(
+            result = platformpack.generate_pack(
                 "retroarch", str(ROOT / "platforms"), {"files": {}, "indexes": {}},
                 str(ROOT / "bios"), tmp, emulators_dir=str(ROOT / "emulators"),
                 system_filter=["sony-playstaton"], offline=True,
@@ -7236,7 +7235,7 @@ class HashInputNamesWhatItAccepts(unittest.TestCase):
     found in input"."""
 
     def test_digests_are_read_by_length(self):
-        from scripts.packresolve import parse_hash_input
+        from scripts.resolve.packfiles import parse_hash_input
 
         sha256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
         self.assertEqual(parse_hash_input(f"0x1A2B3C4D,{sha256}"), [
@@ -7245,7 +7244,7 @@ class HashInputNamesWhatItAccepts(unittest.TestCase):
         self.assertEqual(parse_hash_input("a" * 29), [("md5", "a" * 29)])
 
     def test_anything_else_is_refused_with_the_formats(self):
-        from scripts.packresolve import parse_hash_file, parse_hash_input
+        from scripts.resolve.packfiles import parse_hash_file, parse_hash_input
 
         for raw in ("1234567890ab", "zz", "490f666e1afb15b7362b406ed1cea246,zz"):
             with self.subTest(raw=raw), self.assertRaises(ValueError) as ctx:
@@ -7259,7 +7258,7 @@ class HashInputNamesWhatItAccepts(unittest.TestCase):
         self.assertIn("line 3 (b.bin)", str(ctx.exception))
 
     def test_a_sha256_finds_its_file(self):
-        from scripts.packresolve import sha1_for_hash
+        from scripts.resolve.packfiles import sha1_for_hash
 
         db = json.loads((ROOT / "database.json").read_text(encoding="utf-8"))
         sha1, entry = next(
@@ -7463,7 +7462,7 @@ class ExternalDownloadsFollowTheRunPolicy(unittest.TestCase):
         return response
 
     def test_offline_never_reaches_the_network(self):
-        import packresolve
+        from resolve import packfiles as packresolve
 
         with tempfile.TemporaryDirectory() as tmp, \
                 mock.patch.object(packresolve.urllib.request, "urlopen") as urlopen, \
@@ -7473,7 +7472,7 @@ class ExternalDownloadsFollowTheRunPolicy(unittest.TestCase):
         urlopen.assert_not_called()
 
     def test_the_run_switch_is_inherited(self):
-        import packresolve
+        from resolve import packfiles as packresolve
 
         saved = packresolve._OFFLINE
         packresolve.set_offline(True)
@@ -7487,7 +7486,7 @@ class ExternalDownloadsFollowTheRunPolicy(unittest.TestCase):
             packresolve.set_offline(saved)
 
     def test_a_verified_body_lands_and_a_wrong_one_is_removed(self):
-        import packresolve
+        from resolve import packfiles as packresolve
 
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "x"
@@ -7868,7 +7867,7 @@ class EveryReaderOfACoreFileIsNamed(unittest.TestCase):
     claims with it."""
 
     def test_a_host_its_emulator_installs_leaves_the_others_in_the_pack(self):
-        from verify import _split_bundled_claims
+        from packs.gaps import _split_bundled_claims
 
         dsperate = {"profile": "dsperate", "name": "usrcheat.dat", "in_repo": True}
         drastic = {"profile": "drastic", "name": "usrcheat.dat", "bundled": True,
@@ -7883,14 +7882,14 @@ class EveryReaderOfACoreFileIsNamed(unittest.TestCase):
     def test_a_held_file_out_of_reach_names_every_core_reading_it(self):
         """harm1.wad is a release asset: a checkout without it omits the file,
         and the omission named gzdoom alone where lzdoom reads it too."""
-        from generate_pack import _claim_cores
+        from packs.manifestentry import _claim_cores
 
         extra = {"source_profile": "gzdoom", "other_claims": [
             {"source_profile": "uzdoom"}, {"source_profile": "lzdoom"}]}
         self.assertEqual(_claim_cores(extra), ["gzdoom", "lzdoom", "uzdoom"])
 
     def test_a_missing_file_names_every_core_reading_it(self):
-        from generate_pack import _record_absent
+        from packs.manifestentry import _record_absent
 
         omitted: dict[str, dict] = {}
 

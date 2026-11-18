@@ -16,7 +16,7 @@ import unittest
 import zipfile
 from pathlib import Path
 
-from generate_pack import verify_and_finalize_packs
+from packs.finalize import verify_and_finalize_packs
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 

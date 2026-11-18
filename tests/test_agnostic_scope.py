@@ -22,7 +22,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 class AgnosticScan(unittest.TestCase):
     def test_only_the_bios_directory_seeds_and_finds_keep_its_folder(self):
-        from packextras import _agnostic_scan_extras
+        from packs.extras import _agnostic_scan_extras
 
         with tempfile.TemporaryDirectory() as tmp:
             previous = os.getcwd()
@@ -61,7 +61,7 @@ class AgnosticScan(unittest.TestCase):
         folder where another profile of the system resolves a hashed dump of
         that shape is the evidence, that folder only.
         """
-        from packextras import _agnostic_scan_extras
+        from packs.extras import _agnostic_scan_extras
 
         with tempfile.TemporaryDirectory() as tmp:
             previous = os.getcwd()
@@ -125,7 +125,7 @@ class OneContentTwoPaths(unittest.TestCase):
             "files": [{"name": "ps2_scph50006.bin", "standalone_path": "bios/ps2_scph50006.bin"}]}
 
     def _copies(self, entries):
-        from generate_pack import _profile_copies
+        from packs.standalone import _profile_copies
 
         return _profile_copies({"duckstation": self.DUCK}, list(entries), [], entries)
 

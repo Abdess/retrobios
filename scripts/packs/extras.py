@@ -26,7 +26,7 @@ from model.declarations import OUTER_ROOTS, outer_layout
 from core.paths import sanitize_pack_path
 from resolve.content import declares_shape, shape_fits, size_fits
 from resolve.validation import deliverable, read_from_save_dir, read_from_system_dir
-from packpaths import libretro_systems, save_destination, save_layout
+from packs.paths import libretro_systems, save_destination, save_layout
 from resolve.regions import FILE_GROUP
 
 if TYPE_CHECKING:
@@ -329,7 +329,7 @@ class ExtraResolver:
 
     def resolve(self, fe: dict, dest: str) -> tuple[str | None, str, str]:
         """(local copy or None, resolver status, the core's disagreement)."""
-        from packresolve import pending_release_asset, resolve_file, run_is_offline
+        from resolve.packfiles import pending_release_asset, resolve_file, run_is_offline
         from resolve.validation import core_size_refusal, validated_choice
 
         local_path, status = resolve_file(
@@ -410,7 +410,7 @@ def hidden_extras(
     ``required_only`` are the builder's for a --source truth or a
     --required-only pack: an optional extra is skipped before it takes a path.
     """
-    from packpaths import _register_path, placement_block
+    from packs.paths import _register_path, placement_block
 
     reject_unknown("hidden_extras", options, HiddenOptions.__optional_keys__)
     report = options.get("report")
@@ -1402,7 +1402,7 @@ def undeclared_report(
     """The gap report _collect_emulator_extras reads, for a caller that
     collects the extras more than once with these arguments: the region
     grouping and the pack or manifest phase 2 each computed it in full."""
-    from verify import find_undeclared_files
+    from packs.gaps import find_undeclared_files
 
     return find_undeclared_files(
         config, emulators_dir, db, emu_profiles, target_cores=target_cores,
@@ -2123,7 +2123,7 @@ def _ships(
     Resolved with the builder's own inputs: without the data directories,
     AmberELEC's bluemsx config.ini read as missing while the pack held it.
     """
-    from packresolve import resolve_declaration
+    from resolve.packfiles import resolve_declaration
     from resolve.validation import baseline_verdict
 
     path, status = resolve_declaration(
@@ -2322,7 +2322,7 @@ def emulator_region_drops(
     emulator pack resolves with.
     """
     from resolve import regions as resolve_regions
-    from packpaths import _resolve_destination
+    from packs.paths import _resolve_destination
     from resolve.validation import _build_validation_index, filter_files_by_mode
 
     region_index = resolve_regions.build_region_index(dict(selected))
@@ -2370,7 +2370,7 @@ def emulator_required_spares(
     stvbios.zip. The pack and verify --emulator both read this."""
     from model.alternatives import groups_of, rank_in, required_groups
     from resolve.archives import archive_entry
-    from packpaths import _archive_destination, _resolve_destination
+    from packs.paths import _archive_destination, _resolve_destination
 
     reject_unknown("emulator_required_spares", options, SpareOptions.__optional_keys__)
     data_registry = options.get("data_registry")
@@ -2415,7 +2415,7 @@ def _emulator_ships(
     directories, dolphin-mmjr2's nwc24msg.cfg read as missing while the pack
     held it.
     """
-    from packresolve import resolve_file
+    from resolve.packfiles import resolve_file
     from resolve.validation import validated_choice, with_archive_members
 
     local, status = resolve_file(

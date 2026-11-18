@@ -140,7 +140,7 @@ class AnIdNamesOneCardPerPage(unittest.TestCase):
     the same id, and the deployed site refused 20 pages."""
 
     def test_the_second_card_has_no_id(self):
-        from cross_reference import FileConsumers
+        from packs.crossref import FileConsumers
 
         entry = {"name": "a.bin", "sha1": "a" * 40, "md5": "b" * 32, "size": 3,
                  "path": "bios/Nintendo/DS/a.bin"}

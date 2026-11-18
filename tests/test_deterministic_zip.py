@@ -227,7 +227,7 @@ class TestPackDeterminism(unittest.TestCase):
         self._tmp.cleanup()
 
     def _build(self, out_name: str) -> Path:
-        from scripts.generate_pack import generate_pack
+        from scripts.packs.platformpack import generate_pack
 
         out = self.tmp / out_name
         out.mkdir()
@@ -294,7 +294,7 @@ class TestPackDeterminism(unittest.TestCase):
                 self.assertEqual(info.date_time, _FIXED_DATE_TIME)
 
     def _build_emulator(self, out_name: str) -> Path:
-        from scripts.generate_pack import generate_emulator_pack
+        from scripts.packs.emulatorpack import generate_emulator_pack
 
         out = self.tmp / out_name
         out.mkdir()
@@ -383,7 +383,8 @@ class TestPackDeterminism(unittest.TestCase):
         )
 
     def test_injected_manifest_is_pinned_to_the_database(self):
-        from scripts.generate_pack import inject_manifest, verify_pack
+        from scripts.packs.finalize import inject_manifest
+        from scripts.generate_pack import verify_pack
 
         pack = self._build("out1")
         ok, manifest = verify_pack(str(pack), self.db)
@@ -406,7 +407,8 @@ class ManifestInjectionIsAtomic(unittest.TestCase):
         import tempfile
         from unittest import mock
 
-        from scripts import generate_pack as gp
+        from scripts.packs import archive as packs_archive
+        from scripts.packs import finalize
 
         with tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1] / "tmp") as d:
             pack = Path(d) / "Pack.zip"
@@ -420,9 +422,9 @@ class ManifestInjectionIsAtomic(unittest.TestCase):
                 zf.fp.flush()
                 raise KeyboardInterrupt
 
-            with mock.patch.object(gp, "_write_generated_member", die), \
+            with mock.patch.object(packs_archive, "_write_generated_member", die), \
                     self.assertRaises(KeyboardInterrupt):
-                gp.inject_manifest(str(pack), {"files": ["x"] * 2000})
+                finalize.inject_manifest(str(pack), {"files": ["x"] * 2000})
             self.assertEqual(pack.read_bytes(), before)
             self.assertEqual(
                 [p.name for p in Path(d).iterdir()], ["Pack.zip"],
@@ -436,7 +438,7 @@ class PackMemberCompression(unittest.TestCase):
     the packs' size."""
 
     def _pack(self, tmp: Path, name: str) -> Path:
-        from scripts.generate_pack import _add_pack_member
+        from scripts.packs.archive import _add_pack_member
 
         source = tmp / "member"
         source.write_bytes(b"\x00" * 4096)

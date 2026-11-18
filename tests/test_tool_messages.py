@@ -24,6 +24,9 @@ import diff_truth
 import pipeline
 from resolve import truth
 import verify
+from packs import coverage
+from packs import report as packs_report
+from packs import verdicts
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -271,7 +274,7 @@ class TheGapHeadingAddsUp(unittest.TestCase):
     16 entries were set aside without a word."""
 
     def test_every_entry_is_counted_once(self):
-        import cross_reference as xref
+        from packs import crossref
 
         files = [
             {"name": "kick.rom", "required": True},
@@ -284,11 +287,11 @@ class TheGapHeadingAddsUp(unittest.TestCase):
         ]
         profiles = {"emu": {"emulator": "Emu", "type": "libretro", "systems": ["s"],
                             "files": files}}
-        report = xref.cross_reference(profiles, {}, {"files": {}, "indexes": {}},
+        report = crossref.cross_reference(profiles, {}, {"files": {}, "indexes": {}},
                                       all_declared={"kick.rom": [(None, "kick.rom")]})
         data = report["emu"]
         self.assertEqual(
-            xref.profile_breakdown(data),
+            crossref.profile_breakdown(data),
             "1 declared by platforms, 3 undeclared, 1 unsourceable, "
             "2 set aside (1 other versions of a slot, 1 outside the pack)",
         )
@@ -442,12 +445,12 @@ class TheVerifySummaryCountsDiscrepancies(unittest.TestCase):
 
     def test_the_closing_line_names_them(self):
         details = [
-            {"system": "arcade", "name": "aes.zip", "status": verify.Status.OK,
+            {"system": "arcade", "name": "aes.zip", "status": verdicts.Status.OK,
              "discrepancy": "file present (OK) but hash differs"},
             # Printed as MISSING, so not a second time as a discrepancy.
-            {"system": "arcade", "name": "x.zip", "status": verify.Status.MISSING,
+            {"system": "arcade", "name": "x.zip", "status": verdicts.Status.MISSING,
              "discrepancy": "unmet"},
-            {"system": "arcade", "name": "x.zip", "status": verify.Status.MISSING},
+            {"system": "arcade", "name": "x.zip", "status": verdicts.Status.MISSING},
         ]
         summary = verify._overall_summary([
             ({"severity_counts": {}, "details": details}, ["RetroArch"]),
@@ -456,9 +459,9 @@ class TheVerifySummaryCountsDiscrepancies(unittest.TestCase):
         self.assertIn("1 discrepancy (RetroArch 1)", summary)
 
     def test_a_shared_destination_names_the_path_and_both_sides(self):
-        result = {"name": "disk.rom", "status": verify.Status.UNTESTED}
+        result = {"name": "disk.rom", "status": verdicts.Status.UNTESTED}
         entry = {"name": "disk.rom", "md5": "793f8678" + "0" * 24}
-        self.assertTrue(verify._twin_unmet(
+        self.assertTrue(coverage._twin_unmet(
             result, "coco", entry, "nec-pc-88", "bios/disk.rom"
         ))
         message = result["discrepancy"]
@@ -472,8 +475,8 @@ class EveryPlatformInTheSummaryCarriesItsCount(unittest.TestCase):
     named counts did not add up to the total."""
 
     def test_a_count_of_one_is_written(self):
-        one = {"severity_counts": {verify.Severity.WARNING: 1}, "details": []}
-        two = {"severity_counts": {verify.Severity.WARNING: 2}, "details": []}
+        one = {"severity_counts": {verdicts.Severity.WARNING: 1}, "details": []}
+        two = {"severity_counts": {verdicts.Severity.WARNING: 2}, "details": []}
         summary = verify._overall_summary([(two, ["Lakka"]), (one, ["ROCKNIX"])])
         self.assertIn("3 warning (Lakka 2, ROCKNIX 1)", summary)
 
@@ -491,7 +494,7 @@ class HeldButNotPackedNamesEachReason(unittest.TestCase):
     def _printed(self, entries: list[dict]) -> str:
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
-            verify._print_undeclared_section({"undeclared_files": entries}, False)
+            packs_report._print_undeclared_section({"undeclared_files": entries}, False)
         return out.getvalue()
 
     def test_each_reason_carries_its_count(self):

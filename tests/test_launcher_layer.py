@@ -428,7 +428,7 @@ class LauncherLayerTest(unittest.TestCase):
         """cross_reference --platform batocera listed duckstation's
         scph1002a.bin as packed while the PAL slot was filled by the
         launcher's scph5502.bin, which verify and the builder both knew."""
-        from cross_reference import cross_reference, declared_names, load_platform_files
+        from packs.crossref import cross_reference, declared_names, load_platform_files
         from resolve.launchers import declared_destinations
 
         selected = ["launchertest"]
@@ -453,7 +453,7 @@ class LauncherLayerTest(unittest.TestCase):
     def test_one_decision_for_verify_and_pack(self) -> None:
         """The layer is applied once, in the report both sides read."""
         import generate_pack
-        import packextras
+        from packs import extras as packextras
         import verify
 
         self.assertIn("LauncherLayer(", inspect.getsource(verify.find_undeclared_files))

@@ -21,7 +21,8 @@ from pathlib import Path
 
 from model.database import load_database
 from model.platforms import load_platform_config
-import slots
+from packs import slots
+from resolve import collisions
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -48,7 +49,7 @@ class SlotsReadTheShippedFile(unittest.TestCase):
         self.assertFalse(config.get("case_insensitive_fs"))
         listed = {
             path
-            for collision in slots.find_collisions(config, db)
+            for collision in collisions.find_collisions(config, db)
             for path in collision.resolved
         }
         self.assertNotIn(MSX_DISK, listed)
@@ -57,7 +58,7 @@ class SlotsReadTheShippedFile(unittest.TestCase):
         folded["case_insensitive_fs"] = True
         listed = {
             path
-            for collision in slots.find_collisions(folded, db)
+            for collision in collisions.find_collisions(folded, db)
             for path in collision.resolved
         }
         self.assertIn(MSX_DISK, listed)

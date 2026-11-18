@@ -59,7 +59,7 @@ class TestSkeletonReadsTheResultShape(unittest.TestCase):
     copied from it stopped on KeyError: 0 before any assertion."""
 
     def test_every_key_it_reads_is_one_verify_platform_returns(self):
-        from verify import verify_platform
+        from packs.coverage import verify_platform
 
         result = verify_platform(
             {"platform": "x", "verification_mode": "existence", "systems": {}},
@@ -425,7 +425,7 @@ class RecalboxSeverity(unittest.TestCase):
     code never reads, and called a missing optional file GREEN."""
 
     def test_the_verify_column_is_what_compute_severity_returns(self):
-        from verify import Status, compute_severity
+        from packs.verdicts import Status, compute_severity
 
         section = _section(_page("verification-modes.md"), "Mandatory levels (Recalbox)")
         rows = _table_rows(section)
@@ -475,9 +475,9 @@ class ValidationIndexScope(unittest.TestCase):
     pass it only the profiles the platform resolves."""
 
     def test_page_names_the_scope_the_code_uses(self):
-        import verify
+        from packs import coverage
 
-        source = inspect.getsource(verify.verify_platform)
+        source = inspect.getsource(coverage.verify_platform)
         self.assertRegex(source, r"plat_cores = resolve_platform_cores\(config, profiles\)")
         self.assertIn("_build_validation_index(platform_profiles)", source)
         section = _section(_page("verification-modes.md"), "Validation index")
@@ -1751,7 +1751,7 @@ class ArchitectureStatesTheArbitration(unittest.TestCase):
     checks the content: RetroBat's ATARIOSB.ROM."""
 
     def test_the_page_says_what_arbitrate_decides(self):
-        import slots
+        from packs import slots
 
         page = (WIKI / "architecture.md").read_text(encoding="utf-8")
         self.assertNotIn("the profile takes precedence for pack generation", page)
@@ -1840,7 +1840,7 @@ class ClaimRuleNamesTheSizeProof(unittest.TestCase):
     platform file of another size since 2b535525e."""
 
     def test_the_page_states_what_slots_counts(self):
-        import slots
+        from packs import slots
 
         self.assertIn(slots.SIZE_EXACT, slots.PROVEN_STATUSES)
         page = " ".join((ROOT / "wiki" / "architecture.md").read_text(encoding="utf-8").split())

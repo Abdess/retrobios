@@ -18,6 +18,8 @@ import unittest
 from pathlib import Path
 
 import yaml
+from packs import archive
+from packs import platformpack
 
 from model.platforms import load_platform_config
 
@@ -45,9 +47,6 @@ class ThePackReadmeNamesTheSpellingsItLeavesOut(unittest.TestCase):
         from model.platforms import _platform_config_cache
         from model.profiles import _emulator_profiles_cache
         import generate_db
-        import generate_pack
-
-        self.gp = generate_pack
         tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
         self.addCleanup(tmp.cleanup)
         previous = os.getcwd()
@@ -88,18 +87,18 @@ class ThePackReadmeNamesTheSpellingsItLeavesOut(unittest.TestCase):
         }}}))
         _platform_config_cache.clear()
         texts: dict[str, str] = {}
-        real = self.gp._write_generated_member
+        real = archive._write_generated_member
 
         def capture(zf, arcname, text):
             texts[arcname] = text
             return real(zf, arcname, text)
 
-        self.gp._write_generated_member = capture
+        archive._write_generated_member = capture
         self.addCleanup(setattr, self.gp, "_write_generated_member", real)
         with contextlib.redirect_stdout(io.StringIO()):
-            self.gp.generate_pack(
+            platformpack.generate_pack(
                 "p", "platforms", self.db, "bios", "", emulators_dir="emulators",
-                offline=True, record=self.gp.PackRecord(),
+                offline=True, record=archive.PackRecord(),
             )
         return texts["README.txt"]
 

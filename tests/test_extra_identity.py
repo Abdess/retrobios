@@ -14,8 +14,8 @@ import unittest
 from pathlib import Path
 
 from model.profiles import PROFILE_IDENTITY_FIELDS
-from packextras import _collect_emulator_extras
-from verify import find_undeclared_files
+from packs.extras import _collect_emulator_extras
+from packs.gaps import find_undeclared_files
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 

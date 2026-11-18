@@ -301,7 +301,7 @@ class AlternativesAreLookedUpBySlot(unittest.TestCase):
     def test_same_answer_one_pass_per_profile(self):
         from unittest import mock
 
-        import packextras
+        from packs import extras as packextras
         from resolve import validation
 
         files = [{"name": "DUKE3D.GRP", "size": n} for n in (1, 2)] + [
@@ -351,11 +351,11 @@ class AVersionTakenWithoutACheck(unittest.TestCase):
             ))
 
     def test_the_pack_reads_it_as_an_alternative(self):
-        import generate_pack
+        from packs import platformpack
 
         fe = {"name": "BLOOD.RFF", "source_profile": "raze", "source_path": "BLOOD.RFF"}
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
-            self.assertTrue(generate_pack._matches_an_alternative(
+            self.assertTrue(platformpack._matches_an_alternative(
                 fe, self._file(tmp), {"raze": self.RAZE}
             ))
 

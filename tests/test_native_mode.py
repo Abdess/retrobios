@@ -84,7 +84,7 @@ class BothConsumersAgree(unittest.TestCase):
 
     def test_builder_and_verifier_share_one_predicate(self):
         from generate_pack import _intentional_hash_exclusion
-        from verify import compute_severity
+        from packs.verdicts import compute_severity
 
         self.assertTrue(callable(compute_severity))
 
@@ -100,7 +100,7 @@ class BothConsumersAgree(unittest.TestCase):
         )
 
     def test_severity_uses_the_shared_predicate(self):
-        from verify import Severity, Status, compute_severity
+        from packs.verdicts import Severity, Status, compute_severity
 
         # Existence mode: a missing required file is a warning, not critical.
         self.assertEqual(
@@ -146,12 +146,13 @@ class ThePolicyIsSpeltInOnePlace(unittest.TestCase):
 
     def test_an_unknown_mode_verifies_the_way_it_is_scored(self):
         """A typo in a platform YAML must not verify one way and score another."""
-        import verify
+        from packs import coverage
+        from packs import verdicts
 
         self.assertFalse(nativemode.reads_file_contents("sha256"))
         self.assertEqual(
-            verify.compute_severity(verify.Status.MISSING, True, "sha256"),
-            verify.Severity.WARNING,
+            verdicts.compute_severity(verdicts.Status.MISSING, True, "sha256"),
+            verdicts.Severity.WARNING,
         )
         config = {
             "platform": "Typo",
@@ -159,7 +160,7 @@ class ThePolicyIsSpeltInOnePlace(unittest.TestCase):
             "systems": {},
             "cores": [],
         }
-        result = verify.verify_platform(
+        result = coverage.verify_platform(
             config, {"files": {}, "indexes": {}}, emu_profiles={},
         )
         self.assertEqual(result["verification_mode"], nativemode.DEFAULT_MODE)
@@ -220,7 +221,7 @@ class GapAnalysisAgreesWithTheBuilder(unittest.TestCase):
 
     def _in_repo(self, mode: str) -> bool:
         from model.profiles import _emulator_profiles_cache, load_emulator_profiles
-        from verify import find_undeclared_files
+        from packs.gaps import find_undeclared_files
 
         tmp, root, db = self._fixture()
         try:
@@ -273,7 +274,7 @@ class CandidateVerdict(unittest.TestCase):
 
     def verdict(self, entry, *, standalone=False, include_all=False,
                 declared=frozenset()):
-        from verify import _candidate_verdict
+        from packs.gaps import _candidate_verdict
 
         return _candidate_verdict(
             entry, entry.get("name", ""), standalone, include_all, set(declared)
@@ -366,7 +367,7 @@ class SkippingIsNotSettling(unittest.TestCase):
         import tempfile
 
         from model.profiles import _emulator_profiles_cache, load_emulator_profiles
-        from verify import find_undeclared_files
+        from packs.gaps import find_undeclared_files
 
         tmp = tempfile.TemporaryDirectory()
         root = Path(tmp.name)

@@ -17,6 +17,7 @@ import unittest
 from pathlib import Path
 
 import validate_pr
+from resolve import review
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -43,13 +44,13 @@ class _Fixture(unittest.TestCase):
 
 class FileShapeChecks(_Fixture):
     def test_missing_file_fails_without_hashing(self):
-        result = validate_pr.validate_file("bios/nope.bin", None, EMPTY_HASHES)
+        result = review.validate_file("bios/nope.bin", None, EMPTY_HASHES)
         self.assertFalse(result.passed)
         self.assertEqual(result.sha1, "")
 
     def test_a_path_never_read_shows_no_digest(self):
         """Empty Size, SHA1, MD5 and CRC32 lines read as an empty file contributed."""
-        result = validate_pr.validate_file("bios/nope.bin", None, EMPTY_HASHES)
+        result = review.validate_file("bios/nope.bin", None, EMPTY_HASHES)
         markdown = result.to_markdown()
         for label in ("**Size**", "**SHA1**", "**MD5**", "**CRC32**"):
             self.assertNotIn(label, markdown)
@@ -63,18 +64,18 @@ class FileShapeChecks(_Fixture):
             validate_pr.expand_folders(["card", "empty", "loose.bin"]),
             [str(Path("card/bios/a.bin")), str(Path("card/bios/sub/b.bin")), "empty", "loose.bin"],
         )
-        result = validate_pr.validate_file("empty", None, EMPTY_HASHES)
+        result = review.validate_file("empty", None, EMPTY_HASHES)
         self.assertIn("Folder with no file in it", result.to_markdown())
 
     def test_empty_file_fails(self):
         rel = self._bios_file("bios/Sony/PS/empty.bin", b"")
-        result = validate_pr.validate_file(rel, None, EMPTY_HASHES)
+        result = review.validate_file(rel, None, EMPTY_HASHES)
         self.assertFalse(result.passed)
         self.assertIn("empty", result.to_markdown().lower())
 
     def test_executable_extension_is_refused(self):
         rel = self._bios_file("bios/Sony/PS/payload.exe")
-        result = validate_pr.validate_file(rel, None, EMPTY_HASHES)
+        result = review.validate_file(rel, None, EMPTY_HASHES)
         self.assertFalse(result.passed)
         self.assertIn("Blocked file extension", result.to_markdown())
 
@@ -85,7 +86,7 @@ class FileShapeChecks(_Fixture):
         data = b"MZ pinned"
         rel = self._bios_file("bios/Lexaloffle/PICO-8/pico8.exe", data)
         pins = {"sha1": {hashlib.sha1(data).hexdigest(): {"lexaloffle"}}}
-        result = validate_pr.validate_file(rel, None, EMPTY_HASHES, pins)
+        result = review.validate_file(rel, None, EMPTY_HASHES, pins)
         self.assertNotIn("Blocked file extension", result.to_markdown())
         self.assertIn("pins by sha1: lexaloffle", result.to_markdown())
 
@@ -94,24 +95,24 @@ class FileShapeChecks(_Fixture):
         data = b"MZ weak"
         rel = self._bios_file("bios/Sony/PS/tool.exe", data)
         pins = {"md5": {hashlib.md5(data).hexdigest(): {"someemu"}}}
-        result = validate_pr.validate_file(rel, None, EMPTY_HASHES, pins)
+        result = review.validate_file(rel, None, EMPTY_HASHES, pins)
         self.assertFalse(result.passed)
         self.assertIn("Blocked file extension", result.to_markdown())
 
     def test_oversized_file_is_refused(self):
         rel = self._bios_file("bios/Sony/PS/big.bin")
-        original = validate_pr.MAX_FILE_SIZE
-        validate_pr.MAX_FILE_SIZE = 2
+        original = review.MAX_FILE_SIZE
+        review.MAX_FILE_SIZE = 2
         try:
-            result = validate_pr.validate_file(rel, None, EMPTY_HASHES)
+            result = review.validate_file(rel, None, EMPTY_HASHES)
         finally:
-            validate_pr.MAX_FILE_SIZE = original
+            review.MAX_FILE_SIZE = original
         self.assertFalse(result.passed)
         self.assertIn("too large", result.to_markdown())
 
     def test_ordinary_file_passes(self):
         rel = self._bios_file("bios/Sony/PlayStation/scph.bin")
-        result = validate_pr.validate_file(rel, None, EMPTY_HASHES)
+        result = review.validate_file(rel, None, EMPTY_HASHES)
         self.assertTrue(result.passed, result.to_markdown())
         self.assertEqual(len(result.sha1), 40)
 
@@ -131,8 +132,8 @@ class AFileOnlyACoreReadsIsKnown(_Fixture):
             "emulator: Engine\ntype: standalone\nsystems: [x]\nfiles:\n"
             f"  - name: \"data.bin\"\n    sha1: \"{hashlib.sha1(data).hexdigest()}\"\n"
         )
-        known = validate_pr.load_profile_hashes(str(emulators))
-        result = validate_pr.validate_file(
+        known = review.load_profile_hashes(str(emulators))
+        result = review.validate_file(
             self._bios_file("bios/Maker/Engine/data.bin", data), None, EMPTY_HASHES, known,
         )
         self.assertIn(("PASS", "Hash matches a file the emulator profile declares: engine"),
@@ -154,8 +155,8 @@ class AFileOnlyACoreReadsIsKnown(_Fixture):
         )
         db = {"files": {hashlib.sha1(held).hexdigest(): {"path": "bios/Maker/Console/a.bin"}},
               "indexes": {"by_md5": {}, "by_sha256": {}}}
-        known = validate_pr.load_profile_hashes(str(emulators), db)
-        result = validate_pr.validate_file(
+        known = review.load_profile_hashes(str(emulators), db)
+        result = review.validate_file(
             self._bios_file("Downloads/b.bin", missing), db, EMPTY_HASHES, known,
         )
         self.assertIn(
@@ -167,19 +168,19 @@ class AFileOnlyACoreReadsIsKnown(_Fixture):
         # A file of that name already there: the copy is a variant.
         self._bios_file("bios/Maker/Console/b.bin", b"another")
         self.assertEqual(
-            validate_pr.validate_file("Downloads/b.bin", db, EMPTY_HASHES, known).destination,
+            review.validate_file("Downloads/b.bin", db, EMPTY_HASHES, known).destination,
             f"bios/Maker/Console/.variants/b.bin.{result.sha1[:8]}",
         )
         # Copied under the declared name, never over a file, and only once.
         card = self._bios_file("card/B.BIN", missing)
-        named = validate_pr.validate_file(card, db, EMPTY_HASHES, known)
+        named = review.validate_file(card, db, EMPTY_HASHES, known)
         self.assertEqual(validate_pr.place([named]), [named.destination])
         self.assertEqual((self.tmp / named.destination).read_bytes(), missing)
         self.assertTrue((self.tmp / card).is_file())
         self.assertEqual(validate_pr.place([named]), [])
-        unknown = validate_pr.validate_file(self._bios_file("card/x.bin"), db, EMPTY_HASHES, known)
+        unknown = review.validate_file(self._bios_file("card/x.bin"), db, EMPTY_HASHES, known)
         self.assertEqual((unknown.outcome, unknown.destination), ("unknown", ""))
-        placed = validate_pr.validate_file(
+        placed = review.validate_file(
             self._bios_file("bios/Other/Place/b.bin", missing), db, EMPTY_HASHES, known,
         )
         self.assertTrue(any("Placed under bios/Other/Place/" in m for _s, m in placed.checks))
@@ -202,8 +203,8 @@ class ADeclaredFileBesideItsHeldNameIsAVariant(_Fixture):
         )
         db = {"files": {"a" * 40: {"path": "bios/Maker/Console/v.bin"}},
               "indexes": {"by_md5": {}, "by_sha256": {}, "by_name": {"v.bin": ["a" * 40]}}}
-        known = validate_pr.load_profile_hashes(str(emulators), db)
-        result = validate_pr.validate_file(
+        known = review.load_profile_hashes(str(emulators), db)
+        result = review.validate_file(
             self._bios_file("card/v.bin", data), db, EMPTY_HASHES, known)
         slot = f"bios/Maker/Console/.variants/v.bin.{result.sha1[:8]}"
         self.assertEqual(result.destination, slot)
@@ -226,14 +227,14 @@ class ASizeEveryDeclarationRulesOutIsNotAVariant(_Fixture):
 
     def test_a_truncated_file_is_warned_and_not_offered_a_slot(self):
         rel = self._bios_file("scph5501.bin", b"x" * 1024)
-        text = validate_pr.validate_file(rel, self.DB, self.PLATFORM).to_markdown()
+        text = review.validate_file(rel, self.DB, self.PLATFORM).to_markdown()
         self.assertIn("expects 524,288 bytes", text)
         self.assertNotIn(".variants/", text)
         self.assertNotIn("File size OK", text)
 
     def test_a_right_sized_variant_goes_beside_its_name(self):
         rel = self._bios_file("scph5501.bin", b"y" * 524288)
-        text = validate_pr.validate_file(rel, self.DB, self.PLATFORM).to_markdown()
+        text = review.validate_file(rel, self.DB, self.PLATFORM).to_markdown()
         self.assertIn("bios/Sony/PlayStation/.variants/scph5501.bin.", text)
         self.assertNotIn("expects", text)
 
@@ -250,7 +251,7 @@ class SymlinksAreRefusedBeforeReading(_Fixture):
         self._bios_file("bios/Sony/PS/real.bin")
         link = self.tmp / "bios" / "Sony" / "PS" / "link.bin"
         link.symlink_to(self.tmp / "bios" / "Sony" / "PS" / "real.bin")
-        result = validate_pr.validate_file(
+        result = review.validate_file(
             "bios/Sony/PS/link.bin", None, EMPTY_HASHES
         )
         self.assertFalse(result.passed)
@@ -266,7 +267,7 @@ class SymlinksAreRefusedBeforeReading(_Fixture):
             calls.append(p) or real(p, *a, **k)
         )
         try:
-            validate_pr.validate_file("bios/Sony/PS/link.bin", None, EMPTY_HASHES)
+            review.validate_file("bios/Sony/PS/link.bin", None, EMPTY_HASHES)
         finally:
             validate_pr.compute_hashes = real
         self.assertEqual(calls, [], "a symlink target must not be read")
@@ -276,7 +277,7 @@ class SymlinksAreRefusedBeforeReading(_Fixture):
         link = self.tmp / "bios" / "Sony" / "PS" / "zero.bin"
         link.parent.mkdir(parents=True, exist_ok=True)
         link.symlink_to("/dev/zero")
-        result = validate_pr.validate_file(
+        result = review.validate_file(
             "bios/Sony/PS/zero.bin", None, EMPTY_HASHES
         )
         self.assertFalse(result.passed)
@@ -285,24 +286,24 @@ class SymlinksAreRefusedBeforeReading(_Fixture):
 class HashRecognition(_Fixture):
     def test_a_declared_sha1_is_recognised(self):
         rel = self._bios_file("bios/Sony/PS/known.bin")
-        probe = validate_pr.validate_file(rel, None, EMPTY_HASHES)
+        probe = review.validate_file(rel, None, EMPTY_HASHES)
         known = {"sha1": {probe.sha1}, "md5": set(), "names": set()}
-        result = validate_pr.validate_file(rel, None, known)
+        result = review.validate_file(rel, None, known)
         self.assertIn("SHA1 matches known platform requirement", result.to_markdown())
 
     def test_a_declared_md5_is_recognised(self):
         rel = self._bios_file("bios/Sony/PS/known.bin")
-        probe = validate_pr.validate_file(rel, None, EMPTY_HASHES)
+        probe = review.validate_file(rel, None, EMPTY_HASHES)
         known = {"sha1": set(), "md5": {probe.md5}, "names": set()}
         self.assertIn(
             "MD5 matches known platform requirement",
-            validate_pr.validate_file(rel, None, known).to_markdown(),
+            review.validate_file(rel, None, known).to_markdown(),
         )
 
     def test_a_known_name_with_another_hash_is_flagged_as_a_variant(self):
         rel = self._bios_file("bios/Sony/PS/known.bin")
         known = {"sha1": set(), "md5": set(), "names": {"known.bin"}}
-        markdown = validate_pr.validate_file(rel, None, known).to_markdown()
+        markdown = review.validate_file(rel, None, known).to_markdown()
         self.assertIn("may be a variant", markdown)
         self.assertIn(".variants/known.bin.", markdown)
 
@@ -310,7 +311,7 @@ class HashRecognition(_Fixture):
         """Random bytes read "PASS" and "all checks passed", and the warning
         named the platform configs alone though the profiles were searched."""
         rel = self._bios_file("bios/Sony/PS/mystery.bin")
-        result = validate_pr.validate_file(rel, None, EMPTY_HASHES)
+        result = review.validate_file(rel, None, EMPTY_HASHES)
         markdown = result.to_markdown()
         self.assertEqual(result.outcome, "unknown")
         self.assertIn("### REVIEW", markdown)
@@ -330,7 +331,7 @@ class HashRecognition(_Fixture):
             archive.writestr("other.bin", b"noise")
         db = {"files": {hashlib.sha1(held).hexdigest(): {"path": "bios/Sony/PS/scph5501.bin"}}}
         known = {**EMPTY_HASHES, "md5": {hashlib.md5(declared).hexdigest()}}
-        result = validate_pr.validate_file("mybios.zip", db, known)
+        result = review.validate_file("mybios.zip", db, known)
         markdown = result.to_markdown()
         self.assertEqual(result.outcome, "unknown")
         self.assertIn("unzipped, not the archive", markdown)
@@ -344,11 +345,11 @@ class HashRecognition(_Fixture):
         """A copy of a held file passed, and was sent to the folder that
         already holds it."""
         rel = self._bios_file("elsewhere/dupe.bin")
-        probe = validate_pr.validate_file(rel, None, EMPTY_HASHES)
+        probe = review.validate_file(rel, None, EMPTY_HASHES)
         db = {"files": {probe.sha1: {"path": "bios/Sony/PS/original.bin"}}}
         known = {**EMPTY_HASHES, "sha1": {probe.sha1},
                  "folders": {probe.sha1: {"bios/Sony/PS/"}}}
-        result = validate_pr.validate_file(rel, db, known)
+        result = review.validate_file(rel, db, known)
         markdown = result.to_markdown()
         self.assertEqual(result.outcome, "held")
         self.assertIn("### REVIEW", markdown)
@@ -359,17 +360,17 @@ class HashRecognition(_Fixture):
 
     def test_a_copy_in_a_tree_read_by_path_is_kept(self):
         rel = self._bios_file("bios/ScummVM/a/dupe.bin")
-        probe = validate_pr.validate_file(rel, None, EMPTY_HASHES)
+        probe = review.validate_file(rel, None, EMPTY_HASHES)
         db = {"files": {probe.sha1: {"path": "bios/ScummVM/b/dupe.bin"}}}
-        self.assertNotEqual(validate_pr.validate_file(rel, db, EMPTY_HASHES).outcome, "held")
+        self.assertNotEqual(review.validate_file(rel, db, EMPTY_HASHES).outcome, "held")
 
     def test_the_file_the_database_holds_is_not_its_own_duplicate(self):
         """The documented example on a tracked file warned "Duplicate:
         identical file already exists at" the very path being validated."""
         rel = self._bios_file("bios/Sony/PS/held.bin")
-        probe = validate_pr.validate_file(rel, None, EMPTY_HASHES)
+        probe = review.validate_file(rel, None, EMPTY_HASHES)
         db = {"files": {probe.sha1: {"path": rel}}}
-        markdown = validate_pr.validate_file(rel, db, EMPTY_HASHES).to_markdown()
+        markdown = review.validate_file(rel, db, EMPTY_HASHES).to_markdown()
         self.assertNotIn("Duplicate", markdown)
         self.assertIn("Already in the database at this path", markdown)
 
@@ -385,15 +386,15 @@ class PlacementBySystem(_Fixture):
 
     def test_a_file_under_another_maker_is_told_where_its_system_lives(self):
         rel = self._bios_file("bios/Nintendo/Game Boy/scph.bin")
-        probe = validate_pr.validate_file(rel, None, EMPTY_HASHES)
-        markdown = validate_pr.validate_file(rel, None, self._known(probe.sha1)).to_markdown()
+        probe = review.validate_file(rel, None, EMPTY_HASHES)
+        markdown = review.validate_file(rel, None, self._known(probe.sha1)).to_markdown()
         self.assertIn("bios/Sony/PlayStation/", markdown)
         self.assertNotIn("Correct placement", markdown)
 
     def test_the_folder_of_its_system_passes(self):
         rel = self._bios_file("bios/Sony/PlayStation/scph.bin")
-        probe = validate_pr.validate_file(rel, None, EMPTY_HASHES)
-        markdown = validate_pr.validate_file(rel, None, self._known(probe.sha1)).to_markdown()
+        probe = review.validate_file(rel, None, EMPTY_HASHES)
+        markdown = review.validate_file(rel, None, self._known(probe.sha1)).to_markdown()
         self.assertIn("Correct placement: bios/Sony/PlayStation/", markdown)
 
     def test_systems_spread_over_makers_name_no_home(self):
@@ -409,7 +410,7 @@ class PlacementBySystem(_Fixture):
         db = {"files": {"aaaa": {"path": "bios/Arcade/MAME/a.zip"},
                         "bbbb": {"path": "bios/Apple/Apple II/b.zip"}},
               "indexes": {"by_md5": {}}}
-        known = validate_pr.load_platform_hashes(str(platforms), db)
+        known = review.load_platform_hashes(str(platforms), db)
         self.assertEqual(known["folders"], {})
 
 
@@ -418,29 +419,29 @@ class Placement(_Fixture):
         rel = self._bios_file("bios/Sega/Saturn/sega_101.bin")
         self.assertIn(
             "Correct placement: bios/Sega/Saturn/",
-            validate_pr.validate_file(rel, None, EMPTY_HASHES).to_markdown(),
+            review.validate_file(rel, None, EMPTY_HASHES).to_markdown(),
         )
 
     def test_a_file_at_the_bios_root_is_flagged(self):
         rel = self._bios_file("bios/loose.bin")
         self.assertIn(
             "bios/Manufacturer/Console/",
-            validate_pr.validate_file(rel, None, EMPTY_HASHES).to_markdown(),
+            review.validate_file(rel, None, EMPTY_HASHES).to_markdown(),
         )
 
     def test_a_file_outside_bios_is_flagged(self):
         rel = self._bios_file("elsewhere/loose.bin")
         self.assertIn(
             "not under bios/",
-            validate_pr.validate_file(rel, None, EMPTY_HASHES).to_markdown(),
+            review.validate_file(rel, None, EMPTY_HASHES).to_markdown(),
         )
 
 
 class Reporting(_Fixture):
     def test_markdown_carries_every_digest_and_the_verdict(self):
         rel = self._bios_file("bios/Sega/Saturn/sega.bin")
-        probe = validate_pr.validate_file(rel, None, EMPTY_HASHES)
-        result = validate_pr.validate_file(rel, None, {**EMPTY_HASHES, "sha1": {probe.sha1}})
+        probe = review.validate_file(rel, None, EMPTY_HASHES)
+        result = review.validate_file(rel, None, {**EMPTY_HASHES, "sha1": {probe.sha1}})
         markdown = result.to_markdown()
         for value in (result.sha1, result.md5, result.crc32):
             self.assertIn(value, markdown)
@@ -448,7 +449,7 @@ class Reporting(_Fixture):
 
     def test_a_failure_is_marked_in_the_heading(self):
         rel = self._bios_file("bios/Sega/Saturn/bad.exe")
-        self.assertIn("### FAIL", validate_pr.validate_file(rel, None, EMPTY_HASHES).to_markdown())
+        self.assertIn("### FAIL", review.validate_file(rel, None, EMPTY_HASHES).to_markdown())
 
     @unittest.skipUnless((REPO_ROOT / "database.json").is_file(), "database.json is not built")
     def test_the_status_line_names_what_is_left_to_review(self):
@@ -473,7 +474,7 @@ class Reporting(_Fixture):
 
 class PlatformHashLoading(_Fixture):
     def test_missing_directory_yields_empty_sets(self):
-        known = validate_pr.load_platform_hashes(str(self.tmp / "absent"))
+        known = review.load_platform_hashes(str(self.tmp / "absent"))
         self.assertEqual(known, {"sha1": set(), "md5": set(), "sha256": set(), "crc32": set(),
                                  "names": set(), "folders": {}, "sizes": {}, "entries": {},
                                  "named": {}, "name_systems": {}, "system_dirs": {},
@@ -494,7 +495,7 @@ class PlatformHashLoading(_Fixture):
             f"        sha1: {'a' * 40}\n"
             f"        md5: {'b' * 32}\n"
         )
-        known = validate_pr.load_platform_hashes(str(platforms))
+        known = review.load_platform_hashes(str(platforms))
         self.assertIn("a" * 40, known["sha1"])
         self.assertIn("b" * 32, known["md5"])
         self.assertIn("boot.bin", known["names"])
@@ -514,7 +515,7 @@ class ThePlatformsOwnCheckDecides(_Fixture):
             encoding="utf-8")
         (platforms / "p.yml").write_text(f"platform: P\nsystems:\n  s:\n    files:\n{systems}",
                                          encoding="utf-8")
-        return validate_pr.load_platform_hashes(str(platforms))
+        return review.load_platform_hashes(str(platforms))
 
     def _zip(self) -> str:
         import zipfile
@@ -526,7 +527,7 @@ class ThePlatformsOwnCheckDecides(_Fixture):
         return "contrib/set.zip"
 
     def _verdict(self, path: str, known: dict) -> str:
-        return validate_pr.validate_file(path, None, known).to_markdown()
+        return review.validate_file(path, None, known).to_markdown()
 
     def test_a_member_pinned_by_zipped_file(self):
         import hashlib
@@ -561,8 +562,8 @@ class ThePlatformsOwnCheckDecides(_Fixture):
         db = {"files": {"m" * 40: {"path": "bios/Arcade/MAME/set.zip"},
                         "c" * 40: {"path": "bios/Coleco/Adam/set.zip"}},
               "indexes": {"by_name": {"set.zip": ["m" * 40, "c" * 40]}}}
-        self.assertEqual(validate_pr._variant_home(db, "set.zip", "c" * 40), "bios/Coleco/Adam/")
-        self.assertEqual(validate_pr._variant_home(db, "set.zip"), "bios/Arcade/MAME/")
+        self.assertEqual(review._variant_home(db, "set.zip", "c" * 40), "bios/Coleco/Adam/")
+        self.assertEqual(review._variant_home(db, "set.zip"), "bios/Arcade/MAME/")
 
     def test_another_member_is_still_a_variant(self):
         known = self._platforms(
@@ -614,7 +615,7 @@ class AFileOutsideBiosIsToldWhereToGo(unittest.TestCase):
         import os as _os
         import tempfile as _tempfile
 
-        from validate_pr import validate_file
+        from resolve.review import validate_file
 
         content = b"bios bytes"
         import hashlib as _hashlib
@@ -657,7 +658,7 @@ class ProfileHashesReadAsTheResolverDoes(unittest.TestCase):
                 "  - name: bsx.bin\n    sha256: \"aa,bb\"\n",
                 encoding="utf-8",
             )
-            known = validate_pr.load_profile_hashes(tmp)
+            known = review.load_profile_hashes(tmp)
         self.assertEqual(known["crc32"][("bf63fb1f", 16384)], {"core"})
         self.assertIn("bb", known["sha256"])
 

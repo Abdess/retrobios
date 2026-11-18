@@ -81,8 +81,8 @@ class APlaceholderIsAnsweredByEvidence(unittest.TestCase):
         import yaml
 
         from model.profiles import _emulator_profiles_cache
-        from generate_pack import generate_emulator_pack
-        from verify import verify_emulator
+        from packs.emulatorpack import generate_emulator_pack
+        from packs.emulatorcheck import verify_emulator
 
         _emulator_profiles_cache.clear()
         (REPO_ROOT / "tmp").mkdir(exist_ok=True)

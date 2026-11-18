@@ -144,7 +144,7 @@ def release_pack_labels(root: Path = REPO_ROOT) -> dict[str, str]:
     from resolve.grouping import group_identical_platforms
     from model.registry import list_release_pack_platforms
     from model.platforms import load_platform_config
-    from generate_pack import _name_part, _platform_pack_stem
+    from packs.naming import _name_part, _platform_pack_stem
 
     platforms_dir = str(root / "platforms")
     pool = list_release_pack_platforms(platforms_dir)
@@ -176,7 +176,7 @@ def build_archive(name: str, output: Path, root: Path = REPO_ROOT) -> Path:
         )
     # The packs' member writer: imported here, as it loads the whole
     # pack builder, which a caller reading ARCHIVES does not need.
-    from generate_pack import _add_pack_member
+    from packs.archive import _add_pack_member
 
     members = archive_members(name, root)
     output.parent.mkdir(parents=True, exist_ok=True)

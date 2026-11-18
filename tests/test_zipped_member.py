@@ -17,7 +17,7 @@ from pathlib import Path
 import yaml
 
 from core.ziptools import build_zip_contents_index
-from generate_pack import generate_pack
+from packs.platformpack import generate_pack
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

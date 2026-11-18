@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, TypedDict
 
-from packextras import reject_unknown
+from packs.extras import reject_unknown
 from model.region import label as region_label
 from siteguides import INSTALL_PS1, INSTALL_SH, pack_manual
 

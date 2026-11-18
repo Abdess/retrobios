@@ -28,15 +28,12 @@ from unittest import mock
 import yaml
 
 import verify
+from packs import coverage
+from packs import report as packs_report
 from model.profiles import _emulator_profiles_cache, load_emulator_profiles
 from model.platforms import load_platform_config
-from cross_reference import (
-    LAUNCHER_READS_KEY,
-    LAUNCHER_UNPROVEN_KEY,
-    launcher_file_names,
-    launcher_reads_not_held,
-    print_launcher_reads,
-)
+from cross_reference import LAUNCHER_READS_KEY, LAUNCHER_UNPROVEN_KEY, print_launcher_reads
+from packs.crossref import launcher_file_names, launcher_reads_not_held
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -287,11 +284,11 @@ class LauncherGapTest(unittest.TestCase):
 
     def test_verify_counts_and_exit_code_are_unchanged(self) -> None:
         """A launcher name is reported, not judged: nothing else moves."""
-        with_rows = verify.verify_platform(
+        with_rows = coverage.verify_platform(
             self.config, self.db, self.emulators_dir, self.profiles, data_dir_registry={}
         )
         with mock.patch.object(verify, "launcher_reads_not_held", return_value=[]):
-            without = verify.verify_platform(
+            without = coverage.verify_platform(
                 self.config, self.db, self.emulators_dir, self.profiles,
                 data_dir_registry={},
             )
@@ -313,13 +310,13 @@ class LauncherGapTest(unittest.TestCase):
                          exit_code(without))
 
     def test_verify_prints_a_count_and_lists_on_verbose(self) -> None:
-        result = verify.verify_platform(
+        result = coverage.verify_platform(
             self.config, self.db, self.emulators_dir, self.profiles, data_dir_registry={}
         )
         for verbose, expected in ((False, "(--verbose lists them)"), (True, "absent.bin")):
             out = io.StringIO()
             with contextlib.redirect_stdout(out):
-                verify.print_platform_result(result, ["GapTest"], verbose=verbose)
+                packs_report.print_platform_result(result, ["GapTest"], verbose=verbose)
             self.assertIn("Launcher reads, not held: 3", out.getvalue())
             self.assertIn(expected, out.getvalue())
 

@@ -136,7 +136,7 @@ def main() -> None:
     if not args.refresh_cache:
         import contextlib
 
-        from refresh_data_dirs import hold_data_dirs
+        from packs.datadirs import hold_data_dirs
 
         # Removal candidates are proved against data/: a refresh swapping a
         # tree mid-walk listed entries only that tree holds as removable.

@@ -22,7 +22,7 @@ import yaml
 from model.platforms import _platform_config_cache
 from core.ziptools import build_zip_contents_index
 from core.hashing import compute_hashes
-from generate_pack import generate_split_packs
+from packs.bysystem import generate_split_packs
 
 
 class SplitPartNames(unittest.TestCase):

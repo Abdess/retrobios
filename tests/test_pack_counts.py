@@ -32,12 +32,15 @@ from core.artifacts import ArtifactLockBusy, artifact_lock
 from model.platforms import _platform_config_cache
 from model.profiles import _emulator_profiles_cache, load_emulator_profiles
 import generate_db
-import generate_pack as builder
+from packs import archive as packs_archive
+from packs import datatrees
+from packs import manifest as packs_manifest
+from packs import platformpack
 import generate_readme
 import generate_site
 import release_notes
 import release_record
-import split_pack
+from packs import parts
 
 HAS_JSONSCHEMA = jsonschema is not None
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -114,7 +117,7 @@ class PackCountFixture(unittest.TestCase):
         self._tmp.cleanup()
 
     def _manifest(self) -> dict:
-        return builder.generate_manifest(
+        return packs_manifest.generate_manifest(
             "demo", str(self.platforms), self.db, str(self.bios),
             str(self.platforms / "_registry.yml"),
             emulators_dir=str(self.emulators), emu_profiles=self.profiles,
@@ -126,7 +129,7 @@ class ManifestStatesWhatThePackHolds(PackCountFixture):
     def test_the_count_is_the_one_an_extraction_shows(self):
         out = self.root / "dist"
         out.mkdir()
-        zip_path = builder.generate_pack(
+        zip_path = platformpack.generate_pack(
             "demo", str(self.platforms), self.db, str(self.bios), str(out),
             emulators_dir=str(self.emulators),
             emu_profiles=self.profiles, data_registry=self.registry,
@@ -143,7 +146,7 @@ class ManifestStatesWhatThePackHolds(PackCountFixture):
             sum(
                 member.file_size
                 for member in members
-                if member.filename not in builder.PACK_DOCUMENTS
+                if member.filename not in packs_archive.PACK_DOCUMENTS
             ),
         )
 
@@ -163,7 +166,7 @@ class ManifestStatesWhatThePackHolds(PackCountFixture):
         self.addCleanup(_platform_config_cache.clear)
         out = self.root / "dist"
         out.mkdir()
-        zip_path = builder.generate_pack(
+        zip_path = platformpack.generate_pack(
             "demo", str(self.platforms), self.db, str(self.bios), str(out),
             emulators_dir=str(self.emulators),
             emu_profiles=self.profiles, data_registry=self.registry,
@@ -178,7 +181,7 @@ class ManifestStatesWhatThePackHolds(PackCountFixture):
         )
         self.assertEqual(
             manifest["pack_size"],
-            sum(m.file_size for m in members if m.filename not in builder.PACK_DOCUMENTS),
+            sum(m.file_size for m in members if m.filename not in packs_archive.PACK_DOCUMENTS),
         )
 
     def test_the_installer_count_is_left_alone(self):
@@ -186,7 +189,7 @@ class ManifestStatesWhatThePackHolds(PackCountFixture):
         manifest = self._manifest()
         self.assertEqual(manifest["total_files"], len(manifest["files"]))
         self.assertEqual(manifest["total_files"], 2)
-        self.assertEqual(manifest["pack_files"], 2 + 3 + len(builder.PACK_DOCUMENTS))
+        self.assertEqual(manifest["pack_files"], 2 + 3 + len(packs_archive.PACK_DOCUMENTS))
 
     @unittest.skipUnless(HAS_JSONSCHEMA, "validating a schema needs jsonschema")
     def test_the_manifest_schema_accepts_the_two_figures(self):
@@ -221,7 +224,7 @@ class ManifestFollowsTheBuilder(PackCountFixture):
     def _pack_names(self) -> set[str]:
         out = self.root / "dist"
         out.mkdir(exist_ok=True)
-        zip_path = builder.generate_pack(
+        zip_path = platformpack.generate_pack(
             "demo", str(self.platforms), self.db, str(self.bios), str(out),
             emulators_dir=str(self.emulators),
             emu_profiles=self.profiles, data_registry=self.registry,
@@ -313,7 +316,7 @@ class APackForAndroidHidesItsMedia(PackCountFixture):
         }}))
         out = self.root / f"dist-{target}"
         out.mkdir()
-        zip_path = builder.generate_pack(
+        zip_path = platformpack.generate_pack(
             "demo", str(self.platforms), self.db, str(self.bios), str(out),
             emulators_dir=str(self.emulators), emu_profiles=self.profiles,
             data_registry=self.registry, offline=True, target_name=target,
@@ -331,7 +334,7 @@ class APackForAndroidHidesItsMedia(PackCountFixture):
 
     def test_the_manifest_counts_it(self):
         members = self._pack(None)
-        manifest = builder.generate_manifest(
+        manifest = packs_manifest.generate_manifest(
             "demo", str(self.platforms), self.db, str(self.bios),
             str(self.platforms / "_registry.yml"),
             emulators_dir=str(self.emulators), emu_profiles=self.profiles,
@@ -340,7 +343,7 @@ class APackForAndroidHidesItsMedia(PackCountFixture):
         self.assertEqual(manifest["pack_files"], len(set(members) | {"manifest.json"}))
 
     def test_the_integrity_check_takes_it_for_a_marker(self):
-        import packverify
+        from packs import integrity as packverify
 
         buffer = io.BytesIO()
         with zipfile.ZipFile(buffer, "w") as archive:
@@ -351,7 +354,7 @@ class APackForAndroidHidesItsMedia(PackCountFixture):
         self.assertEqual(errors, ["zero-byte: empty.bin"])
 
     def test_a_platform_without_android_gets_none(self):
-        self.assertEqual(builder.pack_markers("demo", None, str(self.platforms)), ())
+        self.assertEqual(datatrees.pack_markers("demo", None, str(self.platforms)), ())
 
 
 class TheTableDescribesTheRelease(unittest.TestCase):
@@ -420,7 +423,7 @@ class ReleaseRecord(unittest.TestCase):
             "Demo_2.0_BIOS_Pack.zip",
             {f"dir/file{n}.bin": _incompressible(n) for n in range(6)},
         )
-        self.parts = split_pack.split_pack(big, limit=big.stat().st_size - 1)
+        self.parts = parts.split_pack(big, limit=big.stat().st_size - 1)
 
     def tearDown(self):
         self._tmp.cleanup()
@@ -651,7 +654,7 @@ class CoreCopiesKeepTheirCategory(unittest.TestCase):
     copies, game data, under core files."""
 
     def test_a_copy_counts_as_its_entry_says(self):
-        from packextras import _collect_emulator_extras, hidden_extras
+        from packs.extras import _collect_emulator_extras, hidden_extras
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             held = Path(tmp) / "x.dat"

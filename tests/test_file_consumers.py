@@ -15,7 +15,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from cross_reference import FileConsumers, entry_target
+from packs.crossref import FileConsumers, entry_target
 from generate_site import generate_system_page
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -90,7 +90,7 @@ class PlatformReadersResolveAsThePack(unittest.TestCase):
     the one its manifest installs."""
 
     def test_the_declared_file_is_the_one_the_pack_ships(self):
-        from packresolve import resolve_declaration
+        from resolve.packfiles import resolve_declaration
 
         first, first_entry = _collected("bios/Arcade/MAME/hash/apfm1000.xml", b"one")
         other, other_entry = _collected("bios/Other/mame/hash/apfm1000.xml", b"two")

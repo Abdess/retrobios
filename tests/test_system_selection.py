@@ -25,7 +25,9 @@ from model.cliargs import list_system_ids
 from model.database import load_database
 from model.platforms import load_platform_config
 from model.profiles import _emulator_profiles_cache, load_emulator_profiles, profiles_for_systems
-import generate_pack as builder
+from packs import archive
+from packs import emulatorpack
+from packs import md5pack
 from tests.scratchtree import scratch_checkout, snapshot
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -42,9 +44,9 @@ class SpellingsAgree(unittest.TestCase):
 
     def test_the_pack_name_normalizes_the_spelling(self):
         self.assertEqual(
-            builder._system_display_name("atari_2600"), builder._system_display_name("atari-2600")
+            emulatorpack._system_display_name("atari_2600"), emulatorpack._system_display_name("atari-2600")
         )
-        self.assertEqual(builder._system_display_name("msxturboR"), builder._system_display_name("msxturbor"))
+        self.assertEqual(emulatorpack._system_display_name("msxturboR"), emulatorpack._system_display_name("msxturbor"))
 
 
 class TheListingCountsLikeTheSelection(unittest.TestCase):
@@ -74,7 +76,7 @@ class StandaloneNeedsAStandaloneBuild(unittest.TestCase):
             _emulator_profiles_cache.clear()
             self.addCleanup(_emulator_profiles_cache.clear)
             db = {"files": {}, "indexes": {"by_md5": {}, "by_crc32": {}, "by_name": {}}}
-            result = builder.generate_md5_pack(
+            result = md5pack.generate_md5_pack(
                 [("md5", "d8f1206299c48946e6ec5ef96d014eaa")], db, tmp, tmp,
                 emulator_name="handy", emulators_dir=str(Path(tmp, "emulators")), standalone=True,
             )
@@ -442,7 +444,7 @@ class ASystemReportCountsTheClaimsThePackCounts(unittest.TestCase):
     read only the entry's own system."""
 
     def test_a_claim_riding_on_an_entry_selects_it(self):
-        from packextras import extras_for_systems, report_owned_by_systems
+        from packs.extras import extras_for_systems, report_owned_by_systems
 
         entry = {
             "name": "taitofx1.zip", "system": "arcade", "systems": ["arcade"],
@@ -476,15 +478,15 @@ class VerifyReportsTheRequiredOnlyPack(unittest.TestCase):
         import contextlib
         import io
 
-        from verify import verify_emulator
+        from packs.emulatorcheck import verify_emulator
 
         db = load_database("database.json")
         for name in ("beetle_psx", "dolphin", "fbneo", "geolith", "mame"):
             with self.subTest(emulator=name):
-                record = builder.PackRecord()
+                record = archive.PackRecord()
                 with contextlib.redirect_stdout(io.StringIO()), \
                         contextlib.redirect_stderr(io.StringIO()):
-                    builder.generate_emulator_pack(
+                    emulatorpack.generate_emulator_pack(
                         [name], "emulators", db, "bios", "", offline=True,
                         platforms_dir="platforms", record=record, required_only=True,
                     )
@@ -582,13 +584,14 @@ class EmulatorVerifyReadsNoArchiveItDoesNotNeed(unittest.TestCase):
         from unittest import mock
 
         import verify
+        from packs import emulatorcheck
 
         if not (REPO_ROOT / "database.json").exists():
             self.skipTest("database.json is not generated")
         db = load_database(str(REPO_ROOT / "database.json"))
         with mock.patch.object(verify, "build_zip_contents_index",
                                side_effect=AssertionError("index built")):
-            result = verify.verify_emulator(["handy"], str(REPO_ROOT / "emulators"), db)
+            result = emulatorcheck.verify_emulator(["handy"], str(REPO_ROOT / "emulators"), db)
         self.assertTrue(result)
 
 
@@ -598,15 +601,15 @@ class CoverageWithoutProfilesMatchesTheCli(unittest.TestCase):
     a neocdz.zip discrepancy the pack and the CLI do not have."""
 
     def test_omitting_profiles_gives_the_same_report(self):
-        import verify
+        from packs import coverage
 
         if not (REPO_ROOT / "database.json").exists():
             self.skipTest("database.json is not generated")
         db = load_database(str(REPO_ROOT / "database.json"))
         config = load_platform_config("retroarch", str(REPO_ROOT / "platforms"))
         emulators = str(REPO_ROOT / "emulators")
-        bare = verify.verify_platform(config, db, emulators)
-        full = verify.verify_platform(config, db, emulators,
+        bare = coverage.verify_platform(config, db, emulators)
+        full = coverage.verify_platform(config, db, emulators,
                                       load_emulator_profiles(emulators))
 
         def discrepancies(result):
@@ -627,7 +630,7 @@ class ASystemPackHoldsThatSystem(unittest.TestCase):
         from contextlib import redirect_stdout
 
         import yaml
-        from verify import verify_system
+        from packs.emulatorcheck import verify_system
 
         _emulator_profiles_cache.clear()
         (REPO_ROOT / "tmp").mkdir(exist_ok=True)
@@ -659,7 +662,7 @@ class ASystemPackHoldsThatSystem(unittest.TestCase):
         }))
         report = verify_system(["atari-lynx"], "emulators", db)
         with redirect_stdout(io.StringIO()):
-            path = builder.generate_system_pack(
+            path = emulatorpack.generate_system_pack(
                 ["atari-lynx"], "emulators", db, "bios", "out", offline=True,
             )
         with zipfile.ZipFile(path) as zf:
@@ -681,7 +684,7 @@ class ATreeHoldsAPathForAnotherProfile(unittest.TestCase):
         from contextlib import redirect_stdout
 
         import yaml
-        from verify import verify_emulator
+        from packs.emulatorcheck import verify_emulator
 
         _emulator_profiles_cache.clear()
         (REPO_ROOT / "tmp").mkdir(exist_ok=True)
@@ -720,9 +723,9 @@ class ATreeHoldsAPathForAnotherProfile(unittest.TestCase):
         names = ["atree", "msxemu"]
         report = verify_emulator(names, "emulators", db, platforms_dir="platforms",
                                  system_ids=["colecovision"])
-        record = builder.PackRecord()
+        record = archive.PackRecord()
         with redirect_stdout(io.StringIO()):
-            builder.generate_emulator_pack(
+            emulatorpack.generate_emulator_pack(
                 names, "emulators", db, "bios", "", offline=True,
                 platforms_dir="platforms", record=record, system_ids=["colecovision"],
             )

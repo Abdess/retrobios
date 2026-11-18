@@ -19,8 +19,10 @@ import zipfile
 from pathlib import Path
 
 import yaml
+from packs import naming
+from packs import platformpack
 
-import packverify
+from packs import integrity as packverify
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -150,9 +152,6 @@ class NarrowedPacksAgainstTheirOwnList(unittest.TestCase):
         from model.platforms import _platform_config_cache
         from model.profiles import load_emulator_profiles, _emulator_profiles_cache
         import generate_db
-        import generate_pack
-
-        self.gp = generate_pack
         tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
         self.addCleanup(tmp.cleanup)
         previous = os.getcwd()
@@ -192,7 +191,7 @@ class NarrowedPacksAgainstTheirOwnList(unittest.TestCase):
         self.profiles = load_emulator_profiles("emulators")
 
     def _build(self, source: str, required: bool) -> tuple[str, set[str]]:
-        zip_path = self.gp.generate_pack(
+        zip_path = platformpack.generate_pack(
             "p", "platforms", self.db, "bios", "out", emulators_dir="emulators",
             emu_profiles=self.profiles, source=source, required_only=required,
             offline=True,
@@ -222,7 +221,7 @@ class NarrowedPacksAgainstTheirOwnList(unittest.TestCase):
                 ok, _c, _p, errors, *_rest = self._check(zip_path, source, required)
                 self.assertTrue(ok, errors)
                 self.assertEqual(
-                    self.gp._pack_variant(os.path.basename(zip_path)), (source, required)
+                    naming._pack_variant(os.path.basename(zip_path)), (source, required)
                 )
 
     def test_a_narrowed_pack_missing_a_required_file_fails(self):

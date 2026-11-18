@@ -10,7 +10,9 @@ import tests
 
 import unittest
 
-import verify
+from packs import coverage
+from packs import report
+from packs import verdicts
 from resolve.categories import BIOS, GAME_DATA, UNREAD, EntryCategories, ProofIndex, ReadEvidence
 
 PROFILES = {
@@ -108,7 +110,7 @@ class Evidence(unittest.TestCase):
             "emulator": "devilutionx", "proof": "name", "runs_system": True,
             "entries": [{"name": "diabdat.mpq", "source_ref": "Source/init.cpp:120",
                          "by": "name"}]}])
-        self.assertEqual(verify.category_evidence_text(found),
+        self.assertEqual(report.category_evidence_text(found),
                          "read by devilutionx (diabdat.mpq at Source/init.cpp:120)")
 
     def test_unread_names_the_cores_examined(self):
@@ -123,7 +125,7 @@ class Evidence(unittest.TestCase):
         cats = EntryCategories(_config(["bluemsx", "devilutionx", "other"], []), profiles)
         found = cats.explain({"name": "diabdat.mpq"}, "ports/diablo/diabdat.mpq", "diablo")
         self.assertEqual([r["emulator"] for r in found["read_by"]], ["devilutionx", "other"])
-        self.assertEqual(verify.category_evidence_text(found),
+        self.assertEqual(report.category_evidence_text(found),
                          "read by devilutionx (diabdat.mpq at Source/init.cpp:120), "
                          "also named by other (diabdat.mpq)")
 
@@ -134,7 +136,7 @@ class Evidence(unittest.TestCase):
             {"name": "hardwareconfig.xml"}, "bios/Machines/MSX/hardwareconfig.xml",
             "microsoft-msx")
         self.assertEqual(found, {"category": UNREAD, "cores_examined": ["bluemsx"]})
-        self.assertEqual(verify.category_evidence_text(found),
+        self.assertEqual(report.category_evidence_text(found),
                          "no reader found (cores examined: bluemsx)")
 
     def test_an_unsettled_entry_says_why(self):
@@ -143,7 +145,7 @@ class Evidence(unittest.TestCase):
                              "bios/Machines/MSX/hardwareconfig.xml", "microsoft-msx")
         self.assertEqual(found["category"], BIOS)
         self.assertIn("mystery", found["unsettled"])
-        self.assertIn("not settled", verify.category_evidence_text(found))
+        self.assertIn("not settled", report.category_evidence_text(found))
 
 
 class StrictCountsFirmwareOnly(unittest.TestCase):
@@ -156,13 +158,13 @@ class StrictCountsFirmwareOnly(unittest.TestCase):
         ], system="microsoft-msx")
         db = {"files": {}, "indexes": {"by_md5": {}, "by_name": {}, "by_crc32": {},
                                        "by_path_suffix": {}}}
-        result = verify.verify_platform(config, db, emu_profiles=PROFILES)
-        self.assertEqual(result["severity_counts"][verify.Severity.CRITICAL], 1)
+        result = coverage.verify_platform(config, db, emu_profiles=PROFILES)
+        self.assertEqual(result["severity_counts"][verdicts.Severity.CRITICAL], 1)
         self.assertEqual(result["missing_not_firmware"], {
             "game_data": ["ports/diablo/diabdat.mpq"],
             "unread": ["bios/Machines/MSX/hardwareconfig.xml"],
         })
-        self.assertEqual(result["status_counts"][verify.Status.MISSING], 3)
+        self.assertEqual(result["status_counts"][verdicts.Status.MISSING], 3)
         evidence = {d["name"]: d.get("category_evidence") for d in result["details"]}
         self.assertEqual(evidence["hardwareconfig.xml"]["cores_examined"], ["bluemsx"])
         self.assertEqual(evidence["diabdat.mpq"]["read_by"][0]["emulator"], "devilutionx")

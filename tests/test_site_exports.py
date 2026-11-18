@@ -679,7 +679,7 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
 
         import generate_site
         from model.platforms import load_platform_config
-        from cross_reference import FileConsumers
+        from packs.crossref import FileConsumers
         from core.ziptools import build_zip_contents_index
 
         root = Path(__file__).resolve().parents[1]
@@ -912,7 +912,7 @@ class AFileHasAnAddressByContent(unittest.TestCase):
                   / "site.ts").read_text()
         self.assertIn("api/v1/lookup/", script)
         self.assertIn("params.has('sha1')", script)
-        from cross_reference import FileConsumers
+        from packs.crossref import FileConsumers
 
         card = "\n".join(generate_site._system_file_card(
             {"name": "x.rom", "sha1": "ab" * 20, "size": 1}, FileConsumers({"files": {}}),
@@ -928,7 +928,7 @@ class ACardNamesThePacksThatInstallIt(unittest.TestCase):
     def test_a_manifest_destination_reaches_the_card(self):
         import json as _json
 
-        from cross_reference import FileConsumers
+        from packs.crossref import FileConsumers
         from generate_site import _installed_places
 
         with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as tmp:
@@ -1166,7 +1166,7 @@ class TheOneLinerIsWhereUsersLand(unittest.TestCase):
 
     def test_platform_and_system_pages(self):
         import generate_site
-        from cross_reference import FileConsumers
+        from packs.crossref import FileConsumers
 
         cov = {"platform": "Batocera", "mode": "md5", "present": 0, "total": 0,
                "verified": 0, "missing": 0, "details": [], "config": {"systems": {}}}
@@ -1249,7 +1249,7 @@ class EveryPageLinksItsOwnData(unittest.TestCase):
 
     def test_platform_and_system_documents(self):
         import generate_site
-        from cross_reference import FileConsumers
+        from packs.crossref import FileConsumers
 
         cov = {"platform": "Batocera", "mode": "md5", "present": 0, "total": 0,
                "verified": 0, "missing": 0, "details": [], "config": {"systems": {}}}

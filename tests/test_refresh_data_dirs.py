@@ -21,7 +21,8 @@ from pathlib import Path
 from unittest import mock
 
 import refresh_data_dirs as rdd
-from generate_pack import _data_directory_members
+from packs import datadirs
+from packs.datatrees import _data_directory_members
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -60,7 +61,7 @@ class RefreshConcurrency(unittest.TestCase):
         ), mock.patch.object(
             rdd.shutil, "move", side_effect=AssertionError("copy across filesystems")
         ):
-            count = rdd._download_and_extract_zip("https://x/pak.zip", str(self.cache))
+            count = datadirs._download_and_extract_zip("https://x/pak.zip", str(self.cache))
         self.assertEqual(count, 1)
         self.assertEqual((self.cache / "a.bin").read_bytes(), b"new")
         leftovers = [p.name for p in self.cache.parent.iterdir() if p.name != "pak"]
@@ -87,9 +88,9 @@ class RefreshConcurrency(unittest.TestCase):
         entry = {"source_type": "zip", "source_url": "https://x/pak.zip",
                  "local_cache": str(self.cache)}
         with mock.patch.object(rdd.urllib.request, "urlopen", fake_urlopen), \
-                mock.patch.object(rdd, "_get_remote_etag", return_value="e1"):
+                mock.patch.object(datadirs, "_get_remote_etag", return_value="e1"):
             self.assertTrue(
-                rdd.refresh_entry("pak", entry, force=True, versions_path=self.versions)
+                datadirs.refresh_entry("pak", entry, force=True, versions_path=self.versions)
             )
         self.assertEqual(seen, [True])
 
@@ -102,14 +103,14 @@ class RefreshConcurrency(unittest.TestCase):
                  "local_cache": str(self.cache)}
         with mock.patch.object(rdd.urllib.request, "urlopen",
                                lambda *a, **k: _Response(payload)), \
-                mock.patch.object(rdd, "_get_remote_etag", return_value="e1"):
-            self.assertTrue(rdd.refresh_entry("pak", entry, versions_path=self.versions))
-            self.assertEqual(rdd._load_versions(self.versions)["pak"]["archive_size"],
+                mock.patch.object(datadirs, "_get_remote_etag", return_value="e1"):
+            self.assertTrue(datadirs.refresh_entry("pak", entry, versions_path=self.versions))
+            self.assertEqual(datadirs._load_versions(self.versions)["pak"]["archive_size"],
                              len(payload))
-            rdd._record_version("pak", {"sha": "e1"}, self.versions)
+            datadirs._record_version("pak", {"sha": "e1"}, self.versions)
             (self.cache / "a.bin").write_bytes(b"kept")
-            self.assertFalse(rdd.refresh_entry("pak", entry, versions_path=self.versions))
-        self.assertEqual(rdd._load_versions(self.versions)["pak"],
+            self.assertFalse(datadirs.refresh_entry("pak", entry, versions_path=self.versions))
+        self.assertEqual(datadirs._load_versions(self.versions)["pak"],
                          {"sha": "e1", "archive_size": len(payload)})
         self.assertEqual((self.cache / "a.bin").read_bytes(), b"kept")
 
@@ -120,15 +121,15 @@ class RefreshConcurrency(unittest.TestCase):
         import fcntl
 
         self.cache.mkdir(parents=True)
-        rdd._record_version("pak", {"sha": "e1", "archive_size": 1}, self.versions)
+        datadirs._record_version("pak", {"sha": "e1", "archive_size": 1}, self.versions)
         entry = {"source_type": "zip", "source_url": "https://x/pak.zip",
                  "local_cache": str(self.cache)}
         result: list = []
         with open(self.cache.with_name(".pak.lock"), "a") as reader, \
-                mock.patch.object(rdd, "_get_remote_etag", return_value="e1"):
+                mock.patch.object(datadirs, "_get_remote_etag", return_value="e1"):
             fcntl.flock(reader, fcntl.LOCK_SH)
             worker = threading.Thread(target=lambda: result.append(
-                rdd.refresh_entry("pak", entry, versions_path=self.versions)
+                datadirs.refresh_entry("pak", entry, versions_path=self.versions)
             ), daemon=True)
             worker.start()
             worker.join(timeout=20)
@@ -148,10 +149,10 @@ class RefreshConcurrency(unittest.TestCase):
         entered = threading.Event()
 
         def refresh() -> None:
-            with rdd.cache_lock(self.cache):
+            with datadirs.cache_lock(self.cache):
                 entered.set()
 
-        with open(lock_path, "a") as reader, self.assertLogs(rdd.log, "WARNING") as logs:
+        with open(lock_path, "a") as reader, self.assertLogs(datadirs.log, "WARNING") as logs:
             fcntl.flock(reader, fcntl.LOCK_SH)
             worker = threading.Thread(target=refresh, daemon=True)
             worker.start()
@@ -171,14 +172,14 @@ class RefreshConcurrency(unittest.TestCase):
         Path(self.versions).parent.mkdir(parents=True)
         Path(self.versions).write_text(json.dumps({"keep": {"sha": "1"}}))
         with mock.patch.object(rdd.json, "dump", side_effect=OSError("disk full")), self.assertRaises(OSError):
-            rdd._save_versions({"keep": {"sha": "2"}}, self.versions)
+            datadirs._save_versions({"keep": {"sha": "2"}}, self.versions)
         self.assertEqual(json.loads(Path(self.versions).read_text()), {"keep": {"sha": "1"}})
 
     def test_concurrent_writers_keep_each_other(self):
         keys = [f"k{i}" for i in range(16)]
         threads = [
             threading.Thread(
-                target=rdd._record_version, args=(k, {"sha": k}, self.versions)
+                target=datadirs._record_version, args=(k, {"sha": k}, self.versions)
             )
             for k in keys
         ]
@@ -186,7 +187,7 @@ class RefreshConcurrency(unittest.TestCase):
             thread.start()
         for thread in threads:
             thread.join()
-        self.assertEqual(sorted(rdd._load_versions(self.versions)), sorted(keys))
+        self.assertEqual(sorted(datadirs._load_versions(self.versions)), sorted(keys))
 
 
 class PackWalkHoldsTheCache(unittest.TestCase):
@@ -216,7 +217,7 @@ class EmulatorPackHoldsTheCache(unittest.TestCase):
     def test_the_walk_holds_a_shared_lock(self):
         import fcntl
 
-        from generate_pack import _pack_data_tree
+        from packs.datatrees import _pack_data_tree
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             cache = Path(tmp) / "data" / "scummvm"
@@ -234,7 +235,7 @@ class EmulatorPackHoldsTheCache(unittest.TestCase):
                         fcntl.flock(handle, fcntl.LOCK_UN)
                         held.append(False)
 
-            with mock.patch("generate_pack._add_pack_member", member):
+            with mock.patch("packs.archive._add_pack_member", member):
                 _pack_data_tree(None, str(cache), "scummvm", set(), set(), set())
             self.assertEqual(held, [True])
 
@@ -248,11 +249,11 @@ class AWaitIsAnnounced(unittest.TestCase):
             taken = threading.Event()
 
             def second_run() -> None:
-                with rdd.cache_lock(cache):
+                with datadirs.cache_lock(cache):
                     taken.set()
 
-            with self.assertLogs(rdd.log, "WARNING") as logs:
-                with rdd.cache_lock(cache):
+            with self.assertLogs(datadirs.log, "WARNING") as logs:
+                with datadirs.cache_lock(cache):
                     worker = threading.Thread(target=second_run)
                     worker.start()
                     for _ in range(100):
@@ -270,9 +271,9 @@ class DryRunReport(unittest.TestCase):
     """What a dry run says: why each entry would be fetched, and how many."""
 
     def test_a_quoted_etag_is_cut_without_its_quotes(self):
-        self.assertEqual(rdd._short_tag('"0x8DF0B72EB52A1C0"'), "0x8DF0B72EB5")
-        self.assertEqual(rdd._short_tag('W/"2685251384"'), "2685251384")
-        self.assertEqual(rdd._short_tag(None), "none")
+        self.assertEqual(datadirs._short_tag('"0x8DF0B72EB52A1C0"'), "0x8DF0B72EB5")
+        self.assertEqual(datadirs._short_tag('W/"2685251384"'), "2685251384")
+        self.assertEqual(datadirs._short_tag(None), "none")
 
     def test_the_remote_tag_is_shown_beside_the_cached_one(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -280,9 +281,9 @@ class DryRunReport(unittest.TestCase):
             versions.write_text(json.dumps({"k": {"etag": '"2725165595"', "archive_size": 1}}))
             entry = {"source_type": "zip", "source_url": "https://x.invalid/a.zip",
                      "local_cache": tmp}
-            with mock.patch.object(rdd, "_get_remote_etag", return_value='"2685251384"'), \
-                    self.assertLogs(rdd.log, "INFO") as logs:
-                self.assertTrue(rdd.refresh_entry("k", entry, dry_run=True,
+            with mock.patch.object(datadirs, "_get_remote_etag", return_value='"2685251384"'), \
+                    self.assertLogs(datadirs.log, "INFO") as logs:
+                self.assertTrue(datadirs.refresh_entry("k", entry, dry_run=True,
                                                   versions_path=str(versions)))
         self.assertIn("cached: 2725165595, remote: 2685251384", logs.output[0])
 
@@ -302,7 +303,7 @@ class TheManifestCarriesTheArchiveSize(unittest.TestCase):
     the installer announces as the tree's download."""
 
     def test_recorded_size_is_written_and_an_unrecorded_one_left_out(self):
-        from generate_pack import _manifest_data_directories
+        from packs.datatrees import _manifest_data_directories
 
         (REPO_ROOT / "tmp").mkdir(exist_ok=True)
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:

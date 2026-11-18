@@ -19,6 +19,7 @@ import unittest
 from pathlib import Path
 
 import dedup
+from model import nodedup
 
 
 class _Bios(unittest.TestCase):
@@ -286,9 +287,9 @@ class PathPriority(unittest.TestCase):
         self.assertLess(primary, variant)
 
     def test_protected_directories_are_recognised(self):
-        self.assertTrue(dedup._in_nodedup_dir("bios/RPG Maker/x/font.png"))
-        self.assertTrue(dedup._in_nodedup_dir("bios/ScummVM/x/monkey.tbl"))
-        self.assertFalse(dedup._in_nodedup_dir("bios/Sony/PlayStation/scph.bin"))
+        self.assertTrue(nodedup._in_nodedup_dir("bios/RPG Maker/x/font.png"))
+        self.assertTrue(nodedup._in_nodedup_dir("bios/ScummVM/x/monkey.tbl"))
+        self.assertFalse(nodedup._in_nodedup_dir("bios/Sony/PlayStation/scph.bin"))
 
 
 class TheNoDedupListIsPinned(unittest.TestCase):
@@ -298,7 +299,7 @@ class TheNoDedupListIsPinned(unittest.TestCase):
     three machines again, with the suite green."""
 
     def test_every_tree_read_by_path_stays_undeduplicated(self):
-        from scripts.dedup import NODEDUP_DIRS
+        from scripts.model.nodedup import NODEDUP_DIRS
 
         expected = {
             "RPG Maker", "ScummVM", "tzdata", "c64-emu", "PinMAME", "BBK",

@@ -13,7 +13,10 @@ import unittest
 from pathlib import Path
 
 import slots
-from slots import Claim, Conflict, arbitrate, format_decision
+from packs import slots as packs_slots
+from resolve import collisions as resolve_collisions
+from packs.slots import Claim, Conflict, arbitrate
+from slots import format_decision
 
 
 def _db(entries: dict[str, dict]) -> dict:
@@ -108,7 +111,7 @@ class TestConflicts(unittest.TestCase):
             {"name": "IPL.bin", "destination": "bios/GC/JAP/IPL.bin", "md5": "m" * 32},
             {"name": "other.bin", "destination": "bios/other.bin"},
         ]}}}
-        conflicts = slots.find_conflicts(config, self._profile("GC/JAP/IPL.bin"), REGIONS_DB)
+        conflicts = packs_slots.find_conflicts(config, self._profile("GC/JAP/IPL.bin"), REGIONS_DB)
         self.assertEqual([c.destination for c in conflicts], ["bios/GC/JAP/IPL.bin"])
 
     def test_a_core_found_by_content_takes_any_dump_it_accepts(self):
@@ -120,11 +123,11 @@ class TestConflicts(unittest.TestCase):
              "region": ["japan"]},
             {"name": "IPL_alt.bin", "md5": "m" * 32, "region": ["japan"]},
         ]
-        by_name = slots.find_conflicts(
+        by_name = packs_slots.find_conflicts(
             self._config("m" * 32), {"dolphin": {"files": files}}, REGIONS_DB
         )
         self.assertEqual(len(by_name), 1)
-        by_content = slots.find_conflicts(
+        by_content = packs_slots.find_conflicts(
             self._config("m" * 32),
             {"dolphin": {"found_by": "content", "files": files}},
             REGIONS_DB,
@@ -133,7 +136,7 @@ class TestConflicts(unittest.TestCase):
         # Another region is another slot: openMSX finds each ROM by sha1 too,
         # and one machine's ROM never stands for another's.
         files[1]["region"] = ["north-america"]
-        other_slot = slots.find_conflicts(
+        other_slot = packs_slots.find_conflicts(
             self._config("m" * 32),
             {"dolphin": {"found_by": "content", "files": files}},
             REGIONS_DB,
@@ -141,7 +144,7 @@ class TestConflicts(unittest.TestCase):
         self.assertEqual(len(other_slot), 1)
 
     def test_wrong_region_under_a_region_slot_is_reported(self):
-        conflicts = slots.find_conflicts(
+        conflicts = packs_slots.find_conflicts(
             self._config("m" * 32), self._profile("GC/JAP/IPL.bin"), REGIONS_DB
         )
         self.assertEqual(len(conflicts), 1)
@@ -153,7 +156,7 @@ class TestConflicts(unittest.TestCase):
         self.assertEqual(conflicts[0].emulators, ["dolphin"])
 
     def test_agreement_is_not_a_conflict(self):
-        conflicts = slots.find_conflicts(
+        conflicts = packs_slots.find_conflicts(
             self._config("n" * 32), self._profile("GC/JAP/IPL.bin"), REGIONS_DB
         )
         self.assertEqual(conflicts, [])
@@ -169,14 +172,14 @@ class TestConflicts(unittest.TestCase):
                 ]
             }
         }
-        conflicts = slots.find_conflicts(self._config("m" * 32), profile, REGIONS_DB)
+        conflicts = packs_slots.find_conflicts(self._config("m" * 32), profile, REGIONS_DB)
         self.assertEqual(conflicts, [])
 
     def test_a_platform_list_naming_the_profile_file_is_agreement(self):
         """Recalbox names both scph1001.bin revisions. The resolver stops on
         the first, the profile pins the other, and --strict reported a
         contradiction nobody has to correct."""
-        conflicts = slots.find_conflicts(
+        conflicts = packs_slots.find_conflicts(
             self._config(f"{'m' * 32},{'n' * 32}"),
             self._profile("GC/JAP/IPL.bin"),
             REGIONS_DB,
@@ -195,7 +198,7 @@ class TestConflicts(unittest.TestCase):
                 ]
             }
         }
-        conflicts = slots.find_conflicts(self._config("m" * 32), profile, REGIONS_DB)
+        conflicts = packs_slots.find_conflicts(self._config("m" * 32), profile, REGIONS_DB)
         self.assertEqual(conflicts, [])
 
     def test_an_entry_the_pack_never_carries_claims_nothing(self):
@@ -209,7 +212,7 @@ class TestConflicts(unittest.TestCase):
                 ]
             }
         }
-        conflicts = slots.find_conflicts(self._config("m" * 32), profile, REGIONS_DB)
+        conflicts = packs_slots.find_conflicts(self._config("m" * 32), profile, REGIONS_DB)
         self.assertEqual(conflicts, [])
 
     def test_a_name_only_resolution_asserts_nothing(self):
@@ -223,7 +226,7 @@ class TestConflicts(unittest.TestCase):
             }
         }
         profile = {"dolphin": {"files": [{"name": "IPL.bin", "path": "slot/IPL.bin"}]}}
-        self.assertEqual(slots.find_conflicts(config, profile, REGIONS_DB), [])
+        self.assertEqual(packs_slots.find_conflicts(config, profile, REGIONS_DB), [])
 
     def test_a_bare_sibling_met_first_does_not_hide_the_contradiction(self):
         """RetroArch declares dsi_bios7.bin bare under one system and with a
@@ -236,7 +239,7 @@ class TestConflicts(unittest.TestCase):
                     {"name": "IPL.bin", "destination": "GC/JAP/IPL.bin", "md5": "m" * 32}]},
             }
         }
-        conflicts = slots.find_conflicts(config, self._profile("GC/JAP/IPL.bin"), REGIONS_DB)
+        conflicts = packs_slots.find_conflicts(config, self._profile("GC/JAP/IPL.bin"), REGIONS_DB)
         self.assertEqual([c.destination for c in conflicts], ["GC/JAP/IPL.bin"])
 
     def test_launchers_and_aliases_never_claim(self):
@@ -247,7 +250,7 @@ class TestConflicts(unittest.TestCase):
             }
         }
         self.assertEqual(
-            slots.find_conflicts(self._config("m" * 32), profile, REGIONS_DB), []
+            packs_slots.find_conflicts(self._config("m" * 32), profile, REGIONS_DB), []
         )
 
     def test_the_arbitration_reads_the_same_evidence_as_the_builder(self):
@@ -264,17 +267,17 @@ class TestConflicts(unittest.TestCase):
         import verify
 
         for function in (
-            slots.platform_claims,
-            slots.profile_claims,
-            slots.find_conflicts,
-            slots.find_collisions,
+            packs_slots.platform_claims,
+            packs_slots.profile_claims,
+            packs_slots.find_conflicts,
+            resolve_collisions.find_collisions,
         ):
             parameters = inspect.signature(function).parameters
             with self.subTest(function=function.__name__):
                 self.assertIn("zip_contents", parameters)
                 self.assertIn("data_dir_registry", parameters)
 
-        parameters = inspect.signature(slots.pack_overrides).parameters
+        parameters = inspect.signature(packs_slots.pack_overrides).parameters
         self.assertIn("zip_contents", parameters)
         self.assertIn("data_dir_registry", parameters)
 
@@ -310,9 +313,9 @@ class TestConflicts(unittest.TestCase):
             }
         }
         self.assertEqual(
-            slots.find_conflicts(self._config("m" * 32), profile, REGIONS_DB), []
+            packs_slots.find_conflicts(self._config("m" * 32), profile, REGIONS_DB), []
         )
-        self.assertEqual(slots.profile_claims(profile, REGIONS_DB), [])
+        self.assertEqual(packs_slots.profile_claims(profile, REGIONS_DB), [])
 
     def test_a_filename_agnostic_profile_claims_nothing(self):
         """The gap report skips a `bios_mode: agnostic` profile whole: the
@@ -320,16 +323,16 @@ class TestConflicts(unittest.TestCase):
         ARMSX2's GameIndex.yaml replaced the one RetroArch declares."""
         profile = self._profile("GC/JAP/IPL.bin")
         self.assertTrue(
-            slots.find_conflicts(self._config("m" * 32), profile, REGIONS_DB)
+            packs_slots.find_conflicts(self._config("m" * 32), profile, REGIONS_DB)
         )
         profile["dolphin"]["bios_mode"] = "agnostic"
-        self.assertEqual(slots.profile_claims(profile, REGIONS_DB), [])
+        self.assertEqual(packs_slots.profile_claims(profile, REGIONS_DB), [])
         self.assertEqual(
-            slots.find_conflicts(self._config("m" * 32), profile, REGIONS_DB), []
+            packs_slots.find_conflicts(self._config("m" * 32), profile, REGIONS_DB), []
         )
 
     def test_base_destination_prefixes_both_sides(self):
-        conflicts = slots.find_conflicts(
+        conflicts = packs_slots.find_conflicts(
             self._config("m" * 32),
             self._profile("GC/JAP/IPL.bin"),
             REGIONS_DB,
@@ -338,7 +341,7 @@ class TestConflicts(unittest.TestCase):
         self.assertEqual(conflicts[0].destination, "bios/GC/JAP/IPL.bin")
 
     def test_report_line_names_both_answers(self):
-        conflicts = slots.find_conflicts(
+        conflicts = packs_slots.find_conflicts(
             self._config("m" * 32), self._profile("GC/JAP/IPL.bin"), REGIONS_DB
         )
         line = slots.format_conflict(conflicts[0])
@@ -351,33 +354,33 @@ class TestArbitration(unittest.TestCase):
     """A pack answers to whoever asked for it, and serves both when it can."""
 
     def _conflict(self):
-        platform = slots.Claim(
+        platform = packs_slots.Claim(
             "platform", "GC/JAP/IPL.bin", "IPL.bin",
             entry={"md5": "m" * 32, "sha1": "a" * 40},
             local_path="bios/Console/GC/USA/IPL.bin", status="md5_exact",
         )
-        profile = slots.Claim(
+        profile = packs_slots.Claim(
             "profile", "GC/JAP/IPL.bin", "IPL.bin", emulator="dolphin",
             local_path="bios/Console/GC/JAP/IPL.bin", status="path_exact",
         )
-        return slots.Conflict("GC/JAP/IPL.bin", platform, [profile])
+        return packs_slots.Conflict("GC/JAP/IPL.bin", platform, [profile])
 
     def test_existence_mode_serves_both(self):
-        decision = slots.arbitrate(self._conflict(), "existence")
+        decision = packs_slots.arbitrate(self._conflict(), "existence")
         self.assertEqual(decision.winner.origin, "profile")
         self.assertTrue(decision.serves_both)
 
     def test_md5_mode_keeps_the_frontend_green(self):
-        decision = slots.arbitrate(self._conflict(), "md5")
+        decision = packs_slots.arbitrate(self._conflict(), "md5")
         self.assertEqual(decision.winner.origin, "platform")
         self.assertFalse(decision.serves_both)
 
     def test_sha1_mode_is_content_checking_too(self):
-        decision = slots.arbitrate(self._conflict(), "sha1")
+        decision = packs_slots.arbitrate(self._conflict(), "sha1")
         self.assertEqual(decision.winner.origin, "platform")
 
     def test_an_emulator_pack_answers_to_the_emulator(self):
-        decision = slots.arbitrate(self._conflict(), "md5", addressee="emulator")
+        decision = packs_slots.arbitrate(self._conflict(), "md5", addressee="emulator")
         self.assertEqual(decision.winner.origin, "profile")
         self.assertFalse(decision.serves_both)
 
@@ -389,14 +392,14 @@ class TestArbitration(unittest.TestCase):
         conflict.platform_claim.entry = {"name": "IPL.bin"}
         for mode in ("md5", "sha1"):
             with self.subTest(mode=mode):
-                self.assertTrue(slots.arbitrate(conflict, mode).serves_both)
+                self.assertTrue(packs_slots.arbitrate(conflict, mode).serves_both)
         # RomM compares size then any hash: a hash of another kind is content.
         conflict.platform_claim.entry = {"name": "IPL.bin", "sha1": "a" * 40, "size": 3}
         self.assertFalse(
-            slots.arbitrate(conflict, "md5", rule="size_and_any_hash").serves_both
+            packs_slots.arbitrate(conflict, "md5", rule="size_and_any_hash").serves_both
         )
         conflict.platform_claim.entry = {"name": "x.zip", "zipped_file": "IPL.bin"}
-        self.assertFalse(slots.arbitrate(conflict, "md5").serves_both)
+        self.assertFalse(packs_slots.arbitrate(conflict, "md5").serves_both)
 
     def test_the_pack_serves_the_proven_file_at_a_hashless_md5_entry(self):
         config = {
@@ -411,7 +414,7 @@ class TestArbitration(unittest.TestCase):
             {"name": "IPL.bin", "md5": "n" * 32},
             {"name": "IPL.bin", "path": "hashed/IPL.bin", "md5": "n" * 32},
         ]}}
-        overrides = slots.pack_overrides(config, profiles, REGIONS_DB)
+        overrides = packs_slots.pack_overrides(config, profiles, REGIONS_DB)
         # The hashed declaration keeps the file the frontend checks.
         self.assertEqual(overrides, {"IPL.bin": "bios/Console/GC/JAP/IPL.bin"})
 
@@ -430,20 +433,20 @@ class TestArbitration(unittest.TestCase):
                 {"name": "IPL.bin", "path": "GC/JAP/IPL.bin"},
             ]}}
             with self.subTest(mode=mode):
-                [conflict] = slots.find_conflicts(config, profiles, REGIONS_DB)
-                decision = slots.arbitrate(conflict, mode)
-                served = slots.pack_overrides(config, profiles, REGIONS_DB).get(
+                [conflict] = packs_slots.find_conflicts(config, profiles, REGIONS_DB)
+                decision = packs_slots.arbitrate(conflict, mode)
+                served = packs_slots.pack_overrides(config, profiles, REGIONS_DB).get(
                     "GC/JAP/IPL.bin", conflict.platform_claim.local_path
                 )
                 self.assertEqual(served, decision.winner.local_path)
 
     def test_the_reported_line_gives_the_ground_for_the_decision(self):
-        kept = slots.format_decision(slots.arbitrate(self._conflict(), "md5"))
+        kept = slots.format_decision(packs_slots.arbitrate(self._conflict(), "md5"))
         self.assertIn("verifies content", kept)
         # A fact about each layer, no verdict on the platform's list.
         self.assertIn("the file dolphin reads", kept)
         self.assertNotIn("wrong", slots.__loader__.get_source("slots").lower())
-        served = slots.format_decision(slots.arbitrate(self._conflict(), "existence"))
+        served = slots.format_decision(packs_slots.arbitrate(self._conflict(), "existence"))
         self.assertIn("both are satisfied", served)
 
     def test_each_emulator_is_given_the_file_it_reads(self):
@@ -451,12 +454,12 @@ class TestArbitration(unittest.TestCase):
         reads, while geolith pins another one."""
         conflict = self._conflict()
         conflict.profile_claims = [
-            slots.Claim("profile", "neocdz.zip", "neocdz.zip", emulator="fbneo",
+            packs_slots.Claim("profile", "neocdz.zip", "neocdz.zip", emulator="fbneo",
                         local_path="a/neocdz.zip.ba20a7be", status="members_held"),
-            slots.Claim("profile", "neocdz.zip", "neocdz.zip", emulator="geolith",
+            packs_slots.Claim("profile", "neocdz.zip", "neocdz.zip", emulator="geolith",
                         local_path="b/neocdz.zip.712816a3", status="md5_exact"),
         ]
-        kept = slots.format_decision(slots.arbitrate(conflict, "md5"))
+        kept = slots.format_decision(packs_slots.arbitrate(conflict, "md5"))
         self.assertIn("a/neocdz.zip.ba20a7be, the file fbneo reads", kept)
         self.assertIn("b/neocdz.zip.712816a3, the file geolith reads", kept)
         self.assertEqual(conflict.files_read(), [
@@ -471,7 +474,7 @@ class TheStrongestProofTakesAnUndeclaredPath(unittest.TestCase):
     path, whatever the proof, and mame2015 received another revision."""
 
     def test_a_held_hash_beats_a_bare_name_whatever_the_order(self):
-        from packextras import _collect_emulator_extras
+        from packs.extras import _collect_emulator_extras
 
         config = {
             "platform": "P", "verification_mode": "existence",
@@ -534,7 +537,7 @@ class TestSelfContradictingDestinations(unittest.TestCase):
             {"name": "IPL.bin", "destination": "disk.rom", "md5": "m" * 32},
             {"name": "IPL.bin", "destination": "disk.rom", "md5": "n" * 32},
         )
-        collisions = slots.find_collisions(config, REGIONS_DB)
+        collisions = resolve_collisions.find_collisions(config, REGIONS_DB)
         self.assertEqual(len(collisions), 1)
         self.assertEqual(len(collisions[0].resolved), 2)
 
@@ -547,7 +550,7 @@ class TestSelfContradictingDestinations(unittest.TestCase):
             "alpha": {"files": [{"name": "IPL.bin", "destination": "disk.rom",
                                  "md5": "n" * 32}]},
         }}
-        collision = slots.find_collisions(config, REGIONS_DB)[0]
+        collision = resolve_collisions.find_collisions(config, REGIONS_DB)[0]
         line = slots.format_collision(collision)
         left, packed = collision.resolved
         # The builder walks the systems sorted: alpha's declaration ships.
@@ -563,7 +566,7 @@ class TestSelfContradictingDestinations(unittest.TestCase):
             {"name": "IPL.bin", "destination": "a.zip", "md5": "m" * 32,
              "zipped_file": "two.bin"},
         )
-        self.assertEqual(slots.find_collisions(config, REGIONS_DB), [])
+        self.assertEqual(resolve_collisions.find_collisions(config, REGIONS_DB), [])
 
     def test_a_file_both_declarations_accept_settles_the_path(self):
         """RetroDECK: ATARIOSB.ROM under one system with one md5, under
@@ -574,11 +577,11 @@ class TestSelfContradictingDestinations(unittest.TestCase):
             {"name": "IPL.bin", "destination": "disk.rom",
              "md5": f"{'n' * 32},{'m' * 32}"},
         )
-        self.assertEqual(slots.find_collisions(config, REGIONS_DB), [])
+        self.assertEqual(resolve_collisions.find_collisions(config, REGIONS_DB), [])
 
     def test_a_primary_and_its_pinned_variant_are_one_family(self):
         self.assertTrue(
-            slots._same_file_family(
+            resolve_collisions._same_file_family(
                 ["bios/M/C/rom.zip", "bios/M/C/.variants/rom.zip.abcd1234"]
             )
         )
@@ -586,14 +589,14 @@ class TestSelfContradictingDestinations(unittest.TestCase):
     def test_a_variant_kept_under_its_plain_name_is_one_family(self):
         # 63 variants carry no hash suffix, aes.zip among them.
         self.assertTrue(
-            slots._same_file_family(
+            resolve_collisions._same_file_family(
                 ["bios/SNK/Neo Geo/aes.zip", "bios/SNK/Neo Geo/.variants/aes.zip"]
             )
         )
 
     def test_only_a_hash_suffix_is_stripped(self):
         self.assertFalse(
-            slots._same_file_family(
+            resolve_collisions._same_file_family(
                 ["bios/M/C/rom.zip", "bios/M/C/.variants/rom.zip.zip"]
             )
         )
@@ -611,7 +614,7 @@ class TestSelfContradictingDestinations(unittest.TestCase):
 
     def test_two_machines_are_not_one_family(self):
         self.assertFalse(
-            slots._same_file_family(
+            resolve_collisions._same_file_family(
                 ["bios/Microsoft/MSX/DISK.ROM", "bios/Tandy/CoCo/disk.rom"]
             )
         )
@@ -620,14 +623,14 @@ class TestSelfContradictingDestinations(unittest.TestCase):
         config = self._config(
             {"name": "IPL.bin", "destination": "disk.rom", "md5": "m" * 32}
         )
-        self.assertEqual(slots.find_collisions(config, REGIONS_DB), [])
+        self.assertEqual(resolve_collisions.find_collisions(config, REGIONS_DB), [])
 
     def test_the_line_names_every_file_claiming_the_path(self):
         config = self._config(
             {"name": "IPL.bin", "destination": "disk.rom", "md5": "m" * 32},
             {"name": "IPL.bin", "destination": "disk.rom", "md5": "n" * 32},
         )
-        line = slots.format_collision(slots.find_collisions(config, REGIONS_DB)[0])
+        line = slots.format_collision(resolve_collisions.find_collisions(config, REGIONS_DB)[0])
         self.assertIn("USA/IPL.bin", line)
         self.assertIn("JAP/IPL.bin", line)
 
@@ -660,13 +663,13 @@ class TestBuildModeDecidesWhoClaims(unittest.TestCase):
                          "files": [entry]}}
 
     def test_a_standalone_only_file_does_not_claim_a_core_slot(self):
-        conflicts = slots.find_conflicts(
+        conflicts = packs_slots.find_conflicts(
             self._config(), self._profile(mode="standalone"), REGIONS_DB
         )
         self.assertEqual(conflicts, [])
 
     def test_it_claims_when_the_platform_runs_that_emulator_standalone(self):
-        conflicts = slots.find_conflicts(
+        conflicts = packs_slots.find_conflicts(
             self._config(standalone=["ares"]),
             self._profile(mode="standalone"),
             REGIONS_DB,
@@ -675,7 +678,7 @@ class TestBuildModeDecidesWhoClaims(unittest.TestCase):
         self.assertEqual(len(conflicts), 1)
 
     def test_a_libretro_only_file_is_silent_in_standalone_mode(self):
-        conflicts = slots.find_conflicts(
+        conflicts = packs_slots.find_conflicts(
             self._config(standalone=["ares"]),
             self._profile(mode="libretro"),
             REGIONS_DB,
@@ -684,7 +687,7 @@ class TestBuildModeDecidesWhoClaims(unittest.TestCase):
         self.assertEqual(conflicts, [])
 
     def test_standalone_mode_reads_the_standalone_destination(self):
-        claims = slots.profile_claims(
+        claims = packs_slots.profile_claims(
             self._profile(standalone_path="elsewhere/IPL.bin"),
             REGIONS_DB,
             standalone_cores={"ares"},
@@ -697,7 +700,7 @@ class TestBuildModeDecidesWhoClaims(unittest.TestCase):
                                  "files": [{"name": "IPL.bin",
                                             "path": "GC/JAP/IPL.bin",
                                             "mode": "standalone"}]}}
-        conflicts = slots.find_conflicts(
+        conflicts = packs_slots.find_conflicts(
             self._config(standalone=["ares"]), profile, REGIONS_DB,
             standalone_cores={"ares"},
         )
@@ -708,7 +711,7 @@ class TestBuildModeDecidesWhoClaims(unittest.TestCase):
                             "files": [{"name": "IPL.bin",
                                        "path": "GC/JAP/IPL.bin",
                                        "standalone_path": "elsewhere/IPL.bin"}]}}
-        claims = slots.profile_claims(
+        claims = packs_slots.profile_claims(
             profile, REGIONS_DB, standalone_cores={"ares"}
         )
         self.assertEqual(claims[0].destination, "GC/JAP/IPL.bin")
@@ -718,18 +721,18 @@ class TestProvenEvidence(unittest.TestCase):
     """What counts as proof that a claim is about content, not about a name."""
 
     def test_hash_evidence_is_proof(self):
-        self.assertTrue(slots.Claim("profile", "d", "n", status="sha1_exact").is_proven)
-        self.assertTrue(slots.Claim("profile", "d", "n", status="md5_exact").is_proven)
+        self.assertTrue(packs_slots.Claim("profile", "d", "n", status="sha1_exact").is_proven)
+        self.assertTrue(packs_slots.Claim("profile", "d", "n", status="md5_exact").is_proven)
 
     def test_path_evidence_is_proof(self):
         # Dolphin declares no checksum for the GameCube boot ROM because its
         # source declares none, so the path is then the whole assertion.
-        self.assertTrue(slots.Claim("profile", "d", "n", status="path_exact").is_proven)
+        self.assertTrue(packs_slots.Claim("profile", "d", "n", status="path_exact").is_proven)
 
     def test_a_name_is_not_proof(self):
-        self.assertFalse(slots.Claim("profile", "d", "n", status="name_exact").is_proven)
+        self.assertFalse(packs_slots.Claim("profile", "d", "n", status="name_exact").is_proven)
         self.assertFalse(
-            slots.Claim("profile", "d", "n", status="hash_mismatch").is_proven
+            packs_slots.Claim("profile", "d", "n", status="hash_mismatch").is_proven
         )
 
 
@@ -752,9 +755,9 @@ class AnExactSizeContestsAnotherSize(unittest.TestCase):
 
     def test_a_held_copy_of_the_declared_size_proves_the_claim(self):
         entry = {"name": "IPLROM.X1T", "size": 32768}
-        self.assertTrue(slots._size_the_code_reads(entry, str(self.ipl)))
-        self.assertFalse(slots._size_the_code_reads(entry, str(self.font)))
-        self.assertTrue(slots.Claim("profile", "d", "n", status=slots.SIZE_EXACT).is_proven)
+        self.assertTrue(packs_slots._size_the_code_reads(entry, str(self.ipl)))
+        self.assertFalse(packs_slots._size_the_code_reads(entry, str(self.font)))
+        self.assertTrue(packs_slots.Claim("profile", "d", "n", status=packs_slots.SIZE_EXACT).is_proven)
 
     def test_retroarch_ships_the_turbo_ipl(self):
         import json as _json
@@ -788,7 +791,7 @@ class ManifestFollowsTheArbitration(unittest.TestCase):
         db = load_database(str(repo / "database.json"))
         config = load_platform_config("retroarch", str(repo / "platforms"))
         profiles = load_emulator_profiles(str(repo / "emulators"))
-        overrides = slots.pack_overrides(
+        overrides = packs_slots.pack_overrides(
             config, profiles, db, build_zip_contents_index(db),
             load_data_dir_registry(str(repo / "platforms")),
         )
@@ -890,13 +893,13 @@ class AnArchiveIsClaimedByItsMembers(unittest.TestCase):
         }
 
     def test_existence_serves_the_copy_the_core_boots_from(self):
-        overrides = slots.pack_overrides(self._config("existence", "short"), self.profiles, self.db)
+        overrides = packs_slots.pack_overrides(self._config("existence", "short"), self.profiles, self.db)
         self.assertEqual(overrides, {"system/fbneo/neocdz.zip": self.paths["full"][0]})
 
     def test_a_content_check_keeps_the_pin_and_reports_it(self):
         config = self._config("md5", "short")
-        self.assertEqual(slots.pack_overrides(config, self.profiles, self.db), {})
-        conflicts = slots.find_conflicts(config, self.profiles, self.db, "system")
+        self.assertEqual(packs_slots.pack_overrides(config, self.profiles, self.db), {})
+        conflicts = packs_slots.find_conflicts(config, self.profiles, self.db, "system")
         self.assertEqual([c.destination for c in conflicts], ["system/fbneo/neocdz.zip"])
 
     def test_a_pin_nobody_holds_yields_where_only_the_path_is_checked(self):
@@ -906,29 +909,29 @@ class AnArchiveIsClaimedByItsMembers(unittest.TestCase):
         config["systems"]["snk-neogeo-cd"]["files"][0].update(
             destination="neocdz.zip", md5="f" * 32
         )
-        overrides = slots.pack_overrides(config, self.profiles, self.db)
+        overrides = packs_slots.pack_overrides(config, self.profiles, self.db)
         self.assertEqual(overrides, {"system/neocdz.zip": self.paths["full"][0]})
         config["verification_mode"] = "md5"
-        self.assertEqual(slots.find_conflicts(config, self.profiles, self.db, "system"), [])
+        self.assertEqual(packs_slots.find_conflicts(config, self.profiles, self.db, "system"), [])
 
     def test_a_target_without_the_core_keeps_the_pin(self):
         """DuckStation exists on no RetroArch target and still replaced the
         scph5000.bin System.dat pins in every --target pack."""
         config = self._config("existence", "short")
-        self.assertTrue(slots.pack_overrides(config, self.profiles, self.db))
+        self.assertTrue(packs_slots.pack_overrides(config, self.profiles, self.db))
         self.assertEqual(
-            slots.pack_overrides(config, self.profiles, self.db, target_cores={"other"}), {}
+            packs_slots.pack_overrides(config, self.profiles, self.db, target_cores={"other"}), {}
         )
 
     def test_a_baseline_pack_serves_the_baseline(self):
         config = self._config("existence", "short")
         self.assertEqual(
-            slots.pack_overrides(config, self.profiles, self.db, source="platform"), {}
+            packs_slots.pack_overrides(config, self.profiles, self.db, source="platform"), {}
         )
 
     def test_a_pin_holding_the_members_is_agreement(self):
         config = self._config("md5", "full")
-        self.assertEqual(slots.find_conflicts(config, self.profiles, self.db, "system"), [])
+        self.assertEqual(packs_slots.find_conflicts(config, self.profiles, self.db, "system"), [])
 
 
 
@@ -947,7 +950,7 @@ class ARecordIsFoundByItsPathOnce(unittest.TestCase):
     """_accepted_by_all walked all 19 000 records for every path asked."""
 
     def test_the_files_are_walked_once(self):
-        import slots
+        from resolve import collisions as resolve_collisions
 
         class Counted(dict):
             walks = 0
@@ -959,8 +962,8 @@ class ARecordIsFoundByItsPathOnce(unittest.TestCase):
         files = Counted({"a" * 40: {"path": "bios/x.bin"}, "b" * 40: {"path": "bios/y.bin"}})
         db = {"files": files}
         for _ in range(50):
-            self.assertEqual(slots._record_at("bios/y.bin", db)["path"], "bios/y.bin")
-        self.assertIsNone(slots._record_at("bios/z.bin", db))
+            self.assertEqual(resolve_collisions._record_at("bios/y.bin", db)["path"], "bios/y.bin")
+        self.assertIsNone(resolve_collisions._record_at("bios/z.bin", db))
         self.assertEqual(Counted.walks, 1)
 
 
@@ -986,8 +989,8 @@ class TwoPathsHoldingOneContentAgree(unittest.TestCase):
             different = Claim("profile", "Machines/MSX2EXT.rom", "MSX2EXT.rom",
                               emulator="bluemsx", local_path=str(other),
                               status="path_exact")
-            self.assertTrue(slots._satisfies(same, platform, db))
-            self.assertFalse(slots._satisfies(different, platform, db))
+            self.assertTrue(packs_slots._satisfies(same, platform, db))
+            self.assertFalse(packs_slots._satisfies(different, platform, db))
 
 
 class ACopierHeaderIsNotAnotherImage(unittest.TestCase):
@@ -1017,13 +1020,13 @@ class ACopierHeaderIsNotAnotherImage(unittest.TestCase):
                 local_path=str(plain), status="crc32_exact",
                 entry={"name": "syscard3.pce", "crc32": [crc], "size": [1024, 1536]},
             )
-            self.assertTrue(slots._satisfies(profile, platform, db))
+            self.assertTrue(packs_slots._satisfies(profile, platform, db))
             one_size = Claim(
                 "profile", "syscard3.pce", "syscard3.pce", emulator="geargrafx",
                 local_path=str(plain), status="crc32_exact",
                 entry={"name": "syscard3.pce", "crc32": [crc], "size": 1024},
             )
-            self.assertFalse(slots._satisfies(one_size, platform, db))
+            self.assertFalse(packs_slots._satisfies(one_size, platform, db))
 
 
 class TheSlotsSummaryClosesTheRun(unittest.TestCase):

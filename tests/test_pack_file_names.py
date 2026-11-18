@@ -15,7 +15,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from generate_pack import _name_part, generate_emulator_pack
+from packs.naming import _name_part
+from packs.emulatorpack import generate_emulator_pack
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

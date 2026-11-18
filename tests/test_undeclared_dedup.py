@@ -16,7 +16,7 @@ import unittest
 
 class StandaloneFallsBackOnPath(unittest.TestCase):
     def test_both_paths_survive(self):
-        from verify import find_undeclared_files
+        from packs.gaps import find_undeclared_files
 
         profile = {
             "emulator": "Clock Signal",

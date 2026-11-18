@@ -30,7 +30,7 @@ import unittest
 import zipfile
 from pathlib import Path
 
-import split_pack
+from packs import parts as packs_parts
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 _spec = importlib.util.spec_from_file_location(
@@ -322,7 +322,7 @@ class ReleaseServer:
         self.names: list[str] = []
         if zip_parts:
             # One byte under the whole archive: the last member no longer fits.
-            parts = split_pack.split_pack(archive, limit=len(raw) - 1)
+            parts = packs_parts.split_pack(archive, limit=len(raw) - 1)
             self.names = [part.name for part in parts]
             sums = "".join(
                 f"{hashlib.sha256(part.read_bytes()).hexdigest()}  {part.name}\n"
@@ -455,7 +455,7 @@ class DownloaderCase(unittest.TestCase):
         leftovers = sorted(
             p.name for p in searched
             if ("_BIOS_Pack" in p.name or p.name.startswith("."))
-            and not split_pack.is_marker(p.name)
+            and not packs_parts.is_marker(p.name)
         )
         self.assertEqual(leftovers, [], "download staging left behind")
 

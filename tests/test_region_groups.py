@@ -12,7 +12,7 @@ import tests
 import unittest
 from pathlib import Path
 
-from packextras import extra_region_groups, system_spellings
+from packs.extras import extra_region_groups, system_spellings
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -50,7 +50,7 @@ class TheEnterpriseKeepsItsRom(unittest.TestCase):
         from model.database import load_database
         from model.profiles import load_emulator_profiles
         from model.platforms import load_platform_config
-        from packextras import platform_region_groups
+        from packs.extras import platform_region_groups
 
         db = load_database(str(REPO_ROOT / "database.json"))
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
@@ -113,7 +113,7 @@ class ALosingClaimIsKeyedLikeTheWinner(unittest.TestCase):
         from model.database import load_database
         from model.profiles import load_emulator_profiles
         from model.platforms import load_platform_config
-        from packextras import platform_region_groups
+        from packs.extras import platform_region_groups
 
         previous = os.getcwd()
         os.chdir(REPO_ROOT)

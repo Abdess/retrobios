@@ -10,9 +10,9 @@ from collections import Counter
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypedDict
 
-from verify import DEFAULT_BIOS_DIR
+from packs.verdicts import DEFAULT_BIOS_DIR
 from core.artifacts import _build_timestamp
-from packpaths import MEDIA_MARKER, _has_path_conflict
+from packs.paths import MEDIA_MARKER, _has_path_conflict
 from core.ziptools import build_zip_contents_index
 from core.ziptools import check_inside_zip
 from resolve.nativemode import digest_algorithm
@@ -28,12 +28,12 @@ import io
 from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config
 import os
-from packextras import platform_region_groups
-from packpaths import _flat
+from packs.extras import platform_region_groups
+from packs.paths import _flat
 from resolve.nativemode import reads_file_contents
 from resolve import regions as resolve_regions
-import slots
-from packresolve import resolve_declaration, resolve_file
+from packs import slots
+from resolve.packfiles import resolve_declaration, resolve_file
 from resolve.categories import BIOS, EntryCategories
 from resolve.gamedata import without_game_data
 from resolve.cores import resolve_platform_cores
@@ -615,7 +615,7 @@ def _builder_extras(
     refuses, is left free, since the builder then places a core's file
     there: taken by the refused file, that core file was never compared.
     """
-    from packextras import ExtraResolver, hidden_extras
+    from packs.extras import ExtraResolver, hidden_extras
     from resolve.validation import _build_validation_index, destination_owners
 
     config, emu_profiles = expect.config, expect.emu_profiles

@@ -17,7 +17,9 @@ from pathlib import Path
 from unittest import mock
 
 import generate_pack as gp
-import packverify
+from packs import finalize as packs_finalize
+from packs import naming
+from packs import integrity as packverify
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -42,7 +44,7 @@ class ConformanceUsesTheRunDirectories(unittest.TestCase):
             if split:
                 Path(self.tmp.name, "X_Split").mkdir(exist_ok=True)
             with self.subTest(split=split), mock.patch.object(
-                gp, "verify_and_finalize_packs", return_value=True
+                packs_finalize, "verify_and_finalize_packs", return_value=True
             ) as finalize:
                 gp._run_platform_packs(
                     self._args(split), [], {}, {}, {}, {}, {}, None
@@ -63,21 +65,21 @@ class ConformanceUsesTheRunDirectories(unittest.TestCase):
 
         with mock.patch.object(gp, "list_registered_platforms", return_value=["fix"]), \
                 mock.patch.object(
-                    gp, "_expected_pack_names",
+                    naming, "_expected_pack_names",
                     return_value={"fix": {"Fix_BIOS_Pack.zip"}},
                 ), \
-                mock.patch.object(gp, "_pack_archives", return_value=["Fix_BIOS_Pack.zip"]), \
+                mock.patch.object(naming, "_pack_archives", return_value=["Fix_BIOS_Pack.zip"]), \
                 mock.patch.object(
                     gp, "verify_pack",
                     return_value=(True, {"summary": {
                         "verified": 0, "total_files": 0, "untracked": 0, "errors": 0,
                     }, "errors": []}),
                 ), \
-                mock.patch.object(gp, "inject_manifest"), \
-                mock.patch.object(gp, "_target_cores_for", return_value=None), \
+                mock.patch.object(packs_finalize, "inject_manifest"), \
+                mock.patch.object(packs_finalize, "_target_cores_for", return_value=None), \
                 mock.patch.object(gp, "verify_pack_against_platform", record), \
                 mock.patch.object(packverify, "verify_pack_against_platform", record):
-            gp.verify_and_finalize_packs(
+            packs_finalize.verify_and_finalize_packs(
                 str(out), {"files": {}, "indexes": {}},
                 platforms_dir="fixture-platforms",
                 emulators_dir="fixture-emulators",

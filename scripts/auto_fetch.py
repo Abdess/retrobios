@@ -84,7 +84,8 @@ def find_missing(config: dict, db: dict) -> list[dict]:
     the cores need that no platform lists.
     """
     from resolve.nativemode import reads_file_contents
-    from verify import Status, verify_platform
+    from packs.verdicts import Status
+    from packs.coverage import verify_platform
 
     result = verify_platform(config, db)
     hashed = reads_file_contents(config.get("verification_mode", "existence"))

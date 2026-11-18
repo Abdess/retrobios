@@ -13,11 +13,7 @@ import tests
 import unittest
 from pathlib import Path
 
-from cross_reference import (
-    cross_reference,
-    declared_names,
-    load_platform_files,
-)
+from packs.crossref import cross_reference, declared_names, load_platform_files
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

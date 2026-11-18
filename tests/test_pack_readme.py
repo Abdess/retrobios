@@ -16,7 +16,7 @@ from pathlib import Path
 
 import yaml
 
-from packreadme import _build_readme
+from packs.readme import _build_readme
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -116,7 +116,7 @@ class TheOneLinerFollowsTheRegistry(unittest.TestCase):
     def test_the_commands_are_written_once(self):
         """The address comes from install_base in platforms/_guides.yml, the
         one the site's commands use."""
-        import packreadme
+        from packs import readme as packreadme
         import sitebootstrap
         from siteguides import INSTALL_BASE
 

@@ -60,7 +60,7 @@ from exporter.originals import (
     wanted_sources,
 )
 import pin_installer
-import refresh_data_dirs
+from packs import datadirs
 from core import upstream
 from core.cli import InputMissing, require_directory, suggest_names
 from model.targets import apply_target_overrides
@@ -1027,10 +1027,10 @@ def check_coreinfo(
 def check_data(offline: bool) -> list[Finding]:
     if offline:
         return [Finding("data", "_data_dirs.yml", SKIPPED, detail="offline")]
-    registry = refresh_data_dirs.load_registry(str(REPO_ROOT / "platforms" / "_data_dirs.yml"))
+    registry = datadirs.load_registry(str(REPO_ROOT / "platforms" / "_data_dirs.yml"))
     sink = io.StringIO()
     with contextlib.redirect_stdout(sink):
-        results = refresh_data_dirs.refresh_all(registry, dry_run=True)
+        results = datadirs.refresh_all(registry, dry_run=True)
     findings = []
     for key, result in sorted(results.items()):
         if result is None:

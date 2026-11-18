@@ -31,7 +31,7 @@ from unittest import mock
 
 import yaml
 
-from packpaths import (
+from packs.paths import (
     EMULATOR_PACK_SAVE_FOLDER,
     SaveLayout,
     _resolve_destination,
@@ -190,7 +190,7 @@ class ThePlatformNamesItsSaveDirectory(unittest.TestCase):
         self.assertEqual(_bios_tree_below("batocera", "userdata-saves"), "")
 
     def test_the_systems_a_core_runs_for(self):
-        from packpaths import libretro_systems
+        from packs.paths import libretro_systems
 
         config = {"libretro_systems": {"dolphin": ["wii", "gamecube"], "fbalpha": ["fbneo"],
                                        "fbalpha2012": ["cps3", "fbneo"]}}
@@ -276,7 +276,7 @@ class _Fixture(unittest.TestCase):
         return load_emulator_profiles(str(self.emulators))
 
     def pack(self, name: str) -> list[str]:
-        from generate_pack import generate_pack
+        from packs.platformpack import generate_pack
 
         out = self.root / f"out-{name}"
         out.mkdir()
@@ -289,7 +289,7 @@ class _Fixture(unittest.TestCase):
             return sorted(zf.namelist())
 
     def manifest(self, name: str) -> dict:
-        from generate_pack import generate_manifest
+        from packs.manifest import generate_manifest
 
         return generate_manifest(
             name, str(self.platforms), self.db, str(self.bios),
@@ -298,7 +298,7 @@ class _Fixture(unittest.TestCase):
         )
 
     def verify(self, name: str) -> dict:
-        from verify import verify_platform
+        from packs.coverage import verify_platform
 
         return verify_platform(self.config(name), self.db, str(self.emulators))
 
@@ -307,7 +307,7 @@ class ThePackPlacesThemInTheSaveFolder(_Fixture):
     SAVED = "saves/CoreX/CoreX/sysdata/keys.txt"
 
     def test_the_report_marks_the_entry(self):
-        from verify import find_undeclared_files
+        from packs.gaps import find_undeclared_files
 
         report = find_undeclared_files(
             self.config("testra"), str(self.emulators), self.db, self.profiles()
@@ -360,8 +360,9 @@ class ThePackPlacesThemInTheSaveFolder(_Fixture):
         self.assertFalse(any(p.startswith("saves/") for p in report["pack_destinations"]))
 
     def test_the_emulator_pack_and_verify_emulator_agree(self):
-        from generate_pack import PackRecord, generate_emulator_pack
-        from verify import verify_emulator
+        from packs.archive import PackRecord
+        from packs.emulatorpack import generate_emulator_pack
+        from packs.emulatorcheck import verify_emulator
 
         record = PackRecord()
         generate_emulator_pack(

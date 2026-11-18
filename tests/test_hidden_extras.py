@@ -15,7 +15,7 @@ import os
 import unittest
 from pathlib import Path
 
-from packpaths import placement_block
+from packs.paths import placement_block
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -88,7 +88,7 @@ class TheReportSaysSo(unittest.TestCase):
         try:
             from model.database import load_database
             from model.profiles import load_emulator_profiles
-            from verify import verify_platform
+            from packs.coverage import verify_platform
             from model.platforms import load_platform_config
 
             db = load_database("database.json")
@@ -152,7 +152,8 @@ class TheGapReportIsComputedOnce(unittest.TestCase):
         previous = os.getcwd()
         os.chdir(REPO_ROOT)
         try:
-            import verify
+            from packs import coverage
+            from packs import gaps
             from model.database import load_database
             from model.profiles import load_emulator_profiles
             from model.platforms import load_platform_config
@@ -161,9 +162,9 @@ class TheGapReportIsComputedOnce(unittest.TestCase):
             profiles = load_emulator_profiles("emulators")
             config = load_platform_config("emudeck", "platforms")
             with mock.patch.object(
-                verify, "find_undeclared_files", wraps=verify.find_undeclared_files
+                gaps, "find_undeclared_files", wraps=gaps.find_undeclared_files
             ) as counted:
-                verify.verify_platform(config, db, "emulators", profiles)
+                coverage.verify_platform(config, db, "emulators", profiles)
         finally:
             os.chdir(previous)
         self.assertEqual(counted.call_count, 1)
@@ -177,7 +178,7 @@ class TheReplayResolvesAsTheBuilder(unittest.TestCase):
     def test_an_unresolved_extra_blocks_nothing(self):
         from unittest import mock
 
-        import packextras
+        from packs import extras as packextras
 
         extras = [
             {"destination": "box.bin/inner.rom", "name": "inner.rom",

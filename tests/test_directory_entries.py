@@ -28,8 +28,12 @@ except ImportError:
 from model.profiles import load_emulator_profiles, _emulator_profiles_cache
 from resolve.directories import directory_members
 import generate_db
-import generate_pack as builder
-import verify
+from packs import emulatorpack
+from packs import manifest as packs_manifest
+from packs import platformpack
+from packs import emulatorcheck
+from packs import gaps as packs_gaps
+from packs import verdicts
 
 HAS_JSONSCHEMA = jsonschema is not None
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -158,7 +162,7 @@ class DirectoryMembers(DirectoryFixture):
 class CrossReferenceReadsADirectory(DirectoryFixture):
     def _report(self, body: str = PROFILE) -> list[dict]:
         profiles = self._profiles(body)
-        return verify.find_undeclared_files(
+        return packs_gaps.find_undeclared_files(
             PLATFORM, str(self.emulators), self._db(), profiles
         )
 
@@ -199,7 +203,7 @@ class GapReportReadsADirectory(DirectoryFixture):
     listed as a file to source."""
 
     def test_a_held_hidden_directory_is_held(self):
-        from cross_reference import entry_source
+        from packs.crossref import entry_source
 
         self._add("Engine/cdogs/data/.wolf3d/N3D.cdogscpn/campaign.json", b"campaign")
         db = self._db()
@@ -223,7 +227,7 @@ class PackCarriesADirectory(DirectoryFixture):
         profiles = self._profiles()
         out = self.root / "dist"
         out.mkdir()
-        zip_path = builder.generate_pack(
+        zip_path = platformpack.generate_pack(
             "demo", str(self.platforms), self._db(), str(self.bios), str(out),
             emulators_dir=str(self.emulators),
             emu_profiles=profiles, offline=True,
@@ -238,7 +242,7 @@ class PackCarriesADirectory(DirectoryFixture):
 
     def test_the_install_manifest_lists_the_tree(self):
         profiles = self._profiles()
-        manifest = builder.generate_manifest(
+        manifest = packs_manifest.generate_manifest(
             "demo", str(self.platforms), self._db(), str(self.bios),
             str(self.platforms / "_registry.yml"),
             emulators_dir=str(self.emulators), emu_profiles=profiles,
@@ -251,9 +255,9 @@ class PackCarriesADirectory(DirectoryFixture):
     def test_the_gap_report_is_computed_once_per_build(self):
         """The region grouping and phase 2 each ran find_undeclared_files with
         the same arguments: 30 reports for 15 manifests."""
-        import verify
+        from packs import gaps as packs_gaps
 
-        real = verify.find_undeclared_files
+        real = packs_gaps.find_undeclared_files
         calls: list[int] = []
 
         def counted(*a, **kw):
@@ -263,15 +267,15 @@ class PackCarriesADirectory(DirectoryFixture):
         profiles = self._profiles()
         out = self.root / "counted"
         out.mkdir()
-        with mock.patch.object(verify, "find_undeclared_files", counted):
-            builder.generate_manifest(
+        with mock.patch.object(packs_gaps, "find_undeclared_files", counted):
+            packs_manifest.generate_manifest(
                 "demo", str(self.platforms), self._db(), str(self.bios),
                 str(self.platforms / "_registry.yml"),
                 emulators_dir=str(self.emulators), emu_profiles=profiles,
                 offline=True,
             )
             self.assertEqual(len(calls), 1)
-            builder.generate_pack(
+            platformpack.generate_pack(
                 "demo", str(self.platforms), self._db(), str(self.bios), str(out),
                 emulators_dir=str(self.emulators), emu_profiles=profiles,
                 offline=True, regions=["north-america"],
@@ -282,7 +286,7 @@ class PackCarriesADirectory(DirectoryFixture):
         self._profiles()
         out = self.root / "emu"
         out.mkdir()
-        zip_path = builder.generate_emulator_pack(
+        zip_path = emulatorpack.generate_emulator_pack(
             ["demo"], str(self.emulators), self._db(), str(self.bios), str(out),
             offline=True,
         )
@@ -292,17 +296,17 @@ class PackCarriesADirectory(DirectoryFixture):
 
     def test_verify_counts_what_the_emulator_pack_ships(self):
         self._profiles()
-        result = verify.verify_emulator(["demo"], str(self.emulators), self._db())
+        result = emulatorcheck.verify_emulator(["demo"], str(self.emulators), self._db())
         held = {
             detail["name"]
             for detail in result["details"]
-            if detail["status"] == verify.Status.OK
+            if detail["status"] == verdicts.Status.OK
         }
         self.assertEqual(held, self.EXPECTED)
         missing = [
             detail["name"]
             for detail in result["details"]
-            if detail["status"] == verify.Status.MISSING
+            if detail["status"] == verdicts.Status.MISSING
         ]
         self.assertEqual(missing, ["Fonts"])
 

@@ -19,7 +19,7 @@ from pathlib import Path
 
 from model.profiles import _emulator_profiles_cache
 import generate_db
-from verify import verify_platform
+from packs.coverage import verify_platform
 
 
 class TwinDeclarations(unittest.TestCase):

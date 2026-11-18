@@ -28,7 +28,7 @@ import zipfile
 from pathlib import Path
 
 import install
-import split_pack
+from packs import parts as packs_parts
 from tests.test_install_selection import FakeRepository
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -342,7 +342,7 @@ class SplitParts(Scratch):
         downloads = self.root / "downloads"
         downloads.mkdir()
         pack = _pack(downloads, "RetroArch_v1_BIOS_Pack.zip", BIG)
-        parts = split_pack.split_pack(pack, limit=pack.stat().st_size // 3)
+        parts = packs_parts.split_pack(pack, limit=pack.stat().st_size // 3)
         self.assertGreater(len(parts), 2)
         return parts
 
@@ -432,16 +432,17 @@ class ABoardWithoutTheNetwork(Scratch):
                 if p.is_file()}
 
     def test_the_builder_writes_both_into_the_pack_list(self):
-        import generate_pack
+        from packs import scope
+        from packs import targets
 
         install_list = manifest()
         board_file = REPO_ROOT / "platforms" / "targets" / "batocera.yml"
-        boards = generate_pack.target_list(board_file)
+        boards = targets.target_list(board_file)
         self.assertEqual(boards, json.loads(
             (REPO_ROOT / "install" / "targets" / "batocera.json").read_text()))
         pack_list = {"files": []}
-        generate_pack.annotate_pack_systems(
-            pack_list, generate_pack.pack_systems(install_list, boards))
+        scope.annotate_pack_systems(
+            pack_list, scope.pack_systems(install_list, boards))
         self.assertEqual(pack_list["install_list"], install_list)
         self.assertEqual(pack_list["targets"], boards)
 

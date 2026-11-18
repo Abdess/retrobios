@@ -36,7 +36,7 @@ from resolve.ownership import BUCKET_FOLDERS, names_manufacturer
 import generate_db
 import generate_pack as builder
 import generate_site
-from verify import verify_platform
+from packs.coverage import verify_platform
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

@@ -20,7 +20,9 @@ import yaml
 from core.ziptools import build_zip_contents_index
 from core.hashing import compute_hashes
 from model.profiles import load_emulator_profiles
-from generate_pack import PackRecord, generate_pack, generate_split_packs
+from packs.archive import PackRecord
+from packs.platformpack import generate_pack
+from packs.bysystem import generate_split_packs
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

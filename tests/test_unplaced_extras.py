@@ -21,9 +21,9 @@ import yaml
 from model.platforms import _platform_config_cache, load_platform_config
 from model.profiles import load_emulator_profiles, _emulator_profiles_cache
 import generate_db
-import generate_pack as builder
-from packextras import platform_region_groups
-from verify import verify_platform
+from packs import manifest as packs_manifest
+from packs.extras import platform_region_groups
+from packs.coverage import verify_platform
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -106,7 +106,7 @@ class SlugPlatform(unittest.TestCase):
         self.assertEqual(coverage["core_missing"], 1)
 
     def test_the_manifest_says_why_it_is_absent(self):
-        manifest = builder.generate_manifest(
+        manifest = packs_manifest.generate_manifest(
             "slugs", "platforms", self.db, "bios", "platforms/_registry.yml",
             emulators_dir="emulators", emu_profiles=self.profiles, offline=True,
         )
@@ -206,7 +206,7 @@ class FlatFirmwareFolder(unittest.TestCase):
                         load_platform_config("flat", "platforms"), db,
                         "emulators", profiles,
                     )
-                return builder.generate_manifest(
+                return packs_manifest.generate_manifest(
                     "flat", "platforms", db, "bios", "platforms/_registry.yml",
                     emulators_dir="emulators", emu_profiles=profiles, offline=True,
                 )
@@ -250,7 +250,8 @@ class UserProvidedIsNeverTakenFromTheCollection(unittest.TestCase):
     made it report 1/1 OK for a pack that holds no such file."""
 
     def test_verify_matches_the_builder(self):
-        from verify import Status, verify_emulator
+        from packs.verdicts import Status
+        from packs.emulatorcheck import verify_emulator
 
         with tempfile.TemporaryDirectory() as tmp:
             previous = os.getcwd()

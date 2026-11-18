@@ -25,7 +25,7 @@ class DeclaredFilesResolveWithoutDataCaches(unittest.TestCase):
         from model.registry import list_registered_platforms, load_data_dir_registry
         from model.database import load_database
         from model.platforms import load_platform_config
-        from packresolve import resolve_declaration
+        from resolve.packfiles import resolve_declaration
 
         platforms_dir = REPO_ROOT / "platforms"
         registry = load_data_dir_registry(str(platforms_dir))

@@ -21,7 +21,7 @@ import unittest
 from pathlib import Path
 
 from model.targets import build_target_cores_cache
-from generate_pack import _target_cores_for
+from packs.finalize import _target_cores_for
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -49,7 +49,7 @@ class ANameClaimsOnlyANarrowingThatHappened(unittest.TestCase):
     on switch'."""
 
     def test_a_platform_without_the_target_is_named_plainly(self):
-        from generate_pack import _narrowings, _platform_target
+        from packs.naming import _narrowings, _platform_target
 
         platforms = str(REPO_ROOT / "platforms")
         self.assertIsNone(_platform_target("bizhawk", "switch", platforms))
@@ -137,6 +137,8 @@ class ASplitBuildsOnlyTheTargetsSystems(unittest.TestCase):
         from unittest import mock
 
         import generate_pack
+        from packs import bysystem
+        from packs import platformpack
         from model.profiles import load_emulator_profiles
 
         platforms = str(REPO_ROOT / "platforms")
@@ -149,10 +151,10 @@ class ASplitBuildsOnlyTheTargetsSystems(unittest.TestCase):
             return
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as out, \
-                mock.patch.object(generate_pack, "generate_pack", record), \
+                mock.patch.object(platformpack, "generate_pack", record), \
                 mock.patch.object(generate_pack, "_collect_emulator_extras",
                                   return_value=[]):
-            generate_pack.generate_split_packs(
+            bysystem.generate_split_packs(
                 "retroarch", platforms, {"files": {}}, "bios", out,
                 emu_profiles=profiles,
                 target_cores=_target_cores_for("retroarch", "switch", platforms),
@@ -206,6 +208,8 @@ class TheSplitDirectoryReadsThePackStem(unittest.TestCase):
         from unittest import mock
 
         import generate_pack
+        from packs import bysystem
+        from packs import naming
 
         config = {"platform": "Foo: Bar", "version": "release/1.22", "systems": {}}
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as out, \
@@ -213,10 +217,10 @@ class TheSplitDirectoryReadsThePackStem(unittest.TestCase):
                                   return_value=config), \
                 mock.patch.object(generate_pack, "_collect_emulator_extras",
                                   return_value=[]):
-            generate_pack.generate_split_packs(
+            bysystem.generate_split_packs(
                 "foo", "platforms", {"files": {}}, "bios", out, emu_profiles={},
             )
-            stem = generate_pack._platform_pack_stem(["foo"], "foo", "platforms")
+            stem = naming._platform_pack_stem(["foo"], "foo", "platforms")
             self.assertEqual(os.listdir(out), [f"{stem}_Split"])
         self.assertEqual(stem, "Foo-_Bar_release-1.22")
 

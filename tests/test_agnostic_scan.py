@@ -22,7 +22,7 @@ from pathlib import Path
 from model.profiles import load_emulator_profiles, _emulator_profiles_cache
 from resolve.localfile import resolve_local_file
 import generate_pack as builder
-import packextras
+from packs import extras as packextras
 
 SIZE = 1024
 

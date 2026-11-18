@@ -289,7 +289,7 @@ def project_base() -> str:
     is HEAD, and --changed --strict found nothing and passed while the PR's
     CI then failed. validate_pr.py resolves the same line the same way.
     """
-    from validate_pr import _git_lines as git_lines, _project_main_line
+    from core.gitclone import _git_lines as git_lines, _project_main_line
 
     line = _project_main_line()
     if line:

@@ -77,7 +77,7 @@ class SystemAndEmulatorPacksKeepTheirNames(unittest.TestCase):
 
         from model.profiles import _emulator_profiles_cache
         import generate_db
-        import generate_pack as gp
+        from packs import emulatorpack
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as directory:
             root = Path(directory)
@@ -101,11 +101,11 @@ class SystemAndEmulatorPacksKeepTheirNames(unittest.TestCase):
             }))
             _emulator_profiles_cache.clear()
             try:
-                emulator_pack = gp.generate_emulator_pack(
+                emulator_pack = emulatorpack.generate_emulator_pack(
                     ["triforce"], str(root / "emulators"), db, str(root / "bios"),
                     str(out), offline=True,
                 )
-                system_pack = gp.generate_system_pack(
+                system_pack = emulatorpack.generate_system_pack(
                     ["sega-triforce"], str(root / "emulators"), db,
                     str(root / "bios"), str(out), offline=True,
                 )

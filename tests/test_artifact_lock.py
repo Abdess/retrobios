@@ -143,7 +143,7 @@ class PackLockCliTest(unittest.TestCase):
         """The refresh waits for every run holding a data tree, and a
         pipeline holds them all for its whole run: probed after the refresh,
         a second build sat silent for hours instead of being refused."""
-        from refresh_data_dirs import cache_lock
+        from packs.datadirs import cache_lock
 
         platforms = Path(self.dir) / "platforms"
         platforms.mkdir()

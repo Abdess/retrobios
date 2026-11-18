@@ -199,7 +199,7 @@ class TheGapReportAsksAsTheEmulator(unittest.TestCase):
         self.entry = {"name": "et4000.bin", "required": True}
 
     def _source(self, owner: str) -> str | None:
-        from cross_reference import entry_source
+        from packs.crossref import entry_source
 
         by_name = self.db["indexes"]["by_name"]
         index = {
@@ -218,7 +218,7 @@ class TheGapReportAsksAsTheEmulator(unittest.TestCase):
         self.assertEqual(self._source("pcem"), "bios")
 
     def test_core_files_follow_the_resolver(self):
-        from verify import find_undeclared_files
+        from packs.gaps import find_undeclared_files
 
         profiles = {"dosbox-x": {
             "emulator": "DOSBox-X", "type": "libretro", "systems": ["dos"],

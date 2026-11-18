@@ -1,0 +1,297 @@
+"""A pack too large for one release asset, written as several ZIPs of whole files."""
+
+from __future__ import annotations
+
+import io
+import re
+import struct
+import zipfile
+import zlib
+from pathlib import Path
+
+
+# "Each file included in a release must be under 2 GiB."
+ASSET_LIMIT = 2 * 1024**3
+
+PACK_SUFFIX = "_BIOS_Pack.zip"
+_PART_NAME = re.compile(r"^(?P<stem>.+_BIOS_Pack)\.part(?P<index>\d+)of(?P<count>\d+)\.zip$")
+_MARKER_NAME = re.compile(r"^(?P<stem>.+_BIOS_Pack)\.part(?P<index>\d+)of(?P<count>\d+)\.txt$")
+# Sizes are written at a fixed width, so a marker's length, and with it the
+# size of its own part, does not depend on the sizes it records.
+_SIZE_WIDTH = 13
+
+_LOCAL = struct.Struct("<4s2B4HL2L2H")
+_CENTRAL = struct.Struct("<4s4B4HL2L5H2L")
+_END = struct.Struct("<4s4H2LH")
+_LOCAL_SIG = b"PK\x03\x04"
+_CENTRAL_SIG = b"PK\x01\x02"
+_END_SIG = b"PK\x05\x06"
+_DATA_DESCRIPTOR = 0x08
+_UTF8_NAME = 0x800
+_CHUNK = 1024 * 1024
+_MAX_ENTRIES = 0xFFFF
+_MAX_FIELD = 0xFFFFFFFF
+
+
+def is_part(name: str) -> bool:
+    """Whether a file name is one part of a split pack."""
+    return _PART_NAME.match(name) is not None
+
+
+def pack_of(name: str) -> str:
+    """The pack a published file belongs to, a part folded into its archive."""
+    part = _PART_NAME.match(name)
+    return f"{part['stem']}.zip" if part else name
+
+
+def part_name(pack_name: str, index: int, count: int) -> str:
+    return f"{pack_name[: -len('.zip')]}.part{index}of{count}.zip"
+
+
+def marker_name(pack_name: str, index: int, count: int) -> str:
+    return f"{pack_name[: -len('.zip')]}.part{index}of{count}.txt"
+
+
+def is_marker(name: str) -> bool:
+    """Whether an archive member is the marker a split writes in each part."""
+    return _MARKER_NAME.match(name) is not None
+
+
+def marker_text(pack_name: str, index: int, sizes: list[int]) -> bytes:
+    """The marker of part *index* of a pack published in ``len(sizes)`` parts.
+
+    Plain text a person can read, in a form install.py parses back: the
+    lines that matter are `pack:`, `part:` and one `file:` per part.
+    """
+    count = len(sizes)
+    lines = [
+        "RetroBIOS split pack",
+        f"This folder holds part {index} of {count} of {pack_name}.",
+        "Every part is needed: extract them all into this same folder.",
+        "The installer's --check names a part missing from the folder.",
+        "",
+        f"pack: {pack_name}",
+        f"part: {index} of {count}",
+    ]
+    lines += [
+        f"file: {size:>{_SIZE_WIDTH}} {part_name(pack_name, number, count)}"
+        for number, size in enumerate(sizes, 1)
+    ]
+    return ("\n".join(lines) + "\n").encode("utf-8")
+
+
+def _marker_weight(pack_name: str, index: int, count: int) -> int:
+    name = len(marker_name(pack_name, index, count).encode("utf-8"))
+    body = len(marker_text(pack_name, index, [0] * count))
+    return _LOCAL.size + name + body + _CENTRAL.size + name
+
+
+def _name_bytes(info: zipfile.ZipInfo) -> bytes:
+    encoding = "utf-8" if info.flag_bits & _UTF8_NAME else "cp437"
+    return info.orig_filename.encode(encoding)
+
+
+def _weight(info: zipfile.ZipInfo) -> int:
+    """Bytes a member adds to a part: both headers and its stored data."""
+    name = len(_name_bytes(info))
+    return _LOCAL.size + name + info.compress_size + _CENTRAL.size + name
+
+
+def plan_parts(
+    members: list[zipfile.ZipInfo], limit: int, reserve: int = 0
+) -> list[list[zipfile.ZipInfo]]:
+    """Fill each part in archive order, up to the limit less *reserve*."""
+    parts: list[list[zipfile.ZipInfo]] = [[]]
+    floor = _END.size + reserve
+    size = floor
+    for info in members:
+        weight = _weight(info)
+        if floor + weight >= limit:
+            raise ValueError(
+                f"{info.filename} needs {weight:,} bytes, more than a part of "
+                f"{limit:,} can hold"
+            )
+        if info.compress_size > _MAX_FIELD or info.file_size > _MAX_FIELD:
+            raise ValueError(f"{info.filename} needs ZIP64, which a part does not use")
+        if size + weight >= limit or len(parts[-1]) >= _MAX_ENTRIES - 1:
+            parts.append([])
+            size = floor
+        parts[-1].append(info)
+        size += weight
+    return parts
+
+
+def _dos_stamp(info: zipfile.ZipInfo) -> tuple[int, int]:
+    year, month, day, hour, minute, second = info.date_time
+    return (
+        (hour << 11) | (minute << 5) | (second // 2),
+        ((year - 1980) << 9) | (month << 5) | day,
+    )
+
+
+def _data_offset(source: io.BufferedReader, info: zipfile.ZipInfo) -> int:
+    """Where a member's stored bytes begin, read from its own local header."""
+    source.seek(info.header_offset)
+    header = _LOCAL.unpack(source.read(_LOCAL.size))
+    if header[0] != _LOCAL_SIG:
+        raise ValueError(f"{info.filename}: no local header at its offset")
+    return info.header_offset + _LOCAL.size + header[10] + header[11]
+
+
+def _marker_info(name: str, body: bytes) -> zipfile.ZipInfo:
+    info = zipfile.ZipInfo(name, date_time=(1980, 1, 1, 0, 0, 0))
+    info.compress_type = zipfile.ZIP_STORED
+    info.CRC = zlib.crc32(body)
+    info.compress_size = info.file_size = len(body)
+    info.create_system = 3
+    info.external_attr = (0o100000 | 0o644) << 16
+    return info
+
+
+def _write_part(
+    source: io.BufferedReader, members: list[zipfile.ZipInfo], dest: Path,
+    marker: tuple[str, bytes],
+) -> None:
+    directory = []
+    marker_info = _marker_info(*marker)
+    with open(dest, "wb") as out:
+        for info in [marker_info, *members]:
+            name = _name_bytes(info)
+            flags = info.flag_bits & ~_DATA_DESCRIPTOR
+            dos_time, dos_date = _dos_stamp(info)
+            offset = out.tell()
+            out.write(
+                _LOCAL.pack(
+                    _LOCAL_SIG, info.extract_version, info.reserved, flags,
+                    info.compress_type, dos_time, dos_date, info.CRC,
+                    info.compress_size, info.file_size, len(name), 0,
+                )
+            )
+            out.write(name)
+            if info is marker_info:
+                out.write(marker[1])
+                remaining = 0
+            else:
+                source.seek(_data_offset(source, info))
+                remaining = info.compress_size
+            while remaining:
+                chunk = source.read(min(_CHUNK, remaining))
+                if not chunk:
+                    raise ValueError(f"{info.filename}: the pack ends inside it")
+                out.write(chunk)
+                remaining -= len(chunk)
+            directory.append(
+                _CENTRAL.pack(
+                    _CENTRAL_SIG, info.create_version, info.create_system,
+                    info.extract_version, info.reserved, flags,
+                    info.compress_type, dos_time, dos_date, info.CRC,
+                    info.compress_size, info.file_size, len(name), 0, 0, 0,
+                    info.internal_attr, info.external_attr, offset,
+                )
+                + name
+            )
+        start = out.tell()
+        for record in directory:
+            out.write(record)
+        out.write(
+            _END.pack(
+                _END_SIG, 0, 0, len(directory), len(directory),
+                out.tell() - start, start, 0,
+            )
+        )
+
+
+def _identity(archive: zipfile.ZipFile) -> list[tuple[str, int, int]]:
+    return [
+        (info.filename, info.CRC, info.file_size)
+        for info in archive.infolist()
+        if not is_marker(info.filename)
+    ]
+
+
+def marker_weight(pack_name: str, count: int) -> int:
+    """Bytes the largest marker of a pack in *count* parts adds to its part."""
+    return max(_marker_weight(pack_name, index, count) for index in (1, count))
+
+
+def _plan_with_markers(
+    pack_name: str, members: list[zipfile.ZipInfo], limit: int
+) -> list[list[zipfile.ZipInfo]]:
+    """Plan the parts with room for the marker each one carries.
+
+    The marker lists every part, so its length grows with their count: the
+    plan is made again until the count it assumed is the count it gives.
+    """
+    count = 1
+    while True:
+        reserve = marker_weight(pack_name, count)
+        plan = plan_parts(members, limit, reserve)
+        if len(plan) <= count:
+            return plan
+        count = len(plan)
+
+
+def split_pack(zip_path: Path, limit: int = ASSET_LIMIT) -> list[Path]:
+    """Replace a pack at or over the limit by parts that each fit under it.
+
+    Returns the files to publish. The pack is removed only once every part
+    has been read back in full and the parts together list exactly its
+    members, so a failure leaves the pack as it was and no part behind.
+    """
+    zip_path = Path(zip_path)
+    if zip_path.stat().st_size < limit:
+        return [zip_path]
+
+    with zipfile.ZipFile(zip_path) as archive:
+        members = archive.infolist()
+        expected = _identity(archive)
+    taken = [info.filename for info in members if is_marker(info.filename)]
+    if taken:
+        raise ValueError(f"{zip_path.name} already holds {taken[0]}, a part marker name")
+    plan = _plan_with_markers(zip_path.name, members, limit)
+    count = len(plan)
+    parts = [
+        zip_path.with_name(part_name(zip_path.name, index, count))
+        for index in range(1, count + 1)
+    ]
+    sizes = [
+        _END.size + _marker_weight(zip_path.name, index, count)
+        + sum(_weight(info) for info in chosen)
+        for index, chosen in enumerate(plan, 1)
+    ]
+    try:
+        with open(zip_path, "rb") as source:
+            for index, (dest, chosen) in enumerate(zip(parts, plan), 1):
+                marker = (marker_name(zip_path.name, index, count),
+                          marker_text(zip_path.name, index, sizes))
+                _write_part(source, chosen, dest, marker)
+                if dest.stat().st_size != sizes[index - 1]:
+                    raise ValueError(
+                        f"{dest.name} is {dest.stat().st_size:,} bytes, its marker "
+                        f"says {sizes[index - 1]:,}"
+                    )
+        found: list[tuple[str, int, int]] = []
+        for dest in parts:
+            with zipfile.ZipFile(dest) as archive:
+                damaged = archive.testzip()
+                if damaged:
+                    raise ValueError(f"{dest.name}: {damaged} does not read back")
+                found.extend(_identity(archive))
+            if dest.stat().st_size >= limit:
+                raise ValueError(f"{dest.name} reached the limit of {limit:,} bytes")
+        if found != expected:
+            raise ValueError(f"the parts of {zip_path.name} do not add up to it")
+    except (OSError, ValueError, zipfile.BadZipFile):
+        for dest in parts:
+            dest.unlink(missing_ok=True)
+        raise
+    zip_path.unlink()
+    return parts
+
+
+def split_directory(directory: Path, limit: int = ASSET_LIMIT) -> list[Path]:
+    """Split every pack of a directory that needs it. Returns what to publish."""
+    published: list[Path] = []
+    for path in sorted(Path(directory).glob(f"*{PACK_SUFFIX}")):
+        published.extend(split_pack(path, limit))
+    return published

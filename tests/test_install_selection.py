@@ -27,6 +27,10 @@ import sys
 import tempfile
 import threading
 import unittest
+from packs import archive
+from packs import manifest as packs_manifest
+from packs import platformpack
+from packs import coverage
 from unittest import mock
 from pathlib import Path
 
@@ -813,17 +817,14 @@ class InstallMatchesThePack(unittest.TestCase):
         db_path = REPO_ROOT / "database.json"
         if not db_path.exists():
             raise unittest.SkipTest("database.json is not built")
-        import generate_pack as gp
         from model.profiles import load_emulator_profiles
-
-        cls.gp = gp
         cls.db = json.loads(db_path.read_text(encoding="utf-8"))
         cls.profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         cls.full = cls._manifest(None)
 
     @classmethod
     def _manifest(cls, regions):
-        return cls.gp.generate_manifest(
+        return packs_manifest.generate_manifest(
             cls.PLATFORM, str(REPO_ROOT / "platforms"), cls.db,
             str(REPO_ROOT / "bios"), str(REPO_ROOT / "platforms" / "_registry.yml"),
             emulators_dir=str(REPO_ROOT / "emulators"), emu_profiles=cls.profiles,
@@ -866,17 +867,15 @@ class InstallMatchesASystemPack(unittest.TestCase):
         db_path = REPO_ROOT / "database.json"
         if not db_path.exists():
             raise unittest.SkipTest("database.json is not built")
-        import generate_pack as gp
+        from packs import manifest as packs_manifest
         from model.profiles import load_emulator_profiles
         from model.platforms import load_platform_config
-
-        cls.gp = gp
         cls.db = json.loads(db_path.read_text(encoding="utf-8"))
         cls.profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         cls.base = load_platform_config(
             cls.PLATFORM, str(REPO_ROOT / "platforms")
         ).get("base_destination", "")
-        cls.full = gp.generate_manifest(
+        cls.full = packs_manifest.generate_manifest(
             cls.PLATFORM, str(REPO_ROOT / "platforms"), cls.db,
             str(REPO_ROOT / "bios"), str(REPO_ROOT / "platforms" / "_registry.yml"),
             emulators_dir=str(REPO_ROOT / "emulators"), emu_profiles=cls.profiles,
@@ -887,7 +886,7 @@ class InstallMatchesASystemPack(unittest.TestCase):
         import zipfile
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as out:
-            zip_path = self.gp.generate_pack(
+            zip_path = platformpack.generate_pack(
                 self.PLATFORM, str(REPO_ROOT / "platforms"), self.db,
                 str(REPO_ROOT / "bios"), out,
                 emulators_dir=str(REPO_ROOT / "emulators"),
@@ -927,7 +926,7 @@ class DataTreesFollowTheSystemsTheyServe(InstallMatchesASystemPack):
 
         # The trees come from the registry the manifest reads by itself.
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as out:
-            zip_path = self.gp.generate_pack(
+            zip_path = platformpack.generate_pack(
                 self.PLATFORM, str(REPO_ROOT / "platforms"), self.db,
                 str(REPO_ROOT / "bios"), out,
                 emulators_dir=str(REPO_ROOT / "emulators"),
@@ -998,17 +997,14 @@ class InstallMatchesATargetManifest(unittest.TestCase):
         db_path = REPO_ROOT / "database.json"
         if not db_path.exists():
             raise unittest.SkipTest("database.json is not built")
-        import generate_pack as gp
         from model.profiles import load_emulator_profiles
         from model.targets import load_target_config
-
-        cls.gp = gp
         cls.load_target_config = staticmethod(load_target_config)
         cls.db = json.loads(db_path.read_text(encoding="utf-8"))
         cls.profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
 
     def _manifest(self, platform, target_cores=None, target=None):
-        return self.gp.generate_manifest(
+        return packs_manifest.generate_manifest(
             platform, str(REPO_ROOT / "platforms"), self.db,
             str(REPO_ROOT / "bios"), str(REPO_ROOT / "platforms" / "_registry.yml"),
             emulators_dir=str(REPO_ROOT / "emulators"), emu_profiles=self.profiles,
@@ -1056,9 +1052,6 @@ class AHeldFileTheInstallerCannotFetch(unittest.TestCase):
         from model.platforms import _platform_config_cache
         from model.profiles import _emulator_profiles_cache
         import generate_db
-        import generate_pack
-
-        self.gp = generate_pack
         tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
         self.addCleanup(tmp.cleanup)
         previous = os.getcwd()
@@ -1106,7 +1099,7 @@ class AHeldFileTheInstallerCannotFetch(unittest.TestCase):
         self.profiles = profiles.load_emulator_profiles("emulators")
 
     def _manifest(self, regions):
-        return self.gp.generate_manifest(
+        return packs_manifest.generate_manifest(
             "p", "platforms", self.db, "bios", "platforms/_registry.yml",
             emulators_dir="emulators", emu_profiles=self.profiles,
             regions=regions, offline=True,
@@ -1140,9 +1133,6 @@ class AStandaloneLayoutBelowTheBiosFolder(unittest.TestCase):
         from model.platforms import _platform_config_cache
         from model.profiles import _emulator_profiles_cache
         import generate_db
-        import generate_pack
-
-        self.gp = generate_pack
         tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
         self.addCleanup(tmp.cleanup)
         previous = os.getcwd()
@@ -1192,7 +1182,7 @@ class AStandaloneLayoutBelowTheBiosFolder(unittest.TestCase):
         self.profiles = profiles.load_emulator_profiles("emulators")
 
     def _manifest(self, regions):
-        return self.gp.generate_manifest(
+        return packs_manifest.generate_manifest(
             "p", "platforms", self.db, "bios", "platforms/_registry.yml",
             emulators_dir="emulators", emu_profiles=self.profiles,
             regions=regions, offline=True,
@@ -1226,9 +1216,6 @@ class AnExtraBesideItsDeclarationBelowTheBiosFolder(unittest.TestCase):
         from model.platforms import _platform_config_cache
         from model.profiles import _emulator_profiles_cache
         import generate_db
-        import generate_pack
-
-        self.gp = generate_pack
         tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
         self.addCleanup(tmp.cleanup)
         previous = os.getcwd()
@@ -1284,15 +1271,15 @@ class AnExtraBesideItsDeclarationBelowTheBiosFolder(unittest.TestCase):
         self.profiles = profiles.load_emulator_profiles("emulators")
 
     def _manifest(self, regions):
-        return self.gp.generate_manifest(
+        return packs_manifest.generate_manifest(
             "p", "platforms", self.db, "bios", "platforms/_registry.yml",
             emulators_dir="emulators", emu_profiles=self.profiles,
             regions=regions, offline=True,
         )
 
     def _pack(self, regions):
-        record = self.gp.PackRecord()
-        self.gp.generate_pack(
+        record = archive.PackRecord()
+        platformpack.generate_pack(
             "p", "platforms", self.db, "bios", "", emulators_dir="emulators",
             emu_profiles=self.profiles, regions=regions, offline=True, record=record,
         )
@@ -1301,7 +1288,7 @@ class AnExtraBesideItsDeclarationBelowTheBiosFolder(unittest.TestCase):
     def test_the_slot_choices_are_computed_once(self):
         """pack_overrides recomputed the choices the manifest had just
         computed with the same arguments: 8% of a manifest run."""
-        import slots
+        from packs import slots
 
         real = slots.slot_choices
         with mock.patch.object(slots, "slot_choices", side_effect=real) as counted:
@@ -1383,7 +1370,7 @@ class ThePlatformsOwnSystemNamesAreAccepted(unittest.TestCase):
                       source)
 
     def test_every_listed_system_gets_the_title_the_site_prints(self):
-        from generate_pack import system_titles
+        from packs.scope import system_titles
 
         files = [{"dest": "a.bin", "systems": ["sony-playstation", "nintendo-gba"]}]
         omitted = [{"dest": "b.bin", "systems": ["3do"]}]
@@ -1431,12 +1418,10 @@ class ANativeNameSelectsOneSetEverywhere(unittest.TestCase):
         db_path = REPO_ROOT / "database.json"
         if not db_path.exists():
             raise unittest.SkipTest("database.json is not built")
-        import generate_pack as gp
         import pipeline
-        import verify
         from model.profiles import load_emulator_profiles
 
-        cls.gp, cls.pipeline, cls.verify = gp, pipeline, verify
+        cls.pipeline = pipeline
         cls.db = json.loads(db_path.read_text(encoding="utf-8"))
         cls.profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
 
@@ -1447,7 +1432,7 @@ class ANativeNameSelectsOneSetEverywhere(unittest.TestCase):
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as out, \
                 contextlib.redirect_stdout(io.StringIO()):
-            zip_path = self.gp.generate_pack(
+            zip_path = platformpack.generate_pack(
                 platform, str(REPO_ROOT / "platforms"), self.db,
                 str(REPO_ROOT / "bios"), out,
                 emulators_dir=str(REPO_ROOT / "emulators"),
@@ -1469,7 +1454,7 @@ class ANativeNameSelectsOneSetEverywhere(unittest.TestCase):
                 self.assertEqual(chosen, resolve_system_arg(system_id, systems, config))
                 self.assertEqual(chosen, [system_id])
 
-                report = self.verify.verify_platform(
+                report = coverage.verify_platform(
                     config, self.db, str(REPO_ROOT / "emulators"), self.profiles,
                     system_filter=chosen,
                 )
@@ -1485,7 +1470,7 @@ class ANativeNameSelectsOneSetEverywhere(unittest.TestCase):
                 self.assertTrue(written)
                 self.assertEqual(credited, written)
 
-                manifest = self.gp.generate_manifest(
+                manifest = packs_manifest.generate_manifest(
                     platform, str(REPO_ROOT / "platforms"), self.db,
                     str(REPO_ROOT / "bios"),
                     str(REPO_ROOT / "platforms" / "_registry.yml"),

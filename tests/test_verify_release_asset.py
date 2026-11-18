@@ -26,9 +26,13 @@ import yaml
 from model.platforms import _platform_config_cache
 from model.profiles import _emulator_profiles_cache
 import generate_db
-import generate_pack as builder
-import packresolve
-from verify import Status, verify_emulator, verify_platform
+from packs import archive
+from packs import emulatorpack
+from packs import platformpack
+from resolve import packfiles as packresolve
+from packs.verdicts import Status
+from packs.emulatorcheck import verify_emulator
+from packs.coverage import verify_platform
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -111,7 +115,7 @@ class ReleaseAssetNotCached(unittest.TestCase):
         with mock.patch.object(
             packresolve, "fetch_large_file", return_value=str(cache)
         ):
-            zip_path = builder.generate_pack(
+            zip_path = platformpack.generate_pack(
                 "big", "platforms", self.db, "bios", "out",
                 emulators_dir="emulators", emu_profiles={}, offline=False,
             )
@@ -157,7 +161,7 @@ class CoreExtraReleaseAssetNotCached(ReleaseAssetNotCached):
         with mock.patch.object(
             packresolve, "fetch_large_file", return_value=str(cache)
         ):
-            zip_path = builder.generate_pack(
+            zip_path = platformpack.generate_pack(
                 "big", "platforms", self.db, "bios", "out",
                 emulators_dir="emulators", emu_profiles=self.profiles, offline=False,
             )
@@ -225,11 +229,11 @@ class EmulatorReleaseAssetNotCached(ReleaseAssetNotCached):
         cache = Path("cache/big.bin")
         cache.parent.mkdir()
         cache.write_bytes(PAYLOAD)
-        record = builder.PackRecord()
+        record = archive.PackRecord()
         with mock.patch.object(
             packresolve, "fetch_large_file", return_value=str(cache)
         ):
-            builder.generate_emulator_pack(
+            emulatorpack.generate_emulator_pack(
                 ["bigcore"], "emulators", self.db, "bios", "out",
                 offline=False, platforms_dir="platforms", record=record,
             )

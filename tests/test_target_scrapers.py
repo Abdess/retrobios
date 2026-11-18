@@ -364,10 +364,10 @@ class DownloadedCoresReachTheirBoards(unittest.TestCase):
         self.assertIn("amiberry-7.1.1-332", resolved)
 
     def test_the_list_names_the_boards_of_each_downloaded_core(self):
-        import generate_pack
+        from packs import manifestcores
 
         core_names = {"amiberry": [], "higan_sfc_balanced": ["nside_sfc_balanced"]}
-        boards = generate_pack._downloaded_cores(
+        boards = manifestcores._downloaded_cores(
             self.config, self.profiles, core_names, str(REPO_ROOT / "platforms"))
         self.assertEqual(set(boards), {"amiberry", "higan_sfc_balanced"})
         self.assertIn("x86_64", boards["amiberry"])

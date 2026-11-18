@@ -32,7 +32,7 @@ def _pack_path(platform_name: str) -> str | None:
     """Path of the platform's full pack, by the exact name the builder writes."""
     if not os.path.isdir(DIST_DIR):
         return None
-    from generate_pack import _expected_pack_names
+    from packs.naming import _expected_pack_names
 
     names = _expected_pack_names([platform_name], PLATFORMS_DIR, [], None)
     for entry in sorted(names[platform_name]):

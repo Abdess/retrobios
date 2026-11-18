@@ -18,7 +18,9 @@ from pathlib import Path
 from unittest import mock
 
 import generate_pack as gp
-from manifestselect import SelectionIndex
+from packs import manifestcores
+from packs import manifestentry
+from packs.manifestselect import SelectionIndex
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -44,9 +46,9 @@ class AnEntryWithoutSourceIsAnOmission(unittest.TestCase):
         # Every case hashes the file anew through its own compute_hashes: a
         # result another test verified for the same path and scan is a valid
         # cache hit, and it skipped the miscompute this class simulates.
-        saved = dict(gp._STABLE_HASHES)
-        gp._STABLE_HASHES.clear()
-        self.addCleanup(gp._STABLE_HASHES.update, saved)
+        saved = dict(manifestentry._STABLE_HASHES)
+        manifestentry._STABLE_HASHES.clear()
+        self.addCleanup(manifestentry._STABLE_HASHES.update, saved)
 
     def _run_core_entries(self, hashes: dict) -> tuple[list, dict, list]:
         name = Path(self.record["path"]).name
@@ -64,7 +66,7 @@ class AnEntryWithoutSourceIsAnOmission(unittest.TestCase):
             omitted[full_dest] = reason
 
         with mock.patch.object(gp, "compute_hashes", return_value=hashes):
-            gp._manifest_core_entries(
+            manifestcores._manifest_core_entries(
                 [extra], {}, self.db, str(REPO_ROOT / "bios"), "", str(REPO_ROOT),
                 {}, True,
                 region_drops=set(), case_insensitive=False, seen_destinations=set(),
@@ -76,7 +78,7 @@ class AnEntryWithoutSourceIsAnOmission(unittest.TestCase):
 
     def test_a_copy_the_database_lacks_is_omitted(self):
         """A copy the scan never indexed has no repo path: an omission."""
-        with mock.patch.object(gp, "_db_sha1_by_path", return_value={}):
+        with mock.patch.object(manifestentry, "_db_sha1_by_path", return_value={}):
             files, omitted, pack_only = self._run_core_entries(
                 {"sha1": "0" * 40, "sha256": "0" * 64}
             )

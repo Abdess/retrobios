@@ -21,6 +21,8 @@ from pathlib import Path
 import yaml
 
 import validate_pr
+from core import gitclone
+from resolve import review
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -94,15 +96,15 @@ class OversizedFileAdvice(unittest.TestCase):
         os.chdir(self.tmp)
         self.addCleanup(self._tmp.cleanup)
         self.addCleanup(os.chdir, self._cwd)
-        self._max = validate_pr.MAX_FILE_SIZE
-        self.addCleanup(setattr, validate_pr, "MAX_FILE_SIZE", self._max)
+        self._max = review.MAX_FILE_SIZE
+        self.addCleanup(setattr, review, "MAX_FILE_SIZE", self._max)
 
     def _message(self) -> str:
         path = self.tmp / "bios" / "Sony" / "PlayStation 3" / "PS3UPDAT.PUP"
         path.parent.mkdir(parents=True)
         path.write_bytes(b"PUP" * 4)
-        validate_pr.MAX_FILE_SIZE = 4
-        result = validate_pr.validate_file(
+        review.MAX_FILE_SIZE = 4
+        result = review.validate_file(
             str(path.relative_to(self.tmp)), None,
             {"sha1": set(), "md5": set(), "names": set()},
         )
@@ -114,7 +116,7 @@ class OversizedFileAdvice(unittest.TestCase):
         self.assertNotIn("storage: external", message)
         self.assertIn("large-files", message)
         self.assertIn("open an issue", message)
-        self.assertIn(validate_pr.LARGE_FILE_ISSUE_URL, message)
+        self.assertIn(review.LARGE_FILE_ISSUE_URL, message)
 
     def test_the_issue_form_is_filled_and_nothing_points_to_the_pr(self):
         """The link opened an empty form, and the same report said to put the
@@ -123,8 +125,8 @@ class OversizedFileAdvice(unittest.TestCase):
 
         path = self.tmp / "big.bin"
         path.write_bytes(b"x" * 8)
-        validate_pr.MAX_FILE_SIZE = 4
-        result = validate_pr.validate_file(
+        review.MAX_FILE_SIZE = 4
+        result = review.validate_file(
             "big.bin", None, {"sha1": set(), "md5": set(), "names": set()},
         )
         message = next(m for s, m in result.checks if s == "FAIL" and "too large" in m)
@@ -141,7 +143,7 @@ class OversizedFileAdvice(unittest.TestCase):
         self.assertNotIn("not under bios/", others)
 
     def test_the_linked_issue_template_exists(self):
-        template = validate_pr.LARGE_FILE_ISSUE_URL.rsplit("template=", 1)[1]
+        template = review.LARGE_FILE_ISSUE_URL.rsplit("template=", 1)[1]
         self.assertTrue(
             (REPO_ROOT / ".github" / "ISSUE_TEMPLATE" / template).is_file(), template
         )
@@ -206,7 +208,7 @@ class AnUnfetchedUpstreamIsFetched(unittest.TestCase):
             cwd = os.getcwd()
             os.chdir(clone)
             try:
-                with mock.patch.object(validate_pr, "PROJECT_URLS", (str(project),)):
+                with mock.patch.object(gitclone, "PROJECT_URLS", (str(project),)):
                     self.assertEqual(validate_pr.get_changed_files(), ["bios/new.bin"])
             finally:
                 os.chdir(cwd)

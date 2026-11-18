@@ -19,7 +19,7 @@ import unittest
 import zipfile
 from pathlib import Path
 
-from packverify import verify_pack
+from packs.integrity import verify_pack
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -92,7 +92,7 @@ class OneComparisonOfArchiveMembers(unittest.TestCase):
         import tempfile
         import zipfile
 
-        from packverify import _same_members
+        from packs.integrity import _same_members
 
         def archive(members: dict) -> bytes:
             buffer = io.BytesIO()

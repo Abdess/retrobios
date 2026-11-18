@@ -4471,9 +4471,10 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
         manifest = json.loads((REPO_ROOT / "install" / "retroarch.json").read_text())
         dirs = manifest.get("data_directories") or []
         files = sum(len(d["files"]) for d in dirs)
-        import generate_pack
+        from packs import archive as packs_archive
+        from packs import datatrees
 
-        written = generate_pack.PACK_DOCUMENTS + generate_pack.pack_markers(
+        written = packs_archive.PACK_DOCUMENTS + datatrees.pack_markers(
             "retroarch", None, str(REPO_ROOT / "platforms"))
         self.assertEqual(written, ("README.txt", "manifest.json", ".nomedia"))
         self.assertEqual(
@@ -7728,13 +7729,13 @@ class TheListVersionIsComparedWithTheSystems(unittest.TestCase):
         """A handheld without network installs from the pack: its manifest.json
         records the list's version, which generate_pack takes from the
         install list built with the same choices."""
-        import generate_pack
+        from packs import scope
         data = b"bios"
         install_list = {"version": "43.1", "files": [
             {"dest": "a.bin", "sha1": hashlib.sha1(data).hexdigest(), "size": 4}]}
         pack_list = {"files": [{"path": "a.bin", "sha1": hashlib.sha1(data).hexdigest(),
                                 "size": 4}]}
-        generate_pack.annotate_pack_systems(pack_list, generate_pack.pack_systems(install_list))
+        scope.annotate_pack_systems(pack_list, scope.pack_systems(install_list))
         self.assertEqual(pack_list["list_version"], "43.1")
         pack = Path(_tempdir(self)) / "Batocera_43.1_BIOS_Pack.zip"
         with zipfile.ZipFile(pack, "w") as archive:

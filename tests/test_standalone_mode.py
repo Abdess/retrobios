@@ -18,7 +18,7 @@ from pathlib import Path
 
 import yaml
 
-from cross_reference import cross_reference
+from packs.crossref import cross_reference
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

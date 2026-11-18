@@ -23,8 +23,10 @@ import yaml
 
 from model.platforms import _platform_config_cache
 import generate_db
-import generate_pack as builder
-from verify import Status, verify_platform
+from packs import archive
+from packs import platformpack
+from packs.verdicts import Status
+from packs.coverage import verify_platform
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -70,10 +72,10 @@ class TwinDeclarationStatus(unittest.TestCase):
         return config
 
     def _check(self, config: dict) -> None:
-        record = builder.PackRecord()
+        record = archive.PackRecord()
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
-            builder.generate_pack(
+            platformpack.generate_pack(
                 "twin", "platforms", self.db, "bios", "out",
                 emulators_dir="emulators", emu_profiles={}, record=record,
                 offline=True,

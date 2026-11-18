@@ -22,6 +22,8 @@ from pathlib import Path
 from unittest import mock
 
 import check_buildbot_system
+import refresh_data_dirs
+from packs import datadirs
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -153,9 +155,6 @@ class AnEmptyExtractionKeepsTheCache(unittest.TestCase):
     directory, recorded the version and reported success."""
 
     def setUp(self):
-        import refresh_data_dirs
-
-        self.module = refresh_data_dirs
         scratch = Path(__file__).resolve().parent.parent / "tmp"
         scratch.mkdir(exist_ok=True)
         self.root = Path(tempfile.mkdtemp(dir=scratch))
@@ -172,8 +171,8 @@ class AnEmptyExtractionKeepsTheCache(unittest.TestCase):
         payload.write_bytes(b"x")
         with tarfile.open(archive, "w:gz") as tf:
             tf.add(payload, arcname="repo-main/OtherDir/a.txt")
-        with self.assertRaises(self.module.NothingExtractedError):
-            self.module._download_and_extract(
+        with self.assertRaises(datadirs.NothingExtractedError):
+            datadirs._download_and_extract(
                 archive.as_uri(), "repo-main/Data/Sys", str(self.cache), []
             )
         self.assertEqual((self.cache / "keep.dat").read_bytes(), b"cached")
@@ -184,8 +183,8 @@ class AnEmptyExtractionKeepsTheCache(unittest.TestCase):
         archive = self.root / "archive.zip"
         with zipfile.ZipFile(archive, "w") as zf:
             zf.writestr("only/", b"")
-        with self.assertRaises(self.module.NothingExtractedError):
-            self.module._download_and_extract_zip(archive.as_uri(), str(self.cache))
+        with self.assertRaises(datadirs.NothingExtractedError):
+            datadirs._download_and_extract_zip(archive.as_uri(), str(self.cache))
         self.assertEqual((self.cache / "keep.dat").read_bytes(), b"cached")
 
 
@@ -195,7 +194,7 @@ class TheVersionIsReadBeforeTheDownload(unittest.TestCase):
     run called it up to date."""
 
     def test_a_build_published_during_the_download(self):
-        import refresh_data_dirs as rdd
+        from packs import datadirs
 
         root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         self.addCleanup(shutil.rmtree, root, True)
@@ -211,9 +210,9 @@ class TheVersionIsReadBeforeTheDownload(unittest.TestCase):
         versions = root / "versions.json"
         entry = {"source_type": "zip", "source_url": "https://example.invalid/Sys.zip",
                  "local_cache": str(root / "cache")}
-        with mock.patch.object(rdd, "_get_remote_etag", etag), \
-                mock.patch.object(rdd, "_download_and_extract_zip", download):
-            self.assertTrue(rdd._refresh_entry("sys", entry, True, False, str(versions)))
+        with mock.patch.object(datadirs, "_get_remote_etag", etag), \
+                mock.patch.object(datadirs, "_download_and_extract_zip", download):
+            self.assertTrue(datadirs._refresh_entry("sys", entry, True, False, str(versions)))
         self.assertEqual(json.loads(versions.read_text())["sys"]["sha"], "build-1")
 
 
@@ -222,9 +221,6 @@ class ABadResponseIsTriedAgain(unittest.TestCase):
     failed the whole data step on it, and the next download was fine."""
 
     def setUp(self) -> None:
-        import refresh_data_dirs as rdd
-
-        self.rdd = rdd
         root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         self.addCleanup(shutil.rmtree, root, True)
         self.versions = str(root / "versions.json")
@@ -243,21 +239,21 @@ class ABadResponseIsTriedAgain(unittest.TestCase):
 
         with mock.patch.object(self.rdd, "_get_remote_etag", lambda _url: "tag"), \
                 mock.patch.object(self.rdd, "_download_and_extract_zip", download), \
-                mock.patch.object(self.rdd.time, "sleep", self.waits.append):
-            return self.rdd._refresh_entry("s", self.entry, True, False, self.versions)
+                mock.patch.object(refresh_data_dirs.time, "sleep", self.waits.append):
+            return datadirs._refresh_entry("s", self.entry, True, False, self.versions)
 
     def test_a_bad_archive_then_a_good_one_refreshes(self):
         self.assertTrue(self.run_with([zipfile.BadZipFile("File is not a zip file"), 12]))
-        self.assertEqual(self.waits, [self.rdd.DOWNLOAD_RETRY_WAITS[0]])
+        self.assertEqual(self.waits, [datadirs.DOWNLOAD_RETRY_WAITS[0]])
 
     def test_a_source_bad_on_every_try_fails_after_them(self):
         bad = zipfile.BadZipFile("File is not a zip file")
-        tries = len(self.rdd.DOWNLOAD_RETRY_WAITS) + 1
+        tries = len(datadirs.DOWNLOAD_RETRY_WAITS) + 1
         self.assertIsNone(self.run_with([bad] * tries))
-        self.assertEqual(self.waits, list(self.rdd.DOWNLOAD_RETRY_WAITS))
+        self.assertEqual(self.waits, list(datadirs.DOWNLOAD_RETRY_WAITS))
 
     def test_an_empty_archive_is_not_tried_again(self):
-        self.assertIsNone(self.run_with([self.rdd.NothingExtractedError("nothing")]))
+        self.assertIsNone(self.run_with([datadirs.NothingExtractedError("nothing")]))
         self.assertEqual(self.waits, [])
 
 

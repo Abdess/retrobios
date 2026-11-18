@@ -15,7 +15,7 @@ import unittest
 from pathlib import Path
 import yaml
 
-from packextras import _companion_extensions, _companions
+from packs.extras import _companion_extensions, _companions
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -66,7 +66,7 @@ class Companions(unittest.TestCase):
         import os
         import tempfile
 
-        from packextras import _agnostic_scan_extras
+        from packs.extras import _agnostic_scan_extras
 
         profile = {
             "emulator": "PCSX2", "bios_mode": "agnostic", "files": [
@@ -117,7 +117,7 @@ class Companions(unittest.TestCase):
         import os
         import tempfile
 
-        from packextras import _agnostic_scan_extras
+        from packs.extras import _agnostic_scan_extras
 
         def profile(name: str, ext: str) -> dict:
             return {"emulator": name, "bios_mode": "agnostic", "files": [

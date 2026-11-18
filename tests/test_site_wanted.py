@@ -26,7 +26,7 @@ from pathlib import Path
 
 import generate_site
 import sitewanted
-import validate_pr
+from resolve import review
 import yaml
 from model.database import load_database
 from tests.test_site_pronouns import pronouns
@@ -157,7 +157,7 @@ class _World(unittest.TestCase):
         ]}]
         self.platform_hashes = {"sha1": set(), "md5": set(), "names": set(), "folders": {},
                                 "named": {}}
-        self.profile_hashes = validate_pr.load_profile_hashes(str(emulators), self.db)
+        self.profile_hashes = review.load_profile_hashes(str(emulators), self.db)
         self.placer = sitewanted.Placer(self.db, self.platform_hashes, self.profile_hashes)
         self.data = sitewanted.build_wanted(
             self.profiles, self.coverages, self.gap_report, self.db, self.placer,
@@ -392,7 +392,7 @@ class EveryFolderIsTheReviewsFolder(_World):
                 path = self.tmp / "card" / name
                 path.parent.mkdir(exist_ok=True)
                 path.write_bytes(data)
-                result = validate_pr.validate_file(
+                result = review.validate_file(
                     f"card/{name}", self.db, platform_hashes, self.profile_hashes)
                 entry = self.entry(name)
                 folder = self.data["folders"][entry["f"]]
@@ -406,7 +406,7 @@ class EveryFolderIsTheReviewsFolder(_World):
         for entry in self.data["entries"]:
             values = [v for algo in ("sha1", "md5", "sha256") for v in entry.get("h", {}).get(algo, [])
                       if len(v) == sitewanted.FULL_LENGTH[algo]]
-            spot = validate_pr.placement(values, entry["n"], self.db, self.platform_hashes,
+            spot = review.placement(values, entry["n"], self.db, self.platform_hashes,
                                          self.profile_hashes, declared="h" in entry,
                                          exists=self.placer.paths.__contains__,
                                          systems=["x"])
@@ -420,11 +420,11 @@ class EveryFolderIsTheReviewsFolder(_World):
         """nohash.bin is held only in bios/Other/Elsewhere/, a folder no
         file of system x is in: the folder comes from system x."""
         self.assertEqual(self.data["folders"][self.entry("nohash.bin")["f"]], "bios/Maker/Console/")
-        spot = validate_pr.placement([], "nohash.bin", self.db, self.platform_hashes,
+        spot = review.placement([], "nohash.bin", self.db, self.platform_hashes,
                                      self.profile_hashes, declared=False, systems=["x"])
         self.assertEqual(spot.folder, "bios/Maker/Console/")
         # The review, given the name alone, reads the systems that declare it.
-        self.assertEqual(validate_pr.placement([], "nohash.bin", self.db, self.platform_hashes,
+        self.assertEqual(review.placement([], "nohash.bin", self.db, self.platform_hashes,
                                                self.profile_hashes, declared=False).folder,
                          "bios/Maker/Console/")
 
@@ -432,13 +432,13 @@ class EveryFolderIsTheReviewsFolder(_World):
         folder = self.data["folders"][self.entry("nohash.bin")["f"]]
         path = self.tmp / folder / "nohash.bin"
         path.write_bytes(b"a copy of the wanted file")
-        result = validate_pr.validate_file(f"{folder}nohash.bin", self.db, self.platform_hashes,
+        result = review.validate_file(f"{folder}nohash.bin", self.db, self.platform_hashes,
                                            self.profile_hashes)
         self.assertFalse([m for kind, m in result.checks if kind == "WARN" and m.startswith("Placed under")])
         self.assertIn(("PASS", "Correct placement: bios/Maker/Console/"), result.checks)
 
     def test_a_declared_directory_names_its_folder(self):
-        spot = validate_pr.placement([], "v.bin", self.db, self.platform_hashes, self.profile_hashes,
+        spot = review.placement([], "v.bin", self.db, self.platform_hashes, self.profile_hashes,
                                      declared=False, directory="system/Maker/Console/")
         self.assertEqual(spot.folder, "bios/Maker/Console/")
 
@@ -517,9 +517,9 @@ class ThePageReadsTheListAsTheResolverDoes(_World):
         self.assertEqual(out, [["nohash.bin"], [], []])
 
     def test_the_issue_form_is_filled_as_the_review_fills_it(self):
-        result = validate_pr.ValidationResult("b.bin")
+        result = review.ValidationResult("b.bin")
         result.sha1, result.md5, result.size = sha1(WANTED), md5(WANTED), len(WANTED)
-        self.assertEqual(self._page(WANTED, "b.bin")["issue"], validate_pr.large_file_issue_url(result))
+        self.assertEqual(self._page(WANTED, "b.bin")["issue"], review.large_file_issue_url(result))
 
 
 class TheTwoPagesLinkEachOther(unittest.TestCase):
@@ -583,11 +583,11 @@ class AFolderComesFromTheSystem(unittest.TestCase):
         if not (REPO_ROOT / "database.json").is_file():
             raise unittest.SkipTest("no database")
         cls.db = load_database(str(REPO_ROOT / "database.json"))
-        cls.platform_hashes = validate_pr.load_platform_hashes(str(REPO_ROOT / "platforms"), cls.db)
-        cls.profile_hashes = validate_pr.load_profile_hashes(str(REPO_ROOT / "emulators"), cls.db)
+        cls.platform_hashes = review.load_platform_hashes(str(REPO_ROOT / "platforms"), cls.db)
+        cls.profile_hashes = review.load_profile_hashes(str(REPO_ROOT / "emulators"), cls.db)
 
-    def place(self, systems: list[str], directory: str) -> validate_pr.Placement:
-        return validate_pr.placement([], "config.ini", self.db, self.platform_hashes,
+    def place(self, systems: list[str], directory: str) -> review.Placement:
+        return review.placement([], "config.ini", self.db, self.platform_hashes,
                                      self.profile_hashes, declared=False,
                                      systems=systems, directory=directory)
 
@@ -632,15 +632,15 @@ class ThePublishedList(unittest.TestCase):
 
     def test_every_folder_is_the_reviews(self):
         placer = sitewanted.Placer(
-            self.db, validate_pr.load_platform_hashes(str(REPO_ROOT / "platforms"), self.db),
-            validate_pr.load_profile_hashes(str(REPO_ROOT / "emulators"), self.db))
+            self.db, review.load_platform_hashes(str(REPO_ROOT / "platforms"), self.db),
+            review.load_profile_hashes(str(REPO_ROOT / "emulators"), self.db))
         # An entry placed by its hashes. The others take their folder from
         # their system and directory, which the list does not carry: the
         # synthetic world above holds them to the rule.
         for entry in self.data["entries"]:
             values = [v for algo in ("sha1", "md5", "sha256") for v in entry.get("h", {}).get(algo, [])
                       if len(v) == sitewanted.FULL_LENGTH[algo]]
-            if not validate_pr.expected_folders(values, placer.platform_hashes, placer.profile_hashes):
+            if not review.expected_folders(values, placer.platform_hashes, placer.profile_hashes):
                 continue
             spot = placer.place(entry.get("h", {}), entry["n"])
             with self.subTest(entry=entry["n"]):

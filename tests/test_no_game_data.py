@@ -31,10 +31,13 @@ import yaml
 from model.platforms import load_platform_config, _platform_config_cache
 from model.profiles import _emulator_profiles_cache
 import generate_db
-import generate_pack as builder
+from packs import archive as packs_archive
+from packs import bysystem
+from packs import manifest as packs_manifest
+from packs import platformpack
 import install
-import packverify
-import verify
+from packs import integrity as packverify
+from packs import coverage
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -117,17 +120,17 @@ class _Fixture(unittest.TestCase):
     def pack(self, no_game_data: bool) -> tuple[str, set[str], str]:
         printed = io.StringIO()
         with contextlib.redirect_stdout(printed):
-            zip_path = builder.generate_pack(
+            zip_path = platformpack.generate_pack(
                 "handheld", str(self.platforms), self.db, str(self.bios), str(self.out),
                 emulators_dir=str(self.emulators), emu_profiles=PROFILES,
                 offline=True, no_game_data=no_game_data,
             )
         with zipfile.ZipFile(zip_path) as archive:
-            members = set(archive.namelist()) - set(builder.PACK_DOCUMENTS)
+            members = set(archive.namelist()) - set(packs_archive.PACK_DOCUMENTS)
         return zip_path, members, printed.getvalue()
 
     def manifest(self, no_game_data: bool = False) -> dict:
-        return builder.generate_manifest(
+        return packs_manifest.generate_manifest(
             "handheld", str(self.platforms), self.db, str(self.bios),
             str(self.platforms / "_registry.yml"), emulators_dir=str(self.emulators),
             emu_profiles=PROFILES, offline=True, no_game_data=no_game_data,
@@ -184,7 +187,7 @@ class PackNarrowing(_Fixture):
     def test_verify_reports_the_pack_the_builder_wrote(self):
         zip_path, members, _ = self.pack(no_game_data=True)
         config = load_platform_config("handheld", str(self.platforms))
-        result = verify.verify_platform(
+        result = coverage.verify_platform(
             config, self.db, str(self.emulators), PROFILES, no_game_data=True,
         )
         self.assertEqual(set(result["pack_destinations"]), members)
@@ -204,14 +207,14 @@ class PackNarrowing(_Fixture):
 
     def test_the_full_report_is_unchanged(self):
         config = load_platform_config("handheld", str(self.platforms))
-        result = verify.verify_platform(config, self.db, str(self.emulators), PROFILES)
+        result = coverage.verify_platform(config, self.db, str(self.emulators), PROFILES)
         self.assertNotIn("left_out", result)
         self.assertEqual(set(result["pack_destinations"]), FIRMWARE | GAME)
 
     def test_split_parts_add_up_to_the_narrowed_pack(self):
         printed = io.StringIO()
         with contextlib.redirect_stdout(printed):
-            parts = builder.generate_split_packs(
+            parts = bysystem.generate_split_packs(
                 "handheld", str(self.platforms), self.db, str(self.bios), str(self.out),
                 emulators_dir=str(self.emulators), emu_profiles=PROFILES,
                 offline=True, no_game_data=True,
@@ -220,7 +223,7 @@ class PackNarrowing(_Fixture):
         for part in parts:
             self.assertIn("_NoGameData", part)
             with zipfile.ZipFile(part) as archive:
-                held |= set(archive.namelist()) - set(builder.PACK_DOCUMENTS)
+                held |= set(archive.namelist()) - set(packs_archive.PACK_DOCUMENTS)
         self.assertEqual(held, FIRMWARE)
 
 

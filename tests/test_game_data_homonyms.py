@@ -224,7 +224,7 @@ class SecondPassKeepsIdentity(unittest.TestCase):
     """
 
     def test_flag_and_hashes_reach_the_alternative_destination(self):
-        from packextras import _collect_emulator_extras
+        from packs.extras import _collect_emulator_extras
 
         sha = "a" * 40
         md5 = "b" * 32
@@ -266,7 +266,7 @@ class ReleaseAssetIsNotANameMatch(unittest.TestCase):
     def test_an_unsourceable_entry_without_hash_never_reaches_the_asset_store(self):
         from unittest import mock
 
-        import packresolve
+        from resolve import packfiles as packresolve
 
         entry = {"name": "pak0.pk3", "unsourceable": "retail"}
         db = {"files": {}, "indexes": {"by_name": {}, "by_md5": {}, "by_path_suffix": {}}}
@@ -287,7 +287,7 @@ class ReleaseAssetAnswersEveryDeclaredHash(unittest.TestCase):
         import tempfile
         from unittest import mock
 
-        import packresolve
+        from resolve import packfiles as packresolve
 
         db = {"files": {}, "indexes": {"by_name": {}, "by_md5": {}, "by_path_suffix": {}}}
         with tempfile.TemporaryDirectory() as tmp:

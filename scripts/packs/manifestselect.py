@@ -21,7 +21,7 @@ from resolve import regions as resolve_regions
 from resolve import slot as slot_mod
 from model.systems import _norm_system_id
 from core.paths import sanitize_pack_path
-from packextras import (
+from packs.extras import (
     _kept,
     _serving_system_ids,
     extra_region_groups,

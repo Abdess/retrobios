@@ -22,7 +22,7 @@ import sys
 import zipfile
 from pathlib import Path
 
-import split_pack
+from packs import parts
 from core.artifacts import ArtifactLockBusy, artifact_lock, write_text_atomic
 from model.registry import list_release_pack_platforms
 
@@ -52,11 +52,11 @@ def release_owners(platforms_dir: str = "platforms") -> dict[str, list[str]]:
     the full pack and was taken for the RetroArch pack. Only the platforms
     marked release_pack own a release pack.
     """
-    import generate_pack
+    from packs import naming
 
     platforms = list_release_pack_platforms(platforms_dir)
     owners: dict[str, list[str]] = {}
-    for platform, names in generate_pack._expected_pack_names(
+    for platform, names in naming._expected_pack_names(
         platforms, platforms_dir, None, None
     ).items():
         for name in names:
@@ -88,9 +88,9 @@ def build_record(
 def _read_record(dist: Path, tag: str, owners: dict[str, list[str]]) -> dict:
     assets: dict[str, list[Path]] = {}
     for path in sorted(dist.glob("*_BIOS_Pack*.zip")):
-        assets.setdefault(split_pack.pack_of(path.name), []).append(path)
+        assets.setdefault(parts.pack_of(path.name), []).append(path)
     for paths in assets.values():
-        whole = [p for p in paths if not split_pack.is_part(p.name)]
+        whole = [p for p in paths if not parts.is_part(p.name)]
         if whole and len(paths) > len(whole):
             raise UnfinishedSplitError(
                 f"{whole[0].name} lies beside its parts: the split did not finish"
@@ -110,7 +110,7 @@ def _read_record(dist: Path, tag: str, owners: dict[str, list[str]]) -> dict:
                 # A part's marker names its siblings and is not pack content:
                 # the manifest's pack_files is counted before any split.
                 for info in archive.infolist():
-                    if not split_pack.is_marker(info.filename):
+                    if not parts.is_marker(info.filename):
                         members[info.filename] = info.file_size
         packs[name] = {
             "files": len(members),

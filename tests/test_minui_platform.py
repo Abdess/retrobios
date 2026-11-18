@@ -262,7 +262,7 @@ class PackPlacesCoreFilesUnderTheTag(unittest.TestCase):
         }}
 
     def _pack(self) -> dict[str, bytes]:
-        from generate_pack import generate_pack
+        from packs.platformpack import generate_pack
 
         output = os.path.join(self.root, "dist")
         os.makedirs(output)
@@ -310,8 +310,8 @@ class PackPlacesCoreFilesUnderTheTag(unittest.TestCase):
         self.assertEqual(len(groups), 2)
 
     def test_the_report_and_the_manifest_agree_with_the_pack(self):
-        from generate_pack import generate_manifest
-        from verify import verify_platform
+        from packs.manifest import generate_manifest
+        from packs.coverage import verify_platform
 
         packed = set(self._pack())
         config = load_platform_config("test_minui", self.platforms)

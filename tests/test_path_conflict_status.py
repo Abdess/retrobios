@@ -23,8 +23,9 @@ import yaml
 from model.platforms import load_platform_config, _platform_config_cache
 from model.profiles import _emulator_profiles_cache
 import generate_db
-import generate_pack as builder
-from verify import verify_platform
+from packs import emulatorpack
+from packs import platformpack
+from packs.coverage import verify_platform
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -79,7 +80,7 @@ class ConflictingDeclarations(unittest.TestCase):
         out.mkdir()
         report = io.StringIO()
         with contextlib.redirect_stdout(report):
-            builder.generate_pack(
+            platformpack.generate_pack(
                 "conflict", str(self.platforms), self.db, str(self.root / "bios"),
                 str(out), emulators_dir=str(self.emulators), emu_profiles={},
                 offline=True,
@@ -156,7 +157,7 @@ class AnExtraDoesNotPassAHashCheck(unittest.TestCase):
         out.mkdir()
         report = io.StringIO()
         with contextlib.redirect_stdout(report):
-            builder.generate_pack(
+            platformpack.generate_pack(
                 "hashed", str(self.platforms), self.db, str(self.root / "bios"),
                 str(out), emulators_dir=str(self.emulators), offline=True,
             )
@@ -210,7 +211,7 @@ class TheEmulatorPackShipsWhatTheCoreAccepts(unittest.TestCase):
         out.mkdir()
         report = io.StringIO()
         with contextlib.redirect_stdout(report):
-            zip_path = builder.generate_emulator_pack(
+            zip_path = emulatorpack.generate_emulator_pack(
                 ["mac"], str(self.emulators), self.db, str(self.root / "bios"),
                 str(out), offline=True,
             )
@@ -219,7 +220,8 @@ class TheEmulatorPackShipsWhatTheCoreAccepts(unittest.TestCase):
             self.assertNotIn("ROM", archive.namelist())
 
     def test_verify_does_not_call_it_ok(self):
-        from verify import Severity, verify_emulator
+        from packs.verdicts import Severity
+        from packs.emulatorcheck import verify_emulator
 
         result = verify_emulator(["mac"], str(self.emulators), self.db)
         self.assertEqual(result["severity_counts"][Severity.OK], 0)
@@ -263,12 +265,13 @@ class AlternativesAgreeWithThePack(unittest.TestCase):
     def test_verify_counts_what_the_pack_ships(self):
         import zipfile
 
-        from verify import Status, verify_emulator
+        from packs.verdicts import Status
+        from packs.emulatorcheck import verify_emulator
 
         out = self.root / "dist"
         out.mkdir()
         with contextlib.redirect_stdout(io.StringIO()):
-            zip_path = builder.generate_emulator_pack(
+            zip_path = emulatorpack.generate_emulator_pack(
                 ["eng"], str(self.emulators), self.db, str(self.root / "bios"),
                 str(out), offline=True,
             )
@@ -323,13 +326,14 @@ class AMaskedArchiveIsMissing(unittest.TestCase):
         self._tmp.cleanup()
 
     def test_both_report_the_archive_missing(self):
-        from verify import Status, verify_emulator
+        from packs.verdicts import Status
+        from packs.emulatorcheck import verify_emulator
 
         out = self.root / "dist"
         out.mkdir()
         report = io.StringIO()
         with contextlib.redirect_stdout(report):
-            builder.generate_emulator_pack(
+            emulatorpack.generate_emulator_pack(
                 ["a", "b"], str(self.emulators), self.db, str(self.root / "bios"),
                 str(out), offline=True,
             )

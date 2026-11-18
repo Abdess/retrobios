@@ -22,7 +22,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import verify
+from packs import emulatorcheck
+from packs import report
+from packs import verdicts
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -54,13 +56,14 @@ def _db(path: Path, name: str) -> dict:
 
 def _pack_files(root: Path, emulators: Path, db: dict) -> set[str]:
     """The paths the emulator pack writes, built in memory as the pipeline does."""
-    import generate_pack
+    from packs import archive
+    from packs import emulatorpack
 
-    record = generate_pack.PackRecord()
+    record = archive.PackRecord()
     cwd = os.getcwd()
     os.chdir(root)
     try:
-        generate_pack.generate_emulator_pack(
+        emulatorpack.generate_emulator_pack(
             ["demo"], str(emulators), db, "bios", "", False, zip_contents={}, offline=True,
             record=record,
         )
@@ -105,7 +108,7 @@ class HashMismatchIsNotCoverage(unittest.TestCase):
         cwd = os.getcwd()
         os.chdir(self.root)
         try:
-            return verify.verify_emulator(
+            return emulatorcheck.verify_emulator(
                 ["demo"], str(self.emulators), self.db
             )
         finally:
@@ -118,7 +121,7 @@ class HashMismatchIsNotCoverage(unittest.TestCase):
         statuses = {d["name"]: d["status"] for d in result["details"]}
         self.assertNotEqual(
             statuses.get("shared.rom"),
-            verify.Status.OK,
+            verdicts.Status.OK,
             "an entry whose only candidate contradicts its hash counted as covered",
         )
 
@@ -146,7 +149,7 @@ class HashMismatchIsNotCoverage(unittest.TestCase):
         detail = next(
             d for d in self._run()["details"] if d["name"] == "shared.rom"
         )
-        self.assertEqual(detail["status"], verify.Status.OK)
+        self.assertEqual(detail["status"], verdicts.Status.OK)
 
     def test_an_entry_declaring_no_hash_is_still_ok(self):
         """Nothing to contradict, so presence is all the evidence there is."""
@@ -163,7 +166,7 @@ class HashMismatchIsNotCoverage(unittest.TestCase):
         detail = next(
             d for d in self._run()["details"] if d["name"] == "shared.rom"
         )
-        self.assertEqual(detail["status"], verify.Status.OK)
+        self.assertEqual(detail["status"], verdicts.Status.OK)
 
     def test_a_genuinely_absent_file_still_reads_missing(self):
         (self.emulators / "demo.yml").write_text(
@@ -179,7 +182,7 @@ class HashMismatchIsNotCoverage(unittest.TestCase):
         detail = next(
             d for d in self._run()["details"] if d["name"] == "nowhere.rom"
         )
-        self.assertEqual(detail["status"], verify.Status.MISSING)
+        self.assertEqual(detail["status"], verdicts.Status.MISSING)
 
 
 class ArchiveHashMismatchIsNotCoverage(unittest.TestCase):
@@ -234,7 +237,7 @@ class ArchiveHashMismatchIsNotCoverage(unittest.TestCase):
         cwd = os.getcwd()
         os.chdir(self.root)
         try:
-            return verify.verify_emulator(["demo"], str(self.emulators), self.db)
+            return emulatorcheck.verify_emulator(["demo"], str(self.emulators), self.db)
         finally:
             os.chdir(cwd)
 
@@ -253,7 +256,7 @@ class ArchiveHashMismatchIsNotCoverage(unittest.TestCase):
         statuses = self._statuses(self._run())
         self.assertEqual(len(statuses), 2, statuses)
         self.assertNotIn(
-            verify.Status.OK,
+            verdicts.Status.OK,
             statuses,
             "an archive whose bytes contradict its declared hash counted as covered",
         )
@@ -269,7 +272,7 @@ class ArchiveHashMismatchIsNotCoverage(unittest.TestCase):
 
     def test_a_matching_container_hash_is_still_ok(self):
         self._profile(hashlib.md5(self.archive.read_bytes()).hexdigest())
-        self.assertEqual(set(self._statuses(self._run())), {verify.Status.OK})
+        self.assertEqual(set(self._statuses(self._run())), {verdicts.Status.OK})
 
 
 class UnsourceableIsNotAGap(unittest.TestCase):
@@ -317,7 +320,7 @@ class UnsourceableIsNotAGap(unittest.TestCase):
         cwd = os.getcwd()
         os.chdir(self.root)
         try:
-            return verify.verify_emulator(
+            return emulatorcheck.verify_emulator(
                 ["demo"], str(self.emulators), self.db
             )
         finally:
@@ -325,7 +328,7 @@ class UnsourceableIsNotAGap(unittest.TestCase):
 
     def test_an_unsourceable_entry_carries_its_reason(self):
         detail = next(d for d in self._result()["details"] if d["name"] == "paid.so")
-        self.assertEqual(detail["status"], verify.Status.MISSING)
+        self.assertEqual(detail["status"], verdicts.Status.MISSING)
         self.assertIn("unsourceable", detail)
         self.assertIn("paid", detail["unsourceable"])
 
@@ -333,7 +336,7 @@ class UnsourceableIsNotAGap(unittest.TestCase):
         detail = next(
             d for d in self._result()["details"] if d["name"] == "findable.rom"
         )
-        self.assertEqual(detail["status"], verify.Status.MISSING)
+        self.assertEqual(detail["status"], verdicts.Status.MISSING)
         self.assertNotIn("unsourceable", detail)
 
     def test_the_summary_counts_the_two_apart(self):
@@ -342,7 +345,7 @@ class UnsourceableIsNotAGap(unittest.TestCase):
 
         buffer = io.StringIO()
         with contextlib.redirect_stdout(buffer):
-            verify.print_emulator_result(self._result())
+            report.print_emulator_result(self._result())
         summary = buffer.getvalue().splitlines()[0]
         self.assertIn("1 missing", summary)
         self.assertIn("1 unsourceable", summary)
@@ -353,7 +356,7 @@ class UnsourceableIsNotAGap(unittest.TestCase):
 
         buffer = io.StringIO()
         with contextlib.redirect_stdout(buffer):
-            verify.print_emulator_result(self._result())
+            report.print_emulator_result(self._result())
         out = buffer.getvalue()
         self.assertIn("UNSOURCEABLE: paid.so", out)
         self.assertIn("MISSING (required): findable.rom", out)
@@ -435,10 +438,10 @@ class StandaloneSlotsFollowThePack(unittest.TestCase):
         self._tmp.cleanup()
 
     def test_each_standalone_folder_is_a_slot(self):
-        standalone = verify.verify_emulator(
+        standalone = emulatorcheck.verify_emulator(
             ["dual"], str(self.emulators), self.db, standalone=True
         )
-        core = verify.verify_emulator(["dual"], str(self.emulators), self.db)
+        core = emulatorcheck.verify_emulator(["dual"], str(self.emulators), self.db)
         self.assertEqual(standalone["total_files"], 2)
         self.assertEqual(core["total_files"], 1)
 

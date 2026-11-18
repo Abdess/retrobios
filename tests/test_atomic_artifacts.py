@@ -216,14 +216,15 @@ class ScratchFilesGetThePlainMode(unittest.TestCase):
     def test_packs_and_their_manifest(self):
         import zipfile
 
-        import generate_pack
+        from packs import archive
+        from packs import finalize
 
         pack = self.dir / "Pack.zip"
-        with generate_pack._writing_pack(str(pack)) as zf:
+        with archive._writing_pack(str(pack)) as zf:
             zf.writestr("a.bin", b"x")
         self.assertEqual(self._mode(pack), 0o644)
         os.chmod(pack, 0o600)
-        generate_pack.inject_manifest(str(pack), {"files": []})
+        finalize.inject_manifest(str(pack), {"files": []})
         self.assertEqual(self._mode(pack), 0o644)
         with zipfile.ZipFile(pack) as zf:
             self.assertIn("manifest.json", zf.namelist())

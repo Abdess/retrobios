@@ -63,8 +63,8 @@ class _Fixture(unittest.TestCase):
     def _both(self) -> tuple[dict, set[str]]:
         from model.profiles import load_emulator_profiles
         from model.platforms import load_platform_config
-        from generate_pack import generate_pack
-        from verify import verify_platform
+        from packs.platformpack import generate_pack
+        from packs.coverage import verify_platform
 
         profiles = load_emulator_profiles(str(self.emulators))
         report = verify_platform(
@@ -114,7 +114,7 @@ class AnEntryWithoutAFileTakesNoPath(unittest.TestCase):
     base destination as a pack path, and the comparison failed on ''."""
 
     def test_it_is_left_out(self):
-        from verify import _builder_placement
+        from packs.coverage import _builder_placement
 
         shipped, occupied = _builder_placement(
             [("s", "bios/", None), ("s", "", "x"), ("s", "bios/a.bin", "bios/a.bin")], False
@@ -129,8 +129,9 @@ class ARequiredOnlyPack(_Fixture):
     def test_verify_credits_what_the_pack_writes(self):
         from model.profiles import load_emulator_profiles
         from model.platforms import load_platform_config
-        from generate_pack import PackRecord, generate_pack
-        from verify import verify_platform
+        from packs.archive import PackRecord
+        from packs.platformpack import generate_pack
+        from packs.coverage import verify_platform
 
         (self.emulators / "coreemu.yml").write_text(yaml.safe_dump({
             "emulator": "CoreEmu", "type": "libretro", "systems": ["sys"],
@@ -174,7 +175,7 @@ class EveryNarrowingIsCompared(unittest.TestCase):
         import inspect
 
         import pipeline
-        from generate_pack import _narrowings
+        from packs.naming import _narrowings
 
         dimensions = set(inspect.signature(_narrowings).parameters)
         compared = set(pipeline.NARROWINGS_COMPARED)
@@ -191,7 +192,8 @@ class EveryNarrowingIsCompared(unittest.TestCase):
         import inspect
 
         import pipeline
-        from generate_pack import _narrowings, generate_emulator_pack
+        from packs.naming import _narrowings
+        from packs.emulatorpack import generate_emulator_pack
 
         taken = (set(inspect.signature(_narrowings).parameters)
                  & set(inspect.signature(generate_emulator_pack).parameters))

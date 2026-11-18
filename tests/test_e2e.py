@@ -43,14 +43,10 @@ from resolve.localfile import resolve_local_file
 from resolve.cores import resolve_platform_cores
 from resolve.truth import diff_platform_truth, generate_platform_truth
 from resolve.validation import _build_validation_index, check_file_validation, filter_files_by_mode
-from verify import (
-    Severity,
-    Status,
-    find_exclusion_notes,
-    find_undeclared_files,
-    verify_emulator,
-    verify_platform,
-)
+from packs.verdicts import Severity, Status
+from packs.gaps import find_exclusion_notes, find_undeclared_files
+from packs.emulatorcheck import verify_emulator
+from packs.coverage import verify_platform
 
 try:
     import jsonschema
@@ -1047,7 +1043,7 @@ class TestE2E(unittest.TestCase):
 
     def test_45_hle_fallback_downgrades_severity(self):
         """Missing file with hle_fallback=true ->INFO severity, not CRITICAL."""
-        from verify import Severity, compute_severity
+        from packs.verdicts import Severity, compute_severity
 
         # required + missing + NO HLE = CRITICAL
         sev = compute_severity("missing", True, "md5", hle_fallback=False)
@@ -2172,7 +2168,7 @@ class TestE2E(unittest.TestCase):
 
     def test_120_format_ground_truth_aggregate(self):
         """Aggregate format: one line with all cores."""
-        from verify import _format_ground_truth_aggregate
+        from packs.report import _format_ground_truth_aggregate
 
         gt = [
             {
@@ -2196,7 +2192,7 @@ class TestE2E(unittest.TestCase):
 
     def test_121_format_ground_truth_verbose(self):
         """Verbose format: one line per core with expected values and source ref."""
-        from verify import _format_ground_truth_verbose
+        from packs.report import _format_ground_truth_verbose
 
         gt = [
             {
@@ -2215,7 +2211,7 @@ class TestE2E(unittest.TestCase):
 
     def test_122_format_ground_truth_verbose_no_source_ref(self):
         """Verbose format omits bracket when source_ref is None."""
-        from verify import _format_ground_truth_verbose
+        from packs.report import _format_ground_truth_verbose
 
         gt = [
             {
@@ -5011,7 +5007,7 @@ struct BurnDriver BurnDrvneogeo = {
 
     def test_200_find_undeclared_include_all(self):
         """include_all=True returns ALL core files, including declared ones."""
-        from verify import find_undeclared_files
+        from packs.gaps import find_undeclared_files
 
         config = self._load_config("test_existence")
         profiles = load_emulator_profiles(self.emulators_dir)
@@ -5768,7 +5764,7 @@ struct BurnDriver BurnDrvneogeo = {
 
     def test_226_cross_reference_platform_filter(self):
         """--platform restricts declarations to that platform alone."""
-        from cross_reference import load_platform_files
+        from packs.crossref import load_platform_files
 
         with tempfile.TemporaryDirectory() as tmpdir:
             plat_dir = os.path.join(tmpdir, "platforms")
@@ -6072,7 +6068,7 @@ struct BurnDriver BurnDrvneogeo = {
 
     def test_verify_platform_region_matches_the_pack(self):
         from model.platforms import load_platform_config
-        from verify import verify_platform
+        from packs.coverage import verify_platform
 
         self._create_region_fixtures()
         profiles = self._region_profiles()
@@ -6097,7 +6093,7 @@ struct BurnDriver BurnDrvneogeo = {
 
     def test_verify_emulator_region_matches_the_pack(self):
         from generate_pack import generate_emulator_pack
-        from verify import verify_emulator
+        from packs.emulatorcheck import verify_emulator
 
         self._create_region_fixtures()
         with open(
@@ -6320,7 +6316,7 @@ struct BurnDriver BurnDrvneogeo = {
         """
         import inspect
 
-        import packverify
+        from packs import integrity as packverify
         from generate_pack import _narrows_contents, _narrowings
 
         source = inspect.getsource(packverify.verify_pack_against_platform)
@@ -6500,7 +6496,7 @@ struct BurnDriver BurnDrvneogeo = {
         --region compared nothing."""
         import hashlib
 
-        from packextras import platform_region_groups
+        from packs.extras import platform_region_groups
 
         files, by_name = {}, {}
         for name in ("core_us.bin", "core_jp.bin"):
@@ -6538,7 +6534,7 @@ struct BurnDriver BurnDrvneogeo = {
         --region us pack kept the declared Japanese BIOS."""
         import hashlib
 
-        from packextras import platform_region_groups
+        from packs.extras import platform_region_groups
 
         files, by_name = {}, {}
         for name in ("bios_U.sms", "bios_J.sms"):
@@ -6722,7 +6718,7 @@ struct BurnDriver BurnDrvneogeo = {
         }
 
     def _gap_source(self, entry: dict, db: dict) -> str:
-        from cross_reference import cross_reference
+        from packs.crossref import cross_reference
 
         report = cross_reference(
             {"gapemu": {"emulator": "GapEmu", "systems": ["s"], "files": [entry]}},
@@ -6934,7 +6930,7 @@ class OneOfASearchList(unittest.TestCase):
         )
 
     def test_gap_report_counts_the_set_once(self):
-        import cross_reference
+        from packs import crossref
 
         index = {
             "by_name": self.db["indexes"]["by_name"],
@@ -6943,7 +6939,7 @@ class OneOfASearchList(unittest.TestCase):
             "data_names": set(), "all_declared": set(), "db_files": self.db["files"],
         }
         report: dict = {}
-        cross_reference._cross_reference_profile("seq", self.profile, {}, report, index)
+        crossref._cross_reference_profile("seq", self.profile, {}, report, index)
         gaps = {g["name"]: g for g in report["seq"]["gap_details"]}
         self.assertEqual(sorted(gaps), ["none_a.bin", "plain.bin", "second.bin", "third.bin"])
         self.assertEqual(gaps["none_a.bin"]["alternatives"], ["none_b.bin"])

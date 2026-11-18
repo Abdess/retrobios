@@ -16,7 +16,7 @@ from pathlib import Path
 
 from model.systems import SYSTEM_ALIASES, _norm_system_id
 from model.profiles import load_emulator_profiles
-from packextras import _names_content, _slug_for
+from packs.extras import _names_content, _slug_for
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

@@ -24,7 +24,8 @@ import yaml
 from model.platforms import _platform_config_cache
 from model.profiles import _emulator_profiles_cache
 import generate_db
-import generate_pack as builder
+from packs import manifest as packs_manifest
+from packs import platformpack
 
 
 class RequiredTwins(unittest.TestCase):
@@ -80,7 +81,7 @@ class RequiredTwins(unittest.TestCase):
     def test_the_required_only_pack_carries_the_required_file(self):
         out = self.root / "dist"
         out.mkdir()
-        zip_path = builder.generate_pack(
+        zip_path = platformpack.generate_pack(
             "twins", str(self.platforms), self.db, str(self.root / "bios"), str(out),
             emulators_dir=str(self.emulators), emu_profiles={},
             required_only=True, offline=True,
@@ -89,7 +90,7 @@ class RequiredTwins(unittest.TestCase):
             self.assertIn("ATARIOSB.ROM", archive.namelist())
 
     def test_the_required_only_manifest_lists_it(self):
-        manifest = builder.generate_manifest(
+        manifest = packs_manifest.generate_manifest(
             "twins", str(self.platforms), self.db, str(self.root / "bios"),
             str(self.platforms / "_registry.yml"),
             emulators_dir=str(self.emulators), emu_profiles={},

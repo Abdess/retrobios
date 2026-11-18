@@ -15,7 +15,7 @@ from model import profiles as model_profiles
 from model.profiles import _emulator_profiles_cache
 from model import region
 from resolve import regions as resolve_regions
-from packextras import emulator_region_drops
+from packs.extras import emulator_region_drops
 
 
 class TestVocabulary(unittest.TestCase):
@@ -475,7 +475,7 @@ class TestFallbackGroups(unittest.TestCase):
         )
 
     def test_the_readme_names_a_slot_as_a_reader_does(self):
-        from packreadme import _group_label
+        from packs.readme import _group_label
 
         self.assertEqual(_group_label("PicoDrive:variant:megacd"), "megacd (PicoDrive)")
         self.assertEqual(_group_label("sega-mega-cd"), "sega-mega-cd")
@@ -699,7 +699,7 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
         from model import profiles as model_profiles
         from model.profiles import _emulator_profiles_cache
         import generate_pack as builder
-        import verify as reporter
+        from packs import coverage
 
         tmp, root, db, config = self._fixture()
         try:
@@ -717,10 +717,10 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
                 "the builder must drop the Japanese alternative, not the US one",
             )
 
-            plain = reporter.verify_platform(
+            plain = coverage.verify_platform(
                 config, db, str(root / "emulators"), profiles,
             )
-            narrowed = reporter.verify_platform(
+            narrowed = coverage.verify_platform(
                 config, db, str(root / "emulators"), profiles,
                 regions=["north-america"],
             )
@@ -742,7 +742,7 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
         for a region the request excludes."""
         from model import profiles as model_profiles
         from model.profiles import _emulator_profiles_cache
-        import verify as reporter
+        from packs import coverage
 
         tmp, root, db, config = self._fixture()
         try:
@@ -751,10 +751,10 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
             del db["indexes"]["by_name"]["jp.bin"]
             _emulator_profiles_cache.clear()
             profiles = model_profiles.load_emulator_profiles(str(root / "emulators"))
-            plain = reporter.verify_platform(
+            plain = coverage.verify_platform(
                 config, db, str(root / "emulators"), profiles,
             )
-            narrowed = reporter.verify_platform(
+            narrowed = coverage.verify_platform(
                 config, db, str(root / "emulators"), profiles,
                 regions=["north-america"],
             )
@@ -772,20 +772,21 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
         answers the request. verify said all OK and named none."""
         from model import profiles as model_profiles
         from model.profiles import _emulator_profiles_cache
-        import verify as reporter
+        from packs import coverage
+        from packs import report as packs_report
 
         tmp, root, db, config = self._fixture()
         try:
             _emulator_profiles_cache.clear()
             profiles = model_profiles.load_emulator_profiles(str(root / "emulators"))
-            result = reporter.verify_platform(
+            result = coverage.verify_platform(
                 config, db, str(root / "emulators"), profiles,
                 regions=["brazil"],
             )
             self.assertEqual(result["region_fallbacks"], ["demo-system"])
             out = io.StringIO()
             with contextlib.redirect_stdout(out):
-                reporter.print_platform_result(result, ["Demo"])
+                packs_report.print_platform_result(result, ["Demo"])
             self.assertIn("all kept (1): demo-system", out.getvalue())
         finally:
             _emulator_profiles_cache.clear()
@@ -824,7 +825,7 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
         repo = Path(__file__).resolve().parent.parent
         if not (repo / "emulators" / "o2em.yml").is_file():
             self.skipTest("no o2em profile")
-        from verify import verify_emulator
+        from packs.emulatorcheck import verify_emulator
         from model.database import load_database
 
         db = load_database(str(repo / "database.json"))
@@ -1311,8 +1312,8 @@ class ARefusedRegionalFileHoldsNoSlot(unittest.TestCase):
 
         import yaml
 
-        from generate_pack import generate_emulator_pack
-        from verify import verify_emulator
+        from packs.emulatorpack import generate_emulator_pack
+        from packs.emulatorcheck import verify_emulator
 
         _emulator_profiles_cache.clear()
         repo = Path(__file__).resolve().parents[1]
@@ -1459,7 +1460,7 @@ class RegionWordsInAPackReadme(unittest.TestCase):
     """The pack README title-cased each slug: asia-ntsc read "Asia Ntsc"."""
 
     def test_the_priority_line_reads_as_written(self):
-        from packreadme import _build_readme
+        from packs.readme import _build_readme
 
         readme = _build_readme(
             "retroarch", "RetroArch", "system", 1, 1,

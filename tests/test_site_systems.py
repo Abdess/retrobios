@@ -42,7 +42,7 @@ import json
 
 import generate_site as gs
 import siterender
-from cross_reference import FileConsumers
+from packs.crossref import FileConsumers
 import make_og_cards
 from sitestarlight import toc_slug
 
@@ -1256,7 +1256,7 @@ class EachFileDownloadsFromItsCard(unittest.TestCase):
     fourth of a card's facts."""
 
     def test_the_card_title_holds_the_download(self) -> None:
-        from cross_reference import FileConsumers
+        from packs.crossref import FileConsumers
 
         f = _naomi_file("apple2-asoft-auto.rom", "3", "bios/Apple/Apple II/apple2-asoft-auto.rom")
         title = next(line for line in gs._system_file_card(f, FileConsumers({"files": {}}))

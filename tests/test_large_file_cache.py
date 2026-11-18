@@ -553,21 +553,21 @@ class ReleaseAssetNames(unittest.TestCase):
                 self.assertEqual(name, os.path.basename(registered_path))
 
     def test_manifest_checker_and_fetcher_agree_on_a_path(self):
-        import generate_pack
+        from packs import manifestentry
 
         expected = largefiles.asset_names(self.REGISTERED)
         gitignore = "\n".join(["tmp/", *self.REGISTERED]) + "\n"
 
         with tempfile.TemporaryDirectory() as root:
             Path(root, ".gitignore").write_text(gitignore, encoding="utf-8")
-            generate_pack._registered.cache_clear()
+            manifestentry._registered.cache_clear()
             try:
                 manifest = {
-                    p: generate_pack._release_asset_name(os.path.join(root, p), root)
+                    p: manifestentry._release_asset_name(os.path.join(root, p), root)
                     for p in self.REGISTERED
                 }
             finally:
-                generate_pack._registered.cache_clear()
+                manifestentry._registered.cache_clear()
         self.assertEqual(manifest, expected)
 
         sizes = {self.ET: 228138631, self.RTCW: 122757192, self.PUP: 10}

@@ -15,12 +15,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from cross_reference import (
-    _build_supplemental_index,
-    cross_reference,
-    entry_source,
-    print_report,
-)
+from packs.crossref import _build_supplemental_index, cross_reference, entry_source
+from cross_reference import print_report
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

@@ -27,7 +27,7 @@ class ScanFollowsTheBuild(unittest.TestCase):
         from model.database import load_database
         from model.profiles import load_emulator_profiles
         from model.platforms import load_platform_config
-        from packextras import _collect_emulator_extras
+        from packs.extras import _collect_emulator_extras
 
         profiles = load_emulator_profiles("emulators")
         entry = next(

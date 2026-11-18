@@ -446,7 +446,7 @@ def _built(path: Path) -> Path:
 
 def _verify_status(entry: dict, path: Path, mode: str) -> str:
     """What verify.py says of one entry, the platform's native logic."""
-    from verify import verify_entry_existence, verify_entry_md5, verify_entry_sha1
+    from packs.verdicts import verify_entry_existence, verify_entry_md5, verify_entry_sha1
 
     local = str(path) if path.is_file() else None
     if mode == "existence":
@@ -1024,7 +1024,7 @@ class TheFolderCheckReadsEmuDecksWhitelist(unittest.TestCase):
             (api / "emudeck.json").write_text(json.dumps({"items": [{"contract": contract}]}))
             found = check_platform_folder.check("emudeck", root, api.as_uri() + "/")
             # The verifier's verdict on the matching entry, file by file.
-            from verify import verify_entry_md5
+            from packs.verdicts import verify_entry_md5
 
             verdicts = {name: verify_entry_md5(contract["systems"]["sony-playstation"]["files"][0],
                                                str(root / name))["status"]

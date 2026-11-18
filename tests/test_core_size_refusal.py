@@ -24,9 +24,11 @@ import yaml
 from model.platforms import _platform_config_cache
 from model.profiles import load_emulator_profiles, _emulator_profiles_cache
 import generate_db
-import generate_pack as builder
+from packs import manifest as packs_manifest
+from packs import platformpack
 from resolve.validation import core_size_refusal
-from verify import find_undeclared_files, verify_platform
+from packs.gaps import find_undeclared_files
+from packs.coverage import verify_platform
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -104,7 +106,7 @@ class _Collection(unittest.TestCase):
         return next(u for u in undeclared if u["profile"] == profile)
 
     def _pack_members(self) -> set[str]:
-        zip_path = builder.generate_pack(
+        zip_path = platformpack.generate_pack(
             "exist", "platforms", self.db, "bios", "out",
             emulators_dir="emulators", emu_profiles=self.profiles, offline=True,
         )
@@ -112,7 +114,7 @@ class _Collection(unittest.TestCase):
             return set(zf.namelist())
 
     def _manifest(self) -> dict:
-        return builder.generate_manifest(
+        return packs_manifest.generate_manifest(
             "exist", "platforms", self.db, "bios", "platforms/_registry.yml",
             emulators_dir="emulators", emu_profiles=self.profiles, offline=True,
         )

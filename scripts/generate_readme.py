@@ -35,10 +35,10 @@ from model.systems import system_index
 import archive_build
 import release_record
 from siteguides import PACKAGE_COMMAND, install_command
-from validate_pr import LARGE_FILE_ISSUE_URL
+from resolve.review import LARGE_FILE_ISSUE_URL
 from model.largefiles import LARGE_FILES_CACHE, load_registered_paths
 import pr_checks
-from verify import verify_platform
+from packs.coverage import verify_platform
 
 
 def _installer_words() -> ModuleType:
@@ -989,7 +989,7 @@ def main() -> None:
     import contextlib
 
     from model.registry import load_data_dir_registry
-    from refresh_data_dirs import hold_data_dirs
+    from packs.datadirs import hold_data_dirs
 
     db = load_database(args.db)
 

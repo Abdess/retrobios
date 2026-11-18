@@ -115,18 +115,18 @@ class EachPlatformNamesTheTargetItsOwnWay(unittest.TestCase):
         import contextlib
         import io
 
-        import generate_pack
+        from packs import naming
 
         platforms_dir = str(REPO_ROOT / "platforms")
         with contextlib.redirect_stdout(io.StringIO()):
-            expected = generate_pack._expected_pack_names(
+            expected = naming._expected_pack_names(
                 ["batocera", "recalbox"], platforms_dir, None, "rpi4"
             )
         self.assertTrue(any("_Bcm2711_" in name for name in expected["batocera"]))
         self.assertTrue(any("_Rpi464_" in name for name in expected["recalbox"]))
         for platform, tag in (("batocera", "bcm2711"), ("recalbox", "rpi4_64")):
             self.assertEqual(
-                generate_pack._platform_target(platform, "rpi4", platforms_dir), tag
+                naming._platform_target(platform, "rpi4", platforms_dir), tag
             )
 
     def test_no_naming_site_reads_the_typed_target(self):

@@ -22,6 +22,10 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from packs import archive
+from packs import emulatorpack
+from packs import manifest as packs_manifest
+from packs import platformpack
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -48,13 +52,10 @@ class RealListParity(unittest.TestCase):
         if sys.version_info < BUILDER_FLOOR:
             # The builder's floor: install.py alone keeps 3.8.
             raise unittest.SkipTest("generate_pack.py needs Python 3.9 or newer")
-        import generate_pack as gp
         from core.ziptools import build_zip_contents_index
         from model.registry import list_registered_platforms
         from model.profiles import load_emulator_profiles
         from model.platforms import load_platform_config
-
-        cls.gp = gp
         cls.config = staticmethod(
             lambda plat: load_platform_config(plat, str(REPO_ROOT / "platforms")))
         cls.db = json.loads(db_path.read_text(encoding="utf-8"))
@@ -72,7 +73,7 @@ class RealListParity(unittest.TestCase):
         if plat not in self.manifests:
             self.layouts[plat] = {}
             with contextlib.redirect_stdout(io.StringIO()):
-                self.manifests[plat] = self.gp.generate_install_list(
+                self.manifests[plat] = packs_manifest.generate_install_list(
                     plat, str(REPO_ROOT / "platforms"), self.db, str(REPO_ROOT / "bios"),
                     str(REPO_ROOT / "platforms" / "_registry.yml"),
                     emulators_dir=str(REPO_ROOT / "emulators"),
@@ -86,10 +87,10 @@ class RealListParity(unittest.TestCase):
         trees apart (data_directories), and a cache copy at a destination
         the list serves from the collection is no choice of either option."""
         base = self.config(plat).get("base_destination", "")
-        record = self.gp.PackRecord()
+        record = archive.PackRecord()
         with contextlib.redirect_stdout(io.StringIO()), \
                 contextlib.redirect_stderr(io.StringIO()):
-            self.gp.generate_pack(
+            platformpack.generate_pack(
                 plat, str(REPO_ROOT / "platforms"), self.db, str(REPO_ROOT / "bios"),
                 str(REPO_ROOT / "tmp"), emulators_dir=str(REPO_ROOT / "emulators"),
                 zip_contents=self.zip_contents, emu_profiles=self.profiles,
@@ -185,10 +186,10 @@ class RealListParity(unittest.TestCase):
             self.assertEqual(sorted(layouts), full.get("standalone_builds", []))
             for profile in sorted(layouts):
                 with self.subTest(platform=plat, emulator=profile):
-                    record = self.gp.PackRecord()
+                    record = archive.PackRecord()
                     with contextlib.redirect_stdout(io.StringIO()), \
                             contextlib.redirect_stderr(io.StringIO()):
-                        self.gp.generate_emulator_pack(
+                        emulatorpack.generate_emulator_pack(
                             [profile], str(REPO_ROOT / "emulators"), self.db,
                             str(REPO_ROOT / "bios"), str(REPO_ROOT / "tmp"),
                             standalone=True, zip_contents=self.zip_contents,
@@ -268,7 +269,7 @@ class TheSlotRuleIsTheBuilders(unittest.TestCase):
     def test_random_slots_against_the_builder(self):
         import random
 
-        import manifestselect
+        from packs import manifestselect
         from resolve import slot as slot_mod
 
         rng = random.Random(7)
@@ -303,7 +304,7 @@ class TheSlotRuleIsTheBuilders(unittest.TestCase):
         does (slot.lookup_slot per member), whatever cores the board runs."""
         import random
 
-        import manifestselect
+        from packs import manifestselect
         from resolve import slot as slot_mod
 
         rng = random.Random(11)
