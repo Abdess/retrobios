@@ -18,12 +18,18 @@ platform file without a word.
 from __future__ import annotations
 
 import re
-import shlex
 from collections.abc import Callable
 from pathlib import PurePosixPath
 from typing import Any
 
-from .retropie_launchers import Launcher, LauncherPatternMissing, merge_records, source_ref
+from .retropie_launchers import (
+    Launcher,
+    LauncherPatternMissing,
+    _split,
+    _split_path,
+    merge_records,
+    source_ref,
+)
 
 BIOS = "$bios_path"
 PLACEHOLDER = "RETRODECKBIOSDIR"
@@ -49,20 +55,8 @@ HOUSEKEEPING = frozenset({"create_dir", "log", "mkdir", "chmod", "rm", "unlink"}
 Read = Callable[[str], "str | None"]
 
 
-def _words(text: str) -> list[str]:
-    try:
-        return shlex.split(text, comments=True)
-    except ValueError:
-        return text.split()
-
-
 def _unquote(value: str) -> str:
     return value.strip().strip("'\"")
-
-
-def _split_path(path: str) -> tuple[str, str]:
-    pure = PurePosixPath(path.rstrip("/"))
-    return str(pure.parent), pure.name
 
 
 def _is_file(path: str) -> bool:
@@ -105,7 +99,7 @@ class Script:
                 continue
             shown = [c for c in branches if "$action" not in c]
             for part in re.split(r"\s+&&\s+|\s+\|\|\s+", stripped):
-                words = _words(part)
+                words = _split(part)
                 if words:
                     found.append((number, words, part, shown))
         return found
@@ -306,7 +300,7 @@ class Component:
         substitutions = self._substitutions(script, target)
         copied = None
         for line_no, line in enumerate(script.lines[:number], 1):
-            cp = _words(line.strip().split("&&")[0])
+            cp = _split(line.strip().split("&&")[0])
             if cp and cp[0] == "cp" and cp[-1] == target and "$component_config/" in cp[-2]:
                 copied = (line_no, cp[-2].split("$component_config/", 1)[1])
         if copied is None:
@@ -524,7 +518,7 @@ def core_options(read: Read) -> list[Launcher]:
     ]
     if not copied:
         raise LauncherPatternMissing(prepare_path, "the core options preset is never copied")
-    target = _words(prepare.splitlines()[copied[0] - 1].strip())[-1]
+    target = _split(prepare.splitlines()[copied[0] - 1].strip())[-1]
     records = []
     for line_no, line in enumerate(text.splitlines(), 1):
         found = re.match(r'^([\w.-]+)\s*=\s*"([^"]*)"$', line.strip())

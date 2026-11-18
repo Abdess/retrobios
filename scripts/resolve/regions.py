@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from model.region import WORLD, normalize_declared, rank
+from resolve.slot import lookup_slot
 
 
 def platform_region_index(
@@ -90,27 +91,13 @@ def lookup_regions(index: dict[str, dict], destination: str, name: str) -> set[s
     return set(entry["regions"])
 
 
-def _index_entry(index: dict[str, dict], destination: str, name: str) -> dict | None:
-    """The index entry a candidate resolves to, by the lookup_regions order."""
-    if destination:
-        entry = index.get(destination)
-        if entry:
-            return entry
-        parts = destination.split("/")
-        for i in range(1, len(parts)):
-            entry = index.get("/".join(parts[i:]))
-            if entry:
-                return entry
-    return index.get(name)
-
-
 def lookup_priority(index: dict[str, dict], destination: str, name: str) -> int | None:
     """The search rank the code gives a candidate, lower first.
 
     None when no entry declares one, or when two declarations disagree: a
     rank in doubt cannot decide what to drop.
     """
-    entry = _index_entry(index, destination, name)
+    entry = lookup_slot(index, destination, name)
     priorities = (entry or {}).get("priorities", set())
     if len(priorities) != 1:
         return None

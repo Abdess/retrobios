@@ -3,16 +3,15 @@
 from __future__ import annotations
 
 import importlib.util
-import json
 import logging
 import subprocess
 import sys
 import urllib.error
 import urllib.parse
 import urllib.request
-from pathlib import Path
 
 from model.safeparse import yaml_load
+from model.registry import _load_versions
 
 
 log = logging.getLogger(__name__)
@@ -23,7 +22,6 @@ USER_AGENT = "retrobios/1.0"
 REQUEST_TIMEOUT = 15
 
 DEFAULT_REGISTRY = "platforms/_data_dirs.yml"
-VERSIONS_FILE = "data/.versions.json"
 
 
 def fetch_index() -> set[str]:
@@ -69,15 +67,6 @@ def get_remote_etag(url: str) -> str | None:
         return None
 
 
-def load_versions(versions_path: str = VERSIONS_FILE) -> dict:
-    """Load cached version/ETag data."""
-    path = Path(versions_path)
-    if not path.exists():
-        return {}
-    with open(path) as f:
-        return json.load(f)
-
-
 def check(registry_path: str = DEFAULT_REGISTRY) -> dict:
     """Run the buildbot check. Returns structured report."""
     try:
@@ -87,7 +76,7 @@ def check(registry_path: str = DEFAULT_REGISTRY) -> dict:
         return {"error": str(exc), "entries": []}
 
     tracked = load_tracked_entries(registry_path)
-    versions = load_versions()
+    versions = _load_versions()
 
     buildbot_set = set(index_zips)
     tracked_set = set(tracked.keys())

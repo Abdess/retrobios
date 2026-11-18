@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import json
 import os
+from pathlib import Path
 
 from core.cli import InputMissing
 from model.sources import source_yaml
@@ -67,3 +69,14 @@ def list_release_pack_platforms(platforms_dir: str = "platforms") -> list[str]:
         for name in list_registered_platforms(platforms_dir)
         if registry.get(name, {}).get("release_pack") is True
     ]
+
+
+VERSIONS_FILE = "data/.versions.json"
+
+
+def _load_versions(versions_path: str = VERSIONS_FILE) -> dict[str, dict]:
+    path = Path(versions_path)
+    if not path.exists():
+        return {}
+    with open(path) as f:
+        return json.load(f)

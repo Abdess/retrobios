@@ -8,6 +8,8 @@ import bisect
 import re
 from collections.abc import Iterator
 
+from model.sourceref import span
+
 STRING = r'"((?:[^"\\\n]|\\.)*)"'
 
 Record = dict[str, object]
@@ -143,10 +145,6 @@ def _unique(names: list[str]) -> list[str]:
     return list(dict.fromkeys(names))
 
 
-def _span(first: int, last: int) -> str:
-    return str(first) if first == last else f"{first}-{last}"
-
-
 def _merge(spans: list[tuple[int, int]]) -> list[tuple[int, int]]:
     """Spans sorted, joined when only one line separates them."""
     merged: list[tuple[int, int]] = []
@@ -162,7 +160,7 @@ def source_ref(*parts: tuple[str, list[tuple[int, int]]]) -> str:
     """path:a-b, c-d for each file, a later range of one file left bare."""
     refs = []
     for path, spans in parts:
-        ranges = [_span(*s) for s in _merge(spans)]
+        ranges = [span(*s) for s in _merge(spans)]
         refs.append(f"{path}:{', '.join(ranges)}")
     return ", ".join(refs)
 

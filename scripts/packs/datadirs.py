@@ -24,12 +24,12 @@ from core.artifacts import file_lock as _file_lock, set_plain_mode
 from core.cli import InputMissing
 from core.github import github_token
 from model.safeparse import yaml_load
+from model.registry import VERSIONS_FILE, _load_versions
 
 
 log = logging.getLogger(__name__)
 
 DEFAULT_REGISTRY = "platforms/_data_dirs.yml"
-VERSIONS_FILE = "data/.versions.json"
 USER_AGENT = "retrobios/1.0"
 REQUEST_TIMEOUT = 30
 DOWNLOAD_TIMEOUT = 300
@@ -123,14 +123,6 @@ def hold_data_dirs(stack: contextlib.ExitStack, registry: dict) -> None:
         cache = entry.get("local_cache", "")
         if cache:
             stack.enter_context(cache_lock(cache, shared=True))
-
-
-def _load_versions(versions_path: str = VERSIONS_FILE) -> dict[str, dict]:
-    path = Path(versions_path)
-    if not path.exists():
-        return {}
-    with open(path) as f:
-        return json.load(f)
 
 
 def _save_versions(

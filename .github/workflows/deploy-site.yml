@@ -96,6 +96,7 @@ on:
       - "scripts/resolve/reconcile.py"
       - "scripts/resolve/regions.py"
       - "scripts/resolve/review.py"
+      - "scripts/resolve/slot.py"
       - "scripts/resolve/standalone.py"
       - "scripts/resolve/truth.py"
       - "scripts/resolve/validation.py"

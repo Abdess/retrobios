@@ -21,6 +21,7 @@ from model.declarations import OUTER_ROOTS
 from model.platforms import load_platform_config
 from model.registry import list_registered_platforms, load_data_dir_registry
 from model.systems import _norm_system_id
+from packs.gaps import _gap_destination
 from resolve.archives import archive_entry
 from resolve.content import content_fits, name_match_size_ok
 from resolve.directories import directory_members, expand_directory_entries
@@ -720,18 +721,6 @@ def profile_breakdown(data: dict) -> str:
     return ", ".join(parts)
 
 
-def _effective_path(f: dict, fname: str, is_standalone: bool, save_root: bool) -> str:
-    # The destination the running build reads, as find_undeclared_files
-    # takes it: Batocera's standalone Cemu reads keys.txt at
-    # standalone_path, and the libretro Cemu/keys.txt reported here
-    # settled the declaration on a slot the platform never fills.
-    if is_standalone:
-        return f.get("standalone_path") or f.get("path") or fname
-    if save_root:
-        return f.get("path") or fname
-    return system_dir_path(f, f.get("path") or fname)
-
-
 @dataclass
 class _ProfileComparison:
     """One profile's entries against the platforms' declarations."""
@@ -768,7 +757,11 @@ class _ProfileComparison:
         fname = f.get("name", "")
         platform = self.platform
         save_root = read_from_save_dir(f, is_standalone)
-        effective_path = _effective_path(f, fname, is_standalone, save_root)
+        # The destination the running build reads, as find_undeclared_files
+        # takes it: Batocera's standalone Cemu reads keys.txt at
+        # standalone_path, and the libretro Cemu/keys.txt reported here
+        # settled the declaration on a slot the platform never fills.
+        effective_path = _gap_destination(f, fname, is_standalone, save_root)
         slot = slot_key(f, is_standalone)
         seen_key = slot
         if len(self.layouts) > 1:

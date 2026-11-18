@@ -22,6 +22,7 @@ from unittest import mock
 
 import refresh_data_dirs as rdd
 from packs import datadirs
+from model.registry import _load_versions
 from packs.datatrees import _data_directory_members
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -105,12 +106,12 @@ class RefreshConcurrency(unittest.TestCase):
                                lambda *a, **k: _Response(payload)), \
                 mock.patch.object(datadirs, "_get_remote_etag", return_value="e1"):
             self.assertTrue(datadirs.refresh_entry("pak", entry, versions_path=self.versions))
-            self.assertEqual(datadirs._load_versions(self.versions)["pak"]["archive_size"],
+            self.assertEqual(_load_versions(self.versions)["pak"]["archive_size"],
                              len(payload))
             datadirs._record_version("pak", {"sha": "e1"}, self.versions)
             (self.cache / "a.bin").write_bytes(b"kept")
             self.assertFalse(datadirs.refresh_entry("pak", entry, versions_path=self.versions))
-        self.assertEqual(datadirs._load_versions(self.versions)["pak"],
+        self.assertEqual(_load_versions(self.versions)["pak"],
                          {"sha": "e1", "archive_size": len(payload)})
         self.assertEqual((self.cache / "a.bin").read_bytes(), b"kept")
 
@@ -187,7 +188,7 @@ class RefreshConcurrency(unittest.TestCase):
             thread.start()
         for thread in threads:
             thread.join()
-        self.assertEqual(sorted(datadirs._load_versions(self.versions)), sorted(keys))
+        self.assertEqual(sorted(_load_versions(self.versions)), sorted(keys))
 
 
 class PackWalkHoldsTheCache(unittest.TestCase):

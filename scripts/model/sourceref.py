@@ -536,3 +536,7 @@ def _prose_path(
                           before.rfind("(")) + 1:]
         path = f"{word} {path}"
     return path, role, path_start, (path_start, match.end("path"))
+
+
+def span(first: int, last: int) -> str:
+    return str(first) if first == last else f"{first}-{last}"

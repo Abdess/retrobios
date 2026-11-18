@@ -15,6 +15,8 @@ import re
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
 
+from model.sourceref import span
+
 from .base_scraper import fetch_bytes, github_headers
 from .configgen_launchers import LauncherShapeError
 
@@ -31,10 +33,6 @@ class LauncherPatternMissing(LauncherShapeError):
 
     def __init__(self, path: str, what: str) -> None:
         super().__init__(f"{path}: {what} not found")
-
-
-def span(first: int, last: int) -> str:
-    return str(first) if first == last else f"{first}-{last}"
 
 
 def merge_lines(lines: Iterable[int]) -> list[tuple[int, int]]:
