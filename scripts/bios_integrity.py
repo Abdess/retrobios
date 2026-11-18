@@ -43,6 +43,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from core.hashing import file_digest
 from model.largefiles import load_registered_paths
 
 MISREAD = "misread"
@@ -81,14 +82,6 @@ class Report:
     @property
     def clean(self) -> bool:
         return all(f.verdict in (MISREAD, RESTORED) for f in self.findings)
-
-
-def sha1_of(path: Path) -> str:
-    digest = hashlib.sha1()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1 << 20), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 class GitFailed(RuntimeError):
@@ -143,7 +136,7 @@ def check(
     root: Path,
     db: dict,
     apply: bool,
-    hasher: Callable[[Path], str] = sha1_of,
+    hasher: Callable[[Path], str] = file_digest,
 ) -> Report:
     """Hash every database path, confirm each mismatch, repair what may be."""
     ignored = set(load_registered_paths(root / ".gitignore"))

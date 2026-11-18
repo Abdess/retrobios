@@ -99,7 +99,7 @@ class TestCrossVendorDuplicates(unittest.TestCase):
         self._write("Sega/Saturn/cartridge.bin", b"kick")
         self._write("Sony/PlayStation/scph5501.bin", b"a longer dump")
         self._write("Sega/Saturn/other.bin", b"same")
-        with mock.patch.object(identity, "_sha1", wraps=identity._sha1) as hashed:
+        with mock.patch.object(identity, "file_digest", wraps=identity.file_digest) as hashed:
             found = self._scan()
         read = sorted(Path(call.args[0]).name for call in hashed.call_args_list)
         self.assertEqual(read, ["cartridge.bin", "kickstart.rom", "other.bin"])

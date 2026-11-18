@@ -27,10 +27,6 @@ class Upload:
     reason: str = ""
 
 
-def sha1_of(path: Path) -> str:
-    return file_digest(path)
-
-
 def database_sha1(db: dict) -> dict[str, str]:
     return {
         entry["path"]: str(entry.get("sha1") or key).lower()
@@ -44,7 +40,7 @@ def plan_uploads(
     db: dict,
     gitignore_text: str,
     findings: list,
-    hasher: Callable[[Path], str] = sha1_of,
+    hasher: Callable[[Path], str] = file_digest,
 ) -> list[Upload]:
     """Each out-of-date asset, cleared for upload or refused with its reason."""
     names = asset_names([*registered_paths(gitignore_text),

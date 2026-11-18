@@ -18,12 +18,10 @@ from core.ziptools import check_inside_zip
 from resolve.nativemode import digest_algorithm
 from resolve.validation import baseline_verdict, digest_verdict
 from resolve.nativemode import hash_mismatch_excludes_file
-import functools
 import hashlib
-import zlib
 import sys
 from resolve.cores import filter_systems_by_target
-from core.hashing import md5_composite_of, parse_md5_list
+from core.hashing import compute_hashes, file_digest, md5_composite_of, parse_md5_list, stream_hashes
 from core.options import reject_unknown
 import io
 from model.profiles import load_emulator_profiles
@@ -41,6 +39,7 @@ from resolve.cores import resolve_platform_cores
 from core.paths import declared_destination
 import zipfile
 from collections.abc import Callable
+from pathlib import Path
 
 # Imported at run time where typing has it: a test reads the signature of
 # verify_pack_against_platform with its annotations evaluated.
@@ -48,16 +47,6 @@ if sys.version_info >= (3, 11):
     from typing import Unpack
 elif TYPE_CHECKING:
     from typing_extensions import Unpack
-
-
-@functools.cache
-def _file_sha1(path: str) -> str:
-    """SHA-1 of a cached data-directory file, read once per run."""
-    digest = hashlib.sha1()
-    with open(path, "rb") as handle:
-        for chunk in iter(lambda: handle.read(1 << 20), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def _members_are_held(data: bytes, by_md5: dict, held_inside: dict) -> bool:
@@ -215,7 +204,7 @@ def _cached_as(
         # The content, not the size: a member written corrupt
         # keeps its length, and a same-sized homonym from another
         # cache is another file.
-        if os.path.getsize(_dp) == size and _file_sha1(_dp) == sha1:
+        if os.path.getsize(_dp) == size and compute_hashes(_dp, frozenset({"sha1"}))["sha1"] == sha1:
             return _bn
         if (
             name.endswith(".zip") and _dp.endswith(".zip")
@@ -337,11 +326,7 @@ def generate_sha256sums(output_dir: str) -> str | None:
         if not name.endswith(".zip"):
             continue
         path = os.path.join(output_dir, name)
-        sha256 = hashlib.sha256()
-        with open(path, "rb") as f:
-            for chunk in iter(lambda: f.read(65536), b""):
-                sha256.update(chunk)
-        entries.append(f"{sha256.hexdigest()}  {name}")
+        entries.append(f"{file_digest(Path(path), 'sha256')}  {name}")
     if not entries:
         return None
     with open(sums_path, "w") as f:
@@ -406,15 +391,8 @@ def _check_member_hash(
 
     # The frontend's own rule, as the builder and verify apply it: RomM's
     # size-then-any-hash included, which a bare md5 comparison refused.
-    digests = {"md5": hashlib.md5(), "sha1": hashlib.sha1()}
-    crc = 0
     with zf.open(member) as f:
-        for chunk in iter(lambda: f.read(65536), b""):
-            for h in digests.values():
-                h.update(chunk)
-            crc = zlib.crc32(chunk, crc)
-    computed = {name: h.hexdigest() for name, h in digests.items()}
-    computed["crc32"] = format(crc & 0xFFFFFFFF, "08x")
+        computed = stream_hashes(f, frozenset({"md5", "sha1", "crc32"}))
 
     def composite() -> str | None:
         # Recalbox's Md5Composite, over the sorted members of a ZIP.

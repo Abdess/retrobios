@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import csv
 import functools
-import hashlib
 import io
 import json
 import os
@@ -16,6 +15,7 @@ from collections.abc import Callable
 from pathlib import Path
 
 from core.artifacts import json_text as _json_text
+from core.hashing import file_digest
 from model import retired as model_retired
 from model.dumpcatalog import load_provenance_snapshots
 from packs.crossref import FileConsumers
@@ -88,14 +88,6 @@ def _csv_document(fieldnames: list[str], rows: list[dict]) -> str:
     writer.writeheader()
     writer.writerows(rows)
     return stream.getvalue()
-
-
-def _sha256_path(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 def _verify_outcomes(
@@ -880,7 +872,7 @@ def generate_data_exports(
             "url": relative,
             "media_type": media_type,
             "bytes": path.stat().st_size,
-            "sha256": _sha256_path(path),
+            "sha256": file_digest(path, "sha256"),
         }
         if schema:
             item["schema"] = schema

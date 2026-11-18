@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-import hashlib
 import io
 import zipfile
 from collections.abc import Callable
 from pathlib import Path
 
+from core.hashing import stream_hashes
 from core.torrentzip import Source as Readable
 
 
@@ -39,8 +39,5 @@ def _opener(source: Path, member: str | None) -> Callable[[], Readable]:
 
 
 def _member_sha1(path: Path, name: str) -> str:
-    digest = hashlib.sha1()
     with _Member(path, name) as stream:
-        while chunk := stream.read(16 * 1024 * 1024):
-            digest.update(chunk)
-    return digest.hexdigest()
+        return stream_hashes(stream, frozenset({"sha1"}))["sha1"]

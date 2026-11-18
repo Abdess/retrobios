@@ -10,7 +10,7 @@ import os
 import zipfile
 import zlib
 from pathlib import Path
-from typing import IO, BinaryIO
+from typing import IO, BinaryIO, Protocol
 from collections.abc import Iterable
 
 
@@ -53,6 +53,16 @@ def compute_hashes(
 
 def _compute_hashes(filepath: str | Path, algos: frozenset[str]) -> dict[str, str]:
     """Read the file once and compute the requested digests."""
+    with open(filepath, "rb") as f:
+        return stream_hashes(f, algos)
+
+
+class Readable(Protocol):
+    def read(self, size: int = ..., /) -> bytes: ...
+
+
+def stream_hashes(stream: Readable, algos: frozenset[str]) -> dict[str, str]:
+    """The requested digests of a stream (a file, a ZIP member), read once to its end."""
     sha1 = hashlib.sha1() if "sha1" in algos else None
     md5 = hashlib.md5() if "md5" in algos else None
     sha256 = hashlib.sha256() if "sha256" in algos else None
@@ -60,18 +70,17 @@ def _compute_hashes(filepath: str | Path, algos: frozenset[str]) -> dict[str, st
     do_adler = "adler32" in algos
     crc = 0
     adler = 1  # zlib.adler32 initial value
-    with open(filepath, "rb") as f:
-        for chunk in iter(lambda: f.read(65536), b""):
-            if sha1:
-                sha1.update(chunk)
-            if md5:
-                md5.update(chunk)
-            if sha256:
-                sha256.update(chunk)
-            if do_crc:
-                crc = zlib.crc32(chunk, crc)
-            if do_adler:
-                adler = zlib.adler32(chunk, adler)
+    for chunk in iter(lambda: stream.read(65536), b""):
+        if sha1:
+            sha1.update(chunk)
+        if md5:
+            md5.update(chunk)
+        if sha256:
+            sha256.update(chunk)
+        if do_crc:
+            crc = zlib.crc32(chunk, crc)
+        if do_adler:
+            adler = zlib.adler32(chunk, adler)
     result: dict[str, str] = {}
     if sha1:
         result["sha1"] = sha1.hexdigest()
@@ -96,15 +105,10 @@ def file_digest(path: Path, algorithm: str = "sha1") -> str:
 
 def md5sum(source: str | os.PathLike[str] | IO[bytes]) -> str:
     """Compute MD5 of a file path or file-like object - matches Batocera's md5sum()."""
-    h = hashlib.md5()
     if isinstance(source, (str, os.PathLike)):
         with open(source, "rb") as f:
-            for chunk in iter(lambda: f.read(65536), b""):
-                h.update(chunk)
-    else:
-        for chunk in iter(lambda: source.read(65536), b""):
-            h.update(chunk)
-    return h.hexdigest()
+            return stream_hashes(f, frozenset({"md5"}))["md5"]
+    return stream_hashes(source, frozenset({"md5"}))["md5"]
 
 _md5_composite_cache: dict[str, str] = {}
 

@@ -15,9 +15,10 @@ almost never is.
 
 from __future__ import annotations
 
-import hashlib
 from dataclasses import dataclass
 from pathlib import Path
+
+from core.hashing import file_digest
 
 
 # A manufacturer directory holding files that genuinely belong to several
@@ -40,7 +41,6 @@ KNOWN_SHARED: dict[str, tuple[frozenset[str], str]] = {
     ),
 }
 
-CHUNK = 1 << 20
 
 
 @dataclass
@@ -63,14 +63,6 @@ def _manufacturer(path: Path, root: Path) -> str:
     return parts[0] if len(parts) > 1 else ""
 
 
-def _sha1(path: Path) -> str:
-    digest = hashlib.sha1()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(CHUNK), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
 def scan(bios_dir: str = "bios") -> list[Duplicate]:
     """Group the tree by content and keep the groups that cross makers.
 
@@ -87,7 +79,7 @@ def scan(bios_dir: str = "bios") -> list[Duplicate]:
         if len(paths) < 2:
             continue
         for path in paths:
-            by_content.setdefault(_sha1(path), []).append(path)
+            by_content.setdefault(file_digest(path), []).append(path)
 
     found: list[Duplicate] = []
     for sha1, paths in by_content.items():

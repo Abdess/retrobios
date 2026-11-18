@@ -29,6 +29,7 @@ from unattended import runner
 from unattended import timers as unattended_timers
 from unattended import worktree as unattended_worktree
 from core import childenv
+from core.hashing import file_digest
 from core import hostguard
 from core import statefile
 import bios_integrity as bib
@@ -789,7 +790,7 @@ class AssetSync(Scratch):
             (self.root / rel).parent.mkdir(parents=True, exist_ok=True)
             (self.root / rel).write_bytes(data)
         self.db = {"files": {
-            sync.sha1_of(self.root / "bios/A/big.bin"): {"path": "bios/A/big.bin", "size": 1},
+            file_digest(self.root / "bios/A/big.bin"): {"path": "bios/A/big.bin", "size": 1},
             "0" * 40: {"path": "bios/C/solo.iso", "size": 1},
         }}
 
@@ -853,7 +854,7 @@ class BiosIntegrity(Scratch):
             path.write_bytes(data)
             # An old mtime keeps git from re-reading the file as racily clean.
             os.utime(path, (self.OLD, self.OLD))
-            sha1 = bib.sha1_of(path)
+            sha1 = file_digest(path)
             self.db["files"][sha1] = {"path": rel, "sha1": sha1}
         run_git(self.repo, "add", ".gitignore", *[r for r in files if "Big" not in r])
         run_git(self.repo, "commit", "--quiet", "-m", "chore: start")

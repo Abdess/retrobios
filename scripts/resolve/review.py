@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import os
 import sys
 import urllib.parse
@@ -16,7 +15,7 @@ try:
 except ImportError:
     yaml = None
 
-from core.hashing import compute_hashes, parse_hash_list, parse_md5_list
+from core.hashing import compute_hashes, parse_hash_list, parse_md5_list, stream_hashes
 from model.nodedup import _in_nodedup_dir
 from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
@@ -355,12 +354,9 @@ def _archive_members(
                 if info.file_size > MAX_FILE_SIZE:
                     described.append(f"`{info.filename}` too large to read here")
                     continue
-                sha1, md5 = hashlib.sha1(), hashlib.md5()
                 with archive.open(info) as handle:
-                    for chunk in iter(lambda: handle.read(1 << 20), b""):
-                        sha1.update(chunk)
-                        md5.update(chunk)
-                sha1_hex, md5_hex = sha1.hexdigest(), md5.hexdigest()
+                    digests = stream_hashes(handle, frozenset({"sha1", "md5"}))
+                sha1_hex, md5_hex = digests["sha1"], digests["md5"]
                 crc = f"{info.CRC:08x}"
                 if sha1_hex in held:
                     state = f"already held at `{held[sha1_hex]['path']}`"
