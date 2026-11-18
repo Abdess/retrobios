@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from romrecipes import ledger
-import release_record
+from model import releaserecord
 from model import siteinputs
 from model.collection import _group_by_manufacturer, _slug
 from model.composition import compute_composition
@@ -27,6 +27,7 @@ from packs.crossref import FileConsumers
 from acquire.provenance import build_report, profile_needs
 from resolve.cores import resolve_platform_cores
 from resolve.review import load_platform_hashes, load_profile_hashes
+from installer_build.handhelds import GROUP_PAGE
 from sitegen import (
     agents as siteagents,
     bootstrap as sitebootstrap,
@@ -575,11 +576,11 @@ def _write_guide_pages(run: _SiteRun) -> None:
     # One permanent download address per registered platform: the README's
     # table links each of them.
     print("Generating download pages...")
-    get_dir = docs / release_record.GET_DIR
+    get_dir = docs / releaserecord.GET_DIR
     get_dir.mkdir(parents=True, exist_ok=True)
     for name in run.platform_names:
         write_if_changed(str(get_dir / f"{name}.md"), generate_get_page(name))
-    write_if_changed(str(get_dir / f"{sitehandheld.GROUP_PAGE}.md"),
+    write_if_changed(str(get_dir / f"{GROUP_PAGE}.md"),
                      sitehandheld.group_page(_REPO_ROOT))
     write_if_changed(str(get_dir / "index.md"), generate_get_index())
 

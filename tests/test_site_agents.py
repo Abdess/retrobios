@@ -54,9 +54,9 @@ class TheGuideDrivesTheInstaller(unittest.TestCase):
     fact is held to install.py, so the guide cannot drift from it."""
 
     def setUp(self) -> None:
-        import generate_installer_doc
+        from installer_build import installerdoc
 
-        self.doc = generate_installer_doc
+        self.doc = installerdoc
         self.text = siteagents.llms_txt([("retroarch", "RetroArch")])
         self.section = self.text.split("\n## Driving the installer for a user\n", 1)[1].split("\n## ", 1)[0]
 

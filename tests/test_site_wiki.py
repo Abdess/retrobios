@@ -45,8 +45,8 @@ import importlib.util
 from sitegen import diagrams
 from model.guides import INSTALL_SH
 from tests import sitepages
-import build_port
-from check_release import SUMS, Asset, compare_release
+from installer_build import port
+from release.check import SUMS, Asset, compare_release
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -880,11 +880,11 @@ class PinnedInstaller(unittest.TestCase):
         """The handheld launchers carry install.py: the site serves them
         from its own commit, the release never does."""
         record = {"tag": "v1", "packs": {"P.zip": {"download_size": 5, "assets": ["P.zip"]}}}
-        sums = _sums_with(["P.zip", *build_port.ARCHIVES])
+        sums = _sums_with(["P.zip", *port.ARCHIVES])
         assets = {name: Asset(5, digest) for name, digest in sums.items()}
         assets[SUMS] = Asset(1, None)
         kinds = {(f.kind, f.name) for f in compare_release(record, sums, assets, "v1")}
-        self.assertEqual(kinds, {("unrecorded", name) for name in build_port.ARCHIVES})
+        self.assertEqual(kinds, {("unrecorded", name) for name in port.ARCHIVES})
 
     def test_the_release_steps_ship_none(self):
         text = _wiki("release-process.md")
@@ -897,7 +897,7 @@ class PinnedInstaller(unittest.TestCase):
                 self.assertNotIn(name, sums)
                 self.assertNotIn(name, upload)
         # A launcher built into dist/ is never caught by the glob either.
-        for archive in build_port.ARCHIVES:
+        for archive in port.ARCHIVES:
             with self.subTest(archive=archive):
                 self.assertFalse(fnmatch.fnmatch(archive, "*_BIOS_Pack*.zip"))
         self.assertIn("*_BIOS_Pack*.zip", sums)

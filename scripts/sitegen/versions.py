@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 from datetime import datetime
 
-import release_record
+from model import releaserecord
 from model import siteinputs
 from model.composition import count_catalog_matched
 from model.platforms import load_platform_config
@@ -67,7 +67,7 @@ def release_line(platform_name: str, record: dict) -> list[str]:
     """Which release the buttons serve, with its checksums and signature, and
     the version gap when the page describes a newer platform than the pack."""
     tag = record.get("tag")
-    pack_name = release_record.pack_name_for(platform_name, record)
+    pack_name = releaserecord.pack_name_for(platform_name, record)
     if not tag or not pack_name:
         return []
     base = f"{REPO_URL}/releases/download/{tag}"
@@ -107,7 +107,7 @@ def setup_version(platform_name: str, record: dict | None = None) -> str:
         config = load_platform_config(platform_name, str(siteinputs.current().platforms))
     except FileNotFoundError:
         return ""
-    pack_name = release_record.pack_name_for(platform_name, record or {})
+    pack_name = releaserecord.pack_name_for(platform_name, record or {})
     version = (
         _pack_version(pack_name, _pack_platforms(platform_name, record or {}, pack_name))
         if pack_name else ""

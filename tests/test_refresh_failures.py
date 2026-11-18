@@ -21,7 +21,7 @@ import zipfile
 from pathlib import Path
 from unittest import mock
 
-import check_buildbot_system
+from scraper import buildbot_system
 from packs import datadirs
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -140,10 +140,10 @@ class RefreshFailuresAreFailures(unittest.TestCase):
         report = {"entries": [{"status": "UPDATED", "key": "dolphin-sys"},
                               {"status": "OK", "key": "ppsspp-assets"}]}
         with mock.patch.object(
-            check_buildbot_system.subprocess, "run",
+            buildbot_system.subprocess, "run",
             return_value=subprocess.CompletedProcess([], 1),
         ):
-            self.assertEqual(check_buildbot_system.update_changed(report), ["dolphin-sys"])
+            self.assertEqual(buildbot_system.update_changed(report), ["dolphin-sys"])
         source = (REPO_ROOT / "scripts" / "check_buildbot_system.py").read_text(encoding="utf-8")
         self.assertIn("failed = update_changed(report)", source)
         self.assertIn("sys.exit(1)", source[source.index("failed = update_changed(report)"):])

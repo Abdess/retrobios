@@ -6,7 +6,7 @@ import json
 import shutil
 from pathlib import Path
 
-import release_record
+from model import releaserecord
 from sitegen.config import _REPO_ROOT
 from sitegen.write import _record, write_if_changed
 
@@ -21,7 +21,7 @@ def write_release_advertised(generated: Path) -> None:
     generated.mkdir(parents=True, exist_ok=True)
     write_if_changed(
         str(generated / "release-advertised.json"),
-        json.dumps(release_record.load_advertised(), ensure_ascii=False, indent=1,
+        json.dumps(releaserecord.load_advertised(), ensure_ascii=False, indent=1,
                    sort_keys=True) + "\n",
     )
 

@@ -27,16 +27,16 @@ class WhichPackRows(unittest.TestCase):
         release asset: the asset URL dies with its tag."""
         from sitegen import install
         from sitegen import whichpack
-        import release_record
+        from model import releaserecord
 
-        record = release_record.load_advertised()
+        record = releaserecord.load_advertised()
         page = whichpack.generate_which_pack()
         row = re.compile(r"^\| \[[^\]]+\]\(platforms/([a-z0-9]+)\.md\) \|(.*)$", re.M)
         get = re.compile(r'href="get/([a-z0-9]+)\.md"')
         checked = 0
         for key, rest in row.findall(page):
             linked = set(get.findall(rest))
-            pack = release_record.pack_for(key, record)
+            pack = releaserecord.pack_for(key, record)
             with self.subTest(platform=key):
                 self.assertNotIn("/releases/download/", rest)
                 self.assertLessEqual(linked, {key})

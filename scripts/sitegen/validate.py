@@ -419,23 +419,23 @@ def _check_get_pages(
     recorded tag, and one without links none and gives the command.
     """
     sys.path.insert(0, str(Path(__file__).resolve().parent))
-    import release_record
+    from model import releaserecord
     from model.guides import INSTALL_SH
     from model.registry import list_registered_platforms, list_release_pack_platforms
 
     if not (platforms_dir / "_registry.yml").is_file():
         return [f"no platform registry in {platforms_dir}"]
-    record = release_record.load_advertised(record_path, str(platforms_dir))
+    record = releaserecord.load_advertised(record_path, str(platforms_dir))
     released = set(list_release_pack_platforms(str(platforms_dir)))
     issues: list[str] = []
     for platform in list_registered_platforms(str(platforms_dir)):
-        rel = f"{release_record.GET_DIR}/{platform}/index.html"
+        rel = f"{releaserecord.GET_DIR}/{platform}/index.html"
         page = pages.get((site / rel).resolve())
         if page is None or page.redirect:
             issues.append(f"{rel}: no download page for {platform}")
             continue
         assets = [link for link in page.links if link.startswith(RELEASE_DOWNLOAD)]
-        pack = release_record.pack_for(platform, record)
+        pack = releaserecord.pack_for(platform, record)
         if platform in released and pack:
             expected = {f"{RELEASE_DOWNLOAD}{record['tag']}/{a}" for a in pack["assets"]}
             missing = sorted(expected - set(assets))

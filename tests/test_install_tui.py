@@ -10,7 +10,7 @@ installs it).
 from __future__ import annotations
 
 import tests
-from tests.sources import script_source
+from tests.sources import script_paths, script_source
 
 import argparse
 import contextlib
@@ -9559,9 +9559,10 @@ class PacksWordingAndDocs(unittest.TestCase):
         env = page[page.index("## Environment overrides"):]
         self.assertIn("`TERMINFO`", env)
         self.assertIn("`TERMINFO_DIRS`", env)
-        script = (REPO_ROOT / "scripts" / "generate_installer_doc.py").read_text(encoding="utf-8")
-        self.assertEqual([n for n, line in enumerate(script.splitlines(), 1) if len(line) > 100],
-                         [])
+        for path in script_paths("generate_installer_doc.py"):
+            script = path.read_text(encoding="utf-8")
+            self.assertEqual(
+                [n for n, line in enumerate(script.splitlines(), 1) if len(line) > 100], [])
 
 
 class OneDeviceRegistry(unittest.TestCase):
@@ -10620,7 +10621,7 @@ class CardNamesAndHelp(_CardFixtures, unittest.TestCase):
         """The table left out the
         SHARE drives. It is generated: every card rule and SHARE drive file
         is a row, about.info among them."""
-        import generate_installer_doc
+        from installer_build import installerdoc
 
         page = (REPO_ROOT / "wiki" / "installer.md").read_text(encoding="utf-8")
         block = page[page.index("<!-- generated: card-markers -->"):
@@ -10631,7 +10632,7 @@ class CardNamesAndHelp(_CardFixtures, unittest.TestCase):
             self.assertIn(f"`{marker}`", block)
         self.assertIn(self.ABOUT, block)
         self.assertIn("Recalbox SHARE drive", block)
-        self.assertEqual(generate_installer_doc.render(page), page)
+        self.assertEqual(installerdoc.render(page), page)
 
 class TheAndroidResultReadsWhole(unittest.TestCase):
     """A run on Android 17 under Termux: the result named /sdcard and

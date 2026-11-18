@@ -17,7 +17,7 @@ import unittest
 from pathlib import Path
 
 import generate_games_index as gi
-from romfolders import SystemResolver, load_setups
+from model.romfolders import SystemResolver, load_setups
 
 ROOT = Path(__file__).resolve().parent.parent
 TMP_ROOT = ROOT / "tmp" / "tests"
@@ -237,7 +237,7 @@ class CommittedData(unittest.TestCase):
         if not setups:
             self.skipTest("no setup scraped")
         from model.profiles import load_emulator_profiles
-        from romfolders import ProfileResolver
+        from model.romfolders import ProfileResolver
 
         resolver = SystemResolver.from_repo(str(ROOT / "emulators"), str(ROOT / "platforms"))
         cores = ProfileResolver.from_repo(str(ROOT / "emulators"))
@@ -258,7 +258,7 @@ class CommittedData(unittest.TestCase):
         folder run by mednafen_pce_fast, which lists nec-pc-engine, got no
         System Card."""
         from model.profiles import load_emulator_profiles
-        from romfolders import ProfileResolver, folder_names
+        from model.romfolders import ProfileResolver, folder_names
 
         setups = load_setups(ROOT / "platforms" / "romfolders")
         if not setups:
@@ -345,7 +345,7 @@ KNOWN_UNRESOLVED = {
 class EveryCoreResolvesOrIsExplained(unittest.TestCase):
     def setUp(self) -> None:
         from model.profiles import load_emulator_profiles
-        from romfolders import ProfileResolver
+        from model.romfolders import ProfileResolver
 
         self.resolver = SystemResolver.from_repo(str(ROOT / "emulators"), str(ROOT / "platforms"))
         self.cores = ProfileResolver.from_repo(str(ROOT / "emulators"))

@@ -15,7 +15,7 @@ import json
 import unittest
 from pathlib import Path
 
-from romfolders import setup_paths, split_refs
+from model.romfolders import setup_paths, split_refs
 from scraper.romfolders import (
     Fetcher,
     SourceError,

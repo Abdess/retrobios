@@ -6,7 +6,7 @@ import html
 import re
 from pathlib import Path
 
-import release_record
+from model import releaserecord
 from sitegen import measurements as sitemeasurements
 from sitegen.config import SITE_NAME
 
@@ -133,7 +133,7 @@ def _section_description(markdown: str, relative: Path, title: str, browser: str
     """The description of a download, system, emulator or platform page,
     or None for a page of another section."""
     key = relative.as_posix()
-    if key.startswith(f"{release_record.GET_DIR}/"):
+    if key.startswith(f"{releaserecord.GET_DIR}/"):
         size = re.search(r"^- (.+ to download\b.*?)\.?$", markdown, re.M)
         if size:
             return _shorten(f"{title}: the BIOS pack of this setup, {_plain_markdown(size[1])}. "

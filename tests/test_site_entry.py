@@ -53,7 +53,7 @@ from sitegen import nav as sitegen_nav
 from sitegen import platformindex
 from sitegen import reference
 from sitegen import versions
-import release_record
+from model import releaserecord
 from model import guides
 from sitegen import markup as sitemarkup
 from model.platforms import load_platform_config
@@ -209,9 +209,9 @@ class GetYourFilesOrder(unittest.TestCase):
     def test_a_setup_after_the_release_says_no_zip_yet(self):
         text = _page("which-pack.md")
         self.assertNotIn("Not in v", text)
-        record = release_record.load_advertised()
+        record = releaserecord.load_advertised()
         pending = [k for k in REGISTRY if REGISTRY[k].get("release_pack")
-                   and not release_record.pack_for(k, record)]
+                   and not releaserecord.pack_for(k, record)]
         if record.get("tag") and pending:
             self.assertIn("No ZIP yet. [Use the command]", text)
             self.assertIn("Setups added after the last release have no ZIP until the next one.",
@@ -283,8 +283,8 @@ class PackManualReadsThePageFolders(unittest.TestCase):
 
 class DownloadNamesTheRelease(unittest.TestCase):
     def test_tag_date_checksums_and_signature(self):
-        record = release_record.load_record()
-        if not release_record.pack_for("batocera", record):
+        record = releaserecord.load_record()
+        if not releaserecord.pack_for("batocera", record):
             self.skipTest("release.json has no Batocera pack")
         tag = record["tag"]
         lines = versions.release_line("batocera", record)
@@ -461,11 +461,11 @@ class HandheldWayIn(unittest.TestCase):
 
 class PackNamesItsVersion(unittest.TestCase):
     def test_the_line_under_the_release(self):
-        record = release_record.load_record()
-        if not release_record.pack_for("batocera", record):
+        record = releaserecord.load_record()
+        if not releaserecord.pack_for("batocera", record):
             self.skipTest("release.json has no Batocera pack")
         block = guidepage._pack_buttons("batocera")
-        name = release_record.pack_name_for("batocera", record)
+        name = releaserecord.pack_name_for("batocera", record)
         version = versions._pack_version(name, ["batocera"])
         self.assertIn(f"Made for Batocera {version}. "
                       + versions.other_version("batocera"), block)
@@ -577,12 +577,12 @@ class GetYourFilesListsEachSetupOnce(unittest.TestCase):
         self.assertNotIn("**Self-hosted game library**", self.text)
 
     def test_no_unzip_into_without_a_zip(self):
-        record = release_record.load_record()
+        record = releaserecord.load_record()
         for line in self.text.splitlines():
             if "Unzip into" in line:
                 key = re.search(r"/retrobios/platforms/([a-z0-9]+)/", line)[1]
                 with self.subTest(platform=key):
-                    self.assertTrue(release_record.pack_for(key, record))
+                    self.assertTrue(releaserecord.pack_for(key, record))
 
     def test_parts_are_buttons_with_the_size_after(self):
         """A row links the setup's get/ page, which lists every part, with the
@@ -665,8 +665,8 @@ class TileLogosLoadWhenSeen(unittest.TestCase):
 
 class DownloadLine(unittest.TestCase):
     def test_checksums_and_signature_read_as_two(self):
-        record = release_record.load_record()
-        if not release_record.pack_for("batocera", record):
+        record = releaserecord.load_record()
+        if not releaserecord.pack_for("batocera", record):
             self.skipTest("release.json has no Batocera pack")
         line = versions.release_line("batocera", record)[0]
         self.assertRegex(line, r"\[SHA256SUMS\.txt\]\([^)]+\) and its \[signature\]\([^)]+\)\.$")
@@ -682,7 +682,7 @@ def _plain_page(name: str) -> str:
 
 
 def _with_zip(name: str) -> bool:
-    pack = release_record.pack_for(name, release_record.load_advertised())
+    pack = releaserecord.pack_for(name, releaserecord.load_advertised())
     return bool(pack and pack.get("assets"))
 
 
@@ -1113,10 +1113,10 @@ class TheSiteSaysWhatTheInstallerShows(unittest.TestCase):
         self.assertNotIn("offers to install everything or to choose systems", readme)
         source = script_source("generate_readme.py")
         self.assertIn("_installer_words().TUI_SYSTEMS_ROW", source)
-        import generate_installer_doc
+        from installer_build import installerdoc
 
         page = (REPO_ROOT / "wiki" / "installer.md").read_text(encoding="utf-8")
-        self.assertIn(generate_installer_doc.line_menu(), page)
+        self.assertIn(installerdoc.line_menu(), page)
         menu = page.split("<!-- generated: line-menu -->", 1)[1]
         outside = page.replace(menu.split("<!-- /generated: line-menu -->", 1)[0], "")
         for line in self.MENU_LINES:

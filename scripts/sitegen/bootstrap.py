@@ -23,6 +23,7 @@ from pathlib import Path
 
 from core.artifacts import write_if_changed
 from model.guides import PS1_NAME, SH_NAME
+from installer_build.pins import PIN
 
 REPO_RAW = "https://raw.githubusercontent.com/Abdess/retrobios"
 
@@ -36,10 +37,6 @@ SOURCES: dict[str, tuple[str, re.Pattern[str]]] = {
 ADVICE: dict[str, re.Pattern[str]] = {
     SH_NAME: re.compile(r'^(MISMATCH_ADVICE=")[^"]*(")', re.M),
     PS1_NAME: re.compile(r'^(\s*\$mismatchAdvice = ")[^"]*(")', re.M),
-}
-PIN: dict[str, re.Pattern[str]] = {
-    SH_NAME: re.compile(r'^DEFAULT_INSTALL_SHA256="([0-9a-f]{64})"', re.M),
-    PS1_NAME: re.compile(r'^\s*\$defaultInstallSha256 = "([0-9a-f]{64})"', re.M),
 }
 # What the served copy says of a refused installer. It names a commit's
 # install.py, which never changes, and both downloaders fail on a short

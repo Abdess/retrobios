@@ -33,7 +33,7 @@ from pathlib import Path
 
 import yaml
 
-import build_port
+from installer_build import port
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PORTS = REPO_ROOT / "ports"
@@ -275,22 +275,22 @@ class TheSdlModel(unittest.TestCase):
 
 class TheArchives(unittest.TestCase):
     LAYOUT = {
-        build_port.PORT_ZIP: ("RetroBIOS.sh", "retrobios"),
-        build_port.BATOCERA_ZIP: ("RetroBIOS.sh", "retrobios"),
-        build_port.MUOS_APP: (None, "RetroBIOS"),
-        build_port.TOOLS_ZIP: ("RetroBIOS.sh", "retrobios"),
+        port.PORT_ZIP: ("RetroBIOS.sh", "retrobios"),
+        port.BATOCERA_ZIP: ("RetroBIOS.sh", "retrobios"),
+        port.MUOS_APP: (None, "RetroBIOS"),
+        port.TOOLS_ZIP: ("RetroBIOS.sh", "retrobios"),
     }
 
     def setUp(self):
         self.out = _tempdir(self)
 
     def test_every_release_archive_is_built(self):
-        self.assertEqual(set(build_port.ARCHIVES), set(self.LAYOUT))
+        self.assertEqual(set(port.ARCHIVES), set(self.LAYOUT))
 
     def test_layout(self):
         for name, (script, folder) in self.LAYOUT.items():
             with self.subTest(archive=name):
-                with zipfile.ZipFile(build_port.build_archive(name, self.out / name)) as zf:
+                with zipfile.ZipFile(port.build_archive(name, self.out / name)) as zf:
                     names = zf.namelist()
                     modes = {n: zf.getinfo(n).external_attr >> 16 for n in names}
                 self.assertEqual(names, sorted(names))
@@ -301,7 +301,7 @@ class TheArchives(unittest.TestCase):
                     self.assertIn(f"{folder}/{member}", names)
                 launcher = script or f"{folder}/mux_launch.sh"
                 self.assertTrue(modes[launcher] & 0o111, launcher)
-                if name == build_port.BATOCERA_ZIP:
+                if name == port.BATOCERA_ZIP:
                     self.assertEqual(top, ["RetroBIOS.sh", "RetroBIOS.sh.keys"])
                     self.assertNotIn("retrobios/retrobios.gptk", names)
                 elif script:
@@ -316,8 +316,8 @@ class TheArchives(unittest.TestCase):
         muxapp named an icon it did not carry."""
         header = (REPO_ROOT / "ports" / "muos" / "mux_launch.sh").read_text()
         icon = re.search(r"^# ICON: (\S+)$", header, re.MULTILINE).group(1)
-        name = build_port.MUOS_APP
-        with zipfile.ZipFile(build_port.build_archive(name, self.out / name)) as zf:
+        name = port.MUOS_APP
+        with zipfile.ZipFile(port.build_archive(name, self.out / name)) as zf:
             data = zf.read(f"RetroBIOS/glyph/{icon}.png")
         self.assertEqual(data[:8], b"\x89PNG\r\n\x1a\n")
 
@@ -326,26 +326,26 @@ class TheArchives(unittest.TestCase):
         system's extension (.sh for Tools and Ports): batocera-emulationstation
         and EmulationStation-fcamod SystemData.cpp drop a folder with none.
         The support folders must keep none, or each shows up in the menu."""
-        for name in (build_port.TOOLS_ZIP, build_port.PORT_ZIP, build_port.BATOCERA_ZIP):
+        for name in (port.TOOLS_ZIP, port.PORT_ZIP, port.BATOCERA_ZIP):
             with self.subTest(archive=name):
-                with zipfile.ZipFile(build_port.build_archive(name, self.out / name)) as zf:
+                with zipfile.ZipFile(port.build_archive(name, self.out / name)) as zf:
                     inside = [n for n in zf.namelist()
                               if "/" in n and n.lower().endswith(".sh")]
                 self.assertEqual(inside, [])
 
     def test_each_carries_the_pinned_installer(self):
-        pinned = build_port.pinned_installer_sha256()
+        pinned = port.pinned_installer_sha256()
         for name, (_script, folder) in self.LAYOUT.items():
             with self.subTest(archive=name):
-                with zipfile.ZipFile(build_port.build_archive(name, self.out / name)) as zf:
+                with zipfile.ZipFile(port.build_archive(name, self.out / name)) as zf:
                     bundled = hashlib.sha256(zf.read(f"{folder}/install.py")).hexdigest()
                 self.assertEqual(bundled, pinned)
 
     def test_reproducible(self):
-        for name in build_port.ARCHIVES:
+        for name in port.ARCHIVES:
             with self.subTest(archive=name):
-                first = build_port.build_archive(name, self.out / f"a-{name}").read_bytes()
-                second = build_port.build_archive(name, self.out / f"b-{name}").read_bytes()
+                first = port.build_archive(name, self.out / f"a-{name}").read_bytes()
+                second = port.build_archive(name, self.out / f"b-{name}").read_bytes()
                 self.assertEqual(first, second)
 
     def test_each_names_the_release_packs(self):
@@ -354,13 +354,13 @@ class TheArchives(unittest.TestCase):
         registry = yaml.safe_load((REPO_ROOT / "platforms" / "_registry.yml").read_text())
         released = {name for name, entry in registry["platforms"].items()
                     if entry.get("release_pack") is True}
-        labels = build_port.release_pack_labels()
+        labels = port.release_pack_labels()
         self.assertEqual(set(labels), released)
         self.assertEqual(labels["retroarch"], "RetroArch")
         expected = "".join(f"{p}\t{label}\n" for p, label in sorted(labels.items()))
         for name, (_script, folder) in self.LAYOUT.items():
             with self.subTest(archive=name), \
-                    zipfile.ZipFile(build_port.build_archive(name, self.out / name)) as zf:
+                    zipfile.ZipFile(port.build_archive(name, self.out / name)) as zf:
                 self.assertEqual(zf.read(f"{folder}/packs.txt").decode(), expected)
 
     def test_an_unpinned_installer_is_refused(self):
@@ -370,9 +370,9 @@ class TheArchives(unittest.TestCase):
         shutil.copytree(PORTS, root / "ports")
         with (root / "install.py").open("a") as fh:
             fh.write("\n")
-        for name in build_port.ARCHIVES:
+        for name in port.ARCHIVES:
             with self.subTest(archive=name), self.assertRaises(ValueError):
-                build_port.build_archive(name, self.out / name, root)
+                port.build_archive(name, self.out / name, root)
 
     def test_the_site_serves_each_and_the_release_none(self):
         """Each archive carries install.py: the site serves it from its own
@@ -380,7 +380,7 @@ class TheArchives(unittest.TestCase):
         text = (REPO_ROOT / "wiki" / "release-process.md").read_text(encoding="utf-8")
         self.assertNotIn("scripts/build_port.py", text)
         installer = (REPO_ROOT / "wiki" / "installer.md").read_text(encoding="utf-8")
-        for name in build_port.ARCHIVES:
+        for name in port.ARCHIVES:
             with self.subTest(archive=name):
                 self.assertNotIn(name, text)
                 self.assertIn(f"](../get/handheld/{name})", installer)
@@ -763,7 +763,7 @@ class Device:
         """The launcher archive extracted where the firmware keeps it, with
         the fake installer in place of install.py."""
         into.mkdir(parents=True, exist_ok=True)
-        built = build_port.build_archive(archive, self.root / "dist" / archive)
+        built = port.build_archive(archive, self.root / "dist" / archive)
         with zipfile.ZipFile(built) as zf:
             zf.extractall(into)
             for info in zf.infolist():
@@ -946,7 +946,7 @@ class ThePortMasterPort(unittest.TestCase):
     def device(self, console: str | None = None, **env: str) -> Device:
         device = Device(self, **env)
         roms = device.root / "roms"
-        self.gamedir = device.unpack(build_port.PORT_ZIP, roms / "ports") / "retrobios"
+        self.gamedir = device.unpack(port.PORT_ZIP, roms / "ports") / "retrobios"
         control = device.root / "xdg" / "PortMaster"
         control.mkdir(parents=True)
         self.control = control
@@ -1530,7 +1530,7 @@ class ThePortMasterPort(unittest.TestCase):
 class TheBatoceraPort(unittest.TestCase):
     def device(self, **env: str) -> tuple[Device, Path]:
         device = Device(self, **env)
-        ports = device.unpack(build_port.BATOCERA_ZIP, device.root / "userdata" / "roms" / "ports")
+        ports = device.unpack(port.BATOCERA_ZIP, device.root / "userdata" / "roms" / "ports")
         return device, ports
 
     def console_switch(self, device: Device) -> dict[str, str]:
@@ -1637,7 +1637,7 @@ class TheBatoceraPort(unittest.TestCase):
 class TheMuosApp(unittest.TestCase):
     def device(self, muxterm: bool, gptokeyb2: bool = True) -> tuple[Device, Path]:
         device = Device(self)
-        apps = device.unpack(build_port.MUOS_APP, device.root / "mmc" / "MUOS" / "application")
+        apps = device.unpack(port.MUOS_APP, device.root / "mmc" / "MUOS" / "application")
         muos = device.root / "opt-muos"
         (muos / "script" / "var").mkdir(parents=True)
         (muos / "script" / "var" / "retro.sh").write_text(
@@ -1858,7 +1858,7 @@ class TheMuosApp(unittest.TestCase):
 class TheToolsEntry(unittest.TestCase):
     def device(self, **env: str) -> tuple[Device, Path]:
         device = Device(self, **env)
-        tools = device.unpack(build_port.TOOLS_ZIP, device.root / "tools")
+        tools = device.unpack(port.TOOLS_ZIP, device.root / "tools")
         device.env["RB_ROOT"] = str(device.root / "fs")
         return device, tools
 
@@ -2100,7 +2100,7 @@ class TheDocs(unittest.TestCase):
     def test_the_offline_packs_named_are_the_ones_that_serve(self):
         """The wiki names the pack each firmware takes offline: the release
         pack of the platform install.py detects it as, or none."""
-        labels = build_port.release_pack_labels()
+        labels = port.release_pack_labels()
         served = {}
         for rule in install._EMBEDDED_RULES:
             served.setdefault(rule.name, labels.get(rule.manifest))

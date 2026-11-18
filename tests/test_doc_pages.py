@@ -97,17 +97,17 @@ class InstallerOutputExample(unittest.TestCase):
     prints each one with install.py from the committed list."""
 
     def test_the_samples_are_the_ones_the_installer_prints(self):
-        import generate_installer_doc
+        from installer_build import installerdoc
 
         page = _page("installer.md")
-        self.assertEqual(generate_installer_doc.render(page), page,
+        self.assertEqual(installerdoc.render(page), page,
                          "run python scripts/generate_installer_doc.py")
         for name in ("dry-run", "run-date", "run-index", "run-download", "run-end", "run-check"):
             with self.subTest(sample=name):
                 self.assertIn(f"<!-- generated: {name} -->", page)
 
     def test_a_retyped_count_fails_the_check(self):
-        import generate_installer_doc
+        from installer_build import installerdoc
 
         page = _page("installer.md")
         for name in ("dry-run", "run-end", "bulk-hint"):
@@ -116,10 +116,10 @@ class InstallerOutputExample(unittest.TestCase):
                 edited = re.sub(r"\d+", lambda m: str(int(m.group(0)) + 1), body, count=1)
                 stale = page.replace(body, edited)
                 self.assertNotEqual(stale, page)
-                self.assertEqual(generate_installer_doc.render(stale), page)
+                self.assertEqual(installerdoc.render(stale), page)
 
     def test_a_sample_is_dated_by_its_list_never_by_the_day_it_ran(self):
-        import generate_installer_doc
+        from installer_build import installerdoc
 
         page = _page("installer.md")
         for name, platform in (("dry-run", "retroarch"), ("run-date", "batocera")):
@@ -128,7 +128,7 @@ class InstallerOutputExample(unittest.TestCase):
                 date = json.loads(listed)["generated"][:10]
                 self.assertIn(f"the list of {date}", _generated(page, name))
         self.assertNotIn(str(ROOT), page)
-        home = f"{generate_installer_doc.SHOWN_HOME}/.config/retroarch"
+        home = f"{installerdoc.SHOWN_HOME}/.config/retroarch"
         self.assertIn(home, _generated(page, "dry-run"))
 
     def test_run_and_menu_show_one_run_of_the_manifest(self):
@@ -222,13 +222,13 @@ class InstallerSamplesSayWhatTheCodePrints(unittest.TestCase):
         import socket
         from unittest import mock
 
-        import generate_installer_doc
+        from installer_build import installerdoc
 
         def no_lookup(*_args: object) -> str:
             raise AssertionError("the sandbox asked for a name")
 
         with mock.patch.object(socket, "getfqdn", no_lookup), \
-                generate_installer_doc.Sandbox() as box:
+                installerdoc.Sandbox() as box:
             self.assertEqual(box.server.server_name, "127.0.0.1")
 
 
@@ -1808,7 +1808,7 @@ class ReportExcerptIsTheRun(unittest.TestCase):
     def test_every_quoted_line_is_printed(self):
         import subprocess
 
-        from restore_large_files import gitignored_paths
+        from release.restore import gitignored_paths
 
         # The excerpt is a run over the whole collection. A checkout without
         # the release assets (the PR workflow restores none) prints other
@@ -2074,10 +2074,10 @@ class LandingAChangeNamesTheCommitRules(unittest.TestCase):
         return _section(_page("testing-guide.md"), "Landing a change")
 
     def test_every_refusal_is_on_the_page(self):
-        import commit_rules
+        from devtools import commitrules
 
         section = self._landing()
-        words = re.search(r"\\b\((.*?)\)", commit_rules.REFUSED_WORDS.pattern).group(1)
+        words = re.search(r"\\b\((.*?)\)", commitrules.REFUSED_WORDS.pattern).group(1)
         from tests.test_prose_style import NoMarketingVocabulary
 
         for word in words.replace("|", " ").split():
@@ -2099,8 +2099,9 @@ class LandingAChangeNamesTheCommitRules(unittest.TestCase):
             clone = Path(scratch)
             (clone / ".git" / "hooks").mkdir(parents=True)
             (clone / "scripts").mkdir()
-            (clone / "scripts" / "commit_rules.py").write_bytes(
-                (ROOT / "scripts" / "commit_rules.py").read_bytes())
+            for name in ("commit_rules.py", "devtools/__init__.py", "devtools/commitrules.py"):
+                (clone / "scripts" / name).parent.mkdir(exist_ok=True)
+                (clone / "scripts" / name).write_bytes((ROOT / "scripts" / name).read_bytes())
             subprocess.run(["sh", "-c", block], cwd=clone, check=True)
             message = clone / "MSG"
             message.write_text("fix: address review 3 notes\n", encoding="utf-8")

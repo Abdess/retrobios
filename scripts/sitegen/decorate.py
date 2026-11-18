@@ -8,7 +8,7 @@ import sys
 import urllib.parse
 from pathlib import Path
 
-import release_record
+from model import releaserecord
 from model import siteinputs
 from model.database import load_database
 from sitegen import markup, measurements as sitemeasurements, starlight as sitestarlight
@@ -83,7 +83,7 @@ def page_level(relative: Path) -> str:
     path = relative.as_posix()
     if path in ("index.md", "which-pack.md"):
         return "start"
-    if relative.parts[0] in ("platforms", release_record.GET_DIR):
+    if relative.parts[0] in ("platforms", releaserecord.GET_DIR):
         return "setup"
     if relative.parts[0] in ("systems", "emulators") or path == "explore.md":
         return "explore"

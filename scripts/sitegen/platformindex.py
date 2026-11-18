@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import release_record
+from model import releaserecord
 from model.guides import DEVICE_GROUPS, GROUP_TILES, GUIDES
 from resolve.nativemode import check_label
 from sitegen import markup
@@ -66,7 +66,7 @@ def setup_table(coverages: dict) -> list[str]:
     ]
     for name, cov in sorted(coverages.items(), key=lambda item: item[1]["platform"].casefold()):
         listed = f"{cov['total']:,}" if cov["total"] else "No list of its own"
-        files, _size = release_totals(name, release_record.load_advertised())
+        files, _size = release_totals(name, releaserecord.load_advertised())
         zipped = (f"{files:,}" if files
                   else "No ZIP yet" if has_release_pack(name) else "No ZIP")
         lines.append(

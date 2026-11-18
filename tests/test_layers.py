@@ -20,7 +20,8 @@ from pathlib import Path
 SCRIPTS = Path(__file__).resolve().parent.parent / "scripts"
 
 PACKAGE_LAYERS = {"core": 0, "model": 1, "resolve": 2, "packs": 3, "scraper": 3, "exporter": 3,
-                  "probes": 3, "profiling": 3, "sitegen": 3, "romrecipes": 3, "acquire": 3}
+                  "probes": 3, "profiling": 3, "sitegen": 3, "romrecipes": 3, "acquire": 3,
+                  "release": 3, "installer_build": 3, "devtools": 3}
 LIBRARY_LAYER = 3
 COMMAND_LAYER = 4
 
@@ -34,17 +35,20 @@ SIBLING_IMPORTS: dict[str, frozenset[str]] = {
     "profiling": frozenset(),
     "romrecipes": frozenset(),
     # The site prints the recipe counts and the dump-catalog coverage report
-    # those two packages compute.
-    "sitegen": frozenset({"acquire", "packs", "romrecipes"}),
+    # those two packages compute, serves the handheld launchers and prints the
+    # CI checks.
+    "sitegen": frozenset({"acquire", "packs", "romrecipes", "installer_build", "devtools"}),
+    # The record names its packs as the pack builder does.
+    "release": frozenset({"packs"}),
+    # The launcher archives are written by the pack member writer.
+    "installer_build": frozenset({"packs"}),
+    "devtools": frozenset(),
 }
 
 # Top-level modules other modules of scripts/ import: library code that a
 # later wave moves into a package.
 NOT_YET_PACKAGED = frozenset({
-    "autorun", "build_port",
-    "check_buildbot_system", "check_release_assets", "commit_rules",
-    "generate_event_schema", "pin_installer", "pr_checks",
-    "release_record", "romfolders",
+    "autorun",
 })
 
 # Top-level files that stay whole at their path although packages import them:
@@ -60,20 +64,6 @@ PENDING_TOP_LEVEL_IMPORTS = frozenset({
     ("probes.gate", "autorun"),
     ("probes.host", "autorun"),
     ("probes.packprobe", "autorun"),
-    ("sitegen.build", "release_record"),
-    ("sitegen.config", "release_record"),
-    ("sitegen.decorate", "release_record"),
-    ("sitegen.descriptions", "release_record"),
-    ("sitegen.getpages", "release_record"),
-    ("sitegen.guidepage", "release_record"),
-    ("sitegen.handheld", "build_port"),
-    ("sitegen.platformindex", "release_record"),
-    ("sitegen.publish", "release_record"),
-    ("sitegen.readme", "pr_checks"),
-    ("sitegen.readme", "release_record"),
-    ("sitegen.validate", "release_record"),
-    ("sitegen.versions", "release_record"),
-    ("sitegen.whichpack", "release_record"),
 })
 
 

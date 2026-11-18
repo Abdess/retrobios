@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-import release_record
+from model import releaserecord
 from core.paths import REPO_ROOT
 from model.safeparse import require_yaml
 
@@ -22,7 +22,7 @@ RELEASE_URL = f"{REPO_URL}/releases/latest"
 DATA_LICENSE = "MIT (LICENSE: scripts, tooling, schemas, documentation and metadata)"
 SITE_URL = "https://abdess.github.io/retrobios/"
 GENERATED_DIRS = ["platforms", "systems", "emulators", "wiki", "api", "downloads", "files",
-                  release_record.GET_DIR]
+                  releaserecord.GET_DIR]
 # Generated directories of files served as they are, not pages.
 PUBLIC_DIRS = ("api", "downloads")
 

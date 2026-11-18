@@ -59,7 +59,7 @@ from exporter.originals import (
     source_revision,
     wanted_sources,
 )
-import pin_installer
+from installer_build import pins as installer_build_pins
 from packs import datadirs
 from core import upstream
 from core.cli import InputMissing, require_directory, suggest_names
@@ -1049,15 +1049,15 @@ def _check_buildbot_system() -> Finding:
     The registry entries are refreshed above. An asset published since, or
     one the buildbot no longer serves, is only seen by reading its .index.
     """
-    import check_buildbot_system
+    from scraper import buildbot_system
 
     with contextlib.redirect_stdout(io.StringIO()):
-        report = check_buildbot_system.check(
+        report = buildbot_system.check(
             str(REPO_ROOT / "platforms" / "_data_dirs.yml")
         )
     if report.get("error"):
         return Finding("data", "buildbot system", UNKNOWN, detail="index unreachable")
-    todo = check_buildbot_system.pending(report)
+    todo = buildbot_system.pending(report)
     if not todo:
         return Finding("data", "buildbot system", OK)
     every = [f"{e['status'].lower()} {e['zip']}" for e in todo]
@@ -1499,14 +1499,14 @@ def check_ci(cache_dir: str, offline: bool) -> list[Finding]:
 
 def _check_installer_pins() -> Finding:
     """The bootstraps pin install.py by SHA-256, so a stale pin refuses every install."""
-    stale = pin_installer.stale_pins(REPO_ROOT)
+    stale = installer_build_pins.stale_pins(REPO_ROOT)
     return Finding(
         "ci",
         "install.py pin",
         STALE if stale else OK,
-        local=pin_installer.installer_sha256(REPO_ROOT)[:12],
+        local=installer_build_pins.installer_sha256(REPO_ROOT)[:12],
         detail=(
-            f"pin outdated in {', '.join(stale)}, {pin_installer.COMMAND} writes it"
+            f"pin outdated in {', '.join(stale)}, {installer_build_pins.COMMAND} writes it"
             if stale else "install.sh and install.ps1 match"
         ),
     )

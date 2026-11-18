@@ -23,7 +23,7 @@ import unittest
 import zipfile
 from pathlib import Path
 
-import build_pypi
+from installer_build import pypi
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -47,7 +47,7 @@ class Built(unittest.TestCase):
             raise unittest.SkipTest("uv is not installed")
         cls._scratch = tempfile.TemporaryDirectory(prefix="pypi-")
         cls.scratch = Path(cls._scratch.name)
-        cls.wheel, cls.sdist = build_pypi.build(cls.scratch / "dist")
+        cls.wheel, cls.sdist = pypi.build(cls.scratch / "dist")
         cls.version = cls.wheel.name.split("-")[1]
 
     @classmethod
@@ -121,7 +121,7 @@ class TheArchivesHoldTheInstallerAndNothingElse(Built):
     def test_build_is_reproducible(self):
         # SOURCE_DATE_EPOCH is install.py's commit time, so the clock moving
         # between the two builds changes no byte.
-        again = build_pypi.build(self.scratch / "again")
+        again = pypi.build(self.scratch / "again")
         self.assertEqual([path.read_bytes() for path in again],
                          [self.wheel.read_bytes(), self.sdist.read_bytes()])
 
@@ -132,15 +132,15 @@ class TheVersionIsInstallPyCommitDate(unittest.TestCase):
 
     def test_one_change_that_day(self):
         # 2026-11-09 12:00 UTC, then a change the day before.
-        self.assertEqual(build_pypi.package_version([1794225600, 1794139200]), "2026.11.9")
+        self.assertEqual(pypi.package_version([1794225600, 1794139200]), "2026.11.9")
 
     def test_the_rank_in_the_day(self):
-        self.assertEqual(build_pypi.package_version([1794229200, 1794225600, 1794222000]),
+        self.assertEqual(pypi.package_version([1794229200, 1794225600, 1794222000]),
                          "2026.11.9.3")
 
     def test_no_commit_refused(self):
         with self.assertRaises(ValueError):
-            build_pypi.package_version([])
+            pypi.package_version([])
 
 
 class AnUnpinnedInstallerIsRefused(unittest.TestCase):
@@ -151,13 +151,13 @@ class AnUnpinnedInstallerIsRefused(unittest.TestCase):
             root = Path(name)
             (root / "install.py").write_bytes(b"print('another')\n")
             shutil.copyfile(REPO_ROOT / "install.sh", root / "install.sh")
-            original = build_pypi.ROOT
-            build_pypi.ROOT = root
+            original = pypi.ROOT
+            pypi.ROOT = root
             try:
                 with self.assertRaises(ValueError):
-                    build_pypi.installer_bytes()
+                    pypi.installer_bytes()
             finally:
-                build_pypi.ROOT = original
+                pypi.ROOT = original
 
 
 def _python38() -> str | None:

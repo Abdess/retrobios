@@ -21,9 +21,10 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-import build_port
+from installer_build import port
 from model.registry import list_registered_platforms
 from sitegen import handheld as sitehandheld
+from installer_build import handhelds
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -36,8 +37,8 @@ def _pages() -> dict[str, str]:
 
     with contextlib.chdir(REPO_ROOT):
         pages = {f"get/{key}.md": getpages.generate_get_page(key)
-                 for key in sorted(set(sitehandheld.PLATFORM_OF.values()))}
-    pages[f"get/{sitehandheld.GROUP_PAGE}.md"] = sitehandheld.group_page(REPO_ROOT)
+                 for key in sorted(set(handhelds.PLATFORM_OF.values()))}
+    pages[f"get/{handhelds.GROUP_PAGE}.md"] = sitehandheld.group_page(REPO_ROOT)
     return pages
 
 
@@ -50,11 +51,11 @@ class TheSiteServesTheLaunchers(unittest.TestCase):
 
     def test_the_written_archives_are_the_ones_build_port_writes(self):
         written = sitehandheld.write_launchers(self.tmp / "public", REPO_ROOT)
-        self.assertEqual([path.name for path in written], list(build_port.ARCHIVES))
+        self.assertEqual([path.name for path in written], list(port.ARCHIVES))
         for path in written:
             with self.subTest(archive=path.name):
                 self.assertEqual(path.parent, self.tmp / "public" / "get" / "handheld")
-                built = build_port.build_archive(path.name, self.tmp / "built" / path.name)
+                built = port.build_archive(path.name, self.tmp / "built" / path.name)
                 self.assertEqual(path.read_bytes(), built.read_bytes())
 
     def test_an_unchanged_archive_is_not_rewritten(self):
@@ -67,7 +68,7 @@ class TheSiteServesTheLaunchers(unittest.TestCase):
         """build_port refuses an install.py the bootstraps do not pin: served,
         that launcher would refuse its own installer."""
         with mock.patch.dict(sitehandheld._built, clear=True), \
-                mock.patch.object(build_port, "pinned_installer_sha256", return_value="0" * 64), \
+                mock.patch.object(port, "pinned_installer_sha256", return_value="0" * 64), \
                 self.assertRaisesRegex(ValueError, "re-pin the bootstraps"):
             sitehandheld.write_launchers(self.tmp / "public", REPO_ROOT)
         self.assertFalse(list((self.tmp / "public").rglob("RetroBIOS*")))
@@ -76,7 +77,7 @@ class TheSiteServesTheLaunchers(unittest.TestCase):
         public = self.tmp / "public"
         written = {path.name: path for path in sitehandheld.write_launchers(public, REPO_ROOT)}
         pages = _pages()
-        for name in build_port.ARCHIVES:
+        for name in port.ARCHIVES:
             with self.subTest(archive=name):
                 data = written[name].read_bytes()
                 digest = hashlib.sha256(data).hexdigest()
@@ -98,8 +99,8 @@ class TheSiteServesTheLaunchers(unittest.TestCase):
 class WhereEachSystemFindsItsFile(unittest.TestCase):
     def test_each_platform_page_is_a_registered_platform(self):
         registered = set(list_registered_platforms(PLATFORMS))
-        self.assertLessEqual(set(sitehandheld.PLATFORM_OF.values()), registered)
-        self.assertNotIn(sitehandheld.GROUP_PAGE, registered)
+        self.assertLessEqual(set(handhelds.PLATFORM_OF.values()), registered)
+        self.assertNotIn(handhelds.GROUP_PAGE, registered)
 
     def test_the_group_page_sits_with_the_handheld_guide(self):
         """It shares the guide's name, so the sidebar files it with it, and
@@ -109,31 +110,31 @@ class WhereEachSystemFindsItsFile(unittest.TestCase):
         from sitegen import guidepage
 
         guide = guides.HANDHELD_GUIDE
-        self.assertEqual(sitehandheld.GROUP_PAGE, guide.page)
+        self.assertEqual(handhelds.GROUP_PAGE, guide.page)
         with contextlib.chdir(REPO_ROOT):
-            self.assertIn(f"(../get/{sitehandheld.GROUP_PAGE}.md)",
+            self.assertIn(f"(../get/{handhelds.GROUP_PAGE}.md)",
                           guidepage.generate_handheld_guide(guide))
-            self.assertIn(f"]({sitehandheld.GROUP_PAGE}.md)", getpages.generate_get_index())
+            self.assertIn(f"]({handhelds.GROUP_PAGE}.md)", getpages.generate_get_index())
 
     def test_every_system_has_its_launchers_on_its_page(self):
         pages = _pages()
-        for system in sitehandheld.systems():
-            page = sitehandheld.page_of(system)
+        for system in handhelds.systems():
+            page = handhelds.page_of(system)
             with self.subTest(system=system):
                 self.assertIn(page, pages)
-                for launcher in sitehandheld.launchers_for(system):
+                for launcher in handhelds.launchers_for(system):
                     self.assertIn(f'href="handheld/{launcher.archive}"', pages[page])
                     self.assertIn(launcher.folder_for(system), pages[page])
                     self.assertIn(launcher.start, pages[page])
         for system in sitehandheld.group_systems():
-            self.assertIn(f"\n## {system}\n", pages[f"get/{sitehandheld.GROUP_PAGE}.md"])
+            self.assertIn(f"\n## {system}\n", pages[f"get/{handhelds.GROUP_PAGE}.md"])
 
     def test_the_installer_table_is_written_from_the_same_rows(self):
         text = (REPO_ROOT / "wiki" / "installer.md").read_text(encoding="utf-8")
         block = re.search(r"<!-- generated: handheld -->\n(.*?)<!-- /generated: handheld -->",
                           text, re.S)
         self.assertIsNotNone(block)
-        self.assertEqual(block.group(1).strip(), "\n".join(sitehandheld.table_rows()))
+        self.assertEqual(block.group(1).strip(), "\n".join(handhelds.table_rows()))
         self.assertNotIn("releases/latest", text.split("## On a handheld", 1)[1].split("\n## ")[0])
 
     def test_the_installer_section_opens_on_the_downloads(self):
@@ -145,18 +146,18 @@ class WhereEachSystemFindsItsFile(unittest.TestCase):
         block = re.search(r"<!-- generated: handheld-downloads -->\n(.*?)"
                           r"<!-- /generated: handheld-downloads -->", section, re.S)
         self.assertIsNotNone(block)
-        self.assertEqual(block.group(1).strip(), "\n".join(sitehandheld.download_rows()))
+        self.assertEqual(block.group(1).strip(), "\n".join(handhelds.download_rows()))
         self.assertLess(block.start(), section.index("### Where each file goes"))
         self.assertLess(len(section[:block.start()].split()), 40)
-        for system in sitehandheld.systems():
+        for system in handhelds.systems():
             with self.subTest(system=system):
                 row = next(line for line in block.group(1).splitlines()
                            if line.startswith(f"| {system} |"))
-                for launcher in sitehandheld.launchers_for(system):
-                    self.assertIn(f"](../{sitehandheld.SERVED_DIR}/{launcher.archive})", row)
-                self.assertIn(f"](../{sitehandheld.page_of(system)}#", row)
-        for name in build_port.ARCHIVES:
-            self.assertIn(f"](../{sitehandheld.SERVED_DIR}/{name})", block.group(1))
+                for launcher in handhelds.launchers_for(system):
+                    self.assertIn(f"](../{handhelds.SERVED_DIR}/{launcher.archive})", row)
+                self.assertIn(f"](../{handhelds.page_of(system)}#", row)
+        for name in port.ARCHIVES:
+            self.assertIn(f"](../{handhelds.SERVED_DIR}/{name})", block.group(1))
 
     def test_the_generator_writes_them(self):
         source = script_source("generate_site.py")

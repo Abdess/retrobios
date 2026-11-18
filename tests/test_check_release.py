@@ -11,8 +11,8 @@ import tests
 
 import unittest
 
-import build_port
-from check_release import SIGNATURE, SUMS, Asset, compare_release, parse_sums
+from installer_build import port
+from release.check import SIGNATURE, SUMS, Asset, compare_release, parse_sums
 
 A = "a" * 64
 B = "b" * 64
@@ -97,7 +97,7 @@ class ReleaseMatchesWhatWasBuilt(unittest.TestCase):
     def test_a_handheld_launcher_is_no_release_file(self):
         """The site serves the launchers built from its own commit: one in
         the checksum list or among the assets is refused."""
-        for name in build_port.ARCHIVES:
+        for name in port.ARCHIVES:
             with self.subTest(name=name):
                 sums = {**SUMS_LIST, name: A}
                 assets = _assets()

@@ -24,7 +24,7 @@ import unittest
 import zipfile
 from pathlib import Path
 
-import build_port
+from installer_build import port as installer_build_port
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PORT = REPO_ROOT / "ports" / "RetroBIOS"
@@ -80,7 +80,7 @@ class ThePortArchive(unittest.TestCase):
         self.out = _tempdir(self)
 
     def _build(self, name: str = "RetroBIOS.zip") -> Path:
-        return build_port.build_port(self.out / name)
+        return installer_build_port.build_port(self.out / name)
 
     def test_layout_portmaster_installs(self):
         """One launch script at the top, one folder holding port.json: what
@@ -107,7 +107,7 @@ class ThePortArchive(unittest.TestCase):
     def test_bundled_installer_is_the_pinned_one(self):
         with zipfile.ZipFile(self._build()) as zf:
             bundled = hashlib.sha256(zf.read("retrobios/install.py")).hexdigest()
-        self.assertEqual(bundled, build_port.pinned_installer_sha256())
+        self.assertEqual(bundled, installer_build_port.pinned_installer_sha256())
         install_sh = (REPO_ROOT / "install.sh").read_text(encoding="utf-8")
         self.assertIn(f'DEFAULT_INSTALL_SHA256="{bundled}"', install_sh)
 
@@ -117,11 +117,11 @@ class LauncherIndex(unittest.TestCase):
     the archives built from the same tree, each with its size and hash."""
 
     def test_the_committed_list_is_current(self):
-        import generate_launcher_index
+        from installer_build import launcherindex
 
-        text = generate_launcher_index.render(generate_launcher_index.build_index())
+        text = launcherindex.render(launcherindex.build_index())
         self.assertEqual(
-            generate_launcher_index.OUTPUT.read_text(encoding="utf-8"), text,
+            launcherindex.OUTPUT.read_text(encoding="utf-8"), text,
             "install/launchers/index.json is stale: run "
             "python scripts/generate_launcher_index.py")
 
@@ -133,31 +133,31 @@ class LauncherIndex(unittest.TestCase):
         self.assertIn("scripts/generate_launcher_index.py", section)
 
     def test_every_member_of_the_archives_is_listed(self):
-        import generate_launcher_index
+        from installer_build import launcherindex
 
-        index = json.loads(generate_launcher_index.OUTPUT.read_text(encoding="utf-8"))
+        index = json.loads(launcherindex.OUTPUT.read_text(encoding="utf-8"))
         places = {place.key: place for place in install.APP_PLACES.values()}
-        for key, archive in generate_launcher_index.LAUNCHER_ARCHIVES.items():
+        for key, archive in launcherindex.LAUNCHER_ARCHIVES.items():
             with self.subTest(key=key):
                 launcher = index["launchers"][key]
                 listed = launcher.get("members") or launcher["files"]
                 names = [entry.get("name") or entry["dest"] for entry in listed]
                 prefix = "" if "members" in launcher else places[key].folder + "/"
                 self.assertEqual(sorted(names), sorted(
-                    prefix + name for name, _path in build_port.archive_members(archive)))
+                    prefix + name for name, _path in installer_build_port.archive_members(archive)))
                 for entry in listed:
                     if "repo_path" in entry:
                         data = (REPO_ROOT / entry["repo_path"]).read_bytes()
                         self.assertEqual(hashlib.sha256(data).hexdigest(), entry["sha256"])
 
     def test_the_list_refuses_an_installer_the_bootstraps_do_not_pin(self):
-        import generate_launcher_index
+        from installer_build import launcherindex
 
         root = _tempdir(self)
         shutil.copyfile(REPO_ROOT / "install.py", root / "install.py")
         (root / "install.sh").write_text('DEFAULT_INSTALL_SHA256="' + "0" * 64 + '"\n')
         with self.assertRaises(ValueError):
-            generate_launcher_index.build_index(root)
+            launcherindex.build_index(root)
 
 
 class EventRecords(unittest.TestCase):

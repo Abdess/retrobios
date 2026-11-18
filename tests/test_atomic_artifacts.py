@@ -51,7 +51,6 @@ class WholeOrNothing(unittest.TestCase):
 
 class EveryWriterGoesThroughIt(unittest.TestCase):
     def test_manifests_record_and_restore_use_the_atomic_helpers(self):
-        scripts = REPO_ROOT / "scripts"
         for name, helper in (
             ("generate_pack.py", "write_text_atomic("),
             ("release_record.py", "write_text_atomic("),
@@ -63,8 +62,8 @@ class EveryWriterGoesThroughIt(unittest.TestCase):
         pack = script_source("generate_pack.py")
         self.assertNotIn('with open(path, "w") as f:\n        f.write(new_json)', pack)
         self.assertNotIn("json.dump(result, f", pack)
-        self.assertNotIn("args.output.write_text(", (scripts / "release_record.py").read_text())
-        self.assertNotIn("shutil.copy2(source, path)", (scripts / "restore_large_files.py").read_text())
+        self.assertNotIn("args.output.write_text(", script_source("release_record.py"))
+        self.assertNotIn("shutil.copy2(source, path)", script_source("restore_large_files.py"))
 
 
     def test_scrapers_write_whole_files(self):
@@ -95,10 +94,12 @@ class EveryWriterGoesThroughIt(unittest.TestCase):
 
         sandbox = {"write_small_list", "Sandbox"}
         offenders = []
-        for path in sorted((REPO_ROOT / "scripts").glob("generate_*.py")):
+        library = [REPO_ROOT / "scripts" / "installer_build" / name
+                   for name in ("eventschema.py", "installerdoc.py", "launcherindex.py")]
+        for path in [*sorted((REPO_ROOT / "scripts").glob("generate_*.py")), *library]:
             tree = ast.parse(path.read_text(encoding="utf-8"))
             for top in tree.body:
-                if path.name == "generate_installer_doc.py" and getattr(top, "name", "") in sandbox:
+                if path.name == "installerdoc.py" and getattr(top, "name", "") in sandbox:
                     continue
                 offenders.extend(
                     f"{path.name}:{node.lineno}"
@@ -281,6 +282,7 @@ class RestoreSkipsDownloadsInProgress(unittest.TestCase):
 
     def test_a_scratch_promoted_mid_scan_does_not_stop_the_restore(self) -> None:
         import restore_large_files
+        from release import restore
 
         with tempfile.TemporaryDirectory() as tmp:
             cache = Path(tmp)
@@ -299,7 +301,7 @@ class RestoreSkipsDownloadsInProgress(unittest.TestCase):
 
             with mock.patch.object(restore_large_files.os.path, "isfile",
                                    side_effect=check_then_promote):
-                index = restore_large_files.index_cache(str(cache))
+                index = restore.index_cache(str(cache))
             self.assertNotIn(str(scratch), index.values())
             self.assertIn(str(cache / "done.bin"), index.values())
 

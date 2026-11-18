@@ -5,7 +5,7 @@ from __future__ import annotations
 import html
 import json
 
-import release_record
+from model import releaserecord
 from model import siteinputs
 from model.collection import _profiles_on_disk
 from model.guides import (
@@ -19,6 +19,7 @@ from model.guides import (
 from model.platforms import load_platform_config
 from model.registry import load_platform_registry
 from resolve.nativemode import digest_algorithm
+from installer_build.handhelds import GROUP_PAGE
 from sitegen import handheld as sitehandheld, markup
 from sitegen.config import _REPO_ROOT
 from sitegen.guides import platform_args, terminal_tabs
@@ -40,7 +41,7 @@ def no_zip_line(display: str) -> str:
 
 def get_page_link(platform_name: str, prefix: str = "") -> str:
     """The platform's permanent download page, as a site link."""
-    return f"{prefix}{release_record.GET_DIR}/{platform_name}.md"
+    return f"{prefix}{releaserecord.GET_DIR}/{platform_name}.md"
 
 
 def get_page_title(platform_name: str, display: str) -> str:
@@ -85,7 +86,7 @@ def _pack_buttons(platform_name: str, label: str = "Pack", prefix: str = "../",
         display = display or load_platform_config(platform_name, str(siteinputs.current().platforms)).get(
             "platform", platform_name)
         return f"{no_zip_line(display)} [Why no ZIP?]({prefix}{NO_ZIP_FAQ})"
-    record = release_record.load_advertised()
+    record = releaserecord.load_advertised()
     buttons = download_links(
         platform_name,
         record,
@@ -204,7 +205,7 @@ def _share_tabs(name: str, share: str) -> tuple[dict[str, str], dict[str, str]]:
 def _offline_line(name: str) -> list[str]:
     """The offline line, on a setup whose ZIP a release publishes: the
     installer reads that ZIP with no network (`--from-pack`)."""
-    pack = release_record.pack_for(name, release_record.load_advertised())
+    pack = releaserecord.pack_for(name, releaserecord.load_advertised())
     return [OFFLINE_LINE, ""] if pack and pack.get("assets") else []
 
 
@@ -291,7 +292,7 @@ def _computer_first(name: str, guide: Guide) -> bool:
     """A system that runs only on its own device, with a ZIP to download: a
     beginner fills its folder from a computer more easily than from a
     terminal on the TV. Without a ZIP the command is the only route."""
-    pack = release_record.pack_for(name, release_record.load_advertised())
+    pack = releaserecord.pack_for(name, releaserecord.load_advertised())
     return guide.run == ("device",) and bool(pack and pack.get("assets"))
 
 
@@ -309,8 +310,8 @@ def _guide_download(name: str, display: str, guide: Guide, extract_to: str | Non
                     heading: str) -> list[str]:
     """The pack: its buttons, its size, and where it is unzipped."""
     lines = [heading, ""]
-    record = release_record.load_advertised()
-    pack = release_record.pack_for(name, record)
+    record = releaserecord.load_advertised()
+    pack = releaserecord.pack_for(name, record)
     network = any(label.startswith("From ") for label, _path in guide.folders)
     if pack and pack.get("assets"):
         parts = len(pack["assets"])
@@ -457,7 +458,7 @@ def generate_handheld_guide(guide: HandheldGuide) -> str:
         *_offline_line(guide.uses),
         f"On {sitehandheld.joined(sitehandheld.group_systems(), 'or')}: "
         f"[{sitehandheld.GROUP_TITLE}]"
-        f"(../get/{sitehandheld.GROUP_PAGE}.md).",
+        f"(../get/{GROUP_PAGE}.md).",
         "",
         "## Fill the card from a computer { #install }",
         "",

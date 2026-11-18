@@ -78,7 +78,7 @@ from sitegen.sources import launcher_ref_markdown, list_source
 import check_platform_folder
 import core
 from sitegen import sources
-import release_record
+from model import releaserecord
 from core import upstream
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -1230,8 +1230,8 @@ class TheReleaseRecordHasAVersion(unittest.TestCase):
     """8.9."""
 
     def test_the_writer_and_the_committed_record(self):
-        self.assertEqual(release_record.SCHEMA_VERSION, 1)
-        source = (REPO_ROOT / "scripts" / "release_record.py").read_text(encoding="utf-8")
+        self.assertEqual(releaserecord.SCHEMA_VERSION, 1)
+        source = script_source("release_record.py")
         self.assertIn('{"schema_version": SCHEMA_VERSION, "tag": tag, "packs": packs}', source)
         schema = json.loads((REPO_ROOT / "schemas" / "release.schema.json").read_text())
         self.assertIn("schema_version", schema["required"])
@@ -1320,13 +1320,13 @@ class OneAnswerOnReleasePacks(unittest.TestCase):
                                          else None) as folder:
             publish.write_release_advertised(Path(folder))
             written = json.loads((Path(folder) / "release-advertised.json").read_text())
-        self.assertEqual(written, release_record.load_advertised())
+        self.assertEqual(written, releaserecord.load_advertised())
         served = {p for pack in written.get("packs", {}).values() for p in pack["platforms"]}
         self.assertLessEqual(served, _released())
 
     def test_the_built_picker_file(self):
         written = json.loads(_built(GENERATED / "release-advertised.json").read_text())
-        self.assertEqual(written, release_record.load_advertised())
+        self.assertEqual(written, releaserecord.load_advertised())
 
 
 def _properties(node: object, path: str = ""):

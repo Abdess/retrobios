@@ -12,8 +12,8 @@ from pathlib import Path
 from types import ModuleType
 
 from romrecipes import ledger
-import pr_checks
-import release_record
+from devtools import prchecks
+from model import releaserecord
 from core.artifacts import write_if_changed
 from core.cli import InputMissing
 from core.github import github_token
@@ -247,7 +247,7 @@ def release_totals(platform_name: str, record: dict) -> tuple[int | None, int | 
     lands after the release. Returns (None, None) for a platform the release
     carries no pack for.
     """
-    pack = release_record.pack_for(platform_name, record)
+    pack = releaserecord.pack_for(platform_name, record)
     if not pack:
         return None, None
     return pack["files"], pack["extracted_size"]
@@ -271,7 +271,7 @@ def asset_links(
     *button* the function that draws each link as a button. Without a
     recorded release the link is the latest release page.
     """
-    pack = release_record.pack_for(platform_name, record)
+    pack = releaserecord.pack_for(platform_name, record)
     tag = record.get("tag")
     assets = pack.get("assets") if pack else None
     def link(text: str, url: str) -> str:
@@ -308,13 +308,13 @@ def download_links(
     get/ address hangs from, or *page* the address itself as the site links
     it, and *attrs* and *button* style the link.
     """
-    page = page or release_record.get_page(platform_name, site)
+    page = page or releaserecord.get_page(platform_name, site)
     def link(text: str) -> str:
         return button(text, page) if button else f"[{text}]({page}){attrs}"
 
     if (load_platform_registry(platforms_dir).get(platform_name) or {}).get("release_pack") is not True:
         return link(NO_PACK)
-    pack = release_record.pack_for(platform_name, record)
+    pack = releaserecord.pack_for(platform_name, record)
     if record.get("tag") and not (pack and pack.get("assets")):
         return f"No ZIP yet: {link(NO_PACK.lower())}"
     return link(label)
@@ -619,7 +619,7 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
     # the project does, gives the one line that installs, shows it, and leads
     # on to the site, where every detail lives. The figures and the lists it
     # once carried (coverage, collection, build commands) are the site's.
-    record = release_record.load_advertised(platforms_dir=platforms_dir)
+    record = releaserecord.load_advertised(platforms_dir=platforms_dir)
     extract_paths = _extract_cells(platforms_dir)
     released = [name for name in sorted(coverages, key=lambda n: coverages[n]["platform"])
                 if release_totals(name, record)[0]]
@@ -833,8 +833,8 @@ def contributing_text(
     .md for the site); *site_words* names the site from where the text is read.
     """
     pip_line, floor_line = ci_install_lines()
-    width = max(len(pr_checks.shown(step)) for step in pr_checks.STEPS)
-    steps = "\n".join(f"{pr_checks.shown(step):<{width}}  # {step.why}" for step in pr_checks.STEPS)
+    width = max(len(prchecks.shown(step)) for step in prchecks.STEPS)
+    steps = "\n".join(f"{prchecks.shown(step):<{width}}  # {step.why}" for step in prchecks.STEPS)
     return f"""{title}
 
 ## Add a BIOS file

@@ -5,11 +5,12 @@ from __future__ import annotations
 import json
 import re
 
-import release_record
+from model import releaserecord
 from model import siteinputs
 from model.guides import DEVICE_GROUPS, GROUP_TILES, GUIDES, HANDHELD_GUIDE
 from model.platforms import load_platform_config
 from model.registry import load_platform_registry
+from installer_build.handhelds import GROUP_PAGE
 from sitegen import handheld as sitehandheld, markup
 from sitegen.config import RELEASE_URL, REPO_URL, _REPO_ROOT
 from sitegen.descriptions import PAGE_DATA
@@ -55,15 +56,15 @@ def generate_get_page(platform_name: str) -> str:
     never touches it: committing release.json rebuilds it."""
     config = load_platform_config(platform_name, str(siteinputs.current().platforms))
     display = config.get("platform", platform_name)
-    record = release_record.load_advertised()
-    pack = release_record.pack_for(platform_name, record)
+    record = releaserecord.load_advertised()
+    pack = releaserecord.pack_for(platform_name, record)
     released = has_release_pack(platform_name)
     title = get_page_title(platform_name, display)
     # The page changes with the release it lists: its tag is its date, the
     # one the sitemap gives (vYYYY.MM.DD).
     tag_date = re.fullmatch(r"v(\d{4})\.(\d{2})\.(\d{2})", str(record.get("tag", "")))
     if released and pack and tag_date:
-        PAGE_DATA[f"{release_record.GET_DIR}/{platform_name}.md"] = {"dateModified": "-".join(tag_date.groups())}
+        PAGE_DATA[f"{releaserecord.GET_DIR}/{platform_name}.md"] = {"dateModified": "-".join(tag_date.groups())}
     if released and pack and pack.get("assets"):
         description = (f"The BIOS pack for {display}: {_fmt_size(pack['download_size'])} to "
                        "download. The address stays the same and always gives the latest ZIP.")
@@ -147,6 +148,6 @@ def generate_get_index() -> str:
         # handheld guide.
         if any(HANDHELD_GUIDE and tile.link == HANDHELD_GUIDE.path
                for tile in GROUP_TILES.get(group, ())):
-            lines.append(f"- [{sitehandheld.GROUP_TITLE}]({sitehandheld.GROUP_PAGE}.md)")
+            lines.append(f"- [{sitehandheld.GROUP_TITLE}]({GROUP_PAGE}.md)")
         lines.append("")
     return "\n".join(lines)

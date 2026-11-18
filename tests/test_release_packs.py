@@ -28,7 +28,8 @@ from unittest import mock
 import yaml
 
 from model.registry import list_registered_platforms, list_release_pack_platforms
-import release_record
+from release import record as release_record
+from model import releaserecord
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -225,7 +226,7 @@ class TheReleaseCheckReadsTheField(unittest.TestCase):
     }}
 
     def test_a_missing_and_an_unlisted_pack_are_reported(self):
-        from check_release import Asset, compare_release
+        from release.check import Asset, compare_release
 
         sums = {"A_BIOS_Pack.zip": "a" * 64, "K_BIOS_Pack.zip": "b" * 64}
         assets = {name: Asset(1, digest) for name, digest in sums.items()}
@@ -245,12 +246,12 @@ class TheTablesFollowTheField(unittest.TestCase):
                                               "assets": ["x.zip"]},
             "Recalbox_BIOS_Pack.zip": {"platforms": ["recalbox"], "assets": ["y.zip"]},
         }}
-        shown = release_record.advertised(record, PLATFORMS)
+        shown = releaserecord.advertised(record, PLATFORMS)
         self.assertEqual(list(shown["packs"]), ["RetroArch_Lakka_BIOS_Pack.zip"])
         self.assertEqual(shown["packs"]["RetroArch_Lakka_BIOS_Pack.zip"]["platforms"],
                          ["retroarch"])
-        self.assertIsNone(release_record.pack_for("lakka", shown))
-        self.assertEqual(release_record.advertised({}, PLATFORMS), {})
+        self.assertIsNone(releaserecord.pack_for("lakka", shown))
+        self.assertEqual(releaserecord.advertised({}, PLATFORMS), {})
 
 
 class EverySurfaceSaysWhy(unittest.TestCase):
@@ -312,9 +313,9 @@ class TheReleaseNotesNameTheSetupsWithoutAZip(unittest.TestCase):
     }}
 
     def test_the_paragraph_names_them_and_points_to_the_command(self):
-        import release_notes
+        from release import notes
 
-        text = release_notes.render(self.RECORD, PLATFORMS, "### What changed\n\n- x\n")
+        text = notes.render(self.RECORD, PLATFORMS, "### What changed\n\n- x\n")
         paragraph = next(line for line in text.splitlines()
                          if line.startswith("Only the most used setups have a pack"))
         for name in ("KNULLI", "Recalbox", "RetroPie", "Lakka"):
@@ -328,9 +329,9 @@ class TheReleaseNotesNameTheSetupsWithoutAZip(unittest.TestCase):
     def test_the_rows_link_this_release_files(self):
         """The files sit right below the notes: a row sends nobody to the
         site to find them (owner, 2026-11-10)."""
-        import release_notes
+        from release import notes
 
-        text = release_notes.render(self.RECORD, PLATFORMS, "x")
+        text = notes.render(self.RECORD, PLATFORMS, "x")
         self.assertIn(
             "[Download](https://github.com/Abdess/retrobios/releases/download/"
             "v2026.10.24/RomM_5_BIOS_Pack.zip)", text)
@@ -342,9 +343,9 @@ class TheReleaseNotesNameTheSetupsWithoutAZip(unittest.TestCase):
     def test_the_command_comes_before_the_packs(self):
         """Most readers need a few files, not a pack of several GB (owner,
         2026-11-10): the command and the handheld app open the notes."""
-        import release_notes
+        from release import notes
 
-        text = release_notes.render(self.RECORD, PLATFORMS, "### What changed\n\n- x\n")
+        text = notes.render(self.RECORD, PLATFORMS, "### What changed\n\n- x\n")
         command = text.index("```sh")
         # The installer's handheld section, which opens on every download.
         handheld = text.index(f"{SITE}wiki/installer/#on-a-handheld-the-retrobios-port")
@@ -407,14 +408,14 @@ class TheReleaseNotesThankPeople(unittest.TestCase):
         self.calls = []
 
     def test_the_base_is_the_previous_release_record(self):
-        import release_notes
+        from release import notes
 
-        self.assertEqual(release_notes.previous_record_commit("v2026.11.10", self.fake), "c1")
+        self.assertEqual(notes.previous_record_commit("v2026.11.10", self.fake), "c1")
 
     def test_everyone_since_the_start_is_thanked_once(self):
-        import release_notes
+        from release import notes
 
-        lines = release_notes.gather_thanks(self.fake)
+        lines = notes.gather_thanks(self.fake)
         self.assertEqual(lines, [
             "- **Code and data**: @closedwithoutmerge, @dajiaohuang, @habib256 and @zed.",
             "- **Reports**: @72374 and @paperweightorder.",
@@ -430,25 +431,26 @@ class TheReleaseNotesThankPeople(unittest.TestCase):
         self.assertEqual(issues[issues.index("--state") + 1], "all")
 
     def test_the_notes_end_with_thanks_then_the_changelog(self):
-        import release_notes
+        from release import notes
 
-        closing = release_notes.closing_lines(
+        closing = notes.closing_lines(
             ["- **Code and data**: @habib256."],
-            release_notes.changelog_url("55eb95344" + "0" * 31, "v2026.11.10"))
-        text = release_notes.render(TheReleaseNotesNameTheSetupsWithoutAZip.RECORD, PLATFORMS,
+            notes.changelog_url("55eb95344" + "0" * 31, "v2026.11.10"))
+        text = notes.render(TheReleaseNotesNameTheSetupsWithoutAZip.RECORD, PLATFORMS,
                                     "### What changed\n\n- x\n", closing)
         self.assertLess(text.index("### What changed"), text.index("### Thanks"))
         self.assertIn("### Thanks\n\n<details>\n"
                       "<summary>Everyone who helped since the start</summary>\n\n"
                       "- **Code and data**: @habib256.\n\n</details>\n\n**Full changelog**",
                       text)
-        self.assertEqual(release_notes.refused_words(text), [])
+        self.assertEqual(notes.refused_words(text), [])
         self.assertTrue(text.rstrip().endswith(
             "**Full changelog**: https://github.com/Abdess/retrobios/compare/"
             "55eb95344...v2026.11.10"))
 
     def test_a_checked_list_replaces_the_one_gh_gives(self):
         import release_notes
+        from release import notes
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             tmp = Path(tmp)
@@ -461,7 +463,7 @@ class TheReleaseNotesThankPeople(unittest.TestCase):
                     "--whats-new", str(tmp / "whats-new.md"), "--thanks", str(tmp / "thanks.md"),
                     "--platforms-dir", PLATFORMS, "--output", str(tmp / "notes.md")]
             with mock.patch.object(sys, "argv", argv), \
-                    mock.patch.object(release_notes, "_run", self.fake), \
+                    mock.patch.object(notes, "_run", self.fake), \
                     mock.patch.object(release_notes, "gather_thanks",
                                       side_effect=AssertionError("gh read")), \
                     contextlib.redirect_stdout(io.StringIO()):
@@ -475,11 +477,11 @@ class EveryPlatformHasAPermanentPage(unittest.TestCase):
     def test_a_page_for_every_registered_platform(self):
         from sitegen import getpages
 
-        record = release_record.load_advertised()
+        record = releaserecord.load_advertised()
         with contextlib.chdir(REPO_ROOT):
             for name in list_registered_platforms(PLATFORMS):
                 page = getpages.generate_get_page(name)
-                pack = release_record.pack_for(name, record)
+                pack = releaserecord.pack_for(name, record)
                 with self.subTest(platform=name):
                     self.assertRegex(page, r"\n# (.+ )?BIOS (pack|files)( for .+)?\n")
                     if name in RELEASED and pack:
@@ -494,13 +496,13 @@ class EveryPlatformHasAPermanentPage(unittest.TestCase):
     def test_the_generator_writes_and_sweeps_them(self):
         from sitegen import config
 
-        self.assertIn(release_record.GET_DIR, config.GENERATED_DIRS)
+        self.assertIn(releaserecord.GET_DIR, config.GENERATED_DIRS)
         source = script_source("generate_site.py")
         self.assertIn('write_if_changed(str(get_dir / f"{name}.md"), generate_get_page(name))',
                       source)
 
     def test_built_pages_exist(self):
-        docs = REPO_ROOT / "website" / "src" / "content" / "docs" / release_record.GET_DIR
+        docs = REPO_ROOT / "website" / "src" / "content" / "docs" / releaserecord.GET_DIR
         if not docs.is_dir():
             self.skipTest("the site is not generated")
         for name in list_registered_platforms(PLATFORMS):

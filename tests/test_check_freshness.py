@@ -742,19 +742,19 @@ class TheBuildbotIndexIsRead(unittest.TestCase):
     def test_new_and_dropped_assets_are_stale(self):
         from unittest import mock
 
-        import check_buildbot_system as cbs
+        from scraper import buildbot_system
 
         report = {"entries": [
             {"zip": "New.zip", "status": "NEW", "key": None},
             {"zip": "Old.zip", "status": "OK", "key": "old"},
         ]}
-        with mock.patch.object(cbs, "check", lambda registry: report):
+        with mock.patch.object(buildbot_system, "check", lambda registry: report):
             finding = cf._check_buildbot_system()
         self.assertEqual(finding.status, cf.STALE)
         self.assertIn("new New.zip", finding.detail)
-        with mock.patch.object(cbs, "check", lambda registry: {"error": "x", "entries": []}):
+        with mock.patch.object(buildbot_system, "check", lambda registry: {"error": "x", "entries": []}):
             self.assertEqual(cf._check_buildbot_system().status, cf.UNKNOWN)
-        self.assertEqual([e["zip"] for e in cbs.pending(report)], ["New.zip"])
+        self.assertEqual([e["zip"] for e in buildbot_system.pending(report)], ["New.zip"])
 
 
 

@@ -19,7 +19,7 @@ import unittest
 from functools import cache
 from pathlib import Path
 
-import release_record
+from model import releaserecord
 from sitegen.readme import (
     SITE_URL,
     asset_links,
@@ -31,7 +31,7 @@ from sitegen.readme import (
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-RECORD = release_record.load_record(REPO_ROOT / "release.json")
+RECORD = releaserecord.load_record(REPO_ROOT / "release.json")
 REPO = "https://github.com/Abdess/retrobios"
 
 SPLIT_RECORD = {
@@ -217,10 +217,10 @@ class DownloadLinksKeepTheirAddress(unittest.TestCase):
         from model.platforms import load_platform_config
         from sitegen import install
 
-        record = release_record.load_advertised()
+        record = releaserecord.load_advertised()
         page = _which_pack()
         for key in list_registered_platforms("platforms"):
-            if release_record.pack_for(key, record) is not None:
+            if releaserecord.pack_for(key, record) is not None:
                 continue
             label = load_platform_config(key, "platforms").get("platform", key)
             row = next(line for line in page.splitlines() if line.startswith(f"| [{label}]("))
@@ -380,7 +380,7 @@ class SizesComeFromTheRecord(unittest.TestCase):
         tag, platform, download, extracted = quoted.groups()
         if tag != RECORD.get("tag"):
             self.skipTest(f"release.json records {RECORD.get('tag')}, not {tag}")
-        pack = release_record.pack_for(platform.lower(), RECORD)
+        pack = releaserecord.pack_for(platform.lower(), RECORD)
         self.assertEqual(download, format_size(pack["download_size"]))
         self.assertEqual(extracted, format_size(pack["extracted_size"]))
 

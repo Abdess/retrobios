@@ -39,7 +39,9 @@ from packs import platformpack
 from sitegen import readme as sitegen_readme
 from sitegen import home
 import release_notes
-import release_record
+from release import notes
+from release import record as release_record
+from model import releaserecord
 from packs import parts
 
 HAS_JSONSCHEMA = jsonschema is not None
@@ -483,9 +485,9 @@ class ReleaseRecord(unittest.TestCase):
             record["packs"]["Whole_1.0_BIOS_Pack.zip"], files=99, platforms=["other"]
         )
         self.assertEqual(
-            release_record.pack_name_for("whole", record), "Whole_1.0_BIOS_Pack.zip"
+            releaserecord.pack_name_for("whole", record), "Whole_1.0_BIOS_Pack.zip"
         )
-        self.assertEqual(release_record.pack_for("whole", record)["files"], 2)
+        self.assertEqual(releaserecord.pack_for("whole", record)["files"], 2)
 
     def test_the_owners_are_the_full_pack_names_the_builder_writes(self):
         owners = release_record.release_owners(str(REPO_ROOT / "platforms"))
@@ -589,7 +591,7 @@ class TheReleaseNotesReadTheRecord(unittest.TestCase):
     }}
 
     def render(self, record=None):
-        return release_notes.render(record or self.RECORD, str(REPO_ROOT / "platforms"),
+        return notes.render(record or self.RECORD, str(REPO_ROOT / "platforms"),
                                     "### What changed\n\n- x\n")
 
     def test_each_pack_row_carries_the_record(self):
@@ -620,11 +622,11 @@ class TheReleaseNotesReadTheRecord(unittest.TestCase):
         text = self.render().split("### What changed")[0]
         self.assertNotIn("every file its emulators", text)
         self.assertIn("https://abdess.github.io/retrobios/gaps/", text)
-        self.assertEqual(release_notes.refused_words(text), [])
+        self.assertEqual(notes.refused_words(text), [])
 
     def test_a_judging_whats_new_is_refused(self):
         self.assertEqual(
-            release_notes.refused_words(
+            notes.refused_words(
                 "- Every hash comes from the emulator's source, never from a forum list.\n"
                 "- So a game never stops on a missing file."),
             ["forum", "never stops"])

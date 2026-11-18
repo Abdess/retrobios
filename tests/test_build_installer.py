@@ -16,7 +16,7 @@ import textwrap
 import unittest
 from pathlib import Path
 
-import build_installer
+from installer_build import amalgamate
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DOCSTRING = '"""A test installer."""\n'
@@ -33,13 +33,13 @@ def _package(root: Path, modules: dict[str, str]) -> Path:
 
 class TheCommittedFileIsTheBuiltOne(unittest.TestCase):
     def test_install_py_is_what_the_package_builds(self):
-        built = build_installer.build(REPO_ROOT / "installer")
+        built = amalgamate.build(REPO_ROOT / "installer")
         self.assertEqual(built, (REPO_ROOT / "install.py").read_text(encoding="utf-8"),
-                         f"install.py differs from installer/: run {build_installer.COMMAND}")
+                         f"install.py differs from installer/: run {amalgamate.COMMAND}")
 
     def test_two_builds_give_the_same_bytes(self):
-        self.assertEqual(build_installer.build(REPO_ROOT / "installer"),
-                         build_installer.build(REPO_ROOT / "installer"))
+        self.assertEqual(amalgamate.build(REPO_ROOT / "installer"),
+                         amalgamate.build(REPO_ROOT / "installer"))
 
     def test_the_file_says_it_is_generated(self):
         head = (REPO_ROOT / "install.py").read_text(encoding="utf-8").splitlines()[:3]
@@ -85,8 +85,8 @@ class JoiningRefusesWhatOneNamespaceCannotHold(unittest.TestCase):
 
     def assert_refused(self, modules: dict[str, str], words: str) -> None:
         package = _package(self.root, modules)
-        with self.assertRaises(build_installer.BuildError) as caught:
-            build_installer.build(package)
+        with self.assertRaises(amalgamate.BuildError) as caught:
+            amalgamate.build(package)
         self.assertIn(words, str(caught.exception))
 
     def test_a_package_joins_in_import_order(self):
@@ -111,7 +111,7 @@ class JoiningRefusesWhatOneNamespaceCannotHold(unittest.TestCase):
                 A = sys.platform + str(zlib.crc32(b""))
             ''',
         })
-        text = build_installer.build(package)
+        text = amalgamate.build(package)
         self.assertLess(text.index("A = sys.platform"), text.index("B = A + os.sep"))
         self.assertIn("import os\nimport sys\n", text)
         self.assertNotIn("from installer", text)
@@ -147,7 +147,7 @@ class JoiningRefusesWhatOneNamespaceCannotHold(unittest.TestCase):
                   'if TYPE_CHECKING:\n    from installer.b import B\n\n\ndef f(b: B) -> None:\n    return None\n'),
             "b": '"""B."""\nfrom __future__ import annotations\n\nfrom installer.a import f\n\n\nclass B:\n    pass\n',
         })
-        text = build_installer.build(package)
+        text = amalgamate.build(package)
         self.assertNotIn("TYPE_CHECKING", text)
         self.assertLess(text.index("def f("), text.index("class B:"))
 

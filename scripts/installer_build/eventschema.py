@@ -1,0 +1,92 @@
+"""schemas/install-events.schema.json, from install.py's EVENT_KEYS."""
+
+from __future__ import annotations
+
+import importlib.util
+import json
+
+from core.paths import REPO_ROOT
+
+
+ROOT = REPO_ROOT
+OUTPUT = ROOT / "schemas" / "install-events.schema.json"
+
+_spec = importlib.util.spec_from_file_location("install", ROOT / "install.py")
+if _spec is None or _spec.loader is None:
+    raise ImportError(f"cannot load {ROOT / 'install.py'}")
+_install = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(_install)
+
+EVENT_KEYS: dict[str, tuple[str, ...]] = _install.EVENT_KEYS
+EVENT_SCHEMA: int = _install.EVENT_SCHEMA
+
+_TEXT = {"type": "string"}
+_COUNT = {"type": "integer", "minimum": 0}
+_FLAG = {"type": "boolean"}
+_NAMES = {"type": "array", "items": {"type": "string"}}
+_RECORDS = {"type": "array", "items": {"type": "object"}}
+
+# The JSON type of each key, whatever kind carries it. A key EVENT_KEYS
+# gains without a line here stops the generator.
+KEY_TYPES: dict[str, dict] = {
+    **dict.fromkeys((
+        "installer", "os", "os_name", "stage", "reason", "platform", "message",
+        "folder", "dest", "system", "name", "bios_dir", "path", "member",
+        "list_version", "installed_version", "board", "core", "date", "moved_to",
+    ), _TEXT),
+    "mode": {"enum": ["install", "check", "dry-run", "list", "remove", "restore", "pack"]},
+    "source": {"enum": ["remove", "install"]},
+    "state": {"enum": ["present", "wrong_hash", "missing"]},
+    "status": {"enum": ["applied", "written", "unreadable", "not_written", "listed", "made",
+                        "deleted", "not_deleted", "planned", "failed"]},
+    **dict.fromkeys((
+        "files", "files_done", "files_total", "bytes", "bytes_done", "bytes_total",
+        "bytes_local", "bytes_network", "size", "present", "missing", "wrong_hash",
+        "bytes_needed", "data_missing", "not_installable", "installed", "up_to_date",
+        "pending", "code", "games", "recognised", "not_games", "gone",
+    ), _COUNT),
+    **dict.fromkeys(("truncated", "ok", "interrupted", "required_only", "applied", "info",
+                     "backup"), _FLAG),
+    **dict.fromkeys(("systems", "other_drives", "dests", "written", "choice", "parts"),
+                    _NAMES),
+    **dict.fromkeys(("platforms", "failed", "skipped", "left_out", "kept", "found",
+                     "fallback"), _RECORDS),
+}
+
+
+def _kind(kind: str, keys: tuple[str, ...]) -> dict:
+    properties: dict[str, dict] = {"event": {"const": kind}}
+    for key in keys:
+        properties[key] = (
+            {"const": EVENT_SCHEMA} if (kind, key) == ("start", "schema") else KEY_TYPES[key]
+        )
+    return {
+        "type": "object",
+        "additionalProperties": False,
+        "required": ["event", *keys],
+        "properties": properties,
+    }
+
+
+def build_schema() -> dict:
+    """One line of the stream: an object of one of the kinds, with exactly its keys."""
+    return {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": "https://abdess.github.io/retrobios/api/v1/schemas/install-events.schema.json",
+        "title": "RetroBIOS installer event",
+        "description": (
+            f"One line of install.py --events, event schema {EVENT_SCHEMA}. Written from "
+            "EVENT_KEYS in install.py by scripts/generate_event_schema.py. The schema "
+            "gains kinds, never keys on an existing kind: a reader skips a kind it "
+            "does not know."
+        ),
+        "type": "object",
+        "required": ["event"],
+        "properties": {"event": {"enum": list(EVENT_KEYS)}},
+        "oneOf": [{"$ref": f"#/$defs/{kind}"} for kind in EVENT_KEYS],
+        "$defs": {kind: _kind(kind, keys) for kind, keys in EVENT_KEYS.items()},
+    }
+
+
+def render(schema: dict) -> str:
+    return json.dumps(schema, indent=2, ensure_ascii=False) + "\n"

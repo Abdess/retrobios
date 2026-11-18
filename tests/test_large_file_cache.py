@@ -25,7 +25,7 @@ from unittest import mock
 from model.composition import GAME_DATA_TOPS, composition_tier
 from model.profiles import load_emulator_profiles
 from model import largefiles
-import check_release_assets
+from release import assets as release_assets
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -573,14 +573,14 @@ class ReleaseAssetNames(unittest.TestCase):
         sizes = {self.ET: 228138631, self.RTCW: 122757192, self.PUP: 10}
         published = {expected[p]: size for p, size in sizes.items()}
         self.assertEqual(
-            check_release_assets.compare(
+            release_assets.compare(
                 sizes, published, registered=self.REGISTERED
             ),
             [],
         )
         # The old basename-only asset must not satisfy either pak.
         self.assertEqual(
-            {f[1] for f in check_release_assets.compare(
+            {f[1] for f in release_assets.compare(
                 sizes, {"pak0.pk3": 228138631, "PS3UPDAT.PUP": 10},
                 registered=self.REGISTERED,
             )},
@@ -591,7 +591,7 @@ class ReleaseAssetNames(unittest.TestCase):
             "b" * 40: {"path": self.RTCW, "size": sizes[self.RTCW]},
             "c" * 40: {"path": self.PUP, "size": sizes[self.PUP]},
         }}
-        body = check_release_assets.render_notes(
+        body = release_assets.render_notes(
             db, gitignore, published, "", {}, {}, {}
         )
         self.assertIn(f"[{expected[self.ET]}]", body)
@@ -740,7 +740,7 @@ class GameDataHasOneDefinition(unittest.TestCase):
             with self.subTest(path=path):
                 self.assertEqual(composition_tier(path), "game_data")
                 self.assertEqual(
-                    check_release_assets._section_for(path), "Game engine data"
+                    release_assets._section_for(path), "Game engine data"
                 )
 
     def test_a_tree_of_game_data_alone_is_a_game_data_tree(self):
@@ -829,21 +829,21 @@ class ASameSizeReuploadIsSeen(unittest.TestCase):
         assets = {"dsi_nand.bin": 8}
         ours = {"bios/Nintendo/DSi/dsi_nand.bin": "a" * 64}
         self.assertEqual(
-            [f[0] for f in check_release_assets.compare(
+            [f[0] for f in release_assets.compare(
                 expected, assets, expected_digests=ours,
                 asset_digests={"dsi_nand.bin": "b" * 64},
             )],
             ["content"],
         )
         self.assertEqual(
-            check_release_assets.compare(
+            release_assets.compare(
                 expected, assets, expected_digests=ours,
                 asset_digests={"dsi_nand.bin": "a" * 64},
             ),
             [],
         )
         self.assertEqual(
-            check_release_assets.digests_of(
+            release_assets.digests_of(
                 [{"name": "x", "digest": "sha256:ABC"}, {"name": "y"}]
             ),
             {"x": "abc"},

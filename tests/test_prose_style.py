@@ -170,7 +170,7 @@ class NoMarketingVocabulary(unittest.TestCase):
         offenders = []
         for path in _tracked():
             # This file and the commit rules have to name the words they refuse.
-            if path.name in {"test_prose_style.py", "commit_rules.py"}:
+            if path.name in {"test_prose_style.py", "commit_rules.py", "commitrules.py"}:
                 continue
             text = path.read_text(encoding="utf-8", errors="replace")
             for number, line in enumerate(text.splitlines(), 1):

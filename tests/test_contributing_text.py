@@ -240,28 +240,28 @@ class OneCommandRunsTheChecks(unittest.TestCase):
                        r"|vermin|npm (?:ci|run build)|mypy|ruff check|shellcheck))")
 
     def test_every_check_ci_runs_is_a_step(self):
-        import pr_checks
+        from devtools import prchecks
 
         workflow = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
         ran = {m.group(1) for line in workflow.splitlines()
                if not line.strip().startswith("#") for m in [self.CHECK.search(line)] if m}
         self.assertGreaterEqual(len(ran), 10)
-        steps = [step.command for step in pr_checks.STEPS]
+        steps = [step.command for step in prchecks.STEPS]
         for check in sorted(ran):
             with self.subTest(check=check):
                 self.assertTrue(any(command.startswith(check) for command in steps))
 
     def test_a_step_ci_lets_fail_does_not_fail_the_run(self):
-        import pr_checks
+        from devtools import prchecks
 
         workflow = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
         tolerated = set(re.findall(r"continue-on-error: true\n\s*run: (\S+ \S+)", workflow))
-        for step in pr_checks.STEPS:
+        for step in prchecks.STEPS:
             with self.subTest(step=step.command):
                 self.assertEqual(step.may_fail, " ".join(step.command.split()[:2]) in tolerated)
 
     def test_steps_keep_ci_order(self):
-        import pr_checks
+        from devtools import prchecks
 
         workflow = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
         order = [workflow.index(key) for key in (
@@ -269,19 +269,19 @@ class OneCommandRunsTheChecks(unittest.TestCase):
             "npm run build --prefix website", "python scripts/run_tests.py",
             "validate_site.py")]
         self.assertEqual(order, sorted(order))
-        commands = [step.command for step in pr_checks.STEPS]
+        commands = [step.command for step in prchecks.STEPS]
         positions = [next(i for i, c in enumerate(commands) if key in c) for key in (
             "refresh_data_dirs.py", "generate_site.py", "npm run build",
             "run_tests.py", "validate_site.py")]
         self.assertEqual(positions, sorted(positions))
 
     def test_the_guide_gives_the_runner_and_what_it_runs(self):
-        import pr_checks
+        from devtools import prchecks
 
         text = readme.generate_contributing()
         section = text.split("## Before opening a PR", 1)[1].split("\n## ", 1)[0]
         self.assertIn("python scripts/pr_checks.py\n", section)
-        for step in pr_checks.STEPS:
+        for step in prchecks.STEPS:
             with self.subTest(step=step.command):
                 self.assertIn(step.command, section)
 
@@ -289,17 +289,17 @@ class OneCommandRunsTheChecks(unittest.TestCase):
         import contextlib
         import io
 
-        import pr_checks
+        from devtools import prchecks
 
         steps = (
-            pr_checks.Step("python -c raise(SystemExit(3))", "fails"),
-            pr_checks.Step("no-such-tool-here --x", "absent", needs="no-such-tool-here",
+            prchecks.Step("python -c raise(SystemExit(3))", "fails"),
+            prchecks.Step("no-such-tool-here --x", "absent", needs="no-such-tool-here",
                            provider="nothing"),
-            pr_checks.Step("python -c pass", "passes"),
+            prchecks.Step("python -c pass", "passes"),
         )
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
-            code = pr_checks.run(steps)
+            code = prchecks.run(steps)
         self.assertEqual(code, 1)
         self.assertIn("FAILED   python -c raise(SystemExit(3)) (exit 3)", out.getvalue())
         self.assertIn("NOT RUN  no-such-tool-here --x", out.getvalue())

@@ -132,7 +132,7 @@ class FixtureImport(unittest.TestCase):
 
 class Selection(unittest.TestCase):
     def test_every_system_is_a_repository_system(self) -> None:
-        from romfolders import SystemResolver
+        from model.romfolders import SystemResolver
 
         ids = SystemResolver.from_repo().ids
         wanted = [s for s, _ in importer.NOINTRO_DATS.values()]

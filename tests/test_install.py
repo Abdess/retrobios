@@ -2517,7 +2517,7 @@ class TestAvailablePlatforms(unittest.TestCase):
     def test_pin_script_writes_both_pins(self):
         """Every edit to install.py meant a sha256sum pasted by hand into two
         files with two syntaxes, and the failing test named no command."""
-        import pin_installer
+        from installer_build import pins
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" / "tests") as directory:
             root = Path(directory)
@@ -2525,9 +2525,9 @@ class TestAvailablePlatforms(unittest.TestCase):
                 shutil.copy2(REPO_ROOT / name, root / name)
             (root / "install.py").write_text("# changed\n", encoding="utf-8")
             sh_mode = (root / "install.sh").stat().st_mode
-            self.assertEqual(pin_installer.stale_pins(root), ["install.sh", "install.ps1"])
-            self.assertEqual(pin_installer.write_pins(root), ["install.sh", "install.ps1"])
-            self.assertEqual(pin_installer.stale_pins(root), [])
+            self.assertEqual(pins.stale_pins(root), ["install.sh", "install.ps1"])
+            self.assertEqual(pins.write_pins(root), ["install.sh", "install.ps1"])
+            self.assertEqual(pins.stale_pins(root), [])
             digest = hashlib.sha256(b"# changed\n").hexdigest()
             for name in ("install.sh", "install.ps1"):
                 before = (REPO_ROOT / name).read_text(encoding="utf-8").splitlines()
@@ -7088,9 +7088,9 @@ class TheEventSchemaFileIsEventKeys(unittest.TestCase):
     outside Python could check a stream against."""
 
     def _generator(self):
-        import generate_event_schema
+        from installer_build import eventschema
 
-        return generate_event_schema
+        return eventschema
 
     def test_the_committed_file_is_the_generated_one(self):
         generator = self._generator()
@@ -7117,7 +7117,8 @@ class TheEventSchemaFileIsEventKeys(unittest.TestCase):
             generator.build_schema()
 
     def test_the_check_command_fails_on_a_stale_file(self):
-        generator = self._generator()
+        import generate_event_schema as generator
+
         scratch = Path(_tempdir(self)) / "events.schema.json"
         scratch.write_text("{}\n", encoding="utf-8")
         with contextlib.redirect_stdout(io.StringIO()), \
@@ -7136,8 +7137,10 @@ class TheInstallerPageIsWrittenFromTheCode(unittest.TestCase):
 
     def setUp(self):
         import generate_installer_doc
+        from installer_build import installerdoc
 
         self.generator = generate_installer_doc
+        self.doc = installerdoc
         self.scratch = Path(_tempdir(self)) / "installer.md"
         self.scratch.write_text(self.PAGE.read_text(encoding="utf-8"), encoding="utf-8")
 
@@ -7175,7 +7178,7 @@ class TheInstallerPageIsWrittenFromTheCode(unittest.TestCase):
         self.assertEqual(self.run_generator("--check")[0], 0)
 
     def test_what_the_code_gains_stops_it_until_the_page_says_it(self):
-        real = self.generator._install.build_parser
+        real = self.doc._install.build_parser
 
         def gained() -> argparse.ArgumentParser:
             parser = real()
@@ -7183,12 +7186,12 @@ class TheInstallerPageIsWrittenFromTheCode(unittest.TestCase):
             return parser
 
         page = self.scratch.read_text(encoding="utf-8")
-        events = {**self.generator._install.EVENT_KEYS, "brand_new": ("thing",)}
+        events = {**self.doc._install.EVENT_KEYS, "brand_new": ("thing",)}
         for name, patch in (
                 ("--brand-new", unittest.mock.patch.object(
-                    self.generator._install, "build_parser", gained)),
+                    self.doc._install, "build_parser", gained)),
                 ("brand_new", unittest.mock.patch.object(
-                    self.generator._install, "EVENT_KEYS", events))):
+                    self.doc._install, "EVENT_KEYS", events))):
             with self.subTest(gained=name), patch:
                 code, said = self.run_generator()
                 self.assertEqual(code, 1)
@@ -7200,13 +7203,13 @@ class TheInstallerPageIsWrittenFromTheCode(unittest.TestCase):
         self.scratch.write_text(
             page.replace(close, "\n| `--brand-new` | Something new |" + close, 1),
             encoding="utf-8")
-        with unittest.mock.patch.object(self.generator._install, "build_parser", gained):
+        with unittest.mock.patch.object(self.doc._install, "build_parser", gained):
             self.assertEqual(self.run_generator()[0], 0)
         self.assertIn('| <span id="option-brand-new"></span>`--brand-new` | Something new |',
                       self.scratch.read_text(encoding="utf-8"))
 
     def test_the_exit_codes_are_the_ones_install_py_exits_with(self):
-        self.assertEqual(self.generator.exit_codes(), [0, 1, 2, 3, 4, 130, 141])
+        self.assertEqual(self.doc.exit_codes(), [0, 1, 2, 3, 4, 130, 141])
 
     def test_a_missing_marker_stops_it(self):
         page = self.scratch.read_text(encoding="utf-8")

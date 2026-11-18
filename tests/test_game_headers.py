@@ -123,7 +123,7 @@ class HeaderReaders(unittest.TestCase):
                 self.assertIn(core, self.profiles, system)
 
     def test_every_system_is_a_repository_system(self) -> None:
-        from romfolders import SystemResolver
+        from model.romfolders import SystemResolver
 
         ids = SystemResolver.from_repo().ids
         self.assertEqual([s for s in self.doc["systems"] if s not in ids], [])

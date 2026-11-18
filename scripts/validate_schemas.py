@@ -804,14 +804,14 @@ def _semantic_standalone_checks(path: Path, layouts: object) -> list[str]:
 
 def _event_schema_errors() -> list[str]:
     """install-events.schema.json is EVENT_KEYS written out, and a valid schema."""
-    import generate_event_schema
+    from installer_build import eventschema
 
-    path = ROOT / "schemas" / generate_event_schema.OUTPUT.name
+    path = ROOT / "schemas" / eventschema.OUTPUT.name
     label = path.relative_to(ROOT).as_posix()
     if not path.is_file():
         return [f"{label}: missing, run python scripts/generate_event_schema.py"]
-    if path.read_text(encoding="utf-8") != generate_event_schema.render(
-        generate_event_schema.build_schema()
+    if path.read_text(encoding="utf-8") != eventschema.render(
+        eventschema.build_schema()
     ):
         return [f"{label}: differs from EVENT_KEYS in install.py, run "
                 "python scripts/generate_event_schema.py"]

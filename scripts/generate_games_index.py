@@ -48,13 +48,7 @@ from model.platforms import load_platform_config, native_layer
 from core.artifacts import repository_output_lock
 from core.cli import run_cli
 from model.region import normalize_declared
-from romfolders import (
-    ProfileResolver,
-    Resolution,
-    SystemResolver,
-    folder_names,
-    load_setups,
-)
+from model.romfolders import ProfileResolver, Resolution, SystemResolver, folder_names, load_setups
 from core.artifacts import write_text_atomic
 from model.safeparse import yaml_load
 

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import release_record
+from model import releaserecord
 from core.paths import REPO_ROOT
 from core.ziptools import build_zip_contents_index
 from model import siteinputs
@@ -78,7 +78,7 @@ def _pack_cell(name: str, record: dict, prefix: str = "") -> str:
     """The pack's parts and size, or the command where the release has none."""
     if not has_release_pack(name):
         return f"No ZIP. [{NO_PACK}]({prefix}platforms/{name}.md#install)."
-    pack = release_record.pack_for(name, record)
+    pack = releaserecord.pack_for(name, record)
     if record.get("tag") and not (pack and pack.get("assets")):
         return f"No ZIP yet. [{NO_PACK}]({prefix}platforms/{name}.md#install)."
     # One small button to the setup's get/ page, which lists every part, and
@@ -108,7 +108,7 @@ def _folder_row(key: str, display: dict[str, str], registry: dict, record: dict,
     whose ZIP holds its own top folder says where to unzip it, and the
     BIOS folder itself when it has no ZIP to unzip."""
     guide = GUIDES[key]
-    pack = release_record.pack_for(key, record)
+    pack = releaserecord.pack_for(key, record)
     zipped = bool(pack and pack.get("assets"))
     folder = (f"Unzip into `{own_root[key]}`" if key in own_root and zipped
               else _folder_cell(key, guide))
@@ -197,7 +197,7 @@ def generate_which_pack() -> str:
     The tiles are the choice. Open tables under them listed every setup a
     second time and made the page 11,800 px tall on a phone."""
     registry = load_platform_registry(str(siteinputs.current().platforms))
-    record = release_record.load_advertised()
+    record = releaserecord.load_advertised()
     display = {key: load_platform_config(key, str(siteinputs.current().platforms)).get("platform", key)
                for key in registry}
     all_tabs = ("windows", "macos", "linux", "steamdeck", "android")
@@ -235,7 +235,7 @@ def generate_which_pack() -> str:
                         _folder_tables(registry, record, display)),
     ]
     pending = any(has_release_pack(key) and not (pack and pack.get("assets"))
-                  for key, pack in ((key, release_record.pack_for(key, record)) for key in registry))
+                  for key, pack in ((key, releaserecord.pack_for(key, record)) for key in registry))
     if record.get("tag") and pending:
         lines += ["Setups added after the last release have no ZIP until the next one.", ""]
     lines += ["No ZIP on a row: the command serves that setup. ZIPs are made for the "

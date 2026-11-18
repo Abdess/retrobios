@@ -2230,7 +2230,7 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
         self.assertLess(self._index(steps, "refresh_data_dirs.py"), generate)
 
     def test_restore_matches_assets_by_content_not_by_name(self):
-        from scripts.restore_large_files import restore
+        from scripts.release.restore import restore
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             root = Path(directory)
@@ -2265,7 +2265,7 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
         restore, nothing unsatisfied, exit 0 with every asset absent."""
         import subprocess
 
-        from scripts.restore_large_files import gitignored_paths
+        from scripts.release.restore import gitignored_paths
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             missing = str(Path(directory) / "absent")
@@ -2284,7 +2284,7 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
         """The cache is hashed first and copied later: another run that
         replaced the cached name in between put its bytes at a path the
         database pins to the old ones."""
-        from scripts import restore_large_files
+        from scripts.release import restore as release_restore
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             root = Path(directory)
@@ -2298,7 +2298,7 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
                 json.dumps({"files": {sha1: {"path": "bios/Sony/big.pup"}}}),
                 encoding="utf-8",
             )
-            real_index = restore_large_files.index_cache
+            real_index = release_restore.index_cache
 
             def index_then_replace(cache_dir: str) -> dict[str, str]:
                 index = real_index(cache_dir)
@@ -2308,8 +2308,8 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
             cwd = os.getcwd()
             os.chdir(root)
             try:
-                with mock.patch.object(restore_large_files, "index_cache", index_then_replace):
-                    restored, unsatisfied = restore_large_files.restore(
+                with mock.patch.object(release_restore, "index_cache", index_then_replace):
+                    restored, unsatisfied = release_restore.restore(
                         str(cache), "database.json", ".gitignore"
                     )
                 self.assertEqual((restored, unsatisfied), (0, ["bios/Sony/big.pup"]))
@@ -2319,7 +2319,7 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
                 os.chdir(cwd)
 
     def test_restore_leaves_tracked_paths_alone(self):
-        from scripts.restore_large_files import restore
+        from scripts.release.restore import restore
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             root = Path(directory)
@@ -2347,7 +2347,7 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
     def test_restore_without_a_cache_names_what_is_missing(self):
         """A job that skipped `mkdir .cache/large` exited 0 with every
         gitignored file absent: the early return ran before the check."""
-        from scripts.restore_large_files import restore
+        from scripts.release.restore import restore
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             root = Path(directory)
@@ -2696,7 +2696,7 @@ class ReleaseAssetsMatchTheCollection(unittest.TestCase):
     """
 
     def test_missing_and_resized_assets_are_reported_and_nothing_else(self):
-        from scripts import check_release_assets
+        from scripts.release import assets as release_assets
 
         expected = {
             "bios/Other/fbneo/fbneo/samples/twotiger.zip": 154985212,
@@ -2708,7 +2708,7 @@ class ReleaseAssetsMatchTheCollection(unittest.TestCase):
             "MAME.0.174.Arcade.XML.dat": 53677408,
             "unrelated.zip": 1,
         }
-        findings = check_release_assets.compare(expected, assets)
+        findings = release_assets.compare(expected, assets)
         self.assertEqual(
             findings,
             [
@@ -2718,7 +2718,7 @@ class ReleaseAssetsMatchTheCollection(unittest.TestCase):
         )
 
     def test_expected_assets_are_the_gitignored_database_entries(self):
-        from scripts import check_release_assets
+        from scripts.release import assets as release_assets
 
         db = {
             "files": {
@@ -2728,7 +2728,7 @@ class ReleaseAssetsMatchTheCollection(unittest.TestCase):
         }
         gitignore = "# large\nbios/Other/x/big.zip\ntmp/\n"
         self.assertEqual(
-            check_release_assets.expected_assets(db, gitignore),
+            release_assets.expected_assets(db, gitignore),
             {"bios/Other/x/big.zip": 10},
         )
 
@@ -2741,7 +2741,7 @@ class ReleaseAssetsMatchTheCollection(unittest.TestCase):
         description from the profile that declares the file, and an asset the
         collection does not index is listed apart, with its size only.
         """
-        from scripts import check_release_assets
+        from scripts.release import assets as release_assets
 
         db = {"files": {
             "a" * 40: {"path": "bios/Nintendo/Wii/nand.bin", "size": 553649152},
@@ -2758,7 +2758,7 @@ class ReleaseAssetsMatchTheCollection(unittest.TestCase):
         )
         descriptions = {"nand.bin": "BootMii NAND backup"}
         bundles = {"sdlpal-data.zip": "SDLPAL Chinese Paladin game data (.mkf archives)"}
-        body = check_release_assets.render_notes(
+        body = release_assets.render_notes(
             db, gitignore, assets, previous, descriptions, bundles, {"sdlpal-data.zip": "d" * 40}
         )
         self.assertIn("| [twotiger.zip](https://github.com/Abdess/retrobios/releases/download/large-files/twotiger.zip) | Two Tigers samples | 148 MB | `" + "b" * 40 + "` |", body)
@@ -2774,9 +2774,9 @@ class ReleaseAssetsMatchTheCollection(unittest.TestCase):
         ))
 
     def test_stale_notes_are_a_finding(self):
-        from scripts import check_release_assets
+        from scripts.release import assets as release_assets
 
-        findings = check_release_assets.compare({}, {}, notes_current=False)
+        findings = release_assets.compare({}, {}, notes_current=False)
         self.assertEqual(findings, [("notes", "release description", 0, None)])
 
     def test_pipeline_runs_the_check_online_and_marks_it_skipped_offline(self):
@@ -3168,7 +3168,7 @@ class ACheckThatCannotAnswerDoesNotPass(unittest.TestCase):
             self.assertNotEqual(swept.returncode, 0, swept.stdout + swept.stderr)
 
     def test_an_unsatisfiable_declared_path_is_reported(self):
-        from scripts.restore_large_files import restore
+        from scripts.release.restore import restore
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             root = Path(directory)
@@ -3194,19 +3194,20 @@ class ACheckThatCannotAnswerDoesNotPass(unittest.TestCase):
         """Every HEAD unanswered printed "16 unknown" and exited 0, so the
         online pipeline printed check_buildbot OK."""
         import check_buildbot_system as cbs
+        from scraper import buildbot_system
 
         registry = str(ROOT / "platforms" / "_data_dirs.yml")
-        tracked = cbs.load_tracked_entries(registry)
+        tracked = buildbot_system.load_tracked_entries(registry)
         self.assertTrue(tracked)
         cases = {
             "index unreachable": mock.patch.object(
-                cbs, "fetch_index", side_effect=OSError("down")),
+                buildbot_system, "fetch_index", side_effect=OSError("down")),
             "every HEAD unanswered": mock.patch.object(
-                cbs, "fetch_index", return_value=set(tracked)),
+                buildbot_system, "fetch_index", return_value=set(tracked)),
         }
         for label, index in cases.items():
             with self.subTest(label), index, \
-                    mock.patch.object(cbs, "get_remote_etag", return_value=None), \
+                    mock.patch.object(buildbot_system, "get_remote_etag", return_value=None), \
                     mock.patch.object(sys, "argv", ["check_buildbot_system.py",
                                                     "--registry", registry]), \
                     contextlib.redirect_stdout(io.StringIO()), \

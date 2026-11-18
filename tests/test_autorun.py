@@ -29,7 +29,7 @@ from core import hostguard
 from core import statefile
 import bios_integrity as bib
 import cleanup_disk as cd
-import sync_release_assets as sra
+from release import sync
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -785,14 +785,14 @@ class AssetSync(Scratch):
             (self.root / rel).parent.mkdir(parents=True, exist_ok=True)
             (self.root / rel).write_bytes(data)
         self.db = {"files": {
-            sra.sha1_of(self.root / "bios/A/big.bin"): {"path": "bios/A/big.bin", "size": 1},
+            sync.sha1_of(self.root / "bios/A/big.bin"): {"path": "bios/A/big.bin", "size": 1},
             "0" * 40: {"path": "bios/C/solo.iso", "size": 1},
         }}
 
     def test_only_a_file_whose_sha1_matches_twice_is_cleared(self):
         findings = [("missing", "bios/A/big.bin", 1, None), ("size", "bios/C/solo.iso", 1, 5),
                     ("notes", "release description", 0, None)]
-        plans = sra.plan_uploads(self.root, self.db, self.GITIGNORE, findings)
+        plans = sync.plan_uploads(self.root, self.db, self.GITIGNORE, findings)
         self.assertEqual([(p.path, p.asset, p.verdict) for p in plans], [
             ("bios/A/big.bin", "A--big.bin", "upload"),
             ("bios/C/solo.iso", "solo.iso", "refused"),
@@ -801,23 +801,23 @@ class AssetSync(Scratch):
 
     def test_two_reads_that_disagree_refuse_the_upload(self):
         reads = iter(["1" * 40, "2" * 40])
-        plans = sra.plan_uploads(self.root, self.db, self.GITIGNORE,
+        plans = sync.plan_uploads(self.root, self.db, self.GITIGNORE,
                                  [("content", "bios/A/big.bin", 1, 1)],
                                  hasher=lambda _p: next(reads))
         self.assertEqual(plans[0].verdict, "refused")
         self.assertIn("two reads disagree", plans[0].reason)
 
     def test_an_upload_goes_under_its_asset_name_and_is_tried_twice(self):
-        plans = [sra.Upload("bios/A/big.bin", "A--big.bin", "missing", "upload"),
-                 sra.Upload("bios/C/solo.iso", "solo.iso", "size", "refused", "x")]
+        plans = [sync.Upload("bios/A/big.bin", "A--big.bin", "missing", "upload"),
+                 sync.Upload("bios/C/solo.iso", "solo.iso", "size", "refused", "x")]
         seen = []
 
         def upload(path: Path) -> int:
             seen.append(path.name)
             return 1
-        self.assertEqual(sra.upload_all(self.root, plans, upload), ["bios/A/big.bin"])
+        self.assertEqual(sync.upload_all(self.root, plans, upload), ["bios/A/big.bin"])
         self.assertEqual(seen, ["A--big.bin", "A--big.bin"])
-        self.assertFalse((self.root / sra.STAGING / "A--big.bin").exists())
+        self.assertFalse((self.root / sync.STAGING / "A--big.bin").exists())
 
 
 class BiosIntegrity(Scratch):
@@ -961,30 +961,30 @@ class SubjectsFollowTheRepositoryRules(unittest.TestCase):
     calls: a copy in the hook alone let CI check only the shape."""
 
     def test_the_runner_reads_the_tracked_rules(self):
-        import commit_rules
+        from devtools import commitrules
 
         for subject in ("chore: fix the broken manifests", "update things", "chore: " + "a" * 60):
             with self.subTest(subject=subject):
-                self.assertEqual(ar.check_subject(subject), commit_rules.problems(subject))
+                self.assertEqual(ar.check_subject(subject), commitrules.problems(subject))
                 self.assertTrue(ar.check_subject(subject))
         self.assertEqual(ar.check_subject("chore: tidy the cache"), [])
 
     def test_review_numbers_are_refused(self):
         """47 pushed subjects pointed at a numbered private review, which no
         clone can follow. The subject says what the change does."""
-        import commit_rules
+        from devtools import commitrules
 
         for subject in ("chore: audit 24 and 17 cases, host kept out",
                         "fix: polish the screens audit 11 named",
                         "chore: merge audit batch, resolver and profiles",
                         "fix: settle the review 3 notes"):
             with self.subTest(subject=subject):
-                self.assertTrue(commit_rules.problems(subject))
+                self.assertTrue(commitrules.problems(subject))
         for subject in ("fix: scroll long messages in the installer",
                         "feat: read regions in region_audit.py",
                         "chore: merge resolver and profile fixes"):
             with self.subTest(subject=subject):
-                self.assertEqual(commit_rules.problems(subject), [])
+                self.assertEqual(commitrules.problems(subject), [])
 
     def test_the_rules_run_as_a_hook(self):
         with tempfile.TemporaryDirectory() as tmp:
