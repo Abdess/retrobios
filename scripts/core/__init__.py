@@ -1,1 +1,1 @@
-"""Standard-library foundations: hashing, archives, parsing, artifacts, command-line plumbing."""
+"""Standard-library foundations: hashing, archives, artifacts, paths, command-line plumbing."""

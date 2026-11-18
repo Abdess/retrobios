@@ -1,4 +1,4 @@
-"""Where a platform's launch code puts a file: roots, tag prefixes, standalone layout paths."""
+"""Where a platform's launch code puts a file: tag prefixes and standalone layout paths."""
 
 from __future__ import annotations
 
