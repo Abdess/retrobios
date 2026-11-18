@@ -72,6 +72,14 @@ COMMANDS = {
     "validate_site.py": ("sitegen/validate.py",),
     "site_insights.py": ("sitegen/insights.py",),
     "generate_readme.py": ("sitegen/readme.py",),
+    "romset_recipes.py": (
+        "recipes/romsets.py", "recipes/pool.py", "recipes/pins.py", "recipes/identify.py",
+        "recipes/ledger.py", "recipes/members.py", "recipes/capture.py", "recipes/build.py",
+    ),
+    "provenance_report.py": ("acquire/provenance.py",),
+    "auto_fetch.py": ("acquire/fetch.py",),
+    "find_embedded.py": ("acquire/embedded.py",),
+    "find_pinned_revision.py": ("acquire/history.py",),
 }
 
 
