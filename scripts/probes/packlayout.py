@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import json
 import shutil
 import subprocess
@@ -12,6 +11,7 @@ from collections.abc import Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from core.hashing import file_digest
 from core.paths import REPO_ROOT
 from core.ziptools import safe_extract_zip
 
@@ -45,13 +45,6 @@ def walk(root: Path) -> list[str]:
     return sorted(p.relative_to(root).as_posix() for p in root.rglob("*") if p.is_file())
 
 
-def file_sha(path: Path, algorithm: str = "sha1") -> str:
-    digest = hashlib.new(algorithm)
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1 << 20), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
 
 def pack_layout(pack: Path, root: Path, identity: dict) -> Layout:
     """The pack extracted as a user does, at the root of the BIOS folder.
@@ -68,7 +61,7 @@ def pack_layout(pack: Path, root: Path, identity: dict) -> Layout:
 def pack_identity(pack: Path) -> dict:
     with zipfile.ZipFile(pack) as handle:
         members = sum(1 for info in handle.infolist() if not info.is_dir())
-    return {"file": pack.name, "sha256": file_sha(pack, "sha256"), "size": pack.stat().st_size,
+    return {"file": pack.name, "sha256": file_digest(pack, "sha256"), "size": pack.stat().st_size,
             "members": members}
 
 
@@ -118,7 +111,7 @@ def installer_layout(platform: str, pack: Path, identity: dict, manifest_path: P
         "pack": identity,
         "manifest": {"path": manifest_path.relative_to(REPO_ROOT).as_posix() if manifest_path.is_relative_to(REPO_ROOT)
                      else manifest_path.name,
-                     "sha256": file_sha(manifest_path, "sha256"),
+                     "sha256": file_digest(manifest_path, "sha256"),
                      "generated": manifest.get("generated"), "pack_files": manifest.get("pack_files")},
         "save_dir_files": len(walk(save_dir)) if save_dir.is_dir() else 0,
         "installer_summary": installer_summary(proc.stdout, system_dir, save_dir),

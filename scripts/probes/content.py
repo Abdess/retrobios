@@ -12,8 +12,9 @@ from typing import TYPE_CHECKING
 
 import yaml
 
+from core.hashing import file_digest
 from core.statefile import now_iso
-from probes.host import Unavailable, child_env, file_sha1
+from probes.host import Unavailable, child_env
 
 if TYPE_CHECKING:
     from probes.campaign import Campaign
@@ -89,7 +90,7 @@ def verify_identity(folder: Path) -> dict:
         raise Unavailable(f"{folder.name}: identity status {identity.get('status')!r}")
     for item in identity.get("files") or ():
         path = folder / item["name"]
-        if not path.is_file() or path.stat().st_size != item["size"] or file_sha1(path) != item["sha1"]:
+        if not path.is_file() or path.stat().st_size != item["size"] or file_digest(path) != item["sha1"]:
             raise Unavailable(f"{folder.name}: {item['name']} does not match its identity")
     return identity
 

@@ -18,6 +18,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import autorun
+from core_probe import PROBE_LOCK_ENV, PROBE_LOCK_HELD_ENV, VERDICTS, probe_lock_path
+from core.hashing import file_digest
 from core.paths import REPO_ROOT
 from core.statefile import now_iso
 from model import measurements as mr
@@ -28,12 +30,11 @@ from model.targets import load_target_config
 from probes.content import Content, load_content, load_file, verify_identity
 from probes.cores import BUILDBOT, safe_extract_so
 from probes.entries import entry_dest
-from probes.host import CONTENT_FILE, Unavailable, child_env
+from probes.host import CONTENT_FILE, PROBE_TIMEOUT, Unavailable, child_env
 from probes.packlayout import (
     Layout,
     ProbeFailure,
     build_pack,
-    file_sha,
     installer_layout,
     pack_identity,
     pack_layout,
@@ -48,17 +49,10 @@ PACK_CONTENT_FILE = REPO_ROOT / "tests" / "campaign" / "pack_content.yml"
 CONTENT_DIR = MAIN / ".cache" / "test-content"
 CORE_CACHE = MAIN / ".cache" / "pack-probe" / "cores"
 
-PACK_PROBES = mr.PACK_PROBES
 
-
-VERDICTS = ("boots", "bios_error", "crash", "hang", "unknown")
 MAX_ROUNDS = 6
-PROBE_TIMEOUT = 900
 IDLE_WAIT = 1800
-PROBE_LOCK_ENV = "RETROBIOS_PROBE_LOCK"
-PROBE_LOCK_HELD_ENV = "RETROBIOS_PROBE_LOCK_HELD"
-PROBE_LOCK = Path(os.environ.get(PROBE_LOCK_ENV)
-                  or Path.home() / ".local" / "state" / "retrobios" / "probe.lock")
+PROBE_LOCK = probe_lock_path()
 EXIT_BUSY = 3
 
 # The hardware target each platform is probed for: the one whose libretro
@@ -250,7 +244,7 @@ def fetch_core(name: str, refresh: bool = False) -> dict:
     so, meta_path = folder / f"{name}_libretro.so", folder / "build.json"
     if so.is_file() and meta_path.is_file() and not refresh:
         meta = json.loads(meta_path.read_text(encoding="utf-8"))
-        if meta.get("sha256") == file_sha(so, "sha256"):
+        if meta.get("sha256") == file_digest(so, "sha256"):
             return {**meta, "path": str(so)}
     url = f"{BUILDBOT}{name}_libretro.so.zip"
     folder.mkdir(parents=True, exist_ok=True)
@@ -260,7 +254,7 @@ def fetch_core(name: str, refresh: bool = False) -> dict:
         modified = response.headers.get("Last-Modified")
     safe_extract_so(archive, f"{name}_libretro.so", so)
     archive.unlink()
-    meta = {"name": name, "url": url, "last_modified": modified, "sha256": file_sha(so, "sha256"),
+    meta = {"name": name, "url": url, "last_modified": modified, "sha256": file_digest(so, "sha256"),
             "fetched_at": now_iso()}
     meta_path.write_text(json.dumps(meta, indent=1) + "\n", encoding="utf-8")
     return {**meta, "path": str(so)}
@@ -449,8 +443,8 @@ def git_head() -> str | None:
 
 
 def append_line(line: dict, root: Path = REPO_ROOT) -> dict:
-    sealed = mr.seal_line(line, mr.CAMPAIGN_FILES[PACK_PROBES][0])
-    path = root / mr.records_path(PACK_PROBES)
+    sealed = mr.seal_line(line, mr.CAMPAIGN_FILES[mr.PACK_PROBES][0])
+    path = root / mr.records_path(mr.PACK_PROBES)
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("a", encoding="utf-8") as handle:
         handle.write(mr.line_text(sealed) + "\n")

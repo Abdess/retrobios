@@ -32,6 +32,7 @@ import autorun
 import campaign
 import core_probe
 from core import hostguard
+from core.hashing import file_digest
 from probes import campaign as probes_campaign
 from probes import content as probes_content
 from probes import cores
@@ -487,7 +488,7 @@ class StateAndResume(Workspace):
     def test_state_survives_a_reload(self) -> None:
         c = self.make()
         c.pending("fake", "fake/fake-system/x/files", "content: romfetch not found")
-        state.save_state(self.paths.state, c.state)
+        statefile.save_state(self.paths.state, c.state)
         again = self.make()
         self.assertEqual(again.state["checks"]["fake"]["fake/fake-system/x/files"]["status"], "pending")
 
@@ -529,12 +530,12 @@ class Guards(Workspace):
         with hostguard.global_lock(lock):
             with self.assertRaises(hostguard.LockBusy), probes_host.host_lock(lock):
                 pass
-            os.environ[probes_host.LOCK_HELD_ENV] = "1"
+            os.environ[hostguard.LOCK_HELD_ENV] = "1"
             try:
                 with probes_host.host_lock(lock):
                     pass
             finally:
-                del os.environ[probes_host.LOCK_HELD_ENV]
+                del os.environ[hostguard.LOCK_HELD_ENV]
 
 
 class ChildEnvironment(unittest.TestCase):
@@ -1093,7 +1094,7 @@ class FakeCorePasses(Workspace):
         c = probes_campaign.Campaign(self.paths, probes_host.Settings(**values), host,
                               lock_path=self.tmp / "auto.lock")
         so = core or self.cores[kind]
-        c.unit_cores = lambda *a, **k: [cores.Core("fake", so, probes_host.file_sha256(so))]
+        c.unit_cores = lambda *a, **k: [cores.Core("fake", so, file_digest(so, "sha256"))]
         return c
 
     def test_a_stand_in_is_proven_and_written(self) -> None:
@@ -1224,7 +1225,7 @@ class FakeCorePasses(Workspace):
             check_repeat=2, probe_timeout=30, delays=(1,), echo=False), host,
             lock_path=workspace.tmp / "auto.lock")
         so = self.cores["hle"]
-        c.unit_cores = lambda *a, **k: [cores.Core("fake", so, probes_host.file_sha256(so))]
+        c.unit_cores = lambda *a, **k: [cores.Core("fake", so, file_digest(so, "sha256"))]
         return c
 
     def test_missing_content_leaves_the_checks_pending(self) -> None:

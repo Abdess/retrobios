@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import contextlib
-import hashlib
 import http.client
 import os
 import re
@@ -29,8 +28,6 @@ if TYPE_CHECKING:
 CONTENT_FILE = REPO_ROOT / "tests" / "campaign" / "content.yml"
 
 
-LOCK_HELD_ENV = hostguard.LOCK_HELD_ENV
-
 
 NETWORK_DELAYS = (10, 60, 300)
 
@@ -54,20 +51,6 @@ def slug(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-") or "x"
 
 
-def file_sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1 << 20), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
-def file_sha1(path: Path) -> str:
-    digest = hashlib.sha1()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1 << 20), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
 
 
 # --------------------------------------------------------------------------
@@ -210,7 +193,7 @@ def working_directory(path: Path) -> Iterator[None]:
 @contextlib.contextmanager
 def host_lock(lock_path: Path) -> Iterator[None]:
     """The automation lock, unless the autorun job running us holds it."""
-    if os.environ.get(LOCK_HELD_ENV):
+    if os.environ.get(hostguard.LOCK_HELD_ENV):
         yield
         return
     with hostguard.global_lock(lock_path):

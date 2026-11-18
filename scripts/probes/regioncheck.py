@@ -16,9 +16,11 @@ from pathlib import Path
 import yaml
 
 from core.paths import REPO_ROOT
+from core_probe import BUILTIN
+from probes.entries import entry_dest, regions_of
+from probes.host import CONTENT_FILE
 
 
-CONTENT_FILE = REPO_ROOT / "tests" / "campaign" / "content.yml"
 CORES = REPO_ROOT / ".cache" / "region" / "cores"
 NIGHTLY = "https://buildbot.libretro.com/nightly/linux/x86_64/latest/{core}_libretro.so.zip"
 VARIANTS = ("full", "own", "others", "pack")
@@ -32,16 +34,6 @@ REGION_WORDS = {"japan": "Japanese", "north-america": "US", "europe": "European"
 # Pure rules
 # --------------------------------------------------------------------------
 
-def regions_of(entry: dict) -> list[str]:
-    regions = entry.get("region") or []
-    return [regions] if isinstance(regions, str) else list(regions)
-
-
-def entry_dest(entry: dict) -> str:
-    path = entry.get("path")
-    if isinstance(path, str) and path and not path.endswith("/"):
-        return path
-    return entry["name"]
 
 
 def region_entries(profile: dict, system: str) -> list[dict]:
@@ -157,8 +149,6 @@ def outcome(records: dict[str, dict], entries: list[dict], region: str) -> dict:
         "judged_by": "verdict" if full_verdict not in (None, "unknown") else "full_run_frames",
     }
 
-
-BUILTIN = "builtin"
 
 
 def staged_name(used: str | None) -> str | None:

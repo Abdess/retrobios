@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from core import statefile
 from model import measurements as mr
 
 
@@ -30,9 +29,6 @@ def load_state(path: Path) -> dict:
         state.setdefault(key, {})
     return state
 
-
-def save_state(path: Path, state: dict) -> None:
-    statefile.save_state(path, state)
 
 
 def should_run(previous: dict | None, core_sha: str, digest: str, oracle_sha: str = "") -> bool:

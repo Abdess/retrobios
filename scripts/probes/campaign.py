@@ -18,8 +18,9 @@ import yaml
 import autorun
 import core_probe
 from core import hostguard
+from core.hashing import file_digest
 from core.paths import REPO_ROOT
-from core.statefile import now_iso
+from core.statefile import now_iso, save_state
 from model import measurements as mr
 from probes import rules
 from probes.profileedit import ProfileEditError, write_fields
@@ -40,12 +41,10 @@ from probes.host import (
     Settings,
     Unavailable,
     child_env,
-    file_sha1,
-    file_sha256,
     slug,
     working_directory,
 )
-from probes.state import DONE, FAILED, PENDING, load_state, save_state, should_run
+from probes.state import DONE, FAILED, PENDING, load_state, should_run
 
 
 CRASH_ATTEMPTS = 3
@@ -131,7 +130,7 @@ class Campaign:
         self.cores = Cores(self)
         self.store = ContentStore(self)
         self.content = load_content(paths.content_file)
-        self.oracle_sha = file_sha256(paths.oracle) if paths.oracle.is_file() else ""
+        self.oracle_sha = file_digest(paths.oracle, "sha256") if paths.oracle.is_file() else ""
         self.oracle_data = core_probe.load_oracle(paths.oracle)[0]
         self.deadline = 0.0
         self.current: Pass | None = None
@@ -369,7 +368,7 @@ class Campaign:
         for _, other, path in staged.values():
             theirs = set(regions_of(other))
             if theirs and "world" not in theirs and not theirs & mine and path.resolve() != local.resolve():
-                out.setdefault(file_sha1(path), path)
+                out.setdefault(file_digest(path), path)
         return sorted(out.values(), key=lambda p: p.name)[:MAX_REGION_DUMPS]
 
     def run_unit_content(self, unit: Unit, core: Core, content: Content, digest: str) -> None:

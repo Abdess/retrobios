@@ -18,8 +18,9 @@ from pathlib import Path
 from typing import TYPE_CHECKING, TypeVar
 
 import core_probe
+from core.hashing import file_digest
 from core.statefile import now_iso
-from probes.host import Unavailable, child_env, file_sha256, run_group, slug
+from probes.host import Unavailable, child_env, run_group, slug
 
 if TYPE_CHECKING:
     from probes.campaign import Campaign
@@ -255,7 +256,7 @@ class Cores:
         stamp = self.retrying(f"{name} nightly", head)
         target = self.c.paths.home / "cores" / name / f"{name}_libretro.so"
         if (cached.get("etag"), cached.get("last_modified")) != (stamp["etag"], stamp["last_modified"]) \
-                or not target.is_file() or file_sha256(target) != cached.get("sha256"):
+                or not target.is_file() or file_digest(target, "sha256") != cached.get("sha256"):
             archive = target.parent / f"{name}_libretro.so.zip"
             archive.parent.mkdir(parents=True, exist_ok=True)
 
@@ -265,7 +266,7 @@ class Cores:
             self.retrying(f"{name} nightly", download)
             safe_extract_so(archive, f"{name}_libretro.so", target)
             archive.unlink()
-            cached = {**stamp, "url": url, "sha256": file_sha256(target), "fetched_at": now_iso()}
+            cached = {**stamp, "url": url, "sha256": file_digest(target, "sha256"), "fetched_at": now_iso()}
             self.c.state["cores"][name] = cached
             self.c.log(f"core {name}: new nightly {cached['sha256'][:12]} ({stamp['last_modified']})")
         repo = profile.get("source") if isinstance(profile.get("source"), str) else None
@@ -295,7 +296,7 @@ class Cores:
         command = record.get("command") or "make"
         self.c.state["builds"][emulator] = {"commit": commit, "command": command,
                                             "so": built[0].name, "at": now_iso()}
-        return Core(built[0].name.removesuffix("_libretro.so"), built[0], file_sha256(built[0]),
+        return Core(built[0].name.removesuffix("_libretro.so"), built[0], file_digest(built[0], "sha256"),
                     repo=source, commit=commit, build_command=command)
 
     def mirror(self, url: str) -> Path:

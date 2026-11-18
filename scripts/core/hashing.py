@@ -85,6 +85,15 @@ def _compute_hashes(filepath: str | Path, algos: frozenset[str]) -> dict[str, st
         result["adler32"] = format(adler & 0xFFFFFFFF, "08x")
     return result
 
+def file_digest(path: Path, algorithm: str = "sha1") -> str:
+    """The hex digest of a file by any hashlib algorithm, read again each call."""
+    digest = hashlib.new(algorithm)
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1 << 20), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
 def md5sum(source: str | os.PathLike[str] | IO[bytes]) -> str:
     """Compute MD5 of a file path or file-like object - matches Batocera's md5sum()."""
     h = hashlib.md5()
