@@ -33,6 +33,9 @@ from resolve.validation import (
 )
 
 
+# Cross-reference: undeclared files used by cores
+
+
 def _build_expected(file_entry: dict, checks: list[str]) -> dict:
     """Extract expected validation values from an emulator profile file entry."""
     expected: dict = {}

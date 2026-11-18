@@ -84,7 +84,7 @@ class BothConsumersAgree(unittest.TestCase):
     """verify.py and generate_pack.py must answer the same for every mode."""
 
     def test_builder_and_verifier_share_one_predicate(self):
-        from generate_pack import _intentional_hash_exclusion
+        from packs.integrity import _intentional_hash_exclusion
         from packs.verdicts import compute_severity
 
         self.assertTrue(callable(compute_severity))

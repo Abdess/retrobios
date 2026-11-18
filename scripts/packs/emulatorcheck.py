@@ -47,6 +47,9 @@ from resolve.validation import (
 _REPO_PLATFORMS = str(REPO_ROOT / "platforms")
 
 
+# Emulator/system mode verification
+
+
 def _effective_validation_label(details: list[dict], validation_index: dict) -> str:
     """Determine the bracket label for the report.
 

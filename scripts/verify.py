@@ -29,7 +29,6 @@ import json
 import os
 import sys
 from pathlib import Path
-from typing import TYPE_CHECKING
 
 
 sys.path.insert(0, os.path.dirname(__file__))
@@ -65,9 +64,6 @@ from resolve.cores import (
 from model.safeparse import require_yaml
 
 
-if TYPE_CHECKING:
-
-    pass
 from packs.coverage import verify_platform
 from packs.emulatorcheck import verify_emulator, verify_system
 from packs.report import (
@@ -84,27 +80,6 @@ yaml = require_yaml()
 
 DEFAULT_DB = "database.json"
 DEFAULT_PLATFORMS_DIR = "platforms"
-
-
-# Status model: aligned with Batocera BiosStatus (batocera-systems:967-969)
-
-
-# Verification functions
-
-
-# Severity mapping per platform
-
-
-# Cross-reference: undeclared files used by cores
-
-
-# Platform verification
-
-
-# Output
-
-
-# Emulator/system mode verification
 
 
 def _refuse_listing_narrowings(

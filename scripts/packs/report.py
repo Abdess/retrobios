@@ -9,6 +9,9 @@ from resolve.categories import BIOS
 from resolve.nativemode import reads_file_contents
 
 
+# Output
+
+
 def _format_ground_truth_aggregate(ground_truth: list[dict]) -> str:
     """Format ground truth as a single aggregated line.
 

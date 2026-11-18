@@ -61,6 +61,9 @@ if TYPE_CHECKING:
     _Outcome = tuple[list[dict], bool, "Callable[[], None] | None"]
 
 
+# Emulator/system mode pack generation
+
+
 class EmulatorPackOptions(TypedDict, total=False):
     """The keyword options of generate_emulator_pack."""
 

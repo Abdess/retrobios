@@ -23,10 +23,7 @@ import os
 import shutil
 import sys
 from pathlib import Path
-from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    pass
 
 sys.path.insert(0, os.path.dirname(__file__))
 from model.database import load_database

@@ -34,7 +34,8 @@ from scripts import pipeline
 from scripts.resolve import regionaudit, regions
 from scripts.resolve.localfile import resolve_local_file
 from scripts.core.ziptools import safe_extract_zip
-from scripts.generate_pack import _emulator_region_group, verify_pack_against_platform
+from scripts.packs.extras import _emulator_region_group
+from scripts.packs.integrity import verify_pack_against_platform
 from scripts.packs.targets import generate_target_manifests
 
 HAS_JSONSCHEMA = jsonschema is not None

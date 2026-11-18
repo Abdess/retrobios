@@ -17,7 +17,6 @@ import json
 import os
 import sys
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
 
 sys.path.insert(0, os.path.dirname(__file__))
 from model.cliargs import platform_arg, list_emulator_profiles, require_platform
@@ -34,8 +33,6 @@ from resolve.launchers import (
     launcher_unproven,
 )
 
-if TYPE_CHECKING:
-    pass
 from packs.crossref import (
     DEFAULT_PLATFORMS_DIR,
     _build_supplemental_index,

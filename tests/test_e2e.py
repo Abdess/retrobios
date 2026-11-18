@@ -2625,7 +2625,7 @@ class TestE2E(unittest.TestCase):
 
     def test_138_parse_hash_input(self):
         """parse_hash_input handles various formats."""
-        from generate_pack import parse_hash_input
+        from resolve.packfiles import parse_hash_input
 
         # Plain MD5
         result = parse_hash_input("d8f1206299c48946e6ec5ef96d014eaa")
@@ -2645,7 +2645,7 @@ class TestE2E(unittest.TestCase):
 
     def test_139_parse_hash_file(self):
         """parse_hash_file handles comments, empty lines, various formats."""
-        from generate_pack import parse_hash_file
+        from resolve.packfiles import parse_hash_file
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
             f.write("# PS1 BIOS files\n")
@@ -2666,7 +2666,7 @@ class TestE2E(unittest.TestCase):
         import contextlib
         import io
 
-        from generate_pack import lookup_hashes
+        from resolve.packfiles import lookup_hashes
 
         db = {
             "files": {
@@ -2698,7 +2698,7 @@ class TestE2E(unittest.TestCase):
         import contextlib
         import io
 
-        from generate_pack import lookup_hashes
+        from resolve.packfiles import lookup_hashes
 
         db = {"files": {}, "indexes": {"by_md5": {}, "by_crc32": {}}}
         buf = io.StringIO()
@@ -5325,7 +5325,7 @@ struct BurnDriver BurnDrvneogeo = {
         """Pack verification reproduces the native md5 check per member."""
         import tempfile
 
-        from generate_pack import verify_pack_against_platform
+        from packs.integrity import verify_pack_against_platform
 
         with tempfile.TemporaryDirectory() as tmpdir:
             plat_dir, bios_root, out_dir, db, h, hl = self._make_hash_zip_fixture(
@@ -5348,7 +5348,7 @@ struct BurnDriver BurnDrvneogeo = {
         """Pack verification passes when member bytes match declared md5."""
         import tempfile
 
-        from generate_pack import verify_pack_against_platform
+        from packs.integrity import verify_pack_against_platform
 
         with tempfile.TemporaryDirectory() as tmpdir:
             plat_dir, bios_root, out_dir, db, h, hl = self._make_hash_zip_fixture(
@@ -5370,7 +5370,7 @@ struct BurnDriver BurnDrvneogeo = {
         import tempfile
 
         from packs.platformpack import generate_pack
-        from generate_pack import verify_pack_against_platform
+        from packs.integrity import verify_pack_against_platform
 
         profiles = {"eng": {"emulator": "Eng", "type": "game", "cores": ["eng"],
                             "systems": ["arcade-sys"],
@@ -5408,7 +5408,7 @@ struct BurnDriver BurnDrvneogeo = {
 
     def test_214_hash_matches_truncated_and_multi(self):
         """Declared-hash compare handles truncation, case, multi-values."""
-        from generate_pack import _hash_matches
+        from packs.integrity import _hash_matches
 
         full = "85254fbe320ca82a768ec2c26bb08def"
         self.assertTrue(_hash_matches(full, full))
@@ -5630,7 +5630,7 @@ struct BurnDriver BurnDrvneogeo = {
         import hashlib as hl
         import tempfile
 
-        from generate_pack import _check_member_hash
+        from packs.integrity import _check_member_hash
 
         rom = b"inner rom bytes"
         rom_md5 = hl.md5(rom).hexdigest()
@@ -6580,7 +6580,7 @@ struct BurnDriver BurnDrvneogeo = {
         import typing
 
         from packs.platformpack import generate_pack
-        from generate_pack import verify_pack_against_platform
+        from packs.integrity import verify_pack_against_platform
 
         self._create_region_fixtures()
         profiles = self._region_profiles()
@@ -6668,7 +6668,7 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertIn("All are included", text)
 
     def test_verify_agrees_with_region_filtered_pack(self):
-        from generate_pack import verify_pack_against_platform
+        from packs.integrity import verify_pack_against_platform
 
         out = self._region_pack(regions=["north-america"])
         result = verify_pack_against_platform(
@@ -6683,7 +6683,7 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertTrue(ok, errors)
 
     def test_verify_reports_the_gap_without_the_region_filter(self):
-        from generate_pack import verify_pack_against_platform
+        from packs.integrity import verify_pack_against_platform
 
         out = self._region_pack(regions=["north-america"])
         result = verify_pack_against_platform(

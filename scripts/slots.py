@@ -19,7 +19,6 @@ feeds the report this module prints.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
 
 from model.cliargs import platform_arg, require_platform
 from model.database import load_database
@@ -31,8 +30,6 @@ from model.targets import build_target_cores_cache
 from resolve.localfile import resolution_is_hash_exact
 from resolve.standalone import standalone_set as platform_standalone_set
 
-if TYPE_CHECKING:
-    pass
 from packs.slots import ADDRESSEE, Claim, Conflict, Decision, arbitrate, find_conflicts
 from resolve.collisions import Collision, find_collisions
 

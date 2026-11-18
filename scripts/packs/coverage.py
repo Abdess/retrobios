@@ -47,6 +47,9 @@ if TYPE_CHECKING:
     from typing_extensions import Unpack
 
 
+# Platform verification
+
+
 _UNPLACED_REASONS = {
     "outside_bios_folder": "read in a folder the platform keeps outside the BIOS tree",
     "no_roms_directory": "read below a roms folder the platform's registry does not name",

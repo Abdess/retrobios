@@ -19,6 +19,9 @@ DEFAULT_BIOS_DIR = "bios"
 DEFAULT_EMULATORS_DIR = "emulators"
 
 
+# Status model: aligned with Batocera BiosStatus (batocera-systems:967-969)
+
+
 class Status:
     OK = "ok"
     UNTESTED = "untested"  # file present, hash not confirmed: a warning, never --strict
@@ -44,6 +47,9 @@ _SEVERITY_ORDER = {
     Severity.WARNING: 2,
     Severity.CRITICAL: 3,
 }
+
+
+# Verification functions
 
 
 def verify_entry_existence(
@@ -216,6 +222,9 @@ def verify_entry_sha1(
         "path": local_path,
         "reason": f"expected {expected_sha1[:12]}... got {actual_sha1[:12]}...",
     }
+
+
+# Severity mapping per platform
 
 
 def _emulator_severity(status: str, required: bool, hle_fallback: bool) -> str:

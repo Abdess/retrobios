@@ -27,7 +27,6 @@ import json
 import os
 from pathlib import Path
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
 
 sys.path.insert(0, os.path.dirname(__file__))
 from resolve.cores import resolve_platform_cores as _platform_cores
@@ -76,17 +75,7 @@ from resolve import packfiles as packresolve
 from packs.datadirs import hold_data_dirs
 from model import region
 
-from packs.extras import (
-    _emulator_region_group as _emulator_region_group,
-)
-from packs.integrity import (
-    _check_member_hash as _check_member_hash,
-    _hash_matches as _hash_matches,
-    _intentional_hash_exclusion as _intentional_hash_exclusion,
-    verify_pack_against_platform,
-)
-# _OFFLINE is deliberately not re-exported: importing a value copies it, so a
-# facade name would keep saying False after set_offline() changed the flag.
+from packs.integrity import verify_pack_against_platform
 from resolve.packfiles import (
     ACCEPTED_HASHES,
     parse_hash_input,
@@ -94,8 +83,6 @@ from resolve.packfiles import (
     lookup_hashes,
 )
 
-if TYPE_CHECKING:
-    pass
 from packs.archive import DamagedArchiveError
 from packs.platformpack import generate_split_packs
 from packs.datatrees import _MISSING_DATA_DIRS
@@ -125,9 +112,6 @@ DEFAULT_PLATFORMS_DIR = "platforms"
 DEFAULT_DB_FILE = "database.json"
 DEFAULT_OUTPUT_DIR = "dist"
 DEFAULT_BIOS_DIR = "bios"
-
-
-# Emulator/system mode pack generation
 
 
 def _json_artifact_kind(path: Path) -> str | None:
@@ -1497,9 +1481,6 @@ def _main(held: contextlib.ExitStack) -> None:
     _run_platform_mode(args, parser, held, db, zip_contents)
 
 
-# Manifest generation (JSON inventory for install.py)
-
-
 def _write_standalone_layouts(output_dir: str, platform: str, layouts: dict) -> str:
     """install/standalone/<platform>.json, what --standalone reads beside the
     list. Its [dest, sha1] items take their download from that list."""
@@ -1509,9 +1490,6 @@ def _write_standalone_layouts(output_dir: str, platform: str, layouts: dict) -> 
         "schema": 1, "platform": platform, "standalone_layouts": layouts,
     })
     return path
-
-
-# Post-generation pack verification + manifest + SHA256SUMS
 
 
 if __name__ == "__main__":

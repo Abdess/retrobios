@@ -35,6 +35,9 @@ def _baseline_shortfall(excluded: int, absent: int) -> list[str]:
     return parts
 
 
+# Post-generation pack verification + manifest + SHA256SUMS
+
+
 def inject_manifest(zip_path: str, manifest: dict) -> None:
     """Inject manifest.json into an existing ZIP pack.
 

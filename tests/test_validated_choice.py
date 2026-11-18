@@ -156,7 +156,7 @@ class ManifestsServeWhatTheCoreAccepts(unittest.TestCase):
 
         from model.profiles import load_emulator_profiles
         from model.platforms import load_platform_config
-        from generate_pack import _platform_cores
+        from resolve.cores import resolve_platform_cores as _platform_cores
         from resolve.validation import check_file_validation
 
         manifest_path = REPO_ROOT / "install" / "retroarch.json"

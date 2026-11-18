@@ -22,6 +22,9 @@ from resolve.packfiles import resolve_file
 from resolve.validation import validated_choice
 
 
+# Manifest generation (JSON inventory for install.py)
+
+
 @functools.cache
 def _registered(repo_root: str) -> frozenset[str]:
     """The paths a repository's .gitignore registers as release assets, read
