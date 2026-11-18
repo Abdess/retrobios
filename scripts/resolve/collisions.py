@@ -9,7 +9,7 @@ from dataclasses import dataclass, field
 from core.hashing import compute_hashes, parse_md5_list
 from core.ziptools import check_inside_zip
 from resolve.localfile import resolve_local_file, variant_base_name
-from resolve.packfiles import preferred_entries
+from resolve.packfiles import _records_by_path, preferred_entries
 
 
 def _normalize(destination: str, fold: bool = True) -> str:
@@ -139,17 +139,10 @@ def _record_at(path: str, db: dict) -> dict | None:
     """The database record stored at path, from an index built once per db.
 
     A scan of db['files'] on every call was O(calls x 19 000 files) on the
-    path verify --all and slots.py both take.
+    path verify --all and slots.py both take. The index is the pack
+    resolver's, so one run holds one copy of it.
     """
-    files = db.get("files", {})
-    cached = _PATH_INDEX.get(id(files))
-    if cached is None or cached[0] is not files:
-        cached = (files, {e.get("path"): e for e in files.values()})
-        _PATH_INDEX[id(files)] = cached
-    return cached[1].get(path)
-
-
-_PATH_INDEX: dict[int, tuple[dict, dict[str, dict]]] = {}
+    return _records_by_path(db).get(path)
 
 
 def _content_sha1(path: str, db: dict) -> str | None:
