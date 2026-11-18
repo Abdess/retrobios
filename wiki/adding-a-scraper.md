@@ -115,14 +115,19 @@ scraper sets `lists_files = False`.
 
 ### Helper functions
 
-Two additional functions in `base_scraper.py`:
+Other functions in `base_scraper.py`:
 
 - `fetch_github_latest_version(repo)` - fetches the latest release tag via GitHub API.
 - `fetch_github_latest_tag(repo, prefix)` - fetches the most recent tag matching
   an optional prefix.
+- `github_json(url, failure)` - an api.github.com answer, parsed, with the
+  token `github_headers()` adds. A failed request raises `RuntimeError` (or the
+  `error` class given) with `failure` and the cause.
+- `fetch_text(url)` - a platform file as text, `ConnectionError` when it cannot
+  be read. `fetch_bytes(url)` is the same read with retries on a rate limit.
 
-Both send `GITHUB_TOKEN` when it is set and raise `RuntimeError` when the tag
-cannot be read, rather than letting a scraper fall back to a branch.
+The GitHub functions send `GITHUB_TOKEN` when it is set and raise `RuntimeError`
+when the tag cannot be read, rather than letting a scraper fall back to a branch.
 
 ## Creating a BIOS scraper
 
@@ -264,6 +269,11 @@ BaseTargetScraper
   write_output(data, path)   # write YAML to disk
 ```
 
+The package also gives `fetch_text(url, headers)` (raises `RuntimeError`: a
+target written from a failed request would lose its cores), `forge_headers(url)`
+(the GitHub token on api.github.com URLs) and `target_cli(Scraper, description)`,
+the `--dry-run` / `--output` command line every target scraper shares.
+
 ### Output format
 
 `fetch_targets()` must return a dict with this structure:
@@ -306,7 +316,7 @@ handle overrides.
 ### Module contract
 
 ```python
-from scripts.scraper.targets import BaseTargetScraper
+from . import BaseTargetScraper, target_cli
 
 PLATFORM_NAME = "myplatform"  # the platform's registry key
 
@@ -317,6 +327,14 @@ class Scraper(BaseTargetScraper):
     def fetch_targets(self) -> dict:
         # Fetch and parse target data
         ...
+
+
+def main() -> None:
+    target_cli(Scraper, "Scrape MyPlatform per-device cores")
+
+
+if __name__ == "__main__":
+    main()
 ```
 
 Register the target scraper in `_registry.yml`:

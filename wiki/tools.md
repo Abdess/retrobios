@@ -345,6 +345,11 @@ python scripts/export_native.py --platform batocera --fetch
 python scripts/export_native.py --all --fetch   # into exports/, published on the site
 ```
 
+The command is a thin layer over `scripts/exporter/`: `native.py` runs one
+platform's export and writes its report, `originals.py` reads and caches the
+platforms' own files at their pinned revision, `landed.py` lists what the
+written file changed, and each `*_exporter.py` renders one format.
+
 `--fetch` downloads the platform's own file into `.cache/upstream-native/`,
 at the revision the platform YAML's `source:` names. Formats that carry
 code are patched from it rather than regenerated, and the export fails
@@ -1693,8 +1698,8 @@ python -m scripts.scraper.mame_hash_scraper --devices --listxml .cache/dats/mame
 python -m scripts.scraper.mame_hash_scraper --devices --listxml .cache/dats/mame0289lx.zip
 ```
 
-Internal modules: `base_scraper.py` (abstract base with `_fetch_raw()` caching
-and shared CLI), `dat_parser.py` (clrmamepro DAT format parser),
+Internal modules: `base_scraper.py` (abstract base with `_fetch_raw()` caching,
+the GitHub and text fetches, and the shared CLI), `dat_parser.py` (clrmamepro DAT format parser),
 `logiqx_parser.py` (Logiqx XML DAT parser, used by the dump catalogs),
 `mame_parser.py` (MAME C source BIOS root set parser),
 `fbneo_parser.py` (FBNeo C source BIOS set parser),

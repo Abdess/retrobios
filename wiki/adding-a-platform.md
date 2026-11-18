@@ -458,7 +458,10 @@ launchers:
 | `choices_from` | The feature or option file listing the values the option takes (es_features, a core `.opt`), never the record's evidence |
 | `source_ref` | `path:lines` in the repository and at the revision `source` pins, which the site links |
 
-Batocera's generators are read with `ast`, RetroBat's C# generators as text.
+Batocera's generators are read with `ast`: `scripts/scraper/batocera_configgen.py`
+opens the configgen tree and `scripts/scraper/configgen_sites.py` reads each BIOS
+path a generator names, both shared with KNULLI. RetroBat's C# generators are read as
+text through `scripts/scraper/csharp_source.py`.
 ROCKNIX and EmuDeck launch from shell scripts and configs shipped with each
 package, so `scripts/scraper/shell_launchers.py` reads assignments, `for`
 loops, `ln -s` commands and `key = value` lines. A ROCKNIX package can ship
