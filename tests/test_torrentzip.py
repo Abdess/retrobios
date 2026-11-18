@@ -10,7 +10,7 @@ import tempfile
 import unittest
 import zipfile
 
-from core.torrentzip import build_torrentzip, identify_romset, is_torrentzip, rebuild_torrentzip
+from core.torrentzip import build_torrentzip, is_torrentzip, rebuild_torrentzip
 
 REPO_ROOT = os.path.join(os.path.dirname(__file__), "..")
 
@@ -113,30 +113,6 @@ class TorrentZipTest(unittest.TestCase):
             checked += 1
         if not checked:
             self.skipTest("corrected romsets not present in this checkout")
-
-    def test_identify_romset_selects_matching_recipe(self):
-        atoms = {"3610a686": b"alpha", "9d0d1b46": b"beta"}
-        import zlib
-
-        atoms = {
-            f"{zlib.crc32(b'alpha') & 0xffffffff:08x}": b"alpha",
-            f"{zlib.crc32(b'beta') & 0xffffffff:08x}": b"beta",
-        }
-        crc_a, crc_b = list(atoms)
-        wanted = hashlib.md5(
-            build_torrentzip([("a.rom", b"alpha"), ("b.rom", b"beta")])
-        ).hexdigest()
-        recipes = {
-            "v1": [("a.rom", crc_a)],
-            "v2": [("a.rom", crc_a), ("b.rom", crc_b)],
-        }
-        self.assertEqual(identify_romset(recipes, atoms, wanted), "v2")
-        self.assertIsNone(identify_romset(recipes, atoms, "0" * 32))
-
-    def test_identify_romset_skips_recipes_with_absent_atoms(self):
-        atoms = {"aaaaaaaa": b"x"}
-        recipes = {"v1": [("a.rom", "ffffffff")]}
-        self.assertIsNone(identify_romset(recipes, atoms, "0" * 32))
 
 
 def _as_file(test: unittest.TestCase, data: bytes) -> str:

@@ -135,6 +135,18 @@ class PoolAndBuild(unittest.TestCase):
         self.assertEqual(found[0], "v1")
         self.assertEqual(hashlib.md5(found[1]).hexdigest(), target)
 
+    def test_reconstruct_selects_the_recipe_with_every_member(self):
+        crc_a, crc_b = _crc(ROM_A), _crc(ROM_B)
+        wanted = hashlib.md5(
+            build_torrentzip([("a.rom", ROM_A), ("b.rom", ROM_B)])
+        ).hexdigest()
+        recipes = {"v1": [("a.rom", crc_a)], "v2": [("a.rom", crc_a), ("b.rom", crc_b)]}
+        self.assertEqual(reconstruct(wanted, recipes, self.pool)[0], "v2")
+        self.assertIsNone(reconstruct("0" * 32, recipes, self.pool))
+
+    def test_reconstruct_skips_recipes_with_absent_atoms(self):
+        self.assertIsNone(reconstruct("0" * 32, {"v1": [("a.rom", "ffffffff")]}, self.pool))
+
 
 class ReportsOverAFixture(unittest.TestCase):
     """A whole run over a synthetic collection, database and platform."""

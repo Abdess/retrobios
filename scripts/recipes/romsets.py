@@ -6,8 +6,19 @@ import json
 from collections import defaultdict
 from pathlib import Path
 
-
 Recipe = list[tuple[str, str]]
+
+
+def usable_recipe(members: list[dict]) -> Recipe | None:
+    """The (name, crc32) list of named members, None when it is empty or a
+    member lacks a crc32: the pool is addressed by content, so a member
+    without one cannot be located."""
+    recipe = [
+        (str(member["name"]), str(member.get("crc32") or "").lower())
+        for member in members
+        if member.get("name") is not None
+    ]
+    return recipe if recipe and all(crc for _name, crc in recipe) else None
 
 
 def load_dat_recipes(path: str | Path) -> dict[str, dict[str, Recipe]]:
@@ -34,13 +45,8 @@ def load_dat_recipes(path: str | Path) -> dict[str, dict[str, Recipe]]:
     recipes: dict[str, dict[str, Recipe]] = defaultdict(dict)
     for entry in snapshot.get("entries", []):
         archive = entry.get("name", "")
-        members = entry.get("members", []) or []
-        recipe = [
-            (str(member["name"]), str(member.get("crc32") or "").lower())
-            for member in members
-            if member.get("name") is not None
-        ]
-        if not archive or not recipe or not all(crc for _name, crc in recipe):
+        recipe = usable_recipe(entry.get("members", []) or [])
+        if not archive or recipe is None:
             continue
         label = f"{source}:{entry.get('dat', 'unnamed')}"
         recipes[archive][label] = recipe
@@ -57,11 +63,7 @@ def merge_recipes(*sources: dict[str, dict[str, Recipe]]) -> dict[str, dict[str,
 
 
 def collect_recipes(profiles: dict) -> dict[str, dict[str, Recipe]]:
-    """Map each archive name to one recipe per profile that documents it.
-
-    A recipe is only usable when every member carries a CRC32: the pool is
-    addressed by content, so a member without one cannot be located.
-    """
+    """Map each archive name to one usable recipe per profile that documents it."""
     recipes: dict[str, dict[str, Recipe]] = defaultdict(dict)
     for profile_name, profile in sorted(profiles.items()):
         for entry in profile.get("files", []) or []:
@@ -69,11 +71,7 @@ def collect_recipes(profiles: dict) -> dict[str, dict[str, Recipe]]:
             archive = entry.get("name", "")
             if not contents or not archive:
                 continue
-            recipe = [
-                (str(member["name"]), str(member.get("crc32") or "").lower())
-                for member in contents
-                if member.get("name") is not None
-            ]
-            if recipe and all(crc for _name, crc in recipe):
+            recipe = usable_recipe(contents)
+            if recipe is not None:
                 recipes[archive][profile_name] = recipe
     return dict(recipes)

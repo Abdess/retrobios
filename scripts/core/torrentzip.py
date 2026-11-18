@@ -7,10 +7,10 @@ member names and their contents.
 
 That property makes it possible to rebuild a romset ZIP that matches an
 upstream-published hash exactly, and to identify which romset revision a
-published hash refers to.
+published hash refers to (scripts/recipes/).
 
 Usage:
-    from core.torrentzip import build_torrentzip, identify_romset
+    from core.torrentzip import build_torrentzip
 
     data = build_torrentzip([("sp-s2.sp1", rom_bytes), ...])
     md5 = hashlib.md5(data).hexdigest()
@@ -184,24 +184,3 @@ def is_torrentzip(source: str | Path) -> bool:
     """Report whether an archive already carries the TorrentZip signature."""
     with zipfile.ZipFile(source) as zf:
         return zf.comment.decode("ascii", "replace").startswith(_COMMENT_PREFIX)
-
-
-def identify_romset(
-    recipes: dict[str, list[tuple[str, str]]],
-    atoms: dict[str, bytes],
-    target_md5: str,
-) -> str | None:
-    """Find which recipe rebuilds to a target archive MD5.
-
-    recipes maps a label (e.g. a MAME version) to a list of
-    (member name, CRC32 hex) pairs, and atoms maps CRC32 hex to ROM bytes.
-    Returns the matching label, or None when no recipe reproduces the hash.
-    """
-    target = target_md5.lower()
-    for label, recipe in recipes.items():
-        if any(crc.lower() not in atoms for _, crc in recipe):
-            continue
-        members = [(name, atoms[crc.lower()]) for name, crc in recipe]
-        if hashlib.md5(build_torrentzip(members)).hexdigest() == target:
-            return label
-    return None
