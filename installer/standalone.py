@@ -1,0 +1,309 @@
+"""Standalone emulators: their folders and the copies a launcher makes."""
+from __future__ import annotations
+
+import argparse
+import os
+import shutil
+import sys
+from pathlib import Path, PurePosixPath
+
+from installer.datadirs import _copy_targets
+from installer.detect_frontends import launchbox_bios_dirs, launchbox_root
+from installer.invocation import offline_requested
+from installer.line_ui import _sized
+from installer.local_files import BACKUP_DIR, check_local, unreachable_words
+from installer.network import fetch_manifest
+from installer.outcome import EVERYTHING_IN_PLACE, OutcomeDetails, _check_fetch_line, _report_outcome
+from installer.pack_source import NOT_KEPT, NOT_WRITABLE, _write_refused
+from installer.paths import _destination_path, _within
+from installer.plan import _check_free_space, _confirm, _print_plan, download_files
+from installer.probe import _closed_to_this_user, _exists, _is_dir
+from installer.record import KEPT, _NotKept, _replace_with_copy, plan_kept
+from installer.terminal import Progress, Terminal
+
+
+def standalone_folders_here(
+    manifest: dict, os_type: str, extra_dirs: dict[str, Path] | None = None,
+) -> list[Path]:
+    """The emulator folders of the manifest's standalone copies that exist
+    on this machine: the ones --standalone-copies would write to."""
+    found: list[Path] = []
+    for entry in manifest.get("standalone_copies", []):
+        if "note" in entry:
+            continue
+        for folder in _copy_targets(entry, os_type, extra_dirs):
+            if folder not in found and _is_dir(folder):
+                found.append(folder)
+    return found
+
+
+# The file lists a machine with standalone emulators and no platform is
+# served from: EmuDeck's holds the Switch keys, RetroArch's the PPSSPP atlas
+# and the Flycast flash, and each copy entry names its folders.
+STANDALONE_SOURCES = ("emudeck", "retroarch")
+
+
+def standalone_plan(
+    manifests: list[dict], os_type: str, extra_dirs: dict[str, Path] | None = None,
+) -> list[tuple[Path, list[dict]]]:
+    """What each emulator folder found here receives, by its own file name.
+
+    The standalone copies of the manifests, read as do_standalone_copies
+    reads them, but taken from the file lists rather than from a platform
+    tree already installed: an ES-DE user with DuckStation and PCSX2 and no
+    RetroArch had no tree to copy from. The first list that holds a name for
+    a folder serves it.
+    """
+    from fnmatch import fnmatch
+
+    plan: dict[Path, dict[str, dict]] = {}
+    for manifest in manifests:
+        files = manifest.get("files", [])
+        by_dest = {entry["dest"]: entry for entry in files}
+        for copy in manifest.get("standalone_copies", []):
+            if "note" in copy:
+                continue
+            if "pattern" in copy:
+                sources = [entry for entry in files
+                           if fnmatch(PurePosixPath(entry["dest"]).name, copy["pattern"])]
+            else:
+                held = by_dest.get(copy.get("source") or copy["file"])
+                sources = [held] if held else []
+            for folder in _copy_targets(copy, os_type, extra_dirs):
+                if not sources or not _is_dir(folder):
+                    continue
+                chosen = plan.setdefault(folder, {})
+                for entry in sources:
+                    # `as`: the name the emulator reads, when it is not the
+                    # platform's (melonDS's dsisd.bin, xemu's eeprom.bin).
+                    name = copy.get("as") or PurePosixPath(entry["dest"]).name
+                    chosen.setdefault(name, {**entry, "dest": name})
+    return [(folder, list(entries.values())) for folder, entries in plan.items() if entries]
+
+
+def _check_standalone_folder(to_download: list[dict], mismatched: list[dict],
+                             verbose: bool) -> None:
+    """What --check says of one standalone emulator folder."""
+    for entry in mismatched:
+        print(f"    wrong copy: {entry['dest']}")
+    wrong = {id(entry) for entry in mismatched}
+    missing = [entry for entry in to_download if id(entry) not in wrong]
+    for entry in missing[:10] if not verbose else missing:
+        print(f"    missing: {entry['dest']}")
+    if not verbose and len(missing) > 10:
+        print(f"    ... and {len(missing) - 10} more missing (--verbose lists them all)")
+    if not to_download:
+        print(f"  {EVERYTHING_IN_PLACE}")
+
+
+def _install_standalone_folders(
+    args: argparse.Namespace, os_type: str, term: Terminal, interactive: bool,
+) -> bool:
+    """Fill the standalone emulator folders found here, with no platform.
+
+    False when this machine has none, the run then going on to the platform
+    question or hint.
+    """
+    if offline_requested():
+        # Their folders are named by file lists this run cannot fetch: the
+        # first refusal ended an --offline run that asked nothing of EmuDeck
+        # on "No file list for emudeck".
+        return False
+    manifests = [fetch_manifest(plat) for plat in STANDALONE_SOURCES]
+    lb_root = launchbox_root(os_type)
+    plan = standalone_plan(manifests, os_type,
+                           launchbox_bios_dirs(lb_root) if lb_root else None)
+    if not plan:
+        return False
+    print("  Found standalone emulator folders:")
+    for folder, entries in plan:
+        print(f"    {folder}  {_sized(entries)}")
+    if interactive and not (args.check or args.dry_run or args.yes) and not _confirm(
+        "\nInstall the BIOS files these emulators read into their folders? [Y/n] "
+    ):
+        return False
+    downloaded = up_to_date_count = errors = 0
+    pending = 0
+    failures: list[tuple[str, str]] = []
+    transferred, seconds = 0, 0.0
+    interrupted = False
+    for folder, entries in plan:
+        print(f"\n{folder}:")
+        to_download, up_to_date, mismatched = check_local(entries, folder, jobs=args.jobs)
+        to_download.extend(mismatched)
+        up_to_date_count += len(up_to_date)
+        if args.check:
+            _check_standalone_folder(to_download, mismatched, args.verbose)
+            pending += len(to_download)
+            continue
+        if args.dry_run:
+            _print_plan(to_download, folder, term, kept=plan_kept(mismatched, folder),
+                        verbose=args.verbose)
+            continue
+        if not to_download:
+            print(f"  {EVERYTHING_IN_PLACE}")
+            continue
+        size = sum(entry.get("size", 0) for entry in to_download)
+        _check_free_space(folder, size, code=1 if downloaded else 2)
+        progress = Progress(len(to_download), size, term)
+        failed, interrupted = download_files(
+            to_download, folder, jobs=args.jobs, verbose=args.verbose,
+            term=term, progress=progress,
+        )
+        downloaded += progress.installed
+        errors += len(failed)
+        failures.extend((str(folder / dest), reason) for dest, reason in failed)
+        transferred += progress.transferred()
+        seconds += progress.elapsed()
+        if interrupted:
+            break
+    if args.check:
+        if pending:
+            print("\n" + _check_fetch_line(pending, "its folder"))
+            sys.exit(3)
+        return True
+    if args.dry_run:
+        return True
+    _report_outcome(
+        [folder for folder, _entries in plan], downloaded, up_to_date_count, errors,
+        0, interrupted,
+        details=OutcomeDetails(failures=failures, transferred=transferred, seconds=seconds),
+        term=term,
+    )
+    return True
+
+
+def _print_standalone_note(entry: dict, os_type: str) -> None:
+    """A note entry's message, said when its emulator is found here."""
+    detect_paths = entry.get("detect", {}).get(os_type, [])
+    if not detect_paths and os_type == "wsl":
+        detect_paths = entry.get("detect", {}).get("linux", [])
+    for dp in detect_paths:
+        expanded = Path(os.path.expandvars(os.path.expanduser(dp)))
+        if _is_dir(expanded):
+            print(f"  {entry['note']}")
+            break
+
+
+def _standalone_sources(entry: dict, bios_path: Path) -> list[Path]:
+    """The files of the BIOS folder a standalone copy entry copies."""
+    from fnmatch import fnmatch
+
+    if "pattern" in entry:
+        # A kept file is never a source, when the backup had to go
+        # inside the BIOS folder.
+        return [
+            f for f in bios_path.rglob("*")
+            if fnmatch(f.name, entry["pattern"]) and f.is_file()
+            and BACKUP_DIR not in f.relative_to(bios_path).parts
+        ]
+    # `source` is where this platform's manifest put the file, and `file`
+    # names it as the registry does for every platform, and laid out
+    # that way it was missing wherever the pack places it elsewhere.
+    src = _destination_path(bios_path, entry.get("source") or entry["file"])
+    return [src] if _exists(src) else []
+
+
+def _copy_standalone_file(src: Path, dest: Path, resolved_dir: Path,
+                          failures: list[tuple[str, str]] | None) -> bool:
+    """Copy one file into an emulator folder, False when it was refused."""
+    linked = dest.is_symlink()
+    # A crafted source name would climb out of the directory.
+    if not linked and not _within(dest, resolved_dir):
+        print(f"  ERROR: {dest}: {OUTSIDE_TARGET}")
+        if failures is not None:
+            failures.append((str(dest), OUTSIDE_TARGET))
+        return False
+    try:
+        KEPT.keep(resolved_dir, PurePosixPath(dest.name), dest, {}, src)
+    except _NotKept as exc:
+        print(f"  ERROR: {dest}: {NOT_KEPT} ({exc})")
+        if failures is not None:
+            failures.append((str(dest), f"{NOT_KEPT} ({exc})"))
+        return False
+    try:
+        if linked:
+            # Writing through a link already at the name would
+            # leave the folder the user opted into. The link
+            # itself gives way to the file.
+            _replace_with_copy(src, dest)
+            print(f"  {dest}: link replaced by the file")
+        else:
+            shutil.copy2(src, dest)
+    except OSError as exc:
+        print(f"  ERROR: {dest}: {exc.strerror or exc}")
+        if failures is not None:
+            reason = NOT_WRITABLE if _write_refused(exc) else str(
+                exc.strerror or exc)
+            failures.append((str(dest), reason))
+        return False
+    return True
+
+
+def do_standalone_copies(
+    manifest: dict, bios_path: Path, os_type: str,
+    extra_dirs: dict[str, Path] | None = None,
+    failures: list[tuple[str, str]] | None = None,
+) -> tuple[int, int, int]:
+    """Copy BIOS files to standalone emulator directories.
+
+    Supports:
+    - file: single file copy
+    - pattern: glob match (e.g. "scph*.bin")
+    - note: informational message when detect path exists
+    - WSL fallback to linux targets
+
+    extra_dirs maps the emulator id of an entry to a root that replaces the
+    default per-OS locations, for setups such as LaunchBox that keep their
+    emulators outside them. The layout below the root is the same.
+
+    Returns (copied, skipped, failed): skipped is a target directory that
+    does not exist, failed a copy the system refused (permission, disk
+    full, read-only mount) or a name leading out of the folder, which used
+    to be counted as "dir not found". A link already at a file's name is
+    replaced by the file, never written through.
+    Each failure is also appended to failures, by absolute path, for the
+    summary to name.
+    """
+    copies = manifest.get("standalone_copies", [])
+    if not copies:
+        return 0, 0, 0
+
+    copied = 0
+    skipped = 0
+    failed = 0
+
+    for entry in copies:
+        # Note entries: print message if emulator detected
+        if "note" in entry:
+            _print_standalone_note(entry, os_type)
+            continue
+
+        sources = _standalone_sources(entry, bios_path)
+        if not sources:
+            continue
+
+        for target_dir in _copy_targets(entry, os_type, extra_dirs):
+            closed = _closed_to_this_user(target_dir)
+            if closed is not None:
+                # Android 11 and later keep each app's Android/data folder
+                # to that app, there or not: Termux cannot copy Dolphin's
+                # IPL.bin there, and cannot tell whether Dolphin is installed.
+                print(f"  {target_dir}: {unreachable_words(closed)}, not copied")
+                skipped += len(sources)
+                continue
+            if not _is_dir(target_dir):
+                skipped += len(sources)
+                continue
+            resolved_dir = target_dir.resolve()
+            for src in sources:
+                dest = target_dir / (entry.get("as") or src.name)
+                if _copy_standalone_file(src, dest, resolved_dir, failures):
+                    copied += 1
+                else:
+                    failed += 1
+
+    return copied, skipped, failed
+
+
+OUTSIDE_TARGET = "name leads outside the emulator folder"

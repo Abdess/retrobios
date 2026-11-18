@@ -1,0 +1,833 @@
+"""How a run ends: failures, remedies and the next step, on the screen and in events."""
+from __future__ import annotations
+
+import errno
+import http.client
+import os
+import socket
+import sys
+import urllib.error
+from collections.abc import Callable
+from pathlib import Path
+from typing import Any, NamedTuple, NoReturn
+
+from installer.cards import dest_drive
+from installer.constants import BASE_URL, GAME_DATA, OMISSION_REASONS, OTHER_SYSTEMS, SITE_URL, TROUBLESHOOTING_PAGE
+from installer.cores import entry_systems
+from installer.detect_os import detected_os
+from installer.embedded import _mounted_cards, card_bound, display_name, shown_path
+from installer.invocation import _INVOCATION, Invocation, offline_requested
+from installer.local_files import BACKUP_DIR
+from installer.network import _address_lines
+from installer.offline import LOCAL, OFFLINE_WORDS, offline_named, offline_undo
+from installer.pack_source import NOT_IN_PACK, NOT_KEPT, NOT_WRITABLE, READ_ONLY
+from installer.paths import _entry_path
+from installer.probe import _held, _is_file
+from installer.record import KEPT, _kept_lines
+from installer.tally import Tally, installed_words, kinds_definition
+from installer.terminal import OUTPUT, SAID_FAILED, Terminal, format_duration
+from installer.text import _plural, agree, format_size, screen_text
+
+
+def _locations(paths: list[Path]) -> str:
+    """Where the run wrote, naming every destination when it served several."""
+    return ", ".join(shown_path(p) for p in paths) if paths else "nowhere"
+
+
+# A write the drive had no room for: the same run fails the same way until
+# space is freed or another drive is named.
+DRIVE_FULL = "the drive is full"
+
+# What a run says when every file is in place, on the screen and in line
+# mode: the site's "How to check" quotes it (scripts/generate_site.py).
+EVERYTHING_IN_PLACE = "Every file on the list is in place."
+# The plan's two rows a beginner reads first: the README and the site name
+# them from here, so they say what the screen shows.
+TUI_INSTALL_ROW = "Install"
+TUI_SYSTEMS_ROW = "Choose systems"
+# The first screen's title: a setup found here, or none, and the list.
+# which-pack names them from here.
+TUI_FOUND_TITLE = "Where to install?"
+TUI_CHOOSE_TITLE = "Which setup?"
+# Asked after Which setup? where nothing was found, and on a card.
+TUI_FOLDER_TITLE = "Which folder?"
+
+
+def _on_read_only_mount(path: Path) -> bool:
+    """Whether the file system holding path, or the folder it would go in,
+    is mounted read-only (a card Linux remounts read-only after an error)."""
+    if not hasattr(os, "statvfs"):
+        return False
+    probe = path
+    while not _held(probe) and probe.parent != probe:
+        probe = probe.parent
+    try:
+        return bool(os.statvfs(probe).f_flag & os.ST_RDONLY)
+    except OSError:
+        return False
+
+
+def read_only_words(path: Path) -> str:
+    """The remedy for a folder on a read-only file system, in one sentence
+    that the plan, the result and line mode all say: root cannot write it
+    either, and the plan offered sudo for it."""
+    place = path.absolute()
+    card = any(mount == place or mount in place.parents for mount in _mounted_cards())
+    return (f"The {'card' if card else 'drive'} is read-only: unlock it or mount it "
+            "read-write, then run again.")
+
+
+# What Termux needs to write shared storage, said by the plan, the result
+# and line mode alike.
+TERMUX_STORAGE_WORDS = ("Run termux-setup-storage once and allow the storage permission "
+                        "Android asks for, then run it again.")
+
+
+def write_remedy(path: Path, plat: str, hint: Invocation, commands: bool = True) -> list[str]:
+    """What the screens say a user can do about a folder they cannot write:
+    the read-only remedy, or the same choice run as an administrator, the
+    command carrying every option of the run (hint). The sudo line dropped
+    --from-pack and --manifest, and stopped at the file list with
+    --offline. commands is False where no command can be typed (a pad)."""
+    if _on_read_only_mount(path):
+        return [read_only_words(path)]
+    if hint.os_type == "android":
+        # Termux has no sudo: its shared storage is reached once Android
+        # gives it the storage permission.
+        return [TERMUX_STORAGE_WORDS]
+    if not commands:
+        return []
+    if hint.os_type == "windows":
+        return ["Or run the installer as an administrator."]
+    # sudo changes the home folder, and with it what is detected: the folder
+    # is named so root writes here.
+    return ["Or run it as root, this folder named: "
+            + hint.command(plat, path, elevated=True)]
+
+
+def _write_advice(path: Path, assumed: bool, plat: str = "",
+                  hint: Invocation | None = None) -> str:
+    """What to do about a folder this run could not write, the command
+    built by hint (the run's own invocation by default).
+
+    sudo fixes a root-owned BIOS folder on the console itself. On another
+    machine it would create that folder on the wrong disk: a platform named
+    but not found here is a card or share mounted elsewhere, named by --dest.
+    Windows has no sudo, and Termux reaches shared storage once
+    termux-setup-storage has run. A read-only mount refuses root as well,
+    so sudo is never offered for it.
+    """
+    hint = hint or _INVOCATION
+    if _on_read_only_mount(path):
+        again = f"\n    {hint.command(plat, path)}" if plat else ""
+        return (f"  {read_only_words(path)} {path} is on a file system mounted "
+                "read-only, which no user can write, sudo included (a card or drive "
+                "the system switched to read-only after an error needs a check "
+                f"first: fsck, or chkdsk on Windows).{again}")
+    if assumed:
+        return (f"  {path} is where the platform keeps its BIOS on its own system, "
+                "and it was not found here. If this machine prepares its card or "
+                "share, run it again with --dest pointing at that folder:\n"
+                f"    {hint.command(plat, '<that folder>')}")
+    if plat and hint.os_type == "windows":
+        return ("  This user cannot write there. Run it again from a PowerShell window "
+                "opened as administrator:\n"
+                f"    {hint.command(plat, path)}\n"
+                "  Or choose another folder with --dest.")
+    if plat and hint.os_type == "android":
+        return (f"  This user cannot write there. {TERMUX_STORAGE_WORDS}\n"
+                f"    {hint.command(plat, path)}\n"
+                "  Or choose another folder with --dest.")
+    if plat:
+        # sudo resets HOME to root's on Debian, Ubuntu, Arch and SteamOS:
+        # the same command detected nothing there, fell back to a folder
+        # under /root and reported success.
+        return ("  This user cannot write there. Run it again with sudo, naming the "
+                "folder so root does not look in its own home:\n"
+                f"    {hint.command(plat, path, elevated=True)}\n"
+                "  Or choose another folder with --dest.")
+    if hint.os_type == "windows":
+        return ("  This user cannot write there: run the same command from a PowerShell "
+                "window opened as administrator, or choose another folder with --dest.")
+    return ("  This user cannot write there: run the same command with sudo, "
+            "or choose another folder with --dest.")
+
+
+class OfflineReason(str):
+    """A file not fetched because the run was told to make no request."""
+
+
+class NetworkReason(str):
+    """A failure the connection caused: cut, timed out, refused by a server
+    or a proxy. The summary names the network instead of the folder."""
+
+    url = ""
+
+
+class HttpReason(str):
+    """A file the server answered for with an error of its own (HTTP 404):
+    the summary names the address, where "HTTP 404" alone told the user
+    neither what failed nor that running again changes nothing."""
+
+    url = ""
+
+
+def _http_failure_lines(failures: list[tuple[str, str]]) -> list[str]:
+    """The address the first refused file was asked at, and what chose it:
+    a mirror named with RETROBIOS_BASE_URL that holds the lists and not yet
+    the files, or a list out of step with the files it names."""
+    refused = [reason for _dest, reason in failures if isinstance(reason, HttpReason)]
+    if not refused:
+        return []
+    more = f" (and {_plural(len(refused) - 1, 'other file')})" if len(refused) > 1 else ""
+    lines = [f"  The server answered {refused[0]} for {refused[0].url}{more}."]
+    if os.environ.get("RETROBIOS_BASE_URL"):
+        return lines + _address_lines(refused[0].url)[1:]
+    return lines + ["  The file list names files the server does not hold, and running "
+                    "again changes nothing until the two match.",
+                    f"  More help: {TROUBLESHOOTING_PAGE}"]
+
+
+def _transfer_failure(exc: BaseException) -> bool:
+    """Whether a download error came from the connection, not the disk."""
+    # urlopen raises URLError for the name lookup, the connection and TLS.
+    # A cut read surfaces as a timeout (socket.timeout is no TimeoutError
+    # before 3.10), a reset, an SSL error or a size that does not add up.
+    ssl_error = getattr(sys.modules.get("ssl"), "SSLError", ())
+    if isinstance(exc, (urllib.error.URLError, http.client.HTTPException, ValueError,
+                        ConnectionError, TimeoutError, socket.timeout)):
+        return True
+    if ssl_error and isinstance(exc, ssl_error):
+        return True
+    return isinstance(exc, OSError) and exc.errno in (
+        errno.ECONNRESET, errno.ECONNREFUSED, errno.ECONNABORTED, errno.ETIMEDOUT,
+        errno.EHOSTUNREACH, errno.ENETUNREACH, errno.ENETDOWN, errno.EPIPE,
+    )
+
+
+NETWORK_FAILURE_ADVICE = (
+    "  The transfers were cut or refused on the way: check the connection, and "
+    "HTTPS_PROXY if this network needs a proxy.\n"
+    f"  More help: {TROUBLESHOOTING_PAGE}")
+
+
+def _status_print(term: Terminal | None) -> Callable[..., None]:
+    """print, with the status words of what it prints in their roles when
+    term paints (Terminal.status)."""
+    if term is None or not term.colour:
+        return print
+
+    def say(*parts: object, **kwargs: Any) -> None:
+        print(*(term.status(str(part)) for part in parts), **kwargs)
+    return say
+
+
+class _Ending(NamedTuple):
+    """What every ending of a run reads, worked out by _report_outcome."""
+
+    say: Callable[..., None]
+    paths: list[Path]
+    downloaded: int
+    up_to_date: int
+    errors: int
+    omitted: int
+    offline: int
+    failures: list[tuple[str, str]] | None
+    sources: str
+    kept: list[str]
+    advice: list[str]
+    same_lines: list[str]
+    installed_kinds: str
+    omitted_entries: list[dict]
+    unplaced: int
+    platform_of: dict[Path, str]
+    hints: list[str]
+    same_choice: str
+    missing: Tally | None
+
+
+def _say_failures(say: Callable[..., None], failures: list[tuple[str, str]] | None) -> None:
+    """The failed files the progress has not named, one cause said once."""
+    reasons = {reason for _dest, reason in failures or []}
+    # A failure the progress already named on its FAILED line is not named
+    # again: line mode listed each one twice.
+    unsaid = [failure for failure in failures or [] if failure[0] not in SAID_FAILED]
+    if failures and len(failures) > 1 and len(reasons) == 1 and reasons != {""}:
+        # One cause, said once: a read-only folder listed ten of its files
+        # and "... and 266 more" above the advice that fixes them all.
+        said = f", first {unsaid[0][0]}" if unsaid else ""
+        say(f"  failed: {_plural(len(failures), 'file')} ({reasons.pop()}){said}")
+    else:
+        for dest, reason in unsaid[:10]:
+            say(f"  failed: {dest}" + (f" ({reason})" if reason else ""))
+        if len(unsaid) > 10:
+            say(f"  ... and {len(unsaid) - 10} more")
+
+
+def _failure_advice(
+    paths: list[Path], failures: list[tuple[str, str]], assumed: set[Path] | None,
+    platform_of: dict[Path, str] | None,
+) -> list[str]:
+    """What to do about the causes of the failed files, one line each."""
+    refused = any(reason == NOT_WRITABLE for dest, reason in failures
+                  if not Path(dest).is_absolute())
+    advice = [
+        _write_advice(path, path in (assumed or set()), (platform_of or {}).get(path, ""))
+        for path in paths
+    ] if refused else []
+    advice += [_write_advice(folder, False) for folder in sorted({
+        Path(dest).parent for dest, reason in failures
+        if Path(dest).is_absolute() and reason == NOT_WRITABLE
+    })]
+    if any(reason == DRIVE_FULL for _dest, reason in failures):
+        advice.append(f"  The drive holding {_locations(paths)} is full: free up space, or "
+                      "install to another drive with --dest, then run again.")
+    if any(reason == READ_ONLY for _dest, reason in failures):
+        advice.append("  Files marked read-only are in the way: clear that attribute "
+                      "(or delete them), then run again.")
+    advice += _http_failure_lines(failures)
+    if any(isinstance(reason, NetworkReason) for _dest, reason in failures):
+        advice.append(NETWORK_FAILURE_ADVICE)
+        if os.environ.get("RETROBIOS_BASE_URL"):
+            # A mirror that is down read as this machine's connection.
+            advice += _address_lines(BASE_URL)[1:]
+    if any(str(reason).startswith(NOT_KEPT) for _dest, reason in failures):
+        # The same run fails the same way: "retry only those" sent a phone
+        # user round the loop with nothing changed.
+        advice.append("  The files in place were left as they were, as no backup folder could "
+                      "be made for them. Move them out of the folder, then run again to "
+                      "install the new ones.")
+    return advice
+
+
+def _kept_and_unplaced(omitted_entries: list[dict], notes: list[str] | None,
+                       ) -> tuple[list[str], int]:
+    """The lines every ending repeats, and the count of files left out for
+    an unknown save directory."""
+    # Left out for an unknown save directory, said with that reason in
+    # every ending: "the collection does not hold it" blamed the collection.
+    unplaced = [entry for entry in omitted_entries
+                if entry.get("reason") == "no_save_directory"]
+    kept = _kept_lines() + ([
+        f"{_plural(len(unplaced), 'file')} read from "
+        f"{unplaced[0].get('frontend') or 'the frontend'}'s save directory left out: "
+        + (f"{unplaced[0]['save_why']}." if unplaced[0].get("save_why")
+           else f"its place is not known. {LINE_SAVE_REMEDY}")] if unplaced else [])
+    kept += list(notes or [])
+    return kept, len(unplaced)
+
+
+def _end_offline(end: _Ending) -> NoReturn:
+    """End a run --offline left files out of."""
+    say, paths, downloaded, errors, offline = (
+        end.say, end.paths, end.downloaded, end.errors, end.offline)
+    sources = end.sources
+    remedy = _offline_remedy()
+    if not downloaded and not errors:
+        say(f"\nNothing installed: {agree(offline, 'file needs', 'files need')} "
+            "the internet, which "
+            f"{offline_named()} does not use.")
+        say(f"  {remedy}")
+        for line in end.kept:
+            say(line)
+        if end.up_to_date:
+            say(f"{_plural(end.up_to_date, 'file')} already in place at "
+                f"{_locations(paths)}.")
+        for line in end.same_lines:
+            say(line)
+        sys.exit(2)
+    failed = f", {errors} failed" if errors else ""
+    if downloaded and sources:
+        # One count, the remedy under it, as the screen's result: the
+        # count came twice, "installed" then "copied". The failed files are
+        # in it.
+        say(f"\nFinished with files missing. {sources}")
+        sources = ""
+    elif downloaded:
+        say(f"\nFinished with files missing. {_plural(downloaded, 'file')} installed, "
+            f"{offline} not fetched ({offline_named()}){failed}.")
+    else:
+        # Nothing written: "Finished with files missing. 0 files installed"
+        # read as a part done.
+        say(f"\nNothing installed: {_plural(offline, 'file')} not fetched "
+            f"({offline_named()}){failed}.")
+    if sources:
+        say(f"  {sources}")
+    if end.installed_kinds:
+        say(end.installed_kinds)
+    missing = end.missing
+    if missing is not None and missing.bios and missing.games:
+        # The kinds still missing, as the screen's result says them,
+        # before the remedy: "They are not in OLD" followed the files
+        # installed.
+        say(f"  Still missing: {installed_words(missing.bios, missing.games)}.")
+    # Under the files it is about: after the save-directory line, "They"
+    # read as that one file.
+    say(f"  {remedy}")
+    say(f"BIOS folder: {_locations(paths)}")
+    for line in end.kept + end.advice + end.same_lines:
+        say(line)
+    sys.exit(1 if downloaded else 2)
+
+
+def _end_nothing_installed(end: _Ending) -> NoReturn:
+    """End a run whose every file failed."""
+    say, paths, failures = end.say, end.paths, end.failures
+    say(f"\nNothing was installed. {_plural(end.errors, 'file')} failed.")
+    if failures and all(isinstance(r, (NetworkReason, HttpReason, OfflineReason))
+                        for _d, r in failures):
+        # The folder was never the problem: naming it as the place being
+        # written to sent people looking at their disk.
+        say(f"BIOS folder: {_locations(paths)}")
+    elif _retry_words(failures):
+        # Nothing was written: every file is one the pack lacks.
+        say(f"BIOS folder: {_locations(paths)}")
+    else:
+        say(f"BIOS folder that was being written to: {_locations(paths)}")
+    for line in end.kept + end.advice:
+        say(line)
+    say(_retry_words(failures) or "Run the same command again once that is resolved. "
+        "Files already installed are kept.")
+    for line in end.same_lines:
+        say(line)
+    sys.exit(2)
+
+
+def _end_with_errors(end: _Ending) -> NoReturn:
+    """End a run that installed files and failed others."""
+    say, failures = end.say, end.failures
+    # One count: "42 files installed, 2 files failed." over "38 files
+    # copied from E:\, 4 downloaded, 2 still missing." said it twice,
+    # the failed files as missing ones.
+    say(f"\nFinished with errors. {end.sources}" if end.sources else
+        f"\nFinished with errors. {_plural(end.downloaded, 'file')} installed, "
+        f"{_plural(end.errors, 'file')} failed.")
+    if end.installed_kinds:
+        say(end.installed_kinds)
+    say(f"BIOS folder: {_locations(end.paths)}")
+    for line in end.kept + end.advice:
+        say(line)
+    retry = _retry_words(failures)
+    if retry:
+        say(retry)
+    elif not all(str(reason).startswith(NOT_KEPT) or reason == DRIVE_FULL
+                 for _dest, reason in failures or []):
+        say("Run the same command again to retry only those.")
+    for line in end.same_lines:
+        say(line)
+    sys.exit(1)
+
+
+def _say_left_out(end: _Ending) -> None:
+    """The files a run that ended well did not install, and the hints after them."""
+    say, paths = end.say, end.paths
+    skipped = [entry for entry in end.omitted_entries
+               if entry.get("reason") != "no_save_directory"]
+    if end.omitted > end.unplaced and OUTPUT.verbose:
+        for line in _omission_lines(end.omitted - end.unplaced, skipped,
+                                    Path(paths[0]) if len(paths) == 1 else None):
+            say(line)
+    elif end.omitted > end.unplaced and any(entry.get("required") for entry in skipped):
+        # A file an emulator cannot start without is no detail: counted.
+        say(needed_absent_words(sum(1 for entry in skipped if entry.get("required")),
+                                "--verbose"))
+    # RomM's scan is the step after the install: the other hints say how to
+    # install less, a detail.
+    for line in end.hints:
+        if OUTPUT.verbose or line == ROMM_SCAN_WORDS:
+            say(line)
+
+
+def _end_done(end: _Ending) -> None:
+    """End a run that installed every file it could."""
+    say, paths, downloaded, up_to_date = end.say, end.paths, end.downloaded, end.up_to_date
+    sources = end.sources
+    # No zero count, the screen's words: "Done. 0 files installed, 22
+    # files already up to date" beside its "Everything is in place"
+    in_place = f" {_plural(up_to_date, 'file')} already in place." if up_to_date else ""
+    if not downloaded:
+        say(f"\nDone. {EVERYTHING_IN_PLACE}")
+    elif sources and "," not in sources and not KEPT.summary():
+        # Every file from one place: "22 files installed." over "22 files
+        # copied from packx." said one count twice.
+        say(f"\nDone. {sources}{in_place}")
+        sources = ""
+    else:
+        say(f"\nDone. {_plural(downloaded, 'file')} installed.{in_place}")
+    if sources:
+        say(f"  {sources}")
+    if end.installed_kinds:
+        say(end.installed_kinds)
+    if OUTPUT.verbose or not OUTPUT.where_said:
+        say(f"BIOS folder: {_locations(paths)}")
+    for line in end.kept:
+        say(line)
+    _say_left_out(end)
+    if end.same_choice and OUTPUT.verbose:
+        # After the questions, as the screen's result ends: "the same
+        # command" was one that asked them.
+        for line in end.same_lines:
+            say(line)
+        say("To check this later, run that command with --check.")
+    elif OUTPUT.verbose:
+        say("To check this later, run the same command with --check.")
+    say(next_step_words(end.platform_of, paths))
+
+
+class OutcomeDetails(NamedTuple):
+    """What a run's end says besides its counts (_report_outcome)."""
+
+    failures: list[tuple[str, str]] | None = None
+    transferred: int = 0
+    seconds: float = 0.0
+    declined: int = 0
+    assumed: set[Path] | None = None
+    omitted_entries: list[dict] | None = None
+    platform_of: dict[Path, str] | None = None
+    hints: list[str] | None = None
+    sources: str = ""
+    offline: int = 0
+    kinds: tuple[Tally, int] | None = None
+    same_choice: str = ""
+    notes: list[str] | None = None
+    missing: Tally | None = None
+
+
+def _report_outcome(
+    paths: list[Path],
+    downloaded: int,
+    up_to_date: int,
+    errors: int,
+    omitted: int,
+    interrupted: bool,
+    *,
+    details: OutcomeDetails | None = None,
+    term: Terminal | None = None,
+) -> None:
+    """Close the run on what happened, and leave with a status that says so.
+    kinds is the count of the files installed (tally) and of the data
+    tree files, given for a list marking its game data, said apart. notes
+    are lines every ending repeats (a list built for another version).
+    missing is the count of the files --offline left out, by kind, given as
+    kinds is.
+
+    A run that installed nothing used to end on the word Done and a zero exit,
+    which reads as success to a person and to a script alike. offline counts
+    the files --offline left out at a terminal, kept apart from a "no" to
+    the size question: counted with it, 14,696 files missing ended on Done
+    and exit 0 once 4 came from this machine. They end the run as files
+    that failed do, 1 when some were installed and 2 when none were, the
+    codes the full screen's run gives. term paints the status words.
+    """
+    d = details or OutcomeDetails()
+    failures, transferred, seconds, declined = d.failures, d.transferred, d.seconds, d.declined
+    offline, same_choice, notes = d.offline, d.same_choice, d.notes
+    say = _status_print(term)
+    # The command making the same choice ends every result the screen ends
+    # with it: "Finished with files missing" gave none.
+    same_lines = ([f"Same choice without questions: {screen_text(same_choice)}"]
+                  if same_choice and OUTPUT.verbose else [])
+    # A file --offline left out is not a failure, whether the run asked or
+    # not: without questions it was "14698 files failed", and "Run the same
+    # command again to retry only those", which cannot fetch them.
+    left = [failure for failure in failures or [] if isinstance(failure[1], OfflineReason)]
+    if left:
+        failures = [failure for failure in failures or []
+                    if not isinstance(failure[1], OfflineReason)]
+        errors = max(0, errors - len(left))
+        offline += len(left)
+    if transferred and seconds > 0 and OUTPUT.verbose:
+        verb = "copied from the pack" if LOCAL.pack is not None else "downloaded"
+        say(f"\n{format_size(transferred)} {verb} in "
+            f"{format_duration(seconds)} ({format_size(int(transferred / seconds))}/s).")
+    _say_failures(say, failures)
+    if declined and not downloaded and not errors and not interrupted and not offline:
+        say(f"\nNothing installed: {_plural(declined, 'file')} not downloaded, as answered.")
+        if up_to_date:
+            say(f"{_plural(up_to_date, 'file')} already in place at {_locations(paths)}.")
+        for note in notes or []:
+            say(note)
+        return
+    kept, unplaced = _kept_and_unplaced(d.omitted_entries or [], notes)
+    if interrupted:
+        say(f"\nStopped. {_plural(downloaded, 'file')} installed.")
+        for line in kept:
+            say(line)
+        say("Run the same command again to carry on from here. Nothing is lost.")
+        sys.exit(130)
+
+    # A standalone copy fails by absolute path, in an emulator's folder
+    # rather than the BIOS folder: that folder is where the write went.
+    elsewhere = sorted({Path(dest).parent for dest, _reason in failures or []
+                        if Path(dest).is_absolute()})
+    advice = _failure_advice(paths, failures or [], d.assumed, d.platform_of)
+    paths = paths + [folder for folder in elsewhere if folder not in paths]
+
+    # The kinds installed, on every end that installed some, under where
+    # they came from: as the screen's result says them.
+    installed_kinds = (f"  Installed: {installed_words(d.kinds[0].bios, d.kinds[0].games, d.kinds[1])}."
+                       if d.kinds and d.kinds[0].files and downloaded and OUTPUT.verbose else "")
+    end = _Ending(
+        say=say, paths=paths, downloaded=downloaded, up_to_date=up_to_date, errors=errors,
+        omitted=omitted, offline=offline, failures=failures, sources=d.sources, kept=kept,
+        advice=advice, same_lines=same_lines, installed_kinds=installed_kinds,
+        omitted_entries=d.omitted_entries or [], unplaced=unplaced,
+        platform_of=d.platform_of or {}, hints=d.hints or [], same_choice=same_choice,
+        missing=d.missing,
+    )
+    if offline:
+        _end_offline(end)
+    if errors and not downloaded:
+        _end_nothing_installed(end)
+    if errors:
+        _end_with_errors(end)
+    _end_done(end)
+
+
+NEXT_ON_CARD = "Next: put the card back in the device and start a game."
+# On the device detection found the installer running on (KNULLI, Batocera):
+# that system is already started.
+NEXT_ON_DEVICE = "Next: start a game."
+
+
+def next_step_words(platform_of: dict[Path, str], paths: list[Path]) -> str:
+    """The step after an install that ended well: a card goes back in its
+    device, a setup on this machine is started."""
+    setups = [(platform_of.get(path, ""), path) for path in paths]
+    if setups and all(plat and on_its_card(plat, path) for plat, path in setups):
+        return NEXT_ON_CARD
+    if setups and all(plat and detected_os(plat, path) for plat, path in setups):
+        return NEXT_ON_DEVICE
+    names = list(dict.fromkeys(display_name(plat) for plat, path in setups if plat))
+    if len(names) == 1:
+        return f"Next: start {names[0]} and play."
+    return "Next: start your emulators and play."
+
+
+def _offline_remedy(folders: list[str] | None = None, named: bool = False) -> str:
+    """Where files --offline does not fetch can still come from: the
+    folders --from named (folders, on the screen) are not suggested again.
+    One wording for line mode, a run without questions, --check and the
+    screen. named: the line before already says what the folders lack."""
+    labels = (folders if folders is not None
+              else [index.label for index in LOCAL.folders])
+    if labels and named:
+        return f"Run the installer again with a pack (--from-pack) or {offline_undo()}."
+    if labels:
+        names = ", ".join(screen_text(shown_path(label)) for label in labels)
+        return (f"They are not in {names}: run the installer again with a pack "
+                f"(--from-pack) or {offline_undo()}.")
+    return ("Copy them from an old card or a folder (--from), or run the installer "
+            f"again with a pack (--from-pack) or {offline_undo()}.")
+
+
+def _retry_words(failures: list | None) -> str:
+    """What to do when every failure is a file the pack does not hold: a
+    second run fails them the same way, and "run it again to retry only
+    those" sent people round. "" otherwise."""
+    lacking = [dest for dest, reason in failures or [] if str(reason) == NOT_IN_PACK]
+    if not lacking or len(lacking) != len([
+            dest for dest, reason in failures or [] if not str(reason).startswith(NOT_KEPT)]):
+        return ""
+    name = LOCAL.pack.name if LOCAL.pack is not None else "The pack"
+    return (f"{name} does not hold {'it' if len(lacking) == 1 else 'them'}: a newer pack, "
+            "or a run without --from-pack, installs "
+            f"{'it' if len(lacking) == 1 else 'them'}.")
+
+
+def _check_fetch_line(fetch: int, beside: str, lacking: int = 0, wrong: bool = False) -> str:
+    """What --check says a run without it does with the files not in place:
+    offline, those it cannot fetch are said so, not "run it to fetch them".
+    With a pack, those it holds are copied and those it lacks are said lacking
+    (lacking): "fetch them" was said with a pack and no network."""
+    if LOCAL.pack is not None:
+        held = fetch - lacking
+        if not held:
+            return (f"  {LOCAL.pack.name} holds none of them: a newer pack, or a run "
+                    "without --from-pack, installs them.")
+        return (f"  Run the same command without --check to copy {held} of them from "
+                f"{LOCAL.pack.name}. A wrong copy is replaced, and the one in "
+                f"place kept in {BACKUP_DIR} beside {beside}.")
+    if _offline_only():
+        if not fetch:
+            return "  Run the same command without --check to copy them into place."
+        return (f"  {agree(fetch, 'file needs', 'files need')} the "
+                f"internet, which {offline_named()} does not use. {_offline_remedy()}")
+    # What becomes of a wrong copy is said where there is one.
+    return ("  Run the same command without --check to fetch them."
+            + (f"\n  A wrong copy is replaced, and the one in place kept in {BACKUP_DIR} "
+               f"beside {beside}." if OUTPUT.verbose or wrong else ""))
+
+
+def _offline_failure(reason: str) -> bool:
+    """Whether a failure a run reported is a file --offline left out."""
+    return OFFLINE_WORDS in reason or "makes no network request" in reason
+
+
+# The definitions in a few words, for a help with no room for the sentences.
+_SHORT_DEFINITIONS = (
+    ("Game data:", "Game data: what a game reads, of no use to other cores."),
+    ("Data files:", "Data files: an emulator's own data folder."),
+)
+
+
+def game_data_missing(names: str, count: int, folders: list[Path]) -> str:
+    """The game data a run could not supply, and the folder each goes in:
+    "Copy it from your own copy of the game" named no folder."""
+    one = count == 1
+    places = list(dict.fromkeys(f"{shown_path(folder)}{os.sep}" for folder in folders))
+    where = (f" into {', '.join(places[:3])}" + (f" and {len(places) - 3} more folders"
+                                                  if len(places) > 3 else "")) if places else ""
+    # The names first, the kind after them in a word: the definition was
+    # spliced into this sentence, and said again on its own line.
+    return (f"Not available here: {names}, game data "
+            f"{'its game reads' if one else 'their games read'}. Copy "
+            f"{'it' if one else 'them'} from an owned copy of the game{where}.")
+
+
+def not_installable_words(count: int, required: int, reasons: dict[str, int]) -> str:
+    """The line under the index count for the files the list leaves out:
+    "(1 required, not found: 37)" read as a sum."""
+    need = ("" if not required else ", required" if count == 1
+            else f", {required} of them required")
+    if set(reasons) == {"not_found"}:
+        return (f"Not installable: {agree(count, 'file is', 'files are')} not in the "
+                f"collection{need}.")
+    why = ", ".join(f"{OMISSION_REASONS.get(reason, reason)} ({number})"
+                    for reason, number in sorted(reasons.items()))
+    return f"Not installable: {_plural(count, 'file')}{need}. Why: {why}."
+
+
+def _omission_lines(count: int, entries: list[dict], bios_path: Path | None = None) -> list[str]:
+    """What was skipped, the files an emulator cannot start without first.
+
+    "395 file are not in the collection yet" named nothing and gave one
+    reason for all, while the manifest says which file and why. Game data
+    is said apart, with the folder it goes in, as the screen says it.
+    """
+    one = count == 1
+    lines = [f"{_plural(count, 'file')} {'was' if one else 'were'} not installed: "
+             f"the collection does not hold {'it' if one else 'them'}, or its copy "
+             f"fails {'its' if one else 'their'} check."]
+    needed = [e for e in entries if e.get("required")]
+    games = [e for e in needed if e.get("category") == GAME_DATA]
+    lines += _needed_lines([e for e in needed if e.get("category") != GAME_DATA],
+                           "Needed to start an emulator")
+    if games:
+        names = ", ".join(str(e.get("dest") or e.get("name")) for e in games[:3]) + (
+            f" and {len(games) - 3} more" if len(games) > 3 else "")
+        folders = []
+        for entry in games:
+            try:
+                folders.append(_entry_path(bios_path, entry).parent if bios_path else None)
+            except ValueError:
+                continue
+        lines.append("  " + game_data_missing(names, len(games), [f for f in folders if f]))
+        # Defined on a line of its own, the sentence above naming the files.
+        lines.append("  " + kinds_definition(True, False))
+    return lines
+
+
+def needed_absent_words(count: int, where: str) -> str:
+    """The count of files an emulator cannot start without that the
+    collection does not hold, said in every mode: where names what lists
+    them, --verbose in line mode, Details on the screen."""
+    return (f"{_plural(count, 'file')} an emulator needs {'is' if count == 1 else 'are'} "
+            f"not available here ({where} names "
+            f"{'it' if count == 1 else 'them'}).")
+
+
+def _absent_required(omitted: list[dict], bios_path: Path) -> list[dict]:
+    """Required entries the manifest leaves out that the user has not placed."""
+    absent = []
+    for entry in omitted:
+        dest = entry.get("dest") or entry.get("name", "")
+        if not entry.get("required", True) or not dest:
+            continue
+        try:
+            placed = _is_file(_entry_path(bios_path, {**entry, "dest": dest}))
+        except ValueError:
+            # A path climbing out of the folder is never one we read, and one
+            # below a save directory this run does not know is not looked at.
+            placed = False
+        if not placed:
+            absent.append(entry)
+    return absent
+
+
+def _needed_lines(entries: list[dict], heading: str, every: bool = False) -> list[str]:
+    """Required files the collection lacks, by system with the emulators reading them.
+
+    A bare list (DARK.GOB, Data.rsdk, ... and 69 more) left a Batocera user
+    unable to tell whether their PlayStation was concerned.
+    """
+    by_system: dict[str, tuple[set[str], set[str]]] = {}
+    for entry in entries:
+        system = str(entry.get("system") or ", ".join(entry_systems(entry)) or OTHER_SYSTEMS)
+        names, cores = by_system.setdefault(system, (set(), set()))
+        names.add(str(entry.get("dest") or entry.get("name")))
+        cores.update(str(core) for core in entry.get("cores") or [])
+    if not by_system:
+        return []
+    count = sum(len(names) for names, _cores in by_system.values())
+    lines = [f"  {heading} ({_plural(count, 'file')}):"]
+    systems = sorted(by_system)
+    shown = systems if every else systems[:8]
+    for system in shown:
+        names, cores = by_system[system]
+        readers = f" ({', '.join(sorted(cores))})" if cores else ""
+        lines.append(f"    {system}{readers}: {', '.join(sorted(names))}")
+        # Each emulator's own page, one click away: the index alone sent the
+        # user searching several hundred pages for theforceengine.
+        lines += [f"      {SITE_URL}emulators/{core}/" for core in sorted(cores)]
+    if not every and len(systems) > 8:
+        # A file several systems share is a group of its own, counted as one.
+        unit = "groups" if any(", " in system for system in systems) else "systems"
+        more = len(systems) - 8
+        lines.append(f"    ... and {more} more {unit if more > 1 else unit[:-1]} "
+                     "(--check --verbose lists them all)")
+    if all(by_system[system][1] for system in shown):
+        lines.append("  Each emulator's page, linked above, says what these files are.")
+    else:
+        lines.append(f"  Each emulator's page says what these files are: {SITE_URL}emulators/")
+    return lines
+
+
+# Asked before, in an interactive run: past this size a download is worth a
+# second thought, and --system, --core or --region can make it smaller.
+CONFIRM_FROM_BYTES = 1024 * 1024 * 1024
+
+# A --dry-run plan: file names per system, the systems shown when the
+# listing is taller than the screen, and the lines around the listing.
+PLAN_FILES_PER_SYSTEM = 8
+PLAN_LARGEST_SYSTEMS = 10
+PLAN_FRAME_LINES = 6
+# Past this many systems a group sharing files is named by its first two.
+PLAN_GROUP_TITLES = 3
+
+# Answers that stop: every menu before this one taught q as quit.
+_REFUSALS = ("n", "q", "quit", "exit", "stop", "abort")
+
+
+def _offline_only() -> bool:
+    """--offline without a pack: what is not on this machine cannot come."""
+    return offline_requested() and LOCAL.pack is None
+
+
+def on_its_card(plat: str, dest: Path, system: str = "") -> bool:
+    """Whether dest, a card mounted here, is the SD card of the system it
+    is for (system, else the one detection names): line mode and the
+    screen say "free some space on the card" alike."""
+    system = system or detected_os(plat, dest)
+    return bool(system and card_bound(system, plat) and dest_drive(dest) is not None)
+
+
+# RomM serves the firmware rows its library scan records (rommapp/romm 5.4.0,
+# backend/endpoints/firmware.py:148,175 read db_firmware_handler.list_firmware),
+# and its folder watcher is off unless ENABLE_RESCAN_ON_FILESYSTEM_CHANGE is
+# set (backend/config/__init__.py:284, backend/watcher.py:106): files put in
+# place stay unseen by the player until a scan.
+ROMM_SCAN_WORDS = ("RomM lists the firmware its library scan has recorded: start a scan "
+                   "in RomM so that its player finds these files.")
+
+LINE_SAVE_REMEDY = "Name it with --save-dir next time."

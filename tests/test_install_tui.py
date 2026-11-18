@@ -1812,11 +1812,12 @@ class Rendering(unittest.TestCase):
 class TheSectionStandsApart(unittest.TestCase):
     def test_no_name_of_the_installer_is_defined_again(self):
         """_run and _system_label were defined twice: the later one won, and
-        the installer's listing called the interface's."""
+        the installer's listing called the interface's. The interface is
+        modules of installer/ now, joined into one namespace with the rest,
+        so no name is defined twice anywhere in the file."""
         import ast
 
         source = (REPO_ROOT / "install.py").read_text(encoding="utf-8")
-        start = source[:source.index("# Full-screen interface\n#")].count("\n") + 1
         seen: dict = {}
         for node in ast.parse(source).body:
             names = [node.name] if isinstance(node, (ast.FunctionDef, ast.ClassDef)) else [
@@ -1825,7 +1826,7 @@ class TheSectionStandsApart(unittest.TestCase):
             for name in names:
                 seen.setdefault(name, []).append(node.lineno)
         twice = {name: lines for name, lines in seen.items()
-                 if len(lines) > 1 and max(lines) >= start}
+                 if len(lines) > 1}
         self.assertEqual(twice, {})
 
 

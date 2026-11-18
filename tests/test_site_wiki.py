@@ -323,8 +323,14 @@ class TroubleshootingLines(unittest.TestCase):
                 self.assertRegex(" ".join(_wiki(name).split()), r"[Dd]o what the message says")
 
     def test_the_installer_names_what_to_run(self):
+        import ast
+
+        # The function itself, read by its node: install.py is joined from
+        # installer/, and the definition after it is no fixed neighbour.
         source = (REPO_ROOT / "install.py").read_text(encoding="utf-8")
-        advice = source[source.index("def _write_advice"):source.index("def _plural")]
+        node = next(node for node in ast.parse(source).body
+                    if isinstance(node, ast.FunctionDef) and node.name == "_write_advice")
+        advice = ast.get_source_segment(source, node)
         self.assertIn("hint.command(plat, path, elevated=True)", advice)
 
 
