@@ -1399,6 +1399,7 @@ before a release (wiki/release-process.md). Its lines stay in
 | `check_freshness.py` | One report on every upstream the repository transcribes (see above) |
 | `refresh_stale.py` | Run the refresher behind every stale row of that report (see above) |
 | `autorun.py` | Run the unattended jobs of `automation/jobs.yml` under one lock, in their own worktree (see above) |
+| `unattended/` | What `autorun.py` runs: the job registry read from `automation/jobs.yml`, the automation worktree and its commits, the CI circuit breaker, one job run with its state and logs, and the systemd units |
 | `cleanup_disk.py` | Remove idle session worktrees and old `tmp/` entries, alert under 100 GB free (see above) |
 | `bios_integrity.py` | Rehash every file the database names, restore a confirmed bit flip of a committed file from HEAD (see above) |
 | `sync_release_assets.py` | Upload the `large-files` assets the release serves out of date, after a double SHA-1 check (see above) |

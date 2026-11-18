@@ -43,6 +43,7 @@ scripts/                 all tooling (Python and pyyaml, jsonschema for schema c
   release/               the release record, its notes and the checks of its assets
   installer_build/       install.py from installer/, its pins, launchers and PyPI package
   devtools/              the commit message rules and the checks of a pull request
+  unattended/            the job registry, worktree, CI breaker and units behind autorun.py
 install/                 JSON install manifests per platform
   targets/               JSON target manifests per platform (cores per architecture)
 install.py               the installer, with install.sh and install.ps1 to start it,
