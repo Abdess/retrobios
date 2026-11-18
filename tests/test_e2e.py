@@ -33,20 +33,14 @@ from unittest import mock
 
 from model import largefiles
 import yaml
-from common import (
-    build_zip_contents_index,
-    check_inside_zip,
-    compute_hashes,
-    expand_platform_declared_names,
-    group_identical_platforms,
-    load_emulator_profiles,
-    load_platform_config,
-    md5_composite,
-    parse_md5_list,
-    resolve_local_file,
-    resolve_platform_cores,
-    safe_extract_zip,
-)
+from core.ziptools import build_zip_contents_index, check_inside_zip, safe_extract_zip
+from core.hashing import compute_hashes, md5_composite, parse_md5_list
+from model.declarations import expand_platform_declared_names
+from resolve.grouping import group_identical_platforms
+from model.profiles import load_emulator_profiles
+from model.platforms import load_platform_config
+from resolve.localfile import resolve_local_file
+from resolve.cores import resolve_platform_cores
 from resolve.truth import diff_platform_truth, generate_platform_truth
 from resolve.validation import _build_validation_index, check_file_validation, filter_files_by_mode
 from verify import (
@@ -85,7 +79,7 @@ class TestE2E(unittest.TestCase):
 
     def setUp(self):
         # Clear emulator profile cache to avoid stale data between tests
-        from common import _emulator_profiles_cache
+        from model.profiles import _emulator_profiles_cache
 
         _emulator_profiles_cache.clear()
 
@@ -917,7 +911,7 @@ class TestE2E(unittest.TestCase):
 
     def test_24b_a_held_group_member_makes_the_others_optional(self):
         """RetroBat's group: one file held is enough (batocera-systems/Program.cs)."""
-        from common import _platform_config_cache
+        from model.platforms import _platform_config_cache
 
         with open(os.path.join(self.platforms_dir, "test_md5.yml")) as fh:
             config = yaml.safe_load(fh)
@@ -1893,21 +1887,21 @@ class TestE2E(unittest.TestCase):
 
     def test_load_target_config(self):
         self._write_target_fixtures()
-        from common import load_target_config
+        from model.targets import load_target_config
 
         cores = load_target_config("testplatform", "target-minimal", self.platforms_dir)
         self.assertEqual(cores, {"core_a"})
 
     def test_target_alias_resolution(self):
         self._write_target_fixtures()
-        from common import load_target_config
+        from model.targets import load_target_config
 
         cores = load_target_config("testplatform", "full", self.platforms_dir)
         self.assertEqual(cores, {"core_a", "core_b", "core_d"})
 
     def test_target_unknown_error(self):
         self._write_target_fixtures()
-        from common import load_target_config
+        from model.targets import load_target_config
 
         with self.assertRaises(ValueError) as ctx:
             load_target_config("testplatform", "nonexistent", self.platforms_dir)
@@ -1916,7 +1910,7 @@ class TestE2E(unittest.TestCase):
 
     def test_target_override_add_remove(self):
         self._write_target_fixtures()
-        from common import load_target_config
+        from model.targets import load_target_config
 
         cores = load_target_config("testplatform", "full", self.platforms_dir)
         self.assertIn("core_d", cores)
@@ -1927,7 +1921,7 @@ class TestE2E(unittest.TestCase):
     def test_target_default_override_reaches_every_target(self):
         """`_default` drops a name on every target, then the target adds its own."""
         self._write_target_fixtures()
-        from common import load_target_config
+        from model.targets import load_target_config
 
         targets_dir = os.path.join(self.platforms_dir, "targets")
         overrides = {
@@ -1953,7 +1947,7 @@ class TestE2E(unittest.TestCase):
 
     def test_target_single_target_noop(self):
         self._write_target_fixtures()
-        from common import load_target_config
+        from model.targets import load_target_config
 
         cores = load_target_config("singleplatform", "only-target", self.platforms_dir)
         self.assertEqual(cores, {"core_a", "core_b"})
@@ -1974,7 +1968,7 @@ class TestE2E(unittest.TestCase):
         }
         with open(os.path.join(targets_dir, "childplatform.yml"), "w") as f:
             yaml.dump(child_config, f)
-        from common import load_target_config
+        from model.targets import load_target_config
 
         parent = load_target_config(
             "testplatform", "target-minimal", self.platforms_dir
@@ -2441,7 +2435,7 @@ class TestE2E(unittest.TestCase):
 
     def test_133_platform_system_filter_normalized(self):
         """_norm_system_id normalization matches with manufacturer prefix."""
-        from common import _norm_system_id
+        from model.systems import _norm_system_id
 
         self.assertEqual(
             _norm_system_id("sony-playstation"),
@@ -2452,7 +2446,7 @@ class TestE2E(unittest.TestCase):
         """list_platform_system_ids lists systems from a platform YAML."""
         import io
 
-        from common import list_platform_system_ids
+        from model.cliargs import list_platform_system_ids
 
         config = {
             "platform": "ListSysTest",
@@ -2507,7 +2501,7 @@ class TestE2E(unittest.TestCase):
             with open(file_b, "wb") as f:
                 f.write(b"system_b")
 
-            from common import compute_hashes
+            from core.hashing import compute_hashes
 
             ha = compute_hashes(file_a)
             hb = compute_hashes(file_b)
@@ -2557,7 +2551,8 @@ class TestE2E(unittest.TestCase):
             with open(os.path.join(plat_dir, "splitplat.yml"), "w") as f:
                 yaml.dump(plat_cfg, f)
 
-            from common import build_zip_contents_index, load_emulator_profiles
+            from core.ziptools import build_zip_contents_index
+            from model.profiles import load_emulator_profiles
             from generate_pack import generate_split_packs
 
             zip_contents = build_zip_contents_index(db)
@@ -2594,7 +2589,7 @@ class TestE2E(unittest.TestCase):
 
     def test_136_derive_manufacturer(self):
         """derive_manufacturer extracts manufacturer correctly."""
-        from common import derive_manufacturer
+        from model.systems import derive_manufacturer
 
         # From system ID prefix
         self.assertEqual(derive_manufacturer("sony-playstation", {}), "Sony")
@@ -2738,7 +2733,7 @@ class TestE2E(unittest.TestCase):
             bios_file = os.path.join(bios_dir, "scph5501.bin")
             with open(bios_file, "wb") as f:
                 f.write(b"ps1_bios_content")
-            from common import compute_hashes
+            from core.hashing import compute_hashes
 
             h = compute_hashes(bios_file)
 
@@ -2783,7 +2778,7 @@ class TestE2E(unittest.TestCase):
             with open(os.path.join(plat_dir, "testplat.yml"), "w") as f:
                 yaml.dump(plat_cfg, f)
 
-            from common import build_zip_contents_index
+            from core.ziptools import build_zip_contents_index
             from generate_pack import generate_md5_pack
 
             zip_contents = build_zip_contents_index(db)
@@ -3404,7 +3399,7 @@ class TestE2E(unittest.TestCase):
             _yaml.dump(profile, f)
 
         # Clear profile cache so fresh load picks up our file
-        from common import _emulator_profiles_cache
+        from model.profiles import _emulator_profiles_cache
 
         _emulator_profiles_cache.clear()
 
@@ -3434,7 +3429,7 @@ class TestE2E(unittest.TestCase):
     def test_169_generate_truth_mode_filtering(self):
         """generate_platform_truth excludes standalone-only files for all_libretro."""
         import yaml as _yaml
-        from common import _emulator_profiles_cache
+        from model.profiles import _emulator_profiles_cache
 
         profile = {
             "emulator": "DualMode",
@@ -3484,7 +3479,7 @@ class TestE2E(unittest.TestCase):
     def test_170_generate_truth_standalone_cores(self):
         """generate_platform_truth uses standalone mode for standalone_cores."""
         import yaml as _yaml
-        from common import _emulator_profiles_cache
+        from model.profiles import _emulator_profiles_cache
 
         profile = {
             "emulator": "DualCore",
@@ -3527,7 +3522,7 @@ class TestE2E(unittest.TestCase):
     def test_171_generate_truth_dedup_required_wins(self):
         """Dedup merges cores and required=True wins over required=False."""
         import yaml as _yaml
-        from common import _emulator_profiles_cache
+        from model.profiles import _emulator_profiles_cache
 
         core_a = {
             "emulator": "CoreA",
@@ -3582,7 +3577,7 @@ class TestE2E(unittest.TestCase):
     def test_172_generate_truth_coverage_metadata(self):
         """Coverage tracks profiled vs unprofiled cores."""
         import yaml as _yaml
-        from common import _emulator_profiles_cache
+        from model.profiles import _emulator_profiles_cache
 
         profile = {
             "emulator": "ProfiledCore",
@@ -3747,7 +3742,7 @@ class TestE2E(unittest.TestCase):
         A YAML without one, an inheriting child included, is refused rather
         than written with a stand-in or its parent's version.
         """
-        from common import _platform_config_cache
+        from model.platforms import _platform_config_cache
         from generate_pack import generate_manifest
 
         registry_path = os.path.join(self.platforms_dir, "_test_registry_version.yml")
@@ -3803,7 +3798,7 @@ class TestE2E(unittest.TestCase):
                 entry["sha1"] = "0" * 40  # upstream hash, absent from the repo
         with open(config_path, "w") as fh:
             yaml.dump(config, fh)
-        from common import _platform_config_cache
+        from model.platforms import _platform_config_cache
 
         _platform_config_cache.clear()
 
@@ -4405,7 +4400,7 @@ class TestE2E(unittest.TestCase):
 
         # No profile for core_b (unprofiled)
         # Clear cache so the new profile is picked up
-        from common import _emulator_profiles_cache
+        from model.profiles import _emulator_profiles_cache
 
         _emulator_profiles_cache.clear()
         profiles = load_emulator_profiles(self.emulators_dir)
@@ -4509,7 +4504,7 @@ class TestE2E(unittest.TestCase):
 
     def test_175_registry_merge_cores(self):
         """load_platform_config merges cores from _registry.yml."""
-        from common import _platform_config_cache
+        from model.platforms import _platform_config_cache
 
         # Platform YAML with 1 core
         config = {
@@ -4540,7 +4535,8 @@ class TestE2E(unittest.TestCase):
 
     def test_176_all_libretro_in_list(self):
         """resolve_platform_cores expands all_libretro/retroarch in a list."""
-        from common import load_emulator_profiles, resolve_platform_cores
+        from model.profiles import load_emulator_profiles
+        from resolve.cores import resolve_platform_cores
 
         # Create a libretro profile and a standalone profile
         for name, ptype in [("lr_core", "libretro"), ("sa_core", "standalone")]:
@@ -5253,7 +5249,7 @@ struct BurnDriver BurnDrvneogeo = {
         with zipfile.ZipFile(zip_src, "w", zipfile.ZIP_DEFLATED) as zf:
             info = zipfile.ZipInfo("rom.bin", date_time=(2020, 6, 15, 12, 0, 0))
             zf.writestr(info, b"rom_content_bytes")
-        from common import compute_hashes
+        from core.hashing import compute_hashes
 
         h = compute_hashes(zip_src)
 
@@ -5427,7 +5423,7 @@ struct BurnDriver BurnDrvneogeo = {
         """resolve_local_file matches files by declared sha256."""
         import tempfile
 
-        from common import resolve_local_file
+        from resolve.localfile import resolve_local_file
 
         with tempfile.TemporaryDirectory() as tmpdir:
             path = os.path.join(tmpdir, "SNES_dsp1.rom")
@@ -5472,7 +5468,7 @@ struct BurnDriver BurnDrvneogeo = {
         import tempfile
         import urllib.error
 
-        import common
+        from model.largefiles import fetch_large_file
 
         attempts = []
 
@@ -5503,7 +5499,7 @@ struct BurnDriver BurnDrvneogeo = {
             with tempfile.TemporaryDirectory() as tmpdir, mock.patch.dict(
                 os.environ, {"RETROBIOS_OFFLINE": ""}
             ):
-                path = common.fetch_large_file(
+                path = fetch_large_file(
                     "MAME 0.174 Arcade XML.dat", dest_dir=tmpdir
                 )
                 self.assertIsNotNone(path)
@@ -5534,7 +5530,7 @@ struct BurnDriver BurnDrvneogeo = {
         import tempfile
         import zlib
 
-        from common import resolve_local_file
+        from resolve.localfile import resolve_local_file
 
         with tempfile.TemporaryDirectory() as tmpdir:
             data = b"exos rom bytes" * 100
@@ -5574,7 +5570,7 @@ struct BurnDriver BurnDrvneogeo = {
         """Name resolution falls back to a case-insensitive match."""
         import tempfile
 
-        from common import resolve_local_file
+        from resolve.localfile import resolve_local_file
 
         with tempfile.TemporaryDirectory() as tmpdir:
             path = os.path.join(tmpdir, "VEC_Minestorm.vec")
@@ -5605,7 +5601,7 @@ struct BurnDriver BurnDrvneogeo = {
         import hashlib as hl
         import tempfile
 
-        from common import resolve_local_file
+        from resolve.localfile import resolve_local_file
 
         rom = b"inner rom bytes"
         rom_md5 = hl.md5(rom).hexdigest()
@@ -6075,7 +6071,7 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertNotIn("rgn_jp.bin", names)
 
     def test_verify_platform_region_matches_the_pack(self):
-        from common import load_platform_config
+        from model.platforms import load_platform_config
         from verify import verify_platform
 
         self._create_region_fixtures()
@@ -6773,7 +6769,7 @@ class StandaloneModeRequiresAStandaloneBuild(unittest.TestCase):
     profile loses every ``path:`` and drops its files at the root."""
 
     def test_libretro_only_profile_keeps_its_layout(self):
-        from common import runs_standalone
+        from resolve.layout import runs_standalone
 
         libretro_only = {"type": "libretro", "cores": ["scummvm"]}
         dual = {"type": "standalone + libretro", "cores": ["dolphin"]}
@@ -6800,7 +6796,7 @@ class OneOfASearchList(unittest.TestCase):
     """
 
     def setUp(self):
-        from common import _emulator_profiles_cache
+        from model.profiles import _emulator_profiles_cache
 
         _emulator_profiles_cache.clear()
         repo = Path(__file__).resolve().parent.parent
@@ -6985,7 +6981,7 @@ class OneOfASearchList(unittest.TestCase):
     def test_an_archive_needs_one_member_of_a_set(self):
         import zlib
 
-        from common import holds_required_members
+        from resolve.archives import holds_required_members
 
         path = self.root / "set.zip"
         with zipfile.ZipFile(path, "w") as zf:
@@ -7066,7 +7062,7 @@ class AnArchiveIsAMemberOfASet(unittest.TestCase):
     def _fixture(self, held: bool) -> dict:
         import zlib
 
-        from common import _emulator_profiles_cache
+        from model.profiles import _emulator_profiles_cache
 
         _emulator_profiles_cache.clear()
         repo = Path(__file__).resolve().parent.parent

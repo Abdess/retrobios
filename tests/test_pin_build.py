@@ -137,7 +137,7 @@ class EveryBuildReferenceNamesThePin(unittest.TestCase):
     platform's own YAML was scraped from that repository."""
 
     def test_the_values_agree(self):
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         disagree = []
         for name, profile in load_emulator_profiles(str(REPO_ROOT / "emulators")).items():

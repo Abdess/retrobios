@@ -43,7 +43,10 @@ from dataclasses import dataclass
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import github_token, load_database, load_emulator_profiles, run_cli
+from core.github import github_token
+from model.database import load_database
+from model.profiles import load_emulator_profiles
+from core.cli import run_cli
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CONFIG = Path(os.environ.get("RETROBIOS_CONFIG", Path.home() / ".config" / "retrobios"))

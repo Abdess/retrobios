@@ -663,7 +663,8 @@ class RepositoryRun(unittest.TestCase):
         if not database.is_file() or not bios.is_dir():
             self.skipTest("collection not present in this checkout")
 
-        from common import load_database, load_emulator_profiles
+        from model.database import load_database
+        from model.profiles import load_emulator_profiles
 
         db = load_database(str(database))
         recipes = collect_recipes(

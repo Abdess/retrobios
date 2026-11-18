@@ -11,7 +11,7 @@ from pathlib import Path
 
 import yaml
 
-from common import load_emulator_profiles
+from model.profiles import load_emulator_profiles
 from region import REGIONS
 
 ROOT = Path(__file__).resolve().parent.parent

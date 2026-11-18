@@ -16,16 +16,11 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import (
-    platform_arg,
-    list_registered_platforms,
-    load_platform_config,
-    native_layer,
-    require_platform,
-    require_yaml,
-    truth_target_dir,
-    yaml_load,
-)
+from model.cliargs import platform_arg, require_platform
+from model.registry import list_registered_platforms
+from model.platforms import load_platform_config, native_layer
+from model.safeparse import require_yaml, yaml_load
+from model.targets import truth_target_dir
 from resolve.truth import diff_platform_truth
 
 yaml = require_yaml()
@@ -273,6 +268,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

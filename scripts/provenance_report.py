@@ -27,13 +27,10 @@ import zipfile
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import (
-    DEFAULT_PROVENANCE_DIR,
-    load_database,
-    load_emulator_profiles,
-    load_provenance_snapshots,
-    write_if_changed,
-)
+from model.dumpcatalog import DEFAULT_PROVENANCE_DIR, load_provenance_snapshots
+from model.database import load_database
+from model.profiles import load_emulator_profiles
+from core.artifacts import write_if_changed
 
 HASH_FIELDS = ("sha1", "md5", "sha256")
 
@@ -406,7 +403,7 @@ def main() -> int:
         "(the pipeline writes derivable.json)",
     )
     args = parser.parse_args()
-    from common import work_from_repo_root
+    from model.cliargs import work_from_repo_root
 
     work_from_repo_root(args, parser, ["db", "provenance_dir", "emulators_dir", "write_derivable"])
     if args.write_derivable and not args.derive:
@@ -478,6 +475,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

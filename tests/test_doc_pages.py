@@ -238,9 +238,9 @@ class OneResolutionChain(unittest.TestCase):
     ORDER = ("SHA1", "SHA256", "CRC32", "MD5", "Path suffix")
 
     def test_the_table_follows_the_code(self):
-        import common
+        from resolve.localfile import resolve_local_file
 
-        source = inspect.getsource(common.resolve_local_file)
+        source = inspect.getsource(resolve_local_file)
         steps = re.findall(r"# \d+[a-z]?\. (SHA1|SHA256|CRC32|MD5|Path suffix)", source)
         self.assertEqual(tuple(dict.fromkeys(steps)), self.ORDER)
         table = _table_rows(_section(_page("verification-modes.md"), "File resolution chain"))
@@ -460,13 +460,13 @@ class Md5CompositeDefinition(unittest.TestCase):
     def test_composite_only_is_read_by_both_checks(self):
         """The page said the direct MD5 is tried before the composite, which
         Recalbox never does for a .zip, and the pack check did the same."""
-        import common
+        from resolve.localfile import resolve_local_file
         from resolve import validation
 
         section = _section(_page("verification-modes.md"), "md5_composite (Recalbox ZIP verification)")
         self.assertIn("zip_digest: composite", section)
         self.assertNotIn("is tried before reporting a mismatch", section)
-        for function in (common.resolve_local_file, validation.digest_verdict):
+        for function in (resolve_local_file, validation.digest_verdict):
             self.assertIn('get("zip_digest") == "composite"', inspect.getsource(function))
 
 
@@ -493,16 +493,16 @@ class CoreResolutionWrittenOnce(unittest.TestCase):
     def test_one_statement_matching_the_platforms_and_the_code(self):
         import yaml
 
-        import common
+        from resolve.cores import resolve_platform_cores, _platform_profiles
 
         self.assertNotIn("cores: [list]", _page("architecture.md"))
         # resolve_platform_cores narrows by target, _platform_profiles holds
         # the strategies.
-        source = inspect.getsource(common._platform_profiles)
+        source = inspect.getsource(_platform_profiles)
         self.assertIn('not p.get("built_by")', source)
         self.assertIn('"retroarch" in core_set', source)
         self.assertIn('config.get("installable_cores")', source)
-        self.assertIn("downloadable_on", inspect.getsource(common.resolve_platform_cores))
+        self.assertIn("downloadable_on", inspect.getsource(resolve_platform_cores))
         naming = set()
         for path in (ROOT / "platforms").glob("*.yml"):
             config = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
@@ -667,12 +667,12 @@ class ShortMd5Handling(unittest.TestCase):
         self.assertEqual(offenders, [])
 
     def test_the_page_names_what_the_code_does(self):
-        import common
+        from resolve.localfile import resolve_local_file
         from scraper import batocera_scraper
 
         scraper = inspect.getsource(batocera_scraper)
         self.assertIn("_resolve_truncated_md5(value, md5_index) for value in values", scraper)
-        resolver = inspect.getsource(common.resolve_local_file)
+        resolver = inspect.getsource(resolve_local_file)
         self.assertIn("cut_md5_owner(cut, by_md5)", resolver)
         self.assertIn("_md5_name_ok(path)", resolver)
         section = _section(_page("verification-modes.md"), "MD5 shorter than 32 characters (Batocera)")
@@ -695,9 +695,9 @@ class RegistryKeysDocumented(unittest.TestCase):
         self.assertEqual(sorted(k for k in keys if not re.search(rf"\b{k}\b", page)), [])
 
     def test_the_page_says_the_registry_reaches_the_config(self):
-        import common
+        from model import platforms
 
-        source = inspect.getsource(common.load_platform_config)
+        source = inspect.getsource(platforms.load_platform_config)
         self.assertIn("config[key] = val", source)
         section = _section(_page("adding-a-platform.md"), "Step 2: Register the platform")
         self.assertIn("copies every registry key", section)
@@ -710,9 +710,9 @@ class ResolutionSkipsNamesForUnheldFiles(unittest.TestCase):
     disk, skips every step that answers by name and returns not_found."""
 
     def test_the_page_names_both_cases_the_code_guards(self):
-        import common
+        from resolve.localfile import resolve_local_file
 
-        source = inspect.getsource(common.resolve_local_file)
+        source = inspect.getsource(resolve_local_file)
         self.assertIn('unsourceable = bool(file_entry.get("unsourceable")) or own_file_absent', source)
         for guard in (
             "if not has_strong_hash and not unsourceable:",
@@ -1114,9 +1114,9 @@ class PlatformListsFollowTheRegistry(unittest.TestCase):
         return names
 
     def _modes(self) -> dict[str, str]:
-        import common
+        from model import platforms
 
-        return {key: common.load_platform_config(key, str(ROOT / "platforms")).get("verification_mode")
+        return {key: platforms.load_platform_config(key, str(ROOT / "platforms")).get("verification_mode")
                 for key in _registry()}
 
     def _split(self, text: str) -> set[str]:
@@ -2027,8 +2027,9 @@ class RegionFreeRuleNamesWhereItDoesNotHold(unittest.TestCase):
     where it is the only PlayStation core the filter drops it."""
 
     def test_every_platform_that_drops_a_named_file_is_named(self):
-        from common import (list_registered_platforms, load_emulator_profiles,
-                            load_platform_config)
+        from model.registry import list_registered_platforms
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
         from region import WORLD, platform_region_index
 
         section = _section(_page("advanced-usage.md"), "Region filtering")

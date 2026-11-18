@@ -27,7 +27,7 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import IO, NamedTuple
 
-from common import yaml_load
+from model.safeparse import yaml_load
 
 from ._hash_merge import generated_start
 from .mame_parser import _collect_rom_macros, _expand_macros, _parse_rom_entries

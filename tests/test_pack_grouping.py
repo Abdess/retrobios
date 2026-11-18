@@ -22,7 +22,9 @@ class SlotPassReadsTheRegionGrouping(unittest.TestCase):
         if not (REPO_ROOT / "database.json").is_file():
             self.skipTest("database.json not built")
         import generate_pack as gp
-        from common import load_database, load_emulator_profiles, load_platform_config
+        from model.database import load_database
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
 
         previous = os.getcwd()
         os.chdir(REPO_ROOT)
@@ -56,7 +58,9 @@ class VariantGroupSpansSystems(unittest.TestCase):
             self.skipTest("database.json not built")
         import generate_pack as gp
         import region as region_mod
-        from common import load_database, load_emulator_profiles, load_platform_config
+        from model.database import load_database
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
 
         previous = os.getcwd()
         os.chdir(REPO_ROOT)
@@ -86,7 +90,8 @@ class AFrontendCheckSeparatesPacks(unittest.TestCase):
 
         import yaml
 
-        import common
+        from model.platforms import _platform_config_cache
+        from resolve.grouping import group_identical_platforms
 
         files = [{"name": "a.bin", "destination": "a.bin", "md5": "0" * 32}]
         with tempfile.TemporaryDirectory() as tmp:
@@ -98,9 +103,9 @@ class AFrontendCheckSeparatesPacks(unittest.TestCase):
                     "systems": {"s": {"files": [entry]}},
                 }))
             Path(tmp, "_registry.yml").write_text(yaml.dump({"platforms": {}}))
-            common._platform_config_cache.clear()
-            self.addCleanup(common._platform_config_cache.clear)
-            groups = common.group_identical_platforms(["one", "two", "three"], tmp)
+            _platform_config_cache.clear()
+            self.addCleanup(_platform_config_cache.clear)
+            groups = group_identical_platforms(["one", "two", "three"], tmp)
         self.assertEqual(sorted(g for g, _ in groups), [["one"], ["three"], ["two"]])
 
 

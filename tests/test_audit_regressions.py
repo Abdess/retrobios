@@ -30,7 +30,8 @@ except ImportError:
 import install
 from scripts import pipeline, region_audit
 from scripts import region
-from scripts.common import resolve_local_file, safe_extract_zip
+from scripts.resolve.localfile import resolve_local_file
+from scripts.core.ziptools import safe_extract_zip
 from scripts.generate_pack import (
     _emulator_region_group,
     generate_target_manifests,
@@ -600,7 +601,7 @@ class OnePlatformPerFlag(unittest.TestCase):
                 self.assertNotIn("Traceback", completed.stderr)
 
     def test_unknown_names_still_get_a_suggestion(self):
-        from common import require_platform
+        from model.cliargs import require_platform
 
         with self.assertRaises(SystemExit) as caught:
             require_platform("batocra", str(ROOT / "platforms"))
@@ -664,7 +665,8 @@ class EverySharedGroupServesAPlatform(unittest.TestCase):
     verify and no manifest, and nothing said so."""
 
     def test_each_group_contributes_an_entry_somewhere(self):
-        from common import list_registered_platforms, load_platform_config
+        from model.registry import list_registered_platforms
+        from model.platforms import load_platform_config
 
         platforms_dir = str(ROOT / "platforms")
         with (ROOT / "platforms" / "_shared.yml").open(encoding="utf-8") as handle:
@@ -1000,7 +1002,7 @@ class FaqRegressions(unittest.TestCase):
         # and FinalBurn Neo 1.0.0.2, versions no source at the pins states,
         # and the test holding them to the profiles kept the errors in step.
         import generate_site
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         profiles = load_emulator_profiles(str(ROOT / "emulators"), skip_aliases=False)
         page = (ROOT / "wiki" / "technical-faq.md").read_text(encoding="utf-8")
@@ -1077,7 +1079,7 @@ class CatalogRatioRegressions(unittest.TestCase):
             )
 
     def test_arcade_and_engine_data_stay_out_of_the_ratio(self):
-        from scripts.common import compute_composition, count_catalog_matched
+        from scripts.model.composition import compute_composition, count_catalog_matched
 
         db = {
             "files": {
@@ -1097,7 +1099,7 @@ class CatalogRatioRegressions(unittest.TestCase):
         """Engine data collected under `Game Engines/` and under a game
         publisher counted as console and computer system files: 7 697 of
         them made the README announce 13 564 system files."""
-        from scripts.common import composition_tier
+        from scripts.model.composition import composition_tier
 
         for path in (
             "bios/Game Engines/C-Dogs SDL/cdogs/data/guns.json",
@@ -1110,7 +1112,8 @@ class CatalogRatioRegressions(unittest.TestCase):
         self.assertEqual(composition_tier("bios/Microsoft/MSX/MSX2.ROM"), "systems")
 
     def test_readme_ratio_matches_the_database(self):
-        from scripts.common import compute_composition, count_catalog_matched, load_database
+        from scripts.model.composition import compute_composition, count_catalog_matched
+        from scripts.model.database import load_database
 
         database = ROOT / "database.json"
         if not database.exists():
@@ -1466,7 +1469,7 @@ class OneBaselineVerdict(unittest.TestCase):
         digit."""
         import hashlib
 
-        from scripts.common import md5_composite
+        from scripts.core.hashing import md5_composite
         from scripts.resolve.validation import baseline_verdict, digest_verdict
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
@@ -1496,7 +1499,7 @@ class OneBaselineVerdict(unittest.TestCase):
         neocd.bin shipped as neocdz.zip passed while Recalbox marks it red."""
         import hashlib
 
-        from scripts.common import md5_composite
+        from scripts.core.hashing import md5_composite
         from scripts.resolve.validation import digest_verdict
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
@@ -2393,11 +2396,11 @@ class ManifestVersionIsThePlatformsOwn(unittest.TestCase):
     so each manifest states the version its own platform YAML records."""
 
     def setUp(self):
-        from scripts.common import _platform_config_cache
+        from scripts.model.platforms import _platform_config_cache
         _platform_config_cache.clear()
 
     def test_committed_manifests_state_their_platform_version(self):
-        from scripts.common import load_platform_config
+        from scripts.model.platforms import load_platform_config
         manifests = sorted((ROOT / "install").glob("*.json"))
         self.assertTrue(manifests)
         for path in manifests:
@@ -2408,7 +2411,7 @@ class ManifestVersionIsThePlatformsOwn(unittest.TestCase):
                 self.assertEqual(data["version"], str(config["version"]))
 
     def test_no_child_shows_its_parents_version(self):
-        from scripts.common import load_platform_config
+        from scripts.model.platforms import load_platform_config
         platforms = ROOT / "platforms"
         children = {}
         for path in sorted(platforms.glob("*.yml")):
@@ -2425,7 +2428,7 @@ class ManifestVersionIsThePlatformsOwn(unittest.TestCase):
                 self.assertNotEqual(version, parent.get("version"))
 
     def test_an_unversioned_child_has_no_version(self):
-        from scripts.common import load_platform_config
+        from scripts.model.platforms import load_platform_config
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
             Path(tmp, "parent.yml").write_text("platform: P\nversion: '2.0'\nsystems: {}\n")
             Path(tmp, "child.yml").write_text("inherits: parent\nplatform: C\n")
@@ -2907,7 +2910,7 @@ class FreshnessGuardMechanics(unittest.TestCase):
     """
 
     def setUp(self):
-        from common import write_if_changed
+        from core.artifacts import write_if_changed
 
         self.write_if_changed = write_if_changed
         self._tmp = tempfile.TemporaryDirectory()
@@ -3217,10 +3220,13 @@ class ACheckThatCannotAnswerDoesNotPass(unittest.TestCase):
             self.assertEqual(stop.exception.code, 1)
 
     def test_a_missing_profile_directory_says_so(self):
-        from scripts import common as _common
+        # Bare names, as the loader imports them: scripts.core.cli would be a
+        # second copy of the module, with a second InputMissing.
+        from core.cli import InputMissing
+        from model.profiles import load_emulator_profiles
 
-        with self.assertRaisesRegex(_common.InputMissing, "no emulator profile directory"):
-            _common.load_emulator_profiles(str(ROOT / "no-such-emulator-dir"))
+        with self.assertRaisesRegex(InputMissing, "no emulator profile directory"):
+            load_emulator_profiles(str(ROOT / "no-such-emulator-dir"))
 
 
 class TestEntryPointsRunEveryClass(unittest.TestCase):
@@ -3260,7 +3266,7 @@ class ScriptsImportThreeWays(unittest.TestCase):
 
     The three do not agree on what is on the path: only the first form adds
     the scripts directory. Adding the package marker without the bootstrap
-    made `import scripts.common` fail on the first sibling import it reached.
+    made `import scripts.common` (now scripts.core.cli) fail on the first sibling import it reached.
     """
 
     def _run(self, *args: str):
@@ -3274,7 +3280,8 @@ class ScriptsImportThreeWays(unittest.TestCase):
 
     def test_imported_as_a_package(self):
         result = self._run(
-            "-c", "import scripts.common, scripts.verify, scripts.generate_pack"
+            "-c", "import scripts.core.cli, scripts.model.platforms, scripts.resolve.localfile, "
+            "scripts.verify, scripts.generate_pack"
         )
         self.assertEqual(result.returncode, 0, result.stderr[-400:])
 
@@ -3467,7 +3474,7 @@ class AnotherEmulatorsTreeProvesNothing(unittest.TestCase):
         return db
 
     def test_neither_the_full_tail_nor_the_name_lands_in_a_foreign_tree(self):
-        from scripts.common import resolve_local_file
+        from scripts.resolve.localfile import resolve_local_file
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             root = Path(directory)
@@ -3497,13 +3504,11 @@ class AnotherEmulatorsTreeProvesNothing(unittest.TestCase):
 
     def test_no_desktop_retroarch_pack_serves_armsx2s_tree(self):
         from scripts import slots
-        from scripts.common import (
-            load_data_dir_registry,
-            load_database,
-            load_emulator_profiles,
-            load_platform_config,
-            load_target_config,
-        )
+        from scripts.model.registry import load_data_dir_registry
+        from scripts.model.database import load_database
+        from scripts.model.profiles import load_emulator_profiles
+        from scripts.model.platforms import load_platform_config
+        from scripts.model.targets import load_target_config
 
         if not (ROOT / "database.json").exists():
             self.skipTest("database.json is not generated")
@@ -3556,7 +3561,7 @@ class ANameWithItsDirectoryIsTheDestination(unittest.TestCase):
     def test_the_directory_in_the_name_picks_the_copy(self):
         import hashlib
 
-        from scripts.common import resolve_local_file
+        from scripts.resolve.localfile import resolve_local_file
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             root = Path(directory)
@@ -3760,7 +3765,7 @@ class KidVidTapesStayWithTheContent(unittest.TestCase):
     reaches: stella's tapes go there, never to the BIOS tree."""
 
     def test_no_pack_places_them_in_the_system_directory(self):
-        from scripts.common import load_emulator_profiles
+        from scripts.model.profiles import load_emulator_profiles
         from scripts.resolve.validation import (
             outside_gap_scope,
             read_from_save_dir,
@@ -3869,7 +3874,8 @@ class HashMergeBackupsAreNotSources(unittest.TestCase):
         offenders = [
             str(path.relative_to(ROOT))
             for path in sorted(ROOT.glob("scripts/**/*.py"))
-            if path.name != "common.py" and '".old.yml"' in path.read_text()
+            if path.relative_to(ROOT).as_posix() != "scripts/model/profiles.py"
+            and '".old.yml"' in path.read_text()
         ]
         self.assertEqual(offenders, [])
 
@@ -3880,7 +3886,7 @@ class AnUnreadableArchiveIsSaidOutLoud(unittest.TestCase):
     truncated archive read as a missing dump (not_found) or a wrong one."""
 
     def test_the_resolver_names_the_archive(self):
-        import common
+        from resolve import localfile
 
         with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as tmp:
             broken = Path(tmp) / "neogeo.zip"
@@ -3893,7 +3899,7 @@ class AnUnreadableArchiveIsSaidOutLoud(unittest.TestCase):
             entry = {"name": "neogeo.zip", "md5": "1" * 32, "zipped_file": "sp-s2.sp1"}
             stderr = io.StringIO()
             with contextlib.redirect_stderr(stderr):
-                common.resolve_local_file(entry, db)
+                localfile.resolve_local_file(entry, db)
         self.assertIn(f"unreadable archive {broken}", stderr.getvalue())
 
 
@@ -3903,19 +3909,20 @@ class GeneralUserGSReachesEveryCoreThatNamesIt(unittest.TestCase):
     shipped no General MIDI bank."""
 
     def test_each_name_resolves_to_the_one_file(self):
-        import common
+        from model import profiles as model_profiles
+        from resolve import localfile
 
         if not (ROOT / "database.json").exists():
             self.skipTest("database.json is not generated")
         db = json.loads((ROOT / "database.json").read_text())
-        profiles = common.load_emulator_profiles(str(ROOT / "emulators"))
+        profiles = model_profiles.load_emulator_profiles(str(ROOT / "emulators"))
         held = "bios/Other/GeneralUser GS/GeneralUser-GS.sf2"
         for emulator, name in (("dosbox_pure", "DOSBOX.SF2"),
                                ("dosbox-staging", "GeneralUser-GS.sf2"),
                                ("dosbox-x", "GeneralUser_GS.sf2")):
             with self.subTest(emulator=emulator):
                 entry = next(f for f in profiles[emulator]["files"] if f["name"] == name)
-                path, _status = common.resolve_local_file(
+                path, _status = localfile.resolve_local_file(
                     {**entry, "source_profile": emulator}, db, dest_hint=entry.get("path", ""))
                 self.assertEqual(path, held)
 
@@ -3927,19 +3934,20 @@ class APlatformPinDoesNotReplaceTheCoresRevision(unittest.TestCase):
     files to cores built against newer ones."""
 
     def test_the_profile_revision_serves_the_core(self):
-        import common
+        from model import profiles as model_profiles
+        from resolve import localfile
 
         if not (ROOT / "database.json").exists():
             self.skipTest("database.json is not generated")
         db = json.loads((ROOT / "database.json").read_text())
-        profiles = common.load_emulator_profiles(str(ROOT / "emulators"))
+        profiles = model_profiles.load_emulator_profiles(str(ROOT / "emulators"))
         for emulator, name, pinned in (("scummvm", "kyra.dat", "21a57f79886e46f410cfb50186ed8d77"),
                                        ("fbneo", "hiscore.dat", "37fc4e050b53a1ef2c2e7f3042553025")):
             with self.subTest(emulator=emulator):
                 entry = next(f for f in profiles[emulator]["files"] if f["name"] == name)
                 self.assertTrue(entry.get("sha1"), "the profile claims its revision")
                 self.assertIn(pinned, db["indexes"]["by_md5"], "the platform's pin is held")
-                path, status = common.resolve_local_file(
+                path, status = localfile.resolve_local_file(
                     {**entry, "source_profile": emulator}, db, dest_hint=entry["path"])
                 self.assertEqual(status, "sha1_exact")
                 self.assertEqual(db["files"][entry["sha1"]]["path"], path)
@@ -3968,7 +3976,7 @@ class ADataDirectoryIsWalkedOnce(unittest.TestCase):
     resolution cost names x tree on every pack build."""
 
     def test_two_lookups_share_one_walk_and_keep_its_order(self):
-        import common
+        from resolve.datadirs import forget_data_dir_index, _resolve_in_data_dirs
 
         with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as tmp:
             cache = Path(tmp) / "cache"
@@ -3978,7 +3986,7 @@ class ADataDirectoryIsWalkedOnce(unittest.TestCase):
             (cache / "b" / "font.bin").write_bytes(b"2")
             (cache / "b" / "other.bin").write_bytes(b"3")
             registry = {"x": {"local_cache": str(cache)}}
-            common.forget_data_dir_index()
+            forget_data_dir_index()
             walks = []
             real_walk = os.walk
 
@@ -3987,11 +3995,11 @@ class ADataDirectoryIsWalkedOnce(unittest.TestCase):
                 return real_walk(top, *a, **k)
 
             with mock.patch.object(os, "walk", counting_walk):
-                first, _ = common._resolve_in_data_dirs(["font.bin"], registry,
+                first, _ = _resolve_in_data_dirs(["font.bin"], registry,
                                                         lambda _p: "name_exact")
-                second, _ = common._resolve_in_data_dirs(["other.bin"], registry,
+                second, _ = _resolve_in_data_dirs(["other.bin"], registry,
                                                          lambda _p: "name_exact")
-            common.forget_data_dir_index()
+            forget_data_dir_index()
         self.assertEqual(len(walks), 1)
         expected = sorted(str(p) for p in (cache / "a" / "Font.bin", cache / "b" / "font.bin"))
         self.assertIn(first[0], expected)
@@ -4271,12 +4279,9 @@ class OpenMsxRomsSitInItsSystemroms(unittest.TestCase):
     them there."""
 
     def test_every_entry_is_under_share_systemroms(self):
-        from scripts.common import (
-            load_emulator_profiles,
-            load_platform_config,
-            platform_layouts,
-            standalone_set,
-        )
+        from scripts.model.profiles import load_emulator_profiles
+        from scripts.model.platforms import load_platform_config
+        from scripts.resolve.standalone import platform_layouts, standalone_set
 
         profile = load_emulator_profiles(str(ROOT / "emulators"))["openmsx"]
         retrobat = yaml.safe_load((ROOT / "platforms" / "retrobat.yml").read_text())
@@ -4330,7 +4335,7 @@ class AnEmptyTargetIsNotEveryCore(unittest.TestCase):
     served gpsp's files only, the published list said null (every core)."""
 
     def test_the_published_list_is_the_builder_reading(self):
-        from scripts.common import load_target_config
+        from scripts.model.targets import load_target_config
         from scripts.generate_pack import generate_target_manifests
 
         tmp = Path(tempfile.mkdtemp(dir=TMP_ROOT))
@@ -4364,16 +4369,16 @@ class ADataDirectoryIsHeldWhileRead(unittest.TestCase):
         self.addCleanup(lambda: __import__("shutil").rmtree(self.tmp, True))
 
     def test_the_index_follows_a_swapped_tree(self):
-        from scripts import common
+        from scripts.resolve.datadirs import _data_dir_basenames
 
         cache = self.tmp / "cache"
         cache.mkdir()
         (cache / "old.rom").write_bytes(b"old")
-        self.assertIn("old.rom", common._data_dir_basenames(str(cache)))
+        self.assertIn("old.rom", _data_dir_basenames(str(cache)))
         cache.rename(self.tmp / "gone")
         cache.mkdir()
         (cache / "new.rom").write_bytes(b"new")
-        index = common._data_dir_basenames(str(cache))
+        index = _data_dir_basenames(str(cache))
         self.assertIn("new.rom", index)
         self.assertNotIn("old.rom", index)
 
@@ -4756,7 +4761,8 @@ class TheIssueFormListsEveryPlatform(unittest.TestCase):
     """The missing-BIOS form offered 7 of the 12 registered platforms."""
 
     def test_every_registered_platform_is_an_option(self):
-        from scripts.common import list_registered_platforms, load_platform_config
+        from scripts.model.registry import list_registered_platforms
+        from scripts.model.platforms import load_platform_config
 
         form = yaml.safe_load(
             (ROOT / ".github" / "ISSUE_TEMPLATE" / "missing-bios.yml").read_text()
@@ -5049,7 +5055,8 @@ class SignaturesCarryTheirTypes(unittest.TestCase):
 
     # Lowered as modules are annotated, never raised.
     CEILING = 0
-    COMPLETE = ("core/artifacts.py", "common.py", "resolve/validation.py", "generate_pack.py")
+    COMPLETE = ("core/artifacts.py", "model/platforms.py", "model/profiles.py", "resolve/localfile.py",
+                "resolve/validation.py", "generate_pack.py")
 
     @staticmethod
     def _missing(path: Path) -> list[str]:
@@ -5105,7 +5112,9 @@ class EmuDeckRunsItsEmulatorsStandalone(unittest.TestCase):
     lost their standalone-only files."""
 
     def test_every_emuscripts_emulator_is_standalone(self):
-        from scripts.common import load_platform_config, runs_standalone, load_emulator_profiles
+        from scripts.model.platforms import load_platform_config
+        from scripts.resolve.layout import runs_standalone
+        from scripts.model.profiles import load_emulator_profiles
 
         config = load_platform_config("emudeck", str(ROOT / "platforms"))
         self.assertEqual(
@@ -5122,9 +5131,9 @@ class EmuDeckRunsItsEmulatorsStandalone(unittest.TestCase):
         """The scraper dropped RetroArch's own script: np2kai, neocd and
         every core EmuDeck installs through RetroArch got no file that
         checkBIOS.sh does not name."""
-        from scripts.common import (
-            load_emulator_profiles, load_platform_config, resolve_platform_cores,
-        )
+        from scripts.model.profiles import load_emulator_profiles
+        from scripts.model.platforms import load_platform_config
+        from scripts.resolve.cores import resolve_platform_cores
 
         config = load_platform_config("emudeck", str(ROOT / "platforms"))
         self.assertIn("retroarch", config["cores"])
@@ -5419,7 +5428,8 @@ class BundledFilesAreNotToSource(unittest.TestCase):
         self.assertTrue(installed_with_emulator(hcl))
 
     def test_every_platform_named_is_registered(self):
-        from common import list_registered_platforms, load_emulator_profiles
+        from model.registry import list_registered_platforms
+        from model.profiles import load_emulator_profiles
 
         known = set(list_registered_platforms(str(ROOT / "platforms")))
         unknown = sorted({
@@ -5440,14 +5450,14 @@ class BundledFilesAreNotToSource(unittest.TestCase):
 
         import yaml as _yaml
 
-        import common
+        from model.profiles import installed_data_refs
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
             Path(tmp, "dolphin.yml").write_text(_yaml.safe_dump({
                 "emulator": "Dolphin", "type": "libretro", "files": [],
                 "data_directories": [{"ref": "dolphin-sys", "installed_on": ["lakka"]}]}))
-            self.assertEqual(common.installed_data_refs("lakka", tmp), frozenset({"dolphin-sys"}))
-            self.assertEqual(common.installed_data_refs("retroarch", tmp), frozenset())
+            self.assertEqual(installed_data_refs("lakka", tmp), frozenset({"dolphin-sys"}))
+            self.assertEqual(installed_data_refs("retroarch", tmp), frozenset())
         source = (ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8")
         self.assertIn("if ref_key in installed_data_refs(platform_name):", source)
 
@@ -5522,7 +5532,7 @@ class GapsPageCountsOneWay(unittest.TestCase):
 
     def test_the_destination_is_the_list_entrys(self):
         from scripts.generate_site import _declared_destination
-        from common import load_platform_config
+        from model.platforms import load_platform_config
 
         config = load_platform_config("amberelec", str(ROOT / "platforms"))
         detail = {"name": "N88_KNJ1.ROM", "system": "nec-pc-88"}
@@ -5980,7 +5990,7 @@ const _EJS_NIGHTLY_CORES_MAP: Record<string, string[]> = {
             parse_player_cores(source)
 
     def test_the_platform_file_carries_the_nightly_cores(self):
-        from common import load_platform_config
+        from model.platforms import load_platform_config
 
         cores = set(load_platform_config("romm", str(ROOT / "platforms"))["cores"])
         self.assertTrue({"azahar", "bsnes", "genesis_plus_gx_wide"} <= cores)
@@ -6092,7 +6102,7 @@ class TheReadmeCountsSystemsAsListSystemsDoes(unittest.TestCase):
         import re
         from contextlib import redirect_stdout
 
-        from scripts.common import list_system_ids
+        from scripts.model.cliargs import list_system_ids
 
         out = io.StringIO()
         with redirect_stdout(out):
@@ -6163,7 +6173,7 @@ class AnAliasSelectsItsProfile(unittest.TestCase):
         import contextlib as _contextlib
         import io as _io
 
-        from scripts.common import ProfileSelectionError, select_emulator_profiles
+        from scripts.model.profiles import ProfileSelectionError, select_emulator_profiles
 
         profiles = {
             "flycast": {"type": "libretro", "cores": ["flycast", "flycast_gles2"]},
@@ -6277,7 +6287,7 @@ class TheRepairCommandWritesTheFileNamed(unittest.TestCase):
     command wrote another file and the next run failed the same way."""
 
     def test_the_command_names_the_path(self):
-        from scripts.common import DatabaseUnreadable, load_database
+        from scripts.model.database import DatabaseUnreadable, load_database
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             target = str(Path(directory) / "nosuch.json")
@@ -6292,7 +6302,7 @@ class TheRepairCommandWritesTheFileNamed(unittest.TestCase):
     def test_a_typo_beside_the_database_names_the_database(self):
         """--db databse.json beside database.json was told to rescan the whole
         collection into a second file named after the typo."""
-        from scripts.common import DatabaseUnreadable, load_database
+        from scripts.model.database import DatabaseUnreadable, load_database
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             (Path(directory) / "database.json").write_text("{}")
@@ -6338,7 +6348,8 @@ class AHashScanningCoreContradictsNoPlatform(unittest.TestCase):
         import json
 
         from scripts import slots
-        from scripts.common import list_registered_platforms, load_emulator_profiles
+        from scripts.model.registry import list_registered_platforms
+        from scripts.model.profiles import load_emulator_profiles
 
         root = ROOT
         if not (root / "database.json").exists():
@@ -6469,7 +6480,7 @@ class AHashScanLabelNamesNoOtherDump(unittest.TestCase):
     def test_labels_are_not_other_dumps_names(self):
         import json
 
-        from scripts.common import load_emulator_profiles
+        from scripts.model.profiles import load_emulator_profiles
 
         if not (ROOT / "database.json").exists():
             self.skipTest("database.json is not built")
@@ -6628,7 +6639,7 @@ class ABrokenRegistryIsNotAnEmptyOne(unittest.TestCase):
     and every --all build passed having checked nothing."""
 
     def test_both_raise(self):
-        from scripts.common import list_registered_platforms
+        from scripts.model.registry import list_registered_platforms
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
             with self.assertRaises(FileNotFoundError):
@@ -6801,7 +6812,8 @@ class AnUnknownTargetIsRefusedUnderAll(unittest.TestCase):
     BizHawk and MiSTer unfiltered: a green run about no Switch at all."""
 
     def test_a_typo_is_refused_and_targetless_platforms_are_left_out(self):
-        from scripts.common import build_target_cores_cache, list_registered_platforms
+        from scripts.model.targets import build_target_cores_cache
+        from scripts.model.registry import list_registered_platforms
 
         platforms = list_registered_platforms(str(ROOT / "platforms"))
         with contextlib.redirect_stdout(io.StringIO()):
@@ -7028,7 +7040,8 @@ class WhatOnlyAnInstallProvidesIsListed(unittest.TestCase):
         """The pull request checks run this suite, not the pipeline: without
         this, a copy only a bundled entry reaches merges green."""
         import bundled_only
-        from common import load_database, load_emulator_profiles
+        from model.database import load_database
+        from model.profiles import load_emulator_profiles
 
         rows = bundled_only.bundled_only(
             load_database(str(ROOT / "database.json")),

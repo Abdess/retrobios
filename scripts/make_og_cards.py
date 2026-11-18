@@ -25,7 +25,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
-from common import list_registered_platforms, load_platform_config
+from model.registry import list_registered_platforms
+from model.platforms import load_platform_config
 from sitediagrams import OG_SECTIONS, og_card_svg, wrap
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -70,7 +71,8 @@ def system_cards() -> dict[str, tuple[str, str]]:
     """Each manufacturer page's card under og/systems/, titled with the
     manufacturer and listing its consoles. Read from the same grouping the
     system pages are written from."""
-    from common import GAME_DATA_TOPS, load_database
+    from model.composition import GAME_DATA_TOPS
+    from model.database import load_database
     from sitecollection import _group_by_manufacturer, _slug
 
     def lead(manufacturer: str) -> str:
@@ -133,6 +135,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

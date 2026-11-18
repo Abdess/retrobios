@@ -153,7 +153,8 @@ class ManifestsServeWhatTheCoreAccepts(unittest.TestCase):
     def test_no_served_core_file_fails_its_check_beside_a_passing_variant(self):
         import json
 
-        from common import load_emulator_profiles, load_platform_config
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
         from generate_pack import _platform_cores
         from resolve.validation import check_file_validation
 
@@ -228,7 +229,7 @@ class DolphinForksJudgeTheirOwnDspTable(unittest.TestCase):
     FREE_V031 = REPO_ROOT / "bios" / "Nintendo" / "GameCube" / "Sys" / "GC" / "dsp_rom.bin"
 
     def test_each_fork_accepts_its_own_free_rom(self):
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
         from resolve.validation import check_file_validation
 
         if not self.FREE_V04.is_file() or not self.FREE_V031.is_file():

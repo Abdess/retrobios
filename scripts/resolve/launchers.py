@@ -20,7 +20,10 @@ import re
 from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 
-from common import declared_root, name_match_size_ok, resolve_local_file, sanitize_pack_path
+from model.declarations import declared_root
+from resolve.content import name_match_size_ok
+from resolve.localfile import resolve_local_file
+from core.paths import sanitize_pack_path
 from core.paths import REPO_ROOT
 
 # The kinds whose names say which file the launcher opens. A link of a named
@@ -509,7 +512,7 @@ def _profiles_or_repo(profiles: Mapping[str, dict] | None) -> Mapping[str, dict]
         return profiles
     if _DEFAULT_PROFILES is None:
 
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         _DEFAULT_PROFILES = load_emulator_profiles(
             str(REPO_ROOT / "emulators")
@@ -895,7 +898,7 @@ def _roms_place(config: dict, path: str | None) -> Place | None:
     platform installs above its BIOS folder (AmberELEC), else the roms tree."""
     if path is None:
         return None
-    from common import ROMS_ROOT, outer_layout
+    from resolve.layout import ROMS_ROOT, outer_layout
 
     layout = outer_layout(config, ROMS_ROOT) or {}
     if "install_prefix" in layout:
@@ -911,7 +914,7 @@ def folder_in_configs(directory: str, config: dict) -> str | None:
     (``configs_root.path``): Batocera's /userdata/system/configs, where its
     generators start shadPS4 from configs/shadps4.
     """
-    from common import CONFIGS_ROOT
+    from resolve.layout import CONFIGS_ROOT
 
     return folder_in_root(directory, config, CONFIGS_ROOT)
 
@@ -923,7 +926,7 @@ def folder_in_roms(directory: str, config: dict) -> str | None:
     (``roms_root.path``): ROCKNIX's /storage/roms, which holds its BIOS
     folder and the folders its launchers run programs from.
     """
-    from common import ROMS_ROOT, outer_layout
+    from resolve.layout import ROMS_ROOT, outer_layout
 
     spelled = directory.strip().rstrip("/")
     for variable in ROMS_ROOT_VARIABLES:
@@ -937,7 +940,7 @@ def folder_in_roms(directory: str, config: dict) -> str | None:
 
 def folder_in_root(directory: str, config: dict, root: str) -> str | None:
     """A directory relative to an outer root's path, None outside it."""
-    from common import outer_layout
+    from resolve.layout import outer_layout
 
     roms = str((outer_layout(config, root) or {}).get("path") or "").rstrip("/")
     directory = directory.strip().rstrip("/")

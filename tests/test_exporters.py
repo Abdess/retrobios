@@ -30,12 +30,9 @@ import zipfile
 from collections import OrderedDict
 from pathlib import Path
 
-from common import (
-    list_registered_platforms,
-    load_platform_config,
-    native_layer,
-    parse_untrusted_xml,
-)
+from model.registry import list_registered_platforms
+from model.platforms import load_platform_config, native_layer
+from model.safeparse import parse_untrusted_xml
 from exporter import discover_exporters
 from exporter.base_exporter import BaseExporter
 from export_native import (

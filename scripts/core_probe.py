@@ -41,7 +41,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import IO
 
-# The probe tools do not import common.py, which states the 3.9 floor for the
+# The probe tools do not import core/cli.py, which states the 3.9 floor for the
 # other scripts. Under 3.8 they stopped on a str.removesuffix AttributeError.
 if sys.version_info < (3, 9):
     sys.exit(
@@ -1522,7 +1522,7 @@ def default_emulator(core_file: Path, library_name: str | None) -> str:
     """The profile whose cores: names the .so, else the library name as a slug."""
     stem = core_file.name.split(".")[0].removesuffix("_libretro")
     sys.path.insert(0, str(ROOT / "scripts"))
-    from common import load_emulator_profiles
+    from model.profiles import load_emulator_profiles
 
     owners = sorted(key for key, profile in load_emulator_profiles(str(ROOT / "emulators")).items()
                     if stem == key or stem in (profile.get("cores") or []))
@@ -1763,6 +1763,6 @@ if __name__ == "__main__":
         # repository there is: it imports nothing beside the standard library.
         sys.exit(main())
     sys.path.insert(0, str(Path(__file__).resolve().parent))
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

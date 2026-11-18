@@ -17,7 +17,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.common import yaml_load
+from scripts.model.safeparse import yaml_load
 from scripts.scraper._hash_merge import (
     DEVICE_SECTION,
     SOFTLIST_SECTION,
@@ -607,7 +607,7 @@ class APickReadsTheEntrySystems(unittest.TestCase):
     SYSTEMS = ["apple2gs", "coco", "snk-neogeo-mvs"]
 
     def test_entry_system_ids(self):
-        from scripts.common import entry_system_ids
+        from scripts.model.profiles import entry_system_ids
 
         profile = {"systems": self.SYSTEMS}
         self.assertEqual(entry_system_ids({"system": "coco"}, profile), ["coco"])
@@ -617,7 +617,7 @@ class APickReadsTheEntrySystems(unittest.TestCase):
         self.assertEqual(entry_system_ids({}, profile), self.SYSTEMS)
 
     def test_entry_serves_systems(self):
-        from scripts.common import entry_serves_systems
+        from scripts.model.profiles import entry_serves_systems
 
         profile = {"systems": self.SYSTEMS}
         entry = {"systems": ["apple2gs", "coco"]}
@@ -966,7 +966,8 @@ class TheSupportMergeWritesListsAndSamples(unittest.TestCase):
         self.assertEqual(profile_seeds(text), {"neogeo": "acorn-bbc-micro"})
 
     def test_a_pick_takes_its_lists_and_leaves_the_others(self):
-        from scripts.common import entry_serves_systems, expand_directory_entries
+        from scripts.model.profiles import entry_serves_systems
+        from scripts.resolve.directories import expand_directory_entries
 
         self._merge()
         profile = yaml_load(self.path.read_text(encoding="utf-8"))

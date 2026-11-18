@@ -19,7 +19,7 @@ from pathlib import Path
 
 import yaml
 
-from common import load_platform_config
+from model.platforms import load_platform_config
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -42,7 +42,8 @@ class ThePackReadmeNamesTheSpellingsItLeavesOut(unittest.TestCase):
     nothing about it."""
 
     def setUp(self):
-        import common
+        from model.platforms import _platform_config_cache
+        from model.profiles import _emulator_profiles_cache
         import generate_db
         import generate_pack
 
@@ -73,19 +74,19 @@ class ThePackReadmeNamesTheSpellingsItLeavesOut(unittest.TestCase):
             "emulator": "mesence", "type": "libretro", "systems": ["coleco"],
             "files": [{"name": "bios.col", "required": True}],
         }))
-        common._platform_config_cache.clear()
-        common._emulator_profiles_cache.clear()
-        self.addCleanup(common._platform_config_cache.clear)
-        self.addCleanup(common._emulator_profiles_cache.clear)
+        _platform_config_cache.clear()
+        _emulator_profiles_cache.clear()
+        self.addCleanup(_platform_config_cache.clear)
+        self.addCleanup(_emulator_profiles_cache.clear)
 
     def _readme(self, systems: list[str]) -> str:
-        import common
+        from model.platforms import _platform_config_cache
 
         Path("platforms/p.yml").write_text(yaml.dump(self.config))
         Path("platforms/_registry.yml").write_text(yaml.dump({"platforms": {"p": {
             "install": {"detect": [{"os": os_name} for os_name in systems]},
         }}}))
-        common._platform_config_cache.clear()
+        _platform_config_cache.clear()
         texts: dict[str, str] = {}
         real = self.gp._write_generated_member
 

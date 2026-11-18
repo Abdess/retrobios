@@ -19,11 +19,9 @@ from pathlib import Path
 
 import cross_reference
 import slots
-from common import (
-    build_zip_contents_index,
-    load_database,
-    load_emulator_profiles,
-)
+from core.ziptools import build_zip_contents_index
+from model.database import load_database
+from model.profiles import load_emulator_profiles
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

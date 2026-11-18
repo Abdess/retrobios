@@ -49,7 +49,7 @@ ES_SYSTEMS_URL = (
 
 def es_systems_dual(text: str) -> set[str]:
     """Emulators es_systems.cfg offers both as a libretro core and standalone."""
-    from common import parse_untrusted_xml
+    from model.safeparse import parse_untrusted_xml
 
     libretro: set[str] = set()
     standalone: set[str] = set()
@@ -70,7 +70,7 @@ def es_systems_cores(text: str) -> tuple[set[str], set[str]]:
     name. batocera-systems.json names BIOS files only, so the platform read
     from it alone had no core list and relied on one kept by hand.
     """
-    from common import parse_untrusted_xml
+    from model.safeparse import parse_untrusted_xml
 
     root = parse_untrusted_xml(text, "es_systems.cfg")
     cores: set[str] = set()
@@ -96,7 +96,7 @@ def es_systems_libretro_systems(text: str) -> dict[str, list[str]]:
     reads below its save directory sits once in each of these system
     folders. A commented-out system is no element and counts for nothing.
     """
-    from common import parse_untrusted_xml
+    from model.safeparse import parse_untrusted_xml
 
     found: dict[str, set[str]] = {}
     for system in parse_untrusted_xml(text, "es_systems.cfg").iter("system"):
@@ -127,7 +127,7 @@ def pinned_revision(platform_file: Path = PLATFORM_FILE) -> str:
     A rescrape reads this commit unless told to move, so a change to an
     extractor shows in the diff alone, without upstream's commits since.
     """
-    from common import yaml_load
+    from model.safeparse import yaml_load
 
     with platform_file.open(encoding="utf-8") as fh:
         source = str((yaml_load(fh) or {}).get("source") or "")

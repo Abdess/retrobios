@@ -27,35 +27,22 @@ from typing import TYPE_CHECKING, TypedDict
 
 sys.path.insert(0, os.path.dirname(__file__))
 from model.alternatives import set_keys, set_requirements, settle_sets
-from common import (
-    OUTER_ROOTS,
-    platform_arg,
-    ProfileSelectionError,
-    _foreign_tree,
-    _norm_system_id,
-    _owner_tokens,
-    archive_entry,
-    directory_members,
-    expand_directory_entries,
-    get_mame_clone_map,
-    list_emulator_profiles,
-    list_registered_platforms,
-    merged_platform_declared_contents,
-    load_data_dir_registry,
-    load_database,
-    load_emulator_profiles,
-    load_platform_config,
-    content_fits,
-    name_match_size_ok,
-    parse_md5_list,
-    require_platform,
-    require_yaml,
-    resolve_local_file,
-    platform_layouts,
-    system_dir_path,
-    standalone_set,
-    select_emulator_profiles,
-)
+from resolve.layout import OUTER_ROOTS, system_dir_path
+from model.cliargs import platform_arg, list_emulator_profiles, require_platform
+from model.profiles import ProfileSelectionError, load_emulator_profiles, select_emulator_profiles
+from resolve.ownership import _foreign_tree, _owner_tokens
+from model.systems import _norm_system_id
+from resolve.archives import archive_entry
+from resolve.directories import directory_members, expand_directory_entries
+from model.database import get_mame_clone_map, load_database
+from model.registry import list_registered_platforms, load_data_dir_registry
+from model.declarations import merged_platform_declared_contents
+from model.platforms import load_platform_config
+from resolve.content import content_fits, name_match_size_ok
+from core.hashing import parse_md5_list
+from model.safeparse import require_yaml
+from resolve.localfile import resolve_local_file
+from resolve.standalone import platform_layouts, standalone_set
 from core.hashing import parse_hash_list
 from resolve.launchers import (
     LauncherLayer,
@@ -131,7 +118,7 @@ def declared_names(
     together: 646 entries whose exact name a platform declares were counted
     undeclared, while verify and the site read one flat index.
     """
-    from common import merged_platform_declarations
+    from model.declarations import merged_platform_declarations
 
     return merged_platform_declarations(
         [
@@ -152,7 +139,7 @@ def folded_declared_slots(
     RetroBat's 32X_G_BIOS.BIN is the file BlastEm opens as 32X_G_BIOS.bin,
     and the exact-case name test called it undeclared.
     """
-    from common import platform_declarations
+    from model.declarations import platform_declarations
 
     slots: set[str] = set()
     for platform_name in platforms or list_registered_platforms(
@@ -1652,7 +1639,8 @@ class _PlatformScope:
 def _platform_scope(
     args: argparse.Namespace, parser: argparse.ArgumentParser, profiles: dict[str, dict],
 ) -> _PlatformScope:
-    from common import load_target_config, resolve_platform_cores
+    from model.targets import load_target_config
+    from resolve.cores import resolve_platform_cores
 
     try:
         target_cores = (
@@ -1717,7 +1705,7 @@ def _launcher_rows(
 def main() -> None:
     parser = _build_parser()
     args = parser.parse_args()
-    from common import work_from_repo_root
+    from model.cliargs import work_from_repo_root
 
     work_from_repo_root(args, parser, ["emulators_dir", "platforms_dir", "db"])
     if args.list_emulators:
@@ -1770,7 +1758,7 @@ def main() -> None:
         # The tree as every platform runs it: a profile some platform runs
         # standalone keeps its standalone entries. Laid out as libretro only,
         # eka2l1, dolphin and xenia-edge lost 133 files no platform declares.
-        from common import merged_standalone_set
+        from resolve.standalone import merged_standalone_set
 
         standalone_cores = merged_standalone_set(
             load_platform_config(name, args.platforms_dir)
@@ -1838,6 +1826,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

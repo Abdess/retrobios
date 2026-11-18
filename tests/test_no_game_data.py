@@ -28,7 +28,8 @@ from pathlib import Path
 
 import yaml
 
-import common
+from model.platforms import load_platform_config, _platform_config_cache
+from model.profiles import _emulator_profiles_cache
 import generate_db
 import generate_pack as builder
 import install
@@ -103,14 +104,14 @@ class _Fixture(unittest.TestCase):
         (self.platforms / "_registry.yml").write_text(
             yaml.dump({"platforms": {"handheld": {"config": "handheld.yml"}}})
         )
-        common._platform_config_cache.clear()
-        common._emulator_profiles_cache.clear()
+        _platform_config_cache.clear()
+        _emulator_profiles_cache.clear()
         self.out = self.root / "dist"
         self.out.mkdir()
 
     def tearDown(self):
-        common._platform_config_cache.clear()
-        common._emulator_profiles_cache.clear()
+        _platform_config_cache.clear()
+        _emulator_profiles_cache.clear()
         self._tmp.cleanup()
 
     def pack(self, no_game_data: bool) -> tuple[str, set[str], str]:
@@ -182,7 +183,7 @@ class PackNarrowing(_Fixture):
 
     def test_verify_reports_the_pack_the_builder_wrote(self):
         zip_path, members, _ = self.pack(no_game_data=True)
-        config = common.load_platform_config("handheld", str(self.platforms))
+        config = load_platform_config("handheld", str(self.platforms))
         result = verify.verify_platform(
             config, self.db, str(self.emulators), PROFILES, no_game_data=True,
         )
@@ -202,7 +203,7 @@ class PackNarrowing(_Fixture):
         self.assertFalse(full[0])
 
     def test_the_full_report_is_unchanged(self):
-        config = common.load_platform_config("handheld", str(self.platforms))
+        config = load_platform_config("handheld", str(self.platforms))
         result = verify.verify_platform(config, self.db, str(self.emulators), PROFILES)
         self.assertNotIn("left_out", result)
         self.assertEqual(set(result["pack_destinations"]), FIRMWARE | GAME)

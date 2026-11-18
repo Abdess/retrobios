@@ -39,72 +39,75 @@ from typing import TYPE_CHECKING, TypedDict
 
 sys.path.insert(0, os.path.dirname(__file__))
 from model.alternatives import core_file_spares, settle_sets, slot_set_keys
-from common import resolve_platform_cores as _platform_cores
-from common import (
-    ROMS_ROOT,
-    TARGET_KEY,
-    _core_key,
-    content_folder_boards,
-    OUTER_ROOTS,
-    outer_layout,
+from resolve.cores import resolve_platform_cores as _platform_cores
+from resolve.layout import ROMS_ROOT, OUTER_ROOTS, outer_layout, core_system_dirs
+from resolve.contentlayout import TARGET_KEY, _core_key, content_folder_boards
+from model.profiles import (
     installed_data_refs,
-    platform_arg,
-    require_directory,
-    target_listing_line,
-    suggest_names,
-    system_index,
-    require_platform,
-    load_target_config,
-    archive_entry,
     profiles_for_systems,
+    load_emulator_profiles,
+    ProfileSelectionError,
+    entry_serves_systems,
+    entry_system_ids,
+    select_emulator_profiles,
+    upstream_profile_index,
+)
+from model.cliargs import (
+    platform_arg,
+    require_platform,
+    list_emulator_profiles,
+    list_platform_system_ids,
+    print_platform_listing,
+    list_system_ids,
+)
+from core.cli import require_directory, suggest_names
+from model.targets import (
+    target_listing_line,
+    load_target_config,
+    build_target_cores_cache,
+    canonical_target_name,
+    platform_files_target,
+    list_available_targets,
+)
+from model.systems import (
+    system_index,
+    platform_system_names,
+    resolve_system_arg,
+    select_systems,
+    MANUFACTURER_PREFIXES,
+    _norm_system_id,
+)
+from resolve.archives import archive_entry, archive_is_optional
+from core.artifacts import (
     write_text_atomic,
-    archive_is_optional,
     artifact_lock,
     repository_output_lock,
     ArtifactLockBusy,
-    build_target_cores_cache,
-    build_zip_contents_index,
-    compute_hashes,
-    expand_directory_entries,
+)
+from core.ziptools import build_zip_contents_index
+from core.hashing import compute_hashes
+from resolve.directories import expand_directory_entries
+from resolve.cores import (
     filter_systems_by_target,
-    group_identical_platforms,
-    list_emulator_profiles,
-    list_platform_system_ids,
-    platform_system_names,
-    resolve_system_arg,
-    print_platform_listing,
-    select_systems,
     platform_scope_systems,
     system_scope_error,
-    canonical_target_name,
-    platform_files_target,
-    list_registered_platforms,
-    list_release_pack_platforms,
-    list_system_ids,
-    load_data_dir_registry,
-    load_database,
-    load_emulator_profiles,
-    load_platform_config,
     without_profile_blind,
-    MANUFACTURER_PREFIXES,
-    _norm_system_id,
-    require_yaml,
-    ProfileSelectionError,
-    core_system_dirs,
-    declared_root,
     downloadable_on,
     downloaded_only_profiles,
-    list_available_targets,
-    entry_serves_systems,
-    entry_system_ids,
-    platform_layouts,
-    sanitize_pack_path,
-    select_emulator_profiles,
-    standalone_set,
     system_core_reach,
-    upstream_profile_index,
-    yaml_load,
 )
+from resolve.grouping import group_identical_platforms
+from model.registry import (
+    list_registered_platforms,
+    list_release_pack_platforms,
+    load_data_dir_registry,
+)
+from model.database import load_database
+from model.platforms import load_platform_config
+from model.safeparse import require_yaml, yaml_load
+from model.declarations import declared_root
+from resolve.standalone import platform_layouts, standalone_set
+from core.paths import sanitize_pack_path
 import packresolve
 from refresh_data_dirs import cache_lock, hold_data_dirs
 import region as region_mod
@@ -511,7 +514,7 @@ def pack_markers(
 ) -> tuple[str, ...]:
     """The empty files a pack carries for the systems it is unzipped on,
     as named before flattening: the .nomedia of a pack for Android."""
-    from common import list_available_targets
+    from model.targets import list_available_targets
 
     names = [t["name"] for t in list_available_targets(platform_name, platforms_dir)]
     return (MEDIA_MARKER,) if lands_on_android(names, target_name) else ()
@@ -1118,7 +1121,7 @@ def _plan_platform_pack(
 
     # Build emulator-level validation index from the platform's own
     # emulators (same scope as verify.py)
-    from common import resolve_platform_cores
+    from resolve.cores import resolve_platform_cores
 
     validation_index = {}
     platform_profiles: dict[str, dict] = {}
@@ -2571,7 +2574,7 @@ def _group_systems_by_manufacturer(
     bios_dir: str,
 ) -> dict[str, list[str]]:
     """Group system IDs by manufacturer for --split --group-by manufacturer."""
-    from common import derive_manufacturer
+    from model.systems import derive_manufacturer
 
     groups: dict[str, list[str]] = {}
     for sid, sys_data in systems.items():
@@ -4177,7 +4180,7 @@ def _run_quick_mode(
     if args.list_targets:
         if not args.platform:
             parser.error("--list-targets requires --platform")
-        from common import list_available_targets
+        from model.targets import list_available_targets
 
         targets = list_available_targets(args.platform, args.platforms_dir)
         if not targets:
@@ -6903,6 +6906,6 @@ def verify_and_finalize_packs(
     return all_ok
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

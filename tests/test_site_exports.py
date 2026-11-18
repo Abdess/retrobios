@@ -678,7 +678,7 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
         import json as _json
 
         import generate_site
-        from common import load_platform_config
+        from model.platforms import load_platform_config
         from cross_reference import FileConsumers
         from core.ziptools import build_zip_contents_index
 

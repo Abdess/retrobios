@@ -15,12 +15,9 @@ from pathlib import Path
 
 from model.largefiles import fetch_large_file
 from core.hashing import cut_md5_owner
-from common import (
-    declared_hash_verdict,
-    resolution_is_hash_exact,
-    resolve_local_file,
-    sanitize_pack_path,
-)
+from resolve.content import declared_hash_verdict
+from resolve.localfile import resolution_is_hash_exact, resolve_local_file
+from core.paths import sanitize_pack_path
 from resolve.validation import inner_rom_check
 # CLI-wide network policy.  Public helpers can override it explicitly, while
 # every CLI mode inherits --offline (including large-file release fallback).

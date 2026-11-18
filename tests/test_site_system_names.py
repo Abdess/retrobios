@@ -17,11 +17,9 @@ import unittest
 from pathlib import Path
 
 import siterender
-from common import (
-    list_registered_platforms,
-    load_emulator_profiles,
-    load_platform_config,
-)
+from model.registry import list_registered_platforms
+from model.profiles import load_emulator_profiles
+from model.platforms import load_platform_config
 from generate_site import _group_by_manufacturer
 
 REPO_ROOT = Path(__file__).resolve().parents[1]

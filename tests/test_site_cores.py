@@ -14,12 +14,10 @@ import unittest
 from pathlib import Path
 
 import generate_site
-from common import (
-    list_registered_platforms,
-    load_emulator_profiles,
-    load_platform_config,
-    resolve_platform_cores,
-)
+from model.registry import list_registered_platforms
+from model.profiles import load_emulator_profiles
+from model.platforms import load_platform_config
+from resolve.cores import resolve_platform_cores
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

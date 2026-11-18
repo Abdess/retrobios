@@ -23,7 +23,8 @@ from unittest import mock
 
 import yaml
 
-import common
+from model.platforms import _platform_config_cache
+from model.profiles import _emulator_profiles_cache
 import generate_db
 import generate_pack as builder
 import packresolve
@@ -63,8 +64,8 @@ class ReleaseAssetNotCached(unittest.TestCase):
         Path("platforms/_registry.yml").write_text(
             yaml.dump({"platforms": {"big": {"config": "big.yml"}}})
         )
-        common._platform_config_cache.clear()
-        common._emulator_profiles_cache.clear()
+        _platform_config_cache.clear()
+        _emulator_profiles_cache.clear()
         patches = (
             mock.patch("model.largefiles.load_registered_paths", return_value=REGISTERED),
             mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""}),
@@ -76,7 +77,7 @@ class ReleaseAssetNotCached(unittest.TestCase):
         packresolve.set_offline(False)
 
     def tearDown(self):
-        common._platform_config_cache.clear()
+        _platform_config_cache.clear()
         os.chdir(self._cwd)
         self._tmp.cleanup()
 
@@ -138,8 +139,8 @@ class CoreExtraReleaseAssetNotCached(ReleaseAssetNotCached):
             "files": [{"name": "big.bin", "required": True, "sha1": SHA1}],
         }}
         Path("emulators/bigcore.yml").write_text(yaml.dump(self.profiles["bigcore"]))
-        common._platform_config_cache.clear()
-        common._emulator_profiles_cache.clear()
+        _platform_config_cache.clear()
+        _emulator_profiles_cache.clear()
 
     def _report(self) -> dict:
         return verify_platform(self.config, self.db, "emulators", self.profiles)
@@ -188,10 +189,10 @@ class EmulatorReleaseAssetNotCached(ReleaseAssetNotCached):
             "files": [{"name": "big.bin", "required": True, "sha1": SHA1}],
         }
         Path("emulators/bigcore.yml").write_text(yaml.dump(self.profile))
-        common._emulator_profiles_cache.clear()
+        _emulator_profiles_cache.clear()
 
     def _report(self) -> dict:
-        common._emulator_profiles_cache.clear()
+        _emulator_profiles_cache.clear()
         return verify_emulator(["bigcore"], "emulators", self.db, platforms_dir="platforms")
 
     def _entry(self) -> dict:

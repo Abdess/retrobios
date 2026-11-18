@@ -22,7 +22,7 @@ import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
-from ..common import write_provenance_snapshot
+from model.dumpcatalog import write_provenance_snapshot
 from .base_scraper import _read_limited
 from .logiqx_parser import parse_logiqx, validate_logiqx_format
 

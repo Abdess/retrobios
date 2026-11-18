@@ -13,7 +13,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from common import _by_affinity
+from resolve.localfile import _by_affinity
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -36,7 +36,7 @@ class DeclaredSizeOrders(unittest.TestCase):
 class OwnerOutranksSharedTree(unittest.TestCase):
     def test_the_owners_copy_beats_two_matching_segments(self):
         """armsx2's fxaa.fx lost to NetherSX2's under shaders/common/."""
-        from common import _by_affinity
+        from resolve.localfile import _by_affinity
 
         paths = [
             "bios/Other/nethersx2/assets/shaders/common/fxaa.fx",

@@ -21,7 +21,8 @@ from pathlib import Path
 
 import yaml
 
-import common
+from model.platforms import _platform_config_cache
+from model.profiles import _emulator_profiles_cache
 import generate_db
 import generate_pack as builder
 
@@ -69,11 +70,11 @@ class RequiredTwins(unittest.TestCase):
         (self.platforms / "_registry.yml").write_text(
             yaml.dump({"platforms": {"twins": {"config": "twins.yml"}}})
         )
-        common._platform_config_cache.clear()
-        common._emulator_profiles_cache.clear()
+        _platform_config_cache.clear()
+        _emulator_profiles_cache.clear()
 
     def tearDown(self):
-        common._platform_config_cache.clear()
+        _platform_config_cache.clear()
         self._tmp.cleanup()
 
     def test_the_required_only_pack_carries_the_required_file(self):

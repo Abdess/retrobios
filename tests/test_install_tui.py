@@ -16165,7 +16165,7 @@ class EmulatorChoiceMatchesTheEmulatorPack(unittest.TestCase):
             # The builder's floor: install.py alone keeps 3.8.
             raise unittest.SkipTest("generate_pack.py needs Python 3.9 or newer")
         import generate_pack as gp
-        from common import build_zip_contents_index
+        from core.ziptools import build_zip_contents_index
 
         cls.gp = gp
         cls.db = json.loads(db_path.read_text(encoding="utf-8"))

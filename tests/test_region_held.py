@@ -66,8 +66,10 @@ class ADataDirectoryCopyIsHeld(unittest.TestCase):
         previous = os.getcwd()
         os.chdir(REPO_ROOT)
         try:
-            from common import load_data_dir_registry, load_database
-            from common import load_emulator_profiles, load_platform_config
+            from model.registry import load_data_dir_registry
+            from model.database import load_database
+            from model.profiles import load_emulator_profiles
+            from model.platforms import load_platform_config
             cls.db = load_database("database.json")
             cls.registry = load_data_dir_registry("platforms")
             cls.profiles = load_emulator_profiles("emulators")

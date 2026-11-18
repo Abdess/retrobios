@@ -47,7 +47,8 @@ import generate_site
 import release_record
 import siteguides
 import sitemarkup
-from common import load_platform_config, load_platform_registry
+from model.platforms import load_platform_config
+from model.registry import load_platform_registry
 from tests import sitepages
 
 REPO_ROOT = Path(__file__).resolve().parents[1]

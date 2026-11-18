@@ -39,7 +39,7 @@ from pathlib import Path
 from typing import ClassVar
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import run_cli
+from core.cli import run_cli
 
 SITE = "https://abdess.github.io"
 BASE = "/retrobios/"

@@ -15,7 +15,7 @@ Recalbox verification logic:
 
 from __future__ import annotations
 
-from common import parse_untrusted_xml
+from model.safeparse import parse_untrusted_xml
 
 from .base_scraper import BaseScraper, BiosRequirement, fetch_bytes, requirement_entry
 from .recalbox_launchers import SOURCE_FILES as LAUNCHER_FILES

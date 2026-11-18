@@ -20,7 +20,8 @@ from xml.sax.saxutils import quoteattr
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from common import load_emulator_profiles, parse_untrusted_xml
+from model.profiles import load_emulator_profiles
+from model.safeparse import parse_untrusted_xml
 
 from .base_exporter import BaseExporter
 from resolve.reconcile import NativeFile, NativeSystem, Report, by_destination, by_name

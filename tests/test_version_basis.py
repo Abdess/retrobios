@@ -26,7 +26,7 @@ import yaml
 import profile_sync
 import upstream
 import version_basis
-from common import load_emulator_profiles
+from model.profiles import load_emulator_profiles
 from profile_sync import ProfileReport, bump_commit
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -131,14 +131,14 @@ class ReadsTheRecordedSourceOffline(unittest.TestCase):
                     return int(exc.code or 0)
             return 0
 
-        import common
+        from model.profiles import _emulator_profiles_cache
 
-        common._emulator_profiles_cache.clear()
+        _emulator_profiles_cache.clear()
         self.assertEqual(run(), 0)
         stale = emulators / "snes9x.yml"
         stale.write_text(stale.read_text(encoding="utf-8").replace("1.63", "1.61"),
                          encoding="utf-8")
-        common._emulator_profiles_cache.clear()
+        _emulator_profiles_cache.clear()
         self.assertEqual(run(), 1)
 
 

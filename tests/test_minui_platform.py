@@ -27,7 +27,8 @@ from pathlib import Path
 
 import yaml
 
-from common import load_emulator_profiles, load_platform_config
+from model.profiles import load_emulator_profiles
+from model.platforms import load_platform_config
 from scraper import minui_scraper
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -167,7 +168,7 @@ class PackPlacesCoreFilesUnderTheTag(unittest.TestCase):
     folder the platform hands it, and nowhere else."""
 
     def setUp(self):
-        from common import _emulator_profiles_cache
+        from model.profiles import _emulator_profiles_cache
 
         _emulator_profiles_cache.clear()
         self.root = tempfile.mkdtemp(dir=REPO_ROOT / "tmp" / "tests")
@@ -300,7 +301,7 @@ class PackPlacesCoreFilesUnderTheTag(unittest.TestCase):
         self.assertEqual(outside, [])
 
     def test_the_same_cores_in_other_folders_make_another_pack(self):
-        from common import group_identical_platforms
+        from resolve.grouping import group_identical_platforms
 
         twin = yaml.safe_load(Path(self.platforms, "test_minui.yml").read_text())
         twin["core_system_dirs"]["Bios/GB"]["cores"] = ["arcade_lib"]
@@ -335,7 +336,7 @@ class PublishedPlatformsHoldTheRule(unittest.TestCase):
         repository the platform's recipe names: a library renamed from
         another project (dosbox-pure as dosbox) would hand the wrong
         profile's files to the folder."""
-        from common import resolve_platform_cores
+        from resolve.cores import resolve_platform_cores
 
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
 
@@ -421,7 +422,8 @@ class TheSitePageOfACardPlatform(unittest.TestCase):
 
     def test_folders_replace_the_empty_coverage(self):
         import generate_site
-        from common import load_database, load_platform_registry
+        from model.database import load_database
+        from model.registry import load_platform_registry
         from generate_readme import compute_coverage
 
         if not (REPO_ROOT / "database.json").is_file():
@@ -445,7 +447,7 @@ class TheWholeTreeKeepsCoresMinUILeavesOut(unittest.TestCase):
     and the global report lost 238 profiles."""
 
     def test_a_core_minui_does_not_list_keeps_its_files(self):
-        from common import merged_standalone_set, platform_layouts
+        from resolve.standalone import merged_standalone_set, platform_layouts
 
         minui = {"core_system_dirs": {"Bios/FC": {"cores": ["fceumm"]}}}
         retroarch = {}

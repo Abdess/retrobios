@@ -208,7 +208,7 @@ def platform_region_index(
     region, so the Genesis Plus GX and PicoDrive tags never counted and
     `--region us` kept both CD BIOSes in the RetroArch pack.
     """
-    from common import resolve_platform_cores
+    from resolve.cores import resolve_platform_cores
 
     cores = resolve_platform_cores(config, profiles, target_cores=target_cores)
     return build_region_index({n: profiles[n] for n in cores if n in profiles})

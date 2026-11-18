@@ -186,7 +186,7 @@ class NothingIsLost(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        from common import load_database
+        from model.database import load_database
         from generate_readme import compute_coverage
 
         db = load_database(str(REPO_ROOT / "database.json"))
@@ -249,7 +249,7 @@ _SITE = REPO_ROOT / "website" / "dist" / "platforms"
 @unittest.skipUnless(_SITE.is_dir(), "website/dist not built")
 class VisibleWordsStayUnderTheirCeiling(unittest.TestCase):
     def test_platform_pages(self):
-        from common import list_registered_platforms
+        from model.registry import list_registered_platforms
 
         mains = set(list_registered_platforms(str(REPO_ROOT / "platforms")))
         for page in sorted(_SITE.glob("*/index.html")):

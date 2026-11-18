@@ -26,7 +26,9 @@ class ScanCopiesStay(unittest.TestCase):
         os.chdir(REPO_ROOT)
         self.addCleanup(os.chdir, previous)
         import region as region_mod
-        from common import load_database, load_emulator_profiles, load_platform_config
+        from model.database import load_database
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
         from packextras import platform_region_groups
 
         db = load_database("database.json")

@@ -132,10 +132,10 @@ def main() -> int:
         "--strict", action="store_true", help="exit non-zero when any is found"
     )
     args = parser.parse_args()
-    from common import work_from_repo_root
+    from model.cliargs import work_from_repo_root
 
     work_from_repo_root(args, parser, ["bios_dir"])
-    from common import require_directory
+    from core.cli import require_directory
 
     require_directory(args.bios_dir)
 
@@ -166,6 +166,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

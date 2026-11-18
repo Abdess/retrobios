@@ -153,13 +153,11 @@ class BundledHashIsProof(unittest.TestCase):
     def test_no_bundled_entry_resolves_to_other_bytes(self):
         if not (REPO_ROOT / "database.json").is_file():
             self.skipTest("no database.json")
-        from common import (
-            build_zip_contents_index,
-            load_data_dir_registry,
-            load_database,
-            load_emulator_profiles,
-            resolve_local_file,
-        )
+        from core.ziptools import build_zip_contents_index
+        from model.registry import load_data_dir_registry
+        from model.database import load_database
+        from model.profiles import load_emulator_profiles
+        from resolve.localfile import resolve_local_file
 
         previous = os.getcwd()
         os.chdir(REPO_ROOT)

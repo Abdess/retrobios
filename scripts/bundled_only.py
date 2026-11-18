@@ -18,14 +18,12 @@ import argparse
 import json
 from pathlib import Path
 
-from common import (
-    compute_hashes,
-    expand_directory_entries,
-    list_registered_platforms,
-    load_database,
-    load_emulator_profiles,
-    load_platform_config,
-)
+from core.hashing import compute_hashes
+from resolve.directories import expand_directory_entries
+from model.registry import list_registered_platforms
+from model.database import load_database
+from model.profiles import load_emulator_profiles
+from model.platforms import load_platform_config
 from cross_reference import FileConsumers
 
 
@@ -119,7 +117,7 @@ def main() -> int:
     parser.add_argument("--json", action="store_true", help="print the list as JSON")
     parser.add_argument("--strict", action="store_true", help="exit 1 while a file is listed")
     args = parser.parse_args()
-    from common import work_from_repo_root
+    from model.cliargs import work_from_repo_root
 
     work_from_repo_root(args, parser, ["db", "emulators_dir", "platforms_dir", "install_dir"])
 
@@ -139,6 +137,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

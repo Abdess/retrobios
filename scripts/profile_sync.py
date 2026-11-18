@@ -34,16 +34,13 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 import upstream
 import version_basis
-from common import (
-    _norm_system_id,
-    github_token,
-    list_registered_platforms,
-    load_emulator_profiles,
-    load_platform_config,
-    resolve_platform_cores,
-    suggest_names,
-    system_index,
-)
+from model.systems import _norm_system_id, system_index
+from core.github import github_token
+from model.registry import list_registered_platforms
+from model.profiles import load_emulator_profiles
+from model.platforms import load_platform_config
+from resolve.cores import resolve_platform_cores
+from core.cli import suggest_names
 from core.hashing import parse_hash_list
 from sourceref import (  # re-exported for callers and tests
     _ANNOTATION_RE as _ANNOTATION_RE,
@@ -5866,14 +5863,14 @@ def _refresh_source_paths(args: argparse.Namespace) -> None:
     """
     if not _WRITTEN or args.dry_run or args.offline or os.environ.get("RETROBIOS_OFFLINE"):
         return
-    import common
+    from model.profiles import _emulator_profiles_cache
     import sitesources
-    from common import write_if_changed
+    from core.artifacts import write_if_changed
 
     # The run loaded the profiles before writing them, and the loader caches
     # by directory: read again, the record described the pins just replaced
     # (linapple, then ten profiles in one advance).
-    common._emulator_profiles_cache.clear()
+    _emulator_profiles_cache.clear()
     profiles = load_emulator_profiles(args.emulators_dir, skip_aliases=False)
     held, unread = sitesources.build_source_paths(
         profiles, [sitesources.TREE_CACHE], fetch=True
@@ -5999,6 +5996,6 @@ def _print_elided(
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

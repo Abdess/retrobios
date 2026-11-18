@@ -26,7 +26,12 @@ import unittest
 import zipfile
 from pathlib import Path
 
-import common
+from core.hashing import md5_composite
+from core.paths import sanitize_pack_path
+from model.database import load_database
+from model.platforms import load_platform_config
+from model.profiles import load_emulator_profiles
+from resolve.localfile import resolve_local_file
 from resolve.nativemode import reads_file_contents
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -71,7 +76,7 @@ class ShippedFilesSatisfyTheirDeclaration(unittest.TestCase):
         for manifest_path in sorted(self.install.glob("*.json")):
             platform = manifest_path.stem
             try:
-                config = common.load_platform_config(platform, str(ROOT / "platforms"))
+                config = load_platform_config(platform, str(ROOT / "platforms"))
             except (FileNotFoundError, KeyError):
                 continue
             if not reads_file_contents(config.get("verification_mode")):
@@ -85,13 +90,13 @@ class ShippedFilesSatisfyTheirDeclaration(unittest.TestCase):
                     dest = entry.get("destination") or entry.get("name", "")
                     if dest:
                         declared.setdefault(
-                            common.sanitize_pack_path(dest), []
+                            sanitize_pack_path(dest), []
                         ).append(entry)
 
             manifest = json.loads(manifest_path.read_text())
             for shipped in manifest.get("files", []):
                 entries = declared.get(
-                    common.sanitize_pack_path(shipped.get("dest", "")), []
+                    sanitize_pack_path(shipped.get("dest", "")), []
                 )
                 entries = [e for e in entries if not e.get("zipped_file")]
                 candidates = [(e, _declared_digests(e)) for e in entries]
@@ -116,7 +121,7 @@ class ShippedFilesSatisfyTheirDeclaration(unittest.TestCase):
                 # A variant carries its hash after the extension
                 # (cdimono1.zip.e6714b3d), so the name is not the test.
                 with contextlib.suppress(zipfile.BadZipFile, OSError):
-                    digests["md5"].append(common.md5_composite(str(blob_path)))
+                    digests["md5"].append(md5_composite(str(blob_path)))
                 # A declared MD5 can be shorter than 32 characters: compare by prefix.
                 satisfied = any(
                     all(
@@ -165,8 +170,8 @@ class ProfileContradictionsAreKnown(unittest.TestCase):
         database = ROOT / "database.json"
         if not database.is_file():
             self.skipTest("database.json not built")
-        db = common.load_database(str(database))
-        profiles = common.load_emulator_profiles(str(ROOT / "emulators"))
+        db = load_database(str(database))
+        profiles = load_emulator_profiles(str(ROOT / "emulators"))
         unsatisfied = []
         for name, profile in sorted(profiles.items()):
             if profile.get("type") in ("alias", "launcher"):
@@ -180,7 +185,7 @@ class ProfileContradictionsAreKnown(unittest.TestCase):
                     continue
                 if not _declared_digests(entry):
                     continue
-                path, status = common.resolve_local_file(
+                path, status = resolve_local_file(
                     entry, db, dest_hint=entry.get("path", "")
                 )
                 if path and status == "hash_mismatch":
@@ -220,7 +225,7 @@ class ArchiveNamesDesignateArchives(unittest.TestCase):
         database = ROOT / "database.json"
         if not database.is_file():
             self.skipTest("database.json not built")
-        db = common.load_database(str(database))
+        db = load_database(str(database))
         loose = []
         for name, ids in db["indexes"]["by_name"].items():
             if not name.lower().endswith(".zip"):

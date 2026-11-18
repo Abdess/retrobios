@@ -29,7 +29,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 class _Fixture(unittest.TestCase):
     def setUp(self) -> None:
-        from common import _emulator_profiles_cache
+        from model.profiles import _emulator_profiles_cache
 
         _emulator_profiles_cache.clear()
         (REPO_ROOT / "tmp").mkdir(exist_ok=True)
@@ -61,7 +61,8 @@ class _Fixture(unittest.TestCase):
         return config
 
     def _both(self) -> tuple[dict, set[str]]:
-        from common import load_emulator_profiles, load_platform_config
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
         from generate_pack import generate_pack
         from verify import verify_platform
 
@@ -126,7 +127,8 @@ class ARequiredOnlyPack(_Fixture):
     """verify had no --required-only: nothing compared the pack to a report."""
 
     def test_verify_credits_what_the_pack_writes(self):
-        from common import load_emulator_profiles, load_platform_config
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
         from generate_pack import PackRecord, generate_pack
         from verify import verify_platform
 
@@ -206,7 +208,8 @@ class EveryNarrowingIsCompared(unittest.TestCase):
 
     def test_the_variants_reach_every_compared_dimension(self):
         import pipeline
-        from common import load_emulator_profiles, load_platform_config
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
 
         platforms = str(REPO_ROOT / "platforms")
         config = load_platform_config("retroarch", platforms)

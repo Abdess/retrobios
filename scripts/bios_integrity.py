@@ -205,7 +205,7 @@ def main() -> int:
     parser.add_argument("--json", action="store_true", help="machine-readable report")
     args = parser.parse_args()
 
-    from common import load_database
+    from model.database import load_database
 
     root = Path.cwd()
     try:
@@ -224,6 +224,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

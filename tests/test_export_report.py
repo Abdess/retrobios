@@ -296,7 +296,7 @@ def _parse_dat(text: str) -> dict[tuple[str, str], dict[str, str]]:
 
 def _parse_es_bios(text: str) -> dict[tuple[str, str], dict[str, str]]:
     """Each bios element of an es_bios.xml, keyed by system and path."""
-    from common import parse_untrusted_xml
+    from model.safeparse import parse_untrusted_xml
 
     root = parse_untrusted_xml(text)
     elements: dict[tuple[str, str], dict[str, str]] = {}
@@ -315,7 +315,7 @@ class ReportedChangesAreTheDiff(unittest.TestCase):
     entry, or a maintainer checks the diff against a list that differs."""
 
     def _run(self, platform: str, filename: str) -> tuple[list[dict], str, str, dict]:
-        from common import load_platform_config, native_layer
+        from model.platforms import load_platform_config, native_layer
         from exporter import discover_exporters
         from resolve.reconcile import build_native_model
 
@@ -392,7 +392,7 @@ class ReportedChangesAreTheDiff(unittest.TestCase):
     def test_retropie(self):
         """Each addition is a name a help sentence gains, and no other: the
         report counted every file a profiled core reads as added."""
-        from common import load_platform_config, native_layer
+        from model.platforms import load_platform_config, native_layer
         from exporter import discover_exporters
         from resolve.reconcile import build_native_model
 
@@ -550,7 +550,7 @@ class RemovalCandidatesNeedAReadingNoCoreAnswers(unittest.TestCase):
         self.assertIn("corea", found[0]["reason"])
 
     def test_unresolved_names_skip_the_all_libretro_markers(self):
-        from common import unresolved_platform_cores
+        from resolve.cores import unresolved_platform_cores
 
         config = {"cores": ["retroarch", "all_libretro", "corea", "nope"]}
         self.assertEqual(unresolved_platform_cores(config, self.PROFILES), {"nope"})

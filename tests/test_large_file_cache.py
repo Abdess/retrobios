@@ -22,7 +22,8 @@ import urllib.error
 from pathlib import Path
 from unittest import mock
 
-import common
+from model.composition import GAME_DATA_TOPS, composition_tier
+from model.profiles import load_emulator_profiles
 from model import largefiles
 import check_release_assets
 
@@ -110,7 +111,7 @@ class LargeFileCacheTest(unittest.TestCase):
         results: list[str | None] = [None, None]
 
         def worker(slot: int):
-            results[slot] = common.fetch_large_file("asset.bin", dest_dir=self.dir)
+            results[slot] = largefiles.fetch_large_file("asset.bin", dest_dir=self.dir)
 
         threads = [threading.Thread(target=worker, args=(i,)) for i in range(2)]
         for t in threads:
@@ -129,7 +130,7 @@ class LargeFileCacheTest(unittest.TestCase):
         largefiles.urllib.request.urlopen = lambda req, timeout=None: _SlowResponse(
             PAYLOAD_A
         )
-        common.fetch_large_file("asset.bin", dest_dir=self.dir)
+        largefiles.fetch_large_file("asset.bin", dest_dir=self.dir)
         leftovers = [f for f in os.listdir(self.dir) if f.endswith(".tmp")]
         self.assertEqual(leftovers, [])
 
@@ -138,7 +139,7 @@ class LargeFileCacheTest(unittest.TestCase):
             raise urllib.error.URLError("offline")
 
         largefiles.urllib.request.urlopen = fail
-        self.assertIsNone(common.fetch_large_file("asset.bin", dest_dir=self.dir))
+        self.assertIsNone(largefiles.fetch_large_file("asset.bin", dest_dir=self.dir))
         self.assertEqual(os.listdir(self.dir), [])
 
     def test_a_spaced_name_served_dotted_reports_nothing(self):
@@ -154,7 +155,7 @@ class LargeFileCacheTest(unittest.TestCase):
 
         largefiles.urllib.request.urlopen = urlopen
         with mock.patch("sys.stderr", new_callable=io.StringIO) as err:
-            result = common.fetch_large_file("spaced asset.bin", dest_dir=self.dir)
+            result = largefiles.fetch_large_file("spaced asset.bin", dest_dir=self.dir)
         self.assertIsNotNone(result)
         self.assertEqual(len(asked), 2)
         self.assertEqual(err.getvalue(), "")
@@ -165,7 +166,7 @@ class LargeFileCacheTest(unittest.TestCase):
 
         largefiles.urllib.request.urlopen = fail
         with mock.patch("sys.stderr", new_callable=io.StringIO) as err:
-            self.assertIsNone(common.fetch_large_file("spaced asset.bin", dest_dir=self.dir))
+            self.assertIsNone(largefiles.fetch_large_file("spaced asset.bin", dest_dir=self.dir))
         self.assertIn("spaced asset.bin", err.getvalue())
         self.assertIn("spaced.asset.bin", err.getvalue())
 
@@ -173,7 +174,7 @@ class LargeFileCacheTest(unittest.TestCase):
         largefiles.urllib.request.urlopen = lambda req, timeout=None: _SlowResponse(
             PAYLOAD_A
         )
-        result = common.fetch_large_file(
+        result = largefiles.fetch_large_file(
             "asset.bin", dest_dir=self.dir, expected_sha1="00" * 20
         )
         self.assertIsNone(result)
@@ -188,7 +189,7 @@ class LargeFileCacheTest(unittest.TestCase):
 
         largefiles.urllib.request.urlopen = fail
         self.assertTrue(os.path.samefile(
-            common.fetch_large_file("asset.bin", dest_dir=self.dir), cached
+            largefiles.fetch_large_file("asset.bin", dest_dir=self.dir), cached
         ))
 
     def test_offline_cache_miss_never_opens_the_network(self):
@@ -197,7 +198,7 @@ class LargeFileCacheTest(unittest.TestCase):
 
         largefiles.urllib.request.urlopen = fail
         self.assertIsNone(
-            common.fetch_large_file(
+            largefiles.fetch_large_file(
                 "asset.bin", dest_dir=self.dir, offline=True
             )
         )
@@ -212,7 +213,7 @@ class LargeFileCacheTest(unittest.TestCase):
 
         largefiles.urllib.request.urlopen = fail
         self.assertTrue(os.path.samefile(
-            common.fetch_large_file(
+            largefiles.fetch_large_file(
                 "asset.bin",
                 dest_dir=self.dir,
                 expected_sha1=hashlib.sha1(PAYLOAD_A).hexdigest(),
@@ -247,7 +248,7 @@ class LargeFileCacheTest(unittest.TestCase):
         rebuilt = b"C" * 1000
         gets: list = []
         self._serve(rebuilt, gets)
-        result = common.fetch_large_file(
+        result = largefiles.fetch_large_file(
             "asset.bin", dest_dir=self.dir,
             expected_sha1=hashlib.sha1(rebuilt).hexdigest(),
         )
@@ -261,11 +262,11 @@ class LargeFileCacheTest(unittest.TestCase):
         the prune of that same download removed it."""
         self._serve(PAYLOAD_A, [])
         sha1 = hashlib.sha1(PAYLOAD_A).hexdigest()
-        first = common.fetch_large_file("asset.bin", dest_dir=self.dir, expected_sha1=sha1)
+        first = largefiles.fetch_large_file("asset.bin", dest_dir=self.dir, expected_sha1=sha1)
         self.assertTrue(first and os.path.isfile(first))
         os.unlink(Path(self.dir) / "asset.bin")
         with mock.patch.object(largefiles, "ORPHAN_GRACE", -1):
-            second = common.fetch_large_file(
+            second = largefiles.fetch_large_file(
                 "asset.bin", dest_dir=self.dir, expected_sha1=sha1
             )
         self.assertTrue(second and os.path.isfile(second))
@@ -276,11 +277,11 @@ class LargeFileCacheTest(unittest.TestCase):
         handed out the old link, which a prune elsewhere would remove."""
         self._serve(PAYLOAD_A, [])
         sha1 = hashlib.sha1(PAYLOAD_A).hexdigest()
-        common.fetch_large_file("asset.bin", dest_dir=self.dir, expected_sha1=sha1)
+        largefiles.fetch_large_file("asset.bin", dest_dir=self.dir, expected_sha1=sha1)
         cached = Path(self.dir) / "asset.bin"
         os.unlink(cached)
         cached.write_bytes(PAYLOAD_A)
-        hit = common.fetch_large_file(
+        hit = largefiles.fetch_large_file(
             "asset.bin", dest_dir=self.dir, expected_sha1=sha1, offline=True
         )
         self.assertTrue(os.path.samefile(hit, cached))
@@ -290,7 +291,7 @@ class LargeFileCacheTest(unittest.TestCase):
         cached.write_bytes(PAYLOAD_A)
         gets: list = []
         self._serve(PAYLOAD_A, gets)
-        result = common.fetch_large_file(
+        result = largefiles.fetch_large_file(
             "asset.bin", dest_dir=self.dir, expected_sha1="00" * 20
         )
         self.assertIsNone(result)
@@ -302,7 +303,7 @@ class LargeFileCacheTest(unittest.TestCase):
         cached.write_bytes(PAYLOAD_A)
         gets: list = []
         self._serve(b"D" * 10, gets)
-        result = common.fetch_large_file(
+        result = largefiles.fetch_large_file(
             "asset.bin", dest_dir=self.dir, expected_sha1="00" * 20
         )
         self.assertIsNone(result)
@@ -410,12 +411,12 @@ class PreservedLargeFileEntries(unittest.TestCase):
         self._cwd = os.getcwd()
         os.chdir(self.tmp)
         (self.tmp / ".gitignore").write_text("bios/Sony/PS3/FW.PUP\n")
-        self._real_fetch = common.fetch_large_file
+        self._real_fetch = largefiles.fetch_large_file
         generate_db.__dict__.pop("fetch_large_file", None)
 
     def tearDown(self):
         os.chdir(self._cwd)
-        common.fetch_large_file = self._real_fetch
+        largefiles.fetch_large_file = self._real_fetch
         self._tmp.cleanup()
 
     def _write_db(self, entries: dict) -> str:
@@ -424,7 +425,7 @@ class PreservedLargeFileEntries(unittest.TestCase):
         return path
 
     def test_stale_entry_for_a_rescanned_path_is_dropped(self):
-        common.fetch_large_file = lambda *_a, **_k: None
+        largefiles.fetch_large_file = lambda *_a, **_k: None
         db_path = self._write_db(
             {
                 "a" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"},
@@ -438,7 +439,7 @@ class PreservedLargeFileEntries(unittest.TestCase):
         self.assertEqual(list(files), ["a" * 40])
 
     def test_absent_large_file_is_still_preserved(self):
-        common.fetch_large_file = lambda *_a, **_k: None
+        largefiles.fetch_large_file = lambda *_a, **_k: None
         db_path = self._write_db(
             {"b" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
         )
@@ -451,7 +452,7 @@ class PreservedLargeFileEntries(unittest.TestCase):
         cache = self.tmp / "cache" / "FW.PUP"
         cache.parent.mkdir()
         cache.write_bytes(b"firmware")
-        common.fetch_large_file = lambda *_a, **_k: str(cache)
+        largefiles.fetch_large_file = lambda *_a, **_k: str(cache)
         db_path = self._write_db(
             {"b" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
         )
@@ -465,7 +466,7 @@ class PreservedLargeFileEntries(unittest.TestCase):
         cache = self.tmp / "cache" / "FW.PUP"
         cache.parent.mkdir()
         cache.write_bytes(b"firmware")
-        common.fetch_large_file = lambda *_a, **_k: str(cache)
+        largefiles.fetch_large_file = lambda *_a, **_k: str(cache)
         db_path = self._write_db(
             {"b" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
         )
@@ -481,7 +482,7 @@ class PreservedLargeFileEntries(unittest.TestCase):
         self.assertEqual(list(directory.iterdir()), [])
 
     def test_a_file_sharing_only_the_name_is_not_preserved(self):
-        common.fetch_large_file = lambda *_a, **_k: "/cache/large/FW.PUP"
+        largefiles.fetch_large_file = lambda *_a, **_k: "/cache/large/FW.PUP"
         db_path = self._write_db(
             {"c" * 40: {"name": "FW.PUP", "path": "bios/Sony/PSP/FW.PUP"}}
         )
@@ -492,7 +493,7 @@ class PreservedLargeFileEntries(unittest.TestCase):
         self.assertEqual(files, {})
 
     def test_a_second_revision_under_a_rescanned_path_is_dropped(self):
-        common.fetch_large_file = lambda *_a, **_k: "/cache/large/FW.PUP"
+        largefiles.fetch_large_file = lambda *_a, **_k: "/cache/large/FW.PUP"
         db_path = self._write_db(
             {"b" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
         )
@@ -737,7 +738,7 @@ class GameDataHasOneDefinition(unittest.TestCase):
             "bios/Toys for Bob/The Ur-Quan Masters/uqm-0.8.0-voice.uqm",
         ):
             with self.subTest(path=path):
-                self.assertEqual(common.composition_tier(path), "game_data")
+                self.assertEqual(composition_tier(path), "game_data")
                 self.assertEqual(
                     check_release_assets._section_for(path), "Game engine data"
                 )
@@ -747,7 +748,7 @@ class GameDataHasOneDefinition(unittest.TestCase):
         if not db_path.exists():
             self.skipTest("database.json not generated")
         db = json.loads(db_path.read_text(encoding="utf-8"))
-        profiles = common.load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         names: dict[str, set[str]] = {}
         for profile in profiles.values():
             for entry in profile.get("files") or []:
@@ -766,7 +767,7 @@ class GameDataHasOneDefinition(unittest.TestCase):
             top for top, categories in trees.items() if categories == {"game_data"}
         )
         self.assertEqual(
-            [top for top in only_game_data if top not in common.GAME_DATA_TOPS], []
+            [top for top in only_game_data if top not in GAME_DATA_TOPS], []
         )
 
 

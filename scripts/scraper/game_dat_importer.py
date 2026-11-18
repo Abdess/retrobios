@@ -40,7 +40,7 @@ if (_SCRIPTS_DIR := str(Path(__file__).resolve().parents[1])) not in sys.path:
     sys.path.insert(0, _SCRIPTS_DIR)
 
 from core.artifacts import copy_stream_atomic, write_if_changed, write_text_atomic
-from common import parse_untrusted_xml
+from model.safeparse import parse_untrusted_xml
 from region import REGIONS, WORLD
 from region_audit import NOINTRO
 

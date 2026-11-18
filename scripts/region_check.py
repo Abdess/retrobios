@@ -36,7 +36,7 @@ import urllib.request
 from collections.abc import Callable, Iterable
 from pathlib import Path
 
-# The probe tools do not import common.py, which states the 3.9 floor for the
+# The probe tools do not import core/cli.py, which states the 3.9 floor for the
 # other scripts. Under 3.8 they stopped on a str.removesuffix AttributeError.
 if sys.version_info < (3, 9):
     sys.exit(
@@ -292,7 +292,8 @@ def pack_files(emulator: str, region: str, work: Path) -> dict[str, Path]:
 
 
 def local_resolver() -> Callable[[dict], Path | None]:
-    from common import load_database, resolve_local_file
+    from model.database import load_database
+    from resolve.localfile import resolve_local_file
 
     db = load_database(str(ROOT / "database.json"))
 
@@ -328,7 +329,7 @@ def probe_when_idle(argv: list[str], max_wait: float,
 
 
 def run(args: argparse.Namespace) -> int:
-    from common import load_emulator_profiles
+    from model.profiles import load_emulator_profiles
 
     profile = load_emulator_profiles(str(ROOT / "emulators"))[args.emulator]
     entries = region_entries(profile, args.system)
@@ -372,7 +373,7 @@ def collect(root: Path = ROOT, stored_records: list | None = None) -> list[dict]
     """Every region outcome the records under measurements/ hold. A game
     listed under several systems (sega-megacd and mega-cd) is judged under
     the one whose profile ran it."""
-    from common import load_emulator_profiles
+    from model.profiles import load_emulator_profiles
     from measurement_records import live, read_records
 
     content: dict[str, list[tuple[str, dict]]] = {}
@@ -427,6 +428,6 @@ def main(argv: list[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

@@ -392,7 +392,7 @@ def _served_digests() -> dict[str, str]:
         f"{LARGE_FILES_RELEASE}"
     )
     headers = {"User-Agent": "retrobios/1.0", "Accept": "application/vnd.github+json"}
-    from common import github_token
+    from core.github import github_token
 
     token = github_token()
     if token:

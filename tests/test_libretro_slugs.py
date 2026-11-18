@@ -34,7 +34,7 @@ class ScrapedSystemIdsAreSlugs(unittest.TestCase):
         The quasi88 group supplies N88EXT0-3.ROM, which the core reads first
         (src/LIBRETRO/libretro.c:109-112) and which match that main ROM.
         """
-        from common import load_platform_config
+        from model.platforms import load_platform_config
 
         config = load_platform_config("retroarch", str(REPO_ROOT / "platforms"))
         names = {

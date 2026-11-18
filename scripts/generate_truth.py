@@ -13,21 +13,15 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import (
-    build_target_cores_cache,
-    platform_arg,
-    list_registered_platforms,
-    load_data_dir_registry,
-    load_database,
-    load_emulator_profiles,
-    load_platform_config,
-    require_directory,
-    require_platform,
-    require_yaml,
-    truth_target_dir,
-    write_text_atomic,
-    yaml_load,
-)
+from model.targets import build_target_cores_cache, truth_target_dir
+from model.cliargs import platform_arg, require_platform
+from model.registry import list_registered_platforms, load_data_dir_registry
+from model.database import load_database
+from model.profiles import load_emulator_profiles
+from model.platforms import load_platform_config
+from core.cli import require_directory
+from model.safeparse import require_yaml, yaml_load
+from core.artifacts import write_text_atomic
 from resolve.truth import generate_platform_truth
 
 yaml = require_yaml()
@@ -165,6 +159,6 @@ def main(argv: list[str] | None = None) -> None:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

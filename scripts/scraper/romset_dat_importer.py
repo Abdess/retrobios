@@ -45,12 +45,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import IO
 
-from ..common import (
-    list_registered_platforms,
-    load_emulator_profiles,
-    load_platform_config,
-    run_cli,
-)
+from model.registry import list_registered_platforms
+from model.profiles import load_emulator_profiles
+from model.platforms import load_platform_config
+from core.cli import run_cli
 from model.dumpcatalog import build_snapshot, load_provenance_snapshots, write_snapshot
 from .logiqx_parser import LogiqxDat, parse_logiqx
 

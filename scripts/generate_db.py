@@ -21,21 +21,18 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import (
-    annotate_provenance,
-    compute_hashes,
-    DEFAULT_PROVENANCE_DIR,
-    list_registered_platforms,
-    load_provenance_snapshots,
+from model.dumpcatalog import annotate_provenance, DEFAULT_PROVENANCE_DIR, load_provenance_snapshots
+from core.hashing import compute_hashes
+from model.registry import list_registered_platforms
+from core.artifacts import (
     repository_output_lock,
-    require_yaml,
     set_plain_mode,
-    source_yaml_paths,
-    variant_base_name,
     write_if_changed,
     write_text_atomic,
-    yaml_load,
 )
+from model.safeparse import require_yaml, yaml_load
+from model.profiles import source_yaml_paths
+from resolve.localfile import variant_base_name
 import retired_files
 
 # Platform and profile aliases are read from YAML: without pyyaml the
@@ -421,7 +418,7 @@ def _preserve_large_file_entries(files: dict, db_path: str) -> int:
     would send the installer to the repository for it. A fetched asset is
     written back to its registered path.
     """
-    from common import fetch_large_file
+    from model.largefiles import fetch_large_file
 
     registered = _load_gitignored_large_files()
     if not registered:
@@ -874,6 +871,6 @@ def _collect_all_aliases(
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

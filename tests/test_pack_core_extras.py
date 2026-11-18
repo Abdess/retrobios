@@ -147,7 +147,8 @@ class NarrowedPacksAgainstTheirOwnList(unittest.TestCase):
     now held to the platform list narrowed the way it was built."""
 
     def setUp(self):
-        import common
+        from model.platforms import _platform_config_cache
+        from model.profiles import load_emulator_profiles, _emulator_profiles_cache
         import generate_db
         import generate_pack
 
@@ -184,11 +185,11 @@ class NarrowedPacksAgainstTheirOwnList(unittest.TestCase):
                 {"name": "core.bin", "path": "core.bin", "required": True},
                 {"name": "extra.bin", "path": "extra.bin", "required": False},
             ]}), encoding="utf-8")
-        common._platform_config_cache.clear()
-        common._emulator_profiles_cache.clear()
-        self.addCleanup(common._platform_config_cache.clear)
-        self.addCleanup(common._emulator_profiles_cache.clear)
-        self.profiles = common.load_emulator_profiles("emulators")
+        _platform_config_cache.clear()
+        _emulator_profiles_cache.clear()
+        self.addCleanup(_platform_config_cache.clear)
+        self.addCleanup(_emulator_profiles_cache.clear)
+        self.profiles = load_emulator_profiles("emulators")
 
     def _build(self, source: str, required: bool) -> tuple[str, set[str]]:
         zip_path = self.gp.generate_pack(

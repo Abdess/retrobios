@@ -16,7 +16,12 @@ import os
 import unittest
 from pathlib import Path
 
-import common
+from model.database import load_database
+from model.platforms import load_platform_config
+from model.profiles import load_emulator_profiles, installed_data_refs
+from model.registry import load_data_dir_registry, list_registered_platforms
+from resolve.cores import resolve_platform_cores
+from resolve.standalone import platform_layouts, standalone_set
 import generate_pack as builder
 from resolve.validation import deliverable, read_from_system_dir
 
@@ -123,19 +128,19 @@ class EveryReaderHasTheTreeOrAReason(unittest.TestCase):
 
     def test_for_platforms_leaves_no_reader_without_a_reason(self) -> None:
         platforms_dir = str(REPO_ROOT / "platforms")
-        registry = common.load_data_dir_registry(platforms_dir)
-        profiles = common.load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        registry = load_data_dir_registry(platforms_dir)
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         unexplained = []
-        for platform in common.list_registered_platforms(platforms_dir):
-            config = common.load_platform_config(platform, platforms_dir)
-            handed = common.standalone_set(config)
-            for core in sorted(common.resolve_platform_cores(config, profiles)):
+        for platform in list_registered_platforms(platforms_dir):
+            config = load_platform_config(platform, platforms_dir)
+            handed = standalone_set(config)
+            for core in sorted(resolve_platform_cores(config, profiles)):
                 profile = profiles[core]
                 if all(standalone for _view, standalone
-                       in common.platform_layouts(core, profile, handed)):
+                       in platform_layouts(core, profile, handed)):
                     continue
                 trees = [t for t in profile.get("data_directories") or [] if isinstance(t, dict)]
-                installed = common.installed_data_refs(platform)
+                installed = installed_data_refs(platform)
                 for tree in deliverable(trees, False, platform):
                     allowed = registry.get(tree.get("ref"), {}).get("for_platforms")
                     if tree.get("ref") in installed or not read_from_system_dir(tree):
@@ -162,9 +167,9 @@ class AmberelecCarriesTheMachines(unittest.TestCase):
         cwd = os.getcwd()
         os.chdir(REPO_ROOT)
         try:
-            config = common.load_platform_config("amberelec", platforms_dir)
-            registry = common.load_data_dir_registry(platforms_dir)
-            profiles = common.load_emulator_profiles(str(REPO_ROOT / "emulators"))
+            config = load_platform_config("amberelec", platforms_dir)
+            registry = load_data_dir_registry(platforms_dir)
+            profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
             trees = builder.core_data_trees(config, profiles, "amberelec", registry)
             refs: dict = {}
             members = dict(
@@ -194,13 +199,13 @@ class TheCountLineKeepsTreesOutOfTheBaseline(unittest.TestCase):
         previous = os.getcwd()
         os.chdir(REPO_ROOT)
         self.addCleanup(os.chdir, previous)
-        db = common.load_database("database.json")
+        db = load_database("database.json")
         record = builder.PackRecord()
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
             builder.generate_pack(
                 "myminui", "platforms", db, "bios", "tmp", offline=True, record=record,
-                data_registry=common.load_data_dir_registry("platforms"),
+                data_registry=load_data_dir_registry("platforms"),
             )
         line = next(entry for entry in out.getvalue().splitlines() if "files packed" in entry)
         self.assertIn("(0 baseline + ", line)

@@ -25,7 +25,8 @@ from collections.abc import Iterable
 from typing import NamedTuple
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import composition_tier, load_database
+from model.composition import composition_tier
+from model.database import load_database
 from model.largefiles import LARGE_FILES_RELEASE, LARGE_FILES_REPO, asset_names, registered_paths
 
 
@@ -250,7 +251,7 @@ def render_notes(
 
 def profile_descriptions(emulators_dir: str = "emulators") -> dict[str, str]:
     """Name -> description, from the first profile that declares the file."""
-    from common import load_emulator_profiles
+    from model.profiles import load_emulator_profiles
 
     found: dict[str, str] = {}
     for profile in load_emulator_profiles(emulators_dir).values():
@@ -263,7 +264,7 @@ def profile_descriptions(emulators_dir: str = "emulators") -> dict[str, str]:
 
 def registry_bundles(registry_path: str = "platforms/_data_dirs.yml") -> dict[str, str]:
     """Asset name -> description for data directories served from the release."""
-    from common import yaml_load
+    from model.safeparse import yaml_load
 
     with open(registry_path, encoding="utf-8") as handle:
         registry = yaml_load(handle) or {}
@@ -390,6 +391,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

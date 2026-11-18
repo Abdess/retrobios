@@ -93,7 +93,7 @@ class CrossReferenceReadsTheBuildThePlatformRuns(unittest.TestCase):
     def test_a_platform_running_both_builds(self):
         # The dual layout keyed seen files by (path, slot) and then looked
         # the pair up in the slot table: KeyError on Batocera's dolphin.
-        from common import DUAL_MODE_PREFIX
+        from resolve.layout import DUAL_MODE_PREFIX
 
         self.assertEqual(
             self._gaps({"dual", DUAL_MODE_PREFIX + "dual"}),

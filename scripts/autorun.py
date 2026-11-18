@@ -776,7 +776,7 @@ def safe_env(names: Sequence[str] = (), add: dict[str, str] | None = None,
 def token_env() -> dict[str, str]:
     """The environment of the phases that need GitHub: the push and gh."""
     sys.path.insert(0, str(REPO_ROOT / "scripts"))
-    from common import github_token
+    from core.github import github_token
 
     env = dict(os.environ)
     token = github_token()
@@ -1214,6 +1214,6 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.path.insert(0, str(REPO_ROOT / "scripts"))
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

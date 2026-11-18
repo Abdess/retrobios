@@ -21,7 +21,7 @@ from pathlib import Path
 from unittest import mock
 
 import build_port
-import common
+from model.registry import list_registered_platforms
 import sitehandheld
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -96,7 +96,7 @@ class TheSiteServesTheLaunchers(unittest.TestCase):
 
 class WhereEachSystemFindsItsFile(unittest.TestCase):
     def test_each_platform_page_is_a_registered_platform(self):
-        registered = set(common.list_registered_platforms(PLATFORMS))
+        registered = set(list_registered_platforms(PLATFORMS))
         self.assertLessEqual(set(sitehandheld.PLATFORM_OF.values()), registered)
         self.assertNotIn(sitehandheld.GROUP_PAGE, registered)
 

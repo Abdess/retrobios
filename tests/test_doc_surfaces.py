@@ -85,7 +85,7 @@ class TheDownloadTablesFollowTheRegistry(unittest.TestCase):
     def test_every_detected_system_lists_the_platform(self):
         import yaml
 
-        from common import load_platform_config
+        from model.platforms import load_platform_config
 
         registry = yaml.safe_load(_read("platforms/_registry.yml"))
         page = _which_pack()
@@ -186,7 +186,7 @@ class DownloadLinksKeepTheirAddress(unittest.TestCase):
     def test_the_generated_readme_links_every_get_page(self):
         if not RECORD.get("packs"):
             self.skipTest("release.json is not written")
-        from common import list_registered_platforms, list_release_pack_platforms
+        from model.registry import list_registered_platforms, list_release_pack_platforms
 
         readme = _read("README.md")
         table = _section(readme, "## Or download a ZIP")
@@ -212,7 +212,8 @@ class DownloadLinksKeepTheirAddress(unittest.TestCase):
         """KNULLI, AmberELEC and EmuELEC were registered after the recorded
         release, and the platforms without release_pack never get a ZIP: a
         row for them offers the command."""
-        from common import list_registered_platforms, load_platform_config
+        from model.registry import list_registered_platforms
+        from model.platforms import load_platform_config
         import generate_site
 
         record = release_record.load_advertised()
@@ -445,7 +446,9 @@ class CoreCountsReadFromTheData(unittest.TestCase):
 
     def test_the_run_count_is_what_the_platforms_resolve(self):
         import yaml
-        from common import load_emulator_profiles, load_platform_config, resolve_platform_cores
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
+        from resolve.cores import resolve_platform_cores
 
         from tests import sitepages
 

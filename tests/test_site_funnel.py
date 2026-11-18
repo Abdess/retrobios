@@ -17,7 +17,8 @@ from pathlib import Path
 
 import generate_site
 from tests import sitepages
-from common import list_registered_platforms, load_platform_config, load_platform_registry
+from model.registry import list_registered_platforms, load_platform_registry
+from model.platforms import load_platform_config
 from siteguides import DEVICE_GROUPS, GROUP_ANCHORS, GUIDES
 
 REPO_ROOT = Path(__file__).resolve().parent.parent

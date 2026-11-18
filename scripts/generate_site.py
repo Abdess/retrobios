@@ -45,32 +45,28 @@ from sitecollection import (
     _copy_places, _group_by_manufacturer, _profiles_in,
     _profiles_on_disk, _slug, collection_paths,
 )
-from common import (
-    BUCKET_FOLDERS,
-    names_manufacturer,
+from resolve.ownership import BUCKET_FOLDERS, names_manufacturer
+from model.profiles import (
     upstream_profile_index,
-    build_zip_contents_index,
-    GAME_DATA_TOPS,
-    compute_composition,
-    count_catalog_matched,
     entry_system_ids,
+    load_emulator_profiles,
+    unique_emulator_profiles,
+)
+from core.ziptools import build_zip_contents_index
+from model.composition import GAME_DATA_TOPS, compute_composition, count_catalog_matched
+from model.registry import (
     list_registered_platforms,
     list_release_pack_platforms,
     load_platform_registry,
-    load_database,
-    load_emulator_profiles,
-    load_platform_config,
-    load_provenance_snapshots,
-    native_layer,
-    require_directory,
-    require_yaml,
-    resolution_is_hash_exact,
-    resolve_local_file,
-    resolve_platform_cores,
-    runs_standalone,
-    unique_emulator_profiles,
-    yaml_load,
 )
+from model.database import load_database
+from model.platforms import load_platform_config, native_layer
+from model.dumpcatalog import load_provenance_snapshots
+from core.cli import require_directory
+from model.safeparse import require_yaml, yaml_load
+from resolve.localfile import resolution_is_hash_exact, resolve_local_file
+from resolve.cores import resolve_platform_cores
+from resolve.layout import runs_standalone
 from siterender import SECTION_LABELS, WIKI_SRC_DIR
 from core.artifacts import ArtifactLockBusy, artifact_lock
 from core.artifacts import json_text as _json_text
@@ -314,7 +310,7 @@ def _folders_by_name(manufacturers: dict) -> dict[str, set[tuple[str, str]]]:
     nintendo-nes, nes and the NES folder normalize alike, as do
     sega-mastersystem and Sega/Master System.
     """
-    from common import _norm_system_id
+    from model.systems import _norm_system_id
 
     index: dict[str, set[tuple[str, str]]] = {}
     for mfr, consoles in manufacturers.items():
@@ -328,7 +324,7 @@ def _folders_by_name(manufacturers: dict) -> dict[str, set[tuple[str, str]]]:
 
 
 def _folder_named(sys_id: str, by_name: dict[str, set[tuple[str, str]]]) -> tuple[str, str] | None:
-    from common import _norm_system_id
+    from model.systems import _norm_system_id
 
     places = by_name.get(_norm_system_id(sys_id), set())
     return next(iter(places)) if len(places) == 1 else None
@@ -1233,7 +1229,8 @@ def build_emulator_gap_report(
     The gap analysis page and the published gaps export must not compute this
     twice and drift. Both read this one report.
     """
-    from common import _norm_system_id, merged_platform_declarations
+    from model.systems import _norm_system_id
+    from model.declarations import merged_platform_declarations
     from cross_reference import cross_reference as run_cross_reference
 
     # Enriched with alias resolution, with each declaration's size and slot:
@@ -1255,7 +1252,8 @@ def build_emulator_gap_report(
         for k, v in profiles.items()
         if v.get("type") != "alias" and v.get("role") != "test"
     }
-    from common import merged_standalone_set, platform_declarations
+    from resolve.standalone import merged_standalone_set
+    from model.declarations import platform_declarations
     from resolve.validation import case_folded_slots
 
     # The command line passes these too: without them a RetroBat file named
@@ -1378,7 +1376,7 @@ def _profile_categories(profile: dict) -> dict[tuple[str, str], str]:
 
 
 def _cross_reference_export_rows(coverages: dict, profiles: dict) -> list[dict]:
-    from common import resolve_platform_cores
+    from resolve.cores import resolve_platform_cores
 
     unique = {
         key: value
@@ -2061,7 +2059,7 @@ def core_index_items(profiles: dict) -> list[dict]:
     included, said once. A name two profiles claim (pcsx2) lists both, the
     one a platform list designates first.
     """
-    from common import preferred_profile, upstream_profile_index
+    from model.profiles import preferred_profile, upstream_profile_index
 
     published = {name for name, p in profiles.items() if p.get("type") != "alias" and p.get("role") != "test"}
     index = upstream_profile_index(profiles)
@@ -5169,7 +5167,7 @@ def _data_member_digests(
     whose copy in the tree's local cache has the sha1 the manifest records.
     The manifests carry sha1 alone: the MD5 of Dolphin's ApprovedInis.json
     found nothing although the pack ships it."""
-    from common import load_data_dir_registry
+    from model.registry import load_data_dir_registry
     from core.hashing import compute_hashes
 
     if data_registry is None:
@@ -11393,7 +11391,7 @@ def reading_platforms(emu_name: str, profile: dict, name: str,
     """Of the platforms running an emulator (name -> config), those whose
     build of it reads the entry: BlastEm's cdbios.bin is read by the
     standalone build only, and RetroBat hands that build other names."""
-    from common import platform_layouts, standalone_set
+    from resolve.standalone import platform_layouts, standalone_set
     from resolve.validation import filter_files_by_mode, unread_on
 
     return {
@@ -12457,7 +12455,7 @@ def _build_emulator_file_index(profiles: dict) -> dict[str, dict]:
     the Mega Drive as sega-mega-drive and genesis_plus_gx as sega-megadrive,
     and an exact match left the RetroArch page with no emulator for it.
     """
-    from common import _norm_system_id
+    from model.systems import _norm_system_id
 
     return {
         name: {
@@ -12496,7 +12494,7 @@ def _system_emulators(
     an archive does not count: fbneo's boot.bin is read inside bubsys.zip,
     and RomM's Dreamcast boot.bin is not that file.
     """
-    from common import _norm_system_id
+    from model.systems import _norm_system_id
 
     norm = _norm_system_id(sys_id)
     by_id = [name for name, data in (emulator_files or {}).items()
@@ -13044,7 +13042,8 @@ def main() -> None:
         # files in the sweep, so the second is refused instead.
         import contextlib
 
-        from common import load_data_dir_registry, repository_output_lock
+        from model.registry import load_data_dir_registry
+        from core.artifacts import repository_output_lock
         from refresh_data_dirs import hold_data_dirs
 
         # The coverage pages resolve against data/, held while they are read.
@@ -13131,7 +13130,7 @@ class _SiteRun:
 
 def _load_site_run(args: argparse.Namespace, db: dict, docs: Path, public: Path) -> _SiteRun:
     """The registry, the coverage of every platform and the profiles."""
-    from common import load_data_dir_registry
+    from model.registry import load_data_dir_registry
     from cross_reference import _build_supplemental_index
 
     registry = _load_registry(args.platforms_dir)
@@ -13624,6 +13623,6 @@ def _generate(args: argparse.Namespace) -> None:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

@@ -54,12 +54,9 @@ import urllib.error
 import generate_site
 import sitewanted
 import siterender
-from common import (
-    list_registered_platforms,
-    load_emulator_profiles,
-    load_platform_config,
-    list_release_pack_platforms,
-)
+from model.registry import list_registered_platforms, list_release_pack_platforms
+from model.profiles import load_emulator_profiles
+from model.platforms import load_platform_config
 from resolve.reconcile import HASH_FIELDS, _hash_values
 from resolve.categories import EntryCategories
 from sitesources import launcher_ref_markdown, list_source
@@ -609,7 +606,8 @@ class TheContractsValidate(unittest.TestCase):
         except ImportError:
             self.skipTest("jsonschema is a tooling dependency")
 
-        from common import list_registered_platforms, load_platform_config
+        from model.registry import list_registered_platforms
+        from model.platforms import load_platform_config
 
         schema = json.loads((REPO_ROOT / "schemas" / "platform.schema.json").read_text())
         validator = Draft202012Validator(schema)
@@ -915,7 +913,7 @@ class SourceLinksGoWhereTheFileIs(unittest.TestCase):
         tree of its repository holds."""
         if not sitesources.TREE_CACHE.is_dir():
             raise unittest.SkipTest("no cached tree listings")
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         link = re.compile(r"\(https://github\.com/([^/]+/[^/]+)/blob/([0-9a-f]{40})/([^#)]+)")
         checked, wrong = 0, []

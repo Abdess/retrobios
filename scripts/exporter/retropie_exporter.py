@@ -21,7 +21,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from common import load_emulator_profiles
+from model.profiles import load_emulator_profiles
 
 from .base_exporter import BaseExporter
 from resolve.reconcile import NativeFile, NativeSystem, Report, search_order

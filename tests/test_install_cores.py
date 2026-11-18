@@ -266,7 +266,7 @@ class TheBuildersOrder(unittest.TestCase):
         if not db_path.exists():
             self.skipTest("database.json is not built")
         import generate_pack as gp
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         db = json.loads(db_path.read_text(encoding="utf-8"))
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))

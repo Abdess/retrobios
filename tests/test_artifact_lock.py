@@ -17,7 +17,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from common import (
+from core.artifacts import (
     ArtifactLockBusy,
     artifact_lock,
     hold_artifact_lock,
@@ -66,7 +66,7 @@ class ArtifactLockTest(unittest.TestCase):
         """A mistyped --output-dir given to --verify-packs or release_record
         was created holding a .lock, and the next run with the same typo no
         longer said the path did not exist."""
-        from common import ArtifactDirectoryMissing
+        from core.artifacts import ArtifactDirectoryMissing
 
         missing = os.path.join(self.dir, "sub", "dsit")
         with self.assertRaises(ArtifactDirectoryMissing), artifact_lock(missing, exclusive=False):
@@ -314,7 +314,7 @@ class StandaloneWritersHonourTheRepositoryHold(unittest.TestCase):
     def _child(self, target: str, env: dict) -> subprocess.CompletedProcess:
         code = (
             "import sys; sys.path.insert(0, 'scripts')\n"
-            "from common import artifact_lock, repository_output_lock\n"
+            "from core.artifacts import artifact_lock, repository_output_lock\n"
             f"with repository_output_lock({target!r}), artifact_lock({self.scratch!r}):\n"
             "    pass\n"
         )
@@ -349,7 +349,7 @@ class HeldLockTest(unittest.TestCase):
     def _child_locks(self, env: dict) -> subprocess.CompletedProcess:
         code = (
             "import sys; sys.path.insert(0, 'scripts')\n"
-            "from common import artifact_lock\n"
+            "from core.artifacts import artifact_lock\n"
             f"with artifact_lock({self.dir!r}):\n    pass\n"
         )
         return subprocess.run(

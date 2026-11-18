@@ -767,11 +767,8 @@ def main() -> int:
     if not args.fetch and not any(path.is_dir() for path in cache_dirs):
         print(f"Error: no tree cache at {', '.join(map(str, cache_dirs))}", file=sys.stderr)
         return 1
-    from common import (
-        load_emulator_profiles,
-        repository_output_lock,
-        write_if_changed,
-    )
+    from model.profiles import load_emulator_profiles
+    from core.artifacts import repository_output_lock, write_if_changed
 
     profiles = load_emulator_profiles(args.emulators_dir, skip_aliases=False)
     with repository_output_lock(str(args.output)):
@@ -785,6 +782,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

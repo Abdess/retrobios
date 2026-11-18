@@ -40,7 +40,8 @@ class LinksFollowContent(unittest.TestCase):
         previous = os.getcwd()
         os.chdir(REPO_ROOT)
         self.addCleanup(os.chdir, previous)
-        from common import load_database, load_platform_config
+        from model.database import load_database
+        from model.platforms import load_platform_config
 
         db = load_database("database.json")
         config = load_platform_config("misterfpga")
@@ -214,7 +215,8 @@ class ACopyFiledByEmulatorDoesNotMoveAMachine(unittest.TestCase):
         previous = os.getcwd()
         os.chdir(REPO_ROOT)
         self.addCleanup(os.chdir, previous)
-        from common import load_database, load_emulator_profiles
+        from model.database import load_database
+        from model.profiles import load_emulator_profiles
 
         db = load_database("database.json")
         manufacturers = gs._group_by_manufacturer(db)
@@ -279,9 +281,10 @@ class EverySystemLinkLandsOnItsSection(unittest.TestCase):
 
         import siterender
         import sitestarlight
-        from common import (
-            list_registered_platforms, load_database, load_emulator_profiles, load_platform_config,
-        )
+        from model.registry import list_registered_platforms
+        from model.database import load_database
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
 
         db = load_database(str(REPO_ROOT / "database.json"))
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"), skip_aliases=False)

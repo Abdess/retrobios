@@ -9,7 +9,7 @@ from __future__ import annotations
 from collections.abc import Iterable
 from dataclasses import dataclass
 
-from common import sanitize_pack_path
+from core.paths import sanitize_pack_path
 from resolve.validation import read_from_save_dir
 
 

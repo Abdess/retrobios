@@ -309,7 +309,7 @@ class ATerminatedBuildLeavesNoScratch(unittest.TestCase):
     CHILD = (
         "import sys, time\n"
         "sys.path.insert(0, 'scripts')\n"
-        "from common import run_cli\n"
+        "from core.cli import run_cli\n"
         "from generate_pack import _writing_pack\n"
         "def main():\n"
         "    with _writing_pack(sys.argv[1]) as zf:\n"

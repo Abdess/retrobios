@@ -13,7 +13,8 @@ from pathlib import Path, PurePosixPath
 
 import yaml
 
-from common import source_yaml_paths, yaml_load
+from model.profiles import source_yaml_paths
+from model.safeparse import yaml_load
 
 try:
     from jsonschema import Draft202012Validator, FormatChecker
@@ -360,7 +361,7 @@ def _validate_pack_manifests(dist: Path) -> list[str]:
         return []
 
     sys.path.insert(0, str(ROOT / "scripts"))
-    from common import ArtifactLockBusy, artifact_lock
+    from core.artifacts import ArtifactLockBusy, artifact_lock
 
     try:
         with artifact_lock(str(dist), exclusive=False):
@@ -682,7 +683,7 @@ def _save_directory_blocks() -> list[str]:
 
 def _bios_tree_below(platform: str, folder: str) -> str:
     """A destination the platform declares below ``folder``, or empty."""
-    from common import load_platform_config
+    from model.platforms import load_platform_config
 
     try:
         config = load_platform_config(platform, str(ROOT / "platforms"))
@@ -702,7 +703,7 @@ def _bios_tree_below(platform: str, folder: str) -> str:
 
 def _libretro_systems(platform: str) -> dict:
     """The platform file's core -> systems table, inheritance included."""
-    from common import load_platform_config
+    from model.platforms import load_platform_config
 
     try:
         config = load_platform_config(platform, str(ROOT / "platforms"))
@@ -1103,6 +1104,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

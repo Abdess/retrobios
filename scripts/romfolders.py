@@ -5,7 +5,7 @@ about its game folders, read at a pinned revision: the roms root relative to
 the BIOS folder, each folder with the system name the OS gives it, the
 extensions it lists and the core it starts by default. Those files hold the
 OS's facts only. Which repository system a folder is, and which profile its
-core is, is decided here, through the one alias table in common.py
+core is, is decided here, through the one alias table in model/systems.py
 (`SYSTEM_ALIASES`, `_norm_system_id`) and the profiles' `cores:` lists, so a
 change to either reaches every setup without a rescrape.
 """
@@ -16,15 +16,10 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from common import (
-    _norm_system_id,
-    list_registered_platforms,
-    load_emulator_profiles,
-    load_platform_config,
-    native_layer,
-    preferred_profile,
-    upstream_profile_index,
-)
+from model.systems import _norm_system_id
+from model.registry import list_registered_platforms
+from model.profiles import load_emulator_profiles, preferred_profile, upstream_profile_index
+from model.platforms import load_platform_config, native_layer
 from model.safeparse import yaml_load
 
 ROMFOLDERS_DIR = Path("platforms") / "romfolders"

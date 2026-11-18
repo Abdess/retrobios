@@ -157,7 +157,8 @@ class TheArchiveHoldingTheCoreMembers(unittest.TestCase):
         ]
 
     def test_the_copy_with_every_required_member_wins(self):
-        from common import archive_entry, resolve_local_file
+        from resolve.archives import archive_entry
+        from resolve.localfile import resolve_local_file
 
         path, status = resolve_local_file(
             archive_entry("neocdz.zip", self.profile_files), self.db
@@ -166,7 +167,7 @@ class TheArchiveHoldingTheCoreMembers(unittest.TestCase):
         self.assertEqual(status, "name_exact")
 
     def test_without_members_the_primary_stays(self):
-        from common import resolve_local_file
+        from resolve.localfile import resolve_local_file
 
         path, _status = resolve_local_file({"name": "neocdz.zip"}, self.db)
         self.assertTrue(path.endswith("bios/neocdz.zip"))
@@ -186,7 +187,9 @@ class TheArchiveHoldingTheCoreMembers(unittest.TestCase):
         MAME's 83b6f611 dump while the FBNeo dump sat loose in bios/."""
         import json
 
-        from common import archive_members, load_emulator_profiles, zip_member_crcs
+        from resolve.archives import archive_members
+        from model.profiles import load_emulator_profiles
+        from core.ziptools import zip_member_crcs
 
         database = REPO_ROOT / "database.json"
         if not database.exists():
@@ -228,7 +231,7 @@ class EveryDeclaredLayoutIsHeld(unittest.TestCase):
     def setUp(self):
         import json
 
-        from common import get_mame_clone_map
+        from model.database import get_mame_clone_map
 
         database = REPO_ROOT / "database.json"
         if not (REPO_ROOT / "bios").is_dir() or not database.exists():
@@ -240,7 +243,7 @@ class EveryDeclaredLayoutIsHeld(unittest.TestCase):
         self.addCleanup(os.chdir, previous)
 
     def _declared_archives(self):
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         for emu, profile in load_emulator_profiles("emulators").items():
             for entry in profile.get("files") or []:
@@ -273,7 +276,8 @@ class EveryDeclaredLayoutIsHeld(unittest.TestCase):
         self.assertEqual(absent, [])
 
     def test_a_copy_holds_each_declared_layout_and_is_served(self):
-        from common import resolve_local_file, zip_member_crcs
+        from resolve.localfile import resolve_local_file
+        from core.ziptools import zip_member_crcs
 
         short, unserved = [], []
         for emu, entry in self._declared_archives():
@@ -321,19 +325,19 @@ class AnArchiveHashedByItsMembers(unittest.TestCase):
         self.archive = str(archive)
 
     def test_the_archive_answers_a_composite_frontend(self):
-        from common import resolve_local_file
+        from resolve.localfile import resolve_local_file
 
         path, status = resolve_local_file({**self.entry, "zip_digest": "composite"}, self.db)
         self.assertEqual((path, status), (self.archive, "md5_composite_exact"))
 
     def test_a_plain_digest_still_takes_the_md5_match(self):
-        from common import resolve_local_file
+        from resolve.localfile import resolve_local_file
 
         path, _status = resolve_local_file(self.entry, self.db)
         self.assertTrue(path.endswith("neocd.bin"))
 
     def test_the_registry_marks_recalbox_archives(self):
-        from common import load_platform_config
+        from model.platforms import load_platform_config
 
         config = load_platform_config("recalbox", str(REPO_ROOT / "platforms"))
         marks = {
@@ -369,7 +373,7 @@ class AnArchiveRankedByWhatItHolds(unittest.TestCase):
                                             "by_path_suffix": {}, "by_crc32": {}}}
 
     def _resolve(self, entry: dict, db: dict) -> str:
-        from common import resolve_local_file
+        from resolve.localfile import resolve_local_file
 
         path, _status = resolve_local_file(entry, db)
         return str(Path(path).relative_to(self.root))
@@ -409,7 +413,7 @@ class AnArchiveRankedByWhatItHolds(unittest.TestCase):
     def test_a_copy_holding_no_declared_member_is_not_the_archive(self):
         """galgames.zip held only an assembler listing and none of the six
         ROMs MAME declares: the name step served it as the BIOS set."""
-        from common import resolve_local_file
+        from resolve.localfile import resolve_local_file
 
         db = self._db([("bios/MAME/hod2bios.zip", ["listing.lst"])])
         entry = {"name": "hod2bios.zip", "contents": [
@@ -465,7 +469,7 @@ class ALooseEntryNamingItsArchive(unittest.TestCase):
 
         import yaml
 
-        from common import _emulator_profiles_cache
+        from model.profiles import _emulator_profiles_cache
         from generate_pack import generate_emulator_pack
         from verify import verify_emulator
 
@@ -546,7 +550,7 @@ class AnotherEmulatorsOwnSet(unittest.TestCase):
         return [{"name": n, "crc32": format(zlib.crc32(self.roms[n]), "08x")} for n in names]
 
     def test_its_member_count_does_not_rank_for_another_emulator(self):
-        from common import resolve_local_file
+        from resolve.localfile import resolve_local_file
 
         entry = {"name": "naomi.zip", "source_profile": "flycast",
                  "contents": self._contents(list(self.roms))}
@@ -554,13 +558,13 @@ class AnotherEmulatorsOwnSet(unittest.TestCase):
         self.assertEqual(path, "bios/MAME/naomi.zip")
 
     def test_it_does_not_break_the_superset_of_an_unowned_entry(self):
-        from common import resolve_local_file
+        from resolve.localfile import resolve_local_file
 
         path, _status = resolve_local_file({"name": "naomi.zip"}, self.db)
         self.assertEqual(path, "bios/MAME/naomi.zip")
 
     def test_its_owner_still_gets_it(self):
-        from common import resolve_local_file
+        from resolve.localfile import resolve_local_file
 
         entry = {"name": "naomi.zip", "source_profile": "demul",
                  "contents": self._contents(list(self.roms))}
@@ -595,7 +599,7 @@ class ArchiveMembersIndexOnce(unittest.TestCase):
                 for f in list.__iter__(files) if f.get("archive") == archive and f.get("crc32")]
 
     def test_a_profile_list_is_walked_once_and_answers_as_a_scan(self):
-        from common import archive_members
+        from resolve.archives import archive_members
 
         files = self.entries()
         for archive in [f"set{n}.zip" for n in range(30)] + ["absent.zip", "", None]:
@@ -604,7 +608,7 @@ class ArchiveMembersIndexOnce(unittest.TestCase):
         self.assertEqual(self.CountingList.walks, 1)
 
     def test_a_list_that_grew_is_indexed_again(self):
-        from common import archive_members
+        from resolve.archives import archive_members
 
         files = self.entries()
         archive_members("set1.zip", files)

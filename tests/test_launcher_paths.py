@@ -324,8 +324,10 @@ class AUserFolderInTheConfigsFolder(unittest.TestCase):
     of the configs root its batoceraPaths builds (../system/configs)."""
 
     def test_the_sys_modules_go_below_the_configs_root(self):
-        from common import load_emulator_profiles, load_platform_config, platform_layouts
-        from common import standalone_set
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
+        from resolve.standalone import platform_layouts
+        from resolve.standalone import standalone_set
 
         profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["shadps4"]
         # KNULLI's generator does the same, but no KNULLI board builds shadps4.

@@ -22,7 +22,8 @@ from collections.abc import Callable, Iterable
 from pathlib import Path
 
 import archive_build
-from common import runs_standalone, unique_emulator_profiles
+from resolve.layout import runs_standalone
+from model.profiles import unique_emulator_profiles
 from cross_reference import _first_hash
 from core.hashing import cut_md5_owner, parse_hash_list
 from validate_pr import LARGE_FILE_ISSUE_URL, Placement, placement

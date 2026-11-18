@@ -11,14 +11,11 @@ import os
 import sys
 from dataclasses import dataclass
 
-from common import (
-    OUTER_ROOTS,
-    _norm_system_id,
-    load_data_dir_registry,
-    platform_layouts,
-    resolve_platform_cores,
-    standalone_set as platform_standalone_set,
-)
+from resolve.layout import OUTER_ROOTS
+from model.systems import _norm_system_id
+from model.registry import load_data_dir_registry
+from resolve.standalone import platform_layouts, standalone_set as platform_standalone_set
+from resolve.cores import resolve_platform_cores
 from model.alternatives import groups_of
 from core.hashing import compute_hashes
 from resolve.validation import (

@@ -35,20 +35,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from core.artifacts import file_lock, write_bytes_atomic, write_if_changed, write_text_atomic
 import yaml
 
-from common import (
-    InputMissing,
-    build_zip_contents_index,
-    platform_arg,
-    list_registered_platforms,
-    load_data_dir_registry,
-    load_database,
-    load_emulator_profiles,
-    load_platform_config,
-    load_platform_registry,
-    native_layer,
-    require_platform,
-    yaml_load,
-)
+from core.cli import InputMissing
+from core.ziptools import build_zip_contents_index
+from model.cliargs import platform_arg, require_platform
+from model.registry import list_registered_platforms, load_data_dir_registry, load_platform_registry
+from model.database import load_database
+from model.profiles import load_emulator_profiles
+from model.platforms import load_platform_config, native_layer
+from model.safeparse import yaml_load
 from exporter import discover_exporters
 from exporter.base_exporter import BaseExporter
 from resolve.reconcile import (
@@ -1093,6 +1087,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

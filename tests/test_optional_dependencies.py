@@ -158,7 +158,8 @@ class ScriptsNeedOnlyPyyaml(unittest.TestCase):
 
 class TheDownloaderRunsWithoutPyyaml(unittest.TestCase):
     """download.py is the documented Windows downloader, "stdlib only". It
-    stays so only because common.py imports yaml optionally: made a plain
+    stays so only because the core modules it imports use the standard
+    library alone (tests/test_layers.py): had one imported yaml as a plain
     import, every CI job (which installs pyyaml) would stay green."""
 
     def test_help_runs_with_yaml_unimportable(self):

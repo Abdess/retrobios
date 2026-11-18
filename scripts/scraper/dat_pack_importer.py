@@ -20,7 +20,7 @@ from collections.abc import Iterator
 from datetime import datetime, timezone
 from pathlib import Path
 
-from ..common import write_provenance_snapshot
+from model.dumpcatalog import write_provenance_snapshot
 from .logiqx_parser import LogiqxDat, parse_logiqx
 
 MAX_MEMBER_SIZE = 100 * 1024 * 1024

@@ -78,12 +78,12 @@ class HashMismatchIsNotCoverage(unittest.TestCase):
         self.rom = self.root / "shared.rom"
         self.rom.write_bytes(b"THE BYTES THE REPO ACTUALLY HOLDS")
         self.db = _db(self.rom, "shared.rom")
-        from common import _emulator_profiles_cache
+        from model.profiles import _emulator_profiles_cache
 
         _emulator_profiles_cache.clear()
 
     def tearDown(self):
-        from common import _emulator_profiles_cache
+        from model.profiles import _emulator_profiles_cache
 
         _emulator_profiles_cache.clear()
         self._tmp.cleanup()
@@ -202,12 +202,12 @@ class ArchiveHashMismatchIsNotCoverage(unittest.TestCase):
         with zipfile.ZipFile(self.archive, "w") as zf:
             zf.writestr("inner.rom", b"THE MEMBER THE EMULATOR LOADS")
         self.db = _db(self.archive, "romset.zip")
-        from common import _emulator_profiles_cache
+        from model.profiles import _emulator_profiles_cache
 
         _emulator_profiles_cache.clear()
 
     def tearDown(self):
-        from common import _emulator_profiles_cache
+        from model.profiles import _emulator_profiles_cache
 
         _emulator_profiles_cache.clear()
         self._tmp.cleanup()
@@ -303,12 +303,12 @@ class UnsourceableIsNotAGap(unittest.TestCase):
         self.db = {"files": {}, "indexes": {
             "by_name": {}, "by_md5": {}, "by_sha256": {},
             "by_crc32": {}, "by_path_suffix": {}}}
-        from common import _emulator_profiles_cache
+        from model.profiles import _emulator_profiles_cache
 
         _emulator_profiles_cache.clear()
 
     def tearDown(self):
-        from common import _emulator_profiles_cache
+        from model.profiles import _emulator_profiles_cache
 
         _emulator_profiles_cache.clear()
         self._tmp.cleanup()
@@ -363,13 +363,11 @@ class RepositoryWideEvidence(unittest.TestCase):
     """The real collection, so the fix is measured and not just asserted."""
 
     def test_no_profile_entry_is_reported_ok_on_a_contradicted_hash(self):
-        from common import (
-            build_zip_contents_index,
-            load_data_dir_registry,
-            load_database,
-            load_emulator_profiles,
-            resolve_local_file,
-        )
+        from core.ziptools import build_zip_contents_index
+        from model.registry import load_data_dir_registry
+        from model.database import load_database
+        from model.profiles import load_emulator_profiles
+        from resolve.localfile import resolve_local_file
 
         db_path = REPO_ROOT / "database.json"
         if not db_path.is_file():
@@ -426,12 +424,12 @@ class StandaloneSlotsFollowThePack(unittest.TestCase):
             "    path: bios/a.rom\n"
             "    standalone_path: B/a.rom\n"
         )
-        from common import _emulator_profiles_cache
+        from model.profiles import _emulator_profiles_cache
 
         _emulator_profiles_cache.clear()
 
     def tearDown(self):
-        from common import _emulator_profiles_cache
+        from model.profiles import _emulator_profiles_cache
 
         _emulator_profiles_cache.clear()
         self._tmp.cleanup()

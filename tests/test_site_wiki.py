@@ -246,7 +246,7 @@ class SetupCount(unittest.TestCase):
     """C2: the home page said 15 more, the diagram 14 more, from two counts."""
 
     def test_one_count(self):
-        from common import list_registered_platforms
+        from model.registry import list_registered_platforms
 
         self.assertEqual(len(sitediagrams.setups()),
                          len(list_registered_platforms(str(REPO_ROOT / "platforms"))))

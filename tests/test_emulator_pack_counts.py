@@ -80,7 +80,7 @@ class APlaceholderIsAnsweredByEvidence(unittest.TestCase):
 
         import yaml
 
-        from common import _emulator_profiles_cache
+        from model.profiles import _emulator_profiles_cache
         from generate_pack import generate_emulator_pack
         from verify import verify_emulator
 

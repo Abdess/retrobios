@@ -17,7 +17,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 
 
-from common import _norm_system_id
+from model.systems import _norm_system_id
 from core.paths import REPO_ROOT
 
 HASH_FIELDS = ("sha1", "md5", "sha256", "crc32")
@@ -771,7 +771,8 @@ def _attach_runners(systems: dict[str, NativeSystem], scraped: dict | None) -> N
     """
     if not scraped:
         return
-    from common import load_emulator_profiles, runs_standalone
+    from model.profiles import load_emulator_profiles
+    from resolve.layout import runs_standalone
 
     declared = scraped.get("cores")
     libretro = {str(c) for c in declared} if isinstance(declared, list) else set()

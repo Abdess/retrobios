@@ -30,15 +30,12 @@ import urllib.request
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from common import (
-    platform_arg,
-    require_directory,
-    list_registered_platforms,
-    load_database,
-    load_platform_config,
-    require_platform,
-    require_yaml,
-)
+from model.cliargs import platform_arg, require_platform
+from core.cli import require_directory
+from model.registry import list_registered_platforms
+from model.database import load_database
+from model.platforms import load_platform_config
+from model.safeparse import require_yaml
 
 yaml = require_yaml()
 
@@ -701,6 +698,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

@@ -25,24 +25,19 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
 from resolve import nativemode
-from common import (
-    compute_hashes,
-    platform_arg,
-    archive_entry,
-    build_zip_contents_index,
-    check_inside_zip,
-    entry_system_ids,
-    holds_required_members,
-    load_data_dir_registry,
-    parse_md5_list,
-    resolution_is_hash_exact,
-    resolve_local_file,
-    resolve_platform_cores,
-    platform_layouts,
-    standalone_set as platform_standalone_set,
-    system_dir_path,
-    variant_base_name,
-)
+from core.hashing import compute_hashes, parse_md5_list
+from model.cliargs import platform_arg, require_platform
+from model.database import load_database
+from model.platforms import load_platform_config
+from resolve.archives import archive_entry, holds_required_members
+from core.ziptools import build_zip_contents_index, check_inside_zip
+from model.profiles import entry_system_ids, load_emulator_profiles
+from model.registry import list_registered_platforms, load_data_dir_registry
+from model.targets import build_target_cores_cache
+from resolve.localfile import resolution_is_hash_exact, resolve_local_file, variant_base_name
+from resolve.cores import resolve_platform_cores
+from resolve.standalone import platform_layouts, standalone_set as platform_standalone_set
+from resolve.layout import system_dir_path
 from packresolve import preferred_entries
 from resolve.validation import (
     content_alternatives,
@@ -975,7 +970,8 @@ def scan_platform(
     target_cores: set[str] | None = None,
 ) -> list[Conflict]:
     """Conflicts on one platform, using the cores that platform actually runs."""
-    from common import load_platform_config, resolve_platform_cores
+    from model.platforms import load_platform_config
+    from resolve.cores import resolve_platform_cores
 
     config = load_platform_config(platform, platforms_dir)
     keys = resolve_platform_cores(config, profiles, target_cores=target_cores)
@@ -997,15 +993,6 @@ def scan_platform(
 def main() -> int:
     import argparse
     import json
-
-    from common import (
-        build_target_cores_cache,
-        list_registered_platforms,
-        load_database,
-        load_emulator_profiles,
-        load_platform_config,
-        require_platform,
-    )
 
     parser = argparse.ArgumentParser(
         allow_abbrev=False,
@@ -1039,13 +1026,13 @@ def main() -> int:
         "without it the run reports them and exits 0",
     )
     args = parser.parse_args()
-    from common import work_from_repo_root
+    from model.cliargs import work_from_repo_root
 
     work_from_repo_root(args, parser, ["db", "platforms_dir", "emulators_dir"])
 
     import contextlib
 
-    from common import load_data_dir_registry
+    from model.registry import load_data_dir_registry
     from refresh_data_dirs import hold_data_dirs
 
     # Claims resolve against data/: the trees stay put until the process
@@ -1147,6 +1134,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

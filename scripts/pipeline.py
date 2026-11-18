@@ -69,15 +69,15 @@ if sys.version_info < (3, 9):
     sys.exit(f"pipeline.py needs Python 3.9 or newer, this is {sys.version.split()[0]}")
 
 sys.path.insert(0, str(Path(__file__).parent))
-from common import (
+from core.artifacts import (
     ArtifactLockBusy,
     artifact_lock,
-    github_token,
     hold_artifact_lock,
     hold_repository_outputs,
-    load_data_dir_registry,
     publish_hold,
 )
+from core.github import github_token
+from model.registry import load_data_dir_registry
 from refresh_data_dirs import hold_data_dirs
 from packpaths import MEDIA_MARKER
 
@@ -335,7 +335,8 @@ def _match_key(label: str) -> set[str]:
 def release_pack_keys(platforms_dir: str = "platforms") -> set[str]:
     """Comparable identities of the platforms --all builds a pack for: their
     registry ids and display names, normalized as _match_key does."""
-    from common import list_release_pack_platforms, load_platform_config
+    from model.registry import list_release_pack_platforms
+    from model.platforms import load_platform_config
 
     keys: set[str] = set()
     for name in list_release_pack_platforms(platforms_dir):
@@ -455,7 +456,8 @@ def _tree_members(
 ) -> dict[str, int]:
     """Archive path -> size of every file the platform's data trees can add."""
     import generate_pack
-    from common import load_emulator_profiles, load_platform_config
+    from model.profiles import load_emulator_profiles
+    from model.platforms import load_platform_config
     from packpaths import _flat
 
     config = load_platform_config(platform, platforms_dir)
@@ -579,15 +581,15 @@ def check_emulator_packs(
     import generate_pack
     import packresolve
     import verify
-    from common import (
+    from model.profiles import (
         ProfileSelectionError,
-        _norm_system_id,
-        build_zip_contents_index,
-        load_database,
         load_emulator_profiles,
         profiles_for_systems,
         select_emulator_profiles,
     )
+    from model.systems import _norm_system_id
+    from core.ziptools import build_zip_contents_index
+    from model.database import load_database
 
     print(f"\n--- {step_title(STEP_LABELS['consistency'])}, emulator packs ---")
     db = load_database(db_path)
@@ -700,7 +702,7 @@ def narrowed_variants(
     *full*, regions, targets and systems are sampled (_matrix_coverage).
     """
     import region as region_mod
-    from common import list_available_targets
+    from model.targets import list_available_targets
 
     regions = sorted({
         r for entry in region_mod.platform_region_index(config, profiles).values()
@@ -751,15 +753,13 @@ def check_narrowed_packs(
     import generate_pack
     import packresolve
     import verify
-    from common import (
-        build_zip_contents_index,
-        group_identical_platforms,
-        list_registered_platforms,
-        load_database,
-        load_emulator_profiles,
-        load_platform_config,
-        load_target_config,
-    )
+    from core.ziptools import build_zip_contents_index
+    from resolve.grouping import group_identical_platforms
+    from model.registry import list_registered_platforms
+    from model.database import load_database
+    from model.profiles import load_emulator_profiles
+    from model.platforms import load_platform_config
+    from model.targets import load_target_config
 
     print(f"\n--- {step_title(STEP_LABELS['consistency'])}, narrowed packs ---")
     db = load_database(db_path)
@@ -862,14 +862,11 @@ def check_split_packs(
     """
     import generate_pack
     import packresolve
-    from common import (
-        build_zip_contents_index,
-        group_identical_platforms,
-        list_registered_platforms,
-        load_data_dir_registry,
-        load_database,
-        load_emulator_profiles,
-    )
+    from core.ziptools import build_zip_contents_index
+    from resolve.grouping import group_identical_platforms
+    from model.registry import list_registered_platforms, load_data_dir_registry
+    from model.database import load_database
+    from model.profiles import load_emulator_profiles
 
     print(f"\n--- {step_title(STEP_LABELS['consistency'])}, split packs ---")
     db = load_database(db_path)
@@ -1690,6 +1687,6 @@ def _hold_outputs(args: argparse.Namespace) -> contextlib.ExitStack:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

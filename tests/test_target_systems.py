@@ -13,7 +13,7 @@ import tests
 
 import unittest
 
-from common import filter_systems_by_target
+from resolve.cores import filter_systems_by_target
 
 PROFILES = {
     "ep128emu_core": {

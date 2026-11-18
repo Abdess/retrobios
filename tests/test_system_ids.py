@@ -14,7 +14,8 @@ import tests
 import unittest
 from pathlib import Path
 
-from common import SYSTEM_ALIASES, _norm_system_id, load_emulator_profiles
+from model.systems import SYSTEM_ALIASES, _norm_system_id
+from model.profiles import load_emulator_profiles
 from packextras import _names_content, _slug_for
 
 REPO_ROOT = Path(__file__).resolve().parent.parent

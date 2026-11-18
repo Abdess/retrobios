@@ -13,18 +13,17 @@ import zipfile
 from collections.abc import Callable, Collection, Iterator, Mapping, Sequence
 from typing import TYPE_CHECKING, TypedDict
 
-from common import (
+from resolve.content import (
     adler32_of,
-    archive_members,
-    CONTENT_CHECKS,
-    compute_hashes,
     content_fits,
     declared_content_checks,
-    entry_system_ids,
     name_match_size_ok,
-    sanitize_pack_path,
     shape_fits,
 )
+from resolve.archives import archive_members
+from model.profiles import CONTENT_CHECKS, entry_system_ids
+from core.hashing import compute_hashes
+from core.paths import sanitize_pack_path
 from core.hashing import md5_composite, parse_hash_list, parse_md5_list
 from resolve.nativemode import SIZE_AND_ANY_HASH, digest_algorithm, hash_mismatch_excludes_file
 from core.ziptools import check_inside_zip

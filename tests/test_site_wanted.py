@@ -28,7 +28,7 @@ import generate_site
 import sitewanted
 import validate_pr
 import yaml
-from common import load_database
+from model.database import load_database
 from tests.test_site_pronouns import pronouns
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -653,7 +653,7 @@ class ThePublishedList(unittest.TestCase):
     def test_no_game_data_and_nothing_the_emulator_installs(self):
         """Each emulator a row names declares that file as firmware it does
         not install itself: pak0.pk3, game data for every profile, is gone."""
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
         from resolve.validation import installed_with_emulator
 
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))

@@ -28,7 +28,8 @@ from unittest import mock
 import yaml
 
 import verify
-from common import _emulator_profiles_cache, load_emulator_profiles, load_platform_config
+from model.profiles import _emulator_profiles_cache, load_emulator_profiles
+from model.platforms import load_platform_config
 from cross_reference import (
     LAUNCHER_READS_KEY,
     LAUNCHER_UNPROVEN_KEY,

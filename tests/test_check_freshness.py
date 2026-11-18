@@ -19,7 +19,7 @@ from unittest import mock
 from pathlib import Path
 
 import check_freshness as cf
-from common import yaml_load
+from model.safeparse import yaml_load
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 

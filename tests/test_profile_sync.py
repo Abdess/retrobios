@@ -3039,7 +3039,7 @@ class TestDeliberatelyFrozenPin(TestBuildReport):
         # reicast is the commit Recalbox's reicast.mk builds, 789 commits
         # behind master. Compared to HEAD it showed eight refs to review that
         # nobody could act on.
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         root = Path(__file__).resolve().parents[1] / "emulators"
         profiles = load_emulator_profiles(str(root))
@@ -3059,7 +3059,7 @@ class TestDeliberatelyFrozenPin(TestBuildReport):
         # RetroPie builds ppsspp-1.5.4 as PPSSPPSDL alone: the frozen build
         # is the standalone half of a project that also ships a core.
         builds_differ = {("duckstation-legacy", "duckstation"), ("ppsspp-1.5.4", "ppsspp")}
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         root = Path(__file__).resolve().parents[1] / "emulators"
         profiles = load_emulator_profiles(str(root))
@@ -5125,7 +5125,7 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
         with mock.patch.object(sitesources, "build_source_paths", return_value=({}, [])) as built, \
                 mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""}), \
                 mock.patch.object(profile_sync, "load_emulator_profiles", return_value={}), \
-                mock.patch("common.write_if_changed") as written, \
+                mock.patch("core.artifacts.write_if_changed") as written, \
                 contextlib.redirect_stderr(io.StringIO()):
             profile_sync._WRITTEN.clear()
             profile_sync._refresh_source_paths(self._args())
@@ -5143,19 +5143,20 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
         # before writing them: the record kept the pins it had replaced.
         from unittest import mock
 
-        import common
+        from model import profiles as model_profiles
+        from model.profiles import _emulator_profiles_cache
         import sitesources
 
         with tempfile.TemporaryDirectory() as tmp:
             profile = Path(tmp) / "p.yml"
             profile.write_text('emulator: P\nsource_commit: "old"\n', encoding="utf-8")
-            common._emulator_profiles_cache.clear()
-            self.addCleanup(common._emulator_profiles_cache.clear)
-            common.load_emulator_profiles(tmp, skip_aliases=False)
+            _emulator_profiles_cache.clear()
+            self.addCleanup(_emulator_profiles_cache.clear)
+            model_profiles.load_emulator_profiles(tmp, skip_aliases=False)
             profile.write_text('emulator: P\nsource_commit: "new"\n', encoding="utf-8")
             with mock.patch.object(sitesources, "build_source_paths", return_value=({}, [])) as built, \
                     mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""}), \
-                    mock.patch("common.write_if_changed"), \
+                    mock.patch("core.artifacts.write_if_changed"), \
                     contextlib.redirect_stderr(io.StringIO()), \
                     contextlib.redirect_stdout(io.StringIO()):
                 profile_sync._WRITTEN.add("p")

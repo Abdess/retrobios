@@ -26,7 +26,7 @@ from unittest import mock
 
 import yaml
 
-import common
+from model.registry import list_registered_platforms, list_release_pack_platforms
 import release_record
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -62,7 +62,7 @@ def _which_pack() -> str:
 class TheFieldIsTheList(unittest.TestCase):
     def test_the_registry_marks_the_most_downloaded_setups(self):
         self.assertEqual(
-            set(common.list_release_pack_platforms(PLATFORMS)), RELEASED
+            set(list_release_pack_platforms(PLATFORMS)), RELEASED
         )
 
     def test_only_marked_platforms_are_listed(self):
@@ -72,9 +72,9 @@ class TheFieldIsTheList(unittest.TestCase):
                 "small": {},
                 "off": {"release_pack": False},
             })
-            self.assertEqual(common.list_release_pack_platforms(platforms_dir), ["big"])
+            self.assertEqual(list_release_pack_platforms(platforms_dir), ["big"])
             self.assertEqual(
-                common.list_registered_platforms(platforms_dir), ["big", "off", "small"]
+                list_registered_platforms(platforms_dir), ["big", "off", "small"]
             )
 
     def test_the_schema_holds_the_field(self):
@@ -145,7 +145,7 @@ class TheBuildReadsTheField(unittest.TestCase):
     def test_manifests_cover_every_platform(self):
         self.assertEqual(
             set(self._groups("--all", "--manifest", "--offline")),
-            set(common.list_registered_platforms(PLATFORMS)),
+            set(list_registered_platforms(PLATFORMS)),
         )
 
     def test_the_release_owners_are_the_marked_platforms(self):
@@ -475,7 +475,7 @@ class EveryPlatformHasAPermanentPage(unittest.TestCase):
 
         record = release_record.load_advertised()
         with contextlib.chdir(REPO_ROOT):
-            for name in common.list_registered_platforms(PLATFORMS):
+            for name in list_registered_platforms(PLATFORMS):
                 page = generate_site.generate_get_page(name)
                 pack = release_record.pack_for(name, record)
                 with self.subTest(platform=name):
@@ -501,7 +501,7 @@ class EveryPlatformHasAPermanentPage(unittest.TestCase):
         docs = REPO_ROOT / "website" / "src" / "content" / "docs" / release_record.GET_DIR
         if not docs.is_dir():
             self.skipTest("the site is not generated")
-        for name in common.list_registered_platforms(PLATFORMS):
+        for name in list_registered_platforms(PLATFORMS):
             with self.subTest(platform=name):
                 self.assertTrue(any(docs.glob(f"{name}.md*")))
 
@@ -529,7 +529,7 @@ class TheSiteCheckResolvesEveryGetPage(unittest.TestCase):
             record_path.write_text(json.dumps(record), encoding="utf-8")
             pages = {
                 f"get/{name}/index.html": "install.sh"
-                for name in common.list_registered_platforms(PLATFORMS)
+                for name in list_registered_platforms(PLATFORMS)
             }
             pages["get/romm/index.html"] = f'<a href="{download}v1/RomM_BIOS_Pack.zip">x</a>'
             pages["get/knulli/index.html"] = f'<a href="{download}v1/K_BIOS_Pack.zip">x</a>'

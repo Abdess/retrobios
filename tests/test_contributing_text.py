@@ -184,7 +184,7 @@ class OneFileThroughTheBrowser(unittest.TestCase):
         with tempfile.TemporaryDirectory(dir=scratch) as directory:
             (Path(directory) / "bios").mkdir()
             (Path(directory) / "bios" / "boot.rom").write_bytes(b"boot")
-            from common import compute_hashes
+            from core.hashing import compute_hashes
 
             sha1 = compute_hashes(str(Path(directory) / "bios" / "boot.rom"))["sha1"]
             hashes = {"sha1": {sha1}, "folders": {sha1: {"bios/Maker/Console/"}}}

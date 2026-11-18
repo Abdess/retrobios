@@ -20,7 +20,11 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import common
+from core.cli import suggest_names
+from model.cliargs import list_system_ids
+from model.database import load_database
+from model.platforms import load_platform_config
+from model.profiles import _emulator_profiles_cache, load_emulator_profiles, profiles_for_systems
 import generate_pack as builder
 from tests.scratchtree import scratch_checkout, snapshot
 
@@ -29,9 +33,9 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 class SpellingsAgree(unittest.TestCase):
     def test_both_spellings_select_the_same_profiles(self):
-        profiles = common.load_emulator_profiles(str(REPO_ROOT / "emulators"))
-        dashed = common.profiles_for_systems(profiles, ["atari-2600"])
-        underscored = common.profiles_for_systems(profiles, ["atari_2600"])
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        dashed = profiles_for_systems(profiles, ["atari-2600"])
+        underscored = profiles_for_systems(profiles, ["atari_2600"])
         self.assertEqual(dashed, underscored)
         self.assertIn("stella2014", dashed)
         self.assertIn("gopher2600", dashed)
@@ -50,13 +54,13 @@ class TheListingCountsLikeTheSelection(unittest.TestCase):
 
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
-            common.list_system_ids(str(REPO_ROOT / "emulators"))
+            list_system_ids(str(REPO_ROOT / "emulators"))
         lines = {line.split()[0]: line for line in out.getvalue().splitlines() if line.strip()}
-        profiles = common.load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         for spellings in (("3do", "panasonic-3do"), ("atari-2600", "atari_2600")):
             listed = [s for s in spellings if s in lines]
             self.assertEqual(len(listed), 1, f"{spellings}: one line per system")
-            count = len(common.profiles_for_systems(profiles, [spellings[0]]))
+            count = len(profiles_for_systems(profiles, [spellings[0]]))
             self.assertIn(f"({count} emulator", lines[listed[0]])
 
 
@@ -67,8 +71,8 @@ class StandaloneNeedsAStandaloneBuild(unittest.TestCase):
             Path(tmp, "emulators", "handy.yml").write_text(
                 "emulator: Handy\ntype: libretro\nsystems: [atari-lynx]\nfiles:\n  - name: lynxboot.img\n"
             )
-            common._emulator_profiles_cache.clear()
-            self.addCleanup(common._emulator_profiles_cache.clear)
+            _emulator_profiles_cache.clear()
+            self.addCleanup(_emulator_profiles_cache.clear)
             db = {"files": {}, "indexes": {"by_md5": {}, "by_crc32": {}, "by_name": {}}}
             result = builder.generate_md5_pack(
                 [("md5", "d8f1206299c48946e6ec5ef96d014eaa")], db, tmp, tmp,
@@ -134,7 +138,7 @@ class AMistypedPlatformIsNamed(unittest.TestCase):
     def test_the_names_the_site_prints_are_accepted(self):
         """`--platform RetroArch` and `--platform "MiSTer FPGA"` were refused
         by verify and generate_pack while install.py took them."""
-        from common import platform_arg
+        from model.cliargs import platform_arg
 
         previous = os.getcwd()
         os.chdir(REPO_ROOT)
@@ -474,7 +478,7 @@ class VerifyReportsTheRequiredOnlyPack(unittest.TestCase):
 
         from verify import verify_emulator
 
-        db = common.load_database("database.json")
+        db = load_database("database.json")
         for name in ("beetle_psx", "dolphin", "fbneo", "geolith", "mame"):
             with self.subTest(emulator=name):
                 record = builder.PackRecord()
@@ -559,13 +563,13 @@ class ATypoGetsTheNearestNames(unittest.TestCase):
     sony-playstaton was answered with 3do to apple-iie."""
 
     def test_suggestions_follow_the_typed_name(self):
-        hint = common.suggest_names(["sony-playstaton"],
+        hint = suggest_names(["sony-playstaton"],
                                     ["3do", "apple-ii", "sony-playstation"], "--list-systems")
         self.assertEqual(hint, "Close matches: sony-playstation. --list-systems lists all 3.")
-        self.assertEqual(common.suggest_names(["zzz"], ["3do"], "--list-systems"),
+        self.assertEqual(suggest_names(["zzz"], ["3do"], "--list-systems"),
                          "Known: 3do.")
         many = [f"system-{i}" for i in range(40)]
-        self.assertEqual(common.suggest_names(["zzz"], many, "--list-systems"),
+        self.assertEqual(suggest_names(["zzz"], many, "--list-systems"),
                          "--list-systems lists all 40.")
 
 
@@ -581,7 +585,7 @@ class EmulatorVerifyReadsNoArchiveItDoesNotNeed(unittest.TestCase):
 
         if not (REPO_ROOT / "database.json").exists():
             self.skipTest("database.json is not generated")
-        db = common.load_database(str(REPO_ROOT / "database.json"))
+        db = load_database(str(REPO_ROOT / "database.json"))
         with mock.patch.object(verify, "build_zip_contents_index",
                                side_effect=AssertionError("index built")):
             result = verify.verify_emulator(["handy"], str(REPO_ROOT / "emulators"), db)
@@ -598,12 +602,12 @@ class CoverageWithoutProfilesMatchesTheCli(unittest.TestCase):
 
         if not (REPO_ROOT / "database.json").exists():
             self.skipTest("database.json is not generated")
-        db = common.load_database(str(REPO_ROOT / "database.json"))
-        config = common.load_platform_config("retroarch", str(REPO_ROOT / "platforms"))
+        db = load_database(str(REPO_ROOT / "database.json"))
+        config = load_platform_config("retroarch", str(REPO_ROOT / "platforms"))
         emulators = str(REPO_ROOT / "emulators")
         bare = verify.verify_platform(config, db, emulators)
         full = verify.verify_platform(config, db, emulators,
-                                      common.load_emulator_profiles(emulators))
+                                      load_emulator_profiles(emulators))
 
         def discrepancies(result):
             return sorted(d["name"] for d in result["details"] if d.get("discrepancy"))
@@ -625,7 +629,7 @@ class ASystemPackHoldsThatSystem(unittest.TestCase):
         import yaml
         from verify import verify_system
 
-        common._emulator_profiles_cache.clear()
+        _emulator_profiles_cache.clear()
         (REPO_ROOT / "tmp").mkdir(exist_ok=True)
         root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         self.addCleanup(shutil.rmtree, root, True)
@@ -679,7 +683,7 @@ class ATreeHoldsAPathForAnotherProfile(unittest.TestCase):
         import yaml
         from verify import verify_emulator
 
-        common._emulator_profiles_cache.clear()
+        _emulator_profiles_cache.clear()
         (REPO_ROOT / "tmp").mkdir(exist_ok=True)
         root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         self.addCleanup(shutil.rmtree, root, True)

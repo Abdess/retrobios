@@ -236,11 +236,9 @@ def container_pins(platforms_dir: str, emulators_dir: str) -> dict[str, set[str]
     archive md5 is the composite of its members (``zip_digest: composite``,
     Bios.cpp:64-68): neither pins the container bytes.
     """
-    from common import (
-        list_registered_platforms,
-        load_emulator_profiles,
-        load_platform_config,
-    )
+    from model.registry import list_registered_platforms
+    from model.profiles import load_emulator_profiles
+    from model.platforms import load_platform_config
 
     pins: dict[str, set[str]] = defaultdict(set)
     for platform in list_registered_platforms(platforms_dir):
@@ -269,7 +267,7 @@ def recipe_index(emulators_dir: str, recipes_dir: str) -> dict[MemberList, set[s
     Matching on the member list, not the archive name, credits a DAT that
     knows the set under another name (``aga.zip`` is MAME's ``isa_aga``).
     """
-    from common import load_emulator_profiles
+    from model.profiles import load_emulator_profiles
     from romset_recipes import collect_recipes, load_dat_recipes
 
     index: dict[MemberList, set[str]] = defaultdict(set)

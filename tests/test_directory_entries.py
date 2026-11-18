@@ -25,7 +25,8 @@ try:
     import jsonschema
 except ImportError:
     jsonschema = None
-import common
+from model.profiles import load_emulator_profiles, _emulator_profiles_cache
+from resolve.directories import directory_members
 import generate_db
 import generate_pack as builder
 import verify
@@ -87,10 +88,10 @@ class DirectoryFixture(unittest.TestCase):
         (self.platforms / "_registry.yml").write_text(
             yaml.dump({"platforms": {"demo": {"config": "demo.yml"}}})
         )
-        common._emulator_profiles_cache.clear()
+        _emulator_profiles_cache.clear()
 
     def tearDown(self):
-        common._emulator_profiles_cache.clear()
+        _emulator_profiles_cache.clear()
         self._tmp.cleanup()
 
     def _add(self, relative: str, payload: bytes) -> None:
@@ -120,14 +121,14 @@ class DirectoryFixture(unittest.TestCase):
 
     def _profiles(self, body: str = PROFILE) -> dict:
         (self.emulators / "demo.yml").write_text(body)
-        common._emulator_profiles_cache.clear()
-        return common.load_emulator_profiles(str(self.emulators))
+        _emulator_profiles_cache.clear()
+        return load_emulator_profiles(str(self.emulators))
 
 
 class DirectoryMembers(DirectoryFixture):
     def test_every_file_under_the_tail_is_a_member(self):
         self.assertEqual(
-            common.directory_members(self._db(), "rtp/2000/"),
+            directory_members(self._db(), "rtp/2000/"),
             {
                 "rtp/2000/Backdrop/a.png": self.sha1[
                     "Engine/demo/rtp/2000/Backdrop/a.png"
@@ -137,19 +138,19 @@ class DirectoryMembers(DirectoryFixture):
         )
 
     def test_a_directory_nobody_collected_has_no_member(self):
-        self.assertEqual(common.directory_members(self._db(), "demo/Fonts/"), {})
+        self.assertEqual(directory_members(self._db(), "demo/Fonts/"), {})
 
     def test_two_trees_answering_one_tail_prove_nothing(self):
         """`voice/` under two unrelated parents is two directories, and merging
         them would hand one emulator the other's files."""
         self._add("Console/voice/E480.WAV", b"speech")
         self._add("Other/app/voice/hello.wav", b"another program")
-        self.assertEqual(common.directory_members(self._db(), "voice/"), {})
+        self.assertEqual(directory_members(self._db(), "voice/"), {})
 
     def test_one_tree_under_a_generic_name_is_enough(self):
         self._add("Console/voice/E480.WAV", b"speech")
         self.assertEqual(
-            common.directory_members(self._db(), "voice/"),
+            directory_members(self._db(), "voice/"),
             {"voice/E480.WAV": self.sha1["Console/voice/E480.WAV"]},
         )
 

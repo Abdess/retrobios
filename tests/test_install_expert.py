@@ -49,8 +49,10 @@ class RealListParity(unittest.TestCase):
             # The builder's floor: install.py alone keeps 3.8.
             raise unittest.SkipTest("generate_pack.py needs Python 3.9 or newer")
         import generate_pack as gp
-        from common import (build_zip_contents_index, list_registered_platforms,
-                            load_emulator_profiles, load_platform_config)
+        from core.ziptools import build_zip_contents_index
+        from model.registry import list_registered_platforms
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
 
         cls.gp = gp
         cls.config = staticmethod(
@@ -134,7 +136,7 @@ class RealListParity(unittest.TestCase):
         self.assertGreater(dropped, 0)
 
     def test_one_per_slot_on_a_board(self):
-        from common import load_target_config
+        from model.targets import load_target_config
 
         for plat, target in TARGETS:
             with self.subTest(platform=plat, target=target):
@@ -150,7 +152,7 @@ class RealListParity(unittest.TestCase):
         """--installed-cores ranks a slot by the cores found, as a pack built
         for exactly those cores (generate_pack target_cores) ranks it: the
         run passes the found cores as its reach (slot_reach)."""
-        from common import load_target_config
+        from model.targets import load_target_config
 
         for plat, target in (("retroarch", "switch"), ("retroarch", "playstation-psp")):
             with self.subTest(platform=plat, cores=target):

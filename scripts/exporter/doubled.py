@@ -15,13 +15,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from common import (
-    contents_members,
-    holds_required_members,
-    platform_layouts,
-    resolve_platform_cores,
-    standalone_set,
-)
+from resolve.archives import contents_members, holds_required_members
+from resolve.standalone import platform_layouts, standalone_set
+from resolve.cores import resolve_platform_cores
 from resolve.reconcile import HASH_FIELDS, _hash_values
 from slots import _accepted_by_all, _lists_hashes, find_collisions
 from resolve.validation import opens_by_name, outside_gap_scope

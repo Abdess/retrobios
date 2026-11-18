@@ -52,13 +52,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from common import (
-    require_directory,
-    load_database,
-    load_emulator_profiles,
-    load_platform_config,
-    list_registered_platforms,
-)
+from core.cli import require_directory
+from model.database import load_database
+from model.profiles import load_emulator_profiles
+from model.platforms import load_platform_config
+from model.registry import list_registered_platforms
 from torrentzip import build_torrentzip, is_torrentzip
 
 ARCHIVES_FILE = Path(__file__).resolve().parent.parent / "recipes" / "archives.json"
@@ -722,6 +720,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

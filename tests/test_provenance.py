@@ -10,7 +10,7 @@ import unittest
 import zipfile
 from pathlib import Path
 
-from scripts.common import (
+from scripts.model.dumpcatalog import (
     annotate_provenance,
     build_provenance_index,
     load_provenance_snapshots,

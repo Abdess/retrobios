@@ -433,7 +433,7 @@ class Built:
 
 
 def load_profiles(emulators_dir: Path) -> dict:
-    from common import load_emulator_profiles
+    from model.profiles import load_emulator_profiles
 
     return load_emulator_profiles(str(emulators_dir), skip_aliases=False)
 

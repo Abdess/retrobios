@@ -21,23 +21,17 @@ from pathlib import Path
 from types import ModuleType
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import (
-    InputMissing,
-    compute_composition,
-    count_catalog_matched,
-    declared_root,
-    github_token,
-    list_registered_platforms,
-    load_database,
-    load_emulator_profiles,
-    load_platform_config,
-    load_platform_registry,
-    repository_output_lock,
-    resolve_platform_cores,
-    system_index,
-    unique_emulator_profiles,
-    write_if_changed,
-)
+from core.cli import InputMissing
+from model.composition import compute_composition, count_catalog_matched
+from model.declarations import declared_root
+from core.github import github_token
+from model.registry import list_registered_platforms, load_platform_registry
+from model.database import load_database
+from model.profiles import load_emulator_profiles, unique_emulator_profiles
+from model.platforms import load_platform_config
+from core.artifacts import repository_output_lock, write_if_changed
+from resolve.cores import resolve_platform_cores
+from model.systems import system_index
 import archive_build
 import release_record
 from siteguides import PACKAGE_COMMAND, install_command
@@ -607,7 +601,7 @@ def generate_readme(db: dict, platforms_dir: str, db_path: str = "database.json"
 
     platform_names = list_registered_platforms(platforms_dir)
 
-    from common import load_data_dir_registry
+    from model.registry import load_data_dir_registry
 
     data_registry = load_data_dir_registry(platforms_dir)
 
@@ -994,7 +988,7 @@ def main() -> None:
 
     import contextlib
 
-    from common import load_data_dir_registry
+    from model.registry import load_data_dir_registry
     from refresh_data_dirs import hold_data_dirs
 
     db = load_database(args.db)
@@ -1021,6 +1015,6 @@ def _write(readme: str) -> None:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

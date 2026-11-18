@@ -19,7 +19,8 @@ import unittest
 import zlib
 from pathlib import Path
 
-from common import adler32_of, resolve_local_file
+from resolve.content import adler32_of
+from resolve.localfile import resolve_local_file
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -117,7 +118,7 @@ class TheTwoRomsFormAPairTheCodeTakes(unittest.TestCase):
 
 class DolphinGetsAPairItTakes(unittest.TestCase):
     def test_each_dolphin_dsp_rom_resolves_to_an_accepted_dump(self):
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         database = REPO_ROOT / "database.json"
         if not database.exists():
@@ -137,7 +138,7 @@ class DolphinGetsAPairItTakes(unittest.TestCase):
 
 
     def test_every_paired_profile_resolves_a_pair_its_code_takes(self):
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         database = REPO_ROOT / "database.json"
         if not database.exists():

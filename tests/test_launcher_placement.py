@@ -23,13 +23,9 @@ from pathlib import Path
 
 import yaml
 
-from common import (
-    _emulator_profiles_cache,
-    load_emulator_profiles,
-    load_platform_config,
-    platform_layouts,
-    standalone_set,
-)
+from model.profiles import _emulator_profiles_cache, load_emulator_profiles
+from model.platforms import load_platform_config
+from resolve.standalone import platform_layouts, standalone_set
 from generate_pack import generate_manifest, generate_pack
 from verify import verify_platform
 
@@ -241,7 +237,7 @@ class FsUaeOnRetroPie(unittest.TestCase):
     def test_the_launcher_name_is_filled_without_another_core(self) -> None:
         import json
 
-        from common import load_target_config
+        from model.targets import load_target_config
 
         db_path = REPO_ROOT / "database.json"
         if not db_path.exists():
@@ -528,7 +524,8 @@ class EachProgramItsOwnProfile(unittest.TestCase):
     """PICO-8 and Voxatron are two programs: a platform running one gets its files only."""
 
     def test_only_the_platforms_that_run_voxatron_get_it(self) -> None:
-        from common import list_registered_platforms, resolve_platform_cores
+        from model.registry import list_registered_platforms
+        from resolve.cores import resolve_platform_cores
 
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         runs = {
@@ -544,7 +541,7 @@ class EachProgramItsOwnProfile(unittest.TestCase):
             "batocera", "knulli", "rocknix", "retrodeck", "retrobat", "recalbox")))
 
     def test_a_standalone_emulator_is_run(self) -> None:
-        from common import resolve_platform_cores
+        from resolve.cores import resolve_platform_cores
 
         profiles = {"emu": {"emulator": "Emu", "type": "standalone", "cores": ["emu"],
                             "systems": ["sys"], "files": []}}
@@ -895,7 +892,8 @@ class MameSearchPaths(unittest.TestCase):
         self.assertEqual(bbc["standalone_path"], "mame/samples/bbc.zip")
 
     def test_a_moved_tree_is_found_by_its_layout_path(self) -> None:
-        from common import expand_directory_entries, load_database
+        from resolve.directories import expand_directory_entries
+        from model.database import load_database
 
         db = load_database(str(REPO_ROOT / "database.json"))
         view = standalone_view("mame", "retrodeck")
@@ -996,7 +994,7 @@ class AdvanceMameOnEmuELEC(unittest.TestCase):
     def test_both_copies_are_one_file(self) -> None:
         # Outside the BIOS tree the folder is no proof of content: each copy
         # resolves by its layout path, so both folders hold the same file.
-        from common import load_database
+        from model.database import load_database
 
         db = load_database(str(REPO_ROOT / "database.json"))
         with redirect_stdout(io.StringIO()):
@@ -1022,7 +1020,8 @@ class AdvanceMameOnEmuELEC(unittest.TestCase):
 
     def test_the_roms_folder_is_no_proof_of_content(self) -> None:
         # bios/Arcade/MAME/konamigv.zip is MAME 0.289's set, not AdvanceMAME's.
-        from common import load_database, resolve_local_file
+        from model.database import load_database
+        from resolve.localfile import resolve_local_file
 
         db = load_database(str(REPO_ROOT / "database.json"))
         view = standalone_view("advancemame", "emuelec")
@@ -1094,7 +1093,7 @@ class SetsReadBesideTheGame(unittest.TestCase):
         self.assertTrue(all("load_from" not in e and "root" not in e for e in sets))
 
     def test_the_manifest_drops_the_root_copy_no_core_reads(self) -> None:
-        from common import load_database
+        from model.database import load_database
 
         db = load_database(str(REPO_ROOT / "database.json"))
         with redirect_stdout(io.StringIO()):
@@ -1125,7 +1124,7 @@ class MameOnRetroDeckRomPaths(unittest.TestCase):
         self.assertTrue(found["neogeo"]["any_machine"])
 
     def test_a_machine_reads_its_own_set_and_its_devices(self) -> None:
-        from common import rom_search_sets
+        from resolve.contentlayout import rom_search_sets
 
         self.assertIn("adam", rom_search_sets("mame", "adam", ["adam"], False))
         neogeo = rom_search_sets("mame", "neogeo", [], True)
@@ -1212,7 +1211,7 @@ class CloneReadsItsParent(unittest.TestCase):
     finds o2bios.rom in the parent's videopac.zip (src/emu/driver.cpp:31-38)."""
 
     def test_the_parent_set_goes_to_the_clone_folder(self) -> None:
-        from common import rom_search_sets
+        from resolve.contentlayout import rom_search_sets
 
         self.assertIn("videopac", rom_search_sets("mame", "odyssey2", ["odyssey2"], False))
         for platform, dest in (("emudeck", "odyssey2/videopac.zip"),
@@ -1264,7 +1263,7 @@ class CoreOfferedOnSomeBoards(unittest.TestCase):
         return {**base, "_rom_folders": [self.ROW], **extra}
 
     def test_a_branch_names_the_boards(self) -> None:
-        from common import when_admits
+        from resolve.contentlayout import when_admits
 
         self.assertTrue(when_admits("DEVICE H700|RK3326", "rk3326"))
         self.assertFalse(when_admits("DEVICE H700|RK3326", "s922x"))
@@ -1272,7 +1271,7 @@ class CoreOfferedOnSomeBoards(unittest.TestCase):
         self.assertTrue(when_admits('if [ "${PREFER_GLES}" = "yes" ]; then', "h700"))
 
     def test_an_offer_carries_the_boards_its_branch_names(self) -> None:
-        from common import offer_boards
+        from resolve.contentlayout import offer_boards
 
         boards = offer_boards(self.config())
         self.assertEqual(boards[("uae4arm", "amiga")], frozenset({"h700", "rk3326"}))
@@ -1280,7 +1279,8 @@ class CoreOfferedOnSomeBoards(unittest.TestCase):
         self.assertIsNone(boards[("puae2021", "amiga")])
 
     def test_a_board_pack_places_the_core_where_the_board_offers_it(self) -> None:
-        from common import CONTENT_FOLDER_PREFIX, TARGET_KEY, content_folder_tags
+        from resolve.layout import CONTENT_FOLDER_PREFIX
+        from resolve.contentlayout import TARGET_KEY, content_folder_tags
 
         def placed(config: dict) -> dict:
             rows = [json.loads(t[len(CONTENT_FOLDER_PREFIX):]) for t in content_folder_tags(config)
@@ -1296,7 +1296,7 @@ class CoreOfferedOnSomeBoards(unittest.TestCase):
 
 
 def platform_manifest(platform: str) -> dict:
-    from common import load_database
+    from model.database import load_database
 
     db = load_database(str(REPO_ROOT / "database.json"))
     with redirect_stdout(io.StringIO()):

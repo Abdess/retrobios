@@ -271,7 +271,7 @@ class CoreDownloaderReach(unittest.TestCase):
             downloader_disabled("", {"a/retroarch.cfg": 'core_updater_buildbot_cores_url = ""\n'})
 
     def test_a_board_that_downloads_gets_the_buildbot_list(self):
-        from common import load_target_config
+        from model.targets import load_target_config
 
         root = str(REPO_ROOT / "platforms")
         x86 = set(load_target_config("retroarch", "linux-x86_64", root) or ())
@@ -284,7 +284,7 @@ class CoreDownloaderReach(unittest.TestCase):
     def test_the_platform_names_what_its_boards_install(self):
         import yaml
 
-        from common import load_target_config
+        from model.targets import load_target_config
 
         root = str(REPO_ROOT / "platforms")
         for platform in ("batocera", "knulli"):
@@ -306,7 +306,9 @@ class CoreDownloaderReach(unittest.TestCase):
         """Batocera runs amiberry standalone, and its x86_64 boards fetch
         amiberry_libretro: removing every name the image builds lost the
         libretro core to the name it shares with the standalone package."""
-        from common import DUAL_MODE_PREFIX, resolve_platform_cores, standalone_set
+        from resolve.layout import DUAL_MODE_PREFIX
+        from resolve.cores import resolve_platform_cores
+        from resolve.standalone import standalone_set
         from scraper.batocera_scraper import installable_cores
         from scraper.targets.batocera_targets_scraper import BuildSelection
 
@@ -340,7 +342,8 @@ class DownloadedCoresReachTheirBoards(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        from common import load_emulator_profiles, load_platform_config
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
 
         cls.profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         cls.config = load_platform_config("batocera", str(REPO_ROOT / "platforms"))
@@ -349,7 +352,8 @@ class DownloadedCoresReachTheirBoards(unittest.TestCase):
         """Batocera lists higan_sfc_balanced and nside_sfc_balanced, and the
         buildbot offers the second: reading the first alone dropped the
         core from x86_64."""
-        from common import load_target_config, resolve_platform_cores
+        from model.targets import load_target_config
+        from resolve.cores import resolve_platform_cores
 
         root = str(REPO_ROOT / "platforms")
         x86 = load_target_config("batocera", "x86_64", root)

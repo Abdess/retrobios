@@ -59,7 +59,7 @@ UNLINKED: dict[str, str] = {
 
 def _accepts(fe: dict, local: str | None, status: str) -> bool:
     """A resolution that proves the entry's content or its full path."""
-    from common import resolution_is_hash_exact
+    from resolve.localfile import resolution_is_hash_exact
 
     if not local:
         return False
@@ -111,7 +111,7 @@ def _held_sections(
     ids: Iterable[str], entries: dict[str, list[dict]], board_sections: dict, db: dict
 ) -> dict[str, set[tuple[str, str]]]:
     """Id -> the (manufacturer, console) sections holding its files."""
-    from common import resolve_local_file
+    from resolve.localfile import resolve_local_file
 
     # Where each content has a card.
     places: dict[str, set[tuple[str, str, str]]] = {}
@@ -147,11 +147,9 @@ class SystemLinks(unittest.TestCase):
         previous = os.getcwd()
         os.chdir(REPO_ROOT)
         try:
-            from common import (
-                list_registered_platforms,
-                load_emulator_profiles,
-                load_platform_config,
-            )
+            from model.registry import list_registered_platforms
+            from model.profiles import load_emulator_profiles
+            from model.platforms import load_platform_config
             from generate_site import _group_by_manufacturer, arcade_board_sections
 
             with open("database.json", encoding="utf-8") as handle:
@@ -323,7 +321,7 @@ class AnEntryListingSystemsIsFiledUnderEach(unittest.TestCase):
 
     def test_the_site_reads_the_common_rule(self):
         import generate_site as gs
-        from common import entry_system_ids
+        from model.profiles import entry_system_ids
 
         entry = {"name": "ym2608.zip", "systems": ["arcade", "pc80"]}
         self.assertEqual(gs._entry_systems("mame", entry), ["arcade", "pc80"])

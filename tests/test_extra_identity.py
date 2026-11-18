@@ -13,7 +13,7 @@ import tests
 import unittest
 from pathlib import Path
 
-from common import PROFILE_IDENTITY_FIELDS
+from model.profiles import PROFILE_IDENTITY_FIELDS
 from packextras import _collect_emulator_extras
 from verify import find_undeclared_files
 

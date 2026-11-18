@@ -19,7 +19,7 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
-from common import load_emulator_profiles
+from model.profiles import load_emulator_profiles
 from region import REGIONS, normalize_declared
 from model.safeparse import yaml_load
 
@@ -247,7 +247,7 @@ def main() -> int:
                         help="profiles the rules are checked against (default emulators)")
     parser.add_argument("--json", action="store_true", help="print the summary as JSON")
     args = parser.parse_args()
-    from common import work_from_repo_root
+    from model.cliargs import work_from_repo_root
 
     work_from_repo_root(args, parser, ["regions", "extras", "headers", "emulators_dir"])
 
@@ -271,6 +271,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

@@ -813,7 +813,7 @@ class InstallMatchesThePack(unittest.TestCase):
         if not db_path.exists():
             raise unittest.SkipTest("database.json is not built")
         import generate_pack as gp
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         cls.gp = gp
         cls.db = json.loads(db_path.read_text(encoding="utf-8"))
@@ -866,7 +866,8 @@ class InstallMatchesASystemPack(unittest.TestCase):
         if not db_path.exists():
             raise unittest.SkipTest("database.json is not built")
         import generate_pack as gp
-        from common import load_emulator_profiles, load_platform_config
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
 
         cls.gp = gp
         cls.db = json.loads(db_path.read_text(encoding="utf-8"))
@@ -921,7 +922,7 @@ class DataTreesFollowTheSystemsTheyServe(InstallMatchesASystemPack):
     def _packed(self, systems, regions) -> set[str]:
         import zipfile
 
-        from common import load_data_dir_registry
+        from model.registry import load_data_dir_registry
 
         # The trees come from the registry the manifest reads by itself.
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as out:
@@ -997,7 +998,8 @@ class InstallMatchesATargetManifest(unittest.TestCase):
         if not db_path.exists():
             raise unittest.SkipTest("database.json is not built")
         import generate_pack as gp
-        from common import load_emulator_profiles, load_target_config
+        from model.profiles import load_emulator_profiles
+        from model.targets import load_target_config
 
         cls.gp = gp
         cls.load_target_config = staticmethod(load_target_config)
@@ -1023,7 +1025,7 @@ class InstallMatchesATargetManifest(unittest.TestCase):
                 files, omitted = install.narrow_to_cores(full, cores, target=target)
                 # A case-insensitive platform reads one file under both
                 # spellings (BlastEm's 32X_M_BIOS.bin, PicoDrive's .BIN).
-                from common import load_platform_config
+                from model.platforms import load_platform_config
 
                 config = load_platform_config(platform, str(REPO_ROOT / "platforms"))
                 fold = str.lower if config.get("case_insensitive_fs") else str
@@ -1049,7 +1051,9 @@ class AHeldFileTheInstallerCannotFetch(unittest.TestCase):
     pack drops."""
 
     def setUp(self):
-        import common
+        from model import profiles
+        from model.platforms import _platform_config_cache
+        from model.profiles import _emulator_profiles_cache
         import generate_db
         import generate_pack
 
@@ -1094,11 +1098,11 @@ class AHeldFileTheInstallerCannotFetch(unittest.TestCase):
                 {"name": "us.bin", "system": "sys", "region": ["north-america"],
                  "required": True},
             ]}))
-        common._platform_config_cache.clear()
-        common._emulator_profiles_cache.clear()
-        self.addCleanup(common._platform_config_cache.clear)
-        self.addCleanup(common._emulator_profiles_cache.clear)
-        self.profiles = common.load_emulator_profiles("emulators")
+        _platform_config_cache.clear()
+        _emulator_profiles_cache.clear()
+        self.addCleanup(_platform_config_cache.clear)
+        self.addCleanup(_emulator_profiles_cache.clear)
+        self.profiles = profiles.load_emulator_profiles("emulators")
 
     def _manifest(self, regions):
         return self.gp.generate_manifest(
@@ -1131,7 +1135,9 @@ class AStandaloneLayoutBelowTheBiosFolder(unittest.TestCase):
     the pack kept the European BIOS the installer drops."""
 
     def setUp(self):
-        import common
+        from model import profiles
+        from model.platforms import _platform_config_cache
+        from model.profiles import _emulator_profiles_cache
         import generate_db
         import generate_pack
 
@@ -1178,11 +1184,11 @@ class AStandaloneLayoutBelowTheBiosFolder(unittest.TestCase):
                 {"name": name, "system": "sys", "required": False}
                 for name in ("eu.bin", "jp.bin")
             ]}))
-        common._platform_config_cache.clear()
-        common._emulator_profiles_cache.clear()
-        self.addCleanup(common._platform_config_cache.clear)
-        self.addCleanup(common._emulator_profiles_cache.clear)
-        self.profiles = common.load_emulator_profiles("emulators")
+        _platform_config_cache.clear()
+        _emulator_profiles_cache.clear()
+        self.addCleanup(_platform_config_cache.clear)
+        self.addCleanup(_emulator_profiles_cache.clear)
+        self.profiles = profiles.load_emulator_profiles("emulators")
 
     def _manifest(self, regions):
         return self.gp.generate_manifest(
@@ -1215,7 +1221,9 @@ class AnExtraBesideItsDeclarationBelowTheBiosFolder(unittest.TestCase):
     which records the path once, dropped it."""
 
     def setUp(self):
-        import common
+        from model import profiles
+        from model.platforms import _platform_config_cache
+        from model.profiles import _emulator_profiles_cache
         import generate_db
         import generate_pack
 
@@ -1268,11 +1276,11 @@ class AnExtraBesideItsDeclarationBelowTheBiosFolder(unittest.TestCase):
             "emulator": "other", "type": "libretro", "systems": ["sys"], "files": [
                 {"name": "us.bin", "path": "alt/us.bin", "system": "sys", "required": False},
             ]}))
-        common._platform_config_cache.clear()
-        common._emulator_profiles_cache.clear()
-        self.addCleanup(common._platform_config_cache.clear)
-        self.addCleanup(common._emulator_profiles_cache.clear)
-        self.profiles = common.load_emulator_profiles("emulators")
+        _platform_config_cache.clear()
+        _emulator_profiles_cache.clear()
+        self.addCleanup(_platform_config_cache.clear)
+        self.addCleanup(_emulator_profiles_cache.clear)
+        self.profiles = profiles.load_emulator_profiles("emulators")
 
     def _manifest(self, regions):
         return self.gp.generate_manifest(
@@ -1355,8 +1363,8 @@ class ThePlatformsOwnSystemNamesAreAccepted(unittest.TestCase):
     file records psx as the native_system of sony-playstation."""
 
     def test_the_names_come_from_the_platform_file(self):
-        from common import load_platform_config
-        from common import platform_system_names
+        from model.platforms import load_platform_config
+        from model.systems import platform_system_names
 
         config = load_platform_config("batocera", str(REPO_ROOT / "platforms"))
         names = platform_system_names(config, list(config["systems"]))
@@ -1425,7 +1433,7 @@ class ANativeNameSelectsOneSetEverywhere(unittest.TestCase):
         import generate_pack as gp
         import pipeline
         import verify
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         cls.gp, cls.pipeline, cls.verify = gp, pipeline, verify
         cls.db = json.loads(db_path.read_text(encoding="utf-8"))
@@ -1449,7 +1457,8 @@ class ANativeNameSelectsOneSetEverywhere(unittest.TestCase):
         return {i.filename: i.file_size for i in infos}
 
     def test_pack_verify_and_installer_agree(self):
-        from common import load_platform_config, resolve_system_arg
+        from model.platforms import load_platform_config
+        from model.systems import resolve_system_arg
 
         for platform, native, system_id in self.CASES:
             with self.subTest(platform=platform, name=native):
@@ -1514,7 +1523,7 @@ class SystemNamesResolveOneWay(unittest.TestCase):
     }}
 
     def _resolve(self, value, config=CONFIG):
-        from common import resolve_system_arg
+        from model.systems import resolve_system_arg
 
         return resolve_system_arg(value, list(self.CONFIG["systems"]), config)
 

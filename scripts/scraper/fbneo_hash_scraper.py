@@ -21,7 +21,9 @@ from typing import Any
 
 import yaml
 
-from common import source_yaml_paths, write_text_atomic, yaml_load
+from model.profiles import source_yaml_paths
+from core.artifacts import write_text_atomic
+from model.safeparse import yaml_load
 
 from scripts.scraper._hash_merge import compute_diff, merge_fbneo_profile
 from scripts.scraper.fbneo_parser import parse_fbneo_source_tree

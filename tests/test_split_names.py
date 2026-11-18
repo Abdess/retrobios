@@ -19,8 +19,9 @@ from pathlib import Path
 
 import yaml
 
-import common
-from common import build_zip_contents_index, compute_hashes
+from model.platforms import _platform_config_cache
+from core.ziptools import build_zip_contents_index
+from core.hashing import compute_hashes
 from generate_pack import generate_split_packs
 
 
@@ -72,7 +73,7 @@ class SplitPartNames(unittest.TestCase):
             },
         }
         (self.platforms / "longplat.yml").write_text(yaml.dump(config))
-        common._platform_config_cache.clear()
+        _platform_config_cache.clear()
 
     def _split(self, group_by: str) -> list[str]:
         return generate_split_packs(

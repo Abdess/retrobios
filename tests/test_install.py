@@ -1828,7 +1828,7 @@ class TargetFlagIsAppliedOrRefused(unittest.TestCase):
                 self.assertEqual(targets[alias], targets["nintendo-switch"])
 
     def test_every_alias_resolves_to_its_canonical_core_list(self):
-        from common import load_target_config
+        from model.targets import load_target_config
 
         for name in ("install/targets/retroarch.json",):
             path = REPO_ROOT / name
@@ -1861,7 +1861,7 @@ class TargetFlagIsAppliedOrRefused(unittest.TestCase):
         "unknown target" on one side only, and a published null left behind
         once the builder filters a target makes the installer serve every core.
         """
-        from common import list_available_targets, load_target_config
+        from model.targets import list_available_targets, load_target_config
 
         platforms = str(REPO_ROOT / "platforms")
         sources = sorted(
@@ -2486,7 +2486,7 @@ class TestAvailablePlatforms(unittest.TestCase):
 
     def test_every_registered_platform_is_installable(self):
         """The installer serves every registered platform from its manifest."""
-        from common import list_registered_platforms
+        from model.registry import list_registered_platforms
 
         registered = set(
             list_registered_platforms(
@@ -3407,7 +3407,7 @@ class CaseVariants(unittest.TestCase):
         folded = {e["dest"] for e in manifest["files"]}
         # A case-keeping RetroArch install is the Lakka list, less what
         # Lakka's own core packages install (installed_on: lakka).
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         installed = {
             entry.get("path") or entry.get("name")

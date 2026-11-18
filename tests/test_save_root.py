@@ -119,7 +119,7 @@ class ThePlatformNamesItsSaveDirectory(unittest.TestCase):
         )
 
     def test_retroarch_and_lakka_have_one_retropie_none(self):
-        from common import load_platform_config
+        from model.platforms import load_platform_config
 
         platforms = str(REPO_ROOT / "platforms")
         self.assertEqual(save_layout(load_platform_config("retroarch", platforms)),
@@ -132,7 +132,7 @@ class ThePlatformNamesItsSaveDirectory(unittest.TestCase):
     def test_each_platform_running_these_cores_says_where(self):
         """The layout read from each platform's launch code, or none where
         saves sit beside each game or in a browser."""
-        from common import load_platform_config
+        from model.platforms import load_platform_config
 
         platforms = str(REPO_ROOT / "platforms")
         expected = {
@@ -211,7 +211,8 @@ class _Fixture(unittest.TestCase):
     OTHER_KEYS = b"PLATFORM KEYS"
 
     def setUp(self) -> None:
-        from common import _emulator_profiles_cache, _platform_config_cache
+        from model.profiles import _emulator_profiles_cache
+        from model.platforms import _platform_config_cache
 
         _emulator_profiles_cache.clear()
         _platform_config_cache.clear()
@@ -265,12 +266,12 @@ class _Fixture(unittest.TestCase):
         }))
 
     def config(self, name: str) -> dict:
-        from common import load_platform_config
+        from model.platforms import load_platform_config
 
         return load_platform_config(name, str(self.platforms))
 
     def profiles(self) -> dict:
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         return load_emulator_profiles(str(self.emulators))
 

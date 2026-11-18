@@ -19,7 +19,8 @@ import os
 import unittest
 from pathlib import Path
 
-from common import load_database, load_platform_config
+from model.database import load_database
+from model.platforms import load_platform_config
 import slots
 
 REPO_ROOT = Path(__file__).resolve().parents[1]

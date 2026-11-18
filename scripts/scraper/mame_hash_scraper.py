@@ -24,14 +24,12 @@ from typing import Any
 
 import yaml
 
-from common import (
-    github_token,
-    list_registered_platforms,
-    load_platform_config,
-    source_yaml_paths,
-    write_text_atomic,
-    yaml_load,
-)
+from core.github import github_token
+from model.registry import list_registered_platforms
+from model.platforms import load_platform_config
+from model.profiles import source_yaml_paths
+from core.artifacts import write_text_atomic
+from model.safeparse import yaml_load
 
 import upstream
 

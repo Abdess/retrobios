@@ -15,7 +15,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from common import resolve_platform_cores
+from resolve.cores import resolve_platform_cores
 from resolve.categories import GAME_DATA, EntryCategories
 
 

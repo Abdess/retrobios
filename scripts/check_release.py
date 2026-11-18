@@ -32,7 +32,8 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from check_release_assets import digests_of
-from common import list_release_pack_platforms, require_directory
+from model.registry import list_release_pack_platforms
+from core.cli import require_directory
 from model.largefiles import LARGE_FILES_REPO
 from release_record import RECORD, load_record
 
@@ -240,6 +241,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

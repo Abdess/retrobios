@@ -84,7 +84,7 @@ def _hashes(values: object) -> set[str]:
 
 
 def _allowed_members() -> dict[str, set[str]]:
-    from common import load_emulator_profiles
+    from model.profiles import load_emulator_profiles
     from romset_recipes import load_dat_recipes
 
     allowed: dict[str, set[str]] = defaultdict(set)
@@ -111,7 +111,8 @@ def _allowed_members() -> dict[str, set[str]]:
 
 
 def _platform_pins() -> tuple[set[str], dict[str, set[tuple[str, str]]]]:
-    from common import list_registered_platforms, load_platform_config
+    from model.registry import list_registered_platforms
+    from model.platforms import load_platform_config
 
     pinned: set[str] = set()
     zipped: dict[str, set[tuple[str, str]]] = defaultdict(set)
@@ -158,7 +159,7 @@ class HeldArchivesMatchTheirRecipes(unittest.TestCase):
         bios = REPO_ROOT / "bios"
         if not bios.is_dir() or not (REPO_ROOT / "recipes").is_dir():
             self.skipTest("bios/ or recipes/ is not present")
-        from common import variant_base_name
+        from resolve.localfile import variant_base_name
         from core.hashing import md5_composite_of
 
         allowed = _allowed_members()

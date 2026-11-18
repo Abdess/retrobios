@@ -12,7 +12,7 @@ import tests
 import unittest
 from pathlib import Path
 
-from common import load_emulator_profiles
+from model.profiles import load_emulator_profiles
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

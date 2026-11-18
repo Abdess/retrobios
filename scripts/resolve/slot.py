@@ -53,7 +53,7 @@ def platform_slot_claims(
     config: dict, profiles: dict, target_cores: set[str] | None = None
 ) -> dict[str, dict[str, dict]]:
     """What each emulator a platform runs declares at each key, unmerged."""
-    from common import resolve_platform_cores
+    from resolve.cores import resolve_platform_cores
 
     cores = resolve_platform_cores(config, profiles, target_cores=target_cores)
     return slot_claims({n: profiles[n] for n in cores if n in profiles})

@@ -31,7 +31,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import compute_hashes, safe_extract_zip
+from core.hashing import compute_hashes
+from core.ziptools import safe_extract_zip
 
 DEFAULT_API = "https://api.github.com"
 REPO = "Abdess/retrobios"
@@ -416,6 +417,6 @@ To check files already in place, use: python install.py --check
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

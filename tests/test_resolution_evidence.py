@@ -19,7 +19,8 @@ import zipfile
 import zlib
 from pathlib import Path
 
-import common
+from resolve.content import declared_hash_verdict
+from resolve.localfile import resolve_local_file, _resolve_agnostic
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -55,7 +56,7 @@ class DeclaredHashVerdict(unittest.TestCase):
             md5_list=[], crc_candidates=set(), zipped_file=None, declared_size=None,
         )
         base.update(declared)
-        return common.declared_hash_verdict(str(path), **base)
+        return declared_hash_verdict(str(path), **base)
 
     def test_no_declared_hash_means_the_name_is_all_there_is(self):
         self.assertEqual(
@@ -173,13 +174,13 @@ class AgnosticFallback(unittest.TestCase):
             "size": 64,
         }
         self.assertEqual(
-            common._resolve_agnostic(entry, self.files_db, False),
+            _resolve_agnostic(entry, self.files_db, False),
             (str(self.match), "agnostic_fallback"),
         )
 
     def test_a_declared_hash_outranks_the_shape(self):
         entry = {"agnostic": True, "agnostic_path_prefix": str(self.root), "size": 64}
-        self.assertIsNone(common._resolve_agnostic(entry, self.files_db, True))
+        self.assertIsNone(_resolve_agnostic(entry, self.files_db, True))
 
     def test_the_wrong_size_is_not_a_candidate(self):
         entry = {
@@ -187,7 +188,7 @@ class AgnosticFallback(unittest.TestCase):
             "agnostic_path_prefix": str(self.root),
             "size": 65,
         }
-        self.assertIsNone(common._resolve_agnostic(entry, self.files_db, False))
+        self.assertIsNone(_resolve_agnostic(entry, self.files_db, False))
 
     def test_a_size_range_is_honoured(self):
         entry = {
@@ -196,7 +197,7 @@ class AgnosticFallback(unittest.TestCase):
             "min_size": 32,
             "max_size": 128,
         }
-        self.assertIsNotNone(common._resolve_agnostic(entry, self.files_db, False))
+        self.assertIsNotNone(_resolve_agnostic(entry, self.files_db, False))
 
     def test_a_list_of_accepted_sizes_is_honoured(self):
         entry = {
@@ -205,19 +206,19 @@ class AgnosticFallback(unittest.TestCase):
             "size": [32, 64],
         }
         self.assertEqual(
-            common._resolve_agnostic(entry, self.files_db, False),
+            _resolve_agnostic(entry, self.files_db, False),
             (str(self.match), "agnostic_fallback"),
         )
         entry["size"] = [32, 65]
-        self.assertIsNone(common._resolve_agnostic(entry, self.files_db, False))
+        self.assertIsNone(_resolve_agnostic(entry, self.files_db, False))
 
     def test_without_a_prefix_nothing_is_scanned(self):
         entry = {"agnostic": True, "size": 64}
-        self.assertIsNone(common._resolve_agnostic(entry, self.files_db, False))
+        self.assertIsNone(_resolve_agnostic(entry, self.files_db, False))
 
     def test_an_entry_that_is_not_agnostic_is_left_alone(self):
         entry = {"agnostic_path_prefix": str(self.root), "size": 64}
-        self.assertIsNone(common._resolve_agnostic(entry, self.files_db, False))
+        self.assertIsNone(_resolve_agnostic(entry, self.files_db, False))
 
 
 class OneSpellingForAcceptedSizes(unittest.TestCase):
@@ -271,7 +272,7 @@ class SeveralAcceptedCrc32(unittest.TestCase):
             hack_first = sorted([crc[variant], crc[primary]])
             entry = {"name": "syscard3.pce", "crc32": hack_first}
             self.assertEqual(
-                common.resolve_local_file(entry, db), (str(primary), "crc32_exact")
+                resolve_local_file(entry, db), (str(primary), "crc32_exact")
             )
 
 
@@ -296,7 +297,7 @@ class TheMatchingArchiveForAMember(unittest.TestCase):
                                               "by_md5": {}, "by_crc32": {}, "by_path_suffix": {}}}
             entry = {"name": "neogeo.zip", "zipped_file": "sfix.sfix",
                      "md5": hashlib.md5(b"second").hexdigest()}
-            self.assertEqual(common.resolve_local_file(entry, db), (str(paths[1]), "zip_exact"))
+            self.assertEqual(resolve_local_file(entry, db), (str(paths[1]), "zip_exact"))
 
 
 if __name__ == "__main__":

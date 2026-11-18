@@ -15,7 +15,8 @@ from dataclasses import dataclass
 
 sys.path.insert(0, os.path.dirname(__file__))
 import siteinputs
-from common import GAME_DATA_TOPS, load_emulator_profiles
+from model.composition import GAME_DATA_TOPS
+from model.profiles import load_emulator_profiles
 
 
 def _copy_places(db: dict) -> dict[str, set[tuple[str, str, str]]]:

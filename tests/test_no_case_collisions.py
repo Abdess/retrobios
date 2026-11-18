@@ -74,11 +74,9 @@ class SharedGroupsAddNoSecondSpelling(unittest.TestCase):
     and verify counted one more required file."""
 
     def test_no_group_entry_respells_a_declared_destination(self) -> None:
-        from common import (
-            list_registered_platforms,
-            load_emulator_profiles,
-            load_platform_config,
-        )
+        from model.registry import list_registered_platforms
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
 
         # A spelling some code opens as its own file stands: NP2kai's rhythm
         # engine reads 2608_bd.wav, its fmgen engine 2608_BD.WAV, and a
@@ -117,7 +115,7 @@ class Np2kaiRhythmSamplesAreTwoSets(unittest.TestCase):
     from the profile shipped one spelling and reported both OK."""
 
     def test_each_spelling_is_its_own_entry(self):
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         files = load_emulator_profiles(str(REPO_ROOT / "emulators"))["np2kai"]["files"]
         paths = {entry.get("path") for entry in files}

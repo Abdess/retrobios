@@ -16,7 +16,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 
-from common import _norm_system_id, resolve_platform_cores, unresolved_platform_cores
+from model.systems import _norm_system_id
+from resolve.cores import resolve_platform_cores, unresolved_platform_cores
 from resolve.reconcile import HASH_FIELDS, NativeSystem, _hash_values
 from resolve.launchers import _names as launcher_names
 

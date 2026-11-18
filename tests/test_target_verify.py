@@ -20,7 +20,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from common import build_target_cores_cache
+from model.targets import build_target_cores_cache
 from generate_pack import _target_cores_for
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -94,9 +94,9 @@ class ASystemTheTargetDropsIsNamedAsSuch(unittest.TestCase):
     PLATFORMS = str(REPO_ROOT / "platforms")
 
     def test_both_tools_read_one_scope(self):
-        from common import (
-            load_emulator_profiles, load_platform_config, platform_scope_systems,
-        )
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
+        from resolve.cores import platform_scope_systems
 
         config = load_platform_config("retroarch", self.PLATFORMS)
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
@@ -106,7 +106,7 @@ class ASystemTheTargetDropsIsNamedAsSuch(unittest.TestCase):
         self.assertEqual(list(platform_scope_systems(config, profiles, None, wanted)), wanted)
 
     def test_the_message_names_the_target(self):
-        from common import system_scope_error
+        from resolve.cores import system_scope_error
 
         config = {"systems": {"sony-playstation-2": {}, "sony-playstation": {}}}
         self.assertEqual(
@@ -137,7 +137,7 @@ class ASplitBuildsOnlyTheTargetsSystems(unittest.TestCase):
         from unittest import mock
 
         import generate_pack
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         platforms = str(REPO_ROOT / "platforms")
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
@@ -172,7 +172,7 @@ class APlatformWithoutTheSystemIsOutOfScope(unittest.TestCase):
         import argparse
 
         import generate_pack
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         values = {"platforms_dir": str(REPO_ROOT / "platforms"), "target": None,
                   "all": True}

@@ -611,7 +611,7 @@ class EveryTargetCoreReachesAProfile(unittest.TestCase):
         import yaml
 
         import check_freshness
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         root = Path(__file__).resolve().parents[1]
         index = check_freshness.profile_name_index(
@@ -932,7 +932,7 @@ class OneNativeIdOneSystem(unittest.TestCase):
     FOLDS = {"fbneo", "pcenginecd"}
 
     def test_scrapers_agree_on_every_shared_native_id(self):
-        from common import _norm_system_id
+        from model.systems import _norm_system_id
 
         seen: dict[str, dict[str, str]] = {}
         for path in sorted((REPO_ROOT / "scripts" / "scraper").glob("*_scraper.py")):
@@ -977,11 +977,9 @@ class OneNativeIdOneSystem(unittest.TestCase):
     def test_every_platform_system_meets_a_profile_system(self):
         import yaml
 
-        from common import (
-            _norm_system_id,
-            load_emulator_profiles,
-            load_platform_config,
-        )
+        from model.systems import _norm_system_id
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
 
         known = set()
         for profile in load_emulator_profiles(str(REPO_ROOT / "emulators")).values():
@@ -1000,7 +998,7 @@ class OneNativeIdOneSystem(unittest.TestCase):
     def test_xroar_machines_reach_the_platforms_that_run_it(self):
         import yaml
 
-        from common import _norm_system_id
+        from model.systems import _norm_system_id
 
         xroar = yaml.safe_load((REPO_ROOT / "emulators" / "xroar.yml").read_text())
         machines = {_norm_system_id(s) for s in xroar["systems"]}

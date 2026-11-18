@@ -55,7 +55,7 @@ def _profile(name: str) -> dict:
     member's required from its groups (DuckStation's ps-bios), which the raw
     YAML no longer writes on the files."""
     if not _LOADED:
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         _LOADED.update(load_emulator_profiles(str(REPO_ROOT / "emulators"), skip_aliases=False))
     return _LOADED[name]

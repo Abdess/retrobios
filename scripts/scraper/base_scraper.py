@@ -17,7 +17,9 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable, NoReturn, Protocol
 
-from common import github_token, write_text_atomic, yaml_load
+from core.github import github_token
+from core.artifacts import write_text_atomic
+from model.safeparse import yaml_load
 
 
 @dataclass

@@ -15,7 +15,7 @@ from pathlib import Path
 
 import yaml
 
-from common import load_database
+from model.database import load_database
 from generate_site import _availability_check, _file_badges
 
 REPO_ROOT = Path(__file__).resolve().parent.parent

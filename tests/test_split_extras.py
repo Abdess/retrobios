@@ -17,7 +17,9 @@ from pathlib import Path
 
 import yaml
 
-from common import build_zip_contents_index, compute_hashes, load_emulator_profiles
+from core.ziptools import build_zip_contents_index
+from core.hashing import compute_hashes
+from model.profiles import load_emulator_profiles
 from generate_pack import PackRecord, generate_pack, generate_split_packs
 
 REPO_ROOT = Path(__file__).resolve().parent.parent

@@ -27,7 +27,10 @@ import zipfile
 from collections.abc import Callable, Iterator
 from pathlib import Path
 from core.artifacts import file_lock as _file_lock, set_plain_mode
-from common import InputMissing, github_token, platform_arg, require_platform, suggest_names, yaml_load
+from core.cli import InputMissing, suggest_names
+from core.github import github_token
+from model.cliargs import platform_arg, require_platform
+from model.safeparse import yaml_load
 
 try:
     import yaml
@@ -648,7 +651,7 @@ def refresh_all(
         )
     if any(results.values()):
         # A cache the resolver indexed in this process has changed under it.
-        from common import forget_data_dir_index
+        from resolve.datadirs import forget_data_dir_index
 
         forget_data_dir_index()
     return results
@@ -725,6 +728,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

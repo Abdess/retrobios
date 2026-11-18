@@ -25,7 +25,7 @@ class PC88FilesStayInPC88(unittest.TestCase):
         folder = REPO_ROOT / "bios" / "NEC" / "PC-98"
         if not folder.is_dir():
             self.skipTest("bios/NEC/PC-98 is absent")
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         readers: dict[str, set[str]] = {}
         for profile in load_emulator_profiles(str(REPO_ROOT / "emulators")).values():

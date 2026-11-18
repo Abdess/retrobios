@@ -10,18 +10,21 @@ from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypedDict
 
-from common import PROFILE_IDENTITY_FIELDS, _norm_system_id, entry_system_ids
+from model.profiles import PROFILE_IDENTITY_FIELDS, entry_system_ids
+from model.systems import _norm_system_id
 from model.alternatives import core_file_spares, required_only_spares, set_fields
-from common import archive_members, contents_members, holds_required_members
-from common import declared_root, expand_platform_declared_names, platform_declarations
-from common import load_emulator_profiles
-from common import resolution_is_hash_exact
-from common import resolve_local_file
-from common import resolve_platform_cores
-from common import core_system_dirs, platform_layouts, system_dir_path
-from common import standalone_set as platform_standalone_set
-from common import OUTER_ROOTS, outer_layout, sanitize_pack_path
-from common import declares_shape, shape_fits, size_fits
+from resolve.archives import archive_members, contents_members, holds_required_members
+from model.declarations import declared_root, expand_platform_declared_names, platform_declarations
+from model.profiles import load_emulator_profiles
+from resolve.localfile import resolution_is_hash_exact
+from resolve.localfile import resolve_local_file
+from resolve.cores import resolve_platform_cores
+from resolve.layout import core_system_dirs, system_dir_path
+from resolve.standalone import platform_layouts
+from resolve.standalone import standalone_set as platform_standalone_set
+from resolve.layout import OUTER_ROOTS, outer_layout
+from core.paths import sanitize_pack_path
+from resolve.content import declares_shape, shape_fits, size_fits
 from resolve.validation import deliverable, read_from_save_dir, read_from_system_dir
 from packpaths import libretro_systems, save_destination, save_layout
 from region import FILE_GROUP
@@ -201,7 +204,7 @@ def _map_emulator_to_slug(
     sys_to_slug: dict[str, str],
 ) -> str:
     """Map an emulator to a destination slug for slug-based platforms."""
-    from common import _norm_system_id
+    from model.systems import _norm_system_id
 
     emu_systems = set(profile.get("systems", []))
     # Direct match
@@ -1278,7 +1281,7 @@ class ExtraPlacement:
     """
 
     def __init__(self, config: dict, base_dest: str, profiles: dict) -> None:
-        from common import _norm_system_id
+        from model.systems import _norm_system_id
 
         self.prefix = _detect_extras_prefix(config, base_dest)
         self.slug_based, self.sys_to_slug = _detect_slug_structure(config)
@@ -2366,7 +2369,7 @@ def emulator_required_spares(
     is a member like a loose file: Kronos reads kronos/stvbios.zip, else
     stvbios.zip. The pack and verify --emulator both read this."""
     from model.alternatives import groups_of, rank_in, required_groups
-    from common import archive_entry
+    from resolve.archives import archive_entry
     from packpaths import _archive_destination, _resolve_destination
 
     reject_unknown("emulator_required_spares", options, SpareOptions.__optional_keys__)

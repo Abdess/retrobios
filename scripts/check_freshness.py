@@ -53,18 +53,12 @@ import export_native
 import pin_installer
 import refresh_data_dirs
 import upstream
-from common import (
-    InputMissing,
-    apply_target_overrides,
-    list_registered_platforms,
-    load_emulator_profiles,
-    load_platform_registry,
-    require_directory,
-    suggest_names,
-    upstream_profile_index,
-    write_text_atomic,
-    yaml_load,
-)
+from core.cli import InputMissing, require_directory, suggest_names
+from model.targets import apply_target_overrides
+from model.registry import list_registered_platforms, load_platform_registry
+from model.profiles import load_emulator_profiles, upstream_profile_index
+from core.artifacts import write_text_atomic
+from model.safeparse import yaml_load
 from exporter import discover_exporters
 from resolve.reconcile import build_native_model
 from scripts.scraper import game_dat_importer
@@ -709,7 +703,7 @@ def check_targets(
 
 def _declared_cores(platform: str) -> list[str]:
     """The cores and standalone emulators a platform's own file names."""
-    from common import load_platform_config
+    from model.platforms import load_platform_config
 
     try:
         config = load_platform_config(platform, str(REPO_ROOT / "platforms"))
@@ -1958,6 +1952,6 @@ def unknown_areas_message(unknown: list[str]) -> str:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

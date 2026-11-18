@@ -23,7 +23,8 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
-from common import InputMissing, yaml_load
+from core.cli import InputMissing
+from model.safeparse import yaml_load
 
 log = logging.getLogger(__name__)
 
@@ -229,6 +230,6 @@ def unanswered(report: dict) -> list[dict]:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

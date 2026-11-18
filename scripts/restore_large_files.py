@@ -25,7 +25,8 @@ import tempfile
 
 sys.path.insert(0, os.path.dirname(__file__))
 from core.artifacts import set_plain_mode
-from common import copy_file_atomic, load_database
+from core.artifacts import copy_file_atomic
+from model.database import load_database
 
 
 def gitignored_paths(gitignore: str) -> set[str]:
@@ -153,6 +154,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

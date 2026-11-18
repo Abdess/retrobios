@@ -34,7 +34,8 @@ import generate_site as gs
 import sitestarlight
 import validate_site
 import generate_site
-from common import list_registered_platforms, load_emulator_profiles
+from model.registry import list_registered_platforms
+from model.profiles import load_emulator_profiles
 from tests.test_site_nav import ANCHORS, _nav, _present
 
 REPO_ROOT = Path(__file__).resolve().parents[1]

@@ -20,7 +20,8 @@ from pathlib import Path
 
 import yaml
 
-from common import github_token, yaml_load
+from core.github import github_token
+from model.safeparse import yaml_load
 
 from ..emudeck_launchers import SCRIPT_SUFFIXES, emulator_of_script
 from . import BaseTargetScraper

@@ -22,7 +22,7 @@ class SegaFilesStayUnderSega(unittest.TestCase):
         folder = REPO_ROOT / "bios" / "Microsoft" / "MSX"
         if not folder.is_dir():
             self.skipTest("bios/Microsoft/MSX is absent")
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         systems: dict[str, set[str]] = {}
         for profile in load_emulator_profiles(str(REPO_ROOT / "emulators")).values():

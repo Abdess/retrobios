@@ -10,7 +10,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from common import resolve_local_file
+from resolve.localfile import resolve_local_file
 from generate_db import _path_suffixes
 
 

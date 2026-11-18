@@ -18,7 +18,8 @@ from pathlib import Path
 
 import yaml
 
-import common
+from model.platforms import _platform_config_cache, load_platform_config
+from model.profiles import load_emulator_profiles, _emulator_profiles_cache
 import generate_db
 import generate_pack as builder
 from packextras import platform_region_groups
@@ -75,13 +76,13 @@ class SlugPlatform(unittest.TestCase):
             yaml.dump({"platforms": {"slugs": {"config": "slugs.yml"}}})
         )
         (self.emulators / "dosbox.yml").write_text(PROFILE)
-        common._platform_config_cache.clear()
-        common._emulator_profiles_cache.clear()
-        self.profiles = common.load_emulator_profiles("emulators")
+        _platform_config_cache.clear()
+        _emulator_profiles_cache.clear()
+        self.profiles = load_emulator_profiles("emulators")
 
     def tearDown(self):
-        common._platform_config_cache.clear()
-        common._emulator_profiles_cache.clear()
+        _platform_config_cache.clear()
+        _emulator_profiles_cache.clear()
         os.chdir(self._cwd)
         self._tmp.cleanup()
 
@@ -138,8 +139,8 @@ class RegionKeysForEveryClaimant(unittest.TestCase):
                     f"emulator: {name}\ntype: libretro\nsystems: [sys]\ncores: [{name}]\n"
                     f"files:\n  - name: jp.bin\n    region: [japan]\n{extra}"
                 )
-            common._emulator_profiles_cache.clear()
-            profiles = common.load_emulator_profiles("emulators")
+            _emulator_profiles_cache.clear()
+            profiles = load_emulator_profiles("emulators")
             config = {"platform": "P", "version": "2.1", "verification_mode": "existence", "cores": ["one", "two"],
                       "systems": {"sys": {"files": []}}}
             _groups, extra_dests = platform_region_groups(
@@ -197,12 +198,12 @@ class FlatFirmwareFolder(unittest.TestCase):
                     yaml.dump({"platforms": {"flat": entry}})
                 )
                 Path("emulators/psx.yml").write_text(self.PROFILE)
-                common._platform_config_cache.clear()
-                common._emulator_profiles_cache.clear()
-                profiles = common.load_emulator_profiles("emulators")
+                _platform_config_cache.clear()
+                _emulator_profiles_cache.clear()
+                profiles = load_emulator_profiles("emulators")
                 if report:
                     return verify_platform(
-                        common.load_platform_config("flat", "platforms"), db,
+                        load_platform_config("flat", "platforms"), db,
                         "emulators", profiles,
                     )
                 return builder.generate_manifest(
@@ -210,8 +211,8 @@ class FlatFirmwareFolder(unittest.TestCase):
                     emulators_dir="emulators", emu_profiles=profiles, offline=True,
                 )
             finally:
-                common._platform_config_cache.clear()
-                common._emulator_profiles_cache.clear()
+                _platform_config_cache.clear()
+                _emulator_profiles_cache.clear()
                 os.chdir(previous)
 
     def test_a_nested_file_is_omitted_with_its_reason(self):
@@ -267,8 +268,8 @@ class UserProvidedIsNeverTakenFromTheCollection(unittest.TestCase):
                 "emulator: Fake\ntype: libretro\nsystems: [psx]\ncores: [fake]\n"
                 "files:\n  - name: scph5501.bin\n    storage: user_provided\n"
             )
-            common._emulator_profiles_cache.clear()
-            self.addCleanup(common._emulator_profiles_cache.clear)
+            _emulator_profiles_cache.clear()
+            self.addCleanup(_emulator_profiles_cache.clear)
             result = verify_emulator(["fake"], "emulators", db)
         statuses = [d["status"] for d in result["details"] if d["name"] == "scph5501.bin"]
         self.assertEqual(statuses, [Status.MISSING])
@@ -298,9 +299,9 @@ class OnePathCountsOnce(unittest.TestCase):
                     f"emulator: {core}\ntype: libretro\nsystems: [amiga]\ncores: [{core}]\n"
                     f"files:\n  - name: rom.key\n    required: false\n{region}"
                 )
-            common._emulator_profiles_cache.clear()
-            self.addCleanup(common._emulator_profiles_cache.clear)
-            profiles = common.load_emulator_profiles("emulators")
+            _emulator_profiles_cache.clear()
+            self.addCleanup(_emulator_profiles_cache.clear)
+            profiles = load_emulator_profiles("emulators")
             config = {"platform": "P", "version": "2.1", "verification_mode": "existence", "cores": ["one", "two"],
                       "systems": {"amiga": {"files": []}}}
             report = verify_platform(config, db, "emulators", profiles)

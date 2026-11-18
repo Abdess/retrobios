@@ -141,11 +141,9 @@ def release_pack_labels(root: Path = REPO_ROOT) -> dict[str, str]:
     refuses a pack whose name does not spell the platform, so a platform
     outside these groups has no pack to copy, whatever its file list.
     """
-    from common import (
-        group_identical_platforms,
-        list_release_pack_platforms,
-        load_platform_config,
-    )
+    from resolve.grouping import group_identical_platforms
+    from model.registry import list_release_pack_platforms
+    from model.platforms import load_platform_config
     from generate_pack import _name_part, _platform_pack_stem
 
     platforms_dir = str(root / "platforms")
@@ -220,6 +218,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

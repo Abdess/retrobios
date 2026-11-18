@@ -35,11 +35,8 @@ from html import unescape
 
 import generate_site
 import sitestarlight
-from common import (
-    list_registered_platforms,
-    load_platform_config,
-    load_platform_registry,
-)
+from model.registry import list_registered_platforms, load_platform_registry
+from model.platforms import load_platform_config
 
 from siteguides import DEVICE_GROUPS
 
@@ -169,7 +166,7 @@ class EmulatorsOneLevelDeep(unittest.TestCase):
 
     def test_every_initial_has_its_section_on_the_index(self):
         """A letter in the sidebar lands on the section of that letter."""
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         anchors = _index_anchors(generate_site.generate_emulators_index(profiles))
@@ -179,7 +176,7 @@ class EmulatorsOneLevelDeep(unittest.TestCase):
                 self.assertIn(sitestarlight.toc_slug(label), anchors)
 
     def test_every_initial_holds_pages(self):
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         nav = generate_site._emulator_nav(load_emulator_profiles(str(REPO_ROOT / "emulators")))
         for group in nav[1:]:

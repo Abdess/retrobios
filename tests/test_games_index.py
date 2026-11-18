@@ -236,7 +236,7 @@ class CommittedData(unittest.TestCase):
         setups = load_setups(ROOT / "platforms" / "romfolders")
         if not setups:
             self.skipTest("no setup scraped")
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
         from romfolders import ProfileResolver
 
         resolver = SystemResolver.from_repo(str(ROOT / "emulators"), str(ROOT / "platforms"))
@@ -257,7 +257,7 @@ class CommittedData(unittest.TestCase):
         unrecognised GBA game got none of the nintendo-gba files. A CD
         folder run by mednafen_pce_fast, which lists nec-pc-engine, got no
         System Card."""
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
         from romfolders import ProfileResolver, folder_names
 
         setups = load_setups(ROOT / "platforms" / "romfolders")
@@ -301,7 +301,7 @@ class CommittedData(unittest.TestCase):
         self.assertIn("gba_bios.bin", dests)
 
     def test_a_folder_of_a_several_machine_core_holds_its_machines(self) -> None:
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         resolver = SystemResolver.from_repo(str(ROOT / "emulators"), str(ROOT / "platforms"))
         profiles = gi.Profiles(load_emulator_profiles(str(ROOT / "emulators")), resolver)
@@ -344,7 +344,7 @@ KNOWN_UNRESOLVED = {
 
 class EveryCoreResolvesOrIsExplained(unittest.TestCase):
     def setUp(self) -> None:
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
         from romfolders import ProfileResolver
 
         self.resolver = SystemResolver.from_repo(str(ROOT / "emulators"), str(ROOT / "platforms"))

@@ -77,7 +77,7 @@ def es_systems_libretro_systems(text: str) -> dict[str, list[str]]:
     ROM>, the system's <path> folder below %ROMPATH%. A commented-out
     command is no element and counts for nothing.
     """
-    from common import parse_untrusted_xml
+    from model.safeparse import parse_untrusted_xml
 
     found: dict[str, set[str]] = {}
     for system in parse_untrusted_xml(text, "es_systems.xml").iter("system"):
@@ -411,7 +411,7 @@ class Scraper(BaseScraper):
 
     def _fetch_remote_manifests(self) -> list[tuple[str, dict]]:
         """Fetch component manifests via GitHub API."""
-        from common import github_token
+        from core.github import github_token
 
         token = github_token()
         headers = {"User-Agent": "retrobios-scraper/1.0"}

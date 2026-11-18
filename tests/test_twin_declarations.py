@@ -17,7 +17,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import common
+from model.profiles import _emulator_profiles_cache
 import generate_db
 from verify import verify_platform
 
@@ -45,10 +45,10 @@ class TwinDeclarations(unittest.TestCase):
         self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
         self.emulators = Path(self._tmp.name) / "emulators"
         self.emulators.mkdir()
-        common._emulator_profiles_cache.clear()
+        _emulator_profiles_cache.clear()
 
     def tearDown(self):
-        common._emulator_profiles_cache.clear()
+        _emulator_profiles_cache.clear()
         os.chdir(self._cwd)
         self._tmp.cleanup()
 

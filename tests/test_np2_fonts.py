@@ -20,7 +20,7 @@ from pathlib import Path
 
 import yaml
 
-from common import resolve_local_file
+from resolve.localfile import resolve_local_file
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 

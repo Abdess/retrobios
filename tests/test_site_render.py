@@ -107,7 +107,8 @@ class BundledFilesAreNotToSource(unittest.TestCase):
         """cdbios.bin, read by standalone BlastEm only and never on RetroBat,
         was badged retroarch, lakka and retrobat."""
         import generate_site
-        from common import load_platform_config, resolve_platform_cores
+        from model.platforms import load_platform_config
+        from resolve.cores import resolve_platform_cores
 
         root = Path(__file__).resolve().parents[1]
         profile = yaml.safe_load((root / "emulators" / "blastem.yml").read_text(encoding="utf-8"))
@@ -198,7 +199,9 @@ class DirectoryMembersNameTheirEmulator(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        from common import build_zip_contents_index, load_database, load_emulator_profiles
+        from core.ziptools import build_zip_contents_index
+        from model.database import load_database
+        from model.profiles import load_emulator_profiles
         from cross_reference import FileConsumers
 
         cls.db = load_database(str(REPO_ROOT / "database.json"))
@@ -504,7 +507,8 @@ class AMemberIsReadInItsArchive(unittest.TestCase):
         import json
 
         import generate_site as gs
-        from common import archive_entry, resolve_local_file
+        from resolve.archives import archive_entry
+        from resolve.localfile import resolve_local_file
         from cross_reference import FileConsumers
 
         db = json.loads((REPO_ROOT / "database.json").read_text(encoding="utf-8"))

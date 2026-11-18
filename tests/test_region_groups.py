@@ -47,7 +47,9 @@ class TheEnterpriseKeepsItsRom(unittest.TestCase):
         if not (REPO_ROOT / "database.json").exists():
             self.skipTest("database.json is not built")
         import region
-        from common import load_database, load_emulator_profiles, load_platform_config
+        from model.database import load_database
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
         from packextras import platform_region_groups
 
         db = load_database(str(REPO_ROOT / "database.json"))
@@ -65,7 +67,7 @@ class TheEnterpriseKeepsItsRom(unittest.TestCase):
     def test_brd_rom_is_chosen_by_the_content_not_a_territory(self):
         # core.hpp:221-226: "[req brd-rom]" in the content name selects it,
         # whatever the user's country, as "[req zrom]" selects hun.rom.
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         entry = next(
@@ -107,8 +109,10 @@ class ALosingClaimIsKeyedLikeTheWinner(unittest.TestCase):
     def test_a_losing_claim_carries_the_declared_root(self):
         import os
 
-        from common import declared_root, load_database, load_emulator_profiles
-        from common import load_platform_config
+        from model.declarations import declared_root
+        from model.database import load_database
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
         from packextras import platform_region_groups
 
         previous = os.getcwd()

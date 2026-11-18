@@ -34,14 +34,14 @@ from collections.abc import Callable
 from pathlib import Path
 
 import release_record
-from common import (
+from model.registry import (
     list_registered_platforms,
     list_release_pack_platforms,
-    load_platform_config,
     load_platform_registry,
-    require_directory,
-    write_text_atomic,
 )
+from model.platforms import load_platform_config
+from core.cli import require_directory
+from core.artifacts import write_text_atomic
 from siteguides import install_command
 
 REPO = "Abdess/retrobios"
@@ -330,6 +330,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

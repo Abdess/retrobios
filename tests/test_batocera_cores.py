@@ -82,7 +82,8 @@ class AnEmulatorLaunchedBothWaysGetsBothLayouts(unittest.TestCase):
         self.assertEqual(standalone & es_systems_libretro(text), {"dolphin"})
 
     def test_the_layouts_are_both(self):
-        from common import DUAL_MODE_PREFIX, platform_layouts
+        from resolve.layout import DUAL_MODE_PREFIX
+        from resolve.standalone import platform_layouts
 
         profile = {"type": "standalone + libretro", "cores": ["dolphin"], "files": []}
         both = platform_layouts("dolphin", profile, {"dolphin", DUAL_MODE_PREFIX + "dolphin"})
@@ -127,7 +128,7 @@ class DualModeNameReachesTheLibretroBuild(unittest.TestCase):
     left out of the platform."""
 
     def test_both_builds_of_a_dual_mode_name_resolve(self):
-        from common import resolve_platform_cores
+        from resolve.cores import resolve_platform_cores
 
         profiles = {
             "pcsx2": {"type": "standalone", "cores": ["pcsx2"]},
@@ -145,7 +146,7 @@ class APlatformsOwnBuildWinsItsName(unittest.TestCase):
     the standalone uae4all2: one name, two programs."""
 
     def test_built_by_beats_the_key_match_for_that_platform_only(self):
-        from common import resolve_platform_cores
+        from resolve.cores import resolve_platform_cores
 
         profiles = {
             "uae4all": {"type": "standalone", "cores": ["uae4all"]},
@@ -164,7 +165,7 @@ class APatchedLibretroBuildTakesItsNameOnly(unittest.TestCase):
     the same name, stays."""
 
     def test_own_libretro_build_keeps_the_standalone_of_a_dual_name(self):
-        from common import resolve_platform_cores
+        from resolve.cores import resolve_platform_cores
 
         profiles = {
             "pcsx2": {"type": "standalone", "source": "s", "cores": ["pcsx2"]},
@@ -179,7 +180,9 @@ class APatchedLibretroBuildTakesItsNameOnly(unittest.TestCase):
         self.assertEqual(resolve_platform_cores(config, profiles), {"lrps2-own"})
 
     def test_the_registry_resolves_each_platform_build(self):
-        from common import load_emulator_profiles, load_platform_config, resolve_platform_cores
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
+        from resolve.cores import resolve_platform_cores
 
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         platforms = str(REPO_ROOT / "platforms")

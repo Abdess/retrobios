@@ -18,7 +18,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from common import resolve_local_file
+from resolve.localfile import resolve_local_file
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -160,7 +160,7 @@ class RetailDashboardTree(unittest.TestCase):
     def test_partition_c_resolves_by_path_for_both_importers(self):
         import yaml
 
-        from common import load_database
+        from model.database import load_database
 
         db_path = REPO_ROOT / "database.json"
         if not db_path.exists():

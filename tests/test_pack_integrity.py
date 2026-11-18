@@ -43,7 +43,7 @@ def _pack_path(platform_name: str) -> str | None:
 
 
 def _registered_platforms() -> list[str]:
-    from common import list_registered_platforms
+    from model.registry import list_registered_platforms
 
     return list_registered_platforms(PLATFORMS_DIR)
 
@@ -55,7 +55,9 @@ def _profiles_newer_than(path: str, platform_name: str) -> list[str]:
     comment edited in any of 500 profiles used to disarm the integrity
     check of every pack on disk.
     """
-    from common import load_emulator_profiles, load_platform_config, resolve_platform_cores
+    from model.profiles import load_emulator_profiles
+    from model.platforms import load_platform_config
+    from resolve.cores import resolve_platform_cores
 
     built = os.path.getmtime(path)
     config = load_platform_config(platform_name, PLATFORMS_DIR)

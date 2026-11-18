@@ -15,7 +15,11 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-import common
+from core.cli import SourceUnreadable
+from core.github import github_token, _gh_cli_token
+from model.profiles import select_emulator_profiles, ProfileSelectionError
+from model.registry import list_registered_platforms
+from model.targets import load_target_config, build_target_cores_cache
 import diff_truth
 import pipeline
 from resolve import truth
@@ -37,17 +41,17 @@ class ABuildbotNameSelectsItsProfile(unittest.TestCase):
     }
 
     def test_a_core_name_serves_the_profile(self):
-        selected = common.select_emulator_profiles(["pcfx"], self.PROFILES)
+        selected = select_emulator_profiles(["pcfx"], self.PROFILES)
         self.assertEqual([name for name, _profile in selected], ["beetle_pcfx"])
 
     def test_a_name_two_profiles_claim_names_both(self):
-        with self.assertRaises(common.ProfileSelectionError) as caught:
-            common.select_emulator_profiles(["shared"], self.PROFILES)
+        with self.assertRaises(ProfileSelectionError) as caught:
+            select_emulator_profiles(["shared"], self.PROFILES)
         self.assertIn("a, b", str(caught.exception))
 
     def test_an_unknown_name_still_gets_a_hint(self):
-        with self.assertRaises(common.ProfileSelectionError) as caught:
-            common.select_emulator_profiles(["pcsx3"], self.PROFILES)
+        with self.assertRaises(ProfileSelectionError) as caught:
+            select_emulator_profiles(["pcsx3"], self.PROFILES)
         self.assertIn("Close match", str(caught.exception))
 
     def test_cross_reference_reports_the_resolved_profile(self):
@@ -79,7 +83,7 @@ class AMistypedTargetGetsTheClosestName(unittest.TestCase):
                 "p:\n  targets:\n    nintendo-switch:\n      aliases: [switch]\n"
             )
             with self.assertRaises(ValueError) as caught:
-                common.load_target_config("p", "swich", tmp)
+                load_target_config("p", "swich", tmp)
         message = str(caught.exception)
         self.assertIn("Close matches: switch.", message)
         self.assertIn("lists all 31", message)
@@ -146,7 +150,7 @@ class ADamagedProfileNamesItself(unittest.TestCase):
     def test_a_damaged_file_is_not_an_absent_one(self):
         """Ten callers skip a platform whose file is absent (except
         FileNotFoundError): a damaged one has to stop them instead."""
-        self.assertFalse(issubclass(common.SourceUnreadable, FileNotFoundError))
+        self.assertFalse(issubclass(SourceUnreadable, FileNotFoundError))
 
 
 class TheVerdictClosesARedirectedReport(unittest.TestCase):
@@ -158,7 +162,7 @@ class TheVerdictClosesARedirectedReport(unittest.TestCase):
         program = (
             "import sys\n"
             "sys.path.insert(0, 'scripts')\n"
-            "from common import run_cli\n"
+            "from core.cli import run_cli\n"
             "def main():\n"
             "    print('report')\n"
             "    print('ERROR: verdict', file=sys.stderr)\n"
@@ -238,10 +242,10 @@ class AMistypedTargetAcrossAllPlatforms(unittest.TestCase):
     INFO lines, two of which held the suggestion."""
 
     def test_the_refusal_suggests_and_names_the_platforms(self):
-        platforms = common.list_registered_platforms(str(REPO_ROOT / "platforms"))
+        platforms = list_registered_platforms(str(REPO_ROOT / "platforms"))
         out = io.StringIO()
         with contextlib.redirect_stdout(out), self.assertRaises(ValueError) as caught:
-            common.build_target_cores_cache(
+            build_target_cores_cache(
                 platforms, "swich", str(REPO_ROOT / "platforms"), is_all=True
             )
         self.assertIn("Close matches: switch (", str(caught.exception))
@@ -544,7 +548,7 @@ class APlatformWithoutTargetsSaysSo(unittest.TestCase):
             for name in ("retroarch", "batocera", "_overrides"):
                 (Path(tmp) / "targets" / f"{name}.yml").write_text("targets: {}\n")
             with self.assertRaises(FileNotFoundError) as caught:
-                common.load_target_config("misterfpga", "switch", tmp)
+                load_target_config("misterfpga", "switch", tmp)
         self.assertEqual(
             str(caught.exception),
             "misterfpga has no hardware targets: drop --target "
@@ -806,7 +810,7 @@ class NoScriptReadsTheTokenOnItsOwn(unittest.TestCase):
 
     READS = ('environ.get("GITHUB_TOKEN"', "environ['GITHUB_TOKEN']",
              'environ["GITHUB_TOKEN"]', 'environ.get("GH_TOKEN"')
-    OWNERS = {"scripts/common.py", "scripts/download.py"}
+    OWNERS = {"scripts/core/github.py", "scripts/download.py"}
 
     def test_every_reader_asks_github_token(self):
         for path in sorted((REPO_ROOT / "scripts").rglob("*.py")):
@@ -825,8 +829,8 @@ class TheGitHubTokenComesFromGh(unittest.TestCase):
     scrapers went anonymous for a maintainer logged in to gh."""
 
     def setUp(self):
-        common._gh_cli_token.cache_clear()
-        self.addCleanup(common._gh_cli_token.cache_clear)
+        _gh_cli_token.cache_clear()
+        self.addCleanup(_gh_cli_token.cache_clear)
         env = {k: v for k, v in os.environ.items()
                if k not in ("GITHUB_TOKEN", "GH_TOKEN", "RETROBIOS_OFFLINE")}
         patcher = mock.patch.dict(os.environ, env, clear=True)
@@ -842,27 +846,27 @@ class TheGitHubTokenComesFromGh(unittest.TestCase):
 
     def test_gh_answers_when_the_variable_is_unset(self):
         with self._gh():
-            self.assertEqual(common.github_token(), "gho_fromgh")
+            self.assertEqual(github_token(), "gho_fromgh")
         # Subprocesses of the run inherit it.
         self.assertEqual(os.environ.get("GITHUB_TOKEN"), "gho_fromgh")
 
     def test_the_variable_wins(self):
         os.environ["GITHUB_TOKEN"] = "set"
         with self._gh() as run:
-            self.assertEqual(common.github_token(), "set")
+            self.assertEqual(github_token(), "set")
         run.assert_not_called()
 
     def test_no_gh_means_anonymous(self):
         with mock.patch("subprocess.run", side_effect=FileNotFoundError("gh")):
-            self.assertEqual(common.github_token(), "")
+            self.assertEqual(github_token(), "")
         with self._gh("", 1):
-            common._gh_cli_token.cache_clear()
-            self.assertEqual(common.github_token(), "")
+            _gh_cli_token.cache_clear()
+            self.assertEqual(github_token(), "")
 
     def test_offline_runs_never_ask(self):
         os.environ["RETROBIOS_OFFLINE"] = "1"
         with self._gh() as run:
-            self.assertEqual(common.github_token(), "")
+            self.assertEqual(github_token(), "")
         run.assert_not_called()
 
     def test_every_api_caller_reads_it(self):
@@ -927,7 +931,7 @@ class CitedCommandsRunWhenPasted(unittest.TestCase):
             targets.mkdir()
             (targets / "p.yml").write_text("targets:\n  switch:\n    cores: [a]\n")
             with self.assertRaises(ValueError) as caught:
-                common.load_target_config("p", "swich", tmp)
+                load_target_config("p", "swich", tmp)
         self.assertIn("python scripts/verify.py --platform p --list-targets",
                       str(caught.exception))
 

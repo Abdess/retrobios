@@ -23,7 +23,8 @@ from unittest import mock
 
 import yaml
 
-from common import _emulator_profiles_cache, load_platform_config
+from model.profiles import _emulator_profiles_cache
+from model.platforms import load_platform_config
 from generate_pack import generate_pack
 from verify import verify_platform
 

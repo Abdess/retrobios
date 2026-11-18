@@ -14,7 +14,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import list_registered_platforms
+from model.registry import list_registered_platforms
 
 PLATFORMS_DIR = "platforms"
 
@@ -27,7 +27,7 @@ def list_platforms() -> list[str]:
 def main() -> None:
     parser = argparse.ArgumentParser(allow_abbrev=False, description="List available platforms")
     args = parser.parse_args()
-    from common import work_from_repo_root
+    from model.cliargs import work_from_repo_root
 
     work_from_repo_root(args, parser, [])
 
@@ -46,6 +46,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

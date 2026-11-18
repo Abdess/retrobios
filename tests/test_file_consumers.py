@@ -153,7 +153,7 @@ class ReadersFollowTheDataTrees(unittest.TestCase):
     def tearDown(self):
         import os
 
-        from common import forget_data_dir_index
+        from resolve.datadirs import forget_data_dir_index
 
         os.chdir(self._previous)
         forget_data_dir_index()
@@ -206,7 +206,7 @@ class TheDestinationBasenameComesLast(unittest.TestCase):
         self._tree.cleanup()
 
     def test_the_resolver_keeps_the_entry_name(self):
-        from common import resolve_local_file
+        from resolve.localfile import resolve_local_file
 
         path, status = resolve_local_file(
             {**self.entry, "source_profile": "melonds-nightly"}, self.db,
@@ -222,7 +222,7 @@ class TheDestinationBasenameComesLast(unittest.TestCase):
 
     def test_a_descriptive_name_still_reaches_the_basename(self):
         """name: "MDA font ROM", path: "mda.rom" is the case the basename step serves."""
-        from common import resolve_local_file
+        from resolve.localfile import resolve_local_file
 
         path, _ = resolve_local_file(
             {"name": "Wii NAND image", "path": "nand.bin"}, self.db, dest_hint="nand.bin",
@@ -242,10 +242,10 @@ class EveryReaderIsTheEmulatorPackFile(unittest.TestCase):
         import json
         import os
 
-        from common import (
-            build_zip_contents_index, load_data_dir_registry,
-            load_emulator_profiles, resolve_local_file,
-        )
+        from core.ziptools import build_zip_contents_index
+        from model.registry import load_data_dir_registry
+        from model.profiles import load_emulator_profiles
+        from resolve.localfile import resolve_local_file
 
         db_path = REPO_ROOT / "database.json"
         if not db_path.exists():

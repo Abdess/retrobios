@@ -14,11 +14,8 @@ import re
 import unittest
 from pathlib import Path
 
-from common import (
-    preferred_profile,
-    resolve_platform_cores,
-    upstream_profile_index,
-)
+from model.profiles import preferred_profile, upstream_profile_index
+from resolve.cores import resolve_platform_cores
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 

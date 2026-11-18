@@ -21,7 +21,7 @@ from pathlib import Path
 
 import yaml
 
-import common
+from model.platforms import _platform_config_cache
 import generate_db
 import generate_pack as builder
 from verify import Status, verify_platform
@@ -49,7 +49,7 @@ class TwinDeclarationStatus(unittest.TestCase):
         Path("platforms/_registry.yml").write_text(
             yaml.dump({"platforms": {"twin": {"config": "twin.yml"}}})
         )
-        self.addCleanup(common._platform_config_cache.clear)
+        self.addCleanup(_platform_config_cache.clear)
 
     def tearDown(self):
         os.chdir(self._cwd)
@@ -66,7 +66,7 @@ class TwinDeclarationStatus(unittest.TestCase):
             },
         }
         Path("platforms/twin.yml").write_text(yaml.dump(config))
-        common._platform_config_cache.clear()
+        _platform_config_cache.clear()
         return config
 
     def _check(self, config: dict) -> None:

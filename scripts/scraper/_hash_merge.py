@@ -15,7 +15,9 @@ from pathlib import Path
 from typing import Any
 
 
-from common import PROFILE_BACKUP_SUFFIX, write_text_atomic, yaml_load
+from model.profiles import PROFILE_BACKUP_SUFFIX
+from core.artifacts import write_text_atomic
+from model.safeparse import yaml_load
 
 
 _MAME_RELEASE_RE = re.compile(r"^0\.\d+")

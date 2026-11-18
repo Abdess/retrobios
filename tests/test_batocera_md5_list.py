@@ -17,7 +17,7 @@ import unittest
 import zipfile
 from pathlib import Path
 
-from common import resolve_local_file
+from resolve.localfile import resolve_local_file
 from exporter import discover_exporters
 from export_native import landed_changes
 from resolve.reconcile import NativeFile, build_native_model

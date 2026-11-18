@@ -180,7 +180,7 @@ class ContentList(unittest.TestCase):
     def test_every_region_system_has_a_game_per_region_or_says_why(self) -> None:
         """A system whose BIOS a profile ties to JP, US and EU has a game for
         each of the three, or the content list says why it has none."""
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         import yaml
 

@@ -21,7 +21,8 @@ from pathlib import Path
 
 import yaml
 
-import common
+from model.platforms import _platform_config_cache
+from model.profiles import load_emulator_profiles, _emulator_profiles_cache
 import generate_db
 import generate_pack as builder
 from resolve.validation import core_size_refusal
@@ -86,13 +87,13 @@ class _Collection(unittest.TestCase):
         )
         Path("emulators/sized.yml").write_text(SIZED)
         Path("emulators/unsized.yml").write_text(UNSIZED)
-        common._platform_config_cache.clear()
-        common._emulator_profiles_cache.clear()
-        self.profiles = common.load_emulator_profiles("emulators")
+        _platform_config_cache.clear()
+        _emulator_profiles_cache.clear()
+        self.profiles = load_emulator_profiles("emulators")
 
     def tearDown(self):
-        common._platform_config_cache.clear()
-        common._emulator_profiles_cache.clear()
+        _platform_config_cache.clear()
+        _emulator_profiles_cache.clear()
         os.chdir(self._cwd)
         self._tmp.cleanup()
 
@@ -156,8 +157,8 @@ class SizeTheCoreRefuses(_Collection):
         Path("emulators/sized.yml").write_text(
             SIZED + "  - name: ROM\n    path: ROM\n    size: 8\n    validation: [size]\n"
         )
-        common._emulator_profiles_cache.clear()
-        self.profiles = common.load_emulator_profiles("emulators")
+        _emulator_profiles_cache.clear()
+        self.profiles = load_emulator_profiles("emulators")
         self.assertTrue(self._report("sized")["in_repo"])
         self.assertIn("ROM", self._pack_members())
         self.assertIn("ROM", {f["dest"] for f in self._manifest()["files"]})

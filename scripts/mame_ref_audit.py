@@ -27,7 +27,7 @@ from dataclasses import dataclass
 sys.path.insert(0, os.path.dirname(__file__))
 
 import upstream
-from common import require_directory
+from core.cli import require_directory
 from model.safeparse import yaml_load
 from scraper.mame_parser import _MACHINE_MACROS, strip_comments
 
@@ -173,6 +173,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

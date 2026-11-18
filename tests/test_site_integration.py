@@ -118,7 +118,7 @@ class NodeCompileCache(unittest.TestCase):
 
 class SourcePathsFreshness(unittest.TestCase):
     def test_the_committed_record_is_current(self):
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"), skip_aliases=False)
         finding = check_freshness.check_source_paths(profiles)

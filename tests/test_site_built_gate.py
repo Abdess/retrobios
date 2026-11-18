@@ -192,7 +192,7 @@ class EveryBuiltPage(unittest.TestCase):
 class TheIntegrationItems(unittest.TestCase):
 
     def test_a_platform_page_draws_its_logo_beside_the_title(self):
-        from common import load_platform_registry
+        from model.registry import load_platform_registry
 
         registry = load_platform_registry(str(REPO_ROOT / "platforms"))
         with_logo = [key for key, entry in registry.items() if entry.get("logo")]

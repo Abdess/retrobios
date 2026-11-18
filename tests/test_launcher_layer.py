@@ -20,7 +20,8 @@ import zipfile
 
 import yaml
 
-from common import _emulator_profiles_cache, load_emulator_profiles, load_platform_config
+from model.profiles import _emulator_profiles_cache, load_emulator_profiles
+from model.platforms import load_platform_config
 from resolve.launchers import LauncherLayer, launcher_places, suffixed_stem
 from verify import find_undeclared_files, verify_platform
 

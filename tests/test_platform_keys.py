@@ -31,7 +31,7 @@ class ZippedFileKey(unittest.TestCase):
                 self.assertIsNone(pattern.search(path.read_text(encoding="utf-8")))
 
     def test_member_md5_declares_no_loose_name(self):
-        from common import expand_platform_declared_names
+        from model.declarations import expand_platform_declared_names
 
         config = {"systems": {"s": {"files": [
             {"name": "casloopy.zip", "md5": "m1", "zipped_file": "hd6437021.lsi302"},

@@ -32,7 +32,7 @@ import zlib
 import html
 import sys
 
-from common import list_release_pack_platforms
+from model.registry import list_release_pack_platforms
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 

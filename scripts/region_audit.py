@@ -19,7 +19,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import region
-from common import load_database, load_emulator_profiles, resolve_local_file
+from model.database import load_database
+from model.profiles import load_emulator_profiles
+from resolve.localfile import resolve_local_file
 
 # No-Intro filename tokens: full English territory names.
 NOINTRO = {
@@ -201,7 +203,7 @@ def main() -> int:
     )
     parser.add_argument("--json", action="store_true", help="Machine-readable output")
     args = parser.parse_args()
-    from common import work_from_repo_root
+    from model.cliargs import work_from_repo_root
 
     work_from_repo_root(args, parser, ["db", "emulators_dir"])
 
@@ -217,6 +219,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

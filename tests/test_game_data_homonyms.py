@@ -20,14 +20,11 @@ import re
 import unittest
 from pathlib import Path
 
-from common import (
-    build_zip_contents_index,
-    load_data_dir_registry,
-    load_database,
-    load_emulator_profiles,
-    resolution_is_hash_exact,
-    resolve_local_file,
-)
+from core.ziptools import build_zip_contents_index
+from model.registry import load_data_dir_registry
+from model.database import load_database
+from model.profiles import load_emulator_profiles
+from resolve.localfile import resolution_is_hash_exact, resolve_local_file
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -201,7 +198,7 @@ class APlatformEntryTakesNoOtherEmulatorsTree(unittest.TestCase):
 
     def test_the_emuelec_entry_is_not_served_xrick(self):
         os.chdir(self._cwd)
-        from common import load_platform_config
+        from model.platforms import load_platform_config
 
         config = load_platform_config("emuelec", str(REPO_ROOT / "platforms"))
         entry = config["systems"]["vvvvvv"]["files"][0]
@@ -330,7 +327,7 @@ class ForeignCopyYieldsToADataDirectory(unittest.TestCase):
     def test_the_data_directory_answers_before_another_emulators_copy(self):
         import tempfile
 
-        from common import resolve_local_file
+        from resolve.localfile import resolve_local_file
 
         with tempfile.TemporaryDirectory() as tmp:
             previous = os.getcwd()
@@ -371,7 +368,7 @@ class NameStepPrefersTheOwnersCopy(unittest.TestCase):
     def test_the_copy_stored_with_the_profile_wins(self):
         import tempfile
 
-        from common import resolve_local_file
+        from resolve.localfile import resolve_local_file
 
         with tempfile.TemporaryDirectory() as tmp:
             previous = os.getcwd()

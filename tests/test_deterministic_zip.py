@@ -313,14 +313,14 @@ class TestPackDeterminism(unittest.TestCase):
             "    system: test-sys\n"
             "    required: true\n"
         )
-        import common
+        from model.profiles import _emulator_profiles_cache
 
-        common._emulator_profiles_cache.clear()
+        _emulator_profiles_cache.clear()
         path = generate_emulator_pack(
             ["detcore"], str(self.tmp / "emulators"), self.db, str(self.bios),
             str(out), offline=True,
         )
-        common._emulator_profiles_cache.clear()
+        _emulator_profiles_cache.clear()
         self.assertIsNotNone(path)
         return Path(path)
 

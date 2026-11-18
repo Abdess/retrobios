@@ -28,7 +28,9 @@ try:
     import jsonschema
 except ImportError:
     jsonschema = None
-import common
+from core.artifacts import ArtifactLockBusy, artifact_lock
+from model.platforms import _platform_config_cache
+from model.profiles import _emulator_profiles_cache, load_emulator_profiles
 import generate_db
 import generate_pack as builder
 import generate_readme
@@ -104,11 +106,11 @@ class PackCountFixture(unittest.TestCase):
             yaml.dump({"platforms": {"demo": {"config": "demo.yml"}}})
         )
         (self.emulators / "demo.yml").write_text(PROFILE)
-        common._emulator_profiles_cache.clear()
-        self.profiles = common.load_emulator_profiles(str(self.emulators))
+        _emulator_profiles_cache.clear()
+        self.profiles = load_emulator_profiles(str(self.emulators))
 
     def tearDown(self):
-        common._emulator_profiles_cache.clear()
+        _emulator_profiles_cache.clear()
         self._tmp.cleanup()
 
     def _manifest(self) -> dict:
@@ -157,8 +159,8 @@ class ManifestStatesWhatThePackHolds(PackCountFixture):
             ],
         }}}
         (self.platforms / "demo.yml").write_text(yaml.dump(platform))
-        common._platform_config_cache.clear()
-        self.addCleanup(common._platform_config_cache.clear)
+        _platform_config_cache.clear()
+        self.addCleanup(_platform_config_cache.clear)
         out = self.root / "dist"
         out.mkdir()
         zip_path = builder.generate_pack(
@@ -491,8 +493,8 @@ class ReleaseRecord(unittest.TestCase):
             self.assertNotIn(narrowed, owners)
 
     def test_a_directory_being_written_is_not_read(self):
-        with common.artifact_lock(str(self.dist)), \
-                self.assertRaises(common.ArtifactLockBusy):
+        with artifact_lock(str(self.dist)), \
+                self.assertRaises(ArtifactLockBusy):
             release_record.build_record(self.dist, "v1", owners=self.OWNERS)
 
 
@@ -527,7 +529,7 @@ class RefusedFilesAreNotPresent(unittest.TestCase):
     def test_the_coverage_subtracts_a_refused_file(self):
         import os
 
-        import common
+        from model.platforms import _platform_config_cache
         import generate_db
         import generate_readme
 
@@ -560,8 +562,8 @@ class RefusedFilesAreNotPresent(unittest.TestCase):
             Path("platforms/_registry.yml").write_text(
                 yaml.dump({"platforms": {"hashy": {"config": "hashy.yml"}}})
             )
-            common._platform_config_cache.clear()
-            self.addCleanup(common._platform_config_cache.clear)
+            _platform_config_cache.clear()
+            self.addCleanup(_platform_config_cache.clear)
             coverage = generate_readme.compute_coverage(
                 "hashy", "platforms", db, emulators_dir="emulators"
             )

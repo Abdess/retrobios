@@ -43,13 +43,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from common import (
-    load_emulator_profiles,
-    load_platform_config,
-    native_layer,
-    repository_output_lock,
-    run_cli,
-)
+from model.profiles import load_emulator_profiles
+from model.platforms import load_platform_config, native_layer
+from core.artifacts import repository_output_lock
+from core.cli import run_cli
 from region import normalize_declared
 from romfolders import (
     ProfileResolver,

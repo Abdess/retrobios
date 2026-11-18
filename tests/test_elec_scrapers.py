@@ -240,7 +240,7 @@ class CoreFilesGoUnderTheStatedFolder(unittest.TestCase):
     /storage/roms itself, where no core reads them."""
 
     def test_core_destination_wins_over_the_guess(self):
-        from common import declared_root
+        from model.declarations import declared_root
 
         files = [{"destination": f"bios/f{i}"} for i in range(3)]
         files.append({"destination": "ports/diablo/diabdat.mpq"})

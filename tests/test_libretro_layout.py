@@ -60,7 +60,9 @@ class RetroArchCarriesDolphinWhereItReads(unittest.TestCase):
         previous = os.getcwd()
         os.chdir(REPO_ROOT)
         self.addCleanup(os.chdir, previous)
-        from common import load_database, load_emulator_profiles, load_platform_config
+        from model.database import load_database
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
         from packextras import _collect_emulator_extras
 
         config = load_platform_config("retroarch")

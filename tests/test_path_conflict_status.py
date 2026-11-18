@@ -20,7 +20,8 @@ from pathlib import Path
 
 import yaml
 
-import common
+from model.platforms import load_platform_config, _platform_config_cache
+from model.profiles import _emulator_profiles_cache
 import generate_db
 import generate_pack as builder
 from verify import verify_platform
@@ -66,11 +67,11 @@ class ConflictingDeclarations(unittest.TestCase):
         (self.platforms / "_registry.yml").write_text(
             yaml.dump({"platforms": {"conflict": {"config": "conflict.yml"}}})
         )
-        common._platform_config_cache.clear()
-        common._emulator_profiles_cache.clear()
+        _platform_config_cache.clear()
+        _emulator_profiles_cache.clear()
 
     def tearDown(self):
-        common._platform_config_cache.clear()
+        _platform_config_cache.clear()
         self._tmp.cleanup()
 
     def test_the_pack_and_verify_count_alike(self):
@@ -86,7 +87,7 @@ class ConflictingDeclarations(unittest.TestCase):
         packed = re.search(r"(\d+)/(\d+) files OK", report.getvalue())
         self.assertIsNotNone(packed, report.getvalue())
 
-        config = common.load_platform_config("conflict", str(self.platforms))
+        config = load_platform_config("conflict", str(self.platforms))
         verified = verify_platform(config, self.db, str(self.emulators))
         counts = verified["status_counts"]
         self.assertEqual(counts.get("missing"), 1)
@@ -142,12 +143,12 @@ class AnExtraDoesNotPassAHashCheck(unittest.TestCase):
                        "required": True}],
         }
         (self.emulators / "fxcore.yml").write_text(yaml.dump(profile))
-        common._platform_config_cache.clear()
-        common._emulator_profiles_cache.clear()
+        _platform_config_cache.clear()
+        _emulator_profiles_cache.clear()
 
     def tearDown(self):
-        common._platform_config_cache.clear()
-        common._emulator_profiles_cache.clear()
+        _platform_config_cache.clear()
+        _emulator_profiles_cache.clear()
         self._tmp.cleanup()
 
     def test_the_declaration_stays_failed(self):
@@ -161,7 +162,7 @@ class AnExtraDoesNotPassAHashCheck(unittest.TestCase):
             )
         packed = re.search(r"(\d+)/(\d+) files OK", report.getvalue())
         self.assertIsNotNone(packed, report.getvalue())
-        config = common.load_platform_config("hashed", str(self.platforms))
+        config = load_platform_config("hashed", str(self.platforms))
         verified = verify_platform(config, self.db, str(self.emulators))
         self.assertEqual(verified["status_counts"].get("ok", 0), 0)
         self.assertEqual(int(packed.group(1)), 0, report.getvalue())
@@ -196,10 +197,10 @@ class TheEmulatorPackShipsWhatTheCoreAccepts(unittest.TestCase):
                        "max_size": 1048576, "validation": ["size"]}],
         }
         (self.emulators / "mac.yml").write_text(yaml.dump(profile))
-        common._emulator_profiles_cache.clear()
+        _emulator_profiles_cache.clear()
 
     def tearDown(self):
-        common._emulator_profiles_cache.clear()
+        _emulator_profiles_cache.clear()
         self._tmp.cleanup()
 
     def test_the_refused_rom_is_named_not_shipped(self):
@@ -253,10 +254,10 @@ class AlternativesAgreeWithThePack(unittest.TestCase):
             ],
         }
         (self.emulators / "eng.yml").write_text(yaml.dump(profile))
-        common._emulator_profiles_cache.clear()
+        _emulator_profiles_cache.clear()
 
     def tearDown(self):
-        common._emulator_profiles_cache.clear()
+        _emulator_profiles_cache.clear()
         self._tmp.cleanup()
 
     def test_verify_counts_what_the_pack_ships(self):
@@ -315,10 +316,10 @@ class AMaskedArchiveIsMissing(unittest.TestCase):
             "files": [{"name": "y.bin", "archive": "pack.zip", "required": True,
                        "crc32": f"{__import__('zlib').crc32(b'y'):08x}"}],
         }))
-        common._emulator_profiles_cache.clear()
+        _emulator_profiles_cache.clear()
 
     def tearDown(self):
-        common._emulator_profiles_cache.clear()
+        _emulator_profiles_cache.clear()
         self._tmp.cleanup()
 
     def test_both_report_the_archive_missing(self):

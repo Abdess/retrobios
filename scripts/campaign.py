@@ -992,7 +992,7 @@ class Campaign:
 
     def local_file(self, entry: dict) -> Path | None:
         """The collection's copy of an entry, by its declared hashes or its name."""
-        from common import resolve_local_file
+        from resolve.localfile import resolve_local_file
 
         hint = entry.get("path") if isinstance(entry.get("path"), str) else ""
         # The database names files relative to the checkout it describes.
@@ -2110,6 +2110,6 @@ def _run_pass(campaign: Campaign, args: argparse.Namespace, only: set[str], path
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

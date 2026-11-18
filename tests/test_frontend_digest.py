@@ -19,7 +19,7 @@ from pathlib import Path
 
 import yaml
 
-from common import load_platform_config
+from model.platforms import load_platform_config
 from generate_pack import generate_manifest, generate_pack
 from verify import verify_platform
 

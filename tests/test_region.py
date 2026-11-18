@@ -11,7 +11,8 @@ import sys
 import unittest
 from pathlib import Path
 
-import common
+from model import profiles as model_profiles
+from model.profiles import _emulator_profiles_cache
 import region
 from packextras import emulator_region_drops
 
@@ -491,7 +492,7 @@ class OneCodeOneRegionAnswer(unittest.TestCase):
     PROFILES = os.path.join(os.path.dirname(__file__), "..", "emulators")
 
     def test_the_mednafen_saturn_profiles_agree(self):
-        profiles = common.load_emulator_profiles(self.PROFILES)
+        profiles = model_profiles.load_emulator_profiles(self.PROFILES)
         seen: dict[str, dict[str, frozenset]] = {}
         for name in ("mednafen", "beetle_saturn", "saturn-emu", "mednafen_stv"):
             for entry in profiles[name]["files"]:
@@ -505,7 +506,7 @@ class OneCodeOneRegionAnswer(unittest.TestCase):
                 self.assertIn("oceania", next(iter(tags.values())))
 
     def test_export_cartridges_and_allowed_regions(self):
-        profiles = common.load_emulator_profiles(self.PROFILES)
+        profiles = model_profiles.load_emulator_profiles(self.PROFILES)
         bios_sms = next(e for e in profiles["clk"]["files"] if e["name"] == "bios.sms")
         self.assertIn("oceania", bios_sms["region"])
         # A Mexican export cartridge is analysed as Europe or USA and boots the
@@ -526,7 +527,7 @@ class AustraliaReadsThePalIpl(unittest.TestCase):
     alone, `--region australia` dropped it and kept the American one."""
 
     def test_the_pal_ipl_answers_oceania(self):
-        profiles = common.load_emulator_profiles(
+        profiles = model_profiles.load_emulator_profiles(
             os.path.join(os.path.dirname(__file__), "..", "emulators")
         )
         for name in ("dolphin", "primehack", "ishiiruka", "triforce"):
@@ -694,14 +695,15 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
         return tmp, root, db, config
 
     def test_the_report_withdraws_what_the_builder_withdraws(self):
-        import common
+        from model import profiles as model_profiles
+        from model.profiles import _emulator_profiles_cache
         import generate_pack as builder
         import verify as reporter
 
         tmp, root, db, config = self._fixture()
         try:
-            common._emulator_profiles_cache.clear()
-            profiles = common.load_emulator_profiles(str(root / "emulators"))
+            _emulator_profiles_cache.clear()
+            profiles = model_profiles.load_emulator_profiles(str(root / "emulators"))
             groups, extra_dests = builder.platform_region_groups(
                 config, config["systems"], str(root / "emulators"),
                 db, "", profiles,
@@ -730,14 +732,15 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
                 "the report must withdraw exactly the builder's drop set",
             )
         finally:
-            common._emulator_profiles_cache.clear()
+            _emulator_profiles_cache.clear()
             tmp.cleanup()
 
     def test_a_missing_regional_core_file_is_withdrawn_too(self):
         """A missing platform file is grouped and withdrawn under --region, but a
         missing core file was never grouped and stayed "required missing"
         for a region the request excludes."""
-        import common
+        from model import profiles as model_profiles
+        from model.profiles import _emulator_profiles_cache
         import verify as reporter
 
         tmp, root, db, config = self._fixture()
@@ -745,8 +748,8 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
             jp = next(k for k, v in db["files"].items() if v["name"] == "jp.bin")
             del db["files"][jp]
             del db["indexes"]["by_name"]["jp.bin"]
-            common._emulator_profiles_cache.clear()
-            profiles = common.load_emulator_profiles(str(root / "emulators"))
+            _emulator_profiles_cache.clear()
+            profiles = model_profiles.load_emulator_profiles(str(root / "emulators"))
             plain = reporter.verify_platform(
                 config, db, str(root / "emulators"), profiles,
             )
@@ -760,19 +763,20 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
                 {u["name"] for u in narrowed["undeclared_files"]}, {"us.bin"}
             )
         finally:
-            common._emulator_profiles_cache.clear()
+            _emulator_profiles_cache.clear()
             tmp.cleanup()
 
     def test_the_report_names_the_fallback_groups(self):
         """The pack README lists the systems kept whole because nothing
         answers the request. verify said all OK and named none."""
-        import common
+        from model import profiles as model_profiles
+        from model.profiles import _emulator_profiles_cache
         import verify as reporter
 
         tmp, root, db, config = self._fixture()
         try:
-            common._emulator_profiles_cache.clear()
-            profiles = common.load_emulator_profiles(str(root / "emulators"))
+            _emulator_profiles_cache.clear()
+            profiles = model_profiles.load_emulator_profiles(str(root / "emulators"))
             result = reporter.verify_platform(
                 config, db, str(root / "emulators"), profiles,
                 regions=["brazil"],
@@ -783,7 +787,7 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
                 reporter.print_platform_result(result, ["Demo"])
             self.assertIn("all kept (1): demo-system", out.getvalue())
         finally:
-            common._emulator_profiles_cache.clear()
+            _emulator_profiles_cache.clear()
             tmp.cleanup()
 
     def test_one_grouping_pass_serves_both_sides(self):
@@ -820,7 +824,7 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
         if not (repo / "emulators" / "o2em.yml").is_file():
             self.skipTest("no o2em profile")
         from verify import verify_emulator
-        from common import load_database
+        from model.database import load_database
 
         db = load_database(str(repo / "database.json"))
         full = verify_emulator(["o2em"], str(repo / "emulators"), db)
@@ -934,7 +938,7 @@ class RegionalRequestsKeepWhatTheCodeLoads(unittest.TestCase):
     )
 
     def test_each_request_keeps_its_file(self):
-        profiles = common.load_emulator_profiles(
+        profiles = model_profiles.load_emulator_profiles(
             os.path.join(os.path.dirname(__file__), "..", "emulators")
         )
         for name, regions, kept in self.CASES:
@@ -960,7 +964,7 @@ class DsiNandFollowsTheHeaderRegion(unittest.TestCase):
     }
 
     def _profile(self) -> dict:
-        return common.load_emulator_profiles(
+        return model_profiles.load_emulator_profiles(
             os.path.join(os.path.dirname(__file__), "..", "emulators")
         )["bizhawk"]
 
@@ -984,7 +988,7 @@ class FontRomsCarryNoTerritory(unittest.TestCase):
     from the generic MSX2+ machine whose config.ini loads both."""
 
     def test_no_kanji_or_hangul_font_declares_a_region(self):
-        profiles = common.load_emulator_profiles(
+        profiles = model_profiles.load_emulator_profiles(
             os.path.join(os.path.dirname(__file__), "..", "emulators")
         )
         tagged = [
@@ -1083,7 +1087,7 @@ class GenesisPlusGxUsBiosServesEurope(unittest.TestCase):
     def test_eu_jp_keeps_bios_u(self):
         from pathlib import Path
 
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
         from region import build_region_index, parse_requested, resolve_region_drops
 
         root = Path(__file__).resolve().parents[1]
@@ -1104,7 +1108,7 @@ class GenesisPlusGxUsBiosServesEurope(unittest.TestCase):
 def _real_drops(profile: str, members: list[str], requested: str) -> set[str]:
     from pathlib import Path
 
-    from common import load_emulator_profiles
+    from model.profiles import load_emulator_profiles
     from region import build_region_index, parse_requested, resolve_region_drops
 
     root = Path(__file__).resolve().parents[1]
@@ -1139,7 +1143,7 @@ class KoreanGameCubeDiscsReadTheJapaneseIpl(unittest.TestCase):
         for profile in ("dolphin", "dolphin-mmjr", "dolphin-mmjr2", "ishiiruka",
                         "primehack", "triforce"):
             with self.subTest(profile=profile):
-                from common import load_emulator_profiles
+                from model.profiles import load_emulator_profiles
 
                 entries = [
                     f for f in load_emulator_profiles("emulators")[profile]["files"]
@@ -1157,7 +1161,7 @@ class ANameNoCodeOpensCarriesNoRegion(unittest.TestCase):
     exist."""
 
     def test_scph5903_is_unregioned(self):
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         entry = next(
             f for f in load_emulator_profiles("emulators")["beetle_psx"]["files"]
@@ -1216,7 +1220,7 @@ class PcsxRearmedUsSlotIsTheDefault(unittest.TestCase):
     other market boots the US slot."""
 
     def test_every_us_slot_bios_includes_latin_america(self):
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         tagged = [
             f for f in load_emulator_profiles("emulators")["pcsx_rearmed"]["files"]
@@ -1241,7 +1245,7 @@ class PlayStationUsImageAnswersTheAmericaLicence(unittest.TestCase):
               "rustation": 6, "duckstation": 28}
 
     def test_every_us_image_includes_latin_america(self):
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         profiles = load_emulator_profiles("emulators")
         for name, count in self.COUNTS.items():
@@ -1263,7 +1267,7 @@ class FusionSmsExportBiosFollowsTheSetting(unittest.TestCase):
     list. Neither export BIOS is chosen for a territory the cart names."""
 
     def test_the_export_bioses_are_unregioned(self):
-        from common import load_emulator_profiles
+        from model.profiles import load_emulator_profiles
 
         files = {f["name"]: f for f in load_emulator_profiles("emulators")["kega-fusion"]["files"]}
         for name in ("bios_U.sms", "bios_E.sms"):
@@ -1307,7 +1311,7 @@ class ARefusedRegionalFileHoldsNoSlot(unittest.TestCase):
         from generate_pack import generate_emulator_pack
         from verify import verify_emulator
 
-        common._emulator_profiles_cache.clear()
+        _emulator_profiles_cache.clear()
         repo = Path(__file__).resolve().parents[1]
         (repo / "tmp").mkdir(exist_ok=True)
         root = Path(tempfile.mkdtemp(dir=repo / "tmp"))
@@ -1394,7 +1398,7 @@ class MachineModelRomsCarryNoTerritory(unittest.TestCase):
     }
 
     def test_model_roms_are_unregioned(self):
-        profiles = common.load_emulator_profiles(
+        profiles = model_profiles.load_emulator_profiles(
             os.path.join(os.path.dirname(__file__), "..", "emulators")
         )
         for profile, names in self.CASES.items():

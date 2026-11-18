@@ -59,7 +59,7 @@ class BaseTargetScraper(ABC):
             import yaml
         except ImportError as exc:
             raise ImportError("PyYAML required: pip install pyyaml") from exc
-        from common import write_text_atomic
+        from core.artifacts import write_text_atomic
 
         write_text_atomic(
             output_path, yaml.dump(data, default_flow_style=False, sort_keys=False)

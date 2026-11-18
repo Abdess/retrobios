@@ -15,7 +15,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from common import canonical_target_name
+from model.targets import canonical_target_name
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -29,13 +29,10 @@ class EveryBuildbotCoreIsNamed(unittest.TestCase):
     def test_retroarch_names_every_buildbot_core(self):
         import yaml
 
-        from common import (
-            load_emulator_profiles,
-            load_platform_config,
-            load_target_config,
-            resolve_platform_cores,
-            upstream_profile_index,
-        )
+        from model.profiles import load_emulator_profiles, upstream_profile_index
+        from model.platforms import load_platform_config
+        from model.targets import load_target_config
+        from resolve.cores import resolve_platform_cores
 
         platforms = str(REPO_ROOT / "platforms")
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
@@ -144,7 +141,7 @@ class OneTruthModelPerTarget(unittest.TestCase):
     rebuilt the same slug by hand to find it."""
 
     def test_aliases_share_a_directory(self):
-        from common import truth_target_dir
+        from model.targets import truth_target_dir
 
         platforms = str(REPO_ROOT / "platforms")
         dirs = {
@@ -173,7 +170,7 @@ class TheListingCountsWhatTheFilterUses(unittest.TestCase):
     filters on 187 once _overrides.yml removes machine variants and launchers."""
 
     def test_every_listed_count_is_the_filtered_set(self):
-        from common import list_available_targets, load_target_config
+        from model.targets import list_available_targets, load_target_config
 
         platforms = str(REPO_ROOT / "platforms")
         checked = 0
@@ -198,12 +195,10 @@ class ASingleTargetFiltersNothing(unittest.TestCase):
 
         import yaml
 
-        from common import (
-            load_emulator_profiles,
-            load_platform_config,
-            load_target_config,
-            resolve_platform_cores,
-        )
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
+        from model.targets import load_target_config
+        from resolve.cores import resolve_platform_cores
 
         platforms = str(REPO_ROOT / "platforms")
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))

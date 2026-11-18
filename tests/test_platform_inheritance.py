@@ -17,7 +17,8 @@ from pathlib import Path
 
 import yaml
 
-import common
+from model.platforms import load_platform_config, _platform_config_cache, _shared_yml_cache
+from resolve.grouping import group_identical_platforms
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -26,8 +27,8 @@ class AChildLeavesItsParentAlone(unittest.TestCase):
     def setUp(self):
         self.dir = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         self.addCleanup(shutil.rmtree, self.dir, True)
-        self.addCleanup(common._platform_config_cache.clear)
-        self.addCleanup(common._shared_yml_cache.clear)
+        self.addCleanup(_platform_config_cache.clear)
+        self.addCleanup(_shared_yml_cache.clear)
         files = {
             "parent.yml": {"platform": "Parent", "verification_mode": "existence",
                            "systems": {"sys-a": {"files": [{"name": "a.bin"}]}}},
@@ -44,7 +45,7 @@ class AChildLeavesItsParentAlone(unittest.TestCase):
             (self.dir / name).write_text(yaml.safe_dump(data))
 
     def load(self, name):
-        return common.load_platform_config(name, str(self.dir))
+        return load_platform_config(name, str(self.dir))
 
     def test_the_parent_keeps_its_systems(self):
         self.load("parent")
@@ -75,15 +76,15 @@ class ALinuxPlatformKeepsBothCases(unittest.TestCase):
     exact case, and only System.dat's 2608_BD.WAV and BIOS.col shipped."""
 
     def setUp(self):
-        self.addCleanup(common._platform_config_cache.clear)
-        common._platform_config_cache.clear()
+        self.addCleanup(_platform_config_cache.clear)
+        _platform_config_cache.clear()
 
     def test_the_linux_platforms_do_not_fold(self):
         platforms = str(REPO_ROOT / "platforms")
-        self.assertTrue(common.load_platform_config("retroarch", platforms)["case_insensitive_fs"])
+        self.assertTrue(load_platform_config("retroarch", platforms)["case_insensitive_fs"])
         for name in ("lakka", "retropie"):
             with self.subTest(platform=name):
-                config = common.load_platform_config(name, platforms)
+                config = load_platform_config(name, platforms)
                 self.assertFalse(config["case_insensitive_fs"])
                 dests = {
                     f.get("destination", f.get("name"))
@@ -92,7 +93,7 @@ class ALinuxPlatformKeepsBothCases(unittest.TestCase):
                 self.assertTrue({"np2kai/2608_BD.WAV", "np2kai/2608_bd.wav"} <= dests)
 
     def test_lakka_does_not_share_retroarchs_pack(self):
-        groups = common.group_identical_platforms(
+        groups = group_identical_platforms(
             ["retroarch", "lakka"], str(REPO_ROOT / "platforms")
         )
         self.assertEqual(sorted(g for g, _rep in groups), [["lakka"], ["retroarch"]])

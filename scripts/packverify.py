@@ -22,11 +22,11 @@ import functools
 import hashlib
 import zlib
 import sys
-from common import filter_systems_by_target
+from resolve.cores import filter_systems_by_target
 from core.hashing import md5_composite_of, parse_md5_list
 import io
-from common import load_emulator_profiles
-from common import load_platform_config
+from model.profiles import load_emulator_profiles
+from model.platforms import load_platform_config
 import os
 from packextras import platform_region_groups
 from packpaths import _flat
@@ -36,8 +36,8 @@ import slots
 from packresolve import resolve_declaration, resolve_file
 from resolve.categories import BIOS, EntryCategories
 from resolve.gamedata import without_game_data
-from common import resolve_platform_cores
-from common import sanitize_pack_path
+from resolve.cores import resolve_platform_cores
+from core.paths import sanitize_pack_path
 import zipfile
 from collections.abc import Callable, Mapping
 
@@ -442,7 +442,7 @@ def _repo_satisfies_declaration(
     packed) from data coverage gaps (no repo file matches the upstream
     declaration): only the former is a pack generation error.
     """
-    from common import md5_composite
+    from core.hashing import md5_composite
 
     files_db = db.get("files", {})
     by_md5 = db.get("indexes", {}).get("by_md5", {})

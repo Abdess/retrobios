@@ -103,7 +103,9 @@ class DiagramsMatchTheData(unittest.TestCase):
                 self.assertIn(display, text)
 
     def test_each_example_platform_runs_its_emulator(self):
-        from common import load_emulator_profiles, load_platform_config, resolve_platform_cores
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
+        from resolve.cores import resolve_platform_cores
 
         profiles = load_emulator_profiles(str(ROOT / "emulators"), skip_aliases=False)
         for platform, emulator in sitediagrams.CHAIN_EXAMPLES:

@@ -1,0 +1,127 @@
+"""Which emulator, engine or manufacturer a path of the collection belongs to."""
+
+from __future__ import annotations
+
+import re
+
+
+# bios/Other/<emulator> and bios/Arcade/<emulator or board> file a copy by
+# who loads it, not by machine.
+BUCKET_FOLDERS = frozenset({"Other", "Arcade"})
+
+
+def names_manufacturer(sys_id: str, manufacturer: str) -> bool:
+    """Whether a system id names a maker folder: nec-pc-88 names NEC."""
+    slug = manufacturer.lower().replace(" ", "-")
+    return sys_id == slug or sys_id.startswith(f"{slug}-")
+
+
+def _maker_folder(path: str, bios_dir: str) -> str | None:
+    """The bios/<maker>/ folder a collection path is filed under."""
+    prefix = f"{bios_dir.rstrip('/')}/"
+    if not path.startswith(prefix):
+        return None
+    parts = path[len(prefix):].split("/")
+    return parts[0] if len(parts) >= 2 else None
+
+
+# One slot, keyed like the casefold view: the files dict, its size, the folders.
+_maker_folders_cache: list[tuple[dict, int, frozenset[str]]] = []
+
+
+def _maker_folders(db: dict) -> frozenset[str]:
+    """Every maker folder the collection files a copy under."""
+    files_db = db.get("files", {})
+    if _maker_folders_cache:
+        source, size, folders = _maker_folders_cache[0]
+        if source is files_db and size == len(files_db):
+            return folders
+    bios_dir = str(db.get("bios_dir") or "bios")
+    folders = frozenset(
+        folder
+        for entry in files_db.values()
+        if (folder := _maker_folder(str(entry.get("path", "")), bios_dir))
+        and folder not in BUCKET_FOLDERS
+    )
+    _maker_folders_cache[:] = [(files_db, len(files_db), folders)]
+    return folders
+
+
+def system_makers(file_entry: dict, db: dict) -> frozenset[str]:
+    """The maker folders a platform entry's system names.
+
+    Only a platform's own entry is asked: one that names an owning emulator
+    is placed by that emulator's tree. Empty when the system names no maker
+    (pc88, arcade), so nothing is narrowed there.
+    """
+    sys_id = str(file_entry.get("platform_system") or "")
+    if not sys_id or _owner_tokens(file_entry):
+        return frozenset()
+    return frozenset(
+        folder for folder in _maker_folders(db) if names_manufacturer(sys_id, folder)
+    )
+
+
+def other_maker(path: str, makers: frozenset[str], db: dict) -> bool:
+    """Whether a path is filed under a maker the entry's system does not name."""
+    if not makers:
+        return False
+    folder = _maker_folder(path, str(db.get("bios_dir") or "bios"))
+    return folder is not None and folder not in BUCKET_FOLDERS and folder not in makers
+
+
+def _affinity_tokens(text: str) -> set[str]:
+    return {
+        token
+        for token in (re.sub(r"[^0-9a-z]", "", part.casefold()) for part in text.split("/"))
+        if token
+    }
+
+
+def _owner_tokens(file_entry: dict) -> set[str]:
+    """Tokens naming the profile that asks for the file.
+
+    A profile named after another with a suffix (cxbx-reloaded-2023,
+    mame4droid-2024) is a release of that emulator, and the tree named by
+    the shorter name is its own: cxbx-reloaded-2023 was served xemu's
+    encrypted EEPROM because bios/Other/cxbx-reloaded/ read as foreign.
+    Only whole leading words count, so dolphin-mmjr2 is not dolphin-mmjr.
+    """
+    tokens: set[str] = set()
+    for owner in (file_entry.get("source_profile"), file_entry.get("source_emulator")):
+        if owner:
+            tokens |= _affinity_tokens(str(owner).replace(" ", ""))
+    profile = str(file_entry.get("source_profile") or "").casefold()
+    words = [word for word in re.split(r"[^0-9a-z]+", profile) if word]
+    tokens |= {"".join(words[:end]) for end in range(1, len(words))}
+    return tokens
+
+
+def _foreign_tree(path: str, owners: set[str]) -> bool:
+    """Whether a path lives in the tree of an emulator that is not the asker.
+
+    bios/Other/<emulator>/ holds what one emulator ships. A same-named file
+    found there answers that emulator's entry, not another's: EmuCoreX's
+    unlock.wav was served from NetherSX2's tree, and upstream PCSX2's
+    GameIndex.yaml from EmuCoreX's, while the system directory held a copy.
+    """
+    parts = path.split("/")
+    if not owners or len(parts) < 4 or parts[0] != "bios" or parts[1] != "Other":
+        return False
+    return not (owners & _affinity_tokens(parts[2]))
+
+
+def _engine_tree(path: str, owners: set[str]) -> bool:
+    """Whether a path lives in another game's folder under bios/Game Engines/."""
+    parts = path.split("/")
+    if len(parts) < 4 or parts[0] != "bios" or parts[1] != "Game Engines":
+        return False
+    return not (owners & _affinity_tokens(parts[2]))
+
+
+def _own_tree(path: str, owners: set[str]) -> bool:
+    """Whether a path lives in the bios/Other/<emulator>/ tree of the asker."""
+    parts = path.split("/")
+    if not owners or len(parts) < 4 or parts[0] != "bios" or parts[1] != "Other":
+        return False
+    return bool(owners & _affinity_tokens(parts[2]))

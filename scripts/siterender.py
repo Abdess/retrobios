@@ -117,7 +117,7 @@ def set_system_page_map(mapping: dict[str, tuple[str, str]]) -> None:
     derived from it here. Kept anywhere else, it outlived a table of the same
     size and linked to the pages of the previous one.
     """
-    from common import _norm_system_id
+    from model.systems import _norm_system_id
 
     _system_page_map.clear()
     _system_page_map.update(mapping)
@@ -137,7 +137,7 @@ def _page_by_norm(sys_id: str) -> tuple[str, str] | None:
     keyed by the platforms' spellings: 2,431 of 4,195 cards had no link. A
     spelling two pages share leads nowhere rather than to either.
     """
-    from common import _norm_system_id
+    from model.systems import _norm_system_id
 
     return _norm_page_map.get(_norm_system_id(sys_id))
 
@@ -433,7 +433,7 @@ def _read_arcade_source() -> tuple[dict, dict] | None:
     """The profiles and database of the repository, None without a database."""
     import json
 
-    from common import load_emulator_profiles
+    from model.profiles import load_emulator_profiles
 
     inputs = siteinputs.current()
     database = inputs.db
@@ -751,7 +751,7 @@ def set_console_sections(
     group them, or is a set of (manufacturer, console) pairs. ``programs``
     are the emulator names, which never name a system.
     """
-    from common import _norm_system_id
+    from model.systems import _norm_system_id
 
     pairs = (
         {(mfr, console) for mfr, consoles in sections.items() for console in consoles}
@@ -803,7 +803,7 @@ def _ensure_console_sections() -> None:
         return
     import json
 
-    from common import load_emulator_profiles
+    from model.profiles import load_emulator_profiles
     from sitecollection import _group_by_manufacturer
 
     inputs = siteinputs.current()
@@ -820,7 +820,7 @@ def _own_section(sys_id: str) -> tuple[str, str] | None:
     the one under the maker the id names is kept. Two left is no answer,
     and neither is a section that files a program's copies.
     """
-    from common import _norm_system_id
+    from model.systems import _norm_system_id
 
     _ensure_console_sections()
     places = _console_sections.get(_norm_system_id(sys_id), set())
@@ -846,7 +846,7 @@ def _own_section(sys_id: str) -> tuple[str, str] | None:
 def _heading_name(mfr: str, console: str) -> str:
     """A console heading read out of its page: the maker in front, unless
     the heading already starts with it or the page is a game publisher's."""
-    from common import GAME_DATA_TOPS
+    from model.composition import GAME_DATA_TOPS
 
     if mfr in GAME_DATA_TOPS:
         return SECTION_LABELS.get((mfr, console), console)
@@ -1450,11 +1450,9 @@ def system_search_aliases(sys_id: str) -> list[str]:
     (psx, dreamcast, gba), sorted, for search. Read from each platform's
     own entries by common.platform_system_names, never typed by hand."""
     if not _search_aliases_built[0]:
-        from common import (
-            list_registered_platforms,
-            load_platform_config,
-            platform_system_names,
-        )
+        from model.registry import list_registered_platforms
+        from model.platforms import load_platform_config
+        from model.systems import platform_system_names
 
         platforms_dir = str(siteinputs.current().platforms)
         index: dict[str, set[str]] = {}

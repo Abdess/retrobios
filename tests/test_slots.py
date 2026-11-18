@@ -779,13 +779,11 @@ class ManifestFollowsTheArbitration(unittest.TestCase):
         os.chdir(repo)
         self.addCleanup(os.chdir, previous)
         import generate_pack
-        from common import (
-            build_zip_contents_index,
-            load_data_dir_registry,
-            load_database,
-            load_emulator_profiles,
-            load_platform_config,
-        )
+        from core.ziptools import build_zip_contents_index
+        from model.registry import load_data_dir_registry
+        from model.database import load_database
+        from model.profiles import load_emulator_profiles
+        from model.platforms import load_platform_config
 
         db = load_database(str(repo / "database.json"))
         config = load_platform_config("retroarch", str(repo / "platforms"))

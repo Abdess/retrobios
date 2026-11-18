@@ -16,7 +16,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import common
+from model.platforms import load_platform_config, _shared_yml_cache, _platform_config_cache
 from export_native import load_inputs
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -24,10 +24,10 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 class TheNativeLayerIsThePlatformsOwn(unittest.TestCase):
     def setUp(self):
-        common._platform_config_cache.clear()
-        common._shared_yml_cache.clear()
-        self.addCleanup(common._platform_config_cache.clear)
-        self.addCleanup(common._shared_yml_cache.clear)
+        _platform_config_cache.clear()
+        _shared_yml_cache.clear()
+        self.addCleanup(_platform_config_cache.clear)
+        self.addCleanup(_shared_yml_cache.clear)
 
     def test_shared_and_mirrored_entries_are_left_out(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -48,7 +48,7 @@ class TheNativeLayerIsThePlatformsOwn(unittest.TestCase):
                 "      - name: dsp_rom.bin\n        destination: dolphin-emu/Sys/GC/dsp_rom.bin\n"
                 "        curated: true\n"
             )
-            pack_view = common.load_platform_config("demo", str(platforms))
+            pack_view = load_platform_config("demo", str(platforms))
             _truth, native = load_inputs("demo", platforms / "truth", str(platforms))
 
         self.assertEqual(

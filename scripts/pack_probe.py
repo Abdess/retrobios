@@ -62,17 +62,14 @@ import autorun
 import campaign
 import measurement_records as mr
 from autorun import now_iso
-from common import (
-    _norm_system_id,
-    load_emulator_profiles,
-    load_platform_config,
-    load_target_config,
-    platform_arg,
-    require_platform,
-    resolve_platform_cores,
-    run_cli,
-    runs_standalone,
-)
+from model.systems import _norm_system_id
+from model.profiles import load_emulator_profiles
+from model.platforms import load_platform_config
+from model.targets import load_target_config
+from model.cliargs import platform_arg, require_platform
+from resolve.cores import resolve_platform_cores
+from core.cli import run_cli
+from resolve.layout import runs_standalone
 from resolve.validation import filter_files_by_mode
 from core.ziptools import safe_extract_zip
 

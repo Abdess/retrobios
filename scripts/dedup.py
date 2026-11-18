@@ -28,7 +28,9 @@ from collections import defaultdict
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import compute_hashes, require_directory, write_text_atomic
+from core.hashing import compute_hashes
+from core.cli import require_directory
+from core.artifacts import write_text_atomic
 
 DEFAULT_BIOS_DIR = "bios"
 
@@ -416,6 +418,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

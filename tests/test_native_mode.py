@@ -219,13 +219,13 @@ class GapAnalysisAgreesWithTheBuilder(unittest.TestCase):
         return tmp, root, db
 
     def _in_repo(self, mode: str) -> bool:
-        import common
+        from model.profiles import _emulator_profiles_cache, load_emulator_profiles
         from verify import find_undeclared_files
 
         tmp, root, db = self._fixture()
         try:
-            common._emulator_profiles_cache.clear()
-            profiles = common.load_emulator_profiles(str(root / "emulators"))
+            _emulator_profiles_cache.clear()
+            profiles = load_emulator_profiles(str(root / "emulators"))
             config = {
                 "platform": "Demo",
                 "verification_mode": mode,
@@ -238,7 +238,7 @@ class GapAnalysisAgreesWithTheBuilder(unittest.TestCase):
             entry = next(e for e in found if e["name"] == "collide.rom")
             return bool(entry["in_repo"])
         finally:
-            common._emulator_profiles_cache.clear()
+            _emulator_profiles_cache.clear()
             tmp.cleanup()
 
     def test_a_digest_mode_does_not_call_a_contradicted_copy_available(self):
@@ -365,7 +365,7 @@ class SkippingIsNotSettling(unittest.TestCase):
         import hashlib
         import tempfile
 
-        import common
+        from model.profiles import _emulator_profiles_cache, load_emulator_profiles
         from verify import find_undeclared_files
 
         tmp = tempfile.TemporaryDirectory()
@@ -396,8 +396,8 @@ class SkippingIsNotSettling(unittest.TestCase):
                 "files:\n" + entry
             )
         try:
-            common._emulator_profiles_cache.clear()
-            profiles = common.load_emulator_profiles(str(root / "emulators"))
+            _emulator_profiles_cache.clear()
+            profiles = load_emulator_profiles(str(root / "emulators"))
             config = {
                 "platform": "Demo", "verification_mode": "existence",
                 "cores": ["a_standalone_only", "b_libretro"], "systems": {},
@@ -407,7 +407,7 @@ class SkippingIsNotSettling(unittest.TestCase):
             )
             return {(u["emulator"], u["name"]) for u in found}
         finally:
-            common._emulator_profiles_cache.clear()
+            _emulator_profiles_cache.clear()
             tmp.cleanup()
 
     def test_the_profile_that_needs_the_file_still_reports_it(self):
@@ -438,7 +438,7 @@ class OneProfileSelector(unittest.TestCase):
     }
 
     def _select(self, names, standalone=False):
-        from common import ProfileSelectionError, select_emulator_profiles
+        from model.profiles import ProfileSelectionError, select_emulator_profiles
 
         try:
             return select_emulator_profiles(names, self.PROFILES, standalone), None

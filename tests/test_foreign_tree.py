@@ -18,7 +18,7 @@ import unittest
 from pathlib import Path
 
 import generate_db
-from common import resolve_local_file
+from resolve.localfile import resolve_local_file
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -107,7 +107,7 @@ class AReleaseNamedAfterTheTree(unittest.TestCase):
 
     def test_only_whole_leading_words_name_the_tree(self):
         """dolphin-mmjr2 is not a release of dolphin-mmjr: mmjr2 is one word."""
-        from common import _owner_tokens
+        from resolve.ownership import _owner_tokens
 
         self.assertNotIn("dolphinmmjr", _owner_tokens({"source_profile": "dolphin-mmjr2"}))
         self.assertIn("cxbxreloaded", _owner_tokens({"source_profile": "cxbx-reloaded-2023"}))
@@ -121,7 +121,7 @@ class AnotherMachinesRomIsNotServed(unittest.TestCase):
     def test_np2pi_does_not_receive_the_apple_ii_rom(self):
         import yaml
 
-        from common import load_database
+        from model.database import load_database
 
         if not (REPO_ROOT / "database.json").is_file():
             self.skipTest("database.json is absent")

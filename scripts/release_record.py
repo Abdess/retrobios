@@ -23,12 +23,8 @@ import zipfile
 from pathlib import Path
 
 import split_pack
-from common import (
-    ArtifactLockBusy,
-    artifact_lock,
-    list_release_pack_platforms,
-    write_text_atomic,
-)
+from core.artifacts import ArtifactLockBusy, artifact_lock, write_text_atomic
+from model.registry import list_release_pack_platforms
 
 RECORD = "release.json"
 # The record's format, which release.schema.json pins: a reader holding the
@@ -245,6 +241,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

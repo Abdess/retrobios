@@ -36,15 +36,12 @@ if TYPE_CHECKING:
     from typing_extensions import Unpack
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import (
-    compute_hashes,
-    list_registered_platforms,
-    load_database,
-    load_emulator_profiles,
-    load_platform_config,
-    parse_md5_list,
-    require_directory,
-)
+from core.hashing import compute_hashes, parse_md5_list
+from model.registry import list_registered_platforms
+from model.database import load_database
+from model.profiles import load_emulator_profiles
+from model.platforms import load_platform_config
+from core.cli import require_directory
 from core.hashing import parse_hash_list
 from resolve.nativemode import digest_algorithm
 from dedup import _in_nodedup_dir
@@ -1238,6 +1235,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

@@ -20,7 +20,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import compute_hashes
+from core.hashing import compute_hashes
 
 SYSTEM_MAP = {
     "3DO Company, The - 3DO": ("3DO Company", "3DO"),
@@ -553,6 +553,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

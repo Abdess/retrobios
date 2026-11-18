@@ -19,7 +19,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import common
+from model.profiles import load_emulator_profiles, _emulator_profiles_cache
+from resolve.localfile import resolve_local_file
 import generate_pack as builder
 import packextras
 
@@ -87,15 +88,15 @@ class AgnosticScanStaysInItsTree(unittest.TestCase):
             "base_destination": "",
             "systems": {},
         }
-        common._emulator_profiles_cache.clear()
+        _emulator_profiles_cache.clear()
 
     def tearDown(self):
-        common._emulator_profiles_cache.clear()
+        _emulator_profiles_cache.clear()
         self._tmp.cleanup()
 
     def _write_profile(self, body: str):
         (self.root / "emulators" / "demo.yml").write_text(body)
-        return common.load_emulator_profiles(str(self.root / "emulators"))
+        return load_emulator_profiles(str(self.root / "emulators"))
 
     def _scan(self, profiles):
         extras = builder._collect_emulator_extras(
@@ -210,7 +211,7 @@ class AgnosticScanStaysInItsTree(unittest.TestCase):
         self.assertTrue(self._scan(profiles))
         for extra in self._scan(profiles):
             self.assertIn("sha1", extra, f"{extra['name']} carries no identity")
-            path, status = common.resolve_local_file(extra, self.db)
+            path, status = resolve_local_file(extra, self.db)
             self.assertEqual(status, "sha1_exact")
             self.assertTrue(path.endswith(extra["name"]))
 
@@ -254,7 +255,7 @@ class PathTailBeatsABareName(unittest.TestCase):
 
     def test_the_tail_of_the_declared_path_decides(self):
         entry = {"name": "index.yaml", "path": "app/resources/index.yaml"}
-        path, status = common.resolve_local_file(
+        path, status = resolve_local_file(
             entry, self.db, dest_hint=entry["path"]
         )
         self.assertEqual(status, "path_exact")
@@ -263,7 +264,7 @@ class PathTailBeatsABareName(unittest.TestCase):
     def test_a_bare_name_is_never_reached_through_the_tail(self):
         """The tail stops above the filename: that is the weaker step."""
         entry = {"name": "index.yaml", "path": "nowhere/index.yaml"}
-        _path, status = common.resolve_local_file(
+        _path, status = resolve_local_file(
             entry, self.db, dest_hint=entry["path"]
         )
         self.assertEqual(status, "name_exact")

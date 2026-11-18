@@ -432,7 +432,7 @@ def setups() -> tuple[str, ...]:
 
 @cache
 def _setups_in(platforms_dir: str) -> tuple[str, ...]:
-    from common import list_registered_platforms
+    from model.registry import list_registered_platforms
 
     return tuple(sorted(list_registered_platforms(platforms_dir)))
 
@@ -452,7 +452,7 @@ def platform_modes() -> dict[str, tuple[str, str, str | None]]:
 
 @cache
 def _platform_modes_in(platforms_dir: str) -> dict[str, tuple[str, str, str | None]]:
-    from common import load_platform_config
+    from model.platforms import load_platform_config
 
     out: dict[str, tuple[str, str, str | None]] = {}
     for name in _setups_in(platforms_dir):
@@ -1165,6 +1165,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

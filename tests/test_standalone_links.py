@@ -18,16 +18,15 @@ import textwrap
 import unittest
 from pathlib import Path
 
-from common import (
+from resolve.layout import (
     entry_launch_systems,
-    load_emulator_profiles,
-    load_platform_config,
-    platform_layouts,
     standalone_bindings_for,
     standalone_destination,
-    standalone_set,
     system_file_index,
 )
+from model.profiles import load_emulator_profiles
+from model.platforms import load_platform_config
+from resolve.standalone import platform_layouts, standalone_set
 from resolve.launchers import (
     SEARCHED_FILES,
     bound_path,
@@ -728,7 +727,7 @@ class AmiberryBuildEachPlatformShips(unittest.TestCase):
         cls.profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
 
     def resolved(self, platform: str) -> set[str]:
-        from common import resolve_platform_cores
+        from resolve.cores import resolve_platform_cores
 
         cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
         return {p for p in resolve_platform_cores(cfg, self.profiles) if p.startswith("amiberry")}
@@ -739,7 +738,7 @@ class AmiberryBuildEachPlatformShips(unittest.TestCase):
                 self.assertEqual(self.resolved(platform), own)
 
     def test_no_standalone_amiberry_is_the_buildbot_revision(self) -> None:
-        from common import list_registered_platforms
+        from model.registry import list_registered_platforms
 
         for platform in list_registered_platforms(str(REPO_ROOT / "platforms")):
             cfg = load_platform_config(platform, str(REPO_ROOT / "platforms"))
@@ -750,7 +749,8 @@ class AmiberryBuildEachPlatformShips(unittest.TestCase):
                 self.assertEqual([standalone for _view, standalone in layouts], [False])
 
     def test_the_buildbot_core_runs_where_retroarch_installs_it(self) -> None:
-        from common import load_target_config, resolve_platform_cores
+        from model.targets import load_target_config
+        from resolve.cores import resolve_platform_cores
 
         for platform in ("retroarch", "lakka", "batocera"):
             with self.subTest(platform=platform):

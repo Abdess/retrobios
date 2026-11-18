@@ -429,7 +429,7 @@ def _check_get_pages(
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     import release_record
     from siteguides import INSTALL_SH
-    from common import list_registered_platforms, list_release_pack_platforms
+    from model.registry import list_registered_platforms, list_release_pack_platforms
 
     if not (platforms_dir / "_registry.yml").is_file():
         return [f"no platform registry in {platforms_dir}"]
@@ -523,7 +523,7 @@ def main() -> None:
         help="stop listing after this many errors (default: %(default)s)",
     )
     args = parser.parse_args()
-    from common import require_directory
+    from core.cli import require_directory
 
     require_directory(str(args.platforms_dir), "--platforms-dir")
 
@@ -549,6 +549,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

@@ -47,60 +47,54 @@ from model.alternatives import (
     settle_sets,
     slot_set_keys,
 )
-from common import (
-    TARGET_KEY,
+from resolve.contentlayout import TARGET_KEY
+from model.targets import (
     canonical_target_name,
-    OUTER_ROOTS,
-    _foreign_tree,
-    _owner_tokens,
+    target_listing_line,
+    list_available_targets,
+    build_target_cores_cache,
+)
+from resolve.layout import OUTER_ROOTS, runs_standalone, system_dir_path
+from resolve.ownership import _foreign_tree, _owner_tokens
+from model.cliargs import (
     platform_arg,
     work_from_repo_root,
-    target_listing_line,
-    suggest_names,
-    system_index,
     require_platform,
-    archive_entry,
-    archive_is_optional,
-    archive_members,
-    profiles_for_systems,
-    PROFILE_IDENTITY_FIELDS,
-    list_available_targets,
     list_platform_system_ids,
-    list_registered_platforms,
-    build_target_cores_cache,
-    build_zip_contents_index,
-    check_inside_zip,
-    compute_hashes,
-    expand_directory_entries,
-    platform_declarations,
-    platform_declared_contents,
-    group_identical_platforms,
     list_emulator_profiles,
     list_system_ids,
-    load_data_dir_registry,
-    load_database,
-    load_emulator_profiles,
-    load_platform_config,
-    without_profile_blind,
-    resolve_system_arg,
     print_platform_listing,
-    select_systems,
-    platform_scope_systems,
-    system_scope_error,
-    md5sum,
-    require_yaml,
-    resolve_local_file,
+)
+from core.cli import suggest_names
+from model.systems import system_index, resolve_system_arg, select_systems
+from resolve.archives import archive_entry, archive_is_optional, archive_members
+from model.profiles import (
+    profiles_for_systems,
+    PROFILE_IDENTITY_FIELDS,
+    load_emulator_profiles,
     ProfileSelectionError,
-    resolve_platform_cores,
-    platform_layouts,
-    runs_standalone,
-    standalone_set as platform_standalone_set,
     entry_serves_systems,
     entry_system_ids,
-    sanitize_pack_path,
     select_emulator_profiles,
-    system_dir_path,
 )
+from model.registry import list_registered_platforms, load_data_dir_registry
+from core.ziptools import build_zip_contents_index, check_inside_zip
+from core.hashing import compute_hashes, md5sum
+from resolve.directories import expand_directory_entries
+from model.declarations import platform_declarations, platform_declared_contents
+from resolve.grouping import group_identical_platforms
+from model.database import load_database
+from model.platforms import load_platform_config
+from resolve.cores import (
+    without_profile_blind,
+    platform_scope_systems,
+    system_scope_error,
+    resolve_platform_cores,
+)
+from model.safeparse import require_yaml
+from resolve.localfile import resolve_local_file
+from resolve.standalone import platform_layouts, standalone_set as platform_standalone_set
+from core.paths import sanitize_pack_path
 
 from resolve.categories import BIOS, EntryCategories
 from resolve.launchers import LauncherLayer, declared_destinations, held_record, launcher_unproven
@@ -3898,6 +3892,6 @@ def _overall_summary(group_results: list[tuple[dict, list[str]]]) -> str:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)

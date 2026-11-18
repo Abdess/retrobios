@@ -19,7 +19,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import common
+from model.profiles import _emulator_profiles_cache, load_emulator_profiles
+from resolve.content import content_fits, size_fits, _masked_sha1_verdict
+from resolve.localfile import resolve_local_file
 import generate_pack as builder
 import packextras
 from core.romdir import romdir_accepts, walk
@@ -191,21 +193,21 @@ class OtherContentTests(unittest.TestCase):
             config[0x20] ^= 0xFF
             reconfigured = Path(tmp, "reconfigured.rom")
             reconfigured.write_bytes(bytes(config))
-            self.assertTrue(common.content_fits(entry_, str(good)))
-            self.assertTrue(common.content_fits(entry_, str(reconfigured)))
-            self.assertTrue(common.content_fits(entry_, str(other)))  # past 0x1c000
-            self.assertFalse(common.content_fits(entry_, str(short)))
+            self.assertTrue(content_fits(entry_, str(good)))
+            self.assertTrue(content_fits(entry_, str(reconfigured)))
+            self.assertTrue(content_fits(entry_, str(other)))  # past 0x1c000
+            self.assertFalse(content_fits(entry_, str(short)))
             payload[0x100] ^= 1
             good.write_bytes(bytes(payload))
-            common._masked_sha1_verdict.cache_clear()
-            self.assertFalse(common.content_fits(entry_, str(good)))
+            _masked_sha1_verdict.cache_clear()
+            self.assertFalse(content_fits(entry_, str(good)))
 
     def test_size_multiple(self):
         flash = {"min_size": 65536, "size_multiple": 65536, "validation": ["size"]}
-        self.assertTrue(common.size_fits(flash, 262144))
-        self.assertTrue(common.size_fits(flash, 65536 * 3))
-        self.assertFalse(common.size_fits(flash, 65536 + 1))
-        self.assertFalse(common.size_fits(flash, 0))
+        self.assertTrue(size_fits(flash, 262144))
+        self.assertTrue(size_fits(flash, 65536 * 3))
+        self.assertFalse(size_fits(flash, 65536 + 1))
+        self.assertFalse(size_fits(flash, 0))
 
 
 class ScannerVerifyManifestAgree(unittest.TestCase):
@@ -255,13 +257,13 @@ class ScannerVerifyManifestAgree(unittest.TestCase):
             "  - name: \"<bios>.nvm\"\n    path: \"ps2/<bios>.nvm\"\n    size: 1024\n"
             "  - name: \"<bios>.mec\"\n    path: \"ps2/<bios>.mec\"\n    size: 4\n"
         )
-        common._emulator_profiles_cache.clear()
-        self.profiles = common.load_emulator_profiles(str(self.root / "emulators"))
+        _emulator_profiles_cache.clear()
+        self.profiles = load_emulator_profiles(str(self.root / "emulators"))
         self.config = {"platform": "Demo", "verification_mode": "existence",
                        "cores": ["demo", "anchor"], "base_destination": "", "systems": {}}
 
     def tearDown(self):
-        common._emulator_profiles_cache.clear()
+        _emulator_profiles_cache.clear()
         self._tmp.cleanup()
 
     def accepted(self) -> set[str]:
@@ -269,7 +271,7 @@ class ScannerVerifyManifestAgree(unittest.TestCase):
         beside an accepted image of its stem."""
         seed = self.profiles["demo"]["files"][0]
         images = {n for n in self.IMAGES
-                  if common.content_fits(seed, str(self.root / "bios" / "PS2" / n))}
+                  if content_fits(seed, str(self.root / "bios" / "PS2" / n))}
         stems = {n.rsplit(".", 1)[0] for n in images}
         return images | {n for n in self.COMPANIONS if n.rsplit(".", 1)[0] in stems}
 
@@ -300,7 +302,7 @@ class ScannerVerifyManifestAgree(unittest.TestCase):
             path = str(self.root / "bios" / "PS2" / name)
             entry_ = {"name": name, "found_by": "content", "validation": ["romdir"],
                       "romdir": MODERN, "source_profile": "labels"}
-            resolved, status = common.resolve_local_file(entry_, self.db)
+            resolved, status = resolve_local_file(entry_, self.db)
             failure = check_file_validation(path, name, index)
             with self.subTest(name=name):
                 accepted = name in self.accepted()

@@ -197,7 +197,7 @@ def fetch_logos() -> None:
 
 
 def fetch_icons() -> None:
-    from common import load_database
+    from model.database import load_database
     from sitecollection import _group_by_manufacturer
     from siterender import SYSTEM_ICON_BASE, _icon_name
 
@@ -242,6 +242,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    from common import run_cli
+    from core.cli import run_cli
 
     run_cli(main)
