@@ -665,7 +665,7 @@ under `.cache/upstream/`, addressed by commit sha, so `--offline` replays a
 previous run. GitHub, GitLab and Forgejo upstreams are supported, other
 hosts are reported as skipped.
 
-The forge side lives in `upstream.py`: it resolves a revision, fetches a
+The forge side lives in `core/upstream.py`: it resolves a revision, fetches a
 file at a given sha, and compares trees, for the forge families the
 profiles point at. It knows nothing about profile structure, so anchoring
 logic and repository access stay testable apart.
@@ -1350,9 +1350,10 @@ before a release (wiki/release-process.md). Its lines stay in
 
 | Script | Purpose |
 |--------|---------|
-| `core/` | Standard library only: hashing, ZIP reading and TorrentZip, atomic writes and output locks, `run_cli` and the input errors it prints on one line, the GitHub token, the repository root |
-| `model/` | Data loading: `database.json`, platform configs and the registry, emulator profiles, hardware targets, system ids, the region vocabulary, dump catalogues, release assets |
+| `core/` | Standard library only: hashing, ZIP reading and TorrentZip, atomic writes and output locks, `run_cli` and the input errors it prints on one line, the GitHub token, the repository root, forge access (`upstream.py`) |
+| `model/` | Data loading: `database.json`, platform configs and the registry, emulator profiles, hardware targets, system ids, the region vocabulary, dump catalogues, release assets, the `source_ref` grammar (`sourceref.py`) |
 | `resolve/` | From a declaration to a file: content checks, `resolve_local_file` and its stages, archive members, launcher layouts, the cores a platform runs, validation, slots, truth |
+| `profiling/` | What `profile_sync.py` runs: citations, anchoring, the report and its forms, version checks, detection, triage, and the guarded writes (recale, bump, prose realignment, `version_basis`) |
 | `retired_files.py` | The record of files that left the collection, `retired.json`, which `generate_db.py` appends to and the site's lookup reads. `--backfill` rebuilds it from the history of `database.json` since content addresses were published (`--output` names another file) |
 | `dedup.py` | Deduplicate `bios/` (`--dry-run`, `--bios-dir`): byte-identical copies are deleted and one kept. Identical MAME sets under other names stay one file, named in `_mame_clones.json`. Trees addressed by path are left alone (`NODEDUP_DIRS`), under a folder of that name at any depth: BBK, Bungie, C-Dogs SDL, Ikemen GO, mame, PinMAME, RPG Maker, ScummVM, Softdisk, TheXTech, splitwolf, Theme Hospital, c64-emu, opentyrian, tzdata |
 | `identity.py` | One content filed under two identities: groups `bios/` by content and reports a group that crosses manufacturers outside `KNOWN_SHARED` (`--strict` exits 1, pipeline step 3a) |
