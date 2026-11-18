@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import json
 import os
 import re
@@ -10,6 +9,7 @@ import subprocess
 from collections.abc import Iterable
 from typing import NamedTuple
 
+from core.hashing import compute_hashes
 from model.composition import composition_tier
 from model.largefiles import LARGE_FILES_RELEASE, LARGE_FILES_REPO, asset_names, registered_paths
 
@@ -268,11 +268,7 @@ def cache_hashes(names: set[str], cache_dir: str = ".cache/large") -> dict[str, 
     for name in names:
         path = os.path.join(cache_dir, name)
         if os.path.isfile(path):
-            digest = hashlib.sha1()
-            with open(path, "rb") as handle:
-                for chunk in iter(lambda: handle.read(1 << 20), b""):
-                    digest.update(chunk)
-            hashes[name] = digest.hexdigest()
+            hashes[name] = compute_hashes(path, frozenset({"sha1"}), cache=False)["sha1"]
     return hashes
 
 

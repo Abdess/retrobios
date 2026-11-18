@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import os
 import shutil
 import subprocess
@@ -10,6 +9,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
+from core.hashing import compute_hashes
 from model.largefiles import LARGE_FILES_RELEASE, LARGE_FILES_REPO, asset_names, registered_paths
 from release.assets import compare, expected_assets, expected_digests, fetch_release
 
@@ -28,11 +28,7 @@ class Upload:
 
 
 def sha1_of(path: Path) -> str:
-    digest = hashlib.sha1()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1 << 20), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
+    return compute_hashes(path, frozenset({"sha1"}), cache=False)["sha1"]
 
 
 def database_sha1(db: dict) -> dict[str, str]:

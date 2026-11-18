@@ -3,12 +3,12 @@
 from __future__ import annotations
 
 import contextlib
-import hashlib
 import os
 import sys
 import tempfile
 
 from core.artifacts import copy_file_atomic, set_plain_mode
+from core.hashing import compute_hashes
 from model.database import load_database
 
 
@@ -36,11 +36,7 @@ def index_cache(cache_dir: str) -> dict[str, str]:
         path = os.path.join(cache_dir, name)
         if not os.path.isfile(path):
             continue
-        digest = hashlib.sha1()
-        with open(path, "rb") as f:
-            for chunk in iter(lambda: f.read(1 << 20), b""):
-                digest.update(chunk)
-        index[digest.hexdigest()] = path
+        index[compute_hashes(path, frozenset({"sha1"}), cache=False)["sha1"]] = path
     return index
 
 
@@ -59,11 +55,7 @@ def _copy_verified(source: str, path: str, sha1: str) -> bool:
     os.close(handle)
     try:
         copy_file_atomic(source, scratch)
-        digest = hashlib.sha1()
-        with open(scratch, "rb") as f:
-            for chunk in iter(lambda: f.read(1 << 20), b""):
-                digest.update(chunk)
-        if digest.hexdigest() != sha1:
+        if compute_hashes(scratch, frozenset({"sha1"}), cache=False)["sha1"] != sha1:
             print(f"Changed in the cache while restoring: {source}", file=sys.stderr)
             return False
         set_plain_mode(scratch)

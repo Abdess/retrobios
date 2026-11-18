@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-import hashlib
 import json
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
+from core.hashing import compute_hashes
 from release.assets import digests_of
 from model.largefiles import LARGE_FILES_REPO
 
@@ -114,11 +114,7 @@ def compare_release(
 
 
 def _sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with open(path, "rb") as handle:
-        for chunk in iter(lambda: handle.read(1 << 20), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
+    return compute_hashes(path, frozenset({"sha256"}), cache=False)["sha256"]
 
 
 def fetch_assets(tag: str) -> tuple[dict[str, Asset], bool]:
