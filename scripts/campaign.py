@@ -101,11 +101,11 @@ import campaign_profiles
 import campaign_rules as rules
 import measurement_records as mr
 from autorun import now_iso
+from core.paths import REPO_ROOT
 
 T = TypeVar("T")
 
-ROOT = Path(__file__).resolve().parent.parent
-CONTENT_FILE = ROOT / "tests" / "campaign" / "content.yml"
+CONTENT_FILE = REPO_ROOT / "tests" / "campaign" / "content.yml"
 BUILDBOT = "https://buildbot.libretro.com/nightly/linux/x86_64/latest/"
 LOCK_HELD_ENV = autorun.LOCK_HELD_ENV
 ROMFETCH_ENV = "RETROBIOS_ROMFETCH"
@@ -315,8 +315,8 @@ class Paths:
     @classmethod
     def default(cls) -> Paths:
         main = autorun.main_checkout()
-        return cls(root=ROOT, home=main / ".cache" / "campaign",
-                   content=main / ".cache" / "test-content", db=ROOT / "database.json")
+        return cls(root=REPO_ROOT, home=main / ".cache" / "campaign",
+                   content=main / ".cache" / "test-content", db=REPO_ROOT / "database.json")
 
 
 ROMFETCH_PASSED = ("XDG_CONFIG_HOME", "XDG_CACHE_HOME", "XDG_DATA_HOME")
@@ -948,7 +948,7 @@ class Campaign:
         self.paths = paths
         self.settings = settings or Settings()
         self.host = host or Host()
-        self.probe_script = probe_script or ROOT / "scripts" / "core_probe.py"
+        self.probe_script = probe_script or REPO_ROOT / "scripts" / "core_probe.py"
         self.lock_path = lock_path or Path(os.environ.get(autorun.LOCK_ENV) or autorun.DEFAULT_LOCK)
         self.state = load_state(paths.state)
         self.cores = Cores(self)
@@ -1984,7 +1984,7 @@ def _parser() -> argparse.ArgumentParser:
                        help="with --commit, also commit after every N emulators")
     refs_p = sub.add_parser("references", parents=[scope],
                             help="run the full set with PNG frames and list reference candidates")
-    refs_p.add_argument("--png-dir", default=str(ROOT / "tmp" / "campaign" / "references"),
+    refs_p.add_argument("--png-dir", default=str(REPO_ROOT / "tmp" / "campaign" / "references"),
                         help="where the frames are written, one folder per core and content")
     status_p = sub.add_parser("status", help="done, failed and pending checks, and why")
     status_p.add_argument("--json", action="store_true", help="the report as JSON")

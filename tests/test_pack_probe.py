@@ -302,7 +302,7 @@ class RecordsNameNoLocalPath(unittest.TestCase):
         import unittest.mock
 
         work = TMP / "error-paths"
-        script = pp.ROOT / "scripts" / "core_probe.py"
+        script = REPO_ROOT / "scripts" / "core_probe.py"
 
         def fake_run(command, **kwargs):
             return subprocess.CompletedProcess(command, 1, "", f'  File "{script}", line 9\n')

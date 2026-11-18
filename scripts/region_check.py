@@ -47,10 +47,10 @@ if sys.version_info < (3, 9):
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import yaml
+from core.paths import REPO_ROOT
 
-ROOT = Path(__file__).resolve().parent.parent
-CONTENT_FILE = ROOT / "tests" / "campaign" / "content.yml"
-CORES = ROOT / ".cache" / "region" / "cores"
+CONTENT_FILE = REPO_ROOT / "tests" / "campaign" / "content.yml"
+CORES = REPO_ROOT / ".cache" / "region" / "cores"
 NIGHTLY = "https://buildbot.libretro.com/nightly/linux/x86_64/latest/{core}_libretro.so.zip"
 VARIANTS = ("full", "own", "others", "pack")
 SUBJECT = re.compile(r"^region-(?P<core>[a-z0-9_]+)-(?P<game>[a-z0-9-]+)-(?P<variant>full|own|others|pack)$")
@@ -279,9 +279,9 @@ def pack_files(emulator: str, region: str, work: Path) -> dict[str, Path]:
     from core.ziptools import safe_extract_zip
 
     out_dir = work / "pack"
-    subprocess.run([sys.executable, str(ROOT / "scripts" / "generate_pack.py"), "--emulator", emulator,
+    subprocess.run([sys.executable, str(REPO_ROOT / "scripts" / "generate_pack.py"), "--emulator", emulator,
                     "--region", PACK_REGION[region], "--output-dir", str(out_dir)],
-                   cwd=ROOT, check=True, capture_output=True, text=True)
+                   cwd=REPO_ROOT, check=True, capture_output=True, text=True)
     zips = sorted(out_dir.glob("*.zip"))
     if len(zips) != 1:
         raise FileNotFoundError(f"{out_dir}: {len(zips)} packs, one expected")
@@ -295,14 +295,14 @@ def local_resolver() -> Callable[[dict], Path | None]:
     from model.database import load_database
     from resolve.localfile import resolve_local_file
 
-    db = load_database(str(ROOT / "database.json"))
+    db = load_database(str(REPO_ROOT / "database.json"))
 
     def local(entry: dict) -> Path | None:
         hint = entry.get("path") if isinstance(entry.get("path"), str) else ""
         path, status = resolve_local_file(entry, db, dest_hint=hint or "")
         if not path or status in ("not_found", "hash_mismatch"):
             return None
-        found = Path(path) if Path(path).is_absolute() else ROOT / path
+        found = Path(path) if Path(path).is_absolute() else REPO_ROOT / path
         return found if found.is_file() else None
 
     return local
@@ -322,7 +322,7 @@ def probe_when_idle(argv: list[str], max_wait: float,
     threshold stays core_probe's own."""
     started = clock()
     while True:
-        proc = runner(argv, cwd=ROOT, capture_output=True, text=True)
+        proc = runner(argv, cwd=REPO_ROOT, capture_output=True, text=True)
         if proc.returncode != BUSY or clock() - started >= max_wait:
             return proc
         pause(POLL_S)
@@ -331,7 +331,7 @@ def probe_when_idle(argv: list[str], max_wait: float,
 def run(args: argparse.Namespace) -> int:
     from model.profiles import load_emulator_profiles
 
-    profile = load_emulator_profiles(str(ROOT / "emulators"))[args.emulator]
+    profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))[args.emulator]
     entries = region_entries(profile, args.system)
     if not entries:
         print(f"ERROR: {args.emulator} declares no regional BIOS for {args.system}", file=sys.stderr)
@@ -345,15 +345,15 @@ def run(args: argparse.Namespace) -> int:
     failures = 0
     for game in games:
         load = content_file(game, Path(args.content_dir))
-        with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as scratch:
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as scratch:
             variants = plan_variants(entries, game["region"], local)
             variants["pack"] = pack_files(args.emulator, game["region"], Path(scratch))
             for label in args.variants or VARIANTS:
-                argv = [sys.executable, str(ROOT / "scripts" / "core_probe.py"), "run",
+                argv = [sys.executable, str(REPO_ROOT / "scripts" / "core_probe.py"), "run",
                         "--core", str(core), "--content", str(load), "--content-label", game["name"],
                         "--frames", str(game.get("frames", 3600)),
                         "--frame-hash-every", str(game.get("frame_hash_every", 10)),
-                        "--record", str(ROOT), "--emulator", args.emulator,
+                        "--record", str(REPO_ROOT), "--emulator", args.emulator,
                         "--subject", subject(core.name.removesuffix("_libretro.so"), game["name"], label),
                         "--require-sandbox", "--timeout", str(args.timeout)]
                 if url:
@@ -369,7 +369,7 @@ def run(args: argparse.Namespace) -> int:
     return 1 if failures else 0
 
 
-def collect(root: Path = ROOT, stored_records: list | None = None) -> list[dict]:
+def collect(root: Path = REPO_ROOT, stored_records: list | None = None) -> list[dict]:
     """Every region outcome the records under measurements/ hold. A game
     listed under several systems (sega-megacd and mega-cd) is judged under
     the one whose profile ran it."""
@@ -411,7 +411,7 @@ def main(argv: list[str] | None = None) -> int:
     go.add_argument("--core-name", help="buildbot core name, e.g. mednafen_psx (downloads the nightly)")
     go.add_argument("--core", help="a core .so to use instead of the nightly")
     go.add_argument("--core-artifact", help="where --core was downloaded from")
-    go.add_argument("--content-dir", default=str(ROOT / ".cache" / "test-content"),
+    go.add_argument("--content-dir", default=str(REPO_ROOT / ".cache" / "test-content"),
                     help="where romfetch keeps the test games (default: .cache/test-content)")
     go.add_argument("--variants", nargs="*", choices=VARIANTS, help="a subset of the four runs")
     go.add_argument("--timeout", type=int, default=900, help="seconds per run")

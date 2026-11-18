@@ -72,13 +72,13 @@ from core.cli import run_cli
 from resolve.layout import runs_standalone
 from resolve.validation import filter_files_by_mode
 from core.ziptools import safe_extract_zip
+from core.paths import REPO_ROOT
 
-ROOT = Path(__file__).resolve().parent.parent
 MAIN = autorun.main_checkout()
-PACK_CONTENT_FILE = ROOT / "tests" / "campaign" / "pack_content.yml"
+PACK_CONTENT_FILE = REPO_ROOT / "tests" / "campaign" / "pack_content.yml"
 CONTENT_DIR = MAIN / ".cache" / "test-content"
 CORE_CACHE = MAIN / ".cache" / "pack-probe" / "cores"
-WORK_DIR = ROOT / "tmp" / "pack_probe"
+WORK_DIR = REPO_ROOT / "tmp" / "pack_probe"
 BUILDBOT = campaign.BUILDBOT
 PACK_PROBES = mr.PACK_PROBES
 INSTALLS = ("pack", "installer")
@@ -186,10 +186,10 @@ def installer_layout(platform: str, pack: Path, identity: dict, manifest_path: P
     system_dir, save_dir = root / "system", root / "saves"
     if root.exists():
         shutil.rmtree(root)
-    argv = [sys.executable, str(ROOT / "install.py"), "--platform", platform, "--dest", str(system_dir),
+    argv = [sys.executable, str(REPO_ROOT / "install.py"), "--platform", platform, "--dest", str(system_dir),
             "--save-dir", str(save_dir), "--from-pack", str(pack), "--manifest", str(manifest_path),
             "--offline", "--yes", "--quiet", *narrow]
-    proc = subprocess.run(argv, capture_output=True, text=True, check=False, cwd=ROOT)
+    proc = subprocess.run(argv, capture_output=True, text=True, check=False, cwd=REPO_ROOT)
     if proc.returncode != 0 or not system_dir.is_dir():
         raise ProbeFailure(f"install.py exited {proc.returncode}: {(proc.stderr or proc.stdout)[-1500:]}")
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -197,7 +197,7 @@ def installer_layout(platform: str, pack: Path, identity: dict, manifest_path: P
     files = {rel: entries.get(rel) for rel in walk(system_dir)}
     source = {
         "pack": identity,
-        "manifest": {"path": manifest_path.relative_to(ROOT).as_posix() if manifest_path.is_relative_to(ROOT)
+        "manifest": {"path": manifest_path.relative_to(REPO_ROOT).as_posix() if manifest_path.is_relative_to(REPO_ROOT)
                      else manifest_path.name,
                      "sha256": file_sha(manifest_path, "sha256"),
                      "generated": manifest.get("generated"), "pack_files": manifest.get("pack_files")},
@@ -213,9 +213,9 @@ def build_pack(platform: str, out_dir: Path, narrow: Sequence[str] = ()) -> Path
     out_dir.mkdir(parents=True, exist_ok=True)
     for old in out_dir.glob("*_BIOS_Pack*.zip"):
         old.unlink()
-    argv = [sys.executable, str(ROOT / "scripts" / "generate_pack.py"), "--platform", platform,
+    argv = [sys.executable, str(REPO_ROOT / "scripts" / "generate_pack.py"), "--platform", platform,
             "--offline", "--output-dir", str(out_dir), *narrow]
-    proc = subprocess.run(argv, capture_output=True, text=True, check=False, cwd=ROOT)
+    proc = subprocess.run(argv, capture_output=True, text=True, check=False, cwd=REPO_ROOT)
     packs = sorted(p for p in out_dir.glob("*_BIOS_Pack*.zip") if ".part" not in p.name)
     if proc.returncode != 0 or len(packs) != 1:
         raise ProbeFailure(f"generate_pack.py exited {proc.returncode} with {len(packs)} packs: "
@@ -486,12 +486,12 @@ def core_probe(argv: list[str], staged: set[str], layout: Layout, work: Path) ->
     argfile = work / "system-files.args"
     argfile.write_text("".join(f"--system-file\n{rel}={layout.root / rel}\n" for rel in sorted(staged)),
                        encoding="utf-8")
-    command = [sys.executable, str(ROOT / "scripts" / "core_probe.py"), *argv, f"@{argfile}"]
+    command = [sys.executable, str(REPO_ROOT / "scripts" / "core_probe.py"), *argv, f"@{argfile}"]
     with probe_lock():
         if "--record" in argv:
             wait_idle()
         # core_probe takes the same lock unless told its caller holds it.
-        proc = subprocess.run(command, capture_output=True, text=True, check=False, cwd=ROOT,
+        proc = subprocess.run(command, capture_output=True, text=True, check=False, cwd=REPO_ROOT,
                               timeout=PROBE_TIMEOUT * 2 + 120,
                               env={**os.environ, PROBE_LOCK_HELD_ENV: "1", PROBE_LOCK_ENV: str(PROBE_LOCK)})
     record = None
@@ -502,7 +502,7 @@ def core_probe(argv: list[str], staged: set[str], layout: Layout, work: Path) ->
             record = None
     # A traceback spells the checkout and the scratch folders: a record read
     # on another machine names them by role.
-    places = [(str(work), "<work>"), (str(layout.root), "<dest>"), (str(ROOT), "<repo>")]
+    places = [(str(work), "<work>"), (str(layout.root), "<dest>"), (str(REPO_ROOT), "<repo>")]
     error = proc.stderr.strip()
     for prefix, name in sorted(places, key=lambda place: -len(place[0])):
         error = error.replace(prefix, name)
@@ -514,9 +514,9 @@ def probe_argv(core: dict, choice: CoreChoice, content: campaign.Content, load: 
     argv = ["run", "--core", core["path"], "--content", str(load), "--content-label", content.name,
             "--frames", str(content.frames), "--frame-hash-every", str(content.frame_hash_every),
             "--require-sandbox", "--timeout", str(PROBE_TIMEOUT),
-            "--work-dir", str(ROOT / "tmp" / "core_probe"), "--core-artifact", core["url"]]
+            "--work-dir", str(REPO_ROOT / "tmp" / "core_probe"), "--core-artifact", core["url"]]
     if record:
-        argv += ["--record", str(ROOT), "--emulator", choice.emulator, "--subject", subject]
+        argv += ["--record", str(REPO_ROOT), "--emulator", choice.emulator, "--subject", subject]
         if supersedes:
             argv += ["--supersedes", supersedes]
     return argv
@@ -601,11 +601,11 @@ def probe_one(layout: Layout, platform: str, config: dict, profile: dict, target
 
 def git_head() -> str | None:
     proc = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, check=False,
-                          cwd=ROOT)
+                          cwd=REPO_ROOT)
     return proc.stdout.strip() or None
 
 
-def append_line(line: dict, root: Path = ROOT) -> dict:
+def append_line(line: dict, root: Path = REPO_ROOT) -> dict:
     sealed = mr.seal_line(line, mr.CAMPAIGN_FILES[PACK_PROBES][0])
     path = root / mr.records_path(PACK_PROBES)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -627,9 +627,9 @@ class Unit:
 
 def plan(platform: str, systems: set[str] | None, cores: set[str] | None,
          buildbot: set[str]) -> tuple[dict, dict, list[Unit]]:
-    config = load_platform_config(platform, str(ROOT / "platforms"))
-    profiles = load_emulator_profiles(str(ROOT / "emulators"))
-    target = load_target_config(platform, TARGETS[platform], str(ROOT / "platforms"))
+    config = load_platform_config(platform, str(REPO_ROOT / "platforms"))
+    profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+    target = load_target_config(platform, TARGETS[platform], str(REPO_ROOT / "platforms"))
     units: list[Unit] = []
     for system, contents in sorted(load_contents([campaign.CONTENT_FILE, PACK_CONTENT_FILE]).items()):
         if systems and system not in systems:
@@ -662,7 +662,7 @@ def run(args: argparse.Namespace) -> int:
             layout = pack_layout(pack, work / "pack", identity)
         else:
             layout = installer_layout(args.platform, pack, identity,
-                                      ROOT / "install" / f"{args.platform}.json", work / "installer")
+                                      REPO_ROOT / "install" / f"{args.platform}.json", work / "installer")
         try:
             for unit in units:
                 try:
@@ -712,7 +712,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    require_platform(args.platform, str(ROOT / "platforms"))
+    require_platform(args.platform, str(REPO_ROOT / "platforms"))
     if args.platform not in TARGETS:
         print(f"ERROR: pack_probe tests {', '.join(sorted(TARGETS))}, not {args.platform}",
               file=sys.stderr)
