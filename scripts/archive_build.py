@@ -34,7 +34,6 @@ import io
 import json
 import os
 import re
-import sys
 import zipfile
 from collections import defaultdict
 from collections.abc import Callable, Iterable
@@ -43,12 +42,10 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import BinaryIO
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-
 from core.torrentzip import Source as Readable
+from core.paths import REPO_ROOT
 from core.torrentzip import write_torrentzip, zlib_ng_version
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
 ARCHIVES_FILE = REPO_ROOT / "recipes" / "archives.json"
 # The writer contract: build_torrentzip's layout over stock zlib. A change to
 # the layout is a new builder name and a new proof of every record.

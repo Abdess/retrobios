@@ -31,6 +31,7 @@ from model.dumpcatalog import DEFAULT_PROVENANCE_DIR, load_provenance_snapshots
 from model.database import load_database
 from model.profiles import load_emulator_profiles
 from core.artifacts import write_if_changed
+from core.paths import REPO_ROOT
 
 HASH_FIELDS = ("sha1", "md5", "sha256")
 
@@ -202,7 +203,7 @@ def _held_in_archive(entry: dict, members: dict) -> bool:
     return False
 
 
-RECIPES_DIR = Path(__file__).resolve().parent.parent / "recipes"
+RECIPES_DIR = REPO_ROOT / "recipes"
 
 
 def romset_index(recipes_dir: Path = RECIPES_DIR) -> dict[tuple[str, int], list[dict]]:
