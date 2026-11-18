@@ -9,7 +9,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
-from core.hashing import compute_hashes
+from core.hashing import file_digest
 from model.largefiles import LARGE_FILES_RELEASE, LARGE_FILES_REPO, asset_names, registered_paths
 from release.assets import compare, expected_assets, expected_digests, fetch_release
 
@@ -28,7 +28,7 @@ class Upload:
 
 
 def sha1_of(path: Path) -> str:
-    return compute_hashes(path, frozenset({"sha1"}), cache=False)["sha1"]
+    return file_digest(path)
 
 
 def database_sha1(db: dict) -> dict[str, str]:

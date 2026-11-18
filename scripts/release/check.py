@@ -7,7 +7,7 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
-from core.hashing import compute_hashes
+from core.hashing import file_digest
 from release.assets import digests_of
 from model.largefiles import LARGE_FILES_REPO
 
@@ -114,7 +114,7 @@ def compare_release(
 
 
 def _sha256(path: Path) -> str:
-    return compute_hashes(path, frozenset({"sha256"}), cache=False)["sha256"]
+    return file_digest(path, "sha256")
 
 
 def fetch_assets(tag: str) -> tuple[dict[str, Asset], bool]:

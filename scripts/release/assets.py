@@ -7,9 +7,10 @@ import os
 import re
 import subprocess
 from collections.abc import Iterable
+from pathlib import Path
 from typing import NamedTuple
 
-from core.hashing import compute_hashes
+from core.hashing import file_digest
 from model.composition import composition_tier
 from model.largefiles import LARGE_FILES_RELEASE, LARGE_FILES_REPO, asset_names, registered_paths
 
@@ -268,7 +269,7 @@ def cache_hashes(names: set[str], cache_dir: str = ".cache/large") -> dict[str, 
     for name in names:
         path = os.path.join(cache_dir, name)
         if os.path.isfile(path):
-            hashes[name] = compute_hashes(path, frozenset({"sha1"}), cache=False)["sha1"]
+            hashes[name] = file_digest(Path(path))
     return hashes
 
 
