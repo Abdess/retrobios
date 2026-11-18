@@ -14,8 +14,9 @@ import sys
 from pathlib import Path
 
 from core.artifacts import write_text_atomic
+from core.paths import REPO_ROOT
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = REPO_ROOT
 OUTPUT = ROOT / "schemas" / "install-events.schema.json"
 
 _spec = importlib.util.spec_from_file_location("install", ROOT / "install.py")

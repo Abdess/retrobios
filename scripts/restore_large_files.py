@@ -23,7 +23,6 @@ import os
 import sys
 import tempfile
 
-sys.path.insert(0, os.path.dirname(__file__))
 from core.artifacts import set_plain_mode
 from core.artifacts import copy_file_atomic
 from model.database import load_database

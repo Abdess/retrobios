@@ -17,8 +17,9 @@ import hashlib
 import re
 import sys
 from pathlib import Path
+from core.paths import REPO_ROOT
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = REPO_ROOT
 INSTALLER = "install.py"
 # Each bootstrap and its one pin line, the value between the two groups.
 PINS: dict[str, re.Pattern[str]] = {

@@ -24,13 +24,11 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
 import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-sys.path.insert(0, os.path.dirname(__file__))
 from check_release_assets import digests_of
 from model.registry import list_release_pack_platforms
 from core.cli import require_directory

@@ -49,11 +49,12 @@ from typing import TYPE_CHECKING, Any, Callable
 
 from sitegen import handheld as sitehandheld
 from core.artifacts import write_text_atomic
+from core.paths import REPO_ROOT
 
 if TYPE_CHECKING:
     from install import LocalCopy, Progress, _OsRule
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = REPO_ROOT
 PAGE = ROOT / "wiki" / "installer.md"
 INSTALLER = ROOT / "install.py"
 

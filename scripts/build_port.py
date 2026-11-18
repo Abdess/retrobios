@@ -39,8 +39,8 @@ import zipfile
 from pathlib import Path
 
 from core.artifacts import ArtifactLockBusy, artifact_lock
+from core.paths import REPO_ROOT
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
 PORT_DIR = "retrobios"
 PORT_SCRIPT = "RetroBIOS.sh"
 PORT_ZIP = "RetroBIOS.zip"

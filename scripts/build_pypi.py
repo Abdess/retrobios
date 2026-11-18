@@ -35,8 +35,9 @@ from pathlib import Path
 
 from sitegen.bootstrap import PIN
 from model.guides import SH_NAME
+from core.paths import REPO_ROOT
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = REPO_ROOT
 PACKAGE_DIR = ROOT / "packaging" / "pypi"
 DEFAULT_OUTPUT = ROOT / "tmp" / "pypi-dist"
 MODULE = "retrobios"

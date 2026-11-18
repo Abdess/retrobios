@@ -33,7 +33,6 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from check_release_assets import compare, expected_assets, expected_digests, fetch_release
 from model.database import load_database
 from model.largefiles import LARGE_FILES_RELEASE, LARGE_FILES_REPO, asset_names, registered_paths

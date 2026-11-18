@@ -30,8 +30,9 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from core.artifacts import write_text_atomic
+from core.paths import REPO_ROOT
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = REPO_ROOT
 PACKAGE = "installer"
 OUTPUT = "install.py"
 COMMAND = "python scripts/build_installer.py"

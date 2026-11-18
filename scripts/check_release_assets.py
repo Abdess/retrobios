@@ -24,7 +24,6 @@ import sys
 from collections.abc import Iterable
 from typing import NamedTuple
 
-sys.path.insert(0, os.path.dirname(__file__))
 from model.composition import composition_tier
 from model.database import load_database
 from model.largefiles import LARGE_FILES_RELEASE, LARGE_FILES_REPO, asset_names, registered_paths
