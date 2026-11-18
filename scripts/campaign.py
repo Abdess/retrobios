@@ -79,7 +79,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import yaml
 
-import autorun
+from unattended import worktree
 from core import hostguard
 from probes.profileedit import ProfileEditError
 from core.paths import REPO_ROOT
@@ -235,7 +235,7 @@ def main(argv: Sequence[str] | None = None) -> int:
 
 
 def _run_pass(campaign: Campaign, args: argparse.Namespace, only: set[str], paths: Paths) -> int:
-    campaign.dirty_at_start = set(autorun.changed_files(paths.root)) if args.commit else set()
+    campaign.dirty_at_start = set(worktree.changed_files(paths.root)) if args.commit else set()
 
     def stop(signum: int, frame: object) -> None:
         # SIGTERM ends the pass like Ctrl-C: state saved, pass line written.

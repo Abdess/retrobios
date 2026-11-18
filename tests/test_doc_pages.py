@@ -1927,7 +1927,8 @@ class TheInstallerSamplesTravelWithTheManifests(unittest.TestCase):
     place for the samples the gate's pipeline rewrites."""
 
     def test_the_pages_and_the_nightly_carry_them(self):
-        import autorun
+        from unattended import jobs
+        from unattended import worktree
 
         guide = (WIKI / "testing-guide.md").read_text(encoding="utf-8")
         for name in ("wiki/installer.md", "derivable.json", "generate_installer_doc.py"):
@@ -1935,11 +1936,11 @@ class TheInstallerSamplesTravelWithTheManifests(unittest.TestCase):
         tools = (WIKI / "tools.md").read_text(encoding="utf-8")
         manifests = tools.index("--all --manifest --output-dir install/")
         self.assertIn("generate_installer_doc.py", tools[manifests:manifests + 300])
-        nightly = autorun.load_jobs()["nightly"]
+        nightly = jobs.load_jobs()["nightly"]
         patterns = [p for rule in nightly.commits for p in rule.paths]
         for path in ("wiki/installer.md", "derivable.json", "install/retroarch.json"):
             with self.subTest(path=path):
-                self.assertTrue(any(autorun.path_matches(p, path) for p in patterns))
+                self.assertTrue(any(worktree.path_matches(p, path) for p in patterns))
 
 
 class TheRemovalProofsAreTheExportersOwn(unittest.TestCase):

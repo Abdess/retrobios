@@ -17,7 +17,7 @@ from collections.abc import Iterable, Iterator, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
-import autorun
+from unattended import worktree
 from core_probe import PROBE_LOCK_ENV, PROBE_LOCK_HELD_ENV, VERDICTS, probe_lock_path
 from core.hashing import file_digest
 from core.paths import REPO_ROOT
@@ -44,7 +44,7 @@ from resolve.layout import runs_standalone
 from resolve.validation import filter_files_by_mode
 
 
-MAIN = autorun.main_checkout()
+MAIN = worktree.main_checkout()
 PACK_CONTENT_FILE = REPO_ROOT / "tests" / "campaign" / "pack_content.yml"
 CONTENT_DIR = MAIN / ".cache" / "test-content"
 CORE_CACHE = MAIN / ".cache" / "pack-probe" / "cores"

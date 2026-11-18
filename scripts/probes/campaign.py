@@ -15,7 +15,8 @@ from pathlib import Path
 
 import yaml
 
-import autorun
+from unattended import jobs
+from unattended import worktree
 import core_probe
 from core import hostguard
 from core.hashing import file_digest
@@ -959,10 +960,10 @@ class Campaign:
             return []
         made = []
         for subject, paths in plan:
-            problems = autorun.check_subject(subject)
+            problems = jobs.check_subject(subject)
             if problems:
                 raise ValueError(f"{subject!r}: {', '.join(problems)}")
-            made.append(autorun.commit_paths(self.paths.root, paths, autorun.CommitRule(subject, tuple(paths))))
+            made.append(worktree.commit_paths(self.paths.root, paths, jobs.CommitRule(subject, tuple(paths))))
         if self.current:
             self.current.touched.clear()
         return made

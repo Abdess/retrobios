@@ -16,7 +16,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import IO, TYPE_CHECKING, TypedDict
 
-import autorun
+from unattended import worktree
 import core_probe
 from core import childenv, hostguard
 from core.paths import REPO_ROOT
@@ -154,7 +154,7 @@ class Paths:
 
     @classmethod
     def default(cls) -> Paths:
-        main = autorun.main_checkout()
+        main = worktree.main_checkout()
         return cls(root=REPO_ROOT, home=main / ".cache" / "campaign",
                    content=main / ".cache" / "test-content", db=REPO_ROOT / "database.json")
 

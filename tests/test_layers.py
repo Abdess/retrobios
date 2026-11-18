@@ -3,10 +3,8 @@
 A module imports only from its own layer or below. core is the standard
 library's only client, model loads data, resolve turns declarations into
 files, the domain packages build on them, and the top-level scripts are the
-commands. Library code still waiting at the top level is listed in
-NOT_YET_PACKAGED, and the edges a domain package still has to it in
-PENDING_TOP_LEVEL_IMPORTS: both lists must be exact, so a later move that
-empties an entry also removes it.
+commands. No module imports a command: library code lives in a package, and
+the only top-level files other modules may import are the SELF_CONTAINED ones.
 """
 
 from __future__ import annotations
@@ -21,7 +19,7 @@ SCRIPTS = Path(__file__).resolve().parent.parent / "scripts"
 
 PACKAGE_LAYERS = {"core": 0, "model": 1, "resolve": 2, "packs": 3, "scraper": 3, "exporter": 3,
                   "probes": 3, "profiling": 3, "sitegen": 3, "romrecipes": 3, "acquire": 3,
-                  "release": 3, "installer_build": 3, "devtools": 3}
+                  "release": 3, "installer_build": 3, "devtools": 3, "unattended": 3}
 LIBRARY_LAYER = 3
 COMMAND_LAYER = 4
 
@@ -31,7 +29,8 @@ SIBLING_IMPORTS: dict[str, frozenset[str]] = {
     # A search starts from what verify finds missing.
     "acquire": frozenset({"packs"}),
     "packs": frozenset(),
-    "probes": frozenset(),
+    # A campaign commits its findings the way the unattended jobs commit.
+    "probes": frozenset({"unattended"}),
     "profiling": frozenset(),
     "romrecipes": frozenset(),
     # The site prints the recipe counts and the dump-catalog coverage report
@@ -43,28 +42,14 @@ SIBLING_IMPORTS: dict[str, frozenset[str]] = {
     # The launcher archives are written by the pack member writer.
     "installer_build": frozenset({"packs"}),
     "devtools": frozenset(),
+    # A job's commit subjects are checked against the repository's commit rules.
+    "unattended": frozenset({"devtools"}),
 }
-
-# Top-level modules other modules of scripts/ import: library code that a
-# later wave moves into a package.
-NOT_YET_PACKAGED = frozenset({
-    "autorun",
-})
 
 # Top-level files that stay whole at their path although packages import them:
 # the file is the unit. core_probe.py runs alone in its sandbox, where nothing
 # beside the standard library exists, and its records name and hash this file.
 SELF_CONTAINED = frozenset({"core_probe"})
-
-# Imports from a package module to a top-level module, left for the wave that
-# packages the top-level side.
-PENDING_TOP_LEVEL_IMPORTS = frozenset({
-    # autorun, the job runner, keeps its git helpers, which raise its own error.
-    ("probes.campaign", "autorun"),
-    ("probes.gate", "autorun"),
-    ("probes.host", "autorun"),
-    ("probes.packprobe", "autorun"),
-})
 
 
 def module_name(path: Path) -> str:
@@ -135,7 +120,7 @@ def layer_of(name: str) -> int:
     top = name.split(".")[0]
     if "." in name or top in PACKAGE_LAYERS:
         return PACKAGE_LAYERS[top]
-    return LIBRARY_LAYER if name in NOT_YET_PACKAGED | SELF_CONTAINED else COMMAND_LAYER
+    return LIBRARY_LAYER if name in SELF_CONTAINED else COMMAND_LAYER
 
 
 def is_package_module(name: str) -> bool:
@@ -217,11 +202,9 @@ class ImportLayers(unittest.TestCase):
         self.assertIsNone(find_cycle(nodes, self.graph.internal))
 
     def test_package_modules_import_no_top_level_module(self):
-        found = {(src, dst) for src, dst in self.graph.edges()
-                 if is_package_module(src) and not is_package_module(dst) and dst not in SELF_CONTAINED}
-        self.assertEqual(sorted(found - PENDING_TOP_LEVEL_IMPORTS), [])
-        self.assertEqual(sorted(PENDING_TOP_LEVEL_IMPORTS - found), [],
-                         "a pending import no longer exists: remove it from the list")
+        found = sorted(f"{src} imports {dst}" for src, dst in self.graph.edges()
+                       if is_package_module(src) and not is_package_module(dst) and dst not in SELF_CONTAINED)
+        self.assertEqual(found, [])
 
     def test_core_imports_the_standard_library_only(self):
         stdlib = set(sys.stdlib_module_names)
@@ -250,13 +233,10 @@ class ImportLayers(unittest.TestCase):
                     found.append(f"{name} imports from {node.module}")
         self.assertEqual(found, [])
 
-    def test_not_yet_packaged_is_the_exact_set_of_top_level_libraries(self):
-        imported = {dst for _src, dst in self.graph.edges()
-                    if not is_package_module(dst) and dst not in SELF_CONTAINED}
-        self.assertEqual(sorted(imported - NOT_YET_PACKAGED), [],
-                         "a top-level module became a library: package it or list it")
-        self.assertEqual(sorted(NOT_YET_PACKAGED - imported), [],
-                         "listed modules no longer imported by scripts/ (moved, or now a command only)")
+    def test_no_module_imports_a_command(self):
+        found = sorted(f"{src} imports {dst}" for src, dst in self.graph.edges()
+                       if not is_package_module(dst) and dst not in SELF_CONTAINED)
+        self.assertEqual(found, [], "a top-level module became a library: move its code into a package")
 
 
 if __name__ == "__main__":

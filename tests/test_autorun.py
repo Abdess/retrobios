@@ -23,7 +23,11 @@ import unittest.mock
 from pathlib import Path
 from types import MappingProxyType
 
-import autorun as ar
+from unattended import breaker
+from unattended import jobs as unattended_jobs
+from unattended import runner
+from unattended import timers as unattended_timers
+from unattended import worktree as unattended_worktree
 from core import childenv
 from core import hostguard
 from core import statefile
@@ -71,7 +75,7 @@ def run_git(cwd: Path, *args: str) -> str:
     ).stdout
 
 
-class FakeHost(ar.Host):
+class FakeHost(runner.Host):
     def __init__(self, loads: list[float] | None = None, cpus: int = 4) -> None:
         self.loads = list(loads or [0.0])
         self.now = 0.0
@@ -95,44 +99,44 @@ class Scratch(unittest.TestCase):
         self.tmp = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp" / "tests"))
         self.addCleanup(shutil.rmtree, self.tmp, True)
 
-    def context(self, jobs: dict, **kwargs) -> ar.Context:
+    def context(self, jobs: dict, **kwargs) -> runner.Context:
         repo = self.tmp / "repo"
         repo.mkdir(exist_ok=True)
-        parsed = ar.parse_jobs({"jobs": jobs})
+        parsed = unattended_jobs.parse_jobs({"jobs": jobs})
         kwargs.setdefault("host", FakeHost())
-        return ar.Context(repo=repo, jobs=parsed, lock_path=self.tmp / "auto.lock", **kwargs)
+        return runner.Context(repo=repo, jobs=parsed, lock_path=self.tmp / "auto.lock", **kwargs)
 
-    def state(self, ctx: ar.Context) -> dict:
+    def state(self, ctx: runner.Context) -> dict:
         return json.loads(ctx.state_path.read_text(encoding="utf-8"))
 
 
 class Registry(Scratch):
     def test_the_committed_registry_loads(self):
-        jobs = ar.load_jobs()
+        jobs = unattended_jobs.load_jobs()
         self.assertIn("nightly", jobs)
         self.assertTrue(jobs["nightly"].commits)
         self.assertFalse(jobs["disk-check"].lock)
 
     def test_an_unknown_key_is_refused(self):
         with self.assertRaises(ValueError):
-            ar.parse_jobs({"jobs": {"x": {"steps": [], "schedul": "daily"}}})
+            unattended_jobs.parse_jobs({"jobs": {"x": {"steps": [], "schedul": "daily"}}})
 
     def test_a_subject_the_hook_refuses_is_refused_at_load(self):
         for subject in ("chore: fix the broken manifests",
                         "update things",
                         "chore: " + "a" * 60):
             with self.subTest(subject=subject), self.assertRaises(ValueError):
-                ar.parse_jobs({"jobs": {"x": {"commits": [
+                unattended_jobs.parse_jobs({"jobs": {"x": {"commits": [
                     {"subject": subject, "paths": ["a"]}]}}})
 
     def test_a_job_outside_the_worktree_cannot_commit(self):
         with self.assertRaises(ValueError):
-            ar.parse_jobs({"jobs": {"x": {"worktree": False, "commits": [
+            unattended_jobs.parse_jobs({"jobs": {"x": {"worktree": False, "commits": [
                 {"subject": "chore: add a", "paths": ["a"]}]}}})
 
     def test_a_twice_entry_names_its_output(self):
         with self.assertRaises(ValueError):
-            ar.parse_jobs({"jobs": {"x": {"twice": [
+            unattended_jobs.parse_jobs({"jobs": {"x": {"twice": [
                 {"artifact": "a.json", "run": [PY, "gen.py"]}]}}})
 
 
@@ -149,43 +153,43 @@ class Lock(Scratch):
         ctx = self.context({"x": {"worktree": False, "min_free_gb": 0,
                                   "steps": [[PY, "-c", "open('ran', 'w')"]]}})
         with hostguard.global_lock(ctx.lock_path):
-            result, detail = ar.run_job(ctx, "x")
-        self.assertEqual(result, ar.DEFERRED)
+            result, detail = runner.run_job(ctx, "x")
+        self.assertEqual(result, unattended_jobs.DEFERRED)
         self.assertIn("held", detail)
         self.assertFalse((ctx.repo / "ran").exists())
-        self.assertEqual(self.state(ctx)["jobs"]["x"]["result"], ar.DEFERRED)
+        self.assertEqual(self.state(ctx)["jobs"]["x"]["result"], unattended_jobs.DEFERRED)
 
     def test_a_job_that_takes_no_lock_runs_beside_a_holder(self):
         ctx = self.context({"x": {"worktree": False, "lock": False, "min_free_gb": 0,
                                   "steps": [[PY, "-c", "open('ran', 'w')"]]}})
         with hostguard.global_lock(ctx.lock_path):
-            self.assertEqual(ar.run_job(ctx, "x")[0], ar.OK)
+            self.assertEqual(runner.run_job(ctx, "x")[0], unattended_jobs.OK)
         self.assertTrue((ctx.repo / "ran").exists())
 
 
 class Guards(Scratch):
     def test_the_load_guard_waits_then_lets_go(self):
         host = FakeHost(loads=[3.0, 3.0, 0.5], cpus=4)
-        self.assertTrue(ar.wait_for_load(host, max_wait=600))
+        self.assertTrue(runner.wait_for_load(host, max_wait=600))
         self.assertEqual(host.slept, [10.0, 10.0])
 
     def test_the_load_guard_gives_up_at_its_deadline(self):
         host = FakeHost(loads=[8.0], cpus=4)
-        self.assertFalse(ar.wait_for_load(host, max_wait=25))
+        self.assertFalse(runner.wait_for_load(host, max_wait=25))
         self.assertEqual(sum(host.slept), 25)
 
     def test_a_busy_host_defers_the_job(self):
         ctx = self.context({"x": {"worktree": False, "min_free_gb": 0, "max_load_wait": 0,
                                   "steps": [[PY, "-c", "open('ran', 'w')"]]}},
                            host=FakeHost(loads=[64.0]))
-        self.assertEqual(ar.run_job(ctx, "x")[0], ar.DEFERRED)
+        self.assertEqual(runner.run_job(ctx, "x")[0], unattended_jobs.DEFERRED)
         self.assertFalse((ctx.repo / "ran").exists())
 
     def test_a_full_disk_refuses_the_job(self):
         ctx = self.context({"x": {"worktree": False, "min_free_gb": 10 ** 9,
                                   "steps": [[PY, "-c", "open('ran', 'w')"]]}})
-        result, detail = ar.run_job(ctx, "x")
-        self.assertEqual(result, ar.REFUSED)
+        result, detail = runner.run_job(ctx, "x")
+        self.assertEqual(result, unattended_jobs.REFUSED)
         self.assertIn("GB free", detail)
         self.assertFalse((ctx.repo / "ran").exists())
 
@@ -193,10 +197,10 @@ class Guards(Scratch):
         ctx = self.context({
             "bad": {"worktree": False, "min_free_gb": 0, "steps": [[PY, "-c", "raise SystemExit(3)"]]},
         })
-        ar.run_job(ctx, "bad")
-        ar.run_job(ctx, "bad")
+        runner.run_job(ctx, "bad")
+        runner.run_job(ctx, "bad")
         record = self.state(ctx)["jobs"]["bad"]
-        self.assertEqual(record["result"], ar.FAILED)
+        self.assertEqual(record["result"], unattended_jobs.FAILED)
         self.assertEqual(record["consecutive_failures"], 2)
         self.assertIsNone(record["last_success"])
 
@@ -220,7 +224,7 @@ class StepEnvironment(Scratch):
     def test_a_step_naming_a_secret_is_refused_at_load(self):
         for name in ("GITHUB_TOKEN", "ROMSTATION_PASS", "MY_SECRET"):
             with self.subTest(name=name), self.assertRaises(ValueError):
-                ar.parse_jobs({"jobs": {"x": {"steps": [{"run": [PY, "-V"], "env": [name]}]}}})
+                unattended_jobs.parse_jobs({"jobs": {"x": {"steps": [{"run": [PY, "-V"], "env": [name]}]}}})
 
     def test_a_network_job_step_sees_no_token(self):
         dump = "import json, os; print(json.dumps(dict(os.environ)))"
@@ -230,8 +234,8 @@ class StepEnvironment(Scratch):
         with unittest.mock.patch.dict(os.environ, {"GITHUB_TOKEN": "t1", "GH_TOKEN": "t2",
                                                    "ROMSTATION_PASS": "p",
                                                    "ROMFETCH_CONTENT_DIR": "/c", "EDITOR": "vi"}):
-            self.assertEqual(ar.run_job(ctx, "x")[0], ar.OK)
-            given = ar.token_env()
+            self.assertEqual(runner.run_job(ctx, "x")[0], unattended_jobs.OK)
+            given = unattended_jobs.token_env()
         seen = json.loads((ctx.repo / "env.json").read_text())
         self.assertFalse({"GITHUB_TOKEN", "GH_TOKEN", "ROMSTATION_PASS", "EDITOR"} & set(seen))
         self.assertEqual((seen["ROMFETCH_CONTENT_DIR"], seen["RETROBIOS_AUTO"]), ("/c", "1"))
@@ -245,7 +249,7 @@ class GithubTokenPerStep(Scratch):
     per step, and never to third-party code or the campaign."""
 
     def job(self, run: list[str], name: str = "x") -> dict:
-        return ar.parse_jobs({"jobs": {name: {"steps": [{"run": run, "github_token": True}]}}})
+        return unattended_jobs.parse_jobs({"jobs": {name: {"steps": [{"run": run, "github_token": True}]}}})
 
     def test_allowed_on_the_scrapers_and_freshness_scripts(self):
         for run in ([PY, "-m", "scripts.scraper.mame_hash_scraper"],
@@ -254,8 +258,8 @@ class GithubTokenPerStep(Scratch):
             with self.subTest(run=run):
                 step = self.job(run)["x"].steps[0]
                 self.assertTrue(step.github_token)
-                with unittest.mock.patch.object(ar, "token_env", return_value={"GITHUB_TOKEN": "t1"}):
-                    self.assertEqual(ar.job_env(self.job(run)["x"], step)["GITHUB_TOKEN"], "t1")
+                with unittest.mock.patch.object(unattended_jobs, "token_env", return_value={"GITHUB_TOKEN": "t1"}):
+                    self.assertEqual(unattended_jobs.job_env(self.job(run)["x"], step)["GITHUB_TOKEN"], "t1")
 
     def test_refused_on_any_other_step(self):
         for run in ([PY, "-c", "print(1)"], [PY, "scripts/campaign.py", "run"],
@@ -270,14 +274,14 @@ class GithubTokenPerStep(Scratch):
             self.job([PY, "-m", "scripts.scraper.mame_hash_scraper"], name="campaign")
 
     def test_an_undeclared_step_gets_no_token(self):
-        job = ar.parse_jobs({"jobs": {"x": {"network": True, "steps": [
+        job = unattended_jobs.parse_jobs({"jobs": {"x": {"network": True, "steps": [
             [PY, "-m", "scripts.scraper.mame_hash_scraper"]]}}})["x"]
-        with unittest.mock.patch.object(ar, "token_env", return_value={"GITHUB_TOKEN": "t1"}), \
+        with unittest.mock.patch.object(unattended_jobs, "token_env", return_value={"GITHUB_TOKEN": "t1"}), \
                 unittest.mock.patch.dict(os.environ, {"GITHUB_TOKEN": "t1"}):
-            self.assertNotIn("GITHUB_TOKEN", ar.job_env(job, job.steps[0]))
+            self.assertNotIn("GITHUB_TOKEN", unattended_jobs.job_env(job, job.steps[0]))
 
     def test_the_committed_registry(self):
-        jobs = ar.load_jobs()
+        jobs = unattended_jobs.load_jobs()
         self.assertTrue(all(step.github_token for step in jobs["nightly"].steps))
 
 
@@ -287,7 +291,7 @@ class ReportAlert(Scratch):
         for message, expected in (("no sandbox", True), ("", False)):
             ctx = self.context({"x": {"worktree": False, "min_free_gb": 0, "report": "r.json",
                                       "steps": [[PY, "-c", write, message]]}})
-            ar.run_job(ctx, "x")
+            runner.run_job(ctx, "x")
             alerts = self.state(ctx).get("alerts", {})
             self.assertEqual("job:x" in alerts, expected)
             if expected:
@@ -295,35 +299,35 @@ class ReportAlert(Scratch):
 
 
 class Retry(Scratch):
-    def _runs(self, *outcomes: ar.Outcome):
+    def _runs(self, *outcomes: runner.Outcome):
         queue = list(outcomes)
         calls = []
 
-        def run() -> ar.Outcome:
+        def run() -> runner.Outcome:
             calls.append(1)
             return queue.pop(0)
         return run, calls
 
     def test_a_segfault_is_retried_once_on_an_idle_host(self):
-        run, calls = self._runs(ar.Outcome(139), ar.Outcome(0))
+        run, calls = self._runs(runner.Outcome(139), runner.Outcome(0))
         waited = []
-        outcome = ar.run_with_retry(run, (0,), lambda: waited.append(1))
+        outcome = runner.run_with_retry(run, (0,), lambda: waited.append(1))
         self.assertEqual((outcome.returncode, outcome.retried, len(calls), waited),
                          (0, True, 2, [1]))
 
     def test_a_second_segfault_is_a_failure(self):
-        run, calls = self._runs(ar.Outcome(-11), ar.Outcome(-11), ar.Outcome(0))
-        outcome = ar.run_with_retry(run, (0,), lambda: None)
+        run, calls = self._runs(runner.Outcome(-11), runner.Outcome(-11), runner.Outcome(0))
+        outcome = runner.run_with_retry(run, (0,), lambda: None)
         self.assertEqual((outcome.returncode, len(calls)), (-11, 2))
 
     def test_a_host_misread_message_is_retried(self):
-        run, calls = self._runs(ar.Outcome(1, "SystemError: unknown opcode"), ar.Outcome(0))
-        self.assertEqual(ar.run_with_retry(run, (0,), lambda: None).returncode, 0)
+        run, calls = self._runs(runner.Outcome(1, "SystemError: unknown opcode"), runner.Outcome(0))
+        self.assertEqual(runner.run_with_retry(run, (0,), lambda: None).returncode, 0)
         self.assertEqual(len(calls), 2)
 
     def test_an_ordinary_failure_is_not_retried(self):
-        run, calls = self._runs(ar.Outcome(1, "KeyError: 'x'"), ar.Outcome(0))
-        self.assertEqual(ar.run_with_retry(run, (0,), lambda: None).returncode, 1)
+        run, calls = self._runs(runner.Outcome(1, "KeyError: 'x'"), runner.Outcome(0))
+        self.assertEqual(runner.run_with_retry(run, (0,), lambda: None).returncode, 1)
         self.assertEqual(len(calls), 1)
 
     def test_a_real_segfault_runs_again_and_the_job_passes(self):
@@ -334,7 +338,7 @@ class Retry(Scratch):
                  "    os.kill(os.getpid(), signal.SIGSEGV)\n")
         ctx = self.context({"x": {"worktree": False, "min_free_gb": 0,
                                   "steps": [[PY, "-c", crash]]}})
-        self.assertEqual(ar.run_job(ctx, "x")[0], ar.OK)
+        self.assertEqual(runner.run_job(ctx, "x")[0], unattended_jobs.OK)
         self.assertEqual(len(self.state(ctx)["jobs"]["x"]["retried"]), 1)
 
 
@@ -345,20 +349,20 @@ class DoubleComputation(Scratch):
 
     def _run(self, cwd: Path):
         def run(argv):
-            return ar.Outcome(subprocess.run(argv, cwd=cwd, check=False).returncode)
+            return runner.Outcome(subprocess.run(argv, cwd=cwd, check=False).returncode)
         return run
 
     def test_timestamps_aside_two_equal_runs_agree(self):
         script = self.tmp / "gen.py"
         script.write_text(self.GEN % "1", encoding="utf-8")
-        diff = ar.twice([PY, str(script), "{out}"], self.tmp / "a.json",
+        diff = runner.twice([PY, str(script), "{out}"], self.tmp / "a.json",
                         self.tmp / "b.json", self._run(self.tmp))
         self.assertEqual(diff, [])
 
     def test_two_runs_that_disagree_are_named(self):
         script = self.tmp / "gen.py"
         script.write_text(self.GEN % "random.random()", encoding="utf-8")
-        diff = ar.twice([PY, str(script), "{out}"], self.tmp / "a.json",
+        diff = runner.twice([PY, str(script), "{out}"], self.tmp / "a.json",
                         self.tmp / "b.json", self._run(self.tmp))
         self.assertEqual(diff, ["a.json"])
 
@@ -369,9 +373,9 @@ class DoubleComputation(Scratch):
         (a / "x.json").write_text('{"generated": "1", "n": 1}')
         (b / "x.json").write_text('{"generated": "2", "n": 1}')
         (a / "targets" / "t.json").write_text("{}")
-        self.assertEqual(ar.differences(a, b, "*.json"), [])
+        self.assertEqual(runner.differences(a, b, "*.json"), [])
         (b / "y.json").write_text("{}")
-        self.assertEqual(ar.differences(a, b, "*.json"), ["y.json"])
+        self.assertEqual(runner.differences(a, b, "*.json"), ["y.json"])
 
     def test_a_job_whose_artifact_disagrees_fails_with_an_alert(self):
         script = self.tmp / "repo" / "gen.py"
@@ -382,8 +386,8 @@ class DoubleComputation(Scratch):
             "gate": [[PY, "gen.py", "db.json"]],
             "twice": [{"artifact": "db.json", "run": [PY, "gen.py", "{out}"]}],
         }})
-        result, detail = ar.run_job(ctx, "x")
-        self.assertEqual(result, ar.FAILED)
+        result, detail = runner.run_job(ctx, "x")
+        self.assertEqual(result, unattended_jobs.FAILED)
         self.assertIn("two computations disagree", detail)
         self.assertIn("host-integrity", self.state(ctx)["alerts"])
 
@@ -397,7 +401,7 @@ class DoubleComputation(Scratch):
             "twice": [{"artifact": "db.json", "run": [PY, "gen.py", "{out}"]}],
         }})
         statefile.save_state(ctx.state_path, {"alerts": {"host-integrity": {"since": "x"}}})
-        self.assertEqual(ar.run_job(ctx, "x")[0], ar.OK)
+        self.assertEqual(runner.run_job(ctx, "x")[0], unattended_jobs.OK)
         self.assertNotIn("host-integrity", self.state(ctx).get("alerts", {}))
 
 
@@ -423,18 +427,18 @@ class CircuitBreaker(Scratch):
         gh, _ = self._gh({"a" * 40: [ci_run("a" * 40, "success", "2026-10-27T02:10:00Z"),
                                      ci_run("a" * 40, "failure", "2026-10-27T02:10:00Z",
                                             "Validate")]}, [])
-        ar.refresh_breaker(state, gh, "now")
+        breaker.refresh_breaker(state, gh, "now")
         self.assertTrue(state["breaker"]["open"])
         self.assertEqual(state["breaker"]["reason"], "Validate")
         self.assertIn("ci", state["alerts"])
-        self.assertEqual(ar.may_push(state), "circuit breaker open")
+        self.assertEqual(breaker.may_push(state), "circuit breaker open")
 
     def test_runs_still_going_keep_the_push_pending(self):
         state = {"push": {"sha": "a" * 40, "ci": "pending"}}
         gh, _ = self._gh({"a" * 40: [ci_run("a" * 40, None, "2026-10-27T02:10:00Z")]}, [])
-        ar.refresh_breaker(state, gh, "now")
+        breaker.refresh_breaker(state, gh, "now")
         self.assertFalse(state["breaker"]["open"])
-        self.assertIn("has not ended green", ar.may_push(state))
+        self.assertIn("has not ended green", breaker.may_push(state))
 
     def test_a_later_green_run_on_main_closes_it(self):
         state = {"push": {"sha": "a" * 40, "ci": "failure"},
@@ -443,12 +447,12 @@ class CircuitBreaker(Scratch):
                  "alerts": {"ci": {"since": "x"}}}
         pending = [ci_run("b" * 40, None, "2026-10-27T09:00:00Z")]
         gh, _ = self._gh({}, pending + [ci_run("a" * 40, "failure", "2026-10-27T02:10:00Z")])
-        ar.refresh_breaker(state, gh, "now")
+        breaker.refresh_breaker(state, gh, "now")
         self.assertTrue(state["breaker"]["open"])
         green = [ci_run("c" * 40, "success", "2026-10-27T10:00:00Z"),
                  ci_run("c" * 40, "skipped", "2026-10-27T10:00:01Z", "Validate")]
         gh, _ = self._gh({}, green + pending)
-        ar.refresh_breaker(state, gh, "later")
+        breaker.refresh_breaker(state, gh, "later")
         self.assertFalse(state["breaker"]["open"])
         self.assertNotIn("ci", state["alerts"])
 
@@ -457,8 +461,8 @@ class CircuitBreaker(Scratch):
         ctx = self.context({"x": {"min_free_gb": 0, "commits": [
             {"subject": "chore: add a", "paths": ["a"]}]}}, gh=gh)
         statefile.save_state(ctx.state_path, {"push": {"sha": "a" * 40, "ci": "pending"}})
-        result, _ = ar.run_job(ctx, "x")
-        self.assertEqual(result, ar.BLOCKED)
+        result, _ = runner.run_job(ctx, "x")
+        self.assertEqual(result, unattended_jobs.BLOCKED)
         self.assertFalse(ctx.worktree.exists())
 
 
@@ -492,28 +496,28 @@ class Origin(Scratch):
 
     def worktree(self) -> Path:
         wt = self.repo / ".cache" / "autorun" / "worktree"
-        ar.ensure_worktree(self.repo, wt)
+        unattended_worktree.ensure_worktree(self.repo, wt)
         return wt
 
 
 class Commits(Origin):
     def test_globs_stay_inside_one_segment(self):
-        self.assertTrue(ar.path_matches("install/*.json", "install/a.json"))
-        self.assertFalse(ar.path_matches("install/*.json", "install/targets/a.json"))
-        self.assertFalse(ar.path_matches("install/*.json", "x/install/a.json"))
+        self.assertTrue(unattended_worktree.path_matches("install/*.json", "install/a.json"))
+        self.assertFalse(unattended_worktree.path_matches("install/*.json", "install/targets/a.json"))
+        self.assertFalse(unattended_worktree.path_matches("install/*.json", "x/install/a.json"))
 
     def test_the_dry_run_names_only_matching_files_and_stages_nothing(self):
         wt = self.worktree()
         (wt / "database.json").write_text('{"n": 1}\n', encoding="utf-8")
         (wt / "install" / "b.json").write_text("{}\n", encoding="utf-8")
         (wt / "notes.txt").write_text("x", encoding="utf-8")
-        ctx = ar.Context(repo=self.repo, lock_path=self.tmp / "l", dry_run=True,
-                         jobs=ar.parse_jobs({"jobs": {"n": {"commits": [{
+        ctx = runner.Context(repo=self.repo, lock_path=self.tmp / "l", dry_run=True,
+                         jobs=unattended_jobs.parse_jobs({"jobs": {"n": {"commits": [{
                              "subject": "chore: regenerate collection records",
                              "paths": ["database.json", "install/*.json"]}]}}}))
         with contextlib.redirect_stdout(io.StringIO()):
-            self.assertEqual(ar.run_job(ctx, "n"), (ar.OK, "dry run"))
-        lines = ar.describe(ctx.jobs["n"], ctx)
+            self.assertEqual(runner.run_job(ctx, "n"), (unattended_jobs.OK, "dry run"))
+        lines = runner.describe(ctx.jobs["n"], ctx)
         would = sorted(line.split("would commit ")[1] for line in lines if "would commit" in line)
         self.assertEqual(would, ["database.json", "install/b.json"])
         self.assertEqual(run_git(wt, "diff", "--cached", "--name-only"), "")
@@ -524,9 +528,9 @@ class Commits(Origin):
         (wt / "database.json").write_text('{"n": 1}\n', encoding="utf-8")
         (wt / "other.txt").write_text("x", encoding="utf-8")
         run_git(wt, "add", "other.txt")
-        rule = ar.CommitRule("chore: regenerate collection records", ("database.json",))
-        files = ar.plan_commit(ar.changed_files(wt), rule.paths)
-        ar.commit_paths(wt, files, rule)
+        rule = unattended_jobs.CommitRule("chore: regenerate collection records", ("database.json",))
+        files = unattended_worktree.plan_commit(unattended_worktree.changed_files(wt), rule.paths)
+        unattended_worktree.commit_paths(wt, files, rule)
         shown = run_git(wt, "show", "--name-only", "--format=%s", "HEAD").split()
         self.assertEqual(shown[-1], "database.json")
         self.assertNotIn("other.txt", shown)
@@ -536,21 +540,21 @@ class Commits(Origin):
 class Worktree(Origin):
     def test_it_is_created_on_its_own_branch_and_reused(self):
         wt = self.worktree()
-        self.assertEqual(run_git(wt, "branch", "--show-current").strip(), ar.BRANCH)
+        self.assertEqual(run_git(wt, "branch", "--show-current").strip(), unattended_worktree.BRANCH)
         self.assertEqual(run_git(self.repo, "branch", "--show-current").strip(), "main")
-        ar.ensure_worktree(self.repo, wt)
+        unattended_worktree.ensure_worktree(self.repo, wt)
         self.assertEqual(len(run_git(self.repo, "worktree", "list").splitlines()), 2)
 
     def test_it_follows_origin_and_stops_on_leftovers(self):
         wt = self.worktree()
         self.other_commit("x.txt")
-        base = ar.sync_worktree(wt)
+        base = unattended_worktree.sync_worktree(wt)
         self.assertTrue((wt / "x.txt").exists())
         self.assertEqual(base, run_git(wt, "rev-parse", "HEAD").strip())
         (wt / "database.json").write_text("changed", encoding="utf-8")
-        with self.assertRaises(ar.AutorunError) as caught:
-            ar.sync_worktree(wt)
-        self.assertEqual(caught.exception.result, ar.BLOCKED)
+        with self.assertRaises(unattended_jobs.AutorunError) as caught:
+            unattended_worktree.sync_worktree(wt)
+        self.assertEqual(caught.exception.result, unattended_jobs.BLOCKED)
         self.assertEqual((wt / "database.json").read_text(), "changed")
 
     def test_the_hard_links_share_bytes_with_the_main_checkout(self):
@@ -560,34 +564,34 @@ class Worktree(Origin):
         (self.repo / ".cache" / "large").mkdir(parents=True)
         (self.repo / ".cache" / "large" / "a.zip").write_bytes(b"z")
         wt = self.worktree()
-        seeded = ar.seed_worktree(self.repo, wt)
+        seeded = unattended_worktree.seed_worktree(self.repo, wt)
         self.assertEqual(sorted(seeded), [".cache/large", "bios/big.bin"])
         self.assertTrue(os.path.samefile(wt / "bios" / "big.bin", self.repo / "bios" / "big.bin"))
-        self.assertEqual(ar.seed_worktree(self.repo, wt), [])
+        self.assertEqual(unattended_worktree.seed_worktree(self.repo, wt), [])
 
 
 class Push(Origin):
     def _commit(self, wt: Path) -> None:
         (wt / "database.json").write_text('{"n": 2}\n', encoding="utf-8")
-        ar.commit_paths(wt, ["database.json"],
-                        ar.CommitRule("chore: regenerate collection records", ("database.json",)))
+        unattended_worktree.commit_paths(wt, ["database.json"],
+                        unattended_jobs.CommitRule("chore: regenerate collection records", ("database.json",)))
 
     def test_a_batch_on_an_unmoved_origin_pushes_without_a_second_gate(self):
         wt = self.worktree()
-        base = ar.sync_worktree(wt)
+        base = unattended_worktree.sync_worktree(wt)
         self._commit(wt)
         gates = []
-        pushed = ar.push_batch(wt, base, lambda: gates.append(1) or True)
+        pushed = unattended_worktree.push_batch(wt, base, lambda: gates.append(1) or True)
         self.assertEqual(gates, [])
         self.assertEqual(run_git(self.origin, "rev-parse", "main").strip(), pushed)
 
     def test_a_moved_origin_rebases_and_gates_again(self):
         wt = self.worktree()
-        base = ar.sync_worktree(wt)
+        base = unattended_worktree.sync_worktree(wt)
         self._commit(wt)
         self.other_commit("y.txt")
         gates = []
-        pushed = ar.push_batch(wt, base, lambda: gates.append(1) or True)
+        pushed = unattended_worktree.push_batch(wt, base, lambda: gates.append(1) or True)
         self.assertEqual(gates, [1])
         log = run_git(self.origin, "log", "--format=%s", "main").splitlines()
         self.assertEqual(log[:2], ["chore: regenerate collection records", "chore: add y.txt"])
@@ -595,17 +599,17 @@ class Push(Origin):
 
     def test_a_failed_second_gate_pushes_nothing(self):
         wt = self.worktree()
-        base = ar.sync_worktree(wt)
+        base = unattended_worktree.sync_worktree(wt)
         self._commit(wt)
         self.other_commit("y.txt")
         before = run_git(self.origin, "rev-parse", "main")
-        with self.assertRaises(ar.AutorunError):
-            ar.push_batch(wt, base, lambda: False)
+        with self.assertRaises(unattended_jobs.AutorunError):
+            unattended_worktree.push_batch(wt, base, lambda: False)
         self.assertEqual(run_git(self.origin, "rev-parse", "main"), before)
 
     def test_a_conflicting_batch_is_kept_and_nothing_pushed(self):
         wt = self.worktree()
-        base = ar.sync_worktree(wt)
+        base = unattended_worktree.sync_worktree(wt)
         self._commit(wt)
         other = self.tmp / "other"
         run_git(self.tmp, "clone", "--quiet", str(self.origin), str(other))
@@ -613,47 +617,47 @@ class Push(Origin):
         run_git(other, "commit", "--quiet", "-am", "chore: other database")
         run_git(other, "push", "--quiet", "origin", "main")
         mine = run_git(wt, "rev-parse", "HEAD")
-        with self.assertRaises(ar.AutorunError) as caught:
-            ar.push_batch(wt, base, lambda: True)
-        self.assertEqual(caught.exception.result, ar.BLOCKED)
+        with self.assertRaises(unattended_jobs.AutorunError) as caught:
+            unattended_worktree.push_batch(wt, base, lambda: True)
+        self.assertEqual(caught.exception.result, unattended_jobs.BLOCKED)
         self.assertEqual(run_git(wt, "rev-parse", "HEAD"), mine)
-        self.assertEqual(ar.changed_files(wt), [])
+        self.assertEqual(unattended_worktree.changed_files(wt), [])
 
 
 class RunnerPush(Origin):
-    def _ctx(self, value: int, push: bool) -> ar.Context:
+    def _ctx(self, value: int, push: bool) -> runner.Context:
         write = f"open('database.json', 'w').write('{{\"n\": {value:d}}}')"
         jobs = {"n": {"min_free_gb": 0, "steps": [[PY, "-c", write]], "commits": [
             {"subject": "chore: regenerate collection records", "paths": ["database.json"]}]}}
-        return ar.Context(repo=self.repo, jobs=ar.parse_jobs({"jobs": jobs}),
+        return runner.Context(repo=self.repo, jobs=unattended_jobs.parse_jobs({"jobs": jobs}),
                           lock_path=self.tmp / "auto.lock", host=FakeHost(),
                           gh=lambda _args: [], push=push)
 
     def test_without_push_the_commit_stays_local(self):
         before = run_git(self.origin, "rev-parse", "main")
-        result, detail = ar.run_job(self._ctx(5, push=False), "n")
-        self.assertEqual((result, detail), (ar.OK, "1 commits"))
+        result, detail = runner.run_job(self._ctx(5, push=False), "n")
+        self.assertEqual((result, detail), (unattended_jobs.OK, "1 commits"))
         self.assertEqual(run_git(self.origin, "rev-parse", "main"), before)
-        self.assertEqual(ar.unpushed(self.repo / ".cache" / "autorun" / "worktree"), 1)
+        self.assertEqual(unattended_worktree.unpushed(self.repo / ".cache" / "autorun" / "worktree"), 1)
 
     def test_a_push_waits_for_the_previous_push_to_end_green(self):
         ctx = self._ctx(5, push=True)
-        result, detail = ar.run_job(ctx, "n")
-        self.assertEqual(result, ar.OK)
+        result, detail = runner.run_job(ctx, "n")
+        self.assertEqual(result, unattended_jobs.OK)
         self.assertIn("pushed", detail)
         pushed = run_git(self.origin, "rev-parse", "main").strip()
         self.assertEqual(self.state(ctx)["push"]["sha"], pushed)
-        result, detail = ar.run_job(self._ctx(6, push=True), "n")
-        self.assertEqual(result, ar.OK)
+        result, detail = runner.run_job(self._ctx(6, push=True), "n")
+        self.assertEqual(result, unattended_jobs.OK)
         self.assertIn("push held", detail)
         self.assertEqual(run_git(self.origin, "rev-parse", "main").strip(), pushed)
 
 
 class Units(Scratch):
     def test_one_service_template_and_a_timer_per_scheduled_job(self):
-        jobs = ar.parse_jobs({"jobs": {
+        jobs = unattended_jobs.parse_jobs({"jobs": {
             "nightly": {"schedule": "*-*-* 02:00"}, "manual": {}}})
-        units = ar.render_units(jobs, Path("/srv/retrobios"), "/usr/bin/python3")
+        units = unattended_timers.render_units(jobs, Path("/srv/retrobios"), "/usr/bin/python3")
         self.assertEqual(sorted(units), ["retrobios-nightly.timer", "retrobios@.service"])
         service = units["retrobios@.service"]
         self.assertIn("ExecStart=/usr/bin/python3 /srv/retrobios/scripts/autorun.py run %i\n",
@@ -664,16 +668,16 @@ class Units(Scratch):
         self.assertIn("OnCalendar=*-*-* 02:00\n", timer)
         self.assertIn("Persistent=true\n", timer)
         self.assertIn("Unit=retrobios@nightly.service\n", timer)
-        pushed = ar.render_units(jobs, Path("/r"), "py", push=True)["retrobios@.service"]
+        pushed = unattended_timers.render_units(jobs, Path("/r"), "py", push=True)["retrobios@.service"]
         self.assertIn("run %i --push\n", pushed)
 
     def test_units_are_written_and_enabled_only_when_asked(self):
-        units = ar.render_units(ar.load_jobs(), Path("/r"), "py")
+        units = unattended_timers.render_units(unattended_jobs.load_jobs(), Path("/r"), "py")
         calls = []
-        timers = ar.install_timers(self.tmp, units, False, lambda a: calls.append(a) or 0)
+        timers = unattended_timers.install_timers(self.tmp, units, False, lambda a: calls.append(a) or 0)
         self.assertEqual(calls, [])
         self.assertEqual(sorted(p.name for p in self.tmp.iterdir()), sorted(units))
-        ar.install_timers(self.tmp, units, True, lambda a: calls.append(a) or 0)
+        unattended_timers.install_timers(self.tmp, units, True, lambda a: calls.append(a) or 0)
         self.assertEqual(calls, [["daemon-reload"], ["enable", "--now", *timers]])
 
 
@@ -938,18 +942,18 @@ class BiosIntegrity(Scratch):
         self.flip(rel)
         Path(self.db_path).write_text(json.dumps(self.db), encoding="utf-8")
         script = str(REPO_ROOT / "scripts" / "bios_integrity.py")
-        ctx = ar.Context(
+        ctx = runner.Context(
             repo=self.repo, lock_path=self.tmp / "auto.lock", host=FakeHost(),
-            jobs=ar.parse_jobs({"jobs": {"bios-integrity": {
+            jobs=unattended_jobs.parse_jobs({"jobs": {"bios-integrity": {
                 "worktree": False, "min_free_gb": 0,
                 "steps": [{"run": [PY, script, "--apply", "--json", "--db", self.db_path],
                            "stdout": "tmp/autorun/bios-integrity.json"}],
                 "report": "tmp/autorun/bios-integrity.json"}}}))
-        self.assertEqual(ar.run_job(ctx, "bios-integrity")[0], ar.OK)
+        self.assertEqual(runner.run_job(ctx, "bios-integrity")[0], unattended_jobs.OK)
         report = self.state(ctx)["jobs"]["bios-integrity"]["report"]
         self.assertEqual(report["counts"], {"restored": 1})
         self.assertEqual(report["findings"][0]["path"], rel)
-        self.assertIn("1 restored", ar.render_status(ar.status(ctx)))
+        self.assertIn("1 restored", runner.render_status(runner.status(ctx)))
 
     @property
     def db_path(self) -> str:
@@ -965,9 +969,9 @@ class SubjectsFollowTheRepositoryRules(unittest.TestCase):
 
         for subject in ("chore: fix the broken manifests", "update things", "chore: " + "a" * 60):
             with self.subTest(subject=subject):
-                self.assertEqual(ar.check_subject(subject), commitrules.problems(subject))
-                self.assertTrue(ar.check_subject(subject))
-        self.assertEqual(ar.check_subject("chore: tidy the cache"), [])
+                self.assertEqual(unattended_jobs.check_subject(subject), commitrules.problems(subject))
+                self.assertTrue(unattended_jobs.check_subject(subject))
+        self.assertEqual(unattended_jobs.check_subject("chore: tidy the cache"), [])
 
     def test_review_numbers_are_refused(self):
         """47 pushed subjects pointed at a numbered private review, which no

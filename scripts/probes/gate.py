@@ -7,7 +7,7 @@ import sys
 from collections.abc import Sequence
 from pathlib import Path
 
-import autorun
+from unattended import worktree
 from probes.host import Host
 
 
@@ -38,5 +38,5 @@ def gate(root: Path, emulators: Sequence[str], host: Host | None = None) -> int:
 
 
 def changed_profiles(root: Path) -> list[str]:
-    return [Path(p).stem for p in autorun.changed_files(root)
+    return [Path(p).stem for p in worktree.changed_files(root)
             if p.startswith("emulators/") and p.endswith(".yml")]

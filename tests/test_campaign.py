@@ -28,7 +28,7 @@ from types import MappingProxyType
 
 import yaml
 
-import autorun
+from unattended import jobs
 import campaign
 import core_probe
 from core import hostguard
@@ -1009,7 +1009,7 @@ class Findings(Workspace):
             ("chore: add campaign measurements", ["measurements/fake.jsonl", "measurements/findings.jsonl"]),
             ("chore: apply tested fields to fake", ["emulators/fake.yml"])])
         for subject, _ in plan:
-            self.assertEqual(autorun.check_subject(subject), [], subject)
+            self.assertEqual(jobs.check_subject(subject), [], subject)
         # A file someone had changed before the pass is left to them.
         self.assertEqual(self.c.plan_commits({"emulators/fake.yml"})[1:], [])
         out = io.StringIO()
@@ -1051,7 +1051,7 @@ class Registry(unittest.TestCase):
     def test_no_job_runs_a_standing_campaign(self) -> None:
         """A daily pass over every profile contradicted the rule that probes
         run on demand, for a question that names its profiles."""
-        for name, job in autorun.load_jobs().items():
+        for name, job in jobs.load_jobs().items():
             for step in [*job.steps, *job.gate]:
                 with self.subTest(job=name):
                     self.assertNotIn("scripts/campaign.py", step.argv)
