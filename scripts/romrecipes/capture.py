@@ -12,10 +12,10 @@ from typing import BinaryIO
 
 from core.hashing import parse_hash_list
 from core.torrentzip import write_torrentzip, zlib_ng_version
-from recipes.ledger import database_archives
-from recipes.members import _member_sha1, _opener
-from recipes.pins import container_entries
-from recipes.romsets import collect_recipes, load_dat_recipes
+from romrecipes.ledger import database_archives
+from romrecipes.members import _member_sha1, _opener
+from romrecipes.pins import container_entries
+from romrecipes.romsets import collect_recipes, load_dat_recipes
 
 _TORRENTZIP_COMMENT = b"TORRENTZIPPED-"
 

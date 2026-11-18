@@ -85,7 +85,7 @@ def _hashes(values: object) -> set[str]:
 
 def _allowed_members() -> dict[str, set[str]]:
     from model.profiles import load_emulator_profiles
-    from recipes.romsets import load_dat_recipes
+    from romrecipes.romsets import load_dat_recipes
 
     allowed: dict[str, set[str]] = defaultdict(set)
     for archive, per_label in load_dat_recipes(REPO_ROOT / "recipes").items():

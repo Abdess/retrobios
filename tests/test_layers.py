@@ -20,7 +20,7 @@ from pathlib import Path
 SCRIPTS = Path(__file__).resolve().parent.parent / "scripts"
 
 PACKAGE_LAYERS = {"core": 0, "model": 1, "resolve": 2, "packs": 3, "scraper": 3, "exporter": 3,
-                  "profiling": 3, "sitegen": 3, "recipes": 3, "acquire": 3}
+                  "profiling": 3, "sitegen": 3, "romrecipes": 3, "acquire": 3}
 LIBRARY_LAYER = 3
 COMMAND_LAYER = 4
 
@@ -31,10 +31,10 @@ SIBLING_IMPORTS: dict[str, frozenset[str]] = {
     "acquire": frozenset({"packs"}),
     "packs": frozenset(),
     "profiling": frozenset(),
-    "recipes": frozenset(),
+    "romrecipes": frozenset(),
     # The site prints the recipe counts and the dump-catalog coverage report
     # those two packages compute.
-    "sitegen": frozenset({"acquire", "packs", "recipes"}),
+    "sitegen": frozenset({"acquire", "packs", "romrecipes"}),
 }
 
 # Top-level modules other modules of scripts/ import: library code that a

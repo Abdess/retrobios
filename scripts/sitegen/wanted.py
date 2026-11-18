@@ -21,7 +21,7 @@ import urllib.parse
 from collections.abc import Callable, Iterable
 from pathlib import Path
 
-from recipes import ledger as recipes_ledger
+from romrecipes import ledger as romrecipes_ledger
 from resolve.layout import runs_standalone
 from model.profiles import unique_emulator_profiles
 from packs.crossref import _first_hash
@@ -523,7 +523,7 @@ def _merge_named(records: dict[tuple, dict]) -> None:
 
 def load_ledger(path: Path) -> list[dict]:
     """The archive records of recipes/archives.json, empty when absent."""
-    return list(recipes_ledger.load_ledger(path).values())
+    return list(romrecipes_ledger.load_ledger(path).values())
 
 
 def page(total: int, known: int) -> str:

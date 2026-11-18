@@ -22,7 +22,7 @@ An archive whose bytes carry metadata unrelated to its contents cannot be
 derived from ROMs by anyone, and is reported as such rather than guessed at.
 
 Every archive the collection holds also has a recipe of its own in
-``recipes/archives.json`` (scripts/recipes/):
+``recipes/archives.json`` (scripts/romrecipes/):
 
 ``--capture``
     Write a record for every archive in database.json: members in order with
@@ -54,12 +54,12 @@ from core.cli import require_directory
 from core.torrentzip import zlib_ng_version
 from model.database import load_database
 from model.profiles import load_emulator_profiles
-from recipes.build import AtomIndex, build_archive, select
-from recipes.capture import ZlibNgError, capture, container_pins, recipe_index
-from recipes.identify import identify_report, missing_report, write_reconstructions
-from recipes.ledger import ARCHIVES_FILE, load_ledger, write_ledger
-from recipes.pool import AtomPool, DIGEST_CACHE
-from recipes.romsets import collect_recipes, load_dat_recipes, merge_recipes
+from romrecipes.build import AtomIndex, build_archive, select
+from romrecipes.capture import ZlibNgError, capture, container_pins, recipe_index
+from romrecipes.identify import identify_report, missing_report, write_reconstructions
+from romrecipes.ledger import ARCHIVES_FILE, load_ledger, write_ledger
+from romrecipes.pool import AtomPool, DIGEST_CACHE
+from romrecipes.romsets import collect_recipes, load_dat_recipes, merge_recipes
 
 
 def print_missing(gap: dict) -> None:

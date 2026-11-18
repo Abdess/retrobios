@@ -10,7 +10,7 @@ from pathlib import Path
 
 from core.paths import REPO_ROOT
 from core.torrentzip import build_torrentzip
-from recipes.romsets import Recipe
+from romrecipes.romsets import Recipe
 
 
 class AtomPool:

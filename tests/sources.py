@@ -73,8 +73,8 @@ COMMANDS = {
     "site_insights.py": ("sitegen/insights.py",),
     "generate_readme.py": ("sitegen/readme.py",),
     "romset_recipes.py": (
-        "recipes/romsets.py", "recipes/pool.py", "recipes/pins.py", "recipes/identify.py",
-        "recipes/ledger.py", "recipes/members.py", "recipes/capture.py", "recipes/build.py",
+        "romrecipes/romsets.py", "romrecipes/pool.py", "romrecipes/pins.py", "romrecipes/identify.py",
+        "romrecipes/ledger.py", "romrecipes/members.py", "romrecipes/capture.py", "romrecipes/build.py",
     ),
     "provenance_report.py": ("acquire/provenance.py",),
     "auto_fetch.py": ("acquire/fetch.py",),

@@ -11,7 +11,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
-from recipes import ledger
+from romrecipes import ledger
 import release_record
 from model import siteinputs
 from model.collection import _group_by_manufacturer, _slug

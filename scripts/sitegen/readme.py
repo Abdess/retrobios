@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from types import ModuleType
 
-from recipes import ledger
+from romrecipes import ledger
 import pr_checks
 import release_record
 from core.artifacts import write_if_changed

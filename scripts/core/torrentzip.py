@@ -7,7 +7,7 @@ member names and their contents.
 
 That property makes it possible to rebuild a romset ZIP that matches an
 upstream-published hash exactly, and to identify which romset revision a
-published hash refers to (scripts/recipes/).
+published hash refers to (scripts/romrecipes/).
 
 Usage:
     from core.torrentzip import build_torrentzip

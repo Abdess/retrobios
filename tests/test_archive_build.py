@@ -18,9 +18,9 @@ import zipfile
 from pathlib import Path
 from unittest import mock
 
-from recipes import build as recipes_build
-from recipes import capture as recipes_capture
-from recipes import ledger
+from romrecipes import build as romrecipes_build
+from romrecipes import capture as romrecipes_capture
+from romrecipes import ledger
 from core.torrentzip import build_torrentzip
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -141,7 +141,7 @@ class Fixture(unittest.TestCase):
         self.temp.cleanup()
 
     def capture(self, **kwargs) -> dict[str, dict]:
-        records, failed = recipes_capture.capture(
+        records, failed = romrecipes_capture.capture(
             self.db, kwargs.get("previous", {}), kwargs.get("index", {}),
             kwargs.get("pins", {}), workers=1, log=lambda _line: None,
         )
@@ -177,7 +177,7 @@ class Capture(Fixture):
         self.assertEqual(exact["sources"], ["collection"])
 
     def test_dat_agreement_and_pins_are_recorded(self):
-        key = recipes_capture.member_key(
+        key = romrecipes_capture.member_key(
             [{"name": n, "crc32": c} for n, c in (
                 ("a.rom", self._crc(ROM_A)), ("b.rom", self._crc(ROM_B)),
                 ("c.rom", self._crc(ROM_C)),
@@ -199,8 +199,8 @@ class Capture(Fixture):
         self.assertEqual(records["bios/set.zip"]["members"][0]["sha1"], "kept")
 
     def test_zlib_ng_refuses_to_capture(self):
-        with mock.patch.object(recipes_capture, "zlib_ng_version", lambda: "2.2.4"), \
-                self.assertRaises(recipes_capture.ZlibNgError):
+        with mock.patch.object(romrecipes_capture, "zlib_ng_version", lambda: "2.2.4"), \
+                self.assertRaises(romrecipes_capture.ZlibNgError):
             self.capture()
 
     def test_composite_and_zipped_pins_name_no_container(self):
@@ -231,7 +231,7 @@ class Capture(Fixture):
             f"  - name: set.zip\n    sha1: {'d' * 40}\n",
             encoding="utf-8",
         )
-        pins = recipes_capture.container_pins(str(platforms), str(emulators))
+        pins = romrecipes_capture.container_pins(str(platforms), str(emulators))
         self.assertEqual(pins, {"a" * 32: {"platform:plain"}, "d" * 40: {"profile:core"}})
 
     @staticmethod
@@ -250,11 +250,11 @@ class Build(Fixture):
         os.chdir(self.root)
         self.ledger = self.capture()
         os.chdir(self._cwd)
-        self.atoms = recipes_build.AtomIndex.from_collection(self.ledger, self.db, self.root)
+        self.atoms = romrecipes_build.AtomIndex.from_collection(self.ledger, self.db, self.root)
         self.out = self.root / "out"
 
     def build(self, path: str):
-        return recipes_build.build_archive(self.ledger[path], self.atoms, self.out, self.root)
+        return romrecipes_build.build_archive(self.ledger[path], self.atoms, self.out, self.root)
 
     def test_an_exact_recipe_rebuilds_the_bytes(self):
         result = self.build("bios/set.zip")
@@ -281,14 +281,14 @@ class Build(Fixture):
         record["members"] = record["members"] + [
             {"name": "gone.rom", "size": 1, "crc32": "00000000", "sha1": "f" * 40}
         ]
-        result = recipes_build.build_archive(record, self.atoms, self.out, self.root)
+        result = romrecipes_build.build_archive(record, self.atoms, self.out, self.root)
         self.assertEqual(result.status, "impossible")
         self.assertEqual([m["name"] for m in result.missing], ["gone.rom"])
         self.assertFalse(self.out.exists())
 
     def test_a_mismatch_is_never_promoted(self):
         record = dict(self.ledger["bios/set.zip"], sha1="0" * 40)
-        result = recipes_build.build_archive(record, self.atoms, self.out, self.root)
+        result = romrecipes_build.build_archive(record, self.atoms, self.out, self.root)
         self.assertEqual(result.status, "failed")
         self.assertIn("is not the recorded", result.detail)
         self.assertEqual(list(self.out.rglob("*")), [], "no file, no scratch left")
@@ -297,25 +297,25 @@ class Build(Fixture):
         record = dict(self.ledger["bios/other.zip"])
         record["members"] = [dict(m) for m in record["members"]]
         record["members"][0]["crc32"] = "00000000"
-        result = recipes_build.build_archive(record, self.atoms, self.out, self.root)
+        result = romrecipes_build.build_archive(record, self.atoms, self.out, self.root)
         self.assertEqual(result.status, "failed")
         self.assertEqual(list(self.out.rglob("*")), [])
 
     def test_zlib_ng_never_claims_exact(self):
-        with mock.patch.object(recipes_build, "zlib_ng_version", lambda: "2.2.4"):
+        with mock.patch.object(romrecipes_build, "zlib_ng_version", lambda: "2.2.4"):
             result = self.build("bios/set.zip")
         self.assertEqual(result.status, "canonical")
         self.assertIn("zlib-ng 2.2.4", result.detail)
 
     def test_an_archive_is_named_by_path_or_by_name(self):
         self.assertEqual(
-            [r["path"] for r in recipes_build.select(self.ledger, "set.zip", self.root)],
+            [r["path"] for r in romrecipes_build.select(self.ledger, "set.zip", self.root)],
             ["bios/set.zip"],
         )
         self.assertEqual(
-            len(recipes_build.select(self.ledger, str(self.exact_path), self.root)), 1
+            len(romrecipes_build.select(self.ledger, str(self.exact_path), self.root)), 1
         )
-        self.assertEqual(recipes_build.select(self.ledger, "none.zip", self.root), [])
+        self.assertEqual(romrecipes_build.select(self.ledger, "none.zip", self.root), [])
 
     def test_missing_members_reads_the_committed_data(self):
         self.assertEqual(ledger.missing_members(self.ledger, self.db), [])

@@ -13,9 +13,9 @@ import zipfile
 import zlib
 from pathlib import Path
 
-from recipes.pool import AtomPool
-from recipes.romsets import collect_recipes, load_dat_recipes, merge_recipes
-from recipes.identify import (
+from romrecipes.pool import AtomPool
+from romrecipes.romsets import collect_recipes, load_dat_recipes, merge_recipes
+from romrecipes.identify import (
     identify_archive,
     identify_report,
     missing_report,
@@ -727,7 +727,7 @@ class IdentificationReadsTheDirectoryFirst(unittest.TestCase):
     def test_a_recipe_with_other_members_is_never_built(self):
         from core.torrentzip import build_torrentzip
 
-        from recipes import identify
+        from romrecipes import identify
 
         rom = b"rom bytes"
         crc = format(zlib.crc32(rom), "08x")

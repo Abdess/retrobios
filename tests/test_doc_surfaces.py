@@ -650,7 +650,7 @@ class ArchiveRecipesAreCountedFromTheRecipes(unittest.TestCase):
     that file, never typed."""
 
     def setUp(self) -> None:
-        from recipes import ledger
+        from romrecipes import ledger
 
         records = ledger.load_ledger().values()
         self.counts = {

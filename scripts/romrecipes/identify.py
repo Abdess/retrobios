@@ -9,9 +9,9 @@ from collections import defaultdict
 from pathlib import Path
 
 from core.torrentzip import is_torrentzip
-from recipes.pins import container_entries
-from recipes.pool import AtomPool
-from recipes.romsets import Recipe
+from romrecipes.pins import container_entries
+from romrecipes.pool import AtomPool
+from romrecipes.romsets import Recipe
 
 
 def identify_archive(
