@@ -24,7 +24,8 @@ import re
 import zlib
 from pathlib import Path
 
-import generate_site
+from sitegen import gaps
+from sitegen import lookup
 from sitegen import wanted as sitewanted
 from resolve import review
 import yaml
@@ -451,7 +452,7 @@ class EveryFolderIsTheReviewsFolder(_World):
         self.assertEqual(sitewanted.upload_href(sitewanted.UPLOAD_ROOT, "bios/Maker/Sub Dir/"),
                          "https://github.com/Abdess/retrobios/upload/main/bios/Maker/Sub%20Dir")
         self.assertEqual(sitewanted.upload_href(sitewanted.UPLOAD_ROOT, ""),
-                         generate_site.UPLOAD_URL)
+                         gaps.UPLOAD_URL)
 
 
 def _node(script: str) -> str:
@@ -527,7 +528,7 @@ class TheTwoPagesLinkEachOther(unittest.TestCase):
     sends a reader to the other in one line."""
 
     def test_links(self):
-        self.assertIn("[See if it is wanted](../wanted.md)", generate_site.generate_files_page())
+        self.assertIn("[See if it is wanted](../wanted.md)", lookup.generate_files_page())
         self.assertIn("[Find or check a file](files/index.md)", sitewanted.page(2, 1))
 
 

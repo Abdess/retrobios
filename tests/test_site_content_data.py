@@ -19,7 +19,8 @@ from pathlib import Path
 
 import yaml
 
-import generate_site
+from sitegen import decorate
+from sitegen import nav as sitegen_nav
 from model import guides
 from model.guides import GUIDES, GuideError, load_guides
 
@@ -150,7 +151,7 @@ def _wiki_copy(tmp: str) -> Path:
 class NavFromFrontMatter(unittest.TestCase):
 
     def _nav(self, wiki: Path) -> dict:
-        nav = generate_site.generate_nav({}, {}, {}, {}, wiki)
+        nav = sitegen_nav.generate_nav({}, {}, {}, {}, wiki)
         return {next(iter(tab)): next(iter(tab.values())) for tab in nav}
 
     def test_the_repository_nav_matches_the_pages(self):
@@ -178,7 +179,7 @@ class NavFromFrontMatter(unittest.TestCase):
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             wiki = _wiki_copy(tmp)
             (wiki / "orphan.md").write_text("# Orphan\n\nText.\n", encoding="utf-8")
-            with self.assertRaisesRegex(generate_site.NavError,
+            with self.assertRaisesRegex(sitegen_nav.NavError,
                                         r"wiki/orphan\.md: front matter needs `level:`"):
                 self._nav(wiki)
 
@@ -188,7 +189,7 @@ class NavFromFrontMatter(unittest.TestCase):
             (wiki / "orphan.md").write_text(
                 "---\nlevel: reference\n---\n\n# Orphan\n", encoding="utf-8")
             with self.assertRaisesRegex(
-                generate_site.NavError,
+                sitegen_nav.NavError,
                 r"wiki/orphan\.md: front matter needs `order:`.*Reference tab",
             ):
                 self._nav(wiki)
@@ -198,7 +199,7 @@ class NavFromFrontMatter(unittest.TestCase):
             wiki = _wiki_copy(tmp)
             (wiki / "twin.md").write_text(
                 "---\nlevel: contribute\norder: 20\n---\n\n# Twin\n", encoding="utf-8")
-            with self.assertRaisesRegex(generate_site.NavError,
+            with self.assertRaisesRegex(sitegen_nav.NavError,
                                         r"wiki/adding-a-platform\.md and wiki/twin\.md"):
                 self._nav(wiki)
 
@@ -212,9 +213,9 @@ class NavFromFrontMatter(unittest.TestCase):
 
     def test_every_wiki_page_states_its_place(self):
         for page in sorted(WIKI.glob("*.md")):
-            meta = generate_site._front_matter(page.read_text(encoding="utf-8"))
+            meta = decorate._front_matter(page.read_text(encoding="utf-8"))
             with self.subTest(page=page.name):
-                self.assertIn(meta.get("level"), generate_site.TABS)
+                self.assertIn(meta.get("level"), sitegen_nav.TABS)
                 self.assertTrue(meta.get("nav") is False or isinstance(meta.get("order"), int))
 
 

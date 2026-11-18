@@ -16,7 +16,7 @@ import unittest
 from pathlib import Path
 
 from packs.crossref import FileConsumers, entry_target
-from generate_site import generate_system_page
+from sitegen.systempages import generate_system_page
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

@@ -151,7 +151,8 @@ class SystemLinks(unittest.TestCase):
             from model.registry import list_registered_platforms
             from model.profiles import load_emulator_profiles
             from model.platforms import load_platform_config
-            from generate_site import _group_by_manufacturer, arcade_board_sections
+            from generate_site import _group_by_manufacturer
+            from sitegen.systempages import arcade_board_sections
 
             with open("database.json", encoding="utf-8") as handle:
                 db = json.load(handle)
@@ -280,7 +281,7 @@ class SystemLinks(unittest.TestCase):
                 self.assertNotIn(sys_id, systemnames.SYSTEM_PARENTS)
 
     def test_emulator_rows_link_the_variant(self) -> None:
-        from generate_site import _named_system_link
+        from sitegen.emulatorcards import _named_system_link
 
         self.assertEqual(
             _named_system_link("wonderswan-color", "../"),
@@ -321,15 +322,15 @@ class AnEntryListingSystemsIsFiledUnderEach(unittest.TestCase):
     under neither Arcade nor NEC PC-88, and kept on pages it does not serve."""
 
     def test_the_site_reads_the_common_rule(self):
-        import generate_site as gs
+        from sitegen import consolecards
         from model.profiles import entry_system_ids
 
         entry = {"name": "ym2608.zip", "systems": ["arcade", "pc80"]}
-        self.assertEqual(gs._entry_systems("mame", entry), ["arcade", "pc80"])
+        self.assertEqual(consolecards._entry_systems("mame", entry), ["arcade", "pc80"])
         self.assertEqual(
-            gs._entry_systems("mame", entry), entry_system_ids(entry, {"systems": []})
+            consolecards._entry_systems("mame", entry), entry_system_ids(entry, {"systems": []})
         )
-        self.assertEqual(gs._entry_systems("mame", {"name": "a", "system": "pc80"}), ["pc80"])
+        self.assertEqual(consolecards._entry_systems("mame", {"name": "a", "system": "pc80"}), ["pc80"])
 
 
 if __name__ == "__main__":

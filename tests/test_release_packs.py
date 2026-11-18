@@ -53,10 +53,10 @@ def _write_registry(root: Path, platforms: dict) -> str:
 
 
 def _which_pack() -> str:
-    import generate_site
+    from sitegen import whichpack
 
     with contextlib.chdir(REPO_ROOT):
-        return generate_site.generate_which_pack()
+        return whichpack.generate_which_pack()
 
 
 class TheFieldIsTheList(unittest.TestCase):
@@ -255,15 +255,16 @@ class TheTablesFollowTheField(unittest.TestCase):
 class EverySurfaceSaysWhy(unittest.TestCase):
     def test_a_setup_page_says_no_zip_with_the_command_beside_it(self):
         import generate_site
+        from sitegen import guidepage
 
-        line = generate_site.no_zip_line("KNULLI")
+        line = guidepage.no_zip_line("KNULLI")
         self.assertEqual(line, "No ZIP for KNULLI. The command installs every file and checks it.")
         with contextlib.chdir(REPO_ROOT):
-            block = generate_site._pack_buttons("knulli")
-            guide = generate_site._guide_download(
+            block = guidepage._pack_buttons("knulli")
+            guide = guidepage._guide_download(
                 "knulli", "KNULLI", generate_site.GUIDES["knulli"], None, "## Download")
         self.assertIn(line, block)
-        self.assertIn(generate_site.NO_ZIP_FAQ, block)
+        self.assertIn(guidepage.NO_ZIP_FAQ, block)
         self.assertIn(line, "\n".join(guide))
         self.assertNotIn("yet", block)
 
@@ -471,12 +472,12 @@ class TheReleaseNotesThankPeople(unittest.TestCase):
 
 class EveryPlatformHasAPermanentPage(unittest.TestCase):
     def test_a_page_for_every_registered_platform(self):
-        import generate_site
+        from sitegen import getpages
 
         record = release_record.load_advertised()
         with contextlib.chdir(REPO_ROOT):
             for name in list_registered_platforms(PLATFORMS):
-                page = generate_site.generate_get_page(name)
+                page = getpages.generate_get_page(name)
                 pack = release_record.pack_for(name, record)
                 with self.subTest(platform=name):
                     self.assertRegex(page, r"\n# (.+ )?BIOS (pack|files)( for .+)?\n")
@@ -491,8 +492,9 @@ class EveryPlatformHasAPermanentPage(unittest.TestCase):
 
     def test_the_generator_writes_and_sweeps_them(self):
         import generate_site
+        from sitegen import config
 
-        self.assertIn(release_record.GET_DIR, generate_site.GENERATED_DIRS)
+        self.assertIn(release_record.GET_DIR, config.GENERATED_DIRS)
         source = Path(generate_site.__file__).read_text(encoding="utf-8")
         self.assertIn('write_if_changed(str(get_dir / f"{name}.md"), generate_get_page(name))',
                       source)

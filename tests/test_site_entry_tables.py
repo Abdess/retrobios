@@ -19,7 +19,9 @@ from pathlib import Path
 
 import yaml
 
-import generate_site as gs
+from sitegen import cards
+from sitegen import emulatorpage
+from sitegen import provenance
 from sitegen import entries as siteentries
 from sitegen import validate
 
@@ -45,7 +47,7 @@ class TheEntryTable(unittest.TestCase):
                 for i in range(count)]
 
     def test_a_long_table_has_its_filter_box_and_stacks(self):
-        lines = siteentries.entry_table(self._rows(25), gs.ENTRY_HEADS, "rb-entry-filter-x", "Required")
+        lines = siteentries.entry_table(self._rows(25), emulatorpage.ENTRY_HEADS, "rb-entry-filter-x", "Required")
         text = "\n".join(lines)
         self.assertRegex(text, r'<div class="rb-table-filter" hidden data-pagefind-ignore>'
                                r'<label for="rb-entry-filter-x">Filter Required</label> '
@@ -61,7 +63,7 @@ class TheEntryTable(unittest.TestCase):
         self.assertNotIn("data-label", text)
 
     def test_a_card_opens_under_its_name_as_markdown(self):
-        lines = siteentries.entry_table(self._rows(2), gs.ENTRY_HEADS, "x", "Required")
+        lines = siteentries.entry_table(self._rows(2), emulatorpage.ENTRY_HEADS, "x", "Required")
         at = lines.index('<summary><h3 id="file-0" class="rb-file-title">n0</h3></summary>')
         # A blank line after the summary: the body is read as Markdown.
         self.assertEqual(lines[at + 1:at + 4], ["", "- Size: 0 bytes", ""])
@@ -85,19 +87,19 @@ class TheEntryTable(unittest.TestCase):
 
 class ASplitEmulatorListsItsCardsAsRows(unittest.TestCase):
     def setUp(self):
-        self.files = [_archive(i, members=1 + i % 4) for i in range(gs.EMULATOR_CARDS_PER_PAGE * 2)]
-        self.pages = gs.emulator_pages(
+        self.files = [_archive(i, members=1 + i % 4) for i in range(emulatorpage.EMULATOR_CARDS_PER_PAGE * 2)]
+        self.pages = emulatorpage.emulator_pages(
             "big", {"emulator": "Big", "type": "standalone", "files": self.files}, EMPTY_DB)
 
     def test_parts_hold_at_most_a_part_of_cards(self):
-        parts = gs.emulator_parts("big", self.files)
-        self.assertEqual(len(parts), -(-len(self.files) // gs.EMULATOR_CARDS_PER_PART))
-        self.assertLessEqual(max(len(entries) for _, entries in parts), gs.EMULATOR_CARDS_PER_PART)
+        parts = emulatorpage.emulator_parts("big", self.files)
+        self.assertEqual(len(parts), -(-len(self.files) // emulatorpage.EMULATOR_CARDS_PER_PART))
+        self.assertLessEqual(max(len(entries) for _, entries in parts), emulatorpage.EMULATOR_CARDS_PER_PART)
 
     def test_every_name_and_member_hash_is_on_its_part(self):
         parts = {stem: page for stem, page in self.pages.items() if stem != "big"}
-        anchors = gs.emulator_file_anchors(self.files)
-        for stem, entries in gs.emulator_parts("big", self.files):
+        anchors = cards.emulator_file_anchors(self.files)
+        for stem, entries in emulatorpage.emulator_parts("big", self.files):
             page = parts[stem]
             self.assertIn('<table class="rb-entries" data-rb-stack="true">', page)
             self.assertNotIn('class="rb-file-entry"', page)
@@ -127,24 +129,24 @@ class APartIsCutByTheWordsItsRowsShow(unittest.TestCase):
         systems = ["nintendo-nes", "sega-mega-drive", "sony-playstation"]
         self.files = [_archive(i, members=1, system=systems[i % 3], region="japan",
                                md5=f"{i:032x}")
-                      for i in range(gs.EMULATOR_CARDS_PER_PART * 2)]
+                      for i in range(emulatorpage.EMULATOR_CARDS_PER_PART * 2)]
         self.profile = {"emulator": "Wide", "type": "standalone", "systems": systems,
                         "files": self.files}
 
     def test_rows_that_say_more_take_more_parts(self):
-        parts = gs.emulator_parts("wide", self.files, self.profile, lambda _f: False)
-        self.assertGreater(len(parts), -(-len(self.files) // gs.EMULATOR_CARDS_PER_PART))
-        words = gs._entry_row_words(self.files, self.profile, lambda _f: False)
+        parts = emulatorpage.emulator_parts("wide", self.files, self.profile, lambda _f: False)
+        self.assertGreater(len(parts), -(-len(self.files) // emulatorpage.EMULATOR_CARDS_PER_PART))
+        words = emulatorpage._entry_row_words(self.files, self.profile, lambda _f: False)
         shown = [sum(words[i] for i in entries) for _stem, entries in parts]
-        self.assertLessEqual(max(shown), gs.EMULATOR_PART_WORDS)
+        self.assertLessEqual(max(shown), emulatorpage.EMULATOR_PART_WORDS)
         # Balanced: no part a remainder of a few rows.
         self.assertLess(max(shown) - min(shown), max(words) * 3)
         self.assertEqual(sorted(i for _stem, entries in parts for i in entries),
                          list(range(len(self.files))))
 
     def test_each_part_page_stays_under_the_built_ceiling(self):
-        pages = gs.emulator_pages("wide", self.profile, EMPTY_DB)
-        parts = gs.emulator_parts("wide", self.files, self.profile, lambda _f: False)
+        pages = emulatorpage.emulator_pages("wide", self.profile, EMPTY_DB)
+        parts = emulatorpage.emulator_parts("wide", self.files, self.profile, lambda _f: False)
         self.assertEqual(sorted(pages), sorted(["wide", *(stem for stem, _e in parts)]))
         ceiling = VISIBLE_CEILINGS["emulator card parts"][1]
         for stem, _entries in parts:
@@ -154,15 +156,15 @@ class APartIsCutByTheWordsItsRowsShow(unittest.TestCase):
                 self.assertLessEqual(parser.words, ceiling)
 
     def test_the_budget_leaves_room_for_the_frame(self):
-        self.assertLessEqual(gs.EMULATOR_PART_WORDS + 200,
+        self.assertLessEqual(emulatorpage.EMULATOR_PART_WORDS + 200,
                              VISIBLE_CEILINGS["emulator card parts"][1])
 
 
 class ALongEmulatorPageIsOneTable(unittest.TestCase):
     def test_rows_replace_the_index_and_the_cards(self):
-        files = ([_archive(i) for i in range(gs.EMULATOR_TABLE_MIN)]
+        files = ([_archive(i) for i in range(emulatorpage.EMULATOR_TABLE_MIN)]
                  + [{"name": f"opt{i}.bin", "md5": f"{i:032x}"} for i in range(10)])
-        page = gs.generate_emulator_page(
+        page = emulatorpage.generate_emulator_page(
             "long", {"emulator": "Long", "type": "standalone", "files": files}, EMPTY_DB, None, set())
         self.assertNotIn("| File |", page)
         self.assertNotIn('class="rb-file-entry"', page)
@@ -175,8 +177,8 @@ class ALongEmulatorPageIsOneTable(unittest.TestCase):
         self.assertRegex(optional, rf'MD5: <code class="rb-hash"[^>]*>{md5}</code>')
 
     def test_a_shorter_page_keeps_its_cards(self):
-        files = [_archive(i) for i in range(gs.EMULATOR_TABLE_MIN - 1)]
-        page = gs.generate_emulator_page(
+        files = [_archive(i) for i in range(emulatorpage.EMULATOR_TABLE_MIN - 1)]
+        page = emulatorpage.generate_emulator_page(
             "short", {"emulator": "Short", "type": "standalone", "files": files}, EMPTY_DB, None, set())
         self.assertIn('class="rb-file-entry"', page)
         self.assertNotIn('class="rb-entries"', page)
@@ -195,7 +197,7 @@ class TheWantedListIsOneFilteredTable(unittest.TestCase):
                 {"name": "made.bin", "sha1": "a" * 40, "dat": dats[0]}],
         }}
         moved: dict[str, str] = {}
-        self.main = gs.generate_provenance_page(
+        self.main = provenance.generate_provenance_page(
             {"files": {}}, report, {"a" * 40: {"from": ["bios/x.bin"], "transform": "half"}}, moved)
         self.page = moved["provenance-redump"]
 

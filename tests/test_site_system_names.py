@@ -123,9 +123,9 @@ class SectionsComeBeforeThePlan(unittest.TestCase):
         import ast
         import inspect
 
-        import generate_site
+        from sitegen import build
 
-        tree = ast.parse(inspect.getsource(generate_site._generate))
+        tree = ast.parse(inspect.getsource(build._generate))
         lines = {}
         for node in ast.walk(tree):
             if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):

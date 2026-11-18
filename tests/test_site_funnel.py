@@ -15,7 +15,10 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import generate_site
+from sitegen import decorate
+from sitegen import guidepage
+from sitegen import nav as sitegen_nav
+from sitegen import whichpack
 from tests import sitepages
 from model.registry import list_registered_platforms, load_platform_registry
 from model.platforms import load_platform_config
@@ -24,7 +27,7 @@ from model.guides import DEVICE_GROUPS, GROUP_ANCHORS, GUIDES
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 DOCS = sitepages.CONTENT
-ORDER = list(generate_site.LEVELS)
+ORDER = list(decorate.LEVELS)
 # Pages link to site addresses once written for the site.
 LINK = re.compile(r"\[[^\]]*\]\((/retrobios/[^)\s#?]*)(?:[#?][^)]*)?\)")
 FENCED = re.compile(r"^\s*```.*?^\s*```", re.S | re.M)
@@ -36,7 +39,7 @@ def _registered() -> list[str]:
 
 def _which_pack() -> str:
     with contextlib.chdir(REPO_ROOT):
-        return generate_site.generate_which_pack()
+        return whichpack.generate_which_pack()
 
 
 def _docs_pages() -> list[Path]:
@@ -44,21 +47,21 @@ def _docs_pages() -> list[Path]:
 
 
 def _level(page: Path) -> str:
-    return str(generate_site._front_matter(page.read_text(encoding="utf-8")).get("level") or "")
+    return str(decorate._front_matter(page.read_text(encoding="utf-8")).get("level") or "")
 
 
 class FiveTabs(unittest.TestCase):
     """Twelve tabs put the walkthrough at position eleven, under "Wiki"."""
 
     def test_the_tabs_in_reading_order(self):
-        nav = generate_site.generate_nav({}, {}, {}, {})
+        nav = sitegen_nav.generate_nav({}, {}, {}, {})
         self.assertEqual(
             [next(iter(tab)) for tab in nav],
             ["Start here", "Setups", "Explore", "Reference", "Contribute"],
         )
 
     def test_each_tab_opens_on_an_index_or_a_first_page(self):
-        nav = generate_site.generate_nav({}, {}, {}, {})
+        nav = sitegen_nav.generate_nav({}, {}, {}, {})
         tabs = {next(iter(tab)): next(iter(tab.values())) for tab in nav}
         self.assertEqual(tabs["Start here"][0], "index.md")
         self.assertEqual(tabs["Setups"][0], "platforms/index.md")
@@ -107,7 +110,7 @@ class EveryPlatformOnThePicker(unittest.TestCase):
                         found += targets(value) if isinstance(value, list) else [value]
             return found
 
-        nav = " ".join(targets(generate_site.generate_nav({}, {}, {}, {})))
+        nav = " ".join(targets(sitegen_nav.generate_nav({}, {}, {}, {})))
         kept_out: set[str] = set()
         wiki = Path(__file__).resolve().parents[1] / "wiki"
         missing = sorted(
@@ -122,7 +125,7 @@ class EveryPlatformOnThePicker(unittest.TestCase):
             key: {"platform": load_platform_config(key, str(REPO_ROOT / "platforms"))["platform"]}
             for key in _registered()
         }
-        nav = generate_site.generate_nav(coverages, {}, {}, registry)
+        nav = sitegen_nav.generate_nav(coverages, {}, {}, registry)
         setup = next(tab["Setups"] for tab in nav if "Setups" in tab)
         groups = {next(iter(item)): next(iter(item.values()))
                   for item in setup if isinstance(item, dict)}
@@ -136,7 +139,7 @@ class EveryPlatformOnThePicker(unittest.TestCase):
         installer and were named on no page a user reads."""
         from model.guides import HANDHELD_GUIDE
 
-        page = generate_site.generate_handheld_guide(HANDHELD_GUIDE)
+        page = guidepage.generate_handheld_guide(HANDHELD_GUIDE)
         self.assertIn("| muOS |", page)
         self.assertIn("`MUOS/bios` on the card", page)
         self.assertNotIn("| TrimUI |", page)
@@ -153,7 +156,7 @@ class SampleCoresLeaveTheNavigation(unittest.TestCase):
                             "systems": ["sony-playstation"], "files": [{"name": "a.bin"}]},
             "zx": {"emulator": "zx81", "type": "libretro", "systems": ["sinclair-zx81"]},
         }
-        nav = generate_site._emulator_nav(profiles)
+        nav = sitegen_nav._emulator_nav(profiles)
         self.assertEqual(nav[0], "emulators/index.md")
         groups = {next(iter(group)): next(iter(group.values())) for group in nav[1:]}
         self.assertEqual(groups, {
@@ -165,20 +168,20 @@ class SampleCoresLeaveTheNavigation(unittest.TestCase):
 class EveryPageHasALevel(unittest.TestCase):
     def test_wiki_sources_declare_one(self):
         for page in sorted((REPO_ROOT / "wiki").glob("*.md")):
-            level = generate_site._front_matter(page.read_text(encoding="utf-8")).get("level")
+            level = decorate._front_matter(page.read_text(encoding="utf-8")).get("level")
             with self.subTest(page=page.name):
-                self.assertIn(level, generate_site.LEVELS)
+                self.assertIn(level, decorate.LEVELS)
 
     def test_every_generated_page_has_one_and_its_label(self):
         for page in _docs_pages():
             text = page.read_text(encoding="utf-8")
             level = _level(page)
             with self.subTest(page=str(page.relative_to(DOCS))):
-                self.assertIn(level, generate_site.LEVELS)
+                self.assertIn(level, decorate.LEVELS)
                 self.assertIn(f"\nlevel: {level}\n", text)
         # The label above each title comes from the page's level.
         component = (REPO_ROOT / "website" / "src" / "components" / "PageTitle.astro").read_text()
-        for level, label in generate_site.LEVELS.items():
+        for level, label in decorate.LEVELS.items():
             with self.subTest(level=level):
                 self.assertIn(f"{level}: '{label}'", component)
 
@@ -187,8 +190,8 @@ class EveryPageHasALevel(unittest.TestCase):
             page = Path(tmp) / "wiki" / "faq.md"
             page.parent.mkdir()
             page.write_text("---\nlevel: start\n---\n\n# FAQ\n\nQuestions people ask first.\n")
-            generate_site.decorate_markdown_pages(Path(tmp))
-            generate_site.decorate_markdown_pages(Path(tmp))
+            decorate.decorate_markdown_pages(Path(tmp))
+            decorate.decorate_markdown_pages(Path(tmp))
             text = page.read_text()
         self.assertEqual(text.count("level: start"), 1)
         self.assertIn("searchWeight: 10\n", text)
@@ -239,7 +242,7 @@ class DeepLinksCarryALabel(unittest.TestCase):
                         continue
                     if any(f"]({answer})" in match.group(0) for answer in self.ANSWERS):
                         continue
-                    label = f"{generate_site.LEVELS[deeper]}:"
+                    label = f"{decorate.LEVELS[deeper]}:"
                     if line[: match.start()].rstrip().endswith("?"):
                         continue
                     if label not in line[: match.start()] and not any(

@@ -14694,9 +14694,9 @@ class ProvenCardsAndCounts(unittest.TestCase):
     def test_which_pack_names_the_first_screen(self):
         """Which-pack said the command opens a screen
         where Install and Choose systems are, the second screen."""
-        import generate_site
+        from sitegen import guidepage
 
-        words = " ".join(generate_site.first_screen_words())
+        words = " ".join(guidepage.first_screen_words())
         found, nothing = fresh_state(), install.TuiState(os_type="linux", home=HOME)
         found.stack = ["setup"]
         self.assertIn(install.tui_view(found, 80, 24)[0].split(": ", 1)[1].strip(), words)

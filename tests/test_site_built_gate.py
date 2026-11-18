@@ -272,17 +272,17 @@ class TheRules(unittest.TestCase):
     def test_a_large_data_directory_is_listed_on_pages_of_its_own(self):
         """Dolphin's Sys tree put 16,900 elements on the Dolphin page. Its
         files are found where they moved."""
-        import generate_site
+        from sitegen import lookup
 
         members = {f"Sys/{i:05d}.ini": {"sha1": f"{i:040x}", "size": 1}
-                   for i in range(generate_site.DATA_TREE_ROWS_PER_PAGE + 1)}
-        pages = generate_site.data_tree_pages("dolphin-sys", members)
+                   for i in range(lookup.DATA_TREE_ROWS_PER_PAGE + 1)}
+        pages = lookup.data_tree_pages("dolphin-sys", members)
         self.assertEqual([stem for stem, _names in pages], ["data-dolphin-sys", "data-dolphin-sys-2"])
-        self.assertEqual(generate_site.data_tree_pages("small", dict(list(members.items())[:3])), [])
-        items = generate_site.file_location_items(
+        self.assertEqual(lookup.data_tree_pages("small", dict(list(members.items())[:3])), [])
+        items = lookup.file_location_items(
             {"files": {}}, {"dolphin": {"data_directories": [{"ref": "dolphin-sys"}]}},
             {"dolphin-sys": members})
-        last = f"{generate_site.DATA_TREE_ROWS_PER_PAGE:040x}"
+        last = f"{lookup.DATA_TREE_ROWS_PER_PAGE:040x}"
         self.assertIn({"sha1": last, "url": f"/retrobios/emulators/data-dolphin-sys-2/#sha1-{last[:12]}"}, items)
 
     def test_no_float_rule_for_right_aligned_images(self):

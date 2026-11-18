@@ -258,13 +258,13 @@ class GeneratedSurfaces(unittest.TestCase):
         """The install boxes weigh in the split of a manufacturer's page,
         fitted on the 66-character raw address: weighed at their new length,
         Nintendo DS fell back onto the Nintendo summary and lost its page."""
-        import generate_site
+        from sitegen import consolecards
 
         tail = " | sh -s -- --check"
-        self.assertEqual(generate_site._install_box_weight([f"curl -fsSL {INSTALL_SH}{tail}"]),
+        self.assertEqual(consolecards._install_box_weight([f"curl -fsSL {INSTALL_SH}{tail}"]),
                          len("curl -fsSL ") + 66 + len(tail) + 1)
         line = f"&([scriptblock]::Create((irm {INSTALL_PS1}))) --check"
-        self.assertEqual(generate_site._install_box_weight([line]),
+        self.assertEqual(consolecards._install_box_weight([line]),
                          len(line) - len(INSTALL_PS1) + 67 + 1)
 
     def test_the_readme_shows_the_short_form(self):

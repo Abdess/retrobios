@@ -38,6 +38,12 @@ import importlib.util
 import json
 
 import generate_site as gs
+from sitegen import cards
+from sitegen import emulatorcards
+from sitegen import emulatorpage
+from sitegen import emulatorsindex
+from sitegen import install as sitegen_install
+from sitegen import lookup
 from sitegen import render as siterender
 from model import systemnames
 from sitegen import validate
@@ -63,7 +69,7 @@ def _profile(name: str) -> dict:
 
 
 def _page(name: str, profile: dict) -> str:
-    return gs.generate_emulator_page(name, profile, EMPTY_DB, None, set())
+    return emulatorpage.generate_emulator_page(name, profile, EMPTY_DB, None, set())
 
 
 def _files(count: int, **fields: object) -> list[dict]:
@@ -76,7 +82,7 @@ class TheIntroSaysWhatIsNeeded(unittest.TestCase):
         # region fills it, and every member is marked required by the loader.
         profile = _profile("duckstation")
         members = [f for f in profile["files"] if f.get("group") == "ps-bios"]
-        intro = gs._emulator_intro("DuckStation", profile)
+        intro = emulatorpage._emulator_intro("DuckStation", profile)
         self.assertIn(
             f"It needs one BIOS for the game's region, among the {len(members)} it accepts.",
             intro)
@@ -84,7 +90,7 @@ class TheIntroSaysWhatIsNeeded(unittest.TestCase):
         self.assertIn("DuckStation emulates Sony PlayStation.", intro)
 
     def test_three_required_bios_of_three_regions_read_as_one_choice(self):
-        intro = gs._emulator_intro("X", {"systems": ["sony-playstation"], "files": [
+        intro = emulatorpage._emulator_intro("X", {"systems": ["sony-playstation"], "files": [
             {"name": "j.bin", "required": True, "region": ["japan"]},
             {"name": "u.bin", "required": True, "region": ["north-america"]},
             {"name": "e.bin", "required": True, "region": ["europe"]},
@@ -94,16 +100,16 @@ class TheIntroSaysWhatIsNeeded(unittest.TestCase):
         self.assertNotIn("3 of them required", intro)
 
     def test_required_files_without_regions_keep_the_count(self):
-        intro = gs._emulator_intro("X", {"files": [
+        intro = emulatorpage._emulator_intro("X", {"files": [
             {"name": "a.bin", "required": True}, {"name": "b.bin"}]})
         self.assertIn("It reads 2 files, 1 of them required", intro)
 
     def test_several_machines_say_who_needs_a_required_file(self):
-        intro = gs._emulator_intro("X", {
+        intro = emulatorpage._emulator_intro("X", {
             "systems": ["sony-playstation", "sega-saturn"],
             "files": [{"name": "a.bin", "required": True}]})
         self.assertIn("A required file is needed only by the machines that use it.", intro)
-        one = gs._emulator_intro("X", {
+        one = emulatorpage._emulator_intro("X", {
             "systems": ["sony-playstation"], "files": [{"name": "a.bin", "required": True}]})
         self.assertNotIn("machines that use it", one)
 
@@ -162,7 +168,7 @@ class RequiredFilesComeFirst(unittest.TestCase):
         self.assertGreater(len(re.findall(r"^## ", page, re.M)), 2)
 
     def test_rows_carry_region_and_hash(self):
-        files = _files(gs.EMULATOR_TABLE_MIN - 1) + [
+        files = _files(emulatorpage.EMULATOR_TABLE_MIN - 1) + [
             {"name": "req.bin", "required": True, "region": ["japan"], "md5": "ab" * 16}]
         page = _page("x", {"type": "standalone", "files": files})
         required = page[page.index("## Required"):page.index("## Optional")]
@@ -177,11 +183,11 @@ class RequiredFilesComeFirst(unittest.TestCase):
         self.assertIn('class="rb-file-entry"', page)
 
     def test_a_split_page_puts_required_on_the_first_part(self):
-        count = gs.EMULATOR_CARDS_PER_PAGE * 2
+        count = emulatorpage.EMULATOR_CARDS_PER_PAGE * 2
         files = _files(count) + [{"name": "last.bin", "required": True}]
-        parts = gs.emulator_parts("big", files)
+        parts = emulatorpage.emulator_parts("big", files)
         self.assertIn(count, parts[0][1])
-        pages = gs.emulator_pages("big", {"emulator": "Big", "type": "standalone",
+        pages = emulatorpage.emulator_pages("big", {"emulator": "Big", "type": "standalone",
                                           "files": files}, {"files": {}})
         main = pages["big"]
         self.assertLess(main.index("## Required"), main.index("## Optional"))
@@ -195,14 +201,14 @@ class TheSummaryLineIsProse(unittest.TestCase):
             {"name": "a.pak", "category": "game_data"}, {"name": "b.pak", "category": "game_data"}]
         for f in files[:164]:
             f["required"] = True
-        text = "\n".join(gs._emulator_file_summary(files))
+        text = "\n".join(emulatorpage._emulator_file_summary(files))
         self.assertNotIn(" | ", text)
         self.assertNotIn("1399", text)
         self.assertIn("1,401 optional", text)
         self.assertIn("By kind: 1,563 BIOS ZIPs and 2 game data.", text)
 
     def test_category_badge_in_words(self):
-        badges = " ".join(gs._file_badges({"name": "a", "category": "game_data"}, True))
+        badges = " ".join(emulatorcards._file_badges({"name": "a", "category": "game_data"}, True))
         self.assertIn(">game data</span>", badges)
 
 
@@ -214,7 +220,7 @@ class TheIndexNamesEmulatorsAndSystems(unittest.TestCase):
         saved = dict(siterender._system_page_map)
         self.addCleanup(siterender.set_system_page_map, saved)
         siterender.set_system_page_map({"sony-playstation": ("sony", "PlayStation")})
-        page = gs.generate_emulators_index({
+        page = emulatorsindex.generate_emulators_index({
             "duckstation": {"emulator": "DuckStation", "core_classification": "official_port",
                             "systems": ["sony-playstation"], "files": _files(3)},
         })
@@ -232,28 +238,28 @@ DIST = REPO_ROOT / "website" / "dist"
 
 
 def _emulator_page(name: str, profile: dict | None = None) -> str:
-    return gs.generate_emulator_page(name, profile or _profile(name), EMPTY_DB, None, set())
+    return emulatorpage.generate_emulator_page(name, profile or _profile(name), EMPTY_DB, None, set())
 
 
 class EachArcadePageNamesItsRomset(unittest.TestCase):
     def test_the_romset_by_profile(self):
-        self.assertEqual(gs.emulator_romset(_profile("mame2003")), "MAME 0.78")
+        self.assertEqual(emulatorcards.emulator_romset(_profile("mame2003")), "MAME 0.78")
         # The app's version is 1.38.1, its MAME is 0.289.
-        self.assertEqual(gs.emulator_romset(_profile("mame4droid-2024")), "MAME 0.289")
-        self.assertEqual(gs.emulator_romset(_profile("mame2003_plus")), "MAME 0.78 (plus backports)")
-        self.assertTrue(gs.emulator_romset(_profile("fbneo")).startswith("FinalBurn Neo "))
-        self.assertTrue(gs.emulator_romset(_profile("fbalpha2012")).startswith("FB Alpha "))
-        self.assertEqual(gs.emulator_romset(_profile("duckstation")), "")
+        self.assertEqual(emulatorcards.emulator_romset(_profile("mame4droid-2024")), "MAME 0.289")
+        self.assertEqual(emulatorcards.emulator_romset(_profile("mame2003_plus")), "MAME 0.78 (plus backports)")
+        self.assertTrue(emulatorcards.emulator_romset(_profile("fbneo")).startswith("FinalBurn Neo "))
+        self.assertTrue(emulatorcards.emulator_romset(_profile("fbalpha2012")).startswith("FB Alpha "))
+        self.assertEqual(emulatorcards.emulator_romset(_profile("duckstation")), "")
         # HBMAME publishes no MAME release number.
-        self.assertEqual(gs.emulator_romset(_profile("hbmame")), "")
+        self.assertEqual(emulatorcards.emulator_romset(_profile("hbmame")), "")
 
     def test_a_row_and_a_line_under_the_intro(self):
         page = _emulator_page("mame2003")
-        self.assertIn(f"| Romset | [MAME 0.78]({gs.ROMSET_FAQ}) |", page)
+        self.assertIn(f"| Romset | [MAME 0.78]({cards.ROMSET_FAQ}) |", page)
         self.assertNotIn("| MAME version |", _emulator_page("mame2016"))
         line = page.index("Its BIOS and game sets must come from the MAME 0.78 romset.")
         self.assertLess(line, page.index("About this profile"))
-        self.assertIn(f"[Which version each core reads]({gs.ROMSET_FAQ})", page)
+        self.assertIn(f"[Which version each core reads]({cards.ROMSET_FAQ})", page)
 
     def test_the_faq_answer_exists(self):
         faq = (REPO_ROOT / "wiki" / "technical-faq.md").read_text(encoding="utf-8")
@@ -270,23 +276,23 @@ class WhatTheAppShipsIsNoFileToGet(unittest.TestCase):
 
     def test_the_badge(self):
         font = next(f for f in self.profile["files"] if f["name"] == "Roboto-Regular.ttf")
-        badges = " ".join(gs._file_badges(font, False))
+        badges = " ".join(emulatorcards._file_badges(font, False))
         self.assertIn(">comes with the app</span>", badges)
         self.assertNotIn(">required</span>", badges)
         self.assertNotIn(">missing</span>", badges)
         # Narrowed to one build, the entry is that build's alone, as verify
         # and the pack read it: EightyOne installs its ROMs, and the libretro
         # core, which embeds them, reads no entry. Nothing to fetch.
-        dual = " ".join(gs._file_badges({"name": "a", "bundled": True, "mode": "standalone",
+        dual = " ".join(emulatorcards._file_badges({"name": "a", "bundled": True, "mode": "standalone",
                                          "required": True}, False))
         self.assertNotIn(">required</span>", dual)
         self.assertNotIn(">missing</span>", dual)
         self.assertIn("installed with the standalone emulator", dual)
         rom = next(f for f in _profile("81")["files"] if f["name"] == "jupiterace.rom")
-        self.assertTrue(gs.comes_with_app(rom))
+        self.assertTrue(sitegen_install.comes_with_app(rom))
 
     def test_counts_leave_them_out(self):
-        shipped = sum(1 for f in self.profile["files"] if gs.comes_with_app(f))
+        shipped = sum(1 for f in self.profile["files"] if sitegen_install.comes_with_app(f))
         self.assertGreater(shipped, 0)
         summary = self.page[self.page.index("## Files"):]
         self.assertIn(f"{shipped} more files come with the app.", summary)
@@ -313,33 +319,33 @@ class WhatTheAppShipsIsNoFileToGet(unittest.TestCase):
 
 class TheSummaryTableFitsItsContent(unittest.TestCase):
     def test_an_empty_region_column_goes(self):
-        rows = gs._summary_table(_files(3, md5="ab" * 16), [0, 1, 2], lambda _i, s: s)
+        rows = emulatorpage._summary_table(_files(3, md5="ab" * 16), [0, 1, 2], lambda _i, s: s)
         self.assertNotIn("Region", rows[0])
 
     def test_a_constant_required_column_goes(self):
-        rows = gs._summary_table(_files(3, required=True), [0, 1, 2], lambda _i, s: s)
+        rows = emulatorpage._summary_table(_files(3, required=True), [0, 1, 2], lambda _i, s: s)
         self.assertEqual(rows[0], "| File |")
 
     def test_hashes_are_short_with_the_whole_value_in_the_title(self):
         md5 = "0123456789abcdef" * 2
-        cell = gs._hash_short({"md5": md5})
+        cell = emulatorpage._hash_short({"md5": md5})
         self.assertEqual(cell, f'MD5 <code title="{md5}">{md5[:12]}</code>')
 
     def test_the_split_index_holds_each_id_on_its_link(self):
-        files = _files(gs.EMULATOR_CARDS_PER_PAGE + 1, category="bios_zip")
-        main = gs.emulator_pages("big", {"emulator": "Big", "type": "standalone",
+        files = _files(emulatorpage.EMULATOR_CARDS_PER_PAGE + 1, category="bios_zip")
+        main = emulatorpage.emulator_pages("big", {"emulator": "Big", "type": "standalone",
                                          "files": files}, {"files": {}})["big"]
-        anchor = gs.emulator_file_anchors(files)[0]
+        anchor = cards.emulator_file_anchors(files)[0]
         self.assertIn(f'<a id="{anchor}" href="/retrobios/emulators/big-files-1/#{anchor}">', main)
         self.assertNotIn(f'<span id="{anchor}"></span>', main)
 
 
 class LongPagesFold(unittest.TestCase):
     def test_each_entry_is_listed_once_as_a_row(self):
-        files = _files(gs.EMULATOR_TABLE_MIN) + [{"name": "req.bin", "required": True}]
+        files = _files(emulatorpage.EMULATOR_TABLE_MIN) + [{"name": "req.bin", "required": True}]
         page = _emulator_page("x", {"type": "standalone", "files": files})
         self.assertNotIn("| File |", page)
-        self.assertNotIn(f"<summary>{gs.EMULATOR_TABLE_MIN} files</summary>", page)
+        self.assertNotIn(f"<summary>{emulatorpage.EMULATOR_TABLE_MIN} files</summary>", page)
         self.assertEqual(page.count('<h3 id="file-'), len(files))
         required = page[page.index("## Required"):page.index("## Optional")]
         self.assertEqual(required.count('<h3 id="file-'), 1)
@@ -358,12 +364,12 @@ class LongPagesFold(unittest.TestCase):
 
 class DataDirectoryPagesStayOutOfSearch(unittest.TestCase):
     def test_front_matter(self):
-        saved = dict(gs._DATA_MEMBERS), dict(gs._DATA_READERS)
-        self.addCleanup(lambda: (gs._DATA_MEMBERS.clear(), gs._DATA_MEMBERS.update(saved[0]),
-                                 gs._DATA_READERS.clear(), gs._DATA_READERS.update(saved[1])))
-        gs._DATA_MEMBERS["dolphin-sys"] = {"a.bin": {"sha1": "a" * 40, "size": 1}}
-        gs._DATA_READERS["dolphin-sys"] = [("dolphin-mmjr", "Dolphin MMJR"), ("dolphin", "Dolphin")]
-        page = gs._data_tree_page("dolphin-sys", {}, [("data-dolphin-sys", ["a.bin"])], 0)
+        saved = dict(emulatorcards._DATA_MEMBERS), dict(emulatorpage._DATA_READERS)
+        self.addCleanup(lambda: (emulatorcards._DATA_MEMBERS.clear(), emulatorcards._DATA_MEMBERS.update(saved[0]),
+                                 emulatorpage._DATA_READERS.clear(), emulatorpage._DATA_READERS.update(saved[1])))
+        emulatorcards._DATA_MEMBERS["dolphin-sys"] = {"a.bin": {"sha1": "a" * 40, "size": 1}}
+        emulatorpage._DATA_READERS["dolphin-sys"] = [("dolphin-mmjr", "Dolphin MMJR"), ("dolphin", "Dolphin")]
+        page = emulatorpage._data_tree_page("dolphin-sys", {}, [("data-dolphin-sys", ["a.bin"])], 0)
         front = yaml.safe_load(page.split("---\n")[1])
         self.assertEqual(front["search"], "exclude")
         self.assertEqual(front["parent"], {"label": "Dolphin", "link": "dolphin.md"})
@@ -393,7 +399,7 @@ class AnElementBudget(unittest.TestCase):
 
 
 def _pages(name: str, profile: dict | None = None) -> dict[str, str]:
-    return gs.emulator_pages(name, profile or _profile(name), EMPTY_DB, None, set())
+    return emulatorpage.emulator_pages(name, profile or _profile(name), EMPTY_DB, None, set())
 
 
 def _front(page: str) -> dict:
@@ -440,13 +446,13 @@ class AnAppThatReadsAnyBios(unittest.TestCase):
 
     def test_only_found_by_content_with_one_bios(self):
         # DuckStation picks the BIOS of the game's region: its intro stays.
-        self.assertIsNone(gs.any_name_bios(_profile("duckstation")))
-        self.assertIsNone(gs.any_name_bios(_profile("melonds")))
-        self.assertIsNotNone(gs.any_name_bios(_profile("pcsx2")))
+        self.assertIsNone(emulatorcards.any_name_bios(_profile("duckstation")))
+        self.assertIsNone(emulatorcards.any_name_bios(_profile("melonds")))
+        self.assertIsNotNone(emulatorcards.any_name_bios(_profile("pcsx2")))
 
     def test_the_download_links_the_collection_card(self):
-        steps = gs._any_name_steps("X", _profile("aethersx2"),
-                                   gs.any_name_bios(_profile("aethersx2")),
+        steps = emulatorpage._any_name_steps("X", _profile("aethersx2"),
+                                   emulatorcards.any_name_bios(_profile("aethersx2")),
                                    "../systems/sony.md#sha1-abc")
         self.assertIn("1. Download [`ps2-0230a-20080220.bin`](../systems/sony.md#sha1-abc).", steps)
 
@@ -480,15 +486,15 @@ class PartsKnowWhereTheySit(unittest.TestCase):
     def test_data_directory_parts(self):
         ref = "x-sys"
         members = {f"f{i:05d}": {"size": 1, "sha1": f"{i:040x}"}
-                   for i in range(gs.DATA_TREE_ROWS_PER_PAGE * 2 + 1)}
-        gs._DATA_MEMBERS[ref] = members
-        gs._DATA_READERS[ref] = [("x", "X")]
+                   for i in range(lookup.DATA_TREE_ROWS_PER_PAGE * 2 + 1)}
+        emulatorcards._DATA_MEMBERS[ref] = members
+        emulatorpage._DATA_READERS[ref] = [("x", "X")]
         try:
-            pages = gs.data_tree_pages(ref, members)
+            pages = lookup.data_tree_pages(ref, members)
             self.assertEqual(len(pages), 3)
-            middle = _front(gs._data_tree_page(ref, {}, pages, 1))
+            middle = _front(emulatorpage._data_tree_page(ref, {}, pages, 1))
         finally:
-            del gs._DATA_MEMBERS[ref], gs._DATA_READERS[ref]
+            del emulatorcards._DATA_MEMBERS[ref], emulatorpage._DATA_READERS[ref]
         self.assertEqual(middle["parent"], {"label": "X", "link": "x.md"})
         self.assertEqual(middle["prev"]["link"], f"{pages[0][0]}.md")
         self.assertEqual(middle["next"]["link"], f"{pages[2][0]}.md")
@@ -513,7 +519,7 @@ class ARequiredFileSaysForWhichSystem(unittest.TestCase):
 class TheTemplateIsNoEmulator(unittest.TestCase):
     def test_off_the_index_and_the_search(self):
         profiles = {"00_example": _profile("00_example"), "melonds": _profile("melonds")}
-        index = gs.generate_emulators_index(profiles)
+        index = emulatorsindex.generate_emulators_index(profiles)
         self.assertNotIn("00_example", index)
         self.assertIn("melonds.md", index)
         # A test profile gets no page at all (generate_site's public_profiles).
@@ -596,30 +602,30 @@ class FolderOnlyTable(unittest.TestCase):
 
     def test_every_row_names_a_profile_and_entries_that_exist(self) -> None:
         roots = _profiles_with_data_root()
-        for profile_name, patterns, keys, reason in gs.FOLDER_ONLY:
+        for profile_name, patterns, keys, reason in sitegen_install.FOLDER_ONLY:
             with self.subTest(profile=profile_name, patterns=patterns):
                 self.assertIn(profile_name, roots, "no profile with data_root by that name")
                 self.assertTrue(reason.strip())
                 entries = _entries(roots[profile_name])
                 for pattern in patterns:
                     self.assertTrue(
-                        any(gs.folder_only_matches(pattern, f) for f in entries),
+                        any(sitegen_install.folder_only_matches(pattern, f) for f in entries),
                         f"{pattern!r} names no entry of {profile_name}")
                 self.assertLessEqual(set(keys), set(roots[profile_name]["data_root"]))
 
     def test_a_listed_entry_is_never_joined_to_the_root(self) -> None:
         roots = _profiles_with_data_root()
-        for profile_name, patterns, keys, _reason in gs.FOLDER_ONLY:
+        for profile_name, patterns, keys, _reason in sitegen_install.FOLDER_ONLY:
             profile = roots[profile_name]
             for entry in _entries(profile):
-                if not any(gs.folder_only_matches(p, entry) for p in patterns):
+                if not any(sitegen_install.folder_only_matches(p, entry) for p in patterns):
                     continue
                 raw = {str(entry.get(k) or "") for k in ("path", "standalone_path")} - {""}
                 for key in keys or tuple(profile["data_root"]):
                     with self.subTest(profile=profile_name, entry=entry.get("name"), key=key):
-                        self.assertEqual(gs.standalone_place(profile_name, profile, entry, key), "")
-                        self.assertEqual(gs.standalone_place(profile_name, profile, entry), "")
-                        block = "\n".join(gs.data_folder_block(profile_name, profile))
+                        self.assertEqual(sitegen_install.standalone_place(profile_name, profile, entry, key), "")
+                        self.assertEqual(sitegen_install.standalone_place(profile_name, profile, entry), "")
+                        block = "\n".join(sitegen_install.data_folder_block(profile_name, profile))
                         for root in _alternatives(str(profile["data_root"][key]["path"])):
                             for place in raw:
                                 self.assertNotIn(f"{root}/{place}", block)
@@ -628,12 +634,12 @@ class FolderOnlyTable(unittest.TestCase):
         if not _generated():
             self.skipTest("site pages not generated")
         roots = _profiles_with_data_root()
-        for profile_name, patterns, keys, _reason in gs.FOLDER_ONLY:
+        for profile_name, patterns, keys, _reason in sitegen_install.FOLDER_ONLY:
             profile = roots[profile_name]
             pages = [p.read_text(encoding="utf-8")
                      for p in EMULATORS.glob(f"{profile_name}*.md*")]
             for entry in _entries(profile):
-                if not any(gs.folder_only_matches(p, entry) for p in patterns):
+                if not any(sitegen_install.folder_only_matches(p, entry) for p in patterns):
                     continue
                 for key in keys or tuple(profile["data_root"]):
                     for root in _alternatives(str(profile["data_root"][key]["path"])):
@@ -658,37 +664,37 @@ class DataFolderPrinted(unittest.TestCase):
                         self.assertIn(alternative, page)
 
     def test_ryujinx_keys_sit_in_system(self) -> None:
-        block = "\n".join(gs.data_folder_block("ryujinx", _profile("ryujinx")))
+        block = "\n".join(sitegen_install.data_folder_block("ryujinx", _profile("ryujinx")))
         self.assertIn("`%APPDATA%/Ryujinx/system/`", block)
         self.assertIn("`~/Library/Application Support/Ryujinx/system/`", block)
         self.assertEqual(_tab_labels(block), {"Windows", "macOS", "Linux"})
 
     def test_aethersx2_step_names_the_android_folder(self) -> None:
         profile = _profile("aethersx2")
-        steps = gs._any_name_steps("AetherSX2", profile, gs.any_name_bios(profile), "", "aethersx2")
+        steps = emulatorpage._any_name_steps("AetherSX2", profile, emulatorcards.any_name_bios(profile), "", "aethersx2")
         self.assertIn("2. Put it in this folder:", steps)
         self.assertIn("`Android/data/xyz.aethersx2.android/files/bios/`, on the internal storage.",
                       steps)
         self.assertNotIn("app's own data folder", steps)
 
     def test_one_system_is_a_line_not_a_tab(self) -> None:
-        block = "\n".join(gs.data_folder_block("mame4droid", _profile("mame4droid")))
+        block = "\n".join(sitegen_install.data_folder_block("mame4droid", _profile("mame4droid")))
         self.assertTrue(block.startswith("On Android: `Android/data/com.seleuco.mame4droid/files/`"))
         self.assertNotIn("<Tabs", block)
 
     def test_an_entry_found_by_name_or_shipped_is_not_placed(self) -> None:
         profile = {"type": "standalone", "data_root": {"linux": {"path": "~/x", "source_ref": "a"}}}
-        self.assertEqual(gs.standalone_place("x", profile, {"name": "a.bin"}), "")
-        self.assertEqual(gs.standalone_place("x", profile, {"name": "a", "path": "a", "bundled": True}),
+        self.assertEqual(sitegen_install.standalone_place("x", profile, {"name": "a.bin"}), "")
+        self.assertEqual(sitegen_install.standalone_place("x", profile, {"name": "a", "path": "a", "bundled": True}),
                          "")
-        self.assertEqual(gs.standalone_place("x", profile, {"name": "a", "path": "b/a"}), "b/a")
+        self.assertEqual(sitegen_install.standalone_place("x", profile, {"name": "a", "path": "b/a"}), "b/a")
         dual = {**profile, "type": "standalone + libretro"}
-        self.assertEqual(gs.standalone_place("x", dual, {"name": "a", "path": "core/a"}), "")
-        self.assertEqual(gs.standalone_place("x", dual, {"name": "a", "path": "c/a",
+        self.assertEqual(sitegen_install.standalone_place("x", dual, {"name": "a", "path": "core/a"}), "")
+        self.assertEqual(sitegen_install.standalone_place("x", dual, {"name": "a", "path": "c/a",
                                                          "standalone_path": "a"}), "a")
 
     def test_the_metadata_card_has_a_row_per_system(self) -> None:
-        rows = gs._render_metadata_rows(_profile("cxbx-reloaded"))
+        rows = emulatorcards._render_metadata_rows(_profile("cxbx-reloaded"))
         self.assertIn("| Data folder (Windows) | `%APPDATA%/Cxbx-Reloaded/` |", rows)
         self.assertFalse(any("Data folder (Linux)" in row for row in rows))
 
@@ -731,33 +737,33 @@ class InstallBlockWhereItWorks(unittest.TestCase):
         for name, profile in _profiles_with_data_root().items():
             allowed = {labels["device"]}
             for key in profile["data_root"]:
-                allowed |= {labels[t] for t in gs._DATA_ROOT_TERMINALS[key]}
+                allowed |= {labels[t] for t in sitegen_install._DATA_ROOT_TERMINALS[key]}
             with self.subTest(profile=name):
                 self.assertLessEqual(_tab_labels(_install_section(_built_page(name))), allowed)
 
     def test_android_only_app_gets_no_desktop_command(self) -> None:
-        self.assertEqual(gs._install_block("mame4droid", _profile("mame4droid")), [])
-        command, setups, oses = gs.emulator_install_route("cxbx-reloaded", _profile("cxbx-reloaded"))
+        self.assertEqual(sitegen_install._install_block("mame4droid", _profile("mame4droid")), [])
+        command, setups, oses = sitegen_install.emulator_install_route("cxbx-reloaded", _profile("cxbx-reloaded"))
         self.assertEqual(oses, ("windows",))
 
     def test_a_lone_app_is_named_with_the_setup_that_launches_it(self) -> None:
-        text = "\n".join(gs._install_block("ryujinx", _profile("ryujinx")))
+        text = "\n".join(sitegen_install._install_block("ryujinx", _profile("ryujinx")))
         self.assertRegex(text, r"With [^:]*EmuDeck[^:]*: the installer finds")
         self.assertNotIn("Android (Termux)", text)
         self.assertNotIn("RetroArch", text)
 
     def test_a_dual_app_says_what_the_command_fills(self) -> None:
-        text = "\n".join(gs._install_block("duckstation", _profile("duckstation")))
+        text = "\n".join(sitegen_install._install_block("duckstation", _profile("duckstation")))
         self.assertIn("For DuckStation inside RetroArch, Batocera or another setup.", text)
 
     def test_no_files_no_command(self) -> None:
-        self.assertEqual(gs._install_block("beetle_wswan", _profile("beetle_wswan")), [])
+        self.assertEqual(sitegen_install._install_block("beetle_wswan", _profile("beetle_wswan")), [])
 
     def test_tabs_follow_the_keys_given(self) -> None:
-        tabs = "\n".join(gs.install_commands("--emulator x", oses=("linux", "steamdeck")))
+        tabs = "\n".join(sitegen_install.install_commands("--emulator x", oses=("linux", "steamdeck")))
         self.assertEqual(_tab_labels(tabs), {"Linux", "Steam Deck"})
         self.assertIn('syncKey="os"', tabs)
-        blocks = "\n".join(gs.install_commands("--emulator x"))
+        blocks = "\n".join(sitegen_install.install_commands("--emulator x"))
         self.assertIn("Windows (PowerShell):", blocks)
 
 
@@ -772,7 +778,7 @@ class SmallFixes(unittest.TestCase):
     def test_region_choice_summary(self) -> None:
         profile = _profile("duckstation")
         members = sum(1 for f in profile["files"] if f.get("group") == "ps-bios")
-        lines = gs._emulator_file_summary(profile["files"], profile.get("groups"))
+        lines = emulatorpage._emulator_file_summary(profile["files"], profile.get("groups"))
         self.assertIn(f"One of {members} is required, for the games' region.", lines[0])
         self.assertNotIn(f"{members} required", lines[0])
 
@@ -780,7 +786,7 @@ class SmallFixes(unittest.TestCase):
         files = [{"name": "a.rom", "required": True, "group": "boot"},
                  {"name": "b.rom", "required": True, "group": "boot"},
                  {"name": "c.rom", "required": True}, {"name": "d.rom"}]
-        line = gs._emulator_file_summary(files, {"boot": {"required": True}})[0]
+        line = emulatorpage._emulator_file_summary(files, {"boot": {"required": True}})[0]
         self.assertIn("2 required, 1 optional. Any one file of a required set fills it.", line)
 
     def test_no_emulator_part_says_where_it_sits(self) -> None:
@@ -805,7 +811,7 @@ class AnEmulatorPageNamesItsSetups(unittest.TestCase):
             "c": {"config": {"cores": ["other"]}},
         }
         profiles = {"handy": {"type": "libretro"}, "other": {"type": "libretro"}}
-        self.assertEqual(gs.emulator_setups(coverages, profiles)["handy"], ["a", "b"])
+        self.assertEqual(emulatorcards.emulator_setups(coverages, profiles)["handy"], ["a", "b"])
 
     def test_the_page_names_them(self):
         from tests import sitepages
@@ -843,7 +849,7 @@ class ADataDirectoryNamesAFetchableOrigin(unittest.TestCase):
     def test_the_url_is_substituted_and_a_commit_is_linked(self):
         entry = {"source_url": "https://github.com/PCSX2/pcsx2/archive/{version}.tar.gz",
                  "version": "6db638dc0373769b4c5d5b5dd7ed6da641b9a18e"}
-        lines = gs.data_directory_origin(entry, {"sha": entry["version"],
+        lines = lookup.data_directory_origin(entry, {"sha": entry["version"],
                                                  "version": entry["version"]})
         self.assertEqual(lines[0], "Fetched from <https://github.com/PCSX2/pcsx2/archive/"
                                    "6db638dc0373769b4c5d5b5dd7ed6da641b9a18e.tar.gz>")
@@ -853,7 +859,7 @@ class ADataDirectoryNamesAFetchableOrigin(unittest.TestCase):
 
     def test_an_etag_is_no_revision(self):
         entry = {"source_url": "https://buildbot.libretro.com/assets/system/Dolphin.zip"}
-        lines = gs.data_directory_origin(entry, {"sha": '"2047720058"', "version": "master"})
+        lines = lookup.data_directory_origin(entry, {"sha": '"2047720058"', "version": "master"})
         self.assertEqual(lines, ["Fetched from <https://buildbot.libretro.com/assets/system/Dolphin.zip>"])
 
     def test_every_registered_url_resolves(self):
@@ -861,7 +867,7 @@ class ADataDirectoryNamesAFetchableOrigin(unittest.TestCase):
         for ref, entry in (registry.get("data_directories") or registry).items():
             if isinstance(entry, dict):
                 with self.subTest(ref=ref):
-                    self.assertNotIn("{", " ".join(gs.data_directory_origin(entry, {})))
+                    self.assertNotIn("{", " ".join(lookup.data_directory_origin(entry, {})))
 
 
 if __name__ == "__main__":

@@ -422,7 +422,7 @@ class TheSitePageOfACardPlatform(unittest.TestCase):
     the frontend hands its cores and the files the pack puts in each."""
 
     def test_folders_replace_the_empty_coverage(self):
-        import generate_site
+        from sitegen import platformpage
         from model.database import load_database
         from model.registry import load_platform_registry
         from sitegen.readme import compute_coverage
@@ -432,7 +432,7 @@ class TheSitePageOfACardPlatform(unittest.TestCase):
         registry = load_platform_registry(str(REPO_ROOT / "platforms"))
         db = load_database(str(REPO_ROOT / "database.json"))
         cov = compute_coverage("minui", str(REPO_ROOT / "platforms"), db)
-        page = generate_site.generate_platform_page("minui", cov, registry, {})
+        page = platformpage.generate_platform_page("minui", cov, registry, {})
         self.assertNotIn("0/0", page)
         self.assertNotIn("## Systems overview", page)
         self.assertIn("| `Bios/PS/` | [pcsx_rearmed](../emulators/pcsx_rearmed.md) |", page)

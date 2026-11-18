@@ -31,10 +31,10 @@ PLATFORMS = str(REPO_ROOT / "platforms")
 
 def _pages() -> dict[str, str]:
     """Every page that carries a launcher, by site path."""
-    import generate_site
+    from sitegen import getpages
 
     with contextlib.chdir(REPO_ROOT):
-        pages = {f"get/{key}.md": generate_site.generate_get_page(key)
+        pages = {f"get/{key}.md": getpages.generate_get_page(key)
                  for key in sorted(set(sitehandheld.PLATFORM_OF.values()))}
     pages[f"get/{sitehandheld.GROUP_PAGE}.md"] = sitehandheld.group_page(REPO_ROOT)
     return pages
@@ -104,13 +104,15 @@ class WhereEachSystemFindsItsFile(unittest.TestCase):
         """It shares the guide's name, so the sidebar files it with it, and
         the guide a muOS or ArkOS owner lands on links it."""
         import generate_site
+        from sitegen import getpages
+        from sitegen import guidepage
 
         guide = generate_site.HANDHELD_GUIDE
         self.assertEqual(sitehandheld.GROUP_PAGE, guide.page)
         with contextlib.chdir(REPO_ROOT):
             self.assertIn(f"(../get/{sitehandheld.GROUP_PAGE}.md)",
-                          generate_site.generate_handheld_guide(guide))
-            self.assertIn(f"]({sitehandheld.GROUP_PAGE}.md)", generate_site.generate_get_index())
+                          guidepage.generate_handheld_guide(guide))
+            self.assertIn(f"]({sitehandheld.GROUP_PAGE}.md)", getpages.generate_get_index())
 
     def test_every_system_has_its_launchers_on_its_page(self):
         pages = _pages()

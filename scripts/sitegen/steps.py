@@ -265,7 +265,7 @@ def steps_figure(tab: str) -> list[str]:
 
 def tab_demo(tab: str) -> list[str]:
     """The recording a tab shows, as generate_site writes the component."""
-    from generate_site import install_demo
+    from sitegen.home import install_demo
 
     variant = demo_variant(tab)
     return install_demo(variant, tab) if variant else []

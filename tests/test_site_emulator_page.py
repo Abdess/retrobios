@@ -10,7 +10,11 @@ import tests
 import unittest
 from pathlib import Path
 
-import generate_site as gs
+from sitegen import cards
+from sitegen import decorate
+from sitegen import descriptions
+from sitegen import emulatorpage
+from sitegen import structured
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -18,7 +22,7 @@ EMPTY_DB = {"files": {}, "indexes": {"by_name": {}}}
 
 
 def _page(name: str, profile: dict) -> str:
-    return gs.generate_emulator_page(name, profile, EMPTY_DB, None, set())
+    return emulatorpage.generate_emulator_page(name, profile, EMPTY_DB, None, set())
 
 
 class WhereAndHowAFileIsRead(unittest.TestCase):
@@ -71,7 +75,7 @@ class WhoShipsTheBuildAndWhy(unittest.TestCase):
     def test_the_version_links_its_proof(self):
         """`0.97, stated in libretro/handy.h` was bare text beside a pinned
         Revision link: the #define it reads was one search away."""
-        import generate_site as gs
+        from sitegen import emulatorcards
         from sitegen import sources
         import yaml
 
@@ -79,15 +83,15 @@ class WhoShipsTheBuildAndWhy(unittest.TestCase):
         path = handy["version_basis"]["path"]
         self.assertIn(path, sources.cited_paths(handy))
         self.assertIn(f"stated in [`{path}`](https://github.com/libretro/libretro-handy/blob/"
-                      f"{handy['source_commit']}/{path})", gs.version_markdown(handy))
+                      f"{handy['source_commit']}/{path})", emulatorcards.version_markdown(handy))
         tagged = {"source": "https://github.com/owner/emu", "source_commit": "a" * 40,
                   "core_version": "1.2-3-gaaaaaaa",
                   "version_basis": {"kind": "tag", "tag": "1.2", "distance": 3}}
-        self.assertEqual(gs.version_markdown(tagged), "1.2-3-gaaaaaaa, 3 commits after tag "
+        self.assertEqual(emulatorcards.version_markdown(tagged), "1.2-3-gaaaaaaa, 3 commits after tag "
                          "[`1.2`](https://github.com/owner/emu/tree/1.2)")
         # A file no recorded tree confirms stays plain: no link beats a 404.
         unread = {**tagged, "version_basis": {"kind": "file", "path": "src/none.h"}}
-        self.assertEqual(gs.version_markdown(unread), "1.2-3-gaaaaaaa, stated in `src/none.h`")
+        self.assertEqual(emulatorcards.version_markdown(unread), "1.2-3-gaaaaaaa, stated in `src/none.h`")
 
     def test_the_upstream_pin_says_why_it_is_held(self):
         """mupen64plus showed its core revision and not that AmberELEC
@@ -109,8 +113,8 @@ class ACardKeepsItsAddress(unittest.TestCase):
     def test_a_second_version_moves_nothing(self):
         one = {"name": "DUKE3D.GRP", "md5": "aaaa1111bbbb"}
         two = {"name": "DUKE3D.GRP", "md5": "cccc2222dddd"}
-        before = gs.emulator_file_anchors([one])
-        after = gs.emulator_file_anchors([two, one])
+        before = cards.emulator_file_anchors([one])
+        after = cards.emulator_file_anchors([two, one])
         self.assertEqual(before, ["file-duke3d-grp-aaaa1111"])
         self.assertEqual(after[1], before[0])
 
@@ -121,28 +125,28 @@ class ACardKeepsItsAddress(unittest.TestCase):
         self.assertIn('<h3 id="file-duke3d-grp-aaaa1111" class="rb-file-title"', page)
         # A card already holding the plain id gives it to no one else.
         files = [{"name": "x.bin"}, {"name": "x.bin", "sha1": "ab" * 20}]
-        anchors = gs.emulator_file_anchors(files)
+        anchors = cards.emulator_file_anchors(files)
         self.assertEqual(anchors, ["file-x-bin", "file-x-bin-abababab"])
-        self.assertEqual(gs.emulator_file_aliases(files, anchors), ["", ""])
+        self.assertEqual(structured.emulator_file_aliases(files, anchors), ["", ""])
 
 
 class WhatASearchSnippetSays(unittest.TestCase):
     def test_a_core_loading_no_file_promises_no_hash(self):
         """152 pages of cores that load no file announced paths and hashes."""
         rel = Path("emulators/lutro.md")
-        saved = dict(gs.PAGE_DATA)
-        self.addCleanup(lambda: (gs.PAGE_DATA.clear(), gs.PAGE_DATA.update(saved)))
-        gs.PAGE_DATA[rel.as_posix()] = {}
-        text = gs._page_description("# Lutro\n", rel, "Lutro")
+        saved = dict(descriptions.PAGE_DATA)
+        self.addCleanup(lambda: (descriptions.PAGE_DATA.clear(), descriptions.PAGE_DATA.update(saved)))
+        descriptions.PAGE_DATA[rel.as_posix()] = {}
+        text = descriptions._page_description("# Lutro\n", rel, "Lutro")
         self.assertNotIn("hashes", text)
         self.assertIn("It needs no BIOS or firmware file.", text)
-        gs.PAGE_DATA[rel.as_posix()] = {"hasPart": [{"name": "a.bin"}]}
-        self.assertNotIn("needs no BIOS", gs._page_description("# Lutro\n", rel, "Lutro"))
+        descriptions.PAGE_DATA[rel.as_posix()] = {"hasPart": [{"name": "a.bin"}]}
+        self.assertNotIn("needs no BIOS", descriptions._page_description("# Lutro\n", rel, "Lutro"))
 
     def test_a_long_paragraph_is_cut_at_a_word(self):
         plain = ("files/?sha1= is the address that does not move: it opens the card "
                  "wherever the file is now, " * 4)
-        text = gs._shorten(plain)
+        text = descriptions._shorten(plain)
         self.assertTrue(text.endswith("..."))
         self.assertLessEqual(len(text), 160)
         self.assertTrue(plain.startswith(text[:-3]))
@@ -152,13 +156,13 @@ class WhatASearchSnippetSays(unittest.TestCase):
         """The Pioneer meta description published the whole link, anchor
         included: the text `[BIOS] ...bin` stopped the pattern at its "]"."""
         self.assertEqual(
-            gs._plain_markdown("**Start with** [`[BIOS] LaserActive PAC-N1 (Japan) (v1.02).bin`]"
+            descriptions._plain_markdown("**Start with** [`[BIOS] LaserActive PAC-N1 (Japan) (v1.02).bin`]"
                                "(#sha1-6973e2593e66). ares reads it."),
             "Start with [BIOS] LaserActive PAC-N1 (Japan) (v1.02).bin. ares reads it.")
-        self.assertEqual(gs._plain_markdown("[a [b] c](x) and [d](y)"), "a [b] c and d")
+        self.assertEqual(descriptions._plain_markdown("[a [b] c](x) and [d](y)"), "a [b] c and d")
 
     def test_code_keeps_its_underscores(self):
-        self.assertEqual(gs._plain_markdown("only `validate_schemas.py` and _this_"),
+        self.assertEqual(descriptions._plain_markdown("only `validate_schemas.py` and _this_"),
                          "only validate_schemas.py and this")
 
     def test_structured_url_is_encoded_like_the_canonical(self):
@@ -171,7 +175,7 @@ class WhatASearchSnippetSays(unittest.TestCase):
             page = Path(tmp) / "emulators" / "idtech4a++.md"
             page.parent.mkdir()
             page.write_text("# idTech4A++\n\nSome text long enough to be a description.\n")
-            gs.decorate_markdown_pages(Path(tmp))
+            decorate.decorate_markdown_pages(Path(tmp))
             text = page.read_text()
         import yaml
 

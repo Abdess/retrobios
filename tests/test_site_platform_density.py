@@ -19,6 +19,9 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 import generate_site
+from sitegen import cards
+from sitegen import platformfiles
+from sitegen import platformpage
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -87,7 +90,7 @@ class VisibleWordsAreCounted(unittest.TestCase):
 
 class ARowPerFile(unittest.TestCase):
     def _row(self, f: dict, entry: dict, hash_type: str = "md5") -> str:
-        return generate_site._platform_file_row(f, entry, hash_type)
+        return platformfiles._platform_file_row(f, entry, hash_type)
 
     def test_the_row_at_a_glance(self):
         md5, sha1 = "a" * 32, "b" * 40
@@ -102,7 +105,7 @@ class ARowPerFile(unittest.TestCase):
         details, button = row.split("</details>")
         self.assertNotIn("<button", details)
         self.assertEqual(button, f'<button class="rb-copy" data-copy="{md5}" '
-                                 f'aria-label="Copy MD5 {md5[:generate_site.SHORT_HASH]}">{md5[:generate_site.SHORT_HASH]}</button>')
+                                 f'aria-label="Copy MD5 {md5[:cards.SHORT_HASH]}">{md5[:cards.SHORT_HASH]}</button>')
         # Every hash whole in the details, with the size.
         for value in (md5, sha1, "0badf00d"):
             self.assertIn(value, details)
@@ -117,10 +120,10 @@ class ARowPerFile(unittest.TestCase):
         files = [{"name": "a.bin", "status": "ok"}, {"name": "b.bin", "status": "ok"}]
         system = "nintendo-gamecube"
         config = {(system, "a.bin"): [{"destination": "a.bin"}], (system, "b.bin"): [{}]}
-        text = "\n".join(generate_site._render_platform_systems({system: files}, config, {}))
+        text = "\n".join(platformfiles._render_platform_systems({system: files}, config, {}))
         self.assertIn('<div class="rb-files">', text)
         config[(system, "b.bin")] = [{"destination": "sub/b.bin"}]
-        text = "\n".join(generate_site._render_platform_systems({system: files}, config, {}))
+        text = "\n".join(platformfiles._render_platform_systems({system: files}, config, {}))
         self.assertIn('<div class="rb-files rb-files-path">', text)
 
     def test_status_words(self):
@@ -140,7 +143,7 @@ class ARowPerFile(unittest.TestCase):
         values = ["1" * 32, "2" * 32, "3" * 32]
         row = self._row({"name": "x", "status": "ok"}, {"md5": ",".join(values)})
         self.assertIn(f'data-copy="{values[0]}"', row)
-        self.assertIn(f">{values[0][:generate_site.SHORT_HASH]} +2</button>", row)
+        self.assertIn(f">{values[0][:cards.SHORT_HASH]} +2</button>", row)
         for value in values:
             self.assertIn(f'<code class="rb-hash">{value}</code>', row)
 
@@ -149,12 +152,12 @@ class ARowPerFile(unittest.TestCase):
         self.assertIn("&#42;a&#95;b&#42;&#91;1&#93;.bin", row)
 
     def test_a_long_list_gets_a_filter(self):
-        rows = ["<details></details>"] * generate_site.FILTER_ROWS
-        block = generate_site._platform_file_list(rows, False, "arcade")
+        rows = ["<details></details>"] * platformfiles.FILTER_ROWS
+        block = platformfiles._platform_file_list(rows, False, "arcade")
         self.assertTrue(block[0].startswith('<div class="rb-table-filter" hidden data-pagefind-ignore>'
                                         '<label for="rb-files-filter-arcade">Filter files</label>'))
         self.assertNotIn("rb-table-filter", "".join(
-            generate_site._platform_file_list(rows[1:], False, "arcade")))
+            platformfiles._platform_file_list(rows[1:], False, "arcade")))
 
 
 class ReferencesNameTheirRoleOnce(unittest.TestCase):
@@ -163,11 +166,11 @@ class ReferencesNameTheirRoleOnce(unittest.TestCase):
     REFS = "source libretro/libretro.c:1, source src/a.c:2, source src/b.c:3, upstream src/c.c:4"
 
     def test_grouped_by_role(self):
-        text = generate_site._refs_by_role(self.PROFILE, self.REFS)
+        text = platformfiles._refs_by_role(self.PROFILE, self.REFS)
         self.assertEqual(text, "glue `libretro/libretro.c:1` and port `src/a.c:2`, `src/b.c:3` "
                                "and upstream `src/c.c:4`")
-        for word in generate_site.ROLE_WORDS.values():
-            self.assertIn(f"**{word}**", generate_site.ROLE_LEGEND)
+        for word in platformfiles.ROLE_WORDS.values():
+            self.assertIn(f"**{word}**", platformfiles.ROLE_LEGEND)
 
     def test_other_pages_keep_the_role_after_each_reference(self):
         text = generate_site._source_ref_markdown(self.PROFILE, self.REFS)
@@ -194,7 +197,7 @@ class NothingIsLost(unittest.TestCase):
         for name in ("batocera", "retroarch"):
             cov = compute_coverage(name, str(REPO_ROOT / "platforms"), db)
             moved: dict[str, str] = {}
-            page = generate_site.generate_platform_page(name, cov, {}, {}, moved)
+            page = platformpage.generate_platform_page(name, cov, {}, {}, moved)
             cls.pages[name] = (cov, page, moved)
 
     def test_every_fact_is_there(self):
@@ -218,7 +221,7 @@ class NothingIsLost(unittest.TestCase):
                 # cited, when a core of this system reads the file.
                 running = [reader for reader in readers if reader.get("runs_system")]
                 for reader in running or readers:
-                    for url in re.findall(r"\]\((https://[^)]+)\)", generate_site._category_evidence_md(
+                    for url in re.findall(r"\]\((https://[^)]+)\)", platformfiles._category_evidence_md(
                             {"read_by": [reader]})):
                         self.assertIn(url, text, (name, detail["name"], reader["emulator"]))
 
@@ -226,7 +229,7 @@ class NothingIsLost(unittest.TestCase):
         for name, (_cov, page, moved) in self.pages.items():
             for text in (page, *moved.values()):
                 self.assertNotIn("(emulator code, libretro port)", text, name)
-                self.assertEqual(text.count(generate_site.ROLE_LEGEND), 1, name)
+                self.assertEqual(text.count(platformfiles.ROLE_LEGEND), 1, name)
 
 
 # Visible words (outside closed details) measured on the built site,

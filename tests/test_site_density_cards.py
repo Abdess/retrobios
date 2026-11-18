@@ -18,7 +18,9 @@ import unittest
 from html.parser import HTMLParser
 from pathlib import Path
 
-import generate_site as gs
+from sitegen import cards
+from sitegen import emulatorcards
+from sitegen import install
 from sitegen import markup
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -103,7 +105,7 @@ def _card() -> dict:
 
 class ASystemCardShowsTheAnswerFirst(unittest.TestCase):
     def setUp(self) -> None:
-        self.lines = gs._system_file_card(_card(), _card_consumers(SHA1))
+        self.lines = cards._system_file_card(_card(), _card_consumers(SHA1))
         self.text = "\n".join(self.lines)
         self.fold = self.text[self.text.index("<details"):self.text.index("</details>")]
         self.shown = self.text.replace(self.fold, "")
@@ -132,7 +134,7 @@ class ASystemCardShowsTheAnswerFirst(unittest.TestCase):
         # The yardstick list a page is cut by holds every fact: the
         # Starlight card holds each of its values.
         with markup.using("mkdocs"):
-            yardstick = "\n".join(gs._system_file_card(_card(), _card_consumers(SHA1)))
+            yardstick = "\n".join(cards._system_file_card(_card(), _card_consumers(SHA1)))
         for label, values in re.findall(r"(?m)^- ([^:]+): (.*)$", yardstick):
             self.assertIn(f"<dt>{label}</dt>", self.text)
             for value in re.findall(r"[0-9a-f]{8,64}|`[^`]+`", values):
@@ -150,7 +152,7 @@ class AnEmulatorCardFoldsItsHashes(unittest.TestCase):
                  "required": True, "note": "Read at boot.", "priority": 5,
                  "validation": ["md5"], "source_ref": "src/core/bios.cpp:47"}
         profile = {"emulator": "DuckStation", "files": [entry], "systems": ["sony-playstation"]}
-        self.text = "\n".join(gs._render_emulator_file(
+        self.text = "\n".join(emulatorcards._render_emulator_file(
             entry, profile, None, profile["files"], lambda _f: True, anchor="file-scph5501-bin"))
         self.fold = self.text[self.text.index("<details"):self.text.index("</details>")]
         self.shown = self.text.replace(self.fold, "")
@@ -174,7 +176,7 @@ class AnEmulatorCardFoldsItsHashes(unittest.TestCase):
     def test_the_markdown_yardstick_is_unchanged(self) -> None:
         with markup.using("mkdocs"):
             entry = {"name": "a.bin", "md5": "b" * 32, "size": 4}
-            text = "\n".join(gs._render_emulator_file(
+            text = "\n".join(emulatorcards._render_emulator_file(
                 entry, {"files": [entry]}, None, [entry], lambda _f: True))
         self.assertNotIn("<details", text)
         self.assertIn("- MD5: ", text)
@@ -185,7 +187,7 @@ PAIRS = [("emudeck", "sony-psp"), ("retroarch", "sony-psp"), ("retrobat", "Neo G
 
 class AnInstallBoxShowsOneCommand(unittest.TestCase):
     def setUp(self) -> None:
-        self.text = "\n".join(gs._console_install_block("PlayStation Portable", PAIRS))
+        self.text = "\n".join(install._console_install_block("PlayStation Portable", PAIRS))
 
     def test_one_command_per_tab_for_the_setup_picked(self) -> None:
         tabs = self.text[self.text.index("<Tabs"):self.text.index("</Tabs>")]
@@ -198,10 +200,10 @@ class AnInstallBoxShowsOneCommand(unittest.TestCase):
     def test_the_default_setup(self) -> None:
         """AmberELEC led 17 system pages, a handheld system under the
         Windows tab, for being first in alphabetical order."""
-        self.assertEqual(gs._default_setup([("amberelec", "psx"), ("retroarch", "Sony - PlayStation")]),
+        self.assertEqual(install._default_setup([("amberelec", "psx"), ("retroarch", "Sony - PlayStation")]),
                          ("retroarch", "Sony - PlayStation"))
-        self.assertEqual(gs._default_setup([("amberelec", "x"), ("batocera", "x")]), ("batocera", "x"))
-        self.assertEqual(gs._default_setup([("amberelec", "x"), ("knulli", "x")]), ("amberelec", "x"))
+        self.assertEqual(install._default_setup([("amberelec", "x"), ("batocera", "x")]), ("batocera", "x"))
+        self.assertEqual(install._default_setup([("amberelec", "x"), ("knulli", "x")]), ("amberelec", "x"))
         select = re.search(r"<select>(.*?)</select>", self.text).group(1)
         self.assertEqual(re.findall(r'<option value="([^"]+)" selected', select), ["retroarch"])
 
@@ -224,7 +226,7 @@ class AnInstallBoxShowsOneCommand(unittest.TestCase):
         self.assertIn("https://<wbr>abdess.github.io", listed)
 
     def test_one_setup_keeps_its_two_blocks(self) -> None:
-        text = "\n".join(gs._console_install_block("PlayStation Portable", PAIRS[:1]))
+        text = "\n".join(install._console_install_block("PlayStation Portable", PAIRS[:1]))
         self.assertNotIn("<select", text)
         self.assertIn('```sh title="Terminal"', text)
         self.assertIn('```powershell title="PowerShell"', text)
@@ -233,7 +235,7 @@ class AnInstallBoxShowsOneCommand(unittest.TestCase):
         # The budgets that cut a system page are measured on this Markdown:
         # a box that changed it would move cards to other pages.
         with markup.using("mkdocs"):
-            text = "\n".join(gs._console_install_block("PlayStation Portable", PAIRS))
+            text = "\n".join(install._console_install_block("PlayStation Portable", PAIRS))
         self.assertNotIn("<select", text)
         self.assertEqual(text.count("# RetroBat"), 2)
         self.assertEqual(text.count("/i | sh"), 3)
@@ -254,7 +256,7 @@ class TheSetupListLooksLikeAList(unittest.TestCase):
         # The arrow is defined for both themes.
         self.assertEqual(len(re.findall(r"--rb-select-arrow:", css)), 2)
         # The box's select sits in Markdown content, where the shared rule applies.
-        box = "\n".join(gs._console_install_block("PlayStation Portable", PAIRS))
+        box = "\n".join(install._console_install_block("PlayStation Portable", PAIRS))
         self.assertIn('<label class="rb-install-setup">Setup <select>', box)
 
     def test_the_built_select_shows_the_arrow(self) -> None:

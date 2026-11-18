@@ -52,6 +52,19 @@ import runpy
 import urllib.error
 
 import generate_site
+from sitegen import apiitems
+from sitegen import config as sitegen_config
+from sitegen import crossref
+from sitegen import dataexports
+from sitegen import datapage
+from sitegen import gaps
+from sitegen import lookup
+from sitegen import parts as sitegen_parts
+from sitegen import platformfiles
+from sitegen import platformindex
+from sitegen import platformpage
+from sitegen import provenance
+from sitegen import publish
 from sitegen import wanted as sitewanted
 from model import systemnames
 from model.registry import list_registered_platforms, list_release_pack_platforms
@@ -156,7 +169,7 @@ class EvidenceLinksItsSource(unittest.TestCase):
             "entries": [{"name": "scph1001.bin", "by": "name",
                          "source_ref": "source frontend/libretro.c:3864-3867 (listed_bios[6])"}],
         }]}
-        text = generate_site._category_evidence_md(evidence)
+        text = platformfiles._category_evidence_md(evidence)
         self.assertRegex(text, r"\[`frontend/libretro\.c:3864-3867`\]\(https://github\.com/"
                                r"libretro/pcsx_rearmed/blob/[0-9a-f]{40}/frontend/libretro\.c"
                                r"#L3864-L3867\)")
@@ -167,8 +180,8 @@ class EvidenceLinksItsSource(unittest.TestCase):
         evidence = {"read_by": [{"emulator": "launcher", "proof": "launcher",
                                  "entries": [], "runs_system": True}]}
         config = load_platform_config("batocera", PLATFORMS)
-        launched = generate_site._launcher_refs(config)["scph1001.bin"]
-        text = generate_site._category_evidence_md(evidence, launched)
+        launched = platformfiles._launcher_refs(config)["scph1001.bin"]
+        text = platformfiles._category_evidence_md(evidence, launched)
         self.assertNotIn("(by launcher)", text)
         self.assertIn("https://github.com/batocera-linux/batocera.linux/blob/batocera-43.1/"
                       "package/batocera/core/batocera-configgen/", text)
@@ -186,7 +199,7 @@ class EvidenceLinksItsSource(unittest.TestCase):
             if not config.get("launchers"):
                 continue
             with self.subTest(platform=path.stem):
-                rendered = [text for texts in generate_site._launcher_refs(config).values()
+                rendered = [text for texts in platformfiles._launcher_refs(config).values()
                             for text in texts]
                 self.assertTrue(rendered)
                 self.assertFalse([t for t in rendered if " at `" in t])
@@ -203,28 +216,28 @@ class EvidenceLinksItsSource(unittest.TestCase):
 class EachEntryNamesItsFile(unittest.TestCase):
     def test_served_held_and_missing(self):
         path, digest = next(
-            (p, d) for p, d in generate_site._collection_sha1_by_path().items()
+            (p, d) for p, d in platformfiles._collection_sha1_by_path().items()
             if p.startswith("bios/") and p.count("/") >= 3)
-        served = generate_site._served_line({"status": "ok", "path": path})
+        served = platformfiles._served_line({"status": "ok", "path": path})
         self.assertRegex(served, rf"\]\(\.\./systems/[^)]+\.md#sha1-{digest[:12]}\)")
         self.assertTrue(served.startswith("Served by: "))
         self.assertIn(f"`{digest[:8]}`", served)
         # The row already shows the declared sha1: repeating it said nothing.
-        quiet = generate_site._served_line({"status": "ok", "path": path}, f"aaaa, {digest.upper()}")
+        quiet = platformfiles._served_line({"status": "ok", "path": path}, f"aaaa, {digest.upper()}")
         self.assertNotIn(digest[:8], quiet.split(")", 1)[1])
-        self.assertIn(f"`{digest[:8]}`", generate_site._served_line(
+        self.assertIn(f"`{digest[:8]}`", platformfiles._served_line(
             {"status": "ok", "path": path}, "a" * 40))
-        self.assertEqual(generate_site._served_line({"status": "missing"}), "Not held")
-        self.assertTrue(generate_site._served_line(
+        self.assertEqual(platformfiles._served_line({"status": "missing"}), "Not held")
+        self.assertTrue(platformfiles._served_line(
             {"status": "untested", "path": path}).startswith("Held, not the declared hash"))
         # Existence mode reports no path: nothing is claimed, held or not.
-        self.assertEqual(generate_site._served_line({"status": "ok"}), "")
+        self.assertEqual(platformfiles._served_line({"status": "ok"}), "")
 
     def test_a_long_system_list_is_cut_between_rows_by_elements(self):
         rows = [[f'<details class="rb-file"><summary>f{n}.bin</summary>x<br>y</details>']
                 for n in range(4)]
         # Three elements a row: two rows fit in a budget of seven.
-        runs = generate_site._blocks_in_runs(rows, 7, generate_site._element_weight)
+        runs = sitegen_parts._blocks_in_runs(rows, 7, platformfiles._element_weight)
         self.assertEqual([len(run) for run in runs], [2, 2])
         self.assertEqual(sum(runs, []), sum(rows, []))
 
@@ -237,7 +250,7 @@ class AlsoNamedIsNotCited(unittest.TestCase):
             {"emulator": "mame", "proof": "name", "runs_system": False,
              "entries": [{"name": "x.zip", "source_ref": "src/mame/x.cpp:1", "by": "name"}]},
         ]}
-        text = generate_site._category_evidence_md(evidence)
+        text = platformfiles._category_evidence_md(evidence)
         also = text.split(", also named by ", 1)[1]
         self.assertNotIn("x.cpp", also)
         self.assertIn("mame", also)
@@ -251,7 +264,7 @@ class PlatformReferenceInWords(unittest.TestCase):
                "present": 1, "missing": 0, "untested": 0, "mode": mode,
                "config": {"hash_type": hash_type, "systems": systems or {},
                           "source": "https://github.com/o/r/tree/" + "a" * 40}}
-        return generate_site.generate_platform_page("p", cov, registry or {})
+        return platformpage.generate_platform_page("p", cov, registry or {})
 
     def test_hash_type_only_when_it_differs(self):
         self.assertNotIn("Hash type", self._page("md5", "md5"))
@@ -273,10 +286,10 @@ class PlatformReferenceInWords(unittest.TestCase):
                "config": {"hash_type": "md5", "hash_rule": "size_and_any_hash",
                           "systems": {"sony-playstation": {"files": [{"name": "f.bin"}]}},
                           "source": "https://github.com/o/r/tree/" + "a" * 40}}
-        page = generate_site.generate_platform_page("romm", cov, {})
+        page = platformpage.generate_platform_page("romm", cov, {})
         self.assertIn(">size, then any hash</span>", page)
         self.assertNotIn(">MD5</span>", page)
-        table = "\n".join(generate_site.setup_table({"romm": cov}))
+        table = "\n".join(platformindex.setup_table({"romm": cov}))
         self.assertIn("| size, then any hash |", table)
 
     def test_systems_by_name_with_the_id_in_small_text(self):
@@ -297,16 +310,16 @@ class PlatformReferenceInWords(unittest.TestCase):
 
 class GapsPageNumbers(unittest.TestCase):
     def test_badge_only_for_missing_required_firmware(self):
-        self.assertNotIn("rb-badge", generate_site._ratio_cell(99, 100))
-        self.assertIn('class="rb-bar"', generate_site._ratio_cell(99, 100))
-        self.assertIn("rb-badge-danger", generate_site._ratio_cell(99, 100, 1))
+        self.assertNotIn("rb-badge", gaps._ratio_cell(99, 100))
+        self.assertIn('class="rb-bar"', gaps._ratio_cell(99, 100))
+        self.assertIn("rb-badge-danger", gaps._ratio_cell(99, 100, 1))
         cov = {"details": [
             {"name": "a", "system": "s", "status": "missing", "required": True, "category": "bios"},
             {"name": "b", "system": "s", "status": "missing", "required": True,
              "category": "game_data"},
             {"name": "c", "system": "s", "status": "missing", "required": False},
         ]}
-        self.assertEqual(generate_site._missing_required_firmware(cov), 1)
+        self.assertEqual(gaps._missing_required_firmware(cov), 1)
 
     def test_headings_and_header(self):
         source = Path(generate_site.__file__).read_text(encoding="utf-8")
@@ -320,17 +333,17 @@ class GapsPageNumbers(unittest.TestCase):
 
 class UpstreamsGrouped(unittest.TestCase):
     def test_mame_trees_are_one_project(self):
-        keys = {generate_site.upstream_project(u)[0] for u in (
+        keys = {crossref.upstream_project(u)[0] for u in (
             "https://github.com/mamedev/mame",
             "https://github.com/mamedev/mame/tree/mame0289",
             "https://github.com/mamedev/mame/tree/mame0135u4",
         )}
         self.assertEqual(keys, {"github.com/mamedev/mame"})
-        self.assertEqual(generate_site.upstream_project(
+        self.assertEqual(crossref.upstream_project(
             "https://github.com/mamedev/mame/tree/mame0289")[1], "mame0289")
 
     def test_nested_groups_notes_and_archives(self):
-        project = generate_site.upstream_project
+        project = crossref.upstream_project
         self.assertEqual(
             project("https://gitlab.com/recalbox/packages/recalbox-cores/libretro-exel-hence"),
             ("gitlab.com/recalbox/packages/recalbox-cores/libretro-exel-hence", ""))
@@ -341,7 +354,7 @@ class UpstreamsGrouped(unittest.TestCase):
             ("git.9front.org/plan9front/plan9front", "sys/src/games/nes/"))
         key, _ = project("https://archive.softwareheritage.org/browse/revision/"
                          "dc20a615275f66bee20a4fd851ef0231daca4f14/")
-        self.assertEqual(generate_site._upstream_label(key),
+        self.assertEqual(crossref._upstream_label(key),
                          "Software Heritage revision dc20a615275f")
 
     def test_overview_and_a_page_per_platform(self):
@@ -351,7 +364,7 @@ class UpstreamsGrouped(unittest.TestCase):
             config = load_platform_config(name, PLATFORMS)
             coverages[name] = {"platform": config.get("platform", name), "config": config}
         moved: dict[str, str] = {}
-        page = generate_site.generate_cross_reference(coverages, profiles, moved)
+        page = crossref.generate_cross_reference(coverages, profiles, moved)
         self.assertEqual(set(moved), {"cross-reference-batocera", "cross-reference-retroarch"})
         self.assertNotIn("<details", page)
         upstream = page[page.index("## By upstream emulator"):]
@@ -362,18 +375,18 @@ class UpstreamsGrouped(unittest.TestCase):
 
 class ExportsComplete(unittest.TestCase):
     def test_gap_rows_once_with_their_outcome(self):
-        path = next(iter(generate_site._collection_sha1_by_path()))
+        path = next(iter(platformfiles._collection_sha1_by_path()))
         detail = {"name": "x.bin", "system": "s", "status": "untested", "path": path,
                   "category": "bios"}
         coverages = {"p": {"platform": "P", "details": [
             {"name": "h.xml", "system": "s", "status": "missing"},
             {"name": "h.xml", "system": "s", "status": "missing"}, detail]}}
         db = json.loads((REPO_ROOT / "database.json").read_text(encoding="utf-8"))
-        rows = generate_site._gap_export_rows(coverages, {}, db)
+        rows = dataexports._gap_export_rows(coverages, {}, db)
         self.assertEqual([r["name"] for r in rows], ["h.xml", "x.bin"])
         held = rows[1]
         self.assertEqual(held["collection_path"], path)
-        self.assertEqual(held["resolved_sha1"], generate_site._collection_sha1_by_path()[path])
+        self.assertEqual(held["resolved_sha1"], platformfiles._collection_sha1_by_path()[path])
         self.assertEqual(held["category"], "bios")
 
     def test_platform_rows_carry_status_and_file(self):
@@ -384,33 +397,33 @@ class ExportsComplete(unittest.TestCase):
             {"name": "a.bin", "system": "s", "status": "ok", "path": entry["path"],
              "category": "bios"},
             {"name": "b.bin", "system": "s", "status": "missing", "category": "game_data"}]}}
-        _items, rows = generate_site._platform_export_rows(coverages, db)
+        _items, rows = dataexports._platform_export_rows(coverages, db)
         self.assertEqual((rows[0]["status"], rows[0]["resolved_sha1"]), ("ok", sha1))
         self.assertEqual(rows[0]["collection_path"], entry["path"])
         self.assertEqual((rows[1]["status"], rows[1]["category"], rows[1]["collection_path"]),
                          ("missing", "game_data", ""))
 
     def test_commit_and_wanted_list(self):
-        commit = generate_site._source_commit()
+        commit = dataexports._source_commit()
         self.assertRegex(commit, r"^[0-9a-f]{40}$")
         schema = json.loads((REPO_ROOT / "schemas" / "site-api-envelope.schema.json")
                             .read_text(encoding="utf-8"))
         self.assertIn("commit", schema["properties"])
         db = json.loads((REPO_ROOT / "database.json").read_text(encoding="utf-8"))
-        rows = generate_site._provenance_wanted_rows(db)
+        rows = dataexports._provenance_wanted_rows(db)
         self.assertTrue(rows)
         self.assertTrue(all(r["catalog"] and r["name"] for r in rows))
-        text = generate_site._csv_document(list(generate_site.WANTED_FIELDS), rows)
-        self.assertEqual(next(csv.reader(io.StringIO(text))), list(generate_site.WANTED_FIELDS))
+        text = dataexports._csv_document(list(dataexports.WANTED_FIELDS), rows)
+        self.assertEqual(next(csv.reader(io.StringIO(text))), list(dataexports.WANTED_FIELDS))
 
 
 class DatesAndNames(unittest.TestCase):
     def test_snapshot_date_in_words(self):
-        self.assertEqual(generate_site._date_in_words("2026-08-07T10:00:00Z"),
+        self.assertEqual(provenance._date_in_words("2026-08-07T10:00:00Z"),
                          '<time datetime="2026-08-07">7 August 2026</time>')
 
     def test_data_page_title(self):
-        self.assertIn("\n---\n\n# Data and API\n", generate_site.generate_data_page([]))
+        self.assertIn("\n---\n\n# Data and API\n", datapage.generate_data_page([]))
 
 
 @unittest.skipUnless((DIST / "platforms" / "batocera" / "index.html").is_file(),
@@ -478,7 +491,7 @@ class TheExportsKeepWhatACheckNeeds(unittest.TestCase):
     }}
 
     def test_rows_carry_the_member_and_the_flags(self):
-        _items, rows = generate_site._platform_export_rows(self.COVERAGE)
+        _items, rows = dataexports._platform_export_rows(self.COVERAGE)
         zipped, flagged = rows
         self.assertEqual(zipped["zipped_file"], "basic1.rom")
         self.assertIs(flagged["hash_match_mandatory"], True)
@@ -489,10 +502,10 @@ class TheExportsKeepWhatACheckNeeds(unittest.TestCase):
     def test_the_csv_header_and_the_table_name_them(self):
         source = Path(generate_site.__file__).read_text(encoding="utf-8")
         self.assertIn('"collection_path", "resolved_sha1", *ENTRY_EXPORT_FIELDS,', source)
-        for field in generate_site.ENTRY_EXPORT_FIELDS:
+        for field in dataexports.ENTRY_EXPORT_FIELDS:
             self.assertIn(f":{field}", source)
         for field in ("zipped_file", "hash_match_mandatory", "mandatory_declared", "curated"):
-            self.assertIn(field, generate_site.ENTRY_EXPORT_FIELDS)
+            self.assertIn(field, dataexports.ENTRY_EXPORT_FIELDS)
 
     def test_the_built_csv_has_the_column(self):
         text = _built(PUBLIC / "downloads" / "platform-files.csv").read_text(encoding="utf-8")
@@ -504,7 +517,7 @@ class TheExportsKeepWhatACheckNeeds(unittest.TestCase):
                                "WHERE platform_id = 'batocera' AND zipped_file != ''").fetchone()[0]
             license_row = db.execute("SELECT value FROM metadata WHERE key = 'license'").fetchone()
         self.assertGreater(count, 300)
-        self.assertEqual(license_row[0], generate_site.DATA_LICENSE)
+        self.assertEqual(license_row[0], sitegen_config.DATA_LICENSE)
 
 
 class AFolderCheckAgreesWithTheVerifier(unittest.TestCase):
@@ -592,7 +605,7 @@ class AFolderCheckAgreesWithTheVerifier(unittest.TestCase):
 
     def test_the_data_page_shows_the_script_itself(self):
         script = (REPO_ROOT / "scripts" / "check_platform_folder.py").read_text(encoding="utf-8")
-        page = generate_site.generate_data_page([])
+        page = datapage.generate_data_page([])
         self.assertIn("```python\n" + script.rstrip("\n") + "\n```", page)
         self.assertLess(len(script.splitlines()), 70)
         self.assertIn("## Check a folder for one platform", page)
@@ -615,7 +628,7 @@ class TheContractsValidate(unittest.TestCase):
         platforms = str(REPO_ROOT / "platforms")
         for name in list_registered_platforms(platforms):
             config = load_platform_config(name, platforms)
-            contract, registry = generate_site._split_contract(config)
+            contract, registry = dataexports._split_contract(config)
             with self.subTest(platform=name):
                 errors = [error.message for error in validator.iter_errors(contract)]
                 self.assertEqual(errors, [])
@@ -684,7 +697,7 @@ class EveryEnvelopeCarriesTheCommit(unittest.TestCase):
 
     def test_every_built_envelope_has_it(self):
         _built(API / "catalog.json")
-        if not generate_site._source_commit():
+        if not dataexports._source_commit():
             raise unittest.SkipTest("not a git checkout")
         lacking = [
             path.relative_to(API).as_posix() for path in sorted(API.rglob("*.json"))
@@ -707,10 +720,10 @@ class ManifestsArePublished(unittest.TestCase):
                 self.assertEqual(item["sha256"], hashlib.sha256(source.read_bytes()).hexdigest())
                 self.assertEqual(item["schema"], "schemas/install-manifest.schema.json")
         self.assertIn("release.json", listed)
-        self.assertEqual(catalog["license"], generate_site.DATA_LICENSE)
+        self.assertEqual(catalog["license"], sitegen_config.DATA_LICENSE)
 
     def test_the_data_page_explains_the_fields_from_the_schema(self):
-        page = generate_site.generate_data_page([])
+        page = datapage.generate_data_page([])
         schema = json.loads((REPO_ROOT / "schemas" / "install-manifest.schema.json").read_text())
         for field in ("dest", "repo_path", "release_asset", "cores"):
             description = schema["$defs"]["file"]["properties"][field]["description"]
@@ -731,9 +744,9 @@ class TheLookupRecipeSaysWhatASha1Misses(unittest.TestCase):
     def test_the_page_and_the_records_agree(self):
         record = {"layer": "platform", "algorithm": "md5", "value": "0" * 32,
                   "name": "dmg_boot.bin", "owner": "recalbox"}
-        self.assertEqual(generate_site._held_under_every_hash([record], {}, {}), [])
+        self.assertEqual(lookup._held_under_every_hash([record], {}, {}), [])
         self.assertNotIn("sha1", record)
-        page = " ".join(generate_site.generate_data_page([]).split())
+        page = " ".join(datapage.generate_data_page([]).split())
         self.assertNotIn("none is needed", page)
         self.assertIn("A list naming a file the collection lacks is filed under its MD5 "
                       "or CRC32 alone", page)
@@ -750,7 +763,7 @@ class AnIdLeadsToItsData(unittest.TestCase):
             "mednafen_psx_alias": {"type": "alias", "alias_of": "beetle_psx"},
             "probe": {"type": "libretro", "role": "test", "cores": ["probe_core"]},
         }
-        items = generate_site.core_index_items(profiles)
+        items = apiitems.core_index_items(profiles)
         by_name: dict[str, list[tuple[str, bool]]] = {}
         for item in items:
             by_name.setdefault(item["name"], []).append((item["profile"], item["preferred"]))
@@ -775,7 +788,7 @@ class LookupUrlsResolve(unittest.TestCase):
 
     def test_site_absolute(self):
         db = {"files": {"ab" * 20: {"path": "bios/Sony/PlayStation/scph5501.bin"}}}
-        [item] = generate_site.file_location_items(db)
+        [item] = lookup.file_location_items(db)
         self.assertTrue(item["url"].startswith("/retrobios/systems/"), item["url"])
         shard = SITE + "api/v1/lookup/ab.json"
         self.assertTrue(urllib.parse.urljoin(shard, item["url"]).startswith(SITE + "systems/"))
@@ -791,8 +804,8 @@ class LookupUrlsResolve(unittest.TestCase):
             "sony-playstation": {"files": [{"name": "scph5501.bin", "md5": "490f666e1afb15b7362b406ed1cea246"}]}}}}}
         profiles = {"duckstation": {"systems": ["sony-playstation"], "files": [
             {"name": "scph5501.bin", "md5": "490f666e1afb15b7362b406ed1cea246"}]}}
-        records = generate_site.file_lookup_records(
-            db, coverages, profiles, generate_site.file_location_items(db))
+        records = lookup.file_lookup_records(
+            db, coverages, profiles, lookup.file_location_items(db))
         expected = system_name("sony-playstation")
         by_layer = {r["layer"]: r for r in records if r["algorithm"] == "md5"}
         for layer in ("collection", "platform", "emulator"):
@@ -819,7 +832,7 @@ class PlatformPagesLinkTheirSystemsAndEmulators(unittest.TestCase):
     """8.9: the overview named emulators as ids, none of 1,463 linked."""
 
     def test_an_emulator_is_named_and_linked(self):
-        link = generate_site._emulator_named_link("beetle_psx", "../")
+        link = platformfiles._emulator_named_link("beetle_psx", "../")
         self.assertRegex(link, r"^\[[^\]]+\]\(\.\./emulators/beetle_psx\.md\)$")
         self.assertNotEqual(link, "[beetle_psx](../emulators/beetle_psx.md)")
 
@@ -833,7 +846,7 @@ class PlatformPagesLinkTheirSystemsAndEmulators(unittest.TestCase):
         # Past PLATFORM_SECTION_BUDGET, so the list leaves for a page of its own.
         files = [{"name": f"{'f' * 200}{i}.bin", "status": "ok"} for i in range(2000)]
         moved: dict[str, str] = {}
-        generate_site._render_platform_systems(
+        platformfiles._render_platform_systems(
             {"sony-playstation": files}, {}, {}, ("retroarch", "RetroArch"), moved, {})
         self.assertTrue(moved)
         page = next(iter(moved.values()))
@@ -843,7 +856,7 @@ class PlatformPagesLinkTheirSystemsAndEmulators(unittest.TestCase):
 
     def test_part_pages_of_gaps_and_cross_reference_name_their_parent(self):
         moved: dict[str, str] = {}
-        generate_site._list_pages("gaps-x", "T", "intro", [], [["| a |"]], moved,
+        sitegen_parts._list_pages("gaps-x", "T", "intro", [], [["| a |"]], moved,
                                   parent=("What the packs do not hold", "/gaps/"))
         self.assertIn('parent:\n  label: "What the packs do not hold"\n  link: "/gaps/"', moved["gaps-x"])
         source = Path(generate_site.__file__).read_text(encoding="utf-8")
@@ -857,7 +870,7 @@ class TablesFitTheirColumn(unittest.TestCase):
     def test_the_downloads_table(self):
         item = {"title": "SQLite snapshot", "url": "downloads/retrobios.sqlite",
                 "media_type": "application/vnd.sqlite3", "bytes": 10, "sha256": "a" * 64}
-        page = generate_site.generate_data_page([item])
+        page = datapage.generate_data_page([item])
         row = next(line for line in page.splitlines() if "SQLite snapshot" in line and "|" in line)
         self.assertIn(f'<code title="{"a" * 64}">{"a" * 12}</code>', row)
         self.assertNotIn("a" * 13, row.replace(f'title="{"a" * 64}"', ""))
@@ -865,7 +878,7 @@ class TablesFitTheirColumn(unittest.TestCase):
     def test_the_gaps_tables(self):
         problem = {"platform": "Batocera", "name": "x.bin", "status": "untested", "required": True,
                    "reason": "expected md5 differs", "declared": {"md5": ["b" * 32]}, "path": ""}
-        table = "\n".join(generate_site._render_problem_files([problem], db={"files": {}}))
+        table = "\n".join(gaps._render_problem_files([problem], db={"files": {}}))
         row = next(line for line in table.splitlines() if "x.bin" in line)
         self.assertIn(f'<code title="{"b" * 32}">{"b" * 12}</code>', row)
         self.assertIn('<span class="rb-reason">expected md5 differs</span>', row)
@@ -965,10 +978,10 @@ class LookupRecordsUnderEveryHash(unittest.TestCase):
             {"name": "bios.bin", "md5": "b" * 32}]}}}}}
         profiles = {"core": {"type": "libretro", "systems": ["sony-playstation"],
                              "files": [{"name": "bios.bin", "crc32": "c" * 8}]}}
-        with mock.patch.object(generate_site, "_console_system_names", return_value={}), \
-                mock.patch.object(generate_site, "_lookup_system_name", return_value=None), \
+        with mock.patch.object(lookup, "_console_system_names", return_value={}), \
+                mock.patch.object(lookup, "_lookup_system_name", return_value=None), \
                 mock.patch.object(generate_site, "emulator_card_page", side_effect=lambda k, a: k):
-            return generate_site.file_lookup_records(
+            return lookup.file_lookup_records(
                 db, coverages, profiles, [{"sha1": self.SHA1, "url": "/x"}])
 
     def test_each_hash_names_the_setup_and_the_emulator(self):
@@ -1042,7 +1055,7 @@ class TheFolderCheckReadsEmuDecksWhitelist(unittest.TestCase):
         self.assertEqual(found, [("sony-playstation: any file", "missing")])
 
     def test_the_data_page_states_the_rule(self):
-        page = generate_site.generate_data_page([])
+        page = datapage.generate_data_page([])
         self.assertIn("An entry with no `destination` (EmuDeck) names no file", page)
         self.assertLess(len((REPO_ROOT / "scripts" / "check_platform_folder.py")
                             .read_text().splitlines()), 70)
@@ -1054,15 +1067,15 @@ class ManifestFieldsAreComplete(unittest.TestCase):
     SCHEMA = json.loads((REPO_ROOT / "schemas" / "install-manifest.schema.json").read_text())
 
     def test_a_url_template_is_code(self):
-        rows = generate_site._schema_field_rows(self.SCHEMA["$defs"]["file"], ("repo_path",))
+        rows = datapage._schema_field_rows(self.SCHEMA["$defs"]["file"], ("repo_path",))
         self.assertIn("`https://raw.githubusercontent.com/Abdess/retrobios/<ref>/<repo_path>`",
                       rows[0])
-        rows = generate_site._schema_field_rows(
+        rows = datapage._schema_field_rows(
             {"properties": {"a": {"description": "From https://x.test/<asset>, then."}}}, ("a",))
         self.assertEqual(rows, ["| `a` | From `https://x.test/<asset>`, then. |"])
 
     def test_every_field_is_described_and_shown(self):
-        page = generate_site.generate_data_page([])
+        page = datapage.generate_data_page([])
         for schema in (self.SCHEMA, self.SCHEMA["$defs"]["file"]):
             for key, spec in schema["properties"].items():
                 self.assertTrue(spec.get("description"), key)
@@ -1085,10 +1098,10 @@ class EverySystemIdWithFilesHasAPage(unittest.TestCase):
     def test_first_file_then_emulator(self):
         files = {"f" * 40: {"path": "bios/DOS/DOS/a.bin"}}
         with mock.patch("sitegen.render._card_pages", {}):
-            place = generate_site._first_file_place(
+            place = apiitems._first_file_place(
                 "dos", ["f" * 40], files, {}, lambda path, sha1: "dos")
         self.assertEqual(place, ("DOS", "/retrobios/systems/dos/#sha1-ffffffffffff"))
-        place = generate_site._first_file_place(
+        place = apiitems._first_file_place(
             "tyrian", [], files, {"opentyrian": {"systems": ["tyrian"]}}, None)
         self.assertEqual(place, ("", "/retrobios/emulators/opentyrian/"))
 
@@ -1182,7 +1195,7 @@ class TheReferencePagesAnswerTheirWords(unittest.TestCase):
     """8.7, 8.8, 8.10 and 8.13."""
 
     def test_find_or_check_a_file(self):
-        page = generate_site.generate_files_page()
+        page = lookup.generate_files_page()
         self.assertTrue(page.startswith(
             "---\nterms: check my dump, md5 check, verify bios file, check hash, "
             "is my bios correct, is my bios right\n---\n"))
@@ -1190,7 +1203,7 @@ class TheReferencePagesAnswerTheirWords(unittest.TestCase):
                       "or choose the file.\n", page)
 
     def test_the_data_page(self):
-        page = generate_site.generate_data_page([])
+        page = datapage.generate_data_page([])
         self.assertTrue(page.startswith(
             "---\nterms: manifest, schema, json schema, license, check a folder, "
             "check bios folder script, rate limit, api\n---\n"))
@@ -1229,15 +1242,15 @@ class NoEmptyCoreTable(unittest.TestCase):
     def test_own_list_platforms_get_a_sentence(self):
         coverages = {"misterfpga": {"platform": "MiSTer FPGA", "config": {"cores": [], "systems": {}}}}
         moved: dict[str, str] = {}
-        page = generate_site.generate_cross_reference(coverages, {}, moved)
+        page = crossref.generate_cross_reference(coverages, {}, moved)
         self.assertEqual(moved, {})
-        self.assertIn(generate_site.OWN_LIST_ONLY, page)
+        self.assertIn(platformpage.OWN_LIST_ONLY, page)
 
     def test_built_pages(self):
         _built(DOCS / "cross-reference.md")
         for name in ("misterfpga", "bizhawk"):
             self.assertFalse((DOCS / f"cross-reference-{name}.md").exists())
-            self.assertIn(generate_site.OWN_LIST_ONLY, _page(f"platforms/{name}"))
+            self.assertIn(platformpage.OWN_LIST_ONLY, _page(f"platforms/{name}"))
         redirects = json.loads((REPO_ROOT / "website" / "src" / "generated" /
                                 "redirects.json").read_text())
         self.assertEqual(redirects.get("/cross-reference-misterfpga/"), "/platforms/misterfpga/")
@@ -1253,9 +1266,9 @@ class FilesToSourceOnAPhone(unittest.TestCase):
         for part in parts:
             rows = [line for line in part.read_text(encoding="utf-8").splitlines()
                     if line.startswith("| `")]
-            self.assertLessEqual(len(rows), generate_site.FILES_TO_SOURCE_PART, part.name)
+            self.assertLessEqual(len(rows), gaps.FILES_TO_SOURCE_PART, part.name)
             for row in rows:
-                self.assertIn(f"[Have it? Upload]({generate_site.UPLOAD_URL}", row)
+                self.assertIn(f"[Have it? Upload]({gaps.UPLOAD_URL}", row)
 
     def test_the_upload_lands_in_the_folder_the_review_asks_for(self):
         """The link read the profile's first system: Raze's Duke Nukem 3D
@@ -1283,12 +1296,12 @@ class OneAnswerOnReleasePacks(unittest.TestCase):
     """8.1: the API, the picker's data and the pages read the registry."""
 
     def test_a_child_does_not_inherit_its_parents_pack(self):
-        _contract, registry = generate_site._split_contract(
+        _contract, registry = dataexports._split_contract(
             {"_key": "lakka", "inherits": "retroarch", "release_pack": True})
         self.assertIs(registry["release_pack"], "lakka" in _released())
-        _contract, registry = generate_site._split_contract({"_key": "minui"})
+        _contract, registry = dataexports._split_contract({"_key": "minui"})
         self.assertNotIn("release_pack", registry)
-        _contract, registry = generate_site._split_contract({"_key": "retroarch"})
+        _contract, registry = dataexports._split_contract({"_key": "retroarch"})
         self.assertIs(registry["release_pack"], "retroarch" in _released())
 
     def test_api_release_pack_set_equals_the_registry(self):
@@ -1302,7 +1315,7 @@ class OneAnswerOnReleasePacks(unittest.TestCase):
     def test_the_picker_file_is_the_advertised_record(self):
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" if (REPO_ROOT / "tmp").is_dir()
                                          else None) as folder:
-            generate_site.write_release_advertised(Path(folder))
+            publish.write_release_advertised(Path(folder))
             written = json.loads((Path(folder) / "release-advertised.json").read_text())
         self.assertEqual(written, release_record.load_advertised())
         served = {p for pack in written.get("packs", {}).values() for p in pack["platforms"]}
@@ -1338,7 +1351,7 @@ class EveryManifestFieldIsDescribed(unittest.TestCase):
         self.assertEqual(missing, [])
 
     def test_each_reason_code_has_a_line(self):
-        page = generate_site.generate_data_page([])
+        page = datapage.generate_data_page([])
         for path, spec in _properties(SCHEMA):
             if path.endswith(".reason"):
                 self.assertEqual(len(spec["enumDescriptions"]), len(spec["enum"]), path)
@@ -1346,7 +1359,7 @@ class EveryManifestFieldIsDescribed(unittest.TestCase):
                     self.assertRegex(page, rf"\n- `{code}`: \S")
 
     def test_nested_tables_are_on_the_page(self):
-        page = generate_site.generate_data_page([])
+        page = datapage.generate_data_page([])
         for label in ("Each entry of `omitted_files`:", "Each entry of `data_directories`:",
                       "Each value of `data_directories[].files`:", "Fields of `save_directory`:",
                       "Each entry of `files[].alternatives`:",
@@ -1376,10 +1389,10 @@ class LookupCountsEmulatorsLikeTheCard(unittest.TestCase):
               "indexes": {"by_md5": {"b" * 32: self.SHA1}}}
         coverages = {"setup": {"config": {"systems": {"sony-playstation": {"files": [
             {"name": "bios.bin", "md5": "b" * 32}]}}}}}
-        with mock.patch.object(generate_site, "_console_system_names", return_value={}), \
-                mock.patch.object(generate_site, "_lookup_system_name", return_value=None), \
+        with mock.patch.object(lookup, "_console_system_names", return_value={}), \
+                mock.patch.object(lookup, "_lookup_system_name", return_value=None), \
                 mock.patch.object(generate_site, "emulator_card_page", side_effect=lambda k, a: k):
-            return generate_site.file_lookup_records(
+            return lookup.file_lookup_records(
                 db, coverages, {}, [{"sha1": self.SHA1, "url": "/x"}], None,
                 FakeConsumers(self.SHA1))
 
@@ -1411,7 +1424,7 @@ class TheDataPageListsWhatIsServed(unittest.TestCase):
     """8.4 and 8.6."""
 
     def test_every_schema_is_listed(self):
-        page = generate_site.generate_data_page([])
+        page = datapage.generate_data_page([])
         for path in (REPO_ROOT / "schemas").glob("*.schema.json"):
             self.assertIn(f"- [`{path.name}`](api/v1/schemas/{path.name}): ", page)
 
@@ -1423,13 +1436,13 @@ class TheDataPageListsWhatIsServed(unittest.TestCase):
             self.assertEqual((API / "targets" / source.name).read_bytes(), source.read_bytes())
 
     def test_declared_only_and_search_words(self):
-        page = generate_site.generate_data_page([])
+        page = datapage.generate_data_page([])
         self.assertIn("With `--declared-only`, or from the `declared` event, "
                       "`install.py --check` answers it too.", page)
         terms = page.split("\n", 2)[1]
         for word in ("json schema", "license", "check bios folder script"):
             self.assertIn(word, terms)
-        files_terms = generate_site.generate_files_page().split("---\n", 2)[1]
+        files_terms = lookup.generate_files_page().split("---\n", 2)[1]
         for word in ("is my bios correct", "is my bios right"):
             self.assertIn(word, files_terms)
 
@@ -1504,7 +1517,7 @@ class TheFolderCheckExitCode(unittest.TestCase):
     def test_the_page_shows_the_script(self):
         script = Path(self.SCRIPT).read_text(encoding="utf-8")
         self.assertIn("```python\n" + script.rstrip("\n") + "\n```",
-                      generate_site.generate_data_page([]))
+                      datapage.generate_data_page([]))
 
 
 class SystemItemsCarryTheirApi(unittest.TestCase):

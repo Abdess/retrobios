@@ -16,7 +16,7 @@ from scripts.model.dumpcatalog import (
     load_provenance_snapshots,
     write_provenance_snapshot,
 )
-from scripts.generate_site import generate_provenance_page
+from scripts.sitegen.provenance import generate_provenance_page
 from scripts.provenance_report import build_report
 from scripts.scraper.dat_pack_importer import _bios_entries, import_pack
 from scripts.scraper.logiqx_parser import parse_logiqx, validate_logiqx_format
@@ -669,7 +669,7 @@ class TheWantedPageAsksOnlyForWhatCannotBeMade(unittest.TestCase):
     already produces (a Kickstart's odd bytes, a character ROM's halves)."""
 
     def test_a_derivable_dump_moves_out_of_the_wanted_list(self):
-        from scripts import generate_site
+        from scripts.sitegen import provenance as sitegen_provenance
 
         report = {"tosec": {
             "imported_at": "2026-01-01", "dats": {}, "total": 2, "matched": 0,
@@ -681,7 +681,7 @@ class TheWantedPageAsksOnlyForWhatCannotBeMade(unittest.TestCase):
         }}
         derivable = {"a" * 40: {"from": ["bios/Commodore/Amiga/a1200.rom"],
                                 "transform": "byte swap"}}
-        page = generate_site.generate_provenance_page({"files": {}}, report, derivable)
+        page = sitegen_provenance.generate_provenance_page({"files": {}}, report, derivable)
         wanted, _, derived = page.partition("## Derivable")
         self.assertIn("**1** dumps a catalog", wanted)
         self.assertNotIn("kick31.rom", wanted)

@@ -92,9 +92,9 @@ class WikiSourceHeadings(unittest.TestCase):
 
 class PlatformDetails(unittest.TestCase):
     def test_lists_and_flags_read_as_prose(self):
-        import generate_site
+        from sitegen import fields
 
-        lines = generate_site._render_platform_details(
+        lines = fields._render_platform_details(
             {"platform_details": {"megacd": {
                 "extensions_tried": [".bin", ".zip"],
                 "hle_available": False,
@@ -361,7 +361,8 @@ class TheSitemapIsAnnouncedWhereCrawlersLook(unittest.TestCase):
 
 class TheHomeTitleSaysWhatTheSiteIs(unittest.TestCase):
     def test_not_the_site_name_twice(self):
-        from generate_site import SITE_NAME, _browser_title
+        from sitegen.config import SITE_NAME
+        from sitegen.descriptions import _browser_title
 
         title = _browser_title(Path("index.md"), SITE_NAME)
         self.assertNotEqual(title, SITE_NAME)

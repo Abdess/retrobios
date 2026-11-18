@@ -1001,13 +1001,13 @@ class FaqRegressions(unittest.TestCase):
         # Typed by hand, the table and the prose under it kept MAME 0.160
         # and FinalBurn Neo 1.0.0.2, versions no source at the pins states,
         # and the test holding them to the profiles kept the errors in step.
-        import generate_site
+        from sitegen import emulatorcards
         from model.profiles import load_emulator_profiles
 
         profiles = load_emulator_profiles(str(ROOT / "emulators"), skip_aliases=False)
         page = (ROOT / "wiki" / "technical-faq.md").read_text(encoding="utf-8")
         self.assertEqual(
-            page, generate_site.with_romset_table(page, profiles),
+            page, emulatorcards.with_romset_table(page, profiles),
             "wiki/technical-faq.md romset table is stale: run scripts/generate_site.py",
         )
         prose = page.split("### How this is known", 1)[1].split("\n## ", 1)[0]
@@ -4461,7 +4461,7 @@ class TheSiteCountsSlotsNotVersions(unittest.TestCase):
     59 files, 46 missing, where verify --emulator said 23 slots, 12 missing."""
 
     def test_one_held_version_fills_the_slot(self):
-        from scripts.generate_site import _emulator_file_summary, _emulator_held_line
+        from scripts.sitegen.emulatorpage import _emulator_file_summary, _emulator_held_line
 
         files = [
             {"name": "DUKE3D.GRP", "crc32": "1"},
@@ -4866,7 +4866,7 @@ class AFileCardSaysAllItKnows(unittest.TestCase):
     showed standalone_path, and gave no file an anchor to link to."""
 
     def test_members_standalone_path_and_anchor(self):
-        from scripts.generate_site import _render_emulator_file
+        from scripts.sitegen.emulatorcards import _render_emulator_file
 
         entry = {
             "name": "neogeo.zip", "path": "neogeo.zip", "category": "bios_zip",
@@ -4891,7 +4891,7 @@ class EmulatorPagesStateTheirDataForMachines(unittest.TestCase):
     """Every emulator page's JSON-LD differed only by name and url."""
 
     def test_source_pin_date_and_files(self):
-        from scripts.generate_site import emulator_structured_data
+        from scripts.sitegen.structured import emulator_structured_data
 
         data = emulator_structured_data({
             "emulator": "DuckStation", "source": "https://github.com/stenzek/duckstation",
@@ -4912,7 +4912,7 @@ class EmulatorPagesStateTheirDataForMachines(unittest.TestCase):
         """xemu's libretro build lives in another repository. Each source
         repository states the release of its build, a version holding a
         commit id states none, and a port's upstream is another code base."""
-        from scripts.generate_site import emulator_structured_data
+        from scripts.sitegen.structured import emulator_structured_data
 
         data = emulator_structured_data({
             "emulator": "MesenCE",
@@ -5380,9 +5380,9 @@ class BundledFilesAreNotToSource(unittest.TestCase):
         self.assertNotIn("n64.psh", summary)
 
     def test_the_site_gives_it_its_own_status(self):
-        import generate_site
+        from sitegen import dataexports
 
-        rows = generate_site._gap_export_rows({}, {"daedalusx64": {
+        rows = dataexports._gap_export_rows({}, {"daedalusx64": {
             "emulator": "DaedalusX64", "systems": ["nintendo-64"],
             "gap_details": [{"name": "n64.psh", "source": "missing", "required": True,
                              "in_repo": False, "bundled": True}],
@@ -5472,7 +5472,7 @@ class AdlerValuesReadLikeTheDownloads(unittest.TestCase):
     byte-swapped ROM, so the raw ea3734fe in files.csv matched neither."""
 
     def test_values_and_the_swap_are_stated(self):
-        from scripts.generate_site import _render_emulator_file
+        from scripts.sitegen.emulatorcards import _render_emulator_file
 
         entry = {"name": "dsp_rom.bin", "path": "dsp_rom.bin",
                  "known_hash_adler32": ["0x66f334fe", "0xE789B5A5"],
@@ -5492,7 +5492,7 @@ class GapsPageCountsOneWay(unittest.TestCase):
     of the same platform already holds."""
 
     def test_settled_declarations_are_listed_apart(self):
-        from scripts.generate_site import _render_problem_files
+        from scripts.sitegen.gaps import _render_problem_files
 
         problems = [{"platform": "RetroDECK", "name": "dsifirmware.bin", "status": "untested",
                      "required": True, "reason": "x", "discrepancy": ""}]
@@ -5506,7 +5506,7 @@ class GapsPageCountsOneWay(unittest.TestCase):
     def test_missing_says_the_destination_count_of_the_opening_sentence(self):
         # The page opened on "48 are missing" (by destination) above a
         # heading that said "10 files": one row per name.
-        from scripts.generate_site import _render_problem_files
+        from scripts.sitegen.gaps import _render_problem_files
 
         problems = [{"platform": "AmberELEC", "name": "hardwareconfig.xml",
                      "status": "missing", "required": True, "reason": "",
@@ -5519,7 +5519,7 @@ class GapsPageCountsOneWay(unittest.TestCase):
     def test_a_missing_row_links_each_entry_and_names_its_folder(self):
         """The row said `N88_KNJ1.ROM | unread | yes | AmberELEC` in plain text:
         neither where the list puts it nor which cores were examined."""
-        from scripts.generate_site import _render_problem_files
+        from scripts.sitegen.gaps import _render_problem_files
 
         problems = [{"platform": "AmberELEC", "platform_key": "amberelec", "name": "N88_KNJ1.ROM",
                      "status": "missing", "required": True, "reason": "", "discrepancy": "",
@@ -5530,7 +5530,7 @@ class GapsPageCountsOneWay(unittest.TestCase):
                       "`bios/quasi88/N88_KNJ1.ROM` |", text)
 
     def test_the_destination_is_the_list_entrys(self):
-        from scripts.generate_site import _declared_destination
+        from scripts.sitegen.gaps import _declared_destination
         from model.platforms import load_platform_config
 
         config = load_platform_config("amberelec", str(ROOT / "platforms"))
@@ -5552,7 +5552,7 @@ class UnsourceableCardSaysWhy(unittest.TestCase):
     and nothing else. The reason was only on the gaps page."""
 
     def test_reason_and_link(self):
-        from scripts.generate_site import _render_emulator_file
+        from scripts.sitegen.emulatorcards import _render_emulator_file
 
         entry = {"name": "nds_firmware_modified.bin", "path": "x.bin",
                  "unsourceable": "written by the firmware editor, so no dump of it exists"}
@@ -5567,7 +5567,7 @@ class UnsourceableCardSaysWhy(unittest.TestCase):
         """The section read "Acknowledged gaps ... (verified from source
         code)" while No-Intro lists XM7's KANJI2.ROM and MAME's fm7740sx.zip
         carries it: the flag only keeps a homonym out, the file is wanted."""
-        from scripts.generate_site import generate_gap_analysis
+        from scripts.sitegen.gaps import generate_gap_analysis
 
         unsourced = {"name": "KANJI2.ROM", "reason": "no dump distributed", "source_ref": ""}
         report = {"xm7": {"emulator": "XM7", "gaps": 0, "gap_missing": 0, "gap_bios": 0,
@@ -5593,15 +5593,15 @@ class CollectionCardsSayWhereToGetTheFile(unittest.TestCase):
     scph5501.bin and no path or link to the bytes."""
 
     def test_raw_and_release_asset_urls(self):
-        import scripts.generate_site as site
+        from scripts.sitegen import cards
 
-        site._RELEASE_ASSET_NAMES = None
-        self.addCleanup(setattr, site, "_RELEASE_ASSET_NAMES", None)
+        cards._RELEASE_ASSET_NAMES = None
+        self.addCleanup(setattr, cards, "_RELEASE_ASSET_NAMES", None)
         self.assertEqual(
-            site._fetch_url("bios/Sony/PlayStation/scph5501.bin"),
+            cards._fetch_url("bios/Sony/PlayStation/scph5501.bin"),
             "https://raw.githubusercontent.com/Abdess/retrobios/main/bios/Sony/PlayStation/scph5501.bin",
         )
-        self.assertTrue(site._fetch_url("bios/Arcade/MAME/MAME 0.174 Arcade XML.dat").endswith(
+        self.assertTrue(cards._fetch_url("bios/Arcade/MAME/MAME 0.174 Arcade XML.dat").endswith(
             "/releases/download/large-files/MAME.0.174.Arcade.XML.dat"
         ))
 
@@ -5613,7 +5613,8 @@ class CollectionCardsCarryFullHashes(unittest.TestCase):
     CRC32 or SHA256."""
 
     def test_every_hash_in_full(self):
-        from scripts.generate_site import FileConsumers, _system_file_card
+        from scripts.generate_site import FileConsumers
+        from scripts.sitegen.cards import _system_file_card
 
         entry = {"name": "DUKE.RTS", "path": "bios/x/DUKE.RTS", "size": 10,
                  "sha1": "a" * 40, "md5": "9d29f9673bbdb56068acf7645c13749c",
@@ -5629,7 +5630,7 @@ class AHeldRevisionLinksItsBuildFile(unittest.TestCase):
     and the path a pinned link needs. 36 profiles carry one."""
 
     def test_the_build_file_row(self):
-        from scripts.generate_site import _build_rows
+        from scripts.sitegen.emulatorcards import _build_rows
 
         rows = _build_rows({"pin_frozen": "KNULLI builds this revision.", "pin_build": [{
             "platform": "knulli", "repo": "https://github.com/knulli-cfw/knulli-linux",
@@ -5641,7 +5642,7 @@ class AHeldRevisionLinksItsBuildFile(unittest.TestCase):
             "at `20260511` sets `ADVANCED_DRASTIC_VERSION` |", rows)
 
     def test_a_build_read_at_a_recorded_commit_links(self):
-        from scripts.generate_site import _build_rows
+        from scripts.sitegen.emulatorcards import _build_rows
 
         pin = "46128cd252cdecae852a4d0bafa2aaf9d03ab563"
         rows = _build_rows({"pin_build": [{
@@ -5666,7 +5667,8 @@ class AVariantCardSaysWhatToSaveItAs(unittest.TestCase):
     the storage name, and nothing said RetroBat looks for advision.zip."""
 
     def test_the_name_to_save_it_under(self):
-        from scripts.generate_site import FileConsumers, _system_file_card
+        from scripts.generate_site import FileConsumers
+        from scripts.sitegen.cards import _system_file_card
 
         entry = {"name": "advision.zip", "size": 10, "sha1": "a" * 40,
                  "path": "bios/Entex/Adventure Vision/.variants/advision.zip.1c086064"}
@@ -5684,7 +5686,8 @@ class NullReadsAsNone(unittest.TestCase):
     printed `bios_filename: None`: a stated "there is none" read as a gap."""
 
     def test_page_and_values(self):
-        from scripts.generate_site import _plain_value, generate_emulator_page
+        from scripts.sitegen.fields import _plain_value
+        from scripts.sitegen.emulatorpage import generate_emulator_page
 
         self.assertEqual(_plain_value(None), "none")
         page = generate_emulator_page(
@@ -5713,7 +5716,7 @@ class EmulatorCardsLinkTheCopyAndTheSection(unittest.TestCase):
     def test_copy_and_sections(self):
         from types import SimpleNamespace
 
-        from scripts.generate_site import _render_emulator_file
+        from scripts.sitegen.emulatorcards import _render_emulator_file
 
         sha1 = "ef9194ab4804aa0aa8540d846caf291b28331165"
         consumers = SimpleNamespace(
@@ -5738,7 +5741,7 @@ class VersionAnchorsFollowContent(unittest.TestCase):
 
     @staticmethod
     def _anchors(files):
-        from scripts.generate_site import generate_emulator_page
+        from scripts.sitegen.emulatorpage import generate_emulator_page
 
         page = generate_emulator_page(
             "raze", {"emulator": "Raze", "type": "standalone", "files": files},
@@ -5769,18 +5772,19 @@ class SitemapDatesComeFromThePage(unittest.TestCase):
     def test_the_page_date_or_none_reaches_the_sitemap(self):
         import tempfile
 
-        from scripts import generate_site
+        from scripts.sitegen import decorate
+        from scripts.sitegen import descriptions as sitegen_descriptions
 
-        saved = dict(generate_site.PAGE_DATA)
-        self.addCleanup(lambda: (generate_site.PAGE_DATA.clear(),
-                                 generate_site.PAGE_DATA.update(saved)))
+        saved = dict(sitegen_descriptions.PAGE_DATA)
+        self.addCleanup(lambda: (sitegen_descriptions.PAGE_DATA.clear(),
+                                 sitegen_descriptions.PAGE_DATA.update(saved)))
         with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as tmp:
             docs = Path(tmp)
             (docs / "emulators").mkdir()
             (docs / "emulators" / "dated.md").write_text("# Dated\n\nA page with its own date.\n")
             (docs / "emulators" / "undated.md").write_text("# Undated\n\nA page with no date.\n")
-            generate_site.PAGE_DATA["emulators/dated.md"] = {"dateModified": "2026-10-04"}
-            lastmod = generate_site.decorate_markdown_pages(docs)
+            sitegen_descriptions.PAGE_DATA["emulators/dated.md"] = {"dateModified": "2026-10-04"}
+            lastmod = decorate.decorate_markdown_pages(docs)
         self.assertEqual(lastmod, {"/retrobios/emulators/dated/": "2026-10-04"})
         # The sitemap reads that map, and leaves every other page undated.
         config = (ROOT / "website" / "astro.config.mjs").read_text(encoding="utf-8")
@@ -5807,7 +5811,7 @@ class TheDatasetDescribesItsDownloads(unittest.TestCase):
     licence, date or creator: nothing a dataset harvester could index."""
 
     def test_distribution_licence_and_date(self):
-        from scripts.generate_site import dataset_structured_data
+        from scripts.sitegen.structured import dataset_structured_data
 
         exports = [{"title": "Content database", "url": "api/v1/database.json",
                     "media_type": "application/json", "bytes": 10, "sha256": "ab" * 32}]
@@ -5827,7 +5831,7 @@ class SystemPagesDescribeTheirFiles(unittest.TestCase):
     provenance for the pages that carry a card per file."""
 
     def test_parts_carry_hashes_anchor_and_provenance(self):
-        from scripts.generate_site import system_structured_data
+        from scripts.sitegen.structured import system_structured_data
 
         entry = {"name": "scph5501.bin", "sha1": "0555c6fae8906f3f09baf5988f00e55f88e9f30b",
                  "md5": "490f666e1afb15b7362b406ed1cea246", "crc32": "8d8cb7e4", "size": 524288,
@@ -5839,7 +5843,7 @@ class SystemPagesDescribeTheirFiles(unittest.TestCase):
         self.assertIn("redump: Sony - PlayStation - BIOS Images (ps-30a.bin)", part["citation"])
 
     def test_a_huge_page_lists_its_verified_files_and_points_at_the_table(self):
-        from scripts.generate_site import SYSTEM_PARTS_IN_FULL, system_structured_data
+        from scripts.sitegen.structured import SYSTEM_PARTS_IN_FULL, system_structured_data
 
         plain = [{"name": f"f{i}", "sha1": f"{i:040x}"} for i in range(SYSTEM_PARTS_IN_FULL)]
         cited = {"name": "v", "sha1": "f" * 40,
@@ -5858,7 +5862,7 @@ class TheCollectionShipsADat(unittest.TestCase):
     def test_round_trip_through_the_logiqx_parser(self):
         sys.path.insert(0, str(ROOT / "scripts" / "scraper"))
         from logiqx_parser import parse_logiqx
-        from scripts.generate_site import collection_dat
+        from scripts.sitegen.structured import collection_dat
 
         db = {"files": {
             "a" * 40: {"path": "bios/Sony/PlayStation/scph5501.bin", "size": 4,
@@ -5881,7 +5885,8 @@ class TheCollectionShipsADat(unittest.TestCase):
         Batocera reads."""
         sys.path.insert(0, str(ROOT / "scripts" / "scraper"))
         from logiqx_parser import parse_logiqx
-        from scripts.generate_site import _platform_data_links, platform_dat
+        from scripts.sitegen.platformfiles import _platform_data_links
+        from scripts.sitegen.structured import platform_dat
 
         db = {"files": {"a" * 40: {"size": 4, "crc32": "8D8CB7E4", "md5": "1" * 32,
                                    "sha1": "a" * 40}}}

@@ -37,7 +37,7 @@ from packs import datatrees
 from packs import manifest as packs_manifest
 from packs import platformpack
 from sitegen import readme as sitegen_readme
-import generate_site
+from sitegen import home
 import release_notes
 import release_record
 from packs import parts
@@ -519,9 +519,9 @@ class TheCollectionTotalNamesTheCollection(unittest.TestCase):
             "files": {},
             "indexes": {},
         }
-        sentence = generate_site.composition_sentence(db)
+        sentence = home.composition_sentence(db)
         self.assertTrue(sentence.startswith("The collection"), sentence)
-        self.assertEqual(generate_site.COLLECTION_FILES_LABEL, "Files collected")
+        self.assertEqual(home.COLLECTION_FILES_LABEL, "Files collected")
 
 
 class RefusedFilesAreNotPresent(unittest.TestCase):

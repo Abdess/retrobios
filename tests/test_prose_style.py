@@ -456,7 +456,7 @@ class GeneratedSiteProse(unittest.TestCase):
     """The site pages carry strings no tracked file shows verbatim."""
 
     def test_generated_pages(self):
-        from generate_site import LOCAL_NOTE_DIRS
+        from sitegen.decorate import LOCAL_NOTE_DIRS
 
         from tests import sitepages
 

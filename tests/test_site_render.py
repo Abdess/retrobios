@@ -83,7 +83,7 @@ class BundledFilesAreNotToSource(unittest.TestCase):
     Classic, whose 13 missing files all come with its own package."""
 
     def test_the_summary_and_the_row_count_only_what_must_be_found(self):
-        import generate_site
+        from sitegen import gaps
 
         gap = {"required": True, "source_ref": "x", "in_repo": False}
         report = {"zq": {
@@ -96,7 +96,7 @@ class BundledFilesAreNotToSource(unittest.TestCase):
                 {**gap, "name": "d.bin", "source": "bios", "in_repo": True},
             ],
         }}
-        page = generate_site.generate_gap_analysis(
+        page = gaps.generate_gap_analysis(
             {"zq": {"emulator": "ZQuest Classic", "files": []}}, {},
             {"files": {}, "indexes": {}}, gap_report=report)
         self.assertIn("2 installed with their emulator, 1 to source.", page)
@@ -107,7 +107,7 @@ class BundledFilesAreNotToSource(unittest.TestCase):
     def test_a_row_names_only_the_platforms_that_read_it(self):
         """cdbios.bin, read by standalone BlastEm only and never on RetroBat,
         was badged retroarch, lakka and retrobat."""
-        import generate_site
+        from sitegen import gaps
         from model.platforms import load_platform_config
         from resolve.cores import resolve_platform_cores
 
@@ -120,7 +120,7 @@ class BundledFilesAreNotToSource(unittest.TestCase):
                 configs[name] = config
         self.assertIn("retroarch", configs)
         self.assertIn("retrobat", configs)
-        found = generate_site.reading_platforms("blastem", profile, "cdbios.bin", configs)
+        found = gaps.reading_platforms("blastem", profile, "cdbios.bin", configs)
         self.assertFalse(found & {"retroarch", "lakka", "retrobat"}, found)
 
 
@@ -132,9 +132,9 @@ class StructuredBlocks(unittest.TestCase):
                 "source_commit": self.PIN, block: value}
 
     def render(self, profile: dict) -> str:
-        import generate_site
+        from sitegen import fields
 
-        return "\n".join(generate_site._render_structured_blocks(profile))
+        return "\n".join(fields._render_structured_blocks(profile))
 
     @mock.patch("sitegen.sources.tree_holds", lambda *_args: True)  # a path the record confirms
     def test_a_source_ref_in_a_block_is_a_pinned_link(self):
@@ -173,7 +173,7 @@ class FileCardsLinkTheReadingEntry(unittest.TestCase):
     def test_an_emulator_link_lands_on_its_entry(self):
         """The platform links landed on their section, the emulator links on
         the top of a page of a hundred entries."""
-        import generate_site
+        from sitegen import cards
         from packs.crossref import FileConsumers
 
         consumers = FileConsumers({"files": {}})
@@ -183,11 +183,11 @@ class FileCardsLinkTheReadingEntry(unittest.TestCase):
         consumers.emulators = {"s": {"duckstation", "other"}, "t": {"blastem"}}
         consumers.emulator_entries = {"s": {"duckstation": 1}, "t": {"blastem": 2}}
         consumers.emulator_files = {"duckstation": files, "blastem": files}
-        self.assertEqual(generate_site._emulator_links("s", consumers), [
+        self.assertEqual(cards._emulator_links("s", consumers), [
             "[DuckStation](../emulators/duckstation.md#file-scph5501-bin)",
             "[other](../emulators/other.md)",
         ])
-        self.assertEqual(generate_site._emulator_links("t", consumers),
+        self.assertEqual(cards._emulator_links("t", consumers),
                          ["[BlastEm](../emulators/blastem.md#file-tmss-md-d0fd0c16)"])
 
 
@@ -213,20 +213,20 @@ class DirectoryMembersNameTheirEmulator(unittest.TestCase):
         cls.consumers.add_emulators({"alephone": cls.profile})
 
     def test_a_member_names_the_emulator_and_its_directory_entry(self):
-        import generate_site
+        from sitegen import cards
 
         files = self.profile["files"]
         index = self.consumers.emulator_entries[self.SHA1]["alephone"]
         self.assertEqual(files[index].get("type"), "directory")
-        self.assertEqual(generate_site._emulator_links(self.SHA1, self.consumers),
+        self.assertEqual(cards._emulator_links(self.SHA1, self.consumers),
                          ["[Aleph One](../emulators/alephone.md#file-marathon-plugins)"])
 
     def test_the_directory_card_points_at_its_copies(self):
-        import generate_site
+        from sitegen import emulatorcards
 
         entry = next(f for f in self.profile["files"]
                      if f.get("type") == "directory" and f.get("path") == "Marathon/Plugins/")
-        line = generate_site._directory_copies(entry, self.consumers)[0]
+        line = emulatorcards._directory_copies(entry, self.consumers)[0]
         self.assertRegex(line, r"^Collection copies: \d+ files under "
                                r"\[`bios/Bungie/Marathon/Plugins/`\]\(\.\./systems/bungie\.md#")
 
@@ -245,17 +245,17 @@ class AnAliasTreeIsListedOnItsParentsPage(unittest.TestCase):
     }
 
     def test_the_permalink_goes_to_a_page_that_exists(self):
-        import generate_site
+        from sitegen import lookup
 
         members = {"freeintv-overlays": {"a.png": {"sha1": "02" * 20}}}
-        items = generate_site.file_location_items({"files": {}}, self.PROFILES, members)
+        items = lookup.file_location_items({"files": {}}, self.PROFILES, members)
         self.assertEqual(items, [{"sha1": "02" * 20,
                                   "url": "/retrobios/emulators/freeintv/#sha1-020202020202"}])
 
     def test_the_parent_page_lists_the_tree(self):
-        import generate_site
+        from sitegen import lookup
 
-        trees = generate_site.page_data_directories("freeintv", self.PROFILES)
+        trees = lookup.page_data_directories("freeintv", self.PROFILES)
         self.assertEqual([t["ref"] for t in trees], ["freeintv-overlays"])
 
 
@@ -347,7 +347,7 @@ class TheDatHoldsEveryCopy(unittest.TestCase):
     filed under two consoles) as unknown, and a fix moved them away."""
 
     def test_a_second_copy_is_a_rom_of_its_own_folder(self):
-        import generate_site
+        from sitegen import structured
 
         sha1 = "9526ef63" + "0" * 32
         with tempfile.TemporaryDirectory() as tmp:
@@ -363,7 +363,7 @@ class TheDatHoldsEveryCopy(unittest.TestCase):
                     "Atari/ST/tos104uk.img": [sha1], "ST/tos104uk.img": [sha1],
                 }},
             }
-            dat = generate_site.collection_dat(db, "2026-10-21T00:00:00Z")
+            dat = structured.collection_dat(db, "2026-10-21T00:00:00Z")
         self.assertIn('<rom name="tos104.img" size="1"', dat)
         self.assertIn('<rom name="tos104uk.img" size="1"', dat)
         self.assertEqual(dat.count("<rom "), 2)
@@ -376,13 +376,13 @@ class TheSearchLandsOnTheCard(unittest.TestCase):
     overview of a 100-block page."""
 
     def test_a_platform_system_is_a_heading(self):
-        import generate_site
+        from sitegen import platformfiles
 
         by_system = {f"system-{i:02d}": [{"name": f"f{i}.bin", "status": "ok"}]
                      for i in range(11)}
         names = {sys_id: f"System {sys_id[-2:]}" for sys_id in by_system}
         with mock.patch.dict(systemnames.SYSTEM_NAMES, names):
-            lines = generate_site._render_platform_systems(by_system, {}, {})
+            lines = platformfiles._render_platform_systems(by_system, {}, {})
         headings = [line for line in lines if line.startswith("### ")]
         self.assertEqual(len(headings), 11)
         self.assertTrue(headings[0].endswith("{ #system-00 }"))
@@ -390,20 +390,20 @@ class TheSearchLandsOnTheCard(unittest.TestCase):
         self.assertIn("<summary>1 file (OK)</summary>", lines)
 
     def test_an_emulator_card_is_a_heading_with_its_anchor(self):
-        import generate_site
+        from sitegen import emulatorcards
 
         entry = {"name": "scph5501.bin", "required": True}
-        lines = generate_site._render_emulator_file(
+        lines = emulatorcards._render_emulator_file(
             entry, {"files": [entry]}, None, [entry], lambda f: True, "file-scph5501-bin")
         self.assertTrue(lines[2].startswith('<h3 id="file-scph5501-bin" class="rb-file-title"'))
         self.assertIn("<code>scph5501.bin</code>", lines[2])
 
     def test_a_system_card_is_a_heading_with_its_anchor(self):
-        import generate_site
+        from sitegen import cards
         from packs.crossref import FileConsumers
 
         entry = {"name": "a.bin", "sha1": "a" * 40, "md5": "b" * 32, "size": 3}
-        lines = generate_site._system_file_card(entry, FileConsumers({"files": {}}))
+        lines = cards._system_file_card(entry, FileConsumers({"files": {}}))
         self.assertTrue(lines[2].startswith('<h3 id="sha1-aaaaaaaaaaaa" class="rb-file-title"'))
         self.assertIn("<code>a.bin</code>", lines[2])
 
@@ -415,7 +415,7 @@ class TheSearchSkipsLinkLists(unittest.TestCase):
     hashes 4 MB more: files/?hash= finds those."""
 
     def test_a_system_card_keeps_its_name_and_skips_its_body(self):
-        import generate_site
+        from sitegen import cards
         from packs.crossref import FileConsumers
 
         consumers = FileConsumers({"files": {}})
@@ -424,7 +424,7 @@ class TheSearchSkipsLinkLists(unittest.TestCase):
         consumers.installed = {sha1: {"batocera": {"bios/a.bin"}}}
         consumers.emulators = {sha1: {"duckstation"}}
         entry = {"name": "a.bin", "sha1": sha1, "md5": "b" * 32, "size": 3}
-        lines = generate_site._system_file_card(entry, consumers)
+        lines = cards._system_file_card(entry, consumers)
         self.assertIn("<code>a.bin</code>", lines[2])
         text = "\n".join(lines)
         searched, _sep, skipped = text.partition('<dl class="rb-facts" data-pagefind-ignore>')
@@ -436,22 +436,22 @@ class TheSearchSkipsLinkLists(unittest.TestCase):
         self.assertNotIn('<dl class="rb-facts">', searched)
 
     def test_a_game_data_card_skips_its_name_too(self):
-        import generate_site
+        from sitegen import cards
         from packs.crossref import FileConsumers
 
         entry = {"name": "0.ogg", "sha1": "a" * 40, "size": 3}
-        lines = generate_site._system_file_card(
+        lines = cards._system_file_card(
             entry, FileConsumers({"files": {}}), searchable=False)
         self.assertIn("data-pagefind-ignore", lines[2])
         self.assertNotIn("data-pagefind-weight", lines[2])
 
     def test_runs_alternate_in_card_order(self):
-        import generate_site
+        from sitegen import cards
 
         lines = ["- Path: `p`", "- SHA1: x", "- Source: `a.c:1`", "- Platforms: p",
                  "- Destination: `d`", "- Contents (1 members):", "    - `m`",
                  "- Note"]
-        out = [line for line in generate_site._search_skipped_apart(lines) if line]
+        out = [line for line in cards._search_skipped_apart(lines) if line]
         self.assertEqual(out, [
             "- Path: `p`",
             '<div class="rb-search-skip" data-pagefind-ignore>',
@@ -463,11 +463,11 @@ class TheSearchSkipsLinkLists(unittest.TestCase):
         ])
 
     def test_long_tables_leave_the_search(self):
-        import generate_site
+        from sitegen import cards
 
         short = "| a |\n|---|\n| 1 |"
         long = "    | a |\n    |---|\n" + "\n".join(f"    | {'x' * 50} |" for _ in range(80))
-        text = generate_site.tables_out_of_search(f"# T\n\n{short}\n\n{long}\n")
+        text = cards.tables_out_of_search(f"# T\n\n{short}\n\n{long}\n")
         self.assertEqual(text.count("data-pagefind-ignore"), 1)
         self.assertIn("    <section data-pagefind-ignore>\n\n    | a |", text)
         self.assertIn(short, text)
@@ -507,7 +507,7 @@ class AMemberIsReadInItsArchive(unittest.TestCase):
     def test_the_archive_is_credited_and_named_on_the_card(self):
         import json
 
-        import generate_site as gs
+        from sitegen import emulatorcards
         from resolve.archives import archive_entry
         from resolve.localfile import resolve_local_file
         from packs.crossref import FileConsumers
@@ -523,7 +523,7 @@ class AMemberIsReadInItsArchive(unittest.TestCase):
         self.assertIn(shipped, credited)
         self.assertFalse([p for p in credited if p.endswith("/sm1.sm1")])
         sm1 = next(f for f in files if f["name"] == "sm1.sm1")
-        rows = "\n".join(gs._render_emulator_file(sm1, profile, consumers, files,
+        rows = "\n".join(emulatorcards._render_emulator_file(sm1, profile, consumers, files,
                                                   lambda _f: True, owner="fbneo"))
         self.assertIn("Collection copy: member `sm1.sm1` of", rows)
         self.assertIn(shipped, rows)

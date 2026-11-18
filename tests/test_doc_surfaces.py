@@ -72,10 +72,10 @@ def _section(text: str, heading: str) -> str:
 
 
 def _which_pack() -> str:
-    import generate_site
+    from sitegen import whichpack
 
     with contextlib.chdir(REPO_ROOT):
-        return generate_site.generate_which_pack()
+        return whichpack.generate_which_pack()
 
 
 class TheDownloadTablesFollowTheRegistry(unittest.TestCase):
@@ -215,7 +215,7 @@ class DownloadLinksKeepTheirAddress(unittest.TestCase):
         row for them offers the command."""
         from model.registry import list_registered_platforms
         from model.platforms import load_platform_config
-        import generate_site
+        from sitegen import install
 
         record = release_record.load_advertised()
         page = _which_pack()
@@ -224,7 +224,7 @@ class DownloadLinksKeepTheirAddress(unittest.TestCase):
                 continue
             label = load_platform_config(key, "platforms").get("platform", key)
             row = next(line for line in page.splitlines() if line.startswith(f"| [{label}]("))
-            state = "No ZIP yet." if generate_site.has_release_pack(key) else "No ZIP."
+            state = "No ZIP yet." if install.has_release_pack(key) else "No ZIP."
             with self.subTest(platform=key):
                 self.assertNotIn("/releases/", row)
                 self.assertIn(f"{state} [Use the command](platforms/{key}.md#install).", row)
@@ -431,9 +431,9 @@ class PagesOpenOnTheirContent(unittest.TestCase):
     before saying anything about a pack."""
 
     def test_no_paragraph_announces_its_page(self):
-        import generate_site
+        from sitegen import whichpack
 
-        text = generate_site.generate_which_pack()
+        text = whichpack.generate_which_pack()
         announcing = [
             line for line in text.splitlines()
             if re.match(r"(This|The) (page|section) ", line)
@@ -672,12 +672,12 @@ class ArchiveRecipesAreCountedFromTheRecipes(unittest.TestCase):
         self.assertIn(f"({SITE_URL}wiki/archive-recipes/)", line)
 
     def test_the_page_counts(self) -> None:
-        import generate_site
+        from sitegen import emulatorcards
 
         page = _read("wiki/archive-recipes.md")
-        self.assertEqual(generate_site.with_archive_counts(page, self.counts), page,
+        self.assertEqual(emulatorcards.with_archive_counts(page, self.counts), page,
                          "wiki/archive-recipes.md counts are stale: run scripts/generate_site.py")
-        for line in generate_site.archive_recipe_lines(self.counts):
+        for line in emulatorcards.archive_recipe_lines(self.counts):
             self.assertIn(line, page)
 
     def test_the_page_command_is_the_tools(self) -> None:

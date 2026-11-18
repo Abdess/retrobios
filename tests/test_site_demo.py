@@ -193,8 +193,9 @@ def _tab_bodies(markdown: str) -> dict[str, str]:
 class TheTwoPagesShowIt(unittest.TestCase):
     def test_home_shows_the_terminal_recording(self):
         import generate_site
+        from sitegen import home
 
-        tag = generate_site.install_demo()[0]
+        tag = home.install_demo()[0]
         self.assertIn(f'description="{sitegen_readme.demo_description()}"', tag)
         source = Path(generate_site.__file__).read_text(encoding="utf-8")
         body = source[source.index("def generate_home("):]
@@ -202,9 +203,9 @@ class TheTwoPagesShowIt(unittest.TestCase):
         self.assertIn("*install_demo(),", body)
 
     def test_each_tab_of_get_your_files_shows_its_variant(self):
-        import generate_site
+        from sitegen import whichpack
 
-        tabs = _tab_bodies(generate_site.generate_which_pack())
+        tabs = _tab_bodies(whichpack.generate_which_pack())
         expected = {"Windows": None, "macOS": "default", "Linux": "default",
                     "Steam Deck": "default", "Android (Termux)": "default",
                     "On the device": "handheld"}
@@ -220,15 +221,15 @@ class TheTwoPagesShowIt(unittest.TestCase):
                 self.assertIn(f'width="{_facts(variant)["width"]}"', demos[0])
                 self.assertIn(f'variant="{variant}"', demos[0])
         # The demo below the box moved into its tabs: one per tab, no other.
-        page = generate_site.generate_which_pack()
+        page = whichpack.generate_which_pack()
         self.assertEqual(page.count("<InstallDemo "), len(expected) - 1)
 
     def test_the_site_serves_the_videos_not_the_gif(self):
-        import generate_site
+        from sitegen import guidepage
 
         expected = tuple(name for variant in make_demo.VARIANTS.values()
                          for name in variant.outputs if not name.endswith(".gif"))
-        self.assertEqual(sorted(generate_site.DEMO_ASSETS), sorted(expected))
+        self.assertEqual(sorted(guidepage.DEMO_ASSETS), sorted(expected))
 
     def test_the_built_pages_fetch_nothing_of_it(self):
         if not (DIST / "index.html").is_file():
@@ -259,9 +260,9 @@ class TheTwoPagesShowIt(unittest.TestCase):
 
 
 def generate_site_assets() -> tuple[str, ...]:
-    import generate_site
+    from sitegen import guidepage
 
-    return generate_site.DEMO_ASSETS
+    return guidepage.DEMO_ASSETS
 
 
 if __name__ == "__main__":

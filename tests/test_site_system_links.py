@@ -18,6 +18,12 @@ import unittest
 from pathlib import Path
 
 import generate_site as gs
+from sitegen import places
+from sitegen import platformfiles
+from sitegen import startwith
+from sitegen import systempages
+from sitegen import systemsindex
+from sitegen import whichpack
 from sitegen import render as siterender
 from model import systemnames
 
@@ -28,11 +34,11 @@ class LinksFollowContent(unittest.TestCase):
     def test_an_ambiguous_name_places_nothing(self):
         names = {"boot.rom": {("VideoBrain", "VideoBrain"), ("Bandai", "WonderSwan")}}
         files = [{"name": "boot.rom", "sha1": "0" * 40}]
-        self.assertIsNone(gs._system_folder(files, {"files": {}, "indexes": {}}, names))
+        self.assertIsNone(places._system_folder(files, {"files": {}, "indexes": {}}, names))
         names["only.rom"] = {("Bandai", "WonderSwan")}
         files.append({"name": "only.rom"})
         self.assertEqual(
-            gs._system_folder(files, {"files": {}, "indexes": {}}, names),
+            places._system_folder(files, {"files": {}, "indexes": {}}, names),
             ("Bandai", "WonderSwan"),
         )
 
@@ -58,7 +64,7 @@ class LinksFollowContent(unittest.TestCase):
             if system is None:
                 continue
             with self.subTest(system=sys_id):
-                place = gs._system_folder(system.get("files", []), db, names)
+                place = places._system_folder(system.get("files", []), db, names)
                 self.assertEqual(place and place[1], console)
 
 
@@ -68,12 +74,12 @@ class OtherSpellingsOfOneSystem(unittest.TestCase):
     sega-megadrive, and 2,057 of 4,215 emulator system lines had no link."""
 
     def test_a_platform_system_finds_its_emulators(self):
-        index = gs._build_emulator_file_index({
+        index = whichpack._build_emulator_file_index({
             "genesis_plus_gx": {"systems": ["sega-megadrive"]},
             "np2kai": {"systems": ["pc-98"]},
         })
-        self.assertEqual(gs._system_emulators("sega-mega-drive", index), ["genesis_plus_gx"])
-        self.assertEqual(gs._system_emulators("nintendo-snes", index), [])
+        self.assertEqual(platformfiles._system_emulators("sega-mega-drive", index), ["genesis_plus_gx"])
+        self.assertEqual(platformfiles._system_emulators("nintendo-snes", index), [])
 
     def _install(self, mapping: dict) -> None:
         from sitegen import render as siterender
@@ -105,7 +111,7 @@ class OtherSpellingsOfOneSystem(unittest.TestCase):
         manufacturers = {"Commodore": {"PET": [{"name": "basic4.bin"}]}}
         profiles = {"vice_xpet": {"systems": ["commodore-pet"],
                                   "files": [{"name": "basic4.bin"}]}}
-        pages = gs._system_pages_from_data(
+        pages = places._system_pages_from_data(
             manufacturers, {}, {"files": {}, "indexes": {}}, profiles)
         self.assertEqual(pages["commodore-pet"], ("commodore", "PET"))
 
@@ -134,7 +140,7 @@ class ACopyIsOnItsOwnFoldersPage(unittest.TestCase):
         self.assertEqual(sorted(groups), ["Arcade", "Fairchild"])
         self.assertEqual(list(groups["Fairchild"]), ["Channel F"])
         # The copy is listed twice and counted once.
-        self.assertRegex(gs.generate_systems_index(groups), r"2 consoles, 1 files? ")
+        self.assertRegex(systemsindex.generate_systems_index(groups), r"2 consoles, 1 files? ")
 
 
 class AnIdNamesOneCardPerPage(unittest.TestCase):
@@ -146,7 +152,7 @@ class AnIdNamesOneCardPerPage(unittest.TestCase):
 
         entry = {"name": "a.bin", "sha1": "a" * 40, "md5": "b" * 32, "size": 3,
                  "path": "bios/Nintendo/DS/a.bin"}
-        page = gs.generate_system_page(
+        page = systempages.generate_system_page(
             "Nintendo", {"DS": [entry], "DSi": [entry]}, FileConsumers({"files": {}}))
         self.assertEqual(page.count('id="sha1-aaaaaaaaaaaa" class="rb-file-title"'), 1)
         self.assertEqual(page.count("rb-sys-file"), 2)
@@ -188,14 +194,14 @@ class ACopyFiledByEmulatorDoesNotMoveAMachine(unittest.TestCase):
             db = self._db(tmp)
             files = [{"name": "disksys.rom", "sha1": "d" * 40}]
             self.assertEqual(
-                gs._system_folder(files, db, {}, "nintendo-fds"),
+                places._system_folder(files, db, {}, "nintendo-fds"),
                 ("Nintendo", "Famicom Disk System"),
             )
             # A file named otherwise still finds the maker's copy before the
             # emulator's folder.
             files = [{"name": "FDS_disksys-nintendo.rom", "sha1": "d" * 40}]
             self.assertEqual(
-                gs._system_folder(files, db, {}, "fds"),
+                places._system_folder(files, db, {}, "fds"),
                 ("Nintendo", "Famicom Disk System"),
             )
 
@@ -207,7 +213,7 @@ class ACopyFiledByEmulatorDoesNotMoveAMachine(unittest.TestCase):
             manufacturers = gs._group_by_manufacturer(db)
             config = {"systems": {"nintendo-nes": {"files": [
                 {"name": "FDS_disksys-nintendo.rom", "sha1": "d" * 40}]}}}
-            pages = gs._system_pages_from_data(
+            pages = places._system_pages_from_data(
                 manufacturers, {"p": {"config": config}}, db)
         self.assertEqual(pages["nintendo-nes"], ("nintendo", "NES"))
 
@@ -222,7 +228,7 @@ class ACopyFiledByEmulatorDoesNotMoveAMachine(unittest.TestCase):
 
         db = load_database("database.json")
         manufacturers = gs._group_by_manufacturer(db)
-        pages = gs._system_pages_from_data(
+        pages = places._system_pages_from_data(
             manufacturers, {}, db, load_emulator_profiles("emulators", skip_aliases=False))
         expected = {
             "nintendo-nes": ("nintendo", "NES"),
@@ -242,7 +248,7 @@ class SystemEmulatorsWhenNoIdMatches(unittest.TestCase):
     of both rows was empty on every platform page."""
 
     def setUp(self):
-        self.index = gs._build_emulator_file_index({
+        self.index = whichpack._build_emulator_file_index({
             "flycast": {"systems": ["sega-naomi"], "files": [{"name": "airlbios.zip"}]},
             "fbneo": {"systems": ["arcade"], "files": [
                 {"name": "boot.bin", "archive": "bubsys.zip"}]},
@@ -251,18 +257,18 @@ class SystemEmulatorsWhenNoIdMatches(unittest.TestCase):
 
     def test_a_file_the_system_lists_names_its_emulator(self):
         self.assertEqual(
-            gs._system_emulators("sega-dreamcast-arcade", self.index, [{"name": "airlbios.zip"}]),
+            platformfiles._system_emulators("sega-dreamcast-arcade", self.index, [{"name": "airlbios.zip"}]),
             ["flycast"],
         )
 
     def test_an_archive_member_is_not_a_file_by_that_name(self):
         self.assertEqual(
-            gs._system_emulators("sega-dreamcast", self.index, [{"name": "boot.bin"}]), []
+            platformfiles._system_emulators("sega-dreamcast", self.index, [{"name": "boot.bin"}]), []
         )
 
     def test_an_id_match_is_kept_alone(self):
         self.assertEqual(
-            gs._system_emulators("sega-megadrive", self.index, [{"name": "airlbios.zip"}]),
+            platformfiles._system_emulators("sega-megadrive", self.index, [{"name": "airlbios.zip"}]),
             ["genesis"],
         )
 
@@ -325,7 +331,7 @@ class EverySystemLinkLandsOnItsSection(unittest.TestCase):
                     # The Arcade folder of sets no board claims is headed by
                     # what it holds, its id staying the folder's.
                     if slug == "arcade":
-                        console = gs._section_label("Arcade", console)
+                        console = startwith._section_label("Arcade", console)
                     self.assertEqual(self.headings[page][match["anchor"]], console)
         self.assertGreater(linked, 200)
 

@@ -25,11 +25,12 @@ class WhichPackRows(unittest.TestCase):
     def test_platform_rows_name_their_own_pack(self):
         """A row links its own get/ page, never another setup's and never a
         release asset: the asset URL dies with its tag."""
-        import generate_site
+        from sitegen import install
+        from sitegen import whichpack
         import release_record
 
         record = release_record.load_advertised()
-        page = generate_site.generate_which_pack()
+        page = whichpack.generate_which_pack()
         row = re.compile(r"^\| \[[^\]]+\]\(platforms/([a-z0-9]+)\.md\) \|(.*)$", re.M)
         get = re.compile(r'href="get/([a-z0-9]+)\.md"')
         checked = 0
@@ -42,6 +43,6 @@ class WhichPackRows(unittest.TestCase):
                 if pack:
                     checked += 1
                     self.assertEqual(linked, {key})
-                elif not generate_site.has_release_pack(key):
+                elif not install.has_release_pack(key):
                     self.assertIn(f"No ZIP. [Use the command](platforms/{key}.md#install).", rest)
         self.assertGreater(checked, 3)

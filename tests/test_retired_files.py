@@ -68,7 +68,7 @@ class WhatLeftIsRecorded(unittest.TestCase):
 
 class TheLookupAnswersForIt(unittest.TestCase):
     def test_records_lead_to_the_card_in_its_place(self):
-        import generate_site
+        from sitegen import lookup
 
         retired = {OLD: {"name": "a2diskiing.zip", "path": "bios/Arcade/Arcade/a2diskiing.zip",
                          "crc32": "292ef826", "left": "2026-10-22", "successor": "ee" * 20},
@@ -76,7 +76,7 @@ class TheLookupAnswersForIt(unittest.TestCase):
                                "left": "2026-10-23", "successor": NEW}}
         files = {NEW: {"name": "a2diskiing.zip"}}
         locations = [{"sha1": NEW, "url": "/retrobios/systems/apple/#sha1-d9d9d9d9d9d9"}]
-        records = generate_site.retired_records(retired, files, locations)
+        records = lookup.retired_records(retired, files, locations)
         found = {(r["sha1"], r["algorithm"]): r for r in records}
         # Followed to the file held today, through the copy that left after.
         self.assertEqual(found[(OLD, "sha1")]["url"], locations[0]["url"])

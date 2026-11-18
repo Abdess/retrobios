@@ -14,7 +14,7 @@ import unittest
 from unittest import mock
 
 from model import systemnames
-from generate_site import _render_platform_systems
+from sitegen.platformfiles import _render_platform_systems
 
 A, B, C = "a" * 32, "b" * 32, "c" * 32
 
@@ -51,7 +51,7 @@ class AnUntestedRowNamesBothHashes(unittest.TestCase):
     nor the one the collection holds."""
 
     def test_declared_and_held(self):
-        import generate_site as gs
+        from sitegen import gaps
 
         path = "bios/Nintendo/Nintendo DS/dsifirmware.bin"
         declared, held = "1" * 64, "2" * 64
@@ -61,10 +61,10 @@ class AnUntestedRowNamesBothHashes(unittest.TestCase):
         problem = {
             "platform": "RetroDECK", "name": "dsifirmware.bin", "status": "untested",
             "required": True, "reason": "declared hash contradicted by the local file",
-            "declared": gs._declared_hashes(config, detail), "path": path,
+            "declared": gaps._declared_hashes(config, detail), "path": path,
         }
         db = {"files": {"f" * 40: {"path": path, "sha256": held}}}
-        table = "\n".join(gs._render_problem_files([problem], db=db))
+        table = "\n".join(gaps._render_problem_files([problem], db=db))
         row = next(line for line in table.splitlines() if "dsifirmware" in line)
         # Cut to 12 characters in the cell, the whole value in its title.
         self.assertIn(f'sha256 <code title="{declared}">{declared[:12]}</code>', row)

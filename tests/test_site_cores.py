@@ -13,7 +13,8 @@ import re
 import unittest
 from pathlib import Path
 
-import generate_site
+from sitegen import crossref
+from sitegen import platformpage
 from model.registry import list_registered_platforms
 from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config
@@ -32,14 +33,14 @@ class SiteCoreCounts(unittest.TestCase):
             config = load_platform_config(name, platforms)
             coverages[name] = {"platform": config.get("platform", name), "config": config}
         moved: dict[str, str] = {}
-        page = generate_site.generate_cross_reference(coverages, profiles, moved)
+        page = crossref.generate_cross_reference(coverages, profiles, moved)
         shown = {
             m.group(1): int(m.group(2))
             for m in re.finditer(r"^\| \[([^\]]+)\]\(platforms/[^)]+\) \| (\d+)", page, re.M)
         }
         for name, cov in coverages.items():
             with self.subTest(page=name):
-                if generate_site._own_list_only(cov["config"]):
+                if platformpage._own_list_only(cov["config"]):
                     # cores: [] (MiSTer, BizHawk): no core table, the overview
                     # row points at the platform's own list instead.
                     self.assertNotIn(f"cross-reference-{name}", moved)
@@ -66,17 +67,17 @@ class AllLibretroLabel(unittest.TestCase):
     }
 
     def test_a_list_naming_retroarch_is_labelled(self):
-        note = generate_site._core_scope_note(
+        note = crossref._core_scope_note(
             {"cores": ["retroarch", "sa"]}, self.PROFILES)
         self.assertEqual(note, " (all libretro, plus 1 other core)")
 
     def test_the_string_form_is_labelled(self):
-        note = generate_site._core_scope_note({"cores": "all_libretro"}, self.PROFILES)
+        note = crossref._core_scope_note({"cores": "all_libretro"}, self.PROFILES)
         self.assertEqual(note, " (all libretro)")
 
     def test_a_selection_is_not(self):
         self.assertEqual(
-            generate_site._core_scope_note({"cores": ["a", "sa"]}, self.PROFILES), "")
+            crossref._core_scope_note({"cores": ["a", "sa"]}, self.PROFILES), "")
 
 
 if __name__ == "__main__":

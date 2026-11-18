@@ -20,6 +20,10 @@ import unittest
 from pathlib import Path
 
 import generate_site
+from sitegen import decorate
+from sitegen import guidepage
+from sitegen import install
+from sitegen import platformfiles
 from sitegen import diagrams
 from model import siteinputs
 
@@ -43,12 +47,12 @@ class TheGivenDatabase(_Inputs):
 
     def test_a_card_held_elsewhere_resolves_in_the_given_collection(self) -> None:
         self.use(db=self.db)
-        page = generate_site._cards_elsewhere("[x](#sha1-0123456789ab) ")
+        page = decorate._cards_elsewhere("[x](#sha1-0123456789ab) ")
         self.assertIn(f"files/?sha1={SHA1}", page)
 
     def test_paths_are_read_from_the_given_collection(self) -> None:
         self.use(db=self.db)
-        self.assertEqual(generate_site._collection_sha1_by_path(), {"bios/X/only-here.bin": SHA1})
+        self.assertEqual(platformfiles._collection_sha1_by_path(), {"bios/X/only-here.bin": SHA1})
 
 
 class TheGivenProfilesAndPlatforms(_Inputs):
@@ -65,23 +69,23 @@ class TheGivenProfilesAndPlatforms(_Inputs):
     def test_emulator_names_come_from_the_given_profiles(self) -> None:
         self.use(emulators=self.emulators)
         self.assertEqual(set(generate_site._profiles_on_disk()), {"fixturecore"})
-        self.assertEqual(generate_site._emulator_named_link("fixturecore"),
+        self.assertEqual(platformfiles._emulator_named_link("fixturecore"),
                          "[Fixture Core](emulators/fixturecore.md)")
 
     def test_release_pack_does_not_depend_on_the_working_directory(self) -> None:
-        released = generate_site._release_pack_platforms()
+        released = install._release_pack_platforms()
         self.assertIn("retroarch", released)
         here = os.getcwd()
         os.chdir(REPO_ROOT / "scripts")
         self.addCleanup(os.chdir, here)
-        self.assertTrue(generate_site.has_release_pack("retroarch"))
-        self.assertEqual(generate_site.get_page_title("retroarch", "RetroArch"), "RetroArch BIOS pack")
+        self.assertTrue(install.has_release_pack("retroarch"))
+        self.assertEqual(guidepage.get_page_title("retroarch", "RetroArch"), "RetroArch BIOS pack")
 
     def test_the_registry_comes_from_the_given_platforms(self) -> None:
         registry = self.platforms / "_registry.yml"
         registry.write_text(registry.read_text().replace("release_pack: true", "release_pack: false"))
         self.use(platforms=self.platforms)
-        self.assertFalse(generate_site.has_release_pack("retroarch"))
+        self.assertFalse(install.has_release_pack("retroarch"))
         self.assertEqual(diagrams.registry()["retroarch"].get("release_pack"), False)
 
 

@@ -16,7 +16,8 @@ from pathlib import Path
 import yaml
 
 from model.database import load_database
-from generate_site import _availability_check, _file_badges
+from sitegen.emulatorpage import _availability_check
+from sitegen.emulatorcards import _file_badges
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -74,7 +75,7 @@ class AHeldEntrySaysWhere(unittest.TestCase):
         import tempfile
         import zipfile
 
-        import generate_site
+        from sitegen import emulatorcards
         from packs.crossref import FileConsumers, held_copy
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
@@ -98,12 +99,12 @@ class AHeldEntrySaysWhere(unittest.TestCase):
 
         consumers = FileConsumers({"files": {"z" * 40: {
             "path": "bios/Arcade/MAME/spectrum_opus.zip"}}}, data_dir_registry={})
-        line = generate_site._held_copy_line(
+        line = emulatorcards._held_copy_line(
             ("bios/Arcade/MAME/spectrum_opus.zip", "specmate.rom"), consumers)
         self.assertEqual(line, "Collection copy: member `specmate.rom` of "
                          "[`bios/Arcade/MAME/spectrum_opus.zip`]"
                          "(../systems/arcade.md#sha1-zzzzzzzzzzzz)")
-        line = generate_site._held_copy_line(("data/dolphin-sys/GC/font_western.bin", ""),
+        line = emulatorcards._held_copy_line(("data/dolphin-sys/GC/font_western.bin", ""),
                                              consumers)
         self.assertEqual(line, "Collection copy: `GC/font_western.bin` in the "
                          "`dolphin-sys` data directory")

@@ -13,7 +13,12 @@ import tests
 
 import unittest
 
-import generate_site
+from sitegen import cards
+from sitegen import emulatorpage
+from sitegen import nav as sitegen_nav
+from sitegen import parts as sitegen_parts
+from sitegen import platformfiles
+from sitegen import systempages
 from sitegen import starlight as sitestarlight
 from sitegen import render as siterender
 from sitegen import markup
@@ -36,7 +41,7 @@ class ASystemPageOverItsBudgetIsSplit(unittest.TestCase):
         }
 
     def _pages(self, budget: int) -> dict:
-        return generate_site.system_pages(
+        return systempages.system_pages(
             "Maker", self.consoles, FileConsumers({"files": {}}), budget=budget)
 
     def test_a_page_within_its_budget_stays_whole(self):
@@ -83,18 +88,18 @@ class ASystemPageOverItsBudgetIsSplit(unittest.TestCase):
 class AnEmulatorWithTooManyCardsIsSplit(unittest.TestCase):
     def test_parts_are_balanced_and_rows_keep_the_anchors(self):
         files = [{"name": f"set{i:04d}.zip", "required": i % 2 == 0, "category": "bios_zip"}
-                 for i in range(generate_site.EMULATOR_CARDS_PER_PAGE * 2 + 1)]
-        parts = generate_site.emulator_parts("big", files)
+                 for i in range(emulatorpage.EMULATOR_CARDS_PER_PAGE * 2 + 1)]
+        parts = emulatorpage.emulator_parts("big", files)
         self.assertEqual([stem for stem, _ in parts], ["big-files-1", "big-files-2", "big-files-3"])
         sizes = [len(entries) for _, entries in parts]
         self.assertLessEqual(max(sizes) - min(sizes), 1)
-        self.assertEqual(generate_site.emulator_parts("small", files[:3]), [])
+        self.assertEqual(emulatorpage.emulator_parts("small", files[:3]), [])
 
-        pages = generate_site.emulator_pages(
+        pages = emulatorpage.emulator_pages(
             "big", {"emulator": "Big", "type": "standalone", "files": files}, {"files": {}})
         self.assertEqual(sorted(pages), ["big", "big-files-1", "big-files-2", "big-files-3"])
         main = pages["big"]
-        anchors = generate_site.emulator_file_anchors(files)
+        anchors = cards.emulator_file_anchors(files)
         for anchor in anchors:
             self.assertIn(f'<a id="{anchor}" href=', main)
         self.assertIn('class="rb-card-index"', main)
@@ -102,9 +107,9 @@ class AnEmulatorWithTooManyCardsIsSplit(unittest.TestCase):
         self.assertIn(f'id="{anchors[0]}" class="rb-file-title"', pages["big-files-1"])
 
     def test_cards_are_linked_on_the_page_that_holds_them(self):
-        files = [{"name": f"set{i:04d}.zip"} for i in range(generate_site.EMULATOR_CARDS_PER_PAGE + 1)]
-        generate_site.plan_emulator_pages({"big": {"files": files}})
-        anchors = generate_site.emulator_file_anchors(files)
+        files = [{"name": f"set{i:04d}.zip"} for i in range(emulatorpage.EMULATOR_CARDS_PER_PAGE + 1)]
+        emulatorpage.plan_emulator_pages({"big": {"files": files}})
+        anchors = cards.emulator_file_anchors(files)
         self.assertEqual(siterender.emulator_card_page("big", anchors[-1]), "big-files-2")
         self.assertEqual(siterender.emulator_card_page("other", "file-x"), "other")
 
@@ -114,13 +119,13 @@ class APlatformSystemOverItsBudgetMoves(unittest.TestCase):
         files = [{"name": f"f{i:04d}.zip", "status": "ok"} for i in range(40)]
         config = {("arcade", f["name"]): [{"name": f["name"], "md5": "a" * 32}] for f in files}
         moved: dict[str, str] = {}
-        budget = generate_site.PLATFORM_SECTION_BUDGET
-        generate_site.PLATFORM_SECTION_BUDGET = 5
+        budget = sitegen_parts.PLATFORM_SECTION_BUDGET
+        sitegen_parts.PLATFORM_SECTION_BUDGET = 5
         try:
-            lines = generate_site._render_platform_systems(
+            lines = platformfiles._render_platform_systems(
                 {"arcade": files}, config, {}, ("deck", "Deck"), moved)
         finally:
-            generate_site.PLATFORM_SECTION_BUDGET = budget
+            sitegen_parts.PLATFORM_SECTION_BUDGET = budget
         text = "\n".join(lines)
         self.assertIn("{ #arcade }", text)
         self.assertIn("](deck-arcade.md)", text)
@@ -136,7 +141,7 @@ class TheNavigationOpensOneInitial(unittest.TestCase):
             for key, name in (("a1", "Alpha"), ("b1", "Beta"), ("b2", "bravo"), ("z", "Zed"),
                               ("n", "2ship"))
         }
-        nav = generate_site._emulator_nav(profiles)
+        nav = sitegen_nav._emulator_nav(profiles)
         self.assertEqual(nav[1:], [
             {"0 to 9": [{"2ship": "emulators/n.md"}]},
             {"A": [{"Alpha": "emulators/a1.md"}]},

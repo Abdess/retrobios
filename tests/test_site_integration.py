@@ -22,7 +22,9 @@ from unittest import mock
 import yaml
 
 import check_freshness
-import generate_site as gs
+from sitegen import emulatorcards
+from sitegen import emulatorpage
+from sitegen import startwith
 from sitegen import diagrams
 from model import collection
 
@@ -38,12 +40,12 @@ def _profile(name: str) -> dict:
 class DataTreeReaders(unittest.TestCase):
     def test_read_by_names_the_emulators(self):
         ref = "y-sys"
-        gs._DATA_MEMBERS[ref] = {"a.bin": {"size": 1, "sha1": "0" * 40}}
-        gs._DATA_READERS[ref] = [("dolphin", "Dolphin"), ("ishiiruka", "Ishiiruka")]
+        emulatorcards._DATA_MEMBERS[ref] = {"a.bin": {"size": 1, "sha1": "0" * 40}}
+        emulatorpage._DATA_READERS[ref] = [("dolphin", "Dolphin"), ("ishiiruka", "Ishiiruka")]
         try:
-            page = gs._data_tree_page(ref, {}, [("y-sys", ["a.bin"])], 0)
+            page = emulatorpage._data_tree_page(ref, {}, [("y-sys", ["a.bin"])], 0)
         finally:
-            del gs._DATA_MEMBERS[ref], gs._DATA_READERS[ref]
+            del emulatorcards._DATA_MEMBERS[ref], emulatorpage._DATA_READERS[ref]
         self.assertIn("Read by [Dolphin](dolphin.md#data-directories) and "
                       "[Ishiiruka](ishiiruka.md#data-directories).", page)
         self.assertNotIn("('dolphin'", page)
@@ -57,16 +59,16 @@ class EngineIntros(unittest.TestCase):
                 continue
             name = Path(path).stem
             with self.subTest(profile=name):
-                intro = gs._emulator_intro(str(profile.get("emulator") or name), profile)
+                intro = emulatorpage._emulator_intro(str(profile.get("emulator") or name), profile)
                 self.assertNotRegex(intro, r"emulates\s*(?:\.|game\b|and\b|,)")
                 self.assertNotIn("  ", intro)
 
 
 class SectionNames(unittest.TestCase):
     def test_fba2012_is_headed_by_its_program(self):
-        self.assertEqual(gs._section_label("Arcade", "fba2012"), "FB Alpha 2012")
-        self.assertEqual(gs._section_label("Arcade", "Arcade"), gs.OTHER_ARCADE_LABEL)
-        self.assertEqual(gs._section_label("Sony", "PlayStation"), "PlayStation")
+        self.assertEqual(startwith._section_label("Arcade", "fba2012"), "FB Alpha 2012")
+        self.assertEqual(startwith._section_label("Arcade", "Arcade"), startwith.OTHER_ARCADE_LABEL)
+        self.assertEqual(startwith._section_label("Sony", "PlayStation"), "PlayStation")
         self.assertEqual(collection.SECTION_LABELS[("Arcade", "fba2012")],
                          _profile("fbalpha2012")["emulator"])
 

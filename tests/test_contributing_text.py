@@ -15,7 +15,7 @@ from unittest import mock
 
 import generate_readme
 from sitegen import readme
-import generate_site
+from sitegen import reference
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -32,7 +32,7 @@ class OneContributingText(unittest.TestCase):
     def test_repository_and_site_pages_match(self):
         self.assertEqual(
             _normalized(readme.generate_contributing()),
-            _normalized(generate_site.generate_contributing()),
+            _normalized(reference.generate_contributing()),
         )
 
 

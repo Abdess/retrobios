@@ -44,6 +44,15 @@ import yaml
 
 from sitegen import readme as sitegen_readme
 import generate_site
+from sitegen import config
+from sitegen import descriptions
+from sitegen import guidepage
+from sitegen import home as sitegen_home
+from sitegen import install as sitegen_install
+from sitegen import nav as sitegen_nav
+from sitegen import platformindex
+from sitegen import reference
+from sitegen import versions
 import release_record
 from model import guides
 from sitegen import markup as sitemarkup
@@ -101,10 +110,10 @@ class TrustItemsSayWhereItWrites(unittest.TestCase):
 
 class NextStepsIsAPlainList(unittest.TestCase):
     def test_the_helpers(self):
-        block = "\n".join(generate_site._next_block(["[A](a.md)", "[B](b.md)"]))
+        block = "\n".join(sitegen_home._next_block(["[A](a.md)", "[B](b.md)"]))
         self.assertEqual(block, "## Next steps\n\n- [A](a.md)\n- [B](b.md)\n")
-        self.assertIn("## Next steps", generate_site.reference_next())
-        self.assertNotIn(":::", generate_site.reference_next())
+        self.assertIn("## Next steps", reference.reference_next())
+        self.assertNotIn(":::", reference.reference_next())
 
     def test_entry_pages(self):
         for name in ("which-pack.md", "contributing.md", "platforms/batocera.md",
@@ -126,7 +135,7 @@ class DatesInWords(unittest.TestCase):
     def test_data_as_of(self):
         moment = datetime(2026, 10, 22, 22, 43, 8, tzinfo=timezone.utc)
         self.assertEqual(
-            generate_site.data_as_of(moment),
+            config.data_as_of(moment),
             '<time datetime="2026-10-22T22:43:08Z">Data as of 22 October 2026</time>',
         )
 
@@ -223,7 +232,7 @@ class GuideRoutes(unittest.TestCase):
     def test_a_device_system_opens_on_the_computer_route(self):
         text = _page("platforms/batocera.md")
         self.assertLess(text.index("## From a computer"), text.index("## On the device"))
-        self.assertIn("{ #install }", "\n".join(generate_site._guide_install(
+        self.assertIn("{ #install }", "\n".join(guidepage._guide_install(
             "batocera", guides.GUIDES["batocera"], "## On the device { #install }")))
         self.assertIn("Unzip them all into the network folder above", text)
 
@@ -278,17 +287,17 @@ class DownloadNamesTheRelease(unittest.TestCase):
         if not release_record.pack_for("batocera", record):
             self.skipTest("release.json has no Batocera pack")
         tag = record["tag"]
-        lines = generate_site.release_line("batocera", record)
+        lines = versions.release_line("batocera", record)
         self.assertTrue(lines[0].startswith(f"Pack {tag}, built "))
         self.assertIn(f"/releases/download/{tag}/SHA256SUMS.txt)", lines[0])
         self.assertIn(f"/releases/download/{tag}/SHA256SUMS.txt.sig)", lines[0])
-        self.assertEqual(generate_site._release_date("v2026.10.10"), "10 October 2026")
+        self.assertEqual(versions._release_date("v2026.10.10"), "10 October 2026")
 
     def test_a_newer_platform_than_the_pack_is_named(self):
         record = {"tag": "v2026.10.10", "packs": {"RetroBat_1.0_BIOS_Pack.zip": {
             "assets": ["RetroBat_1.0_BIOS_Pack.zip"], "platforms": ["retrobat"]}}}
         version = load_platform_config("retrobat", str(REPO_ROOT / "platforms"))["version"]
-        lines = generate_site.release_line("retrobat", record)
+        lines = versions.release_line("retrobat", record)
         self.assertIn(f"built for RetroBat 1.0. The command installs the files for "
                       f"RetroBat {version}.", lines[-1])
 
@@ -308,7 +317,7 @@ class CommandBlocks(unittest.TestCase):
         self.assertGreaterEqual(len(commands), 3)
         for group in commands:
             self.assertIn("/i.ps1", group)
-        block = "\n".join(generate_site._console_install_block(
+        block = "\n".join(sitegen_install._console_install_block(
             "PlayStation", [("batocera", "psx"), ("recalbox", "psx")]))
         # Every setup's options in both forms: the list of every command,
         # and the one command under the OS tabs.
@@ -325,7 +334,7 @@ class CommandBlocks(unittest.TestCase):
 
 class ContributingOpensOnTheAction(unittest.TestCase):
     def test_both_generators_open_on_the_upload(self):
-        for text in (sitegen_readme.generate_contributing(), generate_site.generate_contributing()):
+        for text in (sitegen_readme.generate_contributing(), reference.generate_contributing()):
             body = text.split("## Add a BIOS file", 1)[1]
             self.assertTrue(body.lstrip().startswith("Have a file the collection lacks?"))
             self.assertLess(body.index(sitegen_readme.UPLOAD_URL), body.index("## What happens next"))
@@ -333,9 +342,9 @@ class ContributingOpensOnTheAction(unittest.TestCase):
             self.assertLess(body.index("## What happens next"), body.index("CI hashes"))
 
     def test_description_is_a_sentence(self):
-        text = generate_site._page_description("", Path("contributing.md"), "Contributing")
+        text = descriptions._page_description("", Path("contributing.md"), "Contributing")
         self.assertTrue(text.endswith("."))
-        fallback = generate_site._page_description(
+        fallback = descriptions._page_description(
             "One file needs no clone and no local setup at all here:\n\n"
             "A plain sentence that describes the page well enough.",
             Path("other.md"), "Other")
@@ -386,7 +395,7 @@ class HandheldWayIn(unittest.TestCase):
         text = _page(GUIDE.path)
         for system in GUIDE.systems:
             with self.subTest(system=system.name):
-                self.assertIn(f"| {generate_site.handheld_name(system)} |", text)
+                self.assertIn(f"| {guidepage.handheld_name(system)} |", text)
 
     def test_a_system_that_stopped_says_so_with_its_source(self):
         """ArkOS was archived on 30 December 2025 and points to dArkOS: the
@@ -437,7 +446,7 @@ class HandheldWayIn(unittest.TestCase):
 
     def test_the_guide_is_in_the_handheld_group_of_the_navigation(self):
         coverages = {key: {"platform": _display(key)} for key in REGISTRY}
-        nav = generate_site.generate_nav(coverages, {}, {}, REGISTRY)
+        nav = sitegen_nav.generate_nav(coverages, {}, {}, REGISTRY)
         setup = next(tab["Setups"] for tab in nav if "Setups" in tab)
         groups = {next(iter(item)): next(iter(item.values()))
                   for item in setup if isinstance(item, dict)}
@@ -455,18 +464,18 @@ class PackNamesItsVersion(unittest.TestCase):
         record = release_record.load_record()
         if not release_record.pack_for("batocera", record):
             self.skipTest("release.json has no Batocera pack")
-        block = generate_site._pack_buttons("batocera")
+        block = guidepage._pack_buttons("batocera")
         name = release_record.pack_name_for("batocera", record)
-        version = generate_site._pack_version(name, ["batocera"])
+        version = versions._pack_version(name, ["batocera"])
         self.assertIn(f"Made for Batocera {version}. "
-                      + generate_site.other_version("batocera"), block)
+                      + versions.other_version("batocera"), block)
 
     def test_a_version_gap_is_said_once(self):
         record = {"tag": "v2026.10.10", "packs": {"RetroBat_1.0_BIOS_Pack.zip": {
             "assets": ["RetroBat_1.0_BIOS_Pack.zip"], "platforms": ["retrobat"]}}}
-        released = generate_site.release_line("retrobat", record)
-        line = generate_site.version_line("retrobat", record, named=len(released) > 1)
-        self.assertEqual(line, generate_site.other_version("retrobat"))
+        released = versions.release_line("retrobat", record)
+        line = versions.version_line("retrobat", record, named=len(released) > 1)
+        self.assertEqual(line, versions.other_version("retrobat"))
 
     def test_a_version_with_an_underscore_is_read_whole(self):
         """AmberELEC's prerelease-20261019_1835 read as 1835, and the page
@@ -475,21 +484,21 @@ class PackNamesItsVersion(unittest.TestCase):
 
         version = load_platform_config("amberelec", "platforms")["version"]
         name = _platform_pack_stem(["amberelec"], "amberelec", "platforms") + "_BIOS_Pack.zip"
-        self.assertEqual(generate_site._pack_version(name, ["amberelec"]), version)
+        self.assertEqual(versions._pack_version(name, ["amberelec"]), version)
         record = {"tag": "v2026.10.10", "packs": {name: {
             "assets": [name], "platforms": ["amberelec"]}}}
-        self.assertEqual(len(generate_site.release_line("amberelec", record)), 1)
+        self.assertEqual(len(versions.release_line("amberelec", record)), 1)
 
     def test_another_version_is_sent_to_the_check_commands(self):
         """A ZIP reader read "Run `--check` after copying." with no command."""
-        line = generate_site.other_version("emudeck")
+        line = versions.other_version("emudeck")
         self.assertNotIn("Run `--check`", line)
         self.assertIn("](../platforms/emudeck.md#how-to-check)", line)
         page = _page("platforms/emudeck.md")
         self.assertIn("{ #how-to-check }", page)
 
     def test_the_v_prefix_is_dropped(self):
-        self.assertEqual(generate_site.setup_version("retroarch", {}),
+        self.assertEqual(versions.setup_version("retroarch", {}),
                          f"RetroArch {load_platform_config('retroarch', 'platforms')['version'].lstrip('v')}")
 
     def test_every_setup_page_names_a_version(self):
@@ -498,10 +507,10 @@ class PackNamesItsVersion(unittest.TestCase):
         for key in REGISTRY:
             with self.subTest(platform=key):
                 text = _plain_guide_part(_page(f"platforms/{key}.md"))
-                if generate_site.has_release_pack(key):
+                if sitegen_install.has_release_pack(key):
                     self.assertRegex(text, r"(?:[Mm]ade for|This pack was built for) \S")
                 else:
-                    self.assertIn(generate_site.no_zip_line(_display(key)), text)
+                    self.assertIn(guidepage.no_zip_line(_display(key)), text)
 
 
 class SetupPagesOfferPartOfThePack(unittest.TestCase):
@@ -612,7 +621,7 @@ class YourSetupIndexInPlainWords(unittest.TestCase):
 
     def test_insertion_keeps_next_steps_last(self):
         page = "# T\n\nBody.\n\n## Next steps\n\n- [A](a.md)\n"
-        out = generate_site.with_setup_table(page, {})
+        out = platformindex.with_setup_table(page, {})
         self.assertTrue(out.rstrip().endswith("- [A](a.md)"))
         self.assertIn("## Every setup at a glance", out)
 
@@ -659,7 +668,7 @@ class DownloadLine(unittest.TestCase):
         record = release_record.load_record()
         if not release_record.pack_for("batocera", record):
             self.skipTest("release.json has no Batocera pack")
-        line = generate_site.release_line("batocera", record)[0]
+        line = versions.release_line("batocera", record)[0]
         self.assertRegex(line, r"\[SHA256SUMS\.txt\]\([^)]+\) and its \[signature\]\([^)]+\)\.$")
 
 
@@ -718,22 +727,22 @@ class NoZipNoUnzipText(unittest.TestCase):
     def test_a_mac_and_a_linux_desktop_reach_the_share_too(self):
         """The share route was a PowerShell tab alone: a Mac user with Recalbox
         on Wi-Fi fell back to SSH or to taking the card out."""
-        args, how = generate_site._share_tabs("recalbox", "\\\\RECALBOX\\share\\bios")
+        args, how = guidepage._share_tabs("recalbox", "\\\\RECALBOX\\share\\bios")
         self.assertEqual(args["macos"], "--platform recalbox --dest /Volumes/share/bios")
         self.assertIn("`smb://recalbox/share`", how["macos"])
         self.assertEqual(args["linux"], "--platform recalbox --dest /path/to/share/bios")
         self.assertIn("`smb://recalbox/share`", how["linux"])
-        lines = generate_site._setup_routes("recalbox", "Recalbox")
+        lines = guidepage._setup_routes("recalbox", "Recalbox")
         routes = "\n".join(lines[:lines.index("## On the device { #install }")])
         for label in ("Windows", "macOS", "Linux"):
             self.assertIn(f'label="{label}"', routes)
         # The setup page sends a Mac or Linux reader to those tabs.
-        lines = generate_site._setup_routes("recalbox", "Recalbox", page_link=True)
+        lines = guidepage._setup_routes("recalbox", "Recalbox", page_link=True)
         self.assertIn("[Mac or Linux](../get/recalbox.md#from-your-computer)", lines)
 
     def test_the_network_route_needs_a_share_and_no_zip(self):
         for name in SETUPS:
-            share = generate_site._network_share(name, guides.GUIDES[name])
+            share = guidepage._network_share(name, guides.GUIDES[name])
             with self.subTest(setup=name):
                 if _with_zip(name) or guides.GUIDES[name].run != ("device",):
                     self.assertEqual(share, "")
@@ -752,7 +761,7 @@ class EveryHandheldRowSaysWhere(unittest.TestCase):
             folder = row.rstrip(" |").rsplit(" | ", 1)[-1]
             with self.subTest(row=row[:40]):
                 self.assertTrue("([source](https://" in folder
-                                or folder == generate_site.RETROARCH_FOLDER_SETTING, folder)
+                                or folder == guidepage.RETROARCH_FOLDER_SETTING, folder)
 
     def test_the_installer_folders_are_written_with_their_source(self):
         systems = {s.name: s for s in HANDHELDS.systems}
@@ -767,7 +776,7 @@ class EveryHandheldRowSaysWhere(unittest.TestCase):
             row = next(line for line in text.splitlines()
                        if line.startswith((f"| {system.name} |", f"| {system.name}, ")))
             with self.subTest(system=system.name):
-                self.assertEqual(generate_site.LINUX_ONLY_HINT in row, system.linux_only)
+                self.assertEqual(guidepage.LINUX_ONLY_HINT in row, system.linux_only)
         self.assertTrue(any(s.linux_only for s in HANDHELDS.systems if s.name == "ArchR"))
         self.assertNotIn("Windows and macOS cannot open", text)
 
@@ -845,7 +854,7 @@ class WhatItAsks(unittest.TestCase):
         # line menu showed keys a beginner never sees (owner's note).
         text = _plain_page("which-pack.md")
         self.assertNotIn('title="What it asks"', text)
-        for line in generate_site.first_screen_words():
+        for line in guidepage.first_screen_words():
             self.assertIn(line, text)
 
 
@@ -889,7 +898,7 @@ class GetPagesGiveTheSetupsOwnRoutes(unittest.TestCase):
             guide = guides.GUIDES[name]
             allowed = {labels[key] for key in guide.run}
             allowed |= {labels[key] for key in guide.card_run or ("windows", "macos", "linux")}
-            if generate_site._network_share(name, guide):
+            if guidepage._network_share(name, guide):
                 # The network folder is reached from any computer.
                 allowed |= {labels[key] for key in ("windows", "macos", "linux")}
             with self.subTest(setup=name):
@@ -913,17 +922,17 @@ class GetPagesGiveTheSetupsOwnRoutes(unittest.TestCase):
 class CheckNeedsTheFiles(unittest.TestCase):
     def test_the_pass_line_is_what_the_installer_prints_only_when_complete(self):
         installer = (REPO_ROOT / "install.py").read_text(encoding="utf-8")
-        printed = re.search(r"`([^`]+)`", generate_site.check_pass_line())[1]
-        self.assertEqual(printed, generate_site._installer().EVERYTHING_IN_PLACE)
+        printed = re.search(r"`([^`]+)`", guidepage.check_pass_line())[1]
+        self.assertEqual(printed, sitegen_install._installer().EVERYTHING_IN_PLACE)
         self.assertIn('print(f"\\n  {EVERYTHING_IN_PLACE}")', installer)
-        self.assertNotIn("wrong hash", generate_site.check_pass_line())
+        self.assertNotIn("wrong hash", guidepage.check_pass_line())
 
     def test_no_setup_page_passes_an_empty_folder(self):
         for name in SETUPS:
             text = _plain_page(f"platforms/{name}.md")
             with self.subTest(setup=name):
                 self.assertNotIn("All good when you see `0 wrong hash`", text)
-                self.assertIn(generate_site.check_pass_line(), text)
+                self.assertIn(guidepage.check_pass_line(), text)
 
 
 class ARouteWithoutANetwork(unittest.TestCase):
@@ -1001,7 +1010,7 @@ class GetPagesSayWhatTheyHold(unittest.TestCase):
             lists = profile.is_file() and (yaml.safe_load(profile.read_text(encoding="utf-8")) or {}).get("files")
             title = f"BIOS {kind} for {display}" if lists else f"{display} BIOS {kind}"
             with self.subTest(setup=name):
-                self.assertEqual(generate_site.get_page_title(name, display), title)
+                self.assertEqual(guidepage.get_page_title(name, display), title)
                 self.assertIn(f"title: {title}\n", text)
                 self.assertNotIn("Download ", text.split("\n---\n", 1)[0].split("title:", 1)[1]
                                  .split("\n", 1)[0])
@@ -1015,7 +1024,7 @@ class GetPagesSayWhatTheyHold(unittest.TestCase):
             if REGISTRY[name].get("release_pack") is True:
                 continue
             with self.subTest(setup=name):
-                title = generate_site.get_page_title(name, _display(name))
+                title = guidepage.get_page_title(name, _display(name))
                 self.assertIn(f"Link to share: [{title}](/retrobios/get/{name}/)",
                               _plain_page(f"platforms/{name}.md"))
 
@@ -1035,7 +1044,7 @@ class HandheldRowsSayWhere(unittest.TestCase):
         self.assertRegex(system.folder_source, r"/wiki/Home/[0-9a-f]{40}$")
         row = next(line for line in _plain_page("platforms/linux-handhelds.md").splitlines()
                    if line.startswith("| RetroOZ |"))
-        self.assertNotIn(generate_site.RETROARCH_FOLDER_SETTING, row)
+        self.assertNotIn(guidepage.RETROARCH_FOLDER_SETTING, row)
 
 
 class GetIndex(unittest.TestCase):
@@ -1071,9 +1080,9 @@ class TheSiteSaysWhatTheInstallerShows(unittest.TestCase):
                   "c) choose systems, cores and regions")
 
     def test_which_pack_describes_the_screen_in_the_installers_words(self):
-        installer = generate_site._installer()
+        installer = sitegen_install._installer()
         text = _plain_page("which-pack.md")
-        for line in generate_site.first_screen_words():
+        for line in guidepage.first_screen_words():
             self.assertIn(line, text)
         self.assertIn(f"**{installer.TUI_INSTALL_ROW}**", text)
         self.assertIn(f"**{installer.TUI_SYSTEMS_ROW}**", text)
@@ -1082,7 +1091,7 @@ class TheSiteSaysWhatTheInstallerShows(unittest.TestCase):
         self.assertNotIn("press **c**", text)
 
     def test_the_plan_rows_are_the_words_the_pages_use(self):
-        installer = generate_site._installer()
+        installer = sitegen_install._installer()
         state = installer.TuiState(os_type="linux", home=Path("/home/me"))
         state.stack = ["plan"]
         state.check = {"files": 2, "present": 0, "missing": 2, "wrong_hash": 0, "need": 2,
@@ -1098,7 +1107,7 @@ class TheSiteSaysWhatTheInstallerShows(unittest.TestCase):
         self.assertIn(installer.TUI_SYSTEMS_ROW, labels)
 
     def test_the_readme_and_the_wiki_take_the_same_words(self):
-        installer = generate_site._installer()
+        installer = sitegen_install._installer()
         readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
         self.assertIn(f"fewer under **{installer.TUI_SYSTEMS_ROW}**", readme)
         self.assertNotIn("offers to install everything or to choose systems", readme)

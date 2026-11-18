@@ -34,6 +34,10 @@ import ast
 from html import unescape
 
 import generate_site
+from sitegen import decorate
+from sitegen import emulatorsindex
+from sitegen import nav as sitegen_nav
+from sitegen import parts
 from sitegen import starlight as sitestarlight
 from core import anchors as core_anchors
 from model.registry import list_registered_platforms, load_platform_registry
@@ -60,7 +64,7 @@ def _nav() -> list:
         "dolphin": {"emulator": "Dolphin", "systems": ["nintendo-gamecube"]},
         "mame": {"emulator": "MAME", "systems": ["arcade"]},
     }
-    return generate_site.generate_nav(coverages, manufacturers, profiles, registry)
+    return sitegen_nav.generate_nav(coverages, manufacturers, profiles, registry)
 def _targets(value: object) -> set[str]:
     if isinstance(value, str):
         return {value}
@@ -80,7 +84,7 @@ def _index_anchors(markdown: str) -> set[str]:
 ANCHORS = {
     "platforms/index.md": {core_anchors.toc_slug(label) for label, _ in DEVICE_GROUPS.values()},
     "systems/index.md": {"consoles-and-computers"},
-    "emulators/index.md": _index_anchors(generate_site.generate_emulators_index({
+    "emulators/index.md": _index_anchors(emulatorsindex.generate_emulators_index({
         "duckstation": {"emulator": "DuckStation", "systems": ["sony-playstation"]},
         "dolphin": {"emulator": "Dolphin", "systems": ["nintendo-gamecube"]},
         "mame": {"emulator": "MAME", "systems": ["arcade"]},
@@ -107,7 +111,7 @@ class NotFoundPage(unittest.TestCase):
                 terms={},
             ),
         )
-        front = generate_site._front_matter(text)
+        front = decorate._front_matter(text)
         self.assertIs(front["tableOfContents"], False)
         self.assertIs(front["prev"], False)
         self.assertIs(front["next"], False)
@@ -158,7 +162,7 @@ class GroupsAreGroups(unittest.TestCase):
 
 class EmulatorsOneLevelDeep(unittest.TestCase):
     def test_initials_hold_pages_not_groups(self):
-        nav = generate_site._emulator_nav({
+        nav = sitegen_nav._emulator_nav({
             "duckstation": {"emulator": "DuckStation", "systems": ["s"]},
             "dolphin": {"emulator": "Dolphin", "systems": ["s"]},
         })
@@ -170,8 +174,8 @@ class EmulatorsOneLevelDeep(unittest.TestCase):
         from model.profiles import load_emulator_profiles
 
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
-        anchors = _index_anchors(generate_site.generate_emulators_index(profiles))
-        for group in generate_site._emulator_nav(profiles)[1:]:
+        anchors = _index_anchors(emulatorsindex.generate_emulators_index(profiles))
+        for group in sitegen_nav._emulator_nav(profiles)[1:]:
             (label, _pages), = group.items()
             with self.subTest(initial=label):
                 self.assertIn(core_anchors.toc_slug(label), anchors)
@@ -179,7 +183,7 @@ class EmulatorsOneLevelDeep(unittest.TestCase):
     def test_every_initial_holds_pages(self):
         from model.profiles import load_emulator_profiles
 
-        nav = generate_site._emulator_nav(load_emulator_profiles(str(REPO_ROOT / "emulators")))
+        nav = sitegen_nav._emulator_nav(load_emulator_profiles(str(REPO_ROOT / "emulators")))
         for group in nav[1:]:
             (label, pages), = group.items()
             with self.subTest(initial=label):
@@ -217,7 +221,7 @@ class OneNextPerPage(unittest.TestCase):
     def test_card_pages_turn_pagination_off(self):
         for rel in ("systems/sony.md", "emulators/duckstation.md", "platforms/batocera.md"):
             _target, text = sitestarlight.render_page(rel, "# T\n\nBody.\n", sitestarlight.PageMeta(level="explore", weight=None, browser_title="T", description="d", structured={}, terms={}))
-            front = generate_site._front_matter(text)
+            front = decorate._front_matter(text)
             with self.subTest(page=rel):
                 self.assertIs(front["prev"], False)
                 self.assertIs(front["next"], False)
@@ -226,17 +230,17 @@ class OneNextPerPage(unittest.TestCase):
         body = ("# Troubleshooting\n\nText.\n\n## Next steps\n\n"
                 "- [Common questions](faq.md)\n- [Glossary](glossary.md)\n")
         _target, text = sitestarlight.render_page("wiki/troubleshooting.md", body, sitestarlight.PageMeta(level="start", weight=None, browser_title="Troubleshooting", description="d", structured={}, terms={}))
-        front = generate_site._front_matter(text)
+        front = decorate._front_matter(text)
         self.assertEqual(front["next"], {"link": "/retrobios/wiki/faq/", "label": "Common questions"})
 
     def test_a_page_without_next_steps_keeps_the_reading_order(self):
         _target, text = sitestarlight.render_page("wiki/faq.md", "# FAQ\n\nText.\n", sitestarlight.PageMeta(level="start", weight=None, browser_title="FAQ", description="d", structured={}, terms={}))
-        self.assertNotIn("next", generate_site._front_matter(text))
+        self.assertNotIn("next", decorate._front_matter(text))
 
 
 class ReferenceGrouped(unittest.TestCase):
     def _reference(self, wiki: Path | None = None) -> list:
-        nav = generate_site.generate_nav({}, {}, {}, {}, wiki)
+        nav = sitegen_nav.generate_nav({}, {}, {}, {}, wiki)
         return next(tab["Reference"] for tab in nav if "Reference" in tab)
 
     def test_checking_files_opens_on_find_a_file(self):
@@ -304,13 +308,13 @@ class Redirects(unittest.TestCase):
             (docs / "gaps-files-to-source-7.md").write_text(part, encoding="utf-8")
             (docs / "gaps.md").write_text("# Gaps\n", encoding="utf-8")
             kept = {"platforms/b-atari-st.md": "platforms/b.md#atari-st"}
-            published = generate_site.record_parts(
+            published = parts.record_parts(
                 docs, {"gaps-files-to-source-7.md", "gaps.md"}, kept)
         self.assertEqual(published, {"gaps-files-to-source-7.md": "gaps.md", **kept})
         # An emulator part names its parent with the site's base.
-        self.assertEqual(generate_site._parent_page("/retrobios/emulators/amiberry/"),
+        self.assertEqual(parts._parent_page("/retrobios/emulators/amiberry/"),
                          "emulators/amiberry.md")
-        self.assertEqual(generate_site._parent_page("/platforms/b/#atari-st"),
+        self.assertEqual(parts._parent_page("/platforms/b/#atari-st"),
                          "platforms/b.md#atari-st")
         # The next run made six parts.
         self.assertEqual(
@@ -573,7 +577,7 @@ class MovedPlatformPages(unittest.TestCase):
 
 class ArcadeGroup(unittest.TestCase):
     def test_arcade_is_not_a_console_or_computer(self) -> None:
-        nav = generate_site._system_nav({"Sony": {}, "Arcade": {}, "Sega": {}})
+        nav = sitegen_nav._system_nav({"Sony": {}, "Arcade": {}, "Sega": {}})
         groups = {next(iter(entry)): entry[next(iter(entry))] for entry in nav if isinstance(entry, dict)}
         self.assertEqual(groups["Arcade"], [{"Arcade": "systems/arcade.md"}])
         self.assertNotIn({"Arcade": "systems/arcade.md"}, groups["Consoles and computers"])

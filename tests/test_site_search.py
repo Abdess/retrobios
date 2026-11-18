@@ -30,10 +30,14 @@ import yaml
 import json
 from html.parser import HTMLParser
 
-import generate_site as gs
+from sitegen import decorate
+from sitegen import descriptions
+from sitegen import emulatorcards
+from sitegen import getpages
+from sitegen import structured
 from sitegen import starlight as sitestarlight
 from sitegen import validate
-import generate_site
+from sitegen import structured
 from model.registry import list_registered_platforms
 from model.profiles import load_emulator_profiles
 from tests.test_site_nav import ANCHORS, _nav, _present
@@ -165,7 +169,7 @@ class FindOrCheckAFile(unittest.TestCase):
 
     def test_the_page_weighs_two(self) -> None:
         rel = Path("files/index.md")
-        self.assertEqual(gs.search_weight(rel, gs.page_level(rel)), 2)
+        self.assertEqual(decorate.search_weight(rel, decorate.page_level(rel)), 2)
 
     def test_its_terms_become_a_field(self) -> None:
         text = _finalize("files/index.md", "# Find or check a file\n\nBody.\n",
@@ -180,8 +184,8 @@ class FindOrCheckAFile(unittest.TestCase):
 
 class PartPages(unittest.TestCase):
     def test_part_weight(self) -> None:
-        self.assertEqual(gs.SEARCH_WEIGHT["part"], 0.5)
-        self.assertEqual(gs.search_weight(Path("systems/arcade-mame-5.md"), "part"), 0.5)
+        self.assertEqual(decorate.SEARCH_WEIGHT["part"], 0.5)
+        self.assertEqual(decorate.search_weight(Path("systems/arcade-mame-5.md"), "part"), 0.5)
 
     def test_a_part_keeps_its_own_weight_and_neighbours(self) -> None:
         """The MAME card parts write prev, next and searchWeight: the build
@@ -191,7 +195,7 @@ class PartPages(unittest.TestCase):
             "parent:\n  label: MAME\n  link: mame.md\n"
             "prev:\n  label: MAME files, part 2 of 8\n  link: mame-files-2.md\n"
             "next:\n  label: MAME files, part 4 of 8\n  link: mame-files-4.md\n"
-            f"searchWeight: {gs.search_weight(Path('emulators/mame-files-3.md'), 'part')}\n"
+            f"searchWeight: {decorate.search_weight(Path('emulators/mame-files-3.md'), 'part')}\n"
             "---\n\n# MAME files, part 3 of 8\n\nPart of [MAME](mame.md). "
             "This part holds 196 entries, `a.zip` to `b.zip`.\n"
         )
@@ -199,9 +203,9 @@ class PartPages(unittest.TestCase):
             path = Path(tmp) / "emulators" / "mame-files-3.md"
             path.parent.mkdir()
             path.write_text(page, encoding="utf-8")
-            gs.PART_PAGES.add("emulators/mame-files-3.md")
-            self.addCleanup(gs.PART_PAGES.discard, "emulators/mame-files-3.md")
-            gs.decorate_markdown_pages(Path(tmp))
+            descriptions.PART_PAGES.add("emulators/mame-files-3.md")
+            self.addCleanup(descriptions.PART_PAGES.discard, "emulators/mame-files-3.md")
+            decorate.decorate_markdown_pages(Path(tmp))
             front = _front(path.read_text(encoding="utf-8"))
         self.assertEqual(front["searchWeight"], 0.5)
         self.assertEqual(front["prev"], {"label": "MAME files, part 2 of 8",
@@ -223,71 +227,71 @@ class PartPages(unittest.TestCase):
 
 class Descriptions(unittest.TestCase):
     def test_titles_say_bios_files(self) -> None:
-        saved = dict(gs.PAGE_DATA)
-        self.addCleanup(lambda: (gs.PAGE_DATA.clear(), gs.PAGE_DATA.update(saved)))
-        gs.PAGE_DATA["emulators/duckstation.md"] = {"hasPart": [{"name": "scph5501.bin"}]}
-        self.assertEqual(gs._browser_title(Path("emulators/duckstation.md"), "DuckStation"),
+        saved = dict(descriptions.PAGE_DATA)
+        self.addCleanup(lambda: (descriptions.PAGE_DATA.clear(), descriptions.PAGE_DATA.update(saved)))
+        descriptions.PAGE_DATA["emulators/duckstation.md"] = {"hasPart": [{"name": "scph5501.bin"}]}
+        self.assertEqual(descriptions._browser_title(Path("emulators/duckstation.md"), "DuckStation"),
                          "DuckStation BIOS files")
-        self.assertEqual(gs._browser_title(Path("systems/sega.md"), "Sega"), "Sega BIOS files")
-        self.assertEqual(gs._browser_title(Path("systems/sega-dreamcast.md"), "Sega: Dreamcast"),
+        self.assertEqual(descriptions._browser_title(Path("systems/sega.md"), "Sega"), "Sega BIOS files")
+        self.assertEqual(descriptions._browser_title(Path("systems/sega-dreamcast.md"), "Sega: Dreamcast"),
                          "Dreamcast BIOS files (Sega)")
 
     def test_an_emulator_page_is_described_by_its_intro(self) -> None:
-        saved = dict(gs.PAGE_DATA)
-        self.addCleanup(lambda: (gs.PAGE_DATA.clear(), gs.PAGE_DATA.update(saved)))
-        gs.PAGE_DATA["emulators/duckstation.md"] = {"hasPart": [{"name": "scph5501.bin"}]}
+        saved = dict(descriptions.PAGE_DATA)
+        self.addCleanup(lambda: (descriptions.PAGE_DATA.clear(), descriptions.PAGE_DATA.update(saved)))
+        descriptions.PAGE_DATA["emulators/duckstation.md"] = {"hasPart": [{"name": "scph5501.bin"}]}
         body = ("# DuckStation\n\nDuckStation emulates Sony PlayStation. It picks the BIOS for "
                 "the game's region.\n\n<details>\n\nThe installer finds the platform.\n")
-        text = gs._page_description(body, Path("emulators/duckstation.md"), "DuckStation")
+        text = descriptions._page_description(body, Path("emulators/duckstation.md"), "DuckStation")
         self.assertTrue(text.startswith("DuckStation emulates Sony PlayStation."))
         self.assertNotIn("source-pinned", text)
 
     def test_a_page_whose_files_come_with_the_app_promises_none(self) -> None:
         """DaedalusX64's three files come with the app. The result read
         "DaedalusX64 BIOS files" over "DaedalusX64 emulates Nintendo 64."."""
-        saved, shipped = dict(gs.PAGE_DATA), set(gs.NOTHING_TO_FETCH)
-        self.addCleanup(lambda: (gs.PAGE_DATA.clear(), gs.PAGE_DATA.update(saved),
-                                 gs.NOTHING_TO_FETCH.clear(), gs.NOTHING_TO_FETCH.update(shipped)))
+        saved, shipped = dict(descriptions.PAGE_DATA), set(descriptions.NOTHING_TO_FETCH)
+        self.addCleanup(lambda: (descriptions.PAGE_DATA.clear(), descriptions.PAGE_DATA.update(saved),
+                                 descriptions.NOTHING_TO_FETCH.clear(), descriptions.NOTHING_TO_FETCH.update(shipped)))
         with open(REPO_ROOT / "emulators" / "daedalusx64.yml", encoding="utf-8") as handle:
-            gs.record_emulator_page("daedalusx64", yaml.safe_load(handle))
+            structured.record_emulator_page("daedalusx64", yaml.safe_load(handle))
         key = Path("emulators/daedalusx64.md")
-        self.assertEqual(gs._browser_title(key, "DaedalusX64"), "DaedalusX64 emulator")
+        self.assertEqual(descriptions._browser_title(key, "DaedalusX64"), "DaedalusX64 emulator")
         body = "# DaedalusX64\n\nDaedalusX64 emulates Nintendo 64.\n"
-        self.assertEqual(gs._page_description(body, key, "DaedalusX64"),
+        self.assertEqual(descriptions._page_description(body, key, "DaedalusX64"),
                          "DaedalusX64 emulates Nintendo 64. Every file it reads comes with the app.")
 
     def test_an_emulator_snippet_names_the_files_searched_for(self) -> None:
         """"gba_bios.bin" and "dreamcast bios" landed on pages described as
         "It reads 4 files, none of them required": fewer than 1 in 70 clicked."""
-        saved, snippets = dict(gs.PAGE_DATA), dict(gs.EMULATOR_SNIPPETS)
-        self.addCleanup(lambda: (gs.PAGE_DATA.clear(), gs.PAGE_DATA.update(saved),
-                                 gs.EMULATOR_SNIPPETS.clear(),
-                                 gs.EMULATOR_SNIPPETS.update(snippets)))
+        saved, snippets = dict(descriptions.PAGE_DATA), dict(descriptions.EMULATOR_SNIPPETS)
+        self.addCleanup(lambda: (descriptions.PAGE_DATA.clear(), descriptions.PAGE_DATA.update(saved),
+                                 descriptions.EMULATOR_SNIPPETS.clear(),
+                                 descriptions.EMULATOR_SNIPPETS.update(snippets)))
         with open(REPO_ROOT / "emulators" / "flycast.yml", encoding="utf-8") as handle:
-            gs.record_emulator_page("flycast", yaml.safe_load(handle))
+            structured.record_emulator_page("flycast", yaml.safe_load(handle))
         key = Path("emulators/flycast.md")
         body = ("# Flycast\n\nFlycast emulates Sega Dreamcast. It reads 10 files, 4 of them "
                 "required: without a required file it does not start games.\n")
-        text = gs._page_description(body, key, "Flycast")
+        text = descriptions._page_description(body, key, "Flycast")
         self.assertTrue(text.startswith("Sega Dreamcast BIOS for Flycast: dc_boot.bin, "), text)
         self.assertLessEqual(len(text), 155)
         self.assertFalse(text.endswith("..."), text)
 
     def test_a_switch_emulator_reads_keys(self) -> None:
-        self.assertEqual(gs._snippet_noun(["prod.keys", "dev.keys", "title.keys", "key_retail.bin"], 4, 4), "keys")
-        self.assertEqual(gs._snippet_noun(["prod.keys", "title.keys", "<firmware>.zip", "a.txt"], 3, 4),
+        self.assertEqual(emulatorcards._snippet_noun(["prod.keys", "dev.keys", "title.keys", "key_retail.bin"], 4, 4), "keys")
+        self.assertEqual(emulatorcards._snippet_noun(["prod.keys", "title.keys", "<firmware>.zip", "a.txt"], 3, 4),
                          "keys and firmware")
-        self.assertEqual(gs._snippet_noun(["gba_bios.bin", "gb_bios.bin"], 2, 2), "BIOS")
-        self.assertEqual(gs._snippet_noun(["oot.z64", "oot-mq.z64", "font.bin"], 1, 3), "files")
+        self.assertEqual(emulatorcards._snippet_noun(["gba_bios.bin", "gb_bios.bin"], 2, 2), "BIOS")
+        self.assertEqual(emulatorcards._snippet_noun(["oot.z64", "oot-mq.z64", "font.bin"], 1, 3), "files")
 
     def test_an_any_name_snippet_says_what_to_do(self) -> None:
-        saved = dict(gs.PAGE_DATA)
-        self.addCleanup(lambda: (gs.PAGE_DATA.clear(), gs.PAGE_DATA.update(saved)))
-        gs.PAGE_DATA["emulators/aethersx2.md"] = {"hasPart": [{"name": "ps2.bin"}]}
+        saved = dict(descriptions.PAGE_DATA)
+        self.addCleanup(lambda: (descriptions.PAGE_DATA.clear(), descriptions.PAGE_DATA.update(saved)))
+        descriptions.PAGE_DATA["emulators/aethersx2.md"] = {"hasPart": [{"name": "ps2.bin"}]}
         body = ("# AetherSX2\n\nAetherSX2 needs one Sony PlayStation 2 BIOS file, any region."
                 "\n\n1. Download [`ps2.bin`](../x/).\n2. Put it in this folder:\n")
         self.assertEqual(
-            gs._page_description(body, Path("emulators/aethersx2.md"), "AetherSX2"),
+            descriptions._page_description(body, Path("emulators/aethersx2.md"), "AetherSX2"),
             "AetherSX2 needs one Sony PlayStation 2 BIOS file, any region. Download one "
             "from this page and put it in the folder it shows. Any file name works.")
 
@@ -296,7 +300,7 @@ class Descriptions(unittest.TestCase):
         body = ("# Hydra Castle Labyrinth\n\n<details>\n<summary>Technical notes</summary>\n\n"
                 "Open-source port of E. Hashimoto's 2008 freeware Metroidvania. It reads "
                 "its data folder.\n\n</details>\n")
-        text = gs._emulator_description(body, "emulators/hcl.md", "Hydra Castle Labyrinth", "")
+        text = descriptions._emulator_description(body, "emulators/hcl.md", "Hydra Castle Labyrinth", "")
         self.assertTrue(text.startswith("Hydra Castle Labyrinth: open-source port of E. "
                                         "Hashimoto's 2008 freeware Metroidvania."), text)
         self.assertNotIn("It reads", text)
@@ -307,19 +311,19 @@ class Descriptions(unittest.TestCase):
         body = ("# ROCKNIX\n\nA system for handhelds. [ROCKNIX website](https://rocknix.org).\n\n"
                 "## On the device { #install }\n")
         self.assertEqual(
-            gs._page_description(body, Path("platforms/rocknix.md"), "ROCKNIX"),
+            descriptions._page_description(body, Path("platforms/rocknix.md"), "ROCKNIX"),
             "The BIOS files for ROCKNIX, the folder they go in and the command that installs "
             "them. A system for handhelds.")
 
     def test_a_console_page_is_described_by_its_start_line(self) -> None:
         body = "# Sega: Dreamcast\n\nPart of Sega.\n\n**Start with**: `dc_boot.bin`, `dc_flash.bin`.\n"
-        text = gs._page_description(body, Path("systems/sega-dreamcast.md"), "Sega: Dreamcast")
+        text = descriptions._page_description(body, Path("systems/sega-dreamcast.md"), "Sega: Dreamcast")
         self.assertEqual(text, "Dreamcast BIOS files (Sega). Start with dc_boot.bin, dc_flash.bin.")
 
     def test_the_faq_is_described_by_its_questions(self) -> None:
         body = ("# Common questions\n\n## Are BIOS files needed?\n\nYes.\n\n## Which one?\n\n"
                 "Run the command with --dry-run.\n\n## Zip or not?\n\nZip.\n")
-        text = gs._page_description(body, Path("wiki/faq.md"), "Common questions")
+        text = descriptions._page_description(body, Path("wiki/faq.md"), "Common questions")
         self.assertTrue(text.startswith("Common questions: Are BIOS files needed?"))
 
     def test_a_written_description_wins(self) -> None:
@@ -375,12 +379,12 @@ class GetPagesSitInYourSetup(unittest.TestCase):
 
     def test_a_get_page_is_dated_by_its_release(self):
         """The sitemap gave no date to the pages that change only with a release."""
-        saved = dict(gs.PAGE_DATA)
-        self.addCleanup(lambda: (gs.PAGE_DATA.clear(), gs.PAGE_DATA.update(saved)))
+        saved = dict(descriptions.PAGE_DATA)
+        self.addCleanup(lambda: (descriptions.PAGE_DATA.clear(), descriptions.PAGE_DATA.update(saved)))
         record = json.loads((REPO_ROOT / "release.json").read_text(encoding="utf-8"))
         tag = re.fullmatch(r"v(\d{4})\.(\d{2})\.(\d{2})", record["tag"])
-        gs.generate_get_page("retroarch")
-        self.assertEqual(gs.PAGE_DATA["get/retroarch.md"], {"dateModified": "-".join(tag.groups())})
+        getpages.generate_get_page("retroarch")
+        self.assertEqual(descriptions.PAGE_DATA["get/retroarch.md"], {"dateModified": "-".join(tag.groups())})
 
     def test_no_page_is_left_out_of_every_tab(self):
         nav = _nav()
@@ -573,7 +577,7 @@ class StructuredData(unittest.TestCase):
     release, never a commit id, and no placeholder description."""
 
     def test_versions_name_releases_only(self):
-        release = generate_site.release_versions
+        release = structured.release_versions
         self.assertEqual(release({"core_version": "v0.1-12070"}), {"": "v0.1-12070"})
         self.assertEqual(release({"core_version": "1.5.85"}), {"": "1.5.85"})
         self.assertEqual(release({"core_version": "8dc77b0"}), {})
@@ -592,7 +596,7 @@ class StructuredData(unittest.TestCase):
                          {"": "20200712"})
 
     def test_the_pin_is_never_a_version(self):
-        data = generate_site.emulator_structured_data({
+        data = structured.emulator_structured_data({
             "emulator": "Redream", "source": "https://github.com/x/redream",
             "source_commit": "0123abcd",
         })
@@ -688,7 +692,7 @@ class BuiltSearchSidebarAndHead(unittest.TestCase):
                         self.assertNotIn("description", entry)
                         runs = re.findall(r"[0-9a-f]{7,40}", str(entry.get("version", "")).casefold())
                         self.assertFalse([run for run in runs if run[:7] in pins])
-                        self.assertFalse(generate_site._COMMIT_ID.search(str(entry.get("version", ""))))
+                        self.assertFalse(structured._COMMIT_ID.search(str(entry.get("version", ""))))
         self.assertTrue(seen)
 
 

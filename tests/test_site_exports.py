@@ -15,14 +15,11 @@ from pathlib import Path
 
 import yaml
 
-from generate_site import (
-    _admonition_body,
-    _browser_title,
-    _forge_sources,
-    _source_ref_markdown,
-    decorate_markdown_pages,
-    generate_data_exports,
-)
+from generate_site import _admonition_body, _source_ref_markdown
+from sitegen.sources import _forge_sources
+from sitegen.descriptions import _browser_title
+from sitegen.decorate import decorate_markdown_pages
+from sitegen.dataexports import generate_data_exports
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -187,10 +184,10 @@ class SiteReferenceContracts(unittest.TestCase):
     def test_browser_titles_distinguish_emulators_from_system_pages(self):
         from unittest import mock
 
-        import generate_site
+        from sitegen import descriptions
 
         pages = {"systems/qemu.md": {}, "emulators/qemu.md": {"hasPart": [{"name": "a"}]}}
-        with mock.patch.dict(generate_site.PAGE_DATA, pages, clear=True):
+        with mock.patch.dict(descriptions.PAGE_DATA, pages, clear=True):
             self.assertEqual(_browser_title(Path("emulators/qemu.md"), "QEMU"),
                              "QEMU emulator BIOS files")
             self.assertEqual(_browser_title(Path("systems/qemu.md"), "QEMU"), "QEMU BIOS files")
@@ -307,7 +304,7 @@ class AnEmulatorPageNamesItsRevision(unittest.TestCase):
     refers to sat in the YAML alone, for 178 profiles."""
 
     def test_each_repository_links_its_pinned_commit(self):
-        import generate_site
+        from sitegen import emulatorpage
 
         profile = {
             "emulator": "Caprice32", "type": "libretro",
@@ -316,7 +313,7 @@ class AnEmulatorPageNamesItsRevision(unittest.TestCase):
             "source_commit": "c" * 40, "upstream_commit": "6" * 40,
             "source_branch": "main", "systems": ["amstrad-cpc"], "files": [],
         }
-        page = generate_site.generate_emulator_page("cap32", profile, {"files": {}})
+        page = emulatorpage.generate_emulator_page("cap32", profile, {"files": {}})
         self.assertIn(
             "| Revision | [libretro/libretro-cap32@cccccccccccc]"
             "(https://github.com/libretro/libretro-cap32/commit/" + "c" * 40 + "), "
@@ -332,13 +329,13 @@ class APlatformPageSaysWhereEachFileGoes(unittest.TestCase):
     goes to GC/USA, GC/EUR or GC/JAP."""
 
     def test_same_named_files_show_their_destinations(self):
-        import generate_site
+        from sitegen import platformfiles
 
         regions = ("USA", "EUR", "JAP")
         declared = [{"name": "IPL.bin", "destination": f"dolphin-emu/Sys/GC/{r}/IPL.bin",
                      "sha1": str(i) * 40} for i, r in enumerate(regions)]
         files = [{"name": "IPL.bin", "status": "ok"} for _ in regions]
-        lines = generate_site._render_platform_systems(
+        lines = platformfiles._render_platform_systems(
             {"nintendo-gamecube": files}, {("nintendo-gamecube", "IPL.bin"): declared}, {})
         for region in regions:
             # The folder: the name is before it in the row.
@@ -354,7 +351,7 @@ class AVariantShowsWhoPinsIt(unittest.TestCase):
     def test_the_variant_card_names_its_readers(self):
         import types
 
-        import generate_site
+        from sitegen import systempages
 
         primary = {"name": "advision.zip", "path": "bios/Entex/Adventure Vision/advision.zip",
                    "sha1": "a" * 40, "md5": "b" * 32, "size": 3000}
@@ -364,7 +361,7 @@ class AVariantShowsWhoPinsIt(unittest.TestCase):
                    "provenance": {"tosec": {"name": "x"}}}
         consumers = types.SimpleNamespace(
             platforms={"c" * 40: {"batocera", "retrobat"}}, emulators={"a" * 40: {"mame"}})
-        page = generate_site.generate_system_page(
+        page = systempages.generate_system_page(
             "Entex", {"Adventure Vision": [primary, variant]}, consumers)
         # Another revision of a set sits open beside it.
         block = page[page.index('id="sha1-' + "c" * 12 + '"'):]
@@ -382,7 +379,7 @@ class AFlaggedDumpIsNotVerified(unittest.TestCase):
     attribute, outside the search and invisible on a touch screen."""
 
     def test_flags_and_name(self):
-        from generate_site import _provenance_lines
+        from sitegen.cards import _provenance_lines
 
         lines = _provenance_lines({
             "tosec": {"name": "Sony PlayStation BIOS (v2.2)(Sony)(JP)[b].bin"},
@@ -397,7 +394,7 @@ class AFlaggedDumpIsNotVerified(unittest.TestCase):
         self.assertIn("SCPH-5000 BIOS v2.2", redump)
 
     def test_an_alternate_is_not_a_flag(self):
-        from generate_site import _dump_flags
+        from sitegen.cards import _dump_flags
 
         self.assertEqual(_dump_flags("tosec", {"name": "x (JP)[a].bin"}), [])
         self.assertEqual(_dump_flags("tosec", {"name": "x [o][b].bin"}), ["overdump", "bad dump"])
@@ -410,7 +407,7 @@ class EmulatorPagesPrintWholeHashes(unittest.TestCase):
     whole found nothing."""
 
     def test_full_and_split(self):
-        from generate_site import _hash_spans
+        from sitegen.fields import _hash_spans
 
         sha1 = "0c3de403b524107809fa9308b730d60e8e41ba93"
         self.assertIn(f">{sha1}</code>", _hash_spans(sha1))
@@ -427,7 +424,7 @@ class TheGapsSayWhatToSupplyAndWhere(unittest.TestCase):
     the emulator page only, and Data.rsdk's three rows looked identical."""
 
     def test_export_rows(self):
-        from generate_site import _gap_export_rows
+        from sitegen.dataexports import _gap_export_rows
 
         report = {"bstone": {"emulator": "BStone", "systems": ["blake-stone"], "gap_details": [
             {"name": "EANIM.BS6", "path": "AOG/EANIM.BS6", "source": "missing",
@@ -443,13 +440,13 @@ class AGoneSourceIsSaid(unittest.TestCase):
     owned by someone else, and the page said nothing."""
 
     def test_the_status_row(self):
-        import generate_site
+        from sitegen import emulatorpage
 
         profile = {"emulator": "Citron", "type": "standalone", "systems": [],
                    "source": "https://git.citron-emu.org/citron-emu/Citron",
                    "upstream_gone": "git.citron-emu.org no longer resolves. Observed 2026-09-04.",
                    "source_mirror": "https://example.org/mirror/Citron", "files": []}
-        page = generate_site.generate_emulator_page(
+        page = emulatorpage.generate_emulator_page(
             "citron", profile, {"files": {}, "indexes": {}}, {})
         self.assertIn("| Source status | gone: git.citron-emu.org no longer resolves", page)
         self.assertIn("| Mirror | [https://example.org/mirror/Citron]", page)
@@ -463,7 +460,7 @@ class ASystemCardLandsOnThePlatformsSection(unittest.TestCase):
     def test_section_and_destination(self):
         import types
 
-        from generate_site import _platform_links
+        from sitegen.cards import _platform_links
 
         consumers = types.SimpleNamespace(
             platforms={"s": {"retrodeck"}},
@@ -483,7 +480,7 @@ class ArchiveMembersAreAcceptedHashes(unittest.TestCase):
     calls the one to ask."""
 
     def test_member_rows(self):
-        from generate_site import _accepted_hash_rows
+        from sitegen.dataexports import _accepted_hash_rows
 
         item = {"id": "fbalpha2019", "profile": {"files": [
             {"name": "nmk004.zip", "system": "arcade",
@@ -501,7 +498,7 @@ class PlatformPagesCarryTheirDeclarations(unittest.TestCase):
     5,640 md5 and 2,047 sha1 the platforms declare lived in the prose only."""
 
     def test_parts_and_version(self):
-        from generate_site import platform_structured_data
+        from sitegen.structured import platform_structured_data
 
         data = platform_structured_data("batocera", {"platform": "Batocera", "config": {
             "version": "43.1", "systems": {"sony-playstation": {"files": [
@@ -513,7 +510,7 @@ class PlatformPagesCarryTheirDeclarations(unittest.TestCase):
 
     def test_a_declared_sha256_is_published(self):
         """RetroDECK's dsifirmware.bin sha256 lived in the CSV exports only."""
-        from generate_site import platform_structured_data
+        from sitegen.structured import platform_structured_data
 
         data = platform_structured_data("retrodeck", {"platform": "RetroDECK", "config": {
             "systems": {"nds": {"files": [
@@ -527,9 +524,9 @@ class AnEmulatorPageLinksItsProfile(unittest.TestCase):
     guessing its path or filtering the 5.9 MB emulators.json."""
 
     def test_links(self):
-        import generate_site
+        from sitegen import emulatorpage
 
-        page = generate_site.generate_emulator_page(
+        page = emulatorpage.generate_emulator_page(
             "raze", {"emulator": "Raze", "type": "standalone", "systems": [], "files": []},
             {"files": {}, "indexes": {}}, {})
         self.assertIn("/blob/main/emulators/raze.yml", page)
@@ -540,7 +537,7 @@ class AVersionPerBuildReadsAsVersions(unittest.TestCase):
     """MesenCE's page showed {'standalone': '2.2.1', 'libretro': '2.0.0'}."""
 
     def test_each_build_is_named(self):
-        from generate_site import generate_emulator_page
+        from sitegen.emulatorpage import generate_emulator_page
 
         page = generate_emulator_page(
             "mesence",
@@ -558,7 +555,8 @@ class EmulatorPartsCarryTheirIdentity(unittest.TestCase):
     no part the url of its card."""
 
     def test_identifiers_members_and_url(self):
-        from generate_site import emulator_file_anchors, emulator_structured_data
+        from sitegen.cards import emulator_file_anchors
+        from sitegen.structured import emulator_structured_data
 
         files = [
             {"name": "BS-X.bin", "sha256": "aa,bb"},
@@ -582,15 +580,15 @@ class OnlyAPinnedProfileClaimsAPin(unittest.TestCase):
     def test_the_description_follows_the_pin(self):
         from unittest import mock
 
-        import generate_site
+        from sitegen import descriptions
 
         pages = {
             "emulators/pinned.md": {"about": {"version": "a" * 40}},
             "emulators/redream.md": {},
         }
-        with mock.patch.dict(generate_site.PAGE_DATA, pages, clear=True):
-            pinned = generate_site._page_description("", Path("emulators/pinned.md"), "P")
-            loose = generate_site._page_description("", Path("emulators/redream.md"), "R")
+        with mock.patch.dict(descriptions.PAGE_DATA, pages, clear=True):
+            pinned = descriptions._page_description("", Path("emulators/pinned.md"), "P")
+            loose = descriptions._page_description("", Path("emulators/redream.md"), "R")
         # A search snippet is level 0: the pin is on the page, not in it.
         self.assertNotIn("source-pinned", pinned)
         self.assertNotIn("source-pinned", loose)
@@ -601,7 +599,7 @@ class ADataDirectorySaysWhatItIs(unittest.TestCase):
 
     @mock.patch("sitegen.sources.tree_holds", lambda *_args: True)  # a path the record confirms
     def test_description_origin_mode_and_source(self):
-        from generate_site import generate_emulator_page
+        from sitegen.emulatorpage import generate_emulator_page
 
         profile = {
             "emulator": "Cemu", "type": "standalone + libretro", "systems": [],
@@ -625,13 +623,13 @@ class APlatformPageNamesTheFileItTranscribes(unittest.TestCase):
     batocera-systems revision every md5 on it comes from."""
 
     def test_pinned_and_moving_sources(self):
-        import generate_site
+        from sitegen import platformpage
 
         def page(source: str) -> str:
             cov = {"platform": "P", "config": {"source": source, "systems": {}},
                    "details": [], "total": 0, "verified": 0, "present": 0,
                    "missing": 0, "untested": 0, "mode": "md5"}
-            return generate_site.generate_platform_page("p", cov)
+            return platformpage.generate_platform_page("p", cov)
 
         tag = "https://raw.githubusercontent.com/o/r/batocera-43.1/x/batocera-systems"
         self.assertIn(
@@ -677,7 +675,7 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
         and 335 of its 337 zipped_file entries were unreachable that way."""
         import json as _json
 
-        import generate_site
+        from sitegen import lookup
         from model.platforms import load_platform_config
         from packs.crossref import FileConsumers
         from core.ziptools import build_zip_contents_index
@@ -697,7 +695,7 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
         if archive is None:
             self.skipTest("no copy of naomi2.zip holding the pinned ROM")
         coverages = {"batocera": {"config": {"systems": {"sega-naomi2": {"files": [entry]}}}}}
-        records = generate_site.file_lookup_records(db, coverages, {}, [], None, consumers)
+        records = lookup.file_lookup_records(db, coverages, {}, [], None, consumers)
         found = {(r["owner"], r["value"]) for r in records if r["layer"] == "platform"}
         self.assertIn(("batocera", archive), found)
         pinned = next(r for r in records if r["layer"] == "platform" and r["algorithm"] == "md5")
@@ -710,7 +708,7 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
         import tempfile
         import zlib
 
-        import generate_site
+        from sitegen import lookup
 
         body = b"approved inis\n"
         sha1 = hashlib.sha1(body).hexdigest()
@@ -723,13 +721,13 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
             members = {"dolphin-sys": {"ApprovedInis.json": {"sha1": sha1},
                                        "Stale.json": {"sha1": "ef" * 20}}}
             registry = {"dolphin-sys": {"local_cache": "data/dolphin-sys"}}
-            digests = generate_site._data_member_digests(members, registry, Path(tmp))
+            digests = lookup._data_member_digests(members, registry, Path(tmp))
         self.assertEqual(digests, {sha1: {
             "sha1": sha1, "md5": hashlib.md5(body).hexdigest(),
             "sha256": hashlib.sha256(body).hexdigest(),
             "crc32": f"{zlib.crc32(body):08x}"}})
-        with mock.patch.object(generate_site, "_data_member_digests", return_value=digests):
-            records = generate_site.file_lookup_records(
+        with mock.patch.object(lookup, "_data_member_digests", return_value=digests):
+            records = lookup.file_lookup_records(
                 {"files": {}}, {}, {}, [{"sha1": sha1, "url": "u"}],
                 {"dolphin-sys": {"ApprovedInis.json": {"sha1": sha1}}})
         self.assertEqual({r["algorithm"]: r["value"] for r in records}, digests[sha1])
@@ -738,7 +736,7 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
         import json as _json
         import tempfile
 
-        import generate_site
+        from sitegen import lookup
 
         sha1 = "ab" * 20
         md5 = "490f666e1afb15b7362b406ed1cea246"
@@ -754,10 +752,10 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
                                           {"name": "m.rom", "crc32": "11223344"}]}]},
             "an-alias": {"type": "alias", "files": [{"name": "x", "md5": md5}]},
         }
-        locations = generate_site.file_location_items(db) + [
+        locations = lookup.file_location_items(db) + [
             {"sha1": "cd" * 20, "url": "emulators/dolphin/#sha1-" + "cd" * 6}]
         members = {"dolphin-sys": {"Sys/GC/font.bin": {"sha1": "cd" * 20}}}
-        records = generate_site.file_lookup_records(db, coverages, profiles, locations, members)
+        records = lookup.file_lookup_records(db, coverages, profiles, locations, members)
         found = {(r["layer"], r.get("owner", ""), r["algorithm"], r["value"]): r for r in records}
         self.assertEqual(found[("collection", "", "md5", md5)]["url"],
                          "/retrobios/systems/sony/#sha1-" + "ab" * 6)
@@ -772,7 +770,7 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
         self.assertNotIn(("emulator", "an-alias", "md5", md5), found)
 
         with tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1] / "tmp") as tmp:
-            shards = generate_site.write_lookup_shards(Path(tmp), records, "2026-01-01T00:00:00Z")
+            shards = lookup.write_lookup_shards(Path(tmp), records, "2026-01-01T00:00:00Z")
             folder = Path(tmp) / "lookup"
             names = sorted(path.name for path in folder.glob("*.json"))
             self.assertEqual(len(names), shards)
@@ -794,7 +792,7 @@ class AnArchiveMemberIsFoundByItsCrc(unittest.TestCase):
     def test_each_member_is_a_record_leading_to_its_archive(self):
         import zipfile
 
-        import generate_site
+        from sitegen import lookup
 
         with tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1] / "tmp") as tmp:
             root = Path(tmp)
@@ -804,8 +802,8 @@ class AnArchiveMemberIsFoundByItsCrc(unittest.TestCase):
                 handle.writestr("logica2.u2", b"rom")
                 handle.writestr("sub/kick.rom", b"kick")
             entry = {"name": "a500.zip", "path": "bios/Arcade/Arcade/a500.zip"}
-            records = generate_site._archive_member_records(entry, "ab" * 20, "/retrobios/x/", root)
-            plain = generate_site._archive_member_records(
+            records = lookup._archive_member_records(entry, "ab" * 20, "/retrobios/x/", root)
+            plain = lookup._archive_member_records(
                 {"name": "a.bin", "path": "bios/a.bin"}, "cd" * 20, "/retrobios/y/", root)
         self.assertEqual(plain, [])
         import zlib
@@ -838,12 +836,12 @@ class AWantedDumpIsFoundByItsHash(unittest.TestCase):
     the site knows has it."""
 
     def test_each_hash_of_a_wanted_row_is_a_record(self):
-        import generate_site
+        from sitegen import lookup
 
         row = {"catalog": "redump", "dat": "Sony - PlayStation 2 - BIOS Images",
                "name": "ps2-dvd-212k.bin", "description": "", "size": "4194304",
                "crc32": "1A2B3C4D", "md5": "", "sha1": "5b346eb9258d710609a9855befd35cab8f3a334a"}
-        records = generate_site.file_lookup_records(
+        records = lookup.file_lookup_records(
             {"files": {}, "indexes": {}}, {}, {}, [], wanted=[row, {**row, "dat": "other"}])
         self.assertEqual(records, [
             {"value": "1a2b3c4d", "algorithm": "crc32", "layer": "wanted", "owner": "Redump",
@@ -875,14 +873,14 @@ class AMovedPartCardReachesItsPage(unittest.TestCase):
     def test_a_part_page_sends_a_missing_card_to_the_emulator_page(self):
         import re as _re
 
-        import generate_site
+        from sitegen import emulatorpage
 
         script = (Path(__file__).resolve().parents[1] / "website" / "src" / "scripts"
                   / "site.ts").read_text(encoding="utf-8")
         body = script.split("const followMovedCard = () => {", 1)[1].split("\n};", 1)[0]
         pattern = _re.search(r"const part = /(.+?)/\.exec\(location\.pathname\)", body).group(1)
         files = [{"name": f"f{i}.bin", "path": f"f{i}.bin", "required": True} for i in range(600)]
-        stem = generate_site.emulator_parts("mame", files)[1][0]
+        stem = emulatorpage.emulator_parts("mame", files)[1][0]
         found = _re.search(pattern.replace("\\/", "/"), f"/retrobios/emulators/{stem}/")
         self.assertEqual(found.group(1), "mame")
         self.assertIn("emulators/${part[1]}/#", body)
@@ -897,24 +895,25 @@ class AFileHasAnAddressByContent(unittest.TestCase):
     was not."""
 
     def test_index_page_and_resolver(self):
-        import generate_site
+        from sitegen import cards
+        from sitegen import lookup
 
         db = {"files": {
             "ab" * 20: {"path": "bios/Roland/mt32-roms/mt32_control.rom"},
             "cd" * 20: {"path": "data/elsewhere.bin"},
         }}
         self.assertEqual(
-            generate_site.file_location_items(db),
+            lookup.file_location_items(db),
             [{"sha1": "ab" * 20, "url": "/retrobios/systems/roland/#sha1-" + "ab" * 6}],
         )
-        self.assertIn('id="rb-file-lookup-status"', generate_site.generate_files_page())
+        self.assertIn('id="rb-file-lookup-status"', lookup.generate_files_page())
         script = (Path(__file__).resolve().parents[1] / "website" / "src" / "scripts"
                   / "site.ts").read_text()
         self.assertIn("api/v1/lookup/", script)
         self.assertIn("params.has('sha1')", script)
         from packs.crossref import FileConsumers
 
-        card = "\n".join(generate_site._system_file_card(
+        card = "\n".join(cards._system_file_card(
             {"name": "x.rom", "sha1": "ab" * 20, "size": 1}, FileConsumers({"files": {}}),
         ))
         self.assertIn("/retrobios/files/?sha1=" + "ab" * 20, card)
@@ -929,7 +928,7 @@ class ACardNamesThePacksThatInstallIt(unittest.TestCase):
         import json as _json
 
         from packs.crossref import FileConsumers
-        from generate_site import _installed_places
+        from sitegen.cards import _installed_places
 
         with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as tmp:
             Path(tmp, "retrobat.json").write_text(_json.dumps({
@@ -1029,7 +1028,7 @@ class EveryAcceptedHashIsItsOwnWord(unittest.TestCase):
     search made one token of it and found none but the first."""
 
     def test_a_list_is_split(self):
-        from generate_site import _hash_spans
+        from sitegen.fields import _hash_spans
 
         md5s = ["96cf" + "0" * 28, "d5af" + "0" * 28]
         text = _hash_spans(",".join(md5s))
@@ -1042,7 +1041,7 @@ class AMismatchNamesTheDumpTheCollectionHolds(unittest.TestCase):
     the collection held that exact dump for every row."""
 
     def test_the_held_copy_is_named(self):
-        from generate_site import _held_accepted
+        from sitegen.gaps import _held_accepted
 
         db = {"files": {"s1": {"path": "bios/Microsoft/MSX/CLK/msx-japanese.rom"}},
               "indexes": {"by_sha256": {"ab" * 32: "s1"}, "by_crc32": {"84f68bf9": "s1"}}}
@@ -1061,7 +1060,7 @@ class ADataDirectoryFileCanBeLookedUp(unittest.TestCase):
     def test_a_member_resolves_to_its_emulator_page(self):
         import json as _json
 
-        from generate_site import data_directory_members, file_location_items
+        from sitegen.lookup import data_directory_members, file_location_items
 
         with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as tmp:
             Path(tmp, "retroarch.json").write_text(_json.dumps({"data_directories": [
@@ -1079,7 +1078,7 @@ class ACardSaysWhyAFileIsLeftOut(unittest.TestCase):
     could not tell why a RetroArch pack carried PPSSPP's assets."""
 
     def test_the_build_and_the_platforms_are_named(self):
-        from generate_site import _file_badges
+        from sitegen.emulatorcards import _file_badges
 
         badges = " ".join(_file_badges({"name": "a", "bundled": True, "mode": "standalone"}, True))
         self.assertIn("installed with the standalone emulator", badges)
@@ -1090,7 +1089,7 @@ class AnEmulatorPageOffersItsInstall(unittest.TestCase):
     install them together."""
 
     def test_the_command_names_the_emulator(self):
-        from generate_site import _install_block
+        from sitegen.install import _install_block
 
         profile = yaml.safe_load((ROOT / "emulators" / "pcem.yml").read_text(encoding="utf-8"))
         text = "\n".join(_install_block("pcem", profile))
@@ -1130,9 +1129,9 @@ class NestedProfileBlocksRenderAsLists(unittest.TestCase):
         self.assertIn("<code>a.c:1</code>", html)
 
     def test_platform_details_are_a_list(self):
-        import generate_site
+        from sitegen import fields
 
-        lines = generate_site._render_platform_details(
+        lines = fields._render_platform_details(
             {"platform_details": {"megacd": {"root": "x"}, "note": "y"}}
         )
         try:
@@ -1157,33 +1156,34 @@ class TheOneLinerIsWhereUsersLand(unittest.TestCase):
     options, and the platform and system pages offered only ZIP parts."""
 
     def test_download_page(self):
-        import generate_site
+        from sitegen import whichpack
 
-        page = generate_site.generate_which_pack()
+        page = whichpack.generate_which_pack()
         self.assertIn("Android (Termux", page)
         self.assertIn("/i.ps1))) --check", page)
         self.assertIn("--platform retroarch --dest", page)
 
     def test_platform_and_system_pages(self):
-        import generate_site
+        from sitegen import platformpage
+        from sitegen import systempages
         from packs.crossref import FileConsumers
 
         cov = {"platform": "Batocera", "mode": "md5", "present": 0, "total": 0,
                "verified": 0, "missing": 0, "details": [], "config": {"systems": {}}}
-        page = generate_site.generate_platform_page("batocera", cov)
+        page = platformpage.generate_platform_page("batocera", cov)
         self.assertIn("/i | sh -s -- --platform batocera", page)
         # Batocera runs the command on the device itself, so its page opens on
         # the computer route. A platform detected on Windows gets the
         # PowerShell form, and its command comes before the ZIP.
         cov = dict(cov, platform="RetroArch", mode="existence")
-        page = generate_site.generate_platform_page("retroarch", cov)
+        page = platformpage.generate_platform_page("retroarch", cov)
         self.assertIn("/i.ps1))) --platform retroarch", page)
         self.assertIn("/i | sh -s -- --platform retroarch", page)
         self.assertLess(page.index("--platform retroarch"), page.index("rb-button"))
 
         entry = {"name": "a.bin", "sha1": "a" * 40, "md5": "b" * 32, "size": 3,
                  "path": "bios/Recalbox/MSX/a.bin"}
-        page = generate_site.generate_system_page(
+        page = systempages.generate_system_page(
             "Microsoft", {"MSX": [entry]}, FileConsumers({"files": {}}),
             {"MSX": [("recalbox", "msx1,msx2,msxturbor"), ("batocera", "msx1")]})
         # The whole system id, up to the end of the command.
@@ -1191,7 +1191,7 @@ class TheOneLinerIsWhereUsersLand(unittest.TestCase):
         self.assertIn("--platform batocera --system msx1", page)
 
     def test_a_system_is_offered_only_where_the_manifest_records_it(self):
-        import generate_site
+        from sitegen import cards
         from sitegen import render as siterender
 
         saved = dict(siterender._system_page_map)
@@ -1199,7 +1199,7 @@ class TheOneLinerIsWhereUsersLand(unittest.TestCase):
         siterender.set_system_page_map({"sony-playstation": ("sony", "PlayStation"),
                                         "nowhere": ("sony", "PlayStation")})
         cov = {"retroarch": {"config": {"systems": {"sony-playstation": {}, "nowhere": {}}}}}
-        choices = generate_site.system_install_choices(cov)
+        choices = cards.system_install_choices(cov)
         self.assertEqual(choices["sony"]["PlayStation"], [("retroarch", "sony-playstation")])
 
 
@@ -1208,9 +1208,9 @@ class TheGapPageOpensOnCounts(unittest.TestCase):
     for 5,437 of 5,438 files and "Missing 0", above a table of red cells."""
 
     def test_every_count_is_said(self):
-        import generate_site
+        from sitegen import gaps
 
-        text = generate_site._platform_lists_sentence(5438, 5437, 1, 0)
+        text = gaps._platform_lists_sentence(5438, 5437, 1, 0)
         self.assertIn("Of the 5,438 files", text)
         self.assertIn("5,437 are held", text)
         self.assertIn("1 is held but not verified", text)
@@ -1229,9 +1229,9 @@ class WhichPackDescribesNoPlatformByOpinion(unittest.TestCase):
     def test_no_ranking_words(self):
         import re
 
-        import generate_site
+        from sitegen import whichpack
 
-        page = generate_site.generate_which_pack()
+        page = whichpack.generate_which_pack()
         rows = [line for line in page.splitlines() if line.startswith("| ")]
         found = [
             row for row in rows
@@ -1248,26 +1248,28 @@ class EveryPageLinksItsOwnData(unittest.TestCase):
     it. A system page linked nothing either."""
 
     def test_platform_and_system_documents(self):
-        import generate_site
+        from sitegen import dataexports
+        from sitegen import platformpage
+        from sitegen import systempages
         from packs.crossref import FileConsumers
 
         cov = {"platform": "Batocera", "mode": "md5", "present": 0, "total": 0,
                "verified": 0, "missing": 0, "details": [], "config": {"systems": {}}}
-        page = generate_site.generate_platform_page("batocera", cov)
+        page = platformpage.generate_platform_page("batocera", cov)
         self.assertIn("[JSON](../api/v1/platforms/batocera.json)", page)
         self.assertIn("/blob/main/platforms/batocera.yml)", page)
 
         entry = {"name": "a.bin", "sha1": "a" * 40, "md5": "b" * 32, "size": 3,
                  "path": "bios/Sony/PlayStation/a.bin"}
-        page = generate_site.generate_system_page(
+        page = systempages.generate_system_page(
             "Sony", {"PlayStation": [entry]}, FileConsumers({"files": {}}))
         self.assertIn(" as JSON](../api/v1/systems/sony.json)", page)
 
-        item = generate_site.system_export_item("sony", "Sony", {"PlayStation": [entry]})
+        item = dataexports.system_export_item("sony", "Sony", {"PlayStation": [entry]})
         self.assertEqual(item["consoles"]["PlayStation"][0]["sha1"], "a" * 40)
         with tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1] / "tmp") as tmp:
             path = Path(tmp) / "sony.json"
-            generate_site.write_single_item(path, "systems", item, "2026-10-21T00:00:00Z")
+            dataexports.write_single_item(path, "systems", item, "2026-10-21T00:00:00Z")
             document = json.loads(path.read_text())
         self.assertEqual(document["count"], 1)
         try:
