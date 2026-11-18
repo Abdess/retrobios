@@ -1,7 +1,7 @@
 """The measurements the site shows, from the records under measurements/.
 
 The records are core probe runs, one append-only .jsonl per emulator with one
-full record per line (measurement_records.py). From them the build writes,
+full record per line (model/measurements.py). From them the build writes,
 never committed:
 
   public/data/measurements/index.json        the compact index the explorer and

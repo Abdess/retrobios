@@ -843,7 +843,7 @@ def _format_errors() -> list[str]:
 
 def _measurement_errors(root: Path | None = None) -> list[str]:
     """Every record line under measurements/, against its schema and the
-    rules measurement_records.read_records applies."""
+    rules model.measurements.read_records applies."""
     from model import measurements as mr
 
     root = root or ROOT

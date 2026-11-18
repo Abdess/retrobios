@@ -39,6 +39,7 @@ scripts/                 all tooling (Python and pyyaml, jsonschema for schema c
   scraper/targets/       hardware target scrapers (one *_targets_scraper.py per platform)
   exporter/              native format exporters (batocera, recalbox, emudeck...)
   sitegen/               the site and README generators: pages, navigation, data files
+  probes/                real-condition runs: the campaign, the pack and region probes
 install/                 JSON install manifests per platform
   targets/               JSON target manifests per platform (cores per architecture)
 install.py               the installer, with install.sh and install.ps1 to start it,

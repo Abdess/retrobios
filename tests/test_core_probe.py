@@ -26,7 +26,7 @@ from pathlib import Path
 from typing import ClassVar
 
 import core_probe
-from model import measurements as measurement_records
+from model import measurements as mr
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -313,7 +313,7 @@ class OracleTests(unittest.TestCase):
         again with the oracle as it stands, every repetition of that run
         boots, so a frame copied wrong or a stage mislabelled fails here."""
         data, _ = core_probe.load_oracle(core_probe.DEFAULT_ORACLE)
-        records = {s.record["id"]: s.record for s in measurement_records.read_records(REPO_ROOT)}
+        records = {s.record["id"]: s.record for s in mr.read_records(REPO_ROOT)}
         checked = 0
         for item in data.get("content") or ():
             for library, block in item["references"].items():
@@ -526,7 +526,7 @@ class FakeCoreTests(unittest.TestCase):
                           for p in record_dir.rglob("*") if p.is_file() and ".git" not in p.parts],
                          ["measurements/fake.jsonl"])
         line = json.loads((record_dir / "measurements" / "fake.jsonl").read_text())
-        self.assertEqual(measurement_records.check_line(line), [])
+        self.assertEqual(mr.check_line(line), [])
         # The line is the record the run printed, id included.
         self.assertEqual(line, record)
         try:
@@ -600,7 +600,7 @@ class FakeCoreTests(unittest.TestCase):
         self.assertEqual(again["variants"][0]["repetitions"][0]["logs"], first["variants"][0]["repetitions"][0]["logs"])
         self.assertEqual(again["recorded_at"], first["recorded_at"])
         self.assertIn("judged_at", again)
-        self.assertEqual(measurement_records.check_line(again), [])
+        self.assertEqual(mr.check_line(again), [])
         self.assert_schema(again)
         # Judged once: a second pass has nothing to add.
         with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
@@ -633,7 +633,7 @@ class FakeCoreTests(unittest.TestCase):
         except ImportError:
             return
         schema = json.loads((REPO_ROOT / "schemas" / "core-probe-record.schema.json").read_text())
-        sealed = measurement_records.seal({**record, "emulator": "fake", "subject": "s"})
+        sealed = mr.seal({**record, "emulator": "fake", "subject": "s"})
         self.assertEqual([e.message for e in Draft202012Validator(schema).iter_errors(sealed)], [])
 
     def test_a_run_waits_for_the_host_lock_and_frees_it(self) -> None:

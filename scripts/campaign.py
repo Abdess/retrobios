@@ -21,7 +21,7 @@ and error patterns of tests/campaign/oracle.yml.
   bench      with --bench only: the content timed, warm-up excluded
 
 Every run is a record in measurements/<emulator>.jsonl. The fixed rule table
-(campaign_rules.py) reads the verdicts, never a comparison of frames. A
+(probes/rules.py) reads the verdicts, never a comparison of frames. A
 verdict the table settles is written into the profile with the record ids
 as `evidence:`. Any other goes to measurements/findings.jsonl, where the
 site lists it as open. Each pass adds one line to

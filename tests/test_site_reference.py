@@ -1164,19 +1164,19 @@ class SourceLinksOnlyWhereTheFileIs(unittest.TestCase):
     def test_every_rendered_link_is_recorded(self):
         record = json.loads(sources.SOURCE_PATHS.read_text(encoding="utf-8"))
         pages = sorted(_built(DOCS / "emulators").rglob("*.md*")) + sorted(DOCS.glob("gaps*.md*"))
-        from model import measurements as measurement_records
+        from model import measurements as mr
 
         # A Tested block links a record line and its data file in this
         # repository. The records are append-only, so a file a permalink
         # names is still in the tree.
-        records = set(measurement_records.tree_files(REPO_ROOT))
+        records = set(mr.tree_files(REPO_ROOT))
         checked, stray = 0, []
         for page in pages:
             for found in _PERMALINK.finditer(page.read_text(encoding="utf-8")):
                 key = f"{found['host']}/{found['slug']}@{found['pin']}"
                 path = urllib.parse.unquote(found["path"])
                 if "/Abdess/retrobios/" in found[0]:
-                    if path.startswith(f"{measurement_records.RECORDS_DIR}/") and path not in records:
+                    if path.startswith(f"{mr.RECORDS_DIR}/") and path not in records:
                         stray.append((page.name, key, path))
                     continue
                 checked += 1
