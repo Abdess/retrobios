@@ -97,7 +97,7 @@ from resolve.packfiles import (
 if TYPE_CHECKING:
     pass
 from packs.archive import DamagedArchiveError
-from packs.bysystem import generate_split_packs
+from packs.platformpack import generate_split_packs
 from packs.datatrees import _MISSING_DATA_DIRS
 from packs.emulatorpack import generate_emulator_pack, generate_system_pack
 from packs.finalize import _baseline_shortfall, verify_and_finalize_packs

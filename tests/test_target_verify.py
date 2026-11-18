@@ -137,7 +137,7 @@ class ASplitBuildsOnlyTheTargetsSystems(unittest.TestCase):
         from unittest import mock
 
         import generate_pack
-        from packs import bysystem
+        from packs import platformpack as packs_platformpack
         from packs import platformpack
         from model.profiles import load_emulator_profiles
 
@@ -154,7 +154,7 @@ class ASplitBuildsOnlyTheTargetsSystems(unittest.TestCase):
                 mock.patch.object(platformpack, "generate_pack", record), \
                 mock.patch.object(generate_pack, "_collect_emulator_extras",
                                   return_value=[]):
-            bysystem.generate_split_packs(
+            packs_platformpack.generate_split_packs(
                 "retroarch", platforms, {"files": {}}, "bios", out,
                 emu_profiles=profiles,
                 target_cores=_target_cores_for("retroarch", "switch", platforms),
@@ -208,7 +208,7 @@ class TheSplitDirectoryReadsThePackStem(unittest.TestCase):
         from unittest import mock
 
         import generate_pack
-        from packs import bysystem
+        from packs import platformpack as packs_platformpack
         from packs import naming
 
         config = {"platform": "Foo: Bar", "version": "release/1.22", "systems": {}}
@@ -217,7 +217,7 @@ class TheSplitDirectoryReadsThePackStem(unittest.TestCase):
                                   return_value=config), \
                 mock.patch.object(generate_pack, "_collect_emulator_extras",
                                   return_value=[]):
-            bysystem.generate_split_packs(
+            packs_platformpack.generate_split_packs(
                 "foo", "platforms", {"files": {}}, "bios", out, emu_profiles={},
             )
             stem = naming._platform_pack_stem(["foo"], "foo", "platforms")

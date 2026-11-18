@@ -22,7 +22,7 @@ from core.hashing import compute_hashes
 from model.profiles import load_emulator_profiles
 from packs.archive import PackRecord
 from packs.platformpack import generate_pack
-from packs.bysystem import generate_split_packs
+from packs.platformpack import generate_split_packs
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

@@ -32,7 +32,6 @@ from model.platforms import load_platform_config, _platform_config_cache
 from model.profiles import _emulator_profiles_cache
 import generate_db
 from packs import archive as packs_archive
-from packs import bysystem
 from packs import manifest as packs_manifest
 from packs import platformpack
 import install
@@ -214,7 +213,7 @@ class PackNarrowing(_Fixture):
     def test_split_parts_add_up_to_the_narrowed_pack(self):
         printed = io.StringIO()
         with contextlib.redirect_stdout(printed):
-            parts = bysystem.generate_split_packs(
+            parts = platformpack.generate_split_packs(
                 "handheld", str(self.platforms), self.db, str(self.bios), str(self.out),
                 emulators_dir=str(self.emulators), emu_profiles=PROFILES,
                 offline=True, no_game_data=True,

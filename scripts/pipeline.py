@@ -863,7 +863,7 @@ def check_split_packs(
     comparison of this step.
     """
     from packs import archive
-    from packs import bysystem
+    from packs import platformpack as packs_platformpack
     from packs import platformpack
     from resolve import packfiles as packresolve
     from core.ziptools import build_zip_contents_index
@@ -897,7 +897,7 @@ def check_split_packs(
                 platformpack.generate_pack(
                     platform, platforms_dir, db, "bios", "", record=full, **args,
                 )
-                bysystem.generate_split_packs(
+                packs_platformpack.generate_split_packs(
                     platform, platforms_dir, db, "bios", "", records=parts, **args,
                 )
             lines = split_differences(full, parts, archive._same_bytes)
