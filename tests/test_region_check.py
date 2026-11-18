@@ -8,7 +8,7 @@ import tests
 import unittest
 from pathlib import Path
 
-import region_check as rc
+from probes import regioncheck
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -37,27 +37,27 @@ def record(rid: str, staged: list[str], opened: list[str], hashes: list, verdict
 
 class Entries(unittest.TestCase):
     def test_only_regional_bios_of_the_system_in_the_libretro_build(self) -> None:
-        names = [e["name"] for e in rc.region_entries(PROFILE, "sony-playstation")]
+        names = [e["name"] for e in regioncheck.region_entries(PROFILE, "sony-playstation")]
         self.assertEqual(names, ["scph5500.bin", "scph5501.bin", "scph5502.bin"])
 
     def test_variants_split_by_the_game_region(self) -> None:
-        entries = rc.region_entries(PROFILE, "sony-playstation")
-        plan = rc.plan_variants(entries, "japan", lambda e: Path("/bios") / e["name"])
+        entries = regioncheck.region_entries(PROFILE, "sony-playstation")
+        plan = regioncheck.plan_variants(entries, "japan", lambda e: Path("/bios") / e["name"])
         self.assertEqual(sorted(plan["full"]), ["scph5500.bin", "scph5501.bin", "scph5502.bin"])
         self.assertEqual(sorted(plan["own"]), ["scph5500.bin"])
         self.assertEqual(sorted(plan["others"]), ["scph5501.bin", "scph5502.bin"])
 
     def test_a_file_the_collection_lacks_is_in_no_variant(self) -> None:
-        entries = rc.region_entries(PROFILE, "sony-playstation")
-        plan = rc.plan_variants(entries, "europe",
+        entries = regioncheck.region_entries(PROFILE, "sony-playstation")
+        plan = regioncheck.plan_variants(entries, "europe",
                                 lambda e: None if e["name"] == "scph5502.bin" else Path(e["name"]))
         self.assertEqual(plan["own"], {})
         self.assertNotIn("scph5502.bin", plan["full"])
 
     def test_subject_names_core_game_and_variant(self) -> None:
-        slug = rc.subject("mednafen_psx", "Puzzle Bobble 2 (Japan)", "own")
+        slug = regioncheck.subject("mednafen_psx", "Puzzle Bobble 2 (Japan)", "own")
         self.assertEqual(slug, "region-mednafen_psx-puzzle-bobble-2-japan-own")
-        self.assertRegex(slug, rc.SUBJECT)
+        self.assertRegex(slug, regioncheck.SUBJECT)
 
 
 class BusyHost(unittest.TestCase):
@@ -74,23 +74,23 @@ class BusyHost(unittest.TestCase):
         def pause(seconds: float) -> None:
             now[0] += seconds
 
-        proc = rc.probe_when_idle(["probe"], max_wait, clock=lambda: now[0], pause=pause, runner=runner)
+        proc = regioncheck.probe_when_idle(["probe"], max_wait, clock=lambda: now[0], pause=pause, runner=runner)
         return proc.returncode, len(calls)
 
     def test_a_refused_run_is_tried_again_once_the_host_settles(self) -> None:
-        self.assertEqual(self._run([rc.BUSY, rc.BUSY, 0], 600), (0, 3))
+        self.assertEqual(self._run([regioncheck.BUSY, regioncheck.BUSY, 0], 600), (0, 3))
 
     def test_it_gives_up_after_the_wait(self) -> None:
-        code, calls = self._run([rc.BUSY], 60)
-        self.assertEqual(code, rc.BUSY)
-        self.assertEqual(calls, 60 // rc.POLL_S + 1)
+        code, calls = self._run([regioncheck.BUSY], 60)
+        self.assertEqual(code, regioncheck.BUSY)
+        self.assertEqual(calls, 60 // regioncheck.POLL_S + 1)
 
     def test_another_failure_is_not_retried(self) -> None:
         self.assertEqual(self._run([1, 0], 600), (1, 1))
 
 
 class Outcome(unittest.TestCase):
-    ENTRIES = rc.region_entries(PROFILE, "sony-playstation")
+    ENTRIES = regioncheck.region_entries(PROFILE, "sony-playstation")
     ALL = ["scph5500.bin", "scph5501.bin", "scph5502.bin"]
 
     def test_locked_bios_by_verdict(self) -> None:
@@ -100,13 +100,13 @@ class Outcome(unittest.TestCase):
             "others": record("x", self.ALL[1:], [], [[0, "b"]], "bios_error", loaded=False),
             "pack": record("p", ["scph5500.bin"], ["scph5500.bin"], [[0, "a"]], "boots"),
         }
-        result = rc.outcome(records, self.ENTRIES, "japan")
+        result = regioncheck.outcome(records, self.ENTRIES, "japan")
         self.assertEqual(result["selected"], ["scph5500.bin"])
         self.assertEqual(result["claim"], "confirmed")
         self.assertEqual((result["own_boots"], result["others_boot"], result["pack_boots"]),
                          (True, False, True))
         self.assertEqual(result["judged_by"], "verdict")
-        self.assertEqual(rc.sentence("japan", result),
+        self.assertEqual(regioncheck.sentence("japan", result),
                          "The Japanese BIOS boots the Japanese game, the other regions' BIOS do not.")
 
     def test_interim_rule_counts_the_same_frames_as_a_boot_and_nothing_else(self) -> None:
@@ -115,44 +115,44 @@ class Outcome(unittest.TestCase):
             "own": record("o", ["scph5501.bin"], ["scph5501.bin"], [[0, "a"], [10, "b"]]),
             "others": record("x", ["scph5500.bin", "scph5502.bin"], ["scph5500.bin"], [[0, "a"], [10, "c"]]),
         }
-        result = rc.outcome(records, self.ENTRIES, "north-america")
+        result = regioncheck.outcome(records, self.ENTRIES, "north-america")
         self.assertEqual(result["judged_by"], "full_run_frames")
         self.assertTrue(result["own_boots"])
         # Other frames are no verdict: a US disc reaches its game on the
         # Japanese BIOS through another licence screen.
         self.assertIsNone(result["others_boot"])
         self.assertIsNone(result["pack_boots"])
-        self.assertEqual(rc.sentence("north-america", result),
+        self.assertEqual(regioncheck.sentence("north-america", result),
                          "The US BIOS boots the US game. The other regions' BIOS have no verdict yet.")
 
     def test_no_interim_answer_when_the_full_run_fails(self) -> None:
         records = {"full": record("f", self.ALL, [], [[0, "a"]], "bios_error"),
                    "own": record("o", ["scph5502.bin"], [], [[0, "a"]])}
-        result = rc.outcome(records, self.ENTRIES, "europe")
+        result = regioncheck.outcome(records, self.ENTRIES, "europe")
         self.assertIsNone(result["own_boots"])
         self.assertEqual(result["claim"], "unread")
 
     def test_a_core_reading_another_region_contradicts_the_claim(self) -> None:
         records = {"full": record("f", self.ALL, ["scph5501.bin"], [[0, "a"]], "boots")}
-        self.assertEqual(rc.outcome(records, self.ENTRIES, "japan")["claim"], "contradicted")
+        self.assertEqual(regioncheck.outcome(records, self.ENTRIES, "japan")["claim"], "contradicted")
 
     def test_a_core_opening_every_region_file_settles_nothing(self) -> None:
         """PCSX-ReARMed opens the three regional files whatever the disc."""
         records = {"full": record("f", self.ALL, self.ALL, [[0, "a"]], "boots")}
-        self.assertEqual(rc.outcome(records, self.ENTRIES, "japan")["claim"], "ambiguous")
+        self.assertEqual(regioncheck.outcome(records, self.ENTRIES, "japan")["claim"], "ambiguous")
 
     def test_region_free_bios(self) -> None:
         records = {"full": record("f", self.ALL, ["scph5501.bin"], [[0, "a"]], "boots"),
                    "own": record("o", ["scph5502.bin"], [], [[0, "a"]], "boots"),
                    "others": record("x", ["scph5501.bin"], ["scph5501.bin"], [[0, "a"]], "boots")}
-        result = rc.outcome(records, self.ENTRIES, "europe")
+        result = regioncheck.outcome(records, self.ENTRIES, "europe")
         # The log names no BIOS: the boot is not said to be the other region's.
-        self.assertEqual(rc.sentence("europe", result),
+        self.assertEqual(regioncheck.sentence("europe", result),
                          "The European BIOS boots the European game, and with the others' files on a "
                          "BIOS its log does not name.")
         records["others"] = record("x", ["scph5501.bin"], ["scph5501.bin"], [[0, "a"]], "boots",
                                    bios_used="staged:scph5501.bin")
-        self.assertEqual(rc.sentence("europe", rc.outcome(records, self.ENTRIES, "europe")),
+        self.assertEqual(regioncheck.sentence("europe", regioncheck.outcome(records, self.ENTRIES, "europe")),
                          "The European BIOS boots the European game, and so does scph5501.bin, "
                          "another region's BIOS.")
 
@@ -165,14 +165,14 @@ class Outcome(unittest.TestCase):
                                  bios_used="staged:scph5501.bin"),
                    "others": record("x", ["scph5500.bin", "scph5502.bin"], ["scph5500.bin", "scph5502.bin"],
                                     [[0, "a"]], "boots", bios_used="builtin")}
-        result = rc.outcome(records, self.ENTRIES, "north-america")
-        text = rc.sentence("north-america", result)
+        result = regioncheck.outcome(records, self.ENTRIES, "north-america")
+        text = regioncheck.sentence("north-america", result)
         self.assertEqual(text, "The US BIOS boots the US game, and on its built-in BIOS with the "
                                "others' files refused.")
         self.assertNotIn("so do the other regions", text)
 
     def test_no_own_run(self) -> None:
-        self.assertEqual(rc.sentence("japan", rc.outcome({}, self.ENTRIES, "japan")),
+        self.assertEqual(regioncheck.sentence("japan", regioncheck.outcome({}, self.ENTRIES, "japan")),
                          "The Japanese game has no run with its own BIOS yet.")
 
 
@@ -184,14 +184,14 @@ class ContentList(unittest.TestCase):
 
         import yaml
 
-        data = yaml.safe_load(rc.CONTENT_FILE.read_text(encoding="utf-8"))
-        content = rc.load_content()
+        data = yaml.safe_load(regioncheck.CONTENT_FILE.read_text(encoding="utf-8"))
+        content = regioncheck.load_content()
         uncovered = data.get("uncovered") or {}
         profiles = load_emulator_profiles(str(ROOT / "emulators"))
         regional: set[str] = set()
         for profile in profiles.values():
             for system in profile.get("systems") or ():
-                regions = {r for e in rc.region_entries(profile, system) for r in rc.regions_of(e)}
+                regions = {r for e in regioncheck.region_entries(profile, system) for r in regioncheck.regions_of(e)}
                 if {"japan", "north-america", "europe"} <= regions:
                     regional.add(system)
         for system in sorted(regional):
