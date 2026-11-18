@@ -29,7 +29,7 @@ except ImportError:
     jsonschema = None
 import install
 from scripts import pipeline, region_audit
-from scripts import region
+from scripts.resolve import regions
 from scripts.resolve.localfile import resolve_local_file
 from scripts.core.ziptools import safe_extract_zip
 from scripts.generate_pack import (
@@ -1814,9 +1814,9 @@ class RegionRegressions(unittest.TestCase):
                 "files": [{"name": "bios.bin", "path": "sys/bios.bin"}],
             },
         }
-        index = region.build_region_index(profiles)
-        self.assertEqual(region.lookup_regions(index, "sys/bios.bin", "bios.bin"), set())
-        drops = region.resolve_region_drops(
+        index = regions.build_region_index(profiles)
+        self.assertEqual(regions.lookup_regions(index, "sys/bios.bin", "bios.bin"), set())
+        drops = regions.resolve_region_drops(
             {"system": [("sys/bios.bin", "bios.bin")]},
             index,
             ["north-america"],
@@ -1833,13 +1833,13 @@ class RegionRegressions(unittest.TestCase):
                 ],
             }
         }
-        index = region.build_region_index(profiles)
+        index = regions.build_region_index(profiles)
         groups = {"system": [("ntsc.bin", "ntsc.bin"), ("pal.bin", "pal.bin")]}
         self.assertEqual(
-            region.resolve_region_drops(groups, index, ["north-america"]),
+            regions.resolve_region_drops(groups, index, ["north-america"]),
             {"pal.bin"},
         )
-        self.assertEqual(region.resolve_region_drops(groups, index, ["europe"]), set())
+        self.assertEqual(regions.resolve_region_drops(groups, index, ["europe"]), set())
 
     def test_multi_system_emulator_uses_separate_region_groups(self):
         profile = {"systems": ["odyssey2", "videopac"]}

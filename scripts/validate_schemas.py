@@ -134,7 +134,7 @@ def _config_records_without_evidence(path: Path, document: object) -> list[str]:
     """
     if not isinstance(document, dict):
         return []
-    from scraper.shell_launchers import config_ref, is_feature_ref
+    from resolve.launcherrefs import config_ref, is_feature_ref
 
     out: list[str] = []
     for index, record in enumerate(document.get("launchers") or []):

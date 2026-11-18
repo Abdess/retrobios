@@ -552,11 +552,11 @@ def emulator_variants(profiles: list[dict], full: bool) -> list[tuple[str, dict]
     sampled as check_narrowed_packs samples them unless *full*. A profile
     without a regional file has nothing --region could withdraw.
     """
-    import region as region_mod
+    from model import region
 
     regions = sorted({
         r for profile in profiles for fe in profile.get("files") or []
-        for r in region_mod.normalize_declared(fe.get("region"))
+        for r in region.normalize_declared(fe.get("region"))
     })
     variants: list[tuple[str, dict]] = [("", {}), (" --required-only", {"required_only": True})]
     variants += [
@@ -701,11 +701,11 @@ def narrowed_variants(
     target, every system, --no-game-data and --required-only. Without
     *full*, regions, targets and systems are sampled (_matrix_coverage).
     """
-    import region as region_mod
+    from resolve import regions as resolve_regions
     from model.targets import list_available_targets
 
     regions = sorted({
-        r for entry in region_mod.platform_region_index(config, profiles).values()
+        r for entry in resolve_regions.platform_region_index(config, profiles).values()
         for r in entry["regions"]
     })
     targets = [t["name"] for t in list_available_targets(platform, platforms_dir)]

@@ -12,7 +12,7 @@ from pathlib import Path
 import yaml
 
 from model.profiles import load_emulator_profiles
-from region import REGIONS
+from model.region import REGIONS
 
 ROOT = Path(__file__).resolve().parent.parent
 

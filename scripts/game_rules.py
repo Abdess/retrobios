@@ -20,7 +20,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from model.profiles import load_emulator_profiles
-from region import REGIONS, normalize_declared
+from model.region import REGIONS, normalize_declared
 from model.safeparse import yaml_load
 
 REGIONS_FILE = Path("games") / "regions.yml"

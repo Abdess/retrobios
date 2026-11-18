@@ -53,7 +53,7 @@ from .configgen_launchers import (
     _assigned_name,
     end_line,
 )
-from .shell_launchers import LauncherPatternMissing, Script, source_ref
+from scraper.shell_launchers import LauncherPatternMissing, Script, source_ref
 
 CONFIGGEN = "package/system/knulli-configgen/configgen/configgen"
 GENERATORS = f"{CONFIGGEN}/generators"

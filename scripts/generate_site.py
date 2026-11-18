@@ -88,7 +88,7 @@ from provenance_report import build_report, distinct_missing, profile_needs
 import sitemarkup as markup
 import siteentries
 import siteinputs
-import retired_files
+from model import retired as model_retired
 import siteagents
 import sitediagrams
 import sitestarlight
@@ -1697,7 +1697,7 @@ def generate_data_exports(
     }
     write_lookup_shards(
         api, file_lookup_records(db, coverages, profiles, locations, members, consumers,
-                                 retired_files.load(_REPO_ROOT / "retired.json"), wanted),
+                                 model_retired.load(_REPO_ROOT / "retired.json"), wanted),
         generated_at, commit,
     )
     for filename, (kind, items) in envelopes.items():
@@ -6814,7 +6814,7 @@ def _region_order() -> dict[str, int]:
     for every region is a region-free stand-in for the BIOS of each one:
     the PlayStation section opened on psxonpsp660.bin, which one emulator
     requires among the BIOS it accepts, above the scph files most read."""
-    from region import REGION_TREE, WORLD
+    from model.region import REGION_TREE, WORLD
 
     ordered = []
     for parent, members in REGION_TREE.items():
@@ -7460,7 +7460,7 @@ def _runs_without(words: _GroupWords) -> list[tuple[str, str]]:
 def _region_lines(words: _GroupWords) -> tuple[list[tuple[str, str]], set[str], set[str]]:
     """The lines of the files picked by region, the emulators they answer
     and the names they give."""
-    from region import _PARENT
+    from model.region import _PARENT
 
     group = words.group
     order = _region_order()
@@ -8250,7 +8250,7 @@ def _region_words(value: object, most: int = 0) -> str:
     """A region: value in words. ``most`` caps the regions named, the rest
     counted: one Saturn BIOS serves seven."""
     raw = value if isinstance(value, list) else [value] if value else []
-    from region import label
+    from model.region import label
 
     words = [_REGION_WORDS.get(str(r)) or label(str(r)) for r in raw]
     if most and len(words) > most:

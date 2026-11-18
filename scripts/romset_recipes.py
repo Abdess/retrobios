@@ -57,7 +57,7 @@ from model.database import load_database
 from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config
 from model.registry import list_registered_platforms
-from torrentzip import build_torrentzip, is_torrentzip
+from core.torrentzip import build_torrentzip, is_torrentzip
 
 ARCHIVES_FILE = Path(__file__).resolve().parent.parent / "recipes" / "archives.json"
 
@@ -232,7 +232,7 @@ DIGEST_CACHE = Path(__file__).resolve().parent.parent / ".cache" / "romset_diges
 # The writer's own source is part of every key: a change to how TorrentZip
 # bytes are laid out invalidates every digest it produced.
 _WRITER = hashlib.sha256(
-    (Path(__file__).resolve().parent / "torrentzip.py").read_bytes()
+    (Path(__file__).resolve().parent / "core" / "torrentzip.py").read_bytes()
 ).hexdigest()[:16]
 
 

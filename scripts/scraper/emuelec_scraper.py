@@ -51,7 +51,7 @@ from .es_emulators import (
     json_systems,
     system_cores,
 )
-from .shell_launchers import RepoTree
+from scraper.shell_launchers import RepoTree
 
 PLATFORM_NAME = "emuelec"
 

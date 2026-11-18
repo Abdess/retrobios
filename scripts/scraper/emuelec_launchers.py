@@ -19,7 +19,7 @@ from dataclasses import dataclass, field
 
 from .configgen_launchers import Launcher
 from .rocknix_launchers import fixed_paths
-from .shell_launchers import (
+from scraper.shell_launchers import (
     LauncherPatternMissing,
     Link,
     config_placement,

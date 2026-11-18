@@ -288,7 +288,7 @@ def config_target(record: dict) -> tuple[str, list[str]]:
     if "." not in head or head.startswith("<"):
         # The file is the one the record installs, named by its path or,
         # when a variable spells the path, by the config file it cites.
-        from scraper.shell_launchers import config_ref, is_feature_ref, ref_path
+        from resolve.launcherrefs import config_ref, is_feature_ref, ref_path
 
         installed = str((record.get("installs") or {}).get("path") or "").rsplit("/", 1)[-1]
         cited = [
@@ -453,7 +453,7 @@ def config_evidence(
     values a menu offers: it goes in ``choices_from``, beside the code that
     writes the choice, and such a record needs (c) and (d) too.
     """
-    from scraper.shell_launchers import config_ref, is_feature_ref
+    from resolve.launcherrefs import config_ref, is_feature_ref
 
     cited = config_ref(str(record.get("source_ref") or ""))
     choices = str(record.get("choices_from") or "")
@@ -521,7 +521,7 @@ def _profiles_or_repo(profiles: Mapping[str, dict] | None) -> Mapping[str, dict]
 
 
 def _cites_config(record: dict) -> bool:
-    from scraper.shell_launchers import config_ref
+    from resolve.launcherrefs import config_ref
 
     return bool(record.get("choices_from")) or bool(config_ref(str(record.get("source_ref") or "")))
 

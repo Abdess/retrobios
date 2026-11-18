@@ -18,8 +18,8 @@ from dataclasses import dataclass
 from typing import TypeVar
 
 from .configgen_launchers import Launcher
-from .shell_launchers import config_placement, evidence_fields
-from .shell_launchers import (
+from scraper.shell_launchers import config_placement, evidence_fields
+from scraper.shell_launchers import (
     LauncherPatternMissing,
     Link,
     RepoTree,

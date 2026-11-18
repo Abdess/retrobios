@@ -19,7 +19,7 @@ from pathlib import Path
 from unittest import mock
 
 import archive_build
-from torrentzip import build_torrentzip
+from core.torrentzip import build_torrentzip
 
 ROOT = Path(__file__).resolve().parent.parent
 TMP_ROOT = ROOT / "tmp" / "tests"

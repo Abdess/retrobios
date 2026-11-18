@@ -34,7 +34,7 @@ from scripts.scraper.romset_dat_importer import (
     recipe_entries,
 )
 from scripts.scraper.logiqx_parser import parse_logiqx
-from torrentzip import build_torrentzip, is_torrentzip
+from core.torrentzip import build_torrentzip, is_torrentzip
 
 ROOT = Path(__file__).resolve().parent.parent
 TMP_ROOT = ROOT / "tmp" / "tests"
@@ -715,7 +715,7 @@ class IdentificationReadsTheDirectoryFirst(unittest.TestCase):
     whose members could never match."""
 
     def test_a_recipe_with_other_members_is_never_built(self):
-        from torrentzip import build_torrentzip
+        from core.torrentzip import build_torrentzip
 
         import romset_recipes
 

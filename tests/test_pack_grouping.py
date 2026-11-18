@@ -57,7 +57,7 @@ class VariantGroupSpansSystems(unittest.TestCase):
         if not (REPO_ROOT / "database.json").is_file():
             self.skipTest("database.json not built")
         import generate_pack as gp
-        import region as region_mod
+        from model import region
         from model.database import load_database
         from model.profiles import load_emulator_profiles
         from model.platforms import load_platform_config
@@ -71,7 +71,7 @@ class VariantGroupSpansSystems(unittest.TestCase):
         drops, _fallbacks, _undecided = gp._select_variants(
             config, config["systems"], "emulators", db,
             config.get("base_destination", ""), profiles, None, "full",
-            regions=region_mod.parse_requested("us"), one_per_slot=False,
+            regions=region.parse_requested("us"), one_per_slot=False,
         )
         names = {os.path.basename(d) for d in drops}
         for name in ("jp_mcd1_9111.bin", "eu_mcd2_9306.bin"):

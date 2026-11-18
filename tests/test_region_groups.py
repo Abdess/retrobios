@@ -46,7 +46,7 @@ class TheEnterpriseKeepsItsRom(unittest.TestCase):
     def test_retrodeck_keeps_brd_rom_under_a_region(self):
         if not (REPO_ROOT / "database.json").exists():
             self.skipTest("database.json is not built")
-        import region
+        from resolve import regions
         from model.database import load_database
         from model.profiles import load_emulator_profiles
         from model.platforms import load_platform_config
@@ -59,8 +59,8 @@ class TheEnterpriseKeepsItsRom(unittest.TestCase):
             config, config["systems"], str(REPO_ROOT / "emulators"), db,
             config.get("base_destination", ""), profiles,
         )
-        drops = region.resolve_region_drops(
-            groups, region.build_region_index(profiles), ["north-america"]
+        drops = regions.resolve_region_drops(
+            groups, regions.build_region_index(profiles), ["north-america"]
         )
         self.assertNotIn("bios/brd.rom", drops)
 

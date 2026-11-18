@@ -77,9 +77,9 @@ class VerifyPackChoice(unittest.TestCase):
         (self.out / name).write_bytes(b"")
 
     def test_region_opens_the_regional_pack(self):
-        import region as region_mod
+        from model import region
 
-        regions = region_mod.parse_requested("us")
+        regions = region.parse_requested("us")
         tag = self.gp._narrowings("full", regions, None, False, False)[0][0]
         self._touch(f"{self.stem}_BIOS_Pack.zip")
         self._touch(f"{self.stem}{tag}_BIOS_Pack.zip")

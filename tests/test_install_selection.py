@@ -30,7 +30,8 @@ import unittest
 from unittest import mock
 from pathlib import Path
 
-import region
+from model import region
+from resolve import regions as resolve_regions
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -48,7 +49,7 @@ class OneRegionVocabulary(unittest.TestCase):
         self.assertEqual(install.REGION_ALIASES, region.ALIASES)
         self.assertEqual(install.WORLD_REGION, region.WORLD)
         self.assertEqual(install.REGIONS, region.REGIONS)
-        self.assertEqual(install.FILE_GROUP, region.FILE_GROUP)
+        self.assertEqual(install.FILE_GROUP, resolve_regions.FILE_GROUP)
 
 
 class TheRegionRuleIsTheBuilders(unittest.TestCase):
@@ -80,7 +81,7 @@ class TheRegionRuleIsTheBuilders(unittest.TestCase):
                                    "has_untagged": not regions, "emulators": [],
                                    "priorities": {priority}}
                 # A lone core file no system names gets a group of its own.
-                group = f"g{g}" if rng.random() < 0.85 else f"e{region.FILE_GROUP}{dest}"
+                group = f"g{g}" if rng.random() < 0.85 else f"e{resolve_regions.FILE_GROUP}{dest}"
                 groups.setdefault(group, []).append((dest, dest))
                 if group not in entries[dest]["region_groups"]:
                     entries[dest]["region_groups"].append(group)
@@ -101,11 +102,11 @@ class TheRegionRuleIsTheBuilders(unittest.TestCase):
             with self.subTest(trial=trial):
                 self.assertEqual(
                     install.region_drops(entries, requested),
-                    region.resolve_region_drops(groups, index, requested),
+                    resolve_regions.resolve_region_drops(groups, index, requested),
                 )
                 self.assertEqual(
                     install.region_drops(entries, requested, held=held),
-                    region.resolve_region_drops(groups, index, requested, held),
+                    resolve_regions.resolve_region_drops(groups, index, requested, held),
                 )
 
     def test_narrow_passes_the_installable_files_as_held(self):
@@ -117,7 +118,7 @@ class TheRegionRuleIsTheBuilders(unittest.TestCase):
             files = [dict(e, size=1, cores=None) for e in entries if e["dest"] in held]
             omitted = [dict(e, cores=None) for e in entries if e["dest"] not in held]
             kept, still_omitted = install.narrow(files, omitted, [], [], requested)
-            drops = region.resolve_region_drops(groups, index, requested, held)
+            drops = resolve_regions.resolve_region_drops(groups, index, requested, held)
             with self.subTest(trial=trial):
                 self.assertEqual(
                     {f["dest"] for f in kept},
@@ -143,8 +144,8 @@ class TheRegionRuleIsTheBuilders(unittest.TestCase):
             omitted = [dict(e, cores=None, **({"held": True} if e["dest"] in pack_only else {}))
                        for e in entries if e["dest"] not in held - pack_only]
             kept, still_omitted = install.narrow(files, omitted, [], [], requested)
-            drops = region.resolve_region_drops(groups, index, requested, held)
-            unheld = region.resolve_region_drops(
+            drops = resolve_regions.resolve_region_drops(groups, index, requested, held)
+            unheld = resolve_regions.resolve_region_drops(
                 groups, index, requested, held - pack_only
             )
             replayed += drops != unheld
@@ -175,7 +176,7 @@ class TheRegionRuleIsTheBuilders(unittest.TestCase):
             {"dest": "GC/USA/IPL.bin", "regions": ["north-america"],
              "region_system_groups": ["nintendo-gamecube"]},
             {"dest": "GC/EUR/IPL.bin", "regions": ["europe"],
-             "region_groups": [f"dolphin{region.FILE_GROUP}GC/EUR/IPL.bin"],
+             "region_groups": [f"dolphin{resolve_regions.FILE_GROUP}GC/EUR/IPL.bin"],
              "region_system_groups": ["nintendo-gamecube"]},
         ]
         self.assertEqual(

@@ -13,7 +13,8 @@ from pathlib import Path
 
 from model import profiles as model_profiles
 from model.profiles import _emulator_profiles_cache
-import region
+from model import region
+from resolve import regions as resolve_regions
 from packextras import emulator_region_drops
 
 
@@ -193,27 +194,27 @@ class TestRegionIndex(unittest.TestCase):
                 "files": [{"name": "ignored.bin", "region": ["japan"]}],
             },
         }
-        self.index = region.build_region_index(self.profiles)
+        self.index = resolve_regions.build_region_index(self.profiles)
 
     def test_path_keyed_entries_stay_separate(self):
         self.assertEqual(
-            region.lookup_regions(self.index, "GC/USA/IPL.bin", "IPL.bin"),
+            resolve_regions.lookup_regions(self.index, "GC/USA/IPL.bin", "IPL.bin"),
             {"north-america"},
         )
         self.assertEqual(
-            region.lookup_regions(self.index, "GC/JAP/IPL.bin", "IPL.bin"),
+            resolve_regions.lookup_regions(self.index, "GC/JAP/IPL.bin", "IPL.bin"),
             {"japan"},
         )
 
     def test_bare_name_lookup_unions_ambiguous_entries(self):
         self.assertEqual(
-            region.lookup_regions(self.index, "", "IPL.bin"),
+            resolve_regions.lookup_regions(self.index, "", "IPL.bin"),
             {"north-america", "europe", "japan"},
         )
 
     def test_destination_suffix_bridges_platform_entry(self):
         self.assertEqual(
-            region.lookup_regions(
+            resolve_regions.lookup_regions(
                 self.index, "dolphin-emu/GC/EUR/IPL.bin", "IPL.bin"
             ),
             {"europe"},
@@ -221,21 +222,21 @@ class TestRegionIndex(unittest.TestCase):
 
     def test_untagged_file_has_no_regions(self):
         self.assertEqual(
-            region.lookup_regions(self.index, "dsp_rom.bin", "dsp_rom.bin"), set()
+            resolve_regions.lookup_regions(self.index, "dsp_rom.bin", "dsp_rom.bin"), set()
         )
 
     def test_unknown_file_has_no_regions(self):
         self.assertEqual(
-            region.lookup_regions(self.index, "nope.bin", "nope.bin"), set()
+            resolve_regions.lookup_regions(self.index, "nope.bin", "nope.bin"), set()
         )
 
     def test_legacy_string_values_are_normalised(self):
         self.assertEqual(
-            region.lookup_regions(self.index, "scph5501.bin", "scph5501.bin"),
+            resolve_regions.lookup_regions(self.index, "scph5501.bin", "scph5501.bin"),
             {"north-america"},
         )
         self.assertEqual(
-            region.lookup_regions(self.index, "psxonpsp660.bin", "psxonpsp660.bin"),
+            resolve_regions.lookup_regions(self.index, "psxonpsp660.bin", "psxonpsp660.bin"),
             {region.WORLD},
         )
 
@@ -246,12 +247,12 @@ class TestRegionIndex(unittest.TestCase):
 
     def test_launcher_profiles_are_skipped(self):
         self.assertEqual(
-            region.lookup_regions(self.index, "ignored.bin", "ignored.bin"), set()
+            resolve_regions.lookup_regions(self.index, "ignored.bin", "ignored.bin"), set()
         )
 
     def test_unknown_value_names_the_profile_and_file(self):
         with self.assertRaises(ValueError) as ctx:
-            region.build_region_index(
+            resolve_regions.build_region_index(
                 {"badcore": {"files": [{"name": "x.bin", "region": ["atlantis"]}]}}
             )
         self.assertIn("badcore", str(ctx.exception))
@@ -272,26 +273,26 @@ class TestStandaloneLayoutIsIndexed(unittest.TestCase):
             {"name": "IPL.bin", "path": "dolphin-emu/Sys/GC/EUR/IPL.bin",
              "standalone_path": "GC/EUR/IPL.bin", "region": ["europe"]},
         ]}}
-        index = region.build_region_index(profiles)
-        self.assertEqual(region.lookup_regions(index, "GC/EUR/IPL.bin", "IPL.bin"), {"europe"})
+        index = resolve_regions.build_region_index(profiles)
+        self.assertEqual(resolve_regions.lookup_regions(index, "GC/EUR/IPL.bin", "IPL.bin"), {"europe"})
         self.assertIn("GC/EUR/IPL.bin", slot.build_slot_index(profiles))
 
     def test_an_alias_carries_the_region_of_its_file(self):
         """scph5552.bin, the name beetle_psx also opens for its European
         BIOS, stayed in a --region jp pack once scph5502.bin went."""
-        index = region.build_region_index({"beetle_psx": {"files": [
+        index = resolve_regions.build_region_index({"beetle_psx": {"files": [
             {"name": "scph5502.bin", "aliases": ["scph5552.bin"],
              "region": ["europe", "oceania"]},
         ]}})
         self.assertEqual(
-            region.lookup_regions(index, "scph5552.bin", "scph5552.bin"),
+            resolve_regions.lookup_regions(index, "scph5552.bin", "scph5552.bin"),
             {"europe", "oceania"},
         )
 
 
 class TestResolveRegionDrops(unittest.TestCase):
     def setUp(self):
-        self.index = region.build_region_index(
+        self.index = resolve_regions.build_region_index(
             {
                 "psx": {
                     "files": [
@@ -308,7 +309,7 @@ class TestResolveRegionDrops(unittest.TestCase):
         )
 
     def _drops(self, groups, requested):
-        return region.resolve_region_drops(groups, self.index, requested)
+        return resolve_regions.resolve_region_drops(groups, self.index, requested)
 
     def test_a_lone_file_never_vetoes_its_system(self):
         """Dolphin's GC/EUR/IPL.bin came back as a core extra alone in its
@@ -329,7 +330,7 @@ class TestResolveRegionDrops(unittest.TestCase):
         groups = {"psx": [("scph5501.bin", "scph5501.bin"),
                           ("scph5500.bin", "scph5500.bin")]}
         held = {"scph5501.bin"}
-        drop = region.resolve_region_drops
+        drop = resolve_regions.resolve_region_drops
         self.assertEqual(drop(groups, self.index, ["japan"], held), set())
         self.assertEqual(
             drop(groups, self.index, ["japan", "north-america"], held), set()
@@ -343,7 +344,7 @@ class TestResolveRegionDrops(unittest.TestCase):
         groups = {"psx": [("scph5500.bin", "scph5500.bin"),
                           ("psxonpsp660.bin", "psxonpsp660.bin")]}
         self.assertEqual(
-            region.resolve_region_drops(
+            resolve_regions.resolve_region_drops(
                 groups, self.index, ["europe"], {"scph5500.bin"}
             ),
             set(),
@@ -352,7 +353,7 @@ class TestResolveRegionDrops(unittest.TestCase):
     def test_a_world_file_the_code_ranks_lower_keeps_the_regional_ones(self):
         """DuckStation looks for its PS1 images (5) before the world PS2 ones
         (100): asked for Brazil, it kept only the PS2 fallbacks."""
-        index = region.build_region_index({"duckstation": {"files": [
+        index = resolve_regions.build_region_index({"duckstation": {"files": [
             {"name": "scph5501.bin", "region": ["north-america"], "priority": 5},
             {"name": "ps2_scph30001.bin", "region": ["north-america"], "priority": 150},
             {"name": "ps2_scph10000.bin", "region": ["world"], "priority": 100},
@@ -360,7 +361,7 @@ class TestResolveRegionDrops(unittest.TestCase):
         groups = {"psx": [(n, n) for n in ("scph5501.bin", "ps2_scph30001.bin",
                                             "ps2_scph10000.bin")]}
         self.assertEqual(
-            region.resolve_region_drops(groups, index, ["brazil"]), {"ps2_scph30001.bin"}
+            resolve_regions.resolve_region_drops(groups, index, ["brazil"]), {"ps2_scph30001.bin"}
         )
 
     def test_without_ranks_the_world_file_still_wins(self):
@@ -438,7 +439,7 @@ class TestResolveRegionDrops(unittest.TestCase):
 
 class TestFallbackGroups(unittest.TestCase):
     def setUp(self):
-        self.index = region.build_region_index(
+        self.index = resolve_regions.build_region_index(
             {
                 "psx": {
                     "files": [
@@ -455,14 +456,14 @@ class TestFallbackGroups(unittest.TestCase):
             "fds": [("disksys.rom", "disksys.rom")],
         }
         self.assertEqual(
-            region.fallback_groups(groups, self.index, ["north-america"]), ["fds"]
+            resolve_regions.fallback_groups(groups, self.index, ["north-america"]), ["fds"]
         )
 
     def test_an_untagged_bios_answers_every_region(self):
         """VICE's generic kernal is untagged beside its Japanese one: the C64
         was reported as having no BIOS for North America."""
         groups = {"fds": [("disksys.rom", "disksys.rom"), ("generic.rom", "generic.rom")]}
-        self.assertEqual(region.fallback_groups(groups, self.index, ["north-america"]), [])
+        self.assertEqual(resolve_regions.fallback_groups(groups, self.index, ["north-america"]), [])
 
     def test_a_file_no_system_claims_is_no_fallback(self):
         """Dolphin's GC/EUR/IPL.bin, alone in its group, named the GameCube
@@ -470,7 +471,7 @@ class TestFallbackGroups(unittest.TestCase):
         groups = {"Dolphin:file:GC/EUR/IPL.bin": [("GC/EUR/IPL.bin", "IPL.bin")],
                   "fds": [("disksys.rom", "disksys.rom")]}
         self.assertEqual(
-            region.fallback_groups(groups, self.index, ["north-america"]), ["fds"]
+            resolve_regions.fallback_groups(groups, self.index, ["north-america"]), ["fds"]
         )
 
     def test_the_readme_names_a_slot_as_a_reader_does(self):
@@ -481,7 +482,7 @@ class TestFallbackGroups(unittest.TestCase):
 
     def test_no_requested_regions_reports_nothing(self):
         groups = {"fds": [("disksys.rom", "disksys.rom")]}
-        self.assertEqual(region.fallback_groups(groups, self.index, []), [])
+        self.assertEqual(resolve_regions.fallback_groups(groups, self.index, []), [])
 
 
 class OneCodeOneRegionAnswer(unittest.TestCase):
@@ -581,7 +582,7 @@ class TestProfileConformance(unittest.TestCase):
         for path in self.repo_profiles:
             with open(path, encoding="utf-8") as fh:
                 profiles[os.path.basename(path)[:-4]] = self.yaml.safe_load(fh) or {}
-        index = region.build_region_index(profiles)
+        index = resolve_regions.build_region_index(profiles)
         self.assertGreater(len(index), 0)
 
 
@@ -708,8 +709,8 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
                 config, config["systems"], str(root / "emulators"),
                 db, "", profiles,
             )
-            drops = region.resolve_region_drops(
-                groups, region.build_region_index(profiles), ["north-america"]
+            drops = resolve_regions.resolve_region_drops(
+                groups, resolve_regions.build_region_index(profiles), ["north-america"]
             )
             self.assertEqual(
                 {d for d in drops}, {"jp.bin"},
@@ -1038,7 +1039,7 @@ class UnknownRegionSaysWhatToType(unittest.TestCase):
     """`unknown region: 'uss'` named nothing to type instead."""
 
     def test_the_build_scripts_suggest_and_list_short_forms(self):
-        import region
+        from model import region
 
         with self.assertRaises(ValueError) as caught:
             region.parse_requested("uss")
@@ -1088,7 +1089,8 @@ class GenesisPlusGxUsBiosServesEurope(unittest.TestCase):
         from pathlib import Path
 
         from model.profiles import load_emulator_profiles
-        from region import build_region_index, parse_requested, resolve_region_drops
+        from resolve.regions import build_region_index, resolve_region_drops
+        from model.region import parse_requested
 
         root = Path(__file__).resolve().parents[1]
         profiles = load_emulator_profiles(str(root / "emulators"))
@@ -1109,7 +1111,8 @@ def _real_drops(profile: str, members: list[str], requested: str) -> set[str]:
     from pathlib import Path
 
     from model.profiles import load_emulator_profiles
-    from region import build_region_index, parse_requested, resolve_region_drops
+    from resolve.regions import build_region_index, resolve_region_drops
+    from model.region import parse_requested
 
     root = Path(__file__).resolve().parents[1]
     profiles = load_emulator_profiles(str(root / "emulators"))
@@ -1427,14 +1430,14 @@ class UsaRegionServesTheAmericas(unittest.TestCase):
         import yaml
 
         profile = yaml.safe_load(self.PROFILE.read_text(encoding="utf-8"))
-        index = region.build_region_index({"citra-mmj": profile})
+        index = resolve_regions.build_region_index({"citra-mmj": profile})
         requested = region.parse_requested("br,cn")
         for destination, name in (
             (self.FONT, "00000000.app.romfs"),
             ("sysdata/cbf_std.bcfnt", "cbf_std.bcfnt"),
         ):
             with self.subTest(file=destination):
-                regions = region.lookup_regions(index, destination, name)
+                regions = resolve_regions.lookup_regions(index, destination, name)
                 self.assertEqual(region.rank(regions, requested), 0)
 
     def test_brazil_ranks_the_usa_dsi_nand_before_the_japanese_one(self):
@@ -1444,10 +1447,10 @@ class UsaRegionServesTheAmericas(unittest.TestCase):
 
         bizhawk = self.PROFILE.with_name("bizhawk.yml")
         profile = yaml.safe_load(bizhawk.read_text(encoding="utf-8"))
-        index = region.build_region_index({"bizhawk": profile})
+        index = resolve_regions.build_region_index({"bizhawk": profile})
         requested = region.parse_requested("br,jp")
-        usa = region.lookup_regions(index, "", "DSi_Nand_USA.bin")
-        jpn = region.lookup_regions(index, "", "DSi_Nand_JPN.bin")
+        usa = resolve_regions.lookup_regions(index, "", "DSi_Nand_USA.bin")
+        jpn = resolve_regions.lookup_regions(index, "", "DSi_Nand_JPN.bin")
         self.assertEqual(region.rank(usa, requested), 0)
         self.assertEqual(region.rank(jpn, requested), 1)
 

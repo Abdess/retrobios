@@ -13,7 +13,7 @@ import tests
 import unittest
 from pathlib import Path
 
-import region as region_mod
+from resolve import regions
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -28,9 +28,9 @@ PROFILES = {
 class OnlyThePlatformsCores(unittest.TestCase):
     def test_a_foreign_untagged_entry_does_not_void_the_tag(self):
         config = {"cores": ["gpgx"], "systems": {"sega-mega-cd": {"files": []}}}
-        index = region_mod.platform_region_index(config, PROFILES)
+        index = regions.platform_region_index(config, PROFILES)
         self.assertFalse(index["bios_CD_E.bin"]["has_untagged"])
-        self.assertTrue(region_mod.build_region_index(PROFILES)["bios_CD_E.bin"]["has_untagged"])
+        self.assertTrue(regions.build_region_index(PROFILES)["bios_CD_E.bin"]["has_untagged"])
 
     def test_every_platform_site_reads_it(self):
         for module in ("verify.py", "generate_pack.py", "packverify.py"):

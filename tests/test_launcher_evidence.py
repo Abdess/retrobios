@@ -25,13 +25,8 @@ from resolve.launchers import (
 )
 from profile_sync import _check_build_refs, shipped_build_holders
 from scraper.retrobat_launchers import _choices_apart
-from scraper.shell_launchers import (
-    LauncherPatternMissing,
-    Script,
-    config_placement,
-    config_ref,
-    is_feature_ref,
-)
+from scraper.shell_launchers import LauncherPatternMissing, Script, config_placement
+from resolve.launcherrefs import config_ref, is_feature_ref
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 

@@ -10,12 +10,7 @@ import tempfile
 import unittest
 import zipfile
 
-from torrentzip import (
-    build_torrentzip,
-    identify_romset,
-    is_torrentzip,
-    rebuild_torrentzip,
-)
+from core.torrentzip import build_torrentzip, identify_romset, is_torrentzip, rebuild_torrentzip
 
 REPO_ROOT = os.path.join(os.path.dirname(__file__), "..")
 
@@ -166,7 +161,7 @@ class StreamingWriter(unittest.TestCase):
     def test_chunked_input_gives_the_one_shot_bytes(self):
         """Deflate output does not depend on how its input is cut."""
         import io
-        import torrentzip
+        from core import torrentzip
 
         members = self._members()
         whole = torrentzip.build_torrentzip(members)
@@ -190,7 +185,7 @@ class StreamingWriter(unittest.TestCase):
 
     def test_a_member_past_32_bits_takes_a_zip64_field(self):
         """cspect-next-8gb.zip holds an 8 GiB image: its size needs ZIP64."""
-        import torrentzip
+        from core import torrentzip
 
         members = self._members()
         saved = torrentzip.ZIP32_LIMIT
@@ -210,7 +205,7 @@ class StreamingWriter(unittest.TestCase):
         """python.org 3.14 on Windows links zlib-ng, which gives other bytes."""
         from types import SimpleNamespace
 
-        from torrentzip import zlib_ng_version
+        from core.torrentzip import zlib_ng_version
 
         stock = SimpleNamespace(ZLIB_RUNTIME_VERSION="1.3.1")
         windows = SimpleNamespace(ZLIB_RUNTIME_VERSION="1.3.1.zlib-ng")

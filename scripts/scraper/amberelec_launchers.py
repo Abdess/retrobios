@@ -22,7 +22,7 @@ from collections.abc import Callable
 from typing import Any
 
 from .configgen_launchers import Launcher, Source
-from .shell_launchers import (
+from scraper.shell_launchers import (
     LauncherPatternMissing,
     Script,
     config_placement,

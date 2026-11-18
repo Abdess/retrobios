@@ -9,7 +9,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import identity
+from resolve import identity
 
 
 class TestCrossVendorDuplicates(unittest.TestCase):

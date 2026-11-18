@@ -45,8 +45,8 @@ from typing import BinaryIO
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from torrentzip import Source as Readable
-from torrentzip import write_torrentzip, zlib_ng_version
+from core.torrentzip import Source as Readable
+from core.torrentzip import write_torrentzip, zlib_ng_version
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 ARCHIVES_FILE = REPO_ROOT / "recipes" / "archives.json"

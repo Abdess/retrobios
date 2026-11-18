@@ -47,7 +47,7 @@ from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config, native_layer
 from core.artifacts import repository_output_lock
 from core.cli import run_cli
-from region import normalize_declared
+from model.region import normalize_declared
 from romfolders import (
     ProfileResolver,
     Resolution,

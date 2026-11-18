@@ -18,7 +18,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-import region
+from model import region
 from model.database import load_database
 from model.profiles import load_emulator_profiles
 from resolve.localfile import resolve_local_file

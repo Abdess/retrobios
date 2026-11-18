@@ -33,7 +33,7 @@ from core.artifacts import (
 from model.safeparse import require_yaml, yaml_load
 from model.profiles import source_yaml_paths
 from resolve.localfile import variant_base_name
-import retired_files
+from model import retired
 
 # Platform and profile aliases are read from YAML: without pyyaml the
 # database lost every one of them and the run still exited 0.
@@ -542,13 +542,13 @@ def _generate(args: argparse.Namespace) -> int:
     output = Path(args.output)
     if output.is_file():
         previous = json.loads(output.read_text(encoding="utf-8"))
-        left = retired_files.update(
-            retired_files.retired_path(output), previous, database,
+        left = retired.update(
+            retired.retired_path(output), previous, database,
             database["generated_at"][:10],
         )
         if left:
             print(f"  Left the collection: {left} files, recorded in "
-                  f"{retired_files.retired_path(output)}")
+                  f"{retired.retired_path(output)}")
 
     new_content = json.dumps(database, indent=2)
     written = write_if_changed(args.output, new_content)

@@ -209,7 +209,7 @@ What does not, and why each trap is easy to fall into:
   Saturn SMPC area codes behind `asia-ntsc` and `asia-pal`. Mednafen names
   them for Taiwan and China, so a `--region taiwan` request reaches an
   `asia-ntsc` file and a `--region china` request an `asia-pal` one, and the
-  other way round (`AREA_TERRITORIES` in `scripts/region.py`).
+  other way round (`AREA_TERRITORIES` in `scripts/model/region.py`).
 - **A single-region system.** When every file of a system shares one region,
   the pack filter keeps them all anyway, so annotating adds nothing.
 - **A language without a territory.** Arabic MSX variants, CJK fonts. The

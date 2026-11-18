@@ -1652,7 +1652,7 @@ def _region_pass(
 ) -> tuple[set[str], list[str], dict[tuple[str, str, str], str]]:
     """The destinations a region run withdraws, the groups no file answers,
     and the destination of each core extra."""
-    import region as region_mod
+    from resolve import regions as resolve_regions
 
     # The builder owns pack composition, so it owns the grouping the region
     # pass reads.  Grouping the platform files here and the core extras
@@ -1676,14 +1676,14 @@ def _region_pass(
         data_registry=run.data_dir_registry,
         slot_overrides=pack_overrides,
     )
-    region_index = region_mod.platform_region_index(config, run.profiles, run.target_cores)
-    region_drops = region_mod.resolve_region_drops(
+    region_index = resolve_regions.platform_region_index(config, run.profiles, run.target_cores)
+    region_drops = resolve_regions.resolve_region_drops(
         region_groups, region_index, regions, held,
     )
     # The pack README names these: no file answers the request, so every
     # candidate stays. Reported here too, or verify reads all OK for a
     # system that has no BIOS for the region asked.
-    region_fallbacks = region_mod.fallback_groups(
+    region_fallbacks = resolve_regions.fallback_groups(
         region_groups, region_index, regions
     )
     return region_drops, region_fallbacks, region_extra_dests
@@ -3528,10 +3528,10 @@ def _build_parser() -> argparse.ArgumentParser:
 def _requested_regions(args: argparse.Namespace, parser: argparse.ArgumentParser) -> list[str]:
     requested_regions: list[str] = []
     if getattr(args, "region", None):
-        import region as region_mod
+        from model import region
 
         try:
-            requested_regions = region_mod.parse_requested(args.region)
+            requested_regions = region.parse_requested(args.region)
         except ValueError as exc:
             parser.error(str(exc))
     return requested_regions

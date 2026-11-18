@@ -25,7 +25,7 @@ from .base_scraper import (
     requirement_entry,
 )
 from .rocknix_launchers import extract_launchers
-from .shell_launchers import RepoTree
+from scraper.shell_launchers import RepoTree
 
 PLATFORM_NAME = "rocknix"
 

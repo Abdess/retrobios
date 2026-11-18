@@ -11,7 +11,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from region import REGIONS
+from model.region import REGIONS
 from scripts.scraper import game_dat_importer as importer
 
 ROOT = Path(__file__).resolve().parent.parent

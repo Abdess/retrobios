@@ -352,12 +352,12 @@ class ClkMasterSystemBios(unittest.TestCase):
     and europe only, a Brazilian pack dropped it for the Japanese one."""
 
     def test_brazil_keeps_the_western_bios(self):
-        import region
+        from resolve import regions
 
-        index = region.build_region_index({"clk": _profile("clk")})
+        index = regions.build_region_index({"clk": _profile("clk")})
         group = {"sms": [("MasterSystem/bios.sms", "bios.sms"),
                          ("MasterSystem/japanese-bios.sms", "japanese-bios.sms")]}
-        drops = region.resolve_region_drops(group, index, ["brazil"])
+        drops = regions.resolve_region_drops(group, index, ["brazil"])
         self.assertEqual(drops, {"MasterSystem/japanese-bios.sms"})
 
 

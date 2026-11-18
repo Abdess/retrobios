@@ -863,7 +863,7 @@ class AWantedDumpIsFoundByItsHash(unittest.TestCase):
         self.assertIn('"wanted"', _json.dumps(schema))
         self.assertIn("byLayer('wanted')", (root / "website" / "src" / "scripts" / "site.ts").read_text())
         source = Path(generate_site.__file__).read_text(encoding="utf-8")
-        self.assertIn('retired_files.load(_REPO_ROOT / "retired.json"), wanted)', source)
+        self.assertIn('model_retired.load(_REPO_ROOT / "retired.json"), wanted)', source)
 
 
 class AMovedPartCardReachesItsPage(unittest.TestCase):

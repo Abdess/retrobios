@@ -27,7 +27,7 @@ from core.paths import sanitize_pack_path
 from resolve.content import declares_shape, shape_fits, size_fits
 from resolve.validation import deliverable, read_from_save_dir, read_from_system_dir
 from packpaths import libretro_systems, save_destination, save_layout
-from region import FILE_GROUP
+from resolve.regions import FILE_GROUP
 
 if TYPE_CHECKING:
     from typing_extensions import Unpack
@@ -2321,11 +2321,11 @@ def emulator_region_drops(
     BIOS at all. ``zip_contents`` and ``data_registry`` are the ones the
     emulator pack resolves with.
     """
-    import region as region_mod
+    from resolve import regions as resolve_regions
     from packpaths import _resolve_destination
     from resolve.validation import _build_validation_index, filter_files_by_mode
 
-    region_index = region_mod.build_region_index(dict(selected))
+    region_index = resolve_regions.build_region_index(dict(selected))
     region_groups: dict[str, list[tuple[str, str]]] = {}
     held: set[str] | None = set() if db is not None else None
     validation_index = _build_validation_index(dict(selected)) if db is not None else {}
@@ -2345,7 +2345,7 @@ def emulator_region_drops(
                     zip_contents, data_registry,
                 ):
                     held.add(dest)
-    return region_mod.resolve_region_drops(region_groups, region_index, regions, held)
+    return resolve_regions.resolve_region_drops(region_groups, region_index, regions, held)
 
 
 class SpareOptions(TypedDict, total=False):

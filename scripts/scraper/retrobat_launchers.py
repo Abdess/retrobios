@@ -14,7 +14,7 @@ import bisect
 import re
 from collections.abc import Callable, Iterator
 
-from .shell_launchers import is_feature_ref, split_ref
+from resolve.launcherrefs import is_feature_ref, split_ref
 
 GENERATORS = "emulatorLauncher/Generators"
 FEATURES = ".emulationstation/es_features.cfg"

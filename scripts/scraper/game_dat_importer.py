@@ -41,7 +41,7 @@ if (_SCRIPTS_DIR := str(Path(__file__).resolve().parents[1])) not in sys.path:
 
 from core.artifacts import copy_stream_atomic, write_if_changed, write_text_atomic
 from model.safeparse import parse_untrusted_xml
-from region import REGIONS, WORLD
+from model.region import REGIONS, WORLD
 from region_audit import NOINTRO
 
 from .base_scraper import github_headers

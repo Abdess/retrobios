@@ -110,7 +110,8 @@ from resolve.standalone import platform_layouts, standalone_set
 from core.paths import sanitize_pack_path
 import packresolve
 from refresh_data_dirs import cache_lock, hold_data_dirs
-import region as region_mod
+from model import region
+from resolve import regions as resolve_regions
 from manifestselect import SelectionIndex
 from resolve import slot as slot_mod
 import slots
@@ -339,7 +340,7 @@ def _narrowings(
             " ".join(w.title() for w in slug.split("-")) for slug in regions
         )
         applied.append(
-            (f"_{region_mod.region_tag(regions)}", f"region priority {pretty}")
+            (f"_{region.region_tag(regions)}", f"region priority {pretty}")
         )
     if target_name:
         applied.append(
@@ -841,13 +842,13 @@ def _select_variants(
             slot_overrides=options.get("slot_overrides"),
         )
     if regions:
-        region_index = region_mod.platform_region_index(
+        region_index = resolve_regions.platform_region_index(
             config, emu_profiles or {}, target_cores
         )
-        region_drops = region_mod.resolve_region_drops(
+        region_drops = resolve_regions.resolve_region_drops(
             region_groups, region_index, regions, held
         )
-        region_fallbacks = region_mod.fallback_groups(
+        region_fallbacks = resolve_regions.fallback_groups(
             region_groups, region_index, regions
         )
 
@@ -3903,7 +3904,7 @@ def _refuse_unapplied_flags(args: argparse.Namespace, parser: argparse.ArgumentP
     args.regions = []
     if args.region:
         try:
-            args.regions = region_mod.parse_requested(args.region)
+            args.regions = region.parse_requested(args.region)
         except ValueError as exc:
             parser.error(str(exc))
         if args.manifest_targets:
@@ -5225,11 +5226,11 @@ def _manifest_selection(
         data_registry=options.get("data_registry"),
         slot_overrides=options.get("slot_overrides"),
     )
-    region_index = region_mod.platform_region_index(
+    region_index = resolve_regions.platform_region_index(
         config, emu_profiles, target_cores
     )
     drops = (
-        region_mod.resolve_region_drops(region_groups, region_index, regions, held)
+        resolve_regions.resolve_region_drops(region_groups, region_index, regions, held)
         if regions
         else set()
     )

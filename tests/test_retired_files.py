@@ -15,7 +15,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import retired_files
+from model import retired as model_retired
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -40,30 +40,30 @@ class WhatLeftIsRecorded(unittest.TestCase):
         })
 
     def test_the_departure_and_the_file_in_its_place(self):
-        left = retired_files.retired_between(self.old, self.new, "2026-10-22")
+        left = model_retired.retired_between(self.old, self.new, "2026-10-22")
         self.assertEqual(list(left), [OLD])
         self.assertEqual(left[OLD]["left"], "2026-10-22")
         self.assertEqual(left[OLD]["successor"], NEW)
         self.assertEqual(left[OLD]["md5"], "43" * 16)
 
     def test_the_first_departure_stays_and_a_return_leaves_the_record(self):
-        first = retired_files.merge({}, retired_files.retired_between(self.old, self.new, "2026-10-22"),
+        first = model_retired.merge({}, model_retired.retired_between(self.old, self.new, "2026-10-22"),
                                     self.new)
-        again = retired_files.merge(first, {OLD: {"left": "2026-11-01"}}, self.new)
+        again = model_retired.merge(first, {OLD: {"left": "2026-11-01"}}, self.new)
         self.assertEqual(again[OLD]["left"], "2026-10-22")
-        self.assertEqual(retired_files.merge(again, {}, self.old), {})
+        self.assertEqual(model_retired.merge(again, {}, self.old), {})
 
     def test_generate_db_writes_it_beside_the_database(self):
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             database = Path(tmp) / "database.json"
-            path = retired_files.retired_path(database)
+            path = model_retired.retired_path(database)
             self.assertEqual(path, Path(tmp) / "retired.json")
-            self.assertEqual(retired_files.update(path, self.old, self.new, "2026-10-22"), 1)
-            self.assertEqual(retired_files.update(path, self.old, self.new, "2026-10-23"), 0)
+            self.assertEqual(model_retired.update(path, self.old, self.new, "2026-10-22"), 1)
+            self.assertEqual(model_retired.update(path, self.old, self.new, "2026-10-23"), 0)
             record = json.loads(path.read_text())["files"]
             self.assertEqual(record[OLD]["left"], "2026-10-22")
         source = (REPO_ROOT / "scripts" / "generate_db.py").read_text(encoding="utf-8")
-        self.assertIn("retired_files.update(", source)
+        self.assertIn("retired.update(", source)
 
 
 class TheLookupAnswersForIt(unittest.TestCase):
@@ -86,7 +86,7 @@ class TheLookupAnswersForIt(unittest.TestCase):
         self.assertEqual(found[(OLD, "sha1")]["left"], "2026-10-22")
 
     def test_the_committed_record_holds_the_reported_file(self):
-        record = retired_files.load(REPO_ROOT / "retired.json")
+        record = model_retired.load(REPO_ROOT / "retired.json")
         if not record:
             self.skipTest("retired.json is not written")
         self.assertIn("bd02f6a0ce8accba7ea5415fd22c2e8f23ec4b10", record)

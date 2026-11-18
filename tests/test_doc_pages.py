@@ -2030,7 +2030,8 @@ class RegionFreeRuleNamesWhereItDoesNotHold(unittest.TestCase):
         from model.registry import list_registered_platforms
         from model.profiles import load_emulator_profiles
         from model.platforms import load_platform_config
-        from region import WORLD, platform_region_index
+        from model.region import WORLD
+        from resolve.regions import platform_region_index
 
         section = _section(_page("advanced-usage.md"), "Region filtering")
         bullet = next(p for p in section.split("\n- ") if "Region-free" in p)

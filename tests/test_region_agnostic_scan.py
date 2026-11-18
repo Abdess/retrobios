@@ -25,7 +25,7 @@ class ScanCopiesStay(unittest.TestCase):
         previous = os.getcwd()
         os.chdir(REPO_ROOT)
         self.addCleanup(os.chdir, previous)
-        import region as region_mod
+        from resolve import regions as resolve_regions
         from model.database import load_database
         from model.profiles import load_emulator_profiles
         from model.platforms import load_platform_config
@@ -45,10 +45,10 @@ class ScanCopiesStay(unittest.TestCase):
         }
         if not scanned:
             self.skipTest("no agnostic scan copy in the RetroArch pack")
-        index = region_mod.platform_region_index(config, profiles)
+        index = resolve_regions.platform_region_index(config, profiles)
         for regions in (["europe"], ["japan"], ["north-america"]):
             with self.subTest(regions=regions):
-                drops = region_mod.resolve_region_drops(groups, index, regions)
+                drops = resolve_regions.resolve_region_drops(groups, index, regions)
                 self.assertEqual(sorted(drops & scanned), [])
 
 

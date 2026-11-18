@@ -31,7 +31,7 @@ import os
 from packextras import platform_region_groups
 from packpaths import _flat
 from resolve.nativemode import reads_file_contents
-import region as region_mod
+from resolve import regions as resolve_regions
 import slots
 from packresolve import resolve_declaration, resolve_file
 from resolve.categories import BIOS, EntryCategories
@@ -776,7 +776,7 @@ def _region_drops(
     region_drops: set[str] = set()
     if not opts.regions:
         return region_drops
-    region_index = region_mod.platform_region_index(
+    region_index = resolve_regions.platform_region_index(
         config, emu_profiles, target_cores
     )
     held: set[str] = set()
@@ -800,7 +800,7 @@ def _region_drops(
             target_cores=target_cores, source=opts.source,
         ) if db is not None else None,
     )
-    return region_mod.resolve_region_drops(
+    return resolve_regions.resolve_region_drops(
         region_groups, region_index, opts.regions, held
     )
 

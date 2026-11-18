@@ -17,7 +17,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-import region as region_mod
+from resolve import regions as resolve_regions
 from resolve import slot as slot_mod
 from model.systems import _norm_system_id
 from core.paths import sanitize_pack_path
@@ -117,7 +117,7 @@ class SelectionIndex:
             return out
         if dest in self.slots:
             out["slot"] = self.slots[dest]
-        regions = region_mod.lookup_regions(self.region_index, dest, name)
+        regions = resolve_regions.lookup_regions(self.region_index, dest, name)
         if not regions:
             return out
         out["regions"] = sorted(regions)
@@ -129,7 +129,7 @@ class SelectionIndex:
             out["region_system_groups"] = sorted(declared)
         # The code's search rank decides whether a world file may withdraw
         # this one when no region matches.
-        priority = region_mod.lookup_priority(self.region_index, dest, name)
+        priority = resolve_regions.lookup_priority(self.region_index, dest, name)
         if priority is not None:
             out["priority"] = priority
         return out

@@ -15,7 +15,7 @@ import re
 from collections.abc import Callable
 
 from .configgen_launchers import Launcher
-from .shell_launchers import (
+from scraper.shell_launchers import (
     LauncherPatternMissing,
     RepoTree,
     Script,
