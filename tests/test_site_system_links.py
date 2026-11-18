@@ -18,6 +18,7 @@ import unittest
 from pathlib import Path
 
 import generate_site as gs
+import siterender
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -279,7 +280,6 @@ class EverySystemLinkLandsOnItsSection(unittest.TestCase):
     def setUpClass(cls):
         import re
 
-        import siterender
         import sitestarlight
         from model.registry import list_registered_platforms
         from model.database import load_database
@@ -294,7 +294,6 @@ class EverySystemLinkLandsOnItsSection(unittest.TestCase):
         for name in list_registered_platforms(str(platforms)):
             ids |= {str(sid) for sid in load_platform_config(name, str(platforms)).get("systems") or {}}
         cls.ids = sorted(ids)
-        cls.siterender = siterender
         heading = re.compile(r"^##\s+(?:<img [^>]*>)?(?P<text>.+?)\s*\{\s*#(?P<id>[^\s}]+)[^}]*\}\s*$", re.M)
         cls.headings: dict[str, dict[str, str]] = {}
         for page in (DOCS / "systems").glob("*.md*"):
@@ -310,7 +309,7 @@ class EverySystemLinkLandsOnItsSection(unittest.TestCase):
 
         linked = 0
         for sys_id in self.ids:
-            link = self.siterender._system_link(sys_id)
+            link = siterender._system_link(sys_id)
             match = re.fullmatch(r"\[[^\]]*\]\(systems/(?P<page>[^)#]+)\.md(?:#(?P<anchor>[^)]+))?\)", link)
             if not match:
                 self.assertEqual(link, sys_id)
@@ -321,7 +320,7 @@ class EverySystemLinkLandsOnItsSection(unittest.TestCase):
                 self.assertIn(page, self.headings)
                 if match["anchor"]:
                     self.assertIn(match["anchor"], self.headings[page])
-                    slug, console = self.siterender.system_section(sys_id)
+                    slug, console = siterender.system_section(sys_id)
                     # The Arcade folder of sets no board claims is headed by
                     # what it holds, its id staying the folder's.
                     if slug == "arcade":
@@ -332,7 +331,7 @@ class EverySystemLinkLandsOnItsSection(unittest.TestCase):
     def test_a_system_without_a_section_of_its_name_is_not_sent_elsewhere(self):
         for sys_id in ("emerson-arcadia-2001", "sega-naomi"):
             with self.subTest(system=sys_id):
-                link = self.siterender._system_link(sys_id)
+                link = siterender._system_link(sys_id)
                 self.assertNotIn("#saturn", link)
                 self.assertNotIn("#dreamcast", link)
 

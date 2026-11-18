@@ -336,9 +336,8 @@ class FilesColumnParagraph(unittest.TestCase):
     it, two paragraphs before the table whose column it described."""
 
     def test_it_names_the_column_in_its_own_paragraph_before_the_table(self):
-        import generate_readme
 
-        source = inspect.getsource(generate_readme)
+        source = script_source("generate_readme.py")
         self.assertNotIn("Files is how many", source)
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         paragraph = next(p for p in readme.split("\n\n") if "The Files column" in p)
@@ -799,12 +798,11 @@ class PublishedNumbersShareOneFormat(unittest.TestCase):
 
     def test_generators_format_counts_and_sizes_alike(self):
         import generate_readme
-        import generate_site
 
         readme_source = inspect.getsource(generate_readme.generate_readme)
         self.assertNotIn("size_mb", readme_source)
         self.assertIn("format_size(size)", readme_source)
-        self.assertIn("{total_files:,}", inspect.getsource(generate_site))
+        self.assertIn("{total_files:,}", script_source("generate_site.py"))
         self.assertEqual(generate_readme.format_size(16011 * 1024 * 1024), "15.6 GB")
 
     def test_the_readme_has_no_bare_large_count(self):
@@ -1983,14 +1981,12 @@ class NoTextClaimsAScheduledScrape(unittest.TestCase):
     `schedule:`."""
 
     def test_no_text_ties_the_registry_to_automation(self):
-        import generate_readme
-        import generate_site
         import list_platforms
 
         texts = {
             "adding-a-platform.md": (WIKI / "adding-a-platform.md").read_text(encoding="utf-8"),
-            "generate_readme": inspect.getsource(generate_readme),
-            "generate_site": inspect.getsource(generate_site),
+            "generate_readme": script_source("generate_readme.py"),
+            "generate_site": script_source("generate_site.py"),
             "generate_pack": script_source("generate_pack.py"),
             "list_platforms": inspect.getsource(list_platforms),
             "_guides.yml": (ROOT / "platforms" / "_guides.yml").read_text(encoding="utf-8"),
