@@ -9,7 +9,7 @@ Each table sits between `<!-- generated: NAME -->` and
 options and their arguments from its parser, the event kinds and their keys
 from EVENT_KEYS, the exit codes from its sys.exit calls, the RETROBIOS_PAD
 values and each route's keys from TUI_ROUTES, the handheld launchers from
-sitehandheld.LAUNCHERS. The prose cells (what an option
+installer_build/handhelds.py. The prose cells (what an option
 does, when an event comes) are kept as written, matched by their row. A row
 install.py gains has no prose yet: the generator names it and writes nothing,
 and the row is added by hand inside the markers, its first cell holding the
