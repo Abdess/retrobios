@@ -21,7 +21,8 @@ from pathlib import Path
 
 
 import siterender
-from sitestarlight import toc_slug
+from model import systemnames
+from core.anchors import toc_slug
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -67,8 +68,8 @@ STAYS_PLAIN = {
 def _reset() -> None:
     """Back to the repository's sections and boards, none written."""
     siterender._arcade_source[0] = None
-    siterender._boards_built[0] = False
-    siterender._sections_installed[0] = False
+    systemnames._boards_built[0] = False
+    systemnames._sections_installed[0] = False
     siterender.reset_console_pages()
 
 
@@ -100,7 +101,7 @@ class Boards(unittest.TestCase):
         names = set(boards.values())
         for sys_id, name in NAMED_BOARDS.items():
             with self.subTest(sys_id=sys_id):
-                self.assertEqual(siterender.system_name(sys_id), name)
+                self.assertEqual(systemnames.system_name(sys_id), name)
                 self.assertIn(name, names)
 
     def test_every_copy_names_its_board(self) -> None:
@@ -227,7 +228,7 @@ class BoardRules(unittest.TestCase):
         tmp_root.mkdir(exist_ok=True)
         self._tmp = tempfile.TemporaryDirectory(dir=tmp_root)
         self.root = Path(self._tmp.name)
-        siterender.set_console_sections({("Arcade", "MAME"), ("SNK", "Neo Geo")})
+        systemnames.set_console_sections({("Arcade", "MAME"), ("SNK", "Neo Geo")})
 
     def tearDown(self) -> None:
         self._tmp.cleanup()

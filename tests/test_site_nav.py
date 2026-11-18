@@ -35,10 +35,11 @@ from html import unescape
 
 import generate_site
 import sitestarlight
+from core import anchors as core_anchors
 from model.registry import list_registered_platforms, load_platform_registry
 from model.platforms import load_platform_config
 
-from siteguides import DEVICE_GROUPS
+from model.guides import DEVICE_GROUPS
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -77,7 +78,7 @@ def _index_anchors(markdown: str) -> set[str]:
 
 
 ANCHORS = {
-    "platforms/index.md": {sitestarlight.toc_slug(label) for label, _ in DEVICE_GROUPS.values()},
+    "platforms/index.md": {core_anchors.toc_slug(label) for label, _ in DEVICE_GROUPS.values()},
     "systems/index.md": {"consoles-and-computers"},
     "emulators/index.md": _index_anchors(generate_site.generate_emulators_index({
         "duckstation": {"emulator": "DuckStation", "systems": ["sony-playstation"]},
@@ -173,7 +174,7 @@ class EmulatorsOneLevelDeep(unittest.TestCase):
         for group in generate_site._emulator_nav(profiles)[1:]:
             (label, _pages), = group.items()
             with self.subTest(initial=label):
-                self.assertIn(sitestarlight.toc_slug(label), anchors)
+                self.assertIn(core_anchors.toc_slug(label), anchors)
 
     def test_every_initial_holds_pages(self):
         from model.profiles import load_emulator_profiles
@@ -472,7 +473,7 @@ def _moved_platform_pages() -> list[Path]:
         return []
     # A guide page sits beside the setups (platforms/linux-handhelds) without
     # being a list moved off one of them.
-    from siteguides import HANDHELD_GUIDE
+    from model.guides import HANDHELD_GUIDE
 
     guides = {Path(HANDHELD_GUIDE.path).stem} if HANDHELD_GUIDE else set()
     return [path for path in sorted(folder.glob("*.md*"))

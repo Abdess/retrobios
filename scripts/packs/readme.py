@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, TypedDict
 
 from core.options import reject_unknown
 from model.region import label as region_label
-from siteguides import INSTALL_PS1, INSTALL_SH, pack_manual
+from model.guides import INSTALL_PS1, INSTALL_SH, pack_manual
 
 if TYPE_CHECKING:
     from typing_extensions import Unpack

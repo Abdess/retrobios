@@ -19,6 +19,7 @@ from pathlib import Path
 
 import generate_site as gs
 import siterender
+from model import systemnames
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -288,7 +289,7 @@ class EverySystemLinkLandsOnItsSection(unittest.TestCase):
 
         db = load_database(str(REPO_ROOT / "database.json"))
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"), skip_aliases=False)
-        siterender.set_console_sections(gs._group_by_manufacturer(db), siterender.program_names(profiles))
+        systemnames.set_console_sections(gs._group_by_manufacturer(db), systemnames.program_names(profiles))
         platforms = REPO_ROOT / "platforms"
         ids = {str(sid) for profile in profiles.values() for sid in profile.get("systems") or []}
         for name in list_registered_platforms(str(platforms)):

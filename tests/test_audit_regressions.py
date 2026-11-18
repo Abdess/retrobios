@@ -60,7 +60,7 @@ class ReadmeRegressions(unittest.TestCase):
 
     def test_advertised_bootstrap_urls_are_the_shipped_ones(self):
         import sitebootstrap
-        from siteguides import INSTALL_BASE
+        from model.guides import INSTALL_BASE
 
         quick_install = self._quick_install()
         for name in sitebootstrap.SOURCES:
@@ -880,7 +880,7 @@ class PackReadmesSayWhatTheInstallerDoes(unittest.TestCase):
         return text[text.index("INSTALLATION"):text.index("TROUBLESHOOTING")]
 
     def test_retroarch_offers_the_windows_installer(self):
-        from siteguides import INSTALL_PS1, INSTALL_SH
+        from model.guides import INSTALL_PS1, INSTALL_SH
 
         guide = self._guide("retroarch")
         self.assertIn(f"{INSTALL_SH} | sh", guide)
@@ -907,7 +907,7 @@ class PackReadmesSayWhatTheInstallerDoes(unittest.TestCase):
 
     def test_retropie_never_sends_a_pc_to_the_linux_partition(self):
         guide = self._guide("retropie")
-        from siteguides import INSTALL_SH
+        from model.guides import INSTALL_SH
 
         self.assertNotIn("Put the SD card in your PC", guide)
         self.assertIn(f"{INSTALL_SH} | sh", guide)

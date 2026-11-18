@@ -22,10 +22,9 @@ import subprocess
 from pathlib import Path
 
 from core.artifacts import write_if_changed
+from model.guides import PS1_NAME, SH_NAME
 
 REPO_RAW = "https://raw.githubusercontent.com/Abdess/retrobios"
-SH_NAME = "i"
-PS1_NAME = "i.ps1"
 
 # Served name: the bootstrap it copies and the one line naming the
 # installer's address there.

@@ -42,9 +42,10 @@ import json
 
 import generate_site as gs
 import siterender
+from model import systemnames
 from packs.crossref import FileConsumers
 import make_og_cards
-from sitestarlight import toc_slug
+from core.anchors import toc_slug
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -1125,7 +1126,7 @@ class ABoardIsAnArcadeMachine(unittest.TestCase):
 
     def test_no_board_has_a_parent_outside_arcade(self) -> None:
         wrong = sorted(board for board in siterender.arcade_boards()
-                       if board in siterender.SYSTEM_PARENTS)
+                       if board in systemnames.SYSTEM_PARENTS)
         self.assertEqual(wrong, [])
 
     def test_no_board_page_for_a_machine_filed_elsewhere(self) -> None:

@@ -23,6 +23,7 @@ from collections.abc import Iterable
 from pathlib import Path
 
 import siterender
+from model import systemnames
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -156,8 +157,8 @@ class SystemLinks(unittest.TestCase):
                 db = json.load(handle)
             cls.manufacturers = _group_by_manufacturer(db)
             profiles = load_emulator_profiles("emulators", skip_aliases=False)
-            siterender.set_console_sections(
-                cls.manufacturers, siterender.program_names(profiles))
+            systemnames.set_console_sections(
+                cls.manufacturers, systemnames.program_names(profiles))
             # The system pages give every arcade board a section of its own
             # and record it. The built pages are checked by
             # test_site_built_gate.
@@ -205,16 +206,16 @@ class SystemLinks(unittest.TestCase):
         by_heading: dict[str, set[tuple[str, str]]] = {}
         for mfr, consoles in self.manufacturers.items():
             for console in consoles:
-                for name in {siterender._heading_name(mfr, console), console}:
+                for name in {systemnames._heading_name(mfr, console), console}:
                     by_heading.setdefault(name.casefold(), set()).add((mfr, console))
         missed = []
         for sys_id in sorted(self.ids):
-            places = by_heading.get(siterender.system_name(sys_id).casefold(), set())
+            places = by_heading.get(systemnames.system_name(sys_id).casefold(), set())
             if len(places) != 1:
                 continue
             mfr, console = next(iter(places))
             if mfr == "Other" or (
-                mfr == "Arcade" and console.casefold() in siterender._program_names
+                mfr == "Arcade" and console.casefold() in systemnames._program_names
             ):
                 continue
             if siterender.system_section(sys_id) is None:
@@ -227,19 +228,19 @@ class SystemLinks(unittest.TestCase):
             for mfr, consoles in self.sections.items() for console in consoles
         }
         self.assertEqual(
-            sorted(k for k, v in siterender.SYSTEM_PARENTS.items() if v not in sections), [])
+            sorted(k for k, v in systemnames.SYSTEM_PARENTS.items() if v not in sections), [])
 
     def test_parents_hold_the_files(self) -> None:
         """A parent holds a file of the id, or of an id of the same name.
         An entry its own section shadows is never read and is not judged."""
         by_name: dict[str, set[tuple[str, str]]] = {}
         for sys_id, sections in self.held.items():
-            by_name.setdefault(siterender.system_name(sys_id), set()).update(sections)
+            by_name.setdefault(systemnames.system_name(sys_id), set()).update(sections)
         wrong = []
-        for sys_id, parent in sorted(siterender.SYSTEM_PARENTS.items()):
-            if siterender._own_section(sys_id) is not None:
+        for sys_id, parent in sorted(systemnames.SYSTEM_PARENTS.items()):
+            if systemnames._own_section(sys_id) is not None:
                 continue
-            held = by_name.get(siterender.system_name(sys_id))
+            held = by_name.get(systemnames.system_name(sys_id))
             if held is not None and parent not in held:
                 wrong.append((sys_id, parent))
         self.assertEqual(wrong, [])
@@ -276,7 +277,7 @@ class SystemLinks(unittest.TestCase):
         self.assertEqual(siterender.system_section("naomi2"), ("arcade", "Sega NAOMI 2"))
         for sys_id in ("emerson-arcadia-2001", "naomi2"):
             with self.subTest(sys_id=sys_id):
-                self.assertNotIn(sys_id, siterender.SYSTEM_PARENTS)
+                self.assertNotIn(sys_id, systemnames.SYSTEM_PARENTS)
 
     def test_emulator_rows_link_the_variant(self) -> None:
         from generate_site import _named_system_link

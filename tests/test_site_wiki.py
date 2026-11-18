@@ -42,7 +42,7 @@ import yaml
 import importlib.util
 
 import sitediagrams
-from siteguides import INSTALL_SH
+from model.guides import INSTALL_SH
 from tests import sitepages
 import build_port
 from check_release import SUMS, Asset, compare_release

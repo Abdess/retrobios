@@ -24,7 +24,7 @@ import yaml
 import check_freshness
 import generate_site as gs
 import sitediagrams
-import siterender
+from model import collection
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -67,7 +67,7 @@ class SectionNames(unittest.TestCase):
         self.assertEqual(gs._section_label("Arcade", "fba2012"), "FB Alpha 2012")
         self.assertEqual(gs._section_label("Arcade", "Arcade"), gs.OTHER_ARCADE_LABEL)
         self.assertEqual(gs._section_label("Sony", "PlayStation"), "PlayStation")
-        self.assertEqual(siterender.SECTION_LABELS[("Arcade", "fba2012")],
+        self.assertEqual(collection.SECTION_LABELS[("Arcade", "fba2012")],
                          _profile("fbalpha2012")["emulator"])
 
 
@@ -86,7 +86,7 @@ class PlatformLogos(unittest.TestCase):
         self.assertTrue(self.registry["minui"]["logo_flip"])
 
     def test_every_logo_copy_has_a_registry_or_tile_logo(self):
-        from siteguides import GROUP_TILES
+        from model.guides import GROUP_TILES
 
         tiles = {re.sub(r"[^a-z0-9]+", "-", tile.name.lower()).strip("-"): tile.logo
                  for group in GROUP_TILES.values() for tile in group}

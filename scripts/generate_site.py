@@ -41,9 +41,13 @@ from pathlib import Path
 from typing import TypeVar
 
 sys.path.insert(0, os.path.dirname(__file__))
-from sitecollection import (
-    _copy_places, _group_by_manufacturer, _profiles_in,
-    _profiles_on_disk, _slug, collection_paths,
+from model.collection import (
+    _copy_places,
+    _group_by_manufacturer,
+    _profiles_in,
+    _profiles_on_disk,
+    _slug,
+    collection_paths,
 )
 from resolve.ownership import BUCKET_FOLDERS, names_manufacturer
 from model.profiles import (
@@ -67,7 +71,8 @@ from model.safeparse import require_yaml, yaml_load
 from resolve.localfile import resolution_is_hash_exact, resolve_local_file
 from resolve.cores import resolve_platform_cores
 from resolve.layout import runs_standalone
-from siterender import SECTION_LABELS, WIKI_SRC_DIR
+from model.collection import SECTION_LABELS
+from siterender import WIKI_SRC_DIR
 from core.artifacts import ArtifactLockBusy, artifact_lock
 from core.artifacts import json_text as _json_text
 from packs.crossref import FileConsumers, entry_target, held_copy
@@ -87,14 +92,14 @@ from generate_readme import (
 from provenance_report import build_report, distinct_missing, profile_needs
 import sitemarkup as markup
 import siteentries
-import siteinputs
+from model import siteinputs
 from model import retired as model_retired
 import siteagents
 import sitediagrams
 import sitestarlight
 import sitesteps
 from siteexports import generate_exports_page, load_export_reports
-from siteguides import (
+from model.guides import (
     ALSO_RUNS,
     DEVICE_GROUPS,
     GROUP_ANCHORS,
@@ -110,13 +115,10 @@ from siteguides import (
     TERMINALS,
     TRUST_ITEMS,
     detected_systems as _detected_systems,
-    fence,
     install_command,
     setup_count,
-    platform_args,
-    terminal_tabs,
-    trust_box,
 )
+from siteguides import fence, platform_args, terminal_tabs, trust_box
 import archive_build
 import release_record
 import sitebootstrap
@@ -149,9 +151,6 @@ from siterender import (
     _slugify_anchor,
     _system_page_map,
     set_system_page_map,
-    set_console_sections,
-    program_names,
-    system_name,
     card_page,
     console_href,
     console_anchor,
@@ -169,6 +168,7 @@ from siterender import (
     _icon_name,
     prime_system_icons,
 )
+from model.systemnames import set_console_sections, program_names, system_name
 from core.paths import REPO_ROOT
 
 yaml = require_yaml()
@@ -5151,7 +5151,8 @@ def _console_system_names(profiles: dict, coverages: dict) -> dict[tuple[str, st
     own section that folder is: a collection file is named after the console
     it is filed under. A folder no id owns, or that two names own, is left out.
     """
-    from siterender import _own_section, system_ids
+    from model.systemnames import _own_section
+    from siterender import system_ids
 
     found: dict[tuple[str, str], set[str]] = {}
     for sys_id in system_ids(profiles, [c["config"] for c in coverages.values()]):
@@ -5483,7 +5484,8 @@ def _console_display(manufacturer: str, console: str) -> str:
     """A console section's name as the reader looks for it: the heading
     system_name gives its id, or the folder alone under a program's top
     (Other, Arcade), where "Other mame" would name nothing."""
-    from siterender import _PROGRAM_TOPS, _heading_name
+    from model.collection import _PROGRAM_TOPS
+    from model.systemnames import _heading_name
 
     return console if manufacturer in _PROGRAM_TOPS else _heading_name(manufacturer, console)
 
@@ -7186,7 +7188,8 @@ def _start_groups(
     the Mega CD BIOS for its Genesis), and one under Other is a single
     emulator's, its shaders and fonts. A file the emulator ships with is
     no file to fetch."""
-    from siterender import _heading_name, _manufacturer_slug, system_name
+    from model.systemnames import _heading_name, system_name
+    from model.collection import _manufacturer_slug
 
     here = (_manufacturer_slug(section[0]), section[1]) if section else None
     kept, candidates = _section_reads(files, consumers, here)
@@ -7669,7 +7672,8 @@ class _BoardSort:
 
     def arcade_folders(self, arcade: dict[str, list], by_name: dict[str, str]) -> None:
         """The folders of bios/Arcade/, each file to its board or machine."""
-        from siterender import arcade_board, archive_machine, record_card_move
+        from siterender import arcade_board, archive_machine
+        from model.collection import record_card_move
 
         for console in sorted(arcade):
             joined = by_name.get(console.casefold())
@@ -7689,7 +7693,8 @@ class _BoardSort:
         """A board's set filed under a machine's folder is on the board's page
         too, whatever the folder: naomi.zip under the Dreamcast was the copy
         five setups list, and the NAOMI page did not name it."""
-        from siterender import arcade_board, archive_machine, record_card_move
+        from siterender import arcade_board, archive_machine
+        from model.collection import record_card_move
 
         for mfr, consoles in manufacturers.items():
             if mfr == "Arcade":

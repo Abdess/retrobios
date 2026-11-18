@@ -20,8 +20,8 @@ from pathlib import Path
 import yaml
 
 import generate_site
-import siteguides
-from siteguides import GUIDES, GuideError, load_guides
+from model import guides
+from model.guides import GUIDES, GuideError, load_guides
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -96,10 +96,10 @@ class GuidesLiveInYaml(unittest.TestCase):
             self._load(_guides_text(), registry)
 
     def test_the_pack_readme_keeps_its_indent(self):
-        manual = siteguides.pack_manual("retrobat")
+        manual = guides.pack_manual("retrobat")
         self.assertTrue(manual.startswith("  Option B: Manual\n  ----------------\n"))
         self.assertTrue(manual.endswith("  4. Overwrite if asked\n\n"))
-        self.assertEqual(siteguides.pack_manual("minui"), "")
+        self.assertEqual(guides.pack_manual("minui"), "")
 
 
 # A table of prose keyed by platform: what the guides file replaced.

@@ -73,7 +73,7 @@ def system_cards() -> dict[str, tuple[str, str]]:
     system pages are written from."""
     from model.composition import GAME_DATA_TOPS
     from model.database import load_database
-    from sitecollection import _group_by_manufacturer, _slug
+    from model.collection import _group_by_manufacturer, _slug
 
     def lead(manufacturer: str) -> str:
         # Other holds one folder per emulator, a game publisher's page its

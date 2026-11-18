@@ -41,7 +41,7 @@ from xml.sax.saxutils import escape
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-import siteinputs
+from model import siteinputs
 import sitemarkup as markup
 from core.paths import REPO_ROOT
 
@@ -440,7 +440,7 @@ def _setups_in(platforms_dir: str) -> tuple[str, ...]:
 
 def setups_named(named: list[str]) -> str:
     """*named*, then how many other setups there are: "A, B and 15 more"."""
-    from siteguides import setup_count
+    from model.guides import setup_count
 
     others = setup_count() - len(named)
     return ", ".join(named) + (f" and {others} more" if others else "")
@@ -876,7 +876,7 @@ FENCE_TITLES = {"sh": "Terminal", "powershell": "PowerShell"}
 
 def _installer_args(body: str) -> str:
     """The options of a one-line install command, continuation lines joined."""
-    from siteguides import INSTALL_SH
+    from model.guides import INSTALL_SH
 
     line = " ".join(part.strip().rstrip("\\").strip() for part in body.splitlines())
     match = re.fullmatch(rf"curl -fsSL {re.escape(INSTALL_SH)} \| sh(?: -s -- (.+))?", line)
@@ -899,7 +899,7 @@ def expand_commands(markdown: str) -> str:
     gives a tab its own options, for a folder that differs there."""
     if "os-tabs" not in markdown:
         return markdown
-    from siteguides import TERMINALS, install_command
+    from model.guides import TERMINALS, install_command
 
     def replace(match: re.Match[str]) -> str:
         indent = match.group("indent")

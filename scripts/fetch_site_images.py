@@ -149,7 +149,7 @@ def write_manifest(directory: Path, note: str, entries: list[dict]) -> None:
 
 
 def fetch_logos() -> None:
-    from siteguides import GROUP_TILES, GUIDES
+    from model.guides import GROUP_TILES, GUIDES
 
     with open(ROOT / "platforms" / "_registry.yml", encoding="utf-8") as handle:
         platforms = yaml.safe_load(handle)["platforms"]
@@ -198,7 +198,7 @@ def fetch_logos() -> None:
 
 def fetch_icons() -> None:
     from model.database import load_database
-    from sitecollection import _group_by_manufacturer
+    from model.collection import _group_by_manufacturer
     from siterender import SYSTEM_ICON_BASE, _icon_name
 
     db = load_database(str(ROOT / "database.json"))

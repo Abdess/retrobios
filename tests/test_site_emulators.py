@@ -39,6 +39,7 @@ import json
 
 import generate_site as gs
 import siterender
+from model import systemnames
 import validate_site
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -222,7 +223,7 @@ class TheIndexNamesEmulatorsAndSystems(unittest.TestCase):
         self.assertNotIn("| Engine |", page)
         self.assertNotIn(" -- ", page)
         row = next(line for line in page.splitlines() if line.startswith("| [DuckStation]"))
-        self.assertIn(f"[{siterender.system_name('sony-playstation')}]", row)
+        self.assertIn(f"[{systemnames.system_name('sony-playstation')}]", row)
         self.assertIn("(../systems/sony.md#playstation)", row)
         self.assertNotIn("sony-playstation |", row)
 

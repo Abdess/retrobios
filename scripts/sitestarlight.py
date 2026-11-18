@@ -14,7 +14,6 @@ from __future__ import annotations
 import html
 import json
 import re
-import unicodedata
 import urllib.parse
 from collections.abc import Callable, Iterator, Mapping
 from dataclasses import dataclass, field
@@ -22,6 +21,7 @@ from html import unescape
 from pathlib import Path, PurePosixPath
 
 from core.paths import REPO_ROOT
+from core.anchors import _unique, toc_slug
 
 BASE = "/retrobios/"
 SITE_URL = "https://abdess.github.io/retrobios/"
@@ -47,7 +47,6 @@ MD_LINK = re.compile(r"(?P<bang>!?)\[(?P<text>(?:[^\[\]\n]|\[[^\]\n]*\])*)\]\((?
 HTML_URL = re.compile(r"(?P<attr>\b(?:href|src))=\"(?P<url>[^\"]*)\"")
 ATTR_BLOCK = re.compile(r"[ \t]*\{(?P<attrs>[^{}]*)\}[ \t]*$")
 ID_ATTR = re.compile(r"\bid=\"(?P<id>[^\"]+)\"")
-IDCOUNT = re.compile(r"^(.*)_([0-9]+)$")
 
 
 # Addresses
@@ -126,27 +125,6 @@ def rewrite_links(text: str, rel: str) -> str:
 
     text = outside_fences(text, lambda chunk: MD_LINK.sub(markdown, chunk))
     return outside_fences(text, lambda chunk: HTML_URL.sub(attribute, chunk))
-
-
-# Heading ids, as Python-Markdown's toc extension gives them
-
-
-def toc_slug(text: str) -> str:
-    text = re.sub(r"<[^>]+>", "", text)
-    text = re.sub(r"!\[[^\]]*\]\([^)]*\)(\{[^}]*\})?", "", text)
-    text = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", text)
-    text = unescape(text.replace("`", "").replace("**", "").replace("\\", ""))
-    text = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode("ascii")
-    text = re.sub(r"[^\w\s-]", "", text).strip().lower()
-    return re.sub(r"[-\s]+", "-", text)
-
-
-def _unique(ident: str, used: set[str]) -> str:
-    while ident in used or not ident:
-        match = IDCOUNT.match(ident)
-        ident = f"{match[1]}_{int(match[2]) + 1}" if match else f"{ident}_1"
-    used.add(ident)
-    return ident
 
 
 def pin_heading_ids(text: str, title_id: str = "") -> str:

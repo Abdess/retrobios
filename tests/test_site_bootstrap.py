@@ -23,7 +23,8 @@ from unittest import mock
 
 import install
 import sitebootstrap
-from siteguides import INSTALL_BASE, INSTALL_PS1, INSTALL_SH, install_command
+from model import guides
+from model.guides import INSTALL_BASE, INSTALL_PS1, INSTALL_SH, install_command
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -156,8 +157,8 @@ class DocumentedCommands(unittest.TestCase):
         site = re.search(r"const SITE = '([^']+)'", config).group(1)
         base = re.search(r"const BASE = '([^']+)'", config).group(1)
         self.assertEqual(f"{INSTALL_BASE}/", site + base)
-        self.assertEqual(INSTALL_SH, f"{site}{base}{sitebootstrap.SH_NAME}")
-        self.assertEqual(INSTALL_PS1, f"{site}{base}{sitebootstrap.PS1_NAME}")
+        self.assertEqual(INSTALL_SH, f"{site}{base}{guides.SH_NAME}")
+        self.assertEqual(INSTALL_PS1, f"{site}{base}{guides.PS1_NAME}")
         self.assertEqual(install.BOOTSTRAP_URL, INSTALL_SH)
         self.assertEqual(f"{install.BOOTSTRAP_URL}.ps1", INSTALL_PS1)
 

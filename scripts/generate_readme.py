@@ -34,7 +34,7 @@ from resolve.cores import resolve_platform_cores
 from model.systems import system_index
 import archive_build
 import release_record
-from siteguides import PACKAGE_COMMAND, install_command
+from model.guides import PACKAGE_COMMAND, install_command
 from resolve.review import LARGE_FILE_ISSUE_URL
 from model.largefiles import LARGE_FILES_CACHE, load_registered_paths
 import pr_checks

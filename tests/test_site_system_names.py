@@ -16,7 +16,7 @@ import json
 import unittest
 from pathlib import Path
 
-import siterender
+from model import systemnames
 from model.registry import list_registered_platforms
 from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config
@@ -47,8 +47,8 @@ class SystemNames(unittest.TestCase):
         cls.manufacturers = _group_by_manufacturer(db)
         cls.profiles = load_emulator_profiles(
             str(REPO_ROOT / "emulators"), skip_aliases=False)
-        siterender.set_console_sections(
-            cls.manufacturers, siterender.program_names(cls.profiles))
+        systemnames.set_console_sections(
+            cls.manufacturers, systemnames.program_names(cls.profiles))
         platforms_dir = str(REPO_ROOT / "platforms")
         cls.platform_ids = {
             sys_id
@@ -64,7 +64,7 @@ class SystemNames(unittest.TestCase):
         unnamed = []
         for sys_id in sorted(self._all_ids()):
             try:
-                name = siterender.system_name(sys_id)
+                name = systemnames.system_name(sys_id)
             except KeyError:
                 unnamed.append(sys_id)
                 continue
@@ -73,11 +73,11 @@ class SystemNames(unittest.TestCase):
 
     def test_no_name_is_a_manufacturer_page_or_an_emulator(self) -> None:
         taken = {name.casefold() for name in self.manufacturers}
-        taken |= {name.casefold() for name in siterender.program_names(self.profiles)}
+        taken |= {name.casefold() for name in systemnames.program_names(self.profiles)}
         clashes = sorted(
-            (sys_id, siterender.system_name(sys_id))
+            (sys_id, systemnames.system_name(sys_id))
             for sys_id in self._all_ids()
-            if siterender.system_name(sys_id).casefold() in taken
+            if systemnames.system_name(sys_id).casefold() in taken
         )
         self.assertEqual(clashes, [])
 
@@ -85,33 +85,33 @@ class SystemNames(unittest.TestCase):
         """A table entry an own section shadows is never read, and an entry
         no platform or profile names is a leftover."""
         shadowed = sorted(
-            sys_id for sys_id in siterender.SYSTEM_NAMES
-            if siterender._own_section(sys_id) is not None
+            sys_id for sys_id in systemnames.SYSTEM_NAMES
+            if systemnames._own_section(sys_id) is not None
         )
         self.assertEqual(shadowed, [])
-        unused = sorted(set(siterender.SYSTEM_NAMES) - self._all_ids())
+        unused = sorted(set(systemnames.SYSTEM_NAMES) - self._all_ids())
         self.assertEqual(unused, [])
 
     def test_names_that_read_a_folder_vote(self) -> None:
-        self.assertEqual(siterender.system_name("nintendo-gba"), "Nintendo Game Boy Advance")
-        self.assertEqual(siterender.system_name("camplynx"), "Camputers Lynx")
-        self.assertEqual(siterender.system_name("atari-lynx"), "Atari Lynx")
-        self.assertEqual(siterender.system_name("arcade"), "Arcade games")
-        self.assertEqual(siterender.system_name("sega-naomi"), "Sega NAOMI")
+        self.assertEqual(systemnames.system_name("nintendo-gba"), "Nintendo Game Boy Advance")
+        self.assertEqual(systemnames.system_name("camplynx"), "Camputers Lynx")
+        self.assertEqual(systemnames.system_name("atari-lynx"), "Atari Lynx")
+        self.assertEqual(systemnames.system_name("arcade"), "Arcade games")
+        self.assertEqual(systemnames.system_name("sega-naomi"), "Sega NAOMI")
 
     def test_own_section_names_from_its_heading(self) -> None:
-        self.assertEqual(siterender.system_name("nintendo-snes"), "Nintendo SNES")
-        self.assertEqual(siterender.system_name("sony-playstation"), "Sony PlayStation")
+        self.assertEqual(systemnames.system_name("nintendo-snes"), "Nintendo SNES")
+        self.assertEqual(systemnames.system_name("sony-playstation"), "Sony PlayStation")
 
     def test_an_unknown_id_raises(self) -> None:
         with self.assertRaises(KeyError):
-            siterender.system_name("no-such-system-anywhere")
+            systemnames.system_name("no-such-system-anywhere")
 
     def test_mame_names_systems_not_emulators(self) -> None:
-        names = {siterender.system_name(s) for s in self.profiles["mame"].get("systems") or []}
+        names = {systemnames.system_name(s) for s in self.profiles["mame"].get("systems") or []}
         self.assertNotIn("FBNeo", names)
         self.assertNotIn("Arcade", names)
-        self.assertFalse(names & siterender.program_names(self.profiles))
+        self.assertFalse(names & systemnames.program_names(self.profiles))
 
 
 class SectionsComeBeforeThePlan(unittest.TestCase):

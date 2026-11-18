@@ -117,14 +117,14 @@ class TheOneLinerFollowsTheRegistry(unittest.TestCase):
         """The address comes from install_base in platforms/_guides.yml, the
         one the site's commands use."""
         from packs import readme as packreadme
-        import sitebootstrap
-        from siteguides import INSTALL_BASE
+        from model import guides
+        from model.guides import INSTALL_BASE
 
         source = (REPO_ROOT / "scripts" / "packs" / "readme.py").read_text(encoding="utf-8")
         self.assertNotIn("raw.githubusercontent.com", source)
         self.assertNotIn("abdess.github.io", source)
-        self.assertEqual(packreadme.INSTALL_SH, f"{INSTALL_BASE}/{sitebootstrap.SH_NAME}")
-        self.assertEqual(packreadme.INSTALL_PS1, f"{INSTALL_BASE}/{sitebootstrap.PS1_NAME}")
+        self.assertEqual(packreadme.INSTALL_SH, f"{INSTALL_BASE}/{guides.SH_NAME}")
+        self.assertEqual(packreadme.INSTALL_PS1, f"{INSTALL_BASE}/{guides.PS1_NAME}")
 
 
 class GuidesInstallFromTheZipInHand(unittest.TestCase):

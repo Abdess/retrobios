@@ -19,7 +19,7 @@ import json
 from collections.abc import Callable
 from pathlib import Path
 
-from siteguides import PACKAGE_COMMAND
+from model.guides import PACKAGE_COMMAND
 
 SITE = "https://abdess.github.io/retrobios/"
 PUBLISHER = "abdess.github.io"

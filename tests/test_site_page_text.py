@@ -25,7 +25,7 @@ from pathlib import Path
 import sitediagrams
 import siteentries
 import sitesteps
-from siteguides import TERMINALS
+from model.guides import TERMINALS
 
 ROOT = Path(__file__).resolve().parent.parent
 

@@ -12,6 +12,7 @@ from unittest import mock
 import yaml
 
 import siterender
+from model import systemnames
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -380,7 +381,7 @@ class TheSearchLandsOnTheCard(unittest.TestCase):
         by_system = {f"system-{i:02d}": [{"name": f"f{i}.bin", "status": "ok"}]
                      for i in range(11)}
         names = {sys_id: f"System {sys_id[-2:]}" for sys_id in by_system}
-        with mock.patch.dict(siterender.SYSTEM_NAMES, names):
+        with mock.patch.dict(systemnames.SYSTEM_NAMES, names):
             lines = generate_site._render_platform_systems(by_system, {}, {})
         headings = [line for line in lines if line.startswith("### ")]
         self.assertEqual(len(headings), 11)

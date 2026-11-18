@@ -53,7 +53,7 @@ import urllib.error
 
 import generate_site
 import sitewanted
-import siterender
+from model import systemnames
 from model.registry import list_registered_platforms, list_release_pack_platforms
 from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config
@@ -281,7 +281,7 @@ class PlatformReferenceInWords(unittest.TestCase):
     def test_systems_by_name_with_the_id_in_small_text(self):
         systems = {"sony-playstation": {"files": [{"name": "f.bin"}]}}
         page = self._page("md5", "md5", systems)
-        name = siterender.system_name("sony-playstation")
+        name = systemnames.system_name("sony-playstation")
         self.assertIn(f"| [{name}](#sony-playstation) <small data-pagefind-ignore>sony-playstation</small> |", page)
         heading = next(line for line in page.splitlines() if line.startswith("### ")
                        and "sony-playstation" in line)
@@ -782,7 +782,7 @@ class LookupUrlsResolve(unittest.TestCase):
     def test_each_record_names_its_system_as_the_pages_do(self):
         """Find a file opens on "a BIOS file for Sony PlayStation": the name
         comes from system_name, never built in the browser."""
-        from siterender import system_name
+        from model.systemnames import system_name
 
         db = {"files": {"ab" * 20: {"path": "bios/Sony/PlayStation/scph5501.bin",
                                     "name": "scph5501.bin", "md5": "490f666e1afb15b7362b406ed1cea246"}}}

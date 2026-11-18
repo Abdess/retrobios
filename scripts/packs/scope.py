@@ -32,7 +32,7 @@ def system_titles(*entry_lists: Iterable[dict]) -> dict[str, str]:
     and the installer shows its id: the site build refuses such a system,
     so only a test fixture reaches here with one.
     """
-    from siterender import system_name
+    from model.systemnames import system_name
 
     ids = {
         sys_id

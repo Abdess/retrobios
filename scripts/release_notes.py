@@ -42,7 +42,7 @@ from model.registry import (
 from model.platforms import load_platform_config
 from core.cli import require_directory
 from core.artifacts import write_text_atomic
-from siteguides import install_command
+from model.guides import install_command
 
 REPO = "Abdess/retrobios"
 OWNER = "Abdess"

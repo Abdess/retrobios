@@ -21,7 +21,7 @@ from pathlib import Path
 
 import generate_site
 import sitediagrams
-import siteinputs
+from model import siteinputs
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -93,7 +93,7 @@ class TheCollectionDoesNotDependOnTheWorkingDirectory(unittest.TestCase):
     def test_same_sections_and_paths_from_another_directory(self) -> None:
         import json
 
-        import sitecollection
+        from model import collection as sitecollection
 
         db = json.loads((REPO_ROOT / "database.json").read_text(encoding="utf-8"))
         here = sitecollection.collection_paths(db)
@@ -108,7 +108,7 @@ class TheCollectionDoesNotDependOnTheWorkingDirectory(unittest.TestCase):
         self.assertGreater(sum(map(len, here.values())), len(here))
 
     def test_the_bios_folder_sits_beside_the_given_database(self) -> None:
-        import siteinputs
+        from model import siteinputs
 
         siteinputs.use(siteinputs.SiteInputs(db=Path("/elsewhere/database.json")))
         self.addCleanup(siteinputs.use, siteinputs.SiteInputs())

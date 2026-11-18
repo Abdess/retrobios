@@ -116,7 +116,7 @@ class TheTapeAndTheDriverAgree(unittest.TestCase):
         self.assertEqual(variant.mount, "/roms")
 
     def test_the_command_typed_is_the_one_the_pages_give(self):
-        from siteguides import install_command
+        from model.guides import install_command
 
         self.assertIn(f'Type "{install_command("sh", "--for-games")}"\n', self.tape)
 

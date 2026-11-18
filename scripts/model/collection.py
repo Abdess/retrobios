@@ -11,7 +11,7 @@ from __future__ import annotations
 import functools
 from dataclasses import dataclass
 
-import siteinputs
+from model import siteinputs
 from model.composition import GAME_DATA_TOPS
 from model.profiles import load_emulator_profiles
 
@@ -93,7 +93,6 @@ def _engine_sections(manufacturers: dict[str, dict[str, list]]) -> dict[str, dic
     top joins that top, and a folder named by a profile key is headed with
     the engine's name (SECTION_LABELS), its address unchanged.
     """
-    from siterender import SECTION_LABELS
 
     profiles = {key: profile for key, profile in _profiles_on_disk().items()
                 if profile.get("type") != "alias" and profile.get("role") != "test"}
@@ -139,7 +138,6 @@ def _file_readers(profiles: dict[str, dict]) -> dict[str, set[str]]:
 
 
 def _regroup_top(mfr: str, consoles: dict[str, list], engines: _Engines) -> dict[str, list]:
-    from siterender import record_card_move
 
     own = engines.profile_of(mfr)
     regrouped: dict[str, list] = {}
@@ -165,7 +163,6 @@ def _regroup_top(mfr: str, consoles: dict[str, list], engines: _Engines) -> dict
 def _join_other_folders(out: dict[str, dict[str, list]]) -> None:
     """The folder under Other an engine top is named after: ScummVM's
     engine data under Other/ScummVM, its themes under ScummVM/."""
-    from siterender import _PROGRAM_TOPS, record_card_move
 
     others = out.get("Other", {})
     for folder in sorted(others):
@@ -189,3 +186,41 @@ def _profiles_on_disk() -> dict[str, dict]:
 @functools.cache
 def _profiles_in(emulators_dir: str, skip_aliases: bool) -> dict[str, dict]:
     return load_emulator_profiles(emulators_dir, skip_aliases=skip_aliases)
+
+
+def _manufacturer_slug(manufacturer: str) -> str:
+    return manufacturer.lower().replace(" ", "-")
+
+
+# (manufacturer slug, folder, sha1) -> the (manufacturer slug, console) a
+# copy's card went to when the system pages file it outside its folder:
+# ScummVM's engine data under Other/ScummVM, neogeo.zip under Arcade.
+_card_moves: dict[tuple[str, str, str], tuple[str, str]] = {}
+
+
+def record_card_move(manufacturer: str, folder: str, sha1: str,
+                     to_manufacturer: str, to_console: str) -> None:
+    """Mark that the card of the copy under bios/<manufacturer>/<folder>/
+    sits in the section (to_manufacturer, to_console)."""
+    _card_moves[(_manufacturer_slug(manufacturer), folder, str(sha1))] = (
+        _manufacturer_slug(to_manufacturer), to_console)
+
+
+# System display names. A system is named by the heading of the console
+# section that is its own: the folder its id spells, under the maker the id
+# names when two makers file a console of that name. The page a system's
+# files were voted onto is not its section and never names it. That vote
+# called nintendo-gba "Nintendo Game Boy" and camplynx "Arcade". A system
+# with no section of its own is named in SYSTEM_NAMES, and a system in
+# neither stops the build.
+
+# Folders that file copies by the emulator or board that loads them. Their
+# headings name a program, not a system.
+_PROGRAM_TOPS = frozenset({"Other", "Arcade"})
+
+
+# A section whose folder is a short name the code reads, headed with the
+# program's name instead (bios/Arcade/fba2012 holds FB Alpha 2012's samples).
+SECTION_LABELS: dict[tuple[str, str], str] = {
+    ("Arcade", "fba2012"): "FB Alpha 2012",
+}

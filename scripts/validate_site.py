@@ -428,7 +428,7 @@ def _check_get_pages(
     """
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     import release_record
-    from siteguides import INSTALL_SH
+    from model.guides import INSTALL_SH
     from model.registry import list_registered_platforms, list_release_pack_platforms
 
     if not (platforms_dir / "_registry.yml").is_file():
