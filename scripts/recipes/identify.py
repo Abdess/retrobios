@@ -9,8 +9,7 @@ from collections import defaultdict
 from pathlib import Path
 
 from core.torrentzip import is_torrentzip
-from model.platforms import load_platform_config
-from model.registry import list_registered_platforms
+from recipes.pins import container_entries
 from recipes.pool import AtomPool
 from recipes.romsets import Recipe
 
@@ -65,29 +64,16 @@ def reconstruct(
 
 
 def platform_targets(platforms_dir: str) -> dict[str, set[str]]:
-    """Container MD5s the platforms pin, per archive name.
-
-    ``zipped_file`` entries pin an inner ROM instead of the container, so
-    their MD5 is not an archive hash and is skipped. So is a Recalbox md5,
-    the composite of the members (``zip_digest: composite``, Bios.cpp:64-68):
-    no container build can ever give it.
-    """
+    """Container MD5s the platforms pin, per archive name."""
     targets: dict[str, set[str]] = defaultdict(set)
-    for name in list_registered_platforms(platforms_dir):
-        config = load_platform_config(name, platforms_dir)
-        for system in config.get("systems", {}).values():
-            for entry in system.get("files", []) or []:
-                archive = entry.get("name", "")
-                if (
-                    not archive.endswith(".zip")
-                    or entry.get("zipped_file")
-                    or entry.get("zip_digest") == "composite"
-                ):
-                    continue
-                for value in str(entry.get("md5") or "").split(","):
-                    value = value.strip().lower()
-                    if len(value) == 32:
-                        targets[archive].add(value)
+    for _platform, entry in container_entries(platforms_dir):
+        archive = entry.get("name", "")
+        if not archive.endswith(".zip"):
+            continue
+        for value in str(entry.get("md5") or "").split(","):
+            value = value.strip().lower()
+            if len(value) == 32:
+                targets[archive].add(value)
     return dict(targets)
 
 

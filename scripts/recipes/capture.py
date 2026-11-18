@@ -10,9 +10,11 @@ from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 from typing import BinaryIO
 
+from core.hashing import parse_hash_list
 from core.torrentzip import write_torrentzip, zlib_ng_version
 from recipes.ledger import database_archives
 from recipes.members import _member_sha1, _opener
+from recipes.pins import container_entries
 from recipes.romsets import collect_recipes, load_dat_recipes
 
 _TORRENTZIP_COMMENT = b"TORRENTZIPPED-"
@@ -96,36 +98,19 @@ def _read_job(job: tuple[str, str]) -> tuple[str, dict | str]:
         return path, f"{type(exc).__name__}: {exc}"
 
 
-def _hash_values(value: object) -> set[str]:
-    raw = value if isinstance(value, list) else str(value or "").split(",")
-    return {str(item).strip().lower() for item in raw if str(item).strip()}
-
-
 def container_pins(platforms_dir: str, emulators_dir: str) -> dict[str, set[str]]:
-    """Container hash -> who pins it: ``platform:<name>`` or ``profile:<name>``.
-
-    A ``zipped_file`` entry pins a ROM inside the archive, and a Recalbox
-    archive md5 is the composite of its members (``zip_digest: composite``,
-    Bios.cpp:64-68): neither pins the container bytes.
-    """
-    from model.registry import list_registered_platforms
+    """Container hash -> who pins it: ``platform:<name>`` or ``profile:<name>``."""
     from model.profiles import load_emulator_profiles
-    from model.platforms import load_platform_config
 
     pins: dict[str, set[str]] = defaultdict(set)
-    for platform in list_registered_platforms(platforms_dir):
-        config = load_platform_config(platform, platforms_dir)
-        for system in config.get("systems", {}).values():
-            for entry in system.get("files", []) or []:
-                if entry.get("zipped_file") or entry.get("zip_digest") == "composite":
-                    continue
-                for key in ("md5", "sha1", "alt_md5"):
-                    for value in _hash_values(entry.get(key)):
-                        pins[value].add(f"platform:{platform}")
+    for platform, entry in container_entries(platforms_dir):
+        for key in ("md5", "sha1", "alt_md5"):
+            for value in parse_hash_list(entry.get(key)):
+                pins[value].add(f"platform:{platform}")
     for name, profile in load_emulator_profiles(emulators_dir, skip_aliases=False).items():
         for entry in profile.get("files", []) or []:
             for key in ("md5", "sha1", "sha256"):
-                for value in _hash_values(entry.get(key)):
+                for value in parse_hash_list(entry.get(key)):
                     pins[value].add(f"profile:{name}")
     return dict(pins)
 

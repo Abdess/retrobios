@@ -14,6 +14,7 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
+from core.hashing import parse_hash_list
 
 MAX_DOWNLOAD = 100 * 1024 * 1024  # 100MB per file
 
@@ -104,20 +105,8 @@ def find_missing(config: dict, db: dict) -> list[dict]:
     return missing
 
 
-def _accepted(entry: dict, field: str) -> set[str]:
-    """Every value an entry accepts for a hash field.
-
-    A profile lists several revisions as a YAML list (daedalusx64's
-    n64.psh), a platform as a comma-separated string. Read as one value,
-    the list stopped the run with an unhashable-type error.
-    """
-    value = entry.get(field)
-    values = value if isinstance(value, list) else str(value or "").split(",")
-    return {str(v).strip().lower() for v in values if str(v).strip()}
-
-
 def _crc32s(entry: dict) -> set[str]:
-    return {value.removeprefix("0x").zfill(8) for value in _accepted(entry, "crc32")}
+    return {value.zfill(8) for value in parse_hash_list(entry.get("crc32"))}
 
 
 def _size(entry: dict) -> int | None:
@@ -141,7 +130,7 @@ def verifiable(entry: dict) -> bool:
     crafted bytes, so they identify a file the database already holds
     (step 1) and never accept one a remote source serves.
     """
-    return any(_accepted(entry, field) for field, _digest in CRYPTO_HASHES)
+    return any(parse_hash_list(entry.get(field)) for field, _digest in CRYPTO_HASHES)
 
 
 def verify_content(data: bytes, expected: dict) -> bool:
@@ -153,7 +142,7 @@ def verify_content(data: bytes, expected: dict) -> bool:
     declared = [
         (accepted, digest)
         for field, digest in CRYPTO_HASHES
-        for accepted in [_accepted(expected, field)]
+        for accepted in [parse_hash_list(expected.get(field))]
         if accepted
     ]
     return bool(declared) and all(
@@ -174,13 +163,13 @@ def _read_limited(
 def step1_crossref_db(entry: dict, db: dict) -> str | None:
     """Check if file exists under different name/path in database."""
     files = db.get("files", {})
-    for sha1 in sorted(_accepted(entry, "sha1")):
+    for sha1 in sorted(parse_hash_list(entry.get("sha1"))):
         if sha1 in files:
             return files[sha1]["path"]
     indexes = db.get("indexes", {})
     for field, index in (("sha256", "by_sha256"), ("md5", "by_md5")):
         by_hash = indexes.get(index, {})
-        for value in sorted(_accepted(entry, field)):
+        for value in sorted(parse_hash_list(entry.get(field))):
             sha1_match = by_hash.get(value)
             if sha1_match and sha1_match in files:
                 return files[sha1_match]["path"]
@@ -288,7 +277,7 @@ def step3b_software_heritage(entry: dict) -> bytes | None:
     """Ask Software Heritage for the file by each accepted sha1, then
     sha256: its archive answers by content, whatever the file was named."""
     for field in ("sha1", "sha256"):
-        for value in sorted(_accepted(entry, field)):
+        for value in sorted(parse_hash_list(entry.get(field))):
             url = f"{SOFTWARE_HERITAGE}/{field}:{value}/raw/"
             try:
                 req = urllib.request.Request(
@@ -325,7 +314,7 @@ def step4_search_archive_org(entry: dict) -> bytes | None:
                 _unanswered(url, exc)
                 continue
 
-    sha1s = sorted(_accepted(entry, "sha1"))
+    sha1s = sorted(parse_hash_list(entry.get("sha1")))
     if not sha1s:
         return None
     # Each accepted revision is a query of its own: archive.org matches one.
@@ -566,8 +555,8 @@ def generate_issue_body(missing: list[dict], platform: str) -> str:
         "|------|--------|------|-----|",
     ]
     for entry in missing:
-        sha1 = ", ".join(f"`{h}`" for h in sorted(_accepted(entry, "sha1"))) or "none declared"
-        md5 = ", ".join(f"`{h}`" for h in sorted(_accepted(entry, "md5"))) or "none declared"
+        sha1 = ", ".join(f"`{h}`" for h in sorted(parse_hash_list(entry.get("sha1")))) or "none declared"
+        md5 = ", ".join(f"`{h}`" for h in sorted(parse_hash_list(entry.get("md5")))) or "none declared"
         lines.append(f"| `{entry['name']}` | {entry['system']} | {sha1} | {md5} |")
     lines += [
         "",

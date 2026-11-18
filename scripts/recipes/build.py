@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-import hashlib
 import os
 import zipfile
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from core.hashing import compute_hashes
 from core.paths import REPO_ROOT
 from core.torrentzip import write_torrentzip, zlib_ng_version
 from recipes.ledger import is_archive_path
@@ -88,14 +88,6 @@ def _members_match(built: Path, members: list[dict]) -> str:
     return f"members differ: expected {missing[:3]}, built {extra[:3]}"
 
 
-def _file_sha1(path: Path) -> str:
-    digest = hashlib.sha1()
-    with path.open("rb") as handle:
-        while chunk := handle.read(16 * 1024 * 1024):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
 def destination(record_path: str, output_dir: Path) -> Path:
     """Where a build lands: the archive's path below ``bios/``, under *output_dir*."""
     parts = Path(record_path).parts
@@ -145,7 +137,7 @@ def build_archive(
                     [(name, _opener(source.path, source.member)) for name, source in sources],
                 )
             if exact:
-                written = _file_sha1(scratch)
+                written = compute_hashes(scratch, frozenset({"sha1"}), cache=False)["sha1"]
                 detail = "" if written == record["sha1"] else (
                     f"sha1 {written} is not the recorded {record['sha1']}"
                 )

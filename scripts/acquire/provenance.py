@@ -9,17 +9,11 @@ import sys
 import zipfile
 from pathlib import Path
 
+from core.hashing import parse_hash_list
 from core.paths import REPO_ROOT
 
 
 HASH_FIELDS = ("sha1", "md5", "sha256")
-
-
-def _values(entry: dict, field: str) -> set[str]:
-    """Every value a profile or catalog entry gives for a hash field."""
-    value = entry.get(field)
-    values = value if isinstance(value, list) else str(value or "").split(",")
-    return {str(v).strip().lower() for v in values if str(v).strip()}
 
 
 def _crc_key(value: str) -> str:
@@ -82,8 +76,8 @@ def profile_needs(profiles: dict, db: dict) -> dict:
                 continue
             need = {"emulator": emulator, "name": name,
                     "required": bool(entry.get("required"))}
-            hashes = {(field, v) for field in HASH_FIELDS for v in _values(entry, field)}
-            crcs = {_crc_key(v) for v in _values(entry, "crc32")}
+            hashes = {(field, v) for field in HASH_FIELDS for v in parse_hash_list(entry.get(field))}
+            crcs = {_crc_key(v) for v in parse_hash_list(entry.get("crc32"))}
             declared = entry.get("size")
             sizes = [] if declared is None else (
                 declared if isinstance(declared, list) else [declared]
@@ -117,10 +111,10 @@ def needs_filled(entry: dict, needs: dict) -> list[dict]:
     """The profile needs a catalog dump answers, required ones first."""
     found: dict[tuple[str, str], dict] = {}
     keys: list[tuple[object, ...]] = [
-        (field, v) for field in HASH_FIELDS for v in _values(entry, field)
+        (field, v) for field in HASH_FIELDS for v in parse_hash_list(entry.get(field))
     ]
     if entry.get("size") is not None:
-        keys += [("crc32", _crc_key(v), entry["size"]) for v in _values(entry, "crc32")]
+        keys += [("crc32", _crc_key(v), entry["size"]) for v in parse_hash_list(entry.get("crc32"))]
     for key in keys:
         for need in needs["by_hash"].get(key, []):
             found.setdefault((need["emulator"], need["name"]), {**need, "by": key[0]})
