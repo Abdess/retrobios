@@ -23,6 +23,12 @@ PACKAGE_LAYERS = {"core": 0, "model": 1, "resolve": 2, "scraper": 3, "exporter":
 LIBRARY_LAYER = 3
 COMMAND_LAYER = 4
 
+# The other domain packages a domain package may import. A package listed
+# here imports no sibling outside its set.
+SIBLING_IMPORTS: dict[str, frozenset[str]] = {
+    "profiling": frozenset(),
+}
+
 # Top-level modules other modules of scripts/ import: library code that a
 # later wave moves into a package.
 NOT_YET_PACKAGED = frozenset({
@@ -31,7 +37,7 @@ NOT_YET_PACKAGED = frozenset({
     "cross_reference", "dedup", "derivations", "export_native", "generate_event_schema",
     "generate_pack", "generate_readme", "generate_site", "manifestselect", "measurement_records",
     "packextras", "packpaths", "packreadme", "packresolve", "packverify", "pin_installer",
-    "pr_checks", "profile_sync", "provenance_report", "refresh_data_dirs", "region_audit",
+    "pr_checks", "provenance_report", "refresh_data_dirs", "region_audit",
     "release_record", "romfolders", "romset_recipes", "siteagents", "sitebootstrap",
     "sitecollection", "sitediagrams", "siteentries", "siteexports", "siteguides", "sitehandheld",
     "siteinputs", "sitemarkup", "sitemeasurements", "siterender", "sitesources", "sitestarlight",
@@ -180,6 +186,14 @@ class ImportLayers(unittest.TestCase):
             if a != b and is_package_module(src) and is_package_module(dst):
                 edges.setdefault(a, set()).add(b)
         self.assertIsNone(find_cycle(set(PACKAGE_LAYERS), edges))
+
+    def test_domain_packages_import_declared_siblings_only(self):
+        found = sorted(
+            f"{src} imports {dst}" for src, dst in self.graph.edges()
+            if (a := src.split(".")[0]) in SIBLING_IMPORTS and (b := dst.split(".")[0]) != a
+            and PACKAGE_LAYERS.get(b) == LIBRARY_LAYER and b not in SIBLING_IMPORTS[a]
+        )
+        self.assertEqual(found, [])
 
     def test_foundation_modules_form_no_cycle(self):
         """Inside core, model and resolve, no two modules import each other,

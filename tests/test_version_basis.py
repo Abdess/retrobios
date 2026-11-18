@@ -24,10 +24,13 @@ from unittest import mock
 import yaml
 
 import profile_sync
+from profiling import resolver
+from profiling import yamledit
 from core import upstream
 from profiling import version_basis
 from model.profiles import load_emulator_profiles
-from profile_sync import ProfileReport, bump_commit
+from profiling.reports import ProfileReport
+from profiling.bump import bump_commit
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -237,7 +240,7 @@ class AnAdvanceReadsTheVersionAgain(unittest.TestCase):
         self.path.write_text(SAMPLE, encoding="utf-8")
         self.report = ProfileReport(
             name="p", repo="o/n", pin="aaaaaaa", head="bbbbbbb", entries=[], counts={},
-            skipped=profile_sync.NO_SOURCE_REF,
+            skipped=resolver.NO_SOURCE_REF,
         )
 
     def tearDown(self):
@@ -286,7 +289,7 @@ class TheWriterKeepsTheDocument(unittest.TestCase):
                 '  libretro: "2"\ndisplay_name: X\n')
         basis = {"standalone": {"kind": "tag", "tag": "2407", "distance": 0},
                  "libretro": {"kind": "none"}}
-        written = profile_sync.set_version_fields(
+        written = yamledit.set_version_fields(
             text, {"standalone": "2407", "libretro": None}, basis)
         document = yaml.safe_load(written)
         self.assertEqual(document["core_version"], {"standalone": "2407", "libretro": None})
@@ -296,7 +299,7 @@ class TheWriterKeepsTheDocument(unittest.TestCase):
 
     def test_a_missing_version_is_written_after_the_pins(self):
         text = 'emulator: X\nsource_commit: "abc"\nfiles: []\n'
-        written = profile_sync.set_version_fields(text, None, {"kind": "none"})
+        written = yamledit.set_version_fields(text, None, {"kind": "none"})
         self.assertEqual(written.splitlines()[2:4], ["core_version: null", "version_basis:"])
 
 

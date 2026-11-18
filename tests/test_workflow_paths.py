@@ -103,8 +103,10 @@ class DeploySiteTriggers(unittest.TestCase):
     def test_the_site_reads_the_ref_grammar_not_the_checker(self):
         """sitesources imported two parsing functions from profile_sync, so
         every change to the comparison tool rebuilt an unchanged site."""
-        self.assertNotIn("scripts/profile_sync.py", closure(["generate_site.py"]))
-        self.assertIn("scripts/model/sourceref.py", closure(["generate_site.py"]))
+        read = closure(["generate_site.py"])
+        self.assertNotIn("scripts/profile_sync.py", read)
+        self.assertEqual(sorted(p for p in read if p.startswith("scripts/profiling/")), [])
+        self.assertIn("scripts/model/sourceref.py", read)
 
 
 class ThePullRequestBuildsTheSite(unittest.TestCase):

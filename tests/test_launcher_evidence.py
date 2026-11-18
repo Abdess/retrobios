@@ -23,7 +23,8 @@ from resolve.launchers import (
     launcher_places,
     launcher_unproven,
 )
-from profile_sync import _check_build_refs, shipped_build_holders
+from profiling.resolver import _check_build_refs
+from profiling.repos import shipped_build_holders
 from scraper.retrobat_launchers import _choices_apart
 from scraper.shell_launchers import LauncherPatternMissing, Script, config_placement
 from resolve.launcherrefs import config_ref, is_feature_ref

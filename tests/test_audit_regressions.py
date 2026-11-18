@@ -4166,7 +4166,7 @@ class ACitationInsideASourceRefIsTracked(unittest.TestCase):
     pin, and pce-emu joined two citations with ` + `: neither was anchored."""
 
     def citations(self, ref: str) -> list[str]:
-        from scripts.profile_sync import collect_citations
+        from scripts.profiling.citations import collect_citations
 
         document = {"files": [{"name": "x.rom", "source_ref": ref}]}
         return [(c.kind, c.ref) for c in collect_citations(document)]
@@ -4204,11 +4204,12 @@ class TriageSurvivesAForgeRefusal(unittest.TestCase):
     def test_the_ranking_is_printed_with_the_profile_marked(self):
         from types import SimpleNamespace
 
-        from scripts import profile_sync
+        from scripts.profiling import reports as profiling_reports
+        from scripts.profiling import triage
 
         reports = [
-            profile_sync.ProfileReport(name="eden", pin="a" * 40, head="b" * 40),
-            profile_sync.ProfileReport(name="vice", pin="c" * 40, head="d" * 40),
+            profiling_reports.ProfileReport(name="eden", pin="a" * 40, head="b" * 40),
+            profiling_reports.ProfileReport(name="vice", pin="c" * 40, head="d" * 40),
         ]
         selected = {
             "eden": {"source": "https://git.eden-emu.dev/eden-emu/eden"},
@@ -4217,16 +4218,16 @@ class TriageSurvivesAForgeRefusal(unittest.TestCase):
 
         def check_version(profile, *_args):
             if "eden" in profile["source"]:
-                raise profile_sync.upstream.UpstreamError("HTTP 403")
+                raise triage.upstream.UpstreamError("HTTP 403")
             return
 
         args = SimpleNamespace(cache_dir="", offline=True)
         out = io.StringIO()
-        with mock.patch.object(profile_sync, "check_version", check_version), \
-                mock.patch.object(profile_sync, "select_repo", lambda p: object()), \
+        with mock.patch.object(triage, "check_version", check_version), \
+                mock.patch.object(triage, "select_repo", lambda p: object()), \
                 contextlib.redirect_stdout(out), \
                 contextlib.redirect_stderr(io.StringIO()):
-            profile_sync._print_triage(args, selected, reports)
+            triage._print_triage(args, selected, reports)
         # A header row and a closing count frame the ranking.
         lines = out.getvalue().splitlines()[1:-1]
         self.assertEqual(len(lines), 2)
@@ -5943,7 +5944,7 @@ class AHashListIsReadOneWay(unittest.TestCase):
     def test_every_reader_splits_the_list(self):
         from scripts.cross_reference import _declared_content
         from scripts.core.hashing import parse_hash_list
-        from scripts.profile_sync import entry_hashes
+        from scripts.profiling.citations import entry_hashes
 
         a, b = "a" * 64, "B" * 64
         entry = {"name": "BS-X.bin", "sha256": f"{a}, {b}", "crc32": "0xDEADBEEF"}

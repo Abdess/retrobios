@@ -19,44 +19,53 @@ from unittest import mock
 import yaml
 
 import profile_sync
+from profiling import anchoring
+from profiling import bump
+from profiling import citations as profiling_citations
+from profiling import detection
+from profiling import proseedit
+from profiling import realign
+from profiling import rebase
+from profiling import reports as profiling_reports
+from profiling import repos as profiling_repos
+from profiling import resolver
+from profiling import run as profiling_run
+from profiling import triage
+from profiling import versions
 from model import sourceref
-from profile_sync import (
+from profiling.reports import (
     EntryReport,
-    PartResult,
     ProfileReport,
-    VersionReport,
+    fetch_plan,
+    format_markdown,
+    format_report,
+    report_to_dict,
+)
+from profiling.anchoring import PartResult, anchor_block, anchor_part, resolve_rename, worst_status
+from profiling.versions import VersionReport, check_version, version_warning
+from profiling.yamledit import (
     YamlWriteError,
-    anchor_block,
-    anchor_part,
     apply_edit,
     backfill_commit,
-    build_parser,
-    build_report,
-    bump_commit,
-    check_version,
-    collect_citations,
-    collect_tokens,
+    find_field_line,
+    insert_after_line,
+    replace_field_line,
+)
+from profile_sync import build_parser, select_profiles
+from profiling.resolver import build_report
+from profiling.bump import bump_commit
+from profiling.citations import collect_citations, collect_tokens
+from profiling.detection import (
     declared_hashes,
     declared_names,
     detect_new_files,
-    drift_score,
-    fetch_plan,
-    find_field_line,
-    format_markdown,
-    format_report,
-    insert_after_line,
-    rebase_refs,
-    replace_field_line,
-    report_to_dict,
-    resolve_rename,
-    select_profiles,
-    select_repo,
     tree_diff,
     unified_for_path,
-    version_warning,
     watch_hashes,
-    worst_status,
 )
+from profiling.triage import drift_score
+from profiling.rebase import rebase_refs
+from profiling.repos import select_repo
 from model.sourceref import RefPart, parse_source_ref, split_source_ref
 from core import upstream
 from profiling import version_basis
@@ -254,7 +263,7 @@ class TestSourceMirror(unittest.TestCase):
             "source_mirror": "https://codeberg.org/o/mirror",
         }
         self.assertEqual(
-            [url for _, _, url in profile_sync.declared_repositories(profile)],
+            [url for _, _, url in profiling_repos.declared_repositories(profile)],
             [
                 "https://github.com/o/port",
                 "https://github.com/o/up",
@@ -265,7 +274,7 @@ class TestSourceMirror(unittest.TestCase):
     def test_mirror_alone_is_enough(self):
         profile = {"source_mirror": "https://codeberg.org/o/mirror"}
         self.assertEqual(
-            profile_sync.declared_repositories(profile),
+            profiling_repos.declared_repositories(profile),
             [("source_mirror", "", "https://codeberg.org/o/mirror")],
         )
 
@@ -288,9 +297,9 @@ class TestSourceMirror(unittest.TestCase):
         def at(*args, **kwargs):
             raise AssertionError("a declared pin needs no date lookup")
 
-        with mock.patch.object(profile_sync.upstream, "resolve_head", head), \
-                mock.patch.object(profile_sync.upstream, "resolve_commit_at", at):
-            views = profile_sync.select_views(profile, "unused", True)
+        with mock.patch.object(upstream, "resolve_head", head), \
+                mock.patch.object(upstream, "resolve_commit_at", at):
+            views = profiling_repos.select_views(profile, "unused", True)
         self.assertEqual([(v.repo.host, v.pin) for v in views],
                          [("codeberg.org", "d16735f5")])
         self.assertIn(("head", "codeberg.org", "dev"), calls)
@@ -308,13 +317,13 @@ class TestSourceMirror(unittest.TestCase):
             "source_commit": "87b176a",
             "upstream_commit": "07021f0",
         }
-        with tempfile.TemporaryDirectory() as cache, self.assertRaises(profile_sync.upstream.NotCachedError):
-            profile_sync.select_views(profile, cache, True)
+        with tempfile.TemporaryDirectory() as cache, self.assertRaises(upstream.NotCachedError):
+            profiling_repos.select_views(profile, cache, True)
 
     def test_a_profile_without_a_mirror_is_unchanged(self):
         profile = {"source": "https://github.com/o/port"}
         self.assertEqual(
-            profile_sync.declared_repositories(profile),
+            profiling_repos.declared_repositories(profile),
             [("source", "", "https://github.com/o/port")],
         )
 
@@ -343,7 +352,7 @@ class TestGoneUpstreamIsNotAnError(unittest.TestCase):
                                 skipped="upstream error: h: HTTP 403")
         buffer = io.StringIO()
         with contextlib.redirect_stdout(buffer):
-            profile_sync._print_elided([gone, failing], 0)
+            profiling_run._print_elided([gone, failing], 0)
         out = buffer.getvalue()
         self.assertIn("upstream gone", out)
         self.assertIn("upstream error", out)
@@ -357,7 +366,7 @@ class TestGoneUpstreamIsNotAnError(unittest.TestCase):
             moved_repos=["a/b answers as c/b (renamed or transferred)"],
         )
         self.assertEqual(
-            profile_sync.triage_state(report),
+            profiling_reports.triage_state(report),
             "2 to review, 1 orphaned pin, 1 repository moved, 2 unchecked",
         )
 
@@ -455,12 +464,12 @@ class TestAnchorBlock(unittest.TestCase):
         self.assertEqual(result.status, "CHANGED")
 
     def test_a_file_past_the_cap_skips_mapping_with_reason(self):
-        size = profile_sync.MAX_MATCH_LINES + 1
+        size = anchoring.MAX_MATCH_LINES + 1
         pin = [f"line {i}" for i in range(size)]
         head = [f"other {i}" for i in range(size)]
         result = anchor_block(pin, head, 10, 10)
         self.assertEqual(result.status, "CHANGED")
-        self.assertIn(str(profile_sync.MAX_MATCH_LINES), result.reason)
+        self.assertIn(str(anchoring.MAX_MATCH_LINES), result.reason)
         self.assertIsNone(result.start)
 
     def test_a_thirty_thousand_line_file_is_still_mapped(self):
@@ -490,32 +499,32 @@ class TestVerifyAtPin(unittest.TestCase):
         """mame cited casloopy.cpp:2105-2462 in a 2105-line file."""
         part = RefPart("a.c", 3, 9, "a.c:3-9")
         self.assertEqual(
-            profile_sync.verify_at_pin(part, self.LINES, ["deadbeef"]).status, "GONE"
+            anchoring.verify_at_pin(part, self.LINES, ["deadbeef"]).status, "GONE"
         )
 
     def test_declared_value_present(self):
         part = RefPart("a.c", 3, 3, "a.c:3")
         self.assertEqual(
-            profile_sync.verify_at_pin(part, self.LINES, ["deadbeef"]).status,
+            anchoring.verify_at_pin(part, self.LINES, ["deadbeef"]).status,
             "ANCHORED",
         )
 
     def test_value_found_within_the_context_window(self):
         part = RefPart("a.c", 1, 1, "a.c:1")
         self.assertEqual(
-            profile_sync.verify_at_pin(part, self.LINES, ["deadbeef"]).status,
+            anchoring.verify_at_pin(part, self.LINES, ["deadbeef"]).status,
             "ANCHORED",
         )
 
     def test_declared_value_absent_from_the_whole_file(self):
         part = RefPart("a.c", 1, 1, "a.c:1")
-        result = profile_sync.verify_at_pin(part, self.LINES, ["cafebabe"])
+        result = anchoring.verify_at_pin(part, self.LINES, ["cafebabe"])
         self.assertEqual(result.status, "ANCHORED")
 
     def test_declared_value_carried_by_another_line(self):
         lines = ["load()", "", "", "", "", "", 'rom("cafebabe")']
         part = RefPart("a.c", 1, 1, "a.c:1")
-        result = profile_sync.verify_at_pin(
+        result = anchoring.verify_at_pin(
             part, lines, ["cafebabe"], ["cafebabe"]
         )
         self.assertEqual(result.status, "MOVED")
@@ -525,9 +534,9 @@ class TestVerifyAtPin(unittest.TestCase):
         """ti99sim cites v0.0.11 beside its v0.16.0 pin."""
         other = RefPart("src/sdl/main.cpp", 407, 411, "src/sdl/main.cpp:407-411 (v0.0.11)")
         same = RefPart("src/core/ti994a.cpp", 122, 131, "src/core/ti994a.cpp:122-131 (v0.16.0)")
-        self.assertEqual(profile_sync.cites_another_version(other, "0.16.0"), "0.0.11")
-        self.assertIsNone(profile_sync.cites_another_version(same, "0.16.0"))
-        self.assertIsNone(profile_sync.cites_another_version(same, {"libretro": "v0.16.0"}))
+        self.assertEqual(profiling_citations.cites_another_version(other, "0.16.0"), "0.0.11")
+        self.assertIsNone(profiling_citations.cites_another_version(same, "0.16.0"))
+        self.assertIsNone(profiling_citations.cites_another_version(same, {"libretro": "v0.16.0"}))
 
     def test_a_profile_with_a_repository_names_a_revision(self):
         """redream declared libretro/redream, a repository that never
@@ -561,7 +570,7 @@ class TestVerifyAtPin(unittest.TestCase):
             refs = " ".join(
                 str(entry.get("source_ref") or "") for entry in profile.get("files") or []
             )
-            if not profile_sync._VERSION_NOTE_RE.search(refs):
+            if not profiling_citations._VERSION_NOTE_RE.search(refs):
                 continue
             declared = profile.get("core_version")
             values = declared.values() if isinstance(declared, dict) else [declared]
@@ -574,7 +583,7 @@ class TestVerifyAtPin(unittest.TestCase):
         lines = ['option(ENABLE_ROM_CLONE_PRAVETS "" OFF)', "", "", "", "", "",
                  "", "", "", "", "", "", "res/roms/pravets82.rom"]
         part = RefPart("CMakeLists.txt", 1, 1, "CMakeLists.txt:1")
-        result = profile_sync.verify_at_pin(
+        result = anchoring.verify_at_pin(
             part, lines, ["0123456789abcdef0123456789abcdef", "pravets82"],
             ["0123456789abcdef0123456789abcdef"],
         )
@@ -583,61 +592,61 @@ class TestVerifyAtPin(unittest.TestCase):
     def test_declared_value_on_several_lines_is_ambiguous(self):
         lines = ["load()", "", "", "", 'a("cafebabe")', "", 'b("cafebabe")']
         part = RefPart("a.c", 1, 1, "a.c:1")
-        result = profile_sync.verify_at_pin(
+        result = anchoring.verify_at_pin(
             part, lines, ["cafebabe"], ["cafebabe"]
         )
         self.assertEqual(result.status, "AMBIGUOUS")
 
     def test_one_anchored_part_settles_the_others(self):
         parts = [
-            profile_sync.PartResult(
+            anchoring.PartResult(
                 RefPart("a.c", 1, 1, "a.c:1"), "ANCHORED", None, None, None, []
             ),
-            profile_sync.PartResult(
+            anchoring.PartResult(
                 RefPart("a.c", 9, 9, "a.c:9"), "AMBIGUOUS", None, None, None, [1, 2]
             ),
         ]
-        settled = profile_sync.reconcile_self_check(parts)
+        settled = anchoring.reconcile_self_check(parts)
         self.assertEqual([p.status for p in settled], ["ANCHORED", "ANCHORED"])
 
     def test_an_absent_part_survives_reconciliation(self):
         parts = [
-            profile_sync.PartResult(
+            anchoring.PartResult(
                 RefPart("a.c", 1, 1, "a.c:1"), "ANCHORED", None, None, None, []
             ),
-            profile_sync.PartResult(
+            anchoring.PartResult(
                 RefPart("b.c", 9, 9, "b.c:9"), "GONE", None, None, None, []
             ),
         ]
-        settled = profile_sync.reconcile_self_check(parts)
+        settled = anchoring.reconcile_self_check(parts)
         self.assertEqual([p.status for p in settled], ["ANCHORED", "GONE"])
 
     def test_nothing_anchored_leaves_the_verdicts_alone(self):
         parts = [
-            profile_sync.PartResult(
+            anchoring.PartResult(
                 RefPart("a.c", 1, 1, "a.c:1"), "MOVED", None, 5, 5, [5]
             ),
         ]
         self.assertEqual(
-            [p.status for p in profile_sync.reconcile_self_check(parts)], ["MOVED"]
+            [p.status for p in anchoring.reconcile_self_check(parts)], ["MOVED"]
         )
 
     def test_external_citation_is_out_of_reach_at_the_pin_too(self):
         part = RefPart("munt ROMInfo.cpp", 1, 1, "munt ROMInfo.cpp:1")
-        result = profile_sync.verify_at_pin(part, None, ["cafebabe"])
+        result = anchoring.verify_at_pin(part, None, ["cafebabe"])
         self.assertEqual(result.status, "EXTERNAL")
 
     def test_a_name_fragment_elsewhere_is_not_evidence(self):
         # Only a hash is unique enough to prove a ref points elsewhere.
         lines = ["load()", "", "", "", "", "", "tyrian2.c line"]
         part = RefPart("a.c", 1, 1, "a.c:1")
-        result = profile_sync.verify_at_pin(part, lines, ["tyrian2"], [])
+        result = anchoring.verify_at_pin(part, lines, ["tyrian2"], [])
         self.assertEqual(result.status, "ANCHORED")
 
     def test_missing_file(self):
         part = RefPart("a.c", 1, 1, "a.c:1")
         self.assertEqual(
-            profile_sync.verify_at_pin(part, None, ["deadbeef"]).status, "GONE"
+            anchoring.verify_at_pin(part, None, ["deadbeef"]).status, "GONE"
         )
 
     def test_an_entry_with_nothing_to_look_for_is_unchecked_not_anchored(self):
@@ -645,22 +654,22 @@ class TestVerifyAtPin(unittest.TestCase):
         pin equal to HEAD its ref was reported anchored while the cited block
         had been deleted upstream. No token means no verdict."""
         part = RefPart("a.c", 3, 3, "a.c:3")
-        result = profile_sync.verify_at_pin(part, self.LINES, [])
+        result = anchoring.verify_at_pin(part, self.LINES, [])
         self.assertEqual(result.status, "UNCHECKED")
-        self.assertNotIn("UNCHECKED", profile_sync.REVIEW_STATUSES)
-        self.assertEqual(profile_sync.worst_status(["ANCHORED", "UNCHECKED"]), "UNCHECKED")
-        self.assertEqual(profile_sync.worst_status(["UNCHECKED", "SHIFTED"]), "SHIFTED")
+        self.assertNotIn("UNCHECKED", anchoring.REVIEW_STATUSES)
+        self.assertEqual(anchoring.worst_status(["ANCHORED", "UNCHECKED"]), "UNCHECKED")
+        self.assertEqual(anchoring.worst_status(["UNCHECKED", "SHIFTED"]), "SHIFTED")
 
     def test_line_beyond_the_file(self):
         part = RefPart("a.c", 99, 99, "a.c:99")
         self.assertEqual(
-            profile_sync.verify_at_pin(part, self.LINES, ["deadbeef"]).status, "GONE"
+            anchoring.verify_at_pin(part, self.LINES, ["deadbeef"]).status, "GONE"
         )
 
     def test_a_ref_without_a_line_is_accepted(self):
         part = RefPart("a.c", None, None, "a.c")
         self.assertEqual(
-            profile_sync.verify_at_pin(part, self.LINES, ["deadbeef"]).status,
+            anchoring.verify_at_pin(part, self.LINES, ["deadbeef"]).status,
             "ANCHORED",
         )
 
@@ -668,19 +677,19 @@ class TestVerifyAtPin(unittest.TestCase):
         # Nothing to re-read, so no review is demanded, but the verdict says
         # that nothing was checked rather than claiming the ref anchors.
         part = RefPart("a.c", 1, 1, "a.c:1")
-        result = profile_sync.verify_at_pin(part, self.LINES, [])
+        result = anchoring.verify_at_pin(part, self.LINES, [])
         self.assertEqual(result.status, "UNCHECKED")
-        self.assertNotIn(result.status, profile_sync.REVIEW_STATUSES)
+        self.assertNotIn(result.status, anchoring.REVIEW_STATUSES)
 
 
 class TestExternalCitation(unittest.TestCase):
     def test_project_name_then_file(self):
-        self.assertTrue(profile_sync.is_external_citation("munt ROMInfo.cpp"))
+        self.assertTrue(profiling_citations.is_external_citation("munt ROMInfo.cpp"))
         self.assertTrue(
-            profile_sync.is_external_citation("Nuked-SC55-CLAP rom_io.cpp")
+            profiling_citations.is_external_citation("Nuked-SC55-CLAP rom_io.cpp")
         )
         self.assertTrue(
-            profile_sync.is_external_citation("EmuDeck emuDeckares.sh")
+            profiling_citations.is_external_citation("EmuDeck emuDeckares.sh")
         )
 
     def test_a_file_without_an_extension_is_still_a_citation(self):
@@ -705,15 +714,15 @@ class TestExternalCitation(unittest.TestCase):
 
     def test_plain_paths_are_not_citations(self):
         for path in ("src/midi/mt32.cpp", "libretro.c", "a/b/c.h"):
-            self.assertFalse(profile_sync.is_external_citation(path), path)
+            self.assertFalse(profiling_citations.is_external_citation(path), path)
 
     def test_a_path_with_a_directory_prefix_is_not_a_citation(self):
         self.assertFalse(
-            profile_sync.is_external_citation("src/dir file.cpp")
+            profiling_citations.is_external_citation("src/dir file.cpp")
         )
 
     def test_a_filename_prefix_is_not_a_citation(self):
-        self.assertFalse(profile_sync.is_external_citation("main.cpp note"))
+        self.assertFalse(profiling_citations.is_external_citation("main.cpp note"))
 
     def test_external_part_is_reported_not_reviewed(self):
         result = anchor_part(
@@ -722,7 +731,7 @@ class TestExternalCitation(unittest.TestCase):
             renamer(CompareResult([], False)),
         )
         self.assertEqual(result.status, "EXTERNAL")
-        self.assertNotIn("EXTERNAL", profile_sync.REVIEW_STATUSES)
+        self.assertNotIn("EXTERNAL", anchoring.REVIEW_STATUSES)
 
 
 class TestBinaryCitation(unittest.TestCase):
@@ -755,11 +764,11 @@ class TestBinaryCitation(unittest.TestCase):
             renamer(CompareResult([], False)),
         )
         self.assertEqual(result.status, "BINARY")
-        self.assertNotIn("BINARY", profile_sync.REVIEW_STATUSES)
+        self.assertNotIn("BINARY", anchoring.REVIEW_STATUSES)
 
     def test_binary_part_at_the_pin(self):
         part = RefPart("ModelImporter.exe import directory", None, None, "")
-        self.assertEqual(profile_sync.verify_at_pin(part, None, []).status, "BINARY")
+        self.assertEqual(anchoring.verify_at_pin(part, None, []).status, "BINARY")
 
 
 class TestRepoWord(unittest.TestCase):
@@ -767,13 +776,13 @@ class TestRepoWord(unittest.TestCase):
 
     def test_declared_repository_word_is_stripped(self):
         self.assertEqual(
-            profile_sync.strip_repo_word("BAM_FPloader FPLoader.cpp", {"bam_fploader"}),
+            profiling_citations.strip_repo_word("BAM_FPloader FPLoader.cpp", {"bam_fploader"}),
             "FPLoader.cpp",
         )
 
     def test_release_version_after_the_repository_word_is_dropped(self):
         self.assertEqual(
-            profile_sync.strip_repo_word(
+            profiling_citations.strip_repo_word(
                 "ArcadeFlashWeb v1.0.2 flash/flash.html", {"arcadeflashweb"}
             ),
             "flash/flash.html",
@@ -781,13 +790,13 @@ class TestRepoWord(unittest.TestCase):
 
     def test_undeclared_project_word_stays(self):
         self.assertEqual(
-            profile_sync.strip_repo_word("munt ROMInfo.cpp", {"bam_fploader"}),
+            profiling_citations.strip_repo_word("munt ROMInfo.cpp", {"bam_fploader"}),
             "munt ROMInfo.cpp",
         )
 
     def test_a_directory_prefix_is_not_a_project_word(self):
         self.assertEqual(
-            profile_sync.strip_repo_word("src/dir file.cpp", {"src/dir"}),
+            profiling_citations.strip_repo_word("src/dir file.cpp", {"src/dir"}),
             "src/dir file.cpp",
         )
 
@@ -802,7 +811,7 @@ class TestNarrowByCited(unittest.TestCase):
 
     def test_deepest_cited_directory_wins(self):
         self.assertEqual(
-            profile_sync.narrow_by_cited(self.MATCHES, {"SheepShaver", "SheepShaver/src"}),
+            profiling_citations.narrow_by_cited(self.MATCHES, {"SheepShaver", "SheepShaver/src"}),
             ["SheepShaver/src/include/version.h"],
         )
 
@@ -812,11 +821,11 @@ class TestNarrowByCited(unittest.TestCase):
             "SheepShaver/src/include/cpu_emulation.h",
         ]
         self.assertEqual(
-            profile_sync.narrow_by_cited(matches, {"SheepShaver/src"}), matches
+            profiling_citations.narrow_by_cited(matches, {"SheepShaver/src"}), matches
         )
 
     def test_nothing_cited_keeps_all(self):
-        self.assertEqual(profile_sync.narrow_by_cited(self.MATCHES, set()), self.MATCHES)
+        self.assertEqual(profiling_citations.narrow_by_cited(self.MATCHES, set()), self.MATCHES)
 
     def test_depth_counts_components_not_characters(self):
         matches = [
@@ -824,7 +833,7 @@ class TestNarrowByCited(unittest.TestCase):
             "SheepShaver/src/Windows/configure.ac",
         ]
         cited = {"SheepShaver", "SheepShaver/src", "SheepShaver/src/Unix", "SheepShaver/src/Windows"}
-        self.assertEqual(profile_sync.narrow_by_cited(matches, cited), matches)
+        self.assertEqual(profiling_citations.narrow_by_cited(matches, cited), matches)
 
 
 class TestSymlinkTarget(unittest.TestCase):
@@ -832,7 +841,7 @@ class TestSymlinkTarget(unittest.TestCase):
 
     def test_relative_link_resolves_from_the_link_directory(self):
         self.assertEqual(
-            profile_sync.symlink_target(
+            profiling_citations.symlink_target(
                 "SheepShaver/src/Unix/ether_unix.cpp",
                 ["../../../BasiliskII/src/Unix/ether_unix.cpp"],
             ),
@@ -840,17 +849,17 @@ class TestSymlinkTarget(unittest.TestCase):
         )
 
     def test_a_real_one_line_file_is_not_a_link(self):
-        self.assertIsNone(profile_sync.symlink_target("a/VERSION", ["1.2.3"]))
-        self.assertIsNone(profile_sync.symlink_target("a/x.c", ["int main() { return 0; }"]))
-        self.assertIsNone(profile_sync.symlink_target("a/x.c", ["../other.c"]))
+        self.assertIsNone(profiling_citations.symlink_target("a/VERSION", ["1.2.3"]))
+        self.assertIsNone(profiling_citations.symlink_target("a/x.c", ["int main() { return 0; }"]))
+        self.assertIsNone(profiling_citations.symlink_target("a/x.c", ["../other.c"]))
 
     def test_a_link_leaving_the_tree_is_ignored(self):
-        self.assertIsNone(profile_sync.symlink_target("x.c", ["../../x.c"]))
+        self.assertIsNone(profiling_citations.symlink_target("x.c", ["../../x.c"]))
 
 
 class TestAnchorTokens(unittest.TestCase):
     def test_archive_members_supply_the_content_values(self):
-        tokens = profile_sync._anchor_tokens(
+        tokens = profiling_citations._anchor_tokens(
             {"name": "esh.zip", "contents": [{"crc32": "c14f36b3"}]}
         )
         # The set name stays: a MAME ref cites the machine declaration, which
@@ -858,24 +867,24 @@ class TestAnchorTokens(unittest.TestCase):
         self.assertEqual(tokens, ["c14f36b3", "esh"])
 
     def test_a_hashless_archive_still_falls_back_to_its_stem(self):
-        tokens = profile_sync._anchor_tokens(
+        tokens = profiling_citations._anchor_tokens(
             {"name": "esh.zip", "contents": [{"name": "rom.u1"}]}
         )
         self.assertIn("esh", tokens)
 
     def test_archive_stem_is_searched_too(self):
-        tokens = profile_sync._anchor_tokens({"name": "stvbios.zip"})
+        tokens = profiling_citations._anchor_tokens({"name": "stvbios.zip"})
         self.assertIn("stvbios.zip", tokens)
         self.assertIn("stvbios", tokens)
 
     def test_hashes_still_win(self):
-        tokens = profile_sync._anchor_tokens(
+        tokens = profiling_citations._anchor_tokens(
             {"name": "a.zip", "sha1": "AABB" * 10}
         )
         self.assertIn("aabb" * 10, tokens)
 
     def test_very_short_stem_is_skipped(self):
-        self.assertNotIn("ab", profile_sync._anchor_tokens({"name": "ab.zip"}))
+        self.assertNotIn("ab", profiling_citations._anchor_tokens({"name": "ab.zip"}))
 
 
 class TestNudgeToDeclared(unittest.TestCase):
@@ -883,14 +892,14 @@ class TestNudgeToDeclared(unittest.TestCase):
 
     def test_moves_onto_the_declared_value(self):
         self.assertEqual(
-            profile_sync.nudge_to_declared(self.LINES, 19, 19, ["stvbios"]),
+            anchoring.nudge_to_declared(self.LINES, 19, 19, ["stvbios"]),
             (21, 21),
         )
 
     def test_range_length_is_kept(self):
         lines = [""] * 20 + ["ROM_START( stvbios )"] + ["pad"] * 20
         self.assertEqual(
-            profile_sync.nudge_to_declared(lines, 17, 19, ["stvbios"]),
+            anchoring.nudge_to_declared(lines, 17, 19, ["stvbios"]),
             (21, 23),
         )
 
@@ -898,78 +907,78 @@ class TestNudgeToDeclared(unittest.TestCase):
         """ymir's 598-618 cited load_rom_cartridge(). Nudged onto the file
         table beside it, a rewritten function read SHIFTED, not CHANGED."""
         lines = ["void load_rom_cartridge() {"] + ["  code();"] * 19 + ["}", "kKOF95Files"]
-        self.assertIsNone(profile_sync.nudge_to_declared(lines, 1, 21, ["kkof95files"]))
+        self.assertIsNone(anchoring.nudge_to_declared(lines, 1, 21, ["kkof95files"]))
 
     def test_nothing_when_already_on_target(self):
         self.assertIsNone(
-            profile_sync.nudge_to_declared(self.LINES, 21, 21, ["stvbios"])
+            anchoring.nudge_to_declared(self.LINES, 21, 21, ["stvbios"])
         )
 
     def test_nothing_beyond_the_window(self):
         lines = ["pad"] * 500 + ["ROM_START( stvbios )"]
-        self.assertIsNone(profile_sync.nudge_to_declared(lines, 1, 1, ["stvbios"]))
+        self.assertIsNone(anchoring.nudge_to_declared(lines, 1, 1, ["stvbios"]))
 
     def test_nothing_without_tokens(self):
-        self.assertIsNone(profile_sync.nudge_to_declared(self.LINES, 19, 19, []))
+        self.assertIsNone(anchoring.nudge_to_declared(self.LINES, 19, 19, []))
 
     def test_nothing_when_the_value_is_absent(self):
         self.assertIsNone(
-            profile_sync.nudge_to_declared(self.LINES, 19, 19, ["absent"])
+            anchoring.nudge_to_declared(self.LINES, 19, 19, ["absent"])
         )
 
     def test_adjacent_duplicates_are_refused(self):
         lines = ["pad"] * 20 + ["stvbios a", "stvbios b"] + ["pad"] * 20
         self.assertIsNone(
-            profile_sync.nudge_to_declared(lines, 19, 19, ["stvbios"])
+            anchoring.nudge_to_declared(lines, 19, 19, ["stvbios"])
         )
 
 
 class TestDominantShift(unittest.TestCase):
     def test_shift_needs_enough_support(self):
         parts = [_part("a.c", 10, 30, "SHIFTED"), _part("a.c", 20, 40, "SHIFTED")]
-        self.assertEqual(profile_sync.dominant_shifts(parts), {})
+        self.assertEqual(anchoring.dominant_shifts(parts), {})
 
     def test_shift_is_taken_from_resolved_anchors(self):
         parts = [_part("a.c", i, i + 20, "SHIFTED") for i in (10, 20, 30)]
-        self.assertEqual(profile_sync.dominant_shifts(parts), {"a.c": 20})
+        self.assertEqual(anchoring.dominant_shifts(parts), {"a.c": 20})
 
     def test_ambiguous_parts_do_not_vote(self):
         parts = [_part("a.c", i, i + 20, "SHIFTED") for i in (10, 20, 30)]
         parts.append(_ambiguous("a.c", 40, [99, 500]))
-        self.assertEqual(profile_sync.dominant_shifts(parts), {"a.c": 20})
+        self.assertEqual(anchoring.dominant_shifts(parts), {"a.c": 20})
 
     def test_candidate_matching_the_shift_is_selected(self):
         part = _ambiguous("a.c", 1624, [1644, 1790, 1834])
-        settled = profile_sync.resolve_by_shift(part, {"a.c": 20})
+        settled = anchoring.resolve_by_shift(part, {"a.c": 20})
         self.assertEqual(settled.status, "SHIFTED")
         self.assertEqual(settled.start, 1644)
         self.assertIn("+20", settled.reason)
 
     def test_no_candidate_matches_the_shift(self):
         part = _ambiguous("a.c", 1624, [1790, 1834])
-        self.assertEqual(profile_sync.resolve_by_shift(part, {"a.c": 20}).status,
+        self.assertEqual(anchoring.resolve_by_shift(part, {"a.c": 20}).status,
                          "AMBIGUOUS")
 
     def test_two_candidates_on_the_shift_stay_ambiguous(self):
         part = _ambiguous("a.c", 1624, [1644, 1644])
-        self.assertEqual(profile_sync.resolve_by_shift(part, {"a.c": 20}).status,
+        self.assertEqual(anchoring.resolve_by_shift(part, {"a.c": 20}).status,
                          "AMBIGUOUS")
 
     def test_range_length_is_preserved(self):
         part = PartResult(
             RefPart("a.c", 100, 104), "AMBIGUOUS", None, None, None, [120]
         )
-        settled = profile_sync.resolve_by_shift(part, {"a.c": 20})
+        settled = anchoring.resolve_by_shift(part, {"a.c": 20})
         self.assertEqual((settled.start, settled.end), (120, 124))
 
     def test_file_without_a_known_shift_is_untouched(self):
         part = _ambiguous("b.c", 10, [30])
-        self.assertEqual(profile_sync.resolve_by_shift(part, {"a.c": 20}).status,
+        self.assertEqual(anchoring.resolve_by_shift(part, {"a.c": 20}).status,
                          "AMBIGUOUS")
 
 
-PIN = profile_sync.PIN
-HEAD = profile_sync.HEAD
+PIN = profiling_repos.PIN
+HEAD = profiling_repos.HEAD
 
 
 def make_fetch(files: dict[tuple[str, str], list[str]]):
@@ -1220,8 +1229,8 @@ class TestMovedStatus(unittest.TestCase):
         self.assertEqual(result.status, "GONE")
 
     def test_moved_is_mechanically_recalable(self):
-        self.assertIn("MOVED", profile_sync.REBASE_STATUSES)
-        self.assertNotIn("MOVED", profile_sync.REVIEW_STATUSES)
+        self.assertIn("MOVED", anchoring.REBASE_STATUSES)
+        self.assertNotIn("MOVED", anchoring.REVIEW_STATUSES)
 
     def test_moved_ranks_below_ambiguous(self):
         self.assertEqual(worst_status(["MOVED", "AMBIGUOUS"]), "AMBIGUOUS")
@@ -1268,37 +1277,37 @@ class TestBuildReport(unittest.TestCase):
         self.dir = self.tmp.name
         self.files: dict[tuple[str, str], list[str]] = {}
         self._orig = (
-            profile_sync.upstream.fetch_file,
-            profile_sync.upstream.resolve_head,
-            profile_sync.upstream.resolve_commit_at,
-            profile_sync.upstream.compare,
-            profile_sync.upstream.list_tree,
-            profile_sync.upstream.list_tags,
-            profile_sync.upstream.resolve_tag_commit,
-            profile_sync.upstream.tag_commit,
-            profile_sync.upstream._http_json,
-            profile_sync.upstream._http_text,
-            profile_sync.upstream.list_gitlinks,
-            profile_sync.upstream.current_slug,
-            profile_sync.upstream.fork_base,
-            profile_sync.upstream.ancestry,
+            upstream.fetch_file,
+            upstream.resolve_head,
+            upstream.resolve_commit_at,
+            upstream.compare,
+            upstream.list_tree,
+            upstream.list_tags,
+            upstream.resolve_tag_commit,
+            upstream.tag_commit,
+            upstream._http_json,
+            upstream._http_text,
+            upstream.list_gitlinks,
+            upstream.current_slug,
+            upstream.fork_base,
+            upstream.ancestry,
         )
         # Pin and tip are unrelated shas in these fixtures: no ancestry.
-        profile_sync.upstream.ancestry = lambda *a, **k: None
+        upstream.ancestry = lambda *a, **k: None
         self.fork_bases: dict[str, str] = {}
-        profile_sync.upstream.fork_base = (
+        upstream.fork_base = (
             lambda repo, sha, fork, fork_sha, cache_dir, offline=False:
             self.fork_bases.get(fork_sha)
         )
         self.current_slugs: dict[str, str] = {}
-        profile_sync.upstream.current_slug = (
+        upstream.current_slug = (
             lambda repo, cache_dir, offline=False: self.current_slugs.get(
                 repo.slug, repo.slug
             )
         )
         self.tags: list[str] = []
         self.gitlinks: dict[str, dict[str, str]] = {}
-        profile_sync.upstream.list_gitlinks = (
+        upstream.list_gitlinks = (
             lambda repo, sha, cache_dir, offline=False: self.gitlinks.get(sha, {})
         )
         self.tag_commits: dict[str, str] = {}
@@ -1306,53 +1315,53 @@ class TestBuildReport(unittest.TestCase):
         def _no_network(url):
             raise AssertionError(f"test reached the network: {url}")
 
-        profile_sync.upstream._http_json = _no_network
-        profile_sync.upstream._http_text = _no_network
-        profile_sync.upstream.list_tags = (
+        upstream._http_json = _no_network
+        upstream._http_text = _no_network
+        upstream.list_tags = (
             lambda repo, cache, offline=False: self.tags
         )
-        profile_sync.upstream.resolve_tag_commit = (
+        upstream.resolve_tag_commit = (
             lambda repo, tag, cache, offline=False: self.tag_commits.get(tag)
         )
-        profile_sync.upstream.tag_commit = (
+        upstream.tag_commit = (
             lambda repo, tag, cache, offline=False: self.tag_commits.get(tag)
         )
-        profile_sync.upstream.list_tree = (
+        upstream.list_tree = (
             lambda repo, sha, cache_dir, offline=False: (
                 sorted({path for _, path in self.files}), False
             )
         )
-        profile_sync.upstream.fetch_file = (
+        upstream.fetch_file = (
             lambda repo, sha, path, cache_dir, offline=False: self.files.get(
                 (sha, path)
             )
         )
-        profile_sync.upstream.resolve_head = (
+        upstream.resolve_head = (
             lambda repo, cache_dir, offline=False, branch=None, fresh=False: "headsha"
         )
-        profile_sync.upstream.resolve_commit_at = (
+        upstream.resolve_commit_at = (
             lambda repo, date, cache_dir, offline=False, branch=None: "pinsha"
         )
-        profile_sync.upstream.compare = (
+        upstream.compare = (
             lambda repo, base, head, cache_dir, offline=False: CompareResult([], False)
         )
 
     def tearDown(self):
         (
-            profile_sync.upstream.fetch_file,
-            profile_sync.upstream.resolve_head,
-            profile_sync.upstream.resolve_commit_at,
-            profile_sync.upstream.compare,
-            profile_sync.upstream.list_tree,
-            profile_sync.upstream.list_tags,
-            profile_sync.upstream.resolve_tag_commit,
-            profile_sync.upstream.tag_commit,
-            profile_sync.upstream._http_json,
-            profile_sync.upstream._http_text,
-            profile_sync.upstream.list_gitlinks,
-            profile_sync.upstream.current_slug,
-            profile_sync.upstream.fork_base,
-            profile_sync.upstream.ancestry,
+            upstream.fetch_file,
+            upstream.resolve_head,
+            upstream.resolve_commit_at,
+            upstream.compare,
+            upstream.list_tree,
+            upstream.list_tags,
+            upstream.resolve_tag_commit,
+            upstream.tag_commit,
+            upstream._http_json,
+            upstream._http_text,
+            upstream.list_gitlinks,
+            upstream.current_slug,
+            upstream.fork_base,
+            upstream.ancestry,
         ) = self._orig
         self.tmp.cleanup()
 
@@ -1377,7 +1386,7 @@ class TestBuildReport(unittest.TestCase):
         self.assertEqual(len(report.moved_repos), 1)
         self.assertIn("o/renamed", report.moved_repos[0])
         self.assertGreaterEqual(report.needs_review(), 1)
-        self.assertIn("moved repository", profile_sync.format_report(report))
+        self.assertIn("moved repository", profiling_reports.format_report(report))
 
     def test_a_repository_under_its_own_name_is_not_moved(self):
         self.files[("pinsha", "a.c")] = ["x", "y"]
@@ -1390,9 +1399,9 @@ class TestBuildReport(unittest.TestCase):
         """git.eden-emu.dev answers 403 to scripts: the muted repository's
         citations read "absent at HEAD" for files that exist."""
         def refuse(repo, sha, path, cache_dir, offline=False):
-            raise profile_sync.upstream.UpstreamError(f"{path}: HTTP 403")
+            raise upstream.UpstreamError(f"{path}: HTTP 403")
 
-        profile_sync.upstream.fetch_file = refuse
+        upstream.fetch_file = refuse
         with contextlib.redirect_stderr(io.StringIO()):
             report = build_report("test", self._profile(["a.c:2"]), self.dir)
         statuses = [p.status for e in report.entries for p in e.parts]
@@ -1403,7 +1412,7 @@ class TestBuildReport(unittest.TestCase):
         """git.eden-emu.dev truncates the HEAD tree: fs_paths.h, cited bare,
         was reported GONE though it lives under src/common/fs/."""
         self.files[("pinsha", "fs_paths.h")] = ["x", "hit"]
-        profile_sync.upstream.list_tree = (
+        upstream.list_tree = (
             lambda repo, sha, cache_dir, offline=False: (["other.c"], True)
         )
         with contextlib.redirect_stderr(io.StringIO()):
@@ -1624,7 +1633,7 @@ class TestBuildReport(unittest.TestCase):
         self.files[("uppin", "src/a.cpp")] = ["x", "discord_init();", "pine();", "z"]
         self.files[("uphead", "src/a.cpp")] = ["a", "b", "x", "discord_init();", "pine();", "z"]
         heads = {"libretro/ps2": "porthead", "PCSX2/pcsx2": "uphead"}
-        profile_sync.upstream.resolve_head = (
+        upstream.resolve_head = (
             lambda repo, cache, offline=False, branch=None: heads[repo.slug]
         )
         profile = {
@@ -1635,7 +1644,7 @@ class TestBuildReport(unittest.TestCase):
             "upstream_commit": "uppin",
             "files": [{"name": "cheats_ni.zip", "source_ref": "src/a.cpp:2-3"}],
         }
-        report = profile_sync.report_to_dict(build_report("lrps2", profile, self.dir))
+        report = profiling_reports.report_to_dict(build_report("lrps2", profile, self.dir))
         part = report["entries"][0]["parts"][0]
         # Moved by -1 in the fork, the block's real target. The upstream's
         # +2 shift of unrelated code is not it.
@@ -1649,7 +1658,7 @@ class TestBuildReport(unittest.TestCase):
             seen[repo.slug] = branch
             return "headsha"
 
-        profile_sync.upstream.resolve_head = _head
+        upstream.resolve_head = _head
         profile = self._profile(["a.c:1"])
         profile["upstream"] = "https://github.com/o/up"
         profile["source_branch"] = "libretro"
@@ -1685,7 +1694,7 @@ class TestBuildReport(unittest.TestCase):
         self.files[("uphead", "src/a.cpp")] = ["x", "GAME(1997, pgm, 0, pgm,", "y"]
 
         heads = {"o/port": "porthead", "o/up": "uphead"}
-        profile_sync.upstream.resolve_head = (
+        upstream.resolve_head = (
             lambda repo, cache, offline=False, branch=None: heads[repo.slug]
         )
         profile = {
@@ -1707,7 +1716,7 @@ class TestBuildReport(unittest.TestCase):
         self.files[("porthead", "src/p.c")] = [f"port {i}" for i in range(8)]
         self.files[("uphead", "src/p.c")] = ["a", "load x.bin", "c", "d", "e"]
         heads = {"o/port": "porthead", "o/up": "uphead"}
-        profile_sync.upstream.resolve_head = (
+        upstream.resolve_head = (
             lambda repo, cache, offline=False, branch=None: heads[repo.slug]
         )
         profile = {
@@ -1736,10 +1745,10 @@ class TestBuildReport(unittest.TestCase):
         for name in ("core.info", "core.sln", "core.vcxproj"):
             self.files[("porthead", name)] = ["x"]
         heads = {"o/port": "porthead", "o/up": "uphead"}
-        profile_sync.upstream.resolve_head = (
+        upstream.resolve_head = (
             lambda repo, cache, offline=False, branch=None: heads[repo.slug]
         )
-        profile_sync.upstream.list_tree = (
+        upstream.list_tree = (
             lambda repo, sha, cache_dir, offline=False: (
                 sorted(path for revision, path in self.files if revision == sha), False
             )
@@ -1765,7 +1774,7 @@ class TestBuildReport(unittest.TestCase):
         self.files[("uppin", "src/stv.cpp")] = ["x"]
         self.files[("uphead", "src/stv.cpp")] = ["x", "y", "GAME( 1996, stvbios,"]
         heads = {"o/port": "porthead", "o/up": "uphead"}
-        profile_sync.upstream.resolve_head = (
+        upstream.resolve_head = (
             lambda repo, cache, offline=False, branch=None: heads[repo.slug]
         )
         profile = {
@@ -1786,19 +1795,19 @@ class TestBuildReport(unittest.TestCase):
         # the forge's orphaned objects, and every ref read ANCHORED.
         self.files[("pinsha", "a.c")] = ["x", "hit"]
         self.files[("headsha", "a.c")] = ["x", "hit"]
-        profile_sync.upstream.compare = (
+        upstream.compare = (
             lambda repo, base, head, cache_dir, offline=False: CompareResult([], False, True)
         )
         report = build_report("test", self._profile(["a.c:2"]), self.dir)
         self.assertEqual(len(report.orphaned), 1)
         self.assertGreater(report.needs_review(), 0)
-        self.assertIn("orphaned pin", profile_sync.format_report(report))
+        self.assertIn("orphaned pin", profiling_reports.format_report(report))
 
     def test_a_frozen_tag_is_off_the_branch_on_purpose(self):
         self.files[("pinsha", "a.c")] = ["x", "hit"]
         self.files[("headsha", "a.c")] = ["x", "hit"]
         self.tag_commits = {"v1.6.0": "pinsha"}
-        profile_sync.upstream.compare = (
+        upstream.compare = (
             lambda repo, base, head, cache_dir, offline=False: CompareResult([], False, True)
         )
         report = build_report("test", self._versioned("1.6.0"), self.dir)
@@ -1828,11 +1837,11 @@ class TestBuildReport(unittest.TestCase):
         self.files[("uppin", "src/u.c")] = ["x", "ROM_LOAD(u.bin)", "y"]
         self.files[("uphead", "src/u.c")] = ["x", "", "", "", "y"]
         heads = {"o/port": "porthead", "o/up": "uphead"}
-        profile_sync.upstream.resolve_head = (
+        upstream.resolve_head = (
             lambda repo, cache, offline=False, branch=None: heads[repo.slug]
         )
         # A tag off the tracked branch is not an orphaned pin.
-        profile_sync.upstream.compare = (
+        upstream.compare = (
             lambda repo, base, head, cache_dir, offline=False: CompareResult(
                 [], False, repo.slug == "o/up"
             )
@@ -1858,7 +1867,7 @@ class TestBuildReport(unittest.TestCase):
             [entry.status for entry in report.entries], ["ANCHORED", "ANCHORED"]
         )
         self.assertIn(
-            "upstream pinned to tag 0.289", profile_sync.format_report(report)
+            "upstream pinned to tag 0.289", profiling_reports.format_report(report)
         )
 
     def test_a_tag_pointing_elsewhere_is_not_flagged(self):
@@ -1869,8 +1878,8 @@ class TestBuildReport(unittest.TestCase):
         self.assertIsNone(report.pinned_tag)
 
     def test_prose_version_is_not_looked_up(self):
-        self.assertEqual(profile_sync.version_tag_candidates("SVN (2015 snapshot)"), [])
-        self.assertEqual(profile_sync.version_tag_candidates(""), [])
+        self.assertEqual(profiling_repos.version_tag_candidates("SVN (2015 snapshot)"), [])
+        self.assertEqual(profiling_repos.version_tag_candidates(""), [])
 
     def test_pin_equal_to_head_is_never_flagged(self):
         self.files[("pinsha", "a.c")] = ["x", "hit"]
@@ -1928,9 +1937,9 @@ class TestDeclaredDeadUpstream(TestBuildReport):
 
     def test_a_declared_death_is_reported_as_declared(self):
         def boom(*a, **k):
-            raise profile_sync.upstream.GoneError("https://h/x: HTTP 451")
+            raise upstream.GoneError("https://h/x: HTTP 451")
 
-        profile_sync.upstream.resolve_head = boom
+        upstream.resolve_head = boom
         report = build_report(
             "test", self._profile_with("withdrawn, HTTP 451"), self.dir
         )
@@ -1942,9 +1951,9 @@ class TestDeclaredDeadUpstream(TestBuildReport):
     def test_any_refusal_of_a_declared_dead_forge_agrees(self):
         # citron's taken domain now resolves and fails TLS.
         def tls(*a, **k):
-            raise profile_sync.upstream.UpstreamError("TLSV1_UNRECOGNIZED_NAME")
+            raise upstream.UpstreamError("TLSV1_UNRECOGNIZED_NAME")
 
-        profile_sync.upstream.resolve_head = tls
+        upstream.resolve_head = tls
         report = build_report("test", self._profile_with("domain taken"), self.dir)
         self.assertIn("declared", report.skipped)
 
@@ -1960,10 +1969,10 @@ class TestDeclaredDeadUpstream(TestBuildReport):
 
     def test_an_undeclared_death_is_unchanged(self):
         def boom(*a, **k):
-            raise profile_sync.upstream.GoneError("https://h/x: HTTP 451")
+            raise upstream.GoneError("https://h/x: HTTP 451")
 
-        profile_sync.upstream.resolve_head = boom
-        with self.assertRaises(profile_sync.upstream.GoneError):
+        upstream.resolve_head = boom
+        with self.assertRaises(upstream.GoneError):
             build_report("test", self._profile(["a.c:1"]), self.dir)
 
 
@@ -2029,7 +2038,7 @@ class TestBareNameResolvedAtThePin(TestBuildReport):
         def list_tree(repo, sha, cache_dir, offline=False):
             return sorted({path for rev, path in self.files if rev == sha}), False
 
-        profile_sync.upstream.list_tree = list_tree
+        upstream.list_tree = list_tree
 
     def test_a_bare_name_follows_the_file_that_moved_after_the_pin(self):
         self._tree_per_revision()
@@ -2106,19 +2115,19 @@ class TestRunResilience(unittest.TestCase):
 
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
-        self._orig = profile_sync.upstream.resolve_commit_at
+        self._orig = upstream.resolve_commit_at
         self.seen: list[str] = []
 
         def flaky(repo, date, cache_dir, offline=False, branch=None):
             self.seen.append(repo.slug)
             if repo.slug == "o/bad":
-                raise profile_sync.upstream.UpstreamError("HTTP 401")
+                raise upstream.UpstreamError("HTTP 401")
             return "pinsha"
 
-        profile_sync.upstream.resolve_commit_at = flaky
+        upstream.resolve_commit_at = flaky
 
     def tearDown(self):
-        profile_sync.upstream.resolve_commit_at = self._orig
+        upstream.resolve_commit_at = self._orig
         self.tmp.cleanup()
 
     def test_upstream_error_becomes_a_skip(self):
@@ -2128,21 +2137,21 @@ class TestRunResilience(unittest.TestCase):
             "profiled_date": "2026-03-29",
             "files": [{"name": "a.bin", "source_ref": "a.c:1"}],
         }
-        with self.assertRaises(profile_sync.upstream.UpstreamError):
+        with self.assertRaises(upstream.UpstreamError):
             build_report("bad", profile, self.tmp.name)
 
     def test_rate_limit_still_propagates(self):
         def limited(repo, date, cache_dir, offline=False, branch=None):
-            raise profile_sync.upstream.RateLimitError("HTTP 403")
+            raise upstream.RateLimitError("HTTP 403")
 
-        profile_sync.upstream.resolve_commit_at = limited
+        upstream.resolve_commit_at = limited
         profile = {
             "emulator": "T",
             "source": "https://github.com/o/n",
             "profiled_date": "2026-03-29",
             "files": [{"name": "a.bin", "source_ref": "a.c:1"}],
         }
-        with self.assertRaises(profile_sync.upstream.RateLimitError):
+        with self.assertRaises(upstream.RateLimitError):
             build_report("x", profile, self.tmp.name)
 
 
@@ -2156,7 +2165,7 @@ class TestElidedSummary(unittest.TestCase):
         ]
         buffer = io.StringIO()
         with contextlib.redirect_stdout(buffer):
-            profile_sync._print_elided(reports, printed=1)
+            profiling_run._print_elided(reports, printed=1)
         text = buffer.getvalue()
         self.assertIn("3 non listes", text)
         self.assertIn("2  no source_ref", text)
@@ -2165,7 +2174,7 @@ class TestElidedSummary(unittest.TestCase):
     def test_silent_when_everything_was_listed(self):
         buffer = io.StringIO()
         with contextlib.redirect_stdout(buffer):
-            profile_sync._print_elided(
+            profiling_run._print_elided(
                 [ProfileReport(name="a", entries=[], counts={"GONE": 1})], printed=1
             )
         self.assertEqual(buffer.getvalue(), "")
@@ -2194,10 +2203,10 @@ class TestExtrasSurviveARefusingForge(unittest.TestCase):
         upstream.fetch_file = refuse
         try:
             report = _sample_report()
-            profile_sync._attach_detection(self._args(), self._profile(), report)
+            profiling_run._attach_detection(self._args(), self._profile(), report)
             buffer = io.StringIO()
             with contextlib.redirect_stdout(buffer):
-                profile_sync._print_extras(self._args(), self._profile(), report)
+                detection._print_extras(self._args(), self._profile(), report)
         finally:
             upstream.fetch_file = original
         self.assertEqual(report.detection_skipped, "https://x/y: HTTP 403")
@@ -2216,7 +2225,7 @@ class TestExtrasSurviveARefusingForge(unittest.TestCase):
         args.watch_hashes = True
         report = _sample_report()
         try:
-            profile_sync._attach_detection(args, self._profile(), report)
+            profiling_run._attach_detection(args, self._profile(), report)
         finally:
             upstream.fetch_file = original
         by_name = {(i["path"], i["name"]): i["since_pin"] for i in report.new_files}
@@ -2238,7 +2247,7 @@ class TestExtrasSurviveARefusingForge(unittest.TestCase):
         upstream.fetch_file = quota
         try:
             with self.assertRaises(upstream.RateLimitError):
-                profile_sync._attach_detection(
+                profiling_run._attach_detection(
                     self._args(), self._profile(), _sample_report()
                 )
         finally:
@@ -2589,8 +2598,8 @@ class TestRebaseRefs(unittest.TestCase):
         self.assertIn('source_ref: "a.c:20-22 (loads the kernel)"', text)
 
     def test_a_chunk_that_is_only_prose_blocks_the_rewrite(self):
-        self.assertFalse(profile_sync._is_rewritable("a.c:1, (just a note)"))
-        self.assertTrue(profile_sync._is_rewritable("a.c:1 (note), b.c:2"))
+        self.assertFalse(rebase._is_rewritable("a.c:1, (just a note)"))
+        self.assertTrue(rebase._is_rewritable("a.c:1 (note), b.c:2"))
 
     def test_mode_keyed_ref_is_never_rewritten(self):
         part = PartResult(RefPart("a.c", 10, 12), "SHIFTED", None, 20, 22, [])
@@ -2642,7 +2651,7 @@ class TestWriteDryRun(unittest.TestCase):
             report.new_files, report.new_hashes = [], []
 
         self._detection = mock.patch.object(
-            profile_sync, "_attach_detection", side_effect=nothing_gained
+            profiling_run, "_attach_detection", side_effect=nothing_gained
         )
         self._detection.start()
 
@@ -2660,12 +2669,12 @@ class TestWriteDryRun(unittest.TestCase):
             report.new_hashes = []
 
         before = self.path.read_text()
-        with mock.patch.object(profile_sync, "_attach_detection", side_effect=gained), \
+        with mock.patch.object(profiling_run, "_attach_detection", side_effect=gained), \
                 contextlib.redirect_stderr(io.StringIO()) as err:
             self._run(self._args(rebase_refs=True, dry_run=False), self._shifted())
         self.assertEqual(self.path.read_text(), before)
         self.assertIn("coh3002t.zip", err.getvalue())
-        with mock.patch.object(profile_sync, "_attach_detection", side_effect=gained):
+        with mock.patch.object(profiling_run, "_attach_detection", side_effect=gained):
             self._run(self._args(rebase_refs=True, dry_run=False, accept_changed=True), self._shifted())
         self.assertIn('source_commit: "newhead"', self.path.read_text())
 
@@ -2681,7 +2690,7 @@ class TestWriteDryRun(unittest.TestCase):
     def _run(self, args, report, sample=SAMPLE):
         buffer = io.StringIO()
         with contextlib.redirect_stdout(buffer):
-            profile_sync._apply_writes(
+            profiling_run._apply_writes(
                 args, "p", yaml.safe_load(sample), report
             )
         return buffer.getvalue()
@@ -2703,9 +2712,9 @@ class TestWriteDryRun(unittest.TestCase):
         from unittest import mock
 
         before = self.path.read_bytes()
-        cold = profile_sync.upstream.NotCachedError("x.c not cached")
-        with mock.patch.object(profile_sync, "realign_prose", side_effect=[[], cold]), \
-                self.assertRaises(profile_sync.upstream.NotCachedError):
+        cold = upstream.NotCachedError("x.c not cached")
+        with mock.patch.object(profiling_run, "realign_prose", side_effect=[[], cold]), \
+                self.assertRaises(upstream.NotCachedError):
             self._run(self._args(rebase_refs=True, dry_run=False), self._shifted())
         self.assertEqual(self.path.read_bytes(), before)
 
@@ -2746,7 +2755,7 @@ class TestWriteDryRun(unittest.TestCase):
             ("c1", {"source_commit": "pin1", "notes": "x"}),
         ]
         repo = object()
-        readings, ambiguous = profile_sync._writing_pairs(
+        readings, ambiguous = realign._writing_pairs(
             {"source_commit": "pin2"}, [("source", "", repo)], revisions, "c1"
         )
         self.assertEqual(readings, [[(repo, "pin1", "pin2")], []])
@@ -2761,12 +2770,12 @@ class TestWriteDryRun(unittest.TestCase):
             ("c1", {"source_commit": "pin1", "notes": "x"}),
         ]
         repo = object()
-        readings, _ambiguous = profile_sync._writing_pairs(
+        readings, _ambiguous = realign._writing_pairs(
             {"source_commit": "pin2", "prose_written_at": "pin2"},
             [("source", "", repo)], revisions, "c1",
         )
         self.assertEqual(readings, [[]])
-        later, _ = profile_sync._writing_pairs(
+        later, _ = realign._writing_pairs(
             {"source_commit": "pin3", "prose_written_at": "pin2"},
             [("source", "", repo)], revisions, "c1",
         )
@@ -2778,7 +2787,7 @@ class TestWriteDryRun(unittest.TestCase):
             ("c1", {"source_commit": "pin1", "notes": "x"}),
         ]
         repo = object()
-        readings, ambiguous = profile_sync._writing_pairs(
+        readings, ambiguous = realign._writing_pairs(
             {"source_commit": "pin2", "prose_written_at": "elsewhere"},
             [("source", "", repo)], revisions, "c1",
         )
@@ -2793,7 +2802,7 @@ class TestWriteDryRun(unittest.TestCase):
             ("c1", {"source_commit": {"libretro": "old", "standalone": "s"}}),
         ]
         repo = object()
-        readings, _ambiguous = profile_sync._writing_pairs(
+        readings, _ambiguous = realign._writing_pairs(
             {"source_commit": {"libretro": "new", "standalone": "s"}},
             [("source", "libretro", repo)], revisions, "c1",
         )
@@ -2813,9 +2822,9 @@ class TestWriteDryRun(unittest.TestCase):
             ("c1", {"source": edge, "notes": "x", "source_commit": "e1"}),
         ]
         document = dict(revisions[0][1])
-        repos = [("source", mode, profile_sync.upstream.parse_repo(url))
+        repos = [("source", mode, upstream.parse_repo(url))
                  for mode, url in modes.items()]
-        readings, ambiguous = profile_sync._writing_pairs(
+        readings, ambiguous = realign._writing_pairs(
             document, repos, revisions, "c1"
         )
         self.assertEqual(readings, [[]])
@@ -2834,7 +2843,7 @@ class TestWriteDryRun(unittest.TestCase):
         )
         stale = ["read again: notes: FileSystem.cpp:2125 (pin moved under this text)"]
         errors = io.StringIO()
-        with mock.patch.object(profile_sync, "realign_prose", return_value=stale), \
+        with mock.patch.object(profiling_run, "realign_prose", return_value=stale), \
                 contextlib.redirect_stderr(errors):
             output = self._run(self._args(bump_commit=True, dry_run=False), report)
         self.assertNotIn("source_commit ->", output)
@@ -2923,7 +2932,7 @@ class TestWriteDryRun(unittest.TestCase):
         before = self.path.read_text()
         answers = iter([[], ["notes: a.c:10 (a.c:10 changed)"]])
         with mock.patch.object(
-            profile_sync, "realign_prose", side_effect=lambda *a, **k: next(answers)
+            profiling_run, "realign_prose", side_effect=lambda *a, **k: next(answers)
         ), contextlib.redirect_stderr(io.StringIO()) as err:
             self._run(self._args(rebase_refs=True, dry_run=False), self._shifted())
         self.assertEqual(self.path.read_text(), before)
@@ -2946,7 +2955,7 @@ class TestWriteDryRun(unittest.TestCase):
             entries=[entry], counts={"SHIFTED": 1},
         )
         self.assertEqual(
-            profile_sync.pending_recale(report, False, before), 1,
+            rebase.pending_recale(report, False, before), 1,
             "the prose still describes the pinned revision",
         )
         output = self._run(
@@ -2982,11 +2991,11 @@ class AKeyedProfileJudgesEachBuildInItsOwnTree(TestBuildReport):
             ("o/port", "lpin", "a.c"): ["y", "f.bin cited"],
         }
         heads = {"o/edge": "shead", "o/port": "lpin"}
-        profile_sync.upstream.fetch_file = (
+        upstream.fetch_file = (
             lambda repo, sha, path, cache_dir, offline=False:
             trees.get((repo.slug, sha, path))
         )
-        profile_sync.upstream.resolve_head = (
+        upstream.resolve_head = (
             lambda repo, cache_dir, offline=False, branch=None, fresh=False:
             heads[repo.slug]
         )
@@ -3123,20 +3132,20 @@ class TestProseSpacingIsNotADifference(unittest.TestCase):
 
     def test_a_written_run_counts_as_written_whatever_the_spacing(self):
         self.assertEqual(
-            profile_sync._citation_key("src/Harddisk.cpp:228, 1439-1443"),
-            profile_sync._citation_key("src/Harddisk.cpp:228,1439-1443"),
+            profiling_citations._citation_key("src/Harddisk.cpp:228, 1439-1443"),
+            profiling_citations._citation_key("src/Harddisk.cpp:228,1439-1443"),
         )
 
     def test_different_citations_still_differ(self):
         self.assertNotEqual(
-            profile_sync._citation_key("a.c:1, 2"),
-            profile_sync._citation_key("a.c:1, 3"),
+            profiling_citations._citation_key("a.c:1, 2"),
+            profiling_citations._citation_key("a.c:1, 3"),
         )
 
     def test_a_path_change_still_differs(self):
         self.assertNotEqual(
-            profile_sync._citation_key("a.c:1"),
-            profile_sync._citation_key("src/a.c:1"),
+            profiling_citations._citation_key("a.c:1"),
+            profiling_citations._citation_key("src/a.c:1"),
         )
 
 
@@ -3149,21 +3158,21 @@ class TestLargeFileCeiling(unittest.TestCase):
     """
 
     def test_a_pair_over_the_ceiling_is_not_diffed(self):
-        big = ["x"] * (profile_sync.MAX_MATCH_LINES + 1)
-        result = profile_sync._map_changed(big, big, 1, 2)
+        big = ["x"] * (anchoring.MAX_MATCH_LINES + 1)
+        result = anchoring._map_changed(big, big, 1, 2)
         self.assertEqual(result.status, "CHANGED")
         self.assertIn("over", result.reason)
 
     def test_a_pair_under_the_ceiling_is_mapped(self):
         pin = ["a", "subject", "b"]
         head = ["pad", "pad", "a", "subject", "b"]
-        result = profile_sync._map_changed(pin, head, 2, 2)
+        result = anchoring._map_changed(pin, head, 2, 2)
         self.assertIsNotNone(result.start, "a small pair has to be diffed")
         self.assertNotIn("over", result.reason or "")
 
     def test_the_ceiling_clears_the_largest_file_any_profile_cites(self):
         self.assertGreater(
-            profile_sync.MAX_MATCH_LINES, 57000,
+            anchoring.MAX_MATCH_LINES, 57000,
             "openbor.c is 57k lines at HEAD and its ref has to map",
         )
 
@@ -3204,7 +3213,7 @@ class TestRebaseWaitsForThePin(unittest.TestCase):
             ],
             {"SHIFTED": 2},
         )
-        self.assertTrue(profile_sync.pending_recale(report))
+        self.assertTrue(rebase.pending_recale(report))
         self.assertEqual(rebase_refs(self.path, report), [])
         self.assertIn('source_ref: "a.c:10-12"', self.path.read_text())
 
@@ -3224,7 +3233,7 @@ class TestRebaseWaitsForThePin(unittest.TestCase):
         )
         out, err = io.StringIO(), io.StringIO()
         with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
-            profile_sync._apply_writes(args, "p", yaml.safe_load(SAMPLE), report)
+            profiling_run._apply_writes(args, "p", yaml.safe_load(SAMPLE), report)
         self.assertEqual(self.path.read_text(), before)
         self.assertIn("nothing was written", err.getvalue())
         self.assertNotIn("a.c:30-32", out.getvalue())
@@ -3235,7 +3244,7 @@ class TestRebaseWaitsForThePin(unittest.TestCase):
             [EntryReport("a.bin", "a.c:10-12", "SHIFTED", [movable])],
             {"SHIFTED": 1},
         )
-        self.assertFalse(profile_sync.pending_recale(report))
+        self.assertFalse(rebase.pending_recale(report))
         self.assertEqual(rebase_refs(self.path, report), ["a.c:10-12 -> a.c:30-32"])
 
     def test_chained_shifts_are_judged_at_their_own_entry(self):
@@ -3263,7 +3272,7 @@ class TestRebaseWaitsForThePin(unittest.TestCase):
         written = self.path.read_text()
         self.assertIn('source_ref: "g.json5:575"', written)
         self.assertEqual(
-            profile_sync.pending_recale(report, text=written), 0
+            rebase.pending_recale(report, text=written), 0
         )
 
 
@@ -3287,7 +3296,7 @@ class TestBumpCommit(unittest.TestCase):
             ],
             counts={"SHIFTED": 1},
         )
-        self.assertEqual(profile_sync.pending_recale(report), 1)
+        self.assertEqual(rebase.pending_recale(report), 1)
         self.assertFalse(bump_commit(self.path, report))
 
     def test_a_profile_citing_nothing_advances(self):
@@ -3295,7 +3304,7 @@ class TestBumpCommit(unittest.TestCase):
         # report skips a profile with no source_ref, and the skip blocked it.
         report = ProfileReport(
             name="p", repo="o/n", pin="pin", head="newhead", entries=[], counts={},
-            skipped=profile_sync.NO_SOURCE_REF,
+            skipped=resolver.NO_SOURCE_REF,
         )
         report.upstream_head, report.upstream_pin = "uphead", "uppin"
         self.assertTrue(bump_commit(self.path, report))
@@ -3318,11 +3327,11 @@ class TestBumpCommit(unittest.TestCase):
         )
         report = ProfileReport(
             name="advanced_drastic", repo="o/n", pin="pin", head="newhead", entries=[],
-            counts={}, skipped=profile_sync.NO_SOURCE_REF,
+            counts={}, skipped=resolver.NO_SOURCE_REF,
         )
         platforms = str(root / "platforms")
         self.assertEqual(
-            profile_sync.shipping_platforms("advanced_drastic", self.tmp.name, platforms),
+            bump.shipping_platforms("advanced_drastic", self.tmp.name, platforms),
             ["knulli"],
         )
         with contextlib.redirect_stderr(io.StringIO()) as err:
@@ -3353,7 +3362,7 @@ class TestBumpCommit(unittest.TestCase):
             ],
             counts={"ANCHORED": 1},
         )
-        self.assertEqual(profile_sync.pending_recale(report), 0)
+        self.assertEqual(rebase.pending_recale(report), 0)
         self.assertTrue(bump_commit(self.path, report))
 
     def test_refused_on_a_build_a_platform_compiles(self):
@@ -3544,34 +3553,34 @@ class TestCheckVersion(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.dir = self.tmp.name
-        self.repo = profile_sync.upstream.parse_repo("https://github.com/o/n")
+        self.repo = upstream.parse_repo("https://github.com/o/n")
         self._orig = (
-            profile_sync.upstream.latest_release,
-            profile_sync.upstream.list_tags,
-            profile_sync.upstream.resolve_tag_commit,
-            profile_sync.upstream.tag_commit,
+            upstream.latest_release,
+            upstream.list_tags,
+            upstream.resolve_tag_commit,
+            upstream.tag_commit,
         )
-        profile_sync.upstream.latest_release = (
-            lambda repo, cache, offline=False: profile_sync.upstream.Release(
+        upstream.latest_release = (
+            lambda repo, cache, offline=False: upstream.Release(
                 "v3.1.2", "2026-06-14", False
             )
         )
-        profile_sync.upstream.list_tags = (
+        upstream.list_tags = (
             lambda repo, cache, offline=False: ["v3.1.2", "v3.0.0"]
         )
-        profile_sync.upstream.resolve_tag_commit = (
+        upstream.resolve_tag_commit = (
             lambda repo, tag, cache, offline=False: (
                 "tagsha" if tag == "v3.0.0" else None
             )
         )
-        profile_sync.upstream.tag_commit = profile_sync.upstream.resolve_tag_commit
+        upstream.tag_commit = upstream.resolve_tag_commit
 
     def tearDown(self):
         (
-            profile_sync.upstream.latest_release,
-            profile_sync.upstream.list_tags,
-            profile_sync.upstream.resolve_tag_commit,
-            profile_sync.upstream.tag_commit,
+            upstream.latest_release,
+            upstream.list_tags,
+            upstream.resolve_tag_commit,
+            upstream.tag_commit,
         ) = self._orig
         self.tmp.cleanup()
 
@@ -3624,13 +3633,13 @@ class APassedReleaseIsNewerThanTheTag(unittest.TestCase):
     def test_a_release_older_than_the_declared_tag_is_not_passed(self):
         from unittest import mock
 
-        version = profile_sync.VersionReport(
+        version = versions.VersionReport(
             "v0.2.22", "v0.2.22", "v0.2.20", "2026-07-25", True, "tag22"
         )
         args = argparse.Namespace(cache_dir="c", offline=True)
-        with mock.patch.object(profile_sync.upstream, "tag_commit", return_value="rel20"), \
-                mock.patch.object(profile_sync.upstream, "ancestry", return_value=(5, 0)):
-            self.assertIsNone(profile_sync._passed_release(args, "repo", version, "pin"))
+        with mock.patch.object(upstream, "tag_commit", return_value="rel20"), \
+                mock.patch.object(upstream, "ancestry", return_value=(5, 0)):
+            self.assertIsNone(versions._passed_release(args, "repo", version, "pin"))
 
 
 class ANewerReleaseThanTheTag(unittest.TestCase):
@@ -3639,12 +3648,12 @@ class ANewerReleaseThanTheTag(unittest.TestCase):
     def _newer(self, after_tag, after_pin):
         from unittest import mock
 
-        version = profile_sync.VersionReport("2.8", "2.9", "2.9", "2026-10-01", True, "tag28")
+        version = versions.VersionReport("2.8", "2.9", "2.9", "2026-10-01", True, "tag28")
         args = argparse.Namespace(cache_dir="c", offline=True)
         answers = iter([after_tag, after_pin])
-        with mock.patch.object(profile_sync.upstream, "tag_commit", return_value="rel29"), \
-                mock.patch.object(profile_sync.upstream, "ancestry", side_effect=lambda *a, **k: next(answers)):
-            return profile_sync._newer_release(args, "repo", version, "tag28")
+        with mock.patch.object(upstream, "tag_commit", return_value="rel29"), \
+                mock.patch.object(upstream, "ancestry", side_effect=lambda *a, **k: next(answers)):
+            return versions._newer_release(args, "repo", version, "tag28")
 
     def test_a_later_release_is_named(self):
         self.assertEqual(self._newer((12, 0), (12, 0)), "2.9")
@@ -3659,29 +3668,29 @@ class AProjectThatOnlyTags(unittest.TestCase):
     with no release published, nothing compared them."""
 
     def test_a_version_tag_stands_in_for_the_missing_release(self):
-        version = profile_sync.VersionReport("v1.2", "v1.3", None, None, True, "tag12")
-        self.assertEqual(profile_sync.published_version(version), "v1.3")
+        version = versions.VersionReport("v1.2", "v1.3", None, None, True, "tag12")
+        self.assertEqual(versions.published_version(version), "v1.3")
         for tag in ("v107", "1.1d", "v9.0-6", "2.55"):
-            version = profile_sync.VersionReport("x", tag, None, None, False, None)
-            self.assertEqual(profile_sync.published_version(version), tag)
+            version = versions.VersionReport("x", tag, None, None, False, None)
+            self.assertEqual(versions.published_version(version), tag)
 
     def test_a_nightly_tag_does_not(self):
         for tag in ("latest-nightly", "continuous", "nightly-20261001"):
-            version = profile_sync.VersionReport("v1.2", tag, None, None, True, "t")
-            self.assertIsNone(profile_sync.published_version(version))
+            version = versions.VersionReport("v1.2", tag, None, None, True, "t")
+            self.assertIsNone(versions.published_version(version))
 
     def test_a_release_wins_over_a_newer_tag(self):
-        version = profile_sync.VersionReport("1.0", "1.2", "1.1", "2026-01-01", True, "t")
-        self.assertEqual(profile_sync.published_version(version), "1.1")
+        version = versions.VersionReport("1.0", "1.2", "1.1", "2026-01-01", True, "t")
+        self.assertEqual(versions.published_version(version), "1.1")
 
     def test_a_newer_tag_is_named(self):
         from unittest import mock
 
-        version = profile_sync.VersionReport("v1.2", "v1.3", None, None, True, "tag12")
+        version = versions.VersionReport("v1.2", "v1.3", None, None, True, "tag12")
         args = argparse.Namespace(cache_dir="c", offline=True)
-        with mock.patch.object(profile_sync.upstream, "tag_commit", return_value="tag13"), \
-                mock.patch.object(profile_sync.upstream, "ancestry", return_value=(7, 0)):
-            self.assertEqual(profile_sync._newer_release(args, "repo", version, "tag12"), "v1.3")
+        with mock.patch.object(upstream, "tag_commit", return_value="tag13"), \
+                mock.patch.object(upstream, "ancestry", return_value=(7, 0)):
+            self.assertEqual(versions._newer_release(args, "repo", version, "tag12"), "v1.3")
 
 
 class APassedReleaseUnderAnUntaggedVersion(unittest.TestCase):
@@ -3689,7 +3698,7 @@ class APassedReleaseUnderAnUntaggedVersion(unittest.TestCase):
     already held release v9.0-6: the missing tag silenced the warning."""
 
     def test_the_passed_release_is_named_without_a_declared_tag(self):
-        version = profile_sync.VersionReport("9.0.5", "v9.0-6", "v9.0-6", "2026-08-08", False, None)
+        version = versions.VersionReport("9.0.5", "v9.0-6", "v9.0-6", "2026-08-08", False, None)
         warning = version_warning(version, "head", None, "v9.0-6")
         self.assertIn("already contains release v9.0-6", warning)
 
@@ -3702,24 +3711,24 @@ class APassedReleaseUnderAnUntaggedVersion(unittest.TestCase):
                  ("v1", "v1.0"): None, ("0.83", "20120302"): None, ("0.160", "v1.4.1"): None,
                  ("0.0.35", "v0.0.43"): "v0.0.43", ("106", "v107"): "v107", ("v1", "20170424"): None}
         for (declared, release), expected in cases.items():
-            version = profile_sync.VersionReport(declared, release, release, "d", False, None)
+            version = versions.VersionReport(declared, release, release, "d", False, None)
             with self.subTest(declared=declared, release=release), \
-                    mock.patch.object(profile_sync.upstream, "tag_commit", return_value="rel"), \
-                    mock.patch.object(profile_sync.upstream, "ancestry", return_value=(3, 0)):
-                self.assertEqual(profile_sync._passed_release(args, "repo", version, "pin"), expected)
+                    mock.patch.object(upstream, "tag_commit", return_value="rel"), \
+                    mock.patch.object(upstream, "ancestry", return_value=(3, 0)):
+                self.assertEqual(versions._passed_release(args, "repo", version, "pin"), expected)
 
     def test_no_tag_and_nothing_passed_stays_quiet(self):
-        version = profile_sync.VersionReport("9.0.5", None, None, None, False, None)
+        version = versions.VersionReport("9.0.5", None, None, None, False, None)
         self.assertIsNone(version_warning(version, "head"))
 
 
 class TestAncestry(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
-        self.saved = profile_sync.upstream._http_json
+        self.saved = upstream._http_json
 
     def tearDown(self):
-        profile_sync.upstream._http_json = self.saved
+        upstream._http_json = self.saved
         self.tmp.cleanup()
 
     def test_github_answers_both_directions_at_once(self):
@@ -3729,10 +3738,10 @@ class TestAncestry(unittest.TestCase):
             calls.append(url)
             return {"ahead_by": 3, "behind_by": 0}
 
-        profile_sync.upstream._http_json = answer
-        repo = profile_sync.upstream.parse_repo("https://github.com/o/n")
+        upstream._http_json = answer
+        repo = upstream.parse_repo("https://github.com/o/n")
         self.assertEqual(
-            profile_sync.upstream.ancestry(repo, "tag", "pin", self.tmp.name), (3, 0)
+            upstream.ancestry(repo, "tag", "pin", self.tmp.name), (3, 0)
         )
         self.assertEqual(len(calls), 1)
 
@@ -3741,10 +3750,10 @@ class TestAncestry(unittest.TestCase):
             forward = "from=tag&to=pin" in url
             return {"commits": [{}] * (0 if forward else 5)}
 
-        profile_sync.upstream._http_json = answer
-        repo = profile_sync.upstream.parse_repo("https://gitlab.com/o/n")
+        upstream._http_json = answer
+        repo = upstream.parse_repo("https://gitlab.com/o/n")
         self.assertEqual(
-            profile_sync.upstream.ancestry(repo, "tag", "pin", self.tmp.name), (0, 5)
+            upstream.ancestry(repo, "tag", "pin", self.tmp.name), (0, 5)
         )
 
 
@@ -4092,7 +4101,7 @@ class TestCollectCitations(unittest.TestCase):
             ["mt32_model.cpp:36-97", "ROMInfo.cpp:206-213"],
         )
         self.assertEqual(citations[1].parts[0].path, "munt ROMInfo.cpp")
-        self.assertTrue(profile_sync.is_external_citation("munt ROMInfo.cpp"))
+        self.assertTrue(profiling_citations.is_external_citation("munt ROMInfo.cpp"))
 
     def test_project_word_ending_the_line_before_marks_the_path_external(self):
         # genesis_plus_gx_expanded wrapped `(Batocera` and
@@ -4106,7 +4115,7 @@ class TestCollectCitations(unittest.TestCase):
         self.assertEqual(
             citation.parts[0].path, "Batocera package/batocera/emulators/gpgx.mk"
         )
-        self.assertTrue(profile_sync.is_external_citation(citation.parts[0].path))
+        self.assertTrue(profiling_citations.is_external_citation(citation.parts[0].path))
         sentence = {"notes": "It is read by the file\nsrc/gpgx.c:7 at boot.\n"}
         self.assertEqual(collect_citations(sentence)[0].parts[0].path, "src/gpgx.c")
 
@@ -4133,7 +4142,7 @@ class TestCollectCitations(unittest.TestCase):
         tree holds only the gitlink, so the parts stayed external and moved
         unchecked with every bump."""
         links = ["Q3E/src/main/jni/xash3d/xash3d-fwgs", "tools/Torch", "libs/zlib"]
-        resolve = profile_sync.resolve_through_gitlinks
+        resolve = profiling_repos.resolve_through_gitlinks
         self.assertEqual(
             resolve("xash3d-fwgs filesystem/filesystem.c", [links]),
             "Q3E/src/main/jni/xash3d/xash3d-fwgs/filesystem/filesystem.c",
@@ -4175,7 +4184,7 @@ class TestCollectCitations(unittest.TestCase):
     def test_run_is_rendered_with_its_written_path(self):
         parts = [RefPart("mupen64plus-video-rice/upstream/src/Config.cpp", 38, 38, "38")]
         self.assertEqual(
-            profile_sync._run_after_moves(parts, {0: (40, 40, None)}, "Config.cpp:38"),
+            proseedit._run_after_moves(parts, {0: (40, 40, None)}, "Config.cpp:38"),
             "Config.cpp:40",
         )
 
@@ -4260,7 +4269,11 @@ class TestCitationSurfaceGuard(unittest.TestCase):
         citations outside its list rot while the pin advances. The walker
         matches the key once. Everything else goes through the collector.
         """
-        source = Path(profile_sync.__file__).read_text(encoding="utf-8")
+        cli = Path(profile_sync.__file__)
+        source = "".join(
+            path.read_text(encoding="utf-8")
+            for path in [cli, *sorted((cli.parent / "profiling").glob("*.py"))]
+        )
         self.assertNotIn('.get("source_ref")', source)
         self.assertEqual(source.count('== "source_ref"'), 1)
 
@@ -4382,7 +4395,7 @@ class TestRebaseProse(unittest.TestCase):
         )
         written = self.path.read_text()
         self.assertEqual(written, text.replace("(a.c:10)", "(a.c:14)"))
-        self.assertEqual(profile_sync.pending_recale(report, text=written), 0)
+        self.assertEqual(rebase.pending_recale(report, text=written), 0)
         self.assertTrue(bump_commit(self.path, report))
 
     def test_a_refused_recale_names_the_citation_and_writes_nothing(self):
@@ -4491,7 +4504,7 @@ class TestPendingProse(unittest.TestCase):
         part = PartResult(RefPart("a.c", 10, 10, "10"), "SHIFTED", None, 14, 14, [])
         report = self._report([part])
         text = self.path.read_text()
-        self.assertEqual(profile_sync.pending_recale(report, text=text), 1)
+        self.assertEqual(rebase.pending_recale(report, text=text), 1)
         self.assertFalse(bump_commit(self.path, report))
         self.assertEqual(
             yaml.safe_load(self.path.read_text())["source_commit"], "pin"
@@ -4510,7 +4523,7 @@ class TestPendingProse(unittest.TestCase):
         part = PartResult(RefPart("a.c", 10, 10, "10"), "ANCHORED", None, None, None, [])
         report = self._report([part])
         self.assertEqual(
-            profile_sync.pending_recale(report, text=self.path.read_text()), 0
+            rebase.pending_recale(report, text=self.path.read_text()), 0
         )
         self.assertTrue(bump_commit(self.path, report))
 
@@ -4547,7 +4560,7 @@ class TestWrappedProse(unittest.TestCase):
     def test_both_wraps_are_read_whole(self):
         runs = {
             c.ref: c.wrapped
-            for c in profile_sync.collect_citations(yaml.safe_load(self.TEXT))
+            for c in profiling_citations.collect_citations(yaml.safe_load(self.TEXT))
             if c.field == "adam"
         }
         self.assertEqual(
@@ -4564,7 +4577,7 @@ class TestWrappedProse(unittest.TestCase):
         )
         runs = {
             c.ref: c.wrapped
-            for c in profile_sync.collect_citations(yaml.safe_load(text))
+            for c in profiling_citations.collect_citations(yaml.safe_load(text))
             if c.field == "cfg"
         }
         self.assertEqual(runs, {"src/config.rs:76-78,95-99": True})
@@ -4625,7 +4638,7 @@ class TestOpcodeCache(unittest.TestCase):
             expected = difflib.SequenceMatcher(
                 None, pin, head, autojunk=False
             ).get_opcodes()
-            self.assertEqual(profile_sync._opcodes(list(pin), list(head)), expected)
+            self.assertEqual(anchoring._opcodes(list(pin), list(head)), expected)
 
 
 class TestCommentCitations(unittest.TestCase):
@@ -4649,20 +4662,20 @@ class TestCommentCitations(unittest.TestCase):
         self.tmp.cleanup()
 
     def test_comments_only(self):
-        found = [c.ref for c in profile_sync.comment_citations(self.TEXT)]
+        found = [c.ref for c in profiling_citations.comment_citations(self.TEXT)]
         self.assertEqual(found, ["src/cpu.c:3212-3451", "z.c:9"])
         document = yaml.safe_load(self.TEXT)
         self.assertNotIn(
             "src/cpu.c:3212-3451",
-            [c.ref for c in profile_sync.collect_citations(document)],
+            [c.ref for c in profiling_citations.collect_citations(document)],
         )
         self.assertIn(
             "src/cpu.c:3212-3451",
-            [c.ref for c in profile_sync.collect_citations(document, self.TEXT)],
+            [c.ref for c in profiling_citations.collect_citations(document, self.TEXT)],
         )
 
     def _report(self, index, part):
-        field = profile_sync.comment_citations(self.TEXT)[index].field
+        field = profiling_citations.comment_citations(self.TEXT)[index].field
         return ProfileReport(
             name="p", repo="o/n", pin="pin", head="newhead",
             entries=[EntryReport("comment", f"{part.part.path}:{part.part.raw}",
@@ -4707,15 +4720,15 @@ class TestRealignProse(unittest.TestCase):
         self.path = self.dir / "p.yml"
         self.files: dict[tuple[str, str], list[str]] = {}
         self._orig = (
-            profile_sync.upstream.fetch_file,
-            profile_sync.upstream.list_tree,
+            upstream.fetch_file,
+            upstream.list_tree,
         )
-        profile_sync.upstream.fetch_file = (
+        upstream.fetch_file = (
             lambda repo, sha, path, cache_dir, offline=False: self.files.get(
                 (sha, path)
             )
         )
-        profile_sync.upstream.list_tree = (
+        upstream.list_tree = (
             lambda repo, sha, cache_dir, offline=False: (
                 sorted({p for _, p in self.files}), False
             )
@@ -4723,8 +4736,8 @@ class TestRealignProse(unittest.TestCase):
 
     def tearDown(self):
         (
-            profile_sync.upstream.fetch_file,
-            profile_sync.upstream.list_tree,
+            upstream.fetch_file,
+            upstream.list_tree,
         ) = self._orig
         self.tmp.cleanup()
 
@@ -4757,7 +4770,7 @@ class TestRealignProse(unittest.TestCase):
         self.files[("pin", "a.c")] = ["x"] * 13 + ["subject"]
         self.files[("oldpin", "b.c")] = ["p", "two", "q", "r", "s", "t", "u", "eight", "nine"]
         self.files[("pin", "b.c")] = ["p", "two", "q", "r", "s", "t", "u", "eight", "nine"]
-        messages = profile_sync.realign_prose(self.path, self.tmp.name)
+        messages = realign.realign_prose(self.path, self.tmp.name)
         self.assertIn("notes: a.c:10 -> a.c:14", messages)
         text = self.path.read_text()
         self.assertIn("(a.c:14)", text)
@@ -4794,7 +4807,7 @@ class TestRealignProse(unittest.TestCase):
         self.files[("oldpin", "a.c")] = ["x"] * 9 + ["subject"]
         self.files[("pin", "a.c")] = ["x"] * 13 + ["subject"]
         self.files[("pin", "b.c")] = ["p"] * 4 + ["read"]
-        messages = profile_sync.realign_prose(self.path, self.tmp.name, dry_run=True)
+        messages = realign.realign_prose(self.path, self.tmp.name, dry_run=True)
         self.assertEqual(
             messages,
             ["would recale files[Games.xml@standalone].note: a.c:10 -> a.c:14"],
@@ -4814,7 +4827,7 @@ class TestRealignProse(unittest.TestCase):
         self.files[("oldpin", "b.c")] = list("pqrstuvwx")
         self.files[("pin", "b.c")] = list("pqrstuvwx")
         before = self.path.read_text()
-        messages = profile_sync.realign_prose(self.path, self.tmp.name)
+        messages = realign.realign_prose(self.path, self.tmp.name)
         self.assertTrue(
             any("pin moved under this text" in m for m in messages), messages
         )
@@ -4836,7 +4849,7 @@ class TestRealignProse(unittest.TestCase):
         self.files[("pin", "a.c")] = ["x"] * 13 + ["subject"]
         self.files[("oldpin", "b.c")] = list("pqrstuvwx")
         self.files[("pin", "b.c")] = list("pqrstuvwx")
-        messages = profile_sync.realign_prose(self.path, self.tmp.name, dry_run=True)
+        messages = realign.realign_prose(self.path, self.tmp.name, dry_run=True)
         self.assertTrue(
             any("pin moved under this text" in m for m in messages), messages
         )
@@ -4854,7 +4867,7 @@ class TestRealignProse(unittest.TestCase):
         self.files[("oldpin", "a.c")] = ["x"] * 9 + ["subject"]
         self.files[("pin", "a.c")] = ["x"] * 13 + ["subject"]
         self.files[("pin", "b.c")] = list("pqrstuvwxyz")
-        messages = profile_sync.realign_prose(self.path, self.tmp.name, dry_run=True)
+        messages = realign.realign_prose(self.path, self.tmp.name, dry_run=True)
         flagged = [m for m in messages if "a.c:10" in m]
         self.assertTrue(flagged, messages)
         self.assertFalse([m for m in messages if "b.c:" in m], messages)
@@ -4876,14 +4889,14 @@ class TestRealignProse(unittest.TestCase):
         self.files[("pin", "a.c")] = ["x"] * 13 + ["subject"]
         self.files[("oldpin", "b.c")] = list("pqrstuvwx")
         self.files[("pin", "b.c")] = list("pqrstuvwx")
-        served = profile_sync.upstream.fetch_file
-        profile_sync.upstream.fetch_file = (
+        served = upstream.fetch_file
+        upstream.fetch_file = (
             lambda repo, sha, path, cache_dir, offline=False: (
                 served(repo, sha, path, cache_dir, offline)
                 if repo.slug == "m/n" else None
             )
         )
-        messages = profile_sync.realign_prose(self.path, self.tmp.name, dry_run=True)
+        messages = realign.realign_prose(self.path, self.tmp.name, dry_run=True)
         # b.c did not move between the two pins: nothing to read again.
         self.assertFalse([m for m in messages if "b.c:" in m], messages)
 
@@ -4908,7 +4921,7 @@ class TestRealignProse(unittest.TestCase):
         self._commit(sample.replace('"oldpin"', '"pin"'), "advance the port")
         self.files[("uppin", "up.c")] = ["a", "b", "c", "d", "check bios"]
         before = self.path.read_text()
-        messages = profile_sync.realign_prose(self.path, self.tmp.name, dry_run=True)
+        messages = realign.realign_prose(self.path, self.tmp.name, dry_run=True)
         self.assertFalse(
             any("readings disagree" in m for m in messages), messages
         )
@@ -4920,7 +4933,7 @@ class TestRealignProse(unittest.TestCase):
         self.files[("pin", "a.c")] = ["x"] * 13 + ["subject"]
         self.files[("oldpin", "b.c")] = list("pqrstuvwx")
         self.files[("pin", "b.c")] = list("pqrstuvwx")
-        messages = profile_sync.realign_prose(
+        messages = realign.realign_prose(
             self.path, self.tmp.name, dry_run=True
         )
         self.assertTrue(any("would recale" in m for m in messages))
@@ -4930,15 +4943,15 @@ class TestRealignProse(unittest.TestCase):
         """git failing (no repository, dubious ownership) read as "nothing
         written under an older pin" and let a bump through."""
         self.path.write_text(PROSE_SAMPLE, encoding="utf-8")
-        messages = profile_sync.realign_prose(self.path, self.tmp.name, dry_run=True)
+        messages = realign.realign_prose(self.path, self.tmp.name, dry_run=True)
         self.assertEqual(messages, ["read again: p.yml: git history unreadable"])
 
     def test_an_unreadable_revision_stops_the_move(self):
         self._repo_with_advanced_pin()
         self.files[("oldpin", "a.c")] = ["x"] * 9 + ["subject"]
         self.files[("pin", "a.c")] = ["x"] * 13 + ["subject"]
-        with mock.patch.object(profile_sync, "_git_file_at", return_value=None):
-            messages = profile_sync.realign_prose(self.path, self.tmp.name)
+        with mock.patch.object(realign, "_git_file_at", return_value=None):
+            messages = realign.realign_prose(self.path, self.tmp.name)
         self.assertTrue(messages)
         self.assertTrue(all(m.startswith("read again: notes:") for m in messages))
         self.assertIn("(a.c:10)", self.path.read_text())
@@ -4963,7 +4976,7 @@ class TestRealignProse(unittest.TestCase):
         day under the same pin. Every older note was reported unreadable
         and the recale stayed refused for good."""
         self._repo_with_a_broken_revision("oldpin")
-        messages = profile_sync.realign_prose(self.path, self.tmp.name, dry_run=True)
+        messages = realign.realign_prose(self.path, self.tmp.name, dry_run=True)
         self.assertFalse(any("unreadable" in m for m in messages), messages)
         self.assertTrue(any("would recale" in m for m in messages), messages)
 
@@ -4980,7 +4993,7 @@ class TestRealignProse(unittest.TestCase):
         self._commit(PROSE_SAMPLE + "files: [\n", "invalid yaml")
         self._commit(PROSE_SAMPLE.replace('"pin"', '"oldpin"'), "repair")
         self.path.write_text(PROSE_SAMPLE, encoding="utf-8")
-        messages = profile_sync.realign_prose(self.path, self.tmp.name, dry_run=True)
+        messages = realign.realign_prose(self.path, self.tmp.name, dry_run=True)
         self.assertTrue(any("unreadable" in m for m in messages), messages)
 
     def test_a_deleted_namesake_is_not_the_profiles_history(self):
@@ -5000,7 +5013,7 @@ class TestRealignProse(unittest.TestCase):
         self._commit(PROSE_SAMPLE, "new profile")
         self.files[("pin", "a.c")] = ["x"] * 9 + ["subject"]
         self.assertEqual(
-            profile_sync.realign_prose(self.path, self.tmp.name, dry_run=True), []
+            realign.realign_prose(self.path, self.tmp.name, dry_run=True), []
         )
 
     def test_scalar_written_at_the_current_pin_is_left_alone(self):
@@ -5010,7 +5023,7 @@ class TestRealignProse(unittest.TestCase):
         self._commit(PROSE_SAMPLE, "profile")
         self.files[("pin", "a.c")] = ["x"] * 9 + ["subject"]
         self.assertEqual(
-            profile_sync.realign_prose(self.path, self.tmp.name), []
+            realign.realign_prose(self.path, self.tmp.name), []
         )
 
     def test_range_lost_between_the_pins_is_reported_not_moved(self):
@@ -5019,7 +5032,7 @@ class TestRealignProse(unittest.TestCase):
         self.files[("pin", "a.c")] = ["y"] * 20
         self.files[("oldpin", "b.c")] = list("pqrstuvwx")
         self.files[("pin", "b.c")] = list("pqrstuvwx")
-        messages = profile_sync.realign_prose(self.path, self.tmp.name)
+        messages = realign.realign_prose(self.path, self.tmp.name)
         self.assertTrue(any("read again" in m for m in messages))
         self.assertIn("(a.c:10)", self.path.read_text())
 
@@ -5030,12 +5043,12 @@ class TestRealignProse(unittest.TestCase):
         base = PROSE_SAMPLE.replace("(a.c:10)", "(deep.c:10)")
         self._commit(base.replace('"pin"', '"oldpin"'), "profile")
         self.path.write_text(base, encoding="utf-8")
-        profile_sync.upstream.list_tree = (
+        upstream.list_tree = (
             lambda repo, sha, cache_dir, offline=False: ([], True)
         )
         self.files[("oldpin", "b.c")] = list("pqrstuvwx")
         self.files[("pin", "b.c")] = list("pqrstuvwx")
-        messages = profile_sync.realign_prose(self.path, self.tmp.name)
+        messages = realign.realign_prose(self.path, self.tmp.name)
         self.assertTrue(
             any("tree unreadable" in m for m in messages), messages
         )
@@ -5052,7 +5065,7 @@ class TestRealignProse(unittest.TestCase):
         self.files[("oldpin", "contrib/deep.c")] = ["y"]
         self.files[("oldpin", "b.c")] = list("pqrstuvwx")
         self.files[("pin", "b.c")] = list("pqrstuvwx")
-        messages = profile_sync.realign_prose(self.path, self.tmp.name)
+        messages = realign.realign_prose(self.path, self.tmp.name)
         self.assertTrue(
             any("2 paths carry the name" in m for m in messages), messages
         )
@@ -5068,7 +5081,7 @@ class TestRealignProse(unittest.TestCase):
         self.files[("pin", "src/deep.c")] = ["x"] * 13 + ["subject"]
         self.files[("oldpin", "b.c")] = list("pqrstuvwx")
         self.files[("pin", "b.c")] = list("pqrstuvwx")
-        messages = profile_sync.realign_prose(self.path, self.tmp.name)
+        messages = realign.realign_prose(self.path, self.tmp.name)
         self.assertIn("notes: deep.c:10 -> deep.c:14", messages)
         self.assertIn("(deep.c:14)", self.path.read_text())
 
@@ -5082,7 +5095,7 @@ class TestRateLimitEndsOneProfile(unittest.TestCase):
 
         def build(name, *_args, **_kwargs):
             if name == "cemu":
-                raise profile_sync.upstream.RateLimitError(
+                raise upstream.RateLimitError(
                     "https://git.libretro.com/x: HTTP 429", "git.libretro.com"
                 )
             return ProfileReport(name=name, counts={"CHANGED": 1})
@@ -5095,7 +5108,7 @@ class TestRateLimitEndsOneProfile(unittest.TestCase):
                     mock.patch.object(profile_sync, "select_profiles",
                                       return_value={"cemu": {}, "after": {}}), \
                     mock.patch.object(profile_sync, "_check_quota"), \
-                    mock.patch.object(profile_sync, "build_report", side_effect=build), \
+                    mock.patch.object(profiling_run, "build_report", side_effect=build), \
                     contextlib.redirect_stdout(out), \
                     contextlib.redirect_stderr(err), \
                     self.assertRaises(SystemExit) as caught:
@@ -5126,15 +5139,15 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
                 mock.patch.object(profile_sync, "load_emulator_profiles", return_value={}), \
                 mock.patch("core.artifacts.write_if_changed") as written, \
                 contextlib.redirect_stderr(io.StringIO()):
-            profile_sync._WRITTEN.clear()
+            profiling_run._WRITTEN.clear()
             profile_sync._refresh_source_paths(self._args())
             self.assertFalse(built.called)
-            profile_sync._WRITTEN.add("x")
+            profiling_run._WRITTEN.add("x")
             profile_sync._refresh_source_paths(self._args(dry_run=True))
             self.assertFalse(built.called)
             profile_sync._refresh_source_paths(self._args())
             self.assertTrue(built.called and written.called)
-            profile_sync._WRITTEN.clear()
+            profiling_run._WRITTEN.clear()
 
 
     def test_the_record_reads_the_pins_just_written(self):
@@ -5158,8 +5171,8 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
                     mock.patch("core.artifacts.write_if_changed"), \
                     contextlib.redirect_stderr(io.StringIO()), \
                     contextlib.redirect_stdout(io.StringIO()):
-                profile_sync._WRITTEN.add("p")
-                self.addCleanup(profile_sync._WRITTEN.clear)
+                profiling_run._WRITTEN.add("p")
+                self.addCleanup(profiling_run._WRITTEN.clear)
                 profile_sync._refresh_source_paths(self._args(emulators_dir=tmp))
             self.assertEqual(built.call_args[0][0]["p"]["source_commit"], "new")
 
@@ -5206,7 +5219,7 @@ class TestOutputModesApplyTheirFlags(unittest.TestCase):
                     mock.patch.object(profile_sync, "select_profiles",
                                       return_value={"clean": {}, "drift": {}}), \
                     mock.patch.object(profile_sync, "_check_quota"), \
-                    mock.patch.object(profile_sync, "build_report",
+                    mock.patch.object(profiling_run, "build_report",
                                       side_effect=lambda name, *a, **k: reports[name]), \
                     contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
                 try:
@@ -5245,7 +5258,7 @@ class TestOutputModesApplyTheirFlags(unittest.TestCase):
                 (Path(tmp) / f"{name}.yml").write_text("emulator: x\n")
             stale = {"clean": ["read again: notes: a.c:5 (pin moved)"], "drift": []}
             with mock.patch.object(
-                profile_sync, "realign_prose",
+                profiling_run, "realign_prose",
                 side_effect=lambda path, *a, **k: stale[path.stem],
             ):
                 code, out, _ = self._main(
@@ -5276,7 +5289,7 @@ class TestOutputModesApplyTheirFlags(unittest.TestCase):
             ]
             report.new_hashes = [{"path": "a.c", "kind": "md5", "value": "0" * 32}]
 
-        with mock.patch.object(profile_sync, "_attach_detection", side_effect=detect):
+        with mock.patch.object(profiling_run, "_attach_detection", side_effect=detect):
             code, out, err = self._main("--json", "--detect-new-files", "--watch-hashes")
         self.assertEqual(code, 0, err)
         rows = json.loads(out)
@@ -5303,7 +5316,7 @@ class TestOutputModesApplyTheirFlags(unittest.TestCase):
 
         def build(name, *args, **kwargs):
             if name == "drift":
-                raise profile_sync.upstream.UpstreamError("https://x: HTTP 502")
+                raise upstream.UpstreamError("https://x: HTTP 502")
             return ProfileReport(name=name)
 
         out = io.StringIO()
@@ -5314,7 +5327,7 @@ class TestOutputModesApplyTheirFlags(unittest.TestCase):
                     mock.patch.object(profile_sync, "select_profiles",
                                       return_value={"clean": {}, "drift": {}}), \
                     mock.patch.object(profile_sync, "_check_quota"), \
-                    mock.patch.object(profile_sync, "build_report", side_effect=build), \
+                    mock.patch.object(profiling_run, "build_report", side_effect=build), \
                     contextlib.redirect_stdout(out), \
                     contextlib.redirect_stderr(io.StringIO()), \
                     self.assertRaises(SystemExit) as caught:
@@ -5332,7 +5345,7 @@ class TestReconcilePerFile(unittest.TestCase):
         anchored = PartResult(RefPart("libretro.c", 5, 5, "5"), "ANCHORED", None, None, None, [])
         same = PartResult(RefPart("libretro.c", 9, 9, "9"), "AMBIGUOUS", None, None, None, [])
         other = PartResult(RefPart("jg.c", 229, 230, "229-230"), "AMBIGUOUS", None, None, None, [])
-        result = profile_sync.reconcile_self_check([anchored, same, other])
+        result = anchoring.reconcile_self_check([anchored, same, other])
         self.assertEqual([p.status for p in result], ["ANCHORED", "ANCHORED", "AMBIGUOUS"])
 
     def test_a_settled_part_keeps_the_repository_of_its_anchor(self):
@@ -5340,14 +5353,14 @@ class TestReconcilePerFile(unittest.TestCase):
                               None, None, None, [], repo="schelling/dosbox-pure")
         same = PartResult(RefPart("mt32emu.h", 5129, 5129, "5129"), "MOVED",
                           None, 5112, 5112, [5112])
-        result = profile_sync.reconcile_self_check([anchored, same])
+        result = anchoring.reconcile_self_check([anchored, same])
         self.assertEqual(result[1].status, "ANCHORED")
         self.assertEqual(result[1].repo, "schelling/dosbox-pure")
 
     def test_a_compared_part_is_never_rewritten(self):
         anchored = PartResult(RefPart("a.c", 5, 5, "5"), "ANCHORED", None, None, None, [])
         shifted = PartResult(RefPart("a.c", 9, 9, "9"), "SHIFTED", None, 12, 12, [])
-        result = profile_sync.reconcile_self_check([anchored, shifted], [True, False])
+        result = anchoring.reconcile_self_check([anchored, shifted], [True, False])
         self.assertEqual(result[1].status, "SHIFTED")
 
 
@@ -5359,13 +5372,13 @@ class TestCollapsingMoves(unittest.TestCase):
                          "ANCHORED", None, None, None, [])
         info = PartResult(RefPart("mt32emu.h", 5129, 5129, "source mt32emu.h:5129", "source"),
                           "MOVED", None, 5112, 5112, [5112])
-        result = profile_sync.refuse_collapsing_moves([sha, info])
+        result = anchoring.refuse_collapsing_moves([sha, info])
         self.assertEqual([p.status for p in result], ["ANCHORED", "AMBIGUOUS"])
 
     def test_a_move_to_a_free_line_is_kept(self):
         first = PartResult(RefPart("a.c", 5, 5, "a.c:5"), "ANCHORED", None, None, None, [])
         moved = PartResult(RefPart("a.c", 9, 9, "a.c:9"), "MOVED", None, 12, 12, [12])
-        result = profile_sync.refuse_collapsing_moves([first, moved])
+        result = anchoring.refuse_collapsing_moves([first, moved])
         self.assertEqual(result[1].status, "MOVED")
 
 
@@ -5504,14 +5517,14 @@ class UpstreamVendoredAsASubmodule(unittest.TestCase):
 
         repo_s, repo_u = object(), object()
         views = [
-            profile_sync.RepoView(repo_s, "src-pin", "src-head", "source_commit", "source"),
-            profile_sync.RepoView(repo_u, "sub-old", "nesbox-tip", "upstream_commit", "upstream"),
+            profiling_repos.RepoView(repo_s, "src-pin", "src-head", "source_commit", "source"),
+            profiling_repos.RepoView(repo_u, "sub-old", "nesbox-tip", "upstream_commit", "upstream"),
         ]
         with mock.patch.object(
-            profile_sync.upstream, "list_gitlinks",
+            upstream, "list_gitlinks",
             side_effect=lambda repo, sha, *a, **k: links.get(sha, {}),
         ):
-            return profile_sync._follow_submodule(views, "cache", True)
+            return profiling_repos._follow_submodule(views, "cache", True)
 
     def test_the_upstream_head_is_what_the_port_head_builds(self):
         views = self._views({"src-pin": {"core": "sub-old"}, "src-head": {"core": "sub-new"}})
@@ -5530,12 +5543,12 @@ class AMirrorOutlivesAGoneSource(unittest.TestCase):
     def test_the_mirror_is_read_when_the_source_is_gone(self):
         from unittest import mock
 
-        gone_repo = profile_sync.upstream.make_repo("github.com", "yuzu-emu-mirror", "yuzu")
-        mirror = profile_sync.upstream.make_repo("github.com", "fork", "yuzu")
+        gone_repo = upstream.make_repo("github.com", "yuzu-emu-mirror", "yuzu")
+        mirror = upstream.make_repo("github.com", "fork", "yuzu")
 
         def head(repo, cache_dir, offline=False, branch=None):
             if repo == gone_repo:
-                raise profile_sync.upstream.GoneError("HTTP 451")
+                raise upstream.GoneError("HTTP 451")
             return "mirror-head"
 
         profile = {
@@ -5543,9 +5556,9 @@ class AMirrorOutlivesAGoneSource(unittest.TestCase):
             "source_mirror": "https://github.com/fork/yuzu",
             "source_commit": "pin",
         }
-        with mock.patch.object(profile_sync.upstream, "resolve_head", side_effect=head), \
-                mock.patch.object(profile_sync, "resolve_pin", return_value=("pin", "source_commit")):
-            views = profile_sync.select_views(profile, "cache", True)
+        with mock.patch.object(upstream, "resolve_head", side_effect=head), \
+                mock.patch.object(profiling_repos, "resolve_pin", return_value=("pin", "source_commit")):
+            views = profiling_repos.select_views(profile, "cache", True)
         self.assertEqual([(v.repo, v.field) for v in views], [(mirror, "source_mirror")])
 
 
@@ -5555,12 +5568,12 @@ class AHeldUpstreamStaysOnItsPin(unittest.TestCase):
 
     def test_the_upstream_view_is_read_at_its_pin(self):
         views = [
-            profile_sync.RepoView("fork", "p", "h", "source_commit", "source"),
-            profile_sync.RepoView("up", "vendored", "tip", "upstream_commit", "upstream"),
+            profiling_repos.RepoView("fork", "p", "h", "source_commit", "source"),
+            profiling_repos.RepoView("up", "vendored", "tip", "upstream_commit", "upstream"),
         ]
-        held = profile_sync._hold_upstream({"upstream_frozen": "vendored tree"}, views)
+        held = profiling_repos._hold_upstream({"upstream_frozen": "vendored tree"}, views)
         self.assertEqual((held[0].head, held[1].head), ("h", "vendored"))
-        self.assertEqual(profile_sync._hold_upstream({}, views), views)
+        self.assertEqual(profiling_repos._hold_upstream({}, views), views)
 
 
 class RealignReadsThePathAsWritten(unittest.TestCase):
@@ -5571,8 +5584,8 @@ class RealignReadsThePathAsWritten(unittest.TestCase):
     def test_an_unmoved_repository_carrying_the_path_keeps_it(self):
         from unittest import mock
 
-        fork = profile_sync.upstream.make_repo("github.com", "b", "hatariB")
-        up = profile_sync.upstream.make_repo("github.com", "hatari", "hatari")
+        fork = upstream.make_repo("github.com", "b", "hatariB")
+        up = upstream.make_repo("github.com", "hatari", "hatari")
         trees = {(fork, "fork-pin"): {"hatari/src/tos.c"},
                  (up, "old"): {"src/tos.c"}, (up, "new"): {"src/tos.c"}}
 
@@ -5580,10 +5593,10 @@ class RealignReadsThePathAsWritten(unittest.TestCase):
             return ["line"] * 40 if path in trees.get((repo, sha), set()) else None
 
         part = sourceref.RefPart("hatari/src/tos.c", 10, 10, "10")
-        with mock.patch.object(profile_sync.upstream, "fetch_file", side_effect=fetch), \
-                mock.patch.object(profile_sync, "_resolve_at",
+        with mock.patch.object(upstream, "fetch_file", side_effect=fetch), \
+                mock.patch.object(realign, "_resolve_at",
                                   return_value=("found", ("src/tos.c", ["x"] * 40))):
-            result = profile_sync._realign_part(
+            result = realign._realign_part(
                 part, [(up, "old", "new")], "cache", True,
                 pinned=[(fork, "fork-pin"), (up, "new")],
             )
@@ -5597,15 +5610,15 @@ class RealignGivesASharedPathToTheFirstRepository(unittest.TestCase):
     def test_the_source_declared_first_keeps_it(self):
         from unittest import mock
 
-        fork = profile_sync.upstream.make_repo("github.com", "t", "freej2me-plus")
-        up = profile_sync.upstream.make_repo("github.com", "hex007", "freej2me")
+        fork = upstream.make_repo("github.com", "t", "freej2me-plus")
+        up = upstream.make_repo("github.com", "hex007", "freej2me")
         part = sourceref.RefPart("src/libretro/freej2me_libretro.c", 39, 46, "39-46")
         with mock.patch.object(
-            profile_sync.upstream, "fetch_file", return_value=["line"] * 99
+            upstream, "fetch_file", return_value=["line"] * 99
         ), mock.patch.object(
-            profile_sync, "_resolve_at", return_value=("found", (part.path, ["x"] * 99))
+            realign, "_resolve_at", return_value=("found", (part.path, ["x"] * 99))
         ):
-            result = profile_sync._realign_part(
+            result = realign._realign_part(
                 part, [(up, "eb4ac87", "8b9bc8a")], "cache", True,
                 pinned=[(fork, "3933e75"), (up, "8b9bc8a")],
             )
@@ -5620,19 +5633,19 @@ class UpstreamForkedByThePort(unittest.TestCase):
     def _views(self, base, ancestry=None):
         from unittest import mock
 
-        fork = profile_sync.upstream.make_repo("github.com", "f", "port")
-        self.up = profile_sync.upstream.make_repo("github.com", "o", "up")
+        fork = upstream.make_repo("github.com", "f", "port")
+        self.up = upstream.make_repo("github.com", "o", "up")
         self.fork = fork
         views = [
-            profile_sync.RepoView(fork, "src-pin", "src-head", "source_commit", "source"),
-            profile_sync.RepoView(self.up, "old-base", "up-tip", "upstream_commit", "upstream"),
+            profiling_repos.RepoView(fork, "src-pin", "src-head", "source_commit", "source"),
+            profiling_repos.RepoView(self.up, "old-base", "up-tip", "upstream_commit", "upstream"),
         ]
         with mock.patch.object(
-            profile_sync.upstream, "fork_base", return_value=base
+            upstream, "fork_base", return_value=base
         ) as asked, mock.patch.object(
-            profile_sync.upstream, "ancestry", return_value=ancestry
+            upstream, "ancestry", return_value=ancestry
         ):
-            followed = profile_sync._follow_fork_base(views, "cache", True)
+            followed = profiling_repos._follow_fork_base(views, "cache", True)
         return followed, asked
 
     def test_the_upstream_head_is_the_fork_base(self):
@@ -5663,8 +5676,8 @@ class ACachedTipOlderThanThePin(TestBuildReport):
     77d80d7, its ancestor: a bump would have moved the pin backwards."""
 
     def test_the_tip_is_asked_again(self):
-        profile_sync.upstream.ancestry = lambda *a, **k: (0, 3)
-        profile_sync.upstream.resolve_head = (
+        upstream.ancestry = lambda *a, **k: (0, 3)
+        upstream.resolve_head = (
             lambda repo, cache_dir, offline=False, branch=None, fresh=False:
             "newtip" if fresh else "staletip"
         )
@@ -5681,10 +5694,10 @@ class OfflineCacheMissIsNotGone(TestBuildReport):
 
     def test_an_uncached_file_is_not_reported_gone(self):
         def cold(repo, sha, path, cache_dir, offline=False):
-            raise profile_sync.upstream.NotCachedError(f"{path} not cached")
+            raise upstream.NotCachedError(f"{path} not cached")
 
-        profile_sync.upstream.fetch_file = cold
-        with self.assertRaises(profile_sync.upstream.NotCachedError):
+        upstream.fetch_file = cold
+        with self.assertRaises(upstream.NotCachedError):
             build_report("test", self._profile(["a.c:2"]), self.dir, offline=True)
 
 
@@ -5748,12 +5761,12 @@ class TestTreeUrlIntoADirectory(unittest.TestCase):
 
     def test_candidates_are_prefixes_shortest_first(self):
         self.assertEqual(
-            profile_sync.branch_candidates(
+            profiling_repos.branch_candidates(
                 "https://github.com/libretro/libretro-samples/tree/master/tests/cruzes"
             ),
             ["master", "master/tests", "master/tests/cruzes"],
         )
-        self.assertEqual(profile_sync.branch_candidates("https://github.com/o/r"), [])
+        self.assertEqual(profiling_repos.branch_candidates("https://github.com/o/r"), [])
 
     def test_the_first_resolving_prefix_is_the_branch(self):
         from unittest import mock
@@ -5766,8 +5779,8 @@ class TestTreeUrlIntoADirectory(unittest.TestCase):
 
         profile = {"source": "https://github.com/libretro/libretro-samples/tree/master/tests/cruzes",
                    "source_commit": "pinsha"}
-        with mock.patch.object(profile_sync.upstream, "resolve_head", side_effect=head):
-            views = profile_sync.select_views(profile, ".cache", True)
+        with mock.patch.object(upstream, "resolve_head", side_effect=head):
+            views = profiling_repos.select_views(profile, ".cache", True)
         self.assertEqual([(v.pin, v.head) for v in views], [("pinsha", "tipsha")])
         self.assertEqual(asked[0], "master")
 
@@ -5781,8 +5794,8 @@ class TestAnUnansweringRepository(unittest.TestCase):
     def _report(self, profile):
         from unittest import mock
 
-        with mock.patch.object(profile_sync, "select_views", return_value=[]):
-            return profile_sync.build_report("p", profile, ".cache", True)
+        with mock.patch.object(resolver, "select_views", return_value=[]):
+            return resolver.build_report("p", profile, ".cache", True)
 
     def test_a_declared_pin_names_the_repository(self):
         report = self._report({"source": "https://github.com/o/r", "source_commit": "abc",
@@ -5821,7 +5834,7 @@ class StrictRefusesAnUncheckableProfile(unittest.TestCase):
     was skipped with empty counts and --strict passed it in CI."""
 
     def test_defects_are_told_from_the_profiles_nature(self):
-        from profile_sync import ProfileReport
+        from profiling.reports import ProfileReport
 
         def report(reason):
             return ProfileReport(name="p", entries=[], counts={}, skipped=reason)
@@ -5845,9 +5858,9 @@ class AnOffForgeProfileWatchesItsReleasePage(unittest.TestCase):
         profile = {"emulator": "Altirra", "core_version": "4.40", "version_source": {
             "url": "https://example.test/altirra", "pattern": r"Altirra (\d+\.\d+) released",
         }}
-        with mock.patch.object(profile_sync.upstream, "fetch_page",
+        with mock.patch.object(upstream, "fetch_page",
                                return_value="<p>Altirra 4.50 released</p>"):
-            self.assertEqual(profile_sync.page_version(profile, "cache", False), "4.50")
+            self.assertEqual(versions.page_version(profile, "cache", False), "4.50")
 
 
 class ARecaleKeepsTheRepositoryWord(unittest.TestCase):
@@ -5865,9 +5878,9 @@ class ARecaleKeepsTheRepositoryWord(unittest.TestCase):
             with self.subTest(raw=raw):
                 p = split_source_ref(raw)[0]
                 part = sourceref.RefPart(
-                    profile_sync.strip_repo_word(p.path, {"stella"}), p.start, p.end, p.raw)
-                result = profile_sync.PartResult(part, "SHIFTED", None, 140, 150, [], "")
-                self.assertEqual(profile_sync._rendered_part(result), expected)
+                    profiling_citations.strip_repo_word(p.path, {"stella"}), p.start, p.end, p.raw)
+                result = anchoring.PartResult(part, "SHIFTED", None, 140, 150, [], "")
+                self.assertEqual(profiling_reports._rendered_part(result), expected)
 
 
 class EachCitationNamesTheCodeThatAsks(unittest.TestCase):
@@ -5895,14 +5908,14 @@ class EachCitationNamesTheCodeThatAsks(unittest.TestCase):
                                "libretro.c": [f"load {self.MD5}"]},
             "alekmaul/a5200": {"emu/memory.c": ["y", f"rom {self.MD5}"]},
         }
-        profile_sync.upstream.fetch_file = (
+        upstream.fetch_file = (
             lambda repo, sha, path, cache_dir, offline=False:
             trees.get(repo.slug, {}).get(path)
         )
-        profile_sync.upstream.list_tree = (
+        upstream.list_tree = (
             lambda repo, sha, cache_dir, offline=False: (sorted(trees[repo.slug]), False)
         )
-        profile_sync.upstream.resolve_head = (
+        upstream.resolve_head = (
             lambda repo, cache_dir, offline=False, branch=None:
             "pins" if repo.owner == "libretro" else "pinu"
         )
@@ -5911,7 +5924,7 @@ class EachCitationNamesTheCodeThatAsks(unittest.TestCase):
         profile = yaml.safe_load(path.read_text(encoding="utf-8"))
         with contextlib.redirect_stderr(io.StringIO()):
             report = build_report("t", profile, self.dir, text=path.read_text())
-        profile_sync.attribute_refs(path, report, profile)
+        rebase.attribute_refs(path, report, profile)
         return yaml.safe_load(path.read_text(encoding="utf-8"))["files"][0]["source_ref"]
 
     def test_emulator_code_the_port_carries_is_the_emulators(self):
@@ -5942,19 +5955,19 @@ class ARoleIsReadPerPart(unittest.TestCase):
             ("alek/x", "pinu"): {"a.c": [f"rom {self.MD5A}", "x",
                                          f"rom {self.MD5B}"]},
         }
-        profile_sync.upstream.fetch_file = (
+        upstream.fetch_file = (
             lambda repo, sha, path, cache_dir, offline=False:
             trees.get((repo.slug, sha), {}).get(path)
         )
-        profile_sync.upstream.list_tree = (
+        upstream.list_tree = (
             lambda repo, sha, cache_dir, offline=False:
             (sorted(trees.get((repo.slug, sha), {})), False)
         )
-        profile_sync.upstream.resolve_head = (
+        upstream.resolve_head = (
             lambda repo, cache_dir, offline=False, branch=None:
             "heads" if repo.owner == "libretro" else "pinu"
         )
-        profile_sync.upstream.compare = (
+        upstream.compare = (
             lambda repo, base, head, cache_dir, offline=False:
             upstream.CompareResult([], False)
         )
@@ -6074,7 +6087,7 @@ class AnOnlinePassSaysWhereItIs(unittest.TestCase):
         saved = sys.argv
         try:
             sys.argv = ["profile_sync.py", "--all", "--triage", *argv]
-            with mock.patch.object(profile_sync, "_build_full_report", side_effect=build), \
+            with mock.patch.object(profiling_run, "_build_full_report", side_effect=build), \
                     mock.patch.object(profile_sync, "_check_quota"), \
                     contextlib.redirect_stdout(out), contextlib.redirect_stderr(err), \
                     self.assertRaises(SystemExit) as caught:
@@ -6096,11 +6109,11 @@ class AnOnlinePassSaysWhereItIs(unittest.TestCase):
         self.assertIn("--offline answers from the cache alone", err)
 
     def test_a_progress_line_at_each_interval(self):
-        clock = iter([0.0, 10.0, profile_sync.PROGRESS_SECONDS + 1, 40.0])
+        clock = iter([0.0, 10.0, triage.PROGRESS_SECONDS + 1, 40.0])
         err = io.StringIO()
-        with mock.patch.object(profile_sync.time, "monotonic", lambda: next(clock)), \
+        with mock.patch.object(triage.time, "monotonic", lambda: next(clock)), \
                 contextlib.redirect_stderr(err):
-            progress = profile_sync._Progress(9, "read", quiet=False)
+            progress = triage._Progress(9, "read", quiet=False)
             for done, name in enumerate(("a", "b", "c")):
                 progress.step(done, name)
         self.assertEqual(err.getvalue(), "read: 1 of 9, at b\n")
@@ -6139,11 +6152,11 @@ class TheTriageCountsWhatBlocksThePin(unittest.TestCase):
         selected = {r.name: {"source": "https://github.com/o/n"} for r in reports}
         args = argparse.Namespace(cache_dir="unused", offline=True)
         out, err = io.StringIO(), io.StringIO()
-        with mock.patch.object(profile_sync, "check_version", return_value=None), \
-                mock.patch.object(profile_sync.upstream, "commits_touching",
+        with mock.patch.object(triage, "check_version", return_value=None), \
+                mock.patch.object(upstream, "commits_touching",
                                   return_value=0), \
                 contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
-            profile_sync._print_triage(args, selected, reports)
+            triage._print_triage(args, selected, reports)
         lines = out.getvalue().splitlines()
         self.assertIn("profile", lines[0])
         self.assertIn("stuck", lines[1])
@@ -6162,11 +6175,11 @@ class TheTriageCountsWhatBlocksThePin(unittest.TestCase):
         selected = {r.name: {"source": "https://github.com/o/n"} for r in reports}
         args = argparse.Namespace(cache_dir="unused", offline=True)
         out = io.StringIO()
-        with mock.patch.object(profile_sync, "check_version", return_value=None), \
-                mock.patch.object(profile_sync.upstream, "commits_touching",
+        with mock.patch.object(triage, "check_version", return_value=None), \
+                mock.patch.object(upstream, "commits_touching",
                                   return_value=0), \
                 contextlib.redirect_stdout(out), contextlib.redirect_stderr(io.StringIO()):
-            profile_sync._print_triage(args, selected, reports)
+            triage._print_triage(args, selected, reports)
         lines = out.getvalue().splitlines()
         self.assertIn("gone", lines[1])
         self.assertEqual(lines[-1], "2 profiles, 1 with something to review")

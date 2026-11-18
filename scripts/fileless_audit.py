@@ -26,7 +26,8 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 from core import upstream
 from core.cli import require_directory, suggest_names
-from profile_sync import collect_citations, select_views
+from profiling.citations import collect_citations
+from profiling.repos import select_views
 from model.sourceref import ref_role, split_source_ref
 from model.safeparse import yaml_load
 

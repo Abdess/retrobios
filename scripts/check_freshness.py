@@ -1736,7 +1736,7 @@ def summarize_profile_sync(report: object) -> list[Finding]:
             # no resolvable pin) is unknown. One that is the profile's nature
             # (an upstream declared gone, a host no forge API serves, no
             # source_ref) is never checkable and does not hold the exit code.
-            from profile_sync import ProfileReport
+            from profiling.reports import ProfileReport
 
             reason = str(row["skipped"])
             status = UNKNOWN if reason.startswith(ProfileReport.UNCHECKABLE) else SKIPPED
