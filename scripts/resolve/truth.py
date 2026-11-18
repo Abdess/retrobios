@@ -11,7 +11,7 @@ import os
 import sys
 from dataclasses import dataclass
 
-from resolve.layout import OUTER_ROOTS
+from model.declarations import OUTER_ROOTS
 from model.systems import _norm_system_id
 from model.registry import load_data_dir_registry
 from resolve.standalone import platform_layouts, standalone_set as platform_standalone_set

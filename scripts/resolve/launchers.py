@@ -20,7 +20,7 @@ import re
 from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 
-from model.declarations import declared_root
+from model.declarations import CONFIGS_ROOT, ROMS_ROOT, declared_root, outer_layout
 from resolve.content import name_match_size_ok
 from resolve.localfile import resolve_local_file
 from core.paths import sanitize_pack_path
@@ -898,8 +898,6 @@ def _roms_place(config: dict, path: str | None) -> Place | None:
     platform installs above its BIOS folder (AmberELEC), else the roms tree."""
     if path is None:
         return None
-    from resolve.layout import ROMS_ROOT, outer_layout
-
     layout = outer_layout(config, ROMS_ROOT) or {}
     if "install_prefix" in layout:
         prefix = layout["install_prefix"]
@@ -914,8 +912,6 @@ def folder_in_configs(directory: str, config: dict) -> str | None:
     (``configs_root.path``): Batocera's /userdata/system/configs, where its
     generators start shadPS4 from configs/shadps4.
     """
-    from resolve.layout import CONFIGS_ROOT
-
     return folder_in_root(directory, config, CONFIGS_ROOT)
 
 
@@ -926,8 +922,6 @@ def folder_in_roms(directory: str, config: dict) -> str | None:
     (``roms_root.path``): ROCKNIX's /storage/roms, which holds its BIOS
     folder and the folders its launchers run programs from.
     """
-    from resolve.layout import ROMS_ROOT, outer_layout
-
     spelled = directory.strip().rstrip("/")
     for variable in ROMS_ROOT_VARIABLES:
         if outer_layout(config, ROMS_ROOT) and (
@@ -940,8 +934,6 @@ def folder_in_roms(directory: str, config: dict) -> str | None:
 
 def folder_in_root(directory: str, config: dict, root: str) -> str | None:
     """A directory relative to an outer root's path, None outside it."""
-    from resolve.layout import outer_layout
-
     roms = str((outer_layout(config, root) or {}).get("path") or "").rstrip("/")
     directory = directory.strip().rstrip("/")
     if not roms or not directory.startswith(roms + "/"):

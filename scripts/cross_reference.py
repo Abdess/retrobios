@@ -27,7 +27,8 @@ from typing import TYPE_CHECKING, TypedDict
 
 sys.path.insert(0, os.path.dirname(__file__))
 from model.alternatives import set_keys, set_requirements, settle_sets
-from resolve.layout import OUTER_ROOTS, system_dir_path
+from model.declarations import OUTER_ROOTS
+from resolve.layout import system_dir_path
 from model.cliargs import platform_arg, list_emulator_profiles, require_platform
 from model.profiles import ProfileSelectionError, load_emulator_profiles, select_emulator_profiles
 from resolve.ownership import _foreign_tree, _owner_tokens

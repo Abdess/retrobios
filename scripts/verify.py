@@ -54,7 +54,8 @@ from model.targets import (
     list_available_targets,
     build_target_cores_cache,
 )
-from resolve.layout import OUTER_ROOTS, runs_standalone, system_dir_path
+from model.declarations import OUTER_ROOTS
+from resolve.layout import runs_standalone, system_dir_path
 from resolve.ownership import _foreign_tree, _owner_tokens
 from model.cliargs import (
     platform_arg,

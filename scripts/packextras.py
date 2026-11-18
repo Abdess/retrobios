@@ -22,7 +22,7 @@ from resolve.cores import resolve_platform_cores
 from resolve.layout import core_system_dirs, system_dir_path
 from resolve.standalone import platform_layouts
 from resolve.standalone import standalone_set as platform_standalone_set
-from resolve.layout import OUTER_ROOTS, outer_layout
+from model.declarations import OUTER_ROOTS, outer_layout
 from core.paths import sanitize_pack_path
 from resolve.content import declares_shape, shape_fits, size_fits
 from resolve.validation import deliverable, read_from_save_dir, read_from_system_dir

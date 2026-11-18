@@ -13,12 +13,11 @@ from resolve.layout import (
     CONTENT_SYSTEM_TAG,
     CONTENT_TAG_PREFIXES,
     OUTSIDE_BIOS_FOLDER,
-    ROMS_ROOT,
     ROM_SEARCH_PREFIX,
     _placed_entry,
-    outer_layout,
     standalone_layout_path,
 )
+from model.declarations import ROMS_ROOT, outer_layout
 from core.paths import REPO_ROOT
 
 

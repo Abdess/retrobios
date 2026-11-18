@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from collections import Counter
 
 from core.paths import sanitize_pack_path
@@ -143,3 +144,54 @@ def merged_platform_declarations(
 def expand_platform_declared_names(config: dict, db: dict) -> set[str]:
     """The names a platform declares, enriched as `platform_declarations`."""
     return set(platform_declarations(config, db))
+
+
+# The entry root of a file read below the platform's roms directory, and of
+# one read in an emulator's folder outside the BIOS tree that the registry
+# describes. Each is located by the registry entry <root>_directory.
+ROMS_ROOT = "roms"
+EMULATORS_ROOT = "emulators"
+CONFIGS_ROOT = "configs"
+OUTER_ROOTS = (ROMS_ROOT, EMULATORS_ROOT, CONFIGS_ROOT)
+
+
+def outer_layout(config: dict, root: str) -> dict | None:
+    """Where a platform keeps the folder an outer root names, or None.
+
+    roms: the roms root its rom folders file records (``path``, the OS's
+    spelling, and ``from_bios``, relative to the BIOS folder), with the
+    BIOS folder's own name, base_destination, that a run's folder must
+    carry before ``from_bios`` is followed from it. emulators: the
+    registry's ``emulators_directory``, the folders a launcher searches
+    for an emulator by key, which no rom folders file describes.
+    """
+    if root == ROMS_ROOT:
+        found = config.get("_roms_root") or {}
+        base = str(config.get("base_destination") or "")
+        path, relation = found.get("path"), found.get("from_bios")
+        if not (path and relation) or "<" in str(path):
+            return None
+        if base:
+            return {"path": str(path), "from_bios": str(relation), "bios_folder": base}
+        # A list whose dests start above the BIOS folder (AmberELEC's
+        # bios/...) installs into the folder holding it: a roms root there
+        # or below is part of the install tree, written as a plain dest.
+        declared = declared_root(config)
+        if not declared:
+            return None
+        inside = os.path.normpath(f"{declared}/{relation}")
+        if inside == ".." or inside.startswith("../"):
+            return None
+        return {"path": str(path), "install_prefix": "" if inside == "." else inside}
+    if root == EMULATORS_ROOT:
+        return config.get("emulators_directory") or None
+    if root == CONFIGS_ROOT:
+        # The frontend's configs folder, as its path code builds it
+        # (configs_root, Batocera's batoceraPaths CONFIGS).
+        found = config.get("configs_root") or {}
+        base = str(config.get("base_destination") or "")
+        if not (found.get("path") and found.get("from_bios") and base):
+            return None
+        return {"path": str(found["path"]), "from_bios": str(found["from_bios"]),
+                "bios_folder": base}
+    return None

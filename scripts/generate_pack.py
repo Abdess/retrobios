@@ -40,7 +40,8 @@ from typing import TYPE_CHECKING, TypedDict
 sys.path.insert(0, os.path.dirname(__file__))
 from model.alternatives import core_file_spares, settle_sets, slot_set_keys
 from resolve.cores import resolve_platform_cores as _platform_cores
-from resolve.layout import ROMS_ROOT, OUTER_ROOTS, outer_layout, core_system_dirs
+from model.declarations import ROMS_ROOT, OUTER_ROOTS, outer_layout
+from resolve.layout import core_system_dirs
 from resolve.contentlayout import TARGET_KEY, _core_key, content_folder_boards
 from model.profiles import (
     installed_data_refs,
