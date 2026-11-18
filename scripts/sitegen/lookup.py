@@ -9,6 +9,7 @@ import urllib.parse
 import zipfile
 from pathlib import Path
 
+from core.hashing import parse_hash_list
 from model import siteinputs
 from model.collection import _slug
 from model.systemnames import system_name
@@ -28,10 +29,7 @@ def _hash_values(value: object) -> list[str]:
     A field holds one value, a list of accepted revisions, or (Recalbox) a
     comma-joined string: an exact lookup missed all but the first form.
     """
-    if value is None:
-        return []
-    items = value if isinstance(value, (list, tuple)) else str(value).split(",")
-    return sorted({str(item).strip().lower() for item in items if str(item).strip()})
+    return sorted(parse_hash_list(value))
 
 
 def _site_path(markdown_target: str) -> str:

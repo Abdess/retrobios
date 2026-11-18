@@ -82,5 +82,20 @@ class OneDigestLoopForFilesAndStreams(unittest.TestCase):
         self.assertEqual(hashing.md5sum(io.BytesIO(self.DATA)), hashlib.md5(self.DATA).hexdigest())
 
 
+class TheSiteReadsAHashFieldTheResolversWay(unittest.TestCase):
+    """The file lookup indexes the values the resolver accepts, sorted."""
+
+    def test_every_shape_of_a_field(self):
+        from sitegen import lookup
+
+        for raw, expected in (
+            (None, []), ("", []), ("B2, a1,b2", ["a1", "b2"]), (["C3", " a1 "], ["a1", "c3"]),
+            ("0xDEADBEEF", ["deadbeef"]), (12345678, ["12345678"]),
+        ):
+            with self.subTest(raw=raw):
+                self.assertEqual(lookup._hash_values(raw), expected)
+                self.assertEqual(lookup._hash_values(raw), sorted(hashing.parse_hash_list(raw)))
+
+
 if __name__ == "__main__":
     unittest.main()

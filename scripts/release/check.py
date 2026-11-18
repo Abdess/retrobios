@@ -5,9 +5,7 @@ from __future__ import annotations
 import json
 import subprocess
 from dataclasses import dataclass
-from pathlib import Path
 
-from core.hashing import file_digest
 from release.assets import digests_of
 from model.largefiles import LARGE_FILES_REPO
 
@@ -111,10 +109,6 @@ def compare_release(
                 f"assets total {sum(parts)} bytes, release.json says {pack.get('download_size')}",
             ))
     return findings
-
-
-def _sha256(path: Path) -> str:
-    return file_digest(path, "sha256")
 
 
 def fetch_assets(tag: str) -> tuple[dict[str, Asset], bool]:

@@ -27,13 +27,13 @@ import subprocess
 import sys
 from pathlib import Path
 
+from core.hashing import file_digest
 from model.registry import list_release_pack_platforms
 from core.cli import require_directory
 from model.releaserecord import RECORD, load_record
 from release.check import (
     SIGNATURE,
     SUMS,
-    _sha256,
     compare_release,
     fetch_assets,
     fetch_sums,
@@ -74,10 +74,10 @@ def main() -> int:
         if args.sums:
             sums_path = Path(args.sums)
             sums_text = sums_path.read_text(encoding="utf-8")
-            local_files = {SUMS: _sha256(sums_path)}
+            local_files = {SUMS: file_digest(sums_path, "sha256")}
             signature = sums_path.with_name(SIGNATURE)
             if signature.is_file():
-                local_files[SIGNATURE] = _sha256(signature)
+                local_files[SIGNATURE] = file_digest(signature, "sha256")
         else:
             sums_text = fetch_sums(tag)
             local_files = {}
