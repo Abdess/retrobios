@@ -199,7 +199,7 @@ class Capture(Fixture):
         self.assertEqual(records["bios/set.zip"]["members"][0]["sha1"], "kept")
 
     def test_zlib_ng_refuses_to_capture(self):
-        with mock.patch.object(recipes_build, "zlib_ng_version", lambda: "2.2.4"), \
+        with mock.patch.object(recipes_capture, "zlib_ng_version", lambda: "2.2.4"), \
                 self.assertRaises(recipes_capture.ZlibNgError):
             self.capture()
 

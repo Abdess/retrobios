@@ -20,35 +20,37 @@ from pathlib import Path
 SCRIPTS = Path(__file__).resolve().parent.parent / "scripts"
 
 PACKAGE_LAYERS = {"core": 0, "model": 1, "resolve": 2, "packs": 3, "scraper": 3, "exporter": 3,
-                  "profiling": 3, "sitegen": 3}
+                  "profiling": 3, "sitegen": 3, "recipes": 3, "acquire": 3}
 LIBRARY_LAYER = 3
 COMMAND_LAYER = 4
 
 # The other domain packages a domain package may import. A package listed
 # here imports no sibling outside its set.
 SIBLING_IMPORTS: dict[str, frozenset[str]] = {
+    # A search starts from what verify finds missing.
+    "acquire": frozenset({"packs"}),
     "packs": frozenset(),
     "profiling": frozenset(),
-    "sitegen": frozenset({"packs"}),
+    "recipes": frozenset(),
+    # The site prints the recipe counts and the dump-catalog coverage report
+    # those two packages compute.
+    "sitegen": frozenset({"acquire", "packs", "recipes"}),
 }
 
 # Top-level modules other modules of scripts/ import: library code that a
 # later wave moves into a package.
 NOT_YET_PACKAGED = frozenset({
-    "archive_build", "autorun", "build_port", "campaign", "campaign_profiles", "campaign_rules",
-    "check_buildbot_system", "check_release_assets", "commit_rules", "core_probe", "derivations",
+    "autorun", "build_port", "campaign", "campaign_profiles", "campaign_rules",
+    "check_buildbot_system", "check_release_assets", "commit_rules", "core_probe",
     "generate_event_schema", "measurement_records", "pin_installer", "pr_checks",
-    "provenance_report", "release_record", "romfolders", "romset_recipes",
+    "release_record", "romfolders",
 })
 
 # Imports from a package module to a top-level module, left for the wave that
 # packages the top-level side.
 PENDING_TOP_LEVEL_IMPORTS = frozenset({
-    ("sitegen.build", "archive_build"),
-    ("sitegen.build", "provenance_report"),
     ("sitegen.build", "release_record"),
     ("sitegen.config", "release_record"),
-    ("sitegen.dataexports", "provenance_report"),
     ("sitegen.decorate", "release_record"),
     ("sitegen.descriptions", "release_record"),
     ("sitegen.getpages", "release_record"),
@@ -56,14 +58,11 @@ PENDING_TOP_LEVEL_IMPORTS = frozenset({
     ("sitegen.handheld", "build_port"),
     ("sitegen.measurements", "measurement_records"),
     ("sitegen.platformindex", "release_record"),
-    ("sitegen.provenance", "provenance_report"),
     ("sitegen.publish", "release_record"),
-    ("sitegen.readme", "archive_build"),
     ("sitegen.readme", "pr_checks"),
     ("sitegen.readme", "release_record"),
     ("sitegen.validate", "release_record"),
     ("sitegen.versions", "release_record"),
-    ("sitegen.wanted", "archive_build"),
     ("sitegen.whichpack", "release_record"),
 })
 

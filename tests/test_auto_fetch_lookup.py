@@ -15,7 +15,6 @@ import urllib.error
 from pathlib import Path
 from unittest import mock
 
-import auto_fetch
 from acquire import fetch
 
 PAYLOAD = b"keyboard mcu"
@@ -48,21 +47,21 @@ def _serving(payloads: dict[str, bytes]):
 class SoftwareHeritageAnswersByContent(unittest.TestCase):
     def test_the_bytes_it_serves_are_kept_when_the_hash_holds(self):
         urlopen, asked = _serving({f"{fetch.SOFTWARE_HERITAGE}/sha1:{SHA1}/raw/": PAYLOAD})
-        with mock.patch.object(auto_fetch.urllib.request, "urlopen", urlopen):
+        with mock.patch.object(fetch.urllib.request, "urlopen", urlopen):
             data = fetch.step3b_software_heritage({"name": "D8039HLC.rom", "sha1": SHA1})
         self.assertEqual(data, PAYLOAD)
         self.assertEqual(asked, [f"{fetch.SOFTWARE_HERITAGE}/sha1:{SHA1}/raw/"])
 
     def test_other_bytes_under_the_hash_are_refused(self):
         urlopen, _asked = _serving({fetch.SOFTWARE_HERITAGE: b"something else"})
-        with mock.patch.object(auto_fetch.urllib.request, "urlopen", urlopen):
+        with mock.patch.object(fetch.urllib.request, "urlopen", urlopen):
             data = fetch.step3b_software_heritage({"name": "x", "sha1": SHA1})
         self.assertIsNone(data)
 
     def test_an_absent_file_is_not_counted_as_a_source_that_did_not_answer(self):
         urlopen, _asked = _serving({})
         fetch._UNANSWERED.clear()
-        with mock.patch.object(auto_fetch.urllib.request, "urlopen", urlopen):
+        with mock.patch.object(fetch.urllib.request, "urlopen", urlopen):
             self.assertIsNone(fetch.step3b_software_heritage({"name": "x", "sha1": SHA1}))
         self.assertEqual(fetch._UNANSWERED, [])
 
@@ -76,7 +75,7 @@ class LookupBySha1(unittest.TestCase):
 
     def test_a_found_file_goes_to_tmp_acquire_never_to_bios(self):
         urlopen, _asked = _serving({f"{fetch.SOFTWARE_HERITAGE}/sha1:{SHA1}/raw/": PAYLOAD})
-        with mock.patch.object(auto_fetch.urllib.request, "urlopen", urlopen), \
+        with mock.patch.object(fetch.urllib.request, "urlopen", urlopen), \
                 contextlib.redirect_stdout(io.StringIO()) as out:
             code = fetch.lookup_sha1s([SHA1.upper()], {"files": {}})
         self.assertEqual(code, 0)
@@ -87,7 +86,7 @@ class LookupBySha1(unittest.TestCase):
     def test_a_held_file_is_named_and_not_fetched(self):
         urlopen, asked = _serving({})
         db = {"files": {SHA1: {"path": "bios/Commodore/Amiga/x.rom"}}}
-        with mock.patch.object(auto_fetch.urllib.request, "urlopen", urlopen), \
+        with mock.patch.object(fetch.urllib.request, "urlopen", urlopen), \
                 contextlib.redirect_stdout(io.StringIO()) as out:
             code = fetch.lookup_sha1s([SHA1], db)
         self.assertEqual((code, asked), (0, []))
@@ -95,7 +94,7 @@ class LookupBySha1(unittest.TestCase):
 
     def test_nothing_found_and_a_malformed_hash_end_with_one(self):
         urlopen, _asked = _serving({})
-        with mock.patch.object(auto_fetch.urllib.request, "urlopen", urlopen), \
+        with mock.patch.object(fetch.urllib.request, "urlopen", urlopen), \
                 contextlib.redirect_stdout(io.StringIO()) as out, \
                 contextlib.redirect_stderr(io.StringIO()) as err:
             code = fetch.lookup_sha1s([SHA1, "not-a-hash"], {"files": {}})

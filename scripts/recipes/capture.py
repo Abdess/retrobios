@@ -13,7 +13,7 @@ from typing import BinaryIO
 from core.torrentzip import write_torrentzip, zlib_ng_version
 from recipes.ledger import database_archives
 from recipes.members import _member_sha1, _opener
-
+from recipes.romsets import collect_recipes, load_dat_recipes
 
 _TORRENTZIP_COMMENT = b"TORRENTZIPPED-"
 
@@ -140,7 +140,6 @@ def recipe_index(emulators_dir: str, recipes_dir: str) -> dict[MemberList, set[s
     knows the set under another name (``aga.zip`` is MAME's ``isa_aga``).
     """
     from model.profiles import load_emulator_profiles
-    from recipes.romsets import collect_recipes, load_dat_recipes
 
     index: dict[MemberList, set[str]] = defaultdict(set)
     profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)

@@ -51,14 +51,15 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from core.cli import require_directory
-from core.paths import REPO_ROOT
+from core.torrentzip import zlib_ng_version
 from model.database import load_database
 from model.profiles import load_emulator_profiles
+from recipes.build import AtomIndex, build_archive, select
+from recipes.capture import ZlibNgError, capture, container_pins, recipe_index
 from recipes.identify import identify_report, missing_report, write_reconstructions
+from recipes.ledger import ARCHIVES_FILE, load_ledger, write_ledger
 from recipes.pool import AtomPool, DIGEST_CACHE
 from recipes.romsets import collect_recipes, load_dat_recipes, merge_recipes
-
-ARCHIVES_FILE = REPO_ROOT / "recipes" / "archives.json"
 
 
 def print_missing(gap: dict) -> None:
@@ -87,22 +88,19 @@ def print_missing(gap: dict) -> None:
 
 def run_capture(args: argparse.Namespace, db: dict) -> int:
     """Write recipes/archives.json for every archive the database lists."""
-    from recipes import capture
-    from recipes import ledger as recipes_ledger
-
     try:
-        records, failed = capture.capture(
+        records, failed = capture(
             db,
-            recipes_ledger.load_ledger(Path(args.archives)),
-            capture.recipe_index(args.emulators_dir, args.dat_recipes),
-            capture.container_pins(args.platforms_dir, args.emulators_dir),
+            load_ledger(Path(args.archives)),
+            recipe_index(args.emulators_dir, args.dat_recipes),
+            container_pins(args.platforms_dir, args.emulators_dir),
         )
-    except capture.ZlibNgError as exc:
+    except ZlibNgError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
     for path, reason in sorted(failed.items()):
         print(f"  UNREADABLE: {path}: {reason}", file=sys.stderr)
-    changed = recipes_ledger.write_ledger(records, Path(args.archives))
+    changed = write_ledger(records, Path(args.archives))
     by_class: dict[str, int] = defaultdict(int)
     for record in records.values():
         by_class[record["rebuild"]] += 1
@@ -119,33 +117,29 @@ def run_capture(args: argparse.Namespace, db: dict) -> int:
 
 def run_build(args: argparse.Namespace, db: dict) -> int:
     """Build one archive, or all of them, from the members the collection holds."""
-    from core import torrentzip
-    from recipes import build as recipes_build
-    from recipes import ledger as recipes_ledger
-
     if not args.output_dir:
         print("ERROR: --build and --build-all need --output-dir", file=sys.stderr)
         return 2
-    ledger = recipes_ledger.load_ledger(Path(args.archives))
+    ledger = load_ledger(Path(args.archives))
     if args.build_all:
         records = [ledger[path] for path in sorted(ledger)]
     else:
-        records = recipes_build.select(ledger, args.build)
+        records = select(ledger, args.build)
         if not records:
             print(f"ERROR: no archive recipe named {args.build}", file=sys.stderr)
             return 2
-    ng = torrentzip.zlib_ng_version()
+    ng = zlib_ng_version()
     if ng:
         print(
             f"  zlib-ng {ng} in use: TorrentZip bytes are stock zlib's output, so no "
             "build is claimed exact here; exact recipes are checked by their members"
         )
     root = Path(args.bios_dir).resolve().parent
-    atoms = recipes_build.AtomIndex.from_collection(ledger, db, root)
+    atoms = AtomIndex.from_collection(ledger, db, root)
     counts: dict[str, int] = defaultdict(int)
     own: list[tuple[str, int]] = []
     for record in records:
-        result = recipes_build.build_archive(record, atoms, Path(args.output_dir), root)
+        result = build_archive(record, atoms, Path(args.output_dir), root)
         counts[result.status] += 1
         if result.own_members:
             own.append((result.path, result.own_members))

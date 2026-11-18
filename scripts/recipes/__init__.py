@@ -1,1 +1,1 @@
-"""Archive recipes: romset identification, rebuilt pinned archives, and the recipe and build of every archive the collection holds."""
+"""Archive recipes: romset identification, rebuilt pinned archives, each held archive's recipe and build."""
