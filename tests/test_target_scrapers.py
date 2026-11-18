@@ -90,8 +90,8 @@ class FailedRequestsStopTheScrape(unittest.TestCase):
             retropie_targets_scraper,
             retroarch_targets_scraper,
         ):
-            with self.subTest(scraper=module.__name__), mock.patch.object(
-                module.urllib.request, "urlopen", _refuse
+            with self.subTest(scraper=module.__name__), mock.patch(
+                "urllib.request.urlopen", _refuse
             ), self.assertRaises(RuntimeError):
                 module.Scraper().fetch_targets()
 
@@ -107,8 +107,8 @@ class FailedRequestsStopTheScrape(unittest.TestCase):
                 return b"[]"
 
         for module in (emudeck_targets_scraper, retropie_targets_scraper):
-            with self.subTest(scraper=module.__name__), mock.patch.object(
-                module.urllib.request, "urlopen", lambda *_a, **_k: _Empty()
+            with self.subTest(scraper=module.__name__), mock.patch(
+                "urllib.request.urlopen", lambda *_a, **_k: _Empty()
             ), self.assertRaises(RuntimeError):
                 module.Scraper().fetch_targets()
 

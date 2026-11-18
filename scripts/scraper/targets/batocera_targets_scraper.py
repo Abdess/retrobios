@@ -15,7 +15,6 @@ Sources (batocera-linux/buildroot, at the submodule commit the tag pins):
 
 from __future__ import annotations
 
-import argparse
 import json
 import re
 import sys
@@ -29,7 +28,7 @@ import yaml
 
 from model.safeparse import yaml_load_upstream
 
-from . import BaseTargetScraper
+from . import BaseTargetScraper, fetch_text, target_cli
 from ..base_scraper import github_headers
 
 PLATFORM_NAME = "batocera"
@@ -69,20 +68,10 @@ _IF_RE = re.compile(r"^if\s+(.*)$")
 _DEFAULT_Y_RE = re.compile(r"^\s*default\s+y\s*(?:#.*)?$")
 
 
-def _fetch(url: str, headers: dict | None = None) -> str:
-    h = headers or {"User-Agent": "retrobios-scraper/1.0"}
-    try:
-        req = urllib.request.Request(url, headers=h)
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            return resp.read().decode("utf-8")
-    except urllib.error.URLError as e:
-        raise RuntimeError(f"cannot fetch {url}: {e}") from e
-
-
 def _fetch_present(url: str) -> str | None:
     """A file's text, or None when the server answers that it does not exist."""
     try:
-        return _fetch(url)
+        return fetch_text(url)
     except RuntimeError as e:
         if isinstance(e.__cause__, urllib.error.HTTPError) and e.__cause__.code == 404:
             return None
@@ -90,7 +79,7 @@ def _fetch_present(url: str) -> str | None:
 
 
 def _fetch_json(url: str) -> list | dict:
-    text = _fetch(url, headers=github_headers())
+    text = fetch_text(url, headers=github_headers())
     try:
         return json.loads(text)
     except json.JSONDecodeError as e:
@@ -499,7 +488,7 @@ class Scraper(BaseTargetScraper):
                 continue
             seen.add(name)
             try:
-                text = _fetch(self._raw(f"configs/{name}"))
+                text = fetch_text(self._raw(f"configs/{name}"))
             except RuntimeError:
                 if optional:
                     continue
@@ -566,7 +555,7 @@ class Scraper(BaseTargetScraper):
             for entry in listing.get("tree", []):
                 if re.search(r"(^|/)retroarch\.cfg$", entry["path"]):
                     raw = f"https://raw.githubusercontent.com/{repo}/{ref}/{entry['path']}"
-                    found[prefix + entry["path"]] = _fetch(raw)
+                    found[prefix + entry["path"]] = fetch_text(raw)
         return found
 
     def _buildroot_rules(self) -> list[tuple[str, str, str]]:
@@ -578,7 +567,7 @@ class Scraper(BaseTargetScraper):
         raw = f"https://raw.githubusercontent.com/{self.BUILDROOT_REPO}/{sha}"
         rules: list[tuple[str, str, str]] = []
         for path in BUILDROOT_KCONFIG:
-            rules += _parse_owned_selects(_fetch(f"{raw}/{path}"))
+            rules += _parse_owned_selects(fetch_text(f"{raw}/{path}"))
         return rules
 
     def build_selection(self, tag: str | None = None) -> BuildSelection:
@@ -611,7 +600,7 @@ class Scraper(BaseTargetScraper):
 
         print("  fetching es_systems.yml...", file=sys.stderr)
         es_systems_url = self._raw(self.ES_SYSTEMS_PATH)
-        es_text = _fetch(es_systems_url)
+        es_text = fetch_text(es_systems_url)
         if not es_text:
             raise RuntimeError(f"empty es_systems.yml from {es_systems_url}")
         package_to_emulators = _parse_es_systems(es_text)
@@ -624,7 +613,7 @@ class Scraper(BaseTargetScraper):
         images_by_flag = _parse_images(config_in_text)
         if not images_by_flag:
             raise RuntimeError(f"no target image list parsed from {self.CONFIG_IN_PATH}")
-        disabled = downloader_disabled(_fetch(self._raw(self.RETROARCH_MK)),
+        disabled = downloader_disabled(fetch_text(self._raw(self.RETROARCH_MK)),
                                        self._shipped_retroarch_cfgs())
         if disabled:
             print(f"  core downloader off: {disabled}", file=sys.stderr)
@@ -689,28 +678,7 @@ class Scraper(BaseTargetScraper):
 
 
 def main(scraper_class: type[Scraper] = Scraper) -> None:
-    parser = argparse.ArgumentParser(
-        allow_abbrev=False,
-        description=f"Scrape {scraper_class.PLATFORM} per-board emulator targets"
-    )
-    parser.add_argument("--dry-run", action="store_true", help="Show target summary")
-    parser.add_argument("--output", "-o", help="Output YAML file")
-    args = parser.parse_args()
-
-    scraper = scraper_class()
-    data = scraper.fetch_targets()
-
-    if args.dry_run:
-        for name, info in data["targets"].items():
-            print(f"  {name} ({info['architecture']}): {len(info['cores'])} emulators")
-        return
-
-    if args.output:
-        scraper.write_output(data, args.output)
-        print(f"Written to {args.output}")
-        return
-
-    print(yaml.dump(data, default_flow_style=False, sort_keys=False))
+    target_cli(scraper_class, f"Scrape {scraper_class.PLATFORM} per-board emulator targets", "emulators")
 
 
 if __name__ == "__main__":

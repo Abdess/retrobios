@@ -13,15 +13,13 @@ target list, a Pi 3 pack carried the firmware of emulators only x86_64 builds.
 
 from __future__ import annotations
 
-import argparse
 import json
 import re
 import sys
 from datetime import datetime, timezone
 
-import yaml
 
-from . import BaseTargetScraper
+from . import BaseTargetScraper, target_cli
 from ..base_scraper import fetch_bytes
 from ..recalbox_scraper import SYSTEMS_TREE_URL, Scraper as PlatformScraper, board_cores
 
@@ -99,22 +97,7 @@ class Scraper(BaseTargetScraper):
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(allow_abbrev=False, description="Scrape Recalbox per-board cores")
-    parser.add_argument("--dry-run", action="store_true", help="Show target summary")
-    parser.add_argument("--output", "-o", help="Output YAML file")
-    args = parser.parse_args()
-
-    scraper = Scraper()
-    data = scraper.fetch_targets()
-    if args.dry_run:
-        for name, info in data["targets"].items():
-            print(f"  {name} ({info['architecture']}): {len(info['cores'])} cores")
-        return
-    if args.output:
-        scraper.write_output(data, args.output)
-        print(f"Written to {args.output}")
-        return
-    print(yaml.dump(data, default_flow_style=False, sort_keys=False))
+    target_cli(Scraper, "Scrape Recalbox per-board cores")
 
 
 if __name__ == "__main__":

@@ -5,11 +5,16 @@ Auto-detects *_targets_scraper.py files and exposes their scrapers.
 
 from __future__ import annotations
 
+import argparse
 import importlib
 import pkgutil
 import re
+import urllib.error
+import urllib.request
 from abc import ABC, abstractmethod
 from pathlib import Path
+
+from core.github import github_token
 
 
 class BaseTargetScraper(ABC):
@@ -64,6 +69,51 @@ class BaseTargetScraper(ABC):
         write_text_atomic(
             output_path, yaml.dump(data, default_flow_style=False, sort_keys=False)
         )
+
+
+def fetch_text(url: str, headers: dict[str, str] | None = None) -> str:
+    """GET a URL as UTF-8 text, RuntimeError with the URL when it fails."""
+    try:
+        req = urllib.request.Request(url, headers=headers or {"User-Agent": "retrobios-scraper/1.0"})
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            return resp.read().decode("utf-8")
+    except urllib.error.URLError as e:
+        # A target written from a failed request loses its cores in silence.
+        raise RuntimeError(f"cannot fetch {url}: {e}") from e
+
+
+def forge_headers(url: str, accept: str | None = None) -> dict[str, str]:
+    """Request headers, with the GitHub token when the URL is api.github.com."""
+    headers = {"User-Agent": "retrobios-scraper/1.0"}
+    if accept is not None:
+        headers["Accept"] = accept
+    token = github_token()
+    if token and "api.github.com" in url:
+        headers["Authorization"] = f"Bearer {token}"
+    return headers
+
+
+def target_cli(scraper_class: type[BaseTargetScraper], description: str, unit: str = "cores") -> None:
+    """The command line every target scraper shares: --dry-run prints each
+    target and its count of `unit`, --output writes the YAML, else it is printed."""
+    import yaml
+
+    parser = argparse.ArgumentParser(allow_abbrev=False, description=description)
+    parser.add_argument("--dry-run", action="store_true", help="Show target summary")
+    parser.add_argument("--output", "-o", help="Output YAML file")
+    args = parser.parse_args()
+
+    scraper = scraper_class()
+    data = scraper.fetch_targets()
+    if args.dry_run:
+        for name, info in data["targets"].items():
+            print(f"  {name} ({info['architecture']}): {len(info['cores'])} {unit}")
+        return
+    if args.output:
+        scraper.write_output(data, args.output)
+        print(f"Written to {args.output}")
+        return
+    print(yaml.dump(data, default_flow_style=False, sort_keys=False))
 
 
 _scrapers: dict[str, type] = {}

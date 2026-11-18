@@ -25,16 +25,14 @@ shipped their firmware anyway.
 
 from __future__ import annotations
 
-import argparse
 import json
 import re
 import sys
 from datetime import datetime, timezone
 from typing import NamedTuple
 
-import yaml
 
-from . import BaseTargetScraper
+from . import BaseTargetScraper, target_cli
 from ..base_scraper import fetch_bytes, github_headers
 from ..batocera_scraper import _not_cores
 from ..emuelec_systems import (
@@ -639,24 +637,7 @@ class Scraper(BaseTargetScraper):
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(
-        allow_abbrev=False, description="Scrape EmuELEC per-device cores"
-    )
-    parser.add_argument("--dry-run", action="store_true", help="Show target summary")
-    parser.add_argument("--output", "-o", help="Output YAML file")
-    args = parser.parse_args()
-
-    scraper = Scraper()
-    data = scraper.fetch_targets()
-    if args.dry_run:
-        for name, info in data["targets"].items():
-            print(f"  {name} ({info['architecture']}): {len(info['cores'])} cores")
-        return
-    if args.output:
-        scraper.write_output(data, args.output)
-        print(f"Written to {args.output}")
-        return
-    print(yaml.dump(data, default_flow_style=False, sort_keys=False))
+    target_cli(Scraper, "Scrape EmuELEC per-device cores")
 
 
 if __name__ == "__main__":

@@ -10,21 +10,16 @@ Sources:
 
 from __future__ import annotations
 
-import argparse
 import json
 import sys
-import urllib.error
-import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
-import yaml
 
-from core.github import github_token
 from model.safeparse import yaml_load
 
 from ..emudeck_launchers import SCRIPT_SUFFIXES, emulator_of_script
-from . import BaseTargetScraper
+from . import BaseTargetScraper, fetch_text, forge_headers, target_cli
 
 PLATFORM_NAME = "emudeck"
 
@@ -37,17 +32,7 @@ WINDOWS_API = (
 RETROARCH_TARGETS = Path(__file__).resolve().parents[3] / "platforms" / "targets" / "retroarch.yml"
 
 def _fetch(url: str) -> str:
-    headers = {"User-Agent": "retrobios-scraper/1.0"}
-    token = github_token()
-    if token and "api.github.com" in url:
-        headers["Authorization"] = f"Bearer {token}"
-    try:
-        req = urllib.request.Request(url, headers=headers)
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            return resp.read().decode("utf-8")
-    except urllib.error.URLError as e:
-        # A target written from a failed request loses its cores in silence.
-        raise RuntimeError(f"cannot fetch {url}: {e}") from e
+    return fetch_text(url, forge_headers(url))
 
 
 def _list_emuscripts(api_url: str) -> list[str]:
@@ -148,25 +133,7 @@ class Scraper(BaseTargetScraper):
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(allow_abbrev=False, description="Scrape EmuDeck emulator targets")
-    parser.add_argument("--dry-run", action="store_true", help="Show target summary")
-    parser.add_argument("--output", "-o", help="Output YAML file")
-    args = parser.parse_args()
-
-    scraper = Scraper()
-    data = scraper.fetch_targets()
-
-    if args.dry_run:
-        for name, info in data["targets"].items():
-            print(f"  {name} ({info['architecture']}): {len(info['cores'])} emulators")
-        return
-
-    if args.output:
-        scraper.write_output(data, args.output)
-        print(f"Written to {args.output}")
-        return
-
-    print(yaml.dump(data, default_flow_style=False, sort_keys=False))
+    target_cli(Scraper, "Scrape EmuDeck emulator targets", "emulators")
 
 
 if __name__ == "__main__":

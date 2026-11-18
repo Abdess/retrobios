@@ -23,13 +23,11 @@ from __future__ import annotations
 import argparse
 import re
 import sys
-import urllib.error
-import urllib.request
 from datetime import datetime, timezone
 
 import yaml
 
-from . import BaseTargetScraper
+from . import BaseTargetScraper, fetch_text
 
 PLATFORM_NAME = "retroarch"
 
@@ -100,20 +98,9 @@ class Scraper(BaseTargetScraper):
     def __init__(self, url: str = BUILDBOT_URL) -> None:
         super().__init__(url=url)
 
-    def _fetch_url(self, url: str) -> str:
-        try:
-            req = urllib.request.Request(
-                url, headers={"User-Agent": "retrobios-scraper/1.0"}
-            )
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                return resp.read().decode("utf-8")
-        except urllib.error.URLError as e:
-            # A target written from a failed request loses its cores in silence.
-            raise RuntimeError(f"cannot fetch {url}: {e}") from e
-
     def _fetch_cores_for_target(self, path: str) -> list[str]:
         url = f"{self.url}{path}/"
-        html = self._fetch_url(url)
+        html = fetch_text(url)
         cores: list[str] = []
         seen: set[str] = set()
         for match in _HREF_RE.finditer(html):
@@ -145,7 +132,7 @@ class Scraper(BaseTargetScraper):
 
     def _fetch_cores_for_recipe(self, recipe_path: str) -> list[str]:
         url = f"{RECIPE_BASE_URL}{recipe_path}"
-        return self._parse_recipe_cores(self._fetch_url(url))
+        return self._parse_recipe_cores(fetch_text(url))
 
     def fetch_targets(self) -> dict:
         targets: dict[str, dict] = {}

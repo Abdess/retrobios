@@ -9,18 +9,14 @@ to determine which platforms each package supports.
 
 from __future__ import annotations
 
-import argparse
 import json
 import re
 import sys
-import urllib.error
-import urllib.request
 from datetime import datetime, timezone
 
-import yaml
 
 from ..retropie_scraper import core_name
-from . import BaseTargetScraper
+from . import BaseTargetScraper, fetch_text, forge_headers, target_cli
 
 PLATFORM_NAME = "retropie"
 
@@ -67,19 +63,7 @@ _MODULE_FLAGS_RE = re.compile(r'rp_module_flags\s*=\s*["\']([^"\']*)["\']')
 
 
 def _fetch(url: str, accept: str = "text/plain") -> str:
-    headers = {"User-Agent": "retrobios-scraper/1.0", "Accept": accept}
-    from core.github import github_token
-
-    token = github_token()
-    if token and "api.github.com" in url:
-        headers["Authorization"] = f"Bearer {token}"
-    try:
-        req = urllib.request.Request(url, headers=headers)
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            return resp.read().decode("utf-8")
-    except urllib.error.URLError as e:
-        # A target written from a failed request loses its cores in silence.
-        raise RuntimeError(f"cannot fetch {url}: {e}") from e
+    return fetch_text(url, forge_headers(url, accept))
 
 
 def _is_available(flags_str: str, platform: str) -> bool:
@@ -183,28 +167,7 @@ class Scraper(BaseTargetScraper):
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(
-        allow_abbrev=False,
-        description="Scrape RetroPie package targets from scriptmodules"
-    )
-    parser.add_argument("--dry-run", action="store_true", help="Show target summary")
-    parser.add_argument("--output", "-o", help="Output YAML file")
-    args = parser.parse_args()
-
-    scraper = Scraper()
-    data = scraper.fetch_targets()
-
-    if args.dry_run:
-        for name, info in data["targets"].items():
-            print(f"  {name} ({info['architecture']}): {len(info['cores'])} cores")
-        return
-
-    if args.output:
-        scraper.write_output(data, args.output)
-        print(f"Written to {args.output}")
-        return
-
-    print(yaml.dump(data, default_flow_style=False, sort_keys=False))
+    target_cli(Scraper, "Scrape RetroPie package targets from scriptmodules")
 
 
 if __name__ == "__main__":
