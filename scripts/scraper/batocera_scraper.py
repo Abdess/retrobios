@@ -19,8 +19,8 @@ from pathlib import Path
 
 
 from common import load_target_config, yaml_load
-from hashing import cut_md5_owner
-from safeparse import yaml_load_upstream
+from core.hashing import cut_md5_owner
+from model.safeparse import yaml_load_upstream
 
 from .base_scraper import (
     BaseScraper,

@@ -210,7 +210,7 @@ class AtomPool:
         """Write the digest cache back, when this run learned anything."""
         if self._digest_cache is None or not self._digests_changed:
             return
-        from artifacts import write_text_atomic
+        from core.artifacts import write_text_atomic
 
         self._digest_cache.parent.mkdir(parents=True, exist_ok=True)
         write_text_atomic(

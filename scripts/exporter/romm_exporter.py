@@ -18,7 +18,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from scraper.romm_scraper import SLUG_MAP
 
 from .base_exporter import BaseExporter
-from .baseline import NativeFile, NativeSystem, Report, _hash_values
+from resolve.reconcile import NativeFile, NativeSystem, Report, _hash_values
 
 SOURCE_URL = (
     "https://raw.githubusercontent.com/rommapp/romm/master/backend/models"

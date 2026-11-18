@@ -27,7 +27,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 import upstream
 from common import require_directory, suggest_names
 from profile_sync import collect_citations, ref_role, select_views, split_source_ref
-from safeparse import yaml_load
+from model.safeparse import yaml_load
 
 # Ways a program asks for somewhere to read from.
 SIGNALS = (

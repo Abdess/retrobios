@@ -386,7 +386,7 @@ def save_cache(cache_path: str, cache: dict) -> None:
 
 def _load_gitignored_large_files() -> set[str]:
     """The bios/ paths .gitignore registers as release assets."""
-    from largefiles import load_registered_paths
+    from model.largefiles import load_registered_paths
 
     return set(load_registered_paths(".gitignore"))
 

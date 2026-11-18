@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypedDict
 
 from common import PROFILE_IDENTITY_FIELDS, _norm_system_id, entry_system_ids
-from alternatives import core_file_spares, required_only_spares, set_fields
+from model.alternatives import core_file_spares, required_only_spares, set_fields
 from common import archive_members, contents_members, holds_required_members
 from common import declared_root, expand_platform_declared_names, platform_declarations
 from common import load_emulator_profiles
@@ -22,7 +22,7 @@ from common import core_system_dirs, platform_layouts, system_dir_path
 from common import standalone_set as platform_standalone_set
 from common import OUTER_ROOTS, outer_layout, sanitize_pack_path
 from common import declares_shape, shape_fits, size_fits
-from validation import deliverable, read_from_save_dir, read_from_system_dir
+from resolve.validation import deliverable, read_from_save_dir, read_from_system_dir
 from packpaths import libretro_systems, save_destination, save_layout
 from region import FILE_GROUP
 
@@ -260,7 +260,7 @@ def native_slug_systems(config: dict) -> set[str]:
 
 def _file_sha1(path: str) -> str | None:
     """sha1 of a copy the database does not index, a data tree's file."""
-    from hashing import compute_hashes
+    from core.hashing import compute_hashes
 
     try:
         return compute_hashes(path, frozenset({"sha1"}))["sha1"]
@@ -314,7 +314,7 @@ class ExtraResolver:
     def alternatives(self, fe: dict) -> list[dict]:
         """The versions the extra's own profile accepts at its slot, as
         validation.extra_alternatives finds them."""
-        from validation import slot_index
+        from resolve.validation import slot_index
 
         key = fe.get("source_profile") or ""
         index = self._slots.get(key)
@@ -327,7 +327,7 @@ class ExtraResolver:
     def resolve(self, fe: dict, dest: str) -> tuple[str | None, str, str]:
         """(local copy or None, resolver status, the core's disagreement)."""
         from packresolve import pending_release_asset, resolve_file, run_is_offline
-        from validation import core_size_refusal, validated_choice
+        from resolve.validation import core_size_refusal, validated_choice
 
         local_path, status = resolve_file(
             fe, self.db, self.bios_dir, self.zip_contents,
@@ -2121,7 +2121,7 @@ def _ships(
     AmberELEC's bluemsx config.ini read as missing while the pack held it.
     """
     from packresolve import resolve_declaration
-    from validation import baseline_verdict
+    from resolve.validation import baseline_verdict
 
     path, status = resolve_declaration(
         file_entry, db, "bios", zip_contents, data_registry, override, offline=True,
@@ -2320,7 +2320,7 @@ def emulator_region_drops(
     """
     import region as region_mod
     from packpaths import _resolve_destination
-    from validation import _build_validation_index, filter_files_by_mode
+    from resolve.validation import _build_validation_index, filter_files_by_mode
 
     region_index = region_mod.build_region_index(dict(selected))
     region_groups: dict[str, list[tuple[str, str]]] = {}
@@ -2365,7 +2365,7 @@ def emulator_required_spares(
     those the pack still carries after the region filter. An archive unit
     is a member like a loose file: Kronos reads kronos/stvbios.zip, else
     stvbios.zip. The pack and verify --emulator both read this."""
-    from alternatives import groups_of, rank_in, required_groups
+    from model.alternatives import groups_of, rank_in, required_groups
     from common import archive_entry
     from packpaths import _archive_destination, _resolve_destination
 
@@ -2413,7 +2413,7 @@ def _emulator_ships(
     held it.
     """
     from packresolve import resolve_file
-    from validation import validated_choice, with_archive_members
+    from resolve.validation import validated_choice, with_archive_members
 
     local, status = resolve_file(
         {**with_archive_members(file_entry, profile.get("files", [])),

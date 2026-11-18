@@ -10,7 +10,7 @@ file is served as BizHawk wrote it, checked for its structure.
 from __future__ import annotations
 
 from .base_exporter import BaseExporter
-from .baseline import NativeFile, NativeSystem, Report
+from resolve.reconcile import NativeFile, NativeSystem, Report
 
 SOURCE_URL = (
     "https://raw.githubusercontent.com/TASEmulators/BizHawk/master"

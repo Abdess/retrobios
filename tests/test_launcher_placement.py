@@ -679,7 +679,7 @@ class ASettingSetsTheBiosFolder(unittest.TestCase):
         )
 
     def test_the_ini_key_carries_its_section(self) -> None:
-        from launchers import ini_keys
+        from resolve.launchers import ini_keys
 
         self.assertEqual(
             ini_keys("PCSX2.ini [Folders] Bios = /storage/roms/bios/armsx2, [Filenames] BIOS"),
@@ -725,7 +725,7 @@ class FlycastOnEmuELEC(unittest.TestCase):
     and root's home is /storage (busybox profile.d/98-busybox.conf:4)."""
 
     def test_the_home_directory_is_spelled_as_home(self) -> None:
-        from launchers import normalize_handle
+        from resolve.launchers import normalize_handle
 
         self.assertEqual(
             normalize_handle("/storage/.local/share/flycast", "/storage"), "~/.local/share/flycast"
@@ -1347,7 +1347,7 @@ class MacBootDisksOnKnulli(unittest.TestCase):
         # mameGenerator.py and libretroMAMEConfig.py pass the boot disk as
         # -hard, the brief name of the LC III's one hard disk image
         # (harddriv.h:43, diimage.cpp:1131-1165, maclc3.cpp:266).
-        from launchers import bound_launchers
+        from resolve.launchers import bound_launchers
 
         config = load_platform_config("knulli", str(REPO_ROOT / "platforms"))
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))

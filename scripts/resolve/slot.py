@@ -29,7 +29,7 @@ rank: the second core reads it by its own rule, which no rank expresses.
 
 from __future__ import annotations
 
-from alternatives import set_keys
+from model.alternatives import set_keys
 
 BIOS_CATEGORY = "bios"
 

@@ -18,7 +18,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import region as region_mod
-import slot as slot_mod
+from resolve import slot as slot_mod
 from common import _norm_system_id, sanitize_pack_path
 from packextras import (
     _kept,

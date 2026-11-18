@@ -192,7 +192,7 @@ shares is published under that file name. When two paths share one, each is
 published under its location below `bios/`, segments joined by `--` and any
 character outside `A-Za-z0-9._-` replaced by `_`
 (`Id_Software--Wolfenstein_Enemy_Territory--etmain--pak0.pk3`).
-`asset_names()` in `scripts/largefiles.py` is the only place that rule lives:
+`asset_names()` in `scripts/model/largefiles.py` is the only place that rule lives:
 the manifests, the fetcher and `check_release_assets.py` all read it.
 
 **Upload.** To add or update a large file:

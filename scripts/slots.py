@@ -24,7 +24,7 @@ import zlib
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
-import nativemode
+from resolve import nativemode
 from common import (
     compute_hashes,
     platform_arg,
@@ -44,7 +44,7 @@ from common import (
     variant_base_name,
 )
 from packresolve import preferred_entries
-from validation import (
+from resolve.validation import (
     content_alternatives,
     outside_gap_scope,
     read_from_save_dir,

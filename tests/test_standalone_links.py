@@ -28,7 +28,7 @@ from common import (
     standalone_set,
     system_file_index,
 )
-from launchers import (
+from resolve.launchers import (
     SEARCHED_FILES,
     bound_path,
     handed_directories,

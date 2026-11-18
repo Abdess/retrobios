@@ -31,7 +31,7 @@ import zipfile
 from pathlib import Path
 from unittest import mock
 
-import largefiles
+from model import largefiles
 import yaml
 from common import (
     build_zip_contents_index,
@@ -47,12 +47,8 @@ from common import (
     resolve_platform_cores,
     safe_extract_zip,
 )
-from truth import diff_platform_truth, generate_platform_truth
-from validation import (
-    _build_validation_index,
-    check_file_validation,
-    filter_files_by_mode,
-)
+from resolve.truth import diff_platform_truth, generate_platform_truth
+from resolve.validation import _build_validation_index, check_file_validation, filter_files_by_mode
 from verify import (
     Severity,
     Status,
@@ -2087,7 +2083,7 @@ class TestE2E(unittest.TestCase):
 
     def test_112_build_ground_truth(self):
         """build_ground_truth returns per-emulator detail for a filename."""
-        from validation import build_ground_truth
+        from resolve.validation import build_ground_truth
 
         profiles = load_emulator_profiles(self.emulators_dir)
         index = _build_validation_index(profiles)
@@ -2104,7 +2100,7 @@ class TestE2E(unittest.TestCase):
 
     def test_113_build_ground_truth_empty(self):
         """build_ground_truth returns [] for unknown filename."""
-        from validation import build_ground_truth
+        from resolve.validation import build_ground_truth
 
         profiles = load_emulator_profiles(self.emulators_dir)
         index = _build_validation_index(profiles)
@@ -4198,7 +4194,7 @@ class TestE2E(unittest.TestCase):
 
     def test_104_diff_truth_normalized_system_ids(self):
         """Diff matches systems with different ID formats via normalization."""
-        from truth import diff_platform_truth
+        from resolve.truth import diff_platform_truth
 
         truth = {
             "systems": {
@@ -4313,7 +4309,7 @@ class TestE2E(unittest.TestCase):
             },
         }
 
-        from exporter.baseline import build_native_model
+        from resolve.reconcile import build_native_model
 
         systems, report = build_native_model(truth, scraped)
         exporter = SystemDatExporter()
@@ -4354,7 +4350,7 @@ class TestE2E(unittest.TestCase):
             },
         }
 
-        from exporter.baseline import build_native_model
+        from resolve.reconcile import build_native_model
 
         systems, report = build_native_model(truth, {"systems": {}})
         original = ('clrmamepro (\n\tname "System"\n)\n\ngame (\n\tname "System"\n'
@@ -4568,7 +4564,7 @@ class TestE2E(unittest.TestCase):
 
     def test_177_diff_hash_fallback_rename(self):
         """Diff detects platform renames via hash fallback."""
-        from truth import diff_platform_truth
+        from resolve.truth import diff_platform_truth
 
         truth = {
             "systems": {
@@ -4603,7 +4599,7 @@ class TestE2E(unittest.TestCase):
 
     def test_178_diff_system_normalization(self):
         """Diff matches systems with different IDs via normalization."""
-        from truth import diff_platform_truth
+        from resolve.truth import diff_platform_truth
 
         truth = {
             "systems": {
@@ -4738,7 +4734,7 @@ class TestE2E(unittest.TestCase):
                 "sony-playstation": {"native_id": "psx", "files": []},
             },
         }
-        from exporter.baseline import build_native_model
+        from resolve.reconcile import build_native_model
 
         # The systems dict is one block inside the checker Batocera runs, so
         # the exporter is handed the script it patches.
@@ -4789,7 +4785,7 @@ class TestE2E(unittest.TestCase):
                 "sony-playstation": {"native_id": "psx", "files": []},
             },
         }
-        from exporter.baseline import build_native_model
+        from resolve.reconcile import build_native_model
 
         systems, report = build_native_model(truth, scraped)
         exp = Exporter()
@@ -4832,7 +4828,7 @@ class TestE2E(unittest.TestCase):
                 "sony-playstation": {"native_id": "psx", "files": []},
             }
         }
-        from exporter.baseline import build_native_model
+        from resolve.reconcile import build_native_model
 
         systems, report = build_native_model(truth, scraped)
         exp = Exporter()
@@ -6958,7 +6954,7 @@ class OneOfASearchList(unittest.TestCase):
         self.assertEqual(report["seq"]["set_aside"]["other_versions"], 2)
 
     def test_truth_names_no_member_required_on_its_own(self):
-        from truth import _fold_into, _new_truth_entry
+        from resolve.truth import _fold_into, _new_truth_entry
 
         entry = _new_truth_entry(dict(self.profile["files"][0]), "seq", None)
         self.assertNotIn("required", entry)
@@ -6971,7 +6967,7 @@ class OneOfASearchList(unittest.TestCase):
     def test_ranks_order_one_set_and_never_two(self):
         """px68k-sdl ranks its IPL list and its font list each from 1:
         --one-per-slot keeps the first of each, not one file of the two."""
-        from slot import build_slot_index, resolve_slot_drops
+        from resolve.slot import build_slot_index, resolve_slot_drops
 
         profile = {"type": "standalone", "files": [
             {"name": "ipl_a.dat", "group": "ipl", "priority": 1},
@@ -7023,7 +7019,7 @@ class OneOfASearchList(unittest.TestCase):
         """pom2 falls back on apple2e.rom for the //e it boots by default
         and for the unenhanced //e it may be switched to. One value on the
         file cannot say both: the sets carry it."""
-        from alternatives import derive_member_requirements
+        from model.alternatives import derive_member_requirements
 
         profile = {"groups": {"iie": {"required": True}, "iie-u": {"required": False}},
                    "files": [{"name": "apple2e_unenh.rom", "group": "iie-u"},
@@ -7051,7 +7047,7 @@ class OneOfASearchList(unittest.TestCase):
         self.assertEqual(packed, held)
 
     def test_required_only_core_files_keep_one_member(self):
-        from alternatives import core_file_spares
+        from model.alternatives import core_file_spares
 
         undeclared = find_undeclared_files(
             self.config, "emulators", self.db, {"seq": self.profile}

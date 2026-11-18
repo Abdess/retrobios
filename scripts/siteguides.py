@@ -17,7 +17,7 @@ from dataclasses import dataclass, fields
 from pathlib import Path
 
 import sitemarkup as markup
-from safeparse import require_yaml
+from model.safeparse import require_yaml
 from sitebootstrap import PS1_NAME, SH_NAME
 
 PLATFORMS_DIR = Path(__file__).resolve().parent.parent / "platforms"

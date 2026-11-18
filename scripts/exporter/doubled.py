@@ -22,9 +22,9 @@ from common import (
     resolve_platform_cores,
     standalone_set,
 )
-from exporter.baseline import HASH_FIELDS, _hash_values
+from resolve.reconcile import HASH_FIELDS, _hash_values
 from slots import _accepted_by_all, _lists_hashes, find_collisions
-from validation import opens_by_name, outside_gap_scope
+from resolve.validation import opens_by_name, outside_gap_scope
 
 
 def _names(entry: dict) -> set[str]:

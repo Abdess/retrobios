@@ -28,7 +28,7 @@ import zipfile
 import zlib
 from pathlib import Path
 
-from artifacts import ArtifactLockBusy, artifact_lock
+from core.artifacts import ArtifactLockBusy, artifact_lock
 
 # "Each file included in a release must be under 2 GiB."
 ASSET_LIMIT = 2 * 1024**3

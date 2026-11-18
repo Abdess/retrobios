@@ -1073,7 +1073,7 @@ class AHeldFileTheInstallerCannotFetch(unittest.TestCase):
         # no copy, and this offline run fetches none.
         Path(".gitignore").write_text("bios/Sys/jp.bin\n")
         registered = mock.patch(
-            "largefiles.load_registered_paths", return_value=["bios/Sys/jp.bin"]
+            "model.largefiles.load_registered_paths", return_value=["bios/Sys/jp.bin"]
         )
         registered.start()
         self.addCleanup(registered.stop)

@@ -105,7 +105,7 @@ def ledger_text(records: dict[str, dict]) -> str:
 
 
 def write_ledger(records: dict[str, dict], path: Path = ARCHIVES_FILE) -> bool:
-    from artifacts import write_if_changed
+    from core.artifacts import write_if_changed
 
     path.parent.mkdir(parents=True, exist_ok=True)
     return write_if_changed(str(path), ledger_text(records))

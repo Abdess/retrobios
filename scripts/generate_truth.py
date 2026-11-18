@@ -28,7 +28,7 @@ from common import (
     write_text_atomic,
     yaml_load,
 )
-from truth import generate_platform_truth
+from resolve.truth import generate_platform_truth
 
 yaml = require_yaml()
 

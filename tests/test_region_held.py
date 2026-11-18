@@ -91,7 +91,7 @@ class ADataDirectoryCopyIsHeld(unittest.TestCase):
 
     def test_emulator_entry_from_a_data_tree(self):
         from packextras import _emulator_ships
-        from validation import _build_validation_index
+        from resolve.validation import _build_validation_index
 
         profile = self.profiles["dolphin-mmjr2"]
         entry = next(

@@ -276,7 +276,7 @@ def nightly_core(core: str) -> tuple[Path, str]:
 def pack_files(emulator: str, region: str, work: Path) -> dict[str, Path]:
     """The files generate_pack puts in the emulator's pack for one region,
     extracted, by their path in the pack."""
-    from ziptools import safe_extract_zip
+    from core.ziptools import safe_extract_zip
 
     out_dir = work / "pack"
     subprocess.run([sys.executable, str(ROOT / "scripts" / "generate_pack.py"), "--emulator", emulator,

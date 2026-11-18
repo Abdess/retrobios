@@ -271,7 +271,7 @@ class TheExportKeepsTheirShape(unittest.TestCase):
 
     def test_paths_start_where_the_list_starts(self):
         from exporter.amberelec_exporter import Exporter as Amber
-        from exporter.baseline import NativeFile
+        from resolve.reconcile import NativeFile
         from exporter.knulli_exporter import Exporter as Knulli
 
         fe = NativeFile("neogeo.zip", "neogeo/neogeo.zip", "neogeo")

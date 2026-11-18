@@ -58,8 +58,8 @@ from romfolders import (
     folder_names,
     load_setups,
 )
-from artifacts import write_text_atomic
-from safeparse import yaml_load
+from core.artifacts import write_text_atomic
+from model.safeparse import yaml_load
 
 import install
 

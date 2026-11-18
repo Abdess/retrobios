@@ -10,7 +10,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 
 from common import sanitize_pack_path
-from validation import read_from_save_dir
+from resolve.validation import read_from_save_dir
 
 
 @dataclass(frozen=True)

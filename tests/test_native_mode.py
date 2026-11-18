@@ -18,7 +18,7 @@ import json
 import unittest
 from pathlib import Path
 
-import nativemode
+from resolve import nativemode
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

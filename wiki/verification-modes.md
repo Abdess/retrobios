@@ -91,7 +91,7 @@ shorter than 32 characters matches no file there. The Batocera scraper completes
 a value when exactly one MD5 in `database.json` starts with it
 (`_resolve_truncated_md5` in `scripts/scraper/batocera_scraper.py`) and keeps it as
 written otherwise. `resolve_local_file` and `--from-md5` read a value still shorter
-than 32 characters by the same rule (`cut_md5_owner` in `scripts/hashing.py`), and the
+than 32 characters by the same rule (`cut_md5_owner` in `scripts/core/hashing.py`), and the
 resolver keeps the file only when its name is one the entry names. Every verdict
 compares whole digests, as Batocera does: a cut value never verifies a file.
 
@@ -103,12 +103,12 @@ Recalbox 10.1.1): one MD5 over the contents of every member, read in filename
 order. The members' own MD5s are not involved, and neither is the MD5 of the ZIP
 file itself: `Bios::Scan` takes the composite for every `.zip`
 ([`es-app/src/bios/Bios.cpp:86-91`](https://gitlab.com/recalbox/recalbox/-/blob/10.1.1/projects/frontend/es-app/src/bios/Bios.cpp#L86-91)). `verify.py` computes the same value with
-`md5_composite()` (`scripts/hashing.py`).
+`md5_composite()` (`scripts/core/hashing.py`).
 
 The registry gives Recalbox `zip_digest: composite`. For a platform so marked, a
 `.zip` entry is checked against its composite alone, by the resolver
 (`resolve_local_file`) and by the pack check (`digest_verdict` in
-`scripts/validation.py`). On other platforms the ZIP file's direct MD5 is tried first
+`scripts/resolve/validation.py`). On other platforms the ZIP file's direct MD5 is tried first
 and the composite after it.
 
 ### Multi-hash (Recalbox)
@@ -277,7 +277,7 @@ firmware). `verify.py` reports these as informational but cannot verify them wit
 the keys. Size checks still apply if combined with crypto.
 
 **Content tests** (`CONTENT_CHECKS` in `common.py`): `romdir` walks a PS2 ROM
-directory the way the profile's fork reads it (`scripts/romdir.py`), and
+directory the way the profile's fork reads it (`scripts/core/romdir.py`), and
 `masked_sha1` hashes a file with a byte range cleared. `content_fits()` runs them,
 and the name steps of the resolver, the folder scans of the pack and manifest,
 the emulator expansion and `verify.py` all call it, so they accept and refuse the
@@ -448,7 +448,7 @@ pack verification apply the same rule.
 
 ### Variant search
 
-`validated_choice()` (`scripts/validation.py`) decides the file a platform
+`validated_choice()` (`scripts/resolve/validation.py`) decides the file a platform
 destination ships when the emulators reading that destination check it. The
 pack, verify and the install manifest all read it, so they name the same file.
 

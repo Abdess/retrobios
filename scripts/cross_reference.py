@@ -26,7 +26,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, TypedDict
 
 sys.path.insert(0, os.path.dirname(__file__))
-from alternatives import set_keys, set_requirements, settle_sets
+from model.alternatives import set_keys, set_requirements, settle_sets
 from common import (
     OUTER_ROOTS,
     platform_arg,
@@ -56,8 +56,8 @@ from common import (
     standalone_set,
     select_emulator_profiles,
 )
-from hashing import parse_hash_list
-from launchers import (
+from core.hashing import parse_hash_list
+from resolve.launchers import (
     LauncherLayer,
     bound_launchers,
     catalogued_model_files,
@@ -69,9 +69,9 @@ from launchers import (
     setting_readers,
     suffixed_stem,
 )
-from launchers import _directories as launcher_directories
-from launchers import _names as launcher_names
-from validation import (
+from resolve.launchers import _directories as launcher_directories
+from resolve.launchers import _names as launcher_names
+from resolve.validation import (
     case_folded_slots,
     declaration_settles,
     inner_rom_check,

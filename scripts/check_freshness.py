@@ -66,7 +66,7 @@ from common import (
     yaml_load,
 )
 from exporter import discover_exporters
-from exporter.baseline import build_native_model
+from resolve.reconcile import build_native_model
 from scripts.scraper import game_dat_importer
 from scripts.scraper.redump_dat_scraper import fetch_snapshot
 from scripts.scraper.targets import discover_target_scrapers

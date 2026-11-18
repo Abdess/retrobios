@@ -8,7 +8,7 @@ the clock alone."""
 from __future__ import annotations
 
 from pathlib import Path
-from artifacts import write_if_changed as _write_artifact
+from core.artifacts import write_if_changed as _write_artifact
 import os
 # Every path this run produced. The generated directories used to be deleted
 # before the build, which made every page new: write_if_changed had no earlier

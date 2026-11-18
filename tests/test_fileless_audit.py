@@ -162,7 +162,7 @@ class TestCorpusIsAnswered(unittest.TestCase):
     def test_no_fileless_profile_is_left_unexplained(self):
         if not (ROOT / ".cache").is_dir():
             self.skipTest("no upstream cache")
-        from safeparse import yaml_load
+        from model.safeparse import yaml_load
 
         fetch = fileless_audit.upstream.fetch_file
         read = []

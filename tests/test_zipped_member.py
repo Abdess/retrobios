@@ -65,7 +65,7 @@ class TheMemberIndexIsCachedByContent(unittest.TestCase):
     def test_a_second_process_reads_the_cache(self):
         from unittest import mock
 
-        import ziptools
+        from core import ziptools
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             archive = Path(tmp) / "set.zip"

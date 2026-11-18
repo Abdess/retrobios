@@ -18,7 +18,7 @@ from pathlib import Path
 
 import yaml
 
-from validation import _build_validation_index, check_file_validation
+from resolve.validation import _build_validation_index, check_file_validation
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -368,7 +368,7 @@ class FbAlpha2012HiscoreFromSaveDir(unittest.TestCase):
     bios/hiscore.dat slot that MAME cores read on RetroDECK and RetroBat."""
 
     def test_hiscore_is_not_a_system_file(self):
-        from validation import read_from_system_dir
+        from resolve.validation import read_from_system_dir
 
         for emulator in ("fbalpha2012", "fbalpha2012_cps3"):
             with self.subTest(emulator=emulator):
@@ -427,7 +427,7 @@ class BizHawkFindsFirmwareByHash(unittest.TestCase):
     writes, and the export added 59 of them to RetroBat's native file."""
 
     def test_entries_are_labels_named_by_the_firmware_database(self):
-        from validation import opens_by_name
+        from resolve.validation import opens_by_name
 
         profile = _profile("bizhawk")
         named = [f["name"] for f in profile["files"] if opens_by_name(f, profile, True)]
@@ -444,7 +444,7 @@ class AmiberryNamesComeFromItsCode(unittest.TestCase):
     writes, and the code has its own AROS (':AROS', src/memory.cpp:2156)."""
 
     def test_scan_label_and_no_launcher_names(self):
-        from validation import opens_by_name
+        from resolve.validation import opens_by_name
 
         profile = _profile("amiberry")
         entry = next(f for f in profile["files"] if f["name"] == "amiga-os-310.rom")
@@ -462,7 +462,7 @@ class WinUaeNamesComeFromItsCode(unittest.TestCase):
     Uae.Generator.cs searches, and kick.rom was missing."""
 
     def test_kick_rom_is_read_by_name_and_kickstarts_are_labels(self):
-        from validation import opens_by_name, read_from_system_dir
+        from resolve.validation import opens_by_name, read_from_system_dir
 
         profile = _profile("winuae")
         kick = next(f for f in profile["files"] if f["name"] == "kick.rom")

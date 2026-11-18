@@ -13,11 +13,11 @@ import ast
 import unittest
 from pathlib import Path
 
-import crypto_verify
+from core import crypto_verify
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
-STDLIB_OR_LOCAL = {"__future__", "hashlib", "struct", "collections", "pathlib", "sect233r1"}
+STDLIB_OR_LOCAL = {"__future__", "hashlib", "struct", "collections", "pathlib", "core"}
 
 
 class StdlibAes(unittest.TestCase):
@@ -40,7 +40,7 @@ class StdlibAes(unittest.TestCase):
         )
 
     def test_no_third_party_import(self):
-        tree = ast.parse((REPO_ROOT / "scripts" / "crypto_verify.py").read_text())
+        tree = ast.parse((REPO_ROOT / "scripts" / "core" / "crypto_verify.py").read_text())
         modules = {
             (node.module if isinstance(node, ast.ImportFrom) else alias.name).split(".")[0]
             for node in ast.walk(tree)

@@ -32,7 +32,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from artifacts import file_lock, write_bytes_atomic, write_if_changed, write_text_atomic
+from core.artifacts import file_lock, write_bytes_atomic, write_if_changed, write_text_atomic
 import yaml
 
 from common import (
@@ -51,7 +51,7 @@ from common import (
 )
 from exporter import discover_exporters
 from exporter.base_exporter import BaseExporter
-from exporter.baseline import (
+from resolve.reconcile import (
     HASH_FIELDS,
     NativeFile,
     Report,
@@ -59,9 +59,9 @@ from exporter.baseline import (
     _single_size,
     build_native_model,
 )
-from exporter.candidates import removal_candidates
+from resolve.categories import removal_candidates
 from exporter.doubled import doubled_destinations
-from truth import generate_platform_truth
+from resolve.truth import generate_platform_truth
 
 DEFAULT_CACHE = ".cache/upstream-native"
 # The database generate_truth reads by default.

@@ -21,7 +21,7 @@ import re
 import subprocess
 from pathlib import Path
 
-from artifacts import write_if_changed
+from core.artifacts import write_if_changed
 
 REPO_RAW = "https://raw.githubusercontent.com/Abdess/retrobios"
 SH_NAME = "i"

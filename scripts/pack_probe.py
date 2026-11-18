@@ -73,8 +73,8 @@ from common import (
     run_cli,
     runs_standalone,
 )
-from validation import filter_files_by_mode
-from ziptools import safe_extract_zip
+from resolve.validation import filter_files_by_mode
+from core.ziptools import safe_extract_zip
 
 ROOT = Path(__file__).resolve().parent.parent
 MAIN = autorun.main_checkout()

@@ -60,8 +60,8 @@ from common import (
     load_platform_config,
     list_release_pack_platforms,
 )
-from exporter.baseline import HASH_FIELDS, _hash_values
-from exporter.candidates import EntryCategories
+from resolve.reconcile import HASH_FIELDS, _hash_values
+from resolve.categories import EntryCategories
 from sitesources import launcher_ref_markdown, list_source
 import check_platform_folder
 import sitesources

@@ -11,7 +11,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar, Union
 
-from .baseline import NativeFile, NativeSystem, Report
+from resolve.reconcile import NativeFile, NativeSystem, Report
 
 # What a produced file holds: text for every format, bytes besides for one
 # that also hands back an archive (MiSTer's bios_db.json.zip).

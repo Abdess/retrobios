@@ -375,7 +375,7 @@ def verify_otp(
 
     Returns (valid, reason_string).
     """
-    from sect233r1 import _N, _ec_mul, _Gx, _Gy, ecdsa_verify_sha256
+    from core.sect233r1 import _N, _ec_mul, _Gx, _Gy, ecdsa_verify_sha256
 
     data = bytearray(Path(filepath).read_bytes())
 

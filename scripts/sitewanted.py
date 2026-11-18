@@ -24,9 +24,9 @@ from pathlib import Path
 import archive_build
 from common import runs_standalone, unique_emulator_profiles
 from cross_reference import _first_hash
-from hashing import cut_md5_owner, parse_hash_list
+from core.hashing import cut_md5_owner, parse_hash_list
 from validate_pr import LARGE_FILE_ISSUE_URL, Placement, placement
-from validation import deliverable, filter_files_by_mode, installed_with_emulator
+from resolve.validation import deliverable, filter_files_by_mode, installed_with_emulator
 
 ALGORITHMS = ("sha1", "sha256", "md5", "crc32")
 # GitHub's upload page takes 25 MB per file. A larger file goes in by a

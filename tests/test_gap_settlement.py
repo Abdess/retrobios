@@ -13,7 +13,7 @@ import unittest
 from pathlib import Path
 
 from cross_reference import cross_reference
-from validation import case_folded_slots, declaration_settles
+from resolve.validation import case_folded_slots, declaration_settles
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 

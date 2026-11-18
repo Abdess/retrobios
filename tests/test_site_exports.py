@@ -680,7 +680,7 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
         import generate_site
         from common import load_platform_config
         from cross_reference import FileConsumers
-        from ziptools import build_zip_contents_index
+        from core.ziptools import build_zip_contents_index
 
         root = Path(__file__).resolve().parents[1]
         db = _json.loads((root / "database.json").read_text(encoding="utf-8"))

@@ -8,7 +8,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from artifacts import write_if_changed
+from core.artifacts import write_if_changed
 
 
 DEFAULT_PROVENANCE_DIR = "provenance"

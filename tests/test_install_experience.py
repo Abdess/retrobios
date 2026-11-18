@@ -242,7 +242,7 @@ class ManifestHashesMatchTheScan(unittest.TestCase):
         value back: one read of the file, then a refusal a second read would
         have avoided."""
         import generate_pack
-        import hashing
+        from core import hashing
 
         real_compute = hashing._compute_hashes
         reads: list[str] = []

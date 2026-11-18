@@ -207,7 +207,7 @@ def _group_requirement_split(path: Path, document: object) -> list[str]:
     that can contradict the first: a true on the first name only wrote the
     search order into required, and the other names read as optional.
     """
-    from alternatives import groups_of
+    from model.alternatives import groups_of
 
     if not isinstance(document, dict):
         return []
@@ -558,7 +558,7 @@ def _save_dir_without_library_name(path: Path, document: object) -> list[str]:
     (sort_savefiles_enable): without the name, packs and the installer
     cannot say where the file goes, and leave it out.
     """
-    from validation import read_from_save_dir
+    from resolve.validation import read_from_save_dir
 
     if not isinstance(document, dict):
         return []
@@ -581,7 +581,7 @@ def _save_folder_once_paths(path: Path, document: dict) -> list[str]:
     frontend sorts saves by core or not, which holds only when the path
     already names the folder the core reads below.
     """
-    from validation import read_from_save_dir
+    from resolve.validation import read_from_save_dir
 
     if not document.get("save_folder_once"):
         return []

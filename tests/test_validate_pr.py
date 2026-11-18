@@ -540,7 +540,7 @@ class ThePlatformsOwnCheckDecides(_Fixture):
         self.assertNotIn(".variants/", markdown)
 
     def test_a_member_digest(self):
-        from hashing import md5_composite
+        from core.hashing import md5_composite
 
         path = self._zip()
         known = self._platforms(

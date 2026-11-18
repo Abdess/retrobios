@@ -33,7 +33,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(__file__))
 from check_release_assets import digests_of
 from common import list_release_pack_platforms, require_directory
-from largefiles import LARGE_FILES_REPO
+from model.largefiles import LARGE_FILES_REPO
 from release_record import RECORD, load_record
 
 SUMS = "SHA256SUMS.txt"

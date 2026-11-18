@@ -27,7 +27,7 @@ from datetime import datetime, timezone
 
 import yaml
 
-from safeparse import yaml_load_upstream
+from model.safeparse import yaml_load_upstream
 
 from . import BaseTargetScraper
 from ..base_scraper import github_headers

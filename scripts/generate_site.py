@@ -72,10 +72,10 @@ from common import (
     yaml_load,
 )
 from siterender import SECTION_LABELS, WIKI_SRC_DIR
-from artifacts import ArtifactLockBusy, artifact_lock
-from artifacts import json_text as _json_text
+from core.artifacts import ArtifactLockBusy, artifact_lock
+from core.artifacts import json_text as _json_text
 from cross_reference import FileConsumers, entry_target, held_copy
-from nativemode import check_label, digest_algorithm, reads_file_contents
+from resolve.nativemode import check_label, digest_algorithm, reads_file_contents
 
 from generate_readme import (
     platform_coverages,
@@ -1256,7 +1256,7 @@ def build_emulator_gap_report(
         if v.get("type") != "alias" and v.get("role") != "test"
     }
     from common import merged_standalone_set, platform_declarations
-    from validation import case_folded_slots
+    from resolve.validation import case_folded_slots
 
     # The command line passes these too: without them a RetroBat file named
     # 32X_G_BIOS.BIN read as missing for a core opening 32X_G_BIOS.bin.
@@ -3724,8 +3724,8 @@ def _served_line(f: dict, declared_sha1: str = "") -> str:
 
 def _launcher_refs(config: dict) -> dict[str, list[str]]:
     """Entry name, casefolded -> each launcher record that opens it, rendered."""
-    from launchers import _names as launcher_names
-    from launchers import bound_launchers
+    from resolve.launchers import _names as launcher_names
+    from resolve.launchers import bound_launchers
     from sitesources import launcher_ref_markdown, list_source
 
     # Every scraper reads its launchers in the repository and at the revision
@@ -3754,7 +3754,7 @@ def _launcher_unproven_section(config: dict) -> list[str]:
     A config file is proof only when the code installing it and the code
     reading it are shown: these records place no file.
     """
-    from launchers import launcher_unproven
+    from resolve.launchers import launcher_unproven
     from sitesources import launcher_ref_markdown, list_source
 
     rows = launcher_unproven({str(config.get("_key") or ""): config})
@@ -3800,7 +3800,7 @@ def _copy_hash(algorithm: str, value: str | list) -> str:
     """A declared hash cut to SHORT_HASH characters on a button that copies
     it whole. A list of accepted values (Recalbox) copies its first. Outside
     a form a button submits nothing, so it carries no type."""
-    from hashing import parse_hash_list
+    from core.hashing import parse_hash_list
 
     values = parse_hash_list(value)
     if not values:
@@ -5170,7 +5170,7 @@ def _data_member_digests(
     The manifests carry sha1 alone: the MD5 of Dolphin's ApprovedInis.json
     found nothing although the pack ships it."""
     from common import load_data_dir_registry
-    from hashing import compute_hashes
+    from core.hashing import compute_hashes
 
     if data_registry is None:
         data_registry = load_data_dir_registry(str(siteinputs.current().platforms))
@@ -5989,7 +5989,7 @@ def _fetch_url(path: str) -> str:
     large-files release asset when .gitignore keeps it out of git."""
     global _RELEASE_ASSET_NAMES
     if _RELEASE_ASSET_NAMES is None:
-        from largefiles import (
+        from model.largefiles import (
             LARGE_FILES_RELEASE,
             asset_names,
             load_registered_paths,
@@ -8396,7 +8396,7 @@ def comes_with_app(f: dict) -> bool:
     narrowed by ``mode`` is that build's alone: the other build reads its
     own entry, or nothing.
     """
-    from validation import installed_with_emulator
+    from resolve.validation import installed_with_emulator
 
     return installed_with_emulator(f)
 
@@ -9020,7 +9020,7 @@ def _more_words(lines: list[str]) -> list[str]:
 def _short_hash_line(f: dict) -> str:
     """The entry's strongest declared hash, cut to SHORT_HASH characters,
     with a copy button for the whole value. "" when it declares none."""
-    from hashing import parse_hash_list
+    from core.hashing import parse_hash_list
 
     for field, label in (("sha1", "SHA1"), ("md5", "MD5"), ("sha256", "SHA256"), ("crc32", "CRC32")):
         values = parse_hash_list(f.get(field) or "")
@@ -9961,7 +9961,7 @@ def _hash_spans(value: str | list, copy: bool = False) -> str:
     that only a profile declares were out of reach of the site search: it
     indexes text, and a pasted sha1 matched nothing.
     """
-    from hashing import parse_hash_list
+    from core.hashing import parse_hash_list
 
     return ", ".join(
         markup.hash_value(v, copy) for v in parse_hash_list(value)
@@ -11072,7 +11072,7 @@ def _declared_hashes(config: dict, detail: dict) -> dict[str, list[str]]:
     and named neither: the reader could not look for the dump RetroDECK asks
     for, nor report the difference.
     """
-    from hashing import parse_hash_list
+    from core.hashing import parse_hash_list
 
     system = (config.get("systems") or {}).get(detail.get("system", "")) or {}
     for entry in system.get("files") or []:
@@ -11394,7 +11394,7 @@ def reading_platforms(emu_name: str, profile: dict, name: str,
     build of it reads the entry: BlastEm's cdbios.bin is read by the
     standalone build only, and RetroBat hands that build other names."""
     from common import platform_layouts, standalone_set
-    from validation import filter_files_by_mode, unread_on
+    from resolve.validation import filter_files_by_mode, unread_on
 
     return {
         platform for platform, config in configs.items()
@@ -11507,7 +11507,7 @@ def _corroboration_rows(coverages: dict) -> list[str]:
 
 def _divergence_rows(coverages: dict, registry: dict | None, profiles: dict, db: dict) -> list[str]:
     """Section 1b: platform lists vs emulator source, one row a platform."""
-    from truth import diff_platform_truth, generate_platform_truth
+    from resolve.truth import diff_platform_truth, generate_platform_truth
 
     div_rows = []
     for pname, cov in _by_platform_name(coverages):

@@ -11,31 +11,31 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypedDict
 
 from auto_fetch import DEFAULT_BIOS_DIR
-from artifacts import _build_timestamp
+from core.artifacts import _build_timestamp
 from packpaths import MEDIA_MARKER, _has_path_conflict
-from ziptools import build_zip_contents_index
-from ziptools import check_inside_zip
-from nativemode import digest_algorithm
-from validation import baseline_verdict, digest_verdict
-from nativemode import hash_mismatch_excludes_file
+from core.ziptools import build_zip_contents_index
+from core.ziptools import check_inside_zip
+from resolve.nativemode import digest_algorithm
+from resolve.validation import baseline_verdict, digest_verdict
+from resolve.nativemode import hash_mismatch_excludes_file
 import functools
 import hashlib
 import zlib
 import sys
 from common import filter_systems_by_target
-from hashing import md5_composite_of, parse_md5_list
+from core.hashing import md5_composite_of, parse_md5_list
 import io
 from common import load_emulator_profiles
 from common import load_platform_config
 import os
 from packextras import platform_region_groups
 from packpaths import _flat
-from nativemode import reads_file_contents
+from resolve.nativemode import reads_file_contents
 import region as region_mod
 import slots
 from packresolve import resolve_declaration, resolve_file
-from exporter.candidates import BIOS, EntryCategories
-from gamedata import without_game_data
+from resolve.categories import BIOS, EntryCategories
+from resolve.gamedata import without_game_data
 from common import resolve_platform_cores
 from common import sanitize_pack_path
 import zipfile
@@ -616,7 +616,7 @@ def _builder_extras(
     there: taken by the refused file, that core file was never compared.
     """
     from packextras import ExtraResolver, hidden_extras
-    from validation import _build_validation_index, destination_owners
+    from resolve.validation import _build_validation_index, destination_owners
 
     config, emu_profiles = expect.config, expect.emu_profiles
     data_registry = expect.opts.data_registry

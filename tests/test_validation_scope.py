@@ -59,7 +59,7 @@ class ContentFoundLabelsTakeTheirRegionSlot(unittest.TestCase):
         import hashlib
         import tempfile
 
-        from validation import _build_validation_index, check_file_validation
+        from resolve.validation import _build_validation_index, check_file_validation
 
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "scph1001.bin"
@@ -96,7 +96,7 @@ class GearcolecoWarnsOnAnUnknownRevision(unittest.TestCase):
 
         import yaml
 
-        from validation import _build_validation_index, check_file_validation
+        from resolve.validation import _build_validation_index, check_file_validation
 
         profile = yaml.safe_load(
             (REPO_ROOT / "emulators" / "gearcoleco.yml").read_text(encoding="utf-8")

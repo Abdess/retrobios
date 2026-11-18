@@ -21,7 +21,7 @@ if sys.version_info < (3, 9):
 
 from collections.abc import Callable, Iterable, Iterator, Mapping
 
-from artifacts import _build_timestamp, set_plain_mode
+from core.artifacts import _build_timestamp, set_plain_mode
 import argparse
 import contextlib
 import functools
@@ -38,7 +38,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypedDict
 
 sys.path.insert(0, os.path.dirname(__file__))
-from alternatives import core_file_spares, settle_sets, slot_set_keys
+from model.alternatives import core_file_spares, settle_sets, slot_set_keys
 from common import resolve_platform_cores as _platform_cores
 from common import (
     ROMS_ROOT,
@@ -109,18 +109,20 @@ import packresolve
 from refresh_data_dirs import cache_lock, hold_data_dirs
 import region as region_mod
 from manifestselect import SelectionIndex
-import slot as slot_mod
+from resolve import slot as slot_mod
 import slots
 import split_pack
-from gamedata import GAME_DATA, GameDataCut, is_game_data, platform_game_data, without_game_data
-from deterministic_zip import _FIXED_DATE_TIME
-from largefiles import asset_name, load_registered_paths, published_asset_name
-from nativemode import (
-    digest_algorithm,
-    hash_mismatch_excludes_file,
-    reads_file_contents,
+from resolve.gamedata import (
+    GAME_DATA,
+    GameDataCut,
+    is_game_data,
+    platform_game_data,
+    without_game_data,
 )
-from validation import (
+from core.deterministic_zip import _FIXED_DATE_TIME
+from model.largefiles import asset_name, load_registered_paths, published_asset_name
+from resolve.nativemode import digest_algorithm, hash_mismatch_excludes_file, reads_file_contents
+from resolve.validation import (
     baseline_verdict,
     existence_discrepancy,
     destination_owners,
@@ -6373,7 +6375,7 @@ def _offered_boards(
     pairs = content_folder_boards(config)
     if all(on is None for on in pairs.values()):
         return {}
-    from launchers import _roms_place
+    from resolve.launchers import _roms_place
 
     by_key: dict[str, set[str]] = {}
     for name, claimants in upstream_profile_index(profiles).items():

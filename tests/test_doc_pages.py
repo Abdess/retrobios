@@ -445,7 +445,7 @@ class Md5CompositeDefinition(unittest.TestCase):
     members' contents in name order."""
 
     def test_page_and_code_agree(self):
-        from hashing import md5_composite_of
+        from core.hashing import md5_composite_of
 
         buffer = io.BytesIO()
         with zipfile.ZipFile(buffer, "w") as zf:
@@ -461,7 +461,7 @@ class Md5CompositeDefinition(unittest.TestCase):
         """The page said the direct MD5 is tried before the composite, which
         Recalbox never does for a .zip, and the pack check did the same."""
         import common
-        import validation
+        from resolve import validation
 
         section = _section(_page("verification-modes.md"), "md5_composite (Recalbox ZIP verification)")
         self.assertIn("zip_digest: composite", section)
@@ -1855,7 +1855,7 @@ class CrossReferenceSettlesBySlotAndSize(unittest.TestCase):
     settles a file only at its slot or at a size the core accepts."""
 
     def test_the_page_states_the_rule_verify_reads(self):
-        from validation import declaration_settles
+        from resolve.validation import declaration_settles
 
         rom1 = {"name": "ROM1.BIN", "size": 32768, "validation": ["size"]}
         self.assertFalse(declaration_settles(rom1, "ROM1.BIN", {"ROM1.BIN": [(4096, "rom1.bin")]},
@@ -1953,7 +1953,7 @@ class TheRemovalProofsAreTheExportersOwn(unittest.TestCase):
              "data_directory": "a data directory"}
 
     def test_the_page_names_each_proof_in_order(self):
-        from exporter.candidates import _PROOF_ORDER
+        from resolve.categories import _PROOF_ORDER
 
         page = (WIKI / "tools.md").read_text(encoding="utf-8")
         start = page.index("No entry the platform declares is removed.")

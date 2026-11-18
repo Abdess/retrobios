@@ -18,7 +18,7 @@ import sys
 import unittest
 from pathlib import Path
 
-from truth import generate_platform_truth
+from resolve.truth import generate_platform_truth
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -181,7 +181,7 @@ class EveryRevisionACoreAcceptsStays(unittest.TestCase):
         giving 1.07's sha1 and md5 is that revision, not a mismatch. dosbox
         checks the sha1 (validation), so its md5 describes one revision and
         contradicts nothing, the rule the export applies too."""
-        from truth import _hash_mismatch
+        from resolve.truth import _hash_mismatch
 
         truth = {"name": "MT32_CONTROL.ROM", "md5": "c" * 32, "sha1": ["a" * 40, "b" * 40],
                  "validation": ["sha1"]}
@@ -205,8 +205,8 @@ class DiffAndExportShareOneMismatchRule(unittest.TestCase):
     )
 
     def test_the_diff_names_what_the_export_corrects(self):
-        from exporter.baseline import build_native_model
-        from truth import diff_platform_truth
+        from resolve.reconcile import build_native_model
+        from resolve.truth import diff_platform_truth
 
         for t_hashes, p_hashes in self.CASES:
             with self.subTest(truth=t_hashes, platform=p_hashes):
@@ -326,7 +326,7 @@ class ASizeOutsideARangeIsAnotherFile(unittest.TestCase):
     def test_two_cores_do_not_merge_across_a_declared_range(self):
         """bk's 24 KB BASIC10.ROM and oricutron's basic10.rom (max_size
         16384) merged into one entry, which took the Oric md5."""
-        from truth import _merge_file_into_system
+        from resolve.truth import _merge_file_into_system
 
         system: dict = {}
         _merge_file_into_system(system, {"name": "BASIC10.ROM", "size": 24576,
@@ -452,7 +452,7 @@ class TheModelIsAFunctionOfItsInputs(unittest.TestCase):
     SCRIPT = (
         "import json, sys\n"
         "sys.path.insert(0, sys.argv[1])\n"
-        "from truth import generate_platform_truth\n"
+        "from resolve.truth import generate_platform_truth\n"
         "names = [f'core{i:02d}' for i in range(16)]\n"
         "profiles = {n: {'emulator': n, 'type': 'libretro',\n"
         "                'systems': [f'maker-system-{n}'], 'files': []} for n in names}\n"

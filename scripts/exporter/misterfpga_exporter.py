@@ -14,7 +14,7 @@ from collections import OrderedDict
 from typing import Union
 
 from .base_exporter import BaseExporter
-from .baseline import NativeFile, NativeSystem, Report
+from resolve.reconcile import NativeFile, NativeSystem, Report
 
 SOURCE_URL = (
     "https://raw.githubusercontent.com/ajgowans/BiosDB_MiSTer/db/bios_db.json.zip"

@@ -74,7 +74,7 @@ def _archives_held(fe: dict, db: dict) -> set[str]:
     holds: by its name, kept when it holds one CRC32 its ``contents:``
     lists. MAME hashes the members, never the archive, so the entry has no
     hash of its own and a name match is the only way to it."""
-    from ziptools import zip_member_crcs
+    from core.ziptools import zip_member_crcs
 
     crcs = {str(m["crc32"]).lower() for m in fe.get("contents") or []
             if isinstance(m, dict) and m.get("crc32")}

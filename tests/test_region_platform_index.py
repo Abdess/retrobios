@@ -56,7 +56,7 @@ class OnlyThePlatformsCoresRankASlot(unittest.TestCase):
     }
 
     def test_a_foreign_rank_orders_nothing(self):
-        import slot as slot_mod
+        from resolve import slot as slot_mod
 
         config = {"cores": ["beetle_psx"], "systems": {"sony-playstation": {"files": []}}}
         index = slot_mod.platform_slot_index(config, self.PROFILES)

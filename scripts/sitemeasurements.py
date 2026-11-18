@@ -33,7 +33,7 @@ from pathlib import Path
 
 import measurement_records as mr
 import sitemarkup as markup
-from artifacts import json_text, write_if_changed
+from core.artifacts import json_text, write_if_changed
 from siterender import _escape_tags
 
 ROOT = Path(__file__).resolve().parent.parent

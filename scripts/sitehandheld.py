@@ -22,7 +22,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 import sitemarkup as markup
-from artifacts import write_bytes_atomic
+from core.artifacts import write_bytes_atomic
 from build_port import ARCHIVES, BATOCERA_ZIP, MUOS_APP, PORT_ZIP, TOOLS_ZIP, build_archive
 
 REPO_ROOT = Path(__file__).resolve().parent.parent

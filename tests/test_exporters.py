@@ -46,12 +46,7 @@ from export_native import (
     pinned_base,
     source_key,
 )
-from exporter.baseline import (
-    NativeFile,
-    NativeSystem,
-    Report,
-    build_native_model,
-)
+from resolve.reconcile import NativeFile, NativeSystem, Report, build_native_model
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -342,7 +337,7 @@ class Reconciliation(unittest.TestCase):
         line for LRPS2 as a hash and size correction."""
         import contextlib
 
-        import truth as truth_module
+        from resolve import truth as truth_module
 
         entry = {"name": "GameIndex.yaml", "sha1": "1" * 40, "size": 2690355}
         with contextlib.redirect_stderr(io.StringIO()):
@@ -361,7 +356,7 @@ class Reconciliation(unittest.TestCase):
         self.assertEqual(report.hashes_corrected, [])
 
     def test_the_diff_names_no_mismatch_the_code_does_not_check(self):
-        from truth import _diff_system
+        from resolve.truth import _diff_system
         truth_sys = {"files": [{"name": "scph1001.bin", "md5": "a" * 32,
                                 "validation": ["size"]}]}
         scraped_sys = {"files": [{"name": "scph1001.bin", "md5": "b" * 32}]}
@@ -405,7 +400,7 @@ class Reconciliation(unittest.TestCase):
         self.assertEqual(report.hashes_corrected, [])
 
     def test_the_diff_names_no_missing_label(self):
-        from truth import _diff_system
+        from resolve.truth import _diff_system
         truth_sys = {"files": [{"name": "scph1001_v20.bin", "md5": "a" * 32,
                                 "_cores": ["duckstation"], "_named_by": []}]}
         self.assertNotIn("missing", _diff_system(truth_sys, {"files": []}))
@@ -446,7 +441,7 @@ class Reconciliation(unittest.TestCase):
         self.assertEqual(added.runners, [(False, "armsx2")])
 
     def test_the_diff_names_no_missing_bundled_file(self):
-        from truth import _diff_system
+        from resolve.truth import _diff_system
         truth_sys = {"files": [{"name": "gngeo_data.zip", "md5": "a" * 32, "bundled": True,
                                 "_cores": ["gngeopi"], "_named_by": ["gngeopi"],
                                 "_brought_by": []}]}
@@ -455,7 +450,7 @@ class Reconciliation(unittest.TestCase):
     def test_the_diff_pairs_by_the_same_rule(self):
         """diff_truth reads the same pairing, or it names a mismatch the
         export does not correct."""
-        from truth import _diff_system
+        from resolve.truth import _diff_system
         truth_sys = {"files": [
             {"name": "system.rom", "aliases": ["bios.rom"], "md5": "c" * 32},
             {"name": "bios.rom", "path": "np2kai/bios.rom"},
@@ -766,7 +761,7 @@ class SearchOrder(unittest.TestCase):
         """PicoDrive loads the first file of each region's list. RetroPie
         names one per region, but the export appended three more, which the
         sentence reads as three more required files."""
-        from exporter.baseline import NativeSystem
+        from resolve.reconcile import NativeSystem
 
         def cd(name, region, rank):
             return NativeFile(name=name, destination=name, native_system="segacd", truth={
@@ -799,7 +794,7 @@ class SearchOrder(unittest.TestCase):
         """flycast's help names the Dreamcast BIOS, then the Naomi/Atomiswave
         ones. naomi2.zip, an arcade archive, went into the Dreamcast list:
         only the first BIOS clause was read."""
-        from exporter.baseline import NativeSystem
+        from resolve.reconcile import NativeSystem
 
         def entry(name, system):
             return NativeFile(name=name, destination=f"dc/{name}", native_system=system,
@@ -2814,7 +2809,7 @@ class ARecordDescribesOneDump(unittest.TestCase):
     export wrote v2.0's crc beside v2.1's md5 and sha1."""
 
     def test_the_platform_record_stays_whole_when_the_truth_accepts_it(self):
-        from exporter.baseline import NativeFile
+        from resolve.reconcile import NativeFile
 
         fe = NativeFile(
             name="syscard2.pce", destination="syscard2.pce", native_system="pce",
@@ -2827,7 +2822,7 @@ class ARecordDescribesOneDump(unittest.TestCase):
         self.assertEqual(fe.record_hash("md5"), "3cdd6614" + "0" * 24)
 
     def test_a_field_only_the_truth_names_is_written_when_unambiguous(self):
-        from exporter.baseline import NativeFile
+        from resolve.reconcile import NativeFile
 
         one = NativeFile(name="a", destination="a", native_system="s",
                          platform={"crc32": "11111111"},

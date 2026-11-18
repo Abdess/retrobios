@@ -28,7 +28,8 @@ try:
 except ImportError:
     jsonschema = None
 import install
-from scripts import pipeline, region, region_audit
+from scripts import pipeline, region_audit
+from scripts import region
 from scripts.common import resolve_local_file, safe_extract_zip
 from scripts.generate_pack import (
     _emulator_region_group,
@@ -1424,7 +1425,7 @@ class OneBaselineVerdict(unittest.TestCase):
         return str(path)
 
     def test_a_missing_member_is_refused_whatever_the_outer_status(self):
-        from scripts.validation import baseline_verdict
+        from scripts.resolve.validation import baseline_verdict
 
         entry = {"name": "dragon32.zip", "zipped_file": "d32.rom", "md5": ""}
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
@@ -1466,7 +1467,7 @@ class OneBaselineVerdict(unittest.TestCase):
         import hashlib
 
         from scripts.common import md5_composite
-        from scripts.validation import baseline_verdict, digest_verdict
+        from scripts.resolve.validation import baseline_verdict, digest_verdict
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             loose = Path(directory) / "abc.bin"
@@ -1496,7 +1497,7 @@ class OneBaselineVerdict(unittest.TestCase):
         import hashlib
 
         from scripts.common import md5_composite
-        from scripts.validation import digest_verdict
+        from scripts.resolve.validation import digest_verdict
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             archive = self._archive(Path(directory), "rom.bin")
@@ -3611,7 +3612,7 @@ class TheZipIndexCacheKnowsItsInputs(unittest.TestCase):
     got the first call's index back."""
 
     def test_the_bound_and_the_sha1_are_part_of_the_key(self):
-        from scripts import ziptools
+        from scripts.core import ziptools
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             path = Path(directory) / "a.zip"
@@ -3760,7 +3761,7 @@ class KidVidTapesStayWithTheContent(unittest.TestCase):
 
     def test_no_pack_places_them_in_the_system_directory(self):
         from scripts.common import load_emulator_profiles
-        from scripts.validation import (
+        from scripts.resolve.validation import (
             outside_gap_scope,
             read_from_save_dir,
             read_from_system_dir,
@@ -3985,7 +3986,7 @@ class ADataDirectoryIsWalkedOnce(unittest.TestCase):
                 walks.append(top)
                 return real_walk(top, *a, **k)
 
-            with mock.patch.object(common.os, "walk", counting_walk):
+            with mock.patch.object(os, "walk", counting_walk):
                 first, _ = common._resolve_in_data_dirs(["font.bin"], registry,
                                                         lambda _p: "name_exact")
                 second, _ = common._resolve_in_data_dirs(["other.bin"], registry,
@@ -4002,7 +4003,7 @@ class ADuplicateYamlKeyIsRefused(unittest.TestCase):
     target_source keys for Recalbox and nothing noticed."""
 
     def test_the_loader_names_the_repeated_key(self):
-        from safeparse import yaml_load
+        from model.safeparse import yaml_load
 
         with self.assertRaises(yaml.constructor.ConstructorError) as caught:
             yaml_load("platform: x\ntarget_source: a\ntarget_source: b\n")
@@ -4965,7 +4966,7 @@ class AZipMemberIsHashedOnce(unittest.TestCase):
     every step: 4 788 times for 355 members in verify --all."""
 
     def test_repeated_questions_read_the_archive_once(self):
-        from scripts import ziptools
+        from scripts.core import ziptools
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
             archive = Path(tmp, "set.zip")
@@ -5048,7 +5049,7 @@ class SignaturesCarryTheirTypes(unittest.TestCase):
 
     # Lowered as modules are annotated, never raised.
     CEILING = 0
-    COMPLETE = ("artifacts.py", "common.py", "validation.py", "generate_pack.py")
+    COMPLETE = ("core/artifacts.py", "common.py", "resolve/validation.py", "generate_pack.py")
 
     @staticmethod
     def _missing(path: Path) -> list[str]:
@@ -5080,7 +5081,8 @@ class ATreeNobodyHoldsIsMissingNotAnAsset(unittest.TestCase):
     IsADirectoryError where verify said MISSING."""
 
     def test_directory_entries_never_reach_the_asset_store(self):
-        from scripts import largefiles, packresolve
+        from scripts.model import largefiles
+        from scripts import packresolve
 
         db = {"files": {}, "indexes": {"by_name": {}, "by_md5": {}, "by_crc32": {},
                                       "by_path_suffix": {}}}
@@ -5394,7 +5396,7 @@ class BundledFilesAreNotToSource(unittest.TestCase):
     def test_a_build_scope_keeps_it_for_the_other_build(self):
         """PPSSPP's standalone release ships assets/, its libretro core does
         not: bundled for one build, the entry still reaches a core's pack."""
-        from validation import deliverable
+        from resolve.validation import deliverable
 
         entries = [{"ref": "ppsspp-assets", "mode": "libretro"},
                    {"name": "a.bin", "bundled": True, "mode": "standalone"},
@@ -5406,7 +5408,7 @@ class BundledFilesAreNotToSource(unittest.TestCase):
     def test_a_platform_package_can_differ_both_ways(self):
         """Batocera's hcl package installs the binary alone, its blueMSX core
         package copies the machines beside the core."""
-        from validation import installed_with_emulator
+        from resolve.validation import installed_with_emulator
 
         hcl = {"name": "data.pak", "bundled": True, "not_bundled_on": ["batocera"]}
         machines = {"name": "Machines/MSX/config.ini", "installed_on": ["batocera", "retropie"]}
@@ -5900,7 +5902,7 @@ class ZippedFileMd5IsParsedOnce(unittest.TestCase):
         import hashlib
         import zipfile as zf_mod
 
-        from scripts.validation import inner_rom_check
+        from scripts.resolve.validation import inner_rom_check
         from scripts.verify import verify_entry_md5
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
@@ -5917,7 +5919,7 @@ class ZippedFileMd5IsParsedOnce(unittest.TestCase):
                     )
 
     def test_the_three_sites_share_the_parser(self):
-        for module in ("validation.py", "packverify.py", "verify.py"):
+        for module in ("resolve/validation.py", "packverify.py", "verify.py"):
             source = (ROOT / "scripts" / module).read_text()
             self.assertIn("parse_md5_list(", source, module)
 
@@ -5930,7 +5932,7 @@ class AHashListIsReadOneWay(unittest.TestCase):
 
     def test_every_reader_splits_the_list(self):
         from scripts.cross_reference import _declared_content
-        from scripts.hashing import parse_hash_list
+        from scripts.core.hashing import parse_hash_list
         from scripts.profile_sync import entry_hashes
 
         a, b = "a" * 64, "B" * 64
@@ -6359,7 +6361,7 @@ class FsUaeKickstartIsFoundByContent(unittest.TestCase):
     flag came from the RetroPie launcher, which the platform layer records."""
 
     def test_the_kickstart_is_an_optional_label(self):
-        from scripts.validation import opens_by_name
+        from scripts.resolve.validation import opens_by_name
 
         profile = yaml.safe_load((ROOT / "emulators" / "fs-uae.yml").read_text(encoding="utf-8"))
         entry = next(f for f in profile["files"] if f.get("sha1") == "891e9a547772fe0c6c19b610baf8bc4ea7fcb785")
@@ -6923,7 +6925,7 @@ class AHashConflictIsReportedOnce(unittest.TestCase):
         import contextlib
         import io
 
-        import truth
+        from resolve import truth
 
         truth._CONFLICTS_SHOWN.clear()
         err = io.StringIO()
@@ -7063,7 +7065,7 @@ class AFileTheLauncherNeverOpens(unittest.TestCase):
     as required and missing on RetroBat although nothing there opens them."""
 
     def test_unread_on_drops_the_entry_for_that_platform_only(self):
-        from validation import deliverable, unread_on
+        from resolve.validation import deliverable, unread_on
 
         entry = {"name": "cdbios.bin", "unread_on": ["retrobat"]}
         self.assertTrue(unread_on(entry, "retrobat"))
@@ -7650,7 +7652,7 @@ class Ps2BiosImagesAreFoundByContent(unittest.TestCase):
         name armsx2 opens on six platforms."""
         import yaml
 
-        from validation import opens_by_name
+        from resolve.validation import opens_by_name
 
         named = []
         for path in sorted((ROOT / "emulators").glob("*.yml")):
@@ -7680,7 +7682,7 @@ class SynthRomsAreFoundByContent(unittest.TestCase):
     def test_every_synth_rom_is_marked(self):
         import yaml
 
-        from validation import opens_by_name
+        from resolve.validation import opens_by_name
 
         profile = yaml.safe_load(
             (ROOT / "emulators" / "dosbox-staging.yml").read_text(encoding="utf-8")
@@ -7727,7 +7729,7 @@ class OpenMsxSystemRomsAreFoundBySha1(unittest.TestCase):
     def test_no_systemrom_label_reads_as_a_name(self):
         import yaml
 
-        from validation import opens_by_name
+        from resolve.validation import opens_by_name
 
         profile = yaml.safe_load((ROOT / "emulators" / "openmsx.yml").read_text())
         named = [

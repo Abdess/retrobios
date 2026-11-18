@@ -24,7 +24,7 @@ if (_SCRIPTS_DIR := str(Path(__file__).resolve().parents[2])) not in sys.path:
     sys.path.insert(0, _SCRIPTS_DIR)
 
 import upstream
-from safeparse import yaml_load
+from model.safeparse import yaml_load
 
 CACHE_DIR = upstream.CACHE_DIR
 

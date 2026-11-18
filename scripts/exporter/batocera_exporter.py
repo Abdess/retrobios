@@ -12,7 +12,7 @@ import ast
 import re
 
 from .base_exporter import BaseExporter
-from .baseline import NativeFile, NativeSystem, Report
+from resolve.reconcile import NativeFile, NativeSystem, Report
 
 SOURCE_URL = (
     "https://raw.githubusercontent.com/batocera-linux/batocera.linux/master"

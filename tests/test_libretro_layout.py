@@ -16,11 +16,7 @@ import unittest
 from pathlib import Path
 
 from packpaths import _resolve_destination
-from validation import (
-    outside_gap_scope,
-    read_from_save_dir,
-    read_from_system_dir,
-)
+from resolve.validation import outside_gap_scope, read_from_save_dir, read_from_system_dir
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 

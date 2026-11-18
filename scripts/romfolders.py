@@ -25,7 +25,7 @@ from common import (
     preferred_profile,
     upstream_profile_index,
 )
-from safeparse import yaml_load
+from model.safeparse import yaml_load
 
 ROMFOLDERS_DIR = Path("platforms") / "romfolders"
 SOURCES_DIR = ROMFOLDERS_DIR / "_sources"

@@ -17,7 +17,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-import artifacts
+from core import artifacts
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

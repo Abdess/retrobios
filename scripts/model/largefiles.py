@@ -20,8 +20,9 @@ from collections import Counter
 from collections.abc import Iterable
 from pathlib import Path
 
-from artifacts import set_plain_mode
-from hashing import compute_hashes
+from core.artifacts import set_plain_mode
+from core.hashing import compute_hashes
+from core.paths import REPO_ROOT
 
 
 LARGE_FILES_RELEASE = "large-files"
@@ -34,7 +35,7 @@ LARGE_FILES_CACHE = ".cache/large"
 # last: callers read the extension (an archive is packed as one).
 VERIFIED_STORE = ".by-sha1"
 ORPHAN_GRACE = 24 * 3600
-GITIGNORE = Path(__file__).resolve().parent.parent / ".gitignore"
+GITIGNORE = REPO_ROOT / ".gitignore"
 
 _UNSAFE_ASSET_CHARS = re.compile(r"[^A-Za-z0-9._-]+")
 

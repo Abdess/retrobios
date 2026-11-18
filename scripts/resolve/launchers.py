@@ -21,6 +21,7 @@ from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 
 from common import declared_root, name_match_size_ok, resolve_local_file, sanitize_pack_path
+from core.paths import REPO_ROOT
 
 # The kinds whose names say which file the launcher opens. A link of a named
 # file is one too: ROCKNIX links /storage/roms/bios/nds_bios_arm9.bin into
@@ -507,12 +508,11 @@ def _profiles_or_repo(profiles: Mapping[str, dict] | None) -> Mapping[str, dict]
     if profiles is not None:
         return profiles
     if _DEFAULT_PROFILES is None:
-        from pathlib import Path
 
         from common import load_emulator_profiles
 
         _DEFAULT_PROFILES = load_emulator_profiles(
-            str(Path(__file__).resolve().parent.parent / "emulators")
+            str(REPO_ROOT / "emulators")
         )
     return _DEFAULT_PROFILES
 

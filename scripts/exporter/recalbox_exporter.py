@@ -23,7 +23,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from common import load_emulator_profiles, parse_untrusted_xml
 
 from .base_exporter import BaseExporter
-from .baseline import NativeFile, NativeSystem, Report, by_destination, by_name
+from resolve.reconcile import NativeFile, NativeSystem, Report, by_destination, by_name
 
 SOURCE_URL = (
     "https://gitlab.com/recalbox/recalbox/-/raw/master/board/recalbox/fsoverlay"

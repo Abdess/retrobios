@@ -10,7 +10,6 @@ import copy
 import os
 import sys
 from dataclasses import dataclass
-from pathlib import Path
 
 from common import (
     OUTER_ROOTS,
@@ -20,15 +19,16 @@ from common import (
     resolve_platform_cores,
     standalone_set as platform_standalone_set,
 )
-from alternatives import groups_of
-from hashing import compute_hashes
-from validation import (
+from model.alternatives import groups_of
+from core.hashing import compute_hashes
+from resolve.validation import (
     filter_files_by_mode,
     installed_with_emulator,
     opens_by_name,
     read_from_system_dir,
     unread_on,
 )
+from core.paths import REPO_ROOT
 
 
 _CONFLICTS_SHOWN: set[tuple[str, ...]] = set()
@@ -571,7 +571,7 @@ def _declaration_verdict(entry: dict, declaration: dict, db: dict | None) -> str
     return "undecided"
 
 
-_REPO_PLATFORMS = Path(__file__).resolve().parent.parent / "platforms"
+_REPO_PLATFORMS = REPO_ROOT / "platforms"
 
 
 def _fold_data_directory_readers(
@@ -942,7 +942,7 @@ def _hash_mismatch(t_entry: dict, s_entry: dict) -> dict | None:
     contradicts nothing (checked_hashes), and a platform md5 that is a
     composite of a zip's members is no container md5 (comparable).
     """
-    from exporter.baseline import contradicted_hashes
+    from resolve.reconcile import contradicted_hashes
 
     fields = contradicted_hashes(t_entry, s_entry)
     if not fields:
@@ -965,7 +965,7 @@ def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
     correct while the export corrected hashes the diff never named. An entry
     never answers for two.
     """
-    from exporter.baseline import _is_placeholder, is_label, pair_entries, platform_declares
+    from resolve.reconcile import _is_placeholder, is_label, pair_entries, platform_declares
 
     truth_files = [
         fe for fe in truth_sys.get("files", [])

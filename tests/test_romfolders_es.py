@@ -353,7 +353,7 @@ class CommittedSetups(unittest.TestCase):
             from jsonschema import Draft202012Validator
         except ImportError:
             self.skipTest("jsonschema not installed")
-        from safeparse import yaml_load
+        from model.safeparse import yaml_load
         schema = json.loads((ROOT / "schemas" / "romfolders.schema.json").read_text())
         validator = Draft202012Validator(schema)
         for setup in ES_SETUPS:
@@ -363,7 +363,7 @@ class CommittedSetups(unittest.TestCase):
                 self.assertEqual(errors, [])
 
     def test_every_source_ref_names_a_declared_source(self) -> None:
-        from safeparse import yaml_load
+        from model.safeparse import yaml_load
         for setup in ES_SETUPS:
             with self.subTest(setup=setup):
                 doc = yaml_load(self.written(setup).read_text(encoding="utf-8"))
@@ -381,14 +381,14 @@ class CommittedSetups(unittest.TestCase):
                         self.assertIn(key, doc["sources"])
 
     def test_committed_file_is_its_own_dump(self) -> None:
-        from safeparse import yaml_load
+        from model.safeparse import yaml_load
         for setup in ES_SETUPS:
             with self.subTest(setup=setup):
                 text = self.written(setup).read_text(encoding="utf-8")
                 self.assertEqual(dump_setup(yaml_load(text)), text)
 
     def test_elec_family_skips_its_bios_folder(self) -> None:
-        from safeparse import yaml_load
+        from model.safeparse import yaml_load
         for setup in ("rocknix", "jelos", "kolos", "unofficialos", "archr",
                       "amberelec", "chaos", "pan4elec", "emuelec", "arkos", "darkos"):
             doc = yaml_load(self.paths[setup].read_text(encoding="utf-8"))

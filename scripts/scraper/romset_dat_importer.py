@@ -51,7 +51,7 @@ from ..common import (
     load_platform_config,
     run_cli,
 )
-from ..dumpcatalog import build_snapshot, load_provenance_snapshots, write_snapshot
+from model.dumpcatalog import build_snapshot, load_provenance_snapshots, write_snapshot
 from .logiqx_parser import LogiqxDat, parse_logiqx
 
 MAX_MEMBER_SIZE = 200 * 1024 * 1024

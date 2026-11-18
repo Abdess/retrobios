@@ -26,7 +26,7 @@ import urllib.request
 import zipfile
 from collections.abc import Callable, Iterator
 from pathlib import Path
-from artifacts import file_lock as _file_lock, set_plain_mode
+from core.artifacts import file_lock as _file_lock, set_plain_mode
 from common import InputMissing, github_token, platform_arg, require_platform, suggest_names, yaml_load
 
 try:

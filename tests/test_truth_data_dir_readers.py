@@ -17,8 +17,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from exporter.baseline import checked_hashes
-from truth import generate_platform_truth
+from resolve.reconcile import checked_hashes
+from resolve.truth import generate_platform_truth
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

@@ -15,7 +15,7 @@ import unittest
 from pathlib import Path
 
 from common import load_emulator_profiles
-from safeparse import yaml_load
+from model.safeparse import yaml_load
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 

@@ -7,7 +7,7 @@ import tests
 import os
 import unittest
 
-import slot
+from resolve import slot
 
 
 def _pairs(*names: str) -> list[tuple[str, str]]:
@@ -261,7 +261,7 @@ class AnUnrankedDeclarationIsADisagreement(unittest.TestCase):
     bios_CD_U.bin by name and ranks nothing."""
 
     def test_the_file_genesis_plus_gx_opens_is_kept(self):
-        from slot import build_slot_index, resolve_slot_drops
+        from resolve.slot import build_slot_index, resolve_slot_drops
 
         profiles = {
             "picodrive": {"files": [
@@ -280,7 +280,7 @@ class AnUnrankedDeclarationIsADisagreement(unittest.TestCase):
         self.assertEqual(undecidable, ["sega-mega-cd"])
 
     def test_one_core_ranking_alone_still_decides(self):
-        from slot import build_slot_index, resolve_slot_drops
+        from resolve.slot import build_slot_index, resolve_slot_drops
 
         index = build_slot_index({"picodrive": {"files": [
             {"name": "a.bin", "priority": 1}, {"name": "b.bin", "priority": 2},
@@ -297,7 +297,7 @@ class AnAbsentRankOneDisplacesNothing(unittest.TestCase):
     dropped the rank-2 and rank-3 files it holds, leaving the slot empty."""
 
     def test_the_best_held_file_wins(self):
-        from slot import build_slot_index, resolve_slot_drops
+        from resolve.slot import build_slot_index, resolve_slot_drops
 
         index = build_slot_index({"picodrive": {"files": [
             {"name": "us_scd2_9306.bin", "priority": 1},

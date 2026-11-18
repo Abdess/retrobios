@@ -15,7 +15,7 @@ import yaml
 
 from . import Fetcher, SourceError, load_sources, scrape_setup
 from upstream import UpstreamError
-from artifacts import write_text_atomic
+from core.artifacts import write_text_atomic
 from ..base_scraper import _PlatformDumper
 
 DEFAULT_DIR = Path("platforms") / "romfolders"

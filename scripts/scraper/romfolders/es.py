@@ -31,7 +31,7 @@ import shlex
 from collections import Counter
 from collections.abc import Iterator
 
-from safeparse import parse_untrusted_xml, yaml_load_upstream
+from model.safeparse import parse_untrusted_xml, yaml_load_upstream
 
 from . import Fetcher, SourceError, register
 

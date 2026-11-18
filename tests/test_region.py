@@ -263,7 +263,7 @@ class TestStandaloneLayoutIsIndexed(unittest.TestCase):
     pack nor in --emulator dolphin --standalone."""
 
     def test_the_standalone_path_carries_its_own_regions(self):
-        import slot
+        from resolve import slot
 
         profiles = {"dolphin": {"files": [
             {"name": "IPL.bin", "path": "dolphin-emu/Sys/GC/USA/IPL.bin",

@@ -44,7 +44,7 @@ from common import (
     suggest_names,
     system_index,
 )
-from hashing import parse_hash_list
+from core.hashing import parse_hash_list
 from sourceref import (  # re-exported for callers and tests
     _ANNOTATION_RE as _ANNOTATION_RE,
     _BARE_RANGE_RE as _BARE_RANGE_RE,

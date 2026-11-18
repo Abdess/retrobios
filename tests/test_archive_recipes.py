@@ -159,7 +159,7 @@ class HeldArchivesMatchTheirRecipes(unittest.TestCase):
         if not bios.is_dir() or not (REPO_ROOT / "recipes").is_dir():
             self.skipTest("bios/ or recipes/ is not present")
         from common import variant_base_name
-        from hashing import md5_composite_of
+        from core.hashing import md5_composite_of
 
         allowed = _allowed_members()
         pinned, zipped = _platform_pins()

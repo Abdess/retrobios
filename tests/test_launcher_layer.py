@@ -21,7 +21,7 @@ import zipfile
 import yaml
 
 from common import _emulator_profiles_cache, load_emulator_profiles, load_platform_config
-from launchers import LauncherLayer, launcher_places, suffixed_stem
+from resolve.launchers import LauncherLayer, launcher_places, suffixed_stem
 from verify import find_undeclared_files, verify_platform
 
 CONTENT = {
@@ -392,7 +392,7 @@ class LauncherLayerTest(unittest.TestCase):
                 self.assertEqual(launcher_places(self.config)[2].paths, ("sub/sub/fix.bin",))
 
     def test_every_extractor_spelling_of_the_bios_folder_is_known(self) -> None:
-        import launchers
+        from resolve import launchers
         from scraper import emudeck_launchers, retrodeck_launchers, retropie_launchers
 
         for token in (emudeck_launchers.BIOS, retrodeck_launchers.BIOS,
@@ -428,7 +428,7 @@ class LauncherLayerTest(unittest.TestCase):
         scph1002a.bin as packed while the PAL slot was filled by the
         launcher's scph5502.bin, which verify and the builder both knew."""
         from cross_reference import cross_reference, declared_names, load_platform_files
-        from launchers import declared_destinations
+        from resolve.launchers import declared_destinations
 
         selected = ["launchertest"]
         declared, data_dirs = load_platform_files(self.platforms_dir, selected)

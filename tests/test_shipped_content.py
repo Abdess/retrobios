@@ -27,7 +27,7 @@ import zipfile
 from pathlib import Path
 
 import common
-from nativemode import reads_file_contents
+from resolve.nativemode import reads_file_contents
 
 ROOT = Path(__file__).resolve().parent.parent
 

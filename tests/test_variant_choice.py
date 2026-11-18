@@ -20,7 +20,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from validation import find_validated_variant
+from resolve.validation import find_validated_variant
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -50,7 +50,7 @@ class FindValidatedVariant(unittest.TestCase):
             "by_name": {"rom.bin": [s for s, e in self.files.items() if e["name"] == "rom.bin"]},
             "by_md5": {e["md5"]: s for s, e in self.files.items()},
         }}
-        from validation import _build_validation_index
+        from resolve.validation import _build_validation_index
 
         self.by_hash = _build_validation_index({"emu": {"files": [
             {"name": "rom.bin", "validation": ["size", "sha1"], "size": 16,
@@ -94,7 +94,7 @@ _SEEDED = """
 import hashlib, sys, tempfile
 from pathlib import Path
 sys.path.insert(0, sys.argv[1])
-from validation import _build_validation_index, find_validated_variant
+from resolve.validation import _build_validation_index, find_validated_variant
 root = Path(sys.argv[2])
 paths = [root / f"ctrl_{i}.rom" for i in range(8)]
 files = {}

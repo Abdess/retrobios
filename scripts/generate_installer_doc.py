@@ -48,7 +48,7 @@ from pathlib import Path, PurePosixPath
 from typing import TYPE_CHECKING, Any, Callable
 
 import sitehandheld
-from artifacts import write_text_atomic
+from core.artifacts import write_text_atomic
 
 if TYPE_CHECKING:
     from install import LocalCopy, Progress, _OsRule

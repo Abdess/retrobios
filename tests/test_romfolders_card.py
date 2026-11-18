@@ -14,7 +14,7 @@ import unittest
 from pathlib import Path
 
 from romfolders import split_refs
-from safeparse import yaml_load
+from model.safeparse import yaml_load
 from scraper.romfolders import SourceError, load_sources, scrape_setup
 from scraper.romfolders.__main__ import dump_setup
 from scraper.romfolders.card import (

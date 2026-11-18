@@ -16,11 +16,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from validation import (
-    _build_validation_index,
-    destination_owners,
-    validated_choice,
-)
+from resolve.validation import _build_validation_index, destination_owners, validated_choice
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -159,7 +155,7 @@ class ManifestsServeWhatTheCoreAccepts(unittest.TestCase):
 
         from common import load_emulator_profiles, load_platform_config
         from generate_pack import _platform_cores
-        from validation import check_file_validation
+        from resolve.validation import check_file_validation
 
         manifest_path = REPO_ROOT / "install" / "retroarch.json"
         if not (REPO_ROOT / "database.json").is_file() or not manifest_path.is_file():
@@ -195,7 +191,7 @@ class EachReaderJudgesWithItsOwnRules(unittest.TestCase):
     Wii U otp.bin, and the variant search gave Cemu the 3DS file."""
 
     def test_rules_of_another_emulator_do_not_judge(self):
-        from validation import check_file_validation
+        from resolve.validation import check_file_validation
 
         index = _build_validation_index({
             "azahar": {"files": [{"name": "otp.bin", "path": "sysdata/otp.bin",
@@ -210,7 +206,7 @@ class EachReaderJudgesWithItsOwnRules(unittest.TestCase):
             self.assertIsNotNone(check_file_validation(str(wiiu), "otp.bin", index, tmp, {"azahar"}))
 
     def test_one_of_an_emulators_entries_is_enough(self):
-        from validation import check_file_validation
+        from resolve.validation import check_file_validation
 
         index = _build_validation_index({"raze": {"files": [
             {"name": "SW.GRP", "size": 100, "validation": ["size"]},
@@ -233,7 +229,7 @@ class DolphinForksJudgeTheirOwnDspTable(unittest.TestCase):
 
     def test_each_fork_accepts_its_own_free_rom(self):
         from common import load_emulator_profiles
-        from validation import check_file_validation
+        from resolve.validation import check_file_validation
 
         if not self.FREE_V04.is_file() or not self.FREE_V031.is_file():
             self.skipTest("free DSP ROMs not present")
@@ -290,7 +286,7 @@ class AWarningRejectsNothing(unittest.TestCase):
             self.assertEqual((chosen, disagreement), (str(good), None))
 
     def test_the_merged_view_rejects_nothing_for_it(self):
-        from validation import check_file_validation
+        from resolve.validation import check_file_validation
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             short, _good, _db, index = self._setup(tmp, held_good=False)
@@ -305,7 +301,7 @@ class AlternativesAreLookedUpBySlot(unittest.TestCase):
         from unittest import mock
 
         import packextras
-        import validation
+        from resolve import validation
 
         files = [{"name": "DUKE3D.GRP", "size": n} for n in (1, 2)] + [
             {"name": "a.bin", "path": "dir/a.bin"}, {"name": "a.bin"}, "not an entry",
@@ -345,7 +341,7 @@ class AVersionTakenWithoutACheck(unittest.TestCase):
         return str(path)
 
     def test_the_unchecked_version_accepts_the_copy(self):
-        from validation import check_file_validation
+        from resolve.validation import check_file_validation
 
         index = _build_validation_index({"raze": self.RAZE})
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
@@ -363,7 +359,7 @@ class AVersionTakenWithoutACheck(unittest.TestCase):
             ))
 
     def test_a_refusal_names_every_accepted_size(self):
-        from validation import check_file_validation
+        from resolve.validation import check_file_validation
 
         checked = {"files": self.RAZE["files"][:2]}
         index = _build_validation_index({"raze": checked})

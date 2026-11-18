@@ -38,7 +38,7 @@ from packpaths import (
     save_destination,
     save_layout,
 )
-from validation import (
+from resolve.validation import (
     entry_root,
     outside_gap_scope,
     read_from_save_dir,

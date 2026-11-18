@@ -548,7 +548,7 @@ def _hardlink_tree(src: Path, dst: Path) -> None:
 
 def seed_worktree(repo: Path, worktree: Path) -> list[str]:
     """Hard-link what git does not carry: a tool deleting a file drops a link."""
-    from largefiles import load_registered_paths
+    from model.largefiles import load_registered_paths
 
     seeded = []
     for rel in [".cache/large", "data", *load_registered_paths(repo / ".gitignore")]:

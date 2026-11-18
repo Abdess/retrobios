@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import re
 
-from .baseline import NativeSystem, Report
+from resolve.reconcile import NativeSystem, Report
 from .batocera_exporter import Exporter as BatoceraExporter
 
 SOURCE_URL = (

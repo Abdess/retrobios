@@ -11,14 +11,7 @@ import tests
 import unittest
 
 import verify
-from exporter.candidates import (
-    BIOS,
-    GAME_DATA,
-    UNREAD,
-    EntryCategories,
-    ProofIndex,
-    ReadEvidence,
-)
+from resolve.categories import BIOS, GAME_DATA, UNREAD, EntryCategories, ProofIndex, ReadEvidence
 
 PROFILES = {
     "bluemsx": {
@@ -48,7 +41,7 @@ class EachProfileEntryIsHashedOnce(unittest.TestCase):
     def test_two_platform_entries_read_one_profile_entry_once(self):
         from unittest import mock
 
-        import exporter.candidates as candidates
+        from resolve import categories as candidates
 
         profiles = {"core": {"emulator": "Core", "type": "libretro", "cores": ["core"],
                              "systems": ["s"],

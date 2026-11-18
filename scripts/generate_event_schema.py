@@ -13,7 +13,7 @@ import json
 import sys
 from pathlib import Path
 
-from artifacts import write_text_atomic
+from core.artifacts import write_text_atomic
 
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "schemas" / "install-events.schema.json"

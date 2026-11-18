@@ -14,6 +14,7 @@ import os
 import tempfile
 import threading
 import re
+from core.paths import REPO_ROOT
 
 
 _TIMESTAMP_PATTERNS = [
@@ -259,7 +260,7 @@ def artifact_lock(directory: str, exclusive: bool = True) -> Iterator[None]:
     # refused because another module holds it. Nothing else sets it.
     moved = os.environ.get(REPOSITORY_LOCK_ENV)
     real = os.path.realpath(directory)
-    if moved and os.path.isfile(os.path.join(real, "scripts", "artifacts.py")):
+    if moved and os.path.isfile(os.path.join(real, "scripts", "core", "artifacts.py")):
         # Keyed by the root's path: a scratch checkout and the process it
         # spawns name the same root, and find the same lock.
         lock_dir = os.path.join(moved, real.strip(os.sep).replace(os.sep, "__"))
@@ -335,7 +336,7 @@ def hold_repository_outputs(root: str = ".") -> Iterator[None]:
         yield
 
 
-_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+_REPO_ROOT = str(REPO_ROOT)
 
 
 def repository_output_lock(path: str) -> contextlib.AbstractContextManager[None]:

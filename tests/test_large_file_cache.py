@@ -23,7 +23,7 @@ from pathlib import Path
 from unittest import mock
 
 import common
-import largefiles
+from model import largefiles
 import check_release_assets
 
 REPO_ROOT = Path(__file__).resolve().parent.parent

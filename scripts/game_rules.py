@@ -21,7 +21,7 @@ from pathlib import Path
 
 from common import load_emulator_profiles
 from region import REGIONS, normalize_declared
-from safeparse import yaml_load
+from model.safeparse import yaml_load
 
 REGIONS_FILE = Path("games") / "regions.yml"
 EXTRAS_FILE = Path("games") / "extras.yml"

@@ -25,7 +25,7 @@ from common import (
     publish_hold,
 )
 from tests.scratchtree import scratch_checkout
-import artifacts
+from core import artifacts
 from unittest import mock
 
 REPO_ROOT = Path(__file__).resolve().parent.parent

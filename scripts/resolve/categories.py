@@ -11,16 +11,14 @@ the platform names that no profile describes leaves the verdict open.
 
 from __future__ import annotations
 
-import sys
 from collections.abc import Iterable
 from dataclasses import dataclass, field
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from common import _norm_system_id, resolve_platform_cores, unresolved_platform_cores
-from exporter.baseline import HASH_FIELDS, NativeSystem, _hash_values
-from launchers import _names as launcher_names
+from resolve.reconcile import HASH_FIELDS, NativeSystem, _hash_values
+from resolve.launchers import _names as launcher_names
 
 
 def _tails(path: str) -> list[str]:

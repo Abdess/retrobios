@@ -25,7 +25,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 
-from artifacts import set_plain_mode
+from core.artifacts import set_plain_mode
 
 USER_AGENT = "retrobios-profile-sync/1.0"
 # Where fetched upstream files live, shared by every reader of this cache.

@@ -31,7 +31,7 @@ import shlex
 import urllib.error
 import urllib.request
 
-from safeparse import yaml_load_upstream
+from model.safeparse import yaml_load_upstream
 
 from .base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_version
 from .batocera_scraper import (

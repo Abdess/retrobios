@@ -15,7 +15,7 @@ from pathlib import Path
 import yaml
 
 from common import load_platform_config
-from launchers import (
+from resolve.launchers import (
     bound_launchers,
     config_evidence,
     config_target,

@@ -317,7 +317,7 @@ class ReportedChangesAreTheDiff(unittest.TestCase):
     def _run(self, platform: str, filename: str) -> tuple[list[dict], str, str, dict]:
         from common import load_platform_config, native_layer
         from exporter import discover_exporters
-        from exporter.baseline import build_native_model
+        from resolve.reconcile import build_native_model
 
         original_path = UPSTREAM_CACHE / platform / filename
         if not original_path.is_file():
@@ -394,7 +394,7 @@ class ReportedChangesAreTheDiff(unittest.TestCase):
         report counted every file a profiled core reads as added."""
         from common import load_platform_config, native_layer
         from exporter import discover_exporters
-        from exporter.baseline import build_native_model
+        from resolve.reconcile import build_native_model
 
         archive = UPSTREAM_CACHE / "retropie" / "RetroPie-Setup.tar.gz"
         if not archive.is_file():
@@ -492,8 +492,8 @@ class RemovalCandidatesNeedAReadingNoCoreAnswers(unittest.TestCase):
         }
 
     def _candidates(self, files: list[dict], cores: list[str] | None = None) -> list[dict]:
-        from exporter.baseline import build_native_model
-        from exporter.candidates import removal_candidates
+        from resolve.reconcile import build_native_model
+        from resolve.categories import removal_candidates
 
         scraped = self._scraped(files, cores or ["corea"])
         systems, _ = build_native_model({"systems": {}}, scraped)
@@ -506,8 +506,8 @@ class RemovalCandidatesNeedAReadingNoCoreAnswers(unittest.TestCase):
         """Batocera's DuckStation generator walks 22 names (bios_lists,
         duckstationGenerator.py:501-515): a name it opens is read on
         Batocera whatever the profiles call it."""
-        from exporter.baseline import build_native_model
-        from exporter.candidates import removal_candidates
+        from resolve.reconcile import build_native_model
+        from resolve.categories import removal_candidates
 
         scraped = self._scraped([{"name": "scph7502.bin"}], ["corea"])
         scraped["launchers"] = [{

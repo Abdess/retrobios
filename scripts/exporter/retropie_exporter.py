@@ -24,7 +24,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from common import load_emulator_profiles
 
 from .base_exporter import BaseExporter
-from .baseline import NativeFile, NativeSystem, Report, search_order
+from resolve.reconcile import NativeFile, NativeSystem, Report, search_order
 
 SOURCE_URL = (
     "https://codeload.github.com/RetroPie/RetroPie-Setup/tar.gz/refs/heads/master"

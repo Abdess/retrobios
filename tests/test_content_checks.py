@@ -22,8 +22,8 @@ from pathlib import Path
 import common
 import generate_pack as builder
 import packextras
-from romdir import romdir_accepts, walk
-from validation import _build_validation_index, check_file_validation
+from core.romdir import romdir_accepts, walk
+from resolve.validation import _build_validation_index, check_file_validation
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

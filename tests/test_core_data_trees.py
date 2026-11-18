@@ -18,7 +18,7 @@ from pathlib import Path
 
 import common
 import generate_pack as builder
-from validation import deliverable, read_from_system_dir
+from resolve.validation import deliverable, read_from_system_dir
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

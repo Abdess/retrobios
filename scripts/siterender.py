@@ -447,7 +447,7 @@ def _read_arcade_source() -> tuple[dict, dict] | None:
 
 def _entry_archives(entry: dict, files: dict, by_name: dict) -> set[str]:
     """The archives of the collection a ``bios_zip`` entry names."""
-    from ziptools import zip_member_crcs
+    from core.ziptools import zip_member_crcs
 
     crcs = {
         str(member["crc32"]).lower()

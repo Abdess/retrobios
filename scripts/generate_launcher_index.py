@@ -22,7 +22,7 @@ import json
 import sys
 from pathlib import Path
 
-from artifacts import write_text_atomic
+from core.artifacts import write_text_atomic
 from build_port import (
     BATOCERA_ZIP,
     MUOS_APP,

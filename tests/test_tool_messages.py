@@ -18,7 +18,7 @@ from unittest import mock
 import common
 import diff_truth
 import pipeline
-import truth
+from resolve import truth
 import verify
 
 REPO_ROOT = Path(__file__).resolve().parents[1]

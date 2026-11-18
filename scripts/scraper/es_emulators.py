@@ -14,7 +14,7 @@ from __future__ import annotations
 import json
 from collections.abc import Iterable, Mapping
 
-from safeparse import parse_untrusted_xml
+from model.safeparse import parse_untrusted_xml
 
 # system -> [(emulator, [core, ...]), ...], both in the list's order.
 SystemEmulators = dict[str, list[tuple[str, list[str]]]]

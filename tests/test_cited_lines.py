@@ -14,7 +14,7 @@ import unittest
 from pathlib import Path
 
 import upstream
-from safeparse import yaml_load
+from model.safeparse import yaml_load
 
 ROOT = Path(__file__).resolve().parents[1]
 

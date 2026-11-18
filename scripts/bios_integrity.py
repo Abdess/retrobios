@@ -43,7 +43,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from largefiles import load_registered_paths
+from model.largefiles import load_registered_paths
 
 MISREAD = "misread"
 RESTORED = "restored"

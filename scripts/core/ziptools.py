@@ -16,8 +16,9 @@ import sys
 import tempfile
 import zipfile
 
-from artifacts import process_umask, set_plain_mode
-from hashing import md5sum
+from core.artifacts import process_umask, set_plain_mode
+from core.hashing import md5sum
+from core.paths import REPO_ROOT
 
 
 def check_inside_zip(container: str, file_name: str, expected_md5: str) -> str:
@@ -114,7 +115,7 @@ _zip_contents_cache: tuple[tuple, dict] | None = None
 # a cached answer is never stale. Every pipeline step that resolves a
 # zipped_file used to decompress the 54 845 members again, about 23 s each.
 MEMBER_CACHE = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".cache", "zip_member_md5.json"
+    REPO_ROOT, ".cache", "zip_member_md5.json"
 )
 
 

@@ -14,7 +14,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from validation import agnostic_substitute
+from resolve.validation import agnostic_substitute
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 

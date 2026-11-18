@@ -26,12 +26,7 @@ from typing import NamedTuple
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import composition_tier, load_database
-from largefiles import (
-    LARGE_FILES_RELEASE,
-    LARGE_FILES_REPO,
-    asset_names,
-    registered_paths,
-)
+from model.largefiles import LARGE_FILES_RELEASE, LARGE_FILES_REPO, asset_names, registered_paths
 
 
 class AssetFinding(NamedTuple):

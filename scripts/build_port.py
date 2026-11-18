@@ -38,7 +38,7 @@ import sys
 import zipfile
 from pathlib import Path
 
-from artifacts import ArtifactLockBusy, artifact_lock
+from core.artifacts import ArtifactLockBusy, artifact_lock
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PORT_DIR = "retrobios"

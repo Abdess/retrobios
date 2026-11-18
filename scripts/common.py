@@ -25,21 +25,21 @@ import zipfile
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, TextIO, TypedDict
 
-from alternatives import derive_member_requirements
+from model.alternatives import derive_member_requirements
 
 if TYPE_CHECKING:
     from typing_extensions import Unpack
 
 # Re-exported so the existing call sites keep working while the
 # modules above become the place to import from.
-from safeparse import (
+from model.safeparse import (
     parse_untrusted_xml as parse_untrusted_xml,
     require_yaml as require_yaml,
     yaml_load as yaml_load,
     _pick_yaml_loader as _pick_yaml_loader,
     _YAML_LOADER as _YAML_LOADER,
 )
-from hashing import (
+from core.hashing import (
     compute_hashes as compute_hashes,
     md5sum as md5sum,
     md5_composite as md5_composite,
@@ -48,7 +48,7 @@ from hashing import (
     _ALL_ALGORITHMS as _ALL_ALGORITHMS,
     _md5_composite_cache as _md5_composite_cache,
 )
-from ziptools import (
+from core.ziptools import (
     check_inside_zip as check_inside_zip,
     build_zip_contents_index as build_zip_contents_index,
     MAX_ZIP_MEMBERS as MAX_ZIP_MEMBERS,
@@ -61,7 +61,7 @@ from ziptools import (
     zip_member_crcs as zip_member_crcs,
     zip_member_names as zip_member_names,
 )
-from artifacts import (
+from core.artifacts import (
     write_if_changed as write_if_changed,
     write_text_atomic as write_text_atomic,
     copy_file_atomic as copy_file_atomic,
@@ -77,13 +77,13 @@ from artifacts import (
     _TIMESTAMP_PATTERNS as _TIMESTAMP_PATTERNS,
     _strip_timestamps as _strip_timestamps,
 )
-from largefiles import (
+from model.largefiles import (
     LARGE_FILES_RELEASE as LARGE_FILES_RELEASE,
     LARGE_FILES_REPO as LARGE_FILES_REPO,
     LARGE_FILES_CACHE as LARGE_FILES_CACHE,
     fetch_large_file as fetch_large_file,
 )
-from dumpcatalog import (
+from model.dumpcatalog import (
     DEFAULT_PROVENANCE_DIR as DEFAULT_PROVENANCE_DIR,
     load_provenance_snapshots as load_provenance_snapshots,
     build_provenance_index as build_provenance_index,
@@ -402,7 +402,7 @@ def declared_content_checks(file_entry: dict) -> set[str]:
 
 @functools.lru_cache(maxsize=4096)
 def _romdir_verdict(path: str, size: int, mtime_ns: int, spec: str) -> bool:
-    from romdir import romdir_accepts
+    from core.romdir import romdir_accepts
 
     with open(path, "rb") as f:
         data = f.read()
@@ -1518,7 +1518,7 @@ def _required_met(members: list[dict], held: Callable[[dict], bool]) -> tuple[in
     alternatives, met when one of its members is held: Odin reads the
     first of three Hikaru boot ROMs it finds in hikaru.zip.
     """
-    from alternatives import groups_of
+    from model.alternatives import groups_of
 
     met = 0
     complete = True
@@ -3365,7 +3365,7 @@ def standalone_set(config: dict) -> set[str]:
         for core in entry.get("cores") or []
     }
     if names - {n for n in names if n.startswith(CORE_DIR_PREFIX)}:
-        from launchers import executed_files, handed_directories
+        from resolve.launchers import executed_files, handed_directories
 
         handed = handed_directories(config)
         # The record's position travels too: a search list is read in order.
@@ -3385,7 +3385,7 @@ def standalone_set(config: dict) -> set[str]:
             if f.get("name")
         }
         # The machines a record offers under its systems, by normalized id.
-        from launchers import native_systems
+        from resolve.launchers import native_systems
 
         natives = native_systems(config)
         names |= {
@@ -3421,7 +3421,7 @@ def merged_standalone_set(configs: Iterable[dict]) -> set[str]:
 
 def _handed(standalone_cores: Iterable[str]) -> list:
     """The directories a standalone set carries, as launchers built them."""
-    from launchers import HandedDirectory
+    from resolve.launchers import HandedDirectory
 
     found = []
     for tag in standalone_cores:
@@ -3465,7 +3465,7 @@ def entry_launch_systems(entry: dict, index: Mapping[str, set[str]]) -> frozense
 
 def _executed(standalone_cores: Iterable[str]) -> list:
     """The files a standalone set's launchers execute, as launchers read them."""
-    from launchers import ExecutedFile
+    from resolve.launchers import ExecutedFile
 
     found = []
     for tag in standalone_cores:
@@ -3560,7 +3560,7 @@ def standalone_destination(
     layout = standalone_layout_path(entry, profile)
     if layout is None or not bindings:
         return None
-    from launchers import bound_path
+    from resolve.launchers import bound_path
 
     return bound_path(layout, bindings)
 
@@ -3573,7 +3573,7 @@ def standalone_bindings_for(
 
     ``systems`` are those the entry is launched for (entry_launch_systems).
     """
-    from launchers import directory_handles, pool_folders, standalone_bindings
+    from resolve.launchers import directory_handles, pool_folders, standalone_bindings
 
     declared = directory_handles(profile)
     pools = pool_folders(profile)
@@ -3671,7 +3671,7 @@ class _StandaloneLaunches:
 
         # The layout folders a search setting stands for (standalone_pools):
         # bound, the launcher passes the setting and the default is not read.
-        from launchers import pool_folders as _pool_folders
+        from resolve.launchers import pool_folders as _pool_folders
 
         pool_folders = {v.strip("/") for v in _pool_folders(profile).values()} - {""}
         return cls(
@@ -3931,7 +3931,7 @@ def content_folder_tags(config: dict) -> set[str]:
     boards = content_folder_boards(config)
     target = config.get(TARGET_KEY)
     pairs = {pair for pair, on in boards.items() if not target or on is None or target in on}
-    from launchers import _roms_place
+    from resolve.launchers import _roms_place
 
     def place(folder: str) -> list:
         return list(_roms_place(config, folder) or ())
@@ -4081,7 +4081,7 @@ def _libretro_content_layout(
     # path with stand for these: libretro MAME hands MAME
     # <system>/mame/bios unless the content's command line names
     # another (retro_init.cpp Set_Path_Option, execute_game_cmd).
-    from launchers import pool_folders
+    from resolve.launchers import pool_folders
 
     pools = set(pool_folders({"standalone_pools": view.get("libretro_pools")}).values())
     out: list = []

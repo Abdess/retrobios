@@ -16,7 +16,7 @@ import unittest
 from collections import OrderedDict
 from pathlib import Path
 
-from exporter.baseline import NativeFile, NativeSystem, Report, build_native_model
+from resolve.reconcile import NativeFile, NativeSystem, Report, build_native_model
 from exporter.bizhawk_exporter import Exporter as BizHawk
 from exporter.misterfpga_exporter import Exporter as Mister
 from exporter.romm_exporter import Exporter as Romm
@@ -191,7 +191,7 @@ class RetroBatKeepsWhatWeDoNotModel(unittest.TestCase):
             ]},
             "newsys": {"name": "New", "biosFiles": [{"md5": B, "file": "bios/new.bin"}]},
         }
-        from exporter.baseline import Report
+        from resolve.reconcile import Report
 
         produced = json.loads(RetroBat().render(
             systems, Report(), {"batocera-systems.json": json.dumps(original)},
@@ -251,7 +251,7 @@ class PureDataExportsKeepWhatWeDoNotModel(unittest.TestCase):
                           filled=[])
 
     def test_recalbox(self):
-        from exporter.baseline import Report
+        from resolve.reconcile import Report
         from exporter.recalbox_exporter import Exporter as Recalbox
 
         fe = self._file("a.bin", "nes", destination="nes/a.bin", core="libretro:fceumm")
@@ -277,7 +277,7 @@ class PureDataExportsKeepWhatWeDoNotModel(unittest.TestCase):
         self.assertIn('mandatory="false"', produced)
 
     def test_system_dat(self):
-        from exporter.baseline import Report
+        from resolve.reconcile import Report
 
         fe = self._file("a.bin", "Nintendo - NES")
         systems = {"Nintendo - NES": NativeSystem("Nintendo - NES", files=[fe])}
@@ -301,7 +301,7 @@ class PureDataExportsKeepWhatWeDoNotModel(unittest.TestCase):
     def test_two_additions_differing_by_directory_are_two_lines(self):
         """PCSX2's vulkan and opengl convert.glsl were both written under the
         bare name, so the second was dropped and still counted as added."""
-        from exporter.baseline import Report
+        from resolve.reconcile import Report
 
         shaders = [
             NativeFile("convert.glsl", f"pcsx2/resources/shaders/{api}/convert.glsl",
@@ -977,7 +977,7 @@ class TheSummaryCountsWhatTheFileCarries(unittest.TestCase):
 
     def test_romm_drops_the_hashes_it_counts_cleared(self):
         from export_native import landed_changes
-        from exporter.baseline import Report
+        from resolve.reconcile import Report
 
         fe = self._contradicted()
         systems = {"psx": NativeSystem("psx", files=[fe])}

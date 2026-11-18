@@ -42,7 +42,7 @@ import archive_build
 import release_record
 from siteguides import PACKAGE_COMMAND, install_command
 from validate_pr import LARGE_FILE_ISSUE_URL
-from largefiles import LARGE_FILES_CACHE, load_registered_paths
+from model.largefiles import LARGE_FILES_CACHE, load_registered_paths
 import pr_checks
 from verify import verify_platform
 

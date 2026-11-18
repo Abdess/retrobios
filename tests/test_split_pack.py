@@ -28,7 +28,7 @@ import zipfile
 from pathlib import Path
 
 import generate_pack as builder
-from artifacts import artifact_lock
+from core.artifacts import artifact_lock
 import split_pack
 
 REPO_ROOT = Path(__file__).resolve().parent.parent

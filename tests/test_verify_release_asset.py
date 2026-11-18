@@ -66,7 +66,7 @@ class ReleaseAssetNotCached(unittest.TestCase):
         common._platform_config_cache.clear()
         common._emulator_profiles_cache.clear()
         patches = (
-            mock.patch("largefiles.load_registered_paths", return_value=REGISTERED),
+            mock.patch("model.largefiles.load_registered_paths", return_value=REGISTERED),
             mock.patch.dict(os.environ, {"RETROBIOS_OFFLINE": ""}),
         )
         for patch in patches:

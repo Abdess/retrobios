@@ -17,12 +17,8 @@ import sys
 import tempfile
 import unittest
 
-from exporter.baseline import pair_entries
-from truth import (
-    _diff_system,
-    _merge_file_into_system,
-    generate_platform_truth,
-)
+from resolve.reconcile import pair_entries
+from resolve.truth import _diff_system, _merge_file_into_system, generate_platform_truth
 
 
 def _entry(name: str, **hashes) -> dict:

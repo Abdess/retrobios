@@ -23,8 +23,8 @@ import unittest
 import unittest.mock
 from pathlib import Path
 
-import crypto_verify
-import sect233r1 as ec
+from core import crypto_verify
+from core import sect233r1 as ec
 
 
 class FieldArithmetic(unittest.TestCase):

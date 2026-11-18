@@ -45,10 +45,10 @@ from common import (
     parse_md5_list,
     require_directory,
 )
-from hashing import parse_hash_list
-from nativemode import digest_algorithm
+from core.hashing import parse_hash_list
+from resolve.nativemode import digest_algorithm
 from dedup import _in_nodedup_dir
-from validation import frontend_digest_matches, inner_rom_check
+from resolve.validation import frontend_digest_matches, inner_rom_check
 
 try:
     import yaml

@@ -24,7 +24,7 @@ import yaml
 import common
 import generate_db
 import generate_pack as builder
-from validation import core_size_refusal
+from resolve.validation import core_size_refusal
 from verify import find_undeclared_files, verify_platform
 
 REPO_ROOT = Path(__file__).resolve().parent.parent

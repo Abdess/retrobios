@@ -26,7 +26,7 @@ from common import (
     truth_target_dir,
     yaml_load,
 )
-from truth import diff_platform_truth
+from resolve.truth import diff_platform_truth
 
 yaml = require_yaml()
 

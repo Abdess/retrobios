@@ -12,7 +12,7 @@ import unittest
 import zipfile
 from pathlib import Path
 
-from scripts.deterministic_zip import (
+from scripts.core.deterministic_zip import (
     _FIXED_DATE_TIME,
     rebuild_zip_deterministic,
     verify_zip_determinism,

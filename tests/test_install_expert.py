@@ -267,7 +267,7 @@ class TheSlotRuleIsTheBuilders(unittest.TestCase):
         import random
 
         import manifestselect
-        import slot as slot_mod
+        from resolve import slot as slot_mod
 
         rng = random.Random(7)
         for _round in range(400):
@@ -302,7 +302,7 @@ class TheSlotRuleIsTheBuilders(unittest.TestCase):
         import random
 
         import manifestselect
-        import slot as slot_mod
+        from resolve import slot as slot_mod
 
         rng = random.Random(11)
         for _round in range(400):

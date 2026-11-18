@@ -17,8 +17,8 @@ import unittest
 import zlib
 from pathlib import Path
 
-from nativemode import HASH_RULES, SIZE_AND_ANY_HASH
-from validation import baseline_verdict, frontend_digest_matches
+from resolve.nativemode import HASH_RULES, SIZE_AND_ANY_HASH
+from resolve.validation import baseline_verdict, frontend_digest_matches
 from verify import Status, verify_entry_md5
 
 REPO_ROOT = Path(__file__).resolve().parents[1]

@@ -38,8 +38,8 @@ from typing import TYPE_CHECKING, TypedDict
 import slots
 
 sys.path.insert(0, os.path.dirname(__file__))
-from hashing import parse_md5_list
-from alternatives import (
+from core.hashing import parse_md5_list
+from model.alternatives import (
     core_file_spares,
     set_fields,
     set_keys,
@@ -102,17 +102,17 @@ from common import (
     system_dir_path,
 )
 
-from exporter.candidates import BIOS, EntryCategories
-from launchers import LauncherLayer, declared_destinations, held_record, launcher_unproven
+from resolve.categories import BIOS, EntryCategories
+from resolve.launchers import LauncherLayer, declared_destinations, held_record, launcher_unproven
 from cross_reference import launcher_reads_not_held
-from nativemode import (
+from resolve.nativemode import (
     SIZE_AND_ANY_HASH,
     digest_algorithm,
     hash_mismatch_excludes_file,
     normalize as normalize_mode,
     reads_file_contents,
 )
-from validation import (
+from resolve.validation import (
     baseline_verdict,
     case_folded_slots,
     declaration_settles,
@@ -1626,7 +1626,7 @@ def _cut_game_data(
     system_filter: list[str] | None,
 ) -> tuple[dict, dict, list[str]]:
     """The config and profiles of a --no-game-data pack, and what it leaves out."""
-    from gamedata import without_game_data
+    from resolve.gamedata import without_game_data
 
     if emu_profiles is None:
         emu_profiles = load_emulator_profiles(emulators_dir)

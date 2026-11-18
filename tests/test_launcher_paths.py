@@ -16,7 +16,7 @@ import textwrap
 import unittest
 from pathlib import Path
 
-from launchers import handed_directories, standalone_bindings
+from resolve.launchers import handed_directories, standalone_bindings
 from scraper import retrobat_launchers as rl
 from scraper.batocera_launchers import (
     GENERATORS,

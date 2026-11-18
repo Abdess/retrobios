@@ -16,7 +16,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from common import resolve_platform_cores
-from exporter.candidates import GAME_DATA, EntryCategories
+from resolve.categories import GAME_DATA, EntryCategories
 
 
 @dataclass(frozen=True)

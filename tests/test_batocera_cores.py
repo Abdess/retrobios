@@ -113,7 +113,7 @@ class AnEmulatorLaunchedBothWaysGetsBothLayouts(unittest.TestCase):
     def test_upstream_yaml_is_read_as_its_code_reads_it(self):
         """configgen-defaults.yml names rtcw's core twice. The strict loader
         stopped the rescrape, while Batocera's PyYAML keeps the last value."""
-        from safeparse import yaml_load_upstream
+        from model.safeparse import yaml_load_upstream
 
         self.assertEqual(
             yaml_load_upstream("rtcw:\n  core: iortcw\n  core: taradino\n"),

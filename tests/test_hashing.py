@@ -10,7 +10,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-import hashing
+from core import hashing
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 

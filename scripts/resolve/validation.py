@@ -25,9 +25,9 @@ from common import (
     sanitize_pack_path,
     shape_fits,
 )
-from hashing import md5_composite, parse_hash_list, parse_md5_list
-from nativemode import SIZE_AND_ANY_HASH, digest_algorithm, hash_mismatch_excludes_file
-from ziptools import check_inside_zip
+from core.hashing import md5_composite, parse_hash_list, parse_md5_list
+from resolve.nativemode import SIZE_AND_ANY_HASH, digest_algorithm, hash_mismatch_excludes_file
+from core.ziptools import check_inside_zip
 
 if TYPE_CHECKING:
     from typing_extensions import Unpack
@@ -169,7 +169,7 @@ def _rule_failure(
         if check not in skip and not content_fits({"validation": [check], check: spec}, local_path):
             return _CONTENT_REASONS[check]
     if rule["crypto"] - skip:
-        from crypto_verify import check_crypto_validation
+        from core.crypto_verify import check_crypto_validation
 
         return check_crypto_validation(local_path, filename, bios_dir)
     return None
@@ -539,7 +539,7 @@ def check_file_validation(
 
     # Signature/crypto checks (3DS RSA, AES)
     if entry["crypto_only"]:
-        from crypto_verify import check_crypto_validation
+        from core.crypto_verify import check_crypto_validation
 
         crypto_reason = check_crypto_validation(local_path, filename, bios_dir)
         if crypto_reason:

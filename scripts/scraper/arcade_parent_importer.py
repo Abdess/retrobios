@@ -50,7 +50,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import IO
 
-from ..artifacts import write_if_changed
+from core.artifacts import write_if_changed
 from ..common import load_emulator_profiles, run_cli
 from .romset_dat_importer import (
     LISTXML_CHUNK,

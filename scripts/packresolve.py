@@ -13,15 +13,15 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-from largefiles import fetch_large_file
-from hashing import cut_md5_owner
+from model.largefiles import fetch_large_file
+from core.hashing import cut_md5_owner
 from common import (
     declared_hash_verdict,
     resolution_is_hash_exact,
     resolve_local_file,
     sanitize_pack_path,
 )
-from validation import inner_rom_check
+from resolve.validation import inner_rom_check
 # CLI-wide network policy.  Public helpers can override it explicitly, while
 # every CLI mode inherits --offline (including large-file release fallback).
 _OFFLINE = False
@@ -173,7 +173,7 @@ def pending_release_asset(
     asset the cache lacks was reported missing while an online build packed
     it. ``registered`` is the .gitignore registry (load_registered_paths).
     """
-    from largefiles import asset_candidates, asset_names, load_registered_paths
+    from model.largefiles import asset_candidates, asset_names, load_registered_paths
 
     name = file_entry.get("name", "")
     if not name or name.endswith("/") or file_entry.get("type") == "directory":

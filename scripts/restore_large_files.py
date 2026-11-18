@@ -24,7 +24,7 @@ import sys
 import tempfile
 
 sys.path.insert(0, os.path.dirname(__file__))
-from artifacts import set_plain_mode
+from core.artifacts import set_plain_mode
 from common import copy_file_atomic, load_database
 
 
