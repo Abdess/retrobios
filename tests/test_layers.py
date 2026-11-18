@@ -59,6 +59,7 @@ PENDING_TOP_LEVEL_IMPORTS = frozenset({
     ("probes.campaign", "autorun"),
     ("probes.gate", "autorun"),
     ("probes.host", "autorun"),
+    ("probes.packprobe", "autorun"),
     ("sitegen.build", "release_record"),
     ("sitegen.config", "release_record"),
     ("sitegen.decorate", "release_record"),

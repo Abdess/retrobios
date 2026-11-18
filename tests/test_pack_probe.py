@@ -25,6 +25,8 @@ from pathlib import Path
 
 from model import measurements as mr
 import pack_probe as pp
+from probes import packlayout
+from probes import packprobe
 from model import profiles as model_profiles
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -57,37 +59,37 @@ KRONOS = {
 }
 
 
-def layout(files: dict[str, int], entries: dict[str, str | None] | None = None) -> pp.Layout:
+def layout(files: dict[str, int], entries: dict[str, str | None] | None = None) -> packlayout.Layout:
     """A layout whose sizes are given, nothing on disk."""
-    return pp.Layout("pack", Path("/nonexistent"), entries or {rel: rel for rel in files}, {},
+    return packlayout.Layout("pack", Path("/nonexistent"), entries or {rel: rel for rel in files}, {},
                      sizes=dict(files))
 
 
 class CoreChoice(unittest.TestCase):
     def test_system_ids_compare_normalised(self) -> None:
         config = {"systems": {"megacd": {}, "psx": {}}}
-        self.assertEqual(pp.platform_system(config, "sega-mega-cd"), "megacd")
-        self.assertIsNone(pp.platform_system(config, "sega-saturn"))
+        self.assertEqual(packprobe.platform_system(config, "sega-mega-cd"), "megacd")
+        self.assertIsNone(packprobe.platform_system(config, "sega-saturn"))
 
     def test_standalone_only_is_not_run_as_a_core(self) -> None:
         both = {"type": "standalone + libretro", "cores": ["duckstation", "duckstation-sa"]}
-        self.assertTrue(pp.libretro_build_runs("duckstation", both, {}))
-        self.assertFalse(pp.libretro_build_runs("duckstation", both, {"standalone_cores": ["duckstation"]}))
-        self.assertTrue(pp.libretro_build_runs("duckstation", both, {
+        self.assertTrue(packprobe.libretro_build_runs("duckstation", both, {}))
+        self.assertFalse(packprobe.libretro_build_runs("duckstation", both, {"standalone_cores": ["duckstation"]}))
+        self.assertTrue(packprobe.libretro_build_runs("duckstation", both, {
             "standalone_cores": ["duckstation"], "dual_mode_cores": ["duckstation-sa"]}))
-        self.assertFalse(pp.libretro_build_runs("x", {"type": "standalone"}, {}))
-        self.assertFalse(pp.libretro_build_runs("x", {"type": "alias"}, {}))
+        self.assertFalse(packprobe.libretro_build_runs("x", {"type": "standalone"}, {}))
+        self.assertFalse(packprobe.libretro_build_runs("x", {"type": "alias"}, {}))
 
     def test_buildbot_name(self) -> None:
         buildbot = {"mednafen_psx", "mednafen_psx_hw", "kronos"}
         beetle = {"cores": ["beetle_psx", "mednafen_psx", "mednafen_psx_hw"]}
         # The target names both builds: both run.
-        self.assertEqual(pp.so_names("beetle_psx", beetle, buildbot, {"mednafen_psx", "mednafen_psx_hw"}),
+        self.assertEqual(packprobe.so_names("beetle_psx", beetle, buildbot, {"mednafen_psx", "mednafen_psx_hw"}),
                          ["mednafen_psx", "mednafen_psx_hw"])
         # A target in the platform's own names: the first buildbot name.
-        self.assertEqual(pp.so_names("beetle_psx", beetle, buildbot, {"beetle-psx"}), ["mednafen_psx"])
-        self.assertEqual(pp.so_names("kronos", {"cores": ["kronos"]}, buildbot, None), ["kronos"])
-        self.assertEqual(pp.so_names("gone", {"cores": ["gone"]}, buildbot, None), [])
+        self.assertEqual(packprobe.so_names("beetle_psx", beetle, buildbot, {"beetle-psx"}), ["mednafen_psx"])
+        self.assertEqual(packprobe.so_names("kronos", {"cores": ["kronos"]}, buildbot, None), ["kronos"])
+        self.assertEqual(packprobe.so_names("gone", {"cores": ["gone"]}, buildbot, None), [])
 
     def test_choose_cores(self) -> None:
         profiles = {"beetle_saturn": SATURN, "kronos": KRONOS, "swanstation": SCANNER,
@@ -95,8 +97,8 @@ class CoreChoice(unittest.TestCase):
         config = {"_key": "p", "cores": ["beetle-saturn", "kronos", "ssf", "swanstation"],
                   "systems": {"saturn": {}}}
         buildbot = {"mednafen_saturn", "kronos", "swanstation"}
-        self.assertEqual(pp.choose_cores(config, profiles, "sega-saturn", buildbot, None),
-                         [pp.CoreChoice("beetle_saturn", "mednafen_saturn"), pp.CoreChoice("kronos", "kronos")])
+        self.assertEqual(packprobe.choose_cores(config, profiles, "sega-saturn", buildbot, None),
+                         [packprobe.CoreChoice("beetle_saturn", "mednafen_saturn"), packprobe.CoreChoice("kronos", "kronos")])
 
 
 class Staging(unittest.TestCase):
@@ -105,23 +107,23 @@ class Staging(unittest.TestCase):
              "kronos/stvbios.zip": 10, "mame/hash/saturn.xml": 5, "standalone.bin": 1}
 
     def test_declared_names_aliases_and_platform_list(self) -> None:
-        staged = pp.initial_stage(layout(self.FILES), SATURN, ["other.rom", "absent.bin"])
+        staged = packprobe.initial_stage(layout(self.FILES), SATURN, ["other.rom", "absent.bin"])
         self.assertEqual(staged, {"sega_101.bin", "saturn_bios.bin", "other.rom"})
 
     def test_a_folder_comes_whole(self) -> None:
-        staged = pp.initial_stage(layout(self.FILES), KRONOS, [])
+        staged = packprobe.initial_stage(layout(self.FILES), KRONOS, [])
         self.assertEqual(staged, {"kronos/saturn_bios.bin", "kronos/stvbios.zip"})
 
     def test_a_core_that_scans_gets_every_root_file_of_its_sizes(self) -> None:
-        staged = pp.initial_stage(layout(self.FILES), SCANNER, [])
+        staged = packprobe.initial_stage(layout(self.FILES), SCANNER, [])
         self.assertEqual(staged, {"sega_101.bin", "saturn_bios.bin", "scph5501.bin", "big.bin"})
 
     def test_grow_to_a_fixed_point(self) -> None:
         staged = {"sega_101.bin"}
-        added = pp.grow_stage(self.FILES, staged, ["other.rom", "absent.bin", "mame/hash", "kronos"])
+        added = packprobe.grow_stage(self.FILES, staged, ["other.rom", "absent.bin", "mame/hash", "kronos"])
         self.assertEqual(added, {"other.rom", "mame/hash/saturn.xml", "kronos/saturn_bios.bin",
                                  "kronos/stvbios.zip"})
-        self.assertEqual(pp.grow_stage(self.FILES, staged | added, ["absent.bin"]), set())
+        self.assertEqual(packprobe.grow_stage(self.FILES, staged | added, ["absent.bin"]), set())
 
 
 class Mapping(unittest.TestCase):
@@ -133,7 +135,7 @@ class Mapping(unittest.TestCase):
                                 {"path": "extra.bin", "sha1_after": "b" * 40},
                                 {"path": "bkram.bin", "sha1_after": "c" * 40}],
                "files_probed_absent": ["saturn_bios.bin", "mpr-17933.bin", "cfg.ini"]}
-        opened, findings = pp.map_run(lay, {"sega_101.bin", "extra.bin"}, rep, SATURN)
+        opened, findings = packprobe.map_run(lay, {"sega_101.bin", "extra.bin"}, rep, SATURN)
         self.assertEqual(opened, [
             {"path": "sega_101.bin", "entry": "sega_101.bin", "sha1": "a" * 40, "created": False},
             {"path": "extra.bin", "entry": None, "sha1": "b" * 40, "created": False},
@@ -150,7 +152,7 @@ class Mapping(unittest.TestCase):
         lay = layout({"bios_MD.bin": 1})
         rep = {"files_opened": [{"path": "bios_MD.bin", "sha1_after": "a" * 40}],
                "files_probed_absent": ["tmss.md", "bios_CD_U.bin"]}
-        _, findings = pp.map_run(lay, {"bios_MD.bin"}, rep, profile)
+        _, findings = packprobe.map_run(lay, {"bios_MD.bin"}, rep, profile)
         self.assertEqual(findings, [{"kind": "missing_declared", "path": "bios_CD_U.bin",
                                      "declared_by": ["bios_CD_U.bin"], "paths": []}])
 
@@ -159,7 +161,7 @@ class Mapping(unittest.TestCase):
                     "case_variants": [{"dest": "A.BIN"}, {"dest": "a.bin"}],
                     "data_directories": [{"ref": "bluemsx", "dest": "", "files": {"Machines/x.ini": {}}},
                                          {"ref": "dolphin", "dest": "dolphin-emu/Sys/", "files": {"y": {}}}]}
-        self.assertEqual(pp.manifest_entries(manifest), {
+        self.assertEqual(packlayout.manifest_entries(manifest), {
             "a.bin": "files:a.bin", "A.BIN": "case_variants:A.BIN",
             "Machines/x.ini": "data_directories:bluemsx:Machines/x.ini",
             "dolphin-emu/Sys/y": "data_directories:dolphin:y"})
@@ -167,14 +169,14 @@ class Mapping(unittest.TestCase):
 
 class Verdict(unittest.TestCase):
     def test_a_record_before_the_oracle_is_unknown(self) -> None:
-        self.assertEqual(pp.run_verdict(None), ("unknown", None))
-        self.assertEqual(pp.run_verdict({"variants": [{"repetitions": [{}]}]}), ("unknown", None))
+        self.assertEqual(packprobe.run_verdict(None), ("unknown", None))
+        self.assertEqual(packprobe.run_verdict({"variants": [{"repetitions": [{}]}]}), ("unknown", None))
 
     def test_the_first_variant_decides(self) -> None:
         evidence = {"rule": "reference_frame", "detail": "frame 120"}
         record = {"variants": [{"verdict": "boots", "verdict_evidence": evidence, "repetitions": [{}]}]}
-        self.assertEqual(pp.run_verdict(record), ("boots", evidence))
-        self.assertEqual(pp.run_verdict({"variants": [{"verdict": "maybe"}]}), ("unknown", None))
+        self.assertEqual(packprobe.run_verdict(record), ("boots", evidence))
+        self.assertEqual(packprobe.run_verdict({"variants": [{"verdict": "maybe"}]}), ("unknown", None))
 
 
 class Line(unittest.TestCase):
@@ -202,7 +204,7 @@ class Line(unittest.TestCase):
         }
 
     def test_the_line_is_sealed_valid_and_read_back(self) -> None:
-        sealed = pp.append_line(self.line(), self.root)
+        sealed = packprobe.append_line(self.line(), self.root)
         self.assertEqual(mr.read_campaign(self.root, mr.PACK_PROBES), [sealed])
         try:
             from jsonschema import Draft202012Validator
@@ -231,7 +233,7 @@ class SitePages(unittest.TestCase):
     def test_pack_runs_stay_off_the_emulator_page(self) -> None:
         from sitegen import measurements as sm
 
-        subject = pp.subject_for("retroarch", "pack", "sega-saturn", "mednafen_saturn", "Game (Japan)")
+        subject = packprobe.subject_for("retroarch", "pack", "sega-saturn", "mednafen_saturn", "Game (Japan)")
         self.assertEqual(subject, "pack-retroarch-pack-sega-saturn-mednafen-saturn-game-japan")
         index = {"items": [{"emulator": "beetle_saturn", "subject": subject},
                            {"emulator": "beetle_saturn", "subject": "boot-sega-101-bin"}]}
@@ -277,10 +279,10 @@ class Lock(unittest.TestCase):
             return subprocess.CompletedProcess(command, 2, "", "refused")
 
         lay = layout({"a.bin": 1})
-        with unittest.mock.patch.object(pp, "PROBE_LOCK", lock), \
-                unittest.mock.patch.object(pp.subprocess, "run", fake_run):
+        with unittest.mock.patch.object(packprobe, "PROBE_LOCK", lock), \
+                unittest.mock.patch.object(packprobe.subprocess, "run", fake_run):
             for _ in range(2):
-                self.assertEqual(pp.core_probe(["run"], {"a.bin"}, lay, work), (2, None, "refused"))
+                self.assertEqual(packprobe.core_probe(["run"], {"a.bin"}, lay, work), (2, None, "refused"))
         self.assertEqual(held, [True, True])
         self.assertFalse(try_lock())
 
@@ -293,7 +295,7 @@ class RecordsNameNoLocalPath(unittest.TestCase):
         root = Path("/srv/run/tmp/pack_probe/retroarch/installer")
         out = (f"Copy it from an owned copy of the game into {root / 'system'}/jazz2/Source/.\n"
                f"Saves go to {root / 'saves'}.\n")
-        summary = pp.installer_summary(out, root / "system", root / "saves")
+        summary = packlayout.installer_summary(out, root / "system", root / "saves")
         self.assertEqual(summary, "Copy it from an owned copy of the game into <dest>/jazz2/Source/. "
                                   "Saves go to <save-dir>.")
 
@@ -308,9 +310,9 @@ class RecordsNameNoLocalPath(unittest.TestCase):
         def fake_run(command, **kwargs):
             return subprocess.CompletedProcess(command, 1, "", f'  File "{script}", line 9\n')
 
-        with unittest.mock.patch.object(pp, "PROBE_LOCK", work / "probe.lock"), \
-                unittest.mock.patch.object(pp.subprocess, "run", fake_run):
-            code, record, error = pp.core_probe(["run"], set(), layout({}), work)
+        with unittest.mock.patch.object(packprobe, "PROBE_LOCK", work / "probe.lock"), \
+                unittest.mock.patch.object(packprobe.subprocess, "run", fake_run):
+            code, record, error = packprobe.core_probe(["run"], set(), layout({}), work)
         self.assertEqual((code, record), (1, None))
         self.assertEqual(error, 'File "<repo>/scripts/core_probe.py", line 9')
 
@@ -342,25 +344,25 @@ class RealLayouts(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.work = TMP / "real"
         shutil.rmtree(cls.work, ignore_errors=True)
-        cls.pack = pp.build_pack("retroarch", cls.work / "dist", ["--system", "sony-playstation"])
-        cls.identity = pp.pack_identity(cls.pack)
+        cls.pack = packlayout.build_pack("retroarch", cls.work / "dist", ["--system", "sony-playstation"])
+        cls.identity = packlayout.pack_identity(cls.pack)
 
     @classmethod
     def tearDownClass(cls) -> None:
         shutil.rmtree(cls.work, ignore_errors=True)
 
     def test_pack_path(self) -> None:
-        lay = pp.pack_layout(self.pack, self.work / "pack", self.identity)
+        lay = packlayout.pack_layout(self.pack, self.work / "pack", self.identity)
         with zipfile.ZipFile(self.pack) as handle:
             members = {i.filename for i in handle.infolist() if not i.is_dir()}
         self.assertEqual(set(lay.files), members)
         self.assertEqual(lay.files["scph5501.bin"], "scph5501.bin")
         self.assertEqual(lay.source["pack"]["members"], len(members))
         swan = model_profiles.load_emulator_profiles(str(REPO_ROOT / "emulators"))["swanstation"]
-        self.assertIn("scph5501.bin", pp.initial_stage(lay, swan, []))
+        self.assertIn("scph5501.bin", packprobe.initial_stage(lay, swan, []))
 
     def test_installer_path(self) -> None:
-        lay = pp.installer_layout("retroarch", self.pack, self.identity,
+        lay = packlayout.installer_layout("retroarch", self.pack, self.identity,
                                   REPO_ROOT / "install" / "retroarch.json", self.work / "installer",
                                   ["--system", "sony-playstation"])
         self.assertEqual(lay.root, self.work / "installer" / "system")
