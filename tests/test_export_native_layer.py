@@ -17,7 +17,7 @@ import unittest
 from pathlib import Path
 
 from model.platforms import load_platform_config, _shared_yml_cache, _platform_config_cache
-from export_native import load_inputs
+from exporter.native import load_inputs
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

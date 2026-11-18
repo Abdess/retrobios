@@ -716,7 +716,7 @@ class UnreadableReleaseStopsTheScrape(unittest.TestCase):
                 self.assertRegex(recorded, f"(^|/){sha}(/|$)")
 
     def test_the_export_reads_the_recorded_tarball(self):
-        from export_native import _tarball_at
+        from exporter.originals import _tarball_at
 
         branch = "https://codeload.github.com/RetroPie/RetroPie-Setup/tar.gz/refs/heads/master"
         pinned = "https://codeload.github.com/RetroPie/RetroPie-Setup/tar.gz/" + "a" * 40
@@ -725,7 +725,7 @@ class UnreadableReleaseStopsTheScrape(unittest.TestCase):
         self.assertEqual(_tarball_at(branch, other), "")
 
     def test_the_export_reads_every_component_at_the_recorded_tree(self):
-        from export_native import pinned_base
+        from exporter.originals import pinned_base
 
         sha = "c" * 40
         base = pinned_base(

@@ -61,7 +61,7 @@ class RetroDeckWritesWhatItCounts(unittest.TestCase):
     def test_an_appended_revision_is_not_counted_corrected(self):
         # 64DD_IPL.bin declared twice (A, B), truth C: the render keeps both
         # and appends C, and the summary said "1 hashes corrected".
-        from export_native import landed_changes
+        from exporter.landed import landed_changes
 
         appended: set = set()
         merged = RetroDeck._merge(
@@ -210,7 +210,7 @@ class RetroBatCountsOneAdditionPerPath(unittest.TestCase):
     added: 78 additions announced for 75 items written."""
 
     def test_an_addition_at_a_held_path_does_not_land(self):
-        from export_native import landed_changes
+        from exporter.landed import landed_changes
 
         theirs = NativeFile("scph1001.bin", "scph1001.bin", "psx",
                             platform={"md5": A}, truth={"md5": A})
@@ -363,7 +363,7 @@ class EmuDeckWritesItsCorrections(unittest.TestCase):
         self.assertIn(d, withheld[0])
 
     def test_the_summary_reads_the_hook(self):
-        source = (Path(__file__).resolve().parents[1] / "scripts" / "export_native.py").read_text()
+        source = (Path(__file__).resolve().parents[1] / "scripts" / "exporter" / "native.py").read_text()
         self.assertIn("withheld = exporter.withheld()", source)
 
 
@@ -397,7 +397,7 @@ class MisterCountsWhatItWrites(unittest.TestCase):
         # The truth took the entry on a size contradiction and has no md5:
         # the render kept MiSTer's hash, wrote the new size, and the summary
         # announced the hash cleared.
-        from export_native import landed_changes
+        from exporter.landed import landed_changes
 
         fe = NativeFile("boot.rom", "NES/boot.rom", "nes",
                         platform={"md5": A, "size": 100},
@@ -545,7 +545,7 @@ class RommKeepsItsOwnKeys(unittest.TestCase):
         """known_bios_files.json writes PLUTONIA.WAD's sha1 with a leading
         space, which RomM compares as stored and never matches. The export
         wrote it stripped and the summary named no change for it."""
-        from export_native import landed_changes
+        from exporter.landed import landed_changes
 
         sha1 = "8" * 40
         fe = NativeFile("PLUTONIA.WAD", "doom/PLUTONIA.WAD", "doom",
@@ -899,7 +899,7 @@ class SummaryCountsWhatTheTruthRewrites(unittest.TestCase):
         )
 
     def test_a_format_with_the_fields_counts_them(self):
-        from export_native import landed_changes
+        from exporter.landed import landed_changes
 
         entry = self._entry()
         changes = landed_changes(SystemDat(), {"neocd": NativeSystem("neocd", files=[entry])})
@@ -908,7 +908,7 @@ class SummaryCountsWhatTheTruthRewrites(unittest.TestCase):
         self.assertEqual(changes.applied, ["neocd/neocdz.zip sha1"])
 
     def test_a_format_without_them_does_not(self):
-        from export_native import landed_changes
+        from exporter.landed import landed_changes
         from exporter.batocera_exporter import Exporter as Batocera
 
         entry = self._entry()
@@ -927,14 +927,14 @@ class AStaleTruthIsRefused(unittest.TestCase):
         import shutil
         import tempfile
 
-        import export_native
+        from exporter.native import load_inputs, StaleTruth
 
         root = Path(__file__).resolve().parents[1]
         truth_dir = Path(tempfile.mkdtemp(dir=root / "tmp"))
         self.addCleanup(shutil.rmtree, truth_dir, True)
         (truth_dir / "retropie.yml").write_text("platform: retropie\nsystems: {}\n")
-        with self.assertRaises(export_native.StaleTruth):
-            export_native.load_inputs("retropie", truth_dir, str(root / "platforms"))
+        with self.assertRaises(StaleTruth):
+            load_inputs("retropie", truth_dir, str(root / "platforms"))
 
 
 
@@ -976,7 +976,7 @@ class TheSummaryCountsWhatTheFileCarries(unittest.TestCase):
         )
 
     def test_romm_drops_the_hashes_it_counts_cleared(self):
-        from export_native import landed_changes
+        from exporter.landed import landed_changes
         from resolve.reconcile import Report
 
         fe = self._contradicted()
@@ -994,7 +994,7 @@ class TheSummaryCountsWhatTheFileCarries(unittest.TestCase):
         self.assertEqual(sorted(cleared), ["psx/scph5501.bin crc32", "psx/scph5501.bin sha1"])
 
     def test_a_fill_no_record_holds_is_not_counted(self):
-        from export_native import landed_changes
+        from exporter.landed import landed_changes
 
         fe = NativeFile(
             "scph5501.bin", "scph5501.bin", "psx",
@@ -1016,7 +1016,7 @@ class TheSummaryCountsWhatTheFileCarries(unittest.TestCase):
         self.assertNotIn("md5", merged[0])
 
     def test_recalbox_counts_nothing_on_an_element_it_keeps(self):
-        from export_native import landed_changes
+        from exporter.landed import landed_changes
 
         fe = NativeFile(
             "scph5501.bin", "scph5501.bin", "psx",
@@ -1050,7 +1050,7 @@ class ARemovedSizeIsReported(unittest.TestCase):
     took the entry over with no size: no counter named the removal."""
 
     def test_the_removal_is_counted(self):
-        from export_native import landed_changes
+        from exporter.landed import landed_changes
         from exporter.systemdat_exporter import Exporter as SystemDat
 
         fe = NativeFile("neocdz.zip", "neocdz.zip", "SNK - NeoGeo CD",
@@ -1067,7 +1067,7 @@ class AnExtendedListIsReported(unittest.TestCase):
     nothing. Only Batocera named the list it writes."""
 
     def _records(self, exporter):
-        from export_native import landed_changes
+        from exporter.landed import landed_changes
 
         platform = {"name": "f.bin", "md5": A, "core": "libretro/mesen"}
         fe = NativeFile("f.bin", "f.bin", "s", platform=platform,
@@ -1085,7 +1085,7 @@ class AnExtendedListIsReported(unittest.TestCase):
                 )
 
     def test_an_unchanged_value_reports_nothing(self):
-        from export_native import landed_changes
+        from exporter.landed import landed_changes
 
         for exporter in (RetroDeck(), Recalbox()):
             fe = NativeFile("f.bin", "f.bin", "s",

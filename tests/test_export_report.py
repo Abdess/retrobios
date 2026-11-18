@@ -14,7 +14,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import export_native
+from exporter import native
+from exporter.landed import landed_changes
+from exporter.native import current_truth, export_platform, write_report
 from siteexports import generate_exports_page, load_export_reports
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -38,7 +40,7 @@ class ExportReportIsWrittenAndRead(unittest.TestCase):
     def test_report_round_trips_through_the_page_loader(self):
         with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as scratch:
             report = _report("recalbox", ["es_bios.xml"])
-            export_native.write_report(Path(scratch) / "recalbox.json", report)
+            write_report(Path(scratch) / "recalbox.json", report)
             (Path(scratch) / "recalbox").mkdir()
             self.assertEqual(load_export_reports(scratch), [report])
 
@@ -47,11 +49,11 @@ class ExportReportIsWrittenAndRead(unittest.TestCase):
         output directory was never made and the report crashed --all."""
         with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as scratch:
             target = Path(scratch) / "fresh" / "retropie.json"
-            export_native.write_report(target, _report("retropie", []))
+            write_report(target, _report("retropie", []))
             self.assertTrue(target.exists())
 
     def test_export_keeps_every_change_not_the_printed_five(self):
-        source = (ROOT / "scripts" / "export_native.py").read_text(encoding="utf-8")
+        source = (ROOT / "scripts" / "exporter" / "native.py").read_text(encoding="utf-8")
         body = source[source.index("def export_platform("):source.index("def write_report(")]
         call = body[body.index("write_report("):]
         for key, value in (
@@ -214,12 +216,12 @@ class TheRunReportStatesWhatTheFileCarries(unittest.TestCase):
         ]}}}
         doubled = {"destination": "a.bin", "declarations": []}
         with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as scratch, \
-                mock.patch.object(export_native, "load_inputs",
+                mock.patch.object(native, "load_inputs",
                                   return_value=(truth, scraped)), \
-                mock.patch.object(export_native, "unpinned", return_value=[]), \
-                mock.patch.object(export_native, "removal_candidates", return_value=[]), \
-                mock.patch.object(export_native, "doubled_in", return_value=[doubled]):
-            ok, messages = export_native.export_platform(
+                mock.patch.object(native, "unpinned", return_value=[]), \
+                mock.patch.object(native, "removal_candidates", return_value=[]), \
+                mock.patch.object(native, "doubled_in", return_value=[doubled]):
+            ok, messages = export_platform(
                 "plat", Plain, Path(scratch), Path(scratch) / "out",
                 str(ROOT / "platforms"), Path(scratch) / "cache", False,
             )
@@ -323,7 +325,7 @@ class ReportedChangesAreTheDiff(unittest.TestCase):
         if not original_path.is_file():
             self.skipTest(f"no cached original for {platform}")
         config = load_platform_config(platform, str(ROOT / "platforms"))
-        truth = export_native.current_truth(platform, config, str(ROOT / "platforms"))
+        truth = current_truth(platform, config, str(ROOT / "platforms"))
         scraped = native_layer(config)
         systems, report = build_native_model(truth, scraped)
         exporter = discover_exporters()[platform]()
@@ -333,7 +335,7 @@ class ReportedChangesAreTheDiff(unittest.TestCase):
             for p in (UPSTREAM_CACHE / platform).iterdir() if p.is_file()
         }
         produced = exporter.render(systems, report, originals, scraped)[filename]
-        changes = export_native.landed_changes(exporter, systems).records
+        changes = landed_changes(exporter, systems).records
         return changes, original, produced, {"exporter": exporter, "systems": systems}
 
     @staticmethod
@@ -400,7 +402,7 @@ class ReportedChangesAreTheDiff(unittest.TestCase):
         if not archive.is_file():
             self.skipTest("no cached original for retropie")
         config = load_platform_config("retropie", str(ROOT / "platforms"))
-        truth = export_native.current_truth("retropie", config, str(ROOT / "platforms"))
+        truth = current_truth("retropie", config, str(ROOT / "platforms"))
         scraped = native_layer(config)
         systems, report = build_native_model(truth, scraped)
         exporter = discover_exporters()["retropie"]()
@@ -412,7 +414,7 @@ class ReportedChangesAreTheDiff(unittest.TestCase):
             before = exporter.modules({relative: originals[relative]})[relative][1]
             after = exporter.modules({relative: text})[relative][1]
             gained |= exporter._listed(after) - exporter._listed(before)
-        changes = export_native.landed_changes(exporter, systems).records
+        changes = landed_changes(exporter, systems).records
         reported = {c["name"].lower() for c in changes if c["kind"] == "added"}
         self.assertEqual(reported, gained)
         self.assertEqual(
@@ -460,7 +462,7 @@ class ThePageShowsEachValueBeforeAndAfter(unittest.TestCase):
             self.assertNotIn(glyph, self.page)
 
     def test_the_report_carries_every_change(self):
-        source = (ROOT / "scripts" / "export_native.py").read_text(encoding="utf-8")
+        source = (ROOT / "scripts" / "exporter" / "native.py").read_text(encoding="utf-8")
         body = source[source.index("def export_platform("):source.index("def write_report(")]
         self.assertIn('"changes": changes.records,', body)
 
@@ -569,7 +571,7 @@ class RemovalCandidatesNeedAReadingNoCoreAnswers(unittest.TestCase):
         self.assertNotIn("no entry the platform declares is removed", page)
 
     def test_the_report_carries_the_list(self):
-        source = (ROOT / "scripts" / "export_native.py").read_text(encoding="utf-8")
+        source = (ROOT / "scripts" / "exporter" / "native.py").read_text(encoding="utf-8")
         body = source[source.index("def export_platform("):source.index("def write_report(")]
         self.assertIn('"removal_candidates": candidates,', body)
 
@@ -666,7 +668,7 @@ class ADestinationDeclaredTwiceIsNamed(unittest.TestCase):
         self.assertEqual(self._doubled(), [])
 
     def test_the_run_counts_it_and_the_report_carries_it(self):
-        source = (ROOT / "scripts" / "export_native.py").read_text(encoding="utf-8")
+        source = (ROOT / "scripts" / "exporter" / "native.py").read_text(encoding="utf-8")
         body = source[source.index("def export_platform("):source.index("def write_report(")]
         self.assertIn('"doubled": doubled,', body)
         self.assertIn("declared twice for two files", body)

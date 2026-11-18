@@ -31,7 +31,7 @@ class NativeCacheTests(unittest.TestCase):
         self._tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self._tmp.cleanup)
         self.cache = Path(self._tmp.name)
-        self.index = self.cache / cf.export_native.SOURCES_INDEX
+        self.index = self.cache / cf.SOURCES_INDEX
         self.root = self.cache / "plat"
         self.root.mkdir()
         self.wanted = {"list.txt": "https://example.invalid/tag-2/list.txt"}
@@ -135,7 +135,7 @@ class PublishedExportTests(unittest.TestCase):
             (output / f"{platform}.json").write_text("{}", encoding="utf-8")
             return ok, [] if ok else ["the platform's own file is required"]
 
-        with mock.patch.object(cf.export_native, "export_platform", fake):
+        with mock.patch.object(cf, "export_platform", fake):
             return cf.published_export_state(
                 "plat", object, Path("t"), Path("p"), Path("c"), self.published
             )

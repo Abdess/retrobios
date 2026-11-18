@@ -129,11 +129,12 @@ class TheNativeIndexKeepsEveryPlatform(unittest.TestCase):
         import io
         import json
 
-        import export_native
+        from exporter import originals
+        from exporter.originals import SOURCES_INDEX, fetch
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as directory:
             root = Path(directory)
-            index = root / export_native.SOURCES_INDEX
+            index = root / SOURCES_INDEX
 
             class Response(io.BytesIO):
                 def __enter__(self):
@@ -147,9 +148,9 @@ class TheNativeIndexKeepsEveryPlatform(unittest.TestCase):
                 return Response(b"payload")
 
             with mock.patch.object(
-                export_native.urllib.request, "urlopen", other_run_records_meanwhile
+                originals.urllib.request, "urlopen", other_run_records_meanwhile
             ):
-                export_native.fetch("https://a", root / "batocera" / "file", index)
+                fetch("https://a", root / "batocera" / "file", index)
             recorded = json.loads(index.read_text())
             self.assertEqual(recorded.get("retrobat/file.json"), "https://b")
             self.assertEqual(recorded.get("batocera/file"), "https://a")

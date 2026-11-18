@@ -35,14 +35,8 @@ from model.platforms import load_platform_config, native_layer
 from model.safeparse import parse_untrusted_xml
 from exporter import discover_exporters
 from exporter.base_exporter import BaseExporter
-from export_native import (
-    SOURCES_INDEX,
-    collect_originals,
-    fetch,
-    landed_changes,
-    pinned_base,
-    source_key,
-)
+from exporter.originals import SOURCES_INDEX, collect_originals, fetch, pinned_base, source_key
+from exporter.landed import landed_changes
 from resolve.reconcile import NativeFile, NativeSystem, Report, build_native_model
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -694,11 +688,11 @@ class ExporterRegistry(unittest.TestCase):
                     self.assertTrue(exporter.needs_original())
 
     def test_an_export_without_its_original_writes_nothing(self):
-        import export_native
+        from exporter.native import export_platform
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             output = Path(tmp) / "out"
-            ok, messages = export_native.export_platform(
+            ok, messages = export_platform(
                 "retroarch", discover_exporters()["retroarch"],
                 REPO_ROOT / "dist" / "truth", output,
                 str(REPO_ROOT / "platforms"), Path(tmp) / "no-cache", False,
@@ -1013,27 +1007,27 @@ class PinnedRevision(unittest.TestCase):
         """Checked on five platforms by their base only: ROCKNIX's second
         file, RetroDECK's manifests and RetroPie's tarball were never
         looked at, and a URL that fell back to a branch passed."""
-        import export_native
+        from exporter.originals import unpinned, wanted_sources
 
         for name, exporter_class in discover_exporters().items():
             with self.subTest(platform=name):
                 config = native_layer(load_platform_config(name, str(REPO_ROOT / "platforms")))
                 systems, _ = build_native_model({}, config)
-                wanted = export_native.wanted_sources(exporter_class(), systems, config)
+                wanted = wanted_sources(exporter_class(), systems, config)
                 self.assertTrue(wanted)
-                self.assertEqual(export_native.unpinned(wanted, config), [])
+                self.assertEqual(unpinned(wanted, config), [])
 
     def test_a_file_read_off_the_pinned_revision_is_named(self):
-        import export_native
+        from exporter.originals import unpinned
 
         pinned = {"source": "https://raw.githubusercontent.com/o/r/v1.0/list.txt"}
-        self.assertEqual(export_native.unpinned(
+        self.assertEqual(unpinned(
             {"list.txt": "https://raw.githubusercontent.com/o/r/v1.0/list.txt"}, pinned), [])
-        moved = export_native.unpinned(
+        moved = unpinned(
             {"list.txt": "https://raw.githubusercontent.com/o/r/master/list.txt"}, pinned)
         self.assertEqual(len(moved), 1)
         self.assertIn("v1.0", moved[0])
-        bare = export_native.unpinned(
+        bare = unpinned(
             {"x.json": "https://raw.githubusercontent.com/o/r/main/x.json"},
             {"source": "https://github.com/RetroDECK/components"})
         self.assertIn("names no revision", bare[0])
@@ -1090,14 +1084,14 @@ class CachedOriginal(unittest.TestCase):
         """A truncated index read as empty: the cached batocera-41 file was
         served for a 43.1 URL, and the next download erased every other
         platform's recorded URL."""
-        import export_native
+        from exporter.originals import SourcesIndexUnreadable
 
         old = self._upstream("batocera-41.txt", "old")
         target = self.cache / "plat" / "list.txt"
         fetch(old, target, self.index)
         self.index.write_text('{"plat/list.txt": "' + old + '",', encoding="utf-8")
         new = self._upstream("batocera-43.txt", "new")
-        with self.assertRaises(export_native.SourcesIndexUnreadable) as caught:
+        with self.assertRaises(SourcesIndexUnreadable) as caught:
             fetch(new, target, self.index)
         self.assertIn("--refresh-cache", str(caught.exception))
         self.assertTrue(self.index.read_text(encoding="utf-8").endswith(","))
@@ -1164,13 +1158,13 @@ class CachedOriginal(unittest.TestCase):
         import fcntl
         from unittest import mock
 
-        import export_native
+        from exporter import originals
 
         url = self._upstream("v1.txt", "one")
         target = self.cache / "plat" / "list.txt"
         lock = self.index.with_name(f".{self.index.name}.lock")
         held: list[bool] = []
-        write = export_native.write_bytes_atomic
+        write = originals.write_bytes_atomic
 
         def probing(path, data):
             with open(lock, "a") as handle:
@@ -1183,7 +1177,7 @@ class CachedOriginal(unittest.TestCase):
                     held.append(False)
             write(path, data)
 
-        with mock.patch.object(export_native, "write_bytes_atomic", probing):
+        with mock.patch.object(originals, "write_bytes_atomic", probing):
             fetch(url, target, self.index)
         self.assertEqual(held, [True])
 
@@ -1221,12 +1215,12 @@ class CachedOriginal(unittest.TestCase):
         import http.client
         from unittest import mock
 
-        import export_native
+        from exporter import originals as exporter_originals
 
         def cut(*_args, **_kwargs):
             raise http.client.IncompleteRead(b"par")
 
-        with mock.patch.object(export_native, "fetch", cut):
+        with mock.patch.object(exporter_originals, "fetch", cut):
             originals, missing = collect_originals(
                 _OneFileExporter("https://example.invalid/list.txt"), {}, self.cache, True
             )
@@ -1557,7 +1551,7 @@ class AnExportLeavesNoStaleFile(unittest.TestCase):
     holding the six files of the first run."""
 
     def test_files_this_run_does_not_write_are_removed(self):
-        import export_native
+        from exporter.native import _remove_stale
 
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp) / "retropie"
@@ -1568,13 +1562,13 @@ class AnExportLeavesNoStaleFile(unittest.TestCase):
             gone_dir.mkdir()
             for path in (kept, stale, gone_dir / "pcsx-rearmed.sh"):
                 path.write_text("old", encoding="utf-8")
-            export_native._remove_stale(root, {"scriptmodules/libretrocores/lr-mgba.sh"})
+            _remove_stale(root, {"scriptmodules/libretrocores/lr-mgba.sh"})
             self.assertTrue(kept.exists())
             self.assertFalse(stale.exists())
             self.assertFalse(gone_dir.exists())
 
     def test_the_export_clears_before_it_writes(self):
-        source = (REPO_ROOT / "scripts" / "export_native.py").read_text()
+        source = (REPO_ROOT / "scripts" / "exporter" / "native.py").read_text()
         body = source[source.index("def export_platform("):]
         self.assertLess(body.index("_remove_stale("), body.index("_write_produced("))
 
@@ -1587,11 +1581,11 @@ class AnExportIsWrittenAsItsBytes(unittest.TestCase):
     def test_bytes_mode_and_atomicity(self):
         import stat
 
-        import export_native
+        from exporter.native import _write_produced
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             root = Path(tmp)
-            export_native._write_produced(root, {
+            _write_produced(root, {
                 "FirmwareDatabase.cs": "a\r\nb\r\n",
                 "rocknix-systems": "#!/usr/bin/python\n",
             }, {"rocknix-systems": 0o755})
@@ -1615,7 +1609,7 @@ class AnExportWithoutTruthIsRefused(unittest.TestCase):
     uncorrected, said OK, and replaced the corrected export in exports/."""
 
     def test_nothing_is_written_and_the_run_fails(self):
-        import export_native
+        from exporter.native import export_platform
 
         exporter = discover_exporters()["batocera"]
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
@@ -1623,7 +1617,7 @@ class AnExportWithoutTruthIsRefused(unittest.TestCase):
             published = output / "batocera" / "batocera-systems"
             published.parent.mkdir(parents=True)
             published.write_text("corrected", encoding="utf-8")
-            ok, messages = export_native.export_platform(
+            ok, messages = export_platform(
                 "batocera", exporter, Path(tmp) / "no-truth", output,
                 str(REPO_ROOT / "platforms"), Path(tmp) / "no-cache", False,
             )
@@ -1642,7 +1636,8 @@ class AnInvalidExportIsNotWritten(unittest.TestCase):
     def test_the_published_file_stays(self):
         from unittest import mock
 
-        import export_native
+        from exporter import native as exporter_native
+        from exporter.native import export_platform
 
         if not (UPSTREAM_CACHE / "romm").exists():
             self.skipTest("upstream cache not populated")
@@ -1653,10 +1648,10 @@ class AnInvalidExportIsNotWritten(unittest.TestCase):
             published = output / "romm" / "known_bios_files.json"
             published.parent.mkdir(parents=True)
             published.write_text("published", encoding="utf-8")
-            with mock.patch.object(export_native, "load_inputs",
+            with mock.patch.object(exporter_native, "load_inputs",
                                    return_value=({"systems": {}}, config)), \
                  mock.patch.object(exporter, "validate", return_value=["bad entry"]):
-                ok, messages = export_native.export_platform(
+                ok, messages = export_platform(
                     "romm", exporter, Path(tmp), output,
                     str(REPO_ROOT / "platforms"), UPSTREAM_CACHE, False,
                 )
@@ -1852,7 +1847,7 @@ class RommSizeIsNeverNone(unittest.TestCase):
     def test_an_entry_the_truth_takes_without_a_size_stays_whole(self):
         """RomM compares the size before any hash: the new md5 beside the
         old size never verified, and the report said the size was removed."""
-        from export_native import landed_changes
+        from exporter.landed import landed_changes
 
         exporter, systems, _, data = self._export(524288)
         self.assertEqual(
@@ -2012,17 +2007,17 @@ class MisterDatabaseComesBackAsWritten(unittest.TestCase):
             )
 
     def test_bytes_are_written_untouched(self):
-        import export_native
+        from exporter.native import _write_produced
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
-            export_native._write_produced(Path(tmp), {"a.zip": b"PK\x03\x04\xff"}, {})
+            _write_produced(Path(tmp), {"a.zip": b"PK\x03\x04\xff"}, {})
             self.assertEqual((Path(tmp) / "a.zip").read_bytes(), b"PK\x03\x04\xff")
 
     def test_a_new_hash_without_a_size_leaves_the_entry_whole(self):
         """The Downloader checks each entry by size (fetch_file_worker.py:127):
         the old size beside the new hash described no file, and the report
         announced a size removal the database did not carry."""
-        from export_native import landed_changes
+        from exporter.landed import landed_changes
 
         database = {"db_id": "bios_db", "files": {
             "games/X/boot.rom": {"hash": "a" * 32, "size": 100, "url": "u"},

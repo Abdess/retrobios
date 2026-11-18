@@ -34,7 +34,7 @@ SIBLING_IMPORTS: dict[str, frozenset[str]] = {
 NOT_YET_PACKAGED = frozenset({
     "archive_build", "auto_fetch", "autorun", "build_port", "campaign", "campaign_profiles",
     "campaign_rules", "check_buildbot_system", "check_release_assets", "commit_rules", "core_probe",
-    "cross_reference", "dedup", "derivations", "export_native", "generate_event_schema",
+    "cross_reference", "dedup", "derivations", "generate_event_schema",
     "generate_pack", "generate_readme", "generate_site", "manifestselect", "measurement_records",
     "packextras", "packpaths", "packreadme", "packresolve", "packverify", "pin_installer",
     "pr_checks", "provenance_report", "refresh_data_dirs",

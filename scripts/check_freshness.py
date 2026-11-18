@@ -49,7 +49,16 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-import export_native
+from exporter.native import StaleTruth, export_platform, load_inputs
+from exporter.originals import (
+    DEFAULT_CACHE,
+    SOURCES_INDEX,
+    SourcesIndexUnreadable,
+    load_sources,
+    source_key,
+    source_revision,
+    wanted_sources,
+)
 import pin_installer
 import refresh_data_dirs
 from core import upstream
@@ -427,7 +436,7 @@ def native_cache_state(
         path = root / relative
         if not path.is_file():
             return f"{relative} not cached"
-        known = recorded.get(export_native.source_key(path, index))
+        known = recorded.get(source_key(path, index))
         if known is None:
             return f"{relative} cached from an unrecorded URL"
         if known != url:
@@ -468,7 +477,7 @@ def published_export_state(
     scratch_root.mkdir(exist_ok=True)
     with tempfile.TemporaryDirectory(dir=scratch_root) as scratch:
         with contextlib.redirect_stdout(io.StringIO()):
-            ok, messages = export_native.export_platform(
+            ok, messages = export_platform(
                 platform, exporter_class, truth_dir, Path(scratch),
                 str(platforms_dir), cache_dir, False,
             )
@@ -521,10 +530,10 @@ def check_native(
     published: Path = Path("exports"),
 ) -> list[Finding]:
     exporters = discover_exporters()
-    index = cache_dir / export_native.SOURCES_INDEX
+    index = cache_dir / SOURCES_INDEX
     try:
-        recorded = export_native.load_sources(cache_dir)
-    except export_native.SourcesIndexUnreadable as exc:
+        recorded = load_sources(cache_dir)
+    except SourcesIndexUnreadable as exc:
         return [Finding("native", index.name, ERROR, detail=str(exc))]
     findings: list[Finding] = []
     for name in list_registered_platforms(str(platforms_dir)):
@@ -533,12 +542,12 @@ def check_native(
             continue
         with _without_model_notes():
             try:
-                truth, scraped = export_native.load_inputs(name, truth_dir, str(platforms_dir))
-            except export_native.StaleTruth as exc:
+                truth, scraped = load_inputs(name, truth_dir, str(platforms_dir))
+            except StaleTruth as exc:
                 findings.append(Finding("native", name, STALE, detail=str(exc)))
                 continue
             systems, _ = build_native_model(truth or {}, scraped)
-            wanted = export_native.wanted_sources(exporter_class(), systems, scraped)
+            wanted = wanted_sources(exporter_class(), systems, scraped)
             reason = native_cache_state(
                 wanted, cache_dir / name, recorded, index, _transcribed_at(platforms_dir, name)
             )
@@ -778,7 +787,7 @@ def platform_revision(setup: str, doc: dict, platforms_dir: Path) -> str:
     repo = upstream.parse_repo(str(_os_source(doc).get("repo") or ""))
     if repo is None or f"/{repo.slug.lower()}/" not in source.lower() + "/":
         return ""
-    return export_native.source_revision(source)
+    return source_revision(source)
 
 
 def romfolder_pin_drift(setup: str, doc: dict, platforms_dir: Path) -> str | None:
@@ -1578,7 +1587,7 @@ def pin_build_revision(reference: dict, platforms_dir: Path) -> str:
         source = str((yaml_load(fh) or {}).get("source") or "")
     if f"/{repo.slug.lower()}/" not in source.lower() + "/":
         return ""
-    return export_native.source_revision(source)
+    return source_revision(source)
 
 
 def check_pin_builds(
@@ -1850,7 +1859,7 @@ def main() -> int:
         help="download cache directory (default: %(default)s)",
     )
     parser.add_argument(
-        "--native-cache-dir", default=export_native.DEFAULT_CACHE,
+        "--native-cache-dir", default=DEFAULT_CACHE,
         help="where the platforms' own files are cached (default: %(default)s)",
     )
     parser.add_argument(
