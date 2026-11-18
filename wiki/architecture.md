@@ -316,7 +316,7 @@ How files enter `bios/`, and why.
 - **One content, one file.** A byte-identical copy under another name is
   removed, and the name it carried becomes a profile alias. Trees addressed by
   path keep their equal files, since equality is part of their layout: those
-  folders are `NODEDUP_DIRS` in `scripts/dedup.py`.
+  folders are `NODEDUP_DIRS` in `scripts/model/nodedup.py`.
 - **Archives the project builds are TorrentZip.** `build_torrentzip()` makes
   an archive's bytes depend on its contents alone, so anyone can rebuild it.
   An upstream romset whose MD5 a platform pins stays verbatim in `.variants/`.

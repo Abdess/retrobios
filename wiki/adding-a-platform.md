@@ -384,7 +384,7 @@ describes.
 `firmware_folder_flat: true` is set where the frontend reads a system's firmware
 folder without descending into it (RomM 5.4.1,
 `backend/handler/filesystem/base_handler.py:1002`, `recursive=False`). On such a platform, a core file whose destination has a
-subfolder is left out of the pack (`nested` in `scripts/packextras.py`), since no
+subfolder is left out of the pack (`nested` in `scripts/packs/extras.py`), since no
 core would receive it.
 
 ### Platform YAML header

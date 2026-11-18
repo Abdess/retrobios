@@ -919,7 +919,7 @@ lists what else a change rewrites.
 - A file too large for git goes to the `large-files` GitHub release and its
   path into `.gitignore`, the list that decides what is served from the release
 - Trees addressed by path are kept out of deduplication (`NODEDUP_DIRS` in
-  `scripts/dedup.py`)
+  `scripts/model/nodedup.py`)
 - Two paths differing only by case break clones on Windows and macOS,
   and `tests/test_no_case_collisions.py` enforces this
 
