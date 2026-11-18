@@ -24,7 +24,7 @@ from resolve.layout import core_system_dirs, system_dir_path
 from resolve.standalone import platform_layouts
 from resolve.standalone import standalone_set as platform_standalone_set
 from model.declarations import OUTER_ROOTS, outer_layout
-from core.paths import sanitize_pack_path
+from core.paths import declared_destination, sanitize_pack_path
 from resolve.content import declares_shape, shape_fits, size_fits
 from resolve.validation import deliverable, read_from_save_dir, read_from_system_dir
 from packs.paths import libretro_systems, save_destination, save_layout
@@ -56,13 +56,13 @@ def extra_full_destination(fe: dict, prefix: str) -> str:
     if fe.get("unprefixed"):
         # A path of the install tree outside the BIOS folder (AmberELEC's
         # pico-8/ beside bios/): no platform prefix in front.
-        return sanitize_pack_path(fe.get("destination", fe.get("name", "")))
+        return declared_destination(fe)
     if fe.get("root") in OUTER_ROOTS:
         return outer_destination(
-            fe["root"], sanitize_pack_path(fe.get("destination", fe.get("name", "")))
+            fe["root"], declared_destination(fe)
         )
     return prefixed_destination(
-        sanitize_pack_path(fe.get("destination", fe.get("name", ""))), prefix
+        declared_destination(fe), prefix
     )
 
 
@@ -100,7 +100,7 @@ def extra_region_key(fe: dict, prefix: str) -> str:
     and the installer, which records the path once, dropped it.
     """
     return prefixed_destination(
-        sanitize_pack_path(fe.get("destination", fe.get("name", ""))), prefix
+        declared_destination(fe), prefix
     )
 
 
@@ -487,7 +487,7 @@ def hidden_extras(
 
 def _packable_dest(fe: dict, region_drops: set[str] | None, region_prefix: str) -> str:
     """The extra's destination, empty when the builder never places it."""
-    dest = sanitize_pack_path(fe.get("destination", fe.get("name", "")))
+    dest = declared_destination(fe)
     if not dest or (region_drops and extra_region_key(fe, region_prefix) in region_drops):
         return ""
     if fe.get("root") in OUTER_ROOTS:
@@ -2188,9 +2188,7 @@ def platform_region_groups(
         # Decided over what the pack keeps: an optional winner removed
         # afterwards left its slot empty.
         for file_entry in _kept(system.get("files", []), required_only):
-            dest = sanitize_pack_path(
-                file_entry.get("destination", file_entry.get("name", ""))
-            )
+            dest = declared_destination(file_entry)
             if dest:
                 members.append((dest, file_entry.get("name", "")))
                 full_dest = f"{base_dest}/{dest}" if base_dest else dest

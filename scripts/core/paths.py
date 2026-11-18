@@ -18,3 +18,10 @@ def sanitize_pack_path(raw: str) -> str:
     """
     raw = raw.replace("\\", "/")
     return "/".join(p for p in raw.split("/") if p and p not in ("..", "."))
+
+
+def declared_destination(entry: dict) -> str:
+    """The destination a declaration names, its name when it names none,
+    normalized as sanitize_pack_path does: the key the builder, the manifest
+    and verify all file a declaration under."""
+    return sanitize_pack_path(entry.get("destination", entry.get("name", "")))

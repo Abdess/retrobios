@@ -38,7 +38,7 @@ from resolve.packfiles import resolve_declaration, resolve_file
 from resolve.categories import BIOS, EntryCategories
 from resolve.gamedata import without_game_data
 from resolve.cores import resolve_platform_cores
-from core.paths import sanitize_pack_path
+from core.paths import declared_destination
 import zipfile
 from collections.abc import Callable
 
@@ -841,7 +841,7 @@ def _baseline_groups(
             system_of[id(fe)] = sys_id
             if opts.required_only and fe.get("required") is False:
                 continue
-            dest = sanitize_pack_path(fe.get("destination", fe.get("name", "")))
+            dest = declared_destination(fe)
             if not dest:
                 continue
             if expect.region_drops and dest in expect.region_drops:

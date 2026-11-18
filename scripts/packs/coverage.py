@@ -6,7 +6,7 @@ import os
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypedDict
 
-from core.paths import sanitize_pack_path
+from core.paths import declared_destination
 from core.ziptools import build_zip_contents_index
 from model.alternatives import core_file_spares
 from model.declarations import OUTER_ROOTS, platform_declarations
@@ -185,7 +185,7 @@ def _builder_placement(
 
 def _dest_key(file_entry: dict, sys_id: str) -> str:
     """The path a declaration occupies, as the builder keys its pack."""
-    dest = sanitize_pack_path(file_entry.get("destination", file_entry.get("name", "")))
+    dest = declared_destination(file_entry)
     return dest or f"{sys_id}/{file_entry.get('name', '')}"
 
 
@@ -236,7 +236,7 @@ def _resolve_declaration(
     declaration's, which is hashed against the shipped file.
     """
     base_dest = resolver.base_dest
-    bare = sanitize_pack_path(file_entry.get("destination", file_entry.get("name", "")))
+    bare = declared_destination(file_entry)
     preferred = resolver.preferred_entries.get(f"{base_dest}/{bare}" if base_dest else bare)
     held_by, winner = (None, file_entry)
     if preferred is not None and preferred != id(file_entry):
@@ -303,7 +303,7 @@ def _resolve_for_platform(
     from resolve.packfiles import pending_release_asset, resolve_declaration, run_is_offline
 
     override = slot_overrides.get(
-        sanitize_pack_path(file_entry.get("destination", file_entry.get("name", "")))
+        declared_destination(file_entry)
     )
     local_path, status = resolve_declaration(
         file_entry, db, DEFAULT_BIOS_DIR, zip_contents, data_dir_registry,
@@ -371,9 +371,7 @@ class _PlatformTally:
 
     def judge(self, sys_id: str, file_entry: dict) -> None:
         """Verify one declaration and add it to its destination's tally."""
-        destination = sanitize_pack_path(
-            file_entry.get("destination", file_entry.get("name", ""))
-        )
+        destination = declared_destination(file_entry)
         if self.region_drops and destination in self.region_drops:
             return
         local_path, resolve_status, held_by = _resolve_declaration(

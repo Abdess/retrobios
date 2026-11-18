@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING, TypedDict
 
 from core.artifacts import _build_timestamp
 from core.options import reject_unknown
-from core.paths import REPO_ROOT, sanitize_pack_path
+from core.paths import REPO_ROOT, declared_destination, sanitize_pack_path
 from model.declarations import OUTER_ROOTS, declared_root, outer_layout
 from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
@@ -209,7 +209,7 @@ class _ManifestBuild:
     ) -> None:
         # A core extra (cores given) is keyed as the region pass keys it.
         bare = (
-            sanitize_pack_path(file_entry.get("destination", file_entry.get("name", "")))
+            declared_destination(file_entry)
             if cores is None else extra_region_key(file_entry, declared_root(self.config))
         )
         self.omitted_by_destination[full_destination] = {
@@ -648,7 +648,7 @@ def _settle_manifest_scope(build: _ManifestBuild) -> None:
     declared_kinds: dict[str, set[bool]] = {}
     for system in build.pack_systems.values():
         for fe in system.get("files", []):
-            bare = sanitize_pack_path(fe.get("destination", fe.get("name", "")))
+            bare = declared_destination(fe)
             if bare:
                 declared_kinds.setdefault(bare, set()).add(id(fe) in build.game_entries)
     build.game_destinations = {d for d, kinds in declared_kinds.items() if kinds == {True}}

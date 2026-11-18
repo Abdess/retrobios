@@ -8,7 +8,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 
 from core.hashing import compute_hashes
-from core.paths import sanitize_pack_path
+from core.paths import declared_destination
 from model.declarations import OUTER_ROOTS, declared_root
 from model.largefiles import asset_name, load_registered_paths, published_asset_name
 from packs.extras import (
@@ -396,7 +396,7 @@ def _record_absent(
     for fe in absent:
         if required_only and fe.get("required") is False:
             continue
-        dest = sanitize_pack_path(fe.get("destination", fe.get("name", "")))
+        dest = declared_destination(fe)
         if not dest or (
             region_drops and extra_region_key(fe, declared_root(config)) in region_drops
         ):

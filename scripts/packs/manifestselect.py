@@ -20,7 +20,7 @@ from dataclasses import dataclass
 from resolve import regions as resolve_regions
 from resolve import slot as slot_mod
 from model.systems import _norm_system_id
-from core.paths import sanitize_pack_path
+from core.paths import declared_destination
 from packs.extras import (
     _kept,
     _serving_system_ids,
@@ -28,10 +28,6 @@ from packs.extras import (
     extra_region_key,
     system_spellings,
 )
-
-
-def _dest(entry: dict) -> str:
-    return sanitize_pack_path(entry.get("destination", entry.get("name", "")))
 
 
 @dataclass(frozen=True)
@@ -63,7 +59,7 @@ class SelectionIndex:
         declared_by: dict[str, set[str]] = {}
         for sys_id, system in pack_systems.items():
             for file_entry in _kept(system.get("files", []), required_only):
-                dest = _dest(file_entry)
+                dest = declared_destination(file_entry)
                 if dest:
                     declared_by.setdefault(dest, set()).add(sys_id)
 
