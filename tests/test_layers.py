@@ -32,7 +32,7 @@ SIBLING_IMPORTS: dict[str, frozenset[str]] = {
 # Top-level modules other modules of scripts/ import: library code that a
 # later wave moves into a package.
 NOT_YET_PACKAGED = frozenset({
-    "archive_build", "auto_fetch", "autorun", "build_port", "campaign", "campaign_profiles",
+    "archive_build", "autorun", "build_port", "campaign", "campaign_profiles",
     "campaign_rules", "check_buildbot_system", "check_release_assets", "commit_rules", "core_probe",
     "cross_reference", "dedup", "derivations", "generate_event_schema",
     "generate_pack", "generate_readme", "generate_site", "manifestselect", "measurement_records",

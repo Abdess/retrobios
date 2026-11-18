@@ -10,7 +10,7 @@ from collections import Counter
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypedDict
 
-from auto_fetch import DEFAULT_BIOS_DIR
+from verify import DEFAULT_BIOS_DIR
 from core.artifacts import _build_timestamp
 from packpaths import MEDIA_MARKER, _has_path_conflict
 from core.ziptools import build_zip_contents_index

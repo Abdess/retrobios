@@ -17,7 +17,7 @@ from model.largefiles import fetch_large_file
 from core.hashing import cut_md5_owner
 from resolve.content import declared_hash_verdict
 from resolve.localfile import resolution_is_hash_exact, resolve_local_file
-from core.paths import sanitize_pack_path
+from core.paths import REPO_ROOT, sanitize_pack_path
 from resolve.validation import inner_rom_check
 # CLI-wide network policy.  Public helpers can override it explicitly, while
 # every CLI mode inherits --offline (including large-file release fallback).
@@ -32,7 +32,7 @@ def set_offline(value: bool) -> None:
 
 def scratch_dir() -> str:
     """The repository's tmp/, never the system /tmp (a 4 GB tmpfs on WSL)."""
-    path = Path(__file__).resolve().parent.parent / "tmp"
+    path = REPO_ROOT / "tmp"
     path.mkdir(exist_ok=True)
     return str(path)
 

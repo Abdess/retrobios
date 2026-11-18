@@ -95,7 +95,7 @@ from resolve.cores import (
 from model.safeparse import require_yaml
 from resolve.localfile import resolve_local_file
 from resolve.standalone import platform_layouts, standalone_set as platform_standalone_set
-from core.paths import sanitize_pack_path
+from core.paths import REPO_ROOT, sanitize_pack_path
 
 from resolve.categories import BIOS, EntryCategories
 from resolve.launchers import LauncherLayer, declared_destinations, held_record, launcher_unproven
@@ -143,9 +143,8 @@ DEFAULT_PLATFORMS_DIR = "platforms"
 DEFAULT_BIOS_DIR = "bios"
 # The repository's platforms wherever the script runs from, for library calls
 # that pass no directory.
-_REPO_PLATFORMS = os.path.join(os.path.dirname(__file__), "..", "platforms")
+_REPO_PLATFORMS = str(REPO_ROOT / "platforms")
 DEFAULT_EMULATORS_DIR = "emulators"
-REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Status model: aligned with Batocera BiosStatus (batocera-systems:967-969)

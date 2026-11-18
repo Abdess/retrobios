@@ -1149,7 +1149,8 @@ def main() -> None:
     # root. Run from elsewhere, every file read as referenced by no platform
     # and placed outside bios/. The files named are read from where they
     # were typed.
-    from verify import REPO_ROOT, work_from_repo_root
+    from core.paths import REPO_ROOT
+    from model.cliargs import work_from_repo_root
 
     if os.path.realpath(os.getcwd()) != os.path.realpath(REPO_ROOT):
         args.files = [os.path.abspath(f) for f in args.files]

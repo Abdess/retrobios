@@ -41,6 +41,7 @@ from model.declarations import merged_platform_declared_contents
 from model.platforms import load_platform_config
 from resolve.content import content_fits, name_match_size_ok
 from core.hashing import parse_md5_list
+from core.paths import REPO_ROOT
 from model.safeparse import require_yaml
 from resolve.localfile import resolve_local_file
 from resolve.standalone import platform_layouts, standalone_set
@@ -465,7 +466,7 @@ class FileConsumers:
         self._data_dir_registry = (
             data_dir_registry if data_dir_registry is not None
             else load_data_dir_registry(
-                str(Path(__file__).resolve().parent.parent / DEFAULT_PLATFORMS_DIR)
+                str(REPO_ROOT / DEFAULT_PLATFORMS_DIR)
             )
         )
         self._sha1_by_path = {

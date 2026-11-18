@@ -108,7 +108,7 @@ from model.platforms import load_platform_config
 from model.safeparse import require_yaml, yaml_load
 from model.declarations import declared_root
 from resolve.standalone import platform_layouts, standalone_set
-from core.paths import sanitize_pack_path
+from core.paths import REPO_ROOT, sanitize_pack_path
 import packresolve
 from refresh_data_dirs import cache_lock, hold_data_dirs
 from model import region
@@ -2424,7 +2424,7 @@ def generate_emulator_pack(
         os.makedirs(output_dir, exist_ok=True)
 
     data_registry = load_data_dir_registry(
-        options.get("platforms_dir") or os.path.join(os.path.dirname(__file__), "..", "platforms")
+        options.get("platforms_dir") or str(REPO_ROOT / "platforms")
     )
     region_drops: set[str] = (
         emulator_region_drops(
@@ -4402,7 +4402,7 @@ def _run_platform_mode(
 def _main(held: contextlib.ExitStack) -> None:
     parser = _build_parser()
     args = parser.parse_args()
-    from verify import work_from_repo_root
+    from model.cliargs import work_from_repo_root
 
     work_from_repo_root(
         args, parser,
@@ -5940,7 +5940,7 @@ def _start_manifest(
     build = _ManifestBuild(
         platform_name, platforms_dir, db, bios_dir, opts, config, emu_profiles,
         zip_contents, data_registry, game_entries, plat_registry.get("install", {}),
-        os.path.dirname(os.path.dirname(os.path.abspath(__file__))), pack_systems,
+        str(REPO_ROOT), pack_systems,
     )
     build.manifest_profiles = {
         name: emu_profiles[name]
@@ -6213,7 +6213,7 @@ def _standalone_layouts(
     that entry. Another is written whole. A data tree member is left to the
     list's data directories.
     """
-    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    repo_root = str(REPO_ROOT)
     known = {
         copy["sha1"]
         for entry in [*result["files"], *result.get("truth_files", [])]
