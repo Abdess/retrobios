@@ -56,7 +56,7 @@ def set_console_sections(
     )
     # A reviewed parent under a maker the pages carry is a section even with
     # no folder of its own: the Atom's sets sit under bios/Arcade, and the
-    # system pages file them under Acorn (generate_site.arcade_board_sections).
+    # system pages file them under Acorn (sitegen.systempages.arcade_board_sections).
     makers = {mfr for mfr, _console in pairs}
     pairs |= {parent for parent in SYSTEM_PARENTS.values()
               if parent[0] in makers and parent[0] not in _PROGRAM_TOPS}
@@ -161,7 +161,7 @@ def system_name(sys_id: str) -> str:
     if name is None:
         raise KeyError(
             f"system {sys_id!r} has no console section of its own and no "
-            "entry in siterender.SYSTEM_NAMES"
+            "entry in model.systemnames.SYSTEM_NAMES"
         )
     return name
 

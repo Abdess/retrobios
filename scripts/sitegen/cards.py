@@ -732,7 +732,7 @@ def _card_title(text: str, anchor: str, searchable: bool = True, weight: int = 1
     pasted md5 to the top of a page of a hundred cards. Level 3, under
     the console or the Files heading: a level 4 after a level 2 skipped
     one for screen readers on 551 pages. The table of contents of a page
-    of cards stops above it (sitestarlight.py), and a card without an
+    of cards stops above it (sitegen/starlight.py), and a card without an
     anchor keeps the id the toc gives it.
     """
     if markup.starlight():

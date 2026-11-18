@@ -407,7 +407,7 @@ def load_guides(path: Path = GUIDES_FILE, registry: dict | None = None) -> dict:
 
 _LOADED = load_guides()
 INSTALL_BASE: str = _LOADED["install_base"]
-# The bootstraps the site serves (sitebootstrap.py writes them).
+# The bootstraps the site serves (sitegen/bootstrap.py writes them).
 INSTALL_SH: str = f"{INSTALL_BASE}/{SH_NAME}"
 INSTALL_PS1: str = f"{INSTALL_BASE}/{PS1_NAME}"
 # The same installer from PyPI (scripts/build_pypi.py builds the package).

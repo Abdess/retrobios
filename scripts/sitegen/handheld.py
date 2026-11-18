@@ -4,7 +4,7 @@ The four archives scripts/build_port.py writes carry install.py pinned by
 SHA-256, so they change with the installer, not with the BIOS packs. The
 site builds them from the commit it is built from and serves them under
 get/handheld/, beside the bootstraps that pin the same installer
-(sitebootstrap.py). build_archive refuses an install.py that install.sh
+(sitegen/bootstrap.py). build_archive refuses an install.py that install.sh
 does not pin: a stale pin stops the site build, the last good archives
 staying served.
 

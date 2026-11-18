@@ -39,7 +39,7 @@ def terminal_tabs(
     the terminal there. Tab labels are shared across the site, so the reader's
     choice carries from page to page. *how* replaces the shared text of a tab
     for one setup. *under_steps* and *under_command* add lines to a tab
-    after its text and after its command (sitesteps.install_box)."""
+    after its text and after its command (sitegen.steps.install_box)."""
     items = []
     for key in tabs:
         label, shared, shell = TERMINALS[key]

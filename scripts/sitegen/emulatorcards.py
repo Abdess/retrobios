@@ -346,7 +346,7 @@ class CardLayout:
     """Where a file card lands. `alias` is a second id the card answers to,
     `data_href` links the data folder an app reads the entry under, from the
     page the card lands on. `badges_apart`: the title holds the name alone,
-    for a table whose Status column shows the badges (siteentries.py)."""
+    for a table whose Status column shows the badges (sitegen/entries.py)."""
 
     alias: str = ""
     data_href: str = "#data-folder"

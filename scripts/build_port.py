@@ -18,7 +18,7 @@ the applications folder, so its top folder is the application.
 install.py is copied from the repository root, and only when it is the
 installer the bootstraps pin, so every launcher runs the same bytes as the
 one-line command of the same commit. The site builds them at each deploy
-and serves them under get/handheld/ (scripts/sitehandheld.py): they are no
+and serves them under get/handheld/ (scripts/sitegen/handheld.py): they are no
 release files, and are written to tmp/handheld/ by default, away from the
 packs of dist/. Members are written as the packs write
 theirs: fixed timestamps, sorted names, the executable bit read from the

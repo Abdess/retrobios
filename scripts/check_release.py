@@ -8,7 +8,7 @@ size the README prints, and nothing else may be attached. The record holds
 one pack for each platform the registry marks release_pack, and no other
 pack. The installer, the file lists and the handheld launchers are not
 release files: a package pins the first two from the tag, and the site
-serves the launchers built from its own commit (sitehandheld.py), so a
+serves the launchers built from its own commit (sitegen/handheld.py), so a
 reader of the release page sees the packs and nothing to puzzle over. An upload that
 failed in the loop, or a part re-uploaded from an older build, otherwise
 publishes a release that `sha256sum --check` rejects for every user.

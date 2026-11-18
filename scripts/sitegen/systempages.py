@@ -166,12 +166,12 @@ def arcade_board_sections(
 
     The Arcade sections were the folders of bios/Arcade/: NAOMI, PGM and
     ZN-1 had no section, and their names stayed plain on 568 emulator
-    pages. Each archive goes to the board siterender.arcade_board() reads
+    pages. Each archive goes to the board sitegen.render.arcade_board() reads
     from the profiles, never from its folder, and a folder named after a
     board (Namco System 246) joins it, whatever maker's folder holds the
-    copy. A set a reviewed machine owns (siterender.archive_machine) goes
+    copy. A set a reviewed machine owns (sitegen.render.archive_machine) goes
     to that machine's section. Files neither claims stay in their
-    folders. Each board is recorded (siterender.record_board_section) before
+    folders. Each board is recorded (sitegen.render.record_board_section) before
     any page links one, and a system's install commands follow its link to
     the board's section. Call after reset_console_pages()."""
     from sitegen.render import arcade_boards, record_board_section
@@ -535,7 +535,7 @@ def system_pages(
     systems/<maker>/#<console> still lands, and site.js sends a card
     anchor the page no longer holds to the card's new place. The pages
     each card and console went to are recorded for every other link
-    (siterender.record_console_pages). An arcade board has a page of its
+    (sitegen.render.record_console_pages). An arcade board has a page of its
     own, systems/arcade-<board slug>/, under a heading of that id.
     """
     maker = _MakerPages(manufacturer, consoles, consumers, installs or {}, budget)

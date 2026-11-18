@@ -302,7 +302,7 @@ def _data_tree_page(ref: str, entry: dict, pages: list[tuple[str, list[str]]],
 # written before them. At 400 a part of MAME's cards was 805 KB of HTML.
 EMULATOR_CARDS_PER_PAGE = 220
 # The most cards a part of a split page holds. Each card is a table row
-# since siteentries.py, about five elements and 60 bytes more: at 220 a
+# since sitegen/entries.py, about five elements and 60 bytes more: at 220 a
 # part, MAME's first was 612 KB and 9,777 elements.
 EMULATOR_CARDS_PER_PART = 180
 # The words a part's rows may show, every card closed. A count of cards
@@ -390,7 +390,7 @@ def emulator_parts(name: str, files: list, profile: dict | None = None,
 
 
 # From this many entries an emulator page lists them as one table, each
-# row opening to its card (siteentries.py). Below it the page is one
+# row opening to its card (sitegen/entries.py). Below it the page is one
 # screen of open cards. A summary table above folded cards listed every
 # file twice: PCSX-ReARMed's seven, once in the table and once in a closed
 # "7 files" block. A split emulator's card pages always use the table.

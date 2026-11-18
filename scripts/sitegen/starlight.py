@@ -322,7 +322,7 @@ OG_DIR = REPO_ROOT / "docs_assets" / "og"
 # An emulator page's card is that of the maker of the first system it runs,
 # by page path: "emulators/mgba.mdx" -> "nintendo". One card per emulator
 # would be some 900 images in the repository, and the maker's names the
-# consoles. Filled by generate_site.record_emulator_page.
+# consoles. Filled by sitegen.structured.record_emulator_page.
 EMULATOR_CARDS: dict[str, str] = {}
 
 
@@ -428,7 +428,7 @@ _page_aliases_built = [False]
 
 def page_aliases(rel: str) -> list[str]:
     """The names the platforms file the consoles of a system page under
-    (psx, dreamcast, gba), from siterender.system_search_aliases(): "psx
+    (psx, dreamcast, gba), from sitegen.render.system_search_aliases(): "psx
     bios" finds the PlayStation page though the page never says psx."""
     if not _page_aliases_built[0]:
         from sitegen import render as siterender

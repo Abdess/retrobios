@@ -69,7 +69,7 @@ class SystemNames(unittest.TestCase):
                 unnamed.append(sys_id)
                 continue
             self.assertTrue(name.strip(), sys_id)
-        self.assertEqual(unnamed, [], "add these to siterender.SYSTEM_NAMES")
+        self.assertEqual(unnamed, [], "add these to model.systemnames.SYSTEM_NAMES")
 
     def test_no_name_is_a_manufacturer_page_or_an_emulator(self) -> None:
         taken = {name.casefold() for name in self.manufacturers}
