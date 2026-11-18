@@ -53,6 +53,7 @@ from typing import IO
 from core.artifacts import write_if_changed
 from model.profiles import load_emulator_profiles
 from core.cli import run_cli
+from core.hashing import compute_hashes
 from .romset_dat_importer import (
     LISTXML_CHUNK,
     MAME_LISTXML_URL,
@@ -1044,14 +1045,6 @@ def read_sets(openers: list[Callable[[], IO[bytes]]]) -> dict[str, SetEntry]:
     return sets
 
 
-def _sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for block in iter(lambda: handle.read(1 << 20), b""):
-            digest.update(block)
-    return digest.hexdigest()
-
-
 def import_profile(
     profile: str, data: dict, cache_dir: Path, offline: bool = False,
     report: dict | None = None,
@@ -1076,7 +1069,7 @@ def import_profile(
         source = {
             "release": f"mamedev/mame {tag}",
             "url": MAME_LISTXML_URL.format(tag=tag),
-            "sha256": _sha256(pack),
+            "sha256": compute_hashes(pack, frozenset({"sha256"}), cache=False)["sha256"],
         }
         index = build_index(read_sets([_listxml_opener(pack)]), spec["marker"])
     elif kind == "fbneo":
