@@ -400,7 +400,7 @@ resolution.
 - `safe_extract_zip()` prevents zip-slip path traversal attacks
 - a pack copies each ZIP of the collection byte for byte, so every member
   hashes to the SHA1 the install list publishes
-- `crypto_verify.py` and `sect233r1.py` verify 3DS RSA-2048 signatures and AES-128-CBC integrity
+- `core/crypto_verify.py` and `core/sect233r1.py` verify 3DS RSA-2048 signatures and AES-128-CBC integrity
 - ZIP inner ROM verification via `checkInsideZip()` replicates Batocera's behavior
 - `md5_composite()` replicates Recalbox's composite ZIP hash
 
@@ -419,7 +419,7 @@ resolution.
 
 ### File resolution chain
 
-`resolve_local_file` in `common.py` turns a file entry into a local path, and
+`resolve_local_file` in `scripts/resolve/localfile.py` turns a file entry into a local path, and
 `verify.py` and `generate_pack.py` both call it. Every declared hash is tried
 before a path or a name, so a path never wins over a hash. The steps, in order,
 are listed under [file resolution chain](verification-modes.md#file-resolution-chain).

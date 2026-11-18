@@ -190,7 +190,7 @@ writes the packages it builds, read from the `rp_module_id` of each
 scriptmodule, and any manual change is overwritten on the next scrape.
 
 The `cores` field determines which emulator profiles are resolved for this
-platform (`resolve_platform_cores` in `common.py`). Alias profiles are never
+platform (`resolve_platform_cores` in `scripts/resolve/cores.py`). Alias profiles are never
 resolved. Three strategies exist:
 
 - **Explicit list**: `cores: [beetle_psx, dolphin, ...]` - match by profile key name
@@ -720,7 +720,7 @@ and `target_source` to the platform's registry entry.
 Hardware-specific overrides go in `platforms/targets/_overrides.yml`, which no
 scraper writes. Each target can list `aliases` (Batocera's `bcm2711` also
 answers to `rpi4`), `add_cores` and `remove_cores`, and `_default` applies to
-every target of the platform. `apply_target_overrides()` in `common.py` applies
+every target of the platform. `apply_target_overrides()` in `scripts/model/targets.py` applies
 them, for the packs and for the published target lists alike.
 
 ### Single-target platforms

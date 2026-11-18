@@ -383,7 +383,7 @@ members included), under a `type: directory` entry or a data directory. An entry
 none of them answers is written to `exports/<platform>.json` under
 `removal_candidates`, with the cores examined for its system and a reason.
 The verdict is `undetermined` when a core the platform names has no
-profile (`common.unresolved_platform_cores`) or when the entry is a ROM set
+profile (`resolve.cores.unresolved_platform_cores`) or when the entry is a ROM set
 and a core of the system opens sets its profile does not list. BizHawk and
 MiSTer resolve no core, so nothing is examined and nothing is listed.
 
@@ -670,7 +670,7 @@ file at a given sha, and compares trees, for the forge families the
 profiles point at. It knows nothing about profile structure, so anchoring
 logic and repository access stay testable apart.
 
-### validation.py
+### resolve/validation.py
 
 Validation index and ground truth formatting. Used by verify.py for emulator-level checks
 (size, CRC32, MD5, SHA1, crypto). Separates reproducible hash checks from cryptographic
@@ -1350,7 +1350,9 @@ before a release (wiki/release-process.md). Its lines stay in
 
 | Script | Purpose |
 |--------|---------|
-| `common.py` | Shared library: hash computation, file resolution, platform config loading, emulator profiles, target filtering |
+| `core/` | Standard library only: hashing, ZIP reading and TorrentZip, atomic writes and output locks, `run_cli` and the input errors it prints on one line, the GitHub token, the repository root |
+| `model/` | Data loading: `database.json`, platform configs and the registry, emulator profiles, hardware targets, system ids, the region vocabulary, dump catalogues, release assets |
+| `resolve/` | From a declaration to a file: content checks, `resolve_local_file` and its stages, archive members, launcher layouts, the cores a platform runs, validation, slots, truth |
 | `retired_files.py` | The record of files that left the collection, `retired.json`, which `generate_db.py` appends to and the site's lookup reads. `--backfill` rebuilds it from the history of `database.json` since content addresses were published (`--output` names another file) |
 | `dedup.py` | Deduplicate `bios/` (`--dry-run`, `--bios-dir`): byte-identical copies are deleted and one kept. Identical MAME sets under other names stay one file, named in `_mame_clones.json`. Trees addressed by path are left alone (`NODEDUP_DIRS`), under a folder of that name at any depth: BBK, Bungie, C-Dogs SDL, Ikemen GO, mame, PinMAME, RPG Maker, ScummVM, Softdisk, TheXTech, splitwolf, Theme Hospital, c64-emu, opentyrian, tzdata |
 | `identity.py` | One content filed under two identities: groups `bios/` by content and reports a group that crosses manufacturers outside `KNOWN_SHARED` (`--strict` exits 1, pipeline step 3a) |
@@ -1381,10 +1383,10 @@ before a release (wiki/release-process.md). Its lines stay in
 | `romset_recipes.py` | Identify which emulator version an arcade archive matches, rebuild a pinned archive from ROMs already held, record a recipe for every archive the collection holds and build any of them from the members it holds (see [Archive recipes](#archive-recipes)) |
 | `archive_build.py` | The archive recipes behind `romset_recipes.py --capture`, `--build` and `--build-all`: capture, member lookup by sha1, verified build |
 | `scraper/romset_dat_importer.py` | Fetch and import per-set recipes from MAME `-listxml` or FBNeo DATs into `recipes/`. `--fetch` alone takes the newest MAME release, and FBNeo DATs are refreshed by git blob sha. `--fetch <revision>` reads FBNeo at that tag, branch or commit |
-| `deterministic_zip.py` | The fixed date pack members carry. Its archive rebuild is no longer called by the pack, which copies each ZIP byte for byte |
-| `torrentzip.py` | Build TorrentZip archives for MAME/FBNeo ROM sets (archive bytes depend only on contents, with stock zlib), streaming one member at a time |
-| `crypto_verify.py` | 3DS RSA signature and AES crypto verification |
-| `sect233r1.py` | Pure Python ECDSA verification on sect233r1 curve (3DS OTP cert) |
+| `core/deterministic_zip.py` | The fixed date pack members carry. Its archive rebuild is no longer called by the pack, which copies each ZIP byte for byte |
+| `core/torrentzip.py` | Build TorrentZip archives for MAME/FBNeo ROM sets (archive bytes depend only on contents, with stock zlib), streaming one member at a time |
+| `core/crypto_verify.py` | 3DS RSA signature and AES crypto verification |
+| `core/sect233r1.py` | Pure Python ECDSA verification on sect233r1 curve (3DS OTP cert) |
 | `check_buildbot_system.py` | Detect stale data directories by comparing with buildbot |
 | `check_freshness.py` | One report on every upstream the repository transcribes (see above) |
 | `refresh_stale.py` | Run the refresher behind every stale row of that report (see above) |
@@ -1597,7 +1599,7 @@ on Windows. zlib-ng does not: python.org CPython 3.14 and 3.15 on Windows
 (zlib-ng 2.2.4) reproduced 479, and zlib-ng 2.3.3 545, the two versions
 disagreeing with each other. `--capture` refuses to run under zlib-ng, and
 `--build` says so and checks every recipe by its members, never claiming an
-exact rebuild. `torrentzip.zlib_ng_version()` is the test.
+exact rebuild. `core.torrentzip.zlib_ng_version()` is the test.
 
 ## Large files
 
@@ -1606,7 +1608,7 @@ release. `.gitignore` is the list of them: a `bios/` path listed there is a
 release asset, whatever its size, and a committed file is served from the
 repository even past 50 MB.
 `generate_db.py` downloads them from the release when rebuilding the database,
-using `fetch_large_file()` from `largefiles.py`. `generate_pack.py` calls the
+using `fetch_large_file()` from `scripts/model/largefiles.py`. `generate_pack.py` calls the
 same function when the file is absent locally or holds another revision than
 the entry declares, and keeps the asset only when it matches a declared hash.
 The rules for asset names, uploads and checks are on the
@@ -1773,7 +1775,7 @@ python scripts/generate_games_index.py --check              # exit 1 when a publ
 | `games/arcade/<profile>.json` | `scraper/arcade_parent_importer.py` | BIOS parent and device sets of each game set, from the DAT the pin names or, for mame2000, mame2003 and mame2003-plus, from the driver code |
 
 Folder names resolve to systems through `SYSTEM_ALIASES` and `_norm_system_id`
-in `common.py`, the one alias table, and core names to profiles through the
+in `scripts/model/systems.py`, the one alias table, and core names to profiles through the
 profiles' `cores:`. The fallback set of a folder, what an unrecognised game
 keeps, is computed from `install/<platform>.json` with the installer's own
 core narrowing. Every published file is listed in `install/games/index.json`

@@ -15,7 +15,7 @@ from pathlib import Path
 
 # Scrapers run both as `python -m scripts.scraper.x` and as plain scripts, and
 # they share helpers with the rest of scripts/. Putting that directory on the
-# path once here is what lets every submodule say `from common import ...`
+# path once here is what lets every submodule say `from core.cli import ...`
 # instead of carrying its own bootstrap.
 if (_SCRIPTS_DIR := str(Path(__file__).resolve().parent.parent)) not in sys.path:
     sys.path.insert(0, _SCRIPTS_DIR)

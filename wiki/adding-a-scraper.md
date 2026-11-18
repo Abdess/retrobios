@@ -223,7 +223,7 @@ is `manufacturer-console` in lowercase with hyphens (e.g. `sony-playstation`,
 When a native slug has no mapping, print a warning to stderr. This surfaces new
 systems added upstream that need to be mapped.
 
-System ID consistency matters for cross-platform operations. The same console must use the same ID across all scrapers and platforms. Before inventing a new ID, check existing profiles and platform YAMLs for precedent. The canonical format is `manufacturer-console` in lowercase with hyphens (e.g., `sony-playstation`, `sega-mega-drive`). The `SYSTEM_ALIASES` dict in `common.py` maps common variations to canonical IDs.
+System ID consistency matters for cross-platform operations. The same console must use the same ID across all scrapers and platforms. Before inventing a new ID, check existing profiles and platform YAMLs for precedent. The canonical format is `manufacturer-console` in lowercase with hyphens (e.g., `sony-playstation`, `sega-mega-drive`). The `SYSTEM_ALIASES` dict in `scripts/model/systems.py` maps common variations to canonical IDs.
 
 ### Hash normalization
 
@@ -299,7 +299,7 @@ pipeline to work correctly.
 - **remove_cores**: names the scraper reads as cores that emulate nothing
 - **_default**: an entry applied to every target of the platform
 
-`apply_target_overrides()` in `common.py` applies them, read by
+`apply_target_overrides()` in `scripts/model/targets.py` applies them, read by
 `load_target_config()` and by the target manifests. The scraper itself does not
 handle overrides.
 

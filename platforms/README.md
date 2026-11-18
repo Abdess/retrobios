@@ -17,7 +17,7 @@ Batocera, or Recalbox. Only `base_destination` varies (`system/` vs `bios/`).
 
 Shared groups define files with correct destinations **once**. Platforms
 reference them via `includes: [group_name]` in their system definitions.
-`load_platform_config()` in `common.py` resolves includes at load time,
+`load_platform_config()` in `scripts/model/platforms.py` resolves includes at load time,
 deduplicating by filename.
 
 When to use shared groups: whenever 2+ platforms share files that a core

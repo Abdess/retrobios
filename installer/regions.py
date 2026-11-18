@@ -1,7 +1,7 @@
 """Region names, their aliases and the tree that ranks them."""
 from __future__ import annotations
 
-# The region vocabulary of scripts/region.py, which this file cannot import.
+# The region vocabulary of scripts/model/region.py, which this file cannot import.
 # A test holds the two copies equal.
 WORLD_REGION = "world"
 REGION_TREE: dict[str, frozenset] = {
