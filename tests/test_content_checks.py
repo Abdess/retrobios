@@ -22,7 +22,6 @@ from pathlib import Path
 from model.profiles import _emulator_profiles_cache, load_emulator_profiles
 from resolve.content import content_fits, size_fits, _masked_sha1_verdict
 from resolve.localfile import resolve_local_file
-import generate_pack as builder
 from packs import extras as packextras
 from core.romdir import romdir_accepts, walk
 from resolve.validation import _build_validation_index, check_file_validation
@@ -280,7 +279,7 @@ class ScannerVerifyManifestAgree(unittest.TestCase):
                                            "SCPH-70004.nvm", "246C.mec"})
 
     def test_platform_pack_and_manifest_scan(self):
-        extras = builder._collect_emulator_extras(
+        extras = packextras._collect_emulator_extras(
             self.config, str(self.root / "emulators"), self.db, set(), "", self.profiles,
         )
         placed = {e["name"] for e in extras if e.get("source_profile") == "demo"}

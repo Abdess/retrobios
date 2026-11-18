@@ -9,6 +9,7 @@ path in bios/: a scan running beside the copy hashed the truncated file.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import os
 import sys
@@ -56,10 +57,10 @@ class EveryWriterGoesThroughIt(unittest.TestCase):
             ("release_record.py", "write_text_atomic("),
             ("restore_large_files.py", "copy_file_atomic("),
         ):
-            source = (scripts / name).read_text(encoding="utf-8")
+            source = script_source(name)
             with self.subTest(script=name):
                 self.assertIn(helper, source)
-        pack = (scripts / "generate_pack.py").read_text(encoding="utf-8")
+        pack = script_source("generate_pack.py")
         self.assertNotIn('with open(path, "w") as f:\n        f.write(new_json)', pack)
         self.assertNotIn("json.dump(result, f", pack)
         self.assertNotIn("args.output.write_text(", (scripts / "release_record.py").read_text())
@@ -312,7 +313,7 @@ class ATerminatedBuildLeavesNoScratch(unittest.TestCase):
         "import sys, time\n"
         "sys.path.insert(0, 'scripts')\n"
         "from core.cli import run_cli\n"
-        "from generate_pack import _writing_pack\n"
+        "from packs.archive import _writing_pack\n"
         "def main():\n"
         "    with _writing_pack(sys.argv[1]) as zf:\n"
         "        zf.writestr('a.bin', b'x')\n"

@@ -8,11 +8,12 @@ names, while the split packs, built per system, carried them.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import unittest
 from pathlib import Path
 
-from generate_pack import _extras_for_systems
+from packs.extras import extras_for_systems as _extras_for_systems
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -47,7 +48,7 @@ class SystemExtras(unittest.TestCase):
         )
 
     def test_full_source_does_not_empty_them(self):
-        source = (REPO_ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8")
+        source = script_source("generate_pack.py")
         self.assertNotIn('elif system_filter and source != "truth":\n          core_files = []', source)
 
 

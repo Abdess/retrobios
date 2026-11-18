@@ -11,6 +11,7 @@ it, and these tests make the agreement checkable instead of reviewable.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import contextlib
 import io
@@ -475,9 +476,8 @@ class OneProfileSelector(unittest.TestCase):
 
     def test_both_entry_points_route_through_it(self):
         """A copy would let one accept what the other refuses."""
-        scripts = Path(__file__).resolve().parent.parent / "scripts"
         for name in ("verify.py", "generate_pack.py"):
-            text = (scripts / name).read_text()
+            text = script_source(name)
             self.assertIn(
                 "select_emulator_profiles", text,
                 f"{name} must ask common, not re-derive the refusal",

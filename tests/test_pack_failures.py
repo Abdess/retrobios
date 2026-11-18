@@ -17,7 +17,6 @@ from pathlib import Path
 from unittest import mock
 
 import generate_pack as gp
-from packs import finalize
 from packs import manifest
 from packs import platformpack
 
@@ -47,8 +46,9 @@ class FailedPlatformFailsTheRun(unittest.TestCase):
         )
 
     def test_pack_mode(self):
-        with mock.patch.object(platformpack, "generate_pack", _boom), \
-                mock.patch.object(finalize, "verify_and_finalize_packs", return_value=True), \
+        with mock.patch.object(gp, "generate_pack", _boom), \
+                mock.patch.object(platformpack, "generate_pack", _boom), \
+                mock.patch.object(gp, "verify_and_finalize_packs", return_value=True), \
                 self.assertRaises(SystemExit) as ctx:
             gp._run_platform_packs(
                 self._args(), [(["retropie"], "retropie")], {}, {}, {}, {}, {}, None
@@ -56,7 +56,9 @@ class FailedPlatformFailsTheRun(unittest.TestCase):
         self.assertEqual(ctx.exception.code, 1)
 
     def test_manifest_mode(self):
-        with mock.patch.object(manifest, "generate_manifest", _boom), self.assertRaises(SystemExit) as ctx:
+        with mock.patch.object(gp, "generate_manifest", _boom), \
+                mock.patch.object(manifest, "generate_manifest", _boom), \
+                self.assertRaises(SystemExit) as ctx:
             gp._run_manifest_mode(
                 self._args(), [(["retropie"], "retropie")], {}, {}, {}, {}
             )

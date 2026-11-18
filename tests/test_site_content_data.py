@@ -105,7 +105,7 @@ class GuidesLiveInYaml(unittest.TestCase):
 # A table of prose keyed by platform: what the guides file replaced.
 _PLATFORM_BRANCH = re.compile(r"""(?:==|!=)\s*["']([a-z0-9-]+)["']|["']([a-z0-9-]+)["']\s*(?:==|!=)""")
 # The modules that write the site and the pack README.
-_RENDERERS = ("generate_site.py", "packreadme.py", "generate_readme.py")
+_RENDERERS = ("generate_site.py", "packs/readme.py", "generate_readme.py")
 
 
 class NoPlatformProseInScripts(unittest.TestCase):

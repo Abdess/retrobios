@@ -63,7 +63,7 @@ class ACardOpenedOnAComputerShowsItsShareDrive(unittest.TestCase):
 class GuidesNameShippedInstallers(unittest.TestCase):
     def test_every_installer_named_exists(self):
         """RetroBat's guide sent users to an install.bat no release carries."""
-        source = (REPO_ROOT / "scripts" / "packreadme.py").read_text(encoding="utf-8")
+        source = (REPO_ROOT / "scripts" / "packs" / "readme.py").read_text(encoding="utf-8")
         for name in set(re.findall(r"install\.(?:bat|ps1|sh|py)", source)):
             with self.subTest(installer=name):
                 self.assertTrue((REPO_ROOT / name).is_file())
@@ -120,7 +120,7 @@ class TheOneLinerFollowsTheRegistry(unittest.TestCase):
         import sitebootstrap
         from siteguides import INSTALL_BASE
 
-        source = (REPO_ROOT / "scripts" / "packreadme.py").read_text(encoding="utf-8")
+        source = (REPO_ROOT / "scripts" / "packs" / "readme.py").read_text(encoding="utf-8")
         self.assertNotIn("raw.githubusercontent.com", source)
         self.assertNotIn("abdess.github.io", source)
         self.assertEqual(packreadme.INSTALL_SH, f"{INSTALL_BASE}/{sitebootstrap.SH_NAME}")

@@ -9,6 +9,7 @@ ruled undecidable, and the keep overrode the drop.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import os
 import unittest
@@ -42,7 +43,7 @@ class SlotPassReadsTheRegionGrouping(unittest.TestCase):
             self.assertIn(name, names)
 
     def test_one_grouping_function(self):
-        source = (REPO_ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8")
+        source = script_source("generate_pack.py")
         self.assertNotIn("def _pack_member_groups", source)
 
 

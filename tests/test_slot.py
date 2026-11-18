@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import os
 import unittest
@@ -314,9 +315,7 @@ class AnAbsentRankOneDisplacesNothing(unittest.TestCase):
         self.assertEqual(drops, {"bios/us_scd1_9210.bin"})
 
     def test_the_builder_passes_held(self):
-        from pathlib import Path
-
-        source = (Path(__file__).resolve().parents[1] / "scripts" / "generate_pack.py").read_text()
+        source = script_source("generate_pack.py")
         compact = " ".join(source.split())
         self.assertRegex(compact, r"resolve_slot_drops\( slot_groups, slot_mod\.platform_slot_index\([^)]*\), held, \)")
 

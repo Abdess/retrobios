@@ -8,6 +8,7 @@ honours Retry-After, and large files that resume where they stopped.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import contextlib
 import errno
@@ -266,7 +267,7 @@ class ManifestHashesMatchTheScan(unittest.TestCase):
     def test_the_cache_is_keyed_by_what_was_checked(self):
         """Keyed by id(db), a database freed and replaced at the same address
         got hashes verified against the first one back, unchecked."""
-        source = (REPO_ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8")
+        source = script_source("generate_pack.py")
         body = source[source.index("def _stable_hashes("):]
         body = body[: body.index("\ndef ")]
         key_line = next(line for line in body.splitlines() if line.strip().startswith("key ="))

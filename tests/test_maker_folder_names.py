@@ -34,7 +34,7 @@ from model.registry import list_registered_platforms, load_data_dir_registry
 from resolve.localfile import resolve_local_file
 from resolve.ownership import BUCKET_FOLDERS, names_manufacturer
 import generate_db
-import generate_pack as builder
+from packs import manifest as packs_manifest, md5pack, naming as packs_naming, platformpack
 import generate_site
 from packs.coverage import verify_platform
 
@@ -118,7 +118,7 @@ class _Collection(unittest.TestCase):
         return self.config["systems"][system]["files"][0]
 
     def _manifest(self) -> dict:
-        return builder.generate_manifest(
+        return packs_manifest.generate_manifest(
             "handheld", "platforms", self.db, "bios", "platforms/_registry.yml",
             emulators_dir="emulators", emu_profiles=self.profiles, offline=True,
         )
@@ -186,7 +186,7 @@ class DiskRomGoesToThePc88File(_Collection):
         )
 
     def test_pack(self):
-        zip_path = builder.generate_pack(
+        zip_path = platformpack.generate_pack(
             "handheld", "platforms", self.db, "bios", "out",
             emulators_dir="emulators", emu_profiles=self.profiles, offline=True,
         )
@@ -198,7 +198,7 @@ class DiskRomGoesToThePc88File(_Collection):
         manifest = self._manifest()
         original = (platforms.load_platform_config, localfile.system_makers)
         # Every module that reads the loader by its own name sees the stub.
-        readers = (builder, platforms, cliargs, cores, grouping)
+        readers = (packs_manifest, md5pack, packs_naming, platformpack, platforms, cliargs, cores, grouping)
 
         def untagged(*args, **kwargs):
             config = original[0](*args, **kwargs)

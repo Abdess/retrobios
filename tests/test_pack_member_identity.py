@@ -71,7 +71,7 @@ class SchemaAcceptsEveryStatus(unittest.TestCase):
     """verified_members reached every pack manifest and the schema refused it."""
 
     def test_each_status_packverify_writes_is_in_the_schema(self):
-        source = (REPO_ROOT / "scripts" / "packverify.py").read_text(encoding="utf-8")
+        source = (REPO_ROOT / "scripts" / "packs" / "integrity.py").read_text(encoding="utf-8")
         written = set(re.findall(r'status = "([a-z_]+)"', source))
         schema = json.loads(
             (REPO_ROOT / "schemas" / "pack-manifest.schema.json").read_text(encoding="utf-8")
@@ -113,7 +113,7 @@ class OneComparisonOfArchiveMembers(unittest.TestCase):
                 self.assertTrue(_same_members(zf, "same.zip", str(held)))
                 self.assertFalse(_same_members(zf, "other.zip", str(held)))
                 self.assertFalse(_same_members(zf, "broken.zip", str(held)))
-        source = (Path(__file__).resolve().parents[1] / "scripts" / "packverify.py").read_text()
+        source = (Path(__file__).resolve().parents[1] / "scripts" / "packs" / "integrity.py").read_text()
         self.assertNotIn("import io as _io", source)
 
 

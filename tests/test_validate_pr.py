@@ -262,14 +262,14 @@ class SymlinksAreRefusedBeforeReading(_Fixture):
         link = self.tmp / "bios" / "Sony" / "PS" / "link.bin"
         link.symlink_to(self.tmp / "bios" / "Sony" / "PS" / "real.bin")
         calls = []
-        real = validate_pr.compute_hashes
-        validate_pr.compute_hashes = lambda p, *a, **k: (
+        real = review.compute_hashes
+        review.compute_hashes = lambda p, *a, **k: (
             calls.append(p) or real(p, *a, **k)
         )
         try:
             review.validate_file("bios/Sony/PS/link.bin", None, EMPTY_HASHES)
         finally:
-            validate_pr.compute_hashes = real
+            review.compute_hashes = real
         self.assertEqual(calls, [], "a symlink target must not be read")
 
     @unittest.skipUnless(os.path.exists("/dev/zero"), "needs /dev/zero")

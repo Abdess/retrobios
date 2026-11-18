@@ -8,6 +8,7 @@ and `--verify-packs --target nx` looked for a pack nobody had built.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import subprocess
 import sys
@@ -130,7 +131,7 @@ class EachPlatformNamesTheTargetItsOwnWay(unittest.TestCase):
             )
 
     def test_no_naming_site_reads_the_typed_target(self):
-        source = (REPO_ROOT / "scripts" / "generate_pack.py").read_text()
+        source = script_source("generate_pack.py")
         self.assertNotIn("target_name=args.target,\n                        one_per_slot", source)
         self.assertNotIn("args.target = canonical_target_name(", source)
 

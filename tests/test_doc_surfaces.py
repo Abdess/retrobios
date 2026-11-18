@@ -10,6 +10,7 @@ tool prints, and a size is the one the release record holds.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import ast
 import contextlib
@@ -342,7 +343,7 @@ class ShownOutputIsPrintedOutput(unittest.TestCase):
     )
 
     def test_the_shapes_are_verify_output(self):
-        source = _read("scripts/verify.py")
+        source = script_source("verify.py")
         for _pattern, literal in self.SHAPES:
             if literal:
                 with self.subTest(literal=literal):

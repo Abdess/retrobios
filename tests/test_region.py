@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import contextlib
 import io
@@ -698,14 +699,14 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
     def test_the_report_withdraws_what_the_builder_withdraws(self):
         from model import profiles as model_profiles
         from model.profiles import _emulator_profiles_cache
-        import generate_pack as builder
+        from packs import extras as packs_extras
         from packs import coverage
 
         tmp, root, db, config = self._fixture()
         try:
             _emulator_profiles_cache.clear()
             profiles = model_profiles.load_emulator_profiles(str(root / "emulators"))
-            groups, extra_dests = builder.platform_region_groups(
+            groups, extra_dests = packs_extras.platform_region_groups(
                 config, config["systems"], str(root / "emulators"),
                 db, "", profiles,
             )
@@ -797,11 +798,11 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
 
         Every module is read, not only the two that once held a copy: the
         builder was split into several modules and a grouping can move with
-        it. packextras.py holds the two shared passes, platform and emulator.
+        it. packs/extras.py holds the two shared passes, platform and emulator.
         """
         scripts = Path(__file__).resolve().parent.parent / "scripts"
         for path in sorted(scripts.rglob("*.py")):
-            if path.name == "packextras.py":
+            if path == scripts / "packs" / "extras.py":
                 continue
             with self.subTest(module=path.name):
                 self.assertNotIn(
@@ -814,11 +815,9 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
         """Imported through the builder's CLI module, the verdict of a
         --region run depended on that module compiling, and seven scripts
         entered the site workflow's trigger paths for one function."""
-        source = (Path(__file__).resolve().parent.parent / "scripts" / "verify.py").read_text(
-            encoding="utf-8"
-        )
+        source = script_source("verify.py")
         self.assertNotIn("from generate_pack import platform_region_groups", source)
-        self.assertIn("from packextras import platform_region_groups", source)
+        self.assertIn("from packs.extras import platform_region_groups", source)
 
     def test_emulator_report_keeps_what_the_emulator_pack_keeps(self):
         """O2EM: --region us left the Videopac BIOSes in the pack, not in the report."""

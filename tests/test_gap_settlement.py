@@ -8,6 +8,7 @@ it. RetroArch names Galaksija's 4 KiB galaksija/rom1.bin, so DOSBox's
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import unittest
 from pathlib import Path
@@ -41,7 +42,7 @@ class OneRule(unittest.TestCase):
 
     def test_both_sides_call_it(self):
         for module in ("verify.py", "cross_reference.py"):
-            source = (REPO_ROOT / "scripts" / module).read_text(encoding="utf-8")
+            source = script_source(module)
             self.assertIn("declaration_settles(", source, module)
 
 
@@ -105,7 +106,7 @@ class EveryGapReportFoldsCase(unittest.TestCase):
         import ast
 
         for script in ("cross_reference.py", "generate_site.py"):
-            source = (REPO_ROOT / "scripts" / script).read_text(encoding="utf-8")
+            source = script_source(script)
             calls = [
                 node for node in ast.walk(ast.parse(source))
                 if isinstance(node, ast.Call)

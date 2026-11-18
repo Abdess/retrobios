@@ -8,6 +8,7 @@ seven of the eight members Batocera checks were missing.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import hashlib
 import os
@@ -23,7 +24,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 class PreferredArchive(unittest.TestCase):
     def test_the_archive_most_declarations_accept_wins(self):
-        import generate_pack
+        from resolve import packfiles
 
         roms = {f"r{i}.bin": bytes([i]) * 32 for i in range(3)}
         with tempfile.TemporaryDirectory() as tmp:
@@ -55,10 +56,10 @@ class PreferredArchive(unittest.TestCase):
                 for name, md5 in member_md5.items()
             ]
             systems = {"s": {"files": declarations}}
-            preferred = generate_pack._preferred_entries(
+            preferred = packfiles.preferred_entries(
                 systems, db, "bios", "", False, {}, True)
             chosen = next(fe for fe in declarations if id(fe) == preferred["set.zip"])
-            path, _status = generate_pack.resolve_file(chosen, db, "bios", {}, offline=True)
+            path, _status = packfiles.resolve_file(chosen, db, "bios", {}, offline=True)
             self.assertEqual(path, "bios/b/set.zip")
 
 
@@ -70,9 +71,9 @@ class OneWinnerRuleForEveryReader(unittest.TestCase):
     def test_the_rule_reads_no_data_directory(self):
         import inspect
 
-        import generate_pack
+        from resolve import packfiles
 
-        parameters = inspect.signature(generate_pack._preferred_entries).parameters
+        parameters = inspect.signature(packfiles.preferred_entries).parameters
         self.assertFalse([name for name in parameters if "registry" in name])
 
 
@@ -215,7 +216,7 @@ class TheArchiveHoldingTheCoreMembers(unittest.TestCase):
 
     def test_verify_and_the_pack_read_one_entry(self):
         for module in ("verify.py", "generate_pack.py"):
-            source = (REPO_ROOT / "scripts" / module).read_text()
+            source = script_source(module)
             with self.subTest(module=module):
                 self.assertIn("archive_entry(", source)
                 self.assertNotIn('{"name": archive', source)
@@ -451,9 +452,9 @@ class AnArchiveRankedByWhatItHolds(unittest.TestCase):
                               "hod2bios.zip", "dc/hod2bios.zip")
         self.assertEqual(extra["contents"], contents)
         # The second pass builds its extra from the profile entry itself.
-        source = (REPO_ROOT / "scripts" / "packextras.py").read_text()
+        source = (REPO_ROOT / "scripts" / "packs" / "extras.py").read_text()
         self.assertEqual(source.count('extra["contents"] = '), 2)
-        report = (REPO_ROOT / "scripts" / "verify.py").read_text()
+        report = script_source("verify.py")
         self.assertIn('entry["contents"] = f["contents"]', report)
 
 

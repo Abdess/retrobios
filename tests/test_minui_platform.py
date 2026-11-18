@@ -12,6 +12,7 @@ profiles, placed below that folder.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import contextlib
 import hashlib
@@ -458,7 +459,7 @@ class TheWholeTreeKeepsCoresMinUILeavesOut(unittest.TestCase):
 
     def test_both_readers_build_the_set_the_same_way(self):
         for script in ("cross_reference.py", "generate_site.py"):
-            source = (REPO_ROOT / "scripts" / script).read_text(encoding="utf-8")
+            source = script_source(script)
             with self.subTest(script=script):
                 self.assertIn("merged_standalone_set(", source)
                 self.assertNotIn("set().union(*(\n            standalone_set(", source)

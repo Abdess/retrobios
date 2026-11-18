@@ -69,7 +69,7 @@ class VerifyPackChoice(unittest.TestCase):
 
         self.variants: list[tuple[str, bool]] = []
 
-        with mock.patch.object(self.gp, "verify_pack_against_platform", record):
+        with mock.patch.object(generate_pack, "verify_pack_against_platform", record):
             generate_pack._run_verify_packs(args)
         return checked
 
@@ -143,7 +143,7 @@ class VerifyPackChoice(unittest.TestCase):
         self._touch(pack)
         out, err = io.StringIO(), io.StringIO()
         failed = (False, 0, 0, ["x: missing"], 1, 0, 1, 1, 0, 0)
-        with mock.patch.object(self.gp, "verify_pack_against_platform",
+        with mock.patch.object(generate_pack, "verify_pack_against_platform",
                                return_value=failed), \
                 contextlib.redirect_stdout(out), contextlib.redirect_stderr(err), \
                 self.assertRaises(SystemExit):
@@ -176,7 +176,6 @@ class VerifyPackChoice(unittest.TestCase):
 class GroupRenameKeepsSystemTag(unittest.TestCase):
     def test_single_system_pack_does_not_take_the_full_name(self):
         import generate_pack as gp
-        from packs import finalize
         from packs import naming
         from packs import platformpack
 
@@ -199,8 +198,9 @@ class GroupRenameKeepsSystemTag(unittest.TestCase):
                 one_per_slot=False, offline=True, bios_dir="bios",
                 output_dir=tmp,
             )
-            with mock.patch.object(platformpack, "generate_pack", fake_generate), \
-                    mock.patch.object(finalize, "verify_and_finalize_packs", return_value=True):
+            with mock.patch.object(gp, "generate_pack", fake_generate), \
+                    mock.patch.object(platformpack, "generate_pack", fake_generate), \
+                    mock.patch.object(gp, "verify_and_finalize_packs", return_value=True):
                 gp._run_platform_packs(
                     args, [(["retroarch", "lakka"], "retroarch")], {}, {}, {},
                     {}, {}, ["atari-lynx"],

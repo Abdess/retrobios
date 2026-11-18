@@ -9,6 +9,7 @@ across 14 destinations on six platforms.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import ast
 import hashlib
@@ -83,7 +84,7 @@ class ValidatedChoice(unittest.TestCase):
                     self.assertEqual(disagreement is not None, judged)
 
     def test_pack_and_manifest_both_read_it(self):
-        tree = ast.parse((REPO_ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8"))
+        tree = ast.parse(script_source("generate_pack.py"))
         callers = {
             node.name
             for node in ast.walk(tree)
@@ -106,7 +107,7 @@ class ValidatedChoice(unittest.TestCase):
             )
         }
         self.assertLessEqual({"generate_pack", "_manifest_core_entries"}, resolvers)
-        extras = ast.parse((REPO_ROOT / "scripts" / "packextras.py").read_text(encoding="utf-8"))
+        extras = ast.parse((REPO_ROOT / "scripts" / "packs" / "extras.py").read_text(encoding="utf-8"))
         resolve = next(
             node for node in ast.walk(extras)
             if isinstance(node, ast.FunctionDef) and node.name == "resolve"
@@ -119,7 +120,7 @@ class ValidatedChoice(unittest.TestCase):
     def test_core_extras_are_judged_too(self):
         """The baseline loop judged a platform's own files while the core-extras loop
         shipped whatever the name found. Both loops live in generate_pack."""
-        tree = ast.parse((REPO_ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8"))
+        tree = ast.parse(script_source("generate_pack.py"))
         builder = next(
             node for node in ast.walk(tree)
             if isinstance(node, ast.FunctionDef) and node.name == "generate_pack"
@@ -135,7 +136,7 @@ class ValidatedChoice(unittest.TestCase):
             and getattr(call.func.value, "id", None) == "extra_resolver"
             for call in ast.walk(builder)
         ))
-        extras = ast.parse((REPO_ROOT / "scripts" / "packextras.py").read_text(encoding="utf-8"))
+        extras = ast.parse((REPO_ROOT / "scripts" / "packs" / "extras.py").read_text(encoding="utf-8"))
         resolve = next(
             node for node in ast.walk(extras)
             if isinstance(node, ast.FunctionDef) and node.name == "resolve"

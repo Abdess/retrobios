@@ -55,4 +55,4 @@ def generator_sources() -> list[Path]:
     moved out of generate_site.py stays under the guards that read it."""
     scripts = REPO_ROOT / "scripts"
     return sorted({*scripts.glob("site*.py"), scripts / "generate_site.py",
-                   scripts / "packreadme.py"})
+                   scripts / "packs" / "readme.py"})

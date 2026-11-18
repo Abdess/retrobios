@@ -583,13 +583,12 @@ class EmulatorVerifyReadsNoArchiveItDoesNotNeed(unittest.TestCase):
     def test_the_member_index_is_not_built(self):
         from unittest import mock
 
-        import verify
         from packs import emulatorcheck
 
         if not (REPO_ROOT / "database.json").exists():
             self.skipTest("database.json is not generated")
         db = load_database(str(REPO_ROOT / "database.json"))
-        with mock.patch.object(verify, "build_zip_contents_index",
+        with mock.patch.object(emulatorcheck, "build_zip_contents_index",
                                side_effect=AssertionError("index built")):
             result = emulatorcheck.verify_emulator(["handy"], str(REPO_ROOT / "emulators"), db)
         self.assertTrue(result)

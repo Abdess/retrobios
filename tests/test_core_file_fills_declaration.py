@@ -9,6 +9,7 @@ frontend sees a file at the path. verify kept it MISSING, so the pack said
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import hashlib
 import contextlib
@@ -366,7 +367,7 @@ class TheManifestResolvesLikeThePack(unittest.TestCase):
     def test_every_platform_resolution_reads_the_data_directories(self):
         import ast
 
-        source = (REPO_ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8")
+        source = script_source("generate_pack.py")
         missing = []
         for fn in ast.walk(ast.parse(source)):
             if not isinstance(fn, ast.FunctionDef) or fn.name == "generate_md5_pack":

@@ -9,6 +9,7 @@ Galaksija ROM and a PS2 ROM2.BIN.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import unittest
 from pathlib import Path
@@ -54,8 +55,8 @@ class IdentityTravels(unittest.TestCase):
                     self.assertEqual(item.get(field), ENTRY[field])
 
     def test_every_hop_reads_the_shared_list(self):
-        for name in ("packextras.py", "verify.py"):
-            source = (REPO_ROOT / "scripts" / name).read_text(encoding="utf-8")
+        for name in ("packs/extras.py", "verify.py"):
+            source = script_source(name)
             with self.subTest(module=name):
                 self.assertIn("PROFILE_IDENTITY_FIELDS", source)
                 self.assertNotIn('("sha1", "md5", "sha256", "crc32", "size"', source)

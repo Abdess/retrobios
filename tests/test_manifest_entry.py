@@ -10,6 +10,7 @@ an empty repo_path, and the installer refused the whole manifest.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import ast
 import json
@@ -17,7 +18,6 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-import generate_pack as gp
 from packs import manifestcores
 from packs import manifestentry
 from packs.manifestselect import SelectionIndex
@@ -65,7 +65,7 @@ class AnEntryWithoutSourceIsAnOmission(unittest.TestCase):
         def record(full_dest, entry, system, reason, cores):
             omitted[full_dest] = reason
 
-        with mock.patch.object(gp, "compute_hashes", return_value=hashes):
+        with mock.patch.object(manifestentry, "compute_hashes", return_value=hashes):
             manifestcores._manifest_core_entries(
                 [extra], {}, self.db, str(REPO_ROOT / "bios"), "", str(REPO_ROOT),
                 {}, True,
@@ -105,7 +105,7 @@ class OneBuilderForEveryEntry(unittest.TestCase):
     """Two copies of the entry let one drift: the guard lived in one only."""
 
     def test_the_download_record_is_built_in_one_place(self):
-        tree = ast.parse((REPO_ROOT / "scripts" / "generate_pack.py").read_text())
+        tree = ast.parse(script_source("generate_pack.py"))
         builders = [
             node.lineno
             for node in ast.walk(tree)

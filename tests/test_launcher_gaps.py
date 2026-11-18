@@ -287,7 +287,7 @@ class LauncherGapTest(unittest.TestCase):
         with_rows = coverage.verify_platform(
             self.config, self.db, self.emulators_dir, self.profiles, data_dir_registry={}
         )
-        with mock.patch.object(verify, "launcher_reads_not_held", return_value=[]):
+        with mock.patch.object(coverage, "launcher_reads_not_held", return_value=[]):
             without = coverage.verify_platform(
                 self.config, self.db, self.emulators_dir, self.profiles,
                 data_dir_registry={},

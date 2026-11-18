@@ -384,7 +384,7 @@ class TestPackDeterminism(unittest.TestCase):
 
     def test_injected_manifest_is_pinned_to_the_database(self):
         from scripts.packs.finalize import inject_manifest
-        from scripts.generate_pack import verify_pack
+        from scripts.packs.integrity import verify_pack
 
         pack = self._build("out1")
         ok, manifest = verify_pack(str(pack), self.db)
@@ -407,7 +407,6 @@ class ManifestInjectionIsAtomic(unittest.TestCase):
         import tempfile
         from unittest import mock
 
-        from scripts.packs import archive as packs_archive
         from scripts.packs import finalize
 
         with tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1] / "tmp") as d:
@@ -422,7 +421,7 @@ class ManifestInjectionIsAtomic(unittest.TestCase):
                 zf.fp.flush()
                 raise KeyboardInterrupt
 
-            with mock.patch.object(packs_archive, "_write_generated_member", die), \
+            with mock.patch.object(finalize, "_write_generated_member", die), \
                     self.assertRaises(KeyboardInterrupt):
                 finalize.inject_manifest(str(pack), {"files": ["x"] * 2000})
             self.assertEqual(pack.read_bytes(), before)

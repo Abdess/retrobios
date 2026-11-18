@@ -136,9 +136,8 @@ class ASplitBuildsOnlyTheTargetsSystems(unittest.TestCase):
     def test_no_part_is_asked_for_a_dropped_system(self):
         from unittest import mock
 
-        import generate_pack
+        from packs import manifest, platformpack
         from packs import platformpack as packs_platformpack
-        from packs import platformpack
         from model.profiles import load_emulator_profiles
 
         platforms = str(REPO_ROOT / "platforms")
@@ -152,8 +151,8 @@ class ASplitBuildsOnlyTheTargetsSystems(unittest.TestCase):
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as out, \
                 mock.patch.object(platformpack, "generate_pack", record), \
-                mock.patch.object(generate_pack, "_collect_emulator_extras",
-                                  return_value=[]):
+                mock.patch.object(platformpack, "_collect_emulator_extras", return_value=[]), \
+                mock.patch.object(manifest, "_collect_emulator_extras", return_value=[]):
             packs_platformpack.generate_split_packs(
                 "retroarch", platforms, {"files": {}}, "bios", out,
                 emu_profiles=profiles,
@@ -207,16 +206,17 @@ class TheSplitDirectoryReadsThePackStem(unittest.TestCase):
     def test_a_reserved_character_is_made_safe_as_in_the_full_pack(self):
         from unittest import mock
 
-        import generate_pack
+        from packs import manifest, md5pack, naming
         from packs import platformpack as packs_platformpack
-        from packs import naming
 
         config = {"platform": "Foo: Bar", "version": "release/1.22", "systems": {}}
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as out, \
-                mock.patch.object(generate_pack, "load_platform_config",
-                                  return_value=config), \
-                mock.patch.object(generate_pack, "_collect_emulator_extras",
-                                  return_value=[]):
+                mock.patch.object(packs_platformpack, "load_platform_config", return_value=config), \
+                mock.patch.object(naming, "load_platform_config", return_value=config), \
+                mock.patch.object(manifest, "load_platform_config", return_value=config), \
+                mock.patch.object(md5pack, "load_platform_config", return_value=config), \
+                mock.patch.object(packs_platformpack, "_collect_emulator_extras", return_value=[]), \
+                mock.patch.object(manifest, "_collect_emulator_extras", return_value=[]):
             packs_platformpack.generate_split_packs(
                 "foo", "platforms", {"files": {}}, "bios", out, emu_profiles={},
             )

@@ -10,6 +10,7 @@ a directory called ROM).
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import tempfile
 import unittest
@@ -155,7 +156,7 @@ class PlatformScopedEntries(unittest.TestCase):
     def test_the_report_reads_the_shared_rules(self):
         """One rule, one function: a local `bool(f.get("bundled"))` answered
         differently from verify for every installed_on/not_bundled_on entry."""
-        source = (REPO_ROOT / "scripts" / "cross_reference.py").read_text()
+        source = script_source("cross_reference.py")
         self.assertNotIn('bool(f.get("bundled"))', source)
         self.assertIn("installed_with_emulator(f, platform)", source)
         self.assertIn("unread_on(f, platform)", source)

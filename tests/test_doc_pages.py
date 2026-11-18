@@ -8,6 +8,7 @@ code moves, and nothing else notices.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import ast
 import hashlib
@@ -1982,7 +1983,6 @@ class NoTextClaimsAScheduledScrape(unittest.TestCase):
     `schedule:`."""
 
     def test_no_text_ties_the_registry_to_automation(self):
-        import generate_pack
         import generate_readme
         import generate_site
         import list_platforms
@@ -1991,7 +1991,7 @@ class NoTextClaimsAScheduledScrape(unittest.TestCase):
             "adding-a-platform.md": (WIKI / "adding-a-platform.md").read_text(encoding="utf-8"),
             "generate_readme": inspect.getsource(generate_readme),
             "generate_site": inspect.getsource(generate_site),
-            "generate_pack": inspect.getsource(generate_pack),
+            "generate_pack": script_source("generate_pack.py"),
             "list_platforms": inspect.getsource(list_platforms),
             "_guides.yml": (ROOT / "platforms" / "_guides.yml").read_text(encoding="utf-8"),
         }

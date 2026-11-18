@@ -10,6 +10,7 @@ ROCKNIX's higan SGB1.sfc/program.rom under the file SGB1.sfc.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import os
 import unittest
@@ -41,19 +42,17 @@ class OneRule(unittest.TestCase):
         )
 
     def test_builder_and_report_read_it(self):
-        for module in ("generate_pack.py", "packextras.py"):
-            source = (REPO_ROOT / "scripts" / module).read_text(encoding="utf-8")
+        for module in ("generate_pack.py", "packs/extras.py"):
+            source = script_source(module)
             self.assertIn("placement_block(", source, module)
-        builder = (REPO_ROOT / "scripts" / "generate_pack.py").read_text(
-            encoding="utf-8"
-        )
+        builder = script_source("generate_pack.py")
         self.assertNotIn("if full_dest.lower() in seen_lower and case_insensitive", builder)
 
     def test_a_refused_declaration_occupies_nothing(self):
         """verify counted a declaration whose hash the frontend refuses as
         occupying its path, but the builder leaves it out, and the core file
         that then takes the path was reported missing from the pack."""
-        source = (REPO_ROOT / "scripts" / "verify.py").read_text(encoding="utf-8")
+        source = script_source("verify.py")
         compact = " ".join(source.split())
         self.assertRegex(
             compact,
@@ -67,7 +66,7 @@ class TheIntegrityCheckFoldsCaseLikeTheBuilder(unittest.TestCase):
     of the two passed step 6."""
 
     def test_case_folding_reads_the_platform(self):
-        source = (REPO_ROOT / "scripts" / "packverify.py").read_text(encoding="utf-8")
+        source = (REPO_ROOT / "scripts" / "packs" / "integrity.py").read_text(encoding="utf-8")
         compact = " ".join(source.split())
         self.assertRegex(
             compact,
@@ -153,7 +152,7 @@ class TheGapReportIsComputedOnce(unittest.TestCase):
         os.chdir(REPO_ROOT)
         try:
             from packs import coverage
-            from packs import gaps
+            from packs import coverage as packs_coverage, gaps
             from model.database import load_database
             from model.profiles import load_emulator_profiles
             from model.platforms import load_platform_config
@@ -163,7 +162,7 @@ class TheGapReportIsComputedOnce(unittest.TestCase):
             config = load_platform_config("emudeck", "platforms")
             with mock.patch.object(
                 gaps, "find_undeclared_files", wraps=gaps.find_undeclared_files
-            ) as counted:
+            ) as counted, mock.patch.object(packs_coverage, "find_undeclared_files", counted):
                 coverage.verify_platform(config, db, "emulators", profiles)
         finally:
             os.chdir(previous)

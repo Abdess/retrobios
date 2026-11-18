@@ -9,6 +9,7 @@ and a fixed path the launcher passes (Batocera's x16emu shape).
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import hashlib
 import inspect
@@ -23,7 +24,8 @@ import yaml
 from model.profiles import _emulator_profiles_cache, load_emulator_profiles
 from model.platforms import load_platform_config
 from resolve.launchers import LauncherLayer, launcher_places, suffixed_stem
-from verify import find_undeclared_files, verify_platform
+from packs.gaps import find_undeclared_files
+from packs.coverage import verify_platform
 
 CONTENT = {
     "b.bin": b"REGION_B_IMAGE",
@@ -140,7 +142,7 @@ class LauncherLayerTest(unittest.TestCase):
         )
 
     def _pack_names(self) -> set[str]:
-        from generate_pack import generate_pack
+        from packs.platformpack import generate_pack
 
         output = os.path.join(self.root, "dist")
         os.makedirs(output)
@@ -452,23 +454,25 @@ class LauncherLayerTest(unittest.TestCase):
 
     def test_one_decision_for_verify_and_pack(self) -> None:
         """The layer is applied once, in the report both sides read."""
-        import generate_pack
         from packs import extras as packextras
-        import verify
+        from packs import gaps as packs_gaps
 
-        self.assertIn("LauncherLayer(", inspect.getsource(verify.find_undeclared_files))
-        self.assertIn(".settle(", inspect.getsource(verify.find_undeclared_files))
+        self.assertIn("LauncherLayer(", inspect.getsource(packs_gaps.find_undeclared_files))
+        self.assertIn(".settle(", inspect.getsource(packs_gaps.find_undeclared_files))
         self.assertIn(
             "undeclared_report(", inspect.getsource(packextras._collect_emulator_extras)
         )
         self.assertIn(
             "find_undeclared_files(", inspect.getsource(packextras.undeclared_report)
         )
-        for module in (generate_pack, packextras, verify):
-            source = inspect.getsource(module)
-            with self.subTest(module=module.__name__):
+        for name, source in (
+            ("generate_pack", script_source("generate_pack.py")),
+            ("packs.extras", inspect.getsource(packextras)),
+            ("verify", script_source("verify.py")),
+        ):
+            with self.subTest(module=name):
                 self.assertNotIn("launcher_places(", source)
-            if module is not verify:
+            if name != "verify":
                 self.assertNotIn("LauncherLayer(", source)
 
 

@@ -18,6 +18,7 @@ Covers:
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import contextlib
 import hashlib
@@ -1126,7 +1127,7 @@ class TestE2E(unittest.TestCase):
         )
 
     def test_60_storage_external(self):
-        from generate_pack import resolve_file
+        from resolve.packfiles import resolve_file
 
         entry = {"name": "large.pup", "storage": "external"}
         path, status = resolve_file(entry, self.db, self.bios_dir)
@@ -1134,7 +1135,7 @@ class TestE2E(unittest.TestCase):
         self.assertEqual(status, "external")
 
     def test_61_storage_user_provided(self):
-        from generate_pack import resolve_file
+        from resolve.packfiles import resolve_file
 
         entry = {"name": "user.bin", "storage": "user_provided"}
         path, status = resolve_file(entry, self.db, self.bios_dir)
@@ -2266,7 +2267,7 @@ class TestE2E(unittest.TestCase):
 
     def test_130_required_only_excludes_optional(self):
         """--required-only excludes files with required: false from pack."""
-        from generate_pack import generate_pack
+        from packs.platformpack import generate_pack
 
         output_dir = os.path.join(self.root, "pack_reqonly")
         os.makedirs(output_dir, exist_ok=True)
@@ -2315,7 +2316,7 @@ class TestE2E(unittest.TestCase):
         import contextlib
         import io
 
-        from generate_pack import generate_pack
+        from packs.platformpack import generate_pack
 
         output_dir = os.path.join(self.root, "pack_mismatch")
         os.makedirs(output_dir, exist_ok=True)
@@ -2358,7 +2359,7 @@ class TestE2E(unittest.TestCase):
 
     def test_131_required_only_keeps_default_required(self):
         """--required-only keeps files with no required field (default = required)."""
-        from generate_pack import generate_pack
+        from packs.platformpack import generate_pack
 
         output_dir = os.path.join(self.root, "pack_reqdef")
         os.makedirs(output_dir, exist_ok=True)
@@ -2392,7 +2393,7 @@ class TestE2E(unittest.TestCase):
 
     def test_132_platform_system_filter(self):
         """--platform + --system filters systems within a platform pack."""
-        from generate_pack import generate_pack
+        from packs.platformpack import generate_pack
 
         output_dir = os.path.join(self.root, "pack_sysfilter")
         os.makedirs(output_dir, exist_ok=True)
@@ -2549,7 +2550,7 @@ class TestE2E(unittest.TestCase):
 
             from core.ziptools import build_zip_contents_index
             from model.profiles import load_emulator_profiles
-            from generate_pack import generate_split_packs
+            from packs.platformpack import generate_split_packs
 
             zip_contents = build_zip_contents_index(db)
             emu_profiles = load_emulator_profiles(emu_dir)
@@ -2606,7 +2607,7 @@ class TestE2E(unittest.TestCase):
 
     def test_137_group_systems_by_manufacturer(self):
         """_group_systems_by_manufacturer groups correctly."""
-        from generate_pack import _group_systems_by_manufacturer
+        from packs.platformpack import _group_systems_by_manufacturer
 
         systems = {
             "sony-playstation": {"files": [{"name": "a.bin"}]},
@@ -2775,7 +2776,7 @@ class TestE2E(unittest.TestCase):
                 yaml.dump(plat_cfg, f)
 
             from core.ziptools import build_zip_contents_index
-            from generate_pack import generate_md5_pack
+            from packs.md5pack import generate_md5_pack
 
             zip_contents = build_zip_contents_index(db)
 
@@ -2825,7 +2826,7 @@ class TestE2E(unittest.TestCase):
         import io
         import tempfile
 
-        from generate_pack import generate_md5_pack
+        from packs.md5pack import generate_md5_pack
 
         db = {
             "files": {
@@ -3069,7 +3070,7 @@ class TestE2E(unittest.TestCase):
 
     def test_157_path_conflict_helpers(self):
         """_has_path_conflict detects file/directory naming collisions."""
-        from generate_pack import _has_path_conflict, _register_path
+        from packs.paths import _has_path_conflict, _register_path
 
         seen_files: set[str] = set()
         seen_parents: set[str] = set()
@@ -3104,7 +3105,7 @@ class TestE2E(unittest.TestCase):
 
     def test_158_pack_skips_file_directory_conflict(self):
         """Pack generation skips entries that conflict with existing paths."""
-        from generate_pack import generate_pack
+        from packs.platformpack import generate_pack
 
         output_dir = os.path.join(self.root, "pack_conflict")
         os.makedirs(output_dir, exist_ok=True)
@@ -3263,7 +3264,7 @@ class TestE2E(unittest.TestCase):
 
     def test_164_pack_extras_use_archive_name(self):
         """Pack extras for archived files use archive name, not individual ROM."""
-        from generate_pack import _collect_emulator_extras
+        from packs.extras import _collect_emulator_extras
 
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
@@ -3285,7 +3286,7 @@ class TestE2E(unittest.TestCase):
 
     def test_165_pack_extras_multi_dest_cross_ref(self):
         """Same file at different paths from two profiles produces both destinations."""
-        from generate_pack import _collect_emulator_extras
+        from packs.extras import _collect_emulator_extras
 
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
@@ -3305,7 +3306,7 @@ class TestE2E(unittest.TestCase):
 
     def test_166_pack_extras_multi_dest_platform_declared(self):
         """Profile with path different from platform destination adds alternative."""
-        from generate_pack import _collect_emulator_extras
+        from packs.extras import _collect_emulator_extras
 
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
@@ -3640,7 +3641,7 @@ class TestE2E(unittest.TestCase):
         required set, and --all-variants wrote three manifests that duplicated
         their non-required twins.
         """
-        from generate_pack import generate_manifest
+        from packs.manifest import generate_manifest
 
         registry_path = os.path.join(self.platforms_dir, "_test_registry.yml")
         with open(registry_path, "w") as fh:
@@ -3672,7 +3673,7 @@ class TestE2E(unittest.TestCase):
 
     def test_91_generate_manifest(self):
         """generate_manifest returns valid manifest dict with expected fields."""
-        from generate_pack import generate_manifest
+        from packs.manifest import generate_manifest
 
         # Create a minimal registry file for the test
         registry_path = os.path.join(self.platforms_dir, "_test_registry.yml")
@@ -3739,7 +3740,7 @@ class TestE2E(unittest.TestCase):
         than written with a stand-in or its parent's version.
         """
         from model.platforms import _platform_config_cache
-        from generate_pack import generate_manifest
+        from packs.manifest import generate_manifest
 
         registry_path = os.path.join(self.platforms_dir, "_test_registry_version.yml")
         with open(registry_path, "w") as fh:
@@ -3780,7 +3781,7 @@ class TestE2E(unittest.TestCase):
         install.py builds its download URL from repo_path, so an upstream
         hash that resolves to nothing leaves the file unfetchable.
         """
-        from generate_pack import generate_manifest
+        from packs.manifest import generate_manifest
 
         registry_path = os.path.join(self.platforms_dir, "_test_registry2.yml")
         with open(registry_path, "w") as fh:
@@ -3828,7 +3829,8 @@ class TestE2E(unittest.TestCase):
 
     def test_92_manifest_matches_zip(self):
         """Manifest file destinations match ZIP contents (excluding metadata)."""
-        from generate_pack import generate_manifest, generate_pack
+        from packs.manifest import generate_manifest
+        from packs.platformpack import generate_pack
 
         registry_path = os.path.join(self.platforms_dir, "_test_registry.yml")
         registry_data = {
@@ -4650,7 +4652,7 @@ class TestE2E(unittest.TestCase):
 
     def test_181_agnostic_extras_scan(self):
         """Agnostic profiles add all matching DB files as extras."""
-        from generate_pack import _collect_emulator_extras
+        from packs.extras import _collect_emulator_extras
 
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
@@ -4673,7 +4675,7 @@ class TestE2E(unittest.TestCase):
 
     def test_182_agnostic_rename_readme(self):
         """_build_agnostic_rename_readme generates correct text."""
-        from generate_pack import _build_agnostic_rename_readme
+        from packs.readme import _build_agnostic_rename_readme
 
         result = _build_agnostic_rename_readme(
             "dsi_nand.bin",
@@ -5033,7 +5035,7 @@ struct BurnDriver BurnDrvneogeo = {
 
     def test_201_collect_emulator_extras_include_all(self):
         """include_all=True passes through to find_undeclared_files."""
-        from generate_pack import _collect_emulator_extras
+        from packs.extras import _collect_emulator_extras
 
         config = self._load_config("test_existence")
         profiles = load_emulator_profiles(self.emulators_dir)
@@ -5063,7 +5065,7 @@ struct BurnDriver BurnDrvneogeo = {
 
     def test_202_pack_source_platform(self):
         """source='platform' skips core extras."""
-        from generate_pack import generate_pack
+        from packs.platformpack import generate_pack
 
         output_dir = os.path.join(self.root, "pack_platform")
         os.makedirs(output_dir, exist_ok=True)
@@ -5083,7 +5085,7 @@ struct BurnDriver BurnDrvneogeo = {
 
     def test_203_pack_source_truth(self):
         """source='truth' uses emulator profile files."""
-        from generate_pack import generate_pack
+        from packs.platformpack import generate_pack
 
         output_dir = os.path.join(self.root, "pack_truth")
         os.makedirs(output_dir, exist_ok=True)
@@ -5103,7 +5105,7 @@ struct BurnDriver BurnDrvneogeo = {
 
     def test_204_pack_source_full_unchanged(self):
         """source='full' (default) has no source tag in filename."""
-        from generate_pack import generate_pack
+        from packs.platformpack import generate_pack
 
         output_dir = os.path.join(self.root, "pack_full")
         os.makedirs(output_dir, exist_ok=True)
@@ -5126,7 +5128,7 @@ struct BurnDriver BurnDrvneogeo = {
 
     def test_205_pack_source_platform_required(self):
         """source='platform' + required_only=True."""
-        from generate_pack import generate_pack
+        from packs.platformpack import generate_pack
 
         output_dir = os.path.join(self.root, "pack_plat_req")
         os.makedirs(output_dir, exist_ok=True)
@@ -5151,7 +5153,7 @@ struct BurnDriver BurnDrvneogeo = {
 
     def test_206_pack_source_truth_required(self):
         """source='truth' + required_only=True."""
-        from generate_pack import generate_pack
+        from packs.platformpack import generate_pack
 
         output_dir = os.path.join(self.root, "pack_truth_req")
         os.makedirs(output_dir, exist_ok=True)
@@ -5172,7 +5174,7 @@ struct BurnDriver BurnDrvneogeo = {
 
     def test_207_manifest_source(self):
         """generate_manifest respects source param."""
-        from generate_pack import generate_manifest
+        from packs.manifest import generate_manifest
 
         profiles = load_emulator_profiles(self.emulators_dir)
         registry_path = os.path.join(self.platforms_dir, "_registry.yml")
@@ -5195,7 +5197,7 @@ struct BurnDriver BurnDrvneogeo = {
 
     def test_208_split_source_tag_in_dirname(self):
         """generate_split_packs uses source tag in split directory name."""
-        from generate_pack import generate_split_packs
+        from packs.platformpack import generate_split_packs
 
         output_dir = os.path.join(self.root, "split_src")
         os.makedirs(output_dir, exist_ok=True)
@@ -5211,7 +5213,7 @@ struct BurnDriver BurnDrvneogeo = {
 
     def test_209_all_variants_generates_6_zips(self):
         """All 6 source x required combinations produce unique ZIPs."""
-        from generate_pack import generate_pack
+        from packs.platformpack import generate_pack
 
         output_dir = os.path.join(self.root, "pack_allvar")
         os.makedirs(output_dir, exist_ok=True)
@@ -5283,7 +5285,7 @@ struct BurnDriver BurnDrvneogeo = {
         """md5-declared ZIPs are copied unchanged, never rebuilt."""
         import tempfile
 
-        from generate_pack import generate_pack
+        from packs.platformpack import generate_pack
 
         with tempfile.TemporaryDirectory() as tmpdir:
             plat_dir, bios_root, out_dir, db, h, hl = self._make_hash_zip_fixture(
@@ -5303,7 +5305,7 @@ struct BurnDriver BurnDrvneogeo = {
         import io
         import tempfile
 
-        from generate_pack import generate_pack
+        from packs.platformpack import generate_pack
 
         with tempfile.TemporaryDirectory() as tmpdir:
             plat_dir, bios_root, out_dir, db, h, hl = self._make_hash_zip_fixture(
@@ -5367,7 +5369,8 @@ struct BurnDriver BurnDrvneogeo = {
         errors, while firmware the collection lacks stays one."""
         import tempfile
 
-        from generate_pack import generate_pack, verify_pack_against_platform
+        from packs.platformpack import generate_pack
+        from generate_pack import verify_pack_against_platform
 
         profiles = {"eng": {"emulator": "Eng", "type": "game", "cores": ["eng"],
                             "systems": ["arcade-sys"],
@@ -5799,7 +5802,7 @@ struct BurnDriver BurnDrvneogeo = {
         """The manifest is deflated whichever injection path runs."""
         import json as _json
 
-        from generate_pack import inject_manifest
+        from packs.finalize import inject_manifest
 
         manifest = {"files": [{"path": f"f{i}.bin"} for i in range(200)]}
         raw = _json.dumps(manifest, indent=2, ensure_ascii=False)
@@ -5876,7 +5879,7 @@ struct BurnDriver BurnDrvneogeo = {
             yaml.safe_dump(config, fh)
 
     def _region_pack(self, **kwargs) -> str:
-        from generate_pack import generate_pack
+        from packs.platformpack import generate_pack
 
         self._create_region_fixtures()
         out = generate_pack(
@@ -5954,7 +5957,7 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertIn("rgn_plain.bin", names)
 
     def test_region_composes_with_split(self):
-        from generate_pack import generate_split_packs
+        from packs.platformpack import generate_split_packs
 
         self._create_region_fixtures()
         paths = generate_split_packs(
@@ -5975,7 +5978,7 @@ struct BurnDriver BurnDrvneogeo = {
             self.assertNotIn("rgn_eu.bin", names)
 
     def test_region_composes_with_split_and_target(self):
-        from generate_pack import generate_split_packs
+        from packs.platformpack import generate_split_packs
 
         self._create_region_fixtures()
         paths = generate_split_packs(
@@ -6000,7 +6003,7 @@ struct BurnDriver BurnDrvneogeo = {
         )
 
     def test_region_composes_with_manifest(self):
-        from generate_pack import generate_manifest
+        from packs.manifest import generate_manifest
 
         self._create_region_fixtures()
         registry_path = os.path.join(self.platforms_dir, "_registry.yml")
@@ -6023,7 +6026,7 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertNotIn("rgn_eu.bin", packed)
 
     def test_manifest_without_region_keeps_every_variant(self):
-        from generate_pack import generate_manifest
+        from packs.manifest import generate_manifest
 
         self._create_region_fixtures()
         registry_path = os.path.join(self.platforms_dir, "_registry.yml")
@@ -6044,7 +6047,7 @@ struct BurnDriver BurnDrvneogeo = {
             self.assertIn(expected, packed)
 
     def test_region_composes_with_system_pack(self):
-        from generate_pack import generate_system_pack
+        from packs.emulatorpack import generate_system_pack
 
         self._create_region_fixtures()
         os.makedirs(self.emulators_dir, exist_ok=True)
@@ -6092,7 +6095,7 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertTrue(checked.issubset(packed), checked - packed)
 
     def test_verify_emulator_region_matches_the_pack(self):
-        from generate_pack import generate_emulator_pack
+        from packs.emulatorpack import generate_emulator_pack
         from packs.emulatorcheck import verify_emulator
 
         self._create_region_fixtures()
@@ -6123,7 +6126,8 @@ struct BurnDriver BurnDrvneogeo = {
     def test_every_narrowing_names_itself_and_says_so(self):
         """A dimension that removes files must show in the pack name and in the
         README. Both are built from _narrowings, so this holds for any new one."""
-        from generate_pack import _build_readme, _narrowings
+        from packs.readme import _build_readme
+        from packs.naming import _narrowings
 
         dimensions = [
             {"source": "platform"},
@@ -6317,7 +6321,7 @@ struct BurnDriver BurnDrvneogeo = {
         import inspect
 
         from packs import integrity as packverify
-        from generate_pack import _narrows_contents, _narrowings
+        from packs.naming import _narrows_contents, _narrowings
 
         source = inspect.getsource(packverify.verify_pack_against_platform)
         self.assertIn(
@@ -6347,7 +6351,7 @@ struct BurnDriver BurnDrvneogeo = {
     def test_standalone_mode_names_itself(self):
         """--emulator --standalone ships a different file set, and without a tag it
         overwrote the pack built without it."""
-        from generate_pack import _narrowings
+        from packs.naming import _narrowings
 
         applied = _narrowings("full", None, None, False, False, standalone=True)
         self.assertEqual([tag for tag, _l in applied], ["_Standalone"])
@@ -6355,11 +6359,7 @@ struct BurnDriver BurnDrvneogeo = {
     def test_every_name_builder_uses_the_same_list(self):
         """Four places name a pack or a manifest. None may assemble tags by
         hand: that is how --one-per-slot reached --split unnamed."""
-        import inspect
-
-        import generate_pack
-
-        source = inspect.getsource(generate_pack)
+        source = script_source("generate_pack.py")
         for hand_rolled in (
             'req_tag = "_Required"',
             'source_tag = {"platform": "_Platform"',
@@ -6473,7 +6473,8 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertFalse(os.listdir(out) if os.path.isdir(out) else [])
 
     def test_a_full_pack_is_not_announced_as_narrowed(self):
-        from generate_pack import _build_readme, _narrowings
+        from packs.readme import _build_readme
+        from packs.naming import _narrowings
 
         self.assertEqual(_narrowings("full", None, None, False, False), [])
         self.assertNotIn(
@@ -6481,7 +6482,7 @@ struct BurnDriver BurnDrvneogeo = {
         )
 
     def test_system_filter_is_announced_too(self):
-        from generate_pack import _build_readme
+        from packs.readme import _build_readme
 
         readme = _build_readme(
             "p", "P", "", 1, 1, system_filter=["sony-playstation"]
@@ -6578,7 +6579,8 @@ struct BurnDriver BurnDrvneogeo = {
         import inspect
         import typing
 
-        from generate_pack import generate_pack, verify_pack_against_platform
+        from packs.platformpack import generate_pack
+        from generate_pack import verify_pack_against_platform
 
         self._create_region_fixtures()
         profiles = self._region_profiles()
@@ -6601,7 +6603,7 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertEqual(len(result), len(annotated))
 
     def test_narrowed_variants_skip_conformance(self):
-        from generate_pack import _narrows_contents
+        from packs.naming import _narrows_contents
 
         for narrowed in (
             "EmuDeck_2.3.8_Required_BIOS_Pack.zip",
@@ -6619,7 +6621,7 @@ struct BurnDriver BurnDrvneogeo = {
             self.assertFalse(_narrows_contents(full), full)
 
     def test_target_tag_formats_hardware_names(self):
-        from generate_pack import _target_tag
+        from packs.naming import _target_tag
 
         self.assertEqual(_target_tag("switch"), "Switch")
         self.assertEqual(_target_tag("rpi4"), "Rpi4")
@@ -6641,7 +6643,7 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertIn("Switch", name)
 
     def test_readme_region_section_lists_fallback_systems(self):
-        from generate_pack import _build_readme
+        from packs.readme import _build_readme
 
         text = _build_readme(
             "regionplat",
@@ -6659,7 +6661,7 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertNotIn("All are included", text)
 
     def test_readme_without_region_keeps_the_regional_note(self):
-        from generate_pack import _build_readme
+        from packs.readme import _build_readme
 
         text = _build_readme("regionplat", "RegionPlat", "", 10, 2)
         self.assertNotIn("PACK TYPE: Region Filtered", text)
@@ -6746,16 +6748,16 @@ struct BurnDriver BurnDrvneogeo = {
 
     def test_gap_analysis_resolves_renamed_mame_set(self):
         """A renamed set is held under the name dedup kept, as verify reads it."""
-        import cross_reference
+        from packs import crossref
 
         db = self._gap_db("v4bios.zip", "a" * 40, "465c4e1c")
-        original = cross_reference.get_mame_clone_map
-        cross_reference.get_mame_clone_map = lambda *_a: {"bctvidbs.zip": "v4bios.zip"}
+        original = crossref.get_mame_clone_map
+        crossref.get_mame_clone_map = lambda *_a: {"bctvidbs.zip": "v4bios.zip"}
         try:
             entry = {"name": "bctvidbs.zip", "required": True}
             self.assertEqual(self._gap_source(entry, db), "bios")
         finally:
-            cross_reference.get_mame_clone_map = original
+            crossref.get_mame_clone_map = original
 
 
 class StandaloneModeRequiresAStandaloneBuild(unittest.TestCase):
@@ -6883,7 +6885,7 @@ class OneOfASearchList(unittest.TestCase):
         self.assertIn("1 required file(s) missing: none_a.bin", err.getvalue())
 
     def test_pack_and_verify_agree(self):
-        from generate_pack import generate_emulator_pack
+        from packs.emulatorpack import generate_emulator_pack
 
         result = self._verify()
         out = io.StringIO()
@@ -7023,7 +7025,7 @@ class OneOfASearchList(unittest.TestCase):
         """second.bin and third.bin are both held: a --required-only pack
         carries second.bin, the first the code reads among those held, and
         verify reports the same single file."""
-        from generate_pack import generate_emulator_pack
+        from packs.emulatorpack import generate_emulator_pack
 
         result = verify_emulator(["seq"], "emulators", self.db,
                                  platforms_dir="platforms", required_only=True)
@@ -7104,7 +7106,7 @@ class AnArchiveIsAMemberOfASet(unittest.TestCase):
         self.assertEqual(result["status_counts"].get("missing"), 1)
 
     def test_required_only_carries_the_archive_the_code_reads_first(self):
-        from generate_pack import generate_emulator_pack
+        from packs.emulatorpack import generate_emulator_pack
 
         self._fixture(held=True)
         full = verify_emulator(["stv"], "emulators", self.db, platforms_dir="platforms")

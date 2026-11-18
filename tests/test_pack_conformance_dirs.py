@@ -18,7 +18,6 @@ from unittest import mock
 
 import generate_pack as gp
 from packs import finalize as packs_finalize
-from packs import naming
 from packs import integrity as packverify
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -44,7 +43,7 @@ class ConformanceUsesTheRunDirectories(unittest.TestCase):
             if split:
                 Path(self.tmp.name, "X_Split").mkdir(exist_ok=True)
             with self.subTest(split=split), mock.patch.object(
-                packs_finalize, "verify_and_finalize_packs", return_value=True
+                gp, "verify_and_finalize_packs", return_value=True
             ) as finalize:
                 gp._run_platform_packs(
                     self._args(split), [], {}, {}, {}, {}, {}, None
@@ -63,21 +62,21 @@ class ConformanceUsesTheRunDirectories(unittest.TestCase):
             seen.update(kwargs)
             return True, 0, 0, [], 0, 0, 0, 0, 0, 0
 
-        with mock.patch.object(gp, "list_registered_platforms", return_value=["fix"]), \
+        with mock.patch.object(packs_finalize, "list_registered_platforms", return_value=["fix"]), \
                 mock.patch.object(
-                    naming, "_expected_pack_names",
+                    packs_finalize, "_expected_pack_names",
                     return_value={"fix": {"Fix_BIOS_Pack.zip"}},
                 ), \
-                mock.patch.object(naming, "_pack_archives", return_value=["Fix_BIOS_Pack.zip"]), \
+                mock.patch.object(packs_finalize, "_pack_archives", return_value=["Fix_BIOS_Pack.zip"]), \
                 mock.patch.object(
-                    gp, "verify_pack",
+                    packs_finalize, "verify_pack",
                     return_value=(True, {"summary": {
                         "verified": 0, "total_files": 0, "untracked": 0, "errors": 0,
                     }, "errors": []}),
                 ), \
                 mock.patch.object(packs_finalize, "inject_manifest"), \
                 mock.patch.object(packs_finalize, "_target_cores_for", return_value=None), \
-                mock.patch.object(gp, "verify_pack_against_platform", record), \
+                mock.patch.object(packs_finalize, "verify_pack_against_platform", record), \
                 mock.patch.object(packverify, "verify_pack_against_platform", record):
             packs_finalize.verify_and_finalize_packs(
                 str(out), {"files": {}, "indexes": {}},

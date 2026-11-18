@@ -22,7 +22,6 @@ from pathlib import Path
 from unittest import mock
 
 import check_buildbot_system
-import refresh_data_dirs
 from packs import datadirs
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -39,7 +38,7 @@ class GitThatCannotAnswer(unittest.TestCase):
             proc = subprocess.run(
                 [sys.executable, "-c", (
                     f"import sys; sys.path.insert(0, {str(REPO_ROOT / 'scripts')!r}); "
-                    "import verify; verify.work_from_repo_root = lambda *a: None; "
+                    "from model import cliargs; cliargs.work_from_repo_root = lambda *a: None; "
                     "import validate_pr; sys.argv = ['validate_pr.py', '--changed']; "
                     "validate_pr.main()"
                 )],
@@ -106,8 +105,8 @@ class AForkPushedToItsOwnMain(unittest.TestCase):
         return subprocess.run(
             [sys.executable, "-c", (
                 f"import sys; sys.path.insert(0, {str(REPO_ROOT / 'scripts')!r}); "
-                "import validate_pr; "
-                f"validate_pr.PROJECT_URLS = ({project!r},); "
+                "import validate_pr; from core import gitclone; "
+                f"gitclone.PROJECT_URLS = ({project!r},); "
                 "print(validate_pr.get_changed_files())"
             )],
             cwd=clone, capture_output=True, text=True, timeout=60, check=False,
@@ -237,9 +236,9 @@ class ABadResponseIsTriedAgain(unittest.TestCase):
                 raise outcome
             return outcome
 
-        with mock.patch.object(self.rdd, "_get_remote_etag", lambda _url: "tag"), \
-                mock.patch.object(self.rdd, "_download_and_extract_zip", download), \
-                mock.patch.object(refresh_data_dirs.time, "sleep", self.waits.append):
+        with mock.patch.object(datadirs, "_get_remote_etag", lambda _url: "tag"), \
+                mock.patch.object(datadirs, "_download_and_extract_zip", download), \
+                mock.patch.object(datadirs.time, "sleep", self.waits.append):
             return datadirs._refresh_entry("s", self.entry, True, False, self.versions)
 
     def test_a_bad_archive_then_a_good_one_refreshes(self):

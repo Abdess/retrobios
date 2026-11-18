@@ -10,6 +10,7 @@ to one answer.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import contextlib
 import functools
@@ -1365,7 +1366,7 @@ class ThePlatformsOwnSystemNamesAreAccepted(unittest.TestCase):
         ))
 
     def test_the_builder_writes_them_into_the_manifest(self):
-        source = (REPO_ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8")
+        source = script_source("generate_pack.py")
         self.assertIn('"system_names": platform_system_names(config, list(pack_systems))',
                       source)
 

@@ -9,6 +9,7 @@ test fails if either hands the index the whole profile set again.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import re
 import unittest
@@ -20,14 +21,14 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 class ValidationIndexScope(unittest.TestCase):
     def test_no_index_over_every_profile(self):
         pattern = re.compile(r"_build_validation_index\(\s*(emu_)?profiles\s*\)")
-        for name in ("verify.py", "generate_pack.py", "packverify.py", "packextras.py"):
-            source = (REPO_ROOT / "scripts" / name).read_text(encoding="utf-8")
+        for name in ("verify.py", "generate_pack.py", "packs/integrity.py", "packs/extras.py"):
+            source = script_source(name)
             with self.subTest(module=name):
                 self.assertIsNone(pattern.search(source))
 
     def test_platform_paths_select_by_platform_cores(self):
-        verify = (REPO_ROOT / "scripts" / "verify.py").read_text(encoding="utf-8")
-        builder = (REPO_ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8")
+        verify = script_source("verify.py")
+        builder = script_source("generate_pack.py")
         self.assertRegex(
             verify,
             r"plat_cores = resolve_platform_cores\(config, profiles\)\s+"
@@ -43,7 +44,7 @@ class ValidationIndexScope(unittest.TestCase):
 
 class HleIndexScope(unittest.TestCase):
     def test_hle_index_reads_the_platform_cores(self):
-        verify = (REPO_ROOT / "scripts" / "verify.py").read_text(encoding="utf-8")
+        verify = script_source("verify.py")
         start = verify.index("    hle_index = {")
         block = verify[start:verify.index("}", start)]
         self.assertIn("for profile in platform_profiles.values()", block)

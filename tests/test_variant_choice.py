@@ -10,6 +10,7 @@ never swapped in. Both sides now read find_validated_variant.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import hashlib
 import os
@@ -77,12 +78,12 @@ class OneImplementation(unittest.TestCase):
     """The report and the builders call the same finder and keep no copy."""
 
     def test_no_module_carries_its_own_variant_search(self):
-        for name in ("verify.py", "generate_pack.py", "packresolve.py"):
-            source = (REPO_ROOT / "scripts" / name).read_text(encoding="utf-8")
+        for name in ("verify.py", "generate_pack.py", "resolve/packfiles.py"):
+            source = script_source(name)
             with self.subTest(module=name):
                 self.assertNotRegex(source, r"def _find_best_variant|def _find_candidate_satisfying_both")
         for name in ("verify.py", "generate_pack.py"):
-            source = (REPO_ROOT / "scripts" / name).read_text(encoding="utf-8")
+            source = script_source(name)
             with self.subTest(module=name):
                 # Directly or through validated_choice, the one place that
                 # picks the variant a destination ships.

@@ -87,14 +87,14 @@ class ThePackReadmeNamesTheSpellingsItLeavesOut(unittest.TestCase):
         }}}))
         _platform_config_cache.clear()
         texts: dict[str, str] = {}
-        real = archive._write_generated_member
+        real = platformpack._write_generated_member
 
         def capture(zf, arcname, text):
             texts[arcname] = text
             return real(zf, arcname, text)
 
-        archive._write_generated_member = capture
-        self.addCleanup(setattr, self.gp, "_write_generated_member", real)
+        platformpack._write_generated_member = capture
+        self.addCleanup(setattr, platformpack, "_write_generated_member", real)
         with contextlib.redirect_stdout(io.StringIO()):
             platformpack.generate_pack(
                 "p", "platforms", self.db, "bios", "", emulators_dir="emulators",

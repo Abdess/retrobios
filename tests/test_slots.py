@@ -263,8 +263,7 @@ class TestConflicts(unittest.TestCase):
         """
         import inspect
 
-        import generate_pack
-        import verify
+        from packs import coverage, manifest, platformpack
 
         for function in (
             packs_slots.platform_claims,
@@ -284,9 +283,11 @@ class TestConflicts(unittest.TestCase):
         # Every consumer reads the one decision and hands its indexes over:
         # the ZIP builder, the install manifest and the report. The manifest
         # deciding nothing gave the installer other bytes than the ZIP.
-        for module, calls in ((generate_pack, 2), (verify, 1)):
-            source = inspect.getsource(module)
-            with self.subTest(module=module.__name__):
+        for tool, modules, calls in (
+            ("generate_pack", (platformpack, manifest), 2), ("verify", (coverage,), 1),
+        ):
+            source = "".join(inspect.getsource(module) for module in modules)
+            with self.subTest(tool=tool):
                 self.assertNotIn("slots.arbitrate(", source)
                 self.assertNotIn("slots.find_conflicts(", source)
                 self.assertEqual(source.count("slots.pack_overrides("), calls)
@@ -499,15 +500,16 @@ class TestBuilderAndVerifierAgree(unittest.TestCase):
     def test_both_read_the_same_decision_function(self):
         # The rule lives in one place. A second copy would let the pack and the
         # report describe different files, which the project forbids outright.
-        builder = Path(__file__).resolve().parents[1] / "scripts" / "generate_pack.py"
-        verifier = Path(__file__).resolve().parents[1] / "scripts" / "verify.py"
-        for source in (builder, verifier):
+        scripts = Path(__file__).resolve().parents[1] / "scripts"
+        builder = (scripts / "packs" / "platformpack.py", scripts / "packs" / "manifest.py")
+        verifier = (scripts / "packs" / "coverage.py",)
+        for source in (*builder, *verifier):
             text = source.read_text(encoding="utf-8")
             self.assertIn("slots.pack_overrides(", text, source.name)
             self.assertNotIn("decision.serves_both", text, source.name)
         self.assertIn(
             "decision.serves_both",
-            (builder.parent / "slots.py").read_text(encoding="utf-8"),
+            (scripts / "slots.py").read_text(encoding="utf-8"),
         )
 
     def test_neither_reimplements_the_mode_test(self):
@@ -516,7 +518,7 @@ class TestBuilderAndVerifierAgree(unittest.TestCase):
         # override lookup both sides must perform. The old anchor was a string
         # the test above forbids, so the window was the whole file.
         mode_test = re.compile(r"""[=!]=\s*["'](?:md5|sha1|existence)["']""")
-        for name in ("generate_pack.py", "verify.py"):
+        for name in ("packs/platformpack.py", "packs/manifest.py", "packs/coverage.py"):
             source = Path(__file__).resolve().parents[1] / "scripts" / name
             body = source.read_text(encoding="utf-8")
             anchors = [m.start() for m in re.finditer(r"slot_overrides\.get\(", body)]
@@ -606,7 +608,7 @@ class TestSelfContradictingDestinations(unittest.TestCase):
 
         variant = Path("bios/M/C/.variants/aes.zip")
         self.assertEqual(generate_db._canonical_name(variant), "aes.zip")
-        for module in ("slots.py", "generate_db.py"):
+        for module in ("resolve/collisions.py", "generate_db.py"):
             source = (Path(__file__).resolve().parents[1] / "scripts" / module).read_text()
             with self.subTest(module=module):
                 self.assertIn("variant_base_name(", source)
@@ -781,8 +783,8 @@ class ManifestFollowsTheArbitration(unittest.TestCase):
         previous = os.getcwd()
         os.chdir(repo)
         self.addCleanup(os.chdir, previous)
-        import generate_pack
         from core.ziptools import build_zip_contents_index
+        from packs import manifest as packs_manifest
         from model.registry import load_data_dir_registry
         from model.database import load_database
         from model.profiles import load_emulator_profiles
@@ -799,7 +801,7 @@ class ManifestFollowsTheArbitration(unittest.TestCase):
         # dsi_bios7/9.bin): an arbitration that settles nothing is the
         # failure, not a reason to skip.
         self.assertTrue(overrides, "pack_overrides settles no RetroArch slot")
-        manifest = generate_pack.generate_manifest(
+        manifest = packs_manifest.generate_manifest(
             "retroarch", str(repo / "platforms"), db, str(repo / "bios"),
             str(repo / "platforms" / "_registry.yml"),
             emulators_dir=str(repo / "emulators"), emu_profiles=profiles, offline=True,

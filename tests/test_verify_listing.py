@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import subprocess
 import sys
@@ -57,7 +58,6 @@ class VerifyRefusesWhatAModeDoesNotRead(unittest.TestCase):
                 self.assertIn(flag, result.stderr)
 
     def test_emulator_mode_reads_the_given_platforms_dir(self):
-        import verify
         from packs import emulatorcheck
 
         seen: list[str] = []
@@ -67,7 +67,7 @@ class VerifyRefusesWhatAModeDoesNotRead(unittest.TestCase):
             return {}
 
         db = {"files": {}, "indexes": {"by_name": {}, "by_md5": {}}}
-        with mock.patch.object(verify, "load_data_dir_registry", registry):
+        with mock.patch.object(emulatorcheck, "load_data_dir_registry", registry):
             emulatorcheck.verify_emulator(
                 ["handy"], str(REPO_ROOT / "emulators"), db, platforms_dir="elsewhere"
             )
@@ -90,7 +90,6 @@ class VerifyAppliesWhatItAccepts(unittest.TestCase):
 
 class EmulatorPackReadsThePlatformsDir(unittest.TestCase):
     def test_the_registry_comes_from_the_given_dir(self):
-        import generate_pack
         from packs import emulatorpack
 
         seen: list[str] = []
@@ -101,7 +100,7 @@ class EmulatorPackReadsThePlatformsDir(unittest.TestCase):
 
         db = {"files": {}, "indexes": {"by_name": {}, "by_md5": {}}}
         out = REPO_ROOT / "tmp" / "emupack-registry"
-        with mock.patch.object(generate_pack, "load_data_dir_registry", registry):
+        with mock.patch.object(emulatorpack, "load_data_dir_registry", registry):
             emulatorpack.generate_emulator_pack(
                 ["handy"], str(REPO_ROOT / "emulators"), db, "bios", str(out),
                 zip_contents={}, platforms_dir="elsewhere",
@@ -175,7 +174,7 @@ class TheDestinationsFlagNeedsAPack(unittest.TestCase):
         that mode raised AttributeError."""
         import ast
 
-        tree = ast.parse((REPO_ROOT / "scripts" / "verify.py").read_text(encoding="utf-8"))
+        tree = ast.parse(script_source("verify.py"))
         body = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == "_main")
         stack = body.args.args[0].arg
         rebound = [

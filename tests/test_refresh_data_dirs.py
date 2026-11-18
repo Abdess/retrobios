@@ -57,9 +57,9 @@ class RefreshConcurrency(unittest.TestCase):
         self.cache.mkdir(parents=True)
         (self.cache / "a.bin").write_bytes(b"old")
         with mock.patch.object(
-            rdd.urllib.request, "urlopen", lambda *a, **k: _Response(payload)
+            datadirs.urllib.request, "urlopen", lambda *a, **k: _Response(payload)
         ), mock.patch.object(
-            rdd.shutil, "move", side_effect=AssertionError("copy across filesystems")
+            datadirs.shutil, "move", side_effect=AssertionError("copy across filesystems")
         ):
             count = datadirs._download_and_extract_zip("https://x/pak.zip", str(self.cache))
         self.assertEqual(count, 1)
@@ -87,7 +87,7 @@ class RefreshConcurrency(unittest.TestCase):
 
         entry = {"source_type": "zip", "source_url": "https://x/pak.zip",
                  "local_cache": str(self.cache)}
-        with mock.patch.object(rdd.urllib.request, "urlopen", fake_urlopen), \
+        with mock.patch.object(datadirs.urllib.request, "urlopen", fake_urlopen), \
                 mock.patch.object(datadirs, "_get_remote_etag", return_value="e1"):
             self.assertTrue(
                 datadirs.refresh_entry("pak", entry, force=True, versions_path=self.versions)
@@ -101,7 +101,7 @@ class RefreshConcurrency(unittest.TestCase):
         payload = _zip_bytes({"a.bin": b"x" * 100})
         entry = {"source_type": "zip", "source_url": "https://x/pak.zip",
                  "local_cache": str(self.cache)}
-        with mock.patch.object(rdd.urllib.request, "urlopen",
+        with mock.patch.object(datadirs.urllib.request, "urlopen",
                                lambda *a, **k: _Response(payload)), \
                 mock.patch.object(datadirs, "_get_remote_etag", return_value="e1"):
             self.assertTrue(datadirs.refresh_entry("pak", entry, versions_path=self.versions))
@@ -171,7 +171,7 @@ class RefreshConcurrency(unittest.TestCase):
     def test_version_file_is_never_left_truncated(self):
         Path(self.versions).parent.mkdir(parents=True)
         Path(self.versions).write_text(json.dumps({"keep": {"sha": "1"}}))
-        with mock.patch.object(rdd.json, "dump", side_effect=OSError("disk full")), self.assertRaises(OSError):
+        with mock.patch.object(datadirs.json, "dump", side_effect=OSError("disk full")), self.assertRaises(OSError):
             datadirs._save_versions({"keep": {"sha": "2"}}, self.versions)
         self.assertEqual(json.loads(Path(self.versions).read_text()), {"keep": {"sha": "1"}})
 
@@ -235,7 +235,7 @@ class EmulatorPackHoldsTheCache(unittest.TestCase):
                         fcntl.flock(handle, fcntl.LOCK_UN)
                         held.append(False)
 
-            with mock.patch("packs.archive._add_pack_member", member):
+            with mock.patch("packs.datatrees._add_pack_member", member):
                 _pack_data_tree(None, str(cache), "scummvm", set(), set(), set())
             self.assertEqual(held, [True])
 

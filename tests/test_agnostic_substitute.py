@@ -8,6 +8,7 @@ the slot missing and the manifest omitted it.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import re
 import tempfile
@@ -45,8 +46,8 @@ class AgnosticSubstitute(unittest.TestCase):
             )
 
     def test_every_reader_calls_it_behind_the_existence_gate(self):
-        builder = (REPO_ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8")
-        verify = (REPO_ROOT / "scripts" / "verify.py").read_text(encoding="utf-8")
+        builder = script_source("generate_pack.py")
+        verify = script_source("verify.py")
         self.assertEqual(builder.count("agnostic_substitute(file_entry, sys_id"), 2)
         self.assertEqual(verify.count("agnostic_substitute(file_entry, sys_id"), 1)
         for source in (builder, verify):

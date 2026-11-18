@@ -10,6 +10,7 @@ installs it).
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import argparse
 import contextlib
@@ -9259,7 +9260,7 @@ class PacksWordingAndDocs(unittest.TestCase):
         self.assertEqual([entry.get("systems") for entry in manifest["files"]],
                          [["3do"], [], None])
         self.assertEqual(manifest["system_titles"], {"3do": "3DO Interactive Multiplayer"})
-        source = (REPO_ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8")
+        source = script_source("generate_pack.py")
         self.assertIn("pack_systems_by_name=systems_for", source)
         schema = json.loads((REPO_ROOT / "schemas" / "pack-manifest.schema.json").read_text())
         self.assertIn("systems", schema["properties"]["files"]["items"]["properties"])

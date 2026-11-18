@@ -9,6 +9,7 @@ the optional winner: the slot shipped empty.
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import ast
 import unittest
@@ -32,7 +33,7 @@ class RequiredOnlyBeforeRegion(unittest.TestCase):
         self.assertEqual(groups["vic20"], [("Vic20/kernel-ntsc.bin", "kernel-ntsc.bin")])
 
     def test_every_caller_passes_it(self):
-        tree = ast.parse((REPO_ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8"))
+        tree = ast.parse(script_source("generate_pack.py"))
         calls = [
             node for node in ast.walk(tree)
             if isinstance(node, ast.Call)

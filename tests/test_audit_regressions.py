@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import ast
 import contextlib
@@ -569,7 +570,7 @@ class VerboseAppliesToJson(unittest.TestCase):
                 self.assertIn("ok", {d["status"] for d in verbose["details"]})
 
     def test_every_json_branch_reads_the_flag(self):
-        source = (ROOT / "scripts" / "verify.py").read_text()
+        source = script_source("verify.py")
         self.assertEqual(source.count("_json_details("), 4)
         self.assertNotIn('if d["status"] != Status.OK\n            ]', source)
 
@@ -651,7 +652,7 @@ class APackIsSwappedInWhole(unittest.TestCase):
         self.assertEqual(sorted(p.name for p in directory.iterdir()), ["Pack.zip"])
 
     def test_no_pack_is_opened_on_its_final_name(self):
-        source = (ROOT / "scripts" / "generate_pack.py").read_text()
+        source = script_source("generate_pack.py")
         self.assertNotIn('ZipFile(zip_path, "w"', source)
 
 
@@ -1042,7 +1043,7 @@ class FaqRegressions(unittest.TestCase):
         )
         self.assertIn(
             'result["discrepancy"]',
-            (ROOT / "scripts" / "verify.py").read_text(encoding="utf-8"),
+            script_source("verify.py"),
             "verify.py no longer raises the discrepancy the FAQ advertises",
         )
 
@@ -1528,7 +1529,7 @@ class OneBaselineVerdict(unittest.TestCase):
         )
 
     def test_the_builder_and_the_manifest_read_the_same_rules(self):
-        source = (ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8")
+        source = script_source("generate_pack.py")
         tree = ast.parse(source)
         for name in ("generate_pack", "generate_manifest"):
             function = next(
@@ -1547,8 +1548,8 @@ class OneBaselineVerdict(unittest.TestCase):
         gives: a gitignored file absent from bios/ read as missing in verify
         while the pack shipped its cached release asset."""
         for module, name in (("verify.py", "_resolve_for_platform"),
-                             ("packextras.py", "_ships")):
-            source = (ROOT / "scripts" / module).read_text(encoding="utf-8")
+                             ("packs/extras.py", "_ships")):
+            source = script_source(module)
             function = next(
                 node for node in ast.parse(source).body
                 if isinstance(node, ast.FunctionDef) and node.name == name
@@ -3385,11 +3386,11 @@ class APackNameFitsAFileName(unittest.TestCase):
     def test_two_hash_lists_get_two_names(self):
         """--from-md5 named its pack after the context only: a second list
         overwrote the first pack in the same directory."""
-        source = (ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8")
+        source = script_source("generate_pack.py")
         self.assertIn('_Custom_{selection}', source)
 
     def test_the_system_pack_names_itself(self):
-        source = (ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8")
+        source = script_source("generate_pack.py")
         self.assertIn("pack_name=final_name", source)
 
 
@@ -3400,7 +3401,7 @@ class AGroupPackIsWrittenUnderItsOwnName(unittest.TestCase):
     on Windows."""
 
     def test_no_pack_is_renamed_after_its_build(self):
-        source = (ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8")
+        source = script_source("generate_pack.py")
         self.assertNotIn("os.rename(", source)
         self.assertIn("pack_name=group_name", source)
 
@@ -3634,7 +3635,7 @@ class GeneratedModelsAreWrittenWhole(unittest.TestCase):
 
     def test_both_writers_replace_their_file_atomically(self):
         for module in ("generate_truth.py", "dedup.py"):
-            source = (ROOT / "scripts" / module).read_text(encoding="utf-8")
+            source = script_source(module)
             with self.subTest(module=module):
                 self.assertIn("write_text_atomic(", source)
                 self.assertNotIn('open(out_path, "w")', source)
@@ -3677,7 +3678,7 @@ class APackNoteBesideItsSlotIsANote(unittest.TestCase):
         self.assertTrue(result[0], result)
 
     def test_verify_reads_the_rule_where_it_is_defined(self):
-        source = (ROOT / "scripts" / "verify.py").read_text(encoding="utf-8")
+        source = script_source("verify.py")
         self.assertNotIn("from generate_pack import _preferred_entries", source)
 
 
@@ -3709,7 +3710,7 @@ class AnArchiveShipsWholeUnderARegion(unittest.TestCase):
     required changed, while the emulator pack ships the archive whole."""
 
     def test_verify_filters_loose_files_only(self):
-        source = (ROOT / "scripts" / "verify.py").read_text(encoding="utf-8")
+        source = script_source("verify.py")
         self.assertIn(
             'if fe.get("archive")\n                or _resolve_destination(fe, standalone) not in region_drops',
             source,
@@ -3722,7 +3723,7 @@ class APathConflictKeepsTheMainVerdict(unittest.TestCase):
     counted excluded while verify counted it OK."""
 
     def test_the_branch_reads_baseline_verdict(self):
-        source = (ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8")
+        source = script_source("generate_pack.py")
         branch = source[source.index("Content ships under the conflicting shape"):]
         branch = branch[: branch.index("storage = file_entry.get")]
         self.assertIn("baseline_verdict(", branch)
@@ -4052,7 +4053,7 @@ class AnAcceptedVersionIsNoCoreDiscrepancy(unittest.TestCase):
                 self._extra(), str(held), {"eduke32": profile}))
 
     def test_the_pack_consults_the_alternatives(self):
-        source = (ROOT / "scripts" / "generate_pack.py").read_text()
+        source = script_source("generate_pack.py")
         self.assertRegex(source, r'status == "hash_mismatch" and not _matches_an_alternative\(')
 
 
@@ -4415,8 +4416,8 @@ class ADataDirectoryIsHeldWhileRead(unittest.TestCase):
                 fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
 
     def test_both_entry_points_hold_the_trees(self):
-        pack = (ROOT / "scripts" / "generate_pack.py").read_text()
-        verify_src = (ROOT / "scripts" / "verify.py").read_text()
+        pack = script_source("generate_pack.py")
+        verify_src = script_source("verify.py")
         self.assertIn("hold_data_dirs(held,", verify_src)
         refresh = pack.index("results = refresh_all(")
         self.assertIn("hold_data_dirs(held, data_registry)", pack[refresh:])
@@ -4424,7 +4425,7 @@ class ADataDirectoryIsHeldWhileRead(unittest.TestCase):
     def test_verify_packs_alone_holds_the_trees(self):
         # --verify-packs returned before the hold and resolved core files
         # against data/ while a refresh could swap a tree.
-        pack = (ROOT / "scripts" / "generate_pack.py").read_text()
+        pack = script_source("generate_pack.py")
         branch = pack.index("if args.verify_packs and not args.all_variants:")
         run = pack.index("_run_verify_packs(args)", branch)
         self.assertIn("hold_data_dirs(held,", pack[branch:run])
@@ -4447,7 +4448,7 @@ class EachRootReadsItsOwnRegistry(unittest.TestCase):
 
     def test_one_parser_reads_the_registry(self):
         for module in ("generate_pack.py", "generate_db.py"):
-            source = (ROOT / "scripts" / module).read_text()
+            source = script_source(module)
             with self.subTest(module=module):
                 self.assertIn("load_registered_paths", source)
                 self.assertNotIn('startswith("bios/")\n    }', source)
@@ -4792,7 +4793,7 @@ class VerifyPacksSaysWhatItExcluded(unittest.TestCase):
     exclusions (352/353 shown as OK with no reason) and printed 5 errors."""
 
     def test_the_result_is_unpacked_whole_and_every_error_printed(self):
-        source = (ROOT / "scripts" / "generate_pack.py").read_text()
+        source = script_source("generate_pack.py")
         body = source[source.index("def _run_verify_packs"):]
         body = body[:body.index("\ndef ")]
         self.assertIn("bl_excluded, bl_absent) = result", body)
@@ -4939,7 +4940,6 @@ class AManifestHashesAFileOnce(unittest.TestCase):
     calls for 15 011 files, 163 s of a 218 s step."""
 
     def test_verified_hashes_are_reused(self):
-        from scripts import generate_pack
         from scripts.packs import manifestentry
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
@@ -4948,13 +4948,13 @@ class AManifestHashesAFileOnce(unittest.TestCase):
             sha1 = hashlib.sha1(b"abc").hexdigest()
             db = {"files": {sha1: {"path": str(path)}}}
             calls = []
-            real = generate_pack.compute_hashes
+            real = manifestentry.compute_hashes
 
             def counting(file_path, algorithms=None):
                 calls.append(algorithms)
                 return real(file_path, algorithms)
 
-            with mock.patch.object(generate_pack, "compute_hashes", counting):
+            with mock.patch.object(manifestentry, "compute_hashes", counting):
                 first = manifestentry._stable_hashes(str(path), db)
                 second = manifestentry._stable_hashes(str(path), db)
         self.assertEqual(first, second)
@@ -5456,11 +5456,11 @@ class BundledFilesAreNotToSource(unittest.TestCase):
                 "data_directories": [{"ref": "dolphin-sys", "installed_on": ["lakka"]}]}))
             self.assertEqual(installed_data_refs("lakka", tmp), frozenset({"dolphin-sys"}))
             self.assertEqual(installed_data_refs("retroarch", tmp), frozenset())
-        source = (ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8")
+        source = script_source("generate_pack.py")
         self.assertIn("if ref_key in installed_data_refs(platform_name):", source)
 
     def test_the_pack_builder_skips_it(self):
-        source = (ROOT / "scripts" / "packextras.py").read_text(encoding="utf-8")
+        source = (ROOT / "scripts" / "packs" / "extras.py").read_text(encoding="utf-8")
         self.assertIn('if u.get("bundled"):', source)
 
 
@@ -5928,8 +5928,8 @@ class ZippedFileMd5IsParsedOnce(unittest.TestCase):
                     )
 
     def test_the_three_sites_share_the_parser(self):
-        for module in ("resolve/validation.py", "packverify.py", "verify.py"):
-            source = (ROOT / "scripts" / module).read_text()
+        for module in ("resolve/validation.py", "packs/integrity.py", "verify.py"):
+            source = script_source(module)
             self.assertIn("parse_md5_list(", source, module)
 
 
@@ -6209,7 +6209,7 @@ class AFailedVerificationIsAnError(unittest.TestCase):
     exit 1: a warning that fails the run, naming no pack."""
 
     def test_the_last_line_names_the_packs(self):
-        source = (ROOT / "scripts" / "generate_pack.py").read_text()
+        source = script_source("generate_pack.py")
         self.assertNotIn("WARNING: some packs have verification errors", source)
         self.assertIn('print(f"ERROR: packs failed verification: {\', \'.join(failing)}", file=sys.stderr)', source)
 
@@ -7088,7 +7088,7 @@ class AFileTheLauncherNeverOpens(unittest.TestCase):
         self.assertEqual(deliverable([entry], True, "batocera"), [entry])
 
     def test_the_gap_report_reads_it(self):
-        source = (ROOT / "scripts" / "verify.py").read_text(encoding="utf-8")
+        source = script_source("verify.py")
         self.assertIn('unread_on(f, config.get("_key", ""))', source)
 
 
@@ -7130,7 +7130,7 @@ class RequiredOnlyReachesDataDirectories(unittest.TestCase):
         self.assertEqual(self._members(True), ["a/needed.bin"])
 
     def test_every_tree_walk_reads_the_flag(self):
-        source = (ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8")
+        source = script_source("generate_pack.py")
         # The pack's walk and the manifest's, which records the flag for
         # install.py --required-only.
         self.assertEqual(source.count('if required_only and dd.get("required") is False:'), 1)
@@ -7282,7 +7282,7 @@ class ErrorsGoToStderr(unittest.TestCase):
 
     def test_no_error_line_is_printed_to_stdout(self):
         for script in ("generate_pack.py", "pipeline.py"):
-            tree = ast.parse((ROOT / "scripts" / script).read_text(encoding="utf-8"))
+            tree = ast.parse(script_source(script))
             seen = 0
             for node in ast.walk(tree):
                 if not (isinstance(node, ast.Call) and getattr(node.func, "id", "") == "print"
@@ -7502,7 +7502,7 @@ class ExternalDownloadsFollowTheRunPolicy(unittest.TestCase):
             self.assertFalse(target.exists())
 
     def test_scratch_files_stay_in_the_repository(self):
-        source = (ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8")
+        source = script_source("generate_pack.py")
         self.assertNotIn("def download_external", source)
         self.assertNotIn("urlopen", source)
         for call in re.findall(r"NamedTemporaryFile\(([^)]*)\)", source):

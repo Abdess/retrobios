@@ -21,7 +21,6 @@ from pathlib import Path
 
 from model.profiles import load_emulator_profiles, _emulator_profiles_cache
 from resolve.localfile import resolve_local_file
-import generate_pack as builder
 from packs import extras as packextras
 
 SIZE = 1024
@@ -99,7 +98,7 @@ class AgnosticScanStaysInItsTree(unittest.TestCase):
         return load_emulator_profiles(str(self.root / "emulators"))
 
     def _scan(self, profiles):
-        extras = builder._collect_emulator_extras(
+        extras = packextras._collect_emulator_extras(
             self.config, str(self.root / "emulators"), self.db, set(), "",
             profiles,
         )

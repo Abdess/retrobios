@@ -9,6 +9,7 @@ voided the [europe] tag Genesis Plus GX and PicoDrive give it, and
 from __future__ import annotations
 
 import tests
+from tests.sources import script_source
 
 import unittest
 from pathlib import Path
@@ -33,8 +34,8 @@ class OnlyThePlatformsCores(unittest.TestCase):
         self.assertTrue(regions.build_region_index(PROFILES)["bios_CD_E.bin"]["has_untagged"])
 
     def test_every_platform_site_reads_it(self):
-        for module in ("verify.py", "generate_pack.py", "packverify.py"):
-            source = (REPO_ROOT / "scripts" / module).read_text(encoding="utf-8")
+        for module in ("verify.py", "generate_pack.py", "packs/integrity.py"):
+            source = script_source(module)
             self.assertNotIn("build_region_index(emu_profiles", source, module)
             self.assertNotIn("build_region_index(profiles)", source, module)
             self.assertIn("platform_region_index(", source, module)
@@ -64,7 +65,7 @@ class OnlyThePlatformsCoresRankASlot(unittest.TestCase):
         self.assertEqual(slot_mod.build_slot_index(self.PROFILES)["scph100.bin"]["rank"], 10)
 
     def test_the_pack_reads_it(self):
-        source = (REPO_ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8")
+        source = script_source("generate_pack.py")
         self.assertNotIn("build_slot_index(", source)
         self.assertIn("platform_slot_index(", source)
 
