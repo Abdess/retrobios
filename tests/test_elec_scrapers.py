@@ -14,7 +14,7 @@ import tests
 import unittest
 from pathlib import Path
 
-from scraper import amberelec_scraper, emuelec_scraper, knulli_scraper
+from scraper import amberelec_scraper, emuelec_scraper, emuelec_systems, knulli_scraper
 from scraper.es_emulators import (
     attach_system_cores,
     es_cores,
@@ -152,7 +152,7 @@ class TheCoresComeFromTheOsList(unittest.TestCase):
 
     def test_emuelec_runners_and_standalone_names(self):
         cores, standalone, dual = es_cores(
-            json_systems(EMUELEC_ES), emuelec_scraper.RUNNERS, emuelec_scraper.BUILDS_OF
+            json_systems(EMUELEC_ES), emuelec_systems.RUNNERS, emuelec_systems.BUILDS_OF
         )
         self.assertEqual(standalone, ["STELLASA", "yabasanshiro"])
         self.assertNotIn("yabasanshiroSA", cores)
@@ -160,7 +160,7 @@ class TheCoresComeFromTheOsList(unittest.TestCase):
 
     def test_a_name_that_emulates_nothing_is_dropped(self):
         cores, standalone, _ = es_cores(
-            json_systems(EMUELEC_ES), emuelec_scraper.RUNNERS, not_cores={"STELLASA"}
+            json_systems(EMUELEC_ES), emuelec_systems.RUNNERS, not_cores={"STELLASA"}
         )
         self.assertNotIn("STELLASA", cores + standalone)
 
@@ -211,27 +211,27 @@ class EmuelecPortsRunTheirEngine(unittest.TestCase):
     port's script: what runs is the core or program the script names."""
 
     def test_each_port_names_its_engine(self):
-        self.assertEqual(emuelec_scraper.port_engines(PORTS), [
+        self.assertEqual(emuelec_systems.port_engines(PORTS), [
             ("2048", "2048", None, True),
             ("Diablo", "devilutionx", "Diablo", False),
             ("Flashback", "reminiscence", "REminiscence", True),
         ])
 
     def test_engines_replace_the_dispatch(self):
-        systems = emuelec_scraper.with_ports(
-            {"ports": [("ports", ["ports"])]}, emuelec_scraper.port_engines(PORTS)
+        systems = emuelec_systems.with_ports(
+            {"ports": [("ports", ["ports"])]}, emuelec_systems.port_engines(PORTS)
         )
-        cores, standalone, _ = es_cores(systems, emuelec_scraper.RUNNERS)
+        cores, standalone, _ = es_cores(systems, emuelec_systems.RUNNERS)
         self.assertNotIn("ports", cores)
         self.assertEqual(standalone, ["devilutionx"])
         self.assertTrue({"2048", "reminiscence"} <= set(cores))
-        by_system = system_cores(systems, emuelec_scraper.RUNNERS)
+        by_system = system_cores(systems, emuelec_systems.RUNNERS)
         self.assertEqual(by_system["Diablo"], ["devilutionx"])
         self.assertEqual(by_system["REminiscence"], ["reminiscence"])
 
     def test_a_port_without_an_engine_is_refused(self):
         with self.assertRaises(ValueError):
-            emuelec_scraper.port_engines("Broken:\n  commands:\n    - true\n")
+            emuelec_systems.port_engines("Broken:\n  commands:\n    - true\n")
 
 
 class CoreFilesGoUnderTheStatedFolder(unittest.TestCase):

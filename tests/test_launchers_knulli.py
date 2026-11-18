@@ -17,6 +17,7 @@ from pathlib import Path
 import yaml
 
 from scraper import knulli_launchers as kl
+from scraper.configgen_sites import bios_sites, GenericSites
 from scraper.batocera_launchers import hatari, melonds
 from scraper.configgen_launchers import LauncherShapeError
 
@@ -391,8 +392,8 @@ def configgen(**overrides: str) -> kl.Configgen:
 
 
 def sites(path: str, kind: str, **fields: object) -> list[dict]:
-    spec = kl.GenericSites(path, kind, **fields)
-    return [launcher.entry() for launcher in kl.bios_sites(configgen(), spec)]
+    spec = GenericSites(path, kind, **fields)
+    return [launcher.entry() for launcher in bios_sites(configgen(), spec)]
 
 
 class SharedExtractors(unittest.TestCase):
@@ -551,9 +552,9 @@ class BiosSites(unittest.TestCase):
 
     def test_a_generator_without_a_bios_path_raises(self):
         files = tree(**{f"{G}/openmsx/openmsxGenerator.py": "def generate():\n    return 1\n"})
-        spec = kl.GenericSites("openmsx/openmsxGenerator.py", "passes_path")
+        spec = GenericSites("openmsx/openmsxGenerator.py", "passes_path")
         with self.assertRaises(LauncherShapeError):
-            kl.bios_sites(kl.configgen(files.__getitem__), spec)
+            bios_sites(kl.configgen(files.__getitem__), spec)
 
 
 class CopiesAndFolders(unittest.TestCase):

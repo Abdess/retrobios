@@ -37,8 +37,13 @@ import yaml
 from . import BaseTargetScraper
 from ..base_scraper import fetch_bytes, github_headers
 from ..batocera_scraper import _not_cores
-from ..emuelec_scraper import (
-    BUILDS_OF, ES_SYSTEMS_TEMPLATE, PORTS_TEMPLATE, RUNNERS, port_engines, with_ports,
+from ..emuelec_systems import (
+    BUILDS_OF,
+    ES_SYSTEMS_TEMPLATE,
+    PORTS_TEMPLATE,
+    RUNNERS,
+    port_engines,
+    with_ports,
 )
 from ..es_emulators import SystemEmulators, es_cores
 

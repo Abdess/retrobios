@@ -30,7 +30,8 @@ from .base_scraper import (
     md5_field,
     requirement_entry,
 )
-from .batocera_launchers import Configgen, configs_root, extract_launchers
+from .batocera_configgen import Configgen, configs_root
+from .batocera_launchers import extract_launchers
 from .targets.batocera_targets_scraper import BuildSelection
 from .targets.batocera_targets_scraper import Scraper as BoardTargets
 

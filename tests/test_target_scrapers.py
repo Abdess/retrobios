@@ -571,7 +571,7 @@ class RocknixPerDevice(unittest.TestCase):
         """vice-standalone answers to vice-sa only, as scummvm-standalone to
         scummvm-sa: stripped to vice, every targeted pack left them out
         while the untargeted one, read from the platform scraper, kept them."""
-        from scraper.rocknix_scraper import standalone_emulators
+        from scraper.rocknix_packages import standalone_emulators
         from scraper.targets.rocknix_targets_scraper import parse_device_cores
 
         _, standalone = parse_device_cores(self.PACKAGE_MK, "SM8550", "aarch64", False)

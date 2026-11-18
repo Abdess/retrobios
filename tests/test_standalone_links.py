@@ -515,9 +515,8 @@ class Scrapers(unittest.TestCase):
             rl.patched_directories(RepoTree.from_files({path: patch.replace("return", "x =")}))
 
     def test_batocera_environment_directory(self) -> None:
-        from scraper.batocera_launchers import (
-            GENERATORS, IMPORTER, PATHS_MODULE, Configgen, environment_directories,
-        )
+        from scraper.batocera_configgen import GENERATORS, IMPORTER, PATHS_MODULE, Configgen
+        from scraper.batocera_launchers import environment_directories
         from scraper.configgen_launchers import LauncherShapeError
 
         paths = "from pathlib import Path\nBIOS = Path('/userdata/bios')\nCONFIGS = Path('/userdata/system/configs')\n"

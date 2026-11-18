@@ -26,6 +26,8 @@ from .base_scraper import (
 )
 from .rocknix_launchers import extract_launchers
 from scraper.shell_launchers import RepoTree
+from .rocknix_packages import dual_mode_emulators, standalone_emulators
+from .targets.rocknix_targets_scraper import Scraper as DeviceTargets
 
 PLATFORM_NAME = "rocknix"
 
@@ -54,36 +56,6 @@ def launcher_revision(url: str) -> str:
     if found is None:
         raise ValueError(f"{url} names no ROCKNIX/distribution revision")
     return found.group(1)
-
-
-def standalone_emulators(package_names: list[str]) -> list[str]:
-    """The standalone emulators ROCKNIX packages, by the names profiles use.
-
-    A package is named after its emulator with an ``-sa`` suffix
-    (``duckstation-sa``), once without its hyphen (``hatarisa``), and both
-    spellings are kept so a profile listing either is found.
-    """
-    names: set[str] = set()
-    for package in package_names:
-        names.add(package)
-        stripped = _emulator_of(package)
-        if stripped != package:
-            names.add(stripped)
-    return sorted(names)
-
-def _emulator_of(package: str) -> str:
-    return re.sub(r"-?sa$", "", package) or package
-
-
-def dual_mode_emulators(standalone: list[str], package_mk: str) -> list[str]:
-    """The standalone emulators RetroArch also runs as a core.
-
-    package.mk adds each launch option with `add_emu_core <system> <emulator>
-    <core> <default>`. Only an emulator also added as `retroarch <core>` is
-    launched both ways: ARMSX2 is added as armsx2-sa alone.
-    """
-    retroarch = set(re.findall(r"^\s*add_emu_core\s+\S+\s+retroarch\s+(\S+)", package_mk, re.M))
-    return sorted(name for name in standalone if _emulator_of(name) in retroarch)
 
 
 # ROCKNIX system key -> retrobios system ID
@@ -188,7 +160,6 @@ class Scraper(BaseScraper):
         the targets scraper, where every libretro profile counted before. A
         standalone package no device carries is not run either.
         """
-        from .targets.rocknix_targets_scraper import Scraper as DeviceTargets
         builds = DeviceTargets().device_builds(self.tag or launcher_revision(self.url))
         libretro = sorted({core for _arch, lr, _sa in builds.values() for core in lr})
         carried = set(standalone_emulators(sorted({p for *_rest, sa in builds.values() for p in sa})))

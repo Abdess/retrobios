@@ -24,7 +24,7 @@ import yaml
 
 from . import BaseTargetScraper
 from ..base_scraper import fetch_bytes, github_headers
-from ..rocknix_scraper import standalone_emulators
+from ..rocknix_packages import standalone_emulators
 
 PLATFORM_NAME = "rocknix"
 

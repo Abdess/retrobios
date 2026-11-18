@@ -445,7 +445,7 @@ class RocknixRunsItsStandaloneEmulators(unittest.TestCase):
     the next branch under the release's version."""
 
     def test_package_names_reach_the_profiles(self):
-        from scraper.rocknix_scraper import standalone_emulators
+        from scraper.rocknix_packages import standalone_emulators
 
         self.assertEqual(
             standalone_emulators(["duckstation-sa", "hatarisa", "openbor"]),
@@ -456,7 +456,7 @@ class RocknixRunsItsStandaloneEmulators(unittest.TestCase):
         """Every standalone package was declared launched both ways, so
         ARMSX2's libretro layout reached ROCKNIX, whose package.mk adds it
         as armsx2-sa only (add_emu_core ps2 armsx2 armsx2-sa true)."""
-        from scraper.rocknix_scraper import dual_mode_emulators
+        from scraper.rocknix_packages import dual_mode_emulators
 
         package_mk = (
             "  add_emu_core psx retroarch duckstation false\n"

@@ -17,12 +17,8 @@ from pathlib import Path
 
 import yaml
 
+from scraper.batocera_configgen import CONFIGGEN, GENERATORS, IMPORTER, PATHS_MODULE, Configgen
 from scraper.batocera_launchers import (
-    CONFIGGEN,
-    GENERATORS,
-    IMPORTER,
-    PATHS_MODULE,
-    Configgen,
     Launcher,
     LauncherShapeError,
     config_directories,

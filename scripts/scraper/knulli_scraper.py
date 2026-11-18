@@ -49,7 +49,7 @@ from .batocera_scraper import (
 )
 from .es_emulators import attach_system_cores
 from .targets.knulli_targets_scraper import Scraper as BoardTargets
-from .batocera_launchers import configs_root
+from .batocera_configgen import configs_root
 from .knulli_launchers import BATOCERA_SUBMODULE, extract_launchers
 from .knulli_launchers import configgen as knulli_configgen
 

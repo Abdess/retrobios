@@ -18,15 +18,8 @@ from pathlib import Path
 
 from resolve.launchers import handed_directories, standalone_bindings
 from scraper import retrobat_launchers as rl
-from scraper.batocera_launchers import (
-    GENERATORS,
-    IMPORTER,
-    PATHS_MODULE,
-    Configgen,
-    LauncherShapeError,
-    patched_paths,
-    working_directories,
-)
+from scraper.batocera_configgen import GENERATORS, IMPORTER, PATHS_MODULE, Configgen
+from scraper.batocera_launchers import LauncherShapeError, patched_paths, working_directories
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
