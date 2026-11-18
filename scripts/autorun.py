@@ -58,9 +58,9 @@ from core.hostguard import (
     global_lock,
     lock_busy,
 )
+from core.paths import REPO_ROOT
 from core.statefile import now_iso, save_state
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
 JOBS_FILE = REPO_ROOT / "automation" / "jobs.yml"
 AUTORUN_DIR = Path(".cache") / "autorun"
 
@@ -711,7 +711,6 @@ def set_alert(state: dict, name: str, active: bool, detail: str, now: str) -> No
 
 def token_env() -> dict[str, str]:
     """The environment of the phases that need GitHub: the push and gh."""
-    sys.path.insert(0, str(REPO_ROOT / "scripts"))
     from core.github import github_token
 
     env = dict(os.environ)
@@ -1149,7 +1148,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.path.insert(0, str(REPO_ROOT / "scripts"))
     from core.cli import run_cli
 
     run_cli(main)
