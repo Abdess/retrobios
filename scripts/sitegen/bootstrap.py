@@ -33,7 +33,7 @@ SOURCES: dict[str, tuple[str, re.Pattern[str]]] = {
     SH_NAME: ("install.sh", re.compile(r'^(DEFAULT_INSTALL_URL=")[^"]*(")', re.M)),
     PS1_NAME: ("install.ps1", re.compile(r'^(\s*\$defaultInstallUrl = ")[^"]*(")', re.M)),
 }
-# The line each bootstrap says a refused installer with, and the pin.
+# The line each bootstrap says a refused installer with.
 ADVICE: dict[str, re.Pattern[str]] = {
     SH_NAME: re.compile(r'^(MISMATCH_ADVICE=")[^"]*(")', re.M),
     PS1_NAME: re.compile(r'^(\s*\$mismatchAdvice = ")[^"]*(")', re.M),

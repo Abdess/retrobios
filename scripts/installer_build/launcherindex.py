@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 
 from core.paths import REPO_ROOT
+from installer_build.pins import installer_sha256
 from installer_build.port import (
     BATOCERA_ZIP,
     MUOS_APP,
@@ -53,7 +54,7 @@ def _member_bytes(entry: dict, root: Path) -> bytes:
 
 def build_index(root: Path = REPO_ROOT) -> dict:
     """Every launcher a card can carry, from the archives' members."""
-    actual = hashlib.sha256((root / "install.py").read_bytes()).hexdigest()
+    actual = installer_sha256(root)
     if actual != pinned_installer_sha256(root):
         raise ValueError("install.py is not the installer install.sh pins: re-pin the "
                          "bootstraps before writing the launcher list")

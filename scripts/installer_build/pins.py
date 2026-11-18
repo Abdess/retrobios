@@ -17,6 +17,11 @@ PINS: dict[str, re.Pattern[str]] = {
     "install.sh": re.compile(r'^(DEFAULT_INSTALL_SHA256=")[0-9a-f]{64}(")', re.M),
     "install.ps1": re.compile(r'^(\s*\$defaultInstallSha256 = ")[0-9a-f]{64}(")', re.M),
 }
+# The value of that pin line, by the name the site serves each bootstrap under.
+PIN: dict[str, re.Pattern[str]] = {
+    SH_NAME: re.compile(r'^DEFAULT_INSTALL_SHA256="([0-9a-f]{64})"', re.M),
+    PS1_NAME: re.compile(r'^\s*\$defaultInstallSha256 = "([0-9a-f]{64})"', re.M),
+}
 COMMAND = "python scripts/pin_installer.py"
 
 
@@ -50,9 +55,3 @@ def write_pins(root: Path = ROOT) -> list[str]:
         path.write_bytes(new.encode("utf-8"))
         written.append(name)
     return written
-
-
-PIN: dict[str, re.Pattern[str]] = {
-    SH_NAME: re.compile(r'^DEFAULT_INSTALL_SHA256="([0-9a-f]{64})"', re.M),
-    PS1_NAME: re.compile(r'^\s*\$defaultInstallSha256 = "([0-9a-f]{64})"', re.M),
-}
