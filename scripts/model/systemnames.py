@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from model import siteinputs
-from model.collection import SECTION_LABELS, _PROGRAM_TOPS, _manufacturer_slug
+from model.collection import SECTION_LABELS, _PROGRAM_TOPS, _slug
 
 
 # (manufacturer slug, console) -> the id of the console's heading. Two
@@ -76,7 +76,7 @@ def set_console_sections(
     for mfr, consoles in by_maker.items():
         used = {toc_slug(mfr)}
         for console in sorted(consoles):
-            _console_anchors[(_manufacturer_slug(mfr), console)] = _unique(toc_slug(console), used)
+            _console_anchors[(_slug(mfr), console)] = _unique(toc_slug(console), used)
     for mfr, console in pairs:
         spelled = console.lower().replace(" ", "-")
         slug = mfr.lower().replace(" ", "-")

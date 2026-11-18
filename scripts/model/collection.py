@@ -188,10 +188,6 @@ def _profiles_in(emulators_dir: str, skip_aliases: bool) -> dict[str, dict]:
     return load_emulator_profiles(emulators_dir, skip_aliases=skip_aliases)
 
 
-def _manufacturer_slug(manufacturer: str) -> str:
-    return manufacturer.lower().replace(" ", "-")
-
-
 # (manufacturer slug, folder, sha1) -> the (manufacturer slug, console) a
 # copy's card went to when the system pages file it outside its folder:
 # ScummVM's engine data under Other/ScummVM, neogeo.zip under Arcade.
@@ -202,8 +198,8 @@ def record_card_move(manufacturer: str, folder: str, sha1: str,
                      to_manufacturer: str, to_console: str) -> None:
     """Mark that the card of the copy under bios/<manufacturer>/<folder>/
     sits in the section (to_manufacturer, to_console)."""
-    _card_moves[(_manufacturer_slug(manufacturer), folder, str(sha1))] = (
-        _manufacturer_slug(to_manufacturer), to_console)
+    _card_moves[(_slug(manufacturer), folder, str(sha1))] = (
+        _slug(to_manufacturer), to_console)
 
 
 # System display names. A system is named by the heading of the console

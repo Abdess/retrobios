@@ -302,9 +302,9 @@ def _start_groups(
     emulator's, its shaders and fonts. A file the emulator ships with is
     no file to fetch."""
     from model.systemnames import _heading_name, system_name
-    from model.collection import _manufacturer_slug
+    from model.collection import _slug
 
-    here = (_manufacturer_slug(section[0]), section[1]) if section else None
+    here = (_slug(section[0]), section[1]) if section else None
     kept, candidates = _section_reads(files, consumers, here)
 
     groups: dict[str | None, _StartGroup] = {}

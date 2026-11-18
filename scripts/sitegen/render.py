@@ -9,7 +9,7 @@ from collections.abc import Callable
 from model import siteinputs
 from sitegen import markup
 from core.paths import REPO_ROOT
-from model.collection import _PROGRAM_TOPS, _card_moves, _manufacturer_slug
+from model.collection import _PROGRAM_TOPS, _card_moves, _slug
 from model.systemnames import (
     SYSTEM_PARENTS,
     _boards_built,
@@ -189,7 +189,7 @@ def console_anchor(manufacturer: str, console: str) -> str:
     """The id of a console's heading on its manufacturer's page."""
     from core.anchors import toc_slug
 
-    key = (_manufacturer_slug(manufacturer), console)
+    key = (_slug(manufacturer), console)
     return _console_anchors.get(key) or toc_slug(console)
 
 
@@ -270,10 +270,10 @@ def _section_without_boards(sys_id: str) -> tuple[str, str] | None:
     reviewed parents give."""
     own = _own_section(sys_id)
     if own is not None:
-        return _manufacturer_slug(own[0]), own[1]
+        return _slug(own[0]), own[1]
     parent = SYSTEM_PARENTS.get(sys_id)
     if parent is not None and parent in _section_pairs:
-        return _manufacturer_slug(parent[0]), parent[1]
+        return _slug(parent[0]), parent[1]
     try:
         name = system_name(sys_id)
     except KeyError:
@@ -286,7 +286,7 @@ def _section_without_boards(sys_id: str) -> tuple[str, str] | None:
         mfr in _PROGRAM_TOPS and console.casefold() in _program_names
     ):
         return None
-    return _manufacturer_slug(mfr), console
+    return _slug(mfr), console
 
 
 def _system_link(sys_id: str, prefix: str = "") -> str:
