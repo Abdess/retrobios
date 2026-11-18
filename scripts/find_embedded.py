@@ -24,8 +24,7 @@ import sys
 from pathlib import Path
 
 from acquire.embedded import offsets, sources
-
-ACQUIRE_DIR = Path("tmp") / "acquire"
+from acquire.fetch import ACQUIRE_DIR
 
 
 def main() -> int:
