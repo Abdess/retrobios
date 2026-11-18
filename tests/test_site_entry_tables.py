@@ -20,7 +20,7 @@ from pathlib import Path
 import yaml
 
 import generate_site as gs
-import siteentries
+from sitegen import entries as siteentries
 import validate_site
 
 REPO_ROOT = Path(__file__).resolve().parents[1]

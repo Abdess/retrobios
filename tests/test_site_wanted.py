@@ -25,7 +25,7 @@ import zlib
 from pathlib import Path
 
 import generate_site
-import sitewanted
+from sitegen import wanted as sitewanted
 from resolve import review
 import yaml
 from model.database import load_database

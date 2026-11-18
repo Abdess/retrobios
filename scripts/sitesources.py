@@ -16,7 +16,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from core import upstream
-from siterender import _by_mode, _escape_tags
+from sitegen.render import _by_mode, _escape_tags
 from model.sourceref import (
     _HEX_ADDRESS_RE,
     _prose_runs,

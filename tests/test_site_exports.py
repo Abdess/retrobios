@@ -1113,7 +1113,7 @@ class NestedProfileBlocksRenderAsLists(unittest.TestCase):
             import markdown
         except ImportError:
             self.skipTest("markdown is not installed")
-        from siterender import _render_yaml_value
+        from sitegen.render import _render_yaml_value
 
         # The page opens the block with ???+ (pymdownx.details). An admonition
         # nests its body by the same four spaces, and needs nothing CI lacks.
@@ -1192,7 +1192,7 @@ class TheOneLinerIsWhereUsersLand(unittest.TestCase):
 
     def test_a_system_is_offered_only_where_the_manifest_records_it(self):
         import generate_site
-        import siterender
+        from sitegen import render as siterender
 
         saved = dict(siterender._system_page_map)
         self.addCleanup(siterender.set_system_page_map, saved)

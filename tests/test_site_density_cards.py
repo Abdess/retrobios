@@ -19,7 +19,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 import generate_site as gs
-import sitemarkup as markup
+from sitegen import markup
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 

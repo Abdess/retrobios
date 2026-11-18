@@ -12,7 +12,7 @@ parts the pages share. The registry keeps the folder the pack unzips into
 from __future__ import annotations
 
 
-import sitemarkup as markup
+from sitegen import markup
 from model.guides import Guide, TERMINALS, TRUST_ITEMS, install_command
 
 

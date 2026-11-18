@@ -22,7 +22,7 @@ import unittest
 from collections.abc import Iterable
 from pathlib import Path
 
-import siterender
+from sitegen import render as siterender
 from model import systemnames
 
 REPO_ROOT = Path(__file__).resolve().parents[1]

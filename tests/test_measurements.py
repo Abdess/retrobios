@@ -24,7 +24,7 @@ import unittest
 from pathlib import Path
 
 import measurement_records as mr
-import sitemeasurements as sm
+from sitegen import measurements as sm
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

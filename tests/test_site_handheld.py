@@ -22,7 +22,7 @@ from unittest import mock
 
 import build_port
 from model.registry import list_registered_platforms
-import sitehandheld
+from sitegen import handheld as sitehandheld
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 

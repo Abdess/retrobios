@@ -199,7 +199,7 @@ def fetch_logos() -> None:
 def fetch_icons() -> None:
     from model.database import load_database
     from model.collection import _group_by_manufacturer
-    from siterender import SYSTEM_ICON_BASE, _icon_name
+    from sitegen.render import SYSTEM_ICON_BASE, _icon_name
 
     db = load_database(str(ROOT / "database.json"))
     names = sorted({

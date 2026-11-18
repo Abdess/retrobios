@@ -222,13 +222,13 @@ class SitePages(unittest.TestCase):
     and reach no page."""
 
     def test_the_pack_blocks_are_gone(self) -> None:
-        import sitemeasurements as sm
+        from sitegen import measurements as sm
 
         for name in ("pack_summary", "packs_section", "pack_tested_section", "by_platform"):
             self.assertFalse(hasattr(sm, name), name)
 
     def test_pack_runs_stay_off_the_emulator_page(self) -> None:
-        import sitemeasurements as sm
+        from sitegen import measurements as sm
 
         subject = pp.subject_for("retroarch", "pack", "sega-saturn", "mednafen_saturn", "Game (Japan)")
         self.assertEqual(subject, "pack-retroarch-pack-sega-saturn-mednafen-saturn-game-japan")
@@ -239,7 +239,7 @@ class SitePages(unittest.TestCase):
 
     def test_a_markdown_link_keeps_only_safe_targets(self) -> None:
         """A Markdown link in site text keeps only http(s) and relative targets."""
-        import sitemarkup
+        from sitegen import markup as sitemarkup
 
         self.assertEqual(sitemarkup.inline_html("[x](javascript:alert(1))"), "[x](javascript:alert(1))")
         self.assertEqual(sitemarkup.inline_html('[x](https://a.org/"onmouseover=1)'),

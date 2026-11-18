@@ -11,7 +11,7 @@ import re
 import unittest
 from pathlib import Path
 
-import siteagents
+from sitegen import agents as siteagents
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 

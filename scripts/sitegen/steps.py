@@ -23,7 +23,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from xml.sax.saxutils import escape
 
-import sitemarkup as markup
+from sitegen import markup
 from sitediagrams import (
     MONO_STYLE,
     NARROW,

@@ -59,7 +59,7 @@ class ReadmeRegressions(unittest.TestCase):
         )[0]
 
     def test_advertised_bootstrap_urls_are_the_shipped_ones(self):
-        import sitebootstrap
+        from sitegen import bootstrap as sitebootstrap
         from model.guides import INSTALL_BASE
 
         quick_install = self._quick_install()
@@ -5794,7 +5794,7 @@ class SiteCodeSpansHoldTheirValue(unittest.TestCase):
     was read as markup."""
 
     def test_a_backtick_cannot_close_the_span(self):
-        from scripts.siterender import _code
+        from scripts.sitegen.render import _code
 
         span = _code("a`<img src=x onerror=alert(1)>`")
         self.assertEqual(span.count("`"), 2)

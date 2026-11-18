@@ -202,7 +202,7 @@ class SharingCards(unittest.TestCase):
                 ET.fromstring(sitediagrams.og_card_svg(section, mark))
 
     def test_the_template_names_every_section(self):
-        import sitestarlight
+        from sitegen import starlight as sitestarlight
 
         named = {sitestarlight.og_section("index.md", "")} | {
             sitestarlight.og_section("wiki/page.md", level)

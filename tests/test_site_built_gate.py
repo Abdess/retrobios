@@ -252,7 +252,7 @@ class TheRules(unittest.TestCase):
     """What the gate reads without a build."""
 
     def test_the_logo_reaches_the_front_matter(self):
-        import sitestarlight
+        from sitegen import starlight as sitestarlight
 
         _target, text = sitestarlight.render_page(
             "platforms/x.md",

@@ -42,7 +42,7 @@ from xml.sax.saxutils import escape
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from model import siteinputs
-import sitemarkup as markup
+from sitegen import markup
 from core.paths import REPO_ROOT
 
 ROOT = REPO_ROOT

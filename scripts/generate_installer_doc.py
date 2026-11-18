@@ -47,7 +47,7 @@ import zipfile
 from pathlib import Path, PurePosixPath
 from typing import TYPE_CHECKING, Any, Callable
 
-import sitehandheld
+from sitegen import handheld as sitehandheld
 from core.artifacts import write_text_atomic
 
 if TYPE_CHECKING:

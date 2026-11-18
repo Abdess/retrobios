@@ -27,7 +27,7 @@ import urllib.request
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from siteagents import INDEXNOW_FILE, INDEXNOW_KEY, SITE
+from sitegen.agents import INDEXNOW_FILE, INDEXNOW_KEY, SITE
 
 HOST = "abdess.github.io"
 # What one IndexNow request accepts.

@@ -243,7 +243,7 @@ class SitePages(unittest.TestCase):
         """No page shows region outcomes. The Beetle PSX page names the runs
         its required: false rests on, each with the BIOS the core ran."""
         import measurement_records as mr
-        import sitemeasurements as sm
+        from sitegen import measurements as sm
 
         stored = mr.read_records(ROOT)
         index = sm.build_index(stored, {"repo": sm.REPO, "commit": "0" * 40}, sm.load_profiles(ROOT / "emulators"),

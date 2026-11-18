@@ -41,7 +41,7 @@ import zipfile
 import json
 
 import generate_site as gs
-import siterender
+from sitegen import render as siterender
 from model import systemnames
 from packs.crossref import FileConsumers
 import make_og_cards
@@ -630,7 +630,7 @@ class InstallBoxesCountTowardTheSummary(unittest.TestCase):
     and the page passed its 600 KB budget once the DS files were refiled."""
 
     def setUp(self) -> None:
-        import siterender
+        from sitegen import render as siterender
 
         siterender.reset_console_pages()
         self.addCleanup(siterender.reset_console_pages)

@@ -18,7 +18,7 @@ import unittest
 from pathlib import Path
 
 import generate_site as gs
-import siterender
+from sitegen import render as siterender
 from model import systemnames
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -76,14 +76,14 @@ class OtherSpellingsOfOneSystem(unittest.TestCase):
         self.assertEqual(gs._system_emulators("nintendo-snes", index), [])
 
     def _install(self, mapping: dict) -> None:
-        import siterender
+        from sitegen import render as siterender
 
         saved = dict(siterender._system_page_map)
         self.addCleanup(siterender.set_system_page_map, saved)
         siterender.set_system_page_map(mapping)
 
     def test_a_profile_spelling_finds_the_platform_page(self):
-        import siterender
+        from sitegen import render as siterender
 
         self._install({"sega-mega-drive": ("sega", "Mega Drive")})
         self.assertEqual(siterender._page_by_norm("sega-megadrive"), ("sega", "Mega Drive"))
@@ -94,7 +94,7 @@ class OtherSpellingsOfOneSystem(unittest.TestCase):
     def test_a_table_of_the_same_size_replaces_the_other_spellings(self):
         """The index of other spellings was kept while the table kept its
         length, so a second table of one entry linked to the first one's page."""
-        import siterender
+        from sitegen import render as siterender
 
         self._install({"sega-mega-drive": ("sega", "Mega Drive")})
         self.assertEqual(siterender._page_by_norm("sega-megadrive"), ("sega", "Mega Drive"))
@@ -281,7 +281,7 @@ class EverySystemLinkLandsOnItsSection(unittest.TestCase):
     def setUpClass(cls):
         import re
 
-        import sitestarlight
+        from sitegen import starlight as sitestarlight
         from model.registry import list_registered_platforms
         from model.database import load_database
         from model.profiles import load_emulator_profiles

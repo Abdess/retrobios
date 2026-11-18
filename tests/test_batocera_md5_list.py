@@ -30,7 +30,7 @@ from scraper.batocera_scraper import (
     platform_systems,
     requirements_from_systems,
 )
-from siteexports import describe_change
+from sitegen.exports import describe_change
 from packs.verdicts import Status, verify_entry_md5
 
 REPO_ROOT = Path(__file__).resolve().parents[1]

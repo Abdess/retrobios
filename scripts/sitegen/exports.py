@@ -11,7 +11,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-import sitemarkup as markup
+from sitegen import markup
 
 EXPORTS_DIR = "exports"
 REPO_BLOB = "https://github.com/Abdess/retrobios/blob/main"

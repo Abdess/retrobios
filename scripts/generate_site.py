@@ -72,7 +72,7 @@ from resolve.localfile import resolution_is_hash_exact, resolve_local_file
 from resolve.cores import resolve_platform_cores
 from resolve.layout import runs_standalone
 from model.collection import SECTION_LABELS
-from siterender import WIKI_SRC_DIR
+from sitegen.render import WIKI_SRC_DIR
 from core.artifacts import ArtifactLockBusy, artifact_lock
 from core.artifacts import json_text as _json_text
 from packs.crossref import FileConsumers, entry_target, held_copy
@@ -90,15 +90,15 @@ from generate_readme import (
     release_totals,
 )
 from provenance_report import build_report, distinct_missing, profile_needs
-import sitemarkup as markup
-import siteentries
+from sitegen import markup
+from sitegen import entries as siteentries
 from model import siteinputs
 from model import retired as model_retired
-import siteagents
+from sitegen import agents as siteagents
 import sitediagrams
-import sitestarlight
-import sitesteps
-from siteexports import generate_exports_page, load_export_reports
+from sitegen import starlight as sitestarlight
+from sitegen import steps as sitesteps
+from sitegen.exports import generate_exports_page, load_export_reports
 from model.guides import (
     ALSO_RUNS,
     DEVICE_GROUPS,
@@ -118,16 +118,16 @@ from model.guides import (
     install_command,
     setup_count,
 )
-from siteguides import fence, platform_args, terminal_tabs, trust_box
+from sitegen.guides import fence, platform_args, terminal_tabs, trust_box
 import archive_build
 import release_record
-import sitebootstrap
-import sitehandheld
-import sitemeasurements
-import sitewanted
+from sitegen import bootstrap as sitebootstrap
+from sitegen import handheld as sitehandheld
+from sitegen import measurements as sitemeasurements
+from sitegen import wanted as sitewanted
 from resolve.review import load_platform_hashes, load_profile_hashes
 from sitediagrams import local_images, prepare_page, unresolved_images
-from sitewrite import (
+from sitegen.write import (
     _record,
     _undecorated,
     write_if_changed,
@@ -144,7 +144,7 @@ from sitesources import (
     _source_ref_markdown,
     version_basis_url,
 )
-from siterender import (
+from sitegen.render import (
     _count,
     _field_text,
     _render_yaml_value,
@@ -1983,7 +1983,7 @@ def system_index_items(db: dict, coverages: dict, profiles: dict) -> list[dict]:
     takes the card of its first file, else the page of the emulator naming
     it: 28 such ids sent their hashes to no page.
     """
-    from siterender import card_page, system_ids, system_section
+    from sitegen.render import card_page, system_ids, system_section
 
     sha1_by_path = _sha1_by_path(db)
     files = db.get("files") or {}
@@ -3675,7 +3675,7 @@ def _system_heading_link(sys_id: str, prefix: str = "") -> str:
 
 def _system_named_link(sys_id: str, prefix: str = "") -> str:
     """A system's name, linked to the section system_section gives."""
-    from siterender import system_section
+    from sitegen.render import system_section
 
     name = _escape_tags(system_name(sys_id))
     section = system_section(sys_id)
@@ -5152,7 +5152,7 @@ def _console_system_names(profiles: dict, coverages: dict) -> dict[tuple[str, st
     it is filed under. A folder no id owns, or that two names own, is left out.
     """
     from model.systemnames import _own_section
-    from siterender import system_ids
+    from sitegen.render import system_ids
 
     found: dict[tuple[str, str], set[str]] = {}
     for sys_id in system_ids(profiles, [c["config"] for c in coverages.values()]):
@@ -6649,7 +6649,7 @@ def system_install_choices(coverages: dict) -> dict[str, dict[str, list[tuple[st
     platform's install manifest records is offered: --system refuses any
     other name.
     """
-    from siterender import _page_by_norm
+    from sitegen.render import _page_by_norm
 
     choices: dict[str, dict[str, list[tuple[str, str]]]] = {}
     for name, cov in sorted(coverages.items()):
@@ -6857,7 +6857,7 @@ _SECTION_ENTRIES: dict[int, tuple[object, dict[tuple[str, str], list]]] = {}
 def _entries_by_section(consumers: FileConsumers) -> dict[tuple[str, str], list]:
     """Each console section with the (sha1, emulator, entry, system) whose
     system leads to it, read once per build."""
-    from siterender import system_section
+    from sitegen.render import system_section
 
     cached = _SECTION_ENTRIES.get(id(consumers))
     if cached is not None and cached[0] is consumers:
@@ -7017,7 +7017,7 @@ def _section_reads(
     """The reads of each file the section names, by sha1, and the files the
     start line may name: the section's primaries, then the Arcade files
     its systems require."""
-    from siterender import system_section
+    from sitegen.render import system_section
 
     held = {str(f.get("sha1", "")) for f in files}
     primaries = [f for f in files if "/.variants/" not in f["path"]]
@@ -7672,7 +7672,7 @@ class _BoardSort:
 
     def arcade_folders(self, arcade: dict[str, list], by_name: dict[str, str]) -> None:
         """The folders of bios/Arcade/, each file to its board or machine."""
-        from siterender import arcade_board, archive_machine
+        from sitegen.render import arcade_board, archive_machine
         from model.collection import record_card_move
 
         for console in sorted(arcade):
@@ -7693,7 +7693,7 @@ class _BoardSort:
         """A board's set filed under a machine's folder is on the board's page
         too, whatever the folder: naomi.zip under the Dreamcast was the copy
         five setups list, and the NAOMI page did not name it."""
-        from siterender import arcade_board, archive_machine
+        from sitegen.render import arcade_board, archive_machine
         from model.collection import record_card_move
 
         for mfr, consoles in manufacturers.items():
@@ -7730,7 +7730,7 @@ def _installs_by_board(
     installs: dict[str, dict[str, list[tuple[str, str]]]],
 ) -> dict[str, dict[str, list[tuple[str, str]]]]:
     """A system's install commands, moved to its board's section."""
-    from siterender import system_section
+    from sitegen.render import system_section
 
     moved: dict[str, dict[str, list[tuple[str, str]]]] = {}
     for slug, consoles in installs.items():
@@ -7761,7 +7761,7 @@ def arcade_board_sections(
     folders. Each board is recorded (siterender.record_board_section) before
     any page links one, and a system's install commands follow its link to
     the board's section. Call after reset_console_pages()."""
-    from siterender import arcade_boards, record_board_section
+    from sitegen.render import arcade_boards, record_board_section
 
     _BOARD_CONSOLES.clear()
     _BOARDS_FROM.clear()
@@ -7786,7 +7786,7 @@ def arcade_board_sections(
 def _boards_line(manufacturer: str, console: str) -> list[str]:
     """The line of a section whose board sets went to the boards' pages:
     the Dreamcast folder holds NAOMI's and Atomiswave's."""
-    from siterender import arcade_boards
+    from sitegen.render import arcade_boards
 
     boards = _BOARDS_FROM.get((manufacturer, console))
     if not boards:
@@ -8065,7 +8065,7 @@ class _MakerPages:
     def moved_section(self, console: str, pages: dict[str, tuple[str, dict[str, list]]]) -> list[str]:
         """A console moved to pages of its own: the lines the summary keeps
         under its heading. Its pages go into ``pages``."""
-        from siterender import board_slug
+        from sitegen.render import board_slug
 
         manufacturer = self.manufacturer
         label = _section_label(manufacturer, console)
@@ -8225,7 +8225,7 @@ def _named_system_link(sys_id: str, prefix: str = "") -> str:
     The emulator pages printed the id ("sony-playstation") where every
     other page says "Sony PlayStation". The id stays in the address only.
     """
-    from siterender import system_section
+    from sitegen.render import system_section
 
     name = system_name(sys_id).replace("[", r"\[").replace("]", r"\]")
     section = system_section(sys_id)
@@ -13194,7 +13194,7 @@ def _write_home_pages(run: _SiteRun) -> dict:
 
 def _write_system_pages(run: _SiteRun) -> None:
     """The system pages, each manufacturer's, and their API items."""
-    from siterender import link_coverage, system_ids
+    from sitegen.render import link_coverage, system_ids
 
     docs, public, db = run.docs, run.public, run.db
     manufacturers = run.manufacturers

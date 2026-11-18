@@ -14,7 +14,7 @@ import unittest
 from pathlib import Path
 
 import indexnow
-import siteagents
+from sitegen import agents as siteagents
 import site_markdown
 
 ROOT = Path(__file__).resolve().parent.parent

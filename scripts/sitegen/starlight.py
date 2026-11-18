@@ -431,7 +431,7 @@ def page_aliases(rel: str) -> list[str]:
     (psx, dreamcast, gba), from siterender.system_search_aliases(): "psx
     bios" finds the PlayStation page though the page never says psx."""
     if not _page_aliases_built[0]:
-        import siterender
+        from sitegen import render as siterender
 
         by_page: dict[str, set[str]] = {}
         for sys_id in list(siterender._system_page_map):

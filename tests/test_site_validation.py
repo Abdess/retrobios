@@ -39,7 +39,7 @@ class ProsePlaceholders(unittest.TestCase):
     """A path written with angle brackets reaches the reader as written."""
 
     def test_a_placeholder_is_text_not_a_tag(self):
-        from siterender import _admonition_body, _escape_tags
+        from sitegen.render import _admonition_body, _escape_tags
 
         self.assertEqual(
             _escape_tags("gameProfiles/<title id>.ini under <system_dir>/Cemu"),
@@ -48,7 +48,7 @@ class ProsePlaceholders(unittest.TestCase):
         self.assertIn("&lt;title id>", _admonition_body("read <title id>.ini"))
 
     def test_code_spans_and_links_are_left_alone(self):
-        from siterender import _escape_tags
+        from sitegen.render import _escape_tags
 
         self.assertEqual(_escape_tags("`<system_dir>/x`"), "`<system_dir>/x`")
         self.assertEqual(_escape_tags("see <https://example.org/a>"), "see <https://example.org/a>")

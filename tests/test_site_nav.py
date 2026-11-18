@@ -34,7 +34,7 @@ import ast
 from html import unescape
 
 import generate_site
-import sitestarlight
+from sitegen import starlight as sitestarlight
 from core import anchors as core_anchors
 from model.registry import list_registered_platforms, load_platform_registry
 from model.platforms import load_platform_config

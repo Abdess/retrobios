@@ -31,7 +31,7 @@ import json
 from html.parser import HTMLParser
 
 import generate_site as gs
-import sitestarlight
+from sitegen import starlight as sitestarlight
 import validate_site
 import generate_site
 from model.registry import list_registered_platforms

@@ -7,7 +7,7 @@ import urllib.parse
 from collections.abc import Callable
 
 from model import siteinputs
-import sitemarkup as markup
+from sitegen import markup
 from core.paths import REPO_ROOT
 from model.collection import _PROGRAM_TOPS, _card_moves, _manufacturer_slug
 from model.systemnames import (

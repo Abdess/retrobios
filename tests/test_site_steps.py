@@ -17,7 +17,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import sitediagrams
-import sitesteps
+from sitegen import steps as sitesteps
 from model.guides import TERMINALS
 
 ROOT = Path(__file__).resolve().parent.parent

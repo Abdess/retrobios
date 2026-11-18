@@ -17,7 +17,7 @@ from pathlib import Path
 from exporter import native
 from exporter.landed import landed_changes
 from exporter.native import current_truth, export_platform, write_report
-from siteexports import generate_exports_page, load_export_reports
+from sitegen.exports import generate_exports_page, load_export_reports
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -150,7 +150,7 @@ class ThePageAddressesMaintainersAsPeers(unittest.TestCase):
     their work, which the page is not."""
 
     def test_the_change_sentence_is_built_from_the_numbers(self):
-        from siteexports import change_text
+        from sitegen.exports import change_text
 
         report = _report("batocera", ["batocera-systems"],
                          hashes_updated=["a md5", "b md5"], required_aligned=3)

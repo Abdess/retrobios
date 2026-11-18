@@ -211,7 +211,7 @@ class DeepLinksCarryALabel(unittest.TestCase):
     ANSWERS = ("/retrobios/wiki/technical-faq/#which-mame-version-do-the-arcade-bios-sets-match",)
 
     def test_start_and_setup_pages(self):
-        import sitestarlight
+        from sitegen import starlight as sitestarlight
 
         pages = _docs_pages()
         levels = {page: _level(page) for page in pages}

@@ -16,7 +16,7 @@ from __future__ import annotations
 import html
 from dataclasses import dataclass, field
 
-import sitemarkup as markup
+from sitegen import markup
 
 # rehype-stack-tables.mjs RECORD_ROWS: from this many rows a table has a
 # filter box, and its stacked labels are written by site.ts, not the build.

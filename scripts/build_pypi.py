@@ -33,7 +33,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-from sitebootstrap import PIN
+from sitegen.bootstrap import PIN
 from model.guides import SH_NAME
 
 ROOT = Path(__file__).resolve().parent.parent

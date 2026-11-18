@@ -21,7 +21,7 @@ import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path
 
-import sitemarkup as markup
+from sitegen import markup
 from core.artifacts import write_bytes_atomic
 from build_port import ARCHIVES, BATOCERA_ZIP, MUOS_APP, PORT_ZIP, TOOLS_ZIP, build_archive
 from core.paths import REPO_ROOT

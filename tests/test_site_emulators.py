@@ -38,7 +38,7 @@ import importlib.util
 import json
 
 import generate_site as gs
-import siterender
+from sitegen import render as siterender
 from model import systemnames
 import validate_site
 

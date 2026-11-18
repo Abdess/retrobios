@@ -1625,7 +1625,7 @@ def unserved_one_liners(page: str, text: str) -> list[str]:
     """One-line commands whose address the site does not serve. The raw
     address of the repository stays as the fallback of the One line
     section, and must name a bootstrap the repository holds."""
-    import sitebootstrap
+    from sitegen import bootstrap as sitebootstrap
     from model.guides import INSTALL_BASE
 
     served = {f"{INSTALL_BASE}/{name}" for name in sitebootstrap.SOURCES}

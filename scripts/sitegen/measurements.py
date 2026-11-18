@@ -32,9 +32,9 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import measurement_records as mr
-import sitemarkup as markup
+from sitegen import markup
 from core.artifacts import json_text, write_if_changed
-from siterender import _escape_tags
+from sitegen.render import _escape_tags
 from core.paths import REPO_ROOT
 
 ROOT = REPO_ROOT

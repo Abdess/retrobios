@@ -21,7 +21,7 @@ from pathlib import Path
 
 import generate_readme
 import make_demo
-import sitestarlight
+from sitegen import starlight as sitestarlight
 
 ROOT = Path(__file__).resolve().parent.parent
 

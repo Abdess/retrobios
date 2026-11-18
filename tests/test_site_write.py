@@ -17,7 +17,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import sitewrite
+from sitegen import write as sitewrite
 
 BODY = "# Title\n\nSome prose.\n\n*Generated on 2026-01-01T00:00:00Z*\n"
 FRONT = (

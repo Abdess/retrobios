@@ -22,7 +22,7 @@ from pathlib import Path
 from unittest import mock
 
 import install
-import sitebootstrap
+from sitegen import bootstrap as sitebootstrap
 from model import guides
 from model.guides import INSTALL_BASE, INSTALL_PS1, INSTALL_SH, install_command
 

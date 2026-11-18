@@ -11,7 +11,7 @@ from unittest import mock
 
 import yaml
 
-import siterender
+from sitegen import render as siterender
 from model import systemnames
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -534,7 +534,7 @@ class NoTooltipInsideAName(unittest.TestCase):
     Free Unix Spectrum Emulator, Windows Terminal, Documents/Dolphin Emulator."""
 
     def test_names_are_left_and_terms_are_marked(self):
-        import sitestarlight
+        from sitegen import starlight as sitestarlight
 
         terms = {"Emulator": "An app that acts like a console.",
                  "Terminal": "A window for typing commands.",

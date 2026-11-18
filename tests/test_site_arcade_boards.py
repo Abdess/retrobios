@@ -20,7 +20,7 @@ import zipfile
 from pathlib import Path
 
 
-import siterender
+from sitegen import render as siterender
 from model import systemnames
 from core.anchors import toc_slug
 

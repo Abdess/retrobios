@@ -14,9 +14,9 @@ import tests
 import unittest
 
 import generate_site
-import sitestarlight
-import siterender
-import sitemarkup as markup
+from sitegen import starlight as sitestarlight
+from sitegen import render as siterender
+from sitegen import markup
 from packs.crossref import FileConsumers
 
 

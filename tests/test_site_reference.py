@@ -52,7 +52,7 @@ import runpy
 import urllib.error
 
 import generate_site
-import sitewanted
+from sitegen import wanted as sitewanted
 from model import systemnames
 from model.registry import list_registered_platforms, list_release_pack_platforms
 from model.profiles import load_emulator_profiles
@@ -1083,7 +1083,7 @@ class EverySystemIdWithFilesHasAPage(unittest.TestCase):
 
     def test_first_file_then_emulator(self):
         files = {"f" * 40: {"path": "bios/DOS/DOS/a.bin"}}
-        with mock.patch("siterender._card_pages", {}):
+        with mock.patch("sitegen.render._card_pages", {}):
             place = generate_site._first_file_place(
                 "dos", ["f" * 40], files, {}, lambda path, sha1: "dos")
         self.assertEqual(place, ("DOS", "/retrobios/systems/dos/#sha1-ffffffffffff"))

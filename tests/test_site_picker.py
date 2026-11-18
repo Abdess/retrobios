@@ -38,7 +38,7 @@ def picked(data: dict, chosen: set[str]) -> list[str]:
 
 class PickerMatchesInstaller(unittest.TestCase):
     def setUp(self):
-        import sitestarlight
+        from sitegen import starlight as sitestarlight
 
         self.folder = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp" if (REPO_ROOT / "tmp").is_dir() else None)
         self.out = Path(self.folder.name)

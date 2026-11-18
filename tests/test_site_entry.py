@@ -46,7 +46,7 @@ import generate_readme
 import generate_site
 import release_record
 from model import guides
-import sitemarkup
+from sitegen import markup as sitemarkup
 from model.platforms import load_platform_config
 from model.registry import load_platform_registry
 from tests import sitepages

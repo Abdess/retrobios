@@ -358,7 +358,7 @@ class TitleLogoOnAPlate(unittest.TestCase):
     def test_a_setup_with_no_logo_gets_its_initials(self):
         # Every setup has a logo today: the fallback is read where it is
         # written, the tile's and the title's.
-        import sitemarkup
+        from sitegen import markup as sitemarkup
 
         self.assertIn('data-initials="MM" aria-hidden="true"></span>', sitemarkup._tile_mark("MyMinUI", ""))
         component = _read(REPO_ROOT / "website" / "src" / "components" / "PageTitle.astro")
@@ -381,8 +381,8 @@ class OneTabIsNoTabBar(unittest.TestCase):
     the heading "On the device"."""
 
     def test_a_single_item_stands_alone(self):
-        import sitemarkup
-        import siteguides
+        from sitegen import markup as sitemarkup
+        from sitegen import guides as siteguides
 
         self.assertEqual(sitemarkup.tabs([("Linux", ["run it"])]), ["**Linux**", "", "run it", ""])
         self.assertEqual(sitemarkup.tabs([("", ["run it"])]), ["run it", ""])
