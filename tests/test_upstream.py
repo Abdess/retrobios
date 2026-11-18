@@ -261,31 +261,31 @@ class TestFetchRetry(unittest.TestCase):
     def test_dropped_connection_is_retried_then_succeeds(self):
         dropped = http.client.RemoteDisconnected("closed")
         self._serve([dropped, b"payload"])
-        self.assertEqual(upstream._fetch("https://host/x"), b"payload")
+        self.assertEqual(upstream.fetch_body("https://host/x"), b"payload")
         self.assertEqual(self.calls, 2)
         self.assertEqual(len(self.slept), 1)
 
     def test_retries_are_bounded(self):
         self._serve([http.client.RemoteDisconnected("closed")])
         with self.assertRaises(upstream.UpstreamError):
-            upstream._fetch("https://host/x")
+            upstream.fetch_body("https://host/x")
         self.assertEqual(self.calls, upstream.RETRIES)
 
     def test_server_error_is_retried(self):
         self._serve([_http_error(503)])
         with self.assertRaises(upstream.UpstreamError):
-            upstream._fetch("https://host/x")
+            upstream.fetch_body("https://host/x")
         self.assertEqual(self.calls, upstream.RETRIES)
 
     def test_forbidden_is_not_retried(self):
         self._serve([_http_error(403)])
         with self.assertRaises(upstream.UpstreamError):
-            upstream._fetch("https://host/x")
+            upstream.fetch_body("https://host/x")
         self.assertEqual(self.calls, 1)
 
     def test_missing_file_is_not_retried(self):
         self._serve([_http_error(404)])
-        self.assertIsNone(upstream._fetch("https://host/x"))
+        self.assertIsNone(upstream.fetch_body("https://host/x"))
         self.assertEqual(self.calls, 1)
 
     @staticmethod
@@ -301,26 +301,26 @@ class TestFetchRetry(unittest.TestCase):
         # git.libretro.com answered 429 on cemu's tree a few hundred
         # requests into a pass, and the whole pass stopped.
         self._serve([self._limited("7"), self._limited(), b"payload"])
-        self.assertEqual(upstream._fetch("https://host/x"), b"payload")
+        self.assertEqual(upstream.fetch_body("https://host/x"), b"payload")
         self.assertEqual(self.slept, [7.0, upstream.RATE_LIMIT_WAITS[1]])
 
     def test_lasting_rate_limit_mutes_the_host_only(self):
         self._serve([self._limited()])
         with self.assertRaises(upstream.RateLimitError) as caught:
-            upstream._fetch("https://host/x")
+            upstream.fetch_body("https://host/x")
         self.assertEqual(caught.exception.host, "host")
         self.assertEqual(self.calls, len(upstream.RATE_LIMIT_WAITS) + 1)
         # The same host is not asked again, another one still is.
         with self.assertRaises(upstream.RateLimitError):
-            upstream._fetch("https://host/y")
+            upstream.fetch_body("https://host/y")
         self.assertEqual(self.calls, len(upstream.RATE_LIMIT_WAITS) + 1)
         self._serve([b"other"])
-        self.assertEqual(upstream._fetch("https://other/x"), b"other")
+        self.assertEqual(upstream.fetch_body("https://other/x"), b"other")
 
     def test_long_retry_after_is_not_waited(self):
         self._serve([self._limited(str(int(upstream.RATE_LIMIT_WAIT_CAP) + 1))])
         with self.assertRaises(upstream.RateLimitError):
-            upstream._fetch("https://host/x")
+            upstream.fetch_body("https://host/x")
         self.assertEqual((self.calls, self.slept), (1, []))
 
     def test_exhausted_github_quota_is_not_waited(self):
@@ -330,7 +330,7 @@ class TestFetchRetry(unittest.TestCase):
         headers["X-RateLimit-Remaining"] = "0"
         self._serve([_http_error(403, headers)])
         with self.assertRaises(upstream.RateLimitError):
-            upstream._fetch("https://host/x")
+            upstream.fetch_body("https://host/x")
         self.assertEqual((self.calls, self.slept), (1, []))
 
 
@@ -362,14 +362,14 @@ class TestGoneUpstream(unittest.TestCase):
     def test_legal_takedown_is_gone_and_not_retried(self):
         self._serve(_http_error(451))
         with self.assertRaises(upstream.GoneError):
-            upstream._fetch("https://host/x")
+            upstream.fetch_body("https://host/x")
         self.assertEqual(self.calls, 1)
         self.assertEqual(self.slept, [])
 
     def test_http_gone_is_gone(self):
         self._serve(_http_error(410))
         with self.assertRaises(upstream.GoneError):
-            upstream._fetch("https://host/x")
+            upstream.fetch_body("https://host/x")
         self.assertEqual(self.calls, 1)
 
     def test_unresolvable_host_is_gone_and_not_retried(self):
@@ -378,7 +378,7 @@ class TestGoneUpstream(unittest.TestCase):
         ))
         with mock.patch.object(upstream, "_resolver_answers", return_value=True), \
                 self.assertRaises(upstream.GoneError):
-            upstream._fetch("https://host/x")
+            upstream.fetch_body("https://host/x")
         self.assertEqual(self.calls, 1)
         self.assertEqual(self.slept, [])
 
@@ -390,25 +390,25 @@ class TestGoneUpstream(unittest.TestCase):
                 self._serve(urllib.error.URLError(socket.gaierror(errno, "no")))
                 with mock.patch.object(upstream, "_resolver_answers", return_value=resolver), \
                         self.assertRaises(upstream.UpstreamError) as caught:
-                    upstream._fetch("https://host/x")
+                    upstream.fetch_body("https://host/x")
                 self.assertNotIsInstance(caught.exception, upstream.GoneError)
 
     def test_a_gone_error_is_still_an_upstream_error(self):
         self._serve(_http_error(451))
         with self.assertRaises(upstream.UpstreamError):
-            upstream._fetch("https://host/x")
+            upstream.fetch_body("https://host/x")
 
     def test_refused_request_is_not_gone(self):
         """403 is a forge refusing a request, which anti-bot filters do."""
         self._serve(_http_error(403))
         with self.assertRaises(upstream.UpstreamError) as caught:
-            upstream._fetch("https://host/x")
+            upstream.fetch_body("https://host/x")
         self.assertNotIsInstance(caught.exception, upstream.GoneError)
 
     def test_a_dropped_connection_is_not_gone(self):
         self._serve(http.client.RemoteDisconnected("closed"))
         with self.assertRaises(upstream.UpstreamError) as caught:
-            upstream._fetch("https://host/x")
+            upstream.fetch_body("https://host/x")
         self.assertNotIsInstance(caught.exception, upstream.GoneError)
         self.assertEqual(self.calls, upstream.RETRIES)
 
@@ -419,12 +419,12 @@ class TestCache(unittest.TestCase):
         self.dir = self.tmp.name
         self.repo = parse_repo("https://github.com/o/n")
         self.calls: list[str] = []
-        self._orig = (upstream._http_text, upstream._http_json)
-        upstream._http_text = self._fake
-        upstream._http_json = _no_network
+        self._orig = (upstream.http_text, upstream.http_json)
+        upstream.http_text = self._fake
+        upstream.http_json = _no_network
 
     def tearDown(self):
-        upstream._http_text, upstream._http_json = self._orig
+        upstream.http_text, upstream.http_json = self._orig
         self.tmp.cleanup()
 
     def _fake(self, url: str) -> str | None:
@@ -473,7 +473,7 @@ class TestCache(unittest.TestCase):
         self.assertEqual(self.calls, [])
 
     def test_missing_file_is_cached_as_absent(self):
-        upstream._http_text = lambda url: None
+        upstream.http_text = lambda url: None
         self.assertIsNone(upstream.fetch_file(self.repo, "abc", "gone.c", self.dir))
         self.assertIsNone(
             upstream.fetch_file(self.repo, "abc", "gone.c", self.dir, offline=True)
@@ -505,12 +505,12 @@ class TestRevisions(unittest.TestCase):
         self.repo = parse_repo("https://github.com/o/n")
         self.responses: dict[str, object] = {}
         self.calls: list[str] = []
-        self._orig = (upstream._http_json, upstream._http_text)
-        upstream._http_json = self._fake
-        upstream._http_text = _no_network
+        self._orig = (upstream.http_json, upstream.http_text)
+        upstream.http_json = self._fake
+        upstream.http_text = _no_network
 
     def tearDown(self):
-        upstream._http_json, upstream._http_text = self._orig
+        upstream.http_json, upstream.http_text = self._orig
         self.tmp.cleanup()
 
     def _fake(self, url: str):
@@ -634,7 +634,7 @@ class TestRevisions(unittest.TestCase):
         def boom(url: str):
             raise upstream.RateLimitError("quota")
 
-        upstream._http_json = boom
+        upstream.http_json = boom
         with self.assertRaises(upstream.RateLimitError):
             upstream.resolve_head(self.repo, self.dir)
 
@@ -645,12 +645,12 @@ class TestCompare(unittest.TestCase):
         self.dir = self.tmp.name
         self.repo = parse_repo("https://github.com/o/n")
         self.payload: object = None
-        self._orig = (upstream._http_json, upstream._http_text)
-        upstream._http_json = lambda url: self.payload
-        upstream._http_text = _no_network
+        self._orig = (upstream.http_json, upstream.http_text)
+        upstream.http_json = lambda url: self.payload
+        upstream.http_text = _no_network
 
     def tearDown(self):
-        upstream._http_json, upstream._http_text = self._orig
+        upstream.http_json, upstream.http_text = self._orig
         self.tmp.cleanup()
 
     def test_list_directory_reads_one_tree(self):
@@ -667,7 +667,7 @@ class TestCompare(unittest.TestCase):
                 ],
             }
 
-        upstream._http_json = answer
+        upstream.http_json = answer
         self.assertEqual(
             upstream.list_directory(self.repo, "abc", "hash/", self.dir), ["a.xml", "b.xml"]
         )
@@ -678,7 +678,7 @@ class TestCompare(unittest.TestCase):
             ["a.xml", "b.xml"],
         )
         self.assertEqual(len(seen), 1)
-        upstream._http_json = lambda url: {"truncated": True, "tree": []}
+        upstream.http_json = lambda url: {"truncated": True, "tree": []}
         self.assertIsNone(upstream.list_directory(self.repo, "def", "hash", self.dir))
         gitlab = parse_repo("https://gitlab.com/o/n")
         self.assertIsNone(upstream.list_directory(gitlab, "abc", "hash", self.dir))
@@ -749,7 +749,7 @@ class TestCompare(unittest.TestCase):
                     return value
             return listing
 
-        upstream._http_json = answer
+        upstream.http_json = answer
         self.assertEqual(
             upstream.commits_touching(self.repo, "a.c", "base", self.dir, head="tip"), 2
         )
@@ -774,7 +774,7 @@ class TestCompare(unittest.TestCase):
                     return value
             return list(listing)
 
-        upstream._http_json = answer
+        upstream.http_json = answer
         self.assertEqual(upstream.commits_touching(self.repo, "a.c", "base", self.dir), 1)
         for cached in (Path(self.dir) / "_api").glob("*.json"):
             stale = _os.path.getmtime(cached) - upstream.MOVING_TTL - 1
@@ -793,7 +793,7 @@ class TestCompare(unittest.TestCase):
         def answer(url):
             return answers[-1]
 
-        upstream._http_json = answer
+        upstream.http_json = answer
         self.assertIsNone(upstream.tag_commit(self.repo, "v2.0", self.dir))
         for cached in (Path(self.dir) / "_api").glob("*.json"):
             stale = _os.path.getmtime(cached) - upstream.MOVING_TTL - 1
@@ -813,7 +813,7 @@ class TestGitlabTree(unittest.TestCase):
         self.dir = self.tmp.name
         self.repo = upstream.parse_repo("https://gitlab.com/g/p")
         self.pages: dict[int, object] = {}
-        self._orig = (upstream._http_json, upstream._http_text)
+        self._orig = (upstream.http_json, upstream.http_text)
 
         def fake(url):
             page = int(url.rsplit("page=", 1)[1])
@@ -822,10 +822,10 @@ class TestGitlabTree(unittest.TestCase):
                 raise upstream.UpstreamError(url)
             return payload
 
-        upstream._http_json = fake
+        upstream.http_json = fake
 
     def tearDown(self):
-        upstream._http_json, upstream._http_text = self._orig
+        upstream.http_json, upstream.http_text = self._orig
         self.tmp.cleanup()
 
     def _blobs(self, *names):
@@ -876,7 +876,7 @@ class TestGiteaCommitAt(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         self.urls: list[str] = []
-        original = upstream._http_json
+        original = upstream.http_json
 
         def fake(url):
             self.urls.append(url)
@@ -884,8 +884,8 @@ class TestGiteaCommitAt(unittest.TestCase):
             page = int(url.rsplit("page=", 1)[1])
             return self.PAGES.get(page, [])
 
-        upstream._http_json = fake
-        self.addCleanup(setattr, upstream, "_http_json", original)
+        upstream.http_json = fake
+        self.addCleanup(setattr, upstream, "http_json", original)
 
     def test_the_first_commit_by_the_cutoff(self):
         repo = parse_repo("https://codeberg.org/iyzsong/gam4980")
@@ -914,7 +914,7 @@ class TestCurrentSlug(unittest.TestCase):
             },
         }
         with tempfile.TemporaryDirectory() as tmp, \
-                mock.patch.object(upstream, "_http_json", side_effect=answers.get):
+                mock.patch.object(upstream, "http_json", side_effect=answers.get):
             github = parse_repo("https://github.com/AloysHF/NicaiEmu")
             gitlab = parse_repo("https://gitlab.com/g/sub/p")
             self.assertEqual(upstream.current_slug(github, tmp), "AloysHF/CoolbarEmu")
@@ -953,10 +953,10 @@ class TestNewestTag(unittest.TestCase):
 class TestNamedTagCommit(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
-        self.saved = upstream._http_json
+        self.saved = upstream.http_json
 
     def tearDown(self):
-        upstream._http_json = self.saved
+        upstream.http_json = self.saved
         self.tmp.cleanup()
 
     def test_gitlab_tag_is_asked_by_name(self):
@@ -966,7 +966,7 @@ class TestNamedTagCommit(unittest.TestCase):
             asked.append(url)
             return {"name": "1.2.35", "commit": {"id": "c74fc36"}}
 
-        upstream._http_json = answer
+        upstream.http_json = answer
         repo = parse_repo("https://gitlab.com/jengun/sdltrs")
         self.assertEqual(upstream.tag_commit(repo, "1.2.35", self.tmp.name), "c74fc36")
         self.assertTrue(asked[0].endswith("/repository/tags/1.2.35"))
@@ -975,10 +975,10 @@ class TestNamedTagCommit(unittest.TestCase):
 class TestForkBase(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
-        self.saved = upstream._http_json
+        self.saved = upstream.http_json
 
     def tearDown(self):
-        upstream._http_json = self.saved
+        upstream.http_json = self.saved
         self.tmp.cleanup()
 
     def test_the_merge_base_github_names(self):
@@ -988,13 +988,13 @@ class TestForkBase(unittest.TestCase):
             asked.append(url)
             return {"merge_base_commit": {"sha": "base"}, "status": "diverged"}
 
-        upstream._http_json = answer
+        upstream.http_json = answer
         up, fork = make_repo("github.com", "o", "up"), make_repo("github.com", "f", "port")
         self.assertEqual(upstream.fork_base(up, "tip", fork, "head", self.tmp.name), "base")
         self.assertTrue(asked[0].endswith("/repos/o/up/compare/tip...f:port:head"))
 
     def test_no_network_is_none(self):
-        upstream._http_json = lambda url: None
+        upstream.http_json = lambda url: None
         up, fork = make_repo("github.com", "o", "up"), make_repo("github.com", "f", "port")
         self.assertIsNone(upstream.fork_base(up, "tip", fork, "head", self.tmp.name))
 
@@ -1029,41 +1029,41 @@ class TestGitlabDirectoryArchive(unittest.TestCase):
 
     def test_files_land_in_the_cache_fetch_file_reads(self):
         calls = []
-        with mock.patch.object(upstream, "_fetch", side_effect=lambda url: calls.append(url) or self.body):
+        with mock.patch.object(upstream, "fetch_body", side_effect=lambda url: calls.append(url) or self.body):
             held = upstream.cache_gitlab_directory(self.repo, "abc", "sys", self.tmp.name)
         self.assertEqual(held, {"sys/a/system.ini", "sys/b/system.ini"})
         self.assertEqual(len(calls), 1)
         self.assertIn("archive.tar.gz?sha=abc&path=sys", calls[0])
-        with mock.patch.object(upstream, "_http_text", side_effect=_no_network):
+        with mock.patch.object(upstream, "http_text", side_effect=_no_network):
             lines = upstream.fetch_file(self.repo, "abc", "sys/b/system.ini", self.tmp.name, offline=True)
         self.assertEqual(lines, ["[core.x]"])
 
     def test_a_second_run_reads_the_index_offline(self):
-        with mock.patch.object(upstream, "_fetch", return_value=self.body):
+        with mock.patch.object(upstream, "fetch_body", return_value=self.body):
             upstream.cache_gitlab_directory(self.repo, "abc", "sys", self.tmp.name)
-        with mock.patch.object(upstream, "_fetch", side_effect=_no_network):
+        with mock.patch.object(upstream, "fetch_body", side_effect=_no_network):
             held = upstream.cache_gitlab_directory(self.repo, "abc", "sys", self.tmp.name, offline=True)
         self.assertEqual(held, {"sys/a/system.ini", "sys/b/system.ini"})
 
     def test_offline_without_index_knows_nothing(self):
-        with mock.patch.object(upstream, "_fetch", side_effect=_no_network):
+        with mock.patch.object(upstream, "fetch_body", side_effect=_no_network):
             self.assertIsNone(upstream.cache_gitlab_directory(self.repo, "abc", "sys", self.tmp.name, offline=True))
 
     def test_other_forges_are_left_to_per_file_reads(self):
         github = parse_repo("https://github.com/o/r")
-        with mock.patch.object(upstream, "_fetch", side_effect=_no_network):
+        with mock.patch.object(upstream, "fetch_body", side_effect=_no_network):
             self.assertIsNone(upstream.cache_gitlab_directory(github, "abc", "sys", self.tmp.name))
 
     def test_a_refused_api_falls_back_to_git(self):
         refused = upstream.RateLimitError("429", "gitlab.com")
-        with mock.patch.object(upstream, "_fetch", side_effect=refused), \
+        with mock.patch.object(upstream, "fetch_body", side_effect=refused), \
                 mock.patch.object(upstream, "_sparse_git_files", return_value={"sys/a/system.ini": "x"}) as git:
             held = upstream.cache_gitlab_directory(self.repo, "abc", "sys", self.tmp.name)
         self.assertEqual(held, {"sys/a/system.ini"})
         git.assert_called_once()
 
     def test_an_empty_archive_is_an_error_not_an_empty_directory(self):
-        with mock.patch.object(upstream, "_fetch", return_value=_tarball({"p/other/x": "y"})), \
+        with mock.patch.object(upstream, "fetch_body", return_value=_tarball({"p/other/x": "y"})), \
                 self.assertRaises(upstream.UpstreamError):
             upstream.cache_gitlab_directory(self.repo, "abc", "sys", self.tmp.name)
 

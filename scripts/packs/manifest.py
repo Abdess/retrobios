@@ -9,7 +9,7 @@ from collections.abc import Callable, Iterator
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypedDict
 
-from core.artifacts import _build_timestamp
+from core.artifacts import build_timestamp
 from core.options import reject_unknown
 from core.paths import REPO_ROOT, declared_destination, sanitize_pack_path
 from model.declarations import OUTER_ROOTS, declared_root, outer_layout
@@ -19,50 +19,50 @@ from model.registry import load_data_dir_registry
 from model.safeparse import yaml_load
 from model.systems import platform_system_names
 from packs import slots
-from packs.archive import CASE_FOLDING_OS, PACK_DOCUMENTS, _Placed
+from packs.archive import CASE_FOLDING_OS, PACK_DOCUMENTS, Placed
 from packs.datatrees import (
-    _data_directory_members,
-    _in_data_cache,
-    _manifest_data_directories,
+    data_directory_members,
+    in_data_cache,
+    manifest_data_directories,
     core_data_trees,
     pack_markers,
     tree_readers,
 )
 from packs.extras import (
-    _collect_emulator_extras,
+    collect_emulator_extras,
     extra_region_key,
     save_entry_fields,
     save_manifest_dest,
     undeclared_report,
 )
 from packs.manifestcores import (
-    _downloaded_cores,
-    _manifest_core_entries,
-    _manifest_core_index,
-    _manifest_selection,
-    _offered_boards,
+    downloaded_cores,
+    manifest_core_entries,
+    manifest_core_index,
+    manifest_selection,
+    offered_boards,
 )
 from packs.manifestentry import (
     MANIFEST_OUTER_FIELDS,
-    _ClaimContext,
-    _attach_claims,
-    _manifest_dest_of,
-    _manifest_entry,
-    _record_absent,
-    _record_slot_choices,
-    _record_unplaceable,
+    ClaimContext,
+    attach_claims,
+    manifest_dest_of,
+    manifest_entry,
+    record_absent,
+    record_slot_choices,
+    record_unplaceable,
 )
 from packs.manifestselect import SelectionIndex
 from packs.paths import save_layout
 from packs.scope import platform_list_version, system_titles
-from packs.standalone import _standalone_copies, _standalone_layouts
+from packs.standalone import standalone_copies, standalone_layouts
 from resolve.contentlayout import TARGET_KEY
 from resolve.cores import filter_systems_by_target, resolve_platform_cores as _platform_cores
 from resolve.gamedata import GAME_DATA, is_game_data, platform_game_data, without_game_data
 from resolve.nativemode import digest_algorithm, reads_file_contents
 from resolve.packfiles import preferred_entries as _preferred_entries, resolve_declaration
 from resolve.validation import (
-    _build_validation_index,
+    build_validation_index,
     agnostic_substitute,
     baseline_verdict,
     destination_owners,
@@ -148,7 +148,7 @@ class _ManifestBuild:
     manifest_validation: dict = field(default_factory=dict)
     manifest_owners: dict = field(default_factory=dict)
     game_destinations: set[str] = field(default_factory=set)
-    placed: _Placed = field(init=False)
+    placed: Placed = field(init=False)
     # Destination -> (entry, full destination, manifest destination) of each
     # platform file, for the core claims a target build would fall back on.
     platform_entries: dict[str, tuple[dict, str, str]] = field(default_factory=dict)
@@ -177,7 +177,7 @@ class _ManifestBuild:
     data_directories: list[dict] = field(default_factory=list)
 
     def __post_init__(self) -> None:
-        self.placed = _Placed(self.case_insensitive)
+        self.placed = Placed(self.case_insensitive)
 
     @property
     def base_dest(self) -> str:
@@ -197,7 +197,7 @@ class _ManifestBuild:
         return self.selection
 
     def manifest_destination(self, full_destination: str) -> str:
-        return _manifest_dest_of(full_destination, self.base_dest)
+        return manifest_dest_of(full_destination, self.base_dest)
 
     def record_omission(
         self,
@@ -355,7 +355,7 @@ class _ManifestBuild:
         local_path: str,
         settle: _Settle,
     ) -> None:
-        entry, file_size = _manifest_entry(
+        entry, file_size = manifest_entry(
             local_path, dest, None, self.db, self.repo_root,
             self.fields.fields(dest, file_entry["name"]),
         )
@@ -364,14 +364,14 @@ class _ManifestBuild:
         if entry is not None and self.opts.target_cores is None:
             order = self.declaration_order(full_dest)
             if full_dest in self.slot_choices or len(order) > 1:
-                _record_slot_choices(
+                record_slot_choices(
                     entry, self.slot_choices.get(full_dest, []), order,
                     settle, dest, self.db, self.repo_root,
                 )
         if entry is None:
             self.record_omission(full_dest, file_entry, sys_id, "not_found", None)
             if file_size and full_dest not in self.placed.destinations:
-                if _in_data_cache(local_path, self.data_registry):
+                if in_data_cache(local_path, self.data_registry):
                     self.cache_held[full_dest] = (local_path, file_size)
                 else:
                     self.pack_only_sizes.append(file_size)
@@ -384,8 +384,8 @@ class _ManifestBuild:
         self.total_size += file_size
         self.placed.take(full_dest)
 
-    def claim_context(self) -> _ClaimContext:
-        return _ClaimContext(
+    def claim_context(self) -> ClaimContext:
+        return ClaimContext(
             self.db, self.bios_dir, self.zip_contents, self.opts.offline,
             self.opts.required_only, self.manifest_validation, self.manifest_owners,
             self.repo_root, self.data_registry,
@@ -398,7 +398,7 @@ class _ManifestBuild:
         baseline_claims: dict[str, dict] = {}
         absent: list[dict] = []
         if opts.source != "platform":
-            core_files = _collect_emulator_extras(
+            core_files = collect_emulator_extras(
                 self.config,
                 opts.emulators_dir,
                 self.db,
@@ -414,12 +414,12 @@ class _ManifestBuild:
             )
         else:
             core_files = []
-        _record_unplaceable(unplaceable, self.record_omission, self.config, self.emu_profiles)
-        _record_absent(
+        record_unplaceable(unplaceable, self.record_omission, self.config, self.emu_profiles)
+        record_absent(
             absent, self.config, self.base_dest, self.region_drops, opts.required_only,
             self.placed.destinations, self.omitted_by_destination, self.record_omission,
         )
-        self.total_size += _manifest_core_entries(
+        self.total_size += manifest_core_entries(
             core_files, self.config, self.db, self.bios_dir, self.base_dest, self.repo_root,
             self.zip_contents, opts.offline,
             region_drops=self.region_drops, case_insensitive=self.case_insensitive,
@@ -445,7 +445,7 @@ class _ManifestBuild:
                 # still fills it.
                 entry.pop("category", None)
             if claims:
-                _attach_claims(entry, claims, ctx, dest, dest)
+                attach_claims(entry, claims, ctx, dest, dest)
         # A platform omission narrows like a platform file: by the systems
         # declaring it, which can be fewer than the ones whose cores read it.
         for full_dest, omission in self.omitted_by_destination.items():
@@ -471,7 +471,7 @@ class _ManifestBuild:
         core_trees = ([] if opts.source == "platform"
                       else core_data_trees(self.config, self.emu_profiles, self.platform_name,
                                            self.data_registry, opts.target_cores))
-        self.data_members = list(_data_directory_members(
+        self.data_members = list(data_directory_members(
             self.pack_systems, self.data_registry, self.platform_name, self.base_dest,
             self.case_insensitive, self.placed.destinations, self.placed.lower,
             self.placed.parents, refs_out=data_refs, required_only=required_only,
@@ -486,7 +486,7 @@ class _ManifestBuild:
                 self.pack_only_sizes.append(size)
             else:
                 self.omitted_by_destination.pop(full_dest, None)
-        self.data_directories = _manifest_data_directories(
+        self.data_directories = manifest_data_directories(
             self.data_members, data_refs, self.data_registry or {}, self.base_dest,
             tree_readers(self.pack_systems, core_trees), self.pack_systems,
         )
@@ -499,7 +499,7 @@ class _ManifestBuild:
         # The pack is unzipped into the BIOS folder: an entry the installer puts
         # in the roms, emulators or configs folder is in its list, not in the ZIP.
         outer = [e for e in manifest_files if e.get("root") in OUTER_ROOTS]
-        core_names, system_cores = _manifest_core_index(
+        core_names, system_cores = manifest_core_index(
             config, self.emu_profiles, manifest_files, list(omitted.values())
         )
         result: dict = {
@@ -521,10 +521,10 @@ class _ManifestBuild:
             "platform": platform_name,
             "display_name": config.get("platform", platform_name),
             "version": platform_list_version(config, platform_name),
-            "generated": _build_timestamp(self.db),
+            "generated": build_timestamp(self.db),
             "base_destination": self.base_dest,
             "detect": self.install_section.get("detect", []),
-            "standalone_copies": _standalone_copies(
+            "standalone_copies": standalone_copies(
                 self.install_section.get("standalone_copies", []), self.manifest_profiles,
                 manifest_files,
             ),
@@ -542,10 +542,10 @@ class _ManifestBuild:
                 omitted.values(), key=lambda entry: entry["dest"]
             ),
             "core_names": core_names,
-            **({"downloaded_cores": downloaded} if (downloaded := _downloaded_cores(
+            **({"downloaded_cores": downloaded} if (downloaded := downloaded_cores(
                 config, self.emu_profiles, core_names, self.platforms_dir,
             )) else {}),
-            **({"offered_boards": offered} if (offered := _offered_boards(
+            **({"offered_boards": offered} if (offered := offered_boards(
                 config, self.emu_profiles, core_names,
                 [*manifest_files, *omitted.values()],
             )) else {}),
@@ -634,7 +634,7 @@ def _start_manifest(
         name: emu_profiles[name]
         for name in _platform_cores(config, emu_profiles)
     }
-    build.manifest_validation = _build_validation_index(build.manifest_profiles)
+    build.manifest_validation = build_validation_index(build.manifest_profiles)
     build.manifest_owners = destination_owners(build.manifest_profiles)
     _settle_manifest_scope(build)
     return build, full_profiles
@@ -679,7 +679,7 @@ def _settle_manifest_scope(build: _ManifestBuild) -> None:
         if opts.source != "platform"
         else None
     )
-    build.region_drops, build.selection, build.builder_held = _manifest_selection(
+    build.region_drops, build.selection, build.builder_held = manifest_selection(
         config, build.pack_systems, opts.emulators_dir, build.db, build.base_dest,
         emu_profiles, opts.target_cores, opts.source,
         required_only=opts.required_only, regions=opts.regions,
@@ -822,7 +822,7 @@ def generate_install_list(
             **truth_options, known_slot_choices=built["slot_choices"],
         )
     _mark_truth(result, truth)
-    layouts = _standalone_layouts(
+    layouts = standalone_layouts(
         built["profiles"], settings.emulators_dir, db, bios_dir,
         settings.zip_contents or {}, settings.offline, platforms_dir, result,
     )

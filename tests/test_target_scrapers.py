@@ -367,7 +367,7 @@ class DownloadedCoresReachTheirBoards(unittest.TestCase):
         from packs import manifestcores
 
         core_names = {"amiberry": [], "higan_sfc_balanced": ["nside_sfc_balanced"]}
-        boards = manifestcores._downloaded_cores(
+        boards = manifestcores.downloaded_cores(
             self.config, self.profiles, core_names, str(REPO_ROOT / "platforms"))
         self.assertEqual(set(boards), {"amiberry", "higan_sfc_balanced"})
         self.assertIn("x86_64", boards["amiberry"])

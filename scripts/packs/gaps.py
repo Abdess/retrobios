@@ -17,10 +17,10 @@ from resolve.launchers import LauncherLayer, declared_destinations, held_record
 from resolve.layout import runs_standalone, system_dir_path
 from resolve.localfile import resolve_local_file
 from resolve.nativemode import hash_mismatch_excludes_file
-from resolve.ownership import _foreign_tree, _owner_tokens
+from resolve.ownership import foreign_tree, owner_tokens
 from resolve.standalone import platform_layouts, standalone_set as platform_standalone_set
 from resolve.validation import (
-    _parse_validation,
+    parse_validation,
     case_folded_slots,
     core_size_refusal,
     declaration_settles,
@@ -56,7 +56,7 @@ def _build_expected(file_entry: dict, checks: list[str]) -> dict:
 
 def _in_foreign_tree(db: dict, owners: set[str], sha1: str) -> bool:
     """Whether the collection keeps this sha1 in another emulator's tree."""
-    return _foreign_tree(db.get("files", {}).get(sha1, {}).get("path", ""), owners)
+    return foreign_tree(db.get("files", {}).get(sha1, {}).get("path", ""), owners)
 
 
 def _name_in_index(
@@ -137,7 +137,7 @@ def _identity_of(entry: dict) -> dict:
     }
 
 
-def _gap_destination(f: dict, fname: str, is_standalone: bool, save_root: bool) -> str:
+def gap_destination(f: dict, fname: str, is_standalone: bool, save_root: bool) -> str:
     """The destination a gap entry is keyed and reported at."""
     # One destination rule for the dedup key and for the entry: a
     # standalone build without standalone_path falls back on path.
@@ -206,7 +206,7 @@ class _GapScan:
         """Consider one profile entry of one build as a gap."""
         fname = f.get("name", "")
         save_root = read_from_save_dir(f, is_standalone)
-        dest = _gap_destination(f, fname, is_standalone, save_root)
+        dest = gap_destination(f, fname, is_standalone, save_root)
         region_key = _region_key(f)
         # Same-name requirements at different paths, for different systems,
         # or in distinct variant groups are not interchangeable.
@@ -350,7 +350,7 @@ class _GapScan:
             _lp, _st = resolve_local_file(owned, self.db, dest_hint=dest)
             return _lp is not None and _st != "hash_mismatch"
         in_repo = self._held_by_name(owned, f, fname, dest)
-        if in_repo and "size" in _parse_validation(f.get("validation")):
+        if in_repo and "size" in parse_validation(f.get("validation")):
             # On any platform the core measures what it opens: a
             # copy it turns away by its own size check is not
             # held for it, the rule the builder's lookup applies
@@ -364,7 +364,7 @@ class _GapScan:
         return in_repo
 
     def _held_by_name(self, owned: dict, f: dict, fname: str, dest: str) -> bool:
-        foreign = functools.partial(_in_foreign_tree, self.db, _owner_tokens(owned))
+        foreign = functools.partial(_in_foreign_tree, self.db, owner_tokens(owned))
         in_repo = _name_in_index(
             fname, self.by_name, self.by_path_suffix, self.data_names, self.by_name_lower,
             foreign,
@@ -407,7 +407,7 @@ class _GapScan:
         self, emu_name: str, layout: dict, f: dict, fname: str, dest: str,
         in_repo: bool, save_root: bool,
     ) -> dict:
-        checks = _parse_validation(f.get("validation"))
+        checks = parse_validation(f.get("validation"))
         entry = {
             "profile": emu_name,
             "emulator": layout.get("emulator", emu_name),

@@ -29,23 +29,23 @@ from model.registry import load_data_dir_registry
 from model.systems import MANUFACTURER_PREFIXES, system_index
 from packs.archive import (
     PackRecord,
-    _Placed,
-    _add_pack_member,
-    _add_zip_to_pack,
-    _same_bytes,
-    _write_generated_member,
-    _writing_pack,
+    Placed,
+    add_pack_member,
+    add_zip_to_pack,
+    same_bytes,
+    write_generated_member,
+    writing_pack,
 )
-from packs.datatrees import _MISSING_DATA_DIRS, _pack_data_tree
+from packs.datatrees import MISSING_DATA_DIRS, pack_data_tree
 from packs.extras import emulator_region_drops, emulator_required_spares, expand_agnostic_entries
-from packs.naming import _bounded_join, _bounded_pack_name, _name_part, _narrowings
-from packs.paths import _archive_destination, _resolve_destination
+from packs.naming import bounded_join, bounded_pack_name, file_name_part, pack_narrowings
+from packs.paths import archive_destination, resolve_destination
 from resolve import packfiles as packresolve
 from resolve.archives import archive_entry, archive_is_optional
 from resolve.directories import expand_directory_entries
 from resolve.packfiles import download_external, resolve_file
 from resolve.validation import (
-    _build_validation_index,
+    build_validation_index,
     deliverable,
     validated_choice,
     with_archive_members,
@@ -100,7 +100,7 @@ class _EmulatorPackBuild:
     discrepancies: list[str] = field(default_factory=list)
     unsourceable_files: list[str] = field(default_factory=list)
     instruction_files: list[str] = field(default_factory=list)
-    placed: _Placed = field(default_factory=lambda: _Placed(True))
+    placed: Placed = field(default_factory=lambda: Placed(True))
     seen_hashes: set[str] = field(default_factory=set)  # SHA1 dedup for same file, different path
     # Loose file packed at each folded destination, to tell a profile asking
     # for the same file there from one asking for other bytes.
@@ -118,9 +118,9 @@ class _EmulatorPackBuild:
     def _add(self, local_path: str, dest: str, fe: dict | None) -> None:
         """Write a loose file or an archive at dest and count it."""
         if fe is not None and local_path.endswith(".zip"):
-            _add_zip_to_pack(local_path, dest, self.zf, fe)
+            add_zip_to_pack(local_path, dest, self.zf, fe)
         else:
-            _add_pack_member(self.zf, local_path, dest)
+            add_pack_member(self.zf, local_path, dest)
         self.placed.take(dest)
         self.total_files += 1
         if self.record is not None:
@@ -156,7 +156,7 @@ class _EmulatorPackBuild:
         # Pack archives as units
         archive_prefix = profile.get("archive_prefix", "")
         for archive_name in sorted({fe["archive"] for fe in files if fe.get("archive")}):
-            archive_dest = _archive_destination(
+            archive_dest = archive_destination(
                 archive_name, archive_prefix, pack_structure, self.standalone
             )
             own_entry = archive_entry(archive_name, files)
@@ -196,7 +196,7 @@ class _EmulatorPackBuild:
             # profile without its archive, which used to pass in
             # silence: a neocdz.zip lacking 000-lo.lo shipped as the
             # one the second core needs.
-            if not (taken and local_path and _same_bytes(
+            if not (taken and local_path and same_bytes(
                 local_path, self.packed_at.get(archive_dest.lower())
             )):
                 return ([own_entry], False, functools.partial(
@@ -223,7 +223,7 @@ class _EmulatorPackBuild:
                 continue
             if fe.get("archive"):
                 continue
-            dest = _resolve_destination(fe, self.standalone)
+            dest = resolve_destination(fe, self.standalone)
             if not dest or dest in spares:
                 continue
             if self.region_drops and dest in self.region_drops:
@@ -237,7 +237,7 @@ class _EmulatorPackBuild:
         self.placed.take(dest)
         instr = provided.get("instructions", "Please provide this file manually.")
         folder = dest.rsplit("/", 1)[0] + "/" if "/" in dest else ""
-        _write_generated_member(
+        write_generated_member(
             self.zf,
             f"{folder}INSTRUCTIONS_{provided['name']}.txt",
             f"File needed: {provided['name']}\n\n{instr}\n",
@@ -314,7 +314,7 @@ class _EmulatorPackBuild:
                 else None if chosen is not None else refused_path
             )
             if chosen is not None or held is not None:
-                if block == "taken" and held and _same_bytes(
+                if block == "taken" and held and same_bytes(
                     held, self.packed_at.get(dest.lower())
                 ):
                     # The file already at this path, asked for twice.
@@ -400,7 +400,7 @@ class _EmulatorPackBuild:
                 prefix = pack_structure.get(mode_key, "")
                 if prefix:
                     dd_dest = f"{prefix}/{dd_dest}" if dd_dest else prefix
-            self.data_files += _pack_data_tree(
+            self.data_files += pack_data_tree(
                 self.zf, local_cache, dd_dest, self.placed.destinations,
                 self.placed.parents, self.placed.lower, self.packed_at,
             )
@@ -441,7 +441,7 @@ class _EmulatorPackBuild:
             print(
                 f"  Note: data directory '{ref}' required but not included (use refresh_data_dirs.py)"
             )
-        _MISSING_DATA_DIRS.update(self.data_dir_notices)
+        MISSING_DATA_DIRS.update(self.data_dir_notices)
 
 
 def generate_emulator_pack(
@@ -483,15 +483,15 @@ def generate_emulator_pack(
 
     record = options.get("record")
     # ZIP naming
-    display_names = [_name_part(p.get("emulator", n)) for n, p in selected]
-    validation_index = _build_validation_index(dict(selected))
+    display_names = [file_name_part(p.get("emulator", n)) for n, p in selected]
+    validation_index = build_validation_index(dict(selected))
     narrow_tags = "".join(
         tag
-        for tag, _label in _narrowings(
+        for tag, _label in pack_narrowings(
             "full", regions, None, False, required_only, standalone
         )
     )
-    zip_name = options.get("pack_name") or _bounded_pack_name(
+    zip_name = options.get("pack_name") or bounded_pack_name(
         display_names, [n for n, _p in selected], f"{narrow_tags}_BIOS_Pack.zip"
     )
     zip_path = os.path.join(output_dir, zip_name)
@@ -511,7 +511,7 @@ def generate_emulator_pack(
     )
     with (
         contextlib.nullcontext(record) if record is not None
-        else _writing_pack(zip_path)
+        else writing_pack(zip_path)
     ) as zf:
         build = _EmulatorPackBuild(
             db, bios_dir, standalone, required_only, zip_contents, data_registry,
@@ -589,8 +589,8 @@ def generate_system_pack(
 
     # Named like the platform's --system tag: one spelling of a system is
     # one file name, and one selection.
-    sys_display = _bounded_join(
-        [_system_display_name(sid) for sid in system_ids], list(system_ids)
+    sys_display = bounded_join(
+        [system_display_name(sid) for sid in system_ids], list(system_ids)
     )
     # Built in a scratch directory: under its emulator name in output_dir it
     # overwrote, then carried away, an --emulator pack already there.
@@ -599,7 +599,7 @@ def generate_system_pack(
     # tag made --system X --required-only overwrite the pack built without it.
     tags = "".join(
         tag
-        for tag, _label in _narrowings(
+        for tag, _label in pack_narrowings(
             "full", regions, None, False, required_only, standalone=standalone
         )
     )
@@ -634,7 +634,7 @@ def generate_system_pack(
         shutil.rmtree(scratch, ignore_errors=True)
 
 
-def _system_display_name(system_id: str) -> str:
+def system_display_name(system_id: str) -> str:
     """Convert system ID to display name for ZIP naming."""
     s = system_id.lower().replace("_", "-")
     for prefix in MANUFACTURER_PREFIXES:

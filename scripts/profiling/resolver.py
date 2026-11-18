@@ -29,7 +29,7 @@ from profiling.anchoring import (
 )
 from profiling.citations import (
     Citation,
-    _anchor_tokens,
+    anchor_tokens,
     cites_another_version,
     collect_citations,
     entry_hashes,
@@ -42,7 +42,7 @@ from profiling.reports import EntryReport, ProfileReport
 from profiling.repos import (
     PIN,
     RepoView,
-    _on_own_revision,
+    reads_own_revision,
     build_revision,
     declared_repositories,
     detect_pinned_tag,
@@ -187,7 +187,7 @@ def _gather_refs(
                 for p in split_source_ref(citation.ref)
             ]
             refs.append((
-                display, citation.ref, _anchor_tokens(entry),
+                display, citation.ref, anchor_tokens(entry),
                 entry_hashes(entry), parts, citation,
             ))
         else:
@@ -314,7 +314,7 @@ def _record_revisions(
         report.orphaned = [
             f"{view.repo.slug}: pin {view.pin[:8]} is no ancestor of {view.head[:8]}"
             for view in views
-            if not _on_own_revision(view, tagged)
+            if not reads_own_revision(view, tagged)
             and upstream.compare(
                 view.repo, view.pin, view.head, cache_dir, offline
             ).diverged
@@ -397,7 +397,7 @@ class _Resolver:
         return next(iter(lent)) if len(lent) == 1 else ""
 
     def on_own_revision(self, view: RepoView) -> bool:
-        return _on_own_revision(view, self.tagged)
+        return reads_own_revision(view, self.tagged)
 
     def trees_in_order(self) -> Iterable[list[str] | None]:
         """Pin trees before HEAD trees, each read only when reached."""

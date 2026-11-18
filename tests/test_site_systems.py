@@ -109,7 +109,7 @@ class TheConsoleBiosComesFirst(unittest.TestCase):
         }, platforms={"6" * 40: {"a", "b"}, "3" * 40: {"a", "b", "c"}})
 
     def names(self) -> list[str]:
-        cards = consolecards._console_cards("Sony", self.files, self.consumers, set())
+        cards = consolecards.console_cards("Sony", self.files, self.consumers, set())
         return [re.search(r"<code>(.*?)</code>", card[2])[1] for _v, card, _s in cards]
 
     def test_required_then_priority_then_setups_then_name(self):
@@ -121,7 +121,7 @@ class TheConsoleBiosComesFirst(unittest.TestCase):
         ])
 
     def test_a_console_cut_in_parts_goes_by_name(self):
-        cards = consolecards._console_cards("Sony", self.files, self.consumers, set(), by_name=True)
+        cards = consolecards.console_cards("Sony", self.files, self.consumers, set(), by_name=True)
         names = [re.search(r"<code>(.*?)</code>", card[2])[1] for _v, card, _s in cards]
         self.assertEqual(names, sorted(names, key=str.casefold))
 
@@ -136,7 +136,7 @@ class TheConsoleBiosComesFirst(unittest.TestCase):
         })
 
     def test_the_section_opens_on_the_bios_by_region(self):
-        lines = startwith._start_with(self.files, self.required_only())
+        lines = startwith.start_with(self.files, self.required_only())
         self.assertEqual(lines[0], "**Start with** the BIOS for the region of the games:")
         self.assertIn("- **North America**: [`scph5501.bin`](#sha1-444444444444)", lines)
         self.assertIn("- **Japan**: [`scph5500.bin`](#sha1-555555555555)", lines)
@@ -146,7 +146,7 @@ class TheConsoleBiosComesFirst(unittest.TestCase):
     def test_regions_needing_the_same_file_share_a_line(self):
         consumers = _one_reader_each({"4" * 40: [
             {"required": True, "region": ["north-america", "latin-america", "brazil"]}]})
-        lines = startwith._start_with([_sony_file("scph5501.bin", "4")], consumers)
+        lines = startwith.start_with([_sony_file("scph5501.bin", "4")], consumers)
         # Brazil says nothing Latin America does not.
         self.assertIn("- **North America, Latin America**: [`scph5501.bin`](#sha1-444444444444)", lines)
 
@@ -157,13 +157,13 @@ class TheConsoleBiosComesFirst(unittest.TestCase):
         consumers = _one_reader_each({f["sha1"]: [{"required": True}] for f in files})
         consumers.emulator_files = {"emu": [{"required": True}] * len(files)}
         consumers.emulator_entries = {f["sha1"]: {"emu": i} for i, f in enumerate(files)}
-        self.assertEqual(startwith._start_with(files, consumers)[0],
+        self.assertEqual(startwith.start_with(files, consumers)[0],
                          "**Start with**: [`rom0.bin`](#sha1-aaaaaaaaaaaa), [`rom1.bin`](#sha1-bbbbbbbbbbbb), "
                          "[`rom2.bin`](#sha1-cccccccccccc) and 5 more files. "
                          "They come first below.")
 
     def test_no_required_file_no_line(self):
-        self.assertEqual(startwith._start_with([_sony_file("a.bin", "a")], _one_reader_each({})), [])
+        self.assertEqual(startwith.start_with([_sony_file("a.bin", "a")], _one_reader_each({})), [])
 
     def test_the_page_carries_the_line_under_the_console(self):
         # Sega keeps its consoles as sections. Sony gives each a page.
@@ -178,7 +178,7 @@ class ThePermalinkIsAnIcon(unittest.TestCase):
     search showed "scph5501.bin permalink" and screen readers read it."""
 
     def test_no_word_and_out_of_the_search(self):
-        lines = sitegen_cards._system_file_card(_sony_file("scph5501.bin", "4"), FileConsumers({"files": {}}))
+        lines = sitegen_cards.system_file_card(_sony_file("scph5501.bin", "4"), FileConsumers({"files": {}}))
         title = lines[2]
         link = re.search(r'<a class="rb-permalink"[^>]*>(.*?)</a>', title)
         self.assertNotIn("permalink", re.sub(r"<[^>]+>", "", title))
@@ -203,7 +203,7 @@ class TheCardGivesTheSizeInBytes(unittest.TestCase):
                             (2 * 1024 * 1024, "2 MB"), (2304, "2,304 B"), (10, "10 B")):
             with self.subTest(size=size):
                 card = {**_sony_file("scph5501.bin", "4"), "size": size}
-                title = sitegen_cards._system_file_card(card, FileConsumers({"files": {}}))[2]
+                title = sitegen_cards.system_file_card(card, FileConsumers({"files": {}}))[2]
                 self.assertIn(f'<span class="rb-badge rb-badge-muted">{shown}</span>', title)
 
 
@@ -219,7 +219,7 @@ class TheCardLinesSayWhatTheyMean(unittest.TestCase):
             platform_destinations={sha1: {"batocera": {"scph5501.bin"}}},
             installed={sha1: {"retrobat": {"bios/scph5501.bin"}}},
         )
-        self.lines = sitegen_cards._system_file_card(_sony_file("scph5501.bin", "4"), self.consumers)
+        self.lines = sitegen_cards.system_file_card(_sony_file("scph5501.bin", "4"), self.consumers)
 
     def test_labels_and_display_names(self):
         text = "\n".join(self.lines)
@@ -251,7 +251,7 @@ class TheCardLinesSayWhatTheyMean(unittest.TestCase):
         self.assertIn("**Packed for its emulators by** names", page)
 
     def test_a_file_nothing_reads_says_so(self):
-        title = sitegen_cards._system_file_card(_sony_file("GameIndex.yaml", "9"), FileConsumers({"files": {}}))[2]
+        title = sitegen_cards.system_file_card(_sony_file("GameIndex.yaml", "9"), FileConsumers({"files": {}}))[2]
         self.assertIn(">No reader</span>", title)
         self.assertNotIn("No reader", self.lines[2])
 
@@ -263,7 +263,7 @@ class FileFactsAreAGrid(unittest.TestCase):
         entry = {**_sony_file("scph5501.bin", "4"), "crc32": "8d8cb7e4",
                  "provenance": {"redump": {"name": "ps-30a.bin"},
                                 "tosec": {"name": "SCPH-5501 (1996).bin"}}}
-        lines = sitegen_cards._system_file_card(entry, FileConsumers({"files": {}}))
+        lines = sitegen_cards.system_file_card(entry, FileConsumers({"files": {}}))
         text = "\n".join(lines)
         # One value cell after each label, in the open list and in the fold.
         facts = re.findall(r"<dt>[^<]*</dt><dd[^>]*>.*?</dd>", text)
@@ -279,7 +279,7 @@ class FileFactsAreAGrid(unittest.TestCase):
         self.assertNotRegex(text, r"(?m)^- ")
 
     def test_collection_path_keeps_its_chip(self):
-        text = "\n".join(sitegen_cards._system_file_card(_sony_file("a.bin", "a"), FileConsumers({"files": {}})))
+        text = "\n".join(sitegen_cards.system_file_card(_sony_file("a.bin", "a"), FileConsumers({"files": {}})))
         self.assertIn("<dt>Collection path</dt><dd><code>bios/Sony/PlayStation/a.bin</code>", text)
 
 
@@ -289,15 +289,15 @@ class ConsoleHeadingsStartWithTheName(unittest.TestCase):
     altogether."""
 
     def test_no_icon_even_when_one_exists(self):
-        icon = siterender._icon_name("Sony", "PlayStation")
+        icon = siterender.console_icon_name("Sony", "PlayStation")
         with mock.patch.dict(siterender._icon_available, {icon: True}):
-            self.assertEqual(startwith._console_heading("Sony", "PlayStation"),
+            self.assertEqual(startwith.console_heading("Sony", "PlayStation"),
                              "## PlayStation { #playstation }")
 
     def test_no_icon_no_image(self):
-        icon = siterender._icon_name("Nobody", "Nothing")
+        icon = siterender.console_icon_name("Nobody", "Nothing")
         with mock.patch.dict(siterender._icon_available, {icon: False}):
-            self.assertEqual(startwith._console_heading("Nobody", "Nothing"), "## Nothing { #nothing }")
+            self.assertEqual(startwith.console_heading("Nobody", "Nothing"), "## Nothing { #nothing }")
 
 
 class TheSystemsIndexListsConsoles(unittest.TestCase):
@@ -424,29 +424,29 @@ class TheSectionStartsWithItsOwnConsole(unittest.TestCase):
         })
 
     def test_no_dsi_file_on_the_ds_line(self) -> None:
-        text = "\n".join(startwith._start_with(self.files, self.consumers, section=DS))
+        text = "\n".join(startwith.start_with(self.files, self.consumers, section=DS))
         self.assertNotIn("dsi", text)
 
     def test_a_console_its_emulators_run_without_says_so(self) -> None:
-        self.assertEqual(startwith._start_with(self.files, self.consumers, section=DS), [
+        self.assertEqual(startwith.start_with(self.files, self.consumers, section=DS), [
             "**No file needed** with emu-a or emu-b. For full accuracy: "
             "[`bios7.bin`](#sha1-777777777777), [`bios9.bin`](#sha1-999999999999).", ""])
 
     def test_the_dsi_section_names_its_file(self) -> None:
-        lines = startwith._start_with(self.files, self.consumers, section=("Nintendo", "Nintendo DSi"))
+        lines = startwith.start_with(self.files, self.consumers, section=("Nintendo", "Nintendo DSi"))
         self.assertEqual(lines, ["**Start with**: [`dsi_bios7.bin`](#sha1-dddddddddddd).", ""])
 
     def test_more_than_three_emulators_are_counted(self) -> None:
         hle = {"required": False, "hle_fallback": True, "system": "nintendo-ds"}
         consumers = _consumers_with_db({"7" * 40: [(f"emu-{n}", hle) for n in "abcd"]})
-        self.assertEqual(startwith._start_with(self.files[:1], consumers, section=DS)[0],
+        self.assertEqual(startwith.start_with(self.files[:1], consumers, section=DS)[0],
                          "**No file needed**: none of its 4 emulators requires one. "
                          "For full accuracy: [`NDS_Bios7.bin`](#sha1-777777777777).")
 
     def test_a_shipped_file_is_no_start(self) -> None:
         consumers = _consumers_with_db({"7" * 40: [("emu-a", {"required": True, "bundled": True,
                                                       "system": "nintendo-ds"})]})
-        self.assertEqual(startwith._start_with(self.files[:1], consumers, section=DS), [])
+        self.assertEqual(startwith.start_with(self.files[:1], consumers, section=DS), [])
 
 
 class TheNameSetupsWrite(unittest.TestCase):
@@ -457,13 +457,13 @@ class TheNameSetupsWrite(unittest.TestCase):
                                    "system": "nintendo-gba"})]},
             destinations={"a" * 40: {"p1": {"gba_bios.bin"}, "p2": {"bios/gba_bios.bin"},
                                      "p3": {"GBA_bios.rom"}}})
-        self.assertEqual(startwith._start_with([f], consumers, section=("Nintendo", "Game Boy Advance")),
+        self.assertEqual(startwith.start_with([f], consumers, section=("Nintendo", "Game Boy Advance")),
                          ["**Start with**: [`gba_bios.bin`](#sha1-aaaaaaaaaaaa).", ""])
 
     def test_no_setup_then_the_emulators_name(self) -> None:
         f = _file_at("x.rom", "b", "bios/Nintendo/Game Boy Advance/x.rom")
         consumers = _consumers_with_db({"b" * 40: [("emu-a", {"name": "gba_bios.bin", "required": True})]})
-        self.assertEqual(consolecards._setup_name(f, consumers, [("emu-a", {"name": "gba_bios.bin"})]),
+        self.assertEqual(consolecards.setup_name(f, consumers, [("emu-a", {"name": "gba_bios.bin"})]),
                          "gba_bios.bin")
 
 
@@ -488,14 +488,14 @@ class ArcadeSetsAreNamedWhereverFiled(unittest.TestCase):
         }, db_files=[self.aes, neogeo, mega_cd, shader])
 
     def test_the_file_most_emulators_read_leads_and_the_arcade_set_is_linked(self) -> None:
-        lines = startwith._start_with([self.aes], self.consumers, section=("SNK", "Neo Geo"))
+        lines = startwith.start_with([self.aes], self.consumers, section=("SNK", "Neo Geo"))
         link = f"[`neogeo.zip`](/retrobios/files/?sha1={'2' * 40})"
         self.assertEqual(lines[0], f"**Start with** {link}. Keep it zipped. "
                                    "mame0, mame1 and mame2 read it.")
         self.assertIn("Geolith reads [`aes.zip`](#sha1-111111111111) instead.", lines)
 
     def test_another_consoles_file_or_an_emulators_folder_is_left_out(self) -> None:
-        text = "\n".join(startwith._start_with([self.aes], self.consumers, section=("SNK", "Neo Geo")))
+        text = "\n".join(startwith.start_with([self.aes], self.consumers, section=("SNK", "Neo Geo")))
         self.assertNotIn("bios_CD_U.bin", text)
         self.assertNotIn("tfx.glsl", text)
 
@@ -506,14 +506,14 @@ class ArcadeSetsAreNamedWhereverFiled(unittest.TestCase):
             "1" * 40: [("geolith", {"required": True})],
             "5" * 40: [(f"emu{n}", {"required": True}) for n in range(3)],
         })
-        cards = consolecards._console_cards("SNK", [one, many], consumers, set())
+        cards = consolecards.console_cards("SNK", [one, many], consumers, set())
         self.assertIn("sp-s3.sp1", cards[0][1][2])
 
     def test_a_long_list_names_the_first_files(self) -> None:
         files = [_file_at(f"rom{i}.bin", "abcdefgh"[i], f"bios/SNK/Neo Geo/rom{i}.bin")
                  for i in range(8)]
         consumers = _consumers_with_db({f["sha1"]: [("emu", {"required": True})] for f in files})
-        self.assertEqual(startwith._start_with(files, consumers, first_below=False)[0],
+        self.assertEqual(startwith.start_with(files, consumers, first_below=False)[0],
                          "**Start with**: [`rom0.bin`](#sha1-aaaaaaaaaaaa), [`rom1.bin`](#sha1-bbbbbbbbbbbb), "
                          "[`rom2.bin`](#sha1-cccccccccccc) and 5 more files.")
 
@@ -537,10 +537,10 @@ class CardsSayWhichReleaseTheSetMatches(unittest.TestCase):
     def card(self) -> str:
         f = {"name": "set.zip", "sha1": "e" * 40, "md5": "e" * 32, "size": 4,
              "path": str(self.path)}
-        with mock.patch.object(sitegen_cards, "_romset_releases", return_value=self.releases), \
-                mock.patch.object(consolecards, "_romset_releases", return_value=self.releases), \
-                mock.patch.object(startwith, "_romset_releases", return_value=self.releases):
-            return "\n".join(sitegen_cards._system_file_card(f, _consumers_with_db({})))
+        with mock.patch.object(sitegen_cards, "romset_releases", return_value=self.releases), \
+                mock.patch.object(consolecards, "romset_releases", return_value=self.releases), \
+                mock.patch.object(startwith, "romset_releases", return_value=self.releases):
+            return "\n".join(sitegen_cards.system_file_card(f, _consumers_with_db({})))
 
     def test_the_matching_releases_as_runs(self) -> None:
         self.assertIn("<dt>Romset</dt><dd>Same contents as MAME 0.190 to 0.195, 0.220 and "
@@ -560,9 +560,9 @@ class CardsSayWhichReleaseTheSetMatches(unittest.TestCase):
 
     def test_a_page_of_sets_links_the_version_answer(self) -> None:
         f = {"name": "set.zip", "sha1": "e" * 40, "path": "bios/SNK/Neo Geo/set.zip"}
-        with mock.patch.object(sitegen_cards, "_romset_releases", return_value=self.releases), \
-                mock.patch.object(consolecards, "_romset_releases", return_value=self.releases), \
-                mock.patch.object(startwith, "_romset_releases", return_value=self.releases):
+        with mock.patch.object(sitegen_cards, "romset_releases", return_value=self.releases), \
+                mock.patch.object(consolecards, "romset_releases", return_value=self.releases), \
+                mock.patch.object(startwith, "romset_releases", return_value=self.releases):
             page = systempages.generate_system_page("SNK", {"Neo Geo": [f]}, _consumers_with_db({}))
         self.assertIn("MAME and FBNeo sets must match the emulator's version. [Which version "
                       f"each core reads]({sitegen_cards.ROMSET_FAQ}).", page)
@@ -657,8 +657,8 @@ class InstallBoxesCountTowardTheSummary(unittest.TestCase):
         def install(console: str, _declared: list) -> list[str]:
             return ["x" * box] if console == "Boxed" else []
 
-        with mock.patch.object(sitegen_install, "_console_install_block", side_effect=install), \
-                mock.patch.object(systempages, "_console_install_block", side_effect=install), \
+        with mock.patch.object(sitegen_install, "console_install_block", side_effect=install), \
+                mock.patch.object(systempages, "console_install_block", side_effect=install), \
                 mock.patch.object(consolecards, "SYSTEM_SUMMARY_HTML", 50_000), \
                 mock.patch.object(systempages, "SYSTEM_SUMMARY_HTML", 50_000):
             return systempages.system_pages("Maker", self.consoles, _consumers_with_db({}), budget=30_000)
@@ -724,7 +724,7 @@ class AFileFewRequireIsNoStartFile(unittest.TestCase):
         consumers = _consumers_by_system({"1" * 40: [
             ("emux_gb", {"name": "dmg_boot.bin", "required": True}),
             ("gambatte", optional), ("mgba", optional), ("sameboy", optional)]})
-        line = _unlinked(startwith._start_with([boot], consumers)[0])
+        line = _unlinked(startwith.start_with([boot], consumers)[0])
         self.assertTrue(line.startswith("**No file needed** with "), line)
         self.assertRegex(line, r"Only \S.* requires `dmg_boot.bin`\.$")
 
@@ -733,14 +733,14 @@ class AFileFewRequireIsNoStartFile(unittest.TestCase):
         required = {"name": "scph5501.bin", "required": True}
         consumers = _consumers_by_system({"2" * 40: [
             ("a", required), ("b", required), ("c", {"required": False, "hle_fallback": True})]})
-        self.assertEqual(_unlinked(startwith._start_with([bios], consumers)[0]), "**Start with**: `scph5501.bin`.")
+        self.assertEqual(_unlinked(startwith.start_with([bios], consumers)[0]), "**Start with**: `scph5501.bin`.")
 
     def test_an_entry_read_for_a_system_with_no_section_is_dropped(self) -> None:
         sample = _game_boy_file("ym2608_adpcm_rom.bin", "3", "bios/Nintendo/NES/ym2608_adpcm_rom.bin")
         consumers = _consumers_by_system({"3" * 40: [
             ("fbneo", {"name": "ym2608_adpcm_rom.bin", "required": True,
                        "system": "no-such-system-anywhere"})]})
-        self.assertEqual(startwith._start_with([sample], consumers, section=("Nintendo", "NES")), [])
+        self.assertEqual(startwith.start_with([sample], consumers, section=("Nintendo", "NES")), [])
 
     def test_the_home_usually_not_consoles_open_on_no_file_needed(self) -> None:
         home = _built_page(DIST / "index.html")
@@ -782,11 +782,11 @@ class TheNeoGeoOpensOnItsSet(unittest.TestCase):
             "5" * 40: [("ares", {"name": "neo-epo.sp1", "required": True,
                                  "system": "snk-neogeo"})],
         })
-        lines = [_unlinked(line) for line in startwith._start_with([neogeo, epo], consumers, section=("SNK", "Neo Geo"))]
+        lines = [_unlinked(line) for line in startwith.start_with([neogeo, epo], consumers, section=("SNK", "Neo Geo"))]
         self.assertTrue(lines[0].startswith("**Start with** `neogeo.zip`. Keep it zipped. "))
         self.assertIn("ares reads `neo-epo.sp1` instead.", lines)
-        cards = consolecards._console_cards("SNK", [epo, neogeo], consumers, set(),
-                                  start=startwith._start_order([neogeo, epo], consumers,
+        cards = consolecards.console_cards("SNK", [epo, neogeo], consumers, set(),
+                                  start=startwith.start_order([neogeo, epo], consumers,
                                                         ("SNK", "Neo Geo")))
         self.assertIn("neogeo.zip", cards[0][1][2])
 
@@ -794,7 +794,7 @@ class TheNeoGeoOpensOnItsSet(unittest.TestCase):
         consumers = _consumers_by_system({}, systems={"a" * 40: {"retroarch": {"arcade"}}})
         pairs = systempages._install_pairs([("batocera", "snk-neogeo")], "a" * 40, consumers)
         self.assertIn(("retroarch", "arcade"), pairs)
-        block = "\n".join(sitegen_install._console_install_block("Neo Geo", pairs))
+        block = "\n".join(sitegen_install.console_install_block("Neo Geo", pairs))
         self.assertIn("<li>RetroArch: <code", block)
         self.assertIn("--platform retroarch --system arcade</code>", block)
 
@@ -852,7 +852,7 @@ class CardsNameEmulatorsByName(unittest.TestCase):
     def test_no_built_card_link_reads_an_id(self) -> None:
         if not (DIST / "systems").is_dir():
             self.skipTest("site not built")
-        profiles = collection._profiles_on_disk()
+        profiles = collection.profiles_on_disk()
         bad = set()
         for page in (DIST / "systems").glob("*/index.html"):
             for emulator, text in re.findall(
@@ -892,7 +892,7 @@ class PartPagesKnowWhereTheyAre(unittest.TestCase):
                  for i in range(10)]
         consumers = _consumers_by_system({})
         with sitegen.markup.using("mkdocs"):
-            one = sum(len(line) + 1 for line in sitegen_cards._system_file_card(files[0], consumers))
+            one = sum(len(line) + 1 for line in sitegen_cards.system_file_card(files[0], consumers))
         pages = systempages.system_pages("Sony", {"PlayStation 2": files}, consumers, budget=one * 7)
         parts = [stem for stem in pages if stem != "sony"]
         self.assertEqual(len(parts), 2)
@@ -925,7 +925,7 @@ class ConsolesFieldNamesMachinesOnce(unittest.TestCase):
     def test_no_emulator_folder_is_a_console(self) -> None:
         for maker in ("Other", "Game Engines"):
             page = systempages.system_pages(maker, {"dolphin": [_game_boy_file("a.bin", "a")]}, _consumers_by_system({}))
-            self.assertEqual(_consoles(page[collection._slug(maker)][0]), [], maker)
+            self.assertEqual(_consoles(page[collection.manufacturer_slug(maker)][0]), [], maker)
 
     def test_a_console_with_its_own_page_is_left_to_it(self) -> None:
         big = [_game_boy_file(f"r{i:02}.bin", "0123456789"[i], f"bios/Sega/Saturn/r{i:02}.bin")
@@ -933,7 +933,7 @@ class ConsolesFieldNamesMachinesOnce(unittest.TestCase):
         small = [_game_boy_file("pico.bin", "p", "bios/Sega/Pico/pico.bin")]
         consumers = _consumers_by_system({})
         with sitegen.markup.using("mkdocs"):
-            one = sum(len(line) + 1 for line in sitegen_cards._system_file_card(big[0], consumers))
+            one = sum(len(line) + 1 for line in sitegen_cards.system_file_card(big[0], consumers))
         # Sega splits by size. Every Sony console has a page whatever its size.
         pages = systempages.system_pages("Sega", {"Saturn": big, "Pico": small},
                                 consumers, budget=one * 12)
@@ -1040,7 +1040,7 @@ class AStartFileIsNoOnesExtra(unittest.TestCase):
             "1" * 40: [(e, {"name": "naomi.zip", "required": True}) for e, _ in both + extra],
             "2" * 40: both + extra,
         })
-        self.assertEqual([_unlinked(line) for line in startwith._start_with([naomi, hod2], consumers)],
+        self.assertEqual([_unlinked(line) for line in startwith.start_with([naomi, hod2], consumers)],
                          ["**Start with**: `naomi.zip`.", ""])
 
     def test_the_naomi_page_opens_on_naomi_zip(self) -> None:
@@ -1052,7 +1052,7 @@ class AStartFileIsNoOnesExtra(unittest.TestCase):
             "3" * 40: [(e, {"name": "bios7.bin", "required": True}) for e in ("a", "b")],
             "4" * 40: [(e, {"name": "bios9.bin", "required": True}) for e in ("a", "b")],
         })
-        self.assertEqual(_unlinked(startwith._start_with([bios7, bios9], consumers)[0]),
+        self.assertEqual(_unlinked(startwith.start_with([bios7, bios9], consumers)[0]),
                          "**Start with**: `bios7.bin`, `bios9.bin`.")
 
     def test_some_files_each_is_not_every_file_for_one(self) -> None:
@@ -1064,7 +1064,7 @@ class AStartFileIsNoOnesExtra(unittest.TestCase):
         reads["1" * 40].append(("bsnes", {"name": "chip1.rom", "required": True}))
         reads["2" * 40].append(("jgenesis", {"name": "chip2.rom", "required": True}))
         reads["3" * 40].append(("jgenesis", {"name": "chip3.rom", "required": True}))
-        line = startwith._start_with(files, _consumers(reads))[0]
+        line = startwith.start_with(files, _consumers(reads))[0]
         self.assertIn("require some of these files: ", line)
 
 
@@ -1078,7 +1078,7 @@ class OtherNamesForOneSlotReadAsAlternatives(unittest.TestCase):
                        for e in ("mesen", "nestopia", "fceumm")],
             "6" * 40: [("fbneo", {"name": "fdsbios.zip", "required": True})],
         })
-        self.assertEqual(_unlinked(startwith._start_with([disk, fds], consumers)[0]),
+        self.assertEqual(_unlinked(startwith.start_with([disk, fds], consumers)[0]),
                          "**Start with**: `disksys.rom`. FinalBurn Neo reads `fdsbios.zip` instead.")
 
     def test_a_card_read_under_another_name_says_both(self) -> None:
@@ -1088,7 +1088,7 @@ class OtherNamesForOneSlotReadAsAlternatives(unittest.TestCase):
             "7" * 40: [("c", {"name": "short.rom", "required": True})],
         })
         self.assertIn("reads `long name (1986).bin` (as `short.rom`) instead.",
-                      _unlinked(startwith._start_with([disk, card], consumers)[0]))
+                      _unlinked(startwith.start_with([disk, card], consumers)[0]))
 
     def test_a_regional_line_names_one_file_per_reader(self) -> None:
         mega_cd = _system_page("sega").split("{ #mega-cd }", 1)[1].split("\n## ", 1)[0]
@@ -1239,9 +1239,9 @@ class OneLabelOnceOnABoardPage(unittest.TestCase):
     """6.7, 6.8, 6.9, 6.10: the words a board or part page repeats."""
 
     def test_a_label_naming_files_installs_these_files(self) -> None:
-        block = "\n".join(sitegen_install._console_install_block("Other arcade files", [("mame", "arcade")]))
+        block = "\n".join(sitegen_install.console_install_block("Other arcade files", [("mame", "arcade")]))
         self.assertIn("<summary>Install these files</summary>", block)
-        block = "\n".join(sitegen_install._console_install_block("Sega NAOMI", [("mame", "arcade")]))
+        block = "\n".join(sitegen_install.console_install_block("Sega NAOMI", [("mame", "arcade")]))
         self.assertIn("<summary>Install the files of Sega NAOMI</summary>", block)
 
     def test_a_board_page_has_no_heading_of_its_name(self) -> None:
@@ -1275,12 +1275,12 @@ class EachFileDownloadsFromItsCard(unittest.TestCase):
         from packs.crossref import FileConsumers
 
         f = _naomi_file("apple2-asoft-auto.rom", "3", "bios/Apple/Apple II/apple2-asoft-auto.rom")
-        title = next(line for line in sitegen_cards._system_file_card(f, FileConsumers({"files": {}}))
+        title = next(line for line in sitegen_cards.system_file_card(f, FileConsumers({"files": {}}))
                      if "rb-file-title" in line)
         self.assertIn('class="rb-download" href="https://raw.githubusercontent.com/Abdess/'
                       'retrobios/main/bios/Apple/Apple%20II/apple2-asoft-auto.rom"', title)
         self.assertIn('aria-label="Download apple2-asoft-auto.rom"', title)
-        facts = "\n".join(sitegen_cards._system_file_card(f, FileConsumers({"files": {}})))
+        facts = "\n".join(sitegen_cards.system_file_card(f, FileConsumers({"files": {}})))
         self.assertNotIn("(download)", facts)
 
     def test_a_start_name_leads_to_its_card(self) -> None:

@@ -20,7 +20,7 @@ from model import systemnames
 from model.registry import list_registered_platforms
 from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config
-from model.collection import _group_by_manufacturer
+from model.collection import group_by_manufacturer
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -44,7 +44,7 @@ class SystemNames(unittest.TestCase):
     def setUpClass(cls) -> None:
         with open(REPO_ROOT / "database.json", encoding="utf-8") as handle:
             db = json.load(handle)
-        cls.manufacturers = _group_by_manufacturer(db)
+        cls.manufacturers = group_by_manufacturer(db)
         cls.profiles = load_emulator_profiles(
             str(REPO_ROOT / "emulators"), skip_aliases=False)
         systemnames.set_console_sections(
@@ -86,7 +86,7 @@ class SystemNames(unittest.TestCase):
         no platform or profile names is a leftover."""
         shadowed = sorted(
             sys_id for sys_id in systemnames.SYSTEM_NAMES
-            if systemnames._own_section(sys_id) is not None
+            if systemnames.own_section(sys_id) is not None
         )
         self.assertEqual(shadowed, [])
         unused = sorted(set(systemnames.SYSTEM_NAMES) - self._all_ids())
@@ -125,7 +125,7 @@ class SectionsComeBeforeThePlan(unittest.TestCase):
 
         from sitegen import build
 
-        tree = ast.parse(inspect.getsource(build._generate))
+        tree = ast.parse(inspect.getsource(build.generate_site))
         lines = {}
         for node in ast.walk(tree):
             if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):

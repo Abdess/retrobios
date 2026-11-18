@@ -24,7 +24,7 @@ from core.cli import suggest_names
 from model.cliargs import list_system_ids
 from model.database import load_database
 from model.platforms import load_platform_config
-from model.profiles import _emulator_profiles_cache, load_emulator_profiles, profiles_for_systems
+from model.profiles import emulator_profiles_cache, load_emulator_profiles, profiles_for_systems
 from packs import archive
 from packs import emulatorpack
 from packs import md5pack
@@ -44,9 +44,9 @@ class SpellingsAgree(unittest.TestCase):
 
     def test_the_pack_name_normalizes_the_spelling(self):
         self.assertEqual(
-            emulatorpack._system_display_name("atari_2600"), emulatorpack._system_display_name("atari-2600")
+            emulatorpack.system_display_name("atari_2600"), emulatorpack.system_display_name("atari-2600")
         )
-        self.assertEqual(emulatorpack._system_display_name("msxturboR"), emulatorpack._system_display_name("msxturbor"))
+        self.assertEqual(emulatorpack.system_display_name("msxturboR"), emulatorpack.system_display_name("msxturbor"))
 
 
 class TheListingCountsLikeTheSelection(unittest.TestCase):
@@ -73,8 +73,8 @@ class StandaloneNeedsAStandaloneBuild(unittest.TestCase):
             Path(tmp, "emulators", "handy.yml").write_text(
                 "emulator: Handy\ntype: libretro\nsystems: [atari-lynx]\nfiles:\n  - name: lynxboot.img\n"
             )
-            _emulator_profiles_cache.clear()
-            self.addCleanup(_emulator_profiles_cache.clear)
+            emulator_profiles_cache.clear()
+            self.addCleanup(emulator_profiles_cache.clear)
             db = {"files": {}, "indexes": {"by_md5": {}, "by_crc32": {}, "by_name": {}}}
             result = md5pack.generate_md5_pack(
                 [("md5", "d8f1206299c48946e6ec5ef96d014eaa")], db, tmp, tmp,
@@ -393,7 +393,7 @@ class TheCopyKeepsTheCheckoutOutOfReach(unittest.TestCase):
         checkout = scratch_checkout()
         proc = subprocess.run(
             [sys.executable, "-c", "import sys; sys.path.insert(0, 'scripts'); "
-             "from sitegen import config; print(config._REPO_ROOT)"],
+             "from core.paths import REPO_ROOT; print(REPO_ROOT)"],
             capture_output=True, text=True, cwd=str(checkout), timeout=300, check=True,
         )
         self.assertEqual(Path(proc.stdout.strip()), checkout.resolve())
@@ -631,7 +631,7 @@ class ASystemPackHoldsThatSystem(unittest.TestCase):
         import yaml
         from packs.emulatorcheck import verify_system
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         (REPO_ROOT / "tmp").mkdir(exist_ok=True)
         root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         self.addCleanup(shutil.rmtree, root, True)
@@ -685,7 +685,7 @@ class ATreeHoldsAPathForAnotherProfile(unittest.TestCase):
         import yaml
         from packs.emulatorcheck import verify_emulator
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         (REPO_ROOT / "tmp").mkdir(exist_ok=True)
         root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         self.addCleanup(shutil.rmtree, root, True)

@@ -14,7 +14,7 @@ from resolve.layout import (
     CONTENT_TAG_PREFIXES,
     OUTSIDE_BIOS_FOLDER,
     ROM_SEARCH_PREFIX,
-    _placed_entry,
+    placed_entry,
     standalone_layout_path,
 )
 from model.declarations import ROMS_ROOT, outer_layout
@@ -24,7 +24,7 @@ from core.paths import REPO_ROOT
 LIBRETRO_RUNNERS = frozenset({"libretro", "retroarch", "retroarch32", "retrorun"})
 
 
-def _core_key(name: str) -> str:
+def core_key(name: str) -> str:
     """A core name as two platforms spell it alike: mame2003-plus, mame2003_plus."""
     return str(name).lower().replace("-", "_")
 
@@ -83,9 +83,9 @@ def offer_boards(config: dict) -> dict[tuple[str, str], frozenset[str] | None]:
     for row in config.get("_rom_folders") or []:
         folder = str(row.get("folder") or "")
         offers = row.get("offers") or []
-        offered = {(o.get("emulator"), _core_key(o.get("core") or "")) for o in offers}
+        offered = {(o.get("emulator"), core_key(o.get("core") or "")) for o in offers}
         choices: list[tuple[dict, set[str]]] = []
-        if row.get("core") and (row.get("emulator"), _core_key(row["core"])) not in offered:
+        if row.get("core") and (row.get("emulator"), core_key(row["core"])) not in offered:
             choices.append((row, every))
         for key, spec in (row.get("board_defaults") or {}).items():
             branch = str(key).replace("=", " ", 1)
@@ -96,7 +96,7 @@ def offer_boards(config: dict) -> dict[tuple[str, str], frozenset[str] | None]:
                             if when else every))
         for choice, boards in choices:
             if choice.get("core") and choice.get("emulator") in LIBRETRO_RUNNERS:
-                found.setdefault((_core_key(choice["core"]), folder), set()).update(boards)
+                found.setdefault((core_key(choice["core"]), folder), set()).update(boards)
     return {
         pair: None if not names or boards >= every else frozenset(boards)
         for pair, boards in found.items()
@@ -108,10 +108,10 @@ def content_folder_boards(config: dict) -> dict[tuple[str, str], frozenset[str] 
     with the boards it does so on, None for every board."""
     pairs: set[tuple[str, str]] = set()
     for core, systems in (config.get("libretro_systems") or {}).items():
-        pairs |= {(_core_key(core), str(s)) for s in systems or []}
+        pairs |= {(core_key(core), str(s)) for s in systems or []}
     for system in (config.get("systems") or {}).values():
         if isinstance(system, dict) and system.get("native_id"):
-            pairs |= {(_core_key(c), str(system["native_id"])) for c in system.get("cores") or []}
+            pairs |= {(core_key(c), str(system["native_id"])) for c in system.get("cores") or []}
     for record in config.get("launchers") or []:
         if record.get("kind") == "package" and record.get("build") == "libretro":
             package = str(record.get("emulator", ""))
@@ -120,7 +120,7 @@ def content_folder_boards(config: dict) -> dict[tuple[str, str], frozenset[str] 
                 # drivers alone, none of the arcade sets of the core it
                 # shares a repository with.
                 continue
-            core = _core_key(package.removeprefix("lr-"))
+            core = core_key(package.removeprefix("lr-"))
             pairs |= {(core, str(s)) for s in record.get("systems") or []}
     # Pairs from the platform's own lists hold on every board, an offer on
     # the boards its frontend writes it for.
@@ -156,10 +156,10 @@ def content_folder_tags(config: dict) -> set[str]:
     boards = content_folder_boards(config)
     target = config.get(TARGET_KEY)
     pairs = {pair for pair, on in boards.items() if not target or on is None or target in on}
-    from resolve.launchers import _roms_place
+    from resolve.launchers import roms_place_of
 
     def place(folder: str) -> list:
-        return list(_roms_place(config, folder) or ())
+        return list(roms_place_of(config, folder) or ())
 
     # Without a board, a core a folder offers on some boards only carries
     # them, for a manifest the installer narrows to one.
@@ -272,7 +272,7 @@ def _roms_entry(entry: dict, tree: str, folder: str, rel: str) -> dict:
     """The entry placed in a roms folder."""
     # Below the roms root inside the install tree (EmuELEC's
     # /storage/roms): a plain dest the platform prefix skips, as a
-    # standalone entry placed there (_placed_entry).
+    # standalone entry placed there (placed_entry).
     where: dict[str, object] = (
         {"unprefixed": True} if tree == "install" else {"root": ROMS_ROOT}
     )
@@ -361,7 +361,7 @@ def _standalone_content_layout(emu_name: str, view: dict, searches: list) -> dic
             out.append(f)
             held = {(f.get("root") or "", f.get("standalone_path") or "")}
             extra = [
-                _placed_entry(f, view, (tree, f"{folder}/{layout}")) for tree, folder in reads
+                placed_entry(f, view, (tree, f"{folder}/{layout}")) for tree, folder in reads
             ]
             extra = [e for e in extra if (e.get("root") or "", e["standalone_path"]) not in held]
             changed |= bool(extra)
@@ -373,7 +373,7 @@ def _standalone_content_layout(emu_name: str, view: dict, searches: list) -> dic
         changed = True
         placed = {k: v for k, v in f.items() if k != "unplaced"}
         out.extend(
-            _placed_entry(placed, view, (tree, f"{folder}/{layout}")) for tree, folder in reads
+            placed_entry(placed, view, (tree, f"{folder}/{layout}")) for tree, folder in reads
         )
     return {**view, "files": out} if changed else view
 
@@ -403,13 +403,13 @@ def content_layout(
         return {**view, "files": files}
     if CONTENT_SCOPE_TAG not in tags:
         return view
-    names = {_core_key(n) for n in {emu_name, *(str(c) for c in view.get("cores") or [])}}
+    names = {core_key(n) for n in {emu_name, *(str(c) for c in view.get("cores") or [])}}
     searches = [
         json.loads(t[len(ROM_SEARCH_PREFIX):])
         for t in tags if t.startswith(ROM_SEARCH_PREFIX)
     ]
     build = "standalone" if standalone else "libretro"
-    searches = [s for s in searches if _core_key(s[0]) in names and s[6] == build]
+    searches = [s for s in searches if core_key(s[0]) in names and s[6] == build]
     if not standalone:
         return _libretro_content_layout(emu_name, view, tags, names, searches)
     return _standalone_content_layout(emu_name, view, searches)

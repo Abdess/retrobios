@@ -75,7 +75,7 @@ class SystemAndEmulatorPacksKeepTheirNames(unittest.TestCase):
 
         import yaml
 
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
         import generate_db
         from packs import emulatorpack
 
@@ -99,7 +99,7 @@ class SystemAndEmulatorPacksKeepTheirNames(unittest.TestCase):
                 "systems": ["sega-triforce"],
                 "files": [{"name": "segaboot.gcm", "required": True}],
             }))
-            _emulator_profiles_cache.clear()
+            emulator_profiles_cache.clear()
             try:
                 emulator_pack = emulatorpack.generate_emulator_pack(
                     ["triforce"], str(root / "emulators"), db, str(root / "bios"),
@@ -110,7 +110,7 @@ class SystemAndEmulatorPacksKeepTheirNames(unittest.TestCase):
                     str(root / "bios"), str(out), offline=True,
                 )
             finally:
-                _emulator_profiles_cache.clear()
+                emulator_profiles_cache.clear()
             self.assertNotEqual(Path(emulator_pack).name, Path(system_pack).name)
             self.assertTrue(Path(emulator_pack).exists())
             self.assertTrue(Path(system_pack).exists())

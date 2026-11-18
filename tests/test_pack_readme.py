@@ -16,7 +16,7 @@ from pathlib import Path
 
 import yaml
 
-from packs.readme import _build_readme
+from packs.readme import build_readme
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -27,7 +27,7 @@ def _extract_lines(text: str) -> list[str]:
 
 class GuidesPointAtTheReadPath(unittest.TestCase):
     def test_retrodeck_is_extracted_at_its_root(self):
-        text = _build_readme("retrodeck", "RetroDECK", "", 1, 1)
+        text = build_readme("retrodeck", "RetroDECK", "", 1, 1)
         for line in _extract_lines(text):
             self.assertNotIn("retrodeck/bios", line)
 
@@ -37,7 +37,7 @@ class GuidesPointAtTheReadPath(unittest.TestCase):
             detect = (data.get("install", {}) or {}).get("detect", [])
             if not any(d.get("bios_path") for d in detect):
                 continue
-            text = _build_readme(name, name, "", 1, 1, detect=detect)
+            text = build_readme(name, name, "", 1, 1, detect=detect)
             with self.subTest(platform=name):
                 self.assertFalse(
                     any("your BIOS directory" in line for line in _extract_lines(text))
@@ -51,7 +51,7 @@ class ACardOpenedOnAComputerShowsItsShareDrive(unittest.TestCase):
 
     def test_the_card_steps_name_the_drive_folder(self):
         for name in ("batocera", "recalbox"):
-            text = _build_readme(name, name, "", 1, 1)
+            text = build_readme(name, name, "", 1, 1)
             card = text[text.index("Manual (SD card)"):]
             card = card[:card.index("\n\n", card.index("1."))]
             with self.subTest(platform=name):
@@ -74,7 +74,7 @@ def _registry() -> dict:
 
 def _guide(name: str) -> str:
     install = _registry()["platforms"][name].get("install") or {}
-    return _build_readme(name, name, "", 1, 1, detect=install.get("detect", []),
+    return build_readme(name, name, "", 1, 1, detect=install.get("detect", []),
                          standalone_copies=install.get("standalone_copies", []))
 
 
@@ -136,7 +136,7 @@ class GuidesInstallFromTheZipInHand(unittest.TestCase):
             detect = (data.get("install", {}) or {}).get("detect", [])
             if not detect:
                 continue
-            text = _build_readme(name, name, "", 1, 1, detect=detect)
+            text = build_readme(name, name, "", 1, 1, detect=detect)
             if "Option A: Automatic" not in text:
                 continue
             with self.subTest(platform=name):

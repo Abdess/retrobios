@@ -25,7 +25,7 @@ from core.statefile import now_iso
 from model import measurements as mr
 from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
-from model.systems import _norm_system_id
+from model.systems import norm_system_id
 from model.targets import load_target_config
 from probes.content import Content, load_content, load_file, verify_identity
 from probes.cores import BUILDBOT, safe_extract_so
@@ -72,8 +72,8 @@ class CoreChoice:
 
 def platform_system(config: dict, system: str) -> str | None:
     """The platform's own id of a system, compared on the normalised id."""
-    wanted = _norm_system_id(system)
-    matches = sorted(s for s in config.get("systems") or {} if _norm_system_id(s) == wanted)
+    wanted = norm_system_id(system)
+    matches = sorted(s for s in config.get("systems") or {} if norm_system_id(s) == wanted)
     return matches[0] if matches else None
 
 
@@ -105,11 +105,11 @@ def so_names(name: str, profile: dict, buildbot: set[str], target: set[str] | No
 
 def choose_cores(config: dict, profiles: dict[str, dict], system: str, buildbot: set[str],
                  target: set[str] | None) -> list[CoreChoice]:
-    wanted = _norm_system_id(system)
+    wanted = norm_system_id(system)
     out: list[CoreChoice] = []
     for name in sorted(resolve_platform_cores(config, profiles, target)):
         profile = profiles[name]
-        if wanted not in {_norm_system_id(s) for s in profile.get("systems") or ()}:
+        if wanted not in {norm_system_id(s) for s in profile.get("systems") or ()}:
             continue
         if not libretro_build_runs(name, profile, config):
             continue

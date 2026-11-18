@@ -11,12 +11,13 @@ from model.collection import collection_paths
 from model.systemnames import system_name
 from sitegen import starlight as sitestarlight
 from sitegen.cards import emulator_file_anchors
-from sitegen.config import REPO_URL, SITE_NAME, SITE_URL, _REPO_ROOT
+from sitegen.config import REPO_URL, SITE_NAME, SITE_URL
+from core.paths import REPO_ROOT
 from sitegen.descriptions import EMULATOR_SNIPPETS, NOTHING_TO_FETCH, PAGE_DATA
-from sitegen.emulatorcards import _snippet_noun
+from sitegen.emulatorcards import snippet_noun
 from sitegen.install import comes_with_app
-from sitegen.lookup import _data_member_digests, _hash_values
-from sitegen.render import _system_page_map
+from sitegen.lookup import data_member_digests, sorted_hash_values
+from sitegen.render import system_page_map
 from sitegen.write import write_if_changed
 
 
@@ -50,12 +51,12 @@ def collection_dat(db: dict, generated_at: str) -> str:
                    games, generated_at)
 
 
-def _write_platform_dats(folder: Path, db: dict, members: dict, generated_at: str) -> list[Path]:
+def write_platform_dats(folder: Path, db: dict, members: dict, generated_at: str) -> list[Path]:
     """downloads/dat/<platform>.dat for each install manifest."""
     folder.mkdir(parents=True, exist_ok=True)
-    digests = _data_member_digests(members)
+    digests = data_member_digests(members)
     written = []
-    for source in sorted((_REPO_ROOT / "install").glob("*.json")):
+    for source in sorted((REPO_ROOT / "install").glob("*.json")):
         manifest = json.loads(source.read_text(encoding="utf-8"))
         path = folder / f"{source.stem}.dat"
         write_if_changed(str(path), platform_dat(manifest, db, digests, generated_at))
@@ -197,7 +198,7 @@ def platform_structured_data(name: str, coverage: dict) -> dict:
             identifiers = [
                 f"{field}:{value}"
                 for field in ("sha1", "md5", "crc32", "sha256")
-                for value in _hash_values(entry.get(field))
+                for value in sorted_hash_values(entry.get(field))
             ]
             if identifiers:
                 part["identifier"] = identifiers
@@ -302,7 +303,7 @@ def record_emulator_page(name: str, profile: dict) -> None:
     fetched = [f for f in listed if f.get("name") and not comes_with_app(f)]
     systems = profile.get("systems") or []
     first = systems[0] if systems else ""
-    makers = [_system_page_map[sys_id][0] for sys_id in systems if sys_id in _system_page_map]
+    makers = [system_page_map[sys_id][0] for sys_id in systems if sys_id in system_page_map]
     if makers:
         sitestarlight.EMULATOR_CARDS[f"emulators/{name}"] = makers[0]
     else:
@@ -320,7 +321,7 @@ def record_emulator_page(name: str, profile: dict) -> None:
         system_name(first) if 0 < len(systems) <= 5 else "",
         list(names.values()),
         len({Path(str(f["name"])).name.casefold() for f in fetched if f.get("required") is True}),
-        _snippet_noun(names.values(), len(firmware), len(fetched)),
+        snippet_noun(names.values(), len(firmware), len(fetched)),
     )
     if listed and all(comes_with_app(f) for f in listed):
         NOTHING_TO_FETCH.add(key)
@@ -370,7 +371,7 @@ def emulator_structured_data(profile: dict) -> dict:
         identifiers = [
             f"{field}:{value}"
             for field in ("sha1", "sha256", "md5", "crc32")
-            for value in _hash_values(f.get(field))
+            for value in sorted_hash_values(f.get(field))
         ]
         part: dict[str, object] = {
             "@type": "CreativeWork",
@@ -389,7 +390,7 @@ def emulator_structured_data(profile: dict) -> dict:
                 "identifier": [
                     f"{field}:{value}"
                     for field in ("sha1", "crc32")
-                    for value in _hash_values(member.get(field))
+                    for value in sorted_hash_values(member.get(field))
                 ],
             }
             for member in f.get("contents") or []

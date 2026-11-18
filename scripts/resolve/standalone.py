@@ -8,7 +8,7 @@ from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 
 from model.profiles import load_emulator_profiles
-from model.systems import _norm_system_id
+from model.systems import norm_system_id
 from resolve.contentlayout import content_folder_tags, content_layout
 from resolve.layout import (
     CONTENT_TAG_PREFIXES,
@@ -20,8 +20,8 @@ from resolve.layout import (
     OUTSIDE_BIOS_FOLDER,
     OWN_BUILD_PREFIX,
     SYSTEM_FILE_PREFIX,
-    _handed,
-    _placed_entry,
+    handed_from_tags,
+    placed_entry,
     core_system_dirs,
     entry_launch_systems,
     runs_standalone,
@@ -131,7 +131,7 @@ def standalone_set(config: dict) -> set[str]:
         natives = native_systems(config)
         names |= {
             SYSTEM_FILE_PREFIX + json.dumps(
-                [natives.get(str(native), str(native)), MACHINE_KEY + _norm_system_id(str(m))]
+                [natives.get(str(native), str(native)), MACHINE_KEY + norm_system_id(str(m))]
             )
             for record in config.get("launchers") or []
             for native in record.get("systems") or []
@@ -196,7 +196,7 @@ class _StandaloneLaunches:
         names = {emu_name, *(str(c) for c in profile.get("cores") or [])}
         per_system = bool(
             profile.get("standalone_directories") or profile.get("standalone_pools")
-        ) and any(h.systems and h.emulator in names for h in _handed(standalone_cores))
+        ) and any(h.systems and h.emulator in names for h in handed_from_tags(standalone_cores))
         index = system_file_index(standalone_cores) if per_system else {}
         # A profile system the platform launches under a system of its own, as
         # its list says for one entry, is launched there for every entry:
@@ -212,7 +212,7 @@ class _StandaloneLaunches:
         # the folder its record gives, every other launch the folder the records
         # naming none give.
         named_systems = frozenset().union(*(
-            h.systems for h in _handed(standalone_cores) if h.emulator in names
+            h.systems for h in handed_from_tags(standalone_cores) if h.emulator in names
         )) if per_system else frozenset()
 
         # The layout folders a search setting stands for (standalone_pools):
@@ -237,7 +237,7 @@ class _StandaloneLaunches:
                 # own system selects the launch that offers it as a machine
                 # (RetroBat runs XRoar's coco3 under coco).
                 systems = systems.union(*(
-                    self.index.get(MACHINE_KEY + _norm_system_id(s), set()) for s in own
+                    self.index.get(MACHINE_KEY + norm_system_id(s), set()) for s in own
                 ))
         return systems
 
@@ -298,7 +298,7 @@ class _StandaloneLaunches:
                 # -hash bios/mame/hash (Mame64.Generator.cs:172, 177-178), and
                 # the hash/ beside mame.exe is no longer read.
                 moved = {k: v for k, v in f.items() if k != "bundled"}
-            files.extend(_placed_entry(moved, self.profile, placed) for placed in places)
+            files.extend(placed_entry(moved, self.profile, placed) for placed in places)
         return files
 
 

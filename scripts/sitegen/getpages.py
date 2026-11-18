@@ -12,21 +12,22 @@ from model.platforms import load_platform_config
 from model.registry import load_platform_registry
 from installer_build.handhelds import GROUP_PAGE
 from sitegen import handheld as sitehandheld, markup
-from sitegen.config import RELEASE_URL, REPO_URL, _REPO_ROOT
+from sitegen.config import RELEASE_URL, REPO_URL
+from core.paths import REPO_ROOT
 from sitegen.descriptions import PAGE_DATA
 from sitegen.guidepage import (
     NO_ZIP_FAQ,
-    _folder_words,
-    _setup_relative,
-    _setup_routes,
+    folder_words,
+    setup_relative,
+    setup_routes,
     get_page_title,
     no_zip_line,
 )
-from sitegen.home import _next_block
+from sitegen.home import next_block
 from sitegen.install import has_release_pack
-from sitegen.parts import _parent_front_matter
+from sitegen.parts import parent_front_matter
 from sitegen.readme import asset_links
-from sitegen.render import _fmt_size
+from sitegen.render import fmt_size
 from sitegen.versions import release_line, version_line
 
 
@@ -35,11 +36,11 @@ def _unzip_into(platform_name: str, display: str, extract_to: str | None, parts:
     writes relative to the setup's own (`system/`, `bios/`) is named as the
     setup's, with the way to find it."""
     what = "them all" if parts > 1 else "it"
-    if not _setup_relative(extract_to):
-        return [f"- Unzip {what} into {_folder_words(display, extract_to)}.", ""]
+    if not setup_relative(extract_to):
+        return [f"- Unzip {what} into {folder_words(display, extract_to)}.", ""]
     lead = GUIDES[platform_name].lead if platform_name in GUIDES else ""
     return [
-        f"- Unzip {what} into {_folder_words(display, extract_to)}. "
+        f"- Unzip {what} into {folder_words(display, extract_to)}. "
         f"[Where is it?](../platforms/{platform_name}.md#where-the-files-go)",
         "",
         *([lead, ""] if lead else []),
@@ -66,13 +67,13 @@ def generate_get_page(platform_name: str) -> str:
     if released and pack and tag_date:
         PAGE_DATA[f"{releaserecord.GET_DIR}/{platform_name}.md"] = {"dateModified": "-".join(tag_date.groups())}
     if released and pack and pack.get("assets"):
-        description = (f"The BIOS pack for {display}: {_fmt_size(pack['download_size'])} to "
+        description = (f"The BIOS pack for {display}: {fmt_size(pack['download_size'])} to "
                        "download. The address stays the same and always gives the latest ZIP.")
     else:
         description = f"The BIOS files for {display}: one command installs and checks them."
     lines = [
         "---", "search: exclude", f"description: {json.dumps(description)}",
-        *_parent_front_matter((display, f"/platforms/{platform_name}/")), "---", "",
+        *parent_front_matter((display, f"/platforms/{platform_name}/")), "---", "",
         f"# {title}", "",
     ]
     if released and pack and pack.get("assets"):
@@ -85,8 +86,8 @@ def generate_get_page(platform_name: str) -> str:
             asset_links(platform_name, record, REPO_URL, f"Download {display} Pack",
                         button=lambda text, url: markup.button(text, url, primary=True)),
             "",
-            f"- {_fmt_size(pack['download_size'])} to download, "
-            f"{_fmt_size(pack['extracted_size'])} once unzipped.",
+            f"- {fmt_size(pack['download_size'])} to download, "
+            f"{fmt_size(pack['extracted_size'])} once unzipped.",
             *(["- Both parts are needed." if parts == 2 else f"- All {parts} parts are needed."]
               if parts > 1 else []),
             *_unzip_into(platform_name, display, extract_to, parts),
@@ -99,7 +100,7 @@ def generate_get_page(platform_name: str) -> str:
             f"No {display} ZIP yet. The next release has one. "
             "The command installs every file and checks it.",
             "",
-            *_setup_routes(platform_name, display),
+            *setup_routes(platform_name, display),
         ]
     elif released:
         lines += [
@@ -112,12 +113,12 @@ def generate_get_page(platform_name: str) -> str:
         lines += [
             no_zip_line(display),
             "",
-            *_setup_routes(platform_name, display),
+            *setup_routes(platform_name, display),
             f"[Why no ZIP?](../{NO_ZIP_FAQ})",
             "",
         ]
-    lines += sitehandheld.platform_block(platform_name, _REPO_ROOT)
-    lines += _next_block([
+    lines += sitehandheld.platform_block(platform_name, REPO_ROOT)
+    lines += next_block([
         f"[{display}](../platforms/{platform_name}.md#install): the folder, "
         "and how to run the command on the device",
         "[All installer options](../wiki/installer.md)",

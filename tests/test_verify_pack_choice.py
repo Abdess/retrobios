@@ -38,7 +38,7 @@ class VerifyPackChoice(unittest.TestCase):
         self.out = Path(self.tmp.name)
         self.db = self.out / "db.json"
         self.db.write_text(json.dumps({"files": {}}))
-        self.stem = naming._platform_pack_stem(
+        self.stem = naming.platform_pack_stem(
             ["retroarch"], "retroarch", "platforms"
         )
 
@@ -80,7 +80,7 @@ class VerifyPackChoice(unittest.TestCase):
         from model import region
 
         regions = region.parse_requested("us")
-        tag = naming._narrowings("full", regions, None, False, False)[0][0]
+        tag = naming.pack_narrowings("full", regions, None, False, False)[0][0]
         self._touch(f"{self.stem}_BIOS_Pack.zip")
         self._touch(f"{self.stem}{tag}_BIOS_Pack.zip")
         checked = self._run(self._args(regions=regions))
@@ -106,7 +106,7 @@ class VerifyPackChoice(unittest.TestCase):
         names = {}
         for source, required in generate_pack.ALL_VARIANTS:
             tags = "".join(
-                tag for tag, _ in naming._narrowings(source, None, None, False, required)
+                tag for tag, _ in naming.pack_narrowings(source, None, None, False, required)
             )
             names[f"{self.stem}{tags}_BIOS_Pack.zip"] = (source, required)
             self._touch(f"{self.stem}{tags}_BIOS_Pack.zip")
@@ -121,7 +121,7 @@ class VerifyPackChoice(unittest.TestCase):
         import contextlib
         import io
 
-        bizhawk = naming._platform_pack_stem(["bizhawk"], "bizhawk", "platforms")
+        bizhawk = naming.platform_pack_stem(["bizhawk"], "bizhawk", "platforms")
         self._touch(f"{bizhawk}_BIOS_Pack.zip")
         self._touch(f"{self.stem}_BIOS_Pack.zip")
         for platform, target in (("bizhawk", "rpi4typo"), ("retroarch", "swich")):
@@ -161,7 +161,7 @@ class VerifyPackChoice(unittest.TestCase):
         """--all checks the packs a release publishes (release_pack): the
         RetroPie pack, served by the installer, is left to a check that names
         it."""
-        stem = naming._platform_pack_stem(["retropie"], "retropie", "platforms")
+        stem = naming.platform_pack_stem(["retropie"], "retropie", "platforms")
         self._touch(f"{stem}_BIOS_Pack.zip")
         self._touch(f"{self.stem}_BIOS_Pack.zip")
         checked = self._run(
@@ -186,7 +186,7 @@ class GroupRenameKeepsSystemTag(unittest.TestCase):
             def fake_generate(*a, pack_name=None, **kw):
                 # The group's name is handed in: nothing is renamed afterwards.
                 built = Path(tmp) / (
-                    pack_name or f"RetroArch_x_BIOS_Pack{naming._system_tag(['atari-lynx'])}.zip"
+                    pack_name or f"RetroArch_x_BIOS_Pack{naming.system_tag(['atari-lynx'])}.zip"
                 )
                 built.write_bytes(b"")
                 return str(built)
@@ -206,7 +206,7 @@ class GroupRenameKeepsSystemTag(unittest.TestCase):
                     {}, {}, ["atari-lynx"],
                 )
             names = os.listdir(tmp)
-        stem = naming._platform_pack_stem(["retroarch", "lakka"], "retroarch", "platforms")
+        stem = naming.platform_pack_stem(["retroarch", "lakka"], "retroarch", "platforms")
         self.assertEqual(names, [f"{stem}_BIOS_Pack_Lynx.zip"])
 
 

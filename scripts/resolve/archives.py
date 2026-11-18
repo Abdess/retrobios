@@ -136,7 +136,7 @@ def _member_held(member: dict, crcs: frozenset[str], names: frozenset[str]) -> b
     return named
 
 
-def _holding_members(paths: list[str], members: list[dict]) -> list[str]:
+def holding_members(paths: list[str], members: list[dict]) -> list[str]:
     """The same-named archives holding the most required members, then the most members.
 
     FBNeo reads neocd.bin and 000-lo.lo inside neocdz.zip. The primary copy,
@@ -157,7 +157,7 @@ def _holding_members(paths: list[str], members: list[dict]) -> list[str]:
     return [path for path in paths if scores[path] == best]
 
 
-def _covering_archives(paths: list[str]) -> list[str]:
+def covering_archives(paths: list[str]) -> list[str]:
     """Same-named archives, those holding every ROM each other copy holds.
 
     Without a declared layout, a primary that is a superset of the other
@@ -185,7 +185,7 @@ def _covering_archives(paths: list[str]) -> list[str]:
 _unreadable_archives: set[str] = set()
 
 
-def _warn_unreadable_archive(path: str, exc: Exception) -> None:
+def warn_unreadable_archive(path: str, exc: Exception) -> None:
     """Say once that an archive on disk cannot be read.
 
     Skipped in silence, a truncated ZIP came out as not_found or

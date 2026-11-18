@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING, TypedDict
 
 from core.options import reject_unknown
 from model.profiles import PROFILE_IDENTITY_FIELDS, entry_system_ids
-from model.systems import _norm_system_id
+from model.systems import norm_system_id
 from model.alternatives import core_file_spares, required_only_spares, set_fields
 from resolve.archives import archive_members, contents_members, holds_required_members
 from model.declarations import declared_root, expand_platform_declared_names, platform_declarations
@@ -34,7 +34,7 @@ if TYPE_CHECKING:
     from typing_extensions import Unpack
 
 
-def _detect_extras_prefix(config: dict, base_dest: str) -> str:
+def detect_extras_prefix(config: dict, base_dest: str) -> str:
     """The prefix core-extra destinations take (may be empty).
 
     When base_destination is empty (RetroDECK), it is the dominant root of
@@ -198,7 +198,7 @@ def _map_emulator_to_slug(
     sys_to_slug: dict[str, str],
 ) -> str:
     """Map an emulator to a destination slug for slug-based platforms."""
-    from model.systems import _norm_system_id
+    from model.systems import norm_system_id
 
     emu_systems = set(profile.get("systems", []))
     # Direct match
@@ -208,7 +208,7 @@ def _map_emulator_to_slug(
         return sys_to_slug.get(target, "")
     # Normalized match
     for es in sorted(emu_systems):
-        norm = _norm_system_id(es)
+        norm = norm_system_id(es)
         if norm in norm_map:
             target = norm_map[norm]
             return sys_to_slug.get(target, "")
@@ -404,7 +404,7 @@ def hidden_extras(
     ``required_only`` are the builder's for a --source truth or a
     --required-only pack: an optional extra is skipped before it takes a path.
     """
-    from packs.paths import _register_path, placement_block
+    from packs.paths import register_path, placement_block
 
     reject_unknown("hidden_extras", options, HiddenOptions.__optional_keys__)
     report = options.get("report")
@@ -423,14 +423,14 @@ def hidden_extras(
     parents: set[str] = set()
     content: dict[str, str | None] = {}
     for dest, local in shipped.items():
-        _register_path(dest, seen, parents)
+        register_path(dest, seen, parents)
         content[dest.lower()] = sha1_by_path.get(local)
     lower = set(content) if case_insensitive else set()
-    prefix = _detect_extras_prefix(config, base_dest)
+    prefix = detect_extras_prefix(config, base_dest)
     region_prefix = declared_root(config)
     hidden: dict[tuple[str, str, str], str] = {}
     packed_keys: set[tuple[str, str, str]] = set()
-    extras = _collect_emulator_extras(
+    extras = collect_emulator_extras(
         config, emulators_dir, db, set() if system_ids else set(shipped),
         base_dest, profiles, target_cores=target_cores, include_all=include_all,
         undeclared=report,
@@ -474,7 +474,7 @@ def hidden_extras(
             hidden.setdefault(key, reason)
             continue
         packed_keys.add(key)
-        _register_path(full, seen, parents)
+        register_path(full, seen, parents)
         content[full.lower()] = held
         if case_insensitive:
             lower.add(full.lower())
@@ -1275,9 +1275,9 @@ class ExtraPlacement:
     """
 
     def __init__(self, config: dict, base_dest: str, profiles: dict) -> None:
-        from model.systems import _norm_system_id
+        from model.systems import norm_system_id
 
-        self.prefix = _detect_extras_prefix(config, base_dest)
+        self.prefix = detect_extras_prefix(config, base_dest)
         self.slug_based, self.sys_to_slug = _detect_slug_structure(config)
         self.platform_systems = set(config.get("systems", {}).keys())
         self.native_systems = native_slug_systems(config)
@@ -1289,7 +1289,7 @@ class ExtraPlacement:
         self.outer = {root for root in OUTER_ROOTS if outer_layout(config, root)}
         self.config = config
         self.norm_map = (
-            {_norm_system_id(sid): sid for sid in self.platform_systems}
+            {norm_system_id(sid): sid for sid in self.platform_systems}
             if self.slug_based
             else {}
         )
@@ -1393,7 +1393,7 @@ def undeclared_report(
     target_cores: set[str] | None = None,
     include_all: bool = False,
 ) -> list[dict]:
-    """The gap report _collect_emulator_extras reads, for a caller that
+    """The gap report collect_emulator_extras reads, for a caller that
     collects the extras more than once with these arguments: the region
     grouping and the pack or manifest phase 2 each computed it in full."""
     from packs.gaps import find_undeclared_files
@@ -1406,7 +1406,7 @@ def undeclared_report(
 
 
 class CollectOptions(TypedDict, total=False):
-    """The records _collect_emulator_extras fills, and the report it reuses."""
+    """The records collect_emulator_extras fills, and the report it reuses."""
 
     claimants: dict[tuple[str, str, str], str] | None
     unplaceable: list[dict] | None
@@ -1447,7 +1447,7 @@ class _CopyScope:
     extras_prefix: str
 
 
-def _collect_emulator_extras(
+def collect_emulator_extras(
     config: dict,
     emulators_dir: str,
     db: dict,
@@ -1490,7 +1490,7 @@ def _collect_emulator_extras(
 
     Works for ANY platform (RetroArch, Batocera, Recalbox, etc.)
     """
-    reject_unknown("_collect_emulator_extras", options, CollectOptions.__optional_keys__)
+    reject_unknown("collect_emulator_extras", options, CollectOptions.__optional_keys__)
     undeclared = options.get("undeclared")
     claimants = options.get("claimants")
     unplaceable = options.get("unplaceable")
@@ -2042,25 +2042,25 @@ def _another_claim(extra: dict | None, claim: dict) -> None:
     claims.sort(key=lambda c: c["claim_order"])
 
 
-def _extra_system_ids(extra: dict) -> list[str]:
+def extra_system_ids(extra: dict) -> list[str]:
     """Return the narrowest system ownership preserved on a core extra."""
     explicit = extra.get("source_system")
     if explicit:
         return [str(explicit)]
     return [str(value) for value in extra.get("source_systems", []) if value]
 
-def _serving_system_ids(extra: dict) -> list[str]:
+def serving_system_ids(extra: dict) -> list[str]:
     """Every system the extra's file serves: its own core's and those of the
     other cores whose claim rides on it. One file stands per destination, so
     narrowed to any of their systems the file is what that core reads.
     """
-    ids = list(_extra_system_ids(extra))
+    ids = list(extra_system_ids(extra))
     for claim in extra.get("other_claims", []):
-        ids.extend(s for s in _extra_system_ids(claim) if s not in ids)
+        ids.extend(s for s in extra_system_ids(claim) if s not in ids)
     return ids
 
 
-def _kept(entries: list[dict], required_only: bool) -> list[dict]:
+def kept_entries(entries: list[dict], required_only: bool) -> list[dict]:
     """The entries a pack keeps: optional ones go under --required-only."""
     if not required_only:
         return entries
@@ -2073,12 +2073,12 @@ def extras_for_systems(extras: list[dict], system_ids: list[str]) -> list[dict]:
     Extras carry their profile/system identity directly. Display labels are
     presentation only and must never drive routing.
     """
-    wanted = set(system_ids) | {_norm_system_id(s) for s in system_ids}
+    wanted = set(system_ids) | {norm_system_id(s) for s in system_ids}
     return [
         fe for fe in extras
         if (
-            set(_serving_system_ids(fe))
-            | {_norm_system_id(s) for s in _serving_system_ids(fe)}
+            set(serving_system_ids(fe))
+            | {norm_system_id(s) for s in serving_system_ids(fe)}
         ) & wanted
     ]
 
@@ -2187,7 +2187,7 @@ def platform_region_groups(
         members = groups.setdefault(sys_id, [])
         # Decided over what the pack keeps: an optional winner removed
         # afterwards left its slot empty.
-        for file_entry in _kept(system.get("files", []), required_only):
+        for file_entry in kept_entries(system.get("files", []), required_only):
             dest = declared_destination(file_entry)
             if dest:
                 members.append((dest, file_entry.get("name", "")))
@@ -2203,7 +2203,7 @@ def platform_region_groups(
         return groups, extra_dests
 
     absent: list[dict] = []
-    extras = _collect_emulator_extras(
+    extras = collect_emulator_extras(
         config,
         emulators_dir,
         db,
@@ -2219,7 +2219,7 @@ def platform_region_groups(
     held = {id(extra) for extra in extras}
     spellings = system_spellings(systems)
     region_prefix = declared_root(config)
-    for extra in _kept(extras + absent, required_only):
+    for extra in kept_entries(extras + absent, required_only):
         dest = extra_region_key(extra, region_prefix)
         if not dest:
             continue
@@ -2255,7 +2255,7 @@ def system_spellings(systems: Iterable[str]) -> dict[str, str]:
     """
     spellings: dict[str, str] = {}
     for sys_id in sorted(systems):
-        spellings.setdefault(_norm_system_id(sys_id), sys_id)
+        spellings.setdefault(norm_system_id(sys_id), sys_id)
     return spellings
 
 
@@ -2268,7 +2268,7 @@ def extra_region_groups(
     extra competes beside the files the platform declares for that system.
     """
     def system_group(sys_id: str) -> str:
-        return (spellings or {}).get(_norm_system_id(sys_id), sys_id)
+        return (spellings or {}).get(norm_system_id(sys_id), sys_id)
 
     emulator = extra.get("source_emulator", "")
     variant = extra.get("selection_slot")
@@ -2314,19 +2314,19 @@ def emulator_region_drops(
     emulator pack resolves with.
     """
     from resolve import regions as resolve_regions
-    from packs.paths import _resolve_destination
-    from resolve.validation import _build_validation_index, filter_files_by_mode
+    from packs.paths import resolve_destination
+    from resolve.validation import build_validation_index, filter_files_by_mode
 
     region_index = resolve_regions.build_region_index(dict(selected))
     region_groups: dict[str, list[tuple[str, str]]] = {}
     held: set[str] | None = set() if db is not None else None
-    validation_index = _build_validation_index(dict(selected)) if db is not None else {}
+    validation_index = build_validation_index(dict(selected)) if db is not None else {}
     for emu_name, profile in sorted(selected):
         # Decided over what the pack keeps, as on the platform side: an
         # optional winner removed afterwards left its slot empty.
         entries = filter_files_by_mode(profile.get("files", []), standalone)
-        for fe in _kept(entries, required_only):
-            dest = _resolve_destination(fe, standalone)
+        for fe in kept_entries(entries, required_only):
+            dest = resolve_destination(fe, standalone)
             if dest:
                 group_id = _emulator_region_group(emu_name, profile, fe, dest)
                 region_groups.setdefault(group_id, []).append(
@@ -2362,7 +2362,7 @@ def emulator_required_spares(
     stvbios.zip. The pack and verify --emulator both read this."""
     from model.alternatives import groups_of, rank_in, required_groups
     from resolve.archives import archive_entry
-    from packs.paths import _archive_destination, _resolve_destination
+    from packs.paths import archive_destination, resolve_destination
 
     reject_unknown("emulator_required_spares", options, SpareOptions.__optional_keys__)
     data_registry = options.get("data_registry")
@@ -2374,12 +2374,12 @@ def emulator_required_spares(
             archives.append(archive)
             own = archive_entry(archive, files)
             if groups_of(own):
-                candidates.append({"dest": _archive_destination(
+                candidates.append({"dest": archive_destination(
                     archive, profile.get("archive_prefix", ""),
                     profile.get("pack_structure"), standalone,
                 ), "entry": own})
     candidates.extend(
-        {"dest": _resolve_destination(fe, standalone), "entry": fe}
+        {"dest": resolve_destination(fe, standalone), "entry": fe}
         for fe in files if not fe.get("archive") and groups_of(fe)
     )
     if not candidates:

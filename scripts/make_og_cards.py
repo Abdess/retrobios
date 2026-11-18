@@ -73,7 +73,7 @@ def system_cards() -> dict[str, tuple[str, str]]:
     system pages are written from."""
     from model.composition import GAME_DATA_TOPS
     from model.database import load_database
-    from model.collection import _group_by_manufacturer, _slug
+    from model.collection import group_by_manufacturer, manufacturer_slug
 
     def lead(manufacturer: str) -> str:
         # Other holds one folder per emulator, a game publisher's page its
@@ -82,9 +82,9 @@ def system_cards() -> dict[str, tuple[str, str]]:
             return "Game data for"
         return "Files kept for the emulators" if manufacturer == "Other" else "BIOS files for"
 
-    manufacturers = _group_by_manufacturer(load_database(str(ROOT / "database.json")))
+    manufacturers = group_by_manufacturer(load_database(str(ROOT / "database.json")))
     return {
-        f"systems/{_slug(manufacturer)}": (
+        f"systems/{manufacturer_slug(manufacturer)}": (
             manufacturer, consoles_tagline(list(consoles), lead(manufacturer)))
         for manufacturer, consoles in sorted(manufacturers.items())
     }

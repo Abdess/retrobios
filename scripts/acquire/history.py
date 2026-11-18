@@ -31,7 +31,7 @@ def path_history(repo: upstream.Repo, path: str, cache_dir: str) -> list[str]:
     """Commits that touched a path, newest first."""
     shas: list[str] = []
     for page in range(1, MAX_PAGES + 1):
-        payload = upstream._api(_history_url(repo, path, page), cache_dir, False,
+        payload = upstream.cached_api(_history_url(repo, path, page), cache_dir, False,
                                 max_age=upstream.MOVING_TTL)
         if not isinstance(payload, list) or not payload:
             break
@@ -47,7 +47,7 @@ def find_revision(
     """The newest revision whose copy of the path has this md5, and its bytes."""
     wanted = md5.lower()
     for sha in path_history(repo, path, cache_dir):
-        data = upstream._fetch(upstream.content_url(repo, sha, path))
+        data = upstream.fetch_body(upstream.content_url(repo, sha, path))
         if data is not None and hashlib.md5(data).hexdigest() == wanted:
             return sha, data
     return None

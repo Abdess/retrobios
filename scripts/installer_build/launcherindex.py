@@ -13,7 +13,7 @@ from installer_build.port import (
     BATOCERA_ZIP,
     MUOS_APP,
     TOOLS_ZIP,
-    _packs_table,
+    packs_table,
     archive_members,
     pinned_installer_sha256,
 )
@@ -35,7 +35,7 @@ def _entry(field: str, name: str, source: Path | None, root: Path) -> dict:
     """A member as the list records it: where it comes from, its size and
     hash, and whether it is executable in the repository."""
     if source is None:
-        data = _packs_table(root)
+        data = packs_table(root)
         origin: dict = {"content": data.decode("utf-8")}
         executable = False
     else:

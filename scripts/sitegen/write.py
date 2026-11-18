@@ -17,14 +17,14 @@ import os
 # and a page is only removed once nothing produced it.
 _produced: set[str] = set()
 
-def _record(path: str | Path) -> None:
+def record_written(path: str | Path) -> None:
     _produced.add(os.path.realpath(str(path)))
 
 # The reader level label the decoration pass puts above a page's title.
 LEVEL_LABEL_START = '<span class="rb-level '
 
 
-def _undecorated(markdown: str) -> str:
+def undecorated(markdown: str) -> str:
     """Return a page body without the front matter the decoration pass adds."""
     if markdown.startswith("---\n") and "generated_by: retrobios-site" in markdown[:300]:
         end = markdown.find("\n---\n", 4)
@@ -46,12 +46,12 @@ def write_if_changed(path: str, content: str) -> bool:
     normalizing there too would make its own write look like a no-op and
     every page would lose its front matter.
     """
-    _record(path)
-    return _write_artifact(path, content, normalize=_undecorated)
+    record_written(path)
+    return _write_artifact(path, content, normalize=undecorated)
 
 def write_decorated(path: str | Path, content: str) -> bool:
     """Write the wrapped page, comparing front matter and body together."""
-    _record(path)
+    record_written(path)
     return _write_artifact(str(path), content)
 
 # A page body is written as .md and the decoration pass, which runs after
@@ -69,7 +69,7 @@ def _was_produced(path: Path) -> bool:
         for suffix in _PAGE_SUFFIXES if suffix != path.suffix)
 
 
-def _sweep_generated(docs: Path, directories: list[str]) -> int:
+def sweep_generated(docs: Path, directories: list[str]) -> int:
     """Delete files in the generated tree that this run did not produce."""
     removed = 0
     for name in directories:
@@ -86,7 +86,7 @@ def _sweep_generated(docs: Path, directories: list[str]) -> int:
     return removed
 
 
-def _sweep_top_pages(docs: Path) -> int:
+def sweep_top_pages(docs: Path) -> int:
     """Delete the pages at the root of the docs tree this run did not produce.
 
     The root holds only generated pages, one per stem (`cross-reference-*`,

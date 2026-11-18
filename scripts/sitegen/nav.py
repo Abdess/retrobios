@@ -6,13 +6,13 @@ import re
 from collections.abc import Iterator
 from pathlib import Path
 
-from model.collection import _slug
+from model.collection import manufacturer_slug
 from model.composition import GAME_DATA_TOPS
 from model.guides import DEVICE_GROUPS, GROUP_TILES, HANDHELD_GUIDE
 from model.profiles import unique_emulator_profiles
 from sitegen import measurements as sitemeasurements, starlight as sitestarlight
-from sitegen.config import _REPO_ROOT
-from sitegen.decorate import _front_matter
+from core.paths import REPO_ROOT
+from sitegen.decorate import front_matter
 from sitegen.emulatorsindex import INITIAL_DIGITS, emulator_initial
 from sitegen.render import WIKI_SRC_DIR
 
@@ -55,7 +55,7 @@ def _system_nav(manufacturers: dict) -> list:
     arcade: list[dict] = []
     games: list[dict] = []
     for mfr in sorted(manufacturers, key=str.casefold):
-        entry = {mfr: f"systems/{_slug(mfr)}.md"}
+        entry = {mfr: f"systems/{manufacturer_slug(mfr)}.md"}
         if mfr in GAME_DATA_TOPS:
             games.append(entry)
         else:
@@ -117,12 +117,12 @@ def wiki_nav(wiki_dir: Path | None = None) -> dict[str, list[NavPlace]]:
     of its tab. `nav: false` keeps a page out on purpose. A page that says
     neither raises, naming what to add.
     """
-    wiki_dir = Path(wiki_dir) if wiki_dir else _REPO_ROOT / WIKI_SRC_DIR
+    wiki_dir = Path(wiki_dir) if wiki_dir else REPO_ROOT / WIKI_SRC_DIR
     tabs: dict[str, list[NavPlace]] = {level: [] for level in TABS}
     for page in sorted(wiki_dir.glob("*.md")):
         where = f"{WIKI_SRC_DIR}/{page.name}"
         text = page.read_text(encoding="utf-8")
-        meta = _front_matter(text)
+        meta = front_matter(text)
         level = meta.get("level")
         if level not in TABS:
             raise NavError(
@@ -152,7 +152,7 @@ def wiki_nav(wiki_dir: Path | None = None) -> dict[str, list[NavPlace]]:
     return tabs
 
 
-def _overview_anchors(nav: list, docs: Path) -> dict[str, set[str]]:
+def overview_anchors(nav: list, docs: Path) -> dict[str, set[str]]:
     """The heading ids of each overview page the navigation names, where a
     group of the sidebar finds its own section."""
     def overviews(value: object) -> Iterator[str]:

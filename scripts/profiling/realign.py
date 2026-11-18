@@ -14,8 +14,8 @@ import yaml
 from core import upstream
 from model.sourceref import RefPart
 from profiling.anchoring import anchor_block
-from profiling.citations import Citation, _citation_key, collect_citations, is_external_citation
-from profiling.proseedit import _apply_prose_edits, _run_after_moves
+from profiling.citations import Citation, citation_key, collect_citations, is_external_citation
+from profiling.proseedit import apply_prose_edits, run_after_moves
 from profiling.repos import declared_repositories
 from profiling.yamledit import apply_edit
 
@@ -383,7 +383,7 @@ class _ProseHistory:
 
 def _carried_by(past: dict) -> set[tuple[str, str]]:
     return {
-        (c.field, _citation_key(c.ref))
+        (c.field, citation_key(c.ref))
         for c in collect_citations(past) if c.kind == "prose"
     }
 
@@ -510,18 +510,18 @@ def realign_prose(
     # one of its citations is corrected by hand, and dating the whole field
     # from that commit put idtech4a++'s untouched Game.java:69-72 under the
     # current pin, so the stale range was never offered again.
-    keys = [(c.field, _citation_key(c.ref)) for c in citations]
+    keys = [(c.field, citation_key(c.ref)) for c in citations]
     dated = _date_prose(path, document, keys, history)
     messages, jobs = _prose_jobs(document, citations, dated, declared, cache_dir, offline)
 
     if dry_run:
         messages.extend(
             f"would recale {citation.field}: {citation.ref} -> "
-            f"{_run_after_moves(citation.parts, moves, citation.ref)}"
+            f"{run_after_moves(citation.parts, moves, citation.ref)}"
             for citation, moves in jobs
         )
         return messages
-    new_text, applied, left = _apply_prose_edits(text, jobs, document)
+    new_text, applied, left = apply_prose_edits(text, jobs, document)
     messages.extend(applied)
     messages.extend(f"left in place: {item}" for item in left)
     if applied:

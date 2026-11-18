@@ -10,7 +10,6 @@ from core.paths import REPO_ROOT
 from model.guides import PS1_NAME, SH_NAME
 
 
-ROOT = REPO_ROOT
 INSTALLER = "install.py"
 # Each bootstrap and its one pin line, the value between the two groups.
 PINS: dict[str, re.Pattern[str]] = {
@@ -25,11 +24,11 @@ PIN: dict[str, re.Pattern[str]] = {
 COMMAND = "python scripts/pin_installer.py"
 
 
-def installer_sha256(root: Path = ROOT) -> str:
+def installer_sha256(root: Path = REPO_ROOT) -> str:
     return hashlib.sha256((root / INSTALLER).read_bytes()).hexdigest()
 
 
-def stale_pins(root: Path = ROOT) -> list[str]:
+def stale_pins(root: Path = REPO_ROOT) -> list[str]:
     """The bootstraps whose pin is not the SHA-256 of install.py."""
     digest = installer_sha256(root)
     stale = []
@@ -42,7 +41,7 @@ def stale_pins(root: Path = ROOT) -> list[str]:
     return stale
 
 
-def write_pins(root: Path = ROOT) -> list[str]:
+def write_pins(root: Path = REPO_ROOT) -> list[str]:
     """Rewrite each stale pin. Returns the bootstraps written."""
     digest = installer_sha256(root)
     written = []

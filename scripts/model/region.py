@@ -57,11 +57,11 @@ AREA_TERRITORIES: dict[str, frozenset[str]] = {
     "asia-pal": frozenset({"china"}),
 }
 
-_PARENT: dict[str, str] = {
+PARENT: dict[str, str] = {
     member: parent for parent, members in REGION_TREE.items() for member in members
 }
 
-REGIONS: frozenset[str] = frozenset({WORLD} | set(REGION_TREE) | set(_PARENT))
+REGIONS: frozenset[str] = frozenset({WORLD} | set(REGION_TREE) | set(PARENT))
 
 # Accepted on the CLI and for legacy profile values. Every territory also
 # answers to its ISO 3166-1 code: `au` alone was unknown, and the closest
@@ -149,8 +149,8 @@ def comparable(a: str, b: str) -> bool:
     territory it serves."""
     return (
         a == b
-        or _PARENT.get(a) == b
-        or _PARENT.get(b) == a
+        or PARENT.get(a) == b
+        or PARENT.get(b) == a
         or a in AREA_TERRITORIES.get(b, ())
         or b in AREA_TERRITORIES.get(a, ())
     )

@@ -152,12 +152,12 @@ class SystemLinks(unittest.TestCase):
             from model.registry import list_registered_platforms
             from model.profiles import load_emulator_profiles
             from model.platforms import load_platform_config
-            from model.collection import _group_by_manufacturer
+            from model.collection import group_by_manufacturer
             from sitegen.systempages import arcade_board_sections
 
             with open("database.json", encoding="utf-8") as handle:
                 db = json.load(handle)
-            cls.manufacturers = _group_by_manufacturer(db)
+            cls.manufacturers = group_by_manufacturer(db)
             profiles = load_emulator_profiles("emulators", skip_aliases=False)
             systemnames.set_console_sections(
                 cls.manufacturers, systemnames.program_names(profiles))
@@ -208,7 +208,7 @@ class SystemLinks(unittest.TestCase):
         by_heading: dict[str, set[tuple[str, str]]] = {}
         for mfr, consoles in self.manufacturers.items():
             for console in consoles:
-                for name in {systemnames._heading_name(mfr, console), console}:
+                for name in {systemnames.heading_name(mfr, console), console}:
                     by_heading.setdefault(name.casefold(), set()).add((mfr, console))
         missed = []
         for sys_id in sorted(self.ids):
@@ -217,7 +217,7 @@ class SystemLinks(unittest.TestCase):
                 continue
             mfr, console = next(iter(places))
             if mfr == "Other" or (
-                mfr == "Arcade" and console.casefold() in systemnames._program_names
+                mfr == "Arcade" and console.casefold() in systemnames.known_program_names
             ):
                 continue
             if siterender.system_section(sys_id) is None:
@@ -240,7 +240,7 @@ class SystemLinks(unittest.TestCase):
             by_name.setdefault(systemnames.system_name(sys_id), set()).update(sections)
         wrong = []
         for sys_id, parent in sorted(systemnames.SYSTEM_PARENTS.items()):
-            if systemnames._own_section(sys_id) is not None:
+            if systemnames.own_section(sys_id) is not None:
                 continue
             held = by_name.get(systemnames.system_name(sys_id))
             if held is not None and parent not in held:
@@ -282,10 +282,10 @@ class SystemLinks(unittest.TestCase):
                 self.assertNotIn(sys_id, systemnames.SYSTEM_PARENTS)
 
     def test_emulator_rows_link_the_variant(self) -> None:
-        from sitegen.emulatorcards import _named_system_link
+        from sitegen.emulatorcards import named_system_link
 
         self.assertEqual(
-            _named_system_link("wonderswan-color", "../"),
+            named_system_link("wonderswan-color", "../"),
             "[Bandai WonderSwan Color](../systems/bandai.md#wonderswan)")
 
 
@@ -327,11 +327,11 @@ class AnEntryListingSystemsIsFiledUnderEach(unittest.TestCase):
         from model.profiles import entry_system_ids
 
         entry = {"name": "ym2608.zip", "systems": ["arcade", "pc80"]}
-        self.assertEqual(consolecards._entry_systems("mame", entry), ["arcade", "pc80"])
+        self.assertEqual(consolecards.entry_systems("mame", entry), ["arcade", "pc80"])
         self.assertEqual(
-            consolecards._entry_systems("mame", entry), entry_system_ids(entry, {"systems": []})
+            consolecards.entry_systems("mame", entry), entry_system_ids(entry, {"systems": []})
         )
-        self.assertEqual(consolecards._entry_systems("mame", {"name": "a", "system": "pc80"}), ["pc80"])
+        self.assertEqual(consolecards.entry_systems("mame", {"name": "a", "system": "pc80"}), ["pc80"])
 
 
 if __name__ == "__main__":

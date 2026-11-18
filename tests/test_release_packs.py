@@ -262,7 +262,7 @@ class EverySurfaceSaysWhy(unittest.TestCase):
         line = guidepage.no_zip_line("KNULLI")
         self.assertEqual(line, "No ZIP for KNULLI. The command installs every file and checks it.")
         with contextlib.chdir(REPO_ROOT):
-            block = guidepage._pack_buttons("knulli")
+            block = guidepage.pack_buttons("knulli")
             guide = guidepage._guide_download(
                 "knulli", "KNULLI", guides.GUIDES["knulli"], None, "## Download")
         self.assertIn(line, block)

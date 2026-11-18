@@ -121,7 +121,7 @@ class APlatformSystemOverItsBudgetMoves(unittest.TestCase):
         budget = platformfiles.PLATFORM_SECTION_BUDGET
         platformfiles.PLATFORM_SECTION_BUDGET = 5
         try:
-            lines = platformfiles._render_platform_systems(
+            lines = platformfiles.render_platform_systems(
                 {"arcade": files}, config, {}, ("deck", "Deck"), moved)
         finally:
             platformfiles.PLATFORM_SECTION_BUDGET = budget

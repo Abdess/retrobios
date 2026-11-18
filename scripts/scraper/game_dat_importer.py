@@ -164,8 +164,8 @@ SERIAL_NOTE = (
 
 _PAREN = re.compile(r"\(([^)]+)\)")
 _NOINTRO_MEMBER = re.compile(r"^(?P<name>.+) \((?P<version>\d{8}-\d{6})\)\.dat$")
-_DISPOSITION = re.compile(r'filename="(?P<file>[^"]+)"')
-_REDUMP_FILE = re.compile(
+DISPOSITION = re.compile(r'filename="(?P<file>[^"]+)"')
+REDUMP_FILE = re.compile(
     r"^(?P<name>.+) - Datfile \((?P<count>\d+)\) \((?P<date>\d{4}-\d{2}-\d{2}) (?P<time>[\d-]+)\)\.(?:zip|dat)$"
 )
 
@@ -343,7 +343,7 @@ def fetch_redump(code: str, cache_dir: Path, offline: bool, refresh: bool) -> tu
         raise NotCachedError(f"{pack} is not cached")
     url = REDUMP_DATFILE_URL.format(code=code)
     kept = _download(url, pack)
-    match = _DISPOSITION.search(kept["content_disposition"])
+    match = DISPOSITION.search(kept["content_disposition"])
     if not match:
         raise RuntimeError(f"{url} answered without a datfile name")
     meta = {"file": match["file"], "url": url, "fetched": _today()}
@@ -400,7 +400,7 @@ def import_redump(pack: Path, meta: dict) -> list[dict]:
         if dat_name not in by_name:
             continue
         file = meta.get("file", member)
-        stamp = _REDUMP_FILE.match(file)
+        stamp = REDUMP_FILE.match(file)
         origin = {
             "fetched_from": meta.get("url", ""),
             "fetched": meta.get("fetched", ""),

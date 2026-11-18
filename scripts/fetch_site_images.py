@@ -198,13 +198,13 @@ def fetch_logos() -> None:
 
 def fetch_icons() -> None:
     from model.database import load_database
-    from model.collection import _group_by_manufacturer
-    from sitegen.render import SYSTEM_ICON_BASE, _icon_name
+    from model.collection import group_by_manufacturer
+    from sitegen.render import SYSTEM_ICON_BASE, console_icon_name
 
     db = load_database(str(ROOT / "database.json"))
     names = sorted({
-        _icon_name(manufacturer, console)
-        for manufacturer, consoles in _group_by_manufacturer(db).items()
+        console_icon_name(manufacturer, console)
+        for manufacturer, consoles in group_by_manufacturer(db).items()
         for console in consoles
     })
     ICON_DIR.mkdir(parents=True, exist_ok=True)

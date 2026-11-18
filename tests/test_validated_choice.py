@@ -17,7 +17,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from resolve.validation import _build_validation_index, destination_owners, validated_choice
+from resolve.validation import build_validation_index, destination_owners, validated_choice
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -44,7 +44,7 @@ class ValidatedChoice(unittest.TestCase):
                 "indexes": {"by_name": {}, "by_md5": {}},
             }
             db["indexes"]["by_name"]["ROM2.BIN"] = list(db["files"])
-            index = _build_validation_index({
+            index = build_validation_index({
                 "galaksija": {
                     "emulator": "galaksija",
                     "files": [{"name": "ROM2.BIN", "size": 4096, "validation": ["size"]}],
@@ -66,7 +66,7 @@ class ValidatedChoice(unittest.TestCase):
                 {"name": "cpc6128.rom", "path": "ep128emu/roms/cpc6128.rom"},
             ]},
         }
-        index = _build_validation_index(profiles)
+        index = build_validation_index(profiles)
         owners = destination_owners(profiles)
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             rom = Path(tmp) / "cpc6128.rom"
@@ -106,7 +106,7 @@ class ValidatedChoice(unittest.TestCase):
                 for call in ast.walk(node)
             )
         }
-        self.assertLessEqual({"generate_pack", "_manifest_core_entries"}, resolvers)
+        self.assertLessEqual({"generate_pack", "manifest_core_entries"}, resolvers)
         extras = ast.parse((REPO_ROOT / "scripts" / "packs" / "extras.py").read_text(encoding="utf-8"))
         resolve = next(
             node for node in ast.walk(extras)
@@ -166,7 +166,7 @@ class ManifestsServeWhatTheCoreAccepts(unittest.TestCase):
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
         config = load_platform_config("retroarch", str(REPO_ROOT / "platforms"))
         cores = {n: profiles[n] for n in _platform_cores(config, profiles)}
-        index = _build_validation_index(cores)
+        index = build_validation_index(cores)
         owners = destination_owners(cores)
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
         wrong = []
@@ -195,7 +195,7 @@ class EachReaderJudgesWithItsOwnRules(unittest.TestCase):
     def test_rules_of_another_emulator_do_not_judge(self):
         from resolve.validation import check_file_validation
 
-        index = _build_validation_index({
+        index = build_validation_index({
             "azahar": {"files": [{"name": "otp.bin", "path": "sysdata/otp.bin",
                                   "size": 256, "validation": ["size"]}]},
             "cemu": {"files": [{"name": "otp.bin", "path": "Cemu/otp.bin",
@@ -210,7 +210,7 @@ class EachReaderJudgesWithItsOwnRules(unittest.TestCase):
     def test_one_of_an_emulators_entries_is_enough(self):
         from resolve.validation import check_file_validation
 
-        index = _build_validation_index({"raze": {"files": [
+        index = build_validation_index({"raze": {"files": [
             {"name": "SW.GRP", "size": 100, "validation": ["size"]},
             {"name": "SW.GRP", "size": 200, "validation": ["size"]},
         ]}})
@@ -239,7 +239,7 @@ class DolphinForksJudgeTheirOwnDspTable(unittest.TestCase):
         expect = {"dolphin": "v04", "primehack": "v04", "dolphin-mmjr2": "v04",
                   "triforce": "v04", "dolphin-mmjr": "v031", "ishiiruka": "v031"}
         for name, accepted in expect.items():
-            index = _build_validation_index({name: profiles[name]})
+            index = build_validation_index({name: profiles[name]})
             with self.subTest(emulator=name):
                 for label, path in (("v04", self.FREE_V04), ("v031", self.FREE_V031)):
                     verdict = check_file_validation(
@@ -266,7 +266,7 @@ class AWarningRejectsNothing(unittest.TestCase):
             sha1 = hashlib.sha1(f.read_bytes()).hexdigest()
             db["files"][sha1] = {"path": str(f), "name": "OS12.rom", "size": f.stat().st_size}
             db["indexes"]["by_name"]["OS12.rom"].append(sha1)
-        index = _build_validation_index({"beebem": {"files": [
+        index = build_validation_index({"beebem": {"files": [
             {"name": "OS12.rom", "size": 16384, "validation": ["size"], "on_mismatch": "warn"},
         ]}})
         return short, good, db, index
@@ -345,7 +345,7 @@ class AVersionTakenWithoutACheck(unittest.TestCase):
     def test_the_unchecked_version_accepts_the_copy(self):
         from resolve.validation import check_file_validation
 
-        index = _build_validation_index({"raze": self.RAZE})
+        index = build_validation_index({"raze": self.RAZE})
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             self.assertIsNone(check_file_validation(
                 self._file(tmp), "BLOOD.RFF", index, emulators={"raze"}
@@ -364,7 +364,7 @@ class AVersionTakenWithoutACheck(unittest.TestCase):
         from resolve.validation import check_file_validation
 
         checked = {"files": self.RAZE["files"][:2]}
-        index = _build_validation_index({"raze": checked})
+        index = build_validation_index({"raze": checked})
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             reason, emulators = check_file_validation(
                 self._file(tmp), "BLOOD.RFF", index, emulators={"raze"}

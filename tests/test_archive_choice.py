@@ -470,11 +470,11 @@ class ALooseEntryNamingItsArchive(unittest.TestCase):
 
         import yaml
 
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
         from packs.emulatorpack import generate_emulator_pack
         from packs.emulatorcheck import verify_emulator
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         (REPO_ROOT / "tmp").mkdir(exist_ok=True)
         root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         self.addCleanup(shutil.rmtree, root, True)

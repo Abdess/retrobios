@@ -8,11 +8,11 @@ import urllib.parse
 from model.systemnames import system_name
 from resolve.cores import resolve_platform_cores
 from sitegen import markup
-from sitegen.config import _date_line
+from sitegen.config import date_line
 from sitegen.emulatorsindex import CLS_LABEL_ONE
-from sitegen.parts import _parent_front_matter
-from sitegen.platformpage import OWN_LIST_ONLY, _own_list_only
-from sitegen.render import _count, _escape_tags
+from sitegen.parts import parent_front_matter
+from sitegen.platformpage import OWN_LIST_ONLY, own_list_only
+from sitegen.render import count_text, escape_tags
 
 
 def _core_scope_note(config: dict, profiles: dict) -> str:
@@ -30,10 +30,10 @@ def _core_scope_note(config: dict, profiles: dict) -> str:
     others = len(resolved - every_libretro)
     if not others:
         return " (all libretro)"
-    return f" (all libretro, plus {_count(others, 'other core')})"
+    return f" (all libretro, plus {count_text(others, 'other core')})"
 
 
-def _gap_sources(data: dict) -> dict[str, int]:
+def gap_sources(data: dict) -> dict[str, int]:
     """Where each undeclared file of one emulator comes from.
 
     A file the emulator's own package installs is not one to find. The
@@ -106,7 +106,7 @@ def _upstream_label(key: str) -> str:
 def _breakable(label: str) -> str:
     """A project address that may wrap after each slash: unbroken, the
     longest pushed three of five columns off a 1,440 px screen."""
-    return "/<wbr>".join(_escape_tags(part) for part in label.split("/"))
+    return "/<wbr>".join(escape_tags(part) for part in label.split("/"))
 
 
 def _xref_platform_rows(config: dict, unique: dict) -> tuple[int, list[str]]:
@@ -120,7 +120,7 @@ def _xref_platform_rows(config: dict, unique: dict) -> tuple[int, list[str]]:
         p = unique[emu_name]
         cls_raw = p.get("core_classification", "-")
         systems = p.get("systems", []) or []
-        sys_str = ", ".join(_escape_tags(system_name(s)) for s in systems[:3])
+        sys_str = ", ".join(escape_tags(system_name(s)) for s in systems[:3])
         if len(systems) > 3:
             sys_str += f" +{len(systems) - 3}"
         files = p.get("files", []) or []
@@ -134,9 +134,9 @@ def _xref_platform_rows(config: dict, unique: dict) -> tuple[int, list[str]]:
         upstream = _xref_upstream(p)
         key, _rest = upstream_project(upstream)
         upstream_display = (f"[{_breakable(_upstream_label(key))}]({upstream.split()[0]})"
-                            if upstream.startswith("http") else (_escape_tags(upstream) or "-"))
+                            if upstream.startswith("http") else (escape_tags(upstream) or "-"))
         rows.append(
-            f"| [{_escape_tags(p.get('emulator', emu_name))}](emulators/{emu_name}.md) "
+            f"| [{escape_tags(p.get('emulator', emu_name))}](emulators/{emu_name}.md) "
             f"| {CLS_LABEL_ONE.get(cls_raw, cls_raw)} | {sys_str or '-'} | {file_str} "
             f"| {upstream_display} |"
         )
@@ -163,23 +163,23 @@ def _render_xref_by_platform(
         config = cov["config"]
         count, rows = _xref_platform_rows(config, unique)
         stem = f"cross-reference-{pname}"
-        if _own_list_only(config):
+        if own_list_only(config):
             # cores: [] (MiSTer, BizHawk): no profile describes what they
             # read, and a page of cores would be an empty table.
-            lines.append(f"| [{_escape_tags(display)}](platforms/{pname}.md) | 0 "
+            lines.append(f"| [{escape_tags(display)}](platforms/{pname}.md) | 0 "
                          f"| {OWN_LIST_ONLY} |")
             continue
         lines.append(
-            f"| [{_escape_tags(display)}](platforms/{pname}.md) | {count}"
-            f"{_core_scope_note(config, unique)} | [Cores on {_escape_tags(display)}]({stem}.md) |"
+            f"| [{escape_tags(display)}](platforms/{pname}.md) | {count}"
+            f"{_core_scope_note(config, unique)} | [Cores on {escape_tags(display)}]({stem}.md) |"
         )
         if moved is not None:
             moved[stem] = "\n".join([
                 "---", "level: reference",
-                *_parent_front_matter(("Cores by platform", "/cross-reference/")), "---", "",
+                *parent_front_matter(("Cores by platform", "/cross-reference/")), "---", "",
                 f"# Cores on {display}",
                 "",
-                f"{_count(count, 'core')}{_core_scope_note(config, unique)} that "
+                f"{count_text(count, 'core')}{_core_scope_note(config, unique)} that "
                 f"{display} runs, the systems each emulates and the project it comes "
                 f"from. Part of [Cores by platform](cross-reference.md). The files "
                 f"are listed on the [{display} page](platforms/{pname}.md).",
@@ -236,7 +236,7 @@ def _render_xref_by_upstream(
         # The project's own address: the bare one when a core cites it.
         home = next((u for u in urls if not upstream_project(u)[1]), urls[0])
         upstream_cell = (f"[{_breakable(_upstream_label(key))}]({home})" if home.startswith("http")
-                         else _escape_tags(key))
+                         else escape_tags(key))
         lines.append(
             "| " + ", ".join(f"[{c}](emulators/{c}.md)" for c in cores)
             + f" | {upstream_cell} | {', '.join(_breakable(r) for r in revisions) or '-'} "
@@ -294,5 +294,5 @@ def generate_cross_reference(
     lines.extend(_render_xref_by_platform(coverages, unique, moved))
     lines.extend(_render_xref_by_upstream(coverages, unique))
 
-    lines.extend(["", _date_line()])
+    lines.extend(["", date_line()])
     return "\n".join(lines) + "\n"

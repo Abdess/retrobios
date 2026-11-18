@@ -10,7 +10,7 @@ from pathlib import PurePosixPath
 from core.paths import REPO_ROOT
 from packs.archive import PackRecord
 from packs.emulatorpack import generate_emulator_pack
-from packs.manifestentry import _manifest_entry
+from packs.manifestentry import manifest_entry
 
 
 def _placed_copies(copies: list[dict], dests: list[str]) -> list[dict]:
@@ -176,7 +176,7 @@ def _profile_copies(
     return copies
 
 
-def _standalone_copies(
+def standalone_copies(
     declared: list[dict], profiles: dict[str, dict], manifest_files: list[dict],
 ) -> list[dict]:
     """A manifest's standalone copies: the registry's, placed where this
@@ -193,7 +193,7 @@ def _standalone_copies(
 STANDALONE_DIR = "standalone"
 
 
-def _standalone_layouts(
+def standalone_layouts(
     profiles: dict[str, dict],
     emulators_dir: str,
     db: dict,
@@ -232,7 +232,7 @@ def _standalone_layouts(
             )
         items: list = []
         for member in record.files:
-            entry, _size = _manifest_entry(
+            entry, _size = manifest_entry(
                 record.sources.get(member), member, [name], db, repo_root, {}
             )
             if entry is None:

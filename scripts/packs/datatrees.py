@@ -13,11 +13,11 @@ from core.hashing import compute_hashes
 from core.options import reject_unknown
 from model.declarations import declared_root
 from model.profiles import entry_system_ids, installed_data_refs
-from model.systems import _norm_system_id
-from packs.archive import PackRecord, _add_pack_member
+from model.systems import norm_system_id
+from packs.archive import PackRecord, add_pack_member
 from packs.datadirs import cache_lock
 from packs.extras import prefixed_destination
-from packs.paths import MEDIA_MARKER, _has_path_conflict, _register_path, lands_on_android
+from packs.paths import MEDIA_MARKER, has_path_conflict, register_path, lands_on_android
 from resolve.cores import resolve_platform_cores as _platform_cores
 from resolve.layout import core_system_dirs
 from resolve.standalone import platform_layouts, standalone_set
@@ -113,7 +113,7 @@ def core_data_trees(
     return trees
 
 
-def _in_data_cache(path: str, data_registry: dict | None) -> bool:
+def in_data_cache(path: str, data_registry: dict | None) -> bool:
     """Whether a resolved file lies in one of the data directory caches."""
     real = os.path.realpath(path)
     return any(
@@ -136,7 +136,7 @@ def _tree_references(
 
 
 class _TreeWalkOptions(TypedDict, total=False):
-    """The keyword options of _data_directory_members."""
+    """The keyword options of data_directory_members."""
 
     refs_out: dict | None
     required_only: bool
@@ -160,7 +160,7 @@ def _carried_tree(dd: dict, data_registry: dict | None, platform_name: str) -> s
         print(
             f"  WARNING: data directory '{ref_key}' not cached at {local_path} (run refresh_data_dirs.py)"
         )
-        _MISSING_DATA_DIRS.add(ref_key)
+        MISSING_DATA_DIRS.add(ref_key)
         return None
     return local_path
 
@@ -174,7 +174,7 @@ def _tree_files(local_path: str, dd_prefix: str) -> Iterator[tuple[str, str]]:
             yield src, f"{dd_prefix}/{rel}" if dd_prefix else rel
 
 
-def _data_directory_members(
+def data_directory_members(
     pack_systems: dict,
     data_registry: dict | None,
     platform_name: str,
@@ -205,7 +205,7 @@ def _data_directory_members(
     ``required_only`` leaves out a tree declared ``required: false``, one the
     core runs without, as it leaves out such a file.
     """
-    reject_unknown("_data_directory_members", options, _TreeWalkOptions.__optional_keys__)
+    reject_unknown("data_directory_members", options, _TreeWalkOptions.__optional_keys__)
     refs_out = options.get("refs_out")
     reclaim = options.get("reclaim")
     required_only = options.get("required_only", False)
@@ -231,11 +231,11 @@ def _data_directory_members(
                     del reclaim[full]
                 elif full in seen_destinations or (
                     full.lower() in seen_lower and case_insensitive
-                ) or _has_path_conflict(full, seen_destinations, seen_parents):
+                ) or has_path_conflict(full, seen_destinations, seen_parents):
                     continue
                 else:
                     seen_destinations.add(full)
-                    _register_path(full, seen_destinations, seen_parents)
+                    register_path(full, seen_destinations, seen_parents)
                     if case_insensitive:
                         seen_lower.add(full.lower())
                 if refs_out is not None:
@@ -243,7 +243,7 @@ def _data_directory_members(
                 yield src, full
 
 
-def _pack_data_tree(
+def pack_data_tree(
     zf: zipfile.ZipFile | PackRecord,
     local_cache: str,
     dd_dest: str,
@@ -266,14 +266,14 @@ def _pack_data_tree(
                 src = os.path.join(root, fname)
                 rel = os.path.relpath(src, local_cache)
                 full = f"{dd_dest}/{rel}" if dd_dest else rel
-                if full.lower() in seen_lower or _has_path_conflict(
+                if full.lower() in seen_lower or has_path_conflict(
                     full, seen_destinations, seen_parents
                 ):
                     continue
                 seen_destinations.add(full)
-                _register_path(full, seen_destinations, seen_parents)
+                register_path(full, seen_destinations, seen_parents)
                 seen_lower.add(full.lower())
-                _add_pack_member(zf, src, full)
+                add_pack_member(zf, src, full)
                 if packed_at is not None:
                     packed_at[full.lower()] = src
                 added += 1
@@ -283,7 +283,7 @@ def _pack_data_tree(
 # Data directories a pack needed and the cache did not hold. The pack is
 # written without them, so the run cannot exit as if it were complete: a
 # refresh refused by a quota left the PPSSPP pack with 2 files, exit 0.
-_MISSING_DATA_DIRS: set[str] = set()
+MISSING_DATA_DIRS: set[str] = set()
 
 
 def tree_readers(pack_systems: dict, core_trees: Iterable[dict]) -> dict[str, list[str]]:
@@ -341,7 +341,7 @@ def _tree_group(
     return group
 
 
-def _manifest_data_directories(
+def manifest_data_directories(
     members: list[tuple[str, str]],
     refs: dict[str, tuple[str, tuple[str, ...], str, bool]],
     registry: dict,
@@ -373,11 +373,11 @@ def _manifest_data_directories(
     versions: dict[str, dict[str, dict]] = {}
     by_norm: dict[str, list[str]] = {}
     for sys_id in sorted(platform_systems or ()):
-        by_norm.setdefault(_norm_system_id(sys_id), []).append(sys_id)
+        by_norm.setdefault(norm_system_id(sys_id), []).append(sys_id)
     for src, full in members:
         ref, systems, prefix, needed = refs[full]
         if platform_systems is not None:
-            systems = tuple(own for sid in systems for own in by_norm.get(_norm_system_id(sid), ()))
+            systems = tuple(own for sid in systems for own in by_norm.get(norm_system_id(sid), ()))
         key = (ref, prefix)
         group = grouped.get(key)
         if group is None:

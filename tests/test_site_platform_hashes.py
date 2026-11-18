@@ -14,7 +14,7 @@ import unittest
 from unittest import mock
 
 from model import systemnames
-from sitegen.platformfiles import _render_platform_systems
+from sitegen.platformfiles import render_platform_systems
 
 A, B, C = "a" * 32, "b" * 32, "c" * 32
 
@@ -37,7 +37,7 @@ class EachRowItsDeclaration(unittest.TestCase):
         }
         names = {"psx": "Sony PlayStation", "saturn": "Sega Saturn"}
         with mock.patch.dict(systemnames.SYSTEM_NAMES, names):
-            text = "\n".join(_render_platform_systems(by_system, config_files, {}))
+            text = "\n".join(render_platform_systems(by_system, config_files, {}))
         psx, saturn = text.split("saturn", 1)[0], text.split("saturn", 1)[1]
         self.assertIn(A, psx)
         self.assertNotIn(B, psx)

@@ -40,7 +40,7 @@ class SiteCoreCounts(unittest.TestCase):
         }
         for name, cov in coverages.items():
             with self.subTest(page=name):
-                if platformpage._own_list_only(cov["config"]):
+                if platformpage.own_list_only(cov["config"]):
                     # cores: [] (MiSTer, BizHawk): no core table, the overview
                     # row points at the platform's own list instead.
                     self.assertNotIn(f"cross-reference-{name}", moved)

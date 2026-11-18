@@ -10,12 +10,13 @@ import re
 import urllib.parse
 from dataclasses import dataclass
 
-from model.collection import SECTION_LABELS, _slug
+from model.collection import SECTION_LABELS, manufacturer_slug
 from model.composition import GAME_DATA_TOPS
 from packs.crossref import FileConsumers
 from sitegen import markup
-from sitegen.cards import _icon_symbol
-from sitegen.config import _REPO_ROOT, _date_line
+from sitegen.cards import icon_symbol
+from sitegen.config import date_line
+from core.paths import REPO_ROOT
 from sitegen.consolecards import (
     CARD_HTML_RATIO,
     CONSOLE_PAGES,
@@ -23,26 +24,26 @@ from sitegen.consolecards import (
     INSTALL_HTML_RATIO,
     SYSTEM_PAGE_BUDGET,
     SYSTEM_SUMMARY_HTML,
-    _console_cards,
-    _install_box_weight,
+    console_cards,
+    install_box_weight,
 )
 from sitegen.decorate import DEMOTED_WEIGHT, SEARCH_WEIGHT
 from sitegen.fields import search_excluded
-from sitegen.home import _next_block
-from sitegen.install import _console_install_block, _platform_display
-from sitegen.parts import _parent_front_matter
-from sitegen.render import _count, _slugify_anchor, console_href, record_console_pages
+from sitegen.home import next_block
+from sitegen.install import console_install_block, platform_display
+from sitegen.parts import parent_front_matter
+from sitegen.render import count_text, slugify_anchor, console_href, record_console_pages
 from sitegen.startwith import (
     OTHER_ARCADE,
-    _cards_markdown,
-    _console_heading,
-    _parts,
-    _romset_note,
-    _section_label,
-    _start_order,
-    _start_with,
+    cards_markdown,
+    console_heading,
+    card_runs,
+    romset_note,
+    section_label,
+    start_order,
+    start_with,
 )
-from sitegen.systemsindex import _folder_emulator
+from sitegen.systemsindex import folder_emulator
 
 
 _NEXT_FROM_SYSTEMS = [
@@ -227,7 +228,7 @@ def _system_front_matter(
     """The front matter of a system page: the page it belongs to, the
     parts before and after it (label, site path), its search weight and
     the consoles it holds, which the search reads as a field."""
-    lines = _parent_front_matter(parent)
+    lines = parent_front_matter(parent)
     for key, link in (("prev", prev), ("next", following)):
         if link:
             lines += [f"{key}:", f"  label: {json.dumps(link[0])}", f"  link: {json.dumps(link[1])}"]
@@ -247,7 +248,7 @@ def _part_weight() -> float:
 def _manifest_systems(platform: str) -> frozenset[str]:
     """The system ids a platform's install manifest records: --system
     refuses any other."""
-    manifest = _REPO_ROOT / "install" / f"{platform}.json"
+    manifest = REPO_ROOT / "install" / f"{platform}.json"
     if not manifest.is_file():
         return frozenset()
     document = json.loads(manifest.read_text(encoding="utf-8"))
@@ -274,7 +275,7 @@ def _install_pairs(
         if recorded:
             pairs.append((platform, recorded[0]))
             have.add(platform)
-    return sorted(pairs, key=lambda pair: (_platform_display(pair[0]).casefold(), pair[1]))
+    return sorted(pairs, key=lambda pair: (platform_display(pair[0]).casefold(), pair[1]))
 
 
 @dataclass(frozen=True)
@@ -313,7 +314,7 @@ class _MakerPages:
 
     def __post_init__(self) -> None:
         manufacturer, consoles = self.manufacturer, self.consoles
-        self.slug = _slug(manufacturer)
+        self.slug = manufacturer_slug(manufacturer)
         self.boards = {console: _BOARD_CONSOLES[console] for console in consoles
                        if manufacturer == "Arcade" and console in _BOARD_CONSOLES}
         self.json_next = (f"[Every hash of these files, as JSON](../api/v1/systems/"
@@ -324,7 +325,7 @@ class _MakerPages:
         boards = self.boards
         self.ordered = sorted(consoles, key=lambda c: (bool(boards) and c not in boards, c))
         self.starts = {console: [] if boards and console not in boards
-                       else _start_order(consoles[console], self.consumers, (manufacturer, console))
+                       else start_order(consoles[console], self.consumers, (manufacturer, console))
                        for console in consoles}
         # One line, then the legend closed: four paragraphs said the same on
         # every maker's page before its first console.
@@ -350,18 +351,18 @@ class _MakerPages:
     def start_of(self, console: str, first_below: bool = True) -> list[str]:
         if self.boards and console not in self.boards:
             return []
-        return [*_start_with(self.consoles[console], self.consumers, first_below,
+        return [*start_with(self.consoles[console], self.consumers, first_below,
                              (self.manufacturer, console)),
                 *_boards_line(self.manufacturer, console)]
 
     def cards_of(self, console: str, anchors: set[str], by_name: bool = False) -> list[Card]:
-        return _console_cards(self.manufacturer, self.consoles[console], self.consumers, anchors,
+        return console_cards(self.manufacturer, self.consoles[console], self.consumers, anchors,
                               by_name, self.starts[console])
 
     def install_block(self, console: str) -> list[str]:
         lead = self.starts[console][0] if self.starts[console] else None
-        return _console_install_block(
-            _section_label(self.manufacturer, console),
+        return console_install_block(
+            section_label(self.manufacturer, console),
             _install_pairs(self.installs.get(console, []), lead, self.consumers))
 
     def all_sections(self) -> dict[str, list[Card]]:
@@ -370,28 +371,28 @@ class _MakerPages:
 
     def consoles_front(self, kept: set[str] | None = None) -> list[str]:
         return _system_front_matter(consoles=[
-            _section_label(self.manufacturer, c) for c in self.machines
+            section_label(self.manufacturer, c) for c in self.machines
             if kept is None or c in kept])
 
     def head(self, front: list[str]) -> list[str]:
         """A maker's page down to its first console."""
         return [
             *front, f"# {self.manufacturer}", "", self.intro, "", *self.legend,
-            *_romset_note(self.consoles), *_icon_symbol(),
+            *romset_note(self.consoles), *icon_symbol(),
         ]
 
     def whole_page(self, sections: dict[str, list[Card]]) -> str:
         lines = self.head(self.front)
         for console, cards in sections.items():
-            lines.append(_console_heading(self.manufacturer, console,
-                                          _section_label(self.manufacturer, console)))
+            lines.append(console_heading(self.manufacturer, console,
+                                          section_label(self.manufacturer, console)))
             lines.append("")
             lines.extend(self.start_of(console))
             lines.extend(self.install_block(console))
-            lines.extend(_cards_markdown(cards))
+            lines.extend(cards_markdown(cards))
             lines.append("")
-        lines.extend(_next_block([*_NEXT_FROM_SYSTEMS, self.json_next]))
-        lines.extend(["", _date_line()])
+        lines.extend(next_block([*_NEXT_FROM_SYSTEMS, self.json_next]))
+        lines.extend(["", date_line()])
         return "\n".join(lines) + "\n"
 
     def cut(self, console: str, by_name: bool) -> list[list[Card]]:
@@ -402,16 +403,16 @@ class _MakerPages:
         with markup.using("mkdocs"):
             sizes = [_card_weight(card) for _variant, card, _sha1 in self.cards_of(
                 console, set(), by_name)]
-        parts = _parts(cards, self.budget, sizes)
+        parts = card_runs(cards, self.budget, sizes)
         if len(parts) < 2:
             return parts
         # Even parts: cut at budget, the PlayStation 2 was 137 cards
         # and 4. The same number of parts, each near the mean.
         share = -(-sum(sizes) // len(parts))
-        even = _parts(cards, share, sizes)
+        even = card_runs(cards, share, sizes)
         while len(even) > len(parts):
             share += max(1, share // 50)
-            even = _parts(cards, share, sizes)
+            even = card_runs(cards, share, sizes)
         return even
 
     def moved(self, weights: dict[str, int], rendered: dict[str, float]) -> set[str]:
@@ -445,7 +446,7 @@ class _MakerPages:
                 weight=_part_weight() if len(stems) > 1 else None,
                 consoles=[label] if index == 0 and console in self.machines else None),
             # The crumbs end on the maker's page: no line says it again.
-            f"# {plan.titles[index]}", "", *_icon_symbol(),
+            f"# {plan.titles[index]}", "", *icon_symbol(),
         ]
         if len(stems) > 1:
             others = ", ".join(
@@ -458,14 +459,14 @@ class _MakerPages:
         if index == 0:
             lines.extend(self.start_of(console, len(stems) == 1))
         lines.extend(self.legend)
-        lines.extend(_romset_note({console: self.consoles[console]}))
+        lines.extend(romset_note({console: self.consoles[console]}))
         lines.extend(self.install_block(console))
         lines.extend(["## Files", ""])
-        lines.extend(_cards_markdown(part))
+        lines.extend(cards_markdown(part))
         lines.append("")
-        lines.extend(_next_block([f"[{self.manufacturer}]({self.slug}.md), every section"]
+        lines.extend(next_block([f"[{self.manufacturer}]({self.slug}.md), every section"]
                                  + _NEXT_FROM_SYSTEMS + [self.json_next]))
-        lines.extend(["", _date_line()])
+        lines.extend(["", date_line()])
         return "\n".join(lines) + "\n"
 
     def moved_section(self, console: str, pages: dict[str, tuple[str, dict[str, list]]]) -> list[str]:
@@ -474,7 +475,7 @@ class _MakerPages:
         from sitegen.render import board_slug
 
         manufacturer = self.manufacturer
-        label = _section_label(manufacturer, console)
+        label = section_label(manufacturer, console)
         # One page keeps the required files first. Parts are named by their
         # first and last file, so a console cut in parts goes by name, the
         # files the start line names first.
@@ -483,7 +484,7 @@ class _MakerPages:
             parts = self.cut(console, True)
         board = self.boards.get(console)
         base = (f"arcade-{board_slug(board)}" if board
-                else f"{self.slug}-{_slugify_anchor(console) or 'files'}")
+                else f"{self.slug}-{slugify_anchor(console) or 'files'}")
         stems = [base if index == 0 else f"{base}-{index + 1}" for index in range(len(parts))]
         clash = set(stems) & set(pages)
         if clash:
@@ -495,12 +496,12 @@ class _MakerPages:
         # A part by the files it holds: "Arcade: Arcade, part 3 of 5" said
         # nothing a search result could use. A folder under Other goes by
         # its emulator's name: "mame files" named the folder.
-        named = _folder_emulator(console)[0] if manufacturer == "Other" else None
+        named = folder_emulator(console)[0] if manufacturer == "Other" else None
         titles = ([f"{manufacturer}: {named or label}"] if len(stems) == 1 else [
             "{} files {} to {}".format(named or _part_name(manufacturer, console),
                                        *_part_ends(part, lead))
             for part in parts])
-        count = _count(len(self.consoles[console]), "file")
+        count = count_text(len(self.consoles[console]), "file")
         summary = list(self.start_of(console, False))
         if len(stems) == 1:
             own = "its" if len(self.consoles[console]) == 1 else "their"
@@ -555,7 +556,7 @@ def system_pages(
     # page, which the card weights never counted. A page is also cut when
     # its estimate as it renders passes the summary's.
     with markup.using("mkdocs"):
-        boxes = {console: _install_box_weight(maker.install_block(console)) for console in consoles}
+        boxes = {console: install_box_weight(maker.install_block(console)) for console in consoles}
     rendered = {console: CARD_HTML_RATIO * weights[console] + INSTALL_HTML_RATIO * boxes[console]
                 for console in weights}
     if (not maker.boards and manufacturer not in CONSOLE_PAGES and len(measured_text) <= budget
@@ -568,18 +569,18 @@ def system_pages(
     summary = maker.head(maker.consoles_front(set(consoles) - moved))
     summary_anchors: set[str] = set()
     for console in maker.ordered:
-        label = _section_label(manufacturer, console)
-        summary.append(_console_heading(manufacturer, console, label))
+        label = section_label(manufacturer, console)
+        summary.append(console_heading(manufacturer, console, label))
         summary.append("")
         if console not in moved:
             summary.extend(maker.start_of(console))
             summary.extend(maker.install_block(console))
-            summary.extend(_cards_markdown(maker.cards_of(console, summary_anchors)))
+            summary.extend(cards_markdown(maker.cards_of(console, summary_anchors)))
             summary.append("")
             continue
         summary.extend(maker.moved_section(console, pages))
-    summary.extend(_next_block([*_NEXT_FROM_SYSTEMS, maker.json_next]))
-    summary.extend(["", _date_line()])
+    summary.extend(next_block([*_NEXT_FROM_SYSTEMS, maker.json_next]))
+    summary.extend(["", date_line()])
     kept = {console: files for console, files in consoles.items() if console not in moved}
     return {slug: ("\n".join(summary) + "\n", kept), **pages}
 
@@ -604,7 +605,7 @@ def _part_range(part: list[Card], lead: set[str] | frozenset[str] = frozenset())
     first, last = _part_ends(part, lead)
     if len(part) == 1:
         return f"`{first}`"
-    return f"{_count(len(part), 'file')}, `{first}` to `{last}`"
+    return f"{count_text(len(part), 'file')}, `{first}` to `{last}`"
 
 
 def generate_system_page(
@@ -619,4 +620,4 @@ def generate_system_page(
     install command the section offers. A page over the budget is the
     summary system_pages writes, its consoles on pages of their own.
     """
-    return system_pages(manufacturer, consoles, consumers, installs)[_slug(manufacturer)][0]
+    return system_pages(manufacturer, consoles, consumers, installs)[manufacturer_slug(manufacturer)][0]

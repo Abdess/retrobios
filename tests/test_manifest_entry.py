@@ -66,7 +66,7 @@ class AnEntryWithoutSourceIsAnOmission(unittest.TestCase):
             omitted[full_dest] = reason
 
         with mock.patch.object(manifestentry, "compute_hashes", return_value=hashes):
-            manifestcores._manifest_core_entries(
+            manifestcores.manifest_core_entries(
                 [extra], {}, self.db, str(REPO_ROOT / "bios"), "", str(REPO_ROOT),
                 {}, True,
                 region_drops=set(), case_insensitive=False, seen_destinations=set(),

@@ -49,6 +49,6 @@ NODEDUP_DIRS = {
 }
 
 
-def _in_nodedup_dir(path: str) -> bool:
+def in_nodedup_dir(path: str) -> bool:
     parts = Path(path).parts
     return any(nodedup in parts for nodedup in NODEDUP_DIRS)

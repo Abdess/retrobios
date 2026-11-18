@@ -31,15 +31,15 @@ FRONT = (
 
 class Undecorate(unittest.TestCase):
     def test_it_removes_front_matter_and_structured_data(self):
-        self.assertEqual(sitewrite._undecorated(FRONT + BODY), BODY)
+        self.assertEqual(sitewrite.undecorated(FRONT + BODY), BODY)
 
     def test_a_plain_body_is_returned_unchanged(self):
-        self.assertEqual(sitewrite._undecorated(BODY), BODY)
+        self.assertEqual(sitewrite.undecorated(BODY), BODY)
 
     def test_front_matter_this_build_did_not_write_is_left_alone(self):
         """A hand-maintained page with its own front matter is not ours."""
         foreign = '---\ntitle: "Hand written"\n---\n\nBody.\n'
-        self.assertEqual(sitewrite._undecorated(foreign), foreign)
+        self.assertEqual(sitewrite.undecorated(foreign), foreign)
 
 
 class TwoPassWriting(unittest.TestCase):
@@ -105,12 +105,12 @@ class Sweep(unittest.TestCase):
 
     def _produce(self, *relatives: str) -> None:
         for relative in relatives:
-            sitewrite._record(self.docs / relative)
+            sitewrite.record_written(self.docs / relative)
 
     def test_it_removes_only_what_nothing_produced(self):
         self._produce("emulators/kept.md", "emulators/nested/deep.md",
                       "platforms/kept.md")
-        removed = sitewrite._sweep_generated(self.docs, ["emulators", "platforms"])
+        removed = sitewrite.sweep_generated(self.docs, ["emulators", "platforms"])
         self.assertEqual(removed, 1)
         self.assertFalse((self.docs / "emulators/stale.md").exists())
         self.assertTrue((self.docs / "emulators/kept.md").exists())
@@ -123,10 +123,10 @@ class Sweep(unittest.TestCase):
         (self.docs / "platforms/kept.mdx").write_text("x")
         (self.docs / "platforms/gone.mdx").write_text("x")
         self._produce("platforms/kept.md")
-        sitewrite._sweep_generated(self.docs, ["platforms"])
+        sitewrite.sweep_generated(self.docs, ["platforms"])
         (self.docs / "top.mdx").write_text("x")
-        sitewrite._record(self.docs / "top.md")
-        self.assertEqual(sitewrite._sweep_top_pages(self.docs), 0)
+        sitewrite.record_written(self.docs / "top.md")
+        self.assertEqual(sitewrite.sweep_top_pages(self.docs), 0)
         self.assertTrue((self.docs / "platforms/kept.mdx").exists())
         self.assertTrue((self.docs / "top.mdx").exists())
         self.assertFalse((self.docs / "platforms/gone.mdx").exists())
@@ -134,22 +134,22 @@ class Sweep(unittest.TestCase):
     def test_a_directory_outside_the_list_is_never_touched(self):
         self._produce("emulators/kept.md", "emulators/nested/deep.md",
                       "emulators/stale.md")
-        sitewrite._sweep_generated(self.docs, ["emulators"])
+        sitewrite.sweep_generated(self.docs, ["emulators"])
         self.assertTrue((self.docs / "untouched/manual.md").exists())
         self.assertTrue((self.docs / "platforms/kept.md").exists())
 
     def test_an_emptied_directory_is_pruned(self):
         self._produce("emulators/kept.md", "emulators/stale.md")
-        sitewrite._sweep_generated(self.docs, ["emulators"])
+        sitewrite.sweep_generated(self.docs, ["emulators"])
         self.assertFalse((self.docs / "emulators/nested").exists())
         self.assertTrue((self.docs / "emulators").is_dir())
 
     def test_a_missing_directory_is_not_an_error(self):
-        self.assertEqual(sitewrite._sweep_generated(self.docs, ["absent"]), 0)
+        self.assertEqual(sitewrite.sweep_generated(self.docs, ["absent"]), 0)
 
     def test_producing_nothing_empties_the_generated_tree(self):
         """The wipe this replaced, reached only when the build produced nothing."""
-        removed = sitewrite._sweep_generated(self.docs, ["emulators"])
+        removed = sitewrite.sweep_generated(self.docs, ["emulators"])
         self.assertEqual(removed, 3)
         self.assertTrue((self.docs / "untouched/manual.md").exists())
 
@@ -161,12 +161,12 @@ class Sweep(unittest.TestCase):
         removes it.
         """
         self._produce("emulators/kept.md")
-        sitewrite._sweep_generated(self.docs, ["emulators"])
+        sitewrite.sweep_generated(self.docs, ["emulators"])
         survivors = {p.name for p in (self.docs / "emulators").rglob("*")
                      if p.is_file()}
         self.assertEqual(survivors, {"kept.md"})
         (self.docs / "emulators" / "kept.md").write_text("y")
-        self.assertEqual(sitewrite._sweep_generated(self.docs, ["emulators"]), 0)
+        self.assertEqual(sitewrite.sweep_generated(self.docs, ["emulators"]), 0)
 
     def test_a_root_page_nothing_produced_is_removed(self):
         """cross-reference-misterfpga.md outlived the table it held and kept
@@ -174,7 +174,7 @@ class Sweep(unittest.TestCase):
         for name in ("cross-reference.md", "cross-reference-misterfpga.md", "which-pack.mdx"):
             (self.docs / name).write_text("x")
         self._produce("cross-reference.md", "which-pack.mdx")
-        self.assertEqual(sitewrite._sweep_top_pages(self.docs), 1)
+        self.assertEqual(sitewrite.sweep_top_pages(self.docs), 1)
         self.assertFalse((self.docs / "cross-reference-misterfpga.md").exists())
         self.assertTrue((self.docs / "cross-reference.md").exists())
         self.assertTrue((self.docs / "which-pack.mdx").exists())

@@ -10,7 +10,7 @@ from core.cli import suggest_names
 from core.paths import sanitize_pack_path
 from model.platforms import load_platform_config
 from model.profiles import preferred_profile, upstream_profile_index
-from model.systems import _norm_system_id, select_systems
+from model.systems import norm_system_id, select_systems
 from model.targets import list_available_targets, load_target_config
 from core.paths import REPO_ROOT
 
@@ -212,11 +212,11 @@ def _platform_profiles(
             result |= every_libretro()
     else:
         # Fallback: system ID intersection with normalization
-        norm_plat_systems = {_norm_system_id(s) for s in config.get("systems", {})}
+        norm_plat_systems = {norm_system_id(s) for s in config.get("systems", {})}
         result = {
             name
             for name, p in profiles.items()
-            if {_norm_system_id(s) for s in p.get("systems", [])} & norm_plat_systems
+            if {norm_system_id(s) for s in p.get("systems", [])} & norm_plat_systems
             and p.get("type") != "alias"
             and not p.get("built_by")
         }
@@ -311,7 +311,7 @@ def system_core_reach(
     None, kept whatever is available, there being no information to exclude
     it.
     """
-    _norm_sid = _norm_system_id
+    _norm_sid = norm_system_id
 
     # Normalized system -> cores, from ALL profiles
     norm_system_cores: dict[str, set[str]] = {}

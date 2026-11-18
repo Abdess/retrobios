@@ -14,15 +14,15 @@ from pathlib import Path
 from core import upstream
 from core.paths import REPO_ROOT
 from model.sourceref import (
-    _HEX_ADDRESS_RE,
-    _prose_runs,
+    HEX_ADDRESS_RE,
+    prose_runs,
     is_binary_citation,
     ref_annotation,
     ref_role,
     source_ref_values,
     split_source_ref,
 )
-from sitegen.render import _by_mode, _escape_tags
+from sitegen.render import by_mode, escape_tags
 
 
 def _repo_pins(profile: dict, field: str, label: str) -> list[tuple[str, str, str]]:
@@ -44,8 +44,8 @@ def _repo_pins(profile: dict, field: str, label: str) -> list[tuple[str, str, st
         return [
             (
                 str(raw),
-                _by_mode(pin_field, label),
-                _by_mode(source_field, label),
+                by_mode(pin_field, label),
+                by_mode(source_field, label),
             )
         ]
 
@@ -55,7 +55,7 @@ def _repo_pins(profile: dict, field: str, label: str) -> list[tuple[str, str, st
         key for key in raw if key != label
     ]
     return [
-        (str(raw[key]), _by_mode(pin_field, key), _by_mode(source_field, key))
+        (str(raw[key]), by_mode(pin_field, key), by_mode(source_field, key))
         for key in ordered
         if raw.get(key)
     ]
@@ -70,7 +70,7 @@ _BROWSE_ONLY = {
 }
 
 
-def _browse_repo(url: str) -> upstream.Repo | None:
+def browse_repo(url: str) -> upstream.Repo | None:
     """The repository a profile URL names, on any forge the pages can link.
 
     Profiles pinned on SourceForge, voidpoint.io, Bitbucket or Software
@@ -109,7 +109,7 @@ def _forge_sources(profile: dict, label: str = "") -> list[tuple[upstream.Repo, 
 
     for field in ("source", "upstream"):
         for value, pin, fallback in _repo_pins(profile, field, label):
-            repo = _browse_repo(value)
+            repo = browse_repo(value)
             if repo is None:
                 continue
             repo_key = (repo.host, repo.slug)
@@ -125,7 +125,7 @@ def _forge_sources(profile: dict, label: str = "") -> list[tuple[upstream.Repo, 
                 source_repos.add(repo_key)
     return candidates
 
-def _source_permalink(repo: upstream.Repo, pin: str, path: str,
+def source_permalink(repo: upstream.Repo, pin: str, path: str,
                       start: int | None, end: int | None) -> str:
     """Forge-specific browser URL for one file at one immutable revision."""
     quoted_path = urllib.parse.quote(path, safe="/@:+-._~")
@@ -256,7 +256,7 @@ def cited_paths(profile: dict) -> set[str]:
             for _label, refs in source_ref_values(value):
                 paths.update(ref_role(part.path)[1] for part in split_source_ref(refs))
         elif isinstance(value, str) and ":" in value:
-            for _n, _span, _spans, parts, _run, _wrapped in _prose_runs(value):
+            for _n, _span, _spans, parts, _run, _wrapped in prose_runs(value):
                 paths.update(part.path for part in parts)
     return {path for path in paths
             if _PATH_RE.fullmatch(path) and not is_binary_citation(path)}
@@ -338,7 +338,7 @@ def build_files(profile: dict) -> list[tuple[upstream.Repo, str, str]]:
     revision, path). A tag can move, so a build read at a tag is not linked."""
     found = []
     for build in profile.get("pin_build") or []:
-        repo = _browse_repo(str(build.get("repo", "")))
+        repo = browse_repo(str(build.get("repo", "")))
         revision = str(build.get("revision", ""))
         if repo is not None and re.fullmatch(r"[0-9a-f]{40}", revision):
             found.append((repo, revision, str(build.get("path", ""))))
@@ -392,14 +392,14 @@ def version_basis_url(profile: dict, basis: dict, mode: str = "") -> str:
     """
     field = "upstream" if basis.get("repo") == "upstream" else "source"
     declared = next(iter(_repo_pins(profile, field, mode)), None)
-    repo = _browse_repo(declared[0]) if declared else None
+    repo = browse_repo(declared[0]) if declared else None
     if repo is None:
         return ""
     kind, path, tag = basis.get("kind"), str(basis.get("path") or ""), str(basis.get("tag") or "")
     if kind == "file" and path:
         pin = next((p for r, p in _forge_sources(profile, mode)
                     if (r.host, r.slug) == (repo.host, repo.slug)), "")
-        return _source_permalink(repo, pin, path, None, None) if pin and tree_holds(
+        return source_permalink(repo, pin, path, None, None) if pin and tree_holds(
             repo, pin, path) else ""
     if kind == "tag" and tag and repo.family in ("github", "gitlab"):
         tree = "/-/tree/" if repo.family == "gitlab" else "/tree/"
@@ -449,7 +449,7 @@ def role_sources(profile: dict, label: str = "") -> dict[str, tuple[upstream.Rep
     found: dict[str, tuple[upstream.Repo, str]] = {}
     for field in ("source", "upstream"):
         for value, pin, _fallback in _repo_pins(profile, field, label):
-            repo = _browse_repo(value)
+            repo = browse_repo(value)
             if repo is not None and pin and field not in found:
                 found[field] = (repo, pin)
     return found
@@ -475,7 +475,7 @@ def _two_repositories(profile: dict) -> bool:
     return bool(source and upstream_url and source != upstream_url)
 
 
-def _source_ref_markdown(profile: dict, value: str | dict | None) -> str:
+def source_ref_markdown(profile: dict, value: str | dict | None) -> str:
     """Render source_ref values as pinned links when their forge is known.
 
     Each part is followed by whose code it cites, in words, when the profile
@@ -551,7 +551,7 @@ def source_ref_items(profile: dict, value: str | dict | None) -> list[tuple[str,
                 rendered.append((f"`{display}`{note}", role))
             else:
                 repo, pin = selected
-                url = _source_permalink(
+                url = source_permalink(
                     repo, pin, real_path, part.start, part.end
                 )
                 rendered.append((f"[`{display}`]({url}){note}", role))
@@ -568,7 +568,7 @@ def _annotation_markdown(text: str) -> str:
     """
     if not text:
         return ""
-    return " " + _escape_tags(re.sub(r"([*|\\])", r"\\\1", text))
+    return " " + escape_tags(re.sub(r"([*|\\])", r"\\\1", text))
 
 
 def _binary_citation(path: str, previous: str) -> tuple[str, str]:
@@ -578,7 +578,7 @@ def _binary_citation(path: str, previous: str) -> tuple[str, str]:
     ranges of one library: the bare address continues the binary before it.
     No revision of a repository holds those bytes, so nothing is linked.
     """
-    found = _HEX_ADDRESS_RE.search(path)
+    found = HEX_ADDRESS_RE.search(path)
     if found is None:
         return f"`{path}`", path
     binary = path[:found.start()].rstrip(" :") or previous
@@ -614,7 +614,7 @@ def link_prose_citations(profile: dict, text: str) -> str:
     for line in text.split("\n"):
         guarded = _guarded_spans(line)
         edits = []
-        for _n, path_span, spans, parts, _run, wrapped in _prose_runs(line):
+        for _n, path_span, spans, parts, _run, wrapped in prose_runs(line):
             path = parts[0].path
             if wrapped or " " in path or not _PATH_RE.fullmatch(path):
                 continue
@@ -631,7 +631,7 @@ def link_prose_citations(profile: dict, text: str) -> str:
             repo, pin = holders[0]
             for index, ((lo, hi), part) in enumerate(zip(spans, parts)):
                 start = path_span[0] if index == 0 else lo
-                url = _source_permalink(repo, pin, part.path, part.start, part.end)
+                url = source_permalink(repo, pin, part.path, part.start, part.end)
                 edits.append((start, hi, f"[`{line[start:hi]}`]({url})"))
         for start, end, link in sorted(edits, reverse=True):
             line = line[:start] + link + line[end:]

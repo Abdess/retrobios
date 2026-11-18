@@ -49,13 +49,13 @@ class ANameClaimsOnlyANarrowingThatHappened(unittest.TestCase):
     on switch'."""
 
     def test_a_platform_without_the_target_is_named_plainly(self):
-        from packs.naming import _narrowings, _platform_target
+        from packs.naming import pack_narrowings, platform_target
 
         platforms = str(REPO_ROOT / "platforms")
-        self.assertIsNone(_platform_target("bizhawk", "switch", platforms))
-        self.assertEqual(_narrowings("full", None, None, False, False), [])
+        self.assertIsNone(platform_target("bizhawk", "switch", platforms))
+        self.assertEqual(pack_narrowings("full", None, None, False, False), [])
         self.assertEqual(
-            _platform_target("retroarch", "nx", platforms), "nintendo-switch"
+            platform_target("retroarch", "nx", platforms), "nintendo-switch"
         )
 
 
@@ -151,8 +151,8 @@ class ASplitBuildsOnlyTheTargetsSystems(unittest.TestCase):
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as out, \
                 mock.patch.object(platformpack, "generate_pack", record), \
-                mock.patch.object(platformpack, "_collect_emulator_extras", return_value=[]), \
-                mock.patch.object(manifest, "_collect_emulator_extras", return_value=[]):
+                mock.patch.object(platformpack, "collect_emulator_extras", return_value=[]), \
+                mock.patch.object(manifest, "collect_emulator_extras", return_value=[]):
             packs_platformpack.generate_split_packs(
                 "retroarch", platforms, {"files": {}}, "bios", out,
                 emu_profiles=profiles,
@@ -215,12 +215,12 @@ class TheSplitDirectoryReadsThePackStem(unittest.TestCase):
                 mock.patch.object(naming, "load_platform_config", return_value=config), \
                 mock.patch.object(manifest, "load_platform_config", return_value=config), \
                 mock.patch.object(md5pack, "load_platform_config", return_value=config), \
-                mock.patch.object(packs_platformpack, "_collect_emulator_extras", return_value=[]), \
-                mock.patch.object(manifest, "_collect_emulator_extras", return_value=[]):
+                mock.patch.object(packs_platformpack, "collect_emulator_extras", return_value=[]), \
+                mock.patch.object(manifest, "collect_emulator_extras", return_value=[]):
             packs_platformpack.generate_split_packs(
                 "foo", "platforms", {"files": {}}, "bios", out, emu_profiles={},
             )
-            stem = naming._platform_pack_stem(["foo"], "foo", "platforms")
+            stem = naming.platform_pack_stem(["foo"], "foo", "platforms")
             self.assertEqual(os.listdir(out), [f"{stem}_Split"])
         self.assertEqual(stem, "Foo-_Bar_release-1.22")
 

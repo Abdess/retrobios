@@ -55,7 +55,7 @@ def _print_ground_truth(gt: list[dict], verbose: bool) -> None:
         print(f"    {_format_ground_truth_aggregate(gt)}")
 
 
-def _discrepancy_keys(details: list[dict]) -> set[str]:
+def discrepancy_keys(details: list[dict]) -> set[str]:
     """The DISCREPANCY lines _print_detail_entries prints for these details.
 
     A file already reported MISSING or UNTESTED on its own ground is not
@@ -76,7 +76,7 @@ def _discrepancy_keys(details: list[dict]) -> set[str]:
 
 
 # A platform entry that is not firmware, as the report names it.
-_NOT_FIRMWARE = {
+NOT_FIRMWARE = {
     "game_data": "game data",
     "unread": "no core the platform runs opens it",
 }
@@ -149,7 +149,7 @@ def _print_missing_details(details: list[dict], seen: set[str], verbose: bool) -
         key = f"{d['system']}/{d['name']}"
         if key in seen:
             continue
-        label = _NOT_FIRMWARE.get(d.get("category", BIOS))
+        label = NOT_FIRMWARE.get(d.get("category", BIOS))
         if label:
             # Counted on their own line, named on request.
             if verbose:
@@ -228,7 +228,7 @@ def _print_undeclared_entry(
             print(f"      validates {'+'.join(checks)}")
 
 
-def _split_undeclared(undeclared: list[dict]) -> tuple[list[dict], list[dict], list[dict]]:
+def split_undeclared(undeclared: list[dict]) -> tuple[list[dict], list[dict], list[dict]]:
     """Game data, firmware the pack places, firmware it holds but cannot place.
 
     Everything that is not game data is firmware the core loads, archives
@@ -242,7 +242,7 @@ def _split_undeclared(undeclared: list[dict]) -> tuple[list[dict], list[dict], l
     return game_data, placed, unplaced
 
 
-def _core_required_missing(bios_files: list[dict]) -> list[dict]:
+def core_required_missing(bios_files: list[dict]) -> list[dict]:
     """Core files a core cannot run without, absent from the collection.
 
     A file bundled with the emulator (DaedalusX64's n64.psh, the shader
@@ -287,7 +287,7 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
     if not undeclared and not (packed and any(packed.values())):
         return
 
-    game_data, bios_files, unplaced = _split_undeclared(undeclared)
+    game_data, bios_files, unplaced = split_undeclared(undeclared)
 
     # A file installed with its emulator is never collected, firmware or
     # game data, required or not: cross_reference counts it apart. The
@@ -296,7 +296,7 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
     bundled = [u for u in undeclared if not u["in_repo"] and u.get("bundled")]
     game_data = [u for u in game_data if u["in_repo"] or not u.get("bundled")]
 
-    req_not_in_repo = _core_required_missing(bios_files)
+    req_not_in_repo = core_required_missing(bios_files)
     req_hle_not_in_repo = [
         u
         for u in bios_files
@@ -460,15 +460,15 @@ def _print_platform_notices(result: dict, verbose: bool) -> None:
         print(f"  {line}")
     fallbacks = result.get("region_fallbacks") or []
     if fallbacks:
-        from packs.readme import _group_label
+        from packs.readme import group_label
 
         print(f"  No BIOS for the requested regions, all kept ({len(fallbacks)}): "
-              + ", ".join(_group_label(g) for g in fallbacks))
+              + ", ".join(group_label(g) for g in fallbacks))
 
     not_firmware = result.get("missing_not_firmware") or {}
     if not_firmware:
         counts = ", ".join(
-            f"{len(dests)} {_NOT_FIRMWARE[category]}"
+            f"{len(dests)} {NOT_FIRMWARE[category]}"
             for category, dests in not_firmware.items()
         )
         listed = "" if verbose else " (--verbose lists them)"

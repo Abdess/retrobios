@@ -20,21 +20,22 @@ from model import retired as model_retired
 from model.dumpcatalog import load_provenance_snapshots
 from packs.crossref import FileConsumers
 from acquire.provenance import build_report
-from sitegen.apiitems import _sha1_by_path, core_index_items, system_index_items
-from sitegen.config import DATA_LICENSE, REPO_URL, _REPO_ROOT, _timestamp
-from sitegen.install import _release_pack_platforms
+from sitegen.apiitems import sha1_index_by_path, core_index_items, system_index_items
+from sitegen.config import DATA_LICENSE, REPO_URL, data_timestamp
+from core.paths import REPO_ROOT
+from sitegen.install import release_pack_platforms
 from sitegen.lookup import (
     HASH_ALGORITHMS,
-    _hash_values,
+    sorted_hash_values,
     data_directory_members,
     file_location_items,
     file_lookup_records,
     write_lookup_shards,
 )
 from sitegen.provenance import load_derivable
-from sitegen.publish import _publish_manifests
-from sitegen.structured import _write_platform_dats, collection_dat
-from sitegen.write import _record, write_if_changed
+from sitegen.publish import publish_manifests
+from sitegen.structured import write_platform_dats, collection_dat
+from sitegen.write import record_written, write_if_changed
 
 
 def generate_stats(stats: dict) -> str:
@@ -50,7 +51,7 @@ def _accepted_hash_rows(platform_files: list[dict], emulator_items: list[dict]) 
                 "layer": "platform", "owner": row["platform_id"],
                 "system": row["system"], "name": row["name"],
                 "path": row["destination"], "algorithm": algorithm, "value": value,
-            } for value in _hash_values(row.get(f"{algorithm}_raw", row.get(algorithm))))
+            } for value in sorted_hash_values(row.get(f"{algorithm}_raw", row.get(algorithm))))
     for item in emulator_items:
         for entry in item["profile"].get("files", []) or []:
             if not isinstance(entry, dict):
@@ -61,7 +62,7 @@ def _accepted_hash_rows(platform_files: list[dict], emulator_items: list[dict]) 
                     "system": _json_text(entry.get("system")),
                     "name": entry.get("name", ""), "path": entry.get("path", "") or "",
                     "algorithm": algorithm, "value": value,
-                } for value in _hash_values(entry.get(algorithm)))
+                } for value in sorted_hash_values(entry.get(algorithm)))
             # Members of an archive: MAME and FBNeo hash the ROMs inside the
             # set, never the set. Left out, a loose nmk004.bin (crc32
             # 83b6f611) found no row while the site search found it.
@@ -75,7 +76,7 @@ def _accepted_hash_rows(platform_files: list[dict], emulator_items: list[dict]) 
                         "system": _json_text(entry.get("system")),
                         "name": str(member["name"]), "path": f"{archive}/{member['name']}",
                         "algorithm": algorithm, "value": value,
-                    } for value in _hash_values(member.get(algorithm)))
+                    } for value in sorted_hash_values(member.get(algorithm)))
     rows.sort(key=lambda r: (r["layer"], r["owner"], r["name"], r["algorithm"], r["value"]))
     return rows
 
@@ -122,7 +123,7 @@ def _verify_outcomes(
 @functools.lru_cache(maxsize=1)
 def _contract_keys() -> frozenset[str]:
     """The top-level keys platform.schema.json allows in a platform's list."""
-    schema = json.loads((_REPO_ROOT / "schemas" / "platform.schema.json").read_text(encoding="utf-8"))
+    schema = json.loads((REPO_ROOT / "schemas" / "platform.schema.json").read_text(encoding="utf-8"))
     return frozenset(schema.get("properties") or {})
 
 
@@ -159,7 +160,7 @@ def _split_contract(config: dict) -> tuple[dict, dict]:
     # The merged config gives a child its parent's release_pack: Lakka and
     # RetroPie said true in the API while every page said they had no ZIP.
     # The registry's own entry decides, as it does for the pages.
-    released = config.get("_key") in _release_pack_platforms()
+    released = config.get("_key") in release_pack_platforms()
     if released or "release_pack" in registry:
         registry["release_pack"] = released
     return contract, registry
@@ -180,7 +181,7 @@ def _platform_export_rows(
     """Normalized platform summaries and one row per declared file."""
     items: list[dict] = []
     file_rows: list[dict] = []
-    sha1_by_path = _sha1_by_path(db)
+    sha1_by_path = sha1_index_by_path(db)
     for key, coverage in sorted(coverages.items()):
         config = coverage["config"]
         outcome = _verify_outcomes(coverage, sha1_by_path)
@@ -247,7 +248,7 @@ def build_emulator_gap_report(
     The gap analysis page and the published gaps export must not compute this
     twice and drift. Both read this one report.
     """
-    from model.systems import _norm_system_id
+    from model.systems import norm_system_id
     from model.declarations import merged_platform_declarations
     from packs.crossref import cross_reference as run_cross_reference
 
@@ -263,7 +264,7 @@ def build_emulator_gap_report(
             for fe in system.get("files", []):
                 fname = fe.get("name", "")
                 if fname:
-                    declared.setdefault(_norm_system_id(sys_id), set()).add(fname)
+                    declared.setdefault(norm_system_id(sys_id), set()).add(fname)
 
     unique_profiles = {
         k: v
@@ -302,7 +303,7 @@ def _gap_export_rows(
     A `layer` column keeps the two apart instead of publishing only one.
     """
     rows: list[dict] = []
-    sha1_by_path = _sha1_by_path(db)
+    sha1_by_path = sha1_index_by_path(db)
     for key, coverage in sorted(coverages.items()):
         for detail in coverage.get("details", []):
             if detail.get("status") == "ok" and not detail.get("discrepancy"):
@@ -506,10 +507,10 @@ def _write_sqlite_export(
             CREATE INDEX emulator_files_name_idx ON emulator_files(name);
             CREATE INDEX gaps_status_idx ON gaps(layer, status);
         """)
-        commit = _source_commit()
+        commit = source_commit()
         metadata = {
             "schema_version": "1",
-            "generated_at": str(db.get("generated_at") or _timestamp()),
+            "generated_at": str(db.get("generated_at") or data_timestamp()),
             **({"commit": commit} if commit else {}),
             "source": REPO_URL,
             "scope": "metadata only, no BIOS or firmware payload bytes",
@@ -640,13 +641,13 @@ def system_export_item(slug: str, manufacturer: str, consoles: dict[str, list]) 
 
 
 @functools.lru_cache(maxsize=1)
-def _source_commit() -> str:
+def source_commit() -> str:
     """The commit of the checkout the site is built from, empty outside one."""
     import subprocess
 
     try:
         result = subprocess.run(
-            ["git", "rev-parse", "HEAD"], cwd=_REPO_ROOT,
+            ["git", "rev-parse", "HEAD"], cwd=REPO_ROOT,
             capture_output=True, text=True, check=True,
         )
     except (OSError, subprocess.CalledProcessError) as error:
@@ -694,10 +695,10 @@ def generate_data_exports(
     for directory in (api, downloads, schemas_dest):
         directory.mkdir(parents=True, exist_ok=True)
 
-    generated_at = str(db.get("generated_at") or _timestamp())
+    generated_at = str(db.get("generated_at") or data_timestamp())
     # The revision the data was read at: a tool comparing two downloads
     # could not tell which commit each came from.
-    commit = _source_commit()
+    commit = source_commit()
     stamp = {"commit": commit} if commit else {}
     platform_items, platform_files = _platform_export_rows(coverages, db)
     emulator_items = _emulator_export_items(profiles)
@@ -715,7 +716,7 @@ def generate_data_exports(
     }
     write_lookup_shards(
         api, file_lookup_records(db, coverages, profiles, locations, members, consumers,
-                                 model_retired.load(_REPO_ROOT / "retired.json"), wanted),
+                                 model_retired.load(REPO_ROOT / "retired.json"), wanted),
         generated_at, commit,
     )
     for filename, (kind, items) in envelopes.items():
@@ -744,11 +745,11 @@ def generate_data_exports(
 
     # Every schema the published files are written against, the manifests'
     # too: an integrator had the platform's list and not what the pack writes.
-    for schema_path in sorted((_REPO_ROOT / "schemas").glob("*.schema.json")):
+    for schema_path in sorted((REPO_ROOT / "schemas").glob("*.schema.json")):
         shutil.copy2(schema_path, schemas_dest / schema_path.name)
-        _record(schemas_dest / schema_path.name)
+        record_written(schemas_dest / schema_path.name)
 
-    manifest_assets = _publish_manifests(api)
+    manifest_assets = publish_manifests(api)
     for filename, (kind, items) in {
         "systems.json": ("system-index", system_index_items(db, coverages, profiles)),
         "cores.json": ("core-index", core_index_items(profiles)),
@@ -774,7 +775,7 @@ def generate_data_exports(
             ),
         })
     write_if_changed(str(downloads / "retrobios.dat"), collection_dat(db, generated_at))
-    platform_dats = _write_platform_dats(downloads / "dat", db, members, generated_at)
+    platform_dats = write_platform_dats(downloads / "dat", db, members, generated_at)
     write_if_changed(
         str(downloads / "files.csv"),
         _csv_document(
@@ -831,7 +832,7 @@ def generate_data_exports(
         downloads / "retrobios.sqlite", db, platform_items, platform_files,
         emulator_items, gap_rows,
     )
-    _record(downloads / "retrobios.sqlite")
+    record_written(downloads / "retrobios.sqlite")
     write_if_changed(
         str(downloads / "provenance-wanted.csv"),
         _csv_document(list(WANTED_FIELDS), wanted),

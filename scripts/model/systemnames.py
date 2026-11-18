@@ -3,27 +3,27 @@
 from __future__ import annotations
 
 from model import siteinputs
-from model.collection import SECTION_LABELS, _PROGRAM_TOPS, _slug
+from model.collection import SECTION_LABELS, PROGRAM_TOPS, manufacturer_slug
 
 
 # (manufacturer slug, console) -> the id of the console's heading. Two
 # folders spelled alike (Sega's "Mega CD" and "Mega-CD") share a slug, and
 # the second heading took "mega-cd_1" while every link said "mega-cd".
-_console_anchors: dict[tuple[str, str], str] = {}
+console_anchors: dict[tuple[str, str], str] = {}
 
 
-_boards_built = [False]
+boards_built = [False]
 
 
 # Every (manufacturer, console) section the system pages carry.
-_section_pairs: set[tuple[str, str]] = set()
+section_pairs: set[tuple[str, str]] = set()
 # Normalized id -> the console sections spelled that way.
 _console_sections: dict[str, set[tuple[str, str]]] = {}
 # A console section by the name its heading reads (Bandai WonderSwan).
-_sections_by_name: dict[str, set[tuple[str, str]]] = {}
+sections_by_name: dict[str, set[tuple[str, str]]] = {}
 # Emulator and engine names. A heading spelled like one (Game Engines >
 # Solarus, ZC > ZC210) files that program's copies and names no system.
-_program_names: set[str] = set()
+known_program_names: set[str] = set()
 
 
 def program_names(profiles: dict[str, dict]) -> set[str]:
@@ -48,7 +48,7 @@ def set_console_sections(
     group them, or is a set of (manufacturer, console) pairs. ``programs``
     are the emulator names, which never name a system.
     """
-    from model.systems import _norm_system_id
+    from model.systems import norm_system_id
 
     pairs = (
         {(mfr, console) for mfr, consoles in sections.items() for console in consoles}
@@ -59,40 +59,40 @@ def set_console_sections(
     # system pages file them under Acorn (sitegen.systempages.arcade_board_sections).
     makers = {mfr for mfr, _console in pairs}
     pairs |= {parent for parent in SYSTEM_PARENTS.values()
-              if parent[0] in makers and parent[0] not in _PROGRAM_TOPS}
-    from core.anchors import _unique, toc_slug
+              if parent[0] in makers and parent[0] not in PROGRAM_TOPS}
+    from core.anchors import unique_anchor, toc_slug
 
     _console_sections.clear()
-    _sections_by_name.clear()
-    _console_anchors.clear()
-    _section_pairs.clear()
-    _section_pairs.update(pairs)
+    sections_by_name.clear()
+    console_anchors.clear()
+    section_pairs.clear()
+    section_pairs.update(pairs)
     by_maker: dict[str, list[str]] = {}
     for mfr, console in pairs:
         by_maker.setdefault(mfr, []).append(console)
-        for name in {_heading_name(mfr, console).casefold(), console.casefold()}:
-            _sections_by_name.setdefault(name, set()).add((mfr, console))
+        for name in {heading_name(mfr, console).casefold(), console.casefold()}:
+            sections_by_name.setdefault(name, set()).add((mfr, console))
     # In the order the page lists them, after the page title's own id.
     for mfr, consoles in by_maker.items():
         used = {toc_slug(mfr)}
         for console in sorted(consoles):
-            _console_anchors[(_slug(mfr), console)] = _unique(toc_slug(console), used)
+            console_anchors[(manufacturer_slug(mfr), console)] = unique_anchor(toc_slug(console), used)
     for mfr, console in pairs:
         spelled = console.lower().replace(" ", "-")
         slug = mfr.lower().replace(" ", "-")
-        for key in {_norm_system_id(f"{slug}-{spelled}"), _norm_system_id(spelled)}:
+        for key in {norm_system_id(f"{slug}-{spelled}"), norm_system_id(spelled)}:
             _console_sections.setdefault(key, set()).add((mfr, console))
-    _program_names.clear()
-    _program_names.update(name.casefold() for name in programs)
+    known_program_names.clear()
+    known_program_names.update(name.casefold() for name in programs)
     _sections_installed[0] = True
     # Which ids are boards depends on which have a section elsewhere.
-    _boards_built[0] = False
+    boards_built[0] = False
 
 
 _sections_installed = [False]
 
 
-def _ensure_console_sections() -> None:
+def ensure_console_sections() -> None:
     """Read the sections from the repository when no generator installed
     them, so a page rendered on its own names systems as the site does."""
     if _sections_installed[0]:
@@ -100,26 +100,26 @@ def _ensure_console_sections() -> None:
     import json
 
     from model.profiles import load_emulator_profiles
-    from model.collection import _group_by_manufacturer
+    from model.collection import group_by_manufacturer
 
     inputs = siteinputs.current()
     with open(inputs.db, encoding="utf-8") as handle:
         db = json.load(handle)
     profiles = load_emulator_profiles(str(inputs.emulators), skip_aliases=False)
-    set_console_sections(_group_by_manufacturer(db), program_names(profiles))
+    set_console_sections(group_by_manufacturer(db), program_names(profiles))
 
 
-def _own_section(sys_id: str) -> tuple[str, str] | None:
+def own_section(sys_id: str) -> tuple[str, str] | None:
     """The console section that is this id's own, or None.
 
     Of two sections spelled alike (Atari and Camputers both file a Lynx),
     the one under the maker the id names is kept. Two left is no answer,
     and neither is a section that files a program's copies.
     """
-    from model.systems import _norm_system_id
+    from model.systems import norm_system_id
 
-    _ensure_console_sections()
-    places = _console_sections.get(_norm_system_id(sys_id), set())
+    ensure_console_sections()
+    places = _console_sections.get(norm_system_id(sys_id), set())
     if len(places) > 1:
         places = {
             (mfr, console) for mfr, console in places
@@ -131,15 +131,15 @@ def _own_section(sys_id: str) -> tuple[str, str] | None:
     # A folder under a program's top, named like its own page (Dinothawr) or
     # like an emulator holds a program's files, not a system's.
     if (
-        mfr in _PROGRAM_TOPS
+        mfr in PROGRAM_TOPS
         or console.casefold() == mfr.casefold()
-        or _heading_name(mfr, console).casefold() in _program_names
+        or heading_name(mfr, console).casefold() in known_program_names
     ):
         return None
     return mfr, console
 
 
-def _heading_name(mfr: str, console: str) -> str:
+def heading_name(mfr: str, console: str) -> str:
     """A console heading read out of its page: the maker in front, unless
     the heading already starts with it or the page is a game publisher's."""
     from model.composition import GAME_DATA_TOPS
@@ -154,9 +154,9 @@ def _heading_name(mfr: str, console: str) -> str:
 def system_name(sys_id: str) -> str:
     """The display name of a system id, the only one a page prints."""
     sys_id = str(sys_id)
-    section = _own_section(sys_id)
+    section = own_section(sys_id)
     if section is not None:
-        return _heading_name(*section)
+        return heading_name(*section)
     name = SYSTEM_NAMES.get(sys_id)
     if name is None:
         raise KeyError(

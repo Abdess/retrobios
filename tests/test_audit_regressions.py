@@ -625,13 +625,13 @@ class APackIsSwappedInWhole(unittest.TestCase):
     def test_a_failed_build_keeps_the_previous_pack(self):
         import zipfile
 
-        from packs.archive import _writing_pack
+        from packs.archive import writing_pack
 
         directory = self._dir()
         pack = directory / "Pack.zip"
         with zipfile.ZipFile(pack, "w") as zf:
             zf.writestr("old.bin", b"complete")
-        with self.assertRaises(OSError), _writing_pack(str(pack)) as zf:
+        with self.assertRaises(OSError), writing_pack(str(pack)) as zf:
             zf.writestr("new.bin", b"half")
             raise OSError("disk full")
         with zipfile.ZipFile(pack) as zf:
@@ -641,12 +641,12 @@ class APackIsSwappedInWhole(unittest.TestCase):
     def test_a_finished_build_replaces_it(self):
         import zipfile
 
-        from packs.archive import _writing_pack
+        from packs.archive import writing_pack
 
         directory = self._dir()
         pack = directory / "Pack.zip"
         pack.write_bytes(b"stale")
-        with _writing_pack(str(pack)) as zf:
+        with writing_pack(str(pack)) as zf:
             zf.writestr("new.bin", b"whole")
         with zipfile.ZipFile(pack) as zf:
             self.assertEqual(zf.namelist(), ["new.bin"])
@@ -823,7 +823,7 @@ class ADamagedArchiveIsNotPacked(unittest.TestCase):
     def test_the_rebuild_refusal_reaches_the_run(self):
         import zipfile
 
-        from packs.archive import DamagedArchiveError, _add_zip_to_pack
+        from packs.archive import DamagedArchiveError, add_zip_to_pack
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             source = Path(directory) / "set.zip"
@@ -835,7 +835,7 @@ class ADamagedArchiveIsNotPacked(unittest.TestCase):
             pack = Path(directory) / "pack.zip"
             with zipfile.ZipFile(pack, "w") as target:
                 with self.assertRaises(DamagedArchiveError) as caught:
-                    _add_zip_to_pack(str(source), "set.zip", target)
+                    add_zip_to_pack(str(source), "set.zip", target)
                 self.assertNotIn("set.zip", target.namelist())
             self.assertIsInstance(caught.exception, OSError)
             self.assertIn("set.zip", str(caught.exception))
@@ -849,7 +849,7 @@ class APackedArchiveKeepsItsBytes(unittest.TestCase):
         import hashlib
         import zipfile
 
-        from packs.archive import _add_zip_to_pack
+        from packs.archive import add_zip_to_pack
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
             source = Path(directory) / "set.zip"
@@ -857,7 +857,7 @@ class APackedArchiveKeepsItsBytes(unittest.TestCase):
                 zf.writestr(zipfile.ZipInfo("rom.bin", (1999, 1, 2, 3, 4, 5)), b"rom" * 40)
             pack = Path(directory) / "pack.zip"
             with zipfile.ZipFile(pack, "w") as target:
-                _add_zip_to_pack(str(source), "set.zip", target)
+                add_zip_to_pack(str(source), "set.zip", target)
             with zipfile.ZipFile(pack) as packed:
                 inner = packed.read("set.zip")
             self.assertEqual(hashlib.sha1(inner).hexdigest(),
@@ -870,11 +870,11 @@ class PackReadmesSayWhatTheInstallerDoes(unittest.TestCase):
     RetroArch README offered only `| sh`, which Windows cannot run."""
 
     def _guide(self, platform: str) -> str:
-        from packs.readme import _build_readme
+        from packs.readme import build_readme
 
         registry = yaml.safe_load((ROOT / "platforms" / "_registry.yml").read_text())
         install = registry["platforms"][platform].get("install") or {}
-        text = _build_readme(platform, platform, "", 1, 1,
+        text = build_readme(platform, platform, "", 1, 1,
                              detect=install.get("detect", []),
                              standalone_copies=install.get("standalone_copies", []))
         return text[text.index("INSTALLATION"):text.index("TROUBLESHOOTING")]
@@ -3351,30 +3351,30 @@ class APackNameFitsAFileName(unittest.TestCase):
     before writing anything, while verify --system snes reported."""
 
     def test_a_long_selection_is_bounded_and_told_apart(self):
-        from scripts.packs.naming import MAX_PACK_NAME_BYTES, _bounded_pack_name
+        from scripts.packs.naming import MAX_PACK_NAME_BYTES, bounded_pack_name
 
         names = [f"Emulator_Number_{i}" for i in range(23)]
-        long_name = _bounded_pack_name(names, names, "_BIOS_Pack.zip")
+        long_name = bounded_pack_name(names, names, "_BIOS_Pack.zip")
         self.assertLessEqual(len(long_name.encode()), MAX_PACK_NAME_BYTES)
         self.assertTrue(long_name.startswith("Emulator_Number_0_and_22_more_"))
-        other = _bounded_pack_name(names, names[:-1] + ["x"], "_BIOS_Pack.zip")
+        other = bounded_pack_name(names, names[:-1] + ["x"], "_BIOS_Pack.zip")
         self.assertNotEqual(long_name, other)
-        self.assertEqual(_bounded_pack_name(["A", "B"], ["a", "b"], ".zip"), "A_B.zip")
+        self.assertEqual(bounded_pack_name(["A", "B"], ["a", "b"], ".zip"), "A_B.zip")
 
     def test_a_long_system_list_is_bounded(self):
         """Thirty systems joined made a 261-byte platform pack name."""
-        from scripts.packs.naming import MAX_SYSTEM_TAG_BYTES, _system_tag
+        from scripts.packs.naming import MAX_SYSTEM_TAG_BYTES, system_tag
 
         systems = [f"vendor-console-number-{i}" for i in range(30)]
-        tag = _system_tag(systems)
+        tag = system_tag(systems)
         self.assertLessEqual(len(tag.encode()), MAX_SYSTEM_TAG_BYTES + 1)
-        self.assertNotEqual(tag, _system_tag(systems[:-1] + ["other-console"]))
-        self.assertEqual(_system_tag(["sony-playstation"]), "_Playstation")
+        self.assertNotEqual(tag, system_tag(systems[:-1] + ["other-console"]))
+        self.assertEqual(system_tag(["sony-playstation"]), "_Playstation")
 
     def test_two_systems_never_name_one_system(self):
         """sega-dreamcast,arcade and sega-dreamcast-arcade both wrote
         RetroArch_..._Dreamcast_Arcade.zip, and the second replaced the first."""
-        from scripts.packs.naming import _system_tag
+        from scripts.packs.naming import system_tag
 
         pairs = [
             (["sega-dreamcast", "arcade"], ["sega-dreamcast-arcade"]),
@@ -3383,7 +3383,7 @@ class APackNameFitsAFileName(unittest.TestCase):
         ]
         for two, one in pairs:
             with self.subTest(two=two):
-                self.assertNotEqual(_system_tag(two), _system_tag(one))
+                self.assertNotEqual(system_tag(two), system_tag(one))
 
     def test_two_hash_lists_get_two_names(self):
         """--from-md5 named its pack after the context only: a second list
@@ -3431,7 +3431,7 @@ class ARegionDroppedExtraBlocksNothing(unittest.TestCase):
             config = {"case_insensitive_fs": True, "base_destination": ""}
 
             def report(region_drops):
-                with mock.patch.object(packextras, "_collect_emulator_extras",
+                with mock.patch.object(packextras, "collect_emulator_extras",
                                        return_value=extras), \
                         mock.patch.object(packextras, "resolve_local_file",
                                           side_effect=lambda fe, *a, **k: (
@@ -3539,7 +3539,7 @@ class APinnedCoreFileTakesTheSlotFirst(unittest.TestCase):
         with mock.patch("packs.gaps.find_undeclared_files", return_value=undeclared), \
                 mock.patch.object(packextras, "resolve_platform_cores",
                                   return_value=set()) as cores:
-            extras = packextras._collect_emulator_extras(
+            extras = packextras.collect_emulator_extras(
                 config, "emulators", {"files": {}, "indexes": {}}, set(), "bios", {}
             )
         self.assertEqual([e["source_profile"] for e in extras][:1], ["solarus"])
@@ -3714,7 +3714,7 @@ class AnArchiveShipsWholeUnderARegion(unittest.TestCase):
     def test_verify_filters_loose_files_only(self):
         source = script_source("verify.py")
         self.assertIn(
-            'if fe.get("archive")\n                or _resolve_destination(fe, standalone) not in region_drops',
+            'if fe.get("archive")\n                or resolve_destination(fe, standalone) not in region_drops',
             source,
         )
 
@@ -3972,7 +3972,7 @@ class ADataDirectoryIsWalkedOnce(unittest.TestCase):
     resolution cost names x tree on every pack build."""
 
     def test_two_lookups_share_one_walk_and_keep_its_order(self):
-        from resolve.datadirs import forget_data_dir_index, _resolve_in_data_dirs
+        from resolve.datadirs import forget_data_dir_index, resolve_in_data_dirs
 
         with tempfile.TemporaryDirectory(dir=ROOT / "tmp") as tmp:
             cache = Path(tmp) / "cache"
@@ -3991,9 +3991,9 @@ class ADataDirectoryIsWalkedOnce(unittest.TestCase):
                 return real_walk(top, *a, **k)
 
             with mock.patch.object(os, "walk", counting_walk):
-                first, _ = _resolve_in_data_dirs(["font.bin"], registry,
+                first, _ = resolve_in_data_dirs(["font.bin"], registry,
                                                         lambda _p: "name_exact")
-                second, _ = _resolve_in_data_dirs(["other.bin"], registry,
+                second, _ = resolve_in_data_dirs(["other.bin"], registry,
                                                          lambda _p: "name_exact")
             forget_data_dir_index()
         self.assertEqual(len(walks), 1)
@@ -4223,7 +4223,7 @@ class TriageSurvivesAForgeRefusal(unittest.TestCase):
                 mock.patch.object(triage, "select_repo", lambda p: object()), \
                 contextlib.redirect_stdout(out), \
                 contextlib.redirect_stderr(io.StringIO()):
-            triage._print_triage(args, selected, reports)
+            triage.print_triage(args, selected, reports)
         # A header row and a closing count frame the ranking.
         lines = out.getvalue().splitlines()[1:-1]
         self.assertEqual(len(lines), 2)
@@ -4315,7 +4315,7 @@ class ASameNamedMemberIsNotTheFile(unittest.TestCase):
         (tmp / "bios").mkdir()
         with zipfile.ZipFile(tmp / "bios" / "extras.zip", "w") as zf:
             zf.writestr("files/other.ttf", b"MEMBER FONT")
-        names = crossref._build_supplemental_index(str(tmp / "data"), str(tmp / "bios"))
+        names = crossref.build_supplemental_index(str(tmp / "data"), str(tmp / "bios"))
         locations = crossref._supplemental_locations(str(tmp / "data"), str(tmp / "bios"))
         with mock.patch.object(crossref, "_supplemental_locations", lambda: locations):
             for fname, data in (("font.ttf", b"DATA FONT"), ("other.ttf", b"MEMBER FONT")):
@@ -4481,7 +4481,7 @@ class EveryReadmeNamesItsFolder(unittest.TestCase):
     /storage/system, the folder the registry and the installer use."""
 
     def test_the_registry_folder_is_in_the_guide(self):
-        from scripts.packs.readme import _build_readme
+        from scripts.packs.readme import build_readme
 
         registry = yaml.safe_load((ROOT / "platforms" / "_registry.yml").read_text())
         for name, entry in registry["platforms"].items():
@@ -4489,10 +4489,10 @@ class EveryReadmeNamesItsFolder(unittest.TestCase):
             if not folder:
                 continue
             with self.subTest(platform=name):
-                text = _build_readme(name, name, "", 1, 1,
+                text = build_readme(name, name, "", 1, 1,
                                      detect=[{"os": "linux", "bios_path": folder}])
                 self.assertIn(folder, text)
-        lakka = _build_readme("lakka", "Lakka", "", 1, 1)
+        lakka = build_readme("lakka", "Lakka", "", 1, 1)
         self.assertNotIn("retroarch/system", lakka)
 
 
@@ -4799,8 +4799,8 @@ class VerifyPacksSaysWhatItExcluded(unittest.TestCase):
         body = source[source.index("def _run_verify_packs"):]
         body = body[:body.index("\ndef ")]
         self.assertIn("bl_excluded, bl_absent) = result", body)
-        self.assertIn("_baseline_shortfall(bl_excluded, bl_absent)", body)
-        shortfall = source[source.index("def _baseline_shortfall"):]
+        self.assertIn("baseline_shortfall(bl_excluded, bl_absent)", body)
+        shortfall = source[source.index("def baseline_shortfall"):]
         self.assertIn("unsafe excluded", shortfall[:shortfall.index("\ndef ")])
         self.assertNotIn("errors[:5]", body)
         self.assertNotRegex(body, r"result\[\d\]")
@@ -4839,11 +4839,11 @@ class AFileToSourceIsAFileNotAName(unittest.TestCase):
     def test_rows_are_keyed_by_name_and_hash(self):
         source = script_source("generate_site.py")
         self.assertIn('key = (g["name"], g.get("identity") or f"emulator:{emu_name}")', source)
-        from scripts.packs.crossref import _first_hash
+        from scripts.packs.crossref import first_hash
 
-        self.assertEqual(_first_hash({"md5": ["AB", "cd"]}), "md5:ab")
-        self.assertEqual(_first_hash({"crc32": "1", "sha1": "F" * 40}), "sha1:" + "f" * 40)
-        self.assertEqual(_first_hash({}), "")
+        self.assertEqual(first_hash({"md5": ["AB", "cd"]}), "md5:ab")
+        self.assertEqual(first_hash({"crc32": "1", "sha1": "F" * 40}), "sha1:" + "f" * 40)
+        self.assertEqual(first_hash({}), "")
 
 
 
@@ -4867,7 +4867,7 @@ class AFileCardSaysAllItKnows(unittest.TestCase):
     showed standalone_path, and gave no file an anchor to link to."""
 
     def test_members_standalone_path_and_anchor(self):
-        from scripts.sitegen.emulatorcards import _render_emulator_file
+        from scripts.sitegen.emulatorcards import render_emulator_file
 
         entry = {
             "name": "neogeo.zip", "path": "neogeo.zip", "category": "bios_zip",
@@ -4875,7 +4875,7 @@ class AFileCardSaysAllItKnows(unittest.TestCase):
             "contents": [{"name": f"m{i}.bin", "size": 1024, "crc32": f"{i:08x}"}
                          for i in range(12)],
         }
-        text = "\n".join(_render_emulator_file(
+        text = "\n".join(render_emulator_file(
             entry, {"files": [entry]}, None, [entry], lambda f: True, "file-neogeo-zip",
         ))
         # The card is a heading with this id, linked by the heading's own
@@ -5374,7 +5374,7 @@ class BundledFilesAreNotToSource(unittest.TestCase):
 
         entry = {"name": "n64.psh", "required": True, "in_repo": False,
                  "category": "bios", "in_pack": True, "bundled": True}
-        self.assertEqual(packs_report._core_required_missing([entry]), [])
+        self.assertEqual(packs_report.core_required_missing([entry]), [])
         summary = verify._overall_summary(
             [({"severity_counts": {}, "undeclared_files": [entry]}, ["ROCKNIX"])]
         )
@@ -5473,12 +5473,12 @@ class AdlerValuesReadLikeTheDownloads(unittest.TestCase):
     byte-swapped ROM, so the raw ea3734fe in files.csv matched neither."""
 
     def test_values_and_the_swap_are_stated(self):
-        from scripts.sitegen.emulatorcards import _render_emulator_file
+        from scripts.sitegen.emulatorcards import render_emulator_file
 
         entry = {"name": "dsp_rom.bin", "path": "dsp_rom.bin",
                  "known_hash_adler32": ["0x66f334fe", "0xE789B5A5"],
                  "adler32_byteswap": True}
-        text = "\n".join(_render_emulator_file(
+        text = "\n".join(render_emulator_file(
             entry, {"files": [entry]}, None, [entry], lambda f: True, "file-dsp",
         ))
         self.assertIn("`66f334fe`, `e789b5a5`", text)
@@ -5553,11 +5553,11 @@ class UnsourceableCardSaysWhy(unittest.TestCase):
     and nothing else. The reason was only on the gaps page."""
 
     def test_reason_and_link(self):
-        from scripts.sitegen.emulatorcards import _render_emulator_file
+        from scripts.sitegen.emulatorcards import render_emulator_file
 
         entry = {"name": "nds_firmware_modified.bin", "path": "x.bin",
                  "unsourceable": "written by the firmware editor, so no dump of it exists"}
-        text = "\n".join(_render_emulator_file(
+        text = "\n".join(render_emulator_file(
             entry, {"files": [entry]}, None, [entry], lambda f: False, "file-x",
         ))
         self.assertIn("Not collected yet: written by the firmware editor", text)
@@ -5599,10 +5599,10 @@ class CollectionCardsSayWhereToGetTheFile(unittest.TestCase):
         cards._RELEASE_ASSET_NAMES = None
         self.addCleanup(setattr, cards, "_RELEASE_ASSET_NAMES", None)
         self.assertEqual(
-            cards._fetch_url("bios/Sony/PlayStation/scph5501.bin"),
+            cards.fetch_url("bios/Sony/PlayStation/scph5501.bin"),
             "https://raw.githubusercontent.com/Abdess/retrobios/main/bios/Sony/PlayStation/scph5501.bin",
         )
-        self.assertTrue(cards._fetch_url("bios/Arcade/MAME/MAME 0.174 Arcade XML.dat").endswith(
+        self.assertTrue(cards.fetch_url("bios/Arcade/MAME/MAME 0.174 Arcade XML.dat").endswith(
             "/releases/download/large-files/MAME.0.174.Arcade.XML.dat"
         ))
 
@@ -5615,12 +5615,12 @@ class CollectionCardsCarryFullHashes(unittest.TestCase):
 
     def test_every_hash_in_full(self):
         from scripts.packs.crossref import FileConsumers
-        from scripts.sitegen.cards import _system_file_card
+        from scripts.sitegen.cards import system_file_card
 
         entry = {"name": "DUKE.RTS", "path": "bios/x/DUKE.RTS", "size": 10,
                  "sha1": "a" * 40, "md5": "9d29f9673bbdb56068acf7645c13749c",
                  "crc32": "504086c1", "sha256": "b" * 64}
-        text = "\n".join(_system_file_card(entry, FileConsumers({}, {})))
+        text = "\n".join(system_file_card(entry, FileConsumers({}, {})))
         for value in (entry["sha1"], entry["md5"], entry["crc32"], entry["sha256"]):
             self.assertIn(f'<dd class="rb-hash">{value}</dd>', text)
 
@@ -5631,9 +5631,9 @@ class AHeldRevisionLinksItsBuildFile(unittest.TestCase):
     and the path a pinned link needs. 36 profiles carry one."""
 
     def test_the_build_file_row(self):
-        from scripts.sitegen.emulatorcards import _build_rows
+        from scripts.sitegen.emulatorcards import build_rows
 
-        rows = _build_rows({"pin_frozen": "KNULLI builds this revision.", "pin_build": [{
+        rows = build_rows({"pin_frozen": "KNULLI builds this revision.", "pin_build": [{
             "platform": "knulli", "repo": "https://github.com/knulli-cfw/knulli-linux",
             "revision": "20260511", "path": "package/emulators/advanced_drastic/advanced_drastic.mk",
             "variable": "ADVANCED_DRASTIC_VERSION", "value": "eaf41ab9"}]})
@@ -5643,10 +5643,10 @@ class AHeldRevisionLinksItsBuildFile(unittest.TestCase):
             "at `20260511` sets `ADVANCED_DRASTIC_VERSION` |", rows)
 
     def test_a_build_read_at_a_recorded_commit_links(self):
-        from scripts.sitegen.emulatorcards import _build_rows
+        from scripts.sitegen.emulatorcards import build_rows
 
         pin = "46128cd252cdecae852a4d0bafa2aaf9d03ab563"
-        rows = _build_rows({"pin_build": [{
+        rows = build_rows({"pin_build": [{
             "platform": "retropie", "repo": "https://github.com/RetroPie/RetroPie-Setup",
             "revision": pin, "path": "scriptmodules/emulators/advmame-1.4.sh",
             "variable": "rp_module_repo", "value": "x"}]})
@@ -5669,14 +5669,14 @@ class AVariantCardSaysWhatToSaveItAs(unittest.TestCase):
 
     def test_the_name_to_save_it_under(self):
         from scripts.packs.crossref import FileConsumers
-        from scripts.sitegen.cards import _system_file_card
+        from scripts.sitegen.cards import system_file_card
 
         entry = {"name": "advision.zip", "size": 10, "sha1": "a" * 40,
                  "path": "bios/Entex/Adventure Vision/.variants/advision.zip.1c086064"}
-        text = "\n".join(_system_file_card(entry, FileConsumers({}, {})))
+        text = "\n".join(system_file_card(entry, FileConsumers({}, {})))
         self.assertIn("Save as", text)
         self.assertIn("advision.zip.1c086064", text)
-        plain = "\n".join(_system_file_card(
+        plain = "\n".join(system_file_card(
             {**entry, "path": "bios/Entex/Adventure Vision/advision.zip"}, FileConsumers({}, {})))
         self.assertNotIn("Save as", plain)
 
@@ -5717,7 +5717,7 @@ class EmulatorCardsLinkTheCopyAndTheSection(unittest.TestCase):
     def test_copy_and_sections(self):
         from types import SimpleNamespace
 
-        from scripts.sitegen.emulatorcards import _render_emulator_file
+        from scripts.sitegen.emulatorcards import render_emulator_file
 
         sha1 = "ef9194ab4804aa0aa8540d846caf291b28331165"
         consumers = SimpleNamespace(
@@ -5727,7 +5727,7 @@ class EmulatorCardsLinkTheCopyAndTheSection(unittest.TestCase):
             platform_systems={sha1: {"batocera": {"nintendo-gamecube"}}},
         )
         entry = {"name": "IPL.bin", "path": "GC/USA/IPL.bin"}
-        text = "\n".join(_render_emulator_file(
+        text = "\n".join(render_emulator_file(
             entry, {"files": [entry]}, consumers, [entry], lambda f: True, "file-ipl", "dolphin",
         ))
         self.assertIn("../systems/nintendo.md#sha1-ef9194ab4804", text)
@@ -5801,9 +5801,9 @@ class SiteCodeSpansHoldTheirValue(unittest.TestCase):
     was read as markup."""
 
     def test_a_backtick_cannot_close_the_span(self):
-        from scripts.sitegen.render import _code
+        from scripts.sitegen.render import code_span
 
-        span = _code("a`<img src=x onerror=alert(1)>`")
+        span = code_span("a`<img src=x onerror=alert(1)>`")
         self.assertEqual(span.count("`"), 2)
         self.assertTrue(span.startswith("`") and span.endswith("`"))
 
@@ -5888,7 +5888,7 @@ class TheCollectionShipsADat(unittest.TestCase):
         Batocera reads."""
         sys.path.insert(0, str(ROOT / "scripts" / "scraper"))
         from logiqx_parser import parse_logiqx
-        from scripts.sitegen.platformfiles import _platform_data_links
+        from scripts.sitegen.platformfiles import platform_data_links
         from scripts.sitegen.structured import platform_dat
 
         db = {"files": {"a" * 40: {"size": 4, "crc32": "8D8CB7E4", "md5": "1" * 32,
@@ -5907,7 +5907,7 @@ class TheCollectionShipsADat(unittest.TestCase):
                                      ("bios", "dolphin-emu\\Sys\\GC\\font.bin")})
         self.assertEqual(roms[("bios", "dc\\naomi2.zip")].md5, "1" * 32)
         self.assertEqual(roms[("bios", "dolphin-emu\\Sys\\GC\\font.bin")].md5, "3" * 32)
-        self.assertIn("[DAT](../downloads/dat/batocera.dat)", _platform_data_links("batocera"))
+        self.assertIn("[DAT](../downloads/dat/batocera.dat)", platform_data_links("batocera"))
 
 
 
@@ -7128,7 +7128,7 @@ class RequiredOnlyReachesDataDirectories(unittest.TestCase):
             }
             return [
                 dest
-                for _src, dest in datatrees._data_directory_members(
+                for _src, dest in datatrees.data_directory_members(
                     systems, registry, "retroarch", "", False, set(), set(), set(),
                     required_only=required_only,
                 )
@@ -7483,7 +7483,7 @@ class ExternalDownloadsFollowTheRunPolicy(unittest.TestCase):
     def test_the_run_switch_is_inherited(self):
         from resolve import packfiles as packresolve
 
-        saved = packresolve._OFFLINE
+        saved = packresolve.OFFLINE
         packresolve.set_offline(True)
         try:
             with tempfile.TemporaryDirectory() as tmp, \
@@ -7891,14 +7891,14 @@ class EveryReaderOfACoreFileIsNamed(unittest.TestCase):
     def test_a_held_file_out_of_reach_names_every_core_reading_it(self):
         """harm1.wad is a release asset: a checkout without it omits the file,
         and the omission named gzdoom alone where lzdoom reads it too."""
-        from packs.manifestentry import _claim_cores
+        from packs.manifestentry import claim_cores
 
         extra = {"source_profile": "gzdoom", "other_claims": [
             {"source_profile": "uzdoom"}, {"source_profile": "lzdoom"}]}
-        self.assertEqual(_claim_cores(extra), ["gzdoom", "lzdoom", "uzdoom"])
+        self.assertEqual(claim_cores(extra), ["gzdoom", "lzdoom", "uzdoom"])
 
     def test_a_missing_file_names_every_core_reading_it(self):
-        from packs.manifestentry import _record_absent
+        from packs.manifestentry import record_absent
 
         omitted: dict[str, dict] = {}
 
@@ -7914,7 +7914,7 @@ class EveryReaderOfACoreFileIsNamed(unittest.TestCase):
         omitted["SHARED.BIN"] = platform
         absent.append({"name": "SHARED.BIN", "destination": "SHARED.BIN",
                        "source_profile": "raze"})
-        _record_absent(absent, {}, "", set(), False, set(), omitted, record)
+        record_absent(absent, {}, "", set(), False, set(), omitted, record)
         self.assertEqual(omitted["NAPALM.GRP"]["cores"], ["eduke32", "raze"])
         # A platform's own omission stays the platform's.
         self.assertIsNone(omitted["SHARED.BIN"]["cores"])

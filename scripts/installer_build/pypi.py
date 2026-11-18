@@ -15,9 +15,8 @@ from model.guides import SH_NAME
 from installer_build.pins import PIN
 
 
-ROOT = REPO_ROOT
-PACKAGE_DIR = ROOT / "packaging" / "pypi"
-DEFAULT_OUTPUT = ROOT / "tmp" / "pypi-dist"
+PACKAGE_DIR = REPO_ROOT / "packaging" / "pypi"
+DEFAULT_OUTPUT = REPO_ROOT / "tmp" / "pypi-dist"
 MODULE = "retrobios"
 
 # The launcher. runpy runs install.py as __main__, so its own __main__ block
@@ -51,7 +50,7 @@ def package_version(stamps: list[int]) -> str:
 
 def install_py_commits() -> list[int]:
     """Commit times of install.py, newest first, from git."""
-    out = subprocess.run(["git", "log", "--format=%ct", "--", "install.py"], cwd=ROOT,
+    out = subprocess.run(["git", "log", "--format=%ct", "--", "install.py"], cwd=REPO_ROOT,
                          capture_output=True, text=True, check=True).stdout
     return [int(line) for line in out.split()]
 
@@ -59,8 +58,8 @@ def install_py_commits() -> list[int]:
 def installer_bytes() -> bytes:
     """install.py, refused unless it is the one install.sh pins: the package
     then runs the installer the one-line command runs, under the same id."""
-    data = (ROOT / "install.py").read_bytes()
-    pins = PIN[SH_NAME].findall((ROOT / "install.sh").read_text(encoding="utf-8"))
+    data = (REPO_ROOT / "install.py").read_bytes()
+    pins = PIN[SH_NAME].findall((REPO_ROOT / "install.sh").read_text(encoding="utf-8"))
     if pins != [hashlib.sha256(data).hexdigest()]:
         raise ValueError("install.py is not the installer install.sh pins: recompute the pin")
     return data
@@ -72,7 +71,7 @@ def stage(folder: Path, version: str) -> None:
     module.mkdir(parents=True)
     for name in ("pyproject.toml", "README.md"):
         shutil.copyfile(PACKAGE_DIR / name, folder / name)
-    shutil.copyfile(ROOT / "LICENSE", folder / "LICENSE")
+    shutil.copyfile(REPO_ROOT / "LICENSE", folder / "LICENSE")
     shutil.copyfile(PACKAGE_DIR / MODULE / "__main__.py", module / "__main__.py")
     (module / "__init__.py").write_text(LAUNCHER.format(version=version), encoding="utf-8")
     (module / "install.py").write_bytes(installer_bytes())
@@ -86,7 +85,7 @@ def build(output_dir: Path) -> tuple[Path, Path]:
     for pattern in ("*.whl", "*.tar.gz"):
         for old in output_dir.glob(f"{MODULE}-{pattern}"):
             old.unlink()
-    scratch = ROOT / "tmp"
+    scratch = REPO_ROOT / "tmp"
     scratch.mkdir(exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="pypi-stage-", dir=scratch) as name:
         folder = Path(name) / "retrobios"

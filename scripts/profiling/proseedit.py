@@ -15,7 +15,7 @@ from profiling.citations import Citation
 _RANGE_TOKEN_RE = re.compile(r"\d+(?:-\d+)?")
 
 
-def _run_after_moves(
+def run_after_moves(
     parts: Sequence[RefPart],
     moves: dict[int, tuple[int, int, str | None]],
     run: str = "",
@@ -108,7 +108,7 @@ def _scalar(holder: object, key: object) -> object:
     raise TypeError(f"no scalar under {key!r} in a {type(holder).__name__}")
 
 
-def _set_scalar(holder: object, key: object, value: str) -> None:
+def set_scalar(holder: object, key: object, value: str) -> None:
     """Replace the value a citation's holder keeps under its key."""
     if isinstance(holder, dict):
         holder[key] = value
@@ -275,7 +275,7 @@ def _edit_scalar_run(
     edits.applied.append(f"{citation.field}: {citation.ref} -> {recaled}")
 
 
-def _apply_prose_edits(
+def apply_prose_edits(
     text: str, jobs: list[tuple[Citation, dict]], document: object = None
 ) -> tuple[str, list[str], list[str]]:
     """Rewrite prose citation tokens in place, nothing else.
@@ -297,7 +297,7 @@ def _apply_prose_edits(
 
     for citation, moves in jobs:
         replacements = _prose_replacements(citation, moves)
-        recaled = _run_after_moves(citation.parts, moves, citation.ref)
+        recaled = run_after_moves(citation.parts, moves, citation.ref)
         if citation.in_comment:
             _edit_comment_run(edits, citation, replacements, recaled)
         else:
@@ -311,7 +311,7 @@ def _apply_prose_edits(
         value_lines = value.splitlines()
         for line_number, spans in by_line.items():
             value_lines[line_number] = _replace_spans(value_lines[line_number], spans)
-        _set_scalar(holder, key, "\n".join(value_lines) + (
+        set_scalar(holder, key, "\n".join(value_lines) + (
             "\n" if value.endswith("\n") else ""
         ))
     return "\n".join(lines) + trailing, edits.applied, edits.left

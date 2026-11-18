@@ -15,7 +15,7 @@ from packs import parts as packs_parts
 from resolve.grouping import group_identical_platforms
 
 
-def _narrowings(
+def pack_narrowings(
     source: str,
     regions: list[str] | None,
     target_name: str | None,
@@ -69,7 +69,7 @@ def _target_tag(target_name: str) -> str:
     )
 
 
-def _platform_target(
+def platform_target(
     platform_name: str, target: str | None, platforms_dir: str
 ) -> str | None:
     """The target as this platform files it, the name its artifacts carry.
@@ -86,7 +86,7 @@ def _platform_target(
     return canonical_target_name([platform_name], target, platforms_dir)
 
 
-def _system_tag(system_filter: list[str] | None) -> str:
+def system_tag(system_filter: list[str] | None) -> str:
     """Filename tag for a pack limited to some systems, empty for all."""
     if not system_filter:
         return ""
@@ -98,7 +98,7 @@ def _system_tag(system_filter: list[str] | None) -> str:
                 s = s[len(prefix) :]
                 break
         display_parts.append("_".join(p.title() for p in s.split("-") if p))
-    return "_" + _bounded_join(display_parts, system_filter)
+    return "_" + bounded_join(display_parts, system_filter)
 
 
 # A system list long enough to push a pack name past this falls back to the
@@ -106,7 +106,7 @@ def _system_tag(system_filter: list[str] | None) -> str:
 MAX_SYSTEM_TAG_BYTES = 120
 
 
-def _bounded_join(parts: list[str], keys: list[str]) -> str:
+def bounded_join(parts: list[str], keys: list[str]) -> str:
     """Parts joined while they fit, else the first, a count and a digest.
 
     Thirty systems joined made a 261-byte file name and the ZIP could not
@@ -125,7 +125,7 @@ def _bounded_join(parts: list[str], keys: list[str]) -> str:
 _UNSAFE_IN_NAME = re.compile(r'[/\\:*?"<>|]')
 
 
-def _name_part(text: str, space: str = "") -> str:
+def file_name_part(text: str, space: str = "") -> str:
     """A display name made safe to stand in a file name.
 
     'FinalBurn Neo (CPS-1/CPS-2)' named a directory that did not exist, and a
@@ -134,7 +134,7 @@ def _name_part(text: str, space: str = "") -> str:
     return _UNSAFE_IN_NAME.sub("-", text.replace(" ", space))
 
 
-def _platform_pack_stem(
+def platform_pack_stem(
     group_platforms: list[str], representative: str, platforms_dir: str
 ) -> str:
     """Platform part of a pack name, version included.
@@ -144,7 +144,7 @@ def _platform_pack_stem(
     """
     rep_cfg = load_platform_config(representative, platforms_dir)
     version = rep_cfg.get("version", rep_cfg.get("dat_version", ""))
-    version_tag = f"_{_name_part(str(version))}" if version else ""
+    version_tag = f"_{file_name_part(str(version))}" if version else ""
     return platform_pack_prefix(group_platforms, representative, platforms_dir) + version_tag
 
 
@@ -158,15 +158,15 @@ def platform_pack_prefix(
     """
     if len(group_platforms) <= 1:
         rep_cfg = load_platform_config(representative, platforms_dir)
-        return _name_part(rep_cfg.get("platform", representative), "_")
+        return file_name_part(rep_cfg.get("platform", representative), "_")
     names = [
         load_platform_config(p, platforms_dir).get("platform", p)
         for p in group_platforms
     ]
-    return "_".join(_name_part(n) for n in names)
+    return "_".join(file_name_part(n) for n in names)
 
 
-def _platform_pack_name(
+def platform_pack_name(
     platform_name: str,
     platforms_dir: str,
     narrowings: list[tuple[str, str]],
@@ -179,9 +179,9 @@ def _platform_pack_name(
     """
     if pack_name:
         return pack_name
-    stem = _platform_pack_stem([platform_name], platform_name, platforms_dir)
+    stem = platform_pack_stem([platform_name], platform_name, platforms_dir)
     tags = "".join(tag for tag, _label in narrowings)
-    return f"{stem}{tags}_BIOS_Pack{_system_tag(system_filter)}.zip"
+    return f"{stem}{tags}_BIOS_Pack{system_tag(system_filter)}.zip"
 
 
 # A file name holds 255 bytes on every filesystem a pack is written to,
@@ -189,7 +189,7 @@ def _platform_pack_name(
 MAX_PACK_NAME_BYTES = 200
 
 
-def _bounded_pack_name(display_names: list[str], keys: list[str], suffix: str) -> str:
+def bounded_pack_name(display_names: list[str], keys: list[str], suffix: str) -> str:
     """The emulator pack's file name, its emulators joined while they fit.
 
     Past the limit the name keeps the first emulator, says how many more the
@@ -203,7 +203,7 @@ def _bounded_pack_name(display_names: list[str], keys: list[str], suffix: str) -
     return f"{display_names[0]}_and_{len(display_names) - 1}_more_{digest}{suffix}"
 
 
-def _expected_pack_names(
+def expected_pack_names(
     platforms: list[str],
     platforms_dir: str,
     regions: list[str] | None,
@@ -220,11 +220,11 @@ def _expected_pack_names(
     the (source, required_only) combinations the run built.
     """
     def narrow_tags(platform_name: str) -> list[str]:
-        named = _platform_target(platform_name, target_name, platforms_dir)
+        named = platform_target(platform_name, target_name, platforms_dir)
         return [
             "".join(
                 tag
-                for tag, _label in _narrowings(
+                for tag, _label in pack_narrowings(
                     source, regions, named, False, required, no_game_data=no_game_data
                 )
             )
@@ -233,7 +233,7 @@ def _expected_pack_names(
 
     names: dict[str, set[str]] = {
         p: {
-            f"{_platform_pack_stem([p], p, platforms_dir)}{tags}_BIOS_Pack.zip"
+            f"{platform_pack_stem([p], p, platforms_dir)}{tags}_BIOS_Pack.zip"
             for tags in narrow_tags(p)
         }
         for p in platforms
@@ -255,7 +255,7 @@ def _expected_pack_names(
     ):
         if len(group) < 2:
             continue
-        stem = _platform_pack_stem(group, representative, platforms_dir)
+        stem = platform_pack_stem(group, representative, platforms_dir)
         for tags in narrow_tags(representative):
             for p in group:
                 if p in names:
@@ -281,7 +281,7 @@ def _content_narrowing_tags() -> tuple[str, ...]:
     for source, one_per_slot, required_only in dimensions:
         tags.extend(
             tag
-            for tag, _label in _narrowings(source, None, None, one_per_slot, required_only)
+            for tag, _label in pack_narrowings(source, None, None, one_per_slot, required_only)
         )
     return tuple(tags)
 
@@ -289,7 +289,7 @@ def _content_narrowing_tags() -> tuple[str, ...]:
 _CONTENT_NARROWING_TAGS = _content_narrowing_tags()
 
 
-def _narrows_contents(pack_name: str) -> bool:
+def narrows_contents(pack_name: str) -> bool:
     """True when a pack holds fewer files than the platform declares.
 
     A source-restricted or required-only build is narrower by design, so the
@@ -300,15 +300,15 @@ def _narrows_contents(pack_name: str) -> bool:
     return any(f"{tag}_" in pack_name for tag in _CONTENT_NARROWING_TAGS)
 
 
-def _pack_variant(pack_name: str) -> tuple[str, bool] | None:
+def pack_variant(pack_name: str) -> tuple[str, bool] | None:
     """The (source, required_only) a pack was built as, read from its name.
 
     None for a one-per-slot pack, whose slot choice the check does not
-    replay. The tags come from the name builder, as for _narrows_contents.
+    replay. The tags come from the name builder, as for narrows_contents.
     """
     def tagged(**dimension: object) -> bool:
         tags = [
-            tag for tag, _label in _narrowings(
+            tag for tag, _label in pack_narrowings(
                 str(dimension.get("source", "full")), None, None,
                 bool(dimension.get("one_per_slot", False)),
                 bool(dimension.get("required_only", False)),
@@ -324,7 +324,7 @@ def _pack_variant(pack_name: str) -> tuple[str, bool] | None:
     return source, tagged(required_only=True)
 
 
-def _pack_archives(output_dir: str) -> list[str]:
+def pack_archives(output_dir: str) -> list[str]:
     """The ZIPs of a directory that are packs.
 
     A part of a split pack holds a share of a platform by design and was

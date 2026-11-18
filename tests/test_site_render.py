@@ -134,7 +134,7 @@ class StructuredBlocks(unittest.TestCase):
     def render(self, profile: dict) -> str:
         from sitegen import fields
 
-        return "\n".join(fields._render_structured_blocks(profile))
+        return "\n".join(fields.render_structured_blocks(profile))
 
     @mock.patch("sitegen.sources.tree_holds", lambda *_args: True)  # a path the record confirms
     def test_a_source_ref_in_a_block_is_a_pinned_link(self):
@@ -310,7 +310,7 @@ class ForgesUpstreamDoesNotRead(unittest.TestCase):
 
         profile = {"source": url, "source_commit": "f6c00044" + "0" * 32, **extra}
         return (sources.revision_markdown(profile),
-                sources._source_ref_markdown(profile, ref))
+                sources.source_ref_markdown(profile, ref))
 
     def test_bitbucket(self):
         revision, ref = self.links("https://bitbucket.org/linuxwolf6/splitwolf",
@@ -382,7 +382,7 @@ class TheSearchLandsOnTheCard(unittest.TestCase):
                      for i in range(11)}
         names = {sys_id: f"System {sys_id[-2:]}" for sys_id in by_system}
         with mock.patch.dict(systemnames.SYSTEM_NAMES, names):
-            lines = platformfiles._render_platform_systems(by_system, {}, {})
+            lines = platformfiles.render_platform_systems(by_system, {}, {})
         headings = [line for line in lines if line.startswith("### ")]
         self.assertEqual(len(headings), 11)
         self.assertTrue(headings[0].endswith("{ #system-00 }"))
@@ -393,7 +393,7 @@ class TheSearchLandsOnTheCard(unittest.TestCase):
         from sitegen import emulatorcards
 
         entry = {"name": "scph5501.bin", "required": True}
-        lines = emulatorcards._render_emulator_file(
+        lines = emulatorcards.render_emulator_file(
             entry, {"files": [entry]}, None, [entry], lambda f: True, "file-scph5501-bin")
         self.assertTrue(lines[2].startswith('<h3 id="file-scph5501-bin" class="rb-file-title"'))
         self.assertIn("<code>scph5501.bin</code>", lines[2])
@@ -403,7 +403,7 @@ class TheSearchLandsOnTheCard(unittest.TestCase):
         from packs.crossref import FileConsumers
 
         entry = {"name": "a.bin", "sha1": "a" * 40, "md5": "b" * 32, "size": 3}
-        lines = cards._system_file_card(entry, FileConsumers({"files": {}}))
+        lines = cards.system_file_card(entry, FileConsumers({"files": {}}))
         self.assertTrue(lines[2].startswith('<h3 id="sha1-aaaaaaaaaaaa" class="rb-file-title"'))
         self.assertIn("<code>a.bin</code>", lines[2])
 
@@ -424,7 +424,7 @@ class TheSearchSkipsLinkLists(unittest.TestCase):
         consumers.installed = {sha1: {"batocera": {"bios/a.bin"}}}
         consumers.emulators = {sha1: {"duckstation"}}
         entry = {"name": "a.bin", "sha1": sha1, "md5": "b" * 32, "size": 3}
-        lines = cards._system_file_card(entry, consumers)
+        lines = cards.system_file_card(entry, consumers)
         self.assertIn("<code>a.bin</code>", lines[2])
         text = "\n".join(lines)
         searched, _sep, skipped = text.partition('<dl class="rb-facts" data-pagefind-ignore>')
@@ -440,7 +440,7 @@ class TheSearchSkipsLinkLists(unittest.TestCase):
         from packs.crossref import FileConsumers
 
         entry = {"name": "0.ogg", "sha1": "a" * 40, "size": 3}
-        lines = cards._system_file_card(
+        lines = cards.system_file_card(
             entry, FileConsumers({"files": {}}), searchable=False)
         self.assertIn("data-pagefind-ignore", lines[2])
         self.assertNotIn("data-pagefind-weight", lines[2])
@@ -451,7 +451,7 @@ class TheSearchSkipsLinkLists(unittest.TestCase):
         lines = ["- Path: `p`", "- SHA1: x", "- Source: `a.c:1`", "- Platforms: p",
                  "- Destination: `d`", "- Contents (1 members):", "    - `m`",
                  "- Note"]
-        out = [line for line in cards._search_skipped_apart(lines) if line]
+        out = [line for line in cards.search_skipped_apart(lines) if line]
         self.assertEqual(out, [
             "- Path: `p`",
             '<div class="rb-search-skip" data-pagefind-ignore>',
@@ -523,7 +523,7 @@ class AMemberIsReadInItsArchive(unittest.TestCase):
         self.assertIn(shipped, credited)
         self.assertFalse([p for p in credited if p.endswith("/sm1.sm1")])
         sm1 = next(f for f in files if f["name"] == "sm1.sm1")
-        rows = "\n".join(emulatorcards._render_emulator_file(sm1, profile, consumers, files,
+        rows = "\n".join(emulatorcards.render_emulator_file(sm1, profile, consumers, files,
                                                   lambda _f: True, owner="fbneo"))
         self.assertIn("Collection copy: member `sm1.sm1` of", rows)
         self.assertIn(shipped, rows)

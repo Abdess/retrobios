@@ -175,7 +175,7 @@ class AmberelecCarriesTheMachines(unittest.TestCase):
             trees = datatrees.core_data_trees(config, profiles, "amberelec", registry)
             refs: dict = {}
             members = dict(
-                (full, src) for src, full in datatrees._data_directory_members(
+                (full, src) for src, full in datatrees.data_directory_members(
                     config.get("systems", {}), registry, "amberelec",
                     config.get("base_destination", ""), False, set(), set(), set(),
                     refs_out=refs, core_trees=trees,

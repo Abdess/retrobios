@@ -16,7 +16,7 @@ from pathlib import Path
 # Macros that declare a machine entry. GAMEL is GAME plus a layout and is
 # the only suffixed form MAME declares (src/emu/gamedrv.h): a BIOS root that
 # ships a layout, such as gq863 or aristmk5, is written with it.
-_MACHINE_MACROS = re.compile(
+MACHINE_MACROS = re.compile(
     r"\b(GAMEL|GAME|SYST|COMP|CONS)\s*\(",
     re.MULTILINE,
 )
@@ -127,7 +127,7 @@ def find_bios_root_sets(source: str, filename: str) -> dict[str, dict]:
     """
     results: dict[str, dict] = {}
 
-    for match in _MACHINE_MACROS.finditer(source):
+    for match in MACHINE_MACROS.finditer(source):
         start = match.end() - 1  # position of opening paren
         block_end = _find_closing_paren(source, start)
         if block_end == -1:

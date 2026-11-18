@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 from model.profiles import unique_emulator_profiles
-from sitegen.emulatorcards import _named_system_link
+from sitegen.emulatorcards import named_system_link
 
 
-def _content_check_ceiling(profiles: dict) -> str:
+def content_check_ceiling(profiles: dict) -> str:
     """How far content checking can reach across every profiled entry."""
     hashed = sized = neither = 0
     for profile in unique_emulator_profiles(profiles).values():
@@ -153,7 +153,7 @@ def generate_emulators_index(profiles: dict) -> str:
             emu_name = p.get("emulator", name)
             cls = p.get("core_classification", "other")
             systems = list(dict.fromkeys(
-                _named_system_link(s, "../") for s in p.get("systems") or []))
+                named_system_link(s, "../") for s in p.get("systems") or []))
             files = p.get("files", [])
             sys_str = ", ".join(systems[:3])
             if len(systems) > 3:

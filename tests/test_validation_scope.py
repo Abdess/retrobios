@@ -20,7 +20,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 class ValidationIndexScope(unittest.TestCase):
     def test_no_index_over_every_profile(self):
-        pattern = re.compile(r"_build_validation_index\(\s*(emu_)?profiles\s*\)")
+        pattern = re.compile(r"build_validation_index\(\s*(emu_)?profiles\s*\)")
         for name in ("verify.py", "generate_pack.py", "packs/integrity.py", "packs/extras.py"):
             source = script_source(name)
             with self.subTest(module=name):
@@ -34,11 +34,11 @@ class ValidationIndexScope(unittest.TestCase):
             r"plat_cores = resolve_platform_cores\(config, profiles\)\s+"
             r"platform_profiles = \{name: profiles\[name\] for name in plat_cores\}",
         )
-        self.assertIn("validation_index = _build_validation_index(platform_profiles)", verify)
+        self.assertIn("validation_index = build_validation_index(platform_profiles)", verify)
         self.assertRegex(
             builder,
             r"for name in resolve_platform_cores\(config, emu_profiles\)\s*\}\s*"
-            r"validation_index = _build_validation_index\(platform_profiles\)",
+            r"validation_index = build_validation_index\(platform_profiles\)",
         )
 
 
@@ -60,7 +60,7 @@ class ContentFoundLabelsTakeTheirRegionSlot(unittest.TestCase):
         import hashlib
         import tempfile
 
-        from resolve.validation import _build_validation_index, check_file_validation
+        from resolve.validation import build_validation_index, check_file_validation
 
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "scph1001.bin"
@@ -78,12 +78,12 @@ class ContentFoundLabelsTakeTheirRegionSlot(unittest.TestCase):
                      "validation": ["sha256"], "sha256": "b" * 64},
                 ],
             }
-            index = _build_validation_index({"rustation": profile})
+            index = build_validation_index({"rustation": profile})
             self.assertIsNone(check_file_validation(str(path), "scph1001.bin", index))
             # Another region is another slot.
             self.assertIsNotNone(check_file_validation(str(path), "scph5500.bin", index))
             # A core that opens the file by name rejects it.
-            index = _build_validation_index({"rustation": {**profile, "found_by": "name"}})
+            index = build_validation_index({"rustation": {**profile, "found_by": "name"}})
             self.assertIsNotNone(check_file_validation(str(path), "scph1001.bin", index))
 
 
@@ -97,12 +97,12 @@ class GearcolecoWarnsOnAnUnknownRevision(unittest.TestCase):
 
         import yaml
 
-        from resolve.validation import _build_validation_index, check_file_validation
+        from resolve.validation import build_validation_index, check_file_validation
 
         profile = yaml.safe_load(
             (REPO_ROOT / "emulators" / "gearcoleco.yml").read_text(encoding="utf-8")
         )
-        index = _build_validation_index({"gearcoleco": profile})
+        index = build_validation_index({"gearcoleco": profile})
         with tempfile.TemporaryDirectory() as tmp:
             for name, size in (("colecovision.rom", 8192), ("eos.rom", 8192),
                                ("writer.rom", 32768)):

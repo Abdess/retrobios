@@ -161,9 +161,9 @@ class WhereEachSystemFindsItsFile(unittest.TestCase):
 
     def test_the_generator_writes_them(self):
         source = script_source("generate_site.py")
-        self.assertIn("sitehandheld.write_launchers(public, _REPO_ROOT)", source)
-        self.assertIn("sitehandheld.platform_block(platform_name, _REPO_ROOT)", source)
-        self.assertIn("sitehandheld.group_page(_REPO_ROOT)", source)
+        self.assertIn("sitehandheld.write_launchers(public, REPO_ROOT)", source)
+        self.assertIn("sitehandheld.platform_block(platform_name, REPO_ROOT)", source)
+        self.assertIn("sitehandheld.group_page(REPO_ROOT)", source)
 
 
 if __name__ == "__main__":

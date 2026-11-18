@@ -12,8 +12,8 @@ from core.paths import declared_destination
 from model.declarations import OUTER_ROOTS, declared_root
 from model.largefiles import asset_name, load_registered_paths, published_asset_name
 from packs.extras import (
-    _detect_extras_prefix,
-    _extra_system_ids,
+    detect_extras_prefix,
+    extra_system_ids,
     extra_full_destination,
     extra_region_key,
     save_manifest_dest,
@@ -124,7 +124,7 @@ def _stable_hashes(local_path: str, db: dict) -> dict:
     )
 
 
-def _manifest_entry(
+def manifest_entry(
     local_path: str | None,
     dest: str,
     cores: list[str] | None,
@@ -192,7 +192,7 @@ def _is_program(path: str) -> bool:
 
 
 @dataclass(frozen=True)
-class _ClaimContext:
+class ClaimContext:
     """How a manifest resolves and judges the copy a core claim names."""
 
     db: dict
@@ -206,10 +206,10 @@ class _ClaimContext:
     data_registry: dict | None = None
 
 
-def _attach_claims(
+def attach_claims(
     entry: dict,
     claims: list[dict],
-    ctx: _ClaimContext,
+    ctx: ClaimContext,
     dest: str,
     manifest_dest: str,
 ) -> None:
@@ -248,7 +248,7 @@ def _attach_claims(
             claim, claim_path, ctx.db, ctx.validation_index or {}, ctx.bios_dir, None,
             claim.get("layout_path") or dest, ctx.owners,
         )
-        copy, _size = _manifest_entry(
+        copy, _size = manifest_entry(
             claim_path, manifest_dest, [claim_emu], ctx.db, ctx.repo_root, {}
         )
         if copy is None:
@@ -267,7 +267,7 @@ def _attach_claims(
 
 def _absent_claim(claim: dict, claim_emu: str, claim_status: str) -> dict:
     """The omission a claim with nothing held stands for."""
-    systems = _extra_system_ids(claim)
+    systems = extra_system_ids(claim)
     return {
         "name": str(claim.get("name") or ""),
         "system": systems[0] if systems else "",
@@ -281,7 +281,7 @@ def _absent_claim(claim: dict, claim_emu: str, claim_status: str) -> dict:
     }
 
 
-def _record_slot_choices(
+def record_slot_choices(
     entry: dict,
     choices: list[tuple[str, str | None]],
     declarations: list[tuple[list[str], dict, str]],
@@ -303,7 +303,7 @@ def _record_slot_choices(
         local_path, _status = settle(file_entry, sys_id, dest, override)
         if local_path is None:
             return None
-        copy, _size = _manifest_entry(local_path, dest, None, db, repo_root, {})
+        copy, _size = manifest_entry(local_path, dest, None, db, repo_root, {})
         if copy is None:
             return None
         return {k: v for k, v in copy.items() if k not in ("dest", "cores")}
@@ -341,14 +341,14 @@ def _record_slot_choices(
     entry["declared_choices"] = declared
 
 
-def _manifest_dest_of(full_dest: str, base_dest: str) -> str:
+def manifest_dest_of(full_dest: str, base_dest: str) -> str:
     """A pack destination as the manifest writes it, below base_destination."""
     if base_dest and full_dest.startswith(f"{base_dest}/"):
         return full_dest[len(base_dest) + 1:]
     return full_dest
 
 
-def _claim_platform_omission(held: dict | None, emulator: str) -> bool:
+def claim_platform_omission(held: dict | None, emulator: str) -> bool:
     """Record a core's claim on a destination the platform already omits.
 
     The platform's own omission stands while one of its declaring systems
@@ -365,7 +365,7 @@ def _claim_platform_omission(held: dict | None, emulator: str) -> bool:
     return True
 
 
-def _claim_cores(fe: dict) -> list[str]:
+def claim_cores(fe: dict) -> list[str]:
     """The cores an extra and the claims folded onto it name: an omission
     names every core reading the file, as a list built for one of them
     would."""
@@ -376,7 +376,7 @@ def _claim_cores(fe: dict) -> list[str]:
     return sorted(name for name in names if name)
 
 
-def _record_absent(
+def record_absent(
     absent: list[dict],
     config: dict,
     base_dest: str,
@@ -392,7 +392,7 @@ def _record_absent(
     pak000-004 reached no safety notice: the installer said everything
     was verified and the game refused to start.
     """
-    extras_pfx = _detect_extras_prefix(config, base_dest)
+    extras_pfx = detect_extras_prefix(config, base_dest)
     for fe in absent:
         if required_only and fe.get("required") is False:
             continue
@@ -414,7 +414,7 @@ def _record_absent(
                     and source_emu not in claimed):
                 held["cores"] = sorted([*claimed, source_emu])
             continue
-        systems = _extra_system_ids(fe)
+        systems = extra_system_ids(fe)
         record_omission(
             full_dest, fe, systems[0] if systems else "", "not_found",
             [source_emu] if source_emu else [],
@@ -429,7 +429,7 @@ def _record_absent(
 MANIFEST_OUTER_FIELDS = ("bios_folder", "from_bios", "searched", "default", "config")
 
 
-def _record_unplaceable(
+def record_unplaceable(
     unplaceable: list[dict],
     record_omission: Callable[..., None],
     config: dict,

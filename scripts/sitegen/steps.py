@@ -30,12 +30,12 @@ from sitegen.diagrams import (
     STROKE,
     TEXT_SIZE,
     WIDE,
-    _badge,
-    _badge_side,
-    _line,
-    _n,
-    _rect,
-    _text,
+    badge,
+    badge_side,
+    svg_connector,
+    svg_number,
+    svg_rect,
+    svg_text,
     diagram_files,
     pictures,
     svg_document,
@@ -105,7 +105,7 @@ def description(tab: str) -> str:
 
 
 def _stroke(d: str, cls: str = "rb-d-line", width: float = 1.5) -> str:
-    return f'<path d="{d}" fill="none" stroke="{STROKE}" stroke-width="{_n(width)}" class="{cls}"/>'
+    return f'<path d="{d}" fill="none" stroke="{STROKE}" stroke-width="{svg_number(width)}" class="{cls}"/>'
 
 
 def _key_width(label: str) -> float:
@@ -120,9 +120,9 @@ def _keys(x: float, y: float, w: float, word: str) -> list[str]:
     top = y + ICON_H / 2 - 12
     for label in labels:
         width = _key_width(label)
-        out.append(_rect(left, top, width, 24, accent=True))
+        out.append(svg_rect(left, top, width, 24, accent=True))
         out.append(
-            f'<text x="{_n(left + width / 2)}" y="{_n(top + 16.5)}" font-size="{_n(KEY_SIZE)}" '
+            f'<text x="{svg_number(left + width / 2)}" y="{svg_number(top + 16.5)}" font-size="{svg_number(KEY_SIZE)}" '
             f'text-anchor="middle" fill="currentColor" style="{MONO_STYLE}">{escape(label)}</text>')
         left += width + 4
     return out
@@ -130,8 +130,8 @@ def _keys(x: float, y: float, w: float, word: str) -> list[str]:
 
 def _menu(x: float, y: float, w: float) -> list[str]:
     cx, top = x + w / 2, y + 4
-    out = [_rect(cx - 22, top, 44, 36)]
-    out += [_stroke(f"M{_n(cx - 14)} {_n(top + 10 + 8 * i)} H{_n(cx + 14)}") for i in range(3)]
+    out = [svg_rect(cx - 22, top, 44, 36)]
+    out += [_stroke(f"M{svg_number(cx - 14)} {svg_number(top + 10 + 8 * i)} H{svg_number(cx + 14)}") for i in range(3)]
     return out
 
 
@@ -139,11 +139,11 @@ def _search(x: float, y: float, w: float, word: str) -> list[str]:
     width = min(w - 4, len(word) * KEY_SIZE * 0.62 + 34)
     left, top = x + (w - width) / 2, y + ICON_H / 2 - 12
     return [
-        _rect(left, top, width, 24, accent=True),
-        f'<circle cx="{_n(left + 11)}" cy="{_n(top + 11)}" r="5" fill="none" stroke="{STROKE}" '
+        svg_rect(left, top, width, 24, accent=True),
+        f'<circle cx="{svg_number(left + 11)}" cy="{svg_number(top + 11)}" r="5" fill="none" stroke="{STROKE}" '
         'stroke-width="1.5" class="rb-d-line"/>',
-        _stroke(f"M{_n(left + 15)} {_n(top + 15)} L{_n(left + 19)} {_n(top + 19)}"),
-        f'<text x="{_n(left + 25)}" y="{_n(top + 16.5)}" font-size="{_n(KEY_SIZE)}" '
+        _stroke(f"M{svg_number(left + 15)} {svg_number(top + 15)} L{svg_number(left + 19)} {svg_number(top + 19)}"),
+        f'<text x="{svg_number(left + 25)}" y="{svg_number(top + 16.5)}" font-size="{svg_number(KEY_SIZE)}" '
         f'fill="currentColor" style="{MONO_STYLE}">{escape(word)}</text>',
     ]
 
@@ -151,36 +151,36 @@ def _search(x: float, y: float, w: float, word: str) -> list[str]:
 def _window(x: float, y: float, w: float) -> list[str]:
     cx, top = x + w / 2, y + 2
     return [
-        _rect(cx - 32, top, 64, 40),
-        _stroke(f"M{_n(cx - 32)} {_n(top + 9)} H{_n(cx + 32)}"),
-        f'<text x="{_n(cx - 24)}" y="{_n(top + 28)}" font-size="{_n(KEY_SIZE)}" '
+        svg_rect(cx - 32, top, 64, 40),
+        _stroke(f"M{svg_number(cx - 32)} {svg_number(top + 9)} H{svg_number(cx + 32)}"),
+        f'<text x="{svg_number(cx - 24)}" y="{svg_number(top + 28)}" font-size="{svg_number(KEY_SIZE)}" '
         f'fill="currentColor" style="{MONO_STYLE}">&gt;_</text>',
     ]
 
 
 def _copy(x: float, y: float, w: float) -> list[str]:
     cx, top = x + w / 2, y + 6
-    return [_rect(cx - 12, top, 18, 24), _rect(cx - 6, top + 7, 18, 24, accent=True)]
+    return [svg_rect(cx - 12, top, 18, 24), svg_rect(cx - 6, top + 7, 18, 24, accent=True)]
 
 
 def _mouse(x: float, y: float, w: float) -> list[str]:
     cx, top = x + w / 2, y + 2
     return [
-        f'<rect x="{_n(cx - 13)}" y="{_n(top)}" width="26" height="40" rx="12" fill="none" '
+        f'<rect x="{svg_number(cx - 13)}" y="{svg_number(top)}" width="26" height="40" rx="12" fill="none" '
         f'stroke="{STROKE}" stroke-width="1.5" class="rb-d-line"/>',
         # The right button, the one to press.
-        f'<path d="M{_n(cx + 1)} {_n(top + 1)} A12 12 0 0 1 {_n(cx + 12)} {_n(top + 13)} '
-        f'L{_n(cx + 1)} {_n(top + 13)} Z" fill="currentColor" class="rb-d-num"/>',
-        _stroke(f"M{_n(cx)} {_n(top)} V{_n(top + 14)} M{_n(cx - 13)} {_n(top + 14)} "
-                f"H{_n(cx + 13)}"),
+        f'<path d="M{svg_number(cx + 1)} {svg_number(top + 1)} A12 12 0 0 1 {svg_number(cx + 12)} {svg_number(top + 13)} '
+        f'L{svg_number(cx + 1)} {svg_number(top + 13)} Z" fill="currentColor" class="rb-d-num"/>',
+        _stroke(f"M{svg_number(cx)} {svg_number(top)} V{svg_number(top + 14)} M{svg_number(cx - 13)} {svg_number(top + 14)} "
+                f"H{svg_number(cx + 13)}"),
     ]
 
 
 def _power(x: float, y: float, w: float) -> list[str]:
     cx, cy = x + w / 2, y + ICON_H / 2 + 2
     return [
-        _stroke(f"M{_n(cx - 9)} {_n(cy - 11)} A14 14 0 1 0 {_n(cx + 9)} {_n(cy - 11)}", width=2.5),
-        _stroke(f"M{_n(cx)} {_n(cy - 18)} V{_n(cy - 2)}", width=2.5),
+        _stroke(f"M{svg_number(cx - 9)} {svg_number(cy - 11)} A14 14 0 1 0 {svg_number(cx + 9)} {svg_number(cy - 11)}", width=2.5),
+        _stroke(f"M{svg_number(cx)} {svg_number(cy - 18)} V{svg_number(cy - 2)}", width=2.5),
     ]
 
 
@@ -202,34 +202,34 @@ def _wide(steps: tuple[Step, ...]) -> tuple[float, float, list[str]]:
     out: list[str] = []
     for index, (step, lines) in enumerate(zip(steps, captions)):
         x = 1 + index * (width + gap)
-        out.append(_rect(x, 1, width, height))
-        out += _badge(x + 8, 8, str(index + 1))
+        out.append(svg_rect(x, 1, width, height))
+        out += badge(x + 8, 8, str(index + 1))
         out += _icon(step, x + 4, 30, width - 8)
         y = 30 + ICON_H + 24
         for line in lines:
-            out.append(_text(x + width / 2, y, line, anchor="middle"))
+            out.append(svg_text(x + width / 2, y, line, anchor="middle"))
             y += 18
         if index < len(steps) - 1:
             mid = 1 + height / 2
-            out += _line([(x + width + 1, mid), (x + width + gap - 1, mid)])
+            out += svg_connector([(x + width + 1, mid), (x + width + gap - 1, mid)])
     return WIDE, height + 2, out
 
 
 def _narrow(steps: tuple[Step, ...]) -> tuple[float, float, list[str]]:
     """One card a row: number, pictogram, caption."""
     icon_w, row_gap = 112.0, 8.0
-    text_x = 8 + _badge_side("9") + 6 + icon_w + 8
+    text_x = 8 + badge_side("9") + 6 + icon_w + 8
     out: list[str] = []
     y = 1.0
     for index, step in enumerate(steps):
         lines = wrap(step.caption, NARROW - text_x - 8, TEXT_SIZE)
         height = max(ICON_H + 12, len(lines) * 18 + 16)
-        out.append(_rect(1, y, NARROW - 2, height))
-        out += _badge(8, y + height / 2 - 10, str(index + 1))
-        out += _icon(step, 8 + _badge_side("9") + 6, y + (height - ICON_H) / 2, icon_w)
+        out.append(svg_rect(1, y, NARROW - 2, height))
+        out += badge(8, y + height / 2 - 10, str(index + 1))
+        out += _icon(step, 8 + badge_side("9") + 6, y + (height - ICON_H) / 2, icon_w)
         ty = y + height / 2 - (len(lines) - 1) * 9 + 5
         for line in lines:
-            out.append(_text(text_x, ty, line))
+            out.append(svg_text(text_x, ty, line))
             ty += 18
         y += height + row_gap
     return NARROW, y - row_gap + 1, out

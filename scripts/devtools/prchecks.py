@@ -11,9 +11,6 @@ from dataclasses import dataclass, field
 from core.paths import REPO_ROOT
 
 
-ROOT = REPO_ROOT
-
-
 @dataclass(frozen=True)
 class Step:
     command: str
@@ -72,7 +69,7 @@ def shown(step: Step) -> str:
 
 def execute(step: Step) -> int:
     env = {**os.environ, **step.env}
-    return subprocess.run(argv(step.command), cwd=ROOT, env=env, check=False).returncode
+    return subprocess.run(argv(step.command), cwd=REPO_ROOT, env=env, check=False).returncode
 
 
 def run(steps: tuple[Step, ...] = STEPS) -> int:

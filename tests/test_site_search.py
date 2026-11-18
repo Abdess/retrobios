@@ -230,10 +230,10 @@ class Descriptions(unittest.TestCase):
         saved = dict(descriptions.PAGE_DATA)
         self.addCleanup(lambda: (descriptions.PAGE_DATA.clear(), descriptions.PAGE_DATA.update(saved)))
         descriptions.PAGE_DATA["emulators/duckstation.md"] = {"hasPart": [{"name": "scph5501.bin"}]}
-        self.assertEqual(descriptions._browser_title(Path("emulators/duckstation.md"), "DuckStation"),
+        self.assertEqual(descriptions.page_browser_title(Path("emulators/duckstation.md"), "DuckStation"),
                          "DuckStation BIOS files")
-        self.assertEqual(descriptions._browser_title(Path("systems/sega.md"), "Sega"), "Sega BIOS files")
-        self.assertEqual(descriptions._browser_title(Path("systems/sega-dreamcast.md"), "Sega: Dreamcast"),
+        self.assertEqual(descriptions.page_browser_title(Path("systems/sega.md"), "Sega"), "Sega BIOS files")
+        self.assertEqual(descriptions.page_browser_title(Path("systems/sega-dreamcast.md"), "Sega: Dreamcast"),
                          "Dreamcast BIOS files (Sega)")
 
     def test_an_emulator_page_is_described_by_its_intro(self) -> None:
@@ -242,7 +242,7 @@ class Descriptions(unittest.TestCase):
         descriptions.PAGE_DATA["emulators/duckstation.md"] = {"hasPart": [{"name": "scph5501.bin"}]}
         body = ("# DuckStation\n\nDuckStation emulates Sony PlayStation. It picks the BIOS for "
                 "the game's region.\n\n<details>\n\nThe installer finds the platform.\n")
-        text = descriptions._page_description(body, Path("emulators/duckstation.md"), "DuckStation")
+        text = descriptions.page_description(body, Path("emulators/duckstation.md"), "DuckStation")
         self.assertTrue(text.startswith("DuckStation emulates Sony PlayStation."))
         self.assertNotIn("source-pinned", text)
 
@@ -255,9 +255,9 @@ class Descriptions(unittest.TestCase):
         with open(REPO_ROOT / "emulators" / "daedalusx64.yml", encoding="utf-8") as handle:
             structured.record_emulator_page("daedalusx64", yaml.safe_load(handle))
         key = Path("emulators/daedalusx64.md")
-        self.assertEqual(descriptions._browser_title(key, "DaedalusX64"), "DaedalusX64 emulator")
+        self.assertEqual(descriptions.page_browser_title(key, "DaedalusX64"), "DaedalusX64 emulator")
         body = "# DaedalusX64\n\nDaedalusX64 emulates Nintendo 64.\n"
-        self.assertEqual(descriptions._page_description(body, key, "DaedalusX64"),
+        self.assertEqual(descriptions.page_description(body, key, "DaedalusX64"),
                          "DaedalusX64 emulates Nintendo 64. Every file it reads comes with the app.")
 
     def test_an_emulator_snippet_names_the_files_searched_for(self) -> None:
@@ -272,17 +272,17 @@ class Descriptions(unittest.TestCase):
         key = Path("emulators/flycast.md")
         body = ("# Flycast\n\nFlycast emulates Sega Dreamcast. It reads 10 files, 4 of them "
                 "required: without a required file it does not start games.\n")
-        text = descriptions._page_description(body, key, "Flycast")
+        text = descriptions.page_description(body, key, "Flycast")
         self.assertTrue(text.startswith("Sega Dreamcast BIOS for Flycast: dc_boot.bin, "), text)
         self.assertLessEqual(len(text), 155)
         self.assertFalse(text.endswith("..."), text)
 
     def test_a_switch_emulator_reads_keys(self) -> None:
-        self.assertEqual(emulatorcards._snippet_noun(["prod.keys", "dev.keys", "title.keys", "key_retail.bin"], 4, 4), "keys")
-        self.assertEqual(emulatorcards._snippet_noun(["prod.keys", "title.keys", "<firmware>.zip", "a.txt"], 3, 4),
+        self.assertEqual(emulatorcards.snippet_noun(["prod.keys", "dev.keys", "title.keys", "key_retail.bin"], 4, 4), "keys")
+        self.assertEqual(emulatorcards.snippet_noun(["prod.keys", "title.keys", "<firmware>.zip", "a.txt"], 3, 4),
                          "keys and firmware")
-        self.assertEqual(emulatorcards._snippet_noun(["gba_bios.bin", "gb_bios.bin"], 2, 2), "BIOS")
-        self.assertEqual(emulatorcards._snippet_noun(["oot.z64", "oot-mq.z64", "font.bin"], 1, 3), "files")
+        self.assertEqual(emulatorcards.snippet_noun(["gba_bios.bin", "gb_bios.bin"], 2, 2), "BIOS")
+        self.assertEqual(emulatorcards.snippet_noun(["oot.z64", "oot-mq.z64", "font.bin"], 1, 3), "files")
 
     def test_an_any_name_snippet_says_what_to_do(self) -> None:
         saved = dict(descriptions.PAGE_DATA)
@@ -291,7 +291,7 @@ class Descriptions(unittest.TestCase):
         body = ("# AetherSX2\n\nAetherSX2 needs one Sony PlayStation 2 BIOS file, any region."
                 "\n\n1. Download [`ps2.bin`](../x/).\n2. Put it in this folder:\n")
         self.assertEqual(
-            descriptions._page_description(body, Path("emulators/aethersx2.md"), "AetherSX2"),
+            descriptions.page_description(body, Path("emulators/aethersx2.md"), "AetherSX2"),
             "AetherSX2 needs one Sony PlayStation 2 BIOS file, any region. Download one "
             "from this page and put it in the folder it shows. Any file name works.")
 
@@ -311,24 +311,24 @@ class Descriptions(unittest.TestCase):
         body = ("# ROCKNIX\n\nA system for handhelds. [ROCKNIX website](https://rocknix.org).\n\n"
                 "## On the device { #install }\n")
         self.assertEqual(
-            descriptions._page_description(body, Path("platforms/rocknix.md"), "ROCKNIX"),
+            descriptions.page_description(body, Path("platforms/rocknix.md"), "ROCKNIX"),
             "The BIOS files for ROCKNIX, the folder they go in and the command that installs "
             "them. A system for handhelds.")
 
     def test_a_console_page_is_described_by_its_start_line(self) -> None:
         body = "# Sega: Dreamcast\n\nPart of Sega.\n\n**Start with**: `dc_boot.bin`, `dc_flash.bin`.\n"
-        text = descriptions._page_description(body, Path("systems/sega-dreamcast.md"), "Sega: Dreamcast")
+        text = descriptions.page_description(body, Path("systems/sega-dreamcast.md"), "Sega: Dreamcast")
         self.assertEqual(text, "Dreamcast BIOS files (Sega). Start with dc_boot.bin, dc_flash.bin.")
 
     def test_the_faq_is_described_by_its_questions(self) -> None:
         body = ("# Common questions\n\n## Are BIOS files needed?\n\nYes.\n\n## Which one?\n\n"
                 "Run the command with --dry-run.\n\n## Zip or not?\n\nZip.\n")
-        text = descriptions._page_description(body, Path("wiki/faq.md"), "Common questions")
+        text = descriptions.page_description(body, Path("wiki/faq.md"), "Common questions")
         self.assertTrue(text.startswith("Common questions: Are BIOS files needed?"))
 
     def test_a_written_description_wins(self) -> None:
         source = script_source("generate_site.py")
-        self.assertIn('authored.get("description") or _page_description(', source)
+        self.assertIn('authored.get("description") or page_description(', source)
 
     def test_the_check_counts_templates(self) -> None:
         pages = {}

@@ -5,14 +5,14 @@ from __future__ import annotations
 import json
 
 from model.profiles import unique_emulator_profiles
-from sitegen.home import _next_block
+from sitegen.home import next_block
 from sitegen.readme import contributing_text
 
 
 def generate_contributing() -> str:
     return contributing_text(
         lambda page: f"{page}.md", "# Contributing", "on this site"
-    ) + "\n" + "\n".join(_next_block([
+    ) + "\n" + "\n".join(next_block([
         "[Profiling an emulator](wiki/profiling.md), the first task most "
         "contributions start from",
     ]))
@@ -45,7 +45,7 @@ def generate_not_found() -> str:
 
 
 def reference_next() -> str:
-    return "\n" + "\n".join(_next_block([
+    return "\n" + "\n".join(next_block([
         "[Reference index](wiki/index.md), every reference page in one list",
         "For contributors: [How to contribute](contributing.md)",
     ]))

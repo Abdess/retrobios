@@ -311,7 +311,7 @@ def _rate_limit_wait(exc: urllib.error.HTTPError, waited: int) -> float | None:
     return RATE_LIMIT_WAITS[waited]
 
 
-def _fetch(url: str, accept_json: bool = False) -> bytes | None:
+def fetch_body(url: str, accept_json: bool = False) -> bytes | None:
     """Body of a GET, or None on 404.
 
     A pass over every profile issues thousands of requests, so a dropped
@@ -355,15 +355,15 @@ def _fetch(url: str, accept_json: bool = False) -> bytes | None:
         _sleep(RETRY_BACKOFF[attempt - 1])
 
 
-def _http_text(url: str) -> str | None:
+def http_text(url: str) -> str | None:
     """Text body of a GET, or None on 404. Replaced in tests."""
-    body = _fetch(url)
+    body = fetch_body(url)
     return None if body is None else body.decode("utf-8", errors="replace")
 
 
-def _http_json(url: str) -> object | None:
+def http_json(url: str) -> object | None:
     """Parsed JSON body of a GET, or None on 404. Replaced in tests."""
-    body = _fetch(url, accept_json=True)
+    body = fetch_body(url, accept_json=True)
     return None if body is None else json.loads(body.decode())
 
 
@@ -419,7 +419,7 @@ def fetch_file(
         return None if text == ABSENT else text.splitlines()
     if offline:
         raise NotCachedError(f"{repo.slug}@{sha[:8]}:{path} is not in the offline cache")
-    fetched = _http_text(content_url(repo, sha, path))
+    fetched = http_text(content_url(repo, sha, path))
     write_cache(target, ABSENT if fetched is None else fetched)
     return None if fetched is None else fetched.splitlines()
 
@@ -441,14 +441,14 @@ def _api_target(url: str, cache_dir: str) -> Path:
 def _require_cached(url: str, cache_dir: str, offline: bool, what: str) -> None:
     """Offline, refuse a call the cache holds no answer to, absence included.
 
-    _api answers None both for a resource the forge does not have and for
+    cached_api answers None both for a resource the forge does not have and for
     one never asked, and only the first is a fact.
     """
     if offline and not _api_target(url, cache_dir).is_file():
         raise NotCachedError(f"{what} is not in the offline cache")
 
 
-def _api(
+def cached_api(
     url: str, cache_dir: str, offline: bool, max_age: float | None = None,
     absent_max_age: float | None = None,
 ) -> object | None:
@@ -472,7 +472,7 @@ def _api(
             return None if raw == ABSENT else json.loads(raw)
     if offline:
         return None
-    payload = _http_json(url)
+    payload = http_json(url)
     write_cache(target, ABSENT if payload is None else json.dumps(payload))
     return payload
 
@@ -492,12 +492,12 @@ def fetch_page(url: str, cache_dir: str, offline: bool) -> str | None:
             return None if raw == ABSENT else raw
     if offline:
         return None
-    text = _http_text(url)
+    text = http_text(url)
     write_cache(target, ABSENT if text is None else text)
     return text
 
 
-def _project(repo: Repo) -> str:
+def project_path(repo: Repo) -> str:
     return urllib.parse.quote(f"{repo.owner}/{repo.name}", safe="")
 
 
@@ -508,7 +508,7 @@ def _commits_url(repo: Repo, date: str | None, branch: str | None = None) -> str
             base += f"&sha={urllib.parse.quote(branch, safe='')}"
     elif repo.family == "gitlab":
         base = (
-            f"{repo.api_base}/projects/{_project(repo)}"
+            f"{repo.api_base}/projects/{project_path(repo)}"
             f"/repository/commits?per_page=1"
         )
         if branch:
@@ -537,10 +537,10 @@ def current_slug(repo: Repo, cache_dir: str, offline: bool = False) -> str | Non
     name in the payload tells the project moved.
     """
     if repo.family == "gitlab":
-        url, key = f"{repo.api_base}/projects/{_project(repo)}", "path_with_namespace"
+        url, key = f"{repo.api_base}/projects/{project_path(repo)}", "path_with_namespace"
     else:
         url, key = f"{repo.api_base}/repos/{repo.slug}", "full_name"
-    payload = _api(url, cache_dir, offline, MOVING_TTL)
+    payload = cached_api(url, cache_dir, offline, MOVING_TTL)
     if not isinstance(payload, dict):
         return None
     value = payload.get(key)
@@ -566,7 +566,7 @@ def resolve_head(
     _require_cached(
         url, cache_dir, offline, f"{repo.slug}: tip of {branch or 'the default branch'}"
     )
-    return _first_sha(_api(url, cache_dir, offline, 0 if fresh else MOVING_TTL))
+    return _first_sha(cached_api(url, cache_dir, offline, 0 if fresh else MOVING_TTL))
 
 
 def resolve_commit_at(
@@ -581,7 +581,7 @@ def resolve_commit_at(
     if repo.family in ("github", "gitlab"):
         url = _commits_url(repo, date, branch)
         _require_cached(url, cache_dir, offline, f"{repo.slug}: commit at {date}")
-        return _first_sha(_api(url, cache_dir, offline))
+        return _first_sha(cached_api(url, cache_dir, offline))
     return _gitea_commit_at(repo, date, cache_dir, offline, branch)
 
 
@@ -610,7 +610,7 @@ def _gitea_commit_at(
     while True:
         url = f"{base}&page={page}"
         _require_cached(url, cache_dir, offline, f"{repo.slug}: commit at {date}")
-        payload = _api(url, cache_dir, offline, MOVING_TTL)
+        payload = cached_api(url, cache_dir, offline, MOVING_TTL)
         if not isinstance(payload, list) or not payload:
             return None
         for entry in payload:
@@ -637,7 +637,7 @@ def _gitea_commit_date(entry: object) -> datetime | None:
 def _tags_url(repo: Repo) -> str:
     if repo.family == "gitlab":
         return (
-            f"{repo.api_base}/projects/{_project(repo)}"
+            f"{repo.api_base}/projects/{project_path(repo)}"
             f"/repository/tags?per_page=100"
         )
     return f"{repo.api_base}/repos/{repo.slug}/tags?per_page=100"
@@ -645,7 +645,7 @@ def _tags_url(repo: Repo) -> str:
 
 def list_tags(repo: Repo, cache_dir: str, offline: bool = False) -> list[str]:
     """Tag names, newest first as the forge orders them."""
-    payload = _api(_tags_url(repo), cache_dir, offline, MOVING_TTL)
+    payload = cached_api(_tags_url(repo), cache_dir, offline, MOVING_TTL)
     if not isinstance(payload, list):
         return []
     return [t["name"] for t in payload if isinstance(t, dict) and t.get("name")]
@@ -728,7 +728,7 @@ def resolve_tag_commit(
     repo: Repo, tag: str, cache_dir: str, offline: bool = False
 ) -> str | None:
     """Commit a tag points at."""
-    payload = _api(_tags_url(repo), cache_dir, offline, MOVING_TTL)
+    payload = cached_api(_tags_url(repo), cache_dir, offline, MOVING_TTL)
     if not isinstance(payload, list):
         return None
     for entry in payload:
@@ -746,10 +746,10 @@ def _named_tag_commit(
     """A GitLab or Forgejo tag's commit, asked for by name."""
     quoted = urllib.parse.quote(tag, safe="")
     if repo.family == "gitlab":
-        url = f"{repo.api_base}/projects/{_project(repo)}/repository/tags/{quoted}"
+        url = f"{repo.api_base}/projects/{project_path(repo)}/repository/tags/{quoted}"
     else:
         url = f"{repo.api_base}/repos/{repo.slug}/tags/{quoted}"
-    payload = _api(url, cache_dir, offline, absent_max_age=MOVING_TTL)
+    payload = cached_api(url, cache_dir, offline, absent_max_age=MOVING_TTL)
     commit = payload.get("commit") if isinstance(payload, dict) else None
     if not isinstance(commit, dict):
         return None
@@ -772,7 +772,7 @@ def tag_commit(
     quoted = urllib.parse.quote(tag)
     # A tag pushed after the first lookup must be seen: the 404 expires,
     # the commit a tag names does not.
-    payload = _api(
+    payload = cached_api(
         f"{repo.api_base}/repos/{repo.slug}/git/ref/tags/{quoted}",
         cache_dir,
         offline,
@@ -785,7 +785,7 @@ def tag_commit(
         return None
     if obj.get("type") != "tag":
         return obj.get("sha")
-    annotated = _api(
+    annotated = cached_api(
         f"{repo.api_base}/repos/{repo.slug}/git/tags/{obj.get('sha')}",
         cache_dir,
         offline,
@@ -796,7 +796,7 @@ def tag_commit(
 
 def _releases_url(repo: Repo) -> str:
     if repo.family == "gitlab":
-        return f"{repo.api_base}/projects/{_project(repo)}/releases"
+        return f"{repo.api_base}/projects/{project_path(repo)}/releases"
     return f"{repo.api_base}/repos/{repo.slug}/releases/latest"
 
 
@@ -804,7 +804,7 @@ def latest_release(
     repo: Repo, cache_dir: str, offline: bool = False
 ) -> Release | None:
     """Most recent release the forge exposes."""
-    payload = _api(_releases_url(repo), cache_dir, offline, MOVING_TTL)
+    payload = cached_api(_releases_url(repo), cache_dir, offline, MOVING_TTL)
     if isinstance(payload, list):
         payload = payload[0] if payload else None
     if not isinstance(payload, dict):
@@ -819,7 +819,7 @@ def latest_release(
 def _compare_url(repo: Repo, base: str, head: str) -> str:
     if repo.family == "gitlab":
         return (
-            f"{repo.api_base}/projects/{_project(repo)}"
+            f"{repo.api_base}/projects/{project_path(repo)}"
             f"/repository/compare?from={base}&to={head}"
         )
     return f"{repo.api_base}/repos/{repo.slug}/compare/{base}...{head}"
@@ -859,7 +859,7 @@ def compare(
     repo: Repo, base: str, head: str, cache_dir: str, offline: bool = False
 ) -> CompareResult:
     """Tree difference between two revisions."""
-    payload = _api(_compare_url(repo, base, head), cache_dir, offline)
+    payload = cached_api(_compare_url(repo, base, head), cache_dir, offline)
     if not isinstance(payload, dict):
         return CompareResult([], True)
     if repo.family == "gitlab":
@@ -894,7 +894,7 @@ def fork_base(
     """
     if repo.family != "github" or fork.family != "github":
         return None
-    payload = _api(
+    payload = cached_api(
         f"{repo.api_base}/repos/{repo.slug}/compare/"
         f"{sha}...{fork.owner}:{fork.name}:{fork_sha}",
         cache_dir, offline,
@@ -912,7 +912,7 @@ def ancestry(
     good. GitHub gives both counts in one answer, GitLab and Forgejo list
     one direction only and are asked twice.
     """
-    forward = _api(_compare_url(repo, base, head), cache_dir, offline)
+    forward = cached_api(_compare_url(repo, base, head), cache_dir, offline)
     ahead = _commits_ahead(forward, repo.family)
     if ahead is None:
         return None
@@ -920,7 +920,7 @@ def ancestry(
         behind = forward.get("behind_by") if isinstance(forward, dict) else None
     else:
         behind = _commits_ahead(
-            _api(_compare_url(repo, head, base), cache_dir, offline), repo.family
+            cached_api(_compare_url(repo, head, base), cache_dir, offline), repo.family
         )
     return (ahead, behind) if isinstance(behind, int) else None
 
@@ -951,7 +951,7 @@ def list_directory(
     if repo.family != "github":
         return None
     url = f"{repo.api_base}/repos/{repo.slug}/git/trees/{sha}:{path.strip('/')}"
-    payload = _api(url, cache_dir, offline)
+    payload = cached_api(url, cache_dir, offline)
     if not isinstance(payload, dict) or payload.get("truncated"):
         return None
     return sorted(
@@ -976,10 +976,10 @@ def _gitlab_tree(
     paths: list[str] = []
     for page in range(1, MAX_TREE_PAGES + 1):
         url = (
-            f"{repo.api_base}/projects/{_project(repo)}/repository/tree"
+            f"{repo.api_base}/projects/{project_path(repo)}/repository/tree"
             f"?ref={sha}&recursive=true&per_page={TREE_PAGE_SIZE}&page={page}"
         )
-        payload = _api(url, cache_dir, offline)
+        payload = cached_api(url, cache_dir, offline)
         if not isinstance(payload, list):
             return paths, True
         paths.extend(
@@ -1028,10 +1028,10 @@ def cache_gitlab_directory(
 
 def _gitlab_archive_files(repo: Repo, sha: str, directory: str) -> dict[str, str]:
     url = (
-        f"{repo.api_base}/projects/{_project(repo)}/repository/archive.tar.gz"
+        f"{repo.api_base}/projects/{project_path(repo)}/repository/archive.tar.gz"
         f"?sha={sha}&path={urllib.parse.quote(directory)}"
     )
-    body = _fetch(url)
+    body = fetch_body(url)
     if body is None:
         return {}
     prefix = directory + "/"
@@ -1084,7 +1084,7 @@ def list_tree(
     url = _tree_url(repo, sha)
     if url is None:
         return [], True
-    payload = _api(url, cache_dir, offline)
+    payload = cached_api(url, cache_dir, offline)
     if not isinstance(payload, dict):
         return [], True
     entries = list(payload.get("tree") or [])
@@ -1098,7 +1098,7 @@ def list_tree(
         for page in range(2, MAX_TREE_PAGES + 1):
             if len(entries) >= total:
                 break
-            more = _api(f"{url}&page={page}", cache_dir, offline)
+            more = cached_api(f"{url}&page={page}", cache_dir, offline)
             if not isinstance(more, dict) or not more.get("tree"):
                 break
             entries.extend(more["tree"])
@@ -1123,10 +1123,10 @@ def list_gitlinks(
         links: dict[str, str] = {}
         for page in range(1, MAX_TREE_PAGES + 1):
             url = (
-                f"{repo.api_base}/projects/{_project(repo)}/repository/tree"
+                f"{repo.api_base}/projects/{project_path(repo)}/repository/tree"
                 f"?ref={sha}&recursive=true&per_page={TREE_PAGE_SIZE}&page={page}"
             )
-            payload = _api(url, cache_dir, offline)
+            payload = cached_api(url, cache_dir, offline)
             if not isinstance(payload, list):
                 break
             links.update(
@@ -1139,7 +1139,7 @@ def list_gitlinks(
                 break
         return links
     tree_url = _tree_url(repo, sha)
-    payload = _api(tree_url, cache_dir, offline) if tree_url else None
+    payload = cached_api(tree_url, cache_dir, offline) if tree_url else None
     if not isinstance(payload, dict):
         return {}
     return {
@@ -1205,8 +1205,8 @@ def through_gitlink(
 def commit_date(repo: Repo, sha: str, cache_dir: str, offline: bool = False) -> str | None:
     """When a revision was committed, as the forge reports it (ISO 8601)."""
     if repo.family == "gitlab":
-        payload = _api(
-            f"{repo.api_base}/projects/{_project(repo)}/repository/commits/{sha}",
+        payload = cached_api(
+            f"{repo.api_base}/projects/{project_path(repo)}/repository/commits/{sha}",
             cache_dir, offline,
         )
         value = payload.get("committed_date") if isinstance(payload, dict) else None
@@ -1215,7 +1215,7 @@ def commit_date(repo: Repo, sha: str, cache_dir: str, offline: bool = False) -> 
         url = f"{repo.api_base}/repos/{repo.slug}/commits/{sha}"
     else:
         url = f"{repo.api_base}/repos/{repo.slug}/git/commits/{sha}"
-    stamp = _gitea_commit_date(_api(url, cache_dir, offline))
+    stamp = _gitea_commit_date(cached_api(url, cache_dir, offline))
     return stamp.isoformat() if stamp is not None else None
 
 
@@ -1238,7 +1238,7 @@ def commits_touching(
     stamp = urllib.parse.quote(since)
     if repo.family == "gitlab":
         url = (
-            f"{repo.api_base}/projects/{_project(repo)}"
+            f"{repo.api_base}/projects/{project_path(repo)}"
             f"/repository/commits?path={quoted}&since={stamp}&per_page=100"
         )
     elif repo.family == "github":
@@ -1253,7 +1253,7 @@ def commits_touching(
         )
     # The list grows with every push touching the path: cached for good, the
     # triage drift score stayed at whatever the first run counted.
-    payload = _api(url, cache_dir, offline, MOVING_TTL)
+    payload = cached_api(url, cache_dir, offline, MOVING_TTL)
     if not isinstance(payload, list):
         return 0
     return sum(

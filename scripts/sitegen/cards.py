@@ -11,13 +11,14 @@ import urllib.parse
 import zipfile
 from collections.abc import Callable
 
-from model.collection import _profiles_on_disk
+from model.collection import profiles_on_disk
 from packs.crossref import FileConsumers
 from sitegen import markup, wanted as sitewanted
-from sitegen.config import REPO_URL, _REPO_ROOT
+from sitegen.config import REPO_URL
+from core.paths import REPO_ROOT
 from sitegen.fields import search_excluded
-from sitegen.install import _platform_display
-from sitegen.render import _code, _count, _system_page_map, emulator_card_page
+from sitegen.install import platform_display
+from sitegen.render import code_span, count_text, system_page_map, emulator_card_page
 
 
 def emulator_file_anchors(files: list[dict]) -> list[str]:
@@ -67,7 +68,7 @@ def emulator_file_anchors(files: list[dict]) -> list[str]:
     return anchors
 
 
-_PROVENANCE_LABELS = {"redump": "Redump", "no-intro": "No-Intro", "tosec": "TOSEC"}
+PROVENANCE_LABELS = {"redump": "Redump", "no-intro": "No-Intro", "tosec": "TOSEC"}
 
 
 # TOSEC dump flags that say the dump is not a clean copy of the chip
@@ -102,19 +103,19 @@ def _provenance_lines(provenance: dict, prefix: str) -> list[str]:
     """
     lines: list[str] = []
     for source, data in sorted(provenance.items()):
-        label = _PROVENANCE_LABELS.get(source, source)
+        label = PROVENANCE_LABELS.get(source, source)
         flags = _dump_flags(source, data)
         kind = "rb-badge-warning" if flags else "rb-badge-success"
         badge = f'<span class="rb-badge {kind}">[{label}]({prefix}provenance.md#{source})</span>'
         name = str(data.get("name") or data.get("description") or "")
-        line = f"- Catalogued: {badge} {_code(name)}" if name else f"- Catalogued: {badge}"
+        line = f"- Catalogued: {badge} {code_span(name)}" if name else f"- Catalogued: {badge}"
         if flags:
             line += f" ({', '.join(flags)}, as {label} records it)"
         lines.append(line)
     return lines
 
 
-_ROMSET_SOURCES = {"mame": "MAME", "fbneo": "FBNeo"}
+ROMSET_SOURCES = {"mame": "MAME", "fbneo": "FBNeo"}
 
 
 _RELEASE_ASSET_NAMES: dict[str, str] | None = None
@@ -124,10 +125,10 @@ def _download_name(path: str) -> str:
     """The name a browser saves a collection file under: the last segment
     of its download URL. Neither host sends a Content-Disposition, and the
     download attribute is ignored on another origin."""
-    return urllib.parse.unquote(_fetch_url(path).rsplit("/", 1)[-1])
+    return urllib.parse.unquote(fetch_url(path).rsplit("/", 1)[-1])
 
 
-def _fetch_url(path: str) -> str:
+def fetch_url(path: str) -> str:
     """Where a collection file downloads from: its raw URL, or the
     large-files release asset when .gitignore keeps it out of git."""
     global _RELEASE_ASSET_NAMES
@@ -154,7 +155,7 @@ def _fetch_url(path: str) -> str:
 Place = tuple[str, str, list[str]]
 
 
-def _platform_places(sha1: str, consumers: FileConsumers) -> list[Place]:
+def platform_places(sha1: str, consumers: FileConsumers) -> list[Place]:
     """Each platform declaring the file, linked to its system section, with
     the destination it gives the file."""
     systems_of = getattr(consumers, "platform_systems", {}).get(sha1, {})
@@ -163,24 +164,24 @@ def _platform_places(sha1: str, consumers: FileConsumers) -> list[Place]:
     for platform in consumers.platforms.get(sha1, ()):
         section = sorted(systems_of.get(platform, ()))
         fragment = f"#{section[0].replace(' ', '-')}" if section else ""
-        places.append((_platform_display(platform), f"../platforms/{platform}.md{fragment}",
+        places.append((platform_display(platform), f"../platforms/{platform}.md{fragment}",
                        sorted(destinations_of.get(platform, ()))))
     return sorted(places, key=lambda place: place[0].casefold())
 
 
-def _platform_links(sha1: str, consumers: FileConsumers) -> list[str]:
+def platform_links(sha1: str, consumers: FileConsumers) -> list[str]:
     """Each platform declaring the file, as Markdown: its name, linked to
     its system section, then the destination it gives the file."""
     return [
-        f"[{name}]({href})" + (": " + ", ".join(_code(d) for d in dests) if dests else "")
-        for name, href, dests in _platform_places(sha1, consumers)
+        f"[{name}]({href})" + (": " + ", ".join(code_span(d) for d in dests) if dests else "")
+        for name, href, dests in platform_places(sha1, consumers)
     ]
 
 
 _card_anchors: dict[str, tuple[list, list[str]]] = {}
 
 
-def _emulator_card_anchor(emulator: str, files: list, index: int) -> str:
+def emulator_card_anchor(emulator: str, files: list, index: int) -> str:
     """The id of a profile entry's card on its emulator page."""
     cached = _card_anchors.get(emulator)
     if cached is None or cached[0] is not files:
@@ -188,13 +189,13 @@ def _emulator_card_anchor(emulator: str, files: list, index: int) -> str:
     return cached[1][index] if 0 <= index < len(cached[1]) else ""
 
 
-def _wanted_link(profiles: dict) -> Callable[[str, str, dict], str]:
+def wanted_link(profiles: dict) -> Callable[[str, str, dict], str]:
     """The page a row of the wanted list links: an emulator entry's card,
     where its notes, hashes and source line are, else the setup's page."""
     def link(kind: str, key: str, entry: dict) -> str:
         files = (profiles.get(key) or {}).get("files") or [] if kind == "emulator" else []
         index = next((i for i, f in enumerate(files) if f is entry), -1)
-        anchor = _emulator_card_anchor(key, files, index) if index >= 0 else ""
+        anchor = emulator_card_anchor(key, files, index) if index >= 0 else ""
         if anchor:
             return f"emulators/{emulator_card_page(key, anchor)}/#{anchor}"
         return sitewanted.reader_page(kind, key, entry)
@@ -213,11 +214,11 @@ def _emulator_links(sha1: str, consumers: FileConsumers) -> list[str]:
     links = []
     # By the name the emulator's page carries: 19,499 card links read
     # melonds_ds where its page says melonDS DS.
-    named = sorted(((_emulator_display(e), e) for e in consumers.emulators.get(sha1, ())),
+    named = sorted(((emulator_display(e), e) for e in consumers.emulators.get(sha1, ())),
                    key=lambda pair: (pair[0].casefold(), pair[1]))
     for display, emulator in named:
         index = entries.get(emulator)
-        anchor = (_emulator_card_anchor(emulator, files_of[emulator], index)
+        anchor = (emulator_card_anchor(emulator, files_of[emulator], index)
                   if index is not None and emulator in files_of else "")
         page = emulator_card_page(emulator, anchor) if anchor else emulator
         fragment = f"#{anchor}" if anchor else ""
@@ -232,7 +233,7 @@ def _installed_places(sha1: str, consumers: FileConsumers, declared: set[str]) -
     """Each pack installing the file that its platform's list does not name,
     with the place the pack gives it."""
     places = [
-        (_platform_display(platform), f"../platforms/{platform}.md", sorted(d for d in dests if d))
+        (platform_display(platform), f"../platforms/{platform}.md", sorted(d for d in dests if d))
         for platform, dests in getattr(consumers, "installed", {}).get(sha1, {}).items()
         if platform not in declared
     ]
@@ -258,14 +259,14 @@ def _places_lines(places: list[Place]) -> list[str]:
     ]
 
 
-def _places_markdown(places: list[Place]) -> list[str]:
+def places_markdown(places: list[Place]) -> list[str]:
     """_places_lines in Markdown, for a card written as a list: the places
     as code spans, which the glossary and the line breaks treat as code."""
     by_place: dict[tuple[str, ...], list[str]] = {}
     for name, href, dests in places:
         by_place.setdefault(tuple(dests), []).append(f"[{name}]({href})")
     ordered = sorted(by_place.items(), key=lambda item: (not item[0], -len(item[1]), item[0]))
-    return [(" and ".join(_code(d) for d in dests) + ": " if dests else "") + ", ".join(links)
+    return [(" and ".join(code_span(d) for d in dests) + ": " if dests else "") + ", ".join(links)
             for dests, links in ordered]
 
 
@@ -296,7 +297,7 @@ _PERMALINK_ICON = ('<svg aria-hidden="true" width="16" height="16">'
                    '<use href="#rb-link-icon"/></svg>')
 
 
-def _icon_symbol() -> list[str]:
+def icon_symbol() -> list[str]:
     """The icon's drawing, for a page of cards. None in the yardstick."""
     return [PERMALINK_SYMBOL, ""] if markup.starlight() else []
 
@@ -316,12 +317,12 @@ def _release_name(source: str, label: str, versions: dict) -> str:
 @functools.lru_cache(maxsize=1)
 def _romset_snapshots() -> list[tuple[str, dict]]:
     return [(str(snapshot.get("source", path.stem)), snapshot)
-            for path in sorted((_REPO_ROOT / "recipes").glob("*.json"))
+            for path in sorted((REPO_ROOT / "recipes").glob("*.json"))
             for snapshot in [json.loads(path.read_text(encoding="utf-8"))]]
 
 
 @functools.lru_cache(maxsize=1)
-def _romset_releases() -> dict[str, list[tuple[RomsetMembers, str, list[Release]]]]:
+def romset_releases() -> dict[str, list[tuple[RomsetMembers, str, list[Release]]]]:
     """Archive name -> (members, source, the releases agreeing on them), from
     the MAME and FBNeo recipe snapshots under recipes/.
 
@@ -374,8 +375,8 @@ def _romset_line(f: dict) -> str:
     match" when names had to agree and no member could be extra. Empty
     when no recipe names the archive or the file is not on disk.
     """
-    recipes = _romset_releases().get(str(f.get("name", "")))
-    path = _REPO_ROOT / str(f.get("path", ""))
+    recipes = romset_releases().get(str(f.get("name", "")))
+    path = REPO_ROOT / str(f.get("path", ""))
     if not recipes or not path.is_file():
         return ""
     try:
@@ -404,7 +405,7 @@ def _romset_line(f: dict) -> str:
 
     def runs(found: dict[str, list[Release]], skip: dict[str, list[Release]]) -> str:
         return " and ".join(
-            f"{_ROMSET_SOURCES.get(source, source)} {_release_runs(kept)}"
+            f"{ROMSET_SOURCES.get(source, source)} {_release_runs(kept)}"
             for source in sorted(found, key=_source_order)
             for kept in [[r for r in found[source] if r not in skip.get(source, [])]] if kept)
 
@@ -418,7 +419,7 @@ def _romset_line(f: dict) -> str:
     if not closest:
         return f"No match in {_romset_coverage()}"
     return "No match: missing " + ", ".join(
-        f"{_count(missing, 'ROM')} of {_ROMSET_SOURCES.get(source, source)} {release[1]}"
+        f"{count_text(missing, 'ROM')} of {ROMSET_SOURCES.get(source, source)} {release[1]}"
         for source, (missing, release) in sorted(closest.items(),
                                                  key=lambda item: _source_order(item[0])))
 
@@ -434,14 +435,14 @@ def _romset_coverage() -> str:
                     for index, label in enumerate(versions)]
             # The ends of the span, read as one run.
             span = [ends[0], (1, ends[-1][1])] if len(ends) > 1 else ends
-            covered[source] = f"{_ROMSET_SOURCES.get(source, source)} {_release_runs(span)}"
+            covered[source] = f"{ROMSET_SOURCES.get(source, source)} {_release_runs(span)}"
     return " or ".join(covered[source] for source in sorted(covered, key=_source_order))
 
 
 ROMSET_FAQ = "../wiki/technical-faq.md#which-mame-version-do-the-arcade-bios-sets-match"
 
 
-def _system_file_card(
+def system_file_card(
     f: dict, consumers: FileConsumers, anchored: set[str] | None = None,
     searchable: bool = True,
 ) -> list[str]:
@@ -487,11 +488,11 @@ def _system_file_card(
     # The download leads the card: as a "(download)" after the collection
     # path, fourth of the facts, a reader of the Apple II page found none.
     download = (
-        f' <a class="rb-download" href="{html.escape(_fetch_url(f["path"]))}" '
+        f' <a class="rb-download" href="{html.escape(fetch_url(f["path"]))}" '
         f'aria-label="Download {html.escape(name)}" {skip}>Download</a>'
     ) if f.get("path") and markup.starlight() else ""
-    lines.append(_card_title(
-        f'{_code(name)} <span class="rb-badge rb-badge-muted">{size}</span>{unread}{download}{permalink}',
+    lines.append(card_title(
+        f'{code_span(name)} <span class="rb-badge rb-badge-muted">{size}</span>{unread}{download}{permalink}',
         anchor, searchable,
     ))
     lines.append("")
@@ -504,14 +505,14 @@ def _system_file_card(
         # A .variants/ copy is stored as advision.zip.1c086064, and the
         # browser names the download after the URL: copied as it came, the
         # file a platform pins was not found under its name.
-        facts.append(("Save as", [f"{_code(name)}, the download is named {_code(saved)}"], False))
+        facts.append(("Save as", [f"{code_span(name)}, the download is named {code_span(saved)}"], False))
     if plats:
         # Each link lands on the platform's system section, and says where
         # that platform puts the file. Out of the search: the card's title
         # weighs the most a word can, and the list made the excerpt of
         # every card a run of setup names and paths.
         facts.append(("On the setup's list",
-                      _places_lines(_platform_places(sha1_full, consumers)), False))
+                      _places_lines(platform_places(sha1_full, consumers)), False))
     if installed:
         # The packs that carry the file for their cores: a RetroBat user
         # looking up scph5501.bin found every platform but RetroBat, whose
@@ -528,9 +529,9 @@ def _system_file_card(
         # The card named a file, its hashes and provenance, but not where to
         # get it: a user missing scph5501.bin found the reference and no way
         # to the bytes.
-        path = _code(f["path"])
+        path = code_span(f["path"])
         if not markup.starlight():
-            path += f" ([download]({_fetch_url(f['path'])}))"
+            path += f" ([download]({fetch_url(f['path'])}))"
         facts.append(("Collection path", [path], False))
     catalogued = [line.split(": ", 1)[1]
                   for line in _provenance_lines(f.get("provenance") or {}, "../")]
@@ -573,7 +574,7 @@ _CARD_MORE_WORDS = {"Romset": "romset", "Collection path": "collection path",
 SHORT_HASH = 12
 
 
-def _listed_words(words: list[str]) -> str:
+def listed_words(words: list[str]) -> str:
     """"a", "a and b", "a, b and c", first letter capital."""
     text = words[0] if len(words) == 1 else f"{', '.join(words[:-1])} and {words[-1]}"
     return text[:1].upper() + text[1:]
@@ -654,7 +655,7 @@ def _card_fact_groups(facts: list[tuple[str, list[str], bool]], sha1: str,
             _CARD_MORE_WORDS.get(label, label.lower()) for label, _values, _searched in more]
         # On one line: nothing reads it as Markdown, and a page cut by size
         # holds its cards in the same bytes.
-        lines += card_fold(_listed_words(words),
+        lines += card_fold(listed_words(words),
                            ["".join(_fact_list(folded, "", dict.fromkeys(_CARD_HASHES, "rb-hash")))])
     return lines
 
@@ -707,7 +708,7 @@ SEARCH_SKIPPED = (
 )
 
 
-def _search_skipped_apart(lines: list[str]) -> list[str]:
+def search_skipped_apart(lines: list[str]) -> list[str]:
     """Card list lines, each run the search skips in a block of its own."""
     out: list[str] = []
     skipping = False
@@ -725,7 +726,7 @@ def _search_skipped_apart(lines: list[str]) -> list[str]:
     return out
 
 
-def _card_title(text: str, anchor: str, searchable: bool = True, weight: int = 10) -> str:
+def card_title(text: str, anchor: str, searchable: bool = True, weight: int = 10) -> str:
     """A file card's heading, so the site search lands on the card.
 
     The search splits a page at its headings: a card titled in bold sent a
@@ -760,11 +761,11 @@ def system_install_choices(coverages: dict) -> dict[str, dict[str, list[tuple[st
     platform's install manifest records is offered: --system refuses any
     other name.
     """
-    from sitegen.render import _page_by_norm
+    from sitegen.render import page_by_norm
 
     choices: dict[str, dict[str, list[tuple[str, str]]]] = {}
     for name, cov in sorted(coverages.items()):
-        manifest = _REPO_ROOT / "install" / f"{name}.json"
+        manifest = REPO_ROOT / "install" / f"{name}.json"
         if not manifest.is_file():
             continue
         document = json.loads(manifest.read_text(encoding="utf-8"))
@@ -774,15 +775,15 @@ def system_install_choices(coverages: dict) -> dict[str, dict[str, list[tuple[st
             for system in entry.get("systems") or []
         }
         for sys_id in sorted(set(cov["config"].get("systems") or {}) & recorded):
-            page = _system_page_map.get(sys_id) or _page_by_norm(sys_id)
+            page = system_page_map.get(sys_id) or page_by_norm(sys_id)
             if page:
                 slug, console = page
                 choices.setdefault(slug, {}).setdefault(console, []).append((name, sys_id))
     return choices
 
 
-def _emulator_display(emulator: str) -> str:
-    return str((_profiles_on_disk().get(emulator) or {}).get("emulator") or emulator)
+def emulator_display(emulator: str) -> str:
+    return str((profiles_on_disk().get(emulator) or {}).get("emulator") or emulator)
 
 
 def _first_hash_value(entry: dict) -> str:

@@ -17,16 +17,16 @@ from core.artifacts import set_plain_mode
 from core.options import reject_unknown
 from model.registry import list_registered_platforms
 from model.targets import load_target_config
-from packs.archive import _write_generated_member
+from packs.archive import write_generated_member
 from packs.integrity import generate_sha256sums, verify_pack, verify_pack_against_platform
-from packs.naming import _expected_pack_names, _narrows_contents, _pack_archives
+from packs.naming import expected_pack_names, narrows_contents, pack_archives
 from packs.scope import annotate_pack_systems
 
 if TYPE_CHECKING:
     from typing_extensions import Unpack
 
 
-def _baseline_shortfall(excluded: int, absent: int) -> list[str]:
+def baseline_shortfall(excluded: int, absent: int) -> list[str]:
     """Why a verified pack holds fewer baseline files than the platform declares."""
     parts = []
     if excluded:
@@ -43,7 +43,7 @@ def inject_manifest(zip_path: str, manifest: dict) -> None:
     """Inject manifest.json into an existing ZIP pack.
 
     The pack is rewritten beside its final name and swapped in, as
-    _writing_pack builds it: appending in place rewrites the central
+    writing_pack builds it: appending in place rewrites the central
     directory last, so a process killed in between left an unreadable ZIP
     where a valid pack had been.
     """
@@ -64,7 +64,7 @@ def inject_manifest(zip_path: str, manifest: dict) -> None:
             # two different byte layouts depending on the path taken here.
             shutil.copyfile(zip_path, scratch)
             with zipfile.ZipFile(scratch, "a", zipfile.ZIP_DEFLATED) as zf:
-                _write_generated_member(zf, "manifest.json", manifest_json)
+                write_generated_member(zf, "manifest.json", manifest_json)
         else:
             with zipfile.ZipFile(zip_path, "r") as src, \
                     zipfile.ZipFile(scratch, "w", zipfile.ZIP_DEFLATED) as dst:
@@ -72,7 +72,7 @@ def inject_manifest(zip_path: str, manifest: dict) -> None:
                     if item.filename == "manifest.json":
                         continue
                     dst.writestr(item, src.read(item.filename))
-                _write_generated_member(dst, "manifest.json", manifest_json)
+                write_generated_member(dst, "manifest.json", manifest_json)
         set_plain_mode(scratch)
         os.replace(scratch, zip_path)
     except BaseException:
@@ -149,7 +149,7 @@ def _conforms(zip_path: str, pname: str, db: dict, opts: _FinalizeSettings) -> b
     )
     status = "OK" if p_ok else "FAILED"
     exclusion_note = "".join(
-        f", {part}" for part in _baseline_shortfall(bl_excluded, bl_absent)
+        f", {part}" for part in baseline_shortfall(bl_excluded, bl_absent)
     )
     print(
         f"  platform {pname}: {bl_present}/{bl_checked} baseline present"
@@ -192,11 +192,11 @@ def verify_and_finalize_packs(
     # substring: a _Custom or regional pack left by another run was judged
     # against this run's expectation and failed it.
     registered = list_registered_platforms(opts.platforms_dir)
-    expected = _expected_pack_names(
+    expected = expected_pack_names(
         registered, opts.platforms_dir, opts.regions, opts.target_name,
         no_game_data=opts.no_game_data,
     )
-    packs = _pack_archives(output_dir)
+    packs = pack_archives(output_dir)
     if opts.built is not None:
         packs = [name for name in packs if name in set(opts.built)]
     pack_to_platform: dict[str, list[str]] = {}
@@ -229,7 +229,7 @@ def verify_and_finalize_packs(
         # Skipped for filtered/split/custom packs (intentionally partial)
         if opts.skip_conformance:
             continue
-        if _narrows_contents(name):
+        if narrows_contents(name):
             continue
         for pname in pack_to_platform.get(name, []):
             if not _conforms(zip_path, pname, db, opts):

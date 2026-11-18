@@ -10,7 +10,7 @@ from core.hashing import parse_md5_list
 from model.profiles import entry_system_ids
 from resolve import nativemode
 from resolve.archives import archive_entry, holds_required_members
-from resolve.collisions import _accepted_by_all, _content_sha1, _lists_hashes, _normalize
+from resolve.collisions import accepted_by_all, content_sha1, lists_hashes, comparable_destination
 from resolve.cores import resolve_platform_cores
 from resolve.layout import system_dir_path
 from resolve.localfile import resolution_is_hash_exact, resolve_local_file
@@ -374,7 +374,7 @@ def _slot_claims(
     for claim in platform_claims(
         config, db, base_dest, zip_contents, data_dir_registry
     ):
-        key = _normalize(claim.destination, fold)
+        key = comparable_destination(claim.destination, fold)
         held = by_dest.get(key)
         if held is not None and id(held.entry) in shipped:
             continue
@@ -404,7 +404,7 @@ def _slot_claims(
         profiles, db, base_dest, standalone_cores, zip_contents, data_dir_registry,
         config=config,
     ):
-        key = _normalize(claim.destination, fold)
+        key = comparable_destination(claim.destination, fold)
         platform = by_dest.get(key)
         if platform is None or not claim.is_proven:
             continue
@@ -619,25 +619,25 @@ def _satisfies(profile: Claim, platform: Claim, db: dict) -> bool:
     # Two paths can hold one content: AmberELEC's bluemsx declarations
     # resolve into the data/bluemsx cache, the profile's into bios/.
     if profile.local_path and platform.local_path:
-        shipped = _content_sha1(platform.local_path, db)
-        if shipped is not None and shipped == _content_sha1(profile.local_path, db):
+        shipped = content_sha1(platform.local_path, db)
+        if shipped is not None and shipped == content_sha1(profile.local_path, db):
             return True
     members = profile.entry.get("members")
     if members and platform.local_path:
         return holds_required_members(platform.local_path, members)
     if (
         profile.local_path
-        and _lists_hashes(platform.entry)
-        and _accepted_by_all(profile.local_path, [platform.entry], db)
+        and lists_hashes(platform.entry)
+        and accepted_by_all(profile.local_path, [platform.entry], db)
     ):
         return True
     if platform.local_path and any(
-        _lists_hashes(label) and _accepted_by_all(platform.local_path, [label], db)
+        lists_hashes(label) and accepted_by_all(platform.local_path, [label], db)
         for label in profile.accepts
     ):
         return True
     return bool(
         platform.local_path
-        and _lists_hashes(profile.entry)
-        and _accepted_by_all(platform.local_path, [profile.entry], db)
+        and lists_hashes(profile.entry)
+        and accepted_by_all(platform.local_path, [profile.entry], db)
     )

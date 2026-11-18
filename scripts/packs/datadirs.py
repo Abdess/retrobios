@@ -24,7 +24,7 @@ from core.artifacts import file_lock as _file_lock, set_plain_mode
 from core.cli import InputMissing
 from core.github import github_token
 from model.safeparse import yaml_load
-from model.registry import VERSIONS_FILE, _load_versions
+from model.registry import VERSIONS_FILE, load_versions
 
 
 log = logging.getLogger(__name__)
@@ -155,7 +155,7 @@ def _record_version(key: str, record: dict, versions_path: str) -> None:
     """Set one key under the file lock, so two writers keep both updates."""
     path = Path(versions_path)
     with _file_lock(path.with_name(f".{path.name}.lock")):
-        versions = _load_versions(versions_path)
+        versions = load_versions(versions_path)
         versions[key] = record
         _save_versions(versions, versions_path)
 
@@ -437,7 +437,7 @@ def _record_archive_size(key: str, entry: dict, versions_path: str) -> None:
     """
     path = Path(versions_path)
     with _file_lock(path.with_name(f".{path.name}.lock")):
-        versions = _load_versions(versions_path)
+        versions = load_versions(versions_path)
         record = versions.get(key)
         if record is None or "archive_size" in record:
             return
@@ -446,7 +446,7 @@ def _record_archive_size(key: str, entry: dict, versions_path: str) -> None:
     if size is None:
         return
     with _file_lock(path.with_name(f".{path.name}.lock")):
-        versions = _load_versions(versions_path)
+        versions = load_versions(versions_path)
         if key in versions and "archive_size" not in versions[key]:
             versions[key]["archive_size"] = size
             _save_versions(versions, versions_path)
@@ -513,7 +513,7 @@ def _decide(
     """(whether the tree needs a refresh, the remote tag read, the recorded
     tag). None when the remote could not be read."""
     version = entry.get("version", "master")
-    cached = _load_versions(versions_path).get(key, {})
+    cached = load_versions(versions_path).get(key, {})
     cached_tag = cached.get("sha") or cached.get("etag")
     if force or not Path(entry["local_cache"]).exists():
         return True, None, cached_tag

@@ -111,7 +111,7 @@ class NotFoundPage(unittest.TestCase):
                 terms={},
             ),
         )
-        front = decorate._front_matter(text)
+        front = decorate.front_matter(text)
         self.assertIs(front["tableOfContents"], False)
         self.assertIs(front["prev"], False)
         self.assertIs(front["next"], False)
@@ -221,7 +221,7 @@ class OneNextPerPage(unittest.TestCase):
     def test_card_pages_turn_pagination_off(self):
         for rel in ("systems/sony.md", "emulators/duckstation.md", "platforms/batocera.md"):
             _target, text = sitestarlight.render_page(rel, "# T\n\nBody.\n", sitestarlight.PageMeta(level="explore", weight=None, browser_title="T", description="d", structured={}, terms={}))
-            front = decorate._front_matter(text)
+            front = decorate.front_matter(text)
             with self.subTest(page=rel):
                 self.assertIs(front["prev"], False)
                 self.assertIs(front["next"], False)
@@ -230,12 +230,12 @@ class OneNextPerPage(unittest.TestCase):
         body = ("# Troubleshooting\n\nText.\n\n## Next steps\n\n"
                 "- [Common questions](faq.md)\n- [Glossary](glossary.md)\n")
         _target, text = sitestarlight.render_page("wiki/troubleshooting.md", body, sitestarlight.PageMeta(level="start", weight=None, browser_title="Troubleshooting", description="d", structured={}, terms={}))
-        front = decorate._front_matter(text)
+        front = decorate.front_matter(text)
         self.assertEqual(front["next"], {"link": "/retrobios/wiki/faq/", "label": "Common questions"})
 
     def test_a_page_without_next_steps_keeps_the_reading_order(self):
         _target, text = sitestarlight.render_page("wiki/faq.md", "# FAQ\n\nText.\n", sitestarlight.PageMeta(level="start", weight=None, browser_title="FAQ", description="d", structured={}, terms={}))
-        self.assertNotIn("next", decorate._front_matter(text))
+        self.assertNotIn("next", decorate.front_matter(text))
 
 
 class ReferenceGrouped(unittest.TestCase):

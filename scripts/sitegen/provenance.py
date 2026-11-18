@@ -9,10 +9,10 @@ from datetime import datetime
 from model.composition import compute_composition, count_catalog_matched
 from acquire.provenance import distinct_missing
 from sitegen import entries as siteentries, markup
-from sitegen.cards import _PROVENANCE_LABELS, _ROMSET_SOURCES
-from sitegen.config import _date_line
-from sitegen.parts import _list_pages
-from sitegen.render import _count, _escape_tags, _slugify_anchor
+from sitegen.cards import PROVENANCE_LABELS, ROMSET_SOURCES
+from sitegen.config import date_line
+from sitegen.parts import list_pages
+from sitegen.render import count_text, escape_tags, slugify_anchor
 
 
 _PROVENANCE_HOMES = {
@@ -46,7 +46,7 @@ def _date_in_words(stamp: str) -> str:
     try:
         day = datetime.strptime(str(stamp)[:10], "%Y-%m-%d")
     except ValueError:
-        return _escape_tags(str(stamp))
+        return escape_tags(str(stamp))
     return f'<time datetime="{day:%Y-%m-%d}">{day.day} {day:%B %Y}</time>'
 
 
@@ -62,7 +62,7 @@ def generate_provenance_page(
     total_files = compute_composition(db)["systems"]["files"]
     # When each catalog was read: a 76-day-old snapshot showed no age.
     as_of = ", ".join(
-        f"{_PROVENANCE_LABELS.get(source, source)} {_date_in_words(data['imported_at'])}"
+        f"{PROVENANCE_LABELS.get(source, source)} {_date_in_words(data['imported_at'])}"
         for source, data in report.items() if data.get("imported_at")
     )
 
@@ -120,7 +120,7 @@ def generate_provenance_page(
     ]
 
     for source, data in report.items():
-        label = _PROVENANCE_LABELS.get(source, source)
+        label = PROVENANCE_LABELS.get(source, source)
         home = _PROVENANCE_HOMES.get(source, "")
         in_scope = data["matched"] + len(data["missing"])
         pct = 100 * data["matched"] / in_scope if in_scope else 0
@@ -145,7 +145,7 @@ def generate_provenance_page(
     out_of_scope = {s: d["out_of_scope"] for s, d in report.items() if d["out_of_scope"]}
     if out_of_scope:
         detail = ", ".join(
-            f"{_PROVENANCE_LABELS.get(s, s)} {c:,}" for s, c in sorted(out_of_scope.items())
+            f"{PROVENANCE_LABELS.get(s, s)} {c:,}" for s, c in sorted(out_of_scope.items())
         )
         lines.extend(
             [
@@ -187,7 +187,7 @@ def generate_provenance_page(
 
     lines.extend(_derivable_section(derived_entries, derivable))
 
-    lines.extend(["", _date_line()])
+    lines.extend(["", date_line()])
     return "\n".join(lines) + "\n"
 
 
@@ -224,7 +224,7 @@ def _wanted_dat_table(entries: list) -> list[str]:
         # Where an emulator's romset already carries the dump.
         for hit in entry.get("romsets", []):
             desc += (
-                f" Ships in {_ROMSET_SOURCES.get(hit['source'], hit['source'])} "
+                f" Ships in {ROMSET_SOURCES.get(hit['source'], hit['source'])} "
                 f"`{hit['archive']}` as `{hit['member']}`."
             )
         table.append(f"| `{name}` | {desc} | `{sha1}` |")
@@ -233,22 +233,22 @@ def _wanted_dat_table(entries: list) -> list[str]:
 
 def _wanted_section(source: str, data: dict, derived: int, moved: dict[str, str] | None) -> list[str]:
     """A catalog's missing dumps, by DAT, or a line naming the page they went to."""
-    label = _PROVENANCE_LABELS.get(source, source)
+    label = PROVENANCE_LABELS.get(source, source)
     by_dat: dict[str, list] = {}
     for entry in data["missing"]:
         for dat in entry.get("dats") or [entry.get("dat", "")]:
             by_dat.setdefault(dat, []).append(entry)
     lines = [f"### {label}", ""]
     if moved is not None:
-        where = _list_pages(
-            f"provenance-{_slugify_anchor(source)}", f"Wanted from {label}",
+        where = list_pages(
+            f"provenance-{slugify_anchor(source)}", f"Wanted from {label}",
             f"Dumps {label} catalogues and the collection lacks. Part of "
-            f"[Dump provenance](provenance.md#{_slugify_anchor(label)}).",
+            f"[Dump provenance](provenance.md#{slugify_anchor(label)}).",
             [], [_wanted_list(source, label, data, by_dat, derived)],
             moved, parent=("Dump provenance", "/provenance/"),
         )
         lines.extend([
-            f"{_count(len(data['missing']), 'dump')} in {_count(len(by_dat), 'DAT')}: "
+            f"{count_text(len(data['missing']), 'dump')} in {count_text(len(by_dat), 'DAT')}: "
             f"listed on {where}.", "",
         ])
         return lines
@@ -293,10 +293,10 @@ def _wanted_list(source: str, label: str, data: dict, by_dat: dict[str, list],
     missing = data["missing"]
     held = data["matched"]
     reached = held + len(missing) + derived
-    dats = _count(len(data["covered_dats"]), "DAT")
+    dats = count_text(len(data["covered_dats"]), "DAT")
     lines = [
         f"Held: **{held:,}** of {reached:,}, in the {dats} the collection reaches. "
-        f"Wanted: **{len(missing):,}**, from {_count(len(by_dat), 'DAT')}.",
+        f"Wanted: **{len(missing):,}**, from {count_text(len(by_dat), 'DAT')}.",
         "",
     ]
     if derived:
@@ -315,7 +315,7 @@ def _wanted_list(source: str, label: str, data: dict, by_dat: dict[str, list],
         desc = markup.inline_html(entry.get("description") or "")
         for hit in entry.get("romsets", []):
             desc += markup.inline_html(
-                f" Ships in {_ROMSET_SOURCES.get(hit['source'], hit['source'])} "
+                f" Ships in {ROMSET_SOURCES.get(hit['source'], hit['source'])} "
                 f"`{hit['archive']}` as `{hit['member']}`.")
         in_dats = ", ".join(html.escape(d) for d in (entry.get("dats") or [entry.get("dat", "")]))
         sha1 = html.escape(entry.get("sha1") or "-")
@@ -333,10 +333,10 @@ def _wanted_list(source: str, label: str, data: dict, by_dat: dict[str, list],
                     f'<td class="rb-hash" {skip}>{sha1}</td></tr>')
     heads = ["Name", "DAT", "Description", "SHA1"]
     lines.extend([
-        siteentries.filter_box(f"rb-wanted-filter-{_slugify_anchor(source)}",
+        siteentries.filter_box(f"rb-wanted-filter-{slugify_anchor(source)}",
                                "dumps", heads, len(rows)),
         '<details class="rb-details rb-details-note">',
-        f"<summary>All {_count(len(rows), 'wanted dump')}</summary>",
+        f"<summary>All {count_text(len(rows), 'wanted dump')}</summary>",
         '<table class="rb-wanted" data-rb-stack="true">',
         "<thead><tr>" + "".join(f'<th scope="col">{h}</th>' for h in heads) + "</tr></thead>",
         "<tbody>", *rows, "</tbody>", "</table>", "</details>", "",

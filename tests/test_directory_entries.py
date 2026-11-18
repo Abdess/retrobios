@@ -25,7 +25,7 @@ try:
     import jsonschema
 except ImportError:
     jsonschema = None
-from model.profiles import load_emulator_profiles, _emulator_profiles_cache
+from model.profiles import load_emulator_profiles, emulator_profiles_cache
 from resolve.directories import directory_members
 import generate_db
 from packs import emulatorpack
@@ -92,10 +92,10 @@ class DirectoryFixture(unittest.TestCase):
         (self.platforms / "_registry.yml").write_text(
             yaml.dump({"platforms": {"demo": {"config": "demo.yml"}}})
         )
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
 
     def tearDown(self):
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self._tmp.cleanup()
 
     def _add(self, relative: str, payload: bytes) -> None:
@@ -125,7 +125,7 @@ class DirectoryFixture(unittest.TestCase):
 
     def _profiles(self, body: str = PROFILE) -> dict:
         (self.emulators / "demo.yml").write_text(body)
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         return load_emulator_profiles(str(self.emulators))
 
 

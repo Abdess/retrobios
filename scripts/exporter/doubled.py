@@ -18,8 +18,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from resolve.archives import contents_members, holds_required_members
 from resolve.standalone import platform_layouts, standalone_set
 from resolve.cores import resolve_platform_cores
-from resolve.reconcile import HASH_FIELDS, _hash_values
-from resolve.collisions import _accepted_by_all, _lists_hashes, find_collisions
+from resolve.reconcile import HASH_FIELDS, hash_values
+from resolve.collisions import accepted_by_all, lists_hashes, find_collisions
 from resolve.validation import opens_by_name, outside_gap_scope
 
 
@@ -58,13 +58,13 @@ def _reads(entry: dict, by_name: bool, local: str, db: dict) -> bool:
     """
     if entry.get("contents"):
         return holds_required_members(local, contents_members(entry))
-    if _lists_hashes(entry):
-        return _accepted_by_all(local, [entry], db)
+    if lists_hashes(entry):
+        return accepted_by_all(local, [entry], db)
     return by_name and _size_fits(entry, local)
 
 
 def _hashes(entry: dict) -> dict[str, list[str]]:
-    found = {f: _hash_values(entry, f) for f in HASH_FIELDS}
+    found = {f: hash_values(entry, f) for f in HASH_FIELDS}
     return {f: values for f, values in found.items() if values}
 
 

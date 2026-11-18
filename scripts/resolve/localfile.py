@@ -15,9 +15,9 @@ from core.ziptools import check_inside_zip
 from model.database import get_mame_clone_map
 from model.profiles import CONTENT_CHECKS
 from resolve.archives import (
-    _covering_archives,
-    _holding_members,
-    _warn_unreadable_archive,
+    covering_archives,
+    holding_members,
+    warn_unreadable_archive,
     contents_members,
 )
 from resolve.content import (
@@ -28,14 +28,14 @@ from resolve.content import (
     name_match_size_ok,
     shape_fits,
 )
-from resolve.datadirs import _data_dir_tail, _resolve_in_data_dirs
+from resolve.datadirs import data_dir_tail, resolve_in_data_dirs
 from resolve.ownership import (
-    _affinity_tokens,
-    _engine_tree,
-    _foreign_tree,
-    _maker_folder,
-    _own_tree,
-    _owner_tokens,
+    affinity_tokens,
+    engine_tree,
+    foreign_tree,
+    maker_folder,
+    own_tree,
+    owner_tokens,
     other_maker,
     system_makers,
 )
@@ -145,7 +145,7 @@ def _rank_tail_candidates(
         candidates = [
             h for h in candidates
             if not path_of(h).endswith("/" + tail)
-            or not _foreign_tree(path_of(h), owners if start else set(asker))
+            or not foreign_tree(path_of(h), owners if start else set(asker))
         ]
     if len(candidates) < 2:
         return candidates
@@ -154,8 +154,8 @@ def _rank_tail_candidates(
         candidates,
         key=lambda h: (
             len(path_of(h).split("/")) - depth,
-            not owners & _affinity_tokens(path_of(h).rsplit("/", 1)[0]),
-            _foreign_tree(path_of(h), owners),
+            not owners & affinity_tokens(path_of(h).rsplit("/", 1)[0]),
+            foreign_tree(path_of(h), owners),
         ),
     )
 
@@ -174,15 +174,15 @@ def _by_affinity(paths: list[str], file_entry: dict, dest_hint: str) -> list[str
     if len(paths) < 2:
         return paths
     hint = dest_hint or file_entry.get("path") or file_entry.get("destination") or ""
-    wanted = _affinity_tokens(hint.rsplit("/", 1)[0] if "/" in hint else "")
-    owners = _owner_tokens(file_entry)
+    wanted = affinity_tokens(hint.rsplit("/", 1)[0] if "/" in hint else "")
+    owners = owner_tokens(file_entry)
     sized = declares_shape(file_entry)
 
     def score(path: str) -> tuple[int, bool, bool, bool, int]:
         fits = 0
         if sized and os.path.exists(path):
             fits = int(shape_fits(file_entry, path))
-        tokens = _affinity_tokens(path.rsplit("/", 1)[0])
+        tokens = affinity_tokens(path.rsplit("/", 1)[0])
         # The owner's own copy ranks above any shared tree segment: NetherSX2's
         # shaders/common/ beat armsx2's own fxaa.fx on two directory tokens.
         # Another emulator's own tree ranks below everything else.
@@ -191,8 +191,8 @@ def _by_affinity(paths: list[str], file_entry: dict, dest_hint: str) -> list[str
         # flycast-dojo, lindbergh-loader and vvvvvv took C-Dogs' 98-line
         # gamecontrollerdb.txt by index order.
         return (
-            fits, bool(owners & tokens), not _foreign_tree(path, owners | wanted),
-            not _engine_tree(path, owners | wanted), len(wanted & tokens),
+            fits, bool(owners & tokens), not foreign_tree(path, owners | wanted),
+            not engine_tree(path, owners | wanted), len(wanted & tokens),
         )
 
     return sorted(paths, key=score, reverse=True)
@@ -424,7 +424,7 @@ def _tail_candidates(q: _Lookup, start: int, tail: str, owners: set[str]) -> lis
     """The records a destination tail names, ranked, ambiguity read."""
     candidates = _rank_tail_candidates(
         q.by_path_suffix.get(tail, []), start, tail, q.files_db, owners,
-        frozenset(_owner_tokens(q.file_entry)),
+        frozenset(owner_tokens(q.file_entry)),
     )
     raw = q.by_path_suffix.get(tail, [])
     if start and len(raw) > 1:
@@ -436,7 +436,7 @@ def _tail_candidates(q: _Lookup, start: int, tail: str, owners: set[str]) -> lis
         # tree still answers a tail several files share.
         candidates = [
             h for h in candidates
-            if _own_tree(q.files_db.get(h, {}).get("path", ""), owners)
+            if own_tree(q.files_db.get(h, {}).get("path", ""), owners)
         ]
     return candidates
 
@@ -490,7 +490,7 @@ def _by_path_suffix(q: _Lookup) -> tuple[Resolution | None, bool]:
     hint_parts = q.dest_hint.split("/")
     # The asking profile and the destination's own directories both name
     # whose tree a copy may come from.
-    owners = _owner_tokens(q.file_entry) | _affinity_tokens("/".join(hint_parts[:-1]))
+    owners = owner_tokens(q.file_entry) | affinity_tokens("/".join(hint_parts[:-1]))
     for start in range(min(2, len(hint_parts) - 1)):
         candidates = _tail_candidates(q, start, "/".join(hint_parts[start:]), owners)
         if start and len(candidates) > 1:
@@ -526,9 +526,9 @@ def _by_data_dir_tail(q: _Lookup, data_dir_registry: dict | None) -> Resolution 
         tail_hint
         and data_dir_registry
         and not q.has_strong_hash
-        and not _owner_tokens(q.file_entry)
+        and not owner_tokens(q.file_entry)
     ):
-        hit = _data_dir_tail(tail_hint, data_dir_registry, q.file_entry, q.db)
+        hit = data_dir_tail(tail_hint, data_dir_registry, q.file_entry, q.db)
         if hit:
             return hit, "path_exact"
     return None
@@ -609,7 +609,7 @@ def _add_casefold_candidates(q: _Lookup, candidates: list[str], owners: set[str]
         for match_sha1 in folded.get(try_name.casefold(), []):
             if match_sha1 in q.files_db and _name_size_ok(q, match_sha1):
                 path = q.files_db[match_sha1]["path"]
-                if _foreign_tree(path, owners):
+                if foreign_tree(path, owners):
                     continue
                 if os.path.exists(path) and path not in candidates:
                     candidates.append(path)
@@ -630,7 +630,7 @@ def _same_maker(q: _Lookup, candidates: list[str], makers: frozenset[str]) -> li
         for match_sha1 in shadowed.get(try_name, []):
             path = q.files_db.get(match_sha1, {}).get("path", "")
             if (
-                _maker_folder(path, str(q.db.get("bios_dir") or "bios"))
+                maker_folder(path, str(q.db.get("bios_dir") or "bios"))
                 in makers
                 and _name_size_ok(q, match_sha1)
                 and os.path.exists(path)
@@ -656,19 +656,19 @@ def _choose_by_name(
         # Demul's naomi.zip holds more NAOMI BIOS rows than any MAME
         # set and broke the superset the MAME cores were served.
         candidates = [
-            p for p in candidates if not _foreign_tree(p, owners)
+            p for p in candidates if not foreign_tree(p, owners)
         ] or candidates
     if members:
-        candidates = _holding_members(candidates, members)
+        candidates = holding_members(candidates, members)
     elif len(candidates) > 1 and q.name.casefold().endswith(".zip"):
-        candidates = _covering_archives(candidates)
+        candidates = covering_archives(candidates)
     candidates = _by_affinity(candidates, q.file_entry, q.dest_hint)
     best = candidates[0] if candidates else ""
     # A copy outside another emulator's tree comes first: the
     # affinity read pcsx2 in bios/Other/armsx2/pcsx2/ and served
     # upstream PCSX2 the patches.zip of ARMSX2.
     candidates = [
-        p for p in candidates if not _foreign_tree(p, owners)
+        p for p in candidates if not foreign_tree(p, owners)
     ] or candidates
     primary = [p for p in candidates if "/.variants/" not in p]
     if not (primary or candidates):
@@ -682,8 +682,8 @@ def _choose_by_name(
     # 8 KB copy was set aside, while data/bluemsx held its own,
     # and MSX2P.ROM of another dump once only msx-emu answered
     # the exact casing.
-    if data_dir_registry and (exact_foreign or _foreign_tree(best, owners)):
-        hit, _mismatch = _resolve_in_data_dirs(
+    if data_dir_registry and (exact_foreign or foreign_tree(best, owners)):
+        hit, _mismatch = resolve_in_data_dirs(
             q.names_to_try, data_dir_registry,
             functools.partial(
                 declared_hash_verdict,
@@ -714,11 +714,11 @@ def _by_name(
     candidates = _exact_name_candidates(q)
     if candidates and all("/.variants/" in p for p in candidates):
         _add_variant_primaries(q, candidates)
-    owners = _owner_tokens(q.file_entry)
+    owners = owner_tokens(q.file_entry)
     # Only another emulator's tree answers the exact casing: what it
     # holds there says nothing about this entry's file.
     exact_foreign = bool(candidates) and all(
-        _foreign_tree(p, owners) for p in candidates
+        foreign_tree(p, owners) for p in candidates
     )
     if not candidates or exact_foreign:
         _add_casefold_candidates(q, candidates, owners)
@@ -730,13 +730,13 @@ def _by_name(
     core_owners = {
         token
         for core in q.file_entry.get("platform_cores") or ()
-        for token in _affinity_tokens(str(core))
+        for token in affinity_tokens(str(core))
     }
     if (
         not owners
         and core_owners
         and candidates
-        and all(_foreign_tree(p, core_owners) for p in candidates)
+        and all(foreign_tree(p, core_owners) for p in candidates)
     ):
         return None, True
     if makers and candidates:
@@ -803,7 +803,7 @@ def _named_md5_match(q: _Lookup, named: list[tuple[str, str, int | None]]) -> Re
                 ):
                     return path, "md5_composite_exact"
             except (zipfile.BadZipFile, OSError) as exc:
-                _warn_unreadable_archive(path, exc)
+                warn_unreadable_archive(path, exc)
         if db_md5.lower() in md5_set and not q.composite_only:
             return path, "md5_exact"
     return None
@@ -821,7 +821,7 @@ def _zipped_named(
                 if zipped_file.casefold() in inner_names:
                     valid.append((path, m, size))
         except (zipfile.BadZipFile, OSError) as exc:
-            _warn_unreadable_archive(path, exc)
+            warn_unreadable_archive(path, exc)
     # The archive whose member carries the declared md5 is the one:
     # neogeo.zip is held twice, each with its own sfix.sfix, and the
     # first by name was returned as a mismatch while the other matched.
@@ -909,7 +909,7 @@ def _in_data_dirs(q: _Lookup, data_dir_registry: dict) -> tuple[Resolution | Non
         file_entry=q.file_entry,
         db=q.db,
     )
-    return _resolve_in_data_dirs(q.names_to_try, data_dir_registry, verdict)
+    return resolve_in_data_dirs(q.names_to_try, data_dir_registry, verdict)
 
 
 def _resolve_layout(

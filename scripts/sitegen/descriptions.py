@@ -11,7 +11,7 @@ from sitegen import measurements as sitemeasurements
 from sitegen.config import SITE_NAME
 
 
-def _page_title(markdown: str, path: Path) -> str:
+def page_title(markdown: str, path: Path) -> str:
     match = re.search(r"^#\s+(.+?)\s*$", markdown, flags=re.MULTILINE)
     if match:
         title = re.sub(r"<[^>]+>", "", match.group(1))
@@ -19,7 +19,7 @@ def _page_title(markdown: str, path: Path) -> str:
     return path.stem.replace("-", " ").title()
 
 
-def _browser_title(relative: Path, title: str) -> str:
+def page_browser_title(relative: Path, title: str) -> str:
     """Return a concise, unique browser/search title for a generated page."""
     key = relative.as_posix()
     index_titles = {
@@ -84,7 +84,7 @@ def _shorten(plain: str, limit: int = 157) -> str:
     return cut.rstrip(" ,;:-(.") + "..."
 
 
-def _page_description(markdown: str, relative: Path, title: str) -> str:
+def page_description(markdown: str, relative: Path, title: str) -> str:
     key = relative.as_posix()
     specific = {
         "index.md": "The BIOS files emulators need, for RetroArch, Batocera, EmuDeck and more: the folder they go in, one command that installs and checks them, and packs to download.",
@@ -103,7 +103,7 @@ def _page_description(markdown: str, relative: Path, title: str) -> str:
         return specific[key]
     # What a search engine shows is the page's own first sentence: 707 pages
     # shared five templates of level 3 words ("source-pinned", "provenance").
-    browser = _browser_title(relative, title)
+    browser = page_browser_title(relative, title)
     held = re.search(r"\bThis part holds (.+?)\.(?: |$)", markdown, re.M)
     if key in PART_PAGES and held:
         return _shorten(f"{browser}. This part holds {_plain_markdown(held[1])}.", 155)
@@ -226,7 +226,7 @@ def _files_snippet(markdown: str, key: str, title: str, intro: str) -> str:
     for count in range(min(len(names), 4), 0, -1):
         shown = (names if count == len(names)
                  else [*names[:count - 1], f"{len(names) - count + 1:,} more"])
-        head = f"{subject}: {_said_as_list(shown)}, {need}."
+        head = f"{subject}: {said_as_list(shown)}, {need}."
         forms += [f"{head} {tail}" for tail in tails if tail] + [head]
     return next((form for form in forms if len(form) <= 155), intro)
 
@@ -271,7 +271,7 @@ def _system_description(markdown: str, browser: str) -> str:
     consoles = [name for name in consoles if name and name not in _NOT_A_CONSOLE]
     if len(consoles) > 1:
         shown = consoles if len(consoles) <= 4 else consoles[:3] + [f"{len(consoles) - 3} more"]
-        return _shorten(f"{browser} for {_said_as_list(shown)}, one card per file with its "
+        return _shorten(f"{browser} for {said_as_list(shown)}, one card per file with its "
                         "hashes and the emulators that read it.", 155)
     start = re.search(r"^\*\*Start with\*\*(?P<line>.*)$(?P<list>(?:\n+- .*)*)", markdown, re.M)
     if start:
@@ -283,7 +283,7 @@ def _system_description(markdown: str, browser: str) -> str:
     names = list(dict.fromkeys(html.unescape(name) for name in _CARD_TITLE.findall(markdown)))
     if names:
         shown = names if len(names) <= 3 else names[:3] + [f"{len(names) - 3} more"]
-        return _shorten(f"{browser}: {_said_as_list(shown)}, with their hashes and the "
+        return _shorten(f"{browser}: {said_as_list(shown)}, with their hashes and the "
                         "emulators that read them.", 155)
     return _shorten(f"{browser}, one card per file with its hashes and the emulators "
                     "that read it.", 155)
@@ -304,6 +304,6 @@ EMULATOR_SNIPPETS: dict[str, tuple[str, list[str], int, str]] = {}
 PART_PAGES: set[str] = set()
 
 
-def _said_as_list(items: list[str]) -> str:
+def said_as_list(items: list[str]) -> str:
     """"a, b and c"."""
     return ", ".join(items[:-1]) + f" and {items[-1]}" if len(items) > 1 else "".join(items)

@@ -20,15 +20,15 @@ from model.database import get_mame_clone_map
 from model.declarations import OUTER_ROOTS
 from model.platforms import load_platform_config
 from model.registry import list_registered_platforms, load_data_dir_registry
-from model.systems import _norm_system_id
-from packs.gaps import _gap_destination
+from model.systems import norm_system_id
+from packs.gaps import gap_destination
 from resolve.archives import archive_entry
 from resolve.content import content_fits, name_match_size_ok
 from resolve.directories import directory_members, expand_directory_entries
 from resolve.launchers import (
     LauncherLayer,
-    _directories as launcher_directories,
-    _names as launcher_names,
+    record_directories as launcher_directories,
+    record_names as launcher_names,
     bound_launchers,
     catalogued_model_files,
     held_record,
@@ -39,7 +39,7 @@ from resolve.launchers import (
 )
 from resolve.layout import system_dir_path
 from resolve.localfile import resolve_local_file
-from resolve.ownership import _foreign_tree, _owner_tokens
+from resolve.ownership import foreign_tree, owner_tokens
 from resolve.standalone import platform_layouts
 from resolve.validation import (
     case_folded_slots,
@@ -80,11 +80,11 @@ def load_platform_files(
             for fe in system.get("files", []):
                 name = fe.get("name", "")
                 if name:
-                    declared.setdefault(_norm_system_id(sys_id), set()).add(name)
+                    declared.setdefault(norm_system_id(sys_id), set()).add(name)
             for dd in system.get("data_directories", []):
                 ref = dd.get("ref", "")
                 if ref:
-                    platform_data_dirs.setdefault(_norm_system_id(sys_id), set()).add(ref)
+                    platform_data_dirs.setdefault(norm_system_id(sys_id), set()).add(ref)
     return declared, platform_data_dirs
 
 
@@ -130,7 +130,7 @@ def folded_declared_slots(
     return frozenset(slots)
 
 
-def _build_supplemental_index(
+def build_supplemental_index(
     data_root: str = "data", bios_root: str = "bios"
 ) -> set[str]:
     """Build a set of filenames and directory names in data/ and inside bios/ ZIPs.
@@ -214,7 +214,7 @@ def _resolve_source(
     refuse it.
     """
     declared = _declared_content(file_entry or {})
-    owners = _owner_tokens(file_entry or {})
+    owners = owner_tokens(file_entry or {})
 
     def _can_be(sha1s: list | str) -> bool:
         if not file_entry or db_files is None:
@@ -237,7 +237,7 @@ def _resolve_source(
         return _can_be([
             sha1 for sha1 in by_name.get(name) or []
             if db_files is None
-            or not _foreign_tree(db_files.get(sha1, {}).get("path", ""), owners)
+            or not foreign_tree(db_files.get(sha1, {}).get("path", ""), owners)
         ])
 
     # bios/ via database.json by_name
@@ -660,7 +660,7 @@ def _resolve_archive_source(
     return result if result is not None else "missing"
 
 
-def _first_hash(entry: dict) -> str:
+def first_hash(entry: dict) -> str:
     """The first hash an entry declares, strongest first, or ''."""
     for field in ("sha1", "sha256", "md5", "crc32"):
         value = entry.get(field)
@@ -761,7 +761,7 @@ class _ProfileComparison:
         # takes it: Batocera's standalone Cemu reads keys.txt at
         # standalone_path, and the libretro Cemu/keys.txt reported here
         # settled the declaration on a slot the platform never fills.
-        effective_path = _gap_destination(f, fname, is_standalone, save_root)
+        effective_path = gap_destination(f, fname, is_standalone, save_root)
         slot = slot_key(f, is_standalone)
         seen_key = slot
         if len(self.layouts) > 1:
@@ -907,7 +907,7 @@ class _ProfileComparison:
             "in_repo": in_repo,
             "source": source,
             # What tells this file from a homonym another emulator wants.
-            "identity": _first_hash(f),
+            "identity": first_hash(f),
         }
         if save_root:
             entry["root"] = "save"
@@ -1011,7 +1011,7 @@ def _cross_reference_profile(
     else:
         platform_names = set()
         for sys_id in systems:
-            platform_names.update(declared.get(_norm_system_id(sys_id), set()))
+            platform_names.update(declared.get(norm_system_id(sys_id), set()))
 
     # The build a platform runs decides which entries it reads, as in
     # find_undeclared_files: without a platform, the libretro build.
@@ -1108,7 +1108,7 @@ PLATFORM_OWN_FOLDERS = frozenset({"<emulatorLauncher folder>"})
 def launcher_file_names(record: dict) -> list[str]:
     """The concrete file names a launcher record reads, in code order.
 
-    The names are read as the launcher layer reads them (`launchers._names`):
+    The names are read as the launcher layer reads them (`launchers.record_names`):
     a label after the name is dropped ("neocd_z.rom (CDZ)"), and a name with
     `<` or without an extension is not a file name (a folder the record
     links, an option value such as hatari2014's "default"). A name with a

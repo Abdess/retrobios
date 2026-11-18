@@ -13,7 +13,7 @@ import unittest
 from pathlib import Path
 
 from model import profiles as model_profiles
-from model.profiles import _emulator_profiles_cache
+from model.profiles import emulator_profiles_cache
 from model import region
 from resolve import regions as resolve_regions
 from packs.extras import emulator_region_drops
@@ -476,10 +476,10 @@ class TestFallbackGroups(unittest.TestCase):
         )
 
     def test_the_readme_names_a_slot_as_a_reader_does(self):
-        from packs.readme import _group_label
+        from packs.readme import group_label
 
-        self.assertEqual(_group_label("PicoDrive:variant:megacd"), "megacd (PicoDrive)")
-        self.assertEqual(_group_label("sega-mega-cd"), "sega-mega-cd")
+        self.assertEqual(group_label("PicoDrive:variant:megacd"), "megacd (PicoDrive)")
+        self.assertEqual(group_label("sega-mega-cd"), "sega-mega-cd")
 
     def test_no_requested_regions_reports_nothing(self):
         groups = {"fds": [("disksys.rom", "disksys.rom")]}
@@ -698,13 +698,13 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
 
     def test_the_report_withdraws_what_the_builder_withdraws(self):
         from model import profiles as model_profiles
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
         from packs import extras as packs_extras
         from packs import coverage
 
         tmp, root, db, config = self._fixture()
         try:
-            _emulator_profiles_cache.clear()
+            emulator_profiles_cache.clear()
             profiles = model_profiles.load_emulator_profiles(str(root / "emulators"))
             groups, extra_dests = packs_extras.platform_region_groups(
                 config, config["systems"], str(root / "emulators"),
@@ -734,7 +734,7 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
                 "the report must withdraw exactly the builder's drop set",
             )
         finally:
-            _emulator_profiles_cache.clear()
+            emulator_profiles_cache.clear()
             tmp.cleanup()
 
     def test_a_missing_regional_core_file_is_withdrawn_too(self):
@@ -742,7 +742,7 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
         missing core file was never grouped and stayed "required missing"
         for a region the request excludes."""
         from model import profiles as model_profiles
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
         from packs import coverage
 
         tmp, root, db, config = self._fixture()
@@ -750,7 +750,7 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
             jp = next(k for k, v in db["files"].items() if v["name"] == "jp.bin")
             del db["files"][jp]
             del db["indexes"]["by_name"]["jp.bin"]
-            _emulator_profiles_cache.clear()
+            emulator_profiles_cache.clear()
             profiles = model_profiles.load_emulator_profiles(str(root / "emulators"))
             plain = coverage.verify_platform(
                 config, db, str(root / "emulators"), profiles,
@@ -765,20 +765,20 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
                 {u["name"] for u in narrowed["undeclared_files"]}, {"us.bin"}
             )
         finally:
-            _emulator_profiles_cache.clear()
+            emulator_profiles_cache.clear()
             tmp.cleanup()
 
     def test_the_report_names_the_fallback_groups(self):
         """The pack README lists the systems kept whole because nothing
         answers the request. verify said all OK and named none."""
         from model import profiles as model_profiles
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
         from packs import coverage
         from packs import report as packs_report
 
         tmp, root, db, config = self._fixture()
         try:
-            _emulator_profiles_cache.clear()
+            emulator_profiles_cache.clear()
             profiles = model_profiles.load_emulator_profiles(str(root / "emulators"))
             result = coverage.verify_platform(
                 config, db, str(root / "emulators"), profiles,
@@ -790,7 +790,7 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
                 packs_report.print_platform_result(result, ["Demo"])
             self.assertIn("all kept (1): demo-system", out.getvalue())
         finally:
-            _emulator_profiles_cache.clear()
+            emulator_profiles_cache.clear()
             tmp.cleanup()
 
     def test_one_grouping_pass_serves_both_sides(self):
@@ -1314,7 +1314,7 @@ class ARefusedRegionalFileHoldsNoSlot(unittest.TestCase):
         from packs.emulatorpack import generate_emulator_pack
         from packs.emulatorcheck import verify_emulator
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         repo = Path(__file__).resolve().parents[1]
         (repo / "tmp").mkdir(exist_ok=True)
         root = Path(tempfile.mkdtemp(dir=repo / "tmp"))
@@ -1459,9 +1459,9 @@ class RegionWordsInAPackReadme(unittest.TestCase):
     """The pack README title-cased each slug: asia-ntsc read "Asia Ntsc"."""
 
     def test_the_priority_line_reads_as_written(self):
-        from packs.readme import _build_readme
+        from packs.readme import build_readme
 
-        readme = _build_readme(
+        readme = build_readme(
             "retroarch", "RetroArch", "system", 1, 1,
             regions=region.parse_requested("us,asia-ntsc,jp"),
         )

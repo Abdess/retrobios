@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 
 from core import upstream
-from model.sourceref import _ANNOTATION_RE, _trim_prose
+from model.sourceref import ANNOTATION_RE, trim_prose
 from profiling.anchoring import PartResult, REVIEW_STATUSES
 from profiling.versions import VersionReport
 
@@ -142,20 +142,20 @@ def _render_span(path: str, start: int | None, end: int | None) -> str:
     return f"{path}:{start}"
 
 
-def _original_part(part: PartResult) -> str:
+def original_part(part: PartResult) -> str:
     """The part exactly as the profile writes it today."""
     return part.part.raw or _render_span(
         part.part.path, part.part.start, part.part.end
     )
 
 
-def _rendered_part(part: PartResult) -> str:
+def rendered_part(part: PartResult) -> str:
     """The part rewritten onto its new location, annotation preserved."""
     span = _render_span(part.new_path or part.part.path, part.start, part.end)
     raw = part.part.raw
     if not raw:
         return span
-    located = _trim_prose(_ANNOTATION_RE.sub("", raw).strip())
+    located = trim_prose(ANNOTATION_RE.sub("", raw).strip())
     # `stella src/emucore/Cart.cxx:120` names the repository the lines are
     # in. The path was read without that word, and a recale wrote it back
     # without it: the attribution went with the old line numbers.
@@ -182,7 +182,7 @@ def _part_line(part: PartResult) -> str:
         detail += f"  ({part.reason})"
     if part.repo:
         detail += f"  [{part.repo}]"
-    return f"      {_original_part(part)}  {detail}"
+    return f"      {original_part(part)}  {detail}"
 
 
 def _report_header(report: ProfileReport) -> list[str]:

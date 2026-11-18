@@ -221,12 +221,12 @@ class GapAnalysisAgreesWithTheBuilder(unittest.TestCase):
         return tmp, root, db
 
     def _in_repo(self, mode: str) -> bool:
-        from model.profiles import _emulator_profiles_cache, load_emulator_profiles
+        from model.profiles import emulator_profiles_cache, load_emulator_profiles
         from packs.gaps import find_undeclared_files
 
         tmp, root, db = self._fixture()
         try:
-            _emulator_profiles_cache.clear()
+            emulator_profiles_cache.clear()
             profiles = load_emulator_profiles(str(root / "emulators"))
             config = {
                 "platform": "Demo",
@@ -240,7 +240,7 @@ class GapAnalysisAgreesWithTheBuilder(unittest.TestCase):
             entry = next(e for e in found if e["name"] == "collide.rom")
             return bool(entry["in_repo"])
         finally:
-            _emulator_profiles_cache.clear()
+            emulator_profiles_cache.clear()
             tmp.cleanup()
 
     def test_a_digest_mode_does_not_call_a_contradicted_copy_available(self):
@@ -367,7 +367,7 @@ class SkippingIsNotSettling(unittest.TestCase):
         import hashlib
         import tempfile
 
-        from model.profiles import _emulator_profiles_cache, load_emulator_profiles
+        from model.profiles import emulator_profiles_cache, load_emulator_profiles
         from packs.gaps import find_undeclared_files
 
         tmp = tempfile.TemporaryDirectory()
@@ -398,7 +398,7 @@ class SkippingIsNotSettling(unittest.TestCase):
                 "files:\n" + entry
             )
         try:
-            _emulator_profiles_cache.clear()
+            emulator_profiles_cache.clear()
             profiles = load_emulator_profiles(str(root / "emulators"))
             config = {
                 "platform": "Demo", "verification_mode": "existence",
@@ -409,7 +409,7 @@ class SkippingIsNotSettling(unittest.TestCase):
             )
             return {(u["emulator"], u["name"]) for u in found}
         finally:
-            _emulator_profiles_cache.clear()
+            emulator_profiles_cache.clear()
             tmp.cleanup()
 
     def test_the_profile_that_needs_the_file_still_reports_it(self):

@@ -23,7 +23,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from core.cli import require_directory
 from core.artifacts import ArtifactLockBusy, artifact_lock
 
-from sitegen.build import _generate
+from sitegen.build import generate_site
 from sitegen.config import STARLIGHT_CONTENT, STARLIGHT_DIR
 from sitegen.parts import PUBLISHED_PARTS_FILE
 
@@ -79,7 +79,7 @@ def main() -> None:
                 repository_output_lock(str(PUBLISHED_PARTS_FILE)), \
                 contextlib.ExitStack() as held:
             hold_data_dirs(held, load_data_dir_registry(args.platforms_dir))
-            _generate(args)
+            generate_site(args)
     except ArtifactLockBusy as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         sys.exit(1)

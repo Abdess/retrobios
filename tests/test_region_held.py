@@ -93,13 +93,13 @@ class ADataDirectoryCopyIsHeld(unittest.TestCase):
 
     def test_emulator_entry_from_a_data_tree(self):
         from packs.extras import _emulator_ships
-        from resolve.validation import _build_validation_index
+        from resolve.validation import build_validation_index
 
         profile = self.profiles["dolphin-mmjr2"]
         entry = next(
             fe for fe in profile["files"] if fe.get("name") == "nwc24msg.cfg"
         )
-        index = _build_validation_index({"dolphin-mmjr2": profile})
+        index = build_validation_index({"dolphin-mmjr2": profile})
         self.assertTrue(_emulator_ships(
             entry, "dolphin-mmjr2", profile, self.db, index, {}, self.registry,
         ))

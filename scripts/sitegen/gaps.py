@@ -11,14 +11,14 @@ from model.platforms import native_layer
 from resolve.cores import resolve_platform_cores
 from resolve.nativemode import check_label
 from sitegen import markup, wanted as sitewanted
-from sitegen.cards import _PROVENANCE_LABELS, _fetch_url
-from sitegen.config import _date_line
-from sitegen.crossref import _gap_sources
+from sitegen.cards import PROVENANCE_LABELS, fetch_url
+from sitegen.config import date_line
+from sitegen.crossref import gap_sources
 from sitegen.dataexports import build_emulator_gap_report
-from sitegen.emulatorsindex import _content_check_ceiling
-from sitegen.parts import _list_pages
-from sitegen.render import _code, _count, _escape_tags
-from sitegen.sources import _source_ref_markdown
+from sitegen.emulatorsindex import content_check_ceiling
+from sitegen.parts import list_pages
+from sitegen.render import code_span, count_text, escape_tags
+from sitegen.sources import source_ref_markdown
 
 
 # Contributing page
@@ -87,7 +87,7 @@ def short_hash(value: str) -> str:
     column on every screen."""
     value = str(value)
     if len(value) <= 12:
-        return _code(value)
+        return code_span(value)
     return f'<code title="{html.escape(value)}">{html.escape(value[:12])}</code>'
 
 
@@ -102,8 +102,8 @@ def _catalogued_needs(report: dict | None) -> dict[tuple[str, str], list[str]]:
     imported romset lists that file, from a provenance report built with
     the profiles' needs."""
     return {
-        need: [f"{_escape_tags(where)} `{_escape_tags(name)}`" for where, name in listed]
-        for need, listed in sitewanted.catalog_listings(report, _PROVENANCE_LABELS).items()
+        need: [f"{escape_tags(where)} `{escape_tags(name)}`" for where, name in listed]
+        for need, listed in sitewanted.catalog_listings(report, PROVENANCE_LABELS).items()
     }
 
 
@@ -122,7 +122,7 @@ def _copy_cell(path: str, algos: list[str], db: dict | None) -> str:
         {},
     )
     hashes = {algo: [str(record[algo]).lower()] for algo in algos if record.get(algo)}
-    shown = f"[{_code(path)}]({_fetch_url(path)})"
+    shown = f"[{code_span(path)}]({fetch_url(path)})"
     return f"{shown}<br>{_hash_cell(hashes)}" if hashes else shown
 
 
@@ -181,7 +181,7 @@ def _render_problem_files(
     total_problems = len(missing_files) + len(untested_files) + len(mismatch_files)
     # One row per name: the page opened on "48 are missing", counted by
     # destination, above a heading that said "10 files". Both are said.
-    names = _count(len(missing_files), "name")
+    names = count_text(len(missing_files), "name")
     missing_said = (f"{missing_total:,} missing under {names}"
                     if missing_total is not None else f"{len(missing_files)} missing")
 
@@ -197,7 +197,7 @@ def _render_problem_files(
         if missing_files:
             lines.extend([
                 f'### Missing <span class="rb-badge rb-badge-danger">'
-                f"{_count(len(missing_files), 'name')}</span>",
+                f"{count_text(len(missing_files), 'name')}</span>",
                 "",
                 "Required is the platform's own flag. Category says what the "
                 "platform's emulators do with the file: `bios` is firmware they "
@@ -217,7 +217,7 @@ def _render_problem_files(
                 plats = "; ".join(
                     (f"[{display}](platforms/{key}.md#{system.replace(' ', '-')})"
                      if key and system else display)
-                    + " " + ", ".join(_code(dest) for dest in sorted(dests))
+                    + " " + ", ".join(code_span(dest) for dest in sorted(dests))
                     for (display, key, system), dests in sorted(f["where"].items())
                 )
                 cats = f["categories"]
@@ -228,7 +228,7 @@ def _render_problem_files(
         if untested_files:
             lines.extend([
                 f'### Untested <span class="rb-badge rb-badge-warning">'
-                f"{_count(len(untested_files), 'file')}</span>",
+                f"{count_text(len(untested_files), 'file')}</span>",
                 "",
                 "Present, but not the expected hash. Declared is what the platform "
                 "asks for, the collection copy is what the path holds.",
@@ -241,7 +241,7 @@ def _render_problem_files(
                 plats = ", ".join(sorted(set(f["platforms"])))
                 declared = f["declared"]
                 lines.append(
-                    f"| {_code(f['name'])} | {plats} | {_reason_cell(f['reason'])} "
+                    f"| {code_span(f['name'])} | {plats} | {_reason_cell(f['reason'])} "
                     f"| {_hash_cell(declared) or '-'} "
                     f"| {_copy_cell(f['path'], list(declared) or ['md5'], db)} |"
                 )
@@ -250,7 +250,7 @@ def _render_problem_files(
         if mismatch_files:
             lines.extend([
                 f'### Discrepancy <span class="rb-badge rb-badge-warning">'
-                f"{_count(len(mismatch_files), 'file')}</span>",
+                f"{count_text(len(mismatch_files), 'file')}</span>",
                 "",
                 "The platform's own check passes, but the emulator's size or "
                 "hash check fails. Each row names the check that fails.",
@@ -262,7 +262,7 @@ def _render_problem_files(
                 f = mismatch_files[fname]
                 plats = ", ".join(sorted(set(f["platforms"])))
                 held = _held_accepted(f["discrepancy"], db)
-                cell = f"[{_code(held)}]({_fetch_url(held)})" if held else "-"
+                cell = f"[{code_span(held)}]({fetch_url(held)})" if held else "-"
                 lines.append(f"| `{fname}` | {plats} | {_reason_cell(f['discrepancy'])} | {cell} |")
             lines.append("")
 
@@ -278,8 +278,8 @@ def _render_problem_files(
             "|------|----------|--------|--------------|",
         ])
         lines.extend(
-            f"| {_code(p['name'])} | {_escape_tags(p['platform'])} | {p['status']} "
-            f"| {_code(p['held_by'])} |"
+            f"| {code_span(p['name'])} | {escape_tags(p['platform'])} | {p['status']} "
+            f"| {code_span(p['held_by'])} |"
             for p in sorted(settled, key=lambda row: (row["name"], row["platform"]))
         )
         lines.append("")
@@ -601,9 +601,9 @@ def _source_row(m: dict, profiles: dict, coverages: dict,
     req = "yes" if m["required"] else "no"
     algorithm, _, value = m["identity"].partition(":")
     expected = f"{algorithm} {short_hash(value)}" if value else "-"
-    destination = _code(m["path"]) if m["path"] != m["name"] else "-"
+    destination = code_span(m["path"]) if m["path"] != m["name"] else "-"
     emulators = ", ".join(
-        f"[{_escape_tags(display)}](emulators/{key}.md)"
+        f"[{escape_tags(display)}](emulators/{key}.md)"
         for display, key in zip(m["emulators"], m["emu_keys"])
     )
     owner = profiles[m["emu_keys"][0]]
@@ -613,7 +613,7 @@ def _source_row(m: dict, profiles: dict, coverages: dict,
     return (
         f"| `{m['name']}` [Have it? Upload]({upload}) | {destination} | {expected} "
         f"| {emulators} | {req} | {plat_badges} | "
-        f"{_source_ref_markdown(owner, m['source_ref'])} |"
+        f"{source_ref_markdown(owner, m['source_ref'])} |"
     )
 
 
@@ -621,9 +621,9 @@ def _source_counted(missing: _MissingFiles) -> str:
     """How many files there are to source, and the entries they come from."""
     req_src = [m for m in missing.rows if m["required"]]
     return (
-        f"{_count(len(missing.rows), 'file')}, {len(req_src)} required."
+        f"{count_text(len(missing.rows), 'file')}, {len(req_src)} required."
         + (
-            f" They come from {_count(missing.entries, 'entry', 'entries')}: a file "
+            f" They come from {count_text(missing.entries, 'entry', 'entries')}: a file "
             "declared with the same hash at several places is listed once."
             if missing.entries != len(missing.rows) else ""
         )
@@ -638,7 +638,7 @@ def _source_table(counted: str, rows: list[str], moved: dict[str, str] | None) -
     ]
     if moved is None:
         return [*head, *rows, ""]
-    where = _list_pages(
+    where = list_pages(
         "gaps-files-to-source", "Files to source",
         f"{counted} Each is a file an emulator loads that no platform lists and "
         "the collection does not hold. Part of "
@@ -657,7 +657,7 @@ def _bundled_note(bundled_rows: set[tuple[str, str]]) -> list[str]:
     emulators = sorted({emulator for emulator, _name in bundled_rows})
     return [
         f"{len(bundled_rows)} further files arrive with their emulator's own "
-        f"package ({_escape_tags(', '.join(emulators))}): documented in the profile, not "
+        f"package ({escape_tags(', '.join(emulators))}): documented in the profile, not "
         "collected, and not listed here.",
         "",
     ]
@@ -675,7 +675,7 @@ def _undeclared_gaps(report_all: dict) -> tuple[dict[str, int], int, list[tuple[
         if data["gaps"] == 0:
             continue
         total_undeclared += data["gaps"]
-        for key, count in _gap_sources(data).items():
+        for key, count in gap_sources(data).items():
             src_totals[key] += count
         emulator_gaps.append((emu_name, data))
     return src_totals, total_undeclared, emulator_gaps
@@ -686,7 +686,7 @@ def _complement_rows(emulator_gaps: list[tuple[str, dict]]) -> list[str]:
     rows = []
     for emu_name, data in sorted(emulator_gaps, key=lambda x: -x[1]["gaps"]):
         display = data["emulator"]
-        sources = _gap_sources(data)
+        sources = gap_sources(data)
         to_source = sources["missing"]
         missing_str = (
             f'<span class="rb-badge rb-badge-danger">{to_source}</span>'
@@ -721,7 +721,7 @@ def _complement_intro(src_totals: dict[str, int], total_undeclared: int,
         "## Files emulators load that no platform lists { #core-complement }",
         "",
         f"Files loaded by emulators but not declared by any platform. "
-        f"{total_undeclared:,} files across {_count(len(emulator_gaps), 'emulator')}, "
+        f"{total_undeclared:,} files across {count_text(len(emulator_gaps), 'emulator')}, "
         f"{total_available:,} available ({pct_available}), "
         f"{src_totals['bundled']:,} installed with their emulator, "
         f"{src_totals['missing']:,} to source.",
@@ -786,7 +786,7 @@ def _not_collected_section(report_all: dict, profiles: dict, catalogued: dict | 
         where = listed.get((u["emu_key"], str(u["name"]).casefold()), [])
         lines.append(
             f"| `{u['name']}` | {u['emulator']} | {_reason_cell(u['reason'])} "
-            f"| {_source_ref_markdown(profiles[u['emu_key']], u['source_ref'])} "
+            f"| {source_ref_markdown(profiles[u['emu_key']], u['source_ref'])} "
             f"| {', '.join(where) or '-'} |"
         )
     lines.append("")
@@ -931,7 +931,7 @@ def generate_gap_analysis(
         "",
         _CORROBORATION_NOTE,
         "",
-        _content_check_ceiling(profiles),
+        content_check_ceiling(profiles),
         "",
     ])
 
@@ -964,5 +964,5 @@ def generate_gap_analysis(
 
     lines.extend(_not_collected_section(report_all, profiles, catalogued))
 
-    lines.extend(["", _date_line()])
+    lines.extend(["", date_line()])
     return "\n".join(lines) + "\n"

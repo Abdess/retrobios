@@ -23,7 +23,7 @@ def toc_slug(text: str) -> str:
     return re.sub(r"[-\s]+", "-", text)
 
 
-def _unique(ident: str, used: set[str]) -> str:
+def unique_anchor(ident: str, used: set[str]) -> str:
     while ident in used or not ident:
         match = IDCOUNT.match(ident)
         ident = f"{match[1]}_{int(match[2]) + 1}" if match else f"{ident}_1"

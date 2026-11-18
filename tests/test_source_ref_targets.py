@@ -44,7 +44,7 @@ class BinaryContinuationsAreNotLinked(unittest.TestCase):
         original = sources._tree_paths
         sources._tree_paths = lambda repo, pin: frozenset({"FPLoader.cpp"})
         try:
-            return sources._source_ref_markdown(self.PROFILE, value)
+            return sources.source_ref_markdown(self.PROFILE, value)
         finally:
             sources._tree_paths = original
 
@@ -77,7 +77,7 @@ class ForgejoTreesArePaged(unittest.TestCase):
             page = int(url.rsplit("&page=", 1)[1]) if "&page=" in url else 1
             return {"tree": pages.get(page, []), "truncated": True, "total_count": 1002}
 
-        with mock.patch.object(upstream, "_api", side_effect=fake_api):
+        with mock.patch.object(upstream, "cached_api", side_effect=fake_api):
             paths, truncated = upstream.list_tree(repo, "7" * 40, "unused")
         self.assertFalse(truncated)
         self.assertEqual(len(paths), 1001)
@@ -86,7 +86,7 @@ class ForgejoTreesArePaged(unittest.TestCase):
     def test_a_github_truncation_stays_final(self):
         repo = upstream.parse_repo("https://github.com/o/r")
         payload = {"tree": [{"type": "blob", "path": "x"}], "truncated": True}
-        with mock.patch.object(upstream, "_api", return_value=payload) as api:
+        with mock.patch.object(upstream, "cached_api", return_value=payload) as api:
             paths, truncated = upstream.list_tree(repo, "7" * 40, "unused")
         self.assertTrue(truncated)
         self.assertEqual(api.call_count, 1)

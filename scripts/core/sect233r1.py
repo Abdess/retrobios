@@ -22,12 +22,12 @@ _F = (1 << 233) | (1 << 74) | 1  # irreducible polynomial
 _A = 1
 _B = 0x0066647EDE6C332C7F8C0923BB58213B333B20E9CE4281FE115F7D8F90AD
 
-_Gx = 0x00FAC9DFCBAC8313BB2139F1BB755FEF65BC391F8B36F8F8EB7371FD558B
-_Gy = 0x01006A08A41903350678E58528BEBF8A0BEFF867A7CA36716F7E01F81052
+Gx = 0x00FAC9DFCBAC8313BB2139F1BB755FEF65BC391F8B36F8F8EB7371FD558B
+Gy = 0x01006A08A41903350678E58528BEBF8A0BEFF867A7CA36716F7E01F81052
 
 # Subgroup order
-_N = 0x01000000000000000000000000000013E974E72F8A6922031D2603CFE0D7
-_N_BITLEN = _N.bit_length()  # 233
+N = 0x01000000000000000000000000000013E974E72F8A6922031D2603CFE0D7
+_N_BITLEN = N.bit_length()  # 233
 
 # Cofactor
 _H = 2
@@ -156,7 +156,7 @@ def _ec_double(p: tuple[int, int] | None) -> tuple[int, int] | None:
     return (x3, y3)
 
 
-def _ec_mul(k: int, p: tuple[int, int] | None) -> tuple[int, int] | None:
+def ec_mul(k: int, p: tuple[int, int] | None) -> tuple[int, int] | None:
     """Scalar multiplication k*P using double-and-add."""
     if k == 0 or p is _INF:
         return _INF
@@ -220,7 +220,7 @@ def ecdsa_verify_sha256(
     q_point = (qx, qy)
 
     # Check r, s in [1, n-1]
-    if not (1 <= r < _N and 1 <= s < _N):
+    if not (1 <= r < N and 1 <= s < N):
         return False
 
     h = hashlib.sha256(message).digest()
@@ -230,20 +230,20 @@ def ecdsa_verify_sha256(
         e >>= 256 - _N_BITLEN
 
     # w = s^(-1) mod n
-    w = _modinv(s, _N)
+    w = _modinv(s, N)
 
     # u1 = e*w mod n, u2 = r*w mod n
-    u1 = (e * w) % _N
-    u2 = (r * w) % _N
+    u1 = (e * w) % N
+    u2 = (r * w) % N
 
     # R = u1*G + u2*Q
-    g_point = (_Gx, _Gy)
-    r_point = _ec_add(_ec_mul(u1, g_point), _ec_mul(u2, q_point))
+    g_point = (Gx, Gy)
+    r_point = _ec_add(ec_mul(u1, g_point), ec_mul(u2, q_point))
 
     if r_point is _INF:
         return False
 
     # v = R.x (as integer, already in GF(2^m) which is an integer)
-    v = r_point[0] % _N
+    v = r_point[0] % N
 
     return v == r

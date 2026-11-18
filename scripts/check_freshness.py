@@ -402,7 +402,7 @@ def check_emulatorjs(platforms_dir: Path, offline: bool) -> Finding:
         tag = str((yaml_load(fh) or {}).get("version", ""))
     for path in ROMM_DOCKERFILES:
         try:
-            text = upstream._http_text(
+            text = upstream.http_text(
                 f"https://raw.githubusercontent.com/rommapp/romm/{tag}/{path}")
         except upstream.UpstreamError as exc:
             return Finding("platforms", subject, UNKNOWN, local=local, detail=str(exc))
@@ -879,7 +879,7 @@ def core_info_blobs(cache_dir: str, offline: bool) -> dict[str, str] | None:
     repo = upstream.parse_repo(CORE_INFO_REPO)
     if repo is None:
         return None
-    payload = upstream._api(
+    payload = upstream.cached_api(
         f"{repo.api_base}/repos/{repo.slug}/contents?per_page=100",
         cache_dir,
         offline,
@@ -1097,7 +1097,7 @@ def _game_catalogs(source: str) -> list[dict]:
 def _no_intro_asset_date(cache_dir: str, offline: bool) -> str:
     """The day the mirror last rebuilt its No-Intro pack, empty if unlisted."""
     repo = upstream.parse_repo(NO_INTRO_MIRROR)
-    payload = upstream._api(
+    payload = upstream.cached_api(
         f"{repo.api_base}/repos/{repo.slug}/releases/tags/{NO_INTRO_RELEASE}",
         cache_dir,
         offline,
@@ -1149,8 +1149,8 @@ def redump_datfile_version(code: str) -> str:
     request = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "retrobios/1.0"})
     with urllib.request.urlopen(request, timeout=60) as response:
         disposition = response.headers.get("Content-Disposition", "")
-    named = game_dat_importer._DISPOSITION.search(disposition)
-    match = game_dat_importer._REDUMP_FILE.match(named["file"]) if named else None
+    named = game_dat_importer.DISPOSITION.search(disposition)
+    match = game_dat_importer.REDUMP_FILE.match(named["file"]) if named else None
     if not match:
         raise ValueError(f"{url} names no datfile")
     return f"{match['date']} {match['time']}"
@@ -1228,7 +1228,7 @@ def _check_tosec(offline: bool) -> Finding:
     if offline:
         return Finding("catalogs", "tosec", SKIPPED, local=imported, detail="offline")
     try:
-        html = upstream._http_text(TOSEC_DOWNLOADS)
+        html = upstream.http_text(TOSEC_DOWNLOADS)
     except upstream.UpstreamError as exc:
         return Finding("catalogs", "tosec", UNKNOWN, local=imported, detail=str(exc))
     latest = tosec_latest_pack(html or "")
@@ -1300,7 +1300,7 @@ def _check_fbneo(cache_dir: str, offline: bool) -> Finding:
     if offline:
         return Finding("catalogs", "fbneo recipes", SKIPPED, local=imported, detail="offline")
     repo = upstream.parse_repo(FBNEO_REPO)
-    listing = upstream._api(
+    listing = upstream.cached_api(
         f"{repo.api_base}/repos/{repo.slug}/contents/dats",
         cache_dir,
         offline,
@@ -1389,7 +1389,7 @@ def specifier_allows(spec: str, version: str) -> bool:
 
 
 def pypi_latest(name: str) -> str | None:
-    payload = upstream._http_json(PYPI_URL.format(name=name))
+    payload = upstream.http_json(PYPI_URL.format(name=name))
     if not isinstance(payload, dict):
         return None
     info = payload.get("info") or {}
@@ -1406,7 +1406,7 @@ def parse_npm_pins(text: str) -> dict[str, str]:
 
 
 def npm_latest(name: str) -> str | None:
-    payload = upstream._http_json(NPM_URL.format(name=name))
+    payload = upstream.http_json(NPM_URL.format(name=name))
     if not isinstance(payload, dict):
         return None
     return str(payload.get("version") or "") or None

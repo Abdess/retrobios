@@ -34,10 +34,9 @@ from pathlib import Path
 from model import measurements as mr
 from sitegen import markup
 from core.artifacts import json_text, write_if_changed
-from sitegen.render import _escape_tags
+from sitegen.render import escape_tags
 from core.paths import REPO_ROOT
 
-ROOT = REPO_ROOT
 REPO = "https://github.com/Abdess/retrobios"
 EXPLORER_PAGE = "measurements.md"
 METHOD_PAGE = "wiki/measurements.md"
@@ -455,8 +454,8 @@ def records_commit(root: Path) -> str | None:
     return commit
 
 
-def build(public: Path, root: Path = ROOT, emulators_dir: Path = ROOT / "emulators",
-          scratch: Path = ROOT / "tmp" / "site", system_names: dict[str, str] | None = None,
+def build(public: Path, root: Path = REPO_ROOT, emulators_dir: Path = REPO_ROOT / "emulators",
+          scratch: Path = REPO_ROOT / "tmp" / "site", system_names: dict[str, str] | None = None,
           repo: str = REPO, commit: str | None = None) -> Built:
     """Write the index and the databases under the site's public folder.
 
@@ -604,7 +603,7 @@ def _text(value: object) -> str:
     ends a sentence on the site: the record keeps the words as written."""
     text = " ".join(str(value or "").split())
     text = re.sub(r";\s+(\w)", lambda m: ". " + m[1].upper(), text)
-    return _escape_tags(text)
+    return escape_tags(text)
 
 
 def _short(commit: str | None) -> str:

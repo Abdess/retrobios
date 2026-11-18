@@ -13,7 +13,7 @@ from typing import Iterable, Iterator
 _REF_RE = re.compile(r"^(?P<path>[^:]+?)(?::(?P<start>\d+)(?:-(?P<end>\d+))?)?$")
 _BARE_RANGE_RE = re.compile(r"^:?(\d+(?:-\d+)?)$")
 _SPLIT_RE = re.compile(r"[,;]")
-_ANNOTATION_RE = re.compile(r"\s*\([^)]*\)?")
+ANNOTATION_RE = re.compile(r"\s*\([^)]*\)?")
 _LOCATED_RE = re.compile(r"^[^\s:]+:\d+(?:-\d+)?$")
 
 
@@ -28,7 +28,7 @@ REPO_ROLES = ("source", "upstream")
 _BINARY_SUFFIXES = (
     ".dll", ".exe", ".so", ".dylib", ".apk", ".elf", ".o", ".a", ".jar", ".dex",
 )
-_HEX_ADDRESS_RE = re.compile(r"\b0x[0-9a-fA-F]{2,}")
+HEX_ADDRESS_RE = re.compile(r"\b0x[0-9a-fA-F]{2,}")
 
 
 def is_binary_citation(path: str) -> bool:
@@ -39,7 +39,7 @@ def is_binary_citation(path: str) -> bool:
     of any repository holds those bytes, so the ref can neither anchor nor
     break: 77 parts of `future-pinball-fploader` alone were reported GONE.
     """
-    if _HEX_ADDRESS_RE.search(path):
+    if HEX_ADDRESS_RE.search(path):
         return True
     if " " not in path:
         # A bare `DesktopKinect.dll` names a shipped library, never a source
@@ -108,7 +108,7 @@ def split_source_ref(ref: str) -> list[RefPart]:
     """
     parts: list[RefPart] = []
     for raw in split_outside_parentheses(str(ref or "")):
-        chunk = _trim_prose(_ANNOTATION_RE.sub("", raw).strip())
+        chunk = trim_prose(ANNOTATION_RE.sub("", raw).strip())
         if not chunk:
             continue
         bare = _BARE_RANGE_RE.match(chunk)
@@ -206,7 +206,7 @@ def split_outside_parentheses(text: str) -> list[str]:
     return [c for c in (chunk.strip() for chunk in chunks) if c]
 
 
-def _trim_prose(chunk: str) -> str:
+def trim_prose(chunk: str) -> str:
     """Drop a trailing comment written without parentheses.
 
     `libretro.cpp:1520-1521 candidates_a1200` cites a location followed by a
@@ -445,7 +445,7 @@ def _run_spans(line: str, match: re.Match) -> tuple[list[tuple[int, int]], int]:
     return spans, end
 
 
-def _prose_runs(
+def prose_runs(
     text: str, known: frozenset[str] | set[str] = frozenset()
 ) -> Iterator[tuple[
     int, tuple[int, int], tuple[tuple[int, int], ...], tuple[RefPart, ...], str, int

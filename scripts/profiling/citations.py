@@ -15,7 +15,7 @@ import yaml
 
 from core import upstream
 from core.hashing import parse_hash_list
-from model.sourceref import RefPart, _prose_runs, ref_prose_text, ref_role, source_ref_values
+from model.sourceref import RefPart, prose_runs, ref_prose_text, ref_role, source_ref_values
 from profiling.repos import declared_repositories
 
 
@@ -155,7 +155,7 @@ def symlink_target(path: str, lines: list[str] | None) -> str | None:
     return None if resolved.startswith("..") or resolved == path else resolved
 
 
-def _anchor_tokens(entry: dict) -> list[str]:
+def anchor_tokens(entry: dict) -> list[str]:
     """Values worth searching for when a cited line misses its subject.
 
     Both the content values and the set name are searched, because profiles
@@ -309,7 +309,7 @@ def comment_citations(
                 continue
             comment = line[column + 1:].rstrip("\r\n")
             shift = column + 1
-            for _, path_span, run_spans, parts, run, _ in _prose_runs(comment, known):
+            for _, path_span, run_spans, parts, run, _ in prose_runs(comment, known):
                 citations.append(Citation(
                     field=f"comment line {number + 1}", kind="prose", ref=run,
                     line=number,
@@ -346,7 +346,7 @@ def collect_citations(document: dict, text: str | None = None) -> list[Citation]
                     holder=holder, key=key, label=label,
                 ))
             if isinstance(value, str):
-                for line, path_span, spans, parts, run, joined_at in _prose_runs(
+                for line, path_span, spans, parts, run, joined_at in prose_runs(
                     ref_prose_text(value), known
                 ):
                     citations.append(Citation(
@@ -355,7 +355,7 @@ def collect_citations(document: dict, text: str | None = None) -> list[Citation]
                         parts=parts, wrapped=bool(joined_at), joined_at=joined_at,
                     ))
             continue
-        for line, path_span, spans, parts, run, joined_at in _prose_runs(
+        for line, path_span, spans, parts, run, joined_at in prose_runs(
             value, known
         ):
             citations.append(Citation(
@@ -368,7 +368,7 @@ def collect_citations(document: dict, text: str | None = None) -> list[Citation]
     return citations
 
 
-def _citation_key(ref: str) -> str:
+def citation_key(ref: str) -> str:
     """A citation compared without the spacing the author chose.
 
     A recale rewrites the located tokens and leaves the sentence alone, so

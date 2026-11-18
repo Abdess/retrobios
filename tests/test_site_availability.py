@@ -16,8 +16,8 @@ from pathlib import Path
 import yaml
 
 from model.database import load_database
-from sitegen.emulatorpage import _availability_check
-from sitegen.emulatorcards import _file_badges
+from sitegen.emulatorpage import availability_check
+from sitegen.emulatorcards import file_badges
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -30,20 +30,20 @@ DB = {
 
 class UnsourceableIsNotHeld(unittest.TestCase):
     def test_a_homonym_does_not_stand_in(self):
-        available = _availability_check(DB, set())
+        available = availability_check(DB, set())
         self.assertTrue(available({"name": "pak0.pk3"}))
         self.assertFalse(available({"name": "pak0.pk3", "unsourceable": "retail data"}))
 
     def test_a_release_asset_is_held_only_when_collected(self):
         """storage: large_file said "in repo" for kenji-nx's user-picked
         firmware package, which the collection does not hold."""
-        available = _availability_check(DB, set())
+        available = availability_check(DB, set())
         self.assertFalse(available({"name": "<firmware>.zip", "storage": "large_file"}))
         self.assertTrue(available({"name": "pak0.pk3", "storage": "release"}))
 
     def test_the_badge_says_why(self):
         entry = {"name": "pak0.pk3", "unsourceable": "retail data"}
-        badges = " ".join(_file_badges(entry, False))
+        badges = " ".join(file_badges(entry, False))
         self.assertIn("unsourceable", badges)
         self.assertNotIn(">missing<", badges)
         self.assertNotIn("in repo", badges)
@@ -52,7 +52,7 @@ class UnsourceableIsNotHeld(unittest.TestCase):
         db_path = REPO_ROOT / "database.json"
         if not db_path.exists():
             self.skipTest("database.json is not built")
-        available = _availability_check(load_database(str(db_path)), set())
+        available = availability_check(load_database(str(db_path)), set())
         shown_held = []
         for path in sorted((REPO_ROOT / "emulators").glob("*.yml")):
             document = yaml.safe_load(path.read_text(encoding="utf-8")) or {}

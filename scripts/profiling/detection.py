@@ -194,20 +194,20 @@ def tree_diff(result: CompareResult, ref_dirs: set[str]) -> list[str]:
     return lines
 
 
-def _cited_paths(report: ProfileReport) -> list[str]:
+def cited_paths(report: ProfileReport) -> list[str]:
     return sorted(
         {part.new_path or part.part.path for e in report.entries for part in e.parts}
     )
 
 
-def _detect(
+def detect_upstream_changes(
     args: argparse.Namespace, profile: dict, report: ProfileReport,
     repo: upstream.Repo,
 ) -> None:
     names, hashes = declared_names(profile), declared_hashes(profile)
     new_files: list[dict] = []
     new_hashes: list[dict] = []
-    for path in _cited_paths(report):
+    for path in cited_paths(report):
         head_lines = upstream.fetch_file(
             repo, report.head, path, args.cache_dir, args.offline
         )
@@ -259,7 +259,7 @@ def _print_detection(report: ProfileReport) -> None:
         print(f"  new {item['kind']}: {item['path']}  {item['value']}")
 
 
-def _print_extras(
+def print_extras(
     args: argparse.Namespace, profile: dict, report: ProfileReport
 ) -> None:
     """Optional per-profile sections beyond the ref report.
@@ -288,7 +288,7 @@ def _print_extras_from(
     repo: upstream.Repo,
 ) -> None:
     if args.full_diff:
-        for path in _cited_paths(report):
+        for path in cited_paths(report):
             if args.ref and args.ref not in path:
                 continue
             pin_lines = (
@@ -312,6 +312,6 @@ def _print_extras_from(
         )
         # The repository root is a directory like any other: dropping the
         # empty dirname would turn the filter off and list the whole tree.
-        ref_dirs = {posixpath.dirname(p) for p in _cited_paths(report)}
+        ref_dirs = {posixpath.dirname(p) for p in cited_paths(report)}
         for line in tree_diff(comparison, ref_dirs):
             print(f"  {line}")

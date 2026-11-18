@@ -24,7 +24,7 @@ from pathlib import Path
 from romrecipes import ledger as romrecipes_ledger
 from resolve.layout import runs_standalone
 from model.profiles import unique_emulator_profiles
-from packs.crossref import _first_hash
+from packs.crossref import first_hash
 from core.hashing import cut_md5_owner, parse_hash_list
 from resolve.review import LARGE_FILE_ISSUE_URL, Placement, placement
 from resolve.validation import deliverable, filter_files_by_mode, installed_with_emulator
@@ -125,7 +125,7 @@ def gap_entries(profile: dict, name: str, identity: str, unsourceable: bool) -> 
     if unsourceable:
         return [f for f in named if f.get("unsourceable")] or named
     if identity:
-        return [f for f in named if _first_hash(f) == identity] or named
+        return [f for f in named if first_hash(f) == identity] or named
     return named
 
 

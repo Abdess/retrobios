@@ -19,7 +19,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from model.profiles import load_emulator_profiles, _emulator_profiles_cache
+from model.profiles import load_emulator_profiles, emulator_profiles_cache
 from resolve.localfile import resolve_local_file
 from packs import extras as packextras
 
@@ -87,10 +87,10 @@ class AgnosticScanStaysInItsTree(unittest.TestCase):
             "base_destination": "",
             "systems": {},
         }
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
 
     def tearDown(self):
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self._tmp.cleanup()
 
     def _write_profile(self, body: str):
@@ -98,7 +98,7 @@ class AgnosticScanStaysInItsTree(unittest.TestCase):
         return load_emulator_profiles(str(self.root / "emulators"))
 
     def _scan(self, profiles):
-        extras = packextras._collect_emulator_extras(
+        extras = packextras.collect_emulator_extras(
             self.config, str(self.root / "emulators"), self.db, set(), "",
             profiles,
         )

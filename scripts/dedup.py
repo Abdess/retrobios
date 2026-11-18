@@ -31,7 +31,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from core.hashing import compute_hashes
 from core.cli import require_directory
 from core.artifacts import write_text_atomic
-from model.nodedup import _in_nodedup_dir
+from model.nodedup import in_nodedup_dir
 
 DEFAULT_BIOS_DIR = "bios"
 
@@ -66,7 +66,7 @@ def scan_duplicates(bios_dir: str) -> dict[str, list[str]]:
     for root, _dirs, files in os.walk(bios_dir):
         for name in files:
             path = os.path.join(root, name)
-            if _in_nodedup_dir(path):
+            if in_nodedup_dir(path):
                 continue
             by_size[os.path.getsize(path)].append(path)
 

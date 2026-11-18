@@ -47,7 +47,7 @@ def _docs_pages() -> list[Path]:
 
 
 def _level(page: Path) -> str:
-    return str(decorate._front_matter(page.read_text(encoding="utf-8")).get("level") or "")
+    return str(decorate.front_matter(page.read_text(encoding="utf-8")).get("level") or "")
 
 
 class FiveTabs(unittest.TestCase):
@@ -168,7 +168,7 @@ class SampleCoresLeaveTheNavigation(unittest.TestCase):
 class EveryPageHasALevel(unittest.TestCase):
     def test_wiki_sources_declare_one(self):
         for page in sorted((REPO_ROOT / "wiki").glob("*.md")):
-            level = decorate._front_matter(page.read_text(encoding="utf-8")).get("level")
+            level = decorate.front_matter(page.read_text(encoding="utf-8")).get("level")
             with self.subTest(page=page.name):
                 self.assertIn(level, decorate.LEVELS)
 

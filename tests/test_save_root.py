@@ -34,7 +34,7 @@ import yaml
 from packs.paths import (
     EMULATOR_PACK_SAVE_FOLDER,
     SaveLayout,
-    _resolve_destination,
+    resolve_destination,
     save_destination,
     save_layout,
 )
@@ -86,10 +86,10 @@ class TheEntryNamesItsRoot(unittest.TestCase):
 
     def test_an_emulator_pack_keeps_them_in_their_own_folder(self):
         self.assertEqual(
-            _resolve_destination(self.ENTRY, False),
+            resolve_destination(self.ENTRY, False),
             f"{EMULATOR_PACK_SAVE_FOLDER}/CoreX/sysdata/keys.txt",
         )
-        self.assertEqual(_resolve_destination(self.ENTRY, True), "sysdata/keys.txt")
+        self.assertEqual(resolve_destination(self.ENTRY, True), "sysdata/keys.txt")
 
 
 class ThePlatformNamesItsSaveDirectory(unittest.TestCase):
@@ -211,13 +211,13 @@ class _Fixture(unittest.TestCase):
     OTHER_KEYS = b"PLATFORM KEYS"
 
     def setUp(self) -> None:
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
         from model.platforms import _platform_config_cache
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         _platform_config_cache.clear()
         self.addCleanup(_platform_config_cache.clear)
-        self.addCleanup(_emulator_profiles_cache.clear)
+        self.addCleanup(emulator_profiles_cache.clear)
         self.root = _scratch(self)
         self.bios = self.root / "bios"
         self.platforms = self.root / "platforms"

@@ -208,7 +208,7 @@ class TheSummaryLineIsProse(unittest.TestCase):
         self.assertIn("By kind: 1,563 BIOS ZIPs and 2 game data.", text)
 
     def test_category_badge_in_words(self):
-        badges = " ".join(emulatorcards._file_badges({"name": "a", "category": "game_data"}, True))
+        badges = " ".join(emulatorcards.file_badges({"name": "a", "category": "game_data"}, True))
         self.assertIn(">game data</span>", badges)
 
 
@@ -217,7 +217,7 @@ class TheIndexNamesEmulatorsAndSystems(unittest.TestCase):
         # Pages another test split off would send the console elsewhere.
         siterender.reset_console_pages()
         self.addCleanup(siterender.reset_console_pages)
-        saved = dict(siterender._system_page_map)
+        saved = dict(siterender.system_page_map)
         self.addCleanup(siterender.set_system_page_map, saved)
         siterender.set_system_page_map({"sony-playstation": ("sony", "PlayStation")})
         page = emulatorsindex.generate_emulators_index({
@@ -276,14 +276,14 @@ class WhatTheAppShipsIsNoFileToGet(unittest.TestCase):
 
     def test_the_badge(self):
         font = next(f for f in self.profile["files"] if f["name"] == "Roboto-Regular.ttf")
-        badges = " ".join(emulatorcards._file_badges(font, False))
+        badges = " ".join(emulatorcards.file_badges(font, False))
         self.assertIn(">comes with the app</span>", badges)
         self.assertNotIn(">required</span>", badges)
         self.assertNotIn(">missing</span>", badges)
         # Narrowed to one build, the entry is that build's alone, as verify
         # and the pack read it: EightyOne installs its ROMs, and the libretro
         # core, which embeds them, reads no entry. Nothing to fetch.
-        dual = " ".join(emulatorcards._file_badges({"name": "a", "bundled": True, "mode": "standalone",
+        dual = " ".join(emulatorcards.file_badges({"name": "a", "bundled": True, "mode": "standalone",
                                          "required": True}, False))
         self.assertNotIn(">required</span>", dual)
         self.assertNotIn(">missing</span>", dual)
@@ -364,11 +364,11 @@ class LongPagesFold(unittest.TestCase):
 
 class DataDirectoryPagesStayOutOfSearch(unittest.TestCase):
     def test_front_matter(self):
-        saved = dict(emulatorcards._DATA_MEMBERS), dict(emulatorpage._DATA_READERS)
-        self.addCleanup(lambda: (emulatorcards._DATA_MEMBERS.clear(), emulatorcards._DATA_MEMBERS.update(saved[0]),
-                                 emulatorpage._DATA_READERS.clear(), emulatorpage._DATA_READERS.update(saved[1])))
-        emulatorcards._DATA_MEMBERS["dolphin-sys"] = {"a.bin": {"sha1": "a" * 40, "size": 1}}
-        emulatorpage._DATA_READERS["dolphin-sys"] = [("dolphin-mmjr", "Dolphin MMJR"), ("dolphin", "Dolphin")]
+        saved = dict(emulatorcards.DATA_MEMBERS), dict(emulatorpage.DATA_READERS)
+        self.addCleanup(lambda: (emulatorcards.DATA_MEMBERS.clear(), emulatorcards.DATA_MEMBERS.update(saved[0]),
+                                 emulatorpage.DATA_READERS.clear(), emulatorpage.DATA_READERS.update(saved[1])))
+        emulatorcards.DATA_MEMBERS["dolphin-sys"] = {"a.bin": {"sha1": "a" * 40, "size": 1}}
+        emulatorpage.DATA_READERS["dolphin-sys"] = [("dolphin-mmjr", "Dolphin MMJR"), ("dolphin", "Dolphin")]
         page = emulatorpage._data_tree_page("dolphin-sys", {}, [("data-dolphin-sys", ["a.bin"])], 0)
         front = yaml.safe_load(page.split("---\n")[1])
         self.assertEqual(front["search"], "exclude")
@@ -487,14 +487,14 @@ class PartsKnowWhereTheySit(unittest.TestCase):
         ref = "x-sys"
         members = {f"f{i:05d}": {"size": 1, "sha1": f"{i:040x}"}
                    for i in range(lookup.DATA_TREE_ROWS_PER_PAGE * 2 + 1)}
-        emulatorcards._DATA_MEMBERS[ref] = members
-        emulatorpage._DATA_READERS[ref] = [("x", "X")]
+        emulatorcards.DATA_MEMBERS[ref] = members
+        emulatorpage.DATA_READERS[ref] = [("x", "X")]
         try:
             pages = lookup.data_tree_pages(ref, members)
             self.assertEqual(len(pages), 3)
             middle = _front(emulatorpage._data_tree_page(ref, {}, pages, 1))
         finally:
-            del emulatorcards._DATA_MEMBERS[ref], emulatorpage._DATA_READERS[ref]
+            del emulatorcards.DATA_MEMBERS[ref], emulatorpage.DATA_READERS[ref]
         self.assertEqual(middle["parent"], {"label": "X", "link": "x.md"})
         self.assertEqual(middle["prev"]["link"], f"{pages[0][0]}.md")
         self.assertEqual(middle["next"]["link"], f"{pages[2][0]}.md")
@@ -694,7 +694,7 @@ class DataFolderPrinted(unittest.TestCase):
                                                          "standalone_path": "a"}), "a")
 
     def test_the_metadata_card_has_a_row_per_system(self) -> None:
-        rows = emulatorcards._render_metadata_rows(_profile("cxbx-reloaded"))
+        rows = emulatorcards.render_metadata_rows(_profile("cxbx-reloaded"))
         self.assertIn("| Data folder (Windows) | `%APPDATA%/Cxbx-Reloaded/` |", rows)
         self.assertFalse(any("Data folder (Linux)" in row for row in rows))
 
@@ -742,22 +742,22 @@ class InstallBlockWhereItWorks(unittest.TestCase):
                 self.assertLessEqual(_tab_labels(_install_section(_built_page(name))), allowed)
 
     def test_android_only_app_gets_no_desktop_command(self) -> None:
-        self.assertEqual(sitegen_install._install_block("mame4droid", _profile("mame4droid")), [])
+        self.assertEqual(sitegen_install.install_block("mame4droid", _profile("mame4droid")), [])
         command, setups, oses = sitegen_install.emulator_install_route("cxbx-reloaded", _profile("cxbx-reloaded"))
         self.assertEqual(oses, ("windows",))
 
     def test_a_lone_app_is_named_with_the_setup_that_launches_it(self) -> None:
-        text = "\n".join(sitegen_install._install_block("ryujinx", _profile("ryujinx")))
+        text = "\n".join(sitegen_install.install_block("ryujinx", _profile("ryujinx")))
         self.assertRegex(text, r"With [^:]*EmuDeck[^:]*: the installer finds")
         self.assertNotIn("Android (Termux)", text)
         self.assertNotIn("RetroArch", text)
 
     def test_a_dual_app_says_what_the_command_fills(self) -> None:
-        text = "\n".join(sitegen_install._install_block("duckstation", _profile("duckstation")))
+        text = "\n".join(sitegen_install.install_block("duckstation", _profile("duckstation")))
         self.assertIn("For DuckStation inside RetroArch, Batocera or another setup.", text)
 
     def test_no_files_no_command(self) -> None:
-        self.assertEqual(sitegen_install._install_block("beetle_wswan", _profile("beetle_wswan")), [])
+        self.assertEqual(sitegen_install.install_block("beetle_wswan", _profile("beetle_wswan")), [])
 
     def test_tabs_follow_the_keys_given(self) -> None:
         tabs = "\n".join(sitegen_install.install_commands("--emulator x", oses=("linux", "steamdeck")))

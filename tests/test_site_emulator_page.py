@@ -137,11 +137,11 @@ class WhatASearchSnippetSays(unittest.TestCase):
         saved = dict(descriptions.PAGE_DATA)
         self.addCleanup(lambda: (descriptions.PAGE_DATA.clear(), descriptions.PAGE_DATA.update(saved)))
         descriptions.PAGE_DATA[rel.as_posix()] = {}
-        text = descriptions._page_description("# Lutro\n", rel, "Lutro")
+        text = descriptions.page_description("# Lutro\n", rel, "Lutro")
         self.assertNotIn("hashes", text)
         self.assertIn("It needs no BIOS or firmware file.", text)
         descriptions.PAGE_DATA[rel.as_posix()] = {"hasPart": [{"name": "a.bin"}]}
-        self.assertNotIn("needs no BIOS", descriptions._page_description("# Lutro\n", rel, "Lutro"))
+        self.assertNotIn("needs no BIOS", descriptions.page_description("# Lutro\n", rel, "Lutro"))
 
     def test_a_long_paragraph_is_cut_at_a_word(self):
         plain = ("files/?sha1= is the address that does not move: it opens the card "

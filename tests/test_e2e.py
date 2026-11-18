@@ -43,7 +43,7 @@ from model.platforms import load_platform_config
 from resolve.localfile import resolve_local_file
 from resolve.cores import resolve_platform_cores
 from resolve.truth import diff_platform_truth, generate_platform_truth
-from resolve.validation import _build_validation_index, check_file_validation, filter_files_by_mode
+from resolve.validation import build_validation_index, check_file_validation, filter_files_by_mode
 from packs.verdicts import Severity, Status
 from packs.gaps import find_exclusion_notes, find_undeclared_files
 from packs.emulatorcheck import verify_emulator
@@ -76,9 +76,9 @@ class TestE2E(unittest.TestCase):
 
     def setUp(self):
         # Clear emulator profile cache to avoid stale data between tests
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
 
         self.root = tempfile.mkdtemp()
         self.bios_dir = os.path.join(self.root, "bios")
@@ -1263,7 +1263,7 @@ class TestE2E(unittest.TestCase):
     def test_70_validation_index_built(self):
         """Validation index extracts checks from emulator profiles."""
         profiles = load_emulator_profiles(self.emulators_dir)
-        index = _build_validation_index(profiles)
+        index = build_validation_index(profiles)
         self.assertIn("present_req.bin", index)
         self.assertIn("size", index["present_req.bin"]["checks"])
         self.assertIn(16, index["present_req.bin"]["sizes"])
@@ -1273,7 +1273,7 @@ class TestE2E(unittest.TestCase):
     def test_71_validation_size_pass(self):
         """File with correct size passes validation."""
         profiles = load_emulator_profiles(self.emulators_dir)
-        index = _build_validation_index(profiles)
+        index = build_validation_index(profiles)
         path = self.files["present_req.bin"]["path"]
         reason = check_file_validation(path, "present_req.bin", index)
         self.assertIsNone(reason)
@@ -1281,7 +1281,7 @@ class TestE2E(unittest.TestCase):
     def test_72_validation_size_fail(self):
         """File with wrong size fails validation."""
         profiles = load_emulator_profiles(self.emulators_dir)
-        index = _build_validation_index(profiles)
+        index = build_validation_index(profiles)
         path = self.files["present_opt.bin"]["path"]
         result = check_file_validation(path, "present_opt.bin", index)
         self.assertIsNotNone(result)
@@ -1292,7 +1292,7 @@ class TestE2E(unittest.TestCase):
     def test_73_validation_crc32_pass(self):
         """File with correct CRC32 passes validation."""
         profiles = load_emulator_profiles(self.emulators_dir)
-        index = _build_validation_index(profiles)
+        index = build_validation_index(profiles)
         path = self.files["correct_hash.bin"]["path"]
         reason = check_file_validation(path, "correct_hash.bin", index)
         self.assertIsNone(reason)
@@ -1300,7 +1300,7 @@ class TestE2E(unittest.TestCase):
     def test_74_validation_crc32_fail(self):
         """File with wrong CRC32 fails validation."""
         profiles = load_emulator_profiles(self.emulators_dir)
-        index = _build_validation_index(profiles)
+        index = build_validation_index(profiles)
         path = self.files["no_md5.bin"]["path"]
         result = check_file_validation(path, "no_md5.bin", index)
         self.assertIsNotNone(result)
@@ -1325,7 +1325,7 @@ class TestE2E(unittest.TestCase):
     def test_77_validation_crc32_leading_zero(self):
         """CRC32 starting with '0' must not be truncated (lstrip regression)."""
         profiles = load_emulator_profiles(self.emulators_dir)
-        index = _build_validation_index(profiles)
+        index = build_validation_index(profiles)
         path = self.files["leading_zero_crc.bin"]["path"]
         reason = check_file_validation(path, "leading_zero_crc.bin", index)
         self.assertIsNone(reason)
@@ -1346,13 +1346,13 @@ class TestE2E(unittest.TestCase):
                 ],
             },
         }
-        index = _build_validation_index(profiles)
+        index = build_validation_index(profiles)
         self.assertEqual(index["shared.bin"]["sizes"], {512, 1024})
 
     def test_79_validation_md5_pass(self):
         """File with correct MD5 passes validation."""
         profiles = load_emulator_profiles(self.emulators_dir)
-        index = _build_validation_index(profiles)
+        index = build_validation_index(profiles)
         path = self.files["correct_hash.bin"]["path"]
         reason = check_file_validation(path, "correct_hash.bin", index)
         self.assertIsNone(reason)
@@ -1360,7 +1360,7 @@ class TestE2E(unittest.TestCase):
     def test_80_validation_md5_fail(self):
         """File with wrong MD5 fails validation."""
         profiles = load_emulator_profiles(self.emulators_dir)
-        index = _build_validation_index(profiles)
+        index = build_validation_index(profiles)
         path = self.files["alias_target.bin"]["path"]
         result = check_file_validation(path, "alias_target.bin", index)
         self.assertIsNotNone(result)
@@ -1371,7 +1371,7 @@ class TestE2E(unittest.TestCase):
     def test_81_validation_index_has_md5_sha1(self):
         """Validation index stores md5 and sha1 when declared."""
         profiles = load_emulator_profiles(self.emulators_dir)
-        index = _build_validation_index(profiles)
+        index = build_validation_index(profiles)
         self.assertIn("md5", index["correct_hash.bin"]["checks"])
         self.assertIn("sha1", index["correct_hash.bin"]["checks"])
         self.assertIsNotNone(index["correct_hash.bin"]["md5"])
@@ -1380,7 +1380,7 @@ class TestE2E(unittest.TestCase):
     def test_82_validation_adler32_pass(self):
         """File with correct adler32 passes validation."""
         profiles = load_emulator_profiles(self.emulators_dir)
-        index = _build_validation_index(profiles)
+        index = build_validation_index(profiles)
         path = self.files["present_req.bin"]["path"]
         reason = check_file_validation(path, "present_req.bin", index)
         self.assertIsNone(reason)
@@ -1388,7 +1388,7 @@ class TestE2E(unittest.TestCase):
     def test_83_validation_min_max_size_pass(self):
         """File within min/max size range passes validation."""
         profiles = load_emulator_profiles(self.emulators_dir)
-        index = _build_validation_index(profiles)
+        index = build_validation_index(profiles)
         path = self.files["present_req.bin"]["path"]
         reason = check_file_validation(path, "present_req.bin", index)
         self.assertIsNone(reason)
@@ -1399,7 +1399,7 @@ class TestE2E(unittest.TestCase):
     def test_84_validation_crypto_tracked(self):
         """Signature/crypto checks are tracked as non-reproducible."""
         profiles = load_emulator_profiles(self.emulators_dir)
-        index = _build_validation_index(profiles)
+        index = build_validation_index(profiles)
         # correct_hash.bin has [size, signature]
         self.assertIn("signature", index["correct_hash.bin"]["crypto_only"])
         # Size check still applies despite signature being non-reproducible
@@ -1410,7 +1410,7 @@ class TestE2E(unittest.TestCase):
     def test_76_validation_no_effect_when_no_field(self):
         """Files without validation field are unaffected."""
         profiles = load_emulator_profiles(self.emulators_dir)
-        index = _build_validation_index(profiles)
+        index = build_validation_index(profiles)
         # wrong_hash.bin has no validation in any profile
         path = self.files["wrong_hash.bin"]["path"]
         reason = check_file_validation(path, "wrong_hash.bin", index)
@@ -2063,7 +2063,7 @@ class TestE2E(unittest.TestCase):
     def test_111_validation_index_per_emulator(self):
         """Validation index includes per-emulator detail for ground truth."""
         profiles = load_emulator_profiles(self.emulators_dir)
-        index = _build_validation_index(profiles)
+        index = build_validation_index(profiles)
         entry = index["present_req.bin"]
         self.assertIn("per_emulator", entry)
         pe = entry["per_emulator"]
@@ -2077,7 +2077,7 @@ class TestE2E(unittest.TestCase):
         from resolve.validation import build_ground_truth
 
         profiles = load_emulator_profiles(self.emulators_dir)
-        index = _build_validation_index(profiles)
+        index = build_validation_index(profiles)
         gt = build_ground_truth("present_req.bin", index)
         self.assertIsInstance(gt, list)
         self.assertTrue(len(gt) >= 1)
@@ -2094,7 +2094,7 @@ class TestE2E(unittest.TestCase):
         from resolve.validation import build_ground_truth
 
         profiles = load_emulator_profiles(self.emulators_dir)
-        index = _build_validation_index(profiles)
+        index = build_validation_index(profiles)
         gt = build_ground_truth("nonexistent.bin", index)
         self.assertEqual(gt, [])
 
@@ -2431,12 +2431,12 @@ class TestE2E(unittest.TestCase):
         self.assertFalse(any("present_opt.bin" in n for n in names))
 
     def test_133_platform_system_filter_normalized(self):
-        """_norm_system_id normalization matches with manufacturer prefix."""
-        from model.systems import _norm_system_id
+        """norm_system_id normalization matches with manufacturer prefix."""
+        from model.systems import norm_system_id
 
         self.assertEqual(
-            _norm_system_id("sony-playstation"),
-            _norm_system_id("playstation"),
+            norm_system_id("sony-playstation"),
+            norm_system_id("playstation"),
         )
 
     def test_134_list_systems_platform_context(self):
@@ -3069,38 +3069,38 @@ class TestE2E(unittest.TestCase):
         self.assertEqual(records[0]["name"], "good.bin")
 
     def test_157_path_conflict_helpers(self):
-        """_has_path_conflict detects file/directory naming collisions."""
-        from packs.paths import _has_path_conflict, _register_path
+        """has_path_conflict detects file/directory naming collisions."""
+        from packs.paths import has_path_conflict, register_path
 
         seen_files: set[str] = set()
         seen_parents: set[str] = set()
 
         # Register system/SGB1.sfc as a file
-        _register_path("system/SGB1.sfc", seen_files, seen_parents)
+        register_path("system/SGB1.sfc", seen_files, seen_parents)
 
         # Adding system/SGB1.sfc/program.rom should conflict (parent is a file)
         self.assertTrue(
-            _has_path_conflict("system/SGB1.sfc/program.rom", seen_files, seen_parents)
+            has_path_conflict("system/SGB1.sfc/program.rom", seen_files, seen_parents)
         )
 
         # Adding system/other.bin should not conflict
         self.assertFalse(
-            _has_path_conflict("system/other.bin", seen_files, seen_parents)
+            has_path_conflict("system/other.bin", seen_files, seen_parents)
         )
 
         # Reverse: register a nested path first, then check flat
         seen_files2: set[str] = set()
         seen_parents2: set[str] = set()
-        _register_path("system/SGB2.sfc/program.rom", seen_files2, seen_parents2)
+        register_path("system/SGB2.sfc/program.rom", seen_files2, seen_parents2)
 
         # Adding system/SGB2.sfc as a file should conflict (it's a directory)
         self.assertTrue(
-            _has_path_conflict("system/SGB2.sfc", seen_files2, seen_parents2)
+            has_path_conflict("system/SGB2.sfc", seen_files2, seen_parents2)
         )
 
         # Adding system/SGB2.sfc/boot.rom should not conflict (sibling in same dir)
         self.assertFalse(
-            _has_path_conflict("system/SGB2.sfc/boot.rom", seen_files2, seen_parents2)
+            has_path_conflict("system/SGB2.sfc/boot.rom", seen_files2, seen_parents2)
         )
 
     def test_158_pack_skips_file_directory_conflict(self):
@@ -3264,11 +3264,11 @@ class TestE2E(unittest.TestCase):
 
     def test_164_pack_extras_use_archive_name(self):
         """Pack extras for archived files use archive name, not individual ROM."""
-        from packs.extras import _collect_emulator_extras
+        from packs.extras import collect_emulator_extras
 
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
-        extras = _collect_emulator_extras(
+        extras = collect_emulator_extras(
             config,
             self.emulators_dir,
             self.db,
@@ -3286,11 +3286,11 @@ class TestE2E(unittest.TestCase):
 
     def test_165_pack_extras_multi_dest_cross_ref(self):
         """Same file at different paths from two profiles produces both destinations."""
-        from packs.extras import _collect_emulator_extras
+        from packs.extras import collect_emulator_extras
 
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
-        extras = _collect_emulator_extras(
+        extras = collect_emulator_extras(
             config,
             self.emulators_dir,
             self.db,
@@ -3306,13 +3306,13 @@ class TestE2E(unittest.TestCase):
 
     def test_166_pack_extras_multi_dest_platform_declared(self):
         """Profile with path different from platform destination adds alternative."""
-        from packs.extras import _collect_emulator_extras
+        from packs.extras import collect_emulator_extras
 
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
         # Simulate platform already having present_req.bin at root
         seen = {"present_req.bin"}
-        extras = _collect_emulator_extras(
+        extras = collect_emulator_extras(
             config,
             self.emulators_dir,
             self.db,
@@ -3396,9 +3396,9 @@ class TestE2E(unittest.TestCase):
             _yaml.dump(profile, f)
 
         # Clear profile cache so fresh load picks up our file
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
 
         profiles = load_emulator_profiles(self.emulators_dir)
         config = {"cores": ["testcore"]}
@@ -3426,7 +3426,7 @@ class TestE2E(unittest.TestCase):
     def test_169_generate_truth_mode_filtering(self):
         """generate_platform_truth excludes standalone-only files for all_libretro."""
         import yaml as _yaml
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
 
         profile = {
             "emulator": "DualMode",
@@ -3461,7 +3461,7 @@ class TestE2E(unittest.TestCase):
         with open(os.path.join(self.emulators_dir, "dualmode.yml"), "w") as f:
             _yaml.dump(profile, f)
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         profiles = load_emulator_profiles(self.emulators_dir)
         config = {"cores": "all_libretro"}
 
@@ -3476,7 +3476,7 @@ class TestE2E(unittest.TestCase):
     def test_170_generate_truth_standalone_cores(self):
         """generate_platform_truth uses standalone mode for standalone_cores."""
         import yaml as _yaml
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
 
         profile = {
             "emulator": "DualCore",
@@ -3503,7 +3503,7 @@ class TestE2E(unittest.TestCase):
         with open(os.path.join(self.emulators_dir, "dualcore.yml"), "w") as f:
             _yaml.dump(profile, f)
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         profiles = load_emulator_profiles(self.emulators_dir)
         config = {
             "cores": ["dualcore"],
@@ -3519,7 +3519,7 @@ class TestE2E(unittest.TestCase):
     def test_171_generate_truth_dedup_required_wins(self):
         """Dedup merges cores and required=True wins over required=False."""
         import yaml as _yaml
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
 
         core_a = {
             "emulator": "CoreA",
@@ -3555,7 +3555,7 @@ class TestE2E(unittest.TestCase):
             with open(os.path.join(self.emulators_dir, f"{name}.yml"), "w") as f:
                 _yaml.dump(data, f)
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         profiles = load_emulator_profiles(self.emulators_dir)
         config = {"cores": ["core_a", "core_b"]}
 
@@ -3574,7 +3574,7 @@ class TestE2E(unittest.TestCase):
     def test_172_generate_truth_coverage_metadata(self):
         """Coverage tracks profiled vs unprofiled cores."""
         import yaml as _yaml
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
 
         profile = {
             "emulator": "ProfiledCore",
@@ -3588,7 +3588,7 @@ class TestE2E(unittest.TestCase):
         with open(os.path.join(self.emulators_dir, "profiled_core.yml"), "w") as f:
             _yaml.dump(profile, f)
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         profiles = load_emulator_profiles(self.emulators_dir)
         config = {"cores": ["profiled_core", "unprofiled_core"]}
 
@@ -4398,9 +4398,9 @@ class TestE2E(unittest.TestCase):
 
         # No profile for core_b (unprofiled)
         # Clear cache so the new profile is picked up
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         profiles = load_emulator_profiles(self.emulators_dir)
         self.assertIn("core_a", profiles)
         self.assertNotIn("core_b", profiles)
@@ -4652,11 +4652,11 @@ class TestE2E(unittest.TestCase):
 
     def test_181_agnostic_extras_scan(self):
         """Agnostic profiles add all matching DB files as extras."""
-        from packs.extras import _collect_emulator_extras
+        from packs.extras import collect_emulator_extras
 
         config = load_platform_config("test_existence", self.platforms_dir)
         profiles = load_emulator_profiles(self.emulators_dir)
-        extras = _collect_emulator_extras(
+        extras = collect_emulator_extras(
             config,
             self.emulators_dir,
             self.db,
@@ -4674,10 +4674,10 @@ class TestE2E(unittest.TestCase):
             self.assertTrue(e.get("agnostic_scan", False))
 
     def test_182_agnostic_rename_readme(self):
-        """_build_agnostic_rename_readme generates correct text."""
-        from packs.readme import _build_agnostic_rename_readme
+        """build_agnostic_rename_readme generates correct text."""
+        from packs.readme import build_agnostic_rename_readme
 
-        result = _build_agnostic_rename_readme(
+        result = build_agnostic_rename_readme(
             "dsi_nand.bin",
             "DSi_Nand_AUS.bin",
             ["DSi_Nand_EUR.bin", "DSi_Nand_USA.bin"],
@@ -5035,20 +5035,20 @@ struct BurnDriver BurnDrvneogeo = {
 
     def test_201_collect_emulator_extras_include_all(self):
         """include_all=True passes through to find_undeclared_files."""
-        from packs.extras import _collect_emulator_extras
+        from packs.extras import collect_emulator_extras
 
         config = self._load_config("test_existence")
         profiles = load_emulator_profiles(self.emulators_dir)
         base_dest = config.get("base_destination", "")
 
         # Default call must succeed without TypeError
-        extras = _collect_emulator_extras(
+        extras = collect_emulator_extras(
             config, self.emulators_dir, self.db, set(), base_dest, profiles
         )
         self.assertIsInstance(extras, list)
 
         # include_all=True must be accepted and return a list
-        all_extras = _collect_emulator_extras(
+        all_extras = collect_emulator_extras(
             config, self.emulators_dir, self.db, set(), base_dest, profiles,
             include_all=True,
         )
@@ -6125,9 +6125,9 @@ struct BurnDriver BurnDrvneogeo = {
 
     def test_every_narrowing_names_itself_and_says_so(self):
         """A dimension that removes files must show in the pack name and in the
-        README. Both are built from _narrowings, so this holds for any new one."""
-        from packs.readme import _build_readme
-        from packs.naming import _narrowings
+        README. Both are built from pack_narrowings, so this holds for any new one."""
+        from packs.readme import build_readme
+        from packs.naming import pack_narrowings
 
         dimensions = [
             {"source": "platform"},
@@ -6139,7 +6139,7 @@ struct BurnDriver BurnDrvneogeo = {
             {"no_game_data": True},
         ]
         for kwargs in dimensions:
-            applied = _narrowings(
+            applied = pack_narrowings(
                 kwargs.get("source", "full"),
                 kwargs.get("regions"),
                 kwargs.get("target_name"),
@@ -6151,7 +6151,7 @@ struct BurnDriver BurnDrvneogeo = {
             tag, label = applied[0]
             self.assertTrue(tag.startswith("_") and len(tag) > 1, kwargs)
             self.assertTrue(label.strip(), kwargs)
-            readme = _build_readme("p", "P", "", 1, 1, narrowings=applied)
+            readme = build_readme("p", "P", "", 1, 1, narrowings=applied)
             self.assertIn("PACK TYPE: Narrowed", readme)
             self.assertIn(label, readme)
 
@@ -6321,7 +6321,7 @@ struct BurnDriver BurnDrvneogeo = {
         import inspect
 
         from packs import integrity as packverify
-        from packs.naming import _narrows_contents, _narrowings
+        from packs.naming import narrows_contents, pack_narrowings
 
         source = inspect.getsource(packverify.verify_pack_against_platform)
         self.assertIn(
@@ -6342,18 +6342,18 @@ struct BurnDriver BurnDrvneogeo = {
 
         # And the pack must not be skipped instead: skipping checks nothing.
         for target in ("nintendo-switch", "switch", "rpi4"):
-            tag = _narrowings("full", None, target, False, False)[0][0]
+            tag = pack_narrowings("full", None, target, False, False)[0][0]
             self.assertFalse(
-                _narrows_contents(f"Platform_1.0{tag}_BIOS_Pack.zip"),
+                narrows_contents(f"Platform_1.0{tag}_BIOS_Pack.zip"),
                 f"a pack built for {target} would skip conformance entirely",
             )
 
     def test_standalone_mode_names_itself(self):
         """--emulator --standalone ships a different file set, and without a tag it
         overwrote the pack built without it."""
-        from packs.naming import _narrowings
+        from packs.naming import pack_narrowings
 
-        applied = _narrowings("full", None, None, False, False, standalone=True)
+        applied = pack_narrowings("full", None, None, False, False, standalone=True)
         self.assertEqual([tag for tag, _l in applied], ["_Standalone"])
 
     def test_every_name_builder_uses_the_same_list(self):
@@ -6372,7 +6372,7 @@ struct BurnDriver BurnDrvneogeo = {
             '("_Platform_", "_Truth_"',
         ):
             self.assertNotIn(hand_rolled, source, hand_rolled)
-        self.assertGreaterEqual(source.count("_narrowings("), 8)
+        self.assertGreaterEqual(source.count("pack_narrowings("), 8)
 
     def test_a_narrowed_system_pack_does_not_take_the_full_name(self):
         """Every dimension has to show in the filename or two builds collide.
@@ -6473,18 +6473,18 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertFalse(os.listdir(out) if os.path.isdir(out) else [])
 
     def test_a_full_pack_is_not_announced_as_narrowed(self):
-        from packs.readme import _build_readme
-        from packs.naming import _narrowings
+        from packs.readme import build_readme
+        from packs.naming import pack_narrowings
 
-        self.assertEqual(_narrowings("full", None, None, False, False), [])
+        self.assertEqual(pack_narrowings("full", None, None, False, False), [])
         self.assertNotIn(
-            "PACK TYPE: Narrowed", _build_readme("p", "P", "", 1, 1)
+            "PACK TYPE: Narrowed", build_readme("p", "P", "", 1, 1)
         )
 
     def test_system_filter_is_announced_too(self):
-        from packs.readme import _build_readme
+        from packs.readme import build_readme
 
-        readme = _build_readme(
+        readme = build_readme(
             "p", "P", "", 1, 1, system_filter=["sony-playstation"]
         )
         self.assertIn("PACK TYPE: Narrowed", readme)
@@ -6603,7 +6603,7 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertEqual(len(result), len(annotated))
 
     def test_narrowed_variants_skip_conformance(self):
-        from packs.naming import _narrows_contents
+        from packs.naming import narrows_contents
 
         for narrowed in (
             "EmuDeck_2.3.8_Required_BIOS_Pack.zip",
@@ -6611,14 +6611,14 @@ struct BurnDriver BurnDrvneogeo = {
             "EmuDeck_2.3.8_Truth_Required_BIOS_Pack.zip",
             "EmuDeck_2.3.8_NorthAmerica_Required_BIOS_Pack.zip",
         ):
-            self.assertTrue(_narrows_contents(narrowed), narrowed)
+            self.assertTrue(narrows_contents(narrowed), narrowed)
 
         for full in (
             "EmuDeck_2.3.8_BIOS_Pack.zip",
             "EmuDeck_2.3.8_NorthAmerica_BIOS_Pack.zip",
             "RetroArch_v1.22.2_Switch_BIOS_Pack.zip",
         ):
-            self.assertFalse(_narrows_contents(full), full)
+            self.assertFalse(narrows_contents(full), full)
 
     def test_target_tag_formats_hardware_names(self):
         from packs.naming import _target_tag
@@ -6643,9 +6643,9 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertIn("Switch", name)
 
     def test_readme_region_section_lists_fallback_systems(self):
-        from packs.readme import _build_readme
+        from packs.readme import build_readme
 
-        text = _build_readme(
+        text = build_readme(
             "regionplat",
             "RegionPlat",
             "",
@@ -6661,9 +6661,9 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertNotIn("All are included", text)
 
     def test_readme_without_region_keeps_the_regional_note(self):
-        from packs.readme import _build_readme
+        from packs.readme import build_readme
 
-        text = _build_readme("regionplat", "RegionPlat", "", 10, 2)
+        text = build_readme("regionplat", "RegionPlat", "", 10, 2)
         self.assertNotIn("PACK TYPE: Region Filtered", text)
         self.assertIn("All are included", text)
 
@@ -6794,9 +6794,9 @@ class OneOfASearchList(unittest.TestCase):
     """
 
     def setUp(self):
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         repo = Path(__file__).resolve().parent.parent
         (repo / "tmp").mkdir(exist_ok=True)
         self.root = Path(tempfile.mkdtemp(dir=repo / "tmp"))
@@ -7060,9 +7060,9 @@ class AnArchiveIsAMemberOfASet(unittest.TestCase):
     def _fixture(self, held: bool) -> dict:
         import zlib
 
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         repo = Path(__file__).resolve().parent.parent
         (repo / "tmp").mkdir(exist_ok=True)
         root = Path(tempfile.mkdtemp(dir=repo / "tmp"))

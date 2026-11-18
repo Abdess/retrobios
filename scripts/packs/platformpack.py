@@ -24,29 +24,29 @@ from packs import slots
 from packs.archive import (
     CASE_FOLDING_OS,
     PackRecord,
-    _Placed,
-    _add_pack_member,
-    _add_zip_to_pack,
-    _extract_zip_to_archive,
-    _same_bytes,
-    _write_generated_member,
-    _writing_pack,
+    Placed,
+    add_pack_member,
+    add_zip_to_pack,
+    extract_zip_to_archive,
+    same_bytes,
+    write_generated_member,
+    writing_pack,
 )
-from packs.datatrees import _data_directory_members, core_data_trees, pack_markers
-from packs.emulatorpack import _system_display_name
+from packs.datatrees import data_directory_members, core_data_trees, pack_markers
+from packs.emulatorpack import system_display_name
 from packs.extras import (
     ExtraResolver,
-    _collect_emulator_extras,
-    _detect_extras_prefix,
+    collect_emulator_extras,
+    detect_extras_prefix,
     extra_full_destination,
     extra_region_key,
     extras_for_systems as _extras_for_systems,
     platform_region_groups,
     undeclared_report,
 )
-from packs.naming import _name_part, _narrowings, _platform_pack_name, _platform_pack_stem
-from packs.paths import _flat, save_layout
-from packs.readme import _build_agnostic_rename_readme, _build_readme, save_place
+from packs.naming import file_name_part, pack_narrowings, platform_pack_name, platform_pack_stem
+from packs.paths import flat_arcname, save_layout
+from packs.readme import build_agnostic_rename_readme, build_readme, save_place
 from resolve import packfiles as packresolve, regions as resolve_regions, slot as slot_mod
 from resolve.contentlayout import TARGET_KEY
 from resolve.cores import platform_scope_systems, system_scope_error
@@ -59,8 +59,8 @@ from resolve.packfiles import (
     resolve_file,
 )
 from resolve.validation import (
-    _build_validation_index,
-    _parse_validation,
+    build_validation_index,
+    parse_validation,
     agnostic_substitute,
     baseline_verdict,
     destination_owners,
@@ -78,7 +78,7 @@ def _case_twin_pairs(
 ) -> list[tuple[str, str]]:
     """Each spelling left out, with the spelling the pack holds."""
     held = {
-        _flat(dest, base_dest, flatten).lower(): _flat(dest, base_dest, flatten)
+        flat_arcname(dest, base_dest, flatten).lower(): flat_arcname(dest, base_dest, flatten)
         for dest in seen_destinations
     }
     return sorted({(twin, held[twin.lower()]) for twin in twins if twin.lower() in held})
@@ -201,7 +201,7 @@ def _select_variants(
 
     slot_undecidable: list[str] = []
     if one_per_slot:
-        slot_drops, slot_undecidable = _slot_drops(
+        slot_drops, slot_undecidable = one_per_slot_drops(
             config, emu_profiles, target_cores, region_groups, region_drops, held
         )
         region_drops = region_drops | slot_drops
@@ -214,7 +214,7 @@ def _select_variants(
     return region_drops, region_fallbacks, slot_undecidable
 
 
-def _slot_drops(
+def one_per_slot_drops(
     config: dict,
     emu_profiles: dict | None,
     target_cores: set[str] | None,
@@ -247,7 +247,7 @@ def _matches_an_alternative(fe: dict, local_path: str, profiles: dict) -> bool:
         return False
     # A sibling the code takes without a check (Raze's "BLOOD: Unknown
     # Version") accepts whatever copy fills the slot.
-    if any(not _parse_validation(entry.get("validation")) for entry in siblings):
+    if any(not parse_validation(entry.get("validation")) for entry in siblings):
         return True
     actual = compute_hashes(local_path, frozenset({"sha1", "md5", "crc32"}))
     for entry in siblings:
@@ -408,13 +408,13 @@ def _plan_platform_pack(
     if cut is not None:
         config, emu_profiles = cut.config, cut.profiles
 
-    narrowings = _narrowings(
+    narrowings = pack_narrowings(
         opts.source, opts.regions, opts.target_name, opts.one_per_slot, opts.required_only,
         no_game_data=opts.no_game_data,
     )
     zip_path = os.path.join(
         output_dir,
-        _platform_pack_name(
+        platform_pack_name(
             platform_name, platforms_dir, narrowings, opts.system_filter, opts.pack_name
         ),
     )
@@ -432,7 +432,7 @@ def _plan_platform_pack(
             name: emu_profiles[name]
             for name in resolve_platform_cores(config, emu_profiles)
         }
-        validation_index = _build_validation_index(platform_profiles)
+        validation_index = build_validation_index(platform_profiles)
     validation_owners = destination_owners(platform_profiles)
     slot_overrides = slots.pack_overrides(
         config, emu_profiles or {}, db, zip_contents, opts.data_registry,
@@ -515,7 +515,7 @@ class _PlatformPackBuild:
     verdict: Callable[[dict, str | None, str], tuple[str, str | None]]
     judge: Callable[[dict, str | None, str], tuple[str | None, str | None]]
     resolve_extra: Callable[[dict, str], tuple[str | None, str, str]]
-    placed: _Placed = field(init=False)
+    placed: Placed = field(init=False)
     total_files: int = 0
     core_count: int = 0
     save_count: int = 0
@@ -532,10 +532,10 @@ class _PlatformPackBuild:
     case_twins: list[str] = field(default_factory=list)
 
     def __post_init__(self) -> None:
-        self.placed = _Placed(self.plan.case_insensitive)
+        self.placed = Placed(self.plan.case_insensitive)
 
     def _flat(self, path: str) -> str:
-        return _flat(path, self.plan.base_dest, self.plan.opts.flatten)
+        return flat_arcname(path, self.plan.base_dest, self.plan.opts.flatten)
 
     def run(self) -> None:
         if self.plan.opts.source != "truth":
@@ -642,7 +642,7 @@ class _PlatformPackBuild:
         instr_path = (
             f"{base_dest}/{instr_name}" if base_dest else instr_name
         )
-        _write_generated_member(
+        write_generated_member(
             self.zf,
             self._flat(instr_path),
             f"File needed: {file_entry['name']}\n\n{instructions}\n",
@@ -664,9 +664,9 @@ class _PlatformPackBuild:
             if self.plan.opts.record is None and download_external(file_entry, tmp_path):
                 extract = file_entry.get("extract", False)
                 if extract and tmp_path.endswith(".zip"):
-                    _extract_zip_to_archive(tmp_path, self._flat(full_dest), self.zf)
+                    extract_zip_to_archive(tmp_path, self._flat(full_dest), self.zf)
                 else:
-                    _add_pack_member(self.zf, tmp_path, self._flat(full_dest))
+                    add_pack_member(self.zf, tmp_path, self._flat(full_dest))
                 self.file_status.setdefault(full_dest, "ok")
                 self.total_files += 1
             else:
@@ -700,11 +700,11 @@ class _PlatformPackBuild:
                 if entry.get("path", "").startswith(agnostic_path)
                 and entry.get("name", "") and entry.get("name", "") != original_name
             ]
-            readme_text = _build_agnostic_rename_readme(dest_name, original_name, alt_names)
+            readme_text = build_agnostic_rename_readme(dest_name, original_name, alt_names)
             readme_name = f"RENAMED_{dest_name}.txt"
             readme_full = f"{plan.base_dest}/{readme_name}" if plan.base_dest else readme_name
             if readme_full not in self.placed.destinations:
-                _write_generated_member(self.zf, self._flat(readme_full), readme_text)
+                write_generated_member(self.zf, self._flat(readme_full), readme_text)
                 self.placed.destinations.add(readme_full)
         return local_path
 
@@ -766,7 +766,7 @@ class _PlatformPackBuild:
             if full_dest not in self.placed.destinations:
                 self.case_twins.append(self._flat(full_dest))
             return
-        if within is not None and not _same_bytes(local_path, within.get(self._flat(full_dest))):
+        if within is not None and not same_bytes(local_path, within.get(self._flat(full_dest))):
             # The full pack holds another system's file here.
             return
         if self.file_status.get(full_dest) == "excluded":
@@ -777,11 +777,11 @@ class _PlatformPackBuild:
         extract = file_entry.get("extract", False)
         flat_dest = self._flat(full_dest)
         if extract and local_path.endswith(".zip"):
-            _extract_zip_to_archive(local_path, flat_dest, self.zf)
+            extract_zip_to_archive(local_path, flat_dest, self.zf)
         elif local_path.endswith(".zip"):
-            _add_zip_to_pack(local_path, flat_dest, self.zf, file_entry)
+            add_zip_to_pack(local_path, flat_dest, self.zf, file_entry)
         else:
-            _add_pack_member(self.zf, local_path, flat_dest)
+            add_pack_member(self.zf, local_path, flat_dest)
         self.total_files += 1
 
     def _region_dropped(self, fe: dict) -> bool:
@@ -803,14 +803,14 @@ class _PlatformPackBuild:
             # The systems asked for, with what their cores need: the split
             # packs get exactly this, and a full pack of one system had none.
             return _extras_for_systems(
-                _collect_emulator_extras(
+                collect_emulator_extras(
                     plan.config, opts.emulators_dir, plan.db, set(), plan.base_dest,
                     plan.emu_profiles, target_cores=opts.target_cores,
                     include_all=(opts.source == "truth"), undeclared=plan.undeclared,
                 ),
                 opts.system_filter,
             )
-        return _collect_emulator_extras(
+        return collect_emulator_extras(
             plan.config,
             opts.emulators_dir,
             plan.db,
@@ -842,13 +842,13 @@ class _PlatformPackBuild:
             # pack is extracted into the BIOS folder and cannot reach
             # them, the installer places these files.
             return
-        # Core extras: _collect_emulator_extras already adjusted
+        # Core extras: collect_emulator_extras already adjusted
         # destinations for slug-based platforms.  Apply the effective
         # prefix (base_dest, or inferred from YAML when base_dest is
         # empty, as RetroDECK infers "bios"). A file read below the save
         # directory goes to the pack's save folder instead.
         full_dest = extra_full_destination(
-            fe, _detect_extras_prefix(plan.config, plan.base_dest)
+            fe, detect_extras_prefix(plan.config, plan.base_dest)
         )
         if not full_dest:
             return
@@ -872,12 +872,12 @@ class _PlatformPackBuild:
 
         flat_dest = self._flat(full_dest)
         within = plan.opts.within
-        if within is not None and not _same_bytes(local_path, within.get(flat_dest)):
+        if within is not None and not same_bytes(local_path, within.get(flat_dest)):
             return
         if local_path.endswith(".zip"):
-            _add_zip_to_pack(local_path, flat_dest, self.zf, fe)
+            add_zip_to_pack(local_path, flat_dest, self.zf, fe)
         else:
-            _add_pack_member(self.zf, local_path, flat_dest)
+            add_pack_member(self.zf, local_path, flat_dest)
         if self.file_status.get(full_dest) in ("missing", "excluded"):
             self._core_fills_declaration(fe, full_dest)
         self.placed.take(full_dest)
@@ -952,13 +952,13 @@ class _PlatformPackBuild:
         required_only = plan.opts.required_only
         seen_parents = self.placed.parents
         added = 0
-        for src, full in _data_directory_members(
+        for src, full in data_directory_members(
             pack_systems, plan.opts.data_registry, plan.platform_name, plan.base_dest,
             self.placed.fold, self.placed.destinations, self.placed.lower,
             seen_parents, required_only=required_only,
             core_trees=core_trees,
         ):
-            _add_pack_member(self.zf, src, self._flat(full))
+            add_pack_member(self.zf, src, self._flat(full))
             if isinstance(self.zf, PackRecord):
                 self.zf.trees.append(self._flat(full))
             added += 1
@@ -970,14 +970,14 @@ class _PlatformPackBuild:
         # them, as the manifest's case_variants are (Mesen-CE's bios.col
         # beside the declared BIOS.col).
         plan, opts = self.plan, self.plan.opts
-        unfolded = _collect_emulator_extras(
+        unfolded = collect_emulator_extras(
             {**plan.config, "case_insensitive_fs": False}, opts.emulators_dir, plan.db, set(),
             plan.base_dest, plan.emu_profiles, target_cores=opts.target_cores,
             include_all=(opts.source == "truth"),
         )
         if opts.system_filter:
             unfolded = _extras_for_systems(unfolded, opts.system_filter)
-        prefix = _detect_extras_prefix(plan.config, plan.base_dest)
+        prefix = detect_extras_prefix(plan.config, plan.base_dest)
         unfolded_spares = self._spares(unfolded)
         for fe in unfolded:
             if opts.required_only and (fe.get("required") is False or id(fe) in unfolded_spares):
@@ -1004,7 +1004,7 @@ class _PlatformPackBuild:
         if keeps_case and opts.source != "platform" and opts.precomputed_extras is None:
             self._unfolded_twins()
         save_count = self.save_count
-        readme_text = _build_readme(
+        readme_text = build_readme(
             plan.platform_name, plan.platform_display, plan.base_dest, self.total_files,
             len(plan.pack_systems),
             source=opts.source,
@@ -1033,9 +1033,9 @@ class _PlatformPackBuild:
                 if keeps_case else []
             ),
         )
-        _write_generated_member(self.zf, "README.txt", readme_text)
+        write_generated_member(self.zf, "README.txt", readme_text)
         for marker in pack_markers(plan.platform_name, opts.target_name, plan.platforms_dir):
-            _write_generated_member(
+            write_generated_member(
                 self.zf,
                 self._flat(f"{plan.base_dest}/{marker}" if plan.base_dest else marker),
                 "",
@@ -1136,7 +1136,7 @@ def generate_pack(
 
     with (
         contextlib.nullcontext(opts.record) if opts.record is not None
-        else _writing_pack(plan.zip_path)
+        else writing_pack(plan.zip_path)
     ) as zf:
         build = _PlatformPackBuild(plan, zf, resolve, verdict, judge, resolve_extra)
         build.run()
@@ -1181,7 +1181,7 @@ def _split_extras(config: dict, db: dict, narrowing: PackNarrowing) -> list[dict
     if source == "platform":
         all_extras = []
     elif emu_profiles:
-        all_extras = _collect_emulator_extras(
+        all_extras = collect_emulator_extras(
             cut.config if cut else config, narrowing["emulators_dir"], db,
             set(), base_dest, cut.profiles if cut else emu_profiles,
             target_cores=target_cores, include_all=(source == "truth"),
@@ -1229,7 +1229,7 @@ def generate_split_packs(
     # differently narrowed runs write into one another.
     split_tags = "".join(
         tag
-        for tag, _label in _narrowings(
+        for tag, _label in pack_narrowings(
             narrowing["source"], narrowing["regions"], narrowing["target_name"],
             narrowing["one_per_slot"], narrowing["required_only"],
             no_game_data=narrowing["no_game_data"],
@@ -1244,7 +1244,7 @@ def generate_split_packs(
     # Named by the stem the full pack reads: assembled here by hand, a '/' in
     # a version nested the directory where the check never looked for it.
     part_prefix = (
-        f"{_platform_pack_stem([platform_name], platform_name, platforms_dir)}{split_tags}"
+        f"{platform_pack_stem([platform_name], platform_name, platforms_dir)}{split_tags}"
     )
     split_dir = os.path.join(output_dir, f"{part_prefix}{group_tag}_Split")
     if records is None:
@@ -1278,14 +1278,14 @@ def generate_split_packs(
     if group_by == "manufacturer":
         groups = _group_systems_by_manufacturer(systems, db, bios_dir)
     else:
-        groups = {_system_display_name(sid): [sid] for sid in systems}
+        groups = {system_display_name(sid): [sid] for sid in systems}
 
     all_extras = _split_extras(config, db, narrowing)
     results = []
     for group_name, group_system_ids in sorted(groups.items()):
         group_extras = _extras_for_systems(all_extras, group_system_ids)
         zip_path = part(
-            f"{part_prefix}_{_name_part(group_name, '_')}_BIOS_Pack.zip",
+            f"{part_prefix}_{file_name_part(group_name, '_')}_BIOS_Pack.zip",
             {"system_filter": group_system_ids, "precomputed_extras": group_extras},
         )
         if zip_path:

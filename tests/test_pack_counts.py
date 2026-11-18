@@ -30,7 +30,7 @@ except ImportError:
     jsonschema = None
 from core.artifacts import ArtifactLockBusy, artifact_lock
 from model.platforms import _platform_config_cache
-from model.profiles import _emulator_profiles_cache, load_emulator_profiles
+from model.profiles import emulator_profiles_cache, load_emulator_profiles
 import generate_db
 from packs import archive as packs_archive
 from packs import datatrees
@@ -111,11 +111,11 @@ class PackCountFixture(unittest.TestCase):
             yaml.dump({"platforms": {"demo": {"config": "demo.yml"}}})
         )
         (self.emulators / "demo.yml").write_text(PROFILE)
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.profiles = load_emulator_profiles(str(self.emulators))
 
     def tearDown(self):
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self._tmp.cleanup()
 
     def _manifest(self) -> dict:
@@ -656,7 +656,7 @@ class CoreCopiesKeepTheirCategory(unittest.TestCase):
     copies, game data, under core files."""
 
     def test_a_copy_counts_as_its_entry_says(self):
-        from packs.extras import _collect_emulator_extras, hidden_extras
+        from packs.extras import collect_emulator_extras, hidden_extras
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             held = Path(tmp) / "x.dat"
@@ -672,7 +672,7 @@ class CoreCopiesKeepTheirCategory(unittest.TestCase):
             }}
             db = {"files": {sha1: {"path": str(held), "name": "x.dat", "sha1": sha1}},
                   "indexes": {"by_name": {"x.dat": [sha1]}, "by_path_suffix": {}}}
-            (extra,) = _collect_emulator_extras(
+            (extra,) = collect_emulator_extras(
                 config, "emulators", db, {"x.dat"}, "", profiles
             )
             self.assertEqual(

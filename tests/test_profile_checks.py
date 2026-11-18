@@ -18,7 +18,7 @@ from pathlib import Path
 
 import yaml
 
-from resolve.validation import _build_validation_index, check_file_validation
+from resolve.validation import build_validation_index, check_file_validation
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -37,7 +37,7 @@ class _Probe(unittest.TestCase):
 
     def accepts(self, emulator: str, name: str, data: bytes, strict: bool = False) -> bool:
         """strict counts a check the code only warns about."""
-        index = _build_validation_index({emulator: _profile(emulator)})
+        index = build_validation_index({emulator: _profile(emulator)})
         path = Path(self._tmp.name) / name
         path.write_bytes(data)
         return check_file_validation(

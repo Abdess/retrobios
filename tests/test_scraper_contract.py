@@ -934,7 +934,7 @@ class OneNativeIdOneSystem(unittest.TestCase):
     FOLDS = {"fbneo", "pcenginecd"}
 
     def test_scrapers_agree_on_every_shared_native_id(self):
-        from model.systems import _norm_system_id
+        from model.systems import norm_system_id
 
         seen: dict[str, dict[str, str]] = {}
         for path in sorted((REPO_ROOT / "scripts" / "scraper").glob("*_scraper.py")):
@@ -947,7 +947,7 @@ class OneNativeIdOneSystem(unittest.TestCase):
                     seen.setdefault(native.lower(), {})[path.stem] = slug
         split = {
             native: by for native, by in seen.items()
-            if native not in self.FOLDS and len({_norm_system_id(s) for s in by.values()}) > 1
+            if native not in self.FOLDS and len({norm_system_id(s) for s in by.values()}) > 1
         }
         self.assertEqual(split, {})
 
@@ -979,14 +979,14 @@ class OneNativeIdOneSystem(unittest.TestCase):
     def test_every_platform_system_meets_a_profile_system(self):
         import yaml
 
-        from model.systems import _norm_system_id
+        from model.systems import norm_system_id
         from model.profiles import load_emulator_profiles
         from model.platforms import load_platform_config
 
         known = set()
         for profile in load_emulator_profiles(str(REPO_ROOT / "emulators")).values():
-            known |= {_norm_system_id(s) for s in profile.get("systems") or []}
-            known |= {_norm_system_id(f["system"]) for f in profile.get("files") or []
+            known |= {norm_system_id(s) for s in profile.get("systems") or []}
+            known |= {norm_system_id(f["system"]) for f in profile.get("files") or []
                       if isinstance(f, dict) and f.get("system")}
         registry = yaml.safe_load((REPO_ROOT / "platforms" / "_registry.yml").read_text())
         for name in registry["platforms"]:
@@ -994,22 +994,22 @@ class OneNativeIdOneSystem(unittest.TestCase):
                 config = load_platform_config(name, str(REPO_ROOT / "platforms"))
                 allowed = self.UNMATCHED["*"] | self.UNMATCHED.get(name, set())
                 stray = {s for s in config.get("systems", {})
-                         if _norm_system_id(s) not in known} - allowed
+                         if norm_system_id(s) not in known} - allowed
                 self.assertEqual(stray, set())
 
     def test_xroar_machines_reach_the_platforms_that_run_it(self):
         import yaml
 
-        from model.systems import _norm_system_id
+        from model.systems import norm_system_id
 
         xroar = yaml.safe_load((REPO_ROOT / "emulators" / "xroar.yml").read_text())
-        machines = {_norm_system_id(s) for s in xroar["systems"]}
+        machines = {norm_system_id(s) for s in xroar["systems"]}
         for platform, wanted in (("retrodeck", {"coco", "dragon64"}),
                                  ("recalbox", {"coco", "dragon64"}),
                                  ("misterfpga", {"coco3"})):
             with self.subTest(platform=platform):
                 data = yaml.safe_load((REPO_ROOT / "platforms" / f"{platform}.yml").read_text())
-                ids = {_norm_system_id(s) for s in data["systems"]}
+                ids = {norm_system_id(s) for s in data["systems"]}
                 self.assertEqual(wanted & ids & machines, wanted)
 
 

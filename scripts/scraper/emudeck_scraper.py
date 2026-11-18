@@ -188,14 +188,14 @@ _RE_ARRAY = re.compile(
 
 # checkBIOS.sh declares its checks as `checkPS1BIOS(){`, with no `function`
 # keyword and no settled casing for BIOS.
-_RE_FUNC = re.compile(
+RE_FUNC = re.compile(
     r"^[ \t]*(?:function\s+)?(check\w*(?:BIOS|Bios))\s*\(\)\s*\{",
     re.MULTILINE,
 )
 
 # The hash list is named differently in each check (PSBios, hashes, ...), so
 # it is found by shape rather than by name.
-_RE_LOCAL_HASHES = re.compile(
+RE_LOCAL_HASHES = re.compile(
     r"(?:local\s+)?\w+=\(\s*((?:[0-9a-fA-F]{32}\s*)+)\)",
     re.MULTILINE,
 )
@@ -276,16 +276,16 @@ class Scraper(BaseScraper):
     def _parse_function_hashes(self, script: str) -> dict[str, list[str]]:
         """Extract local hash arrays from named check functions."""
         result: dict[str, list[str]] = {}
-        for func_match in _RE_FUNC.finditer(script):
+        for func_match in RE_FUNC.finditer(script):
             func_name = func_match.group(1)
             if func_name not in FUNCTION_HASH_MAP:
                 continue
             system = FUNCTION_HASH_MAP[func_name]
             func_start = func_match.start()
-            next_func = _RE_FUNC.search(script, func_match.end())
+            next_func = RE_FUNC.search(script, func_match.end())
             func_end = next_func.start() if next_func else len(script)
             func_body = script[func_start:func_end]
-            local_match = _RE_LOCAL_HASHES.search(func_body)
+            local_match = RE_LOCAL_HASHES.search(func_body)
             if local_match:
                 hashes_raw = local_match.group(1)
                 hashes = [h.strip() for h in hashes_raw.split() if h.strip()]

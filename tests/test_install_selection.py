@@ -1053,7 +1053,7 @@ class AHeldFileTheInstallerCannotFetch(unittest.TestCase):
     def setUp(self):
         from model import profiles
         from model.platforms import _platform_config_cache
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
         import generate_db
         tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
         self.addCleanup(tmp.cleanup)
@@ -1096,9 +1096,9 @@ class AHeldFileTheInstallerCannotFetch(unittest.TestCase):
                  "required": True},
             ]}))
         _platform_config_cache.clear()
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.addCleanup(_platform_config_cache.clear)
-        self.addCleanup(_emulator_profiles_cache.clear)
+        self.addCleanup(emulator_profiles_cache.clear)
         self.profiles = profiles.load_emulator_profiles("emulators")
 
     def _manifest(self, regions):
@@ -1134,7 +1134,7 @@ class AStandaloneLayoutBelowTheBiosFolder(unittest.TestCase):
     def setUp(self):
         from model import profiles
         from model.platforms import _platform_config_cache
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
         import generate_db
         tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
         self.addCleanup(tmp.cleanup)
@@ -1179,9 +1179,9 @@ class AStandaloneLayoutBelowTheBiosFolder(unittest.TestCase):
                 for name in ("eu.bin", "jp.bin")
             ]}))
         _platform_config_cache.clear()
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.addCleanup(_platform_config_cache.clear)
-        self.addCleanup(_emulator_profiles_cache.clear)
+        self.addCleanup(emulator_profiles_cache.clear)
         self.profiles = profiles.load_emulator_profiles("emulators")
 
     def _manifest(self, regions):
@@ -1217,7 +1217,7 @@ class AnExtraBesideItsDeclarationBelowTheBiosFolder(unittest.TestCase):
     def setUp(self):
         from model import profiles
         from model.platforms import _platform_config_cache
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
         import generate_db
         tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
         self.addCleanup(tmp.cleanup)
@@ -1268,9 +1268,9 @@ class AnExtraBesideItsDeclarationBelowTheBiosFolder(unittest.TestCase):
                 {"name": "us.bin", "path": "alt/us.bin", "system": "sys", "required": False},
             ]}))
         _platform_config_cache.clear()
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.addCleanup(_platform_config_cache.clear)
-        self.addCleanup(_emulator_profiles_cache.clear)
+        self.addCleanup(emulator_profiles_cache.clear)
         self.profiles = profiles.load_emulator_profiles("emulators")
 
     def _manifest(self, regions):

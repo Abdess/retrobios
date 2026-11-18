@@ -151,7 +151,7 @@ def _path_parents(dest: str) -> list[str]:
     parts = dest.split("/")
     return ["/".join(parts[:i]) for i in range(1, len(parts))]
 
-def _has_path_conflict(dest: str, seen_files: set[str], seen_parents: set[str]) -> bool:
+def has_path_conflict(dest: str, seen_files: set[str], seen_parents: set[str]) -> bool:
     """Check if dest conflicts with existing paths (file vs directory).
 
     Returns True if adding dest would create an impossible extraction:
@@ -179,12 +179,12 @@ def placement_block(
         return "taken"
     if case_insensitive and dest.lower() in seen_lower:
         return "case_twin"
-    if _has_path_conflict(dest, seen_files, seen_parents):
+    if has_path_conflict(dest, seen_files, seen_parents):
         return "path_conflict"
     return None
 
 
-def _register_path(dest: str, seen_files: set[str], seen_parents: set[str]) -> None:
+def register_path(dest: str, seen_files: set[str], seen_parents: set[str]) -> None:
     """Track a file path and its parent directories."""
     seen_files.add(dest)
     for parent in _path_parents(dest):
@@ -207,13 +207,13 @@ def lands_on_android(target_names: Iterable[str], target: str | None) -> bool:
     return any(name.startswith("android") for name in target_names)
 
 
-def _flat(arcname: str, prefix: str, flatten: bool) -> str:
+def flat_arcname(arcname: str, prefix: str, flatten: bool) -> str:
     """Strip base_destination prefix from ZIP arcname when flattening."""
     if flatten and prefix and arcname.startswith(prefix + "/"):
         return arcname[len(prefix) + 1:]
     return arcname
 
-def _resolve_destination(file_entry: dict, standalone: bool) -> str:
+def resolve_destination(file_entry: dict, standalone: bool) -> str:
     """Resolve the ZIP destination path for a file entry.
 
     ``path:`` is where the libretro build reads the file from the system
@@ -241,7 +241,7 @@ def _resolve_destination(file_entry: dict, standalone: bool) -> str:
     return dest
 
 
-def _archive_destination(
+def archive_destination(
     archive_name: str, archive_prefix: str, pack_structure: dict | None, standalone: bool
 ) -> str:
     """Where an emulator pack places one of the profile's archives."""

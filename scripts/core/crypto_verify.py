@@ -375,7 +375,7 @@ def verify_otp(
 
     Returns (valid, reason_string).
     """
-    from core.sect233r1 import _N, _ec_mul, _Gx, _Gy, ecdsa_verify_sha256
+    from core.sect233r1 import N, ec_mul, Gx, Gy, ecdsa_verify_sha256
 
     data = bytearray(Path(filepath).read_bytes())
 
@@ -436,10 +436,10 @@ def verify_otp(
     signature_rs = bytes(data[0x44:0x80])
 
     # Fix up private key: privkey % subgroup_order (Nintendo's ECC lib quirk)
-    priv_key_int = int.from_bytes(priv_key_raw, "big") % _N
+    priv_key_int = int.from_bytes(priv_key_raw, "big") % N
 
     # Derive public key from private key: Q = privkey * G
-    pub_point = _ec_mul(priv_key_int, (_Gx, _Gy))
+    pub_point = ec_mul(priv_key_int, (Gx, Gy))
     if pub_point is None:
         return False, "ECC cert: derived public key is point at infinity"
     pub_key_xy = pub_point[0].to_bytes(30, "big") + pub_point[1].to_bytes(30, "big")

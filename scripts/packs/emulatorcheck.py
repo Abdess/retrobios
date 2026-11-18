@@ -26,15 +26,15 @@ from packs.verdicts import (
     RELEASE_ASSET_PENDING,
     Severity,
     Status,
-    _SEVERITY_ORDER,
-    _STATUS_ORDER,
-    _emulator_severity,
-    _storage_verdict,
+    SEVERITY_ORDER,
+    STATUS_ORDER,
+    emulator_severity,
+    storage_verdict,
 )
 from resolve.archives import archive_entry, archive_is_optional
 from resolve.directories import expand_directory_entries
 from resolve.validation import (
-    _build_validation_index,
+    build_validation_index,
     build_ground_truth,
     deliverable,
     validated_choice,
@@ -111,7 +111,7 @@ def _emulator_files(
 ) -> list[dict]:
     """The entries of a profile the emulator pack carries."""
     from packs.extras import expand_agnostic_entries
-    from packs.paths import _resolve_destination
+    from packs.paths import resolve_destination
 
     files = expand_agnostic_entries(
         expand_directory_entries(
@@ -142,7 +142,7 @@ def _emulator_files(
             fe
             for fe in files
             if fe.get("archive")
-                or _resolve_destination(fe, standalone) not in region_drops
+                or resolve_destination(fe, standalone) not in region_drops
         ]
     return files
 
@@ -251,12 +251,12 @@ class _EmulatorPack:
         )
 
     def occupy(self, dest: str, path: str | None, owner: str) -> None:
-        from packs.paths import _register_path
+        from packs.paths import register_path
 
         if self.block(dest):
             return
         self.placed[dest.lower()] = (path, owner, dest)
-        _register_path(dest, self.placed_files, self.placed_parents)
+        register_path(dest, self.placed_files, self.placed_parents)
 
     def occupy_trees(self, emu_name: str, profile: dict) -> None:
         """The profile's data trees follow its files in the pack, which
@@ -331,7 +331,7 @@ class _EmulatorPack:
         self, emu_name: str, profile: dict, files: list[dict], spares: set[str],
     ) -> list[PlacedResult]:
         # Verify archives as units (e.g., neogeo.zip, aes.zip)
-        from packs.paths import _archive_destination
+        from packs.paths import archive_destination
         from resolve.packfiles import resolve_file
 
         placed_results: list[PlacedResult] = []
@@ -344,7 +344,7 @@ class _EmulatorPack:
             own_entry = archive_entry(archive, files)
             # Where the pack puts it: an archive_prefix or pack_structure
             # moves it, and a loose same-named entry is another file.
-            dest = _archive_destination(
+            dest = archive_destination(
                 archive, profile.get("archive_prefix", ""),
                 profile.get("pack_structure"), self.standalone,
             )
@@ -387,7 +387,7 @@ class _EmulatorPack:
     def _loose_results(
         self, emu_name: str, files: list[dict],
     ) -> dict[str, list[tuple[dict, bool, bool, dict]]]:
-        from packs.paths import _resolve_destination
+        from packs.paths import resolve_destination
         from resolve.packfiles import resolve_file
 
         # Results of this emulator, by destination. Several entries of one
@@ -426,7 +426,7 @@ class _EmulatorPack:
             result["ground_truth"] = build_ground_truth(name, self.validation_index)
             # The slot the emulator pack places this entry in: standalone_path
             # under --standalone, the sanitised path.
-            dest = _resolve_destination(file_entry, self.standalone) or name
+            dest = resolve_destination(file_entry, self.standalone) or name
             emu_results.setdefault(dest, []).append((result, required, hle, file_entry))
         return emu_results
 
@@ -435,7 +435,7 @@ class _EmulatorPack:
         resolve_status: str, emu_name: str,
     ) -> dict:
         """The verdict on a loose profile entry, from its resolution."""
-        stored = _storage_verdict(file_entry, emulator_pack=True)
+        stored = storage_verdict(file_entry, emulator_pack=True)
         if stored is not None:
             return stored
         if resolve_status == RELEASE_ASSET_PENDING:
@@ -589,15 +589,15 @@ class _EmulatorPack:
             self.dest_to_name[dest] = result["name"]
             cur = result["status"]
             prev = self.file_status.get(dest)
-            if prev is None or _STATUS_ORDER.get(cur, 0) > _STATUS_ORDER.get(
+            if prev is None or STATUS_ORDER.get(cur, 0) > STATUS_ORDER.get(
                 prev, 0
             ):
                 self.file_status[dest] = cur
-            sev = _emulator_severity(cur, required, hle)
+            sev = emulator_severity(cur, required, hle)
             prev_sev = self.file_severity.get(dest)
-            if prev_sev is None or _SEVERITY_ORDER.get(
+            if prev_sev is None or SEVERITY_ORDER.get(
                 sev, 0
-            ) > _SEVERITY_ORDER.get(prev_sev, 0):
+            ) > SEVERITY_ORDER.get(prev_sev, 0):
                 self.file_severity[dest] = sev
 
 
@@ -632,7 +632,7 @@ def verify_emulator(
     file or tree marked ``required: false`` is left out, and an archive when
     it and every member it carries are optional, as the builder leaves them.
     """
-    from packs.paths import _resolve_destination
+    from packs.paths import resolve_destination
 
     # Also load aliases for redirect messages
     all_profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
@@ -649,7 +649,7 @@ def verify_emulator(
 
     # Build validation index from selected profiles only
     selected_profiles = dict(selected)
-    validation_index = _build_validation_index(selected_profiles)
+    validation_index = build_validation_index(selected_profiles)
     data_registry = load_data_dir_registry(platforms_dir)
 
     pack = _EmulatorPack(
@@ -681,7 +681,7 @@ def verify_emulator(
             )
             files = [
                 fe for fe in files
-                if fe.get("archive") or _resolve_destination(fe, standalone) not in spares
+                if fe.get("archive") or resolve_destination(fe, standalone) not in spares
             ]
         pack.verify_profile(emu_name, profile, files, spares)
 

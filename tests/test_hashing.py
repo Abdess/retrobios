@@ -93,8 +93,8 @@ class TheSiteReadsAHashFieldTheResolversWay(unittest.TestCase):
             ("0xDEADBEEF", ["deadbeef"]), (12345678, ["12345678"]),
         ):
             with self.subTest(raw=raw):
-                self.assertEqual(lookup._hash_values(raw), expected)
-                self.assertEqual(lookup._hash_values(raw), sorted(hashing.parse_hash_list(raw)))
+                self.assertEqual(lookup.sorted_hash_values(raw), expected)
+                self.assertEqual(lookup.sorted_hash_values(raw), sorted(hashing.parse_hash_list(raw)))
 
 
 if __name__ == "__main__":

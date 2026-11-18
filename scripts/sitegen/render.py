@@ -9,16 +9,16 @@ from collections.abc import Callable
 from model import siteinputs
 from sitegen import markup
 from core.paths import REPO_ROOT
-from model.collection import _PROGRAM_TOPS, _card_moves, _slug
+from model.collection import PROGRAM_TOPS, card_moves, manufacturer_slug
 from model.systemnames import (
     SYSTEM_PARENTS,
-    _boards_built,
-    _console_anchors,
-    _ensure_console_sections,
-    _own_section,
-    _program_names,
-    _section_pairs,
-    _sections_by_name,
+    boards_built,
+    console_anchors,
+    ensure_console_sections,
+    own_section,
+    known_program_names,
+    section_pairs,
+    sections_by_name,
     system_name,
 )
 
@@ -34,7 +34,7 @@ _icon_available: dict[str, bool] = {}
 _CODE_SPAN = re.compile(r"(`+).+?\1", re.S)
 
 
-def _code(value: object) -> str:
+def code_span(value: object) -> str:
     """A value as an inline code span it cannot leave.
 
     Markdown shows HTML inside a code span as text, so the one way out is a
@@ -44,12 +44,12 @@ def _code(value: object) -> str:
     return "`" + str(value).replace("`", "'") + "`"
 
 
-def _count(number: int, noun: str, plural: str = "") -> str:
+def count_text(number: int, noun: str, plural: str = "") -> str:
     """A count and its noun, singular for one: the site printed "1 files" 234 times."""
     return f"{number:,} {noun if number == 1 else plural or noun + 's'}"
 
 
-def _escape_tags(text: str) -> str:
+def escape_tags(text: str) -> str:
     """Show a placeholder such as ``<system_dir>`` as it was written.
 
     Profile prose names paths with angle brackets. Passed through as HTML
@@ -70,12 +70,12 @@ def _escape_tags(text: str) -> str:
     return "".join(out)
 
 
-def _admonition_body(text: str) -> str:
+def admonition_body(text: str) -> str:
     """Indent prose without turning source tokens such as ``#if`` into H1s."""
-    escaped = re.sub(r"(?m)^(\s*)#", r"\1\\#", _escape_tags(text))
+    escaped = re.sub(r"(?m)^(\s*)#", r"\1\\#", escape_tags(text))
     return escaped.replace("\n", "\n    ")
 
-def _icon_name(manufacturer: str, console_name: str) -> str:
+def console_icon_name(manufacturer: str, console_name: str) -> str:
     return f"{manufacturer} - {console_name}".replace("/", " ")
 
 def _icon_url(icon_name: str) -> str:
@@ -101,15 +101,15 @@ def system_icon_markdown(manufacturer: str, console_name: str) -> str:
     The link names the upstream file: ``sitediagrams.localize_images``
     points it at the local copy, whose source is recorded beside it.
     """
-    name = _icon_name(manufacturer, console_name)
+    name = console_icon_name(manufacturer, console_name)
     if not _icon_available.get(name):
         return ""
     return markup.image(console_name, _icon_url(name), width="24") + " "
 
 # Global index: maps system_id -> (manufacturer_slug, console_name) for cross-linking
-_system_page_map: dict[str, tuple[str, str]] = {}
+system_page_map: dict[str, tuple[str, str]] = {}
 
-def _slugify_anchor(text: str) -> str:
+def slugify_anchor(text: str) -> str:
     """Slugify text for MkDocs anchor compatibility."""
     import re
 
@@ -129,29 +129,29 @@ def set_system_page_map(mapping: dict[str, tuple[str, str]]) -> None:
     derived from it here. Kept anywhere else, it outlived a table of the same
     size and linked to the pages of the previous one.
     """
-    from model.systems import _norm_system_id
+    from model.systems import norm_system_id
 
-    _system_page_map.clear()
-    _system_page_map.update(mapping)
+    system_page_map.clear()
+    system_page_map.update(mapping)
     _norm_page_map.clear()
-    for known, page in _system_page_map.items():
-        key = _norm_system_id(known)
+    for known, page in system_page_map.items():
+        key = norm_system_id(known)
         if _norm_page_map.get(key, page) != page:
             _norm_page_map[key] = None
         else:
             _norm_page_map[key] = page
 
 
-def _page_by_norm(sys_id: str) -> tuple[str, str] | None:
+def page_by_norm(sys_id: str) -> tuple[str, str] | None:
     """The page an id leads to under another spelling of the same system.
 
     Emulator cards name sega-megadrive or sinclair-zxspectrum, the pages are
     keyed by the platforms' spellings: 2,431 of 4,195 cards had no link. A
     spelling two pages share leads nowhere rather than to either.
     """
-    from model.systems import _norm_system_id
+    from model.systems import norm_system_id
 
-    return _norm_page_map.get(_norm_system_id(sys_id))
+    return _norm_page_map.get(norm_system_id(sys_id))
 
 
 # A manufacturer page too large for one page is a summary, each console on
@@ -189,8 +189,8 @@ def console_anchor(manufacturer: str, console: str) -> str:
     """The id of a console's heading on its manufacturer's page."""
     from core.anchors import toc_slug
 
-    key = (_slug(manufacturer), console)
-    return _console_anchors.get(key) or toc_slug(console)
+    key = (manufacturer_slug(manufacturer), console)
+    return console_anchors.get(key) or toc_slug(console)
 
 
 def console_href(slug: str, console: str, prefix: str = "") -> str:
@@ -219,7 +219,7 @@ def card_page(path: str, sha1: str) -> str:
         board = arcade_board(sha1)
         if board in _board_sections:
             return f"arcade-{board_slug(board)}"
-    slug, console = _card_moves.get((slug, console, str(sha1)), (slug, console))
+    slug, console = card_moves.get((slug, console, str(sha1)), (slug, console))
     return _card_pages.get((slug, console, sha1), slug)
 
 
@@ -268,25 +268,25 @@ def system_section(sys_id: str) -> tuple[str, str] | None:
 def _section_without_boards(sys_id: str) -> tuple[str, str] | None:
     """system_section before arcade boards: what the folders and the
     reviewed parents give."""
-    own = _own_section(sys_id)
+    own = own_section(sys_id)
     if own is not None:
-        return _slug(own[0]), own[1]
+        return manufacturer_slug(own[0]), own[1]
     parent = SYSTEM_PARENTS.get(sys_id)
-    if parent is not None and parent in _section_pairs:
-        return _slug(parent[0]), parent[1]
+    if parent is not None and parent in section_pairs:
+        return manufacturer_slug(parent[0]), parent[1]
     try:
         name = system_name(sys_id)
     except KeyError:
         return None
-    places = _sections_by_name.get(name.casefold(), set())
+    places = sections_by_name.get(name.casefold(), set())
     if len(places) != 1:
         return None
     mfr, console = next(iter(places))
     if mfr in _NAMELESS_TOPS or (
-        mfr in _PROGRAM_TOPS and console.casefold() in _program_names
+        mfr in PROGRAM_TOPS and console.casefold() in known_program_names
     ):
         return None
-    return _slug(mfr), console
+    return manufacturer_slug(mfr), console
 
 
 def _system_link(sys_id: str, prefix: str = "") -> str:
@@ -319,7 +319,7 @@ def set_arcade_boards(profiles: dict[str, dict], db: dict) -> None:
     """Install the profiles and database the arcade boards are read from.
     Without it they are read from the repository on first use."""
     _arcade_source[0] = (profiles, db)
-    _boards_built[0] = False
+    boards_built[0] = False
 
 
 def _owner_ids(entry: dict, systems: list[str]) -> set[str]:
@@ -379,16 +379,16 @@ def _arcade_suffix_sha1s(db: dict) -> frozenset[str]:
 
 
 def _build_boards() -> None:
-    if _boards_built[0]:
+    if boards_built[0]:
         return
-    _ensure_console_sections()
+    ensure_console_sections()
     source = _arcade_source[0]
     if source is None:
         source = _read_arcade_source()
         if source is None:
             _archive_boards.clear()
             _board_names.clear()
-            _boards_built[0] = True
+            boards_built[0] = True
             return
         _arcade_source[0] = source
     profiles, db = source
@@ -413,7 +413,7 @@ def _build_boards() -> None:
             archives = _entry_archives(entry, files, by_name)
             _cast_votes(key, entry, owners, archives, votes, ids_by_name)
     _elect_boards(votes, ids_by_name, db)
-    _boards_built[0] = True
+    boards_built[0] = True
 
 
 def _read_arcade_source() -> tuple[dict, dict] | None:
@@ -450,7 +450,7 @@ def _entry_archives(entry: dict, files: dict, by_name: dict) -> set[str]:
             if sha1 not in files:
                 continue
             if crcs:
-                held = zip_member_crcs(str(_REPO_ROOT / files[sha1]["path"]))
+                held = zip_member_crcs(str(REPO_ROOT / files[sha1]["path"]))
                 # An archive the build cannot read keeps its name.
                 if held and not held & crcs:
                     continue
@@ -514,7 +514,7 @@ def _machine_section(sys_id: str) -> tuple[str, str] | None:
     of the folder holding it: an id with a section of its own keeps its
     archives where the collection files them."""
     parent = SYSTEM_PARENTS.get(sys_id)
-    if parent is None or parent[0] == "Arcade" or parent not in _section_pairs:
+    if parent is None or parent[0] == "Arcade" or parent not in section_pairs:
         return None
     return parent
 
@@ -589,7 +589,7 @@ def arcade_boards() -> dict[str, str]:
     return {board: system_name(board) for board in sorted(set(_board_names.values()))}
 
 
-def _field_text(key: object, value: object) -> str:
+def scalar_text(key: object, value: object) -> str:
     """A scalar of a structured block. A source reference reads as code."""
     if isinstance(value, bool):
         text = "yes" if value else "no"
@@ -611,9 +611,9 @@ def _field_label(key: object) -> str:
 FieldText = Callable[[object, object], str]
 
 
-def _render_yaml_value(
+def render_yaml_value(
     lines: list[str], val: object, indent: int = 4,
-    field_text: FieldText = _field_text,
+    field_text: FieldText = scalar_text,
 ) -> None:
     """Render any YAML value as a nested markdown list.
 
@@ -628,7 +628,7 @@ def _render_yaml_value(
             if isinstance(v, (dict, list)) and v:
                 lines.append(f"{pad}- **{_field_label(k)}:**")
                 lines.append("")
-                _render_yaml_value(lines, v, indent + 4, field_text)
+                render_yaml_value(lines, v, indent + 4, field_text)
             else:
                 lines.append(f"{pad}- **{_field_label(k)}:** {field_text(k, v)}")
         lines.append("")
@@ -645,7 +645,7 @@ def _render_yaml_value(
                 lines.append(f"{pad}- {', '.join(parts)}".rstrip())
                 if nested:
                     lines.append("")
-                    _render_yaml_value(lines, nested, indent + 4, field_text)
+                    render_yaml_value(lines, nested, indent + 4, field_text)
             else:
                 lines.append(f"{pad}- {field_text(None, item)}")
         lines.append("")
@@ -659,11 +659,11 @@ def _platform_link(name: str, display: str, prefix: str = "") -> str:
     """Generate a markdown link to a platform page."""
     return f"[{display}]({prefix}platforms/{name}.md)"
 
-def _emulator_link(name: str, prefix: str = "") -> str:
+def emulator_link(name: str, prefix: str = "") -> str:
     """Generate a markdown link to an emulator page."""
     return f"[{name}]({prefix}emulators/{name}.md)"
 
-def _fmt_size(size: int) -> str:
+def fmt_size(size: int) -> str:
     if size >= 1024 * 1024 * 1024:
         return f"{size / (1024**3):.1f} GB"
     if size >= 1024 * 1024:
@@ -672,12 +672,12 @@ def _fmt_size(size: int) -> str:
         return f"{size / 1024:.1f} KB"
     return f"{size} B"
 
-def _pct(n: int, total: int) -> str:
+def percent_text(n: int, total: int) -> str:
     if total == 0:
         return "0%"
     return f"{n / total * 100:.1f}%"
 
-def _by_mode(value: str | dict, mode: str) -> str:
+def by_mode(value: str | dict, mode: str) -> str:
     """Read a profile field that may be keyed by build mode."""
     if isinstance(value, dict):
         return str(value.get(mode) or "") if mode else ""
@@ -687,9 +687,6 @@ def _by_mode(value: str | dict, mode: str) -> str:
 # Of those, the top whose headings never name a system, even read whole.
 # An Arcade heading can (Namco System 246), an Other one cannot.
 _NAMELESS_TOPS = frozenset({"Other"})
-
-
-_REPO_ROOT = REPO_ROOT
 
 
 # A system id that names a family of arcade boards -> the board its link

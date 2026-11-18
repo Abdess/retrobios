@@ -12,7 +12,7 @@ import sys
 from dataclasses import dataclass
 
 from model.declarations import OUTER_ROOTS
-from model.systems import _norm_system_id
+from model.systems import norm_system_id
 from model.registry import load_data_dir_registry
 from resolve.standalone import platform_layouts, standalone_set as platform_standalone_set
 from resolve.cores import resolve_platform_cores
@@ -676,7 +676,7 @@ class _SystemMap:
                     declared_by_name.setdefault(fname, []).append((psid, fe))
         norm_to_platform: dict[str, str] = {}
         for psid in config.get("systems", {}):
-            norm_to_platform.setdefault(_norm_system_id(psid), psid)
+            norm_to_platform.setdefault(norm_system_id(psid), psid)
         return cls(
             set(config.get("systems", {}).keys()), declared_by_name, norm_to_platform, db,
         )
@@ -685,7 +685,7 @@ class _SystemMap:
         """Map a profile system ID to the platform's system ID."""
         if profile_sid in self.platform_sys_ids:
             return profile_sid
-        return self.norm_to_platform.get(_norm_system_id(profile_sid), profile_sid)
+        return self.norm_to_platform.get(norm_system_id(profile_sid), profile_sid)
 
     def attribute(self, fe: dict, own: str | None, on_platform: set[str]) -> list[str]:
         """The platform systems an entry belongs to, [] when nothing decides.
@@ -962,12 +962,12 @@ def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
     correct while the export corrected hashes the diff never named. An entry
     never answers for two.
     """
-    from resolve.reconcile import _is_placeholder, is_label, pair_entries, platform_declares
+    from resolve.reconcile import is_placeholder, is_label, pair_entries, platform_declares
 
     truth_files = [
         fe for fe in truth_sys.get("files", [])
         if fe.get("name") and not fe["name"].startswith("_")
-        and not _is_placeholder(fe["name"])
+        and not is_placeholder(fe["name"])
     ]
     scraped_files = scraped_sys.get("files", [])
 
@@ -1074,7 +1074,7 @@ def _update_summary(summary: dict, sys_div: dict) -> None:
 def diff_platform_truth(truth: dict, scraped: dict) -> dict:
     """Compare truth YAML against scraped YAML, returning divergences.
 
-    System IDs are matched using normalized forms (via _norm_system_id) to
+    System IDs are matched using normalized forms (via norm_system_id) to
     handle naming differences between emulator profiles and scraped platforms
     (e.g. 'sega-game-gear' vs 'sega-gamegear').
     """
@@ -1099,13 +1099,13 @@ def diff_platform_truth(truth: dict, scraped: dict) -> dict:
     # Build normalized-ID lookup for truth systems
     norm_to_truth: dict[str, str] = {}
     for sid in truth_systems:
-        norm_to_truth[_norm_system_id(sid)] = sid
+        norm_to_truth[norm_system_id(sid)] = sid
 
     # Match scraped systems to truth via normalized IDs
     matched_truth: set[str] = set()
 
     for s_sid in sorted(scraped_systems):
-        norm = _norm_system_id(s_sid)
+        norm = norm_system_id(s_sid)
         t_sid = norm_to_truth.get(norm)
 
         if t_sid is None:

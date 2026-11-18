@@ -30,7 +30,7 @@ from core import sect233r1 as ec
 class FieldArithmetic(unittest.TestCase):
     """GF(2^233) with the reduction polynomial t^233 + t^74 + 1."""
 
-    VALUES = (1, 2, 3, 0x1234567, ec._Gx, ec._Gy, (1 << 232) | 1)
+    VALUES = (1, 2, 3, 0x1234567, ec.Gx, ec.Gy, (1 << 232) | 1)
 
     def test_reduction_keeps_the_degree_below_the_field_size(self):
         for value in (1 << 300, (1 << 466) - 1, ec._F, ec._F << 5):
@@ -49,7 +49,7 @@ class FieldArithmetic(unittest.TestCase):
                 self.assertEqual(ec._gf_mul(a, b), ec._gf_mul(b, a))
 
     def test_multiplication_is_associative(self):
-        a, b, c = ec._Gx, ec._Gy, 0x1234567
+        a, b, c = ec.Gx, ec.Gy, 0x1234567
         self.assertEqual(
             ec._gf_mul(ec._gf_mul(a, b), c), ec._gf_mul(a, ec._gf_mul(b, c))
         )
@@ -79,44 +79,44 @@ class CurveParameters(unittest.TestCase):
         return left == right
 
     def test_the_generator_satisfies_the_curve_equation(self):
-        self.assertTrue(self._on_curve((ec._Gx, ec._Gy)))
+        self.assertTrue(self._on_curve((ec.Gx, ec.Gy)))
 
     def test_multiplying_the_generator_by_the_group_order_gives_infinity(self):
         """The definitive check on the point arithmetic."""
-        self.assertIsNone(ec._ec_mul(ec._N, (ec._Gx, ec._Gy)))
+        self.assertIsNone(ec.ec_mul(ec.N, (ec.Gx, ec.Gy)))
 
     def test_scalar_multiplication_agrees_with_repeated_addition(self):
-        g = (ec._Gx, ec._Gy)
+        g = (ec.Gx, ec.Gy)
         accumulated = None
         for k in range(1, 9):
             accumulated = ec._ec_add(accumulated, g)
-            self.assertEqual(ec._ec_mul(k, g), accumulated, f"k={k}")
+            self.assertEqual(ec.ec_mul(k, g), accumulated, f"k={k}")
 
     def test_doubling_agrees_with_adding_a_point_to_itself(self):
-        g = (ec._Gx, ec._Gy)
+        g = (ec.Gx, ec.Gy)
         self.assertEqual(ec._ec_double(g), ec._ec_add(g, g))
 
     def test_infinity_is_the_additive_identity(self):
-        g = (ec._Gx, ec._Gy)
+        g = (ec.Gx, ec.Gy)
         self.assertEqual(ec._ec_add(g, None), g)
         self.assertEqual(ec._ec_add(None, g), g)
         self.assertIsNone(ec._ec_add(None, None))
-        self.assertIsNone(ec._ec_mul(0, g))
+        self.assertIsNone(ec.ec_mul(0, g))
 
     def test_modular_inverse_round_trips(self):
-        for a in (1, 2, 3, 12345, ec._N - 1):
-            self.assertEqual((a * ec._modinv(a, ec._N)) % ec._N, 1)
+        for a in (1, 2, 3, 12345, ec.N - 1):
+            self.assertEqual((a * ec._modinv(a, ec.N)) % ec.N, 1)
 
 
 def _sign(message: bytes, private: int, nonce: int) -> bytes:
     """ECDSA-SHA256 signing, so verification has something real to check."""
-    g = (ec._Gx, ec._Gy)
-    point = ec._ec_mul(nonce, g)
-    r = point[0] % ec._N
+    g = (ec.Gx, ec.Gy)
+    point = ec.ec_mul(nonce, g)
+    r = point[0] % ec.N
     digest = int.from_bytes(hashlib.sha256(message).digest(), "big")
     if ec._N_BITLEN < 256:
         digest >>= 256 - ec._N_BITLEN
-    s = (ec._modinv(nonce, ec._N) * (digest + r * private)) % ec._N
+    s = (ec._modinv(nonce, ec.N) * (digest + r * private)) % ec.N
     return r.to_bytes(30, "big") + s.to_bytes(30, "big")
 
 
@@ -127,7 +127,7 @@ class EcdsaVerification(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        point = ec._ec_mul(cls.PRIVATE, (ec._Gx, ec._Gy))
+        point = ec.ec_mul(cls.PRIVATE, (ec.Gx, ec.Gy))
         cls.public = point[0].to_bytes(30, "big") + point[1].to_bytes(30, "big")
         cls.signature = _sign(cls.MESSAGE, cls.PRIVATE, cls.NONCE)
 
@@ -149,7 +149,7 @@ class EcdsaVerification(unittest.TestCase):
         )
 
     def test_another_public_key_is_rejected(self):
-        other = ec._ec_mul(self.PRIVATE + 1, (ec._Gx, ec._Gy))
+        other = ec.ec_mul(self.PRIVATE + 1, (ec.Gx, ec.Gy))
         encoded = other[0].to_bytes(30, "big") + other[1].to_bytes(30, "big")
         self.assertFalse(
             ec.ecdsa_verify_sha256(self.MESSAGE, self.signature, encoded)
@@ -162,7 +162,7 @@ class EcdsaVerification(unittest.TestCase):
         )
 
     def test_out_of_range_scalars_are_rejected(self):
-        for bad in (b"\x00" * 30, ec._N.to_bytes(30, "big")):
+        for bad in (b"\x00" * 30, ec.N.to_bytes(30, "big")):
             self.assertFalse(
                 ec.ecdsa_verify_sha256(self.MESSAGE, bad + self.signature[30:], self.public)
             )

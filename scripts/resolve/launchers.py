@@ -205,7 +205,7 @@ def _bios_relative(directory: str, base: str) -> str | None:
     return None if re.search(r"[\s<>]", relative) else relative
 
 
-def _directories(record: dict, base: str) -> list[str] | None:
+def record_directories(record: dict, base: str) -> list[str] | None:
     """The directories a record reads, in order. None when the code says none.
 
     ``search_dir`` transcribes the code, conditions included: "bios/chihiro,
@@ -230,7 +230,7 @@ def _directories(record: dict, base: str) -> list[str] | None:
     return found
 
 
-def _names(record: dict) -> list[str]:
+def record_names(record: dict) -> list[str]:
     """The file names a record tries, placeholders expanded in code order."""
     expands = record.get("expands") or {}
     names: list[str] = []
@@ -591,8 +591,8 @@ def launcher_places(
         kind = record.get("kind")
         if kind not in PLACE_KINDS:
             continue
-        names = _names(record)
-        directories = _directories(record, base)
+        names = record_names(record)
+        directories = record_directories(record, base)
         if not names or directories == []:
             continue
         anchored = directories is not None
@@ -869,7 +869,7 @@ def handed_directories(
                         handles=handles,
                         source_ref=str(record.get("source_ref", "")),
                         roms_place=None if folder is not None else (
-                            _roms_place(config, folder_in_roms(part, config))
+                            roms_place_of(config, folder_in_roms(part, config))
                             or _configs_place(folder_in_configs(part, config))
                             or _emulators_place(folder_in_emulators(part, config))
                         ),
@@ -893,7 +893,7 @@ def _emulators_place(path: str | None) -> Place | None:
     return None if path is None else (EMULATORS_TREE, path)
 
 
-def _roms_place(config: dict, path: str | None) -> Place | None:
+def roms_place_of(config: dict, path: str | None) -> Place | None:
     """A path below the roms root as a place: in the install tree when the
     platform installs above its BIOS folder (AmberELEC), else the roms tree."""
     if path is None:
@@ -984,7 +984,7 @@ def executed_files(config: dict) -> list[ExecutedFile]:
         if str(record.get("passes_to") or "").strip() != "exec":
             continue
         raw = str(record.get("search_dir") or "").strip()
-        directories = _directories(record, base)
+        directories = record_directories(record, base)
         roms = folder_in_roms(raw, config) if raw and not directories else None
         emulator_folder = folder_in_emulators(raw, config) if raw and not directories else None
         # A program file needs no extension (pico8, vox): the names are
@@ -997,7 +997,7 @@ def executed_files(config: dict) -> list[ExecutedFile]:
                     f"{directories[0]}/{name}" if directories[0] else name
                 ))
             elif roms is not None:
-                place = _roms_place(config, sanitize_pack_path(f"{roms}/{name}" if roms else name))
+                place = roms_place_of(config, sanitize_pack_path(f"{roms}/{name}" if roms else name))
             elif emulator_folder is not None:
                 place = (EMULATORS_TREE, sanitize_pack_path(f"{emulator_folder}/{name}"))
             else:

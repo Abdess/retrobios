@@ -19,11 +19,11 @@ from dataclasses import dataclass
 
 from resolve import regions as resolve_regions
 from resolve import slot as slot_mod
-from model.systems import _norm_system_id
+from model.systems import norm_system_id
 from core.paths import declared_destination
 from packs.extras import (
-    _kept,
-    _serving_system_ids,
+    kept_entries,
+    serving_system_ids,
     extra_region_groups,
     extra_region_key,
     system_spellings,
@@ -54,11 +54,11 @@ class SelectionIndex:
     ) -> SelectionIndex:
         by_norm: dict[str, set[str]] = {}
         for sys_id in pack_systems:
-            by_norm.setdefault(_norm_system_id(sys_id), set()).add(sys_id)
+            by_norm.setdefault(norm_system_id(sys_id), set()).add(sys_id)
 
         declared_by: dict[str, set[str]] = {}
         for sys_id, system in pack_systems.items():
-            for file_entry in _kept(system.get("files", []), required_only):
+            for file_entry in kept_entries(system.get("files", []), required_only):
                 dest = declared_destination(file_entry)
                 if dest:
                     declared_by.setdefault(dest, set()).add(sys_id)
@@ -76,9 +76,9 @@ class SelectionIndex:
             )
             # A profile system the platform does not have is no system the
             # pack's --system accepts: it would offer what the pack refuses.
-            for sys_id in _serving_system_ids(extra):
+            for sys_id in serving_system_ids(extra):
                 owned_by.setdefault(dest, set()).update(
-                    by_norm.get(_norm_system_id(sys_id), ())
+                    by_norm.get(norm_system_id(sys_id), ())
                 )
 
         systems_by_dest = {

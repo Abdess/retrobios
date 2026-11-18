@@ -11,9 +11,9 @@ from typing import TYPE_CHECKING, TypedDict
 from core.options import reject_unknown
 from model.platforms import load_platform_config
 from model.profiles import ProfileSelectionError, load_emulator_profiles, select_emulator_profiles
-from packs.archive import _add_pack_member, _writing_pack
-from packs.naming import _name_part, _narrowings
-from packs.paths import _resolve_destination
+from packs.archive import add_pack_member, writing_pack
+from packs.naming import file_name_part, pack_narrowings
+from packs.paths import resolve_destination
 from resolve.packfiles import resolve_file, sha1_for_hash
 
 if TYPE_CHECKING:
@@ -134,7 +134,7 @@ def _md5_pack_name(
     # take the name of a run without it.
     custom_tags = "".join(
         tag
-        for tag, _label in _narrowings(
+        for tag, _label in pack_narrowings(
             "full", None, None, False, False, standalone=opts.standalone
         )
     )
@@ -144,7 +144,7 @@ def _md5_pack_name(
         "\n".join(sorted(f"{kind}:{value.lower()}" for kind, value in hashes)).encode()
     ).hexdigest()[:8]
     return (
-        f"{_name_part(context_name, '_')}{mode_part}_Custom_{selection}{custom_tags}"
+        f"{file_name_part(context_name, '_')}{mode_part}_Custom_{selection}{custom_tags}"
         "_BIOS_Pack.zip"
     )
 
@@ -166,7 +166,7 @@ def _md5_destination(entry: dict, layout: _Md5Layout, opts: _Md5Settings) -> str
         if opts.emulator_name:
             # Laid out as the emulator pack lays it out: its path and
             # its standalone_path, which --standalone has to reach.
-            dest = _resolve_destination(matched_fe, opts.standalone)
+            dest = resolve_destination(matched_fe, opts.standalone)
         else:
             dest = matched_fe.get("destination", matched_fe.get("name", name))
     elif paths:
@@ -202,7 +202,7 @@ def generate_md5_pack(
     not_in_db: list[str] = []
     seen: set[str] = set()
 
-    with _writing_pack(zip_path) as zf:
+    with writing_pack(zip_path) as zf:
         for hash_type, hash_val in hashes:
             sha1 = sha1_for_hash(hash_type, hash_val, db)
             if not sha1:
@@ -225,7 +225,7 @@ def generate_md5_pack(
                 not_in_repo.append((name, hash_val))
                 continue
 
-            _add_pack_member(zf, local_path, full_dest)
+            add_pack_member(zf, local_path, full_dest)
             packed.append((name, hash_val))
 
     total = len(hashes)

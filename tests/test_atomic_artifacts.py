@@ -222,7 +222,7 @@ class ScratchFilesGetThePlainMode(unittest.TestCase):
         from packs import finalize
 
         pack = self.dir / "Pack.zip"
-        with archive._writing_pack(str(pack)) as zf:
+        with archive.writing_pack(str(pack)) as zf:
             zf.writestr("a.bin", b"x")
         self.assertEqual(self._mode(pack), 0o644)
         os.chmod(pack, 0o600)
@@ -315,9 +315,9 @@ class ATerminatedBuildLeavesNoScratch(unittest.TestCase):
         "import sys, time\n"
         "sys.path.insert(0, 'scripts')\n"
         "from core.cli import run_cli\n"
-        "from packs.archive import _writing_pack\n"
+        "from packs.archive import writing_pack\n"
         "def main():\n"
-        "    with _writing_pack(sys.argv[1]) as zf:\n"
+        "    with writing_pack(sys.argv[1]) as zf:\n"
         "        zf.writestr('a.bin', b'x')\n"
         "        print('writing', flush=True)\n"
         "        time.sleep(60)\n"

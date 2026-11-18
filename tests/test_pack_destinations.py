@@ -29,9 +29,9 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 class _Fixture(unittest.TestCase):
     def setUp(self) -> None:
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         (REPO_ROOT / "tmp").mkdir(exist_ok=True)
         self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         self.addCleanup(shutil.rmtree, self.root, True)
@@ -175,9 +175,9 @@ class EveryNarrowingIsCompared(unittest.TestCase):
         import inspect
 
         import pipeline
-        from packs.naming import _narrowings
+        from packs.naming import pack_narrowings
 
-        dimensions = set(inspect.signature(_narrowings).parameters)
+        dimensions = set(inspect.signature(pack_narrowings).parameters)
         compared = set(pipeline.NARROWINGS_COMPARED)
         exempt = set(pipeline.NARROWINGS_NOT_COMPARED)
         self.assertFalse(compared & exempt)
@@ -192,10 +192,10 @@ class EveryNarrowingIsCompared(unittest.TestCase):
         import inspect
 
         import pipeline
-        from packs.naming import _narrowings
+        from packs.naming import pack_narrowings
         from packs.emulatorpack import generate_emulator_pack
 
-        taken = (set(inspect.signature(_narrowings).parameters)
+        taken = (set(inspect.signature(pack_narrowings).parameters)
                  & set(inspect.signature(generate_emulator_pack).parameters))
         self.assertEqual(taken, set(pipeline.EMULATOR_NARROWINGS_COMPARED))
         profile = {"files": [{"name": "a.bin", "region": "japan"},

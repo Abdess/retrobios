@@ -17,7 +17,7 @@ import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from model.database import load_database
 from core.artifacts import repository_output_lock
-from sitegen.readme import _write, generate_readme
+from sitegen.readme import write_readme, generate_readme
 
 
 def main() -> None:
@@ -44,7 +44,7 @@ def main() -> None:
     with repository_output_lock("README.md"), contextlib.ExitStack() as held:
         hold_data_dirs(held, load_data_dir_registry(args.platforms_dir))
         readme = generate_readme(db, args.platforms_dir, args.db)
-        _write(readme)
+        write_readme(readme)
 
 
 if __name__ == "__main__":

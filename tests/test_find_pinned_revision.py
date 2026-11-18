@@ -27,7 +27,7 @@ class ThePinnedRevisionIsInTheHistory(unittest.TestCase):
         def fetch(url, *_a, **_k):
             return next(data for sha, data in blobs.items() if f"/{sha}/" in url)
 
-        with mock.patch.object(upstream, "_api", api), mock.patch.object(upstream, "_fetch", fetch):
+        with mock.patch.object(upstream, "cached_api", api), mock.patch.object(upstream, "fetch_body", fetch):
             found = history.find_revision(
                 repo, "dists/engine-data/queen.tbl",
                 hashlib.md5(b"pinned").hexdigest(), "unused")

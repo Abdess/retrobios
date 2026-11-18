@@ -134,14 +134,14 @@ class ReadsTheRecordedSourceOffline(unittest.TestCase):
                     return int(exc.code or 0)
             return 0
 
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.assertEqual(run(), 0)
         stale = emulators / "snes9x.yml"
         stale.write_text(stale.read_text(encoding="utf-8").replace("1.63", "1.61"),
                          encoding="utf-8")
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.assertEqual(run(), 1)
 
 

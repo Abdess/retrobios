@@ -18,8 +18,6 @@ from model import siteinputs
 from sitegen import markup
 
 
-ROOT = REPO_ROOT
-
 PLACEHOLDER = re.compile(r"(?m)^([ \t]*)<!--\s*image:\s*([A-Za-z0-9_-]+)\s*-->[ \t]*$")
 PLACEHOLDER_ANYWHERE = re.compile(r"<!--\s*image:\s*([A-Za-z0-9_-]+)\s*-->")
 
@@ -76,7 +74,7 @@ def wrap(text: str, width: float, size: float, bold: bool = False) -> list[str]:
     return lines
 
 
-def _n(value: float) -> str:
+def svg_number(value: float) -> str:
     text = f"{value:.1f}"
     return text[:-2] if text.endswith(".0") else text
 
@@ -104,48 +102,48 @@ class Figure:
 # Drawing primitives
 
 
-def _text(x: float, y: float, value: str, size: float = TEXT_SIZE,
+def svg_text(x: float, y: float, value: str, size: float = TEXT_SIZE,
           bold: bool = False, anchor: str = "start", cls: str = "") -> str:
     weight = ' font-weight="600"' if bold else ""
     klass = f' class="{cls}"' if cls else ""
     style = f' style="{MONO_STYLE}"' if isinstance(value, Mono) else ""
     fill = MUTED if cls == "rb-d-muted" else ("#ffffff" if cls == "rb-d-numtext" else INK)
     return (
-        f'<text x="{_n(x)}" y="{_n(y)}" font-size="{_n(size)}"{weight} '
+        f'<text x="{svg_number(x)}" y="{svg_number(y)}" font-size="{svg_number(size)}"{weight} '
         f'text-anchor="{anchor}" fill="{fill}"{klass}{style}>{escape(value)}</text>'
     )
 
 
-def _rect(x: float, y: float, w: float, h: float, accent: bool = False) -> str:
+def svg_rect(x: float, y: float, w: float, h: float, accent: bool = False) -> str:
     cls = "rb-d-box rb-d-accent" if accent else "rb-d-box"
     stroke = ACCENT if accent else STROKE
     width = 2 if accent else 1
     return (
-        f'<rect x="{_n(x)}" y="{_n(y)}" width="{_n(w)}" height="{_n(h)}" rx="4" '
+        f'<rect x="{svg_number(x)}" y="{svg_number(y)}" width="{svg_number(w)}" height="{svg_number(h)}" rx="4" '
         f'fill="{FILL}" stroke="{stroke}" stroke-width="{width}" class="{cls}"/>'
     )
 
 
-def _badge_side(number: str) -> float:
+def badge_side(number: str) -> float:
     return max(20.0, _width(number, 11, True) + 10)
 
 
-def _badge(x: float, y: float, number: str) -> list[str]:
-    side = _badge_side(number)
+def badge(x: float, y: float, number: str) -> list[str]:
+    side = badge_side(number)
     return [
-        f'<rect x="{_n(x)}" y="{_n(y)}" width="{_n(side)}" height="20" rx="3" '
+        f'<rect x="{svg_number(x)}" y="{svg_number(y)}" width="{svg_number(side)}" height="20" rx="3" '
         f'fill="{ACCENT}" class="rb-d-num"/>',
-        _text(x + side / 2, y + 14, number, 11, True, "middle", "rb-d-numtext"),
+        svg_text(x + side / 2, y + 14, number, 11, True, "middle", "rb-d-numtext"),
     ]
 
 
-def _line(points: list[tuple[float, float]], head: bool = True) -> list[str]:
+def svg_connector(points: list[tuple[float, float]], head: bool = True) -> list[str]:
     """A connector through *points*, with a drawn arrowhead at the end.
 
     The head is a small triangle, never a text glyph.
     """
     path = " ".join(
-        f"{'M' if index == 0 else 'L'}{_n(x)} {_n(y)}" for index, (x, y) in enumerate(points)
+        f"{'M' if index == 0 else 'L'}{svg_number(x)} {svg_number(y)}" for index, (x, y) in enumerate(points)
     )
     out = [
         f'<path d="{path}" fill="none" stroke="{STROKE}" stroke-width="1.5" class="rb-d-line"/>'
@@ -159,7 +157,7 @@ def _line(points: list[tuple[float, float]], head: bool = True) -> list[str]:
             sign = 1 if x2 > x1 else -1
             tri = [(x2, y2), (x2 - 8 * sign, y2 - 5), (x2 - 8 * sign, y2 + 5)]
         out.append(
-            '<path d="M' + " L".join(f"{_n(x)} {_n(y)}" for x, y in tri)
+            '<path d="M' + " L".join(f"{svg_number(x)} {svg_number(y)}" for x, y in tri)
             + f' Z" fill="{STROKE}" class="rb-d-head"/>'
         )
     return out
@@ -168,7 +166,7 @@ def _line(points: list[tuple[float, float]], head: bool = True) -> list[str]:
 def box_lines(box: Box, width: float) -> tuple[list[str], list[str]]:
     """The title and body lines of *box* drawn *width* wide, as wrapped."""
     inner = width - 2 * PAD
-    title_lines = wrap(box.title, inner - (_badge_side(box.number) + 8 if box.number else 0),
+    title_lines = wrap(box.title, inner - (badge_side(box.number) + 8 if box.number else 0),
                        TITLE_SIZE, True)
     body: list[str] = []
     for line in box.lines:
@@ -186,18 +184,18 @@ def _box_height(box: Box, width: float) -> tuple[list[str], list[str], float]:
 
 def _draw_box(box: Box, x: float, y: float, width: float, height: float,
               title_lines: list[str], body: list[str]) -> list[str]:
-    out = [_rect(x, y, width, height, box.accent)]
+    out = [svg_rect(x, y, width, height, box.accent)]
     tx = x + PAD
     if box.number:
-        out.extend(_badge(x + PAD, y + PAD, box.number))
-        tx += _badge_side(box.number) + 8
+        out.extend(badge(x + PAD, y + PAD, box.number))
+        tx += badge_side(box.number) + 8
     cy = y + PAD + 15
     for line in title_lines:
-        out.append(_text(tx, cy, line, TITLE_SIZE, True))
+        out.append(svg_text(tx, cy, line, TITLE_SIZE, True))
         cy += LINE
     cy += 6
     for line in body:
-        out.append(_text(x + PAD, cy, line, TEXT_SIZE, cls="rb-d-muted"))
+        out.append(svg_text(x + PAD, cy, line, TEXT_SIZE, cls="rb-d-muted"))
         cy += LINE
     return out
 
@@ -214,7 +212,7 @@ def flow(boxes: list[Box], vertical: bool, total: float) -> tuple[float, float, 
             out.extend(_draw_box(box, 1, y, width - 2, height, title_lines, body))
             y += height
             if index < len(boxes) - 1:
-                out.extend(_line([(width / 2, y), (width / 2, y + 22)]))
+                out.extend(svg_connector([(width / 2, y), (width / 2, y + 22)]))
                 y += 24
         return width, y + 1, out
     gap = 26.0
@@ -228,7 +226,7 @@ def flow(boxes: list[Box], vertical: bool, total: float) -> tuple[float, float, 
         out.extend(_draw_box(box, x, 1, width, height, title_lines, body))
         if index < len(boxes) - 1:
             mid = 1 + height / 2
-            out.extend(_line([(x + width, mid), (x + width + gap - 1, mid)]))
+            out.extend(svg_connector([(x + width, mid), (x + width + gap - 1, mid)]))
     return total, height + 2, out
 
 
@@ -267,11 +265,11 @@ def grid(boxes: list[Box], per_row: int, total: float) -> tuple[float, float, li
             x = 1 + index * (width + gap_x)
             if previous_end is not None and index == 0:
                 px, py = previous_end
-                out.extend(_line([(px, py), (px, py + gap_y / 2), (x + width / 2, py + gap_y / 2),
+                out.extend(svg_connector([(px, py), (px, py + gap_y / 2), (x + width / 2, py + gap_y / 2),
                                   (x + width / 2, y)]))
             out.extend(_draw_box(box, x, y, width, height, title_lines, body))
             if index < len(row) - 1:
-                out.extend(_line([(x + width, y + height / 2), (x + width + gap_x - 1, y + height / 2)]))
+                out.extend(svg_connector([(x + width, y + height / 2), (x + width + gap_x - 1, y + height / 2)]))
             previous_end = (x + width / 2, y + height)
         y += height + gap_y
     return total, y - gap_y + 1, out
@@ -281,8 +279,8 @@ def svg_document(width: float, height: float, title: str, desc: str, body: list[
                  base: str) -> str:
     """A drawing as a standalone, accessible SVG element."""
     return (
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {_n(width)} {_n(height)}" '
-        f'width="{_n(width)}" height="{_n(height)}" role="img" '
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {svg_number(width)} {svg_number(height)}" '
+        f'width="{svg_number(width)}" height="{svg_number(height)}" role="img" '
         f'aria-labelledby="{base}-t {base}-d" font-family="{FONT}">'
         f'<title id="{base}-t">{escape(title)}</title>'
         f'<desc id="{base}-d">{escape(desc)}</desc>'
@@ -539,7 +537,7 @@ MINUI_EXAMPLES = (("Sony PlayStation", "PS"), ("Game Boy Advance", "GBA"), ("Seg
 
 @cache
 def minui_files() -> dict[str, list[str]]:
-    manifest = json.loads((ROOT / "install" / "minui.json").read_text(encoding="utf-8"))
+    manifest = json.loads((REPO_ROOT / "install" / "minui.json").read_text(encoding="utf-8"))
     by_tag: dict[str, list[str]] = {}
     for entry in manifest.get("files", []):
         parts = str(entry.get("dest", "")).split("/")
@@ -551,23 +549,23 @@ def minui_files() -> dict[str, list[str]]:
 def _minui_wide() -> tuple[float, float, list[str]]:
     out: list[str] = []
     left_x, right_x, row = 1.0, 430.0, 22.0
-    out.append(_text(left_x, 16, "Roms/", TITLE_SIZE, True))
-    out.append(_text(right_x, 16, "Bios/", TITLE_SIZE, True))
+    out.append(svg_text(left_x, 16, "Roms/", TITLE_SIZE, True))
+    out.append(svg_text(right_x, 16, "Bios/", TITLE_SIZE, True))
     y = 30.0
     for name, tag in MINUI_EXAMPLES:
         files = minui_files().get(tag, [])
         shown = files[:2] + ([f"and {len(files) - 2} more"] if len(files) > 2 else [])
         height = max(row + 8, 14 + row * (1 + len(shown)))
         label = f"{name} ({tag})/"
-        out.append(_rect(left_x + 14, y, 250, row + 8))
-        out.append(_text(left_x + 24, y + 19, label, TEXT_SIZE, True))
-        out.append(_rect(right_x + 14, y, 250, height))
-        out.append(_text(right_x + 24, y + 19, f"{tag}/", TEXT_SIZE, True))
+        out.append(svg_rect(left_x + 14, y, 250, row + 8))
+        out.append(svg_text(left_x + 24, y + 19, label, TEXT_SIZE, True))
+        out.append(svg_rect(right_x + 14, y, 250, height))
+        out.append(svg_text(right_x + 24, y + 19, f"{tag}/", TEXT_SIZE, True))
         for index, file_name in enumerate(shown):
-            out.append(_text(right_x + 40, y + 19 + row * (index + 1), file_name, TEXT_SIZE,
+            out.append(svg_text(right_x + 40, y + 19 + row * (index + 1), file_name, TEXT_SIZE,
                              cls="rb-d-muted"))
-        out.extend(_line([(left_x + 264, y + (row + 8) / 2), (right_x + 13, y + (row + 8) / 2)]))
-        out.append(_text((left_x + 264 + right_x + 14) / 2, y + (row + 8) / 2 - 6,
+        out.extend(svg_connector([(left_x + 264, y + (row + 8) / 2), (right_x + 13, y + (row + 8) / 2)]))
+        out.append(svg_text((left_x + 264 + right_x + 14) / 2, y + (row + 8) / 2 - 6,
                          f"tag {tag}", 11, anchor="middle", cls="rb-d-muted"))
         y += height + 14
     return WIDE, y - 12, out
@@ -578,10 +576,10 @@ def _minui_narrow() -> tuple[float, float, list[str]]:
     y = 1.0
     for name, tag in MINUI_EXAMPLES:
         files = minui_files().get(tag, [])
-        out.append(_rect(1, y, NARROW - 2, 30))
-        out.append(_text(11, y + 20, f"Roms/{name} ({tag})/", TEXT_SIZE, True))
-        out.extend(_line([(NARROW / 2, y + 30), (NARROW / 2, y + 52)]))
-        out.append(_text(NARROW / 2 + 10, y + 45, f"tag {tag}", 11, cls="rb-d-muted"))
+        out.append(svg_rect(1, y, NARROW - 2, 30))
+        out.append(svg_text(11, y + 20, f"Roms/{name} ({tag})/", TEXT_SIZE, True))
+        out.extend(svg_connector([(NARROW / 2, y + 30), (NARROW / 2, y + 52)]))
+        out.append(svg_text(NARROW / 2 + 10, y + 45, f"tag {tag}", 11, cls="rb-d-muted"))
         y += 54
         detail = ""
         if len(files) == 1:
@@ -589,17 +587,17 @@ def _minui_narrow() -> tuple[float, float, list[str]]:
         elif files:
             detail = f"{len(files)} files, such as {files[0]}"
         height = 30 + (LINE if detail else 0)
-        out.append(_rect(1, y, NARROW - 2, height, accent=True))
-        out.append(_text(11, y + 20, f"Bios/{tag}/", TEXT_SIZE, True))
+        out.append(svg_rect(1, y, NARROW - 2, height, accent=True))
+        out.append(svg_text(11, y + 20, f"Bios/{tag}/", TEXT_SIZE, True))
         if detail:
-            out.append(_text(11, y + 20 + LINE, detail, TEXT_SIZE, cls="rb-d-muted"))
+            out.append(svg_text(11, y + 20 + LINE, detail, TEXT_SIZE, cls="rb-d-muted"))
         y += height + 18
     return NARROW, y - 17, out
 
 
 def _pipeline_boxes() -> list[Box]:
     """The steps pipeline.py runs, read from its STEP_LABELS literal."""
-    tree = ast.parse((ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8"))
+    tree = ast.parse((REPO_ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8"))
     for node in ast.walk(tree):
         if isinstance(node, ast.Assign):
             target: ast.expr = node.targets[0]
@@ -638,15 +636,15 @@ def _layers(vertical: bool) -> tuple[float, float, list[str]]:
         px, py, pw, ph = place(platform, 1, 1, 200)
         sx, sy, sw, sh = place(shared, 1, py + ph + 26, 200)
         ex, ey, ew, eh = place(profiles, 1, sy + sh + 26, 200)
-        out.extend(_line([(sx + sw / 2, sy), (px + pw / 2, py + ph)]))
-        out.extend(_line([(sx + sw / 2, sy + sh), (ex + ew / 2, ey)]))
+        out.extend(svg_connector([(sx + sw / 2, sy), (px + pw / 2, py + ph)]))
+        out.extend(svg_connector([(sx + sw / 2, sy + sh), (ex + ew / 2, ey)]))
         _, _, pack_h = _box_height(pack, 200)
         gx, gy, gw, gh = place(pack, 270, sy + (sh - pack_h) / 2, 200)
-        out.extend(_line([(px + pw, py + ph / 2), (240, py + ph / 2), (240, gy + 20), (gx - 1, gy + 20)]))
-        out.extend(_line([(ex + ew, ey + eh / 2), (240, ey + eh / 2), (240, gy + gh - 20),
+        out.extend(svg_connector([(px + pw, py + ph / 2), (240, py + ph / 2), (240, gy + 20), (gx - 1, gy + 20)]))
+        out.extend(svg_connector([(ex + ew, ey + eh / 2), (240, ey + eh / 2), (240, gy + gh - 20),
                           (gx - 1, gy + gh - 20)]))
         zx, zy, zw, zh = place(zip_box, 518, gy + (gh - 42) / 2, 200)
-        out.extend(_line([(gx + gw, gy + gh / 2), (zx - 1, gy + gh / 2)]))
+        out.extend(svg_connector([(gx + gw, gy + gh / 2), (zx - 1, gy + gh / 2)]))
         return WIDE, max(ey + eh, gy + gh) + 2, out
 
     w = NARROW - 2
@@ -654,14 +652,14 @@ def _layers(vertical: bool) -> tuple[float, float, list[str]]:
     sx, sy, sw, sh = place(shared, 1, 1, w)
     px, py, pw, ph = place(platform, 1, sy + sh + 26, half)
     ex, ey, ew, eh = place(profiles, 15 + half, py, half)
-    out.extend(_line([(px + pw / 2, sy + sh), (px + pw / 2, py)]))
-    out.extend(_line([(ex + ew / 2, sy + sh), (ex + ew / 2, ey)]))
+    out.extend(svg_connector([(px + pw / 2, sy + sh), (px + pw / 2, py)]))
+    out.extend(svg_connector([(ex + ew / 2, sy + sh), (ex + ew / 2, ey)]))
     bottom = max(py + ph, ey + eh)
     gx, gy, gw, gh = place(pack, 1, bottom + 26, w)
-    out.extend(_line([(px + pw / 2, py + ph), (px + pw / 2, gy)]))
-    out.extend(_line([(ex + ew / 2, ey + eh), (ex + ew / 2, gy)]))
+    out.extend(svg_connector([(px + pw / 2, py + ph), (px + pw / 2, gy)]))
+    out.extend(svg_connector([(ex + ew / 2, ey + eh), (ex + ew / 2, gy)]))
     zx, zy, zw, zh = place(zip_box, 1, gy + gh + 26, w)
-    out.extend(_line([(NARROW / 2, gy + gh), (NARROW / 2, zy)]))
+    out.extend(svg_connector([(NARROW / 2, gy + gh), (NARROW / 2, zy)]))
     return NARROW, zy + zh + 2, out
 
 
@@ -791,8 +789,8 @@ def unresolved_images(markdown: str) -> list[str]:
 
 # Local copies of images the site used to load from other hosts.
 
-LOGO_DIR = ROOT / "docs_assets" / "logos"
-ICON_DIR = ROOT / "docs_assets" / "system-icons"
+LOGO_DIR = REPO_ROOT / "docs_assets" / "logos"
+ICON_DIR = REPO_ROOT / "docs_assets" / "system-icons"
 SITE_LOGO_DIR = "assets/logos"
 SITE_ICON_DIR = "assets/system-icons"
 IMAGE_LINK = re.compile(r"(!\[[^\]\n]*\]\()(https?://[^)\s]+)(\))")
@@ -912,7 +910,7 @@ def _string(node: ast.expr, constants: dict[str, str]) -> str:
 @cache
 def installer_options() -> tuple[tuple[str, str], ...]:
     """(usage, help) for each option of install.py, in the order --help lists them."""
-    tree = ast.parse((ROOT / "install.py").read_text(encoding="utf-8"))
+    tree = ast.parse((REPO_ROOT / "install.py").read_text(encoding="utf-8"))
     constants = {
         node.targets[0].id: node.value.value
         for node in tree.body

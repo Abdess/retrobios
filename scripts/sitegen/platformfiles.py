@@ -9,29 +9,30 @@ import re
 import urllib.parse
 
 from model import siteinputs
-from model.collection import _profiles_in, _profiles_on_disk
+from model.collection import profiles_in, profiles_on_disk
 from model.profiles import upstream_profile_index
 from model.systemnames import system_name
 from sitegen import entries as siteentries, markup
 from sitegen.cards import SHORT_HASH
-from sitegen.config import REPO_URL, _REPO_ROOT, _date_line
-from sitegen.fields import _hash_spans, search_excluded
+from sitegen.config import REPO_URL, date_line
+from core.paths import REPO_ROOT
+from sitegen.fields import hash_spans, search_excluded
 from sitegen.parts import (
     PAGE_BYTES,
     PAGE_ELEMENTS,
     PLATFORM_PART_BUDGET,
     PLATFORM_REFERENCE_BUDGET,
     PLATFORM_SECTION_BUDGET,
-    _blocks_in_runs,
-    _characters,
-    _parent_front_matter,
+    blocks_in_runs,
+    character_count,
+    parent_front_matter,
 )
 from sitegen.render import (
-    _code,
-    _count,
-    _emulator_link,
-    _escape_tags,
-    _fmt_size,
+    code_span,
+    count_text,
+    emulator_link,
+    escape_tags,
+    fmt_size,
     card_page,
     console_href,
 )
@@ -56,14 +57,14 @@ def _system_heading_link(sys_id: str, prefix: str = "") -> str:
     writes. A system with no section of its own is named, never sent to the
     page a storage folder chose.
     """
-    return f"{_system_named_link(sys_id, prefix)} <small>{_escape_tags(sys_id)}</small>"
+    return f"{_system_named_link(sys_id, prefix)} <small>{escape_tags(sys_id)}</small>"
 
 
 def _system_named_link(sys_id: str, prefix: str = "") -> str:
     """A system's name, linked to the section system_section gives."""
     from sitegen.render import system_section
 
-    name = _escape_tags(system_name(sys_id))
+    name = escape_tags(system_name(sys_id))
     section = system_section(sys_id)
     if section is not None:
         slug, console = section
@@ -71,11 +72,11 @@ def _system_named_link(sys_id: str, prefix: str = "") -> str:
     return name
 
 
-def _emulator_named_link(key: str, prefix: str = "") -> str:
+def emulator_named_link(key: str, prefix: str = "") -> str:
     """An emulator by the name its page carries, linked to that page. A
     profile with no page (an alias, a test) is named only."""
-    profile = _profiles_on_disk().get(key, {})
-    label = _escape_tags(str(profile.get("emulator") or key))
+    profile = profiles_on_disk().get(key, {})
+    label = escape_tags(str(profile.get("emulator") or key))
     if profile.get("type") == "alias" or profile.get("role") == "test":
         return label
     return f"[{label}]({prefix}emulators/{key}.md)"
@@ -99,17 +100,17 @@ def _served_line(f: dict, declared_sha1: str = "") -> str:
     label = "Served by" if f.get("status") == "ok" else "Held, not the declared hash"
     parts = path.split("/")
     if not sha1 or len(parts) < 3 or parts[0] != "bios":
-        return f"{label}: {_code(path)}"
+        return f"{label}: {code_span(path)}"
     # The card of that copy: every hash, provenance and the download.
     page = urllib.parse.quote(card_page(path, sha1))
-    link = f"{label}: [{_code(path)}](../systems/{page}.md#sha1-{sha1[:12]})"
+    link = f"{label}: [{code_span(path)}](../systems/{page}.md#sha1-{sha1[:12]})"
     declared = {value.strip().lower() for value in declared_sha1.split(",")}
     return link if sha1 in declared else f"{link} (sha1 `{sha1[:8]}`)"
 
 
 def _launcher_refs(config: dict) -> dict[str, list[str]]:
     """Entry name, casefolded -> each launcher record that opens it, rendered."""
-    from resolve.launchers import _names as launcher_names
+    from resolve.launchers import record_names as launcher_names
     from resolve.launchers import bound_launchers
     from sitegen.sources import launcher_ref_markdown, list_source
 
@@ -121,7 +122,7 @@ def _launcher_refs(config: dict) -> dict[str, list[str]]:
     for record in bound_launchers(config):
         if not isinstance(record, dict) or not record.get("source_ref"):
             continue
-        text = (f"{_escape_tags(str(record.get('emulator', '')))} at "
+        text = (f"{escape_tags(str(record.get('emulator', '')))} at "
                 f"{launcher_ref_markdown(source, str(record['source_ref']))}")
         for name in launcher_names(record):
             names = found.setdefault(name.rsplit("/", 1)[-1].casefold(), [])
@@ -133,7 +134,7 @@ def _launcher_refs(config: dict) -> dict[str, list[str]]:
 UNPROVEN_TITLE = "Launcher records a config does not prove"
 
 
-def _launcher_unproven_section(config: dict) -> list[str]:
+def launcher_unproven_section(config: dict) -> list[str]:
     """The platform's launcher records resting on a config the code does not prove.
 
     A config file is proof only when the code installing it and the code
@@ -147,9 +148,9 @@ def _launcher_unproven_section(config: dict) -> list[str]:
         return []
     source = list_source(str(config.get("source") or ""))
     body = [
-        f"- {_escape_tags(row['emulator'])}, `{_escape_tags(row['passes_to'] or row['kind'])}` "
+        f"- {escape_tags(row['emulator'])}, `{escape_tags(row['passes_to'] or row['kind'])}` "
         f"at {launcher_ref_markdown(source, row['source_ref'])}: "
-        f"{_escape_tags('; '.join(row['missing']))}"
+        f"{escape_tags('; '.join(row['missing']))}"
         for row in rows
     ]
     return ["", *markup.details("note", f"{UNPROVEN_TITLE} ({len(rows)})", body)]
@@ -270,14 +271,14 @@ def _platform_file_row(f: dict, cfg_entry: dict, hash_type: str = "",
     facts: list[str] = []
     # One code element per value: Recalbox lists accepted md5s joined by
     # commas, and each is a value a reader compares a dump with.
-    facts.extend(f"{alg.upper()}: {_hash_spans(hashes[alg])}"
+    facts.extend(f"{alg.upper()}: {hash_spans(hashes[alg])}"
                  for alg in ("sha1", "md5", "crc32", "sha256") if hashes[alg])
     # The size closes the hash lines: a line of its own was one more
     # element per row.
     if size and facts:
-        facts[-1] += f" ({_fmt_size(size)})"
+        facts[-1] += f" ({fmt_size(size)})"
     elif size:
-        facts.append(f"Size: {_fmt_size(size)}")
+        facts.append(f"Size: {fmt_size(size)}")
     if f.get("status") == "untested" and f.get("reason"):
         facts.append(_text_html(f"Not confirmed: {f['reason']}"))
     # Not every entry is firmware: the platform may list a game's data or a
@@ -330,10 +331,10 @@ def _page_share(lines: list[str]) -> float:
     """The share of a page the lines render to, in thousandths: the rows
     are HTML already, so their length is their weight in bytes."""
     return max(_element_weight(lines) * 1000 / PAGE_ELEMENTS,
-               _characters(lines) * 1000 / PAGE_BYTES)
+               character_count(lines) * 1000 / PAGE_BYTES)
 
 
-def _render_platform_systems(
+def render_platform_systems(
     by_system: dict, config_files: dict, emulator_files: dict | None,
     platform: tuple[str, str] | None = None, moved: dict[str, str] | None = None,
     config: dict | None = None,
@@ -350,7 +351,7 @@ def _render_platform_systems(
     lines: list[str] = []
     # Per-system detail sections (collapsible for large platforms)
     use_collapsible = len(by_system) > 10
-    by_system_declared = _declared_by_system(config_files)
+    by_system_declared = declared_by_system(config_files)
     launched = _launcher_refs(config or {})
 
     sections: list[dict] = []
@@ -358,11 +359,11 @@ def _render_platform_systems(
         ok_count = sum(1 for f in files if f["status"] == "ok")
         total = len(files)
 
-        sys_emus = _system_emulators(sys_id, emulator_files, by_system_declared.get(sys_id))
+        sys_emus = system_emulators(sys_id, emulator_files, by_system_declared.get(sys_id))
         anchor = sys_id.replace(" ", "-")
         head = [f"{ok_count}/{total} files verified"]
         if sys_emus:
-            emu_links = ", ".join(_emulator_named_link(e, "../") for e in sorted(sys_emus))
+            emu_links = ", ".join(emulator_named_link(e, "../") for e in sorted(sys_emus))
             head[-1] += "\\"
             head.append(f"Emulators: {emu_links}")
         head.append("")
@@ -388,8 +389,8 @@ def _render_platform_systems(
         # Measured in the share of a page the list renders to.
         size = _page_share(body)
         if use_collapsible:
-            status_tag = "OK" if ok_count == total else _count(total - ok_count, "issue")
-            block = markup.details("note", f"{_count(total, 'file')} ({status_tag})", body)
+            status_tag = "OK" if ok_count == total else count_text(total - ok_count, "issue")
+            block = markup.details("note", f"{count_text(total, 'file')} ({status_tag})", body)
             while block and not block[-1]:
                 block.pop()
         else:
@@ -425,7 +426,7 @@ def _render_platform_systems(
         if moved is not None and platform and sys_id in own_page:
             key, display = platform
             runs = [sec["head"] + _platform_file_list(run, sec["has_path"], anchor)
-                    for run in _blocks_in_runs([[row] for row in sec["rows"]],
+                    for run in blocks_in_runs([[row] for row in sec["rows"]],
                                                PLATFORM_PART_BUDGET, _page_share)]
             stems = [f"{key}-{anchor}" + (f"-{n}" if n > 1 else "")
                      for n in range(1, len(runs) + 1)]
@@ -434,7 +435,7 @@ def _render_platform_systems(
                 # A console query landed here with no way to the console's
                 # own page: the list says whose it is first, linked.
                 moved[stem] = "\n".join([
-                    "---", *_parent_front_matter((display, f"/platforms/{key}/")), "---", "",
+                    "---", *parent_front_matter((display, f"/platforms/{key}/")), "---", "",
                     f"# {display}: {system_name(sys_id)}{part}", "",
                     f"{display}'s list for {_system_named_link(sys_id, '../')}. "
                     f"Part of the [{display} page]({key}.md#{anchor}), whose other systems "
@@ -445,12 +446,12 @@ def _render_platform_systems(
                         for i, other in enumerate(stems, 1))] if len(runs) > 1 else []),
                     "", "## Files", "", *markup.details("note", ROLE_LEGEND_TITLE, [ROLE_LEGEND]),
                     *search_excluded(run),
-                    "", _date_line(),
+                    "", date_line(),
                 ]) + "\n"
             # The count and status a folded system shows in its summary,
             # linked to the page that lists the files.
-            tag = "OK" if ok_count == total else _count(total - ok_count, "issue")
-            count = f"{_count(total, 'file')} ({tag})"
+            tag = "OK" if ok_count == total else count_text(total - ok_count, "issue")
+            count = f"{count_text(total, 'file')} ({tag})"
             lines.extend([
                 f"[{count}]({stems[0]}.md)" if len(stems) == 1 else f"{count}: " + ", ".join(
                     f"[part {i}]({stem}.md)" for i, stem in enumerate(stems, 1)),
@@ -465,10 +466,10 @@ def _render_platform_systems(
 
 
 # Platforms with an updated file published by export_native.py.
-_EXPORTED: set[str] = set()
+EXPORTED: set[str] = set()
 
 
-def _platform_data_links(name: str) -> str:
+def platform_data_links(name: str) -> str:
     """The platform's own data, machine-readable: the YAML transcribed from
     its upstream list, this page's JSON and the manifest the installer reads.
 
@@ -479,8 +480,8 @@ def _platform_data_links(name: str) -> str:
         f"[YAML]({REPO_URL}/blob/main/platforms/{name}.yml)",
         f"[JSON](../api/v1/platforms/{name}.json)",
     ]
-    if (_REPO_ROOT / "install" / f"{name}.json").is_file():
-        # The site's own copy, byte for byte (_publish_manifests).
+    if (REPO_ROOT / "install" / f"{name}.json").is_file():
+        # The site's own copy, byte for byte (publish_manifests).
         links.append(f"[install manifest](../api/v1/manifests/{name}.json)")
         # The installed BIOS folder for clrmamepro and RomVault.
         links.append(f"[DAT](../downloads/dat/{name}.dat)")
@@ -489,7 +490,7 @@ def _platform_data_links(name: str) -> str:
 
 def _site_profiles() -> dict[str, dict]:
     """Every emulator profile, read once for the citations of a page."""
-    return _profiles_in(str(siteinputs.current().emulators), skip_aliases=True)
+    return profiles_in(str(siteinputs.current().emulators), skip_aliases=True)
 
 
 # Whose code a source reference cites, in one word: a platform page names
@@ -550,7 +551,7 @@ def _category_evidence_md(evidence: dict, launched: list[str] | None = None) -> 
                 name = "the platform's launcher"
                 refs = list(launched or [])
             else:
-                name = _emulator_link(reader["emulator"], "../")
+                name = emulator_link(reader["emulator"], "../")
             groups[bool(reader.get("runs_system"))].append(
                 f"{name} ({', '.join(refs)})" if refs else f"{name} (by {reader['proof']})")
             if not reader.get("runs_system"):
@@ -569,7 +570,7 @@ def _category_evidence_md(evidence: dict, launched: list[str] | None = None) -> 
     # A core the site gives no page (a test core) is named, not linked.
     with_page = _profiles_with_page(str(siteinputs.current().emulators))
     cores = ("cores examined: " + ", ".join(
-        _emulator_link(c, "../") if c in with_page else c for c in examined)
+        emulator_link(c, "../") if c in with_page else c for c in examined)
              if examined else "no core examined")
     if evidence.get("unsettled"):
         return f"No reader found, not settled: {evidence['unsettled']} ({cores})"
@@ -587,7 +588,7 @@ def _profiles_by_core_name() -> dict[str, list[str]]:
 @functools.cache
 def _profiles_with_page(emulators_dir: str) -> frozenset[str]:
     """The profiles the site writes a page for: no alias, no test core."""
-    profiles = _profiles_in(emulators_dir, skip_aliases=True)
+    profiles = profiles_in(emulators_dir, skip_aliases=True)
     return frozenset(
         k for k, v in profiles.items() if v.get("type") != "alias" and v.get("role") != "test"
     )
@@ -595,7 +596,7 @@ def _profiles_with_page(emulators_dir: str) -> frozenset[str]:
 
 @functools.cache
 def _core_names_in(emulators_dir: str) -> dict[str, list[str]]:
-    profiles = _profiles_in(emulators_dir, skip_aliases=True)
+    profiles = profiles_in(emulators_dir, skip_aliases=True)
     with_page = _profiles_with_page(emulators_dir)
     return {
         core: sorted(k for k in keys if k in with_page)
@@ -610,20 +611,20 @@ def _core_name_links(cores: list[str]) -> list[str]:
     for core in cores:
         keys = [core] if core in index.get(core, []) else index.get(core, [])
         if keys:
-            links.extend(_emulator_link(k, "../") for k in keys)
+            links.extend(emulator_link(k, "../") for k in keys)
         else:
             links.append(f"`{core}`")
     return links
 
 
-def _core_folders_section(name: str, config: dict) -> list[str]:
+def core_folders_section(name: str, config: dict) -> list[str]:
     """Each folder the frontend hands a core, and the files the pack puts in it.
 
     For a platform that names no file of its own (MinUI and its forks): the
     folders come from its launch scripts, the files from its install manifest.
     """
     folders = config.get("core_system_dirs") or {}
-    manifest = _REPO_ROOT / "install" / f"{name}.json"
+    manifest = REPO_ROOT / "install" / f"{name}.json"
     files = json.loads(manifest.read_text())["files"] if manifest.is_file() else []
     lines = [
         "### Core folders",
@@ -646,7 +647,7 @@ def _core_folders_section(name: str, config: dict) -> list[str]:
     return lines
 
 
-def _declared_by_system(config_files: dict) -> dict[str, list[dict]]:
+def declared_by_system(config_files: dict) -> dict[str, list[dict]]:
     """The platform's own entries of each system, hashes included."""
     by_system: dict[str, list[dict]] = {}
     for (sys_id, _name), entries in config_files.items():
@@ -654,7 +655,7 @@ def _declared_by_system(config_files: dict) -> dict[str, list[dict]]:
     return by_system
 
 
-def _system_emulators(
+def system_emulators(
     sys_id: str, emulator_files: dict | None, files: list[dict] | None = None
 ) -> list[str]:
     """The emulators a platform runs for one of its systems.
@@ -666,9 +667,9 @@ def _system_emulators(
     an archive does not count: fbneo's boot.bin is read inside bubsys.zip,
     and RomM's Dreamcast boot.bin is not that file.
     """
-    from model.systems import _norm_system_id
+    from model.systems import norm_system_id
 
-    norm = _norm_system_id(sys_id)
+    norm = norm_system_id(sys_id)
     by_id = [name for name, data in (emulator_files or {}).items()
              if sys_id in data["systems"] or norm in data["norm"]]
     if by_id or not files:

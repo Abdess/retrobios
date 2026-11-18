@@ -19,12 +19,12 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from model.profiles import _emulator_profiles_cache, load_emulator_profiles
+from model.profiles import emulator_profiles_cache, load_emulator_profiles
 from resolve.content import content_fits, size_fits, _masked_sha1_verdict
 from resolve.localfile import resolve_local_file
 from packs import extras as packextras
 from core.romdir import romdir_accepts, walk
-from resolve.validation import _build_validation_index, check_file_validation
+from resolve.validation import build_validation_index, check_file_validation
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -256,13 +256,13 @@ class ScannerVerifyManifestAgree(unittest.TestCase):
             "  - name: \"<bios>.nvm\"\n    path: \"ps2/<bios>.nvm\"\n    size: 1024\n"
             "  - name: \"<bios>.mec\"\n    path: \"ps2/<bios>.mec\"\n    size: 4\n"
         )
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.profiles = load_emulator_profiles(str(self.root / "emulators"))
         self.config = {"platform": "Demo", "verification_mode": "existence",
                        "cores": ["demo", "anchor"], "base_destination": "", "systems": {}}
 
     def tearDown(self):
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self._tmp.cleanup()
 
     def accepted(self) -> set[str]:
@@ -279,7 +279,7 @@ class ScannerVerifyManifestAgree(unittest.TestCase):
                                            "SCPH-70004.nvm", "246C.mec"})
 
     def test_platform_pack_and_manifest_scan(self):
-        extras = packextras._collect_emulator_extras(
+        extras = packextras.collect_emulator_extras(
             self.config, str(self.root / "emulators"), self.db, set(), "", self.profiles,
         )
         placed = {e["name"] for e in extras if e.get("source_profile") == "demo"}
@@ -296,7 +296,7 @@ class ScannerVerifyManifestAgree(unittest.TestCase):
         self.assertEqual(names, self.accepted())
 
     def test_resolver_name_step_and_validation_agree(self):
-        index = _build_validation_index(self.profiles_with_labels())
+        index = build_validation_index(self.profiles_with_labels())
         for name in self.IMAGES:
             path = str(self.root / "bios" / "PS2" / name)
             entry_ = {"name": name, "found_by": "content", "validation": ["romdir"],

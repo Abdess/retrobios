@@ -11,8 +11,8 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypedDict
 
 from packs.verdicts import DEFAULT_BIOS_DIR
-from core.artifacts import _build_timestamp
-from packs.paths import MEDIA_MARKER, _has_path_conflict
+from core.artifacts import build_timestamp
+from packs.paths import MEDIA_MARKER, has_path_conflict
 from core.ziptools import build_zip_contents_index
 from core.ziptools import check_inside_zip
 from resolve.nativemode import digest_algorithm
@@ -28,7 +28,7 @@ from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config
 import os
 from packs.extras import platform_region_groups
-from packs.paths import _flat
+from packs.paths import flat_arcname
 from resolve.nativemode import reads_file_contents
 from resolve import regions as resolve_regions
 from packs import slots
@@ -237,7 +237,7 @@ def verify_pack(
         "schema_version": 1,
         "version": 1,
         "generator": "retrobios generate_pack.py",
-        "generated": _build_timestamp(db),
+        "generated": build_timestamp(db),
         "files": [],
     }
     errors: list[str] = []
@@ -595,7 +595,7 @@ def _builder_extras(
     there: taken by the refused file, that core file was never compared.
     """
     from packs.extras import ExtraResolver, hidden_extras
-    from resolve.validation import _build_validation_index, destination_owners
+    from resolve.validation import build_validation_index, destination_owners
 
     config, emu_profiles = expect.config, expect.emu_profiles
     data_registry = expect.opts.data_registry
@@ -632,7 +632,7 @@ def _builder_extras(
         expect.region_drops or None,
         resolver=ExtraResolver(
             db, DEFAULT_BIOS_DIR, build_zip_contents_index(db), data_registry,
-            _build_validation_index(platform_profiles),
+            build_validation_index(platform_profiles),
             destination_owners(platform_profiles), True, profiles=emu_profiles,
         ),
         placed_local=placed_local,
@@ -855,7 +855,7 @@ def _count_baseline(
             member = expected
         elif expected.lower() in view.zip_lower:
             member = view.zip_lower[expected.lower()]
-        elif _has_path_conflict(expected, view.zip_set, view.zip_parents):
+        elif has_path_conflict(expected, view.zip_set, view.zip_parents):
             # Skipped by the builder for the same reason: not an error
             count.present += 1
             continue
@@ -967,7 +967,7 @@ def _check_core_extras(
     )
     for full, local in sorted(placed_local.items()):
         core_checked += 1
-        flat = _flat(full, expect.base_dest, view.is_flat)
+        flat = flat_arcname(full, expect.base_dest, view.is_flat)
         member = flat if flat in view.zip_set else view.zip_lower.get(flat.lower())
         if member is None:
             errors.append(f"core missing: {full}")

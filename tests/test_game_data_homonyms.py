@@ -224,7 +224,7 @@ class SecondPassKeepsIdentity(unittest.TestCase):
     """
 
     def test_flag_and_hashes_reach_the_alternative_destination(self):
-        from packs.extras import _collect_emulator_extras
+        from packs.extras import collect_emulator_extras
 
         sha = "a" * 40
         md5 = "b" * 32
@@ -247,7 +247,7 @@ class SecondPassKeepsIdentity(unittest.TestCase):
                 {"name": "pak1.pk3", "path": "maintt/pak1.pk3", "sha1": "c" * 40},
             ],
         }}
-        extras = {e["destination"]: e for e in _collect_emulator_extras(
+        extras = {e["destination"]: e for e in collect_emulator_extras(
             config, "emulators", db, set(), "", profiles)}
         # Unsourceable is settled, as in the first pass: no copy at all.
         self.assertNotIn("mainta/pak1.pk3", extras)

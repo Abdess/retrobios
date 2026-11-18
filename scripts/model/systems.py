@@ -204,7 +204,7 @@ SYSTEM_ALIASES: dict[str, str] = {
 
 
 @functools.cache
-def _norm_system_id(sid: str) -> str:
+def norm_system_id(sid: str) -> str:
     """Normalize system ID for cross-platform matching.
 
     Resolves known aliases, then strips manufacturer prefixes and separators
@@ -259,10 +259,10 @@ def platform_system_names(config: dict, systems: list[str]) -> dict[str, list[st
 
 def select_systems(systems: dict, wanted: list[str]) -> dict:
     """The systems a --system list keeps, by id or normalized id."""
-    norm = {_norm_system_id(s) for s in wanted}
+    norm = {norm_system_id(s) for s in wanted}
     return {
         sid: data for sid, data in systems.items()
-        if sid in wanted or _norm_system_id(sid) in norm
+        if sid in wanted or norm_system_id(sid) in norm
     }
 
 
@@ -295,7 +295,7 @@ def resolve_system_arg(
                 by_key[_name_key(alias)] = [sid]
     by_norm: dict[str, list[str]] = {}
     for sid in systems:
-        by_norm.setdefault(_norm_system_id(sid), []).append(sid)
+        by_norm.setdefault(norm_system_id(sid), []).append(sid)
 
     value = value.strip()
     tokens = [value] if value.lower() in exact else value.split(",")
@@ -308,7 +308,7 @@ def resolve_system_arg(
         found = (
             exact.get(token.lower())
             or (keyed if len(keyed) == 1 else None)
-            or by_norm.get(_norm_system_id(token))
+            or by_norm.get(norm_system_id(token))
         )
         if not found:
             unknown.append(token)
@@ -335,6 +335,6 @@ def system_index(profiles: dict) -> dict[str, tuple[str, set[str]]]:
         if p.get("type") in ("alias", "launcher") or p.get("role") == "test":
             continue
         for sys_id in p.get("systems", []):
-            key = _norm_system_id(sys_id)
+            key = norm_system_id(sys_id)
             index.setdefault(key, (sys_id, set()))[1].add(name)
     return index

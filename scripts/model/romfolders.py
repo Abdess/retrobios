@@ -6,7 +6,7 @@ the BIOS folder, each folder with the system name the OS gives it, the
 extensions it lists and the core it starts by default. Those files hold the
 OS's facts only. Which repository system a folder is, and which profile its
 core is, is decided here, through the one alias table in model/systems.py
-(`SYSTEM_ALIASES`, `_norm_system_id`) and the profiles' `cores:` lists, so a
+(`SYSTEM_ALIASES`, `norm_system_id`) and the profiles' `cores:` lists, so a
 change to either reaches every setup without a rescrape.
 """
 
@@ -16,7 +16,7 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from model.systems import _norm_system_id
+from model.systems import norm_system_id
 from model.registry import list_registered_platforms
 from model.profiles import load_emulator_profiles, preferred_profile, upstream_profile_index
 from model.platforms import load_platform_config, native_layer
@@ -70,7 +70,7 @@ class SystemResolver:
     The universe is every system a profile or a platform file names. A name
     resolves, in this order, as one of those ids, as a name a platform's own
     file gives a system (`native_system`, the folder Batocera calls `psx`),
-    or through `_norm_system_id`, which applies SYSTEM_ALIASES then drops the
+    or through `norm_system_id`, which applies SYSTEM_ALIASES then drops the
     maker prefix and separators. A name nothing matches stays unresolved:
     a new abbreviation goes into SYSTEM_ALIASES, never into a table here.
 
@@ -89,7 +89,7 @@ class SystemResolver:
 
     def __post_init__(self) -> None:
         for sid in self.ids:
-            self.by_norm.setdefault(_norm_system_id(sid), set()).add(sid)
+            self.by_norm.setdefault(norm_system_id(sid), set()).add(sid)
         for members in self.by_norm.values():
             best = min(members, key=lambda s: (-self.profile_use.get(s, 0), -len(s), s))
             for sid in members:
@@ -123,7 +123,7 @@ class SystemResolver:
 
     def equivalents(self, sid: str) -> set[str]:
         """Every id spelling the same machine as sid, sid included."""
-        return set(self.by_norm.get(_norm_system_id(sid), ())) | {sid}
+        return set(self.by_norm.get(norm_system_id(sid), ())) | {sid}
 
     def _answer(self, found: set[str], basis: str) -> Resolution:
         return Resolution(sorted({self.canonical(s) for s in found}), basis)
@@ -139,7 +139,7 @@ class SystemResolver:
             own = self.native.get(platform, {}).get(lowered)
             if own and len(own) == 1:
                 return self._answer(own, f"native name of {platform}")
-            norm = self.by_norm.get(_norm_system_id(lowered))
+            norm = self.by_norm.get(norm_system_id(lowered))
             if norm:
                 return self._answer(norm, "normalized id")
             claimed = [

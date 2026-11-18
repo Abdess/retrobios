@@ -7,8 +7,8 @@ import shutil
 from pathlib import Path
 
 from model import releaserecord
-from sitegen.config import _REPO_ROOT
-from sitegen.write import _record, write_if_changed
+from core.paths import REPO_ROOT
+from sitegen.write import record_written, write_if_changed
 
 
 def write_release_advertised(generated: Path) -> None:
@@ -26,7 +26,7 @@ def write_release_advertised(generated: Path) -> None:
     )
 
 
-def _publish_manifests(api: Path) -> list[tuple]:
+def publish_manifests(api: Path) -> list[tuple]:
     """The install manifests and the release record, beside the API.
 
     The platform's list says what a setup checks. The manifest says what its
@@ -38,34 +38,34 @@ def _publish_manifests(api: Path) -> list[tuple]:
     folder = api / "manifests"
     folder.mkdir(parents=True, exist_ok=True)
     assets: list[tuple] = []
-    for source in sorted((_REPO_ROOT / "install").glob("*.json")):
+    for source in sorted((REPO_ROOT / "install").glob("*.json")):
         target = folder / source.name
         shutil.copy2(source, target)
-        _record(target)
+        record_written(target)
         assets.append((target, f"Install manifest: {source.stem}", "application/json",
                        "schemas/install-manifest.schema.json"))
     # The target lists install.py --target reads: no catalog entry, and
     # api/v1/targets/ answered 404.
     targets = api / "targets"
     targets.mkdir(parents=True, exist_ok=True)
-    for source in sorted((_REPO_ROOT / "install" / "targets").glob("*.json")):
+    for source in sorted((REPO_ROOT / "install" / "targets").glob("*.json")):
         shutil.copy2(source, targets / source.name)
-        _record(targets / source.name)
+        record_written(targets / source.name)
         assets.append((targets / source.name, f"Target list: {source.stem}",
                        "application/json", "schemas/target-manifest.schema.json"))
     # Every change each updated platform file carries, for a maintainer who
     # reviews them by script: the Exports page linked only the files.
     exports = api / "exports"
     exports.mkdir(parents=True, exist_ok=True)
-    for source in sorted((_REPO_ROOT / "exports").glob("*.json")):
+    for source in sorted((REPO_ROOT / "exports").glob("*.json")):
         shutil.copy2(source, exports / source.name)
-        _record(exports / source.name)
+        record_written(exports / source.name)
         assets.append((exports / source.name, f"Updated platform file, its changes: {source.stem}",
                        "application/json", None))
-    release = _REPO_ROOT / "release.json"
+    release = REPO_ROOT / "release.json"
     if release.is_file():
         shutil.copy2(release, api / "release.json")
-        _record(api / "release.json")
+        record_written(api / "release.json")
         assets.append((api / "release.json", "Latest release: packs, sizes and assets",
                        "application/json", "schemas/release.schema.json"))
     return assets

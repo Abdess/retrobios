@@ -479,7 +479,7 @@ class ValidationIndexScope(unittest.TestCase):
 
         source = inspect.getsource(coverage.verify_platform)
         self.assertRegex(source, r"plat_cores = resolve_platform_cores\(config, profiles\)")
-        self.assertIn("_build_validation_index(platform_profiles)", source)
+        self.assertIn("build_validation_index(platform_profiles)", source)
         section = _section(_page("verification-modes.md"), "Validation index")
         self.assertIn("resolve_platform_cores", section)
         self.assertNotIn("reads all emulator profiles", section)

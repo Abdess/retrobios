@@ -29,7 +29,7 @@ from model import cliargs, platforms
 from resolve import cores, grouping, localfile
 from model.database import load_database
 from model.platforms import _platform_config_cache
-from model.profiles import _emulator_profiles_cache, load_emulator_profiles
+from model.profiles import emulator_profiles_cache, load_emulator_profiles
 from model.registry import list_registered_platforms, load_data_dir_registry
 from resolve.localfile import resolve_local_file
 from resolve.ownership import BUCKET_FOLDERS, names_manufacturer
@@ -104,13 +104,13 @@ class _Collection(unittest.TestCase):
         )
         self.db = load_database("database.json")
         _platform_config_cache.clear()
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.config = platforms.load_platform_config("handheld", "platforms")
         self.profiles = load_emulator_profiles("emulators")
 
     def tearDown(self):
         _platform_config_cache.clear()
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         os.chdir(self._cwd)
         self._tmp.cleanup()
 

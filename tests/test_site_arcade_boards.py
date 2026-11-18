@@ -68,7 +68,7 @@ STAYS_PLAIN = {
 def _reset() -> None:
     """Back to the repository's sections and boards, none written."""
     siterender._arcade_source[0] = None
-    systemnames._boards_built[0] = False
+    systemnames.boards_built[0] = False
     systemnames._sections_installed[0] = False
     siterender.reset_console_pages()
 

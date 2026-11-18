@@ -39,20 +39,20 @@ class ProsePlaceholders(unittest.TestCase):
     """A path written with angle brackets reaches the reader as written."""
 
     def test_a_placeholder_is_text_not_a_tag(self):
-        from sitegen.render import _admonition_body, _escape_tags
+        from sitegen.render import admonition_body, escape_tags
 
         self.assertEqual(
-            _escape_tags("gameProfiles/<title id>.ini under <system_dir>/Cemu"),
+            escape_tags("gameProfiles/<title id>.ini under <system_dir>/Cemu"),
             "gameProfiles/&lt;title id>.ini under &lt;system_dir>/Cemu",
         )
-        self.assertIn("&lt;title id>", _admonition_body("read <title id>.ini"))
+        self.assertIn("&lt;title id>", admonition_body("read <title id>.ini"))
 
     def test_code_spans_and_links_are_left_alone(self):
-        from sitegen.render import _escape_tags
+        from sitegen.render import escape_tags
 
-        self.assertEqual(_escape_tags("`<system_dir>/x`"), "`<system_dir>/x`")
-        self.assertEqual(_escape_tags("see <https://example.org/a>"), "see <https://example.org/a>")
-        self.assertEqual(_escape_tags("size < 4096"), "size &lt; 4096")
+        self.assertEqual(escape_tags("`<system_dir>/x`"), "`<system_dir>/x`")
+        self.assertEqual(escape_tags("see <https://example.org/a>"), "see <https://example.org/a>")
+        self.assertEqual(escape_tags("size < 4096"), "size &lt; 4096")
 
 
 class WikiSourceHeadings(unittest.TestCase):
@@ -94,7 +94,7 @@ class PlatformDetails(unittest.TestCase):
     def test_lists_and_flags_read_as_prose(self):
         from sitegen import fields
 
-        lines = fields._render_platform_details(
+        lines = fields.render_platform_details(
             {"platform_details": {"megacd": {
                 "extensions_tried": [".bin", ".zip"],
                 "hle_available": False,
@@ -362,9 +362,9 @@ class TheSitemapIsAnnouncedWhereCrawlersLook(unittest.TestCase):
 class TheHomeTitleSaysWhatTheSiteIs(unittest.TestCase):
     def test_not_the_site_name_twice(self):
         from sitegen.config import SITE_NAME
-        from sitegen.descriptions import _browser_title
+        from sitegen.descriptions import page_browser_title
 
-        title = _browser_title(Path("index.md"), SITE_NAME)
+        title = page_browser_title(Path("index.md"), SITE_NAME)
         self.assertNotEqual(title, SITE_NAME)
         self.assertIn("BIOS", title)
 

@@ -7,7 +7,7 @@ from model.guides import DEVICE_GROUPS, GROUP_TILES, GUIDES
 from resolve.nativemode import check_label
 from sitegen import markup
 from sitegen.guidepage import NO_ZIP_FAQ
-from sitegen.home import _group_members
+from sitegen.home import group_members
 from sitegen.install import has_release_pack
 from sitegen.readme import release_totals
 
@@ -27,7 +27,7 @@ def generate_platform_index(coverages: dict, registry: dict | None = None) -> st
         "",
     ]
     for group, (label, _description) in DEVICE_GROUPS.items():
-        members = _group_members(coverages, registry, group)
+        members = group_members(coverages, registry, group)
         if not members:
             continue
         # The group label names the devices, and each card carries its

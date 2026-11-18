@@ -6,7 +6,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from .base_exporter import BaseExporter
-from resolve.reconcile import HASH_FIELDS, NativeFile, _hash_values, _single_size
+from resolve.reconcile import HASH_FIELDS, NativeFile, hash_values, single_size
 
 
 @dataclass
@@ -75,7 +75,7 @@ def _change(
 
 
 def _platform_value(entry: NativeFile, field_name: str) -> str | list[str]:
-    values = _hash_values(entry.platform or {}, field_name)
+    values = hash_values(entry.platform or {}, field_name)
     if (entry.platform or {}).get(f"{field_name}_list"):
         return values
     return ",".join(values)
@@ -157,7 +157,7 @@ def landed_changes(exporter: BaseExporter, systems: dict) -> LandedChanges:
                     listed is not None
                     and field_name not in entry.corrections
                     and field_name not in entry.filled
-                    and listed != _hash_values(entry.platform, field_name)
+                    and listed != hash_values(entry.platform, field_name)
                     and exporter.states(entry, field_name)
                 ):
                     records.append(_change(
@@ -175,28 +175,28 @@ def landed_changes(exporter: BaseExporter, systems: dict) -> LandedChanges:
             if (
                 theirs
                 and ours
-                and _single_size(theirs) not in (None, ours)
+                and single_size(theirs) not in (None, ours)
                 and exporter.states(entry, "size")
             ):
                 records.append(_change(
-                    "size_updated", entry, "size", _single_size(theirs), ours
+                    "size_updated", entry, "size", single_size(theirs), ours
                 ))
             elif (
                 theirs
                 and ours is None
-                and _single_size(theirs) is not None
+                and single_size(theirs) is not None
                 and exporter.states(entry, "size")
             ):
                 # The truth took the entry over without a size of its own:
                 # System.dat's neocdz.zip line went out without size 953078.
                 records.append(_change(
-                    "size_removed", entry, "size", _single_size(theirs), None
+                    "size_removed", entry, "size", single_size(theirs), None
                 ))
             records.extend(
                 _change("hash_cleared", entry, field_name,
                         _platform_value(entry, field_name), None)
                 for field_name in HASH_FIELDS
-                if _hash_values(entry.platform, field_name)
+                if hash_values(entry.platform, field_name)
                 and not entry.hashes(field_name)
                 and exporter.clears(entry, field_name)
             )

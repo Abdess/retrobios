@@ -21,7 +21,7 @@ import zipfile
 
 import yaml
 
-from model.profiles import _emulator_profiles_cache, load_emulator_profiles
+from model.profiles import emulator_profiles_cache, load_emulator_profiles
 from model.platforms import load_platform_config
 from resolve.launchers import LauncherLayer, launcher_places, suffixed_stem
 from packs.gaps import find_undeclared_files
@@ -41,7 +41,7 @@ def _md5(data: bytes) -> str:
 
 class LauncherLayerTest(unittest.TestCase):
     def setUp(self) -> None:
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.root = tempfile.mkdtemp()
         self.bios_dir = os.path.join(self.root, "bios")
         self.platforms_dir = os.path.join(self.root, "platforms")
@@ -198,7 +198,7 @@ class LauncherLayerTest(unittest.TestCase):
         }
         with open(os.path.join(self.emulators_dir, "fixemu.yml"), "w") as fh:
             yaml.dump(profile, fh)
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.profiles = load_emulator_profiles(self.emulators_dir)
         added = [u["path"] for u in self._report() if u.get("launcher")]
         self.assertNotIn("sub/fix.bin", added)
@@ -226,7 +226,7 @@ class LauncherLayerTest(unittest.TestCase):
             yaml.dump(profile, fh)
         self.config["launchers"][2]["names"] = ["v103.bin"]
         self.config["launchers"][2]["search_dir"] = "/userdata/bios"
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.profiles = load_emulator_profiles(self.emulators_dir)
         report = {u["path"]: u for u in self._report()}
         self.assertNotIn("flash.bin", report)
@@ -247,7 +247,7 @@ class LauncherLayerTest(unittest.TestCase):
         with open(os.path.join(self.emulators_dir, "fixemu.yml"), "w") as fh:
             yaml.dump(profile, fh)
         self.config["launchers"][2]["names"] = ["plain.bin"]
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.profiles = load_emulator_profiles(self.emulators_dir)
         self.assertNotIn("core.bin", {u["name"] for u in self._report()})
         self.assertNotIn("core.bin", self._pack_names())
@@ -266,7 +266,7 @@ class LauncherLayerTest(unittest.TestCase):
             yaml.dump(profile, fh)
         self.config["launchers"][2]["names"] = ["launcher.rom"]
         self.config["launchers"][2]["passes_to"] = "command line -romslot"
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.profiles = load_emulator_profiles(self.emulators_dir)
         added = {u["path"]: u for u in self._report() if u.get("launcher")}
         self.assertEqual(added["launcher.rom"]["launcher_of"], "core.bin")
@@ -283,7 +283,7 @@ class LauncherLayerTest(unittest.TestCase):
         with open(os.path.join(self.emulators_dir, "fixemu.yml"), "w") as fh:
             yaml.dump(profile, fh)
         self.config["launchers"][2]["names"] = ["kick.A500.rom"]
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.profiles = load_emulator_profiles(self.emulators_dir)
         added = {u["path"]: u for u in self._report() if u.get("launcher")}
         self.assertEqual(added["kick.A500.rom"]["md5"], _md5(CONTENT["core.bin"]))
@@ -302,7 +302,7 @@ class LauncherLayerTest(unittest.TestCase):
         self.config["systems"]["test-sys"]["files"].append(
             {"name": "core.bin", "destination": "core.bin", "required": True}
         )
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.profiles = load_emulator_profiles(self.emulators_dir)
         added = {u["path"]: u for u in self._report() if u.get("launcher")}
         self.assertEqual(added["kick.A500.rom"]["md5"], _md5(CONTENT["core.bin"]))
@@ -353,7 +353,7 @@ class LauncherLayerTest(unittest.TestCase):
             "overrides": [],
             "source_ref": "core-options.cfg:515",
         })
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.profiles = load_emulator_profiles(self.emulators_dir)
         added = {u["path"]: u for u in self._report() if u.get("launcher")}
         self.assertEqual(added["ps2/bios/scph10000.bin"]["md5"], _md5(older))
@@ -460,7 +460,7 @@ class LauncherLayerTest(unittest.TestCase):
         self.assertIn("LauncherLayer(", inspect.getsource(packs_gaps.find_undeclared_files))
         self.assertIn(".settle(", inspect.getsource(packs_gaps.find_undeclared_files))
         self.assertIn(
-            "undeclared_report(", inspect.getsource(packextras._collect_emulator_extras)
+            "undeclared_report(", inspect.getsource(packextras.collect_emulator_extras)
         )
         self.assertIn(
             "find_undeclared_files(", inspect.getsource(packextras.undeclared_report)

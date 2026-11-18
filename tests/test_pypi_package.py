@@ -151,13 +151,13 @@ class AnUnpinnedInstallerIsRefused(unittest.TestCase):
             root = Path(name)
             (root / "install.py").write_bytes(b"print('another')\n")
             shutil.copyfile(REPO_ROOT / "install.sh", root / "install.sh")
-            original = pypi.ROOT
-            pypi.ROOT = root
+            original = pypi.REPO_ROOT
+            pypi.REPO_ROOT = root
             try:
                 with self.assertRaises(ValueError):
                     pypi.installer_bytes()
             finally:
-                pypi.ROOT = original
+                pypi.REPO_ROOT = original
 
 
 def _python38() -> str | None:

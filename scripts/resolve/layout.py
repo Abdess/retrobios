@@ -127,7 +127,7 @@ def system_dir_path(entry: dict, path: str) -> str:
     return f"{directory}/{path}" if directory else path
 
 
-def _handed(standalone_cores: Iterable[str]) -> list:
+def handed_from_tags(standalone_cores: Iterable[str]) -> list:
     """The directories a standalone set carries, as launchers built them."""
     from resolve.launchers import HandedDirectory
 
@@ -245,12 +245,12 @@ def standalone_bindings_for(
         if isinstance(f, dict) and (path := standalone_layout_path(f, profile))
     ]
     return standalone_bindings(
-        names, declared, _handed(standalone_cores), _executed(standalone_cores), layout,
+        names, declared, handed_from_tags(standalone_cores), _executed(standalone_cores), layout,
         pools, systems,
     )
 
 
-def _placed_entry(entry: dict, profile: dict, placed: tuple[str, str]) -> dict:
+def placed_entry(entry: dict, profile: dict, placed: tuple[str, str]) -> dict:
     """A standalone entry moved to the (tree, path) a platform reads it from."""
     tree, path = placed
     moved = {**entry, "standalone_path": path,

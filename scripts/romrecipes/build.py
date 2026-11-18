@@ -11,7 +11,7 @@ from core.hashing import compute_hashes
 from core.paths import REPO_ROOT
 from core.torrentzip import write_torrentzip, zlib_ng_version
 from romrecipes.ledger import is_archive_path
-from romrecipes.members import _member_sha1, _opener
+from romrecipes.members import member_sha1, member_opener
 
 
 # --- build ------------------------------------------------------------------
@@ -79,7 +79,7 @@ def _members_match(built: Path, members: list[dict]) -> str:
         sizes = {info.filename: info.file_size for info in archive.infolist()}
         crcs = {info.filename: f"{info.CRC:08x}" for info in archive.infolist()}
     held = sorted(
-        (name, sizes[name], crcs[name], _member_sha1(built, name)) for name in names
+        (name, sizes[name], crcs[name], member_sha1(built, name)) for name in names
     )
     if held == expected:
         return ""
@@ -134,7 +134,7 @@ def build_archive(
             with scratch.open("wb") as handle:
                 write_torrentzip(
                     handle,
-                    [(name, _opener(source.path, source.member)) for name, source in sources],
+                    [(name, member_opener(source.path, source.member)) for name, source in sources],
                 )
             if exact:
                 written = compute_hashes(scratch, frozenset({"sha1"}), cache=False)["sha1"]

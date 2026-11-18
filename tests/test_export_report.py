@@ -97,9 +97,9 @@ class CorrectedFilesPage(unittest.TestCase):
         for platform in ("recalbox", "retropie"):
             self.assertIn(f'href="api/v1/exports/{platform}.json"', self.page)
         source = script_source("generate_site.py")
-        publish = source[source.index("def _publish_manifests("):]
+        publish = source[source.index("def publish_manifests("):]
         publish = publish[:publish.index("\ndef ")]
-        self.assertIn('(_REPO_ROOT / "exports").glob("*.json")', publish)
+        self.assertIn('(REPO_ROOT / "exports").glob("*.json")', publish)
         self.assertIn('exports = api / "exports"', publish)
 
     def test_several_files_link_to_their_directory(self):

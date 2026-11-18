@@ -16,7 +16,7 @@ from model.composition import GAME_DATA_TOPS
 from model.profiles import load_emulator_profiles
 
 
-def _copy_places(db: dict) -> dict[str, set[tuple[str, str, str]]]:
+def copy_places(db: dict) -> dict[str, set[tuple[str, str, str]]]:
     """sha1 -> every (manufacturer, console, file name) holding a copy.
 
     The database keeps one path per content, deduplication having left one
@@ -39,7 +39,7 @@ def _copy_places(db: dict) -> dict[str, set[tuple[str, str, str]]]:
     return places
 
 
-def _slug(manufacturer: str) -> str:
+def manufacturer_slug(manufacturer: str) -> str:
     return manufacturer.lower().replace(" ", "-")
 
 
@@ -65,7 +65,7 @@ def collection_paths(db: dict) -> dict[str, set[str]]:
     return paths
 
 
-def _group_by_manufacturer(db: dict) -> dict[str, dict[str, list]]:
+def group_by_manufacturer(db: dict) -> dict[str, dict[str, list]]:
     """Group files by manufacturer -> console -> files.
 
     The database keeps one path per content, and a copy filed elsewhere was
@@ -76,7 +76,7 @@ def _group_by_manufacturer(db: dict) -> dict[str, dict[str, list]]:
     """
     files = db.get("files", {})
     manufacturers: dict[str, dict[str, list]] = {}
-    for sha1, where in _copy_places(db).items():
+    for sha1, where in copy_places(db).items():
         for manufacturer, console in sorted({(m, c) for m, c, _ in where}):
             manufacturers.setdefault(manufacturer, {}).setdefault(console, []).append(files[sha1])
     return _engine_sections(manufacturers)
@@ -94,7 +94,7 @@ def _engine_sections(manufacturers: dict[str, dict[str, list]]) -> dict[str, dic
     the engine's name (SECTION_LABELS), its address unchanged.
     """
 
-    profiles = {key: profile for key, profile in _profiles_on_disk().items()
+    profiles = {key: profile for key, profile in profiles_on_disk().items()
                 if profile.get("type") != "alias" and profile.get("role") != "test"}
     engines = _Engines(profiles, _file_readers(profiles))
     out: dict[str, dict[str, list]] = {}
@@ -168,7 +168,7 @@ def _join_other_folders(out: dict[str, dict[str, list]]) -> None:
     for folder in sorted(others):
         top = next((t for t in out if t in GAME_DATA_TOPS and t.casefold() == folder.casefold()),
                    None)
-        if top is None or top in _PROGRAM_TOPS:
+        if top is None or top in PROGRAM_TOPS:
             continue
         sections = out[top]
         target = next((c for c in sections if c.casefold() == folder.casefold()), folder)
@@ -179,27 +179,27 @@ def _join_other_folders(out: dict[str, dict[str, list]]) -> None:
                             *(f for f in others.pop(folder) if str(f.get("sha1", "")) not in held)]
 
 
-def _profiles_on_disk() -> dict[str, dict]:
-    return _profiles_in(str(siteinputs.current().emulators), skip_aliases=False)
+def profiles_on_disk() -> dict[str, dict]:
+    return profiles_in(str(siteinputs.current().emulators), skip_aliases=False)
 
 
 @functools.cache
-def _profiles_in(emulators_dir: str, skip_aliases: bool) -> dict[str, dict]:
+def profiles_in(emulators_dir: str, skip_aliases: bool) -> dict[str, dict]:
     return load_emulator_profiles(emulators_dir, skip_aliases=skip_aliases)
 
 
 # (manufacturer slug, folder, sha1) -> the (manufacturer slug, console) a
 # copy's card went to when the system pages file it outside its folder:
 # ScummVM's engine data under Other/ScummVM, neogeo.zip under Arcade.
-_card_moves: dict[tuple[str, str, str], tuple[str, str]] = {}
+card_moves: dict[tuple[str, str, str], tuple[str, str]] = {}
 
 
 def record_card_move(manufacturer: str, folder: str, sha1: str,
                      to_manufacturer: str, to_console: str) -> None:
     """Mark that the card of the copy under bios/<manufacturer>/<folder>/
     sits in the section (to_manufacturer, to_console)."""
-    _card_moves[(_slug(manufacturer), folder, str(sha1))] = (
-        _slug(to_manufacturer), to_console)
+    card_moves[(manufacturer_slug(manufacturer), folder, str(sha1))] = (
+        manufacturer_slug(to_manufacturer), to_console)
 
 
 # System display names. A system is named by the heading of the console
@@ -212,7 +212,7 @@ def record_card_move(manufacturer: str, folder: str, sha1: str,
 
 # Folders that file copies by the emulator or board that loads them. Their
 # headings name a program, not a system.
-_PROGRAM_TOPS = frozenset({"Other", "Arcade"})
+PROGRAM_TOPS = frozenset({"Other", "Arcade"})
 
 
 # A section whose folder is a short name the code reads, headed with the

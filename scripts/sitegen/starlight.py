@@ -21,7 +21,7 @@ from html import unescape
 from pathlib import Path, PurePosixPath
 
 from core.paths import REPO_ROOT
-from core.anchors import _unique, toc_slug
+from core.anchors import unique_anchor, toc_slug
 
 BASE = "/retrobios/"
 SITE_URL = "https://abdess.github.io/retrobios/"
@@ -145,14 +145,14 @@ def pin_heading_ids(text: str, title_id: str = "") -> str:
         tokens = attrs["attrs"].split() if attrs else []
         if any(token.startswith("#") for token in tokens):
             return match.group(0)
-        ident = _unique(toc_slug(body), used)
+        ident = unique_anchor(toc_slug(body), used)
         return f"{match['hashes']} {body.rstrip()} {{ {' '.join(['#' + ident, *tokens])} }}"
 
     def raw(match: re.Match) -> str:
         if ID_ATTR.search(match["attrs"]):
             return match.group(0)
         level, text = match["level"], match["htmltext"]
-        ident = _unique(toc_slug(text), used)
+        ident = unique_anchor(toc_slug(text), used)
         return f'<h{level} id="{ident}"{match["attrs"]}>{text}</h{level}>'
 
     def pick(match: re.Match) -> str:
@@ -434,7 +434,7 @@ def page_aliases(rel: str) -> list[str]:
         from sitegen import render as siterender
 
         by_page: dict[str, set[str]] = {}
-        for sys_id in list(siterender._system_page_map):
+        for sys_id in list(siterender.system_page_map):
             section = siterender.system_section(sys_id)
             names = siterender.system_search_aliases(sys_id)
             if not section or not names:
@@ -444,7 +444,7 @@ def page_aliases(rel: str) -> list[str]:
         _page_aliases.clear()
         _page_aliases.update({page: sorted(names, key=str.casefold)
                               for page, names in by_page.items()})
-        _page_aliases_built[0] = bool(siterender._system_page_map)
+        _page_aliases_built[0] = bool(siterender.system_page_map)
     return list(_page_aliases.get(rel, []))
 
 

@@ -11,8 +11,9 @@ from model import siteinputs
 from model.registry import load_platform_registry
 from model.safeparse import yaml_load
 from sitegen import markup, measurements as sitemeasurements
-from sitegen.config import RELEASE_URL, REPO_URL, SITE_URL, _REPO_ROOT
-from sitegen.render import _escape_tags, _fmt_size
+from sitegen.config import RELEASE_URL, REPO_URL, SITE_URL
+from core.paths import REPO_ROOT
+from sitegen.render import escape_tags, fmt_size
 
 
 def _is_manifest(item: dict) -> bool:
@@ -36,7 +37,7 @@ def _served_schemas() -> list[tuple[str, str]]:
     the export copies: the page linked 7 of 11."""
     return [
         (path.name, str(json.loads(path.read_text(encoding="utf-8")).get("title") or path.stem))
-        for path in sorted((_REPO_ROOT / "schemas").glob("*.schema.json"))
+        for path in sorted((REPO_ROOT / "schemas").glob("*.schema.json"))
     ]
 
 
@@ -55,7 +56,7 @@ def _schema_field_rows(schema: dict, keys: tuple[str, ...]) -> list[str]:
         text = str((props.get(key) or {}).get("description") or "")
         if text:
             # Python before 3.12 refuses a backslash inside an f-string expression.
-            described = _escape_tags(_URL_TEMPLATE.sub(r"`\g<0>`", text))
+            described = escape_tags(_URL_TEMPLATE.sub(r"`\g<0>`", text))
             rows.append(f"| `{key}` | {described} |")
     return rows
 
@@ -132,8 +133,8 @@ def _join_names(names: list[str]) -> str:
 
 def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = None) -> str:
     manifest_schema = json.loads(
-        (_REPO_ROOT / "schemas" / "install-manifest.schema.json").read_text(encoding="utf-8"))
-    snippet = (_REPO_ROOT / "scripts" / "check_platform_folder.py").read_text(encoding="utf-8")
+        (REPO_ROOT / "schemas" / "install-manifest.schema.json").read_text(encoding="utf-8"))
+    snippet = (REPO_ROOT / "scripts" / "check_platform_folder.py").read_text(encoding="utf-8")
     manifests = [item for item in exports if _is_manifest(item)]
     targets = [item for item in exports if _is_target_list(item)]
     no_list = _platforms_without_a_list()
@@ -177,7 +178,7 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
         )
         lines.append(
             f"| {item['title']} | [`{item['url']}`]({item['url']}) | "
-            f"{schema} | {_fmt_size(item['bytes'])} |"
+            f"{schema} | {fmt_size(item['bytes'])} |"
         )
     lines.extend([
         "",
@@ -353,7 +354,7 @@ def generate_data_page(exports: list[dict], measurements_sqlite: Path | None = N
             continue
         lines.append(
             f"| [{item['title']}]({item['url']}) | `{item['media_type']}` | "
-            f"{_fmt_size(item['bytes'])} | {_short_sha256(item, 'api/v1/catalog.json')} |"
+            f"{fmt_size(item['bytes'])} | {_short_sha256(item, 'api/v1/catalog.json')} |"
         )
     lines.extend([
         "",

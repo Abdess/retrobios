@@ -213,7 +213,7 @@ class NavFromFrontMatter(unittest.TestCase):
 
     def test_every_wiki_page_states_its_place(self):
         for page in sorted(WIKI.glob("*.md")):
-            meta = decorate._front_matter(page.read_text(encoding="utf-8"))
+            meta = decorate.front_matter(page.read_text(encoding="utf-8"))
             with self.subTest(page=page.name):
                 self.assertIn(meta.get("level"), sitegen_nav.TABS)
                 self.assertTrue(meta.get("nav") is False or isinstance(meta.get("order"), int))

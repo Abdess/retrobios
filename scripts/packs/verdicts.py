@@ -40,8 +40,8 @@ class Severity:
     OK = "ok"  # file verified
 
 
-_STATUS_ORDER = {Status.OK: 0, Status.UNTESTED: 1, Status.MISSING: 2}
-_SEVERITY_ORDER = {
+STATUS_ORDER = {Status.OK: 0, Status.UNTESTED: 1, Status.MISSING: 2}
+SEVERITY_ORDER = {
     Severity.OK: 0,
     Severity.INFO: 1,
     Severity.WARNING: 2,
@@ -227,7 +227,7 @@ def verify_entry_sha1(
 # Severity mapping per platform
 
 
-def _emulator_severity(status: str, required: bool, hle_fallback: bool) -> str:
+def emulator_severity(status: str, required: bool, hle_fallback: bool) -> str:
     """Severity when the emulator's own code is the check.
 
     A file present but refused by the core's validation, or a different dump
@@ -274,7 +274,7 @@ def compute_severity(
     return Severity.OK
 
 
-def _storage_verdict(file_entry: dict, emulator_pack: bool) -> dict | None:
+def storage_verdict(file_entry: dict, emulator_pack: bool) -> dict | None:
     """The result a storage tier fixes before any lookup, as the builder sees it.
 
     A user_provided entry is never taken from the collection: a platform pack

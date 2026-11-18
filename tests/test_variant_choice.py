@@ -51,12 +51,12 @@ class FindValidatedVariant(unittest.TestCase):
             "by_name": {"rom.bin": [s for s, e in self.files.items() if e["name"] == "rom.bin"]},
             "by_md5": {e["md5"]: s for s, e in self.files.items()},
         }}
-        from resolve.validation import _build_validation_index
+        from resolve.validation import build_validation_index
 
-        self.by_hash = _build_validation_index({"emu": {"files": [
+        self.by_hash = build_validation_index({"emu": {"files": [
             {"name": "rom.bin", "validation": ["size", "sha1"], "size": 16,
              "sha1": self.good_sha1}]}})
-        self.by_size = _build_validation_index({"emu": {"files": [
+        self.by_size = build_validation_index({"emu": {"files": [
             {"name": "rom.bin", "validation": ["size"], "size": 16}]}})
 
     def test_a_dump_held_under_another_name_is_found_by_the_emulator_hash(self):
@@ -95,7 +95,7 @@ _SEEDED = """
 import hashlib, sys, tempfile
 from pathlib import Path
 sys.path.insert(0, sys.argv[1])
-from resolve.validation import _build_validation_index, find_validated_variant
+from resolve.validation import build_validation_index, find_validated_variant
 root = Path(sys.argv[2])
 paths = [root / f"ctrl_{i}.rom" for i in range(8)]
 files = {}
@@ -105,7 +105,7 @@ for i, path in enumerate(paths):
     files[hashlib.sha1(data).hexdigest()] = {"path": str(path), "name": path.name}
 bad = root / "MT32_CONTROL.ROM"
 bad.write_bytes(b"x" * 16)
-index = _build_validation_index({"emu": {"files": [
+index = build_validation_index({"emu": {"files": [
     {"name": "MT32_CONTROL.ROM", "validation": ["sha1"], "sha1": sha1} for sha1 in files]}})
 db = {"files": files, "indexes": {"by_name": {}}}
 print(find_validated_variant({"name": "MT32_CONTROL.ROM"}, db, str(bad), index))

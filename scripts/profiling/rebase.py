@@ -10,9 +10,9 @@ import yaml
 from core import upstream
 from model.sourceref import ref_role, split_outside_parentheses, split_source_ref
 from profiling.anchoring import PartResult, REBASE_STATUSES, REVIEW_STATUSES
-from profiling.citations import Citation, _citation_key, collect_citations
-from profiling.proseedit import _apply_prose_edits, _run_after_moves, _set_scalar
-from profiling.reports import EntryReport, ProfileReport, _original_part, _rendered_part
+from profiling.citations import Citation, citation_key, collect_citations
+from profiling.proseedit import apply_prose_edits, run_after_moves, set_scalar
+from profiling.reports import EntryReport, ProfileReport, original_part, rendered_part
 from profiling.repos import declared_repositories
 from profiling.yamledit import YamlWriteError, apply_edit, find_field_line, replace_field_line
 
@@ -107,7 +107,7 @@ def pin_blockers(report: ProfileReport, accept_changed: bool = False) -> list[st
         if not any(
             part.status in movable
             and part.start is not None
-            and _rendered_part(part) != _original_part(part)
+            and rendered_part(part) != original_part(part)
             for part in entry.parts
         ):
             continue
@@ -156,7 +156,7 @@ def attribute_refs(path: Path, report: ProfileReport, profile: dict) -> list[str
             continue
         rendered = []
         for part in entry.parts:
-            raw = part.part.raw or _original_part(part)
+            raw = part.part.raw or original_part(part)
             role, bare = ref_role(raw)
             written_path = bare.startswith(part.part.path)
             owner = role_of.get(part.repo or "", primary) if part.repo else primary
@@ -185,7 +185,7 @@ def _moved_by_hand(entry: EntryReport, statuses: tuple[str, ...]) -> bool:
     return any(
         part.status in statuses
         and part.start is not None
-        and _rendered_part(part) != _original_part(part)
+        and rendered_part(part) != original_part(part)
         for part in entry.parts
     )
 
@@ -196,12 +196,12 @@ def _recaled_ref(entry: EntryReport, statuses: tuple[str, ...]) -> str | None:
     touched = False
     for part in entry.parts:
         if part.status in statuses and part.start is not None:
-            recaled = _rendered_part(part)
-            if recaled != _original_part(part):
+            recaled = rendered_part(part)
+            if recaled != original_part(part):
                 touched = True
             rendered.append(recaled)
         else:
-            rendered.append(_original_part(part))
+            rendered.append(original_part(part))
     return ", ".join(rendered) if touched else None
 
 
@@ -285,10 +285,10 @@ def rebase_refs(
             text, "source_ref", entry.source_ref, new_ref, cursor
         )
         cursor = index + 1
-        _set_scalar(citation.holder, citation.key, new_ref)
+        set_scalar(citation.holder, citation.key, new_ref)
         applied.append(f"{entry.source_ref} -> {new_ref}")
 
-    text, prose_applied, left = _apply_prose_edits(text, prose_jobs, document)
+    text, prose_applied, left = apply_prose_edits(text, prose_jobs, document)
     refused.extend(left)
     if refused:
         # A citation left on the pinned lines holds the pin, so writing the
@@ -336,7 +336,7 @@ def _pending_refs(
             for part in entry.parts
             if part.status in movable
             and part.start is not None
-            and _rendered_part(part) != _original_part(part)
+            and rendered_part(part) != original_part(part)
         )
     return pending
 
@@ -348,7 +348,7 @@ def _pending_prose(
     pool: dict[tuple[str, str], int] = {}
     for citation in collect_citations(document, text):
         if citation.kind == "prose":
-            slot = (citation.field, _citation_key(citation.ref))
+            slot = (citation.field, citation_key(citation.ref))
             pool[slot] = pool.get(slot, 0) + 1
     pending = 0
     for entry in report.entries or []:
@@ -361,12 +361,12 @@ def _pending_prose(
             if any(_part_moves(part, movable) for part in entry.parts):
                 pending += 1
             continue
-        rendered = _run_after_moves(
+        rendered = run_after_moves(
             [p.part for p in entry.parts], moves, entry.source_ref
         )
-        if _citation_key(rendered) == _citation_key(entry.source_ref):
+        if citation_key(rendered) == citation_key(entry.source_ref):
             continue
-        slot = (entry.field, _citation_key(rendered))
+        slot = (entry.field, citation_key(rendered))
         if pool.get(slot, 0) > 0:
             pool[slot] -= 1
             continue

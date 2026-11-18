@@ -21,7 +21,7 @@ import zipfile
 from pathlib import Path
 
 # Fixed metadata for deterministic ZIPs
-_FIXED_DATE_TIME = (1980, 1, 1, 0, 0, 0)  # minimum ZIP timestamp
+FIXED_DATE_TIME = (1980, 1, 1, 0, 0, 0)  # minimum ZIP timestamp
 _FIXED_CREATE_SYSTEM = 0  # FAT/DOS (most compatible)
 _FIXED_EXTERNAL_ATTR = 0o100644 << 16  # -rw-r--r--
 _COMPRESS_LEVEL = 9  # deflate level 9 for determinism
@@ -65,7 +65,7 @@ def rebuild_zip_deterministic(
         ) as dst:
             for info in entries:
                 out_info = zipfile.ZipInfo(
-                    filename=info.filename, date_time=_FIXED_DATE_TIME
+                    filename=info.filename, date_time=FIXED_DATE_TIME
                 )
                 out_info.compress_type = zipfile.ZIP_DEFLATED
                 out_info.create_system = _FIXED_CREATE_SYSTEM

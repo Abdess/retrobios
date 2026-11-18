@@ -29,7 +29,7 @@ from pathlib import Path
 import yaml
 
 from model.platforms import load_platform_config, _platform_config_cache
-from model.profiles import _emulator_profiles_cache
+from model.profiles import emulator_profiles_cache
 import generate_db
 from packs import archive as packs_archive
 from packs import manifest as packs_manifest
@@ -107,13 +107,13 @@ class _Fixture(unittest.TestCase):
             yaml.dump({"platforms": {"handheld": {"config": "handheld.yml"}}})
         )
         _platform_config_cache.clear()
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.out = self.root / "dist"
         self.out.mkdir()
 
     def tearDown(self):
         _platform_config_cache.clear()
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self._tmp.cleanup()
 
     def pack(self, no_game_data: bool) -> tuple[str, set[str], str]:

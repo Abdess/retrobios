@@ -15,7 +15,7 @@ import os
 import unittest
 from pathlib import Path
 
-from packs.paths import _resolve_destination
+from packs.paths import resolve_destination
 from resolve.validation import outside_gap_scope, read_from_save_dir, read_from_system_dir
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -24,11 +24,11 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 class PathIsTheDestination(unittest.TestCase):
     def test_no_prefix_on_a_file(self):
         entry = {"name": "ppge_atlas.zim", "path": "PPSSPP/ppge_atlas.zim"}
-        self.assertEqual(_resolve_destination(entry, False), "PPSSPP/ppge_atlas.zim")
+        self.assertEqual(resolve_destination(entry, False), "PPSSPP/ppge_atlas.zim")
         dual = {"name": "IPL.bin", "path": "dolphin-emu/Sys/GC/USA/IPL.bin",
                 "standalone_path": "GC/USA/IPL.bin"}
-        self.assertEqual(_resolve_destination(dual, False), "dolphin-emu/Sys/GC/USA/IPL.bin")
-        self.assertEqual(_resolve_destination(dual, True), "GC/USA/IPL.bin")
+        self.assertEqual(resolve_destination(dual, False), "dolphin-emu/Sys/GC/USA/IPL.bin")
+        self.assertEqual(resolve_destination(dual, True), "GC/USA/IPL.bin")
 
 
 class LoadFromPerBuild(unittest.TestCase):
@@ -63,10 +63,10 @@ class RetroArchCarriesDolphinWhereItReads(unittest.TestCase):
         from model.database import load_database
         from model.profiles import load_emulator_profiles
         from model.platforms import load_platform_config
-        from packs.extras import _collect_emulator_extras
+        from packs.extras import collect_emulator_extras
 
         config = load_platform_config("retroarch")
-        extras = _collect_emulator_extras(
+        extras = collect_emulator_extras(
             config, "emulators", load_database("database.json"), set(),
             config.get("base_destination", ""), load_emulator_profiles("emulators"),
         )

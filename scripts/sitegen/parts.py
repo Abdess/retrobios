@@ -8,8 +8,8 @@ from pathlib import Path
 
 from core.paths import REPO_ROOT
 from sitegen import starlight as sitestarlight
-from sitegen.config import _date_line
-from sitegen.decorate import _front_matter
+from sitegen.config import date_line
+from sitegen.decorate import front_matter
 
 
 # A platform's file lists are split by the share of a page they render to,
@@ -38,7 +38,7 @@ PUBLISHED_PARTS_FILE = (REPO_ROOT
                         / "website" / "src" / "data" / "published-parts.json")
 
 
-def _published_parts() -> dict[str, str]:
+def load_published_parts() -> dict[str, str]:
     if not PUBLISHED_PARTS_FILE.is_file():
         return {}
     return json.loads(PUBLISHED_PARTS_FILE.read_text(encoding="utf-8"))
@@ -66,7 +66,7 @@ def record_parts(docs: Path, present: set[str], published: dict[str, str]) -> di
         if not page.is_file():
             page = page.with_suffix(".mdx")
         try:
-            parent = _front_matter(page.read_text(encoding="utf-8")).get("parent")
+            parent = front_matter(page.read_text(encoding="utf-8")).get("parent")
         except OSError:
             continue
         if isinstance(parent, dict) and parent.get("link") and rel not in found:
@@ -79,12 +79,12 @@ def record_parts(docs: Path, present: set[str], published: dict[str, str]) -> di
 LIST_PART_BUDGET = 300_000
 
 
-def _characters(lines: list[str]) -> int:
+def character_count(lines: list[str]) -> int:
     return sum(len(line) + 1 for line in lines)
 
 
-def _blocks_in_runs(blocks: list[list[str]], budget: int,
-                    weigh: Callable[[list[str]], float] = _characters) -> list[list[str]]:
+def blocks_in_runs(blocks: list[list[str]], budget: int,
+                    weigh: Callable[[list[str]], float] = character_count) -> list[list[str]]:
     """Blocks (table rows, folded lists) in runs of at most ``budget``, by
     default in characters, a block never cut."""
     runs: list[list[str]] = [[]]
@@ -99,7 +99,7 @@ def _blocks_in_runs(blocks: list[list[str]], budget: int,
     return runs
 
 
-def _parent_front_matter(parent: tuple[str, str] | None) -> list[str]:
+def parent_front_matter(parent: tuple[str, str] | None) -> list[str]:
     """The `parent:` front matter of a part page: the page it belongs to,
     by label and site path, which the breadcrumb and sidebar read."""
     if parent is None:
@@ -108,7 +108,7 @@ def _parent_front_matter(parent: tuple[str, str] | None) -> list[str]:
     return ["parent:", f"  label: {json.dumps(label)}", f"  link: {json.dumps(link)}"]
 
 
-def _list_pages(
+def list_pages(
     stem: str, title: str, intro: str, head: list[str], blocks: list[list[str]],
     moved: dict[str, str], budget: int = LIST_PART_BUDGET,
     parent: tuple[str, str] | None = None,
@@ -117,7 +117,7 @@ def _list_pages(
     opens each part, ``blocks`` are cut between parts. Returns where the list
     went, as the page it left says it. ``parent`` (label, site path) is the
     page the parts belong to, for the breadcrumb."""
-    runs = _blocks_in_runs(blocks, budget)
+    runs = blocks_in_runs(blocks, budget)
     stems = [stem + (f"-{n}" if n > 1 else "") for n in range(1, len(runs) + 1)]
     for n, (here, run) in enumerate(zip(stems, runs), 1):
         part = f" (part {n} of {len(runs)})" if len(runs) > 1 else ""
@@ -125,11 +125,11 @@ def _list_pages(
         # one read as duplicates to search and to validate_site.
         opening = f"Part {n} of {len(runs)}. {intro}" if len(runs) > 1 else intro
         moved[here] = "\n".join([
-            "---", "level: reference", *_parent_front_matter(parent), "---", "",
+            "---", "level: reference", *parent_front_matter(parent), "---", "",
             f"# {title}{part}", "", opening, "",
             *([", ".join(f"[part {i}]({other}.md)" if other != here else f"part {i}"
                          for i, other in enumerate(stems, 1)), ""] if len(runs) > 1 else []),
-            *head, *run, "", _date_line(),
+            *head, *run, "", date_line(),
         ]) + "\n"
     if len(stems) == 1:
         return f"[a page of their own]({stems[0]}.md)"

@@ -7,7 +7,7 @@ import sys
 import time
 
 from core import upstream
-from profiling.detection import _cited_paths
+from profiling.detection import cited_paths
 from profiling.reports import ProfileReport, triage_state
 from profiling.repos import select_repo
 from profiling.versions import VersionReport, check_version
@@ -51,7 +51,7 @@ def drift_score(
     return score
 
 
-class _Progress:
+class Progress:
     """A stderr line every PROGRESS_SECONDS while a pass asks the forges."""
 
     def __init__(self, total: int, doing: str, quiet: bool) -> None:
@@ -65,25 +65,25 @@ class _Progress:
             self.last = now
 
 
-def _interrupted(done: int, total: int, what: str) -> None:
+def print_interrupted(done: int, total: int, what: str) -> None:
     print(f"interrupted after {done} of {total} profiles: {what}", file=sys.stderr, flush=True)
 
 
-def _print_triage(
+def print_triage(
     args: argparse.Namespace, selected: dict, reports: list[ProfileReport]
 ) -> bool:
     """Profiles ranked by drift, worst first. False when Ctrl-C cut the
     scoring short: the ranking then covers the profiles scored."""
     ranked: list[tuple[int, ProfileReport, str]] = []
     sampled = 0
-    progress = _Progress(len(reports), "scored", args.offline or len(reports) < 2)
+    progress = Progress(len(reports), "scored", args.offline or len(reports) < 2)
     complete = True
     try:
         for done, report in enumerate(reports):
             progress.step(done, report.name)
             sampled += _score(args, selected, report, ranked)
     except KeyboardInterrupt:
-        _interrupted(len(ranked), len(reports), "the ranking covers those scored")
+        print_interrupted(len(ranked), len(reports), "the ranking covers those scored")
         complete = False
     if sampled:
         # One line for the run: a notice per profile buried the ranking
@@ -117,7 +117,7 @@ def _score(
     sampled = False
     repo = select_repo(profile)
     if report.head and repo is not None:
-        paths = _cited_paths(report)
+        paths = cited_paths(report)
         try:
             version = check_version(profile, repo, args.cache_dir, args.offline)
             for path in paths[:TRIAGE_PATH_SAMPLE]:

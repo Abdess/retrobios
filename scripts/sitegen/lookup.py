@@ -11,19 +11,20 @@ from pathlib import Path
 
 from core.hashing import parse_hash_list
 from model import siteinputs
-from model.collection import _slug
+from model.collection import manufacturer_slug
 from model.systemnames import system_name
 from packs.crossref import FileConsumers
-from sitegen.cards import _PROVENANCE_LABELS, _emulator_card_anchor, emulator_file_anchors
-from sitegen.config import SITE_URL, _REPO_ROOT
-from sitegen.render import _code, _slugify_anchor, card_page, emulator_card_page
+from sitegen.cards import PROVENANCE_LABELS, emulator_card_anchor, emulator_file_anchors
+from sitegen.config import SITE_URL
+from core.paths import REPO_ROOT
+from sitegen.render import code_span, slugify_anchor, card_page, emulator_card_page
 from sitegen.write import write_if_changed
 
 
 HASH_ALGORITHMS = ("sha1", "sha256", "md5", "crc32")
 
 
-def _hash_values(value: object) -> list[str]:
+def sorted_hash_values(value: object) -> list[str]:
     """Every accepted value of one hash field, lowercase.
 
     A field holds one value, a list of accepted revisions, or (Recalbox) a
@@ -32,7 +33,7 @@ def _hash_values(value: object) -> list[str]:
     return sorted(parse_hash_list(value))
 
 
-def _site_path(markdown_target: str) -> str:
+def site_path(markdown_target: str) -> str:
     """A page link as generators write it (systems/sony.md#psx) as a
     site-absolute path (/retrobios/systems/sony/#psx), which resolves the same
     from any document that holds it."""
@@ -107,7 +108,7 @@ def generate_files_page() -> str:
     ])
 
 
-def data_directory_members(install_dir: Path = _REPO_ROOT / "install") -> dict[str, dict[str, dict]]:
+def data_directory_members(install_dir: Path = REPO_ROOT / "install") -> dict[str, dict[str, dict]]:
     """Each data directory's files with their sha1 and size, as the install
     manifests record them for the installer to check."""
     members: dict[str, dict[str, dict]] = {}
@@ -118,7 +119,7 @@ def data_directory_members(install_dir: Path = _REPO_ROOT / "install") -> dict[s
     return members
 
 
-def data_directory_revisions(data_dir: Path = _REPO_ROOT / "data") -> dict[str, dict]:
+def data_directory_revisions(data_dir: Path = REPO_ROOT / "data") -> dict[str, dict]:
     """The revision each data directory was fetched at, as refresh_data_dirs records it."""
     path = data_dir / ".versions.json"
     if not path.is_file():
@@ -145,8 +146,8 @@ def data_directory_origin(entry: dict, fetched: dict) -> list[str]:
     sha = str(fetched.get("sha", "")).strip('"')
     if _GIT_COMMIT.fullmatch(sha):
         repo = _GITHUB_REPO.match(url)
-        commit = f"[{_code(sha[:12])}](https://github.com/{repo.group(1)}/commit/{sha})" \
-            if repo else _code(sha)
+        commit = f"[{code_span(sha[:12])}](https://github.com/{repo.group(1)}/commit/{sha})" \
+            if repo else code_span(sha)
         branch = str(fetched.get("version", ""))
         lines.append(f"Revision: {commit}" + (
             f", the head of `{branch}` when fetched" if branch and branch != sha else ""))
@@ -206,7 +207,7 @@ def file_location_items(
         if len(parts) < 3 or parts[0] != "bios":
             continue
         page = card_page(entry.get("path", ""), sha1)
-        items.append({"sha1": sha1, "url": _site_path(f"systems/{page}.md#sha1-{sha1[:12]}")})
+        items.append({"sha1": sha1, "url": site_path(f"systems/{page}.md#sha1-{sha1[:12]}")})
     # A data directory's files are listed on the page of an emulator reading
     # the tree: 2,534 hashes the packs ship were found nowhere on the site.
     owners = _data_member_owners(profiles or {})
@@ -223,7 +224,7 @@ def file_location_items(
                 known.add(sha1)
                 page = page_of.get(member, owners[ref])
                 items.append({"sha1": sha1,
-                              "url": _site_path(f"emulators/{page}.md#sha1-{sha1[:12]}")})
+                              "url": site_path(f"emulators/{page}.md#sha1-{sha1[:12]}")})
     return sorted(items, key=lambda item: item["sha1"])
 
 
@@ -244,19 +245,19 @@ def _console_system_names(profiles: dict, coverages: dict) -> dict[tuple[str, st
     own section that folder is: a collection file is named after the console
     it is filed under. A folder no id owns, or that two names own, is left out.
     """
-    from model.systemnames import _own_section
+    from model.systemnames import own_section
     from sitegen.render import system_ids
 
     found: dict[tuple[str, str], set[str]] = {}
     for sys_id in system_ids(profiles, [c["config"] for c in coverages.values()]):
-        own = _own_section(sys_id)
+        own = own_section(sys_id)
         if own is not None:
-            found.setdefault((_slug(own[0]), own[1]), set()).add(system_name(sys_id))
+            found.setdefault((manufacturer_slug(own[0]), own[1]), set()).add(system_name(sys_id))
     return {key: next(iter(names)) for key, names in found.items() if len(names) == 1}
 
 
-def _data_member_digests(
-    members: dict, data_registry: dict | None = None, root: Path = _REPO_ROOT,
+def data_member_digests(
+    members: dict, data_registry: dict | None = None, root: Path = REPO_ROOT,
 ) -> dict[str, dict[str, str]]:
     """sha1 -> every hash the lookup takes, for each data directory member
     whose copy in the tree's local cache has the sha1 the manifest records.
@@ -306,17 +307,17 @@ def retired_records(retired: dict[str, dict], files: dict, locations: list[dict]
             extra["successor"] = successor
         else:
             # The page its card was on: the reader lands among its neighbours.
-            url = _site_path(f"systems/{card_page(str(record.get('path', '')), sha1)}.md")
+            url = site_path(f"systems/{card_page(str(record.get('path', '')), sha1)}.md")
         for algorithm in HASH_ALGORITHMS:
             value = sha1 if algorithm == "sha1" else record.get(algorithm)
             records.extend({"value": one, "algorithm": algorithm, "layer": "retired",
                             "name": str(record.get("name", "")), "sha1": sha1,
-                            "url": url, **extra} for one in _hash_values(value))
+                            "url": url, **extra} for one in sorted_hash_values(value))
     return records
 
 
 def _archive_member_records(entry: dict, sha1: str, url: str,
-                            root: Path = _REPO_ROOT) -> list[dict]:
+                            root: Path = REPO_ROOT) -> list[dict]:
     """The CRC32 of each member of a collection archive, read from its
     central directory.
 
@@ -349,7 +350,7 @@ def _collection_lookup_records(
         str(info.get("sha1", "")): member.rsplit("/", 1)[-1]
         for tree in members.values() for member, info in sorted(tree.items())
     }
-    member_digests = _data_member_digests(members)
+    member_digests = data_member_digests(members)
     records: list[dict] = []
     for item in locations:
         sha1 = item["sha1"]
@@ -364,13 +365,13 @@ def _collection_lookup_records(
                            for algorithm in HASH_ALGORITHMS if algorithm in digests)
             continue
         parts = str(entry.get("path", "")).split("/")
-        held_by = named.get((_slug(parts[1]), parts[2])) if len(parts) > 3 else None
+        held_by = named.get((manufacturer_slug(parts[1]), parts[2])) if len(parts) > 3 else None
         for algorithm in HASH_ALGORITHMS:
             records.extend({
                 "value": value, "algorithm": algorithm, "layer": "collection",
                 "name": str(entry.get("name", "")), "sha1": sha1, "url": item["url"],
                 **({"system_name": held_by} if held_by else {}),
-            } for value in _hash_values(entry.get(algorithm)))
+            } for value in sorted_hash_values(entry.get(algorithm)))
         records += _archive_member_records(entry, sha1, item["url"])
     return records
 
@@ -381,7 +382,7 @@ def _platform_lookup_records(coverages: dict, consumers: FileConsumers | None) -
     records: list[dict] = []
     for key, coverage in sorted(coverages.items()):
         for system_id, system in sorted((coverage["config"].get("systems") or {}).items()):
-            url = _site_path(f"platforms/{key}.md#{system_id.replace(' ', '-')}")
+            url = site_path(f"platforms/{key}.md#{system_id.replace(' ', '-')}")
             system_label = _lookup_system_name(system_id)
             for entry in system.get("files") or []:
                 # A hash of a ROM inside the archive (zipped_file) designates
@@ -394,7 +395,7 @@ def _platform_lookup_records(coverages: dict, consumers: FileConsumers | None) -
                         "owner": key, "name": str(entry.get("name", "")), "url": url,
                         **({"system_name": system_label} if system_label else {}),
                         **({"sha1": archive} if archive else {}),
-                    } for value in _hash_values(entry.get(algorithm)))
+                    } for value in sorted_hash_values(entry.get(algorithm)))
     return records
 
 
@@ -407,7 +408,7 @@ def _emulator_lookup_records(profiles: dict) -> list[dict]:
         entries = profile.get("files") or []
         own_systems = [str(s) for s in profile.get("systems") or []]
         for entry, anchor in zip(entries, emulator_file_anchors(entries)):
-            url = _site_path(f"emulators/{emulator_card_page(key, anchor)}.md#{anchor}")
+            url = site_path(f"emulators/{emulator_card_page(key, anchor)}.md#{anchor}")
             sys_id = str(entry.get("system") or "") or (
                 own_systems[0] if len(own_systems) == 1 else "")
             entry_label = _lookup_system_name(sys_id) if sys_id else None
@@ -421,7 +422,7 @@ def _emulator_lookup_records(profiles: dict) -> list[dict]:
                         "value": value, "algorithm": algorithm, "layer": "emulator",
                         "owner": key, "name": name, "url": url,
                         **({"system_name": entry_label} if entry_label else {}),
-                    } for value in _hash_values(holder.get(algorithm)))
+                    } for value in sorted_hash_values(holder.get(algorithm)))
     return records
 
 
@@ -468,8 +469,8 @@ def wanted_records(rows: list[dict]) -> list[dict]:
     knows has it, and never said the dump is wanted."""
     records = []
     for row in rows:
-        label = _PROVENANCE_LABELS.get(row["catalog"], row["catalog"])
-        url = _site_path(f"provenance.md#{_slugify_anchor(label)}")
+        label = PROVENANCE_LABELS.get(row["catalog"], row["catalog"])
+        url = site_path(f"provenance.md#{slugify_anchor(label)}")
         for algorithm in ("sha1", "md5", "crc32"):
             value = str(row.get(algorithm) or "").lower()
             if value:
@@ -500,15 +501,15 @@ def _read_by_name(records: list[dict], files: dict, consumers: FileConsumers) ->
             entries = consumers.emulator_files.get(emulator) or []
             if index is None or index >= len(entries):
                 continue
-            anchor = _emulator_card_anchor(emulator, entries, index)
-            url = _site_path(f"emulators/{emulator_card_page(emulator, anchor)}.md#{anchor}")
+            anchor = emulator_card_anchor(emulator, entries, index)
+            url = site_path(f"emulators/{emulator_card_page(emulator, anchor)}.md#{anchor}")
             name = str(entries[index].get("name", ""))
             for algorithm in HASH_ALGORITHMS:
                 added.extend({
                     "value": value, "algorithm": algorithm, "layer": "emulator",
                     "owner": emulator, "name": name, "url": url, "sha1": sha1,
                     "declared": "name",
-                } for value in _hash_values(entry.get(algorithm)))
+                } for value in sorted_hash_values(entry.get(algorithm)))
     return added
 
 
@@ -542,7 +543,7 @@ def _held_under_every_hash(records: list[dict], files: dict, indexes: dict) -> l
         for algorithm in HASH_ALGORITHMS:
             copies.extend({**record, "value": value, "algorithm": algorithm,
                            "declared": record["algorithm"]}
-                          for value in _hash_values(files[sha1].get(algorithm))
+                          for value in sorted_hash_values(files[sha1].get(algorithm))
                           if value != record["value"])
     return copies
 
@@ -587,6 +588,6 @@ def data_tree_pages(ref: str, members: dict[str, dict]) -> list[tuple[str, list[
     if len(members) <= DATA_TREE_ROWS:
         return []
     names = sorted(members)
-    stem = f"data-{_slugify_anchor(ref)}"
+    stem = f"data-{slugify_anchor(ref)}"
     return [(stem + (f"-{n}" if n > 1 else ""), names[start:start + DATA_TREE_ROWS_PER_PAGE])
             for n, start in enumerate(range(0, len(names), DATA_TREE_ROWS_PER_PAGE), 1)]

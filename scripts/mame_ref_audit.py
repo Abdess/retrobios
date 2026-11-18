@@ -29,7 +29,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from core import upstream
 from core.cli import require_directory
 from model.safeparse import yaml_load
-from scraper.mame_parser import _MACHINE_MACROS, strip_comments
+from scraper.mame_parser import MACHINE_MACROS, strip_comments
 
 # An optional role word names the repository the lines are in.
 DRIVER_REF = re.compile(r"^(?:(source|upstream) )?(src/[\w./+-]+):(\d+)$")
@@ -50,7 +50,7 @@ class Finding:
 def declares(line: str, set_name: str) -> bool:
     """Whether this line is the machine declaration of that set."""
     clean = strip_comments(line)
-    match = _MACHINE_MACROS.search(clean)
+    match = MACHINE_MACROS.search(clean)
     if not match:
         return False
     args = clean[match.end():].split(",")

@@ -28,9 +28,8 @@ if TYPE_CHECKING:
     from install import LocalCopy, Progress, _OsRule
 
 
-ROOT = REPO_ROOT
-PAGE = ROOT / "wiki" / "installer.md"
-INSTALLER = ROOT / "install.py"
+PAGE = REPO_ROOT / "wiki" / "installer.md"
+INSTALLER = REPO_ROOT / "install.py"
 
 _spec = importlib.util.spec_from_file_location("install", INSTALLER)
 if _spec is None or _spec.loader is None:
@@ -216,7 +215,7 @@ def line_menu() -> str:
     import io
     from unittest import mock
 
-    manifest = json.loads((ROOT / "install" / "retroarch.json").read_text(encoding="utf-8"))
+    manifest = json.loads((REPO_ROOT / "install" / "retroarch.json").read_text(encoding="utf-8"))
     files = [*manifest["files"], *(manifest.get("case_variants") or [])]
     folder = Path(MENU_FOLDER)
     out = io.StringIO()
@@ -266,7 +265,7 @@ class _ListHandler(http.server.SimpleHTTPRequestHandler):
 
     def __init__(self, request: socket.socket | tuple[bytes, socket.socket],
                  client_address: tuple[str, int], server: socketserver.BaseServer) -> None:
-        super().__init__(request, client_address, server, directory=str(ROOT))
+        super().__init__(request, client_address, server, directory=str(REPO_ROOT))
 
     def do_GET(self) -> None:
         if not re.fullmatch(r"/install/[a-z0-9_-]+\.json", self.path):
@@ -398,8 +397,8 @@ class Sandbox:
     is printed here."""
 
     def __enter__(self) -> Sandbox:
-        (ROOT / "tmp").mkdir(exist_ok=True)
-        self.root = Path(tempfile.mkdtemp(prefix="installer-doc-", dir=ROOT / "tmp"))
+        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
+        self.root = Path(tempfile.mkdtemp(prefix="installer-doc-", dir=REPO_ROOT / "tmp"))
         self.home = self.root / "home"
         self.card = self.root / "card"
         config = self.home / ".config" / "retroarch" / "retroarch.cfg"
@@ -458,7 +457,7 @@ class Sandbox:
                "RETROBIOS_BASE_URL": f"http://127.0.0.1:{self.server.server_address[1]}"}
         done = subprocess.run(
             [sys.executable, "-s", "-c", CHILD, json.dumps(spec)],
-            cwd=ROOT, env=env, stdin=subprocess.DEVNULL, capture_output=True, text=True,
+            cwd=REPO_ROOT, env=env, stdin=subprocess.DEVNULL, capture_output=True, text=True,
             check=False)
         if done.returncode not in codes:
             raise SampleFailed(f"install.py {' '.join(args)} exited "
@@ -473,7 +472,7 @@ _RUNS: dict[tuple, str] = {}
 
 def _stamp(platform: str) -> tuple[int, int]:
     return (hash(INSTALLER.read_bytes()),
-            hash((ROOT / "install" / f"{platform}.json").read_bytes()))
+            hash((REPO_ROOT / "install" / f"{platform}.json").read_bytes()))
 
 
 class _LazySandbox:
@@ -529,7 +528,7 @@ def _fenced(lines: list[str]) -> str:
 
 def list_date(platform: str) -> str:
     """The day the committed list was generated, which dates its samples."""
-    manifest = json.loads((ROOT / "install" / f"{platform}.json").read_text(encoding="utf-8"))
+    manifest = json.loads((REPO_ROOT / "install" / f"{platform}.json").read_text(encoding="utf-8"))
     return manifest["generated"][:10]
 
 

@@ -24,7 +24,7 @@ from unittest import mock
 
 import yaml
 
-from model.profiles import _emulator_profiles_cache
+from model.profiles import emulator_profiles_cache
 from model.platforms import load_platform_config
 from packs.platformpack import generate_pack
 from packs.coverage import verify_platform
@@ -34,7 +34,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 class ACoreFileFillsAFreeDeclaration(unittest.TestCase):
     def setUp(self):
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         (REPO_ROOT / "tmp").mkdir(exist_ok=True)
         self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         self.addCleanup(shutil.rmtree, self.root, True)
@@ -104,7 +104,7 @@ class AFileDeclaredUnderAnotherName(unittest.TestCase):
     declarations, took ROM as declared and never counted it."""
 
     def test_the_report_lists_what_the_builder_packs(self):
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         self.addCleanup(shutil.rmtree, root, True)
         bios = root / "bios" / "Apple" / "IIgs"
@@ -169,8 +169,8 @@ class AMissingDataDirectoryFailsTheRun(unittest.TestCase):
         }))
         db = {"files": {}, "indexes": {"by_md5": {}, "by_name": {}, "by_crc32": {},
                                       "by_path_suffix": {}}}
-        datatrees._MISSING_DATA_DIRS.clear()
-        self.addCleanup(datatrees._MISSING_DATA_DIRS.clear)
+        datatrees.MISSING_DATA_DIRS.clear()
+        self.addCleanup(datatrees.MISSING_DATA_DIRS.clear)
         with redirect_stdout(io.StringIO()):
             platformpack.generate_pack(
                 "fakeplat", str(root / "platforms"), db, str(root / "bios"),
@@ -178,9 +178,9 @@ class AMissingDataDirectoryFailsTheRun(unittest.TestCase):
                 data_registry={"assets": {"local_cache": str(root / "absent")}},
                 offline=True,
             )
-        self.assertEqual(datatrees._MISSING_DATA_DIRS, {"assets"})
+        self.assertEqual(datatrees.MISSING_DATA_DIRS, {"assets"})
         # main() starts each run with no notices, so the run itself records it.
-        with mock.patch.object(gp, "_main", lambda held: datatrees._MISSING_DATA_DIRS.add("assets")), \
+        with mock.patch.object(gp, "_main", lambda held: datatrees.MISSING_DATA_DIRS.add("assets")), \
                 contextlib.redirect_stderr(io.StringIO()), \
                 self.assertRaises(SystemExit) as stop:
             gp.main()
@@ -196,7 +196,7 @@ class AFileNobodyHoldsIsAnOmission(unittest.TestCase):
     def test_the_manifest_names_it(self):
         from packs.manifest import generate_manifest
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         self.addCleanup(shutil.rmtree, root, True)
         for folder in ("platforms", "emulators", "bios"):
@@ -237,7 +237,7 @@ class AMemberNameIsNotALooseFile(unittest.TestCase):
     def test_verify_reads_undeclared_files_as_the_builder_does(self):
         from packs import crossref
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         self.addCleanup(shutil.rmtree, root, True)
         (root / "platforms").mkdir()
@@ -255,7 +255,7 @@ class AMemberNameIsNotALooseFile(unittest.TestCase):
         db = {"files": {}, "indexes": {"by_md5": {}, "by_name": {}, "by_crc32": {},
                                       "by_path_suffix": {}}}
         config = load_platform_config("fakeplat", str(root / "platforms"))
-        with mock.patch.object(crossref, "_build_supplemental_index",
+        with mock.patch.object(crossref, "build_supplemental_index",
                                lambda *a, **k: {"315-6146.bin"}):
             result = verify_platform(config, db, str(root / "emulators"))
         self.assertEqual(
@@ -271,7 +271,7 @@ class TwoDeclarationsOfOnePath(unittest.TestCase):
     round, both must count the path once and met."""
 
     def _run(self, first: str, second: str, spelling: str):
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         self.addCleanup(shutil.rmtree, root, True)
         bios = root / "bios" / "Maker" / "Console"
@@ -322,7 +322,7 @@ class ANamelessWhitelistEntry(unittest.TestCase):
     missing in the pack and met in verify."""
 
     def test_the_pack_counts_what_verify_counts(self):
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         self.addCleanup(shutil.rmtree, root, True)
         bios = root / "bios" / "Sony" / "PlayStation"

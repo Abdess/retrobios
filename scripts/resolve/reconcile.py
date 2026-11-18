@@ -17,13 +17,13 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 
 
-from model.systems import _norm_system_id
+from model.systems import norm_system_id
 from core.paths import REPO_ROOT
 
 HASH_FIELDS = ("sha1", "md5", "sha256", "crc32")
 
 
-def _hash_values(entry: dict, field_name: str) -> list[str]:
+def hash_values(entry: dict, field_name: str) -> list[str]:
     """Return a hash field as a list, whatever shape it was written in."""
     raw = entry.get(field_name)
     if not raw:
@@ -62,8 +62,8 @@ def checked_hashes(entry: dict | None) -> dict | None:
         kinds = {str(k) for k in raw}
     else:
         kinds = {str(raw)}
-    checked = [f for f in HASH_FIELDS if f in kinds and _hash_values(entry, f)]
-    if checked and all(len(set(_hash_values(entry, f))) == 1 for f in checked):
+    checked = [f for f in HASH_FIELDS if f in kinds and hash_values(entry, f)]
+    if checked and all(len(set(hash_values(entry, f))) == 1 for f in checked):
         return entry
     return {k: v for k, v in entry.items() if k not in HASH_FIELDS or k in kinds}
 
@@ -96,8 +96,8 @@ def contradicted_hashes(truth_entry: dict, platform_entry: dict | None) -> list[
     theirs = comparable(platform_entry)
     return [
         field_name for field_name in HASH_FIELDS
-        if (ours := set(_hash_values(checked, field_name)))
-        and (held := set(_hash_values(theirs, field_name)))
+        if (ours := set(hash_values(checked, field_name)))
+        and (held := set(hash_values(theirs, field_name)))
         and not ours & held
     ]
 
@@ -111,15 +111,15 @@ def is_label(entry: dict) -> bool:
     return bool(entry.get("_cores")) and "_named_by" in entry and not entry["_named_by"]
 
 
-def _is_placeholder(name: str) -> bool:
+def is_placeholder(name: str) -> bool:
     return "<" in name or ">" in name or "*" in name
 
 
 def _field_sets(entry: dict | None) -> dict[str, set[str]]:
-    return {f: set(_hash_values(entry or {}, f)) for f in HASH_FIELDS}
+    return {f: set(hash_values(entry or {}, f)) for f in HASH_FIELDS}
 
 
-def _single_size(value: int | str | list[int | str]) -> int | None:
+def single_size(value: int | str | list[int | str]) -> int | None:
     """One size, or None: a list names several accepted revisions, which a
     single size field cannot state (int() on it stopped the whole export)."""
     if isinstance(value, list):
@@ -206,9 +206,9 @@ class NativeFile:
         rejects a file will reject it whatever the platform declares.
         """
         if field_name == "md5" and self.composite_md5:
-            return _hash_values(self.platform or {}, field_name)
-        truth_values = _hash_values(self._checked_truth, field_name)
-        platform_values = _hash_values(self.platform or {}, field_name)
+            return hash_values(self.platform or {}, field_name)
+        truth_values = hash_values(self._checked_truth, field_name)
+        platform_values = hash_values(self.platform or {}, field_name)
         source = self._identity_source()
         if source == "platform":
             return platform_values
@@ -242,11 +242,11 @@ class NativeFile:
         is written when it names one value, which is then that dump's.
         """
         if field_name == "md5" and self.composite_md5:
-            values = _hash_values(self.platform or {}, field_name)
+            values = hash_values(self.platform or {}, field_name)
             return values[0] if values else ""
         source = self._identity_source()
-        truth_values = _hash_values(self._checked_truth, field_name)
-        platform_values = _hash_values(self.platform or {}, field_name)
+        truth_values = hash_values(self._checked_truth, field_name)
+        platform_values = hash_values(self.platform or {}, field_name)
         if source == "truth":
             return truth_values[0] if truth_values else ""
         if source == "platform" or not truth_values:
@@ -305,7 +305,7 @@ class NativeFile:
         for entry in order:
             if not entry or not entry.get("size"):
                 continue
-            single = _single_size(entry["size"])
+            single = single_size(entry["size"])
             if single is None:
                 if accepted is None:
                     accepted = {int(v) for v in entry["size"]}
@@ -425,19 +425,19 @@ def by_name(truth_entry: dict, platform_entry: dict) -> bool:
 
 def by_hash(truth_entry: dict, platform_entry: dict) -> bool:
     """A value on any of the four hash fields in common: a renamed file."""
-    ours = {v for f in HASH_FIELDS for v in _hash_values(truth_entry, f)}
+    ours = {v for f in HASH_FIELDS for v in hash_values(truth_entry, f)}
     if not ours:
         return False
     theirs = comparable(platform_entry)
-    return bool(ours & {v for f in HASH_FIELDS for v in _hash_values(theirs, f)})
+    return bool(ours & {v for f in HASH_FIELDS for v in hash_values(theirs, f)})
 
 
 def _contradicts(truth_entry: dict, platform_entry: dict) -> bool:
     """A hash both entries declare, without a value in common."""
     platform_entry = comparable(platform_entry)
     return any(
-        (ours := set(_hash_values(truth_entry, f)))
-        and (theirs := set(_hash_values(platform_entry, f)))
+        (ours := set(hash_values(truth_entry, f)))
+        and (theirs := set(hash_values(platform_entry, f)))
         and not ours & theirs
         for f in HASH_FIELDS
     )
@@ -541,7 +541,7 @@ def _correct_matched(matched: NativeFile, truth_entry: dict, report: Report) -> 
             report.hashes_corrected.append(
                 f"{matched.native_system}/{matched.name} {field_name}"
             )
-        elif _hash_values(checked, field_name) and not _hash_values(
+        elif hash_values(checked, field_name) and not hash_values(
             comparable(matched.platform), field_name
         ):
             matched.filled.append(field_name)
@@ -581,7 +581,7 @@ class _TruthPass:
     def __post_init__(self) -> None:
         scraped_systems = self.scraped_systems
         self.norm_to_scraped = {
-            _norm_system_id(key): key for key in scraped_systems
+            norm_system_id(key): key for key in scraped_systems
         }
         self.platform_ids = {
             native_id
@@ -593,7 +593,7 @@ class _TruthPass:
         }
         self.native_by_norm = {}
         for system in self.systems.values():
-            self.native_by_norm.setdefault(_norm_system_id(system.native_id), system.native_id)
+            self.native_by_norm.setdefault(norm_system_id(system.native_id), system.native_id)
 
     def target_native_ids(self, truth_sid: str) -> tuple[list[str], bool]:
         """The native ids a truth system spans, and whether the first one
@@ -601,7 +601,7 @@ class _TruthPass:
         scraped_systems = self.scraped_systems
         scraped_key = truth_sid if truth_sid in scraped_systems else None
         if scraped_key is None:
-            scraped_key = self.norm_to_scraped.get(_norm_system_id(truth_sid))
+            scraped_key = self.norm_to_scraped.get(norm_system_id(truth_sid))
         if scraped_key is not None:
             sys_data = scraped_systems[scraped_key]
             ids = {
@@ -620,7 +620,7 @@ class _TruthPass:
                 ordered.remove(primary)
                 ordered.insert(0, primary)
             return ordered, primary in ids or len(ordered) == 1
-        direct = self.native_by_norm.get(_norm_system_id(truth_sid))
+        direct = self.native_by_norm.get(norm_system_id(truth_sid))
         return ([direct] if direct else [truth_sid]), True
 
     def _files_of(self, target_ids: list[str]) -> list[NativeFile]:
@@ -639,7 +639,7 @@ class _TruthPass:
         truth_files = [
             entry for entry in truth_files
             if (name := str(entry.get("name", "")))
-            and not name.startswith("_") and not _is_placeholder(name)
+            and not name.startswith("_") and not is_placeholder(name)
         ]
         candidates = [c for c in self._files_of(target_ids) if c.truth is None]
         pairs = pair_entries(truth_files, [c.platform or {} for c in candidates])

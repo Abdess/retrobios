@@ -23,7 +23,7 @@ from pathlib import Path
 
 import yaml
 
-from model.profiles import _emulator_profiles_cache, load_emulator_profiles
+from model.profiles import emulator_profiles_cache, load_emulator_profiles
 from model.platforms import load_platform_config
 from resolve.standalone import platform_layouts, standalone_set
 from packs.manifest import generate_manifest
@@ -46,7 +46,7 @@ LINK = {
 
 class ALinkMovesTheDestination(unittest.TestCase):
     def setUp(self) -> None:
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         (REPO_ROOT / "tmp").mkdir(exist_ok=True)
         self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         self.addCleanup(shutil.rmtree, self.root, True)
@@ -161,7 +161,7 @@ class ALinkMovesTheDestination(unittest.TestCase):
             "systems": ["commodore-amiga"],
             "files": [{"name": "kick.rom", "path": "kick.rom", "required": False}],
         }))
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         manifest = self.manifest("linkplat")
         (held,) = [f for f in manifest["files"] if f["dest"] == "kick.rom"]
         self.assertEqual(held["cores"], ["other"])
@@ -175,7 +175,7 @@ class ALinkMovesTheDestination(unittest.TestCase):
         for key in ("kick-1", "kick-2"):
             (self.emulators / f"{key}.yml").write_text(
                 yaml.safe_dump({**data, "built_by": ["linkplat"]}))
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         omitted = [o for o in self.manifest("linkplat")["omitted_files"]
                    if o["name"] == "kick.rom"]
         self.assertEqual([(o["root"], o["cores"]) for o in omitted],
@@ -305,7 +305,7 @@ class AProgramRunFromItsFolder(unittest.TestCase):
     """
 
     def setUp(self) -> None:
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         (REPO_ROOT / "tmp").mkdir(exist_ok=True)
         self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         self.addCleanup(shutil.rmtree, self.root, True)
@@ -572,7 +572,7 @@ class ASettingSetsTheBiosFolder(unittest.TestCase):
     """
 
     def setUp(self) -> None:
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         (REPO_ROOT / "tmp").mkdir(exist_ok=True)
         self.root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
         self.addCleanup(shutil.rmtree, self.root, True)

@@ -85,22 +85,22 @@ from resolve.packfiles import (
 
 from packs.archive import DamagedArchiveError
 from packs.platformpack import generate_split_packs
-from packs.datatrees import _MISSING_DATA_DIRS
+from packs.datatrees import MISSING_DATA_DIRS
 from packs.emulatorpack import generate_emulator_pack, generate_system_pack
-from packs.finalize import _baseline_shortfall, verify_and_finalize_packs
+from packs.finalize import baseline_shortfall, verify_and_finalize_packs
 from packs.manifest import generate_install_list, generate_manifest
 from packs.md5pack import generate_md5_pack
 from packs.naming import (
-    _expected_pack_names,
-    _narrowings,
-    _pack_variant,
-    _platform_pack_stem,
-    _platform_target,
-    _system_tag,
+    expected_pack_names,
+    pack_narrowings,
+    pack_variant,
+    platform_pack_stem,
+    platform_target,
+    system_tag,
 )
 from packs.platformpack import generate_pack
 from packs.scope import pack_systems, platform_list_version
-from packs.standalone import STANDALONE_DIR, _standalone_copies
+from packs.standalone import STANDALONE_DIR, standalone_copies
 from packs.targets import generate_target_manifests, target_list
 
 
@@ -382,7 +382,7 @@ def _run_manifest_mode(
                     target_cores=tc,
                     source=source,
                     regions=getattr(args, "regions", None),
-                    target_name=_platform_target(
+                    target_name=platform_target(
                         representative, args.target, args.platforms_dir
                     ),
                     offline=args.offline,
@@ -392,10 +392,10 @@ def _run_manifest_mode(
                 )
                 narrow_suffix = "".join(
                     tag.lower()
-                    for tag, _label in _narrowings(
+                    for tag, _label in pack_narrowings(
                         source,
                         getattr(args, "regions", None),
-                        _platform_target(representative, args.target, args.platforms_dir),
+                        platform_target(representative, args.target, args.platforms_dir),
                         False,
                         required_only,
                         no_game_data=getattr(args, "no_game_data", False),
@@ -438,7 +438,7 @@ def _run_manifest_mode(
                         alias_manifest["detect"] = alias_install.get("detect", [])
                         # Placed and completed as the representative's are:
                         # copied raw, an alias's copies named no source.
-                        alias_manifest["standalone_copies"] = _standalone_copies(
+                        alias_manifest["standalone_copies"] = standalone_copies(
                             alias_install.get("standalone_copies", []),
                             {name: emu_profiles[name]
                              for name in _platform_cores(alias_cfg, emu_profiles)},
@@ -528,7 +528,7 @@ def _run_verify_packs(args: argparse.Namespace) -> None:
     )
     # After an --all-variants build every variant is named, so none of the
     # six packs the run wrote passes unmentioned.
-    expected = _expected_pack_names(
+    expected = expected_pack_names(
         platforms,
         args.platforms_dir,
         check.regions,
@@ -564,7 +564,7 @@ def _run_verify_packs(args: argparse.Namespace) -> None:
         # A group pack and a pack built for the platform alone can both be
         # present, and each one is a pack of this platform.
         for pack_name in found:
-            variant = _pack_variant(pack_name)
+            variant = pack_variant(pack_name)
             if variant is None:
                 # One BIOS per slot: the slot choice is not replayed here.
                 print(
@@ -593,7 +593,7 @@ def _run_verify_packs(args: argparse.Namespace) -> None:
             # These explain a baseline short of its total: a dump whose hash
             # the frontend refuses is left out on purpose, and a file the
             # collection does not hold cannot be packed (verify reports it).
-            shortfall = ", ".join(_baseline_shortfall(bl_excluded, bl_absent))
+            shortfall = ", ".join(baseline_shortfall(bl_excluded, bl_absent))
             excluded = f" ({shortfall})" if shortfall else ""
             counts = (
                 f"{bl_present}/{bl_checked} baseline{excluded}, "
@@ -722,7 +722,7 @@ def _run_platform_packs(
             zip_path = None
             zip_paths: list = []
             tc = target_cores_cache.get(representative) if args.target else None
-            named_target = _platform_target(representative, args.target, args.platforms_dir)
+            named_target = platform_target(representative, args.target, args.platforms_dir)
             if _skip_empty_truth(args, source, representative, emu_profiles, tc, failed):
                 continue
             try:
@@ -834,7 +834,7 @@ def _group_pack_name(
     source, required_only = variant
     narrow_tags = "".join(
         tag
-        for tag, _label in _narrowings(
+        for tag, _label in pack_narrowings(
             source,
             getattr(args, "regions", None),
             named_target,
@@ -843,12 +843,12 @@ def _group_pack_name(
             no_game_data=getattr(args, "no_game_data", False),
         )
     )
-    stem = _platform_pack_stem(
+    stem = platform_pack_stem(
         group_platforms, representative, args.platforms_dir
     )
     return (
         f"{stem}{narrow_tags}_BIOS_Pack"
-        f"{_system_tag(system_filter)}.zip"
+        f"{system_tag(system_filter)}.zip"
     )
 
 
@@ -1033,7 +1033,7 @@ def _given_flags(args: argparse.Namespace) -> set[str]:
 def main() -> None:
     # One run's account: tests call main() repeatedly in one process, and a
     # notice left by an earlier run failed a later one that missed nothing.
-    _MISSING_DATA_DIRS.clear()
+    MISSING_DATA_DIRS.clear()
     with contextlib.ExitStack() as held:
         try:
             _main(held)
@@ -1042,10 +1042,10 @@ def main() -> None:
             # report it: the run stops with the file to restore.
             print(f"ERROR: {exc}", file=sys.stderr)
             sys.exit(1)
-    if _MISSING_DATA_DIRS:
+    if MISSING_DATA_DIRS:
         print(
             "ERROR: packs written without data directories that are not cached: "
-            f"{', '.join(sorted(_MISSING_DATA_DIRS))} (run refresh_data_dirs.py)",
+            f"{', '.join(sorted(MISSING_DATA_DIRS))} (run refresh_data_dirs.py)",
             file=sys.stderr,
         )
         sys.exit(1)

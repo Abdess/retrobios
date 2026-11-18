@@ -16,9 +16,9 @@ from pathlib import Path
 
 import yaml
 
-from sitegen.render import _admonition_body
-from sitegen.descriptions import _browser_title
-from sitegen.sources import _forge_sources, _source_ref_markdown
+from sitegen.render import admonition_body
+from sitegen.descriptions import page_browser_title
+from sitegen.sources import _forge_sources, source_ref_markdown
 from sitegen.decorate import decorate_markdown_pages
 from sitegen.dataexports import generate_data_exports
 
@@ -143,7 +143,7 @@ class SiteReferenceContracts(unittest.TestCase):
     @mock.patch("sitegen.sources.tree_holds", lambda *_args: True)  # a path the record confirms
     def test_source_references_are_revision_pinned_links(self):
         _, _, profiles, _ = self._fixtures()
-        rendered = _source_ref_markdown(
+        rendered = source_ref_markdown(
             profiles["testemu"], "src/firmware.cpp:10-12"
         )
         self.assertIn("/blob/" + "a" * 40 + "/src/firmware.cpp#L10-L12", rendered)
@@ -161,24 +161,24 @@ class SiteReferenceContracts(unittest.TestCase):
             "upstream": "https://gitlab.com/vendor/example",
             "upstream_commit": "b" * 40,
         }
-        rendered = _source_ref_markdown(profile, "jg.c:213-214")
+        rendered = source_ref_markdown(profile, "jg.c:213-214")
         self.assertEqual(rendered, "`jg.c:213-214`")
         self.assertNotIn("http", rendered)
 
         # A first segment equal to a repository's name proves nothing: PCSX2
         # keeps its sources in pcsx2/, hatariB vendors Hatari in hatari/.
         # Stripped, 470 links pointed at nothing or at another file.
-        prefixed = _source_ref_markdown(profile, "example/jg.c:213-214")
+        prefixed = source_ref_markdown(profile, "example/jg.c:213-214")
         self.assertEqual(prefixed, "`example/jg.c:213-214`")
 
     @mock.patch("sitegen.sources.tree_holds", lambda *_args: True)  # a path the record confirms
     def test_a_single_repository_links_the_path_as_written(self):
         profile = {"source": "https://github.com/PCSX2/pcsx2", "source_commit": "c" * 40}
-        rendered = _source_ref_markdown(profile, "pcsx2/ImGui/FullscreenUI.cpp:755-759")
+        rendered = source_ref_markdown(profile, "pcsx2/ImGui/FullscreenUI.cpp:755-759")
         self.assertIn("/blob/" + "c" * 40 + "/pcsx2/ImGui/FullscreenUI.cpp#L755-L759", rendered)
 
     def test_preprocessor_tokens_cannot_become_page_headings(self):
-        rendered = _admonition_body("First paragraph.\n\n#if FEATURE\nEnabled")
+        rendered = admonition_body("First paragraph.\n\n#if FEATURE\nEnabled")
         self.assertIn("\\#if FEATURE", rendered)
         self.assertNotIn("\n    #if FEATURE", rendered)
 
@@ -189,9 +189,9 @@ class SiteReferenceContracts(unittest.TestCase):
 
         pages = {"systems/qemu.md": {}, "emulators/qemu.md": {"hasPart": [{"name": "a"}]}}
         with mock.patch.dict(descriptions.PAGE_DATA, pages, clear=True):
-            self.assertEqual(_browser_title(Path("emulators/qemu.md"), "QEMU"),
+            self.assertEqual(page_browser_title(Path("emulators/qemu.md"), "QEMU"),
                              "QEMU emulator BIOS files")
-            self.assertEqual(_browser_title(Path("systems/qemu.md"), "QEMU"), "QEMU BIOS files")
+            self.assertEqual(page_browser_title(Path("systems/qemu.md"), "QEMU"), "QEMU BIOS files")
 
     ACCEPTED = (
         ("md5", "c87a52c277f7952b41c639fc7bf0a43b"),
@@ -336,7 +336,7 @@ class APlatformPageSaysWhereEachFileGoes(unittest.TestCase):
         declared = [{"name": "IPL.bin", "destination": f"dolphin-emu/Sys/GC/{r}/IPL.bin",
                      "sha1": str(i) * 40} for i, r in enumerate(regions)]
         files = [{"name": "IPL.bin", "status": "ok"} for _ in regions]
-        lines = platformfiles._render_platform_systems(
+        lines = platformfiles.render_platform_systems(
             {"nintendo-gamecube": files}, {("nintendo-gamecube", "IPL.bin"): declared}, {})
         for region in regions:
             # The folder: the name is before it in the row.
@@ -408,11 +408,11 @@ class EmulatorPagesPrintWholeHashes(unittest.TestCase):
     whole found nothing."""
 
     def test_full_and_split(self):
-        from sitegen.fields import _hash_spans
+        from sitegen.fields import hash_spans
 
         sha1 = "0c3de403b524107809fa9308b730d60e8e41ba93"
-        self.assertIn(f">{sha1}</code>", _hash_spans(sha1))
-        both = _hash_spans(f"{'a' * 64}, {'b' * 64}")
+        self.assertIn(f">{sha1}</code>", hash_spans(sha1))
+        both = hash_spans(f"{'a' * 64}, {'b' * 64}")
         self.assertIn(">" + "a" * 64 + "</code>", both)
         self.assertIn(">" + "b" * 64 + "</code>", both)
         self.assertNotIn("...", both)
@@ -461,7 +461,7 @@ class ASystemCardLandsOnThePlatformsSection(unittest.TestCase):
     def test_section_and_destination(self):
         import types
 
-        from sitegen.cards import _platform_links
+        from sitegen.cards import platform_links
 
         consumers = types.SimpleNamespace(
             platforms={"s": {"retrodeck"}},
@@ -469,7 +469,7 @@ class ASystemCardLandsOnThePlatformsSection(unittest.TestCase):
             platform_destinations={"s": {"retrodeck": {"bios/scph5000.bin"}}},
         )
         self.assertEqual(
-            _platform_links("s", consumers),
+            platform_links("s", consumers),
             ["[RetroDECK](../platforms/retrodeck.md#sony-playstation): `bios/scph5000.bin`"],
         )
 
@@ -588,8 +588,8 @@ class OnlyAPinnedProfileClaimsAPin(unittest.TestCase):
             "emulators/redream.md": {},
         }
         with mock.patch.dict(descriptions.PAGE_DATA, pages, clear=True):
-            pinned = descriptions._page_description("", Path("emulators/pinned.md"), "P")
-            loose = descriptions._page_description("", Path("emulators/redream.md"), "R")
+            pinned = descriptions.page_description("", Path("emulators/pinned.md"), "P")
+            loose = descriptions.page_description("", Path("emulators/redream.md"), "R")
         # A search snippet is level 0: the pin is on the page, not in it.
         self.assertNotIn("source-pinned", pinned)
         self.assertNotIn("source-pinned", loose)
@@ -722,13 +722,13 @@ class AHashFindsEveryPageThatNamesIt(unittest.TestCase):
             members = {"dolphin-sys": {"ApprovedInis.json": {"sha1": sha1},
                                        "Stale.json": {"sha1": "ef" * 20}}}
             registry = {"dolphin-sys": {"local_cache": "data/dolphin-sys"}}
-            digests = lookup._data_member_digests(members, registry, Path(tmp))
+            digests = lookup.data_member_digests(members, registry, Path(tmp))
         self.assertEqual(digests, {sha1: {
             "sha1": sha1, "md5": hashlib.md5(body).hexdigest(),
             "sha256": hashlib.sha256(body).hexdigest(),
             "crc32": f"{zlib.crc32(body):08x}"}})
-        with mock.patch.object(lookup, "_data_member_digests", return_value=digests), \
-                mock.patch.object(structured, "_data_member_digests", return_value=digests):
+        with mock.patch.object(lookup, "data_member_digests", return_value=digests), \
+                mock.patch.object(structured, "data_member_digests", return_value=digests):
             records = lookup.file_lookup_records(
                 {"files": {}}, {}, {}, [{"sha1": sha1, "url": "u"}],
                 {"dolphin-sys": {"ApprovedInis.json": {"sha1": sha1}}})
@@ -861,7 +861,7 @@ class AWantedDumpIsFoundByItsHash(unittest.TestCase):
         self.assertIn('"wanted"', _json.dumps(schema))
         self.assertIn("byLayer('wanted')", (root / "website" / "src" / "scripts" / "site.ts").read_text())
         source = script_source("generate_site.py")
-        self.assertIn('model_retired.load(_REPO_ROOT / "retired.json"), wanted)', source)
+        self.assertIn('model_retired.load(REPO_ROOT / "retired.json"), wanted)', source)
 
 
 class AMovedPartCardReachesItsPage(unittest.TestCase):
@@ -913,7 +913,7 @@ class AFileHasAnAddressByContent(unittest.TestCase):
         self.assertIn("params.has('sha1')", script)
         from packs.crossref import FileConsumers
 
-        card = "\n".join(cards._system_file_card(
+        card = "\n".join(cards.system_file_card(
             {"name": "x.rom", "sha1": "ab" * 20, "size": 1}, FileConsumers({"files": {}}),
         ))
         self.assertIn("/retrobios/files/?sha1=" + "ab" * 20, card)
@@ -1002,10 +1002,10 @@ class ACitationSaysWhoseCodeItIs(unittest.TestCase):
 
     @mock.patch("sitegen.sources.tree_holds", lambda *_args: True)  # a path the record confirms
     def test_each_part_links_to_its_repository_with_its_label(self):
-        from sitegen.sources import _source_ref_markdown, requested_by
+        from sitegen.sources import source_ref_markdown, requested_by
 
         ref = "source libretro.c:5, upstream emu/memory.c:46, 50-52"
-        text = _source_ref_markdown(self.PROFILE, ref)
+        text = source_ref_markdown(self.PROFILE, ref)
         self.assertIn("libretro/a5200/blob/" + "a" * 40 + "/libretro.c#L5) (libretro glue)", text)
         self.assertIn("alekmaul/a5200/blob/" + "b" * 40 + "/emu/memory.c#L50-L52) (upstream emulator)",
                       text)
@@ -1016,10 +1016,10 @@ class ACitationSaysWhoseCodeItIs(unittest.TestCase):
                          "upstream emulator")
 
     def test_a_role_without_a_pin_links_nowhere_else(self):
-        from sitegen.sources import _source_ref_markdown
+        from sitegen.sources import source_ref_markdown
 
         profile = {**self.PROFILE, "upstream_commit": ""}
-        self.assertEqual(_source_ref_markdown(profile, "upstream emu/memory.c:46"),
+        self.assertEqual(source_ref_markdown(profile, "upstream emu/memory.c:46"),
                          "`emu/memory.c:46` (upstream emulator)")
 
 
@@ -1028,10 +1028,10 @@ class EveryAcceptedHashIsItsOwnWord(unittest.TestCase):
     search made one token of it and found none but the first."""
 
     def test_a_list_is_split(self):
-        from sitegen.fields import _hash_spans
+        from sitegen.fields import hash_spans
 
         md5s = ["96cf" + "0" * 28, "d5af" + "0" * 28]
-        text = _hash_spans(",".join(md5s))
+        text = hash_spans(",".join(md5s))
         for md5 in md5s:
             self.assertIn(f'<code class="rb-hash">{md5}</code>', text)
 
@@ -1078,9 +1078,9 @@ class ACardSaysWhyAFileIsLeftOut(unittest.TestCase):
     could not tell why a RetroArch pack carried PPSSPP's assets."""
 
     def test_the_build_and_the_platforms_are_named(self):
-        from sitegen.emulatorcards import _file_badges
+        from sitegen.emulatorcards import file_badges
 
-        badges = " ".join(_file_badges({"name": "a", "bundled": True, "mode": "standalone"}, True))
+        badges = " ".join(file_badges({"name": "a", "bundled": True, "mode": "standalone"}, True))
         self.assertIn("installed with the standalone emulator", badges)
 
 
@@ -1089,13 +1089,13 @@ class AnEmulatorPageOffersItsInstall(unittest.TestCase):
     install them together."""
 
     def test_the_command_names_the_emulator(self):
-        from sitegen.install import _install_block
+        from sitegen.install import install_block
 
         profile = yaml.safe_load((ROOT / "emulators" / "pcem.yml").read_text(encoding="utf-8"))
-        text = "\n".join(_install_block("pcem", profile))
+        text = "\n".join(install_block("pcem", profile))
         self.assertIn("/i | sh -s -- --emulator pcem", text)
         self.assertIn("/i.ps1))) --emulator pcem", text)
-        self.assertEqual(_install_block("x", {"type": "alias"}), [])
+        self.assertEqual(install_block("x", {"type": "alias"}), [])
 
     def test_the_installer_takes_the_option(self):
         source = (ROOT / "install.py").read_text(encoding="utf-8")
@@ -1112,12 +1112,12 @@ class NestedProfileBlocksRenderAsLists(unittest.TestCase):
             import markdown
         except ImportError:
             self.skipTest("markdown is not installed")
-        from sitegen.render import _render_yaml_value
+        from sitegen.render import render_yaml_value
 
         # The page opens the block with ???+ (pymdownx.details). An admonition
         # nests its body by the same four spaces, and needs nothing CI lacks.
         lines = ['!!! abstract "Analysis"', ""]
-        _render_yaml_value(lines, value, 4)
+        render_yaml_value(lines, value, 4)
         return markdown.markdown("\n".join(lines), extensions=["admonition"])
 
     def test_a_nested_mapping_is_a_nested_list(self):
@@ -1131,7 +1131,7 @@ class NestedProfileBlocksRenderAsLists(unittest.TestCase):
     def test_platform_details_are_a_list(self):
         from sitegen import fields
 
-        lines = fields._render_platform_details(
+        lines = fields.render_platform_details(
             {"platform_details": {"megacd": {"root": "x"}, "note": "y"}}
         )
         try:
@@ -1194,7 +1194,7 @@ class TheOneLinerIsWhereUsersLand(unittest.TestCase):
         from sitegen import cards
         from sitegen import render as siterender
 
-        saved = dict(siterender._system_page_map)
+        saved = dict(siterender.system_page_map)
         self.addCleanup(siterender.set_system_page_map, saved)
         siterender.set_system_page_map({"sony-playstation": ("sony", "PlayStation"),
                                         "nowhere": ("sony", "PlayStation")})

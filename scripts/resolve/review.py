@@ -16,7 +16,7 @@ except ImportError:
     yaml = None
 
 from core.hashing import compute_hashes, parse_hash_list, parse_md5_list, stream_hashes
-from model.nodedup import _in_nodedup_dir
+from model.nodedup import in_nodedup_dir
 from model.platforms import load_platform_config
 from model.profiles import load_emulator_profiles
 from model.registry import list_registered_platforms
@@ -467,7 +467,7 @@ def _check_duplicate(result: ValidationResult, db: dict, relative: str) -> None:
         # PR that regenerated database.json was told each new file
         # duplicated itself.
         result.add_check(True, "Already in the database at this path")
-    elif _in_nodedup_dir(relative):
+    elif in_nodedup_dir(relative):
         result.add_info(
             f"Identical to `{existing['path']}`, kept: this tree is read by path"
         )

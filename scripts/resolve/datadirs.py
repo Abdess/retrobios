@@ -9,7 +9,7 @@ from collections.abc import Callable
 from resolve.content import adler32_fits, content_fits, name_match_size_ok
 
 
-def _resolve_in_data_dirs(
+def resolve_in_data_dirs(
     names_to_try: list[str],
     data_dir_registry: dict,
     verdict: Callable[[str], str],
@@ -54,7 +54,7 @@ def _resolve_in_data_dirs(
     return None, mismatch
 
 
-def _data_dir_tail(
+def data_dir_tail(
     dest_hint: str, data_dir_registry: dict, file_entry: dict, db: dict
 ) -> str | None:
     """The cached data-directory file at the destination's own tail.

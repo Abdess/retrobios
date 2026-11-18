@@ -27,7 +27,7 @@ class ScanFollowsTheBuild(unittest.TestCase):
         from model.database import load_database
         from model.profiles import load_emulator_profiles
         from model.platforms import load_platform_config
-        from packs.extras import _collect_emulator_extras
+        from packs.extras import collect_emulator_extras
 
         profiles = load_emulator_profiles("emulators")
         entry = next(
@@ -38,7 +38,7 @@ class ScanFollowsTheBuild(unittest.TestCase):
         if entry is None or entry.get("mode") != "standalone":
             self.skipTest("armsx2 no longer declares a standalone proverb.zip")
         config = load_platform_config("retroarch")
-        extras = _collect_emulator_extras(
+        extras = collect_emulator_extras(
             config, "emulators", load_database("database.json"), set(),
             config.get("base_destination", ""), profiles,
         )

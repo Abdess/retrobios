@@ -18,7 +18,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from scraper.romm_scraper import SLUG_MAP
 
 from .base_exporter import BaseExporter
-from resolve.reconcile import NativeFile, NativeSystem, Report, _hash_values
+from resolve.reconcile import NativeFile, NativeSystem, Report, hash_values
 
 SOURCE_URL = (
     "https://raw.githubusercontent.com/rommapp/romm/master/backend/models"
@@ -161,7 +161,7 @@ class Exporter(BaseExporter[str]):
                         output[key] = OrderedDict(
                             (field, value)
                             for field, name in _FIELDS
-                            if (value := ",".join(_hash_values(fe.platform, name))
+                            if (value := ",".join(hash_values(fe.platform, name))
                                 if name != "size" else str(fe.platform["size"]))
                         )
                     continue
@@ -185,7 +185,7 @@ class Exporter(BaseExporter[str]):
     def _contradicted(fe: NativeFile, name: str) -> bool:
         """A hash the platform states and the truth, taking the entry over,
         does not keep."""
-        return bool(_hash_values(fe.platform or {}, name)) and not fe.hashes(name)
+        return bool(hash_values(fe.platform or {}, name)) and not fe.hashes(name)
 
     def states(self, fe: NativeFile, field_name: str) -> bool:
         """An entry left whole carries none of the truth's values."""

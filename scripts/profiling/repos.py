@@ -407,6 +407,6 @@ def build_revision(profile: dict, platform: str) -> str | None:
     return None
 
 
-def _on_own_revision(view: RepoView, tagged: dict[tuple[str, str], str]) -> bool:
+def reads_own_revision(view: RepoView, tagged: dict[tuple[str, str], str]) -> bool:
     """Whether a view is read at its own revision: on HEAD, or on its tag."""
     return view.pin == view.head or (view.repo.host, view.repo.slug) in tagged

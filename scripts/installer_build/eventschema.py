@@ -8,12 +8,11 @@ import json
 from core.paths import REPO_ROOT
 
 
-ROOT = REPO_ROOT
-OUTPUT = ROOT / "schemas" / "install-events.schema.json"
+OUTPUT = REPO_ROOT / "schemas" / "install-events.schema.json"
 
-_spec = importlib.util.spec_from_file_location("install", ROOT / "install.py")
+_spec = importlib.util.spec_from_file_location("install", REPO_ROOT / "install.py")
 if _spec is None or _spec.loader is None:
-    raise ImportError(f"cannot load {ROOT / 'install.py'}")
+    raise ImportError(f"cannot load {REPO_ROOT / 'install.py'}")
 _install = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_install)
 

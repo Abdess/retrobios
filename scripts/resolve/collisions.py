@@ -9,10 +9,10 @@ from dataclasses import dataclass, field
 from core.hashing import compute_hashes, parse_md5_list
 from core.ziptools import check_inside_zip
 from resolve.localfile import resolve_local_file, variant_base_name
-from resolve.packfiles import _records_by_path, preferred_entries
+from resolve.packfiles import records_by_path, preferred_entries
 
 
-def _normalize(destination: str, fold: bool = True) -> str:
+def comparable_destination(destination: str, fold: bool = True) -> str:
     """Comparable form of a destination, since layers write it differently.
 
     Case is folded only where the platform's filesystem folds it: on Linux
@@ -66,7 +66,7 @@ def find_collisions(
                 continue
             dest = entry.get("destination") or entry.get("name") or ""
             if dest:
-                by_dest.setdefault(_normalize(dest, fold), []).append((sys_id, entry))
+                by_dest.setdefault(comparable_destination(dest, fold), []).append((sys_id, entry))
 
     collisions = []
     for key, claims in sorted(by_dest.items()):
@@ -90,7 +90,7 @@ def find_collisions(
             # A file every declaration accepts settles the path: RetroDECK
             # declares ATARIOSB.ROM twice, the second with an md5 list that
             # also names the first one's file.
-            if any(_accepted_by_all(path, entries, db) for path in resolved):
+            if any(accepted_by_all(path, entries, db) for path in resolved):
                 continue
             reached = sorted(
                 (sys_id, local)
@@ -112,7 +112,7 @@ def find_collisions(
     return collisions
 
 
-def _lists_hashes(entry: dict) -> bool:
+def lists_hashes(entry: dict) -> bool:
     """Whether a declaration says anything about content at all."""
     return any(
         _declared_hashes(entry, field_name)
@@ -142,10 +142,10 @@ def _record_at(path: str, db: dict) -> dict | None:
     path verify --all and slots.py both take. The index is the pack
     resolver's, so one run holds one copy of it.
     """
-    return _records_by_path(db).get(path)
+    return records_by_path(db).get(path)
 
 
-def _content_sha1(path: str, db: dict) -> str | None:
+def content_sha1(path: str, db: dict) -> str | None:
     """The sha1 of the file at path, from the database or read from disk.
 
     A data directory cache is not in the database, so its files are hashed.
@@ -158,7 +158,7 @@ def _content_sha1(path: str, db: dict) -> str | None:
     return compute_hashes(path, frozenset({"sha1"}))["sha1"]
 
 
-def _accepted_by_all(path: str, entries: list[dict], db: dict) -> bool:
+def accepted_by_all(path: str, entries: list[dict], db: dict) -> bool:
     """Whether every declaration's own hashes accept the file at path."""
     record = _record_at(path, db)
     if record is None:

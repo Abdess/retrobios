@@ -21,13 +21,13 @@ from core.paths import REPO_ROOT, declared_destination
 from resolve.validation import inner_rom_check
 # CLI-wide network policy.  Public helpers can override it explicitly, while
 # every CLI mode inherits --offline (including large-file release fallback).
-_OFFLINE = False
+OFFLINE = False
 
 
 def set_offline(value: bool) -> None:
     """Forbid every network reach for the rest of the run."""
-    global _OFFLINE
-    _OFFLINE = value
+    global OFFLINE
+    OFFLINE = value
 
 
 def scratch_dir() -> str:
@@ -61,7 +61,7 @@ def download_external(
     if declared is None:
         print(f"    WARNING: no hash for {name}, skipping unverifiable download")
         return False
-    if _OFFLINE if offline is None else offline:
+    if OFFLINE if offline is None else offline:
         print(f"    WARNING: {name} is external and the run is offline, not fetched")
         return False
     algo, expected = declared
@@ -140,7 +140,7 @@ def _verified_asset(
 def run_is_offline(offline: bool | None = None) -> bool:
     """Whether this run fetches nothing: --offline, or RETROBIOS_OFFLINE."""
     return bool(
-        (_OFFLINE if offline is None else offline)
+        (OFFLINE if offline is None else offline)
         or os.environ.get("RETROBIOS_OFFLINE")
     )
 
@@ -148,7 +148,7 @@ def run_is_offline(offline: bool | None = None) -> bool:
 _RECORDS_BY_PATH: list[tuple[dict, int, dict[str, dict]]] = []
 
 
-def _records_by_path(db: dict) -> dict[str, dict]:
+def records_by_path(db: dict) -> dict[str, dict]:
     """The database records by path, built once per database."""
     files = db.get("files", {})
     if _RECORDS_BY_PATH:
@@ -185,7 +185,7 @@ def pending_release_asset(
     assets = set(asset_candidates(name, registered))
     if not assets:
         return None
-    records = _records_by_path(db)
+    records = records_by_path(db)
     declared_size = file_entry.get("size")
     for path, asset in sorted(asset_names(registered).items()):
         record = records.get(path)
@@ -396,7 +396,7 @@ def resolve_file(
         # exactly what the flag forbids.
         return (path, status) if path else (None, "not_found")
     cached = _verified_asset(
-        name, declared, file_entry, _OFFLINE if offline is None else offline,
+        name, declared, file_entry, OFFLINE if offline is None else offline,
     )
     if cached:
         return cached, "release_asset"

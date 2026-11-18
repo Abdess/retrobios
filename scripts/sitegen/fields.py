@@ -6,8 +6,8 @@ import re
 from collections.abc import Callable
 
 from sitegen import markup
-from sitegen.render import _escape_tags, _field_text, _render_yaml_value
-from sitegen.sources import _source_ref_markdown, link_prose_citations
+from sitegen.render import escape_tags, scalar_text, render_yaml_value
+from sitegen.sources import source_ref_markdown, link_prose_citations
 
 
 def search_excluded(lines: list[str]) -> list[str]:
@@ -26,7 +26,7 @@ def search_excluded(lines: list[str]) -> list[str]:
             *lines, "", "</section>", ""]
 
 
-def _render_platform_details(profile: dict) -> list[str]:
+def render_platform_details(profile: dict) -> list[str]:
     """The per-platform block, one level of nesting deep."""
     lines: list[str] = []
     platform_details = profile.get("platform_details")
@@ -48,9 +48,9 @@ def _render_platform_details(profile: dict) -> list[str]:
 def _detail_value(profile: dict, key: object, value: object) -> str:
     """A platform detail, its citations linked at the profile's pin."""
     if key == "source_ref" and isinstance(value, (str, dict)):
-        return _source_ref_markdown(profile, value)
+        return source_ref_markdown(profile, value)
     if isinstance(value, str):
-        return _escape_tags(link_prose_citations(profile, value))
+        return escape_tags(link_prose_citations(profile, value))
     return _plain_value(value)
 
 
@@ -63,7 +63,7 @@ def _plain_value(value: object) -> str:
         return "none"
     if isinstance(value, (list, tuple)):
         return ", ".join(_plain_value(item) for item in value)
-    return _escape_tags(str(value))
+    return escape_tags(str(value))
 
 
 def _structured_field_text(profile: dict) -> Callable[[object, object], str]:
@@ -74,15 +74,15 @@ def _structured_field_text(profile: dict) -> Callable[[object, object], str]:
     """
     def text(key: object, value: object) -> str:
         if key == "source_ref" and isinstance(value, str):
-            return _source_ref_markdown(profile, value)
+            return source_ref_markdown(profile, value)
         if isinstance(value, str):
-            return link_prose_citations(profile, _field_text(key, value))
-        return _field_text(key, value)
+            return link_prose_citations(profile, scalar_text(key, value))
+        return scalar_text(key, value)
 
     return text
 
 
-def _render_structured_blocks(profile: dict) -> list[str]:
+def render_structured_blocks(profile: dict) -> list[str]:
     """Every remaining structured field, as a collapsible section."""
     lines: list[str] = []
     _structured_blocks = [
@@ -115,12 +115,12 @@ def _render_structured_blocks(profile: dict) -> list[str]:
         if val is None:
             continue
         body: list[str] = []
-        _render_yaml_value(body, val, indent=0,
+        render_yaml_value(body, val, indent=0,
                            field_text=_structured_field_text(profile))
         # Closed: raw profile data, below the files (Cemu's firmware
         # titles opened the page above them).
         block = markup.details(
-            "abstract", label, [_escape_tags(line) for line in body])
+            "abstract", label, [escape_tags(line) for line in body])
         # A block listing hashes is the lookup's, as a card's hash lines are:
         # izapple2's ROM table put "md5" 59 times in the search, above the
         # page that explains MD5 checks.
@@ -131,7 +131,7 @@ def _render_structured_blocks(profile: dict) -> list[str]:
     return lines
 
 
-def _hash_spans(value: str | list, copy: bool = False) -> str:
+def hash_spans(value: str | list, copy: bool = False) -> str:
     """Each hash a profile accepts, in full, each with a copy button when
     *copy*.
 

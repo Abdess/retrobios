@@ -69,12 +69,12 @@ class TheGivenProfilesAndPlatforms(_Inputs):
 
     def test_emulator_names_come_from_the_given_profiles(self) -> None:
         self.use(emulators=self.emulators)
-        self.assertEqual(set(collection._profiles_on_disk()), {"fixturecore"})
-        self.assertEqual(platformfiles._emulator_named_link("fixturecore"),
+        self.assertEqual(set(collection.profiles_on_disk()), {"fixturecore"})
+        self.assertEqual(platformfiles.emulator_named_link("fixturecore"),
                          "[Fixture Core](emulators/fixturecore.md)")
 
     def test_release_pack_does_not_depend_on_the_working_directory(self) -> None:
-        released = install._release_pack_platforms()
+        released = install.release_pack_platforms()
         self.assertIn("retroarch", released)
         here = os.getcwd()
         os.chdir(REPO_ROOT / "scripts")
@@ -102,14 +102,14 @@ class TheCollectionDoesNotDependOnTheWorkingDirectory(unittest.TestCase):
 
         db = json.loads((REPO_ROOT / "database.json").read_text(encoding="utf-8"))
         here = sitecollection.collection_paths(db)
-        places = sitecollection._copy_places(db)
+        places = sitecollection.copy_places(db)
         elsewhere = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp" if (REPO_ROOT / "tmp").is_dir() else None))
         self.addCleanup(shutil.rmtree, elsewhere)
         cwd = os.getcwd()
         os.chdir(elsewhere)
         self.addCleanup(os.chdir, cwd)
         self.assertEqual(sitecollection.collection_paths(db), here)
-        self.assertEqual(sitecollection._copy_places(db), places)
+        self.assertEqual(sitecollection.copy_places(db), places)
         self.assertGreater(sum(map(len, here.values())), len(here))
 
     def test_the_bios_folder_sits_beside_the_given_database(self) -> None:
@@ -161,7 +161,7 @@ class NoPageModuleReadsTheRepositoryInputs(unittest.TestCase):
         source = ast.get_source_segment(
             build,
             next(n for n in ast.parse(build).body
-                 if isinstance(n, ast.FunctionDef) and n.name == "_generate"))
+                 if isinstance(n, ast.FunctionDef) and n.name == "generate_site"))
         self.assertLess(source.index("siteinputs.use("), source.index("load_database("))
 
 

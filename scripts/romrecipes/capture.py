@@ -13,7 +13,7 @@ from typing import BinaryIO
 from core.hashing import parse_hash_list
 from core.torrentzip import write_torrentzip, zlib_ng_version
 from romrecipes.ledger import database_archives
-from romrecipes.members import _member_sha1, _opener
+from romrecipes.members import member_sha1, member_opener
 from romrecipes.pins import container_entries
 from romrecipes.romsets import collect_recipes, load_dat_recipes
 
@@ -65,14 +65,14 @@ def read_archive(path: Path, sha1: str) -> dict:
         for _attempt in range(2):
             sink = HashSink()
             written = write_torrentzip(
-                sink, [(info.filename, _opener(path, info.filename)) for info in files]
+                sink, [(info.filename, member_opener(path, info.filename)) for info in files]
             )
             by_name = {member.name: member.sha1 for member in written}
             if sink.sha1.hexdigest() == sha1:
                 rebuild = "exact"
                 break
     else:
-        by_name = {info.filename: _member_sha1(path, info.filename) for info in files}
+        by_name = {info.filename: member_sha1(path, info.filename) for info in files}
     record: dict = {
         "rebuild": rebuild,
         "members": [

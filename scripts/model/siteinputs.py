@@ -13,14 +13,12 @@ from pathlib import Path
 
 from core.paths import REPO_ROOT
 
-ROOT = REPO_ROOT
-
 
 @dataclass(frozen=True)
 class SiteInputs:
-    db: Path = ROOT / "database.json"
-    emulators: Path = ROOT / "emulators"
-    platforms: Path = ROOT / "platforms"
+    db: Path = REPO_ROOT / "database.json"
+    emulators: Path = REPO_ROOT / "emulators"
+    platforms: Path = REPO_ROOT / "platforms"
 
 
 _current = [SiteInputs()]

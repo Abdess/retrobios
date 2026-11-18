@@ -16,19 +16,19 @@ from model.platforms import load_platform_config
 from model.registry import list_release_pack_platforms
 from resolve.layout import runs_standalone
 from sitegen import markup
-from sitegen.config import _REPO_ROOT
+from core.paths import REPO_ROOT
 from sitegen.fields import search_excluded
 from sitegen.guides import fence, platform_args, terminal_tabs
-from sitegen.render import _code, _escape_tags
-from sitegen.sources import _source_ref_markdown
+from sitegen.render import code_span, escape_tags
+from sitegen.sources import source_ref_markdown
 
 
 def has_release_pack(platform_name: str) -> bool:
     """Whether a release publishes a ZIP for the platform (`release_pack`)."""
-    return platform_name in _release_pack_platforms()
+    return platform_name in release_pack_platforms()
 
 
-def _release_pack_platforms() -> frozenset[str]:
+def release_pack_platforms() -> frozenset[str]:
     return _release_packs_in(str(siteinputs.current().platforms))
 
 
@@ -40,7 +40,7 @@ def _release_packs_in(platforms_dir: str) -> frozenset[str]:
 _platform_names: dict[str, str] = {}
 
 
-def _platform_display(name: str) -> str:
+def platform_display(name: str) -> str:
     """A setup's name as its platform file writes it: Batocera, not batocera."""
     display = _platform_names.get(name)
     if display is None:
@@ -87,14 +87,14 @@ def install_commands(args: str = "", indent: str = "",
 
 
 @functools.cache
-def _installer() -> types.ModuleType:
+def installer_module() -> types.ModuleType:
     """install.py, read as a module: the names `--emulator` accepts are its
     own (`emulator_names`)."""
     import importlib.util
 
-    spec = importlib.util.spec_from_file_location("install", _REPO_ROOT / "install.py")
+    spec = importlib.util.spec_from_file_location("install", REPO_ROOT / "install.py")
     if spec is None or spec.loader is None:
-        raise ImportError(f"cannot load {_REPO_ROOT / 'install.py'}")
+        raise ImportError(f"cannot load {REPO_ROOT / 'install.py'}")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
@@ -104,9 +104,9 @@ def _installer() -> types.ModuleType:
 def _published_emulator_names() -> dict[str, dict[str, str]]:
     """Per published manifest, every name `--emulator` accepts there and the
     profile it stands for, as `install.py --list-emulators` prints them."""
-    installer = _installer()
+    installer = installer_module()
     names: dict[str, dict[str, str]] = {}
-    for path in sorted((_REPO_ROOT / "install").glob("*.json")):
+    for path in sorted((REPO_ROOT / "install").glob("*.json")):
         manifest = json.loads(path.read_text(encoding="utf-8"))
         names[path.stem] = installer.emulator_names(
             manifest, manifest.get("files") or [], manifest.get("omitted_files") or [])
@@ -186,7 +186,7 @@ def _said_or(names: list[str]) -> str:
     return names[0] if len(names) == 1 else ", ".join(names[:-1]) + f" or {names[-1]}"
 
 
-def _install_block(name: str, profile: dict) -> list[str]:
+def install_block(name: str, profile: dict) -> list[str]:
     """One command that installs this emulator's files where it reads them.
 
     The installer finds the setup and its BIOS folder, then keeps what this
@@ -200,7 +200,7 @@ def _install_block(name: str, profile: dict) -> list[str]:
     if not command:
         return []
     emu = str(profile.get("emulator") or name)
-    shown = [_platform_display(setup) for setup in setups]
+    shown = [platform_display(setup) for setup in setups]
     if profile.get("type") == "standalone":
         lead = (f"With {_said_or(shown)}: the installer finds {_said_or(shown)} and its "
                 f"BIOS folder, then downloads only the files {emu} reads there and checks "
@@ -302,11 +302,11 @@ def standalone_place(name: str, profile: dict, entry: dict, key: str = "") -> st
     return str(entry.get("standalone_path") or "")
 
 
-_OS_LABELS = {"windows": "Windows", "macos": "macOS", "linux": "Linux",
+OS_LABELS = {"windows": "Windows", "macos": "macOS", "linux": "Linux",
               "android": "Android", "ios": "iOS"}
 
 
-def _under_root(root: str, folder: str) -> str:
+def under_root(root: str, folder: str) -> str:
     """``root`` with ``folder`` below it, as code: each alternative of
     "$XDG_CONFIG_HOME/x, else ~/.config/x", and a root written in words
     ("the folder picked in the setup wizard") kept as words."""
@@ -315,11 +315,11 @@ def _under_root(root: str, folder: str) -> str:
     for alternative in root.split(", else "):
         alternative = alternative.strip()
         if " " in alternative and "/" not in alternative and not alternative.startswith("<"):
-            shown.append(f"{_code(folder + '/')} in {_escape_tags(alternative)}"
-                         if folder else _escape_tags(alternative))
+            shown.append(f"{code_span(folder + '/')} in {escape_tags(alternative)}"
+                         if folder else escape_tags(alternative))
             continue
         joined = alternative.rstrip("/") + (f"/{folder}" if folder else "") + "/"
-        shown.append(_code(joined))
+        shown.append(code_span(joined))
     return ", else ".join(shown)
 
 
@@ -355,7 +355,7 @@ def data_folder_block(name: str, profile: dict, entries: list[dict] | None = Non
         if not isinstance(root, dict) or not root.get("path"):
             continue
         path = str(root["path"])
-        line = _under_root(path, _data_root_folder(name, profile, key, entries))
+        line = under_root(path, _data_root_folder(name, profile, key, entries))
         if key == "android" and path.startswith("Android/data/"):
             line += ", on the internal storage."
         body = [line]
@@ -365,9 +365,9 @@ def data_folder_block(name: str, profile: dict, entries: list[dict] | None = Non
             first = note.split(" ", 1)[0]
             if first.isalpha() and first.islower():
                 note = note[:1].upper() + note[1:]
-            body += ["", _escape_tags(note) + "."]
-        body += ["", f"Source: {_source_ref_markdown(profile, str(root['source_ref']))}"]
-        items.append((_OS_LABELS[key], body))
+            body += ["", escape_tags(note) + "."]
+        body += ["", f"Source: {source_ref_markdown(profile, str(root['source_ref']))}"]
+        items.append((OS_LABELS[key], body))
     if len(items) == 1:
         label, body = items[0]
         return [f"On {label}: {body[0]}", *body[1:], ""]
@@ -380,7 +380,7 @@ def data_root_words(text: str, href: str = "#data-folder") -> str:
     return re.sub(r"\bdata_root\b", f"[the data folder]({href})", text)
 
 
-def _platform_install_block(name: str, display: str, on_card: bool = False) -> list[str]:
+def platform_install_block(name: str, display: str, on_card: bool = False) -> list[str]:
     """The platform's pack, installed file by file: what the ZIP holds, with
     resume, verification and only what is missing.
 
@@ -462,7 +462,7 @@ def _install_picker(declared: list[tuple[str, str]]) -> list[str]:
         + (" selected" if (platform, system) == lead else "")
         + f' data-sh="{attribute(_install_args(platform, system, "sh"))}" '
         f'data-ps="{attribute(_install_args(platform, system, "powershell"))}">'
-        + html.escape(_platform_display(platform) + (f" ({system})" if names[platform] > 1 else ""),
+        + html.escape(platform_display(platform) + (f" ({system})" if names[platform] > 1 else ""),
                       quote=False)
         + "</option>"
         for platform, system in declared)
@@ -505,24 +505,24 @@ def _command_list(label: str, declared: list[tuple[str, str]], shell: str) -> li
     # inside a command.
     names = Counter(platform for platform, _system in declared)
     items = "".join(
-        f"<li>{html.escape(_platform_display(platform), quote=False)}"
+        f"<li>{html.escape(platform_display(platform), quote=False)}"
         + (f" ({html.escape(system, quote=False)})" if names[platform] > 1 else "")
         + f': <code data-copy="">{command(platform, system)}</code></li>'
         for platform, system in declared)
     return [label, "", f"<ul>{items}</ul>", ""]
 
 
-def _console_install_block(console: str, declared: list[tuple[str, str]]) -> list[str]:
+def console_install_block(console: str, declared: list[tuple[str, str]]) -> list[str]:
     """Each platform's command for one console, by the system id it gives it,
     for a terminal and for PowerShell, each under its setup's name: RetroBat
     had two lines and nothing said which was for the Neo Geo."""
     if not declared:
         return []
     sh = [line for platform, system in declared for line in (
-        f"# {_platform_display(platform)}",
+        f"# {platform_display(platform)}",
         install_command("sh", f"--platform {platform} --system {shlex.quote(system)}"))]
     ps = [line for platform, system in declared for line in (
-        f"# {_platform_display(platform)}",
+        f"# {platform_display(platform)}",
         install_command("powershell", f"--platform {platform} --system {_ps_quote(system)}"))]
     # The name last: "Install the Atari System 1 files" read as a count. A
     # label naming files already reads "Install these files": "Install

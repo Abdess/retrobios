@@ -193,7 +193,7 @@ class TheReplayResolvesAsTheBuilder(unittest.TestCase):
                 )
 
         placed: set[str] = set()
-        with mock.patch.object(packextras, "_collect_emulator_extras", return_value=extras):
+        with mock.patch.object(packextras, "collect_emulator_extras", return_value=extras):
             hidden = packextras.hidden_extras(
                 {"systems": {}}, "emulators", {"files": {}}, {}, {},
                 placed=placed, resolver=Resolver(),

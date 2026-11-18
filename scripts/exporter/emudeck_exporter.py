@@ -15,10 +15,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from scraper.emudeck_scraper import FUNCTION_HASH_MAP, _RE_FUNC, _RE_LOCAL_HASHES
+from scraper.emudeck_scraper import FUNCTION_HASH_MAP, RE_FUNC, RE_LOCAL_HASHES
 
 from .base_exporter import BaseExporter
-from resolve.reconcile import NativeFile, NativeSystem, Report, _hash_values
+from resolve.reconcile import NativeFile, NativeSystem, Report, hash_values
 
 SOURCE_URL = (
     "https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main"
@@ -80,7 +80,7 @@ class Exporter(BaseExporter[str]):
         adds nothing, and the truth's extra accepted revisions are not
         appended: either would grow an array other consumers read too.
         """
-        theirs = _hash_values(fe.platform or {}, "md5")
+        theirs = hash_values(fe.platform or {}, "md5")
         if not theirs:
             return []
         if "md5" in fe.corrections:
@@ -124,7 +124,7 @@ class Exporter(BaseExporter[str]):
             if system.native_id == system_id
             for fe in system.files
             if "md5" in fe.corrections
-            for value in _hash_values(fe.platform or {}, "md5")
+            for value in hash_values(fe.platform or {}, "md5")
         }
 
     @classmethod
@@ -146,7 +146,7 @@ class Exporter(BaseExporter[str]):
 
     def _function_spans(self, script: str) -> list[tuple[str, int, int]]:
         """Name and byte span of every check the script defines."""
-        matches = list(_RE_FUNC.finditer(script))
+        matches = list(RE_FUNC.finditer(script))
         spans: list[tuple[str, int, int]] = []
         for index, match in enumerate(matches):
             end = (
@@ -179,7 +179,7 @@ class Exporter(BaseExporter[str]):
             body = script[start:end]
             system_id = FUNCTION_HASH_MAP.get(name)
             md5s = self._md5s(systems, system_id) if system_id else []
-            match = _RE_LOCAL_HASHES.search(body)
+            match = RE_LOCAL_HASHES.search(body)
             if md5s and match:
                 # An array compared by membership says nothing about order,
                 # so the same set is left as the maintainer wrote it.
@@ -226,7 +226,7 @@ class Exporter(BaseExporter[str]):
                 for fname, start, end in self._function_spans(content)
                 if fname == name
             )
-            if not _RE_LOCAL_HASHES.search(body):
+            if not RE_LOCAL_HASHES.search(body):
                 # A check with no hash list is a path check, not a hash check.
                 continue
             issues.extend(f"absent from {name}: {md5}" for md5 in md5s if md5 not in body)

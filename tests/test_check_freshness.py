@@ -400,7 +400,7 @@ class SiteNpmPins(unittest.TestCase):
                 name = url.split("registry.npmjs.org/", 1)[1].rsplit("/latest", 1)[0]
                 return {"version": latest[name]}
             with mock.patch.object(cf, "SITE_PACKAGE", package), \
-                    mock.patch.object(cf.upstream, "_http_json", side_effect=answer):
+                    mock.patch.object(cf.upstream, "http_json", side_effect=answer):
                 rows = {f.subject: f for f in cf._npm_findings()}
         self.assertEqual(rows["npm:astro"].status, cf.STALE)
         self.assertEqual(rows["npm:astro"].remote, "7.4.7")

@@ -12,10 +12,10 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from core.artifacts import set_plain_mode
-from core.deterministic_zip import _FIXED_DATE_TIME
+from core.deterministic_zip import FIXED_DATE_TIME
 from core.hashing import compute_hashes
 from core.paths import sanitize_pack_path
-from packs.paths import _has_path_conflict, _register_path, placement_block
+from packs.paths import has_path_conflict, register_path, placement_block
 
 
 # Formats that are already compressed: deflating them again took 28 s of the
@@ -54,7 +54,7 @@ class PackRecord:
         self.sources: dict[str, str] = {}
 
 
-def _add_pack_member(
+def add_pack_member(
     zf: zipfile.ZipFile | PackRecord, source_path: str, arcname: str
 ) -> None:
     """Add a file to the pack with metadata that does not depend on the build.
@@ -71,7 +71,7 @@ def _add_pack_member(
         zf.members.append(arcname)
         zf.sources[arcname] = source_path
         return
-    info = zipfile.ZipInfo(filename=arcname, date_time=_FIXED_DATE_TIME)
+    info = zipfile.ZipInfo(filename=arcname, date_time=FIXED_DATE_TIME)
     info.compress_type = _member_compression(arcname)
     # The executable bit is the one permission worth carrying: the RetroDECK
     # pack ships the two Voxatron engine binaries, and a user who extracts
@@ -89,7 +89,7 @@ def _add_pack_member(
         shutil.copyfileobj(source, target, 1024 * 1024)
 
 
-def _write_generated_member(
+def write_generated_member(
     zf: zipfile.ZipFile | PackRecord, arcname: str, text: str
 ) -> None:
     """Write a pack member the builder composes rather than copies.
@@ -102,14 +102,14 @@ def _write_generated_member(
     if isinstance(zf, PackRecord):
         zf.members.append(arcname)
         return
-    info = zipfile.ZipInfo(filename=arcname, date_time=_FIXED_DATE_TIME)
+    info = zipfile.ZipInfo(filename=arcname, date_time=FIXED_DATE_TIME)
     info.compress_type = zipfile.ZIP_DEFLATED
     info.external_attr = 0o100644 << 16
     zf.writestr(info, text)
 
 
 @contextlib.contextmanager
-def _writing_pack(zip_path: str) -> Iterator[zipfile.ZipFile]:
+def writing_pack(zip_path: str) -> Iterator[zipfile.ZipFile]:
     """A pack written beside its final name, swapped in once complete.
 
     Opened on the final name, a rebuild truncated the previous pack at once,
@@ -137,7 +137,7 @@ PACK_DOCUMENTS = ("README.txt", "manifest.json")
 
 
 @dataclass
-class _Placed:
+class Placed:
     """The destinations a build has taken, and the folders they open.
 
     ``fold`` is whether a case twin of a taken path counts as taken.
@@ -150,7 +150,7 @@ class _Placed:
 
     def take(self, dest: str) -> None:
         self.destinations.add(dest)
-        _register_path(dest, self.destinations, self.parents)
+        register_path(dest, self.destinations, self.parents)
         if self.fold:
             self.lower.add(dest.lower())
 
@@ -158,13 +158,13 @@ class _Placed:
         return dest in self.destinations or (self.fold and dest.lower() in self.lower)
 
     def conflicts(self, dest: str) -> bool:
-        return _has_path_conflict(dest, self.destinations, self.parents)
+        return has_path_conflict(dest, self.destinations, self.parents)
 
     def block(self, dest: str) -> str | None:
         return placement_block(dest, self.destinations, self.lower, self.parents, self.fold)
 
 
-def _extract_zip_to_archive(
+def extract_zip_to_archive(
     source_zip: str,
     dest_prefix: str,
     target_zf: zipfile.ZipFile | PackRecord,
@@ -188,14 +188,14 @@ def _extract_zip_to_archive(
             data = src.read(info.filename)
             target_path = f"{dest_prefix}/{clean_name}" if dest_prefix else clean_name
             member = zipfile.ZipInfo(
-                filename=target_path, date_time=_FIXED_DATE_TIME
+                filename=target_path, date_time=FIXED_DATE_TIME
             )
             member.compress_type = _member_compression(target_path)
             member.external_attr = 0o100644 << 16
             target_zf.writestr(member, data)
 
 
-def _add_zip_to_pack(
+def add_zip_to_pack(
     source_zip: str,
     dest_path: str,
     target_zf: zipfile.ZipFile | PackRecord,
@@ -214,7 +214,7 @@ def _add_zip_to_pack(
         target_zf.sources[dest_path] = source_zip
         return
     _check_zip_members(source_zip)
-    _add_pack_member(target_zf, source_zip, dest_path)
+    add_pack_member(target_zf, source_zip, dest_path)
 
 
 def _check_zip_members(source_zip: str) -> None:
@@ -241,7 +241,7 @@ class DamagedArchiveError(OSError):
     """An archive of the collection whose members fail their own CRC."""
 
 
-def _same_bytes(path: str, other: str | None) -> bool:
+def same_bytes(path: str, other: str | None) -> bool:
     if not other:
         return False
     if os.path.realpath(path) == os.path.realpath(other):

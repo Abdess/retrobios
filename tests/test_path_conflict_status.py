@@ -21,7 +21,7 @@ from pathlib import Path
 import yaml
 
 from model.platforms import load_platform_config, _platform_config_cache
-from model.profiles import _emulator_profiles_cache
+from model.profiles import emulator_profiles_cache
 import generate_db
 from packs import emulatorpack
 from packs import platformpack
@@ -69,7 +69,7 @@ class ConflictingDeclarations(unittest.TestCase):
             yaml.dump({"platforms": {"conflict": {"config": "conflict.yml"}}})
         )
         _platform_config_cache.clear()
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
 
     def tearDown(self):
         _platform_config_cache.clear()
@@ -145,11 +145,11 @@ class AnExtraDoesNotPassAHashCheck(unittest.TestCase):
         }
         (self.emulators / "fxcore.yml").write_text(yaml.dump(profile))
         _platform_config_cache.clear()
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
 
     def tearDown(self):
         _platform_config_cache.clear()
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self._tmp.cleanup()
 
     def test_the_declaration_stays_failed(self):
@@ -198,10 +198,10 @@ class TheEmulatorPackShipsWhatTheCoreAccepts(unittest.TestCase):
                        "max_size": 1048576, "validation": ["size"]}],
         }
         (self.emulators / "mac.yml").write_text(yaml.dump(profile))
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
 
     def tearDown(self):
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self._tmp.cleanup()
 
     def test_the_refused_rom_is_named_not_shipped(self):
@@ -256,10 +256,10 @@ class AlternativesAgreeWithThePack(unittest.TestCase):
             ],
         }
         (self.emulators / "eng.yml").write_text(yaml.dump(profile))
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
 
     def tearDown(self):
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self._tmp.cleanup()
 
     def test_verify_counts_what_the_pack_ships(self):
@@ -319,10 +319,10 @@ class AMaskedArchiveIsMissing(unittest.TestCase):
             "files": [{"name": "y.bin", "archive": "pack.zip", "required": True,
                        "crc32": f"{__import__('zlib').crc32(b'y'):08x}"}],
         }))
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
 
     def tearDown(self):
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self._tmp.cleanup()
 
     def test_both_report_the_archive_missing(self):

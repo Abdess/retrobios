@@ -45,7 +45,7 @@ class ThePackReadmeNamesTheSpellingsItLeavesOut(unittest.TestCase):
 
     def setUp(self):
         from model.platforms import _platform_config_cache
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
         import generate_db
         tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
         self.addCleanup(tmp.cleanup)
@@ -74,9 +74,9 @@ class ThePackReadmeNamesTheSpellingsItLeavesOut(unittest.TestCase):
             "files": [{"name": "bios.col", "required": True}],
         }))
         _platform_config_cache.clear()
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.addCleanup(_platform_config_cache.clear)
-        self.addCleanup(_emulator_profiles_cache.clear)
+        self.addCleanup(emulator_profiles_cache.clear)
 
     def _readme(self, systems: list[str]) -> str:
         from model.platforms import _platform_config_cache
@@ -87,14 +87,14 @@ class ThePackReadmeNamesTheSpellingsItLeavesOut(unittest.TestCase):
         }}}))
         _platform_config_cache.clear()
         texts: dict[str, str] = {}
-        real = platformpack._write_generated_member
+        real = platformpack.write_generated_member
 
         def capture(zf, arcname, text):
             texts[arcname] = text
             return real(zf, arcname, text)
 
-        platformpack._write_generated_member = capture
-        self.addCleanup(setattr, platformpack, "_write_generated_member", real)
+        platformpack.write_generated_member = capture
+        self.addCleanup(setattr, platformpack, "write_generated_member", real)
         with contextlib.redirect_stdout(io.StringIO()):
             platformpack.generate_pack(
                 "p", "platforms", self.db, "bios", "", emulators_dir="emulators",

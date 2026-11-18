@@ -169,9 +169,9 @@ class PackPlacesCoreFilesUnderTheTag(unittest.TestCase):
     folder the platform hands it, and nowhere else."""
 
     def setUp(self):
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.root = tempfile.mkdtemp(dir=REPO_ROOT / "tmp" / "tests")
         self.bios = os.path.join(self.root, "bios")
         self.platforms = os.path.join(self.root, "platforms")

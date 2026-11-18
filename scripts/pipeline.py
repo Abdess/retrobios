@@ -458,7 +458,7 @@ def _tree_members(
     from packs import datatrees
     from model.profiles import load_emulator_profiles
     from model.platforms import load_platform_config
-    from packs.paths import _flat
+    from packs.paths import flat_arcname
 
     config = load_platform_config(platform, platforms_dir)
     base_dest = config.get("base_destination", "")
@@ -468,12 +468,12 @@ def _tree_members(
     )
     members: dict[str, int] = {}
     with contextlib.redirect_stdout(io.StringIO()):
-        for src, full in datatrees._data_directory_members(
+        for src, full in datatrees.data_directory_members(
             config.get("systems", {}), registry,
             platform, base_dest, False, set(), set(), set(),
             core_trees=core_trees,
         ):
-            members[_flat(full, base_dest, True)] = os.path.getsize(src)
+            members[flat_arcname(full, base_dest, True)] = os.path.getsize(src)
     return members
 
 
@@ -588,7 +588,7 @@ def check_emulator_packs(
         profiles_for_systems,
         select_emulator_profiles,
     )
-    from model.systems import _norm_system_id
+    from model.systems import norm_system_id
     from core.ziptools import build_zip_contents_index
     from model.database import load_database
 
@@ -599,7 +599,7 @@ def check_emulator_packs(
 
     def compare(names: list[str], standalone: bool, label: str, **narrowing: object) -> bool:
         record = archive.PackRecord()
-        was_offline = packresolve._OFFLINE
+        was_offline = packresolve.OFFLINE
         # The pack is built offline: verify counts a release asset the cache
         # lacks the same way, missing, as the narrowed-pack step does.
         packresolve.set_offline(True)
@@ -643,7 +643,7 @@ def check_emulator_packs(
     # rule that only goes wrong when two profiles share a path (the bluemsx
     # tree beside msx-emu's files) never meets in a one-profile pack.
     systems = sorted({
-        _norm_system_id(str(sid))
+        norm_system_id(str(sid))
         for profile in profiles.values()
         if profile.get("type") not in ("launcher", "alias") and profile.get("role") != "test"
         for sid in profile.get("systems") or []
@@ -668,7 +668,7 @@ def check_emulator_packs(
     return all_ok and systems_ok
 
 
-# How each _narrowings() dimension of a platform pack is compared by
+# How each pack_narrowings() dimension of a platform pack is compared by
 # check_narrowed_packs, or why it is not. A test reads the builder's
 # signature against these two tables, so a new narrowing fails it until it
 # is compared or a reason is written here. Emulator packs have their own
@@ -772,7 +772,7 @@ def check_narrowed_packs(
         list_registered_platforms(platforms_dir),
         platforms_dir,
     )
-    was_offline = packresolve._OFFLINE
+    was_offline = packresolve.OFFLINE
     packresolve.set_offline(True)
     all_ok = True
     compared = 0
@@ -881,7 +881,7 @@ def check_split_packs(
         list_registered_platforms(platforms_dir),
         platforms_dir,
     )
-    was_offline = packresolve._OFFLINE
+    was_offline = packresolve.OFFLINE
     packresolve.set_offline(True)
     all_ok = True
     try:
@@ -900,7 +900,7 @@ def check_split_packs(
                 packs_platformpack.generate_split_packs(
                     platform, platforms_dir, db, "bios", "", records=parts, **args,
                 )
-            lines = split_differences(full, parts, archive._same_bytes)
+            lines = split_differences(full, parts, archive.same_bytes)
             if lines:
                 all_ok = False
                 print(f"  {platform} --split: {len(lines)} differences")

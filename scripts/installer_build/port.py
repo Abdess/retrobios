@@ -112,23 +112,23 @@ def release_pack_labels(root: Path = REPO_ROOT) -> dict[str, str]:
     from resolve.grouping import group_identical_platforms
     from model.registry import list_release_pack_platforms
     from model.platforms import load_platform_config
-    from packs.naming import _name_part, _platform_pack_stem
+    from packs.naming import file_name_part, platform_pack_stem
 
     platforms_dir = str(root / "platforms")
     pool = list_release_pack_platforms(platforms_dir)
     labels: dict[str, str] = {}
     for group, representative in group_identical_platforms(pool, platforms_dir):
-        stem = _platform_pack_stem(group, representative, platforms_dir)
+        stem = platform_pack_stem(group, representative, platforms_dir)
         config = load_platform_config(representative, platforms_dir)
         version = config.get("version", config.get("dat_version", ""))
-        tag = f"_{_name_part(str(version))}" if version else ""
+        tag = f"_{file_name_part(str(version))}" if version else ""
         label = stem[: -len(tag)] if tag and stem.endswith(tag) else stem
         for platform in group:
             labels[platform] = label
     return dict(sorted(labels.items()))
 
 
-def _packs_table(root: Path) -> bytes:
+def packs_table(root: Path) -> bytes:
     return "".join(f"{platform}\t{label}\n"
                    for platform, label in release_pack_labels(root).items()).encode()
 
@@ -144,17 +144,17 @@ def build_archive(name: str, output: Path, root: Path = REPO_ROOT) -> Path:
         )
     # The packs' member writer: imported here, as it loads the whole
     # pack builder, which a caller reading ARCHIVES does not need.
-    from packs.archive import _add_pack_member
+    from packs.archive import add_pack_member
 
     members = archive_members(name, root)
     output.parent.mkdir(parents=True, exist_ok=True)
     scratch = output.with_name(f".{output.name}.tmp")
     table = output.with_name(f".{output.name}.{PACKS_TABLE}")
-    table.write_bytes(_packs_table(root))
+    table.write_bytes(packs_table(root))
     try:
         with zipfile.ZipFile(scratch, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
             for member, path in members:
-                _add_pack_member(zf, str(path or table), member)
+                add_pack_member(zf, str(path or table), member)
     finally:
         table.unlink()
     scratch.replace(output)

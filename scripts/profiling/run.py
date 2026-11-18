@@ -13,7 +13,7 @@ import yaml
 
 from core import upstream
 from profiling.bump import bump_commit, pins_changed
-from profiling.detection import _detect, _print_extras
+from profiling.detection import detect_upstream_changes, print_extras
 from profiling.realign import realign_prose
 from profiling.rebase import attribute_refs, rebase_refs
 from profiling.reports import (
@@ -25,10 +25,10 @@ from profiling.reports import (
 )
 from profiling.repos import select_repo
 from profiling.resolver import build_report
-from profiling.triage import _print_triage
+from profiling.triage import print_triage
 from profiling.versions import (
-    _newer_release,
-    _passed_release,
+    newer_release,
+    latest_passed_release,
     check_version,
     page_version,
     version_warning,
@@ -135,7 +135,7 @@ def _promote(
             file=sys.stderr,
         )
         return False
-    _WRITTEN.add(name)
+    WRITTEN_PROFILES.add(name)
     return True
 
 
@@ -254,7 +254,7 @@ def _attach_detection(
     if repo is None:
         return
     try:
-        _detect(args, profile, report, repo)
+        detect_upstream_changes(args, profile, report, repo)
     except upstream.RateLimitError:
         raise
     except upstream.UpstreamError as exc:
@@ -287,8 +287,8 @@ def _attach_version(
             relation = upstream.ancestry(
                 repo, version.tag_commit, report.pin, args.cache_dir, args.offline
             )
-        passed = _passed_release(args, repo, version, report.pin)
-        newer = None if passed or profile.get("pin_frozen") else _newer_release(
+        passed = latest_passed_release(args, repo, version, report.pin)
+        newer = None if passed or profile.get("pin_frozen") else newer_release(
             args, repo, version, report.pin
         )
     except upstream.RateLimitError:
@@ -303,7 +303,7 @@ def _attach_version(
     )
 
 
-def _read_one(
+def read_one_profile(
     args: argparse.Namespace,
     name: str,
     profile: dict,
@@ -344,7 +344,7 @@ def _read_one(
 
 # Profiles this run wrote. Their new pins name trees the site's record of
 # cited source paths does not hold yet.
-_WRITTEN: set[str] = set()
+WRITTEN_PROFILES: set[str] = set()
 
 
 def _build_full_report(
@@ -402,7 +402,7 @@ def _build_full_report(
     return report
 
 
-def _emit(
+def emit_reports(
     args: argparse.Namespace,
     selected: dict,
     reports: list[ProfileReport],
@@ -425,10 +425,10 @@ def _emit(
                 print(url)
         return None
     if args.triage:
-        return _print_triage(args, selected, shown)
+        return print_triage(args, selected, shown)
     for report in shown:
         print(format_report(report, args.changed_only))
-        _print_extras(args, selected[report.name], report)
+        print_extras(args, selected[report.name], report)
         print()
     if args.changed_only:
         _print_elided(reports, len(shown), frozenset(report.name for report in shown))

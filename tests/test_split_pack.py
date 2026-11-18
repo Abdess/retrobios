@@ -231,7 +231,7 @@ class PartsAreNotTakenForPacks(SplitFixture):
         """A part holds half a platform by design: judged as a pack it fails."""
         parts = packs_parts.split_pack(self.pack, limit=LIMIT)
         self.assertEqual(
-            naming._pack_archives(str(self.dist)), [],
+            naming.pack_archives(str(self.dist)), [],
             [p.name for p in parts],
         )
 
@@ -242,11 +242,11 @@ class PartsAreNotTakenForPacks(SplitFixture):
         for name in ("RetroBIOS.zip", "RetroBIOS-tools.zip", "RetroBIOS-batocera.zip"):
             self._build(self.dist / name, {"RetroBIOS.sh": b"#!/bin/sh\n"})
         before = {p.name: p.read_bytes() for p in self.dist.glob("RetroBIOS*.zip")}
-        self.assertEqual(naming._pack_archives(str(self.dist)), [self.pack.name])
+        self.assertEqual(naming.pack_archives(str(self.dist)), [self.pack.name])
         # A --system platform pack carries its system after the suffix.
         system = self.dist / "Demo_1.0_BIOS_Pack_Playstation.zip"
         self._build(system, {"one.bin": b"1"})
-        self.assertEqual(naming._pack_archives(str(self.dist)),
+        self.assertEqual(naming.pack_archives(str(self.dist)),
                          sorted([self.pack.name, system.name]))
         system.unlink()
         with contextlib.redirect_stdout(io.StringIO()):

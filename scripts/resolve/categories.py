@@ -16,10 +16,10 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 
-from model.systems import _norm_system_id
+from model.systems import norm_system_id
 from resolve.cores import resolve_platform_cores, unresolved_platform_cores
-from resolve.reconcile import HASH_FIELDS, NativeSystem, _hash_values
-from resolve.launchers import _names as launcher_names
+from resolve.reconcile import HASH_FIELDS, NativeSystem, hash_values
+from resolve.launchers import record_names as launcher_names
 
 
 def _tails(path: str) -> list[str]:
@@ -29,17 +29,17 @@ def _tails(path: str) -> list[str]:
 
 
 def _entry_hashes(entry: dict) -> set[str]:
-    values = {v for f in HASH_FIELDS for v in _hash_values(entry, f)}
+    values = {v for f in HASH_FIELDS for v in hash_values(entry, f)}
     for member in entry.get("contents") or []:
         if isinstance(member, dict):
-            values |= {v for f in HASH_FIELDS for v in _hash_values(member, f)}
+            values |= {v for f in HASH_FIELDS for v in hash_values(member, f)}
     return values
 
 
 def _declared_hashes(entry: dict) -> dict[str, set[str]]:
     """Hash field -> the values a platform entry declares, alt_md5 as md5."""
-    found = {f: set(_hash_values(entry, f)) for f in HASH_FIELDS}
-    found["md5"] |= set(_hash_values(entry, "alt_md5"))
+    found = {f: set(hash_values(entry, f)) for f in HASH_FIELDS}
+    found["md5"] |= set(hash_values(entry, "alt_md5"))
     return {f: values for f, values in found.items() if values}
 
 
@@ -53,7 +53,7 @@ def _contradicts(profile_entry: dict, declared: dict[str, set[str]]) -> bool:
     """True when both sides state the same kind of hash and no value agrees:
     the profile entry describes another dump under the same name."""
     for field_name, values in declared.items():
-        own = set(_hash_values(profile_entry, field_name))
+        own = set(hash_values(profile_entry, field_name))
         if own and not set(values) & set(own):
             return True
     return False
@@ -138,7 +138,7 @@ class ReadEvidence:
         if names & self.names or (tails and tails[-1] in self.names):
             return "name"
         hashes = {
-            v for f in (*HASH_FIELDS, "alt_md5") for v in _hash_values(entry, f)
+            v for f in (*HASH_FIELDS, "alt_md5") for v in hash_values(entry, f)
         }
         if hashes & self.hashes:
             return "hash"
@@ -196,7 +196,7 @@ class ProofIndex:
         tails = _tails(destination)
         last = {tails[-1]} if tails else set()
         hashes = {
-            v for f in (*HASH_FIELDS, "alt_md5") for v in _hash_values(entry, f)
+            v for f in (*HASH_FIELDS, "alt_md5") for v in hash_values(entry, f)
         }
         # "/" + d in "/" + path: d is a run of whole segments ending in "/",
         # so it is a run of the path's segments before the last one.
@@ -275,7 +275,7 @@ def removal_candidates(
     by_system: dict[str, list[str]] = {}
     for key in sorted(examined):
         for sid in profiles[key].get("systems") or []:
-            by_system.setdefault(_norm_system_id(str(sid)), []).append(key)
+            by_system.setdefault(norm_system_id(str(sid)), []).append(key)
 
     romset_cores = {key for key in examined if _loads_romsets(profiles[key])}
 
@@ -287,7 +287,7 @@ def removal_candidates(
             if evidence.proof(entry.platform, entry.destination) is not None:
                 continue
             slug = system_of.get(id(entry.platform), entry.native_system)
-            cores = by_system.get(_norm_system_id(slug), [])
+            cores = by_system.get(norm_system_id(slug), [])
             readers = (
                 [c for c in cores if c in romset_cores]
                 if entry.name.casefold().endswith(_ARCHIVES) else []
@@ -370,7 +370,7 @@ class EntryCategories:
         self._by_system: dict[str, list[str]] = {}
         for key in sorted(examined):
             for sid in profiles[key].get("systems") or []:
-                self._by_system.setdefault(_norm_system_id(str(sid)), []).append(key)
+                self._by_system.setdefault(norm_system_id(str(sid)), []).append(key)
         # Where the platform says which cores run a system, those settle its
         # entries: an unprofiled core of another system has no say.
         self._system_runs: dict[str, tuple[list[str], list[str]]] = {}
@@ -461,7 +461,7 @@ class EntryCategories:
         if system in self._system_runs:
             system_cores, unresolved = self._system_runs[system]
         else:
-            system_cores = self._by_system.get(_norm_system_id(system), [])
+            system_cores = self._by_system.get(norm_system_id(system), [])
             unresolved = self._unresolved
         # A reader that runs the entry's system comes first and says so: a
         # core of another system may only share the file's name.

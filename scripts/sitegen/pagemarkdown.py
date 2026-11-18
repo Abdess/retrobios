@@ -374,17 +374,14 @@ def page_markdown(html: str, page_url: str) -> str:
     return converter.markdown()
 
 
-ROOT = REPO_ROOT
-
-
 def build_stamp() -> dict[str, str]:
     """The commit the site is built from and its date. CI names the commit
     in GITHUB_SHA. The date is the commit's, so two builds of one commit
     write the same bytes."""
     commit = os.environ.get("GITHUB_SHA") or subprocess.run(
-        ["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True,
+        ["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, capture_output=True, text=True,
         check=True).stdout.strip()
-    date = subprocess.run(["git", "log", "-1", "--format=%cI", commit], cwd=ROOT,
+    date = subprocess.run(["git", "log", "-1", "--format=%cI", commit], cwd=REPO_ROOT,
                           capture_output=True, text=True, check=True).stdout.strip()
     return {"commit": commit, "date": date}
 

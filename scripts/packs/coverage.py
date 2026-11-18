@@ -21,9 +21,9 @@ from packs.verdicts import (
     RELEASE_ASSET_PENDING,
     Severity,
     Status,
-    _SEVERITY_ORDER,
-    _STATUS_ORDER,
-    _storage_verdict,
+    SEVERITY_ORDER,
+    STATUS_ORDER,
+    storage_verdict,
     compute_severity,
     verify_entry_existence,
     verify_entry_md5,
@@ -34,7 +34,7 @@ from resolve.cores import platform_scope_systems, resolve_platform_cores
 from resolve.launchers import launcher_unproven
 from resolve.nativemode import digest_algorithm, normalize as normalize_mode, reads_file_contents
 from resolve.validation import (
-    _build_validation_index,
+    build_validation_index,
     agnostic_substitute,
     baseline_verdict,
     build_ground_truth,
@@ -158,7 +158,7 @@ def _builder_placement(
     path -> copy or None for each slot kept, a user_provided or external one
     included).
     """
-    from packs.paths import _has_path_conflict, _register_path
+    from packs.paths import has_path_conflict, register_path
 
     shipped: dict[str, str] = {}
     occupied: dict[str, str | None] = {}
@@ -172,10 +172,10 @@ def _builder_placement(
         if (
             full in occupied
             or (case_insensitive and full.lower() in folded)
-            or _has_path_conflict(full, seen, parents)
+            or has_path_conflict(full, seen, parents)
         ):
             continue
-        _register_path(full, seen, parents)
+        register_path(full, seen, parents)
         folded.add(full.lower())
         occupied[full] = local
         if local is not None:
@@ -414,7 +414,7 @@ class _PlatformTally:
         """The declaration's result, and the local copy the pack writes for it."""
         config = self.run.config
         mode = self.run.mode
-        stored = _storage_verdict(file_entry, emulator_pack=False)
+        stored = storage_verdict(file_entry, emulator_pack=False)
         if resolve_status == RELEASE_ASSET_PENDING:
             # Counted as an online build counts it, which fetches the
             # asset. Under --offline the builder cannot, and neither
@@ -496,11 +496,11 @@ class _PlatformTally:
                 return
             del self.file_status[dest], self.file_severity[dest]
             prev = None
-        if prev is None or _STATUS_ORDER.get(cur, 0) > _STATUS_ORDER.get(prev, 0):
+        if prev is None or STATUS_ORDER.get(cur, 0) > STATUS_ORDER.get(prev, 0):
             self.file_status[dest] = cur
             self.file_required[dest] = required
         prev_sev = self.file_severity.get(dest)
-        if prev_sev is None or _SEVERITY_ORDER.get(sev, 0) > _SEVERITY_ORDER.get(
+        if prev_sev is None or SEVERITY_ORDER.get(sev, 0) > SEVERITY_ORDER.get(
             prev_sev, 0
         ):
             self.file_severity[dest] = sev
@@ -819,7 +819,7 @@ def verify_platform(
         for f in profile.get("files", [])
         if f.get("hle_fallback")
     }
-    validation_index = _build_validation_index(platform_profiles)
+    validation_index = build_validation_index(platform_profiles)
     validation_owners = destination_owners(platform_profiles)
 
     verify_systems = platform_scope_systems(config, profiles, target_cores, system_filter)
@@ -906,11 +906,11 @@ def verify_platform(
     # (base_destination stripped, as the builder flattens it). The pipeline
     # compares this set with the archive: equal counts can hide one file
     # credited here and another written there.
-    from packs.paths import _flat
+    from packs.paths import flat_arcname
 
     pack_destinations = sorted(
-        {_flat(dest, base_dest, True) for dest in shipped} | {
-            _flat(dest, base_dest, True) for dest in placed
+        {flat_arcname(dest, base_dest, True) for dest in shipped} | {
+            flat_arcname(dest, base_dest, True) for dest in placed
         }
     )
 

@@ -626,7 +626,7 @@ class APickReadsTheEntrySystems(unittest.TestCase):
         self.assertTrue(entry_serves_systems({}, profile, ["snk-neogeo-mvs"]))
 
     def test_the_gap_report_and_the_extras_carry_them(self):
-        from packs.extras import _collect_emulator_extras, _extra_system_ids
+        from packs.extras import collect_emulator_extras, extra_system_ids
         from packs.gaps import find_undeclared_files
 
         profile = {
@@ -643,10 +643,10 @@ class APickReadsTheEntrySystems(unittest.TestCase):
         }
         (gap,) = find_undeclared_files(config, "emulators", db, emu_profiles={"mame": profile})
         self.assertEqual(gap["systems"], ["apple2gs", "coco"])
-        (extra,) = _collect_emulator_extras(
+        (extra,) = collect_emulator_extras(
             config, "emulators", db, set(), "", {"mame": profile}, include_all=True
         )
-        self.assertEqual(_extra_system_ids(extra), ["apple2gs", "coco"])
+        self.assertEqual(extra_system_ids(extra), ["apple2gs", "coco"])
 
     def test_the_schema_and_the_profile_list(self):
         try:

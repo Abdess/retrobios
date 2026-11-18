@@ -32,7 +32,7 @@ def release_owners(platforms_dir: str = "platforms") -> dict[str, list[str]]:
 
     platforms = list_release_pack_platforms(platforms_dir)
     owners: dict[str, list[str]] = {}
-    for platform, names in naming._expected_pack_names(
+    for platform, names in naming.expected_pack_names(
         platforms, platforms_dir, None, None
     ).items():
         for name in names:

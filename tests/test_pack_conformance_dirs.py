@@ -64,10 +64,10 @@ class ConformanceUsesTheRunDirectories(unittest.TestCase):
 
         with mock.patch.object(packs_finalize, "list_registered_platforms", return_value=["fix"]), \
                 mock.patch.object(
-                    packs_finalize, "_expected_pack_names",
+                    packs_finalize, "expected_pack_names",
                     return_value={"fix": {"Fix_BIOS_Pack.zip"}},
                 ), \
-                mock.patch.object(packs_finalize, "_pack_archives", return_value=["Fix_BIOS_Pack.zip"]), \
+                mock.patch.object(packs_finalize, "pack_archives", return_value=["Fix_BIOS_Pack.zip"]), \
                 mock.patch.object(
                     packs_finalize, "verify_pack",
                     return_value=(True, {"summary": {

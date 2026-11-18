@@ -55,12 +55,12 @@ def _rsa_sign(message: bytes) -> bytes:
 
 
 def _ecdsa_sign(message: bytes) -> bytes:
-    g = (ec._Gx, ec._Gy)
-    r = ec._ec_mul(_ECC_NONCE, g)[0] % ec._N
+    g = (ec.Gx, ec.Gy)
+    r = ec.ec_mul(_ECC_NONCE, g)[0] % ec.N
     digest = int.from_bytes(hashlib.sha256(message).digest(), "big")
     if ec._N_BITLEN < 256:
         digest >>= 256 - ec._N_BITLEN
-    s = (ec._modinv(_ECC_NONCE, ec._N) * (digest + r * _ECC_PRIVATE)) % ec._N
+    s = (ec._modinv(_ECC_NONCE, ec.N) * (digest + r * _ECC_PRIVATE)) % ec.N
     return r.to_bytes(30, "big") + s.to_bytes(30, "big")
 
 
@@ -243,7 +243,7 @@ def _otp_plaintext(
     body[0x24:0x44] = _ECC_PRIVATE.to_bytes(0x20, "big")
 
     # Rebuild the certificate exactly as the verifier does, then sign it.
-    point = ec._ec_mul(_ECC_PRIVATE % ec._N, (ec._Gx, ec._Gy))
+    point = ec.ec_mul(_ECC_PRIVATE % ec.N, (ec.Gx, ec.Gy))
     pub_xy = point[0].to_bytes(30, "big") + point[1].to_bytes(30, "big")
     issuer = bytearray(0x40)
     issuer_str = (
@@ -264,7 +264,7 @@ def _otp_plaintext(
 
 
 def _root_public() -> bytes:
-    point = ec._ec_mul(_ECC_PRIVATE, (ec._Gx, ec._Gy))
+    point = ec.ec_mul(_ECC_PRIVATE, (ec.Gx, ec.Gy))
     return point[0].to_bytes(30, "big") + point[1].to_bytes(30, "big")
 
 

@@ -475,7 +475,7 @@ class TheStrongestProofTakesAnUndeclaredPath(unittest.TestCase):
     path, whatever the proof, and mame2015 received another revision."""
 
     def test_a_held_hash_beats_a_bare_name_whatever_the_order(self):
-        from packs.extras import _collect_emulator_extras
+        from packs.extras import collect_emulator_extras
 
         config = {
             "platform": "P", "verification_mode": "existence",
@@ -488,7 +488,7 @@ class TheStrongestProofTakesAnUndeclaredPath(unittest.TestCase):
             "zzz": {"emulator": "Zzz", "type": "libretro", "systems": ["console"],
                     "files": [{"name": "IPL.bin", "required": True, "md5": "n" * 32}]},
         }
-        extras = _collect_emulator_extras(config, "", REGIONS_DB, set(), "", profiles)
+        extras = collect_emulator_extras(config, "", REGIONS_DB, set(), "", profiles)
         winner = next(e for e in extras if e["destination"] == "IPL.bin")
         self.assertEqual(winner["source_profile"], "zzz")
         self.assertEqual({c["source_profile"] for c in winner["other_claims"]}, {"aaa"})
@@ -949,7 +949,7 @@ class SlotsJudgeWhatVerifyJudged(unittest.TestCase):
 
 
 class ARecordIsFoundByItsPathOnce(unittest.TestCase):
-    """_accepted_by_all walked all 19 000 records for every path asked."""
+    """accepted_by_all walked all 19 000 records for every path asked."""
 
     def test_the_files_are_walked_once(self):
         from resolve import collisions as resolve_collisions

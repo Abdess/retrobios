@@ -120,11 +120,11 @@ class Fetcher:
         paths: list[str] = []
         for page in range(1, upstream.MAX_TREE_PAGES + 1):
             url = (
-                f"{repo.api_base}/projects/{upstream._project(repo)}/repository/tree"
+                f"{repo.api_base}/projects/{upstream.project_path(repo)}/repository/tree"
                 f"?ref={sha}&path={directory}&recursive={'true' if recursive else 'false'}"
                 f"&per_page={upstream.TREE_PAGE_SIZE}&page={page}"
             )
-            payload = upstream._api(url, self.cache_dir, self.offline)
+            payload = upstream.cached_api(url, self.cache_dir, self.offline)
             if not isinstance(payload, list):
                 raise SourceError(f"{repo.slug}@{sha[:8]}: {directory} could not be listed")
             paths.extend(

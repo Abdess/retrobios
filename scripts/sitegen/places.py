@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from model.collection import _copy_places, _slug
+from model.collection import copy_places, manufacturer_slug
 from resolve.localfile import resolution_is_hash_exact, resolve_local_file
 from resolve.ownership import BUCKET_FOLDERS, names_manufacturer
 
@@ -14,7 +14,7 @@ def _copies_by_path(db: dict) -> dict[str, set[tuple[str, str, str]]]:
     files = db.get("files", {})
     return {
         str(files[sha1].get("path", "")): where
-        for sha1, where in _copy_places(db).items()
+        for sha1, where in copy_places(db).items()
     }
 
 
@@ -73,23 +73,23 @@ def _folders_by_name(manufacturers: dict) -> dict[str, set[tuple[str, str]]]:
     nintendo-nes, nes and the NES folder normalize alike, as do
     sega-mastersystem and Sega/Master System.
     """
-    from model.systems import _norm_system_id
+    from model.systems import norm_system_id
 
     index: dict[str, set[tuple[str, str]]] = {}
     for mfr, consoles in manufacturers.items():
         for console in consoles:
             spelled = console.lower().replace(" ", "-")
             for key in {
-                _norm_system_id(f"{_slug(mfr)}-{spelled}"), _norm_system_id(spelled)
+                norm_system_id(f"{manufacturer_slug(mfr)}-{spelled}"), norm_system_id(spelled)
             }:
                 index.setdefault(key, set()).add((mfr, console))
     return index
 
 
 def _folder_named(sys_id: str, by_name: dict[str, set[tuple[str, str]]]) -> tuple[str, str] | None:
-    from model.systems import _norm_system_id
+    from model.systems import norm_system_id
 
-    places = by_name.get(_norm_system_id(sys_id), set())
+    places = by_name.get(norm_system_id(sys_id), set())
     return next(iter(places)) if len(places) == 1 else None
 
 
@@ -180,7 +180,7 @@ def _profile_system_pages(
                 pages[sys_id] = console_norm[sys_id]
 
 
-def _system_pages_from_data(
+def system_pages_from_data(
     manufacturers: dict,
     coverages: dict,
     db: dict,

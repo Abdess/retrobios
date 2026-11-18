@@ -12,11 +12,12 @@ from model import releaserecord
 from model import siteinputs
 from model.database import load_database
 from sitegen import markup, measurements as sitemeasurements, starlight as sitestarlight
-from sitegen.config import SITE_NAME, SITE_URL, _REPO_ROOT, yaml
-from sitegen.descriptions import PAGE_DATA, _browser_title, _page_description, _page_title
+from sitegen.config import SITE_NAME, SITE_URL, yaml
+from core.paths import REPO_ROOT
+from sitegen.descriptions import PAGE_DATA, page_browser_title, page_description, page_title
 from sitegen.diagrams import prepare_page, unresolved_images
 from sitegen.render import WIKI_SRC_DIR
-from sitegen.write import _undecorated, write_decorated
+from sitegen.write import undecorated, write_decorated
 
 
 # Working notes kept under docs/ during development, never part of the site,
@@ -99,7 +100,7 @@ def level_label(level: str) -> str:
     return f'<span class="rb-level rb-level-{level}">{LEVELS[level]}</span>'
 
 
-def _front_matter(markdown: str) -> dict:
+def front_matter(markdown: str) -> dict:
     """The YAML front matter of a page, empty when it has none."""
     if not markdown.startswith("---\n"):
         return {}
@@ -138,13 +139,13 @@ def decorate_markdown_pages(docs: Path) -> dict[str, str]:
     returned by address, for the sitemap.
     """
     lastmod: dict[str, str] = {}
-    terms = sitestarlight.glossary_terms(_REPO_ROOT / WIKI_SRC_DIR / "glossary.md")
+    terms = sitestarlight.glossary_terms(REPO_ROOT / WIKI_SRC_DIR / "glossary.md")
     # The console words of every system page, decorated or not: a console
     # another page's words cover gets a search field of its own.
     console_words: dict[str, set[str]] = {}
     for path in sorted((docs / "systems").glob("*.md*")):
         text = path.read_text(encoding="utf-8")
-        words = sitestarlight.page_console_words(_front_matter(text), text)
+        words = sitestarlight.page_console_words(front_matter(text), text)
         if words:
             console_words[path.relative_to(docs).with_suffix("").as_posix()] = words
     for path in sorted(docs.rglob("*.md")):
@@ -152,7 +153,7 @@ def decorate_markdown_pages(docs: Path) -> dict[str, str]:
         if any(part in LOCAL_NOTE_DIRS for part in relative.parts[:-1]):
             continue
         original = path.read_text(encoding="utf-8")
-        authored = _front_matter(original)
+        authored = front_matter(original)
         if "head" in authored:
             # Written in its final form by an earlier pass and rewritten by
             # nothing since: a second pass would find no title to read.
@@ -160,7 +161,7 @@ def decorate_markdown_pages(docs: Path) -> dict[str, str]:
         markdown = _cards_elsewhere(prepare_page(original, relative))
         for image_id in unresolved_images(markdown):
             print(f"  WARNING: {relative}: no diagram named {image_id!r}", file=sys.stderr)
-        stripped = _undecorated(markdown)
+        stripped = undecorated(markdown)
         if stripped is not markdown:
             markdown = stripped
         elif authored:
@@ -168,9 +169,9 @@ def decorate_markdown_pages(docs: Path) -> dict[str, str]:
             markdown = markdown[markdown.find("\n---\n", 4) + 5:].lstrip("\n")
         level = authored.get("level") or page_level(relative)
 
-        title = _page_title(markdown, relative)
-        browser_title = _browser_title(relative, title)
-        description = str(authored.get("description") or _page_description(markdown, relative, title))
+        title = page_title(markdown, relative)
+        browser_title = page_browser_title(relative, title)
+        description = str(authored.get("description") or page_description(markdown, relative, title))
         if relative.name == "index.md":
             page_path = "" if len(relative.parts) == 1 else "/".join(relative.parts[:-1]) + "/"
         else:

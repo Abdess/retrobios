@@ -25,7 +25,8 @@ import argparse
 import sys
 
 from core.artifacts import write_text_atomic
-from installer_build.amalgamate import BuildError, COMMAND, OUTPUT, PACKAGE, ROOT, build
+from installer_build.amalgamate import BuildError, COMMAND, OUTPUT, PACKAGE, build
+from core.paths import REPO_ROOT
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -34,11 +35,11 @@ def main(argv: list[str] | None = None) -> int:
                         help="write nothing, exit 1 if install.py differs from what the package builds")
     args = parser.parse_args(argv)
     try:
-        text = build(ROOT / PACKAGE)
+        text = build(REPO_ROOT / PACKAGE)
     except BuildError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
-    target = ROOT / OUTPUT
+    target = REPO_ROOT / OUTPUT
     current = target.read_text(encoding="utf-8") if target.exists() else ""
     if args.check:
         if current != text:

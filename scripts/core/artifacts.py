@@ -355,7 +355,7 @@ def repository_output_lock(path: str) -> contextlib.AbstractContextManager[None]
     return contextlib.nullcontext()
 
 
-def _build_timestamp(db: dict | None = None) -> str:
+def build_timestamp(db: dict | None = None) -> str:
     """Timestamp for generated artifacts.
 
     Reads the database snapshot the artifact was built from, so rebuilding

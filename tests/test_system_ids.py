@@ -14,7 +14,7 @@ import tests
 import unittest
 from pathlib import Path
 
-from model.systems import SYSTEM_ALIASES, _norm_system_id
+from model.systems import SYSTEM_ALIASES, norm_system_id
 from model.profiles import load_emulator_profiles
 from packs.extras import _names_content, _slug_for
 
@@ -64,26 +64,26 @@ class PlatformNamesReachTheProfileSystem(unittest.TestCase):
         unmet = [
             f"{name} -> {emulator}"
             for name, emulator in self.PAIRS
-            if _norm_system_id(name)
-            not in {_norm_system_id(str(s)) for s in profiles[emulator].get("systems", [])}
+            if norm_system_id(name)
+            not in {norm_system_id(str(s)) for s in profiles[emulator].get("systems", [])}
         ]
         self.assertEqual(unmet, [])
 
     def test_both_spellings_normalize_alike(self):
         for alias, canonical in SYSTEM_ALIASES.items():
             with self.subTest(alias=alias):
-                self.assertEqual(_norm_system_id(alias), _norm_system_id(canonical))
+                self.assertEqual(norm_system_id(alias), norm_system_id(canonical))
 
     def test_each_id_is_normalized_once(self):
         """A manifest run asked 1.7 million times for about a thousand ids,
         1.5 seconds of prefix loops: the answer is kept per id."""
-        _norm_system_id.cache_clear()
+        norm_system_id.cache_clear()
         for _ in range(3):
-            _norm_system_id("Nintendo_WiiU")
-        info = _norm_system_id.cache_info()
+            norm_system_id("Nintendo_WiiU")
+        info = norm_system_id.cache_info()
         self.assertEqual((info.misses, info.hits), (1, 2))
         self.assertEqual(
-            _norm_system_id("Nintendo_WiiU"), _norm_system_id.__wrapped__("Nintendo_WiiU")
+            norm_system_id("Nintendo_WiiU"), norm_system_id.__wrapped__("Nintendo_WiiU")
         )
 
 

@@ -10,7 +10,7 @@ from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from pathlib import Path
 
-from model.collection import _slug
+from model.collection import manufacturer_slug
 from model.systemnames import system_name
 from packs.crossref import FileConsumers, entry_target, held_copy
 from resolve.cores import resolve_platform_cores
@@ -19,37 +19,37 @@ from sitegen.cards import (
     ROMSET_FAQ,
     SEARCH_SKIPPED,
     SHORT_HASH,
-    _card_title,
-    _listed_words,
-    _places_markdown,
-    _platform_links,
-    _platform_places,
-    _search_skipped_apart,
+    card_title,
+    listed_words,
+    places_markdown,
+    platform_links,
+    platform_places,
+    search_skipped_apart,
     card_fold,
 )
 from sitegen.config import REPO_URL
-from sitegen.descriptions import _said_as_list
-from sitegen.fields import _hash_spans
+from sitegen.descriptions import said_as_list
+from sitegen.fields import hash_spans
 from sitegen.install import (
-    _OS_LABELS,
-    _platform_display,
-    _under_root,
+    OS_LABELS,
+    platform_display,
+    under_root,
     comes_with_app,
     data_root_words,
     standalone_place,
 )
 from sitegen.render import (
     WIKI_SRC_DIR,
-    _code,
-    _count,
-    _escape_tags,
-    _fmt_size,
+    code_span,
+    count_text,
+    escape_tags,
+    fmt_size,
     card_page,
     console_href,
 )
 from sitegen.sources import (
-    _source_permalink,
-    _source_ref_markdown,
+    source_permalink,
+    source_ref_markdown,
     link_prose_citations,
     requested_by,
     version_basis_url,
@@ -59,7 +59,7 @@ from sitegen.sources import (
 # Emulator pages
 
 
-def _named_system_link(sys_id: str, prefix: str = "") -> str:
+def named_system_link(sys_id: str, prefix: str = "") -> str:
     """A system by its display name, linked where _system_link links it.
 
     The emulator pages printed the id ("sony-playstation") where every
@@ -79,7 +79,7 @@ def _named_system_link(sys_id: str, prefix: str = "") -> str:
 _REGION_WORDS = {"world": "every region"}
 
 
-def _region_words(value: object, most: int = 0) -> str:
+def region_words(value: object, most: int = 0) -> str:
     """A region: value in words. ``most`` caps the regions named, the rest
     counted: one Saturn BIOS serves seven."""
     raw = value if isinstance(value, list) else [value] if value else []
@@ -88,13 +88,13 @@ def _region_words(value: object, most: int = 0) -> str:
     words = [_REGION_WORDS.get(str(r)) or label(str(r)) for r in raw]
     if most and len(words) > most:
         words = words[:most] + [f"{len(words) - most} more"]
-    return _said_as_list(words)
+    return said_as_list(words)
 
 
 _CATEGORY_WORDS = {"bios": "BIOS", "game_data": "game data", "bios_zip": "BIOS ZIP"}
 
 
-def _snippet_noun(names: Iterable[str], firmware: int, fetched: int) -> str:
+def snippet_noun(names: Iterable[str], firmware: int, fetched: int) -> str:
     """What an emulator's files are called in its snippet. A Switch
     emulator reads keys, and "eden keys" is what readers search for. Ship
     of Harkinian reads game ROMs, which are no BIOS."""
@@ -142,7 +142,7 @@ def _status_badges(f: dict, in_repo: bool, for_system: str, shipped: bool) -> li
     return badges
 
 
-def _file_badges(f: dict, in_repo: bool, for_system: str = "") -> list[str]:
+def file_badges(f: dict, in_repo: bool, for_system: str = "") -> list[str]:
     """The status chips shown beside a file name.
 
     Fourteen independent optional fields, each contributing at most one
@@ -176,7 +176,7 @@ def _file_badges(f: dict, in_repo: bool, for_system: str = "") -> list[str]:
     if region:
         # Labelled: "optional in repo japan" read as one run-on phrase.
         badges.append(
-            f'<span class="rb-badge rb-badge-muted">Region: {_region_words(region)}</span>'
+            f'<span class="rb-badge rb-badge-muted">Region: {region_words(region)}</span>'
         )
     if storage and storage != "embedded":
         badges.append(
@@ -228,7 +228,7 @@ def _load_from_text(value: object) -> str:
     """
     if value in (None, "", "system_dir"):
         return ""
-    return _by_build(value, lambda v: _LOAD_FROM.get(v, _code(v)))
+    return _by_build(value, lambda v: _LOAD_FROM.get(v, code_span(v)))
 
 
 def _found_by_text(value: object) -> str:
@@ -238,7 +238,7 @@ def _found_by_text(value: object) -> str:
         "content": "content (the code scans the folder and identifies the file "
                    "by its hash, any file name works)",
     }
-    return _by_build(value, lambda v: words.get(v, _code(v)))
+    return _by_build(value, lambda v: words.get(v, code_span(v)))
 
 
 def _on_mismatch_lines(value: object) -> list[str]:
@@ -247,7 +247,7 @@ def _on_mismatch_lines(value: object) -> list[str]:
     if value == "warn":
         return [f"On a failed check: {said['warn']}"]
     if isinstance(value, dict):
-        return [f"On a failed {check} check: {said.get(str(how), _code(str(how)))}"
+        return [f"On a failed {check} check: {said.get(str(how), code_span(str(how)))}"
                 for check, how in value.items()]
     return []
 
@@ -259,7 +259,7 @@ def emulator_setups(coverages: dict, profiles: dict) -> dict[str, list[str]]:
         for emulator in resolve_platform_cores(cov["config"], profiles):
             setups.setdefault(emulator, []).append(platform)
     return {
-        emulator: sorted(names, key=lambda p: _platform_display(p).casefold())
+        emulator: sorted(names, key=lambda p: platform_display(p).casefold())
         for emulator, names in setups.items()
     }
 
@@ -273,30 +273,30 @@ def _validation_names(validation: dict | list | None) -> set[str]:
 
 def _exact_size(size: int) -> str:
     """A rounded size with its bytes, where the bytes are not the same figure."""
-    return _fmt_size(size) if size < 1024 else f"{_fmt_size(size)} ({size:,} bytes)"
+    return fmt_size(size) if size < 1024 else f"{fmt_size(size)} ({size:,} bytes)"
 
 
 def _build_file_links(pin_build: list[dict]) -> list[str]:
     """Each platform build file that holds the revision, linked at the
     commit it was read at when the source record holds it. The prose of
     pin_frozen named the file as plain text."""
-    from sitegen.sources import _browse_repo, tree_holds
+    from sitegen.sources import browse_repo, tree_holds
 
     links = []
     for build in pin_build:
-        repo = _browse_repo(str(build["repo"]))
+        repo = browse_repo(str(build["repo"]))
         path = str(build["path"])
         revision = str(build["revision"])
-        text = f"{_escape_tags(_platform_display(str(build['platform'])))} {_code(path)}"
+        text = f"{escape_tags(platform_display(str(build['platform'])))} {code_span(path)}"
         # Linked where the record saw the file at that commit, as every
         # source link is: a tag can move, and is never recorded.
         if repo is not None and tree_holds(repo, revision, path):
-            text = f"[{text}]({_source_permalink(repo, revision, path, None, None)})"
-        links.append(f"{text} at {_code(str(build['revision']))} sets {_code(str(build['variable']))}")
+            text = f"[{text}]({source_permalink(repo, revision, path, None, None)})"
+        links.append(f"{text} at {code_span(str(build['revision']))} sets {code_span(str(build['variable']))}")
     return links
 
 
-def _build_rows(profile: dict) -> list[str]:
+def build_rows(profile: dict) -> list[str]:
     """Meta card rows for who ships the build, how its files are found, why
     its revision is held and where its releases are announced."""
     rows = []
@@ -314,7 +314,7 @@ def _build_rows(profile: dict) -> list[str]:
                          ("upstream_frozen", "Upstream revision held")):
         frozen = profile.get(field)
         if frozen:
-            held = _escape_tags(' '.join(str(frozen).split())).replace('|', r'\|')
+            held = escape_tags(' '.join(str(frozen).split())).replace('|', r'\|')
             rows.append(f"| {label} | {held} |")
     builds = _build_file_links(profile.get("pin_build") or [])
     if builds:
@@ -324,21 +324,21 @@ def _build_rows(profile: dict) -> list[str]:
         url = str(announced["url"])
         row = f"| Releases announced at | [{url}]({url})"
         if announced.get("no_genuine_copy"):
-            row += (f" (version {_escape_tags(str(announced['no_genuine_copy']))} "
+            row += (f" (version {escape_tags(str(announced['no_genuine_copy']))} "
                     "announced there, found only as rebuilt copies)")
         rows.append(row + " |")
     return rows
 
 
-def _entry_label(f: dict, profile: dict) -> str:
+def entry_label(f: dict, profile: dict) -> str:
     """The name a file card goes by, its title without the badges."""
     fname = f.get("name", "")
     if f is any_name_bios(profile):
         # Found by content: the name is an example, any image of the system works.
         system = system_name((profile.get("systems") or [""])[0])
-        return (f"a {system} BIOS (example: {_code(fname)})" if _named_example(str(fname))
+        return (f"a {system} BIOS (example: {code_span(fname)})" if named_example(str(fname))
                 else f"a {system} BIOS, any file name")
-    return _code(fname)
+    return code_span(fname)
 
 
 @dataclass(frozen=True)
@@ -382,7 +382,7 @@ def _card_place_details(f: dict, profile: dict, owner: str, data_href: str) -> l
     if found:
         details.append(f"Found by: {found}")
     if fsystem:
-        details.append(f"System: {_named_system_link(fsystem, '../')}")
+        details.append(f"System: {named_system_link(fsystem, '../')}")
     return details
 
 
@@ -393,7 +393,7 @@ def _card_size_details(f: dict) -> list[str]:
     fmax = f.get("max_size")
     # Where the code compares the size, the exact bytes: raze tells three
     # DUKE3D.GRP apart by size, all three shown as 42.3 MB.
-    sized = _exact_size if "size" in _validation_names(f.get("validation", [])) else _fmt_size
+    sized = _exact_size if "size" in _validation_names(f.get("validation", [])) else fmt_size
     bounds = []
     if fmin:
         bounds.append(f"min {sized(fmin)}")
@@ -423,22 +423,22 @@ def _card_hash_details(f: dict) -> list[str]:
     # Starlight folds the hashes and gives each a copy button.
     copyable = markup.starlight()
     if fsha1:
-        details.append(f"SHA1: {_hash_spans(fsha1, copyable)}")
+        details.append(f"SHA1: {hash_spans(fsha1, copyable)}")
     if fmd5:
-        details.append(f"MD5: {_hash_spans(fmd5, copyable)}")
+        details.append(f"MD5: {hash_spans(fmd5, copyable)}")
     if fcrc32:
         crcs = fcrc32 if isinstance(fcrc32, list) else [fcrc32]
         details.append("CRC32: " + ", ".join(
             markup.hash_value(crc, True) if copyable else f"`{crc}`" for crc in crcs))
     if fsha256:
-        details.append(f"SHA256: {_hash_spans(fsha256, copyable)}")
+        details.append(f"SHA256: {hash_spans(fsha256, copyable)}")
     if fadler32:
         # Printed as the downloads spell a hash, one per code span: the list
         # repr read `['0x66f334fe', ...]`. Dolphin hashes its DSP ROMs over
         # byte-swapped 16-bit words, so the raw Adler-32 the downloads carry
         # for the same file differs, and the card says which one it lists.
         values = fadler32 if isinstance(fadler32, list) else [fadler32]
-        shown = ", ".join(_code(str(v).lower().removeprefix("0x")) for v in values)
+        shown = ", ".join(code_span(str(v).lower().removeprefix("0x")) for v in values)
         if f.get("adler32_byteswap"):
             details.append(
                 f"Adler32 over the file's 16-bit words byte-swapped: {shown} "
@@ -492,7 +492,7 @@ def _card_reading_details(f: dict, profile: dict) -> list[str]:
             # for the file.
             details.append(f"Asked for by: {asker}")
         details.append(
-            f"Source: {_source_ref_markdown(profile, source_ref)}"
+            f"Source: {source_ref_markdown(profile, source_ref)}"
         )
     return details
 
@@ -511,7 +511,7 @@ def _card_copy_line(
         # said "in repo" without naming the file.
         page = card_page(held, sha1)
         return [
-            f"Collection copy: [{_code(held)}]"
+            f"Collection copy: [{code_span(held)}]"
             f"(../systems/{urllib.parse.quote(page)}.md#sha1-{sha1[:12]})"
         ]
     if in_repo and not any(d.startswith("Collection copies:") for d in details):
@@ -536,13 +536,13 @@ def _card_copy_details(
         *entry_target(f, profile.get("files") or []), owner=owner)
     held = consumers.path_of(sha1) if sha1 and in_repo else ""
     added.extend(_card_copy_line(f, consumers, held, sha1, in_repo, details + added))
-    plat_links = _platform_links(sha1, consumers) if sha1 else []
+    plat_links = platform_links(sha1, consumers) if sha1 else []
     if plat_links and markup.starlight():
         # Grouped by where the setups put the file, as the system card
         # says it: twelve setups repeating scph5502.bin took twelve
         # names and twelve paths where a few say it. One sentence a
         # place: a list or a line break was one more element a place.
-        places = _places_markdown(_platform_places(sha1, consumers))
+        places = places_markdown(platform_places(sha1, consumers))
         added.append("Platforms: " + ". ".join(places))
     elif plat_links:
         added.append(f"Platforms: {', '.join(plat_links)}")
@@ -584,21 +584,21 @@ def _card_heading(f: dict, profile: dict, in_repo: bool, anchor: str, layout: Ca
     # above the DS files, for an emulator most people run for DS games.
     for_system = (system_name(str(fsystem))
                   if fsystem and len(profile.get("systems") or []) > 1 else "")
-    badges = _file_badges(f, in_repo, for_system)
+    badges = file_badges(f, in_repo, for_system)
     badge_str = " ".join(badges)
     lines.append(markup.block_open("div", 'class="rb-file-entry"'))
     lines.append("")
     marker = f'<span id="{layout.alias}"></span>' if layout.alias else ""
-    label = _entry_label(f, profile)
+    label = entry_label(f, profile)
     title = f"{marker}{label}" if layout.badges_apart else f"{marker}{label} {badge_str}"
-    lines.append(_card_title(title, anchor, weight=5))
+    lines.append(card_title(title, anchor, weight=5))
     lines.append("")
     if desc:
-        lines.extend([data_root_words(_escape_tags(str(desc)), layout.data_href), ""])
+        lines.extend([data_root_words(escape_tags(str(desc)), layout.data_href), ""])
     return lines
 
 
-def _render_emulator_file(
+def render_emulator_file(
     f: dict,
     profile: dict,
     consumers: FileConsumers | None,
@@ -639,11 +639,11 @@ def _render_emulator_file(
         return lines
     lines.extend(f"- {d}" for d in details)
     if fnote:
-        lines.append(f"- {data_root_words(_escape_tags(link_prose_citations(profile, str(fnote))), data_href)}")
+        lines.append(f"- {data_root_words(escape_tags(link_prose_citations(profile, str(fnote))), data_href)}")
     if not in_repo and f.get("unsourceable"):
         lines.append(f"- {_unsourceable_line(f)}")
     lines.extend(_contents_lines(contents))
-    lines[body_start:] = _search_skipped_apart(lines[body_start:])
+    lines[body_start:] = search_skipped_apart(lines[body_start:])
     lines.append("")
     lines.append("</div>")
     lines.append("")
@@ -661,9 +661,9 @@ def _contents_lines(contents: list) -> list[str]:
         if isinstance(c, dict):
             parts = []
             if c.get("description"):
-                parts.append(_escape_tags(str(c["description"])))
+                parts.append(escape_tags(str(c["description"])))
             if c.get("size"):
-                parts.append(_fmt_size(c["size"]))
+                parts.append(fmt_size(c["size"]))
             if c.get("crc32"):
                 parts.append(f"CRC32 `{c['crc32']}`")
             if c.get("sha1"):
@@ -751,7 +751,7 @@ def _emulator_card_folds(
     open_lines = [d for d in key if not skipped(d)]
     if fnote:
         open_lines.append(data_root_words(
-            _escape_tags(link_prose_citations(profile, str(fnote))), data_href))
+            escape_tags(link_prose_citations(profile, str(fnote))), data_href))
     if not in_repo and f.get("unsourceable"):
         open_lines.append(_unsourceable_line(f))
     lines = [f"- {d}" for d in open_lines]
@@ -768,12 +768,12 @@ def _emulator_card_folds(
                 tuple(f"- {h}" for h in _ENTRY_HASHES))])
         words = words if len(words) <= 3 else [*words[:3], "more"]
         if members:
-            words.append(_count(len(members), "member"))
+            words.append(count_text(len(members), "member"))
         hidden_part = [*shut_fold, "", *members] if members else shut_fold
         body = (hidden_part if not read_fold else [
             "", markup.block_open("div", f'class="rb-search-skip" {markup.search_exclude()}'),
             "", *hidden_part, "", "</div>", "", *read_fold])
-        fold = card_fold(_listed_words(words), body, skip=False)
+        fold = card_fold(listed_words(words), body, skip=False)
     # A fold the search skips whole sits in the skipped block before it, with
     # no attribute of its own: on a page of 200 MAME cards the attribute, the
     # class and a block each were 12 KB.
@@ -793,25 +793,25 @@ def _held_copy_line(copy: tuple[str, str], consumers: FileConsumers) -> str:
     path, member = copy
     parts = path.rstrip("/").split("/")
     if member:
-        archive = _code(path)
+        archive = code_span(path)
         zsha1 = consumers.sha1_at(path)
         if zsha1 and len(parts) >= 3 and parts[0] == "bios":
             page = urllib.parse.quote(card_page(path, zsha1))
             archive = f"[{archive}](../systems/{page}.md#sha1-{zsha1[:12]})"
-        return f"Collection copy: member {_code(member)} of {archive}"
+        return f"Collection copy: member {code_span(member)} of {archive}"
     if parts[0] == "data" and len(parts) >= 2:
         ref, inside = parts[1], "/".join(parts[2:])
         if path.endswith("/"):
-            where = _code(inside + "/") if inside else "the tree"
-            return f"Collection copy: {where} in the {_code(ref)} data directory"
-        info = (_DATA_MEMBERS.get(ref) or {}).get(inside) or {}
-        shown = _code(inside)
+            where = code_span(inside + "/") if inside else "the tree"
+            return f"Collection copy: {where} in the {code_span(ref)} data directory"
+        info = (DATA_MEMBERS.get(ref) or {}).get(inside) or {}
+        shown = code_span(inside)
         if info.get("sha1"):
             shown = (f'<a href="../../files/?sha1={info["sha1"]}">'
                      f"<code>{html.escape(inside)}</code></a>")
-        return f"Collection copy: {shown} in the {_code(ref)} data directory"
+        return f"Collection copy: {shown} in the {code_span(ref)} data directory"
     tree = f"{REPO_URL}/tree/main/{urllib.parse.quote(path.rstrip('/'))}"
-    return f"Collection copy: [{_code(path)}]({tree})"
+    return f"Collection copy: [{code_span(path)}]({tree})"
 
 
 def _directory_copies(entry: dict, consumers: FileConsumers) -> list[str]:
@@ -826,11 +826,11 @@ def _directory_copies(entry: dict, consumers: FileConsumers) -> list[str]:
         return []
     folder = os.path.commonpath(held) if len(held) > 1 else os.path.dirname(held[0])
     parts = folder.split("/")
-    where = _code(folder + "/")
+    where = code_span(folder + "/")
     if len(parts) >= 3 and parts[0] == "bios":
-        where = f"[{where}]({console_href(_slug(parts[1]), parts[2], '../')})"
+        where = f"[{where}]({console_href(manufacturer_slug(parts[1]), parts[2], '../')})"
     tree = f"{REPO_URL}/tree/main/{urllib.parse.quote(folder)}"
-    return [f"Collection copies: {_count(len(members), 'file')} under {where} "
+    return [f"Collection copies: {count_text(len(members), 'file')} under {where} "
             f"([browse]({tree}))"]
 
 
@@ -874,7 +874,7 @@ def _version_said(value: object, basis: dict, profile: dict, mode: str = "") -> 
     url = version_basis_url(profile, basis, mode) if kind in ("file", "tag") else ""
 
     def shown(text: object) -> str:
-        return f"[{_code(str(text))}]({url})" if url else _code(str(text))
+        return f"[{code_span(str(text))}]({url})" if url else code_span(str(text))
 
     if kind == "file":
         return f"{value}, stated in {shown(basis.get('path'))}"
@@ -999,7 +999,7 @@ def with_archive_counts(page: str, counts: dict[str, int]) -> str:
     return _ARCHIVE_BLOCK.sub(lambda m: f"{m.group(1)}{block}{m.group(3)}", page, count=1)
 
 
-def _render_metadata_rows(profile: dict) -> list[str]:
+def render_metadata_rows(profile: dict) -> list[str]:
     """Scalar profile fields, one table row each.
 
     Anything structured belongs in a collapsible block below, not in a
@@ -1034,9 +1034,9 @@ def _render_metadata_rows(profile: dict) -> list[str]:
                 and not str(val).startswith(("/", "~", "$")) and ":" not in str(val):
             # A bare `bios/` read as a place on the device: it is a folder
             # inside the app's own data folder, which the notes describe.
-            lines.append(f"| {label} | {_code(val)}, inside the app's own data folder |")
+            lines.append(f"| {label} | {code_span(val)}, inside the app's own data folder |")
         elif field == "bios_size" and isinstance(val, int):
-            lines.append(f"| {label} | {_fmt_size(val)} ({val:,} bytes) |")
+            lines.append(f"| {label} | {fmt_size(val)} ({val:,} bytes) |")
         elif isinstance(val, str) and val.startswith("http"):
             lines.append(f"| {label} | [{val}]({val}) |")
         else:
@@ -1047,17 +1047,17 @@ def _render_metadata_rows(profile: dict) -> list[str]:
         for key in ("windows", "macos", "linux", "android", "ios"):
             root = roots.get(key)
             if isinstance(root, dict) and root.get("path"):
-                lines.append(f"| Data folder ({_OS_LABELS[key]}) | "
-                             f"{_under_root(str(root['path']), '')} |")
+                lines.append(f"| Data folder ({OS_LABELS[key]}) | "
+                             f"{under_root(str(root['path']), '')} |")
     if profile.get("source_ref"):
         lines.append(
-            f"| Source ref | {_source_ref_markdown(profile, profile['source_ref'])} |"
+            f"| Source ref | {source_ref_markdown(profile, profile['source_ref'])} |"
         )
     return lines
 
 
 # Data directory members and revisions, read once per build.
-_DATA_MEMBERS: dict[str, dict[str, dict]] = {}
+DATA_MEMBERS: dict[str, dict[str, dict]] = {}
 
 
 def any_name_bios(profile: dict) -> dict | None:
@@ -1080,7 +1080,7 @@ def any_name_bios(profile: dict) -> dict | None:
     return required[0]
 
 
-def _named_example(name: str) -> bool:
+def named_example(name: str) -> bool:
     """A real file name, not a placeholder such as `<bios>.bin`."""
     return bool(name) and "<" not in name
 
@@ -1091,5 +1091,5 @@ def _unsourceable_line(f: dict) -> str:
     same-named file from being served in its place: the file is still
     wanted, and "Not collectable" sent readers away from KANJI2.ROM, which
     MAME's fm7740sx.zip carries."""
-    return (f"Not collected yet: {_escape_tags(str(f['unsourceable']))} "
+    return (f"Not collected yet: {escape_tags(str(f['unsourceable']))} "
             "([files not collected yet](../gaps.md#not-collected-yet))")

@@ -35,7 +35,7 @@ from resolve.launchers import (
 
 from packs.crossref import (
     DEFAULT_PLATFORMS_DIR,
-    _build_supplemental_index,
+    build_supplemental_index,
     cross_reference,
     declared_names,
     folded_declared_slots,
@@ -367,7 +367,7 @@ def main() -> None:
     selected = [args.platform] if args.platform else None
     declared, plat_data_dirs = load_platform_files(args.platforms_dir, selected)
     db = load_database(args.db)
-    data_names = _build_supplemental_index()
+    data_names = build_supplemental_index()
     report = cross_reference(
         profiles, declared, db, plat_data_dirs, data_names,
         all_declared=declared_names(args.platforms_dir, selected, db),

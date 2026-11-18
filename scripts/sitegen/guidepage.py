@@ -7,7 +7,7 @@ import json
 
 from model import releaserecord
 from model import siteinputs
-from model.collection import _profiles_on_disk
+from model.collection import profiles_on_disk
 from model.guides import (
     GUIDES,
     Guide,
@@ -21,12 +21,12 @@ from model.registry import load_platform_registry
 from resolve.nativemode import digest_algorithm
 from installer_build.handhelds import GROUP_PAGE
 from sitegen import handheld as sitehandheld, markup
-from sitegen.config import _REPO_ROOT
+from core.paths import REPO_ROOT
 from sitegen.guides import platform_args, terminal_tabs
-from sitegen.home import _next_block
-from sitegen.install import _installer, has_release_pack
+from sitegen.home import next_block
+from sitegen.install import installer_module, has_release_pack
 from sitegen.readme import download_links, extract_notes
-from sitegen.render import _fmt_size
+from sitegen.render import fmt_size
 from sitegen.versions import release_line, setup_version, version_line
 
 
@@ -52,12 +52,12 @@ def get_page_title(platform_name: str, display: str) -> str:
     A profile listing no file (the RetroArch frontend) titles its page
     "... emulator", which no setup title repeats."""
     kind = "BIOS pack" if has_release_pack(platform_name) else "BIOS files"
-    if (_profiles_on_disk().get(platform_name) or {}).get("files"):
+    if (profiles_on_disk().get(platform_name) or {}).get("files"):
         return f"{kind} for {display}"
     return f"{display} {kind}"
 
 
-def _setup_relative(extract_to: str | None) -> bool:
+def setup_relative(extract_to: str | None) -> bool:
     """Whether the registry writes the folder relative to the setup's own
     (`system/`, `Firmware/`), not as a path the device reads."""
     if not extract_to:
@@ -65,17 +65,17 @@ def _setup_relative(extract_to: str | None) -> bool:
     return not extract_to.startswith(("/", "~", "<"))
 
 
-def _folder_words(display: str, extract_to: str | None) -> str:
+def folder_words(display: str, extract_to: str | None) -> str:
     """The folder a pack or a copy goes into, in words: the device's path,
     or a folder of the setup named as the setup's."""
     if not extract_to:
         return "the BIOS folder"
-    if _setup_relative(extract_to):
+    if setup_relative(extract_to):
         return f"{display}'s `{extract_to.rstrip('/')}` folder"
     return f"`{extract_to}`"
 
 
-def _pack_buttons(platform_name: str, label: str = "Pack", prefix: str = "../",
+def pack_buttons(platform_name: str, label: str = "Pack", prefix: str = "../",
                   display: str | None = None) -> str:
     """The way to the platform's ZIP from its setup page: a button to its
     get/ page, the release it comes from, and the setup version its list
@@ -135,7 +135,7 @@ def first_screen_words() -> list[str]:
     read from install.py: the one-liner opens the full screen, and the page
     showed a line menu (Enter, i, c, q) nobody saw, whose keys had changed
     since."""
-    installer = _installer()
+    installer = installer_module()
     # The screen it opens first: the setup found, or the list when none
     # is. Install comes on the next one, Choose systems beside it and named
     # above on the page.
@@ -156,7 +156,7 @@ def check_pass_line() -> str:
     no file is missing or wrong (install.py EVERYTHING_IN_PLACE), read from
     the installer. Typed here, it kept "All files up to date." after the
     installer said "Everything is in place."."""
-    return f"Good result: `{_installer().EVERYTHING_IN_PLACE}`"
+    return f"Good result: `{installer_module().EVERYTHING_IN_PLACE}`"
 
 # Under "From your computer": a device with no network installs from the ZIP
 # (`--from-pack`). The id is the one wiki/installer.md gives its section.
@@ -233,7 +233,7 @@ def _card_route(name: str, display: str, guide: Guide) -> list[str]:
             for key in tabs}
     if guide.run != ("device",):
         lead = ("No network here? Run the command on a computer that has one, with a USB "
-                f"drive's folder after `--dest`. Then copy it into {_folder_words(display, extract_to)}.")
+                f"drive's folder after `--dest`. Then copy it into {folder_words(display, extract_to)}.")
         return [lead, "", *terminal_tabs(tabs, args, steps=False)]
     # A folder on the card's Linux partition: Windows and macOS show the
     # small boot partition alone, and no folder there fits --dest.
@@ -253,7 +253,7 @@ def _get_page_line(name: str, display: str) -> list[str]:
     return [f"Link to share: [{get_page_title(name, display)}](../{get_page_link(name)})", ""]
 
 
-def _setup_routes(name: str, display: str, page_link: bool = False) -> list[str]:
+def setup_routes(name: str, display: str, page_link: bool = False) -> list[str]:
     """The ways to run the command for a setup no ZIP serves first, written
     once for its setup page and its get/ page: the network folder from a
     computer, the card from a computer when the device has no network, and
@@ -299,7 +299,7 @@ def _computer_first(name: str, guide: Guide) -> bool:
 def _ships_neogeo(name: str) -> bool:
     """Whether the setup's files hold `neogeo.zip`, the archive a reader most
     often unzips by mistake: arcade BIOS sets are read zipped."""
-    manifest = _REPO_ROOT / "install" / f"{name}.json"
+    manifest = REPO_ROOT / "install" / f"{name}.json"
     if not manifest.is_file():
         return False
     files = json.loads(manifest.read_text(encoding="utf-8")).get("files", [])
@@ -316,8 +316,8 @@ def _guide_download(name: str, display: str, guide: Guide, extract_to: str | Non
     if pack and pack.get("assets"):
         parts = len(pack["assets"])
         bullets = [
-            f"{_fmt_size(pack['download_size'])} to download, "
-            f"{_fmt_size(pack['extracted_size'])} once unzipped."
+            f"{fmt_size(pack['download_size'])} to download, "
+            f"{fmt_size(pack['extracted_size'])} once unzipped."
         ]
         if parts > 1:
             bullets.append("Both parts are needed." if parts == 2 else f"All {parts} parts are needed.")
@@ -330,13 +330,13 @@ def _guide_download(name: str, display: str, guide: Guide, extract_to: str | Non
         if guide.download_hint and not _computer_first(name, guide):
             bullets.append(guide.download_hint)
         lines += [
-            _pack_buttons(name, f"Download {display} Pack"),
+            pack_buttons(name, f"Download {display} Pack"),
             "",
             *(f"- {b}" for b in bullets),
             "",
         ]
     elif not has_release_pack(name):
-        lines += [_pack_buttons(name, display=display), ""]
+        lines += [pack_buttons(name, display=display), ""]
     elif record.get("tag"):
         made_from = setup_version(name)
         lines += [
@@ -345,7 +345,7 @@ def _guide_download(name: str, display: str, guide: Guide, extract_to: str | Non
             "",
         ]
     else:
-        lines += [_pack_buttons(name, f"Download {display} Pack"), ""]
+        lines += [pack_buttons(name, f"Download {display} Pack"), ""]
     return [*lines, *only_some_consoles(name, "../")]
 
 
@@ -353,7 +353,7 @@ def only_some_consoles(name: str, prefix: str = "") -> list[str]:
     """The way to a smaller download, in the words Get the files uses."""
     return [
         f"Only some consoles? [Pick them]({prefix}which-pack.md?platform={name}"
-        f"#only-some-consoles), or the command's **{_installer().TUI_SYSTEMS_ROW}**.",
+        f"#only-some-consoles), or the command's **{installer_module().TUI_SYSTEMS_ROW}**.",
         "",
     ]
 
@@ -468,14 +468,14 @@ def generate_handheld_guide(guide: HandheldGuide) -> str:
         *terminal_tabs(("windows", "macos", "linux"), args),
         SAFE_LINK,
         "",
-        *_next_block([
+        *next_block([
             f"[{display}]({guide.uses}.md): every folder and every file",
             "[When a game does not start](../wiki/troubleshooting.md)",
         ]),
     ]) + "\n"
 
 
-def _platform_guide(name: str, display: str, cov: dict, registry: dict, no_list: bool) -> list[str]:
+def platform_guide(name: str, display: str, cov: dict, registry: dict, no_list: bool) -> list[str]:
     """The guide part of a platform page: folder, command, pack, check, next.
 
     A system that runs only on its own device puts the computer route
@@ -518,7 +518,7 @@ def _platform_guide(name: str, display: str, cov: dict, registry: dict, no_list:
     else:
         where = lines
         lines = [
-            *_setup_routes(name, display, page_link=True),
+            *setup_routes(name, display, page_link=True),
             *_guide_download(name, display, guide, extract_to, "## Download"),
             *_offline_line(name),
             *where,
@@ -537,7 +537,7 @@ def _platform_guide(name: str, display: str, cov: dict, registry: dict, no_list:
         MISSING_IN_PLACE,
         "",
         *([guide.finish, ""] if guide.finish else []),
-        *_next_block([
+        *next_block([
             "[First install, step by step](../wiki/first-install.md)",
             "[When a game does not start](../wiki/troubleshooting.md)",
         ]),

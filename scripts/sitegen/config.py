@@ -5,7 +5,6 @@ from __future__ import annotations
 from datetime import datetime, timezone
 
 from model import releaserecord
-from core.paths import REPO_ROOT
 from model.safeparse import require_yaml
 
 
@@ -27,7 +26,7 @@ GENERATED_DIRS = ["platforms", "systems", "emulators", "wiki", "api", "downloads
 PUBLIC_DIRS = ("api", "downloads")
 
 
-def _timestamp() -> str:
+def data_timestamp() -> str:
     """The build time for data files (stats, API records), ISO 8601."""
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
@@ -40,12 +39,9 @@ def data_as_of(moment: datetime | None = None) -> str:
             f"Data as of {moment.day} {moment.strftime('%B %Y')}</time>")
 
 
-def _date_line() -> str:
+def date_line() -> str:
     """The date a page closes on, in the words of data_as_of(). The search
     does not read it: a query word such as the "2" of "playstation 2 bios"
     also matches the start of "2026", and every page closing on the date
     then held every word of the query."""
     return f'<div class="rb-timestamp" data-pagefind-ignore>{data_as_of()}.</div>'
-
-
-_REPO_ROOT = REPO_ROOT

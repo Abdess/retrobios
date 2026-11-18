@@ -107,10 +107,10 @@ class AReleaseNamedAfterTheTree(unittest.TestCase):
 
     def test_only_whole_leading_words_name_the_tree(self):
         """dolphin-mmjr2 is not a release of dolphin-mmjr: mmjr2 is one word."""
-        from resolve.ownership import _owner_tokens
+        from resolve.ownership import owner_tokens
 
-        self.assertNotIn("dolphinmmjr", _owner_tokens({"source_profile": "dolphin-mmjr2"}))
-        self.assertIn("cxbxreloaded", _owner_tokens({"source_profile": "cxbx-reloaded-2023"}))
+        self.assertNotIn("dolphinmmjr", owner_tokens({"source_profile": "dolphin-mmjr2"}))
+        self.assertIn("cxbxreloaded", owner_tokens({"source_profile": "cxbx-reloaded-2023"}))
 
 
 class AnotherMachinesRomIsNotServed(unittest.TestCase):

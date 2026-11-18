@@ -14,7 +14,7 @@ from pathlib import Path
 from romrecipes import ledger
 from model import releaserecord
 from model import siteinputs
-from model.collection import _group_by_manufacturer, _slug
+from model.collection import group_by_manufacturer, manufacturer_slug
 from model.composition import compute_composition
 from model.database import load_database
 from model.dumpcatalog import load_provenance_snapshots
@@ -38,11 +38,12 @@ from sitegen import (
     steps as sitesteps,
     wanted as sitewanted,
 )
-from sitegen.cards import _wanted_link, system_install_choices, tables_out_of_search
-from sitegen.config import GENERATED_DIRS, PUBLIC_DIRS, REPO_URL, _REPO_ROOT, _timestamp, yaml
+from sitegen.cards import wanted_link, system_install_choices, tables_out_of_search
+from sitegen.config import GENERATED_DIRS, PUBLIC_DIRS, REPO_URL, data_timestamp, yaml
+from core.paths import REPO_ROOT
 from sitegen.crossref import generate_cross_reference
 from sitegen.dataexports import (
-    _source_commit,
+    source_commit,
     build_emulator_gap_report,
     generate_data_exports,
     generate_stats,
@@ -50,22 +51,22 @@ from sitegen.dataexports import (
     write_single_item,
 )
 from sitegen.datapage import generate_data_page
-from sitegen.decorate import SEARCH_DEMOTED, _front_matter, decorate_markdown_pages
+from sitegen.decorate import SEARCH_DEMOTED, front_matter, decorate_markdown_pages
 from sitegen.descriptions import PAGE_DATA, PART_PAGES
 from sitegen.emulatorcards import (
     ARCHIVE_RECIPES_PAGE,
     ROMSET_FAQ_PAGE,
-    _DATA_MEMBERS,
+    DATA_MEMBERS,
     emulator_setups,
     with_archive_counts,
     with_romset_table,
 )
 from sitegen.emulatorpage import (
-    _DATA_READERS,
-    _DATA_REVISIONS,
-    _EMULATOR_SETUPS,
-    _MEASUREMENT_ITEMS,
-    _availability_check,
+    DATA_READERS,
+    DATA_REVISIONS,
+    EMULATOR_SETUPS,
+    MEASUREMENT_ITEMS,
+    availability_check,
     emulator_pages,
     emulator_parts,
     plan_emulator_pages,
@@ -83,12 +84,12 @@ from sitegen.lookup import (
     generate_files_page,
     page_data_directories,
 )
-from sitegen.nav import _overview_anchors, generate_nav
-from sitegen.parts import PUBLISHED_PARTS_FILE, _published_parts, record_parts
-from sitegen.places import _system_pages_from_data
-from sitegen.platformfiles import _EXPORTED
+from sitegen.nav import overview_anchors, generate_nav
+from sitegen.parts import PUBLISHED_PARTS_FILE, load_published_parts, record_parts
+from sitegen.places import system_pages_from_data
+from sitegen.platformfiles import EXPORTED
 from sitegen.platformindex import SETUP_TABLE_PAGE, generate_platform_index, with_setup_table
-from sitegen.platformpage import _own_list_only, generate_platform_page
+from sitegen.platformpage import own_list_only, generate_platform_page
 from sitegen.provenance import generate_provenance_page, load_derivable
 from sitegen.publish import write_release_advertised
 from sitegen.readme import platform_coverages
@@ -100,9 +101,9 @@ from sitegen.reference import (
 )
 from sitegen.render import (
     WIKI_SRC_DIR,
-    _icon_name,
-    _pct,
-    _system_page_map,
+    console_icon_name,
+    percent_text,
+    system_page_map,
     prime_system_icons,
     reset_console_pages,
     set_system_page_map,
@@ -118,8 +119,8 @@ from sitegen.structured import (
 from sitegen.systempages import arcade_board_sections, system_pages
 from sitegen.systemsindex import generate_systems_index
 from sitegen.versions import compute_stats
-from sitegen.whichpack import _build_emulator_file_index, _build_file_consumers, generate_which_pack
-from sitegen.write import _record, _sweep_generated, _sweep_top_pages, write_if_changed
+from sitegen.whichpack import build_emulator_file_index, build_file_consumers, generate_which_pack
+from sitegen.write import record_written, sweep_generated, sweep_top_pages, write_if_changed
 
 
 def _write_public_assets(docs: Path, public: Path) -> None:
@@ -133,9 +134,9 @@ def _write_public_assets(docs: Path, public: Path) -> None:
     # the sitemap instead (Starlight's head links it).
     (public / "robots.txt").unlink(missing_ok=True)
     # The one-line commands' bootstraps, at the site's root.
-    sitebootstrap.write_bootstraps(public, _REPO_ROOT)
+    sitebootstrap.write_bootstraps(public, REPO_ROOT)
     # The handheld launchers, built from the same commit (sitehandheld).
-    sitehandheld.write_launchers(public, _REPO_ROOT)
+    sitehandheld.write_launchers(public, REPO_ROOT)
 
     images_dest = public / "assets" / "images"
     images_dest.mkdir(parents=True, exist_ok=True)
@@ -195,7 +196,7 @@ class _SiteRun:
 def _load_site_run(args: argparse.Namespace, db: dict, docs: Path, public: Path) -> _SiteRun:
     """The registry, the coverage of every platform and the profiles."""
     from model.registry import load_data_dir_registry
-    from packs.crossref import _build_supplemental_index
+    from packs.crossref import build_supplemental_index
 
     registry = _load_registry(args.platforms_dir)
 
@@ -204,14 +205,14 @@ def _load_site_run(args: argparse.Namespace, db: dict, docs: Path, public: Path)
     )
 
     data_registry = load_data_dir_registry(args.platforms_dir)
-    suppl_names = _build_supplemental_index()
+    suppl_names = build_supplemental_index()
 
     print("Computing platform coverage...")
     coverages = platform_coverages(
         sorted(platform_names), args.platforms_dir, db, data_registry,
         emulators_dir=args.emulators_dir, db_path=args.db,
         report=lambda _name, cov: print(
-            f"  {cov['platform']}: {cov['present']}/{cov['total']} ({_pct(cov['present'], cov['total'])})"
+            f"  {cov['platform']}: {cov['present']}/{cov['total']} ({percent_text(cov['present'], cov['total'])})"
         ),
     )
 
@@ -222,7 +223,7 @@ def _load_site_run(args: argparse.Namespace, db: dict, docs: Path, public: Path)
         f"  {len(profiles)} profiles ({unique_count} unique, {len(profiles) - unique_count} aliases)"
     )
 
-    consumers = _build_file_consumers(db, coverages, profiles)
+    consumers = build_file_consumers(db, coverages, profiles)
     return _SiteRun(args, db, docs, public, registry, platform_names, data_registry,
                     suppl_names, coverages, profiles, consumers)
 
@@ -259,7 +260,7 @@ def _write_system_pages(run: _SiteRun) -> None:
     print("Generating system pages...")
 
     prime_system_icons({
-        _icon_name(mfr, console)
+        console_icon_name(mfr, console)
         for mfr, consoles in manufacturers.items()
         for console in consoles
     })
@@ -290,9 +291,9 @@ def _write_system_pages(run: _SiteRun) -> None:
             public / "api" / "v1" / "systems" / f"{slug}.json", "systems",
             # The published data keeps the collection's folders.
             system_export_item(slug, mfr, manufacturers[mfr]),
-            str(db.get("generated_at") or _timestamp()), _source_commit(),
+            str(db.get("generated_at") or data_timestamp()), source_commit(),
         )
-    clash = split_system_stems() & {_slug(m) for m in manufacturers}
+    clash = split_system_stems() & {manufacturer_slug(m) for m in manufacturers}
     if clash:
         raise RuntimeError(f"a console page takes a manufacturer's address: {sorted(clash)}")
 
@@ -302,12 +303,12 @@ def _write_measurements(run: _SiteRun) -> sitemeasurements.Built:
     print("Compiling the measurements...")
     measured = sitemeasurements.build(
         run.public, emulators_dir=Path(run.args.emulators_dir), repo=REPO_URL,
-        system_names={sys_id: system_name(sys_id) for sys_id in sorted(set(_system_page_map))},
+        system_names={sys_id: system_name(sys_id) for sys_id in sorted(set(system_page_map))},
     )
     for path in measured.paths:
-        _record(path)
-    _MEASUREMENT_ITEMS.clear()
-    _MEASUREMENT_ITEMS.update(sitemeasurements.by_emulator(measured.index))
+        record_written(path)
+    MEASUREMENT_ITEMS.clear()
+    MEASUREMENT_ITEMS.update(sitemeasurements.by_emulator(measured.index))
     print(f"  {measured.index['records']} records, {measured.index['count']} tests")
     write_if_changed(str(run.docs / sitemeasurements.EXPLORER_PAGE),
                      sitemeasurements.generate_explorer_page(measured.index) + reference_next())
@@ -331,7 +332,7 @@ def _write_platform_pages(run: _SiteRun) -> dict[str, str]:
     """The platform pages and the pages their long lists went to. Returns
     the published parts, each part's page with the anchor it came from."""
     docs, coverages = run.docs, run.coverages
-    emulator_files = _build_emulator_file_index(run.profiles)
+    emulator_files = build_emulator_file_index(run.profiles)
     print("Generating platform pages...")
     write_if_changed(
         str(docs / "platforms" / "index.md"),
@@ -339,7 +340,7 @@ def _write_platform_pages(run: _SiteRun) -> dict[str, str]:
     )
     if HANDHELD_GUIDE:
         write_if_changed(str(docs / HANDHELD_GUIDE.path), generate_handheld_guide(HANDHELD_GUIDE))
-    published_parts = _published_parts()
+    published_parts = load_published_parts()
     for name, cov in coverages.items():
         # The emulators this platform runs, not every one of the system.
         runs = resolve_platform_cores(cov["config"], run.profiles)
@@ -364,7 +365,7 @@ def _write_platform_pages(run: _SiteRun) -> dict[str, str]:
             # of the index: the title alone, found again on the setup's page
             # and the console's, is all the search held of them.
             SEARCH_DEMOTED.add(f"platforms/{stem}.md")
-            front = _front_matter(page)
+            front = front_matter(page)
             if front:
                 page = page[page.find("\n---\n", 4) + 5:].lstrip("\n")
             front.update(level="reference", search="exclude",
@@ -379,17 +380,17 @@ def _write_platform_pages(run: _SiteRun) -> dict[str, str]:
 def _record_data_trees(profiles: dict) -> None:
     """The data directories: their members, revisions and readers, and the
     pages their member lists go to."""
-    _DATA_MEMBERS.update(data_directory_members())
-    _DATA_REVISIONS.update(data_directory_revisions())
+    DATA_MEMBERS.update(data_directory_members())
+    DATA_REVISIONS.update(data_directory_revisions())
     for key in sorted(profiles):
         if profiles[key].get("type") == "alias" or profiles[key].get("role") == "test":
             continue
         display = str(profiles[key].get("emulator", key))
         for tree in page_data_directories(key, profiles):
-            readers = _DATA_READERS.setdefault(str(tree.get("ref", "")), [])
+            readers = DATA_READERS.setdefault(str(tree.get("ref", "")), [])
             if (key, display) not in readers:
                 readers.append((key, display))
-    for ref, members in _DATA_MEMBERS.items():
+    for ref, members in DATA_MEMBERS.items():
         for stem, _names in data_tree_pages(ref, members):
             PART_PAGES.add(f"emulators/{stem}.md")
 
@@ -398,7 +399,7 @@ def _write_emulator_pages(run: _SiteRun) -> None:
     """The emulator index, and each emulator's page and API item."""
     profiles = run.profiles
     print("Generating emulator pages...")
-    _EMULATOR_SETUPS.update(emulator_setups(run.coverages, profiles))
+    EMULATOR_SETUPS.update(emulator_setups(run.coverages, profiles))
     _record_data_trees(profiles)
     write_if_changed(
         str(run.docs / "emulators" / "index.md"), generate_emulators_index(profiles)
@@ -425,7 +426,7 @@ def _write_emulator_page(run: _SiteRun, name: str, profile: dict) -> None:
     write_single_item(
         run.public / "api" / "v1" / "emulators" / f"{name}.json", "emulators",
         {"id": name, "profile": profile},
-        str(db.get("generated_at") or _timestamp()), _source_commit(),
+        str(db.get("generated_at") or data_timestamp()), source_commit(),
     )
     pages = emulator_pages(
         name, profile, db, run.consumers, run.suppl_names, run.data_registry,
@@ -461,7 +462,7 @@ def _write_cross_reference(run: _SiteRun) -> None:
     for stem, page in xref_pages.items():
         write_if_changed(str(docs / f"{stem}.md"), tables_out_of_search(page))
     for pname, cov in run.coverages.items():
-        if _own_list_only(cov["config"]):
+        if own_list_only(cov["config"]):
             # The empty table it had is gone: its address leads to the
             # platform's page, which says its own list decides alone.
             sitestarlight.MOVED_PAGES.setdefault(
@@ -494,7 +495,7 @@ def _write_gap_pages(run: _SiteRun, provenance_report: dict) -> None:
     wanted = sitewanted.build_wanted(
         profiles, coverages, run.gap_report, db, placer, system_name,
         sitewanted.load_ledger(ledger.ARCHIVES_FILE),
-        _wanted_link(profiles),
+        wanted_link(profiles),
     )
     (public / "data").mkdir(parents=True, exist_ok=True)
     write_if_changed(str(public / sitewanted.DATA_FILE),
@@ -542,17 +543,17 @@ def _write_wiki_pages(run: _SiteRun, measured: sitemeasurements.Built) -> None:
     wiki_src = Path(WIKI_SRC_DIR)
     # The romset table is the profiles' versions, never typed: the source
     # page is rewritten before it is copied, as the README is.
-    faq = _REPO_ROOT / ROMSET_FAQ_PAGE
+    faq = REPO_ROOT / ROMSET_FAQ_PAGE
     if faq.is_file():
         write_if_changed(str(faq), with_romset_table(faq.read_text(encoding="utf-8"), profiles))
-    recipes_page = _REPO_ROOT / ARCHIVE_RECIPES_PAGE
+    recipes_page = REPO_ROOT / ARCHIVE_RECIPES_PAGE
     if recipes_page.is_file():
         write_if_changed(str(recipes_page), with_archive_counts(
             recipes_page.read_text(encoding="utf-8"), ledger.rebuild_counts()))
     if wiki_src.is_dir():
         for src_file in wiki_src.glob("*.md"):
             shutil.copy2(src_file, wiki_dest / src_file.name)
-            _record(wiki_dest / src_file.name)
+            record_written(wiki_dest / src_file.name)
     method_page = docs / sitemeasurements.METHOD_PAGE
     if method_page.is_file():
         write_if_changed(str(method_page), sitemeasurements.with_hosts(
@@ -581,7 +582,7 @@ def _write_guide_pages(run: _SiteRun) -> None:
     for name in run.platform_names:
         write_if_changed(str(get_dir / f"{name}.md"), generate_get_page(name))
     write_if_changed(str(get_dir / f"{GROUP_PAGE}.md"),
-                     sitehandheld.group_page(_REPO_ROOT))
+                     sitehandheld.group_page(REPO_ROOT))
     write_if_changed(str(get_dir / "index.md"), generate_get_index())
 
     print("Generating contributing page...")
@@ -596,9 +597,9 @@ def _write_navigation(run: _SiteRun, published_parts: dict[str, str]) -> None:
     # page no generator produced any more (a console moved back onto its
     # manufacturer's page) was decorated, recorded, and kept for ever.
     write_if_changed(str(docs / "404.md"), generate_not_found())
-    stale = _sweep_generated(docs, [d for d in GENERATED_DIRS if d not in PUBLIC_DIRS])
-    stale += _sweep_generated(public, list(PUBLIC_DIRS))
-    stale += _sweep_top_pages(docs)
+    stale = sweep_generated(docs, [d for d in GENERATED_DIRS if d not in PUBLIC_DIRS])
+    stale += sweep_generated(public, list(PUBLIC_DIRS))
+    stale += sweep_top_pages(docs)
 
     print("Adding page metadata and structured data...")
     lastmod = decorate_markdown_pages(docs)
@@ -616,25 +617,25 @@ def _write_navigation(run: _SiteRun, published_parts: dict[str, str]) -> None:
     generated = site / "src" / "generated"
     generated.mkdir(parents=True, exist_ok=True)
     write_if_changed(str(generated / "sidebar.json"),
-                     json.dumps(sitestarlight.sidebar(nav, present, _overview_anchors(nav, docs)),
+                     json.dumps(sitestarlight.sidebar(nav, present, overview_anchors(nav, docs)),
                                 indent=1) + "\n")
     write_if_changed(str(generated / "redirects.json"),
                      json.dumps(sitestarlight.redirects(run.profiles, present, published_parts), indent=1,
                                 sort_keys=True) + "\n")
     write_if_changed(str(generated / "lastmod.json"),
                      json.dumps(dict(sorted(lastmod.items())), indent=1) + "\n")
-    system_ids = set(_system_page_map) | {
+    system_ids = set(system_page_map) | {
         sys_id for cov in coverages.values() for sys_id in cov["config"].get("systems", {})
     }
     titles = {sys_id: system_name(sys_id) for sys_id in sorted(system_ids)}
-    sitestarlight.picker_data(_REPO_ROOT / "install", public / "data" / "picker", titles)
+    sitestarlight.picker_data(REPO_ROOT / "install", public / "data" / "picker", titles)
     total_pages = len(present)
     print(f"\nGenerated {total_pages} pages in {run.args.docs_dir}/")
     if stale:
         print(f"Removed {stale} page(s) nothing produced this run")
 
 
-def _generate(args: argparse.Namespace) -> None:
+def generate_site(args: argparse.Namespace) -> None:
 
     # Every page reads these, never the repository's own files.
     siteinputs.use(siteinputs.SiteInputs(
@@ -659,24 +660,24 @@ def _generate(args: argparse.Namespace) -> None:
 
     # The test each emulator page builds for itself: the parts a page is
     # cut into weigh the status its rows show.
-    run.file_held = _availability_check(db, run.suppl_names)
+    run.file_held = availability_check(db, run.suppl_names)
     # The plan names systems: the sections must be this run's data first.
-    run.manufacturers = _group_by_manufacturer(db)
+    run.manufacturers = group_by_manufacturer(db)
     set_console_sections(run.manufacturers, program_names(profiles))
     plan_emulator_pages(profiles, run.file_held)
     # Build system_id -> manufacturer page map (needed by all generators)
     print("Building system cross-reference map...")
     set_system_page_map(
-        _system_pages_from_data(run.manufacturers, coverages, db, profiles)
+        system_pages_from_data(run.manufacturers, coverages, db, profiles)
     )
-    print(f"  {len(_system_page_map)} system IDs mapped to pages")
+    print(f"  {len(system_page_map)} system IDs mapped to pages")
     _write_system_pages(run)
 
     measured = _write_measurements(run)
     _write_data_exports(run, stats)
 
     export_reports = load_export_reports()
-    _EXPORTED.update(report["platform"] for report in export_reports)
+    EXPORTED.update(report["platform"] for report in export_reports)
 
     published_parts = _write_platform_pages(run)
     _write_emulator_pages(run)

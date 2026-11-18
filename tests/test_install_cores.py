@@ -369,11 +369,11 @@ class APlatformOmissionKeepsItsClaim(unittest.TestCase):
         from packs import manifestentry
 
         held = {"cores": None}
-        self.assertTrue(manifestentry._claim_platform_omission(held, "melonds"))
-        self.assertTrue(manifestentry._claim_platform_omission(held, "melonds"))
+        self.assertTrue(manifestentry.claim_platform_omission(held, "melonds"))
+        self.assertTrue(manifestentry.claim_platform_omission(held, "melonds"))
         self.assertEqual(held["alternatives"], [{"cores": ["melonds"]}])
-        self.assertFalse(manifestentry._claim_platform_omission({"cores": ["x"]}, "melonds"))
-        self.assertFalse(manifestentry._claim_platform_omission(None, "melonds"))
+        self.assertFalse(manifestentry.claim_platform_omission({"cores": ["x"]}, "melonds"))
+        self.assertFalse(manifestentry.claim_platform_omission(None, "melonds"))
 
     def test_the_boundary_takes_only_core_names(self):
         manifest = {"manifest_version": 2, "platform": "retroarch", "files": [],

@@ -214,7 +214,7 @@ class ReadmeOptions(TypedDict, total=False):
     case_twins: list[tuple[str, str]] | None
 
 
-def _build_readme(
+def build_readme(
     platform_name: str,
     platform_display: str,
     base_dest: str,
@@ -235,7 +235,7 @@ def _build_readme(
     where names keep their case (EmuDeck and RetroArch on Linux), where the
     core asking for the other spelling finds nothing.
     """
-    reject_unknown("_build_readme", options, ReadmeOptions.__optional_keys__)
+    reject_unknown("build_readme", options, ReadmeOptions.__optional_keys__)
     regions = options.get("regions")
     launch_folders = options.get("launch_folders", 0)
     sep = "=" * 50
@@ -366,7 +366,7 @@ def _region_info(regions: list[str] | None, fallback_systems: list[str] | None) 
         "  Only the best-matching BIOS was kept for each system.\n"
     )
     if fallback_systems:
-        listed = "\n".join(f"    {_group_label(s)}" for s in fallback_systems)
+        listed = "\n".join(f"    {group_label(s)}" for s in fallback_systems)
         region_info += (
             "\n  These systems have no BIOS in those regions, so every\n"
             "  BIOS file for them was kept:\n"
@@ -426,7 +426,7 @@ def _credits(contributors: list[dict] | None) -> str:
     return credits + "\n"
 
 
-def _build_agnostic_rename_readme(
+def build_agnostic_rename_readme(
     destination: str,
     original: str,
     alternatives: list[str],
@@ -445,7 +445,7 @@ def _build_agnostic_rename_readme(
     return "\n".join(lines) + "\n"
 
 
-def _group_label(group_id: str) -> str:
+def group_label(group_id: str) -> str:
     """A region group as a reader names it: the system, or one core's slot."""
     emulator, kind, rest = (group_id.split(":", 2) + ["", ""])[:3]
     if kind == "variant" and rest:

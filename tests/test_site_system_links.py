@@ -54,7 +54,7 @@ class LinksFollowContent(unittest.TestCase):
         db = load_database("database.json")
         config = load_platform_config("misterfpga")
         names: dict = {}
-        for mfr, consoles in collection._group_by_manufacturer(db).items():
+        for mfr, consoles in collection.group_by_manufacturer(db).items():
             for console, entries in consoles.items():
                 for entry in entries:
                     names.setdefault(entry["name"], set()).add((mfr, console))
@@ -74,17 +74,17 @@ class OtherSpellingsOfOneSystem(unittest.TestCase):
     sega-megadrive, and 2,057 of 4,215 emulator system lines had no link."""
 
     def test_a_platform_system_finds_its_emulators(self):
-        index = whichpack._build_emulator_file_index({
+        index = whichpack.build_emulator_file_index({
             "genesis_plus_gx": {"systems": ["sega-megadrive"]},
             "np2kai": {"systems": ["pc-98"]},
         })
-        self.assertEqual(platformfiles._system_emulators("sega-mega-drive", index), ["genesis_plus_gx"])
-        self.assertEqual(platformfiles._system_emulators("nintendo-snes", index), [])
+        self.assertEqual(platformfiles.system_emulators("sega-mega-drive", index), ["genesis_plus_gx"])
+        self.assertEqual(platformfiles.system_emulators("nintendo-snes", index), [])
 
     def _install(self, mapping: dict) -> None:
         from sitegen import render as siterender
 
-        saved = dict(siterender._system_page_map)
+        saved = dict(siterender.system_page_map)
         self.addCleanup(siterender.set_system_page_map, saved)
         siterender.set_system_page_map(mapping)
 
@@ -92,10 +92,10 @@ class OtherSpellingsOfOneSystem(unittest.TestCase):
         from sitegen import render as siterender
 
         self._install({"sega-mega-drive": ("sega", "Mega Drive")})
-        self.assertEqual(siterender._page_by_norm("sega-megadrive"), ("sega", "Mega Drive"))
+        self.assertEqual(siterender.page_by_norm("sega-megadrive"), ("sega", "Mega Drive"))
         self._install({"sega-mega-drive": ("sega", "Mega Drive"),
                        "megadrive": ("other", "Elsewhere")})
-        self.assertIsNone(siterender._page_by_norm("sega-megadrive"))
+        self.assertIsNone(siterender.page_by_norm("sega-megadrive"))
 
     def test_a_table_of_the_same_size_replaces_the_other_spellings(self):
         """The index of other spellings was kept while the table kept its
@@ -103,15 +103,15 @@ class OtherSpellingsOfOneSystem(unittest.TestCase):
         from sitegen import render as siterender
 
         self._install({"sega-mega-drive": ("sega", "Mega Drive")})
-        self.assertEqual(siterender._page_by_norm("sega-megadrive"), ("sega", "Mega Drive"))
+        self.assertEqual(siterender.page_by_norm("sega-megadrive"), ("sega", "Mega Drive"))
         self._install({"sega-mega-drive": ("other", "Elsewhere")})
-        self.assertEqual(siterender._page_by_norm("sega-megadrive"), ("other", "Elsewhere"))
+        self.assertEqual(siterender.page_by_norm("sega-megadrive"), ("other", "Elsewhere"))
 
     def test_a_system_only_profiles_name_is_placed_by_their_files(self):
         manufacturers = {"Commodore": {"PET": [{"name": "basic4.bin"}]}}
         profiles = {"vice_xpet": {"systems": ["commodore-pet"],
                                   "files": [{"name": "basic4.bin"}]}}
-        pages = places._system_pages_from_data(
+        pages = places.system_pages_from_data(
             manufacturers, {}, {"files": {}, "indexes": {}}, profiles)
         self.assertEqual(pages["commodore-pet"], ("commodore", "PET"))
 
@@ -136,7 +136,7 @@ class ACopyIsOnItsOwnFoldersPage(unittest.TestCase):
                     "Fairchild/Channel F/sl31253.bin": ["s"], "Channel F/sl31253.bin": ["s"],
                 }},
             }
-            groups = collection._group_by_manufacturer(db)
+            groups = collection.group_by_manufacturer(db)
         self.assertEqual(sorted(groups), ["Arcade", "Fairchild"])
         self.assertEqual(list(groups["Fairchild"]), ["Channel F"])
         # The copy is listed twice and counted once.
@@ -210,10 +210,10 @@ class ACopyFiledByEmulatorDoesNotMoveAMachine(unittest.TestCase):
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             db = self._db(tmp)
-            manufacturers = collection._group_by_manufacturer(db)
+            manufacturers = collection.group_by_manufacturer(db)
             config = {"systems": {"nintendo-nes": {"files": [
                 {"name": "FDS_disksys-nintendo.rom", "sha1": "d" * 40}]}}}
-            pages = places._system_pages_from_data(
+            pages = places.system_pages_from_data(
                 manufacturers, {"p": {"config": config}}, db)
         self.assertEqual(pages["nintendo-nes"], ("nintendo", "NES"))
 
@@ -227,8 +227,8 @@ class ACopyFiledByEmulatorDoesNotMoveAMachine(unittest.TestCase):
         from model.profiles import load_emulator_profiles
 
         db = load_database("database.json")
-        manufacturers = collection._group_by_manufacturer(db)
-        pages = places._system_pages_from_data(
+        manufacturers = collection.group_by_manufacturer(db)
+        pages = places.system_pages_from_data(
             manufacturers, {}, db, load_emulator_profiles("emulators", skip_aliases=False))
         expected = {
             "nintendo-nes": ("nintendo", "NES"),
@@ -248,7 +248,7 @@ class SystemEmulatorsWhenNoIdMatches(unittest.TestCase):
     of both rows was empty on every platform page."""
 
     def setUp(self):
-        self.index = whichpack._build_emulator_file_index({
+        self.index = whichpack.build_emulator_file_index({
             "flycast": {"systems": ["sega-naomi"], "files": [{"name": "airlbios.zip"}]},
             "fbneo": {"systems": ["arcade"], "files": [
                 {"name": "boot.bin", "archive": "bubsys.zip"}]},
@@ -257,18 +257,18 @@ class SystemEmulatorsWhenNoIdMatches(unittest.TestCase):
 
     def test_a_file_the_system_lists_names_its_emulator(self):
         self.assertEqual(
-            platformfiles._system_emulators("sega-dreamcast-arcade", self.index, [{"name": "airlbios.zip"}]),
+            platformfiles.system_emulators("sega-dreamcast-arcade", self.index, [{"name": "airlbios.zip"}]),
             ["flycast"],
         )
 
     def test_an_archive_member_is_not_a_file_by_that_name(self):
         self.assertEqual(
-            platformfiles._system_emulators("sega-dreamcast", self.index, [{"name": "boot.bin"}]), []
+            platformfiles.system_emulators("sega-dreamcast", self.index, [{"name": "boot.bin"}]), []
         )
 
     def test_an_id_match_is_kept_alone(self):
         self.assertEqual(
-            platformfiles._system_emulators("sega-megadrive", self.index, [{"name": "airlbios.zip"}]),
+            platformfiles.system_emulators("sega-megadrive", self.index, [{"name": "airlbios.zip"}]),
             ["genesis"],
         )
 
@@ -295,7 +295,7 @@ class EverySystemLinkLandsOnItsSection(unittest.TestCase):
 
         db = load_database(str(REPO_ROOT / "database.json"))
         profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"), skip_aliases=False)
-        systemnames.set_console_sections(collection._group_by_manufacturer(db), systemnames.program_names(profiles))
+        systemnames.set_console_sections(collection.group_by_manufacturer(db), systemnames.program_names(profiles))
         platforms = REPO_ROOT / "platforms"
         ids = {str(sid) for profile in profiles.values() for sid in profile.get("systems") or []}
         for name in list_registered_platforms(str(platforms)):
@@ -331,7 +331,7 @@ class EverySystemLinkLandsOnItsSection(unittest.TestCase):
                     # The Arcade folder of sets no board claims is headed by
                     # what it holds, its id staying the folder's.
                     if slug == "arcade":
-                        console = startwith._section_label("Arcade", console)
+                        console = startwith.section_label("Arcade", console)
                     self.assertEqual(self.headings[page][match["anchor"]], console)
         self.assertGreater(linked, 200)
 

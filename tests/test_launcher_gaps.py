@@ -30,7 +30,7 @@ import yaml
 import verify
 from packs import coverage
 from packs import report as packs_report
-from model.profiles import _emulator_profiles_cache, load_emulator_profiles
+from model.profiles import emulator_profiles_cache, load_emulator_profiles
 from model.platforms import load_platform_config
 from cross_reference import LAUNCHER_READS_KEY, LAUNCHER_UNPROVEN_KEY, print_launcher_reads
 from packs.crossref import launcher_file_names, launcher_reads_not_held
@@ -82,7 +82,7 @@ LAUNCHERS = [
 
 class LauncherGapTest(unittest.TestCase):
     def setUp(self) -> None:
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.root = tempfile.mkdtemp()
         self.bios_dir = os.path.join(self.root, "bios")
         self.platforms_dir = os.path.join(self.root, "platforms")

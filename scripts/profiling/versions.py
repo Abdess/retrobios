@@ -149,7 +149,7 @@ def _later_number(candidate: str, declared: str) -> bool:
     return high[0] == low[0] and high > low
 
 
-def _newer_release(
+def newer_release(
     args: argparse.Namespace,
     repo: upstream.Repo,
     version: VersionReport | None,
@@ -178,7 +178,7 @@ def _newer_release(
     return published
 
 
-def _passed_release(
+def latest_passed_release(
     args: argparse.Namespace,
     repo: upstream.Repo,
     version: VersionReport | None,

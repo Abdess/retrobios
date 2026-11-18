@@ -287,9 +287,9 @@ class PathPriority(unittest.TestCase):
         self.assertLess(primary, variant)
 
     def test_protected_directories_are_recognised(self):
-        self.assertTrue(nodedup._in_nodedup_dir("bios/RPG Maker/x/font.png"))
-        self.assertTrue(nodedup._in_nodedup_dir("bios/ScummVM/x/monkey.tbl"))
-        self.assertFalse(nodedup._in_nodedup_dir("bios/Sony/PlayStation/scph.bin"))
+        self.assertTrue(nodedup.in_nodedup_dir("bios/RPG Maker/x/font.png"))
+        self.assertTrue(nodedup.in_nodedup_dir("bios/ScummVM/x/monkey.tbl"))
+        self.assertFalse(nodedup.in_nodedup_dir("bios/Sony/PlayStation/scph.bin"))
 
 
 class TheNoDedupListIsPinned(unittest.TestCase):

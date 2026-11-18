@@ -22,7 +22,7 @@ from pathlib import Path
 import yaml
 
 from model.platforms import _platform_config_cache
-from model.profiles import load_emulator_profiles, _emulator_profiles_cache
+from model.profiles import load_emulator_profiles, emulator_profiles_cache
 import generate_db
 from packs import manifest as packs_manifest
 from packs import platformpack
@@ -90,12 +90,12 @@ class _Collection(unittest.TestCase):
         Path("emulators/sized.yml").write_text(SIZED)
         Path("emulators/unsized.yml").write_text(UNSIZED)
         _platform_config_cache.clear()
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.profiles = load_emulator_profiles("emulators")
 
     def tearDown(self):
         _platform_config_cache.clear()
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         os.chdir(self._cwd)
         self._tmp.cleanup()
 
@@ -159,7 +159,7 @@ class SizeTheCoreRefuses(_Collection):
         Path("emulators/sized.yml").write_text(
             SIZED + "  - name: ROM\n    path: ROM\n    size: 8\n    validation: [size]\n"
         )
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.profiles = load_emulator_profiles("emulators")
         self.assertTrue(self._report("sized")["in_repo"])
         self.assertIn("ROM", self._pack_members())

@@ -40,12 +40,12 @@ def _profile(name: str) -> dict:
 class DataTreeReaders(unittest.TestCase):
     def test_read_by_names_the_emulators(self):
         ref = "y-sys"
-        emulatorcards._DATA_MEMBERS[ref] = {"a.bin": {"size": 1, "sha1": "0" * 40}}
-        emulatorpage._DATA_READERS[ref] = [("dolphin", "Dolphin"), ("ishiiruka", "Ishiiruka")]
+        emulatorcards.DATA_MEMBERS[ref] = {"a.bin": {"size": 1, "sha1": "0" * 40}}
+        emulatorpage.DATA_READERS[ref] = [("dolphin", "Dolphin"), ("ishiiruka", "Ishiiruka")]
         try:
             page = emulatorpage._data_tree_page(ref, {}, [("y-sys", ["a.bin"])], 0)
         finally:
-            del emulatorcards._DATA_MEMBERS[ref], emulatorpage._DATA_READERS[ref]
+            del emulatorcards.DATA_MEMBERS[ref], emulatorpage.DATA_READERS[ref]
         self.assertIn("Read by [Dolphin](dolphin.md#data-directories) and "
                       "[Ishiiruka](ishiiruka.md#data-directories).", page)
         self.assertNotIn("('dolphin'", page)
@@ -66,9 +66,9 @@ class EngineIntros(unittest.TestCase):
 
 class SectionNames(unittest.TestCase):
     def test_fba2012_is_headed_by_its_program(self):
-        self.assertEqual(startwith._section_label("Arcade", "fba2012"), "FB Alpha 2012")
-        self.assertEqual(startwith._section_label("Arcade", "Arcade"), startwith.OTHER_ARCADE_LABEL)
-        self.assertEqual(startwith._section_label("Sony", "PlayStation"), "PlayStation")
+        self.assertEqual(startwith.section_label("Arcade", "fba2012"), "FB Alpha 2012")
+        self.assertEqual(startwith.section_label("Arcade", "Arcade"), startwith.OTHER_ARCADE_LABEL)
+        self.assertEqual(startwith.section_label("Sony", "PlayStation"), "PlayStation")
         self.assertEqual(collection.SECTION_LABELS[("Arcade", "fba2012")],
                          _profile("fbalpha2012")["emulator"])
 

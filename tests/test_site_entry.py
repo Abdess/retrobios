@@ -110,7 +110,7 @@ class TrustItemsSayWhereItWrites(unittest.TestCase):
 
 class NextStepsIsAPlainList(unittest.TestCase):
     def test_the_helpers(self):
-        block = "\n".join(sitegen_home._next_block(["[A](a.md)", "[B](b.md)"]))
+        block = "\n".join(sitegen_home.next_block(["[A](a.md)", "[B](b.md)"]))
         self.assertEqual(block, "## Next steps\n\n- [A](a.md)\n- [B](b.md)\n")
         self.assertIn("## Next steps", reference.reference_next())
         self.assertNotIn(":::", reference.reference_next())
@@ -317,7 +317,7 @@ class CommandBlocks(unittest.TestCase):
         self.assertGreaterEqual(len(commands), 3)
         for group in commands:
             self.assertIn("/i.ps1", group)
-        block = "\n".join(sitegen_install._console_install_block(
+        block = "\n".join(sitegen_install.console_install_block(
             "PlayStation", [("batocera", "psx"), ("recalbox", "psx")]))
         # Every setup's options in both forms: the list of every command,
         # and the one command under the OS tabs.
@@ -342,9 +342,9 @@ class ContributingOpensOnTheAction(unittest.TestCase):
             self.assertLess(body.index("## What happens next"), body.index("CI hashes"))
 
     def test_description_is_a_sentence(self):
-        text = descriptions._page_description("", Path("contributing.md"), "Contributing")
+        text = descriptions.page_description("", Path("contributing.md"), "Contributing")
         self.assertTrue(text.endswith("."))
-        fallback = descriptions._page_description(
+        fallback = descriptions.page_description(
             "One file needs no clone and no local setup at all here:\n\n"
             "A plain sentence that describes the page well enough.",
             Path("other.md"), "Other")
@@ -464,7 +464,7 @@ class PackNamesItsVersion(unittest.TestCase):
         record = releaserecord.load_record()
         if not releaserecord.pack_for("batocera", record):
             self.skipTest("release.json has no Batocera pack")
-        block = guidepage._pack_buttons("batocera")
+        block = guidepage.pack_buttons("batocera")
         name = releaserecord.pack_name_for("batocera", record)
         version = versions._pack_version(name, ["batocera"])
         self.assertIn(f"Made for Batocera {version}. "
@@ -480,10 +480,10 @@ class PackNamesItsVersion(unittest.TestCase):
     def test_a_version_with_an_underscore_is_read_whole(self):
         """AmberELEC's prerelease-20261019_1835 read as 1835, and the page
         said the pack was built for another version."""
-        from packs.naming import _platform_pack_stem
+        from packs.naming import platform_pack_stem
 
         version = load_platform_config("amberelec", "platforms")["version"]
-        name = _platform_pack_stem(["amberelec"], "amberelec", "platforms") + "_BIOS_Pack.zip"
+        name = platform_pack_stem(["amberelec"], "amberelec", "platforms") + "_BIOS_Pack.zip"
         self.assertEqual(versions._pack_version(name, ["amberelec"]), version)
         record = {"tag": "v2026.10.10", "packs": {name: {
             "assets": [name], "platforms": ["amberelec"]}}}
@@ -732,12 +732,12 @@ class NoZipNoUnzipText(unittest.TestCase):
         self.assertIn("`smb://recalbox/share`", how["macos"])
         self.assertEqual(args["linux"], "--platform recalbox --dest /path/to/share/bios")
         self.assertIn("`smb://recalbox/share`", how["linux"])
-        lines = guidepage._setup_routes("recalbox", "Recalbox")
+        lines = guidepage.setup_routes("recalbox", "Recalbox")
         routes = "\n".join(lines[:lines.index("## On the device { #install }")])
         for label in ("Windows", "macOS", "Linux"):
             self.assertIn(f'label="{label}"', routes)
         # The setup page sends a Mac or Linux reader to those tabs.
-        lines = guidepage._setup_routes("recalbox", "Recalbox", page_link=True)
+        lines = guidepage.setup_routes("recalbox", "Recalbox", page_link=True)
         self.assertIn("[Mac or Linux](../get/recalbox.md#from-your-computer)", lines)
 
     def test_the_network_route_needs_a_share_and_no_zip(self):
@@ -913,17 +913,17 @@ class GetPagesGiveTheSetupsOwnRoutes(unittest.TestCase):
     def test_one_helper_writes_both_pages(self):
         source = script_source("generate_site.py")
         get_page = source.split("def generate_get_page", 1)[1].split("\ndef ", 1)[0]
-        guide = source.split("def _platform_guide", 1)[1].split("\ndef ", 1)[0]
+        guide = source.split("def platform_guide", 1)[1].split("\ndef ", 1)[0]
         self.assertNotIn("install_commands(", get_page)
-        self.assertIn("_setup_routes(", get_page)
-        self.assertIn("_setup_routes(", guide)
+        self.assertIn("setup_routes(", get_page)
+        self.assertIn("setup_routes(", guide)
 
 
 class CheckNeedsTheFiles(unittest.TestCase):
     def test_the_pass_line_is_what_the_installer_prints_only_when_complete(self):
         installer = (REPO_ROOT / "install.py").read_text(encoding="utf-8")
         printed = re.search(r"`([^`]+)`", guidepage.check_pass_line())[1]
-        self.assertEqual(printed, sitegen_install._installer().EVERYTHING_IN_PLACE)
+        self.assertEqual(printed, sitegen_install.installer_module().EVERYTHING_IN_PLACE)
         self.assertIn('print(f"\\n  {EVERYTHING_IN_PLACE}")', installer)
         self.assertNotIn("wrong hash", guidepage.check_pass_line())
 
@@ -1080,7 +1080,7 @@ class TheSiteSaysWhatTheInstallerShows(unittest.TestCase):
                   "c) choose systems, cores and regions")
 
     def test_which_pack_describes_the_screen_in_the_installers_words(self):
-        installer = sitegen_install._installer()
+        installer = sitegen_install.installer_module()
         text = _plain_page("which-pack.md")
         for line in guidepage.first_screen_words():
             self.assertIn(line, text)
@@ -1091,7 +1091,7 @@ class TheSiteSaysWhatTheInstallerShows(unittest.TestCase):
         self.assertNotIn("press **c**", text)
 
     def test_the_plan_rows_are_the_words_the_pages_use(self):
-        installer = sitegen_install._installer()
+        installer = sitegen_install.installer_module()
         state = installer.TuiState(os_type="linux", home=Path("/home/me"))
         state.stack = ["plan"]
         state.check = {"files": 2, "present": 0, "missing": 2, "wrong_hash": 0, "need": 2,
@@ -1107,7 +1107,7 @@ class TheSiteSaysWhatTheInstallerShows(unittest.TestCase):
         self.assertIn(installer.TUI_SYSTEMS_ROW, labels)
 
     def test_the_readme_and_the_wiki_take_the_same_words(self):
-        installer = sitegen_install._installer()
+        installer = sitegen_install.installer_module()
         readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
         self.assertIn(f"fewer under **{installer.TUI_SYSTEMS_ROW}**", readme)
         self.assertNotIn("offers to install everything or to choose systems", readme)

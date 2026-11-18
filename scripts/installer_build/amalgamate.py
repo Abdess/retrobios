@@ -9,10 +9,8 @@ from collections.abc import Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from core.paths import REPO_ROOT
 
 
-ROOT = REPO_ROOT
 PACKAGE = "installer"
 OUTPUT = "install.py"
 COMMAND = "python scripts/build_installer.py"

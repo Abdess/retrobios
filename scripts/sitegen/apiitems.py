@@ -5,14 +5,14 @@ from __future__ import annotations
 import urllib.parse
 from collections.abc import Callable
 
-from model.collection import _group_by_manufacturer, _slug
+from model.collection import group_by_manufacturer, manufacturer_slug
 from model.systemnames import system_name
 from sitegen.config import SITE_URL
-from sitegen.lookup import _hash_values, _site_path
+from sitegen.lookup import sorted_hash_values, site_path
 from sitegen.render import console_href
 
 
-def _sha1_by_path(db: dict | None) -> dict[str, str]:
+def sha1_index_by_path(db: dict | None) -> dict[str, str]:
     return {str(e.get("path", "")): sha1 for sha1, e in ((db or {}).get("files") or {}).items()}
 
 
@@ -28,7 +28,7 @@ def system_index_items(db: dict, coverages: dict, profiles: dict) -> list[dict]:
     """
     from sitegen.render import card_page, system_ids, system_section
 
-    sha1_by_path = _sha1_by_path(db)
+    sha1_by_path = sha1_index_by_path(db)
     files = db.get("files") or {}
     by_md5 = (db.get("indexes") or {}).get("by_md5") or {}
     held: dict[str, set[str]] = {}
@@ -48,13 +48,13 @@ def system_index_items(db: dict, coverages: dict, profiles: dict) -> list[dict]:
             ids = ([str(entry["system"])] if entry.get("system")
                    else [str(s) for s in entry.get("systems") or []] or
                    (own if len(own) == 1 else []))
-            found = {v for v in _hash_values(entry.get("sha1")) if v in files}
-            for md5 in _hash_values(entry.get("md5")):
+            found = {v for v in sorted_hash_values(entry.get("sha1")) if v in files}
+            for md5 in sorted_hash_values(entry.get("md5")):
                 match = by_md5.get(md5)
                 found.update([match] if isinstance(match, str) else match or [])
             for sys_id in ids:
                 held.setdefault(sys_id, set()).update(found)
-    manufacturers = {_slug(mfr): mfr for mfr in _group_by_manufacturer(db)}
+    manufacturers = {manufacturer_slug(mfr): mfr for mfr in group_by_manufacturer(db)}
     base = urllib.parse.urlsplit(SITE_URL).path
     items = []
     for sys_id in sorted(system_ids(profiles, [c["config"] for c in coverages.values()])):
@@ -65,12 +65,12 @@ def system_index_items(db: dict, coverages: dict, profiles: dict) -> list[dict]:
             name = sys_id
         sha1s = sorted(held.get(sys_id, set()) & files.keys())
         manufacturer = manufacturers.get(section[0], "") if section else ""
-        url = _site_path(console_href(*section)) if section else None
+        url = site_path(console_href(*section)) if section else None
         if url is None and sha1s:
             manufacturer, url = _first_file_place(sys_id, sha1s, files, profiles, card_page)
         # The id's JSON document: api/v1/systems/ is keyed by the manufacturer
         # page, and sony-playstation.json answered 404.
-        holder = section[0] if section else _slug(manufacturer) if manufacturer else ""
+        holder = section[0] if section else manufacturer_slug(manufacturer) if manufacturer else ""
         api = f"{base}api/v1/systems/{holder}.json" if holder else None
         items.append({"id": sys_id, "name": name, "manufacturer": manufacturer,
                       "url": url, "api": api, "sha1": sha1s})
@@ -87,11 +87,11 @@ def _first_file_place(
         parts = str(files[sha1].get("path", "")).split("/")
         if len(parts) >= 3 and parts[0] == "bios":
             page = card_page("/".join(parts), sha1)
-            return parts[1], _site_path(f"systems/{page}.md#sha1-{sha1[:12]}")
+            return parts[1], site_path(f"systems/{page}.md#sha1-{sha1[:12]}")
     for key in sorted(profiles):
         profile = profiles[key]
         if profile.get("type") != "alias" and profile.get("role") != "test" and sys_id in (profile.get("systems") or []):
-            return "", _site_path(f"emulators/{key}.md")
+            return "", site_path(f"emulators/{key}.md")
     return "", None
 
 

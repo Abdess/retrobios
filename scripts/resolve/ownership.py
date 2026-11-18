@@ -16,7 +16,7 @@ def names_manufacturer(sys_id: str, manufacturer: str) -> bool:
     return sys_id == slug or sys_id.startswith(f"{slug}-")
 
 
-def _maker_folder(path: str, bios_dir: str) -> str | None:
+def maker_folder(path: str, bios_dir: str) -> str | None:
     """The bios/<maker>/ folder a collection path is filed under."""
     prefix = f"{bios_dir.rstrip('/')}/"
     if not path.startswith(prefix):
@@ -40,7 +40,7 @@ def _maker_folders(db: dict) -> frozenset[str]:
     folders = frozenset(
         folder
         for entry in files_db.values()
-        if (folder := _maker_folder(str(entry.get("path", "")), bios_dir))
+        if (folder := maker_folder(str(entry.get("path", "")), bios_dir))
         and folder not in BUCKET_FOLDERS
     )
     _maker_folders_cache[:] = [(files_db, len(files_db), folders)]
@@ -55,7 +55,7 @@ def system_makers(file_entry: dict, db: dict) -> frozenset[str]:
     (pc88, arcade), so nothing is narrowed there.
     """
     sys_id = str(file_entry.get("platform_system") or "")
-    if not sys_id or _owner_tokens(file_entry):
+    if not sys_id or owner_tokens(file_entry):
         return frozenset()
     return frozenset(
         folder for folder in _maker_folders(db) if names_manufacturer(sys_id, folder)
@@ -66,11 +66,11 @@ def other_maker(path: str, makers: frozenset[str], db: dict) -> bool:
     """Whether a path is filed under a maker the entry's system does not name."""
     if not makers:
         return False
-    folder = _maker_folder(path, str(db.get("bios_dir") or "bios"))
+    folder = maker_folder(path, str(db.get("bios_dir") or "bios"))
     return folder is not None and folder not in BUCKET_FOLDERS and folder not in makers
 
 
-def _affinity_tokens(text: str) -> set[str]:
+def affinity_tokens(text: str) -> set[str]:
     return {
         token
         for token in (re.sub(r"[^0-9a-z]", "", part.casefold()) for part in text.split("/"))
@@ -78,7 +78,7 @@ def _affinity_tokens(text: str) -> set[str]:
     }
 
 
-def _owner_tokens(file_entry: dict) -> set[str]:
+def owner_tokens(file_entry: dict) -> set[str]:
     """Tokens naming the profile that asks for the file.
 
     A profile named after another with a suffix (cxbx-reloaded-2023,
@@ -90,14 +90,14 @@ def _owner_tokens(file_entry: dict) -> set[str]:
     tokens: set[str] = set()
     for owner in (file_entry.get("source_profile"), file_entry.get("source_emulator")):
         if owner:
-            tokens |= _affinity_tokens(str(owner).replace(" ", ""))
+            tokens |= affinity_tokens(str(owner).replace(" ", ""))
     profile = str(file_entry.get("source_profile") or "").casefold()
     words = [word for word in re.split(r"[^0-9a-z]+", profile) if word]
     tokens |= {"".join(words[:end]) for end in range(1, len(words))}
     return tokens
 
 
-def _foreign_tree(path: str, owners: set[str]) -> bool:
+def foreign_tree(path: str, owners: set[str]) -> bool:
     """Whether a path lives in the tree of an emulator that is not the asker.
 
     bios/Other/<emulator>/ holds what one emulator ships. A same-named file
@@ -108,20 +108,20 @@ def _foreign_tree(path: str, owners: set[str]) -> bool:
     parts = path.split("/")
     if not owners or len(parts) < 4 or parts[0] != "bios" or parts[1] != "Other":
         return False
-    return not (owners & _affinity_tokens(parts[2]))
+    return not (owners & affinity_tokens(parts[2]))
 
 
-def _engine_tree(path: str, owners: set[str]) -> bool:
+def engine_tree(path: str, owners: set[str]) -> bool:
     """Whether a path lives in another game's folder under bios/Game Engines/."""
     parts = path.split("/")
     if len(parts) < 4 or parts[0] != "bios" or parts[1] != "Game Engines":
         return False
-    return not (owners & _affinity_tokens(parts[2]))
+    return not (owners & affinity_tokens(parts[2]))
 
 
-def _own_tree(path: str, owners: set[str]) -> bool:
+def own_tree(path: str, owners: set[str]) -> bool:
     """Whether a path lives in the bios/Other/<emulator>/ tree of the asker."""
     parts = path.split("/")
     if not owners or len(parts) < 4 or parts[0] != "bios" or parts[1] != "Other":
         return False
-    return bool(owners & _affinity_tokens(parts[2]))
+    return bool(owners & affinity_tokens(parts[2]))

@@ -122,11 +122,10 @@ def compute_coverage(
     }
 
 
-_REPO = REPO_ROOT
 # The site and the README read the same coverage: the first generator to run
 # stores it here and the second reads it back, instead of verifying every
 # platform twice (about a minute of the site build).
-COVERAGE_CACHE_DIR = _REPO / "tmp" / "coverage-cache"
+COVERAGE_CACHE_DIR = REPO_ROOT / "tmp" / "coverage-cache"
 _COVERAGE_CACHE_FORMAT = "3"
 
 
@@ -150,12 +149,12 @@ def _coverage_inputs(db_path: Path, platforms_dir: str, emulators_dir: str) -> s
 
     add_file(db_path.resolve())
     for root, pattern in ((Path(platforms_dir), "*"), (Path(emulators_dir), "*.yml"),
-                          (_REPO / "scripts", "*.py"), (_REPO / "install", "*.json"),
-                          (_REPO / "recipes", "*.json")):
+                          (REPO_ROOT / "scripts", "*.py"), (REPO_ROOT / "install", "*.json"),
+                          (REPO_ROOT / "recipes", "*.json")):
         for path in sorted(p for p in root.resolve().rglob(pattern) if p.is_file()):
             add_file(path)
-    for path in (_REPO / ".gitignore", _REPO / "_mame_clones.json",
-                 _REPO / "data" / ".versions.json"):
+    for path in (REPO_ROOT / ".gitignore", REPO_ROOT / "_mame_clones.json",
+                 REPO_ROOT / "data" / ".versions.json"):
         add_file(path)
     digest.update(b"offline\0" + (b"1" if os.environ.get("RETROBIOS_OFFLINE") else b"0") + b"\n")
     large = Path(LARGE_FILES_CACHE).resolve()
@@ -164,7 +163,7 @@ def _coverage_inputs(db_path: Path, platforms_dir: str, emulators_dir: str) -> s
         if path.is_file():
             stat = path.stat()
             digest.update(f"{path.name}\0{stat.st_size}\0{stat.st_mtime_ns}\n".encode())
-    bios = _REPO / "bios"
+    bios = REPO_ROOT / "bios"
     for path in sorted(bios.rglob("*")):
         if path.is_file():
             stat = path.stat()
@@ -205,7 +204,7 @@ def platform_coverages(
         else:
             if stored.get("platforms") == names:
                 coverages = stored["coverages"]
-                print(f"  coverage read from {cache.relative_to(_REPO)}")
+                print(f"  coverage read from {cache.relative_to(REPO_ROOT)}")
     if coverages is None:
         coverages = {}
         for name in names:
@@ -815,7 +814,7 @@ def ci_install_lines() -> tuple[str, str]:
     could pass on releases CI never installs. Read from the workflow, the
     two cannot disagree. The second line is the Python 3.8 one.
     """
-    text = (_REPO / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
+    text = (REPO_ROOT / ".github" / "workflows" / "validate.yml").read_text(encoding="utf-8")
     main = re.search(r'^\s*run: (pip install pyyaml "jsonschema.*markdown.*)$', text, re.M)
     floor = re.search(r"^\s*run: (python3\.8 -m pip install .*)$", text, re.M)
     if main is None or floor is None:
@@ -964,7 +963,7 @@ def generate_contributing() -> str:
     )
 
 
-def _write(readme: str) -> None:
+def write_readme(readme: str) -> None:
     status = "Generated" if write_if_changed("README.md", readme) else "Unchanged"
     print(f"{status} ./README.md")
 

@@ -16,7 +16,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from packs.crossref import _build_supplemental_index, cross_reference, entry_source
+from packs.crossref import build_supplemental_index, cross_reference, entry_source
 from cross_reference import print_report
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -77,7 +77,7 @@ class GapReportSources(unittest.TestCase):
     def test_a_directory_does_not_stand_for_a_file(self):
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             (Path(tmp) / "bios" / "cpcemu" / "ROM").mkdir(parents=True)
-            names = _build_supplemental_index(str(Path(tmp) / "data"), str(Path(tmp) / "bios"))
+            names = build_supplemental_index(str(Path(tmp) / "data"), str(Path(tmp) / "bios"))
         self.assertIsNone(entry_source({"name": "ROM"}, _index(data_names=names)))
         directory = {"name": "ROM", "type": "directory"}
         self.assertEqual(entry_source(directory, _index(data_names=names)), "data")

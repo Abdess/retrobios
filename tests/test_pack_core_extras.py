@@ -150,7 +150,7 @@ class NarrowedPacksAgainstTheirOwnList(unittest.TestCase):
 
     def setUp(self):
         from model.platforms import _platform_config_cache
-        from model.profiles import load_emulator_profiles, _emulator_profiles_cache
+        from model.profiles import load_emulator_profiles, emulator_profiles_cache
         import generate_db
         tmp = tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp")
         self.addCleanup(tmp.cleanup)
@@ -185,9 +185,9 @@ class NarrowedPacksAgainstTheirOwnList(unittest.TestCase):
                 {"name": "extra.bin", "path": "extra.bin", "required": False},
             ]}), encoding="utf-8")
         _platform_config_cache.clear()
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.addCleanup(_platform_config_cache.clear)
-        self.addCleanup(_emulator_profiles_cache.clear)
+        self.addCleanup(emulator_profiles_cache.clear)
         self.profiles = load_emulator_profiles("emulators")
 
     def _build(self, source: str, required: bool) -> tuple[str, set[str]]:
@@ -221,7 +221,7 @@ class NarrowedPacksAgainstTheirOwnList(unittest.TestCase):
                 ok, _c, _p, errors, *_rest = self._check(zip_path, source, required)
                 self.assertTrue(ok, errors)
                 self.assertEqual(
-                    naming._pack_variant(os.path.basename(zip_path)), (source, required)
+                    naming.pack_variant(os.path.basename(zip_path)), (source, required)
                 )
 
     def test_a_narrowed_pack_missing_a_required_file_fails(self):

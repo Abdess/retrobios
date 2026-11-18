@@ -72,7 +72,7 @@ from model import systemnames
 from model.registry import list_registered_platforms, list_release_pack_platforms
 from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config
-from resolve.reconcile import HASH_FIELDS, _hash_values
+from resolve.reconcile import HASH_FIELDS, hash_values
 from resolve.categories import EntryCategories
 from sitegen.sources import launcher_ref_markdown, list_source
 import check_platform_folder
@@ -89,10 +89,10 @@ DIST = REPO_ROOT / "website" / "dist"
 
 
 def _accepted(profile_entry: dict) -> set[str]:
-    values = {v for f in HASH_FIELDS for v in _hash_values(profile_entry, f)}
+    values = {v for f in HASH_FIELDS for v in hash_values(profile_entry, f)}
     for member in profile_entry.get("contents") or []:
         if isinstance(member, dict):
-            values |= {v for f in HASH_FIELDS for v in _hash_values(member, f)}
+            values |= {v for f in HASH_FIELDS for v in hash_values(member, f)}
     return values
 
 
@@ -123,11 +123,11 @@ class ReaderMatchedByHash(unittest.TestCase):
             cats = EntryCategories(config, self.profiles)
             for sys_id, system in (config.get("systems") or {}).items():
                 for entry in system.get("files") or []:
-                    md5s = set(_hash_values(entry, "md5")) | set(_hash_values(entry, "alt_md5"))
+                    md5s = set(hash_values(entry, "md5")) | set(hash_values(entry, "alt_md5"))
                     if not md5s:
                         continue
                     # The same dump, named by whichever hash both sides state.
-                    declared = md5s | {v for f in HASH_FIELDS for v in _hash_values(entry, f)}
+                    declared = md5s | {v for f in HASH_FIELDS for v in hash_values(entry, f)}
                     found = cats.explain(entry, entry.get("destination") or entry["name"], sys_id)
                     for reader in found.get("read_by", []):
                         if reader["emulator"] == "launcher":
@@ -239,7 +239,7 @@ class EachEntryNamesItsFile(unittest.TestCase):
         rows = [[f'<details class="rb-file"><summary>f{n}.bin</summary>x<br>y</details>']
                 for n in range(4)]
         # Three elements a row: two rows fit in a budget of seven.
-        runs = sitegen_parts._blocks_in_runs(rows, 7, platformfiles._element_weight)
+        runs = sitegen_parts.blocks_in_runs(rows, 7, platformfiles._element_weight)
         self.assertEqual([len(run) for run in runs], [2, 2])
         self.assertEqual(sum(runs, []), sum(rows, []))
 
@@ -406,7 +406,7 @@ class ExportsComplete(unittest.TestCase):
                          ("missing", "game_data", ""))
 
     def test_commit_and_wanted_list(self):
-        commit = dataexports._source_commit()
+        commit = dataexports.source_commit()
         self.assertRegex(commit, r"^[0-9a-f]{40}$")
         schema = json.loads((REPO_ROOT / "schemas" / "site-api-envelope.schema.json")
                             .read_text(encoding="utf-8"))
@@ -691,15 +691,15 @@ class EveryEnvelopeCarriesTheCommit(unittest.TestCase):
 
     def test_the_writers_pass_it(self):
         source = script_source("generate_site.py")
-        self.assertIn('str(db.get("generated_at") or _timestamp()), _source_commit(),\n        )\n'
+        self.assertIn('str(db.get("generated_at") or data_timestamp()), source_commit(),\n        )\n'
                       "    clash", source)
         block = source[source.index("public_profiles = {"):source.index("pages = emulator_pages(")]
         self.assertIn("write_single_item(", block)
-        self.assertIn("_source_commit()", block)
+        self.assertIn("source_commit()", block)
 
     def test_every_built_envelope_has_it(self):
         _built(API / "catalog.json")
-        if not dataexports._source_commit():
+        if not dataexports.source_commit():
             raise unittest.SkipTest("not a git checkout")
         lacking = [
             path.relative_to(API).as_posix() for path in sorted(API.rglob("*.json"))
@@ -729,7 +729,7 @@ class ManifestsArePublished(unittest.TestCase):
         schema = json.loads((REPO_ROOT / "schemas" / "install-manifest.schema.json").read_text())
         for field in ("dest", "repo_path", "release_asset", "cores"):
             description = schema["$defs"]["file"]["properties"][field]["description"]
-            self.assertIn(f"| `{field}` | {render._escape_tags(description)} |", page)
+            self.assertIn(f"| `{field}` | {render.escape_tags(description)} |", page)
         self.assertIn("## Platform manifests", page)
         self.assertIn("**Licence:**", page)
         self.assertIn("## Hosting, rate limits and caching", page)
@@ -834,21 +834,21 @@ class PlatformPagesLinkTheirSystemsAndEmulators(unittest.TestCase):
     """8.9: the overview named emulators as ids, none of 1,463 linked."""
 
     def test_an_emulator_is_named_and_linked(self):
-        link = platformfiles._emulator_named_link("beetle_psx", "../")
+        link = platformfiles.emulator_named_link("beetle_psx", "../")
         self.assertRegex(link, r"^\[[^\]]+\]\(\.\./emulators/beetle_psx\.md\)$")
         self.assertNotEqual(link, "[beetle_psx](../emulators/beetle_psx.md)")
 
     def test_the_overview_column_uses_it(self):
         source = script_source("generate_site.py")
-        block = source[source.index("### Systems overview"):source.index("_render_platform_systems(by_system")]
-        self.assertIn("_emulator_named_link(e, \"../\")", block)
+        block = source[source.index("### Systems overview"):source.index("render_platform_systems(by_system")]
+        self.assertIn("emulator_named_link(e, \"../\")", block)
         self.assertNotIn('", ".join(sys_emus[:3])', block)
 
     def test_a_moved_list_opens_on_its_console_and_names_its_parent(self):
         # Past PLATFORM_SECTION_BUDGET, so the list leaves for a page of its own.
         files = [{"name": f"{'f' * 200}{i}.bin", "status": "ok"} for i in range(2000)]
         moved: dict[str, str] = {}
-        platformfiles._render_platform_systems(
+        platformfiles.render_platform_systems(
             {"sony-playstation": files}, {}, {}, ("retroarch", "RetroArch"), moved, {})
         self.assertTrue(moved)
         page = next(iter(moved.values()))
@@ -858,11 +858,11 @@ class PlatformPagesLinkTheirSystemsAndEmulators(unittest.TestCase):
 
     def test_part_pages_of_gaps_and_cross_reference_name_their_parent(self):
         moved: dict[str, str] = {}
-        sitegen_parts._list_pages("gaps-x", "T", "intro", [], [["| a |"]], moved,
+        sitegen_parts.list_pages("gaps-x", "T", "intro", [], [["| a |"]], moved,
                                   parent=("What the packs do not hold", "/gaps/"))
         self.assertIn('parent:\n  label: "What the packs do not hold"\n  link: "/gaps/"', moved["gaps-x"])
         source = script_source("generate_site.py")
-        self.assertIn('_parent_front_matter(("Cores by platform", "/cross-reference/"))', source)
+        self.assertIn('parent_front_matter(("Cores by platform", "/cross-reference/"))', source)
         self.assertIn('parent=("Dump provenance", "/provenance/")', source)
 
 
@@ -906,7 +906,7 @@ class SourceLinksGoWhereTheFileIs(unittest.TestCase):
         original = sources._tree_paths
         sources._tree_paths = lambda repo, pin: tree
         try:
-            return sources._source_ref_markdown(
+            return sources.source_ref_markdown(
                 self.PROFILE, "src/emulator.cpp:234; src/core/loader/ncch.cpp:151-164")
         finally:
             sources._tree_paths = original
@@ -939,7 +939,7 @@ class SourceLinksGoWhereTheFileIs(unittest.TestCase):
                 if not isinstance(entry, dict) or not entry.get("source_ref"):
                     continue
                 for slug, pin, path in link.findall(
-                        sources._source_ref_markdown(profile, entry["source_ref"])):
+                        sources.source_ref_markdown(profile, entry["source_ref"])):
                     from core import upstream
 
                     repo = upstream.parse_repo(f"https://github.com/{slug}")
@@ -1120,7 +1120,7 @@ class SourceLinksOnlyWhereTheFileIs(unittest.TestCase):
 
     def test_an_address_in_a_binary_reads_as_one(self):
         profile = {"source": "https://github.com/o/r", "source_commit": "e" * 40}
-        text = sources._source_ref_markdown(
+        text = sources.source_ref_markdown(
             profile, "Nesoid 2.5.0 libnes.so 0x455a4-0x45694 (setter), 0x8094-0x80ac")
         self.assertEqual(text, "offset `0x455a4-0x45694` in `Nesoid 2.5.0 libnes.so` (setter), "
                                "offset `0x8094-0x80ac` in `Nesoid 2.5.0 libnes.so`")
@@ -1132,7 +1132,7 @@ class SourceLinksOnlyWhereTheFileIs(unittest.TestCase):
         with mock.patch.object(sources, "_verified", return_value=record):
             sources._tree_paths.cache_clear()
             try:
-                text = sources._source_ref_markdown(profile, "src/a.c:5, src/b.c:7")
+                text = sources.source_ref_markdown(profile, "src/a.c:5, src/b.c:7")
             finally:
                 sources._tree_paths.cache_clear()
         self.assertIn("[`src/a.c:5`](https://github.com/o/r/blob/" + "e" * 40 + "/src/a.c#L5)", text)

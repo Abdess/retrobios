@@ -22,8 +22,8 @@ from unittest import mock
 
 import refresh_data_dirs as rdd
 from packs import datadirs
-from model.registry import _load_versions
-from packs.datatrees import _data_directory_members
+from model.registry import load_versions
+from packs.datatrees import data_directory_members
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -106,12 +106,12 @@ class RefreshConcurrency(unittest.TestCase):
                                lambda *a, **k: _Response(payload)), \
                 mock.patch.object(datadirs, "_get_remote_etag", return_value="e1"):
             self.assertTrue(datadirs.refresh_entry("pak", entry, versions_path=self.versions))
-            self.assertEqual(_load_versions(self.versions)["pak"]["archive_size"],
+            self.assertEqual(load_versions(self.versions)["pak"]["archive_size"],
                              len(payload))
             datadirs._record_version("pak", {"sha": "e1"}, self.versions)
             (self.cache / "a.bin").write_bytes(b"kept")
             self.assertFalse(datadirs.refresh_entry("pak", entry, versions_path=self.versions))
-        self.assertEqual(_load_versions(self.versions)["pak"],
+        self.assertEqual(load_versions(self.versions)["pak"],
                          {"sha": "e1", "archive_size": len(payload)})
         self.assertEqual((self.cache / "a.bin").read_bytes(), b"kept")
 
@@ -188,7 +188,7 @@ class RefreshConcurrency(unittest.TestCase):
             thread.start()
         for thread in threads:
             thread.join()
-        self.assertEqual(sorted(_load_versions(self.versions)), sorted(keys))
+        self.assertEqual(sorted(load_versions(self.versions)), sorted(keys))
 
 
 class PackWalkHoldsTheCache(unittest.TestCase):
@@ -203,7 +203,7 @@ class PackWalkHoldsTheCache(unittest.TestCase):
             (cache / "b.mkf").write_bytes(b"b")
             systems = {"s": {"data_directories": [{"ref": "sdlpal", "destination": "sdlpal"}]}}
             registry = {"sdlpal": {"local_cache": str(cache)}}
-            walk = _data_directory_members(systems, registry, "p", "", False, set(), set(), set())
+            walk = data_directory_members(systems, registry, "p", "", False, set(), set(), set())
             next(walk)
             with open(cache.with_name(".sdlpal.lock"), "a") as handle, self.assertRaises(
                 BlockingIOError
@@ -218,7 +218,7 @@ class EmulatorPackHoldsTheCache(unittest.TestCase):
     def test_the_walk_holds_a_shared_lock(self):
         import fcntl
 
-        from packs.datatrees import _pack_data_tree
+        from packs.datatrees import pack_data_tree
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             cache = Path(tmp) / "data" / "scummvm"
@@ -236,8 +236,8 @@ class EmulatorPackHoldsTheCache(unittest.TestCase):
                         fcntl.flock(handle, fcntl.LOCK_UN)
                         held.append(False)
 
-            with mock.patch("packs.datatrees._add_pack_member", member):
-                _pack_data_tree(None, str(cache), "scummvm", set(), set(), set())
+            with mock.patch("packs.datatrees.add_pack_member", member):
+                pack_data_tree(None, str(cache), "scummvm", set(), set(), set())
             self.assertEqual(held, [True])
 
 
@@ -304,7 +304,7 @@ class TheManifestCarriesTheArchiveSize(unittest.TestCase):
     the installer announces as the tree's download."""
 
     def test_recorded_size_is_written_and_an_unrecorded_one_left_out(self):
-        from packs.datatrees import _manifest_data_directories
+        from packs.datatrees import manifest_data_directories
 
         (REPO_ROOT / "tmp").mkdir(exist_ok=True)
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
@@ -319,7 +319,7 @@ class TheManifestCarriesTheArchiveSize(unittest.TestCase):
             members = [(str(data / ref / "a.bin"), f"{ref}/a.bin") for ref in ("pak", "old")]
             refs = {f"{ref}/a.bin": (ref, ("s",), ref, True) for ref in ("pak", "old")}
             listed = {entry["ref"]: entry for entry in
-                      _manifest_data_directories(members, refs, registry, "")}
+                      manifest_data_directories(members, refs, registry, "")}
         self.assertEqual(listed["pak"]["archive_size"], 21_360_579)
         self.assertNotIn("archive_size", listed["old"])
         self.assertNotIn("optional", listed["pak"])

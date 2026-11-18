@@ -23,16 +23,16 @@ from sitegen import markup, steps as sitesteps
 from sitegen.config import RELEASE_URL
 from sitegen.guidepage import NO_ZIP_FAQ, devices_meta, first_screen_words, get_page_link
 from sitegen.guides import fence, terminal_tabs, trust_box
-from sitegen.home import _group_keys, _next_block, _runs_on, setup_picker
-from sitegen.install import _installer, has_release_pack
+from sitegen.home import group_keys, next_block, runs_on_text, setup_picker
+from sitegen.install import installer_module, has_release_pack
 from sitegen.readme import NO_PACK, download_links
-from sitegen.render import _fmt_size
+from sitegen.render import fmt_size
 
 
 # Build cross-reference indexes
 
 
-def _build_file_consumers(db: dict, coverages: dict, profiles: dict) -> FileConsumers:
+def build_file_consumers(db: dict, coverages: dict, profiles: dict) -> FileConsumers:
     """Which platforms and emulators read each collected file."""
     consumers = FileConsumers(db, build_zip_contents_index(db))
     consumers.add_platforms({name: cov["config"] for name, cov in coverages.items()})
@@ -41,19 +41,19 @@ def _build_file_consumers(db: dict, coverages: dict, profiles: dict) -> FileCons
     return consumers
 
 
-def _build_emulator_file_index(profiles: dict) -> dict[str, dict]:
+def build_emulator_file_index(profiles: dict) -> dict[str, dict]:
     """Map emulator_name -> {systems, norm}, for the platform pages.
 
-    norm holds the systems as _norm_system_id reads them: a platform files
+    norm holds the systems as norm_system_id reads them: a platform files
     the Mega Drive as sega-mega-drive and genesis_plus_gx as sega-megadrive,
     and an exact match left the RetroArch page with no emulator for it.
     """
-    from model.systems import _norm_system_id
+    from model.systems import norm_system_id
 
     return {
         name: {
             "systems": set(profile.get("systems", [])),
-            "norm": {_norm_system_id(str(s)) for s in profile.get("systems", [])},
+            "norm": {norm_system_id(str(s)) for s in profile.get("systems", [])},
             # Archive members are read inside their archive, never by name.
             "names": {
                 str(entry["name"]).lower()
@@ -86,7 +86,7 @@ def _pack_cell(name: str, record: dict, prefix: str = "") -> str:
     link = download_links(name, record, "ZIP", page=get_page_link(name, prefix),
                           button=lambda text, url: markup.button(text, url))
     size = pack.get("download_size") if pack else None
-    return f"{link} ({_fmt_size(size)})" if size else link
+    return f"{link} ({fmt_size(size)})" if size else link
 
 
 def _own_root_folders(registry: dict) -> dict[str, str]:
@@ -113,7 +113,7 @@ def _folder_row(key: str, display: dict[str, str], registry: dict, record: dict,
     folder = (f"Unzip into `{own_root[key]}`" if key in own_root and zipped
               else _folder_cell(key, guide))
     return (f"| [{display[key]}](platforms/{key}.md) | "
-            f"{guide.runs_on or _runs_on(registry[key], guide)} | {folder} | "
+            f"{guide.runs_on or runs_on_text(registry[key], guide)} | {folder} | "
             f"{_pack_cell(key, record)} |")
 
 
@@ -126,7 +126,7 @@ def _folder_tables(registry: dict, record: dict, display: dict[str, str]) -> lis
     lines: list[str] = []
     alone: list[str] = []
     for group, (label, _description) in DEVICE_GROUPS.items():
-        members = _group_keys(registry, group, display)
+        members = group_keys(registry, group, display)
         if len(members) == 1 and not ALSO_RUNS.get(group):
             alone += members
             continue
@@ -247,7 +247,7 @@ def generate_which_pack() -> str:
         "## Only some consoles?",
         "",
         "Pick them here, and get the files and the command. Or use the command's "
-        f"**{_installer().TUI_SYSTEMS_ROW}**.",
+        f"**{installer_module().TUI_SYSTEMS_ROW}**.",
         "",
         "<FilePicker />",
         "",
@@ -294,7 +294,7 @@ def generate_which_pack() -> str:
         ]),
         "Details: [All installer options](wiki/installer.md).",
         "",
-        *_next_block([
+        *next_block([
             "[First install, step by step](wiki/first-install.md)",
             "[When a game does not start](wiki/troubleshooting.md)",
         ]),

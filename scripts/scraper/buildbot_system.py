@@ -11,7 +11,7 @@ import urllib.parse
 import urllib.request
 
 from model.safeparse import yaml_load
-from model.registry import _load_versions
+from model.registry import load_versions
 
 
 log = logging.getLogger(__name__)
@@ -76,7 +76,7 @@ def check(registry_path: str = DEFAULT_REGISTRY) -> dict:
         return {"error": str(exc), "entries": []}
 
     tracked = load_tracked_entries(registry_path)
-    versions = _load_versions()
+    versions = load_versions()
 
     buildbot_set = set(index_zips)
     tracked_set = set(tracked.keys())

@@ -9,25 +9,25 @@ from model.guides import GUIDES
 from model.systemnames import system_name
 from resolve.nativemode import check_label, reads_file_contents
 from sitegen import markup
-from sitegen.config import REPO_URL, _date_line
+from sitegen.config import REPO_URL, date_line
 from sitegen.decorate import level_label
 from sitegen.diagrams import local_images
-from sitegen.guidepage import _pack_buttons, _platform_guide
-from sitegen.home import _stat
-from sitegen.install import _platform_install_block
+from sitegen.guidepage import pack_buttons, platform_guide
+from sitegen.home import stat_block
+from sitegen.install import platform_install_block
 from sitegen.platformfiles import (
     ROLE_LEGEND,
     ROLE_LEGEND_TITLE,
-    _EXPORTED,
-    _core_folders_section,
-    _declared_by_system,
-    _emulator_named_link,
-    _launcher_unproven_section,
-    _platform_data_links,
-    _render_platform_systems,
-    _system_emulators,
+    EXPORTED,
+    core_folders_section,
+    declared_by_system,
+    emulator_named_link,
+    launcher_unproven_section,
+    platform_data_links,
+    render_platform_systems,
+    system_emulators,
 )
-from sitegen.render import _escape_tags, _pct
+from sitegen.render import escape_tags, percent_text
 
 
 # A hash a platform's list writes, in words.
@@ -48,7 +48,7 @@ def _transcribed_row(config: dict) -> list[str]:
     note = " (a branch: the revision read is not recorded)" if moving else ""
     # Named in words: the raw URL broke into 25 lines of 8 characters
     # on a phone.
-    link = (f"[{_escape_tags(listed.label)}]({listed.browse()})" if listed
+    link = (f"[{escape_tags(listed.label)}]({listed.browse()})" if listed
             else f"<{transcribed}>")
     return [f"| Transcribed from | {link}{note} |"]
 
@@ -73,9 +73,9 @@ def _platform_meta_rows(name: str, config: dict, mode: str, registry: dict) -> l
     if homepage:
         rows.append(f"| Homepage | [{homepage}]({homepage}) |")
     rows.extend(_transcribed_row(config))
-    if name in _EXPORTED:
+    if name in EXPORTED:
         rows.append(f"| Updated file | [Download it and see the changes](../exports.md#{name}) |")
-    rows.append(f"| Data | {_platform_data_links(name)} |")
+    rows.append(f"| Data | {platform_data_links(name)} |")
     for cb in registry.get(name, {}).get("contributed_by", []) or []:
         username = cb.get("username", "")
         contribution = cb.get("contribution", "")
@@ -92,17 +92,17 @@ def _platform_band(cov: dict) -> list[str]:
     """The coverage figures above a platform's detail card."""
     config = cov["config"]
     mode = cov["mode"]
-    pct = _pct(cov["present"], cov["total"])
+    pct = percent_text(cov["present"], cov["total"])
     mode_badge = (
         "rb-badge-success" if reads_file_contents(mode) else "rb-badge-info"
     )
     return [
         markup.block_open("div", 'class="rb-stats"'),
         "",
-        *_stat(f"{cov['present']}/{cov['total']}", f"Coverage ({pct})"),
-        *_stat(str(cov["verified"]), "Verified"),
-        *_stat(str(cov["missing"]), "Missing"),
-        *_stat(f'<span class="rb-badge {mode_badge}">{check_label(mode, config.get("hash_rule"))}</span>',
+        *stat_block(f"{cov['present']}/{cov['total']}", f"Coverage ({pct})"),
+        *stat_block(str(cov["verified"]), "Verified"),
+        *stat_block(str(cov["missing"]), "Missing"),
+        *stat_block(f'<span class="rb-badge {mode_badge}">{check_label(mode, config.get("hash_rule"))}</span>',
                "Checked by"),
         "</div>",
         "",
@@ -151,7 +151,7 @@ def _platform_head(name: str, cov: dict, registry: dict, no_list: bool) -> list[
         lines += [summary + (f" [{display} website]({homepage})." if homepage else ""), ""]
 
     if name in GUIDES:
-        lines += _platform_guide(name, display, cov, registry, no_list)
+        lines += platform_guide(name, display, cov, registry, no_list)
     lines += [
         "## Reference: every file by system { #reference-every-file-by-system }",
         "",
@@ -200,15 +200,15 @@ def generate_platform_page(
     if name not in GUIDES:
         detect = (registry.get(name, {}).get("install") or {}).get("detect") or []
         on_card = any(rule.get("method") == "card_marker" for rule in detect)
-        lines.extend(["", *_platform_install_block(name, display, on_card)])
-        lines.extend(["", _pack_buttons(name, f"Download {display} Pack", display=display)])
+        lines.extend(["", *platform_install_block(name, display, on_card)])
+        lines.extend(["", pack_buttons(name, f"Download {display} Pack", display=display)])
     lines.append("")
 
     config_files, by_system = _platform_declarations(cov)
 
     if no_list:
-        lines.extend(_core_folders_section(name, config))
-    if _own_list_only(config):
+        lines.extend(core_folders_section(name, config))
+    if own_list_only(config):
         lines.extend([f"**Cores:** {OWN_LIST_ONLY}", ""])
 
     # System summary table (quick navigation)
@@ -220,7 +220,7 @@ def generate_platform_page(
             "|--------|-------|--------|-----------|",
         ]
     )
-    by_system_declared = _declared_by_system(config_files)
+    by_system_declared = declared_by_system(config_files)
     for sys_id, files in sorted(by_system.items()):
         ok_count = sum(1 for f in files if f["status"] == "ok")
         total = len(files)
@@ -232,18 +232,18 @@ def generate_platform_page(
                 f'<span class="rb-badge rb-badge-warning">'
                 f'{non_ok} issue{"s" if non_ok > 1 else ""}</span>'
             )
-        sys_emus = _system_emulators(sys_id, emulator_files, by_system_declared.get(sys_id))
+        sys_emus = system_emulators(sys_id, emulator_files, by_system_declared.get(sys_id))
         anchor = sys_id.replace(" ", "-")
         # Named and linked as the detail blocks below do: the column held
         # profile ids, none of 1,463 linked.
-        emu_str = ", ".join(_emulator_named_link(e, "../") for e in sorted(sys_emus)[:3])
+        emu_str = ", ".join(emulator_named_link(e, "../") for e in sorted(sys_emus)[:3])
         if len(sys_emus) > 3:
             emu_str += f" [+{len(sys_emus) - 3}](#{anchor})"
         # The name a reader filters on, the id the list writes beside it.
         # The id and the count are no words a reader searches for: indexed,
         # every platform page answered a system id before its system's page.
         lines.append(
-            f"| [{_escape_tags(system_name(sys_id))}](#{anchor}) "
+            f"| [{escape_tags(system_name(sys_id))}](#{anchor}) "
             f"<small data-pagefind-ignore>{sys_id}</small> "
             f"| <span data-pagefind-ignore>{ok_count}/{total}</span> | {status} | {emu_str} |"
         )
@@ -252,12 +252,12 @@ def generate_platform_page(
         lines.extend(markup.details("note", ROLE_LEGEND_TITLE, [ROLE_LEGEND]))
 
     lines.extend(
-        _render_platform_systems(by_system, config_files, emulator_files,
+        render_platform_systems(by_system, config_files, emulator_files,
                                  (name, display), moved, config)
     )
-    lines.extend(_launcher_unproven_section(config))
+    lines.extend(launcher_unproven_section(config))
 
-    lines.extend(["", _date_line()])
+    lines.extend(["", date_line()])
     return "\n".join(lines) + "\n"
 
 
@@ -266,6 +266,6 @@ def generate_platform_page(
 OWN_LIST_ONLY = "None. Its own list is the whole truth: no core profile adds a file."
 
 
-def _own_list_only(config: dict) -> bool:
+def own_list_only(config: dict) -> bool:
     """The platform declares `cores: []`: its own list decides alone."""
     return isinstance(config.get("cores"), list) and not config["cores"]

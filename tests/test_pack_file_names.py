@@ -15,7 +15,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from packs.naming import _name_part
+from packs.naming import file_name_part
 from packs.emulatorpack import generate_emulator_pack
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -23,8 +23,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 class PackFileNames(unittest.TestCase):
     def test_separators_and_reserved_characters_are_replaced(self):
-        self.assertEqual(_name_part("FinalBurn Neo (CPS-1/CPS-2)"), "FinalBurnNeo(CPS-1-CPS-2)")
-        self.assertEqual(_name_part('a\\b:c*d?"e<f>g|h', "_"), "a-b-c-d--e-f-g-h")
+        self.assertEqual(file_name_part("FinalBurn Neo (CPS-1/CPS-2)"), "FinalBurnNeo(CPS-1-CPS-2)")
+        self.assertEqual(file_name_part('a\\b:c*d?"e<f>g|h', "_"), "a-b-c-d--e-f-g-h")
 
     def test_an_emulator_named_with_a_slash_writes_its_pack(self):
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:

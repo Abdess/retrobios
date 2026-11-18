@@ -13,7 +13,7 @@ import zipfile
 from pathlib import Path
 
 from scripts.core.deterministic_zip import (
-    _FIXED_DATE_TIME,
+    FIXED_DATE_TIME,
     rebuild_zip_deterministic,
     verify_zip_determinism,
 )
@@ -67,7 +67,7 @@ class TestRebuild(unittest.TestCase):
         out, _ = self._rebuild()
         with zipfile.ZipFile(out) as zf:
             for info in zf.infolist():
-                self.assertEqual(info.date_time, _FIXED_DATE_TIME)
+                self.assertEqual(info.date_time, FIXED_DATE_TIME)
                 self.assertEqual(info.create_system, 0)
                 self.assertEqual(info.external_attr, 0o100644 << 16)
                 self.assertEqual(info.compress_type, zipfile.ZIP_DEFLATED)
@@ -278,7 +278,7 @@ class TestPackDeterminism(unittest.TestCase):
         pack = self._build("out1")
         with zipfile.ZipFile(pack) as zf:
             dates = {i.date_time for i in zf.infolist()}
-        self.assertEqual(dates, {_FIXED_DATE_TIME})
+        self.assertEqual(dates, {FIXED_DATE_TIME})
 
     def test_generated_members_carry_the_fixed_epoch(self):
         pack = self._build("out1")
@@ -291,7 +291,7 @@ class TestPackDeterminism(unittest.TestCase):
             ]
             self.assertTrue(generated, "pack should carry a generated README")
             for info in generated:
-                self.assertEqual(info.date_time, _FIXED_DATE_TIME)
+                self.assertEqual(info.date_time, FIXED_DATE_TIME)
 
     def _build_emulator(self, out_name: str) -> Path:
         from scripts.packs.emulatorpack import generate_emulator_pack
@@ -313,14 +313,14 @@ class TestPackDeterminism(unittest.TestCase):
             "    system: test-sys\n"
             "    required: true\n"
         )
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         path = generate_emulator_pack(
             ["detcore"], str(self.tmp / "emulators"), self.db, str(self.bios),
             str(out), offline=True,
         )
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self.assertIsNotNone(path)
         return Path(path)
 
@@ -337,7 +337,7 @@ class TestPackDeterminism(unittest.TestCase):
     def test_every_emulator_pack_member_carries_the_fixed_epoch(self):
         pack = self._build_emulator("emu1")
         with zipfile.ZipFile(pack) as zf:
-            self.assertEqual({i.date_time for i in zf.infolist()}, {_FIXED_DATE_TIME})
+            self.assertEqual({i.date_time for i in zf.infolist()}, {FIXED_DATE_TIME})
 
     def test_an_executable_source_stays_executable(self):
         """Pinning the mode stripped the bit the RetroDECK pack needs.
@@ -393,7 +393,7 @@ class TestPackDeterminism(unittest.TestCase):
         inject_manifest(str(pack), manifest)
         with zipfile.ZipFile(pack) as zf:
             info = zf.getinfo("manifest.json")
-        self.assertEqual(info.date_time, _FIXED_DATE_TIME)
+        self.assertEqual(info.date_time, FIXED_DATE_TIME)
 
 
 
@@ -421,7 +421,7 @@ class ManifestInjectionIsAtomic(unittest.TestCase):
                 zf.fp.flush()
                 raise KeyboardInterrupt
 
-            with mock.patch.object(finalize, "_write_generated_member", die), \
+            with mock.patch.object(finalize, "write_generated_member", die), \
                     self.assertRaises(KeyboardInterrupt):
                 finalize.inject_manifest(str(pack), {"files": ["x"] * 2000})
             self.assertEqual(pack.read_bytes(), before)
@@ -437,14 +437,14 @@ class PackMemberCompression(unittest.TestCase):
     the packs' size."""
 
     def _pack(self, tmp: Path, name: str) -> Path:
-        from scripts.packs.archive import _add_pack_member
+        from scripts.packs.archive import add_pack_member
 
         source = tmp / "member"
         source.write_bytes(b"\x00" * 4096)
         pack = tmp / name
         with zipfile.ZipFile(pack, "w", zipfile.ZIP_DEFLATED) as zf:
             for arcname in ("bios/a.zip", "bios/b.PNG", "bios/c.bin", "bios/d.pk3"):
-                _add_pack_member(zf, str(source), arcname)
+                add_pack_member(zf, str(source), arcname)
         return pack
 
     def test_compressed_formats_are_stored_and_the_rest_deflated(self):

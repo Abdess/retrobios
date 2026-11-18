@@ -11,13 +11,13 @@ from model.profiles import unique_emulator_profiles
 from model.registry import load_platform_registry
 from sitegen import markup
 from sitegen.readme import demo_description, demo_facts
-from sitegen.render import _fmt_size
+from sitegen.render import fmt_size
 
 
 # Home page
 
 
-def _stat(value: str, label: str) -> list[str]:
+def stat_block(value: str, label: str) -> list[str]:
     return [
         markup.block_open("div", 'class="rb-stat"'),
         # One line, a space between: the page text read "168/168Coverage".
@@ -27,7 +27,7 @@ def _stat(value: str, label: str) -> list[str]:
     ]
 
 
-def _group_members(coverages: dict, registry: dict, group: str) -> list[str]:
+def group_members(coverages: dict, registry: dict, group: str) -> list[str]:
     """Registered platforms of a device group, by display name."""
     return sorted(
         (name for name in coverages if registry.get(name, {}).get("device_group") == group),
@@ -35,7 +35,7 @@ def _group_members(coverages: dict, registry: dict, group: str) -> list[str]:
     )
 
 
-def _next_block(links: list[str]) -> list[str]:
+def next_block(links: list[str]) -> list[str]:
     """Where to go from here, at the end of a page: a plain heading and a
     list. A tinted callout with a side stripe said the same as the pager."""
     return ["## Next steps", "", *(f"- {link}" for link in links), ""]
@@ -49,7 +49,7 @@ def _tiles(registry: dict, members: list[str], display: dict[str, str], prefix: 
     return markup.platform_tiles([
         *((display[name], f"{prefix}platforms/{name}.md",
            str(registry.get(name, {}).get("logo") or ""),
-           GUIDES[name].runs_on or _runs_on(registry.get(name, {}), GUIDES[name]))
+           GUIDES[name].runs_on or runs_on_text(registry.get(name, {}), GUIDES[name]))
           for name in members),
         *((tile.name, f"{prefix}{tile.link}", tile.logo, tile.text)
           for tile in GROUP_TILES.get(group, ())),
@@ -64,7 +64,7 @@ def setup_picker(registry: dict, display: dict[str, str], prefix: str = "") -> l
     lines: list[str] = []
     alone: list[str] = []
     for group, (label, _description) in DEVICE_GROUPS.items():
-        members = _group_keys(registry, group, display)
+        members = group_keys(registry, group, display)
         if len(members) == 1 and not GROUP_TILES.get(group):
             alone += members
         elif members:
@@ -175,10 +175,10 @@ def generate_explore_index(db: dict, coverages: dict, profiles: dict) -> str:
         "",
         markup.block_open("div", 'class="rb-stats"'),
         "",
-        *_stat(f"{total_files:,}", COLLECTION_FILES_LABEL),
-        *_stat(str(setup_count()), "Setups supported"),
-        *_stat(str(emulator_count), "Emulators documented"),
-        *_stat(_fmt_size(total_size), "Size of the collection"),
+        *stat_block(f"{total_files:,}", COLLECTION_FILES_LABEL),
+        *stat_block(str(setup_count()), "Setups supported"),
+        *stat_block(str(emulator_count), "Emulators documented"),
+        *stat_block(fmt_size(total_size), "Size of the collection"),
         "</div>",
         "",
         composition_sentence(db),
@@ -226,7 +226,7 @@ def install_demo(variant: str = "default", name: str = "") -> list[str]:
 _OS_NAMES = {"windows": "Windows", "darwin": "macOS", "linux": "Linux"}
 
 
-def _runs_on(entry: dict, guide: Guide) -> str:
+def runs_on_text(entry: dict, guide: Guide) -> str:
     """Where a setup runs, read from the systems the installer detects it on."""
     if guide.on_card:
         return "SD card, filled from a computer"
@@ -243,7 +243,7 @@ def _runs_on(entry: dict, guide: Guide) -> str:
     return ", ".join(names)
 
 
-def _group_keys(registry: dict, group: str, display: dict[str, str]) -> list[str]:
+def group_keys(registry: dict, group: str, display: dict[str, str]) -> list[str]:
     return sorted(
         (k for k in registry if registry[k].get("device_group") == group),
         key=lambda k: display[k].casefold(),

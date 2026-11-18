@@ -50,7 +50,7 @@ _CONTENT_REASONS = {
 _HASH_CHECKS = frozenset({"crc32", "md5", "sha1", "adler32"})
 
 
-def _parse_validation(validation: list | dict | None) -> list[str]:
+def parse_validation(validation: list | dict | None) -> list[str]:
     """Extract the validation check list from a file's validation field.
 
     Handles both simple list and divergent (core/upstream) dict forms.
@@ -378,7 +378,7 @@ def _index_entry(index: dict[str, dict], emu_name: str, f: dict, checks: list[st
     _merge_per_emulator(item, emu_name, f, checks)
 
 
-def _build_validation_index(profiles: dict) -> dict[str, dict]:
+def build_validation_index(profiles: dict) -> dict[str, dict]:
     """Build per-filename validation rules from emulator profiles.
 
     Returns {filename: {"checks": [str], "size": int|None, "min_size": int|None,
@@ -407,7 +407,7 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
             fname = f.get("name", "")
             if not fname:
                 continue
-            checks = _parse_validation(f.get("validation"))
+            checks = parse_validation(f.get("validation"))
             slot = (fname, emu_name, f.get("path") or fname)
             if not checks:
                 unchecked.add(slot)

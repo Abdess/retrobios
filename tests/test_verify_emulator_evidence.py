@@ -81,14 +81,14 @@ class HashMismatchIsNotCoverage(unittest.TestCase):
         self.rom = self.root / "shared.rom"
         self.rom.write_bytes(b"THE BYTES THE REPO ACTUALLY HOLDS")
         self.db = _db(self.rom, "shared.rom")
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
 
     def tearDown(self):
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self._tmp.cleanup()
 
     def _profile(self, declared_md5: str) -> None:
@@ -205,14 +205,14 @@ class ArchiveHashMismatchIsNotCoverage(unittest.TestCase):
         with zipfile.ZipFile(self.archive, "w") as zf:
             zf.writestr("inner.rom", b"THE MEMBER THE EMULATOR LOADS")
         self.db = _db(self.archive, "romset.zip")
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
 
     def tearDown(self):
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self._tmp.cleanup()
 
     def _profile(self, declared_md5: str) -> None:
@@ -306,14 +306,14 @@ class UnsourceableIsNotAGap(unittest.TestCase):
         self.db = {"files": {}, "indexes": {
             "by_name": {}, "by_md5": {}, "by_sha256": {},
             "by_crc32": {}, "by_path_suffix": {}}}
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
 
     def tearDown(self):
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self._tmp.cleanup()
 
     def _result(self):
@@ -427,14 +427,14 @@ class StandaloneSlotsFollowThePack(unittest.TestCase):
             "    path: bios/a.rom\n"
             "    standalone_path: B/a.rom\n"
         )
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
 
     def tearDown(self):
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
 
-        _emulator_profiles_cache.clear()
+        emulator_profiles_cache.clear()
         self._tmp.cleanup()
 
     def test_each_standalone_folder_is_a_slot(self):

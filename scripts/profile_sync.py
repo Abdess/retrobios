@@ -22,15 +22,15 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 from core import upstream
 from profiling import version_basis
-from model.systems import _norm_system_id, system_index
+from model.systems import norm_system_id, system_index
 from core.github import github_token
 from model.profiles import load_emulator_profiles
 from core.cli import suggest_names
 from profiling.bump import DEFAULT_CACHE, write_version
 from profiling.realign import realign_prose
 from profiling.reports import ProfileReport
-from profiling.run import _WRITTEN, _emit, _read_one
-from profiling.triage import PROGRESS_SECONDS, _Progress, _interrupted
+from profiling.run import WRITTEN_PROFILES, emit_reports, read_one_profile
+from profiling.triage import PROGRESS_SECONDS, Progress, print_interrupted
 from profiling.yamledit import YamlWriteError
 
 ANON_QUOTA = 60
@@ -289,9 +289,9 @@ def project_base() -> str:
     is HEAD, and --changed --strict found nothing and passed while the PR's
     CI then failed. validate_pr.py resolves the same line the same way.
     """
-    from core.gitclone import _git_lines as git_lines, _project_main_line
+    from core.gitclone import git_lines as git_lines, project_main_line
 
-    line = _project_main_line()
+    line = project_main_line()
     if line:
         return line
     for remote in ("upstream", "origin"):
@@ -328,13 +328,13 @@ def select_profiles(profiles: dict, args: argparse.Namespace) -> dict:
 
     # --system matches as verify.py --list-systems lists and --system selects:
     # by normalized id, so `saturn` reaches the profiles declaring sega-saturn.
-    wanted_system = _norm_system_id(args.system) if args.system else None
+    wanted_system = norm_system_id(args.system) if args.system else None
     selected = {}
     for name, profile in sorted(profiles.items()):
         if profile.get("type") == "alias" or profile.get("role") == "test":
             continue
         if wanted_system and wanted_system not in {
-            _norm_system_id(str(s)) for s in profile.get("systems") or []
+            norm_system_id(str(s)) for s in profile.get("systems") or []
         }:
             continue
         if args.type_ and profile.get("type") != args.type_:
@@ -589,16 +589,16 @@ def main() -> None:
             f"{PROGRESS_SECONDS} s. --offline answers from the cache alone.",
             file=sys.stderr, flush=True,
         )
-    progress = _Progress(len(selected), "read", quiet)
+    progress = Progress(len(selected), "read", quiet)
     complete = True
     try:
         for name, profile in selected.items():
             progress.step(len(reports), name)
-            _read_one(args, name, profile, reports, failed, writes)
+            read_one_profile(args, name, profile, reports, failed, writes)
     except KeyboardInterrupt:
         # What was read is still worth printing: a ranking of 200 profiles
         # beats none after 15 minutes.
-        _interrupted(len(reports), len(selected), "the output covers those read")
+        print_interrupted(len(reports), len(selected), "the output covers those read")
         complete = False
 
     # --changed-only narrows every output, not the text report alone: the
@@ -607,7 +607,7 @@ def main() -> None:
         report for report in reports
         if not args.changed_only or report.needs_review() or report.name in failed
     ]
-    complete = _emit(args, selected, reports, shown) is not False and complete
+    complete = emit_reports(args, selected, reports, shown) is not False and complete
     _refresh_source_paths(args)
     if not complete:
         raise SystemExit(130)
@@ -631,7 +631,7 @@ def _run_realign(args: argparse.Namespace, selected: dict) -> None:
             ):
                 print(f"{name}: {line}")
             if profile_path.read_bytes() != before:
-                _WRITTEN.add(name)
+                WRITTEN_PROFILES.add(name)
         except upstream.UpstreamError as exc:
             print(f"{name}: {exc}", file=sys.stderr)
             failed.add(name)
@@ -651,16 +651,16 @@ def _refresh_source_paths(args: argparse.Namespace) -> None:
     --fetch by hand. A run that writes nothing, or makes no request, leaves
     it alone.
     """
-    if not _WRITTEN or args.dry_run or args.offline or os.environ.get("RETROBIOS_OFFLINE"):
+    if not WRITTEN_PROFILES or args.dry_run or args.offline or os.environ.get("RETROBIOS_OFFLINE"):
         return
-    from model.profiles import _emulator_profiles_cache
+    from model.profiles import emulator_profiles_cache
     from sitegen import sources
     from core.artifacts import write_if_changed
 
     # The run loaded the profiles before writing them, and the loader caches
     # by directory: read again, the record described the pins just replaced
     # (linapple, then ten profiles in one advance).
-    _emulator_profiles_cache.clear()
+    emulator_profiles_cache.clear()
     profiles = load_emulator_profiles(args.emulators_dir, skip_aliases=False)
     held, unread = sources.build_source_paths(
         profiles, [sources.TREE_CACHE], fetch=True

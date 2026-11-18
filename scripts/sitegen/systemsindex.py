@@ -2,21 +2,21 @@
 
 from __future__ import annotations
 
-from model.collection import SECTION_LABELS, _profiles_on_disk, _slug
+from model.collection import SECTION_LABELS, profiles_on_disk, manufacturer_slug
 from model.composition import GAME_DATA_TOPS
 from sitegen import starlight as sitestarlight
-from sitegen.render import _count, console_href
-from sitegen.startwith import _section_label
+from sitegen.render import count_text, console_href
+from sitegen.startwith import section_label
 
 
 def _console_display(manufacturer: str, console: str) -> str:
     """A console section's name as the reader looks for it: the heading
     system_name gives its id, or the folder alone under a program's top
     (Other, Arcade), where "Other mame" would name nothing."""
-    from model.collection import _PROGRAM_TOPS
-    from model.systemnames import _heading_name
+    from model.collection import PROGRAM_TOPS
+    from model.systemnames import heading_name
 
-    return console if manufacturer in _PROGRAM_TOPS else _heading_name(manufacturer, console)
+    return console if manufacturer in PROGRAM_TOPS else heading_name(manufacturer, console)
 
 
 def generate_systems_index(manufacturers: dict) -> str:
@@ -42,8 +42,8 @@ def generate_systems_index(manufacturers: dict) -> str:
         "Every BIOS file the collection holds, by console. Open a console to "
         "see each file, the emulators that read it and the setups that list it.",
         "",
-        f"{_count(total_consoles, 'console')}, {_count(total_files, 'file')} in the "
-        f"repository, from {_count(total_mfr, 'manufacturer')}.",
+        f"{count_text(total_consoles, 'console')}, {count_text(total_files, 'file')} in the "
+        f"repository, from {count_text(total_mfr, 'manufacturer')}.",
         "",
     ]
 
@@ -68,8 +68,8 @@ def generate_systems_index(manufacturers: dict) -> str:
          "as the data of a game, rather than the BIOS of a machine."),
     ):
         rows = sorted(
-            ((_folder_emulator(console)[0] if group == "programs"
-              else _section_label(mfr, console) if mfr == "Arcade"
+            ((folder_emulator(console)[0] if group == "programs"
+              else section_label(mfr, console) if mfr == "Arcade"
               or (mfr, console) in SECTION_LABELS
               else _console_display(mfr, console), mfr, console, len(files))
              for mfr, consoles in manufacturers.items() if kind(mfr) == group
@@ -87,11 +87,11 @@ def generate_systems_index(manufacturers: dict) -> str:
             # every maker cell said Other.
             lines += ["| Emulator | Files |", "|---------|------:|"]
             for name, mfr, console, count in rows:
-                href = console_href(_slug(mfr), console).removeprefix("systems/")
-                key = _folder_emulator(console)[1]
+                href = console_href(manufacturer_slug(mfr), console).removeprefix("systems/")
+                key = folder_emulator(console)[1]
                 cell = name.replace("|", "-")
                 cell = f"[{cell}](../emulators/{key}.md)" if key else cell
-                lines.append(f"| {cell} | [{_count(count, 'file')}]({href}) |")
+                lines.append(f"| {cell} | [{count_text(count, 'file')}]({href}) |")
             lines.append("")
             continue
         lines += [
@@ -102,18 +102,18 @@ def generate_systems_index(manufacturers: dict) -> str:
         ]
         for name, mfr, console, count in rows:
             cell = name.replace("|", "-")
-            href = console_href(_slug(mfr), console).removeprefix("systems/")
-            lines.append(f"| [{cell}]({href}) | {count:,} | [{mfr}]({_slug(mfr)}.md) |")
+            href = console_href(manufacturer_slug(mfr), console).removeprefix("systems/")
+            lines.append(f"| [{cell}]({href}) | {count:,} | [{mfr}]({manufacturer_slug(mfr)}.md) |")
         lines.append("")
 
     return "\n".join(lines) + "\n"
 
 
-def _folder_emulator(folder: str) -> tuple[str, str]:
+def folder_emulator(folder: str) -> tuple[str, str]:
     """The display name and profile of the emulator a folder under Other is
     named after, by its profile key or its name, else the folder and "".
     """
-    profiles = _profiles_on_disk()
+    profiles = profiles_on_disk()
     if folder in profiles and profiles[folder].get("type") != "alias" and profiles[folder].get("role") != "test":
         return str(profiles[folder].get("emulator") or folder), folder
     for key in sorted(profiles):

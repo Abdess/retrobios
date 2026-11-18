@@ -14,8 +14,8 @@ from model.profiles import upstream_profile_index
 from model.targets import list_available_targets, load_target_config
 from packs.extras import (
     ExtraResolver,
-    _detect_extras_prefix,
-    _extra_system_ids,
+    detect_extras_prefix,
+    extra_system_ids,
     extra_full_destination,
     extra_region_key,
     platform_region_groups,
@@ -23,18 +23,18 @@ from packs.extras import (
     save_manifest_dest,
 )
 from packs.manifestentry import (
-    _ClaimContext,
-    _attach_claims,
-    _claim_cores,
-    _claim_platform_omission,
-    _manifest_dest_of,
-    _manifest_entry,
+    ClaimContext,
+    attach_claims,
+    claim_cores,
+    claim_platform_omission,
+    manifest_dest_of,
+    manifest_entry,
 )
 from packs.manifestselect import SelectionIndex
-from packs.paths import _register_path, placement_block
-from packs.platformpack import _slot_drops
+from packs.paths import register_path, placement_block
+from packs.platformpack import one_per_slot_drops
 from resolve import regions as resolve_regions, slot as slot_mod
-from resolve.contentlayout import TARGET_KEY, _core_key, content_folder_boards
+from resolve.contentlayout import TARGET_KEY, core_key, content_folder_boards
 from resolve.cores import (
     downloadable_on,
     downloaded_only_profiles,
@@ -48,7 +48,7 @@ if TYPE_CHECKING:
 
 
 class _CoreEntryState(TypedDict):
-    """What _manifest_core_entries reads and fills of the manifest being listed."""
+    """What manifest_core_entries reads and fills of the manifest being listed."""
 
     region_drops: set
     case_insensitive: bool
@@ -63,7 +63,7 @@ class _CoreEntryState(TypedDict):
 
 
 class _CoreEntryParts(_CoreEntryState, total=False):
-    """_CoreEntryState and the optional keywords of _manifest_core_entries."""
+    """_CoreEntryState and the optional keywords of manifest_core_entries."""
 
     required_only: bool
     validation_index: dict | None
@@ -78,14 +78,14 @@ class _CoreEntryLister:
 
     config: dict
     base_dest: str
-    ctx: _ClaimContext
+    ctx: ClaimContext
     state: _CoreEntryParts
     resolver: ExtraResolver
     total_size: int = 0
     extras_pfx: str = field(init=False)
 
     def __post_init__(self) -> None:
-        self.extras_pfx = _detect_extras_prefix(self.config, self.base_dest)
+        self.extras_pfx = detect_extras_prefix(self.config, self.base_dest)
 
     def region_key(self, fe: dict) -> str:
         return extra_region_key(fe, declared_root(self.config))
@@ -139,7 +139,7 @@ class _CoreEntryLister:
         save_root = fe.get("root") == "save"
         folded = (
             save_manifest_dest(fe) if save_root
-            else _manifest_dest_of(full_dest, self.base_dest)
+            else manifest_dest_of(full_dest, self.base_dest)
         ).lower()
         held = next(
             (e for e in self.state["manifest_files"]
@@ -148,16 +148,16 @@ class _CoreEntryLister:
             None,
         )
         if held is not None and held.get("cores") is not None:
-            _attach_claims(held, [fe], self.ctx, dest, held["dest"])
+            attach_claims(held, [fe], self.ctx, dest, held["dest"])
 
     def _omit(self, fe: dict, full_dest: str, reason: str) -> None:
         source_emu = fe.get("source_profile") or fe.get("source_emulator", "")
-        if not _claim_platform_omission(
+        if not claim_platform_omission(
             self.state["omitted_by_destination"].get(full_dest), source_emu
         ):
-            systems = _extra_system_ids(fe)
+            systems = extra_system_ids(fe)
             self.state["record_omission"](
-                full_dest, fe, systems[0] if systems else "", reason, _claim_cores(fe),
+                full_dest, fe, systems[0] if systems else "", reason, claim_cores(fe),
             )
 
     def _list_held(
@@ -178,9 +178,9 @@ class _CoreEntryLister:
             # Relative to the roms or emulators folder the entry names.
             manifest_dest = dest
         else:
-            manifest_dest = _manifest_dest_of(full_dest, self.base_dest)
+            manifest_dest = manifest_dest_of(full_dest, self.base_dest)
 
-        entry, file_size = _manifest_entry(
+        entry, file_size = manifest_entry(
             local_path, manifest_dest, [source_emu] if source_emu else [],
             self.ctx.db, self.ctx.repo_root,
             state["selection"].fields(region_key, fe.get("name", "")),
@@ -199,7 +199,7 @@ class _CoreEntryLister:
             is_game_data(claim) for claim in fe.get("other_claims", [])
         ):
             entry["category"] = GAME_DATA
-        _attach_claims(entry, fe.get("other_claims", []), self.ctx, dest, manifest_dest)
+        attach_claims(entry, fe.get("other_claims", []), self.ctx, dest, manifest_dest)
 
         state["manifest_files"].append(entry)
         displaced = state["omitted_by_destination"].pop(full_dest, None)
@@ -212,12 +212,12 @@ class _CoreEntryLister:
             )
         self.total_size += file_size
         state["seen_destinations"].add(full_dest)
-        _register_path(full_dest, state["seen_destinations"], state["seen_parents"])
+        register_path(full_dest, state["seen_destinations"], state["seen_parents"])
         if state["case_insensitive"]:
             state["seen_lower"].add(full_dest.lower())
 
 
-def _manifest_core_entries(
+def manifest_core_entries(
     core_files: list,
     config: dict,
     db: dict,
@@ -236,11 +236,11 @@ def _manifest_core_entries(
     Returns the bytes added.
     """
     reject_unknown(
-        "_manifest_core_entries", state,
+        "manifest_core_entries", state,
         _CoreEntryParts.__required_keys__ | _CoreEntryParts.__optional_keys__,
     )
     required_only = state.get("required_only", False)
-    ctx = _ClaimContext(
+    ctx = ClaimContext(
         db, bios_dir, zip_contents, offline, required_only,
         state.get("validation_index"), state.get("owners"), repo_root,
         state.get("data_registry"),
@@ -261,7 +261,7 @@ def _manifest_core_entries(
 
 
 class _SelectionOptions(TypedDict, total=False):
-    """The keyword options of _manifest_selection."""
+    """The keyword options of manifest_selection."""
 
     required_only: bool
     regions: list[str] | None
@@ -272,7 +272,7 @@ class _SelectionOptions(TypedDict, total=False):
     one_per_slot: bool
 
 
-def _manifest_selection(
+def manifest_selection(
     config: dict,
     pack_systems: dict,
     emulators_dir: str,
@@ -290,7 +290,7 @@ def _manifest_selection(
     decides on the full manifest withdraws what `--region` and
     `--one-per-slot` withdraw from the pack.
     """
-    reject_unknown("_manifest_selection", options, _SelectionOptions.__optional_keys__)
+    reject_unknown("manifest_selection", options, _SelectionOptions.__optional_keys__)
     required_only = options.get("required_only", False)
     regions = options.get("regions")
     one_per_slot = options.get("one_per_slot", False)
@@ -323,7 +323,7 @@ def _manifest_selection(
         else set()
     )
     if one_per_slot:
-        drops = drops | _slot_drops(
+        drops = drops | one_per_slot_drops(
             config, emu_profiles, target_cores, region_groups, drops, held
         )[0]
     return drops, SelectionIndex.build(
@@ -333,7 +333,7 @@ def _manifest_selection(
     ), held
 
 
-def _offered_boards(
+def offered_boards(
     config: dict,
     profiles: dict[str, dict],
     core_names: dict[str, list[str]],
@@ -354,18 +354,18 @@ def _offered_boards(
     pairs = content_folder_boards(config)
     if all(on is None for on in pairs.values()):
         return {}
-    from resolve.launchers import _roms_place
+    from resolve.launchers import roms_place_of
 
     by_key: dict[str, set[str]] = {}
     for name, claimants in upstream_profile_index(profiles).items():
-        by_key.setdefault(_core_key(name), set()).update(claimants)
+        by_key.setdefault(core_key(name), set()).update(claimants)
     free = {
         (profile, folder) for (core, folder), on in pairs.items() if on is None
         for profile in by_key.get(core, ())
     }
     found: dict[tuple[str, str, str], set[str]] = {}
     for (core, folder), on in pairs.items():
-        where = _roms_place(config, folder) if on is not None else None
+        where = roms_place_of(config, folder) if on is not None else None
         if where is None:
             continue
         for profile in by_key.get(core, ()):
@@ -392,7 +392,7 @@ def _offered_boards(
     return result
 
 
-def _downloaded_cores(
+def downloaded_cores(
     config: dict,
     profiles: dict[str, dict],
     core_names: dict[str, list[str]],
@@ -425,7 +425,7 @@ def _downloaded_cores(
     return {profile: sorted(names) for profile, names in sorted(boards.items())}
 
 
-def _manifest_core_index(
+def manifest_core_index(
     config: dict,
     profiles: dict[str, dict],
     files: list[dict],

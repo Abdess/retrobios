@@ -15,7 +15,7 @@ except ImportError:
 from core.cli import InputMissing, suggest_names
 from model.alternatives import derive_member_requirements
 from model.sources import source_yaml
-from model.systems import _norm_system_id
+from model.systems import norm_system_id
 from core.paths import REPO_ROOT
 
 
@@ -24,7 +24,7 @@ from core.paths import REPO_ROOT
 CONTENT_CHECKS = frozenset({"romdir", "masked_sha1"})
 
 
-_emulator_profiles_cache: dict[tuple[str, bool], dict[str, dict]] = {}
+emulator_profiles_cache: dict[tuple[str, bool], dict[str, dict]] = {}
 
 
 class ProfileSelectionError(ValueError):
@@ -40,14 +40,14 @@ def profiles_for_systems(
     other profile writes atari-2600, and an exact match built two different
     packs under one file name, the second replacing the first.
     """
-    wanted = {_norm_system_id(sid) for sid in system_ids}
+    wanted = {norm_system_id(sid) for sid in system_ids}
     matching = []
     for name, profile in sorted(profiles.items()):
         if profile.get("type") in ("launcher", "alias") or profile.get("role") == "test":
             continue
         if standalone and "standalone" not in profile.get("type", "libretro"):
             continue
-        if wanted & {_norm_system_id(sid) for sid in profile.get("systems", [])}:
+        if wanted & {norm_system_id(sid) for sid in profile.get("systems", [])}:
             matching.append(name)
     return matching
 
@@ -73,8 +73,8 @@ def entry_serves_systems(entry: dict, profile: dict, system_ids: list[str]) -> b
     serves every system of its profile, the rule a platform pack applies to
     core extras.
     """
-    wanted = {_norm_system_id(sid) for sid in system_ids}
-    return bool(wanted & {_norm_system_id(sid) for sid in entry_system_ids(entry, profile)})
+    wanted = {norm_system_id(sid) for sid in system_ids}
+    return bool(wanted & {norm_system_id(sid) for sid in entry_system_ids(entry, profile)})
 
 
 def select_emulator_profiles(
@@ -187,8 +187,8 @@ def load_emulator_profiles(
 ) -> dict[str, dict]:
     """Load all emulator YAML profiles from a directory (cached)."""
     cache_key = (os.path.realpath(emulators_dir), skip_aliases)
-    if cache_key in _emulator_profiles_cache:
-        return _emulator_profiles_cache[cache_key]
+    if cache_key in emulator_profiles_cache:
+        return emulator_profiles_cache[cache_key]
     if skip_aliases:
         # A filter over the full set: parsed once, 534 YAML files cost 1.6 s
         # every time a process asked for both variants.
@@ -197,7 +197,7 @@ def load_emulator_profiles(
             for name, profile in load_emulator_profiles(emulators_dir, False).items()
             if profile.get("type") != "alias"
         }
-        _emulator_profiles_cache[cache_key] = profiles
+        emulator_profiles_cache[cache_key] = profiles
         return profiles
     if importlib.util.find_spec("yaml") is None:
         # Every consumer reads {} as "this repo documents no emulator", which
@@ -223,7 +223,7 @@ def load_emulator_profiles(
         _normalize_hash_fields(profile)
         derive_member_requirements(profile)
         profiles[f.stem] = profile
-    _emulator_profiles_cache[cache_key] = profiles
+    emulator_profiles_cache[cache_key] = profiles
     return profiles
 
 

@@ -33,7 +33,7 @@ try:
     import yaml
 except ImportError:
     yaml = None
-from core.gitclone import _git_lines, _project_main_line
+from core.gitclone import git_lines, project_main_line
 from resolve.review import (
     ValidationResult,
     load_platform_hashes,
@@ -58,14 +58,14 @@ def get_changed_files() -> list[str]:
     """
     changed: list[str] = []
     compared = False
-    project_base = _project_main_line()
+    project_base = project_main_line()
     remotes = [[project_base]] if project_base else [
         [f"{remote}/{base}" for base in ("main", "master", "v2")]
         for remote in ("upstream", "origin")
     ]
     for candidates in remotes:
         for line in candidates:
-            committed = _git_lines("diff", "--name-only", f"{line}...HEAD")
+            committed = git_lines("diff", "--name-only", f"{line}...HEAD")
             if committed is None:
                 continue
             compared = True
@@ -73,9 +73,9 @@ def get_changed_files() -> list[str]:
             break
         if compared and changed:
             break
-    staged = _git_lines("diff", "--cached", "--name-only")
-    local = _git_lines("diff", "--name-only")
-    untracked = _git_lines("ls-files", "--others", "--exclude-standard", "--", "bios")
+    staged = git_lines("diff", "--cached", "--name-only")
+    local = git_lines("diff", "--name-only")
+    untracked = git_lines("ls-files", "--others", "--exclude-standard", "--", "bios")
     if staged is None and local is None and untracked is None:
         raise RuntimeError("git cannot read this checkout")
     for found in (staged, local, untracked):

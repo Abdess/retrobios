@@ -67,10 +67,10 @@ from model.safeparse import require_yaml
 from packs.coverage import verify_platform
 from packs.emulatorcheck import verify_emulator, verify_system
 from packs.report import (
-    _NOT_FIRMWARE,
-    _core_required_missing,
-    _discrepancy_keys,
-    _split_undeclared,
+    NOT_FIRMWARE,
+    core_required_missing,
+    discrepancy_keys,
+    split_undeclared,
     print_emulator_result,
     print_platform_result,
 )
@@ -580,7 +580,7 @@ def _overall_summary(group_results: list[tuple[dict, list[str]]]) -> str:
     # Shipped files whose bytes contradict a declaration or a core's own
     # check: the body printed 19 of them under a last line that read clean.
     counts = {
-        " / ".join(group): len(_discrepancy_keys(r.get("details", [])))
+        " / ".join(group): len(discrepancy_keys(r.get("details", [])))
         for r, group in group_results
     }
     total = sum(counts.values())
@@ -592,7 +592,7 @@ def _overall_summary(group_results: list[tuple[dict, list[str]]]) -> str:
     holders: dict[str, list[str]] = {}
     for r, group in group_results:
         for name in sorted({
-            u["name"] for u in _core_required_missing(_split_undeclared(
+            u["name"] for u in core_required_missing(split_undeclared(
                 r.get("undeclared_files", []))[1])
         }):
             holders.setdefault(name, []).append(" / ".join(group))
@@ -607,7 +607,7 @@ def _overall_summary(group_results: list[tuple[dict, list[str]]]) -> str:
         )
         lines.append(f"{len(holders)} core file(s) a core cannot run without are "
                      f"missing: {detail}")
-    for category, label in _NOT_FIRMWARE.items():
+    for category, label in NOT_FIRMWARE.items():
         counts = {
             " / ".join(group): len((r.get("missing_not_firmware") or {}).get(category, []))
             for r, group in group_results

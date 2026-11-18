@@ -15,7 +15,7 @@ import unittest
 from pathlib import Path
 
 from model.profiles import PROFILE_IDENTITY_FIELDS
-from packs.extras import _collect_emulator_extras
+from packs.extras import collect_emulator_extras
 from packs.gaps import find_undeclared_files
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -46,7 +46,7 @@ class IdentityTravels(unittest.TestCase):
                         "by_crc32": {"12345678": "s1"}},
         }
         report = find_undeclared_files(config, "emulators", db, emu_profiles={"np2kai": profile})
-        extras = _collect_emulator_extras(
+        extras = collect_emulator_extras(
             config, "emulators", db, set(), "", {"np2kai": profile}, include_all=True
         )
         for label, item in (("report", report[0]), ("extra", extras[0])):
@@ -91,7 +91,7 @@ class UnsourceableIsNoCopy(unittest.TestCase):
                         "by_crc32": {"c1": "s1"},
                         "by_path_suffix": {"zc210/sf2/default.sf2": ["s1"]}},
         }
-        extras = _collect_emulator_extras(config, "emulators", db, set(), "", profiles)
+        extras = collect_emulator_extras(config, "emulators", db, set(), "", profiles)
         self.assertEqual(
             [(e["source_profile"], e["destination"]) for e in extras],
             [("zc210", "zc210/sf2/default.sf2")],
@@ -117,7 +117,7 @@ class BareNameIsADestination(unittest.TestCase):
             "indexes": {"by_name": {"syscard1.pce": ["s1"]}, "by_md5": {"m1": "s1"},
                         "by_crc32": {"c1": "s1"}, "by_path_suffix": {}},
         }
-        extras = _collect_emulator_extras(
+        extras = collect_emulator_extras(
             config, "emulators", db, {"pcenginecd/syscard1.pce"}, "", profiles
         )
         self.assertIn("syscard1.pce", [e["destination"] for e in extras])
@@ -142,7 +142,7 @@ class ArchiveMembersStayInside(unittest.TestCase):
             "indexes": {"by_name": {"msx.rom": ["s1"]}, "by_md5": {"m1": "s1"},
                         "by_crc32": {"c1": "s1"}, "by_path_suffix": {}},
         }
-        extras = _collect_emulator_extras(config, "emulators", db, set(), "", profiles)
+        extras = collect_emulator_extras(config, "emulators", db, set(), "", profiles)
         loose = [e for e in extras if e["destination"] == "msx.rom"]
         self.assertEqual([e["source_profile"] for e in loose], ["zesarux"])
 

@@ -74,7 +74,7 @@ def list_release_pack_platforms(platforms_dir: str = "platforms") -> list[str]:
 VERSIONS_FILE = "data/.versions.json"
 
 
-def _load_versions(versions_path: str = VERSIONS_FILE) -> dict[str, dict]:
+def load_versions(versions_path: str = VERSIONS_FILE) -> dict[str, dict]:
     path = Path(versions_path)
     if not path.exists():
         return {}

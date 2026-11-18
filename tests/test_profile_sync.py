@@ -859,7 +859,7 @@ class TestSymlinkTarget(unittest.TestCase):
 
 class TestAnchorTokens(unittest.TestCase):
     def test_archive_members_supply_the_content_values(self):
-        tokens = profiling_citations._anchor_tokens(
+        tokens = profiling_citations.anchor_tokens(
             {"name": "esh.zip", "contents": [{"crc32": "c14f36b3"}]}
         )
         # The set name stays: a MAME ref cites the machine declaration, which
@@ -867,24 +867,24 @@ class TestAnchorTokens(unittest.TestCase):
         self.assertEqual(tokens, ["c14f36b3", "esh"])
 
     def test_a_hashless_archive_still_falls_back_to_its_stem(self):
-        tokens = profiling_citations._anchor_tokens(
+        tokens = profiling_citations.anchor_tokens(
             {"name": "esh.zip", "contents": [{"name": "rom.u1"}]}
         )
         self.assertIn("esh", tokens)
 
     def test_archive_stem_is_searched_too(self):
-        tokens = profiling_citations._anchor_tokens({"name": "stvbios.zip"})
+        tokens = profiling_citations.anchor_tokens({"name": "stvbios.zip"})
         self.assertIn("stvbios.zip", tokens)
         self.assertIn("stvbios", tokens)
 
     def test_hashes_still_win(self):
-        tokens = profiling_citations._anchor_tokens(
+        tokens = profiling_citations.anchor_tokens(
             {"name": "a.zip", "sha1": "AABB" * 10}
         )
         self.assertIn("aabb" * 10, tokens)
 
     def test_very_short_stem_is_skipped(self):
-        self.assertNotIn("ab", profiling_citations._anchor_tokens({"name": "ab.zip"}))
+        self.assertNotIn("ab", profiling_citations.anchor_tokens({"name": "ab.zip"}))
 
 
 class TestNudgeToDeclared(unittest.TestCase):
@@ -1285,8 +1285,8 @@ class TestBuildReport(unittest.TestCase):
             upstream.list_tags,
             upstream.resolve_tag_commit,
             upstream.tag_commit,
-            upstream._http_json,
-            upstream._http_text,
+            upstream.http_json,
+            upstream.http_text,
             upstream.list_gitlinks,
             upstream.current_slug,
             upstream.fork_base,
@@ -1315,8 +1315,8 @@ class TestBuildReport(unittest.TestCase):
         def _no_network(url):
             raise AssertionError(f"test reached the network: {url}")
 
-        upstream._http_json = _no_network
-        upstream._http_text = _no_network
+        upstream.http_json = _no_network
+        upstream.http_text = _no_network
         upstream.list_tags = (
             lambda repo, cache, offline=False: self.tags
         )
@@ -1356,8 +1356,8 @@ class TestBuildReport(unittest.TestCase):
             upstream.list_tags,
             upstream.resolve_tag_commit,
             upstream.tag_commit,
-            upstream._http_json,
-            upstream._http_text,
+            upstream.http_json,
+            upstream.http_text,
             upstream.list_gitlinks,
             upstream.current_slug,
             upstream.fork_base,
@@ -2206,7 +2206,7 @@ class TestExtrasSurviveARefusingForge(unittest.TestCase):
             profiling_run._attach_detection(self._args(), self._profile(), report)
             buffer = io.StringIO()
             with contextlib.redirect_stdout(buffer):
-                detection._print_extras(self._args(), self._profile(), report)
+                detection.print_extras(self._args(), self._profile(), report)
         finally:
             upstream.fetch_file = original
         self.assertEqual(report.detection_skipped, "https://x/y: HTTP 403")
@@ -2731,7 +2731,7 @@ class TestWriteDryRun(unittest.TestCase):
         with mock.patch.object(profiling_run, "_build_full_report", return_value=skipped), \
                 mock.patch.object(profiling_run, "realign_prose", side_effect=cold), \
                 contextlib.redirect_stderr(io.StringIO()) as err:
-            profiling_run._read_one(
+            profiling_run.read_one_profile(
                 self._args(rebase_refs=True), "p", yaml.safe_load(SAMPLE), reports, failed, True
             )
         self.assertEqual(reports, [skipped])
@@ -3145,7 +3145,7 @@ class TestDeliberatelyFrozenPin(TestBuildReport):
 class TestProseSpacingIsNotADifference(unittest.TestCase):
     """A recale keeps the author's spacing, so the check has to allow for it.
 
-    _run_after_moves renders `a.c:228,1439-1443` while the writer leaves the
+    run_after_moves renders `a.c:228,1439-1443` while the writer leaves the
     sentence as written, `a.c:228, 1439-1443`. Comparing the two literally
     made the run look unwritten, so bump_commit refused for ever: mariani
     was held back by three of them.
@@ -3153,20 +3153,20 @@ class TestProseSpacingIsNotADifference(unittest.TestCase):
 
     def test_a_written_run_counts_as_written_whatever_the_spacing(self):
         self.assertEqual(
-            profiling_citations._citation_key("src/Harddisk.cpp:228, 1439-1443"),
-            profiling_citations._citation_key("src/Harddisk.cpp:228,1439-1443"),
+            profiling_citations.citation_key("src/Harddisk.cpp:228, 1439-1443"),
+            profiling_citations.citation_key("src/Harddisk.cpp:228,1439-1443"),
         )
 
     def test_different_citations_still_differ(self):
         self.assertNotEqual(
-            profiling_citations._citation_key("a.c:1, 2"),
-            profiling_citations._citation_key("a.c:1, 3"),
+            profiling_citations.citation_key("a.c:1, 2"),
+            profiling_citations.citation_key("a.c:1, 3"),
         )
 
     def test_a_path_change_still_differs(self):
         self.assertNotEqual(
-            profiling_citations._citation_key("a.c:1"),
-            profiling_citations._citation_key("src/a.c:1"),
+            profiling_citations.citation_key("a.c:1"),
+            profiling_citations.citation_key("src/a.c:1"),
         )
 
 
@@ -3660,7 +3660,7 @@ class APassedReleaseIsNewerThanTheTag(unittest.TestCase):
         args = argparse.Namespace(cache_dir="c", offline=True)
         with mock.patch.object(upstream, "tag_commit", return_value="rel20"), \
                 mock.patch.object(upstream, "ancestry", return_value=(5, 0)):
-            self.assertIsNone(versions._passed_release(args, "repo", version, "pin"))
+            self.assertIsNone(versions.latest_passed_release(args, "repo", version, "pin"))
 
 
 class ANewerReleaseThanTheTag(unittest.TestCase):
@@ -3674,7 +3674,7 @@ class ANewerReleaseThanTheTag(unittest.TestCase):
         answers = iter([after_tag, after_pin])
         with mock.patch.object(upstream, "tag_commit", return_value="rel29"), \
                 mock.patch.object(upstream, "ancestry", side_effect=lambda *a, **k: next(answers)):
-            return versions._newer_release(args, "repo", version, "tag28")
+            return versions.newer_release(args, "repo", version, "tag28")
 
     def test_a_later_release_is_named(self):
         self.assertEqual(self._newer((12, 0), (12, 0)), "2.9")
@@ -3711,7 +3711,7 @@ class AProjectThatOnlyTags(unittest.TestCase):
         args = argparse.Namespace(cache_dir="c", offline=True)
         with mock.patch.object(upstream, "tag_commit", return_value="tag13"), \
                 mock.patch.object(upstream, "ancestry", return_value=(7, 0)):
-            self.assertEqual(versions._newer_release(args, "repo", version, "tag12"), "v1.3")
+            self.assertEqual(versions.newer_release(args, "repo", version, "tag12"), "v1.3")
 
 
 class APassedReleaseUnderAnUntaggedVersion(unittest.TestCase):
@@ -3736,7 +3736,7 @@ class APassedReleaseUnderAnUntaggedVersion(unittest.TestCase):
             with self.subTest(declared=declared, release=release), \
                     mock.patch.object(upstream, "tag_commit", return_value="rel"), \
                     mock.patch.object(upstream, "ancestry", return_value=(3, 0)):
-                self.assertEqual(versions._passed_release(args, "repo", version, "pin"), expected)
+                self.assertEqual(versions.latest_passed_release(args, "repo", version, "pin"), expected)
 
     def test_no_tag_and_nothing_passed_stays_quiet(self):
         version = versions.VersionReport("9.0.5", None, None, None, False, None)
@@ -3746,10 +3746,10 @@ class APassedReleaseUnderAnUntaggedVersion(unittest.TestCase):
 class TestAncestry(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
-        self.saved = upstream._http_json
+        self.saved = upstream.http_json
 
     def tearDown(self):
-        upstream._http_json = self.saved
+        upstream.http_json = self.saved
         self.tmp.cleanup()
 
     def test_github_answers_both_directions_at_once(self):
@@ -3759,7 +3759,7 @@ class TestAncestry(unittest.TestCase):
             calls.append(url)
             return {"ahead_by": 3, "behind_by": 0}
 
-        upstream._http_json = answer
+        upstream.http_json = answer
         repo = upstream.parse_repo("https://github.com/o/n")
         self.assertEqual(
             upstream.ancestry(repo, "tag", "pin", self.tmp.name), (3, 0)
@@ -3771,7 +3771,7 @@ class TestAncestry(unittest.TestCase):
             forward = "from=tag&to=pin" in url
             return {"commits": [{}] * (0 if forward else 5)}
 
-        upstream._http_json = answer
+        upstream.http_json = answer
         repo = upstream.parse_repo("https://gitlab.com/o/n")
         self.assertEqual(
             upstream.ancestry(repo, "tag", "pin", self.tmp.name), (0, 5)
@@ -4205,7 +4205,7 @@ class TestCollectCitations(unittest.TestCase):
     def test_run_is_rendered_with_its_written_path(self):
         parts = [RefPart("mupen64plus-video-rice/upstream/src/Config.cpp", 38, 38, "38")]
         self.assertEqual(
-            proseedit._run_after_moves(parts, {0: (40, 40, None)}, "Config.cpp:38"),
+            proseedit.run_after_moves(parts, {0: (40, 40, None)}, "Config.cpp:38"),
             "Config.cpp:40",
         )
 
@@ -5160,15 +5160,15 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
                 mock.patch.object(profile_sync, "load_emulator_profiles", return_value={}), \
                 mock.patch("core.artifacts.write_if_changed") as written, \
                 contextlib.redirect_stderr(io.StringIO()):
-            profiling_run._WRITTEN.clear()
+            profiling_run.WRITTEN_PROFILES.clear()
             profile_sync._refresh_source_paths(self._args())
             self.assertFalse(built.called)
-            profiling_run._WRITTEN.add("x")
+            profiling_run.WRITTEN_PROFILES.add("x")
             profile_sync._refresh_source_paths(self._args(dry_run=True))
             self.assertFalse(built.called)
             profile_sync._refresh_source_paths(self._args())
             self.assertTrue(built.called and written.called)
-            profiling_run._WRITTEN.clear()
+            profiling_run.WRITTEN_PROFILES.clear()
 
 
     def test_the_record_reads_the_pins_just_written(self):
@@ -5177,14 +5177,14 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
         from unittest import mock
 
         from model import profiles as model_profiles
-        from model.profiles import _emulator_profiles_cache
+        from model.profiles import emulator_profiles_cache
         from sitegen import sources
 
         with tempfile.TemporaryDirectory() as tmp:
             profile = Path(tmp) / "p.yml"
             profile.write_text('emulator: P\nsource_commit: "old"\n', encoding="utf-8")
-            _emulator_profiles_cache.clear()
-            self.addCleanup(_emulator_profiles_cache.clear)
+            emulator_profiles_cache.clear()
+            self.addCleanup(emulator_profiles_cache.clear)
             model_profiles.load_emulator_profiles(tmp, skip_aliases=False)
             profile.write_text('emulator: P\nsource_commit: "new"\n', encoding="utf-8")
             with mock.patch.object(sources, "build_source_paths", return_value=({}, [])) as built, \
@@ -5192,8 +5192,8 @@ class AWriteRefreshesTheSourcePaths(unittest.TestCase):
                     mock.patch("core.artifacts.write_if_changed"), \
                     contextlib.redirect_stderr(io.StringIO()), \
                     contextlib.redirect_stdout(io.StringIO()):
-                profiling_run._WRITTEN.add("p")
-                self.addCleanup(profiling_run._WRITTEN.clear)
+                profiling_run.WRITTEN_PROFILES.add("p")
+                self.addCleanup(profiling_run.WRITTEN_PROFILES.clear)
                 profile_sync._refresh_source_paths(self._args(emulators_dir=tmp))
             self.assertEqual(built.call_args[0][0]["p"]["source_commit"], "new")
 
@@ -5901,7 +5901,7 @@ class ARecaleKeepsTheRepositoryWord(unittest.TestCase):
                 part = sourceref.RefPart(
                     profiling_citations.strip_repo_word(p.path, {"stella"}), p.start, p.end, p.raw)
                 result = anchoring.PartResult(part, "SHIFTED", None, 140, 150, [], "")
-                self.assertEqual(profiling_reports._rendered_part(result), expected)
+                self.assertEqual(profiling_reports.rendered_part(result), expected)
 
 
 class EachCitationNamesTheCodeThatAsks(unittest.TestCase):
@@ -6047,9 +6047,9 @@ class ARoleIsReadPerPart(unittest.TestCase):
         self.assertEqual(prose[0].parts[0].repo, "alek/x")
 
     def test_the_prose_grammar_keeps_the_role(self):
-        from model.sourceref import _prose_runs
+        from model.sourceref import prose_runs
 
-        runs = list(_prose_runs(
+        runs = list(prose_runs(
             "# ref: source src/a.cpp:1656-1685, 1709-1738, upstream b.c:5"
         ))
         roles = [(p.path, p.role) for run in runs for p in run[3]]
@@ -6060,7 +6060,7 @@ class ARoleIsReadPerPart(unittest.TestCase):
     def test_an_abbreviated_location_reads_in_the_file_named_last(self):
         """devilutionx writes `Source/engine/assets.cpp:` then `(:507)` for
         each loader, and its pin moved under five uncollected numbers."""
-        from model.sourceref import _prose_runs
+        from model.sourceref import prose_runs
 
         text = (
             "Load order is defined in Source/engine/assets.cpp:\n"
@@ -6071,7 +6071,7 @@ class ARoleIsReadPerPart(unittest.TestCase):
             ":44,65) and lightspark's (tools/errorgen:20).\n"
         )
         cited = [
-            (p.path, p.start, p.end) for run in _prose_runs(text) for p in run[3]
+            (p.path, p.start, p.end) for run in prose_runs(text) for p in run[3]
         ]
         self.assertEqual(cited, [
             ("Source/engine/assets.cpp", 507, 507),
@@ -6086,9 +6086,9 @@ class ARoleIsReadPerPart(unittest.TestCase):
         ])
 
     def test_an_abbreviated_location_needs_a_file_before_it(self):
-        from model.sourceref import _prose_runs
+        from model.sourceref import prose_runs
 
-        self.assertEqual(list(_prose_runs("read at boot (:507), devilutionx.mpq")), [])
+        self.assertEqual(list(prose_runs("read at boot (:507), devilutionx.mpq")), [])
 
 
 class AnOnlinePassSaysWhereItIs(unittest.TestCase):
@@ -6134,7 +6134,7 @@ class AnOnlinePassSaysWhereItIs(unittest.TestCase):
         err = io.StringIO()
         with mock.patch.object(triage.time, "monotonic", lambda: next(clock)), \
                 contextlib.redirect_stderr(err):
-            progress = triage._Progress(9, "read", quiet=False)
+            progress = triage.Progress(9, "read", quiet=False)
             for done, name in enumerate(("a", "b", "c")):
                 progress.step(done, name)
         self.assertEqual(err.getvalue(), "read: 1 of 9, at b\n")
@@ -6177,7 +6177,7 @@ class TheTriageCountsWhatBlocksThePin(unittest.TestCase):
                 mock.patch.object(upstream, "commits_touching",
                                   return_value=0), \
                 contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
-            triage._print_triage(args, selected, reports)
+            triage.print_triage(args, selected, reports)
         lines = out.getvalue().splitlines()
         self.assertIn("profile", lines[0])
         self.assertIn("stuck", lines[1])
@@ -6200,7 +6200,7 @@ class TheTriageCountsWhatBlocksThePin(unittest.TestCase):
                 mock.patch.object(upstream, "commits_touching",
                                   return_value=0), \
                 contextlib.redirect_stdout(out), contextlib.redirect_stderr(io.StringIO()):
-            triage._print_triage(args, selected, reports)
+            triage.print_triage(args, selected, reports)
         lines = out.getvalue().splitlines()
         self.assertIn("gone", lines[1])
         self.assertEqual(lines[-1], "2 profiles, 1 with something to review")

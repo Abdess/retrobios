@@ -32,12 +32,12 @@ class _Member(io.RawIOBase):
         super().close()
 
 
-def _opener(source: Path, member: str | None) -> Callable[[], Readable]:
+def member_opener(source: Path, member: str | None) -> Callable[[], Readable]:
     if member is None:
         return lambda: source.open("rb")
     return lambda: _Member(source, member)
 
 
-def _member_sha1(path: Path, name: str) -> str:
+def member_sha1(path: Path, name: str) -> str:
     with _Member(path, name) as stream:
         return stream_hashes(stream, frozenset({"sha1"}))["sha1"]

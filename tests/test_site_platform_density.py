@@ -120,10 +120,10 @@ class ARowPerFile(unittest.TestCase):
         files = [{"name": "a.bin", "status": "ok"}, {"name": "b.bin", "status": "ok"}]
         system = "nintendo-gamecube"
         config = {(system, "a.bin"): [{"destination": "a.bin"}], (system, "b.bin"): [{}]}
-        text = "\n".join(platformfiles._render_platform_systems({system: files}, config, {}))
+        text = "\n".join(platformfiles.render_platform_systems({system: files}, config, {}))
         self.assertIn('<div class="rb-files">', text)
         config[(system, "b.bin")] = [{"destination": "sub/b.bin"}]
-        text = "\n".join(platformfiles._render_platform_systems({system: files}, config, {}))
+        text = "\n".join(platformfiles.render_platform_systems({system: files}, config, {}))
         self.assertIn('<div class="rb-files rb-files-path">', text)
 
     def test_status_words(self):
@@ -173,7 +173,7 @@ class ReferencesNameTheirRoleOnce(unittest.TestCase):
             self.assertIn(f"**{word}**", platformfiles.ROLE_LEGEND)
 
     def test_other_pages_keep_the_role_after_each_reference(self):
-        text = sources._source_ref_markdown(self.PROFILE, self.REFS)
+        text = sources.source_ref_markdown(self.PROFILE, self.REFS)
         self.assertEqual(text.count("(emulator code, libretro port)"), 2)
         self.assertIn("`src/c.c:4` (upstream emulator)", text)
 
