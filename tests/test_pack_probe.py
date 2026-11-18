@@ -25,6 +25,7 @@ from pathlib import Path
 
 from model import measurements as mr
 import pack_probe as pp
+from model import profiles as model_profiles
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -355,7 +356,7 @@ class RealLayouts(unittest.TestCase):
         self.assertEqual(set(lay.files), members)
         self.assertEqual(lay.files["scph5501.bin"], "scph5501.bin")
         self.assertEqual(lay.source["pack"]["members"], len(members))
-        swan = pp.load_emulator_profiles(str(REPO_ROOT / "emulators"))["swanstation"]
+        swan = model_profiles.load_emulator_profiles(str(REPO_ROOT / "emulators"))["swanstation"]
         self.assertIn("scph5501.bin", pp.initial_stage(lay, swan, []))
 
     def test_installer_path(self) -> None:

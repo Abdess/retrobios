@@ -41,15 +41,24 @@ SIBLING_IMPORTS: dict[str, frozenset[str]] = {
 # Top-level modules other modules of scripts/ import: library code that a
 # later wave moves into a package.
 NOT_YET_PACKAGED = frozenset({
-    "autorun", "build_port", "campaign",
-    "check_buildbot_system", "check_release_assets", "commit_rules", "core_probe",
+    "autorun", "build_port",
+    "check_buildbot_system", "check_release_assets", "commit_rules",
     "generate_event_schema", "pin_installer", "pr_checks",
     "release_record", "romfolders",
 })
 
+# Top-level files that stay whole at their path although packages import them:
+# the file is the unit. core_probe.py runs alone in its sandbox, where nothing
+# beside the standard library exists, and its records name and hash this file.
+SELF_CONTAINED = frozenset({"core_probe"})
+
 # Imports from a package module to a top-level module, left for the wave that
 # packages the top-level side.
 PENDING_TOP_LEVEL_IMPORTS = frozenset({
+    # autorun, the job runner, keeps its git helpers, which raise its own error.
+    ("probes.campaign", "autorun"),
+    ("probes.gate", "autorun"),
+    ("probes.host", "autorun"),
     ("sitegen.build", "release_record"),
     ("sitegen.config", "release_record"),
     ("sitegen.decorate", "release_record"),
@@ -135,7 +144,7 @@ def layer_of(name: str) -> int:
     top = name.split(".")[0]
     if "." in name or top in PACKAGE_LAYERS:
         return PACKAGE_LAYERS[top]
-    return LIBRARY_LAYER if name in NOT_YET_PACKAGED else COMMAND_LAYER
+    return LIBRARY_LAYER if name in NOT_YET_PACKAGED | SELF_CONTAINED else COMMAND_LAYER
 
 
 def is_package_module(name: str) -> bool:
@@ -218,7 +227,7 @@ class ImportLayers(unittest.TestCase):
 
     def test_package_modules_import_no_top_level_module(self):
         found = {(src, dst) for src, dst in self.graph.edges()
-                 if is_package_module(src) and not is_package_module(dst)}
+                 if is_package_module(src) and not is_package_module(dst) and dst not in SELF_CONTAINED}
         self.assertEqual(sorted(found - PENDING_TOP_LEVEL_IMPORTS), [])
         self.assertEqual(sorted(PENDING_TOP_LEVEL_IMPORTS - found), [],
                          "a pending import no longer exists: remove it from the list")
@@ -234,8 +243,25 @@ class ImportLayers(unittest.TestCase):
                       if i.split(".")[0] != "core"]
         self.assertEqual(found, [])
 
+    def test_self_contained_files_load_the_standard_library_only(self):
+        """What a self-contained file imports when it loads is the standard
+        library: in its sandbox, the file is all of the repository there is."""
+        stdlib = set(sys.stdlib_module_names) | {"__future__"}
+        found = []
+        for name in sorted(SELF_CONTAINED):
+            tree = ast.parse(self.graph.modules[name].read_text(encoding="utf-8"))
+            for node in tree.body:
+                if isinstance(node, ast.Import):
+                    found += [f"{name} imports {a.name}" for a in node.names
+                              if a.name.split(".")[0] not in stdlib]
+                elif isinstance(node, ast.ImportFrom) and (node.level or (node.module or "").split(".")[0]
+                                                           not in stdlib):
+                    found.append(f"{name} imports from {node.module}")
+        self.assertEqual(found, [])
+
     def test_not_yet_packaged_is_the_exact_set_of_top_level_libraries(self):
-        imported = {dst for _src, dst in self.graph.edges() if not is_package_module(dst)}
+        imported = {dst for _src, dst in self.graph.edges()
+                    if not is_package_module(dst) and dst not in SELF_CONTAINED}
         self.assertEqual(sorted(imported - NOT_YET_PACKAGED), [],
                          "a top-level module became a library: package it or list it")
         self.assertEqual(sorted(NOT_YET_PACKAGED - imported), [],

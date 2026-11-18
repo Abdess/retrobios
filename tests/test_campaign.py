@@ -28,8 +28,19 @@ from types import MappingProxyType
 
 import yaml
 
+import autorun
 import campaign
-from probes import profileedit as campaign_profiles
+import core_probe
+from core import hostguard
+from probes import campaign as probes_campaign
+from probes import content as probes_content
+from probes import cores
+from probes import entries as probes_entries
+from probes import host as probes_host
+from probes import reports
+from probes import state
+from core import statefile
+from probes import profileedit
 from probes import rules
 from model import measurements as mr
 
@@ -296,14 +307,14 @@ class RuleTable(unittest.TestCase):
         record = {"variants": [{"repetitions": [
             rep(["black"] * 4 + ["logo"] * 3 + ["flash"] + ["title"] * 5),
             rep(["black"] * 5 + ["logo"] * 3 + ["title"] * 3)]}]}
-        self.assertEqual(campaign.reference_candidates(record),
+        self.assertEqual(probes_campaign.reference_candidates(record),
                          [{"sha1": "logo", "first_frame": 40, "samples": 3},
                           {"sha1": "title", "first_frame": 80, "samples": 5}])
 
 
 class ProfileEditor(unittest.TestCase):
     def test_replace_insert_and_keep_the_rest(self) -> None:
-        out = campaign_profiles.set_fields(PROFILE, 0, {
+        out = profileedit.set_fields(PROFILE, 0, {
             "required": False, "hle_fallback": True,
             "aliases": ["Bios.bin", "BIOS.BIN"], "evidence": {"hle_fallback": ["2026-10-27-cccccccccccc"]}})
         parsed = yaml.safe_load(out)
@@ -317,17 +328,17 @@ class ProfileEditor(unittest.TestCase):
         self.assertEqual(lines[lines.index('    evidence:') + 1], '      hle_fallback: ["2026-10-27-cccccccccccc"]')
 
     def test_the_last_entry_and_a_no_op(self) -> None:
-        out = campaign_profiles.set_fields(PROFILE, 1, {"path": "sub/other.bin"})
+        out = profileedit.set_fields(PROFILE, 1, {"path": "sub/other.bin"})
         self.assertEqual(yaml.safe_load(out)["files"][1]["path"], "sub/other.bin")
-        self.assertEqual(campaign_profiles.set_fields(PROFILE, 1, {"required": False}), PROFILE)
+        self.assertEqual(profileedit.set_fields(PROFILE, 1, {"required": False}), PROFILE)
 
     def test_refusals(self) -> None:
-        with self.assertRaises(campaign_profiles.ProfileEditError):
-            campaign_profiles.set_fields(PROFILE, 2, {"required": False})
-        with self.assertRaises(campaign_profiles.ProfileEditError):
-            campaign_profiles.set_fields("emulator: X\n", 0, {"required": False})
-        with self.assertRaises(campaign_profiles.ProfileEditError):
-            campaign_profiles.set_fields(PROFILE, 0, {"name": "x.bin"})
+        with self.assertRaises(profileedit.ProfileEditError):
+            profileedit.set_fields(PROFILE, 2, {"required": False})
+        with self.assertRaises(profileedit.ProfileEditError):
+            profileedit.set_fields("emulator: X\n", 0, {"required": False})
+        with self.assertRaises(profileedit.ProfileEditError):
+            profileedit.set_fields(PROFILE, 0, {"name": "x.bin"})
 
     def test_every_profile_reads_as_its_entries(self) -> None:
         # The text layout the editor reads holds in every profile it may edit.
@@ -337,10 +348,10 @@ class ProfileEditor(unittest.TestCase):
             if not entries or "\nfiles:\n" not in text:
                 continue
             with self.subTest(profile=path.name):
-                self.assertEqual(len(campaign_profiles.item_spans(text.splitlines())), len(entries))
+                self.assertEqual(len(profileedit.item_spans(text.splitlines())), len(entries))
 
 
-class FakeHost(campaign.Host):
+class FakeHost(probes_host.Host):
     def __init__(self, loads: list[float] | None = None, free: float = 500.0) -> None:
         super().__init__()
         self.loads = list(loads or [0.0])
@@ -408,7 +419,7 @@ class Workspace(unittest.TestCase):
                     {"sha1": screen(1), "stage": "bios", "shows": "the fake logo"},
                     {"sha1": screen(20), "stage": "game", "shows": "the fake title"}]}}}]}),
             encoding="utf-8")
-        self.paths = campaign.Paths(root=self.root, home=self.tmp / "home",
+        self.paths = probes_host.Paths(root=self.root, home=self.tmp / "home",
                                     content=self.tmp / "content", db=self.root / "database.json",
                                     content_file=self.content_file, oracle=self.oracle)
 
@@ -423,25 +434,25 @@ class Workspace(unittest.TestCase):
             {"name": "game.bin", "size": len(payload), "sha1": hashlib.sha1(payload).hexdigest()}]}))
         return folder
 
-    def make(self, host: campaign.Host | None = None, **settings: object) -> campaign.Campaign:
+    def make(self, host: probes_host.Host | None = None, **settings: object) -> probes_campaign.Campaign:
         values = {"delays": (1, 2), "echo": False, **settings}
-        return campaign.Campaign(self.paths, campaign.Settings(**values), host or FakeHost(),
+        return probes_campaign.Campaign(self.paths, probes_host.Settings(**values), host or FakeHost(),
                                  lock_path=self.tmp / "auto.lock")
 
 
 class StateAndResume(Workspace):
     def test_should_run(self) -> None:
-        self.assertTrue(campaign.should_run(None, "a", "d"))
+        self.assertTrue(state.should_run(None, "a", "d"))
         done = {"status": "done", "core_sha256": "a", "profile_digest": "d",
                 "record_version": mr.RECORD_VERSION, "oracle_sha256": ""}
-        self.assertFalse(campaign.should_run(done, "a", "d"))
+        self.assertFalse(state.should_run(done, "a", "d"))
         # A record from before the verdicts, or judged against another oracle, runs again.
-        self.assertTrue(campaign.should_run({**done, "record_version": 3}, "a", "d"))
-        self.assertTrue(campaign.should_run(done, "a", "d", "f" * 64))
-        self.assertTrue(campaign.should_run(done, "b", "d"))
-        self.assertTrue(campaign.should_run(done, "a", "e"))
-        self.assertTrue(campaign.should_run({**done, "status": "pending"}, "a", "d"))
-        self.assertFalse(campaign.should_run({**done, "status": "failed"}, "a", "d"))
+        self.assertTrue(state.should_run({**done, "record_version": 3}, "a", "d"))
+        self.assertTrue(state.should_run(done, "a", "d", "f" * 64))
+        self.assertTrue(state.should_run(done, "b", "d"))
+        self.assertTrue(state.should_run(done, "a", "e"))
+        self.assertTrue(state.should_run({**done, "status": "pending"}, "a", "d"))
+        self.assertFalse(state.should_run({**done, "status": "failed"}, "a", "d"))
 
     def test_a_record_judged_again_is_read_in_its_place(self) -> None:
         lines = self.root / mr.records_path("fake")
@@ -467,16 +478,16 @@ class StateAndResume(Workspace):
 
     def test_evidence_does_not_change_the_digest(self) -> None:
         profile = yaml.safe_load(PROFILE)
-        before = campaign.profile_digest(profile)
+        before = probes_entries.profile_digest(profile)
         profile["files"][0]["evidence"] = {"required": ["2026-10-27-dddddddddddd"]}
-        self.assertEqual(campaign.profile_digest(profile), before)
+        self.assertEqual(probes_entries.profile_digest(profile), before)
         profile["files"][0]["required"] = False
-        self.assertNotEqual(campaign.profile_digest(profile), before)
+        self.assertNotEqual(probes_entries.profile_digest(profile), before)
 
     def test_state_survives_a_reload(self) -> None:
         c = self.make()
         c.pending("fake", "fake/fake-system/x/files", "content: romfetch not found")
-        campaign.save_state(self.paths.state, c.state)
+        state.save_state(self.paths.state, c.state)
         again = self.make()
         self.assertEqual(again.state["checks"]["fake"]["fake/fake-system/x/files"]["status"], "pending")
 
@@ -498,32 +509,32 @@ class Guards(Workspace):
         host = FakeHost(loads=[5.0])
         c = self.make(host, max_load_wait=120)
         c.deadline = 10_000
-        with self.assertRaisesRegex(campaign.Pause, "busy host"):
+        with self.assertRaisesRegex(probes_campaign.Pause, "busy host"):
             c.guard()
 
     def test_full_disk_pauses(self) -> None:
         c = self.make(FakeHost(free=10.0), min_free_gb=30)
         c.deadline = 10_000
-        with self.assertRaisesRegex(campaign.Pause, "disk"):
+        with self.assertRaisesRegex(probes_campaign.Pause, "disk"):
             c.guard()
 
     def test_budget_pauses(self) -> None:
         c = self.make()
         c.deadline = 0
-        with self.assertRaisesRegex(campaign.Pause, "budget"):
+        with self.assertRaisesRegex(probes_campaign.Pause, "budget"):
             c.guard()
 
     def test_the_lock_is_skipped_under_autorun(self) -> None:
         lock = self.tmp / "held.lock"
-        with campaign.autorun.global_lock(lock):
-            with self.assertRaises(campaign.autorun.LockBusy), campaign.host_lock(lock):
+        with hostguard.global_lock(lock):
+            with self.assertRaises(hostguard.LockBusy), probes_host.host_lock(lock):
                 pass
-            os.environ[campaign.LOCK_HELD_ENV] = "1"
+            os.environ[probes_host.LOCK_HELD_ENV] = "1"
             try:
-                with campaign.host_lock(lock):
+                with probes_host.host_lock(lock):
                     pass
             finally:
-                del os.environ[campaign.LOCK_HELD_ENV]
+                del os.environ[probes_host.LOCK_HELD_ENV]
 
 
 class ChildEnvironment(unittest.TestCase):
@@ -531,7 +542,7 @@ class ChildEnvironment(unittest.TestCase):
         host = {"GITHUB_TOKEN": "t", "GH_TOKEN": "t", "ROMSTATION_USER": "u", "ROMSTATION_PASS": "p",
                 "ROMFETCH_CONTENT_DIR": "/c", "SSH_AUTH_SOCK": "/s", "PATH": "/usr/bin"}
         with unittest.mock.patch.dict(os.environ, host):
-            probe, fetch = campaign.child_env(), campaign.child_env(romfetch=True)
+            probe, fetch = probes_host.child_env(), probes_host.child_env(romfetch=True)
         for env in (probe, fetch):
             self.assertFalse({"GITHUB_TOKEN", "GH_TOKEN", "ROMSTATION_USER", "ROMSTATION_PASS",
                               "SSH_AUTH_SOCK"} & set(env))
@@ -545,9 +556,9 @@ class ChildEnvironment(unittest.TestCase):
         host.run = lambda argv, **kw: (seen.append(kw.get("env")),
                                        subprocess.CompletedProcess([], 0, '{"id": "x"}', ""))[1]
         with tempfile.TemporaryDirectory(dir=TMP) as tmp:
-            paths = campaign.Paths(root=Path(tmp), home=Path(tmp) / "h", content=Path(tmp) / "c",
-                                   db=Path(tmp) / "db.json", content_file=campaign.CONTENT_FILE)
-            c = campaign.Campaign(paths, campaign.Settings(echo=False), host, lock_path=Path(tmp) / "l")
+            paths = probes_host.Paths(root=Path(tmp), home=Path(tmp) / "h", content=Path(tmp) / "c",
+                                   db=Path(tmp) / "db.json", content_file=probes_host.CONTENT_FILE)
+            c = probes_campaign.Campaign(paths, probes_host.Settings(echo=False), host, lock_path=Path(tmp) / "l")
             c.deadline = 10_000
             with unittest.mock.patch.dict(os.environ, {"GITHUB_TOKEN": "t"}):
                 c.probe(["run"], "x")
@@ -561,7 +572,7 @@ class FailClosed(Workspace):
         host = FakeHost()
         host.results = [subprocess.CompletedProcess([], 0, "{}", "")]
         c = self.make(host)
-        with unittest.mock.patch.object(campaign.core_probe.shutil, "which", return_value=None):
+        with unittest.mock.patch.object(core_probe.shutil, "which", return_value=None):
             current = c.run(set(), None)
         self.assertEqual(current.result, "refused")
         self.assertIn("bwrap not found", current.detail)
@@ -571,24 +582,24 @@ class FailClosed(Workspace):
     def test_the_override_lets_it_run(self) -> None:
         c = self.make(allow_unsandboxed=True)
         c.unit_cores = lambda *a, **k: []
-        with unittest.mock.patch.object(campaign.core_probe.shutil, "which", return_value=None):
+        with unittest.mock.patch.object(core_probe.shutil, "which", return_value=None):
             self.assertEqual(c.run(set(), None).result, "complete")
 
     def test_every_probe_requires_the_sandbox(self) -> None:
-        core = campaign.Core("fake", self.tmp / "x.so", "a" * 64)
+        core = cores.Core("fake", self.tmp / "x.so", "a" * 64)
         self.assertIn("--require-sandbox", self.make().probe_args("run", core, "fake", "s", None, None))
         self.assertNotIn("--require-sandbox", self.make(allow_unsandboxed=True).probe_args(
             "run", core, "fake", "s", None, None))
 
     def test_a_build_without_a_sandbox_is_refused(self) -> None:
         c = self.make()
-        src = c.paths.home / "src" / campaign.slug("https://example.invalid/x")
+        src = c.paths.home / "src" / probes_host.slug("https://example.invalid/x")
         (src / ".git").mkdir(parents=True)
         (src / "Makefile").write_text("all:\n")
         host = c.host
         host.results = [subprocess.CompletedProcess([], 0, "", "")]
-        with unittest.mock.patch.object(campaign.core_probe.shutil, "which", return_value=None), \
-                self.assertRaisesRegex(campaign.Unavailable, "refused: no sandbox"):
+        with unittest.mock.patch.object(core_probe.shutil, "which", return_value=None), \
+                self.assertRaisesRegex(probes_host.Unavailable, "refused: no sandbox"):
             c.cores.compile("https://example.invalid/x", "a" * 40, self.tmp / "out")
         self.assertFalse(any(call[0] == "make" for call in host.calls))
 
@@ -646,24 +657,24 @@ class BuildIsolation(unittest.TestCase):
 
     def test_the_export_holds_the_tree_and_its_submodule_and_no_git(self) -> None:
         tree = self.tmp / "tree"
-        campaign.export_commit(self.mirrors.__getitem__, self.MAIN, self.commit, tree)
+        cores.export_commit(self.mirrors.__getitem__, self.MAIN, self.commit, tree)
         self.assertEqual((tree / "lib" / "sub.c").read_text(), "int x;\n")
         self.assertTrue((tree / "Makefile").is_file())
         self.assertEqual([p for p in tree.rglob(".git")], [])
 
     def test_a_build_cannot_reach_the_mirror(self) -> None:
         tree = self.tmp / "tree"
-        prefix, isolation = campaign.core_probe.sandbox_argv([tree])
-        if isolation != campaign.core_probe.SANDBOX:
+        prefix, isolation = core_probe.sandbox_argv([tree])
+        if isolation != core_probe.SANDBOX:
             self.skipTest("no working bwrap on this host")
-        campaign.export_commit(self.mirrors.__getitem__, self.MAIN, self.commit, tree)
+        cores.export_commit(self.mirrors.__getitem__, self.MAIN, self.commit, tree)
         proc = subprocess.run(prefix + ["make"], cwd=tree, capture_output=True, text=True,
-                              check=False, env=campaign.child_env())
+                              check=False, env=probes_host.child_env())
         self.assertEqual(proc.returncode, 0, proc.stderr)
         mirror = self.mirrors[self.MAIN]
         self.assertFalse((mirror / "hooks" / "post-checkout").exists())
         self.assertEqual((mirror / "config").read_text(), self.config)
-        campaign.export_commit(self.mirrors.__getitem__, self.MAIN, self.commit, self.tmp / "again")
+        cores.export_commit(self.mirrors.__getitem__, self.MAIN, self.commit, self.tmp / "again")
         self.assertFalse(self.pwned.exists())
 
     def test_host_git_runs_nothing_a_repository_config_names(self) -> None:
@@ -676,31 +687,31 @@ class BuildIsolation(unittest.TestCase):
                          f'[filter "x"]\n\tsmudge = touch {self.pwned}\n')
         (mirror / "info").mkdir(exist_ok=True)
         (mirror / "info" / "attributes").write_text("* filter=x\n")
-        campaign.export_commit(self.mirrors.__getitem__, self.MAIN, self.commit, self.tmp / "tree")
-        campaign.git_out("-C", str(mirror), "update-ref", "refs/x", self.commit)
+        cores.export_commit(self.mirrors.__getitem__, self.MAIN, self.commit, self.tmp / "tree")
+        cores.git_out("-C", str(mirror), "update-ref", "refs/x", self.commit)
         self.assertFalse(self.pwned.exists())
         # Plain git on the same mirror runs the planted hook: the test plants a live one.
         subprocess.run(["git", "-C", str(mirror), "update-ref", "refs/y", self.commit], check=True)
         self.assertTrue(self.pwned.exists())
 
     def test_only_https_mirrors(self) -> None:
-        c = campaign.Campaign(campaign.Paths(root=self.tmp, home=self.tmp / "home", content=self.tmp,
-                                             db=self.tmp / "db.json", content_file=campaign.CONTENT_FILE),
-                              campaign.Settings(echo=False), FakeHost(), lock_path=self.tmp / "l")
+        c = probes_campaign.Campaign(probes_host.Paths(root=self.tmp, home=self.tmp / "home", content=self.tmp,
+                                             db=self.tmp / "db.json", content_file=probes_host.CONTENT_FILE),
+                              probes_host.Settings(echo=False), FakeHost(), lock_path=self.tmp / "l")
         for url in ("file:///etc", "/home/x/repo", "ext::sh -c touch", "ssh://h/r", "git@h:r"):
-            with self.subTest(url=url), self.assertRaises(campaign.Unavailable):
+            with self.subTest(url=url), self.assertRaises(probes_host.Unavailable):
                 c.cores.mirror(url)
-        self.assertEqual(campaign.submodule_url(self.MAIN, "../sub.git"), self.SUB)
-        self.assertEqual(campaign.git_env()["GIT_ALLOW_PROTOCOL"], "https")
+        self.assertEqual(cores.submodule_url(self.MAIN, "../sub.git"), self.SUB)
+        self.assertEqual(cores.git_env()["GIT_ALLOW_PROTOCOL"], "https")
 
     def test_a_whole_build_wipes_old_clones_and_copies_a_regular_file(self) -> None:
-        if campaign.core_probe.sandbox_argv([])[1] != campaign.core_probe.SANDBOX:
+        if core_probe.sandbox_argv([])[1] != core_probe.SANDBOX:
             self.skipTest("no working bwrap on this host")
         home = self.tmp / "home"
         (home / "src" / "old" / ".git").mkdir(parents=True)
-        c = campaign.Campaign(campaign.Paths(root=self.tmp, home=home, content=self.tmp,
-                                             db=self.tmp / "db.json", content_file=campaign.CONTENT_FILE),
-                              campaign.Settings(echo=False), campaign.Host(), lock_path=self.tmp / "l")
+        c = probes_campaign.Campaign(probes_host.Paths(root=self.tmp, home=home, content=self.tmp,
+                                             db=self.tmp / "db.json", content_file=probes_host.CONTENT_FILE),
+                              probes_host.Settings(echo=False), probes_host.Host(), lock_path=self.tmp / "l")
         c.cores.mirror = self.mirrors.__getitem__
         so, command = c.cores.compile(self.MAIN, self.commit, self.tmp / "out")
         self.assertEqual(so, self.tmp / "out" / "fake_libretro.so")
@@ -719,17 +730,17 @@ class BuiltCore(unittest.TestCase):
 
     def test_a_link_is_never_taken_for_the_core(self) -> None:
         (self.tree / "a_libretro.so").symlink_to(self.secret)
-        with self.assertRaises(campaign.Unavailable):
-            campaign.built_core(self.tree)
+        with self.assertRaises(probes_host.Unavailable):
+            cores.built_core(self.tree)
         (self.tree / "sub").mkdir()
         (self.tree / "sub" / "b_libretro.so").write_bytes(b"\x7fELF")
-        self.assertEqual(campaign.built_core(self.tree), self.tree / "sub" / "b_libretro.so")
+        self.assertEqual(cores.built_core(self.tree), self.tree / "sub" / "b_libretro.so")
 
     def test_copy_refuses_a_link(self) -> None:
         link = self.tree / "c_libretro.so"
         link.symlink_to(self.secret)
         with self.assertRaises(OSError):
-            campaign.copy_regular(link, self.tree / "out.so")
+            cores.copy_regular(link, self.tree / "out.so")
         self.assertFalse((self.tree / "out.so").exists())
 
 
@@ -737,7 +748,7 @@ class ProbeRuns(Workspace):
     def completed(self, code: int, stdout: str = "", stderr: str = "") -> subprocess.CompletedProcess:
         return subprocess.CompletedProcess([], code, stdout, stderr)
 
-    def probe(self, *results: object) -> tuple[campaign.ProbeResult, FakeHost]:
+    def probe(self, *results: object) -> tuple[probes_campaign.ProbeResult, FakeHost]:
         host = FakeHost()
         host.results = list(results)
         c = self.make(host)
@@ -764,13 +775,13 @@ class ProbeRuns(Workspace):
         self.assertEqual((result.status, result.record, len(host.calls)), ("done", record, 2))
 
     def test_refusal_on_a_busy_host_pauses(self) -> None:
-        with self.assertRaisesRegex(campaign.Pause, "busy host"):
+        with self.assertRaisesRegex(probes_campaign.Pause, "busy host"):
             self.probe(self.completed(3, stderr="load average"))
 
 
 class Content(Workspace):
-    def content(self, name: str = "Fake Game (World)", pinned: bool = False) -> campaign.Content:
-        return campaign.Content("fake-system", "fakesys", name, "no-intro", "r", None, "", 12, 2,
+    def content(self, name: str = "Fake Game (World)", pinned: bool = False) -> probes_content.Content:
+        return probes_content.Content("fake-system", "fakesys", name, "no-intro", "r", None, "", 12, 2,
                                 pinned, None)
 
     def test_local_content_is_verified_by_its_identity(self) -> None:
@@ -778,12 +789,12 @@ class Content(Workspace):
         c = self.make()
         self.assertEqual(c.store.get(self.content()), self.game)
         (self.game / "game.bin").write_bytes(b"EDIT")
-        with self.assertRaisesRegex(campaign.Unavailable, "does not match"):
+        with self.assertRaisesRegex(probes_host.Unavailable, "does not match"):
             self.make().store.get(self.content())
 
     def test_without_romfetch_the_check_waits_for_content(self) -> None:
         c = self.make(romfetch=str(self.tmp / "absent-romfetch"))
-        with self.assertRaisesRegex(campaign.Unavailable, "romfetch not found"):
+        with self.assertRaisesRegex(probes_host.Unavailable, "romfetch not found"):
             c.store.get(self.content())
 
     def test_romfetch_is_retried_on_a_source_error(self) -> None:
@@ -813,7 +824,7 @@ class Content(Workspace):
         host.results = [subprocess.CompletedProcess(
             [], 1, json.dumps({"error": {"code": "no_entry", "message": "m", "hint": "h"}}), "")]
         c = self.make(host, romfetch=str(fetcher))
-        with self.assertRaisesRegex(campaign.Unavailable, r"exit 1 \(no_entry\)"):
+        with self.assertRaisesRegex(probes_host.Unavailable, r"exit 1 \(no_entry\)"):
             c.store.get(self.content())
         self.assertEqual(len(host.calls), 1)
 
@@ -854,9 +865,9 @@ class Content(Workspace):
 
     def test_load_file(self) -> None:
         self.put_game()
-        self.assertEqual(campaign.load_file(self.game, ""), self.game / "game.bin")
-        with self.assertRaises(campaign.Unavailable):
-            campaign.load_file(self.game, "cue")
+        self.assertEqual(probes_content.load_file(self.game, ""), self.game / "game.bin")
+        with self.assertRaises(probes_host.Unavailable):
+            probes_content.load_file(self.game, "cue")
 
 
 class Findings(Workspace):
@@ -865,10 +876,10 @@ class Findings(Workspace):
     def setUp(self) -> None:
         super().setUp()
         self.c = self.make()
-        self.c.current = campaign.Pass(started=campaign.now_iso())
-        self.content = campaign.Content("fake-system", "fakesys", "Fake Game (World)", "no-intro",
+        self.c.current = probes_campaign.Pass(started=statefile.now_iso())
+        self.content = probes_content.Content("fake-system", "fakesys", "Fake Game (World)", "no-intro",
                                         "r", None, "", 12, 2, False, None)
-        self.core = campaign.Core("fake", self.tmp / "fake_libretro.so", "a" * 64)
+        self.core = cores.Core("fake", self.tmp / "fake_libretro.so", "a" * 64)
         self.profile = self.root / "emulators" / "fake.yml"
 
     def lines(self) -> list[dict]:
@@ -950,8 +961,8 @@ class Findings(Workspace):
         self.c.settle("fake", self.content, self.core, 0, self.entry(), [self.contradicted()])
         key = self.lines()[-1]["key"]
         with self.assertRaises(ValueError):
-            campaign.review_finding(self.root, key, "applied", " ")
-        line = campaign.review_finding(self.root, key, "applied", "the core logs the md5 (x.c:1)",
+            reports.review_finding(self.root, key, "applied", " ")
+        line = reports.review_finding(self.root, key, "applied", "the core logs the md5 (x.c:1)",
                                        {"on_mismatch": "warn"})
         self.assertEqual((line["status"], line["reason"]), ("applied", "the core logs the md5 (x.c:1)"))
         entry = self.entry()
@@ -959,9 +970,9 @@ class Findings(Workspace):
         self.assertEqual(entry["evidence"], {"validation": [self.RID]})
         text = self.profile.read_text()
         self.assertLess(text.index("validation: [size]"), text.index("on_mismatch"))
-        self.assertEqual(campaign.open_findings(self.root), [])
+        self.assertEqual(reports.open_findings(self.root), [])
         with self.assertRaises(ValueError):
-            campaign.review_finding(self.root, key, "rejected", "again")
+            reports.review_finding(self.root, key, "rejected", "again")
         try:
             from jsonschema import Draft202012Validator
         except ImportError:
@@ -975,9 +986,9 @@ class Findings(Workspace):
         self.c.settle("fake", self.content, self.core, 0, self.entry(), [verdict])
         key = self.lines()[-1]["key"]
         with self.assertRaises(ValueError):
-            campaign.review_finding(self.root, key, "rejected", "kept", {"required": False})
+            reports.review_finding(self.root, key, "rejected", "kept", {"required": False})
         out = io.StringIO()
-        with contextlib.redirect_stdout(out), unittest.mock.patch.object(campaign.Paths, "default",
+        with contextlib.redirect_stdout(out), unittest.mock.patch.object(probes_host.Paths, "default",
                                                                 return_value=self.paths):
             self.assertEqual(campaign.main(["review", key, "--status", "rejected",
                                             "--reason", "the md5 is checked (x.c:2)"]), 0)
@@ -997,7 +1008,7 @@ class Findings(Workspace):
             ("chore: add campaign measurements", ["measurements/fake.jsonl", "measurements/findings.jsonl"]),
             ("chore: apply tested fields to fake", ["emulators/fake.yml"])])
         for subject, _ in plan:
-            self.assertEqual(campaign.autorun.check_subject(subject), [], subject)
+            self.assertEqual(autorun.check_subject(subject), [], subject)
         # A file someone had changed before the pass is left to them.
         self.assertEqual(self.c.plan_commits({"emulators/fake.yml"})[1:], [])
         out = io.StringIO()
@@ -1013,7 +1024,7 @@ class ContentFile(Workspace):
             "romfetch": "fakesys", "content": [{"name": "Other Game (Japan)", "catalog": "redump",
                                                 "reason": "r"}]}}}), encoding="utf-8")
         out = io.StringIO()
-        with unittest.mock.patch.object(campaign.Paths, "default", return_value=self.paths), \
+        with unittest.mock.patch.object(probes_host.Paths, "default", return_value=self.paths), \
                 contextlib.redirect_stdout(out):
             self.assertEqual(campaign.main(["run", "--dry-run", "--content-file", str(other)]), 0)
         self.assertIn("Other Game (Japan)", out.getvalue())
@@ -1025,7 +1036,7 @@ class Registry(unittest.TestCase):
         self.assertEqual(stems & set(mr.CAMPAIGN_FILES), set())
 
     def test_content_list(self) -> None:
-        content = campaign.load_content(campaign.CONTENT_FILE)
+        content = probes_content.load_content(probes_host.CONTENT_FILE)
         systems = {s for p in (REPO_ROOT / "emulators").glob("*.yml")
                    for s in (yaml.safe_load(p.read_text()) or {}).get("systems") or ()}
         self.assertTrue(content)
@@ -1039,7 +1050,7 @@ class Registry(unittest.TestCase):
     def test_no_job_runs_a_standing_campaign(self) -> None:
         """A daily pass over every profile contradicted the rule that probes
         run on demand, for a question that names its profiles."""
-        for name, job in campaign.autorun.load_jobs().items():
+        for name, job in autorun.load_jobs().items():
             for step in [*job.steps, *job.gate]:
                 with self.subTest(job=name):
                     self.assertNotIn("scripts/campaign.py", step.argv)
@@ -1053,8 +1064,8 @@ class FakeCorePasses(Workspace):
     def setUpClass(cls) -> None:
         # These passes prove the cores run sandboxed. Without a working bwrap
         # the campaign refuses, and the cause is named here instead of a KeyError.
-        _prefix, isolation = campaign.core_probe.sandbox_argv([Path(tempfile.gettempdir())])
-        if isolation != campaign.core_probe.SANDBOX:
+        _prefix, isolation = core_probe.sandbox_argv([Path(tempfile.gettempdir())])
+        if isolation != core_probe.SANDBOX:
             raise unittest.SkipTest(f"no sandbox here ({isolation}): install bubblewrap")
         TMP.mkdir(parents=True, exist_ok=True)
         cls.build = Path(tempfile.mkdtemp(dir=TMP))
@@ -1072,17 +1083,17 @@ class FakeCorePasses(Workspace):
         shutil.rmtree(cls.build, ignore_errors=True)
 
     def passing(self, kind: str = "plain", core: Path | None = None,
-                **settings: object) -> campaign.Campaign:
+                **settings: object) -> probes_campaign.Campaign:
         self.put_game()
         # The core_probe threshold follows the host: a test never waits on the real load.
-        host = campaign.Host(loadavg=lambda: (0.0, 0.0, 0.0), free_gb=lambda path: 500.0,
+        host = probes_host.Host(loadavg=lambda: (0.0, 0.0, 0.0), free_gb=lambda path: 500.0,
                              cpu_count=1_000_000)
         values = {"bench_warmup": 2, "bench_frames": 4, "check_repeat": 2, "probe_timeout": 30,
                   "delays": (1,), "echo": False, **settings}
-        c = campaign.Campaign(self.paths, campaign.Settings(**values), host,
+        c = probes_campaign.Campaign(self.paths, probes_host.Settings(**values), host,
                               lock_path=self.tmp / "auto.lock")
         so = core or self.cores[kind]
-        c.unit_cores = lambda *a, **k: [campaign.Core("fake", so, campaign.file_sha256(so))]
+        c.unit_cores = lambda *a, **k: [cores.Core("fake", so, probes_host.file_sha256(so))]
         return c
 
     def test_a_stand_in_is_proven_and_written(self) -> None:
@@ -1091,7 +1102,7 @@ class FakeCorePasses(Workspace):
         self.assertEqual(current.result, "complete")
         records = [s.record for s in mr.read_records(self.root)]
         isolations = {rep["isolation"] for r in records for v in r["variants"] for rep in v["repetitions"]}
-        self.assertEqual(isolations, {campaign.core_probe.SANDBOX})
+        self.assertEqual(isolations, {core_probe.SANDBOX})
         kinds = sorted(r["subject"].split("-")[0] for r in records)
         self.assertEqual(kinds, ["alias", "files", "negative", "none"])
         by_kind = {r["subject"].split("-")[0]: r for r in records}
@@ -1205,15 +1216,15 @@ class FakeCorePasses(Workspace):
         self.assertLess(ends["b"][0], ends["a"][-1])
         self.assertLess(ends["a"][0], ends["b"][-1])
 
-    def passing_in(self, workspace: Workspace) -> campaign.Campaign:
+    def passing_in(self, workspace: Workspace) -> probes_campaign.Campaign:
         workspace.put_game()
-        host = campaign.Host(loadavg=lambda: (0.0, 0.0, 0.0), free_gb=lambda path: 500.0,
+        host = probes_host.Host(loadavg=lambda: (0.0, 0.0, 0.0), free_gb=lambda path: 500.0,
                              cpu_count=1_000_000)
-        c = campaign.Campaign(workspace.paths, campaign.Settings(
+        c = probes_campaign.Campaign(workspace.paths, probes_host.Settings(
             check_repeat=2, probe_timeout=30, delays=(1,), echo=False), host,
             lock_path=workspace.tmp / "auto.lock")
         so = self.cores["hle"]
-        c.unit_cores = lambda *a, **k: [campaign.Core("fake", so, campaign.file_sha256(so))]
+        c.unit_cores = lambda *a, **k: [cores.Core("fake", so, probes_host.file_sha256(so))]
         return c
 
     def test_missing_content_leaves_the_checks_pending(self) -> None:

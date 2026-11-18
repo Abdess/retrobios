@@ -59,7 +59,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import autorun
-import campaign
+from probes import content as probes_content
+from probes import cores as probes_cores
+from probes import entries as probes_entries
+from probes import host
 from model import measurements as mr
 from core.statefile import now_iso
 from model.systems import _norm_system_id
@@ -79,7 +82,7 @@ PACK_CONTENT_FILE = REPO_ROOT / "tests" / "campaign" / "pack_content.yml"
 CONTENT_DIR = MAIN / ".cache" / "test-content"
 CORE_CACHE = MAIN / ".cache" / "pack-probe" / "cores"
 WORK_DIR = REPO_ROOT / "tmp" / "pack_probe"
-BUILDBOT = campaign.BUILDBOT
+BUILDBOT = probes_cores.BUILDBOT
 PACK_PROBES = mr.PACK_PROBES
 INSTALLS = ("pack", "installer")
 VERDICTS = ("boots", "bios_error", "crash", "hang", "unknown")
@@ -287,7 +290,7 @@ def choose_cores(config: dict, profiles: dict[str, dict], system: str, buildbot:
 def entry_paths(entry: dict) -> list[str]:
     """The paths a profile entry names under the system directory: its
     path or name, and its aliases beside it."""
-    main = campaign.entry_dest(entry)
+    main = probes_entries.entry_dest(entry)
     folder = main.rsplit("/", 1)[0] + "/" if "/" in main else ""
     return [main] + [f"{folder}{alias}" for alias in entry.get("aliases") or ()]
 
@@ -415,7 +418,7 @@ def fetch_core(name: str, refresh: bool = False) -> dict:
     with urllib.request.urlopen(url, timeout=600) as response, archive.open("wb") as out:
         shutil.copyfileobj(response, out)
         modified = response.headers.get("Last-Modified")
-    campaign.safe_extract_so(archive, f"{name}_libretro.so", so)
+    probes_cores.safe_extract_so(archive, f"{name}_libretro.so", so)
     archive.unlink()
     meta = {"name": name, "url": url, "last_modified": modified, "sha256": file_sha(so, "sha256"),
             "fetched_at": now_iso()}
@@ -423,28 +426,28 @@ def fetch_core(name: str, refresh: bool = False) -> dict:
     return {**meta, "path": str(so)}
 
 
-def load_contents(files: Sequence[Path]) -> dict[str, list[campaign.Content]]:
-    out: dict[str, list[campaign.Content]] = {}
+def load_contents(files: Sequence[Path]) -> dict[str, list[probes_content.Content]]:
+    out: dict[str, list[probes_content.Content]] = {}
     for path in files:
         if path.is_file():
-            for system, items in campaign.load_content(path).items():
+            for system, items in probes_content.load_content(path).items():
                 out.setdefault(system, []).extend(items)
     return out
 
 
-def content_folder(content: campaign.Content, fetch: bool) -> Path:
+def content_folder(content: probes_content.Content, fetch: bool) -> Path:
     """The game's folder, fetched through romfetch when absent and asked to."""
     folder = CONTENT_DIR / content.romfetch_system / content.name
     if not (folder / "identity.json").is_file() and fetch:
         romfetch = shutil.which("romfetch")
         if not romfetch:
-            raise campaign.Unavailable("romfetch not found")
+            raise host.Unavailable("romfetch not found")
         proc = subprocess.run([romfetch, "get", content.romfetch_system, content.name, "--json", "-q",
                                "--content-dir", str(CONTENT_DIR)], capture_output=True, text=True,
-                              check=False, env=campaign.child_env(romfetch=True))
+                              check=False, env=host.child_env(romfetch=True))
         if proc.returncode != 0:
-            raise campaign.Unavailable(f"romfetch exit {proc.returncode} for {content.name!r}")
-    campaign.verify_identity(folder)
+            raise host.Unavailable(f"romfetch exit {proc.returncode} for {content.name!r}")
+    probes_content.verify_identity(folder)
     return folder
 
 
@@ -509,7 +512,7 @@ def core_probe(argv: list[str], staged: set[str], layout: Layout, work: Path) ->
     return proc.returncode, record, error[-1500:]
 
 
-def probe_argv(core: dict, choice: CoreChoice, content: campaign.Content, load: Path,
+def probe_argv(core: dict, choice: CoreChoice, content: probes_content.Content, load: Path,
                subject: str, record: bool, supersedes: str | None = None) -> list[str]:
     argv = ["run", "--core", core["path"], "--content", str(load), "--content-label", content.name,
             "--frames", str(content.frames), "--frame-hash-every", str(content.frame_hash_every),
@@ -534,7 +537,7 @@ class ProbeTarget:
     choice: CoreChoice
     core: dict
     system: str
-    content: campaign.Content
+    content: probes_content.Content
     load: Path
 
 
@@ -621,7 +624,7 @@ def append_line(line: dict, root: Path = REPO_ROOT) -> dict:
 @dataclass
 class Unit:
     system: str
-    content: campaign.Content
+    content: probes_content.Content
     cores: list[CoreChoice]
 
 
@@ -631,7 +634,7 @@ def plan(platform: str, systems: set[str] | None, cores: set[str] | None,
     profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
     target = load_target_config(platform, TARGETS[platform], str(REPO_ROOT / "platforms"))
     units: list[Unit] = []
-    for system, contents in sorted(load_contents([campaign.CONTENT_FILE, PACK_CONTENT_FILE]).items()):
+    for system, contents in sorted(load_contents([host.CONTENT_FILE, PACK_CONTENT_FILE]).items()):
         if systems and system not in systems:
             continue
         if not platform_system(config, system):
@@ -666,8 +669,8 @@ def run(args: argparse.Namespace) -> int:
         try:
             for unit in units:
                 try:
-                    load = campaign.load_file(content_folder(unit.content, args.fetch), unit.content.load)
-                except campaign.Unavailable as exc:
+                    load = probes_content.load_file(content_folder(unit.content, args.fetch), unit.content.load)
+                except host.Unavailable as exc:
                     print(f"SKIP {unit.system}: {exc}", file=sys.stderr)
                     continue
                 for choice in unit.cores:
