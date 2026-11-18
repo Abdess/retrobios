@@ -200,9 +200,12 @@ from packresolve import (
 if TYPE_CHECKING:
     from typing_extensions import Unpack
 
+if TYPE_CHECKING:
     # How a manifest settles a platform declaration: the copy served, or None
     # and why not.
     _Settle = Callable[[dict, str, str, "str | None"], "tuple[str | None, str]"]
+
+if TYPE_CHECKING:
     # What a destination came to: its entries, whether it was filled, and the
     # report to make if no other member of its set fills it.
     _Outcome = tuple[list[dict], bool, "Callable[[], None] | None"]
