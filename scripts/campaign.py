@@ -100,8 +100,8 @@ import autorun
 from core import childenv
 from core import hostguard
 from core import statefile
-import campaign_profiles
-import campaign_rules as rules
+from probes import profileedit as campaign_profiles
+from probes import rules
 from model import measurements as mr
 from core.statefile import now_iso
 from core.paths import REPO_ROOT

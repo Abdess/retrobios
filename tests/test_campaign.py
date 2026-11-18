@@ -29,8 +29,8 @@ from types import MappingProxyType
 import yaml
 
 import campaign
-import campaign_profiles
-import campaign_rules as rules
+from probes import profileedit as campaign_profiles
+from probes import rules
 from model import measurements as mr
 
 REPO_ROOT = Path(__file__).resolve().parent.parent

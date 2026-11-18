@@ -20,7 +20,7 @@ from pathlib import Path
 SCRIPTS = Path(__file__).resolve().parent.parent / "scripts"
 
 PACKAGE_LAYERS = {"core": 0, "model": 1, "resolve": 2, "packs": 3, "scraper": 3, "exporter": 3,
-                  "profiling": 3, "sitegen": 3, "romrecipes": 3, "acquire": 3}
+                  "probes": 3, "profiling": 3, "sitegen": 3, "romrecipes": 3, "acquire": 3}
 LIBRARY_LAYER = 3
 COMMAND_LAYER = 4
 
@@ -30,6 +30,7 @@ SIBLING_IMPORTS: dict[str, frozenset[str]] = {
     # A search starts from what verify finds missing.
     "acquire": frozenset({"packs"}),
     "packs": frozenset(),
+    "probes": frozenset(),
     "profiling": frozenset(),
     "romrecipes": frozenset(),
     # The site prints the recipe counts and the dump-catalog coverage report
@@ -40,7 +41,7 @@ SIBLING_IMPORTS: dict[str, frozenset[str]] = {
 # Top-level modules other modules of scripts/ import: library code that a
 # later wave moves into a package.
 NOT_YET_PACKAGED = frozenset({
-    "autorun", "build_port", "campaign", "campaign_profiles", "campaign_rules",
+    "autorun", "build_port", "campaign",
     "check_buildbot_system", "check_release_assets", "commit_rules", "core_probe",
     "generate_event_schema", "pin_installer", "pr_checks",
     "release_record", "romfolders",
