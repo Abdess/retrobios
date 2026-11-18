@@ -602,7 +602,7 @@ class ExpertRuns(Lists):
                 json.dumps({**LIST, "truth_files": None}), encoding="utf-8")
             path = Path(root) / "install" / "standalone" / "retroarch.json"
             path.write_text(json.dumps(LAYOUTS), encoding="utf-8")
-            with mock.patch.object(validate_schemas, "ROOT", Path(root)):
+            with mock.patch.object(validate_schemas, "REPO_ROOT", Path(root)):
                 self.assertEqual(validate_schemas._semantic_standalone_checks(path, LAYOUTS),
                                  [])
 

@@ -58,16 +58,16 @@ from .mame_devices import (
     source_path,
 )
 from .mame_parser import parse_mame_source_tree
+from core.paths import REPO_ROOT
 
 log = logging.getLogger(__name__)
 
-_ROOT = Path(__file__).resolve().parents[2]
-_CACHE_PATH = _ROOT / "data" / "mame-hashes.json"
+_CACHE_PATH = REPO_ROOT / "data" / "mame-hashes.json"
 # One clone per process: a fixed tmp/mame was removed and recloned at another
 # release by a second run while the first was still parsing it.
-_CLONE_DIR = _ROOT / "tmp" / f"mame-{os.getpid()}"
-_EMULATORS_DIR = _ROOT / "emulators"
-_PLATFORMS_DIR = _ROOT / "platforms"
+_CLONE_DIR = REPO_ROOT / "tmp" / f"mame-{os.getpid()}"
+_EMULATORS_DIR = REPO_ROOT / "emulators"
+_PLATFORMS_DIR = REPO_ROOT / "platforms"
 _FLOPPY_SOURCE = "src/devices/imagedev/floppy.cpp"
 # Where a device set goes when only machines no seed places load it: MAME
 # starts such a machine from its set name, as an arcade folder passes one.
@@ -410,7 +410,7 @@ def fetch_release_listxml(version: str) -> Path:
 
     tag = "mame" + version.replace(".", "")
     return _download(
-        MAME_LISTXML_URL.format(tag=tag), _ROOT / ".cache" / "dats" / f"{tag}lx.zip"
+        MAME_LISTXML_URL.format(tag=tag), REPO_ROOT / ".cache" / "dats" / f"{tag}lx.zip"
     )
 
 

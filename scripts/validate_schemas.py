@@ -15,6 +15,7 @@ import yaml
 
 from model.profiles import source_yaml_paths
 from model.safeparse import yaml_load
+from core.paths import REPO_ROOT
 
 try:
     from jsonschema import Draft202012Validator, FormatChecker
@@ -25,8 +26,7 @@ except ImportError:
         raise
     sys.exit('Error: jsonschema required (pip install "jsonschema[format-nongpl]")')
 
-ROOT = Path(__file__).resolve().parent.parent
-SCHEMAS = ROOT / "schemas"
+SCHEMAS = REPO_ROOT / "schemas"
 
 
 def _load_json(path: Path) -> object:
@@ -95,9 +95,9 @@ def _validate_yaml_directory(
         try:
             data = _load_source(path)
         except (OSError, yaml.YAMLError) as exc:
-            out.append(f"{path.relative_to(ROOT)}: {exc}")
+            out.append(f"{path.relative_to(REPO_ROOT)}: {exc}")
             continue
-        out.extend(_errors(validator, data, str(path.relative_to(ROOT))))
+        out.extend(_errors(validator, data, str(path.relative_to(REPO_ROOT))))
         out.extend(_unreachable_citations(path, data))
         if schema_name == "platform.schema.json":
             out.extend(_config_records_without_evidence(path, data))
@@ -141,7 +141,7 @@ def _config_records_without_evidence(path: Path, document: object) -> list[str]:
         if not isinstance(record, dict):
             continue
         cited = config_ref(str(record.get("source_ref") or ""))
-        where = f"{path.relative_to(ROOT)}: launchers[{index}] ({record.get('emulator')})"
+        where = f"{path.relative_to(REPO_ROOT)}: launchers[{index}] ({record.get('emulator')})"
         features = [part for part in cited if is_feature_ref(part)]
         if features:
             out.append(f"{where} cites {features[0]} as source, choices_from holds it")
@@ -168,7 +168,7 @@ def _config_reads_without_build(path: Path, document: object) -> list[str]:
         if read.get("revision") or read.get("binary_sha256"):
             continue
         out.extend(
-            f"{path.relative_to(ROOT)}: config_reads[{index}] ({read.get('file')}) "
+            f"{path.relative_to(REPO_ROOT)}: config_reads[{index}] ({read.get('file')}) "
             f"names {platform}, which has no pin_build"
             for platform in read.get("platforms") or [] if str(platform) not in builds
         )
@@ -193,7 +193,7 @@ def _systems_outside_profile(path: Path, document: object) -> list[str]:
         unknown = [str(s) for s in named if str(s) not in listed]
         if unknown:
             out.append(
-                f"{path.relative_to(ROOT)}: files[{index}] ({entry.get('name')}) "
+                f"{path.relative_to(REPO_ROOT)}: files[{index}] ({entry.get('name')}) "
                 f"system {', '.join(unknown)} not in the profile's systems"
             )
     return out
@@ -212,7 +212,7 @@ def _group_requirement_split(path: Path, document: object) -> list[str]:
 
     if not isinstance(document, dict):
         return []
-    label = path.relative_to(ROOT)
+    label = path.relative_to(REPO_ROOT)
     declared = set((document.get("groups") or {}).keys())
     used: set[str] = set()
     out: list[str] = []
@@ -290,7 +290,7 @@ def _data_only_source_refs(path: Path, document: object) -> list[str]:
             continue
         refs = entry["source_ref"]
         out.extend(
-            f"{path.relative_to(ROOT)}: files[{index}] ({entry.get('name')}) "
+            f"{path.relative_to(REPO_ROOT)}: files[{index}] ({entry.get('name')}) "
             f"source_ref cites no code that reads the file: {ref}"
             for ref in (refs.values() if isinstance(refs, dict) else [refs])
             if ref and not _ref_cites_code(str(ref))
@@ -318,7 +318,7 @@ def _checks_without_values(path: Path, document: object) -> list[str]:
             fields = _CHECK_FIELDS.get(check)
             if fields and not any(entry.get(field) not in (None, "", []) for field in fields):
                 out.append(
-                    f"{path.relative_to(ROOT)}: files[{index}] ({entry.get('name')}) "
+                    f"{path.relative_to(REPO_ROOT)}: files[{index}] ({entry.get('name')}) "
                     f"declares a {check} check with no {'/'.join(fields)} value"
                 )
     return out
@@ -335,9 +335,9 @@ def _validate_json_files(
         try:
             data = _load_json(path)
         except (OSError, json.JSONDecodeError) as exc:
-            out.append(f"{path.relative_to(ROOT)}: {exc}")
+            out.append(f"{path.relative_to(REPO_ROOT)}: {exc}")
             continue
-        validation_errors = _errors(validator, data, str(path.relative_to(ROOT)))
+        validation_errors = _errors(validator, data, str(path.relative_to(REPO_ROOT)))
         out.extend(validation_errors)
         # Every schema a semantic check follows describes an object.
         if not validation_errors and semantic_check is not None and isinstance(data, dict):
@@ -360,7 +360,7 @@ def _validate_pack_manifests(dist: Path) -> list[str]:
     if not dist.is_dir():
         return []
 
-    sys.path.insert(0, str(ROOT / "scripts"))
+    sys.path.insert(0, str(REPO_ROOT / "scripts"))
     from core.artifacts import ArtifactLockBusy, artifact_lock
 
     try:
@@ -386,7 +386,7 @@ def _scan_pack_manifests(dist: Path) -> list[str]:
     def _label(path: Path) -> str:
         resolved = path.resolve()
         try:
-            return str(resolved.relative_to(ROOT))
+            return str(resolved.relative_to(REPO_ROOT))
         except ValueError:
             return str(resolved)
 
@@ -439,7 +439,7 @@ def _unreachable_citations(path: Path, document: object) -> list[str]:
             stack.extend(node)
         elif isinstance(node, str):
             out.extend(
-                f"{path.relative_to(ROOT)}: citation names a path outside "
+                f"{path.relative_to(REPO_ROOT)}: citation names a path outside "
                 f"any repository: {match.group().strip(' ,;(')}"
                 for match in _UNREACHABLE_REF.finditer(node)
             )
@@ -461,7 +461,7 @@ def _doubled_paths(path: Path) -> list[str]:
         match = _DOUBLED_PATH.search(line)
         if match:
             out.append(
-                f"{path.relative_to(ROOT)}:{number}: citation repeats its "
+                f"{path.relative_to(REPO_ROOT)}:{number}: citation repeats its "
                 f"directory: {match.group(1)}"
             )
     return out
@@ -474,11 +474,11 @@ def _unknown_data_dir_refs() -> list[str]:
     every run printed "not cached" while refresh_data_dirs had nothing to
     refresh.
     """
-    registry_path = ROOT / "platforms" / "_data_dirs.yml"
+    registry_path = REPO_ROOT / "platforms" / "_data_dirs.yml"
     with registry_path.open(encoding="utf-8") as handle:
         registered = set((yaml_load(handle) or {}).get("data_directories", {}))
     out: list[str] = []
-    for directory in (ROOT / "emulators", ROOT / "platforms"):
+    for directory in (REPO_ROOT / "emulators", REPO_ROOT / "platforms"):
         for path in source_yaml_paths(directory):
             if path.name.startswith("_"):
                 continue
@@ -492,7 +492,7 @@ def _unknown_data_dir_refs() -> list[str]:
                     ref = entry.get("ref") if isinstance(entry, dict) else None
                     if ref and ref not in registered:
                         out.append(
-                            f"{path.relative_to(ROOT)}: data directory {ref!r} "
+                            f"{path.relative_to(REPO_ROOT)}: data directory {ref!r} "
                             f"is not in platforms/_data_dirs.yml"
                         )
     return out
@@ -506,7 +506,7 @@ def _repository_layout_in_profiles() -> list[str]:
     `.variants/...`, and the pack then wrote them where no emulator looks.
     """
     out: list[str] = []
-    for path in source_yaml_paths(ROOT / "emulators"):
+    for path in source_yaml_paths(REPO_ROOT / "emulators"):
         document = _source_mapping(path)
         for entry in document.get("files") or []:
             if not isinstance(entry, dict):
@@ -515,7 +515,7 @@ def _repository_layout_in_profiles() -> list[str]:
                 value = str(entry.get(key) or "")
                 if ".variants" in value.replace("\\", "/").split("/"):
                     out.append(
-                        f"{path.relative_to(ROOT)}: {entry.get('name')} {key} "
+                        f"{path.relative_to(REPO_ROOT)}: {entry.get('name')} {key} "
                         f"names the repository's .variants/ storage: {value}"
                     )
     return out
@@ -523,7 +523,7 @@ def _repository_layout_in_profiles() -> list[str]:
 
 def _semantic_envelope_checks(path: Path, document: dict) -> list[str]:
     if document.get("count") != len(document.get("items", [])):
-        return [f"{path.relative_to(ROOT)}: count does not equal len(items)"]
+        return [f"{path.relative_to(REPO_ROOT)}: count does not equal len(items)"]
     return []
 
 
@@ -566,7 +566,7 @@ def _save_dir_without_library_name(path: Path, document: object) -> list[str]:
     if "library_name" in document:
         return _save_folder_once_paths(path, document)
     return [
-        f"{path.relative_to(ROOT)}: files[{index}] ({entry.get('name')}) is read "
+        f"{path.relative_to(REPO_ROOT)}: files[{index}] ({entry.get('name')}) is read "
         "below the save directory and the profile declares no library_name"
         for index, entry in enumerate(document.get("files") or [])
         if isinstance(entry, dict)
@@ -588,7 +588,7 @@ def _save_folder_once_paths(path: Path, document: dict) -> list[str]:
         return []
     folder = f"{document.get('library_name') or ''}/"
     return [
-        f"{path.relative_to(ROOT)}: files[{index}] ({entry.get('name')}) does not "
+        f"{path.relative_to(REPO_ROOT)}: files[{index}] ({entry.get('name')}) does not "
         f"start with {folder}, the folder save_folder_once says the core adds"
         for index, entry in enumerate(document.get("files") or [])
         if isinstance(entry, dict)
@@ -605,12 +605,12 @@ def _registry_contract() -> list[str]:
     registry where no platform carries it would cut a release with no pack
     at all, and every download link would lead to the command.
     """
-    registry_path = ROOT / "platforms" / "_registry.yml"
+    registry_path = REPO_ROOT / "platforms" / "_registry.yml"
     if not registry_path.is_file():
         return []
     with registry_path.open(encoding="utf-8") as handle:
         registry = yaml_load(handle) or {}
-    label = str(registry_path.relative_to(ROOT))
+    label = str(registry_path.relative_to(REPO_ROOT))
     out = _errors(_validator("registry.schema.json"), registry, label)
     platforms = registry.get("platforms") or {}
     if isinstance(platforms, dict) and not any(
@@ -629,7 +629,7 @@ def _save_directory_blocks() -> list[str]:
     folder per launched system) needs the platform file's libretro_systems,
     and ``by_core_for`` names the cores a launcher sorts by core.
     """
-    registry_path = ROOT / "platforms" / "_registry.yml"
+    registry_path = REPO_ROOT / "platforms" / "_registry.yml"
     if not registry_path.is_file():
         return []
     with registry_path.open(encoding="utf-8") as handle:
@@ -686,7 +686,7 @@ def _bios_tree_below(platform: str, folder: str) -> str:
     from model.platforms import load_platform_config
 
     try:
-        config = load_platform_config(platform, str(ROOT / "platforms"))
+        config = load_platform_config(platform, str(REPO_ROOT / "platforms"))
     except FileNotFoundError:
         return ""
     prefix = f"{folder}/".lower()
@@ -706,7 +706,7 @@ def _libretro_systems(platform: str) -> dict:
     from model.platforms import load_platform_config
 
     try:
-        config = load_platform_config(platform, str(ROOT / "platforms"))
+        config = load_platform_config(platform, str(REPO_ROOT / "platforms"))
     except FileNotFoundError:
         return {}
     return config.get("libretro_systems") or {}
@@ -716,20 +716,20 @@ def _semantic_install_checks(path: Path, manifest: dict) -> list[str]:
     out: list[str] = []
     files = manifest.get("files", [])
     if manifest.get("total_files") != len(files):
-        out.append(f"{path.relative_to(ROOT)}: total_files does not equal len(files)")
+        out.append(f"{path.relative_to(REPO_ROOT)}: total_files does not equal len(files)")
     if manifest.get("total_size") != sum(entry.get("size", 0) for entry in files):
-        out.append(f"{path.relative_to(ROOT)}: total_size does not equal the file-size sum")
+        out.append(f"{path.relative_to(REPO_ROOT)}: total_size does not equal the file-size sum")
     omitted = manifest.get("omitted_files", [])
     if manifest.get("total_omitted") != len(omitted):
         out.append(
-            f"{path.relative_to(ROOT)}: total_omitted does not equal "
+            f"{path.relative_to(REPO_ROOT)}: total_omitted does not equal "
             "len(omitted_files)"
         )
     # One dest below the BIOS folder and one below the save directory are
     # two places.
     destinations = [(entry.get("root"), entry.get("dest")) for entry in files]
     if len(destinations) != len(set(destinations)):
-        out.append(f"{path.relative_to(ROOT)}: duplicate destinations")
+        out.append(f"{path.relative_to(REPO_ROOT)}: duplicate destinations")
     # root: emulator is each core's own folder: mame2015 and mame2016 read
     # 3dobios.zip in two places, one omission each, named by its cores.
     omitted_destinations = [
@@ -738,11 +738,11 @@ def _semantic_install_checks(path: Path, manifest: dict) -> list[str]:
         for entry in omitted
     ]
     if len(omitted_destinations) != len(set(omitted_destinations)):
-        out.append(f"{path.relative_to(ROOT)}: duplicate omitted destinations")
+        out.append(f"{path.relative_to(REPO_ROOT)}: duplicate omitted destinations")
     overlap = set(destinations) & set(omitted_destinations)
     if overlap:
         out.append(
-            f"{path.relative_to(ROOT)}: destinations are both downloadable and omitted"
+            f"{path.relative_to(REPO_ROOT)}: destinations are both downloadable and omitted"
         )
     saved = [
         entry for entry in [*files, *manifest.get("case_variants", [])]
@@ -751,13 +751,13 @@ def _semantic_install_checks(path: Path, manifest: dict) -> list[str]:
     layout = manifest.get("save_directory")
     if saved and not layout:
         out.append(
-            f"{path.relative_to(ROOT)}: entries read below the save directory "
+            f"{path.relative_to(REPO_ROOT)}: entries read below the save directory "
             "and no save_directory"
         )
-    builds = ROOT / "install" / "standalone" / path.name
-    if manifest.get("standalone_builds") and path.parent == ROOT / "install" \
+    builds = REPO_ROOT / "install" / "standalone" / path.name
+    if manifest.get("standalone_builds") and path.parent == REPO_ROOT / "install" \
             and not builds.is_file():
-        out.append(f"{path.relative_to(ROOT)}: standalone_builds and no "
+        out.append(f"{path.relative_to(REPO_ROOT)}: standalone_builds and no "
                    f"install/standalone/{path.name}")
     stray = sorted(
         entry["dest"] for entry in [*files, *omitted]
@@ -765,7 +765,7 @@ def _semantic_install_checks(path: Path, manifest: dict) -> list[str]:
     )
     if stray:
         out.append(
-            f"{path.relative_to(ROOT)}: core_folder outside root: save ({stray[0]})"
+            f"{path.relative_to(REPO_ROOT)}: core_folder outside root: save ({stray[0]})"
         )
     return out
 
@@ -774,13 +774,13 @@ def _semantic_standalone_checks(path: Path, layouts: object) -> list[str]:
     """A standalone layout file goes with its platform's list: the list
     names the same builds, and each [dest, sha1] item takes its download
     from a copy of that list."""
-    where = path.relative_to(ROOT)
+    where = path.relative_to(REPO_ROOT)
     if not isinstance(layouts, dict):
         return [f"{where}: not an object"]
     plat = layouts.get("platform")
     if path.stem != plat:
         return [f"{where}: platform {plat} in a file named {path.stem}"]
-    listed = ROOT / "install" / f"{plat}.json"
+    listed = REPO_ROOT / "install" / f"{plat}.json"
     if not listed.is_file():
         return [f"{where}: no install/{plat}.json beside it"]
     manifest = json.loads(listed.read_text(encoding="utf-8"))
@@ -806,8 +806,8 @@ def _event_schema_errors() -> list[str]:
     """install-events.schema.json is EVENT_KEYS written out, and a valid schema."""
     from installer_build import eventschema
 
-    path = ROOT / "schemas" / eventschema.OUTPUT.name
-    label = path.relative_to(ROOT).as_posix()
+    path = REPO_ROOT / "schemas" / eventschema.OUTPUT.name
+    label = path.relative_to(REPO_ROOT).as_posix()
     if not path.is_file():
         return [f"{label}: missing, run python scripts/generate_event_schema.py"]
     if path.read_text(encoding="utf-8") != eventschema.render(
@@ -846,7 +846,7 @@ def _measurement_errors(root: Path | None = None) -> list[str]:
     rules model.measurements.read_records applies."""
     from model import measurements as mr
 
-    root = root or ROOT
+    root = root or REPO_ROOT
     validator = _validator("core-probe-record.schema.json")
     out: list[str] = []
     campaign = {mr.records_path(name): _validator(schema)
@@ -884,13 +884,13 @@ def _romfolder_errors() -> list[str]:
     """Every scraped setup against its schema, and every source_ref against
     the sources the file declares: a ref naming no declared repository can
     never be read back at a pin."""
-    directory = ROOT / "platforms" / "romfolders"
+    directory = REPO_ROOT / "platforms" / "romfolders"
     if not directory.is_dir():
         return []
     validator = _validator("romfolders.schema.json")
     out: list[str] = []
     for path in sorted(directory.glob("*.yml")):
-        label = str(path.relative_to(ROOT))
+        label = str(path.relative_to(REPO_ROOT))
         with path.open(encoding="utf-8") as handle:
             data = yaml_load(handle)
         errors = _errors(validator, data, label)
@@ -925,14 +925,14 @@ _GAMES_SOURCES = (
 def _games_source_errors() -> list[str]:
     out: list[str] = []
     for pattern, schema in _GAMES_SOURCES:
-        paths = sorted(ROOT.glob(pattern))
+        paths = sorted(REPO_ROOT.glob(pattern))
         if not paths:
             continue
         validator = _validator(schema)
         for path in paths:
             with path.open(encoding="utf-8") as handle:
                 data = json.load(handle) if path.suffix == ".json" else yaml_load(handle)
-            out.extend(_errors(validator, data, str(path.relative_to(ROOT))))
+            out.extend(_errors(validator, data, str(path.relative_to(REPO_ROOT))))
     return out
 
 
@@ -941,10 +941,10 @@ def _arcade_pin_errors() -> list[str]:
     profile pins. A bump of the profile left the game-to-BIOS map of the old
     code in place, and the installer kept serving it."""
     out: list[str] = []
-    for path in sorted((ROOT / "games" / "arcade").glob("*.json")):
+    for path in sorted((REPO_ROOT / "games" / "arcade").glob("*.json")):
         doc = _json_object(path)
-        profile_path = ROOT / "emulators" / f"{doc.get('profile')}.yml"
-        label = str(path.relative_to(ROOT))
+        profile_path = REPO_ROOT / "emulators" / f"{doc.get('profile')}.yml"
+        label = str(path.relative_to(REPO_ROOT))
         if not profile_path.is_file():
             out.append(f"{label}: no profile emulators/{profile_path.name}")
             continue
@@ -969,14 +969,14 @@ def _games_index_errors() -> list[str]:
     against the files it lists (size and sha256)."""
     import hashlib
 
-    base = ROOT / "install" / "games"
+    base = REPO_ROOT / "install" / "games"
     index_path = base / "index.json"
     if not index_path.exists():
         return []
     out: list[str] = []
     index = _json_object(index_path)
     out.extend(_errors(_defs_validator("games-index.schema.json", "index"), index,
-                       str(index_path.relative_to(ROOT))))
+                       str(index_path.relative_to(REPO_ROOT))))
     kinds = {
         "setups": _defs_validator("games-index.schema.json", "setup"),
         "fallback": _defs_validator("games-index.schema.json", "fallback"),
@@ -988,7 +988,7 @@ def _games_index_errors() -> list[str]:
         for entry in (index.get(kind) or {}).values():
             path = base / entry["file"]
             listed.add(path)
-            label = str(path.relative_to(ROOT))
+            label = str(path.relative_to(REPO_ROOT))
             if not path.exists():
                 out.append(f"{label}: listed in index.json, absent")
                 continue
@@ -996,7 +996,7 @@ def _games_index_errors() -> list[str]:
             if len(data) != entry["size"] or hashlib.sha256(data).hexdigest() != entry["sha256"]:
                 out.append(f"{label}: size or sha256 differs from index.json")
             out.extend(_errors(validator, json.loads(data), label))
-    out.extend(f"{path.relative_to(ROOT)}: not listed in index.json"
+    out.extend(f"{path.relative_to(REPO_ROOT)}: not listed in index.json"
                for path in sorted(base.rglob("*.json")) if path != index_path and path not in listed)
     return out
 
@@ -1012,11 +1012,11 @@ def main() -> int:
 
     errors: list[str] = _format_errors()
     errors.extend(
-        _validate_yaml_directory(ROOT / "emulators", "emulator.schema.json")
+        _validate_yaml_directory(REPO_ROOT / "emulators", "emulator.schema.json")
     )
     errors.extend(
         _validate_yaml_directory(
-            ROOT / "platforms", "platform.schema.json", skip_private=True
+            REPO_ROOT / "platforms", "platform.schema.json", skip_private=True
         )
     )
     errors.extend(_unknown_data_dir_refs())
@@ -1030,7 +1030,7 @@ def main() -> int:
     errors.extend(_arcade_pin_errors())
 
     if not args.source_only:
-        database_path = ROOT / "database.json"
+        database_path = REPO_ROOT / "database.json"
         errors.extend(
             _validate_json_files(
                 [database_path],
@@ -1039,14 +1039,14 @@ def main() -> int:
             )
         )
 
-        install_paths = sorted((ROOT / "install").glob("*.json"))
+        install_paths = sorted((REPO_ROOT / "install").glob("*.json"))
         errors.extend(
             _validate_json_files(
                 install_paths, "install-manifest.schema.json", _semantic_install_checks
             )
         )
 
-        standalone_paths = sorted((ROOT / "install" / "standalone").glob("*.json"))
+        standalone_paths = sorted((REPO_ROOT / "install" / "standalone").glob("*.json"))
         errors.extend(
             _validate_json_files(
                 standalone_paths, "install-standalone.schema.json",
@@ -1054,20 +1054,20 @@ def main() -> int:
             )
         )
 
-        target_paths = sorted((ROOT / "install" / "targets").glob("*.json"))
+        target_paths = sorted((REPO_ROOT / "install" / "targets").glob("*.json"))
         errors.extend(
             _validate_json_files(target_paths, "target-manifest.schema.json")
         )
 
-        release_path = ROOT / "release.json"
+        release_path = REPO_ROOT / "release.json"
         if release_path.exists():
             errors.extend(_validate_json_files([release_path], "release.schema.json"))
 
-        stats_path = ROOT / "website" / "public" / "stats.json"
+        stats_path = REPO_ROOT / "website" / "public" / "stats.json"
         if stats_path.exists():
             errors.extend(_validate_json_files([stats_path], "stats.schema.json"))
 
-        api_dir = ROOT / "website" / "public" / "api" / "v1"
+        api_dir = REPO_ROOT / "website" / "public" / "api" / "v1"
         api_database = api_dir / "database.json"
         if api_database.exists():
             errors.extend(
@@ -1092,7 +1092,7 @@ def main() -> int:
         )
 
         errors.extend(_games_index_errors())
-        errors.extend(_validate_pack_manifests(ROOT / "dist"))
+        errors.extend(_validate_pack_manifests(REPO_ROOT / "dist"))
 
     if errors:
         for error in errors:

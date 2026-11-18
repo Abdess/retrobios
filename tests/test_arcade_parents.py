@@ -424,7 +424,7 @@ class CommittedIndex(unittest.TestCase):
                 f"source_commit: {'b' * 40}\ncore_version: '0.2'\n")
             (root / "games" / "arcade" / "core.json").write_text(json.dumps(
                 {"profile": "core", "core_version": "0.1", "source": {"commit": COMMIT}}))
-            with mock.patch.object(validate_schemas, "ROOT", root):
+            with mock.patch.object(validate_schemas, "REPO_ROOT", root):
                 (error,) = validate_schemas._arcade_pin_errors()
         self.assertIn("read at aaaaaaaaaaaa", error)
         self.assertIn("core_version '0.1'", error)

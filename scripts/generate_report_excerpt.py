@@ -20,12 +20,11 @@ import argparse
 import re
 import subprocess
 import sys
-from pathlib import Path
 
 from core.artifacts import write_text_atomic
+from core.paths import REPO_ROOT
 
-ROOT = Path(__file__).resolve().parent.parent
-PAGE = ROOT / "wiki" / "reading-reports.md"
+PAGE = REPO_ROOT / "wiki" / "reading-reports.md"
 BLOCK = re.compile(
     r"(<!-- generated: verify-retrodeck -->\n```\n)(.*?)(```\n<!-- /generated: verify-retrodeck -->)",
     re.S)
@@ -52,9 +51,9 @@ def excerpt(lines: list[str]) -> list[str]:
 
 
 def run() -> list[str]:
-    proc = subprocess.run([sys.executable, str(ROOT / "scripts" / "verify.py"),
+    proc = subprocess.run([sys.executable, str(REPO_ROOT / "scripts" / "verify.py"),
                            "--platform", "retrodeck"], capture_output=True, text=True,
-                          cwd=ROOT, check=False)
+                          cwd=REPO_ROOT, check=False)
     lines = proc.stdout.splitlines()
     if not lines or not lines[0].startswith("RetroDECK:"):
         raise SystemExit(f"verify did not run: {proc.stderr[-300:]}")
@@ -70,17 +69,17 @@ def main() -> int:
     text = PAGE.read_text(encoding="utf-8")
     found = BLOCK.search(text)
     if found is None:
-        print(f"{PAGE.relative_to(ROOT)}: no verify-retrodeck block", file=sys.stderr)
+        print(f"{PAGE.relative_to(REPO_ROOT)}: no verify-retrodeck block", file=sys.stderr)
         return 1
     body = "\n".join(excerpt(run())) + "\n"
     if found.group(2) == body:
         return 0
     if args.check:
-        print(f"STALE {PAGE.relative_to(ROOT)}: the verify excerpt is not the run's. "
+        print(f"STALE {PAGE.relative_to(REPO_ROOT)}: the verify excerpt is not the run's. "
               "Run python scripts/generate_report_excerpt.py", file=sys.stderr)
         return 1
     write_text_atomic(str(PAGE), text[:found.start(2)] + body + text[found.end(2):])
-    print(f"Wrote {PAGE.relative_to(ROOT)}")
+    print(f"Wrote {PAGE.relative_to(REPO_ROOT)}")
     return 0
 
 

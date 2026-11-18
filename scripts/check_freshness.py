@@ -73,8 +73,8 @@ from resolve.reconcile import build_native_model
 from scripts.scraper import game_dat_importer
 from scripts.scraper.redump_dat_scraper import fetch_snapshot
 from scripts.scraper.targets import discover_target_scrapers
+from core.paths import REPO_ROOT
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
 CORE_INFO_REPO = "https://github.com/libretro/libretro-core-info"
 # The git blob of every .info as last reviewed: `--record-coreinfo` writes it.
 CORE_INFO_RECORD = REPO_ROOT / "platforms" / "_core_info.json"

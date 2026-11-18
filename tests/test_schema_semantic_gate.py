@@ -50,7 +50,7 @@ class SemanticManifestValidation(unittest.TestCase):
             )
 
             output = io.StringIO()
-            with mock.patch.object(validate_schemas, "ROOT", root), mock.patch.object(
+            with mock.patch.object(validate_schemas, "REPO_ROOT", root), mock.patch.object(
                 sys, "argv", ["validate_schemas.py"]
             ), redirect_stdout(output):
                 result = validate_schemas.main()

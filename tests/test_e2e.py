@@ -6996,9 +6996,10 @@ class OneOfASearchList(unittest.TestCase):
 
     @unittest.skipUnless(HAS_JSONSCHEMA, "validate_schemas needs jsonschema")
     def test_schema_refuses_a_set_split_on_required(self):
-        from validate_schemas import _group_requirement_split, ROOT
+        from validate_schemas import _group_requirement_split
+        from core.paths import REPO_ROOT
 
-        path = ROOT / "emulators" / "seq.yml"
+        path = REPO_ROOT / "emulators" / "seq.yml"
         own_value = {"groups": {"g": {"required": True}},
                      "files": [{"name": "a", "group": "g", "required": False},
                                {"name": "b", "group": "g"}]}

@@ -28,11 +28,10 @@ The repository's own images come from the same shapes, in ``.github/assets/``:
 
 from __future__ import annotations
 
-from pathlib import Path
+from core.paths import REPO_ROOT
 
-ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "docs_assets" / "brand"
-PROJECT = ROOT / ".github" / "assets"
+OUT = REPO_ROOT / "docs_assets" / "brand"
+PROJECT = REPO_ROOT / ".github" / "assets"
 
 HEADER = "#3b3f7a"
 GLYPH = "#8be0f7"
@@ -165,7 +164,7 @@ def main() -> None:
     )
     for path, text in vectors:
         path.write_text(text + "\n", encoding="utf-8")
-        print(path.relative_to(ROOT))
+        print(path.relative_to(REPO_ROOT))
     favicon = favicon_svg().replace("@media (prefers-color-scheme: dark)", "@media not all")
     rasters = (
         (OUT / "favicon-32.png", 32, favicon),
@@ -181,12 +180,12 @@ def main() -> None:
             page.set_content(f'<html><body style="margin:0;background:transparent">{sized}</body></html>')
             page.screenshot(path=str(path), omit_background=True, clip={"x": 0, "y": 0, "width": size, "height": size})
             page.close()
-            print(path.relative_to(ROOT))
+            print(path.relative_to(REPO_ROOT))
         page = browser.new_page(viewport={"width": 1280, "height": 640})
         page.set_content(social_preview_html())
         page.screenshot(path=str(PROJECT / "social-preview.png"),
                         clip={"x": 0, "y": 0, "width": 1280, "height": 640})
-        print((PROJECT / "social-preview.png").relative_to(ROOT))
+        print((PROJECT / "social-preview.png").relative_to(REPO_ROOT))
         browser.close()
 
 

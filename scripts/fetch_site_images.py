@@ -35,12 +35,12 @@ import urllib.request
 from pathlib import Path
 
 import yaml
+from core.paths import REPO_ROOT
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "scripts"))
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
-LOGO_DIR = ROOT / "docs_assets" / "logos"
-ICON_DIR = ROOT / "docs_assets" / "system-icons"
+LOGO_DIR = REPO_ROOT / "docs_assets" / "logos"
+ICON_DIR = REPO_ROOT / "docs_assets" / "system-icons"
 LOGO_SIZE = 80
 ICON_SIZE = 48
 AVATAR_HOST = "avatars.githubusercontent.com"
@@ -129,7 +129,7 @@ def shrink_embedded(data: bytes) -> bytes:
 
 # Editor markup (Inkscape's namedview, sodipodi attributes, metadata) was
 # most of the bytes of two logos. svgo comes with the site's packages.
-SVGO = ROOT / "website" / "node_modules" / ".bin" / "svgo"
+SVGO = REPO_ROOT / "website" / "node_modules" / ".bin" / "svgo"
 
 
 def minify_svg(data: bytes) -> bytes:
@@ -151,7 +151,7 @@ def write_manifest(directory: Path, note: str, entries: list[dict]) -> None:
 def fetch_logos() -> None:
     from model.guides import GROUP_TILES, GUIDES
 
-    with open(ROOT / "platforms" / "_registry.yml", encoding="utf-8") as handle:
+    with open(REPO_ROOT / "platforms" / "_registry.yml", encoding="utf-8") as handle:
         platforms = yaml.safe_load(handle)["platforms"]
     LOGO_DIR.mkdir(parents=True, exist_ok=True)
     entries = []
@@ -201,7 +201,7 @@ def fetch_icons() -> None:
     from model.collection import group_by_manufacturer
     from sitegen.render import SYSTEM_ICON_BASE, console_icon_name
 
-    db = load_database(str(ROOT / "database.json"))
+    db = load_database(str(REPO_ROOT / "database.json"))
     names = sorted({
         console_icon_name(manufacturer, console)
         for manufacturer, consoles in group_by_manufacturer(db).items()

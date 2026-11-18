@@ -45,7 +45,7 @@ class EachSourceIsParsedOnce(unittest.TestCase):
                 "emulator: Core\nfiles:\n- name: a.bin\n  path: .variants/a.bin\n")
             loaded = []
             real = validate_schemas.yaml_load
-            with mock.patch.object(validate_schemas, "ROOT", root), \
+            with mock.patch.object(validate_schemas, "REPO_ROOT", root), \
                     mock.patch.object(validate_schemas, "yaml_load",
                                       side_effect=lambda h: loaded.append(h.name) or real(h)):
                 validate_schemas._validate_yaml_directory(root / "emulators", "emulator.schema.json")

@@ -61,8 +61,8 @@ from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
+from core.paths import REPO_ROOT
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
 LOG_DIR = REPO_ROOT / "tmp" / "refresh_stale"
 CHECK_FRESHNESS = REPO_ROOT / "scripts" / "check_freshness.py"
 PLATFORMS_REGISTRY = REPO_ROOT / "platforms" / "_registry.yml"

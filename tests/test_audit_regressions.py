@@ -6062,7 +6062,7 @@ class AProfilePathIsTheEmulatorsNotOurs(unittest.TestCase):
                 "emulator: X\nfiles:\n  - name: scph1001.bin\n"
                 "    path: .variants/scph1001.bin.abc12345\n"
             )
-            with mock.patch.object(validate_schemas, "ROOT", Path(directory)):
+            with mock.patch.object(validate_schemas, "REPO_ROOT", Path(directory)):
                 errors = validate_schemas._repository_layout_in_profiles()
         self.assertEqual(len(errors), 1)
         self.assertIn(".variants/", errors[0])
