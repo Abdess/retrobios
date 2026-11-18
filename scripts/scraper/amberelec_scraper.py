@@ -30,19 +30,17 @@ the scripts its standalone table runs and the configs their packages install.
 
 from __future__ import annotations
 
-import json
 import re
-import urllib.error
-import urllib.request
 
 from .amberelec_launchers import extract_launchers
-from .base_scraper import BaseScraper, BiosRequirement, github_headers
+from .base_scraper import BaseScraper, BiosRequirement, fetch_text, github_json
 from .batocera_scraper import (
     SYSTEM_SLUG_MAP as BATOCERA_SLUGS,
 )
 from .batocera_scraper import (
     _not_cores,
     extract_systems_dict,
+    is_checkbios_script,
     platform_systems,
     requirements_from_systems,
 )
@@ -93,12 +91,7 @@ def prerelease_commit(body: str) -> str:
 def fetch_newest_prerelease() -> tuple[str, str]:
     """(tag, commit) of the newest AmberELEC prerelease."""
     url = f"https://api.github.com/repos/{PRERELEASE_REPO}/releases?per_page=1"
-    try:
-        req = urllib.request.Request(url, headers=github_headers())
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            releases = json.loads(resp.read())
-    except (urllib.error.URLError, json.JSONDecodeError) as e:
-        raise RuntimeError(f"cannot list the releases of {PRERELEASE_REPO}: {e}") from e
+    releases = github_json(url, f"cannot list the releases of {PRERELEASE_REPO}")
     if not releases or not releases[0].get("tag_name"):
         raise RuntimeError(f"{PRERELEASE_REPO} lists no release")
     return releases[0]["tag_name"], prerelease_commit(releases[0].get("body", ""))
@@ -114,17 +107,8 @@ class Scraper(BaseScraper):
             self.tag, self.commit = fetch_newest_prerelease()
         super().__init__(url=url or SOURCE_TEMPLATE.format(ref=self.commit))
 
-    def _fetch_text(self, url: str) -> str:
-        req = urllib.request.Request(url, headers={"User-Agent": "retrobios-scraper/1.0"})
-        try:
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                return resp.read().decode("utf-8")
-        except urllib.error.URLError as e:
-            raise ConnectionError(f"Failed to fetch {url}: {e}") from e
-
     def validate_format(self, raw_data: str) -> bool:
-        has_dict = re.search(r"^systems\s*=\s*\{", raw_data, re.MULTILINE) is not None
-        return has_dict and "def checkBios" in raw_data and '"biosFiles"' in raw_data
+        return is_checkbios_script(raw_data)
 
     def fetch_requirements(self) -> list[BiosRequirement]:
         raw = self._fetch_raw()
@@ -140,7 +124,7 @@ class Scraper(BaseScraper):
         )
         # es_systems.cfg gives each <system> its <emulators> in menu order
         # (atarist, lines 267-288: retroarch's hatari, then HATARISA).
-        es_systems = xml_systems(self._fetch_text(ES_SYSTEMS_TEMPLATE.format(ref=self.commit)))
+        es_systems = xml_systems(fetch_text(ES_SYSTEMS_TEMPLATE.format(ref=self.commit)))
         not_cores = _not_cores(PLATFORM_NAME)
         cores, standalone, dual = es_cores(es_systems, RUNNERS, BUILDS_OF, not_cores)
         attach_system_cores(systems, system_cores(es_systems, RUNNERS, not_cores))
@@ -160,7 +144,7 @@ class Scraper(BaseScraper):
             "dual_mode_cores": dual,
             "systems": systems,
             "launchers": extract_launchers(
-                lambda path: self._fetch_text(_RAW.format(ref=self.commit) + path)
+                lambda path: fetch_text(_RAW.format(ref=self.commit) + path)
             ),
         }
 

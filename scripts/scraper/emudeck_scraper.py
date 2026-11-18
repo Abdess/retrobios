@@ -14,15 +14,14 @@ from __future__ import annotations
 import csv
 import io
 import re
-import urllib.error
-import urllib.request
 
 from .base_scraper import (
     BaseScraper,
     BiosRequirement,
     fetch_branch_head,
     fetch_github_latest_version,
-    github_headers,
+    fetch_text,
+    github_json,
     requirement_entry,
 )
 from .emudeck_launchers import emulator_of_script, extract_launchers
@@ -202,15 +201,6 @@ _RE_LOCAL_HASHES = re.compile(
 )
 
 
-def _fetch_url(url: str) -> str:
-    req = urllib.request.Request(url, headers={"User-Agent": "retrobios-scraper/1.0"})
-    try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            return resp.read().decode("utf-8")
-    except urllib.error.URLError as e:
-        raise ConnectionError(f"Failed to fetch {url}: {e}") from e
-
-
 def launcher_revision(url: str) -> str:
     """The commit a checkBIOS.sh URL is read at."""
     found = re.search(r"/dragoonDorise/EmuDeck/([0-9a-f]{40})/", url)
@@ -258,7 +248,7 @@ class Scraper(BaseScraper):
     def _fetch_script(self) -> str:
         if self._raw_script is not None:
             return self._raw_script
-        self._raw_script = _fetch_url(self.checkbios_url)
+        self._raw_script = fetch_text(self.checkbios_url)
         return self._raw_script
 
     def _fetch_csv(self, sheet: str) -> str:
@@ -266,7 +256,7 @@ class Scraper(BaseScraper):
             return self._csv_cache[sheet]
         url = f"{self.csv_base_url}/{sheet}"
         try:
-            data = _fetch_url(url)
+            data = fetch_text(url)
         except ConnectionError:
             data = ""
         self._csv_cache[sheet] = data
@@ -495,18 +485,12 @@ class Scraper(BaseScraper):
         named as their profiles are: the launcher layer and the SteamOS
         target are read at that revision too.
         """
-        import json
 
         api_url = (
             "https://api.github.com/repos/dragoonDorise/EmuDeck/"
             f"contents/functions/EmuScripts?ref={revision}"
         )
-        try:
-            req = urllib.request.Request(api_url, headers=github_headers())
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                data = json.loads(resp.read())
-        except (urllib.error.URLError, json.JSONDecodeError) as e:
-            raise RuntimeError(f"cannot list EmuDeck EmuScripts: {e}") from e
+        data = github_json(api_url, "cannot list EmuDeck EmuScripts", timeout=30)
 
         cores: list[str] = []
         seen: set[str] = set()

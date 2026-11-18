@@ -21,6 +21,7 @@ from .base_scraper import (
     BaseScraper,
     BiosRequirement,
     fetch_github_latest_version,
+    github_json,
     md5_field,
     requirement_entry,
 )
@@ -168,19 +169,8 @@ class Scraper(BaseScraper):
 
     def _fetch_standalone(self) -> list[str]:
         """The packages of projects/ROCKNIX/packages/emulators/standalone."""
-        import json
-        import urllib.error
-        import urllib.request
-
-        from .base_scraper import github_headers
-
         url = STANDALONE_TREE_URL.format(ref=self.tag or "next")
-        req = urllib.request.Request(url, headers=github_headers())
-        try:
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                listing = json.loads(resp.read())
-        except (urllib.error.URLError, json.JSONDecodeError) as e:
-            raise ConnectionError(f"Failed to list {url}: {e}") from e
+        listing = github_json(url, f"Failed to list {url}", timeout=30, error=ConnectionError)
         packages = [item["name"] for item in listing if item.get("type") == "dir"]
         if not packages:
             raise RuntimeError(f"no standalone emulator package at {url}")

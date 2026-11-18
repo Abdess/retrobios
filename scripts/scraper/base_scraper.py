@@ -15,7 +15,7 @@ import yaml
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Callable, NoReturn, Protocol
+from typing import Any, Callable, NoReturn, Protocol
 
 from core.github import github_token
 from core.artifacts import write_text_atomic
@@ -311,6 +311,29 @@ def github_headers() -> dict[str, str]:
     return headers
 
 
+def fetch_text(url: str) -> str:
+    """GET a platform file as UTF-8 text, ConnectionError when it cannot be read."""
+    req = urllib.request.Request(url, headers={"User-Agent": "retrobios-scraper/1.0"})
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            return resp.read().decode("utf-8")
+    except urllib.error.URLError as e:
+        raise ConnectionError(f"Failed to fetch {url}: {e}") from e
+
+
+def github_json(
+    url: str, failure: str, timeout: int = 15, error: type[Exception] = RuntimeError
+) -> Any:
+    """An api.github.com answer, parsed. A request or a body that fails raises
+    `error` with `failure` and the cause: a scrape never goes on without it."""
+    try:
+        req = urllib.request.Request(url, headers=github_headers())
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return json.loads(resp.read())
+    except (urllib.error.URLError, json.JSONDecodeError) as e:
+        raise error(f"{failure}: {e}") from e
+
+
 def fetch_github_latest_version(repo: str) -> str:
     """Return the tag of the latest release of a GitHub repo.
 
@@ -318,12 +341,7 @@ def fetch_github_latest_version(repo: str) -> str:
     the release it was read from cannot be patched back by the exporter.
     """
     url = f"https://api.github.com/repos/{repo}/releases/latest"
-    try:
-        req = urllib.request.Request(url, headers=github_headers())
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            tag = json.loads(resp.read()).get("tag_name", "")
-    except (urllib.error.URLError, json.JSONDecodeError) as e:
-        raise RuntimeError(f"cannot read the latest release of {repo}: {e}") from e
+    tag = github_json(url, f"cannot read the latest release of {repo}").get("tag_name", "")
     if not tag:
         raise RuntimeError(f"the latest release of {repo} names no tag")
     return tag
@@ -337,12 +355,7 @@ def fetch_branch_head(repo: str, branch: str) -> str:
     not whatever the branch has become. Raises like the release lookup.
     """
     url = f"https://api.github.com/repos/{repo}/commits/{branch}"
-    try:
-        req = urllib.request.Request(url, headers=github_headers())
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            sha = json.loads(resp.read()).get("sha", "")
-    except (urllib.error.URLError, json.JSONDecodeError) as e:
-        raise RuntimeError(f"cannot read the head of {repo}@{branch}: {e}") from e
+    sha = github_json(url, f"cannot read the head of {repo}@{branch}").get("sha", "")
     if not re.fullmatch(r"[0-9a-f]{40}", sha or ""):
         raise RuntimeError(f"{repo}@{branch} answered no commit sha")
     return sha
@@ -538,12 +551,7 @@ def fetch_github_latest_tag(repo: str, prefix: str = "") -> str:
     a reason to scrape a branch under it.
     """
     url = f"https://api.github.com/repos/{repo}/tags?per_page=50"
-    try:
-        req = urllib.request.Request(url, headers=github_headers())
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            tags = json.loads(resp.read())
-    except (urllib.error.URLError, json.JSONDecodeError) as e:
-        raise RuntimeError(f"cannot read the tags of {repo}: {e}") from e
+    tags = github_json(url, f"cannot read the tags of {repo}")
     names = [tag["name"] for tag in tags if tag["name"].startswith(prefix)]
     if not names:
         raise RuntimeError(f"{repo} has no tag starting with {prefix!r}")

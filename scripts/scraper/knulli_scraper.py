@@ -27,11 +27,10 @@ where it is older or its own.
 
 from __future__ import annotations
 
-import re
 import urllib.error
 import urllib.request
 
-from .base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_version
+from .base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_version, fetch_text
 from .batocera_scraper import (
     SYSTEM_SLUG_MAP as BATOCERA_SLUGS,
 )
@@ -43,6 +42,7 @@ from .batocera_scraper import (
     es_systems_libretro_systems,
     extract_systems_dict,
     installable_cores,
+    is_checkbios_script,
     platform_systems,
     records_run,
     requirements_from_systems,
@@ -84,14 +84,6 @@ class Scraper(BaseScraper):
         self.tag = "" if url else fetch_github_latest_version(REPO)
         super().__init__(url=url or SOURCE_TEMPLATE.format(ref=self.tag))
 
-    def _fetch_text(self, url: str) -> str:
-        req = urllib.request.Request(url, headers={"User-Agent": "retrobios-scraper/1.0"})
-        try:
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                return resp.read().decode("utf-8")
-        except urllib.error.URLError as e:
-            raise ConnectionError(f"Failed to fetch {url}: {e}") from e
-
     def submodule_revision(self) -> str:
         """The batocera.linux commit KNULLI's batocera submodule pins at the tag."""
         import json
@@ -110,8 +102,7 @@ class Scraper(BaseScraper):
         return str(found["sha"])
 
     def validate_format(self, raw_data: str) -> bool:
-        has_dict = re.search(r"^systems\s*=\s*\{", raw_data, re.MULTILINE) is not None
-        return has_dict and "def checkBios" in raw_data and '"biosFiles"' in raw_data
+        return is_checkbios_script(raw_data)
 
     def fetch_requirements(self) -> list[BiosRequirement]:
         raw = self._fetch_raw()
@@ -126,13 +117,13 @@ class Scraper(BaseScraper):
         # es_systems.yml files machine selectors and plugins under an
         # emulator as Batocera's does: Batocera's list of them applies, with
         # KNULLI's own.
-        defaults = self._fetch_text(CONFIGGEN_DEFAULTS_TEMPLATE.format(ref=self.tag))
-        es_systems = self._fetch_text(ES_SYSTEMS_TEMPLATE.format(ref=self.tag))
+        defaults = fetch_text(CONFIGGEN_DEFAULTS_TEMPLATE.format(ref=self.tag))
+        es_systems = fetch_text(ES_SYSTEMS_TEMPLATE.format(ref=self.tag))
         dropped = _not_cores("batocera") | _not_cores(PLATFORM_NAME)
         revision = self.submodule_revision()
         launchers = extract_launchers(
-            lambda path: self._fetch_text(_RAW.format(ref=self.tag) + path),
-            lambda path: self._fetch_text(_BATOCERA_RAW.format(ref=revision) + path),
+            lambda path: fetch_text(_RAW.format(ref=self.tag) + path),
+            lambda path: fetch_text(_BATOCERA_RAW.format(ref=revision) + path),
         )
         # What runs is what at least one board builds, read by the targets
         # scraper from the Kconfig of KNULLI's tree and its batocera and
@@ -170,7 +161,7 @@ class Scraper(BaseScraper):
         result["libretro_systems"] = es_systems_libretro_systems(es_systems, dropped)
         result["launchers"] = launchers
         result["configs_root"] = configs_root(
-            knulli_configgen(lambda path: self._fetch_text(_RAW.format(ref=self.tag) + path))
+            knulli_configgen(lambda path: fetch_text(_RAW.format(ref=self.tag) + path))
         )
         return result
 

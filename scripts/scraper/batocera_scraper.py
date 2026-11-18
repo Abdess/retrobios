@@ -12,8 +12,6 @@ import ast
 import json
 import re
 import sys
-import urllib.error
-import urllib.request
 from collections.abc import Callable
 from pathlib import Path
 
@@ -26,7 +24,8 @@ from model.safeparse import yaml_load_upstream
 from .base_scraper import (
     BaseScraper,
     BiosRequirement,
-    github_headers,
+    fetch_text,
+    github_json,
     md5_field,
     requirement_entry,
 )
@@ -59,12 +58,7 @@ def fetch_stable_tag() -> str:
     it was read from, and the exporter patches that revision.
     """
     url = "https://api.github.com/repos/batocera-linux/batocera.linux/tags?per_page=100"
-    try:
-        req = urllib.request.Request(url, headers=github_headers())
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            tags = json.loads(resp.read())
-    except (urllib.error.URLError, json.JSONDecodeError) as e:
-        raise RuntimeError(f"cannot list batocera tags: {e}") from e
+    tags = github_json(url, "cannot list batocera tags")
     tag = pick_stable_tag([tag["name"] for tag in tags])
     if not tag:
         raise RuntimeError("no stable batocera tag among the latest 100")
@@ -420,6 +414,13 @@ def extract_systems_dict(raw: str) -> dict:
         raise ValueError(f"Failed to parse systems dict: {e}") from e
 
 
+def is_checkbios_script(raw_data: str) -> bool:
+    """A batocera-systems script as its forks ship it: the `systems` dict of
+    biosFiles and the checkBios that reads it."""
+    has_dict = re.search(r"^systems\s*=\s*\{", raw_data, re.MULTILINE) is not None
+    return has_dict and "def checkBios" in raw_data and '"biosFiles"' in raw_data
+
+
 def requirements_from_systems(
     systems: dict, slug_map: dict[str, str], strip: str = "bios/"
 ) -> list[BiosRequirement]:
@@ -611,19 +612,11 @@ class Scraper(BaseScraper):
         it or its launcher runs a program from the BIOS folder.
         """
         return configgen_cores(
-            self._fetch_text(CONFIGGEN_DEFAULTS_URL.format(tag=self.tag)),
-            self._fetch_text(ES_SYSTEMS_URL.format(tag=self.tag)),
+            fetch_text(CONFIGGEN_DEFAULTS_URL.format(tag=self.tag)),
+            fetch_text(ES_SYSTEMS_URL.format(tag=self.tag)),
             _not_cores(),
             built,
         )
-
-    def _fetch_text(self, url: str) -> str:
-        req = urllib.request.Request(url, headers={"User-Agent": "retrobios-scraper/1.0"})
-        try:
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                return resp.read().decode("utf-8")
-        except urllib.error.URLError as e:
-            raise ConnectionError(f"Failed to fetch {url}: {e}") from e
 
     def fetch_requirements(self) -> list[BiosRequirement]:
         """Parse batocera-systems and return BIOS requirements."""
@@ -649,7 +642,7 @@ class Scraper(BaseScraper):
         )
 
         launchers = extract_launchers(
-            lambda path: self._fetch_text(f"{_RAW_BASE}/{self.tag}/{path}")
+            lambda path: fetch_text(f"{_RAW_BASE}/{self.tag}/{path}")
         )
         selection = BoardTargets().build_selection(self.tag)
         built = boards_build(selection, launchers)
@@ -657,7 +650,7 @@ class Scraper(BaseScraper):
         cores, standalone, dual = self._fetch_cores(built)
         installable = installable_cores(selection, cores, standalone, dual)
         libretro_systems = es_systems_libretro_systems(
-            self._fetch_text(ES_SYSTEMS_URL.format(tag=self.tag)), _not_cores()
+            fetch_text(ES_SYSTEMS_URL.format(tag=self.tag)), _not_cores()
         )
         result = {
             "platform": "Batocera",
@@ -681,7 +674,7 @@ class Scraper(BaseScraper):
         result["libretro_systems"] = libretro_systems
         result["launchers"] = launchers
         result["configs_root"] = configs_root(
-            Configgen(lambda path: self._fetch_text(f"{_RAW_BASE}/{self.tag}/{path}"))
+            Configgen(lambda path: fetch_text(f"{_RAW_BASE}/{self.tag}/{path}"))
         )
         return result
 

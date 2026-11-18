@@ -17,7 +17,7 @@ from .base_scraper import (
     BiosRequirement,
     fetch_branch_head,
     fetch_github_latest_version,
-    github_headers,
+    github_json,
     requirement_entry,
 )
 from .dat_parser import parse_dat, parse_dat_metadata, validate_dat_format
@@ -106,15 +106,9 @@ SYSTEM_SLUG_MAP = {
 
 def _core_info_files() -> list[str]:
     """Paths of every .info file in libretro-core-info, or RuntimeError."""
-    import json
 
     url = "https://api.github.com/repos/libretro/libretro-core-info/git/trees/master?recursive=1"
-    try:
-        req = urllib.request.Request(url, headers=github_headers())
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            tree = json.loads(resp.read())
-    except (urllib.error.URLError, json.JSONDecodeError) as e:
-        raise RuntimeError(f"cannot list libretro-core-info: {e}") from e
+    tree = github_json(url, "cannot list libretro-core-info", timeout=30)
     info_files = [
         item["path"]
         for item in tree.get("tree", [])

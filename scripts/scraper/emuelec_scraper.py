@@ -27,16 +27,15 @@ Verification (batocera-systems at the release tag):
 from __future__ import annotations
 
 import re
-import urllib.error
-import urllib.request
 
-from .base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_version
+from .base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_version, fetch_text
 from .batocera_scraper import (
     SYSTEM_SLUG_MAP as BATOCERA_SLUGS,
 )
 from .batocera_scraper import (
     _not_cores,
     extract_systems_dict,
+    is_checkbios_script,
     platform_systems,
     requirements_from_systems,
 )
@@ -111,17 +110,8 @@ class Scraper(BaseScraper):
         self.tag = "" if url else fetch_github_latest_version(REPO)
         super().__init__(url=url or SOURCE_TEMPLATE.format(ref=self.tag))
 
-    def _fetch_text(self, url: str) -> str:
-        req = urllib.request.Request(url, headers={"User-Agent": "retrobios-scraper/1.0"})
-        try:
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                return resp.read().decode("utf-8")
-        except urllib.error.URLError as e:
-            raise ConnectionError(f"Failed to fetch {url}: {e}") from e
-
     def validate_format(self, raw_data: str) -> bool:
-        has_dict = re.search(r"^systems\s*=\s*\{", raw_data, re.MULTILINE) is not None
-        return has_dict and "def checkBios" in raw_data and '"biosFiles"' in raw_data
+        return is_checkbios_script(raw_data)
 
     def fetch_requirements(self) -> list[BiosRequirement]:
         raw = self._fetch_raw()
@@ -139,8 +129,8 @@ class Scraper(BaseScraper):
         # lines 3610-3660: libretro pcsx_rearmed_32b, pcsx_rearmed,
         # swanstation, then Duckstation).
         es_systems = with_ports(
-            json_systems(self._fetch_text(ES_SYSTEMS_TEMPLATE.format(ref=self.tag))),
-            port_engines(self._fetch_text(PORTS_TEMPLATE.format(ref=self.tag))),
+            json_systems(fetch_text(ES_SYSTEMS_TEMPLATE.format(ref=self.tag))),
+            port_engines(fetch_text(PORTS_TEMPLATE.format(ref=self.tag))),
         )
         not_cores = _not_cores(PLATFORM_NAME)
         cores, standalone, dual = es_cores(es_systems, RUNNERS, BUILDS_OF, not_cores)

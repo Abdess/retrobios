@@ -14,7 +14,6 @@ Complements libretro_scraper (System.dat) with:
 from __future__ import annotations
 
 import importlib
-import json
 import os
 import re
 import sys
@@ -31,7 +30,7 @@ from .base_scraper import (
     BaseScraper,
     BiosRequirement,
     fetch_github_latest_version,
-    github_headers,
+    github_json,
 )
 
 PLATFORM_NAME = "libretro_coreinfo"
@@ -210,18 +209,14 @@ class Scraper(BaseScraper):
         """Fetch list of all .info files from GitHub API."""
         # Use the tree API to get all files at once
         url = f"{GITHUB_API}/git/trees/master?recursive=1"
-        try:
-            req = urllib.request.Request(url, headers=github_headers())
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                data = json.loads(resp.read())
-
-            return [
-                item["path"]
-                for item in data.get("tree", [])
-                if item["path"].endswith("_libretro.info")
-            ]
-        except (urllib.error.URLError, json.JSONDecodeError) as e:
-            raise ConnectionError(f"Failed to list core-info files: {e}") from e
+        data = github_json(
+            url, "Failed to list core-info files", timeout=30, error=ConnectionError
+        )
+        return [
+            item["path"]
+            for item in data.get("tree", [])
+            if item["path"].endswith("_libretro.info")
+        ]
 
     def _fetch_info_file(self, filename: str) -> dict:
         """Fetch and parse a single .info file.

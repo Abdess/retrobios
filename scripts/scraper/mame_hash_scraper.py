@@ -24,7 +24,6 @@ from typing import Any
 
 import yaml
 
-from core.github import github_token
 from model.registry import list_registered_platforms
 from model.platforms import load_platform_config
 from model.profiles import source_yaml_paths
@@ -33,6 +32,7 @@ from model.safeparse import yaml_load
 
 from core import upstream
 
+from .base_scraper import github_headers
 from ._hash_merge import (
     _build_contents,
     _build_source_ref,
@@ -168,16 +168,9 @@ def _get_release_tag() -> str:
     version.cpp is generated at build time, not in the repo. A failed lookup
     raises: "unknown" was cached for a day and written as core_version.
     """
-    headers = {
-        "User-Agent": "retrobios-scraper/1.0",
-        "Accept": "application/vnd.github.v3+json",
-    }
-    token = github_token()
-    if token:
-        headers["Authorization"] = f"Bearer {token}"
     url = "https://api.github.com/repos/mamedev/mame/releases/latest"
     try:
-        req = urllib.request.Request(url, headers=headers)
+        req = urllib.request.Request(url, headers=github_headers())
         with urllib.request.urlopen(req, timeout=10) as resp:
             tag = json.loads(resp.read()).get("tag_name", "")
     except (urllib.error.URLError, json.JSONDecodeError, OSError) as exc:

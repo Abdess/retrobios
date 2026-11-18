@@ -10,8 +10,6 @@ from __future__ import annotations
 
 import json
 import re
-import urllib.error
-import urllib.request
 from pathlib import Path
 
 from .base_scraper import (
@@ -20,6 +18,7 @@ from .base_scraper import (
     fetch_branch_head,
     fetch_bytes,
     fetch_github_latest_version,
+    fetch_text,
     requirement_entry,
 )
 from .batocera_scraper import SYSTEM_SLUG_MAP as BATOCERA_SLUGS
@@ -296,15 +295,10 @@ class Scraper(BaseScraper):
 
         version = fetch_github_latest_version(GITHUB_REPO)
         es_url = ES_SYSTEMS_URL.format(tag=version)
-        request = urllib.request.Request(es_url, headers={"User-Agent": "retrobios-scraper/1.0"})
-        try:
-            with urllib.request.urlopen(request, timeout=30) as resp:
-                es_text = resp.read().decode("utf-8")
-            cores, standalone = es_systems_cores(es_text)
-            dual = es_systems_dual(es_text)
-            libretro_systems = es_systems_libretro_systems(es_text)
-        except urllib.error.URLError as e:
-            raise ConnectionError(f"Failed to fetch {es_url}: {e}") from e
+        es_text = fetch_text(es_url)
+        cores, standalone = es_systems_cores(es_text)
+        dual = es_systems_dual(es_text)
+        libretro_systems = es_systems_libretro_systems(es_text)
         if not cores:
             raise RuntimeError(f"es_systems.cfg at {version} names no core")
 
