@@ -42,8 +42,6 @@ from pathlib import Path, PurePosixPath, PureWindowsPath
 from unittest import mock
 
 import install
-from packs import archive as packs_archive
-from packs import emulatorpack
 from tests.test_install_app import make_card
 from tests.test_install_selection import FakeRepository, _QuietHandler
 from tests.netguard import module_guard
@@ -16168,14 +16166,17 @@ class EmulatorChoiceMatchesTheEmulatorPack(unittest.TestCase):
             # The builder's floor: install.py alone keeps 3.8.
             raise unittest.SkipTest("generate_pack.py needs Python 3.9 or newer")
         from core.ziptools import build_zip_contents_index
+        from packs import archive as packs_archive
+        from packs import emulatorpack
+        cls.packs_archive, cls.emulatorpack = packs_archive, emulatorpack
         cls.db = json.loads(db_path.read_text(encoding="utf-8"))
         cls.zip_contents = build_zip_contents_index(cls.db)
         cls.by_path = {entry["path"]: sha1 for sha1, entry in cls.db["files"].items()}
 
     def pack(self, emulator: str) -> dict[str, str]:
-        record = packs_archive.PackRecord()
+        record = self.packs_archive.PackRecord()
         with contextlib.redirect_stdout(io.StringIO()):
-            emulatorpack.generate_emulator_pack(
+            self.emulatorpack.generate_emulator_pack(
                 [emulator], str(REPO_ROOT / "emulators"), self.db, str(REPO_ROOT / "bios"),
                 str(REPO_ROOT / "tmp"), zip_contents=self.zip_contents, offline=True,
                 record=record)

@@ -28,15 +28,17 @@ import sys
 import tempfile
 import threading
 import unittest
-from packs import archive
-from packs import manifest as packs_manifest
-from packs import platformpack
-from packs import coverage
 from unittest import mock
 from pathlib import Path
 
 from model import region
 from resolve import regions as resolve_regions
+
+# The screen tests run under 3.8 and import this module for its fakes. The
+# pack builder stops below 3.9, so its modules load only above that floor.
+if sys.version_info >= (3, 9):
+    from packs import archive, coverage, platformpack
+    from packs import manifest as packs_manifest
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
