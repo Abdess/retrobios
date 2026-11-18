@@ -28,8 +28,8 @@ try:
 except ImportError:
     jsonschema = None
 import install
-from scripts import pipeline, region_audit
-from scripts.resolve import regions
+from scripts import pipeline
+from scripts.resolve import regionaudit, regions
 from scripts.resolve.localfile import resolve_local_file
 from scripts.core.ziptools import safe_extract_zip
 from scripts.generate_pack import (
@@ -1896,11 +1896,11 @@ class RegionRegressions(unittest.TestCase):
             db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
             by_md5 = {e["md5"]: s for s, e in files.items()}
             self.assertEqual(
-                region_audit.resolve_sha1({"name": "IPL.bin", "md5": [files[shas["bios/GC/USA/IPL.bin"]]["md5"]]}, db),
+                regionaudit.resolve_sha1({"name": "IPL.bin", "md5": [files[shas["bios/GC/USA/IPL.bin"]]["md5"]]}, db),
                 shas["bios/GC/USA/IPL.bin"],
             )
             self.assertEqual(
-                region_audit.resolve_sha1({"name": "IPL.bin", "path": "GC/JAP/IPL.bin"}, db),
+                regionaudit.resolve_sha1({"name": "IPL.bin", "path": "GC/JAP/IPL.bin"}, db),
                 shas["bios/GC/JAP/IPL.bin"],
             )
             self.assertTrue(by_md5)

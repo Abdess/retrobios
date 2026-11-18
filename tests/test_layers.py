@@ -37,7 +37,7 @@ NOT_YET_PACKAGED = frozenset({
     "cross_reference", "dedup", "derivations", "export_native", "generate_event_schema",
     "generate_pack", "generate_readme", "generate_site", "manifestselect", "measurement_records",
     "packextras", "packpaths", "packreadme", "packresolve", "packverify", "pin_installer",
-    "pr_checks", "provenance_report", "refresh_data_dirs", "region_audit",
+    "pr_checks", "provenance_report", "refresh_data_dirs",
     "release_record", "romfolders", "romset_recipes", "siteagents", "sitebootstrap",
     "sitecollection", "sitediagrams", "siteentries", "siteexports", "siteguides", "sitehandheld",
     "siteinputs", "sitemarkup", "sitemeasurements", "siterender", "sitesources", "sitestarlight",
@@ -48,7 +48,6 @@ NOT_YET_PACKAGED = frozenset({
 # packages the top-level side.
 PENDING_TOP_LEVEL_IMPORTS = frozenset({
     ("exporter.doubled", "slots"),
-    ("scraper.game_dat_importer", "region_audit"),
 })
 
 

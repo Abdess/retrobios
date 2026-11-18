@@ -5,6 +5,7 @@ from __future__ import annotations
 
 
 
+
 WORLD = "world"
 
 # Two levels only: super-region -> member territories.
@@ -194,3 +195,39 @@ def region_tag(requested: list[str]) -> str:
     return "_".join(
         "".join(part.title() for part in slug.split("-")) for slug in requested
     )
+
+
+# No-Intro filename tokens: full English territory names.
+NOINTRO = {
+    "World": "world",
+    "USA": "north-america",
+    "Canada": "canada",
+    "Europe": "europe",
+    "Japan": "japan",
+    "Asia": "asia",
+    "Korea": "south-korea",
+    "Brazil": "brazil",
+    "Taiwan": "taiwan",
+    "China": "china",
+    "Hong Kong": "hong-kong",
+    "France": "france",
+    "Germany": "germany",
+    "Spain": "spain",
+    "Italy": "italy",
+    "Netherlands": "netherlands",
+    "Sweden": "sweden",
+    "Norway": "norway",
+    "Denmark": "denmark",
+    "Finland": "finland",
+    "Australia": "australia",
+    "New Zealand": "new-zealand",
+    "Russia": "russia",
+    "UK": "uk",
+    "Portugal": "portugal",
+    "Greece": "greece",
+    "Poland": "poland",
+    "India": "india",
+    "Mexico": "mexico",
+    "Argentina": "argentina",
+    "Latin America": "latin-america",
+}
