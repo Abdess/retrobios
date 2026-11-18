@@ -239,7 +239,7 @@ from `validation.py`. This layer uses data from emulator profiles (YAML files in
 
 ### Validation index
 
-`_build_validation_index()` (`validation.py`) builds a per-filename index of
+`build_validation_index()` (`resolve/validation.py`) builds a per-filename index of
 validation rules from the profiles it is given. A platform report, its pack and
 its install manifest pass only the profiles `resolve_platform_cores` resolves for
 that platform (`verify.py`, `verify_platform`). A profile that does not run on the

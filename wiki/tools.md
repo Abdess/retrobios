@@ -1783,7 +1783,7 @@ python scripts/generate_games_index.py --check              # exit 1 when a publ
 | `games/regions.yml`, `games/extras.yml` | hand, cited | region routes, the cases that keep every region, per-game files |
 | `games/arcade/<profile>.json` | `scraper/arcade_parent_importer.py` | BIOS parent and device sets of each game set, from the DAT the pin names or, for mame2000, mame2003 and mame2003-plus, from the driver code |
 
-Folder names resolve to systems through `SYSTEM_ALIASES` and `_norm_system_id`
+Folder names resolve to systems through `SYSTEM_ALIASES` and `norm_system_id`
 in `scripts/model/systems.py`, the one alias table, and core names to profiles through the
 profiles' `cores:`. The fallback set of a folder, what an unrecognised game
 keeps, is computed from `install/<platform>.json` with the installer's own
