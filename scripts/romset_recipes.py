@@ -22,7 +22,7 @@ An archive whose bytes carry metadata unrelated to its contents cannot be
 derived from ROMs by anyone, and is reported as such rather than guessed at.
 
 Every archive the collection holds also has a recipe of its own in
-``recipes/archives.json`` (scripts/archive_build.py):
+``recipes/archives.json`` (scripts/recipes/):
 
 ``--capture``
     Write a record for every archive in database.json: members in order with
