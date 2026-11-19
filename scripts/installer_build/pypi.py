@@ -11,7 +11,6 @@ import tempfile
 from pathlib import Path
 
 from core.paths import REPO_ROOT
-from model.guides import SH_NAME
 from installer_build.pins import PIN
 
 
@@ -59,7 +58,7 @@ def installer_bytes() -> bytes:
     """install.py, refused unless it is the one install.sh pins: the package
     then runs the installer the one-line command runs, under the same id."""
     data = (REPO_ROOT / "install.py").read_bytes()
-    pins = PIN[SH_NAME].findall((REPO_ROOT / "install.sh").read_text(encoding="utf-8"))
+    pins = PIN["install.sh"].findall((REPO_ROOT / "install.sh").read_text(encoding="utf-8"))
     if pins != [hashlib.sha256(data).hexdigest()]:
         raise ValueError("install.py is not the installer install.sh pins: recompute the pin")
     return data

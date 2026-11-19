@@ -7,7 +7,6 @@ from pathlib import Path
 
 from core.paths import REPO_ROOT
 from installer_build.pins import PIN, installer_sha256
-from model.guides import SH_NAME
 
 
 PORT_DIR = "retrobios"
@@ -24,7 +23,7 @@ PACKS_TABLE = "packs.txt"
 
 def pinned_installer_sha256(root: Path = REPO_ROOT) -> str:
     """The SHA-256 install.sh accepts for install.py."""
-    found = PIN[SH_NAME].search((root / "install.sh").read_text(encoding="utf-8"))
+    found = PIN["install.sh"].search((root / "install.sh").read_text(encoding="utf-8"))
     if found is None:
         raise ValueError("install.sh pins no installer SHA-256")
     return found.group(1)

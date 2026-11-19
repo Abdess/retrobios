@@ -7,7 +7,6 @@ import re
 from pathlib import Path
 
 from core.paths import REPO_ROOT
-from model.guides import PS1_NAME, SH_NAME
 
 
 INSTALLER = "install.py"
@@ -16,10 +15,10 @@ PINS: dict[str, re.Pattern[str]] = {
     "install.sh": re.compile(r'^(DEFAULT_INSTALL_SHA256=")[0-9a-f]{64}(")', re.M),
     "install.ps1": re.compile(r'^(\s*\$defaultInstallSha256 = ")[0-9a-f]{64}(")', re.M),
 }
-# The value of that pin line, by the name the site serves each bootstrap under.
+# The value of that pin line, by bootstrap.
 PIN: dict[str, re.Pattern[str]] = {
-    SH_NAME: re.compile(r'^DEFAULT_INSTALL_SHA256="([0-9a-f]{64})"', re.M),
-    PS1_NAME: re.compile(r'^\s*\$defaultInstallSha256 = "([0-9a-f]{64})"', re.M),
+    "install.sh": re.compile(r'^DEFAULT_INSTALL_SHA256="([0-9a-f]{64})"', re.M),
+    "install.ps1": re.compile(r'^\s*\$defaultInstallSha256 = "([0-9a-f]{64})"', re.M),
 }
 COMMAND = "python scripts/pin_installer.py"
 

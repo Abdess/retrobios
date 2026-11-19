@@ -72,7 +72,7 @@ def served_text(name: str, root: Path, commit: str) -> str:
     pair served."""
     source, line = SOURCES[name]
     text = (root / source).read_text(encoding="utf-8")
-    pinned = PIN[name].findall(text)
+    pinned = PIN[source].findall(text)
     if len(pinned) != 1:
         raise ValueError(f"{source}: {len(pinned)} installer pins, expected one")
     actual = hashlib.sha256((root / "install.py").read_bytes()).hexdigest()
