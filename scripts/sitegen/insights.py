@@ -26,8 +26,10 @@ SITE_PROPERTY = "https://abdess.github.io/retrobios/"
 GOATCOUNTER = "https://retrobios.goatcounter.com/api/v0"
 REPOSITORY = "Abdess/retrobios"
 SOURCES = ("gsc", "goatcounter", "github")
-# Paths excluded before a window is cut in two: about 10 KB of address.
-GOAT_MAX_EXCLUDED = 1000
+# Paths excluded before a window is cut in two. Each adds ten characters
+# to the address, and on 2026-11-19 the server accepted 8,125 characters
+# and dropped the connection at 10,125: 700 paths stay near 7,000.
+GOAT_MAX_EXCLUDED = 700
 # GoatCounter answers four requests a second and 500 per window, and says
 # when to come back: a short wait is waited, a long one ends the run.
 RATE_LIMIT_TRIES = 8
@@ -160,15 +162,17 @@ def _goat_window(start: dt.datetime, end: dt.datetime, auth: dict[str, str]) -> 
 
 
 def _goat_hits(start: dt.datetime, end: dt.datetime, auth: dict[str, str]) -> list[tuple[str, int]]:
-    """Counts by path over the whole span, summed week by week: GoatCounter
+    """Counts by path over the whole span, summed day by day: GoatCounter
     keeps hourly counts, so windows add up. The API pages with
-    exclude_paths, which lengthens the address by every path already read,
-    and the run of 2026-11-19 failed past 2,800 of them. A window with too
-    many paths is read again in halves, down to one hour."""
+    exclude_paths, which lengthens the address by every path already read
+    (GOAT_MAX_EXCLUDED). A day with too many paths is read again in
+    halves, down to one hour. Days, not weeks: a window that overflows is
+    read twice, and four weeks cost 432 of the 500 requests GoatCounter
+    allows per window."""
     totals: dict[str, int] = defaultdict(int)
-    week = dt.timedelta(days=7)
-    pending = [(low, min(low + week, end)) for low in
-               (start + n * week for n in range(-(-(end - start) // week)))]
+    day = dt.timedelta(days=1)
+    pending = [(low, min(low + day, end)) for low in
+               (start + n * day for n in range(-(-(end - start) // day)))]
     while pending:
         low, high = pending.pop()
         counts = _goat_window(low, high, auth)
