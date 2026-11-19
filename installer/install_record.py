@@ -286,6 +286,17 @@ def record_file(entry: dict, origin: str, root: str = "") -> dict:
             "from": origin}
 
 
+def recorded_data_copies(folder: Path) -> dict[str, set[tuple[str, int]]]:
+    """The data tree files earlier runs wrote in folder, as its record names
+    them: (sha1, size) of each, by destination casefolded."""
+    copies: dict[str, set[tuple[str, int]]] = {}
+    for setup in ((load_record(folder).data or {}).get("setups") or {}).values():
+        for item in setup.get("files") or []:
+            if str(item.get("root") or "") == "data":
+                copies.setdefault(item["dest"].casefold(), set()).add((item["sha1"], item["size"]))
+    return copies
+
+
 def write_record(
     folder: Path, plat: str, manifest: dict, choice: list[str], files: list[dict],
 ) -> tuple[Path | None, dict, str]:

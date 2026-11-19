@@ -7,7 +7,7 @@
   "platform": "myminui",
   "display_name": "MyMinUI",
   "version": "2026-08-09",
-  "generated": "2026-11-11T12:03:42Z",
+  "generated": "2026-11-13T11:31:17Z",
   "base_destination": "",
   "detect": [
     {
@@ -6078,7 +6078,7 @@
     {
       "ref": "fbneo-cheats",
       "dest": "Bios/FBN/fbneo/cheats",
-      "url": "https://github.com/finalburnneo/FBNeo-cheats/archive/refs/heads/master.zip",
+      "url": "https://github.com/finalburnneo/FBNeo-cheats/archive/c72c882746580b38d8e93da27bbc41999024c08f.zip",
       "type": "zip",
       "systems": [],
       "files": {
@@ -19776,7 +19776,7 @@
         }
       },
       "strip_components": 1,
-      "archive_size": 5083767,
+      "archive_size": 5316667,
       "optional": true,
       "cores": [
         "fbneo"
@@ -19785,7 +19785,7 @@
     {
       "ref": "fbneo-cheats",
       "dest": "Bios/NG/fbneo/cheats",
-      "url": "https://github.com/finalburnneo/FBNeo-cheats/archive/refs/heads/master.zip",
+      "url": "https://github.com/finalburnneo/FBNeo-cheats/archive/c72c882746580b38d8e93da27bbc41999024c08f.zip",
       "type": "zip",
       "systems": [],
       "files": {
@@ -33483,7 +33483,7 @@
         }
       },
       "strip_components": 1,
-      "archive_size": 5083767,
+      "archive_size": 5316667,
       "optional": true,
       "cores": [
         "fbneo"
@@ -33695,6 +33695,7 @@
       },
       "strip_components": 0,
       "archive_size": 53006540,
+      "rolling": true,
       "optional": true,
       "cores": [
         "fbneo"
@@ -33906,6 +33907,7 @@
       },
       "strip_components": 0,
       "archive_size": 53006540,
+      "rolling": true,
       "optional": true,
       "cores": [
         "fbneo"

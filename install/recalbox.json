@@ -58964,7 +58964,7 @@
     {
       "ref": "fbneo-cheats",
       "dest": "fbneo/cheats",
-      "url": "https://github.com/finalburnneo/FBNeo-cheats/archive/refs/heads/master.zip",
+      "url": "https://github.com/finalburnneo/FBNeo-cheats/archive/c72c882746580b38d8e93da27bbc41999024c08f.zip",
       "type": "zip",
       "systems": [
         "sega-mega-drive",
@@ -72665,7 +72665,7 @@
         }
       },
       "strip_components": 1,
-      "archive_size": 5083767,
+      "archive_size": 5316667,
       "optional": true,
       "cores": [
         "fbneo"
@@ -72877,6 +72877,7 @@
       },
       "strip_components": 0,
       "archive_size": 53006540,
+      "rolling": true,
       "optional": true,
       "cores": [
         "fbneo"

@@ -131457,7 +131457,8 @@
         }
       },
       "strip_components": 0,
-      "archive_size": 4465709
+      "archive_size": 4465709,
+      "rolling": true
     },
     {
       "ref": "cemu-gameprofiles",
@@ -132865,6 +132866,7 @@
       },
       "strip_components": 0,
       "archive_size": 5752250,
+      "rolling": true,
       "cores": [
         "dinothawr"
       ]
@@ -132923,6 +132925,7 @@
       },
       "strip_components": 0,
       "archive_size": 175384,
+      "rolling": true,
       "cores": [
         "dirksimple"
       ]
@@ -141597,12 +141600,13 @@
       "exclude": [
         "Themes"
       ],
-      "archive_size": 3197914
+      "archive_size": 3197914,
+      "rolling": true
     },
     {
       "ref": "fbneo-cheats",
       "dest": "fbneo/cheats",
-      "url": "https://github.com/finalburnneo/FBNeo-cheats/archive/refs/heads/master.zip",
+      "url": "https://github.com/finalburnneo/FBNeo-cheats/archive/c72c882746580b38d8e93da27bbc41999024c08f.zip",
       "type": "zip",
       "systems": [
         "arcade",
@@ -155306,7 +155310,7 @@
         }
       },
       "strip_components": 1,
-      "archive_size": 5083767,
+      "archive_size": 5316667,
       "optional": true,
       "cores": [
         "fbneo"
@@ -155520,6 +155524,7 @@
       },
       "strip_components": 0,
       "archive_size": 53006540,
+      "rolling": true,
       "optional": true,
       "cores": [
         "fbneo"
@@ -155528,7 +155533,7 @@
     {
       "ref": "freeintv-overlays",
       "dest": "freeintv_overlays",
-      "url": "https://github.com/libretro/FreeIntv/raw/master/Assets/Overlays.zip",
+      "url": "https://github.com/libretro/FreeIntv/raw/ef3e0fe322bec62a7f916c0bb0834c08c348d0b4/Assets/Overlays.zip",
       "type": "zip",
       "systems": [
         "mattel-intellivision"
@@ -156586,7 +156591,8 @@
         }
       },
       "strip_components": 1,
-      "archive_size": 9893234
+      "archive_size": 9893234,
+      "rolling": true
     },
     {
       "ref": "yaps2-resources",

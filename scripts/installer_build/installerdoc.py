@@ -351,7 +351,7 @@ def _child(spec: dict) -> int:
 
     def tree_landed(entry: dict, _bios: Path, state: object = None,
                     _progress: object = None) -> dict:
-        return {"present": 0, "installed": len(entry["files"]), "changed": 0,
+        return {"present": 0, "installed": len(entry["files"]), "updated": 0, "changed": 0,
                 "absent": 0, "error": "", "not_kept": []}
 
     def tree_held(entry: dict, bios: Path, remember: bool = False) -> tuple:

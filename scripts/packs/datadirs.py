@@ -220,6 +220,16 @@ def _parse_repo_from_url(source_url: str) -> tuple[str, str, str]:
     raise ValueError(f"Unsupported host in URL: {source_url}")
 
 
+def revisioned(entry: dict) -> bool:
+    """Whether the source names a forge revision: {version} in a GitHub or
+    GitLab address. Such a tree is fetched at the commit its branch points
+    to, recorded, and listed at that commit, whose bytes never change. Any
+    other source (the buildbot's nightly assets, a release asset) names no
+    revision: what it serves today is all it holds."""
+    url = str(entry.get("source_url", ""))
+    return "{version}" in url and ("github.com/" in url or "gitlab.com/" in url)
+
+
 def get_remote_sha(source_url: str, version: str) -> str | None:
     """Fetch the current commit SHA for a branch/tag from GitHub or GitLab."""
     try:
@@ -441,7 +451,10 @@ def _record_archive_size(key: str, entry: dict, versions_path: str) -> None:
         record = versions.get(key)
         if record is None or "archive_size" in record:
             return
-    version = entry.get("version", "master")
+    # The archive of the commit the tree was fetched at, which the
+    # install lists name, never the one its branch points to now.
+    version = (record.get("sha") if revisioned(entry) and record.get("sha")
+               else entry.get("version", "master"))
     size = _measure_archive(entry["source_url"].format(version=version))
     if size is None:
         return
@@ -507,6 +520,14 @@ def refresh_entry(
         return _refresh_entry(key, entry, force, dry_run, versions_path)
 
 
+def _remote_tag(entry: dict, version: str) -> str | None:
+    """The commit a revisioned source's branch points to, else the ETag of
+    what the address serves."""
+    if revisioned(entry):
+        return get_remote_sha(entry["source_url"], version)
+    return _get_remote_etag(entry["source_url"].format(version=version))
+
+
 def _decide(
     key: str, entry: dict, force: bool, versions_path: str
 ) -> tuple[bool | None, str | None, str | None]:
@@ -517,10 +538,7 @@ def _decide(
     cached_tag = cached.get("sha") or cached.get("etag")
     if force or not Path(entry["local_cache"]).exists():
         return True, None, cached_tag
-    if entry.get("source_type", "tarball") == "zip":
-        remote_tag = _get_remote_etag(entry["source_url"].format(version=version))
-    else:
-        remote_tag = get_remote_sha(entry["source_url"], version)
+    remote_tag = _remote_tag(entry, version)
     if remote_tag is None:
         log.warning("[%s] could not check remote, skipping", key)
         return None, None, cached_tag
@@ -557,10 +575,12 @@ def _refresh_entry(
         # Read before the download. A release published in between then
         # leaves an older tag on newer content, which the next run refreshes.
         # Read after, it left a newer tag on older content, trusted for good.
-        if source_type == "zip":
-            remote_tag = _get_remote_etag(source_url)
-        else:
-            remote_tag = get_remote_sha(entry["source_url"], version)
+        remote_tag = _remote_tag(entry, version)
+    # A branch is fetched at the commit read above, never at its name: read
+    # by name, a push in between left the recorded commit on other bytes,
+    # and the list the installer checks named a revision it never had.
+    at = remote_tag if revisioned(entry) and remote_tag else version
+    source_url = entry["source_url"].format(version=at)
 
     archive_sizes: list[int] = []
 
@@ -571,7 +591,7 @@ def _refresh_entry(
                 source_url, local_cache, exclude, entry.get("strip_components", 0),
                 measured=archive_sizes.append,
             )
-        source_path = entry["source_path"].format(version=version)
+        source_path = entry["source_path"].format(version=at)
         return _download_and_extract(
             source_url, source_path, local_cache, exclude, measured=archive_sizes.append
         )

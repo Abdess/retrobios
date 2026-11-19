@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import IO, TYPE_CHECKING, BinaryIO, ContextManager
 
 from installer.download import _claim_partial, _release_claim
+from installer.install_record import recorded_data_copies
 from installer.host_fs import (
     DRIVE_FULL,
     NOT_WRITABLE,
@@ -33,7 +34,7 @@ from installer.offline import LOCAL, _Offline, _network_allowed, _offline_only
 from installer.outcome import OfflineReason
 from installer.paths import _destination_path
 from installer.platforms import entry_systems
-from installer.remote import MAX_DATA_ARCHIVE_SIZE, MAX_RETRIES
+from installer.remote import MAX_DATA_ARCHIVE_SIZE, MAX_DOWNLOAD_SIZE, MAX_RETRIES
 from installer.safe_replace import KEPT, _MEMBER_ERRORS, _NotKept, _kept_slot, unreadable_words
 
 if TYPE_CHECKING:
@@ -237,18 +238,30 @@ def _archive_members(
             yield rel, member.size, functools.partial(_tar_member, tf, member)
 
 
+def _slot(entry: dict, rel: str) -> str:
+    """A tree member's place below the BIOS folder, as the record names it."""
+    return f"{entry['dest']}/{rel}" if entry.get("dest") else rel
+
+
 def data_directory_state(entry: dict, bios_path: Path,
                          remember: bool = False) -> tuple[Path, dict[str, dict], int]:
     """(tree root, files missing or wrong, files already right). remember
-    keeps what was read for the check after the line menu (_HEAD_READS)."""
+    keeps what was read for the check after the line menu (_HEAD_READS).
+
+    A rolling tree's file is right as the list hashes it or as an earlier
+    run wrote it from the source (the install record): the source has moved
+    on from the pack's copy, and that file is the newer one."""
     root = _destination_path(bios_path, entry["dest"]) if entry.get("dest") else bios_path.resolve()
     needed: dict[str, dict] = {}
     present = 0
+    written = recorded_data_copies(bios_path) if entry.get("rolling") else {}
     for rel, meta in entry["files"].items():
         target = _destination_path(root, rel)
+        accepted = {(meta["sha1"], meta["size"])} | written.get(_slot(entry, rel).casefold(), set())
         try:
-            held = (target.is_file() and target.stat().st_size == meta["size"]
-                    and _read_digests(target, ("sha1",), remember)["sha1"] == meta["sha1"])
+            size = target.stat().st_size if target.is_file() else -1
+            held = (any(size == known for _sha1, known in accepted)
+                    and (_read_digests(target, ("sha1",), remember)["sha1"], size) in accepted)
         except OSError:
             held = False
         if held:
@@ -294,8 +307,17 @@ def install_data_directory(entry: dict, bios_path: Path,
     state is the tree's data_directory_state when the run already read it:
     each read hashes every file in place.
 
-    Returns counts: present, installed, changed (the source no longer holds
-    the recorded bytes), absent (not in the archive), error, the reason
+    A rolling tree (a source that names no revision, the buildbot's nightly
+    assets) is written as its source serves it now, as RetroArch's own
+    downloader writes it: a member whose bytes differ from the list is
+    written all the same, read to the size its archive declares and, in a
+    ZIP, checked against its CRC-32. A tree listed at a commit keeps only
+    the listed bytes.
+
+    Returns counts: present, installed, updated (of those installed, the
+    ones a rolling source holds newer than the list), changed (the source
+    no longer holds the recorded bytes), absent (not in the archive), error,
+    the reason
     the archive could not be read, not_kept, the (path, reason) of each
     file in place that differs and could not be moved aside, left as it is,
     and written, each file written (dest below the BIOS folder, sha1, size).
@@ -304,9 +326,11 @@ def install_data_directory(entry: dict, bios_path: Path,
     needed = dict(needed)
     written: list[dict] = []
     not_kept: list[tuple[str, str]] = []
-    tallies = {"installed": 0, "changed": 0}
+    tallies = {"installed": 0, "updated": 0, "changed": 0}
+    # From a pack, the pack's copy is the tree: nothing newer to follow.
+    rolling = bool(entry.get("rolling")) and LOCAL.pack is None
     counts: dict[str, object] = {
-        "present": present, "installed": 0, "changed": 0, "absent": 0, "error": "",
+        "present": present, "installed": 0, "updated": 0, "changed": 0, "absent": 0, "error": "",
         "not_kept": not_kept, "written": written}
     if not needed:
         return counts
@@ -339,19 +363,24 @@ def install_data_directory(entry: dict, bios_path: Path,
                 # Read no more than the list records: the archive's own size
                 # field is checked first, and the stream is cut at the
                 # expected size whatever the member claims, so a member that
-                # inflates without end costs one byte past it.
-                if declared != meta["size"]:
+                # inflates without end costs one byte past it. A rolling
+                # source's member is cut at the size its archive declares.
+                if declared != meta["size"] and not (rolling and 0 <= declared <= MAX_DOWNLOAD_SIZE):
                     tallies["changed"] += 1
                     continue
                 target = _destination_path(root, rel)
                 target.parent.mkdir(parents=True, exist_ok=True)
-                slot = f"{entry['dest']}/{rel}" if entry.get("dest") else rel
-                outcome = _install_data_member(
-                    opener, meta, target, bios_path, slot, rel, not_kept)
+                slot = _slot(entry, rel)
+                outcome, landed = _install_data_member(
+                    opener, meta, target, bios_path, slot, rel, not_kept,
+                    declared if rolling else None)
                 if outcome:
                     tallies[outcome] += 1
-                if outcome == "installed":
-                    written.append({"dest": slot, "sha1": meta["sha1"], "size": meta["size"]})
+                if outcome == "updated":
+                    # Installed too: updated counts the newer ones among them.
+                    tallies["installed"] += 1
+                if landed is not None:
+                    written.append({"dest": slot, **landed})
     except _Offline as exc:
         # Kept apart, so the advice is the offline one, not the network's.
         counts["error"] = OfflineReason(str(exc))
@@ -375,6 +404,7 @@ def install_data_directory(entry: dict, bios_path: Path,
         if lock is not None:
             _release_claim(lock, lock_path)
     counts["installed"] = tallies["installed"]
+    counts["updated"] = tallies["updated"]
     counts["changed"] = tallies["changed"]
     counts["absent"] = len(needed)
     return counts
@@ -383,11 +413,17 @@ def install_data_directory(entry: dict, bios_path: Path,
 def _install_data_member(
     opener: Callable[[], ContextManager[IO[bytes]]], meta: dict, target: Path,
     bios_path: Path, slot: str, rel: str, not_kept: list[tuple[str, str]],
-) -> str:
+    follow: int | None = None,
+) -> tuple[str, dict | None]:
     """Write one member of a data tree's archive at target once its bytes
-    are the recorded ones: "installed", "changed" when they are not, or ""
-    when the file in place could not be moved aside (named in not_kept).
+    are the recorded ones: ("installed", what landed), ("changed", None)
+    when they are not, or ("", None) when the file in place could not be
+    moved aside (named in not_kept). follow is the size a rolling source's
+    archive declares for the member: its bytes land whatever they hash to,
+    ("updated", what landed) when they are not the listed ones, and a
+    stream that ends short of that size or runs past it is "changed".
     A read or write error is raised, and leaves no .part behind."""
+    expected = meta["size"] if follow is None else follow
     scratch: Path | None = None
     try:
         digest = hashlib.sha1()
@@ -396,23 +432,27 @@ def _install_data_member(
             dir=target.parent, prefix=f".{target.name}.", suffix=".part", delete=False,
         ) as out:
             scratch = Path(out.name)
-            while size <= meta["size"]:
-                chunk = src.read(min(1024 * 1024, meta["size"] + 1 - size))
+            # Read to the end, one byte past at most: a ZIP member checks
+            # its CRC-32 when its stream ends, and raises when it differs.
+            while size <= expected:
+                chunk = src.read(min(1024 * 1024, expected + 1 - size))
                 if not chunk:
                     break
                 digest.update(chunk)
                 size += len(chunk)
                 out.write(chunk)
-        if digest.hexdigest() != meta["sha1"] or size != meta["size"]:
-            return "changed"
+        sha1 = digest.hexdigest()
+        listed = sha1 == meta["sha1"] and size == meta["size"]
+        if size != expected or not (listed or follow is not None):
+            return "changed", None
         try:
-            KEPT.keep(*_kept_slot(bios_path, slot), target, {"sha1": meta["sha1"]})
+            KEPT.keep(*_kept_slot(bios_path, slot), target, {"sha1": sha1})
         except _NotKept as exc:
             not_kept.append((rel, str(exc)))
-            return ""
+            return "", None
         os.replace(scratch, target)
         scratch = None
-        return "installed"
+        return ("installed" if listed else "updated"), {"sha1": sha1, "size": size}
     finally:
         if scratch is not None:
             scratch.unlink(missing_ok=True)

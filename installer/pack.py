@@ -791,7 +791,9 @@ def _fill_pack(args: argparse.Namespace, pack: _PackFill, staging: Path,
         if not owned:
             continue
         detail(f"  {entry.get('ref', 'data')}: {_plural(len(names), 'data file')}...")
-        counts = install_data_directory(entry, root)
+        # The pack is rebuilt byte for byte: its tree is the listed one,
+        # never what a rolling source serves since.
+        counts = install_data_directory({**entry, "rolling": False}, root)
         problem = (str(counts["error"]) if counts["error"]
                    else f"{counts['changed']} changed in its source" if counts["changed"]
                    else f"{counts['absent']} not in its source" if counts["absent"]

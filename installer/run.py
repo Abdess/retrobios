@@ -555,6 +555,9 @@ def _pass_install_tree(run: _InstallRun, p: _PlatformPass, entry: dict,
         # said so of 218 files no source was asked for.
         line = f"  {entry['ref']}: {counts['installed']} installed, " \
                f"{counts['present']} already in place"
+        if counts["updated"]:
+            # A rolling source moved on since the list: its bytes landed.
+            line += f", {counts['updated']} newer than the pack's (as {entry['url']} serves them)"
         if counts["changed"] or counts["absent"]:
             # From a pack, the pack is the source that lacks them.
             line += (f", {counts['changed'] + counts['absent']} not in "

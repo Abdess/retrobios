@@ -18,6 +18,15 @@
 # tests/test_core_data_trees.py fails on a reader with neither.
 #
 # Each entry cites the original emulator source code that requires the directory.
+#
+# A source_url with {version} on GitHub or GitLab names a revision: the
+# refresh reads the commit the branch points to, fetches the tree at that
+# commit and records it, and the install lists carry that commit's address,
+# whose bytes never change. Write such an address so it takes a commit
+# (archive/{version}.tar.gz, never archive/refs/heads/{version}), and a
+# tarball's source_path with {version}. A source with no revision (the
+# buildbot's nightly assets, a release asset) is followed: the installer
+# writes what it serves, as RetroArch's own downloader does.
 
 data_directories:
 
@@ -251,9 +260,9 @@ data_directories:
   # ref: syobonaction (system/syobonaction/)
   # Freeware game data from OpenSyobonAction (BGM, res, SE directories)
   syobonaction:
-    source_url: "https://github.com/akemin-dayo/OpenSyobonAction/archive/refs/heads/{version}.tar.gz"
+    source_url: "https://github.com/akemin-dayo/OpenSyobonAction/archive/{version}.tar.gz"
     source_type: tarball
-    source_path: "OpenSyobonAction-master"
+    source_path: "OpenSyobonAction-{version}"
     version: master
     local_cache: data/syobonaction
     exclude: [DxLib.cpp, DxLib.h, icon.ico, joyconfig.h, loadg.cpp, main.cpp, main.h, Makefile, README_ja.md, README.md]
@@ -283,9 +292,9 @@ data_directories:
   # Not on buildbot, sourced from libretro repo
   # 532 files (tiles, fonts, databases, lua scripts, level descriptions)
   stonesoup:
-    source_url: "https://github.com/libretro/crawl-ref/archive/refs/heads/{version}.tar.gz"
+    source_url: "https://github.com/libretro/crawl-ref/archive/{version}.tar.gz"
     source_type: tarball
-    source_path: "crawl-ref-master/crawl-ref/source/dat"
+    source_path: "crawl-ref-{version}/crawl-ref/source/dat"
     version: master
     local_cache: data/stonesoup
     description: "DCSS game data (tiles, fonts, databases, lua, level descriptions)"
@@ -293,7 +302,7 @@ data_directories:
   # ref: FBNeo src/burner/libretro/libretro.cpp (system/fbneo/cheats/)
   # No platform installs it. Never opened: romm (one file per core).
   fbneo-cheats:
-    source_url: "https://github.com/finalburnneo/FBNeo-cheats/archive/refs/heads/{version}.zip"
+    source_url: "https://github.com/finalburnneo/FBNeo-cheats/archive/{version}.zip"
     source_type: zip
     version: master
     local_cache: data/fbneo-cheats

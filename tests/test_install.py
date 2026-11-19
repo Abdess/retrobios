@@ -509,7 +509,7 @@ class TheDataTreesCountInTheFreeSpace(unittest.TestCase):
                         unittest.mock.patch.object(
                             install, "install_data_directory",
                             lambda entry, *a, fetched=fetched, **k: fetched.append(entry["ref"]) or {
-                                "present": 0, "installed": 1, "changed": 0, "absent": 0,
+                                "present": 0, "installed": 1, "updated": 0, "changed": 0, "absent": 0,
                                 "error": "", "not_kept": []}), \
                         contextlib.redirect_stdout(out), contextlib.redirect_stderr(out):
                     try:
@@ -4377,6 +4377,91 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
         self.assertFalse((bios / "dolphin-emu" / "Themes").exists())
         self.assertEqual(again["present"], 1)
         self.assertEqual(sorted(p.name for p in (bios / "dolphin-emu").iterdir()), ["Sys"])
+
+    def _served(self, archive: Path):
+        def fetch(url, directory, progress=None, keep=None):
+            copy = Path(directory) / "a.zip"
+            shutil.copy(archive, copy)
+            return copy
+        return fetch
+
+    def test_a_rolling_tree_lands_what_its_source_serves(self):
+        """The buildbot rebuilt PPSSPP.zip and 49 of its 169 files were
+        refused on every install: a nightly source holds no other bytes.
+        RetroArch's own downloader writes what the buildbot serves."""
+        work = Path(_tempdir(self))
+        bios = work / "system"
+        bios.mkdir()
+        entry = {**self._entry(), "rolling": True}
+        with unittest.mock.patch.object(install, "_fetch_archive", self._served(self._zip(work))):
+            counts = install.install_data_directory(entry, bios)
+        self.assertEqual((counts["installed"], counts["updated"], counts["changed"],
+                          counts["absent"]), (2, 1, 0, 1))
+        dsp = bios / "dolphin-emu" / "Sys" / "GC" / "dsp.bin"
+        self.assertEqual(dsp.read_bytes(), b"new bytes upstream")
+        self.assertIn({"dest": "dolphin-emu/Sys/GC/dsp.bin",
+                       "sha1": hashlib.sha1(b"new bytes upstream").hexdigest(),
+                       "size": len(b"new bytes upstream")}, counts["written"])
+        self.assertFalse((bios / "dolphin-emu" / "Themes").exists())
+
+    def test_a_rolling_file_an_earlier_run_wrote_is_in_place(self):
+        """Its bytes are not the list's, they are what the source served and
+        the record names: the next run neither fetches nor rewrites it."""
+        work = Path(_tempdir(self))
+        bios = work / "system"
+        bios.mkdir()
+        entry = {**self._entry(), "rolling": True}
+        with unittest.mock.patch.object(install, "_fetch_archive", self._served(self._zip(work))):
+            counts = install.install_data_directory(entry, bios)
+        files = [install.record_file(item, "download", "data") for item in counts["written"]]
+        install.write_record(bios, "retroarch", {}, [], files)
+        _root, needed, present = install.data_directory_state(entry, bios)
+        self.assertEqual((sorted(needed), present), (["Sys/GC/gone.bin"], 2))
+        # Changed on the drive since: neither the list's bytes nor the run's.
+        (bios / "dolphin-emu" / "Sys" / "GC" / "dsp.bin").write_bytes(b"new bytes upstreaM")
+        self.assertIn("Sys/GC/dsp.bin", install.data_directory_state(entry, bios)[1])
+        # A tree listed at a commit takes only the list's bytes.
+        self.assertIn("Sys/GC/dsp.bin", install.data_directory_state(self._entry(), bios)[1])
+
+    def test_a_damaged_rolling_member_is_never_written(self):
+        """No hash to hold a followed member to: its ZIP CRC-32 still is."""
+        import zipfile
+
+        work = Path(_tempdir(self))
+        archive = self._zip(work)
+        body = bytearray(archive.read_bytes())
+        at = body.index(b"new bytes upstream")
+        body[at] ^= 0x01
+        archive.write_bytes(bytes(body))
+        bios = work / "system"
+        bios.mkdir()
+        with unittest.mock.patch.object(install, "_fetch_archive", self._served(archive)):
+            counts = install.install_data_directory({**self._entry(), "rolling": True}, bios)
+        self.assertTrue(counts["error"])
+        self.assertFalse((bios / "dolphin-emu" / "Sys" / "GC" / "dsp.bin").exists())
+        self.assertEqual([p.name for p in (bios / "dolphin-emu" / "Sys" / "GC").iterdir()
+                          if p.name.endswith(".part")], [])
+        self.assertTrue(zipfile.is_zipfile(archive))
+
+    def test_a_pack_rebuilds_a_rolling_tree_as_listed(self):
+        """From a pack, the pack's copy is the tree: nothing newer exists."""
+        work = Path(_tempdir(self))
+        bios = work / "system"
+        bios.mkdir()
+
+        def tree(_dest):
+            yield "Sys/GC/dsp.bin", 18, lambda: io.BytesIO(b"new bytes upstream")
+
+        local = unittest.mock.Mock()
+        local.tree = tree
+        with unittest.mock.patch.object(install.LOCAL, "pack", local):
+            counts = install.install_data_directory({**self._entry(), "rolling": True}, bios)
+        self.assertEqual((counts["installed"], counts["updated"], counts["changed"]), (0, 0, 1))
+
+    def test_a_rolling_flag_is_true_or_absent(self):
+        with self.assertRaisesRegex(ValueError, "rolling is invalid"):
+            install._check_data_directory({**self._entry(), "rolling": False}, "d")
+        install._check_data_directory({**self._entry(), "rolling": True}, "d")
 
     def test_a_member_that_inflates_is_cut_at_its_size(self):
         # A member whose header claims the recorded size and whose stream

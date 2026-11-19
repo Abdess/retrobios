@@ -325,5 +325,83 @@ class TheManifestCarriesTheArchiveSize(unittest.TestCase):
         self.assertNotIn("optional", listed["pak"])
 
 
+class ASourceThatMovesIsPinnedOrFollowed(unittest.TestCase):
+    """The PPSSPP list pinned the bytes of a buildbot nightly: six days after
+    the buildbot rebuilt it, 49 of its 169 files were refused on every
+    install. A source with a revision is listed at the commit it was fetched
+    at; one with none is marked rolling, and the installer follows it."""
+
+    COMMIT = "c" * 40
+
+    def _listed(self, registry: dict, versions: dict) -> dict[str, dict]:
+        from packs.datatrees import manifest_data_directories
+
+        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            data = Path(tmp) / "data"
+            for ref, entry in registry.items():
+                (data / ref).mkdir(parents=True)
+                (data / ref / "a.bin").write_bytes(b"abc")
+                entry["local_cache"] = str(data / ref)
+            (data / ".versions.json").write_text(json.dumps(versions))
+            members = [(str(data / ref / "a.bin"), f"{ref}/a.bin") for ref in registry]
+            refs = {f"{ref}/a.bin": (ref, ("s",), ref, True) for ref in registry}
+            return {entry["ref"]: entry for entry in
+                    manifest_data_directories(members, refs, registry, "")}
+
+    def test_a_branch_is_listed_at_the_commit_it_was_fetched_at(self):
+        listed = self._listed(
+            {"git": {"source_type": "tarball", "version": "master",
+                     "source_url": "https://github.com/o/r/archive/{version}.tar.gz",
+                     "source_path": "r-{version}/dat"},
+             "nightly": {"source_type": "zip",
+                         "source_url": "https://buildbot.libretro.com/assets/system/P.zip"},
+             "unrecorded": {"source_type": "zip", "version": "master",
+                            "source_url": "https://github.com/o/u/archive/{version}.zip"}},
+            {"git": {"sha": self.COMMIT, "version": "master"},
+             "nightly": {"sha": '"1261709225"', "version": "master"}})
+        self.assertEqual(listed["git"]["url"], f"https://github.com/o/r/archive/{self.COMMIT}.tar.gz")
+        self.assertEqual(listed["git"]["source_path"], f"r-{self.COMMIT}/dat")
+        self.assertNotIn("rolling", listed["git"])
+        self.assertIs(listed["nightly"]["rolling"], True)
+        # No commit recorded: the branch's name is all the list can carry.
+        self.assertIs(listed["unrecorded"]["rolling"], True)
+
+    def test_a_branch_is_fetched_at_the_commit_it_records(self):
+        (REPO_ROOT / "tmp").mkdir(exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            versions = str(Path(tmp) / ".versions.json")
+            entry = {"source_type": "zip", "version": "master", "strip_components": 1,
+                     "source_url": "https://github.com/o/r/archive/{version}.zip",
+                     "local_cache": str(Path(tmp) / "r")}
+            fetched: list[str] = []
+
+            def extract(url, *args, **kwargs):
+                fetched.append(url)
+                return 1
+
+            with mock.patch.object(datadirs, "get_remote_sha", return_value=self.COMMIT), \
+                    mock.patch.object(datadirs, "_get_remote_etag",
+                                      side_effect=AssertionError("an ETag for a revision")), \
+                    mock.patch.object(datadirs, "_download_and_extract_zip", extract):
+                self.assertTrue(datadirs.refresh_entry("r", entry, force=True,
+                                                       versions_path=versions))
+            self.assertEqual(fetched, [f"https://github.com/o/r/archive/{self.COMMIT}.zip"])
+            self.assertEqual(load_versions(versions)["r"],
+                             {"sha": self.COMMIT, "version": "master"})
+
+    def test_every_forge_source_takes_a_commit(self):
+        """archive/refs/heads/<commit> is no address: a forge source must be
+        written so the commit the refresh reads can replace its branch."""
+        registry = datadirs.load_registry(str(REPO_ROOT / "platforms" / "_data_dirs.yml"))
+        for key, entry in registry.items():
+            if not datadirs.revisioned(entry):
+                continue
+            with self.subTest(key):
+                self.assertNotIn("refs/heads/", entry["source_url"])
+                if entry.get("source_type", "tarball") == "tarball":
+                    self.assertIn("{version}", entry["source_path"])
+
+
 if __name__ == "__main__":
     unittest.main()

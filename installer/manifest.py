@@ -513,8 +513,9 @@ def _check_data_directory(entry: object, where: str) -> None:
         values = entry.get(field, [])
         if not isinstance(values, list) or not all(isinstance(v, str) for v in values):
             raise ValueError(f"{where}.{field} is invalid")
-    if entry.get("optional", True) is not True:
-        raise ValueError(f"{where}.optional is invalid")
+    for flag in ("optional", "rolling"):
+        if entry.get(flag, True) is not True:
+            raise ValueError(f"{where}.{flag} is invalid")
     cores = entry.get("cores", ["-"])
     if not isinstance(cores, list) or not cores or not all(isinstance(c, str) and c for c in cores):
         raise ValueError(f"{where}.cores is invalid")

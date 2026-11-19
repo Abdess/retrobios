@@ -479,7 +479,7 @@
       "uniqueItems": true
     },
     "data_directories": {
-      "description": "Data trees the pack carries, rebuilt by the installer from their source archive. Each file is kept only when its sha1 matches.",
+      "description": "Data trees the pack carries, rebuilt by the installer from their source archive. Each file is kept only when its sha1 matches, except in a rolling tree, which is written as its source serves it.",
       "type": "array",
       "items": {
         "type": "object",
@@ -546,6 +546,11 @@
             "type": "boolean",
             "const": true,
             "description": "Every core reading the tree runs without it (required: false in its profile): --required-only leaves it out."
+          },
+          "rolling": {
+            "type": "boolean",
+            "const": true,
+            "description": "The source names no revision (the buildbot's nightly assets, a release asset): the installer writes each listed file as the source serves it now, as RetroArch's downloader does, and the hashes describe the pack's copy. Absent for a source listed at a commit, whose files must hash as listed."
           },
           "cores": {
             "type": "array",

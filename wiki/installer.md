@@ -2031,8 +2031,13 @@ PPSSPP's assets, blueMSX's machines. These are not files of the collection, so
 upstream release) and the sha1 and size of every file the pack carries. The
 installer downloads the archive once, maps its members the way the pack was
 built (`strip_components` for a ZIP, `source_path` for a tarball, `exclude`),
-and writes a file only when its hash matches the list. A file the source has
-changed since is left out and counted, and the pack still holds it. `--check`
+and writes a file only when its hash matches the list. A source that names a
+revision is listed at the commit `refresh_data_dirs.py` fetched, so its files
+never change. A source that names none, the buildbot's nightly assets, is
+marked `rolling`: it holds only its latest build, so the installer writes each
+file as the source serves it now, as RetroArch's own downloader does, checked
+against its ZIP CRC-32, and says how many are newer than the pack's. The next
+run takes those files as in place through the install record. `--check`
 counts the data files missing, `--dry-run` names each tree it would fetch, and
 the size announced for a tree is its archive's (`archive_size`, recorded when
 `refresh_data_dirs.py` last downloaded it): one missing file fetches the whole

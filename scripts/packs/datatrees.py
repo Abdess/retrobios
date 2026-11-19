@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import zipfile
 from collections.abc import Iterable, Iterator
 from pathlib import Path
@@ -15,7 +16,7 @@ from model.declarations import declared_root
 from model.profiles import entry_system_ids, installed_data_refs
 from model.systems import norm_system_id
 from packs.archive import PackRecord, add_pack_member
-from packs.datadirs import cache_lock
+from packs.datadirs import cache_lock, revisioned
 from packs.extras import prefixed_destination
 from packs.paths import MEDIA_MARKER, has_path_conflict, register_path, lands_on_android
 from resolve.cores import resolve_platform_cores as _platform_cores
@@ -25,6 +26,8 @@ from resolve.validation import deliverable, read_from_system_dir
 
 if TYPE_CHECKING:
     from typing_extensions import Unpack
+
+_COMMIT = re.compile(r"[0-9a-f]{40}")
 
 
 def pack_markers(
@@ -309,7 +312,15 @@ def _tree_group(
 
     ``versions`` caches each .versions.json read, by path.
     """
+    recorded = _recorded_version(ref, entry, versions)
     version = str(entry.get("version", "master"))
+    revision = str(recorded.get("sha") or "")
+    rolling = not revisioned(entry)
+    if not rolling and recorded.get("version") == version and _COMMIT.fullmatch(revision):
+        # The commit the cache was fetched at, not the branch's name.
+        version = revision
+    elif not _COMMIT.fullmatch(version):
+        rolling = True
     dest = prefix
     if base_dest and (dest == base_dest or dest.startswith(base_dest + "/")):
         dest = dest[len(base_dest):].lstrip("/")
@@ -327,18 +338,28 @@ def _tree_group(
         group["source_path"] = str(entry.get("source_path", "")).format(version=version)
     if entry.get("exclude"):
         group["exclude"] = [str(e) for e in entry["exclude"]]
-    cache = entry.get("local_cache")
-    if cache:
-        recorded = Path(cache).parent / ".versions.json"
-        if str(recorded) not in versions:
-            try:
-                versions[str(recorded)] = json.loads(recorded.read_text())
-            except FileNotFoundError:
-                versions[str(recorded)] = {}
-        size = versions[str(recorded)].get(ref, {}).get("archive_size")
-        if isinstance(size, int) and size > 0:
-            group["archive_size"] = size
+    size = recorded.get("archive_size")
+    if isinstance(size, int) and size > 0:
+        group["archive_size"] = size
+    if rolling:
+        group["rolling"] = True
     return group
+
+
+def _recorded_version(ref: str, entry: dict, versions: dict[str, dict[str, dict]]) -> dict:
+    """What refresh_data_dirs recorded of the tree's last fetch, read once
+    per .versions.json."""
+    cache = entry.get("local_cache")
+    if not cache:
+        return {}
+    recorded = Path(cache).parent / ".versions.json"
+    if str(recorded) not in versions:
+        try:
+            versions[str(recorded)] = json.loads(recorded.read_text())
+        except FileNotFoundError:
+            versions[str(recorded)] = {}
+    found = versions[str(recorded)].get(ref)
+    return found if isinstance(found, dict) else {}
 
 
 def manifest_data_directories(
@@ -354,8 +375,12 @@ def manifest_data_directories(
     The source archive and the rule that maps its members onto the tree
     (strip_components for a ZIP, source_path for a tarball, exclude) come
     from _data_dirs.yml, the same refresh_data_dirs applies. Every file
-    carries the sha1 and size the cache holds, so a member the source
-    changed since is refused rather than installed. archive_size is the
+    carries the sha1 and size the cache holds. A source that names a
+    revision is listed at the commit the cache was fetched at, so its
+    members never change; one that names none (the buildbot's nightly
+    assets) is ``rolling``: the installer writes what it serves, as
+    RetroArch's downloader does, and the hashes describe the pack's copy.
+    archive_size is the
     size of the archive refresh_data_dirs last downloaded, what fetching
     the tree costs: a tarball whose tree is 10 KB is a download of 21 MB.
     ``systems`` are the platform's ids (``platform_systems``) the tree's
