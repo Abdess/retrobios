@@ -28,18 +28,18 @@ Installer:
 
 Website:
 
-- Lighthouse accessibility, 2026-11-19 (Lighthouse 13.4.1): 100 for `/`, `/emulators/mgba/` and `/files/` on desktop, 100 for `/` on mobile, 96 for `/systems/sony-playstation-2/` on desktop (see Known limitations).
+- Lighthouse accessibility, 2026-11-19 (Lighthouse 13.4.1, Chrome, mobile and desktop, median of 3 runs, on a production build served with gzip under `/retrobios/`): 100 on `/`, `/emulators/mgba/`, `/systems/sony-playstation-2/`, `/systems/other-project64/`, `/platforms/retroarch/`, `/get/retroarch/`, `/files/`, `/wanted/`, `/wiki/installer/`, `/gaps/`, `/provenance-redump/`, `/cross-reference/` and the not-found page. Best Practices is 100 on the same pages, and SEO is 100 on all but the not-found page (see Known limitations).
 - Text, link, button and focus ring colours meet the WCAG AA contrast ratios in both themes. A test in `tests/test_site_css.py` checks each pair.
 - Every link and control shows a focus ring. Form fields (file picker, wanted list filter, measurements filters) have labels, and results are announced in live regions.
 - Glossary terms open with Enter or Space and close with Escape.
+- The search button is named "Search", and its shortcut (Ctrl+K, or Cmd+K on a Mac) is announced through `aria-keyshortcuts`. The key hint beside it is drawn, so it does not change the button's name.
 - Animations and transitions are cut when the system asks for reduced motion.
 
 ## Known limitations
 
 - The full-screen installer is read badly by a screen reader. Use `--plain`.
 - Mouse and touch input have not been checked in macOS Terminal or iTerm2.
-- On long system pages, Lighthouse flags `target-size` on links inside file cards. The cards use `content-visibility: auto`, so cards out of view are not laid out when the audit measures them. With every card drawn, the same audit passes. The score of `/systems/sony-playstation-2/` is 96 for this reason.
-- Lighthouse flags `label-content-name-mismatch` on the search button: its accessible name is "Search" while the button also shows the Ctrl K shortcut, which is exposed through `aria-keyshortcuts`. This audit does not count toward the score.
+- The not-found page scores below 100 in SEO because it carries `noindex`, so Lighthouse fails `is-crawlable`. A page that only says an address does not exist must stay out of search results, so this is kept. Lighthouse cannot audit the page at a missing address, since the server answers 404 there, so it was audited at `/404.html`.
 - The website checks are automated. No review with a screen reader or with the keyboard alone has been recorded.
 
 ## Reporting
