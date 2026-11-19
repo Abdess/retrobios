@@ -182,7 +182,7 @@ const enhanceTables = () => {
 		}
 		filterTable(table);
 	};
-	// A table is set up and measured when it nears the screen. Doing all of
+	// A table is set up when it nears the screen. Doing all of
 	// them at load relaid out every row of a 3,800-row page after its first
 	// paint. One that appears later (a block opened, a tab chosen) is handled
 	// then.
@@ -194,32 +194,32 @@ const enhanceTables = () => {
 				if (!near.has(table)) enhance(table);
 				near.add(table);
 			}
-			if (shown.length) requestAnimationFrame(() => markScrollable(shown));
 		},
 		{ rootMargin: '400px 0px' },
 	);
-	// Every table is measured once the page is drawn and idle, before anything
-	// is written, so the read finds the layout done instead of forcing it: a
-	// keyboard reaches a scrolling table anywhere on the page, not only near
-	// the screen.
-	const idle = window.requestIdleCallback ?? ((callback: () => void) => setTimeout(callback, 1));
+	// Every table is measured from a ResizeObserver: its callback runs once
+	// the browser has laid the page out, so the read never forces a layout,
+	// and a keyboard reaches a scrolling table anywhere on the page, not only
+	// near the screen. The same callback measures again when the window
+	// changes width or a closed block opens. Measured in an idle callback
+	// after load, the read still forced a layout of the gaps page (103 ms,
+	// mobile, 4x CPU throttling). A table in a closed block is not laid out,
+	// and measuring it would lay it out: it is skipped until its block opens.
+	const sized = new ResizeObserver((entries) =>
+		markScrollable(
+			entries.map((entry) => entry.target as HTMLTableElement).filter((table) => table.checkVisibility?.() ?? true),
+		),
+	);
 	const start = () =>
-		idle(() => {
-			// A table in a closed block is not laid out, and measuring it would
-			// lay it out: it is measured when its block opens.
-			markScrollable(tables.filter((table) => table.checkVisibility?.() ?? true));
-			tables.forEach((table) => observer.observe(table));
+		tables.forEach((table) => {
+			sized.observe(table);
+			observer.observe(table);
 		});
 	if (document.readyState === 'complete') start();
 	else addEventListener('load', start, { once: true });
 	// A box above a closed block is typed in before its table is ever near
 	// the screen: it is wired now.
 	for (const table of tables) if (table.closest('details:not([open])') && filterControls(table)) filterTable(table);
-	let timer = 0;
-	addEventListener('resize', () => {
-		clearTimeout(timer);
-		timer = window.setTimeout(() => markScrollable([...near]), 150);
-	});
 };
 
 // Paths
@@ -928,17 +928,27 @@ const osTabs = () => {
 // The sidebar lists 91 manufacturers: the current page's link sat below the
 // pane, out of sight. On load, and when the phone menu opens, the pane
 // scrolls so the link sits a third of the way down. Only the pane scrolls,
-// never the page.
+// never the page. The positions come from an IntersectionObserver, read
+// once the page is laid out: reading them as the script ran laid out the
+// whole page early, a forced reflow of 114 ms on the gaps page (mobile,
+// 4x CPU throttling).
 const showCurrentPage = () => {
 	const pane = document.getElementById('starlight__sidebar');
 	if (!pane) return;
 	const reveal = () => {
 		const current = pane.querySelector<HTMLElement>('[aria-current="page"]');
 		if (!current) return;
-		const box = pane.getBoundingClientRect();
-		const link = current.getBoundingClientRect();
-		if (link.top >= box.top && link.bottom <= box.bottom) return;
-		pane.scrollTop += link.top - box.top - pane.clientHeight / 3;
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				observer.disconnect();
+				const box = entry.rootBounds;
+				const link = entry.boundingClientRect;
+				if (!box || !box.height || (link.top >= box.top && link.bottom <= box.bottom)) return;
+				pane.scrollTop += link.top - box.top - box.height / 3;
+			},
+			{ root: pane },
+		);
+		observer.observe(current);
 	};
 	reveal();
 	pane.addEventListener('toggle', (event) => {

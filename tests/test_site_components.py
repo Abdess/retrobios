@@ -143,6 +143,22 @@ class ScrollingTablesHaveTheirOwnName(unittest.TestCase):
         self.assertIn("`${heading}, table ${count}`", source)
 
 
+class TablesMeasuredWithoutAForcedLayout(unittest.TestCase):
+    """Measured in an idle callback after load, every table's scrollWidth
+    forced a layout of the gaps page (103 ms, mobile, 4x CPU throttling)."""
+
+    def test_widths_read_from_a_resize_observer(self):
+        source = _read(SITE_TS)
+        block = source[source.index("const enhanceTables = () =>"):source.index("// Paths")]
+        self.assertIn("new ResizeObserver(", block)
+        self.assertIn("sized.observe(table);", block)
+        self.assertNotIn("requestIdleCallback", block)
+        self.assertNotIn("addEventListener('resize'", block)
+        # Read after enhance() wrote captions and labels, the width forced
+        # the layout again (131 ms).
+        self.assertNotIn("requestAnimationFrame(() => markScrollable", block)
+
+
 class CommandBlocksHaveNoWindowDots(unittest.TestCase):
     def test_the_dots_are_off_in_the_theme(self):
         self.assertIn("terminalTitlebarDotsOpacity: '0'", _read(CONFIG))
@@ -905,7 +921,12 @@ class TheSidebarShowsTheCurrentPage(unittest.TestCase):
         source = _read(SITE_TS)
         block = source[source.index("const showCurrentPage = () =>"):source.index("// A glossary term")]
         self.assertIn("pane.scrollTop +=", block)
-        self.assertIn("pane.clientHeight / 3", block)
+        self.assertIn("box.height / 3", block)
+        # Read from an observer once laid out: a geometry read as the script
+        # ran forced a layout of the whole page (114 ms on gaps, mobile).
+        self.assertIn("new IntersectionObserver(", block)
+        self.assertNotIn("getBoundingClientRect", block)
+        self.assertNotIn("clientHeight", block)
         self.assertIn("addEventListener('toggle'", block)
         self.assertNotIn("scrollIntoView", source)
         self.assertIn("showCurrentPage();", source)
