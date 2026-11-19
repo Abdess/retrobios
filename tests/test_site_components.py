@@ -1019,7 +1019,7 @@ class SearchButtonShowsOnlyItsName(unittest.TestCase):
         text = re.sub(r"<[^>]*>", "", button[button.index(">", button.index("aria-keyshortcuts")) + 1:])
         self.assertEqual(text.split(), ["{Astro.locals.t('search.label')}"])
         self.assertIn("kbd[data-key]::before", search)
-        self.assertIn("platformKey.dataset.key = '⌘';", search)
+        self.assertIn("shortcut.dataset.key = '⌘ K';", search)
 
 
 class LogosAtTheirWeight(unittest.TestCase):

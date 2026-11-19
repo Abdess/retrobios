@@ -32,9 +32,11 @@ if (project.trailingSlash === 'never') dataAttributes['data-strip-trailing-slash
 	>
 		<Icon name="magnifier" />
 		<span class="sl-hidden md:sl-block" aria-hidden="true">{Astro.locals.t('search.label')}</span>
-		<kbd class="sl-hidden md:sl-flex" style="display: none;">
-			<kbd data-key={Astro.locals.t('search.ctrlKey')}></kbd><kbd data-key="K"></kbd>
-		</kbd>
+		<kbd
+			class="sl-hidden md:sl-flex"
+			style="display: none;"
+			data-key={`${Astro.locals.t('search.ctrlKey')} K`}
+		></kbd>
 	</button>
 
 	<dialog style="padding:0" aria-label={Astro.locals.t('search.label')}>
@@ -69,9 +71,8 @@ if (project.trailingSlash === 'never') dataAttributes['data-strip-trailing-slash
 		const openBtn = document.querySelector('button[data-open-modal]');
 		const shortcut = openBtn?.querySelector('kbd');
 		if (!openBtn || !(shortcut instanceof HTMLElement)) return;
-		const platformKey = shortcut.querySelector('kbd');
-		if (platformKey && /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
-			platformKey.dataset.key = '⌘';
+		if (/(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
+			shortcut.dataset.key = '⌘ K';
 			openBtn.setAttribute('aria-keyshortcuts', 'Meta+K');
 		}
 		shortcut.style.display = '';
