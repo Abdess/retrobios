@@ -35,6 +35,13 @@ recipes/                 romset recipes read from MAME and FBNeo DATs, and
 exports/                 each platform's own file, updated, with a report of the changes
 measurements/            records of real runs, one JSONL file per emulator
 scripts/                 all tooling (Python and pyyaml, jsonschema for schema checks)
+  core/                  standard-library foundations: hashing, archives, artifacts, paths, CLI plumbing
+  model/                 data loading: database, platforms, registry, profiles, targets, catalogues
+  resolve/               from declarations to files: content checks, resolution, layouts, cores, truth
+  packs/                 pack building and verification: selection, archives, manifests, coverage
+  profiling/             emulator profiles confronted with their upstream source (profile_sync.py)
+  romrecipes/            romset identification, rebuilt pinned archives, each archive's recipe
+  acquire/               catalog coverage and the searches for a missing file
   scraper/               upstream scrapers (libretro, batocera, recalbox...)
   scraper/targets/       hardware target scrapers (one *_targets_scraper.py per platform)
   exporter/              native format exporters (batocera, recalbox, emudeck...)
