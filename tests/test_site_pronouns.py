@@ -19,8 +19,10 @@ import unittest
 from functools import cache
 from pathlib import Path
 
+from tests.scratchtree import scratch_checkout
+
 ROOT = Path(__file__).resolve().parent.parent
-DOCS = ROOT / "website" / "src" / "content" / "docs"
+DOCS = Path("website") / "src" / "content" / "docs"
 
 PRONOUN = re.compile(
     r"(?<![\w-])((?-i:I)|me|my|mine|myself|we|us|our|ours|ourselves"
@@ -121,21 +123,26 @@ def pronouns(text: str) -> list[tuple[int, str]]:
     ]
 
 
-def _hits(paths: list[Path]) -> list[str]:
+def _hits(paths: list[Path], root: Path = ROOT) -> list[str]:
     return [
-        f"{path.relative_to(ROOT)}:{number}: {line}"
+        f"{path.relative_to(root)}:{number}: {line}"
         for path in paths
         for number, line in pronouns(path.read_text(encoding="utf-8"))
     ]
 
 
 @cache
-def _generated() -> bool:
+def _generated() -> Path | None:
+    """The checkout copy the site was generated in, None if it failed.
+    Run in the checkout, the generator rewrote website/public/data/wanted.json
+    after the site was built, and test_site_wanted then read a list the
+    built page did not ask for."""
+    root = scratch_checkout()
     result = subprocess.run(
-        [sys.executable, str(ROOT / "scripts" / "generate_site.py")],
-        cwd=ROOT, capture_output=True, text=True, check=False,
+        [sys.executable, "scripts/generate_site.py"],
+        cwd=root, capture_output=True, text=True, check=False,
     )
-    return result.returncode == 0
+    return root if result.returncode == 0 else None
 
 
 class Scanner(unittest.TestCase):
@@ -170,20 +177,22 @@ class SitePronouns(unittest.TestCase):
         self.assertEqual(hits, [], "\n".join(hits))
 
     def test_generated_pages(self):
-        if not _generated():
+        root = _generated()
+        if root is None:
             self.fail("scripts/generate_site.py failed")
-        pages = sorted(p for p in DOCS.rglob("*") if p.suffix in (".md", ".mdx"))
+        pages = sorted(p for p in (root / DOCS).rglob("*") if p.suffix in (".md", ".mdx"))
         self.assertTrue(pages)
-        hits = _hits(pages)
+        hits = _hits(pages, root)
         self.assertEqual(hits, [], "\n".join(hits[:200]))
 
     def test_agent_files(self):
-        if not _generated():
+        root = _generated()
+        if root is None:
             self.fail("scripts/generate_site.py failed")
-        public = ROOT / "website" / "public"
+        public = root / "website" / "public"
         files = [public / "llms.txt", *sorted((public / "skills").rglob("*.md"))]
         self.assertTrue(all(path.is_file() for path in files))
-        hits = _hits(files)
+        hits = _hits(files, root)
         self.assertEqual(hits, [], "\n".join(hits))
 
     def test_release_notes(self):
