@@ -451,15 +451,16 @@
 	border-top: 1px solid var(--rb-border);
 }
 
-/* File cards on system and emulator pages. A page holds hundreds: those
-   off screen are laid out when they come near, and the column is wide
-   enough for a sha256 on one line. */
+/* File cards on system and emulator pages. The column is wide enough for a
+   sha256 on one line. Every card is laid out: with content-visibility an
+   off-screen card took a 320px placeholder, the links of the card above it
+   were drawn over its own, and Lighthouse failed target-size on the PS2
+   page (31 links on desktop, 7 on mobile). A page is split at about 280 cards, and laying them all out
+   moved no Lighthouse metric (PS2 page, mobile: TBT 0 ms both ways). */
 body:has(.rb-sys-file, .rb-file-entry) { --sl-content-width: var(--rb-grid-width); }
 .sl-markdown-content :is(.rb-sys-file, .rb-file-entry) {
 	border-top: 1px solid var(--rb-border);
 	padding: 0.75rem 0 0.25rem;
-	content-visibility: auto;
-	contain-intrinsic-size: auto 320px;
 }
 .sl-markdown-content :is(.rb-sys-file, .rb-file-entry) > :first-child { margin-top: 0; }
 .sl-markdown-content .rb-file-title {

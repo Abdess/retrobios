@@ -183,8 +183,11 @@ class ThemeStylesheet(unittest.TestCase):
 
     def test_card_pages(self):
         cards = next(b for s, b in _blocks(self.css) if s == ".sl-markdown-content :is(.rb-sys-file, .rb-file-entry)")
-        self.assertIn("content-visibility: auto", cards)
-        self.assertIn("contain-intrinsic-size: auto 320px", cards)
+        # A card off screen with content-visibility kept a placeholder
+        # height, and the links of the card above were drawn over its own
+        # (Lighthouse target-size, 31 links on the PS2 page, desktop).
+        self.assertNotIn("content-visibility", cards)
+        self.assertNotRegex(self.css, r"content-visibility\s*:")
         self.assertIn("--sl-content-width: var(--rb-grid-width)", _rules(self.css, "body:has(.rb-sys-file, .rb-file-entry)")[0])
         self.assertEqual(_theme_tokens(self.css, ":root")["--rb-grid-width"], "54rem")
         facts = _rules(self.css, "dl.rb-facts")[0]
