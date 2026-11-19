@@ -519,13 +519,16 @@ def _extra_dest(u: dict) -> str:
     """Where a report entry lands before any platform prefix.
 
     An archive entry goes by the archive's name, and a directory path takes
-    the file's name after it ("cafeLibs/" + "snd_user.rpl").
+    the file's name after it ("cafeLibs/" + "snd_user.rpl"). A directory
+    entry ("registered/") is that path itself.
     """
     archive = u.get("archive")
     # An archive goes at the root of the core's system directory, which a
     # platform handing each core its own folder writes in the path.
     raw = (u.get("path") or archive) if archive else (u.get("path") or u["name"])
-    return f"{raw}{u['name']}" if raw.endswith("/") else raw
+    if not raw.endswith("/") or str(u["name"]).endswith("/"):
+        return raw
+    return f"{raw}{u['name']}"
 
 
 def unplaceable_extras(
@@ -1732,7 +1735,7 @@ def _second_pass_copy(
         raw = f.get("standalone_path") or f.get("path") or fname
     else:
         raw = system_dir_path(f, f.get("path") or fname)
-    dest = f"{raw}{fname}" if raw.endswith("/") else raw
+    dest = f"{raw}{fname}" if raw.endswith("/") and not fname.endswith("/") else raw
     # A bare name is a destination too: the core reads it at the root
     # of the directory core files go to, which the platform may not
     # declare (Recalbox has its System Cards under pcenginecd/ only,

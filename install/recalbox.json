@@ -2102,6 +2102,17 @@
       ]
     },
     {
+      "dest": "caesar3",
+      "name": "caesar3/",
+      "system": "caesar3",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "julius"
+      ],
+      "category": "game_data"
+    },
+    {
       "dest": "caesar3/The_empire.555",
       "name": "The_empire.555",
       "system": "caesar3",
@@ -2159,17 +2170,6 @@
     {
       "dest": "caesar3/c3_model.txt",
       "name": "c3_model.txt",
-      "system": "caesar3",
-      "required": true,
-      "reason": "not_found",
-      "cores": [
-        "julius"
-      ],
-      "category": "game_data"
-    },
-    {
-      "dest": "caesar3/caesar3",
-      "name": "caesar3/",
       "system": "caesar3",
       "required": true,
       "reason": "not_found",

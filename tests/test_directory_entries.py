@@ -311,6 +311,17 @@ class PackCarriesADirectory(DirectoryFixture):
         self.assertEqual(missing, ["Fonts"])
 
 
+class UnansweredDirectoryDestination(unittest.TestCase):
+    def test_a_directory_gap_is_named_by_its_path(self):
+        from packs.extras import _extra_dest
+
+        tree = {"name": "registered/", "type": "directory",
+                "path": "nand/system/Contents/registered/"}
+        self.assertEqual(_extra_dest(tree), "nand/system/Contents/registered/")
+        folder = {"name": "snd_user.rpl", "path": "cafeLibs/"}
+        self.assertEqual(_extra_dest(folder), "cafeLibs/snd_user.rpl")
+
+
 @unittest.skipUnless(HAS_JSONSCHEMA, "validating a schema needs jsonschema")
 class ProfileContract(unittest.TestCase):
     """One way to say an entry is a directory, so one place reads it."""
