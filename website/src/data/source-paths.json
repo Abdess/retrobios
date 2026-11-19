@@ -31,11 +31,24 @@
  "codeberg.org/virtualxt/virtualxt@a400adb0abf242c2fecbe926618338a00dc557c5": [
   "virtualxt_libretro.info"
  ],
+ "git.citron-emu.org/citron-emu/Citron@79dee42601deff2077160906f9a89756fca820a9": [],
  "git.eden-emu.dev/eden-emu/eden@26a03d2473787abf3223b2d0e65b291eee00c1e1": [
+  "src/android/app/src/main/java/org/yuzu/yuzu_emu/fragments/InstallableFragment.kt",
   "src/android/app/src/main/java/org/yuzu/yuzu_emu/utils/DirectoryInitialization.kt",
+  "src/android/app/src/main/java/org/yuzu/yuzu_emu/utils/InstallableActions.kt",
+  "src/common/fs/fs_paths.h",
   "src/common/fs/path_util.cpp",
   "src/core/crypto/key_manager.cpp",
-  "src/core/hle/service/nfc/common/amiibo_crypto.cpp"
+  "src/core/file_sys/bis_factory.cpp",
+  "src/core/file_sys/registered_cache.cpp",
+  "src/core/hle/service/filesystem/filesystem.cpp",
+  "src/core/hle/service/filesystem/fsp/fsp_srv.cpp",
+  "src/core/hle/service/nfc/common/amiibo_crypto.cpp",
+  "src/core/loader/nca.cpp",
+  "src/frontend_common/content_manager.h",
+  "src/frontend_common/firmware_manager.h",
+  "src/qt_common/util/content.cpp",
+  "src/yuzu/main_window.cpp"
  ],
  "git.eden-emu.dev/eden-emu/eden@8648c27cbb4c17b176076b09ac245271829cbd9f": [
   "CMakeModules/GenerateSCMRev.cmake",
@@ -331,7 +344,12 @@
  ],
  "git.ngram.ca/mirrors/Ryujinx@7d158acc3b5826a08941d6e8d50d3a3897021bcd": [
   "src/Ryujinx.Common/Configuration/AppDataManager.cs",
-  "src/Ryujinx.HLE/FileSystem/VirtualFileSystem.cs"
+  "src/Ryujinx.HLE/FileSystem/ContentManager.cs",
+  "src/Ryujinx.HLE/FileSystem/ContentPath.cs",
+  "src/Ryujinx.HLE/FileSystem/VirtualFileSystem.cs",
+  "src/Ryujinx.UI.Common/Helper/SetupValidator.cs",
+  "src/Ryujinx/AppHost.cs",
+  "src/Ryujinx/UI/ViewModels/MainWindowViewModel.cs"
  ],
  "git.ryujinx.app/projects/Kenji-NX@280c427c550c5fe3bcc46b378e06a9b90a7e6b09": [
   "README.md",
@@ -352,6 +370,7 @@
   "src/Ryujinx.Common/Configuration/AppDataManager.cs",
   "src/Ryujinx.Common/ReleaseInformation.cs",
   "src/Ryujinx.HLE/FileSystem/ContentManager.cs",
+  "src/Ryujinx.HLE/FileSystem/ContentPath.cs",
   "src/Ryujinx.HLE/FileSystem/VirtualFileSystem.cs",
   "src/Ryujinx.HLE/HOS/Horizon.cs",
   "src/Ryujinx.HLE/HOS/Services/Nfc/AmiiboDecryption/AmiiboBinReader.cs",
@@ -367,6 +386,8 @@
   "src/Ryujinx.HLE/Loaders/Processes/ProcessLoader.cs",
   "src/Ryujinx.Input.SDL3/SDL3GamepadDriver.cs",
   "src/Ryujinx.SDL3.Common/SDL3Driver.cs",
+  "src/Ryujinx.UI.Common/Helper/SetupValidator.cs",
+  "src/Ryujinx/AppHost.cs",
   "src/Ryujinx/UI/ViewModels/AmiiboWindowViewModel.cs",
   "src/Ryujinx/UI/ViewModels/MainWindowViewModel.cs",
   "src/Ryujinx/UI/Windows/MainWindow.axaml.cs"
@@ -10308,6 +10329,7 @@
   "src/io/file_manager.cpp",
   "src/utils/constants.cpp"
  ],
+ "github.com/suyu-emu/suyu@ee365bad9501c73ff49936e72ec91cd9c3ce5c24": [],
  "github.com/sydarn/yabause@a40dace1ae0af3ebd45848549fdf396f40e3930f": [
   "yabause/CMakeLists.txt",
   "yabause/src/config.h.in",

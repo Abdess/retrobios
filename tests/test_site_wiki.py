@@ -686,8 +686,7 @@ class CommunityAnswers(unittest.TestCase):
             with self.subTest(name=name):
                 self.assertIn(f"`{name}`", section)
                 _entry(_profile(profile), name)
-        self.assertIn("Firmware (system NCAs) must be installed through Eden's UI",
-                      _profile("eden")["notes"])
+        self.assertIn("Firmware (system NCAs) is installed through the UI", _profile("eden")["notes"])
 
     def test_zip_or_unzip_stays(self):
         self.assertIn("neogeo.zip", _section(self.faq, "Zip or unzip?"))
