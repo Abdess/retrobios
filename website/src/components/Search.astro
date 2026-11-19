@@ -1,9 +1,12 @@
 ---
 // Starlight's search (@astrojs/starlight 0.42.6, components/Search.astro),
-// with one change: the Pagefind UI (ui-core.js, 26 KiB) loads when the
+// with two changes. The Pagefind UI (ui-core.js, 26 KiB) loads when the
 // reader reaches for search, a pointer on the button, focus on it, a tap,
 // Ctrl+K, and not on idle on every page. It was a third of the home page's
-// weight. The markup and the styles are Starlight's own.
+// weight. The Ctrl K hint is drawn from data-key, not written as text: the
+// button is named "Search", the shortcut is in aria-keyshortcuts, and a
+// visible "Ctrl K" in its content made the name differ from its label
+// (WCAG 2.5.3). The rest of the markup and the styles are Starlight's own.
 import { Icon } from '@astrojs/starlight/components';
 import project from 'virtual:starlight/project-context';
 
@@ -30,7 +33,7 @@ if (project.trailingSlash === 'never') dataAttributes['data-strip-trailing-slash
 		<Icon name="magnifier" />
 		<span class="sl-hidden md:sl-block" aria-hidden="true">{Astro.locals.t('search.label')}</span>
 		<kbd class="sl-hidden md:sl-flex" style="display: none;">
-			<kbd>{Astro.locals.t('search.ctrlKey')}</kbd><kbd>K</kbd>
+			<kbd data-key={Astro.locals.t('search.ctrlKey')}></kbd><kbd data-key="K"></kbd>
 		</kbd>
 	</button>
 
@@ -68,7 +71,7 @@ if (project.trailingSlash === 'never') dataAttributes['data-strip-trailing-slash
 		if (!openBtn || !(shortcut instanceof HTMLElement)) return;
 		const platformKey = shortcut.querySelector('kbd');
 		if (platformKey && /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
-			platformKey.textContent = '⌘';
+			platformKey.dataset.key = '⌘';
 			openBtn.setAttribute('aria-keyshortcuts', 'Meta+K');
 		}
 		shortcut.style.display = '';
@@ -220,6 +223,9 @@ if (project.trailingSlash === 'never') dataAttributes['data-strip-trailing-slash
 
 		kbd {
 			font-family: var(--__sl-font);
+		}
+		kbd[data-key]::before {
+			content: attr(data-key);
 		}
 
 		dialog {

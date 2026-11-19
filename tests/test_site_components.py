@@ -984,6 +984,23 @@ class SearchLoadsOnFirstUse(unittest.TestCase):
         self.assertNotIn("TODO", search)
 
 
+class SearchButtonShowsOnlyItsName(unittest.TestCase):
+    """Lighthouse flagged label-content-name-mismatch: the button is named
+    "Search" and showed "Ctrl K" as text. The hint is drawn from data-key,
+    the shortcut is announced by aria-keyshortcuts."""
+
+    def test_no_text_in_the_button_but_its_name(self):
+        search = _read(COMPONENTS / "Search.astro")
+        start = search.index("<button\n\t\tdata-open-modal")
+        button = search[start:search.index("</button>", start)]
+        self.assertIn("aria-label={Astro.locals.t('search.label')}", button)
+        self.assertIn('aria-keyshortcuts="Control+K"', button)
+        text = re.sub(r"<[^>]*>", "", button[button.index(">", button.index("aria-keyshortcuts")) + 1:])
+        self.assertEqual(text.split(), ["{Astro.locals.t('search.label')}"])
+        self.assertIn("kbd[data-key]::before", search)
+        self.assertIn("platformKey.dataset.key = '⌘';", search)
+
+
 class LogosAtTheirWeight(unittest.TestCase):
     """2.7: two logos were Inkscape files, one with a 441 x 334 PNG inside."""
 
