@@ -3,12 +3,15 @@
 
 Four sources, none of which names a person:
 
-- Google Search Console: the searches that showed the site, by page.
+- Google Search Console: the searches that showed the site, by page,
+  against the period of the same length just before.
 - GoatCounter: page views, the domains readers came from, and the actions
   website/src/scripts/count.ts counts (searches that found nothing,
   "Did this page help?", downloads, broken links). wiki/privacy.md says
   what is sent.
-- GitHub: repository traffic (14 days) and release download counts.
+- GitHub: repository traffic (14 days) and release download counts,
+  all-time counters compared with the snapshot the previous run left in
+  .cache/insights/downloads.json.
 - The collection: which searched file names it holds, and which no
   emulator profile declares.
 
@@ -22,6 +25,7 @@ Usage:
     python scripts/site_insights.py
     python scripts/site_insights.py --days 90 --output report.md
     python scripts/site_insights.py --skip gsc,github
+    python scripts/site_insights.py --downloads-snapshot tmp/downloads.json
 """
 
 from __future__ import annotations
@@ -30,6 +34,7 @@ import argparse
 import datetime as dt
 import os
 import sys
+from dataclasses import replace
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
@@ -39,11 +44,15 @@ from core.cli import run_cli
 from core.paths import REPO_ROOT
 from sitegen.insights import (
     SOURCES,
+    Readings,
     collection_names,
+    downloads_snapshot,
     fetch_github,
     fetch_goatcounter,
     fetch_queries,
+    load_snapshot,
     report,
+    save_snapshot,
 )
 
 
@@ -52,25 +61,37 @@ def main() -> int:
     parser.add_argument("--days", type=int, default=28, help="days to read, ending 3 days ago (default 28)")
     parser.add_argument("--skip", default="", help=f"sources to leave out, among {', '.join(SOURCES)}")
     parser.add_argument("--output", type=Path, help="write the report here instead of stdout")
+    parser.add_argument("--downloads-snapshot", type=Path, default=REPO_ROOT / ".cache" / "insights" / "downloads.json",
+                        help="release download counts of the previous run, rewritten after each run")
     args = parser.parse_args()
     skip = {name.strip() for name in args.skip.split(",") if name.strip()}
     unknown = skip - set(SOURCES)
     if unknown:
         parser.error(f"unknown source(s): {', '.join(sorted(unknown))}")
+    if args.days < 1:
+        parser.error("--days must be at least 1")
     # Search Console data settles two to three days after the fact.
     end = dt.date.today() - dt.timedelta(days=3)
     start = end - dt.timedelta(days=args.days - 1)
     held, declared = collection_names(load_database(str(REPO_ROOT / "database.json")),
                                       load_emulator_profiles(str(REPO_ROOT / "emulators")))
-    queries = None if "gsc" in skip else fetch_queries(start, end)
-    goat = None if "goatcounter" in skip else fetch_goatcounter(start, dt.date.today())
-    github = None if "github" in skip else fetch_github()
-    text = report(start, end, queries, goat, github, held, declared)
+    now = dt.datetime.now(dt.timezone.utc)
+    readings = Readings(start, end, now, held, declared)
+    if "gsc" not in skip:
+        readings = replace(readings, queries=fetch_queries(start, end),
+                           previous=fetch_queries(*readings.previous_span))
+    if "goatcounter" not in skip:
+        readings = replace(readings, goat=fetch_goatcounter(start, now.date()), goat_end=now.date())
+    if "github" not in skip:
+        readings = replace(readings, github=fetch_github(), snapshot=load_snapshot(args.downloads_snapshot))
+    text = report(readings)
     if args.output:
         args.output.write_text(text, encoding="utf-8")
         print(f"Wrote {args.output}", file=sys.stderr)
     else:
         sys.stdout.write(text)
+    if readings.github is not None:
+        save_snapshot(args.downloads_snapshot, downloads_snapshot(readings.github["downloads"], now))
     return 0
 
 
