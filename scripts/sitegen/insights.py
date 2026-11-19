@@ -10,6 +10,7 @@ import re
 import subprocess
 import tempfile
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from collections import defaultdict
@@ -24,6 +25,12 @@ SITE_PROPERTY = "https://abdess.github.io/retrobios/"
 GOATCOUNTER = "https://retrobios.goatcounter.com/api/v0"
 REPOSITORY = "Abdess/retrobios"
 SOURCES = ("gsc", "goatcounter", "github")
+# Paths excluded before a window is cut in two: about 10 KB of address.
+GOAT_MAX_EXCLUDED = 1000
+# GoatCounter answers four requests a second and 500 per window, and says
+# when to come back: a short wait is waited, a long one ends the run.
+RATE_LIMIT_TRIES = 8
+RATE_LIMIT_LONGEST_WAIT = 60
 
 # A word of a search that names a file: "scph5501.bin", "prod.keys".
 FILE_TOKEN = re.compile(r"\b[\w.+-]+\.(?:bin|rom|zip|pup|keys|img|dat|bios|ic\d+|u\d+|sys|nvm|mec|"
@@ -51,6 +58,18 @@ def _get_json(url: str, headers: dict[str, str] | None = None, body: dict | None
     request = urllib.request.Request(url, data=data, headers={
         "User-Agent": "retrobios-site-insights", **({"Content-Type": "application/json"} if data else {}),
         **(headers or {})})
+    for _ in range(RATE_LIMIT_TRIES - 1):
+        try:
+            with urllib.request.urlopen(request, timeout=60) as response:
+                return json.load(response)
+        except urllib.error.HTTPError as error:
+            if error.code != 429:
+                raise
+            wait = int(error.headers.get("X-Rate-Limit-Reset") or 1) + 1
+            if wait > RATE_LIMIT_LONGEST_WAIT:
+                raise SystemExit(f"{urllib.parse.urlsplit(url).hostname} refuses requests for "
+                                 f"{wait} s (rate limit); run again then, or --skip that source") from error
+            time.sleep(wait)
     with urllib.request.urlopen(request, timeout=60) as response:
         return json.load(response)
 
@@ -98,23 +117,71 @@ def fetch_queries(start: dt.date, end: dt.date) -> list[Query]:
             return rows
 
 
+def _goat_object(url: str, auth: dict[str, str]) -> dict:
+    answer = _get_json(url, auth)
+    if not isinstance(answer, dict):
+        raise SystemExit("GoatCounter answered with something other than an object")
+    return answer
+
+
+def _goat_span(start: dt.datetime, end: dt.datetime) -> dict[str, str]:
+    """The hours from start up to end, end excluded: GoatCounter keeps hourly
+    counts and reads an end at hh:59:59 as the last hour included."""
+    last = end - dt.timedelta(seconds=1)
+    return {"start": start.strftime("%Y-%m-%dT%H:00:00Z"), "end": last.strftime("%Y-%m-%dT%H:59:59Z")}
+
+
+def _goat_window(start: dt.datetime, end: dt.datetime, auth: dict[str, str]) -> dict[str, int] | None:
+    """Every path of one window with its count, or None once the window
+    holds too many paths to page through."""
+    counts: dict[str, int] = {}
+    exclude: list[str] = []
+    while True:
+        params = urllib.parse.urlencode({**_goat_span(start, end), "limit": 100,
+                                         "exclude_paths": ",".join(exclude)}, safe=",")
+        answer = _goat_object(f"{GOATCOUNTER}/stats/hits?{params}", auth)
+        for hit in answer.get("hits", []):
+            counts[hit["path"] + (" [404]" if hit.get("title") == "404" else "")] = int(hit["count"])
+            exclude.append(str(hit["path_id"]))
+        if not answer.get("more"):
+            return counts
+        if len(exclude) >= GOAT_MAX_EXCLUDED:
+            return None
+
+
+def _goat_hits(start: dt.datetime, end: dt.datetime, auth: dict[str, str]) -> list[tuple[str, int]]:
+    """Counts by path over the whole span, summed week by week: GoatCounter
+    keeps hourly counts, so windows add up. The API pages with
+    exclude_paths, which lengthens the address by every path already read,
+    and the run of 2026-11-19 failed past 2,800 of them. A window with too
+    many paths is read again in halves, down to one hour."""
+    totals: dict[str, int] = defaultdict(int)
+    week = dt.timedelta(days=7)
+    pending = [(low, min(low + week, end)) for low in
+               (start + n * week for n in range(-(-(end - start) // week)))]
+    while pending:
+        low, high = pending.pop()
+        counts = _goat_window(low, high, auth)
+        if counts is None:
+            hours = int((high - low).total_seconds()) // 3600
+            if hours <= 1:
+                raise SystemExit(f"GoatCounter holds more than {GOAT_MAX_EXCLUDED} paths in the hour from {low}")
+            middle = low + dt.timedelta(hours=hours // 2)
+            pending += [(low, middle), (middle, high)]
+            continue
+        for path, count in counts.items():
+            totals[path] += count
+    return list(totals.items())
+
+
 def fetch_goatcounter(start: dt.date, end: dt.date) -> dict:
     """Paths and events with their visit counts, and the referring domains."""
     token = (CONFIG / "goatcounter-api-token.txt").read_text(encoding="utf-8").strip()
     auth = {"Authorization": f"Bearer {token}"}
-    span = {"start": f"{start.isoformat()}T00:00:00Z", "end": f"{end.isoformat()}T23:59:59Z"}
-    hits: list[tuple[str, int]] = []
-    exclude: list[str] = []
-    while True:
-        params = urllib.parse.urlencode({**span, "limit": 100, "exclude_paths": ",".join(exclude)})
-        answer = _get_json(f"{GOATCOUNTER}/stats/hits?{params}", auth)
-        if not isinstance(answer, dict):
-            raise SystemExit("GoatCounter answered with something other than an object")
-        for hit in answer.get("hits", []):
-            hits.append((hit["path"] + (" [404]" if hit.get("title") == "404" else ""), int(hit["count"])))
-            exclude.append(str(hit["path_id"]))
-        if not answer.get("more"):
-            break
+    first = dt.datetime.combine(start, dt.time(), dt.timezone.utc)
+    after = dt.datetime.combine(end + dt.timedelta(days=1), dt.time(), dt.timezone.utc)
+    span = _goat_span(first, after)
+    hits = _goat_hits(first, after, auth)
     refs = _get_json(f"{GOATCOUNTER}/stats/toprefs?{urllib.parse.urlencode({**span, 'limit': 50})}", auth)
     total = _get_json(f"{GOATCOUNTER}/stats/total?{urllib.parse.urlencode(span)}", auth)
     if not isinstance(refs, dict) or not isinstance(total, dict):
