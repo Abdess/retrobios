@@ -23,8 +23,10 @@ SYSTEM_PAGE_BUDGET = 300_000
 # Manufacturers whose every console gets a page of its own, whatever its
 # size. A section shares its page's search fields with its neighbours, and
 # a digit is on too many pages to weigh: "playstation 3 bios" found the
-# PlayStation page before the Sony page that held the PlayStation 3.
-CONSOLE_PAGES = frozenset({"Sony"})
+# PlayStation page before the Sony page that held the PlayStation 3, and
+# "gba bios" landed on mGBA's page, the Game Boy Advance being a section of
+# the Nintendo page.
+CONSOLE_PAGES = frozenset({"Nintendo", "Sony"})
 # What the sections kept on a manufacturer's summary may weigh once
 # rendered, estimated from their Markdown. Fitted on the Nintendo, Sega and
 # Commodore summaries: highlighted install commands grow about eleven times

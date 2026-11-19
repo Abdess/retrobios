@@ -621,9 +621,15 @@ class TheBuiltSystemPages(unittest.TestCase):
         self.assertNotRegex(opening.casefold(), r"dsi_|bios7i|bios9i")
 
     def test_the_gba_line_prints_the_setups_name(self) -> None:
+        """On the Nintendo page, whose section now leads to the console's
+        own page, and on that page above its first card."""
         page = (DIST / "systems" / "nintendo" / "index.html").read_text(encoding="utf-8")
         section = page[page.index('id="game-boy-advance"'):page.index('id="game-boy-color"')]
-        self.assertRegex(section[:section.index("class=\"rb-sys-file\"")], r"<code[^>]*>gba_bios.bin</code>")
+        own = (DIST / "systems" / "nintendo-game-boy-advance" / "index.html").read_text(
+            encoding="utf-8")
+        for opening in (section.split('class="rb-sys-file"')[0],
+                        own.split('class="rb-sys-file"')[0]):
+            self.assertRegex(opening, r"<code[^>]*>gba_bios.bin</code>")
 
     def test_the_neo_geo_section_opens_on_the_neo_geo_bios(self) -> None:
         page = (DIST / "systems" / "snk" / "index.html").read_text(encoding="utf-8")

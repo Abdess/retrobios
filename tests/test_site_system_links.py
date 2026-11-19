@@ -150,10 +150,12 @@ class AnIdNamesOneCardPerPage(unittest.TestCase):
     def test_the_second_card_has_no_id(self):
         from packs.crossref import FileConsumers
 
+        # Sega keeps small consoles on its page: Nintendo and Sony give every
+        # console a page of its own (CONSOLE_PAGES).
         entry = {"name": "a.bin", "sha1": "a" * 40, "md5": "b" * 32, "size": 3,
-                 "path": "bios/Nintendo/DS/a.bin"}
+                 "path": "bios/Sega/Mega CD/a.bin"}
         page = systempages.generate_system_page(
-            "Nintendo", {"DS": [entry], "DSi": [entry]}, FileConsumers({"files": {}}))
+            "Sega", {"Mega CD": [entry], "Mega Drive": [entry]}, FileConsumers({"files": {}}))
         self.assertEqual(page.count('id="sha1-aaaaaaaaaaaa" class="rb-file-title"'), 1)
         self.assertEqual(page.count("rb-sys-file"), 2)
 

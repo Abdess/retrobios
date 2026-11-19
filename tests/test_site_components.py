@@ -746,20 +746,49 @@ class SearchConsoleOwnership(unittest.TestCase):
                       (DIST / "index.html").read_text(encoding="utf-8"))
 
 
+NINTENDO_CONSOLES = (
+    "nintendo-3ds", "nintendo-famicom-disk-system", "nintendo-game-boy",
+    "nintendo-game-boy-advance", "nintendo-game-boy-color", "nintendo-gamecube",
+    "nintendo-nes", "nintendo-nintendo-64", "nintendo-nintendo-64dd", "nintendo-nintendo-ds",
+    "nintendo-nintendo-dsi", "nintendo-pokemon-mini", "nintendo-satellaview", "nintendo-snes",
+    "nintendo-sufami-turbo", "nintendo-super-famicom-box", "nintendo-super-game-boy",
+    "nintendo-switch", "nintendo-wii", "nintendo-wii-u",
+)
+
+
 class EverySonyConsoleHasItsPage(unittest.TestCase):
     """A section shares its page's search fields: "playstation 3 bios"
-    found the PlayStation page before the Sony page holding the PS3."""
+    found the PlayStation page before the Sony page holding the PS3, and
+    "gba bios" landed on mGBA's page, the Game Boy Advance being a section
+    of the Nintendo page."""
 
-    def test_sony_is_split_by_console(self):
+    def test_sony_and_nintendo_are_split_by_console(self):
         source = script_source("generate_site.py")
-        self.assertIn('CONSOLE_PAGES = frozenset({"Sony"})', source)
+        self.assertIn('CONSOLE_PAGES = frozenset({"Nintendo", "Sony"})', source)
         self.assertIn("manufacturer in CONSOLE_PAGES", source)
+
+    def test_the_game_boy_advance_page_and_its_section(self):
+        docs = WEBSITE / "src" / "content" / "docs"
+        page = docs / "systems" / "nintendo-game-boy-advance.mdx"
+        if not page.is_file():
+            self.skipTest("site not generated")
+        text = page.read_text(encoding="utf-8")
+        self.assertIn("content: Game Boy Advance BIOS files (Nintendo) - RetroBIOS", text)
+        self.assertIn("/retrobios/emulators/mgba/", text)
+        # The section keeps its anchor on the Nintendo page and leads here.
+        summary = (docs / "systems" / "nintendo.md").read_text(encoding="utf-8")
+        section = summary.split("## Game Boy Advance { #game-boy-advance }", 1)[1]
+        self.assertIn("(/retrobios/systems/nintendo-game-boy-advance/)",
+                      section.split("\n## ", 1)[0])
+        mgba = next((docs / "emulators").glob("mgba.md*")).read_text(encoding="utf-8")
+        self.assertIn("systems/nintendo-game-boy-advance/", mgba)
+        self.assertNotIn("systems/nintendo/#game-boy-advance", mgba)
 
     @unittest.skipUnless((DIST / "index.html").is_file(), "site not built")
     def test_each_console_page_is_built(self):
         for slug in ("sony-playstation", "sony-playstation-2", "sony-playstation-3",
                      "sony-playstation-4", "sony-playstation-portable", "sony-playstation-vita",
-                     "sony-pocketstation"):
+                     "sony-pocketstation", *NINTENDO_CONSOLES):
             with self.subTest(page=slug):
                 self.assertTrue((DIST / "systems" / slug / "index.html").is_file())
 
