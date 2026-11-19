@@ -1092,4 +1092,4 @@ def _unsourceable_line(f: dict) -> str:
     wanted, and "Not collectable" sent readers away from KANJI2.ROM, which
     MAME's fm7740sx.zip carries."""
     return (f"Not collected yet: {escape_tags(str(f['unsourceable']))} "
-            "([files not collected yet](../gaps.md#not-collected-yet))")
+            "([files not collected yet](../gaps-not-collected.md))")

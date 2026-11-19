@@ -5561,7 +5561,7 @@ class UnsourceableCardSaysWhy(unittest.TestCase):
             entry, {"files": [entry]}, None, [entry], lambda f: False, "file-x",
         ))
         self.assertIn("Not collected yet: written by the firmware editor", text)
-        self.assertIn("../gaps.md#not-collected-yet", text)
+        self.assertIn("../gaps-not-collected.md", text)
         self.assertNotIn("collectable", text)
 
     def test_the_gaps_page_names_where_a_wanted_file_is_listed(self):

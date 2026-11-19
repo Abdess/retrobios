@@ -363,6 +363,10 @@ UPLOAD_URL = f"{sitewanted.UPLOAD_ROOT}bios"
 # Rows of Files to source on one page: 601 on one page made a phone page
 # 274,509 px long.
 FILES_TO_SOURCE_PART = 100
+# The two other long tables, each on a page of its own. Emulator cards link
+# the second.
+PER_EMULATOR_STEM = "gaps-per-emulator"
+NOT_COLLECTED_STEM = "gaps-not-collected"
 
 
 def reading_platforms(emu_name: str, profile: dict, name: str,
@@ -705,8 +709,21 @@ def _complement_rows(emulator_gaps: list[tuple[str, dict]]) -> list[str]:
     return rows
 
 
+def _moved_table(stem: str, title: str, intro: str, head: list[str], rows: list[str], noun: str,
+                 moved: dict[str, str] | None) -> list[str]:
+    """A table on the gaps page, or on a page of its own with a line here.
+    Two tables of 340 and 283 rows held most of the gaps page's 8,300
+    elements: their first layout was a 200 ms task on a phone."""
+    if moved is None:
+        return [*head, *rows, ""]
+    where = list_pages(stem, title, intro, head, [rows], moved, budget=1,
+                       parent=("What the packs do not hold", "/gaps/"))
+    return [f"{count_text(len(rows), noun)}, listed on {where}.", ""]
+
+
 def _complement_intro(src_totals: dict[str, int], total_undeclared: int,
-                      emulator_gaps: list[tuple[str, dict]]) -> list[str]:
+                      emulator_gaps: list[tuple[str, dict]],
+                      moved: dict[str, str] | None = None) -> list[str]:
     """Section 3 up to its per-emulator table: what the emulators load
     that no platform lists, and where those files come from."""
     total_available = (
@@ -746,14 +763,19 @@ def _complement_intro(src_totals: dict[str, int], total_undeclared: int,
         "",
         "### Per emulator",
         "",
-        "| Emulator | Undeclared | bios | data | release | Bundled | Missing |",
-        "|----------|----------:|-----:|-----:|--------:|--------:|--------:|",
-        *_complement_rows(emulator_gaps),
-        "",
+        *_moved_table(
+            PER_EMULATOR_STEM, "Files emulators load, per emulator",
+            f"For each of {count_text(len(emulator_gaps), 'emulator')}, the files it loads "
+            "that no platform lists, counted by where they come from. Part of "
+            "[What the packs do not hold](gaps.md#per-emulator).",
+            ["| Emulator | Undeclared | bios | data | release | Bundled | Missing |",
+             "|----------|----------:|-----:|-----:|--------:|--------:|--------:|"],
+            _complement_rows(emulator_gaps), "emulator", moved),
     ]
 
 
-def _not_collected_section(report_all: dict, profiles: dict, catalogued: dict | None) -> list[str]:
+def _not_collected_section(report_all: dict, profiles: dict, catalogued: dict | None,
+                           moved: dict[str, str] | None = None) -> list[str]:
     """Section 4: files the collection does not hold yet (unsourceable)."""
     all_unsourceable: list[dict] = [
         {
@@ -779,17 +801,23 @@ def _not_collected_section(report_all: dict, profiles: dict, catalogued: dict | 
         "with the same name is never served in their place. Each is still "
         "wanted, and the last column names a catalog or romset that lists it.",
         "",
-        "| File | Emulator | Reason | Source ref | Listed in |",
-        "|------|----------|--------|-----------|-----------|",
     ]
+    rows = []
     for u in sorted(all_unsourceable, key=lambda x: x["name"]):
         where = listed.get((u["emu_key"], str(u["name"]).casefold()), [])
-        lines.append(
+        rows.append(
             f"| `{u['name']}` | {u['emulator']} | {_reason_cell(u['reason'])} "
             f"| {source_ref_markdown(profiles[u['emu_key']], u['source_ref'])} "
             f"| {', '.join(where) or '-'} |"
         )
-    lines.append("")
+    lines.extend(_moved_table(
+        NOT_COLLECTED_STEM, "Files not collected yet",
+        f"{count_text(len(rows), 'file')} the collection does not hold, each with the "
+        "emulator that loads it, why it is not collected and the catalog or romset "
+        "that lists it. Part of [What the packs do not hold](gaps.md#not-collected-yet).",
+        ["| File | Emulator | Reason | Source ref | Listed in |",
+         "|------|----------|--------|-----------|-----------|"],
+        rows, "file", moved))
     return lines
 
 
@@ -947,7 +975,8 @@ def generate_gap_analysis(
     src_totals, total_undeclared, emulator_gaps = _undeclared_gaps(report_all)
 
     if total_undeclared > 0:
-        lines.extend(_complement_intro(src_totals, total_undeclared, emulator_gaps))
+        lines.extend(_complement_intro(src_totals, total_undeclared, emulator_gaps,
+                                       listing.moved))
         # List truly missing files with platform impact
         emu_to_platforms = _emulator_platforms(profiles, coverages)
         missing = _missing_files(emulator_gaps)
@@ -962,7 +991,7 @@ def generate_gap_analysis(
             lines.extend(_source_table(counted, rows, listing.moved))
         lines.extend(_bundled_note(missing.bundled))
 
-    lines.extend(_not_collected_section(report_all, profiles, catalogued))
+    lines.extend(_not_collected_section(report_all, profiles, catalogued, listing.moved))
 
     lines.extend(["", date_line()])
     return "\n".join(lines) + "\n"

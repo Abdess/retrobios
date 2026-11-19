@@ -62,6 +62,8 @@
  "gaps-files-to-source-8.md": "gaps.md",
  "gaps-files-to-source-9.md": "gaps.md",
  "gaps-files-to-source.md": "gaps.md",
+ "gaps-not-collected.md": "gaps.md",
+ "gaps-per-emulator.md": "gaps.md",
  "get/amberelec.md": "platforms/amberelec.md",
  "get/batocera.md": "platforms/batocera.md",
  "get/bizhawk.md": "platforms/bizhawk.md",

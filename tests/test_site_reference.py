@@ -1287,6 +1287,47 @@ class FilesToSourceOnAPhone(unittest.TestCase):
         self.assertEqual(placer.folder({"name": "x.bin"}), "")
 
 
+class LongGapTablesOnPagesOfTheirOwn(unittest.TestCase):
+    """Mobile Lighthouse Performance stayed at 99 on /gaps/: two tables of
+    340 and 283 rows were 8,300 elements, laid out in one 200 ms task.
+    Each moved to a page of its own, its heading and anchor kept on the
+    gaps page with the row count."""
+
+    def _page(self, moved: dict[str, str] | None) -> str:
+        unsourced = {"name": "KANJI2.ROM", "reason": "no dump distributed", "source_ref": ""}
+        gap = {"name": "a.bin", "path": "a.bin", "required": True, "source": "missing",
+               "in_repo": False, "identity": "", "source_ref": ""}
+        report = {"xm7": {"emulator": "XM7", "gaps": 1, "gap_missing": 1, "gap_bios": 0,
+                          "gap_data": 0, "gap_large_file": 0, "gap_bundled": 0,
+                          "unsourceable": [unsourced], "gap_details": [gap]}}
+        return gaps.generate_gap_analysis(
+            {"xm7": {"emulator": "XM7", "files": []}}, {}, {"files": {}, "indexes": {}},
+            gap_report=report, listing=gaps.SourceListing(moved=moved))
+
+    def test_both_tables_leave_with_their_anchors_kept(self):
+        moved: dict[str, str] = {}
+        page = self._page(moved)
+        self.assertEqual(set(moved) - {"gaps-files-to-source"},
+                         {gaps.PER_EMULATOR_STEM, gaps.NOT_COLLECTED_STEM})
+        self.assertNotIn("| Emulator | Undeclared |", page)
+        self.assertNotIn("| File | Emulator | Reason |", page)
+        self.assertIn("### Per emulator", page)
+        self.assertIn("1 emulator, listed on [a page of their own](gaps-per-emulator.md).", page)
+        self.assertIn('<span id="acknowledged-gaps"></span>', page)
+        self.assertIn("## Not collected yet", page)
+        self.assertIn("[a page of their own](gaps-not-collected.md)", page)
+        own = moved[gaps.NOT_COLLECTED_STEM]
+        self.assertIn('link: "/gaps/"', own)
+        self.assertIn("| `KANJI2.ROM` | XM7 |", own)
+        self.assertIn("gaps.md#not-collected-yet", own)
+        self.assertIn("| [XM7](emulators/xm7.md) | 1 |", moved[gaps.PER_EMULATOR_STEM])
+
+    def test_without_pages_the_tables_stay(self):
+        page = self._page(None)
+        self.assertIn("| Emulator | Undeclared |", page)
+        self.assertIn("| `KANJI2.ROM` | XM7 |", page)
+
+
 GENERATED = REPO_ROOT / "website" / "src" / "generated"
 SCHEMA = json.loads((REPO_ROOT / "schemas" / "install-manifest.schema.json").read_text())
 
