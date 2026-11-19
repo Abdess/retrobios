@@ -493,6 +493,41 @@ class EveryPlatformHasAPermanentPage(unittest.TestCase):
                         self.assertIn(f"/i | sh -s -- --platform {name}", page)
                         self.assertIn("No ZIP for ", page)
 
+    def test_a_pack_in_parts_puts_the_command_first(self):
+        """3,236 people took part 1 of the RetroArch pack and 2,404 part 3.
+        The command installs everything with no part to miss."""
+        from sitegen import getpages
+
+        record = releaserecord.load_advertised()
+        split = [name for name in sorted(RELEASED)
+                 if len((releaserecord.pack_for(name, record) or {}).get("assets") or []) > 1]
+        if not split:
+            self.skipTest("no release publishes a pack in parts")
+        with contextlib.chdir(REPO_ROOT):
+            for name in split:
+                page = getpages.generate_get_page(name)
+                parts = len(releaserecord.pack_for(name, record)["assets"])
+                with self.subTest(platform=name):
+                    command = page.index(f"--platform {name}")
+                    self.assertLess(command, page.index(f"## Or download the {parts} parts"))
+                    self.assertLess(command, page.index(".part1of"))
+                    self.assertIn(f"All {parts} parts are needed.", page)
+
+    def test_a_pack_in_one_file_keeps_its_zip_first(self):
+        from sitegen import getpages
+
+        record = releaserecord.load_advertised()
+        whole = [name for name in sorted(RELEASED)
+                 if len((releaserecord.pack_for(name, record) or {}).get("assets") or []) == 1]
+        if not whole:
+            self.skipTest("no release publishes a pack in one file")
+        with contextlib.chdir(REPO_ROOT):
+            for name in whole:
+                page = getpages.generate_get_page(name)
+                with self.subTest(platform=name):
+                    self.assertLess(page.index("_BIOS_Pack.zip"), page.index(f"--platform {name}"))
+                    self.assertNotIn("parts are needed", page)
+
     def test_the_generator_writes_and_sweeps_them(self):
         from sitegen import config
 

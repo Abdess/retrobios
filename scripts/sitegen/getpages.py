@@ -47,6 +47,43 @@ def _unzip_into(platform_name: str, display: str, extract_to: str | None, parts:
     ]
 
 
+def _pack_lines(platform_name: str, display: str, record: dict, pack: dict) -> list[str]:
+    """The ZIP of a release and the command, on its get/ page. A pack in
+    parts puts the command first: 3,236 people took part 1 of the RetroArch
+    pack and 2,404 part 3, and the command has no part to miss. A pack in
+    one file keeps its ZIP first, the command after it."""
+    parts = len(pack["assets"])
+    release = release_line(platform_name, record)
+    extract_to = (load_platform_registry(str(siteinputs.current().platforms)).get(platform_name) or {}).get("extract_to")
+    command = setup_routes(platform_name, display)
+    download = [
+        "This address stays the same. It always gives the latest ZIP.",
+        "",
+        asset_links(platform_name, record, REPO_URL, f"Download {display} Pack",
+                    button=lambda text, url: markup.button(text, url, primary=True)),
+        "",
+        f"- {fmt_size(pack['download_size'])} to download, "
+        f"{fmt_size(pack['extracted_size'])} once unzipped.",
+        *(["- Both parts are needed." if parts == 2 else f"- All {parts} parts are needed."]
+          if parts > 1 else []),
+        *_unzip_into(platform_name, display, extract_to, parts),
+        *(line for text in release for line in (text, "")),
+        version_line(platform_name, record, named=len(release) > 1),
+        "",
+    ]
+    if parts == 1:
+        return [*download, *command]
+    return [
+        f"The ZIP comes in {parts} parts, all needed. The command needs no ZIP. "
+        "It installs every file and checks it.",
+        "",
+        *command,
+        f"## Or download the {parts} parts {{ #download }}",
+        "",
+        *download,
+    ]
+
+
 def generate_get_page(platform_name: str) -> str:
     """get/<platform>/: the address a link outside the site can keep.
 
@@ -77,24 +114,7 @@ def generate_get_page(platform_name: str) -> str:
         f"# {title}", "",
     ]
     if released and pack and pack.get("assets"):
-        parts = len(pack["assets"])
-        release = release_line(platform_name, record)
-        extract_to = (load_platform_registry(str(siteinputs.current().platforms)).get(platform_name) or {}).get("extract_to")
-        lines += [
-            "This address stays the same. It always gives the latest ZIP.",
-            "",
-            asset_links(platform_name, record, REPO_URL, f"Download {display} Pack",
-                        button=lambda text, url: markup.button(text, url, primary=True)),
-            "",
-            f"- {fmt_size(pack['download_size'])} to download, "
-            f"{fmt_size(pack['extracted_size'])} once unzipped.",
-            *(["- Both parts are needed." if parts == 2 else f"- All {parts} parts are needed."]
-              if parts > 1 else []),
-            *_unzip_into(platform_name, display, extract_to, parts),
-            *(line for text in release for line in (text, "")),
-            version_line(platform_name, record, named=len(release) > 1),
-            "",
-        ]
+        lines += _pack_lines(platform_name, display, record, pack)
     elif released and record.get("tag"):
         lines += [
             f"No {display} ZIP yet. The next release has one. "
