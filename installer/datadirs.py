@@ -327,6 +327,9 @@ def install_data_directory(entry: dict, bios_path: Path,
     written: list[dict] = []
     not_kept: list[tuple[str, str]] = []
     tallies = {"installed": 0, "updated": 0, "changed": 0}
+    # What a rolling tree may write in all: a nightly grows from one build to
+    # the next, never to a drive's worth. The space check counted the list.
+    budget = [_follow_cap(sum(meta["size"] for meta in needed.values()))]
     # From a pack, the pack's copy is the tree: nothing newer to follow.
     rolling = bool(entry.get("rolling")) and LOCAL.pack is None
     counts: dict[str, object] = {
@@ -365,9 +368,10 @@ def install_data_directory(entry: dict, bios_path: Path,
                 # expected size whatever the member claims, so a member that
                 # inflates without end costs one byte past it. A rolling
                 # source's member is cut at the size its archive declares.
-                if declared != meta["size"] and not (rolling and 0 <= declared <= MAX_DOWNLOAD_SIZE):
+                if declared != meta["size"] and not (rolling and _followable(meta, declared, budget)):
                     tallies["changed"] += 1
                     continue
+                budget[0] -= declared
                 target = _destination_path(root, rel)
                 target.parent.mkdir(parents=True, exist_ok=True)
                 slot = _slot(entry, rel)
@@ -408,6 +412,18 @@ def install_data_directory(entry: dict, bios_path: Path,
     counts["changed"] = tallies["changed"]
     counts["absent"] = len(needed)
     return counts
+
+
+def _follow_cap(listed: int) -> int:
+    """The most a rolling source may serve where the list records listed
+    bytes: twice as much, and 16 MiB more for a file that was tiny."""
+    return min(2 * listed + 16 * 1024 * 1024, MAX_DOWNLOAD_SIZE)
+
+
+def _followable(meta: dict, declared: int, budget: list[int]) -> bool:
+    """Whether a rolling source's member of declared bytes is written: within
+    its own cap and what the tree has left to write."""
+    return 0 <= declared <= min(_follow_cap(meta["size"]), budget[0])
 
 
 def _install_data_member(

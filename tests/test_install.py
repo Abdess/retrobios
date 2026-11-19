@@ -4458,6 +4458,28 @@ class DataDirectoriesAreInstalled(unittest.TestCase):
             counts = install.install_data_directory({**self._entry(), "rolling": True}, bios)
         self.assertEqual((counts["installed"], counts["updated"], counts["changed"]), (0, 0, 1))
 
+    def test_a_rolling_member_past_its_cap_is_not_written(self):
+        """A followed member is read to the size its archive declares: a
+        source serving gigabytes where the list has 3 bytes fills no drive."""
+        work = Path(_tempdir(self))
+        entry = {**self._entry(), "rolling": True}
+        served: list[int] = []
+
+        def members(_archive, _entry):
+            for rel, size in (("Sys/GC/dsp.bin", 900 * 1024 * 1024),
+                              ("Sys/GC/font.bin", 4)):
+                yield rel, size, lambda size=size: served.append(size) or io.BytesIO(b"font")
+
+        with unittest.mock.patch.object(
+                install, "_fetch_archive",
+                lambda url, d, progress=None, keep=None: Path(d) / "a"), \
+                unittest.mock.patch.object(install, "_archive_members", members):
+            counts = install.install_data_directory(entry, work)
+        self.assertEqual((counts["changed"], counts["installed"]), (1, 1))
+        self.assertEqual(served, [4])
+        self.assertEqual(install._follow_cap(3), 16 * 1024 * 1024 + 6)
+        self.assertFalse(install._followable({"size": 3}, 40, [39]))
+
     def test_a_rolling_flag_is_true_or_absent(self):
         with self.assertRaisesRegex(ValueError, "rolling is invalid"):
             install._check_data_directory({**self._entry(), "rolling": False}, "d")
