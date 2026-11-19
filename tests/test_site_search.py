@@ -284,6 +284,47 @@ class Descriptions(unittest.TestCase):
         self.assertEqual(emulatorcards.snippet_noun(["gba_bios.bin", "gb_bios.bin"], 2, 2), "BIOS")
         self.assertEqual(emulatorcards.snippet_noun(["oot.z64", "oot-mq.z64", "font.bin"], 1, 3), "files")
 
+    def test_a_title_names_what_its_files_are(self) -> None:
+        """"eden keys" (1,125 impressions) and "ps vita firmware" landed on
+        pages titled "Eden BIOS files" and "Vita3K BIOS files"."""
+        noun = descriptions.title_noun
+        self.assertEqual(noun(["prod.keys", "title.keys", "console.keys", "key_retail.bin"]), "keys")
+        self.assertEqual(noun(["PSVUPDAT.PUP", "PSP2UPDAT.PUP", "font.pup"]), "firmware")
+        self.assertEqual(noun(["SystemUpdate_17559_USB.zip"]), "firmware")
+        self.assertEqual(noun(["aes_keys.txt", "boot9.bin", "shared_font.bin", "seeddb.bin"]),
+                         "keys and BIOS files")
+        self.assertEqual(noun(["bios7.bin", "bios9.bin", "firmware.bin", "dsi_nand.bin"]),
+                         "firmware and BIOS files")
+        self.assertEqual(noun(["gba_bios.bin", "gb_bios.bin"]), "BIOS files")
+        # One key beside Kickstarts, keyboards and keymaps name no keys.
+        self.assertEqual(noun([f"amiga-os-{n}.rom" for n in range(9)] + ["rom.key"]), "BIOS files")
+        self.assertEqual(noun(["archimedes_keyboard.zip", "keymap file", "at_keybc.zip"]), "BIOS files")
+        # A name pattern is no file to fetch.
+        self.assertEqual(noun(["prod.keys", "<firmware>.zip", "<amiibo>.bin"]), "keys")
+        self.assertEqual(noun([]), "BIOS files")
+
+    def test_titles_follow_the_profiles(self) -> None:
+        saved, nouns = dict(descriptions.PAGE_DATA), dict(descriptions.TITLE_NOUNS)
+        snippets, shipped = dict(descriptions.EMULATOR_SNIPPETS), set(descriptions.NOTHING_TO_FETCH)
+        self.addCleanup(lambda: (
+            descriptions.PAGE_DATA.clear(), descriptions.PAGE_DATA.update(saved),
+            descriptions.TITLE_NOUNS.clear(), descriptions.TITLE_NOUNS.update(nouns),
+            descriptions.EMULATOR_SNIPPETS.clear(), descriptions.EMULATOR_SNIPPETS.update(snippets),
+            descriptions.NOTHING_TO_FETCH.clear(), descriptions.NOTHING_TO_FETCH.update(shipped)))
+        expected = {"eden": ("Eden", "Eden keys"), "vita3k": ("Vita3K", "Vita3K firmware"),
+                    "rpcs3": ("RPCS3", "RPCS3 firmware"), "mgba": ("mGBA", "mGBA BIOS files"),
+                    "citra": ("Citra", "Citra keys and BIOS files")}
+        for name, (title, browser) in expected.items():
+            with open(REPO_ROOT / "emulators" / f"{name}.yml", encoding="utf-8") as handle:
+                structured.record_emulator_page(name, yaml.safe_load(handle))
+            with self.subTest(emulator=name):
+                self.assertEqual(descriptions.page_browser_title(Path(f"emulators/{name}.md"), title),
+                                 browser)
+        descriptions.TITLE_NOUNS["systems/sony-playstation-vita.md"] = "firmware"
+        self.assertEqual(descriptions.page_browser_title(
+            Path("systems/sony-playstation-vita.md"), "Sony: PlayStation Vita"),
+            "PlayStation Vita firmware (Sony)")
+
     def test_an_any_name_snippet_says_what_to_do(self) -> None:
         saved = dict(descriptions.PAGE_DATA)
         self.addCleanup(lambda: (descriptions.PAGE_DATA.clear(), descriptions.PAGE_DATA.update(saved)))

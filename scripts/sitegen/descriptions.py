@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import html
 import re
+from collections import Counter
+from collections.abc import Iterable
 from pathlib import Path
 
 from model import releaserecord
@@ -47,11 +49,43 @@ def page_browser_title(relative: Path, title: str) -> str:
         has_files = PAGE_DATA.get(key, {}).get("hasPart") and key not in NOTHING_TO_FETCH
         # Lexaloffle, QEMU and ScummVM name a system page too.
         own = " emulator" if f"systems/{relative.name}" in PAGE_DATA else ""
-        return f"{title}{own} BIOS files" if has_files else f"{title} emulator"
+        return f"{title}{own} {TITLE_NOUNS.get(key, BIOS_FILES)}" if has_files else f"{title} emulator"
     if key.startswith("systems/"):
+        noun = TITLE_NOUNS.get(key, BIOS_FILES)
         maker, _, console = title.partition(": ")
-        return f"{console} BIOS files ({maker})" if console else f"{title} BIOS files"
+        return f"{console} {noun} ({maker})" if console else f"{title} {noun}"
     return title
+
+
+BIOS_FILES = "BIOS files"
+
+
+def file_kind(name: str) -> str:
+    """What a file is called by the people who look for it, read from its
+    name: a key set (prod.keys, aes_keys.txt, keys.bin), a firmware package
+    or flash image (PS3UPDAT.PUP, SystemUpdate_17559_USB.zip, dsi_nand.bin),
+    or a BIOS. Words are whole: keyboard.zip and keymap are no keys."""
+    folded = Path(name).name.casefold()
+    words = set(re.split(r"[^a-z0-9]+", folded))
+    if words & {"key", "keys"}:
+        return "keys"
+    if folded.endswith(".pup") or "update" in folded or words & {"firmware", "nand"}:
+        return "firmware"
+    return BIOS_FILES
+
+
+def title_noun(names: Iterable[str]) -> str:
+    """The noun a page title gives its files: each kind holding at least a
+    quarter of the distinct names, keys first. A Switch emulator reads keys
+    and "eden keys" is the search; Vita3K reads firmware packages; one
+    rom.key beside nine Kickstarts leaves WinUAE's page "BIOS files". A
+    name pattern (<firmware>.zip) is no file to fetch and counts for none."""
+    distinct = {Path(name).name.casefold(): name for name in names if "<" not in name}
+    if not distinct:
+        return BIOS_FILES
+    counts = Counter(file_kind(name) for name in distinct.values())
+    return said_as_list([kind for kind in ("keys", "firmware", BIOS_FILES)
+                         if counts[kind] * 4 >= len(distinct)])
 
 
 _LINK_TEXT = r"(?:`[^`]*`|\[[^\]\[]*\]|[^\]\[])"
@@ -298,6 +332,9 @@ NOTHING_TO_FETCH: set[str] = set()
 # The first system, the file names, the count of required names and the
 # word for them ("BIOS" or "files") of each emulator page, for its snippet.
 EMULATOR_SNIPPETS: dict[str, tuple[str, list[str], int, str]] = {}
+# The noun of the title of an emulator or system page, by page path
+# relative to docs/ (title_noun): "BIOS files" when absent.
+TITLE_NOUNS: dict[str, str] = {}
 # Pages that hold part of a page too long for one (a console of a split
 # manufacturer, a run of an emulator's cards), by path relative to docs/:
 # their H1 already says what they are.

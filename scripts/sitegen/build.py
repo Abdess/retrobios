@@ -52,7 +52,7 @@ from sitegen.dataexports import (
 )
 from sitegen.datapage import generate_data_page
 from sitegen.decorate import SEARCH_DEMOTED, front_matter, decorate_markdown_pages
-from sitegen.descriptions import PAGE_DATA, PART_PAGES
+from sitegen.descriptions import PAGE_DATA, PART_PAGES, TITLE_NOUNS, title_noun
 from sitegen.emulatorcards import (
     ARCHIVE_RECIPES_PAGE,
     ROMSET_FAQ_PAGE,
@@ -284,6 +284,8 @@ def _write_system_pages(run: _SiteRun) -> None:
         pages = system_pages(mfr, consoles, run.consumers, console_installs.get(slug))
         for stem, (page, held) in pages.items():
             PAGE_DATA[f"systems/{stem}.md"] = system_structured_data(stem, held)
+            TITLE_NOUNS[f"systems/{stem}.md"] = title_noun(
+                str(entry.get("name", "")) for entries in held.values() for entry in entries)
             if stem != slug:
                 PART_PAGES.add(f"systems/{stem}.md")
             write_if_changed(str(docs / "systems" / f"{stem}.md"), page)

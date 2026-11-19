@@ -13,7 +13,7 @@ from sitegen import starlight as sitestarlight
 from sitegen.cards import emulator_file_anchors
 from sitegen.config import REPO_URL, SITE_NAME, SITE_URL
 from core.paths import REPO_ROOT
-from sitegen.descriptions import EMULATOR_SNIPPETS, NOTHING_TO_FETCH, PAGE_DATA
+from sitegen.descriptions import EMULATOR_SNIPPETS, NOTHING_TO_FETCH, PAGE_DATA, TITLE_NOUNS, title_noun
 from sitegen.emulatorcards import snippet_noun
 from sitegen.install import comes_with_app
 from sitegen.lookup import data_member_digests, sorted_hash_values
@@ -316,6 +316,7 @@ def record_emulator_page(name: str, profile: dict) -> None:
         base = Path(str(f["name"])).name
         names.setdefault(base.casefold(), base)
     firmware = [f for f in fetched if f.get("category", "bios") in ("bios", "bios_zip")]
+    TITLE_NOUNS[key] = title_noun(str(f["name"]) for f in firmware)
     EMULATOR_SNIPPETS[key] = (
         # One console names an emulator of five systems, not BizHawk of 40.
         system_name(first) if 0 < len(systems) <= 5 else "",
