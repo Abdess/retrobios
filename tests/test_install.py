@@ -7110,6 +7110,16 @@ class EventsDescribeTheRun(unittest.TestCase, _SyntheticTree):
                  "bytes_total": 245}
                 for n, (dest, size, total) in enumerate(
                     (("c.bin", 70, 70), ("d.bin", 25, 95), ("b.bin", 150, 245)), 1)]
+        # bytes_done counts every byte arrived, as the progress events do:
+        # the worker may be into the next file before a finished one is
+        # reported, so it never runs back and covers at least the files done.
+        downloaded = [e for e in events if e["event"] == "downloaded"]
+        arrived = [e["bytes_done"] for e in downloaded]
+        self.assertEqual(arrived, sorted(arrived))
+        for event, expected in zip(downloaded, done):
+            self.assertGreaterEqual(event["bytes_done"], expected["bytes_done"])
+            self.assertLessEqual(event["bytes_done"], 245)
+            event["bytes_done"] = expected["bytes_done"]
         # The last transfer: every byte came over the network.
         self.assertEqual([e for e in events if e["event"] == "transfer"][-1],
                          {"event": "transfer", "bytes_local": 0, "bytes_network": 245})

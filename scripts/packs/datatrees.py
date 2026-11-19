@@ -377,11 +377,11 @@ def manifest_data_directories(
     from _data_dirs.yml, the same refresh_data_dirs applies. Every file
     carries the sha1 and size the cache holds. A source that names a
     revision is listed at the commit the cache was fetched at, so its
-    members never change; one that names none (the buildbot's nightly
+    members never change. One that names none (the buildbot's nightly
     assets) is ``rolling``: the installer writes what it serves, as
     RetroArch's downloader does, and the hashes describe the pack's copy.
-    archive_size is the
-    size of the archive refresh_data_dirs last downloaded, what fetching
+    archive_size is the size of the archive refresh_data_dirs last
+    downloaded, what fetching
     the tree costs: a tarball whose tree is 10 KB is a download of 21 MB.
     ``systems`` are the platform's ids (``platform_systems``) the tree's
     systems normalize to, as a core extra's are: a tree no platform system

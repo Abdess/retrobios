@@ -329,7 +329,7 @@ class ASourceThatMovesIsPinnedOrFollowed(unittest.TestCase):
     """The PPSSPP list pinned the bytes of a buildbot nightly: six days after
     the buildbot rebuilt it, 49 of its 169 files were refused on every
     install. A source with a revision is listed at the commit it was fetched
-    at; one with none is marked rolling, and the installer follows it."""
+    at. One with none is marked rolling, and the installer follows it."""
 
     COMMIT = "c" * 40
 
