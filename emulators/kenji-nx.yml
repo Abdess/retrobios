@@ -63,9 +63,10 @@ notes: |
   zip or an xci with an update partition, verifies each NCA against the key set
   and refuses a package carrying unrelated archives, then registers the contents
   under bis/system/Contents/registered. Android passes a file descriptor instead
-  of a path but reaches the same two methods. Nothing gates the launch on it:
-  homebrew NRO goes through ProcessLoader without touching the key set, and the
-  failure is deferred to the first service that needs a system archive.
+  of a path but reaches the same two methods. On Android nothing gates the
+  launch on it: homebrew NRO goes through ProcessLoader without touching the
+  key set, and the failure is deferred to the first service that needs a
+  system archive.
   ref: src/Ryujinx.HLE/FileSystem/ContentManager.cs:431-498,675-749,891-904,
        src/LibKenjinx/Android/JniExportedMethods.cs:462-498,
        src/Ryujinx.HLE/Loaders/Processes/ProcessLoader.cs:186-214
@@ -147,6 +148,22 @@ files:
       set, alongside the production one rather than instead of it. Validated as
       "name = value" lines.
     source_ref: "src/Ryujinx.HLE/FileSystem/VirtualFileSystem.cs:243,260-263,266, src/Ryujinx.HLE/FileSystem/ContentManager.cs:1104-1105"
+
+  - name: "registered/"
+    type: directory
+    path: "bis/system/Contents/registered/"
+    required: false
+    storage: large_file
+    description: "Installed Switch system firmware, the system title NCAs"
+    note: >-
+      Read at every start: each folder <NCA id>.nca under registered/ is opened
+      at its first file, the installer writing it as 00, and decrypted with the
+      key set to index its title and content type. The installed version is
+      read from title 0100000000000809. The desktop window refuses any launch
+      other than an .nro or .nso without it. The Android entry point applies no
+      such check, and a missing system archive fails only the service that asks
+      for it.
+    source_ref: "src/Ryujinx.HLE/FileSystem/ContentManager.cs:101-188, 1047-1080, src/Ryujinx.HLE/FileSystem/ContentPath.cs:33, src/Ryujinx.HLE/FileSystem/VirtualFileSystem.cs:31, src/Ryujinx.Common/Configuration/AppDataManager.cs:36, src/Ryujinx.UI.Common/Helper/SetupValidator.cs:92-112, src/Ryujinx/AppHost.cs:695-755"
 
   - name: "<firmware>.zip"
     aliases: ["<firmware>.xci"]

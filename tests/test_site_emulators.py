@@ -664,7 +664,10 @@ class DataFolderPrinted(unittest.TestCase):
                         self.assertIn(alternative, page)
 
     def test_ryujinx_keys_sit_in_system(self) -> None:
-        block = "\n".join(sitegen_install.data_folder_block("ryujinx", _profile("ryujinx")))
+        # The installed firmware sits in bis/, so the keys name system/ alone.
+        profile = _profile("ryujinx")
+        keys = [f for f in profile["files"] if str(f.get("name", "")).endswith(".keys")]
+        block = "\n".join(sitegen_install.data_folder_block("ryujinx", profile, keys))
         self.assertIn("`%APPDATA%/Ryujinx/system/`", block)
         self.assertIn("`~/Library/Application Support/Ryujinx/system/`", block)
         self.assertEqual(_tab_labels(block), {"Windows", "macOS", "Linux"})

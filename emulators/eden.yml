@@ -25,7 +25,7 @@ mode: standalone
 # Key files loaded from <data_dir>/keys/ (src/common/fs/fs_paths.h:20, src/common/fs/path_util.cpp:158).
 # On Linux: $XDG_DATA_HOME/eden/keys/
 # On Windows: %APPDATA%/eden/keys/
-# Firmware NCAs are installed via UI (Tools > Install Firmware), not placed as files.
+# Firmware NCAs are installed via UI (Tools > Install Firmware) into nand/system/Contents/registered/.
 # HLE fallbacks exist for fonts, timezone, system version, mii model, ng word lists.
 
 files:
@@ -60,6 +60,40 @@ files:
     note: "Amiibo decryption keys (two InternalKey structs, 0x50 bytes each)"
     source_ref: "src/core/hle/service/nfc/common/amiibo_crypto.cpp:281-302"
 
+  - name: "registered/"
+    type: directory
+    path: "nand/system/Contents/registered/"
+    required: false
+    hle_fallback: true
+    storage: large_file
+    description: "Installed Switch system firmware, the system title NCAs"
+    note: >-
+      Read as the system NAND content registry at every start. Files are named
+      <32 hex digits>.nca or <32 hex digits>.cnmt.nca, flat or under 000000XX
+      folders, a directory of the same name holding split parts 00, 01... also
+      accepted. The meta NCAs index the rest. A missing system data archive is
+      synthesized for MiiModel, NgWord, SystemVersion, TimeZoneBinary and the
+      shared fonts, any other one fails the service call. Firmware counts as
+      present when the MiiEdit program NCA is found. Without it the desktop
+      build warns before launching Mario Kart 8 Deluxe, the one title it lists,
+      and launches anyway on OK.
+    source_ref: "src/core/file_sys/bis_factory.cpp:20, src/core/hle/service/filesystem/filesystem.cpp:734-750, src/common/fs/fs_paths.h:24, src/common/fs/path_util.cpp:162, src/core/file_sys/registered_cache.cpp:58-64, 585-604, 659-693, src/core/hle/service/filesystem/fsp/fsp_srv.cpp:511-542, src/frontend_common/firmware_manager.h:23-25, 49-53, 66-82, src/qt_common/util/content.cpp:26-38, src/yuzu/main_window.cpp:1804"
+
+  - name: "<firmware>.zip"
+    aliases: ["<firmware>"]
+    required: false
+    storage: large_file
+    description: "Switch system firmware dump, a zip or folder of NCAs"
+    note: >-
+      Install medium chosen by the user, never read again. The desktop build
+      takes a folder, copying the .nca files at its top level, or a zip, which
+      it extracts and searches for .nca files at any depth. The Android build
+      takes a zip whose entries must all be .nca files at its root. Keys must
+      be installed first. The registry is emptied, the files copied under
+      their own names, then every non-meta NCA is hashed with SHA-256 and the
+      first 16 bytes compared with its file name.
+    source_ref: "src/yuzu/main_window.cpp:1618-1619, src/qt_common/util/content.cpp:41-160, 182-202, 508-548, src/frontend_common/content_manager.h:262-331, src/core/loader/nca.cpp:143-223, src/android/app/src/main/java/org/yuzu/yuzu_emu/utils/InstallableActions.kt:132-178, src/android/app/src/main/java/org/yuzu/yuzu_emu/fragments/InstallableFragment.kt:136"
+
 standalone_directories:
   - "$XDG_DATA_HOME/eden"
   - "$HOME/.local/share/eden"
@@ -84,5 +118,5 @@ data_root:
 
 notes: |
   Eden is a standalone Nintendo Switch emulator, community fork of yuzu by Camille LaVey.
-  Firmware (system NCAs) must be installed through Eden's UI from a firmware ZIP or NCA folder.
-  Required for commercial games. Homebrew (.nro, .nso) can run without keys or firmware.
+  Firmware (system NCAs) is installed through the UI from a zip or a folder of NCAs.
+  Commercial games need the keys. Homebrew (.nro, .nso) runs without keys or firmware.

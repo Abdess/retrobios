@@ -37,7 +37,7 @@ data_root:
 # Key files are read from {BaseDirPath}/system/ (src/Ryujinx.Common/Configuration/AppDataManager.cs:229)
 # Also searched in ~/.switch/ (src/Ryujinx.Common/Configuration/AppDataManager.cs:47)
 # Batocera copied bios/switch/prod.keys to Ryujinx/system/prod.keys (batocera ryujinxGenerator.py:108 at 1f69a46e) until it dropped the package in ee8a418f
-# Firmware NCAs are installed via UI (src/Ryujinx.HLE/FileSystem/ContentManager.cs:429), not placed as files
+# Firmware NCAs are installed via UI (src/Ryujinx.HLE/FileSystem/ContentManager.cs:429) into bis/system/Contents/registered/
 
 files:
   - name: "prod.keys"
@@ -58,9 +58,38 @@ files:
     note: "Console-specific keys for encrypted content"
     source_ref: "src/Ryujinx.HLE/FileSystem/VirtualFileSystem.cs:240"
 
+  - name: "registered/"
+    type: directory
+    path: "bis/system/Contents/registered/"
+    required: true
+    storage: large_file
+    description: "Installed Switch system firmware, the system title NCAs"
+    note: >-
+      Read at every start: each folder <NCA id>.nca under registered/ is opened
+      at its first file, the installer writing it as 00, and decrypted with the
+      key set to index its title and content type. The installed version is
+      read from title 0100000000000809. Without it every launch other than an
+      .nro or .nso stops with the no-firmware error, unless the game is an xci
+      carrying an update partition, which is then offered for install.
+    source_ref: "src/Ryujinx.HLE/FileSystem/ContentManager.cs:99-186, 932-965, src/Ryujinx.HLE/FileSystem/ContentPath.cs:33, src/Ryujinx.HLE/FileSystem/VirtualFileSystem.cs:31, src/Ryujinx.Common/Configuration/AppDataManager.cs:36, src/Ryujinx.UI.Common/Helper/SetupValidator.cs:13-26, 92-112, src/Ryujinx/AppHost.cs:603-662"
+
+  - name: "<firmware>.zip"
+    aliases: ["<firmware>.xci", "<firmware>"]
+    required: false
+    storage: large_file
+    description: "Switch system firmware package, a zip, an xci or a folder of NCAs"
+    note: >-
+      Install medium chosen by the user, never read again. Zip entries ending
+      in .nca or .nca/00 are taken at any depth, an xci is opened at its update
+      partition, a folder through its .nca entries. Before installing, each
+      NCA is decrypted with the key set, title 0100000000000816 must be present,
+      and every other NCA must be listed in its meta with a matching SHA-256 or
+      the package is refused. The NCAs are then written as registered/<NCA id>.nca/00.
+    source_ref: "src/Ryujinx.HLE/FileSystem/ContentManager.cs:429-556, 584-930, src/Ryujinx/UI/ViewModels/MainWindowViewModel.cs:1007-1109, 1328-1373"
+
 notes: |
   Ryujinx is a standalone Nintendo Switch emulator written in C#, created by gdkchan.
   Original repo discontinued October 2024 after Nintendo takedown.
-  Firmware (system NCAs) must be installed through Ryujinx's UI from a ZIP or XCI.
+  Firmware (system NCAs) is installed through the UI from a zip, an xci or a folder.
   Required for commercial games (.nsp, .xci). Homebrew (.nro, .nso) runs without firmware.
   Firmware provides shared fonts, timezone data, SSL certificates, system version info.

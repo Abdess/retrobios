@@ -2182,7 +2182,7 @@
   "total_size": 9389534458,
   "pack_files": 16136,
   "pack_size": 8753125146,
-  "total_omitted": 378,
+  "total_omitted": 383,
   "omitted_files": [
     {
       "dest": "3dobios.zip",
@@ -2845,6 +2845,17 @@
       ]
     },
     {
+      "dest": "bis/system/Contents/registered",
+      "root": "emulator",
+      "name": "registered/",
+      "system": "",
+      "required": true,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "ryujinx"
+      ]
+    },
+    {
       "dest": "bubsys.zip",
       "root": "emulator",
       "name": "bubsys.zip",
@@ -2974,6 +2985,16 @@
         "ume2015"
       ],
       "held": true
+    },
+    {
+      "dest": "citron/firmware",
+      "name": "registered/",
+      "system": "nintendo-switch",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "citron"
+      ]
     },
     {
       "dest": "cpzn1.zip",
@@ -3304,6 +3325,16 @@
         "uzdoom"
       ],
       "category": "game_data"
+    },
+    {
+      "dest": "eden/firmware",
+      "name": "registered/",
+      "system": "nintendo-switch",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "eden"
+      ]
     },
     {
       "dest": "extras.wad",
@@ -4934,6 +4965,28 @@
       "reason": "outside_bios_folder",
       "cores": [
         "azahar"
+      ]
+    },
+    {
+      "dest": "nand/system/Contents/registered",
+      "root": "emulator",
+      "name": "registered/",
+      "system": "",
+      "required": false,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "suyu"
+      ]
+    },
+    {
+      "dest": "nand/system/Contents/registered",
+      "root": "emulator",
+      "name": "registered/",
+      "system": "",
+      "required": false,
+      "reason": "outside_bios_folder",
+      "cores": [
+        "yuzu"
       ]
     },
     {

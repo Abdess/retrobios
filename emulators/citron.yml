@@ -4,7 +4,9 @@ core_classification: community_fork
 source: "https://git.citron-emu.org/citron-emu/Citron"
 upstream: "https://git.citron-emu.org/citron-emu/Citron"
 profiled_date: "2026-03-26"
-upstream_gone: "git.citron-emu.org no longer resolves, and git.citron-emu.com redirects to an unrelated survey site, the domain having been taken. Observed 2026-09-04, no mirror found."
+upstream_gone: "git.citron-emu.org no longer resolves, and git.citron-emu.com redirects to an unrelated survey site, the domain having been taken. Observed 2026-09-04. Software Heritage archived the repository on 2026-03-13, main and tag 2026.03.12 at the analysed commit below."
+source_commit: "79dee42601deff2077160906f9a89756fca820a9"
+source_mirror: "https://archive.softwareheritage.org/browse/revision/79dee42601deff2077160906f9a89756fca820a9/"
 core_version: "2026.03.12"
 version_basis:
   kind: unverified
@@ -28,7 +30,7 @@ standalone_directories:
 # are relative to the data folder: $XDG_DATA_HOME/citron on Linux, or the
 # user folder (PORTABLE_DIR) beside the executable when it exists.
 # On Batocera: 002-adjust-paths.patch sets KeysDir to /userdata/bios/switch.
-# Firmware NCAs are installed into NAND via UI (main.cpp:1808), not placed as files.
+# Firmware NCAs are installed via UI (main.cpp:1808) into nand/system/Contents/registered/.
 # HLE fallbacks exist for fonts, timezone, system version, mii model, ng word lists.
 
 files:
@@ -57,8 +59,40 @@ files:
     note: "Amiibo decryption keys (two InternalKey structs, 0x50 bytes each)"
     source_ref: "src/core/hle/service/nfc/common/amiibo_crypto.cpp:274-292"
 
+  - name: "registered/"
+    type: directory
+    path: "nand/system/Contents/registered/"
+    required: false
+    hle_fallback: true
+    storage: large_file
+    description: "Installed Switch system firmware, the system title NCAs"
+    note: >-
+      Read as the system NAND content registry at every start. Files are named
+      <32 hex digits>.nca or <32 hex digits>.cnmt.nca, flat or under 000000XX
+      folders, a directory of the same name holding split parts 00, 01... also
+      accepted. The meta NCAs index the rest. Nothing is required to boot: a
+      missing system data archive is synthesized where the core carries one
+      and fails the service call otherwise, and the Album, Cabinet, Mii Edit,
+      controller and home menu applets refuse to open until the firmware is
+      installed.
+    source_ref: "src/core/file_sys/bis_factory.cpp:20, src/core/file_sys/registered_cache.cpp:53-60, 332-351, 382-416, src/core/hle/service/filesystem/fsp/fsp_srv.cpp:491-521, src/citron/main.cpp:5435-5553, 5884-5898"
+
+  - name: "<firmware>.zip"
+    aliases: ["<firmware>"]
+    required: false
+    storage: large_file
+    description: "Switch system firmware dump, a zip or folder of NCAs"
+    note: >-
+      Install medium chosen by the user, never read again. The desktop build
+      offers a zip, extracted to a temporary folder, or a folder, and in both
+      cases copies only the .nca files at the top level. The Android build
+      takes a zip whose entries must all be .nca files at its root. Keys must
+      be installed first. The registry is emptied, the files copied under
+      their own names, then each installed NCA is checked for integrity.
+    source_ref: "src/citron/main.cpp:1808, 4834-4997, 4999-5159, src/android/app/src/main/java/org/citron/citron_emu/ui/main/MainActivity.kt:373-418"
+
 notes: |
   Citron is a standalone Nintendo Switch emulator, community fork of yuzu by Zephyron.
   dev.keys can be used instead of prod.keys when use_dev_keys is enabled (for Switch dev units).
-  Firmware (system NCAs) must be installed through Citron's UI from a firmware ZIP or NCA files.
-  Required for commercial games. Homebrew (.nro, .nso) can run without keys or firmware.
+  Firmware (system NCAs) is installed through the UI from a zip or a folder of NCAs.
+  Commercial games need the keys. Homebrew (.nro, .nso) runs without keys or firmware.

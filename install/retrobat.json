@@ -1785,7 +1785,7 @@
   "total_size": 9639486696,
   "pack_files": 11252,
   "pack_size": 9651834655,
-  "total_omitted": 418,
+  "total_omitted": 423,
   "omitted_files": [
     {
       "dest": "3dobios.zip",
@@ -3437,6 +3437,17 @@
       "held": true
     },
     {
+      "dest": "citron/user/nand/system/Contents/registered",
+      "root": "emulators",
+      "name": "registered/",
+      "system": "nintendo-switch",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "citron"
+      ]
+    },
+    {
       "dest": "coh1000a.zip",
       "root": "emulator",
       "name": "coh1000a.zip",
@@ -4035,6 +4046,17 @@
         "raze"
       ],
       "category": "game_data"
+    },
+    {
+      "dest": "eden/user/nand/system/Contents/registered",
+      "root": "emulators",
+      "name": "registered/",
+      "system": "nintendo-switch",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "eden"
+      ]
     },
     {
       "dest": "enhanced.gob",
@@ -5942,6 +5964,17 @@
       ]
     },
     {
+      "dest": "ryujinx/portable/bis/system/Contents/registered",
+      "root": "emulators",
+      "name": "registered/",
+      "system": "nintendo-switch",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "ryujinx"
+      ]
+    },
+    {
       "dest": "sammymdl.zip",
       "root": "emulator",
       "name": "sammymdl.zip",
@@ -6155,6 +6188,17 @@
         "mame2016"
       ],
       "held": true
+    },
+    {
+      "dest": "sudachi/user/nand/system/Contents/registered",
+      "root": "emulators",
+      "name": "registered/",
+      "system": "nintendo-switch",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "sudachi"
+      ]
     },
     {
       "dest": "sve.wad",
@@ -6608,6 +6652,17 @@
       "reason": "outside_bios_folder",
       "cores": [
         "mame2016"
+      ]
+    },
+    {
+      "dest": "yuzu/user/nand/system/Contents/registered",
+      "root": "emulators",
+      "name": "registered/",
+      "system": "nintendo-switch",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "yuzu"
       ]
     }
   ],

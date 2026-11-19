@@ -26,7 +26,7 @@ mode: standalone
 # Key files loaded from <data_dir>/keys/ (fs_paths.h:18, path_util.cpp:124).
 # On Linux: $XDG_DATA_HOME/yuzu/keys/
 # On Windows: %APPDATA%/yuzu/keys/
-# Firmware NCAs are installed via UI (main.cpp:4160), not placed as files.
+# Firmware NCAs are installed via UI (main.cpp:4160) into nand/system/Contents/registered/.
 # HLE fallbacks exist for fonts, timezone, system version, mii model, ng word lists.
 # Original repo DMCA'd by Nintendo. Analysis from community mirror (yuzu-emu-mirror).
 
@@ -56,6 +56,38 @@ files:
     note: "Amiibo decryption keys (two InternalKey structs, 0x50 bytes each)"
     source_ref: "src/core/hle/service/nfc/common/amiibo_crypto.cpp:273-294"
 
+  - name: "registered/"
+    type: directory
+    path: "nand/system/Contents/registered/"
+    required: false
+    hle_fallback: true
+    storage: large_file
+    description: "Installed Switch system firmware, the system title NCAs"
+    note: >-
+      Read as the system NAND content registry at every start. Files are named
+      <32 hex digits>.nca or <32 hex digits>.cnmt.nca, flat or under 000000XX
+      folders, a directory of the same name holding split parts 00, 01... also
+      accepted. The meta NCAs index the rest. Nothing is required to boot: a
+      missing system data archive is synthesized for MiiModel, NgWord,
+      SystemVersion, TimeZoneBinary and the five shared fonts, any other one
+      fails the service call, and the applet actions stay disabled until the
+      MiiEdit program NCA is present.
+    source_ref: "src/core/file_sys/bis_factory.cpp:20, src/core/hle/service/filesystem/filesystem.cpp:691-708, src/common/fs/fs_paths.h:21, src/common/fs/path_util.cpp:127, src/core/file_sys/registered_cache.cpp:50-57, 329-347, 379-413, src/core/hle/service/filesystem/fsp/fsp_srv.cpp:416-447, src/core/file_sys/system_archive/system_archive.cpp:26-68, src/yuzu/main.cpp:1613, 1640, 4804-4818"
+
+  - name: "<firmware>"
+    aliases: ["<firmware>.zip"]
+    required: false
+    storage: large_file
+    description: "Switch system firmware dump, a folder or zip of NCAs"
+    note: >-
+      Install medium chosen by the user, never read again. The desktop build
+      takes a folder and copies the .nca files at its top level, the Android
+      build takes a zip whose entries must all be .nca files at its root. Keys
+      must be installed first. The registry is emptied, the files copied under
+      their own names, then every non-meta NCA is hashed with SHA-256 and the
+      first 16 bytes compared with its file name.
+    source_ref: "src/yuzu/main.cpp:4160-4295, src/frontend_common/content_manager.h:257-336, src/core/loader/nca.cpp:86-159, src/android/app/src/main/java/org/yuzu/yuzu_emu/ui/main/MainActivity.kt:373-418, src/android/app/src/main/java/org/yuzu/yuzu_emu/fragments/InstallableFragment.kt:135"
+
 standalone_directories:
   - "$XDG_DATA_HOME/yuzu"
   - "$HOME/.local/share/yuzu"
@@ -78,6 +110,6 @@ notes: |
   Yuzu is the original standalone Nintendo Switch emulator, created by bunnei (author of Citra).
   Legally shut down by Nintendo in March 2024 via lawsuit settlement. Permanently frozen.
   dev.keys can be used instead of prod.keys when use_dev_keys is enabled (for Switch dev units).
-  Firmware (system NCAs) must be installed through Yuzu's UI from a firmware directory.
-  Required for commercial games. Homebrew (.nro, .nso) can run without keys or firmware.
+  Firmware (system NCAs) is installed through the UI from a folder, or a zip on Android.
+  Commercial games need the keys. Homebrew (.nro, .nso) runs without keys or firmware.
   Community forks: Citron, Suyu, Eden. Original GitHub repos DMCA'd.

@@ -46,7 +46,7 @@ notes: |
   Key loading stops when neither prod.keys nor title.keys exists
   (src/core/crypto/key_manager.cpp:649-652).
   Firmware (system NCAs) is installed through the UI (Tools, Install
-  Firmware, src/sudachi/main.cpp:4130), not read as loose files.
+  Firmware, src/sudachi/main.cpp:4130) into nand/system/Contents/registered/.
   Commercial games need the keys. Homebrew (.nro, .nso) runs without keys or firmware.
 
 files:
@@ -80,3 +80,34 @@ files:
     size: 160
     note: "Amiibo decryption keys (two InternalKey structs, 0x50 bytes each)"
     source_ref: "src/core/hle/service/nfc/common/amiibo_crypto.cpp:273-295"
+
+  - name: "registered/"
+    type: directory
+    path: "nand/system/Contents/registered/"
+    required: false
+    hle_fallback: true
+    storage: large_file
+    description: "Installed Switch system firmware, the system title NCAs"
+    note: >-
+      Read as the system NAND content registry at every start. Files are named
+      <32 hex digits>.nca or <32 hex digits>.cnmt.nca, flat or under 000000XX
+      folders, a directory of the same name holding split parts 00, 01... also
+      accepted. The meta NCAs index the rest. Nothing is required to boot: a
+      missing system data archive is synthesized for MiiModel, NgWord,
+      SystemVersion, TimeZoneBinary and the shared fonts, any other one fails
+      the service call, and the applet actions need the MiiEdit program NCA.
+    source_ref: "src/core/file_sys/bis_factory.cpp:20, src/core/file_sys/registered_cache.cpp:50-57, 329-348, 379-413, src/core/hle/service/filesystem/fsp/fsp_srv.cpp:416-447, src/sudachi/main.cpp:1604, 4839-4853"
+
+  - name: "<firmware>"
+    aliases: ["<firmware>.zip"]
+    required: false
+    storage: large_file
+    description: "Switch system firmware dump, a folder or zip of NCAs"
+    note: >-
+      Install medium chosen by the user, never read again. The desktop build
+      takes a folder and copies the .nca files at its top level, the Android
+      build takes a zip whose entries must all be .nca files at its root. Keys
+      must be installed first. The registry is emptied, the files copied under
+      their own names, then every non-meta NCA is hashed with SHA-256 and the
+      first 16 bytes compared with its file name.
+    source_ref: "src/sudachi/main.cpp:1597, 4130-4265, src/frontend_common/content_manager.h:257-336, src/core/loader/nca.cpp:86-159, src/android/app/src/main/java/org/sudachi/sudachi_emu/ui/main/MainActivity.kt:424-470, src/android/app/src/main/java/org/sudachi/sudachi_emu/fragments/InstallableFragment.kt:135"

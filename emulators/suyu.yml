@@ -4,7 +4,9 @@ core_classification: community_fork
 source: "https://github.com/suyu-emu/suyu"
 upstream: "https://github.com/suyu-emu/suyu"
 profiled_date: "2026-03-26"
-upstream_gone: "GitHub withdrew the repository for legal reasons: the API answers HTTP 451. git.suyu.dev still serves a Forgejo page, but its API answers 403 and its raw paths 404, so it carries no readable tree. Observed 2026-09-04."
+upstream_gone: "GitHub withdrew the repository for legal reasons: the API answers HTTP 451. git.suyu.dev still serves a Forgejo page, but its API answers 403 and its raw paths 404, so it carries no readable tree. Observed 2026-09-04. Software Heritage archived git.suyu.dev on 2025-03-16, dev at the commit below, where the key and amiibo references land on the lines they cite. The analysed c096d16 is on no archived branch."
+source_commit: "ee365bad9501c73ff49936e72ec91cd9c3ce5c24"
+source_mirror: "https://archive.softwareheritage.org/browse/revision/ee365bad9501c73ff49936e72ec91cd9c3ce5c24/"
 core_version: "Yuzu EA 4176 based"
 version_basis:
   kind: unverified
@@ -28,7 +30,7 @@ standalone_directories:
 # are relative to the data folder: $XDG_DATA_HOME/suyu on Linux,
 # %APPDATA%/suyu on Windows, or the user folder (PORTABLE_DIR) beside the
 # executable when it exists.
-# Firmware NCAs are installed via UI, not placed as files.
+# Firmware NCAs are installed via UI into nand/system/Contents/registered/.
 # HLE fallbacks exist for fonts, timezone, system version, mii model, ng word lists.
 # Original repos (GitHub + GitLab) are DMCA'd. Analysis from community mirror.
 
@@ -58,9 +60,40 @@ files:
     note: "Amiibo decryption keys (two InternalKey structs, 0x50 bytes each)"
     source_ref: "src/core/hle/service/nfc/common/amiibo_crypto.cpp:273-294"
 
+  - name: "registered/"
+    type: directory
+    path: "nand/system/Contents/registered/"
+    required: false
+    hle_fallback: true
+    storage: large_file
+    description: "Installed Switch system firmware, the system title NCAs"
+    note: >-
+      Read as the system NAND content registry at every start. Files are named
+      <32 hex digits>.nca or <32 hex digits>.cnmt.nca, flat or under 000000XX
+      folders, a directory of the same name holding split parts 00, 01... also
+      accepted. The meta NCAs index the rest. Nothing is required to boot: a
+      missing system data archive is synthesized for MiiModel, NgWord,
+      SystemVersion, TimeZoneBinary and the shared fonts, any other one fails
+      the service call, and the applet actions need the MiiEdit program NCA.
+    source_ref: "src/core/file_sys/bis_factory.cpp:20, src/core/file_sys/registered_cache.cpp:50-57, 329-348, 379-413, src/core/hle/service/filesystem/fsp/fsp_srv.cpp:425-456, src/suyu/main.cpp:4828-4842"
+
+  - name: "<firmware>"
+    aliases: ["<firmware>.zip"]
+    required: false
+    storage: large_file
+    description: "Switch system firmware dump, a folder or zip of NCAs"
+    note: >-
+      Install medium chosen by the user, never read again. The desktop build
+      takes a folder and copies the .nca files at its top level, the Android
+      build takes a zip whose entries must all be .nca files at its root. Keys
+      must be installed first. The registry is emptied, the files copied under
+      their own names, then every non-meta NCA is hashed with SHA-256 and the
+      first 16 bytes compared with its file name.
+    source_ref: "src/suyu/main.cpp:4152-4287, src/frontend_common/content_manager.h:257-336, src/core/loader/nca.cpp:86-159, src/android/app/src/main/java/dev/suyu/suyu_emu/ui/main/MainActivity.kt:373-418"
+
 notes: |
   Suyu is a standalone Nintendo Switch emulator, community fork of yuzu after legal takedown.
   dev.keys can be used instead of prod.keys when use_dev_keys is enabled (for Switch dev units).
-  Firmware (system NCAs) must be installed through Suyu's UI from a firmware ZIP or NCA folder.
-  Required for commercial games. Homebrew (.nro, .nso) can run without keys or firmware.
+  Firmware (system NCAs) is installed through the UI from a folder, or a zip on Android.
+  Commercial games need the keys. Homebrew (.nro, .nso) runs without keys or firmware.
   Original repos DMCA'd by Nintendo. Analysis performed from community mirror (Hengle/suyu-emu).
