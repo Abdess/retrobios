@@ -242,7 +242,14 @@ def _render_xref_by_upstream(
             + f" | {upstream_cell} | {', '.join(_breakable(r) for r in revisions) or '-'} "
             f"| {', '.join(classifications)} | {len(plats)} |"
         )
-    return lines
+    # A class the stylesheet sizes the columns by. Found from the heading
+    # with `.sl-heading-wrapper:has(> #by-upstream-emulator) ~ section`, the
+    # rule was checked again for every block the browser added after any
+    # heading of any page: 400 ms of style work on the gaps page (mobile,
+    # 4x CPU throttling).
+    table = lines.index("| Cores | Upstream | Revisions | Classification | Platforms |")
+    return [*lines[:table], markup.block_open("div", 'class="rb-xref-upstream"'), "",
+            *lines[table:], "", "</div>"]
 
 
 def generate_cross_reference(

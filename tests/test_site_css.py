@@ -201,8 +201,15 @@ class ThemeStylesheet(unittest.TestCase):
         self.assertNotRegex(self.css, r"\.rb-meta-card td \{ overflow-wrap: anywhere")
         self.assertIn("overflow-wrap: anywhere", _rules(self.css, ".rb-meta-card td code")[0])
         self.assertIn("width: 40%", "".join(_rules(self.css, ".rb-meta-card td:first-child")))
-        upstream = _rules(self.css, "#by-upstream-emulator")[0]
+        upstream = _rules(self.css, ".rb-xref-upstream td:nth-child(2)")[0]
         self.assertIn("max-width: 22rem", upstream)
+
+    def test_no_has_before_a_sibling_combinator(self):
+        """`.sl-heading-wrapper:has(> #by-upstream-emulator) ~ section` was
+        matched again for every block added after any heading: 400 ms of
+        style work on the gaps page (mobile, 4x CPU throttling)."""
+        for selector, _body in _blocks(self.css):
+            self.assertNotRegex(selector, r":has\([^)]*\)[^,{]*~", selector)
 
     def test_two_column_tables_stack_label_over_value(self):
         self.assertIn("content: none", _rules(self.css, "table[data-rb-stack='kv'] td::before")[0])

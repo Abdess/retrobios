@@ -409,27 +409,30 @@
 .rb-meta-card td:first-child { font-weight: 600; color: var(--rb-text-secondary); width: 11rem; }
 
 /* Cross-reference by upstream, the last table of its page: the address
-   column wraps instead of pushing the cores and platforms off screen. */
-.sl-markdown-content .sl-heading-wrapper:has(> #by-upstream-emulator) ~ section td:has(a[href^='http']) {
+   column wraps instead of pushing the cores and platforms off screen. The
+   table sits in .rb-xref-upstream (sitegen/crossref.py): reached from its
+   heading with :has() and `~ section`, the rules were matched again for
+   every block added after any heading of any page. */
+.sl-markdown-content .rb-xref-upstream td:nth-child(2) {
 	max-width: 22rem;
 	overflow-wrap: anywhere;
 }
 /* Beside the column, the five columns share its width: at 1440 px the
    Platforms column sat 100 px past the edge. */
 @media (min-width: 50rem) {
-	.sl-markdown-content .sl-heading-wrapper:has(> #by-upstream-emulator) ~ section table {
+	.sl-markdown-content .rb-xref-upstream table {
 		display: table;
 		table-layout: fixed;
 		width: 100%;
 	}
-	.sl-markdown-content .sl-heading-wrapper:has(> #by-upstream-emulator) ~ section td {
+	.sl-markdown-content .rb-xref-upstream td {
 		overflow-wrap: anywhere;
 	}
-	.sl-markdown-content .sl-heading-wrapper:has(> #by-upstream-emulator) ~ section th:nth-child(1) { width: 25%; }
-	.sl-markdown-content .sl-heading-wrapper:has(> #by-upstream-emulator) ~ section th:nth-child(2) { width: 26%; }
-	.sl-markdown-content .sl-heading-wrapper:has(> #by-upstream-emulator) ~ section th:nth-child(3) { width: 15%; }
-	.sl-markdown-content .sl-heading-wrapper:has(> #by-upstream-emulator) ~ section th:nth-child(4) { width: 20%; }
-	.sl-markdown-content .sl-heading-wrapper:has(> #by-upstream-emulator) ~ section th:nth-child(5) { width: 14%; }
+	.sl-markdown-content .rb-xref-upstream th:nth-child(1) { width: 25%; }
+	.sl-markdown-content .rb-xref-upstream th:nth-child(2) { width: 26%; }
+	.sl-markdown-content .rb-xref-upstream th:nth-child(3) { width: 15%; }
+	.sl-markdown-content .rb-xref-upstream th:nth-child(4) { width: 20%; }
+	.sl-markdown-content .rb-xref-upstream th:nth-child(5) { width: 14%; }
 }
 
 /* The id a platform writes for a system, beside the name in its heading:
