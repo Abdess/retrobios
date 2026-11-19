@@ -2366,9 +2366,9 @@
     }
   ],
   "total_files": 12197,
-  "total_size": 10572021991,
+  "total_size": 10572282384,
   "pack_files": 16110,
-  "pack_size": 10688709277,
+  "pack_size": 10688969670,
   "total_omitted": 340,
   "omitted_files": [
     {
@@ -13393,39 +13393,6 @@
       "cores": null,
       "systems": [
         "arcade"
-      ],
-      "truth": false
-    },
-    {
-      "dest": "bios/cdibios.zip",
-      "sha1": "e7d2a0dad62d6f75bc10f48a376da0a99b764571",
-      "sha256": "aa8a33813531795de9739b06b65960e0f86cdec504c8452a956d184eac3cdcd4",
-      "size": 468660,
-      "repo_path": "bios/Arcade/Arcade/.variants/cdibios.zip.e7d2a0da",
-      "cores": null,
-      "systems": [
-        "arcade",
-        "philips-cdi"
-      ],
-      "declared_choices": [
-        {
-          "sha1": "e7d2a0dad62d6f75bc10f48a376da0a99b764571",
-          "sha256": "aa8a33813531795de9739b06b65960e0f86cdec504c8452a956d184eac3cdcd4",
-          "size": 468660,
-          "repo_path": "bios/Arcade/Arcade/.variants/cdibios.zip.e7d2a0da",
-          "systems": [
-            "arcade"
-          ]
-        },
-        {
-          "sha1": "16072afaa65d1b059346616ac5b5a600c63ff1d1",
-          "sha256": "b53d206ae81607bf6866411b720ad82ce75122423058ce08c6df84cdc1ca3496",
-          "size": 472798,
-          "repo_path": "bios/Philips/CD-i/cdibios.zip",
-          "systems": [
-            "philips-cdi"
-          ]
-        }
       ],
       "truth": false
     },
@@ -24503,71 +24470,6 @@
       "truth": false
     },
     {
-      "dest": "bios/stvbios.zip",
-      "sha1": "330a2ab5ce2e2c29987b2086e021de7aa04aa102",
-      "sha256": "bbdf6a9ef4bad6bd9ad16f9f7669071dd4ee3bb2387d49124f024ea8dd750f88",
-      "size": 2699375,
-      "repo_path": "bios/Arcade/MAME/.variants/stvbios.zip.330a2ab5",
-      "cores": null,
-      "systems": [
-        "arcade",
-        "sega-saturn"
-      ],
-      "slot": {
-        "groups": [
-          "arcade",
-          "sega-saturn",
-          "sega-stv"
-        ],
-        "keys": [
-          {
-            "kronos": {
-              "ranks": [
-                null
-              ],
-              "sets": [
-                "stv-bios"
-              ]
-            }
-          }
-        ]
-      },
-      "declared_choices": [
-        {
-          "sha1": "330a2ab5ce2e2c29987b2086e021de7aa04aa102",
-          "sha256": "bbdf6a9ef4bad6bd9ad16f9f7669071dd4ee3bb2387d49124f024ea8dd750f88",
-          "size": 2699375,
-          "repo_path": "bios/Arcade/MAME/.variants/stvbios.zip.330a2ab5",
-          "systems": [
-            "arcade"
-          ]
-        },
-        {
-          "sha1": "7783ab663bb1a8d62ff60d583674355c2af556b1",
-          "sha256": "38ceb2792c72770f56aadb1865cf66dc33a3017db1ee05e11c2b2dff397ad39e",
-          "size": 2955630,
-          "repo_path": "bios/Arcade/MAME/stvbios.zip",
-          "systems": [
-            "sega-saturn"
-          ]
-        }
-      ],
-      "alternatives": [
-        {
-          "sha1": "b14bbed4bf459439cf7e96d2f79d7adea5d31448",
-          "sha256": "1c4970da5f7066dd213d3dca14f7e45408cf667f508f4653025626bb33fbeb14",
-          "size": 3455065,
-          "repo_path": "bios/Arcade/Arcade/stvbios.zip",
-          "cores": [
-            "beetle_saturn",
-            "kronos",
-            "mednafen_stv"
-          ]
-        }
-      ],
-      "truth": false
-    },
-    {
       "dest": "bios/sv603.zip",
       "sha1": "53415c3366e4449751101bbe41e2f8f8b30ebb3e",
       "sha256": "65b32e084b956a1244bc2efeac0a1a82382195dc0cdae6ba9c7867d31018dcff",
@@ -31919,6 +31821,39 @@
       "truth": false
     },
     {
+      "dest": "bios/cdibios.zip",
+      "sha1": "16072afaa65d1b059346616ac5b5a600c63ff1d1",
+      "sha256": "b53d206ae81607bf6866411b720ad82ce75122423058ce08c6df84cdc1ca3496",
+      "size": 472798,
+      "repo_path": "bios/Philips/CD-i/cdibios.zip",
+      "cores": null,
+      "systems": [
+        "arcade",
+        "philips-cdi"
+      ],
+      "declared_choices": [
+        {
+          "sha1": "16072afaa65d1b059346616ac5b5a600c63ff1d1",
+          "sha256": "b53d206ae81607bf6866411b720ad82ce75122423058ce08c6df84cdc1ca3496",
+          "size": 472798,
+          "repo_path": "bios/Philips/CD-i/cdibios.zip",
+          "systems": [
+            "philips-cdi"
+          ]
+        },
+        {
+          "sha1": "e7d2a0dad62d6f75bc10f48a376da0a99b764571",
+          "sha256": "aa8a33813531795de9739b06b65960e0f86cdec504c8452a956d184eac3cdcd4",
+          "size": 468660,
+          "repo_path": "bios/Arcade/Arcade/.variants/cdibios.zip.e7d2a0da",
+          "systems": [
+            "arcade"
+          ]
+        }
+      ],
+      "truth": false
+    },
+    {
       "dest": "bios/cdi200.rom",
       "sha1": "d961de803c89b3d1902d656ceb9ce7c02dccb40a",
       "sha256": "24e388c72df21237a89d8d775d41a90208af24c4112c61429b8e47f190ac18c6",
@@ -33306,6 +33241,71 @@
           ]
         }
       ]
+    },
+    {
+      "dest": "bios/stvbios.zip",
+      "sha1": "7783ab663bb1a8d62ff60d583674355c2af556b1",
+      "sha256": "38ceb2792c72770f56aadb1865cf66dc33a3017db1ee05e11c2b2dff397ad39e",
+      "size": 2955630,
+      "repo_path": "bios/Arcade/MAME/stvbios.zip",
+      "cores": null,
+      "systems": [
+        "arcade",
+        "sega-saturn"
+      ],
+      "slot": {
+        "groups": [
+          "arcade",
+          "sega-saturn",
+          "sega-stv"
+        ],
+        "keys": [
+          {
+            "kronos": {
+              "ranks": [
+                null
+              ],
+              "sets": [
+                "stv-bios"
+              ]
+            }
+          }
+        ]
+      },
+      "declared_choices": [
+        {
+          "sha1": "7783ab663bb1a8d62ff60d583674355c2af556b1",
+          "sha256": "38ceb2792c72770f56aadb1865cf66dc33a3017db1ee05e11c2b2dff397ad39e",
+          "size": 2955630,
+          "repo_path": "bios/Arcade/MAME/stvbios.zip",
+          "systems": [
+            "sega-saturn"
+          ]
+        },
+        {
+          "sha1": "330a2ab5ce2e2c29987b2086e021de7aa04aa102",
+          "sha256": "bbdf6a9ef4bad6bd9ad16f9f7669071dd4ee3bb2387d49124f024ea8dd750f88",
+          "size": 2699375,
+          "repo_path": "bios/Arcade/MAME/.variants/stvbios.zip.330a2ab5",
+          "systems": [
+            "arcade"
+          ]
+        }
+      ],
+      "alternatives": [
+        {
+          "sha1": "b14bbed4bf459439cf7e96d2f79d7adea5d31448",
+          "sha256": "1c4970da5f7066dd213d3dca14f7e45408cf667f508f4653025626bb33fbeb14",
+          "size": 3455065,
+          "repo_path": "bios/Arcade/Arcade/stvbios.zip",
+          "cores": [
+            "beetle_saturn",
+            "kronos",
+            "mednafen_stv"
+          ]
+        }
+      ],
+      "truth": false
     },
     {
       "dest": "bios/sega1003.bin",

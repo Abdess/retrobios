@@ -11,6 +11,7 @@ import os
 import re
 import urllib.error
 import urllib.request
+import zipfile
 from pathlib import Path
 
 from model.largefiles import fetch_large_file
@@ -482,15 +483,52 @@ def _archive_choice(
     return fe if accepted(path) > 0 else None
 
 
-def _hash_choice(resolved: list[tuple[dict, str | None, str]]) -> dict | None:
-    """The first declaration resolved by md5, else the first by any hash."""
-    best = None
-    for fe, _lp, _st in resolved:
-        if _lp and _st == "md5_exact":
+def _member_crcs(path: str) -> frozenset[int] | None:
+    """The crc32 of each member of an archive, None when it is no archive."""
+    try:
+        with zipfile.ZipFile(path) as zf:
+            return frozenset(info.CRC for info in zf.infolist() if not info.is_dir())
+    except (OSError, zipfile.BadZipFile):
+        return None
+
+
+def _covering_archive(candidates: list[tuple[dict, str]]) -> dict | None:
+    """The archive holding every member each other candidate holds, and more.
+
+    RetroDECK pins bios/cdibios.zip twice: the two-member MAME set for its
+    mame component, the three-member set for the CD-i core. MAME reads the
+    members, never the container, and its cdi driver needs all three, so
+    the larger set serves both readers where the first one serves one.
+    """
+    sets: list[tuple[dict, frozenset[int]]] = []
+    for fe, path in candidates:
+        members = _member_crcs(path)
+        if members is None:
+            return None
+        sets.append((fe, members))
+    for fe, members in sets:
+        others = [m for other, m in sets if other is not fe]
+        if all(members > m for m in others):
             return fe
-        if best is None and _lp and resolution_is_hash_exact(_st):
-            best = fe
-    return best
+    return None
+
+
+def _hash_choice(resolved: list[tuple[dict, str | None, str]]) -> dict | None:
+    """The declaration resolved by md5, else the first by any hash.
+
+    Two md5 pins on one path are two files for one place: one stays red in
+    the frontend's check whichever ships, so the archive covering the other
+    ships, else the first.
+    """
+    by_md5 = [(fe, lp) for fe, lp, st in resolved if lp and st == "md5_exact"]
+    if by_md5:
+        if len({lp for _fe, lp in by_md5}) > 1:
+            covering = _covering_archive(by_md5)
+            if covering is not None:
+                return covering
+        return by_md5[0][0]
+    return next(
+        (fe for fe, lp, st in resolved if lp and resolution_is_hash_exact(st)), None)
 
 
 def preferred_entries(

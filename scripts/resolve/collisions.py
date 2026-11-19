@@ -54,8 +54,9 @@ def find_collisions(
     fold = bool(config.get("case_insensitive_fs", False))
     systems = config.get("systems") or {}
     # The builder lets a hash-constrained declaration that resolves by
-    # content take the path, else the first it reaches walking the systems
-    # sorted: the same choice says which file ships.
+    # content take the path, the archive covering the others when two md5
+    # pins tie, else the first it reaches walking the systems sorted: the
+    # same choice says which file ships.
     preferred = set(
         preferred_entries(systems, db, "bios", "", False, zip_contents, True).values()
     )

@@ -395,6 +395,9 @@ MiSTer resolve no core, so nothing is examined and nothing is listed.
 A destination the platform's own list declares twice, for two different
 files, is written under `doubled` (`slots.find_collisions` finds it). One
 path holds one file, so one of the two checks fails on every install.
+When both are archives and one holds every member of the other, that one
+ships: a MAME core reads members, never the container, so the larger set
+serves both readers.
 Each declaration carries its system, component, hashes and the file it
 resolves to, with the emulators the platform runs whose profile reads
 that file: a member list it holds, a hash it matches, or a name and a

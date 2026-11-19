@@ -63,6 +63,60 @@ class PreferredArchive(unittest.TestCase):
             self.assertEqual(path, "bios/b/set.zip")
 
 
+class TwoPinsOnePath(unittest.TestCase):
+    """RetroDECK pins bios/cdibios.zip twice, a two-member MAME set and the
+    three-member set MAME's cdi driver needs. The first pin in system order
+    shipped the smaller set: the CD-i core and MAME both lacked a ROM."""
+
+    def _db(self, paths):
+        files, by_md5, by_name = {}, {}, {}
+        for path in paths:
+            data = Path(path).read_bytes()
+            sha1, md5 = hashlib.sha1(data).hexdigest(), hashlib.md5(data).hexdigest()
+            files[sha1] = {"path": path, "name": "set.zip", "sha1": sha1, "md5": md5,
+                           "size": len(data)}
+            by_md5[md5] = sha1
+            by_name.setdefault("set.zip", []).append(sha1)
+        return {"files": files, "indexes": {"by_name": by_name, "by_md5": by_md5,
+                                            "by_path_suffix": {}, "by_crc32": {}}}
+
+    def _shipped(self, small_members, large_members):
+        from resolve import packfiles
+
+        with tempfile.TemporaryDirectory() as tmp:
+            previous = os.getcwd()
+            os.chdir(tmp)
+            self.addCleanup(os.chdir, previous)
+            for folder, members in (("a", small_members), ("b", large_members)):
+                Path(f"bios/{folder}").mkdir(parents=True)
+                with zipfile.ZipFile(f"bios/{folder}/set.zip", "w") as zf:
+                    for name in members:
+                        zf.writestr(name, name.encode() * 16)
+            db = self._db(["bios/a/set.zip", "bios/b/set.zip"])
+            md5 = {f["path"]: f["md5"] for f in db["files"].values()}
+            systems = {
+                "arcade": {"files": [{"name": "set.zip", "destination": "set.zip",
+                                      "md5": md5["bios/a/set.zip"]}]},
+                "cdi": {"files": [{"name": "set.zip", "destination": "set.zip",
+                                   "md5": md5["bios/b/set.zip"]}]},
+            }
+            preferred = packfiles.preferred_entries(systems, db, "bios", "", False, {}, True)
+            chosen = next(fe for s in systems.values() for fe in s["files"]
+                          if id(fe) == preferred["set.zip"])
+            path, _status = packfiles.resolve_file(chosen, db, "bios", {}, offline=True)
+            return path
+
+    def test_the_archive_covering_the_other_ships(self):
+        self.assertEqual(
+            self._shipped(["r0.bin", "r1.bin"], ["r0.bin", "r1.bin", "slave.bin"]),
+            "bios/b/set.zip")
+
+    def test_two_unrelated_archives_keep_the_first(self):
+        self.assertEqual(
+            self._shipped(["r0.bin", "r1.bin"], ["r0.bin", "other.bin"]),
+            "bios/a/set.zip")
+
+
 class OneWinnerRuleForEveryReader(unittest.TestCase):
     """verify passed the data-directory registry to the winner rule, the pack
     and the manifest passed none: a declaration only a data/ cache satisfies
