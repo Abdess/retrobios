@@ -18,6 +18,7 @@ from resolve.content import (
     content_fits,
     declared_content_checks,
     name_match_size_ok,
+    parse_validation,
     shape_fits,
 )
 from resolve.archives import archive_members
@@ -48,21 +49,6 @@ _CONTENT_REASONS = {
 
 # All reproducible validation types.
 _HASH_CHECKS = frozenset({"crc32", "md5", "sha1", "adler32"})
-
-
-def parse_validation(validation: list | dict | None) -> list[str]:
-    """Extract the validation check list from a file's validation field.
-
-    Handles both simple list and divergent (core/upstream) dict forms.
-    For dicts, uses the ``core`` key since RetroArch users run the core.
-    """
-    if validation is None:
-        return []
-    if isinstance(validation, list):
-        return validation
-    if isinstance(validation, dict):
-        return validation.get("core", [])
-    return []
 
 
 def _entry_rule(emu_name: str, f: dict, checks: Collection[str]) -> dict:

@@ -17,6 +17,21 @@ if TYPE_CHECKING:
     from typing_extensions import Unpack
 
 
+def parse_validation(validation: list | dict | None) -> list[str]:
+    """Extract the validation check list from a file's validation field.
+
+    Handles both simple list and divergent (core/upstream) dict forms.
+    For dicts, uses the ``core`` key since RetroArch users run the core.
+    """
+    if validation is None:
+        return []
+    if isinstance(validation, list):
+        return validation
+    if isinstance(validation, dict):
+        return validation.get("core", [])
+    return []
+
+
 def name_match_size_ok(file_entry: dict, candidate_size: int | None) -> bool:
     """Whether a candidate found by name may be the file the entry describes.
 
@@ -25,10 +40,7 @@ def name_match_size_ok(file_entry: dict, candidate_size: int | None) -> bool:
     its own, so a size the emulator verifies settles it. A size declared
     without ``validation: [size]`` is informative and rejects nothing.
     """
-    validation = file_entry.get("validation")
-    if isinstance(validation, dict):
-        validation = validation.get("core", [])
-    if "size" not in (validation or []) or candidate_size is None:
+    if "size" not in parse_validation(file_entry.get("validation")) or candidate_size is None:
         return True
     return size_fits(file_entry, candidate_size)
 
@@ -102,11 +114,8 @@ def adler32_fits(file_entry: dict, path: str, db: dict | None = None) -> bool:
     With the collection at hand, a candidate outside the held pair the
     code accepts (``held_adler32_pair``) is refused too.
     """
-    validation = file_entry.get("validation")
-    if isinstance(validation, dict):
-        validation = validation.get("core", [])
     declared = file_entry.get("known_hash_adler32")
-    if "adler32" not in (validation or []) or not declared:
+    if "adler32" not in parse_validation(file_entry.get("validation")) or not declared:
         return True
     values = declared if isinstance(declared, list) else [declared]
     accepted = {_adler32_value(v) for v in values}
@@ -120,16 +129,9 @@ def adler32_fits(file_entry: dict, path: str, db: dict | None = None) -> bool:
     return chosen is None or actual == chosen
 
 
-def _core_checks(file_entry: dict) -> list:
-    validation = file_entry.get("validation")
-    if isinstance(validation, dict):
-        validation = validation.get("core", [])
-    return list(validation or [])
-
-
 def declared_content_checks(file_entry: dict) -> set[str]:
     """The content tests the entry's code runs on a candidate."""
-    return set(CONTENT_CHECKS.intersection(_core_checks(file_entry)))
+    return set(CONTENT_CHECKS.intersection(parse_validation(file_entry.get("validation"))))
 
 
 @functools.lru_cache(maxsize=4096)
