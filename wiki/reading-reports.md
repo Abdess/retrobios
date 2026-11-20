@@ -65,8 +65,9 @@ strictly necessary. INFO files are nice to have.
 
 ### Large files (release assets)
 
-Files like PS3UPDAT.PUP, PSVUPDAT.PUP, and Switch firmware are too large for the
-git repository. They are stored as GitHub release assets under the `large-files`
+Files like PS3UPDAT.PUP, PSVUPDAT.PUP, and the Switch firmware zip are too large
+for the git repository. The NCAs the Switch emulators read from their NAND are
+committed one by one. They are stored as GitHub release assets under the `large-files`
 release and downloaded at build time.
 
 If a pack build fails to include these, check the network connection. In offline

@@ -86,7 +86,6 @@ files:
     path: "nand/system/Contents/registered/"
     required: false
     hle_fallback: true
-    storage: large_file
     description: "Installed Switch system firmware, the system title NCAs"
     note: >-
       Read as the system NAND content registry at every start. Files are named
