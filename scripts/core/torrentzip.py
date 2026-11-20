@@ -180,7 +180,12 @@ def rebuild_torrentzip(source: str | Path) -> bytes:
     return build_torrentzip(members)
 
 
+def has_torrentzip_comment(comment: bytes) -> bool:
+    """Report whether an archive comment is the TorrentZip signature."""
+    return comment.startswith(_COMMENT_PREFIX.encode("ascii"))
+
+
 def is_torrentzip(source: str | Path) -> bool:
     """Report whether an archive already carries the TorrentZip signature."""
     with zipfile.ZipFile(source) as zf:
-        return zf.comment.decode("ascii", "replace").startswith(_COMMENT_PREFIX)
+        return has_torrentzip_comment(zf.comment)

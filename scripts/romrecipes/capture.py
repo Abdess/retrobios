@@ -11,13 +11,11 @@ from pathlib import Path
 from typing import BinaryIO
 
 from core.hashing import parse_hash_list
-from core.torrentzip import write_torrentzip, zlib_ng_version
+from core.torrentzip import has_torrentzip_comment, write_torrentzip, zlib_ng_version
 from romrecipes.ledger import database_archives
 from romrecipes.members import member_sha1, member_opener
 from romrecipes.pins import container_entries
 from romrecipes.romsets import collect_recipes, load_dat_recipes
-
-_TORRENTZIP_COMMENT = b"TORRENTZIPPED-"
 
 
 # --- capture ----------------------------------------------------------------
@@ -44,7 +42,7 @@ class HashSink:
 def _file_infos(path: Path) -> tuple[list[zipfile.ZipInfo], list[str], bool]:
     with zipfile.ZipFile(path) as archive:
         infos = archive.infolist()
-        torrentzip = archive.comment.startswith(_TORRENTZIP_COMMENT)
+        torrentzip = has_torrentzip_comment(archive.comment)
     files = [info for info in infos if not info.is_dir()]
     directories = [info.filename for info in infos if info.is_dir()]
     return files, directories, torrentzip
