@@ -32,11 +32,12 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from core.hashing import compute_hashes, parse_sha256sums
+from core.paths import REPO_ROOT
 from core.ziptools import safe_extract_zip
+from model.releaserecord import PACK_SUFFIX, RECORD, load_record, match_key, pack_label, recorded_pack
 
 DEFAULT_API = "https://api.github.com"
 REPO = "Abdess/retrobios"
-PACK_SUFFIX = "_BIOS_Pack.zip"
 CHECKSUMS_ASSET = "SHA256SUMS.txt"
 STAGING_PREFIX = ".retrobios-download-"
 MAX_CHECKSUMS_BYTES = 1 << 20
@@ -143,7 +144,7 @@ def group_packs(release: dict) -> list[Pack]:
         packs.append(
             Pack(
                 name=base,
-                platform=base[: -len(PACK_SUFFIX)].replace("_", " "),
+                platform=pack_label(base),
                 parts=parts,
                 size=sum(part.get("size", 0) for part in parts),
                 joined=base in joined,
@@ -158,20 +159,24 @@ def list_platforms(release: dict) -> list[str]:
     return sorted(pack.platform for pack in group_packs(release))
 
 
-def _match_key(value: str) -> str:
-    """Letters and digits only: the platform is `misterfpga`, the asset MiSTer_FPGA."""
-    return re.sub(r"[^a-z0-9]", "", value.lower())
-
-
 def find_pack(release: dict, platform: str) -> Pack | None:
-    """Find the pack for a platform name."""
-    needle = _match_key(platform)
+    """Find the pack for a platform name.
+
+    release.json names the platforms each pack serves, and is read when it
+    records this release. Otherwise the platform is matched against the pack
+    names, the shortest first: RetroArch_v1.22.2 is the full pack, and
+    RetroArch_v1.22.2_AndroidArm64V8A one target's.
+    """
+    packs = group_packs(release)
+    record = load_record(REPO_ROOT / RECORD)
+    if record.get("tag") and record.get("tag") == release.get("tag_name"):
+        name = recorded_pack(platform, record)
+        return next((pack for pack in packs if pack.name == name), None)
+    needle = match_key(platform)
     if not needle:
         return None
-    for pack in group_packs(release):
-        if needle in _match_key(pack.name):
-            return pack
-    return None
+    matches = [pack for pack in packs if needle in match_key(pack.name)]
+    return min(matches, key=lambda pack: (len(match_key(pack.name)), pack.name), default=None)
 
 
 def fetch_checksums(release: dict) -> dict[str, str]:

@@ -29,6 +29,7 @@ import time
 import unittest
 import zipfile
 from pathlib import Path
+from unittest import mock
 
 from packs import parts as packs_parts
 
@@ -215,6 +216,26 @@ class TestPackGrouping(unittest.TestCase):
     def test_find_pack_maps_retroarch_to_the_lakka_asset(self):
         pack = download.find_pack(_release(RELEASE_ASSETS), "retroarch")
         self.assertEqual(pack.name, "RetroArch_Lakka_v1.22.2_BIOS_Pack.zip")
+
+    def test_find_pack_prefers_the_full_pack_to_a_target_pack(self):
+        names = ["RetroArch_v1.22.2_AndroidArm64V8A_BIOS_Pack.zip", "RetroArch_v1.22.2_BIOS_Pack.zip"]
+        pack = download.find_pack(_release(names), "retroarch")
+        self.assertEqual(pack.name, "RetroArch_v1.22.2_BIOS_Pack.zip")
+
+    def test_find_pack_reads_the_record_of_this_release(self):
+        record = {"tag": "v1", "packs": {
+            "RetroArch_Lakka_v1.22.2_BIOS_Pack.zip": {"platforms": ["lakka"]},
+            "RetroArch_v1.22.2_BIOS_Pack.zip": {"platforms": ["retroarch"]},
+        }}
+        release = {**_release(["RetroArch_Lakka_v1.22.2_BIOS_Pack.zip",
+                               "RetroArch_v1.22.2_BIOS_Pack.zip"]), "tag_name": "v1"}
+        with mock.patch.object(download, "load_record", return_value=record):
+            self.assertEqual(download.find_pack(release, "lakka").name,
+                             "RetroArch_Lakka_v1.22.2_BIOS_Pack.zip")
+            self.assertIsNone(download.find_pack(release, "batocera"))
+        with mock.patch.object(download, "load_record", return_value={**record, "tag": "v0"}):
+            self.assertEqual(download.find_pack(release, "lakka").name,
+                             "RetroArch_Lakka_v1.22.2_BIOS_Pack.zip")
 
     def test_find_pack_returns_none_for_an_unknown_platform(self):
         self.assertIsNone(download.find_pack(_release(RELEASE_ASSETS), "nintendo"))

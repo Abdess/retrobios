@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 from core.paths import PLATFORMS_DIR
@@ -17,6 +18,7 @@ SCHEMA_VERSION = 1
 # current pack's files, or the command when no release publishes one. The
 # address outlives every release, so a link written elsewhere keeps working.
 GET_DIR = "get"
+PACK_SUFFIX = "_BIOS_Pack.zip"
 
 
 def load_record(path: str | Path = RECORD) -> dict:
@@ -26,6 +28,33 @@ def load_record(path: str | Path = RECORD) -> dict:
             return json.load(handle)
     except (OSError, json.JSONDecodeError):
         return {}
+
+
+def match_key(value: str) -> str:
+    """Letters and digits only: the platform is `misterfpga`, the pack MiSTer_FPGA."""
+    return re.sub(r"[^a-z0-9]", "", value.lower())
+
+
+def pack_label(name: str) -> str:
+    """RetroArch_Lakka_v1.22.2_BIOS_Pack.zip reads as RetroArch Lakka v1.22.2."""
+    return name.split(PACK_SUFFIX.removesuffix(".zip"), 1)[0].replace("_", " ")
+
+
+def pack_owner(name: str, pack: dict) -> str:
+    """The platform a pack is named after: RetroArch_Lakka is RetroArch's."""
+    key = match_key(name)
+    return sorted(
+        pack.get("platforms", ()), key=lambda p: key.find(match_key(p)) % (len(key) + 1)
+    )[0]
+
+
+def recorded_pack(platform: str, record: dict) -> str | None:
+    """The pack the record says serves a platform, its id spelled any way."""
+    needle = match_key(platform)
+    for name, pack in sorted(record.get("packs", {}).items()):
+        if needle in {match_key(p) for p in pack.get("platforms", ())}:
+            return name
+    return None
 
 
 def get_page(platform: str, site: str = "") -> str:

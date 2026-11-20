@@ -3,13 +3,13 @@
 from __future__ import annotations
 
 import json
-import re
 import subprocess
 from collections.abc import Callable
 
 from core.sizes import size_text
 from model.guides import install_command
 from model.platforms import load_platform_config
+from model.releaserecord import pack_label, pack_owner
 from model.registry import (
     list_registered_platforms,
     list_release_pack_platforms,
@@ -26,25 +26,12 @@ SITE = "https://abdess.github.io/retrobios/"
 HANDHELD_PAGE = "wiki/installer/#on-a-handheld-the-retrobios-port"
 
 
-def _display(pack: str) -> str:
-    """RetroArch_Lakka_v1.22.2_BIOS_Pack.zip reads as RetroArch Lakka v1.22.2."""
-    return pack.split("_BIOS_Pack", 1)[0].replace("_", " ")
-
-
-def _owner(name: str, pack: dict) -> str:
-    """The platform a pack is named after: RetroArch_Lakka is RetroArch's."""
-    key = _match_key(name)
-    return sorted(
-        pack.get("platforms", ()), key=lambda p: key.find(_match_key(p)) % (len(key) + 1)
-    )[0]
-
-
 def _extract_folders(record: dict, platforms_dir: str) -> dict[str, str]:
     """Pack name to the folder the registry says it extracts into."""
     registry = load_platform_registry(platforms_dir)
     folders: dict[str, str] = {}
     for name, pack in sorted(record.get("packs", {}).items()):
-        folder = registry.get(_owner(name, pack), {}).get("extract_to")
+        folder = registry.get(pack_owner(name, pack), {}).get("extract_to")
         if folder:
             folders[name] = folder
     return folders
@@ -74,11 +61,6 @@ def no_pack_paragraph(platforms_dir: str) -> list[str]:
          f" For {listed}, use the command above."),
         "",
     ]
-
-
-def _match_key(value: str) -> str:
-    """Letters and digits only: the platform is `misterfpga`, the pack MiSTer_FPGA."""
-    return re.sub(r"[^a-z0-9]", "", value.lower())
 
 
 def _link(pack: dict, tag: str) -> str:
@@ -239,7 +221,7 @@ def render(record: dict, platforms_dir: str, whats_new: str,
     for name, pack in sorted(packs.items(), key=lambda item: -item[1]["extracted_size"]):
         folder = folders.get(name)
         lines.append(
-            f"| {_display(name)} | {_link(pack, tag)} |"
+            f"| {pack_label(name)} | {_link(pack, tag)} |"
             f" {size_text(pack['extracted_size'])} | {pack['files']:,} |"
             f" {f'`{folder}`' if folder else '-'} |"
         )
