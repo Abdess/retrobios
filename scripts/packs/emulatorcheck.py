@@ -11,6 +11,7 @@ from core.hashing import compute_hashes
 from core.paths import BIOS_DIR, REPO_ROOT
 from core.ziptools import build_zip_contents_index
 from model.alternatives import set_requirements, settle_sets, slot_set_keys
+from model.database import sha1_at
 from model.profiles import (
     ProfileSelectionError,
     entry_serves_systems,
@@ -207,18 +208,12 @@ class _EmulatorPack:
     # The emulator pack walks profiles in name order and keeps the first
     # file at a path, folding case: a later profile's different file there
     # (zesarux pentagon.rom after speccy's PENTAGON.ROM) is not in the pack.
-    sha1_by_path: dict = field(init=False)
     # Destination -> (file packed there, its profile, the path as written).
     # Archives and data trees take paths too, before and after the loose
     # files of their profile, as the pack writes them.
     placed: dict[str, tuple[str | None, str, str]] = field(default_factory=dict)
     taken: Placed = field(default_factory=lambda: Placed(True))
     content_ids: dict[str, str | None] = field(default_factory=dict)
-
-    def __post_init__(self) -> None:
-        self.sha1_by_path = {
-            entry.get("path"): sha1 for sha1, entry in self.db.get("files", {}).items()
-        }
 
     def pending(self, entry: dict, local_path: str | None, status: str) -> tuple[str | None, str]:
         from resolve.packfiles import pending_release_asset, run_is_offline
@@ -236,7 +231,7 @@ class _EmulatorPack:
         if not path:
             return None
         if path not in self.content_ids:
-            self.content_ids[path] = self.sha1_by_path.get(path) or (
+            self.content_ids[path] = sha1_at(self.db, path) or (
                 compute_hashes(path)["sha1"] if os.path.isfile(path) else None
             )
         return self.content_ids[path]

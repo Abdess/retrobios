@@ -21,6 +21,7 @@ from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 
 from core.hashing import parse_hash_list
+from model.database import record_at
 from model.declarations import CONFIGS_ROOT, ROMS_ROOT, declared_root, outer_layout
 from model.profiles import lists_files
 from resolve.content import name_match_size_ok
@@ -1239,10 +1240,7 @@ def held_record(report: dict, db: dict) -> dict | None:
     local, status = resolve_local_file(report, db, dest_hint=report.get("path") or "")
     if local is None or status in ("not_found", "hash_mismatch"):
         return None
-    for record in db.get("files", {}).values():
-        if record.get("path") == local:
-            return record
-    return None
+    return record_at(db, local)
 
 
 def declared_destinations(config: dict) -> set[str]:

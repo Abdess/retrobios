@@ -9,6 +9,7 @@ import collections
 import re
 
 from model import region
+from model.database import sha1_at
 from model.region import NOINTRO
 from model.profiles import lists_files
 from resolve.localfile import resolve_local_file
@@ -42,21 +43,19 @@ def catalog_regions(db: dict) -> dict[str, tuple[set[str], str]]:
     return out
 
 
-def resolve_sha1(file_entry: dict, db: dict, by_path: dict | None = None) -> str | None:
+def resolve_sha1(file_entry: dict, db: dict) -> str | None:
     """The repo SHA1 a profile entry resolves to, by the pack's own resolver.
 
     A private resolver read sha1, then md5, then a lone name: entries that
     identify their file by path (Dolphin's three IPL.bin), by crc32
     (geargrafx) or by sha256 (mednafen) were never checked at all.
     """
-    if by_path is None:
-        by_path = {entry.get("path", ""): sha1 for sha1, entry in db["files"].items()}
     path, status = resolve_local_file(
         file_entry, db, dest_hint=file_entry.get("path") or ""
     )
     if not path or status in ("not_found", "hash_mismatch"):
         return None
-    return by_path.get(path)
+    return sha1_at(db, path)
 
 
 def build_report(profiles: dict, db: dict) -> dict:
@@ -69,7 +68,6 @@ def build_report(profiles: dict, db: dict) -> dict:
     for slugs, _name in catalog.values():
         vocabulary.update(slugs)
 
-    by_path = {entry.get("path", ""): sha1 for sha1, entry in db["files"].items()}
     for emu_name, profile in sorted(profiles.items()):
         if not lists_files(profile):
             continue
@@ -77,7 +75,7 @@ def build_report(profiles: dict, db: dict) -> dict:
             if not isinstance(f, dict) or not f.get("region"):
                 continue
             declared = region.normalize_declared(f["region"])
-            sha1 = resolve_sha1(dict(f, source_profile=emu_name), db, by_path)
+            sha1 = resolve_sha1(dict(f, source_profile=emu_name), db)
             if not sha1 or sha1 not in catalog:
                 unchecked += 1
                 continue

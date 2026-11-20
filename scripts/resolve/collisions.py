@@ -10,7 +10,8 @@ from core.hashing import compute_hashes, parse_hash_list, parse_md5_list
 from core.paths import comparable_destination
 from core.ziptools import check_inside_zip
 from resolve.localfile import resolve_local_file, variant_base_name
-from resolve.packfiles import records_by_path, preferred_entries
+from model.database import record_at
+from resolve.packfiles import preferred_entries
 
 
 @dataclass
@@ -124,7 +125,7 @@ def _record_at(path: str, db: dict) -> dict | None:
     path verify --all and slots.py both take. The index is the pack
     resolver's, so one run holds one copy of it.
     """
-    return records_by_path(db).get(path)
+    return record_at(db, path)
 
 
 def content_sha1(path: str, db: dict) -> str | None:

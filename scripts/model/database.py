@@ -48,6 +48,42 @@ def load_database(db_path: str) -> dict:
         ) from None
 
 
+# One slot: the files dict, its size, and path -> (sha1, record) built from it.
+_PATH_INDEX: list[tuple[dict, int, dict[str, tuple[str, dict]]]] = []
+
+
+def _path_index(db: dict) -> dict[str, tuple[str, dict]]:
+    """Normalized path -> (sha1, record), built once per database."""
+    files = db.get("files", {})
+    if _PATH_INDEX:
+        cached, size, index = _PATH_INDEX[0]
+        if cached is files and size == len(files):
+            return index
+    index = {
+        os.path.normpath(record["path"]): (sha1, record)
+        for sha1, record in files.items()
+        if record.get("path")
+    }
+    _PATH_INDEX[:] = [(files, len(files), index)]
+    return index
+
+
+def record_at(db: dict, path: str | None) -> dict | None:
+    """The database record stored at a path, spelled any way normpath reads alike."""
+    if not path:
+        return None
+    found = _path_index(db).get(os.path.normpath(path))
+    return found[1] if found else None
+
+
+def sha1_at(db: dict, path: str | None) -> str | None:
+    """The sha1 the database keys the file at a path under."""
+    if not path:
+        return None
+    found = _path_index(db).get(os.path.normpath(path))
+    return found[0] if found else None
+
+
 _mame_clone_map_cache: dict[str, dict[str, str]] = {}
 
 

@@ -9,6 +9,7 @@ from dataclasses import dataclass
 
 from core.hashing import compute_hashes
 from core.paths import declared_destination
+from model.database import sha1_at
 from model.declarations import OUTER_ROOTS, declared_root
 from model.largefiles import asset_name, load_registered_paths, published_asset_name
 from packs.extras import (
@@ -68,23 +69,6 @@ def _get_repo_path(sha1: str, db: dict) -> str:
     return entry.get("path", "")
 
 
-# The database the index was built from, held so its identity stays its own.
-_DB_SHA1_BY_PATH: list[tuple[dict, dict[str, str]]] = []
-
-
-def _db_sha1_by_path(db: dict) -> dict[str, str]:
-    """Path -> sha1 of the database, built once per database."""
-    if _DB_SHA1_BY_PATH and _DB_SHA1_BY_PATH[0][0] is db:
-        return _DB_SHA1_BY_PATH[0][1]
-    index = {
-        os.path.normpath(entry["path"]): sha1
-        for sha1, entry in db.get("files", {}).items()
-        if entry.get("path")
-    }
-    _DB_SHA1_BY_PATH[:] = [(db, index)]
-    return index
-
-
 # The hashes a manifest entry records, and each file's once verified.
 _MANIFEST_HASHES = frozenset({"sha1", "sha256"})
 _STABLE_HASHES: dict[tuple, dict] = {}
@@ -100,7 +84,7 @@ def _stable_hashes(local_path: str, db: dict) -> dict:
     refused rather than published.
     """
     stat = os.stat(local_path)
-    expected = _db_sha1_by_path(db).get(os.path.normpath(local_path))
+    expected = sha1_at(db, local_path)
     # Keyed by what was checked, the sha1 this database expects there, never
     # by id(db): a database freed and replaced at the same address answered
     # with hashes verified against the first one.

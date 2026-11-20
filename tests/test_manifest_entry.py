@@ -78,7 +78,7 @@ class AnEntryWithoutSourceIsAnOmission(unittest.TestCase):
 
     def test_a_copy_the_database_lacks_is_omitted(self):
         """A copy the scan never indexed has no repo path: an omission."""
-        with mock.patch.object(manifestentry, "_db_sha1_by_path", return_value={}):
+        with mock.patch.object(manifestentry, "sha1_at", return_value=None):
             files, omitted, pack_only = self._run_core_entries(
                 {"sha1": "0" * 40, "sha256": "0" * 64}
             )

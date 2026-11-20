@@ -11,6 +11,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypedDict
 
 from core.options import reject_unknown
+from model.database import sha1_at
 from model.profiles import PROFILE_IDENTITY_FIELDS, entry_system_ids, lists_files
 from model.systems import norm_system_id
 from model.alternatives import core_file_spares, required_only_spares, set_fields
@@ -415,13 +416,10 @@ def hidden_extras(
     system_ids = options.get("system_ids")
     include_all = options.get("include_all", False)
     required_only = options.get("required_only", False)
-    sha1_by_path = {
-        entry.get("path"): sha1 for sha1, entry in db.get("files", {}).items()
-    }
     base_dest = config.get("base_destination", "")
     taken = Placed(bool(config.get("case_insensitive_fs", False)), content={})
     for dest, local in shipped.items():
-        taken.take(dest, sha1_by_path.get(local))
+        taken.take(dest, sha1_at(db, local))
     prefix = detect_extras_prefix(config, base_dest)
     region_prefix = declared_root(config)
     hidden: dict[tuple[str, str, str], str] = {}
@@ -459,7 +457,7 @@ def hidden_extras(
             local, _status = resolve_local_file(
                 fe, db, dest_hint=fe.get("destination", "")
             )
-        held = (sha1_by_path.get(local) or _file_sha1(local)) if local else None
+        held = (sha1_at(db, local) or _file_sha1(local)) if local else None
         if reason == "case_twin" and held and taken.content_at(full) == held:
             continue
         key = (

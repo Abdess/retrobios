@@ -13,6 +13,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
+from model.database import record_at
 from model.largefiles import fetch_large_file
 from core.hashing import cut_md5_owner, parse_hash_list
 from resolve.content import declared_hash_verdict
@@ -135,21 +136,6 @@ def run_is_offline(offline: bool | None = None) -> bool:
     )
 
 
-_RECORDS_BY_PATH: list[tuple[dict, int, dict[str, dict]]] = []
-
-
-def records_by_path(db: dict) -> dict[str, dict]:
-    """The database records by path, built once per database."""
-    files = db.get("files", {})
-    if _RECORDS_BY_PATH:
-        cached, size, index = _RECORDS_BY_PATH[0]
-        if cached is files and size == len(files):
-            return index
-    index = {record.get("path"): record for record in files.values()}
-    _RECORDS_BY_PATH[:] = [(files, len(files), index)]
-    return index
-
-
 def pending_release_asset(
     file_entry: dict, db: dict, registered: list[str] | None = None,
 ) -> str | None:
@@ -175,10 +161,9 @@ def pending_release_asset(
     assets = set(asset_candidates(name, registered))
     if not assets:
         return None
-    records = records_by_path(db)
     declared_size = file_entry.get("size")
     for path, asset in sorted(asset_names(registered).items()):
-        record = records.get(path)
+        record = record_at(db, path)
         if asset not in assets or record is None:
             continue
         if isinstance(declared_size, int) and record.get("size") != declared_size:
