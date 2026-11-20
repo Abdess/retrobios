@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import base64
 import datetime as dt
+import io
 import json
 import os
 import re
@@ -13,6 +14,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+import zipfile
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
@@ -26,10 +28,10 @@ SITE_PROPERTY = "https://abdess.github.io/retrobios/"
 GOATCOUNTER = "https://retrobios.goatcounter.com/api/v0"
 REPOSITORY = "Abdess/retrobios"
 SOURCES = ("gsc", "goatcounter", "github")
-# Paths excluded before a window is cut in two. Each adds ten characters
-# to the address, and on 2026-11-19 the server accepted 8,125 characters
-# and dropped the connection at 10,125: 700 paths stay near 7,000.
-GOAT_MAX_EXCLUDED = 700
+# GoatCounter builds an export in the background: it is asked for every
+# EXPORT_POLL seconds, EXPORT_TRIES times. It allows one export an hour.
+EXPORT_POLL = 5
+EXPORT_TRIES = 60
 # GoatCounter answers four requests a second and 500 per window, and says
 # when to come back: a short wait is waited, a long one ends the run.
 RATE_LIMIT_TRIES = 8
@@ -65,7 +67,7 @@ class Query:
 # Reading the sources
 
 
-def _get_json(url: str, headers: dict[str, str] | None = None, body: dict | None = None) -> dict | list:
+def _fetch(url: str, headers: dict[str, str] | None = None, body: dict | None = None) -> tuple[int, bytes]:
     data = json.dumps(body).encode() if body is not None else None
     request = urllib.request.Request(url, data=data, headers={
         "User-Agent": "retrobios-site-insights", **({"Content-Type": "application/json"} if data else {}),
@@ -73,7 +75,7 @@ def _get_json(url: str, headers: dict[str, str] | None = None, body: dict | None
     for _ in range(RATE_LIMIT_TRIES - 1):
         try:
             with urllib.request.urlopen(request, timeout=60) as response:
-                return json.load(response)
+                return response.status, response.read()
         except urllib.error.HTTPError as error:
             if error.code != 429:
                 raise
@@ -83,7 +85,11 @@ def _get_json(url: str, headers: dict[str, str] | None = None, body: dict | None
                                  f"{wait} s (rate limit); run again then, or --skip that source") from error
             time.sleep(wait)
     with urllib.request.urlopen(request, timeout=60) as response:
-        return json.load(response)
+        return response.status, response.read()
+
+
+def _get_json(url: str, headers: dict[str, str] | None = None, body: dict | None = None) -> dict | list:
+    return json.loads(_fetch(url, headers, body)[1])
 
 
 def _google_token(key_file: Path) -> str:
@@ -129,84 +135,57 @@ def fetch_queries(start: dt.date, end: dt.date) -> list[Query]:
             return merge_fragments(rows)
 
 
-def _goat_object(url: str, auth: dict[str, str]) -> dict:
-    answer = _get_json(url, auth)
-    if not isinstance(answer, dict):
-        raise SystemExit("GoatCounter answered with something other than an object")
-    return answer
+def _goat_export(first: dt.datetime, auth: dict[str, str]) -> bytes:
+    """The site's JSON export from the day of first: a ZIP of hourly counts.
+    Reading the same counts from /stats/hits pages by excluding the paths
+    already read, and four weeks took more than the 500 requests GoatCounter
+    allows in an hour. The export takes three or four."""
+    export = _get_json(f"{GOATCOUNTER}/export", auth,
+                       {"format": "json", "start_from_day": first.strftime("%Y-%m-%dT00:00:00Z")})
+    if not isinstance(export, dict) or "id" not in export:
+        raise SystemExit("GoatCounter did not start an export")
+    for _ in range(EXPORT_TRIES):
+        time.sleep(EXPORT_POLL)
+        status, raw = _fetch(f"{GOATCOUNTER}/export/{export['id']}/download", auth)
+        if status == 200:
+            return raw
+    raise SystemExit(f"GoatCounter export {export['id']} not ready after {EXPORT_POLL * EXPORT_TRIES} s")
 
 
-def _goat_span(start: dt.datetime, end: dt.datetime) -> dict[str, str]:
-    """The hours from start up to end, end excluded: GoatCounter keeps hourly
-    counts and reads an end at hh:59:59 as the last hour included."""
-    last = end - dt.timedelta(seconds=1)
-    return {"start": start.strftime("%Y-%m-%dT%H:00:00Z"), "end": last.strftime("%Y-%m-%dT%H:59:59Z")}
+def read_export(raw: bytes, first: dt.datetime, after: dt.datetime) -> dict:
+    """Paths and events with their counts, the referring domains of page
+    views, from first up to after (excluded). An action is counted as a
+    path without a leading slash and carries no referrer."""
+    with zipfile.ZipFile(io.BytesIO(raw)) as archive:
+        members = {Path(name).name: name for name in archive.namelist()}
 
+        def rows(name: str) -> list[dict]:
+            return [json.loads(line) for line in archive.read(members[name]).decode().splitlines() if line]
 
-def _goat_window(start: dt.datetime, end: dt.datetime, auth: dict[str, str]) -> dict[str, int] | None:
-    """Every path of one window with its count, or None once the window
-    holds too many paths to page through."""
-    counts: dict[str, int] = {}
-    exclude: list[str] = []
-    while True:
-        params = urllib.parse.urlencode({**_goat_span(start, end), "limit": 100,
-                                         "exclude_paths": ",".join(exclude)}, safe=",")
-        answer = _goat_object(f"{GOATCOUNTER}/stats/hits?{params}", auth)
-        for hit in answer.get("hits", []):
-            counts[hit["path"] + (" [404]" if hit.get("title") == "404" else "")] = int(hit["count"])
-            exclude.append(str(hit["path_id"]))
-        if not answer.get("more"):
-            return counts
-        if len(exclude) >= GOAT_MAX_EXCLUDED:
-            return None
-
-
-def _goat_hits(start: dt.datetime, end: dt.datetime, auth: dict[str, str]) -> list[tuple[str, int]]:
-    """Counts by path over the whole span, summed window by window:
-    GoatCounter keeps hourly counts, so windows add up. The API pages with
-    exclude_paths, which lengthens the address by every path already read
-    (GOAT_MAX_EXCLUDED). A window with too many paths is read again at half
-    the size, down to one hour, and the windows after it keep that size: a
-    busy day is followed by busy days, and reading each one whole first
-    paid every page twice and spent the 500 requests GoatCounter allows
-    per hour on four weeks."""
-    totals: dict[str, int] = defaultdict(int)
-    hour = dt.timedelta(hours=1)
-    size = dt.timedelta(days=1)
-    low = start
-    while low < end:
-        high = min(low + size, end)
-        counts = _goat_window(low, high, auth)
-        if counts is None:
-            if high - low <= hour:
-                raise SystemExit(f"GoatCounter holds more than {GOAT_MAX_EXCLUDED} paths in the hour from {low}")
-            size = max(hour, (high - low) // 2 // hour * hour)
-            continue
-        for path, count in counts.items():
-            totals[path] += count
-        low = high
-    return list(totals.items())
+        paths = {row["id"]: row["path"] + (" [404]" if row.get("title") == "404" else "")
+                 for row in rows("paths.jsonl")}
+        refs = {row["id"]: row["ref"] for row in rows("refs.jsonl")}
+        stats = rows("hit_stats.jsonl")
+    low, high = first.strftime("%Y-%m-%dT%H:00:00Z"), after.strftime("%Y-%m-%dT%H:00:00Z")
+    hits: dict[str, int] = defaultdict(int)
+    referrers: dict[str, int] = defaultdict(int)
+    for row in stats:
+        if low <= row["hour"] < high:
+            path = paths[row["path_id"]]
+            hits[path] += row["count"]
+            if path.startswith("/"):
+                referrers[refs[row["ref_id"]] or "(direct)"] += row["count"]
+    actions = sum(count for path, count in hits.items() if not path.startswith("/"))
+    return {"hits": list(hits.items()), "referrers": sorted(referrers.items(), key=lambda row: -row[1]),
+            "visits": sum(hits.values()) - actions, "actions": actions}
 
 
 def fetch_goatcounter(start: dt.date, end: dt.date) -> dict:
     """Paths and events with their visit counts, and the referring domains."""
     token = (CONFIG / "goatcounter-api-token.txt").read_text(encoding="utf-8").strip()
-    auth = {"Authorization": f"Bearer {token}"}
     first = dt.datetime.combine(start, dt.time(), dt.timezone.utc)
     after = dt.datetime.combine(end + dt.timedelta(days=1), dt.time(), dt.timezone.utc)
-    span = _goat_span(first, after)
-    hits = _goat_hits(first, after, auth)
-    refs = _get_json(f"{GOATCOUNTER}/stats/toprefs?{urllib.parse.urlencode({**span, 'limit': 50})}", auth)
-    total = _get_json(f"{GOATCOUNTER}/stats/total?{urllib.parse.urlencode(span)}", auth)
-    if not isinstance(refs, dict) or not isinstance(total, dict):
-        raise SystemExit("GoatCounter answered with something other than an object")
-    # An action carries no referrer, and GoatCounter files it as a direct
-    # visit: 592 of the first day's 1,145 "direct" were clicks.
-    events = int(total.get("total_events", 0))
-    referrers = [("(direct)", max(int(r["count"]) - events, 0)) if not r.get("name") else (r["name"], int(r["count"]))
-                 for r in refs.get("stats", [])]
-    return {"hits": hits, "referrers": sorted(referrers, key=lambda row: -row[1]),
-            "visits": int(total.get("total", 0)) - events, "actions": events}
+    return read_export(_goat_export(first, {"Authorization": f"Bearer {token}"}), first, after)
 
 
 def fetch_github() -> dict:

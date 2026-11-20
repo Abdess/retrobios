@@ -11,6 +11,7 @@ import tempfile
 import unittest
 import urllib.error
 import urllib.parse
+import zipfile
 from pathlib import Path
 from unittest import mock
 
@@ -219,71 +220,64 @@ class TheReport(unittest.TestCase):
         self.assertEqual(declared, {"dsp1b.rom", "dsp1b.bin"})
 
 
-class FakeGoatCounter:
-    """Hourly counts by path, paged the way /stats/hits pages: by count,
-    a hundred at most, past the ids in exclude_paths."""
-
-    def __init__(self, hourly: dict[tuple[str, dt.datetime], int]) -> None:
-        self.hourly = hourly
-        self.ids = {path: n for n, path in enumerate(sorted({path for path, _ in hourly}), 1)}
-        self.calls = 0
-
-    def __call__(self, url: str, headers: dict[str, str] | None = None) -> dict:
-        self.calls += 1
-        query = urllib.parse.parse_qs(urllib.parse.urlsplit(url).query)
-        start = dt.datetime.strptime(query["start"][0], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=dt.timezone.utc)
-        end = dt.datetime.strptime(query["end"][0], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=dt.timezone.utc)
-        excluded = {int(i) for i in query.get("exclude_paths", [""])[0].split(",") if i}
-        counts: dict[str, int] = {}
-        for (path, hour), count in self.hourly.items():
-            if start <= hour <= end and self.ids[path] not in excluded:
-                counts[path] = counts.get(path, 0) + count
-        ranked = sorted(counts.items(), key=lambda row: (-row[1], row[0]))
-        limit = int(query["limit"][0])
-        return {"hits": [{"path": path, "path_id": self.ids[path], "count": count,
-                          "title": "404" if path.startswith("/gone") else ""} for path, count in ranked[:limit]],
-                "more": len(ranked) > limit}
+def goat_export(hourly: list[tuple[str, str, str, int]]) -> bytes:
+    """A GoatCounter JSON export holding (hour, path, referrer, count) rows."""
+    paths = {path: n for n, path in enumerate(sorted({row[1] for row in hourly}), 100)}
+    refs = {ref: n for n, ref in enumerate(sorted({row[2] for row in hourly}), 1)}
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w") as archive:
+        folder = "goatcounter-export-site-20261120T000000Z/"
+        archive.writestr(folder + "info.json", "{}")
+        archive.writestr(folder + "paths.jsonl", "\n".join(json.dumps(
+            {"id": n, "path": path.removesuffix(" [404]"), "title": "404" if path.endswith(" [404]") else ""})
+            for path, n in paths.items()))
+        archive.writestr(folder + "refs.jsonl", "\n".join(json.dumps({"id": n, "ref": ref}) for ref, n in refs.items()))
+        archive.writestr(folder + "hit_stats.jsonl", "\n".join(json.dumps(
+            {"hour": hour, "path_id": paths[path], "ref_id": refs[ref], "count": count})
+            for hour, path, ref, count in hourly))
+    return buffer.getvalue()
 
 
-class GoatCounterPaging(unittest.TestCase):
-    START = dt.datetime(2026, 10, 20, tzinfo=dt.timezone.utc)
-    END = dt.datetime(2026, 11, 17, tzinfo=dt.timezone.utc)
+class GoatCounterExport(unittest.TestCase):
+    FIRST = dt.datetime(2026, 10, 20, tzinfo=dt.timezone.utc)
+    AFTER = dt.datetime(2026, 11, 17, tzinfo=dt.timezone.utc)
 
-    def hits(self, server: FakeGoatCounter) -> dict[str, int]:
-        with mock.patch.object(insights, "_get_json", server):
-            return dict(insights._goat_hits(self.START, self.END, {}))
+    def test_counts_inside_the_span_add_up_by_path_and_referrer(self) -> None:
+        raw = goat_export([("2026-10-19T23:00:00Z", "/", "", 50),
+                           ("2026-10-20T00:00:00Z", "/", "", 3),
+                           ("2026-10-25T10:00:00Z", "/", "Google", 4),
+                           ("2026-10-25T10:00:00Z", "/gone/ [404]", "github.com", 2),
+                           ("2026-11-16T23:00:00Z", "search-none/kenji", "", 5),
+                           ("2026-11-17T00:00:00Z", "/", "Google", 70)])
+        got = insights.read_export(raw, self.FIRST, self.AFTER)
+        self.assertEqual(dict(got["hits"]), {"/": 7, "/gone/ [404]": 2, "search-none/kenji": 5})
+        self.assertEqual(got["referrers"], [("Google", 4), ("(direct)", 3), ("github.com", 2)])
+        self.assertEqual((got["visits"], got["actions"]), (9, 5))
+        self.assertEqual(insights.site_actions(got["hits"])["404"], [("/gone/", 2)])
 
-    def test_windows_add_up_without_counting_an_hour_twice(self) -> None:
-        # One visit at the last hour of each day, the hour a window boundary falls on.
-        hourly = {(f"/page{day}", self.START + dt.timedelta(days=day, hours=23)): 1 for day in range(28)}
-        hourly[("/gone/link/", self.START + dt.timedelta(days=7))] = 3
-        hourly[("search-none/kenji", self.END - dt.timedelta(hours=1))] = 2
-        hourly[("/late", self.END)] = 9
-        got = self.hits(FakeGoatCounter(hourly))
-        self.assertEqual(sum(got.values()), 28 + 3 + 2)
-        self.assertEqual(got["/gone/link/ [404]"], 3)
-        self.assertEqual(got["search-none/kenji"], 2)
-        self.assertNotIn("/late", got)
+    def test_the_export_is_asked_for_once_and_read_when_ready(self) -> None:
+        raw = goat_export([("2026-10-21T08:00:00Z", "/", "", 1)])
+        calls: list[tuple[str, dict | None]] = []
 
-    def test_a_window_with_too_many_paths_is_read_in_halves(self) -> None:
-        hourly = {(f"/p{n}", self.START + dt.timedelta(hours=n % 300)): n + 1 for n in range(250)}
-        server = FakeGoatCounter(hourly)
-        with mock.patch.object(insights, "GOAT_MAX_EXCLUDED", 100):
-            got = self.hits(server)
-        self.assertEqual(got, {f"/p{n}": n + 1 for n in range(250)})
-        self.assertGreater(server.calls, 4)
+        def fetch(url: str, headers: dict[str, str] | None = None, body: dict | None = None) -> tuple[int, bytes]:
+            calls.append((url, body))
+            if url.endswith("/export"):
+                return 202, json.dumps({"id": 7}).encode()
+            return (202, b"") if len(calls) < 4 else (200, raw)
 
-    def test_busy_days_pay_the_overflow_once(self) -> None:
-        # 150 paths every day, at most 100 a window: each day takes two half
-        # days of one page each, and only the first day is read whole first.
-        hourly = {(f"/d{day}p{n}", self.START + dt.timedelta(days=day, hours=n % 24)): 1
-                  for day in range(28) for n in range(150)}
-        server = FakeGoatCounter(hourly)
-        with mock.patch.object(insights, "GOAT_MAX_EXCLUDED", 100):
-            got = self.hits(server)
-        self.assertEqual(len(got), 28 * 150)
-        self.assertEqual(sum(got.values()), 28 * 150)
-        self.assertEqual(server.calls, 1 + 28 * 2)
+        with mock.patch.object(insights, "_fetch", fetch), mock.patch.object(insights.time, "sleep"):
+            self.assertEqual(insights._goat_export(self.FIRST, {}), raw)
+        self.assertEqual(calls[0], (f"{insights.GOATCOUNTER}/export",
+                                    {"format": "json", "start_from_day": "2026-10-20T00:00:00Z"}))
+        self.assertEqual([url for url, _ in calls[1:]], [f"{insights.GOATCOUNTER}/export/7/download"] * 3)
+
+    def test_an_export_never_ready_ends_the_run(self) -> None:
+        def fetch(url: str, headers: dict[str, str] | None = None, body: dict | None = None) -> tuple[int, bytes]:
+            return 202, json.dumps({"id": 7}).encode()
+
+        with mock.patch.object(insights, "_fetch", fetch), mock.patch.object(insights.time, "sleep"), \
+                self.assertRaisesRegex(SystemExit, "export 7 not ready"):
+            insights._goat_export(self.FIRST, {})
 
     def test_a_long_rate_limit_ends_the_run_instead_of_sleeping(self) -> None:
         headers = email.message.Message()
@@ -301,7 +295,8 @@ class GoatCounterPaging(unittest.TestCase):
         headers["X-Rate-Limit-Reset"] = "1"
         refusal = urllib.error.HTTPError("https://x/api", 429, "Too Many Requests", headers, io.BytesIO(b""))
         answer = mock.MagicMock()
-        answer.__enter__.return_value = io.BytesIO(json.dumps({"ok": 1}).encode())
+        answer.__enter__.return_value.status = 200
+        answer.__enter__.return_value.read.return_value = json.dumps({"ok": 1}).encode()
         with mock.patch.object(insights.urllib.request, "urlopen", side_effect=[refusal, answer]), \
                 mock.patch.object(insights.time, "sleep") as sleep:
             self.assertEqual(insights._get_json("https://x/api"), {"ok": 1})

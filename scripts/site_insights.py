@@ -18,7 +18,7 @@ Four sources, none of which names a person:
 The report is Markdown on stdout. Credentials stay outside the repository:
 
     ~/.config/retrobios/gsc-service-account.json   Search Console, read only
-    ~/.config/retrobios/goatcounter-api-token.txt   GoatCounter, read only
+    ~/.config/retrobios/goatcounter-api-token.txt   GoatCounter, statistics and export
     GITHUB_TOKEN or gh auth token                   GitHub
 
 Usage:
