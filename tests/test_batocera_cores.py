@@ -241,10 +241,6 @@ class APatchedLibretroBuildTakesItsNameOnly(unittest.TestCase):
             self.assertEqual(profiles[name]["files"][0]["path"], "ps2/<bios>.bin")
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class OneLocatorFindsTheSystemsDict(unittest.TestCase):
     """The scraper and the exporter cut batocera-systems at the same braces."""
 
@@ -286,3 +282,7 @@ class OneLocatorFindsTheSystemsDict(unittest.TestCase):
             systems_span("systems = {\n 'a': {}\n")
         with self.assertRaisesRegex(ValueError, "no 'systems = {'"):
             systems_span("other = {}\n")
+
+
+if __name__ == "__main__":
+    unittest.main()
