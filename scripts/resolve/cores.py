@@ -10,7 +10,7 @@ from core.cli import suggest_names
 from core.paths import sanitize_pack_path
 from model.declarations import declared_slot
 from model.platforms import load_platform_config
-from model.profiles import preferred_profile, upstream_profile_index
+from model.profiles import preferred_profile, profile_names, upstream_profile_index
 from model.systems import norm_system_id, select_systems
 from model.targets import list_available_targets, load_target_config
 from core.paths import REPO_ROOT
@@ -110,11 +110,11 @@ def _platform_profiles(
     def replaced_by_own(name: str, p: dict, libretro_only: bool = False) -> bool:
         if platform_key in (p.get("built_by") or []):
             return False
-        names = {name, *(str(c) for c in p.get("cores") or [])}
+        names = set(profile_names(name, p))
         return any(
             (not libretro_only or "libretro" in str(q.get("type", "")))
             and q.get("source") == p.get("source")
-            and names & {key, *(str(c) for c in q.get("cores") or [])}
+            and names.intersection(profile_names(key, q))
             for key, q in own_builds.items()
         )
 

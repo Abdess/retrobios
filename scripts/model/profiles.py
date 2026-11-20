@@ -105,7 +105,7 @@ def entry_serves_systems(entry: dict, profile: dict, system_ids: list[str]) -> b
 
 
 def select_emulator_profiles(
-    profile_names: list[str],
+    requested: list[str],
     all_profiles: dict,
     standalone: bool = False,
 ) -> list[tuple[str, dict]]:
@@ -118,7 +118,7 @@ def select_emulator_profiles(
     builder return empty-handed from one rule.
     """
     selected: list[tuple[str, dict]] = []
-    for name in profile_names:
+    for name in requested:
         if name not in all_profiles:
             # A buildbot name (pcfx, advmame) lives in a profile's cores:,
             # and the spelling hints sent pcfx to two PlayStation cores.
@@ -151,7 +151,7 @@ def select_emulator_profiles(
             target = profile.get("alias_of") or next(
                 (
                     key for key, value in all_profiles.items()
-                    if value.get("type") != "alias" and name in (value.get("cores") or [])
+                    if value.get("type") != "alias" and name in profile_names(key, value)
                 ),
                 None,
             )
@@ -294,6 +294,17 @@ PROFILE_IDENTITY_FIELDS = (
 )
 
 
+def profile_names(key: str, profile: dict) -> list[str]:
+    """Every name a profile's core goes by: its key, then the upstream names
+    its ``cores:`` lists, in that order and once each."""
+    return list(dict.fromkeys([key, *(str(c) for c in profile.get("cores") or [])]))
+
+
+def core_key(name: str) -> str:
+    """A core name as two platforms spell it alike: mame2003-plus, mame2003_plus."""
+    return str(name).lower().replace("-", "_")
+
+
 def upstream_profile_index(
     profiles: dict[str, dict], include_aliases: bool = False
 ) -> dict[str, set[str]]:
@@ -310,9 +321,24 @@ def upstream_profile_index(
     for name, profile in profiles.items():
         if not include_aliases and profile.get("type") == "alias":
             continue
-        index.setdefault(name, set()).add(name)
-        for core in profile.get("cores") or []:
-            index.setdefault(str(core), set()).add(name)
+        for known in profile_names(name, profile):
+            index.setdefault(known, set()).add(name)
+    return index
+
+
+def core_key_index(
+    profiles: dict[str, dict], include_aliases: bool = False
+) -> dict[str, set[str]]:
+    """upstream_profile_index keyed by core_key: the names a roms folder
+    list writes, whose case and separators follow no profile.
+
+    Only those lists match this loosely. Elsewhere a name matches exactly:
+    folded, dosbox_pure would also name dosbox-pure-unleashed and
+    pcsx_rearmed the pcsx_rearmed_standalone profile.
+    """
+    index: dict[str, set[str]] = {}
+    for name, claimants in upstream_profile_index(profiles, include_aliases).items():
+        index.setdefault(core_key(name), set()).update(claimants)
     return index
 
 

@@ -10,7 +10,7 @@ from core.options import reject_unknown
 from core.paths import declared_destination
 from model.alternatives import core_file_spares
 from model.declarations import OUTER_ROOTS, ROMS_ROOT, declared_root
-from model.profiles import upstream_profile_index
+from model.profiles import core_key_index, upstream_profile_index
 from model.targets import list_available_targets, load_target_config
 from packs.extras import (
     ExtraResolver,
@@ -34,7 +34,7 @@ from packs.manifestselect import SelectionIndex
 from packs.archive import Placed
 from packs.platformpack import one_per_slot_drops
 from resolve import regions as resolve_regions, slot as slot_mod
-from resolve.contentlayout import TARGET_KEY, core_key, content_folder_boards
+from resolve.contentlayout import TARGET_KEY, content_folder_boards
 from resolve.cores import (
     downloadable_on,
     downloaded_only_profiles,
@@ -343,9 +343,7 @@ def offered_boards(
         return {}
     from resolve.launchers import roms_place_of
 
-    by_key: dict[str, set[str]] = {}
-    for name, claimants in upstream_profile_index(profiles).items():
-        by_key.setdefault(core_key(name), set()).update(claimants)
+    by_key = core_key_index(profiles)
     free = {
         (profile, folder) for (core, folder), on in pairs.items() if on is None
         for profile in by_key.get(core, ())

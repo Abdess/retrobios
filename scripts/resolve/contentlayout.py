@@ -18,15 +18,11 @@ from resolve.layout import (
     standalone_layout_path,
 )
 from model.declarations import ROMS_ROOT, outer_layout
+from model.profiles import core_key, profile_names
 from core.paths import REPO_ROOT
 
 
 LIBRETRO_RUNNERS = frozenset({"libretro", "retroarch", "retroarch32", "retrorun"})
-
-
-def core_key(name: str) -> str:
-    """A core name as two platforms spell it alike: mame2003-plus, mame2003_plus."""
-    return str(name).lower().replace("-", "_")
 
 
 # Set on a platform config built for one board (generate_pack, verify
@@ -403,7 +399,7 @@ def content_layout(
         return {**view, "files": files}
     if CONTENT_SCOPE_TAG not in tags:
         return view
-    names = {core_key(n) for n in {emu_name, *(str(c) for c in view.get("cores") or [])}}
+    names = {core_key(n) for n in profile_names(emu_name, view)}
     searches = [
         json.loads(t[len(ROM_SEARCH_PREFIX):])
         for t in tags if t.startswith(ROM_SEARCH_PREFIX)

@@ -17,7 +17,7 @@ from model.systems import norm_system_id
 from model.alternatives import core_file_spares, required_only_spares, set_fields
 from resolve.archives import archive_members, contents_members, holds_required_members
 from model.declarations import declared_root, expand_platform_declared_names, platform_declarations
-from model.profiles import load_emulator_profiles
+from model.profiles import core_key, core_key_index, load_emulator_profiles, profile_names
 from resolve.localfile import resolution_is_hash_exact
 from resolve.localfile import resolve_local_file
 from resolve.nativemode import platform_mode
@@ -1356,7 +1356,7 @@ class ExtraPlacement:
         profile: dict = self.profiles.get(key) or next(
             (pp for pp in self.profiles.values() if pp.get("emulator") == key), {}
         )
-        return {str(key), *(str(c) for c in profile.get("cores") or [])} - {""}
+        return set(profile_names(str(key), profile)) - {""}
 
     def nested(self, dest: str) -> bool:
         """True when the file would sit below a folder the frontend lists flat."""
@@ -1888,14 +1888,12 @@ class _ClaimRanks:
 
 def _folder_defaults(config: dict, profiles: dict) -> dict[str, set[str]]:
     """Roms folder -> the profiles its default core or emulator names."""
+    by_key = core_key_index(profiles, include_aliases=True)
     out: dict[str, set[str]] = {}
     for row in config.get("_rom_folders") or []:
         chosen = {str(row.get("core") or ""), str(row.get("emulator") or "")} - {""}
-        keys = {c.lower().replace("-", "_") for c in chosen}
         out[str(row.get("folder"))] = {
-            name for name, profile in profiles.items()
-            if keys & {n.lower().replace("-", "_")
-                       for n in (name, *(str(c) for c in profile.get("cores") or []))}
+            name for c in chosen for name in by_key.get(core_key(c), ())
         }
     return out
 

@@ -23,7 +23,7 @@ from dataclasses import dataclass
 from core.hashing import parse_hash_list
 from model.database import record_at
 from model.declarations import CONFIGS_ROOT, ROMS_ROOT, declared_root, declared_slot, outer_layout
-from model.profiles import lists_files
+from model.profiles import lists_files, profile_names
 from resolve.content import name_match_size_ok
 from resolve.localfile import resolve_local_file
 from core.paths import comparable_destination, sanitize_pack_path
@@ -434,8 +434,7 @@ def _named_profiles(record: dict, profiles: Mapping[str, dict], platform: str) -
     for part in (e.strip() for e in str(record.get("emulator", "")).split(",")):
         named = [
             key for key, profile in profiles.items()
-            if lists_files(profile)
-            and (key == part or part in {str(c) for c in profile.get("cores") or []})
+            if lists_files(profile) and part in profile_names(key, profile)
         ]
         own = [k for k in named if platform in (profiles[k].get("built_by") or [])]
         found.extend(own or [k for k in named if not profiles[k].get("built_by")])
@@ -1367,7 +1366,7 @@ class LauncherLayer:
             key for key in relevant
             if (profile := profiles.get(key)) is not None
             and lists_files(profile)
-            and (key == name or name in {str(c) for c in profile.get("cores") or []})
+            and name in profile_names(key, profile)
         )
 
     def __bool__(self) -> bool:

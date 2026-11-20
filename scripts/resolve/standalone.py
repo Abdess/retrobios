@@ -7,7 +7,7 @@ import json
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 
-from model.profiles import load_emulator_profiles
+from model.profiles import load_emulator_profiles, profile_names
 from model.systems import norm_system_id
 from resolve.contentlayout import content_folder_tags, content_layout
 from resolve.layout import (
@@ -48,7 +48,7 @@ def own_build_tags(config: dict, standalone: set[str]) -> set[str]:
         OWN_BUILD_PREFIX + json.dumps([n, key, p.get("source")])
         for key, p in profiles.items()
         if platform in (p.get("built_by") or []) and "standalone" in str(p.get("type", ""))
-        for n in {key, *(str(c) for c in p.get("cores") or [])} & standalone
+        for n in set(profile_names(key, p)) & standalone
     }
 
 
@@ -72,7 +72,7 @@ def twin_build_names(config: dict) -> set[str]:
         kind = str(profile.get("type", ""))
         if "libretro" not in kind or "standalone" not in kind:
             continue
-        names = {key, *(str(c) for c in profile.get("cores") or [])}
+        names = set(profile_names(key, profile))
         if names & standalone:
             found |= names & libretro
     return found
@@ -193,7 +193,7 @@ class _StandaloneLaunches:
 
     @classmethod
     def of(cls, emu_name: str, profile: dict, standalone_cores: set[str]) -> _StandaloneLaunches:
-        names = {emu_name, *(str(c) for c in profile.get("cores") or [])}
+        names = set(profile_names(emu_name, profile))
         per_system = bool(
             profile.get("standalone_directories") or profile.get("standalone_pools")
         ) and any(h.systems and h.emulator in names for h in handed_from_tags(standalone_cores))

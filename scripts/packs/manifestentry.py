@@ -11,6 +11,7 @@ from core.hashing import compute_hashes
 from core.paths import declared_destination
 from model.database import sha1_at
 from model.declarations import OUTER_ROOTS, declared_root
+from model.profiles import profile_names
 from model.largefiles import asset_name, load_registered_paths, published_asset_name
 from packs.extras import (
     detect_extras_prefix,
@@ -433,7 +434,7 @@ def record_unplaceable(
     }
 
     def folder(profile: str) -> str:
-        names = {profile, *map(str, (profiles.get(profile) or {}).get("cores") or [])}
+        names = set(profile_names(profile, profiles.get(profile) or {}))
         return min(names & platform_names, default=profile)
 
     grouped: dict[str, tuple[dict, list[str]]] = {}

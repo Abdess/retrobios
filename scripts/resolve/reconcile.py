@@ -18,6 +18,7 @@ from dataclasses import dataclass, field
 
 
 from core.hashing import parse_hash_list
+from model.profiles import profile_names
 from model.systems import norm_system_id
 from core.paths import REPO_ROOT
 
@@ -789,7 +790,7 @@ def _attach_runners(systems: dict[str, NativeSystem], scraped: dict | None) -> N
             )
             for key, as_standalone in layers:
                 profile = profiles.get(key, {})
-                names = [key, *(str(c) for c in profile.get("cores") or [])]
+                names = profile_names(key, profile)
                 if as_standalone:
                     name = next((n for n in names if n in standalone), None)
                     runner = (True, name) if name else None

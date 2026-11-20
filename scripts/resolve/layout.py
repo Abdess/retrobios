@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from collections.abc import Iterable, Mapping
 
+from model.profiles import profile_names
+
 
 
 def runs_standalone(
@@ -97,7 +99,7 @@ def core_system_dirs(
     ]
     if not pairs:
         return None
-    names = {emu_name, *(str(c) for c in profile.get("cores") or [])}
+    names = set(profile_names(emu_name, profile))
     return sorted({directory for core, directory in pairs if core in names})
 
 
@@ -239,7 +241,7 @@ def standalone_bindings_for(
     if not declared and not pools:
         return {}
 
-    names = {emu_name, *(str(c) for c in profile.get("cores") or [])}
+    names = set(profile_names(emu_name, profile))
     layout = [
         path for f in profile.get("files") or []
         if isinstance(f, dict) and (path := standalone_layout_path(f, profile))
