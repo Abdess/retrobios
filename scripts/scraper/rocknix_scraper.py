@@ -15,18 +15,14 @@ which shells out to `rocknix-systems` (es-app/src/ApiSystem.cpp:486-516).
 """
 from __future__ import annotations
 
-import re
+from typing import ClassVar
 
-from .batocera_scraper import extract_systems_dict
+from .batocera_scraper import CheckBiosScraper
 from model.sourcerevision import required_revision
 from .base_scraper import (
-    BaseScraper,
-    BiosRequirement,
     fetch_github_latest_version,
     fetch_text,
     github_json,
-    md5_field,
-    requirement_entry,
 )
 from .rocknix_launchers import extract_launchers
 from scraper.shell_launchers import RepoTree
@@ -87,25 +83,11 @@ SYSTEM_SLUG_MAP = {
     "zxspectrum": "sinclair-zx-spectrum",
 }
 
-def parse_systems(source: str) -> dict[str, dict]:
-    """Per-system BIOS declarations of the rocknix-systems script, read like
-    batocera-systems (extract_systems_dict), never executed. A list md5
-    (`"md5": ["a", "b"]`, batocera.linux 6b08b873) stays a list."""
-    systems = {
-        key: {
-            "name": entry.get("name"),
-            "biosFiles": [dict(f) for f in entry.get("biosFiles", []) if f.get("file")],
-        }
-        for key, entry in extract_systems_dict(source).items()
-        if isinstance(entry, dict) and entry.get("biosFiles") is not None
-    }
-    if not systems:
-        raise ValueError("no system declarations found in rocknix-systems")
-    return systems
+class Scraper(CheckBiosScraper):
+    """Scraper for the ROCKNIX rocknix-systems script, read like batocera-systems."""
 
-
-class Scraper(BaseScraper):
-    """Scraper for the ROCKNIX rocknix-systems script."""
+    slug_map: ClassVar[dict[str, str]] = SYSTEM_SLUG_MAP
+    list_name: ClassVar[str] = "rocknix-systems"
 
     def __init__(self, url: str | None = None) -> None:
         self.tag = None if url else fetch_github_latest_version(GITHUB_REPO)
@@ -143,65 +125,8 @@ class Scraper(BaseScraper):
             raise RuntimeError(f"no add_emu_core line in {url}")
         return text
 
-    def validate_format(self, raw_data: str) -> bool:
-        """Validate the rocknix-systems format."""
-        has_dict = re.search(r"^systems\s*=\s*\{", raw_data, re.MULTILINE) is not None
-        has_check = "def checkBios" in raw_data
-        return has_dict and has_check and '"biosFiles"' in raw_data and '"md5"' in raw_data
-
-    def fetch_requirements(self) -> list[BiosRequirement]:
-        """Parse rocknix-systems and return BIOS requirements."""
-        if not self.validate_format(self._fetch_raw()):
-            raise ValueError("rocknix-systems format validation failed")
-        requirements = []
-
-        for key, entry in parse_systems(self._fetch_raw()).items():
-            system_slug = SYSTEM_SLUG_MAP.get(key, key)
-            for bios in entry["biosFiles"]:
-                path = bios["file"]
-                # Declared paths are relative to the storage root: strip the
-                # leading bios/ so destinations match base_destination
-                destination = path[len("bios/"):] if path.startswith("bios/") else path
-                values, as_list = md5_field(bios.get("md5"))
-                native: dict[str, object] = {"native_name": entry["name"]}
-                if as_list:
-                    native["md5_list"] = True
-                req = BiosRequirement(
-                    name=destination.rsplit("/", 1)[-1],
-                    system=system_slug,
-                    md5=",".join(values) or None,
-                    alt_md5=bios.get("altmd5", "") or None,
-                    destination=destination,
-                    required=True,
-                    native_id=key,
-                    native=native,
-                )
-                if bios.get("zippedFile"):
-                    req.zipped_file = bios["zippedFile"]
-                requirements.append(req)
-
-        return requirements
-
     def generate_platform_yaml(self) -> dict:
         """Build the ROCKNIX platform configuration."""
-        raw = parse_systems(self._fetch_raw())
-        names = {key: entry["name"] for key, entry in raw.items()}
-        systems: dict[str, dict] = {}
-
-        for req in self.fetch_requirements():
-            entry = systems.setdefault(
-                req.system,
-                {
-                    "files": [],
-                    "native_id": req.native_id,
-                    "name": (
-                        names.get(req.native_id, req.system)
-                        if req.native_id is not None else req.system
-                    ),
-                },
-            )
-            entry["files"].append(requirement_entry(req))
-
         cores, standalone = self._built_cores(self._fetch_standalone())
         return {
             "platform": "ROCKNIX",
@@ -216,7 +141,7 @@ class Scraper(BaseScraper):
             # Launched both ways only where package.mk also adds the
             # emulator as a RetroArch core.
             "dual_mode_cores": dual_mode_emulators(standalone, self._fetch_emulators_mk()),
-            "systems": systems,
+            "systems": self.platform_systems(),
             # Read at the revision the BIOS list comes from.
             "launchers": extract_launchers(
                 RepoTree.github(GITHUB_REPO, required_revision(self.url, GITHUB_REPO))

@@ -128,6 +128,12 @@ class RocknixScraper(unittest.TestCase):
         self.assertEqual(entries["scph1001.bin"]["md5"], f"{A},{B}")
         self.assertIs(entries["scph1001.bin"]["md5_list"], True)
 
+    def test_altmd5_is_kept_by_every_fork(self):
+        """checkBios reads altmd5; only the ROCKNIX copy of the reader kept it."""
+        script = SCRIPT.replace('"file": "bios/scph5500.bin"', f'"altmd5": "{A}", "file": "bios/scph5500.bin"')
+        self.assertEqual(self._requirements(script)["scph5500.bin"]["alt_md5"], A)
+        self.assertEqual(_files(_scraped(script))["scph5500.bin"]["alt_md5"], A)
+
 
 class BatoceraExportRoundTrip(unittest.TestCase):
     def _render(self, truth_files: list[dict], script: str = SCRIPT) -> str:

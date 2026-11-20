@@ -467,6 +467,8 @@ def requirements_from_systems(
                     name=file_path.split("/")[-1],
                     system=system_slug,
                     md5=md5 or None,
+                    # checkBios tries altmd5 when the zipped member's md5 differs.
+                    alt_md5=bios.get("altmd5") or None,
                     destination=file_path,
                     native_path=declared_path,
                     required=True,
