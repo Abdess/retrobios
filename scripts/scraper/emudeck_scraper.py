@@ -22,7 +22,7 @@ from .base_scraper import (
     fetch_github_latest_version,
     fetch_text,
     github_json,
-    requirement_entry,
+    systems_from_requirements,
 )
 from .emudeck_launchers import emulator_of_script, extract_launchers
 from scraper.shell_launchers import RepoTree
@@ -438,12 +438,7 @@ class Scraper(BaseScraper):
     def generate_platform_yaml(self) -> dict:
         requirements = self.fetch_requirements()
 
-        systems: dict[str, dict] = {}
-        for req in requirements:
-            if req.system not in systems:
-                systems[req.system] = {"files": []}
-
-            systems[req.system]["files"].append(requirement_entry(req))
+        systems = systems_from_requirements(requirements)
 
         version = fetch_github_latest_version("dragoonDorise/EmuDeck")
 

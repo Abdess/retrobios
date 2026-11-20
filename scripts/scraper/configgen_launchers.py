@@ -10,11 +10,18 @@ from __future__ import annotations
 import ast
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass
-from typing import Any, NoReturn, Protocol
+from typing import Any, ClassVar, NoReturn, Protocol
 
 
 class LauncherShapeError(ValueError):
     """A generator no longer has the shape its extractor reads."""
+
+
+class LauncherPatternMissing(LauncherShapeError):
+    """A construct an extractor reads is absent from the launcher source."""
+
+    def __init__(self, path: str, what: str) -> None:
+        super().__init__(f"{path}: {what} not found")
 
 
 class Located(Protocol):
@@ -48,7 +55,7 @@ class Launcher:
     case_insensitive: bool | None = None
     search_dir: str | None = None
     passes_to: str | None = None
-    fails_when_missing: bool | str = False
+    fails_when_missing: bool | str | None = False
     fails_scope: str | None = None
     depends_on_option: str | None = None
     device: str | None = None
@@ -65,16 +72,19 @@ class Launcher:
     # The feature or option file listing the values the option written takes.
     choices_from: str | None = None
 
+    # The platform YAML key order. A platform whose records carry other
+    # fields (RetroPie's package and repo) declares its own.
+    ENTRY_ORDER: ClassVar[tuple[str, ...]] = (
+        "emulator", "systems", "build", "kind", "slot", "names", "expands",
+        "case_insensitive", "search_dir", "passes_to",
+        "fails_when_missing", "fails_scope", "depends_on_option",
+        "device", "machines", "installs", "kept_if_present", "overrides",
+        "choices_from", "source_ref",
+    )
+
     def entry(self) -> dict[str, Any]:
         """The platform YAML form, in a fixed key order, unset keys left out."""
-        order = (
-            "emulator", "systems", "build", "kind", "slot", "names", "expands",
-            "case_insensitive", "search_dir", "passes_to",
-            "fails_when_missing", "fails_scope", "depends_on_option",
-            "device", "machines", "installs", "kept_if_present", "overrides",
-            "choices_from", "source_ref",
-        )
-        return {key: getattr(self, key) for key in order if getattr(self, key) is not None}
+        return {key: getattr(self, key) for key in self.ENTRY_ORDER if getattr(self, key) is not None}
 
 
 @dataclass(frozen=True)

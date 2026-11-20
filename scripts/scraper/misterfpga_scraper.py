@@ -33,6 +33,7 @@ from .base_scraper import (
     BiosRequirement,
     _read_limited,
     fetch_branch_head,
+    json_object,
     requirement_entry,
 )
 
@@ -145,11 +146,8 @@ class Scraper(BaseScraper):
 
     def validate_format(self, raw_data: str) -> bool:
         """Validate the BiosDB database format."""
-        try:
-            data = json.loads(raw_data)
-        except json.JSONDecodeError:
-            return False
-        if data.get("db_id") != "bios_db":
+        data = json_object(raw_data)
+        if data is None or data.get("db_id") != "bios_db":
             return False
         files = data.get("files")
         if not isinstance(files, dict) or not files:

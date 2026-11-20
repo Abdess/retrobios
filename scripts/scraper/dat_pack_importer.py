@@ -37,18 +37,7 @@ def _bios_entries(source: str, dat: LogiqxDat) -> list[dict]:
         if "firmware" not in dat_name and "bios" not in dat_name:
             return []
         roms = dat.roms
-    return [
-        {
-            "dat": dat.name,
-            "name": rom.name,
-            "description": rom.description,
-            "size": rom.size,
-            "crc32": rom.crc32,
-            "md5": rom.md5,
-            "sha1": rom.sha1,
-        }
-        for rom in roms
-    ]
+    return dat.provenance_entries(roms)
 
 
 def _iter_dat_contents(pack: Path) -> Iterator[tuple[str, bytes]]:

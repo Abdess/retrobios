@@ -21,7 +21,7 @@ from __future__ import annotations
 import re
 
 from .base_scraper import (
-    requirement_entry,
+    systems_from_requirements,
     BaseScraper,
     BiosRequirement,
     fetch_github_latest_version,
@@ -330,12 +330,7 @@ class Scraper(BaseScraper):
         """Generate a platform YAML config dict from scraped data."""
         requirements = self.fetch_requirements()
 
-        systems: dict[str, dict] = {}
-        for req in requirements:
-            if req.system not in systems:
-                systems[req.system] = {"files": []}
-
-            systems[req.system]["files"].append(requirement_entry(req))
+        systems = systems_from_requirements(requirements)
 
         return {
             "platform": "BizHawk",

@@ -39,6 +39,21 @@ class LogiqxDat:
     version: str = ""
     roms: list[LogiqxRom] = field(default_factory=list)
 
+    def provenance_entries(self, roms: list[LogiqxRom] | None = None) -> list[dict]:
+        """The provenance snapshot form of the ROMs given, all of them by default."""
+        return [
+            {
+                "dat": self.name,
+                "name": rom.name,
+                "description": rom.description,
+                "size": rom.size,
+                "crc32": rom.crc32,
+                "md5": rom.md5,
+                "sha1": rom.sha1,
+            }
+            for rom in (self.roms if roms is None else roms)
+        ]
+
 
 def parse_logiqx(content: str | bytes) -> LogiqxDat:
     """Parse Logiqx XML DAT content.

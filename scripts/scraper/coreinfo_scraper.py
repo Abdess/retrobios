@@ -26,6 +26,8 @@ if not __package__:
     importlib.import_module("scraper")
     __package__ = "scraper"
 
+from model.database import load_database
+
 from .base_scraper import (
     BaseScraper,
     BiosRequirement,
@@ -318,10 +320,7 @@ def main() -> None:
         sys.exit(1)
 
     if args.compare_db:
-        import json as _json
-
-        with open(args.compare_db) as f:
-            db = _json.load(f)
+        db = load_database(args.compare_db)
 
         found = 0
         missing = []

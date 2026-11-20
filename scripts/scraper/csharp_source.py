@@ -10,16 +10,12 @@ from collections.abc import Iterator
 
 from model.sourceref import span
 
+from .configgen_launchers import LauncherPatternMissing
+
+
 STRING = r'"((?:[^"\\\n]|\\.)*)"'
 
 Record = dict[str, object]
-
-
-class LauncherPatternMissing(ValueError):
-    """A construct an extractor reads is absent from the launcher source."""
-
-    def __init__(self, path: str, what: str) -> None:
-        super().__init__(f"{path}: {what} not found")
 
 
 class Source:

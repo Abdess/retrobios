@@ -48,7 +48,7 @@ from typing import IO
 from model.registry import list_registered_platforms
 from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config
-from core.cli import run_cli
+from core.cli import add_repo_inputs, run_cli
 from model.dumpcatalog import build_snapshot, load_provenance_snapshots, write_snapshot
 from .logiqx_parser import LogiqxDat, parse_logiqx
 
@@ -654,14 +654,7 @@ def _parser() -> argparse.ArgumentParser:
         "--output", default="",
         help="snapshot to write (default: recipes/<source>.json)",
     )
-    parser.add_argument(
-        "--emulators-dir", default="emulators",
-        help="emulator profile directory (default: %(default)s)",
-    )
-    parser.add_argument(
-        "--platforms-dir", default="platforms",
-        help="platform YAML directory (default: %(default)s)",
-    )
+    add_repo_inputs(parser, "emulators", "platforms")
     parser.add_argument(
         "--all", action="store_true", help="keep every set, not only referenced ones"
     )

@@ -9,17 +9,19 @@ Hash: MD5 primary
 from __future__ import annotations
 
 import ast
-import json
 import re
 import sys
 from collections.abc import Callable
 from pathlib import Path
 
 
+from model.database import load_database
 from model.targets import load_target_config
 from model.safeparse import yaml_load
 from core.hashing import cut_md5_owner
 from model.safeparse import yaml_load_upstream
+
+from typing import ClassVar
 
 from .base_scraper import (
     BaseScraper,
@@ -27,7 +29,8 @@ from .base_scraper import (
     fetch_text,
     github_json,
     md5_field,
-    requirement_entry,
+    optional_core_lists,
+    systems_from_requirements,
 )
 from .batocera_configgen import Configgen, configs_root
 from .batocera_launchers import extract_launchers
@@ -311,9 +314,7 @@ def _load_md5_index() -> dict[str, str]:
     db_path = Path(__file__).resolve().parents[2] / "database.json"
     if not db_path.exists():
         return {}
-    with open(db_path) as f:
-        db = json.load(f)
-    return db.get("indexes", {}).get("by_md5", {})
+    return load_database(str(db_path)).get("indexes", {}).get("by_md5", {})
 
 
 def _resolve_truncated_md5(md5: str, md5_index: dict[str, str]) -> str:
@@ -474,17 +475,12 @@ def platform_systems(
         dname = sys_data.get("name", "")
         if dname:
             display_names[slug_map.get(sys_key, sys_key)] = dname
-    systems: dict[str, dict] = {}
-    for req in requirements:
-        if req.system not in systems:
-            sys_entry: dict = {"files": []}
-            if req.native_id:
-                sys_entry["native_id"] = req.native_id
-            dname = display_names.get(req.system)
-            if dname:
-                sys_entry["name"] = dname
-            systems[req.system] = sys_entry
-        systems[req.system]["files"].append(requirement_entry(req))
+
+    def system_fields(req: BiosRequirement) -> dict:
+        fields = {"native_id": req.native_id, "name": display_names.get(req.system)}
+        return {key: value for key, value in fields.items() if value}
+
+    systems = systems_from_requirements(requirements, system_fields)
     return systems
 
 
@@ -596,7 +592,35 @@ def records_run(launchers: list[dict], built: Callable[[str], bool]) -> list[dic
     return [r for r in launchers if any(built(n) for n in str(r["emulator"]).split(", "))]
 
 
-class Scraper(BaseScraper):
+class CheckBiosScraper(BaseScraper):
+    """A batocera-systems list as Batocera and its forks ship it."""
+
+    # Our slug for each system key of the list.
+    slug_map: ClassVar[dict[str, str]] = SYSTEM_SLUG_MAP
+    # The list's file name, for the format refusal.
+    list_name: ClassVar[str] = "batocera-systems"
+    # What base_destination already stands for in each declared path
+    # (requirements_from_systems).
+    strip: ClassVar[str] = "bios/"
+
+    def validate_format(self, raw_data: str) -> bool:
+        return is_checkbios_script(raw_data)
+
+    def fetch_requirements(self) -> list[BiosRequirement]:
+        """Parse the list and return BIOS requirements."""
+        raw = self._fetch_raw()
+        if not self.validate_format(raw):
+            raise ValueError(f"{self.list_name} format validation failed")
+        return requirements_from_systems(extract_systems_dict(raw), self.slug_map, strip=self.strip)
+
+    def platform_systems(self) -> dict:
+        """The `systems:` section of the platform YAML, in the script's order."""
+        return platform_systems(
+            self.fetch_requirements(), extract_systems_dict(self._fetch_raw()), self.slug_map
+        )
+
+
+class Scraper(CheckBiosScraper):
     """Scraper for batocera-systems Python dict."""
 
     def __init__(self) -> None:
@@ -618,13 +642,6 @@ class Scraper(BaseScraper):
             built,
         )
 
-    def fetch_requirements(self) -> list[BiosRequirement]:
-        """Parse batocera-systems and return BIOS requirements."""
-        raw = self._fetch_raw()
-        if not self.validate_format(raw):
-            raise ValueError("batocera-systems format validation failed")
-        return requirements_from_systems(extract_systems_dict(raw), SYSTEM_SLUG_MAP)
-
     def validate_format(self, raw_data: str) -> bool:
         """Validate batocera-systems format."""
         has_systems = "systems" in raw_data and "biosFiles" in raw_data
@@ -635,11 +652,7 @@ class Scraper(BaseScraper):
 
     def generate_platform_yaml(self) -> dict:
         """Generate a platform YAML config dict from scraped data."""
-        systems = platform_systems(
-            self.fetch_requirements(),
-            extract_systems_dict(self._fetch_raw()),
-            SYSTEM_SLUG_MAP,
-        )
+        systems = self.platform_systems()
 
         launchers = extract_launchers(
             lambda path: fetch_text(f"{_RAW_BASE}/{self.tag}/{path}")
@@ -663,13 +676,7 @@ class Scraper(BaseScraper):
             "cores": cores,
             "systems": systems,
         }
-        if standalone:
-            result["standalone_cores"] = standalone
-        if dual:
-            # Launched both ways: each layout gets its files.
-            result["dual_mode_cores"] = dual
-        if installable:
-            result["installable_cores"] = installable
+        result.update(optional_core_lists(standalone, dual, installable))
         # The systems each libretro core runs for: its save folders.
         result["libretro_systems"] = libretro_systems
         result["launchers"] = launchers

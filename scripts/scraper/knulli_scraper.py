@@ -30,22 +30,23 @@ from __future__ import annotations
 import urllib.error
 import urllib.request
 
-from .base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_version, fetch_text
+from .base_scraper import (
+    fetch_github_latest_version,
+    fetch_text,
+    optional_core_lists,
+)
 from .batocera_scraper import (
     SYSTEM_SLUG_MAP as BATOCERA_SLUGS,
 )
 from .batocera_scraper import (
+    CheckBiosScraper,
     _not_cores,
     boards_build,
     configgen_cores,
     es_systems_by_system,
     es_systems_libretro_systems,
-    extract_systems_dict,
     installable_cores,
-    is_checkbios_script,
-    platform_systems,
     records_run,
-    requirements_from_systems,
 )
 from .es_emulators import attach_system_cores
 from .targets.knulli_targets_scraper import Scraper as BoardTargets
@@ -77,8 +78,11 @@ SYSTEM_SLUG_MAP = {
 }
 
 
-class Scraper(BaseScraper):
+class Scraper(CheckBiosScraper):
     """Scraper for KNULLI's knulli-systems."""
+
+    slug_map = SYSTEM_SLUG_MAP
+    list_name = "knulli-systems"
 
     def __init__(self, url: str | None = None) -> None:
         self.tag = "" if url else fetch_github_latest_version(REPO)
@@ -101,19 +105,8 @@ class Scraper(BaseScraper):
             raise RuntimeError(f"{url}: {BATOCERA_SUBMODULE} is not a submodule")
         return str(found["sha"])
 
-    def validate_format(self, raw_data: str) -> bool:
-        return is_checkbios_script(raw_data)
-
-    def fetch_requirements(self) -> list[BiosRequirement]:
-        raw = self._fetch_raw()
-        if not self.validate_format(raw):
-            raise ValueError("knulli-systems format validation failed")
-        return requirements_from_systems(extract_systems_dict(raw), SYSTEM_SLUG_MAP)
-
     def generate_platform_yaml(self) -> dict:
-        systems = platform_systems(
-            self.fetch_requirements(), extract_systems_dict(self._fetch_raw()), SYSTEM_SLUG_MAP
-        )
+        systems = self.platform_systems()
         # es_systems.yml files machine selectors and plugins under an
         # emulator as Batocera's does: Batocera's list of them applies, with
         # KNULLI's own.
@@ -150,12 +143,7 @@ class Scraper(BaseScraper):
             "cores": cores,
             "systems": systems,
         }
-        if standalone:
-            result["standalone_cores"] = standalone
-        if dual:
-            result["dual_mode_cores"] = dual
-        if installable:
-            result["installable_cores"] = installable
+        result.update(optional_core_lists(standalone, dual, installable))
         # configgen hands a libretro core /userdata/saves/<system>, as
         # Batocera's does: the systems each core runs for are its save folders.
         result["libretro_systems"] = es_systems_libretro_systems(es_systems, dropped)

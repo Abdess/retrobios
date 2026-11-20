@@ -18,7 +18,7 @@ from .base_scraper import (
     fetch_branch_head,
     fetch_github_latest_version,
     github_json,
-    requirement_entry,
+    systems_from_requirements,
 )
 from .dat_parser import parse_dat, parse_dat_metadata, validate_dat_format
 
@@ -263,24 +263,12 @@ class Scraper(BaseScraper):
     def _system_entries(
         requirements: list[BiosRequirement], core_meta: dict[str, dict]
     ) -> dict[str, dict]:
-        systems = {}
-        for req in requirements:
-            if req.system not in systems:
-                system_entry: dict = {"files": []}
-                if req.native_id:
-                    system_entry["native_id"] = req.native_id
-                if req.system in core_meta:
-                    cm = core_meta[req.system]
-                    if cm.get("core"):
-                        system_entry["core"] = cm["core"]
-                    if cm.get("manufacturer"):
-                        system_entry["manufacturer"] = cm["manufacturer"]
-                    if cm.get("docs"):
-                        system_entry["docs"] = cm["docs"]
-                systems[req.system] = system_entry
+        def system_fields(req: BiosRequirement) -> dict:
+            meta = core_meta.get(req.system, {})
+            fields = {"native_id": req.native_id, **{key: meta.get(key) for key in ("core", "manufacturer", "docs")}}
+            return {key: value for key, value in fields.items() if value}
 
-            systems[req.system]["files"].append(requirement_entry(req))
-
+        systems = systems_from_requirements(requirements, system_fields)
         return systems
 
     @staticmethod

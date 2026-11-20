@@ -48,6 +48,7 @@ from .base_scraper import (
     fetch_bytes,
     fetch_github_latest_version,
     github_headers,
+    json_object,
     requirement_entry,
 )
 from .retrodeck_launchers import extract_launchers
@@ -506,10 +507,7 @@ class Scraper(BaseScraper):
         return text
 
     def validate_format(self, raw_data: str) -> bool:
-        try:
-            return isinstance(json.loads(raw_data), dict)
-        except (json.JSONDecodeError, TypeError):
-            return False
+        return json_object(raw_data) is not None
 
     def fetch_requirements(self) -> list[BiosRequirement]:
         manifests = self._get_manifests()

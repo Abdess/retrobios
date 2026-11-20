@@ -20,13 +20,14 @@ from dataclasses import dataclass, field
 from .configgen_launchers import Launcher
 from .rocknix_launchers import fixed_paths
 from scraper.shell_launchers import (
+    config_placement,
+    describe_keys,
+    evidence_fields,
     LauncherPatternMissing,
     Link,
-    config_placement,
-    evidence_fields,
+    link_record,
     RepoTree,
     Script,
-    describe_keys,
     settings,
     source_ref,
     words,
@@ -293,20 +294,6 @@ def pico8(tree: RepoTree, runs: Runs) -> list[Launcher]:
     ]
 
 
-def link_record(emulator: str, script: Script, link: Link, extra: set[int]) -> Launcher:
-    return Launcher(
-        emulator=emulator,
-        build="standalone",
-        kind="links",
-        names=list(link.names),
-        source_ref=source_ref([(script.path, link.lines | extra)]),
-        expands=link.expands or None,
-        search_dir=link.bios_side,
-        passes_to=f"symlink {link.link} -> {link.target}",
-        fails_when_missing=False,
-    )
-
-
 def _link_guard(script: Script, link: Link) -> set[int]:
     """The `[ ! -L <link> ]` test the link waits for, when it is the one just above."""
     first = max(link.lines)
@@ -343,7 +330,7 @@ def links(tree: RepoTree, runs: Runs) -> list[Launcher]:
             raise script.missing(f"ln -s of a path under {BIOS_ROOT}")
         name = posixpath.basename(path)
         for link in found:
-            record = link_record(runs.emulator(name), script, link, _link_guard(script, link))
+            record = link_record(runs.emulator(name), script, link, guard_lines=_link_guard(script, link))
             record.source_ref = f"{source_ref([runs.ref(name)])}, {record.source_ref}"
             records.append(record)
     for package in LINK_PACKAGES:
@@ -352,7 +339,7 @@ def links(tree: RepoTree, runs: Runs) -> list[Launcher]:
         if not found:
             raise script.missing(f"ln -s of a path under {BIOS_ROOT}")
         records.extend(
-            link_record(posixpath.basename(package), script, link, set()) for link in found
+            link_record(posixpath.basename(package), script, link) for link in found
         )
     return records
 

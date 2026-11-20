@@ -93,7 +93,10 @@ def validate_format(self, raw_data: str) -> bool:
 | `native` | `dict` | Fields the platform declares that the model has no place for, written back unchanged by the export: `native_name`, `md5_list` (a Batocera md5 written as a list), `core`, `note`, `description`, `hash_match_mandatory`, `mandatory_declared`, `alt_paths`, `component`, `required_label`, `group` (RetroBat: files of one group are alternatives, one held is enough) |
 
 `requirement_entry()` in `base_scraper.py` is the single serializer from a
-requirement to a platform YAML entry, and every scraper goes through it.
+requirement to a platform YAML entry, and every scraper goes through it,
+usually by `systems_from_requirements()`, which files each entry under its
+system. A scraper reading a batocera-systems list (Batocera, KNULLI,
+AmberELEC, EmuELEC) inherits `CheckBiosScraper` and sets only its slug map.
 Anything an export writes back is recorded by the scraper, never rebuilt by the
 exporter: several native systems can fall onto one slug (Recalbox files
 `pcengine`, `pcenginecd` and `supergrafx` under `nec-pc-engine`), and a path

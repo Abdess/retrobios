@@ -22,7 +22,6 @@ Slugs are IGDB-style platform identifiers.
 
 from __future__ import annotations
 
-import json
 import re
 import sys
 
@@ -31,7 +30,8 @@ from .base_scraper import (
     BiosRequirement,
     fetch_bytes,
     fetch_github_latest_version,
-    requirement_entry,
+    json_object,
+    systems_from_requirements,
 )
 
 PLATFORM_NAME = "romm"
@@ -164,18 +164,6 @@ class Scraper(BaseScraper):
     def __init__(self) -> None:
         self.tag = fetch_github_latest_version(GITHUB_REPO)
         super().__init__(url=SOURCE_URL.format(tag=self.tag))
-        self._parsed: dict | None = None
-
-    def _parse_json(self) -> dict:
-        if self._parsed is not None:
-            return self._parsed
-
-        raw = self._fetch_raw()
-        try:
-            self._parsed = json.loads(raw)
-        except json.JSONDecodeError as e:
-            raise ValueError(f"Failed to parse JSON: {e}") from e
-        return self._parsed
 
     def fetch_requirements(self) -> list[BiosRequirement]:
         """Parse known_bios_files.json and return BIOS requirements."""
@@ -184,7 +172,7 @@ class Scraper(BaseScraper):
         if not self.validate_format(raw):
             raise ValueError("known_bios_files.json format validation failed")
 
-        data = self._parse_json()
+        data = self._fetch_json()
         requirements: list[BiosRequirement] = []
 
         for key, entry in data.items():
@@ -227,12 +215,8 @@ class Scraper(BaseScraper):
 
     def validate_format(self, raw_data: str) -> bool:
         """Validate that raw_data is a JSON dict with slug:filename keys."""
-        try:
-            data = json.loads(raw_data)
-        except (json.JSONDecodeError, TypeError):
-            return False
-
-        if not isinstance(data, dict):
+        data = json_object(raw_data)
+        if data is None:
             return False
 
         for key in list(data.keys())[:5]:
@@ -249,12 +233,7 @@ class Scraper(BaseScraper):
         """Generate a platform YAML config dict from scraped data."""
         requirements = self.fetch_requirements()
 
-        systems: dict[str, dict] = {}
-        for req in requirements:
-            if req.system not in systems:
-                systems[req.system] = {"files": []}
-
-            systems[req.system]["files"].append(requirement_entry(req))
+        systems = systems_from_requirements(requirements)
 
         return {
             "inherits": "emulatorjs",

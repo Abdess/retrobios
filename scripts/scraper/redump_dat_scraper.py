@@ -53,19 +53,7 @@ def parse_redump_dat(content: str) -> tuple[str, str, list[dict]]:
     model, kernel or firmware version), so it is kept per entry.
     """
     dat = parse_logiqx(content)
-    entries = [
-        {
-            "dat": dat.name,
-            "name": rom.name,
-            "description": rom.description,
-            "size": rom.size,
-            "crc32": rom.crc32,
-            "md5": rom.md5,
-            "sha1": rom.sha1,
-        }
-        for rom in dat.roms
-    ]
-    return dat.name, dat.version, entries
+    return dat.name, dat.version, dat.provenance_entries()
 
 
 def fetch_snapshot() -> tuple[dict, list[dict]]:

@@ -8,7 +8,6 @@ Hash: MD5 primary
 
 from __future__ import annotations
 
-import json
 import re
 from pathlib import Path
 
@@ -19,7 +18,8 @@ from .base_scraper import (
     fetch_bytes,
     fetch_github_latest_version,
     fetch_text,
-    requirement_entry,
+    json_object,
+    systems_from_requirements,
 )
 from .batocera_scraper import SYSTEM_SLUG_MAP as BATOCERA_SLUGS
 from .retrobat_launchers import SOURCE_FILES as LAUNCHER_FILES
@@ -179,18 +179,6 @@ class Scraper(BaseScraper):
         elif revision is not None:
             raise ValueError("pass a url or a revision, not both")
         super().__init__(url=url)
-        self._parsed: dict | None = None
-
-    def _parse_json(self) -> dict:
-        if self._parsed is not None:
-            return self._parsed
-
-        raw = self._fetch_raw()
-        try:
-            self._parsed = json.loads(raw)
-        except json.JSONDecodeError as e:
-            raise ValueError(f"Failed to parse JSON: {e}") from e
-        return self._parsed
 
     def fetch_requirements(self) -> list[BiosRequirement]:
         """Parse batocera-systems.json and return BIOS requirements."""
@@ -199,7 +187,7 @@ class Scraper(BaseScraper):
         if not self.validate_format(raw):
             raise ValueError("batocera-systems.json format validation failed")
 
-        data = self._parse_json()
+        data = self._fetch_json()
         requirements = []
 
         for sys_key, sys_data in data.items():
@@ -252,12 +240,8 @@ class Scraper(BaseScraper):
 
     def validate_format(self, raw_data: str) -> bool:
         """Validate that raw_data is valid JSON containing biosFiles entries."""
-        try:
-            data = json.loads(raw_data)
-        except (json.JSONDecodeError, TypeError):
-            return False
-
-        if not isinstance(data, dict):
+        data = json_object(raw_data)
+        if data is None:
             return False
 
         has_bios = False
@@ -272,8 +256,7 @@ class Scraper(BaseScraper):
         """Generate a platform YAML config dict from scraped data."""
         requirements = self.fetch_requirements()
 
-        raw = self._fetch_raw()
-        source_data = json.loads(raw)
+        source_data = self._fetch_json()
         display_names: dict[str, str] = {}
         for sys_key, sys_data in source_data.items():
             if isinstance(sys_data, dict):
@@ -282,16 +265,10 @@ class Scraper(BaseScraper):
                     slug = SYSTEM_SLUG_MAP.get(sys_key, sys_key)
                     display_names[slug] = dname
 
-        systems = {}
-        for req in requirements:
-            if req.system not in systems:
-                sys_entry: dict = {"files": []}
-                dname = display_names.get(req.system)
-                if dname:
-                    sys_entry["name"] = dname
-                systems[req.system] = sys_entry
-
-            systems[req.system]["files"].append(requirement_entry(req))
+        systems = systems_from_requirements(
+            requirements,
+            lambda req: {"name": display_names[req.system]} if display_names.get(req.system) else {},
+        )
 
         version = fetch_github_latest_version(GITHUB_REPO)
         es_url = ES_SYSTEMS_URL.format(tag=version)

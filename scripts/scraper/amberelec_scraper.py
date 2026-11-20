@@ -33,16 +33,13 @@ from __future__ import annotations
 import re
 
 from .amberelec_launchers import extract_launchers
-from .base_scraper import BaseScraper, BiosRequirement, fetch_text, github_json
+from .base_scraper import fetch_text, github_json
 from .batocera_scraper import (
     SYSTEM_SLUG_MAP as BATOCERA_SLUGS,
 )
 from .batocera_scraper import (
+    CheckBiosScraper,
     _not_cores,
-    extract_systems_dict,
-    is_checkbios_script,
-    platform_systems,
-    requirements_from_systems,
 )
 from .es_emulators import attach_system_cores, es_cores, system_cores, xml_systems
 
@@ -97,8 +94,13 @@ def fetch_newest_prerelease() -> tuple[str, str]:
     return releases[0]["tag_name"], prerelease_commit(releases[0].get("body", ""))
 
 
-class Scraper(BaseScraper):
+class Scraper(CheckBiosScraper):
     """Scraper for AmberELEC's batocera-systems."""
+
+    slug_map = SYSTEM_SLUG_MAP
+    # Paths are relative to /storage/roms (`prefix`, lines 667-675): the
+    # list names neogeo/neogeo.zip beside bios/.
+    strip = ""
 
     def __init__(self, url: str | None = None) -> None:
         if url:
@@ -107,21 +109,8 @@ class Scraper(BaseScraper):
             self.tag, self.commit = fetch_newest_prerelease()
         super().__init__(url=url or SOURCE_TEMPLATE.format(ref=self.commit))
 
-    def validate_format(self, raw_data: str) -> bool:
-        return is_checkbios_script(raw_data)
-
-    def fetch_requirements(self) -> list[BiosRequirement]:
-        raw = self._fetch_raw()
-        if not self.validate_format(raw):
-            raise ValueError("batocera-systems format validation failed")
-        # Paths are relative to /storage/roms (`prefix`, lines 667-675): the
-        # list names neogeo/neogeo.zip beside bios/.
-        return requirements_from_systems(extract_systems_dict(raw), SYSTEM_SLUG_MAP, strip="")
-
     def generate_platform_yaml(self) -> dict:
-        systems = platform_systems(
-            self.fetch_requirements(), extract_systems_dict(self._fetch_raw()), SYSTEM_SLUG_MAP
-        )
+        systems = self.platform_systems()
         # es_systems.cfg gives each <system> its <emulators> in menu order
         # (atarist, lines 267-288: retroarch's hatari, then HATARISA).
         es_systems = xml_systems(fetch_text(ES_SYSTEMS_TEMPLATE.format(ref=self.commit)))

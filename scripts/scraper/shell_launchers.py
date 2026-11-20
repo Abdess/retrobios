@@ -18,7 +18,7 @@ from dataclasses import dataclass, field
 from model.sourceref import span
 
 from .base_scraper import fetch_bytes, github_headers
-from .configgen_launchers import LauncherShapeError
+from .configgen_launchers import Launcher, LauncherPatternMissing
 
 NAME = r"[A-Za-z_][A-Za-z0-9_]*"
 # A single-quoted "$" is literal: it is carried as this mark through expansion.
@@ -26,13 +26,6 @@ LITERAL_DOLLAR = "\x00"
 # A loop variable expands to this mark around its name, so the caller can
 # tell which part of a path the loop supplies.
 LOOP_MARK = "\x01"
-
-
-class LauncherPatternMissing(LauncherShapeError):
-    """A construct an extractor reads is absent from the launcher source."""
-
-    def __init__(self, path: str, what: str) -> None:
-        super().__init__(f"{path}: {what} not found")
 
 
 def merge_lines(lines: Iterable[int]) -> list[tuple[int, int]]:
@@ -375,6 +368,31 @@ class Script:
                     continue
                 found.append(Link(target, link, bios_side, names, used, bios_is_target, expands))
         return _merge_links(found)
+
+
+def link_record(
+    emulator: str,
+    script: Script,
+    link: Link,
+    *,
+    guard_lines: Iterable[int] = (),
+    case_insensitive: bool | None = None,
+    fails_when_missing: bool | str | None = False,
+) -> Launcher:
+    """The record of an ln -s a script makes under the BIOS root,
+    citing the guard lines the link waits for beside its own."""
+    return Launcher(
+        emulator=emulator,
+        build="standalone",
+        kind="links",
+        names=list(link.names),
+        source_ref=source_ref([(script.path, link.lines | set(guard_lines))]),
+        expands=link.expands or None,
+        search_dir=link.bios_side,
+        passes_to=f"symlink {link.link} -> {link.target}",
+        case_insensitive=case_insensitive,
+        fails_when_missing=fails_when_missing,
+    )
 
 
 def _under(path: str, root: str) -> bool:

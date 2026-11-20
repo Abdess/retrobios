@@ -20,12 +20,13 @@ from typing import TypeVar
 from .configgen_launchers import Launcher
 from scraper.shell_launchers import config_placement, evidence_fields
 from scraper.shell_launchers import (
+    describe_keys,
     LauncherPatternMissing,
     Link,
+    link_record,
     RepoTree,
     Script,
     Setting,
-    describe_keys,
     settings,
     source_ref,
 )
@@ -399,27 +400,6 @@ def amiberry(tree: RepoTree) -> list[Launcher]:
             passes_to=f"symlink {copied} -> {link.target}, copied with {installed}",
         ))
     return records
-
-
-def link_record(
-    emulator: str,
-    script: Script,
-    link: Link,
-    case_insensitive: bool | None = None,
-    fails_when_missing: bool | str = False,
-) -> Launcher:
-    return Launcher(
-        emulator=emulator,
-        build="standalone",
-        kind="links",
-        names=list(link.names),
-        source_ref=source_ref([(script.path, link.lines)]),
-        expands=link.expands or None,
-        search_dir=link.bios_side,
-        passes_to=f"symlink {link.link} -> {link.target}",
-        case_insensitive=case_insensitive,
-        fails_when_missing=fails_when_missing,
-    )
 
 
 def hatari(tree: RepoTree) -> list[Launcher]:

@@ -16,10 +16,11 @@ from collections.abc import Callable
 
 from .configgen_launchers import Launcher
 from scraper.shell_launchers import (
+    describe_keys,
     LauncherPatternMissing,
+    link_record,
     RepoTree,
     Script,
-    describe_keys,
     settings,
     source_ref,
     words,
@@ -394,19 +395,7 @@ def links(tree: RepoTree) -> list[Launcher]:
         found = script.links(BIOS)
         if not found:
             raise script.missing(f"ln -s of a path under {BIOS}")
-        records.extend(
-            Launcher(
-                emulator=_emulator(name),
-                build="standalone",
-                kind="links",
-                names=list(link.names),
-                source_ref=source_ref([(script.path, link.lines)]),
-                expands=link.expands or None,
-                search_dir=link.bios_side,
-                passes_to=f"symlink {link.link} -> {link.target}",
-            )
-            for link in found
-        )
+        records.extend(link_record(_emulator(name), script, link) for link in found)
     return records
 
 

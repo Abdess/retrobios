@@ -17,7 +17,7 @@ from __future__ import annotations
 
 from model.safeparse import parse_untrusted_xml
 
-from .base_scraper import BaseScraper, BiosRequirement, fetch_bytes, requirement_entry
+from .base_scraper import BaseScraper, BiosRequirement, fetch_bytes, systems_from_requirements
 from .recalbox_launchers import SOURCE_FILES as LAUNCHER_FILES
 from .recalbox_launchers import LauncherShapeError, extract_launchers
 
@@ -408,15 +408,9 @@ class Scraper(BaseScraper):
         """Generate a platform YAML config dict from scraped data."""
         requirements = self.fetch_requirements()
 
-        systems: dict[str, dict] = {}
-        for req in requirements:
-            if req.system not in systems:
-                sys_entry: dict = {"files": []}
-                if req.native_id:
-                    sys_entry["native_id"] = req.native_id
-                systems[req.system] = sys_entry
-
-            systems[req.system]["files"].append(requirement_entry(req))
+        systems = systems_from_requirements(
+            requirements, lambda req: {"native_id": req.native_id} if req.native_id else {}
+        )
 
         cores, standalone, dual = self._fetch_cores()
         return {

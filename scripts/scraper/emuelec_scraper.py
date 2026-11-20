@@ -28,16 +28,13 @@ from __future__ import annotations
 
 import re
 
-from .base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_version, fetch_text
+from .base_scraper import fetch_github_latest_version, fetch_text
 from .batocera_scraper import (
     SYSTEM_SLUG_MAP as BATOCERA_SLUGS,
 )
 from .batocera_scraper import (
+    CheckBiosScraper,
     _not_cores,
-    extract_systems_dict,
-    is_checkbios_script,
-    platform_systems,
-    requirements_from_systems,
 )
 from .emuelec_launchers import extract_launchers
 from .es_emulators import (
@@ -103,28 +100,20 @@ def launcher_revision(url: str) -> str:
     return found.group(1)
 
 
-class Scraper(BaseScraper):
+class Scraper(CheckBiosScraper):
     """Scraper for EmuELEC's batocera-systems."""
+
+    slug_map = SYSTEM_SLUG_MAP
+    # Paths are relative to /storage/roms (`prefix`, lines 859-865): the
+    # list names neogeo/ and ports/ beside bios/.
+    strip = ""
 
     def __init__(self, url: str | None = None) -> None:
         self.tag = "" if url else fetch_github_latest_version(REPO)
         super().__init__(url=url or SOURCE_TEMPLATE.format(ref=self.tag))
 
-    def validate_format(self, raw_data: str) -> bool:
-        return is_checkbios_script(raw_data)
-
-    def fetch_requirements(self) -> list[BiosRequirement]:
-        raw = self._fetch_raw()
-        if not self.validate_format(raw):
-            raise ValueError("batocera-systems format validation failed")
-        # Paths are relative to /storage/roms (`prefix`, lines 859-865): the
-        # list names neogeo/ and ports/ beside bios/.
-        return requirements_from_systems(extract_systems_dict(raw), SYSTEM_SLUG_MAP, strip="")
-
     def generate_platform_yaml(self) -> dict:
-        systems = platform_systems(
-            self.fetch_requirements(), extract_systems_dict(self._fetch_raw()), SYSTEM_SLUG_MAP
-        )
+        systems = self.platform_systems()
         # es_systems.json gives each system its emulators in menu order (psx,
         # lines 3610-3660: libretro pcsx_rearmed_32b, pcsx_rearmed,
         # swanstation, then Duckstation).

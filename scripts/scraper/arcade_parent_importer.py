@@ -50,6 +50,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import IO
 
+from model.database import load_database
 from core.artifacts import write_if_changed
 from model.profiles import load_emulator_profiles
 from core.cli import run_cli
@@ -1149,8 +1150,7 @@ def declared_archives(profile: dict) -> set[str]:
 def collection_names(database: Path) -> set[str]:
     if not database.is_file():
         return set()
-    with database.open(encoding="utf-8") as handle:
-        db = json.load(handle)
+    db = load_database(str(database))
     return {n.lower() for n in db.get("indexes", {}).get("by_name", {})}
 
 

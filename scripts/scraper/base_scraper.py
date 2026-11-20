@@ -187,6 +187,43 @@ def fetch_bytes(
     raise AssertionError("unreachable")
 
 
+def json_object(raw: str) -> dict | None:
+    """The text parsed as a JSON object, None when it is not one."""
+    try:
+        data = json.loads(raw)
+    except (json.JSONDecodeError, TypeError):
+        return None
+    return data if isinstance(data, dict) else None
+
+
+def systems_from_requirements(
+    requirements: list[BiosRequirement],
+    system_fields: Callable[[BiosRequirement], dict] | None = None,
+) -> dict[str, dict]:
+    """Each system's platform YAML block, its files in scrape order.
+
+    ``system_fields`` gives the keys a system carries beside its files
+    (native id, display name), read from its first requirement.
+    """
+    systems: dict[str, dict] = {}
+    for req in requirements:
+        if req.system not in systems:
+            systems[req.system] = {"files": [], **(system_fields(req) if system_fields else {})}
+        systems[req.system]["files"].append(requirement_entry(req))
+    return systems
+
+
+def optional_core_lists(
+    standalone: list[str], dual: list[str], installable: list[str] | None = None
+) -> dict[str, list[str]]:
+    """The core lists a platform YAML writes only when they name a core:
+    standalone builds, cores launched both ways (each layout gets its files),
+    and cores a board can install."""
+    lists = {"standalone_cores": standalone, "dual_mode_cores": dual,
+             "installable_cores": installable or []}
+    return {key: names for key, names in lists.items() if names}
+
+
 class BaseScraper(ABC):
     """Abstract base class for platform BIOS requirement scrapers."""
 
@@ -198,6 +235,7 @@ class BaseScraper(ABC):
     def __init__(self, url: str = "") -> None:
         self.url = url
         self._raw_data: str | None = None
+        self._json_data: dict | None = None
 
     def _fetch_raw(self) -> str:
         """Fetch raw content from source URL. Cached after first call."""
@@ -207,6 +245,16 @@ class BaseScraper(ABC):
             raise ValueError("No source URL configured")
         self._raw_data = fetch_bytes(self.url).decode("utf-8")
         return self._raw_data
+
+    def _fetch_json(self) -> dict:
+        """The source parsed as a JSON object. Cached after first call."""
+        if self._json_data is None:
+            raw = self._fetch_raw()
+            try:
+                self._json_data = json.loads(raw)
+            except json.JSONDecodeError as e:
+                raise ValueError(f"Failed to parse JSON: {e}") from e
+        return self._json_data
 
     @abstractmethod
     def fetch_requirements(self) -> list[BiosRequirement]:
