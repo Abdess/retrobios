@@ -3017,6 +3017,12 @@ class BatoceraNotesStayWithTheirItem(unittest.TestCase):
         self.assertEqual(leading, {("bios/bk0010.zip", "one.rom"): ["# head note", "# MAME"]})
         self.assertEqual(trailing, {("bios/bk0010.zip", "two.rom"): "# tail"})
 
+    def test_hash_inside_a_quoted_path_is_no_note(self):
+        from exporter.batocera_exporter import Exporter
+
+        lines = ['        { "md5": "", "file": "ports/opentyrian/newsh#.shp" },']
+        self.assertEqual(Exporter._item_notes(lines), ({}, {}))
+
 
 class TheWikiNamesWhatCountsAnExport(unittest.TestCase):
     """adding-a-platform listed the methods that say what a format can hold

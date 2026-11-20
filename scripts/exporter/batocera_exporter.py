@@ -422,7 +422,8 @@ class Exporter(BaseExporter[str]):
         pending: list[str] = []
         for line in lines:
             stripped = line.strip()
-            hash_at = line.find("#")
+            cut = comment_start(line)
+            hash_at = -1 if cut is None else cut
             if stripped.startswith("#"):
                 pending.append(stripped)
                 continue
