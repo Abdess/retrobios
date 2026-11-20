@@ -128,16 +128,12 @@ def slot_lookup_keys(destination: str, name: str) -> list[str]:
 
 def lookup_slot(index: dict[str, dict], destination: str, name: str) -> dict | None:
     """Look a candidate up, trying the destination then its suffixes then name."""
-    if destination:
-        entry = index.get(destination)
+    *paths, bare = slot_lookup_keys(destination, name)
+    for key in paths:
+        entry = index.get(key)
         if entry:
             return entry
-        parts = destination.split("/")
-        for i in range(1, len(parts)):
-            entry = index.get("/".join(parts[i:]))
-            if entry:
-                return entry
-    return index.get(name)
+    return index.get(bare)
 
 
 def resolve_slot_drops(
