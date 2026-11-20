@@ -288,6 +288,14 @@ class TestProgressLineWidth(unittest.TestCase):
                     self.assertLess(len(line), columns)
                     self.assertIn("%", line)
 
+    def test_the_figures_read_like_the_site(self):
+        """The bar counted decimal megabytes (8,127 MB) where --info and the
+        site gave the same pack as 7.6 GB."""
+        from download import _progress_line
+
+        line = _progress_line("", 1024**3, 8_127_352_876, 200)
+        self.assertTrue(line.endswith(" 13% (1.0 GB/7.6 GB)"), line)
+
 
 class TestStagingIsolation(unittest.TestCase):
     """Two downloads into one BIOS folder must not share a staging directory."""

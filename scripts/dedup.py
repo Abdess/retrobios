@@ -29,6 +29,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from core.hashing import compute_hashes
+from core.sizes import size_text
 from core.cli import add_repo_inputs, require_directory
 from core.artifacts import write_text_atomic
 from model.nodedup import in_nodedup_dir
@@ -298,7 +299,7 @@ def deduplicate(bios_dir: str, dry_run: bool = False) -> dict:
     prefix = "Would remove" if dry_run else "Removed"
     print(f"\n{prefix}: {total_removed} files")
     print(
-        f"Space {'to save' if dry_run else 'saved'}: {total_saved / 1024 / 1024:.1f} MB"
+        f"Space {'to save' if dry_run else 'saved'}: {size_text(total_saved)}"
     )
     if not dry_run and empty_cleaned:
         print(f"Cleaned {empty_cleaned} empty directories")

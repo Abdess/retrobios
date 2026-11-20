@@ -33,6 +33,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(__file__))
 from core.hashing import compute_hashes, parse_sha256sums
 from core.paths import REPO_ROOT
+from core.sizes import size_text
 from core.upstream import forge_headers
 from core.ziptools import safe_extract_zip
 from packs.parts import part_of
@@ -239,7 +240,7 @@ def _progress_line(label: str, done: int, total: int, columns: int) -> str:
     copy of itself on every redraw, since \\r goes back one row only. The
     bar shrinks first, then goes."""
     pct = done * 100 // total
-    figures = f" {pct}% ({done / 1e6:,.0f}/{total / 1e6:,.0f} MB)"
+    figures = f" {pct}% ({size_text(done)}/{size_text(total)})"
     room = min(50, columns - 1 - len(f"  {label}[]") - len(figures))
     if room < 10:
         return f"  {label}{figures.strip()}"[: columns - 1]
@@ -333,7 +334,7 @@ def show_info(platform: str, release: dict) -> None:
     print(f"  Platform: {pack.platform}")
     print(f"  File: {pack.name}")
     print(f"  Parts: {len(pack.parts)} part{'s' if len(pack.parts) > 1 else ''}")
-    print(f"  Size: {pack.size:,} bytes ({pack.size / (1024 * 1024):.1f} MB)")
+    print(f"  Size: {pack.size:,} bytes ({size_text(pack.size)})")
     for part in pack.parts:
         print(f"    {part['name']} ({part.get('size', 0):,} bytes)")
 

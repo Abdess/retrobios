@@ -218,7 +218,7 @@ def render_notes(
             out += ["| File | Description | Size | SHA1 |", "|------|-------------|-----:|------|"]
         out += [line for _, line in sorted(rows[section])]
     total = sum(assets.values())
-    out += ["", f"{len(assets)} files, {total / 1073741824:.1f} GB total. Verify a download with `sha1sum <file>`.", ""]
+    out += ["", f"{len(assets)} files, {size_text(total)} total. Verify a download with `sha1sum <file>`.", ""]
     return "\n".join(out)
 
 

@@ -19,6 +19,7 @@ import json
 from pathlib import Path
 
 from core.hashing import compute_hashes
+from core.sizes import size_text
 from resolve.directories import expand_directory_entries
 from model.registry import list_registered_platforms
 from model.database import load_database
@@ -132,7 +133,7 @@ def main() -> int:
             print(f"{row['path']}  ({', '.join(row['emulators'])})")
         total = sum(row["size"] for row in rows)
         print(f"{len(rows)} collected files only an emulator install provides, "
-              f"{total / 1024**2:.1f} MB")
+              f"{size_text(total)}")
     return 1 if args.strict and rows else 0
 
 
