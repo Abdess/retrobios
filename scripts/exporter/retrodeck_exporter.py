@@ -13,7 +13,7 @@ import json
 from collections import OrderedDict
 
 from .base_exporter import BaseExporter
-from resolve.reconcile import NativeFile, NativeSystem, Report
+from resolve.reconcile import NativeFile, NativeSystem, Report, hash_values
 
 COMPONENTS_REPO = "RetroDECK/components"
 COMPONENTS_BRANCH = "main"
@@ -31,11 +31,6 @@ def _systems_of(entry: dict) -> list[str]:
     if isinstance(declared, list):
         return [str(s) for s in declared]
     return [str(declared)] if declared else []
-
-
-def _md5_set(value: object) -> set[str]:
-    values = value if isinstance(value, list) else str(value or "").split(",")
-    return {str(m).strip().lower() for m in values if str(m).strip()}
 
 
 def _paths_key(entry: dict) -> tuple[str, ...]:
@@ -255,7 +250,7 @@ class Exporter(BaseExporter[str]):
             other_revision = (
                 keys
                 and seen_keys.get(keys[0], 0) > 1
-                and not _md5_set(entry.get("md5")) & _md5_set(by_key[keys[0]].get("md5"))
+                and not set(hash_values(entry, "md5")) & set(hash_values(by_key[keys[0]], "md5"))
             )
             if other_revision or not keys:
                 merged.append(OrderedDict(entry))
@@ -307,7 +302,7 @@ class Exporter(BaseExporter[str]):
         for field in ("md5", "sha256"):
             if field in cls.carries() and field not in own:
                 combined.pop(field, None)
-        if _md5_set(entry.get("md5")) == _md5_set(combined.get("md5")):
+        if set(hash_values(entry, "md5")) == set(hash_values(combined, "md5")):
             # Their own spelling, and no key where they wrote none: an
             # equal empty set wrote "md5": null 39 times.
             if "md5" in entry:

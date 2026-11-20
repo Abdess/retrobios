@@ -24,7 +24,9 @@ from model.profiles import load_emulator_profiles
 from model.safeparse import parse_untrusted_xml
 
 from .base_exporter import BaseExporter
-from resolve.reconcile import NativeFile, NativeSystem, Report, by_destination, by_name
+from resolve.reconcile import (
+    NativeFile, NativeSystem, Report, by_destination, by_name, hash_values,
+)
 
 SOURCE_URL = (
     "https://gitlab.com/recalbox/recalbox/-/raw/master/board/recalbox/fsoverlay"
@@ -81,7 +83,7 @@ def _stated(text: str) -> dict[str, str]:
         # Recalbox accepts any digest of the list (Bios.cpp:109-130): the
         # order is not content, and neogeo.zip's 24, reordered, were
         # written again.
-        attrs["md5"] = ",".join(sorted({h.strip().lower() for h in attrs["md5"].split(",")}))
+        attrs["md5"] = ",".join(sorted(hash_values(attrs, "md5")))
     return attrs
 
 

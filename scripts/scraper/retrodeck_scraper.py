@@ -39,6 +39,8 @@ if not __package__:
     importlib.import_module("scraper")
     __package__ = "scraper"
 
+from core.hashing import parse_hash_list
+
 from .base_scraper import (
     BaseScraper,
     BiosRequirement,
@@ -48,6 +50,7 @@ from .base_scraper import (
     fetch_text,
     github_tree,
     json_object,
+    md5_field,
     requirement_entry,
 )
 from .retrodeck_launchers import extract_launchers
@@ -298,17 +301,18 @@ def _entry_folder(paths_raw: object) -> str | None:
     return resolved
 
 
+_MD5 = re.compile(r"[0-9a-f]{32}")
+
+
 def _entry_md5(md5_raw: object) -> str:
-    """MD5 handling: sanitize upstream errors."""
-    if isinstance(md5_raw, list):
-        parts = [str(m).strip().lower() for m in md5_raw if m]
-    elif md5_raw:
-        parts = [str(md5_raw).strip().lower()]
-    else:
-        parts = []
-    # Keep only valid 32-char hex MD5 hashes
-    valid = [p for p in parts if re.fullmatch(r"[0-9a-f]{32}", p)]
-    return ",".join(valid)
+    """The valid md5 values of a manifest entry, comma-joined.
+
+    An entry writes one string or a list of strings, as a batocera-systems
+    item does. A value that is not a 32-digit hex md5 is an upstream error
+    and is left out.
+    """
+    values, _listed = md5_field(md5_raw or None)
+    return ",".join(m for m in parse_hash_list(values) if _MD5.fullmatch(m))
 
 
 def _entry_requirement(entry: dict, comp_key: str, default_system: object) -> BiosRequirement | None:

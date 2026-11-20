@@ -82,5 +82,23 @@ class ManifestErrors(unittest.TestCase):
             self.fetch(None)
 
 
+
+class ManifestMd5(unittest.TestCase):
+    def test_a_string_or_a_list_gives_the_valid_values(self):
+        from scripts.scraper.retrodeck_scraper import _entry_md5
+
+        md5 = "0123456789abcdef0123456789ABCDEF"
+        self.assertEqual(_entry_md5(md5), md5.lower())
+        self.assertEqual(_entry_md5([md5, "", "not an md5", md5]), md5.lower())
+        self.assertEqual(_entry_md5(""), "")
+        self.assertEqual(_entry_md5(None), "")
+
+    def test_a_value_of_another_type_is_refused(self):
+        from scripts.scraper.retrodeck_scraper import _entry_md5
+
+        with self.assertRaises(ValueError):
+            _entry_md5([1])
+
+
 if __name__ == "__main__":
     unittest.main()
