@@ -29,6 +29,7 @@ from model.declarations import OUTER_ROOTS, outer_layout
 from core.paths import declared_destination, sanitize_pack_path
 from resolve.content import declares_shape, shape_fits, size_fits
 from resolve.validation import deliverable, read_by_build, read_from_save_dir, read_from_system_dir
+from packs.gaps import gap_destination
 from packs.paths import libretro_systems, save_destination, save_layout
 from resolve.regions import FILE_GROUP
 
@@ -1716,10 +1717,7 @@ def _second_pass_copy(
     if not _copies_entry(f, is_standalone, scope):
         return None
     fname = f.get("name", "")
-    if is_standalone:
-        raw = f.get("standalone_path") or f.get("path") or fname
-    else:
-        raw = system_dir_path(f, f.get("path") or fname)
+    raw = gap_destination(f, fname, is_standalone, False)
     dest = f"{raw}{fname}" if raw.endswith("/") and not fname.endswith("/") else raw
     # A bare name is a destination too: the core reads it at the root
     # of the directory core files go to, which the platform may not

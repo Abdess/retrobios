@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING
 from core.hashing import parse_md5_list
 from model.declarations import declared_slot
 from model.profiles import entry_system_ids, lists_files
+from packs.gaps import gap_destination
 from resolve import nativemode
 from resolve.archives import archive_entry, holds_required_members
 from core.paths import comparable_destination
@@ -201,11 +202,7 @@ def profile_claims(
                 # the member put FBNeo's msx.zip contents loose at the root.
                 if entry.get("archive"):
                     continue
-                dest = (
-                    (entry.get("standalone_path") or entry.get("path"))
-                    if is_standalone
-                    else system_dir_path(entry, entry.get("path") or entry.get("name") or "")
-                ) or entry.get("name") or ""
+                dest = gap_destination(entry, entry.get("name") or "", is_standalone, False)
                 if not dest:
                     continue
                 if placement is None:
