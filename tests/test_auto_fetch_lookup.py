@@ -161,5 +161,29 @@ class AStalledOrLimitedSourceIsNoAnswer(unittest.TestCase):
         self.assertEqual(len(asked), 2)
 
 
+class OptionalDatabase(unittest.TestCase):
+    """auto_fetch --sha1 read a mistyped --db as an empty collection and asked
+    Software Heritage for a file already held."""
+
+    def setUp(self):
+        self.cwd = os.getcwd()
+        self.root = Path(tempfile.mkdtemp())
+        os.chdir(self.root)
+        self.addCleanup(os.chdir, self.cwd)
+
+    def test_the_default_may_be_absent(self):
+        from core.paths import DB_FILE
+        from model.database import load_optional_database
+
+        self.assertIsNone(load_optional_database(DB_FILE))
+
+    def test_a_named_database_must_exist(self):
+        from model.database import DatabaseUnreadable, load_optional_database
+
+        (self.root / "database.json").write_text('{"files": {}}')
+        with self.assertRaisesRegex(DatabaseUnreadable, "Close match: database.json"):
+            load_optional_database("databse.json")
+
+
 if __name__ == "__main__":
     unittest.main()

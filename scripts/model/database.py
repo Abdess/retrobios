@@ -9,7 +9,7 @@ from pathlib import Path
 from core.cli import InputMissing
 from core.hashing import cut_md5_owner
 from core.memo import DerivedView
-from core.paths import REPO_ROOT
+from core.paths import DB_FILE, REPO_ROOT
 
 
 class DatabaseUnreadable(InputMissing):
@@ -48,6 +48,17 @@ def load_database(db_path: str) -> dict:
             f"{db_path} is not valid JSON ({exc}). Rebuild it with: "
             f"python scripts/generate_db.py --force --bios-dir bios --output {db_path}"
         ) from None
+
+
+def load_optional_database(db_path: str) -> dict | None:
+    """The database, or None when the default one is absent.
+
+    The default may be missing, a --db that was named must exist: a typo
+    beside the real file was read as an empty collection.
+    """
+    if db_path == DB_FILE and not os.path.exists(db_path):
+        return None
+    return load_database(db_path)
 
 
 def _index_paths(files: dict) -> dict[str, tuple[str, dict]]:

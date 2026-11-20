@@ -24,7 +24,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from model.cliargs import platform_arg, require_platform
 from core.cli import add_repo_inputs, require_directory
 from model.registry import list_registered_platforms
-from model.database import load_database
+from model.database import load_database, load_optional_database
 from model.platforms import load_platform_config
 from model.safeparse import require_yaml
 from acquire.fetch import fetch_missing, find_missing, generate_issue_body, lookup_sha1s
@@ -54,12 +54,8 @@ def main() -> None:
         if args.platform or args.all or args.create_issues:
             parser.error("--sha1 looks for files by hash alone: it takes no "
                          "--platform, --all or --create-issues")
-        db = load_database(args.db) if os.path.exists(args.db) else {"files": {}}
+        db = load_optional_database(args.db) or {"files": {}}
         sys.exit(lookup_sha1s(args.sha1, db, args.dry_run))
-
-    if not os.path.exists(args.db):
-        print(f"Error: {args.db} not found. Run generate_db.py first.", file=sys.stderr)
-        sys.exit(1)
 
     db = load_database(args.db)
 

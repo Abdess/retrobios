@@ -13,11 +13,10 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
-from core.paths import DB_FILE
 from model.targets import target_scope, truth_target_dir
 from model.cliargs import platform_arg, require_platform
 from model.registry import list_registered_platforms, load_data_dir_registry, load_platform_registry
-from model.database import load_database
+from model.database import load_optional_database
 from model.profiles import load_emulator_profiles
 from model.platforms import load_platform_config
 from core.cli import add_repo_inputs, require_directory
@@ -62,11 +61,7 @@ def main(argv: list[str] | None = None) -> None:
     profiles = load_emulator_profiles(args.emulators_dir)
     data_registry = load_data_dir_registry(args.platforms_dir)
 
-    # Load database (optional)
-    # The default may be absent, but a --db that was named must exist.
-    db: dict | None = None
-    if args.db != DB_FILE or os.path.exists(args.db):
-        db = load_database(args.db)
+    db = load_optional_database(args.db)
 
     if args.all:
         platforms = list_registered_platforms(
