@@ -43,6 +43,7 @@ class Content:
     frame_hash_every: int
     pinned: bool
     boot_file: str | None
+    also_regions: tuple[str, ...] = ()
 
     @property
     def key(self) -> str:
@@ -61,6 +62,7 @@ def load_content(path: Path) -> dict[str, list[Content]]:
                 frames=int(item.get("frames", 3600)),
                 frame_hash_every=int(item.get("frame_hash_every", 10)),
                 pinned=bool(item.get("pinned", False)), boot_file=spec.get("boot_file"),
+                also_regions=tuple(item.get("also_regions") or ()),
             ))
     return out
 

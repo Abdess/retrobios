@@ -9,20 +9,18 @@ import subprocess
 import sys
 import tempfile
 import time
-import urllib.request
 from collections.abc import Callable, Iterable
 from pathlib import Path
 
-import yaml
-
 from core.paths import REPO_ROOT
 from core_probe import BUILTIN
-from probes.entries import entry_dest, regions_of
+from probes.content import Content, load_content, load_file
+from probes.cores import cached_nightly
+from probes.entries import entry_dest, held_file, regions_of
 from probes.host import CONTENT_FILE
 
 
 CORES = REPO_ROOT / ".cache" / "region" / "cores"
-NIGHTLY = "https://buildbot.libretro.com/nightly/linux/x86_64/latest/{core}_libretro.so.zip"
 VARIANTS = ("full", "own", "others", "pack")
 SUBJECT = re.compile(r"^region-(?P<core>[a-z0-9_]+)-(?P<game>[a-z0-9-]+)-(?P<variant>full|own|others|pack)$")
 # The territory a test game names, as generate_pack --region takes it.
@@ -186,50 +184,11 @@ def sentence(game_region: str, result: dict) -> str:
 # Runs
 # --------------------------------------------------------------------------
 
-def load_content(path: Path = CONTENT_FILE) -> dict[str, list[dict]]:
-    data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
-    out: dict[str, list[dict]] = {}
-    for system, spec in (data.get("systems") or {}).items():
-        for item in spec.get("content") or ():
-            out.setdefault(system, []).append({**item, "romfetch": spec["romfetch"]})
-    return out
-
-
-def content_file(item: dict, content_dir: Path) -> Path:
-    folder = content_dir / item["romfetch"] / item["name"]
-    if item.get("load") == "cue":
-        cues = sorted(folder.glob("*.cue"))
-        if len(cues) != 1:
-            raise FileNotFoundError(f"{folder}: {len(cues)} .cue files, one expected")
-        return cues[0]
-    if item.get("load"):
-        return folder / item["load"]
-    files = [p for p in sorted(folder.iterdir()) if p.is_file() and p.name != "identity.json"]
-    if len(files) != 1:
-        raise FileNotFoundError(f"{folder}: {len(files)} files, name one with load:")
-    return files[0]
-
-
 def nightly_core(core: str) -> tuple[Path, str]:
-    """The buildbot nightly of a core, downloaded once, and its URL."""
-    import zipfile
-
-    url = NIGHTLY.format(core=core)
-    target = CORES / f"{core}_libretro.so"
-    if not target.is_file():
-        CORES.mkdir(parents=True, exist_ok=True)
-        archive = CORES / f"{core}.zip"
-        with urllib.request.urlopen(url, timeout=300) as response, archive.open("wb") as out:
-            out.write(response.read())
-        with zipfile.ZipFile(archive) as handle:
-            member = f"{core}_libretro.so"
-            if member not in handle.namelist():
-                raise FileNotFoundError(f"{archive.name}: no {member} inside")
-            partial = target.with_suffix(".part")
-            partial.write_bytes(handle.read(member))
-            partial.replace(target)
-        archive.unlink()
-    return target, url
+    """The buildbot nightly of a core, downloaded again when the buildbot
+    replaced it, and its URL."""
+    record = cached_nightly(core, CORES / core)
+    return Path(record["path"]), record["url"]
 
 
 def pack_files(emulator: str, region: str, work: Path) -> dict[str, Path]:
@@ -252,19 +211,9 @@ def pack_files(emulator: str, region: str, work: Path) -> dict[str, Path]:
 
 def local_resolver() -> Callable[[dict], Path | None]:
     from model.database import load_database
-    from resolve.localfile import resolve_local_file
 
     db = load_database(str(REPO_ROOT / "database.json"))
-
-    def local(entry: dict) -> Path | None:
-        hint = entry.get("path") if isinstance(entry.get("path"), str) else ""
-        path, status = resolve_local_file(entry, db, dest_hint=hint or "")
-        if not path or status in ("not_found", "hash_mismatch"):
-            return None
-        found = Path(path) if Path(path).is_absolute() else REPO_ROOT / path
-        return found if found.is_file() else None
-
-    return local
+    return lambda entry: held_file(entry, db, REPO_ROOT)
 
 
 BUSY = 3  # core_probe's exit status when it refuses to record on a busy host
@@ -295,7 +244,7 @@ def run(args: argparse.Namespace) -> int:
     if not entries:
         print(f"ERROR: {args.emulator} declares no regional BIOS for {args.system}", file=sys.stderr)
         return 2
-    games = [g for g in load_content().get(args.system, []) if g.get("region") in PACK_REGION]
+    games = [g for g in load_content(CONTENT_FILE).get(args.system, []) if g.region in PACK_REGION]
     if not games:
         print(f"ERROR: content.yml has no regional game for {args.system}", file=sys.stderr)
         return 2
@@ -303,17 +252,17 @@ def run(args: argparse.Namespace) -> int:
     local = local_resolver()
     failures = 0
     for game in games:
-        load = content_file(game, Path(args.content_dir))
+        load = load_file(Path(args.content_dir) / game.romfetch_system / game.name, game.load)
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as scratch:
-            variants = plan_variants(entries, game["region"], local)
-            variants["pack"] = pack_files(args.emulator, game["region"], Path(scratch))
+            variants = plan_variants(entries, game.region, local)
+            variants["pack"] = pack_files(args.emulator, game.region, Path(scratch))
             for label in args.variants or VARIANTS:
                 argv = [sys.executable, str(REPO_ROOT / "scripts" / "core_probe.py"), "run",
-                        "--core", str(core), "--content", str(load), "--content-label", game["name"],
-                        "--frames", str(game.get("frames", 3600)),
-                        "--frame-hash-every", str(game.get("frame_hash_every", 10)),
+                        "--core", str(core), "--content", str(load), "--content-label", game.name,
+                        "--frames", str(game.frames),
+                        "--frame-hash-every", str(game.frame_hash_every),
                         "--record", str(REPO_ROOT), "--emulator", args.emulator,
-                        "--subject", subject(core.name.removesuffix("_libretro.so"), game["name"], label),
+                        "--subject", subject(core.name.removesuffix("_libretro.so"), game.name, label),
                         "--require-sandbox", "--timeout", str(args.timeout)]
                 if url:
                     argv += ["--core-artifact", url]
@@ -321,7 +270,7 @@ def run(args: argparse.Namespace) -> int:
                     argv += ["--system-file", f"{dest}={src}"]
                 proc = probe_when_idle(argv, args.max_load_wait)
                 status = "recorded" if proc.returncode == 0 else f"exit {proc.returncode}"
-                print(json.dumps({"game": game["name"], "variant": label, "status": status,
+                print(json.dumps({"game": game.name, "variant": label, "status": status,
                                   "error": proc.stderr.strip()[-400:] if proc.returncode else None}),
                       flush=True)
                 failures += proc.returncode != 0
@@ -335,10 +284,10 @@ def collect(root: Path = REPO_ROOT, stored_records: list | None = None) -> list[
     from model.profiles import load_emulator_profiles
     from model.measurements import live, read_records
 
-    content: dict[str, list[tuple[str, dict]]] = {}
+    content: dict[str, list[tuple[str, Content]]] = {}
     for system, items in load_content(root / "tests" / "campaign" / "content.yml").items():
         for item in items:
-            content.setdefault(item["name"], []).append((system, item))
+            content.setdefault(item.name, []).append((system, item))
     profiles = load_emulator_profiles(str(root / "emulators"))
     groups: dict[tuple[str, str, str], dict[str, dict]] = {}
     for stored in read_records(root) if stored_records is None else stored_records:
@@ -355,7 +304,7 @@ def collect(root: Path = REPO_ROOT, stored_records: list | None = None) -> list[
         system, item = next(((s, i) for s, i in content[game] if s in (profile.get("systems") or ())),
                             content[game][0])
         entries = region_entries(profile, system)
-        result = outcome(records, entries, item["region"])
+        result = outcome(records, entries, item.region)
         out.append({"emulator": emulator, "core": core, "system": system, "game": game, **result,
-                    "sentence": sentence(item["region"], result)})
+                    "sentence": sentence(item.region, result)})
     return out

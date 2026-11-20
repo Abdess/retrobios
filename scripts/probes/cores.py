@@ -3,24 +3,27 @@
 from __future__ import annotations
 
 import io
+import json
 import os
 import re
 import shutil
 import stat
 import subprocess
+import sys
 import tarfile
+import time
 import urllib.error
 import urllib.request
 import zipfile
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import TYPE_CHECKING, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar
 
 import core_probe
 from core.hashing import file_digest
 from core.statefile import now_iso
-from probes.host import Unavailable, child_env, run_group, slug
+from probes.host import NETWORK_DELAYS, Unavailable, child_env, run_group, slug
 
 if TYPE_CHECKING:
     from probes.campaign import Campaign
@@ -207,6 +210,82 @@ def safe_extract_so(archive: Path, member: str, target: Path) -> None:
         os.replace(scratch, target)
 
 
+def retrying(what: str, call: Callable[[], T], *, delays: Sequence[float],
+             sleep: Callable[[float], None], log: Callable[[str], None]) -> T:
+    """call, run again after each delay on a network failure. A client error
+    other than 429 is final."""
+    for attempt, delay in enumerate((*delays, None)):
+        try:
+            return call()
+        except (urllib.error.URLError, TimeoutError, ConnectionError, OSError) as exc:
+            if isinstance(exc, urllib.error.HTTPError) and exc.code < 500 and exc.code != 429:
+                raise Unavailable(f"{what}: HTTP {exc.code}") from exc
+            if delay is None:
+                raise Unavailable(f"{what}: {exc}") from exc
+            log(f"{what}: {exc}, retry {attempt + 1} in {delay}s")
+            sleep(delay)
+    raise AssertionError("unreachable")
+
+
+def buildbot_listing(urlopen: Callable[..., Any] = urllib.request.urlopen) -> set[str]:
+    """The core names the buildbot publishes a nightly of."""
+    with urlopen(BUILDBOT, timeout=120) as response:
+        page = response.read().decode("utf-8", "replace")
+    return set(re.findall(r"([A-Za-z0-9_]+)_libretro\.so\.zip", page))
+
+
+def fetch_nightly(name: str, target: Path, cached: dict, *, urlopen: Callable[..., Any],
+                  retry: Callable[[str, Callable[[], Any]], Any]) -> dict:
+    """The buildbot nightly of a core at target, downloaded again when the
+    buildbot's ETag or Last-Modified moved or the file on disk is not the one
+    cached describes. Returns the record of the file now at target: cached
+    itself when nothing changed."""
+    url = f"{BUILDBOT}{name}_libretro.so.zip"
+
+    def head() -> dict:
+        request = urllib.request.Request(url, method="HEAD")
+        with urlopen(request, timeout=120) as response:
+            return {"etag": response.headers.get("ETag"),
+                    "last_modified": response.headers.get("Last-Modified")}
+    stamp = retry(f"{name} nightly", head)
+    if (cached.get("etag"), cached.get("last_modified")) == (stamp["etag"], stamp["last_modified"]) \
+            and target.is_file() and file_digest(target, "sha256") == cached.get("sha256"):
+        return cached
+    archive = target.parent / f"{name}_libretro.so.zip"
+    archive.parent.mkdir(parents=True, exist_ok=True)
+
+    def download() -> None:
+        with urlopen(url, timeout=600) as response, archive.open("wb") as out:
+            shutil.copyfileobj(response, out)
+    retry(f"{name} nightly", download)
+    safe_extract_so(archive, f"{name}_libretro.so", target)
+    archive.unlink()
+    return {**stamp, "url": url, "sha256": file_digest(target, "sha256"), "fetched_at": now_iso()}
+
+
+def cached_nightly(name: str, folder: Path, *, check: bool = True) -> dict:
+    """fetch_nightly for a tool without campaign state, its record kept in
+    folder/build.json. Without check, a file on disk that matches its record
+    is returned without asking the buildbot."""
+    target, record_path = folder / f"{name}_libretro.so", folder / "build.json"
+    cached: dict = {}
+    if record_path.is_file():
+        cached = json.loads(record_path.read_text(encoding="utf-8"))
+    if not check and target.is_file() and cached.get("sha256") == file_digest(target, "sha256"):
+        return {**cached, "path": str(target)}
+
+    def report(line: str) -> None:
+        print(line, file=sys.stderr)
+
+    def retry(what: str, call: Callable[[], Any]) -> Any:
+        return retrying(what, call, delays=NETWORK_DELAYS, sleep=time.sleep, log=report)
+    record = fetch_nightly(name, target, cached, urlopen=urllib.request.urlopen, retry=retry)
+    if record is not cached:
+        record = {"name": name, **record}
+        record_path.write_text(json.dumps(record, indent=1) + "\n", encoding="utf-8")
+    return {**record, "path": str(target)}
+
+
 class Cores:
     """Buildbot nightlies, downloaded once per build, else local builds of
     the profile's pinned commit."""
@@ -216,28 +295,14 @@ class Cores:
         self.listing: set[str] | None = None
 
     def retrying(self, what: str, call: Callable[[], T]) -> T:
-        for attempt, delay in enumerate((*self.c.settings.delays, None)):
-            try:
-                return call()
-            except (urllib.error.URLError, TimeoutError, ConnectionError, OSError) as exc:
-                if isinstance(exc, urllib.error.HTTPError) and exc.code < 500 and exc.code != 429:
-                    raise Unavailable(f"{what}: HTTP {exc.code}") from exc
-                if delay is None:
-                    raise Unavailable(f"{what}: {exc}") from exc
-                self.c.log(f"{what}: {exc}, retry {attempt + 1} in {delay}s")
-                self.c.host.sleep(delay)
-        raise AssertionError("unreachable")
+        return retrying(what, call, delays=self.c.settings.delays, sleep=self.c.host.sleep, log=self.c.log)
 
     def buildbot(self) -> set[str]:
         if self.listing is None:
             if not self.c.settings.network:
                 self.listing = set()
             else:
-                def read() -> bytes:
-                    with self.c.host.urlopen(BUILDBOT, timeout=120) as response:
-                        return response.read()
-                page = self.retrying("buildbot listing", read).decode("utf-8", "replace")
-                self.listing = set(re.findall(r"([A-Za-z0-9_]+)_libretro\.so\.zip", page))
+                self.listing = self.retrying("buildbot listing", lambda: buildbot_listing(self.c.host.urlopen))
         return self.listing
 
     def names(self, profile: dict) -> list[str]:
@@ -245,32 +310,14 @@ class Cores:
         return sorted({str(c) for c in profile.get("cores") or () if str(c) in listing})
 
     def nightly(self, name: str, profile: dict) -> Core:
-        url = f"{BUILDBOT}{name}_libretro.so.zip"
         cached = self.c.state["cores"].get(name) or {}
-
-        def head() -> dict:
-            request = urllib.request.Request(url, method="HEAD")
-            with self.c.host.urlopen(request, timeout=120) as response:
-                return {"etag": response.headers.get("ETag"),
-                        "last_modified": response.headers.get("Last-Modified")}
-        stamp = self.retrying(f"{name} nightly", head)
         target = self.c.paths.home / "cores" / name / f"{name}_libretro.so"
-        if (cached.get("etag"), cached.get("last_modified")) != (stamp["etag"], stamp["last_modified"]) \
-                or not target.is_file() or file_digest(target, "sha256") != cached.get("sha256"):
-            archive = target.parent / f"{name}_libretro.so.zip"
-            archive.parent.mkdir(parents=True, exist_ok=True)
-
-            def download() -> None:
-                with self.c.host.urlopen(url, timeout=600) as response, archive.open("wb") as out:
-                    shutil.copyfileobj(response, out)
-            self.retrying(f"{name} nightly", download)
-            safe_extract_so(archive, f"{name}_libretro.so", target)
-            archive.unlink()
-            cached = {**stamp, "url": url, "sha256": file_digest(target, "sha256"), "fetched_at": now_iso()}
-            self.c.state["cores"][name] = cached
-            self.c.log(f"core {name}: new nightly {cached['sha256'][:12]} ({stamp['last_modified']})")
+        record = fetch_nightly(name, target, cached, urlopen=self.c.host.urlopen, retry=self.retrying)
+        if record is not cached:
+            self.c.state["cores"][name] = record
+            self.c.log(f"core {name}: new nightly {record['sha256'][:12]} ({record['last_modified']})")
         repo = profile.get("source") if isinstance(profile.get("source"), str) else None
-        return Core(name, target, cached["sha256"], artifact=url,
+        return Core(name, target, record["sha256"], artifact=record["url"],
                     repo=repo if repo and repo.startswith("http") else None)
 
     def build(self, emulator: str, profile: dict) -> Core:

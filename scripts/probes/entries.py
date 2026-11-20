@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import hashlib
+from pathlib import Path
 
 from model import measurements as mr
+from probes.host import working_directory
 
 
 def profile_digest(profile: dict) -> str:
@@ -15,6 +17,22 @@ def profile_digest(profile: dict) -> str:
     body = {"files": entries, "cores": profile.get("cores"), "type": profile.get("type"),
             "systems": profile.get("systems")}
     return hashlib.sha1(mr.canonical(body)).hexdigest()
+
+
+def held_file(entry: dict, db: dict, root: Path) -> Path | None:
+    """The collection's copy of an entry in the checkout at root, by its
+    declared hashes or its name."""
+    from resolve.localfile import resolve_local_file
+
+    hint = entry.get("path") if isinstance(entry.get("path"), str) else ""
+    # The database names files relative to the checkout it describes.
+    with working_directory(root):
+        path, status = resolve_local_file(entry, db, dest_hint=hint or "")
+    if not path or status in ("not_found", "hash_mismatch"):
+        return None
+    local = Path(path)
+    local = local if local.is_absolute() else root / local
+    return local if local.is_file() else None
 
 
 def entry_systems(entry: dict, profile: dict) -> list[str]:

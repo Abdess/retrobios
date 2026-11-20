@@ -185,7 +185,7 @@ class ContentList(unittest.TestCase):
         import yaml
 
         data = yaml.safe_load(regioncheck.CONTENT_FILE.read_text(encoding="utf-8"))
-        content = regioncheck.load_content()
+        content = regioncheck.load_content(regioncheck.CONTENT_FILE)
         uncovered = data.get("uncovered") or {}
         profiles = load_emulator_profiles(str(ROOT / "emulators"))
         regional: set[str] = set()
@@ -197,10 +197,10 @@ class ContentList(unittest.TestCase):
         for system in sorted(regional):
             if system in uncovered:
                 continue
-            held = {item.get("region") for item in content.get(system, [])}
+            held = {item.region for item in content.get(system, [])}
             missing = {"japan", "north-america", "europe"} - held
             # One cartridge sold in two territories counts for both.
-            missing -= {r for item in content.get(system, []) for r in item.get("also_regions") or ()}
+            missing -= {r for item in content.get(system, []) for r in item.also_regions}
             self.assertFalse(missing, f"{system}: no game for {sorted(missing)}")
 
 

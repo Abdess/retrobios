@@ -7,19 +7,16 @@ import contextlib
 import fcntl
 import json
 import os
-import re
 import shutil
 import subprocess
 import sys
 import time
-import urllib.request
 from collections.abc import Iterable, Iterator, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
 from unattended import worktree
 from core_probe import PROBE_LOCK_ENV, PROBE_LOCK_HELD_ENV, VERDICTS, probe_lock_path
-from core.hashing import file_digest
 from core.paths import REPO_ROOT
 from core.statefile import now_iso
 from model import measurements as mr
@@ -28,7 +25,7 @@ from model.profiles import load_emulator_profiles
 from model.systems import norm_system_id
 from model.targets import load_target_config
 from probes.content import Content, load_content, load_file, verify_identity
-from probes.cores import BUILDBOT, safe_extract_so
+from probes.cores import buildbot_listing, cached_nightly
 from probes.entries import entry_dest
 from probes.host import CONTENT_FILE, PROBE_TIMEOUT, Unavailable, child_env
 from probes.packlayout import (
@@ -232,32 +229,10 @@ def map_run(layout: Layout, staged: set[str], rep: dict, profile: dict) -> tuple
 # Cores and content
 # --------------------------------------------------------------------------
 
-def buildbot_listing() -> set[str]:
-    with urllib.request.urlopen(BUILDBOT, timeout=120) as response:
-        page = response.read().decode("utf-8", "replace")
-    return set(re.findall(r"([A-Za-z0-9_]+)_libretro\.so\.zip", page))
-
-
 def fetch_core(name: str, refresh: bool = False) -> dict:
-    """The buildbot nightly of a core, kept with where and when it came from."""
-    folder = CORE_CACHE / name
-    so, meta_path = folder / f"{name}_libretro.so", folder / "build.json"
-    if so.is_file() and meta_path.is_file() and not refresh:
-        meta = json.loads(meta_path.read_text(encoding="utf-8"))
-        if meta.get("sha256") == file_digest(so, "sha256"):
-            return {**meta, "path": str(so)}
-    url = f"{BUILDBOT}{name}_libretro.so.zip"
-    folder.mkdir(parents=True, exist_ok=True)
-    archive = folder / f"{name}.zip.part"
-    with urllib.request.urlopen(url, timeout=600) as response, archive.open("wb") as out:
-        shutil.copyfileobj(response, out)
-        modified = response.headers.get("Last-Modified")
-    safe_extract_so(archive, f"{name}_libretro.so", so)
-    archive.unlink()
-    meta = {"name": name, "url": url, "last_modified": modified, "sha256": file_digest(so, "sha256"),
-            "fetched_at": now_iso()}
-    meta_path.write_text(json.dumps(meta, indent=1) + "\n", encoding="utf-8")
-    return {**meta, "path": str(so)}
+    """The buildbot nightly of a core, kept with where and when it came from.
+    refresh asks the buildbot whether a newer build replaced it."""
+    return cached_nightly(name, CORE_CACHE / name, check=refresh)
 
 
 def load_contents(files: Sequence[Path]) -> dict[str, list[Content]]:

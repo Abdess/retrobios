@@ -30,6 +30,7 @@ from probes.cores import Core, Cores
 from probes.entries import (
     entry_dest,
     entry_systems,
+    held_file,
     is_bios,
     profile_digest,
     region_matches,
@@ -43,7 +44,6 @@ from probes.host import (
     Unavailable,
     child_env,
     slug,
-    working_directory,
 )
 from probes.state import DONE, FAILED, PENDING, load_state, should_run
 
@@ -152,14 +152,20 @@ class Campaign:
     # -- profiles and files -------------------------------------------------
 
     def profiles(self) -> dict[str, dict]:
-        out = {}
-        for path in sorted(self.paths.emulators.glob("*.yml")):
-            if path.name.startswith("_") or path.stem == "00_example":
-                continue
-            data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
-            if "emulator" in data:
-                out[path.stem] = data
-        return out
+        from model.profiles import emulator_profiles_cache, load_emulator_profiles
+
+        # The campaign writes these profiles itself: each pass reads them again.
+        folder = os.path.realpath(self.paths.emulators)
+        for key in [key for key in emulator_profiles_cache if key[0] == folder]:
+            del emulator_profiles_cache[key]
+        profiles = load_emulator_profiles(folder, skip_aliases=False)
+        return {name: profile for name, profile in profiles.items() if name != "00_example"}
+
+    def digest_on_disk(self, emulator: str) -> str:
+        """profile_digest of the profile as its file reads now. The campaign's
+        own edits land between the two reads of a unit, so both go to disk."""
+        path = self.paths.emulators / f"{emulator}.yml"
+        return profile_digest(yaml.safe_load(path.read_text(encoding="utf-8")))
 
     @property
     def db(self) -> dict:
@@ -169,17 +175,7 @@ class Campaign:
 
     def local_file(self, entry: dict) -> Path | None:
         """The collection's copy of an entry, by its declared hashes or its name."""
-        from resolve.localfile import resolve_local_file
-
-        hint = entry.get("path") if isinstance(entry.get("path"), str) else ""
-        # The database names files relative to the checkout it describes.
-        with working_directory(self.paths.root):
-            path, status = resolve_local_file(entry, self.db, dest_hint=hint or "")
-        if not path or status in ("not_found", "hash_mismatch"):
-            return None
-        local = Path(path)
-        local = local if local.is_absolute() else self.paths.root / local
-        return local if local.is_file() else None
+        return held_file(entry, self.db, self.paths.root)
 
     def variant_files(self, entry: dict, primary: Path) -> list[Path]:
         """The .variants/ copies of an entry's file the collection holds."""
@@ -838,7 +834,7 @@ class Campaign:
 
     def run_unit(self, unit: Unit, system: str | None) -> None:
         emulator, profile = unit.emulator, unit.profile
-        digest = profile_digest(profile)
+        digest = self.digest_on_disk(emulator)
         contents = self.unit_contents(unit, system)
         systems = [s for s in profile.get("systems") or () if not system or s == system]
         if unit.pending:
@@ -865,9 +861,8 @@ class Campaign:
                 self.run_unit_content(Unit(emulator, profile, core.name), core, content, digest)
         for content in contents:
             self.store.release(content, emulator)
-        self.state["emulators"][emulator] = {"profile_digest": profile_digest(
-            yaml.safe_load((self.paths.emulators / f"{emulator}.yml").read_text(encoding="utf-8"))),
-            "at": now_iso()}
+        self.state["emulators"][emulator] = {"profile_digest": self.digest_on_disk(emulator),
+                                             "at": now_iso()}
         # The campaign's own edits do not make its checks run again.
         new_digest = self.state["emulators"][emulator]["profile_digest"]
         for entry in self.state["checks"].get(emulator, {}).values():
