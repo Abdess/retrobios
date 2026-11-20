@@ -7109,6 +7109,7 @@ class RequiredOnlyReachesDataDirectories(unittest.TestCase):
 
     def _members(self, required_only: bool) -> list[str]:
         from scripts.packs import datatrees
+        from scripts.packs.archive import Placed
 
         with tempfile.TemporaryDirectory(dir=TMP_ROOT) as tmp:
             for key in ("needed", "optional"):
@@ -7129,7 +7130,7 @@ class RequiredOnlyReachesDataDirectories(unittest.TestCase):
             return [
                 dest
                 for _src, dest in datatrees.data_directory_members(
-                    systems, registry, "retroarch", "", False, set(), set(), set(),
+                    systems, registry, "retroarch", "", Placed(False),
                     required_only=required_only,
                 )
             ]

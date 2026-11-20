@@ -42,9 +42,11 @@ class OneRule(unittest.TestCase):
         )
 
     def test_builder_and_report_read_it(self):
+        self.assertIn("placement_block(", script_source("packs/archive.py"))
         for module in ("generate_pack.py", "packs/extras.py"):
             source = script_source(module)
-            self.assertIn("placement_block(", source, module)
+            self.assertIn("Placed(", source, module)
+            self.assertIn(".block(", source, module)
         builder = script_source("generate_pack.py")
         self.assertNotIn("if full_dest.lower() in seen_lower and case_insensitive", builder)
 

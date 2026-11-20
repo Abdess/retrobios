@@ -140,19 +140,32 @@ PACK_DOCUMENTS = ("README.txt", "manifest.json")
 class Placed:
     """The destinations a build has taken, and the folders they open.
 
-    ``fold`` is whether a case twin of a taken path counts as taken.
+    ``fold`` is whether a case twin of a taken path counts as taken. The
+    builder, the manifest, verify's replay of the builder and the data
+    tree walk all place files through this one record.
+
+    ``content``, when given, records the sha1 of what each taken path holds,
+    keyed by its lowercased destination: a case twin carrying the same
+    bytes serves the core on a filesystem that folds the names.
     """
 
     fold: bool
     destinations: set[str] = field(default_factory=set)
     lower: set[str] = field(default_factory=set)  # only used when fold=True
     parents: set[str] = field(default_factory=set)  # parent dirs of added files (path conflict detection)
+    content: dict[str, str | None] | None = None
 
-    def take(self, dest: str) -> None:
+    def take(self, dest: str, sha1: str | None = None) -> None:
         self.destinations.add(dest)
         register_path(dest, self.destinations, self.parents)
         if self.fold:
             self.lower.add(dest.lower())
+        if self.content is not None:
+            self.content[dest.lower()] = sha1
+
+    def content_at(self, dest: str) -> str | None:
+        """The sha1 recorded for the path a destination folds onto."""
+        return (self.content or {}).get(dest.lower())
 
     def holds(self, dest: str) -> bool:
         return dest in self.destinations or (self.fold and dest.lower() in self.lower)

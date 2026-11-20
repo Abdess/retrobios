@@ -20,6 +20,7 @@ from model.profiles import (
     select_emulator_profiles,
 )
 from model.registry import load_data_dir_registry
+from packs.archive import Placed
 from packs.verdicts import (
     RELEASE_ASSET_PENDING,
     Severity,
@@ -211,8 +212,7 @@ class _EmulatorPack:
     # Archives and data trees take paths too, before and after the loose
     # files of their profile, as the pack writes them.
     placed: dict[str, tuple[str | None, str, str]] = field(default_factory=dict)
-    placed_files: set[str] = field(default_factory=set)
-    placed_parents: set[str] = field(default_factory=set)
+    taken: Placed = field(default_factory=lambda: Placed(True))
     content_ids: dict[str, str | None] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
@@ -242,19 +242,13 @@ class _EmulatorPack:
         return self.content_ids[path]
 
     def block(self, dest: str) -> str | None:
-        from packs.paths import placement_block
-
-        return placement_block(
-            dest, self.placed_files, set(self.placed), self.placed_parents, True
-        )
+        return self.taken.block(dest)
 
     def occupy(self, dest: str, path: str | None, owner: str) -> None:
-        from packs.paths import register_path
-
         if self.block(dest):
             return
         self.placed[dest.lower()] = (path, owner, dest)
-        register_path(dest, self.placed_files, self.placed_parents)
+        self.taken.take(dest)
 
     def occupy_trees(self, emu_name: str, profile: dict) -> None:
         """The profile's data trees follow its files in the pack, which

@@ -190,7 +190,7 @@ class _EmulatorPackBuild:
             data_dir_registry=self.data_registry,
             offline=self.offline,
         )
-        taken = archive_dest.lower() in self.placed.lower
+        taken = self.placed.holds(archive_dest)
         if taken or self.placed.conflicts(archive_dest):
             # Another profile's file holds this path. The same archive
             # asked for twice is served. Anything else leaves this
@@ -402,8 +402,7 @@ class _EmulatorPackBuild:
                 if prefix:
                     dd_dest = f"{prefix}/{dd_dest}" if dd_dest else prefix
             self.data_files += pack_data_tree(
-                self.zf, local_cache, dd_dest, self.placed.destinations,
-                self.placed.parents, self.placed.lower, self.packed_at,
+                self.zf, local_cache, dd_dest, self.placed, self.packed_at,
             )
 
     def nothing_needed(self) -> bool:

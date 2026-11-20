@@ -422,9 +422,8 @@ class _ManifestBuild:
         self.total_size += manifest_core_entries(
             core_files, self.config, self.db, self.bios_dir, self.base_dest, self.repo_root,
             self.zip_contents, opts.offline,
-            region_drops=self.region_drops, case_insensitive=self.case_insensitive,
-            seen_destinations=self.placed.destinations, seen_lower=self.placed.lower,
-            seen_parents=self.placed.parents, manifest_files=self.manifest_files,
+            region_drops=self.region_drops, placed=self.placed,
+            manifest_files=self.manifest_files,
             omitted_by_destination=self.omitted_by_destination,
             record_omission=self.record_omission, pack_only_sizes=self.pack_only_sizes,
             selection=self.fields, required_only=opts.required_only,
@@ -473,8 +472,7 @@ class _ManifestBuild:
                                            self.data_registry, opts.target_cores))
         self.data_members = list(data_directory_members(
             self.pack_systems, self.data_registry, self.platform_name, self.base_dest,
-            self.case_insensitive, self.placed.destinations, self.placed.lower,
-            self.placed.parents, refs_out=data_refs, required_only=required_only,
+            self.placed, refs_out=data_refs, required_only=required_only,
             core_trees=core_trees,
             reclaim=reclaim,
         ))

@@ -951,12 +951,10 @@ class _PlatformPackBuild:
         """Add the data directories to the pack. Returns how many files went in."""
         plan = self.plan
         required_only = plan.opts.required_only
-        seen_parents = self.placed.parents
         added = 0
         for src, full in data_directory_members(
             pack_systems, plan.opts.data_registry, plan.platform_name, plan.base_dest,
-            self.placed.fold, self.placed.destinations, self.placed.lower,
-            seen_parents, required_only=required_only,
+            self.placed, required_only=required_only,
             core_trees=core_trees,
         ):
             add_pack_member(self.zf, src, self._flat(full))

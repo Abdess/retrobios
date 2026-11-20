@@ -15,10 +15,10 @@ from core.options import reject_unknown
 from model.declarations import declared_root
 from model.profiles import entry_system_ids, installed_data_refs
 from model.systems import norm_system_id
-from packs.archive import PackRecord, add_pack_member
+from packs.archive import PackRecord, Placed, add_pack_member
 from packs.datadirs import cache_lock, revisioned
 from packs.extras import prefixed_destination
-from packs.paths import MEDIA_MARKER, has_path_conflict, register_path, lands_on_android
+from packs.paths import MEDIA_MARKER, lands_on_android
 from resolve.cores import resolve_platform_cores as _platform_cores
 from resolve.layout import core_system_dirs
 from resolve.standalone import platform_layouts, standalone_set
@@ -182,10 +182,7 @@ def data_directory_members(
     data_registry: dict | None,
     platform_name: str,
     base_dest: str,
-    case_insensitive: bool,
-    seen_destinations: set,
-    seen_lower: set,
-    seen_parents: set,
+    placed: Placed,
     **options: Unpack[_TreeWalkOptions],
 ) -> Iterator[tuple[str, str]]:
     """Yield (source, destination) for the cached data directories a
@@ -232,15 +229,10 @@ def data_directory_members(
                     os.path.normpath(reclaim[full]) == os.path.normpath(src)
                 ):
                     del reclaim[full]
-                elif full in seen_destinations or (
-                    full.lower() in seen_lower and case_insensitive
-                ) or has_path_conflict(full, seen_destinations, seen_parents):
+                elif placed.block(full):
                     continue
                 else:
-                    seen_destinations.add(full)
-                    register_path(full, seen_destinations, seen_parents)
-                    if case_insensitive:
-                        seen_lower.add(full.lower())
+                    placed.take(full)
                 if refs_out is not None:
                     refs_out[full] = (ref_key, systems, dd_prefix, needed)
                 yield src, full
@@ -250,9 +242,7 @@ def pack_data_tree(
     zf: zipfile.ZipFile | PackRecord,
     local_cache: str,
     dd_dest: str,
-    seen_destinations: set[str],
-    seen_parents: set[str],
-    seen_lower: set[str],
+    placed: Placed,
     packed_at: dict[str, str] | None = None,
 ) -> int:
     """Write one data directory into an emulator pack, under its shared lock.
@@ -269,13 +259,9 @@ def pack_data_tree(
                 src = os.path.join(root, fname)
                 rel = os.path.relpath(src, local_cache)
                 full = f"{dd_dest}/{rel}" if dd_dest else rel
-                if full.lower() in seen_lower or has_path_conflict(
-                    full, seen_destinations, seen_parents
-                ):
+                if placed.block(full):
                     continue
-                seen_destinations.add(full)
-                register_path(full, seen_destinations, seen_parents)
-                seen_lower.add(full.lower())
+                placed.take(full)
                 add_pack_member(zf, src, full)
                 if packed_at is not None:
                     packed_at[full.lower()] = src

@@ -19,6 +19,7 @@ from pathlib import Path
 from unittest import mock
 
 from packs import manifestcores
+from packs.archive import Placed
 from packs import manifestentry
 from packs.manifestselect import SelectionIndex
 
@@ -69,8 +70,7 @@ class AnEntryWithoutSourceIsAnOmission(unittest.TestCase):
             manifestcores.manifest_core_entries(
                 [extra], {}, self.db, str(REPO_ROOT / "bios"), "", str(REPO_ROOT),
                 {}, True,
-                region_drops=set(), case_insensitive=False, seen_destinations=set(),
-                seen_lower=set(), seen_parents=set(), manifest_files=files,
+                region_drops=set(), placed=Placed(False), manifest_files=files,
                 omitted_by_destination={}, record_omission=record,
                 pack_only_sizes=pack_only, selection=SelectionIndex.build({}, {}, {}, []),
             )

@@ -23,6 +23,7 @@ from unittest import mock
 import refresh_data_dirs as rdd
 from packs import datadirs
 from model.registry import load_versions
+from packs.archive import Placed
 from packs.datatrees import data_directory_members
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -203,7 +204,7 @@ class PackWalkHoldsTheCache(unittest.TestCase):
             (cache / "b.mkf").write_bytes(b"b")
             systems = {"s": {"data_directories": [{"ref": "sdlpal", "destination": "sdlpal"}]}}
             registry = {"sdlpal": {"local_cache": str(cache)}}
-            walk = data_directory_members(systems, registry, "p", "", False, set(), set(), set())
+            walk = data_directory_members(systems, registry, "p", "", Placed(False))
             next(walk)
             with open(cache.with_name(".sdlpal.lock"), "a") as handle, self.assertRaises(
                 BlockingIOError
@@ -237,7 +238,7 @@ class EmulatorPackHoldsTheCache(unittest.TestCase):
                         held.append(False)
 
             with mock.patch("packs.datatrees.add_pack_member", member):
-                pack_data_tree(None, str(cache), "scummvm", set(), set(), set())
+                pack_data_tree(None, str(cache), "scummvm", Placed(True))
             self.assertEqual(held, [True])
 
 

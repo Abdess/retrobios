@@ -31,7 +31,7 @@ from packs.manifestentry import (
     manifest_entry,
 )
 from packs.manifestselect import SelectionIndex
-from packs.paths import register_path, placement_block
+from packs.archive import Placed
 from packs.platformpack import one_per_slot_drops
 from resolve import regions as resolve_regions, slot as slot_mod
 from resolve.contentlayout import TARGET_KEY, core_key, content_folder_boards
@@ -51,10 +51,7 @@ class _CoreEntryState(TypedDict):
     """What manifest_core_entries reads and fills of the manifest being listed."""
 
     region_drops: set
-    case_insensitive: bool
-    seen_destinations: set
-    seen_lower: set
-    seen_parents: set
+    placed: Placed
     manifest_files: list
     omitted_by_destination: dict
     record_omission: Callable[..., None]
@@ -106,18 +103,11 @@ class _CoreEntryLister:
         if not full_dest:
             return
 
-        if (
-            state["case_insensitive"]
-            and full_dest not in state["seen_destinations"]
-            and full_dest.lower() in state["seen_lower"]
-        ):
+        block = state["placed"].block(full_dest)
+        if block == "case_twin":
             self._join_spelling(fe, full_dest, dest)
             return
-
-        if placement_block(
-            full_dest, state["seen_destinations"], state["seen_lower"], state["seen_parents"],
-            state["case_insensitive"],
-        ):
+        if block:
             return
 
         # The builder's own lookup (ExtraResolver): the data directories, the
@@ -211,10 +201,7 @@ class _CoreEntryLister:
                 {k: v for k, v in displaced.items() if k not in ("dest", "held")}
             )
         self.total_size += file_size
-        state["seen_destinations"].add(full_dest)
-        register_path(full_dest, state["seen_destinations"], state["seen_parents"])
-        if state["case_insensitive"]:
-            state["seen_lower"].add(full_dest.lower())
+        state["placed"].take(full_dest)
 
 
 def manifest_core_entries(

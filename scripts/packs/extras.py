@@ -405,7 +405,7 @@ def hidden_extras(
     ``required_only`` are the builder's for a --source truth or a
     --required-only pack: an optional extra is skipped before it takes a path.
     """
-    from packs.paths import register_path, placement_block
+    from packs.archive import Placed
 
     reject_unknown("hidden_extras", options, HiddenOptions.__optional_keys__)
     report = options.get("report")
@@ -419,14 +419,9 @@ def hidden_extras(
         entry.get("path"): sha1 for sha1, entry in db.get("files", {}).items()
     }
     base_dest = config.get("base_destination", "")
-    case_insensitive = bool(config.get("case_insensitive_fs", False))
-    seen: set[str] = set()
-    parents: set[str] = set()
-    content: dict[str, str | None] = {}
+    taken = Placed(bool(config.get("case_insensitive_fs", False)), content={})
     for dest, local in shipped.items():
-        register_path(dest, seen, parents)
-        content[dest.lower()] = sha1_by_path.get(local)
-    lower = set(content) if case_insensitive else set()
+        taken.take(dest, sha1_by_path.get(local))
     prefix = detect_extras_prefix(config, base_dest)
     region_prefix = declared_root(config)
     hidden: dict[tuple[str, str, str], str] = {}
@@ -451,7 +446,7 @@ def hidden_extras(
         full = extra_full_destination(fe, prefix)
         if not full:
             continue
-        reason = placement_block(full, seen, lower, parents, case_insensitive)
+        reason = taken.block(full)
         if reason == "taken":
             # Another core's claim on the same path, settled by the claims
             # the collector records: not a file left out.
@@ -465,7 +460,7 @@ def hidden_extras(
                 fe, db, dest_hint=fe.get("destination", "")
             )
         held = (sha1_by_path.get(local) or _file_sha1(local)) if local else None
-        if reason == "case_twin" and held and content.get(full.lower()) == held:
+        if reason == "case_twin" and held and taken.content_at(full) == held:
             continue
         key = (
             fe.get("source_emulator", ""), fe.get("source_name", ""),
@@ -475,10 +470,7 @@ def hidden_extras(
             hidden.setdefault(key, reason)
             continue
         packed_keys.add(key)
-        register_path(full, seen, parents)
-        content[full.lower()] = held
-        if case_insensitive:
-            lower.add(full.lower())
+        taken.take(full, held)
         if local:
             _record_placed(full, local, fe, placed, placed_kind, placed_local)
     # A file read below a save directory kept per system is packed once per

@@ -156,25 +156,18 @@ def _builder_placement(
     path -> copy or None for each slot kept, a user_provided or external one
     included).
     """
-    from packs.paths import has_path_conflict, register_path
+    from packs.archive import Placed
 
     shipped: dict[str, str] = {}
     occupied: dict[str, str | None] = {}
-    seen: set[str] = set()
-    folded: set[str] = set()
-    parents: set[str] = set()
+    placed = Placed(case_insensitive)
     for _sys_id, full, local in sorted(packed_order, key=lambda item: item[0]):
         # EmuDeck's system:md5 entries name no file: the builder writes none.
         if not full or full.endswith("/"):
             continue
-        if (
-            full in occupied
-            or (case_insensitive and full.lower() in folded)
-            or has_path_conflict(full, seen, parents)
-        ):
+        if placed.block(full):
             continue
-        register_path(full, seen, parents)
-        folded.add(full.lower())
+        placed.take(full)
         occupied[full] = local
         if local is not None:
             shipped[full] = local

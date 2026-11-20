@@ -459,6 +459,7 @@ def _tree_members(
     from packs import datatrees
     from model.profiles import load_emulator_profiles
     from model.platforms import load_platform_config
+    from packs.archive import Placed
     from packs.paths import flat_arcname
 
     config = load_platform_config(platform, platforms_dir)
@@ -471,7 +472,7 @@ def _tree_members(
     with contextlib.redirect_stdout(io.StringIO()):
         for src, full in datatrees.data_directory_members(
             config.get("systems", {}), registry,
-            platform, base_dest, False, set(), set(), set(),
+            platform, base_dest, Placed(False),
             core_trees=core_trees,
         ):
             members[flat_arcname(full, base_dest, True)] = os.path.getsize(src)
