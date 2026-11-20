@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import functools
 import html
-import json
 import re
 import sys
 import urllib.parse
@@ -18,7 +17,7 @@ from romrecipes.romsets import dat_snapshots, usable_recipe
 from sitegen import markup, wanted as sitewanted
 from core.paths import REPO_ROOT
 from sitegen.fields import search_excluded
-from sitegen.install import platform_display
+from sitegen.install import manifest_systems, platform_display
 from sitegen.render import code_span, count_text, system_page_map, emulator_card_page
 
 
@@ -756,15 +755,7 @@ def system_install_choices(coverages: dict) -> dict[str, dict[str, list[tuple[st
 
     choices: dict[str, dict[str, list[tuple[str, str]]]] = {}
     for name, cov in sorted(coverages.items()):
-        manifest = REPO_ROOT / "install" / f"{name}.json"
-        if not manifest.is_file():
-            continue
-        document = json.loads(manifest.read_text(encoding="utf-8"))
-        recorded = {
-            str(system)
-            for entry in (document.get("files") or []) + (document.get("omitted_files") or [])
-            for system in entry.get("systems") or []
-        }
+        recorded = manifest_systems(name)
         for sys_id in sorted(set(cov["config"].get("systems") or {}) & recorded):
             page = system_page_map.get(sys_id) or page_by_norm(sys_id)
             if page:

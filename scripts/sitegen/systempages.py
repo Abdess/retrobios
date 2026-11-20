@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import dataclasses
-import functools
 import html
 import json
 import re
@@ -16,7 +15,6 @@ from packs.crossref import FileConsumers
 from sitegen import markup
 from sitegen.cards import icon_symbol
 from sitegen.config import date_line
-from core.paths import REPO_ROOT
 from sitegen.consolecards import (
     CARD_HTML_RATIO,
     CONSOLE_PAGES,
@@ -30,7 +28,7 @@ from sitegen.consolecards import (
 from sitegen.decorate import DEMOTED_WEIGHT, SEARCH_WEIGHT
 from sitegen.fields import search_excluded
 from sitegen.home import next_block
-from sitegen.install import console_install_block, platform_display
+from sitegen.install import console_install_block, manifest_systems, platform_display
 from sitegen.parts import character_count, even_runs, parent_front_matter, part_stems, weighted_runs
 from sitegen.render import count_text, slugify_anchor, console_href, record_console_pages
 from sitegen.startwith import (
@@ -243,21 +241,6 @@ def _part_weight() -> float:
     return SEARCH_WEIGHT.get("part", DEMOTED_WEIGHT)
 
 
-@functools.cache
-def _manifest_systems(platform: str) -> frozenset[str]:
-    """The system ids a platform's install manifest records: --system
-    refuses any other."""
-    manifest = REPO_ROOT / "install" / f"{platform}.json"
-    if not manifest.is_file():
-        return frozenset()
-    document = json.loads(manifest.read_text(encoding="utf-8"))
-    return frozenset(
-        str(system)
-        for entry in (document.get("files") or []) + (document.get("omitted_files") or [])
-        for system in entry.get("systems") or []
-    )
-
-
 def _install_pairs(
     declared: list[tuple[str, str]], lead: str | None, consumers: FileConsumers,
 ) -> list[tuple[str, str]]:
@@ -270,7 +253,7 @@ def _install_pairs(
                                     .get(lead or "", {}).items()):
         if platform in have:
             continue
-        recorded = [s for s in sorted(systems) if s in _manifest_systems(platform)]
+        recorded = [s for s in sorted(systems) if s in manifest_systems(platform)]
         if recorded:
             pairs.append((platform, recorded[0]))
             have.add(platform)

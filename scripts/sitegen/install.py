@@ -39,6 +39,21 @@ def _release_packs_in(platforms_dir: str) -> frozenset[str]:
     return frozenset(list_release_pack_platforms(platforms_dir))
 
 
+@functools.cache
+def manifest_systems(platform: str) -> frozenset[str]:
+    """The system ids a platform's install manifest records: --system
+    refuses any other."""
+    manifest = REPO_ROOT / "install" / f"{platform}.json"
+    if not manifest.is_file():
+        return frozenset()
+    document = json.loads(manifest.read_text(encoding="utf-8"))
+    return frozenset(
+        str(system)
+        for entry in (document.get("files") or []) + (document.get("omitted_files") or [])
+        for system in entry.get("systems") or []
+    )
+
+
 _platform_names: dict[str, str] = {}
 
 
