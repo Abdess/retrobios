@@ -287,15 +287,3 @@ def fetch_release() -> tuple[dict[str, int], str, dict[str, str]]:
         data.get("body", ""),
         digests_of(data["assets"]),
     )
-
-
-def fetch_assets() -> dict[str, int]:
-    """Name and size of every asset of the large-files release."""
-    result = subprocess.run(
-        [
-            "gh", "release", "view", LARGE_FILES_RELEASE,
-            "-R", LARGE_FILES_REPO, "--json", "assets",
-        ],
-        capture_output=True, text=True, check=True,
-    )
-    return {a["name"]: a["size"] for a in json.loads(result.stdout)["assets"]}
