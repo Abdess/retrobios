@@ -8,9 +8,11 @@ import bisect
 import re
 from collections.abc import Iterator
 
+from core.lines import LineIndex
 from model.sourceref import span
 
 from .configgen_launchers import LauncherPatternMissing
+from .shell_launchers import merge_lines
 
 
 STRING = r'"((?:[^"\\\n]|\\.)*)"'
@@ -24,14 +26,14 @@ class Source:
     def __init__(self, path: str, text: str) -> None:
         self.path = path
         self.text = text
-        self._starts = [0] + [m.end() for m in re.finditer(r"\n", text)]
+        self._lines = LineIndex(text)
         self._blocks: list[tuple[int, int]] | None = None
         self._ends: list[int] | None = None
         self.code: str | None = None
         self.bare: str | None = None
 
     def line(self, offset: int) -> int:
-        return bisect.bisect_right(self._starts, offset)
+        return self._lines.line(offset)
 
     def lines(self, start: int, end: int) -> tuple[int, int]:
         return self.line(start), self.line(max(start, end - 1))
@@ -96,7 +98,7 @@ class Source:
     def statement_span(self, block: tuple[int, int]) -> tuple[int, int]:
         """Lines of a block, from the statement that owns its opening brace."""
         first, last = self.lines(*block)
-        line_text = self.text[self._starts[first - 1] : block[0]].strip()
+        line_text = self.text[self._lines.start(first) : block[0]].strip()
         return (first - 1 if not line_text and first > 1 else first), last
 
 
@@ -141,23 +143,12 @@ def _unique(names: list[str]) -> list[str]:
     return list(dict.fromkeys(names))
 
 
-def _merge(spans: list[tuple[int, int]]) -> list[tuple[int, int]]:
-    """Spans sorted, joined when only one line separates them."""
-    merged: list[tuple[int, int]] = []
-    for first, last in sorted(spans):
-        if merged and first <= merged[-1][1] + 2:
-            merged[-1] = (merged[-1][0], max(last, merged[-1][1]))
-        else:
-            merged.append((first, last))
-    return merged
-
-
 def source_ref(*parts: tuple[str, list[tuple[int, int]]]) -> str:
-    """path:a-b, c-d for each file, a later range of one file left bare."""
+    """path:a-b, c-d for each file, spans one line apart joined."""
     refs = []
     for path, spans in parts:
-        ranges = [span(*s) for s in _merge(spans)]
-        refs.append(f"{path}:{', '.join(ranges)}")
+        lines = merge_lines(n for first, last in spans for n in range(first, last + 1))
+        refs.append(f"{path}:{', '.join(span(*s) for s in lines)}")
     return ", ".join(refs)
 
 

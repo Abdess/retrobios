@@ -1013,6 +1013,8 @@ def _render_targets(names: list[str], targets: list[str]) -> str:
 
 def source_ref(lines: list[tuple[str, int]]) -> str:
     """`path:a-b, c` per file, in first-seen file order, adjacent lines joined."""
+    # Not shell_launchers.merge_lines: joining across a one-line gap would turn
+    # the committed lr-prboom.sh:86, 88 of four retropie.yml records into 86-88.
     by_path: dict[str, list[int]] = {}
     for path, number in lines:
         by_path.setdefault(path, []).append(number)
