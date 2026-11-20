@@ -7146,7 +7146,7 @@ class RequiredOnlyReachesDataDirectories(unittest.TestCase):
         self.assertEqual(source.count('if required_only and dd.get("required") is False:'), 1)
         self.assertIn('needed = dd.get("required") is not False\n        if required_only and not needed:',
                       source)
-        self.assertIn("seen_parents, required_only=required_only,", source)
+        self.assertIn("self.placed, required_only=required_only,", source)
         self.assertIn("data_refs, required_only=required_only,", source)
 
     def test_the_overlays_are_declared_optional(self):
