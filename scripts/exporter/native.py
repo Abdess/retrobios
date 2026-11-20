@@ -20,7 +20,7 @@ from .originals import collect_originals, unpinned, wanted_sources
 from model.database import load_database
 from model.platforms import load_platform_config, native_layer
 from model.profiles import load_emulator_profiles
-from model.registry import load_data_dir_registry
+from model.registry import load_data_dir_registry, load_platform_registry
 from model.safeparse import yaml_load
 from resolve.categories import removal_candidates
 from resolve.reconcile import Report, build_native_model
@@ -56,11 +56,7 @@ class StaleTruth(ValueError):
 @functools.cache
 def _truth_sources(platforms_dir: str) -> tuple[dict, dict, dict | None]:
     """Registry, profiles and database, as generate_truth reads them."""
-    registry_path = Path(platforms_dir) / "_registry.yml"
-    registry: dict = {}
-    if registry_path.exists():
-        with open(registry_path) as handle:
-            registry = (yaml_load(handle) or {}).get("platforms", {})
+    registry = load_platform_registry(platforms_dir)
     profiles = load_emulator_profiles("emulators")
     db = load_database(TRUTH_DB) if Path(TRUTH_DB).exists() else None
     return registry, profiles, db

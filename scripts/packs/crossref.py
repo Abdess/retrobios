@@ -2,19 +2,18 @@
 
 from __future__ import annotations
 
+import io
 import dataclasses
-import hashlib
 import json
 import sys
 import zipfile
-import zlib
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING, TypedDict
 
-from core.hashing import parse_hash_list, parse_md5_list
-from core.paths import REPO_ROOT
+from core.hashing import parse_hash_list, parse_md5_list, stream_hashes
+from core.paths import BIOS_DIR, PLATFORMS_DIR, REPO_ROOT
 from model.alternatives import set_keys, set_requirements, settle_sets
 from model.database import get_mame_clone_map
 from model.declarations import OUTER_ROOTS
@@ -54,9 +53,6 @@ from resolve.validation import (
 
 if TYPE_CHECKING:
     from typing_extensions import Unpack
-
-
-DEFAULT_PLATFORMS_DIR = "platforms"
 
 
 def load_platform_files(
@@ -131,7 +127,7 @@ def folded_declared_slots(
 
 
 def build_supplemental_index(
-    data_root: str = "data", bios_root: str = "bios"
+    data_root: str = "data", bios_root: str = BIOS_DIR
 ) -> set[str]:
     """Build a set of filenames and directory names in data/ and inside bios/ ZIPs.
 
@@ -326,7 +322,7 @@ _locations_cache: dict[tuple[str, str], dict[str, list[tuple[str, str]]]] = {}
 
 
 def _supplemental_locations(
-    data_root: str = "data", bios_root: str = "bios"
+    data_root: str = "data", bios_root: str = BIOS_DIR
 ) -> dict[str, list[tuple[str, str]]]:
     """Where each name of the supplemental index sits: a data/ file, or a
     member of a ZIP under bios/, keyed by lowercased basename."""
@@ -368,12 +364,7 @@ def _content_matches(location: tuple[str, str], declared: dict[str, set[str]]) -
     except (zipfile.BadZipFile, KeyError, OSError) as exc:
         print(f"  WARNING: cannot read {path} {member}: {exc}", file=sys.stderr)
         return False
-    actual = {
-        "sha1": hashlib.sha1(data).hexdigest(),
-        "md5": hashlib.md5(data).hexdigest(),
-        "sha256": hashlib.sha256(data).hexdigest(),
-        "crc32": f"{zlib.crc32(data) & 0xFFFFFFFF:08x}",
-    }
+    actual = stream_hashes(io.BytesIO(data), frozenset({"sha1", "md5", "sha256", "crc32"}))
     return any(actual[field] in values for field, values in declared.items())
 
 
@@ -395,7 +386,7 @@ def _trees(data_root: str, bios_root: str) -> list[str]:
 
 
 def held_copy(
-    entry: dict, data_root: str = "data", bios_root: str = "bios"
+    entry: dict, data_root: str = "data", bios_root: str = BIOS_DIR
 ) -> tuple[str, str] | None:
     """The data/ file, directory or bios/ ZIP member holding an entry.
 
@@ -444,7 +435,7 @@ class FileConsumers:
         self._data_dir_registry = (
             data_dir_registry if data_dir_registry is not None
             else load_data_dir_registry(
-                str(REPO_ROOT / DEFAULT_PLATFORMS_DIR)
+                str(REPO_ROOT / PLATFORMS_DIR)
             )
         )
         self._sha1_by_path = {

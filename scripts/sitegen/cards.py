@@ -11,6 +11,7 @@ import urllib.parse
 import zipfile
 from collections.abc import Callable
 
+from core.hashing import parse_hash_list
 from model.collection import profiles_on_disk
 from packs.crossref import FileConsumers
 from sitegen import markup, wanted as sitewanted
@@ -789,10 +790,9 @@ def emulator_display(emulator: str) -> str:
 def _first_hash_value(entry: dict) -> str:
     """The first declared hash of an entry, lowercase, for a stable anchor."""
     for field in ("sha1", "md5", "crc32", "sha256"):
-        value = entry.get(field)
-        value = value[0] if isinstance(value, list) and value else value
-        if value:
-            return str(value).lower().split(",")[0].strip().removeprefix("0x")
+        values = parse_hash_list(entry.get(field))
+        if values:
+            return values[0]
     return ""
 
 

@@ -97,14 +97,12 @@ def ensure_console_sections() -> None:
     them, so a page rendered on its own names systems as the site does."""
     if _sections_installed[0]:
         return
-    import json
-
-    from model.profiles import load_emulator_profiles
     from model.collection import group_by_manufacturer
+    from model.database import load_database
+    from model.profiles import load_emulator_profiles
 
     inputs = siteinputs.current()
-    with open(inputs.db, encoding="utf-8") as handle:
-        db = json.load(handle)
+    db = load_database(str(inputs.db))
     profiles = load_emulator_profiles(str(inputs.emulators), skip_aliases=False)
     set_console_sections(group_by_manufacturer(db), program_names(profiles))
 

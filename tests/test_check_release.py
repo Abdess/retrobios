@@ -12,7 +12,8 @@ import tests
 import unittest
 
 from installer_build import port
-from release.check import SIGNATURE, SUMS, Asset, compare_release, parse_sums
+from core.hashing import parse_sha256sums as parse_sums
+from release.check import SIGNATURE, SUMS, Asset, compare_release
 
 A = "a" * 64
 B = "b" * 64

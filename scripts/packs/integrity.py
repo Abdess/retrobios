@@ -10,7 +10,6 @@ from collections import Counter
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, TypedDict
 
-from packs.verdicts import DEFAULT_BIOS_DIR
 from core.artifacts import build_timestamp
 from packs.paths import MEDIA_MARKER, has_path_conflict
 from core.ziptools import build_zip_contents_index
@@ -36,7 +35,7 @@ from resolve.packfiles import resolve_declaration, resolve_file
 from resolve.categories import BIOS, EntryCategories
 from resolve.gamedata import without_game_data
 from resolve.cores import resolve_platform_cores
-from core.paths import declared_destination
+from core.paths import BIOS_DIR, EMULATORS_DIR, declared_destination
 import zipfile
 from collections.abc import Callable
 from pathlib import Path
@@ -153,14 +152,8 @@ def _is_pack_note(name: str) -> bool:
 def _member_digests(zf: zipfile.ZipFile, info: zipfile.ZipInfo) -> tuple[str, str, int]:
     """(sha1, md5, size) of a pack member."""
     with zf.open(info) as f:
-        sha1_h = hashlib.sha1()
-        md5_h = hashlib.md5()
-        size = 0
-        for chunk in iter(lambda: f.read(65536), b""):
-            sha1_h.update(chunk)
-            md5_h.update(chunk)
-            size += len(chunk)
-    return sha1_h.hexdigest(), md5_h.hexdigest(), size
+        digests = stream_hashes(f, frozenset({"sha1", "md5"}))
+    return digests["sha1"], digests["md5"], info.file_size
 
 
 def _rebuilt_from(zf: zipfile.ZipFile, name: str, by_name: dict, files_db: dict) -> str | None:
@@ -479,7 +472,7 @@ def _held_nowhere(
         resolve_file(
             entry,
             db,
-            DEFAULT_BIOS_DIR,
+            BIOS_DIR,
             zip_contents,
             data_dir_registry=data_dir_registry,
             offline=True,
@@ -491,7 +484,7 @@ def _held_nowhere(
 def _intentional_hash_exclusion(
     entries: list[dict],
     db: dict,
-    bios_dir: str = DEFAULT_BIOS_DIR,
+    bios_dir: str = BIOS_DIR,
     zip_contents: dict | None = None,
     data_dir_registry: dict | None = None,
     verification_mode: str = "md5",
@@ -571,7 +564,7 @@ def _shipped_copy(
     The verdict verify applies before it lets a declaration hold its path.
     """
     local, status = resolve_declaration(
-        entry, db, DEFAULT_BIOS_DIR, None, data_registry, None, offline=True,
+        entry, db, BIOS_DIR, None, data_registry, None, offline=True,
     )
     if local and baseline_verdict(entry, local, status, mode, hash_rule)[1] is None:
         return local
@@ -631,7 +624,7 @@ def _builder_extras(
         config, expect.opts.emulators_dir, db, emu_profiles, shipped, expect.target_cores,
         expect.region_drops or None,
         resolver=ExtraResolver(
-            db, DEFAULT_BIOS_DIR, build_zip_contents_index(db), data_registry,
+            db, BIOS_DIR, build_zip_contents_index(db), data_registry,
             build_validation_index(platform_profiles),
             destination_owners(platform_profiles), True, profiles=emu_profiles,
         ),
@@ -667,7 +660,7 @@ class PlatformCheckOptions(TypedDict, total=False):
 class _PlatformCheckSettings:
     """PlatformCheckOptions with their defaults."""
 
-    emulators_dir: str = "emulators"
+    emulators_dir: str = EMULATORS_DIR
     emu_profiles: dict | None = None
     regions: list[str] | None = None
     data_registry: dict | None = None

@@ -31,7 +31,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from core.hashing import compute_hashes
+from core.hashing import compute_hashes, parse_sha256sums
 from core.ziptools import safe_extract_zip
 
 DEFAULT_API = "https://api.github.com"
@@ -185,12 +185,13 @@ def fetch_checksums(release: dict) -> dict[str, str]:
         )
         with urllib.request.urlopen(req, timeout=60) as resp:
             body = resp.read(MAX_CHECKSUMS_BYTES).decode("utf-8", "replace")
-        sums = {}
-        for line in body.splitlines():
-            digest, _, name = line.strip().partition("  ")
-            if digest and name:
-                sums[name] = digest.lower()
-        return sums
+        # A file that is not sha256sum output refuses the download: read
+        # leniently, a `*name` line matched nothing and the pack went
+        # unchecked.
+        try:
+            return parse_sha256sums(body)
+        except ValueError as exc:
+            raise SystemExit(f"ERROR: {CHECKSUMS_ASSET}: {exc}") from exc
     return {}
 
 

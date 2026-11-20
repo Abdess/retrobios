@@ -15,7 +15,6 @@ Invoke-RestMethod reads any type that is neither JSON nor XML as text.
 
 from __future__ import annotations
 
-import hashlib
 import os
 import re
 import subprocess
@@ -23,7 +22,7 @@ from pathlib import Path
 
 from core.artifacts import write_if_changed
 from model.guides import PS1_NAME, SH_NAME
-from installer_build.pins import PIN
+from installer_build.pins import PIN, installer_sha256
 
 REPO_RAW = "https://raw.githubusercontent.com/Abdess/retrobios"
 
@@ -75,7 +74,7 @@ def served_text(name: str, root: Path, commit: str) -> str:
     pinned = PIN[source].findall(text)
     if len(pinned) != 1:
         raise ValueError(f"{source}: {len(pinned)} installer pins, expected one")
-    actual = hashlib.sha256((root / "install.py").read_bytes()).hexdigest()
+    actual = installer_sha256(root)
     if pinned[0] != actual:
         raise ValueError(f"{source} pins {pinned[0][:12]}, install.py is {actual[:12]}: "
                          "re-pin the bootstrap before the site serves it")

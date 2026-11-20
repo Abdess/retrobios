@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-import hashlib
 import re
 from pathlib import Path
 
+from core.hashing import file_digest
 from core.paths import REPO_ROOT
 
 
@@ -24,7 +24,7 @@ COMMAND = "python scripts/pin_installer.py"
 
 
 def installer_sha256(root: Path = REPO_ROOT) -> str:
-    return hashlib.sha256((root / INSTALLER).read_bytes()).hexdigest()
+    return file_digest(root / INSTALLER, "sha256")
 
 
 def stale_pins(root: Path = REPO_ROOT) -> list[str]:

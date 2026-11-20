@@ -13,6 +13,7 @@ from functools import cache
 from pathlib import Path
 from xml.sax.saxutils import escape
 
+from model.registry import load_platform_registry
 from core.paths import REPO_ROOT
 from model import siteinputs
 from sitegen import markup
@@ -390,10 +391,7 @@ def registry() -> dict:
 
 @cache
 def _registry_in(platforms_dir: str) -> dict:
-    import yaml
-
-    with open(Path(platforms_dir) / "_registry.yml", encoding="utf-8") as handle:
-        return yaml.safe_load(handle).get("platforms", {})
+    return load_platform_registry(platforms_dir, required=True)
 
 
 def setups() -> tuple[str, ...]:

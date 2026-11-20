@@ -25,20 +25,6 @@ class Finding:
     detail: str
 
 
-def parse_sums(text: str) -> dict[str, str]:
-    """`sha256sum` output: digest, then a space and a mode character."""
-    sums: dict[str, str] = {}
-    for line in text.splitlines():
-        line = line.strip()
-        if not line:
-            continue
-        digest, _, name = line.partition(" ")
-        if len(digest) != 64 or not name:
-            raise ValueError(f"not a sha256sum line: {line!r}")
-        sums[name.lstrip(" *")] = digest.lower()
-    return sums
-
-
 def _registry_findings(packs: dict, released: set[str]) -> list[Finding]:
     """Each platform marked release_pack has a pack, and each pack serves one."""
     served = {p for pack in packs.values() for p in pack.get("platforms", ())}

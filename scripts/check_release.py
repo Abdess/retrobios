@@ -37,8 +37,8 @@ from release.check import (
     compare_release,
     fetch_assets,
     fetch_sums,
-    parse_sums,
 )
+from core.hashing import parse_sha256sums
 
 
 def main() -> int:
@@ -88,7 +88,7 @@ def main() -> int:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
     try:
-        sums = parse_sums(sums_text)
+        sums = parse_sha256sums(sums_text)
     except ValueError as exc:
         print(f"ERROR: {SUMS}: {exc}", file=sys.stderr)
         return 2

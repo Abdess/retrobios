@@ -8,6 +8,7 @@ import urllib.parse
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
+from core.hashing import parse_hash_list
 from model.systemnames import system_name
 from packs.crossref import FileConsumers
 from sitegen import entries as siteentries, markup, measurements as sitemeasurements
@@ -454,10 +455,9 @@ def _hash_short(f: dict) -> str:
     """The shortest way to tell two dumps apart in a table: the first 12
     characters of an md5, crc32 or sha1, the whole value in its title."""
     for field in ("md5", "crc32", "sha1"):
-        value = f.get(field)
-        value = value[0] if isinstance(value, list) and value else value
-        if value:
-            full = html.escape(str(value).lower().split(",")[0].strip().removeprefix("0x"))
+        values = parse_hash_list(f.get(field))
+        if values:
+            full = html.escape(values[0])
             # Kept on one line: the label above the value doubled each row.
             return f'{field.upper()}\u00a0<code title="{full}">{full[:12]}</code>'
     return ""

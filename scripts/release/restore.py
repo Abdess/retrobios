@@ -8,6 +8,7 @@ import sys
 import tempfile
 from pathlib import Path
 
+from model.largefiles import registered_paths
 from core.artifacts import copy_file_atomic, set_plain_mode
 from core.hashing import file_digest
 from model.database import load_database
@@ -19,10 +20,7 @@ def gitignored_paths(gitignore: str) -> set[str]:
     A missing file raises: read as empty, it left nothing to restore and
     nothing unsatisfied, and the run exited 0 with every asset absent.
     """
-    with open(gitignore) as f:
-        return {
-            line.strip() for line in f if line.strip().startswith("bios/")
-        }
+    return set(registered_paths(Path(gitignore).read_text(encoding="utf-8")))
 
 
 def index_cache(cache_dir: str) -> dict[str, str]:

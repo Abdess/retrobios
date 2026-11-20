@@ -17,7 +17,7 @@ from model.registry import load_data_dir_registry
 from resolve.standalone import platform_layouts, standalone_set as platform_standalone_set
 from resolve.cores import resolve_platform_cores
 from model.alternatives import groups_of
-from core.hashing import compute_hashes
+from core.hashing import compute_hashes, parse_hash_list
 from resolve.validation import (
     filter_files_by_mode,
     installed_with_emulator,
@@ -249,10 +249,8 @@ def _shares_hash(a: dict, b: dict) -> bool:
 
 
 def _declared(entry: dict, field: str) -> set[str]:
-    """The values an entry declares for a hash field, one or a list."""
-    value = entry.get(field)
-    values = value if isinstance(value, list) else [value]
-    return {str(v).lower() for v in values if v}
+    """The values an entry declares for a hash field, one, a list or comma-joined."""
+    return set(parse_hash_list(entry.get(field)))
 
 
 def _contents_disagree(a: dict, b: dict) -> bool:
@@ -350,15 +348,15 @@ def _merge_hashes(
             existing[h] = theirs
             existing.setdefault("_hash_by", {})[h] = emu_name
             continue
-        t_list = theirs if isinstance(theirs, list) else [theirs]
-        o_list = ours if isinstance(ours, list) else [ours]
+        # A field holds one value, a list or a comma-joined string (mesence
+        # names twelve BS-X dumps in one sha256): compared value by value.
+        t_list, o_list = parse_hash_list(theirs), parse_hash_list(ours)
         if revision:
-            known = {str(v).lower() for v in o_list}
-            added = [v for v in t_list if str(v).lower() not in known]
+            added = [v for v in t_list if v not in o_list]
             if added:
                 existing[h] = [*o_list, *added]
             continue
-        if not {str(v).lower() for v in t_list} & {str(v).lower() for v in o_list}:
+        if not set(t_list) & set(o_list):
             # The value kept is one revision among those the cores accept:
             # it pairs an entry, it never overrules one (checked_hashes).
             existing["hash_conflict"] = sorted({*existing.get("hash_conflict", ()), h})

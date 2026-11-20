@@ -61,6 +61,7 @@ from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
+from model.registry import load_platform_registry
 from core.paths import REPO_ROOT
 
 LOG_DIR = REPO_ROOT / "tmp" / "refresh_stale"
@@ -99,15 +100,8 @@ class JobResult:
 
 
 def _load_platform_registry() -> dict[str, dict]:
-    """Return the platforms map from _registry.yml.
-
-    pyyaml is already a project dependency, and the registry is small so we read
-    it once at startup rather than parsing each dispatch.
-    """
-    import yaml
-
-    with PLATFORMS_REGISTRY.open(encoding="utf-8") as fh:
-        return (yaml.safe_load(fh) or {}).get("platforms") or {}
+    """Return the platforms map from _registry.yml, read once at startup."""
+    return load_platform_registry(PLATFORMS_REGISTRY.parent, required=True)
 
 
 def _platform_parents(registry: dict[str, dict]) -> dict[str, str]:

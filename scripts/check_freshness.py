@@ -62,7 +62,7 @@ from exporter.originals import (
 from installer_build import pins as installer_build_pins
 from packs import datadirs
 from core import upstream
-from core.cli import InputMissing, require_directory, suggest_names
+from core.cli import InputMissing, add_repo_inputs, require_directory, suggest_names
 from model.targets import apply_target_overrides
 from model.registry import list_registered_platforms, load_platform_registry
 from model.profiles import load_emulator_profiles, upstream_profile_index
@@ -315,8 +315,7 @@ def _scrapable_platforms(platforms_dir: Path) -> list[tuple[str, str, Path]]:
     A platform that only inherits another and declares no source of its own
     (Lakka) has nothing to scrape: its scraper writes the parent's file.
     """
-    with (platforms_dir / "_registry.yml").open(encoding="utf-8") as fh:
-        registry = (yaml_load(fh) or {}).get("platforms") or {}
+    registry = load_platform_registry(platforms_dir, required=True)
     rows = []
     for name in list_registered_platforms(str(platforms_dir)):
         path = platforms_dir / f"{name}.yml"
@@ -337,8 +336,7 @@ def rescrape_args(platforms_dir: Path, name: str) -> tuple[str, ...]:
     A scraper that rereads the revision its platform file pins by default
     (RetroBat) names the ref to move to in the registry's rescrape_args.
     """
-    with (platforms_dir / "_registry.yml").open(encoding="utf-8") as fh:
-        registry = (yaml_load(fh) or {}).get("platforms") or {}
+    registry = load_platform_registry(platforms_dir, required=True)
     return tuple(str(a) for a in (registry.get(name) or {}).get("rescrape_args") or ())
 
 
@@ -1867,14 +1865,7 @@ def main() -> int:
         help="directory of the truth models generate_truth writes (default: "
              "%(default)s)",
     )
-    parser.add_argument(
-        "--platforms-dir", default="platforms",
-        help="platform YAML directory (default: %(default)s)",
-    )
-    parser.add_argument(
-        "--emulators-dir", default="emulators",
-        help="emulator profile directory (default: %(default)s)",
-    )
+    add_repo_inputs(parser, "platforms", "emulators")
     parser.add_argument(
         "--record-coreinfo", nargs="*", metavar="CORE",
         help="record the current .info of CORE (every core when none is named) "

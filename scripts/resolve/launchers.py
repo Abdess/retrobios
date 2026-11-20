@@ -20,6 +20,7 @@ import re
 from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 
+from core.hashing import parse_hash_list
 from model.declarations import CONFIGS_ROOT, ROMS_ROOT, declared_root, outer_layout
 from resolve.content import name_match_size_ok
 from resolve.localfile import resolve_local_file
@@ -1267,8 +1268,7 @@ def _hashes(entry: dict) -> dict[str, set[str]]:
         value = entry.get(field) or (entry.get("expected") or {}).get(field)
         if not value:
             continue
-        values = value if isinstance(value, list) else str(value).split(",")
-        found[field] = {str(v).strip().lower() for v in values if str(v).strip()}
+        found[field] = set(parse_hash_list(value))
     return found
 
 

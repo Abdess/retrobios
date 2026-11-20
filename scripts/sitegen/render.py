@@ -6,6 +6,7 @@ import re
 import urllib.parse
 from collections.abc import Callable
 
+from model.database import load_database
 from model import siteinputs
 from sitegen import markup
 from core.paths import REPO_ROOT
@@ -418,7 +419,6 @@ def _build_boards() -> None:
 
 def _read_arcade_source() -> tuple[dict, dict] | None:
     """The profiles and database of the repository, None without a database."""
-    import json
 
     from model.profiles import load_emulator_profiles
 
@@ -426,8 +426,7 @@ def _read_arcade_source() -> tuple[dict, dict] | None:
     database = inputs.db
     if not database.exists():
         return None
-    with open(database, encoding="utf-8") as handle:
-        db = json.load(handle)
+    db = load_database(str(database))
     profiles = load_emulator_profiles(str(inputs.emulators), skip_aliases=False)
     return profiles, db
 

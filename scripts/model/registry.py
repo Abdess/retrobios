@@ -6,11 +6,12 @@ import json
 import os
 from pathlib import Path
 
+from core.paths import PLATFORMS_DIR
 from core.cli import InputMissing
 from model.sources import source_yaml
 
 
-def load_data_dir_registry(platforms_dir: str = "platforms") -> dict:
+def load_data_dir_registry(platforms_dir: str = PLATFORMS_DIR) -> dict:
     """Load the data directory registry from _data_dirs.yml."""
     registry_path = os.path.join(platforms_dir, "_data_dirs.yml")
     if not os.path.exists(registry_path):
@@ -20,16 +21,22 @@ def load_data_dir_registry(platforms_dir: str = "platforms") -> dict:
     return data.get("data_directories", {})
 
 
-def load_platform_registry(platforms_dir: str = "platforms") -> dict:
-    """Return the `platforms:` mapping from _registry.yml, empty if absent."""
+def load_platform_registry(platforms_dir: str | Path = PLATFORMS_DIR, required: bool = False) -> dict:
+    """Return the `platforms:` mapping from _registry.yml.
+
+    An absent file is an empty registry, or with ``required`` an input the
+    command cannot run without.
+    """
     registry_path = os.path.join(platforms_dir, "_registry.yml")
     if not os.path.exists(registry_path):
+        if required:
+            raise InputMissing(f"{registry_path} not found")
         return {}
-    with open(registry_path) as f:
-        return (source_yaml(f) or {}).get("platforms", {})
+    with open(registry_path, encoding="utf-8") as f:
+        return (source_yaml(f) or {}).get("platforms") or {}
 
 
-def list_registered_platforms(platforms_dir: str = "platforms") -> list[str]:
+def list_registered_platforms(platforms_dir: str = PLATFORMS_DIR) -> list[str]:
     """List platforms registered in _registry.yml.
 
     Only registered platforms generate packs and appear in CI.
@@ -55,7 +62,7 @@ def list_registered_platforms(platforms_dir: str = "platforms") -> list[str]:
     return platforms
 
 
-def list_release_pack_platforms(platforms_dir: str = "platforms") -> list[str]:
+def list_release_pack_platforms(platforms_dir: str = PLATFORMS_DIR) -> list[str]:
     """Registered platforms a release publishes a ZIP pack for.
 
     `release_pack: true` in _registry.yml is the whole list: the build of

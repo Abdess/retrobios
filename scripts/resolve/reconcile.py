@@ -17,6 +17,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 
 
+from core.hashing import parse_hash_list
 from model.systems import norm_system_id
 from core.paths import REPO_ROOT
 
@@ -25,12 +26,7 @@ HASH_FIELDS = ("sha1", "md5", "sha256", "crc32")
 
 def hash_values(entry: dict, field_name: str) -> list[str]:
     """Return a hash field as a list, whatever shape it was written in."""
-    raw = entry.get(field_name)
-    if not raw:
-        return []
-    if isinstance(raw, list):
-        return [str(v).strip().lower() for v in raw if str(v).strip()]
-    return [v.strip().lower() for v in str(raw).split(",") if v.strip()]
+    return parse_hash_list(entry.get(field_name))
 
 
 def checked_hashes(entry: dict | None) -> dict | None:

@@ -20,8 +20,7 @@ from model.database import load_database
 from model.dumpcatalog import load_provenance_snapshots
 from model.guides import HANDHELD_GUIDE
 from model.profiles import load_emulator_profiles
-from model.registry import list_registered_platforms
-from model.safeparse import yaml_load
+from model.registry import list_registered_platforms, load_platform_registry
 from model.systemnames import program_names, set_console_sections, system_name
 from packs.crossref import FileConsumers
 from acquire.provenance import build_report, profile_needs
@@ -165,12 +164,7 @@ def _write_public_assets(docs: Path, public: Path) -> None:
 
 def _load_registry(platforms_dir: str) -> dict:
     """The platforms of _registry.yml, by name."""
-    registry_path = Path(platforms_dir) / "_registry.yml"
-    registry = {}
-    if registry_path.exists():
-        with open(registry_path) as f:
-            registry = (yaml_load(f) or {}).get("platforms", {})
-    return registry
+    return load_platform_registry(platforms_dir)
 
 
 @dataclass

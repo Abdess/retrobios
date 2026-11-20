@@ -8,6 +8,7 @@ import sys
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, TypedDict
 
+from core.hashing import parse_hash_list
 from core.options import reject_unknown
 from model.platforms import load_platform_config
 from model.profiles import ProfileSelectionError, load_emulator_profiles, select_emulator_profiles
@@ -28,9 +29,7 @@ def _entry_for_file(candidates: list[dict], held: dict) -> dict:
     destination the collection's own path ends with, then the last one.
     """
     def declared(fe: dict, key: str) -> set[str]:
-        value = fe.get(key)
-        values = value if isinstance(value, list) else str(value or "").split(",")
-        return {str(v).strip().lower() for v in values if str(v).strip()}
+        return set(parse_hash_list(fe.get(key)))
 
     for fe in candidates:
         if any(

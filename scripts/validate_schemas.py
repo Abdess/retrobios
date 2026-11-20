@@ -13,9 +13,10 @@ from pathlib import Path, PurePosixPath
 
 import yaml
 
+from model.registry import load_platform_registry
 from model.profiles import source_yaml_paths
 from model.safeparse import yaml_load
-from core.paths import REPO_ROOT
+from core.paths import PLATFORMS_DIR, REPO_ROOT
 
 try:
     from jsonschema import Draft202012Validator, FormatChecker
@@ -629,11 +630,7 @@ def _save_directory_blocks() -> list[str]:
     folder per launched system) needs the platform file's libretro_systems,
     and ``by_core_for`` names the cores a launcher sorts by core.
     """
-    registry_path = REPO_ROOT / "platforms" / "_registry.yml"
-    if not registry_path.is_file():
-        return []
-    with registry_path.open(encoding="utf-8") as handle:
-        platforms = (yaml_load(handle) or {}).get("platforms") or {}
+    platforms = load_platform_registry(REPO_ROOT / PLATFORMS_DIR)
     out: list[str] = []
     for name, entry in sorted(platforms.items()):
         if not isinstance(entry, dict) or "save_directory" not in entry:

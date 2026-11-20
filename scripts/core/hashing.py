@@ -168,10 +168,11 @@ def parse_hash_list(raw: str | list | int | None) -> list[str]:
     """
     if raw is None or raw == "":
         return []
-    items = raw if isinstance(raw, list) else str(raw).split(",")
+    # A list item can itself be comma-joined (a list of Recalbox md5 fields).
+    items = [part for item in (raw if isinstance(raw, list) else [raw]) for part in str(item).split(",")]
     out: list[str] = []
     for item in items:
-        value = str(item).strip().lower().removeprefix("0x")
+        value = item.strip().lower().removeprefix("0x")
         if value and value not in out:
             out.append(value)
     return out
@@ -184,3 +185,18 @@ def parse_md5_list(raw: str | list | None) -> list[str]:
     emulator profiles carry a YAML list. Both reach here.
     """
     return parse_hash_list(raw)
+
+
+def parse_sha256sums(text: str) -> dict[str, str]:
+    """`sha256sum` output by file name: digest, a space, then the mode
+    character (space for text, `*` for binary) before the name."""
+    sums: dict[str, str] = {}
+    for line in text.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        digest, _, name = line.partition(" ")
+        if len(digest) != 64 or not name:
+            raise ValueError(f"not a sha256sum line: {line!r}")
+        sums[name.lstrip(" *")] = digest.lower()
+    return sums

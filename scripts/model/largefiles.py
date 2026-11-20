@@ -21,7 +21,7 @@ from collections.abc import Iterable
 from pathlib import Path
 
 from core.artifacts import set_plain_mode
-from core.hashing import compute_hashes
+from core.hashing import compute_hashes, parse_hash_list
 from core.paths import REPO_ROOT
 
 
@@ -436,6 +436,5 @@ def _matches(hashes: dict, expected_sha1: str, expected_md5: str) -> bool:
     if expected_sha1 and hashes["sha1"].lower() != expected_sha1.lower():
         return False
     if expected_md5:
-        md5_list = [m.strip().lower() for m in expected_md5.split(",") if m.strip()]
-        return hashes["md5"].lower() in md5_list
+        return hashes["md5"].lower() in parse_hash_list(expected_md5)
     return True

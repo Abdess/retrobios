@@ -32,10 +32,10 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import hashlib
 import sys
 from pathlib import Path
 
+from core.hashing import file_digest
 from core.artifacts import ArtifactLockBusy, artifact_lock
 from core.paths import REPO_ROOT
 from installer_build.port import ARCHIVES, build_archive
@@ -55,7 +55,7 @@ def main() -> int:
         print(f"Error: {exc}", file=sys.stderr)
         return 1
     for path in paths:
-        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        digest = file_digest(path, "sha256")
         print(f"{path} ({path.stat().st_size} bytes, sha256 {digest})")
     return 0
 

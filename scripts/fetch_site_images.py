@@ -34,8 +34,8 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-import yaml
-from core.paths import REPO_ROOT
+from model.registry import load_platform_registry
+from core.paths import PLATFORMS_DIR, REPO_ROOT
 
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
@@ -151,8 +151,7 @@ def write_manifest(directory: Path, note: str, entries: list[dict]) -> None:
 def fetch_logos() -> None:
     from model.guides import GROUP_TILES, GUIDES
 
-    with open(REPO_ROOT / "platforms" / "_registry.yml", encoding="utf-8") as handle:
-        platforms = yaml.safe_load(handle)["platforms"]
+    platforms = load_platform_registry(REPO_ROOT / PLATFORMS_DIR, required=True)
     LOGO_DIR.mkdir(parents=True, exist_ok=True)
     entries = []
     # The tiles of a kind of device (Android handhelds) beside the setups

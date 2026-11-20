@@ -6,7 +6,7 @@ import os
 import zlib
 from dataclasses import dataclass, field
 
-from core.hashing import compute_hashes, parse_md5_list
+from core.hashing import compute_hashes, parse_hash_list, parse_md5_list
 from core.ziptools import check_inside_zip
 from resolve.localfile import resolve_local_file, variant_base_name
 from resolve.packfiles import records_by_path, preferred_entries
@@ -123,17 +123,7 @@ def lists_hashes(entry: dict) -> bool:
 
 def _declared_hashes(entry: dict, field_name: str) -> set[str]:
     """Hashes an entry accepts for one field, declared as a string or a list."""
-    value = entry.get(field_name)
-    values = value if isinstance(value, list) else [value]
-    # Recalbox writes its md5 list comma separated, and profiles do the
-    # same for sha256 (mesence names four BS-X dumps in one string).
-    return {
-        part.strip().lower()
-        for v in values
-        if v
-        for part in str(v).split(",")
-        if part.strip()
-    }
+    return set(parse_hash_list(entry.get(field_name)))
 
 
 def _record_at(path: str, db: dict) -> dict | None:

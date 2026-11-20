@@ -22,9 +22,9 @@ from resolve.content import (
 )
 from resolve.archives import archive_members
 from model.profiles import CONTENT_CHECKS, entry_system_ids
-from core.hashing import compute_hashes
-from core.paths import sanitize_pack_path
-from core.hashing import md5_composite, parse_hash_list, parse_md5_list
+from core.hashing import compute_hashes, parse_hash_list
+from core.paths import BIOS_DIR, sanitize_pack_path
+from core.hashing import md5_composite, parse_md5_list
 from resolve.nativemode import SIZE_AND_ANY_HASH, digest_algorithm, hash_mismatch_excludes_file
 from core.ziptools import check_inside_zip
 
@@ -281,35 +281,19 @@ def _merge_sizes(item: dict, f: dict) -> None:
         )
 
 
-def _hex_values(value: object) -> list[str]:
-    """Hash values without their 0x prefix, lowercased."""
-    values = value if isinstance(value, list) else [value] if value else []
-    out = []
-    for item in values:
-        norm = str(item).lower()
-        if norm.startswith("0x"):
-            norm = norm[2:]
-        out.append(norm)
-    return out
-
-
 def _merge_hashes(item: dict, f: dict, checks: list[str]) -> None:
     # Hash checks: collect all accepted hashes as sets (multiple valid
     # versions of the same file, e.g. MT-32 ROM versions)
     if "crc32" in checks and f.get("crc32"):
-        item["crc32"].update(_hex_values(f["crc32"]))
+        item["crc32"].update(parse_hash_list(f["crc32"]))
     # A hash field may carry several accepted values, as a list or as
     # the comma-separated string the schema spells out
     for hash_type in ("md5", "sha1", "sha256"):
         if hash_type in checks and f.get(hash_type):
-            val = f[hash_type]
-            values = val if isinstance(val, list) else str(val).split(",")
-            item[hash_type].update(
-                str(h).strip().lower() for h in values if str(h).strip()
-            )
+            item[hash_type].update(parse_hash_list(f[hash_type]))
     # Adler32: stored as known_hash_adler32 field (not in validation: list
     # for Dolphin, but support it in both forms for future profiles)
-    item["adler32"].update(_hex_values(f.get("known_hash_adler32") or f.get("adler32")))
+    item["adler32"].update(parse_hash_list(f.get("known_hash_adler32") or f.get("adler32")))
     if f.get("adler32_byteswap"):
         item["adler32_byteswap"] = True
 
@@ -487,7 +471,7 @@ def check_file_validation(
     local_path: str,
     filename: str,
     validation_index: dict[str, dict],
-    bios_dir: str = "bios",
+    bios_dir: str = BIOS_DIR,
     emulators: set[str] | None = None,
     strict: bool = False,
 ) -> tuple[str, list[str]] | None:
@@ -894,7 +878,7 @@ def find_validated_variant(
     db: dict,
     current_path: str,
     validation_index: dict,
-    bios_dir: str = "bios",
+    bios_dir: str = BIOS_DIR,
     platform_digest: str | None = None,
     emulators: set[str] | None = None,
     strict: bool = False,

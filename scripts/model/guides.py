@@ -7,6 +7,7 @@ import textwrap
 from dataclasses import dataclass, fields
 from pathlib import Path
 
+from model.registry import load_platform_registry
 from core.paths import REPO_ROOT
 from model.safeparse import require_yaml
 
@@ -344,8 +345,7 @@ def load_guides(path: Path = GUIDES_FILE, registry: dict | None = None) -> dict:
     """
     yaml = require_yaml()
     if registry is None:
-        with open(PLATFORMS_DIR / "_registry.yml", encoding="utf-8") as handle:
-            registry = (yaml.safe_load(handle) or {}).get("platforms", {})
+        registry = load_platform_registry(PLATFORMS_DIR, required=True)
     with open(path, encoding="utf-8") as handle:
         data = yaml.safe_load(handle) or {}
     if not isinstance(data, dict):

@@ -15,7 +15,7 @@ import zipfile
 from pathlib import Path
 
 from model.largefiles import fetch_large_file
-from core.hashing import cut_md5_owner
+from core.hashing import cut_md5_owner, parse_hash_list
 from resolve.content import declared_hash_verdict
 from resolve.localfile import resolution_is_hash_exact, resolve_local_file
 from core.paths import REPO_ROOT, declared_destination
@@ -84,20 +84,9 @@ def download_external(
         return False
     return True
 
-def _values(raw: object) -> list[str]:
-    """A hash field's values: one, a list, or a comma-separated string."""
-    items = raw if isinstance(raw, list) else [raw] if raw else []
-    return [
-        value.strip().lower().removeprefix("0x")
-        for item in items
-        for value in str(item).split(",")
-        if value.strip()
-    ]
-
-
 def _declared_hashes(file_entry: dict) -> dict[str, list[str]]:
     return {
-        field: _values(file_entry.get(field))
+        field: parse_hash_list(file_entry.get(field))
         for field in ("sha1", "md5", "sha256", "crc32")
     }
 
