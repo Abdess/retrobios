@@ -33,14 +33,11 @@ from collections.abc import Callable
 from dataclasses import dataclass
 
 from core import upstream
+from profiling.repos import pin_field, resolve_pin
 
 KINDS = ("file", "tag", "alias", "package", "none", "unverified")
 # Values copied from a .info or a branch name, which name no version.
 PLACEHOLDERS = frozenset({"git", "svn", "unknown", "master", "main", "latest", "dev", "head"})
-# Pin field of each repository field a basis may name. A mirror carries the
-# source's history, so source_commit pins it too.
-PIN_FIELDS = {"source": "source_commit", "source_mirror": "source_commit",
-              "upstream": "upstream_commit"}
 
 MATCH = "MATCH"
 DRIFT = "DRIFT"
@@ -143,13 +140,17 @@ def _repo_and_pin(
         field = str(basis.get("repo") or "source")
         url = _by_mode(profile, field, mode) or ""
         repo = upstream.parse_repo(url)
-        pin = _by_mode(profile, PIN_FIELDS.get(field, ""), mode) or ""
         where = url or field
-        if repo is not None and not pin and field == "upstream" and profile.get("profiled_date"):
-            # The pin of a second repository falls back on profiled_date,
-            # as profile_sync resolves it.
-            pin = upstream.resolve_commit_at(
-                repo, str(profile["profiled_date"]), cache_dir, offline) or ""
+        pin = ""
+        if repo is not None:
+            # The pin profile_sync compares at: the declared commit, else
+            # the commit at profiled_date on the branch the source follows.
+            pinned_by = pin_field(field)
+            branch = str(profile.get("source_branch") or "") or None
+            pin = resolve_pin(
+                profile, repo, cache_dir, offline, pinned_by, mode,
+                branch if pinned_by == "source" else None,
+            )[0] or ""
     if repo is None:
         raise VersionUnreadable(f"{where}: not a forge repository")
     if not pin:

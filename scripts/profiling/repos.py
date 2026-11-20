@@ -44,6 +44,12 @@ def select_repo(profile: dict) -> upstream.Repo | None:
     return None
 
 
+def pin_field(field: str) -> str:
+    """The `<field>_commit` that pins a repository field. A mirror carries
+    the source's history, commits and branches alike: source_commit pins it."""
+    return "source" if field == "source_mirror" else field
+
+
 def resolve_pin(
     profile: dict, repo: upstream.Repo, cache_dir: str, offline: bool,
     field: str = "source", mode: str = "", branch: str | None = None,
@@ -89,12 +95,11 @@ def select_views(
         repo = upstream.parse_repo(url)
         if repo is None or (repo.host, repo.slug) in seen:
             continue
-        # A mirror carries the source's history, commits and branches alike:
-        # its pin is source_commit. It read `source_mirror_commit`, a field
-        # no profile carries, and fell back to profiled_date, which a bump
-        # never moves (eden judged from f6e76860 while pinned on d16735f5).
-        pin_field = "source" if field_name == "source_mirror" else field_name
-        branch = declared if pin_field == "source" else None
+        # A mirror read `source_mirror_commit`, a field no profile carries,
+        # and fell back to profiled_date, which a bump never moves (eden
+        # judged from f6e76860 while pinned on d16735f5).
+        pinned_by = pin_field(field_name)
+        branch = declared if pinned_by == "source" else None
         head = None
         try:
             unread: upstream.NotCachedError | None = None
@@ -111,7 +116,7 @@ def select_views(
             if unread and not head:
                 raise unread
             pin, origin = resolve_pin(
-                profile, repo, cache_dir, offline, pin_field, mode, branch
+                profile, repo, cache_dir, offline, pinned_by, mode, branch
             )
             if not pin or origin is None:
                 continue

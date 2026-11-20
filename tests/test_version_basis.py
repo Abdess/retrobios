@@ -28,6 +28,7 @@ from profiling import resolver
 from profiling import yamledit
 from core import upstream
 from profiling import version_basis
+from profiling.repos import pin_field
 from model.profiles import load_emulator_profiles
 from profiling.reports import ProfileReport
 from profiling.bump import bump_commit
@@ -186,7 +187,7 @@ class EveryProfileSaysWhereItsVersionIsRead(unittest.TestCase):
             for mode, basis in version_basis.bases(profile).items():
                 if basis.get("kind") != "tag" or basis.get("url"):
                     continue
-                field = version_basis.PIN_FIELDS[str(basis.get("repo") or "source")]
+                field = pin_field(str(basis.get("repo") or "source")) + "_commit"
                 pin = version_basis._by_mode(profile, field, mode)
                 if not pin:
                     continue
@@ -229,6 +230,25 @@ version_basis:
   pattern: '#define\\s+VERSION\\s+"([^"]+)"'
 files: []
 """
+
+
+class TheBasisPinIsTheComparisonPin(unittest.TestCase):
+    def test_a_source_without_commit_reads_at_the_profiled_date(self):
+        """version_basis fell back on profiled_date for upstream only, while
+        profile_sync compares every repository at that date's commit."""
+        profile = {"source": "https://github.com/o/r", "source_branch": "port",
+                   "profiled_date": "2026-01-01"}
+        basis = {"kind": "file", "repo": "source"}
+        with mock.patch.object(upstream, "resolve_commit_at", return_value="a" * 40) as at:
+            repo, pin = version_basis._repo_and_pin(profile, basis, "", "cache", True)
+        self.assertEqual((repo.slug, pin), ("o/r", "a" * 40))
+        self.assertEqual(at.call_args.args[1:], ("2026-01-01", "cache", True, "port"))
+
+    def test_a_mirror_is_pinned_by_the_source_commit(self):
+        profile = {"source_mirror": "https://github.com/o/m", "source_commit": "b" * 40}
+        repo, pin = version_basis._repo_and_pin(
+            profile, {"kind": "file", "repo": "source_mirror"}, "", "cache", True)
+        self.assertEqual((repo.slug, pin), ("o/m", "b" * 40))
 
 
 class AnAdvanceReadsTheVersionAgain(unittest.TestCase):
